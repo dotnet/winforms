@@ -7,8 +7,9 @@ namespace Windows.Win32;
 
 internal partial class PInvoke
 {
-    public static class ImageList
+    public static unsafe class ImageList
     {
+        /// <inheritdoc cref="ImageList_Add(HIMAGELIST, HBITMAP, HBITMAP)"/>
         public static int Add<T>(T himl, HBITMAP hbmImage, HBITMAP hbmMask) where T : IHandle<HIMAGELIST>
         {
             int result = ImageList_Add(himl.Handle, hbmImage, hbmMask);
@@ -16,13 +17,15 @@ internal partial class PInvoke
             return result;
         }
 
-        public static bool Destroy<T>(T himl) where T: IHandle<HIMAGELIST>
+        /// <inheritdoc cref="ImageList_Destroy(HIMAGELIST)"/>
+        public static bool Destroy<T>(T himl) where T : IHandle<HIMAGELIST>
         {
             bool result = ImageList_Destroy(himl.Handle);
             GC.KeepAlive(himl.Wrapper);
             return result;
         }
 
+        /// <inheritdoc cref="ImageList_Draw(HIMAGELIST, int, HDC, int, int, IMAGE_LIST_DRAW_STYLE)"/>
         public static bool Draw<T>(T himl, int i, HDC hdcDst, int x, int y, IMAGE_LIST_DRAW_STYLE fStyle)
             where T : IHandle<HIMAGELIST>
         {
@@ -31,6 +34,7 @@ internal partial class PInvoke
             return result;
         }
 
+        /// <inheritdoc cref="ImageList_DrawEx(HIMAGELIST, int, HDC, int, int, int, int, COLORREF, COLORREF, IMAGE_LIST_DRAW_STYLE)"/>
         public static bool DrawEx<THIML, THDC>(
             THIML himl,
             int i,
@@ -49,7 +53,8 @@ internal partial class PInvoke
             return result;
         }
 
-        public static unsafe bool GetIconSize<T>(T himl, out int x, out int y) where T : IHandle<HIMAGELIST>
+        /// <inheritdoc cref="ImageList_GetIconSize(HIMAGELIST, int*, int*)"/>
+        public static bool GetIconSize<T>(T himl, out int x, out int y) where T : IHandle<HIMAGELIST>
         {
             fixed (int* px = &x)
             fixed (int* py = &y)
@@ -60,6 +65,7 @@ internal partial class PInvoke
             }
         }
 
+        /// <inheritdoc cref="ImageList_GetImageCount(HIMAGELIST)"/>
         public static int GetImageCount<T>(T himl) where T : IHandle<HIMAGELIST>
         {
             int result = ImageList_GetImageCount(himl.Handle);
@@ -67,6 +73,7 @@ internal partial class PInvoke
             return result;
         }
 
+        /// <inheritdoc cref="ImageList_GetImageInfo(HIMAGELIST, int, IMAGEINFO*)"/>
         public static bool GetImageInfo<T>(T himl, int i, out IMAGEINFO pImageInfo) where T : IHandle<HIMAGELIST>
         {
             bool result = ImageList_GetImageInfo(himl.Handle, i, out pImageInfo);
@@ -74,6 +81,7 @@ internal partial class PInvoke
             return result;
         }
 
+        /// <inheritdoc cref="ImageList_Remove(HIMAGELIST, int)"/>
         public static bool Remove<T>(T himl, int i) where T : IHandle<HIMAGELIST>
         {
             bool result = ImageList_Remove(himl.Handle, i);
@@ -81,6 +89,7 @@ internal partial class PInvoke
             return result;
         }
 
+        /// <inheritdoc cref="ImageList_Replace(HIMAGELIST, int, HBITMAP, HBITMAP)"/>
         public static bool Replace<T>(T himl, int i, HBITMAP hbmImage, HBITMAP hbmMask) where T : IHandle<HIMAGELIST>
         {
             bool result = ImageList_Replace(himl.Handle, i, hbmImage, hbmMask);
@@ -88,6 +97,7 @@ internal partial class PInvoke
             return result;
         }
 
+        /// <inheritdoc cref="ImageList_ReplaceIcon(HIMAGELIST, int, HICON)"/>
         public static int ReplaceIcon<THIML, THICON>(
             THIML himl,
             int i,
@@ -99,6 +109,7 @@ internal partial class PInvoke
             return result;
         }
 
+        /// <inheritdoc cref="ImageList_SetBkColor(HIMAGELIST, COLORREF)"/>
         public static COLORREF SetBkColor<T>(T himl, COLORREF clrBk) where T : IHandle<HIMAGELIST>
         {
             COLORREF result = ImageList_SetBkColor(himl.Handle, clrBk);
@@ -106,22 +117,22 @@ internal partial class PInvoke
             return result;
         }
 
-        public static unsafe BOOL Write<T>(T himl, IStream.Interface pstm) where T : IHandle<HIMAGELIST>
+        /// <inheritdoc cref="ImageList_Write(HIMAGELIST, IStream*)"/>
+        public static BOOL Write<T>(T himl, Stream pstm) where T : IHandle<HIMAGELIST>
         {
-            using var stream = ComHelpers.TryGetComScope<IStream>(pstm, out HRESULT hr);
-            Debug.Assert(hr.Succeeded);
+            using var stream = pstm.ToIStream();
             BOOL result = ImageList_Write(himl.Handle, stream);
             GC.KeepAlive(himl.Wrapper);
             return result;
         }
 
-        public static unsafe HRESULT WriteEx<T>(
+        /// <inheritdoc cref="ImageList_WriteEx(HIMAGELIST, IMAGE_LIST_WRITE_STREAM_FLAGS, IStream*)"/>
+        public static HRESULT WriteEx<T>(
             T himl,
             IMAGE_LIST_WRITE_STREAM_FLAGS dwFlags,
-            IStream.Interface pstm) where T : IHandle<HIMAGELIST>
+            Stream pstm) where T : IHandle<HIMAGELIST>
         {
-            using var stream = ComHelpers.TryGetComScope<IStream>(pstm, out HRESULT hr);
-            Debug.Assert(hr.Succeeded);
+            using var stream = pstm.ToIStream();
             HRESULT result = ImageList_WriteEx(himl.Handle, dwFlags, stream);
             GC.KeepAlive(himl.Wrapper);
             return result;

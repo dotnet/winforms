@@ -209,7 +209,7 @@ public partial class DataGridViewRowHeaderCell
                 throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
             }
 
-            if (!(Owner is DataGridViewRowHeaderCell dataGridViewCell))
+            if (Owner is not DataGridViewRowHeaderCell dataGridViewCell)
             {
                 return;
             }

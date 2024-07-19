@@ -1,96 +1,117 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-
-using System.Runtime.InteropServices;
 
 namespace System.Drawing.Imaging;
 
 /// <summary>
-/// Defines an array of colors that make up a color palette.
+///  Defines an array of colors that make up a color palette.
 /// </summary>
-public sealed class ColorPalette
+public sealed unsafe class ColorPalette
 {
-    // We don't provide a public constructor for ColorPalette because if we allow
-    // arbitrary creation of color palettes you could in theroy not only change the color entries, but the size
-    // of the palette and that is not valid for an image (meaning you cannot change the palette size for an image).
-    // ColorPalettes are only valid for "indexed" images like GIFs.
+    private readonly int _flags;
+    private readonly Color[] _entries;
 
-    private int _flags;
-    private Color[] _entries;
+    // XmlSerializer requires a public constructor with no parameters.
+    private ColorPalette() => _entries = new Color[1];
 
     /// <summary>
-    /// Specifies how to interpret the color information in the array of colors.
+    ///  Specifies how to interpret the color information in the array of colors.
     /// </summary>
-    public int Flags
+    public int Flags => _flags;
+
+    /// <summary>
+    ///  Specifies an array of <see cref='Color'/> objects.
+    /// </summary>
+    public Color[] Entries => _entries;
+
+    private ColorPalette(int flags, Color[] entries)
     {
-        get
-        {
-            return _flags;
-        }
+        _flags = flags;
+        _entries = entries;
+    }
+
+#if NET9_0_OR_GREATER
+    /// <summary>
+    ///  Create a custom color palette.
+    /// </summary>
+    /// <param name="customColors">Color entries for the palette.</param>
+    public ColorPalette(params Color[] customColors) : this(0, customColors)
+    {
     }
 
     /// <summary>
-    /// Specifies an array of <see cref='Color'/> objects.
+    ///  Create a standard color palette.
     /// </summary>
-    public Color[] Entries
+    public ColorPalette(PaletteType fixedPaletteType)
     {
-        get
+        ColorPalette palette = InitializePalette(fixedPaletteType, 0, useTransparentColor: false, bitmap: null);
+        _flags = palette.Flags;
+        _entries = palette.Entries;
+    }
+
+    /// <summary>
+    ///  Create an optimal color palette based on the colors in a given bitmap.
+    /// </summary>
+    /// <inheritdoc cref="InitializePalette(PaletteType, int, bool, IPointer{GpBitmap}?)"/>
+    public static ColorPalette CreateOptimalPalette(int colors, bool useTransparentColor, Bitmap bitmap) =>
+        InitializePalette((PaletteType)GdiPlus.PaletteType.PaletteTypeOptimal, colors, useTransparentColor, bitmap);
+#endif
+
+    // Memory layout is:
+    //    UINT Flags
+    //    UINT Count
+    //    ARGB Entries[size]
+
+    /// <summary>
+    ///  Converts a native <see cref="GdiPlus.ColorPalette"/> buffer.
+    /// </summary>
+    internal static ColorPalette ConvertFromBuffer(ReadOnlySpan<uint> buffer) =>
+        new((int)buffer[0], ARGB.ToColorArray(buffer.Slice(2, (int)buffer[1])));
+
+    internal BufferScope<uint> ConvertToBuffer()
+    {
+        BufferScope<uint> buffer = new(Entries.Length + 2);
+        buffer[0] = (uint)Flags;
+        buffer[1] = (uint)Entries.Length;
+
+        for (int i = 0; i < Entries.Length; i++)
         {
-            return _entries;
-        }
-    }
-
-    internal ColorPalette(int count)
-    {
-        _entries = new Color[count];
-    }
-
-    internal ColorPalette()
-    {
-        _entries = new Color[1];
-    }
-
-    internal unsafe void ConvertFromMemory(IntPtr memory)
-    {
-        // Memory layout is:
-        //    UINT Flags
-        //    UINT Count
-        //    ARGB Entries[size]
-
-        byte* pMemory = (byte*)memory;
-
-        _flags = *(int*)pMemory;
-
-        int size = *(int*)(pMemory + 4);
-
-        _entries = new Color[size];
-
-        for (int i = 0; i < size; i++)
-        {
-            int argb = *(int*)(pMemory + 8 + i * 4);
-            _entries[i] = Color.FromArgb(argb);
-        }
-    }
-
-    internal unsafe IntPtr ConvertToMemory()
-    {
-        // Memory layout is:
-        //    UINT Flags
-        //    UINT Count
-        //    ARGB Entries[size]
-
-        int length = _entries.Length;
-        IntPtr memory = Marshal.AllocHGlobal(checked(4 * (2 + length)));
-        byte* pMemory = (byte*)memory;
-
-        *(int*)pMemory = _flags;
-        *(int*)(pMemory + 4) = length;
-
-        for (int i = 0; i < length; i++)
-        {
-            *(int*)(pMemory + 4 * (i + 2)) = _entries[i].ToArgb();
+            buffer[i + 2] = (ARGB)Entries[i];
         }
 
-        return memory;
+        return buffer;
     }
+
+#if NET9_0_OR_GREATER
+    /// <summary>
+    ///  Initializes a standard, optimal, or custom color palette.
+    /// </summary>
+    /// <param name="fixedPaletteType">The palette type.</param>
+    /// <param name="colorCount">
+    ///  The number of colors you want to have in an optimal palette based on a the specified bitmap.
+    /// </param>
+    /// <param name="useTransparentColor"><see langword="true"/> to include the transparent color in the palette.</param>
+    internal static ColorPalette InitializePalette(
+        PaletteType fixedPaletteType,
+        int colorCount,
+        bool useTransparentColor,
+        IPointer<GpBitmap>? bitmap)
+    {
+        // Reserve the largest possible buffer for the palette.
+        using BufferScope<uint> buffer = new(256 + sizeof(GdiPlus.ColorPalette) / sizeof(uint));
+        buffer[1] = 256;
+        fixed (void* b = buffer)
+        {
+            PInvoke.GdipInitializePalette(
+                (GdiPlus.ColorPalette*)b,
+                (GdiPlus.PaletteType)fixedPaletteType,
+                colorCount,
+                useTransparentColor,
+                bitmap is null ? null : bitmap.Pointer).ThrowIfFailed();
+        }
+
+        GC.KeepAlive(bitmap);
+        return ConvertFromBuffer(buffer);
+    }
+#endif
 }

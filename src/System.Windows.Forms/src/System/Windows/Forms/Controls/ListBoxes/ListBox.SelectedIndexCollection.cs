@@ -164,7 +164,7 @@ public partial class ListBox
             get
             {
                 _owner.SelectedItems.EnsureUpToDate();
-                return ((ObjectCollection)_owner.Items).InnerArray;
+                return _owner.Items.InnerArray;
             }
         }
 

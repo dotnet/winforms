@@ -57,8 +57,8 @@ public class ListViewGroupTests
         yield return new object[] { null, HorizontalAlignment.Left, string.Empty };
         yield return new object[] { string.Empty, HorizontalAlignment.Right, string.Empty };
         yield return new object[] { "reasonable", HorizontalAlignment.Center, "reasonable" };
-        yield return new object[] { "reasonable", (HorizontalAlignment)(HorizontalAlignment.Left - 1), "reasonable" };
-        yield return new object[] { "reasonable", (HorizontalAlignment)(HorizontalAlignment.Center + 1), "reasonable" };
+        yield return new object[] { "reasonable", HorizontalAlignment.Left - 1, "reasonable" };
+        yield return new object[] { "reasonable", HorizontalAlignment.Center + 1, "reasonable" };
     }
 
     [WinFormsTheory]
@@ -216,8 +216,8 @@ public class ListViewGroupTests
                 groupImageList.Images.Add(new Bitmap(10, 10));
                 groupImageList.Images.Add(new Bitmap(20, 20));
                 listView.GroupImageList = groupImageList;
-                Assert.Equal((nint)groupImageList.Handle,
-                    PInvoke.SendMessage(listView, PInvoke.LVM_SETIMAGELIST, (WPARAM)(uint)PInvoke.LVSIL_GROUPHEADER, groupImageList.Handle));
+                Assert.Equal(groupImageList.Handle,
+                    PInvoke.SendMessage(listView, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_GROUPHEADER, groupImageList.Handle));
 
                 ListViewGroup group = new();
                 listView.Groups.Add(group);
@@ -356,8 +356,8 @@ public class ListViewGroupTests
                 using ImageList groupImageList = new();
                 groupImageList.Images.Add(value.Key, new Bitmap(10, 10));
                 listView.GroupImageList = groupImageList;
-                Assert.Equal((nint)groupImageList.Handle,
-                    PInvoke.SendMessage(listView, PInvoke.LVM_SETIMAGELIST, (WPARAM)(uint)PInvoke.LVSIL_GROUPHEADER, groupImageList.Handle));
+                Assert.Equal(groupImageList.Handle,
+                    PInvoke.SendMessage(listView, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_GROUPHEADER, groupImageList.Handle));
 
                 ListViewGroup group = new();
                 listView.Groups.Add(group);
@@ -1334,11 +1334,13 @@ public class ListViewGroupTests
         using BinaryFormatterScope formatterScope = new(enable: true);
         using MemoryStream stream = new();
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-        BinaryFormatter formatter = new();
+        // cs/binary-formatter-without-binder 
+        BinaryFormatter formatter = new(); // CodeQL [SM04191] : This is a test. Safe use because the deserialization process is performed on trusted data and the types are controlled and validated.
         formatter.Serialize(stream, group);
         stream.Seek(0, SeekOrigin.Begin);
 
-        ListViewGroup result = Assert.IsType<ListViewGroup>(formatter.Deserialize(stream));
+        // cs/dangerous-binary-deserialization 
+        ListViewGroup result = Assert.IsType<ListViewGroup>(formatter.Deserialize(stream)); // CodeQL [SM03722] : Deserialization is performed on trusted data and the types are controlled and validated.
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
         Assert.Equal(group.Header, result.Header);
         Assert.Equal(group.HeaderAlignment, result.HeaderAlignment);

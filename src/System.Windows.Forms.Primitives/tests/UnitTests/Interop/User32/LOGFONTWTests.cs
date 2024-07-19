@@ -27,15 +27,15 @@ public class LOGFONTWTests
         string bigString = new('*', 32);
 
         logFont.FaceName = bigString;
-        Assert.True(logFont.FaceName.SequenceEqual(bigString.AsSpan().Slice(1)));
+        Assert.True(logFont.FaceName.SequenceEqual(bigString.AsSpan()[1..]));
     }
 
     [Fact]
     public unsafe void CreateFontIndirect()
     {
         LOGFONTW logFont = default;
-        HFONT handle = PInvoke.CreateFontIndirect(&logFont);
+        HFONT handle = PInvokeCore.CreateFontIndirect(&logFont);
         Assert.False(handle.IsNull);
-        Assert.True(PInvoke.DeleteObject(handle));
+        Assert.True(PInvokeCore.DeleteObject(handle));
     }
 }

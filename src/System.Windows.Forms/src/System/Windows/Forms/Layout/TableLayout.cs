@@ -34,13 +34,13 @@ internal partial class TableLayout : LayoutEngine
     // End of sorting code
 
     // Singleton instance shared by all containers.
-    internal static readonly TableLayout Instance = new();
+    internal static TableLayout Instance { get; } = new();
 
-    private static readonly int _containerInfoProperty = PropertyStore.CreateKey();
-    private static readonly int _layoutInfoProperty = PropertyStore.CreateKey();
+    private static readonly int s_containerInfoProperty = PropertyStore.CreateKey();
+    private static readonly int s_layoutInfoProperty = PropertyStore.CreateKey();
 
-    private static readonly string?[] _propertiesWhichInvalidateCache = new string?[]
-    {
+    private static readonly string?[] s_propertiesWhichInvalidateCache =
+    [
        // suspend layout before changing one of the above property will cause the AffectedProperty of LayoutEventArgs to be set to null
 
        null,
@@ -53,7 +53,7 @@ internal partial class TableLayout : LayoutEngine
        PropertyNames.RowStyles,
        PropertyNames.ColumnStyles,
        // RowSpan, ColumnSpan, TableIndex manually call ClearCachedAssignments.
-    };
+    ];
 
     internal static TableLayoutSettings CreateSettings(IArrangedElement owner)
     {
@@ -64,9 +64,9 @@ internal partial class TableLayout : LayoutEngine
     {
         ContainerInfo containerInfo = GetContainerInfo(container);
 
-        foreach (string? propertyName in _propertiesWhichInvalidateCache)
+        foreach (string? propertyName in s_propertiesWhichInvalidateCache)
         {
-            if (object.ReferenceEquals(args.AffectedProperty, propertyName))
+            if (ReferenceEquals(args.AffectedProperty, propertyName))
             {
                 ClearCachedAssignments(containerInfo);
                 break;
@@ -225,12 +225,12 @@ internal partial class TableLayout : LayoutEngine
         Strip[] cols = containerInfo.Columns;
         if (cols.Length != 0 && totalSpace.Width > usedSpace.Width)
         {
-            cols[cols.Length - 1].MinSize += totalSpace.Width - usedSpace.Width;
+            cols[^1].MinSize += totalSpace.Width - usedSpace.Width;
         }
 
         if (rows.Length != 0 && totalSpace.Height > usedSpace.Height)
         {
-            rows[rows.Length - 1].MinSize += totalSpace.Height - usedSpace.Height;
+            rows[^1].MinSize += totalSpace.Height - usedSpace.Height;
         }
     }
 
@@ -692,7 +692,7 @@ internal partial class TableLayout : LayoutEngine
         {
             if (containerInfo.Container is TableLayoutPanel tlp && tlp.ParentInternal is not null && tlp.ParentInternal.LayoutEngine == DefaultLayout.Instance)
             {
-                if (tlp.Dock == DockStyle.Top || tlp.Dock == DockStyle.Bottom || tlp.Dock == DockStyle.Fill)
+                if (tlp.Dock is DockStyle.Top or DockStyle.Bottom or DockStyle.Fill)
                 {
                     dontHonorConstraint = false; // we want to honor constraints
                 }
@@ -818,7 +818,7 @@ internal partial class TableLayout : LayoutEngine
         {
             if (containerInfo.Container is TableLayoutPanel tlp && tlp.ParentInternal is not null && tlp.ParentInternal.LayoutEngine == DefaultLayout.Instance)
             {
-                if (tlp.Dock == DockStyle.Left || tlp.Dock == DockStyle.Right || tlp.Dock == DockStyle.Fill)
+                if (tlp.Dock is DockStyle.Left or DockStyle.Right or DockStyle.Fill)
                 {
                     dontHonorConstraint = false; // we want to honor constraints
                 }
@@ -1253,9 +1253,7 @@ internal partial class TableLayout : LayoutEngine
             Padding elementMargin = CommonProperties.GetMargin(element);
             if (isContainerRTL)
             {
-                int temp = elementMargin.Right;
-                elementMargin.Right = elementMargin.Left;
-                elementMargin.Left = temp;
+                (elementMargin.Left, elementMargin.Right) = (elementMargin.Right, elementMargin.Left);
             }
 
             cellBounds = LayoutUtils.DeflateRect(cellBounds, elementMargin);
@@ -1350,7 +1348,7 @@ internal partial class TableLayout : LayoutEngine
 
     internal static LayoutInfo GetLayoutInfo(IArrangedElement element)
     {
-        LayoutInfo? layoutInfo = (LayoutInfo?)element.Properties.GetObject(_layoutInfoProperty);
+        LayoutInfo? layoutInfo = (LayoutInfo?)element.Properties.GetObject(s_layoutInfoProperty);
         if (layoutInfo is null)
         {
             layoutInfo = new LayoutInfo(element);
@@ -1362,7 +1360,7 @@ internal partial class TableLayout : LayoutEngine
 
     internal static void SetLayoutInfo(IArrangedElement element, LayoutInfo value)
     {
-        element.Properties.SetObject(_layoutInfoProperty, value);
+        element.Properties.SetObject(s_layoutInfoProperty, value);
         Debug.Assert(GetLayoutInfo(element) == value, "GetLayoutInfo should return the same value as we set it to");
     }
 
@@ -1376,11 +1374,11 @@ internal partial class TableLayout : LayoutEngine
     // store.
     internal static ContainerInfo GetContainerInfo(IArrangedElement container)
     {
-        ContainerInfo? containerInfo = (ContainerInfo?)container.Properties.GetObject(_containerInfoProperty);
+        ContainerInfo? containerInfo = (ContainerInfo?)container.Properties.GetObject(s_containerInfoProperty);
         if (containerInfo is null)
         {
             containerInfo = new ContainerInfo(container);
-            container.Properties.SetObject(_containerInfoProperty, containerInfo);
+            container.Properties.SetObject(s_containerInfoProperty, containerInfo);
         }
 
         return containerInfo;
@@ -1393,7 +1391,7 @@ internal partial class TableLayout : LayoutEngine
     private static void Debug_VerifyAssignmentsAreCurrent(IArrangedElement container, ContainerInfo containerInfo)
     {
 #if DEBUG
-        Dictionary<IArrangedElement, LayoutInfo> oldLayoutInfo = new();
+        Dictionary<IArrangedElement, LayoutInfo> oldLayoutInfo = [];
         ArrangedElementCollection children = container.Children;
         List<LayoutInfo> childrenInfo = new(children.Count);
 

@@ -10,7 +10,7 @@ public partial class DataGridViewCheckBoxCell
 {
     protected class DataGridViewCheckBoxCellAccessibleObject : DataGridViewCellAccessibleObject
     {
-        private int[] runtimeId = null!; // Used by UIAutomation
+        private int[] _runtimeId = null!;
 
         public DataGridViewCheckBoxCellAccessibleObject(DataGridViewCell? owner) : base(owner)
         {
@@ -25,25 +25,22 @@ public partial class DataGridViewCheckBoxCell
                     throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
                 }
 
-                if (!(Owner is DataGridViewButtonCell dataGridViewCheckBoxCell))
+                if (Owner is not DataGridViewButtonCell dataGridViewCheckBoxCell)
                 {
                     return base.State;
                 }
 
-                switch (dataGridViewCheckBoxCell.EditedFormattedValue)
+                return dataGridViewCheckBoxCell.EditedFormattedValue switch
                 {
-                    case CheckState state:
-                        return state switch
-                        {
-                            CheckState.Checked => AccessibleStates.Checked | base.State,
-                            CheckState.Indeterminate => AccessibleStates.Indeterminate | base.State,
-                            _ => base.State
-                        };
-                    case bool stateAsBool:
-                        return stateAsBool ? AccessibleStates.Checked | base.State : base.State;
-                    default:
-                        return base.State;
-                }
+                    CheckState state => state switch
+                    {
+                        CheckState.Checked => AccessibleStates.Checked | base.State,
+                        CheckState.Indeterminate => AccessibleStates.Indeterminate | base.State,
+                        _ => base.State
+                    },
+                    bool stateAsBool => stateAsBool ? AccessibleStates.Checked | base.State : base.State,
+                    _ => base.State,
+                };
             }
         }
 
@@ -84,7 +81,7 @@ public partial class DataGridViewCheckBoxCell
                 throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
             }
 
-            if (!(Owner is DataGridViewCheckBoxCell dataGridViewCell))
+            if (Owner is not DataGridViewCheckBoxCell dataGridViewCell)
             {
                 return;
             }
@@ -136,7 +133,7 @@ public partial class DataGridViewCheckBoxCell
 
         internal override bool IsIAccessibleExSupported() => true;
 
-        internal override int[] RuntimeId => runtimeId ??= new int[] { RuntimeIDFirstItem, GetHashCode() };
+        internal override int[] RuntimeId => _runtimeId ??= [RuntimeIDFirstItem, GetHashCode()];
 
         internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
@@ -145,7 +142,7 @@ public partial class DataGridViewCheckBoxCell
                 _ => base.GetPropertyValue(propertyID)
             };
 
-        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId) => patternId == UIA_PATTERN_ID.UIA_TogglePatternId ? true : base.IsPatternSupported(patternId);
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId) => patternId == UIA_PATTERN_ID.UIA_TogglePatternId || base.IsPatternSupported(patternId);
 
         internal override void Toggle() => DoDefaultAction();
 

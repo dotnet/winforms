@@ -7,19 +7,12 @@ internal partial class TableLayout
 {
     private class MinSizeProxy : SizeProxy
     {
-        private static readonly MinSizeProxy instance = new();
         public override int Size
         {
             get { return strip.MinSize; }
             set { strip.MinSize = value; }
         }
 
-        public static MinSizeProxy GetInstance
-        {
-            get
-            {
-                return instance;
-            }
-        }
+        public static MinSizeProxy GetInstance { get; } = new();
     }
 }

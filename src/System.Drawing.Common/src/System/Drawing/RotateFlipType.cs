@@ -1,21 +1,21 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 namespace System.Drawing;
 
 /// <summary>
-/// Specifies the different patterns available 'RotateFlipType' objects.
+///  Specifies the different patterns available 'RotateFlipType' objects.
 /// </summary>
 public enum RotateFlipType
 {
-    RotateNoneFlipNone = 0,
-    Rotate90FlipNone = 1,
-    Rotate180FlipNone = 2,
-    Rotate270FlipNone = 3,
-    RotateNoneFlipX = 4,
-    Rotate90FlipX = 5,
-    Rotate180FlipX = 6,
-    Rotate270FlipX = 7,
+    RotateNoneFlipNone = GdiPlus.RotateFlipType.RotateNoneFlipNone,
+    Rotate90FlipNone = GdiPlus.RotateFlipType.Rotate90FlipNone,
+    Rotate180FlipNone = GdiPlus.RotateFlipType.Rotate180FlipNone,
+    Rotate270FlipNone = GdiPlus.RotateFlipType.Rotate270FlipNone,
+    RotateNoneFlipX = GdiPlus.RotateFlipType.RotateNoneFlipX,
+    Rotate90FlipX = GdiPlus.RotateFlipType.Rotate90FlipX,
+    Rotate180FlipX = GdiPlus.RotateFlipType.Rotate180FlipX,
+    Rotate270FlipX = GdiPlus.RotateFlipType.Rotate270FlipX,
     RotateNoneFlipY = Rotate180FlipX,
     Rotate90FlipY = Rotate270FlipX,
     Rotate180FlipY = RotateNoneFlipX,

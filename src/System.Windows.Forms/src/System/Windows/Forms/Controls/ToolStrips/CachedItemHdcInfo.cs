@@ -27,17 +27,17 @@ internal class CachedItemHdcInfo : IDisposable, IHandle<HDC>
             if (_cachedItemHDC.IsNull)
             {
                 // Create a new DC - we don't have one yet.
-                _cachedItemHDC = PInvoke.CreateCompatibleDC(toolStripHDC);
+                _cachedItemHDC = PInvokeCore.CreateCompatibleDC(toolStripHDC);
             }
 
             // Create compatible bitmap with the correct size.
-            _cachedItemBitmap = PInvoke.CreateCompatibleBitmap(toolStripHDC, bitmapSize.Width, bitmapSize.Height);
+            _cachedItemBitmap = PInvokeCore.CreateCompatibleBitmap(toolStripHDC, bitmapSize.Width, bitmapSize.Height);
             HGDIOBJ oldBitmap = PInvoke.SelectObject(_cachedItemHDC, _cachedItemBitmap);
 
             // Delete the old bitmap
             if (!oldBitmap.IsNull)
             {
-                PInvoke.DeleteObject(oldBitmap);
+                PInvokeCore.DeleteObject(oldBitmap);
             }
 
             // remember what size we created.
@@ -53,10 +53,10 @@ internal class CachedItemHdcInfo : IDisposable, IHandle<HDC>
         {
             if (!_cachedItemBitmap.IsNull)
             {
-                PInvoke.DeleteObject(_cachedItemBitmap);
+                PInvokeCore.DeleteObject(_cachedItemBitmap);
             }
 
-            PInvoke.DeleteDC(_cachedItemHDC);
+            PInvokeCore.DeleteDC(_cachedItemHDC);
         }
 
         _cachedItemHDC = default;

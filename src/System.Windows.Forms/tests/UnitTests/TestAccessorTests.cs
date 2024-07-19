@@ -187,6 +187,8 @@ public class TestAccessorTests
 #pragma warning disable IDE0052   // unaccessed private
 #pragma warning disable CS0169    // unused field
 #pragma warning disable CA1823    // unused field
+#pragma warning disable CA1822    // Mark members as static
+#pragma warning disable CA1051 // Do not declare visible instance fields
 
     public class A
     {
@@ -203,7 +205,7 @@ public class TestAccessorTests
     {
         private int _integer;
         private readonly int _readOnlyInteger;
-        private List<string> _list = new() { "42" };
+        private List<string> _list = ["42"];
 
         private long Long { get; set; }
 
@@ -229,6 +231,9 @@ public class TestAccessorTests
     }
 #pragma warning restore IDE0044
 #pragma warning restore IDE0051
+#pragma warning restore IDE0052
 #pragma warning restore CS0169
 #pragma warning restore CA1823
+#pragma warning restore CA1822
+#pragma warning restore CA1051
 }

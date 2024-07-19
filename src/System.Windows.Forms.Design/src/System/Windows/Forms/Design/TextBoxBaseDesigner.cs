@@ -27,11 +27,12 @@ internal class TextBoxBaseDesigner : ControlDesigner
         get
         {
             int baseline = DesignerUtils.GetTextBaseline(Control, Drawing.ContentAlignment.TopLeft);
-
-            PropertyDescriptor? prop = TypeDescriptor.GetProperties(Component)["BorderStyle"];
-            BorderStyle borderStyle = prop is not null
-                ? (BorderStyle)prop.GetValue(Component)!
-                : BorderStyle.Fixed3D;
+            BorderStyle borderStyle = BorderStyle.Fixed3D;
+            PropertyDescriptorCollection props = TypeDescriptor.GetProperties(Component);
+            props.TryGetPropertyDescriptorValue(
+                "BorderStyle",
+                Component,
+                ref borderStyle);
 
             if (borderStyle == BorderStyle.None)
             {
@@ -59,10 +60,7 @@ internal class TextBoxBaseDesigner : ControlDesigner
 
     private string Text
     {
-        get
-        {
-            return Control.Text;
-        }
+        get => Control.Text;
         set
         {
             Control.Text = value;
@@ -88,7 +86,7 @@ internal class TextBoxBaseDesigner : ControlDesigner
     /// We override this so we can clear the text field set by controldesigner.
     /// </summary>
     /// <param name="defaultValues">The default values.</param>
-    public override void InitializeNewComponent(IDictionary defaultValues)
+    public override void InitializeNewComponent(IDictionary? defaultValues)
     {
         base.InitializeNewComponent(defaultValues);
 
@@ -104,19 +102,16 @@ internal class TextBoxBaseDesigner : ControlDesigner
         base.PreFilterProperties(properties);
 
         // Handle shadowed properties
-        string[] shadowProps = new string[]
-        {
+        string[] shadowProps =
+        [
             "Text",
-        };
-
-        Attribute[] empty = Array.Empty<Attribute>();
+        ];
 
         for (int i = 0; i < shadowProps.Length; i++)
         {
-            PropertyDescriptor? prop = (PropertyDescriptor?)properties[shadowProps[i]];
-            if (prop is not null)
+            if (properties[shadowProps[i]] is PropertyDescriptor prop)
             {
-                properties[shadowProps[i]] = TypeDescriptor.CreateProperty(typeof(TextBoxBaseDesigner), prop, empty);
+                properties[shadowProps[i]] = TypeDescriptor.CreateProperty(typeof(TextBoxBaseDesigner), prop, []);
             }
         }
     }

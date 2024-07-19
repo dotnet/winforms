@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Drawing;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.TreeNode;
 
@@ -14,8 +15,12 @@ public class TreeNodeAccessibleObjectTests
         using TreeView control = new();
         TreeNode node = new(control);
 
-        Assert.NotNull(node.AccessibilityObject);
-        Assert.False(control.IsHandleCreated);
+        node.AccessibilityObject.Should().NotBeNull();      
+        node.AccessibilityObject.CanGetDefaultActionInternal.Should().BeFalse();
+        node.AccessibilityObject.CanGetNameInternal.Should().BeFalse();
+        node.AccessibilityObject.IsItemSelected.Should().BeFalse();
+        node.AccessibilityObject.CanGetValueInternal.Should().BeFalse();
+        control.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsFact]
@@ -138,7 +143,7 @@ public class TreeNodeAccessibleObjectTests
     {
         using TreeView control = new();
         TreeNode node = new();
-        control.Nodes.Add(new TreeNode("Root node", new[] { node }));
+        control.Nodes.Add(new TreeNode("Root node", [node]));
 
         var actual = (AccessibleObject)node.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent);
 
@@ -188,7 +193,7 @@ public class TreeNodeAccessibleObjectTests
     public void TreeNodeAccessibleObject_FragmentNavigate_NextSibling_ReturnsExpected()
     {
         using TreeView control = new();
-        control.Nodes.AddRange(new TreeNode[] { new(), new(), new() });
+        control.Nodes.AddRange([new(), new(), new()]);
 
         AccessibleObject accessibleObject1 = control.Nodes[0].AccessibilityObject;
         AccessibleObject accessibleObject2 = control.Nodes[1].AccessibilityObject;
@@ -204,7 +209,7 @@ public class TreeNodeAccessibleObjectTests
     public void TreeNodeAccessibleObject_FragmentNavigate_PreviousSibling_ReturnsExpected()
     {
         using TreeView control = new();
-        control.Nodes.AddRange(new TreeNode[] { new(), new(), new() });
+        control.Nodes.AddRange([new(), new(), new()]);
 
         AccessibleObject accessibleObject1 = control.Nodes[0].AccessibilityObject;
         AccessibleObject accessibleObject2 = control.Nodes[1].AccessibilityObject;
@@ -232,7 +237,7 @@ public class TreeNodeAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData((int)UIA_PATTERN_ID.UIA_ExpandCollapsePatternId, false)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_ExpandCollapsePatternId, true)]
     [InlineData((int)UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId, true)]
     [InlineData((int)UIA_PATTERN_ID.UIA_ScrollItemPatternId, true)]
     [InlineData((int)UIA_PATTERN_ID.UIA_SelectionItemPatternId, true)]
@@ -246,7 +251,7 @@ public class TreeNodeAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData((int)UIA_PATTERN_ID.UIA_ExpandCollapsePatternId, false)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_ExpandCollapsePatternId, true)]
     [InlineData((int)UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId, true)]
     [InlineData((int)UIA_PATTERN_ID.UIA_ScrollItemPatternId, true)]
     [InlineData((int)UIA_PATTERN_ID.UIA_SelectionItemPatternId, true)]
@@ -261,7 +266,7 @@ public class TreeNodeAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData((int)UIA_PATTERN_ID.UIA_ExpandCollapsePatternId, false)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_ExpandCollapsePatternId, true)]
     [InlineData((int)UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId, true)]
     [InlineData((int)UIA_PATTERN_ID.UIA_ScrollItemPatternId, true)]
     [InlineData((int)UIA_PATTERN_ID.UIA_SelectionItemPatternId, true)]
@@ -279,7 +284,7 @@ public class TreeNodeAccessibleObjectTests
     public void TreeNodeAccessibleObject_Index_ReturnsExpected()
     {
         using TreeView control = new();
-        control.Nodes.AddRange(new TreeNode[] { new(), new(), new() });
+        control.Nodes.AddRange([new(), new(), new()]);
 
         TreeNodeAccessibleObject accessibleObject1 = control.Nodes[0].AccessibilityObject;
         TreeNodeAccessibleObject accessibleObject2 = control.Nodes[1].AccessibilityObject;
@@ -318,7 +323,7 @@ public class TreeNodeAccessibleObjectTests
         using TreeView control = new();
         TreeNode node = new();
 
-        control.Nodes.Add(new TreeNode("Root node", new[] { node }));
+        control.Nodes.Add(new TreeNode("Root node", [node]));
 
         Assert.Equal(node.Parent.AccessibilityObject, node.AccessibilityObject.Parent);
         Assert.False(control.IsHandleCreated);
@@ -348,7 +353,7 @@ public class TreeNodeAccessibleObjectTests
     public void TreeNodeAccessibleObject_Expand_WorksExpected_IfNodeIsCollapsed()
     {
         using TreeView control = new();
-        TreeNode node = new("Root node", new TreeNode[] { new() });
+        TreeNode node = new("Root node", [new()]);
 
         control.Nodes.Add(node);
 
@@ -380,7 +385,7 @@ public class TreeNodeAccessibleObjectTests
     public void TreeNodeAccessibleObject_Collapse_WorksExpected_IfNodeIsExpanded()
     {
         using TreeView control = new();
-        TreeNode node = new("Root node", new TreeNode[] { new() });
+        TreeNode node = new("Root node", [new()]);
 
         control.Nodes.Add(node);
 
@@ -408,7 +413,7 @@ public class TreeNodeAccessibleObjectTests
     public void TreeNodeAccessibleObject_ExpandCollapseState_ReturnsExpected(bool isExpanded)
     {
         using TreeView control = new();
-        TreeNode node = new("Root node", new TreeNode[] { new() });
+        TreeNode node = new("Root node", [new()]);
 
         control.Nodes.Add(node);
 
@@ -503,7 +508,7 @@ public class TreeNodeAccessibleObjectTests
         node.Nodes.Add("ChildNode");
 
         Assert.True(node.AccessibilityObject.IsPatternSupported(UIA_PATTERN_ID.UIA_ExpandCollapsePatternId));
-        Assert.True(node._childNodes.Count > 0);
+        Assert.True(node._childCount > 0);
         Assert.False(control.IsHandleCreated);
     }
 
@@ -582,6 +587,36 @@ public class TreeNodeAccessibleObjectTests
         Assert.True(secondLevelNode.IsAccessibilityObjectDisconnected);
         Assert.True(thirdLevelNode.IsAccessibilityObjectDisconnected);
         Assert.True(control.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [InlineData(false, false, true)]
+    [InlineData(true, true, false)]
+    public void TreeNodeAccessibleObject_Bounds_ShouldMatchExpected_IfConditionsMet(bool createControl, bool makeNodeVisible, bool expectBoundsEmpty)
+    {
+        using TreeView treeView = new();
+        TreeNode node = new("Node");
+        treeView.Nodes.Add(node);
+
+        if (createControl)
+        {
+            treeView.CreateControl();
+            if (makeNodeVisible)
+            {
+                treeView.ExpandAll();
+            }
+        }
+
+        var accessibleObject = node.AccessibilityObject;
+
+        if (expectBoundsEmpty)
+        {
+            accessibleObject.Bounds.Should().Be(Rectangle.Empty);
+        }
+        else
+        {
+            accessibleObject.Bounds.Should().NotBe(Rectangle.Empty);
+        }
     }
 
     private class AccessibilityObjectDisconnectTrackingTreeNode : TreeNode

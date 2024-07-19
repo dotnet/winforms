@@ -1,0 +1,62 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>$(TargetFramework)-windows7.0</TargetFramework>
+    <DisableTransitiveFrameworkReferences>true</DisableTransitiveFrameworkReferences>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <RootNamespace />
+
+    <!--
+      Note that this is the only way to enable binary formatter serialization. If this isn't set it will will be set to
+      false by default in the Microsoft.NET.Sdk targets and it will set the RuntimeHostConfigurationOption item for
+      System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization will always be set to this value. This will
+      trump anything set in the runtimeconfig.template.json file.
+    -->
+    <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!--
+     Turning off a number of warnings that would otherwise litter this project due to special
+     test type cases for binary formatting.
+
+     SYSLIB0011: BinaryFormatter obsolete
+     SYSLIB0050: Obsolete attribute
+     SYSLIB0051: Formatters obsolete
+    -->
+    <NoWarn>$(NoWarn);CS1574;CS1580;CA1036;CA1051;CA1066;SYSLIB0011;SYSLIB0050;SYSLIB0051;xUnit1013</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="$(FluentAssertionsVersion)" />
+    <PackageReference Include="System.Runtime.Serialization.Formatters" Version="$(SystemRuntimeSerializationFormattersPackageVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\System.Drawing.Common\src\System.Drawing.Common.csproj" />
+    <ProjectReference Include="..\..\..\System.Windows.Forms\tests\TestUtilities\System.Windows.Forms.TestUtilities.csproj" />
+    <ProjectReference Include="..\..\src\System.Private.Windows.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="TestResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>TestResources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="TestResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>TestResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

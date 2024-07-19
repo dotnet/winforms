@@ -94,7 +94,7 @@ public sealed class HtmlElementEventArgs : EventArgs
         get
         {
             object obj = NativeHTMLEventObj.GetReturnValue();
-            return obj is null ? true : (bool)obj;
+            return obj is null || (bool)obj;
         }
         set => NativeHTMLEventObj.SetReturnValue(value);
     }

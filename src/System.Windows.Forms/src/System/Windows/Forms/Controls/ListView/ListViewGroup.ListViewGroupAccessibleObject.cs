@@ -27,7 +27,7 @@ public partial class ListViewGroup
                     ? listView
                     : throw new InvalidOperationException(nameof(owningGroup.ListView)));
 
-            _owningListViewAccessibilityObject = _owningListView.AccessibilityObject as ListView.ListViewAccessibleObject
+            _owningListViewAccessibilityObject = _owningListView.AccessibilityObject as ListViewAccessibleObject
                 ?? throw new InvalidOperationException(nameof(_owningListView.AccessibilityObject));
 
             _owningGroupIsDefault = owningGroupIsDefault;
@@ -111,17 +111,18 @@ public partial class ListViewGroup
         {
             get
             {
-                int[] owningListViewRuntimeId = _owningListViewAccessibilityObject.RuntimeId;
+                int[] id = _owningListViewAccessibilityObject.RuntimeId;
 
-                Debug.Assert(owningListViewRuntimeId.Length >= 2);
+                Debug.Assert(id.Length >= 2);
 
-                return new int[]
-                {
-                    owningListViewRuntimeId[0],
-                    owningListViewRuntimeId[1],
-                    4, // Win32-control specific RuntimeID constant, is used in similar Win32 controls and is used in WinForms controls for consistency.
+                return
+                [
+                    id[0],
+                    id[1],
+                    // Win32 control specific RuntimeID constant, is used in similar Win32 controls and is used in WinForms controls for consistency.
+                    4,
                     GetHashCode()
-                };
+                ];
             }
         }
 
@@ -196,7 +197,7 @@ public partial class ListViewGroup
 
         internal IReadOnlyList<ListViewItem> GetVisibleItems()
         {
-            List<ListViewItem> visibleItems = new();
+            List<ListViewItem> visibleItems = [];
             if (_owningGroupIsDefault)
             {
                 foreach (ListViewItem? listViewItem in _owningListView.Items)

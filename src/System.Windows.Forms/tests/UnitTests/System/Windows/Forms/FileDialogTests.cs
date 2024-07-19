@@ -733,7 +733,7 @@ public class FileDialogTests
             Assert.Equal((OPEN_FILENAME_FLAGS_EX)0, o.FlagsEx);
             return result;
         };
-        Assert.Equal(result, dialog.RunDialog((IntPtr)1));
+        Assert.Equal(result, dialog.RunDialog(1));
     }
 
     [WinFormsTheory]
@@ -788,9 +788,42 @@ public class FileDialogTests
         Assert.Equal(expected, dialog.ToString());
     }
 
+    [WinFormsFact]
+    public void FileDialog_GetMultiselectFiles_ReturnsExpected()
+    {
+        // Test with directory
+        var accessor = typeof(FileDialog).TestAccessor();
+        string buffer = "C:\\test\0testfile.txt\0testfile2.txt\0";
+        string[] expected = ["C:\\test\\testfile.txt", "C:\\test\\testfile2.txt"];
+        string[] result = accessor.CreateDelegate<GetMultiselectFiles>()(buffer);
+        Assert.Equal(expected, result);
+
+        // Test without directory
+        buffer = "C:\\\0testfile.txt\0testfile2.txt\0";
+        expected = ["C:\\testfile.txt", "C:\\testfile2.txt"];
+        result = accessor.CreateDelegate<GetMultiselectFiles>()(buffer);
+        Assert.Equal(expected, result);
+
+        // Test single file with directory
+        buffer = "C:\\test\\testfile.txt\0";
+        expected = ["C:\\test\\testfile.txt"];
+        result = accessor.CreateDelegate<GetMultiselectFiles>()(buffer);
+        Assert.Equal(expected, result);
+
+        // Test single file without directory
+        buffer = "C:\\testfile.txt\0";
+        expected = ["C:\\testfile.txt"];
+        result = accessor.CreateDelegate<GetMultiselectFiles>()(buffer);
+        Assert.Equal(expected, result);
+    }
+
+    private delegate string[] GetMultiselectFiles(ReadOnlySpan<char> fileBuffer);
+
     private unsafe class SubFileDialog : FileDialog
     {
+#pragma warning disable IDE1006 // Naming Styles
         public static new readonly object EventFileOk = FileDialog.EventFileOk;
+#pragma warning restore IDE1006
 
         public new bool CanRaiseEvents => base.CanRaiseEvents;
 

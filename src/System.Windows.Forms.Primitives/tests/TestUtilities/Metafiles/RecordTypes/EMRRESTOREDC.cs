@@ -13,5 +13,5 @@ internal struct EMRRESTOREDC
     public EMR emr;
     public int iRelative;
 
-    public override string ToString() => $"[{nameof(EMRRESTOREDC)}] Index: {iRelative}";
+    public override readonly string ToString() => $"[{nameof(EMRRESTOREDC)}] Index: {iRelative}";
 }

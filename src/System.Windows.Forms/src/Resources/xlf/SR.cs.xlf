@@ -287,6 +287,11 @@
         <target state="translated">Strukturovaný objekt DataBinding přijímá jako zdroj dat objekt IList nebo IListSource.</target>
         <note />
       </trans-unit>
+      <trans-unit id="BinaryFormatterNotSupported">
+        <source>BinaryFormatter serialization and deserialization are disabled within this application. See https://aka.ms/binaryformatter for more information.</source>
+        <target state="needs-review-translation">Použití deserializace BinaryFormatter se v aplikacích s pročištěným kódem nepodporuje.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
         <source>Occurs when the binding context has changed.</source>
         <target state="translated">Vyvolá se při změně kontextu vazby.</target>
@@ -410,6 +415,11 @@
       <trans-unit id="BindingNavigatorToolStripName">
         <source>Binding Navigator</source>
         <target state="translated">Navigátor vazby</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BindingNotSupported">
+        <source>Binding operations are not supported when application trimming is enabled.</source>
+        <target state="translated">Operace vytvoření vazby nejsou podporovány, pokud je povolen trimming aplikací.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingSourceAddingNewEventHandlerDescr">
@@ -1650,6 +1660,11 @@
       <trans-unit id="ControlNotChild">
         <source>'child' is not a child control of this parent.</source>
         <target state="translated">Objekt child není podřízeným ovládacím prvkem tohoto nadřazeného objektu.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlNotSupportedInTrimming">
+        <source>'{0}' is not supported in trimmed applications.</source>
+        <target state="translated">{0} se v aplikacích s pročištěným kódem nepodporuje.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlOnAutoSizeChangedDescr">
@@ -4135,8 +4150,8 @@ Chcete-li nahradit toto výchozí dialogové okno, nastavte popisovač události
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_SortedDescr">
-        <source>Occurs when the DataGridView compares two cell values to perform a sort operation.</source>
-        <target state="translated">Vyvolá se v případě, že ovládací prvek DataGridView porovnává dvě hodnoty buňky za účelem provedení operace řazení.</target>
+        <source>Occurs when the DataGridView control completes a sorting operation.</source>
+        <target state="translated">Vyvolá se v případě, že kontrola DataGridView dokončí operaci řazení.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_StandardTabDescr">
@@ -4627,6 +4642,11 @@ Chcete-li nahradit toto výchozí dialogové okno, nastavte popisovač události
       <trans-unit id="DescriptionWebBrowser">
         <source>Enables the user to browse Web pages inside your form.</source>
         <target state="translated">Umožňuje uživateli procházet webové stránky uvnitř formuláře.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignTimeFeaturesNotSupported">
+        <source>Design time features are not supported.</source>
+        <target state="translated">Funkce doby návrhu nejsou podporovány.</target>
         <note />
       </trans-unit>
       <trans-unit id="DispInvokeFailed">
@@ -5207,7 +5227,7 @@ Chcete jej nahradit?</target>
       </trans-unit>
       <trans-unit id="FolderBrowserDialogMultiSelectDescr">
         <source>Controls whether multiple folders can be selected in the dialog.</source>
-        <target state="new">Controls whether multiple folders can be selected in the dialog.</target>
+        <target state="translated">Určuje, zda v dialogovém okně lze vybrat více složek.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogOkRequiresInteraction">
@@ -5227,7 +5247,7 @@ Chcete jej nahradit?</target>
       </trans-unit>
       <trans-unit id="FolderBrowserDialogSelectedPathsDescr">
         <source>Retrieves the paths of all selected folders in the dialog box.</source>
-        <target state="new">Retrieves the paths of all selected folders in the dialog box.</target>
+        <target state="translated">Načte cesty všech vybraných složek v dialogovém okně.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogShowHiddenFiles">
@@ -9682,6 +9702,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       <trans-unit id="TooManyResumeUpdateMenuHandles">
         <source>Too many calls to ResumeUpdateMenuHandles.</source>
         <target state="translated">Příliš mnoho volání ResumeUpdateMenuHandles.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripAllowClickThrough">
+        <source>Allows the control to be interacted when window does not have focus.</source>
+        <target state="translated">Umožňuje interakci s ovládacím prvkem, pokud okno nemá fokus.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue">

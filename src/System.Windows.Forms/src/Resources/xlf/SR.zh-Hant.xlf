@@ -287,6 +287,11 @@
         <target state="translated">複雜 DataBinding 接受以 IList 或 IListSource 做為資料來源。</target>
         <note />
       </trans-unit>
+      <trans-unit id="BinaryFormatterNotSupported">
+        <source>BinaryFormatter serialization and deserialization are disabled within this application. See https://aka.ms/binaryformatter for more information.</source>
+        <target state="needs-review-translation">修剪後的應用程式不支援使用 BinaryFormatter。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
         <source>Occurs when the binding context has changed.</source>
         <target state="translated">在繫結內容變更時發生。</target>
@@ -410,6 +415,11 @@
       <trans-unit id="BindingNavigatorToolStripName">
         <source>Binding Navigator</source>
         <target state="translated">繫結導覽</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BindingNotSupported">
+        <source>Binding operations are not supported when application trimming is enabled.</source>
+        <target state="translated">啟用應用程式修剪時，不支援繫結作業。</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingSourceAddingNewEventHandlerDescr">
@@ -1650,6 +1660,11 @@
       <trans-unit id="ControlNotChild">
         <source>'child' is not a child control of this parent.</source>
         <target state="translated">'child' 不是此父系的子控制項。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlNotSupportedInTrimming">
+        <source>'{0}' is not supported in trimmed applications.</source>
+        <target state="translated">修剪後的應用程式不支援 '{0}'。</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlOnAutoSizeChangedDescr">
@@ -4135,8 +4150,8 @@ To replace this default dialog please handle the DataError event.</source>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_SortedDescr">
-        <source>Occurs when the DataGridView compares two cell values to perform a sort operation.</source>
-        <target state="translated">DataGridView 比較兩個儲存格值以執行排序作業時發生。</target>
+        <source>Occurs when the DataGridView control completes a sorting operation.</source>
+        <target state="translated">在 DataGridView 控件完成排序作業時發生。</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_StandardTabDescr">
@@ -4627,6 +4642,11 @@ To replace this default dialog please handle the DataError event.</source>
       <trans-unit id="DescriptionWebBrowser">
         <source>Enables the user to browse Web pages inside your form.</source>
         <target state="translated">讓使用者可以瀏覽表單內部的 Web 網頁。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignTimeFeaturesNotSupported">
+        <source>Design time features are not supported.</source>
+        <target state="translated">不支援設計時間功能。</target>
         <note />
       </trans-unit>
       <trans-unit id="DispInvokeFailed">
@@ -5207,7 +5227,7 @@ Do you want to replace it?</source>
       </trans-unit>
       <trans-unit id="FolderBrowserDialogMultiSelectDescr">
         <source>Controls whether multiple folders can be selected in the dialog.</source>
-        <target state="new">Controls whether multiple folders can be selected in the dialog.</target>
+        <target state="translated">控制對話方塊中是否可選取多個資料夾。</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogOkRequiresInteraction">
@@ -5227,7 +5247,7 @@ Do you want to replace it?</source>
       </trans-unit>
       <trans-unit id="FolderBrowserDialogSelectedPathsDescr">
         <source>Retrieves the paths of all selected folders in the dialog box.</source>
-        <target state="new">Retrieves the paths of all selected folders in the dialog box.</target>
+        <target state="translated">擷取對話方塊中所有已選取資料夾的路徑。</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogShowHiddenFiles">
@@ -9682,6 +9702,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="TooManyResumeUpdateMenuHandles">
         <source>Too many calls to ResumeUpdateMenuHandles.</source>
         <target state="translated">太多的 ResumeUpdateMenuHandles 呼叫。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripAllowClickThrough">
+        <source>Allows the control to be interacted when window does not have focus.</source>
+        <target state="translated">允許控制件在視窗沒有焦點時進行互動。</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue">

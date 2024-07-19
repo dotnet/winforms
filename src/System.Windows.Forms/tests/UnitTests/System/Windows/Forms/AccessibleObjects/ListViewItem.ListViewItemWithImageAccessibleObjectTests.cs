@@ -14,7 +14,7 @@ public class ListViewItem_ListViewItemWithImageAccessibleObjectTests
     {
         using ListView control = new();
         control.View = view;
-        control.Items.AddRange(new ListViewItem[] { new() });
+        control.Items.Add(new ListViewItem());
 
         AccessibleObject listViewItemAccessibleObject = control.Items[0].AccessibilityObject;
 
@@ -60,7 +60,7 @@ public class ListViewItem_ListViewItemWithImageAccessibleObjectTests
     {
         using ListView control = new();
         control.View = view;
-        control.Items.AddRange(new ListViewItem[] { new() });
+        control.Items.Add(new ListViewItem());
 
         AccessibleObject listViewItemAccessibleObject = control.Items[0].AccessibilityObject;
 
@@ -96,7 +96,7 @@ public class ListViewItem_ListViewItemWithImageAccessibleObjectTests
     {
         using ListView control = new();
         control.View = view;
-        control.Items.AddRange(new ListViewItem[] { new() });
+        control.Items.Add(new ListViewItem());
         control.CreateControl();
 
         AccessibleObject listViewItemAccessibleObject = control.Items[0].AccessibilityObject;

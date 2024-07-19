@@ -11,7 +11,7 @@ public sealed partial class CodeDomComponentSerializationService
     {
         private class PassThroughSerializationManager : IDesignerSerializationManager
         {
-            private readonly HashSet<string> _resolved = new();
+            private readonly HashSet<string> _resolved = [];
             private ResolveNameEventHandler? _resolveNameEventHandler;
 
             public PassThroughSerializationManager(DesignerSerializationManager manager) => Manager = manager;

@@ -1,8 +1,6 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Option Explicit On
-Option Strict On
 Imports System.ComponentModel
 Imports System.Net
 Imports System.Security
@@ -129,7 +127,7 @@ Namespace Microsoft.VisualBasic.Devices
             ' We're safe from Ping(Nothing, ...) due to overload failure (Ping(String,...) vs. Ping(Uri,...)).
             ' However, it is good practice to verify address before calling address.Host.
             If address Is Nothing Then
-                Throw ExceptionUtils.GetArgumentNullException("address")
+                Throw GetArgumentNullException("address")
             End If
             Return Ping(address.Host, DEFAULT_PING_TIMEOUT)
         End Function
@@ -144,7 +142,7 @@ Namespace Microsoft.VisualBasic.Devices
 
             ' Make sure a network is available
             If Not IsAvailable Then
-                Throw ExceptionUtils.GetInvalidOperationException(SR.Network_NetworkNotAvailable)
+                Throw GetInvalidOperationException(SR.Network_NetworkNotAvailable)
             End If
 
             Dim PingMaker As New NetInfoAlias.Ping
@@ -165,7 +163,7 @@ Namespace Microsoft.VisualBasic.Devices
             ' We're safe from Ping(Nothing, ...) due to overload failure (Ping(String,...) vs. Ping(Uri,...)).
             ' However, it is good practice to verify address before calling address.Host.
             If address Is Nothing Then
-                Throw ExceptionUtils.GetArgumentNullException("address")
+                Throw GetArgumentNullException("address")
             End If
             Return Ping(address.Host, timeout)
         End Function
@@ -218,7 +216,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="userName">The name of the user performing the download</param>
         ''' <param name="password">The user's password</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
-        ''' <param name="connectionTimeout">Time alloted before giving up on a connection</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
         Public Sub DownloadFile(address As String,
                              destinationFileName As String,
@@ -239,7 +237,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="userName">The name of the user performing the download</param>
         ''' <param name="password">The user's password</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
-        ''' <param name="connectionTimeout">Time alloted before giving up on a connection</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
         ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing)</param>
         Public Sub DownloadFile(address As String,
@@ -254,7 +252,7 @@ Namespace Microsoft.VisualBasic.Devices
             ' We're safe from DownloadFile(Nothing, ...) due to overload failure (DownloadFile(String,...) vs. DownloadFile(Uri,...)).
             ' However, it is good practice to verify address before calling Trim.
             If String.IsNullOrWhiteSpace(address) Then
-                Throw ExceptionUtils.GetArgumentNullException("address")
+                Throw GetArgumentNullException("address")
             End If
 
             Dim addressUri As Uri = GetUri(address.Trim())
@@ -273,9 +271,9 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="userName">The name of the user performing the download</param>
         ''' <param name="password">The user's password</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
-        ''' <param name="connectionTimeout">Time alloted before giving up on a connection</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
-        Sub DownloadFile(address As Uri,
+        Public Sub DownloadFile(address As Uri,
                      destinationFileName As String,
                      userName As String,
                      password As String,
@@ -294,10 +292,10 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="userName">The name of the user performing the download</param>
         ''' <param name="password">The user's password</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
-        ''' <param name="connectionTimeout">Time alloted before giving up on a connection</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
         ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing)</param>
-        Sub DownloadFile(address As Uri,
+        Public Sub DownloadFile(address As Uri,
                      destinationFileName As String,
                      userName As String,
                      password As String,
@@ -319,10 +317,10 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="destinationFileName">Name and path of file where download is saved</param>
         ''' <param name="networkCredentials">The credentials of the user performing the download</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
-        ''' <param name="connectionTimeout">Time alloted before giving up on a connection</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
         ''' <remarks>Calls to all the other overloads will come through here</remarks>
-        Sub DownloadFile(address As Uri,
+        Public Sub DownloadFile(address As Uri,
                     destinationFileName As String,
                     networkCredentials As ICredentials,
                     showUI As Boolean,
@@ -340,11 +338,11 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="destinationFileName">Name and path of file where download is saved</param>
         ''' <param name="networkCredentials">The credentials of the user performing the download</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
-        ''' <param name="connectionTimeout">Time alloted before giving up on a connection</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
         ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing)</param>
         ''' <remarks>Calls to all the other overloads will come through here</remarks>
-        Sub DownloadFile(address As Uri,
+        Public Sub DownloadFile(address As Uri,
                     destinationFileName As String,
                     networkCredentials As ICredentials,
                     showUI As Boolean,
@@ -356,7 +354,7 @@ Namespace Microsoft.VisualBasic.Devices
             End If
 
             If address Is Nothing Then
-                Throw ExceptionUtils.GetArgumentNullException("address")
+                Throw GetArgumentNullException("address")
             End If
 
             Using client As New WebClientExtended
@@ -366,12 +364,12 @@ Namespace Microsoft.VisualBasic.Devices
                 client.UseNonPassiveFtp = showUI
 
                 'Construct the local file. This will validate the full name and path
-                Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(destinationFileName, "destinationFileName")
+                Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(destinationFileName, NameOf(destinationFileName))
 
                 ' Sometime a path that can't be parsed is normalized to the current directory. This makes sure we really
                 ' have a file and path
-                If System.IO.Directory.Exists(fullFilename) Then
-                    Throw ExceptionUtils.GetInvalidOperationException(SR.Network_DownloadNeedsFilename)
+                If IO.Directory.Exists(fullFilename) Then
+                    Throw GetInvalidOperationException(SR.Network_DownloadNeedsFilename)
                 End If
 
                 'Throw if the file exists and the user doesn't want to overwrite
@@ -385,7 +383,7 @@ Namespace Microsoft.VisualBasic.Devices
                 End If
 
                 Dim dialog As ProgressDialog = Nothing
-                If showUI AndAlso System.Environment.UserInteractive Then
+                If showUI AndAlso Environment.UserInteractive Then
                     dialog = New ProgressDialog With {
                         .Text = GetResourceString(SR.ProgressDialogDownloadingTitle, address.AbsolutePath),
                         .LabelText = GetResourceString(SR.ProgressDialogDownloadingLabel, address.AbsolutePath, fullFilename)
@@ -393,11 +391,11 @@ Namespace Microsoft.VisualBasic.Devices
                 End If
 
                 'Check to see if the target directory exists. If it doesn't, create it
-                Dim targetDirectory As String = System.IO.Path.GetDirectoryName(fullFilename)
+                Dim targetDirectory As String = IO.Path.GetDirectoryName(fullFilename)
 
                 ' Make sure we have a meaningful directory. If we don't, the destinationFileName is suspect
                 If String.IsNullOrEmpty(targetDirectory) Then
-                    Throw ExceptionUtils.GetInvalidOperationException(SR.Network_DownloadNeedsFilename)
+                    Throw GetInvalidOperationException(SR.Network_DownloadNeedsFilename)
                 End If
 
                 If Not IO.Directory.Exists(targetDirectory) Then
@@ -411,7 +409,7 @@ Namespace Microsoft.VisualBasic.Devices
                 copier.DownloadFile(address, fullFilename)
 
                 'Handle a dialog cancel
-                If showUI AndAlso System.Environment.UserInteractive Then
+                If showUI AndAlso Environment.UserInteractive Then
                     If onUserCancel = UICancelOption.ThrowException And dialog.UserCanceledTheDialog Then
                         Throw New OperationCanceledException()
                     End If
@@ -469,7 +467,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="userName">The name of the user performing the upload</param>
         ''' <param name="Password">The user's password</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
-        ''' <param name="connectionTimeout">Time alloted before giving up on a connection</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
         Public Sub UploadFile(sourceFileName As String,
                       address As String,
                       userName As String,
@@ -488,7 +486,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="userName">The name of the user performing the upload</param>
         ''' <param name="Password">The user's password</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
-        ''' <param name="connectionTimeout">Time alloted before giving up on a connection</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
         ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing)</param>
         Public Sub UploadFile(sourceFileName As String,
                       address As String,
@@ -501,7 +499,7 @@ Namespace Microsoft.VisualBasic.Devices
             ' We're safe from UploadFile(Nothing, ...) due to overload failure (UploadFile(String,...) vs. UploadFile(Uri,...)).
             ' However, it is good practice to verify address before calling address.Trim.
             If String.IsNullOrWhiteSpace(address) Then
-                Throw ExceptionUtils.GetArgumentNullException("address")
+                Throw GetArgumentNullException("address")
             End If
 
             ' Getting a uri will validate the form of the host address
@@ -509,7 +507,7 @@ Namespace Microsoft.VisualBasic.Devices
 
             ' For uploads, we need to make sure the address includes the filename
             If String.IsNullOrEmpty(IO.Path.GetFileName(addressUri.AbsolutePath)) Then
-                Throw ExceptionUtils.GetInvalidOperationException(SR.Network_UploadAddressNeedsFilename)
+                Throw GetInvalidOperationException(SR.Network_UploadAddressNeedsFilename)
             End If
 
             UploadFile(sourceFileName, addressUri, userName, password, showUI, connectionTimeout, onUserCancel)
@@ -524,7 +522,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="userName">The name of the user performing the upload</param>
         ''' <param name="password">The user's password</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
-        ''' <param name="connectionTimeout">Time alloted before giving up on a connection</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
         Public Sub UploadFile(sourceFileName As String,
                               address As Uri,
                               userName As String,
@@ -543,7 +541,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="userName">The name of the user performing the upload</param>
         ''' <param name="password">The user's password</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
-        ''' <param name="connectionTimeout">Time alloted before giving up on a connection</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
         ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing)</param>
         Public Sub UploadFile(sourceFileName As String,
                               address As Uri,
@@ -567,7 +565,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="address">Uri representing the destination</param>
         ''' <param name="networkCredentials">The credentials of the user performing the upload</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
-        ''' <param name="connectionTimeout">Time alloted before giving up on a connection</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
         Public Sub UploadFile(sourceFileName As String,
                               address As Uri,
                               networkCredentials As ICredentials,
@@ -584,7 +582,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="address">Uri representing the destination</param>
         ''' <param name="networkCredentials">The credentials of the user performing the upload</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
-        ''' <param name="connectionTimeout">Time alloted before giving up on a connection</param>
+        ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
         ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing)</param>
         Public Sub UploadFile(sourceFileName As String,
                               address As Uri,
@@ -592,7 +590,7 @@ Namespace Microsoft.VisualBasic.Devices
                               showUI As Boolean,
                               connectionTimeout As Integer,
                               onUserCancel As UICancelOption)
-            sourceFileName = FileSystemUtils.NormalizeFilePath(sourceFileName, "sourceFileName")
+            sourceFileName = FileSystemUtils.NormalizeFilePath(sourceFileName, NameOf(sourceFileName))
 
             'Make sure the file exists
             If Not IO.File.Exists(sourceFileName) Then
@@ -604,7 +602,7 @@ Namespace Microsoft.VisualBasic.Devices
             End If
 
             If address Is Nothing Then
-                Throw ExceptionUtils.GetArgumentNullException("address")
+                Throw GetArgumentNullException("address")
             End If
 
             Using client As New WebClientExtended()
@@ -616,7 +614,7 @@ Namespace Microsoft.VisualBasic.Devices
                 End If
 
                 Dim Dialog As ProgressDialog = Nothing
-                If showUI AndAlso System.Environment.UserInteractive Then
+                If showUI AndAlso Environment.UserInteractive Then
                     Dialog = New ProgressDialog With {
                         .Text = GetResourceString(SR.ProgressDialogUploadingTitle, sourceFileName),
                         .LabelText = GetResourceString(SR.ProgressDialogUploadingLabel, sourceFileName, address.AbsolutePath)
@@ -630,7 +628,7 @@ Namespace Microsoft.VisualBasic.Devices
                 copier.UploadFile(sourceFileName, address)
 
                 'Handle a dialog cancel
-                If showUI AndAlso System.Environment.UserInteractive Then
+                If showUI AndAlso Environment.UserInteractive Then
                     If onUserCancel = UICancelOption.ThrowException And Dialog.UserCanceledTheDialog Then
                         Throw New OperationCanceledException()
                     End If
@@ -647,7 +645,7 @@ Namespace Microsoft.VisualBasic.Devices
         Private Sub OS_NetworkAvailabilityChangedListener(sender As Object, e As EventArgs)
             SyncLock _syncObject 'Ensure we don't handle events until after we've finished setting up the event marshalling infrastructure
                 'Don't call AsyncOperationManager.OperationSynchronizationContext.Post.  The reason we want to go through m_SynchronizationContext is that
-                'the OperationSyncronizationContext is thread static.  Since we are getting called on some random thread, the context that was
+                'the OperationSynchronizationContext is thread static.  Since we are getting called on some random thread, the context that was
                 'in place when the Network object was created won't be available (it is on the original thread).  To hang on to the original
                 'context associated with the thread that the network object is created on, I use m_SynchronizationContext.
                 _synchronizationContext.Post(_networkAvailabilityChangedCallback, Nothing)
@@ -674,7 +672,7 @@ Namespace Microsoft.VisualBasic.Devices
                     ReDim _pingBuffer(BUFFER_SIZE - 1)
                     For i As Integer = 0 To BUFFER_SIZE - 1
                         'This is the same logic Ping.exe uses to fill it's buffer
-                        _pingBuffer(i) = System.Convert.ToByte(Asc("a"c) + i Mod 23, System.Globalization.CultureInfo.InvariantCulture)
+                        _pingBuffer(i) = Convert.ToByte(Asc("a"c) + i Mod 23, Globalization.CultureInfo.InvariantCulture)
                     Next
                 End If
 
@@ -706,11 +704,11 @@ Namespace Microsoft.VisualBasic.Devices
 
             ' Make sure all nulls are empty strings
             If userName Is Nothing Then
-                userName = ""
+                userName = String.Empty
             End If
 
             If password Is Nothing Then
-                password = ""
+                password = String.Empty
             End If
 
             If userName.Length = 0 And password.Length = 0 Then

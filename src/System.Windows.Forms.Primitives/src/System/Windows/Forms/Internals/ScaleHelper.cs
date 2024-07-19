@@ -26,6 +26,7 @@ internal static partial class ScaleHelper
 
     // Backing field, indicating that we will need to send a PerMonitorV2 query in due course.
     private static bool s_processPerMonitorAware;
+    private static Size? s_logicalSmallSystemIconSize;
 
     /// <summary>
     ///  The initial primary monitor DPI (logical pixels per inch) for the process.
@@ -61,7 +62,7 @@ internal static partial class ScaleHelper
             if (!OsVersion.IsWindows10_1607OrGreater())
             {
                 using var dc = GetDcScope.ScreenDC;
-                return PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
+                return PInvokeCore.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
             }
 
             // This avoids needing to create a DC
@@ -104,9 +105,7 @@ internal static partial class ScaleHelper
                 // We can't cache this value because different top level windows can have different DPI awareness context
                 // for mixed mode applications.
                 DPI_AWARENESS_CONTEXT dpiAwareness = PInvoke.GetThreadDpiAwarenessContextInternal();
-                return PInvoke.AreDpiAwarenessContextsEqualInternal(
-                    dpiAwareness,
-                    DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+                return dpiAwareness.IsEquivalent(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
             }
             else
             {
@@ -319,20 +318,26 @@ internal static partial class ScaleHelper
         : new(ScaleToDpi(logicalSize.Width, dpi), ScaleToDpi(logicalSize.Height, dpi));
 
     internal static Size SystemIconSize => new(
-        PInvoke.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXICON),
-        PInvoke.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CYICON));
+        PInvokeCore.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXICON),
+        PInvokeCore.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CYICON));
+
+    internal static Size LogicalSmallSystemIconSize => s_logicalSmallSystemIconSize ??= OsVersion.IsWindows10_1607OrGreater()
+        ? new(
+            PInvoke.GetSystemMetricsForDpi(SYSTEM_METRICS_INDEX.SM_CXSMICON, OneHundredPercentLogicalDpi),
+            PInvoke.GetSystemMetricsForDpi(SYSTEM_METRICS_INDEX.SM_CXSMICON, OneHundredPercentLogicalDpi))
+        : new(16, 16);
 
     /// <summary>
     ///  Gets the given icon resource as a <see cref="Bitmap"/> at the default icon size.
     /// </summary>
-    internal static Bitmap GetIconResourceAsDefaultSizeBitmap(Type type, string resource)
-        => GetIconResourceAsBestMatchBitmap(type, resource, Size.Empty);
+    internal static Bitmap GetIconResourceAsDefaultSizeBitmap(Type type, string resource) =>
+        GetIconResourceAsBestMatchBitmap(type, resource, Size.Empty);
 
     /// <summary>
-    ///  Gets the given icon resource as a <see cref="Bitmap"/> scaled to the specified dpi.
+    ///  Gets the given small icon (usually 16x16) resource as a <see cref="Bitmap"/> scaled to the specified dpi.
     /// </summary>
-    internal static Bitmap GetIconResourceAsBitmap(Type type, string resource, int dpi)
-        => GetIconResourceAsBitmap(type, resource, ScaleToDpi(SystemIconSize, dpi));
+    internal static Bitmap GetSmallIconResourceAsBitmap(Type type, string resource, int dpi) =>
+        GetIconResourceAsBitmap(type, resource, ScaleToDpi(LogicalSmallSystemIconSize, dpi));
 
     /// <summary>
     ///  Gets the given icon resource as a <see cref="Bitmap"/> of the given size.
@@ -382,27 +387,27 @@ internal static partial class ScaleHelper
         {
             DPI_AWARENESS_CONTEXT dpiAwareness = PInvoke.GetThreadDpiAwarenessContextInternal();
 
-            if (PInvoke.AreDpiAwarenessContextsEqualInternal(dpiAwareness, DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
+            if (dpiAwareness.IsEquivalent(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
             {
                 return HighDpiMode.SystemAware;
             }
 
-            if (PInvoke.AreDpiAwarenessContextsEqualInternal(dpiAwareness, DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE))
+            if (dpiAwareness.IsEquivalent(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE))
             {
                 return HighDpiMode.DpiUnaware;
             }
 
-            if (PInvoke.AreDpiAwarenessContextsEqualInternal(dpiAwareness, DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2))
+            if (dpiAwareness.IsEquivalent(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2))
             {
                 return HighDpiMode.PerMonitorV2;
             }
 
-            if (PInvoke.AreDpiAwarenessContextsEqualInternal(dpiAwareness, DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE))
+            if (dpiAwareness.IsEquivalent(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE))
             {
                 return HighDpiMode.PerMonitor;
             }
 
-            if (PInvoke.AreDpiAwarenessContextsEqualInternal(dpiAwareness, DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED))
+            if (dpiAwareness.IsEquivalent(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED))
             {
                 return HighDpiMode.DpiUnawareGdiScaled;
             }

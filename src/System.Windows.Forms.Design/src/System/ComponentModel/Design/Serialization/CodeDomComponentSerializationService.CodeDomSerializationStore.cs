@@ -1,9 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.CodeDom;
 using System.Collections;
-using System.Globalization;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -13,21 +11,23 @@ namespace System.ComponentModel.Design.Serialization;
 public sealed partial class CodeDomComponentSerializationService
 {
     /// <summary>
-    ///  The SerializationStore class is an implementation-specific class that stores serialization data for the component serialization service.
-    ///  The service adds state to this serialization store.  Once the store is closed it can be saved to a stream.  A serialization store can
-    ///  be deserialized at a later date by the same type of serialization service. SerializationStore implements the IDisposable interface such
-    ///  that Dispose  simply calls the Close method.  Dispose is implemented as a private interface to avoid confusion.
-    ///  The <see cref="IDisposable" /> pattern is provided for languages that support a "using" syntax like C# and VB .NET.
+    ///  The <see cref="CodeDomSerializationStore"/> class is an implementation-specific class that stores serialization data
+    ///  for the CodeDom component serialization service.  The service adds state to this serialization store.
+    ///  Once the store is closed it can be serialized or deserialized in memory.
     /// </summary>
+    /// <para>
+    ///   On .NET Framework, once the store is closed it can be saved to a stream.  A serialization store can be deserialized
+    ///   at a later time by the same type of serialization service. On .NET <see cref="CodeDomSerializationStore"/> class
+    ///   cannot be saved to a stream or loaded from a stream.
+    /// </para>
+    /// <para>
+    ///   <see cref="SerializationStore"/> implements the <see cref="IDisposable"/> interface such
+    ///   that <see cref="SerializationStore.Dispose"/> simply calls the <see cref="Close"/> method.
+    ///   <see cref="SerializationStore.Dispose"/> is implemented as a private interface to avoid confusion.
+    ///   The <see cref="IDisposable" /> pattern is provided for languages that support a "using" syntax like C# and VB .NET.
+    /// </para>
     private sealed partial class CodeDomSerializationStore : SerializationStore, ISerializable
     {
-#if DEBUG
-        private static readonly TraceSwitch s_trace = new("ComponentSerializationService", "Trace component serialization");
-#else
-#pragma warning disable CS0649  // Field is never assigned to, and will always have its default value null
-        private static readonly TraceSwitch? s_trace;
-#pragma warning restore CS0649  // Field is never assigned to, and will always have its default value null
-#endif
         private const string StateKey = "State";
         private const string NameKey = "Names";
         private const string AssembliesKey = "Assemblies";
@@ -55,9 +55,9 @@ public sealed partial class CodeDomComponentSerializationService
         internal CodeDomSerializationStore(IServiceProvider? provider)
         {
             _provider = provider;
-            _objects = new Dictionary<object, ObjectData>();
-            _objectNames = new List<string>();
-            _shimObjectNames = new List<string>();
+            _objects = [];
+            _objectNames = [];
+            _shimObjectNames = [];
         }
 
         /// <summary>
@@ -80,9 +80,9 @@ public sealed partial class CodeDomComponentSerializationService
             }
         }
 
-        /// <summary>
+        /// <devdoc>
         ///  Nested classes within us access this property to get to our collection of resources.
-        /// </summary>
+        /// </devdoc>
         private LocalResourceManager Resources => _resources ??= new LocalResourceManager();
 
         private ObjectData GetOrCreateObjectData(object value)
@@ -109,8 +109,6 @@ public sealed partial class CodeDomComponentSerializationService
         internal void AddMember(object value, MemberDescriptor member, bool absolute)
         {
             ObjectData data = GetOrCreateObjectData(value);
-
-            s_trace.TraceVerbose($"ComponentSerialization: Adding object '{data._name}' ({data._value.GetType().FullName}:{member.Name}) {(absolute ? "ABSOLUTE" : "NORMAL")}");
             data.Members.Add(new MemberData(member, absolute));
         }
 
@@ -120,14 +118,12 @@ public sealed partial class CodeDomComponentSerializationService
         internal void AddObject(object value, bool absolute)
         {
             ObjectData data = GetOrCreateObjectData(value);
-
-            s_trace.TraceVerbose($"ComponentSerialization: Adding object '{data._name}' ({data._value.GetType().FullName}) {(absolute ? "ABSOLUTE" : "NORMAL")}");
             data.EntireObject = true;
             data.Absolute = absolute;
         }
 
         /// <summary>
-        ///  The Close method closes this store and prevents any objects  from being serialized into it.  Once closed, the serialization store may be saved.
+        ///  The <see cref="Close()"/> method closes this store and prevents any objects from being added to it.
         /// </summary>
         [MemberNotNull(nameof(_objectState))]
         public override void Close()
@@ -147,7 +143,6 @@ public sealed partial class CodeDomComponentSerializationService
                 }
             }
 
-            s_trace.TraceVerbose($"ComponentSerialization: Closing Store: serializing {_objects.Count} objects");
             using (manager.CreateSession())
             {
                 // Walk through our objects and name them so the serialization manager knows what names we gave them.
@@ -160,7 +155,7 @@ public sealed partial class CodeDomComponentSerializationService
                 _errors = manager.Errors;
             }
 
-            // also serialize out resources if we have any  we force this in order for undo to work correctly
+            // Also serialize out resources if we have any we force this in order for undo to work correctly.
             if (_resources is not null)
             {
                 Debug.Assert(_resourceStream is null, "Attempting to close a serialization store with already serialized resources");
@@ -188,8 +183,6 @@ public sealed partial class CodeDomComponentSerializationService
             AssemblyNames = new AssemblyName[assemblies.Count];
             assemblies.Values.CopyTo(AssemblyNames, 0);
 
-            TraceCode(state);
-
             _objectState = state;
             _objects.Clear();
         }
@@ -199,7 +192,7 @@ public sealed partial class CodeDomComponentSerializationService
         /// </summary>
         internal List<object> Deserialize(IServiceProvider? provider, IContainer? container = null)
         {
-            List<object> collection = new();
+            List<object> collection = [];
             Deserialize(provider, container, validateRecycledTypes: true, applyDefaults: true, collection);
             return collection;
         }
@@ -226,7 +219,8 @@ public sealed partial class CodeDomComponentSerializationService
             delegator.Manager.RecycleInstances = recycleInstances;
             delegator.Manager.PreserveNames = recycleInstances;
             delegator.Manager.ValidateRecycledTypes = validateRecycledTypes;
-            // recreate resources
+
+            // Recreate resources
             if (_resourceStream is not null)
             {
                 _resourceStream.Seek(0, SeekOrigin.Begin);
@@ -236,10 +230,9 @@ public sealed partial class CodeDomComponentSerializationService
                 _resources = new LocalResourceManager(resources);
             }
 
-            s_trace.TraceVerbose($"ComponentSerialization: Deserializing {_objectState!.Count} objects, recycling instances: {recycleInstances}");
             using (delegator.Manager.CreateSession())
             {
-                // before we deserialize, setup any references to components we faked during serialization
+                // Before we deserialize, setup any references to components we faked during serialization
                 if (_shimObjectNames.Count > 0)
                 {
                     if (delegator is IDesignerSerializationManager dsm && container is not null)
@@ -278,7 +271,7 @@ public sealed partial class CodeDomComponentSerializationService
         /// </summary>
         internal void DeserializeTo(IServiceProvider provider, IContainer container, bool validateRecycledTypes, bool applyDefaults)
         {
-            Deserialize(provider, container, validateRecycledTypes, applyDefaults, null);
+            Deserialize(provider, container, validateRecycledTypes, applyDefaults, objects: null);
         }
 
         /// <summary>
@@ -310,83 +303,18 @@ public sealed partial class CodeDomComponentSerializationService
         }
 
         /// <summary>
-        ///  Loads our state from a stream.
+        ///  The <see cref="Save(Stream)"/> method is not supported on .NET because this class is not binary serializable.
         /// </summary>
-        internal static CodeDomSerializationStore Load(Stream stream)
-        {
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
-            return (CodeDomSerializationStore)new BinaryFormatter().Deserialize(stream);
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
-        }
+        /// <exception cref="PlatformNotSupportedException">
+        ///  This method is not supported on .NET.
+        /// </exception>
+        public override void Save(Stream stream) => throw new PlatformNotSupportedException();
 
         /// <summary>
-        ///  The Save method is not supported.
-        /// </summary>
-        public override void Save(Stream stream)
-        {
-            throw new PlatformNotSupportedException();
-        }
-
-        [Conditional("DEBUG")]
-        internal static void TraceCode(Dictionary<string, CodeDomComponentSerializationState> state)
-        {
-            if (!s_trace!.TraceVerbose)
-            {
-                return;
-            }
-
-            foreach (KeyValuePair<string, CodeDomComponentSerializationState> stateEntry in state)
-            {
-                object? code = stateEntry.Value.Code;
-
-                if (code is null)
-                {
-                    continue;
-                }
-
-                CodeDom.Compiler.ICodeGenerator codeGenerator = new Microsoft.CSharp.CSharpCodeProvider().CreateGenerator();
-                using StringWriter stringWriter = new(CultureInfo.InvariantCulture);
-                Debug.WriteLine($"ComponentSerialization: Stored CodeDom for {stateEntry.Key}: ");
-                Debug.Indent();
-
-                if (code is CodeTypeDeclaration codeTypeDeclaration)
-                {
-                    codeGenerator.GenerateCodeFromType(codeTypeDeclaration, stringWriter, o: null);
-                }
-                else if (code is CodeStatementCollection statements)
-                {
-                    foreach (CodeStatement statement in statements)
-                    {
-                        codeGenerator.GenerateCodeFromStatement(statement, stringWriter, o: null);
-                    }
-                }
-                else if (code is CodeStatement codeStatement)
-                {
-                    codeGenerator.GenerateCodeFromStatement(codeStatement, stringWriter, o: null);
-                }
-                else if (code is CodeExpression codeExpression)
-                {
-                    codeGenerator.GenerateCodeFromExpression(codeExpression, stringWriter, o: null);
-                }
-                else
-                {
-                    stringWriter.Write("Unknown code type: ");
-                    stringWriter.WriteLine(code.GetType().Name);
-                }
-
-                // spit this line by line so it respects the indent.
-                StringReader stringReader = new(stringWriter.ToString());
-                for (string? ln = stringReader.ReadLine(); ln is not null; ln = stringReader.ReadLine())
-                {
-                    Debug.WriteLine(ln);
-                }
-
-                Debug.Unindent();
-            }
-        }
-
-        /// <summary>
-        ///  Implements the save part of ISerializable. Used in unit tests only.
+        ///  On .NET Framework, this method implements the save part of <see cref="ISerializable"/> interface.  On .NET,
+        ///  this interface is implemented only for binary compatibility with the .NET Framework.  Formatter deserialization
+        ///  is disabled .NET by removing the <see cref="SerializableAttribute"/> from this class.
+        ///  This method is used in unit tests only.
         /// </summary>
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {

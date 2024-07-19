@@ -10,15 +10,18 @@ namespace System.Windows.Forms;
 ///  Collection of screen device contexts.
 /// </summary>
 /// <remarks>
-///  This caching counts on consumers not leaving the HDC in a dirty state. There is a signficant overhead to
-///  saving and restoring the state which would make this cache much less impactful. If we can't have confidence
-///  the DC state is being restored the best option may be to simply create a brand new screen DC every time we
-///  need one.
-///
-///  Creating a screen DC from scratch and deleting it takes about 11us. Saving and restoring takes about half
-///  that time. Renting an existing DC from the cache and returning it is on the order of 20_ns_. If we were
-///  forced to save state we'd be taking about 9us renting and returning cached DCs- which would take around
-///  20 rentals to break even with simply creating and tossing away a brand new DC.
+///  <para>
+///   This caching counts on consumers not leaving the HDC in a dirty state. There is a significant overhead to
+///   saving and restoring the state which would make this cache much less impactful. If we can't have confidence
+///   the DC state is being restored the best option may be to simply create a brand new screen DC every time we
+///   need one.
+///  </para>
+///  <para>
+///   Creating a screen DC from scratch and deleting it takes about 11us. Saving and restoring takes about half
+///   that time. Renting an existing DC from the cache and returning it is on the order of 20_ns_. If we were
+///   forced to save state we'd be taking about 9us renting and returning cached DCs- which would take around
+///   20 rentals to break even with simply creating and tossing away a brand new DC.
+///  </para>
 /// </remarks>
 internal sealed partial class ScreenDcCache : IDisposable
 {
@@ -51,7 +54,7 @@ internal sealed partial class ScreenDcCache : IDisposable
         }
 
         // Didn't find anything in the cache, create a new HDC
-        return new ScreenDcScope(this, PInvoke.CreateCompatibleDC((HDC)default));
+        return new ScreenDcScope(this, PInvokeCore.CreateCompatibleDC(default));
     }
 
     /// <summary>
@@ -75,7 +78,7 @@ internal sealed partial class ScreenDcCache : IDisposable
         }
 
         // Too many to store, delete the last item we swapped.
-        PInvoke.DeleteDC((HDC)temp);
+        PInvokeCore.DeleteDC((HDC)temp);
     }
 
     ~ScreenDcCache() => Dispose();
@@ -87,7 +90,7 @@ internal sealed partial class ScreenDcCache : IDisposable
             IntPtr hdc = _itemsCache[i];
             if (hdc != IntPtr.Zero)
             {
-                PInvoke.DeleteDC((HDC)hdc);
+                PInvokeCore.DeleteDC((HDC)hdc);
             }
         }
     }
@@ -99,10 +102,10 @@ internal sealed partial class ScreenDcCache : IDisposable
 
         HRGN hrgn = PInvoke.CreateRectRgn(0, 0, 0, 0);
         Debug.Assert(PInvoke.GetClipRgn(hdc, hrgn) == 0, "Should not have a clipping region");
-        PInvoke.DeleteObject(hrgn);
+        PInvokeCore.DeleteObject(hrgn);
 
         Point point;
-        PInvoke.GetViewportOrgEx(hdc, &point);
+        PInvokeCore.GetViewportOrgEx(hdc, &point);
         Debug.Assert(point.IsEmpty, "Viewport origin shouldn't be shifted");
         Debug.Assert(PInvoke.GetMapMode(hdc) == HDC_MAP_MODE.MM_TEXT);
         Debug.Assert(PInvoke.GetROP2(hdc) == R2_MODE.R2_COPYPEN);

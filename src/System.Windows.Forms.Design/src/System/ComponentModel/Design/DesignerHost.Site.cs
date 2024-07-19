@@ -77,11 +77,12 @@ internal sealed partial class DesignerHost
         }
 
         /// <summary>
-        ///  Stores the given key-value pair in an object's site.  This key-value pair is stored on a per-object basis, and is a handy place to save additional information about a component.
+        ///  Stores the given key-value pair in an object's site. This key-value pair is stored on a per-object basis,
+        ///  and is a handy place to save additional information about a component.
         /// </summary>
         void IDictionaryService.SetValue(object key, object? value)
         {
-            _dictionary ??= new();
+            _dictionary ??= [];
 
             if (value is null)
             {
@@ -169,8 +170,9 @@ internal sealed partial class DesignerHost
                 return _nestedContainer;
             }
 
-            // SiteNestedContainer does offer IServiceContainer and IContainer as services, but we always want a default site query for these services to delegate to the host.
-            // Because it is more common to add  services to the host than it is to add them to the site itself, and also because we need this for backward compatibility.
+            // SiteNestedContainer does offer IServiceContainer and IContainer as services, but we always want a default
+            // site query for these services to delegate to the host. Because it is more common to add  services to the
+            // host than it is to add them to the site itself, and also because we need this for backward compatibility.
             if (service != typeof(IServiceContainer) && service != typeof(IContainer) && _nestedContainer is not null)
             {
                 return _nestedContainer.GetServiceInternal(service);
@@ -182,26 +184,17 @@ internal sealed partial class DesignerHost
         /// <summary>
         ///  The component sited by this component site.
         /// </summary>
-        IComponent ISite.Component
-        {
-            get => _component;
-        }
+        IComponent ISite.Component => _component;
 
         /// <summary>
         ///  The container in which the component is sited.
         /// </summary>
-        IContainer ISite.Container
-        {
-            get => _container;
-        }
+        IContainer ISite.Container => _container;
 
         /// <summary>
         ///  Indicates whether the component is in design mode.
         /// </summary>
-        bool ISite.DesignMode
-        {
-            get => true;
-        }
+        bool ISite.DesignMode => true;
 
         /// <summary>
         ///  Indicates whether this Site has been disposed.
@@ -212,6 +205,7 @@ internal sealed partial class DesignerHost
             set
             {
                 _disposed = value;
+
                 // We need to do the cleanup when the site is set as disposed by its user
                 if (_disposed)
                 {
@@ -230,37 +224,36 @@ internal sealed partial class DesignerHost
             {
                 value ??= string.Empty;
 
-                if (_name != value)
+                if (_name == value)
                 {
-                    bool validateName = true;
-                    if (value.Length > 0)
-                    {
-                        IComponent? namedComponent = _container.Components[value];
-                        validateName = (_component != namedComponent);
-                        // allow renames that are just case changes of the current name.
-                        if (namedComponent is not null && validateName)
-                        {
-                            Exception ex = new(string.Format(SR.DesignerHostDuplicateName, value))
-                            {
-                                HelpLink = SR.DesignerHostDuplicateName
-                            };
-                            throw ex;
-                        }
-                    }
-
-                    if (validateName)
-                    {
-                        if (((IServiceProvider)this).GetService(typeof(INameCreationService)) is INameCreationService nameService)
-                        {
-                            nameService.ValidateName(value);
-                        }
-                    }
-
-                    // It is OK to change the name to this value.  Announce the change and do it.
-                    string? oldName = _name;
-                    _name = value;
-                    _host.OnComponentRename(_component, oldName, _name);
+                    return;
                 }
+
+                bool validateName = true;
+                if (value.Length > 0)
+                {
+                    IComponent? namedComponent = _container.Components[value];
+                    validateName = _component != namedComponent;
+
+                    // Sllow renames that are just case changes of the current name.
+                    if (namedComponent is not null && validateName)
+                    {
+                        throw new InvalidOperationException(string.Format(SR.DesignerHostDuplicateName, value))
+                        {
+                            HelpLink = SR.DesignerHostDuplicateName
+                        };
+                    }
+                }
+
+                if (validateName && this.TryGetService(out INameCreationService? nameService))
+                {
+                    nameService.ValidateName(value);
+                }
+
+                // It is OK to change the name to this value.  Announce the change and do it.
+                string? oldName = _name;
+                _name = value;
+                _host.OnComponentRename(_component, oldName, _name);
             }
         }
     }

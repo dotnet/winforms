@@ -16,7 +16,7 @@ namespace System.Windows.Forms;
 [SRDescription(nameof(SR.DescriptionTextBox))]
 public partial class TextBox : TextBoxBase
 {
-    private static readonly object EVENT_TEXTALIGNCHANGED = new();
+    private static readonly object s_textAlignChangedEvent = new();
 
     /// <summary>
     ///  Controls whether or not the edit box consumes/respects ENTER key
@@ -187,7 +187,7 @@ public partial class TextBox : TextBoxBase
         {
             if (_autoCompleteCustomSource is null)
             {
-                _autoCompleteCustomSource = new AutoCompleteStringCollection();
+                _autoCompleteCustomSource = [];
                 _autoCompleteCustomSource.CollectionChanged += new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
             }
 
@@ -499,8 +499,8 @@ public partial class TextBox : TextBoxBase
     [SRDescription(nameof(SR.RadioButtonOnTextAlignChangedDescr))]
     public event EventHandler? TextAlignChanged
     {
-        add => Events.AddHandler(EVENT_TEXTALIGNCHANGED, value);
-        remove => Events.RemoveHandler(EVENT_TEXTALIGNCHANGED, value);
+        add => Events.AddHandler(s_textAlignChangedEvent, value);
+        remove => Events.RemoveHandler(s_textAlignChangedEvent, value);
     }
 
     protected override void Dispose(bool disposing)
@@ -586,7 +586,7 @@ public partial class TextBox : TextBoxBase
             _selectionSet = true;
 
             // If the user didn't provide a selection, force one in.
-            if (SelectionLength == 0 && Control.MouseButtons == MouseButtons.None)
+            if (SelectionLength == 0 && MouseButtons == MouseButtons.None)
             {
                 SelectAll();
             }
@@ -610,7 +610,7 @@ public partial class TextBox : TextBoxBase
             return;
         }
 
-        base.SetSelectionOnHandle();
+        SetSelectionOnHandle();
 
         if (_passwordChar != 0)
         {
@@ -673,7 +673,7 @@ public partial class TextBox : TextBoxBase
 
     protected virtual void OnTextAlignChanged(EventArgs e)
     {
-        if (Events[EVENT_TEXTALIGNCHANGED] is EventHandler eh)
+        if (Events[s_textAlignChangedEvent] is EventHandler eh)
         {
             eh(this, e);
         }
@@ -682,7 +682,7 @@ public partial class TextBox : TextBoxBase
     /// <summary>
     ///  Process a command key.
     ///  Native "EDIT" control does not support "Select All" shortcut represented by Ctrl-A keys, when in multiline mode,
-    ///  Winforms TextBox supports this in .NET.
+    ///  WinForms TextBox supports this in .NET.
     /// </summary>
     /// <param name="m">The current windows message.</param>
     /// <param name="keyData">The bitmask containing one or more keys.</param>
@@ -721,17 +721,6 @@ public partial class TextBox : TextBoxBase
         base.SelectInternal(start, length, textLen);
     }
 
-    private string[] GetStringsForAutoComplete()
-    {
-        string[] strings = new string[AutoCompleteCustomSource.Count];
-        for (int i = 0; i < AutoCompleteCustomSource.Count; i++)
-        {
-            strings[i] = AutoCompleteCustomSource[i];
-        }
-
-        return strings;
-    }
-
     /// <summary>
     ///  Sets the AutoComplete mode in TextBox.
     /// </summary>
@@ -767,7 +756,7 @@ public partial class TextBox : TextBoxBase
                     {
                         if (_stringSource is null)
                         {
-                            _stringSource = new StringSource(GetStringsForAutoComplete());
+                            _stringSource = new StringSource(AutoCompleteCustomSource.ToArray());
                             if (!_stringSource.Bind(this, (AUTOCOMPLETEOPTIONS)AutoCompleteMode))
                             {
                                 throw new ArgumentException(SR.AutoCompleteFailure);
@@ -775,7 +764,7 @@ public partial class TextBox : TextBoxBase
                         }
                         else
                         {
-                            _stringSource.RefreshList(GetStringsForAutoComplete());
+                            _stringSource.RefreshList(AutoCompleteCustomSource.ToArray());
                         }
                     }
                 }
@@ -966,7 +955,7 @@ public partial class TextBox : TextBoxBase
                         PInvoke.InvalidateRect(this, lpRect: null, bErase: true);
 
                         // Use BeginPaint instead of GetDC to prevent flicker and support print-to-image scenarios.
-                        using PInvoke.BeginPaintScope paintScope = new((HWND)Handle);
+                        using BeginPaintScope paintScope = new(HWND);
                         DrawPlaceholderText(paintScope);
 
                         PInvoke.ValidateRect(this, lpRect: null);

@@ -35,30 +35,24 @@ public class ImageConverterTest
     [InlineData("pngwithheight_icon.ico")]
     public void ImageConverterFromIconTest(string name)
     {
-        using (Icon icon = new(Helpers.GetTestBitmapPath(name)))
-        {
-            Bitmap IconBitmap = (Bitmap)_imgConv.ConvertFrom(icon);
-            Assert.NotNull(IconBitmap);
-            Assert.Equal(32, IconBitmap.Width);
-            Assert.Equal(32, IconBitmap.Height);
-            Assert.Equal(new Size(32, 32), IconBitmap.Size);
-        }
+        using Icon icon = new(Helpers.GetTestBitmapPath(name));
+        Bitmap IconBitmap = (Bitmap)_imgConv.ConvertFrom(icon);
+        Assert.NotNull(IconBitmap);
+        Assert.Equal(32, IconBitmap.Width);
+        Assert.Equal(32, IconBitmap.Height);
+        Assert.Equal(new Size(32, 32), IconBitmap.Size);
     }
 
     [Fact]
     public void ImageWithOleHeader()
     {
         string path = Path.Combine("bitmaps", "TestImageWithOleHeader.bmp");
-        using (FileStream fileStream = File.Open(path, FileMode.Open))
-        {
-            using (MemoryStream ms = new())
-            {
-                fileStream.CopyTo(ms);
-                ImageConverter converter = new();
-                object image = converter.ConvertFrom(ms.ToArray());
-                Assert.NotNull(image);
-            }
-        }
+        using FileStream fileStream = File.Open(path, FileMode.Open);
+        using MemoryStream ms = new();
+        fileStream.CopyTo(ms);
+        ImageConverter converter = new();
+        object image = converter.ConvertFrom(ms.ToArray());
+        Assert.NotNull(image);
     }
 
     [Fact]

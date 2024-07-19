@@ -5,6 +5,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="SetWindowRgn(HWND, HRGN, BOOL)"/>
     public static int SetWindowRgn<T>(T hwnd, HRGN hrgn, BOOL fRedraw)
         where T : IHandle<HWND>
     {

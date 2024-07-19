@@ -20,28 +20,28 @@ internal static partial class WebBrowserHelper
     //
 
     // BitVector32 masks for various internal state flags.
-    internal static readonly int sinkAttached = BitVector32.CreateMask();
-    internal static readonly int manualUpdate = BitVector32.CreateMask(sinkAttached);
-    internal static readonly int setClientSiteFirst = BitVector32.CreateMask(manualUpdate);
-    internal static readonly int addedSelectionHandler = BitVector32.CreateMask(setClientSiteFirst);
-    internal static readonly int siteProcessedInputKey = BitVector32.CreateMask(addedSelectionHandler);
-    internal static readonly int inTransition = BitVector32.CreateMask(siteProcessedInputKey);
-    internal static readonly int processingKeyUp = BitVector32.CreateMask(inTransition);
-    internal static readonly int isMaskEdit = BitVector32.CreateMask(processingKeyUp);
-    internal static readonly int recomputeContainingControl = BitVector32.CreateMask(isMaskEdit);
+    internal static readonly int s_sinkAttached = BitVector32.CreateMask();
+    internal static readonly int s_manualUpdate = BitVector32.CreateMask(s_sinkAttached);
+    internal static readonly int s_setClientSiteFirst = BitVector32.CreateMask(s_manualUpdate);
+    internal static readonly int s_addedSelectionHandler = BitVector32.CreateMask(s_setClientSiteFirst);
+    internal static readonly int s_siteProcessedInputKey = BitVector32.CreateMask(s_addedSelectionHandler);
+    internal static readonly int s_inTransition = BitVector32.CreateMask(s_siteProcessedInputKey);
+    internal static readonly int s_processingKeyUp = BitVector32.CreateMask(s_inTransition);
+    internal static readonly int s_isMaskEdit = BitVector32.CreateMask(s_processingKeyUp);
+    internal static readonly int s_recomputeContainingControl = BitVector32.CreateMask(s_isMaskEdit);
 
     // Gets the LOGPIXELSX of the screen DC.
-    private static int logPixelsX = -1;
-    private static int logPixelsY = -1;
+    private static int s_logPixelsX = -1;
+    private static int s_logPixelsY = -1;
     private const int HMperInch = 2540;
 
     // Special guids
-    internal static Guid windowsMediaPlayer_Clsid = new("{22d6f312-b0f6-11d0-94ab-0080c74c7e95}");
-    internal static Guid comctlImageCombo_Clsid = new("{a98a24c0-b06f-3684-8c12-c52ae341e0bc}");
-    internal static Guid maskEdit_Clsid = new("{c932ba85-4374-101b-a56c-00aa003668dc}");
+    internal static Guid s_windowsMediaPlayer_Clsid = new("{22d6f312-b0f6-11d0-94ab-0080c74c7e95}");
+    internal static Guid s_comctlImageCombo_Clsid = new("{a98a24c0-b06f-3684-8c12-c52ae341e0bc}");
+    internal static Guid s_maskEdit_Clsid = new("{c932ba85-4374-101b-a56c-00aa003668dc}");
 
     // Window message to check if we have already sub-classed
-    internal static readonly MessageId REGMSG_MSG = PInvoke.RegisterWindowMessage($"{Application.WindowMessagesVersion}_subclassCheck");
+    internal static uint REGMSG_MSG { get; } = PInvoke.RegisterWindowMessage($"{Application.WindowMessagesVersion}_subclassCheck");
     internal const int REGMSG_RETVAL = 123;
 
     //
@@ -63,13 +63,13 @@ internal static partial class WebBrowserHelper
     {
         get
         {
-            if (logPixelsX == -1)
+            if (s_logPixelsX == -1)
             {
                 using var dc = GetDcScope.ScreenDC;
-                logPixelsX = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
+                s_logPixelsX = PInvokeCore.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
             }
 
-            return logPixelsX;
+            return s_logPixelsX;
         }
     }
 
@@ -78,13 +78,13 @@ internal static partial class WebBrowserHelper
     {
         get
         {
-            if (logPixelsY == -1)
+            if (s_logPixelsY == -1)
             {
                 using var dc = GetDcScope.ScreenDC;
-                logPixelsY = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
+                s_logPixelsY = PInvokeCore.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
             }
 
-            return logPixelsY;
+            return s_logPixelsY;
         }
     }
 
@@ -104,10 +104,7 @@ internal static partial class WebBrowserHelper
     }
 
     /// <remarks>
-    ///  Returns a big clip RECT.
+    ///  <para>Returns a big clip RECT.</para>
     /// </remarks>
-    internal static RECT GetClipRect()
-    {
-        return new Rectangle(0, 0, 32000, 32000);
-    }
+    internal static RECT GetClipRect() => new Rectangle(0, 0, 32000, 32000);
 }

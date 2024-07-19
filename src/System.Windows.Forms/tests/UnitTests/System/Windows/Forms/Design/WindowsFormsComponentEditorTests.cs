@@ -80,7 +80,7 @@ public class WindowsFormsComponentEditorTests
     {
         CustomWindowsFormsComponentEditor editor = new()
         {
-            GetComponentEditorPagesResult = new Type[] { typeof(int) }
+            GetComponentEditorPagesResult = [typeof(int)]
         };
         Assert.Throws<ArgumentException>("component", () => editor.EditComponent(component, null));
         Assert.Throws<ArgumentException>("component", () => editor.EditComponent(null, component));

@@ -94,10 +94,10 @@ internal class ContextMenuStripActionList : DesignerActionList
     /// </summary>
     public override DesignerActionItemCollection GetSortedActionItems()
     {
-        DesignerActionItemCollection items = new DesignerActionItemCollection
-        {
+        DesignerActionItemCollection items =
+        [
             new DesignerActionPropertyItem("RenderMode", SR.ToolStripActionList_RenderMode, SR.ToolStripActionList_Layout, SR.ToolStripActionList_RenderModeDesc)
-        };
+        ];
         if (_toolStripDropDown is ToolStripDropDownMenu)
         {
             items.Add(new DesignerActionPropertyItem("ShowImageMargin", SR.ContextMenuStripActionList_ShowImageMargin, SR.ToolStripActionList_Layout, SR.ContextMenuStripActionList_ShowImageMarginDesc));

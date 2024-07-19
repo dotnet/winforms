@@ -22,7 +22,7 @@ internal static class AutomationMessages
     ///  This is to support MAUI interaction with the PropertyGrid control and MAUI should remove the
     ///  file after used.
     /// </summary>
-    public static IntPtr WriteAutomationText(string text)
+    public static IntPtr WriteAutomationText(string? text)
     {
         IntPtr fileId = IntPtr.Zero;
         string? fullFileName = GenerateLogFileName(ref fileId);
@@ -89,7 +89,7 @@ internal static class AutomationMessages
     {
         string? fullFileName = null;
 
-        string? filePath = System.Environment.GetEnvironmentVariable("TEMP");
+        string? filePath = Environment.GetEnvironmentVariable("TEMP");
         Debug.Assert(filePath is not null, "Could not get value of the TEMP environment variable");
 
         if (filePath is not null)

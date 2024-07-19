@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Collections.Concurrent;
 using System.Drawing;
 
 namespace System.Windows.Forms.PropertyGridInternal;
@@ -11,23 +12,13 @@ namespace System.Windows.Forms.PropertyGridInternal;
 internal sealed partial class CategoryGridEntry : GridEntry
 {
     private readonly string _name;
-    private static Dictionary<string, bool>? s_categoryStates;
-    private static readonly object s_lock = new();
+    private static readonly ConcurrentDictionary<string, bool> s_categoryStates = [];
 
     public CategoryGridEntry(PropertyGrid ownerGrid, GridEntry parent, string name, IEnumerable<GridEntry> children)
         : base(ownerGrid, parent)
     {
         _name = name;
-
-        lock (s_lock)
-        {
-            s_categoryStates ??= new();
-
-            if (!s_categoryStates.ContainsKey(name))
-            {
-                s_categoryStates.Add(name, true);
-            }
-        }
+        s_categoryStates.TryAdd(name, true);
 
         IsExpandable = true;
 
@@ -37,10 +28,7 @@ internal sealed partial class CategoryGridEntry : GridEntry
             child.ParentGridEntry = this;
         }
 
-        lock (s_lock)
-        {
-            InternalExpanded = s_categoryStates[name];
-        }
+        InternalExpanded = s_categoryStates[name];
 
         SetFlag(Flags.LabelBold, true);
     }
@@ -69,7 +57,7 @@ internal sealed partial class CategoryGridEntry : GridEntry
     /// </summary>
     protected override GridEntryAccessibleObject GetAccessibilityObject() => new CategoryGridEntryAccessibleObject(this);
 
-    protected override Color BackgroundColor => OwnerGridView.LineColor;
+    protected override Color BackgroundColor => OwnerGridView?.LineColor ?? default;
 
     protected override Color LabelTextColor => OwnerGrid.CategoryForeColor;
 
@@ -80,10 +68,7 @@ internal sealed partial class CategoryGridEntry : GridEntry
         set
         {
             base.InternalExpanded = value;
-            lock (s_lock)
-            {
-                s_categoryStates![_name] = value;
-            }
+            s_categoryStates[_name] = value;
         }
     }
 
@@ -97,26 +82,31 @@ internal sealed partial class CategoryGridEntry : GridEntry
     {
         get
         {
-            PropertyGridView gridHost = OwnerGridView;
+            PropertyGridView? gridHost = OwnerGridView;
 
             // Give an extra pixel for breathing room.
             // Calling base.PropertyDepth to avoid the -1 in our override.
-            return 1 + gridHost.OutlineIconSize + OutlineIconPadding
+            return 1 + (gridHost?.OutlineIconSize ?? 0) + OutlineIconPadding
                 + (base.PropertyDepth * PropertyGridView.DefaultOutlineIndent);
         }
     }
 
-    public override string GetPropertyTextValue(object o) => string.Empty;
+    public override string GetPropertyTextValue(object? o) => string.Empty;
 
     public override Type PropertyType => typeof(void);
 
-    internal override object GetValueOwnerInternal() => ParentGridEntry.GetValueOwnerInternal();
+    internal override object? GetValueOwnerInternal() => ParentGridEntry?.GetValueOwnerInternal();
 
     protected override bool CreateChildren(bool diffOldChildren) => true;
 
     public override string GetTestingInfo() => $"object = ({FullLabel}), Category = ({PropertyLabel})";
 
-    public override void PaintLabel(Graphics g, Rectangle rect, Rectangle clipRect, bool selected, bool paintFullLabel)
+    public override void PaintLabel(
+        Graphics g,
+        Rectangle rect,
+        Rectangle clipRect,
+        bool selected,
+        bool paintFullLabel)
     {
         base.PaintLabel(g, rect, clipRect, false, true);
 
@@ -141,19 +131,24 @@ internal sealed partial class CategoryGridEntry : GridEntry
         }
 
         // Draw the line along the top.
-        if (ParentGridEntry.GetChildIndex(this) > 0)
+        if (ParentGridEntry is not null && ParentGridEntry.GetChildIndex(this) > 0)
         {
             using var topLinePen = OwnerGrid.CategorySplitterColor.GetCachedPenScope();
             g.DrawLine(topLinePen, rect.X - 1, rect.Y - 1, rect.Width + 2, rect.Y - 1);
         }
     }
 
-    public override void PaintValue(Graphics g, Rectangle rect, Rectangle clipRect, PaintValueFlags paintFlags, string text)
+    public override void PaintValue(
+        Graphics g,
+        Rectangle rect,
+        Rectangle clipRect,
+        PaintValueFlags paintFlags,
+        string? text)
     {
         base.PaintValue(g, rect, clipRect, paintFlags & ~PaintValueFlags.DrawSelected, text);
 
         // Draw the line along the top.
-        if (ParentGridEntry.GetChildIndex(this) > 0)
+        if (ParentGridEntry is not null && ParentGridEntry.GetChildIndex(this) > 0)
         {
             using var topLinePen = OwnerGrid.CategorySplitterColor.GetCachedPenScope();
             g.DrawLine(topLinePen, rect.X - 2, rect.Y - 1, rect.Width + 1, rect.Y - 1);
@@ -161,5 +156,5 @@ internal sealed partial class CategoryGridEntry : GridEntry
     }
 
     internal override bool SendNotification(GridEntry entry, Notify notification)
-        => ParentGridEntry.SendNotification(entry, notification);
+        => ParentGridEntry?.SendNotification(entry, notification) ?? false;
 }

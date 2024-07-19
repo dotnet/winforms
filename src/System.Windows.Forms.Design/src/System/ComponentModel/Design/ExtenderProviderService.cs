@@ -19,15 +19,8 @@ internal sealed class ExtenderProviderService : IExtenderProviderService, IExten
     /// <summary>
     ///  Gets the set of extender providers for the component.
     /// </summary>
-    IExtenderProvider[] IExtenderListService.GetExtenderProviders()
-    {
-        if (_providers is not null)
-        {
-            return _providers.ToArray();
-        }
-
-        return Array.Empty<IExtenderProvider>();
-    }
+    IExtenderProvider[] IExtenderListService.GetExtenderProviders() =>
+        _providers is not null ? ([.. _providers]) : ([]);
 
     /// <summary>
     ///  Adds an extender provider.

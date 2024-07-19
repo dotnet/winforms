@@ -57,6 +57,11 @@
         <target state="translated">ActiveX 控件</target>
         <note />
       </trans-unit>
+      <trans-unit id="BaseNodeName">
+        <source>Node</source>
+        <target state="translated">节点</target>
+        <note />
+      </trans-unit>
       <trans-unit id="BasicDesignerLoaderAlreadyLoaded">
         <source>The designer is already loaded.</source>
         <target state="translated">已加载设计器。</target>
@@ -372,6 +377,11 @@
       <trans-unit id="CollectionEditorCaption">
         <source>{0} Collection Editor</source>
         <target state="translated">{0} 集合编辑器</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorCreateInstanceError">
+        <source>Neither {0} nor {1} can create an instance of {2}.</source>
+        <target state="translated">{0} 和 {1} 都不能创建 {2} 的实例。</target>
         <note />
       </trans-unit>
       <trans-unit id="CollectionEditorInheritedReadOnlySelection">

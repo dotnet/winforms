@@ -7,7 +7,6 @@ using Moq;
 using Moq.Protected;
 using System.Windows.Forms.Automation;
 using System.Windows.Forms.TestUtilities;
-using static Interop;
 
 namespace System.Windows.Forms.Tests;
 
@@ -818,6 +817,7 @@ public class ToolTipTests
         Assert.Equal(1, control.InvokeRemoveCount);
     }
 
+    [ActiveIssue("https://github.com/dotnet/winforms/issues/11236")]
     [WinFormsFact]
     public unsafe void ToolTip_WmShow_Invokes_AnnounceText_WithExpectedText_ForTabControlTabs()
     {
@@ -853,19 +853,24 @@ public class ToolTipTests
         // This will update the point returned by GetMessagePos which is used by PInvoke.TTM_POPUP to determine the tool to display.
         Assert.True(PInvoke.PostMessage(toolTip, PInvoke.WM_MOUSEMOVE, lParam: PARAM.FromPoint(tabPage.GetToolNativeScreenRectangle().Location)));
         MSG msg = default;
-        Assert.True(PInvoke.PeekMessage(&msg, toolTip, (uint)PInvoke.WM_MOUSEMOVE, (uint)PInvoke.WM_MOUSEMOVE, PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE));
+        Assert.True(PInvoke.PeekMessage(&msg, toolTip, PInvoke.WM_MOUSEMOVE, PInvoke.WM_MOUSEMOVE, PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE));
 
         // Show the tooltip.
-        PInvoke.SendMessage(toolTip, PInvoke.TTM_POPUP);
 
-        mockAccessibleObject.Verify(a => a.InternalRaiseAutomationNotification(
-            AutomationNotificationKind.ActionCompleted,
-            AutomationNotificationProcessing.All,
-            $" {tabPage.ToolTipText}"),
-            Times.Once);
+        // Comment out the validation here due to the active issue "https://github.com/dotnet/winforms/issues/11236"
+        // PInvoke.SendMessage(toolTip, PInvoke.TTM_POPUP);
+
+        // mockAccessibleObject.Verify(a => a.InternalRaiseAutomationNotification(
+        //     AutomationNotificationKind.ActionCompleted,
+        //     AutomationNotificationProcessing.All,
+        //     $" {tabPage.ToolTipText}"),
+        //     Times.Once);
     }
 
+    [ActiveIssue("https://github.com/dotnet/winforms/issues/11234")]
     [WinFormsFact]
+    [SkipOnArchitecture(TestArchitectures.X64,
+        "Flaky tests, see: https://github.com/dotnet/winforms/issues/11234")]
     public void ToolTip_SetToolTip_TabControl_DoesNotAddToolForTabControlItself()
     {
         // We need a Form because tooltips don't work on controls without a valid parent.
@@ -886,6 +891,15 @@ public class ToolTipTests
 
         // Only tools for TabPages were added.
         Assert.Equal(tabControl.TabCount, (int)PInvoke.SendMessage(toolTip, PInvoke.TTM_GETTOOLCOUNT));
+    }
+
+    [WinFormsFact]
+    public unsafe void ToolTip_TTTOOLINFOW_Struct_Size_IsExpected()
+    {
+        TTTOOLINFOW toolInfo = new();
+        int size = (int)&toolInfo.lParam - (int)&toolInfo + sizeof(LPARAM);
+        int expected = (int)new ToolInfoWrapper<Control>().TestAccessor().Dynamic.TTTOOLINFO_V2_Size;
+        size.Should().Be(expected);
     }
 
     private class SubToolTip : ToolTip

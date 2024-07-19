@@ -57,16 +57,16 @@ public partial class ComponentEditorForm
             short* patternBits = stackalloc short[]
             {
                 unchecked((short)0xAAAA),
-                unchecked((short)0x5555),
+                unchecked(0x5555),
                 unchecked((short)0xAAAA),
-                unchecked((short)0x5555),
+                unchecked(0x5555),
                 unchecked((short)0xAAAA),
-                unchecked((short)0x5555),
+                unchecked(0x5555),
                 unchecked((short)0xAAAA),
-                unchecked((short)0x5555)
+                unchecked(0x5555)
             };
 
-            HBITMAP hbitmapTemp = PInvoke.CreateBitmap(8, 8, 1, 1, patternBits);
+            HBITMAP hbitmapTemp = PInvokeCore.CreateBitmap(8, 8, 1, 1, patternBits);
             Debug.Assert(
                 !hbitmapTemp.IsNull,
                 "could not create dither bitmap. Page selector UI will not be correct");
@@ -79,7 +79,7 @@ public partial class ComponentEditorForm
                     !_hbrushDither.IsNull,
                     "Unable to created dithered brush. Page selector UI will not be correct");
 
-                PInvoke.DeleteObject(hbitmapTemp);
+                PInvokeCore.DeleteObject(hbitmapTemp);
             }
         }
 
@@ -99,7 +99,7 @@ public partial class ComponentEditorForm
 
             // Select the font of the dialog, so we don't get the underlined font
             // when the item is being tracked
-            using PInvoke.SelectObjectScope fontSelection = new(
+            using SelectObjectScope fontSelection = new(
                 dc,
                 (state & STATE_HOT) != 0 ? (HGDIOBJ)Parent!.FontHandle : default);
 
@@ -252,7 +252,7 @@ public partial class ComponentEditorForm
 
             if (!RecreatingHandle && !_hbrushDither.IsNull)
             {
-                PInvoke.DeleteObject(_hbrushDither);
+                PInvokeCore.DeleteObject(_hbrushDither);
                 _hbrushDither = default;
             }
         }

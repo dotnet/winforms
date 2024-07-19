@@ -287,6 +287,11 @@
         <target state="translated">Karmaşık DataBinding, veri kaynağı olarak ya IList ya da IListSource kabul eder.</target>
         <note />
       </trans-unit>
+      <trans-unit id="BinaryFormatterNotSupported">
+        <source>BinaryFormatter serialization and deserialization are disabled within this application. See https://aka.ms/binaryformatter for more information.</source>
+        <target state="needs-review-translation">Kırpılmış uygulamalarda BinaryFormatter’ın kullanımı desteklenmiyor.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
         <source>Occurs when the binding context has changed.</source>
         <target state="translated">Bağlama bağlamı değiştiğinde gerçekleşir.</target>
@@ -410,6 +415,11 @@
       <trans-unit id="BindingNavigatorToolStripName">
         <source>Binding Navigator</source>
         <target state="translated">Bağlama Gezgini</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BindingNotSupported">
+        <source>Binding operations are not supported when application trimming is enabled.</source>
+        <target state="translated">Uygulama kırpma etkinleştirildiğinde bağlama işlemleri desteklenmez.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingSourceAddingNewEventHandlerDescr">
@@ -1650,6 +1660,11 @@
       <trans-unit id="ControlNotChild">
         <source>'child' is not a child control of this parent.</source>
         <target state="translated">'alt' bu üstün alt denetimi değil.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlNotSupportedInTrimming">
+        <source>'{0}' is not supported in trimmed applications.</source>
+        <target state="translated">'{0}', kırpılmış uygulamalarda desteklenmiyor.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlOnAutoSizeChangedDescr">
@@ -4135,8 +4150,8 @@ Bu varsayılan iletişim kutusunu değiştirmek için, lütfen DataError olayın
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_SortedDescr">
-        <source>Occurs when the DataGridView compares two cell values to perform a sort operation.</source>
-        <target state="translated">DataGridView sıralama işlemi gerçekleştirmek için iki hücre değerini karşılaştırdığında gerçekleşir.</target>
+        <source>Occurs when the DataGridView control completes a sorting operation.</source>
+        <target state="translated">DataGridView denetimi bir sıralama işlemini tamamladığında gerçekleşir.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_StandardTabDescr">
@@ -4627,6 +4642,11 @@ Bu varsayılan iletişim kutusunu değiştirmek için, lütfen DataError olayın
       <trans-unit id="DescriptionWebBrowser">
         <source>Enables the user to browse Web pages inside your form.</source>
         <target state="translated">Kullanıcıların formunuzdaki Web sayfalarına gitmesine olanak tanır.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignTimeFeaturesNotSupported">
+        <source>Design time features are not supported.</source>
+        <target state="translated">Tasarım zamanı özellikleri desteklenmiyor.</target>
         <note />
       </trans-unit>
       <trans-unit id="DispInvokeFailed">
@@ -5207,7 +5227,7 @@ Bunu değiştirmek istiyor musunuz?</target>
       </trans-unit>
       <trans-unit id="FolderBrowserDialogMultiSelectDescr">
         <source>Controls whether multiple folders can be selected in the dialog.</source>
-        <target state="new">Controls whether multiple folders can be selected in the dialog.</target>
+        <target state="translated">İletişim kutusunda birden fazla klasörün seçilip seçilemeyeceğini kontrol eder.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogOkRequiresInteraction">
@@ -5227,7 +5247,7 @@ Bunu değiştirmek istiyor musunuz?</target>
       </trans-unit>
       <trans-unit id="FolderBrowserDialogSelectedPathsDescr">
         <source>Retrieves the paths of all selected folders in the dialog box.</source>
-        <target state="new">Retrieves the paths of all selected folders in the dialog box.</target>
+        <target state="translated">İletişim kutusunda seçilen tüm klasörlerin yollarını alır.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogShowHiddenFiles">
@@ -9682,6 +9702,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="TooManyResumeUpdateMenuHandles">
         <source>Too many calls to ResumeUpdateMenuHandles.</source>
         <target state="translated">Çok fazla sayıda ResumeUpdateMenuHandles çağrısı.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripAllowClickThrough">
+        <source>Allows the control to be interacted when window does not have focus.</source>
+        <target state="new">Allows the control to be interacted when window does not have focus.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue">

@@ -292,15 +292,18 @@ public sealed class PrintDialog : CommonDialog
                 dialogSettings->nMaxPage = (ushort)PrinterSettings.MaximumPage;
             }
 
-            HRESULT result = RuntimeInformation.ProcessArchitecture == Architecture.X86
+            BOOL result = RuntimeInformation.ProcessArchitecture == Architecture.X86
                 ? PInvoke.PrintDlg(&dialogSettings32)
                 : PInvoke.PrintDlg(&dialogSettings64);
 
-            if (result.Failed)
+            if (!result)
             {
 #if DEBUG
                 var extendedResult = PInvoke.CommDlgExtendedError();
-                Debug.Fail($"PrintDlg returned non zero error code: {extendedResult}");
+                if (extendedResult != COMMON_DLG_ERRORS.CDERR_GENERALCODES)
+                {
+                    Debug.Fail($"PrintDlg returned non zero error code: {extendedResult}");
+                }
 #endif
                 return false;
             }
@@ -331,7 +334,7 @@ public sealed class PrintDialog : CommonDialog
                 PrinterSettings.Collate = dialogSettings->Flags.HasFlag(PRINTDLGEX_FLAGS.PD_COLLATE);
             }
 
-            return true;
+            return result;
         }
         finally
         {
@@ -409,7 +412,7 @@ public sealed class PrintDialog : CommonDialog
             // PrintDlgEx. So we have to strip them out.
             dialogSettings.Flags &= ~(PRINTDLGEX_FLAGS.PD_SHOWHELP | PRINTDLGEX_FLAGS.PD_NONETWORKBUTTON);
 
-            HRESULT hr = PInvoke.PrintDlgEx(&dialogSettings);
+            HRESULT hr = PInvokeCore.PrintDlgEx(&dialogSettings);
             if (hr.Failed || dialogSettings.dwResultAction == PInvoke.PD_RESULT_CANCEL)
             {
                 return false;

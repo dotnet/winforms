@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
@@ -31,8 +31,7 @@ public class ImageFormatConverter : TypeConverter
     public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
     {
         // we must be able to convert from short names and long names
-        string? strFormat = value as string;
-        if (strFormat is null)
+        if (value is not string strFormat)
         {
             // case #1, this is not a string
             return base.ConvertFrom(context, culture, value);
@@ -112,7 +111,7 @@ public class ImageFormatConverter : TypeConverter
                 }
                 else
                 {
-                    ConstructorInfo? ctor = typeof(ImageFormat).GetConstructor(new Type[] { typeof(Guid) });
+                    ConstructorInfo? ctor = typeof(ImageFormat).GetConstructor([typeof(Guid)]);
                     return new InstanceDescriptor(ctor, new object[] { imgFormat.Guid });
                 }
             }
@@ -123,7 +122,7 @@ public class ImageFormatConverter : TypeConverter
 
     public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext? context)
     {
-        return new TypeConverter.StandardValuesCollection(new ImageFormat[]
+        return new StandardValuesCollection(new ImageFormat[]
         {
             ImageFormat.MemoryBmp,
             ImageFormat.Bmp,

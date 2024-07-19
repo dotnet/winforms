@@ -87,7 +87,7 @@ internal static partial class Interop
 
             HRESULT IRawElementProviderFragment.Interface.SetFocus() => HRESULT.S_OK;
 
-            HRESULT IRawElementProviderFragment.Interface.get_FragmentRoot(Windows.Win32.UI.Accessibility.IRawElementProviderFragmentRoot** pRetVal)
+            HRESULT IRawElementProviderFragment.Interface.get_FragmentRoot(IRawElementProviderFragmentRoot** pRetVal)
             {
                 if (pRetVal is null)
                 {

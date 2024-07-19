@@ -1,0 +1,74 @@
+
+parameters:
+  name: ''
+  enableMicrobuild: true
+  enablePublishBuildArtifacts: true
+  enablePublishTestResults: true
+  enablePublishBuildAssets: true
+  enablePublishUsingPipelines: true
+  testResultsFormat: 'xunit'
+
+steps:
+  - ${{ if ne(parameters.artifacts.publish, '') }}:
+    - ${{ if or(eq(parameters.artifacts.publish.artifacts, 'true'), ne(parameters.artifacts.publish.artifacts, '')) }}:
+      - task: CopyFiles@2
+        displayName: Gather binaries for publish to artifacts
+        inputs:
+          SourceFolder: 'artifacts/bin'
+          Contents: '**'
+          TargetFolder: '$(Build.ArtifactStagingDirectory)/artifacts/bin'
+      - task: CopyFiles@2
+        displayName: Gather packages for publish to artifacts
+        inputs:
+          SourceFolder: 'artifacts/packages'
+          Contents: '**'
+          TargetFolder: '$(Build.ArtifactStagingDirectory)/artifacts/packages'
+      - task: PublishBuildArtifacts@1
+        displayName: Publish pipeline artifacts
+        inputs:
+          PathtoPublish: '$(Build.ArtifactStagingDirectory)/artifacts'
+          PublishLocation: Container
+          ArtifactName: ${{ coalesce(parameters.artifacts.publish.artifacts.name , 'Artifacts_$(Agent.Os)_$(_BuildConfig)') }}
+        continueOnError: true
+        condition: always()
+    - ${{ if or(eq(parameters.artifacts.publish.logs, 'true'), ne(parameters.artifacts.publish.logs, '')) }}:
+      - publish: artifacts/log
+        artifact: ${{ coalesce(parameters.artifacts.publish.logs.name, 'Logs_Build_$(Agent.Os)_$(_BuildConfig)') }}
+        displayName: Publish logs
+        continueOnError: true
+        condition: always()
+
+  - ${{ if ne(parameters.enablePublishBuildArtifacts, 'false') }}:
+    - task: PublishBuildArtifacts@1
+      displayName: Publish Logs
+      inputs:
+        PathtoPublish: '$(Build.SourcesDirectory)/artifacts/log/$(_BuildConfig)'
+        PublishLocation: Container
+        ArtifactName: ${{ coalesce(parameters.enablePublishBuildArtifacts.artifactName, '$(Agent.Os)_$(Agent.JobName)' ) }}
+      continueOnError: true
+      condition: always()
+
+  - ${{ if or(and(eq(parameters.enablePublishTestResults, 'true'), eq(parameters.testResultsFormat, '')), eq(parameters.testResultsFormat, 'xunit')) }}:
+    - task: PublishTestResults@2
+      displayName: Publish XUnit Test Results
+      inputs:
+        testResultsFormat: 'xUnit'
+        testResultsFiles: '*.xml' 
+        searchFolder: '$(Build.SourcesDirectory)/artifacts/TestResults/$(_BuildConfig)'
+        testRunTitle: ${{ coalesce(parameters.testRunTitle, parameters.name, '$(System.JobName)') }}-xunit
+        mergeTestResults: ${{ parameters.mergeTestResults }}
+      continueOnError: true
+      condition: and(eq(variables['System.TeamProject'], 'public'), ne('${{ parameters.targetArchitecture }}', 'arm64'))
+
+  - ${{ if or(and(eq(parameters.enablePublishTestResults, 'true'), eq(parameters.testResultsFormat, '')), eq(parameters.testResultsFormat, 'vstest')) }}:
+    - task: PublishTestResults@2
+      displayName: Publish TRX Test Results
+      inputs:
+        testResultsFormat: 'VSTest'
+        testResultsFiles: '*.trx' 
+        searchFolder: '$(Build.SourcesDirectory)/artifacts/TestResults/$(_BuildConfig)'
+        testRunTitle: ${{ coalesce(parameters.testRunTitle, parameters.name, '$(System.JobName)') }}-trx
+        mergeTestResults: ${{ parameters.mergeTestResults }}
+      continueOnError: true
+      condition: and(eq(variables['System.TeamProject'], 'public'), ne('${{ parameters.targetArchitecture }}', 'arm64'))
+

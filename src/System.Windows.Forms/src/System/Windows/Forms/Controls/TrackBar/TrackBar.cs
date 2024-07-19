@@ -359,7 +359,7 @@ public partial class TrackBar : Control, ISupportInitialize
         get => _orientation;
         set
         {
-            if (value < Orientation.Horizontal || value > Orientation.Vertical)
+            if (value is < Orientation.Horizontal or > Orientation.Vertical)
             {
                 throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Orientation));
             }
@@ -418,7 +418,7 @@ public partial class TrackBar : Control, ISupportInitialize
     {
         get
         {
-            int cyhscroll = PInvoke.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CYHSCROLL);
+            int cyhscroll = PInvokeCore.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CYHSCROLL);
             return ((cyhscroll * 8) / 3);
         }
     }
@@ -530,7 +530,7 @@ public partial class TrackBar : Control, ISupportInitialize
         get => _tickStyle;
         set
         {
-            if (value < TickStyle.None || value > TickStyle.Both)
+            if (value is < TickStyle.None or > TickStyle.Both)
             {
                 throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(TickStyle));
             }
@@ -566,24 +566,26 @@ public partial class TrackBar : Control, ISupportInitialize
             }
 
             _tickFrequency = value;
-            // Determine if the decision of whether the ticks drawing,
-            // is performed by the native control or the Windows Forms runtime
-            // is still valid. If it's no longer valid, we'll need to recreate the native control.
+
             bool recreateHandle = ShouldRecreateHandle();
-            if (IsHandleCreated)
+            if (!IsHandleCreated)
+            {
+                return;
+            }
+
+            if (_autoDrawTicks)
             {
                 PInvoke.SendMessage(this, PInvoke.TBM_SETTICFREQ, (WPARAM)value);
-                // If user opts out of TrackBarModernRendering then recreateHandle
-                // will always be false.
-                if (recreateHandle)
-                {
-                    RecreateHandle();
-                }
-                else
-                {
-                    DrawTicks();
-                    Invalidate();
-                }
+            }
+
+            if (recreateHandle)
+            {
+                RecreateHandle();
+            }
+            else
+            {
+                DrawTicksManually();
+                Invalidate();
             }
         }
     }
@@ -762,11 +764,14 @@ public partial class TrackBar : Control, ISupportInitialize
 
     /// <summary>
     ///  Check if the value of the max is greater then the taskbar size.
-    ///  If so then we divide the value by size and only that many ticks to be drawn on the screen.
+    ///  If so then we divide the value by size and only that many ticks to be drawn on the screen
+    ///  via TBM_SETTIC.
     /// </summary>
-    private void DrawTicks()
+    /// <remarks>
+    ///  <para>This should not be called if <see cref="_autoDrawTicks"/> is <see langword="true"/></para>
+    /// </remarks>
+    private void DrawTicksManually()
     {
-        // Will be true if they opt out TrackBarModernRendering.
         if (_tickStyle == TickStyle.None || _autoDrawTicks)
         {
             return;
@@ -835,16 +840,11 @@ public partial class TrackBar : Control, ISupportInitialize
             return false;
         }
 
-        switch (keyData & Keys.KeyCode)
+        return (keyData & Keys.KeyCode) switch
         {
-            case Keys.PageUp:
-            case Keys.PageDown:
-            case Keys.Home:
-            case Keys.End:
-                return true;
-        }
-
-        return base.IsInputKey(keyData);
+            Keys.PageUp or Keys.PageDown or Keys.Home or Keys.End => true,
+            _ => base.IsInputKey(keyData),
+        };
     }
 
     protected override void OnHandleCreated(EventArgs e)
@@ -859,8 +859,15 @@ public partial class TrackBar : Control, ISupportInitialize
         Debug.Assert(_autoDrawTicks == ShouldAutoDrawTicks());
         PInvoke.SendMessage(this, PInvoke.TBM_SETRANGEMIN, (WPARAM)(BOOL)false, (LPARAM)_minimum);
         PInvoke.SendMessage(this, PInvoke.TBM_SETRANGEMAX, (WPARAM)(BOOL)false, (LPARAM)_maximum);
-        PInvoke.SendMessage(this, PInvoke.TBM_SETTICFREQ, (WPARAM)_tickFrequency);
-        DrawTicks();
+        if (_autoDrawTicks)
+        {
+            PInvoke.SendMessage(this, PInvoke.TBM_SETTICFREQ, (WPARAM)_tickFrequency);
+        }
+        else
+        {
+            DrawTicksManually();
+        }
+
         PInvoke.SendMessage(this, PInvoke.TBM_SETPAGESIZE, (WPARAM)0, (LPARAM)_largeChange);
         PInvoke.SendMessage(this, PInvoke.TBM_SETLINESIZE, (WPARAM)0, (LPARAM)_smallChange);
         SetTrackBarPosition();
@@ -929,7 +936,7 @@ public partial class TrackBar : Control, ISupportInitialize
         _cumulativeWheelData += e.Delta;
 
         float partialNotches;
-        partialNotches = (float)_cumulativeWheelData / (float)PInvoke.WHEEL_DELTA;
+        partialNotches = _cumulativeWheelData / (float)PInvoke.WHEEL_DELTA;
 
         if (wheelScrollLines == -1)
         {
@@ -937,7 +944,7 @@ public partial class TrackBar : Control, ISupportInitialize
         }
 
         // Evaluate number of bands to scroll
-        int scrollBands = (int)((float)wheelScrollLines * partialNotches);
+        int scrollBands = (int)(wheelScrollLines * partialNotches);
 
         if (scrollBands != 0)
         {
@@ -946,13 +953,13 @@ public partial class TrackBar : Control, ISupportInitialize
             {
                 absScrollBands = scrollBands;
                 Value = Math.Min(absScrollBands + Value, Maximum);
-                _cumulativeWheelData -= (int)((float)scrollBands * ((float)PInvoke.WHEEL_DELTA / (float)wheelScrollLines));
+                _cumulativeWheelData -= (int)(scrollBands * (PInvoke.WHEEL_DELTA / (float)wheelScrollLines));
             }
             else
             {
                 absScrollBands = -scrollBands;
                 Value = Math.Max(Value - absScrollBands, Minimum);
-                _cumulativeWheelData -= (int)((float)scrollBands * ((float)PInvoke.WHEEL_DELTA / (float)wheelScrollLines));
+                _cumulativeWheelData -= (int)(scrollBands * (PInvoke.WHEEL_DELTA / (float)wheelScrollLines));
             }
         }
 
@@ -1053,7 +1060,7 @@ public partial class TrackBar : Control, ISupportInitialize
                 PInvoke.SendMessage(this, PInvoke.TBM_SETRANGEMAX, (WPARAM)(BOOL)true, (LPARAM)_maximum);
                 if (!_autoDrawTicks)
                 {
-                    DrawTicks();
+                    DrawTicksManually();
                 }
 
                 Invalidate();
@@ -1143,10 +1150,11 @@ public partial class TrackBar : Control, ISupportInitialize
     }
 
     /// <summary>
-    /// Determine if the decision of whether the ticks drawing,
-    /// is performed by the native control or the Windows Forms runtime
-    /// is still valid. If it's no longer valid, we'll need to recreate the native control.
-    /// If user opts out of TrackBarModernRendering then this will always return false.
+    ///  Determine if the previous decision of whether drawing ticks
+    ///  is performed by the native control or the Windows Forms runtime
+    ///  is still valid. If it's no longer valid, the native control needs to be recreated.
+    ///  If user opts out of <see cref="LocalAppContextSwitches.TrackBarModernRendering"/>
+    ///  then this will always return false.
     /// </summary>
     private bool ShouldRecreateHandle() => IsHandleCreated && _autoDrawTicks != ShouldAutoDrawTicks();
 

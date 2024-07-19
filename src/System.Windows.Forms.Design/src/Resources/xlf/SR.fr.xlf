@@ -57,6 +57,11 @@
         <target state="translated">Contrôle ActiveX</target>
         <note />
       </trans-unit>
+      <trans-unit id="BaseNodeName">
+        <source>Node</source>
+        <target state="translated">Nœud</target>
+        <note />
+      </trans-unit>
       <trans-unit id="BasicDesignerLoaderAlreadyLoaded">
         <source>The designer is already loaded.</source>
         <target state="translated">Le concepteur est déjà chargé.</target>
@@ -372,6 +377,11 @@
       <trans-unit id="CollectionEditorCaption">
         <source>{0} Collection Editor</source>
         <target state="translated">Éditeur de collections {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorCreateInstanceError">
+        <source>Neither {0} nor {1} can create an instance of {2}.</source>
+        <target state="translated">Ni {0} ni {1} ne peuvent créer une instance de {2}.</target>
         <note />
       </trans-unit>
       <trans-unit id="CollectionEditorInheritedReadOnlySelection">

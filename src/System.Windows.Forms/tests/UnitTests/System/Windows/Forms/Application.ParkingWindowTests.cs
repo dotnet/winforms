@@ -37,8 +37,10 @@ public class ParkingWindowTests
     private Form InitFormWithControlToGarbageCollect()
     {
         Form form = new();
-        ComboBox comboBox = new();
-        comboBox.DropDownStyle = ComboBoxStyle.DropDown;
+        ComboBox comboBox = new()
+        {
+            DropDownStyle = ComboBoxStyle.DropDown
+        };
 
         form.Controls.Add(comboBox);
         form.Show();
@@ -58,7 +60,7 @@ public class ParkingWindowTests
     [WinFormsFact]
     public void ParkingWindow_Unaware()
     {
-        // run tests only on Windows 10 versions that support thread dpi awareness.
+        // Run tests only on Windows 10 versions that support thread dpi awareness.
         if (!PlatformDetection.IsWindows10Version1803OrGreater)
         {
             return;
@@ -76,11 +78,11 @@ public class ParkingWindowTests
                 using Control control = new();
                 ThreadContext ctx = GetContextForHandle(control);
                 Assert.NotNull(ctx);
-                ParkingWindow parkingWindow = ctx.GetParkingWindowForContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE);
+                ParkingWindow parkingWindow = ctx.TestAccessor().Dynamic.GetParkingWindowForContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE);
                 Assert.NotNull(parkingWindow);
 
                 DPI_AWARENESS_CONTEXT dpiContext = PInvoke.GetWindowDpiAwarenessContext(parkingWindow.HWND);
-                Assert.True(PInvoke.AreDpiAwarenessContextsEqualInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE, dpiContext));
+                Assert.True(dpiContext.IsEquivalent(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNAWARE));
             }
         }
         finally
@@ -111,11 +113,11 @@ public class ParkingWindowTests
                 using Control control = new();
                 ThreadContext ctx = GetContextForHandle(control);
                 Assert.NotNull(ctx);
-                ParkingWindow parkingWindow = ctx.GetParkingWindowForContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE);
+                ParkingWindow parkingWindow = ctx.TestAccessor().Dynamic.GetParkingWindowForContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE);
                 Assert.NotNull(parkingWindow);
 
                 DPI_AWARENESS_CONTEXT dpiContext = PInvoke.GetWindowDpiAwarenessContext(parkingWindow.HWND);
-                Assert.True(PInvoke.AreDpiAwarenessContextsEqualInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE, dpiContext));
+                Assert.True(dpiContext.IsEquivalent(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE));
             }
         }
         finally
@@ -145,11 +147,11 @@ public class ParkingWindowTests
             ThreadContext ctx = GetContextForHandle(control);
             Assert.NotNull(ctx);
 
-            ParkingWindow parkingWindow = ctx.GetParkingWindowForContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+            ParkingWindow parkingWindow = ctx.TestAccessor().Dynamic.GetParkingWindowForContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
             Assert.NotNull(parkingWindow);
 
             DPI_AWARENESS_CONTEXT dpiContext = PInvoke.GetWindowDpiAwarenessContext(parkingWindow.HWND);
-            Assert.True(PInvoke.AreDpiAwarenessContextsEqualInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2, dpiContext));
+            Assert.True(dpiContext.IsEquivalent(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2));
         }
         finally
         {
@@ -177,29 +179,29 @@ public class ParkingWindowTests
             using Control control = new();
             ThreadContext ctx = GetContextForHandle(control);
             Assert.NotNull(ctx);
-            ParkingWindow parkingWindow = ctx.GetParkingWindowForContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+            ParkingWindow parkingWindow = ctx.TestAccessor().Dynamic.GetParkingWindowForContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
             Assert.NotNull(parkingWindow);
 
             DPI_AWARENESS_CONTEXT dpiContext = PInvoke.GetWindowDpiAwarenessContext(parkingWindow.HWND);
-            Assert.True(PInvoke.AreDpiAwarenessContextsEqualInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2, dpiContext));
+            Assert.True(dpiContext.IsEquivalent(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2));
 
             using (ScaleHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
             {
                 using Control systemControl = new();
                 ctx = GetContextForHandle(systemControl);
                 Assert.NotNull(ctx);
-                parkingWindow = ctx.GetParkingWindowForContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE);
+                parkingWindow = ctx.TestAccessor().Dynamic.GetParkingWindowForContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE);
                 Assert.NotNull(parkingWindow);
 
                 dpiContext = PInvoke.GetWindowDpiAwarenessContext(parkingWindow.HWND);
-                Assert.True(PInvoke.AreDpiAwarenessContextsEqualInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE, dpiContext));
+                Assert.True(dpiContext.IsEquivalent(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE));
 
                 // check PMv2 parking window still available.
-                parkingWindow = ctx.GetParkingWindowForContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+                parkingWindow = ctx.TestAccessor().Dynamic.GetParkingWindowForContext(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
                 Assert.NotNull(parkingWindow);
 
                 dpiContext = PInvoke.GetWindowDpiAwarenessContext(parkingWindow.HWND);
-                Assert.True(PInvoke.AreDpiAwarenessContextsEqualInternal(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2, dpiContext));
+                Assert.True(dpiContext.IsEquivalent(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2));
             }
         }
         finally

@@ -28,7 +28,7 @@ public partial class CollectionEditor
 
         private readonly CollectionEditor _editor;
 
-        private FilterListBox _listbox;
+        private FilterListBox _listBox;
         private SplitButton _addButton;
         private Button _removeButton;
         private Button _cancelButton;
@@ -80,7 +80,7 @@ public partial class CollectionEditor
         {
             get
             {
-                foreach (ListItem item in _listbox.SelectedItems)
+                foreach (ListItem item in _listBox.SelectedItems)
                 {
                     Type type = item.Value.GetType();
 
@@ -126,9 +126,9 @@ public partial class CollectionEditor
         /// </summary>
         private void AddItems(IList instances)
         {
-            _createdItems ??= new List<object>();
+            _createdItems ??= [];
 
-            _listbox.BeginUpdate();
+            _listBox.BeginUpdate();
             try
             {
                 foreach (object? instance in instances)
@@ -138,19 +138,19 @@ public partial class CollectionEditor
                         _dirty = true;
                         _createdItems.Add(instance);
                         ListItem created = new(_editor, instance);
-                        _listbox.Items.Add(created);
+                        _listBox.Items.Add(created);
                     }
                 }
             }
             finally
             {
-                _listbox.EndUpdate();
+                _listBox.EndUpdate();
             }
 
             if (instances.Count == 1)
             {
                 // optimize for the case where we just added one thing...
-                UpdateItemWidths(_listbox.Items[_listbox.Items.Count - 1] as ListItem);
+                UpdateItemWidths(_listBox.Items[^1] as ListItem);
             }
             else
             {
@@ -160,23 +160,23 @@ public partial class CollectionEditor
             SuspendEnabledUpdates();
             try
             {
-                _listbox.ClearSelected();
-                _listbox.SelectedIndex = _listbox.Items.Count - 1;
+                _listBox.ClearSelected();
+                _listBox.SelectedIndex = _listBox.Items.Count - 1;
 
-                object[] items = new object[_listbox.Items.Count];
+                object[] items = new object[_listBox.Items.Count];
                 for (int i = 0; i < items.Length; i++)
                 {
-                    items[i] = ((ListItem)_listbox.Items[i]).Value;
+                    items[i] = ((ListItem)_listBox.Items[i]).Value;
                 }
 
                 Items = items;
 
                 // If someone changes the edit value which resets the selindex, we
                 // should keep the new index.
-                if (_listbox.Items.Count > 0 && _listbox.SelectedIndex != _listbox.Items.Count - 1)
+                if (_listBox.Items.Count > 0 && _listBox.SelectedIndex != _listBox.Items.Count - 1)
                 {
-                    _listbox.ClearSelected();
-                    _listbox.SelectedIndex = _listbox.Items.Count - 1;
+                    _listBox.ClearSelected();
+                    _listBox.SelectedIndex = _listBox.Items.Count - 1;
                 }
             }
             finally
@@ -187,7 +187,7 @@ public partial class CollectionEditor
 
         private void AdjustListBoxItemHeight()
         {
-            _listbox.ItemHeight = Font.Height + SystemInformation.BorderSize.Width * 2;
+            _listBox.ItemHeight = Font.Height + SystemInformation.BorderSize.Width * 2;
         }
 
         /// <summary>
@@ -208,8 +208,8 @@ public partial class CollectionEditor
 
         private int CalcItemWidth(Graphics g, ListItem item)
         {
-            int c = Math.Max(2, _listbox.Items.Count);
-            SizeF sizeW = g.MeasureString(c.ToString(CultureInfo.CurrentCulture), _listbox.Font);
+            int c = Math.Max(2, _listBox.Items.Count);
+            SizeF sizeW = g.MeasureString(c.ToString(CultureInfo.CurrentCulture), _listBox.Font);
 
             int charactersInNumber = ((int)(Math.Log(c - 1) / s_log10) + 1);
             int w = 4 + charactersInNumber * (Font.Height / 2);
@@ -217,7 +217,7 @@ public partial class CollectionEditor
             w = Math.Max(w, (int)Math.Ceiling(sizeW.Width));
             w += SystemInformation.BorderSize.Width * 4;
 
-            SizeF size = g.MeasureString(GetDisplayText(item), _listbox.Font);
+            SizeF size = g.MeasureString(GetDisplayText(item), _listBox.Font);
             int pic = 0;
             if (item.Editor is not null && item.Editor.GetPaintValueSupported())
             {
@@ -242,11 +242,11 @@ public partial class CollectionEditor
                 }
 
                 _dirty = false;
-                _listbox.Items.Clear();
+                _listBox.Items.Clear();
 
                 if (_createdItems is not null)
                 {
-                    if (_createdItems is [IComponent {Site: not null}, ..])
+                    if (_createdItems is [IComponent { Site: not null }, ..])
                     {
                         // here we bail now because we don't want to do the "undo" manually,
                         // we're part of a transaction, we've added item, the rollback will be
@@ -256,7 +256,7 @@ public partial class CollectionEditor
                         return;
                     }
 
-                    object[] items = _createdItems.ToArray();
+                    object[] items = [.. _createdItems];
                     for (int i = 0; i < items.Length; i++)
                     {
                         DestroyInstance(items[i]);
@@ -272,12 +272,12 @@ public partial class CollectionEditor
                 // but this will at least roll back the additions, removals and reordering. See ASURT #85470.
                 if (_originalItems is not null && _originalItems.Count > 0)
                 {
-                    Items = _originalItems.ToArray();
+                    Items = [.. _originalItems];
                     _originalItems.Clear();
                 }
                 else
                 {
-                    Items = Array.Empty<object>();
+                    Items = [];
                 }
             }
             catch (Exception ex)
@@ -317,24 +317,22 @@ public partial class CollectionEditor
             {
                 SuspendEnabledUpdates();
                 _dirty = true;
-                int index = _listbox.SelectedIndex;
-                if (index == _listbox.Items.Count - 1)
+                int index = _listBox.SelectedIndex;
+                if (index == _listBox.Items.Count - 1)
                 {
                     return;
                 }
 
-                int ti = _listbox.TopIndex;
-                object itemMove = _listbox.Items[index];
-                _listbox.Items[index] = _listbox.Items[index + 1];
-                _listbox.Items[index + 1] = itemMove;
+                int ti = _listBox.TopIndex;
+                (_listBox.Items[index + 1], _listBox.Items[index]) = (_listBox.Items[index], _listBox.Items[index + 1]);
 
-                if (ti < _listbox.Items.Count - 1)
+                if (ti < _listBox.Items.Count - 1)
                 {
-                    _listbox.TopIndex = ti + 1;
+                    _listBox.TopIndex = ti + 1;
                 }
 
-                _listbox.ClearSelected();
-                _listbox.SelectedIndex = index + 1;
+                _listBox.ClearSelected();
+                _listBox.SelectedIndex = index + 1;
 
                 // enabling/disabling the buttons has moved the focus to the OK button, move it back to the sender
                 Control ctrlSender = (Control)sender!;
@@ -374,10 +372,10 @@ public partial class CollectionEditor
 
         private void HookEvents()
         {
-            _listbox.KeyDown += Listbox_keyDown;
-            _listbox.DrawItem += Listbox_drawItem;
-            _listbox.SelectedIndexChanged += Listbox_SelectedIndexChanged;
-            _listbox.HandleCreated += Listbox_HandleCreated;
+            _listBox.KeyDown += ListBox_keyDown;
+            _listBox.DrawItem += ListBox_drawItem;
+            _listBox.SelectedIndexChanged += ListBox_SelectedIndexChanged;
+            _listBox.HandleCreated += ListBox_HandleCreated;
             _upButton.Click += UpButton_Click;
             _downButton.Click += DownButton_click;
             _propertyGrid.PropertyValueChanged += PropertyGrid_propertyValueChanged;
@@ -391,7 +389,7 @@ public partial class CollectionEditor
         }
 
         [MemberNotNull(nameof(_membersLabel))]
-        [MemberNotNull(nameof(_listbox))]
+        [MemberNotNull(nameof(_listBox))]
         [MemberNotNull(nameof(_upButton))]
         [MemberNotNull(nameof(_downButton))]
         [MemberNotNull(nameof(_propertiesLabel))]
@@ -407,7 +405,7 @@ public partial class CollectionEditor
         {
             ComponentResourceManager resources = new(typeof(CollectionEditor));
             _membersLabel = new Label();
-            _listbox = new FilterListBox();
+            _listBox = new FilterListBox();
             _upButton = new Button();
             _downButton = new Button();
             _propertiesLabel = new Label();
@@ -428,13 +426,13 @@ public partial class CollectionEditor
             _membersLabel.Margin = new Padding(0, 0, 3, 3);
             _membersLabel.Name = "membersLabel";
 
-            resources.ApplyResources(_listbox, "listbox");
-            _listbox.SelectionMode = (CanSelectMultipleInstances() ? SelectionMode.MultiExtended : SelectionMode.One);
-            _listbox.DrawMode = DrawMode.OwnerDrawFixed;
-            _listbox.FormattingEnabled = true;
-            _listbox.Margin = new Padding(0, 3, 3, 3);
-            _listbox.Name = "listbox";
-            _overArchingTableLayoutPanel.SetRowSpan(_listbox, 2);
+            resources.ApplyResources(_listBox, "listbox");
+            _listBox.SelectionMode = (CanSelectMultipleInstances() ? SelectionMode.MultiExtended : SelectionMode.One);
+            _listBox.DrawMode = DrawMode.OwnerDrawFixed;
+            _listBox.FormattingEnabled = true;
+            _listBox.Margin = new Padding(0, 3, 3, 3);
+            _listBox.Name = "listbox";
+            _overArchingTableLayoutPanel.SetRowSpan(_listBox, 2);
 
             resources.ApplyResources(_upButton, "upButton");
             _upButton.Name = "upButton";
@@ -483,7 +481,7 @@ public partial class CollectionEditor
             _overArchingTableLayoutPanel.Controls.Add(_addRemoveTableLayoutPanel, 0, 3);
             _overArchingTableLayoutPanel.Controls.Add(_propertiesLabel, 2, 0);
             _overArchingTableLayoutPanel.Controls.Add(_membersLabel, 0, 0);
-            _overArchingTableLayoutPanel.Controls.Add(_listbox, 0, 1);
+            _overArchingTableLayoutPanel.Controls.Add(_listBox, 0, 1);
             _overArchingTableLayoutPanel.Controls.Add(_propertyGrid, 2, 1);
             _overArchingTableLayoutPanel.Controls.Add(_okCancelTableLayoutPanel, 0, 4);
             _overArchingTableLayoutPanel.Controls.Add(_upButton, 1, 1);
@@ -517,55 +515,53 @@ public partial class CollectionEditor
 
         private void UpdateItemWidths(ListItem? item)
         {
-            if (!_listbox.IsHandleCreated)
+            if (!_listBox.IsHandleCreated)
             {
                 return;
             }
 
-            using (Graphics g = _listbox.CreateGraphics())
+            using Graphics g = _listBox.CreateGraphics();
+            int old = _listBox.HorizontalExtent;
+
+            if (item is not null)
             {
-                int old = _listbox.HorizontalExtent;
-
-                if (item is not null)
+                int w = CalcItemWidth(g, item);
+                if (w > old)
                 {
-                    int w = CalcItemWidth(g, item);
-                    if (w > old)
+                    _listBox.HorizontalExtent = w;
+                }
+            }
+            else
+            {
+                int max = 0;
+                foreach (ListItem i in _listBox.Items)
+                {
+                    int w = CalcItemWidth(g, i);
+                    if (w > max)
                     {
-                        _listbox.HorizontalExtent = w;
+                        max = w;
                     }
                 }
-                else
-                {
-                    int max = 0;
-                    foreach (ListItem i in _listbox.Items)
-                    {
-                        int w = CalcItemWidth(g, i);
-                        if (w > max)
-                        {
-                            max = w;
-                        }
-                    }
 
-                    _listbox.HorizontalExtent = max;
-                }
+                _listBox.HorizontalExtent = max;
             }
         }
 
         /// <summary>
-        ///  This draws a row of the listbox.
+        ///  This draws a row of the listBox.
         /// </summary>
-        private void Listbox_drawItem(object? sender, DrawItemEventArgs e)
+        private void ListBox_drawItem(object? sender, DrawItemEventArgs e)
         {
             if (e.Index != -1)
             {
-                ListItem item = (ListItem)_listbox.Items[e.Index];
+                ListItem item = (ListItem)_listBox.Items[e.Index];
 
                 Graphics g = e.Graphics;
 
-                int c = _listbox.Items.Count;
+                int c = _listBox.Items.Count;
                 int maxC = (c > 1) ? c - 1 : c;
                 // We add the +4 is a fudge factor...
-                SizeF sizeW = g.MeasureString(maxC.ToString(CultureInfo.CurrentCulture), _listbox.Font);
+                SizeF sizeW = g.MeasureString(maxC.ToString(CultureInfo.CurrentCulture), _listBox.Font);
 
                 int charactersInNumber = ((int)(Math.Log(maxC) / s_log10) + 1); // Luckily, this is never called if count = 0
                 int w = 4 + charactersInNumber * (Font.Height / 2);
@@ -621,11 +617,11 @@ public partial class CollectionEditor
                         e.Bounds with { X = e.Bounds.X + offset, Width = e.Bounds.Width - offset });
                 }
 
-                // Check to see if we need to change the horizontal extent of the listbox
+                // Check to see if we need to change the horizontal extent of the listBox
                 int width = offset + (int)g.MeasureString(itemText, Font).Width;
-                if (width > e.Bounds.Width && _listbox.HorizontalExtent < width)
+                if (width > e.Bounds.Width && _listBox.HorizontalExtent < width)
                 {
-                    _listbox.HorizontalExtent = width;
+                    _listBox.HorizontalExtent = width;
                 }
             }
         }
@@ -633,9 +629,9 @@ public partial class CollectionEditor
         /// <summary>
         ///  Handles keypress events for the list box.
         /// </summary>
-        private void Listbox_keyDown(object? sender, KeyEventArgs kevent)
+        private void ListBox_keyDown(object? sender, KeyEventArgs e)
         {
-            switch (kevent.KeyData)
+            switch (e.KeyData)
             {
                 case Keys.Delete:
                     PerformRemove();
@@ -649,7 +645,7 @@ public partial class CollectionEditor
         /// <summary>
         ///  Event that fires when the selected list box index changes.
         /// </summary>
-        private void Listbox_SelectedIndexChanged(object? sender, EventArgs e)
+        private void ListBox_SelectedIndexChanged(object? sender, EventArgs e)
         {
             UpdateEnabled();
         }
@@ -657,7 +653,7 @@ public partial class CollectionEditor
         /// <summary>
         ///  Event that fires when the list box's window handle is created.
         /// </summary>
-        private void Listbox_HandleCreated(object? sender, EventArgs e)
+        private void ListBox_HandleCreated(object? sender, EventArgs e)
         {
             UpdateItemWidths(null);
         }
@@ -678,10 +674,10 @@ public partial class CollectionEditor
 
                 if (_dirty)
                 {
-                    object[] items = new object[_listbox.Items.Count];
+                    object[] items = new object[_listBox.Items.Count];
                     for (int i = 0; i < items.Length; i++)
                     {
-                        items[i] = ((ListItem)_listbox.Items[i]).Value;
+                        items[i] = ((ListItem)_listBox.Items[i]).Value;
                     }
 
                     Items = items;
@@ -689,7 +685,7 @@ public partial class CollectionEditor
 
                 if (_removedItems is not null && _dirty)
                 {
-                    object[] deadItems = _removedItems.ToArray();
+                    object[] deadItems = [.. _removedItems];
 
                     for (int i = 0; i < deadItems.Length; i++)
                     {
@@ -702,7 +698,7 @@ public partial class CollectionEditor
                 _createdItems?.Clear();
                 _originalItems?.Clear();
 
-                _listbox.Items.Clear();
+                _listBox.Items.Clear();
                 _dirty = false;
             }
             catch (Exception ex)
@@ -743,12 +739,12 @@ public partial class CollectionEditor
             }
 
             // Remember these contents for cancellation
-            _originalItems ??= new List<object>();
+            _originalItems ??= [];
 
             _originalItems.Clear();
 
             // Now update the list box.
-            _listbox.Items.Clear();
+            _listBox.Items.Clear();
             _propertyGrid.Site = new PropertyGridSite(Context, _propertyGrid);
             if (EditValue is not null)
             {
@@ -758,13 +754,13 @@ public partial class CollectionEditor
                     object[] items = Items;
                     for (int i = 0; i < items.Length; i++)
                     {
-                        _listbox.Items.Add(new ListItem(_editor, items[i]));
+                        _listBox.Items.Add(new ListItem(_editor, items[i]));
                         _originalItems.Add(items[i]);
                     }
 
-                    if (_listbox.Items.Count > 0)
+                    if (_listBox.Items.Count > 0)
                     {
-                        _listbox.SelectedIndex = 0;
+                        _listBox.SelectedIndex = 0;
                     }
                 }
                 finally
@@ -802,16 +798,16 @@ public partial class CollectionEditor
         /// </summary>
         private void PerformRemove()
         {
-            int index = _listbox.SelectedIndex;
+            int index = _listBox.SelectedIndex;
 
             if (index != -1)
             {
                 SuspendEnabledUpdates();
                 try
                 {
-                    if (_listbox.SelectedItems.Count > 1)
+                    if (_listBox.SelectedItems.Count > 1)
                     {
-                        List<ListItem> toBeDeleted = _listbox.SelectedItems.Cast<ListItem>().ToList();
+                        List<ListItem> toBeDeleted = _listBox.SelectedItems.Cast<ListItem>().ToList();
                         foreach (ListItem item in toBeDeleted)
                         {
                             RemoveInternal(item);
@@ -819,16 +815,16 @@ public partial class CollectionEditor
                     }
                     else
                     {
-                        RemoveInternal((ListItem?)_listbox.SelectedItem);
+                        RemoveInternal((ListItem?)_listBox.SelectedItem);
                     }
 
-                    if (index < _listbox.Items.Count)
+                    if (index < _listBox.Items.Count)
                     {
-                        _listbox.SelectedIndex = index;
+                        _listBox.SelectedIndex = index;
                     }
-                    else if (_listbox.Items.Count > 0)
+                    else if (_listBox.Items.Count > 0)
                     {
-                        _listbox.SelectedIndex = _listbox.Items.Count - 1;
+                        _listBox.SelectedIndex = _listBox.Items.Count - 1;
                     }
                 }
                 finally
@@ -845,14 +841,14 @@ public partial class CollectionEditor
         {
             _dirty = true;
 
-            // Refresh selected listbox item so that it picks up any name change
+            // Refresh selected listBox item so that it picks up any name change
             SuspendEnabledUpdates();
             try
             {
-                int selectedItem = _listbox.SelectedIndex;
+                int selectedItem = _listBox.SelectedIndex;
                 if (selectedItem >= 0)
                 {
-                    _listbox.RefreshItem(_listbox.SelectedIndex);
+                    _listBox.RefreshItem(_listBox.SelectedIndex);
                 }
             }
             finally
@@ -862,10 +858,10 @@ public partial class CollectionEditor
 
             // if a property changes, invalidate the grid in case it affects the item's name.
             UpdateItemWidths(null);
-            _listbox.Invalidate();
+            _listBox.Invalidate();
 
             // also update the string above the grid.
-            _propertiesLabel.Text = string.Format(SR.CollectionEditorProperties, GetDisplayText((ListItem?)_listbox.SelectedItem));
+            _propertiesLabel.Text = string.Format(SR.CollectionEditorProperties, GetDisplayText((ListItem?)_listBox.SelectedItem));
         }
 
         /// <summary>
@@ -883,7 +879,7 @@ public partial class CollectionEditor
                 {
                     DestroyInstance(item.Value);
                     _createdItems.Remove(item.Value);
-                    _listbox.Items.Remove(item);
+                    _listBox.Items.Remove(item);
                 }
                 else
                 {
@@ -891,14 +887,14 @@ public partial class CollectionEditor
                     {
                         if (CanRemoveInstance(item.Value))
                         {
-                            _removedItems ??= new List<object>();
+                            _removedItems ??= [];
 
                             _removedItems.Add(item.Value);
-                            _listbox.Items.Remove(item);
+                            _listBox.Items.Remove(item);
                         }
                         else
                         {
-                            throw new Exception(string.Format(SR.CollectionEditorCantRemoveItem, GetDisplayText(item)));
+                            throw new InvalidOperationException(string.Format(SR.CollectionEditorCantRemoveItem, GetDisplayText(item)));
                         }
                     }
                     catch (Exception ex)
@@ -967,7 +963,7 @@ public partial class CollectionEditor
                 }
 
                 // This is cached across requests, so reset the initial focus.
-                ActiveControl = _listbox;
+                ActiveControl = _listBox;
                 result = base.ShowEditorDialog(edSvc);
             }
             finally
@@ -986,7 +982,7 @@ public partial class CollectionEditor
         /// </summary>
         private void UpButton_Click(object? sender, EventArgs e)
         {
-            int index = _listbox.SelectedIndex;
+            int index = _listBox.SelectedIndex;
             if (index == 0)
             {
                 return;
@@ -996,18 +992,16 @@ public partial class CollectionEditor
             try
             {
                 SuspendEnabledUpdates();
-                int ti = _listbox.TopIndex;
-                object itemMove = _listbox.Items[index];
-                _listbox.Items[index] = _listbox.Items[index - 1];
-                _listbox.Items[index - 1] = itemMove;
+                int ti = _listBox.TopIndex;
+                (_listBox.Items[index - 1], _listBox.Items[index]) = (_listBox.Items[index], _listBox.Items[index - 1]);
 
                 if (ti > 0)
                 {
-                    _listbox.TopIndex = ti - 1;
+                    _listBox.TopIndex = ti - 1;
                 }
 
-                _listbox.ClearSelected();
-                _listbox.SelectedIndex = index - 1;
+                _listBox.ClearSelected();
+                _listBox.SelectedIndex = index - 1;
 
                 // enabling/disabling the buttons has moved the focus to the OK button, move it back to the sender
                 Control ctrlSender = (Control)sender!;
@@ -1034,14 +1028,14 @@ public partial class CollectionEditor
                 return;
             }
 
-            bool editEnabled = (_listbox.SelectedItem is not null) && CollectionEditable;
-            _removeButton.Enabled = editEnabled && AllowRemoveInstance(((ListItem)_listbox.SelectedItem!).Value);
-            _upButton.Enabled = editEnabled && _listbox.Items.Count > 1;
-            _downButton.Enabled = editEnabled && _listbox.Items.Count > 1;
+            bool editEnabled = (_listBox.SelectedItem is not null) && CollectionEditable;
+            _removeButton.Enabled = editEnabled && AllowRemoveInstance(((ListItem)_listBox.SelectedItem!).Value);
+            _upButton.Enabled = editEnabled && _listBox.Items.Count > 1;
+            _downButton.Enabled = editEnabled && _listBox.Items.Count > 1;
             _propertyGrid.Enabled = editEnabled;
             _addButton.Enabled = CollectionEditable;
 
-            if (_listbox.SelectedItem is not null)
+            if (_listBox.SelectedItem is not null)
             {
                 object[] items;
 
@@ -1049,22 +1043,22 @@ public partial class CollectionEditor
                 // otherwise, the user will be presented with a batch of read only properties, which isn't terribly useful.
                 if (IsImmutable)
                 {
-                    items = new object[] { new SelectionWrapper(CollectionType, CollectionItemType, _listbox, _listbox.SelectedItems) };
+                    items = [new SelectionWrapper(CollectionType, CollectionItemType, _listBox, _listBox.SelectedItems)];
                 }
                 else
                 {
-                    items = new object[_listbox.SelectedItems.Count];
+                    items = new object[_listBox.SelectedItems.Count];
                     for (int i = 0; i < items.Length; i++)
                     {
-                        items[i] = ((ListItem)_listbox.SelectedItems[i]!).Value;
+                        items[i] = ((ListItem)_listBox.SelectedItems[i]!).Value;
                     }
                 }
 
-                int selectedItemCount = _listbox.SelectedItems.Count;
+                int selectedItemCount = _listBox.SelectedItems.Count;
                 if (selectedItemCount is 1 or -1)
                 {
-                    // handle both single select listboxes and a single item selected in a multi-select listbox
-                    _propertiesLabel.Text = string.Format(SR.CollectionEditorProperties, GetDisplayText((ListItem)_listbox.SelectedItem));
+                    // handle both single select listBoxes and a single item selected in a multi-select listBox
+                    _propertiesLabel.Text = string.Format(SR.CollectionEditorProperties, GetDisplayText((ListItem)_listBox.SelectedItem));
                 }
                 else
                 {
@@ -1129,13 +1123,13 @@ public partial class CollectionEditor
             private object? _value;
 
             public SelectionWrapper(Type collectionType, Type collectionItemType, Control control, ICollection collection)
-                : base("Value", new Attribute[] { new CategoryAttribute(collectionItemType.Name) })
+                : base("Value", [new CategoryAttribute(collectionItemType.Name)])
             {
                 ComponentType = collectionType;
                 PropertyType = collectionItemType;
                 _control = control;
                 _collection = collection;
-                _properties = new PropertyDescriptorCollection(new PropertyDescriptor[] { this });
+                _properties = new PropertyDescriptorCollection([this]);
 
                 Debug.Assert(collection.Count > 0, "We should only be wrapped if there is a selection");
                 _value = this;
@@ -1250,6 +1244,7 @@ public partial class CollectionEditor
             /// <summary>
             ///  Retrieves the type converter for this object.
             /// </summary>
+            [RequiresUnreferencedCode("Generic TypeConverters may require the generic types to be annotated. For example, NullableConverter requires the underlying type to be DynamicallyAccessedMembers All.")]
             TypeConverter? ICustomTypeDescriptor.GetConverter() => null;
 
             /// <summary>
@@ -1265,6 +1260,7 @@ public partial class CollectionEditor
             /// <summary>
             ///  Retrieves the an editor for this object.
             /// </summary>
+            [RequiresUnreferencedCode("Design-time attributes are not preserved when trimming. Types referenced by attributes like EditorAttribute and DesignerAttribute may not be available after trimming.")]
             object? ICustomTypeDescriptor.GetEditor(Type editorBaseType) => null;
 
             /// <summary>
@@ -1290,6 +1286,7 @@ public partial class CollectionEditor
             ///  This may differ from the set of properties the class provides.
             ///  If the component is sited, the site may add or remove additional properties.
             /// </summary>
+            [RequiresUnreferencedCode("PropertyDescriptor's PropertyType cannot be statically discovered.")]
             PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties() => _properties;
 
             /// <summary>
@@ -1298,6 +1295,7 @@ public partial class CollectionEditor
             ///  If the component is sited, the site may add or remove additional properties.
             ///  The returned array of properties will be filtered by the given set of attributes.
             /// </summary>
+            [RequiresUnreferencedCode("PropertyDescriptor's PropertyType cannot be statically discovered. The public parameterless constructor or the 'Default' static field may be trimmed from the Attribute's Type.")]
             PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties(Attribute[]? attributes) => _properties;
 
             /// <summary>

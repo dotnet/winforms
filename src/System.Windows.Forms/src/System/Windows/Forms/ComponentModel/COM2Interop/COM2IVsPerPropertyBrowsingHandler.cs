@@ -10,6 +10,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop;
 /// <summary>
 ///  Browsing handler for <see cref="IVsPerPropertyBrowsing"/>.
 /// </summary>
+[RequiresUnreferencedCode(ComNativeDescriptor.ComTypeDescriptorsMessage + " Uses Com2IDispatchConverter which is not trim-compatible.")]
 internal sealed unsafe class Com2IVsPerPropertyBrowsingHandler : Com2ExtendedBrowsingHandler<IVsPerPropertyBrowsing>
 {
     public static unsafe bool AllowChildProperties(Com2PropertyDescriptor property)
@@ -60,7 +61,7 @@ internal sealed unsafe class Com2IVsPerPropertyBrowsingHandler : Com2ExtendedBro
         }
 
         using BSTR helpString = default;
-        hr = propertyBrowsing.Value->GetLocalizedPropertyInfo(sender.DISPID, PInvoke.GetThreadLocale(), null, &helpString);
+        hr = propertyBrowsing.Value->GetLocalizedPropertyInfo(sender.DISPID, PInvokeCore.GetThreadLocale(), null, &helpString);
         if (hr == HRESULT.S_OK && !helpString.IsNull)
         {
             e.Add(new DescriptionAttribute(helpString.ToString()));
@@ -113,7 +114,7 @@ internal sealed unsafe class Com2IVsPerPropertyBrowsingHandler : Com2ExtendedBro
             return;
         }
 
-        BOOL canReset = e.Value ? true : false;
+        BOOL canReset = e.Value;
         hr = propertyBrowsing.Value->CanResetPropertyValue(sender.DISPID, &canReset);
         if (hr.Succeeded)
         {
@@ -132,7 +133,7 @@ internal sealed unsafe class Com2IVsPerPropertyBrowsingHandler : Com2ExtendedBro
 
         // Get the localized name, if applicable.
         using BSTR name = default;
-        hr = propertyBrowsing.Value->GetLocalizedPropertyInfo(sender.DISPID, PInvoke.GetThreadLocale(), &name, null);
+        hr = propertyBrowsing.Value->GetLocalizedPropertyInfo(sender.DISPID, PInvokeCore.GetThreadLocale(), &name, null);
         if (hr == HRESULT.S_OK && !name.IsNull)
         {
             e.Name = name.ToString();

@@ -11,7 +11,7 @@ public class IconConverter : ExpandableObjectConverter
 {
     public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
     {
-        return (sourceType == typeof(byte[]));
+        return sourceType == typeof(byte[]);
     }
 
     public override bool CanConvertTo(ITypeDescriptorContext? context, [NotNullWhen(true)] Type? destinationType)

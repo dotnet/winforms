@@ -48,9 +48,9 @@ public partial class WebBrowser
             // Note: we want to allow navigation if we haven't already navigated.
             if (AllowNavigation || !_haveNavigated)
             {
-                Debug.Assert(urlObject is null || urlObject is string, "invalid url type");
-                Debug.Assert(targetFrameName is null || targetFrameName is string, "invalid targetFrameName type");
-                Debug.Assert(headers is null || headers is string, "invalid headers type");
+                Debug.Assert(urlObject is null or string, "invalid url type");
+                Debug.Assert(targetFrameName is null or string, "invalid targetFrameName type");
+                Debug.Assert(headers is null or string, "invalid headers type");
 
                 // If during running interop code, the variant.bstr value gets set
                 // to -1 on return back to native code, if the original value was null, we
@@ -73,7 +73,7 @@ public partial class WebBrowser
 
         public unsafe void DocumentComplete(object pDisp, ref object? urlObject)
         {
-            Debug.Assert(urlObject is null || urlObject is string, "invalid url");
+            Debug.Assert(urlObject is null or string, "invalid url");
             _haveNavigated = true;
             if (_parent._documentStreamToSetOnLoad is not null && (string?)urlObject == "about:blank")
             {
@@ -82,7 +82,7 @@ public partial class WebBrowser
                 {
                     IPersistStreamInit.Interface? psi = htmlDocument.DomDocument as IPersistStreamInit.Interface;
                     Debug.Assert(psi is not null, "The Document does not implement IPersistStreamInit");
-                    using var pStream = ComHelpers.GetComScope<IStream>(new Ole32.GPStream(_parent._documentStreamToSetOnLoad));
+                    using var pStream = _parent._documentStreamToSetOnLoad.ToIStream();
                     psi.Load(pStream);
                     htmlDocument.Encoding = "unicode";
                 }
@@ -111,7 +111,7 @@ public partial class WebBrowser
 
         public void NavigateComplete2(object pDisp, ref object? urlObject)
         {
-            Debug.Assert(urlObject is null || urlObject is string, "invalid url type");
+            Debug.Assert(urlObject is null or string, "invalid url type");
             string urlString = urlObject is null ? string.Empty : (string)urlObject;
             WebBrowserNavigatedEventArgs e = new(
                     new Uri(urlString));

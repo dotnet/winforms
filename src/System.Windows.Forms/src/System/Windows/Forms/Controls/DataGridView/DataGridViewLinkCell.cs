@@ -150,7 +150,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
     {
         set
         {
-            Debug.Assert(value >= LinkBehavior.SystemDefault && value <= LinkBehavior.NeverUnderline);
+            Debug.Assert(value is >= LinkBehavior.SystemDefault and <= LinkBehavior.NeverUnderline);
             if (value != LinkBehavior)
             {
                 Properties.SetInteger(s_propLinkCellLinkBehavior, (int)value);
@@ -279,12 +279,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
         get
         {
             int trackVisitedState = Properties.GetInteger(s_propLinkCellTrackVisitedState, out bool found);
-            if (found)
-            {
-                return trackVisitedState == 0 ? false : true;
-            }
-
-            return true;
+            return !found || trackVisitedState != 0;
         }
         set
         {
@@ -323,12 +318,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
         get
         {
             int useColumnTextForLinkValue = Properties.GetInteger(s_propLinkCellUseColumnTextForLinkValue, out bool found);
-            if (found)
-            {
-                return useColumnTextForLinkValue == 0 ? false : true;
-            }
-
-            return false;
+            return found && useColumnTextForLinkValue != 0;
         }
         set
         {
@@ -450,7 +440,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
             dataGridViewCell = (DataGridViewLinkCell)Activator.CreateInstance(thisType)!;
         }
 
-        base.CloneInternal(dataGridViewCell);
+        CloneInternal(dataGridViewCell);
 
         if (Properties.ContainsObject(s_propLinkCellActiveLinkColor))
         {
@@ -1038,13 +1028,13 @@ public partial class DataGridViewLinkCell : DataGridViewCell
             bool isActive = (LinkState & LinkState.Active) == LinkState.Active;
 
             LinkUtilities.EnsureLinkFonts(cellStyle.Font, LinkBehavior, ref getLinkFont, ref getHoverFont, isActive);
+            using Font linkFont = getLinkFont;
+            using Font hoverFont = getHoverFont;
+
             TextFormatFlags flags = DataGridViewUtilities.ComputeTextFormatFlagsForCellStyleAlignment(
                 DataGridView.RightToLeftInternal,
                 cellStyle.Alignment,
                 cellStyle.WrapMode);
-
-            using Font linkFont = getLinkFont;
-            using Font hoverFont = getHoverFont;
 
             // Paint the focus rectangle around the link
             if (!paint)
@@ -1129,9 +1119,6 @@ public partial class DataGridViewLinkCell : DataGridViewCell
                     ControlPaint.DrawFocusRectangle(g, errorBounds, Color.Empty, brushColor);
                 }
             }
-
-            linkFont.Dispose();
-            hoverFont.Dispose();
         }
         else if (paint || computeContentBounds)
         {

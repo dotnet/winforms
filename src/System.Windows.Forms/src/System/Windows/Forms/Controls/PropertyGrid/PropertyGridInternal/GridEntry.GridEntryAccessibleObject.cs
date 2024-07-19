@@ -51,7 +51,7 @@ internal abstract partial class GridEntry
 
         internal override bool CanGetDefaultActionInternal => !this.TryGetOwnerAs(out GridEntry? owner) || !owner.Expandable;
 
-        public override string Description
+        public override string? Description
             => this.TryGetOwnerAs(out GridEntry? owner) ? owner.PropertyDescription : string.Empty;
 
         internal override bool CanGetDescriptionInternal => false;
@@ -61,7 +61,7 @@ internal abstract partial class GridEntry
                 ? owner.Expanded ? ExpandCollapseState.ExpandCollapseState_Expanded : ExpandCollapseState.ExpandCollapseState_Collapsed
                 : ExpandCollapseState.ExpandCollapseState_LeafNode;
 
-        public override string Help => this.TryGetOwnerAs(out GridEntry? owner) ? owner.PropertyDescription : string.Empty;
+        public override string? Help => this.TryGetOwnerAs(out GridEntry? owner) ? owner.PropertyDescription : string.Empty;
 
         internal override bool CanGetHelpInternal => false;
 
@@ -195,18 +195,22 @@ internal abstract partial class GridEntry
             }
         }
 
-        internal override int[] RuntimeId => _runtimeId ??= new[]
-        {
-            // We need to provide a unique ID. Others are implementing this in the same manner. First item is static - 0x2a.
-            // Second item can be anything, but it's good to supply HWND. Third and others are optional, but in case of
-            // GridItem we need it, to make it unique. Grid items are not controls, they don't have hwnd - we use hwnd
-            // of PropertyGridView.
+        /// <remarks>
+        ///  <para>
+        ///    For <see cref="GridEntry" /> the item hash code to make the ID unique. Grid items are not controls,
+        ///    they don't have windows - we use <see cref="HWND" /> of <see cref="PropertyGridView" />.
+        ///  </para>
+        /// </remarks>
+        /// <inheritdoc cref="AccessibleObject.RuntimeId" />
+        internal override int[] RuntimeId => _runtimeId ??=
+        [
+
             RuntimeIDFirstItem,
             this.TryGetOwnerAs(out GridEntry? owner)
                 ? (int)(owner?.OwnerGridView?.InternalHandle ?? HWND.Null)
                 : (int)HWND.Null,
             GetHashCode()
-        };
+        ];
 
         private PropertyGridView? PropertyGridView
         {
@@ -284,7 +288,7 @@ internal abstract partial class GridEntry
             // Make sure we're on the right thread.
             if (PropertyGridView.InvokeRequired)
             {
-                PropertyGridView.Invoke(new SelectDelegate(Select), new object[] { flags });
+                PropertyGridView.Invoke(new SelectDelegate(Select), [flags]);
                 return;
             }
 
@@ -311,7 +315,7 @@ internal abstract partial class GridEntry
 
         internal override void Expand()
         {
-            if (this.TryGetOwnerAs(out GridEntry? owner) && owner.Expandable && owner.Expanded == false)
+            if (this.TryGetOwnerAs(out GridEntry? owner) && owner.Expandable && !owner.Expanded)
             {
                 owner.Expanded = true;
             }

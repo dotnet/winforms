@@ -19,7 +19,7 @@ public abstract partial class AxHost
 
         private TypeConverter? _converter;
         private UITypeEditor? _editor;
-        private readonly List<Attribute> _updateAttributes = new();
+        private readonly List<Attribute> _updateAttributes = [];
         private int _flags;
 
         private const int FlagUpdatedEditorAndConverter = 0x00000001;
@@ -89,7 +89,7 @@ public abstract partial class AxHost
         internal int Dispid
             => _baseDescriptor.TryGetAttribute(out DispIdAttribute? dispid)
                 ? dispid.Value
-                : PInvoke.DISPID_UNKNOWN;
+                : PInvokeCore.DISPID_UNKNOWN;
 
         public override bool IsReadOnly => _baseDescriptor.IsReadOnly;
 
@@ -256,7 +256,7 @@ public abstract partial class AxHost
 
             List<Attribute> attributes = new(AttributeArray!);
             attributes.AddRange(_updateAttributes);
-            AttributeArray = attributes.ToArray();
+            AttributeArray = [.. attributes];
             _updateAttributes.Clear();
         }
 

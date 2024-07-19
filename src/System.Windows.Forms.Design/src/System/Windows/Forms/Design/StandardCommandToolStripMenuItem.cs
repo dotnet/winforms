@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel.Design;
 using System.Drawing;
 
@@ -14,22 +12,27 @@ namespace System.Windows.Forms.Design;
 internal class StandardCommandToolStripMenuItem : ToolStripMenuItem
 {
     private bool _cachedImage;
-    private Image _image;
+    private Image? _image;
     private readonly CommandID _menuID;
-    private IMenuCommandService _menuCommandService;
+    private IMenuCommandService? _menuCommandService;
     private readonly IServiceProvider _serviceProvider;
     private readonly string _name;
-    private readonly MenuCommand _menuCommand;
+    private readonly MenuCommand? _menuCommand;
 
     // Ok to call MenuService.FindCommand to find the menuCommand mapping to the appropriated menuID.
-    public StandardCommandToolStripMenuItem(CommandID menuID, string text, string imageName, IServiceProvider serviceProvider)
+    public StandardCommandToolStripMenuItem(
+        CommandID menuID,
+        string text,
+        string imageName,
+        IServiceProvider serviceProvider)
     {
         _menuID = menuID;
         _serviceProvider = serviceProvider;
+
         // Findcommand can throw; so we need to catch and disable the command.
         try
         {
-            _menuCommand = MenuService.FindCommand(menuID);
+            _menuCommand = MenuService?.FindCommand(menuID);
         }
         catch
         {
@@ -55,17 +58,20 @@ internal class StandardCommandToolStripMenuItem : ToolStripMenuItem
     /// <summary>
     ///  Retrieves the menu editor service, which we cache for speed.
     /// </summary>
-    public IMenuCommandService MenuService
+    public IMenuCommandService? MenuService
     {
         get
         {
-            _menuCommandService ??= (IMenuCommandService)_serviceProvider.GetService(typeof(IMenuCommandService));
+            if (_menuCommandService is null && _serviceProvider.TryGetService(out IMenuCommandService? menuCommandService))
+            {
+                _menuCommandService = menuCommandService;
+            }
 
             return _menuCommandService;
         }
     }
 
-    public override Image Image
+    public override Image? Image
     {
         // Standard 'catch all - rethrow critical' exception pattern
         get

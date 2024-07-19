@@ -11,7 +11,7 @@ namespace System.Windows.Forms;
 public class TaskDialogButtonCollection : Collection<TaskDialogButton>
 {
     // HashSet to detect duplicate items.
-    private readonly HashSet<TaskDialogButton> _itemSet = new();
+    private readonly HashSet<TaskDialogButton> _itemSet = [];
 
     /// <summary>
     ///   Initializes a new instance of the <see cref="TaskDialogButtonCollection"/> class.

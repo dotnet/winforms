@@ -28,8 +28,9 @@ public partial class DataGridView
                 ? owner.AccessibilityObject
                 : UiaCore.StubFragmentRoot.Instance;
 
-        internal override int[] RuntimeId
-            => _runtimeId ??= this.TryGetOwnerAs(out Panel? owner) ? owner.AccessibilityObject.RuntimeId : base.RuntimeId;
+        internal override int[] RuntimeId => _runtimeId ??= this.TryGetOwnerAs(out Panel? owner)
+            ? owner.AccessibilityObject.RuntimeId
+            : base.RuntimeId;
 
         internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {

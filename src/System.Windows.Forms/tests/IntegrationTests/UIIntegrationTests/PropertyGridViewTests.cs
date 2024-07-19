@@ -23,7 +23,7 @@ public class PropertyGridViewTests : ControlTestBase
             propertyGrid.Size = new Size(223, 244);
             form.ClientSize = new Size(508, 367);
             propertyGrid.SelectedObject = domainUpDown;
-            GridEntryCollection entries = propertyGrid.GetCurrentEntries();
+            GridEntryCollection entries = propertyGrid.GetCurrentEntries()!;
             PropertyGridView propertyGridView = (PropertyGridView)propertyGrid.Controls[2];
 
             int borderHeight = 2;

@@ -82,6 +82,13 @@ internal unsafe class DataStreamFromComStream : Stream
         return (int)bytesRead;
     }
 
+    public override int ReadByte()
+    {
+        byte data = default;
+        int r = Read(new Span<byte>(ref data));
+        return r == 0 ? -1 : data;
+    }
+
     public override void SetLength(long value)
     {
         _comStream->SetSize((ulong)value);
@@ -139,6 +146,8 @@ internal unsafe class DataStreamFromComStream : Stream
             throw new IOException(SR.DataStreamWrite);
         }
     }
+
+    public override void WriteByte(byte value) => Write([value]);
 
     protected override void Dispose(bool disposing)
     {

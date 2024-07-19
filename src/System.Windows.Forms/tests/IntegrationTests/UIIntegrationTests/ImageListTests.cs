@@ -71,8 +71,10 @@ public class ImageListTests : ControlTestBase
         {
             GC.GetTotalMemory(true);
 
-            uint result = PInvoke.GetGuiResources((HANDLE)Process.GetCurrentProcess().Handle,
+            uint result = PInvokeCore.GetGuiResources(
+                (HANDLE)Process.GetCurrentProcess().Handle,
                 GET_GUI_RESOURCES_FLAGS.GR_GDIOBJECTS);
+
             if (result == 0)
             {
                 int lastWin32Error = Marshal.GetLastWin32Error();
@@ -104,14 +106,18 @@ public class ImageListTests : ControlTestBase
             UseCompatibleStateImageBehavior = false
         };
 
-        Form form = new();
-        form.AutoScaleMode = AutoScaleMode.Font;
+        Form form = new()
+        {
+            AutoScaleMode = AutoScaleMode.Font
+        };
         form.Controls.Add(listView1);
         form.Name = "ListViewTest";
         form.Text = "ListView Test";
 
-        ImageList imageList1 = new();
-        imageList1.ImageStream = DeserializeStreamer(DevMsImageListStreamer);
+        ImageList imageList1 = new()
+        {
+            ImageStream = DeserializeStreamer(DevMsImageListStreamer)
+        };
         listView1.SmallImageList = imageList1;
 
         return form;
@@ -120,7 +126,6 @@ public class ImageListTests : ControlTestBase
     private static ImageListStreamer DeserializeStreamer(string base64String)
     {
         byte[] bytes = Convert.FromBase64String(base64String);
-        using MemoryStream ms = new(bytes);
-        return new ImageListStreamer(ms);
+        return new ImageListStreamer(bytes);
     }
 }

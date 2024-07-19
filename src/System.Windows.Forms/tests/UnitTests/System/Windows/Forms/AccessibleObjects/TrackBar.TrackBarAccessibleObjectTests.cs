@@ -469,7 +469,7 @@ public class TrackBarAccessibleObjectTests
         using TrackBar trackBar = new();
         TrackBar.TrackBarAccessibleObject accessibleObject = (TrackBar.TrackBarAccessibleObject)trackBar.AccessibilityObject;
         var result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
-        Assert.Equal(expected, result.IsEmpty ? false : (bool)result);
+        Assert.Equal(expected, !result.IsEmpty && (bool)result);
         Assert.False(trackBar.IsHandleCreated);
     }
 
@@ -492,5 +492,50 @@ public class TrackBarAccessibleObjectTests
         }
 
         return trackBar;
+    }
+
+    [WinFormsTheory]
+    [InlineData(null)]
+    [InlineData("Test Default Action")]
+    public void TrackBarAccessibleObject_DefaultAction_ReturnsExpected(string accessibleDefaultActionDescription)
+    {
+        using TrackBar trackBar = new();
+        trackBar.CreateControl();
+        TrackBar.TrackBarAccessibleObject accessibleObject = (TrackBar.TrackBarAccessibleObject)trackBar.AccessibilityObject;
+
+        trackBar.AccessibleDefaultActionDescription = accessibleDefaultActionDescription;
+
+        accessibleObject.DefaultAction.Should().Be(accessibleDefaultActionDescription);
+    }
+
+    [WinFormsFact]
+    public void TrackBarAccessibleObject_DefaultAction_ThrowsArgumentNullException_IfOwnerNotSet()
+    {
+        Assert.Throws<ArgumentNullException>(() => new TrackBar.TrackBarAccessibleObject(null));
+    }
+
+    [WinFormsFact]
+    public void TrackBarAccessibleObject_HitTest_ReturnsExpected()
+    {
+        using TrackBar trackBar = new();
+        trackBar.CreateControl();
+        TrackBar.TrackBarAccessibleObject accessibleObject = (TrackBar.TrackBarAccessibleObject)trackBar.AccessibilityObject;
+
+        Point pointInThumb = new Point(accessibleObject.ThumbAccessibleObject.Bounds.X + 1, accessibleObject.ThumbAccessibleObject.Bounds.Y + 1);
+        accessibleObject.HitTest(pointInThumb.X, pointInThumb.Y).Should().Be(accessibleObject.ThumbAccessibleObject);
+
+        if (accessibleObject.FirstButtonAccessibleObject?.IsDisplayed ?? false)
+        {
+            Point pointInFirstButton = new Point(accessibleObject.FirstButtonAccessibleObject.Bounds.X + 1, accessibleObject.FirstButtonAccessibleObject.Bounds.Y + 1);
+            accessibleObject.HitTest(pointInFirstButton.X, pointInFirstButton.Y).Should().Be(accessibleObject.FirstButtonAccessibleObject);
+        }
+
+        if (accessibleObject.LastButtonAccessibleObject?.IsDisplayed ?? false)
+        {
+            Point pointInLastButton = new Point(accessibleObject.LastButtonAccessibleObject.Bounds.X + 1, accessibleObject.LastButtonAccessibleObject.Bounds.Y + 1);
+            accessibleObject.HitTest(pointInLastButton.X, pointInLastButton.Y).Should().Be(accessibleObject.LastButtonAccessibleObject);
+        }
+
+        accessibleObject.HitTest(-1, -1).Should().BeNull();
     }
 }

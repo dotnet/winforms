@@ -4,7 +4,6 @@
 using System.Drawing;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -114,6 +113,7 @@ public partial class TreeNode
                 UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focused),
                 UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => (VARIANT)_owningTreeView.Enabled,
                 UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focusable),
+                UIA_PROPERTY_ID.UIA_LevelPropertyId => (VARIANT)(_owningTreeNode.Level + 1),
                 _ => base.GetPropertyValue(propertyID)
             };
 
@@ -124,7 +124,7 @@ public partial class TreeNode
         internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
             => patternId switch
             {
-                UIA_PATTERN_ID.UIA_ExpandCollapsePatternId => _owningTreeNode._childNodes.Count > 0,
+                UIA_PATTERN_ID.UIA_ExpandCollapsePatternId => true,
                 UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId => true,
                 UIA_PATTERN_ID.UIA_ScrollItemPatternId => true,
                 UIA_PATTERN_ID.UIA_SelectionItemPatternId => true,
@@ -146,13 +146,12 @@ public partial class TreeNode
                 ? AccessibleRole.CheckButton
                 : AccessibleRole.OutlineItem;
 
-        internal override int[] RuntimeId
-            => new int[]
-            {
-                RuntimeIDFirstItem,
-                PARAM.ToInt(_owningTreeView.InternalHandle),
-                _owningTreeNode.GetHashCode()
-            };
+        internal override int[] RuntimeId =>
+        [
+            RuntimeIDFirstItem,
+            (int)_owningTreeView.InternalHandle,
+            _owningTreeNode.GetHashCode()
+        ];
 
         public override AccessibleStates State
         {

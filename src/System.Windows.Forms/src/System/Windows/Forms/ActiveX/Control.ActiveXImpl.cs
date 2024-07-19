@@ -12,13 +12,13 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
-using System.Windows.Forms.BinaryFormat;
+using System.Private.Windows.Core.BinaryFormat;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Com.StructuredStorage;
 using Windows.Win32.System.Ole;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
-using static Interop;
+using System.Windows.Forms.BinaryFormat;
 
 namespace System.Windows.Forms;
 
@@ -137,6 +137,15 @@ public partial class Control
         private short _accelCount = -1;
         private RECT* _adjustRect; // temporary rect used during OnPosRectChange && SetObjectRects
 
+        // Feature switch, when set to false, ActiveX is not supported in trimmed applications.
+        [FeatureSwitchDefinition("System.Windows.Forms.ActiveXImpl.IsSupported")]
+#pragma warning disable IDE0075 // Simplify conditional expression - the simpler expression is hard to read
+        private static bool IsSupported { get; } =
+            AppContext.TryGetSwitch("System.Windows.Forms.ActiveXImpl.IsSupported", out bool isSupported)
+                ? isSupported
+                : true;
+#pragma warning restore IDE0075
+
         /// <summary>
         ///  Creates a new ActiveXImpl.
         /// </summary>
@@ -150,12 +159,12 @@ public partial class Control
             control.WindowTarget = this;
 
             _activeXState = default;
-            _ambientProperties = new AmbientProperty[]
-            {
-                new("Font", PInvoke.DISPID_AMBIENT_FONT),
-                new("BackColor", PInvoke.DISPID_AMBIENT_BACKCOLOR),
-                new("ForeColor", PInvoke.DISPID_AMBIENT_FORECOLOR)
-            };
+            _ambientProperties =
+            [
+                new("Font", PInvokeCore.DISPID_AMBIENT_FONT),
+                new("BackColor", PInvokeCore.DISPID_AMBIENT_BACKCOLOR),
+                new("ForeColor", PInvokeCore.DISPID_AMBIENT_FORECOLOR)
+            ];
         }
 
         /// <summary>
@@ -168,14 +177,13 @@ public partial class Control
         {
             get
             {
-                AmbientProperty property = LookupAmbient(PInvoke.DISPID_AMBIENT_BACKCOLOR);
+                AmbientProperty property = LookupAmbient(PInvokeCore.DISPID_AMBIENT_BACKCOLOR);
 
                 if (property.Empty)
                 {
-                    using VARIANT value = GetAmbientProperty(PInvoke.DISPID_AMBIENT_BACKCOLOR);
+                    using VARIANT value = GetAmbientProperty(PInvokeCore.DISPID_AMBIENT_BACKCOLOR);
                     if (value.vt is VARENUM.VT_I4 or VARENUM.VT_INT)
                     {
-                        Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"Object color type={value.vt}");
                         property.Value = ColorTranslator.FromOle(value.data.intVal);
                     }
                 }
@@ -194,11 +202,11 @@ public partial class Control
         {
             get
             {
-                AmbientProperty property = LookupAmbient(PInvoke.DISPID_AMBIENT_FONT);
+                AmbientProperty property = LookupAmbient(PInvokeCore.DISPID_AMBIENT_FONT);
 
                 if (property.Empty)
                 {
-                    using VARIANT value = GetAmbientProperty(PInvoke.DISPID_AMBIENT_FONT);
+                    using VARIANT value = GetAmbientProperty(PInvokeCore.DISPID_AMBIENT_FONT);
                     if (value.vt == VARENUM.VT_UNKNOWN)
                     {
                         using var font = ComScope<IFont>.TryQueryFrom(value.data.punkVal, out HRESULT hr);
@@ -230,14 +238,13 @@ public partial class Control
         {
             get
             {
-                AmbientProperty property = LookupAmbient(PInvoke.DISPID_AMBIENT_FORECOLOR);
+                AmbientProperty property = LookupAmbient(PInvokeCore.DISPID_AMBIENT_FORECOLOR);
 
                 if (property.Empty)
                 {
-                    using VARIANT value = GetAmbientProperty(PInvoke.DISPID_AMBIENT_FORECOLOR);
+                    using VARIANT value = GetAmbientProperty(PInvokeCore.DISPID_AMBIENT_FORECOLOR);
                     if (value.vt is VARENUM.VT_I4 or VARENUM.VT_INT)
                     {
-                        Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"Object color type={value.vt}");
                         property.Value = ColorTranslator.FromOle(value.data.intVal);
                     }
                 }
@@ -274,8 +281,8 @@ public partial class Control
                 {
                     s_logPixels = default;
                     using var dc = GetDcScope.ScreenDC;
-                    s_logPixels.X = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
-                    s_logPixels.Y = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
+                    s_logPixels.X = PInvokeCore.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
+                    s_logPixels.Y = PInvokeCore.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
                 }
 
                 return s_logPixels;
@@ -331,14 +338,12 @@ public partial class Control
             HWND hwndParent,
             RECT* lprcPosRect)
         {
-            CompModSwitches.ActiveX.TraceVerbose($"AxSource:ActiveXImpl:DoVerb({iVerb})");
             switch (iVerb)
             {
                 case OLEIVERB.OLEIVERB_SHOW:
                 case OLEIVERB.OLEIVERB_INPLACEACTIVATE:
                 case OLEIVERB.OLEIVERB_UIACTIVATE:
                 case OLEIVERB.OLEIVERB_PRIMARY:
-                    CompModSwitches.ActiveX.TraceVerbose("DoVerb:Show, InPlaceActivate, UIActivate");
                     InPlaceActivate(iVerb);
 
                     // Now that we're active, send the lpmsg to the control if it is valid.
@@ -370,14 +375,6 @@ public partial class Control
                         lpmsg->lParam = PARAM.FromPoint(pt);
                     }
 
-#if DEBUG
-                    if (CompModSwitches.ActiveX.TraceVerbose)
-                    {
-                        Message m = Message.Create(lpmsg);
-                        Debug.WriteLine($"Valid message pointer passed, sending to control: {m}");
-                    }
-#endif
-
                     if (lpmsg->message == PInvoke.WM_KEYDOWN && lpmsg->wParam == (WPARAM)(nuint)VIRTUAL_KEY.VK_TAB)
                     {
                         target.SelectNextControl(null, ModifierKeys != Keys.Shift, tabStopOnly: true, nested: true, wrap: true);
@@ -390,7 +387,6 @@ public partial class Control
                     break;
 
                 case OLEIVERB.OLEIVERB_HIDE:
-                    CompModSwitches.ActiveX.TraceVerbose("DoVerb:Hide");
                     UIDeactivate();
                     InPlaceDeactivate();
                     if (_activeXState[s_inPlaceVisible])
@@ -402,9 +398,7 @@ public partial class Control
 
                 // All other verbs are not implemented.
                 default:
-                    CompModSwitches.ActiveX.TraceVerbose("DoVerb:Other");
-                    ThrowHr(HRESULT.E_NOTIMPL);
-                    break;
+                    return HRESULT.E_NOTIMPL;
             }
 
             return HRESULT.S_OK;
@@ -438,7 +432,7 @@ public partial class Control
             // supported on classic metafiles.  We throw VIEW_E_DRAW in the hope that
             // the caller figures it out and sends us a different DC.
 
-            OBJ_TYPE hdcType = (OBJ_TYPE)PInvoke.GetObjectType(hdcDraw);
+            OBJ_TYPE hdcType = (OBJ_TYPE)PInvokeCore.GetObjectType(hdcDraw);
             if (hdcType == OBJ_TYPE.OBJ_METADC)
             {
                 return HRESULT.VIEW_E_DRAW;
@@ -465,7 +459,7 @@ public partial class Control
                 // system. This puts us in the most similar coordinates as we currently use.
                 Point p1 = new(rc.left, rc.top);
                 Point p2 = new(rc.right - rc.left, rc.bottom - rc.top);
-                PInvoke.LPtoDP(hdcDraw, new Point[] { p1, p2 }.AsSpan());
+                PInvoke.LPtoDP(hdcDraw, [p1, p2]);
 
                 iMode = (HDC_MAP_MODE)PInvoke.SetMapMode(hdcDraw, HDC_MAP_MODE.MM_ANISOTROPIC);
                 PInvoke.SetWindowOrgEx(hdcDraw, 0, 0, &pW);
@@ -513,14 +507,14 @@ public partial class Control
                     lVerb = OLEIVERB.OLEIVERB_SHOW
                 };
 
-                s_axVerbs = new OLEVERB[]
-                {
+                s_axVerbs =
+                [
                     new() { lVerb = OLEIVERB.OLEIVERB_SHOW },
                     new() { lVerb = OLEIVERB.OLEIVERB_INPLACEACTIVATE },
                     new() { lVerb = OLEIVERB.OLEIVERB_UIACTIVATE },
                     new() { lVerb = OLEIVERB.OLEIVERB_HIDE },
                     new() { lVerb = OLEIVERB.OLEIVERB_PRIMARY },
-                };
+                ];
             }
 
             return ComHelpers.GetComPointer<IEnumOLEVERB>(new ActiveXVerbEnum(s_axVerbs));
@@ -597,8 +591,6 @@ public partial class Control
         /// </summary>
         private VARIANT GetAmbientProperty(int dispid)
         {
-            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetAmbientProperty");
-
             VARIANT property = default;
 
             if (_clientSite is null)
@@ -612,22 +604,12 @@ public partial class Control
                 return property;
             }
 
-            Debug.Indent();
-            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "clientSite implements IDispatch");
-
             hr = dispatch.Value->TryGetProperty(dispid, &property, PInvoke.LCID.USER_DEFAULT.RawValue);
 
-            if (hr.Succeeded)
+            if (hr.Failed)
             {
-                Debug.WriteLineIf(
-                    CompModSwitches.ActiveX.TraceInfo,
-                    $"IDispatch::Invoke succeeded. VT={property.vt}");
-                Debug.Unindent();
-                return property;
+                Debug.WriteLine($"Failed to get property for dispid {dispid}: {hr}");
             }
-
-            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"IDispatch::Invoke failed. HR: 0x{hr:X}");
-            Debug.Unindent();
 
             return property;
         }
@@ -640,7 +622,7 @@ public partial class Control
         {
             if (_accelCount == -1)
             {
-                List<char> mnemonicList = new();
+                List<char> mnemonicList = [];
                 GetMnemonicList(_control, mnemonicList);
 
                 _accelCount = (short)mnemonicList.Count;
@@ -650,15 +632,11 @@ public partial class Control
                     // In the worst case we may have two accelerators per mnemonic: one lower case and
                     // one upper case, hence the * 2 below.
                     var accelerators = new ACCEL[_accelCount * 2];
-                    Debug.Indent();
-
                     ushort cmd = 0;
                     _accelCount = 0;
 
                     foreach (char ch in mnemonicList)
                     {
-                        Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"Mnemonic: {ch}");
-
                         short scan = PInvoke.VkKeyScan(ch);
                         ushort key = (ushort)(scan & 0x00FF);
                         if (ch is >= 'A' and <= 'Z')
@@ -698,8 +676,6 @@ public partial class Control
 
                         cmd++;
                     }
-
-                    Debug.Unindent();
 
                     // Now create an accelerator table and then free our memory.
 
@@ -829,8 +805,6 @@ public partial class Control
             // If we're not already active, go and do it.
             if (!_activeXState[s_inPlaceActive])
             {
-                CompModSwitches.ActiveX.TraceVerbose("\tActiveXImpl:InPlaceActivate --> inplaceactive");
-
                 hr = inPlaceSite.Value->CanInPlaceActivate();
                 if (hr != HRESULT.S_OK)
                 {
@@ -850,7 +824,6 @@ public partial class Control
             // And if we're not visible, do that too.
             if (!_activeXState[s_inPlaceVisible])
             {
-                CompModSwitches.ActiveX.TraceVerbose("\tActiveXImpl:InPlaceActivate --> inplacevisible");
                 OLEINPLACEFRAMEINFO inPlaceFrameInfo = new()
                 {
                     cb = (uint)sizeof(OLEINPLACEFRAMEINFO)
@@ -906,18 +879,15 @@ public partial class Control
             // If we weren't asked to UIActivate, then we're done.
             if (verb is not OLEIVERB.OLEIVERB_PRIMARY and not OLEIVERB.OLEIVERB_UIACTIVATE)
             {
-                CompModSwitches.ActiveX.TraceVerbose("\tActiveXImpl:InPlaceActivate --> not becoming UIActive");
                 return;
             }
 
             // If we're not already UI active, do sow now.
             if (_activeXState[s_uiActive])
             {
-                CompModSwitches.ActiveX.TraceVerbose("\tActiveXImpl:InPlaceActivate --> already uiactive");
                 return;
             }
 
-            CompModSwitches.ActiveX.TraceVerbose("\tActiveXImpl:InPlaceActivate --> uiactive");
             _activeXState[s_uiActive] = true;
 
             // Inform the container of our intent.
@@ -1075,14 +1045,18 @@ public partial class Control
         /// <inheritdoc cref="IPersistPropertyBag.Load(IPropertyBag*, IErrorLog*)"/>
         internal unsafe void Load(IPropertyBag* propertyBag, IErrorLog* errorLog)
         {
+            if (!IsSupported)
+            {
+                throw new NotSupportedException(string.Format(SR.ControlNotSupportedInTrimming, nameof(ActiveXImpl)));
+            }
+
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(
                 _control,
-                new Attribute[] { DesignerSerializationVisibilityAttribute.Visible });
+                [DesignerSerializationVisibilityAttribute.Visible]);
 
             for (int i = 0; i < props.Count; i++)
             {
                 PropertyDescriptor currentProperty = props[i];
-                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"Loading property {currentProperty.Name}");
 
                 try
                 {
@@ -1105,9 +1079,6 @@ public partial class Control
                         continue;
                     }
 
-                    Debug.Indent();
-                    Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Property was in bag");
-
                     string? errorString = null;
                     HRESULT errorCode = HRESULT.S_OK;
 
@@ -1124,25 +1095,19 @@ public partial class Control
                         errorCode = e is ExternalException ee ? (HRESULT)ee.ErrorCode : HRESULT.E_FAIL;
                     }
 
-                    if (errorString is not null)
+                    if (errorString is not null && errorLog is not null)
                     {
-                        Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"Exception converting property: {errorString}");
-                        if (errorLog is not null)
+                        using BSTR bstrSource = new(_control.GetType().FullName!);
+                        using BSTR bstrDescription = new(errorString);
+                        EXCEPINFO err = new()
                         {
-                            using BSTR bstrSource = new(_control.GetType().FullName!);
-                            using BSTR bstrDescription = new(errorString);
-                            EXCEPINFO err = new()
-                            {
-                                bstrSource = bstrSource,
-                                bstrDescription = bstrDescription,
-                                scode = errorCode
-                            };
+                            bstrSource = bstrSource,
+                            bstrDescription = bstrDescription,
+                            scode = errorCode
+                        };
 
-                            errorLog->AddError(currentProperty.Name, in err);
-                        }
+                        errorLog->AddError(currentProperty.Name, in err);
                     }
-
-                    Debug.Unindent();
                 }
                 catch (Exception ex)
                 {
@@ -1167,8 +1132,6 @@ public partial class Control
 
                 if (IsResourceProperty(currentProperty))
                 {
-                    Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "It's a resource property");
-
                     // Resource property. We encode these as base 64 strings. To load them, we convert
                     // to a binary blob and then de-serialize.
                     using MemoryStream stream = new(Convert.FromBase64String(value), writable: false);
@@ -1176,8 +1139,8 @@ public partial class Control
                     object? deserialized = null;
                     try
                     {
-                        BinaryFormattedObject format = new(stream, leaveOpen: true);
-                        success = format.TryGetFrameworkObject(out deserialized);
+                        BinaryFormattedObject format = new(stream);
+                        success = format.TryGetObject(out deserialized);
                     }
                     catch (Exception ex) when (!ex.IsCriticalException())
                     {
@@ -1186,6 +1149,11 @@ public partial class Control
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
                     if (!success)
                     {
+                        if (!DataObject.Composition.EnableUnsafeBinaryFormatterInNativeObjectSerialization)
+                        {
+                            throw new NotSupportedException(SR.BinaryFormatterNotSupported);
+                        }
+
                         stream.Position = 0;
                         deserialized = new BinaryFormatter().Deserialize(stream);
                     }
@@ -1194,8 +1162,6 @@ public partial class Control
                     currentProperty.SetValue(_control, deserialized);
                     return true;
                 }
-
-                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "It's a standard property");
 
                 // Not a resource property.  Use TypeConverters to convert the string back to the data type.  We do
                 // not check for CanConvertFrom here -- we the conversion fails the type converter will throw,
@@ -1220,9 +1186,7 @@ public partial class Control
                     newValue = converter.ConvertFrom(null, CultureInfo.InvariantCulture, FromBase64WrappedString(value));
                 }
 
-                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"Converter returned {newValue}");
                 currentProperty.SetValue(_control, newValue);
-
                 return true;
             }
         }
@@ -1295,47 +1259,7 @@ public partial class Control
         /// <inheritdoc cref="IOleControl.OnAmbientPropertyChange(int)"/>
         internal void OnAmbientPropertyChange(int dispID)
         {
-            if (dispID != PInvoke.DISPID_UNKNOWN)
-            {
-                // Look for a specific property that has changed.
-                for (int i = 0; i < _ambientProperties.Length; i++)
-                {
-                    if (_ambientProperties[i].DispID == dispID)
-                    {
-                        _ambientProperties[i].ResetValue();
-                        CallParentPropertyChanged(_control, _ambientProperties[i].Name);
-                        return;
-                    }
-                }
-
-                // Special properties that we care about
-                switch (dispID)
-                {
-                    case PInvoke.DISPID_AMBIENT_UIDEAD:
-                        using (VARIANT value = GetAmbientProperty(PInvoke.DISPID_AMBIENT_UIDEAD))
-                        {
-                            if (value.vt == VARENUM.VT_BOOL)
-                            {
-                                _activeXState[s_uiDead] = value.data.boolVal == VARIANT_BOOL.VARIANT_TRUE;
-                            }
-                        }
-
-                        break;
-
-                    case PInvoke.DISPID_AMBIENT_DISPLAYASDEFAULT:
-                        if (_control is IButtonControl ibuttonControl)
-                        {
-                            using VARIANT value = GetAmbientProperty(PInvoke.DISPID_AMBIENT_DISPLAYASDEFAULT);
-                            if (value.vt == VARENUM.VT_BOOL)
-                            {
-                                ibuttonControl.NotifyDefault(value.data.boolVal == VARIANT_BOOL.VARIANT_TRUE);
-                            }
-                        }
-
-                        break;
-                }
-            }
-            else
+            if (dispID == PInvokeCore.DISPID_UNKNOWN)
             {
                 // Invalidate all properties. Ideally we should be checking each one, but
                 // that's pretty expensive too.
@@ -1344,6 +1268,46 @@ public partial class Control
                     _ambientProperties[i].ResetValue();
                     CallParentPropertyChanged(_control, _ambientProperties[i].Name);
                 }
+
+                return;
+            }
+
+            // Look for a specific property that has changed.
+            for (int i = 0; i < _ambientProperties.Length; i++)
+            {
+                if (_ambientProperties[i].DispID == dispID)
+                {
+                    _ambientProperties[i].ResetValue();
+                    CallParentPropertyChanged(_control, _ambientProperties[i].Name);
+                    return;
+                }
+            }
+
+            // Special properties that we care about
+            switch (dispID)
+            {
+                case PInvokeCore.DISPID_AMBIENT_UIDEAD:
+                    using (VARIANT value = GetAmbientProperty(PInvokeCore.DISPID_AMBIENT_UIDEAD))
+                    {
+                        if (value.vt == VARENUM.VT_BOOL)
+                        {
+                            _activeXState[s_uiDead] = value.data.boolVal == VARIANT_BOOL.VARIANT_TRUE;
+                        }
+                    }
+
+                    break;
+
+                case PInvokeCore.DISPID_AMBIENT_DISPLAYASDEFAULT:
+                    if (_control is IButtonControl ibuttonControl)
+                    {
+                        using VARIANT value = GetAmbientProperty(PInvokeCore.DISPID_AMBIENT_DISPLAYASDEFAULT);
+                        if (value.vt == VARENUM.VT_BOOL)
+                        {
+                            ibuttonControl.NotifyDefault(value.data.boolVal == VARIANT_BOOL.VARIANT_TRUE);
+                        }
+                    }
+
+                    break;
             }
         }
 
@@ -1367,7 +1331,6 @@ public partial class Control
         /// </summary>
         internal void OnFocus(bool focus)
         {
-            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"AXSource: SetFocus:  {focus}");
             if (_activeXState[s_inPlaceActive] && _clientSite is not null)
             {
                 using var controlSite = _clientSite.TryGetInterface<IOleControlSite>(out HRESULT hr);
@@ -1401,16 +1364,16 @@ public partial class Control
             }
 
             // Hookup our ambient colors
-            AmbientProperty prop = LookupAmbient(PInvoke.DISPID_AMBIENT_BACKCOLOR);
+            AmbientProperty prop = LookupAmbient(PInvokeCore.DISPID_AMBIENT_BACKCOLOR);
             prop.Value = ColorTranslator.FromOle((int)pQaContainer->colorBack);
 
-            prop = LookupAmbient(PInvoke.DISPID_AMBIENT_FORECOLOR);
+            prop = LookupAmbient(PInvokeCore.DISPID_AMBIENT_FORECOLOR);
             prop.Value = ColorTranslator.FromOle((int)pQaContainer->colorFore);
 
             // And our ambient font
             if (pQaContainer->pFont is not null)
             {
-                prop = LookupAmbient(PInvoke.DISPID_AMBIENT_FONT);
+                prop = LookupAmbient(PInvokeCore.DISPID_AMBIENT_FONT);
 
                 try
                 {
@@ -1477,6 +1440,11 @@ public partial class Control
             {
                 Type? eventInterface = null;
 
+                if (!IsSupported)
+                {
+                    throw new NotSupportedException(string.Format(SR.ControlNotSupportedInTrimming, nameof(ActiveXImpl)));
+                }
+
                 // Get the first declared interface, if any.
                 if (controlType.GetCustomAttributes<ComSourceInterfacesAttribute>(inherit: false).FirstOrDefault()
                     is { } comSourceInterfaces)
@@ -1526,9 +1494,14 @@ public partial class Control
         /// <inheritdoc cref="IPersistPropertyBag.Save(IPropertyBag*, BOOL, BOOL)"/>
         internal void Save(IPropertyBag* propertyBag, BOOL clearDirty, BOOL saveAllProperties)
         {
+            if (!IsSupported)
+            {
+                throw new NotSupportedException(string.Format(SR.ControlNotSupportedInTrimming, nameof(ActiveXImpl)));
+            }
+
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(
                 _control,
-                new Attribute[] { DesignerSerializationVisibilityAttribute.Visible });
+                [DesignerSerializationVisibilityAttribute.Visible]);
 
             for (int i = 0; i < props.Count; i++)
             {
@@ -1537,8 +1510,6 @@ public partial class Control
                 {
                     continue;
                 }
-
-                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"Saving property {currentProperty.Name}");
 
                 string? value = null;
 
@@ -1551,7 +1522,7 @@ public partial class Control
 
                     try
                     {
-                        success = BinaryFormatWriter.TryWriteFrameworkObject(stream, sourceValue);
+                        success = WinFormsBinaryFormatWriter.TryWriteObject(stream, sourceValue);
                     }
                     catch (Exception ex) when (!ex.IsCriticalException())
                     {
@@ -1561,6 +1532,11 @@ public partial class Control
                     if (!success)
                     {
                         stream.SetLength(0);
+
+                        if (!DataObject.Composition.EnableUnsafeBinaryFormatterInNativeObjectSerialization)
+                        {
+                            throw new NotSupportedException(SR.BinaryFormatterNotSupported);
+                        }
 
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
                         new BinaryFormatter().Serialize(stream, sourceValue);
@@ -1677,7 +1653,7 @@ public partial class Control
             }
 
             // Get the ambient properties that effect us.
-            using VARIANT property = GetAmbientProperty(PInvoke.DISPID_AMBIENT_UIDEAD);
+            using VARIANT property = GetAmbientProperty(PInvokeCore.DISPID_AMBIENT_UIDEAD);
             if (property.vt == VARENUM.VT_BOOL)
             {
                 bool uiDead = property.data.boolVal == VARIANT_BOOL.VARIANT_TRUE;
@@ -1718,7 +1694,6 @@ public partial class Control
             try
             {
                 Size size = new(HiMetricToPixel(pSizel->Width, pSizel->Height));
-                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"SetExtent : new size:{size}");
 
                 // If we're in place active, let the in place site set our bounds.
                 // Otherwise, just set it on our control directly.
@@ -1732,12 +1707,6 @@ public partial class Control
                         Size adjusted = new(size.Width, size.Height);
                         bounds.Width = adjusted.Width;
                         bounds.Height = adjusted.Height;
-                        Debug.WriteLineIf(
-                            CompModSwitches.ActiveX.TraceInfo,
-                            "SetExtent : Announcing to in place site that our rect has changed.");
-                        Debug.WriteLineIf(
-                            CompModSwitches.ActiveX.TraceInfo,
-                            $"            Announcing rect = {bounds}");
                         Debug.Assert(_clientSite is not null, "How can we setextent before we are sited??");
 
                         RECT posRect = bounds;
@@ -1753,10 +1722,6 @@ public partial class Control
                     return;
                 }
 
-                Debug.WriteLineIf(
-                    CompModSwitches.ActiveX.TraceInfo,
-                    "SetExtent : Control has changed size. Setting dirty bit");
-
                 _activeXState[s_isDirty] = true;
 
                 // If we're not inplace active, then announce that the view changed.
@@ -1768,7 +1733,6 @@ public partial class Control
                 // We need to call RequestNewObjectLayout here so we visually display our new extents.
                 if (!_activeXState[s_inPlaceActive] && _clientSite is not null)
                 {
-                    Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "SetExtent : Requesting new Object layout.");
                     using var clientSite = _clientSite.GetInterface();
                     clientSite.Value->RequestNewObjectLayout();
                 }
@@ -1796,29 +1760,7 @@ public partial class Control
                 return HRESULT.E_INVALIDARG;
             }
 
-#if DEBUG
-            if (CompModSwitches.ActiveX.TraceInfo)
-            {
-                Debug.WriteLine("SetObjectRects:");
-                Debug.Indent();
-
-                Debug.WriteLine($"PosLeft:    {lprcPosRect->left}");
-                Debug.WriteLine($"PosTop:     {lprcPosRect->top}");
-                Debug.WriteLine($"PosRight:   {lprcPosRect->right}");
-                Debug.WriteLine($"PosBottom:  {lprcPosRect->bottom}");
-
-                Debug.WriteLine($"ClipLeft:   {lprcClipRect->left}");
-                Debug.WriteLine($"ClipTop:    {lprcClipRect->top}");
-                Debug.WriteLine($"ClipRight:  {lprcClipRect->right}");
-                Debug.WriteLine($"ClipBottom: {lprcClipRect->bottom}");
-
-                Debug.Unindent();
-            }
-#endif
-
             Rectangle posRect = *lprcPosRect;
-
-            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"Set control bounds: {posRect}");
 
             // ActiveX expects to be notified when a control's bounds change, and also
             // intends to notify us through SetObjectRects when we report that the
@@ -1830,7 +1772,6 @@ public partial class Control
             // this returns from the container and comes back to our OnPosRectChange
             // implementation, these new bounds will be handed back to the control
             // for the actual window change.
-            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"Old Control Bounds: {_control.Bounds}");
             if (_activeXState[s_adjustingRect])
             {
                 *_adjustRect = posRect;
@@ -1872,17 +1813,10 @@ public partial class Control
                     RECT rcIntersect = intersect;
                     HWND hWndParent = PInvoke.GetParent(_control);
 
-                    Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"Old Intersect: {rcIntersect}");
-                    Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"New Control Bounds: {posRect}");
-
                     PInvoke.MapWindowPoints(hWndParent, _control, ref rcIntersect);
-
-                    Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"New Intersect: {rcIntersect}");
 
                     _lastClipRect = rcIntersect;
                     setRegion = true;
-
-                    Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Created clipping region");
                 }
             }
 
@@ -1913,21 +1847,6 @@ public partial class Control
             {
                 return HRESULT.E_POINTER;
             }
-
-#if DEBUG
-            if (CompModSwitches.ActiveX.TraceInfo)
-            {
-                if (!_control.IsHandleCreated)
-                {
-                    Debug.WriteLine("AxSource: TranslateAccelerator before handle creation");
-                }
-                else
-                {
-                    Message m = Message.Create(lpmsg->hwnd, lpmsg->message, lpmsg->wParam, lpmsg->lParam);
-                    Debug.WriteLine($"AxSource: TranslateAccelerator : {m}");
-                }
-            }
-#endif
 
             bool needPreProcess = false;
             switch (lpmsg->message)
@@ -1980,7 +1899,6 @@ public partial class Control
             }
 
             // SITE processing. We're not interested in the message, but the site may be.
-            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource: Control did not process accelerator, handing to site");
             if (_clientSite is null)
             {
                 return HRESULT.S_FALSE;

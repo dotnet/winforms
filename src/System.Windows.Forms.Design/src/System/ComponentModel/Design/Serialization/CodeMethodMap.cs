@@ -30,22 +30,22 @@ internal class CodeMethodMap
         _targetStatements = targetStatements;
     }
 
-    internal CodeStatementCollection BeginStatements => _begin ??= new CodeStatementCollection();
+    internal CodeStatementCollection BeginStatements => _begin ??= [];
 
-    internal CodeStatementCollection EndStatements => _end ??= new CodeStatementCollection();
+    internal CodeStatementCollection EndStatements => _end ??= [];
 
-    internal CodeStatementCollection ContainerStatements => _container ??= new CodeStatementCollection();
+    internal CodeStatementCollection ContainerStatements => _container ??= [];
 
     internal CodeMemberMethod? Method { get; }
 
-    internal CodeStatementCollection Statements => _statements ??= new CodeStatementCollection();
+    internal CodeStatementCollection Statements => _statements ??= [];
 
-    internal CodeStatementCollection LocalVariables => _locals ??= new CodeStatementCollection();
+    internal CodeStatementCollection LocalVariables => _locals ??= [];
 
-    internal CodeStatementCollection FieldAssignments => _fields ??= new CodeStatementCollection();
+    internal CodeStatementCollection FieldAssignments => _fields ??= [];
 
     // TODO: Should we update RootCodeDomSerializer as well?
-    internal CodeStatementCollection VariableAssignments => _variables ??= new CodeStatementCollection();
+    internal CodeStatementCollection VariableAssignments => _variables ??= [];
 
     internal void Add(CodeStatementCollection statements)
     {

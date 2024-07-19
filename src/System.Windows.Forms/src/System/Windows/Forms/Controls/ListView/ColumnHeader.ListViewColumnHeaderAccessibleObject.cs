@@ -23,7 +23,7 @@ public partial class ColumnHeader
 
         internal override bool CanGetNameInternal => false;
 
-        internal override int[] RuntimeId => new int[] { RuntimeIDFirstItem, _owningColumnHeader.GetHashCode() };
+        internal override int[] RuntimeId => [RuntimeIDFirstItem, _owningColumnHeader.GetHashCode()];
 
         internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch

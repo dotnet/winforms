@@ -9,18 +9,16 @@ namespace System.Windows.Forms;
 internal sealed unsafe class TreeViewLabelEditAccessibleObject : LabelEditAccessibleObject
 {
     private readonly WeakReference<TreeView> _owningTreeView;
-    private readonly WeakReference<TreeViewLabelEditNativeWindow> _labelEdit;
 
     public TreeViewLabelEditAccessibleObject(TreeView owningTreeView, TreeViewLabelEditNativeWindow labelEdit) : base(owningTreeView, labelEdit)
     {
         ArgumentNullException.ThrowIfNull(owningTreeView);
         _owningTreeView = new(owningTreeView);
-        _labelEdit = new(labelEdit);
     }
 
     private protected override string? AutomationId =>
         _owningTreeView.TryGetTarget(out TreeView? target)
-            ? target._editNode?.AccessibilityObject.Name
+            ? target._editNode?.AccessibilityObject?.Name
             : null;
 
     internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot =>

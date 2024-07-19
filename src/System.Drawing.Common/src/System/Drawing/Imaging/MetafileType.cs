@@ -1,35 +1,40 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 namespace System.Drawing.Imaging;
 
 /// <summary>
-/// Specifies the format of a <see cref='Metafile'/>.
+///  Specifies the format of a <see cref='Metafile'/>.
 /// </summary>
 public enum MetafileType
 {
     /// <summary>
-    /// Specifies an invalid type.
+    ///  Specifies an invalid type.
     /// </summary>
-    Invalid,
+    Invalid = GdiPlus.MetafileType.MetafileTypeInvalid,
+
     /// <summary>
-    /// Specifies a standard Windows metafile.
+    ///  Specifies a standard Windows metafile.
     /// </summary>
-    Wmf,
+    Wmf = GdiPlus.MetafileType.MetafileTypeWmf,
+
     /// <summary>
-    /// Specifies a Windows Placeable metafile.
+    ///  Specifies a Windows Placeable metafile.
     /// </summary>
-    WmfPlaceable,
+    WmfPlaceable = GdiPlus.MetafileType.MetafileTypeWmfPlaceable,
+
     /// <summary>
-    /// Specifies a Windows enhanced metafile.
+    ///  Specifies a Windows enhanced metafile.
     /// </summary>
-    Emf,
+    Emf = GdiPlus.MetafileType.MetafileTypeEmf,
+
     /// <summary>
-    /// Specifies a Windows enhanced metafile plus.
+    ///  Specifies a Windows enhanced metafile plus.
     /// </summary>
-    EmfPlusOnly,
+    EmfPlusOnly = GdiPlus.MetafileType.MetafileTypeEmfPlusOnly,
+
     /// <summary>
-    /// Specifies both enhanced and enhanced plus commands in the same file.
+    ///  Specifies both enhanced and enhanced plus commands in the same file.
     /// </summary>
-    EmfPlusDual,
+    EmfPlusDual = GdiPlus.MetafileType.MetafileTypeEmfPlusDual
 }

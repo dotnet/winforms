@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Collections;
-
 namespace System.Windows.Forms.Design;
 
 /// <summary>
@@ -10,28 +8,16 @@ namespace System.Windows.Forms.Design;
 /// </summary>
 internal class ToolStripItemDataObject : DataObject
 {
-    private readonly ArrayList _dragComponents;
-    private readonly ToolStrip _owner;
-    private readonly ToolStripItem _primarySelection;
-    internal ToolStripItemDataObject(ArrayList dragComponents, ToolStripItem primarySelection, ToolStrip owner) : base()
+    internal ToolStripItemDataObject(List<ToolStripItem> dragComponents, ToolStripItem primarySelection, ToolStrip owner) : base()
     {
-        _dragComponents = dragComponents;
-        _owner = owner;
-        _primarySelection = primarySelection;
+        DragComponents = dragComponents;
+        Owner = owner;
+        PrimarySelection = primarySelection;
     }
 
-    internal ArrayList DragComponents
-    {
-        get => _dragComponents;
-    }
+    internal List<ToolStripItem> DragComponents { get; }
 
-    internal ToolStrip Owner
-    {
-        get => _owner;
-    }
+    internal ToolStrip Owner { get; }
 
-    internal ToolStripItem PrimarySelection
-    {
-        get => _primarySelection;
-    }
+    internal ToolStripItem PrimarySelection { get; }
 }

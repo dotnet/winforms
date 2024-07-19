@@ -40,7 +40,7 @@ public partial class CheckedListBox
         {
             get
             {
-                return ((ListBox.ObjectCollection)_owner.Items).InnerArray;
+                return _owner.Items.InnerArray;
             }
         }
 

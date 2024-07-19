@@ -103,20 +103,19 @@ internal partial class ImageListDesigner : ComponentDesigner
         base.PreFilterProperties(properties);
 
         // Handle shadowed properties
-        string[] shadowProps = new string[]
-        {
+        string[] shadowProps =
+        [
             nameof(ColorDepth),
             nameof(ImageSize),
             nameof(ImageStream),
             nameof(TransparentColor)
-        };
+        ];
 
         for (int i = 0; i < shadowProps.Length; i++)
         {
-            PropertyDescriptor? prop = (PropertyDescriptor?)properties[shadowProps[i]];
-            if (prop is not null)
+            if (properties[shadowProps[i]] is PropertyDescriptor prop)
             {
-                properties[shadowProps[i]] = TypeDescriptor.CreateProperty(typeof(ImageListDesigner), prop, Array.Empty<Attribute>());
+                properties[shadowProps[i]] = TypeDescriptor.CreateProperty(typeof(ImageListDesigner), prop, []);
             }
         }
 
@@ -139,6 +138,7 @@ internal partial class ImageListDesigner : ComponentDesigner
             {
                 new ImageListActionList(this)
             };
+
             return _actionLists;
         }
     }

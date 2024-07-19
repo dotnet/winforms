@@ -4076,8 +4076,8 @@ public class DataGridViewRowTests
     }
 
     [WinFormsTheory]
-    [InlineData(new object[] { new object[0] })]
-    [InlineData(new object[] { new object[] { 1, 2, 3 } })]
+    [InlineData([new object[0]])]
+    [InlineData([new object[] { 1, 2, 3 }])]
     public void DataGridViewRow_CreateCells_InvokeNoColumnsWithValues_Success(object[] values)
     {
         using DataGridView control = new();
@@ -4089,9 +4089,9 @@ public class DataGridViewRowTests
     }
 
     [WinFormsTheory]
-    [InlineData(new object[] { new object[0], null })]
-    [InlineData(new object[] { new object[] { 1 }, 1 })]
-    [InlineData(new object[] { new object[] { 1, 2, 3 }, 1 })]
+    [InlineData([new object[0], null])]
+    [InlineData([new object[] { 1 }, 1])]
+    [InlineData([new object[] { 1, 2, 3 }, 1])]
     public void DataGridViewRow_CreateCells_InvokeWithValues_Success(object[] values, object expectedValue)
     {
         using DataGridView control = new()
@@ -5321,8 +5321,8 @@ public class DataGridViewRowTests
     }
 
     [WinFormsTheory]
-    [InlineData((DataGridViewPaintParts)(DataGridViewPaintParts.None - 1))]
-    [InlineData((DataGridViewPaintParts)(DataGridViewPaintParts.All + 1))]
+    [InlineData((DataGridViewPaintParts.None - 1))]
+    [InlineData((DataGridViewPaintParts.All + 1))]
     public void DataGridViewRow_PaintCells_InvalidPaintParts_ThrowsArgumentException(DataGridViewPaintParts paintParts)
     {
         using Bitmap image = new(10, 10);
@@ -5659,8 +5659,8 @@ public class DataGridViewRowTests
     }
 
     [WinFormsTheory]
-    [InlineData((DataGridViewPaintParts)(DataGridViewPaintParts.None - 1))]
-    [InlineData((DataGridViewPaintParts)(DataGridViewPaintParts.All + 1))]
+    [InlineData((DataGridViewPaintParts.None - 1))]
+    [InlineData((DataGridViewPaintParts.All + 1))]
     public void DataGridViewRow_PaintHeader_InvalidPaintParts_ThrowsInvalidEnumArgumentException(DataGridViewPaintParts paintParts)
     {
         using Bitmap image = new(10, 10);
@@ -5710,7 +5710,7 @@ public class DataGridViewRowTests
     {
         using DataGridViewRow row = new();
         row.Cells.Add(new CantSetDataGridViewCell());
-        Assert.False(row.SetValues(new object[] { 1 }));
+        Assert.False(row.SetValues([1]));
         Assert.Null(Assert.Single(row.Cells.Cast<DataGridViewCell>()).Value);
     }
 

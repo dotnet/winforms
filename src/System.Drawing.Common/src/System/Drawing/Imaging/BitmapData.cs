@@ -1,16 +1,12 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-#if NET7_0_OR_GREATER
-using System.Runtime.InteropServices.Marshalling;
-#endif
 
 namespace System.Drawing.Imaging;
 
 /// <summary>
-/// Specifies the attributes of a bitmap image.
+///  Specifies the attributes of a bitmap image.
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
 public sealed class BitmapData
@@ -23,7 +19,7 @@ public sealed class BitmapData
     private int _reserved;
 
     /// <summary>
-    /// Specifies the pixel width of the <see cref='Bitmap'/>.
+    ///  Specifies the pixel width of the <see cref='Bitmap'/>.
     /// </summary>
     public int Width
     {
@@ -32,7 +28,7 @@ public sealed class BitmapData
     }
 
     /// <summary>
-    /// Specifies the pixel height of the <see cref='Bitmap'/>.
+    ///  Specifies the pixel height of the <see cref='Bitmap'/>.
     /// </summary>
     public int Height
     {
@@ -41,7 +37,7 @@ public sealed class BitmapData
     }
 
     /// <summary>
-    /// Specifies the stride width of the <see cref='Bitmap'/>.
+    ///  Specifies the stride width of the <see cref='Bitmap'/>.
     /// </summary>
     public int Stride
     {
@@ -50,7 +46,7 @@ public sealed class BitmapData
     }
 
     /// <summary>
-    /// Specifies the format of the pixel information in this <see cref='Bitmap'/>.
+    ///  Specifies the format of the pixel information in this <see cref='Bitmap'/>.
     /// </summary>
     public PixelFormat PixelFormat
     {
@@ -84,7 +80,7 @@ public sealed class BitmapData
                 case PixelFormat.Format64bppArgb:
                     break;
                 default:
-                    throw new System.ComponentModel.InvalidEnumArgumentException(nameof(value), unchecked((int)value), typeof(PixelFormat));
+                    throw new ComponentModel.InvalidEnumArgumentException(nameof(value), (int)value, typeof(PixelFormat));
             }
 
             _pixelFormat = value;
@@ -92,7 +88,7 @@ public sealed class BitmapData
     }
 
     /// <summary>
-    /// Specifies the address of the pixel data.
+    ///  Specifies the address of the pixel data.
     /// </summary>
     public IntPtr Scan0
     {
@@ -101,7 +97,7 @@ public sealed class BitmapData
     }
 
     /// <summary>
-    /// Reserved. Do not use.
+    ///  Reserved. Do not use.
     /// </summary>
     public int Reserved
     {
@@ -110,15 +106,4 @@ public sealed class BitmapData
     }
 
     internal ref int GetPinnableReference() => ref _width;
-
-#if NET7_0_OR_GREATER
-    [CustomMarshaller(typeof(BitmapData), MarshalMode.ManagedToUnmanagedIn, typeof(PinningMarshaller))]
-    internal static unsafe class PinningMarshaller
-    {
-        public static ref int GetPinnableReference(BitmapData managed) => ref (managed is null ? ref Unsafe.NullRef<int>() : ref managed.GetPinnableReference());
-
-        // All usages in our currently supported scenarios will always go through GetPinnableReference
-        public static int* ConvertToUnmanaged(BitmapData _) => throw new UnreachableException();
-    }
-#endif
 }

@@ -531,11 +531,10 @@ internal abstract class SelectionUIHandler
     }
 
     /// <summary>
-    ///  Queries to see if a drag operation
-    ///  is valid on this handler for the given set of components.
+    ///  Queries to see if a drag operation is valid on this handler for the given set of components.
     ///  If it returns true, BeginDrag will be called immediately after.
     /// </summary>
-    public bool QueryBeginDrag(object[] components, SelectionRules rules, int initialX, int initialY)
+    public bool QueryBeginDrag(object[] components)
     {
         if (TryGetService(out IComponentChangeService? cs))
         {

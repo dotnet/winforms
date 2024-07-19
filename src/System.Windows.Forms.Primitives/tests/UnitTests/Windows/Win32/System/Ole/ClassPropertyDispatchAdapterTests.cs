@@ -15,7 +15,7 @@ public unsafe class ClassPropertyDispatchAdapterTests
         TestClass testClass = new();
         ClassPropertyDispatchAdapter adapter = new(testClass);
 
-        adapter.TryGetNextDispId(PInvoke.DISPID_STARTENUM, out int result).Should().BeTrue();
+        adapter.TryGetNextDispId(PInvokeCore.DISPID_STARTENUM, out int result).Should().BeTrue();
         result.Should().Be(0x10000);
         adapter.TryGetMemberName(result, out string? name).Should().BeTrue();
         name.Should().Be("Value");

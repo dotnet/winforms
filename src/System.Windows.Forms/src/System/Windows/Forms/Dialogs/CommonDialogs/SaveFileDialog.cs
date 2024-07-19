@@ -158,13 +158,13 @@ public sealed partial class SaveFileDialog : FileDialog
     {
         using ComScope<IShellItem> item = new(null);
         dialog->GetResult(item);
-        return item.IsNull ? Array.Empty<string>() : new string[] { GetFilePathFromShellItem(item) };
+        return item.IsNull ? [] : [GetFilePathFromShellItem(item)];
     }
 
     private protected override unsafe ComScope<IFileDialog> CreateVistaDialog()
     {
-        HRESULT hr = PInvoke.CoCreateInstance(
-            in CLSID.FileSaveDialog,
+        HRESULT hr = PInvokeCore.CoCreateInstance(
+            CLSID.FileSaveDialog,
             pUnkOuter: null,
             CLSCTX.CLSCTX_INPROC_SERVER | CLSCTX.CLSCTX_LOCAL_SERVER | CLSCTX.CLSCTX_REMOTE_SERVER,
             out IFileDialog* fileDialog);

@@ -14,8 +14,8 @@ public static class ComboBoxRenderer
     // Make this per-thread, so that different threads can safely use these methods.
     [ThreadStatic]
     private static VisualStyleRenderer? t_visualStyleRenderer;
-    private static readonly VisualStyleElement ComboBoxElement = VisualStyleElement.ComboBox.DropDownButton.Normal;
-    private static readonly VisualStyleElement TextBoxElement = VisualStyleElement.TextBox.TextEdit.Normal;
+    private static readonly VisualStyleElement s_comboBoxElement = VisualStyleElement.ComboBox.DropDownButton.Normal;
+    private static readonly VisualStyleElement s_textBoxElement = VisualStyleElement.TextBox.TextEdit.Normal;
 
     /// <summary>
     ///  Returns true if this class is supported for the current OS and user/application settings,
@@ -47,7 +47,7 @@ public static class ComboBoxRenderer
     /// </summary>
     public static void DrawTextBox(Graphics g, Rectangle bounds, ComboBoxState state)
     {
-        InitializeRenderer(TextBoxElement, (int)state);
+        InitializeRenderer(s_textBoxElement, (int)state);
 
         DrawBackground(g, bounds, state);
     }
@@ -73,7 +73,7 @@ public static class ComboBoxRenderer
     /// </summary>
     public static void DrawTextBox(Graphics g, Rectangle bounds, string? comboBoxText, Font? font, TextFormatFlags flags, ComboBoxState state)
     {
-        InitializeRenderer(TextBoxElement, (int)state);
+        InitializeRenderer(s_textBoxElement, (int)state);
 
         Rectangle textBounds = t_visualStyleRenderer.GetBackgroundContentRectangle(g, bounds);
         textBounds.Inflate(-2, -2);
@@ -85,7 +85,7 @@ public static class ComboBoxRenderer
     /// </summary>
     public static void DrawTextBox(Graphics g, Rectangle bounds, string? comboBoxText, Font? font, Rectangle textBounds, TextFormatFlags flags, ComboBoxState state)
     {
-        InitializeRenderer(TextBoxElement, (int)state);
+        InitializeRenderer(s_textBoxElement, (int)state);
 
         DrawBackground(g, bounds, state);
         Color textColor = t_visualStyleRenderer.GetColor(ColorProperty.TextColor);
@@ -110,7 +110,7 @@ public static class ComboBoxRenderer
     /// <param name="hwnd">Handle of the control.</param>
     internal static void DrawDropDownButtonForHandle(HDC hdc, Rectangle bounds, ComboBoxState state, HWND hwnd)
     {
-        InitializeRenderer(ComboBoxElement, (int)state);
+        InitializeRenderer(s_comboBoxElement, (int)state);
         t_visualStyleRenderer.DrawBackground(hdc, bounds, hwnd);
     }
 

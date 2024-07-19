@@ -238,8 +238,8 @@ public partial class ResXResourceReader : IResourceReader
 
         Debug.Assert(_resData is null && _resMetadata is null);
 
-        _resData = new();
-        _resMetadata = new();
+        _resData = [];
+        _resMetadata = [];
 
         XmlTextReader? contentReader = null;
 
@@ -458,7 +458,7 @@ public partial class ResXResourceReader : IResourceReader
         }
     }
 
-    private void ParseResHeaderNode(XmlReader reader)
+    private void ParseResHeaderNode(XmlTextReader reader)
     {
         string? name = reader[ResXResourceWriter.NameStr];
         if (name is null)

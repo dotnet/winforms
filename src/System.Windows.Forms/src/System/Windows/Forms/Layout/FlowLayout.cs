@@ -1,46 +1,27 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#if DEBUG
-using System.ComponentModel;
-#endif
 using System.Drawing;
 
 namespace System.Windows.Forms.Layout;
 
 internal partial class FlowLayout : LayoutEngine
 {
-    internal static readonly FlowLayout Instance = new();
+    internal static FlowLayout Instance { get; } = new();
 
     private static readonly int s_wrapContentsProperty = PropertyStore.CreateKey();
     private static readonly int s_flowDirectionProperty = PropertyStore.CreateKey();
 
     private protected override bool LayoutCore(IArrangedElement container, LayoutEventArgs args)
     {
-#if DEBUG
-        Debug.WriteLineIf(CompModSwitches.FlowLayout.TraceInfo,
-            $"FlowLayout::Layout(container={container}, displayRect={container.DisplayRectangle}, args={args})");
-        Debug.Indent();
-#endif
-
         // ScrollableControl will first try to get the layoutbounds from the derived control when
         // trying to figure out if ScrollBars should be added.
         CommonProperties.SetLayoutBounds(container, TryCalculatePreferredSize(container, container.DisplayRectangle, measureOnly: false));
-
-        Debug.Unindent();
-
         return CommonProperties.GetAutoSize(container);
     }
 
     internal override Size GetPreferredSize(IArrangedElement container, Size proposedConstraints)
     {
-#if DEBUG
-        if (CompModSwitches.FlowLayout.TraceInfo)
-        {
-            Debug.WriteLine($"FlowLayout::GetPreferredSize(container={container}, proposedConstraints={proposedConstraints})");
-            Debug.Indent();
-        }
-#endif
         Rectangle measureBounds = new(new Point(0, 0), proposedConstraints);
         Size prefSize = TryCalculatePreferredSize(container, measureBounds, measureOnly: true);
 
@@ -53,13 +34,6 @@ internal partial class FlowLayout : LayoutEngine
             prefSize = TryCalculatePreferredSize(container, measureBounds, measureOnly: true);
         }
 
-#if DEBUG
-        if (CompModSwitches.FlowLayout.TraceInfo)
-        {
-            Debug.Unindent();
-            Debug.WriteLine($"GetPreferredSize returned {prefSize}");
-        }
-#endif
         return prefSize;
     }
 

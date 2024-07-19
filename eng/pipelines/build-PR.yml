@@ -1,0 +1,154 @@
+parameters:
+  name: ''
+  targetArchitecture: null
+  timeoutInMinutes: 120
+  enableMicrobuild: true
+  enablePublishBuildArtifacts: true
+  enablePublishTestResults: true
+  enablePublishBuildAssets: true
+  enablePublishUsingPipelines: true
+
+jobs:
+  - job: ${{ parameters.name }}
+    displayName: ${{ parameters.name }}
+    timeoutInMinutes: ${{ parameters.timeoutInMinutes }}
+    variables:
+    - template: /eng/common/templates/variables/pool-providers.yml
+    pool:
+      ${{ if eq(variables['System.TeamProject'], 'public') }}:
+        name: $(DncEngPublicBuildPool)
+        demands: ImageOverride -equals windows.vs2022preview.amd64.open
+      ${{ if ne(variables['System.TeamProject'], 'public') }}:
+        name: $(DncEngInternalBuildPool)
+        demands: ImageOverride -equals windows.vs2022preview.amd64
+    strategy:
+      matrix:
+        Debug:
+          _BuildConfig: Debug
+          # override some variables for debug
+          _SignType: test
+          # Only collect coverage for external Debug-x64 builds. Uploads fail on internal builds, and coverage
+          # collection on additional legs produces unnecessary performance overhead.
+          ${{ if and(eq(variables['System.TeamProject'], 'public'), eq(parameters.targetArchitecture, 'x64')) }}:
+            _Coverage: true
+          ${{ else }}:
+            _Coverage: false
+        Release:
+          _BuildConfig: Release
+          _Coverage: false
+    workspace:
+      clean: all
+
+    steps:
+    - checkout: self
+      clean: true
+
+    - template: /eng/common/templates/steps/enable-internal-sources.yml
+    - template: /eng/common/templates/steps/enable-internal-runtimes.yml
+
+    - ${{ if ne(variables['System.TeamProject'], 'public') }}:
+      - task: MicroBuildSigningPlugin@2
+        displayName: Install MicroBuild plugin for Signing
+        inputs:
+          signType: $(_SignType)
+          zipSources: false
+          feedSource: https://dnceng.pkgs.visualstudio.com/_packaging/MicroBuildToolset/nuget/v3/index.json
+        continueOnError: false
+        condition: and(succeeded(), 
+                       in(variables['_SignType'], 'real', 'test'))
+    # NuGet's http cache lasts 30 minutes. If we're on a static machine, this may interfere with
+    # auto-update PRs by preventing the CI build from fetching the new version. Delete the cache.
+    - powershell: Remove-Item -Recurse -ErrorAction Ignore "$env:LocalAppData\NuGet\v3-cache"
+      displayName: Clear NuGet http cache (if exists)
+
+    - script: C:\Windows\Microsoft.NET\Framework\v4.0.30319\ngen.exe queue pause
+      displayName: Pause NGEN x86
+
+    - script: C:\Windows\Microsoft.NET\Framework64\v4.0.30319\ngen.exe queue pause
+      displayName: Pause NGEN x64
+
+    # Build and rename binlog
+    # The /p:Coverage argument is passed here since some build properties change to accommodate running with
+    # coverage. This is part of the workarounds for https://github.com/tonerdo/coverlet/issues/362 and
+    # https://github.com/tonerdo/coverlet/issues/363.
+    - script: eng\cibuild.cmd
+        -restore
+        -build
+        -configuration $(_BuildConfig)
+        /p:Platform=${{ parameters.targetArchitecture }}
+        /p:TargetArchitecture=${{ parameters.targetArchitecture }}
+        $(_OfficialBuildIdArgs)
+        $(_InternalRuntimeDownloadArgs)
+        /p:Coverage=$(_Coverage)
+        /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\BuildSrc-${{ parameters.targetArchitecture }}.binlog
+      displayName: Build
+
+    # Run Unit Tests
+    # Tests are run with /m:1 to work around https://github.com/tonerdo/coverlet/issues/364
+    - script: eng\cibuild.cmd
+        -test
+        -configuration $(_BuildConfig)
+        /p:Platform=${{ parameters.targetArchitecture }}
+        /p:TargetArchitecture=${{ parameters.targetArchitecture }}
+        $(_OfficialBuildIdArgs)
+        $(_InternalRuntimeDownloadArgs)
+        /p:Coverage=$(_Coverage)
+        /p:TestRunnerAdditionalArguments='-notrait Category=IgnoreForCI -notrait Category=failing'
+        /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Test-${{ parameters.targetArchitecture }}.binlog
+        /m:1
+      displayName: Run Unit Tests
+      condition: and(eq(variables['System.TeamProject'], 'public'), ne('${{ parameters.targetArchitecture }}', 'arm64'))
+
+    # Run Integration Tests
+    # Tests are run with /m:1 to avoid parallelism across different assemblies which can lead to
+    # UI race conditions
+    - script: eng\cibuild.cmd
+        -integrationTest
+        -configuration $(_BuildConfig)
+        /p:Platform=${{ parameters.targetArchitecture }}
+        /p:TargetArchitecture=${{ parameters.targetArchitecture }}
+        $(_OfficialBuildIdArgs)
+        $(_InternalRuntimeDownloadArgs)
+        /p:Coverage=$(_Coverage)
+        /p:TestRunnerAdditionalArguments='-notrait Category=IgnoreForCI -notrait Category=failing'
+        /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\IntegrationTest-${{ parameters.targetArchitecture }}.binlog
+        /m:1
+      env:
+        XUNIT_LOGS: $(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)
+      displayName: Run Integration Tests
+      condition: and(eq(variables['System.TeamProject'], 'public'), ne('${{ parameters.targetArchitecture }}', 'arm64'))
+
+    # Create Nuget package, sign, and publish
+    - script: eng\cibuild.cmd
+        -restore
+        -pack
+        -sign $(_SignArgs)
+        -publish $(_PublishArgs)
+        -configuration $(_BuildConfig)
+        $(_OfficialBuildIdArgs)
+        $(_InternalRuntimeDownloadArgs)
+        /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\PackSignPublish-${{ parameters.targetArchitecture }}.binlog
+      displayName: Pack, Sign, and Publish
+
+    # Upload code coverage data
+    - script: $(Build.SourcesDirectory)/.dotnet/dotnet msbuild -restore
+        eng/CodeCoverage.proj
+        /p:Configuration=$(_BuildConfig)
+        $(_InternalRuntimeDownloadArgs)
+        /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\CodeCoverage-${{ parameters.targetArchitecture }}.binlog
+      displayName: Upload coverage to codecov.io
+      condition: and(succeeded(), eq(variables._Coverage, 'true'), eq('${{ parameters.targetArchitecture }}', 'x64'))
+
+    #Publish code coverage results
+    - task: PublishCodeCoverageResults@1
+      inputs:
+        codeCoverageTool: 'cobertura'
+        summaryFileLocation: '$(Build.SourcesDirectory)\artifacts\bin\CodeCoverage\coverage\full\Cobertura.xml'
+        pathToSources: '$(Build.SourcesDirectory)'
+        reportDirectory: '$(Build.SourcesDirectory)\artifacts\bin\CodeCoverage\coverage\full'
+      displayName: PublishCodeCoverageResults
+      condition: and(eq(variables['_BuildConfig'], 'Debug'), eq('${{ parameters.targetArchitecture }}', 'x64'))
+
+    - template: post-build-PR.yml
+      parameters:
+        name: ${{ parameters.name }}

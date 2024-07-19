@@ -591,7 +591,7 @@ public class ByteViewerTests
     public void ByteViewer_SaveToFile_InvokeWithBytes_Success()
     {
         using ByteViewer control = new();
-        control.SetBytes(new byte[] { 1, 2, 3 });
+        control.SetBytes([1, 2, 3]);
         string path = "ByteViewerContent";
         try
         {
@@ -698,7 +698,7 @@ public class ByteViewerTests
     public void ByteViewer_SetBytes_InvokeWithBytes_GetReturnExpected(byte[] bytes)
     {
         using ByteViewer control = new();
-        control.SetBytes(new byte[] { 1 });
+        control.SetBytes([1]);
 
         control.SetBytes(bytes);
         Assert.Same(bytes, control.GetBytes());
@@ -740,7 +740,7 @@ public class ByteViewerTests
     public void ByteViewer_SetDisplayMode_InvokeWithBytes_GetReturnsExpected(DisplayMode value)
     {
         using ByteViewer control = new();
-        control.SetBytes(new byte[] { 1, 2, 3 });
+        control.SetBytes([1, 2, 3]);
 
         control.SetDisplayMode(value);
         Assert.Equal(value, control.GetDisplayMode());
@@ -760,7 +760,7 @@ public class ByteViewerTests
     public void ByteViewer_SetDisplayMode_InvokeWithBytesWithHandle_GetReturnsExpected(DisplayMode value, int expectedInvalidatedCallCount1, int expectedInvalidatedCallCount2)
     {
         using ByteViewer control = new();
-        control.SetBytes(new byte[] { 1, 2, 3 });
+        control.SetBytes([1, 2, 3]);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -808,7 +808,7 @@ public class ByteViewerTests
         Assert.False(control.IsHandleCreated);
 
         // Set different.
-        control.SetBytes(new byte[] { (byte)'1', (byte)'2', (byte)'3' });
+        control.SetBytes([(byte)'1', (byte)'2', (byte)'3']);
         Assert.Equal("123", textBox.Text);
         Assert.True(textBox.Visible);
         Assert.False(scrollBar.Visible);
@@ -838,7 +838,7 @@ public class ByteViewerTests
         Assert.False(control.IsHandleCreated);
 
         // Set different.
-        control.SetBytes(new byte[] { (byte)'1', 0, (byte)'2', 0, (byte)'3', 0 });
+        control.SetBytes([(byte)'1', 0, (byte)'2', 0, (byte)'3', 0]);
         Assert.Equal("123", textBox.Text);
         Assert.True(textBox.Visible);
         Assert.False(scrollBar.Visible);
@@ -857,7 +857,7 @@ public class ByteViewerTests
     public void ByteViewer_SetFile_InvokeNoBytes_Success()
     {
         using ByteViewer control = new();
-        using TempFile file = TempFile.Create(new byte[] { 1, 2, 3 });
+        using TempFile file = TempFile.Create([1, 2, 3]);
         control.SetFile(file.Path);
         Assert.Equal(new byte[] { 1, 2, 3 }, control.GetBytes());
     }
@@ -866,9 +866,9 @@ public class ByteViewerTests
     public void ByteViewer_SetFile_InvokeWithBytes_Success()
     {
         using ByteViewer control = new();
-        control.SetBytes(new byte[] { 4, 5, 6 });
+        control.SetBytes([4, 5, 6]);
 
-        using TempFile file = TempFile.Create(new byte[] { 1, 2, 3 });
+        using TempFile file = TempFile.Create([1, 2, 3]);
         control.SetFile(file.Path);
         Assert.Equal(new byte[] { 1, 2, 3 }, control.GetBytes());
     }
@@ -997,15 +997,15 @@ public class ByteViewerTests
 
     private class SubByteViewer : ByteViewer
     {
-        public new const int ScrollStateAutoScrolling = ByteViewer.ScrollStateAutoScrolling;
+        public new const int ScrollStateAutoScrolling = ScrollableControl.ScrollStateAutoScrolling;
 
-        public new const int ScrollStateHScrollVisible = ByteViewer.ScrollStateHScrollVisible;
+        public new const int ScrollStateHScrollVisible = ScrollableControl.ScrollStateHScrollVisible;
 
-        public new const int ScrollStateVScrollVisible = ByteViewer.ScrollStateVScrollVisible;
+        public new const int ScrollStateVScrollVisible = ScrollableControl.ScrollStateVScrollVisible;
 
-        public new const int ScrollStateUserHasScrolled = ByteViewer.ScrollStateUserHasScrolled;
+        public new const int ScrollStateUserHasScrolled = ScrollableControl.ScrollStateUserHasScrolled;
 
-        public new const int ScrollStateFullDrag = ByteViewer.ScrollStateFullDrag;
+        public new const int ScrollStateFullDrag = ScrollableControl.ScrollStateFullDrag;
 
         public new bool CanEnableIme => base.CanEnableIme;
 

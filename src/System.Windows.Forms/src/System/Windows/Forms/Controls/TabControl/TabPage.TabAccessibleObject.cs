@@ -4,7 +4,6 @@
 using System.Drawing;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -65,15 +64,14 @@ public partial class TabPage
 
         internal override IRawElementProviderSimple.Interface? ItemSelectionContainer => OwningTabControl?.AccessibilityObject;
 
-        internal override int[] RuntimeId
-            => new int[]
-            {
-                RuntimeIDFirstItem,
-                OwningTabControl is null
-                    ? PARAM.ToInt(IntPtr.Zero)
-                    : PARAM.ToInt(OwningTabControl.InternalHandle),
-                GetHashCode()
-            };
+        internal override int[] RuntimeId =>
+        [
+            RuntimeIDFirstItem,
+            OwningTabControl is null
+                ? (int)IntPtr.Zero
+                : (int)OwningTabControl.InternalHandle,
+            GetHashCode()
+        ];
 
         private int CurrentIndex => OwningTabControl?.TabPages.IndexOf(_owningTabPage) ?? -1;
 

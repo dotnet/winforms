@@ -21,17 +21,17 @@ public class BaseCollectionTests
     [WinFormsFact]
     public void BaseCollection_Count_GetWithList_ReturnsExpected()
     {
-        CustomBaseCollection collection = new(new ArrayList { 1, 2, 3 });
+        CustomBaseCollection collection = new([1, 2, 3]);
         Assert.Equal(3, collection.Count);
     }
 
     [WinFormsFact]
     public void BaseCollection_CopyTo_InvokeWithList_Success()
     {
-        CustomBaseCollection collection = new(new ArrayList { 1, 2, 3 });
-        object[] array = new object[] { 0, 0, 0, 0, 4 };
+        CustomBaseCollection collection = new([1, 2, 3]);
+        object[] array = [0, 0, 0, 0, 4];
         collection.CopyTo(array, 1);
-        Assert.Equal(new object[] { 0, 1, 2, 3, 4 }, array);
+        Assert.Equal([0, 1, 2, 3, 4], array);
     }
 
     [WinFormsFact]
@@ -44,7 +44,7 @@ public class BaseCollectionTests
     [WinFormsFact]
     public void BaseCollection_GetEnumerator_InvokeWithList_Success()
     {
-        CustomBaseCollection collection = new(new ArrayList { 1, 2, 3 });
+        CustomBaseCollection collection = new([1, 2, 3]);
         IEnumerator enumerator = collection.GetEnumerator();
         Assert.True(enumerator.MoveNext());
         Assert.Equal(1, enumerator.Current);

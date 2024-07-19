@@ -1,9 +1,6 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Option Explicit On
-Option Strict On
-
 Imports System.Drawing
 Imports System.Globalization
 Imports System.Threading
@@ -261,7 +258,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
             Controls.Add(ButtonCloseDialog)
             Controls.Add(ProgressBarWork)
             Controls.Add(LabelInfo)
-            FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+            FormBorderStyle = FormBorderStyle.FixedDialog
             MaximizeBox = False
             MinimizeBox = False
             Name = "ProgressDialog"

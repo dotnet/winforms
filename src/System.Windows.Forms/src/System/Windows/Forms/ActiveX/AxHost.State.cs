@@ -6,7 +6,6 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Com.StructuredStorage;
-using static Interop;
 using static Windows.Win32.System.Memory.GLOBAL_ALLOC_FLAGS;
 
 namespace System.Windows.Forms;
@@ -15,7 +14,7 @@ public abstract partial class AxHost
 {
     /// <summary>
     ///  The class which encapsulates the persisted state of the underlying activeX control.
-    ///  An instance of this class my be obtained either by calling <see cref="OcxState"/> on an
+    ///  An instance of this class may be obtained either by calling <see cref="OcxState"/> on an
     ///  AxHost object, or by reading in from a stream.
     /// </summary>
     [TypeConverter(typeof(TypeConverter))]
@@ -26,8 +25,12 @@ public abstract partial class AxHost
         private int _length;
         private byte[]? _buffer;
         private MemoryStream? _memoryStream;
+
+        [NonSerialized]
         private AgileComPointer<IStorage>? _storage;
+        [NonSerialized]
         private AgileComPointer<ILockBytes>? _lockBytes;
+
         private readonly PropertyBagStream? _propertyBag;
         private const string PropertyBagSerializationName = "PropertyBagBinary";
         private const string DataSerializationName = "Data";
@@ -212,7 +215,7 @@ public abstract partial class AxHost
                 _memoryStream.Seek(0, SeekOrigin.Begin);
             }
 
-            return ComHelpers.GetComScope<IStream>(new Ole32.GPStream(_memoryStream));
+            return _memoryStream.ToIStream();
         }
 
         private void InitializeFromStream(Stream dataStream, bool initializeBufferOnly = false)

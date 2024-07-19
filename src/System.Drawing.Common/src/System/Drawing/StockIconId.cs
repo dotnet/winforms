@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Shell;
+
 namespace System.Drawing;
 
 #if NET8_0_OR_GREATER
@@ -12,466 +14,466 @@ public enum StockIconId
     /// <summary>
     ///  Document (blank page), no associated program.
     /// </summary>
-    DocumentNoAssociation = 0,      // SIID_DOCNOASSOC
+    DocumentNoAssociation = SHSTOCKICONID.SIID_DOCNOASSOC,
 
     /// <summary>
     ///  Document with an associated program.
     /// </summary>
-    DocumentWithAssociation = 1,    // SIID_DOCASSOC
+    DocumentWithAssociation = SHSTOCKICONID.SIID_DOCASSOC,
 
     /// <summary>
     ///  Generic application with no custom icon.
     /// </summary>
-    Application = 2,                // SIID_APPLICATION
+    Application = SHSTOCKICONID.SIID_APPLICATION,
 
     /// <summary>
     ///  Closed folder.
     /// </summary>
-    Folder = 3,                     // SIID_FOLDER
+    Folder = SHSTOCKICONID.SIID_FOLDER,
 
     /// <summary>
     ///  Open folder.
     /// </summary>
-    FolderOpen = 4,                 // SIID_FOLDEROPEN
+    FolderOpen = SHSTOCKICONID.SIID_FOLDEROPEN,
 
     /// <summary>
     ///  5.25" floppy disk drive.
     /// </summary>
-    Drive525 = 5,                   // SIID_DRIVE525
+    Drive525 = SHSTOCKICONID.SIID_DRIVE525,
 
     /// <summary>
     ///  3.5" floppy disk drive.
     /// </summary>
-    Drive35 = 6,                    // SIID_DRIVE35
+    Drive35 = SHSTOCKICONID.SIID_DRIVE35,
 
     /// <summary>
     ///  Removable drive.
     /// </summary>
-    DriveRemovable = 7,             // SIID_DRIVEREMOVE
+    DriveRemovable = SHSTOCKICONID.SIID_DRIVEREMOVE,
 
     /// <summary>
     ///  Fixed drive.
     /// </summary>
-    DriveFixed = 8,                 // SIID_DRIVEFIXED
+    DriveFixed = SHSTOCKICONID.SIID_DRIVEFIXED,
 
     /// <summary>
     ///  Network drive.
     /// </summary>
-    DriveNet = 9,                   // SIID_DRIVENET
+    DriveNet = SHSTOCKICONID.SIID_DRIVENET,
 
     /// <summary>
     ///  Disabled network drive.
     /// </summary>
-    DriveNetDisabled = 10,          // SIID_DRIVENETDISABLED
+    DriveNetDisabled = SHSTOCKICONID.SIID_DRIVENETDISABLED,
 
     /// <summary>
     ///  CD drive.
     /// </summary>
-    DriveCD = 11,                   // SIID_DRIVECD
+    DriveCD = SHSTOCKICONID.SIID_DRIVECD,
 
     /// <summary>
     ///  RAM disk drive.
     /// </summary>
-    DriveRam = 12,                  // SIID_DRIVERAM
+    DriveRam = SHSTOCKICONID.SIID_DRIVERAM,
 
     /// <summary>
     ///  Entire network.
     /// </summary>
-    World = 13,                     // SIID_WORLD
+    World = SHSTOCKICONID.SIID_WORLD,
 
     /// <summary>
     ///  A computer on the network.
     /// </summary>
-    Server = 15,                    // SIID_SERVER
+    Server = SHSTOCKICONID.SIID_SERVER,
 
     /// <summary>
     ///  Printer.
     /// </summary>
-    Printer = 16,                   // SIID_PRINTER
+    Printer = SHSTOCKICONID.SIID_PRINTER,
 
     /// <summary>
     ///  My network places.
     /// </summary>
-    MyNetwork = 17,                 // SIID_MYNETWORK
+    MyNetwork = SHSTOCKICONID.SIID_MYNETWORK,
 
     /// <summary>
     ///  Find.
     /// </summary>
-    Find = 22,                      // SIID_FIND
+    Find = SHSTOCKICONID.SIID_FIND,
 
     /// <summary>
     ///  Help.
     /// </summary>
-    Help = 23,                      // SIID_HELP
+    Help = SHSTOCKICONID.SIID_HELP,
 
     /// <summary>
     ///  Overlay for shared items.
     /// </summary>
-    Share = 28,                     // SIID_SHARE
+    Share = SHSTOCKICONID.SIID_SHARE,
 
     /// <summary>
     ///  Overlay for shortcuts to items.
     /// </summary>
-    Link = 29,                      // SIID_LINK
+    Link = SHSTOCKICONID.SIID_LINK,
 
     /// <summary>
     ///  Overlay for slow items.
     /// </summary>
-    SlowFile = 30,                  // SIID_SLOWFILE
+    SlowFile = SHSTOCKICONID.SIID_SLOWFILE,
 
     /// <summary>
     ///  Empty recycle bin.
     /// </summary>
-    Recycler = 31,                  // SIID_RECYCLER
+    Recycler = SHSTOCKICONID.SIID_RECYCLER,
 
     /// <summary>
     ///  Full recycle bin.
     /// </summary>
-    RecyclerFull = 32,              // SIID_RECYCLERFULL
+    RecyclerFull = SHSTOCKICONID.SIID_RECYCLERFULL,
 
     /// <summary>
     ///  Audio CD media.
     /// </summary>
-    MediaCDAudio = 40,              // SIID_MEDIACDAUDIO
+    MediaCDAudio = SHSTOCKICONID.SIID_MEDIACDAUDIO,
 
     /// <summary>
     ///  Security lock.
     /// </summary>
-    Lock = 47,                      // SIID_LOCK
+    Lock = SHSTOCKICONID.SIID_LOCK,
 
     /// <summary>
     ///  AutoList.
     /// </summary>
-    AutoList = 49,                  // SIID_AUTOLIST
+    AutoList = SHSTOCKICONID.SIID_AUTOLIST,
 
     /// <summary>
     ///  Network printer.
     /// </summary>
-    PrinterNet = 50,                // SIID_PRINTERNET
+    PrinterNet = SHSTOCKICONID.SIID_PRINTERNET,
 
     /// <summary>
     ///  Server share.
     /// </summary>
-    ServerShare = 51,               // SIID_SERVERSHARE
+    ServerShare = SHSTOCKICONID.SIID_SERVERSHARE,
 
     /// <summary>
     ///  Fax printer.
     /// </summary>
-    PrinterFax = 52,                // SIID_PRINTERFAX
+    PrinterFax = SHSTOCKICONID.SIID_PRINTERFAX,
 
     /// <summary>
     ///  Networked fax printer.
     /// </summary>
-    PrinterFaxNet = 53,             // SIID_PRINTERFAXNET
+    PrinterFaxNet = SHSTOCKICONID.SIID_PRINTERFAXNET,
 
     /// <summary>
     ///  Print to file.
     /// </summary>
-    PrinterFile = 54,               // SIID_PRINTERFILE
+    PrinterFile = SHSTOCKICONID.SIID_PRINTERFILE,
 
     /// <summary>
     ///  Stack.
     /// </summary>
-    Stack = 55,                     // SIID_STACK
+    Stack = SHSTOCKICONID.SIID_STACK,
 
     /// <summary>
     ///  SVCD media.
     /// </summary>
-    MediaSVCD = 56,                 // SIID_MEDIASVCD
+    MediaSVCD = SHSTOCKICONID.SIID_MEDIASVCD,
 
     /// <summary>
     ///  Folder containing other items.
     /// </summary>
-    StuffedFolder = 57,             // SIID_STUFFEDFOLDER
+    StuffedFolder = SHSTOCKICONID.SIID_STUFFEDFOLDER,
 
     /// <summary>
     ///  Unknown drive.
     /// </summary>
-    DriveUnknown = 58,              // SIID_DRIVEUNKNOWN
+    DriveUnknown = SHSTOCKICONID.SIID_DRIVEUNKNOWN,
 
     /// <summary>
     ///  DVD drive.
     /// </summary>
-    DriveDVD = 59,                  // SIID_DRIVEDVD
+    DriveDVD = SHSTOCKICONID.SIID_DRIVEDVD,
 
     /// <summary>
     ///  DVD media.
     /// </summary>
-    MediaDVD = 60,                  // SIID_MEDIADVD
+    MediaDVD = SHSTOCKICONID.SIID_MEDIADVD,
 
     /// <summary>
     ///  DVD-RAM media.
     /// </summary>
-    MediaDVDRAM = 61,               // SIID_MEDIADVDRAM
+    MediaDVDRAM = SHSTOCKICONID.SIID_MEDIADVDRAM,
 
     /// <summary>
     ///  DVD-RW media.
     /// </summary>
-    MediaDVDRW = 62,                // SIID_MEDIADVDRW
+    MediaDVDRW = SHSTOCKICONID.SIID_MEDIADVDRW,
 
     /// <summary>
     ///  DVD-R media.
     /// </summary>
-    MediaDVDR = 63,                 // SIID_MEDIADVDR
+    MediaDVDR = SHSTOCKICONID.SIID_MEDIADVDR,
 
     /// <summary>
     ///  DVD-ROM media.
     /// </summary>
-    MediaDVDROM = 64,               // SIID_MEDIADVDROM
+    MediaDVDROM = SHSTOCKICONID.SIID_MEDIADVDROM,
 
     /// <summary>
     ///  CD+ (Enhanced CD) media.
     /// </summary>
-    MediaCDAudioPlus = 65,          // SIID_MEDIACDAUDIOPLUS
+    MediaCDAudioPlus = SHSTOCKICONID.SIID_MEDIACDAUDIOPLUS,
 
     /// <summary>
     ///  CD-RW media.
     /// </summary>
-    MediaCDRW = 66,                 // SIID_MEDIACDRW
+    MediaCDRW = SHSTOCKICONID.SIID_MEDIACDRW,
 
     /// <summary>
     ///  CD-R media.
     /// </summary>
-    MediaCDR = 67,                  // SIID_MEDIACDR
+    MediaCDR = SHSTOCKICONID.SIID_MEDIACDR,
 
     /// <summary>
     ///  Burning CD.
     /// </summary>
-    MediaCDBurn = 68,               // SIID_MEDIACDBURN
+    MediaCDBurn = SHSTOCKICONID.SIID_MEDIACDBURN,
 
     /// <summary>
     ///  Blank CD media.
     /// </summary>
-    MediaBlankCD = 69,              // SIID_MEDIABLANKCD
+    MediaBlankCD = SHSTOCKICONID.SIID_MEDIABLANKCD,
 
     /// <summary>
     ///  CD-ROM media.
     /// </summary>
-    MediaCDROM = 70,                // SIID_MEDIACDROM
+    MediaCDROM = SHSTOCKICONID.SIID_MEDIACDROM,
 
     /// <summary>
     ///  Audio files.
     /// </summary>
-    AudioFiles = 71,                // SIID_AUDIOFILES
+    AudioFiles = SHSTOCKICONID.SIID_AUDIOFILES,
 
     /// <summary>
     ///  Image files.
     /// </summary>
-    ImageFiles = 72,                // SIID_IMAGEFILES
+    ImageFiles = SHSTOCKICONID.SIID_IMAGEFILES,
 
     /// <summary>
     ///  Video files.
     /// </summary>
-    VideoFiles = 73,                // SIID_VIDEOFILES
+    VideoFiles = SHSTOCKICONID.SIID_VIDEOFILES,
 
     /// <summary>
     ///  Mixed files.
     /// </summary>
-    MixedFiles = 74,                // SIID_MIXEDFILES
+    MixedFiles = SHSTOCKICONID.SIID_MIXEDFILES,
 
     /// <summary>
     ///  Folder back.
     /// </summary>
-    FolderBack = 75,                // SIID_FOLDERBACK
+    FolderBack = SHSTOCKICONID.SIID_FOLDERBACK,
 
     /// <summary>
     ///  Folder front.
     /// </summary>
-    FolderFront = 76,               // SIID_FOLDERFRONT
+    FolderFront = SHSTOCKICONID.SIID_FOLDERFRONT,
 
     /// <summary>
     ///  Security shield. Use for UAC prompts only.
     /// </summary>
-    Shield = 77,                    // SIID_SHIELD
+    Shield = SHSTOCKICONID.SIID_SHIELD,
 
     /// <summary>
     ///  Warning.
     /// </summary>
-    Warning = 78,                   // SIID_WARNING
+    Warning = SHSTOCKICONID.SIID_WARNING,
 
     /// <summary>
     ///  Informational.
     /// </summary>
-    Info = 79,                      // SIID_INFO
+    Info = SHSTOCKICONID.SIID_INFO,
 
     /// <summary>
     ///  Error.
     /// </summary>
-    Error = 80,                     // SIID_ERROR
+    Error = SHSTOCKICONID.SIID_ERROR,
 
     /// <summary>
     ///  Key / secure.
     /// </summary>
-    Key = 81,                       // SIID_KEY
+    Key = SHSTOCKICONID.SIID_KEY,
 
     /// <summary>
     ///  Software.
     /// </summary>
-    Software = 82,                  // SIID_SOFTWARE
+    Software = SHSTOCKICONID.SIID_SOFTWARE,
 
     /// <summary>
     ///  Rename.
     /// </summary>
-    Rename = 83,                    // SIID_RENAME
+    Rename = SHSTOCKICONID.SIID_RENAME,
 
     /// <summary>
     ///  Delete.
     /// </summary>
-    Delete = 84,                    // SIID_DELETE
+    Delete = SHSTOCKICONID.SIID_DELETE,
 
     /// <summary>
     ///  Audio DVD media.
     /// </summary>
-    MediaAudioDVD = 85,             // SIID_MEDIAAUDIODVD
+    MediaAudioDVD = SHSTOCKICONID.SIID_MEDIAAUDIODVD,
 
     /// <summary>
-    ///  Movied DVD media.
+    ///  Movie DVD media.
     /// </summary>
-    MediaMovieDVD = 86,             // SIID_MEDIAMOVIEDVD
+    MediaMovieDVD = SHSTOCKICONID.SIID_MEDIAMOVIEDVD,
 
     /// <summary>
     ///  Enhanced CD media.
     /// </summary>
-    MediaEnhancedCD = 87,           // SIID_MEDIAENHANCEDCD
+    MediaEnhancedCD = SHSTOCKICONID.SIID_MEDIAENHANCEDCD,
 
     /// <summary>
     ///  Enhanced DVD media.
     /// </summary>
-    MediaEnhancedDVD = 88,          // SIID_MEDIAENHANCEDDVD
+    MediaEnhancedDVD = SHSTOCKICONID.SIID_MEDIAENHANCEDDVD,
 
     /// <summary>
     ///  HD-DVD media.
     /// </summary>
-    MediaHDDVD = 89,                // SIID_MEDIAHDDVD
+    MediaHDDVD = SHSTOCKICONID.SIID_MEDIAHDDVD,
 
     /// <summary>
     ///  BluRay media.
     /// </summary>
-    MediaBluRay = 90,               // SIID_MEDIABLURAY
+    MediaBluRay = SHSTOCKICONID.SIID_MEDIABLURAY,
 
     /// <summary>
     ///  VCD media.
     /// </summary>
-    MediaVCD = 91,                  // SIID_MEDIAVCD
+    MediaVCD = SHSTOCKICONID.SIID_MEDIAVCD,
 
     /// <summary>
     ///  DVD+R media.
     /// </summary>
-    MediaDVDPlusR = 92,             // SIID_MEDIADVDPLUSR
+    MediaDVDPlusR = SHSTOCKICONID.SIID_MEDIADVDPLUSR,
 
     /// <summary>
     ///  DVD+RW media.
     /// </summary>
-    MediaDVDPlusRW = 93,            // SIID_MEDIADVDPLUSRW
+    MediaDVDPlusRW = SHSTOCKICONID.SIID_MEDIADVDPLUSRW,
 
     /// <summary>
     ///  Desktop computer.
     /// </summary>
-    DesktopPC = 94,                 // SIID_DESKTOPPC
+    DesktopPC = SHSTOCKICONID.SIID_DESKTOPPC,
 
     /// <summary>
     ///  Mobile computer.
     /// </summary>
-    MobilePC = 95,                  // SIID_MOBILEPC
+    MobilePC = SHSTOCKICONID.SIID_MOBILEPC,
 
     /// <summary>
     ///  Users.
     /// </summary>
-    Users = 96,                     // SIID_USERS
+    Users = SHSTOCKICONID.SIID_USERS,
 
     /// <summary>
     ///  Smart media.
     /// </summary>
-    MediaSmartMedia = 97,           // SIID_MEDIASMARTMEDIA
+    MediaSmartMedia = SHSTOCKICONID.SIID_MEDIASMARTMEDIA,
 
     /// <summary>
     ///  Compact Flash.
     /// </summary>
-    MediaCompactFlash = 98,         // SIID_MEDIACOMPACTFLASH
+    MediaCompactFlash = SHSTOCKICONID.SIID_MEDIACOMPACTFLASH,
 
     /// <summary>
     ///  Cell phone.
     /// </summary>
-    DeviceCellPhone = 99,           // SIID_DEVICECELLPHONE
+    DeviceCellPhone = SHSTOCKICONID.SIID_DEVICECELLPHONE,
 
     /// <summary>
     ///  Camera.
     /// </summary>
-    DeviceCamera = 100,             // SIID_DEVICECAMERA
+    DeviceCamera = SHSTOCKICONID.SIID_DEVICECAMERA,
 
     /// <summary>
     ///  Video camera.
     /// </summary>
-    DeviceVideoCamera = 101,        // SIID_DEVICEVIDEOCAMERA
+    DeviceVideoCamera = SHSTOCKICONID.SIID_DEVICEVIDEOCAMERA,
 
     /// <summary>
     ///  Audio player.
     /// </summary>
-    DeviceAudioPlayer = 102,        // SIID_DEVICEAUDIOPLAYER
+    DeviceAudioPlayer = SHSTOCKICONID.SIID_DEVICEAUDIOPLAYER,
 
     /// <summary>
     ///  Connect to network.
     /// </summary>
-    NetworkConnect = 103,           // SIID_NETWORKCONNECT
+    NetworkConnect = SHSTOCKICONID.SIID_NETWORKCONNECT,
 
     /// <summary>
     ///  Internet.
     /// </summary>
-    Internet = 104,                 // SIID_INTERNET
+    Internet = SHSTOCKICONID.SIID_INTERNET,
 
     /// <summary>
     ///  ZIP file.
     /// </summary>
-    ZipFile = 105,                  // SIID_ZIPFILE
+    ZipFile = SHSTOCKICONID.SIID_ZIPFILE,
 
     /// <summary>
     ///  Settings.
     /// </summary>
-    Settings = 106,                 // SIID_SETTINGS
+    Settings = SHSTOCKICONID.SIID_SETTINGS,
 
     /// <summary>
     ///  HD-DVD drive.
     /// </summary>
-    DriveHDDVD = 132,               // SIID_DRIVEHDDVD
+    DriveHDDVD = SHSTOCKICONID.SIID_DRIVEHDDVD,
 
     /// <summary>
     ///  BluRay drive.
     /// </summary>
-    DriveBD = 133,                  // SIID_DRIVEBD
+    DriveBD = SHSTOCKICONID.SIID_DRIVEBD,
 
     /// <summary>
     ///  HD-DVD-ROM media.
     /// </summary>
-    MediaHDDVDROM = 134,            // SIID_MEDIAHDDVDROM
+    MediaHDDVDROM = SHSTOCKICONID.SIID_MEDIAHDDVDROM,
 
     /// <summary>
     ///  HD-DVD-R media.
     /// </summary>
-    MediaHDDVDR = 135,              // SIID_MEDIAHDDVDR
+    MediaHDDVDR = SHSTOCKICONID.SIID_MEDIAHDDVDR,
 
     /// <summary>
     ///  HD-DVD-RAM media.
     /// </summary>
-    MediaHDDVDRAM = 136,            // SIID_MEDIAHDDVDRAM
+    MediaHDDVDRAM = SHSTOCKICONID.SIID_MEDIAHDDVDRAM,
 
     /// <summary>
     ///  BluRay-ROM media.
     /// </summary>
-    MediaBDROM = 137,               // SIID_MEDIABDROM
+    MediaBDROM = SHSTOCKICONID.SIID_MEDIABDROM,
 
     /// <summary>
     ///  BluRay-R media.
     /// </summary>
-    MediaBDR = 138,                 // SIID_MEDIABDR
+    MediaBDR = SHSTOCKICONID.SIID_MEDIABDR,
 
     /// <summary>
     ///  BluRay-RE media.
     /// </summary>
-    MediaBDRE = 139,                // SIID_MEDIABDRE
+    MediaBDRE = SHSTOCKICONID.SIID_MEDIABDRE,
 
     /// <summary>
     ///  Clustered disk.
     /// </summary>
-    ClusteredDrive = 140            // SIID_CLUSTEREDDRIVE
+    ClusteredDrive = SHSTOCKICONID.SIID_CLUSTEREDDRIVE
 }
 #endif

@@ -15,12 +15,12 @@ public class AssemblyInfoTests
 
     [Theory]
     [MemberData(nameof(AssemblyProperties_TestData))]
-    public void AssemblyProperties(System.Reflection.Assembly assembly)
+    public void AssemblyProperties(Assembly assembly)
     {
         AssemblyInfo assemblyInfo = new(assembly);
         var assemblyName = assembly.GetName();
         Assert.Equal(assemblyName.Name, assemblyInfo.AssemblyName);
-        Assert.Equal(System.IO.Path.GetDirectoryName(assembly.Location), assemblyInfo.DirectoryPath);
+        Assert.Equal(Path.GetDirectoryName(assembly.Location), assemblyInfo.DirectoryPath);
         Assert.Equal(GetAttributeValue<AssemblyCompanyAttribute>(assembly, attr => attr.Company), assemblyInfo.CompanyName);
         Assert.Equal(GetAttributeValue<AssemblyCopyrightAttribute>(assembly, attr => attr.Copyright), assemblyInfo.Copyright);
         Assert.Equal(GetAttributeValue<AssemblyDescriptionAttribute>(assembly, attr => attr.Description), assemblyInfo.Description);
@@ -63,7 +63,7 @@ public class AssemblyInfoTests
         Assert.True(workingSet > 0);
     }
 
-    private static string GetAttributeValue<TAttribute>(System.Reflection.Assembly assembly, Func<TAttribute, string> getAttributeValue)
+    private static string GetAttributeValue<TAttribute>(Assembly assembly, Func<TAttribute, string> getAttributeValue)
         where TAttribute : Attribute
     {
         var attribute = (TAttribute)assembly.GetCustomAttribute(typeof(TAttribute));

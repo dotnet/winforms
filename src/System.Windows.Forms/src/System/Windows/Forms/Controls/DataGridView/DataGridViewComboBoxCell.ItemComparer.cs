@@ -9,11 +9,11 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
 {
     private sealed class ItemComparer : IComparer<object?>
     {
-        private readonly DataGridViewComboBoxCell dataGridViewComboBoxCell;
+        private readonly DataGridViewComboBoxCell _dataGridViewComboBoxCell;
 
         public ItemComparer(DataGridViewComboBoxCell dataGridViewComboBoxCell)
         {
-            this.dataGridViewComboBoxCell = dataGridViewComboBoxCell;
+            _dataGridViewComboBoxCell = dataGridViewComboBoxCell;
         }
 
         public int Compare(object? item1, object? item2)
@@ -23,8 +23,8 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
                 return (int)returnValue;
             }
 
-            string? itemName1 = dataGridViewComboBoxCell.GetItemDisplayText(item1);
-            string? itemName2 = dataGridViewComboBoxCell.GetItemDisplayText(item2);
+            string? itemName1 = _dataGridViewComboBoxCell.GetItemDisplayText(item1);
+            string? itemName2 = _dataGridViewComboBoxCell.GetItemDisplayText(item2);
 
             CompareInfo compInfo = Application.CurrentCulture.CompareInfo;
             return compInfo.Compare(itemName1, itemName2, CompareOptions.StringSort);

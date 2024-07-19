@@ -1124,13 +1124,13 @@ public class TableLayoutPanelTests
             GrowStyle = growStyle,
             ClientSize = new Size(50, 50)
         };
-        control.RowStyles.Add(new RowStyle((SizeType)(SizeType.AutoSize - 1), 22));
+        control.RowStyles.Add(new RowStyle(SizeType.AutoSize - 1, 22));
         Assert.Equal(new int[] { 0, 50 }, control.GetRowHeights());
 
-        control.RowStyles.Add(new RowStyle((SizeType)(SizeType.AutoSize - 1), 22));
+        control.RowStyles.Add(new RowStyle(SizeType.AutoSize - 1, 22));
         Assert.Equal(new int[] { 0, 50 }, control.GetRowHeights());
 
-        control.RowStyles.Add(new RowStyle((SizeType)(SizeType.AutoSize - 1), 6));
+        control.RowStyles.Add(new RowStyle(SizeType.AutoSize - 1, 6));
         Assert.Equal(new int[] { 0, 50 }, control.GetRowHeights());
     }
 
@@ -2158,15 +2158,15 @@ public class TableLayoutPanelTests
 
     private class SubTableLayoutPanel : TableLayoutPanel
     {
-        public new const int ScrollStateAutoScrolling = TableLayoutPanel.ScrollStateAutoScrolling;
+        public new const int ScrollStateAutoScrolling = ScrollableControl.ScrollStateAutoScrolling;
 
-        public new const int ScrollStateHScrollVisible = TableLayoutPanel.ScrollStateHScrollVisible;
+        public new const int ScrollStateHScrollVisible = ScrollableControl.ScrollStateHScrollVisible;
 
-        public new const int ScrollStateVScrollVisible = TableLayoutPanel.ScrollStateVScrollVisible;
+        public new const int ScrollStateVScrollVisible = ScrollableControl.ScrollStateVScrollVisible;
 
-        public new const int ScrollStateUserHasScrolled = TableLayoutPanel.ScrollStateUserHasScrolled;
+        public new const int ScrollStateUserHasScrolled = ScrollableControl.ScrollStateUserHasScrolled;
 
-        public new const int ScrollStateFullDrag = TableLayoutPanel.ScrollStateFullDrag;
+        public new const int ScrollStateFullDrag = ScrollableControl.ScrollStateFullDrag;
 
         public new bool CanEnableIme => base.CanEnableIme;
 

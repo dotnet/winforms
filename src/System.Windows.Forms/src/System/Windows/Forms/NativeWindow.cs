@@ -4,7 +4,6 @@
 using System.ComponentModel;
 using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -15,11 +14,9 @@ namespace System.Windows.Forms;
 public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHandle<HWND>
 {
 #if DEBUG
-    private static readonly BooleanSwitch AlwaysUseNormalWndProc
+    private static BooleanSwitch AlwaysUseNormalWndProc { get; }
         = new("AlwaysUseNormalWndProc", "Skips checking for the debugger when choosing the debuggable WndProc handler");
 #endif
-
-    private static readonly TraceSwitch WndProcChoice = new("WndProcChoice", "Info about choice of WndProc");
 
     private const int InitializedFlags = 0x01;
     private const int UseDebuggableWndProc = 0x04;
@@ -38,8 +35,8 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
 
     // Need to Store Table of Ids and Handles
     private static short s_globalID = 1;
-    private static readonly Dictionary<HWND, GCHandle> s_windowHandles = new();
-    private static readonly Dictionary<short, HWND> s_windowIds = new();
+    private static readonly Dictionary<HWND, GCHandle> s_windowHandles = [];
+    private static readonly Dictionary<short, HWND> s_windowIds = [];
     private static readonly object s_internalSyncObject = new();
     private static readonly object s_createWindowSyncObject = new();
 
@@ -198,9 +195,6 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
 
             if (intWndProcFlags == 0)
             {
-                WndProcChoice.TraceVerbose("Init wndProcFlags");
-                Debug.Indent();
-
                 if (t_userSetProcFlags != 0)
                 {
                     intWndProcFlags = t_userSetProcFlags;
@@ -213,31 +207,18 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
                 {
                     if (Debugger.IsAttached)
                     {
-                        WndProcChoice.TraceVerbose("Debugger is attached, using debuggable WndProc");
                         intWndProcFlags |= UseDebuggableWndProc;
-                    }
-                    else
-                    {
-                        // Reading Framework registry key in Netcore/5.0 doesn't make sense. This path seems to be used to override the
-                        // default behaviour after applications deployed (otherwise, Developer/user can set this flag
-                        // via Application.SetUnhandledExceptionModeInternal(..).
-                        // Disabling this feature from .NET core 3.0 release. Would need to redesign if there are customer requests on this.
-
-                        WndProcChoice.TraceVerbose("Debugger check from registry is not supported in this release of .Net version");
                     }
                 }
 
 #if DEBUG
                 if (AlwaysUseNormalWndProc.Enabled)
                 {
-                    WndProcChoice.TraceVerbose("Stripping debuggablewndproc due to AlwaysUseNormalWndProc switch");
                     intWndProcFlags &= ~UseDebuggableWndProc;
                 }
 #endif
                 intWndProcFlags |= InitializedFlags;
-                WndProcChoice.TraceVerbose($"Final 0x{intWndProcFlags:X}");
                 t_wndProcFlags = (byte)intWndProcFlags;
-                Debug.Unindent();
             }
 
             return intWndProcFlags;
@@ -306,8 +287,7 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
     /// <summary>
     ///  Assigns a handle to this <see cref="NativeWindow"/> instance.
     /// </summary>
-    public void AssignHandle(IntPtr handle)
-        => AssignHandle((HWND)handle, assignUniqueID: true);
+    public void AssignHandle(IntPtr handle) => AssignHandle((HWND)handle, assignUniqueID: true);
 
     internal unsafe void AssignHandle(HWND hwnd, bool assignUniqueID)
     {
@@ -320,9 +300,6 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
 
             _priorWindowProcHandle = (void*)PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC);
             Debug.Assert(_priorWindowProcHandle is not null);
-
-            WndProcChoice.TraceVerbose(
-                WndProcShouldBeDebuggable ? "Using debuggable wndproc" : "Using normal wndproc");
 
             _windowProc = new WNDPROC(Callback);
 
@@ -454,7 +431,7 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
                             // If it exceeds the max, we should take the substring....
                             if (cp.Caption is not null && cp.Caption.Length > short.MaxValue)
                             {
-                                cp.Caption = cp.Caption.Substring(0, short.MaxValue);
+                                cp.Caption = cp.Caption[..short.MaxValue];
                             }
 
                             createResult = PInvoke.CreateWindowEx(
@@ -500,7 +477,7 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
                     // based on the window properties and the behavior of the thread. For additional information, please refer to
                     // https://microsoft.visualstudio.com/OS/_git/os.2020?path=/clientcore/windows/Core/ntuser/kernel/windows/createw.cxx&version=GBofficial/main&line=881&lineEnd=882&lineStartColumn=1&lineEndColumn=1&lineStyle=plain&_a=contents
                     DPI_AWARENESS_CONTEXT controlHandleDpiContext = PInvoke.GetWindowDpiAwarenessContext(HWND);
-                    Debug.Assert(PInvoke.AreDpiAwarenessContextsEqualInternal(DpiAwarenessContext, controlHandleDpiContext),
+                    Debug.Assert(DpiAwarenessContext.IsEquivalent(controlHandleDpiContext),
                         $"Control's expected DpiAwarenessContext - {DpiAwarenessContext} is different from the DpiAwarenessContext on the Handle created for the control - {controlHandleDpiContext}");
                 }
 #endif

@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Reflection;
@@ -18,26 +16,23 @@ public partial class DocumentDesigner
     /// </summary>
     private class DocumentInheritanceService : InheritanceService
     {
-        private readonly DocumentDesigner designer;
+        private readonly DocumentDesigner _designer;
 
         /// <summary>
         ///  Creates a new document inheritance service.
         /// </summary>
-        public DocumentInheritanceService(DocumentDesigner designer)
-        {
-            this.designer = designer;
-        }
+        public DocumentInheritanceService(DocumentDesigner designer) => _designer = designer;
 
         /// <summary>
         ///  <para>Indicates the inherited members to ignore.</para>
         /// </summary>
-        protected override bool IgnoreInheritedMember(MemberInfo member, IComponent component)
+        protected override bool IgnoreInheritedMember(MemberInfo member, IComponent? component)
         {
-            FieldInfo field = member as FieldInfo;
-            MethodInfo method = member as MethodInfo;
+            FieldInfo? field = member as FieldInfo;
+            MethodInfo? method = member as MethodInfo;
+
             // We allow private members if they are controls on our design surface or
             // derive from Menu.
-            //
             bool privateMember;
             Type memberType;
             if (field is not null)
@@ -62,17 +57,17 @@ public partial class DocumentDesigner
                 {
                     // See if this member is a child of our document...
                     //
-                    Control child = null;
+                    Control? child = null;
                     if (field is not null)
                     {
-                        child = (Control)field.GetValue(component);
+                        child = (Control?)field.GetValue(component);
                     }
                     else if (method is not null)
                     {
-                        child = (Control)method.Invoke(component, null);
+                        child = (Control?)method.Invoke(component, parameters: null);
                     }
 
-                    Control parent = designer.Control;
+                    Control parent = _designer.Control;
 
                     while (child is not null && child != parent)
                     {
@@ -80,7 +75,6 @@ public partial class DocumentDesigner
                     }
 
                     // If it is a child of our designer, we don't want to ignore this member.
-                    //
                     if (child is not null)
                     {
                         return false;

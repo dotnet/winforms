@@ -1,4 +1,6 @@
-﻿namespace Accessibility_Core_App;
+﻿using System.Drawing;
+
+namespace Accessibility_Core_App;
 
 partial class ContainerControls2
 {
@@ -285,6 +287,7 @@ partial class ContainerControls2
         // groupBox5
         // 
         this.groupBox5.BackColor = System.Drawing.Color.Green;
+        groupBox5.ForeColor = SystemColors.Control;
         this.groupBox5.Location = new System.Drawing.Point(337, 182);
         this.groupBox5.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
         this.groupBox5.Name = "groupBox5";

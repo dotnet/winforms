@@ -66,6 +66,8 @@ internal abstract class NonNullCollection<T>
     /// </summary>
     public void AddRange(IEnumerable<T> items)
     {
+        // We don't want to put in partial items, so we need to enumerate twice to throw appropriately.
+#pragma warning disable CA1851 // Possible multiple enumerations of 'IEnumerable' collection
         if (items is null || items.Contains(default))
         {
             ThrowArgumentNull(nameof(items));
@@ -77,6 +79,7 @@ internal abstract class NonNullCollection<T>
         {
             ItemAdded(item);
         }
+#pragma warning restore CA1851
     }
 
     int IList.Add(object? value)

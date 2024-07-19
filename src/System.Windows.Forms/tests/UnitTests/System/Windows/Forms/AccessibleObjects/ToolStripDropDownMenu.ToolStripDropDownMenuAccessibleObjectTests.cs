@@ -77,6 +77,7 @@ public class ToolStripDropDownMenu_ToolStripDropDownMenuAccessibleObjectTests
     public static IEnumerable<object[]> ToolStripDropDownMenuAccessible_FragmentNavigate_TestData()
     {
         IEnumerable<Type> types = ReflectionHelper.GetPublicNotAbstractClasses<ToolStripDropDownItem>().Select(type => type);
+#pragma warning disable CA1851 // Possible multiple enumerations of 'IEnumerable' collection
         foreach (Type ownerType in types)
         {
             foreach (Type parentType in types)
@@ -90,6 +91,7 @@ public class ToolStripDropDownMenu_ToolStripDropDownMenuAccessibleObjectTests
                 }
             }
         }
+#pragma warning restore CA1851 // Possible multiple enumerations of 'IEnumerable' collection
     }
 
     [WinFormsTheory]
@@ -167,6 +169,7 @@ public class ToolStripDropDownMenu_ToolStripDropDownMenuAccessibleObjectTests
     public static IEnumerable<object[]> ToolStripDropDownMenuAccessible_FragmentNavigate_ToolStripOverflowButton_TestData()
     {
         IEnumerable<Type> types = ReflectionHelper.GetPublicNotAbstractClasses<ToolStripDropDownItem>().Select(type => type);
+#pragma warning disable CA1851 // Possible multiple enumerations of 'IEnumerable' collection
         foreach (Type parentType in types)
         {
             foreach (Type childType in types)
@@ -177,6 +180,7 @@ public class ToolStripDropDownMenu_ToolStripDropDownMenuAccessibleObjectTests
                 }
             }
         }
+#pragma warning restore CA1851 // Possible multiple enumerations of 'IEnumerable' collection
     }
 
     [WinFormsTheory]

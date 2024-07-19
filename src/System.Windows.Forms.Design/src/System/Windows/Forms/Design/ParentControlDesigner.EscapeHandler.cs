@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel.Design;
 
 namespace System.Windows.Forms.Design;
@@ -15,15 +13,12 @@ public partial class ParentControlDesigner
     /// </summary>
     private class EscapeHandler : IMenuStatusHandler
     {
-        private readonly ParentControlDesigner designer;
+        private readonly ParentControlDesigner _designer;
 
         /// <summary>
         ///  Creates a new escape handler.
         /// </summary>
-        public EscapeHandler(ParentControlDesigner designer)
-        {
-            this.designer = designer;
-        }
+        public EscapeHandler(ParentControlDesigner designer) => _designer = designer;
 
         /// <summary>
         ///  CommandSet will check with this handler on each status update
@@ -32,9 +27,10 @@ public partial class ParentControlDesigner
         /// </summary>
         public bool OverrideInvoke(MenuCommand cmd)
         {
-            if (cmd.CommandID.Equals(MenuCommands.KeyCancel))
+            if (MenuCommands.KeyCancel.Equals(cmd.CommandID))
             {
-                designer.OnMouseDragEnd(true);
+                _designer.OnMouseDragEnd(true);
+
                 return true;
             }
 
@@ -48,7 +44,7 @@ public partial class ParentControlDesigner
         /// </summary>
         public bool OverrideStatus(MenuCommand cmd)
         {
-            if (cmd.CommandID.Equals(MenuCommands.KeyCancel))
+            if (MenuCommands.KeyCancel.Equals(cmd.CommandID))
             {
                 cmd.Enabled = true;
             }

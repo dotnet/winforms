@@ -12,7 +12,7 @@ internal partial class ToolStripScrollButton : ToolStripControlHost
 {
     private readonly bool _up = true;
 
-    private static readonly Size defaultBitmapSize = new(16, 16);
+    private static readonly Size s_defaultBitmapSize = new(16, 16);
 
     [ThreadStatic]
     private static Bitmap? t_upScrollImage;
@@ -20,7 +20,7 @@ internal partial class ToolStripScrollButton : ToolStripControlHost
     [ThreadStatic]
     private static Bitmap? t_downScrollImage;
     private const int AUTOSCROLL_UPDATE = 50;
-    private static readonly int AUTOSCROLL_PAUSE = SystemInformation.DoubleClickTime;
+    private static readonly int s_autoScrollPause = SystemInformation.DoubleClickTime;
 
     private Timer? _mouseDownTimer;
 
@@ -35,15 +35,13 @@ internal partial class ToolStripScrollButton : ToolStripControlHost
         _up = up;
     }
 
-    protected override AccessibleObject CreateAccessibilityInstance()
-       => Control.AccessibilityObject;
+    protected override AccessibleObject CreateAccessibilityInstance() => Control.AccessibilityObject;
 
-    private static Control CreateControlInstance(bool up)
-        => new StickyLabel(up)
-        {
-            ImageAlign = ContentAlignment.MiddleCenter,
-            Image = (up) ? UpImage : DownImage
-        };
+    private static StickyLabel CreateControlInstance(bool up) => new(up)
+    {
+        ImageAlign = ContentAlignment.MiddleCenter,
+        Image = (up) ? UpImage : DownImage
+    };
 
     protected internal override Padding DefaultMargin => Padding.Empty;
 
@@ -52,14 +50,14 @@ internal partial class ToolStripScrollButton : ToolStripControlHost
     private static Image DownImage => t_downScrollImage ??= ScaleHelper.GetIconResourceAsBestMatchBitmap(
         typeof(ToolStripScrollButton),
         "ScrollButtonDown",
-        ScaleHelper.ScaleToDpi(defaultBitmapSize, ScaleHelper.InitialSystemDpi));
+        ScaleHelper.ScaleToDpi(s_defaultBitmapSize, ScaleHelper.InitialSystemDpi));
 
     internal StickyLabel Label => (StickyLabel)Control;
 
     private static Image UpImage => t_upScrollImage ??= ScaleHelper.GetIconResourceAsBestMatchBitmap(
         typeof(ToolStripScrollButton),
         "ScrollButtonUp",
-        ScaleHelper.ScaleToDpi(defaultBitmapSize, ScaleHelper.InitialSystemDpi));
+        ScaleHelper.ScaleToDpi(s_defaultBitmapSize, ScaleHelper.InitialSystemDpi));
 
     private Timer MouseDownTimer => _mouseDownTimer ??= new Timer();
 
@@ -85,7 +83,7 @@ internal partial class ToolStripScrollButton : ToolStripControlHost
         base.OnMouseDown(e);
         Scroll();
 
-        MouseDownTimer.Interval = AUTOSCROLL_PAUSE;
+        MouseDownTimer.Interval = s_autoScrollPause;
         MouseDownTimer.Tick += new EventHandler(OnInitialAutoScrollMouseDown);
         MouseDownTimer.Enabled = true;
     }

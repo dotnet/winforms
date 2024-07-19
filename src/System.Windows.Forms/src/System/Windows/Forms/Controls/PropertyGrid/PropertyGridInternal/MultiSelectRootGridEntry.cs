@@ -19,10 +19,16 @@ internal sealed partial class MultiSelectRootGridEntry : SingleSelectRootGridEnt
         PropertyGridView view,
         object[] target,
         IServiceProvider baseProvider,
-        IDesignerHost host,
+        IDesignerHost? host,
         PropertyTab tab,
         PropertySort sortType)
-        : base(view, target, baseProvider, host, tab, sortType)
+        : base(
+            view,
+            target,
+            baseProvider,
+            host,
+            tab,
+            sortType)
     {
     }
 
@@ -59,8 +65,6 @@ internal sealed partial class MultiSelectRootGridEntry : SingleSelectRootGridEnt
             ChildCollection.Clear();
 
             var mergedProperties = PropertyMerger.GetMergedProperties(targets, this, _propertySort, OwnerTab);
-
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose && mergedProperties is null, "PropertyGridView: MergedProps returned null!");
 
             if (mergedProperties is not null)
             {

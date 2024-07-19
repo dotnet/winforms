@@ -44,7 +44,7 @@ public struct Padding : IEquatable<Padding>
         readonly get => _all ? _top : -1;
         set
         {
-            if (_all != true || _top != value)
+            if (!_all || _top != value)
             {
                 _all = true;
                 _top = _left = _right = _bottom = value;
@@ -132,7 +132,7 @@ public struct Padding : IEquatable<Padding>
     public static Padding Subtract(Padding p1, Padding p2) => p1 - p2;
 
 #pragma warning disable CA1725 // Parameter names should match base declaration. Shipped API.
-    public override readonly bool Equals(object? other) => other is not Padding otherPadding ? false : Equals(otherPadding);
+    public override readonly bool Equals(object? other) => other is Padding otherPadding && Equals(otherPadding);
 #pragma warning restore CA1725
 
     public readonly bool Equals(Padding other) =>

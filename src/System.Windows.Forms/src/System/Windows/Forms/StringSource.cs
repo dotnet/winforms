@@ -13,9 +13,9 @@ namespace System.Windows.Forms;
 /// </summary>
 internal unsafe class StringSource : IEnumString.Interface, IManagedWrapper<IEnumString>
 {
-    private string[] strings;
-    private int current;
-    private int size;
+    private string[] _strings;
+    private int _current;
+    private int _size;
     private IAutoComplete2* _autoComplete2;
 
     /// <summary>
@@ -23,14 +23,11 @@ internal unsafe class StringSource : IEnumString.Interface, IManagedWrapper<IEnu
     /// </summary>
     public StringSource(string[] strings)
     {
-        Array.Clear(strings, 0, size);
-        this.strings = strings;
+        _strings = strings;
+        _size = strings.Length;
 
-        current = 0;
-        size = strings.Length;
-
-        PInvoke.CoCreateInstance(
-            in CLSID.AutoComplete,
+        PInvokeCore.CoCreateInstance(
+            CLSID.AutoComplete,
             pUnkOuter: null,
             CLSCTX.CLSCTX_INPROC_SERVER,
             out _autoComplete2).ThrowOnFailure();
@@ -68,10 +65,10 @@ internal unsafe class StringSource : IEnumString.Interface, IManagedWrapper<IEnu
 
     public void RefreshList(string[] newSource)
     {
-        Array.Clear(strings, 0, size);
-        strings = newSource;
-        current = 0;
-        size = strings.Length;
+        Array.Clear(_strings, 0, _size);
+        _strings = newSource;
+        _current = 0;
+        _size = _strings.Length;
     }
 
     public unsafe HRESULT Clone(IEnumString** ppenum)
@@ -81,7 +78,7 @@ internal unsafe class StringSource : IEnumString.Interface, IManagedWrapper<IEnu
             return HRESULT.E_POINTER;
         }
 
-        *ppenum = ComHelpers.GetComPointer<IEnumString>(new StringSource(strings) { current = current });
+        *ppenum = ComHelpers.GetComPointer<IEnumString>(new StringSource(_strings) { _current = _current });
         return HRESULT.S_OK;
     }
 
@@ -94,10 +91,10 @@ internal unsafe class StringSource : IEnumString.Interface, IManagedWrapper<IEnu
 
         uint fetched = 0;
 
-        while (current < size && celt > 0)
+        while (_current < _size && celt > 0)
         {
-            rgelt[fetched] = (char*)Marshal.StringToCoTaskMemUni(strings[current]);
-            current++;
+            rgelt[fetched] = (char*)Marshal.StringToCoTaskMemUni(_strings[_current]);
+            _current++;
             fetched++;
             celt--;
         }
@@ -112,19 +109,19 @@ internal unsafe class StringSource : IEnumString.Interface, IManagedWrapper<IEnu
 
     public HRESULT Skip(uint celt)
     {
-        int newCurrent = current + (int)celt;
-        if (newCurrent >= size)
+        int newCurrent = _current + (int)celt;
+        if (newCurrent >= _size)
         {
             return HRESULT.S_FALSE;
         }
 
-        current = newCurrent;
+        _current = newCurrent;
         return HRESULT.S_OK;
     }
 
     public HRESULT Reset()
     {
-        current = 0;
+        _current = 0;
         return HRESULT.S_OK;
     }
 }

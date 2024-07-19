@@ -287,6 +287,11 @@
         <target state="translated">Das komplexe DataBinding akzeptiert als Datenquelle entweder IList oder IListSource.</target>
         <note />
       </trans-unit>
+      <trans-unit id="BinaryFormatterNotSupported">
+        <source>BinaryFormatter serialization and deserialization are disabled within this application. See https://aka.ms/binaryformatter for more information.</source>
+        <target state="needs-review-translation">Die Verwendung von BinaryFormatter wird in gekürzten Anwendungen nicht unterstützt.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
         <source>Occurs when the binding context has changed.</source>
         <target state="translated">Tritt auf, wenn sich der Bindungskontext geändert hat.</target>
@@ -410,6 +415,11 @@
       <trans-unit id="BindingNavigatorToolStripName">
         <source>Binding Navigator</source>
         <target state="translated">BindingNavigator</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BindingNotSupported">
+        <source>Binding operations are not supported when application trimming is enabled.</source>
+        <target state="translated">Bindungsvorgänge werden nicht unterstützt, wenn das Kürzen von Anwendungen aktiviert ist.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingSourceAddingNewEventHandlerDescr">
@@ -1650,6 +1660,11 @@
       <trans-unit id="ControlNotChild">
         <source>'child' is not a child control of this parent.</source>
         <target state="translated">"child" ist kein untergeordnetes Steuerelement dieses übergeordneten Elements.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlNotSupportedInTrimming">
+        <source>'{0}' is not supported in trimmed applications.</source>
+        <target state="translated">„{0}“ wird in gekürzten Anwendungen nicht unterstützt.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlOnAutoSizeChangedDescr">
@@ -4135,8 +4150,8 @@ Behandeln Sie das DataError-Ereignis, um dieses Standarddialogfeld zu ersetzen.<
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_SortedDescr">
-        <source>Occurs when the DataGridView compares two cell values to perform a sort operation.</source>
-        <target state="translated">Tritt auf, wenn DataGridView zwei Zellwerte vergleicht, um einen Sortiervorgang auszuführen.</target>
+        <source>Occurs when the DataGridView control completes a sorting operation.</source>
+        <target state="translated">Tritt auf, wenn das DataGridView-Steuerelement einen Sortiervorgang abschließt.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_StandardTabDescr">
@@ -4627,6 +4642,11 @@ Behandeln Sie das DataError-Ereignis, um dieses Standarddialogfeld zu ersetzen.<
       <trans-unit id="DescriptionWebBrowser">
         <source>Enables the user to browse Web pages inside your form.</source>
         <target state="translated">Ermöglicht dem Benutzer das Besuchen von Webseiten im Formular.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignTimeFeaturesNotSupported">
+        <source>Design time features are not supported.</source>
+        <target state="translated">Entwurfszeitfeatures werden nicht unterstützt.</target>
         <note />
       </trans-unit>
       <trans-unit id="DispInvokeFailed">
@@ -5207,7 +5227,7 @@ Möchten Sie sie ersetzen?</target>
       </trans-unit>
       <trans-unit id="FolderBrowserDialogMultiSelectDescr">
         <source>Controls whether multiple folders can be selected in the dialog.</source>
-        <target state="new">Controls whether multiple folders can be selected in the dialog.</target>
+        <target state="translated">Steuert, ob mehrere Ordner im Dialogfeld ausgewählt werden können.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogOkRequiresInteraction">
@@ -5227,7 +5247,7 @@ Möchten Sie sie ersetzen?</target>
       </trans-unit>
       <trans-unit id="FolderBrowserDialogSelectedPathsDescr">
         <source>Retrieves the paths of all selected folders in the dialog box.</source>
-        <target state="new">Retrieves the paths of all selected folders in the dialog box.</target>
+        <target state="translated">Fragt die Pfade aller ausgewählten Ordner im Dialogfeld ab.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogShowHiddenFiles">
@@ -9682,6 +9702,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="TooManyResumeUpdateMenuHandles">
         <source>Too many calls to ResumeUpdateMenuHandles.</source>
         <target state="translated">Zu viele Aufrufe an ResumeUpdateMenuHandles.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripAllowClickThrough">
+        <source>Allows the control to be interacted when window does not have focus.</source>
+        <target state="translated">Ermöglicht die Interaktion des Steuerelements, wenn das Fenster keinen Fokus hat.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue">

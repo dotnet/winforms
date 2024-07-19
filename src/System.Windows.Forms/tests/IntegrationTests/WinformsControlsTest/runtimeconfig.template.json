@@ -1,0 +1,14 @@
+{
+  "configProperties": {
+    "System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization": false,
+    "System.Windows.Forms.AnchorLayoutV2": false,
+    "System.Windows.Forms.ApplyParentFontToMenus": true,
+    "System.Windows.Forms.DataGridViewUIAStartRowCountAtZero": false,
+    "System.Windows.Forms.DoNotCatchUnhandledExceptions": true,
+    "System.Windows.Forms.EnableMsoComponentManager": false,
+    "System.Windows.Forms.NoClientNotifications": false,
+    "System.Windows.Forms.ScaleTopLevelFormMinMaxSizeForDpi": false,
+    "System.Windows.Forms.ServicePointManagerCheckCrl": false,
+    "System.Windows.Forms.TrackBarModernRendering": false
+  }
+}

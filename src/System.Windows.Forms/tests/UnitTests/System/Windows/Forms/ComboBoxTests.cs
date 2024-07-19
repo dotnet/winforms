@@ -218,6 +218,26 @@ public class ComboBoxTests
         Assert.Equal(0, createdCallCount);
     }
 
+    [WinFormsTheory]
+    [InlineData(0, 0)]
+    [InlineData(5, 5)]
+    [InlineData(-1, 0)]
+    [InlineData(int.MaxValue, int.MaxValue)]
+    public void ComboBox_MaxLength_Set_GetReturnsExpected(int value, int expected)
+    {
+        using ComboBox control = new();
+        control.MaxLength = value;
+        control.MaxLength.Should().Be(expected);
+        control.IsHandleCreated.Should().BeFalse();
+
+        if (control.Handle != IntPtr.Zero)
+        {
+            control.MaxLength = value;
+            control.MaxLength.Should().Be(expected);
+            control.IsHandleCreated.Should().BeTrue();
+        }
+    }
+
     [WinFormsFact]
     public void ComboBox_BackColor_SetWithHandler_CallsBackColorChanged()
     {
@@ -283,6 +303,109 @@ public class ComboBoxTests
         property.ResetValue(control);
         Assert.Equal(SystemColors.Window, control.BackColor);
         Assert.False(property.ShouldSerializeValue(control));
+    }
+
+    [WinFormsFact]
+    public void VerifyAutoCompleteEntries()
+    {
+        void AssertAutoCompleteCustomSource(string[] items, bool isHandleCreated)
+        {
+            using ComboBox control = new();
+
+            if (items is not null)
+            {
+                AutoCompleteStringCollection autoCompleteCustomSource = new();
+                autoCompleteCustomSource.AddRange(items);
+                control.AutoCompleteCustomSource = autoCompleteCustomSource;
+                control.AutoCompleteCustomSource.Should().BeEquivalentTo(autoCompleteCustomSource);
+            }
+            else
+            {
+                control.AutoCompleteCustomSource = null;
+                control.AutoCompleteCustomSource.Should().NotBeNull();
+                control.AutoCompleteCustomSource.Count.Should().Be(0);
+            }
+
+            control.IsHandleCreated.Should().Be(isHandleCreated);
+        }
+
+        AssertAutoCompleteCustomSource(new[] { "item1", "item2" }, false);
+        AssertAutoCompleteCustomSource(null, false);
+        AssertAutoCompleteCustomSource(new[] { "item3", "item4" }, false);
+    }
+
+    [WinFormsFact]
+    public void ComboBox_BeginEndUpdate()
+    {
+        using ComboBox control1 = new();
+        control1.BeginUpdate();
+        control1.EndUpdate();
+
+        using ComboBox control2 = new() { AutoCompleteSource = AutoCompleteSource.ListItems };
+        control2.BeginUpdate();
+        control2.EndUpdate();
+        control2.AutoCompleteMode.Should().Be(AutoCompleteMode.None);
+
+        using ComboBox control3 = new();
+        control3.BeginUpdate();
+        control3.CreateControl();
+        control3.EndUpdate();
+        control3.IsHandleCreated.Should().BeTrue();
+
+        using ComboBox control4 = new();
+        Exception exception = Record.Exception(() => control4.EndUpdate());
+        exception.Should().BeNull();
+    }
+
+    [WinFormsFact]
+    public void ComboBox_SelectedTextTests()
+    {
+        using ComboBox control = new();
+
+        control.IsHandleCreated.Should().BeFalse();
+        {
+            control.SelectedText.Should().BeEmpty();
+        }
+
+        control.CreateControl();
+        control.IsHandleCreated.Should().BeTrue();
+        {
+            control.SelectedText.Should().BeEmpty();
+        }
+
+        control.DropDownStyle = ComboBoxStyle.DropDownList;
+        control.CreateControl();
+        if (control.DropDownStyle == ComboBoxStyle.DropDownList)
+        {
+            control.SelectedText.Should().BeEmpty();
+        }
+
+        // Test SetWithoutHandle
+        control.CreateControl();
+        {
+            control.SelectedText = "Test";
+            control.SelectedText.Should().BeEmpty();
+        }
+
+        // Test SetWithHandle
+        control.DropDownStyle = ComboBoxStyle.DropDown;
+        control.Text = "Initial";
+        control.SelectionStart = 0;
+        control.SelectionLength = 7;
+        control.CreateControl();
+        {
+            control.SelectedText = "Test";
+            control.Text.Should().Be("Test");
+        }
+
+        // Test SetWithDropDownListStyle
+        control.DropDownStyle = ComboBoxStyle.DropDownList;
+        control.CreateControl();
+        if (control.DropDownStyle == ComboBoxStyle.DropDownList)
+        {
+            control.SelectedText = "Test";
+            control.SelectedText.Should().BeEmpty();
+        }
     }
 
     [WinFormsTheory]
@@ -460,7 +583,7 @@ public class ComboBoxTests
         control.DisplayMemberChanged += displayMemberHandler;
 
         // Set different.
-        List<int> dataSource1 = new();
+        List<int> dataSource1 = [];
         control.DataSource = dataSource1;
         Assert.Same(dataSource1, control.DataSource);
         Assert.Equal(0, dataSourceCallCount);
@@ -473,7 +596,7 @@ public class ComboBoxTests
         Assert.Equal(0, displayMemberCallCount);
 
         // Set different.
-        List<int> dataSource2 = new();
+        List<int> dataSource2 = [];
         control.DataSource = dataSource2;
         Assert.Same(dataSource2, control.DataSource);
         Assert.Equal(0, dataSourceCallCount);
@@ -1860,7 +1983,7 @@ public class ComboBoxTests
         Assert.True(comboBox.IsHandleCreated);
 
         // The "RaiseAutomationCallCount" method is called from "OnTextChanged" method
-        Assert.Equal(0, comboBoxChildEditUiaProvider.RaiseAutomationCallCount);
+        Assert.Equal(0, comboBoxChildEditUiaProvider._raiseAutomationCallCount);
     }
 
     [WinFormsFact]
@@ -1882,7 +2005,7 @@ public class ComboBoxTests
         Assert.True(comboBox.IsHandleCreated);
 
         // The "RaiseAutomationCallCount" method is called from "OnTextChanged" method
-        Assert.Equal(1, comboBoxChildEditUiaProvider.RaiseAutomationCallCount);
+        Assert.Equal(1, comboBoxChildEditUiaProvider._raiseAutomationCallCount);
     }
 
     [WinFormsFact]
@@ -1902,7 +2025,7 @@ public class ComboBoxTests
         Assert.True(comboBox.IsHandleCreated);
 
         // The "RaiseAutomationCallCount" method is called from "OnTextChanged" method
-        Assert.Equal(0, comboBoxChildEditUiaProvider.RaiseAutomationCallCount);
+        Assert.Equal(0, comboBoxChildEditUiaProvider._raiseAutomationCallCount);
     }
 
     [WinFormsFact]
@@ -1924,7 +2047,7 @@ public class ComboBoxTests
         Assert.True(comboBox.IsHandleCreated);
 
         // The "RaiseAutomationCallCount" method is called from "OnTextChanged" method
-        Assert.Equal(1, comboBoxChildEditUiaProvider.RaiseAutomationCallCount);
+        Assert.Equal(1, comboBoxChildEditUiaProvider._raiseAutomationCallCount);
     }
 
     [WinFormsTheory]
@@ -1965,7 +2088,7 @@ public class ComboBoxTests
 
         Assert.False(comboBox.IsAccessibilityObjectCreated);
         Assert.True(comboBox.IsHandleCreated);
-        Assert.Equal(0, comboBoxChildEditUiaProvider.RaiseAutomationCallCount);
+        Assert.Equal(0, comboBoxChildEditUiaProvider._raiseAutomationCallCount);
     }
 
     [WinFormsFact]
@@ -1987,7 +2110,7 @@ public class ComboBoxTests
         Assert.True(comboBox.IsHandleCreated);
 
         // The "RaiseAutomationEvent" method is called from "OnTextChanged" and "OnSelectedIndexChanged" methods
-        Assert.Equal(2, comboBoxChildEditUiaProvider.RaiseAutomationCallCount);
+        Assert.Equal(2, comboBoxChildEditUiaProvider._raiseAutomationCallCount);
     }
 
     [WinFormsFact]
@@ -2005,7 +2128,7 @@ public class ComboBoxTests
 
         Assert.False(comboBox.IsAccessibilityObjectCreated);
         Assert.True(comboBox.IsHandleCreated);
-        Assert.Equal(0, comboBoxChildEditUiaProvider.RaiseAutomationCallCount);
+        Assert.Equal(0, comboBoxChildEditUiaProvider._raiseAutomationCallCount);
     }
 
     [WinFormsFact]
@@ -2027,7 +2150,7 @@ public class ComboBoxTests
         Assert.True(comboBox.IsHandleCreated);
 
         // The "RaiseAutomationEvent" method is called from "OnTextChanged" method
-        Assert.Equal(1, comboBoxChildEditUiaProvider.RaiseAutomationCallCount);
+        Assert.Equal(1, comboBoxChildEditUiaProvider._raiseAutomationCallCount);
     }
 
     [WinFormsFact]
@@ -2041,7 +2164,7 @@ public class ComboBoxTests
 
         Assert.False(comboBox.IsAccessibilityObjectCreated);
         Assert.True(comboBox.IsHandleCreated);
-        Assert.Equal(0, ((AutomationEventCountingComboBoxAccessibleObject)comboBox.AccessibilityObject).RaiseAutomationCallCount);
+        Assert.Equal(0, ((AutomationEventCountingComboBoxAccessibleObject)comboBox.AccessibilityObject)._raiseAutomationCallCount);
     }
 
     [WinFormsFact]
@@ -2056,7 +2179,7 @@ public class ComboBoxTests
 
         Assert.False(comboBox.IsAccessibilityObjectCreated);
         Assert.True(comboBox.IsHandleCreated);
-        Assert.Equal(0, ((AutomationEventCountingComboBoxAccessibleObject)comboBox.AccessibilityObject).RaiseAutomationCallCount);
+        Assert.Equal(0, ((AutomationEventCountingComboBoxAccessibleObject)comboBox.AccessibilityObject)._raiseAutomationCallCount);
     }
 
     [WinFormsFact]
@@ -2074,7 +2197,7 @@ public class ComboBoxTests
         Assert.True(comboBox.IsHandleCreated);
 
         // The "RaiseAutomationPropertyChangedEvent" method is called from "OnDropDown" method
-        Assert.Equal(1, ((AutomationEventCountingComboBoxAccessibleObject)comboBox.AccessibilityObject).RaiseAutomationCallCount);
+        Assert.Equal(1, ((AutomationEventCountingComboBoxAccessibleObject)comboBox.AccessibilityObject)._raiseAutomationCallCount);
     }
 
     [WinFormsFact]
@@ -2093,7 +2216,7 @@ public class ComboBoxTests
         Assert.True(comboBox.IsHandleCreated);
 
         // The "RaiseAutomationPropertyChangedEvent" method is called from "OnDropDown" and "OnDropDownClosed" method
-        Assert.Equal(2, ((AutomationEventCountingComboBoxAccessibleObject)comboBox.AccessibilityObject).RaiseAutomationCallCount);
+        Assert.Equal(2, ((AutomationEventCountingComboBoxAccessibleObject)comboBox.AccessibilityObject)._raiseAutomationCallCount);
     }
 
     [WinFormsFact]
@@ -2162,7 +2285,7 @@ public class ComboBoxTests
         // All the items are between a - z
         for (int j = 0; j < numItems; j++)
         {
-            string item = (random.Next() % 26 + (char)'a').ToString();
+            string item = (random.Next() % 26 + 'a').ToString();
             items[j] = item;
             comboBox.Items.Add(item);
         }
@@ -2250,12 +2373,12 @@ public class ComboBoxTests
     {
         using OwnerDrawComboBox ownerDrawComboBox = new();
         ownerDrawComboBox.CreateControl();
-        ownerDrawComboBox.Items.AddRange(new object[]
-        {
+        ownerDrawComboBox.Items.AddRange(
+        [
             "One",
             "Two",
             "Three"
-        });
+        ]);
         ownerDrawComboBox.Location = new Point(0, 50);
         Assert.Equal(3, ownerDrawComboBox.MeasureItemEventArgs.Count);
 
@@ -2288,6 +2411,108 @@ public class ComboBoxTests
         Assert.Equal(expectedKeyPressesCount, comboBox.EventsCount);
     }
 
+    [WinFormsTheory]
+    [InlineData(DrawMode.Normal)]
+    [InlineData(DrawMode.OwnerDrawFixed)]
+    [InlineData(DrawMode.OwnerDrawVariable)]
+    public void ComboBox_GetItemHeight_Invoke_ReturnsExpected(DrawMode drawMode)
+    {
+        int index = 0;
+        int expected = 15;
+        using ComboBox control = CreateComboBox(drawMode, expected);
+        control.GetItemHeight(index).Should().Be(expected);
+    }
+
+    private ComboBox CreateComboBox(DrawMode drawMode, int itemHeight = 15)
+    {
+        ComboBox control = new()
+        {
+            DrawMode = drawMode,
+            ItemHeight = itemHeight
+        };
+
+        control.Items.Add("Item1");
+        control.Items.Add("Item2");
+        control.Items.Add("Item3");
+        control.CreateControl();
+
+        return control;
+    }
+
+    [WinFormsTheory]
+    [InlineData(-1)]
+    [InlineData(0)]
+    [InlineData(2)]
+    [InlineData(3)]
+    [InlineData(4)]
+    public void ComboBox_GetItemHeight_Index_ThrowsArgumentOutOfRangeException(int index)
+    {
+        using ComboBox control = CreateComboBox(DrawMode.OwnerDrawVariable);
+        control.CreateControl(); // Ensure the handle is created
+
+        if (index < 0 || index >= control.Items.Count)
+        {
+            control.Invoking(y => y.GetItemHeight(index))
+                   .Should().Throw<ArgumentOutOfRangeException>()
+                   .WithMessage("*index*")
+                   .Where(ex => ex.ParamName == "index");
+        }
+        else
+        {
+            // Test valid index
+            int itemHeight = control.GetItemHeight(index);
+            itemHeight.Should().BeGreaterThan(0, "Item height should be greater than 0.");
+        }
+    }
+
+    [WinFormsFact]
+    public void ComboBox_GetItemHeight_NoItems_ThrowsArgumentOutOfRangeException()
+    {
+        using ComboBox control = new();
+        control.DrawMode = DrawMode.OwnerDrawVariable;
+        control.CreateControl();
+        control.Invoking(c => c.GetItemHeight(0))
+               .Should().Throw<ArgumentOutOfRangeException>();
+    }
+
+    [WinFormsTheory]
+    [BoolData]
+    public void ComboBox_ResetText_Invoke_Success(bool withHandle)
+    {
+        using ComboBox control = new();
+        if (withHandle)
+        {
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+        }
+
+        control.Text = "Some text";
+        control.ResetText();
+        Assert.Equal(string.Empty, control.Text);
+    }
+
+    [WinFormsFact]
+    public void ComboBox_SelectAll_InvokeWithoutHandle_Success()
+    {
+        using ComboBox control = new();
+        control.Items.AddRange(new string[] { "Item1", "Item2", "Item3" });
+        control.Handle.Should().NotBe(IntPtr.Zero);
+        control.SelectAll();
+
+        control.SelectionStart.Should().Be(0);
+        control.SelectionLength.Should().Be(control.Text.Length);
+    }
+
+    [WinFormsFact]
+    public void ComboBox_SelectAll_InvokeWithoutItems_Success()
+    {
+        using ComboBox control = new();
+        control.Handle.Should().NotBe(IntPtr.Zero);
+        control.SelectAll();
+
+        control.SelectionStart.Should().Be(0);
+        control.SelectionLength.Should().Be(control.Text.Length);
+    }
+
     private void InitializeItems(ComboBox comboBox, int numItems)
     {
         for (int i = 0; i < numItems; i++)
@@ -2306,7 +2531,7 @@ public class ComboBoxTests
             FormattingEnabled = true;
         }
 
-        public List<MeasureItemEventArgs> MeasureItemEventArgs { get; } = new();
+        public List<MeasureItemEventArgs> MeasureItemEventArgs { get; } = [];
 
         protected override void OnMeasureItem(MeasureItemEventArgs e)
         {
@@ -2329,11 +2554,11 @@ public class ComboBoxTests
         public AutomationEventCountingComboBoxAccessibleObject(ComboBox owner) : base(owner)
         { }
 
-        internal int RaiseAutomationCallCount;
+        internal int _raiseAutomationCallCount;
 
         internal override bool RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID propertyId, VARIANT oldValue, VARIANT newValue)
         {
-            RaiseAutomationCallCount++;
+            _raiseAutomationCallCount++;
             return base.RaiseAutomationPropertyChangedEvent(propertyId, oldValue, newValue);
         }
     }
@@ -2342,14 +2567,14 @@ public class ComboBoxTests
     {
         public AutomationEventCountingComboBoxChildEditUiaProvider(ComboBox owner, HWND childEditControlhandle) : base(owner, childEditControlhandle)
         {
-            RaiseAutomationCallCount = 0;
+            _raiseAutomationCallCount = 0;
         }
 
-        internal int RaiseAutomationCallCount;
+        internal int _raiseAutomationCallCount;
 
         internal override bool RaiseAutomationEvent(UIA_EVENT_ID eventId)
         {
-            RaiseAutomationCallCount++;
+            _raiseAutomationCallCount++;
             return base.RaiseAutomationEvent(eventId);
         }
     }
@@ -2431,7 +2656,7 @@ public class ComboBoxTests
         public void ConfigureForCtrlBackspace(int cursorRelativeToEnd = 0)
         {
             Focus();
-            SelectionStart = this.Text.Length + cursorRelativeToEnd;
+            SelectionStart = Text.Length + cursorRelativeToEnd;
             SelectionLength = 0;
         }
 

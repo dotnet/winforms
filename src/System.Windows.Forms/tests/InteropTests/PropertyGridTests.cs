@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.ApplicationInstallationAndServicing;
 using Windows.Win32.System.Com;
-using static Interop;
 
 namespace System.Windows.Forms.Interop.Tests;
 
@@ -110,7 +109,9 @@ public class PropertyGridTests
             {
                 if (!PInvoke.DeactivateActCtx(0, cookie))
                 {
+#pragma warning disable CA2219 // Do not raise exceptions in finally clauses
                     throw new Win32Exception();
+#pragma warning restore CA2219
                 }
             }
         }
@@ -120,26 +121,26 @@ public class PropertyGridTests
         }
     }
 
-    private object CreateComObjectWithRawIErrorInfoUsage()
+    private static unsafe object CreateComObjectWithRawIErrorInfoUsage()
     {
         Guid clsidRawErrorInfoUsageTest = new("0ED8EE0D-22E3-49EA-850C-E69B20D1F296");
-        Ole32.CoCreateInstance(in clsidRawErrorInfoUsageTest,
-            IntPtr.Zero,
+        PInvokeCore.CoCreateInstance(
+            in clsidRawErrorInfoUsageTest,
+            pUnkOuter: null,
             CLSCTX.CLSCTX_INPROC_SERVER,
-            in IID.GetRef<global::Windows.Win32.System.Com.IUnknown>(),
-            out object result);
-        return result;
+            out IUnknown* result);
+        return ComHelpers.GetObjectForIUnknown(result);
     }
 
-    private object CreateComObjectWithStandardIErrorInfoUsage()
+    private static unsafe object CreateComObjectWithStandardIErrorInfoUsage()
     {
         Guid clsidStandardErrorInfoUsageTest = new("EA1FCB3A-277C-4C79-AB85-E2ED3E858201");
-        Ole32.CoCreateInstance(in clsidStandardErrorInfoUsageTest,
-            IntPtr.Zero,
+        PInvokeCore.CoCreateInstance(
+            in clsidStandardErrorInfoUsageTest,
+            pUnkOuter: null,
             CLSCTX.CLSCTX_INPROC_SERVER,
-            in IID.GetRef<global::Windows.Win32.System.Com.IUnknown>(),
-            out object result);
-        return result;
+            out IUnknown* result);
+        return ComHelpers.GetObjectForIUnknown(result);
     }
 
     [DllImport("kernel32", SetLastError = true)]

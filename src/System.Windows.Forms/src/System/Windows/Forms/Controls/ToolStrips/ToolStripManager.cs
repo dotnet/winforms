@@ -3,6 +3,7 @@
 
 using System.Collections.Concurrent;
 using System.Drawing;
+using System.Windows.Forms.Primitives;
 using Microsoft.Win32;
 
 namespace System.Windows.Forms;
@@ -12,16 +13,16 @@ public static partial class ToolStripManager
     // WARNING: ThreadStatic initialization happens only on the first thread at class CTOR time.
     // use InitializeThread mechanism to initialize ThreadStatic members
     [ThreadStatic]
-    private static WeakRefCollection? t_toolStripWeakArrayList;
+    private static WeakRefCollection<ToolStrip>? t_activeToolStrips;
 
     [ThreadStatic]
-    private static WeakRefCollection? t_toolStripPanelWeakArrayList;
+    private static WeakRefCollection<ToolStripPanel>? t_activeToolStripPanels;
 
     [ThreadStatic]
     private static bool t_initialized;
 
     private static Font? s_defaultFont;
-    private static ConcurrentDictionary<int, Font> s_defaultFontCache = new();
+    private static readonly ConcurrentDictionary<int, Font> s_defaultFontCache = new();
 
     // WARNING: When subscribing to static event handlers - make sure you unhook from them
     // otherwise you can leak USER objects on process shutdown.
@@ -51,6 +52,11 @@ public static partial class ToolStripManager
     {
         get
         {
+            if (LocalAppContextSwitches.ApplyParentFontToMenus)
+            {
+                return Control.DefaultFont;
+            }
+
             Font? sysFont = null;
 
             // We need to cache the default fonts for the different DPIs.
@@ -124,8 +130,8 @@ public static partial class ToolStripManager
 
     internal static int CurrentDpi { get; set; } = ScaleHelper.InitialSystemDpi;
 
-    internal static WeakRefCollection ToolStrips
-        => t_toolStripWeakArrayList ??= new WeakRefCollection();
+    internal static WeakRefCollection<ToolStrip> ToolStrips
+        => t_activeToolStrips ??= [];
 
     /// <summary>Static events only!!!</summary>
     private static void AddEventHandler(int key, Delegate? value)
@@ -142,17 +148,15 @@ public static partial class ToolStripManager
     /// </summary>
     public static ToolStrip? FindToolStrip(string toolStripName)
     {
-        ToolStrip? result = null;
-        for (int i = 0; i < ToolStrips.Count; i++)
+        foreach (ToolStrip toolStrip in ToolStrips)
         {
-            if (ToolStrips[i] is ToolStrip toolStrip && string.Equals(toolStrip.Name, toolStripName, StringComparison.Ordinal))
+            if (string.Equals(toolStrip.Name, toolStripName, StringComparison.Ordinal))
             {
-                result = toolStrip;
-                break;
+                return toolStrip;
             }
         }
 
-        return result;
+        return null;
     }
 
     /// <summary>
@@ -161,9 +165,9 @@ public static partial class ToolStripManager
     internal static ToolStrip? FindToolStrip(Form owningForm, string toolStripName)
     {
         ToolStrip? result = null;
-        for (int i = 0; i < ToolStrips.Count; i++)
+        foreach (ToolStrip toolStrip in ToolStrips)
         {
-            if (ToolStrips[i] is ToolStrip toolStrip && string.Equals(toolStrip.Name, toolStripName, StringComparison.Ordinal))
+            if (string.Equals(toolStrip.Name, toolStripName, StringComparison.Ordinal))
             {
                 result = toolStrip;
                 if (result.FindForm() == owningForm)
@@ -184,7 +188,7 @@ public static partial class ToolStripManager
             return false;
         }
 
-        bool canChange = toolStrip.TabStop == false &&
+        bool canChange = !toolStrip.TabStop &&
                              toolStrip.Enabled &&
                              toolStrip.Visible &&
                              !toolStrip.IsDisposed &&
@@ -258,7 +262,7 @@ public static partial class ToolStripManager
         => PInvoke.GetAncestor(control1, GET_ANCESTOR_FLAGS.GA_ROOT) == PInvoke.GetAncestor(control2, GET_ANCESTOR_FLAGS.GA_ROOT);
 
     internal static bool IsThreadUsingToolStrips()
-        => t_toolStripWeakArrayList is not null && t_toolStripWeakArrayList.Count > 0;
+        => t_activeToolStrips is not null && t_activeToolStrips.Count > 0;
 
     private static void OnUserPreferenceChanging(object sender, UserPreferenceChangingEventArgs e)
     {
@@ -287,17 +291,9 @@ public static partial class ToolStripManager
 
     internal static void NotifyMenuModeChange(bool invalidateText, bool activationChange)
     {
-        bool toolStripPruneNeeded = false;
-
         // If we've toggled the ShowUnderlines value, we'll need to invalidate
-        for (int i = 0; i < ToolStrips.Count; i++)
+        foreach (ToolStrip toolStrip in ToolStrips)
         {
-            if (ToolStrips[i] is not ToolStrip toolStrip)
-            {
-                toolStripPruneNeeded = true;
-                continue;
-            }
-
             if (invalidateText)
             {
                 toolStrip.InvalidateTextItems();
@@ -306,30 +302,6 @@ public static partial class ToolStripManager
             if (activationChange)
             {
                 toolStrip.KeyboardActive = false;
-            }
-        }
-
-        if (toolStripPruneNeeded)
-        {
-            PruneToolStripList();
-        }
-    }
-
-    /// <summary>
-    ///  Removes dead entries from the toolstrip weak reference collection.
-    /// </summary>
-    internal static void PruneToolStripList()
-    {
-        if (t_toolStripWeakArrayList is null || t_toolStripWeakArrayList.Count == 0)
-        {
-            return;
-        }
-
-        for (int i = t_toolStripWeakArrayList.Count - 1; i >= 0; i--)
-        {
-            if (t_toolStripWeakArrayList[i] is null)
-            {
-                t_toolStripWeakArrayList.RemoveAt(i);
             }
         }
     }
@@ -376,7 +348,7 @@ public static partial class ToolStripManager
             }
 
             int nextControlTabIndex = toolStrip.TabIndex;
-            ToolStrip.s_controlTabDebug.TraceVerbose($"SELECTNEXTTOOLSTRIP: start: {startTabIndex} {start.Name}");
+
             // since CanChangeSelection can iterate through all the items in a toolstrip,
             // defer the checking until we think we've got a viable TabIndex candidate.
             // this brings it to O(n+m) instead of O(n*m) where n is # toolstrips & m is avg number
@@ -385,7 +357,6 @@ public static partial class ToolStripManager
             {
                 if (nextControlTabIndex >= startTabIndex && CanChangeSelection(start, toolStrip))
                 {
-                    ToolStrip.s_controlTabDebug.TraceVerbose($"FORWARD considering selection {toolStrip.Name} {toolStrip.TabIndex}");
                     if (nextControl is null)
                     {
                         nextControl = toolStrip;
@@ -401,7 +372,6 @@ public static partial class ToolStripManager
                           && CanChangeSelection(start, toolStrip))
                 {
                     // We've found a candidate for wrapping (the one with the smallest tab index in the collection)
-                    ToolStrip.s_controlTabDebug.TraceVerbose($"\tFORWARD new wrap candidate {toolStrip.Name}");
                     wrappedControl = toolStrip;
                 }
             }
@@ -409,7 +379,6 @@ public static partial class ToolStripManager
             {
                 if (nextControlTabIndex <= startTabIndex && CanChangeSelection(start, toolStrip))
                 {
-                    ToolStrip.s_controlTabDebug.TraceVerbose($"\tREVERSE selecting {toolStrip.Name}");
                     if (nextControl is null)
                     {
                         nextControl = toolStrip;
@@ -422,21 +391,14 @@ public static partial class ToolStripManager
                     }
                 }
                 else if (((wrappedControl is null) || (toolStrip.TabIndex > wrappedControl.TabIndex))
-                           && CanChangeSelection(start, toolStrip))
+                    && CanChangeSelection(start, toolStrip))
                 {
                     // We've found a candidate for wrapping (the one with the largest tab index in the collection)
-                    ToolStrip.s_controlTabDebug.TraceVerbose($"\tREVERSE new wrap candidate {toolStrip.Name}");
-
                     wrappedControl = toolStrip;
-                }
-                else
-                {
-                    ToolStrip.s_controlTabDebug.TraceVerbose($"\tREVERSE skipping wrap candidate {toolStrip.Name}{toolStrip.TabIndex}");
                 }
             }
 
-            if (nextControl is not null
-                && Math.Abs(nextControl.TabIndex - startTabIndex) <= 1)
+            if (nextControl is not null && Math.Abs(nextControl.TabIndex - startTabIndex) <= 1)
             {
                 // If we've found a valid candidate and it's within 1
                 // then bail, we've found something close enough.
@@ -446,13 +408,10 @@ public static partial class ToolStripManager
 
         if (nextControl is not null)
         {
-            ToolStrip.s_controlTabDebug.TraceVerbose($"SELECTING {nextControl.Name}");
             return ChangeSelection(start, nextControl);
         }
         else if (wrappedControl is not null)
         {
-            ToolStrip.s_controlTabDebug.TraceVerbose($"WRAPPING {wrappedControl.Name}");
-
             return ChangeSelection(start, wrappedControl);
         }
 
@@ -460,9 +419,11 @@ public static partial class ToolStripManager
     }
 
     /// <remarks>
-    ///  This is thread static because we want separate instances for each thread.
-    ///  We don't want to guarantee thread safety and don't want to have to take
-    ///  locks in painting code.
+    ///  <para>
+    ///   This is thread static because we want separate instances for each thread.
+    ///   We don't want to guarantee thread safety and don't want to have to take
+    ///   locks in painting code.
+    ///  </para>
     /// </remarks>
     [ThreadStatic]
     private static ToolStripRenderer? t_defaultRenderer;
@@ -589,45 +550,37 @@ public static partial class ToolStripManager
 
     internal static ToolStripRenderer CreateRenderer(ToolStripManagerRenderMode renderMode)
     {
-        switch (renderMode)
+        return renderMode switch
         {
-            case ToolStripManagerRenderMode.System:
-                return new ToolStripSystemRenderer(isDefault: true);
-            case ToolStripManagerRenderMode.Professional:
-                return new ToolStripProfessionalRenderer(isDefault: true);
-            case ToolStripManagerRenderMode.Custom:
-            default:
-                return new ToolStripSystemRenderer(isDefault: true);
-        }
+            ToolStripManagerRenderMode.System => new ToolStripSystemRenderer(isDefault: true),
+            ToolStripManagerRenderMode.Professional => new ToolStripProfessionalRenderer(isDefault: true),
+            _ => new ToolStripSystemRenderer(isDefault: true),
+        };
     }
 
     internal static ToolStripRenderer CreateRenderer(ToolStripRenderMode renderMode)
     {
-        switch (renderMode)
+        return renderMode switch
         {
-            case ToolStripRenderMode.System:
-                return new ToolStripSystemRenderer(isDefault: true);
-            case ToolStripRenderMode.Professional:
-                return new ToolStripProfessionalRenderer(isDefault: true);
-            case ToolStripRenderMode.Custom:
-            default:
-                return new ToolStripSystemRenderer(isDefault: true);
-        }
+            ToolStripRenderMode.System => new ToolStripSystemRenderer(isDefault: true),
+            ToolStripRenderMode.Professional => new ToolStripProfessionalRenderer(isDefault: true),
+            _ => new ToolStripSystemRenderer(isDefault: true),
+        };
     }
 
-    internal static WeakRefCollection ToolStripPanels
-        => t_toolStripPanelWeakArrayList ??= new WeakRefCollection();
+    internal static WeakRefCollection<ToolStripPanel> ToolStripPanels
+        => t_activeToolStripPanels ??= [];
 
     internal static ToolStripPanel? ToolStripPanelFromPoint(Control draggedControl, Point screenLocation)
     {
-        if (t_toolStripPanelWeakArrayList is not null)
+        if (t_activeToolStripPanels is not null)
         {
             ISupportToolStripPanel draggedItem = (ISupportToolStripPanel)draggedControl;
             bool rootWindowCheck = draggedItem.IsCurrentlyDragging;
 
-            for (int i = 0; i < t_toolStripPanelWeakArrayList.Count; i++)
+            foreach (ToolStripPanel toolStripPanel in t_activeToolStripPanels)
             {
-                if (t_toolStripPanelWeakArrayList[i] is ToolStripPanel toolStripPanel && toolStripPanel.IsHandleCreated && toolStripPanel.Visible &&
+                if (toolStripPanel.IsHandleCreated && toolStripPanel.Visible &&
                     toolStripPanel.DragBounds.Contains(toolStripPanel.PointToClient(screenLocation)))
                 {
                     // Ensure that we can't drag off one window to another.
@@ -695,17 +648,7 @@ public static partial class ToolStripManager
     }
 
     internal static bool ShowMenuFocusCues
-    {
-        get
-        {
-            if (!DisplayInformation.MenuAccessKeysUnderlined)
-            {
-                return ModalMenuFilter.Instance.ShowUnderlines;
-            }
-
-            return true;
-        }
-    }
+        => DisplayInformation.MenuAccessKeysUnderlined || ModalMenuFilter.Instance.ShowUnderlines;
 
     /// <summary>
     ///  Determines if the key combination is valid for a shortcut.
@@ -714,18 +657,18 @@ public static partial class ToolStripManager
     public static bool IsValidShortcut(Keys shortcut)
     {
         // Should have a key and one or more modifiers.
-        Keys keyCode = (Keys)(shortcut & Keys.KeyCode);
-        Keys modifiers = (Keys)(shortcut & Keys.Modifiers);
+        Keys keyCode = shortcut & Keys.KeyCode;
+        Keys modifiers = shortcut & Keys.Modifiers;
 
         if (shortcut == Keys.None)
         {
             return false;
         }
-        else if ((keyCode == Keys.Delete) || (keyCode == Keys.Insert))
+        else if (keyCode is Keys.Delete or Keys.Insert)
         {
             return true;
         }
-        else if (((int)keyCode >= (int)Keys.F1) && ((int)keyCode <= (int)Keys.F24))
+        else if ((int)keyCode is >= ((int)Keys.F1) and <= ((int)Keys.F24))
         {
             // Function keys by themselves are valid
             return true;
@@ -755,16 +698,13 @@ public static partial class ToolStripManager
     }
 
     internal static bool IsMenuKey(Keys keyData)
-    {
-        Keys keyCode = keyData & Keys.KeyCode;
-        return (keyCode == Keys.Menu || keyCode == Keys.F10);
-    }
+        => (keyData & Keys.KeyCode) is Keys.Menu or Keys.F10;
 
     public static bool IsShortcutDefined(Keys shortcut)
     {
-        for (int i = 0; i < ToolStrips.Count; i++)
+        foreach (ToolStrip toolStrip in ToolStrips)
         {
-            if (ToolStrips[i] is ToolStrip t && t.Shortcuts.ContainsKey(shortcut))
+            if (toolStrip.Shortcuts.ContainsKey(shortcut))
             {
                 return true;
             }
@@ -779,22 +719,18 @@ public static partial class ToolStripManager
     /// </summary>
     internal static bool ProcessCmdKey(ref Message m, Keys keyData)
     {
-        Control.s_controlKeyboardRouting.TraceVerbose($"ToolStripManager.ProcessCmdKey - processing: [{keyData}]");
-        if (ToolStripManager.IsValidShortcut(keyData))
+        if (IsValidShortcut(keyData))
         {
             // If we're at the toplevel, check the toolstrips for matching shortcuts.
             // Win32 menus are handled in Form.ProcessCmdKey, but we can't guarantee that
             // toolstrips will be hosted in a form. ToolStrips have a hash of shortcuts
             // per container, so this should hopefully be a quick search.
-            Control.s_controlKeyboardRouting.TraceVerbose($"ToolStripManager.ProcessCmdKey - IsValidShortcut: [{keyData}]");
-
-            return ToolStripManager.ProcessShortcut(ref m, keyData);
+            return ProcessShortcut(ref m, keyData);
         }
 
         if (m.Msg == (int)PInvoke.WM_SYSKEYDOWN)
         {
-            Control.s_controlKeyboardRouting.TraceVerbose($"ToolStripManager.ProcessCmdKey - Checking if it's a menu key: [{keyData}]");
-            ToolStripManager.ModalMenuFilter.ProcessMenuKeyDown(ref m);
+            ModalMenuFilter.ProcessMenuKeyDown(ref m);
         }
 
         return false;
@@ -816,144 +752,118 @@ public static partial class ToolStripManager
         Control? activeControl = Control.FromChildHandle(m.HWnd);
         Control? activeControlInChain = activeControl;
 
-        if (activeControlInChain is not null && IsValidShortcut(shortcut))
+        if (activeControlInChain is null || !IsValidShortcut(shortcut))
         {
-            Control.s_controlKeyboardRouting.TraceVerbose($"ToolStripManager.ProcessShortcut - processing: [{shortcut}]");
-
-            // Start from the focused control and work your way up the parent chain
-            do
-            {
-                // Check the context menu strip first.
-                if (activeControlInChain.ContextMenuStrip is not null)
-                {
-                    if (activeControlInChain.ContextMenuStrip.Shortcuts.TryGetValue(shortcut, out ToolStripMenuItem? item))
-                    {
-                        if (item.ProcessCmdKey(ref m, shortcut))
-                        {
-                            Control.s_controlKeyboardRouting.TraceVerbose(
-                                $"ToolStripManager.ProcessShortcut - found item on context menu: [{item}]");
-                            return true;
-                        }
-                    }
-                }
-
-                activeControlInChain = activeControlInChain.ParentInternal;
-            }
-            while (activeControlInChain is not null);
-
-            if (activeControlInChain is not null)
-            {
-                // The keystroke may applies to one of our parents...
-                // a WM_CONTEXTMENU message bubbles up to the parent control
-                activeControl = activeControlInChain;
-            }
-
-            bool retVal = false;
-            bool needsPrune = false;
-
-            // Now search the toolstrips
-            for (int i = 0; i < ToolStrips.Count; i++)
-            {
-                bool isAssociatedContextMenu = false;
-                bool isDoublyAssignedContextMenuStrip = false;
-
-                if (ToolStrips[i] is not ToolStrip toolStrip)
-                {
-                    // Consider prune tree.
-                    needsPrune = true;
-                    continue;
-                }
-                else if (activeControl is not null && toolStrip == activeControl.ContextMenuStrip)
-                {
-                    continue;
-                }
-                else if (toolStrip.Shortcuts.ContainsKey(shortcut))
-                {
-                    if (toolStrip.IsDropDown)
-                    {
-                        // We don't want to process someone else's context menu (e.g. button1 and button2 have context menus)
-                        // button2's context menu should not be processed if button1 is the one we're processing.
-
-                        ToolStripDropDown dropDown = (ToolStripDropDown)toolStrip;
-
-                        // If a context menu is re-used between the main menu and the
-                        // and some other control's context menu, we should go ahead and evaluate it.
-
-                        if (dropDown.GetFirstDropDown() is ContextMenuStrip topLevelContextMenu)
-                        {
-                            isDoublyAssignedContextMenuStrip = topLevelContextMenu.IsAssignedToDropDownItem;
-                            if (!isDoublyAssignedContextMenuStrip)
-                            {
-                                if (topLevelContextMenu != activeControl!.ContextMenuStrip)
-                                {
-                                    // The toplevel context menu is NOT the same as the active control's context menu.
-                                    continue;
-                                }
-                                else
-                                {
-                                    isAssociatedContextMenu = true;
-                                }
-                            }
-                        }
-
-                        // else it's not a child of a context menu
-                    }
-
-                    bool rootWindowsMatch = false;
-
-                    if (!isAssociatedContextMenu)
-                    {
-                        // Make sure that were processing shortcuts for the correct window.
-                        // since the shortcut lookup is faster than this check we've postponed this to the last
-                        // possible moment.
-                        ToolStrip? topMostToolStrip = toolStrip.GetToplevelOwnerToolStrip();
-                        if (topMostToolStrip is not null && activeControl is not null)
-                        {
-                            HWND rootWindowOfToolStrip = PInvoke.GetAncestor(topMostToolStrip, GET_ANCESTOR_FLAGS.GA_ROOT);
-                            HWND rootWindowOfControl = PInvoke.GetAncestor(activeControl, GET_ANCESTOR_FLAGS.GA_ROOT);
-                            rootWindowsMatch = rootWindowOfToolStrip == rootWindowOfControl;
-
-                            if (rootWindowsMatch)
-                            {
-                                // Double check this is not an MDIContainer type situation...
-                                if (Control.FromHandle(rootWindowOfControl) is Form mainForm && mainForm.IsMdiContainer)
-                                {
-                                    Form? toolStripForm = topMostToolStrip.FindForm();
-                                    if (toolStripForm != mainForm && toolStripForm is not null)
-                                    {
-                                        // We should only process shortcuts of the ActiveMDIChild or the Main Form.
-                                        rootWindowsMatch = toolStripForm == mainForm.ActiveMdiChildInternal;
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    if (isAssociatedContextMenu || rootWindowsMatch || isDoublyAssignedContextMenuStrip)
-                    {
-                        if (toolStrip.Shortcuts.TryGetValue(shortcut, out ToolStripMenuItem? item))
-                        {
-                            if (item.ProcessCmdKey(ref m, shortcut))
-                            {
-                                Control.s_controlKeyboardRouting.TraceVerbose(
-                                    $"ToolStripManager.ProcessShortcut - found item on toolstrip: [{item}]");
-                                retVal = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (needsPrune)
-            {
-                PruneToolStripList();
-            }
-
-            return retVal;
+            return false;
         }
 
-        return false;
+        // Start from the focused control and work your way up the parent chain
+        do
+        {
+            // Check the context menu strip first.
+            if (activeControlInChain.ContextMenuStrip is not null
+                && activeControlInChain.ContextMenuStrip.Shortcuts.TryGetValue(shortcut, out ToolStripMenuItem? item)
+                && item.ProcessCmdKey(ref m, shortcut))
+            {
+                return true;
+            }
+
+            activeControlInChain = activeControlInChain.ParentInternal;
+        }
+        while (activeControlInChain is not null);
+
+        if (activeControlInChain is not null)
+        {
+            // The keystroke may apply to one of our parents, a WM_CONTEXTMENU message bubbles up to the parent control.
+            activeControl = activeControlInChain;
+        }
+
+        bool retVal = false;
+
+        // Now search the toolstrips
+        foreach (ToolStrip toolStrip in ToolStrips)
+        {
+            bool isAssociatedContextMenu = false;
+            bool isDoublyAssignedContextMenuStrip = false;
+
+            if ((activeControl is not null && toolStrip == activeControl.ContextMenuStrip)
+                || !toolStrip.Shortcuts.ContainsKey(shortcut))
+            {
+                continue;
+            }
+
+            if (toolStrip.IsDropDown)
+            {
+                // We don't want to process someone else's context menu (e.g. button1 and button2 have context menus)
+                // button2's context menu should not be processed if button1 is the one we're processing.
+
+                ToolStripDropDown dropDown = (ToolStripDropDown)toolStrip;
+
+                // If a context menu is re-used between the main menu and the
+                // and some other control's context menu, we should go ahead and evaluate it.
+
+                if (dropDown.GetFirstDropDown() is ContextMenuStrip topLevelContextMenu)
+                {
+                    isDoublyAssignedContextMenuStrip = topLevelContextMenu.IsAssignedToDropDownItem;
+                    if (!isDoublyAssignedContextMenuStrip)
+                    {
+                        if (topLevelContextMenu != activeControl!.ContextMenuStrip)
+                        {
+                            // The toplevel context menu is NOT the same as the active control's context menu.
+                            continue;
+                        }
+                        else
+                        {
+                            isAssociatedContextMenu = true;
+                        }
+                    }
+                }
+
+                // else it's not a child of a context menu
+            }
+
+            bool rootWindowsMatch = false;
+
+            if (!isAssociatedContextMenu)
+            {
+                // Make sure that were processing shortcuts for the correct window.
+                // since the shortcut lookup is faster than this check we've postponed this to the last
+                // possible moment.
+                ToolStrip? topMostToolStrip = toolStrip.GetToplevelOwnerToolStrip();
+                if (topMostToolStrip is not null && activeControl is not null)
+                {
+                    HWND rootWindowOfToolStrip = PInvoke.GetAncestor(topMostToolStrip, GET_ANCESTOR_FLAGS.GA_ROOT);
+                    HWND rootWindowOfControl = PInvoke.GetAncestor(activeControl, GET_ANCESTOR_FLAGS.GA_ROOT);
+                    rootWindowsMatch = rootWindowOfToolStrip == rootWindowOfControl;
+
+                    if (rootWindowsMatch)
+                    {
+                        // Double check this is not an MDIContainer type situation...
+                        if (Control.FromHandle(rootWindowOfControl) is Form mainForm && mainForm.IsMdiContainer)
+                        {
+                            Form? toolStripForm = topMostToolStrip.FindForm();
+                            if (toolStripForm != mainForm && toolStripForm is not null)
+                            {
+                                // We should only process shortcuts of the ActiveMDIChild or the Main Form.
+                                rootWindowsMatch = toolStripForm == mainForm.ActiveMdiChildInternal;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (isAssociatedContextMenu || rootWindowsMatch || isDoublyAssignedContextMenuStrip)
+            {
+                if (toolStrip.Shortcuts.TryGetValue(shortcut, out ToolStripMenuItem? item)
+                    && item.ProcessCmdKey(ref m, shortcut))
+                {
+                    retVal = true;
+                    break;
+                }
+            }
+        }
+
+        return retVal;
     }
 
     /// <summary>
@@ -964,13 +874,10 @@ public static partial class ToolStripManager
     /// </summary>
     internal static bool ProcessMenuKey(ref Message m)
     {
-        Control.s_controlKeyboardRouting.TraceVerbose($"ToolStripManager.ProcessMenuKey: [{m}]");
         if (!IsThreadUsingToolStrips())
         {
             return false;
         }
-
-        ToolStrip.s_snapFocusDebug.TraceVerbose("[ProcessMenuKey] Determining whether we should send focus to MenuStrip");
 
         Keys keyData = (Keys)(nint)m.LParamInternal;
 
@@ -991,8 +898,6 @@ public static partial class ToolStripManager
                     // Only activate the menu if there's no win32 menu. Win32 menus trump menustrips.
                     menuStripToActivate = GetMainMenuStrip(toplevelControl);
                 }
-
-                ToolStrip.s_snapFocusDebug.TraceVerbose($"[ProcessMenuKey] MenuStripToActivate is: {menuStripToActivate}");
             }
         }
 
@@ -1021,28 +926,23 @@ public static partial class ToolStripManager
             {
                 // If it's Shift+F10 and we're already InMenuMode, then we
                 // need to cancel this message, otherwise we'll enter the native modal menu loop.
-                ToolStrip.s_snapFocusDebug.TraceVerbose($"[ProcessMenuKey] DETECTED SHIFT+F10{keyData}");
-                return ToolStripManager.ModalMenuFilter.InMenuMode;
+                return ModalMenuFilter.InMenuMode;
             }
             else
             {
                 if (menuStripToActivate is not null && !ModalMenuFilter.MenuKeyToggle)
                 {
-                    ToolStrip.s_snapFocusDebug.TraceVerbose("[ProcessMenuKey] attempting to set focus to menustrip");
-
                     // If we've alt-tabbed away don't snap/restore focus.
                     HWND topmostParentOfMenu = PInvoke.GetAncestor(menuStripToActivate, GET_ANCESTOR_FLAGS.GA_ROOT);
-                    HWND foregroundWindow = PInvoke.GetForegroundWindow();
+                    HWND foregroundWindow = PInvokeCore.GetForegroundWindow();
 
                     if (topmostParentOfMenu == foregroundWindow)
                     {
-                        ToolStrip.s_snapFocusDebug.TraceVerbose("[ProcessMenuKey] ToolStripManager call MenuStrip.OnMenuKey");
                         return menuStripToActivate.OnMenuKey();
                     }
                 }
                 else if (menuStripToActivate is not null)
                 {
-                    ToolStrip.s_snapFocusDebug.TraceVerbose("[ProcessMenuKey] Resetting MenuKeyToggle");
                     ModalMenuFilter.MenuKeyToggle = false;
                     return true;
                 }
@@ -1146,15 +1046,14 @@ public static partial class ToolStripManager
 
     internal static List<ToolStrip> FindMergeableToolStrips(ContainerControl? container)
     {
-        List<ToolStrip> result = new();
+        List<ToolStrip> result = [];
         if (container is not null)
         {
-            for (int i = 0; i < ToolStrips.Count; i++)
+            foreach (ToolStrip toolStrip in ToolStrips)
             {
-                ToolStrip? candidateTS = (ToolStrip?)ToolStrips[i];
-                if (candidateTS is not null && candidateTS.AllowMerge && container == candidateTS.FindForm())
+                if (toolStrip.AllowMerge && container == toolStrip.FindForm())
                 {
-                    result.Add(candidateTS);
+                    result.Add(toolStrip);
                 }
             }
         }
@@ -1165,7 +1064,7 @@ public static partial class ToolStripManager
     }
 
     private static bool IsSpecialMDIStrip(ToolStrip toolStrip)
-        => toolStrip is MdiControlStrip || toolStrip is MdiWindowListStrip;
+        => toolStrip is MdiControlStrip or MdiWindowListStrip;
 
     /// <summary>
     ///  Merge two toolstrips
@@ -1182,13 +1081,15 @@ public static partial class ToolStripManager
 
         // We only do this if the source and target toolstrips are the same
         bool canMerge = IsSpecialMDIStrip(sourceToolStrip);
-        canMerge = (canMerge || (sourceToolStrip.AllowMerge &&
-                                  targetToolStrip.AllowMerge &&
-                                  (sourceToolStrip.GetType().IsAssignableFrom(targetToolStrip.GetType()) || targetToolStrip.GetType().IsAssignableFrom(sourceToolStrip.GetType()))));
+        canMerge = canMerge
+            || (sourceToolStrip.AllowMerge
+                && targetToolStrip.AllowMerge
+                && (sourceToolStrip.GetType().IsAssignableFrom(targetToolStrip.GetType())
+                    || targetToolStrip.GetType().IsAssignableFrom(sourceToolStrip.GetType())));
+
         MergeHistory? mergeHistory = null;
         if (canMerge)
         {
-            Debug.Indent();
             mergeHistory = new MergeHistory(sourceToolStrip);
 
             int originalCount = sourceToolStrip.Items.Count;
@@ -1214,7 +1115,6 @@ public static partial class ToolStripManager
                 }
                 finally
                 {
-                    Debug.Unindent();
                     sourceToolStrip.ResumeLayout();
                     targetToolStrip.ResumeLayout();
                 }
@@ -1232,8 +1132,8 @@ public static partial class ToolStripManager
 
     private static void MergeRecursive(ToolStripItem source, ToolStripItemCollection destinationItems, Stack<MergeHistoryItem> history)
     {
-        Debug.Indent();
         MergeHistoryItem maction;
+
         switch (source.MergeAction)
         {
             case MergeAction.MatchOnly:
@@ -1336,8 +1236,6 @@ public static partial class ToolStripManager
                 history.Push(maction);
                 break;
         }
-
-        Debug.Unindent();
     }
 
     /// <summary>
@@ -1349,18 +1247,11 @@ public static partial class ToolStripManager
         ArgumentNullException.ThrowIfNull(targetName);
 
         ToolStrip? target = FindToolStrip(targetName);
-        if (target is null)
-        {
-            return false;
-        }
-        else
-        {
-            return Merge(sourceToolStrip, target);
-        }
+        return target is not null && Merge(sourceToolStrip, target);
     }
 
     /// <remarks>
-    ///  Doesn't do a null check on source - if it's null we unmerge everything
+    ///  <para>Doesn't do a null check on source - if it's null we unmerge everything</para>
     /// </remarks>
     internal static bool RevertMergeInternal(ToolStrip targetToolStrip, ToolStrip? sourceToolStrip, bool revertMDIControls)
     {
@@ -1422,7 +1313,6 @@ public static partial class ToolStripManager
                     reApply.Push(history.MergedToolStrip);
                 }
 
-                Debug.Indent();
                 while (history.MergeHistoryItemsStack.Count > 0)
                 {
                     MergeHistoryItem historyItem = history.MergeHistoryItemsStack.Pop();
@@ -1439,8 +1329,6 @@ public static partial class ToolStripManager
                             break;
                     }
                 }
-
-                Debug.Unindent();
             }
 
             // Re-apply the merges of the toolstrips we had to unmerge first.
@@ -1469,23 +1357,11 @@ public static partial class ToolStripManager
     ///  Unmerge two toolstrips
     /// </summary>
     public static bool RevertMerge(ToolStrip targetToolStrip, ToolStrip sourceToolStrip)
-    {
-        ArgumentNullException.ThrowIfNull(sourceToolStrip);
-
-        return RevertMergeInternal(targetToolStrip, sourceToolStrip, revertMDIControls: false);
-    }
+        => RevertMergeInternal(targetToolStrip, sourceToolStrip.OrThrowIfNull(nameof(sourceToolStrip)), revertMDIControls: false);
 
     /// <summary>
     ///  Unmerge two toolstrips
     /// </summary>
     public static bool RevertMerge(string targetName)
-    {
-        ToolStrip? target = FindToolStrip(targetName);
-        if (target is null)
-        {
-            return false;
-        }
-
-        return RevertMerge(target);
-    }
+        => FindToolStrip(targetName) is ToolStrip target && RevertMerge(target);
 }

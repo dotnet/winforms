@@ -7,6 +7,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="GetSysColorBrush(SYS_COLOR_INDEX)"/>
     public static HBRUSH GetSysColorBrush(Color systemColor)
     {
         Debug.Assert(systemColor.IsSystemColor);

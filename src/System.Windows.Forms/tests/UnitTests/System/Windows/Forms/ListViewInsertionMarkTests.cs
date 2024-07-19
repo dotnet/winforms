@@ -98,7 +98,7 @@ public class ListViewInsertionMarkTests
                 cbSize = (uint)sizeof(LVINSERTMARK)
             };
             Assert.Equal(0, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARK, 0, ref insertMark));
-            Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
+            Assert.Equal(0x80000000, insertMark.dwFlags);
             Assert.Equal(-1, insertMark.iItem);
             Assert.Equal(0u, insertMark.dwReserved);
             Assert.Equal(0, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARKCOLOR));
@@ -110,7 +110,7 @@ public class ListViewInsertionMarkTests
                 cbSize = (uint)sizeof(LVINSERTMARK)
             };
             Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARK, 0, ref insertMark));
-            Assert.Equal(0x80000001, (uint)insertMark.dwFlags);
+            Assert.Equal(0x80000001, insertMark.dwFlags);
             Assert.Equal(0, insertMark.iItem);
             Assert.Equal(0u, insertMark.dwReserved);
             Assert.Equal(0, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARKCOLOR));
@@ -122,7 +122,7 @@ public class ListViewInsertionMarkTests
                 cbSize = (uint)sizeof(LVINSERTMARK)
             };
             Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARK, 0, ref insertMark));
-            Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
+            Assert.Equal(0x80000000, insertMark.dwFlags);
             Assert.Equal(0, insertMark.iItem);
             Assert.Equal(0u, insertMark.dwReserved);
             Assert.Equal(0, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARKCOLOR));
@@ -149,7 +149,7 @@ public class ListViewInsertionMarkTests
                 cbSize = (uint)sizeof(LVINSERTMARK)
             };
             Assert.Equal(0, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARK, 0, ref insertMark));
-            Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
+            Assert.Equal(0x80000000, insertMark.dwFlags);
             Assert.Equal(-1, insertMark.iItem);
             Assert.Equal(0u, insertMark.dwReserved);
             Assert.Equal(0, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARKCOLOR));
@@ -161,7 +161,7 @@ public class ListViewInsertionMarkTests
                 cbSize = (uint)sizeof(LVINSERTMARK)
             };
             Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARK, 0, ref insertMark));
-            Assert.Equal(0x80000001, (uint)insertMark.dwFlags);
+            Assert.Equal(0x80000001, insertMark.dwFlags);
             Assert.Equal(0, insertMark.iItem);
             Assert.Equal(0u, insertMark.dwReserved);
             Assert.Equal(0x785634, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARKCOLOR));
@@ -173,7 +173,7 @@ public class ListViewInsertionMarkTests
                 cbSize = (uint)sizeof(LVINSERTMARK)
             };
             Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARK, 0, ref insertMark));
-            Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
+            Assert.Equal(0x80000000, insertMark.dwFlags);
             Assert.Equal(0, insertMark.iItem);
             Assert.Equal(0u, insertMark.dwReserved);
             Assert.Equal(0x785634, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARKCOLOR));
@@ -240,7 +240,7 @@ public class ListViewInsertionMarkTests
             {
                 RECT* pRect = (RECT*)m.LParam;
                 *pRect = GetInsertMarkRectResult;
-                m.Result = (IntPtr)1;
+                m.Result = 1;
                 return;
             }
 
@@ -374,7 +374,7 @@ public class ListViewInsertionMarkTests
                 cbSize = (uint)sizeof(LVINSERTMARK)
             };
             Assert.Equal(0, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARK, 0, ref insertMark));
-            Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
+            Assert.Equal(0x80000000, insertMark.dwFlags);
             Assert.Equal(-1, insertMark.iItem);
             Assert.Equal(0u, insertMark.dwReserved);
             Assert.Equal(0, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARKCOLOR));
@@ -386,7 +386,7 @@ public class ListViewInsertionMarkTests
                 cbSize = (uint)sizeof(LVINSERTMARK)
             };
             Assert.Equal(0, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARK, 0, ref insertMark));
-            Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
+            Assert.Equal(0x80000000, insertMark.dwFlags);
             Assert.Equal(-1, insertMark.iItem);
             Assert.Equal(0u, insertMark.dwReserved);
             Assert.Equal(0x785634, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARKCOLOR));
@@ -471,7 +471,7 @@ public class ListViewInsertionMarkTests
                 cbSize = (uint)sizeof(LVINSERTMARK)
             };
             Assert.Equal(0, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARK, 0, ref insertMark));
-            Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
+            Assert.Equal(0x80000000, insertMark.dwFlags);
             Assert.Equal(-1, insertMark.iItem);
             Assert.Equal(0u, insertMark.dwReserved);
             Assert.Equal(0, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARKCOLOR));
@@ -484,7 +484,7 @@ public class ListViewInsertionMarkTests
                 cbSize = (uint)sizeof(LVINSERTMARK)
             };
             Assert.Equal(0, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARK, 0, ref insertMark));
-            Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
+            Assert.Equal(0x80000000, insertMark.dwFlags);
             Assert.Equal(-1, insertMark.iItem);
             Assert.Equal(0u, insertMark.dwReserved);
             Assert.Equal(0, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARKCOLOR));
@@ -496,7 +496,7 @@ public class ListViewInsertionMarkTests
                 cbSize = (uint)sizeof(LVINSERTMARK)
             };
             Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARK, 0, ref insertMark));
-            Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
+            Assert.Equal(0x80000000, insertMark.dwFlags);
             Assert.Equal(index, insertMark.iItem);
             Assert.Equal(0u, insertMark.dwReserved);
             Assert.Equal(0, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARKCOLOR));
@@ -526,7 +526,7 @@ public class ListViewInsertionMarkTests
                 cbSize = (uint)sizeof(LVINSERTMARK)
             };
             Assert.Equal(0, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARK, 0, ref insertMark));
-            Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
+            Assert.Equal(0x80000000, insertMark.dwFlags);
             Assert.Equal(-1, insertMark.iItem);
             Assert.Equal(0u, insertMark.dwReserved);
             Assert.Equal(0, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARKCOLOR));
@@ -539,7 +539,7 @@ public class ListViewInsertionMarkTests
                 cbSize = (uint)sizeof(LVINSERTMARK)
             };
             Assert.Equal(0, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARK, 0, ref insertMark));
-            Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
+            Assert.Equal(0x80000000, insertMark.dwFlags);
             Assert.Equal(-1, insertMark.iItem);
             Assert.Equal(0u, insertMark.dwReserved);
             Assert.Equal(0x785634, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARKCOLOR));
@@ -551,7 +551,7 @@ public class ListViewInsertionMarkTests
                 cbSize = (uint)sizeof(LVINSERTMARK)
             };
             Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARK, 0, ref insertMark));
-            Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
+            Assert.Equal(0x80000000, insertMark.dwFlags);
             Assert.Equal(index, insertMark.iItem);
             Assert.Equal(0u, insertMark.dwReserved);
             Assert.Equal(0x785634, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARKCOLOR));
@@ -616,7 +616,7 @@ public class ListViewInsertionMarkTests
                 Assert.Equal(2, pPt->Y);
                 LVINSERTMARK* pInsertMark = (LVINSERTMARK*)m.LParam;
                 pInsertMark->iItem = InsertMarkHitTestResult;
-                m.Result = (IntPtr)1;
+                m.Result = 1;
                 return;
             }
 

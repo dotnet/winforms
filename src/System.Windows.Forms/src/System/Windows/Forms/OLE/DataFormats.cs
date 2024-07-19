@@ -154,10 +154,7 @@ public static partial class DataFormats
     /// </summary>
     public static Format GetFormat(string format)
     {
-        if (string.IsNullOrWhiteSpace(format))
-        {
-            throw new ArgumentException(nameof(format));
-        }
+        ArgumentException.ThrowIfNullOrWhiteSpace(format);
 
         lock (s_internalSyncObject)
         {
@@ -197,20 +194,22 @@ public static partial class DataFormats
     /// <summary>
     ///  Gets a <see cref="Format"/> with the Windows Clipboard numeric ID and name for the specified ID.
     /// </summary>
-    public static unsafe Format GetFormat(int id)
-    {
+    public static Format GetFormat(int id) =>
         // Win32 uses an unsigned 16 bit type as a format ID, thus stripping off the leading bits.
         // Registered format IDs are in the range 0xC000 through 0xFFFF, thus it's important
         // to represent format as an unsigned type.
-        ushort clampedId = (ushort)(id & 0xFFFF);
+        GetFormat((ushort)(id & 0xFFFF));
 
+    /// <inheritdoc cref="GetFormat(int)"/>
+    internal static unsafe Format GetFormat(ushort id)
+    {
         lock (s_internalSyncObject)
         {
             EnsurePredefined();
 
             for (int n = 0; n < s_formatCount; n++)
             {
-                if (s_formatList[n].Id == clampedId)
+                if (s_formatList[n].Id == id)
                 {
                     return s_formatList[n];
                 }
@@ -224,19 +223,19 @@ public static partial class DataFormats
             Span<char> formatName = stackalloc char[256];
             fixed (char* pFormatName = formatName)
             {
-                int length = PInvoke.GetClipboardFormatName(clampedId, pFormatName, 256);
+                int length = PInvoke.GetClipboardFormatName(id, pFormatName, 256);
                 if (length != 0)
                 {
-                    name = formatName.Slice(0, length).ToString();
+                    name = formatName[..length].ToString();
                 }
             }
 
             // This can happen if windows adds a standard format that we don't know about,
             // so we should play it safe.
-            name ??= $"Format{clampedId}";
+            name ??= $"Format{id}";
 
             EnsureFormatSpace(1);
-            s_formatList[s_formatCount] = new Format(name, clampedId);
+            s_formatList[s_formatCount] = new Format(name, id);
             return s_formatList[s_formatCount++];
         }
     }
@@ -270,8 +269,8 @@ public static partial class DataFormats
     {
         if (s_formatCount == 0)
         {
-            s_formatList = new Format[]
-            {
+            s_formatList =
+            [
                 // Text name                  Win32 format ID
                 new(UnicodeTextConstant,       (int)CLIPBOARD_FORMAT.CF_UNICODETEXT),
                 new(TextConstant,              (int)CLIPBOARD_FORMAT.CF_TEXT),
@@ -289,13 +288,13 @@ public static partial class DataFormats
                 new(SymbolicLinkConstant,      (int)CLIPBOARD_FORMAT.CF_SYLK),
                 new(FileDropConstant,          (int)CLIPBOARD_FORMAT.CF_HDROP),
                 new(LocaleConstant,            (int)CLIPBOARD_FORMAT.CF_LOCALE)
-            };
+            ];
 
             s_formatCount = s_formatList.Length;
         }
         else
         {
-            s_formatList ??= Array.Empty<Format>();
+            s_formatList ??= [];
         }
     }
 }

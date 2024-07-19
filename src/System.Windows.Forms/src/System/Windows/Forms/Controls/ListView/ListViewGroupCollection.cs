@@ -31,7 +31,7 @@ public class ListViewGroupCollection : IList
 
     bool IList.IsReadOnly => false;
 
-    private List<ListViewGroup> List => _list ??= new List<ListViewGroup>();
+    private List<ListViewGroup> List => _list ??= [];
 
     public ListViewGroup this[int index]
     {

@@ -7,6 +7,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="ImmGetContext(HWND)"/>
     public static HIMC ImmGetContext<T>(T hWnd) where T : IHandle<HWND>
     {
         HIMC result = ImmGetContext(hWnd.Handle);

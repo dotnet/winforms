@@ -287,6 +287,11 @@
         <target state="translated">IList 또는 IListSource를 복합 DataBinding의 데이터 소스로 사용할 수 있습니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="BinaryFormatterNotSupported">
+        <source>BinaryFormatter serialization and deserialization are disabled within this application. See https://aka.ms/binaryformatter for more information.</source>
+        <target state="needs-review-translation">트리밍된 애플리케이션에서는 BinaryFormatter를 사용할 수 없습니다.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
         <source>Occurs when the binding context has changed.</source>
         <target state="translated">바인딩 컨텍스트가 변경될 때 발생합니다.</target>
@@ -410,6 +415,11 @@
       <trans-unit id="BindingNavigatorToolStripName">
         <source>Binding Navigator</source>
         <target state="translated">바인딩 탐색기</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BindingNotSupported">
+        <source>Binding operations are not supported when application trimming is enabled.</source>
+        <target state="translated">애플리케이션 자르기가 사용하도록 설정된 경우 바인딩 작업이 지원되지 않습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingSourceAddingNewEventHandlerDescr">
@@ -1650,6 +1660,11 @@
       <trans-unit id="ControlNotChild">
         <source>'child' is not a child control of this parent.</source>
         <target state="translated">'child'는 이 부모의 자식 컨트롤이 아닙니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlNotSupportedInTrimming">
+        <source>'{0}' is not supported in trimmed applications.</source>
+        <target state="translated">'{0}'은(는) 트리밍된 애플리케이션에서 지원되지 않습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlOnAutoSizeChangedDescr">
@@ -4135,8 +4150,8 @@ To replace this default dialog please handle the DataError event.</source>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_SortedDescr">
-        <source>Occurs when the DataGridView compares two cell values to perform a sort operation.</source>
-        <target state="translated">DataGridView가 정렬 작업을 수행하기 위해 두 셀 값을 비교할 때 발생합니다.</target>
+        <source>Occurs when the DataGridView control completes a sorting operation.</source>
+        <target state="translated">DataGridView 컨트롤이 정렬 작업을 완료할 때 발생합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_StandardTabDescr">
@@ -4627,6 +4642,11 @@ To replace this default dialog please handle the DataError event.</source>
       <trans-unit id="DescriptionWebBrowser">
         <source>Enables the user to browse Web pages inside your form.</source>
         <target state="translated">사용자가 폼에서 웹 페이지를 찾을 수 있습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignTimeFeaturesNotSupported">
+        <source>Design time features are not supported.</source>
+        <target state="translated">디자인 타임 기능은 지원되지 않습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="DispInvokeFailed">
@@ -5207,7 +5227,7 @@ Do you want to replace it?</source>
       </trans-unit>
       <trans-unit id="FolderBrowserDialogMultiSelectDescr">
         <source>Controls whether multiple folders can be selected in the dialog.</source>
-        <target state="new">Controls whether multiple folders can be selected in the dialog.</target>
+        <target state="translated">대화 상자에서 여러 폴더를 선택할 수 있는지 여부를 제어합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogOkRequiresInteraction">
@@ -5227,7 +5247,7 @@ Do you want to replace it?</source>
       </trans-unit>
       <trans-unit id="FolderBrowserDialogSelectedPathsDescr">
         <source>Retrieves the paths of all selected folders in the dialog box.</source>
-        <target state="new">Retrieves the paths of all selected folders in the dialog box.</target>
+        <target state="translated">대화 상자에서 선택한 모든 폴더의 경로를 검색합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogShowHiddenFiles">
@@ -9682,6 +9702,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="TooManyResumeUpdateMenuHandles">
         <source>Too many calls to ResumeUpdateMenuHandles.</source>
         <target state="translated">ResumeUpdateMenuHandles에 대한 호출이 너무 많습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripAllowClickThrough">
+        <source>Allows the control to be interacted when window does not have focus.</source>
+        <target state="translated">창에 포커스가 없을 때 컨트롤이 상호 작용할 수 있도록 허용합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue">

@@ -938,7 +938,7 @@ public class ListViewSubItemCollectionTests
     {
         ListViewItem listViewItem = new();
 
-        listViewItem.SubItems.AddRange(new string[] { "Test 1", "Test 2" }, Color.White, Color.Black, SystemFonts.MenuFont);
+        listViewItem.SubItems.AddRange(["Test 1", "Test 2"], Color.White, Color.Black, SystemFonts.MenuFont);
 
         Assert.Same(listViewItem, listViewItem.SubItems[1]._owner);
         Assert.Same(listViewItem, listViewItem.SubItems[2]._owner);

@@ -7,13 +7,13 @@ public partial class CollectionEditor
 {
     internal class PropertyGridSite : ISite
     {
-        private readonly IServiceProvider? _sp;
+        private readonly IServiceProvider? _serviceProvider;
         private bool _inGetService;
 
-        public PropertyGridSite(IServiceProvider? sp, IComponent comp)
+        public PropertyGridSite(IServiceProvider? serviceProvider, IComponent component)
         {
-            _sp = sp;
-            Component = comp;
+            _serviceProvider = serviceProvider;
+            Component = component;
         }
 
         public IComponent Component { get; }
@@ -28,14 +28,14 @@ public partial class CollectionEditor
             set { }
         }
 
-        public object? GetService(Type t)
+        public object? GetService(Type type)
         {
-            if (!_inGetService && _sp is not null)
+            if (!_inGetService && _serviceProvider is not null)
             {
                 try
                 {
                     _inGetService = true;
-                    return _sp.GetService(t);
+                    return _serviceProvider.GetService(type);
                 }
                 finally
                 {

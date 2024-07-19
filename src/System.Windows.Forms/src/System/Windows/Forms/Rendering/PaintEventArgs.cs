@@ -11,20 +11,26 @@ namespace System.Windows.Forms;
 ///  Provides data for the <see cref="Control.Paint"/> event.
 /// </summary>
 /// <remarks>
-///  Please keep this class consistent with <see cref="PrintPageEventArgs"/>.
+///  <para>
+///   Please keep this class consistent with <see cref="PrintPageEventArgs"/>.
+///  </para>
 /// </remarks>
-public partial class PaintEventArgs : EventArgs, IDisposable, IDeviceContext, IGraphicsHdcProvider
+public partial class PaintEventArgs : EventArgs, IDisposable, IDeviceContext, IGraphicsHdcProvider, IHdcContext
 {
     private readonly DrawingEventArgs _event;
 
     /// <remarks>
-    ///  This is only needed for <see cref="ResetGraphics"/> callers and applies in the following places:
-    ///
-    ///    1. In <see cref="Control.WmPaint(ref Message)"/> when we are painting the background.
-    ///    2. In <see cref="Control.WmPrintClient(ref Message)"/>.
-    ///
-    ///  We can potentially optimize further by skipping the save when we only use <see cref="GraphicsInternal"/>
-    ///  as we shouldn't have messed with the clipping there.
+    ///  <para>
+    ///   This is only needed for <see cref="ResetGraphics"/> callers and applies in the following places:
+    ///  </para>
+    ///  <list type="number">
+    ///   <item><description>In <see cref="Control.WmPaint(ref Message)"/> when we are painting the background.</description></item>
+    ///   <item><description>In <see cref="Control.WmPrintClient(ref Message)"/>.</description></item>
+    ///  </list>
+    ///  <para>
+    ///   We can potentially optimize further by skipping the save when we only use <see cref="GraphicsInternal"/>
+    ///   as we shouldn't have messed with the clipping there.
+    ///  </para>
     /// </remarks>
     private GraphicsState? _savedGraphicsState;
 
@@ -126,8 +132,10 @@ public partial class PaintEventArgs : EventArgs, IDisposable, IDeviceContext, IG
     internal HDC HDC => _event.HDC;
 
     IntPtr IDeviceContext.GetHdc() => Graphics?.GetHdc() ?? IntPtr.Zero;
+    HDC IHdcContext.GetHdc() => (HDC)((IDeviceContext)this).GetHdc();
     void IDeviceContext.ReleaseHdc() => Graphics?.ReleaseHdc();
-    HDC IGraphicsHdcProvider.GetHDC() => _event.GetHDC();
-    Graphics? IGraphicsHdcProvider.GetGraphics(bool create) => _event.GetGraphics(create);
+    void IHdcContext.ReleaseHdc() => ((IDeviceContext)this).ReleaseHdc();
+    IGraphics? IGraphicsHdcProvider.GetGraphics(bool createIfNeeded) => _event.GetGraphics(createIfNeeded);
+    HDC IGraphicsHdcProvider.GetHdc() => _event.GetHDC();
     bool IGraphicsHdcProvider.IsGraphicsStateClean => _event.IsStateClean;
 }

@@ -37,7 +37,7 @@ public partial class PrinterResolution
         {
             if (value is < PrinterResolutionKind.High or > PrinterResolutionKind.Custom)
             {
-                throw new InvalidEnumArgumentException(nameof(value), unchecked((int)value), typeof(PrinterResolutionKind));
+                throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(PrinterResolutionKind));
             }
 
             _kind = value;

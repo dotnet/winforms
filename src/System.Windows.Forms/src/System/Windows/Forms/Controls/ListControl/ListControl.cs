@@ -29,7 +29,7 @@ public abstract class ListControl : Control
     private IFormatProvider? _formatInfo;
     private bool _formattingEnabled;
     private TypeConverter? _displayMemberConverter;
-    private static TypeConverter? _stringTypeConverter;
+    private static TypeConverter? s_stringTypeConverter;
 
     private bool _isDataSourceInitialized;
     private bool _isDataSourceInitEventHooked;
@@ -49,7 +49,7 @@ public abstract class ListControl : Control
         get => _dataSource;
         set
         {
-            if (value is not null && !(value is IList || value is IListSource))
+            if (value is not null and not (IList or IListSource))
             {
                 throw new ArgumentException(SR.BadDataSourceForComplexBinding, nameof(value));
             }
@@ -135,6 +135,11 @@ public abstract class ListControl : Control
     {
         get
         {
+            if (!Binding.IsSupported)
+            {
+                throw new NotSupportedException(SR.BindingNotSupported);
+            }
+
             if (_displayMemberConverter is null)
             {
                 PropertyDescriptorCollection? props = DataManager?.GetItemProperties();
@@ -368,7 +373,7 @@ public abstract class ListControl : Control
 
                 PropertyDescriptorCollection props = _dataManager.GetItemProperties();
                 PropertyDescriptor? property = props.Find(propertyName, true);
-                int index = _dataManager.Find(property, value, true);
+                int index = _dataManager.Find(property, value);
                 SelectedIndex = index;
             }
         }
@@ -422,6 +427,11 @@ public abstract class ListControl : Control
     {
         if (item is not null && !string.IsNullOrEmpty(field))
         {
+            if (!Binding.IsSupported)
+            {
+                throw new NotSupportedException(SR.BindingNotSupported);
+            }
+
             try
             {
                 // if we have a dataSource, then use that to display the string
@@ -449,8 +459,9 @@ public abstract class ListControl : Control
     }
 
     /// <remarks>
-    ///  We use this to prevent getting the selected item when mouse is hovering
-    ///  over the dropdown.
+    ///  <para>
+    ///   We use this to prevent getting the selected item when mouse is hovering over the dropdown.
+    ///  </para>
     /// </remarks>
     private protected bool BindingFieldEmpty => _displayMember.BindingField.Length == 0;
 
@@ -526,7 +537,15 @@ public abstract class ListControl : Control
         }
 
         // Try Formatter.FormatObject
-        _stringTypeConverter ??= TypeDescriptor.GetConverter(typeof(string));
+        if (!UseComponentModelRegisteredTypes)
+        {
+            s_stringTypeConverter ??= TypeDescriptor.GetConverter(typeof(string));
+        }
+        else
+        {
+            // Call the trim safe API
+            s_stringTypeConverter ??= TypeDescriptor.GetConverterFromRegisteredType(typeof(string));
+        }
 
         try
         {
@@ -534,7 +553,7 @@ public abstract class ListControl : Control
                 filteredItem,
                 typeof(string),
                 DisplayMemberConverter,
-                _stringTypeConverter,
+                s_stringTypeConverter,
                 _formatString,
                 _formatInfo,
                 formattedNullValue: null,
@@ -557,16 +576,11 @@ public abstract class ListControl : Control
             return false;
         }
 
-        switch (keyData & Keys.KeyCode)
+        return (keyData & Keys.KeyCode) switch
         {
-            case Keys.PageUp:
-            case Keys.PageDown:
-            case Keys.Home:
-            case Keys.End:
-                return true;
-        }
-
-        return base.IsInputKey(keyData);
+            Keys.PageUp or Keys.PageDown or Keys.Home or Keys.End => true,
+            _ => base.IsInputKey(keyData),
+        };
     }
 
     protected override void OnBindingContextChanged(EventArgs e)
@@ -684,6 +698,11 @@ public abstract class ListControl : Control
                     CurrencyManager? newDataManager = null;
                     if (newDataSource is not null && BindingContext is not null && newDataSource != Convert.DBNull)
                     {
+                        if (!Binding.IsSupported)
+                        {
+                            throw new NotSupportedException(SR.BindingNotSupported);
+                        }
+
                         newDataManager = (CurrencyManager)BindingContext[newDataSource, newDisplayMember.BindingPath];
                     }
 

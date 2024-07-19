@@ -1,7 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.ComponentModel;
 using System.Drawing;
 
 namespace System.Windows.Forms;
@@ -18,9 +17,8 @@ public partial class ErrorProvider
     /// </summary>
     internal partial class ErrorWindow : NativeWindow
     {
-        private static readonly int s_accessibilityProperty = PropertyStore.CreateKey();
-
-        private readonly List<ControlItem> _items = new();
+        private AccessibleObject? _accessibleObject;
+        private readonly List<ControlItem> _items = [];
         private readonly Control _parent;
         private readonly ErrorProvider _provider;
         private Rectangle _windowBounds;
@@ -34,27 +32,12 @@ public partial class ErrorProvider
         {
             _provider = provider;
             _parent = parent;
-            Properties = new PropertyStore();
         }
 
         /// <summary>
         ///  The Accessibility Object for this ErrorProvider
         /// </summary>
-        internal AccessibleObject AccessibilityObject
-        {
-            get
-            {
-                AccessibleObject? accessibleObject = (AccessibleObject?)Properties.GetObject(s_accessibilityProperty);
-
-                if (accessibleObject is null)
-                {
-                    accessibleObject = CreateAccessibilityInstance();
-                    Properties.SetObject(s_accessibilityProperty, accessibleObject);
-                }
-
-                return accessibleObject;
-            }
-        }
+        internal AccessibleObject AccessibilityObject => _accessibleObject ??= CreateAccessibilityInstance();
 
         /// <summary>
         ///  This is called when a control would like to show an error icon.
@@ -82,10 +65,7 @@ public partial class ErrorProvider
         ///  Constructs the new instance of the accessibility object for this ErrorProvider. Subclasses
         ///  should not call base.CreateAccessibilityObject.
         /// </summary>
-        private AccessibleObject CreateAccessibilityInstance()
-        {
-            return new ErrorWindowAccessibleObject(this);
-        }
+        private ErrorWindowAccessibleObject CreateAccessibilityInstance() => new(this);
 
         /// <summary>
         ///  Called to get rid of any resources the Object may have.
@@ -193,7 +173,7 @@ public partial class ErrorProvider
                 PInvoke.GetViewportExtEx(hdc, &originalExtents);
                 PInvoke.SetViewportExtEx(hdc, -originalExtents.Width, originalExtents.Height, lpsz: null);
                 Point originalOrigin = default;
-                PInvoke.GetViewportOrgEx(hdc, &originalOrigin);
+                PInvokeCore.GetViewportOrgEx(hdc, &originalOrigin);
                 PInvoke.SetViewportOrgEx(hdc, originalOrigin.X + _windowBounds.Width - 1, originalOrigin.Y, lppt: null);
             }
         }
@@ -203,8 +183,8 @@ public partial class ErrorProvider
         /// </summary>
         private unsafe void OnPaint()
         {
-            using PInvoke.BeginPaintScope hdc = new((HWND)Handle);
-            using PInvoke.SaveDcScope save = new(hdc);
+            using BeginPaintScope hdc = new(HWND);
+            using SaveDcScope save = new(hdc);
 
             MirrorDcIfNeeded(hdc);
 
@@ -212,7 +192,7 @@ public partial class ErrorProvider
             {
                 ControlItem item = _items[i];
                 Rectangle bounds = item.GetIconBounds(_provider.Region.Size);
-                PInvoke.DrawIconEx(
+                PInvokeCore.DrawIconEx(
                     hdc,
                     bounds.X - _windowBounds.X,
                     bounds.Y - _windowBounds.Y,
@@ -268,13 +248,6 @@ public partial class ErrorProvider
             Debug.Assert(shownTooltips <= 1);
 #endif
         }
-
-        /// <summary>
-        ///  Retrieves our internal property storage object. If you have a property
-        ///  whose value is not always set, you should store it in here to save
-        ///  space.
-        /// </summary>
-        internal PropertyStore Properties { get; }
 
         /// <summary>
         ///  This is called when a control no longer needs to display an error icon.
@@ -396,11 +369,11 @@ public partial class ErrorProvider
             }
 
             using GetDcScope hdc = new(HWND);
-            using PInvoke.SaveDcScope save = new(hdc);
+            using SaveDcScope save = new(hdc);
             MirrorDcIfNeeded(hdc);
 
             using Graphics g = hdc.CreateGraphics();
-            using PInvoke.RegionScope windowRegionHandle = new(windowRegion, g);
+            using RegionScope windowRegionHandle = new(windowRegion, g);
             if (PInvoke.SetWindowRgn(this, windowRegionHandle, fRedraw: true) != 0)
             {
                 // The HWnd owns the region.
@@ -424,8 +397,6 @@ public partial class ErrorProvider
         /// </summary>
         private void WmGetObject(ref Message m)
         {
-            Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"In WmGetObject, this = {GetType().FullName}, lParam = {m.LParamInternal}");
-
             if (m.Msg == (int)PInvoke.WM_GETOBJECT && m.LParamInternal == PInvoke.UiaRootObjectId)
             {
                 // If the requested object identifier is UiaRootObjectId,

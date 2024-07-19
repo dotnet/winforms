@@ -6,15 +6,45 @@ Windows Forms (WinForms) is a UI framework for building Windows desktop applicat
 
 Windows Forms also provides one of the most productive ways to create desktop applications based on the visual designer provided in Visual Studio. It enables drag-and-drop of visual controls and other similar functionality that make it easy to build desktop applications.
 
-### Windows Forms Designer
-For more information about the designer, please see the [Windows Forms Designer Documentation](docs/designer/readme.md).<br />
+## Windows Forms Out-Of-Process Designer
 
-### Relationship to .NET Framework
+For information about the WinForms Designer supporting the .NET runtime and the changes between the .NET Framework Designer (supporting .NET Framework up to version 4.8.1) vs. the .NET Designer (supporting .NET 6, 7, 8, 9+), please see [Windows Forms Designer Documentation](https://learn.microsoft.com/dotnet/desktop/winforms/controls-design/designer-differences-framework?view=netdesktop-8.0).
+
+**Important:** As a Third Party Control Vendor, when you migrate controls from .NET Framework to .NET, your control libraries _at runtime_ are expected to work as before in the context of the respective new TFM (special modernization or security changes in the TFM kept aside, but those are rare breaking changes). Depending on the richness of your control's design-time support, the migration of control designers from .NET Framework to .NET might need to take a series of areas with breaking changes into account. The provided link points out additional resources which help in that migration process.
+
+## Relationship to .NET Framework
 
 This codebase is a fork of the Windows Forms code in the .NET Framework 4.8. 
-In Windows Forms .NET Core 3.0, we've strived to bring the two runtimes to a parity. However since then, we've done a number of changes, including [breaking changes](https://docs.microsoft.com/dotnet/core/compatibility/winforms), which diverged the two.
-For more information about breaking changes, see the [Porting guide][porting-guidelines].
+We started the migration process by targeting .NET Core 3.0, when we've strived to bring the two runtimes to a parity. Since then, we've done a number of changes, including [breaking changes](https://docs.microsoft.com/dotnet/core/compatibility/winforms), which diverged the two. For more information about breaking changes, see the [Porting guide][porting-guidelines].
 
+## The bar for innovation and new features
+
+WinForms is a technology which was originally introduced as a part of .NET Framework 1.0 on February 13th, 2002. It's primary focus was and is to be a Rapid Application Tool for Windows based Apps, and that principal sentiment has not changed over the years. WinForms at the time addressed developer's requests for
+
+* A framework for stable, monolithic Line of Business Apps, even with extremely complicated and complex domain-specific workflows
+* The ability to easily provide rich and accessibility-compliant UIs
+* A safe and - over the first 3 versions of .NET Framework - increasingly performant way to communicate across process boundaries via various Windows Communication Services, or access on-site databases via ADO.NET providers.
+* A very easy to use, visual what-you-see-is-what-you-get designer, which requires little ramp-up time, and was primarily focused to support 96 DPI resolution-based, pixel-coordinated drag & drop design strategies.
+* A flexible, .NET reflection-based Designer extensibility model, utilizing the .NET Component Model.
+* Visual Controls and Components, which provide their own design-time functionality through Control Designers
+
+Over time, and with a growing need to address working scenarios with multi-monitor, high resolution monitors, significantly more powerful hardware, and much more, WinForms has continued to be modernized.
+
+And then there is the evolution of Windows: When new versions of Windows introduce new or change existing APIs or technologies - WinForms needs to keep up and adjust their APIs accordingly.
+
+And exactly **that** is still the primary motivation for once to modernize and innovate, but also the bar to reach for potential innovation areas we either need or want to consider:
+
+* Areas, where for example for security concerns, the Windows team needed to take an depending area out-of-proc, and we see and extreme performance hit in WinForms Apps running under a new Service Pack or a new Windows Version
+* New features to comply with updated industry standards for accessibility.
+* HighDPI and per Monitor V2-Scenarios.
+* Picking up changed or extended Win32 Control functionality, to keep controls in WinForms working the way the Windows team wants them to be used.
+* Addressing Performance and Security issues
+* Introducing ways to support asynchronous calls interatively, to enable apps to pick up migration paths via Windows APIs projection/Windows Desktop Bridge, enable scenarios for async WebAPI, SignalR, Azure Function, etc. calls, so WinForms backends can modernized and even migrated to the cloud.
+
+What would not make the bar: 
+* New functionality which modern Desktop UIs like WPF or WinUI clearly have already
+* Functionality, which would "stretch" a Windows Desktop App to be a mobile, Multi-Media or IoT app.
+* Domain-specific custom controls, which are already provided by the vast variety of third party control vendors
 
 ## Please note
 

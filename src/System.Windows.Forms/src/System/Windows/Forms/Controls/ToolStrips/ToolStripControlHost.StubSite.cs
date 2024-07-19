@@ -113,7 +113,7 @@ public partial class ToolStripControlHost
         /// </summary>
         void IDictionaryService.SetValue(object key, object? value)
         {
-            _dictionary ??= new();
+            _dictionary ??= [];
             ArgumentNullException.ThrowIfNull(key);
 
             if (value is not object)

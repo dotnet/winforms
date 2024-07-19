@@ -87,9 +87,7 @@ public partial class DataGridView
             }
         }
 
-        public bool AllowEdit => CurrencyManager is not null
-            ? CurrencyManager.AllowEdit
-            : false;
+        public bool AllowEdit => CurrencyManager is not null && CurrencyManager.AllowEdit;
 
         public bool AllowRemove
         {
@@ -367,9 +365,9 @@ public partial class DataGridView
 
         private void ProcessListChanged(ListChangedEventArgs e)
         {
-            if (e.ListChangedType == ListChangedType.PropertyDescriptorAdded ||
-                e.ListChangedType == ListChangedType.PropertyDescriptorDeleted ||
-                e.ListChangedType == ListChangedType.PropertyDescriptorChanged)
+            if (e.ListChangedType is ListChangedType.PropertyDescriptorAdded
+                or ListChangedType.PropertyDescriptorDeleted
+                or ListChangedType.PropertyDescriptorChanged)
             {
                 _dataConnectionState[DATACONNECTIONSTATE_processingMetaDataChanges] = true;
                 try
@@ -623,7 +621,7 @@ public partial class DataGridView
                         string? dataPropertyName = null;
                         if (e.PropertyDescriptor is not null)
                         {
-                            dataPropertyName = ((MemberDescriptor)(e.PropertyDescriptor)).Name;
+                            dataPropertyName = e.PropertyDescriptor.Name;
                         }
 
                         for (int columnIndex = 0; columnIndex < _owner.Columns.Count; columnIndex++)
@@ -1518,7 +1516,7 @@ public partial class DataGridView
                 return true;
             }
 
-            if (!(_owner.BindingContext[newDataSource] is CurrencyManager cm))
+            if (_owner.BindingContext[newDataSource] is not CurrencyManager cm)
             {
                 // if we don't have a currency manager then the data member can be valid
                 return false;

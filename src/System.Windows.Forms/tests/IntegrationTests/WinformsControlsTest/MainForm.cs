@@ -1,15 +1,14 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.IntegrationTests.Common;
 using Microsoft.Win32;
 using WindowsFormsApp1;
-using WinformsControlsTest.UserControls;
+using WinFormsControlsTest.UserControls;
 
-namespace WinformsControlsTest;
+namespace WinFormsControlsTest;
 
 [DesignerCategory("code")]
 public partial class MainForm : Form
@@ -244,7 +243,7 @@ public partial class MainForm : Form
         Debug.WriteLine($"MessageBoxFont: {SystemFonts.MessageBoxFont}", nameof(MainForm));
         Debug.WriteLine($"Default font: {Control.DefaultFont}", nameof(MainForm));
 
-        List<Button> buttons = new();
+        List<Button> buttons = [];
         foreach (Control control in overarchingFlowLayoutPanel.Controls)
         {
             if (control is Button button)

@@ -3,17 +3,14 @@
 
 using System.Globalization;
 using System.Windows.Forms.Analyzers;
-using VerifyXunit;
-using Xunit;
 using static System.Windows.Forms.Analyzers.ApplicationConfig;
 
 namespace System.Windows.Forms.Generators.Tests;
 
-[UsesVerify]
 public partial class ApplicationConfigurationInitializeBuilderTests
 {
-    private static readonly string[] s_locales = new[]
-    {
+    private static readonly string[] s_locales =
+    [
         "ar-SA",
         "en-US",
         "es-ES",
@@ -23,7 +20,7 @@ public partial class ApplicationConfigurationInitializeBuilderTests
         "ru-RU",
         "tr-TR",
         "zh-CN"
-    };
+    ];
 
     [Theory]
     [InlineData(null, "default_top_level")]
@@ -31,7 +28,7 @@ public partial class ApplicationConfigurationInitializeBuilderTests
     [InlineData(" ", "default_top_level")]
     [InlineData("\t", "default_top_level")]
     [InlineData("MyProject", "default_boilerplate")]
-    public void ApplicationConfigurationInitializeBuilder_GenerateInitialize_can_handle_namespace(string ns, string expectedFileName)
+    public void ApplicationConfigurationInitializeBuilder_GenerateInitialize_can_handle_namespace(string? ns, string expectedFileName)
     {
         string expected = File.ReadAllText($@"System\Windows\Forms\Generators\MockData\{GetType().Name}.{expectedFileName}.cs");
 
@@ -46,15 +43,16 @@ public partial class ApplicationConfigurationInitializeBuilderTests
         Assert.Equal(expected, output);
     }
 
-    public static IEnumerable<object[]> GenerateInitializeData()
+    public static TheoryData<CultureInfo, object, string> GenerateInitializeData()
     {
+        TheoryData<CultureInfo, object, string> testData = new();
+
         foreach (string cultureName in s_locales)
         {
             CultureInfo culture = new(cultureName);
 
             // EnableVisualStyles: false, true
-            yield return new object[]
-            {
+            testData.Add(
                 culture,
                 new ApplicationConfig(
                     EnableVisualStyles: false,
@@ -63,9 +61,9 @@ public partial class ApplicationConfigurationInitializeBuilderTests
                     UseCompatibleTextRendering: PropertyDefaultValue.UseCompatibleTextRendering
                 ),
                 "EnableVisualStyles=false"
-            };
-            yield return new object[]
-            {
+            );
+
+            testData.Add(
                 culture,
                 new ApplicationConfig(
                     EnableVisualStyles: true,
@@ -74,11 +72,10 @@ public partial class ApplicationConfigurationInitializeBuilderTests
                     UseCompatibleTextRendering: PropertyDefaultValue.UseCompatibleTextRendering
                 ),
                 "EnableVisualStyles=true"
-            };
+            );
 
             // UseCompatibleTextRendering: false, true
-            yield return new object[]
-            {
+            testData.Add(
                 culture,
                 new ApplicationConfig(
                     EnableVisualStyles: PropertyDefaultValue.EnableVisualStyles,
@@ -87,9 +84,9 @@ public partial class ApplicationConfigurationInitializeBuilderTests
                     UseCompatibleTextRendering: false
                 ),
                 "UseCompTextRendering=false"
-            };
-            yield return new object[]
-            {
+            );
+
+            testData.Add(
                 culture,
                 new ApplicationConfig(
                     EnableVisualStyles: PropertyDefaultValue.EnableVisualStyles,
@@ -98,11 +95,10 @@ public partial class ApplicationConfigurationInitializeBuilderTests
                     UseCompatibleTextRendering: true
                 ),
                 "UseCompTextRendering=true"
-            };
+            );
 
             // DefaultFont: null, FontDescriptor
-            yield return new object[]
-            {
+            testData.Add(
                 culture,
                 new ApplicationConfig(
                     EnableVisualStyles: PropertyDefaultValue.EnableVisualStyles,
@@ -111,9 +107,9 @@ public partial class ApplicationConfigurationInitializeBuilderTests
                     UseCompatibleTextRendering: false
                 ),
                 "DefaultFont=null"
-            };
-            yield return new object[]
-            {
+            );
+
+            testData.Add(
                 culture,
                 new ApplicationConfig(
                     EnableVisualStyles: PropertyDefaultValue.EnableVisualStyles,
@@ -122,9 +118,9 @@ public partial class ApplicationConfigurationInitializeBuilderTests
                     UseCompatibleTextRendering: true
                 ),
                 "DefaultFont=default"
-            };
-            yield return new object[]
-            {
+            );
+
+            testData.Add(
                 culture,
                 new ApplicationConfig(
                     EnableVisualStyles: PropertyDefaultValue.EnableVisualStyles,
@@ -133,9 +129,9 @@ public partial class ApplicationConfigurationInitializeBuilderTests
                     UseCompatibleTextRendering: true
                 ),
                 "DefaultFont=Tahoma"
-            };
-            yield return new object[]
-            {
+            );
+
+            testData.Add(
                 culture,
                 new ApplicationConfig(
                     EnableVisualStyles: PropertyDefaultValue.EnableVisualStyles,
@@ -144,8 +140,10 @@ public partial class ApplicationConfigurationInitializeBuilderTests
                     UseCompatibleTextRendering: true
                 ),
                 "DefaultFont=SansSerif"
-            };
+            );
         }
+
+        return testData;
     }
 
     [Theory]
@@ -157,7 +155,7 @@ public partial class ApplicationConfigurationInitializeBuilderTests
         string output = ApplicationConfigurationInitializeBuilder.GenerateInitialize(null, (ApplicationConfig)config);
 
         // Compare all locale tests against the same files - we expect the produced output to be the same
-        return Verifier.Verify(output)
+        return Verify(output)
             .UseMethodName("GenerateInitialize")
             .UseTextForParameters(testName)
             .DisableRequireUniquePrefix();

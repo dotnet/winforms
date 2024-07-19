@@ -548,7 +548,7 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                     ToolStripItem ownerItem = parentDropDown.OwnerItem;
                     if (designerHost.GetDesigner(ownerItem) is ToolStripItemDesigner ownerItemDesigner)
                     {
-                        dragBox = ownerItemDesigner.dragBoxFromMouseDown;
+                        dragBox = ownerItemDesigner._dragBoxFromMouseDown;
                     }
                 }
             }
@@ -567,7 +567,7 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                 // Proceed with the drag and drop, passing in the list item.
                 try
                 {
-                    ArrayList dragItems = new();
+                    List<ToolStripItem> dragItems = [];
                     ICollection selComps = selSvc.GetSelectedComponents();
                     // create our list of controls-to-drag
                     foreach (IComponent comp in selComps)
@@ -626,9 +626,8 @@ internal class ToolStripItemBehavior : Behavior.Behavior
     {
         ToolStripItem currentDropItem = ToolStripDesigner.s_dragItem;
         // Ensure that the list item index is contained in the data.
-        if (e.Data is ToolStripItemDataObject && currentDropItem is not null)
+        if (e.Data is ToolStripItemDataObject data && currentDropItem is not null)
         {
-            ToolStripItemDataObject data = (ToolStripItemDataObject)e.Data;
             // Get the PrimarySelection before the Drag operation...
             ToolStripItem selectedItem = data.PrimarySelection;
             IDesignerHost designerHost = (IDesignerHost)currentDropItem.Site.GetService(typeof(IDesignerHost));
@@ -636,24 +635,24 @@ internal class ToolStripItemBehavior : Behavior.Behavior
             // Do DragDrop only if currentDropItem has changed.
             if (currentDropItem != selectedItem && designerHost is not null)
             {
-                IList components = data.DragComponents;
+                List<ToolStripItem> dragComponents = data.DragComponents;
                 ToolStrip parentToolStrip = currentDropItem.GetCurrentParent();
                 int primaryIndex = -1;
                 string transDesc;
                 bool copy = (e.Effect == DragDropEffects.Copy);
-                if (components.Count == 1)
+                if (dragComponents.Count == 1)
                 {
-                    string name = TypeDescriptor.GetComponentName(components[0]);
+                    string name = TypeDescriptor.GetComponentName(dragComponents[0]);
                     if (name is null || name.Length == 0)
                     {
-                        name = components[0].GetType().Name;
+                        name = dragComponents[0].GetType().Name;
                     }
 
                     transDesc = string.Format(copy ? SR.BehaviorServiceCopyControl : SR.BehaviorServiceMoveControl, name);
                 }
                 else
                 {
-                    transDesc = string.Format(copy ? SR.BehaviorServiceCopyControls : SR.BehaviorServiceMoveControls, components.Count);
+                    transDesc = string.Format(copy ? SR.BehaviorServiceCopyControls : SR.BehaviorServiceMoveControls, dragComponents.Count);
                 }
 
                 DesignerTransaction designerTransaction = designerHost.CreateTransaction(transDesc);
@@ -672,13 +671,15 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                         }
                     }
 
+                    IReadOnlyList<IComponent> components;
+
                     // If we are copying, then we want to make a copy of the components we are dragging
                     if (copy)
                     {
                         // Remember the primary selection if we had one
                         if (selectedItem is not null)
                         {
-                            primaryIndex = components.IndexOf(selectedItem);
+                            primaryIndex = dragComponents.IndexOf(selectedItem);
                         }
 
                         ToolStripKeyboardHandlingService keyboardHandlingService = GetKeyBoardHandlingService(selectedItem);
@@ -687,7 +688,7 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                             keyboardHandlingService.CopyInProgress = true;
                         }
 
-                        components = DesignerUtils.CopyDragObjects(components, currentDropItem.Site);
+                        components = DesignerUtils.CopyDragObjects(dragComponents, currentDropItem.Site);
                         if (keyboardHandlingService is not null)
                         {
                             keyboardHandlingService.CopyInProgress = false;
@@ -698,6 +699,10 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                             selectedItem = components[primaryIndex] as ToolStripItem;
                         }
                     }
+                    else
+                    {
+                        components = dragComponents;
+                    }
 
                     if (e.Effect == DragDropEffects.Move || copy)
                     {
@@ -705,9 +710,9 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                         if (selSvc is not null)
                         {
                             // Insert the item.
-                            if (parentToolStrip is ToolStripOverflow)
+                            if (parentToolStrip is ToolStripOverflow overflow)
                             {
-                                parentToolStrip = (((ToolStripOverflow)parentToolStrip).OwnerItem).Owner;
+                                parentToolStrip = overflow.OwnerItem.Owner;
                             }
 
                             int indexOfItemUnderMouseToDrop = parentToolStrip.Items.IndexOf(ToolStripDesigner.s_dragItem);
@@ -980,14 +985,14 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                 {
                     if (setValues)
                     {
-                        ownerItemDesigner.indexOfItemUnderMouseToDrag = parentDropDown.Items.IndexOf(glyphItem);
+                        ownerItemDesigner._indexOfItemUnderMouseToDrag = parentDropDown.Items.IndexOf(glyphItem);
                         // Create a rectangle using the DragSize, with the mouse position being at the center of the rectangle. On SelectionChanged we recreate the Glyphs ... so need to stash this value on the parentDesigner....
-                        ownerItemDesigner.dragBoxFromMouseDown = _dragBoxFromMouseDown = new Rectangle(new Point(mouseLoc.X - (dragSize.Width / 2), mouseLoc.Y - (dragSize.Height / 2)), dragSize);
+                        ownerItemDesigner._dragBoxFromMouseDown = _dragBoxFromMouseDown = new Rectangle(new Point(mouseLoc.X - (dragSize.Width / 2), mouseLoc.Y - (dragSize.Height / 2)), dragSize);
                     }
                     else
                     {
-                        ownerItemDesigner.indexOfItemUnderMouseToDrag = -1;
-                        ownerItemDesigner.dragBoxFromMouseDown = _dragBoxFromMouseDown = Rectangle.Empty;
+                        ownerItemDesigner._indexOfItemUnderMouseToDrag = -1;
+                        ownerItemDesigner._dragBoxFromMouseDown = _dragBoxFromMouseDown = Rectangle.Empty;
                     }
                 }
             }

@@ -20,7 +20,7 @@ public sealed partial class CodeDomComponentSerializationService
             internal LocalResourceManager() { }
             internal LocalResourceManager(Hashtable? data) { _hashtable = data; }
 
-            internal Hashtable Data => _hashtable ??= new Hashtable();
+            internal Hashtable Data => _hashtable ??= [];
 
             // IResourceWriter
             public void AddResource(string name, object? value) { Data[name] = value; }

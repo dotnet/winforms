@@ -104,11 +104,11 @@ public class ThreadExceptionDialog : Form
             messageText = w.Message;
             if (w.HelpUrl is null)
             {
-                buttons = new Button[] { _continueButton };
+                buttons = [_continueButton];
             }
             else
             {
-                buttons = new Button[] { _continueButton, _helpButton };
+                buttons = [_continueButton, _helpButton];
             }
         }
         else
@@ -128,7 +128,7 @@ public class ThreadExceptionDialog : Form
                     messageFormat = SR.ExDlgErrorText;
                 }
 
-                buttons = new Button[] { _detailsButton, _continueButton, _quitButton };
+                buttons = [_detailsButton, _continueButton, _quitButton];
             }
             else
             {
@@ -141,7 +141,7 @@ public class ThreadExceptionDialog : Form
                     messageFormat = SR.ExDlgContinueErrorText;
                 }
 
-                buttons = new Button[] { _detailsButton, _continueButton };
+                buttons = [_detailsButton, _continueButton];
             }
         }
 
@@ -197,8 +197,6 @@ public class ThreadExceptionDialog : Form
 
         string detailsText = detailsTextBuilder.ToString();
 
-        Graphics g = _message.CreateGraphicsInternal();
-
         Size textSize = new(_scaledMaxWidth - _scaledPaddingWidth, int.MaxValue);
 
         if (ScaleHelper.IsScalingRequirementMet && !UseCompatibleTextRenderingDefault)
@@ -208,13 +206,12 @@ public class ThreadExceptionDialog : Form
         }
         else
         {
+            using Graphics g = _message.CreateGraphicsInternal();
             // if HighDpi improvements are not enabled, or rendering mode is GDI+, use Graphics.MeasureString
             textSize = Size.Ceiling(g.MeasureString(messageText, Font, textSize.Width));
         }
 
         textSize.Height += _scaledExceptionMessageVerticalPadding;
-        g.Dispose();
-
         if (textSize.Width < _scaledMaxTextWidth)
         {
             textSize.Width = _scaledMaxTextWidth;
@@ -228,7 +225,7 @@ public class ThreadExceptionDialog : Form
         int width = textSize.Width + _scaledPaddingWidth;
         int buttonTop = Math.Max(textSize.Height, _scaledMaxTextHeight) + _scaledPaddingHeight;
 
-        Form? activeForm = Form.ActiveForm;
+        Form? activeForm = ActiveForm;
         if (activeForm is null || activeForm.Text.Length == 0)
         {
             Text = SR.ExDlgCaption;
@@ -278,20 +275,26 @@ public class ThreadExceptionDialog : Form
         _detailsButton.FlatStyle = FlatStyle.Standard;
         _detailsButton.Click += new EventHandler(DetailsClick);
 
-        Button? b = null;
+        Button? button = null;
         int startIndex = 0;
 
         if (detailAnchor)
         {
-            b = _detailsButton;
+            button = _detailsButton;
 
-            _expandImage = ScaleHelper.GetIconResourceAsBitmap(GetType(), DownBitmapName, DeviceDpi);
-            _collapseImage = ScaleHelper.GetIconResourceAsBitmap(GetType(), UpBitmapName, DeviceDpi);
+            _expandImage = ScaleHelper.GetSmallIconResourceAsBitmap(
+                GetType(),
+                DownBitmapName,
+                DeviceDpi);
+            _collapseImage = ScaleHelper.GetSmallIconResourceAsBitmap(
+                GetType(),
+                UpBitmapName,
+                DeviceDpi);
 
-            b.SetBounds(_scaledButtonDetailsLeftPadding, buttonTop, _scaledButtonWidth, _scaledButtonHeight);
-            b.Image = _expandImage;
-            b.ImageAlign = ContentAlignment.MiddleLeft;
-            Controls.Add(b);
+            button.SetBounds(_scaledButtonDetailsLeftPadding, buttonTop, _scaledButtonWidth, _scaledButtonHeight);
+            button.Image = _expandImage;
+            button.ImageAlign = ContentAlignment.MiddleLeft;
+            Controls.Add(button);
             startIndex = 1;
         }
 
@@ -300,9 +303,9 @@ public class ThreadExceptionDialog : Form
 
         for (int i = startIndex; i < buttons.Length; i++)
         {
-            b = buttons[i];
-            b.SetBounds(buttonLeft, buttonTop, _scaledButtonWidth, _scaledButtonHeight);
-            Controls.Add(b);
+            button = buttons[i];
+            button.SetBounds(buttonLeft, buttonTop, _scaledButtonWidth, _scaledButtonHeight);
+            Controls.Add(button);
             buttonLeft += _scaledButtonAlignmentWidth;
         }
 
@@ -329,8 +332,8 @@ public class ThreadExceptionDialog : Form
     private void ThreadExceptionDialog_DpiChanged(object? sender, DpiChangedEventArgs e)
     {
         _expandImage?.Dispose();
-        _expandImage = ScaleHelper.GetIconResourceAsBitmap(GetType(), DownBitmapName, DeviceDpi);
-        _collapseImage = ScaleHelper.GetIconResourceAsBitmap(GetType(), UpBitmapName, DeviceDpi);
+        _expandImage = ScaleHelper.GetSmallIconResourceAsBitmap(GetType(), DownBitmapName, DeviceDpi);
+        _collapseImage = ScaleHelper.GetSmallIconResourceAsBitmap(GetType(), UpBitmapName, DeviceDpi);
         _detailsButton.Image = _detailsVisible ? _collapseImage : _expandImage;
 
         if (e.DeviceDpiNew != e.DeviceDpiOld)
@@ -389,6 +392,6 @@ public class ThreadExceptionDialog : Form
             i--;
         }
 
-        return s.Substring(0, i);
+        return s[..i];
     }
 }

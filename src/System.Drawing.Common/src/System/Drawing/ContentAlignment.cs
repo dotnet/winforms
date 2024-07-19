@@ -6,9 +6,9 @@ namespace System.Drawing;
 /// <summary>
 /// Specifies alignment of content on the drawing surface.
 /// </summary>
-[System.ComponentModel.Editor($"System.Drawing.Design.ContentAlignmentEditor, {AssemblyRef.SystemDrawingDesign}",
+[ComponentModel.Editor($"System.Drawing.Design.ContentAlignmentEditor, {AssemblyRef.SystemDrawingDesign}",
                               $"System.Drawing.Design.UITypeEditor, {AssemblyRef.SystemDrawing}")]
-[System.Runtime.CompilerServices.TypeForwardedFrom(AssemblyRef.SystemDrawing)]
+[Runtime.CompilerServices.TypeForwardedFrom(AssemblyRef.SystemDrawing)]
 public enum ContentAlignment
 {
     /// <summary>

@@ -742,21 +742,27 @@ public class MenuStripTests
         Assert.False(control.IsHandleCreated);
     }
 
+    [ActiveIssue("https://github.com/dotnet/winforms/issues/11560")]
     [WinFormsFact]
+    [SkipOnArchitecture(TestArchitectures.X64,
+        "Flaky tests, see: https://github.com/dotnet/winforms/issues/11560")]
     public void MenuStrip_WndProc_InvokeMouseActivate_Success()
     {
         using SubMenuStrip control = new();
         Message m = new()
         {
             Msg = (int)PInvoke.WM_MOUSEACTIVATE,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
         Assert.True(control.IsHandleCreated);
     }
 
+    [ActiveIssue("https://github.com/dotnet/winforms/issues/11561")]
     [WinFormsFact]
+    [SkipOnArchitecture(TestArchitectures.X64,
+        "Flaky tests, see: https://github.com/dotnet/winforms/issues/11561")]
     public void MenuStrip_WndProc_InvokeMouseActivateWithHandle_Success()
     {
         using SubMenuStrip control = new();
@@ -771,7 +777,7 @@ public class MenuStripTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_MOUSEACTIVATE,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -803,7 +809,7 @@ public class MenuStripTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_MOUSEHOVER,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -827,15 +833,15 @@ public class MenuStripTests
 
     private class SubMenuStrip : MenuStrip
     {
-        public new const int ScrollStateAutoScrolling = MenuStrip.ScrollStateAutoScrolling;
+        public new const int ScrollStateAutoScrolling = ScrollableControl.ScrollStateAutoScrolling;
 
-        public new const int ScrollStateHScrollVisible = MenuStrip.ScrollStateHScrollVisible;
+        public new const int ScrollStateHScrollVisible = ScrollableControl.ScrollStateHScrollVisible;
 
-        public new const int ScrollStateVScrollVisible = MenuStrip.ScrollStateVScrollVisible;
+        public new const int ScrollStateVScrollVisible = ScrollableControl.ScrollStateVScrollVisible;
 
-        public new const int ScrollStateUserHasScrolled = MenuStrip.ScrollStateUserHasScrolled;
+        public new const int ScrollStateUserHasScrolled = ScrollableControl.ScrollStateUserHasScrolled;
 
-        public new const int ScrollStateFullDrag = MenuStrip.ScrollStateFullDrag;
+        public new const int ScrollStateFullDrag = ScrollableControl.ScrollStateFullDrag;
 
         public SubMenuStrip() : base()
         {

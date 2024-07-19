@@ -3,6 +3,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using System.Windows.Forms.TestUtilities;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using Point = System.Drawing.Point;
@@ -10,7 +11,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests;
 
-public class CheckBoxTests
+public class CheckBoxTests : AbstractButtonBaseTests
 {
     [WinFormsFact]
     public void CheckBox_Ctor_Default()
@@ -287,6 +288,136 @@ public class CheckBoxTests
     }
 
     [WinFormsTheory]
+    [NewAndDefaultData<EventArgs>]
+    public void CheckBox_OnCheckedChanged_Invoke_CallsCheckedChanged(EventArgs eventArgs)
+    {
+        using SubCheckBox control = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().BeSameAs(control);
+            eventArgs.Should().BeSameAs(e);
+            callCount++;
+        };
+
+        // Call with handler.
+        control.CheckedChanged += handler;
+        control.OnCheckedChanged(eventArgs);
+        callCount.Should().Be(1);
+
+        // Remove handler.
+        control.CheckedChanged -= handler;
+        control.OnCheckedChanged(eventArgs);
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsTheory]
+    [NewAndDefaultData<EventArgs>]
+    public void CheckBox_OnCheckedChanged_InvokeWithHandle_CallsCheckedChanged(EventArgs eventArgs)
+    {
+        using SubCheckBox control = new();
+        control.Handle.Should().NotBe(IntPtr.Zero);
+        int invalidatedCallCount = 0;
+        control.Invalidated += (sender, e) => invalidatedCallCount++;
+        int styleChangedCallCount = 0;
+        control.StyleChanged += (sender, e) => styleChangedCallCount++;
+        int createdCallCount = 0;
+        control.HandleCreated += (sender, e) => createdCallCount++;
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().BeSameAs(control);
+            eventArgs.Should().BeSameAs(e);
+            callCount++;
+        };
+
+        // Call with handler.
+        control.CheckedChanged += handler;
+        control.OnCheckedChanged(eventArgs);
+        callCount.Should().Be(1);
+        control.Handle.Should().NotBe(IntPtr.Zero);
+        control.IsHandleCreated.Should().BeTrue();
+        invalidatedCallCount.Should().Be(0);
+        styleChangedCallCount.Should().Be(0);
+        createdCallCount.Should().Be(0);
+
+        // Remove handler.
+        control.CheckedChanged -= handler;
+        control.OnCheckedChanged(eventArgs);
+        callCount.Should().Be(1);
+        control.Handle.Should().NotBe(IntPtr.Zero);
+        control.IsHandleCreated.Should().BeTrue();
+        invalidatedCallCount.Should().Be(0);
+        styleChangedCallCount.Should().Be(0);
+        createdCallCount.Should().Be(0);
+    }
+
+    [WinFormsTheory]
+    [NewAndDefaultData<EventArgs>]
+    public void CheckBox_OnCheckStateChanged_Invoke_CallsCheckStateChanged(EventArgs eventArgs)
+    {
+        using SubCheckBox control = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().BeSameAs(control);
+            eventArgs.Should().BeSameAs(e);
+            callCount++;
+        };
+
+        // Call with handler.
+        control.CheckStateChanged += handler;
+        control.OnCheckStateChanged(eventArgs);
+        callCount.Should().Be(1);
+
+        // Remove handler.
+        control.CheckStateChanged -= handler;
+        control.OnCheckStateChanged(eventArgs);
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsTheory]
+    [NewAndDefaultData<EventArgs>]
+    public void CheckBox_OnCheckStateChanged_InvokeWithHandle_CallsCheckStateChanged(EventArgs eventArgs)
+    {
+        using SubCheckBox control = new();
+        control.Handle.Should().NotBe(IntPtr.Zero);
+        int invalidatedCallCount = 0;
+        control.Invalidated += (sender, e) => invalidatedCallCount++;
+        int styleChangedCallCount = 0;
+        control.StyleChanged += (sender, e) => styleChangedCallCount++;
+        int createdCallCount = 0;
+        control.HandleCreated += (sender, e) => createdCallCount++;
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().BeSameAs(control);
+            eventArgs.Should().BeSameAs(e);
+            callCount++;
+        };
+
+        // Call with handler.
+        control.CheckStateChanged += handler;
+        control.OnCheckStateChanged(eventArgs);
+        callCount.Should().Be(1);
+        control.Handle.Should().NotBe(IntPtr.Zero);
+        control.IsHandleCreated.Should().BeTrue();
+        invalidatedCallCount.Should().Be(1);
+        styleChangedCallCount.Should().Be(0);
+        createdCallCount.Should().Be(0);
+
+        // Remove handler.
+        control.CheckStateChanged -= handler;
+        control.OnCheckStateChanged(eventArgs);
+        callCount.Should().Be(1);
+        control.Handle.Should().NotBe(IntPtr.Zero);
+        control.IsHandleCreated.Should().BeTrue();
+        invalidatedCallCount.Should().Be(2);
+        styleChangedCallCount.Should().Be(0);
+        createdCallCount.Should().Be(0);
+    }
+
+    [WinFormsTheory]
     [EnumData<ContentAlignment>]
     public void CheckBox_TextAlign_Set_GetReturnsExpected(ContentAlignment value)
     {
@@ -414,6 +545,78 @@ public class CheckBoxTests
         Assert.False(checkBox.IsHandleCreated);
     }
 
+    [WinFormsTheory]
+    [NewAndDefaultData<EventArgs>]
+    public void CheckBox_OnAppearanceChanged_Invoke_CallsDoubleClick(EventArgs eventArgs)
+    {
+        using SubCheckBox control = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().BeSameAs(control);
+            eventArgs.Should().BeSameAs(e);
+            callCount++;
+        };
+
+        // Call with handler.
+        control.AppearanceChanged += handler;
+        control.OnAppearanceChanged(eventArgs);
+        callCount.Should().Be(1);
+
+        // Remove handler.
+        control.AppearanceChanged -= handler;
+        control.OnAppearanceChanged(eventArgs);
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsTheory]
+    [NewAndDefaultData<EventArgs>]
+    public void CheckBox_OnDoubleClick_Invoke_CallsDoubleClick(EventArgs eventArgs)
+    {
+        using SubCheckBox control = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().BeSameAs(control);
+            eventArgs.Should().BeSameAs(e);
+            callCount++;
+        };
+
+        // Call with handler.
+        control.DoubleClick += handler;
+        control.OnDoubleClick(eventArgs);
+        callCount.Should().Be(1);
+
+        // Remove handler.
+        control.DoubleClick -= handler;
+        control.OnDoubleClick(eventArgs);
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsTheory]
+    [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
+    public void CheckBox_OnMouseDoubleClick_Invoke_CallsMouseDoubleClick(MouseEventArgs eventArgs)
+    {
+        using SubCheckBox control = new();
+        int callCount = 0;
+        MouseEventHandler handler = (sender, e) =>
+        {
+            sender.Should().BeSameAs(control);
+            eventArgs.Should().BeSameAs(e);
+            callCount++;
+        };
+
+        // Call with handler.
+        control.MouseDoubleClick += handler;
+        control.OnMouseDoubleClick(eventArgs);
+        callCount.Should().Be(1);
+
+        // Remove handler.
+        control.MouseDoubleClick -= handler;
+        control.OnMouseDoubleClick(eventArgs);
+        callCount.Should().Be(1);
+    }
+
     // the zero here may be an issue with cultural variance
     [WinFormsFact]
     public void CheckBox_ToStringTest()
@@ -492,7 +695,23 @@ public class CheckBoxTests
 
         public new bool GetTopLevel() => base.GetTopLevel();
 
+        public new void OnAppearanceChanged(EventArgs e) => base.OnAppearanceChanged(e);
+
         public new void OnClick(EventArgs e) => base.OnClick(e);
+
+        public new void OnDoubleClick(EventArgs e) => base.OnDoubleClick(e);
+
+        public new void OnMouseDoubleClick(MouseEventArgs e) => base.OnMouseDoubleClick(e);
+
+        public new void OnMouseUp(MouseEventArgs e) => base.OnMouseUp(e);
+
+        public new void OnCheckedChanged(EventArgs e) => base.OnCheckedChanged(e);
+
+        public new void OnCheckStateChanged(EventArgs e) => base.OnCheckStateChanged(e);
+
+        internal new void OnMouseClick(MouseEventArgs e) => base.OnMouseClick(e);
+
+        internal new void OnMouseDown(MouseEventArgs e) => base.OnMouseDown(e);
     }
 
     private class TestCheckBox : CheckBox
@@ -527,4 +746,130 @@ public class CheckBoxTests
             return base.RaiseAutomationPropertyChangedEvent(propertyId, oldValue, newValue);
         }
     }
+
+    [WinFormsFact]
+    public void CheckBox_CheckedChangedEvent_Raised()
+    {
+        using CheckBox checkBox = (CheckBox)CreateButton();
+        bool eventFired = false;
+
+        checkBox.CheckedChanged += (sender, args) => eventFired = true;
+        checkBox.Checked = !checkBox.Checked;
+
+        eventFired.Should().BeTrue();
+    }
+
+    [WinFormsFact]
+    public void CheckBox_CheckStateChangedEvent_Raised()
+    {
+        using CheckBox checkBox = (CheckBox)CreateButton();
+        bool eventFired = false;
+
+        checkBox.CheckStateChanged += (sender, args) => eventFired = true;
+        checkBox.CheckState = checkBox.CheckState == CheckState.Checked ? CheckState.Unchecked : CheckState.Checked;
+
+        eventFired.Should().BeTrue();
+    }
+
+    public static IEnumerable<object[]> Appearance_FlatStyle_TestData()
+    {
+        yield return new object[] { Appearance.Button, FlatStyle.Standard };
+        yield return new object[] { Appearance.Button, FlatStyle.Flat };
+        yield return new object[] { Appearance.Button, FlatStyle.Popup };
+        yield return new object[] { Appearance.Button, FlatStyle.System };
+        yield return new object[] { Appearance.Normal, FlatStyle.Standard };
+        yield return new object[] { Appearance.Normal, FlatStyle.Flat };
+        yield return new object[] { Appearance.Normal, FlatStyle.Popup };
+        yield return new object[] { Appearance.Normal, FlatStyle.System };
+    }
+
+    [WinFormsTheory]
+    [MemberData(nameof(Appearance_FlatStyle_TestData))]
+    public void CheckBox_OverChangeRectangle_Get(Appearance appearance, FlatStyle flatStyle) => base.ButtonBase_OverChangeRectangle_Get(appearance, flatStyle);
+
+    [WinFormsTheory]
+    [MemberData(nameof(Appearance_FlatStyle_TestData))]
+    public void CheckBox_DownChangeRectangle_ReturnsExpectedRectangle(Appearance appearance, FlatStyle flatStyle)
+    {
+        CheckBox checkBox = (CheckBox)CreateButton();
+        checkBox.Appearance = appearance;
+        checkBox.FlatStyle = flatStyle;
+
+        Rectangle downChangeRectangle = checkBox.DownChangeRectangle;
+
+        if (appearance == Appearance.Button || flatStyle == FlatStyle.System)
+        {
+            downChangeRectangle.Should().Be(checkBox.ClientRectangle);
+        }
+        else
+        {
+            downChangeRectangle.Should().Be(checkBox.Adapter.CommonLayout().Layout().CheckBounds);
+        }
+    }
+
+    [WinFormsTheory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public void CheckBox_LeftClick_MouseUpCounts(bool capture)
+    {
+        using Form form = new();
+        using SubCheckBox control = (SubCheckBox)CreateButton();
+        control.Capture = capture;
+        form.Controls.Add(control);
+        control.TabIndex = 9999;
+        form.Show();
+
+        MouseEventArgs eventArgs = new(MouseButtons.Left, 1, new Point(0, 0), 0);
+
+        int callCountOnMouseUp = 0;
+
+        control.MouseUp += (sender, e) =>
+        {
+            sender.Should().Be(control);
+            e.Should().Be(eventArgs);
+            callCountOnMouseUp++;
+        };
+
+        control.OnMouseUp(eventArgs);
+        callCountOnMouseUp.Should().Be(1);
+    }
+
+    [WinFormsTheory]
+    [InlineData(true, '&', "&MnemonicText")]
+    [InlineData(true, 'N', "NonMnemonicText")]
+    [InlineData(true, 'M', "&MnemonicText")]
+    [InlineData(false, 'M', "&MnemonicText")]
+    public void CheckBox_ProcessMnemonic_ValidCases(bool useMnemonic, char charCode, string buttonText)
+    {
+        // Arrange
+        using Form form = new();
+        using SubCheckBox checkBox = new()
+        {
+            UseMnemonic = useMnemonic,
+            Text = buttonText,
+        };
+        form.Controls.Add(checkBox);
+        form.Show();
+
+        // Act
+        bool result = checkBox.ProcessMnemonic(charCode);
+
+        // Assert
+        // Requirements for SUT to process mnemonic
+        bool requirements =
+            useMnemonic
+                && charCode != '&'
+                && buttonText.Contains($"&{charCode}", StringComparison.OrdinalIgnoreCase);
+
+        if (!requirements)
+        {
+            return;
+        }
+
+        result.Should().BeTrue();
+        checkBox.Focused.Should().BeTrue();
+        checkBox.CheckState.Should().Be(CheckState.Checked);
+    }
+
+    protected override ButtonBase CreateButton() => new SubCheckBox();
 }

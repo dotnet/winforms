@@ -833,7 +833,7 @@ public class ListBoxTests
         control.DisplayMemberChanged += displayMemberHandler;
 
         // Set different.
-        List<int> dataSource1 = new();
+        List<int> dataSource1 = [];
         control.DataSource = dataSource1;
         Assert.Same(dataSource1, control.DataSource);
         Assert.Equal(1, dataSourceCallCount);
@@ -846,7 +846,7 @@ public class ListBoxTests
         Assert.Equal(0, displayMemberCallCount);
 
         // Set different.
-        List<int> dataSource2 = new();
+        List<int> dataSource2 = [];
         control.DataSource = dataSource2;
         Assert.Same(dataSource2, control.DataSource);
         Assert.Equal(2, dataSourceCallCount);
@@ -1815,11 +1815,12 @@ public class ListBoxTests
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ListBox))[nameof(ListBox.ItemHeight)];
         using ListBox control = new();
+        Assert.True(control.DrawMode is DrawMode.Normal);
         Assert.False(property.CanResetValue(control));
 
         control.ItemHeight = 15;
         Assert.Equal(15, control.ItemHeight);
-        Assert.True(property.CanResetValue(control));
+        Assert.False(property.CanResetValue(control));
 
         property.ResetValue(control);
         Assert.Equal(Control.DefaultFont.Height, control.ItemHeight);
@@ -1835,7 +1836,7 @@ public class ListBoxTests
 
         control.ItemHeight = 15;
         Assert.Equal(15, control.ItemHeight);
-        Assert.True(property.ShouldSerializeValue(control));
+        Assert.False(property.ShouldSerializeValue(control));
 
         property.ResetValue(control);
         Assert.Equal(Control.DefaultFont.Height, control.ItemHeight);
@@ -2438,8 +2439,8 @@ public class ListBoxTests
     [InlineData(false, 1)]
     public void ListBox_SelectedIndex_SetWithDataManager_SetsDataManagerPosition(bool formattingEnabled, int position)
     {
-        BindingContext bindingContext = new();
-        List<string> dataSource = new() { "item1", "item2", "item3" };
+        BindingContext bindingContext = [];
+        List<string> dataSource = ["item1", "item2", "item3"];
         using SubListBox control = new()
         {
             BindingContext = bindingContext,
@@ -2920,8 +2921,8 @@ public class ListBoxTests
     [InlineData(false, 1)]
     public void ListBox_SelectedItem_SetWithDataManager_SetsDataManagerPosition(bool formattingEnabled, int position)
     {
-        BindingContext bindingContext = new();
-        List<string> dataSource = new() { "item1", "item2", "item3" };
+        BindingContext bindingContext = [];
+        List<string> dataSource = ["item1", "item2", "item3"];
         using SubListBox control = new()
         {
             BindingContext = bindingContext,
@@ -3307,14 +3308,14 @@ public class ListBoxTests
         control.MakeCustom = true;
 
         // Verify equal lengths.
-        control.GetSelCountResult = (IntPtr)1;
-        control.GetSelResult = new int[] { 2 };
+        control.GetSelCountResult = 1;
+        control.GetSelResult = [2];
         Dirty();
         Assert.Equal(new int[] { 2 }, control.SelectedIndices.Cast<int>());
 
         // Verify truncated
-        control.GetSelCountResult = (IntPtr)2;
-        control.GetSelResult = new int[] { 2 };
+        control.GetSelCountResult = 2;
+        control.GetSelResult = [2];
         Dirty();
         Assert.Equal(new int[] { 0, 2 }, control.SelectedIndices.Cast<int>());
 
@@ -3343,7 +3344,7 @@ public class ListBoxTests
             {
                 Assert.Equal(GetSelCountResult, m.WParam);
                 Marshal.Copy(GetSelResult, 0, m.LParam, GetSelResult.Length);
-                m.Result = (IntPtr)GetSelResult.Length;
+                m.Result = GetSelResult.Length;
                 return;
             }
 
@@ -4556,12 +4557,12 @@ public class ListBoxTests
         using SubListBox control = new();
 
         // Add multiple.
-        control.AddItemsCore(new object[] { "item1", "item2" });
+        control.AddItemsCore(["item1", "item2"]);
         Assert.Equal(new string[] { "item1", "item2" }, control.Items.Cast<object>());
         Assert.False(control.IsHandleCreated);
 
         // Add another.
-        control.AddItemsCore(new object[] { "item3" });
+        control.AddItemsCore(["item3"]);
         Assert.Equal(new string[] { "item1", "item2", "item3" }, control.Items.Cast<object>());
         Assert.False(control.IsHandleCreated);
 
@@ -4589,7 +4590,7 @@ public class ListBoxTests
         control.HandleCreated += (sender, e) => createdCallCount++;
 
         // Add multiple.
-        control.AddItemsCore(new object[] { "item1", "item2" });
+        control.AddItemsCore(["item1", "item2"]);
         Assert.Equal(new string[] { "item1", "item2" }, control.Items.Cast<object>());
         Assert.True(control.IsHandleCreated);
         Assert.Equal(1, invalidatedCallCount);
@@ -4597,7 +4598,7 @@ public class ListBoxTests
         Assert.Equal(0, createdCallCount);
 
         // Add another.
-        control.AddItemsCore(new object[] { "item3" });
+        control.AddItemsCore(["item3"]);
         Assert.Equal(new string[] { "item1", "item2", "item3" }, control.Items.Cast<object>());
         Assert.True(control.IsHandleCreated);
         Assert.Equal(2, invalidatedCallCount);
@@ -4844,7 +4845,7 @@ public class ListBoxTests
         control.HandleCreated += (sender, e) => createdCallCount++;
 
         Size result = control.GetPreferredSize(proposedSize);
-        Assert.True(result.Width > 0 && result.Width < 120);
+        Assert.True(result.Width is > 0 and < 120);
         Assert.Equal(control.PreferredHeight, result.Height);
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
@@ -4877,7 +4878,7 @@ public class ListBoxTests
         control.HandleCreated += (sender, e) => createdCallCount++;
 
         Size result = control.GetPreferredSize(proposedSize);
-        Assert.True(result.Width > 0 && result.Width < 120);
+        Assert.True(result.Width is > 0 and < 120);
         Assert.Equal(control.PreferredHeight + 6, result.Height);
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
@@ -5243,7 +5244,7 @@ public class ListBoxTests
         {
             DrawMode = drawMode,
             ExpectedIndex = expectedIndex,
-            GetItemHeightResult = (IntPtr)getItemRectResult
+            GetItemHeightResult = getItemRectResult
         };
         control.Items.Add("Item1");
         control.Items.Add("Item2");
@@ -5814,8 +5815,8 @@ public class ListBoxTests
     [MemberData(nameof(OnSelectedIndexChanged_WithDataManager_TestData))]
     public void ListBox_OnSelectedIndexChanged_InvokeWithDataManager_CallsSelectedIndexChanged(bool formattingEnabled, int position, EventArgs eventArgs)
     {
-        BindingContext bindingContext = new();
-        List<string> dataSource = new() { "item1", "item2", "item3" };
+        BindingContext bindingContext = [];
+        List<string> dataSource = ["item1", "item2", "item3"];
         using SubListBox control = new()
         {
             BindingContext = bindingContext,
@@ -6117,7 +6118,7 @@ public class ListBoxTests
             listBox.CreateControl();
         }
 
-        listBox.Items.AddRange(new object[] { "1", "2", "3" });
+        listBox.Items.AddRange((object[])["1", "2", "3"]);
         listBox.SelectedItem = listBox.Items[0];
 
         Assert.Equal(3, listBox.Items.Count);
@@ -6158,7 +6159,7 @@ public class ListBoxTests
             listBox.CreateControl();
         }
 
-        listBox.Items.AddRange(new object[] { "1", "2", "3", "4" });
+        listBox.Items.AddRange((object[])["1", "2", "3", "4"]);
         listBox.SelectedItems.Add(listBox.Items[0]);
         listBox.SelectedItems.Add(listBox.Items[1]);
 
@@ -6198,7 +6199,7 @@ public class ListBoxTests
             listBox.CreateControl();
         }
 
-        listBox.Items.AddRange(new object[] { "1", "2", "3" });
+        listBox.Items.AddRange((object[])["1", "2", "3"]);
 
         for (int count = listBox.Items.Count; count > 1; count -= 1)
         {
@@ -6234,7 +6235,7 @@ public class ListBoxTests
             listBox.CreateControl();
         }
 
-        listBox.Items.AddRange(new object[] { "1", "2", "3" });
+        listBox.Items.AddRange((object[])["1", "2", "3"]);
 
         for (int count = listBox.Items.Count; count > 1; count -= 1)
         {
@@ -6255,6 +6256,143 @@ public class ListBoxTests
             Assert.Equal(0, listBox.SelectedIndices.Count);
             Assert.Equal(0, listBox.SelectedItems.Count);
         }
+    }
+
+    [WinFormsTheory]
+    [InlineData(true, null, "")]
+    [InlineData(true, "TestItem", "TestItem")]
+    [InlineData(false, "TestItem", "TestItem")]
+    public void ListBox_GetItemText_ReturnsExpected(bool formattingEnabled, string selectedItem, string expected)
+    {
+        using ListBox listBox = new() { FormattingEnabled = formattingEnabled };
+        if (selectedItem is not null)
+        {
+            listBox.Items.Add(selectedItem);
+            listBox.SelectedItem = selectedItem;
+        }
+        else
+        {
+            listBox.SelectedItem = null;
+        }
+
+        string result = listBox.GetItemText(listBox.SelectedItem);
+        result.Should().Be(expected);
+    }
+
+    [WinFormsTheory]
+    [InlineData(DrawMode.OwnerDrawVariable, true)]
+    [InlineData(DrawMode.OwnerDrawFixed, false)]
+    [InlineData(DrawMode.Normal, false)]
+    public void ListBox_Refresh_CallsOnMeasureItemBasedOnDrawMode(DrawMode drawMode, bool expectedMeasureItemCalled)
+    {
+        using ListBox listBox = new()
+        {
+            DrawMode = drawMode,
+            Items = { "Item1", "Item2", "Item3" }
+        };
+
+        bool measureItemCalled = false;
+        listBox.MeasureItem += (sender, e) =>
+        {
+            measureItemCalled = true;
+        };
+
+        listBox.Refresh();
+
+        measureItemCalled.Should().Be(expectedMeasureItemCalled);
+    }
+
+    [WinFormsTheory]
+    [InlineData(new string[] { }, 0)]
+    [InlineData(new string[] { "Item1", "Item2" }, 2)]
+    public void ListBox_ItemsCollection_ReturnsExpectedCount(string[] items, int expectedCount)
+    {
+        using ListBox listBox = new();
+        foreach (string item in items)
+        {
+            listBox.Items.Add(item);
+        }
+
+        int itemCount = listBox.Items.Count;
+        itemCount.Should().Be(expectedCount);
+    }
+
+    [WinFormsFact]
+    public void ListBox_SelectionModeNone_ThrowsArgumentException()
+    {
+        using ListBox listBox = new();
+        listBox.SelectionMode = SelectionMode.None;
+
+        listBox.Items.Add("Item1");
+
+        Action action = () => listBox.SelectedIndex = 0;
+
+        action.Should().Throw<ArgumentException>()
+            .WithMessage("Cannot call this method when SelectionMode is SelectionMode.NONE.*");
+    }
+
+    [WinFormsTheory]
+    [InlineData(SelectionMode.One)]
+    [InlineData(SelectionMode.MultiSimple)]
+    [InlineData(SelectionMode.MultiExtended)]
+    public void ListBox_SelectionModeValid_DoesNotThrow(SelectionMode selectionMode)
+    {
+        using ListBox listBox = new();
+        listBox.SelectionMode = selectionMode;
+
+        listBox.Items.Add("Item1");
+
+        Action action = () => listBox.SelectedIndex = 0;
+
+        action.Should().NotThrow();
+    }
+
+    [WinFormsFact]
+    public void ListBox_PreferredHeight_RecreatingHandle_ReturnsCurrentHeight()
+    {
+        using ListBox listBox = new()
+        {
+            DrawMode = DrawMode.Normal,
+            BorderStyle = BorderStyle.None,
+            Items = { "Item 1", "Item 2", "Item 3" }
+        };
+
+        // Use TestAccessor to call the private RecreateHandle method
+        listBox.TestAccessor().Dynamic.RecreateHandle();
+
+        int totalItemHeight = 0;
+        for (int i = 0; i < listBox.Items.Count; i++)
+        {
+            totalItemHeight += listBox.GetItemHeight(i);
+        }
+
+        int expectedHeight = totalItemHeight + listBox.Padding.Vertical;
+
+        listBox.PreferredHeight.Should().Be(expectedHeight);
+    }
+
+    [WinFormsFact]
+    public void ListBox_PreferredHeight_CreatingHandle_ReturnsCurrentHeight()
+    {
+        using ListBox listBox = new()
+        {
+            DrawMode = DrawMode.Normal,
+            BorderStyle = BorderStyle.None,
+            Items = { "Item 1", "Item 2", "Item 3" }
+        };
+
+        // Use TestAccessor to call the private SetState method and set the state to 'true'
+        listBox.TestAccessor().Dynamic.SetState(1, true);
+
+        int totalItemHeight = 0;
+        for (int i = 0; i < listBox.Items.Count; i++)
+        {
+            totalItemHeight += listBox.GetItemHeight(i);
+        }
+
+        int expectedHeight = totalItemHeight + listBox.Padding.Vertical;
+
+        listBox.PreferredHeight.Should().Be(expectedHeight);
     }
 
     private class SubListBox : ListBox

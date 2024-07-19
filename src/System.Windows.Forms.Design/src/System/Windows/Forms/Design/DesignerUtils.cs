@@ -9,7 +9,6 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Windows.Forms.Design.Behavior;
-using static Interop;
 
 namespace System.Windows.Forms.Design;
 
@@ -23,7 +22,7 @@ internal static class DesignerUtils
     private static SolidBrush s_hoverBrush = new(Color.FromArgb(alpha: 50, SystemColors.Highlight));
     // brush used to draw the resizeable selection borders around controls/components
     private static HatchBrush s_selectionBorderBrush =
-        new(HatchStyle.Percent50, SystemColors.ControlDarkDark, Color.Transparent);
+        new(HatchStyle.Percent50, SystemColors.ControlDarkDark, SystemColors.ControlDarkDark);
     // Pens and Brushes used via GDI to render our grabhandles
     private static HBRUSH s_grabHandleFillBrushPrimary =
         PInvoke.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Window));
@@ -36,71 +35,71 @@ internal static class DesignerUtils
 
     // The box-like image used as the user is dragging comps from the toolbox
     private static Bitmap? s_boxImage;
-    public static int BOXIMAGESIZE = ScaleLogicalToDeviceUnitsX(16);
+    public static int s_boxImageSize = ScaleLogicalToDeviceUnitsX(16);
 
     // selection border size
-    public static int SELECTIONBORDERSIZE = ScaleLogicalToDeviceUnitsX(1);
+    public static int s_selectionBorderSize = ScaleLogicalToDeviceUnitsX(1);
     // Although the selection border is only 1, we actually want a 3 pixel hittestarea
-    public static int SELECTIONBORDERHITAREA = ScaleLogicalToDeviceUnitsX(3);
+    public static int s_selectionBorderHitArea = ScaleLogicalToDeviceUnitsX(3);
 
     // We want to make sure that the 1 pixel selectionborder is centered on the handles.
     // The fact that the border is actually 3 pixels wide works like magic. If you draw a picture, then you will see why.
     // grabhandle size (diameter)
-    public static int HANDLESIZE = ScaleLogicalToDeviceUnitsX(7);
+    public static int s_handleSize = ScaleLogicalToDeviceUnitsX(7);
     // how much should the grabhandle overlap the control
-    public static int HANDLEOVERLAP = ScaleLogicalToDeviceUnitsX(2);
+    public static int s_handleOverlap = ScaleLogicalToDeviceUnitsX(2);
     // we want the selection border to be centered on a grabhandle, so how much do. we need to offset the border from the control to make that happen
-    public static int SELECTIONBORDEROFFSET = ((HANDLESIZE - SELECTIONBORDERSIZE) / 2) - HANDLEOVERLAP;
+    public static int s_selectionBorderOffset = ((s_handleSize - s_selectionBorderSize) / 2) - s_handleOverlap;
 
     // no-resize handle size (diameter)
-    public static int NORESIZEHANDLESIZE = ScaleLogicalToDeviceUnitsX(5);
+    public static int s_noResizeHandleSize = ScaleLogicalToDeviceUnitsX(5);
     // we want the selection border to be centered on a grabhandle, so how much do
     // we need to offset the border from the control to make that happen
-    public static int NORESIZEBORDEROFFSET = ((NORESIZEHANDLESIZE - SELECTIONBORDERSIZE) / 2);
+    public static int s_noResizeBorderOffset = ((s_noResizeHandleSize - s_selectionBorderSize) / 2);
 
     // lock handle height
-    public static int LOCKHANDLEHEIGHT = ScaleLogicalToDeviceUnitsX(9);
+    public static int s_lockHandleHeight = ScaleLogicalToDeviceUnitsX(9);
     // total lock handle width
-    public static int LOCKHANDLEWIDTH = ScaleLogicalToDeviceUnitsX(7);
+    public static int s_lockHandleWidth = ScaleLogicalToDeviceUnitsX(7);
     // how much should the lockhandle overlap the control
-    public static int LOCKHANDLEOVERLAP = ScaleLogicalToDeviceUnitsX(2);
+    public static int s_lockHandleOverlap = ScaleLogicalToDeviceUnitsX(2);
     // we want the selection border to be centered on the no-resize handle, so calculate how many pixels we need
     // to offset the selection border from the control -- since the handle is not square, we need one in each direction
-    public static int LOCKEDSELECTIONBORDEROFFSET_Y = ((LOCKHANDLEHEIGHT - SELECTIONBORDERSIZE) / 2) - LOCKHANDLEOVERLAP;
-    public static int LOCKEDSELECTIONBORDEROFFSET_X = ((LOCKHANDLEWIDTH - SELECTIONBORDERSIZE) / 2) - LOCKHANDLEOVERLAP;
+    public static int s_lockedSelectionBorderOffsetY = ((s_lockHandleHeight - s_selectionBorderSize) / 2) - s_lockHandleOverlap;
+    public static int s_lockedSelectionBorderOffsetX = ((s_lockHandleWidth - s_selectionBorderSize) / 2) - s_lockHandleOverlap;
 
     // upper rectangle size (diameter)
-    public static int LOCKHANDLESIZE_UPPER = ScaleLogicalToDeviceUnitsX(5);
+    public static int s_lockedHandleSizeUpper = ScaleLogicalToDeviceUnitsX(5);
     // lower rectangle size
-    public static int LOCKHANDLEHEIGHT_LOWER = ScaleLogicalToDeviceUnitsX(6);
-    public static int LOCKHANDLEWIDTH_LOWER = ScaleLogicalToDeviceUnitsX(7);
+    public static int s_lockedHandleHeightLower = ScaleLogicalToDeviceUnitsX(6);
+    public static int s_lockedHandleWidthLower = ScaleLogicalToDeviceUnitsX(7);
 
     // Offset used when drawing the upper rect of a lock handle
-    public static int LOCKHANDLEUPPER_OFFSET = (LOCKHANDLEWIDTH_LOWER - LOCKHANDLESIZE_UPPER) / 2;
+    public static int s_lockedHandleUpperOffset = (s_lockedHandleWidthLower - s_lockedHandleSizeUpper) / 2;
     // Offset used when drawing the lower rect of a lock handle
-    public static int LOCKHANDLELOWER_OFFSET = (LOCKHANDLEHEIGHT - LOCKHANDLEHEIGHT_LOWER);
+    public static int s_lockedHandleLowerOffset = (s_lockHandleHeight - s_lockedHandleHeightLower);
 
-    public static int CONTAINERGRABHANDLESIZE = ScaleLogicalToDeviceUnitsX(15);
+    public static int s_containerGrabHandleSize = ScaleLogicalToDeviceUnitsX(15);
     // delay for showing snaplines on keyboard movements
-    public static int SNAPELINEDELAY = 1000;
+    public static int s_snapLineDelay = 1000;
 
     // min new row/col style size for the table layout panel
-    public static int MINIMUMSTYLESIZE = 20;
-    public static int MINIMUMSTYLEPERCENT = 50;
+    public static int s_minimumStyleSize = 20;
+    public static int s_minimumStylePercent = 50;
 
     // min width/height used to create bitmap to paint control into.
-    public static int MINCONTROLBITMAPSIZE = 1;
+    public static int s_minimumControlBitmapSize = 1;
     // min size for row/col style during a resize drag operation
-    public static int MINUMUMSTYLESIZEDRAG = 8;
+    public static int s_minimumSizeDrag = 8;
     // min # of rows/cols for the tablelayoutpanel when it is newly created
-    public static int DEFAULTROWCOUNT = 2;
-    public static int DEFAULTCOLUMNCOUNT = 2;
+    public static int s_defaultRowCount = 2;
+    public static int s_defaultColumnCount = 2;
 
     // size of the col/row grab handle glyphs for the table layout panel
-    public static int RESIZEGLYPHSIZE = ScaleLogicalToDeviceUnitsX(4);
+    public static int s_resizeGlyphSize = ScaleLogicalToDeviceUnitsX(4);
 
     // default value for Form padding if it has not been set in the designer (usability study request)
-    public static int DEFAULTFORMPADDING = 9;
+    public static int s_defaultFormPadding = 9;
 
     // use these value to signify ANY of the right, top, left, center, or bottom alignments with the ContentAlignment enum.
     public const ContentAlignment AnyTopAlignment = ContentAlignment.TopLeft | ContentAlignment.TopCenter | ContentAlignment.TopRight;
@@ -115,10 +114,10 @@ internal static class DesignerUtils
         {
             if (s_boxImage is null)
             {
-                s_boxImage = new Bitmap(BOXIMAGESIZE, BOXIMAGESIZE, PixelFormat.Format32bppPArgb);
+                s_boxImage = new Bitmap(s_boxImageSize, s_boxImageSize, PixelFormat.Format32bppPArgb);
                 using Graphics g = Graphics.FromImage(s_boxImage);
-                g.FillRectangle(new SolidBrush(SystemColors.InactiveBorder), 0, 0, BOXIMAGESIZE, BOXIMAGESIZE);
-                g.DrawRectangle(new Pen(SystemColors.ControlDarkDark), 0, 0, BOXIMAGESIZE - 1, BOXIMAGESIZE - 1);
+                g.FillRectangle(new SolidBrush(SystemColors.InactiveBorder), 0, 0, s_boxImageSize, s_boxImageSize);
+                g.DrawRectangle(new Pen(SystemColors.ControlDarkDark), 0, 0, s_boxImageSize - 1, s_boxImageSize - 1);
             }
 
             return s_boxImage;
@@ -165,18 +164,18 @@ internal static class DesignerUtils
         s_hoverBrush = new SolidBrush(Color.FromArgb(50, SystemColors.Highlight));
 
         s_selectionBorderBrush.Dispose();
-        s_selectionBorderBrush = new HatchBrush(HatchStyle.Percent50, SystemColors.ControlDarkDark, Color.Transparent);
+        s_selectionBorderBrush = new HatchBrush(HatchStyle.Percent50, SystemColors.ControlDarkDark, SystemColors.ControlDarkDark);
 
-        PInvoke.DeleteObject(s_grabHandleFillBrushPrimary);
+        PInvokeCore.DeleteObject(s_grabHandleFillBrushPrimary);
         s_grabHandleFillBrushPrimary = PInvoke.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Window));
 
-        PInvoke.DeleteObject(s_grabHandleFillBrush);
+        PInvokeCore.DeleteObject(s_grabHandleFillBrush);
         s_grabHandleFillBrush = PInvoke.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlText));
 
-        PInvoke.DeleteObject(s_grabHandlePenPrimary);
+        PInvokeCore.DeleteObject(s_grabHandlePenPrimary);
         s_grabHandlePenPrimary = PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlText));
 
-        PInvoke.DeleteObject(s_grabHandlePen);
+        PInvokeCore.DeleteObject(s_grabHandlePen);
         s_grabHandlePen = PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Window));
     }
 
@@ -239,30 +238,30 @@ internal static class DesignerUtils
     }
 
     /// <summary>
-    ///  Used for drawing the grabhandles around sizeable selected controls and components.
+    ///  Used for drawing the grab handles around sizeable selected controls and components.
     /// </summary>
-    public static void DrawGrabHandle(Graphics graphics, Rectangle bounds, bool isPrimary, Glyph glyph)
+    public static void DrawGrabHandle(Graphics graphics, Rectangle bounds, bool isPrimary)
     {
         using DeviceContextHdcScope hDC = new(graphics, applyGraphicsState: false);
 
         // Set our pen and brush based on primary selection
-        using PInvoke.SelectObjectScope brushSelection = new(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
-        using PInvoke.SelectObjectScope penSelection = new(hDC, isPrimary ? s_grabHandlePenPrimary : s_grabHandlePen);
+        using SelectObjectScope brushSelection = new(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
+        using SelectObjectScope penSelection = new(hDC, isPrimary ? s_grabHandlePenPrimary : s_grabHandlePen);
 
-        // Draw our rounded rect grabhandle
+        // Draw our rounded rect grab handle
         PInvoke.RoundRect(hDC, bounds.Left, bounds.Top, bounds.Right, bounds.Bottom, 2, 2);
     }
 
     /// <summary>
     ///  Used for drawing the no-resize handle for non-resizeable selected controls and components.
     /// </summary>
-    public static void DrawNoResizeHandle(Graphics graphics, Rectangle bounds, bool isPrimary, Glyph glyph)
+    public static void DrawNoResizeHandle(Graphics graphics, Rectangle bounds, bool isPrimary)
     {
         using DeviceContextHdcScope hDC = new(graphics, applyGraphicsState: false);
 
         // Set our pen and brush based on primary selection
-        using PInvoke.SelectObjectScope brushSelection = new(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
-        using PInvoke.SelectObjectScope penSelection = new(hDC, s_grabHandlePenPrimary);
+        using SelectObjectScope brushSelection = new(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
+        using SelectObjectScope penSelection = new(hDC, s_grabHandlePenPrimary);
 
         // Draw our rect no-resize handle
         PInvoke.Rectangle(hDC, bounds.Left, bounds.Top, bounds.Right, bounds.Bottom);
@@ -271,25 +270,25 @@ internal static class DesignerUtils
     /// <summary>
     ///  Used for drawing the lock handle for locked selected controls and components.
     /// </summary>
-    public static void DrawLockedHandle(Graphics graphics, Rectangle bounds, bool isPrimary, Glyph glyph)
+    public static void DrawLockedHandle(Graphics graphics, Rectangle bounds, bool isPrimary)
     {
         using DeviceContextHdcScope hDC = new(graphics, applyGraphicsState: false);
 
-        using PInvoke.SelectObjectScope penSelection = new(hDC, s_grabHandlePenPrimary);
+        using SelectObjectScope penSelection = new(hDC, s_grabHandlePenPrimary);
 
         // Upper rect - upper rect is always filled with the primary brush
-        using PInvoke.SelectObjectScope brushSelection = new(hDC, s_grabHandleFillBrushPrimary);
+        using SelectObjectScope brushSelection = new(hDC, s_grabHandleFillBrushPrimary);
         PInvoke.RoundRect(
             hDC,
-            bounds.Left + LOCKHANDLEUPPER_OFFSET,
-            bounds.Top, bounds.Left + LOCKHANDLEUPPER_OFFSET + LOCKHANDLESIZE_UPPER,
-            bounds.Top + LOCKHANDLESIZE_UPPER,
+            bounds.Left + s_lockedHandleUpperOffset,
+            bounds.Top, bounds.Left + s_lockedHandleUpperOffset + s_lockedHandleSizeUpper,
+            bounds.Top + s_lockedHandleSizeUpper,
             width: 2,
             height: 2);
 
         // Lower rect - its fillbrush depends on the primary selection
         PInvoke.SelectObject(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
-        PInvoke.Rectangle(hDC, bounds.Left, bounds.Top + LOCKHANDLELOWER_OFFSET, bounds.Right, bounds.Bottom);
+        PInvoke.Rectangle(hDC, bounds.Left, bounds.Top + s_lockedHandleLowerOffset, bounds.Right, bounds.Bottom);
     }
 
     /// <summary>
@@ -335,19 +334,12 @@ internal static class DesignerUtils
     /// <summary>
     ///  Retrieves the width and height of a selection border grab handle. Designers may need this to properly position their user interfaces.
     /// </summary>
-    public static Size GetAdornmentDimensions(AdornmentType adornmentType)
+    public static Size GetAdornmentDimensions(AdornmentType adornmentType) => adornmentType switch
     {
-        switch (adornmentType)
-        {
-            case AdornmentType.GrabHandle:
-                return new Size(HANDLESIZE, HANDLESIZE);
-            case AdornmentType.ContainerSelector:
-            case AdornmentType.Maximum:
-                return new Size(CONTAINERGRABHANDLESIZE, CONTAINERGRABHANDLESIZE);
-        }
-
-        return new Size(0, 0);
-    }
+        AdornmentType.GrabHandle => new Size(s_handleSize, s_handleSize),
+        AdornmentType.ContainerSelector or AdornmentType.Maximum => new Size(s_containerGrabHandleSize, s_containerGrabHandleSize),
+        _ => new Size(0, 0),
+    };
 
     public static bool UseSnapLines(IServiceProvider provider)
     {
@@ -394,8 +386,8 @@ internal static class DesignerUtils
         // Get the DC's and create our image
         using GetDcScope controlDC = new((HWND)control.Handle);
         image = new Bitmap(
-            Math.Max(control.Width, MINCONTROLBITMAPSIZE),
-            Math.Max(control.Height, MINCONTROLBITMAPSIZE),
+            Math.Max(control.Width, s_minimumControlBitmapSize),
+            Math.Max(control.Height, s_minimumControlBitmapSize),
             PixelFormat.Format32bppPArgb);
 
         using Graphics gDest = Graphics.FromImage(image);
@@ -408,7 +400,7 @@ internal static class DesignerUtils
         using DeviceContextHdcScope destDC = new(gDest, applyGraphicsState: false);
 
         // Perform our bitblit operation to push the image into the dest bitmap
-        PInvoke.BitBlt(
+        PInvokeCore.BitBlt(
             destDC,
             x: 0,
             y: 0,
@@ -426,8 +418,8 @@ internal static class DesignerUtils
     public static bool GenerateSnapShotWithWM_PRINT(Control control, out Bitmap image)
     {
         image = new Bitmap(
-            Math.Max(control.Width, MINCONTROLBITMAPSIZE),
-            Math.Max(control.Height, MINCONTROLBITMAPSIZE),
+            Math.Max(control.Width, s_minimumControlBitmapSize),
+            Math.Max(control.Height, s_minimumControlBitmapSize),
             PixelFormat.Format32bppPArgb);
 
         // Have to do this BEFORE we set the testcolor.
@@ -518,12 +510,12 @@ internal static class DesignerUtils
     /// </summary>
     public static Rectangle GetBoundsForSelectionType(Rectangle originalBounds, SelectionBorderGlyphType type)
     {
-        return GetBoundsForSelectionType(originalBounds, type, SELECTIONBORDERSIZE, SELECTIONBORDEROFFSET);
+        return GetBoundsForSelectionType(originalBounds, type, s_selectionBorderSize, s_selectionBorderOffset);
     }
 
     public static Rectangle GetBoundsForNoResizeSelectionType(Rectangle originalBounds, SelectionBorderGlyphType type)
     {
-        return GetBoundsForSelectionType(originalBounds, type, SELECTIONBORDERSIZE, NORESIZEBORDEROFFSET);
+        return GetBoundsForSelectionType(originalBounds, type, s_selectionBorderSize, s_noResizeBorderOffset);
     }
 
     /// <summary>
@@ -536,8 +528,8 @@ internal static class DesignerUtils
 
         using Graphics g = ctrl.CreateGraphics();
         using DeviceContextHdcScope dc = new(g, applyGraphicsState: false);
-        using PInvoke.ObjectScope hFont = new(ctrl.Font.ToHFONT());
-        using PInvoke.SelectObjectScope hFontOld = new(dc, hFont);
+        using ObjectScope hFont = new(ctrl.Font.ToHFONT());
+        using SelectObjectScope hFontOld = new(dc, hFont);
 
         TEXTMETRICW metrics = default;
         PInvoke.GetTextMetrics(dc, &metrics);
@@ -745,7 +737,7 @@ internal static class DesignerUtils
     /// <summary>
     ///  Used to create copies of the objects that we are dragging in a drag operation
     /// </summary>
-    public static List<IComponent>? CopyDragObjects(ICollection objects, IServiceProvider svcProvider)
+    public static List<IComponent>? CopyDragObjects(IReadOnlyList<IComponent> objects, IServiceProvider svcProvider)
     {
         if (objects is null || svcProvider is null)
         {
@@ -804,9 +796,9 @@ internal static class DesignerUtils
         return null;
     }
 
-    private static List<IComponent> GetCopySelection(ICollection objects, IDesignerHost host)
+    private static List<IComponent> GetCopySelection(IReadOnlyList<IComponent> objects, IDesignerHost host)
     {
-        List<IComponent> copySelection = new();
+        List<IComponent> copySelection = [];
         foreach (IComponent comp in objects)
         {
             copySelection.Add(comp);
@@ -868,7 +860,7 @@ internal static class DesignerUtils
         PInvoke.SendMessage(
             listView,
             PInvoke.LVM_SETEXTENDEDLISTVIEWSTYLE,
-            (WPARAM)(uint)PInvoke.LVS_EX_DOUBLEBUFFER,
-            (LPARAM)(uint)PInvoke.LVS_EX_DOUBLEBUFFER);
+            (WPARAM)PInvoke.LVS_EX_DOUBLEBUFFER,
+            (LPARAM)PInvoke.LVS_EX_DOUBLEBUFFER);
     }
 }

@@ -72,10 +72,12 @@ internal interface ICommandBindingTargetProvider
     /// <see cref="Command"/> should be executed.
     /// </summary>
     /// <remarks>
-    /// As an example, a <see cref="Button"/> should call this method inside the method which
-    /// also raises the <see cref="Control.Click"/> Event of that Button, which
-    /// would be the <see cref="Button.OnClick(EventArgs)"/> OnClick method.
-    /// See <see cref="ButtonBase"/> for an exmaple implementation.
+    ///  <para>
+    ///   As an example, a <see cref="Button"/> should call this method inside the method which
+    ///   also raises the <see cref="Control.Click"/> Event of that Button, which
+    ///   would be the <see cref="Button.OnClick(EventArgs)"/> OnClick method.
+    ///   See <see cref="ButtonBase"/> for an example implementation.
+    ///  </para>
     /// </remarks>
     /// <param name="commandComponent"></param>
     protected static void RequestCommandExecute(ICommandBindingTargetProvider commandComponent)

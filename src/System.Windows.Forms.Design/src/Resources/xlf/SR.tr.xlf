@@ -57,6 +57,11 @@
         <target state="translated">ActiveX Denetimi</target>
         <note />
       </trans-unit>
+      <trans-unit id="BaseNodeName">
+        <source>Node</source>
+        <target state="translated">Düğüm</target>
+        <note />
+      </trans-unit>
       <trans-unit id="BasicDesignerLoaderAlreadyLoaded">
         <source>The designer is already loaded.</source>
         <target state="translated">Tasarımcı zaten yüklendi.</target>
@@ -374,6 +379,11 @@
         <target state="translated">{0} Koleksiyonu Düzenleyici</target>
         <note />
       </trans-unit>
+      <trans-unit id="CollectionEditorCreateInstanceError">
+        <source>Neither {0} nor {1} can create an instance of {2}.</source>
+        <target state="translated">Ne {0} ne de {1} bir {2} örneği oluşturabiliyor.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CollectionEditorInheritedReadOnlySelection">
         <source>Read-only component(s) selected.</source>
         <target state="translated">Salt okunur bileşenler seçildi.</target>
@@ -658,7 +668,7 @@
       </trans-unit>
       <trans-unit id="DataGridViewAddColumnVerb">
         <source>&amp;Add Column...</source>
-        <target state="new">&amp;Add Column...</target>
+        <target state="translated">&amp;Sütun Ekle...</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewBoundColumnProperties">
@@ -673,7 +683,7 @@
       </trans-unit>
       <trans-unit id="DataGridViewChooseDataSourceTransactionString">
         <source>{0} DataSource changed</source>
-        <target state="new">{0} DataSource changed</target>
+        <target state="translated">{0} DataSource değiştirildi</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewColumnTypePropertyDescription">
@@ -718,7 +728,7 @@
       </trans-unit>
       <trans-unit id="DataGridViewEditColumnsVerb">
         <source>&amp;Edit Columns...</source>
-        <target state="new">&amp;Edit Columns...</target>
+        <target state="translated">&amp;Sütunları Düzenle...</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEnableAdding">

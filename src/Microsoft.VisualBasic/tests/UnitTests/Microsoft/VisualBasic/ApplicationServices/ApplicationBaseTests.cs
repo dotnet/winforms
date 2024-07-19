@@ -62,14 +62,14 @@ public class ApplicationBaseTests
 
     private static (string, string)[] GetEnvironmentVariables()
     {
-        List<(string, string)> pairs = new();
+        List<(string, string)> pairs = [];
         var vars = Environment.GetEnvironmentVariables();
         foreach (string key in vars.Keys)
         {
             pairs.Add((key, (string)vars[key]));
         }
 
-        return pairs.OrderBy(pair => pair.Item1).ToArray();
+        return [.. pairs.OrderBy(pair => pair.Item1)];
     }
 
     [Fact]

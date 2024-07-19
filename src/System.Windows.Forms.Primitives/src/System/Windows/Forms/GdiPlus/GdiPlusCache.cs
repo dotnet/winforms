@@ -62,32 +62,21 @@ internal static class GdiPlusCache
     ///  Returns a cached <see cref="Pen"/>. Use in a using and assign to var.
     /// </summary>
     /// <remarks>
-    ///  Correct: using var pen = GdiPlusCache.GetCachedPen(Color.Blue);
-    ///  Incorrect (LEAKS): using Pen pen = GdiPlusCache.GetCachedPen(Color.Blue);
+    ///  <para>
+    ///   Correct: using var pen = GdiPlusCache.GetCachedPen(Color.Blue);
+    ///   Incorrect (LEAKS): using Pen pen = GdiPlusCache.GetCachedPen(Color.Blue);
+    ///  </para>
+    ///  <para>
+    ///   Debug builds track proper disposal.
+    ///  </para>
     /// </remarks>
     internal static PenCache.Scope GetCachedPenScope(this Color color) => GetPenScope(color);
 
-    /// <summary>
-    ///  Returns a cached <see cref="Pen"/>. Use in a using and assign to var.
-    /// </summary>
-    /// <remarks>
-    ///  Correct: using var pen = GdiPlusCache.GetCachedPen(Color.Blue);
-    ///  Incorrect (LEAKS): using Pen pen = GdiPlusCache.GetCachedPen(Color.Blue);
-    ///
-    ///  Debug builds track proper disposal.
-    /// </remarks>
+    /// <inheritdoc cref="GetCachedPenScope(Color)"/>
     internal static PenCache.Scope GetCachedPenScope(this Color color, int width)
         => width == 1 ? GetPenScope(color) : new PenCache.Scope(new Pen(color, width));
 
-    /// <summary>
-    ///  Returns a cached <see cref="SolidBrush"/>. Use in a using and assign to var.
-    /// </summary>
-    /// <remarks>
-    ///  Correct: using var pen = GdiPlusCache.GetCachedSolidBrush(Color.Blue);
-    ///  Incorrect (LEAKS): using Pen pen = GdiPlusCache.GetCachedSolidBrush(Color.Blue);
-    ///
-    ///  Debug builds track proper disposal.
-    /// </remarks>
+    /// <inheritdoc cref="GetCachedPenScope(Color)"/>
     internal static SolidBrushCache.Scope GetCachedSolidBrushScope(this Color color) => GetSolidBrushScope(color);
 
     private static Brush? BrushFromKnownColor(KnownColor color) => color switch

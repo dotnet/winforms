@@ -1,7 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Windows.Forms;
 using System.Windows.Forms.Automation;
 using Windows.Win32.UI.Accessibility;
 
@@ -9,6 +8,7 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="UiaRaiseNotificationEvent(IRawElementProviderSimple*, NotificationKind, NotificationProcessing, BSTR, BSTR)"/>
     public static unsafe HRESULT UiaRaiseNotificationEvent(
         IRawElementProviderSimple.Interface provider,
         AutomationNotificationKind notificationKind,

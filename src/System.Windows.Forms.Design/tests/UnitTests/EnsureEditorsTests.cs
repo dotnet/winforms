@@ -18,9 +18,9 @@ public class EnsureEditorsTests
     {
         // The list of editors which either didn't exist in .NET Framework
         Type[] nonTypeForwardedEditors =
-        {
+        [
             typeof(InitialDirectoryEditor),     // introduced in .NET 6.0, https://github.com/dotnet/winforms/pull/4645
-        };
+        ];
 
         SystemDesignMetadataReader metadataReader = new();
         IReadOnlyList<string> forwardedTypes = metadataReader.GetExportedTypeNames();
@@ -171,6 +171,6 @@ public class EnsureEditorsTests
         IEnumerable<EditorAttribute> attributes = method.GetCustomAttributes(typeof(EditorAttribute), false).Cast<EditorAttribute>();
         Assert.NotNull(attributes);
         Assert.NotEmpty(attributes);
-        Assert.Contains(attributes, editor => editor.EditorTypeName.StartsWith(expectedEditorType.FullName + ", "));
+        Assert.Contains(attributes, editor => editor.EditorTypeName.StartsWith($"{expectedEditorType.FullName}, ", StringComparison.Ordinal));
     }
 }

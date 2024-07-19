@@ -3,8 +3,8 @@
 
 using System.Drawing.Interop;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using static Interop;
 
 namespace System.Drawing;
 
@@ -48,13 +48,10 @@ public static class SystemFonts
         return null;
     }
 
-    private static unsafe bool GetNonClientMetrics(out User32.NONCLIENTMETRICS metrics)
+    private static unsafe bool GetNonClientMetrics(out NONCLIENTMETRICSW metrics)
     {
-        metrics = new User32.NONCLIENTMETRICS { cbSize = (uint)sizeof(User32.NONCLIENTMETRICS) };
-        fixed (void* m = &metrics)
-        {
-            return User32.SystemParametersInfoW(User32.SystemParametersAction.SPI_GETNONCLIENTMETRICS, metrics.cbSize, m, 0);
-        }
+        metrics = new NONCLIENTMETRICSW { cbSize = (uint)sizeof(NONCLIENTMETRICSW) };
+        return PInvokeCore.SystemParametersInfo(ref metrics);
     }
 
     public static Font? CaptionFont
@@ -63,9 +60,9 @@ public static class SystemFonts
         {
             Font? captionFont = null;
 
-            if (GetNonClientMetrics(out User32.NONCLIENTMETRICS metrics))
+            if (GetNonClientMetrics(out NONCLIENTMETRICSW metrics))
             {
-                captionFont = GetFontFromData(metrics.lfCaptionFont);
+                captionFont = GetFontFromData(in metrics.lfCaptionFont);
                 captionFont.SetSystemFontName(nameof(CaptionFont));
             }
 
@@ -79,9 +76,9 @@ public static class SystemFonts
         {
             Font? smcaptionFont = null;
 
-            if (GetNonClientMetrics(out User32.NONCLIENTMETRICS metrics))
+            if (GetNonClientMetrics(out NONCLIENTMETRICSW metrics))
             {
-                smcaptionFont = GetFontFromData(metrics.lfSmCaptionFont);
+                smcaptionFont = GetFontFromData(in metrics.lfSmCaptionFont);
                 smcaptionFont.SetSystemFontName(nameof(SmallCaptionFont));
             }
 
@@ -95,7 +92,7 @@ public static class SystemFonts
         {
             Font? menuFont = null;
 
-            if (GetNonClientMetrics(out User32.NONCLIENTMETRICS metrics))
+            if (GetNonClientMetrics(out NONCLIENTMETRICSW metrics))
             {
                 menuFont = GetFontFromData(metrics.lfMenuFont);
                 menuFont.SetSystemFontName(nameof(MenuFont));
@@ -111,7 +108,7 @@ public static class SystemFonts
         {
             Font? statusFont = null;
 
-            if (GetNonClientMetrics(out User32.NONCLIENTMETRICS metrics))
+            if (GetNonClientMetrics(out NONCLIENTMETRICSW metrics))
             {
                 statusFont = GetFontFromData(metrics.lfStatusFont);
                 statusFont.SetSystemFontName(nameof(StatusFont));
@@ -127,7 +124,7 @@ public static class SystemFonts
         {
             Font? messageBoxFont = null;
 
-            if (GetNonClientMetrics(out User32.NONCLIENTMETRICS metrics))
+            if (GetNonClientMetrics(out NONCLIENTMETRICSW metrics))
             {
                 messageBoxFont = GetFontFromData(metrics.lfMessageFont);
                 messageBoxFont.SetSystemFontName(nameof(MessageBoxFont));
@@ -137,17 +134,15 @@ public static class SystemFonts
         }
     }
 
-    private static bool IsCriticalFontException(Exception ex)
-    {
-        return !(
-            // In any of these cases we'll handle the exception.
-            ex is ExternalException ||
-            ex is ArgumentException ||
-            ex is OutOfMemoryException || // GDI+ throws this one for many reasons other than actual OOM.
-            ex is InvalidOperationException ||
-            ex is NotImplementedException ||
-            ex is FileNotFoundException);
-    }
+    private static bool IsCriticalFontException(Exception ex) =>
+        // In any of these cases we'll handle the exception.
+        ex is not (ExternalException
+            or ArgumentException
+            // GDI+ throws this one for many reasons other than actual OOM.
+            or OutOfMemoryException
+            or InvalidOperationException
+            or NotImplementedException
+            or FileNotFoundException);
 
     public static unsafe Font? IconTitleFont
     {
@@ -156,9 +151,9 @@ public static class SystemFonts
             Font? iconTitleFont = null;
 
             LOGFONT itfont = default;
-            if (User32.SystemParametersInfoW(User32.SystemParametersAction.SPI_GETICONTITLELOGFONT, (uint)sizeof(LOGFONT), &itfont, 0))
+            if (PInvokeCore.SystemParametersInfo(SYSTEM_PARAMETERS_INFO_ACTION.SPI_GETICONTITLELOGFONT, (uint)sizeof(LOGFONT), &itfont, 0))
             {
-                iconTitleFont = GetFontFromData(itfont);
+                iconTitleFont = GetFontFromData(in itfont);
                 iconTitleFont.SetSystemFontName(nameof(IconTitleFont));
             }
 
@@ -173,7 +168,7 @@ public static class SystemFonts
             Font? defaultFont = null;
 
             // For Arabic systems, always return Tahoma 8.
-            if ((ushort)Kernel32.GetSystemDefaultLCID() == 0x0001)
+            if (PInvokeCore.GetSystemDefaultLCID() == PInvoke.LANG_ARABIC)
             {
                 try
                 {
@@ -185,7 +180,7 @@ public static class SystemFonts
             // First try DEFAULT_GUI.
             if (defaultFont is null)
             {
-                IntPtr handle = Gdi32.GetStockObject(Gdi32.StockObject.DEFAULT_GUI_FONT);
+                HFONT handle = (HFONT)PInvokeCore.GetStockObject(GET_STOCK_OBJECT_FLAGS.DEFAULT_GUI_FONT);
                 try
                 {
                     using Font fontInWorldUnits = Font.FromHfont(handle);
@@ -230,7 +225,7 @@ public static class SystemFonts
         {
             Font? dialogFont = null;
 
-            if ((ushort)Kernel32.GetSystemDefaultLCID() == 0x0011)
+            if (PInvokeCore.GetSystemDefaultLCID() == PInvoke.LANG_JAPANESE)
             {
                 // Always return DefaultFont for Japanese cultures.
                 dialogFont = DefaultFont;
@@ -269,7 +264,10 @@ public static class SystemFonts
         return new Font(font.FontFamily, font.SizeInPoints, font.Style, GraphicsUnit.Point, font.GdiCharSet, font.GdiVerticalFont);
     }
 
-    private static Font GetFontFromData(LOGFONT logFont)
+    private static Font GetFontFromData(in LOGFONTW logFont) =>
+        GetFontFromData(Unsafe.As<LOGFONTW, LOGFONT>(ref Unsafe.AsRef(in logFont)));
+
+    private static Font GetFontFromData(in LOGFONT logFont)
     {
         Font? font = null;
         try

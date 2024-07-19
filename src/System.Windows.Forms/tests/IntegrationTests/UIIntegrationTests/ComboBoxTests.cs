@@ -19,11 +19,11 @@ public class ComboBoxTests : ControlTestBase
         {
             // Test case captured from here.
             // https://github.com/dotnet/winforms/issues/6953
-            comboBox.AutoCompleteCustomSource.AddRange(new[]
-            {
+            comboBox.AutoCompleteCustomSource.AddRange(
+            [
                 "_sss",
                 "_sss"
-            });
+            ]);
             comboBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
             comboBox.AutoCompleteSource = AutoCompleteSource.CustomSource;
             comboBox.AutoCompleteMode = AutoCompleteMode.Suggest;

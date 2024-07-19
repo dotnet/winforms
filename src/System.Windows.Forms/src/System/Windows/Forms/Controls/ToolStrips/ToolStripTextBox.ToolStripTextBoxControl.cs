@@ -37,7 +37,7 @@ public partial class ToolStripTextBox
                 int offsetY = -rect.top;
 
                 // fetch the client rect, then apply the offset.
-                PInvoke.GetClientRect(this, out var clientRect);
+                PInvokeCore.GetClientRect(this, out var clientRect);
 
                 clientRect.left += offsetX;
                 clientRect.right += offsetX;
@@ -114,15 +114,15 @@ public partial class ToolStripTextBox
             var absoluteClientRectangle = AbsoluteClientRECT;
 
             // Get the total client area, then exclude the client by using XOR
-            using PInvoke.RegionScope hTotalRegion = new(0, 0, Width, Height);
-            using PInvoke.RegionScope hClientRegion = new(
+            using RegionScope hTotalRegion = new(0, 0, Width, Height);
+            using RegionScope hClientRegion = new(
                 absoluteClientRectangle.left,
                 absoluteClientRectangle.top,
                 absoluteClientRectangle.right,
                 absoluteClientRectangle.bottom);
-            using PInvoke.RegionScope hNonClientRegion = new(0, 0, 0, 0);
+            using RegionScope hNonClientRegion = new(0, 0, 0, 0);
 
-            PInvoke.CombineRgn(hNonClientRegion, hTotalRegion, hClientRegion, RGN_COMBINE_MODE.RGN_XOR);
+            PInvokeCore.CombineRgn(hNonClientRegion, hTotalRegion, hClientRegion, RGN_COMBINE_MODE.RGN_XOR);
 
             // Call RedrawWindow with the region.
             PInvoke.RedrawWindow(

@@ -6,6 +6,8 @@ using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Automation;
+using System.Windows.Forms.Primitives;
+
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
 using Windows.Win32.System.Variant;
@@ -117,8 +119,6 @@ public unsafe partial class AccessibleObject :
     // Indicates this object is being used ONLY to wrap a system IAccessible
     private readonly bool _isSystemWrapper;
 
-    private static bool? s_canNotifyClients;
-
     internal const int InvalidIndex = -1;
 
     internal const int RuntimeIDFirstItem = 0x2a;
@@ -142,24 +142,6 @@ public unsafe partial class AccessibleObject :
     ///  Gets the bounds of the accessible object, in screen coordinates.
     /// </summary>
     public virtual Rectangle Bounds => SystemIAccessible.TryGetLocation(CHILDID_SELF);
-
-    internal static bool CanNotifyClients => s_canNotifyClients ??= InitializeCanNotifyClients();
-
-    private static bool InitializeCanNotifyClients()
-    {
-        // While handling accessibility events, accessibility clients (JAWS, Inspect),
-        // can access AccessibleObject associated with the event. In the designer scenario, controls are not
-        // receiving messages directly and might not respond to messages while in the notification call.
-        // This will make the server process unresponsive and will cause VisualStudio to become unresponsive.
-        //
-        // The following compat switch is set in the designer server process to prevent controls from sending notification.
-        if (AppContext.TryGetSwitch("Switch.System.Windows.Forms.AccessibleObject.NoClientNotifications", out bool isEnabled))
-        {
-            return !isEnabled;
-        }
-
-        return true;
-    }
 
     /// <summary>
     ///  Gets a description of the default action for an object.
@@ -596,7 +578,7 @@ public unsafe partial class AccessibleObject :
         => patternId == UIA_PATTERN_ID.UIA_InvokePatternId && IsInvokePatternAvailable;
 
     /// <summary>
-    ///  Gets the runtime ID.
+    ///  Gets the runtime identifier. This value must be unique within the parent window.
     /// </summary>
     internal virtual int[] RuntimeId
     {
@@ -604,7 +586,7 @@ public unsafe partial class AccessibleObject :
         {
             if (_isSystemWrapper)
             {
-                return new int[] { RuntimeIDFirstItem, GetHashCode() };
+                return [RuntimeIDFirstItem, GetHashCode()];
             }
 
             string message = string.Format(SR.AccessibleObjectRuntimeIdNotSupported, nameof(AccessibleObject), nameof(RuntimeId));
@@ -670,51 +652,46 @@ public unsafe partial class AccessibleObject :
             // MSAA Proxy determines the availability of invoke pattern based
             // on Role/DefaultAction properties.
             // Below code emulates the same rules.
-            switch (Role)
+            return Role switch
             {
-                case AccessibleRole.MenuItem:
-                case AccessibleRole.Link:
-                case AccessibleRole.PushButton:
-                case AccessibleRole.ButtonDropDown:
-                case AccessibleRole.ButtonMenu:
-                case AccessibleRole.ButtonDropDownGrid:
-                case AccessibleRole.Clock:
-                case AccessibleRole.SplitButton:
-                case AccessibleRole.CheckButton:
-                case AccessibleRole.Cell:
-                case AccessibleRole.ListItem:
-                    return true;
-
-                case AccessibleRole.Default:
-                case AccessibleRole.None:
-                case AccessibleRole.Sound:
-                case AccessibleRole.Cursor:
-                case AccessibleRole.Caret:
-                case AccessibleRole.Alert:
-                case AccessibleRole.Client:
-                case AccessibleRole.Chart:
-                case AccessibleRole.Dialog:
-                case AccessibleRole.Border:
-                case AccessibleRole.Column:
-                case AccessibleRole.Row:
-                case AccessibleRole.HelpBalloon:
-                case AccessibleRole.Character:
-                case AccessibleRole.PageTab:
-                case AccessibleRole.PropertyPage:
-                case AccessibleRole.DropList:
-                case AccessibleRole.Dial:
-                case AccessibleRole.HotkeyField:
-                case AccessibleRole.Diagram:
-                case AccessibleRole.Animation:
-                case AccessibleRole.Equation:
-                case AccessibleRole.WhiteSpace:
-                case AccessibleRole.IpAddress:
-                case AccessibleRole.OutlineButton:
-                    return false;
-
-                default:
-                    return !string.IsNullOrEmpty(DefaultAction);
-            }
+                AccessibleRole.MenuItem
+                    or AccessibleRole.Link
+                    or AccessibleRole.PushButton
+                    or AccessibleRole.ButtonDropDown
+                    or AccessibleRole.ButtonMenu
+                    or AccessibleRole.ButtonDropDownGrid
+                    or AccessibleRole.Clock
+                    or AccessibleRole.SplitButton
+                    or AccessibleRole.CheckButton
+                    or AccessibleRole.Cell
+                    or AccessibleRole.ListItem => true,
+                AccessibleRole.Default
+                    or AccessibleRole.None
+                    or AccessibleRole.Sound
+                    or AccessibleRole.Cursor
+                    or AccessibleRole.Caret
+                    or AccessibleRole.Alert
+                    or AccessibleRole.Client
+                    or AccessibleRole.Chart
+                    or AccessibleRole.Dialog
+                    or AccessibleRole.Border
+                    or AccessibleRole.Column
+                    or AccessibleRole.Row
+                    or AccessibleRole.HelpBalloon
+                    or AccessibleRole.Character
+                    or AccessibleRole.PageTab
+                    or AccessibleRole.PropertyPage
+                    or AccessibleRole.DropList
+                    or AccessibleRole.Dial
+                    or AccessibleRole.HotkeyField
+                    or AccessibleRole.Diagram
+                    or AccessibleRole.Animation
+                    or AccessibleRole.Equation
+                    or AccessibleRole.WhiteSpace
+                    or AccessibleRole.IpAddress
+                    or AccessibleRole.OutlineButton => false,
+                _ => !string.IsNullOrEmpty(DefaultAction),
+            };
         }
     }
 
@@ -762,7 +739,7 @@ public unsafe partial class AccessibleObject :
     {
     }
 
-    internal virtual UIA.ExpandCollapseState ExpandCollapseState => UIA.ExpandCollapseState.ExpandCollapseState_Collapsed;
+    internal virtual ExpandCollapseState ExpandCollapseState => ExpandCollapseState.ExpandCollapseState_Collapsed;
 
     internal virtual void Toggle()
     {
@@ -839,7 +816,7 @@ public unsafe partial class AccessibleObject :
 
     internal virtual int GetMultiViewProviderCurrentView() => 0;
 
-    internal virtual int[]? GetMultiViewProviderSupportedViews() => Array.Empty<int>();
+    internal virtual int[]? GetMultiViewProviderSupportedViews() => [];
 
     internal virtual string GetMultiViewProviderViewName(int viewId) => string.Empty;
 
@@ -1855,7 +1832,7 @@ public unsafe partial class AccessibleObject :
     {
         ComScope<IDispatch> child = new(null);
         ((UIA.IAccessible.Interface)this).get_accChild(ChildIdToVARIANT(childID), child);
-        return child.IsNull ? null : ComHelpers.GetObjectForIUnknown(child.AsUnknown);
+        return child.IsNull ? null : ComHelpers.GetObjectForIUnknown(child);
     }
 
     HRESULT UIA.IAccessible.Interface.get_accChild(VARIANT varChild, IDispatch** ppdispChild)
@@ -2262,7 +2239,7 @@ public unsafe partial class AccessibleObject :
         {
             ComScope<IDispatch> dispatch = new(null);
             ((UIA.IAccessible.Interface)this).get_accParent(dispatch).AssertSuccess();
-            return dispatch.IsNull ? null : ComHelpers.GetObjectForIUnknown(dispatch.AsUnknown);
+            return dispatch.IsNull ? null : ComHelpers.GetObjectForIUnknown(dispatch);
         }
     }
 
@@ -3008,7 +2985,7 @@ public unsafe partial class AccessibleObject :
         // `accChild` .NET Core only ever exposes the ITypeInfo for IUnknown.
         if (args?.Length == 0 && s_propertiesWithArguments.Contains(name))
         {
-            args = new object[] { (int)PInvoke.CHILDID_SELF };
+            args = [(int)PInvoke.CHILDID_SELF];
         }
 
         return typeof(IAccessible).InvokeMember(name, invokeAttr, binder, target, args, modifiers, culture, namedParameters);
@@ -3234,7 +3211,7 @@ public unsafe partial class AccessibleObject :
         AutomationNotificationKind notificationKind,
         AutomationNotificationProcessing notificationProcessing,
         string? notificationText)
-        => CanNotifyClients
+        => !LocalAppContextSwitches.NoClientNotifications
             && PInvoke.UiaRaiseNotificationEvent(
                 this,
                 notificationKind,
@@ -3253,7 +3230,7 @@ public unsafe partial class AccessibleObject :
 
     internal virtual bool RaiseAutomationEvent(UIA_EVENT_ID eventId)
     {
-        if (PInvoke.UiaClientsAreListening() && CanNotifyClients)
+        if (PInvoke.UiaClientsAreListening() && !LocalAppContextSwitches.NoClientNotifications)
         {
             using var provider = ComHelpers.GetComScope<IRawElementProviderSimple>(this);
             HRESULT result = PInvoke.UiaRaiseAutomationEvent(provider, eventId);
@@ -3265,7 +3242,7 @@ public unsafe partial class AccessibleObject :
 
     internal virtual bool RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID propertyId, VARIANT oldValue, VARIANT newValue)
     {
-        if (PInvoke.UiaClientsAreListening() && CanNotifyClients)
+        if (PInvoke.UiaClientsAreListening() && !LocalAppContextSwitches.NoClientNotifications)
         {
             using var provider = ComHelpers.GetComScope<IRawElementProviderSimple>(this);
             HRESULT result = PInvoke.UiaRaiseAutomationPropertyChangedEvent(provider, propertyId, oldValue, newValue);
@@ -3285,7 +3262,7 @@ public unsafe partial class AccessibleObject :
 
     internal bool RaiseStructureChangedEvent(StructureChangeType structureChangeType, int[] runtimeId)
     {
-        if (PInvoke.UiaClientsAreListening() && CanNotifyClients)
+        if (PInvoke.UiaClientsAreListening() && !LocalAppContextSwitches.NoClientNotifications)
         {
             using var provider = ComHelpers.GetComScope<IRawElementProviderSimple>(this);
             int length = runtimeId.Length;

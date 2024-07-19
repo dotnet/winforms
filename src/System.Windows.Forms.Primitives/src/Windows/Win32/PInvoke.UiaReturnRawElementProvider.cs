@@ -7,12 +7,13 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
+    /// <inheritdoc cref="UiaReturnRawElementProvider(HWND, WPARAM, LPARAM, IRawElementProviderSimple*)"/>
     public static unsafe LRESULT UiaReturnRawElementProvider<T>(
         T hwnd,
         WPARAM wParam,
         LPARAM lParam,
         IRawElementProviderSimple.Interface? el)
-        where T: IHandle<HWND>
+        where T : IHandle<HWND>
     {
         using var provider = ComHelpers.TryGetComScope<IRawElementProviderSimple>(el);
         LRESULT result = UiaReturnRawElementProvider(hwnd.Handle, wParam, lParam, provider);

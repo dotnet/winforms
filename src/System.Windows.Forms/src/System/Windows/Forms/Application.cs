@@ -7,9 +7,8 @@ using System.Globalization;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms.VisualStyles;
-using Microsoft.Win32;
 using Microsoft.Office;
-using static Interop;
+using Microsoft.Win32;
 using Directory = System.IO.Directory;
 
 namespace System.Windows.Forms;
@@ -68,14 +67,7 @@ public sealed partial class Application
     ///  for example, if being called from a windows forms control being hosted within a web browser.  The
     ///  windows forms control should not attempt to quit the application.
     /// </summary>
-    public static bool AllowQuit
-        => ThreadContext.GetAllowQuit();
-
-    /// <summary>
-    ///  Returns True if it is OK to continue idle processing. Typically called in an Application.Idle event handler.
-    /// </summary>
-    internal static bool CanContinueIdle
-        => ThreadContext.FromCurrent().ComponentManager?.FContinueIdle() ?? false;
+    public static bool AllowQuit => ThreadContext.GetAllowQuit();
 
     /// <summary>
     ///  Typically, you shouldn't need to use this directly - use RenderWithVisualStyles instead.
@@ -145,8 +137,10 @@ public sealed partial class Application
     ///  Gets the path for the application data that is shared among all users.
     /// </summary>
     /// <remarks>
-    ///  Don't obsolete these. GetDataPath isn't on SystemInformation, and it provides
-    ///  the Windows logo required adornments to the directory (Company\Product\Version)
+    ///  <para>
+    ///   Don't obsolete these. GetDataPath isn't on SystemInformation, and it provides
+    ///   the Windows logo required adornments to the directory (Company\Product\Version).
+    ///  </para>
     /// </remarks>
     public static string CommonAppDataPath
         => GetDataPath(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData));
@@ -198,7 +192,7 @@ public sealed partial class Application
                                 int firstDot = ns.IndexOf('.');
                                 if (firstDot != -1)
                                 {
-                                    s_companyName = ns.Substring(0, firstDot);
+                                    s_companyName = ns[..firstDot];
                                 }
                                 else
                                 {
@@ -258,8 +252,8 @@ public sealed partial class Application
     ///  Gets the path for the application data specific to a local, non-roaming user.
     /// </summary>
     /// <remarks>
-    ///  Don't obsolete these. GetDataPath isn't on SystemInformation, and it provides
-    ///  the Windows logo required adornments to the directory (Company\Product\Version)
+    ///  <para>Don't obsolete these. GetDataPath isn't on SystemInformation, and it provides
+    ///  the Windows logo required adornments to the directory (Company\Product\Version)</para>
     /// </remarks>
     public static string LocalUserAppDataPath
         => GetDataPath(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
@@ -273,7 +267,7 @@ public sealed partial class Application
     /// <summary>
     ///  Gets the forms collection associated with this application.
     /// </summary>
-    public static FormCollection OpenForms => s_forms ??= new FormCollection();
+    public static FormCollection OpenForms => s_forms ??= [];
 
     /// <summary>
     ///  Gets
@@ -323,7 +317,7 @@ public sealed partial class Application
                                 int lastDot = ns.LastIndexOf('.');
                                 if (lastDot != -1 && lastDot < ns.Length - 1)
                                 {
-                                    s_productName = ns.Substring(lastDot + 1);
+                                    s_productName = ns[(lastDot + 1)..];
                                 }
                                 else
                                 {
@@ -466,8 +460,8 @@ public sealed partial class Application
     ///  Gets the path for the application data specific to the roaming user.
     /// </summary>
     /// <remarks>
-    ///  Don't obsolete these. GetDataPath isn't on SystemInformation, and it provides
-    ///  the Windows logo required adornments to the directory (Company\Product\Version)
+    ///  <para>Don't obsolete these. GetDataPath isn't on SystemInformation, and it provides
+    ///  the Windows logo required adornments to the directory (Company\Product\Version)</para>
     /// </remarks>
     public static string UserAppDataPath
         => GetDataPath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
@@ -484,15 +478,19 @@ public sealed partial class Application
     /// </summary>
     /// <value><see langword="true" /> if visual styles are enabled; otherwise, <see langword="false" />.</value>
     /// <remarks>
-    ///  The visual styles can be enabled by calling <see cref="EnableVisualStyles"/>.
-    ///  The visual styles will not be enabled if the OS does not support them, or theming is disabled at the OS level.
+    ///  <para>
+    ///   The visual styles can be enabled by calling <see cref="EnableVisualStyles"/>.
+    ///   The visual styles will not be enabled if the OS does not support them, or theming is disabled at the OS level.
+    ///  </para>
     /// </remarks>
     public static bool UseVisualStyles { get; private set; }
 
     /// <remarks>
-    ///  Don't never ever change this name, since the window class and partner teams
-    ///  dependent on this. Changing this will introduce breaking changes.
-    ///  If there is some reason need to change this, notify any partner teams affected.
+    ///  <para>
+    ///   Don't never ever change this name, since the window class and partner teams
+    ///   dependent on this. Changing this will introduce breaking changes.
+    ///   If there is some reason need to change this, notify any partner teams affected.
+    ///  </para>
     /// </remarks>
     internal static string WindowsFormsVersion => "WindowsForms10";
 
@@ -640,10 +638,7 @@ public sealed partial class Application
             lock (current)
             {
                 current._idleHandler += value;
-
-                // This just ensures that the component manager is hooked up.  We
-                // need it for idle time processing.
-                object? o = current.ComponentManager;
+                current.EnsureReadyForIdle();
             }
         }
         remove
@@ -803,7 +798,7 @@ public sealed partial class Application
     /// <summary>
     ///  Informs all message pumps that they are to terminate and then closes all
     ///  application windows after the messages have been processed. e.Cancel indicates
-    ///  whether any of the open forms cancelled the exit call.
+    ///  whether any of the open forms canceled the exit call.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public static void Exit(CancelEventArgs? e)
@@ -826,11 +821,22 @@ public sealed partial class Application
             try
             {
                 // Raise the FormClosing and FormClosed events for each open form
-                if (s_forms is not null)
+                if (s_forms?.Count > 0)
                 {
-                    foreach (Form f in s_forms)
+                    HashSet<Form> processedForms = new(s_forms.Count);
+                    int version = s_forms.AddVersion;
+                    // We need to iterate in backward order to not violate MDI closing events rules
+                    for (int i = s_forms.Count - 1; i > -1; i--)
                     {
-                        if (f.RaiseFormClosingOnAppExit())
+                        Form? form = s_forms[i];
+                        if (form is null || processedForms.Contains(form))
+                        {
+                            continue;
+                        }
+
+                        processedForms.Add(form);
+                        // Here user can remove existing forms or add new
+                        if (form.RaiseFormClosingOnAppExit())
                         {
                             // A form refused to close
                             if (e is not null)
@@ -838,14 +844,35 @@ public sealed partial class Application
                                 e.Cancel = true;
                             }
 
+                            processedForms.Clear();
                             return;
+                        }
+
+                        if (version != s_forms.AddVersion) // A new form was added, we need to iterate again
+                        {
+                            version = s_forms.AddVersion;
+                            i = s_forms.Count;
+                        }
+                        else
+                        {
+                            i = Math.Min(i, s_forms.Count); // Form can be removed from the collection, we need to check it
                         }
                     }
 
+                    processedForms.Clear();
                     while (s_forms.Count > 0)
                     {
-                        // OnFormClosed removes the form from the FormCollection
-                        s_forms[0]!.RaiseFormClosedOnAppExit();
+                        // We need to iterate in backward order to not violate MDI closing events rules
+                        Form? form = s_forms[^1];
+                        if (form is not null)
+                        {
+                            // OnFormClosed removes the form from the FormCollection
+                            form.RaiseFormClosedOnAppExit();
+                        }
+                        else
+                        {
+                            s_forms.RemoveAt(s_forms.Count - 1);
+                        }
                     }
                 }
 
@@ -1087,8 +1114,11 @@ public sealed partial class Application
             string[] arguments = Environment.GetCommandLineArgs();
             Debug.Assert(arguments is not null && arguments.Length > 0);
 
-            ProcessStartInfo currentStartInfo = new();
-            currentStartInfo.FileName = ExecutablePath;
+            ProcessStartInfo currentStartInfo = new()
+            {
+                FileName = ExecutablePath
+            };
+
             if (arguments.Length >= 2)
             {
                 StringBuilder sb = new((arguments.Length - 1) * 16);

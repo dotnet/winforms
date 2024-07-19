@@ -939,7 +939,7 @@ public class ToolStripDropDownTests
         control.BindingContextChanged += handler;
 
         // Set different.
-        BindingContext context1 = new();
+        BindingContext context1 = [];
         control.BindingContext = context1;
         Assert.Same(context1, control.BindingContext);
         Assert.Equal(1, callCount);
@@ -950,7 +950,7 @@ public class ToolStripDropDownTests
         Assert.Equal(1, callCount);
 
         // Set different.
-        BindingContext context2 = new();
+        BindingContext context2 = [];
         control.BindingContext = context2;
         Assert.Same(context2, control.BindingContext);
         Assert.Equal(2, callCount);
@@ -4866,7 +4866,7 @@ public class ToolStripDropDownTests
         Message m = new()
         {
             Msg = (int)PInvoke.WM_MOUSEHOVER,
-            Result = (IntPtr)250
+            Result = 250
         };
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
@@ -4930,6 +4930,128 @@ public class ToolStripDropDownTests
         Assert.Equal(value, control.WorkingAreaConstrained);
     }
 
+    [WinFormsFact]
+    public void ToolStripDropDown_DockChanged_AddRemoveEvent_Invoke_Success()
+    {
+        using ToolStripDropDown control = new();
+
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(control);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        control.DockChanged += handler;
+        control.Dock = DockStyle.Left;
+        callCount.Should().Be(1);
+        control.Dock.Should().Be(DockStyle.Left);
+
+        control.Dock = DockStyle.Right;
+        callCount.Should().Be(2);
+        control.Dock.Should().Be(DockStyle.Right);
+
+        control.DockChanged -= handler;
+        control.Dock = DockStyle.Top;
+        callCount.Should().Be(2);
+        control.Dock.Should().Be(DockStyle.Top);
+    }
+
+    [WinFormsTheory]
+    [InlineData(null)]
+    [InlineData(ToolStripDropDownCloseReason.AppClicked)]
+    [InlineData(ToolStripDropDownCloseReason.AppFocusChange)]
+    [InlineData(ToolStripDropDownCloseReason.CloseCalled)]
+    [InlineData(ToolStripDropDownCloseReason.ItemClicked)]
+    [InlineData(ToolStripDropDownCloseReason.Keyboard)]
+    public void ToolStripDropDown_Close_InvokeReason_Success(ToolStripDropDownCloseReason? reason)
+    {
+        using ToolStripDropDown control = new();
+        control.Visible = true;
+
+        if (reason.HasValue)
+        {
+            control.Close(reason.Value);
+        }
+        else
+        {
+            control.Close();
+        }
+
+        control.Visible.Should().BeFalse();
+    }
+
+    [WinFormsTheory]
+    [InlineData(10, 20, ToolStripDropDownDirection.AboveLeft)]
+    public void ToolStripDropDown_Show_ControlPointDirection(int x, int y, ToolStripDropDownDirection direction)
+    {
+        using Control control = new();
+        using ToolStripDropDown toolStripDropDown = new();
+
+        toolStripDropDown.Show(control, new Point(x, y), direction);
+
+        toolStripDropDown.Location.Should().Be(new Point(x + 6, y + 27));
+    }  
+
+    [WinFormsTheory]
+    [InlineData(10, 20, ToolStripDropDownDirection.AboveLeft)]
+    public void ToolStripDropDown_Show_PositionDirection(int x, int y, ToolStripDropDownDirection direction)
+    {
+        using ToolStripDropDown toolStripDropDown = new();
+
+        toolStripDropDown.Show(new Point(x, y), direction);
+        Point expectedLocation = new(x, y);
+        var nonClientSize = SystemInformation.BorderSize;
+        expectedLocation.Offset(nonClientSize.Width-3, nonClientSize.Height -1);
+
+        if (direction is ToolStripDropDownDirection.AboveLeft or ToolStripDropDownDirection.AboveRight)
+        {
+            expectedLocation.Offset(0, -toolStripDropDown.Height);
+        }
+
+        toolStripDropDown.Location.Should().Be(expectedLocation);
+    }
+
+    [WinFormsTheory]
+    [InlineData(10, 20, true)]
+    [InlineData(10, 20, false)]
+    public void ToolStripDropDown_Show_ControlLocation(int x, int y, bool usePoint)
+    {
+        using Control control = new();
+        using ToolStripDropDown toolStripDropDown = new();
+
+        if (usePoint)
+        {
+            toolStripDropDown.Show(control, new Point(x, y));
+        }
+        else
+        {
+            toolStripDropDown.Show(control, x, y);
+        }
+
+        toolStripDropDown.Location.Should().Be(new Point(x + 8, y + 31));
+    }
+
+    [WinFormsTheory]
+    [InlineData(10, 20, true)]
+    [InlineData(10, 20, false)]
+    public void ToolStripDropDown_Show_ScreenLocation(int x, int y, bool usePoint)
+    {
+        using ToolStripDropDown toolStripDropDown = new();
+
+        if (usePoint)
+        {
+            toolStripDropDown.Show(new Point(x, y));
+        }
+        else
+        {
+            toolStripDropDown.Show(x, y);
+        }
+
+        toolStripDropDown.Location.Should().Be(new Point(x, y));
+    }
+
     private class SubAxHost : AxHost
     {
         public SubAxHost(string clsid) : base(clsid)
@@ -4955,15 +5077,15 @@ public class ToolStripDropDownTests
 
     private class SubToolStripDropDown : ToolStripDropDown
     {
-        public new const int ScrollStateAutoScrolling = ToolStrip.ScrollStateAutoScrolling;
+        public new const int ScrollStateAutoScrolling = ScrollableControl.ScrollStateAutoScrolling;
 
-        public new const int ScrollStateHScrollVisible = ToolStrip.ScrollStateHScrollVisible;
+        public new const int ScrollStateHScrollVisible = ScrollableControl.ScrollStateHScrollVisible;
 
-        public new const int ScrollStateVScrollVisible = ToolStrip.ScrollStateVScrollVisible;
+        public new const int ScrollStateVScrollVisible = ScrollableControl.ScrollStateVScrollVisible;
 
-        public new const int ScrollStateUserHasScrolled = ToolStrip.ScrollStateUserHasScrolled;
+        public new const int ScrollStateUserHasScrolled = ScrollableControl.ScrollStateUserHasScrolled;
 
-        public new const int ScrollStateFullDrag = ToolStrip.ScrollStateFullDrag;
+        public new const int ScrollStateFullDrag = ScrollableControl.ScrollStateFullDrag;
 
         public new bool CanEnableIme => base.CanEnableIme;
 

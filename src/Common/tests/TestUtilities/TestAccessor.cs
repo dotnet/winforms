@@ -23,9 +23,6 @@ namespace System;
 ///   Where internals access is more useful are testing building blocks of more
 ///   complicated objects, such as internal helper methods or classes.
 ///  </para>
-///  <para>
-///   This can be used to access private/internal objects as well via
-///  </para>
 /// </remarks>
 /// <example>
 ///  This class can also be derived from to create a strongly typed wrapper
@@ -50,7 +47,7 @@ namespace System;
 public class TestAccessor<T> : ITestAccessor
 {
     private static readonly Type s_type = typeof(T);
-    protected readonly T? _instance;
+    private readonly T? _instance;
     private readonly DynamicWrapper _dynamicWrapper;
 
     /// <param name="instance">The type instance, can be null for statics.</param>
@@ -66,7 +63,7 @@ public class TestAccessor<T> : ITestAccessor
     {
         Type type = typeof(TDelegate);
         MethodInfo? invokeMethodInfo = type.GetMethod("Invoke");
-        Type[] types = invokeMethodInfo is null ? Array.Empty<Type>() : invokeMethodInfo.GetParameters().Select(pi => pi.ParameterType).ToArray();
+        Type[] types = invokeMethodInfo is null ? [] : invokeMethodInfo.GetParameters().Select(pi => pi.ParameterType).ToArray();
 
         // To make it easier to write a class wrapper with a number of delegates,
         // we'll take the name from the delegate itself when unspecified.
@@ -77,10 +74,7 @@ public class TestAccessor<T> : ITestAccessor
             BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static,
             binder: null,
             types,
-            modifiers: null);
-
-        if (methodInfo is null)
-            throw new ArgumentException($"Could not find non public method {methodName}.");
+            modifiers: null) ?? throw new ArgumentException($"Could not find non public method {methodName}.");
 
         return (TDelegate)methodInfo.CreateDelegate(type, methodInfo.IsStatic ? null : _instance);
     }
@@ -145,7 +139,7 @@ public class TestAccessor<T> : ITestAccessor
 
         public override bool TrySetMember(SetMemberBinder binder, object? value)
         {
-            MemberInfo? info = GetFieldOrPropertyInfo(binder.Name);
+            MemberInfo? info = TestAccessor<T>.DynamicWrapper.GetFieldOrPropertyInfo(binder.Name);
             if (info is null)
                 return false;
 
@@ -157,7 +151,7 @@ public class TestAccessor<T> : ITestAccessor
         {
             result = null;
 
-            MemberInfo? info = GetFieldOrPropertyInfo(binder.Name);
+            MemberInfo? info = TestAccessor<T>.DynamicWrapper.GetFieldOrPropertyInfo(binder.Name);
             if (info is null)
                 return false;
 
@@ -165,7 +159,7 @@ public class TestAccessor<T> : ITestAccessor
             return true;
         }
 
-        private MemberInfo? GetFieldOrPropertyInfo(string memberName)
+        private static MemberInfo? GetFieldOrPropertyInfo(string memberName)
         {
             Type? type = s_type;
             MemberInfo? info;

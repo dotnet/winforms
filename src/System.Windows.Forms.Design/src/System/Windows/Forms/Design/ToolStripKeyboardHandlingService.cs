@@ -842,7 +842,7 @@ internal class ToolStripKeyboardHandlingService
                                     itemDesigner.EditTemplateNode(true);
                                     if (ActiveTemplateNode is not null)
                                     {
-                                        ActiveTemplateNode.ignoreFirstKeyUp = true;
+                                        ActiveTemplateNode._ignoreFirstKeyUp = true;
                                     }
                                 }
                             }
@@ -854,7 +854,7 @@ internal class ToolStripKeyboardHandlingService
                                 tooldesigner.ShowEditNode(true);
                                 if (ActiveTemplateNode is not null)
                                 {
-                                    ActiveTemplateNode.ignoreFirstKeyUp = true;
+                                    ActiveTemplateNode._ignoreFirstKeyUp = true;
                                 }
                             }
                         }
@@ -877,7 +877,7 @@ internal class ToolStripKeyboardHandlingService
                             tooldesigner.ShowEditNode(false);
                             if (ActiveTemplateNode is not null)
                             {
-                                ActiveTemplateNode.ignoreFirstKeyUp = true;
+                                ActiveTemplateNode._ignoreFirstKeyUp = true;
                             }
                         }
                     }
@@ -1067,8 +1067,8 @@ internal class ToolStripKeyboardHandlingService
     private void OnKeySelect(object sender, EventArgs e)
     {
         MenuCommand cmd = (MenuCommand)sender;
-        bool reverse = (cmd.CommandID.Equals(MenuCommands.KeySelectPrevious));
-        ProcessKeySelect(reverse, cmd);
+        bool reverse = cmd.CommandID.Equals(MenuCommands.KeySelectPrevious);
+        ProcessKeySelect(reverse);
     }
 
     /// <summary>
@@ -1134,7 +1134,7 @@ internal class ToolStripKeyboardHandlingService
     }
 
     // helper function to select the next item.
-    public void ProcessKeySelect(bool reverse, MenuCommand cmd)
+    public void ProcessKeySelect(bool reverse)
     {
         ISelectionService selSvc = SelectionService;
         if (selSvc is not null)
@@ -1455,7 +1455,7 @@ internal class ToolStripKeyboardHandlingService
     // caches the old commands from the menuCommand service.
     private void PopulateOldCommands()
     {
-        _oldCommands ??= new();
+        _oldCommands ??= [];
 
         IMenuCommandService mcs = MenuService;
         if (mcs is not null)
@@ -1493,7 +1493,7 @@ internal class ToolStripKeyboardHandlingService
     // populates a list of our custom commands to be added to menu command service.
     private void PopulateNewCommands()
     {
-        _newCommands ??= new();
+        _newCommands ??= [];
 
         _newCommands.Add(new MenuCommand(new EventHandler(OnKeySelect), MenuCommands.KeySelectNext));
         _newCommands.Add(new MenuCommand(new EventHandler(OnKeySelect), MenuCommands.KeySelectPrevious));

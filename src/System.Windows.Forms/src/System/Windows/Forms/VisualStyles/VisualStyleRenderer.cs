@@ -212,7 +212,7 @@ public sealed class VisualStyleRenderer : IHandle<HTHEME>
     {
         ArgumentNullException.ThrowIfNull(dc);
 
-        using DeviceContextHdcScope hdc = new(dc);
+        using DeviceContextHdcScope hdc = dc.ToHdcScope();
         DrawBackground(hdc, bounds, HWND.Null);
     }
 
@@ -241,7 +241,7 @@ public sealed class VisualStyleRenderer : IHandle<HTHEME>
     {
         ArgumentNullException.ThrowIfNull(dc);
 
-        using DeviceContextHdcScope hdc = new(dc);
+        using DeviceContextHdcScope hdc = dc.ToHdcScope();
         DrawBackground(hdc, bounds, clipRectangle, HWND.Null);
     }
 
@@ -268,7 +268,7 @@ public sealed class VisualStyleRenderer : IHandle<HTHEME>
     {
         ArgumentNullException.ThrowIfNull(dc);
 
-        using DeviceContextHdcScope hdc = new(dc);
+        using DeviceContextHdcScope hdc = dc.ToHdcScope();
         return DrawEdge(hdc, bounds, edges, style, effects);
     }
 
@@ -344,7 +344,7 @@ public sealed class VisualStyleRenderer : IHandle<HTHEME>
 
         if (childControl.IsHandleCreated)
         {
-            using DeviceContextHdcScope hdc = new(dc);
+            using DeviceContextHdcScope hdc = dc.ToHdcScope();
             _lastHResult = PInvoke.DrawThemeParentBackground(childControl.HWND, hdc, bounds);
         }
     }
@@ -372,7 +372,7 @@ public sealed class VisualStyleRenderer : IHandle<HTHEME>
     {
         ArgumentNullException.ThrowIfNull(dc);
 
-        using DeviceContextHdcScope hdc = new(dc);
+        using DeviceContextHdcScope hdc = dc.ToHdcScope();
         DrawText(hdc, bounds, textToDraw, drawDisabled, flags);
     }
 
@@ -406,7 +406,7 @@ public sealed class VisualStyleRenderer : IHandle<HTHEME>
     {
         ArgumentNullException.ThrowIfNull(dc);
 
-        using DeviceContextHdcScope hdc = new(dc);
+        using DeviceContextHdcScope hdc = dc.ToHdcScope();
         return GetBackgroundContentRectangle(hdc, bounds);
     }
 
@@ -433,7 +433,7 @@ public sealed class VisualStyleRenderer : IHandle<HTHEME>
             return Rectangle.Empty;
         }
 
-        using DeviceContextHdcScope hdc = new(dc);
+        using DeviceContextHdcScope hdc = dc.ToHdcScope();
         _lastHResult = PInvoke.GetThemeBackgroundExtent(HTHEME, hdc, Part, State, contentBounds, out RECT extents);
         return extents;
     }
@@ -452,7 +452,7 @@ public sealed class VisualStyleRenderer : IHandle<HTHEME>
             return null;
         }
 
-        using DeviceContextHdcScope hdc = new(dc);
+        using DeviceContextHdcScope hdc = dc.ToHdcScope();
         HRGN hrgn;
         _lastHResult = PInvoke.GetThemeBackgroundRegion(HTHEME, hdc, Part, State, bounds, &hrgn);
 
@@ -467,7 +467,7 @@ public sealed class VisualStyleRenderer : IHandle<HTHEME>
         // From the GDI+ sources it doesn't appear as if they take ownership of the hRegion, so this is safe to do.
         // We need to DeleteObject in order to not leak.
         Region region = Region.FromHrgn(hrgn);
-        PInvoke.DeleteObject(hrgn);
+        PInvokeCore.DeleteObject(hrgn);
         return region;
     }
 
@@ -533,7 +533,7 @@ public sealed class VisualStyleRenderer : IHandle<HTHEME>
 
         SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
 
-        using DeviceContextHdcScope hdc = new(dc);
+        using DeviceContextHdcScope hdc = dc.ToHdcScope();
         _lastHResult = PInvoke.GetThemeFont(this, hdc, Part, State, (int)prop, out LOGFONT logfont);
 
         // Check for a failed HR.
@@ -572,7 +572,7 @@ public sealed class VisualStyleRenderer : IHandle<HTHEME>
     {
         ArgumentNullException.ThrowIfNull(dc);
 
-        using DeviceContextHdcScope hdc = new(dc);
+        using DeviceContextHdcScope hdc = dc.ToHdcScope();
         return GetPartSize(hdc, type, HWND.Null);
     }
 
@@ -602,7 +602,7 @@ public sealed class VisualStyleRenderer : IHandle<HTHEME>
         // Valid values are 0x0 to 0x2
         SourceGenerated.EnumValidator.Validate(type, nameof(type));
 
-        using DeviceContextHdcScope hdc = new(dc);
+        using DeviceContextHdcScope hdc = dc.ToHdcScope();
         _lastHResult = PInvoke.GetThemePartSize(HTHEME, hdc, Part, State, bounds, (THEMESIZE)type, out SIZE size);
         return size;
     }
@@ -629,7 +629,7 @@ public sealed class VisualStyleRenderer : IHandle<HTHEME>
         // Valid values are 0xe11 to 0xe13
         SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
 
-        using DeviceContextHdcScope hdc = new(dc);
+        using DeviceContextHdcScope hdc = dc.ToHdcScope();
         _lastHResult = PInvoke.GetThemeMargins(HTHEME, hdc, Part, State, (THEME_PROPERTY_SYMBOL_ID)prop, null, out MARGINS margins);
 
         return new Padding(margins.cxLeftWidth, margins.cyTopHeight, margins.cxRightWidth, margins.cyBottomHeight);
@@ -660,7 +660,7 @@ public sealed class VisualStyleRenderer : IHandle<HTHEME>
         ArgumentNullException.ThrowIfNull(dc);
         textToDraw.ThrowIfNullOrEmpty();
 
-        using DeviceContextHdcScope hdc = new(dc);
+        using DeviceContextHdcScope hdc = dc.ToHdcScope();
         _lastHResult = PInvoke.GetThemeTextExtent(
             HTHEME,
             hdc,
@@ -683,7 +683,7 @@ public sealed class VisualStyleRenderer : IHandle<HTHEME>
         ArgumentNullException.ThrowIfNull(dc);
         textToDraw.ThrowIfNullOrEmpty();
 
-        using DeviceContextHdcScope hdc = new(dc);
+        using DeviceContextHdcScope hdc = dc.ToHdcScope();
         _lastHResult = PInvoke.GetThemeTextExtent(
             HTHEME,
             hdc,
@@ -705,7 +705,7 @@ public sealed class VisualStyleRenderer : IHandle<HTHEME>
     {
         ArgumentNullException.ThrowIfNull(dc);
 
-        using DeviceContextHdcScope hdc = new(dc);
+        using DeviceContextHdcScope hdc = dc.ToHdcScope();
         _lastHResult = PInvoke.GetThemeTextMetrics(HTHEME, hdc, Part, State, out TEXTMETRICW tm);
         return TextMetrics.FromTEXTMETRICW(tm);
     }
@@ -717,7 +717,7 @@ public sealed class VisualStyleRenderer : IHandle<HTHEME>
     {
         ArgumentNullException.ThrowIfNull(dc);
 
-        using DeviceContextHdcScope hdc = new(dc);
+        using DeviceContextHdcScope hdc = dc.ToHdcScope();
         _lastHResult = PInvoke.HitTestThemeBackground(
             HTHEME,
             hdc,
@@ -751,7 +751,7 @@ public sealed class VisualStyleRenderer : IHandle<HTHEME>
     {
         ArgumentNullException.ThrowIfNull(dc);
 
-        using DeviceContextHdcScope hdc = new(dc);
+        using DeviceContextHdcScope hdc = dc.ToHdcScope();
         _lastHResult = PInvoke.HitTestThemeBackground(
             HTHEME,
             hdc,

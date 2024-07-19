@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design;
 
@@ -13,7 +11,8 @@ internal class ColumnHeaderCollectionEditor : CollectionEditor
     /// <summary>
     /// Initializes a new instance of the <see cref="ImageCollectionEditor"/> class.
     /// </summary>
-    public ColumnHeaderCollectionEditor(Type type) : base(type)
+    public ColumnHeaderCollectionEditor(Type type)
+        : base(type)
     {
     }
 
@@ -28,14 +27,17 @@ internal class ColumnHeaderCollectionEditor : CollectionEditor
     /// <summary>
     /// Sets the specified collection to have the specified array of items.
     /// </summary>
-    protected override object SetItems(object editValue, object[] value)
+    protected override object? SetItems(object? editValue, object[]? value)
     {
         if (editValue is ListView.ColumnHeaderCollection list)
         {
             list.Clear();
-            ColumnHeader[] colHeaders = new ColumnHeader[value.Length];
-            Array.Copy(value, 0, colHeaders, 0, value.Length);
-            list.AddRange(colHeaders);
+            if (value is not null)
+            {
+                ColumnHeader[] colHeaders = new ColumnHeader[value.Length];
+                Array.Copy(value, 0, colHeaders, 0, value.Length);
+                list.AddRange(colHeaders);
+            }
         }
 
         return editValue;
@@ -44,17 +46,17 @@ internal class ColumnHeaderCollectionEditor : CollectionEditor
     /// <summary>
     ///  Removes the item from listview column header collection
     /// </summary>
-    internal override void OnItemRemoving(object item)
+    internal override void OnItemRemoving(object? item)
     {
-        if (Context.Instance is not ListView listview)
+        if (Context?.Instance is not ListView listview)
         {
             return;
         }
 
         if (item is ColumnHeader column)
         {
-            IComponentChangeService changeService = Context.GetService<IComponentChangeService>();
-            PropertyDescriptor property = null;
+            IComponentChangeService? changeService = Context.GetService<IComponentChangeService>();
+            PropertyDescriptor? property = null;
             if (changeService is not null)
             {
                 property = TypeDescriptor.GetProperties(Context.Instance)["Columns"];

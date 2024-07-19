@@ -22,7 +22,12 @@ namespace System.Windows.Forms;
 [SRDescription(nameof(SR.DescriptionPictureBox))]
 public partial class PictureBox : Control, ISupportInitialize
 {
-    private static readonly bool s_useWebRequest = AppContext.TryGetSwitch("System.Windows.Forms.PictureBox.UseWebRequest", out bool useWebRequest) ? useWebRequest : true;
+    private static readonly bool s_useWebRequest =
+        !AppContext.TryGetSwitch("System.Windows.Forms.PictureBox.UseWebRequest", out bool useWebRequest)
+        || useWebRequest;
+
+    private static readonly HttpClient s_httpClient = !LocalAppContextSwitches.ServicePointManagerCheckCrl ? new() :
+        new(new HttpClientHandler { CheckCertificateRevocationList = true });
 
     /// <summary>
     ///  The type of border this control will have.
@@ -123,7 +128,7 @@ public partial class PictureBox : Control, ISupportInitialize
     /// </summary>
     [DefaultValue(BorderStyle.None)]
     [SRCategory(nameof(SR.CatAppearance))]
-    [DispId(PInvoke.DISPID_BORDERSTYLE)]
+    [DispId(PInvokeCore.DISPID_BORDERSTYLE)]
     [SRDescription(nameof(SR.PictureBoxBorderStyleDescr))]
     public BorderStyle BorderStyle
     {
@@ -356,7 +361,7 @@ public partial class PictureBox : Control, ISupportInitialize
 
                 case PictureBoxSizeMode.Zoom:
                     Size imageSize = _image.Size;
-                    float ratio = Math.Min((float)ClientRectangle.Width / (float)imageSize.Width, (float)ClientRectangle.Height / (float)imageSize.Height);
+                    float ratio = Math.Min(ClientRectangle.Width / (float)imageSize.Width, ClientRectangle.Height / (float)imageSize.Height);
                     result.Width = (int)(imageSize.Width * ratio);
                     result.Height = (int)(imageSize.Height * ratio);
                     result.X = (ClientRectangle.Width - result.Width) / 2;
@@ -462,23 +467,26 @@ public partial class PictureBox : Control, ISupportInitialize
         try
         {
             DisposeImageStream();
-            if (UseWebRequest())
+            Uri uri = CalculateUri(_imageLocation);
+            if (uri.IsFile)
             {
-                LoadImageViaWebClient();
+                _localImageStreamReader = new StreamReader(uri.LocalPath);
+                Image img = Image.FromStream(_localImageStreamReader.BaseStream);
+                InstallNewImage(img, ImageInstallationType.FromUrl);
+            }
+            else if (UseWebRequest())
+            {
+                // Run async operation synchronously to avoid blocking UI thread and potential deadlocks.
+                Task.Run(async () =>
+                {
+                    _uriImageStream = await s_httpClient.GetStreamAsync(uri).ConfigureAwait(false);
+                    Image img = Image.FromStream(_uriImageStream);
+                    InstallNewImage(img, ImageInstallationType.FromUrl);
+                }).GetAwaiter().GetResult();
             }
             else
             {
-                Uri uri = CalculateUri(_imageLocation);
-                if (uri.IsFile)
-                {
-                    _localImageStreamReader = new StreamReader(uri.LocalPath);
-                    Image img = Image.FromStream(_localImageStreamReader.BaseStream);
-                    InstallNewImage(img, ImageInstallationType.FromUrl);
-                }
-                else
-                {
-                    throw new NotSupportedException(SR.PictureBoxRemoteLocationNotSupported);
-                }
+                throw new NotSupportedException(SR.PictureBoxRemoteLocationNotSupported);
             }
         }
         catch
@@ -493,34 +501,6 @@ public partial class PictureBox : Control, ISupportInitialize
                 InstallNewImage(ErrorImage, ImageInstallationType.ErrorOrInitial);
             }
         }
-    }
-
-    private void LoadImageViaWebClient()
-    {
-        Image img;
-        Uri uri = CalculateUri(_imageLocation!);
-        if (uri.IsFile)
-        {
-            _localImageStreamReader = new StreamReader(uri.LocalPath);
-            img = Image.FromStream(_localImageStreamReader.BaseStream);
-        }
-        else
-        {
-            if (LocalAppContextSwitches.ServicePointManagerCheckCrl)
-            {
-                ServicePointManager.CheckCertificateRevocationList = true;
-            }
-
-#pragma warning disable SYSLIB0014 // Type or member is obsolete
-            using (WebClient webClient = new()) // lgtm[cs/webrequest-checkcertrevlist-disabled] - Having ServicePointManager.CheckCertificateRevocationList set to true has a slim chance of resulting in failure. We have an opt-out for this rare event.
-#pragma warning restore SYSLIB0014 // Type or member is obsolete
-            {
-                _uriImageStream = webClient.OpenRead(uri.ToString());
-                img = Image.FromStream(_uriImageStream);
-            }
-        }
-
-        InstallNewImage(img, ImageInstallationType.FromUrl);
     }
 
     [SRCategory(nameof(SR.CatAsynchronous))]
@@ -723,7 +703,7 @@ public partial class PictureBox : Control, ISupportInitialize
                 // Report progress thus far, but only if we know total length.
                 if (_contentLength != -1)
                 {
-                    int progress = (int)(100 * (((float)_totalBytesRead) / ((float)_contentLength)));
+                    int progress = (int)(100 * (_totalBytesRead / ((float)_contentLength)));
                     _currentAsyncLoadOperation?.Post(
                         _loadProgressDelegate!,
                         new ProgressChangedEventArgs(progress, null));
@@ -867,15 +847,14 @@ public partial class PictureBox : Control, ISupportInitialize
         }
     }
 
-    private static readonly object EVENT_SIZEMODECHANGED = new();
+    private static readonly object s_sizeModeChangedEvent = new();
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.PictureBoxOnSizeModeChangedDescr))]
     public event EventHandler? SizeModeChanged
     {
-        add => Events.AddHandler(EVENT_SIZEMODECHANGED, value);
-
-        remove => Events.RemoveHandler(EVENT_SIZEMODECHANGED, value);
+        add => Events.AddHandler(s_sizeModeChangedEvent, value);
+        remove => Events.RemoveHandler(s_sizeModeChangedEvent, value);
     }
 
     internal override bool SupportsUiaProviders => true;
@@ -1147,8 +1126,7 @@ public partial class PictureBox : Control, ISupportInitialize
             ImageAnimator.UpdateFrames(Image);
 
             // Error and initial image are drawn centered, non-stretched.
-            Rectangle drawingRect =
-                (_imageInstallationType == ImageInstallationType.ErrorOrInitial)
+            Rectangle drawingRect = _imageInstallationType == ImageInstallationType.ErrorOrInitial
                 ? ImageRectangleFromSizeMode(PictureBoxSizeMode.CenterImage)
                 : ImageRectangle;
 
@@ -1177,7 +1155,10 @@ public partial class PictureBox : Control, ISupportInitialize
     protected override void OnResize(EventArgs e)
     {
         base.OnResize(e);
-        if (_sizeMode == PictureBoxSizeMode.Zoom || _sizeMode == PictureBoxSizeMode.StretchImage || _sizeMode == PictureBoxSizeMode.CenterImage || BackgroundImage is not null)
+        if (_sizeMode == PictureBoxSizeMode.Zoom
+            || _sizeMode == PictureBoxSizeMode.StretchImage
+            || _sizeMode == PictureBoxSizeMode.CenterImage
+            || BackgroundImage is not null)
         {
             Invalidate();
         }
@@ -1187,7 +1168,7 @@ public partial class PictureBox : Control, ISupportInitialize
 
     protected virtual void OnSizeModeChanged(EventArgs e)
     {
-        if (Events[EVENT_SIZEMODECHANGED] is EventHandler eh)
+        if (Events[s_sizeModeChangedEvent] is EventHandler eh)
         {
             eh(this, e);
         }

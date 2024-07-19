@@ -27,19 +27,15 @@ public partial class Control
 
         public void Dispose()
         {
-            Dispose(true);
+            if (!_handle.IsNull)
+            {
+                PInvokeCore.DeleteObject(_handle);
+                _handle = default;
+            }
+
             GC.SuppressFinalize(this);
         }
 
-        private void Dispose(bool disposing)
-        {
-            if (!_handle.IsNull)
-            {
-                PInvoke.DeleteObject(_handle);
-                _handle = default;
-            }
-        }
-
-        ~FontHandleWrapper() => Dispose(disposing: false);
+        ~FontHandleWrapper() => Dispose();
     }
 }

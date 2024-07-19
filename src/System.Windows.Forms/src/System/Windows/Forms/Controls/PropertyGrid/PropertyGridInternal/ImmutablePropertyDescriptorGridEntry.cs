@@ -36,10 +36,20 @@ internal sealed class ImmutablePropertyDescriptorGridEntry : PropertyDescriptorG
         set
         {
             // Create a new instance of the value and set it into the parent grid entry.
-            object owner = GetValueOwner();
+            object? owner = GetValueOwner();
             object? newObject = null;
-            GridEntry parentEntry = InstanceParentGridEntry;
+            GridEntry? parentEntry = InstanceParentGridEntry;
+            if (parentEntry is null)
+            {
+                return;
+            }
+
             TypeConverter parentConverter = parentEntry.TypeConverter;
+
+            if (owner is null)
+            {
+                return;
+            }
 
             PropertyDescriptorCollection? properties = parentConverter.GetProperties(parentEntry, owner);
             if (properties is not null)
@@ -66,7 +76,7 @@ internal sealed class ImmutablePropertyDescriptorGridEntry : PropertyDescriptorG
                     if (string.IsNullOrEmpty(e.Message))
                     {
                         throw new TargetInvocationException(
-                            string.Format(SR.ExceptionCreatingObject, InstanceParentGridEntry.PropertyType.FullName, e),
+                            string.Format(SR.ExceptionCreatingObject, InstanceParentGridEntry?.PropertyType?.FullName, e),
                             e);
                     }
                     else
@@ -84,15 +94,15 @@ internal sealed class ImmutablePropertyDescriptorGridEntry : PropertyDescriptorG
     }
 
     protected override bool SendNotification(object? owner, Notify notification)
-        => ParentGridEntry.SendNotificationToParent(notification);
+        => ParentGridEntry?.SendNotificationToParent(notification) ?? false;
 
-    public override bool ShouldRenderReadOnly => InstanceParentGridEntry.ShouldRenderReadOnly;
+    public override bool ShouldRenderReadOnly => InstanceParentGridEntry?.ShouldRenderReadOnly ?? false;
 
-    private GridEntry InstanceParentGridEntry
+    private GridEntry? InstanceParentGridEntry
     {
         get
         {
-            GridEntry parent = ParentGridEntry;
+            GridEntry? parent = ParentGridEntry;
 
             if (parent is CategoryGridEntry)
             {

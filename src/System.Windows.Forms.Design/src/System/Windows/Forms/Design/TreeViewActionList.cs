@@ -37,9 +37,11 @@ internal class TreeViewActionList : DesignerActionList
 
     public override DesignerActionItemCollection GetSortedActionItems()
     {
-        DesignerActionItemCollection items = new();
-        items.Add(new DesignerActionMethodItem(this, "InvokeNodesDialog", SR.InvokeNodesDialogDisplayName, SR.PropertiesCategoryName, SR.InvokeNodesDialogDescription, true));
-        items.Add(new DesignerActionPropertyItem("ImageList", SR.ImageListDisplayName, SR.PropertiesCategoryName, SR.ImageListDescription));
+        DesignerActionItemCollection items =
+        [
+            new DesignerActionMethodItem(this, "InvokeNodesDialog", SR.InvokeNodesDialogDisplayName, SR.PropertiesCategoryName, SR.InvokeNodesDialogDescription, true),
+            new DesignerActionPropertyItem("ImageList", SR.ImageListDisplayName, SR.PropertiesCategoryName, SR.ImageListDescription),
+        ];
         return items;
     }
 }

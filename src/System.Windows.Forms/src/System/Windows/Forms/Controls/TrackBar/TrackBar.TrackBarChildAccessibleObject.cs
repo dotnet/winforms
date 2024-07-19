@@ -55,13 +55,12 @@ public partial class TrackBar
             ? owner.AccessibilityObject as TrackBarAccessibleObject
             : null;
 
-        internal override int[] RuntimeId
-            => _runtimeId ??= new int[]
-            {
-                RuntimeIDFirstItem,
-                (int)(this.TryGetOwnerAs(out TrackBar? owner) ? owner.InternalHandle : HWND.Null),
-                GetChildId()
-            };
+        internal override int[] RuntimeId => _runtimeId ??=
+        [
+            RuntimeIDFirstItem,
+            (int)(this.TryGetOwnerAs(out TrackBar? owner) ? owner.InternalHandle : HWND.Null),
+            GetChildId()
+        ];
 
         internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
             => direction switch

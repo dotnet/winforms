@@ -34,10 +34,8 @@ public class PropertyValueUIItemTests
     [Fact]
     public void PropertyValueUIItem_Ctor_NullHandler_ThrowsArgumentNullException()
     {
-        using (Bitmap uiItemImage = new(10, 10))
-        {
-            Assert.Throws<ArgumentNullException>("handler", () => new PropertyValueUIItem(uiItemImage, null, "tooltip"));
-        }
+        using Bitmap uiItemImage = new(10, 10);
+        Assert.Throws<ArgumentNullException>("handler", () => new PropertyValueUIItem(uiItemImage, null, "tooltip"));
     }
 
     private static void Dummy_PropertyValueUIItemInvokeHandler(ITypeDescriptorContext context, PropertyDescriptor propDesc, PropertyValueUIItem invokedItem) { }

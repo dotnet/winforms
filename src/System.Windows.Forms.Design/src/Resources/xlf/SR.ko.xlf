@@ -57,6 +57,11 @@
         <target state="translated">ActiveX 컨트롤</target>
         <note />
       </trans-unit>
+      <trans-unit id="BaseNodeName">
+        <source>Node</source>
+        <target state="translated">노드</target>
+        <note />
+      </trans-unit>
       <trans-unit id="BasicDesignerLoaderAlreadyLoaded">
         <source>The designer is already loaded.</source>
         <target state="translated">디자이너가 이미 로드되었습니다.</target>
@@ -372,6 +377,11 @@
       <trans-unit id="CollectionEditorCaption">
         <source>{0} Collection Editor</source>
         <target state="translated">{0} 컬렉션 편집기</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorCreateInstanceError">
+        <source>Neither {0} nor {1} can create an instance of {2}.</source>
+        <target state="translated">{0} 또는 {1} 모두 {2}인스턴스를 만들 수 없습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="CollectionEditorInheritedReadOnlySelection">

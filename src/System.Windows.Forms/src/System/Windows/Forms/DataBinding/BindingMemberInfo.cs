@@ -15,8 +15,8 @@ public readonly struct BindingMemberInfo : IEquatable<BindingMemberInfo>
         int lastDot = dataMember.LastIndexOf('.');
         if (lastDot != -1)
         {
-            _dataList = dataMember.Substring(0, lastDot);
-            _dataField = dataMember.Substring(lastDot + 1);
+            _dataList = dataMember[..lastDot];
+            _dataField = dataMember[(lastDot + 1)..];
         }
         else
         {
