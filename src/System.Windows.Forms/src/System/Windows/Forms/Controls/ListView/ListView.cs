@@ -4880,10 +4880,6 @@ public partial class ListView : Control
     protected virtual void OnRetrieveVirtualItem(RetrieveVirtualItemEventArgs e)
     {
         ((RetrieveVirtualItemEventHandler?)Events[s_retrieveVirtualItemEvent])?.Invoke(this, e);
-        if (e.Item is null)
-        {
-            throw new InvalidOperationException(SR.ListViewVirtualItemRequired);
-        }
     }
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -6800,7 +6796,7 @@ public partial class ListView : Control
 
                         RetrieveVirtualItemEventArgs rVI = new(dispInfo->item.iItem);
                         OnRetrieveVirtualItem(rVI);
-                        ListViewItem lvItem = rVI.Item!;
+                        ListViewItem lvItem = rVI.Item ?? throw new InvalidOperationException(SR.ListViewVirtualItemRequired);
 
                         lvItem.SetItemIndex(this, dispInfo->item.iItem);
                         if ((dispInfo->item.mask & LIST_VIEW_ITEM_FLAGS.LVIF_TEXT) != 0)
