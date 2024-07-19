@@ -14,7 +14,7 @@ public sealed class DateTimePickerDesignerTests
         bool autoResizeHandles = dateTimePickerDesigner.AutoResizeHandles;
 
         dateTimePickerDesigner.Should().NotBeNull();
-        autoResizeHandles.Should().Be(true);
+        autoResizeHandles.Should().BeTrue();
     }
 
     [Fact]
