@@ -9,7 +9,6 @@ using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ListViewItem;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
-using System.Reflection;
 
 namespace System.Windows.Forms.Tests;
 
@@ -5900,9 +5899,8 @@ public class ListViewTests
 
         // Add first handler and simulate the column click event
         listView.ColumnClick += firstHandler;
-        var args = new ColumnClickEventArgs(1);
-        listView.GetType().GetMethod("OnColumnClick", BindingFlags.Instance | BindingFlags.NonPublic)
-            .Invoke(listView, new[] { args });
+        ColumnClickEventArgs args = new(1);
+        listView.TestAccessor().Dynamic.OnColumnClick(args);
 
         firstHandlerInvokeCount.Should().Be(1);
         secondHandlerInvokeCount.Should().Be(0);
@@ -5911,16 +5909,14 @@ public class ListViewTests
 
         // Add second handler and simulate the event again
         listView.ColumnClick += secondHandler;
-        listView.GetType().GetMethod("OnColumnClick", BindingFlags.Instance | BindingFlags.NonPublic)
-            .Invoke(listView, new[] { args });
+        listView.TestAccessor().Dynamic.OnColumnClick(args);
 
         firstHandlerInvokeCount.Should().Be(2); // First handler called again
         secondHandlerInvokeCount.Should().Be(1); // Second handler called for the first time
 
         // Remove first handler and simulate the event again
         listView.ColumnClick -= firstHandler;
-        listView.GetType().GetMethod("OnColumnClick", BindingFlags.Instance | BindingFlags.NonPublic)
-            .Invoke(listView, new[] { args });
+        listView.TestAccessor().Dynamic.OnColumnClick(args);
 
         // First handler should not be called again, second handler should be called again
         firstHandlerInvokeCount.Should().Be(2);
@@ -5946,9 +5942,8 @@ public class ListViewTests
 
         // Test adding and invoking first handler.
         listView.GroupTaskLinkClick += handler1;
-        var expectedEventArgs = new ListViewGroupEventArgs(1);
-        listView.GetType().GetMethod("OnGroupTaskLinkClick", BindingFlags.Instance | BindingFlags.NonPublic)
-            .Invoke(listView, new[] { expectedEventArgs });
+        ListViewGroupEventArgs expectedEventArgs = new(1);
+        listView.TestAccessor().Dynamic.OnGroupTaskLinkClick(expectedEventArgs);
 
         callCount.Should().Be(1);
         eventSender.Should().Be(listView);
@@ -5956,24 +5951,21 @@ public class ListViewTests
 
         // Test adding and invoking both handlers.
         listView.GroupTaskLinkClick += handler2;
-        listView.GetType().GetMethod("OnGroupTaskLinkClick", BindingFlags.Instance | BindingFlags.NonPublic)
-            .Invoke(listView, new[] { new ListViewGroupEventArgs(2) });
+        listView.TestAccessor().Dynamic.OnGroupTaskLinkClick(new ListViewGroupEventArgs(2));
 
         // Expect callCount to be 3 because both handlers should be called.
         callCount.Should().Be(3);
 
         // Test removing first handler and invoking.
         listView.GroupTaskLinkClick -= handler1;
-        listView.GetType().GetMethod("OnGroupTaskLinkClick", BindingFlags.Instance | BindingFlags.NonPublic)
-            .Invoke(listView, new[] { new ListViewGroupEventArgs(3) });
+        listView.TestAccessor().Dynamic.OnGroupTaskLinkClick(new ListViewGroupEventArgs(3));
 
         // Expect callCount to be 4 because only second handler should be called.
         callCount.Should().Be(4);
 
         // Test removing second handler and ensuring no invocation.
         listView.GroupTaskLinkClick -= handler2;
-        listView.GetType().GetMethod("OnGroupTaskLinkClick", BindingFlags.Instance | BindingFlags.NonPublic)
-            .Invoke(listView, new[] { new ListViewGroupEventArgs(4) });
+        listView.TestAccessor().Dynamic.OnGroupTaskLinkClick(new ListViewGroupEventArgs(4));
 
         // Expect callCount to remain 4 because no handlers should be called.
         callCount.Should().Be(4);
