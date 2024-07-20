@@ -416,11 +416,10 @@ public unsafe partial class Control :
     {
         get
         {
-            AccessibleObject? accessibleObject = (AccessibleObject?)Properties.GetObject(s_accessibilityProperty);
-            if (accessibleObject is null)
+            if (!Properties.TryGetValue(s_accessibilityProperty, out AccessibleObject? accessibleObject))
             {
                 accessibleObject = CreateAccessibilityInstance();
-                Properties.SetObject(s_accessibilityProperty, accessibleObject);
+                Properties.AddValue(s_accessibilityProperty, accessibleObject);
             }
 
             Debug.Assert(accessibleObject is not null, "Failed to create accessibility object");
@@ -436,11 +435,10 @@ public unsafe partial class Control :
     {
         get
         {
-            AccessibleObject? ncAccessibleObject = (AccessibleObject?)Properties.GetObject(s_ncAccessibilityProperty);
-            if (ncAccessibleObject is null)
+            if (!Properties.TryGetValue(s_ncAccessibilityProperty, out AccessibleObject? ncAccessibleObject))
             {
                 ncAccessibleObject = new ControlAccessibleObject(this, (int)OBJECT_IDENTIFIER.OBJID_WINDOW);
-                Properties.SetObject(s_ncAccessibilityProperty, ncAccessibleObject);
+                Properties.AddValue(s_ncAccessibilityProperty, ncAccessibleObject);
             }
 
             Debug.Assert(ncAccessibleObject is not null, "Failed to create NON-CLIENT accessibility object");
@@ -464,8 +462,8 @@ public unsafe partial class Control :
     [SRDescription(nameof(SR.ControlAccessibleDefaultActionDescr))]
     public string? AccessibleDefaultActionDescription
     {
-        get => (string?)Properties.GetObject(s_accessibleDefaultActionProperty);
-        set => Properties.SetObject(s_accessibleDefaultActionProperty, value);
+        get => Properties.GetValueOrDefault<string?>(s_accessibleDefaultActionProperty);
+        set => Properties.AddValue(s_accessibleDefaultActionProperty, value);
     }
 
     /// <summary>
@@ -477,8 +475,8 @@ public unsafe partial class Control :
     [SRDescription(nameof(SR.ControlAccessibleDescriptionDescr))]
     public string? AccessibleDescription
     {
-        get => (string?)Properties.GetObject(s_accessibleDescriptionProperty);
-        set => Properties.SetObject(s_accessibleDescriptionProperty, value);
+        get => Properties.GetValueOrDefault<string?>(s_accessibleDescriptionProperty);
+        set => Properties.AddValue(s_accessibleDescriptionProperty, value);
     }
 
     /// <summary>
@@ -490,8 +488,8 @@ public unsafe partial class Control :
     [SRDescription(nameof(SR.ControlAccessibleNameDescr))]
     public string? AccessibleName
     {
-        get => (string?)Properties.GetObject(s_accessibleNameProperty);
-        set => Properties.SetObject(s_accessibleNameProperty, value);
+        get => Properties.GetValueOrDefault<string?>(s_accessibleNameProperty);
+        set => Properties.AddValue(s_accessibleNameProperty, value);
     }
 
     /// <summary>
@@ -854,7 +852,7 @@ public unsafe partial class Control :
     [SRDescription(nameof(SR.ControlBackgroundImageDescr))]
     public virtual Image? BackgroundImage
     {
-        get => (Image?)Properties.GetObject(s_backgroundImageProperty);
+        get => Properties.GetValueOrDefault<Image?>(s_backgroundImageProperty);
         set
         {
             if (BackgroundImage == value)
@@ -862,7 +860,7 @@ public unsafe partial class Control :
                 return;
             }
 
-            Properties.SetObject(s_backgroundImageProperty, value);
+            Properties.AddValue(s_backgroundImageProperty, value);
             OnBackgroundImageChanged(EventArgs.Empty);
         }
     }
@@ -947,8 +945,10 @@ public unsafe partial class Control :
             return;
         }
 
-        ControlBindingsCollection? bindings = (ControlBindingsCollection?)Properties.GetObject(s_bindingsProperty);
-        bindings?.Clear();
+        if (Properties.TryGetValue(s_bindingsProperty, out ControlBindingsCollection? bindings))
+        {
+            bindings.Clear();
+        }
     }
 
     /// <summary>
@@ -961,8 +961,7 @@ public unsafe partial class Control :
         get
         {
             // See if we have locally overridden the binding manager.
-            BindingContext? context = (BindingContext?)Properties.GetObject(s_bindingManagerProperty);
-            if (context is not null)
+            if (Properties.TryGetValue(s_bindingManagerProperty, out BindingContext? context))
             {
                 return context;
             }
@@ -979,12 +978,12 @@ public unsafe partial class Control :
         }
         set
         {
-            BindingContext? oldContext = (BindingContext?)Properties.GetObject(s_bindingManagerProperty);
+            Properties.TryGetValue(s_bindingManagerProperty, out BindingContext? oldContext);
             BindingContext? newContext = value;
 
             if (oldContext != newContext)
             {
-                Properties.SetObject(s_bindingManagerProperty, newContext);
+                Properties.AddValue(s_bindingManagerProperty, newContext);
 
                 // the property change will wire up the bindings.
                 OnBindingContextChanged(EventArgs.Empty);
@@ -1252,10 +1251,10 @@ public unsafe partial class Control :
     [SRDescription(nameof(SR.ControlContextMenuDescr))]
     public virtual ContextMenuStrip? ContextMenuStrip
     {
-        get => (ContextMenuStrip?)Properties.GetObject(s_contextMenuStripProperty);
+        get => Properties.GetValueOrDefault<ContextMenuStrip?>(s_contextMenuStripProperty);
         set
         {
-            ContextMenuStrip? oldValue = Properties.GetObject(s_contextMenuStripProperty) as ContextMenuStrip;
+            Properties.TryGetValue(s_contextMenuStripProperty, out ContextMenuStrip? oldValue);
 
             if (oldValue == value)
             {
@@ -1269,7 +1268,7 @@ public unsafe partial class Control :
                 oldValue.Disposed -= disposedHandler;
             }
 
-            Properties.SetObject(s_contextMenuStripProperty, value);
+            Properties.AddValue(s_contextMenuStripProperty, value);
 
             if (value is not null)
             {
@@ -1298,14 +1297,13 @@ public unsafe partial class Control :
     {
         get
         {
-            ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
-
-            if (controlsCollection is null)
+            if (Properties.TryGetValue(s_controlsCollectionProperty, out ControlCollection? controlsCollection))
             {
-                controlsCollection = CreateControlsInstance();
-                Properties.SetObject(s_controlsCollectionProperty, controlsCollection);
+                return controlsCollection;
             }
 
+            controlsCollection = CreateControlsInstance();
+            Properties.AddValue(s_controlsCollectionProperty, controlsCollection);
             return controlsCollection;
         }
     }
@@ -1478,7 +1476,7 @@ public unsafe partial class Control :
     /// <summary>
     ///  Indicates whether or not this control has an accessible object associated with it.
     /// </summary>
-    internal bool IsAccessibilityObjectCreated => Properties.GetObject(s_accessibilityProperty) is ControlAccessibleObject;
+    internal bool IsAccessibilityObjectCreated => Properties.TryGetValue(s_accessibilityProperty, out ControlAccessibleObject? controlAccessibleObject);
 
     /// <summary>
     ///  Retrieves the Win32 thread ID of the thread that created the
@@ -1506,8 +1504,7 @@ public unsafe partial class Control :
                 return Cursors.WaitCursor;
             }
 
-            Cursor? cursor = (Cursor?)Properties.GetObject(s_cursorProperty);
-            if (cursor is not null)
+            if (Properties.TryGetValue(s_cursorProperty, out Cursor? cursor))
             {
                 return cursor;
             }
@@ -1536,11 +1533,11 @@ public unsafe partial class Control :
         }
         set
         {
-            Cursor? localCursor = (Cursor?)Properties.GetObject(s_cursorProperty);
+            Properties.TryGetValue(s_cursorProperty, out Cursor? localCursor);
             Cursor resolvedCursor = Cursor;
             if (localCursor != value)
             {
-                Properties.SetObject(s_cursorProperty, value);
+                Properties.AddValue(s_cursorProperty, value);
             }
 
             // Other things can change the cursor. We always want to force the correct cursor.
@@ -1588,13 +1585,13 @@ public unsafe partial class Control :
                 throw new NotSupportedException(SR.BindingNotSupported);
             }
 
-            ControlBindingsCollection? bindings = (ControlBindingsCollection?)Properties.GetObject(s_bindingsProperty);
-            if (bindings is null)
+            if (Properties.TryGetValue(s_bindingsProperty, out ControlBindingsCollection? bindings))
             {
-                bindings = new ControlBindingsCollection(this);
-                Properties.SetObject(s_bindingsProperty, bindings);
+                return bindings;
             }
 
+            bindings = new ControlBindingsCollection(this);
+            Properties.AddValue(s_bindingsProperty, bindings);
             return bindings;
         }
     }
@@ -1881,14 +1878,14 @@ public unsafe partial class Control :
         [param: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(ActiveXFontMarshaler))]
         set
         {
-            if (Equals((Font?)Properties.GetObject(s_fontProperty), value))
+            if (Equals(Properties.GetValueOrDefault<Font?>(s_fontProperty), value))
             {
                 // Explicitly set font for this control is unchanged, do nothing.
                 return;
             }
 
             Font currentFont = Font;
-            Properties.SetObject(s_fontProperty, value);
+            Properties.AddValue(s_fontProperty, value);
 
             // Clear the current cached HFONT, if any.
             DisposeFontHandle();
@@ -1988,14 +1985,13 @@ public unsafe partial class Control :
 
             if (TryGetExplicitlySetFont(out Font? font))
             {
-                FontHandleWrapper? fontHandle = (FontHandleWrapper?)Properties.GetObject(s_fontHandleWrapperProperty);
-                if (fontHandle is null)
+                if (Properties.TryGetValue(s_fontHandleWrapperProperty, out FontHandleWrapper? fontHandle))
                 {
-                    fontHandle = new FontHandleWrapper(font);
-
-                    Properties.SetObject(s_fontHandleWrapperProperty, fontHandle);
+                    return fontHandle.Handle;
                 }
 
+                fontHandle = new FontHandleWrapper(font);
+                Properties.AddValue(s_fontHandleWrapperProperty, fontHandle);
                 return fontHandle.Handle;
             }
 
@@ -2007,24 +2003,20 @@ public unsafe partial class Control :
             if (AmbientPropertiesService?.Font is { } ambientFont)
             {
                 FontHandleWrapper? fontHandle = null;
-
-                Font? currentAmbient = (Font?)Properties.GetObject(s_currentAmbientFontProperty);
-
-                if (currentAmbient is not null && currentAmbient == ambientFont)
+                if (Properties.TryGetValue(s_currentAmbientFontProperty, out Font? currentAmbient) && currentAmbient == ambientFont)
                 {
-                    fontHandle = (FontHandleWrapper?)Properties.GetObject(s_fontHandleWrapperProperty);
+                    fontHandle = Properties.GetValueOrDefault<FontHandleWrapper?>(s_fontHandleWrapperProperty);
                 }
                 else
                 {
-                    Properties.SetObject(s_currentAmbientFontProperty, ambientFont);
+                    Properties.AddValue(s_currentAmbientFontProperty, ambientFont);
                 }
 
                 if (fontHandle is null)
                 {
                     font = ambientFont;
                     fontHandle = new FontHandleWrapper(font);
-
-                    Properties.SetObject(s_fontHandleWrapperProperty, fontHandle);
+                    Properties.AddValue(s_fontHandleWrapperProperty, fontHandle);
                 }
 
                 return fontHandle.Handle;

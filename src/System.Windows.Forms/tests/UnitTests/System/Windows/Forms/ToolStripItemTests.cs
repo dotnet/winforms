@@ -15638,7 +15638,7 @@ public class ToolStripItemTests
         public bool IsAccessibleObjectCleared()
         {
             var key = this.TestAccessor().Dynamic.s_accessibilityProperty;
-            return Properties.GetObject(key) is not AccessibleObject;
+            return Properties.TryGetValue(key, out AccessibleObject accessibleObject) && accessibleObject is not AccessibleObject;
         }
     }
 }

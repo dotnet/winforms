@@ -576,7 +576,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
     /// </summary>
     private void AxContainerFormCreated()
     {
-        ((AxHost.AxContainer?)Properties.GetObject(s_propAxContainer))?.FormCreated();
+        Properties.GetValueOrDefault<AxHost.AxContainer?>(s_propAxContainer)?.FormCreated();
     }
 
     /// <summary>
@@ -586,14 +586,14 @@ public class ContainerControl : ScrollableControl, IContainerControl
 
     internal AxHost.AxContainer CreateAxContainer()
     {
-        object? aXContainer = Properties.GetObject(s_propAxContainer);
-        if (aXContainer is null)
+        if (Properties.TryGetValue(s_propAxContainer, out AxHost.AxContainer? aXContainer))
         {
-            aXContainer = new AxHost.AxContainer(this);
-            Properties.SetObject(s_propAxContainer, aXContainer);
+            return aXContainer;
         }
 
-        return (AxHost.AxContainer)aXContainer;
+        aXContainer = new AxHost.AxContainer(this);
+        Properties.AddValue(s_propAxContainer, aXContainer);
+        return aXContainer;
     }
 
     /// <summary>

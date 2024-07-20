@@ -3910,10 +3910,10 @@ public partial class ComboBox : ListControl
     {
         get
         {
-            if (!(Properties.GetObject(s_propFlatComboAdapter) is FlatComboAdapter comboAdapter) || !comboAdapter.IsValid(this))
+            if (!Properties.TryGetValue(s_propFlatComboAdapter, out FlatComboAdapter? comboAdapter) || !comboAdapter.IsValid(this))
             {
                 comboAdapter = CreateFlatComboAdapterInstance();
-                Properties.SetObject(s_propFlatComboAdapter, comboAdapter);
+                Properties.AddValue(s_propFlatComboAdapter, comboAdapter);
             }
 
             return comboAdapter;

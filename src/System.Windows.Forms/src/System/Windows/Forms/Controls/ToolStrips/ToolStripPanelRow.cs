@@ -89,14 +89,13 @@ public partial class ToolStripPanelRow : Component, IArrangedElement
     {
         get
         {
-            ToolStripPanelRowControlCollection? controlsCollection = (ToolStripPanelRowControlCollection?)Properties.GetObject(s_propControlsCollection);
-
-            if (controlsCollection is null)
+            if (Properties.TryGetValue(s_propControlsCollection, out ToolStripPanelRowControlCollection? controlsCollection))
             {
-                controlsCollection = CreateControlsInstance();
-                Properties.SetObject(s_propControlsCollection, controlsCollection);
+                return controlsCollection;
             }
 
+            controlsCollection = CreateControlsInstance();
+            Properties.AddValue(s_propControlsCollection, controlsCollection);
             return controlsCollection;
         }
     }
