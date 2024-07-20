@@ -77,6 +77,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         Friend Declare Function WaitForSingleObject Lib "kernel32" (
             hHandle As NativeTypes.LateInitSafeHandleZeroOrMinusOneIsInvalid,
             dwMilliseconds As Integer) As Integer
+
 #Disable Warning IDE0049  ' Use language keywords instead of framework type names for type references, Justification:=<Types come from Windows Native API>
 #Disable Warning IDE1006 ' Naming Styles, Justification:=<Names come from Windows Native API>
 
