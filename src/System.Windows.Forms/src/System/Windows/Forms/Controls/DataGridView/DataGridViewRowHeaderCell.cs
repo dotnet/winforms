@@ -1051,10 +1051,7 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
     protected override bool SetValue(int rowIndex, object? value)
     {
         object? originalValue = GetValue(rowIndex);
-        if (value is not null || Properties.ContainsObject(s_propCellValue))
-        {
-            Properties.SetObject(s_propCellValue, value);
-        }
+        Properties.AddOrRemoveValue(s_propCellValue, value);
 
         if (DataGridView is not null && originalValue != value)
         {

@@ -686,14 +686,13 @@ public unsafe partial class Control :
     {
         get
         {
-            object? customBackBrush = Properties.GetObject(s_backBrushProperty);
-            if (customBackBrush is not null)
+            if (Properties.TryGetValue(s_backBrushProperty, out HBRUSH customBackBrush))
             {
                 // We already have a valid brush.  Unbox, and return.
-                return (HBRUSH)customBackBrush;
+                return customBackBrush;
             }
 
-            if (!Properties.ContainsObject(s_backColorProperty))
+            if (!Properties.ContainsKey(s_backColorProperty))
             {
                 // No custom back color.  See if we can get to our parent.
                 // The color check here is to account for parents and children who
@@ -721,7 +720,7 @@ public unsafe partial class Control :
             }
 
             Debug.Assert(!backBrush.IsNull, "Failed to create brushHandle");
-            Properties.SetObject(s_backBrushProperty, backBrush);
+            Properties.AddValue(s_backBrushProperty, backBrush);
 
             return backBrush;
         }
@@ -758,23 +757,23 @@ public unsafe partial class Control :
 
             // When DataContext was different than its parent before, but now it is about to become the same,
             // we're removing it altogether, so it can inherit the value from its parent.
-            if (Properties.ContainsObject(s_dataContextProperty) && Equals(ParentInternal?.DataContext, value))
+            if (Properties.ContainsKey(s_dataContextProperty) && Equals(ParentInternal?.DataContext, value))
             {
-                Properties.RemoveObject(s_dataContextProperty);
+                Properties.RemoveValue(s_dataContextProperty);
                 OnDataContextChanged(EventArgs.Empty);
                 return;
             }
 
-            Properties.SetObject(s_dataContextProperty, value);
+            Properties.AddValue(s_dataContextProperty, value);
             OnDataContextChanged(EventArgs.Empty);
         }
     }
 
     private bool ShouldSerializeDataContext()
-        => Properties.ContainsObject(s_dataContextProperty);
+        => Properties.ContainsKey(s_dataContextProperty);
 
     private void ResetDataContext()
-        => Properties.RemoveObject(s_dataContextProperty);
+        => Properties.RemoveValue(s_dataContextProperty);
 
     /// <summary>
     ///  The background color of this control. This is an ambient property and
@@ -834,9 +833,9 @@ public unsafe partial class Control :
             }
 
             Color c = BackColor;
-            if (!value.IsEmpty || Properties.ContainsObject(s_backColorProperty))
+            if (!value.IsEmpty || Properties.ContainsKey(s_backColorProperty))
             {
-                Properties.SetColor(s_backColorProperty, value);
+                Properties.AddValue(s_backColorProperty, value);
             }
 
             if (!c.Equals(BackColor))
@@ -1733,15 +1732,12 @@ public unsafe partial class Control :
     /// </summary>
     private void DisposeFontHandle()
     {
-        if (Properties.ContainsObject(s_fontHandleWrapperProperty))
+        if (Properties.TryGetValue(s_fontHandleWrapperProperty, out FontHandleWrapper? fontHandle))
         {
-            if (Properties.GetObject(s_fontHandleWrapperProperty) is FontHandleWrapper fontHandle)
-            {
-                fontHandle.Dispose();
-            }
-
-            Properties.SetObject(s_fontHandleWrapperProperty, null);
+            fontHandle.Dispose();
         }
+
+        Properties.RemoveValue(s_fontHandleWrapperProperty);
     }
 
     /// <summary>
@@ -2095,7 +2091,7 @@ public unsafe partial class Control :
     {
         get
         {
-            Color color = Properties.GetColor(s_foreColorProperty);
+            Color color = Properties.GetValueOrDefault<Color>(s_foreColorProperty);
             if (!color.IsEmpty)
             {
                 return color;
@@ -2125,9 +2121,9 @@ public unsafe partial class Control :
         set
         {
             Color color = ForeColor;
-            if (!value.IsEmpty || Properties.ContainsObject(s_foreColorProperty))
+            if (!value.IsEmpty || Properties.ContainsKey(s_foreColorProperty))
             {
-                Properties.SetColor(s_foreColorProperty, value);
+                Properties.AddValue(s_foreColorProperty, value);
             }
 
             if (!color.Equals(ForeColor))
@@ -2794,7 +2790,7 @@ public unsafe partial class Control :
     internal PropertyStore Properties { get; }
 
     // Returns the value of the backColor field -- no asking the parent with its color is, etc.
-    internal Color RawBackColor => Properties.GetColor(s_backColorProperty);
+    internal Color RawBackColor => Properties.GetValueOrDefault<Color>(s_backColorProperty);
 
     /// <summary>
     ///  Indicates whether the control is currently recreating its handle. This
@@ -3005,7 +3001,7 @@ public unsafe partial class Control :
 
             if (Properties.ContainsKey(s_rightToLeftProperty) || value != RightToLeft.Inherit)
             {
-                Properties.AddValue(s_rightToLeftProperty, value);
+                Properties.AddValue(s_rightToLeftProperty, (int)value);
             }
 
             if (oldValue != RightToLeft)
@@ -3076,10 +3072,10 @@ public unsafe partial class Control :
             // If the ambients changed, compare each property.
             if (oldAmbients != newAmbients)
             {
-                bool checkFont = !Properties.ContainsObject(s_fontProperty);
-                bool checkBackColor = !Properties.ContainsObject(s_backColorProperty);
-                bool checkForeColor = !Properties.ContainsObject(s_foreColorProperty);
-                bool checkCursor = !Properties.ContainsObject(s_cursorProperty);
+                bool checkFont = !Properties.ContainsKey(s_fontProperty);
+                bool checkBackColor = !Properties.ContainsKey(s_backColorProperty);
+                bool checkForeColor = !Properties.ContainsKey(s_foreColorProperty);
+                bool checkCursor = !Properties.ContainsKey(s_cursorProperty);
 
                 Font? oldFont = null;
                 Color oldBackColor = Color.Empty;
@@ -6976,9 +6972,9 @@ public unsafe partial class Control :
 
         Invalidate();
 
-        if (Properties.ContainsInteger(s_fontHeightProperty))
+        if (Properties.ContainsKey(s_fontHeightProperty))
         {
-            Properties.SetInteger(s_fontHeightProperty, -1);
+            Properties.AddValue(s_fontHeightProperty, -1);
         }
 
         // Cleanup any font handle wrapper.
@@ -7086,7 +7082,7 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnParentBackColorChanged(EventArgs e)
     {
-        Color backColor = Properties.GetColor(s_backColorProperty);
+        Color backColor = Properties.GetValueOrDefault<Color>(s_backColorProperty);
         if (backColor.IsEmpty)
         {
             OnBackColorChanged(e);
@@ -7120,13 +7116,13 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnParentDataContextChanged(EventArgs e)
     {
-        if (Properties.ContainsObject(s_dataContextProperty))
+        if (Properties.TryGetValue(s_dataContextProperty, out object? dataContext))
         {
             // If this DataContext was the same as the Parent's just became,
-            if (Equals(Properties.GetObject(s_dataContextProperty), Parent?.DataContext))
+            if (Equals(dataContext, Parent?.DataContext))
             {
                 // we need to make it ambient again by removing it.
-                Properties.RemoveObject(s_dataContextProperty);
+                Properties.RemoveValue(s_dataContextProperty);
 
                 // Even though internally we don't store it any longer, and the
                 // value we had stored therefore changed, technically the value
@@ -7220,7 +7216,7 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnParentForeColorChanged(EventArgs e)
     {
-        Color foreColor = Properties.GetColor(s_foreColorProperty);
+        Color foreColor = Properties.GetValueOrDefault<Color>(s_foreColorProperty);
         if (foreColor.IsEmpty)
         {
             OnForeColorChanged(e);
@@ -10686,7 +10682,7 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Never)]
     internal virtual bool ShouldSerializeBackColor()
     {
-        Color backColor = Properties.GetColor(s_backColorProperty);
+        Color backColor = Properties.GetValueOrDefault<Color>(s_backColorProperty);
         return !backColor.IsEmpty;
     }
 
@@ -10714,7 +10710,7 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Never)]
     internal virtual bool ShouldSerializeForeColor()
     {
-        Color foreColor = Properties.GetColor(s_foreColorProperty);
+        Color foreColor = Properties.GetValueOrDefault<Color>(s_foreColorProperty);
         return !foreColor.IsEmpty;
     }
 
@@ -10936,9 +10932,9 @@ public unsafe partial class Control :
         // Dispose old FontHandle.
         DisposeFontHandle();
 
-        if (Properties.ContainsInteger(s_fontHeightProperty))
+        if (Properties.ContainsKey(s_fontHeightProperty))
         {
-            Properties.SetInteger(s_fontHeightProperty, scaledFont.Height);
+            Properties.AddValue(s_fontHeightProperty, scaledFont.Height);
         }
 
         if (!raiseOnFontChangedEvent)

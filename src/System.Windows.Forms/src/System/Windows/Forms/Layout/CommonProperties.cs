@@ -51,13 +51,8 @@ internal partial class CommonProperties
     /// <summary>
     ///  Removes the maximum size from the property store, making it "unset".
     /// </summary>
-    internal static void ClearMaximumSize(IArrangedElement element)
-    {
-        if (element.Properties.ContainsObject(s_maximumSizeProperty))
-        {
-            element.Properties.RemoveObject(s_maximumSizeProperty);
-        }
-    }
+    internal static void ClearMaximumSize(IArrangedElement element) =>
+        element.Properties.RemoveValue(s_maximumSizeProperty);
 
     /// <summary>
     ///  Determines whether or not the <see cref="Layout"/> <see cref="LayoutEngine"/>s
@@ -100,30 +95,14 @@ internal partial class CommonProperties
     /// <summary>
     ///  Returns the maximum size for an element.
     /// </summary>
-    internal static Size GetMaximumSize(IArrangedElement element, Size defaultMaximumSize)
-    {
-        Size size = element.Properties.GetSize(s_maximumSizeProperty, out bool found);
-        if (found)
-        {
-            return size;
-        }
-
-        return defaultMaximumSize;
-    }
+    internal static Size GetMaximumSize(IArrangedElement element, Size defaultMaximumSize) =>
+        element.Properties.TryGetValue(s_maximumSizeProperty, out Size size) ? size : defaultMaximumSize;
 
     /// <summary>
     ///  Returns the minimum size for an element.
     /// </summary>
-    internal static Size GetMinimumSize(IArrangedElement element, Size defaultMinimumSize)
-    {
-        Size size = element.Properties.GetSize(s_minimumSizeProperty, out bool found);
-        if (found)
-        {
-            return size;
-        }
-
-        return defaultMinimumSize;
-    }
+    internal static Size GetMinimumSize(IArrangedElement element, Size defaultMinimumSize) =>
+        element.Properties.TryGetValue(s_minimumSizeProperty, out Size size) ? size : defaultMinimumSize;
 
     /// <summary>
     ///  Returns the padding for an element.
@@ -138,15 +117,8 @@ internal partial class CommonProperties
     ///   layout by modifying what the control reports for preferred size.
     ///  </para>
     /// </remarks>
-    internal static Padding GetPadding(IArrangedElement element, Padding defaultPadding)
-    {
-        if (element.Properties.TryGetValue(s_paddingProperty, out Padding padding))
-        {
-            return padding;
-        }
-
-        return defaultPadding;
-    }
+    internal static Padding GetPadding(IArrangedElement element, Padding defaultPadding) =>
+        element.Properties.TryGetValue(s_paddingProperty, out Padding padding) ? padding : defaultPadding;
 
     /// <summary>
     ///  Returns the last size manually set into the element.
@@ -213,7 +185,7 @@ internal partial class CommonProperties
         Debug.Assert(value != GetMaximumSize(element, new Size(-7109, -7107)),
             "PERF: Caller should guard against setting MaximumSize to original value.");
 
-        element.Properties.SetSize(s_maximumSizeProperty, value);
+        element.Properties.AddValue(s_maximumSizeProperty, value);
 
         // Element bounds may need to truncated to new maximum
         Rectangle bounds = element.Bounds;
@@ -235,7 +207,7 @@ internal partial class CommonProperties
         Debug.Assert(value != GetMinimumSize(element, new Size(-7109, -7107)),
             "PERF: Caller should guard against setting MinimumSize to original value.");
 
-        element.Properties.SetSize(s_minimumSizeProperty, value);
+        element.Properties.AddValue(s_minimumSizeProperty, value);
 
         using (new LayoutTransaction(element.Container as Control, element, PropertyNames.MinimumSize))
         {
@@ -335,7 +307,7 @@ internal partial class CommonProperties
         {
             // SetBoundsCore is going to call this a lot with the same bounds.  Avoid the set object
             // (which indirectly may causes an allocation) if we can.
-            if (element.Properties.ContainsObject(s_specifiedBoundsProperty))
+            if (element.Properties.ContainsKey(s_specifiedBoundsProperty))
             {
                 // use MaxRectangle instead of null so we can reuse the SizeWrapper in the property store.
                 element.Properties.AddValue(s_specifiedBoundsProperty, LayoutUtils.s_maxRectangle);
@@ -357,7 +329,7 @@ internal partial class CommonProperties
     /// </summary>
     internal static void xClearPreferredSizeCache(IArrangedElement element)
     {
-        element.Properties.SetSize(s_preferredSizeCacheProperty, LayoutUtils.s_invalidSize);
+        element.Properties.AddValue(s_preferredSizeCacheProperty, LayoutUtils.s_invalidSize);
         Debug.Assert(xGetPreferredSizeCache(element) == Size.Empty, "Error detected in xClearPreferredSizeCache.");
     }
 
@@ -387,8 +359,7 @@ internal partial class CommonProperties
     /// </summary>
     internal static Size xGetPreferredSizeCache(IArrangedElement element)
     {
-        Size size = element.Properties.GetSize(s_preferredSizeCacheProperty, out bool found);
-        if (found && (size != LayoutUtils.s_invalidSize))
+        if (element.Properties.TryGetValue(s_preferredSizeCacheProperty, out Size size) && (size != LayoutUtils.s_invalidSize))
         {
             return size;
         }
@@ -404,7 +375,7 @@ internal partial class CommonProperties
         Debug.Assert(
             value == Size.Empty || value != xGetPreferredSizeCache(element),
             "PERF: Caller should guard against setting PreferredSizeCache to original value.");
-        element.Properties.SetSize(s_preferredSizeCacheProperty, value);
+        element.Properties.AddValue(s_preferredSizeCacheProperty, value);
         Debug.Assert(xGetPreferredSizeCache(element) == value, "Error detected in xGetPreferredSizeCache.");
     }
 
@@ -685,16 +656,8 @@ internal partial class CommonProperties
     ///   of how it lays out. Example is TLP in RTL and LTR.
     ///  </para>
     /// </remarks>
-    internal static Size GetLayoutBounds(IArrangedElement element)
-    {
-        Size size = element.Properties.GetSize(s_layoutBoundsProperty, out bool found);
-        if (found)
-        {
-            return size;
-        }
-
-        return Size.Empty;
-    }
+    internal static Size GetLayoutBounds(IArrangedElement element) =>
+         element.Properties.TryGetValue(s_layoutBoundsProperty, out Size size) ? size : Size.Empty;
 
     /// <summary>
     ///  This is the size used to determine whether or not we need scrollbars.
@@ -709,19 +672,14 @@ internal partial class CommonProperties
     ///   scrollbars should be added, rather than doing its own magic to figure it out.
     ///  </para>
     /// </remarks>
-    internal static void SetLayoutBounds(IArrangedElement element, Size value)
-    {
-        element.Properties.SetSize(s_layoutBoundsProperty, value);
-    }
+    internal static void SetLayoutBounds(IArrangedElement element, Size value) =>
+        element.Properties.AddValue(s_layoutBoundsProperty, value);
 
     /// <summary>
     ///  Returns whether we have layout bounds stored for this element.
     /// </summary>
-    internal static bool HasLayoutBounds(IArrangedElement element)
-    {
-        element.Properties.GetSize(s_layoutBoundsProperty, out bool found);
-        return found;
-    }
+    internal static bool HasLayoutBounds(IArrangedElement element) =>
+        element.Properties.ContainsKey(s_layoutBoundsProperty);
 
     #endregion
     #region InternalCommonPropertiesHelpers
@@ -736,9 +694,9 @@ internal partial class CommonProperties
     ///  </para>
     /// </remarks>
     internal static BitVector32 GetLayoutState(IArrangedElement element) =>
-        new BitVector32(element.Properties.GetInteger(s_layoutStateProperty));
+        new BitVector32(element.Properties.GetValueOrDefault<int>(s_layoutStateProperty));
 
     internal static void SetLayoutState(IArrangedElement element, BitVector32 state) =>
-        element.Properties.SetInteger(s_layoutStateProperty, state.Data);
+        element.Properties.AddValue(s_layoutStateProperty, state.Data);
     #endregion
 }

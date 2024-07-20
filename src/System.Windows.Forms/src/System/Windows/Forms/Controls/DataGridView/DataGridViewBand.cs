@@ -102,10 +102,10 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
                 style.RemoveScope(IsRow ? DataGridViewCellStyleScopes.Row : DataGridViewCellStyleScopes.Column);
             }
 
-            if (value is not null || Properties.ContainsObject(s_propDefaultCellStyle))
+            if (value is not null || Properties.ContainsKey(s_propDefaultCellStyle))
             {
                 value?.AddScope(DataGridView, IsRow ? DataGridViewCellStyleScopes.Row : DataGridViewCellStyleScopes.Column);
-                Properties.SetObject(s_propDefaultCellStyle, value);
+                Properties.AddValue(s_propDefaultCellStyle, value);
             }
 
             if (DataGridView is not null &&
@@ -139,14 +139,14 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
         }
         set
         {
-            if (value is not null || Properties.ContainsObject(s_propDefaultHeaderCellType))
+            if (value is not null || Properties.ContainsKey(s_propDefaultHeaderCellType))
             {
                 if (!typeof(DataGridViewHeaderCell).IsAssignableFrom(value))
                 {
                     throw new ArgumentException(string.Format(SR.DataGridView_WrongType, nameof(DefaultHeaderCellType), "System.Windows.Forms.DataGridViewHeaderCell"), nameof(value));
                 }
 
-                Properties.SetObject(s_propDefaultHeaderCellType, value);
+                Properties.AddValue(s_propDefaultHeaderCellType, value);
             }
         }
     }
@@ -280,8 +280,8 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
         }
         set
         {
-            DataGridViewHeaderCell? headerCell = (DataGridViewHeaderCell?)Properties.GetObject(s_propHeaderCell);
-            if (value is not null || Properties.ContainsObject(s_propHeaderCell))
+            Properties.TryGetValue(s_propHeaderCell, out DataGridViewHeaderCell? headerCell);
+            if (value is not null || Properties.ContainsKey(s_propHeaderCell))
             {
                 if (headerCell is not null)
                 {
@@ -612,14 +612,12 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public object? Tag
     {
-        get => Properties.GetObject(s_propUserData);
-        set
+        get
         {
-            if (value is not null || Properties.ContainsObject(s_propUserData))
-            {
-                Properties.SetObject(s_propUserData, value);
-            }
+            Properties.TryGetValue(s_propUserData, out object? tag);
+            return tag;
         }
+        set => Properties.AddOrRemoveValue(s_propUserData, value);
     }
 
     internal int Thickness

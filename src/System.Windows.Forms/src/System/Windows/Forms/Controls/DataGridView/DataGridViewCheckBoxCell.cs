@@ -215,12 +215,12 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
     [DefaultValue(null)]
     public object? FalseValue
     {
-        get => Properties.GetObject(s_propFalseValue);
+        get => Properties.GetValueOrDefault<object?>(s_propFalseValue);
         set
         {
-            if (value is not null || Properties.ContainsObject(s_propFalseValue))
+            if (value is not null || Properties.ContainsKey(s_propFalseValue))
             {
-                Properties.SetObject(s_propFalseValue, value);
+                Properties.AddOrRemoveValue(s_propFalseValue, value);
                 if (DataGridView is not null)
                 {
                     if (RowIndex != -1)
@@ -238,13 +238,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
 
     internal object? FalseValueInternal
     {
-        set
-        {
-            if (value is not null || Properties.ContainsObject(s_propFalseValue))
-            {
-                Properties.SetObject(s_propFalseValue, value);
-            }
-        }
+        set => Properties.AddOrRemoveValue(s_propFalseValue, value);
     }
 
     [DefaultValue(FlatStyle.Standard)]
@@ -289,12 +283,12 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
     [DefaultValue(null)]
     public object? IndeterminateValue
     {
-        get => Properties.GetObject(s_propIndeterminateValue);
+        get => Properties.GetValueOrDefault<object?>(s_propIndeterminateValue);
         set
         {
-            if (value is not null || Properties.ContainsObject(s_propIndeterminateValue))
+            if (value is not null || Properties.ContainsKey(s_propIndeterminateValue))
             {
-                Properties.SetObject(s_propIndeterminateValue, value);
+                Properties.AddOrRemoveValue(s_propIndeterminateValue, value);
                 if (DataGridView is not null)
                 {
                     if (RowIndex != -1)
@@ -314,9 +308,9 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
     {
         set
         {
-            if (value is not null || Properties.ContainsObject(s_propIndeterminateValue))
+            if (value is not null || Properties.ContainsKey(s_propIndeterminateValue))
             {
-                Properties.SetObject(s_propIndeterminateValue, value);
+                Properties.AddOrRemoveValue(s_propIndeterminateValue, value);
             }
         }
     }
@@ -396,12 +390,12 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
     [DefaultValue(null)]
     public object? TrueValue
     {
-        get => Properties.GetObject(s_propTrueValue);
+        get => Properties.GetValueOrDefault<object?>(s_propTrueValue);
         set
         {
-            if (value is not null || Properties.ContainsObject(s_propTrueValue))
+            if (value is not null || Properties.ContainsKey(s_propTrueValue))
             {
-                Properties.SetObject(s_propTrueValue, value);
+                Properties.AddOrRemoveValue(s_propTrueValue, value);
                 if (DataGridView is not null)
                 {
                     if (RowIndex != -1)
@@ -419,13 +413,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
 
     internal object? TrueValueInternal
     {
-        set
-        {
-            if (value is not null || Properties.ContainsObject(s_propTrueValue))
-            {
-                Properties.SetObject(s_propTrueValue, value);
-            }
-        }
+        set => Properties.AddOrRemoveValue(s_propTrueValue, value);
     }
 
     public override Type? ValueType

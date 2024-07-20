@@ -449,8 +449,7 @@ public partial class ComboBox : ListControl
     {
         get
         {
-            int dropDownWidth = Properties.GetInteger(s_propDropDownWidth, out bool found);
-            return found ? dropDownWidth : Width;
+            return Properties.TryGetValue(s_propDropDownWidth, out int dropDownWidth) ? dropDownWidth : Width;
         }
         set
         {
@@ -700,15 +699,12 @@ public partial class ComboBox : ListControl
     {
         get
         {
-            string? matchingText = (string?)Properties.GetObject(s_propMatchingText);
+            Properties.TryGetValue(s_propMatchingText, out string? matchingText);
             return matchingText ?? string.Empty;
         }
         set
         {
-            if (value is not null || Properties.ContainsObject(s_propMatchingText))
-            {
-                Properties.SetObject(s_propMatchingText, value);
-            }
+            Properties.AddOrRemoveValue(s_propMatchingText, value);
         }
     }
 
@@ -3201,12 +3197,12 @@ public partial class ComboBox : ListControl
 
     private void ResetDropDownWidth()
     {
-        Properties.RemoveInteger(s_propDropDownWidth);
+        Properties.RemoveValue(s_propDropDownWidth);
     }
 
     private void ResetItemHeight()
     {
-        Properties.RemoveInteger(s_propItemHeight);
+        Properties.RemoveValue(s_propItemHeight);
     }
 
     public override void ResetText()
@@ -3431,18 +3427,16 @@ public partial class ComboBox : ListControl
         return _autoCompleteCustomSource is not null && _autoCompleteCustomSource.Count > 0;
     }
 
-    internal bool ShouldSerializeDropDownWidth()
-    {
-        return (Properties.ContainsInteger(s_propDropDownWidth));
-    }
+    /// <summary>
+    ///  Indicates whether the DropDownWidth property should be persisted.
+    /// </summary>
+    /// <returns></returns>
+    internal bool ShouldSerializeDropDownWidth() => Properties.ContainsKey(s_propDropDownWidth);
 
     /// <summary>
     ///  Indicates whether the itemHeight property should be persisted.
     /// </summary>
-    internal bool ShouldSerializeItemHeight()
-    {
-        return (Properties.ContainsInteger(s_propItemHeight));
-    }
+    internal bool ShouldSerializeItemHeight() => Properties.ContainsKey(s_propItemHeight);
 
     /// <summary>
     ///  Determines if the Text property needs to be persisted.

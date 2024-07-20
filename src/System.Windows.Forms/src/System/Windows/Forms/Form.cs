@@ -113,10 +113,8 @@ public partial class Form : ContainerControl
     private static readonly int s_propMaximizedBounds = PropertyStore.CreateKey();
     private static readonly int s_propOwnedFormsCount = PropertyStore.CreateKey();
 
-    private static readonly int s_propMinTrackSizeWidth = PropertyStore.CreateKey();
-    private static readonly int s_propMinTrackSizeHeight = PropertyStore.CreateKey();
-    private static readonly int s_propMaxTrackSizeWidth = PropertyStore.CreateKey();
-    private static readonly int s_propMaxTrackSizeHeight = PropertyStore.CreateKey();
+    private static readonly int s_propMinTrackSize = PropertyStore.CreateKey();
+    private static readonly int s_propMaxTrackSize = PropertyStore.CreateKey();
 
     private static readonly int s_propFormMdiParent = PropertyStore.CreateKey();
     private static readonly int s_propActiveMdiChild = PropertyStore.CreateKey();
@@ -376,14 +374,14 @@ public partial class Form : ContainerControl
 
                 if (!value)
                 {
-                    if (Properties.ContainsObject(s_propOpacity))
+                    if (Properties.ContainsKey(s_propOpacity))
                     {
-                        Properties.SetObject(s_propOpacity, 1.0f);
+                        Properties.AddValue(s_propOpacity, 1.0f);
                     }
 
-                    if (Properties.ContainsObject(s_propTransparencyKey))
+                    if (Properties.ContainsKey(s_propTransparencyKey))
                     {
-                        Properties.SetObject(s_propTransparencyKey, Color.Empty);
+                        Properties.AddValue(s_propTransparencyKey, Color.Empty);
                     }
 
                     UpdateLayered();
@@ -1241,9 +1239,9 @@ public partial class Form : ContainerControl
     {
         get
         {
-            if (Properties.ContainsInteger(s_propMaxTrackSizeWidth))
+            if (Properties.TryGetValue(s_propMaxTrackSize, out Size size))
             {
-                return new Size(Properties.GetInteger(s_propMaxTrackSizeWidth), Properties.GetInteger(s_propMaxTrackSizeHeight));
+                return size;
             }
 
             return Size.Empty;
@@ -1264,20 +1262,29 @@ public partial class Form : ContainerControl
 
     private void UpdateMaximumSize(Size value, bool updateFormSize = true)
     {
-        Properties.SetInteger(s_propMaxTrackSizeWidth, value.Width);
-        Properties.SetInteger(s_propMaxTrackSizeHeight, value.Height);
+        Properties.AddValue(s_propMaxTrackSize, value);
 
         // Bump minimum size if necessary
         if (!MinimumSize.IsEmpty && !value.IsEmpty)
         {
-            if (Properties.GetInteger(s_propMinTrackSizeWidth) > value.Width)
+            bool shouldUpdate = false;
+            Size minimumSize = MinimumSize;
+            Size newSize = new Size(minimumSize.Width, minimumSize.Height);
+            if (minimumSize.Width > value.Width)
             {
-                Properties.SetInteger(s_propMinTrackSizeWidth, value.Width);
+                newSize.Width = value.Width;
+                shouldUpdate = true;
             }
 
-            if (Properties.GetInteger(s_propMinTrackSizeHeight) > value.Height)
+            if (minimumSize.Height > value.Height)
             {
-                Properties.SetInteger(s_propMinTrackSizeHeight, value.Height);
+                newSize.Height = value.Height;
+                shouldUpdate = true;
+            }
+
+            if (shouldUpdate)
+            {
+                Properties.AddValue(s_propMinTrackSize, newSize);
             }
         }
 
@@ -1358,9 +1365,9 @@ public partial class Form : ContainerControl
     {
         get
         {
-            if (Properties.ContainsInteger(s_propMinTrackSizeWidth))
+            if (Properties.TryGetValue(s_propMinTrackSize, out Size size))
             {
-                return new Size(Properties.GetInteger(s_propMinTrackSizeWidth), Properties.GetInteger(s_propMinTrackSizeHeight));
+                return size;
             }
 
             return DefaultMinimumSize;
@@ -1385,20 +1392,29 @@ public partial class Form : ContainerControl
 
     private void UpdateMinimumSize(Size value, bool updateFormSize = true)
     {
-        Properties.SetInteger(s_propMinTrackSizeWidth, value.Width);
-        Properties.SetInteger(s_propMinTrackSizeHeight, value.Height);
+        Properties.SetInteger(s_propMinTrackSize, value.Width);
 
         // Bump maximum size if necessary
         if (!MaximumSize.IsEmpty && !value.IsEmpty)
         {
-            if (Properties.GetInteger(s_propMaxTrackSizeWidth) < value.Width)
+            Size maximumSize = MaximumSize;
+            Size newSize = new Size(maximumSize.Width, maximumSize.Height);
+            bool shouldUpdate = false;
+            if (maximumSize.Width < value.Width)
             {
-                Properties.SetInteger(s_propMaxTrackSizeWidth, value.Width);
+                newSize.Width = value.Width;
+                shouldUpdate = true;
             }
 
-            if (Properties.GetInteger(s_propMaxTrackSizeHeight) < value.Height)
+            if (maximumSize.Height < value.Height)
             {
-                Properties.SetInteger(s_propMaxTrackSizeHeight, value.Height);
+                newSize.Height = value.Height;
+                shouldUpdate = true;
+            }
+
+            if (shouldUpdate)
+            {
+                Properties.AddValue(s_propMaxTrackSize, newSize);
             }
         }
 
@@ -3278,25 +3294,10 @@ public partial class Form : ContainerControl
             CalledMakeVisible = false;
             CalledCreateControl = false;
 
-            if (Properties.ContainsObject(s_propAcceptButton))
-            {
-                Properties.SetObject(s_propAcceptButton, null);
-            }
-
-            if (Properties.ContainsObject(s_propCancelButton))
-            {
-                Properties.SetObject(s_propCancelButton, null);
-            }
-
-            if (Properties.ContainsObject(s_propDefaultButton))
-            {
-                Properties.SetObject(s_propDefaultButton, null);
-            }
-
-            if (Properties.ContainsObject(s_propActiveMdiChild))
-            {
-                Properties.SetObject(s_propActiveMdiChild, null);
-            }
+            Properties.RemoveValue(s_propAcceptButton);
+            Properties.RemoveValue(s_propCancelButton);
+            Properties.RemoveValue(s_propDefaultButton);
+            Properties.RemoveValue(s_propActiveMdiChild);
 
             if (MdiWindowListStrip is not null)
             {
@@ -3316,17 +3317,16 @@ public partial class Form : ContainerControl
                 MainMenuStrip = null;
             }
 
-            Form? owner = (Form?)Properties.GetObject(s_propOwner);
-            if (owner is not null)
+            if (Properties.TryGetValue(s_propOwner, out Form? owner))
             {
                 owner.RemoveOwnedForm(this);
-                Properties.SetObject(s_propOwner, null);
+                Properties.RemoveValue(s_propOwner);
             }
 
-            Properties.SetObject(s_propDialogOwner, null);
+            Properties.RemoveValue(s_propDialogOwner);
 
-            Form?[]? ownedForms = (Form?[]?)Properties.GetObject(s_propOwnedForms);
-            int ownedFormsCount = Properties.GetInteger(s_propOwnedFormsCount);
+            Properties.TryGetValue(s_propOwnedForms, out Form?[]? ownedForms);
+            Properties.TryGetValue(s_propOwnedFormsCount, out int ownedFormsCount);
 
             for (int i = ownedFormsCount - 1; i >= 0; i--)
             {
@@ -3343,9 +3343,9 @@ public partial class Form : ContainerControl
             base.Dispose(disposing);
             _ctlClient = null;
 
-            if (Properties.TryGetObject(s_propDummyMdiMenu, out HMENU dummyMenu) && !dummyMenu.IsNull)
+            if (Properties.TryGetValue(s_propDummyMdiMenu, out HMENU dummyMenu) && !dummyMenu.IsNull)
             {
-                Properties.RemoveObject(s_propDummyMdiMenu);
+                Properties.RemoveValue(s_propDummyMdiMenu);
                 PInvoke.DestroyMenu(dummyMenu);
             }
         }

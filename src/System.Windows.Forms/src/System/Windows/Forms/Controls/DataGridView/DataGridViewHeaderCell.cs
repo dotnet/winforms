@@ -98,15 +98,10 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
     {
         get
         {
-            return (Bitmap?)Properties.GetObject(s_propFlipXPThemesBitmap);
+            Properties.TryGetValue(s_propFlipXPThemesBitmap, out Bitmap? bitmap);
+            return bitmap;
         }
-        set
-        {
-            if (value is not null || Properties.ContainsObject(s_propFlipXPThemesBitmap))
-            {
-                Properties.SetObject(s_propFlipXPThemesBitmap, value);
-            }
-        }
+        set => Properties.AddOrRemoveValue(s_propFlipXPThemesBitmap, value);
     }
 
     public override Type FormattedValueType => s_defaultFormattedValueType;
@@ -185,23 +180,8 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
 
     public override Type? ValueType
     {
-        get
-        {
-            Type? valueType = (Type?)Properties.GetObject(s_propValueType);
-            if (valueType is not null)
-            {
-                return valueType;
-            }
-
-            return s_defaultValueType;
-        }
-        set
-        {
-            if (value is not null || Properties.ContainsObject(s_propValueType))
-            {
-                Properties.SetObject(s_propValueType, value);
-            }
-        }
+        get => Properties.TryGetValue(s_propValueType, out Type? valueType) ? valueType : s_defaultValueType;
+        set => Properties.AddOrRemoveValue(s_propValueType, value);
     }
 
     [Browsable(false)]

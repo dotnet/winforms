@@ -48,14 +48,12 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
 
     private DataGridViewTextBoxEditingControl? EditingTextBox
     {
-        get => (DataGridViewTextBoxEditingControl?)Properties.GetObject(s_propTextBoxCellEditingTextBox);
-        set
+        get
         {
-            if (value is not null || Properties.ContainsObject(s_propTextBoxCellEditingTextBox))
-            {
-                Properties.SetObject(s_propTextBoxCellEditingTextBox, value);
-            }
+            Properties.TryGetValue(s_propTextBoxCellEditingTextBox, out DataGridViewTextBoxEditingControl? editingTextBox);
+            return editingTextBox;
         }
+        set => Properties.AddOrRemoveValue(s_propTextBoxCellEditingTextBox, value);
     }
 
     public override Type FormattedValueType

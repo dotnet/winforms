@@ -58,24 +58,8 @@ public partial class DataGridViewImageCell : DataGridViewCell
     [AllowNull]
     public string Description
     {
-        get
-        {
-            object? description = Properties.GetObject(s_propImageCellDescription);
-            if (description is not null)
-            {
-                return (string)description;
-            }
-
-            return string.Empty;
-        }
-
-        set
-        {
-            if (!string.IsNullOrEmpty(value) || Properties.ContainsObject(s_propImageCellDescription))
-            {
-                Properties.SetObject(s_propImageCellDescription, value);
-            }
-        }
+        get => Properties.TryGetValue(s_propImageCellDescription, out string? description) ? description : string.Empty;
+        set => Properties.AddOrRemoveValue(s_propImageCellDescription, value);
     }
 
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.Interfaces)]

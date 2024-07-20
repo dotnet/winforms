@@ -122,18 +122,12 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
     private CurrencyManager? DataManager
     {
         get => GetDataManager(DataGridView);
-        set
-        {
-            if (value is not null || Properties.ContainsObject(s_propComboBoxCellDataManager))
-            {
-                Properties.SetObject(s_propComboBoxCellDataManager, value);
-            }
-        }
+        set => Properties.AddOrRemoveValue(s_propComboBoxCellDataManager, value);
     }
 
     public virtual object? DataSource
     {
-        get => Properties.GetObject(s_propComboBoxCellDataSource);
+        get => Properties.GetValueOrDefault<object?>(s_propComboBoxCellDataSource);
         set
         {
             // Same check as for ListControl's DataSource
@@ -232,21 +226,21 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         set
         {
             InitializeDisplayMemberPropertyDescriptor(value);
-            if ((value is not null && value.Length > 0) || Properties.ContainsObject(s_propComboBoxCellDisplayMember))
+            if ((value is not null && value.Length > 0) || Properties.ContainsKey(s_propComboBoxCellDisplayMember))
             {
-                Properties.SetObject(s_propComboBoxCellDisplayMember, value);
+                Properties.AddOrRemoveValue(s_propComboBoxCellDisplayMember, value);
             }
         }
     }
 
     private PropertyDescriptor? DisplayMemberProperty
     {
-        get => (PropertyDescriptor?)Properties.GetObject(s_propComboBoxCellDisplayMemberProp);
+        get => Properties.GetValueOrDefault<PropertyDescriptor?>(s_propComboBoxCellDisplayMemberProp);
         set
         {
-            if (value is not null || Properties.ContainsObject(s_propComboBoxCellDisplayMemberProp))
+            if (value is not null || Properties.ContainsKey(s_propComboBoxCellDisplayMemberProp))
             {
-                Properties.SetObject(s_propComboBoxCellDisplayMemberProp, value);
+                Properties.AddOrRemoveValue(s_propComboBoxCellDisplayMemberProp, value);
             }
         }
     }
@@ -385,14 +379,9 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
 
     private DataGridViewComboBoxEditingControl? EditingComboBox
     {
-        get => (DataGridViewComboBoxEditingControl?)Properties.GetObject(s_propComboBoxCellEditingComboBox);
-        set
-        {
-            if (value is not null || Properties.ContainsObject(s_propComboBoxCellEditingComboBox))
-            {
-                Properties.SetObject(s_propComboBoxCellEditingComboBox, value);
-            }
-        }
+        get => Properties.TryGetValue(s_propComboBoxCellEditingComboBox,
+            out DataGridViewComboBoxEditingControl? editingComboBox) ? editingComboBox : null;
+        set => Properties.AddOrRemoveValue(s_propComboBoxCellEditingComboBox, value);
     }
 
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.Interfaces)]
@@ -558,23 +547,17 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         set
         {
             InitializeValueMemberPropertyDescriptor(value);
-            if ((value is not null && value.Length > 0) || Properties.ContainsObject(s_propComboBoxCellValueMember))
+            if ((value is not null && value.Length > 0) || Properties.ContainsKey(s_propComboBoxCellValueMember))
             {
-                Properties.SetObject(s_propComboBoxCellValueMember, value);
+                Properties.AddOrRemoveValue(s_propComboBoxCellValueMember, value);
             }
         }
     }
 
     private PropertyDescriptor? ValueMemberProperty
     {
-        get => (PropertyDescriptor?)Properties.GetObject(s_propComboBoxCellValueMemberProp);
-        set
-        {
-            if (value is not null || Properties.ContainsObject(s_propComboBoxCellValueMemberProp))
-            {
-                Properties.SetObject(s_propComboBoxCellValueMemberProp, value);
-            }
-        }
+        get => Properties.TryGetValue(s_propComboBoxCellValueMemberProp, out PropertyDescriptor? descriptor) ? descriptor : null;
+        set => Properties.AddOrRemoveValue(s_propComboBoxCellValueMemberProp, value);
     }
 
     public override Type ValueType

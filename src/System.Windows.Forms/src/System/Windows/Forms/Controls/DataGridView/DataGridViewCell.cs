@@ -207,13 +207,13 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     [AllowNull]
     private string ErrorTextInternal
     {
-        get => (string?)Properties.GetObject(s_propCellErrorText) ?? string.Empty;
+        get => Properties.TryGetValue(s_propCellErrorText, out string? errorTextInternal) ? errorTextInternal : string.Empty;
         set
         {
             string errorText = ErrorTextInternal;
-            if (!string.IsNullOrEmpty(value) || Properties.ContainsObject(s_propCellErrorText))
+            if (!string.IsNullOrEmpty(value) || Properties.ContainsKey(s_propCellErrorText))
             {
-                Properties.SetObject(s_propCellErrorText, value);
+                Properties.AddOrRemoveValue(s_propCellErrorText, value);
             }
 
             if (DataGridView is not null && !errorText.Equals(ErrorTextInternal))
@@ -638,7 +638,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             {
                 dataGridViewCellStyle = new DataGridViewCellStyle();
                 dataGridViewCellStyle.AddScope(DataGridView, DataGridViewCellStyleScopes.Cell);
-                Properties.SetObject(s_propCellStyle, dataGridViewCellStyle);
+                Properties.AddValue(s_propCellStyle, dataGridViewCellStyle);
             }
 
             return dataGridViewCellStyle;
@@ -652,11 +652,11 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
                 dataGridViewCellStyle.RemoveScope(DataGridViewCellStyleScopes.Cell);
             }
 
-            if (value is not null || Properties.ContainsObject(s_propCellStyle))
+            if (value is not null || Properties.ContainsKey(s_propCellStyle))
             {
                 value?.AddScope(DataGridView, DataGridViewCellStyleScopes.Cell);
 
-                Properties.SetObject(s_propCellStyle, value);
+                Properties.AddOrRemoveValue(s_propCellStyle, value);
             }
 
             if (((dataGridViewCellStyle is not null && value is null) ||
@@ -676,14 +676,12 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     [TypeConverter(typeof(StringConverter))]
     public object? Tag
     {
-        get => Properties.GetObject(s_propCellTag);
-        set
+        get
         {
-            if (value is not null || Properties.ContainsObject(s_propCellTag))
-            {
-                Properties.SetObject(s_propCellTag, value);
-            }
+            Properties.TryGetValue(s_propCellTag, out object? tag);
+            return tag;
         }
+        set => Properties.AddOrRemoveValue(s_propCellTag, value);
     }
 
     [Browsable(false)]
@@ -702,13 +700,13 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     [AllowNull]
     private string ToolTipTextInternal
     {
-        get => (string?)Properties.GetObject(s_propCellToolTipText) ?? string.Empty;
+        get => Properties.TryGetValue(s_propCellToolTipText, out string? toolTipTextInternal) ? toolTipTextInternal : string.Empty;
         set
         {
             string toolTipText = ToolTipTextInternal;
-            if (!string.IsNullOrEmpty(value) || Properties.ContainsObject(s_propCellToolTipText))
+            if (!string.IsNullOrEmpty(value) || Properties.ContainsKey(s_propCellToolTipText))
             {
-                Properties.SetObject(s_propCellToolTipText, value);
+                Properties.AddOrRemoveValue(s_propCellToolTipText, value);
             }
 
             if (DataGridView is not null && !toolTipText.Equals(ToolTipTextInternal))
@@ -746,13 +744,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
 
             return cellValueType;
         }
-        set
-        {
-            if (value is not null || Properties.ContainsObject(s_propCellValueType))
-            {
-                Properties.SetObject(s_propCellValueType, value);
-            }
-        }
+        set => Properties.AddOrRemoveValue(s_propCellValueType, value);
     }
 
     private TypeConverter? ValueTypeConverter
@@ -3923,10 +3915,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             }
             else if ((dataConnection.CurrencyManager?.Count ?? 0) <= rowIndex)
             {
-                if (value is not null || Properties.ContainsObject(s_propCellValue))
-                {
-                    Properties.SetObject(s_propCellValue, value);
-                }
+                Properties.AddOrRemoveValue(s_propCellValue, value);
             }
             else
             {
@@ -3963,10 +3952,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             rowIndex == -1 ||
             ColumnIndex == -1)
         {
-            if (value is not null || Properties.ContainsObject(s_propCellValue))
-            {
-                Properties.SetObject(s_propCellValue, value);
-            }
+            Properties.AddOrRemoveValue(s_propCellValue, value);
         }
         else
         {
