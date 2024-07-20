@@ -194,7 +194,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ' Used to signal when the dialog is in a closable state. The dialog is in a closable
         ' state when it has been activated or when it has been flagged to be closed before
         ' ShowDialog has been called
-        Private _formClosableSemaphore As ManualResetEvent = New ManualResetEvent(False)
+        Private _formClosableSemaphore As New ManualResetEvent(False)
 
         ' Indicates CloseDialog has been called
         Private _closeDialogInvoked As Boolean

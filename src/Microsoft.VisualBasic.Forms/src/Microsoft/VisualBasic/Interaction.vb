@@ -302,7 +302,7 @@ Namespace Microsoft.VisualBasic
         End Function
 
         Private Function InternalInputBox(prompt As String, title As String, defaultResponse As String, xPos As Integer, yPos As Integer, parentWindow As IWin32Window) As String
-            Dim box As VBInputBox = New VBInputBox(prompt, title, defaultResponse, xPos, yPos)
+            Dim box As New VBInputBox(prompt, title, defaultResponse, xPos, yPos)
             box.ShowDialog(parentWindow)
 
             InternalInputBox = box.Output
