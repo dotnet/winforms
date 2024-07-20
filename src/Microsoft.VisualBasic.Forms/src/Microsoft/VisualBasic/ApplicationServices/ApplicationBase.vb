@@ -49,8 +49,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  Provides access to logging capability.
         ''' </summary>
         ''' <value>
-        '''  Returns a Microsoft.VisualBasic.Windows.Log object used for logging to OS log, debug window
-        '''  and a delimited text file or xml log.
+        '''  Returns a Microsoft.VisualBasic.Windows.Log object used for logging
+        '''  to OS log, debug window and a delimited text file or xml log.
         ''' </value>
         Public ReadOnly Property Log() As Logging.Log
             Get
@@ -118,5 +118,5 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             Return variableValue
         End Function
 
-    End Class 'ApplicationBase
+    End Class
 End Namespace

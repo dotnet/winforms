@@ -9,13 +9,13 @@ Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 Namespace Microsoft.VisualBasic.ApplicationServices
 
     ''' <summary>
-    '''  A class that contains the information about an Application. This information can be
-    '''  specified using the assembly attributes (contained in AssemblyInfo.vb file in case of
-    '''  a VB project in Visual Studio .NET).
+    '''  A class that contains the information about an Application. This information
+    '''  can be specified using the assembly attributes (contained in AssemblyInfo.vb
+    '''  file in case of a VB project in Visual Studio .NET).
     ''' </summary>
     ''' <remarks>
-    '''  This class is based on the <see cref="FileVersionInfo"/> class of the framework, but
-    '''  reduced to a number of relevant properties.
+    '''  This class is based on the <see cref="FileVersionInfo"/> class of the
+    '''  framework, but reduced to a number of relevant properties.
     ''' </remarks>
     Public Class AssemblyInfo
 
@@ -66,8 +66,13 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         '''  Gets the company name associated with the assembly.
         ''' </summary>
-        ''' <returns>A String containing the AssemblyCompanyAttribute associated with the assembly.</returns>
-        ''' <exception cref="InvalidOperationException">if the AssemblyCompanyAttribute is not defined.</exception>
+        ''' <returns>
+        '''  A String containing the <see cref="AssemblyCompanyAttribute"/>
+        '''  associated with the assembly.
+        ''' </returns>
+        ''' <exception cref="InvalidOperationException">
+        '''  Thrown if <see cref="AssemblyCompanyAttribute"/> is not defined.
+        ''' </exception>
         Public ReadOnly Property CompanyName() As String
             Get
                 If _companyName Is Nothing Then
@@ -86,8 +91,13 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         '''  Gets the copyright notices associated with the assembly.
         ''' </summary>
-        ''' <returns>A String containing the AssemblyCopyrightAttribute associated with the assembly.</returns>
-        ''' <exception cref="InvalidOperationException">if the AssemblyCopyrightAttribute is not defined.</exception>
+        ''' <returns>
+        '''  A String containing the <see cref="AssemblyCopyrightAttribute"/>
+        '''  associated with the assembly.
+        ''' </returns>
+        ''' <exception cref="InvalidOperationException">
+        '''  Thrown if <see cref="AssemblyCopyrightAttribute"/> is not defined.
+        ''' </exception>
         Public ReadOnly Property Copyright() As String
             Get
                 If _copyright Is Nothing Then
@@ -105,8 +115,13 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         '''  Gets the description associated with the assembly.
         ''' </summary>
-        ''' <returns>A String containing the AssemblyDescriptionAttribute associated with the assembly.</returns>
-        ''' <exception cref="InvalidOperationException">if the AssemblyDescriptionAttribute is not defined.</exception>
+        ''' <returns>
+        '''  String containing the <see cref="AssemblyDescriptionAttribute"/>
+        '''  associated with the assembly.
+        ''' </returns>
+        ''' <exception cref="InvalidOperationException">
+        '''  Thrown if <see cref="AssemblyDescriptionAttribute"/> is not defined.
+        ''' </exception>
         Public ReadOnly Property Description() As String
             Get
                 If _description Is Nothing Then
@@ -134,8 +149,12 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         '''  Returns the names of all assemblies loaded by the current application.
         ''' </summary>
-        ''' <returns>A ReadOnlyCollection(Of Assembly) containing all the loaded assemblies.</returns>
-        ''' <exception cref="AppDomainUnloadedException">attempt on an unloaded application domain.</exception>
+        ''' <returns>
+        '''  A <see cref="ReadOnlyCollection(Of Assembly)"/> containing all the loaded assemblies.
+        ''' </returns>
+        ''' <exception cref="AppDomainUnloadedException">
+        '''  Attempt on an unloaded application domain.
+        ''' </exception>
         Public ReadOnly Property LoadedAssemblies() As ReadOnlyCollection(Of Assembly)
             Get
                 Dim result As New Collection(Of Assembly)
@@ -149,8 +168,13 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         '''  Gets the product name associated with the assembly.
         ''' </summary>
-        ''' <returns>A String containing the AssemblyProductAttribute associated with the assembly.</returns>
-        ''' <exception cref="InvalidOperationException">if the AssemblyProductAttribute is not defined.</exception>
+        ''' <returns>
+        '''  String containing the <see cref="AssemblyProductAttribute"/> associated
+        '''  with the assembly.
+        ''' </returns>
+        ''' <exception cref="InvalidOperationException">
+        '''  Thrown if <see cref="AssemblyProductAttribute"/> is not defined.
+        ''' </exception>
         Public ReadOnly Property ProductName() As String
             Get
                 If _productName Is Nothing Then
@@ -168,8 +192,12 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         '''  Returns the current stack trace information.
         ''' </summary>
-        ''' <returns>A string containing stack trace information. Value can be String.Empty.</returns>
-        ''' <exception cref="ArgumentOutOfRangeException">The requested stack trace information is out of range.</exception>
+        ''' <returns>
+        '''  String containing stack trace information. Value can be <see cref="String.Empty"/>.
+        ''' </returns>
+        ''' <exception cref="ArgumentOutOfRangeException">
+        '''  Thrown if the requested stack trace information is out of range.
+        ''' </exception>
         Public ReadOnly Property StackTrace() As String
             Get
                 Return Environment.StackTrace
@@ -179,8 +207,12 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         '''  Gets the company name associated with the assembly.
         ''' </summary>
-        ''' <returns>A String containing the AssemblyTitleAttribute associated with the assembly.</returns>
-        ''' <exception cref="InvalidOperationException">if the AssemblyTitleAttribute is not defined.</exception>
+        ''' <returns>
+        '''  String containing the <see cref="AssemblyTitleAttribute"/>
+        '''  associated with the assembly.
+        ''' </returns>
+        ''' <exception cref="InvalidOperationException">
+        ''' Thrown if <see cref="AssemblyTitleAttribute"/> is not defined.</exception>
         Public ReadOnly Property Title() As String
             Get
                 If _title Is Nothing Then
@@ -199,8 +231,13 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         '''  Gets the trademark notices associated with the assembly.
         ''' </summary>
-        ''' <returns>A String containing the AssemblyTrademarkAttribute associated with the assembly.</returns>
-        ''' <exception cref="InvalidOperationException">if the AssemblyTrademarkAttribute is not defined.</exception>
+        ''' <returns>
+        '''  String containing the <see cref="AssemblyTrademarkAttribute"/> associated
+        '''  with the assembly.
+        ''' </returns>
+        ''' <exception cref="InvalidOperationException">
+        ''' Thrown if the <see cref="AssemblyTrademarkAttribute"/> is not defined.
+        ''' </exception>
         Public ReadOnly Property Trademark() As String
             Get
                 If _trademark Is Nothing Then
@@ -218,8 +255,12 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         '''  Gets the version number of the assembly.
         ''' </summary>
-        ''' <returns>A System.Version class containing the version number of the assembly.</returns>>
-        ''' <remarks>Cannot use AssemblyVersionAttribute since it always return Nothing.</remarks>
+        ''' <returns>
+        '''  A <see cref="System.Version"/> class containing the version number of the assembly.
+        ''' </returns>>
+        ''' <remarks>
+        '''  Cannot use <see cref="AssemblyVersionAttribute"/> since it always return Nothing.
+        ''' </remarks>
         Public ReadOnly Property Version() As Version
             Get
                 Return _assembly.GetName().Version
@@ -230,7 +271,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  Gets the amount of physical memory mapped to the process context.
         ''' </summary>
         ''' <returns>
-        '''  A 64-bit signed integer containing the size of physical memory mapped to the process context, in bytes.
+        '''  A 64-bit signed integer containing the size of physical memory mapped
+        '''  to the process context, in bytes.
         ''' </returns>
         Public ReadOnly Property WorkingSet() As Long
             Get
@@ -239,11 +281,12 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
         ''' <summary>
-        '''  Gets an attribute from the assembly and throw exception if the attribute does not exist.
+        '''  Gets an <see cref="Attribute"/> from the assembly and throws exception
+        '''  if the attribute does not exist.
         ''' </summary>
         ''' <param name="attributeType">The type of the required attribute.</param>
         ''' <returns>
-        '''  The attribute with the given type gotten from the assembly, or Nothing.
+        '''  The <see cref="Attribute"/> with the given type gotten from the assembly, or Nothing.
         ''' </returns>
         Private Function GetAttribute(attributeType As Type) As Object
 
