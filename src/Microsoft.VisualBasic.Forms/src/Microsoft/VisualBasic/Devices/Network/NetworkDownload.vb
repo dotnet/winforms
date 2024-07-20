@@ -2,7 +2,6 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.Net
-Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.MyServices.Internal
 
@@ -25,13 +24,15 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="destinationFileName">Name and path of file where download is saved.</param>
         Public Sub DownloadFile(address As String, destinationFileName As String)
             Try
-                DownloadFileAsync(address,
+                DownloadFileAsync(
+                    address,
                     destinationFileName,
                     userName:=DEFAULT_USERNAME,
                     password:=DEFAULT_PASSWORD,
                     dialog:=Nothing,
                     connectionTimeout:=DEFAULT_TIMEOUT,
                     overwrite:=False).Wait()
+
             Catch ex As Exception
                 If ex.InnerException IsNot Nothing Then
                     Throw ex.InnerException
@@ -54,7 +55,8 @@ Namespace Microsoft.VisualBasic.Devices
             password As String)
 
             Try
-                DownloadFileAsync(address,
+                DownloadFileAsync(
+                    address,
                     destinationFileName,
                     userName,
                     password,
@@ -92,14 +94,16 @@ Namespace Microsoft.VisualBasic.Devices
             Try
                 dialog = GetProgressDialog(address, destinationFileName, showUI)
 
-                Dim t As Task = DownloadFileAsync(address,
-                                    destinationFileName,
-                                    userName,
-                                    password,
-                                    dialog,
-                                    connectionTimeout,
-                                    overwrite,
-                                    onUserCancel:=UICancelOption.ThrowException)
+                Dim t As Task = DownloadFileAsync(
+                    address,
+                    destinationFileName,
+                    userName,
+                    password,
+                    dialog,
+                    connectionTimeout,
+                    overwrite,
+                    onUserCancel:=UICancelOption.ThrowException)
+
                 If t.IsFaulted Then
                     ' This will be true if any parameters are bad
                     Throw t.Exception
@@ -137,11 +141,15 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="address">Address to the remote file, http, ftp etc...</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved.</param>
         ''' <param name="userName">The name of the user performing the download.</param>
-        ''' <param name="password">The user's password</param>
+        ''' <param name="password">The user's password.</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar.</param>
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
-        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists.</param>
-        ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing).</param>
+        ''' <param name="overwrite">Indicates whether or not the file should be
+        '''   overwritten if local file already exists.
+        ''' </param>
+        ''' <param name="onUserCancel">
+        '''  Indicates what to do if user cancels dialog (either throw or do nothing).
+        ''' </param>
         Public Sub DownloadFile(
             address As String,
             destinationFileName As String,
@@ -167,17 +175,19 @@ Namespace Microsoft.VisualBasic.Devices
             Try
                 If showUI AndAlso Environment.UserInteractive Then
                     'Construct the local file. This will validate the full name and path
-                    Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(destinationFileName, NameOf(destinationFileName))
+                    Dim fullFilename As String = CompilerServices.FileSystemUtils.NormalizeFilePath(destinationFileName, NameOf(destinationFileName))
                     dialog = GetProgressDialog(address, destinationFileName, showUI)
                 End If
 
-                Dim t As Task = DownloadFileAsync(addressUri,
-                                    destinationFileName,
-                                    networkCredentials,
-                                    dialog,
-                                    connectionTimeout,
-                                    overwrite,
-                                    onUserCancel)
+                Dim t As Task = DownloadFileAsync(
+                    addressUri,
+                    destinationFileName,
+                    networkCredentials,
+                    dialog,
+                    connectionTimeout,
+                    overwrite,
+                    onUserCancel)
+
                 If t.IsFaulted Then
                     ' IsFaulted will be true if any parameters are bad
                     Throw t.Exception
@@ -223,13 +233,13 @@ Namespace Microsoft.VisualBasic.Devices
             Dim dialog As ProgressDialog = Nothing
             Try
                 dialog = GetProgressDialog(address.AbsolutePath, destinationFileName, showUI)
-                Dim t As Task = DownloadFileAsync(address,
-                                    destinationFileName,
-                                    networkCredentials,
-                                    dialog,
-                                    connectionTimeout,
-                                    overwrite
-                                    )
+                Dim t As Task = DownloadFileAsync(
+                    address,
+                    destinationFileName,
+                    networkCredentials,
+                    dialog,
+                    connectionTimeout,
+                    overwrite)
 
                 If t.IsFaulted Then
                     ' IsFaulted will be true if any parameters are bad
@@ -282,13 +292,15 @@ Namespace Microsoft.VisualBasic.Devices
             Dim dialog As ProgressDialog = Nothing
             Try
                 dialog = GetProgressDialog(address.AbsolutePath, destinationFileName, showUI)
-                Dim t As Task = DownloadFileAsync(address,
-                                    destinationFileName,
-                                    networkCredentials,
-                                    dialog,
-                                    connectionTimeout,
-                                    overwrite,
-                                    onUserCancel)
+                Dim t As Task = DownloadFileAsync(
+                    address,
+                    destinationFileName,
+                    networkCredentials,
+                    dialog,
+                    connectionTimeout,
+                    overwrite,
+                    onUserCancel)
+
                 If t.IsFaulted Then
                     ' IsFaulted will be true if any parameters are bad
                     Throw t.Exception
@@ -337,13 +349,15 @@ Namespace Microsoft.VisualBasic.Devices
 
             Try
                 dialog = GetProgressDialog(address.AbsolutePath, destinationFileName, showUI)
-                Dim t As Task = DownloadFileAsync(address,
-                                    destinationFileName,
-                                    networkCredentials,
-                                    dialog,
-                                    connectionTimeout,
-                                    overwrite,
-                                    onUserCancel:=UICancelOption.ThrowException)
+                Dim t As Task = DownloadFileAsync(
+                    address,
+                    destinationFileName,
+                    networkCredentials,
+                    dialog,
+                    connectionTimeout,
+                    overwrite,
+                    onUserCancel:=UICancelOption.ThrowException)
+
                 If t.IsFaulted Then
                     ' IsFaulted will be true if any parameters are bad
                     Throw t.Exception
@@ -395,13 +409,15 @@ Namespace Microsoft.VisualBasic.Devices
             Dim dialog As ProgressDialog = Nothing
             Try
                 dialog = GetProgressDialog(address.AbsolutePath, destinationFileName, showUI)
-                Dim t As Task = DownloadFileAsync(addressUri:=address,
-                                    destinationFileName,
-                                    networkCredentials,
-                                    dialog,
-                                    connectionTimeout,
-                                    overwrite,
-                                    onUserCancel)
+                Dim t As Task = DownloadFileAsync(
+                    addressUri:=address,
+                    destinationFileName,
+                    networkCredentials,
+                    dialog,
+                    connectionTimeout,
+                    overwrite,
+                    onUserCancel)
+
                 If t.IsFaulted Then
                     ' IsFaulted will be true if any parameters are bad
                     Throw t.Exception
@@ -430,7 +446,8 @@ Namespace Microsoft.VisualBasic.Devices
         Public Sub DownloadFile(address As Uri, destinationFileName As String)
             Try
 
-                DownloadFileAsync(addressUri:=address,
+                DownloadFileAsync(
+                    addressUri:=address,
                     destinationFileName,
                     userName:=DEFAULT_USERNAME,
                     password:=DEFAULT_PASSWORD,
@@ -459,7 +476,8 @@ Namespace Microsoft.VisualBasic.Devices
             password As String)
 
             Try
-                DownloadFileAsync(addressUri:=address,
+                DownloadFileAsync(
+                    addressUri:=address,
                     destinationFileName,
                     userName,
                     password,
