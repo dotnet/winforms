@@ -15,6 +15,13 @@ Namespace Microsoft.VisualBasic.ApplicationServices
     <Serializable()>
     Public Class CantStartSingleInstanceException : Inherits Exception
 
+        ' Deserialization constructor must be defined since we are serializable
+        <EditorBrowsable(EditorBrowsableState.Advanced)>
+        <Obsolete("Type or member is obsolete", DiagnosticId:="SYSLIB0051")>
+        Protected Sub New(info As Runtime.Serialization.SerializationInfo, context As Runtime.Serialization.StreamingContext)
+            MyBase.New(info, context)
+        End Sub
+
         ''' <summary>
         '''  Creates a new exception
         ''' </summary>
@@ -28,13 +35,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         Public Sub New(message As String, inner As Exception)
             MyBase.New(message, inner)
-        End Sub
-
-        ' Deserialization constructor must be defined since we are serializable
-        <EditorBrowsable(EditorBrowsableState.Advanced)>
-        <Obsolete("Type or member is obsolete", DiagnosticId:="SYSLIB0051")>
-        Protected Sub New(info As Runtime.Serialization.SerializationInfo, context As Runtime.Serialization.StreamingContext)
-            MyBase.New(info, context)
         End Sub
 
     End Class
