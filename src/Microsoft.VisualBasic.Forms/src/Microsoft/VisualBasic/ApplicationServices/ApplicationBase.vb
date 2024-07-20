@@ -13,42 +13,21 @@ Namespace Microsoft.VisualBasic.ApplicationServices
     ''' </summary>
     Public Class ApplicationBase
 
+        ' The executing application (the EntryAssembly)
+        Private _info As AssemblyInfo
+
+        'Lazy-initialized and cached log object.
+        Private _log As Logging.Log
+
         Public Sub New()
         End Sub
 
         ''' <summary>
-        '''  Returns the value of the specified environment variable.
+        '''  Gets the information about the current culture used by the current thread.
         ''' </summary>
-        ''' <param name="Name">A String containing the name of the environment variable.</param>
-        ''' <returns>A string containing the value of the environment variable.</returns>
-        ''' <exception cref="ArgumentNullException">if name is Nothing.</exception>
-        ''' <exception cref="ArgumentException">if the specified environment variable does not exist.</exception>
-        Public Function GetEnvironmentVariable(name As String) As String
-
-            ' Framework returns Null if not found.
-            Dim variableValue As String = Environment.GetEnvironmentVariable(name)
-
-            ' Since the explicitly requested a specific environment variable and we couldn't find it, throw
-            If variableValue Is Nothing Then
-                Throw ExUtils.GetArgumentExceptionWithArgName(NameOf(name), SR.EnvVarNotFound_Name, name)
-            End If
-
-            Return variableValue
-        End Function
-
-        ''' <summary>
-        '''  Provides access to logging capability.
-        ''' </summary>
-        ''' <value>
-        '''  Returns a Microsoft.VisualBasic.Windows.Log object used for logging to OS log, debug window
-        '''  and a delimited text file or xml log.
-        ''' </value>
-        Public ReadOnly Property Log() As Logging.Log
+        Public ReadOnly Property Culture() As Globalization.CultureInfo
             Get
-                If _log Is Nothing Then
-                    _log = New Logging.Log
-                End If
-                Return _log
+                Return Thread.CurrentThread.CurrentCulture
             End Get
         End Property
 
@@ -67,11 +46,18 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
         ''' <summary>
-        '''  Gets the information about the current culture used by the current thread.
+        '''  Provides access to logging capability.
         ''' </summary>
-        Public ReadOnly Property Culture() As Globalization.CultureInfo
+        ''' <value>
+        '''  Returns a Microsoft.VisualBasic.Windows.Log object used for logging to OS log, debug window
+        '''  and a delimited text file or xml log.
+        ''' </value>
+        Public ReadOnly Property Log() As Logging.Log
             Get
-                Return Thread.CurrentThread.CurrentCulture
+                If _log Is Nothing Then
+                    _log = New Logging.Log
+                End If
+                Return _log
             End Get
         End Property
 
@@ -112,10 +98,25 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             Thread.CurrentThread.CurrentUICulture = New Globalization.CultureInfo(cultureName)
         End Sub
 
-        'Lazy-initialized and cached log object.
-        Private _log As Logging.Log
-        ' The executing application (the EntryAssembly)
-        Private _info As AssemblyInfo
+        ''' <summary>
+        '''  Returns the value of the specified environment variable.
+        ''' </summary>
+        ''' <param name="Name">A String containing the name of the environment variable.</param>
+        ''' <returns>A string containing the value of the environment variable.</returns>
+        ''' <exception cref="ArgumentNullException">if name is Nothing.</exception>
+        ''' <exception cref="ArgumentException">if the specified environment variable does not exist.</exception>
+        Public Function GetEnvironmentVariable(name As String) As String
+
+            ' Framework returns Null if not found.
+            Dim variableValue As String = Environment.GetEnvironmentVariable(name)
+
+            ' Since the explicitly requested a specific environment variable and we couldn't find it, throw
+            If variableValue Is Nothing Then
+                Throw ExUtils.GetArgumentExceptionWithArgName(NameOf(name), SR.EnvVarNotFound_Name, name)
+            End If
+
+            Return variableValue
+        End Function
 
     End Class 'ApplicationBase
 End Namespace

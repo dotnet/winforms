@@ -5,7 +5,6 @@ Imports System.ComponentModel
 
 Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
-
 Namespace Microsoft.VisualBasic.ApplicationServices
 
     ''' <summary>
@@ -14,6 +13,13 @@ Namespace Microsoft.VisualBasic.ApplicationServices
     <EditorBrowsable(EditorBrowsableState.Never)>
     <Serializable()>
     Public Class NoStartupFormException : Inherits Exception
+
+        ' De-serialization constructor must be defined since we are serializable
+        <EditorBrowsable(EditorBrowsableState.Advanced)>
+        <Obsolete("Type or member obsolete.", DiagnosticId:="SYSLIB0051")>
+        Protected Sub New(info As Runtime.Serialization.SerializationInfo, context As Runtime.Serialization.StreamingContext)
+            MyBase.New(info, context)
+        End Sub
 
         ''' <summary>
         '''  Creates a new exception
@@ -28,13 +34,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         Public Sub New(message As String, inner As Exception)
             MyBase.New(message, inner)
-        End Sub
-
-        ' De-serialization constructor must be defined since we are serializable
-        <EditorBrowsable(EditorBrowsableState.Advanced)>
-        <Obsolete("Type or member obsolete.", DiagnosticId:="SYSLIB0051")>
-        Protected Sub New(info As Runtime.Serialization.SerializationInfo, context As Runtime.Serialization.StreamingContext)
-            MyBase.New(info, context)
         End Sub
 
     End Class
