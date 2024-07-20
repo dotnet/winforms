@@ -3,7 +3,7 @@
 
 Imports System.ComponentModel
 
-Imports VbUtils = Microsoft.VisualBasic.CompilerServices.Utils1
+Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.ApplicationServices
 
@@ -19,7 +19,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  Creates a new exception
         ''' </summary>
         Public Sub New()
-            MyBase.New(VbUtils.GetResourceString(SR.AppModel_SingleInstanceCantConnect))
+            MyBase.New(ExUtils.GetResourceString(SR.AppModel_SingleInstanceCantConnect))
         End Sub
 
         Public Sub New(message As String)

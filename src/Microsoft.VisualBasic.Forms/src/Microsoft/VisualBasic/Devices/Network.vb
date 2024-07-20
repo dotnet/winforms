@@ -6,8 +6,6 @@ Imports System.Net
 Imports System.Security
 Imports System.Threading
 Imports Microsoft.VisualBasic.CompilerServices
-Imports Microsoft.VisualBasic.CompilerServices.ExceptionUtils
-Imports Microsoft.VisualBasic.CompilerServices.Utils1
 Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.MyServices.Internal
 Imports NetInfoAlias = System.Net.NetworkInformation

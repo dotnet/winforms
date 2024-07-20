@@ -1,8 +1,7 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Imports System.Runtime.InteropServices
-Imports VbUtils = Microsoft.VisualBasic.CompilerServices.Utils1
+Imports System.Threading
 
 Namespace Microsoft.VisualBasic.CompilerServices
 
@@ -15,38 +14,24 @@ Namespace Microsoft.VisualBasic.CompilerServices
     ' Implements error utilities for Basic
     Friend Module ExceptionUtils
 
-        Friend Function VbMakeException(hr As Integer) As Exception
-            Dim sMsg As String
-
-            If hr > 0 AndAlso hr <= &HFFFFI Then
-                sMsg = VbUtils.GetResourceString(CType(hr, vbErrors))
-            Else
-                sMsg = String.Empty
-            End If
-            VbMakeException = VbMakeExceptionEx(hr, sMsg)
+        Friend Function GetResourceString(resourceKey As String,
+                            ParamArray args() As String) As String
+            Return String.Format(Thread.CurrentThread.CurrentCulture, resourceKey, args)
         End Function
 
-        Friend Function VbMakeExceptionEx(number As Integer, sMsg As String) As Exception
-            Dim vBDefinedError As Boolean
-
-            VbMakeExceptionEx = BuildException(number, sMsg, vBDefinedError)
-
-            If vBDefinedError Then
-                ' .NET Framework implementation calls:
-                ' Err().SetUnmappedError(number)
-            End If
-
+        Friend Function GetResourceString(resourceId As vbErrors) As String
+            Dim id As String = $"ID{CStr(resourceId)}"
+            Return SR.GetResourceString(id, id)
         End Function
 
-        Friend Function BuildException(resourceId As Integer,
-                            description As String,
-                            ByRef vbDefinedError As Boolean) As Exception
+        Friend Function VbMakeException(resourceId As Integer) As Exception
+            Dim description As String = ""
 
-            vbDefinedError = True
+            If resourceId > 0 AndAlso resourceId <= &HFFFFI Then
+                description = GetResourceString(DirectCast(resourceId, vbErrors))
+            End If
 
             Select Case resourceId
-
-                Case vbErrors.None
 
                 Case vbErrors.FileNotFound
                     Return New IO.FileNotFoundException(description)
@@ -55,13 +40,8 @@ Namespace Microsoft.VisualBasic.CompilerServices
                     Return New IO.IOException(description)
 
                 Case Else
-                    'Fall below to default
-                    vbDefinedError = False
                     Return New Exception(description)
             End Select
-
-            vbDefinedError = False
-            Return New Exception(description)
 
         End Function
 
@@ -77,7 +57,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
                             resourceID As String,
                             ParamArray placeHolders() As String) As ArgumentException
 
-            Return New ArgumentException(VbUtils.GetResourceString(resourceID, placeHolders), argumentName)
+            Return New ArgumentException(GetResourceString(resourceID, placeHolders), argumentName)
         End Function
 
         ''' <summary>
@@ -87,7 +67,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <returns>A new instance of <see cref="ArgumentNullException"/>.</returns>
         Friend Function GetArgumentNullException(argumentName As String) As ArgumentNullException
 
-            Return New ArgumentNullException(argumentName, VbUtils.GetResourceString(SR.General_ArgumentNullException))
+            Return New ArgumentNullException(argumentName, GetResourceString(SR.General_ArgumentNullException))
         End Function
 
         ''' <summary>
@@ -101,7 +81,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
                             resourceID As String,
                             ParamArray placeHolders() As String) As ArgumentNullException
 
-            Return New ArgumentNullException(argumentName, VbUtils.GetResourceString(resourceID, placeHolders))
+            Return New ArgumentNullException(argumentName, GetResourceString(resourceID, placeHolders))
         End Function
 
         ''' <summary>
@@ -113,7 +93,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         Friend Function GetDirectoryNotFoundException(resourceID As String,
                             ParamArray placeHolders() As String) As IO.DirectoryNotFoundException
 
-            Return New IO.DirectoryNotFoundException(VbUtils.GetResourceString(resourceID, placeHolders))
+            Return New IO.DirectoryNotFoundException(GetResourceString(resourceID, placeHolders))
         End Function
 
         ''' <summary>
@@ -124,10 +104,10 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <param name="placeHolders">Strings that will replace place holders in the resource string, if any.</param>
         ''' <returns>A new instance of <see cref="IO.FileNotFoundException"/>.</returns>
         Friend Function GetFileNotFoundException(fileName As String,
-                            resourceID As String,
-                            ParamArray placeHolders() As String) As IO.FileNotFoundException
+                           resourceID As String,
+                           ParamArray placeHolders() As String) As IO.FileNotFoundException
 
-            Return New IO.FileNotFoundException(VbUtils.GetResourceString(resourceID, placeHolders), fileName)
+            Return New IO.FileNotFoundException(GetResourceString(resourceID, placeHolders), fileName)
         End Function
 
         ''' <summary>
@@ -139,7 +119,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         Friend Function GetInvalidOperationException(resourceID As String,
                             ParamArray placeHolders() As String) As InvalidOperationException
 
-            Return New InvalidOperationException(VbUtils.GetResourceString(resourceID, placeHolders))
+            Return New InvalidOperationException(GetResourceString(resourceID, placeHolders))
         End Function
 
         ''' <summary>
@@ -151,7 +131,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         Friend Function GetIOException(resourceID As String,
                             ParamArray placeHolders() As String) As IO.IOException
 
-            Return New IO.IOException(VbUtils.GetResourceString(resourceID, placeHolders))
+            Return New IO.IOException(GetResourceString(resourceID, placeHolders))
         End Function
 
         ''' <summary>
@@ -164,7 +144,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         Friend Function GetWin32Exception(resourceID As String,
                             ParamArray placeHolders() As String) As ComponentModel.Win32Exception
 
-            Return New ComponentModel.Win32Exception(Marshal.GetLastWin32Error(), VbUtils.GetResourceString(resourceID, placeHolders))
+            Return New ComponentModel.Win32Exception(Runtime.InteropServices.Marshal.GetLastWin32Error(), GetResourceString(resourceID, placeHolders))
         End Function
 
     End Module
