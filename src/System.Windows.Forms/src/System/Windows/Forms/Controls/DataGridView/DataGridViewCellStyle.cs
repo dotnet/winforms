@@ -127,7 +127,7 @@ public class DataGridViewCellStyle : ICloneable
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public object? DataSourceNullValue
     {
-        get => Properties.TryGetObject(s_propDataSourceNullValue, out object? value)
+        get => Properties.TryGetValue(s_propDataSourceNullValue, out object? value)
             ? value
             : DBNull.Value;
         set
@@ -256,25 +256,13 @@ public class DataGridViewCellStyle : ICloneable
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public bool IsDataSourceNullValueDefault
-    {
-        get
-        {
-            if (!Properties.TryGetObject(s_propDataSourceNullValue, out object? value))
-            {
-                return true;
-            }
-
-            return value == DBNull.Value;
-        }
-    }
+    public bool IsDataSourceNullValueDefault =>
+        !Properties.TryGetValue(s_propDataSourceNullValue, out object? value) || value == DBNull.Value;
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public bool IsFormatProviderDefault
-    {
-        get => !Properties.ContainsObjectThatIsNotNull(s_propFormatProvider);
-    }
+    public bool IsFormatProviderDefault =>
+        !Properties.ContainsObjectThatIsNotNull(s_propFormatProvider);
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -282,7 +270,7 @@ public class DataGridViewCellStyle : ICloneable
     {
         get
         {
-            if (!Properties.TryGetObject(s_propNullValue, out object? nullValue))
+            if (!Properties.TryGetValue(s_propNullValue, out object? nullValue))
             {
                 return true;
             }
@@ -296,7 +284,7 @@ public class DataGridViewCellStyle : ICloneable
     [SRCategory(nameof(SR.CatData))]
     public object? NullValue
     {
-        get => Properties.TryGetObject(s_propNullValue, out object? value)
+        get => Properties.TryGetValue(s_propNullValue, out object? value)
             ? value
             : string.Empty;
         set
@@ -597,7 +585,7 @@ public class DataGridViewCellStyle : ICloneable
 
     private bool ShouldSerializeBackColor() => Properties.ContainsKey(s_propBackColor);
 
-    private bool ShouldSerializeFont() => Properties.TryGetValueOrNull(s_propFont, out Font? font) && font is not null;
+    private bool ShouldSerializeFont() => Properties.TryGetValue(s_propFont, out Font? font) && font is not null;
 
     private bool ShouldSerializeForeColor() => Properties.ContainsKey(s_propForeColor);
 

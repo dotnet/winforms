@@ -479,7 +479,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
     internal static MenuTimer MenuTimer => s_menuTimer;
 
     /// <summary> Tag property for internal use </summary>
-    internal Form? MdiForm => Properties.TryGetObject(s_propMdiForm, out Form? form) ? form : null;
+    internal Form? MdiForm => Properties.TryGetValue(s_propMdiForm, out Form? form) ? form : null;
 
     internal ToolStripMenuItem Clone()
     {

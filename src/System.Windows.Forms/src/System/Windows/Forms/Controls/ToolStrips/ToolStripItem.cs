@@ -489,7 +489,7 @@ public abstract partial class ToolStripItem :
     [SRDescription(nameof(SR.ControlBackgroundImageLayoutDescr))]
     public virtual ImageLayout BackgroundImageLayout
     {
-        get => Properties.TryGetObject(s_backgroundImageLayoutProperty, out ImageLayout imageLayout)
+        get => Properties.TryGetValue(s_backgroundImageLayoutProperty, out ImageLayout imageLayout)
             ? imageLayout
             : ImageLayout.Tile;
         set
@@ -1856,8 +1856,8 @@ public abstract partial class ToolStripItem :
     [TypeConverter(typeof(StringConverter))]
     public object? Tag
     {
-        get => Properties.TryGetObject(s_tagProperty, out object? tag) ? tag : null;
-        set => Properties.SetObject(s_tagProperty, value);
+        get => Properties.TryGetValue(s_tagProperty, out object? tag) ? tag : null;
+        set => Properties.AddValue(s_tagProperty, value);
     }
 
     /// <summary>
@@ -1869,14 +1869,14 @@ public abstract partial class ToolStripItem :
     [SRDescription(nameof(SR.ToolStripItemTextDescr))]
     public virtual string? Text
     {
-        get => Properties.TryGetObject(s_textProperty, out string? text)
+        get => Properties.TryGetValue(s_textProperty, out string? text)
             ? text
             : string.Empty;
         set
         {
             if (value != Text)
             {
-                Properties.SetObject(s_textProperty, value);
+                Properties.AddValue(s_textProperty, value);
                 OnTextChanged(EventArgs.Empty);
             }
         }

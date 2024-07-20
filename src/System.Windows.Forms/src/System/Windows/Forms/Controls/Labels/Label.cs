@@ -480,7 +480,7 @@ public partial class Label : Control, IAutomationLiveRegion
         get
         {
             // Demand create the ImageIndexer property
-            if ((!(Properties.GetObject(s_propImageIndex, out bool found) is LabelImageIndexer imageIndexer)) || (!found))
+            if (!Properties.TryGetValue(s_propImageIndex, out LabelImageIndexer? imageIndexer))
             {
                 imageIndexer = new LabelImageIndexer(this);
                 ImageIndexer = imageIndexer;
@@ -490,7 +490,7 @@ public partial class Label : Control, IAutomationLiveRegion
         }
         set
         {
-            Properties.SetObject(s_propImageIndex, value);
+            Properties.AddValue(s_propImageIndex, value);
         }
     }
 

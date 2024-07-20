@@ -381,8 +381,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     {
         get
         {
-            BindingContext? bc = (BindingContext?)Properties.GetObject(s_propBindingContext);
-            if (bc is not null)
+            if (Properties.TryGetValue(s_propBindingContext, out BindingContext? bc))
             {
                 return bc;
             }
@@ -400,9 +399,9 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
 
         set
         {
-            if (Properties.GetObject(s_propBindingContext) != value)
+            if (!Properties.TryGetValue(s_propBindingContext, out BindingContext? bc) || bc != value)
             {
-                Properties.SetObject(s_propBindingContext, value);
+                Properties.AddValue(s_propBindingContext, value);
 
                 // re-wire the bindings
                 OnBindingContextChanged(EventArgs.Empty);
@@ -1454,10 +1453,10 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
             ToolStripPanelCell? toolStripPanelCell = null;
             if (!IsDropDown && !IsDisposed)
             {
-                if (!Properties.TryGetObject(s_propToolStripPanelCell, out toolStripPanelCell))
+                if (!Properties.TryGetValue(s_propToolStripPanelCell, out toolStripPanelCell))
                 {
                     toolStripPanelCell = new ToolStripPanelCell(this);
-                    Properties.SetObject(s_propToolStripPanelCell, toolStripPanelCell);
+                    Properties.AddValue(s_propToolStripPanelCell, toolStripPanelCell);
                 }
             }
 
@@ -1738,10 +1737,10 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     {
         get
         {
-            if (!Properties.TryGetObject(s_propToolTip, out ToolTip? toolTip) || toolTip is null)
+            if (!Properties.TryGetValue(s_propToolTip, out ToolTip? toolTip) || toolTip is null)
             {
                 toolTip = new ToolTip();
-                Properties.SetObject(s_propToolTip, toolTip);
+                Properties.AddValue(s_propToolTip, toolTip);
             }
 
             return toolTip;
@@ -1756,7 +1755,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         get
         {
             ToolStripTextDirection textDirection = ToolStripTextDirection.Inherit;
-            if (Properties.TryGetObject(s_propTextDirection, out ToolStripTextDirection direction))
+            if (Properties.TryGetValue(s_propTextDirection, out ToolStripTextDirection direction))
             {
                 textDirection = direction;
             }
@@ -1772,7 +1771,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         {
             // valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(value);
-            Properties.SetObject(s_propTextDirection, value);
+            Properties.AddValue(s_propTextDirection, value);
 
             using (new LayoutTransaction(this, this, "TextDirection"))
             {
@@ -1985,8 +1984,10 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
 
                 _mouseHoverTimer?.Dispose();
 
-                ToolTip? toolTip = (ToolTip?)Properties.GetObject(s_propToolTip);
-                toolTip?.Dispose();
+                if (Properties.TryGetValue(s_propToolTip, out ToolTip? toolTip))
+                {
+                    toolTip.Dispose();
+                }
 
                 if (!Items.IsReadOnly)
                 {
@@ -4601,7 +4602,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
                 if (item != _currentlyActiveTooltipItem)
                 {
                     ToolTip.Hide(this);
-                    if(!refresh)
+                    if (!refresh)
                         _currentlyActiveTooltipItem = item;
                 }
 

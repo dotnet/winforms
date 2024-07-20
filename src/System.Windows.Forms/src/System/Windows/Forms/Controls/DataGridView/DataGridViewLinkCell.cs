@@ -44,7 +44,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
     {
         get
         {
-            if (Properties.TryGetObject(s_propLinkCellActiveLinkColor, out Color color))
+            if (Properties.TryGetValue(s_propLinkCellActiveLinkColor, out Color color))
             {
                 return color;
             }
@@ -62,7 +62,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
         {
             if (!value.Equals(ActiveLinkColor))
             {
-                Properties.SetObject(s_propLinkCellActiveLinkColor, value);
+                Properties.AddValue(s_propLinkCellActiveLinkColor, value);
                 if (DataGridView is not null)
                 {
                     if (RowIndex != -1)
@@ -153,7 +153,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
     {
         get
         {
-            if (Properties.TryGetObject(s_propLinkCellLinkColor, out Color color))
+            if (Properties.TryGetValue(s_propLinkCellLinkColor, out Color color))
             {
                 return color;
             }
@@ -171,7 +171,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
         {
             if (!value.Equals(LinkColor))
             {
-                Properties.SetObject(s_propLinkCellLinkColor, value);
+                Properties.AddValue(s_propLinkCellLinkColor, value);
                 if (DataGridView is not null)
                 {
                     if (RowIndex != -1)
@@ -323,7 +323,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
     {
         get
         {
-            if (Properties.TryGetObject(s_propLinkCellVisitedLinkColor, out Color color))
+            if (Properties.TryGetValue(s_propLinkCellVisitedLinkColor, out Color color))
             {
                 return color;
             }
@@ -341,7 +341,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
         {
             if (!value.Equals(VisitedLinkColor))
             {
-                Properties.SetObject(s_propLinkCellVisitedLinkColor, value);
+                Properties.AddValue(s_propLinkCellVisitedLinkColor, value);
                 if (DataGridView is not null)
                 {
                     if (RowIndex != -1)

@@ -555,11 +555,7 @@ public unsafe partial class Control :
     {
         get
         {
-            AmbientProperties? ambientProperties = (AmbientProperties?)Properties.GetObject(
-                s_ambientPropertiesServiceProperty,
-                out bool found);
-
-            if (found)
+            if (Properties.TryGetValue(s_ambientPropertiesServiceProperty, out AmbientProperties? ambientProperties))
             {
                 return ambientProperties;
             }
@@ -575,7 +571,7 @@ public unsafe partial class Control :
 
             if (ambientProperties is not null)
             {
-                Properties.SetObject(s_ambientPropertiesServiceProperty, ambientProperties);
+                Properties.AddValue(s_ambientPropertiesServiceProperty, ambientProperties);
             }
 
             return ambientProperties;
@@ -652,14 +648,14 @@ public unsafe partial class Control :
     [DefaultValue(typeof(Point), "0, 0")]
     public virtual Point AutoScrollOffset
     {
-        get => Properties.TryGetObject(s_autoScrollOffsetProperty, out Point point)
+        get => Properties.TryGetValue(s_autoScrollOffsetProperty, out Point point)
             ? point
             : Point.Empty;
         set
         {
             if (AutoScrollOffset != value)
             {
-                Properties.SetObject(s_autoScrollOffsetProperty, value);
+                Properties.AddValue(s_autoScrollOffsetProperty, value);
             }
         }
     }
@@ -741,7 +737,7 @@ public unsafe partial class Control :
     [Bindable(true)]
     public virtual object? DataContext
     {
-        get => Properties.TryGetObject(s_dataContextProperty, out object? value)
+        get => Properties.TryGetValue(s_dataContextProperty, out object? value)
             ? value
             : ParentInternal?.DataContext;
         set
@@ -888,7 +884,7 @@ public unsafe partial class Control :
     [SRDescription(nameof(SR.ControlBackgroundImageLayoutDescr))]
     public virtual ImageLayout BackgroundImageLayout
     {
-        get => Properties.TryGetObject(s_backgroundImageLayoutProperty, out ImageLayout imageLayout)
+        get => Properties.TryGetValue(s_backgroundImageLayoutProperty, out ImageLayout imageLayout)
             ? imageLayout
             : ImageLayout.Tile;
         set
@@ -913,7 +909,7 @@ public unsafe partial class Control :
                 }
             }
 
-            Properties.SetObject(s_backgroundImageLayoutProperty, value);
+            Properties.AddValue(s_backgroundImageLayoutProperty, value);
             OnBackgroundImageLayoutChanged(EventArgs.Empty);
         }
     }

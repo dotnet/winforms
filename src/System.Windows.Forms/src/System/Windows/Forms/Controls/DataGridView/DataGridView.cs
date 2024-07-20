@@ -2943,7 +2943,7 @@ public partial class DataGridView : Control, ISupportInitialize
     {
         get
         {
-            if (Properties.TryGetObject(s_propToolTip, out ToolTip? toolTip))
+            if (Properties.TryGetValue(s_propToolTip, out ToolTip? toolTip))
             {
                 return toolTip!;
             }
@@ -2954,7 +2954,7 @@ public partial class DataGridView : Control, ISupportInitialize
                 InitialDelay = 500
             };
 
-            Properties.SetObject(s_propToolTip, toolTip);
+            Properties.AddValue(s_propToolTip, toolTip);
 
             return toolTip;
         }

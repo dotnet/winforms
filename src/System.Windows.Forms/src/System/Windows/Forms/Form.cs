@@ -1118,12 +1118,12 @@ public partial class Form : ContainerControl
     // so that WM_SETFOCUS sent to MDIClient does not activate that child. (See MdiClient.WndProc).
     internal bool IsMdiChildFocusable
     {
-        get => Properties.TryGetObject(s_propMdiChildFocusable, out bool value) && value;
+        get => Properties.TryGetValue(s_propMdiChildFocusable, out bool value) && value;
         set
         {
             if (value != IsMdiChildFocusable)
             {
-                Properties.SetObject(s_propMdiChildFocusable, value);
+                Properties.AddValue(s_propMdiChildFocusable, value);
             }
         }
     }
@@ -5620,10 +5620,10 @@ public partial class Form : ContainerControl
                 // (set to null) so that duplicate control buttons are not placed on the menu bar when
                 // an ole menu is being removed.
                 // Make MDI forget the mdi item position.
-                if (!Properties.TryGetObject(s_propDummyMdiMenu, out HMENU dummyMenu) || dummyMenu.IsNull || recreateMenu)
+                if (!Properties.TryGetValue(s_propDummyMdiMenu, out HMENU dummyMenu) || dummyMenu.IsNull || recreateMenu)
                 {
                     dummyMenu = PInvoke.CreateMenu();
-                    Properties.SetObject(s_propDummyMdiMenu, dummyMenu);
+                    Properties.AddValue(s_propDummyMdiMenu, dummyMenu);
                 }
 
                 PInvoke.SendMessage(_ctlClient, PInvoke.WM_MDISETMENU, (WPARAM)dummyMenu.Value);

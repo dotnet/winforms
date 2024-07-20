@@ -63,8 +63,7 @@ internal class PropertyStore
     // REMOVE
     public bool ContainsObjectThatIsNotNull(int key)
     {
-        object? entry = GetObject(key, out bool found);
-        return found && entry is not null;
+        return TryGetValue(key, out object? entry) && entry is not null;
     }
 
     // REMOVE
@@ -113,24 +112,6 @@ internal class PropertyStore
         {
             value = foundValue.GetValue<T>();
             return value is not null;
-        }
-
-        value = default;
-        return false;
-    }
-
-    // Ideally we can get rid of this one and just clear values when they are null.
-
-    /// <summary>
-    ///  Tries to get the value for the given key, allowing explicitly set <see langword="null"/> values.
-    ///  Returns <see langword="true"/> if the value was found.
-    /// </summary>
-    public bool TryGetValueOrNull<T>(int key, out T? value) where T : class
-    {
-        if (_values.TryGetValue(key, out Value foundValue))
-        {
-            value = foundValue.GetValue<T>();
-            return true;
         }
 
         value = default;

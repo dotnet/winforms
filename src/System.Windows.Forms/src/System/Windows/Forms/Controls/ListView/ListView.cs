@@ -2249,10 +2249,10 @@ public partial class ListView : Control
     private void ApplyUpdateCachedItems()
     {
         // first check if there is a delayed update array
-        if (Properties.TryGetObject(s_propDelayedUpdateItems, out List<ListViewItem>? newItems) && newItems is not null)
+        if (Properties.TryGetValue(s_propDelayedUpdateItems, out List<ListViewItem>? newItems) && newItems is not null)
         {
             // if there is, clear it and push the items in.
-            Properties.SetObject(s_propDelayedUpdateItems, null);
+            Properties.RemoveValue(s_propDelayedUpdateItems);
             if (newItems.Count > 0)
             {
                 InsertItems(_itemCount, [.. newItems], checkHosting: false);
@@ -2385,7 +2385,7 @@ public partial class ListView : Control
         // we can cache up any items that have been added while this is active.
         if (_updateCounter++ == 0 && !Properties.ContainsObjectThatIsNotNull(s_propDelayedUpdateItems))
         {
-            Properties.SetObject(s_propDelayedUpdateItems, new List<ListViewItem>());
+            Properties.AddValue(s_propDelayedUpdateItems, new List<ListViewItem>());
         }
     }
 
@@ -4086,7 +4086,7 @@ public partial class ListView : Control
 
         // if we're in the middle of a Begin/EndUpdate, just push the items into our array list
         // as they'll get processed on EndUpdate.
-        if (_updateCounter > 0 && Properties.TryGetObject(s_propDelayedUpdateItems, out List<ListViewItem>? itemList) && itemList is not null)
+        if (_updateCounter > 0 && Properties.TryGetValue(s_propDelayedUpdateItems, out List<ListViewItem>? itemList) && itemList is not null)
         {
             // CheckHosting.
             if (checkHosting)
