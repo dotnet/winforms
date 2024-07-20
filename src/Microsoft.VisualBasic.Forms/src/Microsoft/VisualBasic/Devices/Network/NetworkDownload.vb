@@ -10,11 +10,11 @@ Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.Devices
 
+    ''' <summary>
+    '''  An object that allows easy access to some simple network properties and functionality.
+    ''' </summary>
     Partial Public Class Network
 
-        ''' <summary>
-        '''  Creates class and hooks up events.
-        ''' </summary>
         Public Sub New()
         End Sub
 
@@ -47,10 +47,12 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="destinationFileName">Name and path of file where download is saved.</param>
         ''' <param name="userName">The name of the user performing the download.</param>
         ''' <param name="password">The user's password</param>
-        Public Sub DownloadFile(address As String,
-                    destinationFileName As String,
-                    userName As String,
-                    password As String)
+        Public Sub DownloadFile(
+            address As String,
+            destinationFileName As String,
+            userName As String,
+            password As String)
+
             Try
                 DownloadFileAsync(address,
                     destinationFileName,
@@ -77,13 +79,15 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="showUI">Indicates whether or not to show a progress bar.</param>
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists.</param>
-        Public Sub DownloadFile(address As String,
-                    destinationFileName As String,
-                    userName As String,
-                    password As String,
-                    showUI As Boolean,
-                    connectionTimeout As Integer,
-                    overwrite As Boolean)
+        Public Sub DownloadFile(
+            address As String,
+            destinationFileName As String,
+            userName As String,
+            password As String,
+            showUI As Boolean,
+            connectionTimeout As Integer,
+            overwrite As Boolean)
+
             Dim dialog As ProgressDialog = Nothing
             Try
                 dialog = GetProgressDialog(address, destinationFileName, showUI)
@@ -138,14 +142,15 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists.</param>
         ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing).</param>
-        Public Sub DownloadFile(address As String,
-                    destinationFileName As String,
-                    userName As String,
-                    password As String,
-                    showUI As Boolean,
-                    connectionTimeout As Integer,
-                    overwrite As Boolean,
-                    onUserCancel As UICancelOption)
+        Public Sub DownloadFile(
+            address As String,
+            destinationFileName As String,
+            userName As String,
+            password As String,
+            showUI As Boolean,
+            connectionTimeout As Integer,
+            overwrite As Boolean,
+            onUserCancel As UICancelOption)
 
             ' We're safe from DownloadFile(Nothing, ...) due to overload failure (DownloadFile(String,...) vs. DownloadFile(Uri,...)).
             ' However, it is good practice to verify address before calling Trim.
@@ -203,12 +208,13 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists.</param>
         ''' <remarks>Calls to all the other overloads will come through here.</remarks>
-        Public Sub DownloadFile(address As Uri,
-                                destinationFileName As String,
-                                networkCredentials As ICredentials,
-                                showUI As Boolean,
-                                connectionTimeout As Integer,
-                                overwrite As Boolean)
+        Public Sub DownloadFile(
+            address As Uri,
+            destinationFileName As String,
+            networkCredentials As ICredentials,
+            showUI As Boolean,
+            connectionTimeout As Integer,
+            overwrite As Boolean)
 
             If address Is Nothing Then
                 Throw ExUtils.GetArgumentNullException(NameOf(address))
@@ -256,13 +262,14 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists.</param>
         ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing).</param>
         ''' <remarks>Calls to all the other overloads will come through here.</remarks>
-        Public Sub DownloadFile(address As Uri,
-                    destinationFileName As String,
-                    networkCredentials As ICredentials,
-                    showUI As Boolean,
-                    connectionTimeout As Integer,
-                    overwrite As Boolean,
-                    onUserCancel As UICancelOption)
+        Public Sub DownloadFile(
+            address As Uri,
+            destinationFileName As String,
+            networkCredentials As ICredentials,
+            showUI As Boolean,
+            connectionTimeout As Integer,
+            overwrite As Boolean,
+            onUserCancel As UICancelOption)
 
             If connectionTimeout <= 0 Then
                 Throw ExUtils.GetArgumentExceptionWithArgName(NameOf(connectionTimeout), SR.Network_BadConnectionTimeout)
@@ -312,13 +319,15 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="showUI">Indicates whether or not to show a progress bar.</param>
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists.</param>
-        Public Sub DownloadFile(address As Uri,
-                    destinationFileName As String,
-                    userName As String,
-                    password As String,
-                    showUI As Boolean,
-                    connectionTimeout As Integer,
-                    overwrite As Boolean)
+        Public Sub DownloadFile(
+            address As Uri,
+            destinationFileName As String,
+            userName As String,
+            password As String,
+            showUI As Boolean,
+            connectionTimeout As Integer,
+            overwrite As Boolean)
+
             If address Is Nothing Then
                 Throw ExUtils.GetArgumentNullException(NameOf(address))
             End If
@@ -366,14 +375,15 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists.</param>
         ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing).</param>
-        Public Sub DownloadFile(address As Uri,
-                    destinationFileName As String,
-                    userName As String,
-                    password As String,
-                    showUI As Boolean,
-                    connectionTimeout As Integer,
-                    overwrite As Boolean,
-                    onUserCancel As UICancelOption)
+        Public Sub DownloadFile(
+            address As Uri,
+            destinationFileName As String,
+            userName As String,
+            password As String,
+            showUI As Boolean,
+            connectionTimeout As Integer,
+            overwrite As Boolean,
+            onUserCancel As UICancelOption)
 
             If address Is Nothing Then
                 Throw ExUtils.GetArgumentNullException(NameOf(address))
@@ -417,8 +427,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' </summary>
         ''' <param name="address">Uri to the remote file.</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved.</param>
-        Public Sub DownloadFile(address As Uri,
-                    destinationFileName As String)
+        Public Sub DownloadFile(address As Uri, destinationFileName As String)
             Try
 
                 DownloadFileAsync(addressUri:=address,
@@ -443,10 +452,12 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="destinationFileName">Name and path of file where download is saved.</param>
         ''' <param name="userName">The name of the user performing the download.</param>
         ''' <param name="password">The user's password.</param>
-        Public Sub DownloadFile(address As Uri,
-                    destinationFileName As String,
-                    userName As String,
-                    password As String)
+        Public Sub DownloadFile(
+            address As Uri,
+            destinationFileName As String,
+            userName As String,
+            password As String)
+
             Try
                 DownloadFileAsync(addressUri:=address,
                     destinationFileName,

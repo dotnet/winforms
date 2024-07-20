@@ -80,7 +80,7 @@ Namespace Microsoft.VisualBasic
                             Throw ExUtils.VbMakeException(vbErrors.PermissionDenied)
                         End If
 
-                        Throw ExUtils.VbMakeException(vbErrors.PermissionDenied)
+                        Throw ExUtils.VbMakeException(vbErrors.FileNotFound)
                     End If
                 Finally
                     safeProcessHandle.Close() ' Close the process handle will not cause the process to stop.
