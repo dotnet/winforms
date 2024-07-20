@@ -288,8 +288,8 @@
         <note />
       </trans-unit>
       <trans-unit id="BinaryFormatterNotSupported">
-        <source>Using the BinaryFormatter is not supported in trimmed applications.</source>
-        <target state="translated">Použití deserializace BinaryFormatter se v aplikacích s pročištěným kódem nepodporuje.</target>
+        <source>BinaryFormatter serialization and deserialization are disabled within this application. See https://aka.ms/binaryformatter for more information.</source>
+        <target state="needs-review-translation">Použití deserializace BinaryFormatter se v aplikacích s pročištěným kódem nepodporuje.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
@@ -9706,7 +9706,7 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="ToolStripAllowClickThrough">
         <source>Allows the control to be interacted when window does not have focus.</source>
-        <target state="new">Allows the control to be interacted when window does not have focus.</target>
+        <target state="translated">Umožňuje interakci s ovládacím prvkem, pokud okno nemá fokus.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue">

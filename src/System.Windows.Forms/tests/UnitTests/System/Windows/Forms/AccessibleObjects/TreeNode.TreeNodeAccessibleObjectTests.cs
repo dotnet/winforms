@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Drawing;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.TreeNode;
 
@@ -14,8 +15,12 @@ public class TreeNodeAccessibleObjectTests
         using TreeView control = new();
         TreeNode node = new(control);
 
-        Assert.NotNull(node.AccessibilityObject);
-        Assert.False(control.IsHandleCreated);
+        node.AccessibilityObject.Should().NotBeNull();      
+        node.AccessibilityObject.CanGetDefaultActionInternal.Should().BeFalse();
+        node.AccessibilityObject.CanGetNameInternal.Should().BeFalse();
+        node.AccessibilityObject.IsItemSelected.Should().BeFalse();
+        node.AccessibilityObject.CanGetValueInternal.Should().BeFalse();
+        control.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsFact]
@@ -582,6 +587,36 @@ public class TreeNodeAccessibleObjectTests
         Assert.True(secondLevelNode.IsAccessibilityObjectDisconnected);
         Assert.True(thirdLevelNode.IsAccessibilityObjectDisconnected);
         Assert.True(control.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [InlineData(false, false, true)]
+    [InlineData(true, true, false)]
+    public void TreeNodeAccessibleObject_Bounds_ShouldMatchExpected_IfConditionsMet(bool createControl, bool makeNodeVisible, bool expectBoundsEmpty)
+    {
+        using TreeView treeView = new();
+        TreeNode node = new("Node");
+        treeView.Nodes.Add(node);
+
+        if (createControl)
+        {
+            treeView.CreateControl();
+            if (makeNodeVisible)
+            {
+                treeView.ExpandAll();
+            }
+        }
+
+        var accessibleObject = node.AccessibilityObject;
+
+        if (expectBoundsEmpty)
+        {
+            accessibleObject.Bounds.Should().Be(Rectangle.Empty);
+        }
+        else
+        {
+            accessibleObject.Bounds.Should().NotBe(Rectangle.Empty);
+        }
     }
 
     private class AccessibilityObjectDisconnectTrackingTreeNode : TreeNode

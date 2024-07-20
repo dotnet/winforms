@@ -104,7 +104,7 @@ internal static class BinaryFormattedObjectExtensions
     }
 
     /// <summary>
-    ///  Trys to get this object as a primitive type or string.
+    ///  Tries to get this object as a primitive type or string.
     /// </summary>
     /// <returns><see langword="true"/> if this represented a primitive type or string.</returns>
     public static bool TryGetPrimitiveType(this BinaryFormattedObject format, [NotNullWhen(true)] out object? value)

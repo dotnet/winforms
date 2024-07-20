@@ -13,7 +13,7 @@ public unsafe partial class DataObject
     ///  Contains the logic to move between <see cref="IDataObject"/>, <see cref="Com.IDataObject.Interface"/>,
     ///  and <see cref="ComTypes.IDataObject"/> calls.
     /// </summary>
-    internal unsafe partial class ComposedDataObject : IDataObject, Com.IDataObject.Interface, ComTypes.IDataObject
+    internal unsafe partial class Composition : IDataObject, Com.IDataObject.Interface, ComTypes.IDataObject
     {
         private const Com.TYMED AllowedTymeds = Com.TYMED.TYMED_HGLOBAL | Com.TYMED.TYMED_ISTREAM | Com.TYMED.TYMED_GDI;
 
@@ -33,38 +33,45 @@ public unsafe partial class DataObject
         private readonly Com.IDataObject.Interface _nativeDataObject;
         private readonly ComTypes.IDataObject _runtimeDataObject;
 
-        private ComposedDataObject(IDataObject winFormsDataObject, Com.IDataObject.Interface nativeDataObject, ComTypes.IDataObject runtimeDataObject)
+        // Feature switch, when set to false, BinaryFormatter is not supported in trimmed applications.
+        // This field, using the default BinaryFormatter switch, is used to control trim warnings related to using BinaryFormatter in WinForms trimming.
+        // The trimmer will generate a warning when set to true and will not generate a warning when set to false.
+        [FeatureSwitchDefinition("System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization")]
+        internal static bool EnableUnsafeBinaryFormatterInNativeObjectSerialization =>
+            !AppContext.TryGetSwitch("System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization", out bool isEnabled) || isEnabled;
+
+        private Composition(IDataObject winFormsDataObject, Com.IDataObject.Interface nativeDataObject, ComTypes.IDataObject runtimeDataObject)
         {
             _winFormsDataObject = winFormsDataObject;
             _nativeDataObject = nativeDataObject;
             _runtimeDataObject = runtimeDataObject;
-            if (winFormsDataObject is not NativeDataObjectToWinFormsAdapter and not DataStore)
+            if (winFormsDataObject is not NativeToWinFormsAdapter and not DataStore)
             {
                 OriginalIDataObject = winFormsDataObject;
             }
         }
 
-        public static ComposedDataObject CreateFromWinFormsDataObject(IDataObject winFormsDataObject)
+        public static Composition CreateFromWinFormsDataObject(IDataObject winFormsDataObject)
         {
-            WinFormsDataObjectToNativeAdapter winFormsToNative = new(winFormsDataObject);
+            WinFormsToNativeAdapter winFormsToNative = new(winFormsDataObject);
             NativeDataObjectToRuntimeAdapter nativeToRuntime = new(ComHelpers.GetComPointer<Com.IDataObject>(winFormsToNative));
             return new(winFormsDataObject, winFormsToNative, nativeToRuntime);
         }
 
-        public static ComposedDataObject CreateFromNativeDataObject(Com.IDataObject* nativeDataObject)
+        public static Composition CreateFromNativeDataObject(Com.IDataObject* nativeDataObject)
         {
             // Add ref so each adapter can take ownership of the native data object.
             nativeDataObject->AddRef();
             nativeDataObject->AddRef();
-            NativeDataObjectToWinFormsAdapter nativeToWinForms = new(nativeDataObject);
+            NativeToWinFormsAdapter nativeToWinForms = new(nativeDataObject);
             NativeDataObjectToRuntimeAdapter nativeToRuntime = new(nativeDataObject);
             return new(nativeToWinForms, nativeToWinForms, nativeToRuntime);
         }
 
-        public static ComposedDataObject CreateFromRuntimeDataObject(ComTypes.IDataObject runtimeDataObject)
+        public static Composition CreateFromRuntimeDataObject(ComTypes.IDataObject runtimeDataObject)
         {
-            RuntimeDataObjectToNativeAdapter runtimeToNative = new(runtimeDataObject);
-            NativeDataObjectToWinFormsAdapter nativeToWinForms = new(ComHelpers.GetComPointer<Com.IDataObject>(runtimeToNative));
+            RuntimeToNativeAdapter runtimeToNative = new(runtimeDataObject);
+            NativeToWinFormsAdapter nativeToWinForms = new(ComHelpers.GetComPointer<Com.IDataObject>(runtimeToNative));
             return new(nativeToWinForms, runtimeToNative, runtimeDataObject);
         }
 

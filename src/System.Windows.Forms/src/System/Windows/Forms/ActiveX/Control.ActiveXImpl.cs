@@ -1149,7 +1149,7 @@ public partial class Control
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
                     if (!success)
                     {
-                        if (!DataObject.ComposedDataObject.EnableUnsafeBinaryFormatterInNativeObjectSerialization)
+                        if (!DataObject.Composition.EnableUnsafeBinaryFormatterInNativeObjectSerialization)
                         {
                             throw new NotSupportedException(SR.BinaryFormatterNotSupported);
                         }
@@ -1533,7 +1533,7 @@ public partial class Control
                     {
                         stream.SetLength(0);
 
-                        if (!DataObject.ComposedDataObject.EnableUnsafeBinaryFormatterInNativeObjectSerialization)
+                        if (!DataObject.Composition.EnableUnsafeBinaryFormatterInNativeObjectSerialization)
                         {
                             throw new NotSupportedException(SR.BinaryFormatterNotSupported);
                         }

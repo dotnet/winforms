@@ -212,7 +212,7 @@ Namespace Microsoft.VisualBasic
 
                 '  if scan failed, return an error
                 If IntPtr.op_Equality(hwndOwned, IntPtr.Zero) Then
-                    Throw New ArgumentException(ExUtils.GetResourceString(SR.ProcessNotFound, processId))
+                    Throw New ArgumentException(GetResourceString(SR.ProcessNotFound, processId))
                 End If
 
                 '  set active window to the owned one
@@ -341,7 +341,7 @@ Namespace Microsoft.VisualBasic
             Catch ex As ThreadAbortException
                 Throw
             Catch
-                Throw New ArgumentException(ExUtils.GetResourceString(SR.Argument_InvalidValueType2, "Prompt", "String"))
+                Throw New ArgumentException(GetResourceString(SR.Argument_InvalidValueType2, "Prompt", "String"))
             End Try
 
             Try
@@ -361,7 +361,7 @@ Namespace Microsoft.VisualBasic
             Catch ex As ThreadAbortException
                 Throw
             Catch
-                Throw New ArgumentException(ExUtils.GetResourceString(SR.Argument_InvalidValueType2, "Title", "String"))
+                Throw New ArgumentException(GetResourceString(SR.Argument_InvalidValueType2, "Title", "String"))
             End Try
 
             Return CType(MessageBox.Show(parentWindow, sPrompt, sTitle,

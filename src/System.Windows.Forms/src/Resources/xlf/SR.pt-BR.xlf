@@ -288,8 +288,8 @@
         <note />
       </trans-unit>
       <trans-unit id="BinaryFormatterNotSupported">
-        <source>Using the BinaryFormatter is not supported in trimmed applications.</source>
-        <target state="translated">Não há suporte para o uso do BinaryFormatter em aplicativos cortados.</target>
+        <source>BinaryFormatter serialization and deserialization are disabled within this application. See https://aka.ms/binaryformatter for more information.</source>
+        <target state="needs-review-translation">Não há suporte para o uso do BinaryFormatter em aplicativos cortados.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
@@ -9706,7 +9706,7 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       </trans-unit>
       <trans-unit id="ToolStripAllowClickThrough">
         <source>Allows the control to be interacted when window does not have focus.</source>
-        <target state="new">Allows the control to be interacted when window does not have focus.</target>
+        <target state="translated">Permite a interação com o controle quando a janela não tem foco.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue">

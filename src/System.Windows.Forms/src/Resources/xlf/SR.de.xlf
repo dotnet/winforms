@@ -288,8 +288,8 @@
         <note />
       </trans-unit>
       <trans-unit id="BinaryFormatterNotSupported">
-        <source>Using the BinaryFormatter is not supported in trimmed applications.</source>
-        <target state="translated">Die Verwendung von BinaryFormatter wird in gekürzten Anwendungen nicht unterstützt.</target>
+        <source>BinaryFormatter serialization and deserialization are disabled within this application. See https://aka.ms/binaryformatter for more information.</source>
+        <target state="needs-review-translation">Die Verwendung von BinaryFormatter wird in gekürzten Anwendungen nicht unterstützt.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
@@ -9706,7 +9706,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="ToolStripAllowClickThrough">
         <source>Allows the control to be interacted when window does not have focus.</source>
-        <target state="new">Allows the control to be interacted when window does not have focus.</target>
+        <target state="translated">Ermöglicht die Interaktion des Steuerelements, wenn das Fenster keinen Fokus hat.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue">

@@ -288,8 +288,8 @@
         <note />
       </trans-unit>
       <trans-unit id="BinaryFormatterNotSupported">
-        <source>Using the BinaryFormatter is not supported in trimmed applications.</source>
-        <target state="translated">BinaryFormatter の使用は、トリミングされたアプリケーションではサポートされていません。</target>
+        <source>BinaryFormatter serialization and deserialization are disabled within this application. See https://aka.ms/binaryformatter for more information.</source>
+        <target state="needs-review-translation">BinaryFormatter の使用は、トリミングされたアプリケーションではサポートされていません。</target>
         <note />
       </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
@@ -9706,7 +9706,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ToolStripAllowClickThrough">
         <source>Allows the control to be interacted when window does not have focus.</source>
-        <target state="new">Allows the control to be interacted when window does not have focus.</target>
+        <target state="translated">ウィンドウにフォーカスがない場合にコントロールを操作できるようにします。</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue">
