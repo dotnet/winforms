@@ -40,7 +40,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         End Sub
 
         Private Sub InitializeComponent()
-            Dim resources As ComponentResourceManager = New ComponentResourceManager(GetType(VBInputBox))
+            Dim resources As New ComponentResourceManager(GetType(VBInputBox))
             OKButton = New Button
             MyCancelButton = New Button
             TextBox = New TextBox

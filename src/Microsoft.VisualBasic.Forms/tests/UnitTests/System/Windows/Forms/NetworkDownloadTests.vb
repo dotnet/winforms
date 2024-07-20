@@ -352,7 +352,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim destinationFileName As String = GetDestinationFileName(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize, DefaultUserName, DefaultPassword)
             Dim listener As HttpListener = webListener.ProcessRequests()
-            Dim networkCredentials As ICredentials = New NetworkCredential(DefaultUserName, DefaultPassword)
+            Dim networkCredentials As New NetworkCredential(DefaultUserName, DefaultPassword)
 
             Try
                 My.Computer.Network _

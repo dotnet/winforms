@@ -12,7 +12,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub UserBaseTest()
             Dim testUser As New User
             Assert.Null(testUser.CurrentPrincipal)
-            Dim userPrincipal As UserPrincipal = New UserPrincipal(
+            Dim userPrincipal As New UserPrincipal(
                             authenticationType:="Basic",
                             name:="Test",
                             isAuthenticated:=True,

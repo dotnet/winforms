@@ -7,9 +7,53 @@ Imports Microsoft.Win32.SafeHandles
 Namespace Microsoft.VisualBasic.CompilerServices
 
     <ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
-    Friend NotInheritable Class NativeTypes
+    Partial Friend NotInheritable Class NativeTypes
 
 #Disable Warning CA1812 ' Supress warning as this is a type used in PInvoke and shouldn't be changed.
+        Friend Const GW_CHILD As Integer = 5
+
+        ' GetWindow() Constants
+        Friend Const GW_HWNDFIRST As Integer = 0
+
+        Friend Const GW_HWNDLAST As Integer = 1
+
+        Friend Const GW_HWNDNEXT As Integer = 2
+
+        Friend Const GW_HWNDPREV As Integer = 3
+
+        Friend Const GW_MAX As Integer = 5
+
+        Friend Const GW_OWNER As Integer = 4
+
+        Friend Const NORMAL_PRIORITY_CLASS As Integer = &H20
+
+        Friend Const STARTF_USESHOWWINDOW As Integer = 1
+
+        ' Handle Values
+        Friend Shared ReadOnly s_invalidHandle As New IntPtr(-1)
+
+        ''' <summary>
+        '''  Inherits <see cref="SafeHandleZeroOrMinusOneIsInvalid"/>, with additional InitialSetHandle method.
+        '''  This is required because call to constructor of SafeHandle is not allowed in constrained region.
+        ''' </summary>
+        Friend NotInheritable Class LateInitSafeHandleZeroOrMinusOneIsInvalid
+            Inherits SafeHandleZeroOrMinusOneIsInvalid
+
+            Friend Sub New()
+                MyBase.New(True)
+            End Sub
+
+            Protected Overrides Function ReleaseHandle() As Boolean
+                Return NativeMethods.CloseHandle(handle) <> 0
+            End Function
+
+            Friend Sub InitialSetHandle(h As IntPtr)
+                Debug.Assert(IsInvalid, "Safe handle should only be set once.")
+                SetHandle(h)
+            End Sub
+
+        End Class
+
         <StructLayout(LayoutKind.Sequential)>
         Friend NotInheritable Class SECURITY_ATTRIBUTES
 #Enable Warning CA1812
@@ -34,49 +78,6 @@ Namespace Microsoft.VisualBasic.CompilerServices
             Protected Overrides Sub Finalize()
                 Dispose()
                 MyBase.Finalize()
-            End Sub
-
-        End Class
-
-        ''' <summary>
-        '''  Inherits <see cref="SafeHandleZeroOrMinusOneIsInvalid"/>, with additional InitialSetHandle method.
-        '''  This is required because call to constructor of SafeHandle is not allowed in constrained region.
-        ''' </summary>
-        Friend NotInheritable Class LateInitSafeHandleZeroOrMinusOneIsInvalid
-            Inherits SafeHandleZeroOrMinusOneIsInvalid
-
-            Friend Sub New()
-                MyBase.New(True)
-            End Sub
-
-            Friend Sub InitialSetHandle(h As IntPtr)
-                Debug.Assert(IsInvalid, "Safe handle should only be set once.")
-                SetHandle(h)
-            End Sub
-
-            Protected Overrides Function ReleaseHandle() As Boolean
-                Return NativeMethods.CloseHandle(handle) <> 0
-            End Function
-
-        End Class
-
-        ''' <summary>
-        '''  Represent Win32 PROCESS_INFORMATION structure. IMPORTANT: Copy the handles to a SafeHandle before use them.
-        ''' </summary>
-        ''' <remarks>
-        '''  The handles in PROCESS_INFORMATION are initialized in unmanaged function.
-        '''  We can't use SafeHandle here because Interop doesn't support [out] SafeHandles in structure / classes yet.
-        '''  This class makes no attempt to free the handles. To use the handle, first copy it to a SafeHandle class
-        '''  (using LateInitSafeHandleZeroOrMinusOneIsInvalid.InitialSetHandle) to correctly use and dispose the handle.
-        ''' </remarks>
-        <StructLayout(LayoutKind.Sequential)>
-        Friend NotInheritable Class PROCESS_INFORMATION
-            Public hProcess As IntPtr = IntPtr.Zero
-            Public hThread As IntPtr = IntPtr.Zero
-            Public dwProcessId As Integer
-            Public dwThreadId As Integer
-
-            Friend Sub New()
             End Sub
 
         End Class
@@ -159,22 +160,5 @@ Namespace Microsoft.VisualBasic.CompilerServices
             End Sub
 
         End Class
-
-        ' Handle Values
-        Friend Shared ReadOnly s_invalidHandle As IntPtr = New IntPtr(-1)
-
-        ' GetWindow() Constants
-        Friend Const GW_HWNDFIRST As Integer = 0
-        Friend Const GW_HWNDLAST As Integer = 1
-        Friend Const GW_HWNDNEXT As Integer = 2
-        Friend Const GW_HWNDPREV As Integer = 3
-        Friend Const GW_OWNER As Integer = 4
-        Friend Const GW_CHILD As Integer = 5
-        Friend Const GW_MAX As Integer = 5
-
-        Friend Const STARTF_USESHOWWINDOW As Integer = 1
-
-        Friend Const NORMAL_PRIORITY_CLASS As Integer = &H20
-
     End Class
 End Namespace
