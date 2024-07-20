@@ -57,8 +57,10 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="showUI">Indicates whether or not to show a progress bar.</param>
         ''' <returns>New ProgressDialog.</returns>
         Friend Function GetProgressDialog(
-            address As String, destinationFileName As String,
+            address As String,
+            destinationFileName As String,
             showUI As Boolean) As ProgressDialog
+
             If showUI AndAlso Environment.UserInteractive Then
                 'Construct the local file. This will validate the full name and path
                 Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(path:=destinationFileName, paramName:=NameOf(destinationFileName))
