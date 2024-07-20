@@ -27,10 +27,21 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Sub
 
         ''' <summary>
+        '''  Allows derived classes to set what the command line should look like. <see cref="WindowsFormsApplicationBase"/> calls this
+        '''  for instance because we snag the command line from Main().
+        ''' </summary>
+        <EditorBrowsable(EditorBrowsableState.Advanced)>
+        Protected WriteOnly Property InternalCommandLine() As ObjectModel.ReadOnlyCollection(Of String)
+            Set(value As ObjectModel.ReadOnlyCollection(Of String))
+                _commandLineArgs = value
+            End Set
+        End Property
+
+        ''' <summary>
         '''  Returns the command line arguments for the current application.
         ''' </summary>
         ''' <remarks>
-        '''  This function differs from System.Environment.GetCommandLineArgs in that the
+        '''  This function differs from <see cref="System.Environment.GetCommandLineArgs"/> in that the
         '''  path of the executing file (the 0th entry) is omitted from the returned collection
         ''' </remarks>
         Public ReadOnly Property CommandLineArgs() As ObjectModel.ReadOnlyCollection(Of String)
@@ -48,17 +59,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 End If
                 Return _commandLineArgs
             End Get
-        End Property
-
-        ''' <summary>
-        '''  Allows derived classes to set what the command line should look like. WindowsFormsApplicationBase calls this
-        '''  for instance because we snag the command line from Main().
-        ''' </summary>
-        <EditorBrowsable(EditorBrowsableState.Advanced)>
-        Protected WriteOnly Property InternalCommandLine() As ObjectModel.ReadOnlyCollection(Of String)
-            Set(value As ObjectModel.ReadOnlyCollection(Of String))
-                _commandLineArgs = value
-            End Set
         End Property
 
     End Class 'ApplicationBase

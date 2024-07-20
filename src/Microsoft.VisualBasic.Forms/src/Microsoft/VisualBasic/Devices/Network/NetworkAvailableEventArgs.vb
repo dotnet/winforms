@@ -14,5 +14,6 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         Public ReadOnly Property IsNetworkAvailable() As Boolean
+
     End Class
 End Namespace

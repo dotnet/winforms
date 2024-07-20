@@ -18,7 +18,7 @@ Namespace Microsoft.VisualBasic.Devices
         Friend Const DEFAULT_USERNAME As String = ""
 
         ''' <summary>
-        '''  Posts a message to close the progress dialog
+        '''  Posts a message to close the progress dialog.
         ''' </summary>
         Friend Sub CloseProgressDialog(dialog As ProgressDialog)
             ' Don't invoke unless dialog is up and running
@@ -56,7 +56,11 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="destinationFileName">Name and path of file where download is saved.</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar.</param>
         ''' <returns>New ProgressDialog.</returns>
-        Friend Function GetProgressDialog(address As String, destinationFileName As String, showUI As Boolean) As ProgressDialog
+        Friend Function GetProgressDialog(
+            address As String,
+            destinationFileName As String,
+            showUI As Boolean) As ProgressDialog
+
             If showUI AndAlso Environment.UserInteractive Then
                 'Construct the local file. This will validate the full name and path
                 Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(path:=destinationFileName, paramName:=NameOf(destinationFileName))

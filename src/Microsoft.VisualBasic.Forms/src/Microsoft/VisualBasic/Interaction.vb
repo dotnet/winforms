@@ -77,10 +77,10 @@ Namespace Microsoft.VisualBasic
                         'If not, throw FileNotFound
                         Const ERROR_ACCESS_DENIED As Integer = 5
                         If errorCode = ERROR_ACCESS_DENIED Then
-                            Throw VbMakeException(vbErrors.PermissionDenied)
+                            Throw ExUtils.VbMakeException(vbErrors.PermissionDenied)
                         End If
 
-                        Throw VbMakeException(vbErrors.FileNotFound)
+                        Throw ExUtils.VbMakeException(vbErrors.PermissionDenied)
                     End If
                 Finally
                     safeProcessHandle.Close() ' Close the process handle will not cause the process to stop.
@@ -212,7 +212,7 @@ Namespace Microsoft.VisualBasic
 
                 '  if scan failed, return an error
                 If IntPtr.op_Equality(hwndOwned, IntPtr.Zero) Then
-                    Throw New ArgumentException(ExUtils.GetResourceString(SR.ProcessNotFound, processId))
+                    Throw New ArgumentException(GetResourceString(SR.ProcessNotFound, processId))
                 End If
 
                 '  set active window to the owned one
@@ -341,7 +341,7 @@ Namespace Microsoft.VisualBasic
             Catch ex As ThreadAbortException
                 Throw
             Catch
-                Throw New ArgumentException(ExUtils.GetResourceString(SR.Argument_InvalidValueType2, "Prompt", "String"))
+                Throw New ArgumentException(GetResourceString(SR.Argument_InvalidValueType2, "Prompt", "String"))
             End Try
 
             Try
@@ -361,7 +361,7 @@ Namespace Microsoft.VisualBasic
             Catch ex As ThreadAbortException
                 Throw
             Catch
-                Throw New ArgumentException(ExUtils.GetResourceString(SR.Argument_InvalidValueType2, "Title", "String"))
+                Throw New ArgumentException(GetResourceString(SR.Argument_InvalidValueType2, "Title", "String"))
             End Try
 
             Return CType(MessageBox.Show(parentWindow, sPrompt, sTitle,

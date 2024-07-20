@@ -8,9 +8,7 @@ Namespace Microsoft.VisualBasic.Devices
     ''' <summary>
     '''  Temporary class used to provide WebClient with a timeout property.
     ''' </summary>
-    ''' <remarks>
-    '''  This class will be deleted when Timeout is added to WebClient.
-    ''' </remarks>
+    ''' <remarks>This class will be deleted when Timeout is added to WebClient.</remarks>
     Friend NotInheritable Class WebClientExtended
         Inherits WebClient
 
@@ -21,14 +19,12 @@ Namespace Microsoft.VisualBasic.Devices
         Private _useNonPassiveFtp As Boolean
 
 #Disable Warning BC41004 ' First statement of this 'Sub New' should be an explicit call to 'MyBase.New' or 'MyClass.New' because the constructor in the base class is marked obsolete
-
         Friend Sub New()
         End Sub
-
 #Enable Warning BC41004 ' First statement of this 'Sub New' should be an explicit call to 'MyBase.New' or 'MyClass.New' because the constructor in the base class is marked obsolete
 
         ''' <summary>
-        '''  Sets or indicates the timeout used by WebRequest used by WebClient
+        ''' Sets or indicates the timeout used by WebRequest used by WebClient
         ''' </summary>
         Public WriteOnly Property Timeout() As Integer
             Set(value As Integer)
@@ -40,7 +36,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         '''  Enables switching the server to non passive mode.
         ''' </summary>
-        ''' <remarks>We need this in order for the progress UI on a download to work.</remarks>
+        ''' <remarks>We need this in order for the progress UI on a download to work</remarks>
         Public WriteOnly Property UseNonPassiveFtp() As Boolean
             Set(value As Boolean)
                 _useNonPassiveFtp = value
@@ -48,8 +44,8 @@ Namespace Microsoft.VisualBasic.Devices
         End Property
 
         ''' <summary>
-        '''  Makes sure that the timeout value for WebRequests (used for all Download and
-        '''  Upload methods) is set to the Timeout value.
+        '''  Makes sure that the timeout value for WebRequests (used for all Download
+        '''  and Upload methods) is set to the Timeout value.
         ''' </summary>
         ''' <param name="address"></param>
         Protected Overrides Function GetWebRequest(address As Uri) As WebRequest

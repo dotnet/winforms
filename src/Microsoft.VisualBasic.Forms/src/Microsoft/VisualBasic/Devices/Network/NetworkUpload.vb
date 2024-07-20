@@ -8,7 +8,7 @@ Imports Microsoft.VisualBasic.MyServices.Internal
 
 Namespace Microsoft.VisualBasic.Devices
 
-    Partial Public Class Network
+    Public Class Network
 
         ''' <summary>
         '''  Uploads a file from the local machine to the specified host.
@@ -35,7 +35,12 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="address">The full name and path of the host destination.</param>
         ''' <param name="userName">The name of the user performing the upload.</param>
         ''' <param name="password">The user's password.</param>
-        Public Sub UploadFile(sourceFileName As String, address As String, userName As String, password As String)
+        Public Sub UploadFile(
+            sourceFileName As String,
+            address As String,
+            userName As String,
+            password As String)
+
             UploadFile(sourceFileName, address, userName, password, False, DEFAULT_TIMEOUT)
         End Sub
 
@@ -46,7 +51,12 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="address">Uri representing the destination.</param>
         ''' <param name="userName">The name of the user performing the upload.</param>
         ''' <param name="password">The user's password.</param>
-        Public Sub UploadFile(sourceFileName As String, address As Uri, userName As String, password As String)
+        Public Sub UploadFile(
+            sourceFileName As String,
+            address As Uri,
+            userName As String,
+            password As String)
+
             UploadFile(sourceFileName, address, userName, password, False, DEFAULT_TIMEOUT)
         End Sub
 
@@ -59,12 +69,13 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="Password">The user's password.</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar.</param>
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
-        Public Sub UploadFile(sourceFileName As String,
-                      address As String,
-                      userName As String,
-                      password As String,
-                      showUI As Boolean,
-                      connectionTimeout As Integer)
+        Public Sub UploadFile(
+            sourceFileName As String,
+            address As String,
+            userName As String,
+            password As String,
+            showUI As Boolean,
+            connectionTimeout As Integer)
 
             UploadFile(sourceFileName, address, userName, password, showUI, connectionTimeout, UICancelOption.ThrowException)
         End Sub
@@ -78,19 +89,22 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="Password">The user's password.</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar.</param>
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
-        ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing).</param>
-        Public Sub UploadFile(sourceFileName As String,
-                      address As String,
-                      userName As String,
-                      password As String,
-                      showUI As Boolean,
-                      connectionTimeout As Integer,
-                      onUserCancel As UICancelOption)
+        ''' <param name="onUserCancel">
+        '''  Indicates what to do if user cancels dialog (either throw or do nothing).
+        ''' </param>
+        Public Sub UploadFile(
+            sourceFileName As String,
+            address As String,
+            userName As String,
+            password As String,
+            showUI As Boolean,
+            connectionTimeout As Integer,
+            onUserCancel As UICancelOption)
 
             ' We're safe from UploadFile(Nothing, ...) due to overload failure (UploadFile(String,...) vs. UploadFile(Uri,...)).
             ' However, it is good practice to verify address before calling address.Trim.
             If String.IsNullOrWhiteSpace(address) Then
-                Throw GetArgumentNullException(NameOf(address))
+                Throw GetArgumentNullException("address")
             End If
 
             ' Getting a uri will validate the form of the host address
@@ -114,12 +128,13 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="password">The user's password.</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar.</param>
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
-        Public Sub UploadFile(sourceFileName As String,
-                              address As Uri,
-                              userName As String,
-                              password As String,
-                              showUI As Boolean,
-                              connectionTimeout As Integer)
+        Public Sub UploadFile(
+            sourceFileName As String,
+            address As Uri,
+            userName As String,
+            password As String,
+            showUI As Boolean,
+            connectionTimeout As Integer)
 
             UploadFile(sourceFileName, address, userName, password, showUI, connectionTimeout, UICancelOption.ThrowException)
         End Sub
@@ -133,14 +148,17 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="password">The user's password.</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar.</param>
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
-        ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing).</param>
-        Public Sub UploadFile(sourceFileName As String,
-                              address As Uri,
-                              userName As String,
-                              password As String,
-                              showUI As Boolean,
-                              connectionTimeout As Integer,
-                              onUserCancel As UICancelOption)
+        ''' <param name="onUserCancel">
+        '''  Indicates what to do if user cancels dialog (either throw or do nothing).
+        ''' </param>
+        Public Sub UploadFile(
+            sourceFileName As String,
+            address As Uri,
+            userName As String,
+            password As String,
+            showUI As Boolean,
+            connectionTimeout As Integer,
+            onUserCancel As UICancelOption)
 
             ' Get network credentials
             Dim networkCredentials As ICredentials = GetNetworkCredentials(userName, password)
@@ -157,11 +175,12 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="networkCredentials">The credentials of the user performing the upload.</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar.</param>
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
-        Public Sub UploadFile(sourceFileName As String,
-                              address As Uri,
-                              networkCredentials As ICredentials,
-                              showUI As Boolean,
-                              connectionTimeout As Integer)
+        Public Sub UploadFile(
+            sourceFileName As String,
+            address As Uri,
+            networkCredentials As ICredentials,
+            showUI As Boolean,
+            connectionTimeout As Integer)
 
             UploadFile(sourceFileName, address, networkCredentials, showUI, connectionTimeout, UICancelOption.ThrowException)
         End Sub
@@ -174,26 +193,30 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="networkCredentials">The credentials of the user performing the upload.</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar.</param>
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
-        ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing).</param>
-        Public Sub UploadFile(sourceFileName As String,
-                              address As Uri,
-                              networkCredentials As ICredentials,
-                              showUI As Boolean,
-                              connectionTimeout As Integer,
-                              onUserCancel As UICancelOption)
+        ''' <param name="onUserCancel">
+        '''  Indicates what to do if user cancels dialog (either throw or do nothing).
+        ''' </param>
+        Public Sub UploadFile(
+            sourceFileName As String,
+            address As Uri,
+            networkCredentials As ICredentials,
+            showUI As Boolean,
+            connectionTimeout As Integer,
+            onUserCancel As UICancelOption)
+
             sourceFileName = FileSystemUtils.NormalizeFilePath(sourceFileName, NameOf(sourceFileName))
 
             'Make sure the file exists
             If Not IO.File.Exists(sourceFileName) Then
-                Throw New IO.FileNotFoundException(Utils.GetResourceString(SR.IO_FileNotFound_Path, sourceFileName))
+                Throw New IO.FileNotFoundException(GetResourceString(SR.IO_FileNotFound_Path, sourceFileName))
             End If
 
             If connectionTimeout <= 0 Then
-                Throw GetArgumentExceptionWithArgName(NameOf(connectionTimeout), SR.Network_BadConnectionTimeout)
+                Throw GetArgumentExceptionWithArgName("connectionTimeout", SR.Network_BadConnectionTimeout)
             End If
 
             If address Is Nothing Then
-                Throw GetArgumentNullException(NameOf(address))
+                Throw GetArgumentNullException("address")
             End If
 
             Using client As New WebClientExtended()
@@ -207,8 +230,8 @@ Namespace Microsoft.VisualBasic.Devices
                 Dim dialog As ProgressDialog = Nothing
                 If showUI AndAlso Environment.UserInteractive Then
                     dialog = New ProgressDialog With {
-                        .Text = Utils.GetResourceString(SR.ProgressDialogUploadingTitle, sourceFileName),
-                        .LabelText = Utils.GetResourceString(SR.ProgressDialogUploadingLabel, sourceFileName, address.AbsolutePath)
+                        .Text = GetResourceString(SR.ProgressDialogUploadingTitle, sourceFileName),
+                        .LabelText = GetResourceString(SR.ProgressDialogUploadingLabel, sourceFileName, address.AbsolutePath)
                     }
                 End If
 
