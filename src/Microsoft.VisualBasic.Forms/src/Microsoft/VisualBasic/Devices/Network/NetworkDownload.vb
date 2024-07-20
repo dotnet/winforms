@@ -25,8 +25,8 @@ Namespace Microsoft.VisualBasic.Devices
         Public Sub DownloadFile(address As String, destinationFileName As String)
             Try
                 DownloadFileAsync(
-                    address,
-                    destinationFileName,
+            address,
+            destinationFileName,
                     userName:=DEFAULT_USERNAME,
                     password:=DEFAULT_PASSWORD,
                     dialog:=Nothing,
@@ -56,10 +56,10 @@ Namespace Microsoft.VisualBasic.Devices
 
             Try
                 DownloadFileAsync(
-                    address,
-                    destinationFileName,
-                    userName,
-                    password,
+            address,
+            destinationFileName,
+            userName,
+            password,
                     dialog:=Nothing,
                     connectionTimeout:=DEFAULT_TIMEOUT,
                     overwrite:=False).Wait()
@@ -95,13 +95,13 @@ Namespace Microsoft.VisualBasic.Devices
                 dialog = GetProgressDialog(address, destinationFileName, showUI)
 
                 Dim t As Task = DownloadFileAsync(
-                    address,
-                    destinationFileName,
-                    userName,
-                    password,
+            address,
+            destinationFileName,
+            userName,
+            password,
                     dialog,
-                    connectionTimeout,
-                    overwrite,
+            connectionTimeout,
+            overwrite,
                     onUserCancel:=UICancelOption.ThrowException)
 
                 If t.IsFaulted Then
@@ -180,13 +180,13 @@ Namespace Microsoft.VisualBasic.Devices
                 End If
 
                 Dim t As Task = DownloadFileAsync(
-                    addressUri,
-                    destinationFileName,
-                    networkCredentials,
+            addressUri,
+            destinationFileName,
+            networkCredentials,
                     dialog,
-                    connectionTimeout,
-                    overwrite,
-                    onUserCancel)
+            connectionTimeout,
+            overwrite,
+            onUserCancel)
 
                 If t.IsFaulted Then
                     ' IsFaulted will be true if any parameters are bad
@@ -234,11 +234,11 @@ Namespace Microsoft.VisualBasic.Devices
             Try
                 dialog = GetProgressDialog(address.AbsolutePath, destinationFileName, showUI)
                 Dim t As Task = DownloadFileAsync(
-                    address,
-                    destinationFileName,
+            address,
+            destinationFileName,
                     networkCredentials,
                     dialog,
-                    connectionTimeout,
+            connectionTimeout,
                     overwrite)
 
                 If t.IsFaulted Then
@@ -293,13 +293,13 @@ Namespace Microsoft.VisualBasic.Devices
             Try
                 dialog = GetProgressDialog(address.AbsolutePath, destinationFileName, showUI)
                 Dim t As Task = DownloadFileAsync(
-                    address,
-                    destinationFileName,
-                    networkCredentials,
+            address,
+            destinationFileName,
+            networkCredentials,
                     dialog,
-                    connectionTimeout,
-                    overwrite,
-                    onUserCancel)
+            connectionTimeout,
+            overwrite,
+            onUserCancel)
 
                 If t.IsFaulted Then
                     ' IsFaulted will be true if any parameters are bad
@@ -350,12 +350,12 @@ Namespace Microsoft.VisualBasic.Devices
             Try
                 dialog = GetProgressDialog(address.AbsolutePath, destinationFileName, showUI)
                 Dim t As Task = DownloadFileAsync(
-                    address,
-                    destinationFileName,
-                    networkCredentials,
+            address,
+            destinationFileName,
+            networkCredentials,
                     dialog,
-                    connectionTimeout,
-                    overwrite,
+            connectionTimeout,
+            overwrite,
                     onUserCancel:=UICancelOption.ThrowException)
 
                 If t.IsFaulted Then

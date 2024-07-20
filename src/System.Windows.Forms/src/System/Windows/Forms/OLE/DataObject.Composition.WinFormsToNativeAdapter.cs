@@ -14,18 +14,18 @@ namespace System.Windows.Forms;
 
 public unsafe partial class DataObject
 {
-    internal unsafe partial class ComposedDataObject
+    internal unsafe partial class Composition
     {
         /// <summary>
         ///  Maps <see cref="IDataObject"/> to <see cref="Com.IDataObject.Interface"/>.
         /// </summary>
-        private unsafe class WinFormsDataObjectToNativeAdapter : Com.IDataObject.Interface, IManagedWrapper<Com.IDataObject>
+        private unsafe class WinFormsToNativeAdapter : Com.IDataObject.Interface, IManagedWrapper<Com.IDataObject>
         {
             private const int DATA_S_SAMEFORMATETC = 0x00040130;
 
             private readonly IDataObject _dataObject;
 
-            public WinFormsDataObjectToNativeAdapter(IDataObject dataObject)
+            public WinFormsToNativeAdapter(IDataObject dataObject)
             {
                 _dataObject = dataObject;
             }

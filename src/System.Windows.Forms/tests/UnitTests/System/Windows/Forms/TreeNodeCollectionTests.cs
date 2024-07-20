@@ -242,8 +242,8 @@ public class TreeNodeCollectionTests
         treeView.Sort();
         treeView.CreateControl();
 
-        TreeNode[] treeNodeArray = new TreeNode[]
-        {
+        TreeNode[] treeNodeArray =
+        [
             new()
             {
                 Name = "2",
@@ -254,7 +254,7 @@ public class TreeNodeCollectionTests
                 Name = "1",
                 Text = "1"
             }
-        };
+        ];
 
         treeView.Nodes.AddRange(treeNodeArray);
 
@@ -281,8 +281,8 @@ public class TreeNodeCollectionTests
             Name = "7",
             Text = "7"
         };
-        TreeNode[] treeNodeArray = new TreeNode[]
-        {
+        TreeNode[] treeNodeArray =
+        [
             new()
             {
                 Name = "2",
@@ -293,7 +293,7 @@ public class TreeNodeCollectionTests
                 Name = "1",
                 Text = "1"
             }
-        };
+        ];
 
         TreeNode treeNode;
         using (TreeNodeCollectionAddRangeRespectsSortOrderScope scope = new(enable: true))
@@ -501,5 +501,38 @@ public class TreeNodeCollectionTests
 
         treeNode.Should().Be(collection[0]);
         treeNode.ImageIndex.Should().Be(imageIndex);
+    }
+
+    [WinFormsTheory]
+    [InlineData("name1", true)]
+    [InlineData("name2", true)]
+    [InlineData("NonExistentNode", false)]
+    public void TreeNodeCollection_Contains_VariousScenarios_ReturnsExpected(string nodeName, bool expected)
+    {
+        var collection = CreateCollectionWithNodes();
+        TreeNode node = new(nodeName);
+        collection.Add(node);
+
+        bool result = collection.Contains(collection[nodeName]);
+
+        if (nodeName == "NonExistentNode")
+        {
+            collection.Remove(node);
+        }
+
+        result.Should().Be(expected);
+    }
+
+    [WinFormsFact]
+    public void TreeNodeCollection_Contains_SpecialCases_ReturnsFalse()
+    {
+        var collection = CreateCollectionWithNodes();
+        var nodeToRemove = collection[0];
+
+        collection.Remove(nodeToRemove);
+        collection.Contains(nodeToRemove).Should().BeFalse();
+
+        collection.Clear();
+        collection.Contains(nodeToRemove).Should().BeFalse();
     }
 }

@@ -11,7 +11,7 @@ namespace System.Windows.Forms;
 
 public unsafe partial class DataObject
 {
-    internal unsafe partial class ComposedDataObject
+    internal unsafe partial class Composition
     {
         /// <summary>
         ///  Maps native pointer <see cref="Com.IDataObject"/> to <see cref="ComTypes.IDataObject"/>.

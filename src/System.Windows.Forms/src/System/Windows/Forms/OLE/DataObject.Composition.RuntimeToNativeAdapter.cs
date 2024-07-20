@@ -9,16 +9,16 @@ namespace System.Windows.Forms;
 
 public unsafe partial class DataObject
 {
-    internal unsafe partial class ComposedDataObject
+    internal unsafe partial class Composition
     {
         /// <summary>
         ///  Maps the runtime <see cref="ComTypes.IDataObject"/> to the native <see cref="Com.IDataObject.Interface"/>.
         /// </summary>
-        private class RuntimeDataObjectToNativeAdapter : Com.IDataObject.Interface, ComTypes.IDataObject, Com.IManagedWrapper<Com.IDataObject>
+        private class RuntimeToNativeAdapter : Com.IDataObject.Interface, ComTypes.IDataObject, Com.IManagedWrapper<Com.IDataObject>
         {
             private readonly ComTypes.IDataObject _runtimeDataObject;
 
-            public RuntimeDataObjectToNativeAdapter(ComTypes.IDataObject dataObject) => _runtimeDataObject = dataObject;
+            public RuntimeToNativeAdapter(ComTypes.IDataObject dataObject) => _runtimeDataObject = dataObject;
 
             int ComTypes.IDataObject.DAdvise(ref FORMATETC pFormatetc, ADVF advf, IAdviseSink adviseSink, out int connection) => _runtimeDataObject.DAdvise(ref pFormatetc, advf, adviseSink, out connection);
             void ComTypes.IDataObject.DUnadvise(int connection) => _runtimeDataObject.DUnadvise(connection);
