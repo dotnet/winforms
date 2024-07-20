@@ -2,9 +2,10 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.Net
-Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.MyServices.Internal
+
+Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.Devices
 
@@ -13,9 +14,6 @@ Namespace Microsoft.VisualBasic.Devices
     ''' </summary>
     Partial Public Class Network
 
-        ''' <summary>
-        '''  Creates class and hooks up events
-        ''' </summary>
         Public Sub New()
         End Sub
 
@@ -34,7 +32,14 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="address">Uri to the remote file.</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved.</param>
         Public Sub DownloadFile(address As Uri, destinationFileName As String)
-            DownloadFile(address, destinationFileName, DEFAULT_USERNAME, DEFAULT_PASSWORD, False, DEFAULT_TIMEOUT, False)
+            DownloadFile(
+                address,
+                destinationFileName,
+                DEFAULT_USERNAME,
+                DEFAULT_PASSWORD,
+                False,
+                DEFAULT_TIMEOUT,
+                False)
         End Sub
 
         ''' <summary>
@@ -50,7 +55,14 @@ Namespace Microsoft.VisualBasic.Devices
             userName As String,
             password As String)
 
-            DownloadFile(address, destinationFileName, userName, password, False, DEFAULT_TIMEOUT, False)
+            DownloadFile(
+                address,
+                destinationFileName,
+                userName,
+                password,
+                showUI:=False,
+                DEFAULT_TIMEOUT,
+                False)
         End Sub
 
         ''' <summary>
@@ -66,7 +78,14 @@ Namespace Microsoft.VisualBasic.Devices
             userName As String,
             password As String)
 
-            DownloadFile(address, destinationFileName, userName, password, False, DEFAULT_TIMEOUT, False)
+            DownloadFile(
+                address,
+                destinationFileName,
+                userName,
+                password,
+                False,
+                DEFAULT_TIMEOUT,
+                False)
         End Sub
 
         ''' <summary>
@@ -90,11 +109,19 @@ Namespace Microsoft.VisualBasic.Devices
             connectionTimeout As Integer,
             overwrite As Boolean)
 
-            DownloadFile(address, destinationFileName, userName, password, showUI, connectionTimeout, overwrite, UICancelOption.ThrowException)
+            DownloadFile(
+                address,
+                destinationFileName,
+                userName,
+                password,
+                showUI,
+                connectionTimeout,
+                overwrite,
+                UICancelOption.ThrowException)
         End Sub
 
         ''' <summary>
-        '''  Downloads a file from the network to the specified path
+        '''  Downloads a file from the network to the specified path.
         ''' </summary>
         ''' <param name="address">Address to the remote file, http, ftp etc...</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved.</param>
@@ -121,7 +148,7 @@ Namespace Microsoft.VisualBasic.Devices
             ' We're safe from DownloadFile(Nothing, ...) due to overload failure (DownloadFile(String,...) vs. DownloadFile(Uri,...)).
             ' However, it is good practice to verify address before calling Trim.
             If String.IsNullOrWhiteSpace(address) Then
-                Throw GetArgumentNullException("address")
+                Throw ExUtils.GetArgumentNullException(NameOf(address))
             End If
 
             Dim addressUri As Uri = GetUri(address.Trim())
@@ -129,7 +156,14 @@ Namespace Microsoft.VisualBasic.Devices
             ' Get network credentials
             Dim networkCredentials As ICredentials = GetNetworkCredentials(userName, password)
 
-            DownloadFile(addressUri, destinationFileName, networkCredentials, showUI, connectionTimeout, overwrite, onUserCancel)
+            DownloadFile(
+                addressUri,
+                destinationFileName,
+                networkCredentials,
+                showUI,
+                connectionTimeout,
+                overwrite,
+                onUserCancel)
         End Sub
 
         ''' <summary>
@@ -155,7 +189,15 @@ Namespace Microsoft.VisualBasic.Devices
             connectionTimeout As Integer,
             overwrite As Boolean)
 
-            DownloadFile(address, destinationFileName, userName, password, showUI, connectionTimeout, overwrite, UICancelOption.ThrowException)
+            DownloadFile(
+                address,
+                destinationFileName,
+                userName,
+                password,
+                showUI,
+                connectionTimeout,
+                overwrite,
+                UICancelOption.ThrowException)
         End Sub
 
         ''' <summary>
@@ -191,7 +233,14 @@ Namespace Microsoft.VisualBasic.Devices
             ' Get network credentials
             Dim networkCredentials As ICredentials = GetNetworkCredentials(userName, password)
 
-            DownloadFile(address, destinationFileName, networkCredentials, showUI, connectionTimeout, overwrite, onUserCancel)
+            DownloadFile(
+                address,
+                destinationFileName,
+                networkCredentials,
+                showUI,
+                connectionTimeout,
+                overwrite,
+                onUserCancel)
         End Sub
 
         ''' <summary>
@@ -218,7 +267,14 @@ Namespace Microsoft.VisualBasic.Devices
             connectionTimeout As Integer,
             overwrite As Boolean)
 
-            DownloadFile(address, destinationFileName, networkCredentials, showUI, connectionTimeout, overwrite, UICancelOption.ThrowException)
+            DownloadFile(
+                address,
+                destinationFileName,
+                networkCredentials,
+                showUI,
+                connectionTimeout,
+                overwrite,
+                UICancelOption.ThrowException)
 
         End Sub
 
@@ -243,11 +299,11 @@ Namespace Microsoft.VisualBasic.Devices
             onUserCancel As UICancelOption)
 
             If connectionTimeout <= 0 Then
-                Throw GetArgumentExceptionWithArgName("connectionTimeOut", SR.Network_BadConnectionTimeout)
+                Throw ExUtils.GetArgumentExceptionWithArgName(NameOf(connectionTimeout), SR.Network_BadConnectionTimeout)
             End If
 
             If address Is Nothing Then
-                Throw GetArgumentNullException("address")
+                Throw ExUtils.GetArgumentNullException(NameOf(address))
             End If
 
             Using client As New WebClientExtended
@@ -257,17 +313,17 @@ Namespace Microsoft.VisualBasic.Devices
                 client.UseNonPassiveFtp = showUI
 
                 'Construct the local file. This will validate the full name and path
-                Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(destinationFileName, NameOf(destinationFileName))
+                Dim fullFilename As String = CompilerServices.FileSystemUtils.NormalizeFilePath(destinationFileName, NameOf(destinationFileName))
 
                 ' Sometime a path that can't be parsed is normalized to the current directory. This makes sure we really
                 ' have a file and path
                 If IO.Directory.Exists(fullFilename) Then
-                    Throw GetInvalidOperationException(SR.Network_DownloadNeedsFilename)
+                    Throw ExUtils.GetInvalidOperationException(SR.Network_DownloadNeedsFilename)
                 End If
 
                 'Throw if the file exists and the user doesn't want to overwrite
                 If IO.File.Exists(fullFilename) And Not overwrite Then
-                    Throw New IO.IOException(GetResourceString(SR.IO_FileExists_Path, destinationFileName))
+                    Throw New IO.IOException(ExUtils.GetResourceString(SR.IO_FileExists_Path, destinationFileName))
                 End If
 
                 ' Set credentials if we have any
@@ -278,8 +334,8 @@ Namespace Microsoft.VisualBasic.Devices
                 Dim dialog As ProgressDialog = Nothing
                 If showUI AndAlso Environment.UserInteractive Then
                     dialog = New ProgressDialog With {
-                        .Text = GetResourceString(SR.ProgressDialogDownloadingTitle, address.AbsolutePath),
-                        .LabelText = GetResourceString(SR.ProgressDialogDownloadingLabel, address.AbsolutePath, fullFilename)
+                        .Text = ExUtils.GetResourceString(SR.ProgressDialogDownloadingTitle, address.AbsolutePath),
+                        .LabelText = ExUtils.GetResourceString(SR.ProgressDialogDownloadingLabel, address.AbsolutePath, fullFilename)
                     }
                 End If
 
@@ -288,7 +344,7 @@ Namespace Microsoft.VisualBasic.Devices
 
                 ' Make sure we have a meaningful directory. If we don't, the destinationFileName is suspect
                 If String.IsNullOrEmpty(targetDirectory) Then
-                    Throw GetInvalidOperationException(SR.Network_DownloadNeedsFilename)
+                    Throw ExUtils.GetInvalidOperationException(SR.Network_DownloadNeedsFilename)
                 End If
 
                 If Not IO.Directory.Exists(targetDirectory) Then
