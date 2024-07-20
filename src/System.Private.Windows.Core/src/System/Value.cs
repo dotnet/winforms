@@ -732,7 +732,7 @@ internal readonly partial struct Value
         {
             // A null is stored, it can only be assigned to a reference type or nullable.
             value = default!;
-            result = Nullable.GetUnderlyingType(typeof(T)) is not null;
+            result = value is not null || Nullable.GetUnderlyingType(typeof(T)) is not null;
         }
         else if (typeof(T).IsEnum && _object is TypeFlag<T> typeFlag)
         {

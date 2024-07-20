@@ -210,7 +210,7 @@ internal class PropertyStore
     ///  Tries to get the value for the given key, allowing explicitly set <see langword="null"/> values.
     ///  Returns <see langword="true"/> if the value was found.
     /// </summary>
-    public bool TryGetValueOrNull<T>(int key, out T? value) where T : class
+    public bool TryGetValueOrNull<T>(int key, out T? value)
     {
         if (_values.TryGetValue(key, out Value foundValue))
         {
