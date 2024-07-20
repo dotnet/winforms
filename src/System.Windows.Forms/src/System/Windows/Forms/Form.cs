@@ -1392,7 +1392,7 @@ public partial class Form : ContainerControl
 
     private void UpdateMinimumSize(Size value, bool updateFormSize = true)
     {
-        Properties.SetInteger(s_propMinTrackSize, value.Width);
+        Properties.AddValue(s_propMinTrackSize, value);
 
         // Bump maximum size if necessary
         if (!MaximumSize.IsEmpty && !value.IsEmpty)
@@ -1765,8 +1765,8 @@ public partial class Form : ContainerControl
     {
         get
         {
-            Form?[]? ownedForms = (Form?[]?)Properties.GetObject(s_propOwnedForms);
-            int ownedFormsCount = Properties.GetInteger(s_propOwnedFormsCount);
+            Form?[]? ownedForms = Properties.GetValueOrDefault<Form?[]?>(s_propOwnedForms);
+            int ownedFormsCount = Properties.GetValueOrDefault<int>(s_propOwnedFormsCount);
 
             Form[] result = new Form[ownedFormsCount];
             if (ownedFormsCount > 0)
@@ -2652,8 +2652,8 @@ public partial class Form : ContainerControl
             return;
         }
 
-        Form?[]? ownedForms = (Form?[]?)Properties.GetObject(s_propOwnedForms);
-        int ownedFormsCount = Properties.GetInteger(s_propOwnedFormsCount);
+        Form?[]? ownedForms = Properties.GetValueOrDefault<Form?[]?>(s_propOwnedForms);
+        int ownedFormsCount = Properties.GetValueOrDefault<int>(s_propOwnedFormsCount);
 
         // Make sure this isn't already in the list:
         for (int i = 0; i < ownedFormsCount; i++)
@@ -2674,11 +2674,11 @@ public partial class Form : ContainerControl
             Form[] newOwnedForms = new Form[ownedFormsCount * 2];
             Array.Copy(ownedForms, 0, newOwnedForms, 0, ownedFormsCount);
             ownedForms = newOwnedForms;
-            Properties.SetObject(s_propOwnedForms, ownedForms);
+            Properties.AddValue(s_propOwnedForms, ownedForms);
         }
 
         ownedForms[ownedFormsCount] = ownedForm;
-        Properties.SetInteger(s_propOwnedFormsCount, ownedFormsCount + 1);
+        Properties.AddValue(s_propOwnedFormsCount, ownedFormsCount + 1);
     }
 
     // When shrinking the form (i.e. going from Large Fonts to Small
@@ -4582,7 +4582,7 @@ public partial class Form : ContainerControl
         {
             // Fire FormClosed event on all the forms that this form owns and are not in the Application.OpenForms collection
             // This is to be consistent with what WmClose does.
-            int ownedFormsCount = Properties.GetInteger(s_propOwnedFormsCount);
+            int ownedFormsCount = Properties.GetValueOrDefault<int>(s_propOwnedFormsCount);
             if (ownedFormsCount > 0)
             {
                 Form[] ownedForms = OwnedForms;
@@ -4612,7 +4612,7 @@ public partial class Form : ContainerControl
         {
             // Fire FormClosing event on all the forms that this form owns and are not in the Application.OpenForms collection
             // This is to be consistent with what WmClose does.
-            int ownedFormsCount = Properties.GetInteger(s_propOwnedFormsCount);
+            int ownedFormsCount = Properties.GetValueOrDefault<int>(s_propOwnedFormsCount);
             if (ownedFormsCount > 0)
             {
                 Form[] ownedForms = OwnedForms;
@@ -4713,8 +4713,8 @@ public partial class Form : ContainerControl
             return;
         }
 
-        Form?[]? ownedForms = (Form?[]?)Properties.GetObject(s_propOwnedForms);
-        int ownedFormsCount = Properties.GetInteger(s_propOwnedFormsCount);
+        Form?[]? ownedForms = Properties.GetValueOrDefault<Form?[]?>(s_propOwnedForms);
+        int ownedFormsCount = Properties.GetValueOrDefault<int>(s_propOwnedFormsCount);
 
         if (ownedForms is not null)
         {
@@ -4736,7 +4736,7 @@ public partial class Form : ContainerControl
                 }
             }
 
-            Properties.SetInteger(s_propOwnedFormsCount, ownedFormsCount);
+            Properties.AddValue(s_propOwnedFormsCount, ownedFormsCount);
         }
     }
 
@@ -6152,7 +6152,7 @@ public partial class Form : ContainerControl
 
                 // Call OnClosing/OnFormClosing on all the forms that current form owns.
                 Form[] ownedForms = OwnedForms;
-                int ownedFormsCount = Properties.GetInteger(s_propOwnedFormsCount);
+                int ownedFormsCount = Properties.GetValueOrDefault<int>(s_propOwnedFormsCount);
                 for (int i = ownedFormsCount - 1; i >= 0; i--)
                 {
                     FormClosingEventArgs cfe = new(CloseReason.FormOwnerClosing, e.Cancel);
@@ -6218,7 +6218,7 @@ public partial class Form : ContainerControl
 
                 // Call OnClosed/OnFormClosed on all the forms that current form owns.
                 Form[] ownedForms = OwnedForms;
-                int ownedFormsCount = Properties.GetInteger(s_propOwnedFormsCount);
+                int ownedFormsCount = Properties.GetValueOrDefault<int>(s_propOwnedFormsCount);
                 for (int i = ownedFormsCount - 1; i >= 0; i--)
                 {
                     fc = new FormClosedEventArgs(CloseReason.FormOwnerClosing);

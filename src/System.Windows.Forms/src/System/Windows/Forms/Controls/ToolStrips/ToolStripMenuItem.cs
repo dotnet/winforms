@@ -299,11 +299,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
     [SRDescription(nameof(SR.CheckBoxCheckStateDescr))]
     public CheckState CheckState
     {
-        get
-        {
-            object checkState = Properties.GetInteger(s_propCheckState, out bool found);
-            return (found) ? (CheckState)checkState : CheckState.Unchecked;
-        }
+        get => Properties.TryGetValue(s_propCheckState, out CheckState checkState) ? checkState : CheckState.Unchecked;
         set
         {
             // Valid values are 0x0 to 0x2
@@ -311,7 +307,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
 
             if (value != CheckState)
             {
-                Properties.SetInteger(s_propCheckState, (int)value);
+                Properties.AddValue(s_propCheckState, value);
                 OnCheckedChanged(EventArgs.Empty);
                 OnCheckStateChanged(EventArgs.Empty);
             }
@@ -364,11 +360,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
     [SRDescription(nameof(SR.MenuItemShortCutDescr))]
     public Keys ShortcutKeys
     {
-        get
-        {
-            object shortcutKeys = Properties.GetInteger(s_propShortcutKeys, out bool found);
-            return (found) ? (Keys)shortcutKeys : Keys.None;
-        }
+        get => Properties.TryGetValue(s_propShortcutKeys, out Keys shortcutKeys) ? shortcutKeys : Keys.None;
         set
         {
             if ((value != Keys.None) && !ToolStripManager.IsValidShortcut(value))
@@ -401,7 +393,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
                     }
                 }
 
-                Properties.SetInteger(s_propShortcutKeys, (int)value);
+                Properties.AddValue(s_propShortcutKeys, value);
 
                 if (ShowShortcutKeys && IsOnDropDown)
                 {

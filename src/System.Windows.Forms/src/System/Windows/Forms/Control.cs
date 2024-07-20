@@ -502,16 +502,12 @@ public unsafe partial class Control :
     [SRDescription(nameof(SR.ControlAccessibleRoleDescr))]
     public AccessibleRole AccessibleRole
     {
-        get
-        {
-            int role = Properties.GetInteger(s_accessibleRoleProperty, out bool found);
-            return found ? (AccessibleRole)role : AccessibleRole.Default;
-        }
+        get => Properties.TryGetValue(s_accessibleRoleProperty, out AccessibleRole role) ? role : AccessibleRole.Default;
         set
         {
             // valid values are -1 to 0x40
             SourceGenerated.EnumValidator.Validate(value);
-            Properties.SetInteger(s_accessibleRoleProperty, (int)value);
+            Properties.AddValue(s_accessibleRoleProperty, value);
         }
     }
 
@@ -1141,8 +1137,7 @@ public unsafe partial class Control :
         get
         {
             // Check if we're caching text.
-            int cacheTextCounter = Properties.GetInteger(s_cacheTextCountProperty, out _);
-
+            int cacheTextCounter = Properties.GetValueOrDefault<int>(s_cacheTextCountProperty);
             return cacheTextCounter > 0 || GetStyle(ControlStyles.CacheText);
         }
         set
@@ -1154,13 +1149,13 @@ public unsafe partial class Control :
             }
 
             // Otherwise, get the state and update the cache if necessary.
-            int cacheTextCounter = Properties.GetInteger(s_cacheTextCountProperty, out _);
+            int cacheTextCounter = Properties.GetValueOrDefault<int>(s_cacheTextCountProperty);
 
             if (value)
             {
                 if (cacheTextCounter == 0)
                 {
-                    Properties.SetObject(s_cacheTextFieldProperty, _text);
+                    Properties.AddValue(s_cacheTextFieldProperty, _text);
                     _text ??= WindowText;
                 }
 
@@ -1171,11 +1166,11 @@ public unsafe partial class Control :
                 cacheTextCounter--;
                 if (cacheTextCounter == 0)
                 {
-                    _text = (string?)Properties.GetObject(s_cacheTextFieldProperty, out _);
+                    _text = Properties.GetValueOrDefault<string?>(s_cacheTextFieldProperty);
                 }
             }
 
-            Properties.SetInteger(s_cacheTextCountProperty, cacheTextCounter);
+            Properties.AddValue(s_cacheTextCountProperty, cacheTextCounter);
         }
     }
 
@@ -2048,8 +2043,7 @@ public unsafe partial class Control :
     {
         get
         {
-            int fontHeight = Properties.GetInteger(s_fontHeightProperty, out bool found);
-            if (found && fontHeight != -1)
+            if (Properties.TryGetValue(s_fontHeightProperty, out int fontHeight) && fontHeight != -1)
             {
                 return fontHeight;
             }
@@ -2057,7 +2051,7 @@ public unsafe partial class Control :
             if (TryGetExplicitlySetFont(out Font? font))
             {
                 fontHeight = font.Height;
-                Properties.SetInteger(s_fontHeightProperty, fontHeight);
+                Properties.AddValue(s_fontHeightProperty, fontHeight);
                 return fontHeight;
             }
 
@@ -2073,12 +2067,12 @@ public unsafe partial class Control :
             if (localFontHeight == -1)
             {
                 localFontHeight = Font.Height;
-                Properties.SetInteger(s_fontHeightProperty, localFontHeight);
+                Properties.AddValue(s_fontHeightProperty, localFontHeight);
             }
 
             return localFontHeight;
         }
-        set => Properties.SetInteger(s_fontHeightProperty, value);
+        set => Properties.AddValue(s_fontHeightProperty, value);
     }
 
     /// <summary>

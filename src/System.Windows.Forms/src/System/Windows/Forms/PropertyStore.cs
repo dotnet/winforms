@@ -27,26 +27,6 @@ internal class PropertyStore
 
     // REMOVE
     /// <summary>
-    ///  Retrieves an integer value from our property list.
-    ///  This will set value to zero and return false if the
-    ///  list does not contain the given key.
-    /// </summary>
-    public int GetInteger(int key) => GetInteger(key, out _);
-
-    // REMOVE
-    /// <summary>
-    ///  Retrieves an integer value from our property list.
-    ///  This will set value to zero and return false if the
-    ///  list does not contain the given key.
-    /// </summary>
-    public int GetInteger(int key, out bool found)
-    {
-        found = _values.TryGetValue(key, out Value value);
-        return found ? value.GetValue<int>() : default;
-    }
-
-    // REMOVE
-    /// <summary>
     ///  Retrieves an object value from our property list.
     ///  This will set value to null and return false if the
     ///  list does not contain the given key.
@@ -103,12 +83,6 @@ internal class PropertyStore
     ///  Removes the given key from the store.
     /// </summary>
     public void RemoveValue(int key) => _values.Remove(key);
-
-    // REMOVE
-    /// <summary>
-    ///  Stores the given value in the key.
-    /// </summary>
-    public void SetInteger(int key, int value) => _values[key] = value;
 
     // REMOVE
     /// <summary>

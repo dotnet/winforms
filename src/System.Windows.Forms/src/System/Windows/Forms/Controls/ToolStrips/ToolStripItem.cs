@@ -263,20 +263,11 @@ public abstract partial class ToolStripItem :
     [SRDescription(nameof(SR.ToolStripItemAccessibleRoleDescr))]
     public AccessibleRole AccessibleRole
     {
-        get
-        {
-            int role = Properties.GetInteger(s_accessibleRoleProperty, out bool found);
-            if (found)
-            {
-                return (AccessibleRole)role;
-            }
-
-            return AccessibleRole.Default;
-        }
+        get => Properties.TryGetValue(s_accessibleRoleProperty, out AccessibleRole role) ? role : AccessibleRole.Default;
         set
         {
             SourceGenerated.EnumValidator.Validate(value);
-            Properties.SetInteger(s_accessibleRoleProperty, (int)value);
+            Properties.AddValue(s_accessibleRoleProperty, value);
             OnAccessibleRoleChanged(EventArgs.Empty);
         }
     }
@@ -1306,21 +1297,11 @@ public abstract partial class ToolStripItem :
     [SRCategory(nameof(SR.CatLayout))]
     public MergeAction MergeAction
     {
-        get
-        {
-            int action = Properties.GetInteger(s_mergeActionProperty, out bool found);
-            if (found)
-            {
-                return (MergeAction)action;
-            }
-
-            return MergeAction.Append;
-        }
+        get => Properties.TryGetValue(s_mergeActionProperty, out MergeAction action) ? action : MergeAction.Append;
         set
         {
             SourceGenerated.EnumValidator.Validate(value);
-
-            Properties.SetInteger(s_mergeActionProperty, (int)value);
+            Properties.AddValue(s_mergeActionProperty, value);
         }
     }
 
@@ -1332,17 +1313,8 @@ public abstract partial class ToolStripItem :
     [SRCategory(nameof(SR.CatLayout))]
     public int MergeIndex
     {
-        get
-        {
-            int index = Properties.GetInteger(s_mergeIndexProperty, out bool found);
-            if (found)
-            {
-                return index;
-            }
-
-            return -1;
-        }
-        set => Properties.SetInteger(s_mergeIndexProperty, value);
+        get => Properties.TryGetValue(s_mergeIndexProperty, out int index) ? index : -1;
+        set => Properties.AddValue(s_mergeIndexProperty, value);
     }
 
     internal bool MouseDownAndUpMustBeInSameItem
@@ -1685,30 +1657,29 @@ public abstract partial class ToolStripItem :
     {
         get
         {
-            int rightToLeft = Properties.GetInteger(s_rightToLeftProperty, out bool found);
-            if (!found)
+            if (!Properties.TryGetValue(s_rightToLeftProperty, out RightToLeft rightToLeft))
             {
-                rightToLeft = (int)RightToLeft.Inherit;
+                rightToLeft = RightToLeft.Inherit;
             }
 
-            if (((RightToLeft)rightToLeft) == RightToLeft.Inherit)
+            if ((rightToLeft) == RightToLeft.Inherit)
             {
                 if (Owner is not null)
                 {
-                    rightToLeft = (int)Owner.RightToLeft;
+                    rightToLeft = Owner.RightToLeft;
                 }
                 else if (ParentInternal is not null)
                 {
                     // case for Overflow & Grip
-                    rightToLeft = (int)ParentInternal.RightToLeft;
+                    rightToLeft = ParentInternal.RightToLeft;
                 }
                 else
                 {
-                    rightToLeft = (int)DefaultRightToLeft;
+                    rightToLeft = DefaultRightToLeft;
                 }
             }
 
-            return (RightToLeft)rightToLeft;
+            return rightToLeft;
         }
 
         set
@@ -1719,7 +1690,7 @@ public abstract partial class ToolStripItem :
 
             if (Properties.ContainsKey(s_rightToLeftProperty) || value != RightToLeft.Inherit)
             {
-                Properties.AddValue(s_rightToLeftProperty, (int)value);
+                Properties.AddValue(s_rightToLeftProperty, value);
             }
 
             if (oldValue != RightToLeft)
@@ -1948,7 +1919,7 @@ public abstract partial class ToolStripItem :
         get
         {
             ToolStripTextDirection textDirection = ToolStripTextDirection.Inherit;
-            if (Properties.TryGetObject(s_textDirectionProperty, out ToolStripTextDirection direction))
+            if (Properties.TryGetValue(s_textDirectionProperty, out ToolStripTextDirection direction))
             {
                 textDirection = direction;
             }
@@ -1972,7 +1943,7 @@ public abstract partial class ToolStripItem :
         {
             SourceGenerated.EnumValidator.Validate(value);
 
-            Properties.SetObject(s_textDirectionProperty, value);
+            Properties.AddValue(s_textDirectionProperty, value);
             InvalidateItemLayout("TextDirection");
         }
     }
@@ -2987,7 +2958,7 @@ public abstract partial class ToolStripItem :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected internal virtual void OnParentRightToLeftChanged(EventArgs e)
     {
-        if (!Properties.ContainsKey(s_rightToLeftProperty) || ((RightToLeft)Properties.GetInteger(s_rightToLeftProperty)) == RightToLeft.Inherit)
+        if (!Properties.ContainsKey(s_rightToLeftProperty) || (Properties.GetValueOrDefault<RightToLeft>(s_rightToLeftProperty)) == RightToLeft.Inherit)
         {
             OnRightToLeftChanged(e);
         }
@@ -3003,13 +2974,12 @@ public abstract partial class ToolStripItem :
         if (Owner is not null)
         {
             // check if we need to fire OnRightToLeftChanged
-            int rightToLeft = Properties.GetInteger(s_rightToLeftProperty, out bool found);
-            if (!found)
+            if (!Properties.TryGetValue(s_rightToLeftProperty, out RightToLeft rightToLeft))
             {
-                rightToLeft = (int)RightToLeft.Inherit;
+                rightToLeft = RightToLeft.Inherit;
             }
 
-            if ((rightToLeft == (int)RightToLeft.Inherit) && RightToLeft != DefaultRightToLeft)
+            if ((rightToLeft == RightToLeft.Inherit) && RightToLeft != DefaultRightToLeft)
             {
                 OnRightToLeftChanged(EventArgs.Empty);
             }
@@ -3020,7 +2990,7 @@ public abstract partial class ToolStripItem :
     internal void OnOwnerTextDirectionChanged()
     {
         ToolStripTextDirection textDirection = ToolStripTextDirection.Inherit;
-        if (Properties.TryGetObject(s_textDirectionProperty, out ToolStripTextDirection direction))
+        if (Properties.TryGetValue(s_textDirectionProperty, out ToolStripTextDirection direction))
         {
             textDirection = direction;
         }
@@ -3419,19 +3389,18 @@ public abstract partial class ToolStripItem :
     [EditorBrowsable(EditorBrowsableState.Never)]
     internal virtual bool ShouldSerializeRightToLeft()
     {
-        int rightToLeft = Properties.GetInteger(s_rightToLeftProperty, out bool found);
-        if (!found)
+        if (!Properties.TryGetValue(s_rightToLeftProperty, out RightToLeft rightToLeft))
         {
             return false;
         }
 
-        return rightToLeft != (int)DefaultRightToLeft;
+        return rightToLeft != DefaultRightToLeft;
     }
 
     private bool ShouldSerializeTextDirection()
     {
         ToolStripTextDirection textDirection = ToolStripTextDirection.Inherit;
-        if (Properties.TryGetObject(s_textDirectionProperty, out ToolStripTextDirection direction))
+        if (Properties.TryGetValue(s_textDirectionProperty, out ToolStripTextDirection direction))
         {
             textDirection = direction;
         }

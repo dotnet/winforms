@@ -417,16 +417,7 @@ public partial class ComboBox : ListControl
     [RefreshProperties(RefreshProperties.Repaint)]
     public DrawMode DrawMode
     {
-        get
-        {
-            int drawMode = Properties.GetInteger(s_propDrawMode, out bool found);
-            if (found)
-            {
-                return (DrawMode)drawMode;
-            }
-
-            return DrawMode.Normal;
-        }
+        get => Properties.TryGetValue(s_propDrawMode, out DrawMode drawMode) ? drawMode : DrawMode.Normal;
         set
         {
             if (DrawMode != value)
@@ -434,7 +425,7 @@ public partial class ComboBox : ListControl
                 // valid values are 0x0 to 0x2.
                 SourceGenerated.EnumValidator.Validate(value);
                 ResetHeightCache();
-                Properties.SetInteger(s_propDrawMode, (int)value);
+                Properties.AddValue(s_propDrawMode, value);
                 RecreateHandle();
             }
         }
@@ -455,9 +446,9 @@ public partial class ComboBox : ListControl
         {
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
 
-            if (Properties.GetInteger(s_propDropDownWidth) != value)
+            if (Properties.GetValueOrDefault<int>(s_propDropDownWidth) != value)
             {
-                Properties.SetInteger(s_propDropDownWidth, value);
+                Properties.AddValue(s_propDropDownWidth, value);
                 if (IsHandleCreated)
                 {
                     PInvoke.SendMessage(this, PInvoke.CB_SETDROPPEDWIDTH, (WPARAM)value);
@@ -476,25 +467,14 @@ public partial class ComboBox : ListControl
     [DefaultValue(106)]
     public int DropDownHeight
     {
-        get
-        {
-            int dropDownHeight = Properties.GetInteger(s_propDropDownHeight, out bool found);
-            if (found)
-            {
-                return dropDownHeight;
-            }
-            else
-            {
-                return DefaultDropDownHeight;
-            }
-        }
+        get => Properties.TryGetValue(s_propDropDownHeight, out int dropDownHeight) ? dropDownHeight : DefaultDropDownHeight;
         set
         {
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
 
-            if (Properties.GetInteger(s_propDropDownHeight) != value)
+            if (Properties.GetValueOrDefault<int>(s_propDropDownHeight) != value)
             {
-                Properties.SetInteger(s_propDropDownHeight, value);
+                Properties.AddValue(s_propDropDownHeight, value);
 
                 // The dropDownHeight is not reflected unless the
                 // combobox integralHeight == false..
@@ -635,15 +615,7 @@ public partial class ComboBox : ListControl
                 drawMode == DrawMode.OwnerDrawVariable ||
                 !IsHandleCreated)
             {
-                int itemHeight = Properties.GetInteger(s_propItemHeight, out bool found);
-                if (found)
-                {
-                    return itemHeight;
-                }
-                else
-                {
-                    return FontHeight + 2;
-                }
+                return Properties.TryGetValue(s_propItemHeight, out int itemHeight) ? itemHeight : FontHeight + 2;
             }
 
             // Note that the above if clause deals with the case when the handle has not yet been created
@@ -663,9 +635,9 @@ public partial class ComboBox : ListControl
 
             ResetHeightCache();
 
-            if (Properties.GetInteger(s_propItemHeight) != value)
+            if (Properties.GetValueOrDefault<int>(s_propItemHeight) != value)
             {
-                Properties.SetInteger(s_propItemHeight, value);
+                Properties.AddValue(s_propItemHeight, value);
                 if (DrawMode != DrawMode.Normal)
                 {
                     UpdateItemHeight();
@@ -753,10 +725,7 @@ public partial class ComboBox : ListControl
     [SRDescription(nameof(SR.ComboBoxMaxLengthDescr))]
     public int MaxLength
     {
-        get
-        {
-            return Properties.GetInteger(s_propMaxLength);
-        }
+        get => Properties.GetValueOrDefault<int>(s_propMaxLength);
         set
         {
             if (value < 0)
@@ -766,7 +735,7 @@ public partial class ComboBox : ListControl
 
             if (MaxLength != value)
             {
-                Properties.SetInteger(s_propMaxLength, value);
+                Properties.AddValue(s_propMaxLength, value);
                 if (IsHandleCreated)
                 {
                     PInvoke.SendMessage(this, PInvoke.CB_LIMITTEXT, (WPARAM)value);
@@ -1130,16 +1099,7 @@ public partial class ComboBox : ListControl
     [RefreshProperties(RefreshProperties.Repaint)]
     public ComboBoxStyle DropDownStyle
     {
-        get
-        {
-            int style = Properties.GetInteger(s_propStyle, out bool found);
-            if (found)
-            {
-                return (ComboBoxStyle)style;
-            }
-
-            return ComboBoxStyle.DropDown;
-        }
+        get => Properties.TryGetValue(s_propStyle, out ComboBoxStyle style) ? style : ComboBoxStyle.DropDown;
         set
         {
             if (DropDownStyle == value)
@@ -1161,7 +1121,7 @@ public partial class ComboBox : ListControl
             // reset preferred height.
             ResetHeightCache();
 
-            Properties.SetInteger(s_propStyle, (int)value);
+            Properties.AddValue(s_propStyle, value);
 
             if (IsHandleCreated)
             {
@@ -2412,14 +2372,12 @@ public partial class ComboBox : ListControl
             }
         }
 
-        int dropDownWidth = Properties.GetInteger(s_propDropDownWidth, out bool found);
-        if (found)
+        if (Properties.TryGetValue(s_propDropDownWidth, out int dropDownWidth))
         {
             PInvoke.SendMessage(this, PInvoke.CB_SETDROPPEDWIDTH, (WPARAM)dropDownWidth);
         }
 
-        _ = Properties.GetInteger(s_propItemHeight, out found);
-        if (found)
+        if (Properties.ContainsKey(s_propItemHeight))
         {
             // someone has set the item height - update it
             UpdateItemHeight();
