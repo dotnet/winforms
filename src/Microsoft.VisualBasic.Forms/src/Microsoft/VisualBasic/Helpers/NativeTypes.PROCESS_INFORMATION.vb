@@ -4,7 +4,9 @@
 Imports System.Runtime.InteropServices
 
 Namespace Microsoft.VisualBasic.CompilerServices
+
     Partial Friend NotInheritable Class NativeTypes
+
         ''' <summary>
         '''  Represent Win32 PROCESS_INFORMATION structure. IMPORTANT: Copy the handles to a SafeHandle before use them.
         ''' </summary>
@@ -25,6 +27,5 @@ Namespace Microsoft.VisualBasic.CompilerServices
             End Sub
 
         End Class
-
     End Class
 End Namespace

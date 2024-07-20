@@ -4,7 +4,9 @@
 Imports Microsoft.Win32.SafeHandles
 
 Namespace Microsoft.VisualBasic.CompilerServices
+
     Partial Friend NotInheritable Class NativeTypes
+
         ''' <summary>
         '''  Inherits <see cref="SafeHandleZeroOrMinusOneIsInvalid"/>, with additional InitialSetHandle method.
         '''  This is required because call to constructor of SafeHandle is not allowed in constrained region.
@@ -16,16 +18,15 @@ Namespace Microsoft.VisualBasic.CompilerServices
                 MyBase.New(True)
             End Sub
 
+            Protected Overrides Function ReleaseHandle() As Boolean
+                Return NativeMethods.CloseHandle(handle) <> 0
+            End Function
+
             Friend Sub InitialSetHandle(h As IntPtr)
                 Debug.Assert(IsInvalid, "Safe handle should only be set once.")
                 SetHandle(h)
             End Sub
 
-            Protected Overrides Function ReleaseHandle() As Boolean
-                Return NativeMethods.CloseHandle(handle) <> 0
-            End Function
-
         End Class
-
     End Class
 End Namespace

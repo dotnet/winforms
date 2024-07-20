@@ -8,7 +8,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
     Partial Friend NotInheritable Class NativeTypes
 
         ' Handle Values
-        Friend Shared ReadOnly s_invalidHandle As IntPtr = New IntPtr(-1)
+        Friend Shared ReadOnly s_invalidHandle As New IntPtr(-1)
 
         ''' <summary>
         '''  Important!  This class should be used where the API being called has allocated the strings. That is why lpReserved, etc. are declared as IntPtrs instead
