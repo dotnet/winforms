@@ -26,7 +26,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         End Function
 
         Friend Function VbMakeException(resourceId As Integer) As Exception
-            Dim description As String = ""
+            Dim description As String = String.Empty
 
             If resourceId > 0 AndAlso resourceId <= &HFFFFI Then
                 description = GetResourceString(DirectCast(resourceId, vbErrors))
