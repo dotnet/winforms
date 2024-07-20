@@ -4,11 +4,12 @@
 Imports System.Runtime.InteropServices
 
 Namespace Microsoft.VisualBasic.CompilerServices
+
     Partial Friend NotInheritable Class NativeTypes
 
-#Disable Warning CA1812 ' Supress warning as this is a type used in PInvoke and shouldn't be changed.
         ' Handle Values
         Friend Shared ReadOnly s_invalidHandle As New IntPtr(-1)
+
         ''' <summary>
         '''  Important!  This class should be used where the API being called has allocated the strings. That is why lpReserved, etc. are declared as IntPtrs instead
         '''  of Strings - so that the marshaling layer won't release the memory. This caused us problems in the shell() functions. We would call GetStartupInfo()
