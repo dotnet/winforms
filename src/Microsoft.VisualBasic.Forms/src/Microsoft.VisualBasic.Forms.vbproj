@@ -12,7 +12,7 @@
     <OptionInfer>Off</OptionInfer>
     <OptionStrict>On</OptionStrict>
     <RootNamespace></RootNamespace>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>Latest</LangVersion>
     <VBRuntime>None</VBRuntime>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <UsePublicApiAnalyzers>true</UsePublicApiAnalyzers>
