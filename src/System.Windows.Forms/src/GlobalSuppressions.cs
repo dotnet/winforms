@@ -165,9 +165,9 @@
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Thread local", Scope = "member", Target = "~F:System.Windows.Forms.VisualStyles.VisualStyleRenderer.t_themeHandles")]
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Thread local", Scope = "member", Target = "~F:System.Windows.Forms.VisualStyles.VisualStyleRenderer.t_threadCacheVersion")]
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Thread local", Scope = "member", Target = "~F:System.Windows.Forms.RadioButtonRenderer.t_visualStyleRenderer")]
-[assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Thread local", Scope = "member", Target = "~F:System.Windows.Forms.DataGridViewComboBoxCell.DataGridViewComboBoxCellRenderer.t_visualStyleRenderer")]
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Thread local", Scope = "member", Target = "~F:System.Windows.Forms.Control.t_inCrossThreadSafeCall")]
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Thread local", Scope = "member", Target = "~F:System.Windows.Forms.Control.t_currentHelpInfo")]
+[assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Thread static", Scope = "member", Target = "~F:System.Windows.Forms.DataGridViewComboBoxCell.DataGridViewComboBoxCellRenderer.t_visualStyleRenderer")]
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Thread local", Scope = "member", Target = "~F:System.Windows.Forms.Application.ThreadContext.t_currentThreadContext")]
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Thread local", Scope = "member", Target = "~F:System.Windows.Forms.ComboBoxRenderer.t_visualStyleRenderer")]
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Thread local", Scope = "member", Target = "~F:System.Windows.Forms.GroupBoxRenderer.t_visualStyleRenderer")]
@@ -229,7 +229,6 @@
 [assembly: SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "Designer", Scope = "member", Target = "~M:System.Windows.Forms.MdiClient.ShouldSerializeLocation~System.Boolean")]
 
 // Ideally these should be different exceptions, but leaving them as shipped for compatibility
-[assembly: SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "Compat", Scope = "member", Target = "~M:System.Windows.Forms.DataObject.Composition.NativeToWinFormsAdapter.GetDataFromHGLOBAL(Windows.Win32.Foundation.HGLOBAL,System.String)~System.Object")]
 [assembly: SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "Compat", Scope = "member", Target = "~M:System.Windows.Forms.DataObject.Composition.NativeToWinFormsAdapter.ReadByteStreamFromHGLOBAL(Windows.Win32.Foundation.HGLOBAL,System.Boolean@)~System.IO.MemoryStream")]
 [assembly: SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "Compat", Scope = "member", Target = "~M:System.Windows.Forms.DataObject.Composition.NativeDataObjectToRuntimeAdapter.System#Runtime#InteropServices#ComTypes#IDataObject#EnumFormatEtc(System.Runtime.InteropServices.ComTypes.DATADIR)~System.Runtime.InteropServices.ComTypes.IEnumFORMATETC")]
 [assembly: SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "Compat", Scope = "member", Target = "~M:System.Windows.Forms.Clipboard.SetDataObject(System.Object,System.Boolean,System.Int32,System.Int32)")]

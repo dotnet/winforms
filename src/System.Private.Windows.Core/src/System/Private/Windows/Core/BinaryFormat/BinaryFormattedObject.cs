@@ -26,13 +26,14 @@ internal sealed partial class BinaryFormattedObject
     internal static FormatterConverter DefaultConverter { get; } = new();
 #pragma warning restore SYSLIB0050
 
+    internal ITypeResolver TypeResolver => _typeResolver ??= new DefaultTypeResolver(_options, _recordMap);
+
     private static readonly Options s_defaultOptions = new();
     private readonly Options _options;
 
     private readonly RecordMap _recordMap = new();
 
     private ITypeResolver? _typeResolver;
-    private ITypeResolver TypeResolver => _typeResolver ??= new DefaultTypeResolver(_options, _recordMap);
 
     private readonly Id _rootRecord;
 

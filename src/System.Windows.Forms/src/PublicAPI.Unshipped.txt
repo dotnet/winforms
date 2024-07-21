@@ -1,3 +1,14 @@
+static System.Windows.Forms.Clipboard.SetDataAsJson<T>(T data) -> void
+static System.Windows.Forms.Clipboard.TryGetData<T>(string! format, out T data) -> bool
+static System.Windows.Forms.Clipboard.TryGetData<T>(string! format, System.Func<System.Reflection.Metadata.TypeName!, System.Type!>! resolver, out T data) -> bool
+System.Windows.Forms.IDataObject.TryGetData<T>(string! format, out T data) -> bool
+System.Windows.Forms.IDataObject.TryGetData<T>(out T data) -> bool
+System.Windows.Forms.IDataObject.TryGetData<T>(string! format, bool autoConvert, out T data) -> bool
+System.Windows.Forms.IDataObject.TryGetData<T>(string! format, System.Func<System.Reflection.Metadata.TypeName!, System.Type!>! resolver, bool autoConvert, out T data) -> bool
+virtual System.Windows.Forms.DataObject.TryGetData<T>(out T data) -> bool
+virtual System.Windows.Forms.DataObject.TryGetData<T>(string! format, bool autoConvert, out T data) -> bool
+virtual System.Windows.Forms.DataObject.TryGetData<T>(string! format, out T data) -> bool
+virtual System.Windows.Forms.DataObject.TryGetData<T>(string! format, System.Func<System.Reflection.Metadata.TypeName!, System.Type!>! resolver, bool autoConvert, out T data) -> bool
 System.Windows.Forms.ToolStrip.AllowClickThrough.get -> bool
 System.Windows.Forms.ToolStrip.AllowClickThrough.set -> void
 virtual System.Drawing.Design.PropertyValueUIHandler.Invoke(System.ComponentModel.ITypeDescriptorContext! context, System.ComponentModel.PropertyDescriptor! propDesc, System.Collections.ArrayList! valueUIItemList) -> void

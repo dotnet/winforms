@@ -25,6 +25,7 @@ internal static partial class LocalAppContextSwitches
     internal const string NoClientNotificationsSwitchName = "Switch.System.Windows.Forms.AccessibleObject.NoClientNotifications";
     internal const string EnableMsoComponentManagerSwitchName = "Switch.System.Windows.Forms.EnableMsoComponentManager";
     internal const string TreeNodeCollectionAddRangeRespectsSortOrderSwitchName = "System.Windows.Forms.TreeNodeCollectionAddRangeRespectsSortOrder";
+    internal const string ClipboardEnableUnsafeBinaryFormatterDeserializationSwitchName = "System.Windows.Forms.Clipboard.EnableUnsafeBinaryFormatterDeserialization";
 
     private static int s_scaleTopLevelFormMinMaxSizeForDpi;
     private static int s_anchorLayoutV2;
@@ -36,6 +37,7 @@ internal static partial class LocalAppContextSwitches
     private static int s_noClientNotifications;
     private static int s_enableMsoComponentManager;
     private static int s_treeNodeCollectionAddRangeRespectsSortOrder;
+    private static int s_clipboardEnableUnsafeBinaryFormatterDeserialization;
 
     private static FrameworkName? s_targetFrameworkName;
 
@@ -109,6 +111,11 @@ internal static partial class LocalAppContextSwitches
             if (switchName == TreeNodeCollectionAddRangeRespectsSortOrderSwitchName)
             {
                 return true;
+            }
+
+            if (switchName == ClipboardEnableUnsafeBinaryFormatterDeserializationSwitchName)
+            {
+                return false;
             }
 
             if (framework.Version.Major >= 8)
@@ -217,5 +224,16 @@ internal static partial class LocalAppContextSwitches
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get => GetCachedSwitchValue(TreeNodeCollectionAddRangeRespectsSortOrderSwitchName, ref s_treeNodeCollectionAddRangeRespectsSortOrder);
+    }
+
+    /// <summary>
+    ///  If <see langword="true"/>, then <see cref="Clipboard"/> and <see cref="DataObject"/> get methods
+    ///  will use <see cref="BinaryFormatter"/> to deserialize the payload.
+    ///  To use this switch, application should also opt into the <see cref="EnableUnsafeBinaryFormatterSerialization"/> option.
+    /// </summary>
+    public static bool ClipboardEnableUnsafeBinaryFormatterDeserialization
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => GetCachedSwitchValue(ClipboardEnableUnsafeBinaryFormatterDeserializationSwitchName, ref s_clipboardEnableUnsafeBinaryFormatterDeserialization);
     }
 }

@@ -3,8 +3,12 @@
 
 Imports System.Collections.Specialized
 Imports System.ComponentModel
+Imports System.Diagnostics.CodeAnalysis
 Imports System.Drawing
 Imports System.IO
+Imports System.Reflection.Metadata
+Imports System.Runtime.InteropServices
+Imports System.Runtime.Serialization
 Imports System.Windows.Forms
 
 Namespace Microsoft.VisualBasic.MyServices
@@ -164,7 +168,26 @@ Namespace Microsoft.VisualBasic.MyServices
         End Function
 
         ''' <summary>
-        '''  Indicates whether or not there is data on the clipboard in the passed in format.
+        ''' Gets data of type <typeparamref name="T"/> from the clipboard that's been saved in the passed in format.
+        ''' </summary>
+        ''' <param name="format">The format in which to search for the data of type <typeparamref name="T"/>. </param>
+        ''' <param name="data">The retrieved data, if successful.</param>
+        ''' <param name="resolver">Control BinaryFormatter deserialization.</param>
+        Public Function TryGetData(Of T)(format As String, resolver As Func(Of TypeName, Type), <Out> ByRef data As T) As Boolean
+            Return Clipboard.TryGetData(format, resolver, data)
+        End Function
+
+        ''' <summary>
+        ''' Gets data of type <typeparamref name="T"/> from the clipboard that's been saved in the passed in format.
+        ''' </summary>
+        ''' <param name="format">The format in which to search for the data of type <typeparamref name="T"/>. </param>
+        ''' <param name="data">The retrieved data, if successful.</param>
+        Public Function TryGetData(Of T)(format As String, <Out> ByRef data As T) As Boolean
+            Return Clipboard.TryGetData(format, data)
+        End Function
+
+        ''' <summary>
+        '''  Indicates whether or not there is data on the clipboard in the passed in format,
         ''' </summary>
         ''' <param name="format"></param>
         ''' <returns>True if there's data in the passed in format, otherwise False.</returns>
@@ -182,7 +205,15 @@ Namespace Microsoft.VisualBasic.MyServices
         End Sub
 
         ''' <summary>
-        '''  Removes everything from the clipboard.
+        ''' Saves the passed in data to the clipboard as JSON that contains <typeparamref name="T"/>.
+        ''' </summary>
+        ''' <param name="data">The data to be saved.</param>
+        Public Sub SetDataAsJson(Of T)(data As T)
+            Clipboard.SetDataAsJson(data)
+        End Sub
+
+        ''' <summary>
+        ''' Removes everything from the clipboard
         ''' </summary>
         Public Sub Clear()
             Clipboard.Clear()
