@@ -101,10 +101,12 @@ public partial class ListView : Control
     private Collections.Specialized.BitVector32 _listViewState; // see LISTVIEWSTATE_ consts above
     private Collections.Specialized.BitVector32 _listViewState1; // see LISTVIEWSTATE1_ consts above
 
-    // Ownerdraw data caches...  Only valid inside WM_PAINT.
+    // Owner draw data caches...  Only valid inside WM_PAINT.
 
-    private Color _odCacheForeColor = Application.ApplicationColors.WindowText;
-    private Color _odCacheBackColor = Application.ApplicationColors.Window;
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    private Color _odCacheForeColor = ControlSystemColors.Current.WindowText;
+    private Color _odCacheBackColor = ControlSystemColors.Current.Window;
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     private Font _odCacheFont;
     private HFONT _odCacheFontHandle;
     private FontHandleWrapper? _odCacheFontHandleWrapper;
@@ -353,7 +355,9 @@ public partial class ListView : Control
             }
             else
             {
-                return Application.ApplicationColors.Window;
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+                return SystemColors.Window;
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             }
         }
         set
@@ -853,7 +857,9 @@ public partial class ListView : Control
             }
             else
             {
-                return Application.ApplicationColors.WindowText;
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+                return SystemColors.WindowText;
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             }
         }
         set
@@ -2889,6 +2895,8 @@ public partial class ListView : Control
                         // Basically, if the color component is 0xFF, subtract 1 from it
                         // (adding 1 will overflow), else add 1 to it. If the color component is 0,
                         // skip it and go to the next color (unless it is our last option).
+
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                         if (nmcd->clrText == ColorTranslator.ToWin32(SystemColors.HotTrack))
                         {
                             int totalshift = 0;
@@ -2926,6 +2934,7 @@ public partial class ListView : Control
                             }
                             while (!clrAdjusted);
                         }
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
                         if (!haveRenderInfo || riBack.IsEmpty)
                         {
@@ -4614,7 +4623,7 @@ public partial class ListView : Control
         }
 
 #pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        if (IsDarkModeEnabled)
+        if (Application.IsDarkModeEnabled)
         {
             _ = PInvoke.SetWindowTheme(HWND, "DarkMode_Explorer", null);
 
@@ -5021,14 +5030,14 @@ public partial class ListView : Control
 
         c = BackColor;
 #pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        if (c != Application.ApplicationColors.Window || IsDarkModeEnabled)
+        if (c != SystemColors.Window || Application.IsDarkModeEnabled)
         {
             PInvoke.SendMessage(this, PInvoke.LVM_SETBKCOLOR, (WPARAM)0, (LPARAM)c);
         }
 
         c = ForeColor;
 
-        if (c != Application.ApplicationColors.WindowText || IsDarkModeEnabled)
+        if (c != SystemColors.WindowText || Application.IsDarkModeEnabled)
         {
             PInvoke.SendMessage(this, PInvoke.LVM_SETTEXTCOLOR, (WPARAM)0, (LPARAM)c);
         }
@@ -6025,7 +6034,7 @@ public partial class ListView : Control
         // We need to set the text color when we are in dark mode,
         // so that the themed headers are actually readable.
 #pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        if (IsDarkModeEnabled && !OwnerDraw && nmhdr->code == PInvoke.NM_CUSTOMDRAW)
+        if (Application.IsDarkModeEnabled && !OwnerDraw && nmhdr->code == PInvoke.NM_CUSTOMDRAW)
         {
             NMLVCUSTOMDRAW* nmlvcd = (NMLVCUSTOMDRAW*)(nint)m.LParamInternal;
 

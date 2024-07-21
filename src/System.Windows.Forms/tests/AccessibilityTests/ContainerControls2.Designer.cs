@@ -287,7 +287,11 @@ partial class ContainerControls2
         // groupBox5
         // 
         this.groupBox5.BackColor = System.Drawing.Color.Green;
+
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         groupBox5.ForeColor = SystemColors.Control;
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
         this.groupBox5.Location = new System.Drawing.Point(337, 182);
         this.groupBox5.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
         this.groupBox5.Name = "groupBox5";

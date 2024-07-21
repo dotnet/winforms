@@ -2192,6 +2192,11 @@
         <target state="translated">I cursori predefiniti non possono essere serializzati.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DarkModeNotSupported">
+        <source>Dark mode cannot be activated, either because of an activated High-Contrast mode or because the underlying OS does not support it.</source>
+        <target state="new">Dark mode cannot be activated, either because of an activated High-Contrast mode or because the underlying OS does not support it.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DataBindingAddNewNotSupportedOnPropertyManager">
         <source>AddNew is not supported for property to property binding.</source>
         <target state="translated">AddNew non è supportato per l'associazione da proprietà a proprietà.</target>

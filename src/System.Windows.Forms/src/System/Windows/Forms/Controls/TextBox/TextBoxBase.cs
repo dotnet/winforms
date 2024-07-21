@@ -283,18 +283,20 @@ public abstract partial class TextBoxBase : Control
     {
         get
         {
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             if (ShouldSerializeBackColor())
             {
                 return base.BackColor;
             }
             else if (ReadOnly)
             {
-                return Application.ApplicationColors.Control;
+                return SystemColors.Control;
             }
             else
             {
-                return Application.ApplicationColors.Window;
+                return SystemColors.Window;
             }
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         }
         set => base.BackColor = value;
     }
@@ -421,7 +423,7 @@ public abstract partial class TextBoxBase : Control
             cp.ExStyle &= ~(int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
 
 #pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
-            if (VisualStylesMode == VisualStylesMode.Latest)
+            if (VisualStylesMode == VisualStylesMode.Net10)
             {
                 // We draw the borders ourselves for the visual styles for .NET 9/10 onwards.
                 if (_textBoxFlags[s_multiline])
@@ -521,7 +523,9 @@ public abstract partial class TextBoxBase : Control
             }
             else
             {
-                return Application.ApplicationColors.WindowText;
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+                return SystemColors.WindowText;
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             }
         }
         set => base.ForeColor = value;
@@ -805,7 +809,7 @@ public abstract partial class TextBoxBase : Control
         {
             VisualStylesMode.Disabled => PreferredHeightClassic,
             VisualStylesMode.Classic => PreferredHeightClassic,
-            VisualStylesMode.Latest => PreferredHeightCore,
+            VisualStylesMode.Net10 => PreferredHeightCore,
 
             // We'll should never be here.
             _ => throw new InvalidEnumArgumentException(
@@ -908,7 +912,7 @@ public abstract partial class TextBoxBase : Control
         }
 
 #pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
-        if (VisualStylesMode == VisualStylesMode.Latest)
+        if (VisualStylesMode == VisualStylesMode.Net10)
         {
             // For Versions >=10, we take our modern Style adorners into account
             // when we're calculating the preferred height.
@@ -2147,7 +2151,7 @@ public abstract partial class TextBoxBase : Control
 #pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     private bool WmNcPaint(ref Message m)
     {
-        if (VisualStylesMode < VisualStylesMode.Latest)
+        if (VisualStylesMode < VisualStylesMode.Net10)
         {
             return false;
         }
@@ -2199,7 +2203,7 @@ public abstract partial class TextBoxBase : Control
         using Brush clientBackgroundBrush = new SolidBrush(clientBackColor);
         using Brush adornerBrush = new SolidBrush(adornerColor);
         using Pen adornerPen = new(adornerColor, borderThickness);
-        using Pen focusPen = new(Application.ApplicationColors.Highlight, borderThickness);
+        using Pen focusPen = new(SystemColors.Highlight, borderThickness);
 
         Rectangle bounds = new Rectangle(
             x: 0,
@@ -2317,7 +2321,7 @@ public abstract partial class TextBoxBase : Control
         // Also, we do that only one time per instance,
         // but we need to reset this, when the handle is recreated.
 #pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        if (VisualStylesMode < VisualStylesMode.Latest
+        if (VisualStylesMode < VisualStylesMode.Net10
             || _triggerNewClientSizeRequest)
         {
             return;

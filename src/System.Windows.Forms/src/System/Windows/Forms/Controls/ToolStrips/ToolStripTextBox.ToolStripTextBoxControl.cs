@@ -245,8 +245,11 @@ public partial class ToolStripTextBox
 
             if (!Enabled)
             {
-                outerBorderColor = Application.ApplicationColors.ControlDark;
-                innerBorderColor = Application.ApplicationColors.Control;
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+                outerBorderColor = SystemColors.ControlDark;
+                innerBorderColor = SystemColors.Control;
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
             }
 
             using Graphics g = hdc.CreateGraphics();

@@ -113,9 +113,9 @@ internal static class LinkUtilities
     ///  Produces a color for visited links using SystemColors
     public static Color GetVisitedLinkColor()
     {
-        int r = (SystemColors.Window.R + Application.ApplicationColors.WindowText.R + 1) / 2;
-        int g = Application.ApplicationColors.WindowText.G;
-        int b = (SystemColors.Window.B + Application.ApplicationColors.WindowText.B + 1) / 2;
+        int r = (SystemColors.Window.R + SystemColors.WindowText.R + 1) / 2;
+        int g = SystemColors.WindowText.G;
+        int b = (SystemColors.Window.B + SystemColors.WindowText.B + 1) / 2;
 
         return Color.FromArgb(r, g, b);
     }

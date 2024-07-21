@@ -4180,9 +4180,9 @@ public partial class Form : ContainerControl
         if (IsHandleCreated)
         {
 #pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-            if (IsDarkModeEnabled)
+            if (Application.IsDarkModeEnabled)
             {
-                PInvoke.SetWindowTheme(HWND, "DarkMode_Explorer", null);
+                PInvoke.SetWindowTheme(HWND, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null);
             }
 #pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 

@@ -425,7 +425,7 @@ public partial class GroupBox : Control
             // specified by the theme. This is a temporary workaround till we find a good solution for the
             // "default theme color" issue.
 #pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-            if (ShouldSerializeForeColor() || IsDarkModeEnabled || !Enabled)
+            if (ShouldSerializeForeColor() || Application.IsDarkModeEnabled || !Enabled)
             {
                 Color textColor = Enabled ? ForeColor : TextRenderer.DisabledTextColor(BackColor);
 
@@ -544,7 +544,9 @@ public partial class GroupBox : Control
 
         if (SystemInformation.HighContrast)
         {
-            Color boxColor = Enabled ? ForeColor : Application.ApplicationColors.GrayText;
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            Color boxColor = Enabled ? ForeColor : SystemColors.GrayText;
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
             ReadOnlySpan<int> lines =
             [

@@ -62,7 +62,7 @@ public class ToolStripRenderEventArgs : EventArgs
             // get the user specified color
             if (ToolStrip is null)
             {
-                _backColor = Application.ApplicationColors.Control;
+                _backColor = SystemColors.Control;
                 return _backColor;
             }
 
@@ -74,15 +74,15 @@ public class ToolStripRenderEventArgs : EventArgs
 
             if (ToolStrip is ToolStripDropDown)
             {
-                _backColor = Application.ApplicationColors.Menu;
+                _backColor = SystemColors.Menu;
             }
             else if (ToolStrip is MenuStrip)
             {
-                _backColor = Application.ApplicationColors.MenuBar;
+                _backColor = SystemColors.MenuBar;
             }
             else
             {
-                _backColor = Application.ApplicationColors.Control;
+                _backColor = SystemColors.Control;
             }
 
             return _backColor;

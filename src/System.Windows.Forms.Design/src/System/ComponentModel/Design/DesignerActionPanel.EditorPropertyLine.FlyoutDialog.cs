@@ -15,11 +15,12 @@ internal sealed partial class DesignerActionPanel
             private readonly Control _hostedControl;
             private readonly Control _parentControl;
 
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             public FlyoutDialog(Control hostedControl, Control parentControl, Color borderColor, Font font)
             {
                 _hostedControl = hostedControl;
                 _parentControl = parentControl;
-                BackColor = SystemColors.Window;
+                BackColor = ControlSystemColors.Current.Window;
                 ControlBox = false;
                 Font = font;
                 FormBorderStyle = FormBorderStyle.None;
@@ -53,6 +54,7 @@ internal sealed partial class DesignerActionPanel
                     ResumeLayout();
                 }
             }
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
             protected override CreateParams CreateParams
             {

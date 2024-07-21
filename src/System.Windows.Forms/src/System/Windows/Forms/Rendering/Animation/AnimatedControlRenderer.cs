@@ -90,7 +90,7 @@ internal abstract class AnimatedControlRenderer
     /// </summary>
     public void StopAnimation()
     {
-        _isRunning = false;
+        AnimationManager.Suspend(this);
         OnStoppedAnimation();
     }
 
@@ -104,7 +104,7 @@ internal abstract class AnimatedControlRenderer
     /// </summary>
     protected int DpiScale => (int)(_control.DeviceDpi / 96f);
 
-    public bool IsRunning => _isRunning;
+    public bool IsRunning { get; set; }
 
     /// <summary>
     ///  Gets the control associated with the renderer.

@@ -281,7 +281,9 @@ internal class TreeNodeCollectionEditor : CollectionEditor
             // LineColor assigned here is causing issues in the HC mode. Going with runtime default for HC mode.
             if (!SystemInformation.HighContrast)
             {
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                 _propertyGrid1.LineColor = SystemColors.ScrollBar;
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             }
 
             _propertyGrid1.Name = "propertyGrid1";

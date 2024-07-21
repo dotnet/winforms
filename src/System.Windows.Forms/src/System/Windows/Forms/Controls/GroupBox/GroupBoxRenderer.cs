@@ -245,7 +245,7 @@ public static class GroupBoxRenderer
     /// </summary>
     private static void DrawUnthemedGroupBoxNoText(Graphics g, Rectangle bounds)
     {
-        Color backColor = Application.ApplicationColors.Control;
+        Color backColor = SystemColors.Control;
         using var light = ControlPaint.Light(backColor, 1.0f).GetCachedPenScope();
         using var dark = ControlPaint.Dark(backColor, 0f).GetCachedPenScope();
 
@@ -350,7 +350,7 @@ public static class GroupBoxRenderer
         }
         else
         {
-            return Application.ApplicationColors.ControlText;
+            return SystemColors.ControlText;
         }
     }
 

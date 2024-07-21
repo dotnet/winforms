@@ -77,7 +77,7 @@ public partial class ListViewItem
                     return style.backColor;
                 }
 
-                return _owner?._listView?.BackColor ?? Application.ApplicationColors.Window;
+                return _owner?._listView?.BackColor ?? SystemColors.Window;
             }
             set
             {
@@ -170,7 +170,7 @@ public partial class ListViewItem
                     return style.foreColor;
                 }
 
-                return _owner?._listView?.ForeColor ?? Application.ApplicationColors.WindowText;
+                return _owner?._listView?.ForeColor ?? SystemColors.WindowText;
             }
             set
             {

@@ -186,20 +186,22 @@ public partial class ComboBox
                 });
         }
 
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         protected virtual Color GetOuterBorderColor(ComboBox comboBox)
-            => comboBox.Enabled ? Application.ApplicationColors.Window : Application.ApplicationColors.ControlDark;
+            => comboBox.Enabled ? ControlSystemColors.Current.Window : ControlSystemColors.Current.ControlDark;
 
         protected virtual Color GetPopupOuterBorderColor(ComboBox comboBox, bool focused)
         {
             if (!comboBox.Enabled)
             {
-                return Application.ApplicationColors.ControlDark;
+                return ControlSystemColors.Current.ControlDark;
             }
 
-            return focused ? Application.ApplicationColors.ControlDark : Application.ApplicationColors.Window;
+            return focused ? ControlSystemColors.Current.ControlDark : ControlSystemColors.Current.Window;
         }
 
         protected virtual Color GetInnerBorderColor(ComboBox comboBox)
-            => comboBox.Enabled ? comboBox.BackColor : Application.ApplicationColors.Control;
+            => comboBox.Enabled ? comboBox.BackColor : ControlSystemColors.Current.Control;
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     }
 }

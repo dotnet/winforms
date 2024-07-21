@@ -9,6 +9,7 @@ namespace System.Windows.Forms.Design;
 
 internal class DataGridViewColumnCollectionDialog : Form
 {
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     private Label _selectedColumnsLabel;
 
     private ListBox _selectedColumns;
@@ -1390,4 +1391,5 @@ internal class DataGridViewColumnCollectionDialog : Form
             return false;
         }
     }
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 }

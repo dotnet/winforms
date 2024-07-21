@@ -143,9 +143,12 @@ public unsafe partial class Control :
     private static readonly object s_causesValidationEvent = new();
     private static readonly object s_regionChangedEvent = new();
     private static readonly object s_marginChangedEvent = new();
-    private protected static readonly object s_paddingChangedEvent = new();
     private static readonly object s_previewKeyDownEvent = new();
-    private static readonly object s_dataContextEvent = new();
+    private static readonly object s_dataContextChangedEvent = new();
+    private static readonly object s_visualStylesModeChangedEvent = new();
+
+    // This needs to be internal for derived controls to access it.
+    private protected static readonly object s_paddingChangedEvent = new();
 
     private static MessageId s_threadCallbackMessage;
     private static ContextCallback? s_invokeMarshaledCallbackHelperDelegate;
@@ -220,7 +223,6 @@ public unsafe partial class Control :
     private static readonly int s_ambientPropertiesServiceProperty = PropertyStore.CreateKey();
 
     private static readonly int s_dataContextProperty = PropertyStore.CreateKey();
-    private static readonly int s_darkModeProperty = PropertyStore.CreateKey();
     private static readonly int s_visualStylesModeProperty = PropertyStore.CreateKey();
 
     private static bool s_needToLoadComCtl = true;
@@ -1616,123 +1618,12 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Gets or sets the dark mode for the control.
-    /// </summary>
-    /// <value>
-    ///  The dark mode for the control. The default value is <see cref="DarkMode.Inherits"/>. This property is ambient.
-    ///  Deriving classes should override <see cref="SetDarkModeCore(DarkMode)"/> to implement their own dark-mode detection logic.
-    /// </value>
-    [SRCategory(nameof(SR.CatAppearance))]
-    [EditorBrowsable(EditorBrowsableState.Always)]
-    [SRDescription(nameof(SR.ControlDarkModeDescr))]
-    [Experimental("WFO9001")]
-    public DarkMode DarkMode
-    {
-        get => Properties.TryGetObject(s_darkModeProperty, out DarkMode value)
-            ? value
-            : ParentInternal?.DarkMode ?? DarkMode.Inherits;
-
-        set => SetDarkMode(value);
-    }
-
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
-    private bool ShouldSerializeDarkMode()
-        => DarkMode != DefaultDarkMode;
-
-    private void ResetDarkMode()
-        => DarkMode = DefaultDarkMode;
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
-
-    /// <summary>
-    ///  Tests, if the control is currently in dark mode. This property is ambient. Inherited controls can return false,
-    ///  to prevent their base classes to apply their dark-mode logic, and can still test for dark-mode by calling base.IsDarkModeEnabled.
-    /// </summary>
-    [Experimental("WFO9001")]
-    protected virtual bool IsDarkModeEnabled
-    {
-        get
-        {
-            if (Properties.ContainsObject(s_darkModeProperty))
-            {
-                // If we inherit, it's the parent's dark-mode, otherwise it's the value we have.
-                return (DarkMode == DarkMode.Inherits
-                    && (ParentInternal?.IsDarkModeEnabled ?? false))
-                    || DarkMode == DarkMode.Enabled;
-            }
-            else
-            {
-                // We're ambient: It's either the parent's or the application's dark-mode.
-                return ParentInternal?.IsDarkModeEnabled ?? Application.IsDarkModeEnabled;
-            }
-        }
-    }
-
-    [Experimental("WFO9001")]
-    private void SetDarkMode(DarkMode darkMode)
-    {
-        if (ParentInternal is not null && Equals(darkMode, DarkMode))
-        {
-            return;
-        }
-
-        if (darkMode switch
-        {
-            DarkMode.Inherits or
-            DarkMode.Enabled or
-            DarkMode.Disabled => Application.EnvironmentDarkMode == DarkMode.NotSupported || !DarkModeSupported
-                    ? throw new ArgumentException($"{darkMode} is not supported in this Environment.")
-                    : true,
-            _ => throw new ArgumentException($"{darkMode} is not supported in this context.")
-        })
-        {
-            // When DarkModeSetting was different than its parent before, but now it is about to become the same,
-            // we're removing it altogether, so it can inherit the value from its parent.
-            if (Properties.ContainsObject(s_darkModeProperty) && Equals(ParentInternal?.DarkMode, darkMode))
-            {
-                Properties.RemoveObject(s_darkModeProperty);
-            }
-            else
-            {
-                Properties.SetObject(s_darkModeProperty, darkMode);
-            }
-
-            SetDarkModeCore(darkMode);
-
-            if (IsHandleCreated)
-            {
-                RecreateHandle();
-            }
-            else
-            {
-                UpdateStyles();
-            }
-        }
-    }
-
-    /// <summary>
-    ///  Inherited classes should override this method to implement their own dark-mode changed logic, if they need it.
-    /// </summary>
-    /// <param name="darkModeSetting">A value of type <see cref="DarkMode"/> with the new dark-mode setting.</param>
-    /// <returns><see langword="true"/>, if the setting succeeded, otherwise <see langword="false"/>.</returns>
-    [Experimental("WFO9001")]
-    protected virtual bool SetDarkModeCore(DarkMode darkModeSetting) => true;
-
-    /// <summary>
-    ///  Determines whether the control supports dark mode.
-    /// </summary>
-    /// <returns><see langword="true"/>, if the control supports dark mode; otherwise, <see langword="false"/>.</returns>
-    [Experimental("WFO9001")]
-    protected virtual bool DarkModeSupported
-        => Application.EnvironmentDarkMode != DarkMode.NotSupported;
-
-    [Experimental("WFO9001")]
-    private static DarkMode DefaultDarkMode => DarkMode.Inherits;
-
-    /// <summary>
     ///  The default BackColor of a generic top-level Control.  Subclasses may have
     ///  different defaults.
     /// </summary>
-    public static Color DefaultBackColor => Application.ApplicationColors.Control;
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    public static Color DefaultBackColor => ControlSystemColors.Current.Control;
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     /// <summary>
     ///  Deriving classes can override this to configure a default cursor for their control.
@@ -1763,7 +1654,9 @@ public unsafe partial class Control :
     ///  The default ForeColor of a generic top-level Control.  Subclasses may have
     ///  different defaults.
     /// </summary>
-    public static Color DefaultForeColor => Application.ApplicationColors.ControlText;
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    public static Color DefaultForeColor => ControlSystemColors.Current.ControlText;
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     protected virtual Padding DefaultMargin => CommonProperties.DefaultMargin;
 
@@ -1813,7 +1706,9 @@ public unsafe partial class Control :
                 if (control is null)
                 {
                     // Don't know what to do, this seems good as anything
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                     color = SystemColors.Control;
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                     break;
                 }
 
@@ -3291,6 +3186,12 @@ public unsafe partial class Control :
         remove => Events.RemoveHandler(s_sizeEvent, value);
     }
 
+    [Experimental("WFO9001")]
+    public ControlSystemColors SystemColors =>
+        Application.IsDarkModeEnabled
+        ? ControlSystemColors.DefaultDarkMode
+        : ControlSystemColors.Default;
+
     /// <summary>
     ///  The tab index of this control.
     /// </summary>
@@ -3743,13 +3644,27 @@ public unsafe partial class Control :
     }
 
     /// <summary>
+    ///  Occurs when the value of the <see cref="VisualStylesMode"/> property changes.
+    /// </summary>
+    [SRCategory(nameof(SR.CatAppearance))]
+    [Browsable(true)]
+    [EditorBrowsable(EditorBrowsableState.Advanced)]
+    // [SRDescription(nameof(SR.ControlVisualStylesModeChangedDescr))]
+    [SRDescription("VisualStyleMode Description.")]
+    public event EventHandler? VisualStylesModeChanged
+    {
+        add => Events.AddHandler(s_visualStylesModeChangedEvent, value);
+        remove => Events.RemoveHandler(s_visualStylesModeChangedEvent, value);
+    }
+
+    /// <summary>
     ///  Gets or sets how the control renders itself with visual styles. This ambient property can inherit its value
     ///  from its parent control or, if it is a top-level control, from the application's default setting.
     /// </summary>
     /// <value>
     ///  The <see cref="VisualStylesMode"/> for the control. A control's VisualStylesMode default value always derives
     ///  from its parent control, or if there is no parent, from the Application. The Application's
-    ///  <see cref="DefaultVisualStylesMode"/> is <see cref="VisualStylesMode.Latest"/>.
+    ///  <see cref="DefaultVisualStylesMode"/> is <see cref="VisualStylesMode.Net10"/>.
     /// </value>
     /// <remarks>
     ///  <para>
@@ -3839,18 +3754,19 @@ public unsafe partial class Control :
         }
     }
 
-    /// <summary>
-    ///  Gets the default visual styles mode for the control; standard is <see cref="VisualStylesMode.Latest"/>.
-    /// </summary>
-    /// <returns>The default visual styles mode for the control.</returns>
-    [Experimental("WFO9000")]
-    protected virtual VisualStylesMode DefaultVisualStylesMode => Application.DefaultVisualStylesMode;
-
     private bool ShouldSerializeVisualStylesMode()
         => Properties.ContainsObject(s_visualStylesModeProperty);
 
     private void ResetVisualStylesMode()
         => Properties.RemoveObject(s_visualStylesModeProperty);
+
+    /// <summary>
+    ///  Gets the default visual styles mode for the control. The default setting is ambient to
+    ///  <see cref="Application.DefaultVisualStylesMode"/> whose default is <see cref="VisualStylesMode.Classic"/>.
+    /// </summary>
+    /// <returns>The default visual styles mode for the control.</returns>
+    [Experimental("WFO9000")]
+    protected virtual VisualStylesMode DefaultVisualStylesMode => Application.DefaultVisualStylesMode;
 
     /// <summary>
     ///  Wait for the wait handle to receive a signal: throw an exception if the thread is no longer with us.
@@ -4040,8 +3956,8 @@ public unsafe partial class Control :
     [SRDescription(nameof(SR.ControlDataContextChangedDescr))]
     public event EventHandler? DataContextChanged
     {
-        add => Events.AddHandler(s_dataContextEvent, value);
-        remove => Events.RemoveHandler(s_dataContextEvent, value);
+        add => Events.AddHandler(s_dataContextChangedEvent, value);
+        remove => Events.RemoveHandler(s_dataContextChangedEvent, value);
     }
 
     [SRCategory(nameof(SR.CatDragDrop))]
@@ -7148,7 +7064,7 @@ public unsafe partial class Control :
             return;
         }
 
-        if (Events[s_dataContextEvent] is EventHandler eventHandler)
+        if (Events[s_dataContextChangedEvent] is EventHandler eventHandler)
         {
             eventHandler(this, e);
         }
@@ -7499,6 +7415,32 @@ public unsafe partial class Control :
         }
     }
 
+    /// <summary>
+    ///  Occurs when the <see cref="VisualStylesMode"/> property of the parent of this control changed.
+    /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Advanced)]
+    [Experimental("WFO9000")]
+    protected virtual void OnParentVisualStylesModeChanged(EventArgs e)
+    {
+        if (Properties.ContainsObject(s_visualStylesModeProperty))
+        {
+            // If this DataContext was the same as the Parent's just became,
+            if (Equals(Properties.GetObject(s_visualStylesModeProperty), Parent?.VisualStylesMode))
+            {
+                // we need to make it ambient again by removing it.
+                Properties.RemoveObject(s_visualStylesModeProperty);
+
+                // Even though internally we don't store it any longer, and the
+                // value we had stored therefore changed, technically the value
+                // remains the same, so we don't raise the DataContextChanged event.
+                return;
+            }
+        }
+
+        // In every other case we're going to raise the event.
+        OnVisualStylesModeChanged(e);
+    }
+
     // OnVisibleChanged/OnParentVisibleChanged is not called when a parent becomes invisible
     internal virtual void OnParentBecameInvisible()
     {
@@ -7577,9 +7519,9 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Raises the <see cref="Visible"/> event.
+    ///  Raises the <see cref="VisibleChanged"/> event.
     ///  Inheriting classes should override this method to handle this event.
-    ///  Call base.OnVisible to send this event to any registered event listeners.
+    ///  Call base.<see cref="OnVisibleChanged(EventArgs)"/> to send this event to any registered event listeners.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnVisibleChanged(EventArgs e)
@@ -7625,6 +7567,35 @@ public unsafe partial class Control :
                 {
                     ctl.OnParentBecameInvisible();
                 }
+            }
+        }
+    }
+
+    /// <summary>
+    ///  Raises the <see cref="VisualStylesModeChanged"/> event.
+    ///  Inheriting classes should override this method to handle this event.
+    ///  Call base.<see cref="OnVisualStylesModeChanged"/> to send this event to any registered event listeners.
+    /// </summary>
+    [Experimental("WFO9000")]
+    [EditorBrowsable(EditorBrowsableState.Advanced)]
+    protected virtual void OnVisualStylesModeChanged(EventArgs e)
+    {
+        if (GetAnyDisposingInHierarchy())
+        {
+            return;
+        }
+
+        if (Events[s_visualStylesModeChangedEvent] is EventHandler eventHandler)
+        {
+            eventHandler(this, e);
+        }
+
+        ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
+        if (controlsCollection is not null)
+        {
+            for (int i = 0; i < controlsCollection.Count; i++)
+            {
+                controlsCollection[i].OnParentVisualStylesModeChanged(e);
             }
         }
     }
@@ -7754,7 +7725,7 @@ public unsafe partial class Control :
             }
 
 #pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
-            if (IsDarkModeEnabled)
+            if (Application.IsDarkModeEnabled)
             {
                 // These controls need to be individually themed.
                 if (this is not ComboBox
@@ -8668,7 +8639,9 @@ public unsafe partial class Control :
             // For whatever reason, our parent can't paint our background, but we need some kind of background
             // since we're transparent.
             using DeviceContextHdcScope hdcNoParent = new(e);
-            using CreateBrushScope hbrush = new(Application.ApplicationColors.Control);
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            using CreateBrushScope hbrush = new(SystemColors.Control);
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             hdcNoParent.FillRectangle(rectangle, hbrush);
             return;
         }
@@ -10845,7 +10818,7 @@ public unsafe partial class Control :
                     if (value)
                     {
 #pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
-                        PrepareDarkMode(HWND, IsDarkModeEnabled);
+                        PrepareDarkMode(HWND, Application.IsDarkModeEnabled);
 #pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
                     }
 
@@ -11548,7 +11521,7 @@ public unsafe partial class Control :
         {
             VisualStylesMode.Disabled => true,
             VisualStylesMode.Classic => true,
-            VisualStylesMode.Latest => true,
+            VisualStylesMode.Net10 => true,
             _ => false,
         };
 

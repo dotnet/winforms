@@ -102,7 +102,7 @@ internal abstract partial class ButtonBaseAdapter
 
     protected void Draw3DBorder(IDeviceContext deviceContext, Rectangle bounds, ColorData colors, bool raised)
     {
-        if (Control.BackColor != Application.ApplicationColors.Control && SystemInformation.HighContrast)
+        if (Control.BackColor != SystemColors.Control && SystemInformation.HighContrast)
         {
             if (raised)
             {
@@ -128,7 +128,7 @@ internal abstract partial class ButtonBaseAdapter
 
     private void Draw3DBorderHighContrastRaised(IDeviceContext deviceContext, ref Rectangle bounds, ColorData colors)
     {
-        bool stockColor = colors.ButtonFace.ToKnownColor() == Application.ApplicationColors.Control.ToKnownColor();
+        bool stockColor = colors.ButtonFace.ToKnownColor() == SystemColors.Control.ToKnownColor();
         bool disabledHighContrast = (!Control.Enabled) && SystemInformation.HighContrast;
 
         using DeviceContextHdcScope hdc = deviceContext.ToHdcScope();
@@ -143,7 +143,7 @@ internal abstract partial class ButtonBaseAdapter
         using CreatePenScope penTopLeft = new(
             disabledHighContrast
             ? colors.WindowDisabled
-            : stockColor ? Application.ApplicationColors.ControlLightLight : colors.Highlight);
+            : stockColor ? SystemColors.ControlLightLight : colors.Highlight);
 
         hdc.DrawLine(penTopLeft, p1, p2);           // Top  (right-left)
         hdc.DrawLine(penTopLeft, p2, p3);           // Left (up-down)
@@ -152,7 +152,7 @@ internal abstract partial class ButtonBaseAdapter
         using CreatePenScope penBottomRight = new(
             disabledHighContrast
                 ? colors.WindowDisabled
-                : stockColor ? Application.ApplicationColors.ControlDarkDark : colors.ButtonShadowDark);
+                : stockColor ? SystemColors.ControlDarkDark : colors.ButtonShadowDark);
 
         p1.Offset(0, -1);                           // Need to paint last pixel too.
         hdc.DrawLine(penBottomRight, p3, p4);       // Bottom (left-right)
@@ -161,7 +161,7 @@ internal abstract partial class ButtonBaseAdapter
         // Draw inset using the background color to make the top and left lines thinner
         using CreatePenScope insetPen = new(
             stockColor
-                ? SystemInformation.HighContrast ? Application.ApplicationColors.ControlLight : Application.ApplicationColors.Control
+                ? SystemInformation.HighContrast ? SystemColors.ControlLight : SystemColors.Control
                 : SystemInformation.HighContrast ? colors.Highlight : colors.ButtonFace);
 
         p1.Offset(-1, 2);
@@ -177,7 +177,7 @@ internal abstract partial class ButtonBaseAdapter
         using CreatePenScope bottomRightInsetPen = new(
             disabledHighContrast
             ? colors.WindowDisabled
-            : stockColor ? Application.ApplicationColors.ControlDark : colors.ButtonShadow);
+            : stockColor ? SystemColors.ControlDark : colors.ButtonShadow);
 
         p1.Offset(0, -1);                           // Need to paint last pixel too.
         hdc.DrawLine(bottomRightInsetPen, p3, p4);  // Bottom (left-right)
@@ -220,8 +220,8 @@ internal abstract partial class ButtonBaseAdapter
 
         // Bottom + right inset
         using CreatePenScope insetPen = new(
-            colors.ButtonFace.ToKnownColor() == Application.ApplicationColors.Control.ToKnownColor()
-                ? Application.ApplicationColors.ControlLight
+            colors.ButtonFace.ToKnownColor() == SystemColors.Control.ToKnownColor()
+                ? SystemColors.ControlLight
                 : colors.ButtonFace);
 
         p1.Offset(0, -1);                       // Need to paint last pixel too.
@@ -231,7 +231,7 @@ internal abstract partial class ButtonBaseAdapter
 
     private void Draw3DBorderRaised(IDeviceContext deviceContext, ref Rectangle bounds, ColorData colors)
     {
-        bool stockColor = colors.ButtonFace.ToKnownColor() == Application.ApplicationColors.Control.ToKnownColor();
+        bool stockColor = colors.ButtonFace.ToKnownColor() == SystemColors.Control.ToKnownColor();
         bool disabledHighContrast = (!Control.Enabled) && SystemInformation.HighContrast;
 
         using DeviceContextHdcScope hdc = deviceContext.ToHdcScope();
@@ -246,7 +246,7 @@ internal abstract partial class ButtonBaseAdapter
         using CreatePenScope topLeftPen = new(
             disabledHighContrast
                 ? colors.WindowDisabled
-                : stockColor ? Application.ApplicationColors.ControlLightLight : colors.Highlight);
+                : stockColor ? SystemColors.ControlLightLight : colors.Highlight);
 
         hdc.DrawLine(topLeftPen, p1, p2);           // Top  (right-left)
         hdc.DrawLine(topLeftPen, p2, p3);           // Left (up-down)
@@ -255,7 +255,7 @@ internal abstract partial class ButtonBaseAdapter
         using CreatePenScope bottomRightPen = new(
             disabledHighContrast
             ? colors.WindowDisabled
-            : stockColor ? Application.ApplicationColors.ControlDarkDark : colors.ButtonShadowDark);
+            : stockColor ? SystemColors.ControlDarkDark : colors.ButtonShadowDark);
 
         p1.Offset(0, -1);                           // Need to paint last pixel too.
         hdc.DrawLine(bottomRightPen, p3, p4);       // Bottom (left-right)
@@ -270,7 +270,7 @@ internal abstract partial class ButtonBaseAdapter
         using CreatePenScope topLeftInsetPen = new(
             !stockColor
                 ? colors.ButtonFace
-                : SystemInformation.HighContrast ? Application.ApplicationColors.ControlLight : Application.ApplicationColors.Control);
+                : SystemInformation.HighContrast ? SystemColors.ControlLight : SystemColors.Control);
 
         // Top + left inset
         hdc.DrawLine(topLeftInsetPen, p1, p2);      // Top  (right-left)
@@ -281,7 +281,7 @@ internal abstract partial class ButtonBaseAdapter
         using CreatePenScope bottomRightInsetPen = new(
             disabledHighContrast
             ? colors.WindowDisabled
-            : stockColor ? Application.ApplicationColors.ControlDark : colors.ButtonShadow);
+            : stockColor ? SystemColors.ControlDark : colors.ButtonShadow);
 
         p1.Offset(0, -1);                           // Need to paint last pixel too.
         hdc.DrawLine(bottomRightInsetPen, p3, p4);  // Bottom (left-right)

@@ -85,7 +85,7 @@ public partial class CheckBox : ButtonBase
 
 #pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                     if (value == Appearance.ToggleSwitch
-                        && VisualStylesMode == VisualStylesMode.Latest)
+                        && VisualStylesMode == VisualStylesMode.Net10)
                     {
                         Refresh();
                     }
@@ -179,6 +179,8 @@ public partial class CheckBox : ButtonBase
     public CheckState CheckState
     {
         get => _checkState;
+
+#pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
         set
         {
             SourceGenerated.EnumValidator.Validate(value);
@@ -188,8 +190,15 @@ public partial class CheckBox : ButtonBase
                 return;
             }
 
-            bool oldChecked = Checked;
+            bool animationHandlingNeeded = VisualStylesMode == VisualStylesMode.Net10
+                && Appearance == Appearance.ToggleSwitch;
 
+            if (animationHandlingNeeded)
+            {
+                _toggleSwitchRenderer?.StopAnimation();
+            }
+
+            bool oldChecked = Checked;
             _checkState = value;
 
             if (IsHandleCreated)
@@ -199,16 +208,25 @@ public partial class CheckBox : ButtonBase
 
             bool checkedChanged = oldChecked != Checked;
 
+            // In here, we take care of both the event changed events for Checked...
             if (checkedChanged)
             {
                 OnCheckedChanged(EventArgs.Empty);
             }
 
             _notifyAccessibilityStateChangedNeeded = !checkedChanged;
+
+            // ...and Check_State_.
             OnCheckStateChanged(EventArgs.Empty);
             _notifyAccessibilityStateChangedNeeded = false;
+
+            if (animationHandlingNeeded)
+            {
+                _toggleSwitchRenderer?.StartAnimation();
+            }
         }
     }
+#pragma warning restore WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
 
     /// <hideinheritance/>
     [Browsable(false)]
@@ -242,7 +260,7 @@ public partial class CheckBox : ButtonBase
             else
             {
 #pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
-                if (VisualStylesMode == VisualStylesMode.Latest)
+                if (VisualStylesMode == VisualStylesMode.Net10)
                 {
                     SetStyle(ControlStyles.UserPaint, true);
                     SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
@@ -296,7 +314,7 @@ public partial class CheckBox : ButtonBase
 
 #pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
         if (Appearance == Appearance.ToggleSwitch
-            && VisualStylesMode == VisualStylesMode.Latest)
+            && VisualStylesMode == VisualStylesMode.Net10)
         {
             _toggleSwitchRenderer ??= new AnimatedToggleSwitchRenderer(this, ModernCheckBoxStyle.Rounded);
             int dpiScale = (int)(DeviceDpi / 96f);
@@ -335,7 +353,7 @@ public partial class CheckBox : ButtonBase
     protected override void OnPaint(PaintEventArgs pevent)
     {
 #pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
-        if (VisualStylesMode == VisualStylesMode.Latest
+        if (VisualStylesMode == VisualStylesMode.Net10
             && Appearance == Appearance.ToggleSwitch)
         {
             _toggleSwitchRenderer?.RenderControl(pevent.Graphics);
@@ -449,16 +467,6 @@ public partial class CheckBox : ButtonBase
     /// </summary>
     protected virtual void OnCheckStateChanged(EventArgs e)
     {
-#pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
-        if (VisualStylesMode == VisualStylesMode.Latest
-            && Appearance == Appearance.ToggleSwitch)
-        {
-            _toggleSwitchRenderer?.RestartAnimation();
-
-            Refresh();
-        }
-#pragma warning restore WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
-
         if (OwnerDraw)
         {
             Refresh();

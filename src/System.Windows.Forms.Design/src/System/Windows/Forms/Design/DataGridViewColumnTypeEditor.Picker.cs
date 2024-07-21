@@ -31,7 +31,9 @@ internal partial class DataGridViewColumnTypePicker : ContainerControl
         _typesListBox.HorizontalScrollbar = true;
         _typesListBox.SelectedIndexChanged += typesListBox_SelectedIndexChanged;
         Controls.Add(_typesListBox);
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         BackColor = SystemColors.Control;
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         ActiveControl = _typesListBox;
     }
 

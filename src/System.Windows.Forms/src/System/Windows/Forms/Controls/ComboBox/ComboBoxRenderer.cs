@@ -32,7 +32,7 @@ public static class ComboBoxRenderer
         if (state != ComboBoxState.Disabled)
         {
             Color windowColor = t_visualStyleRenderer.GetColor(ColorProperty.FillColor);
-            if (windowColor != Application.ApplicationColors.Window)
+            if (windowColor != SystemColors.Window)
             {
                 Rectangle fillRect = t_visualStyleRenderer.GetBackgroundContentRectangle(g, bounds);
                 fillRect.Inflate(-2, -2);

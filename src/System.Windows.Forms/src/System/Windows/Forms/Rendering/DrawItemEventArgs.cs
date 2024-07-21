@@ -29,7 +29,7 @@ public class DrawItemEventArgs : EventArgs, IDisposable, IDeviceContext, IGraphi
     ///  Creates a new DrawItemEventArgs with the given parameters.
     /// </summary>
     public DrawItemEventArgs(Graphics graphics, Font? font, Rectangle rect, int index, DrawItemState state)
-        : this(graphics, font, rect, index, state, Application.ApplicationColors.WindowText, Application.ApplicationColors.Window)
+        : this(graphics, font, rect, index, state, SystemColors.WindowText, SystemColors.Window)
     { }
 
     /// <summary>
@@ -59,7 +59,7 @@ public class DrawItemEventArgs : EventArgs, IDisposable, IDeviceContext, IGraphi
         Rectangle rect,
         uint index,
         ODS_FLAGS state)
-        : this(hdc, font, rect, index, state, Application.ApplicationColors.WindowText, Application.ApplicationColors.Window)
+        : this(hdc, font, rect, index, state, SystemColors.WindowText, SystemColors.Window)
     { }
 
     internal DrawItemEventArgs(
@@ -112,10 +112,10 @@ public class DrawItemEventArgs : EventArgs, IDisposable, IDeviceContext, IGraphi
     ///  depending on whether this item is selected.
     /// </summary>
     public Color ForeColor
-        => (State & DrawItemState.Selected) == DrawItemState.Selected ? Application.ApplicationColors.HighlightText : _foreColor;
+        => (State & DrawItemState.Selected) == DrawItemState.Selected ? SystemColors.HighlightText : _foreColor;
 
     public Color BackColor
-        => (State & DrawItemState.Selected) == DrawItemState.Selected ? Application.ApplicationColors.Highlight : _backColor;
+        => (State & DrawItemState.Selected) == DrawItemState.Selected ? SystemColors.Highlight : _backColor;
 
     /// <summary>
     ///  Fills the <see cref="Bounds"/> with the <see cref="BackColor"/>.

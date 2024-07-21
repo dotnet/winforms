@@ -191,7 +191,9 @@ public partial class ComponentEditorForm : Form
 
         Label grayStrip = new Label
         {
-            BackColor = Application.ApplicationColors.ControlDark
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            BackColor = SystemColors.ControlDark
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         };
 
         int selectorWidth = MIN_SELECTOR_WIDTH;

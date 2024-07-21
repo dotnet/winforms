@@ -103,6 +103,17 @@ internal partial class AnimationManager
         }
     }
 
+    internal static void Suspend(AnimatedControlRenderer animatedControlRenderer)
+    {
+        lock (Instance._lock)
+        {
+            if (Instance._renderer.TryGetValue(animatedControlRenderer, out AnimationRendererItem? renderItem))
+            {
+                renderItem.Renderer.IsRunning = false;
+            }
+        }
+    }
+
     /// <summary>
     ///  Handles the tick event of the timer.
     /// </summary>

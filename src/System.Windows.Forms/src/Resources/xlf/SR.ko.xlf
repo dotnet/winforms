@@ -2192,6 +2192,11 @@
         <target state="translated">스톡 커서를 serialize할 수 없습니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DarkModeNotSupported">
+        <source>Dark mode cannot be activated, either because of an activated High-Contrast mode or because the underlying OS does not support it.</source>
+        <target state="new">Dark mode cannot be activated, either because of an activated High-Contrast mode or because the underlying OS does not support it.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DataBindingAddNewNotSupportedOnPropertyManager">
         <source>AddNew is not supported for property to property binding.</source>
         <target state="translated">AddNew는 속성에 대하여 속성 바인딩을 지원하지 않습니다.</target>

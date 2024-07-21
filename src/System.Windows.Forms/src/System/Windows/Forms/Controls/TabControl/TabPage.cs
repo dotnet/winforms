@@ -102,7 +102,7 @@ public partial class TabPage : Panel
             {
                 return color;
             }
-            else if (!IsDarkModeEnabled
+            else if (!Application.IsDarkModeEnabled
                 && Application.RenderWithVisualStyles
                 && UseVisualStyleBackColor
                 && (ParentInternal is TabControl parent && parent.Appearance == TabAppearance.Normal))
@@ -600,7 +600,7 @@ public partial class TabPage : Panel
             && (ParentInternal is TabControl parent && parent.Appearance == TabAppearance.Normal))
         {
 #pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-            Color bkColor = (UseVisualStyleBackColor && !IsDarkModeEnabled)
+            Color bkColor = (UseVisualStyleBackColor && !Application.IsDarkModeEnabled)
                 ? Color.Transparent
                 : BackColor;
 #pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.

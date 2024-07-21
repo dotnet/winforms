@@ -25,22 +25,24 @@ public partial class DateTimePicker : Control
     /// <summary>
     ///  Specifies the default title back color. This field is read-only.
     /// </summary>
-    protected static readonly Color DefaultTitleBackColor = Application.ApplicationColors.ActiveCaption;
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    protected static readonly Color DefaultTitleBackColor = ControlSystemColors.Current.ActiveCaption;
 
     /// <summary>
     ///  Specifies the default foreground color. This field is read-only.
     /// </summary>
-    protected static readonly Color DefaultTitleForeColor = Application.ApplicationColors.ActiveCaptionText;
+    protected static readonly Color DefaultTitleForeColor = ControlSystemColors.Current.ActiveCaptionText;
 
     /// <summary>
     ///  Specifies the default month background color. This field is read-only.
     /// </summary>
-    protected static readonly Color DefaultMonthBackColor = Application.ApplicationColors.Window;
+    protected static readonly Color DefaultMonthBackColor = ControlSystemColors.Current.Window;
 
     /// <summary>
     ///  Specifies the default trailing foreground color. This field is read-only.
     /// </summary>
-    protected static readonly Color DefaultTrailingForeColor = Application.ApplicationColors.GrayText;
+    protected static readonly Color DefaultTrailingForeColor = ControlSystemColors.Current.GrayText;
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     private static readonly object s_formatChangedEvent = new();
 
@@ -129,9 +131,9 @@ public partial class DateTimePicker : Control
     {
 #pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
         get => ShouldSerializeBackColor()
-            || IsDarkModeEnabled
+            || Application.IsDarkModeEnabled
                 ? base.BackColor
-                : Application.ApplicationColors.Window;
+                : SystemColors.Window;
 #pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
         set => base.BackColor = value;
     }
@@ -495,9 +497,9 @@ public partial class DateTimePicker : Control
     {
 #pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
         get => ShouldSerializeForeColor()
-            || IsDarkModeEnabled
+            || Application.IsDarkModeEnabled
                 ? base.ForeColor
-                : Application.ApplicationColors.WindowText;
+                : SystemColors.WindowText;
 #pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
 
         set => base.ForeColor = value;

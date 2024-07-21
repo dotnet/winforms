@@ -93,15 +93,15 @@ internal abstract class CheckBoxBaseAdapter : CheckableControlBaseAdapter
 
         if (!controlEnabled && disabledColors)
         {
-            color = Application.ApplicationColors.Control;
+            color = SystemColors.Control;
         }
-        else if (controlCheckState == CheckState.Indeterminate && checkBackground == Application.ApplicationColors.Window && disabledColors)
+        else if (controlCheckState == CheckState.Indeterminate && checkBackground == SystemColors.Window && disabledColors)
         {
-            Color comboColor = SystemInformation.HighContrast ? Application.ApplicationColors.ControlDark : Application.ApplicationColors.Control;
+            Color comboColor = SystemInformation.HighContrast ? SystemColors.ControlDark : SystemColors.Control;
             color = Color.FromArgb(
-                (byte)((comboColor.R + Application.ApplicationColors.Window.R) / 2),
-                (byte)((comboColor.G + Application.ApplicationColors.Window.G) / 2),
-                (byte)((comboColor.B + Application.ApplicationColors.Window.B) / 2));
+                (byte)((comboColor.R + SystemColors.Window.R) / 2),
+                (byte)((comboColor.G + SystemColors.Window.G) / 2),
+                (byte)((comboColor.B + SystemColors.Window.B) / 2));
         }
         else
         {

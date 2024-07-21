@@ -156,7 +156,9 @@ public partial class ListBox : ListControl
             }
             else
             {
-                return Application.ApplicationColors.Window;
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+                return SystemColors.Window;
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             }
         }
         set => base.BackColor = value;
@@ -449,7 +451,9 @@ public partial class ListBox : ListControl
             }
             else
             {
-                return Application.ApplicationColors.WindowText;
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+                return SystemColors.WindowText;
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             }
         }
         set => base.ForeColor = value;

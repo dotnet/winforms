@@ -55,7 +55,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
             else
             {
                 // return the default IE Color if cell is not not selected
-                return Selected ? Application.ApplicationColors.HighlightText : LinkUtilities.IEActiveLinkColor;
+                return Selected ? SystemColors.HighlightText : LinkUtilities.IEActiveLinkColor;
             }
         }
         set
@@ -173,7 +173,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
             else
             {
                 // return the default IE Color when cell is not selected
-                return Selected ? Application.ApplicationColors.HighlightText : LinkUtilities.IELinkColor;
+                return Selected ? SystemColors.HighlightText : LinkUtilities.IELinkColor;
             }
         }
         set
@@ -352,12 +352,12 @@ public partial class DataGridViewLinkCell : DataGridViewCell
             }
             else if (SystemInformation.HighContrast)
             {
-                return Selected ? Application.ApplicationColors.HighlightText : LinkUtilities.GetVisitedLinkColor();
+                return Selected ? SystemColors.HighlightText : LinkUtilities.GetVisitedLinkColor();
             }
             else
             {
                 // return the default IE Color if cell is not not selected
-                return Selected ? Application.ApplicationColors.HighlightText : LinkUtilities.IEVisitedLinkColor;
+                return Selected ? SystemColors.HighlightText : LinkUtilities.IEVisitedLinkColor;
             }
         }
         set
@@ -408,7 +408,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
         {
             // Selected cells have Application.SystemColors.Highlight as a background.
             // Application.SystemColors.HighlightText is supposed to be in contrast with Application.SystemColors.Highlight.
-            return Selected ? Application.ApplicationColors.HighlightText : Application.ApplicationColors.HotTrack;
+            return Selected ? SystemColors.HighlightText : SystemColors.HotTrack;
         }
     }
 

@@ -578,11 +578,12 @@ public partial class CheckedListBox : ListBox
                 textBounds.X = bounds.X;
             }
 
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             Color backColor = (SelectionMode != SelectionMode.None) ? e.BackColor : BackColor;
             Color foreColor = (SelectionMode != SelectionMode.None) ? e.ForeColor : ForeColor;
             if (!Enabled)
             {
-                foreColor = Application.ApplicationColors.GrayText;
+                foreColor = SystemColors.GrayText;
             }
 
             Font font = Font;
@@ -595,15 +596,16 @@ public partial class CheckedListBox : ListBox
             {
                 if (Enabled)
                 {
-                    backColor = Application.ApplicationColors.Highlight;
-                    foreColor = Application.ApplicationColors.HighlightText;
+                    backColor = SystemColors.Highlight;
+                    foreColor = SystemColors.HighlightText;
                 }
                 else
                 {
-                    backColor = Application.ApplicationColors.InactiveBorder;
-                    foreColor = Application.ApplicationColors.GrayText;
+                    backColor = SystemColors.InactiveBorder;
+                    foreColor = SystemColors.GrayText;
                 }
             }
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
             // Draw the text
 
@@ -728,7 +730,9 @@ public partial class CheckedListBox : ListBox
                 Color foreColor = (SelectionMode != SelectionMode.None) ? e.ForeColor : ForeColor;
                 if (!Enabled)
                 {
-                    foreColor = Application.ApplicationColors.GrayText;
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+                    foreColor = SystemColors.GrayText;
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                 }
 
                 ControlPaint.DrawFocusRectangle(e.Graphics, emptyRectangle, foreColor, backColor);

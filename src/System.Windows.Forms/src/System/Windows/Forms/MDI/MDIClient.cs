@@ -29,7 +29,10 @@ public sealed partial class MdiClient : Control
     public MdiClient() : base()
     {
         SetStyle(ControlStyles.Selectable, false);
-        BackColor = Application.ApplicationColors.AppWorkspace;
+
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        BackColor = SystemColors.AppWorkspace;
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         Dock = DockStyle.Fill;
     }
 
@@ -311,7 +314,9 @@ public sealed partial class MdiClient : Control
 
     internal override bool ShouldSerializeBackColor()
     {
-        return BackColor != Application.ApplicationColors.AppWorkspace;
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        return BackColor != SystemColors.AppWorkspace;
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     }
 
     private static bool ShouldSerializeLocation() => false;

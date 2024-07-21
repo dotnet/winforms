@@ -128,7 +128,11 @@ internal sealed partial class DesignerActionPanel
                         // Make sure we draw properly under high contrast by re-mapping
                         // the arrow color to the WindowText color
                         using ImageAttributes attributes = new();
+
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                         (Color OldColor, Color NewColor) map = new(Color.Black, SystemColors.WindowText);
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
                         attributes.SetRemapTable(ColorAdjustType.Bitmap, new ReadOnlySpan<(Color OldColor, Color NewColor)>(ref map));
                         int imageWidth = arrowBitmap.Width;
                         int imageHeight = arrowBitmap.Height;

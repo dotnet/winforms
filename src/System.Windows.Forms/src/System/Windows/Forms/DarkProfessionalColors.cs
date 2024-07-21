@@ -17,7 +17,7 @@ namespace System.Windows.Forms
             => Color.FromArgb(0xFF, 0x60, 0x60, 0x60);
 
         public override Color MenuItemSelected
-            => Application.ApplicationColors.ControlText;
+            => SystemColors.ControlText;
 
         public override Color MenuItemSelectedGradientBegin
             => Color.FromArgb(0xFF, 0x40, 0x40, 0x40);
@@ -26,27 +26,27 @@ namespace System.Windows.Forms
             => Color.FromArgb(0xFF, 0x40, 0x40, 0x40);
 
         public override Color MenuStripGradientBegin
-            => Application.ApplicationColors.Control;
+            => SystemColors.Control;
 
         public override Color MenuStripGradientEnd
-            => Application.ApplicationColors.Control;
+            => SystemColors.Control;
 
         public override Color StatusStripGradientBegin
-            => Application.ApplicationColors.Control;
+            => SystemColors.Control;
 
         public override Color StatusStripGradientEnd
-            => Application.ApplicationColors.Control;
+            => SystemColors.Control;
 
         public override Color ToolStripDropDownBackground
-            => Application.ApplicationColors.Control;
+            => SystemColors.Control;
 
         public override Color ImageMarginGradientBegin
-            => Application.ApplicationColors.Control;
+            => SystemColors.Control;
 
         public override Color ImageMarginGradientMiddle
-            => Application.ApplicationColors.Control;
+            => SystemColors.Control;
 
         public override Color ImageMarginGradientEnd
-            => Application.ApplicationColors.Control;
+            => SystemColors.Control;
     }
 }

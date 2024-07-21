@@ -264,7 +264,7 @@ public partial class ComboBox : ListControl
             }
             else
             {
-                return Application.ApplicationColors.Window;
+                return SystemColors.Window;
             }
         }
         set => base.BackColor = value;
@@ -586,7 +586,7 @@ public partial class ComboBox : ListControl
             }
             else
             {
-                return Application.ApplicationColors.WindowText;
+                return SystemColors.WindowText;
             }
         }
         set => base.ForeColor = value;
@@ -2452,7 +2452,7 @@ public partial class ComboBox : ListControl
             _fromHandleCreate = false;
         }
 
-        if (IsDarkModeEnabled)
+        if (Application.IsDarkModeEnabled)
         {
             // Style the ComboBox Open-Button:
             PInvoke.SetWindowTheme(HWND, "DarkMode_CFD", null);
@@ -3587,7 +3587,7 @@ public partial class ComboBox : ListControl
         {
             PInvokeCore.GetClientRect(this, out RECT rect);
             HDC hdc = (HDC)m.WParamInternal;
-            using var hbrush = new CreateBrushScope(ParentInternal?.BackColor ?? Application.ApplicationColors.Control);
+            using var hbrush = new CreateBrushScope(ParentInternal?.BackColor ?? SystemColors.Control);
             hdc.FillRectangle(rect, hbrush);
             m.ResultInternal = (LRESULT)1;
             return;
@@ -3869,7 +3869,7 @@ public partial class ComboBox : ListControl
             case PInvoke.WM_PAINT:
                 if (!GetStyle(ControlStyles.UserPaint)
                     && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup)
-                    && !(SystemInformation.HighContrast && BackColor == Application.ApplicationColors.Window))
+                    && !(SystemInformation.HighContrast && BackColor == SystemColors.Window))
                 {
                     using RegionScope dropDownRegion = new(FlatComboBoxAdapter._dropDownRect);
                     using RegionScope windowRegion = new(Bounds);

@@ -171,7 +171,9 @@ public partial class TabControl : Control
             // The tab control can only be rendered in 1 color: System's Control color.
             // So, always return this value... otherwise, we're inheriting the forms BackColor
             // and passing it on to the pab pages.
-            return Application.ApplicationColors.Control;
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            return SystemColors.Control;
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         }
         set
         {

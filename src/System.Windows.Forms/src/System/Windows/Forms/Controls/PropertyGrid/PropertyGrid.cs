@@ -71,16 +71,18 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
     private int _paintFrozen;
 
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     private Color _lineColor = SystemInformation.HighContrast
-        ? Application.ApplicationColors.ControlDarkDark
-        : Application.ApplicationColors.InactiveBorder;
+        ? ControlSystemColors.Current.ControlDarkDark
+        : ControlSystemColors.Current.InactiveBorder;
 
-    private Color _categoryForegroundColor = Application.ApplicationColors.ControlText;
-    private Color _categorySplitterColor = Application.ApplicationColors.Control;
-    private Color _viewBorderColor = Application.ApplicationColors.ControlDark;
-    private Color _selectedItemWithFocusForeColor = Application.ApplicationColors.HighlightText;
-    private Color _selectedItemWithFocusBackColor = Application.ApplicationColors.Highlight;
+    private Color _categoryForegroundColor = ControlSystemColors.Current.ControlText;
+    private Color _categorySplitterColor = ControlSystemColors.Current.Control;
+    private Color _viewBorderColor = ControlSystemColors.Current.ControlDark;
+    private Color _selectedItemWithFocusForeColor = ControlSystemColors.Current.HighlightText;
+    private Color _selectedItemWithFocusBackColor = ControlSystemColors.Current.Highlight;
     private bool _canShowVisualStyleGlyphs = true;
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     private AttributeCollection? _browsableAttributes;
 
@@ -215,8 +217,12 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
                 _helpPane.TabStop = false;
                 _helpPane.Dock = DockStyle.None;
-                _helpPane.BackColor = Application.ApplicationColors.Control;
-                _helpPane.ForeColor = Application.ApplicationColors.ControlText;
+
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+                _helpPane.BackColor = SystemColors.Control;
+                _helpPane.ForeColor = SystemColors.ControlText;
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
                 _helpPane.MouseMove += OnChildMouseMove;
                 _helpPane.MouseDown += OnChildMouseDown;
 
@@ -1621,9 +1627,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     }
 
     [Conditional("DEBUG")]
-#pragma warning disable CA1822 // Mark members as static
     internal void CheckInCreate()
-#pragma warning restore CA1822 // Mark members as static
     {
 #if DEBUG
         if (_inGridViewCreate)
@@ -3700,8 +3704,10 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         return true;
     }
 
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     private void SetHotCommandColors()
-        => _commandsPane.SetColors(SystemColors.Control, Application.ApplicationColors.ControlText, Color.Empty, Color.Empty, Color.Empty, Color.Empty);
+        => _commandsPane.SetColors(SystemColors.Control, SystemColors.ControlText, Color.Empty, Color.Empty, Color.Empty, Color.Empty);
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     internal void SetStatusBox(string? title, string? description) => _helpPane.SetDescription(title, description);
 

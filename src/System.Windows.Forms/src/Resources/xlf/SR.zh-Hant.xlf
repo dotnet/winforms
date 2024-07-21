@@ -2192,6 +2192,11 @@
         <target state="translated">無法序列化內建游標。</target>
         <note />
       </trans-unit>
+      <trans-unit id="DarkModeNotSupported">
+        <source>Dark mode cannot be activated, either because of an activated High-Contrast mode or because the underlying OS does not support it.</source>
+        <target state="new">Dark mode cannot be activated, either because of an activated High-Contrast mode or because the underlying OS does not support it.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DataBindingAddNewNotSupportedOnPropertyManager">
         <source>AddNew is not supported for property to property binding.</source>
         <target state="translated">屬性間的繫結不支援 AddNew。</target>

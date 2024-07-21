@@ -512,10 +512,14 @@ internal partial class PropertyGridView
 
                 // Draw the divider.
                 int y = _resizeUp ? (s_resizeBarSize - 1) : (Height - s_resizeBarSize);
+
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                 using Pen pen = new(SystemColors.ControlDark, 1)
                 {
                     DashStyle = DashStyle.Solid
                 };
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
                 e.Graphics.DrawLine(pen, 0, y, Width, y);
             }
         }

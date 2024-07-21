@@ -64,7 +64,7 @@ internal class ButtonFlatAdapter : ButtonBaseAdapter
             }
         }
 
-        PaintBackground(e, r, IsHighContrastHighlighted() ? Application.ApplicationColors.Highlight : backColor);
+        PaintBackground(e, r, IsHighContrastHighlighted() ? SystemColors.Highlight : backColor);
 
         if (Control.IsDefault)
         {
@@ -72,7 +72,7 @@ internal class ButtonFlatAdapter : ButtonBaseAdapter
         }
 
         PaintImage(e, layout);
-        PaintField(e, layout, colors, IsHighContrastHighlighted() ? Application.ApplicationColors.HighlightText : colors.WindowText, drawFocus: false);
+        PaintField(e, layout, colors, IsHighContrastHighlighted() ? SystemColors.HighlightText : colors.WindowText, drawFocus: false);
 
         if (Control.Focused && Control.ShowFocusCues)
         {
@@ -241,7 +241,7 @@ internal class ButtonFlatAdapter : ButtonBaseAdapter
                     : colors.LowButtonFace;
             }
 
-            PaintBackground(e, r, IsHighContrastHighlighted() ? Application.ApplicationColors.Highlight : backColor);
+            PaintBackground(e, r, IsHighContrastHighlighted() ? SystemColors.Highlight : backColor);
 
             if (Control.IsDefault)
             {
@@ -253,7 +253,7 @@ internal class ButtonFlatAdapter : ButtonBaseAdapter
                 e,
                 layout,
                 colors,
-                IsHighContrastHighlighted() ? Application.ApplicationColors.HighlightText : colors.WindowText,
+                IsHighContrastHighlighted() ? SystemColors.HighlightText : colors.WindowText,
                 drawFocus: false);
 
             if (Control.Focused && Control.ShowFocusCues)

@@ -256,11 +256,6 @@ public sealed partial class Application
         {
             if (!s_darkMode.HasValue)
             {
-                if (EnvironmentDarkMode is DarkMode.NotSupported)
-                {
-                    return DarkMode.NotSupported;
-                }
-
                 return DarkMode.Disabled;
             }
 
@@ -272,27 +267,22 @@ public sealed partial class Application
     ///  Sets the default dark mode for the application.
     /// </summary>
     /// <param name="darkMode">The default dark mode to set.</param>
-    /// <returns>True if the default dark mode was set successfully; otherwise, false.</returns>
+    /// <param name="throwIfImpossible">Flag, if set to <see langword="true"/>, leads to an exception if the dark mode is not supported.</param>
     [Experimental("WFO9001")]
-    public static bool SetDefaultDarkMode(DarkMode darkMode)
+    public static void SetDefaultDarkMode(DarkMode darkMode, bool throwIfImpossible = false)
     {
-        return darkMode switch
+        if (GetEnvironmentDarkModeCore() > -1)
         {
-            DarkMode.Enabled or DarkMode.Disabled or DarkMode.Inherits => SetDefaultDarkModeCore(darkMode),
-            _ => throw new ArgumentException($"Setting to {darkMode} is not supported in this context.")
-        };
-
-        static bool SetDefaultDarkModeCore(DarkMode darkMode)
-        {
-            if (EnvironmentDarkMode == DarkMode.NotSupported)
-            {
-                s_darkMode = DarkMode.NotSupported;
-                return false;
-            }
-
             s_darkMode = darkMode;
-            return true;
+            return;
         }
+
+        if (throwIfImpossible)
+        {
+            throw new ArgumentException(SR.DarkModeNotSupported);
+        }
+
+        s_darkMode = DarkMode.Disabled;
     }
 
     /// <summary>
@@ -315,7 +305,7 @@ public sealed partial class Application
 
     /// <summary>
     ///  Sets the default <see cref="DefaultVisualStylesMode"/> as the rendering style guideline for the Application's controls to use.
-    ///  Default is <see cref="VisualStylesMode.Latest"/> when visual style rendering is enabled,
+    ///  Default is <see cref="VisualStylesMode.Net10"/> when visual style rendering is enabled,
     ///  otherwise <see cref="VisualStylesMode.Disabled"/>. Setting to <see cref="VisualStylesMode.Disabled"/> has the same effect
     ///  as not setting using <see cref="EnableVisualStyles"/>.
     /// </summary>
@@ -356,40 +346,39 @@ public sealed partial class Application
     ///  </para>
     /// </remarks>
     [Experimental("WFO9001")]
-    public static DarkMode EnvironmentDarkMode
-    {
-        get
+    public static DarkMode EnvironmentDarkMode =>
+        GetEnvironmentDarkModeCore() switch
         {
-            int systemDarkMode = -1;
+            0 => DarkMode.Enabled,
+            _ => DarkMode.Disabled,
+        };
 
-            if (SystemInformation.HighContrast)
-            {
-                return DarkMode.NotSupported;
-            }
-
-            // Dark mode is supported when we are >= W11/22000
-            // Technically, we could go earlier, but then the APIs we're using weren't officially public.
-            if (OsVersion.IsWindows11_OrGreater())
-            {
-                try
-                {
-                    systemDarkMode = (int)(Registry.GetValue(
-                        keyName: DarkModeKeyPath,
-                        valueName: DarkModeKey,
-                        defaultValue: -1) ?? 0);
-                }
-                catch
-                {
-                }
-            }
-
-            return systemDarkMode switch
-            {
-                0 => DarkMode.Enabled,
-                1 => DarkMode.Disabled,
-                _ => DarkMode.NotSupported
-            };
+    private static int GetEnvironmentDarkModeCore()
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return -1;
         }
+
+        int systemDarkMode = -1;
+
+        // Dark mode is supported when we are >= W11/22000
+        // Technically, we could go earlier, but then the APIs we're using weren't officially public.
+        if (OsVersion.IsWindows11_OrGreater())
+        {
+            try
+            {
+                systemDarkMode = (int)(Registry.GetValue(
+                    keyName: DarkModeKeyPath,
+                    valueName: DarkModeKey,
+                    defaultValue: -1) ?? 0);
+            }
+            catch
+            {
+            }
+        }
+
+        return systemDarkMode;
     }
 
     /// <summary>
@@ -411,33 +400,6 @@ public sealed partial class Application
                 _ => false
             }
         };
-
-    /// <summary>
-    ///  Gets the application colors.
-    /// </summary>
-    /// <remarks>
-    ///  <list type="bullet">
-    ///   <item>
-    ///    <description>
-    ///     In light mode or high contrast settings, the colors are equal to the <see cref="SystemColors"/>.
-    ///    </description>
-    ///   </item>
-    ///   <item>
-    ///    <description>
-    ///     In dark mode, the colors are derived from a custom set of colors defined by WinForms,
-    ///     which resemble a compromise between Visual Studio Dark Scheme, Windows 11 Dark Scheme, and accessibility requirements.
-    ///    </description>
-    ///    </item>
-    ///  </list>
-    ///  <para>
-    ///   The color scheme is read-only and cannot be changed.
-    ///  </para>
-    /// </remarks>
-    [Experimental("WFO9002")]
-    public static ApplicationColors ApplicationColors
-        => IsDarkModeEnabled
-            ? DarkThemedApplicationColors.DefaultInstance
-            : LightThemedApplicationColors.DefaultInstance;
 
     /// <summary>
     ///  Gets the path for the executable file that started the application.

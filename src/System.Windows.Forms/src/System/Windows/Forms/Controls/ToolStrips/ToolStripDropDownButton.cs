@@ -200,11 +200,11 @@ public partial class ToolStripDropDownButton : ToolStripDropDownItem
                 Color arrowColor;
                 if (Selected && !Pressed && SystemInformation.HighContrast)
                 {
-                    arrowColor = Enabled ? Application.ApplicationColors.HighlightText : Application.ApplicationColors.ControlDark;
+                    arrowColor = Enabled ? SystemColors.HighlightText : SystemColors.ControlDark;
                 }
                 else
                 {
-                    arrowColor = Enabled ? Application.ApplicationColors.ControlText : Application.ApplicationColors.ControlDark;
+                    arrowColor = Enabled ? SystemColors.ControlText : SystemColors.ControlDark;
                 }
 
                 renderer.DrawArrow(new ToolStripArrowRenderEventArgs(g, this, dropDownArrowRect, arrowColor, ArrowDirection.Down));

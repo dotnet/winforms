@@ -59,10 +59,12 @@ namespace System.Windows.Forms;
 [SRDescription(nameof(SR.DescriptionMonthCalendar))]
 public partial class MonthCalendar : Control
 {
-    private static readonly Color s_defaultTitleBackColor = Application.ApplicationColors.ActiveCaption;
-    private static readonly Color s_defaultTitleForeColor = Application.ApplicationColors.ActiveCaptionText;
-    private static readonly Color s_trailingForeColor = Application.ApplicationColors.GrayText;
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    private static readonly Color s_defaultTitleBackColor = ControlSystemColors.Current.ActiveCaption;
+    private static readonly Color s_defaultTitleForeColor = ControlSystemColors.Current.ActiveCaptionText;
+    private static readonly Color s_trailingForeColor = ControlSystemColors.Current.GrayText;
     private const int MonthsInYear = 12;
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     /// <summary>
     ///  This is the arbitrary number of pixels that the Win32 control
@@ -188,22 +190,22 @@ public partial class MonthCalendar : Control
         }
     }
 
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     [SRDescription(nameof(SR.MonthCalendarMonthBackColorDescr))]
     public override Color BackColor
     {
         get
         {
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-            if (ShouldSerializeBackColor() || IsDarkModeEnabled)
+            if (ShouldSerializeBackColor() || Application.IsDarkModeEnabled)
             {
                 return base.BackColor;
             }
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
-            return Application.ApplicationColors.Window;
+            return SystemColors.Window;
         }
         set => base.BackColor = value;
     }
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -404,22 +406,22 @@ public partial class MonthCalendar : Control
         }
     }
 
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     [SRDescription(nameof(SR.MonthCalendarForeColorDescr))]
     public override Color ForeColor
     {
         get
         {
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-            if (ShouldSerializeForeColor() || IsDarkModeEnabled)
+            if (ShouldSerializeForeColor() || Application.IsDarkModeEnabled)
             {
                 return base.ForeColor;
             }
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
-            return Application.ApplicationColors.WindowText;
+            return SystemColors.WindowText;
         }
         set => base.ForeColor = value;
     }
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]

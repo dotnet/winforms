@@ -23,11 +23,12 @@ public partial class ComponentEditorForm
 
         private HBRUSH _hbrushDither;
 
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         public PageSelector()
         {
             HotTracking = true;
             HideSelection = false;
-            BackColor = Application.ApplicationColors.Control;
+            BackColor = SystemColors.Control;
             Indent = 0;
             LabelEdit = false;
             Scrollable = false;
@@ -38,6 +39,7 @@ public partial class ComponentEditorForm
             Indent = 0;
             FullRowSelect = true;
         }
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
         protected override CreateParams CreateParams
         {
@@ -157,7 +159,9 @@ public partial class ComponentEditorForm
                 COLORREF savedColor;
 
                 // top left
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                 savedColor = PInvoke.SetBkColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlLightLight));
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                 rc2.left = rc.left;
                 rc2.top = rc.top;
                 rc2.bottom = rc.top + 1;
@@ -168,7 +172,9 @@ public partial class ComponentEditorForm
                 PInvoke.ExtTextOut(dc, 0, 0, ETO_OPTIONS.ETO_OPAQUE, &rc2, lpString: null, 0, lpDx: null);
 
                 // bottom right
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                 PInvoke.SetBkColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlDark));
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                 rc2.left = rc.left;
                 rc2.right = rc.right;
                 rc2.top = rc.bottom - 1;
@@ -229,8 +235,10 @@ public partial class ComponentEditorForm
                                 nmtvcd->nmcd.hdc,
                                 nmtvcd->nmcd.rc,
                                 state,
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                                 (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Control),
                                 (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlText));
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                         }
 
                         m.ResultInternal = (LRESULT)(nint)PInvoke.CDRF_SKIPDEFAULT;
@@ -263,8 +271,10 @@ public partial class ComponentEditorForm
 
             if (!hbrushOld.IsNull)
             {
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                 COLORREF oldTextColor = PInvoke.SetTextColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlLightLight));
                 COLORREF oldBackColor = PInvoke.SetBkColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Control));
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
                 PInvoke.PatBlt(dc, rc.left, rc.top, rc.Width, rc.Height, ROP_CODE.PATCOPY);
                 PInvoke.SetTextColor(dc, oldTextColor);

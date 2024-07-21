@@ -25,7 +25,9 @@ public partial class ProgressBar : Control
 
     private int _marqueeAnimationSpeed = 100;
 
-    private static readonly Color s_defaultForeColor = Application.ApplicationColors.Highlight;
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    private static readonly Color s_defaultForeColor = ControlSystemColors.Current.Highlight;
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     private ProgressBarStyle _style = ProgressBarStyle.Blocks;
 
@@ -77,7 +79,7 @@ public partial class ProgressBar : Control
         // so Windows allows setting Fore- and Background color.
         // There are more ideal ways imaginable, but this does the trick for now.
 #pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        if (IsDarkModeEnabled)
+        if (Application.IsDarkModeEnabled)
         {
             // Disables Visual Styles for the ProgressBar.
             PInvoke.SetWindowTheme(HWND, " ", " ");

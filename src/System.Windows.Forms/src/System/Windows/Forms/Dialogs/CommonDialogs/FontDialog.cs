@@ -109,7 +109,7 @@ public class FontDialog : CommonDialog
             }
             else
             {
-                _color = Application.ApplicationColors.ControlText;
+                _color = SystemColors.ControlText;
                 _usingDefaultIndirectColor = true;
             }
         }
@@ -367,7 +367,7 @@ public class FontDialog : CommonDialog
     {
         _options = CHOOSEFONT_FLAGS.CF_SCREENFONTS | CHOOSEFONT_FLAGS.CF_EFFECTS;
         _font = null;
-        _color = Application.ApplicationColors.ControlText;
+        _color = SystemColors.ControlText;
         _usingDefaultIndirectColor = true;
         ShowColor = false;
         _minSize = DefaultMinSize;
@@ -393,7 +393,7 @@ public class FontDialog : CommonDialog
             hInstance = PInvoke.GetModuleHandle((PCWSTR)null),
             nSizeMin = _minSize,
             nSizeMax = _maxSize == 0 ? int.MaxValue : _maxSize,
-            rgbColors = ShowColor || ShowEffects ? _color : Application.ApplicationColors.ControlText
+            rgbColors = ShowColor || ShowEffects ? _color : SystemColors.ControlText
         };
 
         if (_minSize > 0 || _maxSize > 0)

@@ -7,6 +7,7 @@ namespace System.Windows.Forms.Design;
 
 public sealed partial class AnchorEditor
 {
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     /// <summary>
     ///  User Interface for the AnchorEditor.
     /// </summary>
@@ -353,4 +354,5 @@ public sealed partial class AnchorEditor
             }
         }
     }
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 }

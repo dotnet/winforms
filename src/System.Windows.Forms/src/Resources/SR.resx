@@ -6988,4 +6988,7 @@ Stack trace where the illegal operation occurred was:
   <data name="VisualStylesModeNotSupported" xml:space="preserve">
     <value>The visual style {0} is not supported for the {1} control with the name {2}.</value>
   </data>
+  <data name="DarkModeNotSupported" xml:space="preserve">
+    <value>Dark mode cannot be activated, either because of an activated High-Contrast mode or because the underlying OS does not support it.</value>
+  </data>
 </root>

@@ -32,7 +32,9 @@ public partial class PropertyGrid
         {
         }
 
-        public Color BorderColor { get; set; } = Application.ApplicationColors.ControlDark;
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        public Color BorderColor { get; set; } = ControlSystemColors.Current.ControlDark;
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
         protected override void OnPaint(PaintEventArgs e)
         {

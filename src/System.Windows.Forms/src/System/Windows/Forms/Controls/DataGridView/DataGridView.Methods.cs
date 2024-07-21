@@ -5826,7 +5826,9 @@ public partial class DataGridView
 
             if (ApplyVisualStylesToHeaderCells)
             {
-                using var brush = Application.ApplicationColors.HotTrack.GetCachedSolidBrushScope();
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+                using var brush = SystemColors.HotTrack.GetCachedSolidBrushScope();
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                 g.FillRectangle(brush, rectInsertionBar);
             }
             else
@@ -17103,7 +17105,9 @@ public partial class DataGridView
             {
                 if (SystemInformation.HighContrast)
                 {
-                    ControlPaint.DrawHighContrastFocusRectangle(g, GetGridFocusRectangle(), Application.ApplicationColors.ActiveCaptionText);
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+                    ControlPaint.DrawHighContrastFocusRectangle(g, GetGridFocusRectangle(), SystemColors.ActiveCaptionText);
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                 }
                 else
                 {
@@ -19744,7 +19748,9 @@ public partial class DataGridView
             }
             else if (BorderStyle == BorderStyle.FixedSingle)
             {
-                using var pen = Application.ApplicationColors.ControlText.GetCachedPenScope();
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+                using var pen = SystemColors.ControlText.GetCachedPenScope();
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                 g.DrawRectangle(pen, new Rectangle(0, 0, bounds.Width - 1, bounds.Height - 1));
             }
             else

@@ -28,7 +28,7 @@ public static class TextBoxRenderer
         if (state != TextBoxState.Disabled)
         {
             Color windowColor = t_visualStyleRenderer.GetColor(ColorProperty.FillColor);
-            if (windowColor != Application.ApplicationColors.Window)
+            if (windowColor != SystemColors.Window)
             {
                 Rectangle fillRect = t_visualStyleRenderer.GetBackgroundContentRectangle(g, bounds);
                 g.FillRectangle(SystemBrushes.Window, fillRect);

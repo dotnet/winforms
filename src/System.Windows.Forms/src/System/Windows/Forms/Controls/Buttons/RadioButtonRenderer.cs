@@ -141,7 +141,7 @@ public static class RadioButtonRenderer
         else
         {
             ControlPaint.DrawRadioButton(g, glyphBounds, ConvertToButtonState(state));
-            textColor = Application.ApplicationColors.ControlText;
+            textColor = SystemColors.ControlText;
         }
 
         TextRenderer.DrawText(g, radioButtonText, font, textBounds, textColor, flags);
@@ -234,7 +234,7 @@ public static class RadioButtonRenderer
         {
             g.DrawImage(image, imageBounds);
             ControlPaint.DrawRadioButton(g, glyphBounds, ConvertToButtonState(state));
-            textColor = Application.ApplicationColors.ControlText;
+            textColor = SystemColors.ControlText;
         }
 
         TextRenderer.DrawText(g, radioButtonText, font, textBounds, textColor, flags);

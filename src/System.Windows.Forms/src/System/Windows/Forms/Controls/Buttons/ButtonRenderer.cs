@@ -156,7 +156,7 @@ public static class ButtonRenderer
         {
             ControlPaint.DrawButton(g, bounds, ConvertToButtonState(state));
             contentBounds = Rectangle.Inflate(bounds, -3, -3);
-            textColor = Application.ApplicationColors.ControlText;
+            textColor = SystemColors.ControlText;
         }
 
         TextRenderer.DrawText(g, buttonText, font, contentBounds, textColor, flags);
@@ -267,7 +267,7 @@ public static class ButtonRenderer
             }
 
             contentBounds = Rectangle.Inflate(bounds, -3, -3);
-            textColor = Application.ApplicationColors.ControlText;
+            textColor = SystemColors.ControlText;
         }
 
         TextRenderer.DrawText(deviceContext, buttonText, font, contentBounds, textColor, flags);

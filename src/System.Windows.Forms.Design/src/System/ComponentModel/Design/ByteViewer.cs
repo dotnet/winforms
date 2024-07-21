@@ -131,6 +131,7 @@ public class ByteViewer : TableLayoutPanel
         g.DrawString(hexChars, font, foreground, ADDRESS_START_X, LINE_START_Y + line * CELL_HEIGHT);
     }
 
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     /// <summary>
     ///  Draws the client background and frames
     /// </summary>
@@ -164,6 +165,7 @@ public class ByteViewer : TableLayoutPanel
             DUMP_START_X - HEX_DUMP_GAP,
             CLIENT_START_Y + _rowCount * CELL_HEIGHT - 1);
     }
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     // Char.IsPrintable is going away because it's a mostly meaningless concept.
     // Copied code here to preserve semantics.  -- BrianGru, 10/3/2000

@@ -15,7 +15,8 @@ internal sealed partial class DropDownButton : Button
 
         private void DDB_Draw3DBorder(PaintEventArgs e, Rectangle r, bool raised)
         {
-            if (Control.BackColor != Application.ApplicationColors.Control && SystemInformation.HighContrast)
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            if (Control.BackColor != ControlSystemColors.Current.Control && SystemInformation.HighContrast)
             {
                 if (raised)
                 {
@@ -61,6 +62,7 @@ internal sealed partial class DropDownButton : Button
                     ControlPaint.DrawBorderSimple(e, r, ControlPaint.Dark(Control.BackColor));
                 }
             }
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         }
 
         internal override void PaintUp(PaintEventArgs pevent, CheckState state)
@@ -72,7 +74,9 @@ internal sealed partial class DropDownButton : Button
             }
             else
             {
-                Color c = (ARGB)SystemColors.Window;
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+                Color c = (ARGB)ControlSystemColors.Current.Window;
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                 Rectangle rect = Control.ClientRectangle;
                 rect.Inflate(0, -1);
                 ControlPaint.DrawBorder(
@@ -87,7 +91,11 @@ internal sealed partial class DropDownButton : Button
         internal override void DrawImageCore(Graphics graphics, Image image, Rectangle imageBounds, Point imageStart, LayoutData layout)
         {
             bool isHighContrastHighlighted = !Control.MouseIsDown && IsHighContrastHighlighted();
-            Color backgroundColor = isHighContrastHighlighted ? Application.ApplicationColors.Highlight : Control.BackColor;
+
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            Color backgroundColor = isHighContrastHighlighted ? ControlSystemColors.Current.Highlight : Control.BackColor;
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
             if (ControlPaint.IsDark(backgroundColor) && image is Bitmap bitmap)
             {
                 using Image invertedImage = ControlPaint.CreateBitmapWithInvertedForeColor(bitmap, Control.BackColor);

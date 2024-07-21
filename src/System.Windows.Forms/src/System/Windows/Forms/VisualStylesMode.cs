@@ -20,8 +20,8 @@ public enum VisualStylesMode : short
     Classic = 1,
 
     /// <summary>
-    ///  The latest version of the visual renderer. Controls are rendered using the latest version
-    ///  of ComCtl and customized adorner rendering and layouting in addition.
+    ///  The .NET 10 version of the visual renderer. Controls are rendered using the latest version
+    ///  of ComCtl and customized adorner rendering and layout handling in addition.
     /// </summary>
-    Latest = 2
+    Net10 = 2
 }

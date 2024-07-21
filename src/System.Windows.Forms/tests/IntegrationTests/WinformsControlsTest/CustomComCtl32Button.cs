@@ -93,7 +93,9 @@ internal class CustomComCtl32Button : Form
             if (Application.RenderWithVisualStyles && !isPressed)
             {
                 GraphicsPath path = new();
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                 Pen pen = new(SystemColors.ControlDarkDark, 1);
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
                 int x = sender.ClientRectangle.X + 1;
                 int y = sender.ClientRectangle.Y + 1;

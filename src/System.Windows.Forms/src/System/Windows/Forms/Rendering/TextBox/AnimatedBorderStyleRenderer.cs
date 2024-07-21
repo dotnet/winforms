@@ -52,7 +52,7 @@ internal class AnimatedBorderStyleRenderer : AnimatedControlRenderer
             using Brush clientBackgroundBrush = new SolidBrush(clientBackColor);
             using Brush adornerBrush = new SolidBrush(adornerColor);
             using Pen adornerPen = new(adornerColor, borderThickness);
-            using Pen focusPen = new(Application.ApplicationColors.Highlight, borderThickness);
+            using Pen focusPen = new(SystemColors.Highlight, borderThickness);
 
             Rectangle bounds = _textBox.Bounds;
 

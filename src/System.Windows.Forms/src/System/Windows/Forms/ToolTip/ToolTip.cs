@@ -40,8 +40,8 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
     private ToolTipNativeWindow _window;
     private Control? _topLevelControl;
     private bool _active = true;
-    private Color _backColor = Application.ApplicationColors.Info;
-    private Color _foreColor = Application.ApplicationColors.InfoText;
+    private Color _backColor = SystemColors.Info;
+    private Color _foreColor = SystemColors.InfoText;
     private bool _isBalloon;
     private bool _isDisposing;
     private string _toolTipTitle = string.Empty;
@@ -770,12 +770,12 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         // Set active status.
         PInvoke.SendMessage(this, PInvoke.TTM_ACTIVATE, (WPARAM)(BOOL)_active);
 
-        if (BackColor != Application.ApplicationColors.Info)
+        if (BackColor != SystemColors.Info)
         {
             PInvoke.SendMessage(this, PInvoke.TTM_SETTIPBKCOLOR, (WPARAM)BackColor);
         }
 
-        if (ForeColor != Application.ApplicationColors.InfoText)
+        if (ForeColor != SystemColors.InfoText)
         {
             PInvoke.SendMessage(this, PInvoke.TTM_SETTIPTEXTCOLOR, (WPARAM)ForeColor);
         }
