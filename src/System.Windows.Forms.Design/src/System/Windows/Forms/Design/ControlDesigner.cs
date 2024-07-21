@@ -2482,7 +2482,7 @@ public partial class ControlDesigner : ComponentDesigner
     internal void RemoveSubclassedWindow(IntPtr hwnd) =>
         SubclassedChildWindows.Remove(hwnd);
 
-    internal void SetUnhandledException(Control owner, Exception exception)
+    internal void SetUnhandledException(Control? owner, Exception exception)
     {
         if (_thrownException is not null)
         {
