@@ -57,7 +57,7 @@ public partial class ControlDesigner
         public override void OnDragLeave(Glyph? g, EventArgs e)
         {
             _controlRect = Rectangle.Empty;
-            _designer?.OnDragLeave(e);
+            _designer.OnDragLeave(e);
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ public partial class ControlDesigner
                 return;
             }
 
-            _designer.OnDragOver(e);
+            _designer.OnDragOver(e!);
         }
 
         /// <summary>
