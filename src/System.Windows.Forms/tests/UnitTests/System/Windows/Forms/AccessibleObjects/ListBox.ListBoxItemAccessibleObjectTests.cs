@@ -234,7 +234,6 @@ public class ListBox_ListBoxItemAccessibleObjectTests
         listBox.Focused.Should().BeTrue();
     }
 
-    [WinFormsFact]
     [WinFormsTheory]
     [InlineData(AccessibleSelection.AddSelection)]
     [InlineData(AccessibleSelection.RemoveSelection)]
