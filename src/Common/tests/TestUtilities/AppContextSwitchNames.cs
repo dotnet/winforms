@@ -14,7 +14,7 @@ public static class AppContextSwitchNames
         = "System.Windows.Forms.AnchorLayoutV2";
 
     /// <summary>
-    /// The switch that controls whether the parent font (as set by <see cref="Forms.Application.SetDefaultFont(Font)" />
+    /// The switch that controls whether the parent font (as set by <see cref="M:System.Windows.Forms.Application.SetDefaultFont(System.Drawing.Font)" />
     ///  or by the parent control or form's font) is applied to menus.
     /// </summary>
     public const string ApplyParentFontToMenus

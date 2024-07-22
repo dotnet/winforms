@@ -7,8 +7,8 @@ namespace Windows.Win32.Graphics.Gdi;
 
 /// <summary>
 ///  <para>
-///   Helper to scope getting a <see cref="HDC"/> from a <see cref="IDeviceContext"/> object. Releases
-///   the <see cref="HDC"/> when disposed, unlocking the parent <see cref="IDeviceContext"/> object.
+///   Helper to scope getting a <see cref="HDC"/> from a <see cref="IHdcContext"/> object. Releases
+///   the <see cref="HDC"/> when disposed, unlocking the parent <see cref="IHdcContext"/> object.
 ///  </para>
 ///  <para>
 ///   Also saves and restores the state of the HDC.
@@ -36,18 +36,18 @@ internal readonly ref struct DeviceContextHdcScope
     /// </summary>
     /// <remarks>
     ///  <para>
-    ///   When a <see cref="Graphics"/> object is created from a <see cref="HDC"/> the clipping region and
+    ///   When a <see cref="T:System.Drawing.Graphics"/> object is created from a <see cref="Gdi.HDC"/> the clipping region and
     ///   the viewport origin are applied (<see cref="PInvokeCore.GetViewportExtEx(HDC, SIZE*)"/>). The clipping
-    ///   region isn't reflected in <see cref="Graphics.Clip"/>, which is combined with the HDC HRegion.
+    ///   region isn't reflected in <see cref="P:System.Drawing.Graphics.Clip"/>, which is combined with the HDC HRegion.
     ///  </para>
     ///  <para>
     ///   The Graphics object saves and restores DC state when performing operations that would modify the DC to
-    ///   maintain the DC in its original or returned state after <see cref="Graphics.ReleaseHdc()"/>.
+    ///   maintain the DC in its original or returned state after <see cref="M:System.Drawing.Graphics.ReleaseHdc()"/>.
     ///  </para>
     /// </remarks>
     /// <param name="applyGraphicsState">
     ///  Applies the origin transform and clipping region of the <paramref name="deviceContext"/> if it is an
-    ///  object of type <see cref="Graphics"/>. Otherwise this is a no-op.
+    ///  object of type <see cref="T:System.Drawing.Graphics"/>. Otherwise this is a no-op.
     /// </param>
     /// <param name="saveHdcState">
     ///  When true, saves and restores the <see cref="HDC"/> state.
@@ -63,7 +63,7 @@ internal readonly ref struct DeviceContextHdcScope
     }
 
     /// <summary>
-    ///  Prefer to use <see cref="DeviceContextHdcScope(IDeviceContext, bool, bool)"/>.
+    ///  Prefer to use <see cref="DeviceContextHdcScope(IHdcContext, bool, bool)"/>.
     /// </summary>
     /// <remarks>
     ///  <para>
