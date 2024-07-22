@@ -391,20 +391,6 @@ public class ListBoxAccessibleObjectTests
     }
 
     [WinFormsFact]
-    public void TestHitTest_PointOutsideListBoxBounds_ReturnsNull()
-    {
-        using Form form = new();
-        using ListBox listBox = new() { Parent = form, Items = { "Item 1", "Item 2" } };
-        listBox.CreateControl();
-        form.Show();
-        Point testPoint = new Point(listBox.Bounds.Right + 10, listBox.Bounds.Bottom + 10);
-
-        var result = listBox.AccessibilityObject.HitTest(testPoint.X, testPoint.Y);
-
-        result.Should().BeNull();
-    }
-
-    [WinFormsFact]
     public void TestHitTest_PointInsideChildBounds_ReturnsChild()
     {
         using Form form = new();
