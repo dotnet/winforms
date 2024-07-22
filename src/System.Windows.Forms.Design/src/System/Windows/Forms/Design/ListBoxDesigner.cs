@@ -157,13 +157,14 @@ internal class ListBoxDesigner : ControlDesigner
     /// </summary>
     private void OnComponentChanged(object? sender, ComponentChangedEventArgs e)
     {
-        if (e.Component == Component && e.Member is not null && e.Member.Name == "Items")
+        if (e.Component == Component
+            && e.Member is not null
+            && e.Member.Name == nameof(ListBox.Items)
+            && TypeDescriptor.GetProperties(Component)[nameof(ListBox.Name)] is PropertyDescriptor nameProp
+            && nameProp.GetValue(Component) is { } componentName
+            && componentName.ToString() is { } name)
         {
-            PropertyDescriptor? nameProp = TypeDescriptor.GetProperties(Component)[nameof(ListBox.Name)];
-            if (nameProp is not null)
-            {
-                UpdateControlName(nameProp.GetValue(Component)!.ToString()!);
-            }
+            UpdateControlName(name);
         }
     }
 
@@ -173,9 +174,11 @@ internal class ListBoxDesigner : ControlDesigner
     protected override void OnCreateHandle()
     {
         base.OnCreateHandle();
-        if (TypeDescriptor.GetProperties(Component)[nameof(ListBox.Name)] is PropertyDescriptor nameProp)
+        if (TypeDescriptor.GetProperties(Component)[nameof(ListBox.Name)] is PropertyDescriptor nameProp
+            && nameProp.GetValue(Component) is { } componentName
+            && componentName.ToString() is { } name)
         {
-            UpdateControlName(nameProp.GetValue(Component)!.ToString()!);
+            UpdateControlName(name);
         }
     }
 
