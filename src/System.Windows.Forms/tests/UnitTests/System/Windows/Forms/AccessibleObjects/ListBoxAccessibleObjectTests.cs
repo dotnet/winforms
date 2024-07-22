@@ -364,60 +364,59 @@ public class ListBoxAccessibleObjectTests
         }
     }
 
-    [WinFormsTheory]
-    [InlineData(false, 10, 10, "null")] // ListBox not created
-    [InlineData(true, 0, 0, "self", true)] // Point inside ListBox bounds but outside items
-    [InlineData(true, 10, 10, "null", false)] // Point outside ListBox bounds, adjusted offsets to likely be outside
-    [InlineData(true, 0, 0, "child", true, true)] // Point inside child bounds
-    public void TestHitTest_VariousScenarios(bool listBoxCreated, int xOffset, int yOffset, string expectedResult, bool insideBounds = true, bool insideChild = false)
+    [WinFormsFact]
+    public void TestHitTest_ListBoxNotCreated_ReturnsNull()
     {
         using Form form = new();
         using ListBox listBox = new() { Parent = form, Items = { "Item 1", "Item 2" } };
-        if (listBoxCreated)
-        {
-            listBox.CreateControl();
-            form.Show();
-        }
+        Point testPoint = new Point(10, 10);
 
-        var accessibleObject = listBox.AccessibilityObject;
-        Point testPoint;
-        if (listBoxCreated)
-        {
-            if (!insideBounds)
-            {
-                testPoint = new Point(listBox.Bounds.Right + xOffset, listBox.Bounds.Bottom + yOffset);
-            }
-            else if (insideChild)
-            {
-                listBox.SelectedIndex = 0;
-                var itemBounds = listBox.GetItemRectangle(0);
-                testPoint = listBox.PointToScreen(new Point(itemBounds.Left + xOffset, itemBounds.Top + yOffset));
-            }
-            else
-            {
-                testPoint = listBox.PointToScreen(new Point(xOffset, listBox.ClientRectangle.Height - 1));
-            }
-        }
-        else
-        {
-            testPoint = new Point(xOffset, yOffset);
-        }
+        var result = listBox.AccessibilityObject.HitTest(testPoint.X, testPoint.Y);
 
-        var result = accessibleObject.HitTest(testPoint.X, testPoint.Y);
+        result.Should().BeNull();
+    }
 
-        switch (expectedResult)
-        {
-            case "self":
-                result.Should().Be(accessibleObject);
-                break;
-            case "null":
-                result.Should().BeNull();
-                break;
-            case "child":
-                result.Should().Be(accessibleObject.GetChild(0));
-                break;
-            default:
-                throw new ArgumentException($"Unexpected test result: {expectedResult}");
-        }
+    [WinFormsFact]
+    public void TestHitTest_PointInsideListBoxBoundsButOutsideItems_ReturnsSelf()
+    {
+        using Form form = new();
+        using ListBox listBox = new() { Parent = form, Items = { "Item 1", "Item 2" } };
+        listBox.CreateControl();
+        form.Show();
+        Point testPoint = listBox.PointToScreen(new Point(0, listBox.ClientRectangle.Height - 1));
+
+        var result = listBox.AccessibilityObject.HitTest(testPoint.X, testPoint.Y);
+
+        result.Should().Be(listBox.AccessibilityObject);
+    }
+
+    [WinFormsFact]
+    public void TestHitTest_PointOutsideListBoxBounds_ReturnsNull()
+    {
+        using Form form = new();
+        using ListBox listBox = new() { Parent = form, Items = { "Item 1", "Item 2" } };
+        listBox.CreateControl();
+        form.Show();
+        Point testPoint = new Point(listBox.Bounds.Right + 10, listBox.Bounds.Bottom + 10);
+
+        var result = listBox.AccessibilityObject.HitTest(testPoint.X, testPoint.Y);
+
+        result.Should().BeNull();
+    }
+
+    [WinFormsFact]
+    public void TestHitTest_PointInsideChildBounds_ReturnsChild()
+    {
+        using Form form = new();
+        using ListBox listBox = new() { Parent = form, Items = { "Item 1", "Item 2" } };
+        listBox.CreateControl();
+        form.Show();
+        listBox.SelectedIndex = 0;
+        var itemBounds = listBox.GetItemRectangle(0);
+        Point testPoint = listBox.PointToScreen(new Point(itemBounds.Left + 1, itemBounds.Top + 1));
+
+        var result = listBox.AccessibilityObject.HitTest(testPoint.X, testPoint.Y);
+
+        result.Should().Be(listBox.AccessibilityObject.GetChild(0));
     }
 }
