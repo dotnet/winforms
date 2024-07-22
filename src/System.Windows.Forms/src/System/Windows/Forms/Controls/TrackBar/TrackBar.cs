@@ -1153,7 +1153,7 @@ public partial class TrackBar : Control, ISupportInitialize
     ///  Determine if the previous decision of whether drawing ticks
     ///  is performed by the native control or the Windows Forms runtime
     ///  is still valid. If it's no longer valid, the native control needs to be recreated.
-    ///  If user opts out of <see cref="LocalAppContextSwitches.TrackBarModernRendering"/>
+    ///  If user opts out of <see cref="Primitives.LocalAppContextSwitches.TrackBarModernRendering"/>
     ///  then this will always return false.
     /// </summary>
     private bool ShouldRecreateHandle() => IsHandleCreated && _autoDrawTicks != ShouldAutoDrawTicks();

@@ -9,7 +9,7 @@ namespace System;
 #nullable enable
 
 /// <summary>
-///  Scope for setting the see <see cref="LocalAppContextSwitches.TargetFrameworkName" /> temporarily.
+///  Scope for setting the see <see cref="Windows.Forms.Primitives.LocalAppContextSwitches.TargetFrameworkName" /> temporarily.
 ///  Use in a <see langword="using"/> statement.
 /// </summary>
 public readonly ref struct TargetFrameworkNameScope

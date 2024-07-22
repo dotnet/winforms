@@ -22,7 +22,7 @@ internal readonly ref struct CreateDcScope
     public HDC HDC { get; }
 
     /// <summary>
-    ///  Creates a compatible HDC for <paramref name="hdc"/> using <see cref="CreateCompatibleDC(HDC)"/>.
+    ///  Creates a compatible HDC for <paramref name="hdc"/> using <see cref="PInvokeCore.CreateCompatibleDC(HDC)"/>.
     /// </summary>
     /// <remarks>
     ///  <para>

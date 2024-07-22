@@ -24,7 +24,7 @@ internal readonly ref struct SetTextColorScope
 
     /// <summary>
     ///  Sets text color <paramref name="color"/> in the given <paramref name="hdc"/> using
-    ///  <see cref="SetTextColor(HDC, COLORREF)"/>.
+    ///  <see cref="PInvoke.SetTextColor(HDC, COLORREF)"/>.
     /// </summary>
     public SetTextColorScope(HDC hdc, COLORREF color)
     {
