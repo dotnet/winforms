@@ -620,16 +620,18 @@ public class ComboBoxTests
     public class CustomComboBox : ComboBox
     {
         // Make methods private to improve encapsulation
-        private void RaiseOnDrawItem(DrawItemEventArgs e)
-        {
-            base.OnDrawItem(e);
-        }
+        private void RaiseOnDrawItem(DrawItemEventArgs e) => base.OnDrawItem(e);
 
-        private void TriggerDoubleClick()
-        {
-            base.OnDoubleClick(EventArgs.Empty);
-        }
+        private void TriggerDoubleClick() => base.OnDoubleClick(EventArgs.Empty);
 
+        // Public methods to trigger the private methods for testing purposes
+        public void TestRaiseOnDrawItem(DrawItemEventArgs e) => RaiseOnDrawItem(e);
+
+        public void TestTriggerDoubleClick() => TriggerDoubleClick();
+    }
+
+    public class CustomComboBoxTests
+    {
         [WinFormsFact]
         public void ComboBox_DrawItem_AddHandler_ShouldCallHandler()
         {
@@ -641,7 +643,7 @@ public class ComboBoxTests
             DrawItemEventHandler handler = (sender, e) => callCount++;
 
             control.DrawItem += handler;
-            control.RaiseOnDrawItem(new DrawItemEventArgs(graphics, control.Font, new Rectangle(), 0, DrawItemState.Default));
+            control.TestRaiseOnDrawItem(new DrawItemEventArgs(graphics, control.Font, new Rectangle(), 0, DrawItemState.Default));
 
             callCount.Should().Be(1);
             control.DrawItem -= handler;
@@ -658,7 +660,7 @@ public class ComboBoxTests
             control.DrawItem += handler;
             control.DrawItem -= handler;
             using Bitmap bitmap = new(1, 1);
-            control.RaiseOnDrawItem(new DrawItemEventArgs(Graphics.FromImage(bitmap), control.Font, new Rectangle(), 0, DrawItemState.Default));
+            control.TestRaiseOnDrawItem(new DrawItemEventArgs(Graphics.FromImage(bitmap), control.Font, new Rectangle(), 0, DrawItemState.Default));
 
             callCount.Should().Be(0);
         }
@@ -687,13 +689,13 @@ public class ComboBoxTests
 
             control.DrawItem += handler1;
             control.DrawItem += handler2;
-            control.RaiseOnDrawItem(new DrawItemEventArgs(graphics, control.Font, new Rectangle(), 0, DrawItemState.Default));
+            control.TestRaiseOnDrawItem(new DrawItemEventArgs(graphics, control.Font, new Rectangle(), 0, DrawItemState.Default));
 
             callCount1.Should().Be(1);
             callCount2.Should().Be(1);
 
             control.DrawItem -= handler1;
-            control.RaiseOnDrawItem(new DrawItemEventArgs(graphics, control.Font, new Rectangle(), 0, DrawItemState.Default));
+            control.TestRaiseOnDrawItem(new DrawItemEventArgs(graphics, control.Font, new Rectangle(), 0, DrawItemState.Default));
 
             callCount1.Should().Be(1); // Should not increase
             callCount2.Should().Be(2); // Should increase
@@ -723,11 +725,11 @@ public class ComboBoxTests
                 control.DoubleClick += handler;
             }
 
-            control.TriggerDoubleClick();
+            control.TestTriggerDoubleClick();
             callCount.Should().Be(expectedCallCount);
 
             control.DoubleClick -= handler;
-            control.TriggerDoubleClick();
+            control.TestTriggerDoubleClick();
             callCount.Should().Be(expectedCallCount);
         }
     }
