@@ -278,7 +278,7 @@ public partial class MainForm : Form
                         rootComponent.Text = "Root Component hosted by the DesignSurface N.6";
 
                         ToolStripContainer toolStripContainer = surface.CreateControl<ToolStripContainer>(new Size(800, 200), new Point(0, 0));
-                        toolStripContainer.Dock = DockStyle.Top;
+                        toolStripContainer.Dock = DockStyle.Fill;
 
                         MenuStrip menuStrip1 = new();
                         MenuStrip menuStrip2 = new();
@@ -319,6 +319,7 @@ public partial class MainForm : Form
                         MyScrollableControl scrollableControl = surface.CreateControl<MyScrollableControl>(new Size(0, 0), new Point(0, 0));
                         scrollableControl.Dock = DockStyle.Fill;
                         scrollableControl.InjectControl(userControl);
+
                         SplitterPanel splitterPanel1 = splitContainer.Panel1;
                         SplitterPanel splitterPanel2 = splitContainer.Panel2;
                         splitterPanel1.Controls.Add(richTextBox);
@@ -327,6 +328,17 @@ public partial class MainForm : Form
                         toolStripContainer.ContentPanel.Controls.AddRange(splitContainer);
 
                         Component component = surface.CreateComponent<Component>();
+
+                        Splitter splitter = surface.CreateControl<Splitter>(new(5, 0), new(0, 0));
+                        splitter.BackColor = Color.Green;
+                        splitter.Dock = DockStyle.Bottom;
+
+                        Panel panel = surface.CreateControl<Panel>(new(0, tabPage6.Height/2), new(0, 0));
+                        panel.Dock = DockStyle.Bottom;
+                        NumericUpDown numericUpDown = surface.CreateControl<NumericUpDown>(new(50, 10), new(10, 10));
+                        panel.Controls.Add(numericUpDown);
+
+                        tabPage6.Controls.AddRange(toolStripContainer, splitter, panel);
                     }
 
                     break;
