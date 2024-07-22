@@ -19,9 +19,9 @@ public sealed class ButtonBaseDesignerTests
         autoResizeHandles.Should().Be(true);
     }
 
-    public static IEnumerable<object[]> IDictionary_TestData()
+    public static IEnumerable<object?[]> IDictionary_TestData()
     {
-        yield return new object[] { null! };
+        yield return new object?[] { null };
         yield return new object[] { new Dictionary<string, object>() };
     }
 
