@@ -37,6 +37,11 @@ internal class ListViewGroupItemCollection : ListView.ListViewItemCollection.IIn
         }
     }
 
+    public ListViewItem? GetItemByIndex(int index)
+    {
+        return Items[index];
+    }
+
     public ListViewItem Add(ListViewItem value)
     {
         CheckListViewItem(value);
