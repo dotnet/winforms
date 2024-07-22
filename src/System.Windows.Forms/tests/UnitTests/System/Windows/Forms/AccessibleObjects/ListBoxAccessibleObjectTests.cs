@@ -4,6 +4,7 @@
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ListBox;
+using System.Drawing;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -245,5 +246,178 @@ public class ListBoxAccessibleObjectTests
         Assert.Equal(childCount, accessibilityObject.TestAccessor().Dynamic._itemAccessibleObjects.Count);
 
         return accessibilityObject;
+    }
+
+    [WinFormsTheory]
+    [InlineData(false, AccessibleStates.Focusable)]
+    [InlineData(true, AccessibleStates.Focused | AccessibleStates.Focusable)]
+    public void ListBoxAccessibleObject_State_ShouldBeExpected(bool focusControl, AccessibleStates expectedState)
+    {
+        using Form form = new();
+        using ListBox listBox = new();
+        form.Controls.Add(listBox);
+
+        using TextBox textBox = new();
+        form.Controls.Add(textBox);
+
+        form.Show();
+        listBox.CreateControl();
+
+        textBox.Focus();
+        listBox.Focused.Should().BeFalse();
+
+        if (focusControl)
+        {
+            listBox.Focus();
+        }
+
+        var state = listBox.AccessibilityObject.State;
+
+        state.Should().Be(expectedState);
+    }
+
+    [WinFormsFact]
+    public void ListBoxAccessibleObject_ShouldCorrectlyHandleChildrenAndSelection()
+    {
+        using ListBox listBox = new();
+        listBox.Items.AddRange(new object[] { "Item 1", "Item 2" });
+        var accessibleObject = listBox.AccessibilityObject;
+
+        accessibleObject.GetSelected().Should().BeNull();
+
+        listBox.SelectedIndex = 0;
+        accessibleObject.GetSelected().Should().Be(accessibleObject.GetChild(0));
+
+        listBox.SelectedIndex = 1;
+        accessibleObject.GetSelected().Should().Be(accessibleObject.GetChild(1));
+
+        listBox.ClearSelected();
+        accessibleObject.GetSelected().Should().BeNull();
+    }
+
+    [WinFormsTheory]
+    [InlineData(0, 0)]
+    [InlineData(2, 2)]
+    public void GetChildCount_ReturnsExpected(int numberOfItemsToAdd, int expectedCount)
+    {
+        using ListBox listBox = new();
+        for (int i = 0; i < numberOfItemsToAdd; i++)
+        {
+            listBox.Items.Add($"Item {i + 1}");
+        }
+
+        var accessibleObject = new ListBox.ListBoxAccessibleObject(listBox);
+
+        int childCount = accessibleObject.GetChildCount();
+
+        childCount.Should().Be(expectedCount);
+    }
+
+    [WinFormsFact]
+    public void TestGetFocused_ReturnsExpected()
+    {
+        using ListBox listBox = new();
+        listBox.Items.AddRange(new object[] { "Item 1", "Item 2" });
+        listBox.CreateControl();
+        listBox.SelectedIndex = 1; // Focus the second item
+        listBox.Focus();
+
+        var accessibleObject = listBox.AccessibilityObject;
+        var focusedObject = accessibleObject.GetFocused();
+
+        focusedObject.Should().BeEquivalentTo(accessibleObject.GetChild(1));
+    }
+
+    [WinFormsTheory]
+    [InlineData(-1, null)]
+    [InlineData(1, 1)]
+    [InlineData(-1, null, true)]
+    [InlineData(0, 0, false, true)]
+    public void TestGetSelected_VariousScenarios(int selectedIndex, int? expectedIndex, bool clearSelection = false, bool multipleSelection = false)
+    {
+        using ListBox listBox = new() { SelectionMode = multipleSelection ? SelectionMode.MultiExtended : SelectionMode.One };
+        listBox.Items.AddRange(new object[] { "Item 1", "Item 2", "Item 3" });
+        if (selectedIndex >= 0)
+        {
+            listBox.SelectedIndices.Add(selectedIndex);
+            if (multipleSelection)
+            {
+                listBox.SelectedIndices.Add(2); // Select an additional item for multiple selection scenarios
+            }
+        }
+
+        if (clearSelection)
+        {
+            listBox.ClearSelected();
+        }
+
+        var accessibleObject = new ListBox.ListBoxAccessibleObject(listBox);
+        var selectedObject = accessibleObject.GetSelected();
+
+        if (expectedIndex.HasValue)
+        {
+            selectedObject.Should().BeEquivalentTo(accessibleObject.GetChild(expectedIndex.Value));
+        }
+        else
+        {
+            selectedObject.Should().BeNull();
+        }
+    }
+
+    [WinFormsTheory]
+    [InlineData(false, 10, 10, "null")] // ListBox not created
+    [InlineData(true, 0, 0, "self", true)] // Point inside ListBox bounds but outside items
+    [InlineData(true, 0, 0, "null", false)] // Point outside ListBox bounds
+    [InlineData(true, 0, 0, "child", true, true)] // Point inside child bounds
+    public void TestHitTest_VariousScenarios(bool listBoxCreated, int xOffset, int yOffset, string expectedResult, bool insideBounds = true, bool insideChild = false)
+    {
+        using Form form = new();
+        using ListBox listBox = new() { Parent = form, Items = { "Item 1", "Item 2" } };
+        if (listBoxCreated)
+        {
+            listBox.CreateControl();
+            form.Show();
+        }
+
+        var accessibleObject = listBox.AccessibilityObject;
+        Point testPoint;
+        if (listBoxCreated)
+        {
+            if (!insideBounds)
+            {
+                testPoint = new Point(listBox.Bounds.Right + 10, listBox.Bounds.Bottom + 10);
+            }
+            else if (insideChild)
+            {
+                listBox.SelectedIndex = 0;
+                var itemBounds = listBox.GetItemRectangle(0);
+                testPoint = listBox.PointToScreen(new Point(itemBounds.Left + 1, itemBounds.Top + 1));
+            }
+            else
+            {
+                testPoint = listBox.PointToScreen(new Point(1, listBox.ClientRectangle.Height - 1));
+            }
+        }
+        else
+        {
+            testPoint = new Point(xOffset, yOffset);
+        }
+
+        var result = accessibleObject.HitTest(testPoint.X, testPoint.Y);
+
+        switch (expectedResult)
+        {
+            case "self":
+                result.Should().Be(accessibleObject);
+                break;
+            case "null":
+                result.Should().BeNull();
+                break;
+            case "child":
+                result.Should().Be(accessibleObject.GetChild(0));
+                break;
+            default:
+                throw new ArgumentException($"Unexpected test result: {expectedResult}");
+        }
     }
 }
