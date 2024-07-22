@@ -367,7 +367,7 @@ public class ListBoxAccessibleObjectTests
     [WinFormsTheory]
     [InlineData(false, 10, 10, "null")] // ListBox not created
     [InlineData(true, 0, 0, "self", true)] // Point inside ListBox bounds but outside items
-    [InlineData(true, 0, 0, "null", false)] // Point outside ListBox bounds
+    [InlineData(true, 10, 10, "null", false)] // Point outside ListBox bounds, adjusted offsets to likely be outside
     [InlineData(true, 0, 0, "child", true, true)] // Point inside child bounds
     public void TestHitTest_VariousScenarios(bool listBoxCreated, int xOffset, int yOffset, string expectedResult, bool insideBounds = true, bool insideChild = false)
     {
@@ -385,17 +385,17 @@ public class ListBoxAccessibleObjectTests
         {
             if (!insideBounds)
             {
-                testPoint = new Point(listBox.Bounds.Right + 10, listBox.Bounds.Bottom + 10);
+                testPoint = new Point(listBox.Bounds.Right + xOffset, listBox.Bounds.Bottom + yOffset);
             }
             else if (insideChild)
             {
                 listBox.SelectedIndex = 0;
                 var itemBounds = listBox.GetItemRectangle(0);
-                testPoint = listBox.PointToScreen(new Point(itemBounds.Left + 1, itemBounds.Top + 1));
+                testPoint = listBox.PointToScreen(new Point(itemBounds.Left + xOffset, itemBounds.Top + yOffset));
             }
             else
             {
-                testPoint = listBox.PointToScreen(new Point(1, listBox.ClientRectangle.Height - 1));
+                testPoint = listBox.PointToScreen(new Point(xOffset, listBox.ClientRectangle.Height - 1));
             }
         }
         else
