@@ -10,9 +10,11 @@ public sealed class ListBoxDesignerTests
     [Fact]
     public void IntegralHeight_WhenDockStyleNotFillLeftOrRight_ShouldSetShadowPropertyAndListBoxIntegralHeight()
     {
-        ListBoxDesigner designer = new();
-        ListBox listBox = new();
+        using ListBoxDesigner designer = new();
+        using ListBox listBox = new();
         designer.Initialize(listBox);
+
+        designer.IntegralHeight.Should().Be(true);
 
         bool value = false;
         designer.IntegralHeight = value;
@@ -21,70 +23,102 @@ public sealed class ListBoxDesignerTests
         listBox.IntegralHeight.Should().Be(value);
     }
 
-    [Fact]
-    public void IntegralHeight_WhenDockStyleIsFillLeftOrRight_ShouldSetShadowPropertyAndNotListBoxIntegralHeight()
+    public static IEnumerable<object?[]> SetDockStyle_TestData()
     {
-        ListBoxDesigner designer = new();
-        ListBox listBox = new();
+        yield return new object[] { DockStyle.Fill, false };
+        yield return new object[] { DockStyle.Left, false };
+        yield return new object[] { DockStyle.Right, false };
+        yield return new object[] { DockStyle.Bottom };
+        yield return new object[] { DockStyle.Top };
+    }
+
+    [Theory]
+    [MemberData(nameof(SetDockStyle_TestData))]
+    public void IntegralHeight_WhenDockStyleIsFillLeftOrRight_ShouldSetShadowPropertyAndNotListBoxIntegralHeight(DockStyle dockStyle, bool expected = true)
+    {
+        using ListBoxDesigner designer = new();
+        using ListBox listBox = new();
         designer.Initialize(listBox);
 
-        bool value = false;
-        listBox.Dock = DockStyle.Fill;
-        designer.IntegralHeight = value;
+        designer.IntegralHeight.Should().Be(true);
 
-        designer.IntegralHeight.Should().Be(value);
-        listBox.IntegralHeight.Should().NotBe(value);
+        listBox.Dock = dockStyle;
+        designer.IntegralHeight = expected;
+
+        designer.IntegralHeight.Should().Be(expected);
+        if (expected is false)
+        {
+            // When DockStyle is Fill/Left/Right, should set ShadowProperty and not set ListBox's IntegralHeight.
+            listBox.IntegralHeight.Should().NotBe(expected);
+        }
+        else
+        {
+            listBox.IntegralHeight.Should().Be(expected);
+        }
     }
 
     [Fact]
     public void Dock_Get_ShouldReturnListBoxDock()
     {
-        ListBoxDesigner designer = new();
-        ListBox listBox = new();
+        using ListBoxDesigner designer = new();
+        using ListBox listBox = new();
         designer.Initialize(listBox);
 
-        var expected = listBox.Dock;
-        var result = designer.Dock;
-
-        result.Should().Be(expected);
+        designer.Dock.Should().Be(listBox.Dock);
     }
 
-    [Fact]
-    public void Dock_Set_WhenDockStyleIsFillLeftOrRight_ShouldSetListBoxDockAndSetListBoxIntegralHeightToFalse()
+    [Theory]
+    [MemberData(nameof(SetDockStyle_TestData))]
+    public void Dock_Set_WhenDockStyleIsFillLeftOrRight_ShouldSetListBoxDockAndSetListBoxIntegralHeightToFalse(DockStyle dockStyle, bool expected = true)
     {
-        ListBoxDesigner designer = new();
-        ListBox listBox = new();
+        using ListBoxDesigner designer = new();
+        using ListBox listBox = new();
         designer.Initialize(listBox);
+        designer.Dock = dockStyle;
 
-        var value = DockStyle.Fill;
-        designer.Dock = value;
-
-        listBox.Dock.Should().Be(value);
-        listBox.IntegralHeight.Should().BeFalse();
+        listBox.Dock.Should().Be(dockStyle);
+        if (expected is false)
+        {
+            // When DockStyle is Fill/Left/Right, should set ListBox's Dock and set ListBox's IntegralHeight to False.
+            listBox.IntegralHeight.Should().BeFalse();
+        }
+        else
+        {
+            listBox.IntegralHeight.Should().BeTrue();
+        }
     }
 
-    [Fact]
-    public void Dock_Set_WhenDockStyleNotFillLeftOrRight_ShouldSetListBoxDockAndRestoreListBoxIntegralHeight()
+    [Theory]
+    [MemberData(nameof(SetDockStyle_TestData))]
+    public void Dock_Set_WhenDockStyleNotFillLeftOrRight_ShouldSetListBoxDockAndRestoreListBoxIntegralHeight(DockStyle dockStyle, bool expected = true)
     {
-        ListBoxDesigner designer = new();
-        ListBox listBox = new();
+        using ListBoxDesigner designer = new();
+        using ListBox listBox = new();
         designer.Initialize(listBox);
+
+        listBox.IntegralHeight.Should().BeTrue();
 
         listBox.IntegralHeight = false;
         designer.IntegralHeight = true;
-        var value = DockStyle.Top;
+        designer.Dock = dockStyle;
 
-        designer.Dock = value;
-
-        listBox.Dock.Should().Be(value);
-        listBox.IntegralHeight.Should().BeTrue();
+        listBox.Dock.Should().Be(dockStyle);
+        if (expected is false)
+        {
+            // When DockStyle not Fill/Left/Right, whould set listBox's Dock and restore ListBox's IntegralHeight.
+            listBox.IntegralHeight.Should().BeFalse();
+        }
+        else
+        {
+            listBox.IntegralHeight.Should().BeTrue();
+        }
     }
 
     [Fact]
     public void Initialize_ShouldModifyProperties()
     {
-        ListBoxDesigner designer = new();
-        ListBox listBox = new();
+        using ListBoxDesigner designer = new();
+        using ListBox listBox = new();
         designer.Initialize(listBox);
 
         listBox.Should().NotBeNull();
@@ -95,8 +129,8 @@ public sealed class ListBoxDesignerTests
     [Fact]
     public void ActionLists_WithCheckedListBoxListBox_ShouldSetValue()
     {
-        ListBoxDesigner designer = new();
-        CheckedListBox listBox = new();
+        using ListBoxDesigner designer = new();
+        using CheckedListBox listBox = new();
         designer.Initialize(listBox);
 
         var actionList = designer.ActionLists;
@@ -107,11 +141,13 @@ public sealed class ListBoxDesignerTests
     [Fact]
     public void InitializeNewComponent_WithCheckedListBox_ShouldSetFormattingEnabledToTrue()
     {
-        ListBoxDesigner designer = new();
-        ListBox listBox = new CheckedListBox();
+        using ListBoxDesigner designer = new();
+        using ListBox listBox = new CheckedListBox();
         designer.Initialize(listBox);
+        listBox.FormattingEnabled.Should().BeFalse();
+
         designer.InitializeNewComponent(new Dictionary<int, int>());
 
-        listBox.FormattingEnabled.Should().Be(true);
+        listBox.FormattingEnabled.Should().BeTrue();
     }
 }

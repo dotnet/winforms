@@ -65,16 +65,14 @@ internal class ListBoxDesigner : ControlDesigner
 
     protected override void PreFilterProperties(IDictionary properties)
     {
-        PropertyDescriptor? integralHeightProp = (PropertyDescriptor?)properties["IntegralHeight"];
-        if (integralHeightProp is not null)
+        if (properties[nameof(IntegralHeight)] is PropertyDescriptor integralHeightProp)
         {
-            properties["IntegralHeight"] = TypeDescriptor.CreateProperty(typeof(ListBoxDesigner), integralHeightProp, []);
+            properties[nameof(IntegralHeight)] = TypeDescriptor.CreateProperty(typeof(ListBoxDesigner), integralHeightProp, []);
         }
 
-        PropertyDescriptor? dockProp = (PropertyDescriptor?)properties["Dock"];
-        if (dockProp is not null)
+        if (properties[nameof(Dock)] is PropertyDescriptor dockProp)
         {
-            properties["Dock"] = TypeDescriptor.CreateProperty(typeof(ListBoxDesigner), dockProp, []);
+            properties[nameof(Dock)] = TypeDescriptor.CreateProperty(typeof(ListBoxDesigner), dockProp, []);
         }
 
         base.PreFilterProperties(properties);
@@ -90,8 +88,7 @@ internal class ListBoxDesigner : ControlDesigner
             // Now, hook the component rename event so we can update the text in the
             // list box.
             //
-            TryGetService<IComponentChangeService>(out IComponentChangeService? componentChangeService);
-            if (componentChangeService is not null)
+            if (TryGetService<IComponentChangeService>(out IComponentChangeService? componentChangeService))
             {
                 componentChangeService.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
                 componentChangeService.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
@@ -117,8 +114,7 @@ internal class ListBoxDesigner : ControlDesigner
         // Now, hook the component rename event so we can update the text in the
         // list box.
         //
-        TryGetService<IComponentChangeService>(out IComponentChangeService? componentChangeService);
-        if (componentChangeService is not null)
+        if (TryGetService<IComponentChangeService>(out IComponentChangeService? componentChangeService))
         {
             componentChangeService.ComponentRename += new ComponentRenameEventHandler(OnComponentRename);
             componentChangeService.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
@@ -135,10 +131,11 @@ internal class ListBoxDesigner : ControlDesigner
         // VSWhidbey 497239 - Setting FormattingEnabled clears the text we set in
         // OnCreateHandle so let's set it here again. We need to keep setting the text in
         // OnCreateHandle, otherwise we introduce VSWhidbey 498162.
-        PropertyDescriptor? nameProp = TypeDescriptor.GetProperties(Component)["Name"];
-        if (nameProp is not null)
+        if (TypeDescriptor.GetProperties(Component)[nameof(ListBox.Name)] is PropertyDescriptor nameProp
+            && nameProp.GetValue(Component) is { } componentName
+            && componentName.ToString() is { } name)
         {
-            UpdateControlName(nameProp.GetValue(Component)!.ToString()!);
+            UpdateControlName(name);
         }
     }
 
@@ -162,7 +159,7 @@ internal class ListBoxDesigner : ControlDesigner
     {
         if (e.Component == Component && e.Member is not null && e.Member.Name == "Items")
         {
-            PropertyDescriptor? nameProp = TypeDescriptor.GetProperties(Component)["Name"];
+            PropertyDescriptor? nameProp = TypeDescriptor.GetProperties(Component)[nameof(ListBox.Name)];
             if (nameProp is not null)
             {
                 UpdateControlName(nameProp.GetValue(Component)!.ToString()!);
@@ -176,8 +173,7 @@ internal class ListBoxDesigner : ControlDesigner
     protected override void OnCreateHandle()
     {
         base.OnCreateHandle();
-        PropertyDescriptor? nameProp = TypeDescriptor.GetProperties(Component)["Name"];
-        if (nameProp is not null)
+        if (TypeDescriptor.GetProperties(Component)[nameof(ListBox.Name)] is PropertyDescriptor nameProp)
         {
             UpdateControlName(nameProp.GetValue(Component)!.ToString()!);
         }
