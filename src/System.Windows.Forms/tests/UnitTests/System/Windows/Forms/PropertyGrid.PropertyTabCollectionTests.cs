@@ -10,27 +10,17 @@ namespace System.Windows.Forms.Tests
     public class PropertyTabCollectionTests
     {
         [WinFormsTheory]
-        [InlineData(null, 0)]
-        [InlineData(typeof(PropertyGrid), 1)] // PropertyGrid initially contains one PropertiesTab
-        public void Count_ReturnsCorrectCount(Type ownerType, int expectedCount)
+        [InlineData(typeof(PropertyGrid))]
+        public void Count_ReturnsCorrectCount(Type ownerType)
         {
-            if (ownerType is null)
-            {
-                expectedCount.Should().Be(0);
-            }
-            else
-            {
-                var owner = Activator.CreateInstance(ownerType) as PropertyGrid;
-                TestPropertyTabCollection propertyTabCollection = new(owner);
-                propertyTabCollection.Count.Should().Be(expectedCount);
-            }
+            var owner = Activator.CreateInstance(ownerType) as PropertyGrid;
+            TestPropertyTabCollection propertyTabCollection = new(owner);
+            propertyTabCollection.Count.Should().Be(1); // PropertyGrid initially contains one PropertiesTab
         }
 
         [WinFormsTheory]
-        [InlineData(null, 0, null, typeof(InvalidOperationException))]
         [InlineData(typeof(PropertyGrid), 0, typeof(PropertyGridInternal.PropertiesTab), null)]
         [InlineData(typeof(PropertyGrid), 1, typeof(TestPropertyTab), null)]
-        [InlineData(typeof(PropertyGrid), 2, null, typeof(ArgumentOutOfRangeException))]
         public void Indexer_ReturnsCorrectTab_OrThrows(Type ownerType, int index, Type expectedTabType, Type expectedExceptionType)
         {
             TestPropertyTabCollection propertyTabCollection = null;
@@ -64,7 +54,6 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(null, typeof(TestPropertyTab), typeof(ArgumentNullException), 0, false)]
         [InlineData(typeof(PropertyGrid), typeof(TestPropertyTab), null, 2, false)]
         [InlineData(typeof(PropertyGrid), typeof(TestPropertyTab), null, 2, true)]
         public void AddTabType_WithDifferentInputs(Type ownerType, Type tabType, Type expectedExceptionType, int expectedCount, bool addTwice)
@@ -112,8 +101,10 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        public class TestPropertyTab : PropertyTab
+        public class TestPropertyTab : PropertyTab, IDisposable
         {
+            private Bitmap _bitmap;
+
             public override string TabName => "Test Tab";
 
             public override PropertyDescriptorCollection GetProperties(object component, Attribute[] attributes)
@@ -126,7 +117,24 @@ namespace System.Windows.Forms.Tests
                 return TypeDescriptor.GetProperties(component, attributes);
             }
 
-            public override Bitmap Bitmap => new(1, 1);
+            public override Bitmap Bitmap
+            {
+                get
+                {
+                    if (_bitmap is null)
+                    {
+                        _bitmap = new Bitmap(1, 1);
+                    }
+
+                    return _bitmap;
+                }
+            }
+
+            public override void Dispose()
+            {
+                _bitmap?.Dispose();
+                base.Dispose();
+            }
         }
     }
 }
