@@ -11,7 +11,6 @@ namespace System.Windows.Forms.Rendering.Animation;
 internal abstract class AnimatedControlRenderer
 {
     private bool _disposedValue;
-    private bool _isRunning;
     private readonly Control _control;
 
     /// <summary>
@@ -50,7 +49,7 @@ internal abstract class AnimatedControlRenderer
     /// </summary>
     public void StartAnimation()
     {
-        if (_isRunning)
+        if (IsRunning)
         {
             return;
         }
@@ -64,12 +63,12 @@ internal abstract class AnimatedControlRenderer
             animationDuration,
             animationCycle);
 
-        _isRunning = true;
+        IsRunning = true;
     }
 
     internal void RestartAnimation()
     {
-        if (_isRunning)
+        if (IsRunning)
         {
             StopAnimation();
         }
