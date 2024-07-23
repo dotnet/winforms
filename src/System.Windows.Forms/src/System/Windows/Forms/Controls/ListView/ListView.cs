@@ -2783,7 +2783,18 @@ public partial class ListView : Control
                     }
 
                     // get the node
-                    ListViewItem item = Items[(int)nmcd->nmcd.dwItemSpec];
+                    ListViewItem item;
+                    if (VirtualMode && m.LParamInternal != 0)
+                    {
+                        RetrieveVirtualItemEventArgs rVI = new((int)nmcd->nmcd.dwItemSpec);
+                        OnRetrieveVirtualItem(rVI);
+                        item = rVI.Item ?? throw new InvalidOperationException(SR.ListViewVirtualItemRequired);
+                    }
+                    else
+                    {
+                        item = Items[(int)nmcd->nmcd.dwItemSpec];
+                    }
+
                     // if we're doing the whole row in one style, change our result!
                     if (dontmess && item.UseItemStyleForSubItems)
                     {
@@ -7109,6 +7120,11 @@ public partial class ListView : Control
                     // if none of the items are focused already.
                     if (FocusedItem is null && Items.Count > 0)
                     {
+                        if (VirtualMode && Items.GetItemByIndex(0) is null)
+                        {
+                            throw new InvalidOperationException(SR.ListViewVirtualItemRequired);
+                        }
+
                         Items[0].Focused = true;
                     }
                 }
