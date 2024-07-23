@@ -168,7 +168,7 @@ public class ListBox_ListBoxItemAccessibleObjectTests
         using Form form = new();
         using ListBox listBox = new() { Parent = form };
         listBox.Items.Add("Test Item");
-        var itemAccessibleObject = (ListBox.ListBoxItemAccessibleObject)listBox.AccessibilityObject.GetChild(0);
+        var itemAccessibleObject = (ListBox.ListBoxItemAccessibleObject)listBox.AccessibilityObject.GetChild(0)!;
 
         var boundsBeforeHandleCreation = itemAccessibleObject.Bounds;
 
@@ -179,6 +179,8 @@ public class ListBox_ListBoxItemAccessibleObjectTests
 
         var boundsAfterHandleCreation = itemAccessibleObject.Bounds;
     }
+
+    # nullable disable
 
     [WinFormsFact]
     public void ListBoxItemAccessibleObject_DefaultAction_VariesByContext()
