@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using System.Runtime.Serialization.BinaryFormat;
+using System.Formats.Nrbf;
 
 namespace FormatTests.FormattedObject;
 
@@ -15,8 +15,8 @@ public class SystemDrawingTests : Common.SystemDrawingTests<FormattedObjectSeria
         System.Windows.Forms.BinaryFormat.BinaryFormattedObject format = new(Serialize(input));
 
         ClassRecord classInfo = (ClassRecord)format.RootRecord;
-        classInfo.RecordType.Should().Be(RecordType.ClassWithMembersAndTypes);
-        classInfo.ObjectId.Should().Be(1);
+        classInfo.RecordType.Should().Be(SerializationRecordType.ClassWithMembersAndTypes);
+        classInfo.Id.Should().Be(format.RootRecord.Id);
         classInfo.TypeName.FullName.Should().Be("System.Drawing.PointF");
         classInfo.TypeName.AssemblyName!.FullName.Should().Be("System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
         classInfo.MemberNames.Should().BeEquivalentTo(["x", "y"]);
@@ -31,8 +31,8 @@ public class SystemDrawingTests : Common.SystemDrawingTests<FormattedObjectSeria
         System.Windows.Forms.BinaryFormat.BinaryFormattedObject format = new(Serialize(input));
 
         ClassRecord classInfo = (ClassRecord)format.RootRecord;
-        classInfo.RecordType.Should().Be(RecordType.ClassWithMembersAndTypes);
-        classInfo.ObjectId.Should().Be(1);
+        classInfo.RecordType.Should().Be(SerializationRecordType.ClassWithMembersAndTypes);
+        classInfo.Id.Should().Be(format.RootRecord.Id);
         classInfo.TypeName.FullName.Should().Be("System.Drawing.RectangleF");
         classInfo.MemberNames.Should().BeEquivalentTo(["x", "y", "width", "height"]);
         classInfo.GetSingle("x").Should().Be(input.X);

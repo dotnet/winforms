@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Formats.Nrbf;
+
 namespace System.Windows.Forms.BinaryFormat.Deserializer;
 
 internal sealed partial class Deserializer
@@ -19,17 +21,17 @@ internal sealed partial class Deserializer
         // dictionary, to do so we'd need to know if any referenced object is going to get to this state
         // even if it hasn't finished parsing, which isn't easy to do with cycles involved.
         private Queue<PendingSerializationInfo>? _pendingSerializationInfo;
-        private HashSet<int>? _pendingSerializationInfoIds;
+        private HashSet<SerializationRecordId>? _pendingSerializationInfoIds;
 
         // For a given object id, the set of ids that it is waiting on to complete.
-        private Dictionary<int, HashSet<int>>? _incompleteDependencies;
+        private Dictionary<SerializationRecordId, HashSet<SerializationRecordId>>? _incompleteDependencies;
 
         // The pending value updaters. Scanned each time an object is completed.
         private HashSet<ValueUpdater>? _pendingValueUpdates;
 
-        private readonly IDictionary<int, object> _deserializedObjects;
+        private readonly IDictionary<SerializationRecordId, object> _deserializedObjects;
 
-        internal PendingUpdates(IDictionary<int, object> deserializedObjects) => _deserializedObjects = deserializedObjects;
+        internal PendingUpdates(IDictionary<SerializationRecordId, object> deserializedObjects) => _deserializedObjects = deserializedObjects;
 
         /// <summary>
         ///  Number of pending updates, if any.
@@ -43,7 +45,7 @@ internal sealed partial class Deserializer
 
             _incompleteDependencies ??= [];
 
-            if (_incompleteDependencies.TryGetValue(updater.ObjectId, out HashSet<int>? dependencies))
+            if (_incompleteDependencies.TryGetValue(updater.ObjectId, out HashSet<SerializationRecordId>? dependencies))
             {
                 dependencies.Add(updater.ValueId);
             }
@@ -53,9 +55,9 @@ internal sealed partial class Deserializer
             }
         }
 
-        internal bool HasIncompleteDependencies(int id) => _incompleteDependencies?.ContainsKey(id) ?? false;
+        internal bool HasIncompleteDependencies(SerializationRecordId id) => _incompleteDependencies?.ContainsKey(id) ?? false;
 
-        internal void RemoveIncompleteDependency(int id) => _incompleteDependencies?.Remove(id);
+        internal void RemoveIncompleteDependency(SerializationRecordId id) => _incompleteDependencies?.Remove(id);
 
         internal void Enqueue(PendingSerializationInfo pending)
         {
@@ -78,11 +80,11 @@ internal sealed partial class Deserializer
             return false;
         }
 
-        internal bool ContainsPendingSerializationInfo(int id) => _pendingSerializationInfoIds?.Contains(id) ?? false;
+        internal bool ContainsPendingSerializationInfo(SerializationRecordId id) => _pendingSerializationInfoIds?.Contains(id) ?? false;
 
         internal int PendingSerializationInfoCount => _pendingSerializationInfo?.Count ?? 0;
 
-        internal bool TryGetIncompleteDependencies(int id, [NotNullWhen(true)] out HashSet<int>? dependencies)
+        internal bool TryGetIncompleteDependencies(SerializationRecordId id, [NotNullWhen(true)] out HashSet<SerializationRecordId>? dependencies)
         {
             if (_incompleteDependencies is not null)
             {
@@ -93,14 +95,14 @@ internal sealed partial class Deserializer
             return false;
         }
 
-        internal IEnumerable<int> CompleteDependencies(int completedId)
+        internal IEnumerable<SerializationRecordId> CompleteDependencies(SerializationRecordId completedId)
         {
             if (_incompleteDependencies is null)
             {
                 yield break;
             }
 
-            foreach ((int incompleteId, HashSet<int> dependencies) in _incompleteDependencies)
+            foreach ((SerializationRecordId incompleteId, HashSet<SerializationRecordId> dependencies) in _incompleteDependencies)
             {
                 if (!dependencies.Remove(completedId))
                 {
@@ -110,7 +112,7 @@ internal sealed partial class Deserializer
                 // Search for fixups that need to be applied for this dependency.
                 int removals = _pendingValueUpdates!.RemoveWhere((ValueUpdater updater) =>
                 {
-                    if (updater.ValueId != completedId)
+                    if (!updater.ValueId.Equals(completedId))
                     {
                         return false;
                     }

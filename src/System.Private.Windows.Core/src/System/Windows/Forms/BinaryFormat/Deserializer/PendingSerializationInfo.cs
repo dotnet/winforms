@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Formats.Nrbf;
 using System.Reflection;
 using System.Runtime.Serialization;
 
@@ -10,12 +11,12 @@ namespace System.Windows.Forms.BinaryFormat.Deserializer;
 
 internal sealed class PendingSerializationInfo
 {
-    internal int ObjectId { get; }
+    internal SerializationRecordId ObjectId { get; }
     private readonly ISerializationSurrogate? _surrogate;
     private readonly SerializationInfo _info;
 
     internal PendingSerializationInfo(
-        int objectId,
+        SerializationRecordId objectId,
         SerializationInfo info,
         ISerializationSurrogate? surrogate)
     {
@@ -28,7 +29,7 @@ internal sealed class PendingSerializationInfo
         "ReflectionAnalysis",
         "IL2072:UnrecognizedReflectionPattern",
         Justification = "Not sure how to attribute this.")]
-    internal void Populate(IDictionary<int, object> objects, StreamingContext context)
+    internal void Populate(IDictionary<SerializationRecordId, object> objects, StreamingContext context)
     {
         object @object = objects[ObjectId];
         Type type = @object.GetType();

@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Runtime.Serialization.BinaryFormat;
+using System.Formats.Nrbf;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms.BinaryFormat;
 using FormatTests.Common;
@@ -70,7 +70,7 @@ public class PrimitiveTypeTests : SerializationTest<FormattedObjectSerializer>
     public void PrimitiveTypeMemberName(object value)
     {
         BinaryFormattedObject format = new(Serialize(value));
-        VerifyNonGeneric(value, format[1]);
+        VerifyNonGeneric(value, format[format.RootRecord.Id]);
     }
 
     [Theory]

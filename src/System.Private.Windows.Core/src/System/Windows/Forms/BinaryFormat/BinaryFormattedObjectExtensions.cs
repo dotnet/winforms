@@ -3,7 +3,7 @@
 
 using System.Collections;
 using System.Drawing;
-using System.Runtime.Serialization.BinaryFormat;
+using System.Formats.Nrbf;
 
 namespace System.Windows.Forms.BinaryFormat;
 
@@ -38,7 +38,7 @@ internal static class BinaryFormattedObjectExtensions
             value = default;
 
             if (format.RootRecord is not ClassRecord classInfo
-                || !classInfo.IsTypeNameMatching(typeof(PointF))
+                || !classInfo.TypeNameMatches(typeof(PointF))
                 || !classInfo.HasMember("x")
                 || !classInfo.HasMember("y"))
             {
@@ -63,7 +63,7 @@ internal static class BinaryFormattedObjectExtensions
             value = default;
 
             if (format.RootRecord is not ClassRecord classInfo
-                || !classInfo.IsTypeNameMatching(typeof(RectangleF))
+                || !classInfo.TypeNameMatches(typeof(RectangleF))
                 || !classInfo.HasMember("x")
                 || !classInfo.HasMember("y")
                 || !classInfo.HasMember("width")
@@ -92,12 +92,12 @@ internal static class BinaryFormattedObjectExtensions
 
         static bool Get(BinaryFormattedObject format, [NotNullWhen(true)] out object? value)
         {
-            if (format.RootRecord.RecordType is RecordType.BinaryObjectString)
+            if (format.RootRecord.RecordType is SerializationRecordType.BinaryObjectString)
             {
                 value = ((PrimitiveTypeRecord<string>)format.RootRecord).Value;
                 return true;
             }
-            else if (format.RootRecord.RecordType is RecordType.MemberPrimitiveTyped)
+            else if (format.RootRecord.RecordType is SerializationRecordType.MemberPrimitiveTyped)
             {
                 value = GetMemberPrimitiveTypedValue(format.RootRecord);
                 return true;
@@ -110,7 +110,7 @@ internal static class BinaryFormattedObjectExtensions
 
     internal static object GetMemberPrimitiveTypedValue(this SerializationRecord record)
     {
-        Debug.Assert(record.RecordType is RecordType.MemberPrimitiveTyped);
+        Debug.Assert(record.RecordType is SerializationRecordType.MemberPrimitiveTyped);
 
         return record switch
         {
@@ -162,22 +162,22 @@ internal static class BinaryFormattedObjectExtensions
             // BinaryFormatter serializes the entire backing array, so we need to trim it down to the size of the list.
             list = arrayRecord switch
             {
-                ArrayRecord<string> ar => ar.ToArray(maxLength: Array.MaxLength).CreateTrimmedList(size),
-                ArrayRecord<bool> ar => ar.ToArray(maxLength: Array.MaxLength).CreateTrimmedList(size),
-                ArrayRecord<byte> ar => ar.ToArray(maxLength: Array.MaxLength).CreateTrimmedList(size),
-                ArrayRecord<sbyte> ar => ar.ToArray(maxLength: Array.MaxLength).CreateTrimmedList(size),
-                ArrayRecord<char> ar => ar.ToArray(maxLength: Array.MaxLength).CreateTrimmedList(size),
-                ArrayRecord<short> ar => ar.ToArray(maxLength: Array.MaxLength).CreateTrimmedList(size),
-                ArrayRecord<ushort> ar => ar.ToArray(maxLength: Array.MaxLength).CreateTrimmedList(size),
-                ArrayRecord<int> ar => ar.ToArray(maxLength: Array.MaxLength).CreateTrimmedList(size),
-                ArrayRecord<uint> ar => ar.ToArray(maxLength: Array.MaxLength).CreateTrimmedList(size),
-                ArrayRecord<long> ar => ar.ToArray(maxLength: Array.MaxLength).CreateTrimmedList(size),
-                ArrayRecord<ulong> ar => ar.ToArray(maxLength: Array.MaxLength).CreateTrimmedList(size),
-                ArrayRecord<float> ar => ar.ToArray(maxLength: Array.MaxLength).CreateTrimmedList(size),
-                ArrayRecord<double> ar => ar.ToArray(maxLength: Array.MaxLength).CreateTrimmedList(size),
-                ArrayRecord<decimal> ar => ar.ToArray(maxLength: Array.MaxLength).CreateTrimmedList(size),
-                ArrayRecord<TimeSpan> ar => ar.ToArray(maxLength: Array.MaxLength).CreateTrimmedList(size),
-                ArrayRecord<DateTime> ar => ar.ToArray(maxLength: Array.MaxLength).CreateTrimmedList(size),
+                SZArrayRecord<string> ar => ar.GetArray().CreateTrimmedList(size),
+                SZArrayRecord<bool> ar => ar.GetArray().CreateTrimmedList(size),
+                SZArrayRecord<byte> ar => ar.GetArray().CreateTrimmedList(size),
+                SZArrayRecord<sbyte> ar => ar.GetArray().CreateTrimmedList(size),
+                SZArrayRecord<char> ar => ar.GetArray().CreateTrimmedList(size),
+                SZArrayRecord<short> ar => ar.GetArray().CreateTrimmedList(size),
+                SZArrayRecord<ushort> ar => ar.GetArray().CreateTrimmedList(size),
+                SZArrayRecord<int> ar => ar.GetArray().CreateTrimmedList(size),
+                SZArrayRecord<uint> ar => ar.GetArray().CreateTrimmedList(size),
+                SZArrayRecord<long> ar => ar.GetArray().CreateTrimmedList(size),
+                SZArrayRecord<ulong> ar => ar.GetArray().CreateTrimmedList(size),
+                SZArrayRecord<float> ar => ar.GetArray().CreateTrimmedList(size),
+                SZArrayRecord<double> ar => ar.GetArray().CreateTrimmedList(size),
+                SZArrayRecord<decimal> ar => ar.GetArray().CreateTrimmedList(size),
+                SZArrayRecord<TimeSpan> ar => ar.GetArray().CreateTrimmedList(size),
+                SZArrayRecord<DateTime> ar => ar.GetArray().CreateTrimmedList(size),
                 _ => throw new InvalidOperationException()
             };
 
@@ -197,18 +197,18 @@ internal static class BinaryFormattedObjectExtensions
             value = null;
 
             if (format.RootRecord is not ClassRecord classInfo
-                || !classInfo.IsTypeNameMatching(typeof(ArrayList))
+                || !classInfo.TypeNameMatches(typeof(ArrayList))
                 || !classInfo.HasMember("_items")
                 || !classInfo.HasMember("_size")
                 || classInfo.GetRawValue("_size") is not int size
-                || classInfo.GetRawValue("_items") is not ArrayRecord<object> arrayRecord
+                || classInfo.GetRawValue("_items") is not SZArrayRecord<object> arrayRecord
                 || size > arrayRecord.Length)
             {
                 return false;
             }
 
             ArrayList arrayList = new(size);
-            object?[] array = arrayRecord.ToArray(maxLength: size);
+            object?[] array = arrayRecord.GetArray();
             for (int i = 0; i < size; i++)
             {
                 if (array[i] is SerializationRecord)
@@ -241,22 +241,22 @@ internal static class BinaryFormattedObjectExtensions
 
             value = format.RootRecord switch
             {
-                ArrayRecord<string> ar => ar.ToArray(maxLength: Array.MaxLength),
-                ArrayRecord<bool> ar => ar.ToArray(maxLength: Array.MaxLength),
-                ArrayRecord<byte> ar => ar.ToArray(maxLength: Array.MaxLength),
-                ArrayRecord<sbyte> ar => ar.ToArray(maxLength: Array.MaxLength),
-                ArrayRecord<char> ar => ar.ToArray(maxLength: Array.MaxLength),
-                ArrayRecord<short> ar => ar.ToArray(maxLength: Array.MaxLength),
-                ArrayRecord<ushort> ar => ar.ToArray(maxLength: Array.MaxLength),
-                ArrayRecord<int> ar => ar.ToArray(maxLength: Array.MaxLength),
-                ArrayRecord<uint> ar => ar.ToArray(maxLength: Array.MaxLength),
-                ArrayRecord<long> ar => ar.ToArray(maxLength: Array.MaxLength),
-                ArrayRecord<ulong> ar => ar.ToArray(maxLength: Array.MaxLength),
-                ArrayRecord<float> ar => ar.ToArray(maxLength: Array.MaxLength),
-                ArrayRecord<double> ar => ar.ToArray(maxLength: Array.MaxLength),
-                ArrayRecord<decimal> ar => ar.ToArray(maxLength: Array.MaxLength),
-                ArrayRecord<TimeSpan> ar => ar.ToArray(maxLength: Array.MaxLength),
-                ArrayRecord<DateTime> ar => ar.ToArray(maxLength: Array.MaxLength),
+                SZArrayRecord<string> ar => ar.GetArray(),
+                SZArrayRecord<bool> ar => ar.GetArray(),
+                SZArrayRecord<byte> ar => ar.GetArray(),
+                SZArrayRecord<sbyte> ar => ar.GetArray(),
+                SZArrayRecord<char> ar => ar.GetArray(),
+                SZArrayRecord<short> ar => ar.GetArray(),
+                SZArrayRecord<ushort> ar => ar.GetArray(),
+                SZArrayRecord<int> ar => ar.GetArray(),
+                SZArrayRecord<uint> ar => ar.GetArray(),
+                SZArrayRecord<long> ar => ar.GetArray(),
+                SZArrayRecord<ulong> ar => ar.GetArray(),
+                SZArrayRecord<float> ar => ar.GetArray(),
+                SZArrayRecord<double> ar => ar.GetArray(),
+                SZArrayRecord<decimal> ar => ar.GetArray(),
+                SZArrayRecord<TimeSpan> ar => ar.GetArray(),
+                SZArrayRecord<DateTime> ar => ar.GetArray(),
                 _ => throw new InvalidOperationException()
             };
 
@@ -285,23 +285,23 @@ internal static class BinaryFormattedObjectExtensions
         {
             hashtable = null;
 
-            // Note that hashtables with custom comparers and/or hash code providers will have that information before
-            // the value pair arrays.
-            if (format.RootRecord.RecordType != RecordType.SystemClassWithMembersAndTypes
+            if (format.RootRecord.RecordType != SerializationRecordType.SystemClassWithMembersAndTypes
                 || format.RootRecord is not ClassRecord classInfo
-                || !classInfo.IsTypeNameMatching(typeof(Hashtable))
+                || !classInfo.TypeNameMatches(typeof(Hashtable))
                 || !classInfo.HasMember("Keys")
                 || !classInfo.HasMember("Values")
-                || format[2] is not ArrayRecord<object?> keysRecord
-                || format[3] is not ArrayRecord<object?> valuesRecord
+                // Note that hashtables with custom comparers and/or hash code providers will have non null Comparer
+                || classInfo.GetSerializationRecord("Comparer") is not null
+                || classInfo.GetSerializationRecord("Keys") is not SZArrayRecord<object?> keysRecord
+                || classInfo.GetSerializationRecord("Values") is not SZArrayRecord<object?> valuesRecord
                 || keysRecord.Length != valuesRecord.Length)
             {
                 return false;
             }
 
-            Hashtable temp = new((int)keysRecord.Length);
-            object?[] keys = keysRecord.ToArray(maxLength: Array.MaxLength);
-            object?[] values = valuesRecord.ToArray(maxLength: Array.MaxLength);
+            Hashtable temp = new(keysRecord.Length);
+            object?[] keys = keysRecord.GetArray();
+            object?[] values = valuesRecord.GetArray();
             for (int i = 0; i < keys.Length; i++)
             {
                 object? key = keys[i];
@@ -334,7 +334,7 @@ internal static class BinaryFormattedObjectExtensions
             exception = null;
 
             if (format.RootRecord is not ClassRecord classInfo
-                || classInfo.IsTypeNameMatching(typeof(NotSupportedException)))
+                || classInfo.TypeNameMatches(typeof(NotSupportedException)))
             {
                 return false;
             }
@@ -360,5 +360,5 @@ internal static class BinaryFormattedObjectExtensions
             || format.TryGetNotSupportedException(out value);
 
     private static bool IsPrimitiveArrayRecord(SerializationRecord serializationRecord)
-        => serializationRecord.RecordType is RecordType.ArraySingleString or RecordType.ArraySinglePrimitive;
+        => serializationRecord.RecordType is SerializationRecordType.ArraySingleString or SerializationRecordType.ArraySinglePrimitive;
 }

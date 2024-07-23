@@ -177,8 +177,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrimTestBinaryDeserializati
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BinaryFormatTests", "src\System.Private.Windows.Core\tests\BinaryFormatTests\BinaryFormatTests.csproj", "{57EC5288-9513-46CF-8FB7-626199690D90}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Runtime.Serialization.BinaryFormat", "src\System.Runtime.Serialization.BinaryFormat\System.Runtime.Serialization.BinaryFormat.csproj", "{DC3DD357-7FB4-4384-92DC-5D34864D010B}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -983,22 +981,6 @@ Global
 		{57EC5288-9513-46CF-8FB7-626199690D90}.Release|x64.Build.0 = Release|Any CPU
 		{57EC5288-9513-46CF-8FB7-626199690D90}.Release|x86.ActiveCfg = Release|Any CPU
 		{57EC5288-9513-46CF-8FB7-626199690D90}.Release|x86.Build.0 = Release|Any CPU
-		{DC3DD357-7FB4-4384-92DC-5D34864D010B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DC3DD357-7FB4-4384-92DC-5D34864D010B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DC3DD357-7FB4-4384-92DC-5D34864D010B}.Debug|arm64.ActiveCfg = Debug|Any CPU
-		{DC3DD357-7FB4-4384-92DC-5D34864D010B}.Debug|arm64.Build.0 = Debug|Any CPU
-		{DC3DD357-7FB4-4384-92DC-5D34864D010B}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{DC3DD357-7FB4-4384-92DC-5D34864D010B}.Debug|x64.Build.0 = Debug|Any CPU
-		{DC3DD357-7FB4-4384-92DC-5D34864D010B}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{DC3DD357-7FB4-4384-92DC-5D34864D010B}.Debug|x86.Build.0 = Debug|Any CPU
-		{DC3DD357-7FB4-4384-92DC-5D34864D010B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DC3DD357-7FB4-4384-92DC-5D34864D010B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DC3DD357-7FB4-4384-92DC-5D34864D010B}.Release|arm64.ActiveCfg = Release|Any CPU
-		{DC3DD357-7FB4-4384-92DC-5D34864D010B}.Release|arm64.Build.0 = Release|Any CPU
-		{DC3DD357-7FB4-4384-92DC-5D34864D010B}.Release|x64.ActiveCfg = Release|Any CPU
-		{DC3DD357-7FB4-4384-92DC-5D34864D010B}.Release|x64.Build.0 = Release|Any CPU
-		{DC3DD357-7FB4-4384-92DC-5D34864D010B}.Release|x86.ActiveCfg = Release|Any CPU
-		{DC3DD357-7FB4-4384-92DC-5D34864D010B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1062,7 +1044,6 @@ Global
 		{55F3174F-C1FE-4C8F-AF71-2512630088F8} = {583F1292-AE8D-4511-B8D8-A81FE4642DDC}
 		{CFBCC732-C988-4FE7-A21B-98A142365374} = {680FB14C-7B0C-4D63-9F1A-18ACCDB0F52A}
 		{57EC5288-9513-46CF-8FB7-626199690D90} = {583F1292-AE8D-4511-B8D8-A81FE4642DDC}
-		{DC3DD357-7FB4-4384-92DC-5D34864D010B} = {77FEDB47-F7F6-490D-AF7C-ABB4A9E0B9D7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B1B0433-F612-4E5A-BE7E-FCF5B9F6E136}

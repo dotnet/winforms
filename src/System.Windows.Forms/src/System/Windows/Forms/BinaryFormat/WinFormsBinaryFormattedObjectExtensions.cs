@@ -20,15 +20,15 @@ internal static class WinFormsBinaryFormattedObjectExtensions
         {
             imageListStreamer = null;
 
-            if (format.RootRecord is not System.Runtime.Serialization.BinaryFormat.ClassRecord types
-                || !types.IsTypeNameMatching(typeof(ImageListStreamer))
+            if (format.RootRecord is not System.Formats.Nrbf.ClassRecord types
+                || !types.TypeNameMatches(typeof(ImageListStreamer))
                 || !types.HasMember("Data")
-                || types.GetRawValue("Data") is not System.Runtime.Serialization.BinaryFormat.ArrayRecord<byte> data)
+                || types.GetRawValue("Data") is not System.Formats.Nrbf.SZArrayRecord<byte> data)
             {
                 return false;
             }
 
-            imageListStreamer = new ImageListStreamer(data.ToArray(maxLength: Array.MaxLength));
+            imageListStreamer = new ImageListStreamer(data.GetArray());
             return true;
         }
     }
@@ -40,15 +40,15 @@ internal static class WinFormsBinaryFormattedObjectExtensions
     {
         bitmap = null;
 
-        if (format.RootRecord is not System.Runtime.Serialization.BinaryFormat.ClassRecord types
-            || !types.IsTypeNameMatching(typeof(Bitmap))
+        if (format.RootRecord is not System.Formats.Nrbf.ClassRecord types
+            || !types.TypeNameMatches(typeof(Bitmap))
             || !types.HasMember("Data")
-            || types.GetRawValue("Data") is not System.Runtime.Serialization.BinaryFormat.ArrayRecord<byte> data)
+            || types.GetRawValue("Data") is not System.Formats.Nrbf.SZArrayRecord<byte> data)
         {
             return false;
         }
 
-        bitmap = new Bitmap(new MemoryStream(data.ToArray(maxLength: Array.MaxLength)));
+        bitmap = new Bitmap(new MemoryStream(data.GetArray()));
         return true;
     }
 

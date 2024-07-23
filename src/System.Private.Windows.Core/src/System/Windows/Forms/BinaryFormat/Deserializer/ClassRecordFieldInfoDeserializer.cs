@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Formats.Nrbf;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters;
@@ -14,14 +15,14 @@ namespace System.Windows.Forms.BinaryFormat.Deserializer;
 /// </summary>
 internal sealed class ClassRecordFieldInfoDeserializer : ClassRecordDeserializer
 {
-    private readonly Runtime.Serialization.BinaryFormat.ClassRecord _classRecord;
+    private readonly Formats.Nrbf.ClassRecord _classRecord;
     private readonly MemberInfo[] _fieldInfo;
     private int _currentFieldIndex;
     private readonly bool _isValueType;
     private bool _hasFixups;
 
     internal ClassRecordFieldInfoDeserializer(
-        Runtime.Serialization.BinaryFormat.ClassRecord classRecord,
+        Formats.Nrbf.ClassRecord classRecord,
         object @object,
         [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
         Type type,
@@ -33,7 +34,7 @@ internal sealed class ClassRecordFieldInfoDeserializer : ClassRecordDeserializer
         _isValueType = type.IsValueType;
     }
 
-    internal override Id Continue()
+    internal override SerializationRecordId Continue()
     {
         // When directly setting fields we need to populate fields with primitive types before we
         // can add the object to the deserialized object list to handle value types. This ensures
@@ -60,7 +61,7 @@ internal sealed class ClassRecordFieldInfoDeserializer : ClassRecordDeserializer
                 throw new SerializationException($"Could not find field '{field.Name}' data for type '{field.DeclaringType!.Name}'.");
             }
 
-            (object? memberValue, Id reference) = UnwrapMemberValue(_classRecord.GetRawValue(field.Name));
+            (object? memberValue, SerializationRecordId reference) = UnwrapMemberValue(_classRecord.GetRawValue(field.Name));
             if (s_missingValueSentinel == memberValue)
             {
                 // Record has not been encountered yet, need to pend iteration.
@@ -73,7 +74,7 @@ internal sealed class ClassRecordFieldInfoDeserializer : ClassRecordDeserializer
             {
                 // Need to track a fixup for this field.
                 _hasFixups = true;
-                Deserializer.PendValueUpdater(new FieldValueUpdater(_classRecord.ObjectId, reference, field));
+                Deserializer.PendValueUpdater(new FieldValueUpdater(_classRecord.Id, reference, field));
             }
 
             _currentFieldIndex++;
@@ -86,11 +87,11 @@ internal sealed class ClassRecordFieldInfoDeserializer : ClassRecordDeserializer
         {
             // We can be used for completion even with fixups if we're not a value type as our fixups won't need to be
             // copied to propogate them. Note that surrogates cannot replace our created instance for reference types.
-            Deserializer.CompleteObject(_classRecord.ObjectId);
+            Deserializer.CompleteObject(_classRecord.Id);
         }
 
         // No more missing member refs.
-        return Id.Null;
+        return default;
     }
 }
 

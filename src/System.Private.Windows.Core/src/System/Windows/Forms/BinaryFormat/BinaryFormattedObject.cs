@@ -4,7 +4,7 @@
 using System.Reflection;
 using System.Runtime.ExceptionServices;
 using System.Runtime.Serialization;
-using System.Runtime.Serialization.BinaryFormat;
+using System.Formats.Nrbf;
 
 namespace System.Windows.Forms.BinaryFormat;
 
@@ -41,7 +41,7 @@ internal sealed partial class BinaryFormattedObject
 
         try
         {
-            RootRecord = PayloadReader.Read(stream, out var readonlyRecordMap, leaveOpen: true);
+            RootRecord = NrbfDecoder.Decode(stream, out var readonlyRecordMap, leaveOpen: true);
             RecordMap = readonlyRecordMap;
         }
         catch (Exception ex) when (ex is ArgumentException or InvalidCastException or ArithmeticException or IOException)
@@ -63,7 +63,7 @@ internal sealed partial class BinaryFormattedObject
     {
         try
         {
-            return Deserializer.Deserializer.Deserialize(RootRecord.ObjectId, RecordMap, TypeResolver, _options);
+            return Deserializer.Deserializer.Deserialize(RootRecord.Id, RecordMap, TypeResolver, _options);
         }
         catch (Exception ex) when (ex is ArgumentException or InvalidCastException or ArithmeticException or IOException)
         {
@@ -85,7 +85,7 @@ internal sealed partial class BinaryFormattedObject
     ///  Gets a record by it's identifier. Not all records have identifiers, only ones that
     ///  can be referenced by other records.
     /// </summary>
-    public SerializationRecord this[Id id] => RecordMap[id];
+    public SerializationRecord this[SerializationRecordId id] => RecordMap[id];
 
-    public IReadOnlyDictionary<int, SerializationRecord> RecordMap { get; }
+    public IReadOnlyDictionary<SerializationRecordId, SerializationRecord> RecordMap { get; }
 }

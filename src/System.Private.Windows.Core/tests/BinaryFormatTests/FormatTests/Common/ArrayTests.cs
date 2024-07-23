@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Formats.Nrbf;
 using System.Runtime.Serialization;
 using System.Windows.Forms.BinaryFormat;
 
@@ -40,12 +41,12 @@ public abstract class ArrayTests<T> : SerializationTest<T> where T : ISerializer
     }
 
     [Theory]
-    [InlineData(-1, (byte)RecordType.ArraySingleObject)]
-    [InlineData(int.MinValue, (byte)RecordType.ArraySingleObject)]
-    [InlineData(-1, (byte)RecordType.ArraySinglePrimitive)]
-    [InlineData(int.MinValue, (byte)RecordType.ArraySinglePrimitive)]
-    [InlineData(-1, (byte)RecordType.ArraySingleString)]
-    [InlineData(int.MinValue, (byte)RecordType.ArraySingleString)]
+    [InlineData(-1, (byte)SerializationRecordType.ArraySingleObject)]
+    [InlineData(int.MinValue, (byte)SerializationRecordType.ArraySingleObject)]
+    [InlineData(-1, (byte)SerializationRecordType.ArraySinglePrimitive)]
+    [InlineData(int.MinValue, (byte)SerializationRecordType.ArraySinglePrimitive)]
+    [InlineData(-1, (byte)SerializationRecordType.ArraySingleString)]
+    [InlineData(int.MinValue, (byte)SerializationRecordType.ArraySingleString)]
     public void NegativeLength(int length, byte recordType)
     {
         MemoryStream stream = new();
@@ -77,7 +78,7 @@ public abstract class ArrayTests<T> : SerializationTest<T> where T : ISerializer
         MemoryStream stream = new();
         using (BinaryFormatWriterScope scope = new(stream))
         {
-            scope.Writer.Write((byte)RecordType.BinaryArray);
+            scope.Writer.Write((byte)SerializationRecordType.BinaryArray);
 
             // Id
             scope.Writer.Write(1);
@@ -111,7 +112,7 @@ public abstract class ArrayTests<T> : SerializationTest<T> where T : ISerializer
         MemoryStream stream = new();
         using (BinaryFormatWriterScope scope = new(stream))
         {
-            scope.Writer.Write((byte)RecordType.BinaryArray);
+            scope.Writer.Write((byte)SerializationRecordType.BinaryArray);
 
             // Id
             scope.Writer.Write(1);
@@ -143,7 +144,7 @@ public abstract class ArrayTests<T> : SerializationTest<T> where T : ISerializer
         MemoryStream stream = new();
         using (BinaryFormatWriterScope scope = new(stream))
         {
-            scope.Writer.Write((byte)RecordType.BinaryArray);
+            scope.Writer.Write((byte)SerializationRecordType.BinaryArray);
 
             // Id
             scope.Writer.Write(1);

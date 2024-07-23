@@ -28,10 +28,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Windows.CsWin32" Version="$(MicrosoftWindowsCsWin32PackageVersion)" PrivateAssets="all" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\System.Runtime.Serialization.BinaryFormat\System.Runtime.Serialization.BinaryFormat.csproj" />
+    <PackageReference Include="System.Formats.Nrbf" Version="9.0.0-preview.7.24372.7" />
   </ItemGroup>
 
   <ItemGroup>
