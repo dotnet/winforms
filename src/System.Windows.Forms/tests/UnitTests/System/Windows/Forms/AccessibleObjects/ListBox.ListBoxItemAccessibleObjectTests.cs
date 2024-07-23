@@ -160,6 +160,8 @@ public class ListBox_ListBoxItemAccessibleObjectTests
         Assert.False(listBox.IsHandleCreated);
     }
 
+    #nullable enable
+
     [WinFormsFact]
     public void ListBoxItemAccessibleObject_Bounds_BeforeAndAfterHandleCreation()
     {
