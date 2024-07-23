@@ -4,6 +4,7 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
+using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.Serialization;
@@ -395,6 +396,58 @@ public partial class DataObjectTests
         mockDataObject.Object.GetData(format).Should().BeSameAs(expectedResult);
         mockDataObject.Verify(o => o.GetData(formatName), Times.Exactly(expectedCallCount));
     }
+
+    [Fact]
+    public void DataObject_TryGetData_InvokeString_CallsTryGetData()
+    {
+        string data = "text";
+        Mock<DataObject> mockDataObject = new(MockBehavior.Strict);
+        mockDataObject
+            .Setup(o => o.TryGetData(out data))
+            .CallBase();
+        string formatName = typeof(string).FullName!;
+        mockDataObject
+            .Setup(o => o.TryGetData(formatName, out data))
+            .Returns(true)
+            .Verifiable();
+        mockDataObject.Object.TryGetData(out data).Should().BeTrue();
+        mockDataObject.Verify(o => o.TryGetData(formatName, out data), Times.Exactly(1));
+    }
+
+    [Fact]
+    public void DataObject_TryGetData_InvokeStringString_CallsTryGetData()
+    {
+        string data = "text";
+        Mock<DataObject> mockDataObject = new(MockBehavior.Strict);
+        mockDataObject
+            .Setup(o => o.TryGetData("test format", out data))
+            .CallBase();
+        mockDataObject
+            .Setup(o => o.TryGetData("test format", false, out data))
+            .Returns(true)
+            .Verifiable();
+        mockDataObject.Object.TryGetData("test format", out data).Should().BeTrue();
+        mockDataObject.Verify(o => o.TryGetData("test format", false, out data), Times.Exactly(1));
+    }
+
+    [Theory]
+    [BoolData]
+    public void DataObject_TryGetData_InvokeStringBoolString_CallsTryGetData(bool autoConvert)
+    {
+        string data = "text";
+        Mock<DataObject> mockDataObject = new(MockBehavior.Strict);
+        mockDataObject
+            .Setup(o => o.TryGetData("test format", autoConvert, out data))
+            .CallBase();
+        mockDataObject
+            .Setup(o => o.TryGetData("test format", DataObject.NotSupportedResolver, autoConvert, out data))
+            .Returns(true)
+            .Verifiable();
+        mockDataObject.Object.TryGetData("test format", autoConvert, out data).Should().BeTrue();
+        mockDataObject.Verify(o => o.TryGetData("test format", DataObject.NotSupportedResolver, autoConvert, out data), Times.Exactly(1));
+    }
+
+    private static Type NotSupportedResolver(TypeName typeName) => throw new NotSupportedException();
 
     [Theory]
     [MemberData(nameof(GetData_String_TheoryData))]
@@ -1108,9 +1161,26 @@ public partial class DataObjectTests
         dataObject.GetDataPresent(format, autoConvert: false).Should().BeTrue();
         dataObject.GetDataPresent(format, autoConvert: true).Should().BeTrue();
 
-        dataObject.GetData(format).Should().BeSameAs(input);
-        dataObject.GetData(format, autoConvert: false).Should().BeSameAs(input);
-        dataObject.GetData(format, autoConvert: true).Should().BeSameAs(input);
+        dataObject.GetData(format).Should().Be(input);
+        dataObject.GetData(format, autoConvert: false).Should().Be(input);
+        dataObject.GetData(format, autoConvert: true).Should().Be(input);
+
+        dataObject.TryGetData(format, out object unboundedData).Should().Be(input is string);
+        unboundedData.Should().Be(input);
+
+        dataObject.TryGetData(format, autoConvert: false, out unboundedData).Should().Be(input is string);
+        unboundedData.Should().Be(input);
+        dataObject.TryGetData(format, autoConvert: true, out unboundedData).Should().Be(input is string);
+        unboundedData.Should().Be(input);
+
+        dataObject.TryGetData(format, StringResolver, autoConvert: true, out unboundedData).Should().Be(input is string);
+        unboundedData.Should().Be(input);
+        dataObject.TryGetData(format, StringResolver, autoConvert: false, out unboundedData).Should().Be(input is string);
+        unboundedData.Should().Be(input);
+        dataObject.TryGetData(format, resolver: null!, autoConvert: true, out unboundedData).Should().Be(input is string);
+        unboundedData.Should().Be(input);
+        dataObject.TryGetData(format, resolver: null!, autoConvert: false, out unboundedData).Should().Be(input is string);
+        unboundedData.Should().Be(input);
 
         dataObject.ContainsAudio().Should().Be(format == DataFormats.WaveAudio);
         dataObject.ContainsFileDropList().Should().Be(expectedContainsFileDropList);
@@ -1140,6 +1210,21 @@ public partial class DataObjectTests
         dataObject.GetData(format).Should().Be(input);
         dataObject.GetData(format, autoConvert: false).Should().Be(input);
         dataObject.GetData(format, autoConvert: true).Should().Be(input);
+
+        dataObject.TryGetData(format, out object unboundedData).Should().Be(input is string);
+        dataObject.TryGetData(format, autoConvert: false, out unboundedData).Should().Be(input is string);
+        dataObject.TryGetData(format, autoConvert: true, out unboundedData).Should().Be(input is string);
+        dataObject.TryGetData(format, resolver: null!, autoConvert: true, out unboundedData).Should().Be(input is string);
+        dataObject.TryGetData(format, resolver: null!, autoConvert: false, out unboundedData).Should().Be(input is string);
+
+        dataObject.TryGetData(format, StringResolver, autoConvert: false, out unboundedData).Should().Be(input is not null);
+        unboundedData.Should().Be(input);
+        dataObject.TryGetData(format, StringResolver, autoConvert: true, out unboundedData).Should().Be(input is not null);
+        unboundedData.Should().Be(input);
+        dataObject.TryGetData(format, resolver: null!, autoConvert: false, out string data).Should().Be(input is not null);
+        data.Should().Be(input);
+        dataObject.TryGetData(format, resolver: null!, autoConvert: true, out data).Should().Be(input is not null);
+        data.Should().Be(input);
 
         dataObject.ContainsAudio().Should().BeFalse();
         dataObject.ContainsFileDropList().Should().BeFalse();
@@ -1247,6 +1332,23 @@ public partial class DataObjectTests
         dataObject.GetData(format, autoConvert: false).Should().Be(input);
         dataObject.GetData(format, autoConvert: true).Should().Be(input);
 
+        dataObject.TryGetData(format, out object unboundedData).Should().Be(input is string);
+        unboundedData.Should().Be(input);
+
+        dataObject.TryGetData(format, autoConvert: false, out unboundedData).Should().Be(input is string);
+        unboundedData.Should().Be(input);
+        dataObject.TryGetData(format, autoConvert: true, out unboundedData).Should().Be(input is string);
+        unboundedData.Should().Be(input);
+
+        dataObject.TryGetData(format, StringResolver, autoConvert: false, out unboundedData).Should().Be(input is string);
+        unboundedData.Should().Be(input);
+        dataObject.TryGetData(format, StringResolver, autoConvert: true, out unboundedData).Should().Be(input is string);
+        unboundedData.Should().Be(input);
+        dataObject.TryGetData(format, resolver: null!, autoConvert: false, out unboundedData).Should().Be(input is string);
+        unboundedData.Should().Be(input);
+        dataObject.TryGetData(format, resolver: null!, autoConvert: true, out unboundedData).Should().Be(input is string);
+        unboundedData.Should().Be(input);
+
         dataObject.GetDataPresent(format, autoConvert: true).Should().BeTrue();
         dataObject.GetDataPresent(format, autoConvert: false).Should().BeTrue();
 
@@ -1261,6 +1363,22 @@ public partial class DataObjectTests
         dataObject.ContainsText(TextDataFormat.CommaSeparatedValue).Should().Be(format == DataFormats.CommaSeparatedValue);
     }
 
+    private static Type StringResolver(TypeName typeName)
+    {
+        Type type = typeof(string);
+        TypeName parsed = TypeName.Parse($"{type.FullName}, {type.Assembly.FullName}");
+
+        // Namespace-qualified type name.
+        if (typeName.FullName == parsed.FullName
+            // Ignore version, culture, and public key token in the assembly name.
+            && typeName.AssemblyName?.Name == parsed.AssemblyName?.Name)
+        {
+            return type;
+        }
+
+        throw new NotSupportedException($"Unexpected type {typeName.AssemblyQualifiedName}.");
+    }
+
     [Theory]
     [InlineData("something custom", false, "input")]
     [InlineData("something custom", false, null)]
@@ -1270,13 +1388,30 @@ public partial class DataObjectTests
     [InlineData(DataFormats.SerializableConstant, false, null)]
     [InlineData(DataFormats.SerializableConstant, true, "input")]
     [InlineData(DataFormats.SerializableConstant, true, null)]
-    private void DataObject_SetData_InvokeStringBoolObject_Unbounded_GetReturnsExpected(string format, bool autoConvert, string input)
+    private void DataObject_SetData_InvokeStringBoolObject_Unbounded(string format, bool autoConvert, string input)
     {
         DataObject dataObject = new();
         dataObject.SetData(format, autoConvert, input);
 
         dataObject.GetData(format, autoConvert: false).Should().Be(input);
         dataObject.GetData(format, autoConvert: true).Should().Be(input);
+
+        dataObject.TryGetData(format, out string data).Should().Be(input is string);
+        data.Should().Be(input);
+
+        dataObject.TryGetData(format, autoConvert: false, out data).Should().Be(input is string);
+        data.Should().Be(input);
+        dataObject.TryGetData(format, autoConvert: true, out data).Should().Be(input is string);
+        data.Should().Be(input);
+
+        dataObject.TryGetData(format, StringResolver, autoConvert: false, out data).Should().Be(input is string);
+        data.Should().Be(input);
+        dataObject.TryGetData(format, StringResolver, autoConvert: true, out data).Should().Be(input is string);
+        data.Should().Be(input);
+        dataObject.TryGetData(format, resolver: null!, autoConvert: false, out data).Should().Be(input is string);
+        data.Should().Be(input);
+        dataObject.TryGetData(format, resolver: null!, autoConvert: true, out data).Should().Be(input is string);
+        data.Should().Be(input);
 
         dataObject.GetDataPresent(format, autoConvert: true).Should().BeTrue();
         dataObject.GetDataPresent(format, autoConvert: false).Should().BeTrue();
@@ -2567,6 +2702,10 @@ public partial class DataObjectTests
         public object GetData(string format, bool autoConvert) => throw new NotImplementedException();
         public object GetData(string format) => throw new NotImplementedException();
         public object GetData(Type format) => throw new NotImplementedException();
+        public bool TryGetData<T>(string format, Func<TypeName, Type> resolver, bool autoConvert, out T data) => throw new NotImplementedException();
+        public bool TryGetData<T>(string format, bool autoConvert, out T data) => throw new NotImplementedException();
+        public bool TryGetData<T>(string format, out T data) => throw new NotImplementedException();
+        public bool TryGetData<T>(out T data) => throw new NotImplementedException();
         public void GetDataHere(ref FORMATETC format, ref STGMEDIUM medium) => throw new NotImplementedException();
         public bool GetDataPresent(string format, bool autoConvert) => throw new NotImplementedException();
         public bool GetDataPresent(string format) => throw new NotImplementedException();

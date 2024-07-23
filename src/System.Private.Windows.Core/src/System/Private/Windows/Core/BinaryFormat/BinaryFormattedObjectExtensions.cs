@@ -3,6 +3,7 @@
 
 using System.Collections;
 using System.Drawing;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace System.Private.Windows.Core.BinaryFormat;
@@ -44,6 +45,88 @@ internal static class BinaryFormattedObjectExtensions
             Debug.Fail(ex.Message);
             value = default;
             return false;
+        }
+    }
+
+    /// <summary>
+    ///  Tries to get this object as a <see cref="Point"/>.
+    /// </summary>
+    public static bool TryGetPoint(this BinaryFormattedObject format, [NotNullWhen(true)] out object? value)
+    {
+        return TryGet(Get, format, out value);
+
+        static bool Get(BinaryFormattedObject format, [NotNullWhen(true)] out object? value)
+        {
+            value = default;
+
+            if (format.RootRecord is not ClassWithMembersAndTypes classInfo
+                || format[classInfo.LibraryId] is not BinaryLibrary binaryLibrary
+                || binaryLibrary.LibraryName != TypeInfo.SystemDrawingAssemblyName
+                || classInfo.Name != typeof(Point).FullName
+                || classInfo.MemberValues.Count != 2)
+            {
+                return false;
+            }
+
+            value = new Point((int)classInfo["x"]!, (int)classInfo["y"]!);
+
+            return true;
+        }
+    }
+
+    /// <summary>
+    ///  Tries to get this object as a <see cref="Rectangle"/>.
+    /// </summary>
+    public static bool TryGetRectangle(this BinaryFormattedObject format, [NotNullWhen(true)] out object? value)
+    {
+        return TryGet(Get, format, out value);
+
+        static bool Get(BinaryFormattedObject format, [NotNullWhen(true)] out object? value)
+        {
+            value = default;
+
+            if (format.RootRecord is not ClassWithMembersAndTypes classInfo
+                || format[classInfo.LibraryId] is not BinaryLibrary binaryLibrary
+                || binaryLibrary.LibraryName != TypeInfo.SystemDrawingAssemblyName
+                || classInfo.Name != typeof(Rectangle).FullName
+                || classInfo.MemberValues.Count != 4)
+            {
+                return false;
+            }
+
+            value = new Rectangle(
+                (int)classInfo["x"]!,
+                (int)classInfo["y"]!,
+                (int)classInfo["width"]!,
+                (int)classInfo["height"]!);
+
+            return true;
+        }
+    }
+
+    /// <summary>
+    ///  Tries to get this object as a <see cref="Size"/>.
+    /// </summary>
+    public static bool TryGetSize(this BinaryFormattedObject format, [NotNullWhen(true)] out object? value)
+    {
+        return TryGet(Get, format, out value);
+
+        static bool Get(BinaryFormattedObject format, [NotNullWhen(true)] out object? value)
+        {
+            value = default;
+
+            if (format.RootRecord is not ClassWithMembersAndTypes classInfo
+                || format[classInfo.LibraryId] is not BinaryLibrary binaryLibrary
+                || binaryLibrary.LibraryName != TypeInfo.SystemDrawingAssemblyName
+                || classInfo.Name != typeof(Size).FullName
+                || classInfo.MemberValues.Count != 2)
+            {
+                return false;
+            }
+
+            value = new Size((int)classInfo["width"]!, (int)classInfo["height"]!);
+
+            return true;
         }
     }
 
@@ -98,6 +181,66 @@ internal static class BinaryFormattedObjectExtensions
                 (float)classInfo["y"]!,
                 (float)classInfo["width"]!,
                 (float)classInfo["height"]!);
+
+            return true;
+        }
+    }
+
+    /// <summary>
+    ///  Tries to get this object as a <see cref="SizeF"/>.
+    /// </summary>
+    public static bool TryGetSizeF(this BinaryFormattedObject format, [NotNullWhen(true)] out object? value)
+    {
+        return TryGet(Get, format, out value);
+
+        static bool Get(BinaryFormattedObject format, [NotNullWhen(true)] out object? value)
+        {
+            value = default;
+
+            if (format.RootRecord is not ClassWithMembersAndTypes classInfo
+                || format[classInfo.LibraryId] is not BinaryLibrary binaryLibrary
+                || binaryLibrary.LibraryName != TypeInfo.SystemDrawingAssemblyName
+                || classInfo.Name != typeof(SizeF).FullName
+                || classInfo.MemberValues.Count != 2)
+            {
+                return false;
+            }
+
+            value = new SizeF((float)classInfo["width"]!, (float)classInfo["height"]!);
+
+            return true;
+        }
+    }
+
+    /// <summary>
+    ///  Tries to get this object as a <see cref="Color"/>.
+    /// </summary>
+    public static bool TryGetColor(this BinaryFormattedObject format, [NotNullWhen(true)] out object? value)
+    {
+        return TryGet(Get, format, out value);
+
+        static bool Get(BinaryFormattedObject format, [NotNullWhen(true)] out object? value)
+        {
+            value = default;
+
+            if (format.RootRecord is not ClassWithMembersAndTypes classInfo
+                || format[classInfo.LibraryId] is not BinaryLibrary binaryLibrary
+                || binaryLibrary.LibraryName != TypeInfo.SystemDrawingAssemblyName
+                || classInfo.Name != typeof(Color).FullName
+                || classInfo.MemberValues.Count != 4)
+            {
+                return false;
+            }
+
+            string? name = classInfo["name"] as string;
+
+            ConstructorInfo? ctor = typeof(Color).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, [typeof(long), typeof(short), typeof(string), typeof(KnownColor)]);
+            if (ctor is null)
+            {
+                return false;
+            }
+
+            value = ctor.Invoke([(long)classInfo["value"]!, (short)classInfo["state"]!, name, (KnownColor)Convert.ToInt32(classInfo["knownColor"]!)]);
 
             return true;
         }
@@ -483,6 +626,19 @@ internal static class BinaryFormattedObjectExtensions
             || format.TryGetRectangleF(out value)
             || format.TryGetPointF(out value)
             || format.TryGetNotSupportedException(out value);
+
+    /// <summary>
+    ///  Try to get a supported .NET type object (not WinForms) that does not have a <see cref="TypeConverter"/>.
+    ///  This method is used for <see cref="Clipboard"/> payload deserialization.
+    /// </summary>
+    public static bool TryGetDrawingPrimitivesObject(
+        this BinaryFormattedObject format,
+        [NotNullWhen(true)] out object? value) =>
+        format.TryGetPoint(out value)
+            || format.TryGetSize(out value)
+            || format.TryGetSizeF(out value)
+            || format.TryGetRectangle(out value)
+            || format.TryGetColor(out value);
 
     /// <summary>
     ///  Dereferences <see cref="MemberReference"/> records.

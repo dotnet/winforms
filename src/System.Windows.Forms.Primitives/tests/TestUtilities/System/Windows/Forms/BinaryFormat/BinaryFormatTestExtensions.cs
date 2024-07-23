@@ -19,6 +19,21 @@ internal static class BinaryFormatTestExtensions
     }
 
     /// <summary>
+    ///  Serializes the object using the <see cref="BinaryFormatter"/> and reads it into a <see cref="BinaryFormattedObject"/>.
+    ///  Resolves types using the supplied binder.
+    /// </summary>
+    public static BinaryFormattedObject SerializeAndParse(this object source, SerializationBinder binder)
+    {
+        using Stream stream = source.Serialize();
+        BinaryFormattedObject.Options options = new()
+        {
+            Binder = binder
+        };
+
+        return new(stream, options);
+    }
+
+    /// <summary>
     ///  Serializes the object using the <see cref="BinaryFormatter"/>.
     /// </summary>
     public static Stream Serialize(this object source)
