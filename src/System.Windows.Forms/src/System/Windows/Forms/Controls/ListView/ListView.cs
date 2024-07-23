@@ -4625,11 +4625,11 @@ public partial class ListView : Control
 #pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         if (Application.IsDarkModeEnabled)
         {
-            _ = PInvoke.SetWindowTheme(HWND, "DarkMode_Explorer", null);
+            _ = PInvoke.SetWindowTheme(HWND, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null);
 
             // Get the ListView's ColumnHeader handle:
             var columnHeaderHandle = (HWND)PInvoke.SendMessage(this, PInvoke.LVM_GETHEADER, (WPARAM)0, (LPARAM)0);
-            PInvoke.SetWindowTheme(columnHeaderHandle, "DarkMode_ItemsView", null);
+            PInvoke.SetWindowTheme(columnHeaderHandle, $"{DarkModeIdentifier}_{ItemsViewThemeIdentifier}, null);
         }
 #pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
@@ -5009,6 +5009,9 @@ public partial class ListView : Control
             GC.KeepAlive(this);
         }
     }
+
+    // ListView handles the theme change itself.
+    protected override bool PreventDarkModeThemeChange => true;
 
     private void RealizeAllSubItems()
     {

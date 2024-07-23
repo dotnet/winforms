@@ -1,3 +1,7 @@
+override System.Windows.Forms.ComboBox.PreventDarkModeThemeChange.get -> bool
+override System.Windows.Forms.GroupBox.PreventDarkModeThemeChange.get -> bool
+override System.Windows.Forms.ListView.PreventDarkModeThemeChange.get -> bool
+override System.Windows.Forms.MonthCalendar.PreventDarkModeThemeChange.get -> bool
 static System.Windows.Forms.Application.DefaultDarkMode.get -> System.Windows.Forms.DarkMode
 static System.Windows.Forms.Application.SetDefaultDarkMode(System.Windows.Forms.DarkMode darkMode, bool throwIfImpossible = false) -> void
 static System.Windows.Forms.Control.ControlSystemColors.Current.get -> System.Windows.Forms.Control.ControlSystemColors!
@@ -51,6 +55,7 @@ virtual System.Windows.Forms.ColumnWidthChangingEventHandler.Invoke(object? send
 virtual System.Windows.Forms.ContentsResizedEventHandler.Invoke(object? sender, System.Windows.Forms.ContentsResizedEventArgs! e) -> void
 virtual System.Windows.Forms.Control.OnParentVisualStylesModeChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Control.OnVisualStylesModeChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Control.PreventDarkModeThemeChange.get -> bool
 virtual System.Windows.Forms.Control.ValidateVisualStylesMode(System.Windows.Forms.VisualStylesMode visualStylesMode) -> bool
 virtual System.Windows.Forms.ControlEventHandler.Invoke(object? sender, System.Windows.Forms.ControlEventArgs! e) -> void
 virtual System.Windows.Forms.ConvertEventHandler.Invoke(object? sender, System.Windows.Forms.ConvertEventArgs! e) -> void

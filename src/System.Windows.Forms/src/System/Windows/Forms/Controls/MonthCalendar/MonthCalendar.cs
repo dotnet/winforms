@@ -551,6 +551,9 @@ public partial class MonthCalendar : Control
 
     private static DateTime Now => DateTime.Now.Date;
 
+    // MonthCalendar does not support theming.
+    protected override bool PreventDarkModeThemeChange => true;
+
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]

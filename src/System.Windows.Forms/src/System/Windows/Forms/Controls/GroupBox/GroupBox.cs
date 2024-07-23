@@ -616,6 +616,8 @@ public partial class GroupBox : Control
         base.OnFontChanged(e);
     }
 
+    protected override bool PreventDarkModeThemeChange => true;
+
     /// <summary>
     ///  We use this to process mnemonics and send them on to the first child
     ///  control.

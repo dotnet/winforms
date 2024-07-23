@@ -885,6 +885,9 @@ public partial class ComboBox : ListControl
         }
     }
 
+    // ComboBox handles theming switch itself.
+    protected override bool PreventDarkModeThemeChange => true;
+
     // ComboBox.PreferredHeight returns incorrect values
     // This is translated from windows implementation.  Since we cannot control the size
     // of the combo box, we need to use the same calculation they do.

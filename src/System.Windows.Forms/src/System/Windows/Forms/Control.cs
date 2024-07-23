@@ -163,6 +163,7 @@ public unsafe partial class Control :
 
     internal const string DarkModeIdentifier = "DarkMode";
     internal const string ExplorerThemeIdentifier = "Explorer";
+    internal const string ItemsViewThemeIdentifier = "ItemsView";
 
     private const short PaintLayerBackground = 1;
     private const short PaintLayerForeground = 2;
@@ -7725,19 +7726,12 @@ public unsafe partial class Control :
             }
 
 #pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
-            if (Application.IsDarkModeEnabled)
+            if (Application.IsDarkModeEnabled && !PreventDarkModeThemeChange)
             {
-                // These controls need to be individually themed.
-                if (this is not ComboBox
-                    and not GroupBox
-                    and not ListView
-                    and not MonthCalendar)
-                {
-                    _ = PInvoke.SetWindowTheme(
-                        hwnd: HWND,
-                        pszSubAppName: $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}",
-                        pszSubIdList: null);
-                }
+                _ = PInvoke.SetWindowTheme(
+                    hwnd: HWND,
+                    pszSubAppName: $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}",
+                    pszSubIdList: null);
             }
 #pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
 
@@ -9068,6 +9062,13 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public PreProcessControlState PreProcessControlMessage(ref Message msg)
         => PreProcessControlMessageInternal(target: null, ref msg);
+
+    /// <summary>
+    ///  Allows a derived control to opt out of an explicit theme change in the dark mode context.
+    ///  The control indicates that it is self-responsible for dark-mode-rendering itself completely
+    ///  without relying on Windows theming functionality, or that it manages the respective changes itself.
+    /// </summary>
+    protected virtual bool PreventDarkModeThemeChange => false;
 
     internal static PreProcessControlState PreProcessControlMessageInternal(Control? target, ref Message message)
     {
