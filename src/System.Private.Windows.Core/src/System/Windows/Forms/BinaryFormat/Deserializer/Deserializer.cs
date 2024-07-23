@@ -63,17 +63,6 @@ internal sealed partial class Deserializer : IDeserializer
     // Surrogate cache.
     private readonly Dictionary<Type, ISerializationSurrogate?>? _surrogates;
 
-    // Queue of SerializationInfo objects that need to be applied. These are in depth first order,
-    // if there are no cycles in the graph this ensures that all objects are available when the
-    // SerializationInfo is applied.
-    //
-    // We also keep a hashset for quickly checking to make sure we do not complete objects before we
-    // actually apply the SerializationInfo. While we could mark them in the incomplete dependencies
-    // dictionary, to do so we'd need to know if any referenced object is going to get to this state
-    // even if it hasn't finished parsing, which isn't easy to do with cycles involved.
-    private Queue<PendingSerializationInfo>? _pendingSerializationInfo;
-    private HashSet<int>? _pendingSerializationInfoIds;
-
     // Keeping a separate stack for ids for fast infinite loop checks.
     private readonly Stack<int> _parseStack = [];
     private readonly Stack<ObjectRecordDeserializer> _parserStack = [];
@@ -82,11 +71,7 @@ internal sealed partial class Deserializer : IDeserializer
     private readonly HashSet<int> _incompleteObjects = [];
     public IReadOnlySet<int> IncompleteObjects => _incompleteObjects;
 
-    // For a given object id, the set of ids that it is waiting on to complete.
-    private Dictionary<int, HashSet<int>>? _incompleteDependencies;
-
-    // The pending value updaters. Scanned each time an object is completed.
-    private HashSet<ValueUpdater>? _pendingUpdates;
+    private readonly PendingUpdates _pending;
 
     // Kept as a field to avoid allocating a new one every time we complete objects.
     private readonly Queue<int> _pendingCompletions = [];
@@ -107,6 +92,7 @@ internal sealed partial class Deserializer : IDeserializer
         _recordMap = recordMap;
         _typeResolver = typeResolver;
         Options = options;
+        _pending = new(_deserializedObjects);
 
         if (Options.SurrogateSelector is not null)
         {
@@ -134,21 +120,20 @@ internal sealed partial class Deserializer : IDeserializer
         DeserializeRoot(_rootId);
 
         // Complete all pending SerializationInfo objects.
-        int pendingCount = _pendingSerializationInfo?.Count ?? 0;
-        while (_pendingSerializationInfo is not null && _pendingSerializationInfo.TryDequeue(out PendingSerializationInfo? pending))
+        int pendingCount = _pending.PendingSerializationInfoCount;
+        while (_pending.TryDequeuePendingSerializationInfo(out PendingSerializationInfo? pending))
         {
             // Using pendingCount to only requeue on the first pass.
             if (--pendingCount >= 0
-                && _pendingSerializationInfo.Count != 0
-                && _incompleteDependencies is not null
-                && _incompleteDependencies.TryGetValue(pending.ObjectId, out HashSet<int>? dependencies))
+                && _pending.PendingSerializationInfoCount != 0
+                && _pending.TryGetIncompleteDependencies(pending.ObjectId, out HashSet<int>? dependencies))
             {
                 // We can get here with nested ISerializable value types.
 
                 // Hopefully another pass will complete this.
                 if (dependencies.Count > 0)
                 {
-                    _pendingSerializationInfo.Enqueue(pending);
+                    _pending.Enqueue(pending);
                     continue;
                 }
 
@@ -157,11 +142,10 @@ internal sealed partial class Deserializer : IDeserializer
 
             // All _pendingSerializationInfo objects are considered incomplete.
             pending.Populate(_deserializedObjects, Options.StreamingContext);
-            _pendingSerializationInfoIds?.Remove(pending.ObjectId);
             ((IDeserializer)this).CompleteObject(pending.ObjectId);
         }
 
-        if (_incompleteObjects.Count > 0 || (_pendingUpdates is not null && _pendingUpdates.Count > 0))
+        if (_incompleteObjects.Count > 0 || _pending.PendingValueUpdatesCount > 0)
         {
             // This should never happen outside of corrupted data.
             throw new SerializationException("Objects could not be deserialized completely.");
@@ -280,43 +264,32 @@ internal sealed partial class Deserializer : IDeserializer
         return surrogate;
     }
 
-    void IDeserializer.PendSerializationInfo(PendingSerializationInfo pending)
-    {
-        _pendingSerializationInfo ??= new();
-        _pendingSerializationInfo.Enqueue(pending);
-        _pendingSerializationInfoIds ??= [];
-        _pendingSerializationInfoIds.Add(pending.ObjectId);
-    }
+    void IDeserializer.PendSerializationInfo(PendingSerializationInfo pending) => _pending.Enqueue(pending);
 
-    void IDeserializer.PendValueUpdater(ValueUpdater updater)
-    {
-        // Add the pending update and update the dependencies list.
-
-        _pendingUpdates ??= [];
-        _pendingUpdates.Add(updater);
-
-        _incompleteDependencies ??= [];
-
-        if (_incompleteDependencies.TryGetValue(updater.ObjectId, out HashSet<int>? dependencies))
-        {
-            dependencies.Add(updater.ValueId);
-        }
-        else
-        {
-            _incompleteDependencies.Add(updater.ObjectId, [updater.ValueId]);
-        }
-    }
+    void IDeserializer.PendValueUpdater(ValueUpdater updater) => _pending.Add(updater);
 
     [UnconditionalSuppressMessage(
         "Trimming",
         "IL2026:Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code",
         Justification = "The type is already in the cache of the TypeResolver, no need to mark this one again.")]
+    void IDeserializer.RegisterCompleteEvents(
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] Type type,
+        object @object)
+    {
+        OnDeserialized += SerializationEvents.GetOnDeserializedForType(type, @object);
+
+        if (@object is IDeserializationCallback callback)
+        {
+            OnDeserialization += callback.OnDeserialization;
+        }
+    }
+
     void IDeserializer.CompleteObject(Id id)
     {
         // Need to use a queue as Completion is recursive.
 
         _pendingCompletions.Enqueue(id);
-        Id completed = Id.Null;
+        bool recursed = false;
 
         while (_pendingCompletions.TryDequeue(out int completedId))
         {
@@ -324,77 +297,33 @@ internal sealed partial class Deserializer : IDeserializer
 
             // When we've recursed, we've done so because there are no more dependencies for the current id, so we can
             // remove it from the dictionary. We have to pend as we can't remove while we're iterating the dictionary.
-            if (!completed.IsNull)
+            if (recursed)
             {
-                _incompleteDependencies?.Remove(completed);
+                _pending.RemoveIncompleteDependency(completedId);
 
-                if (_pendingSerializationInfoIds is not null && _pendingSerializationInfoIds.Contains(completed))
+                if (_pending.ContainsPendingSerializationInfo(completedId))
                 {
                     // We came back for an object that has no remaining direct dependencies, but still has
                     // PendingSerializationInfo. As such it cannot be considered completed yet.
                     continue;
                 }
-
-                completed = Id.Null;
             }
 
-            if (_recordMap[completedId] is ClassRecord classRecord
-                && (_incompleteDependencies is null || !_incompleteDependencies.ContainsKey(completedId)))
+            if (_recordMap[completedId] is ClassRecord classRecord && !_pending.HasIncompleteDependencies(completedId))
             {
-                // There are no remaining dependencies. Hook any finished events for this object.
-                // Doing at the end of deserialization for simplicity.
-
-                Type type = _typeResolver.GetType(classRecord.TypeName);
-                object @object = _deserializedObjects[completedId];
-
-                OnDeserialized += SerializationEvents.GetOnDeserializedForType(type, @object);
-
-                if (@object is IDeserializationCallback callback)
-                {
-                    OnDeserialization += callback.OnDeserialization;
-                }
-
-                if (@object is IObjectReference objectReference)
+                // There are no remaining dependencies. Get the real object if it's an IObjectReference.
+                if (_deserializedObjects[completedId] is IObjectReference objectReference)
                 {
                     _deserializedObjects[completedId] = objectReference.GetRealObject(Options.StreamingContext);
                 }
             }
 
-            if (_incompleteDependencies is null)
+            foreach (int dependentCompletion in _pending.CompleteDependencies(completedId))
             {
-                continue;
+                _pendingCompletions.Enqueue(dependentCompletion);
             }
 
-            Debug.Assert(_pendingUpdates is not null);
-
-            foreach ((int incompleteId, HashSet<int> dependencies) in _incompleteDependencies)
-            {
-                if (!dependencies.Remove(completedId))
-                {
-                    continue;
-                }
-
-                // Search for fixups that need to be applied for this dependency.
-                int removals = _pendingUpdates.RemoveWhere((ValueUpdater updater) =>
-                {
-                    if (updater.ValueId != completedId)
-                    {
-                        return false;
-                    }
-
-                    updater.UpdateValue(_deserializedObjects);
-                    return true;
-                });
-
-                if (dependencies.Count != 0)
-                {
-                    continue;
-                }
-
-                // No more dependencies, enqueue for completion
-                completed = incompleteId;
-                _pendingCompletions.Enqueue(incompleteId);
-            }
+            recursed = true;
         }
     }
 }

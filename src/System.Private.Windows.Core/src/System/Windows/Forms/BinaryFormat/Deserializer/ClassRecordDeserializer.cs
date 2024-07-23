@@ -16,10 +16,18 @@ internal abstract class ClassRecordDeserializer : ObjectRecordDeserializer
 {
     private readonly bool _onlyAllowPrimitives;
 
-    private protected ClassRecordDeserializer(ClassRecord classRecord, object @object, IDeserializer deserializer)
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
+    private readonly Type _type;
+
+    private protected ClassRecordDeserializer(
+        ClassRecord classRecord,
+        object @object,
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] Type type,
+        IDeserializer deserializer)
         : base(classRecord, deserializer)
     {
         Object = @object;
+        _type = type;
 
         // We want to be able to complete IObjectReference without having to evaluate their dependencies
         // for circular references. See ValidateNewMemberObjectValue below for more.
@@ -89,6 +97,8 @@ internal abstract class ClassRecordDeserializer : ObjectRecordDeserializer
             throw new SerializationException($"IObjectReference type '{type}' can only have primitive member data.");
         }
     }
+
+    private protected void RegisterCompleteEvents() => Deserializer.RegisterCompleteEvents(_type, Object);
 }
 
 #pragma warning restore SYSLIB0050 // Type or member is obsolete
