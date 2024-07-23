@@ -29,7 +29,7 @@ internal sealed class NameCreationServiceImp : INameCreationService
                 count++;
 
                 string name = comp.Site.Name;
-                if (name.StartsWith(type.Name, StringComparison.Ordinal))
+                if (name.StartsWith(type.Name, StringComparison.OrdinalIgnoreCase))
                 {
                     try
                     {
