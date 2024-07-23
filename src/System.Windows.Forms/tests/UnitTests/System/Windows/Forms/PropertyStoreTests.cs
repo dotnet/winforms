@@ -26,27 +26,30 @@ public class PropertyStoreTests
     private static readonly int s_color = PropertyStore.CreateKey();
     private static readonly int s_formWindowState = PropertyStore.CreateKey();
 
-    public static IEnumerable<object[]> PropertyStore_TryGetValue_Exists_TestData()
+    public static TheoryData<int, object?> PropertyStore_TryGetValue_Exists_TestData()
     {
-        yield return new object[] { s_bool, true };
-        yield return new object[] { s_byte, (byte)1 };
-        yield return new object[] { s_sbyte, (sbyte)-1 };
-        yield return new object[] { s_char, 'a' };
-        yield return new object[] { s_decimal, 1.0m };
-        yield return new object[] { s_double, 1.0d };
-        yield return new object[] { s_float, 1.0f };
-        yield return new object[] { s_int, 1 };
-        yield return new object[] { s_uint, (uint)1 };
-        yield return new object[] { s_long, 1L };
-        yield return new object[] { s_ulong, 1UL };
-        yield return new object[] { s_short, (short)1 };
-        yield return new object[] { s_ushort, (ushort)1 };
-        yield return new object[] { s_object, new() };
-        yield return new object[] { s_color, Color.Red };
-        yield return new object[] { s_formWindowState, FormWindowState.Maximized };
+        return new TheoryData<int, object?>()
+        {
+            { s_bool, true },
+            { s_byte, (byte)1 },
+            { s_sbyte, (sbyte)-1 },
+            { s_char, 'a' },
+            { s_decimal, 1.0m },
+            { s_double, 1.0d },
+            { s_float, 1.0f },
+            { s_int, 1 },
+            { s_uint, (uint)1 },
+            { s_long, 1L },
+            { s_ulong, 1UL },
+            { s_short, (short)1 },
+            { s_ushort, (ushort)1 },
+            { s_object, new() },
+            { s_color, Color.Red },
+            { s_formWindowState, FormWindowState.Maximized }
+        };
     }
 
-    [WinFormsTheory]
+    [Theory]
     [MemberData(nameof(PropertyStore_TryGetValue_Exists_TestData))]
     public void PropertyStore_TryGetValue_Exists(int key, object? value)
     {
@@ -57,7 +60,7 @@ public class PropertyStoreTests
         Assert.Equal(value, outValue);
     }
 
-    [WinFormsTheory]
+    [Theory]
     [MemberData(nameof(PropertyStore_TryGetValue_Exists_TestData))]
     public void PropertyStore_TryGetValue_Exists_Null(int key, object? value)
     {
@@ -68,7 +71,7 @@ public class PropertyStoreTests
         Assert.NotEqual(value, outValue);
     }
 
-    [WinFormsTheory]
+    [Theory]
     [MemberData(nameof(PropertyStore_TryGetValue_Exists_TestData))]
     public void PropertyStore_TryGetValue_NotExists(int key, object? value)
     {
@@ -80,7 +83,7 @@ public class PropertyStoreTests
         Assert.NotEqual(value, outValue);
     }
 
-    [WinFormsFact]
+    [Fact]
     public void PropertyStore_TryGetValue_Enum_Unset_IsDefault()
     {
         PropertyStore store = new();
@@ -90,7 +93,7 @@ public class PropertyStoreTests
         Assert.Equal(windowState, outValue);
     }
 
-    [WinFormsFact]
+    [Fact]
     public void PropertyStore_TryGetValue_Struct_Unset_IsDefault()
     {
         PropertyStore store = new();
@@ -100,7 +103,7 @@ public class PropertyStoreTests
         Assert.Equal(color, outValue);
     }
 
-    [WinFormsFact]
+    [Fact]
     public void PropertyStore_TryGetValue_Primitive_Unset_IsDefault()
     {
         PropertyStore store = new();
@@ -110,7 +113,7 @@ public class PropertyStoreTests
         Assert.Equal(intDefault, outValue);
     }
 
-    [WinFormsFact]
+    [Fact]
     public void PropertyStore_TryGetValue_Enum_Null()
     {
         PropertyStore store = new();
@@ -121,7 +124,7 @@ public class PropertyStoreTests
         Assert.Equal(windowState, outValue);
     }
 
-    [WinFormsFact]
+    [Fact]
     public void PropertyStore_TryGetValue_Struct_Null()
     {
         PropertyStore store = new();
@@ -132,7 +135,7 @@ public class PropertyStoreTests
         Assert.Equal(color, outValue);
     }
 
-    [WinFormsFact]
+    [Fact]
     public void PropertyStore_TryGetValue_Primitive_Null()
     {
         PropertyStore store = new();
@@ -143,7 +146,7 @@ public class PropertyStoreTests
         Assert.Equal(intDefault, outValue);
     }
 
-    [WinFormsFact]
+    [Fact]
     public void PropertyStore_TryGetValue_Enum_Nullable()
     {
         PropertyStore store = new();
@@ -153,7 +156,7 @@ public class PropertyStoreTests
         Assert.Null(outValue);
     }
 
-    [WinFormsFact]
+    [Fact]
     public void PropertyStore_TryGetValue_Struct_Nullable()
     {
         PropertyStore store = new();
@@ -163,7 +166,7 @@ public class PropertyStoreTests
         Assert.Null(outValue);
     }
 
-    [WinFormsFact]
+    [Fact]
     public void PropertyStore_TryGetValue_Primitive_Nullable()
     {
         PropertyStore store = new();
@@ -173,7 +176,7 @@ public class PropertyStoreTests
         Assert.Null(outValue);
     }
 
-    [WinFormsFact]
+    [Fact]
     public void PropertyStore_TryGetValue_Enum_Unset_Nullable()
     {
         PropertyStore store = new();
@@ -182,7 +185,7 @@ public class PropertyStoreTests
         Assert.Null(outValue);
     }
 
-    [WinFormsFact]
+    [Fact]
     public void PropertyStore_TryGetValue_Struct_Unset_Nullable()
     {
         PropertyStore store = new();
@@ -191,7 +194,7 @@ public class PropertyStoreTests
         Assert.Null(outValue);
     }
 
-    [WinFormsFact]
+    [Fact]
     public void PropertyStore_TryGetValue_Primitive_Unset_Nullable()
     {
         PropertyStore store = new();
