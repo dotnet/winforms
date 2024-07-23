@@ -52,39 +52,39 @@ public unsafe partial class Control
 
         private static readonly Color[] s_darkSystemColors =
         [
-            unchecked(Color.FromArgb((int)0xFF2D2D2D)), // ActiveBorder - Dark gray
-            unchecked(Color.FromArgb((int)0xFF0078D4)), // ActiveCaption - Highlighted Text Background
-            unchecked(Color.FromArgb((int)0xFFFFFFFF)), // ActiveCaptionText - White
-            unchecked(Color.FromArgb((int)0xFF252526)), // AppWorkspace - Panel Background
-            unchecked(Color.FromArgb((int)0xFF202020)), // Control - Normal Panel/Windows Background
-            unchecked(Color.FromArgb((int)0xFF4A4A4A)), // ControlDark - A lighter gray for dark mode
-            unchecked(Color.FromArgb((int)0xFF5A5A5A)), // ControlDarkDark - An even lighter gray for dark mode
-            unchecked(Color.FromArgb((int)0xFF2E2E2E)), // ControlLight - Unfocused Textbox Background
-            unchecked(Color.FromArgb((int)0xFF1F1F1F)), // ControlLightLight - Focused Textbox Background
-            unchecked(Color.FromArgb((int)0xFFE0E0E0)), // ControlText - Control Forecolor and Text Color
-            unchecked(Color.FromArgb((int)0xFF000000)), // Desktop - Black
-            unchecked(Color.FromArgb((int)0xFF969696)), // GrayText - Prompt Text Focused TextBox
-            unchecked(Color.FromArgb((int)0xFF2B2B2B)), // Highlight - Highlighted Panel in DarkMode
-            unchecked(Color.FromArgb((int)0xFFFFFFFF)), // HighlightText - White
-            unchecked(Color.FromArgb((int)0xFF4CC2FF)), // HotTrack - Background of the ToggleSwitch
-            unchecked(Color.FromArgb((int)0xFF2D2D2D)), // InactiveBorder - Dark gray
-            unchecked(Color.FromArgb((int)0xFF2B2B2B)), // InactiveCaption - Highlighted Panel in DarkMode
-            unchecked(Color.FromArgb((int)0xFF121212)), // InactiveCaptionText - Middle Dark Panel
-            unchecked(Color.FromArgb((int)0xFF99EBFF)), // Info - Link Label
-            unchecked(Color.FromArgb((int)0xFFCFCFCF)), // InfoText - Prompt Text Color
-            unchecked(Color.FromArgb((int)0xFF2E2E2E)), // Menu - Normal Menu Background
-            unchecked(Color.FromArgb((int)0xFFFFFFFF)), // MenuText - White
-            unchecked(Color.FromArgb((int)0xFF9A9A9A)), // ScrollBar - Scrollbars and Scrollbar Arrows
-            unchecked(Color.FromArgb((int)0xFF202020)), // Window - Window Background
-            unchecked(Color.FromArgb((int)0xFFFFFFFF)), // WindowFrame - White
-            unchecked(Color.FromArgb((int)0xFFFFFFFF)), // WindowText - White
-            unchecked(Color.FromArgb((int)0xFF202020)), // ButtonFace - Same as Window Background
-            unchecked(Color.FromArgb((int)0xFFFFFFFF)), // ButtonHighlight - White
-            unchecked(Color.FromArgb((int)0xFF9A9A9A)), // ButtonShadow - Same as Scrollbar Elements
-            unchecked(Color.FromArgb((int)0xFF0078D4)), // GradientActiveCaption - Same as Highlighted Text Background
-            unchecked(Color.FromArgb((int)0xFF2B2B2B)), // GradientInactiveCaption - Same as Highlighted Panel in DarkMode
-            unchecked(Color.FromArgb((int)0xFF2E2E2E)), // MenuBar - Same as Normal Menu Background
-            unchecked(Color.FromArgb((int)0xFF3D3D3D))  // MenuHighlight - Same as Highlighted Menu Background
+            unchecked(Color.FromArgb((int)0xFF464646)), // FFB4B4B4 - FF464646: ActiveBorder - Dark gray
+            unchecked(Color.FromArgb((int)0xFF3C5F78)), // FF99B4D1 - FF3C5F78: ActiveCaption - Highlighted Text Background
+            unchecked(Color.FromArgb((int)0xFFFFFFFF)), // FF000000 - FFBEBEBE: ActiveCaptionText - White
+            unchecked(Color.FromArgb((int)0xFF3C3C3C)), // FFABABAB - FF3C3C3C: AppWorkspace - Panel Background
+            unchecked(Color.FromArgb((int)0xFF202020)), // FFF0F0F0 - FF373737: Control - Normal Panel/Windows Background
+            unchecked(Color.FromArgb((int)0xFF4A4A4A)), // FFA0A0A0 - FF464646: ControlDark - A lighter gray for dark mode
+            unchecked(Color.FromArgb((int)0xFF5A5A5A)), // FF696969 - FF5A5A5A: ControlDarkDark - An even lighter gray for dark mode
+            unchecked(Color.FromArgb((int)0xFF2E2E2E)), // FFE3E3E3 - FF2E2E2E: ControlLight - Unfocused Textbox Background
+            unchecked(Color.FromArgb((int)0xFF1F1F1F)), // FFFFFFFF - FF1F1F1F: ControlLightLight - Focused Textbox Background
+            unchecked(Color.FromArgb((int)0xFFFFFFFF)), // FF000000 - FFFFFFFF: ControlText - Control Forecolor and Text Color
+            unchecked(Color.FromArgb((int)0xFF101010)), // FF000000 - FF101010: Desktop - Black
+            unchecked(Color.FromArgb((int)0xFF969696)), // FF6D6D6D - FF969696: GrayText - Prompt Text Focused TextBox
+            unchecked(Color.FromArgb((int)0xFF2864B4)), // FF0078D7 - FF2864B4: Highlight - Highlighted Panel in DarkMode
+            unchecked(Color.FromArgb((int)0xFF000000)), // FFFFFFFF - FF000000: HighlightText - White
+            unchecked(Color.FromArgb((int)0xFF2D5FAF)), // FF0066CC - FF2D5FAF: HotTrack - Background of the ToggleSwitch
+            unchecked(Color.FromArgb((int)0xFF3C3F41)), // FFF4F7FC - FF3C3F41: InactiveBorder - Dark gray
+            unchecked(Color.FromArgb((int)0xFF374B5A)), // FFBFCBDD - FF374B5A: InactiveCaption - Highlighted Panel in DarkMode
+            unchecked(Color.FromArgb((int)0xFFBEBEBE)), // FF000000 - FFBEBEBE: InactiveCaptionText - Middle Dark Panel
+            unchecked(Color.FromArgb((int)0xFF50503C)), // FFFFFE1  - FF50503C: Info - Link Label
+            unchecked(Color.FromArgb((int)0xFFBEBEBE)), // FF000000 - FFBEBEBE: InfoText - Prompt Text Color
+            unchecked(Color.FromArgb((int)0xFF373737)), // FFF0F0F0 - FF373737: Menu - Normal Menu Background
+            unchecked(Color.FromArgb((int)0xFFF0F0F0)), // FF000000 - FFF0F0F0: MenuText - White
+            unchecked(Color.FromArgb((int)0xFF505050)), // FFC8C8C8 - FF505050: ScrollBar - Scrollbars and Scrollbar Arrows
+            unchecked(Color.FromArgb((int)0xFF323232)), // FFFFFFFF - FF323232: Window - Window Background
+            unchecked(Color.FromArgb((int)0xFF282828)), // FF646464 - FF282828: WindowFrame - White
+            unchecked(Color.FromArgb((int)0xFFF0F0F0)), // FF000000 - FFF0F0F0: WindowText - White
+            unchecked(Color.FromArgb((int)0xFF202020)), // FFF0F0F0 - FF373737: ButtonFace - Same as Window Background
+            unchecked(Color.FromArgb((int)0xFF101010)), // FFFFFFFF - FF101010: ButtonHighlight - White
+            unchecked(Color.FromArgb((int)0xFF464646)), // FFA0A0A0 - FF464646: ButtonShadow - Same as Scrollbar Elements
+            unchecked(Color.FromArgb((int)0XFF416482)), // FFB9D1EA - FF416482: GradientActiveCaption - Same as Highlighted Text Background
+            unchecked(Color.FromArgb((int)0xFF557396)), // FFD7E4F2 - FF557396: GradientInactiveCaption - Same as Highlighted Panel in DarkMode
+            unchecked(Color.FromArgb((int)0xFF373737)), // FFF0F0F0 - FF373737: MenuBar - Same as Normal Menu Background
+            unchecked(Color.FromArgb((int)0xFF2A80D2))  // FF3399FF - FF2A80D2: MenuHighlight - Same as Highlighted Menu Background
         ];
 
         internal ControlSystemColors(bool isDarkMode = false)
@@ -98,11 +98,6 @@ public unsafe partial class Control
             for (int i = 0; i < sourceSpan.Length; i++)
             {
                 targetSpan[i] = sourceSpan[i];
-            }
-
-            if (Debugger.IsAttached)
-            {
-                Debugger.Break();
             }
 
             ActiveBorder = _mappedSystemColors[GetSystemColorLookupIndex(KnownColor.ActiveBorder)];

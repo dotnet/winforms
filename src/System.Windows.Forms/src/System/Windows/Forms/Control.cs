@@ -3652,6 +3652,7 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     // [SRDescription(nameof(SR.ControlVisualStylesModeChangedDescr))]
     [SRDescription("VisualStyleMode Description.")]
+    [Experimental("WFO9000")]
     public event EventHandler? VisualStylesModeChanged
     {
         add => Events.AddHandler(s_visualStylesModeChangedEvent, value);
@@ -3700,18 +3701,6 @@ public unsafe partial class Control :
                 && Equals(value, VisualStylesMode))
             {
                 return;
-            }
-
-            if (!ValidateVisualStylesMode(value))
-            {
-                throw new NotSupportedException(
-                    string.Format(
-                        format: SR.VisualStylesModeNotSupported,
-                        arg0: value,
-                        arg1: GetType().Name,
-                        arg2: string.IsNullOrWhiteSpace(Name)
-                            ? "- - -"
-                            : Name));
             }
 
             // When VisualStyleMode was different than its parent before, but now it is about to become the same,
@@ -11515,16 +11504,6 @@ public unsafe partial class Control :
     internal virtual void OnBoundsUpdate(int x, int y, int width, int height)
     {
     }
-
-    [Experimental("WFO9000")]
-    protected virtual bool ValidateVisualStylesMode(VisualStylesMode visualStylesMode)
-        => visualStylesMode switch
-        {
-            VisualStylesMode.Disabled => true,
-            VisualStylesMode.Classic => true,
-            VisualStylesMode.Net10 => true,
-            _ => false,
-        };
 
     // These Window* methods allow us to keep access to the "window"
     // property private, which is important for restricting access to the

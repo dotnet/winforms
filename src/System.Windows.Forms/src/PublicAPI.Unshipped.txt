@@ -36,8 +36,8 @@ System.Windows.Forms.Form.WindowCornerPreference.DoNotRound = 1 -> System.Window
 System.Windows.Forms.Form.WindowCornerPreference.Round = 2 -> System.Windows.Forms.Form.WindowCornerPreference
 System.Windows.Forms.Form.WindowCornerPreference.RoundSmall = 3 -> System.Windows.Forms.Form.WindowCornerPreference
 System.Windows.Forms.VisualStylesMode
-System.Windows.Forms.VisualStylesMode.Classic = 1 -> System.Windows.Forms.VisualStylesMode
-System.Windows.Forms.VisualStylesMode.Disabled = 0 -> System.Windows.Forms.VisualStylesMode
+System.Windows.Forms.VisualStylesMode.Classic = 0 -> System.Windows.Forms.VisualStylesMode
+System.Windows.Forms.VisualStylesMode.Disabled = 1 -> System.Windows.Forms.VisualStylesMode
 System.Windows.Forms.VisualStylesMode.Net10 = 2 -> System.Windows.Forms.VisualStylesMode
 virtual System.Windows.Forms.Control.DefaultVisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
 virtual System.Windows.Forms.Control.OnDebuggerBreak(string! ticket) -> bool
@@ -56,7 +56,6 @@ virtual System.Windows.Forms.ContentsResizedEventHandler.Invoke(object? sender, 
 virtual System.Windows.Forms.Control.OnParentVisualStylesModeChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Control.OnVisualStylesModeChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Control.PreventDarkModeThemeChange.get -> bool
-virtual System.Windows.Forms.Control.ValidateVisualStylesMode(System.Windows.Forms.VisualStylesMode visualStylesMode) -> bool
 virtual System.Windows.Forms.ControlEventHandler.Invoke(object? sender, System.Windows.Forms.ControlEventArgs! e) -> void
 virtual System.Windows.Forms.ConvertEventHandler.Invoke(object? sender, System.Windows.Forms.ConvertEventArgs! e) -> void
 virtual System.Windows.Forms.DataGridViewAutoSizeColumnModeEventHandler.Invoke(object? sender, System.Windows.Forms.DataGridViewAutoSizeColumnModeEventArgs! e) -> void

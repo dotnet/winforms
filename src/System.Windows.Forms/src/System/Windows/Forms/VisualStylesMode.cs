@@ -10,14 +10,14 @@ namespace System.Windows.Forms;
 public enum VisualStylesMode : short
 {
     /// <summary>
-    ///  Visual renderers are not in use. See <see cref="UseVisualStyles"/>; Controls are based on Version 5 of ComCtl.
-    /// </summary>
-    Disabled = 0,
-
-    /// <summary>
     ///  The classic version of the visual renderer (.NET 8 and earlier), using the Version 6 of ComCtl.
     /// </summary>
-    Classic = 1,
+    Classic = 0,
+
+    /// <summary>
+    ///  Visual renderers are not in use. See <see cref="UseVisualStyles"/>; Controls are based on Version 5 of ComCtl.
+    /// </summary>
+    Disabled = 1,
 
     /// <summary>
     ///  The .NET 10 version of the visual renderer. Controls are rendered using the latest version
