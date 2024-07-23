@@ -13,35 +13,34 @@ public sealed class ButtonBaseDesignerTests
     public void ButtonBaseDesigner_Constructor_Initialize_AutoResizeHandles()
     {
         using ButtonBaseDesigner buttonBaseDesigner = new();
-        bool autoResizeHandles = buttonBaseDesigner.AutoResizeHandles;
 
-        buttonBaseDesigner.Should().NotBeNull();
-        autoResizeHandles.Should().Be(true);
+        buttonBaseDesigner.AutoResizeHandles.Should().Be(true);
     }
 
-    public static IEnumerable<object?[]> IDictionary_TestData()
+    public static TheoryData<IDictionary<string, object>?> IDictionary_TheoryData => new()
     {
-        yield return new object?[] { null };
-        yield return new object[] { new Dictionary<string, object>() };
-    }
+        null,
+        new Dictionary<string, object>()
+    };
 
     [Theory]
-    [MemberData(nameof(IDictionary_TestData))]
-    public void ButtonBaseDesigner_InitializeNewComponent_WithDefaultButton(IDictionary defaultValues)
+    [MemberData(nameof(IDictionary_TheoryData))]
+    public void ButtonBaseDesigner_InitializeNewComponent_WithDefaultButton(IDictionary<string, object>? defaultValues)
     {
         using ButtonBaseDesigner buttonBaseDesigner = new();
         using Button button = new();
         buttonBaseDesigner.Initialize(button);
 
-        buttonBaseDesigner.InitializeNewComponent(defaultValues);
+        buttonBaseDesigner.InitializeNewComponent((IDictionary?)defaultValues);
+        Assert.False(button.IsHandleCreated);
     }
 
     [Theory]
-    [MemberData(nameof(IDictionary_TestData))]
-    public void ButtonBaseDesigner_InitializeNewComponent_NotInitialized(IDictionary defaultValues)
+    [MemberData(nameof(IDictionary_TheoryData))]
+    public void ButtonBaseDesigner_InitializeNewComponent_NotInitialized(IDictionary<string, object>? defaultValues)
     {
         using ButtonBaseDesigner buttonBaseDesigner = new();
-        Action action = () => buttonBaseDesigner.InitializeNewComponent(defaultValues);
+        Action action = () => buttonBaseDesigner.InitializeNewComponent((IDictionary?)defaultValues);
         action.Should().Throw<InvalidOperationException>();
     }
 
