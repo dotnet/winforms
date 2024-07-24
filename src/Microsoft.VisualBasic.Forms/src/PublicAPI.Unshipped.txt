@@ -1,6 +1,0 @@
-Overridable Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventHandler.Invoke(sender As Object, e As Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventArgs) -> Void
-Overridable Microsoft.VisualBasic.ApplicationServices.ShutdownEventHandler.Invoke(sender As Object, e As System.EventArgs) -> Void
-Overridable Microsoft.VisualBasic.ApplicationServices.StartupEventHandler.Invoke(sender As Object, e As Microsoft.VisualBasic.ApplicationServices.StartupEventArgs) -> Void
-Overridable Microsoft.VisualBasic.ApplicationServices.StartupNextInstanceEventHandler.Invoke(sender As Object, e As Microsoft.VisualBasic.ApplicationServices.StartupNextInstanceEventArgs) -> Void
-Overridable Microsoft.VisualBasic.ApplicationServices.UnhandledExceptionEventHandler.Invoke(sender As Object, e As Microsoft.VisualBasic.ApplicationServices.UnhandledExceptionEventArgs) -> Void
-Overridable Microsoft.VisualBasic.Devices.NetworkAvailableEventHandler.Invoke(sender As Object, e As Microsoft.VisualBasic.Devices.NetworkAvailableEventArgs) -> Void

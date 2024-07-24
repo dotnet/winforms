@@ -19,6 +19,7 @@ using Windows.Win32.System.Ole;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
 using System.Windows.Forms.BinaryFormat;
+using RECTL = Windows.Win32.Foundation.RECTL;
 
 namespace System.Windows.Forms;
 

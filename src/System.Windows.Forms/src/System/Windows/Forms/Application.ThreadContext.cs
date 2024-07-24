@@ -171,7 +171,7 @@ public sealed partial class Application
         }
 
         /// <summary>
-        ///  Retrieves the <see cref="MarshalingControl"/>.
+        ///  Retrieves the <see cref="MarshallingControl"/>.
         /// </summary>
         internal Control MarshallingControl
         {

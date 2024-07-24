@@ -7,6 +7,7 @@ using Windows.Win32.System.Com;
 using Windows.Win32.System.Com.StructuredStorage;
 using Windows.Win32.System.Ole;
 using ComIDataObject = Windows.Win32.System.Com.IDataObject;
+using RECTL = Windows.Win32.Foundation.RECTL;
 
 namespace System.Windows.Forms;
 

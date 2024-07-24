@@ -153,14 +153,14 @@ internal static unsafe partial class ComHelpers
         return false;
     }
 
-    /// <inheritdoc cref="TryGetObjectForIUnknown{TObject}(IUnknown*, bool, out TObject?)"/>
+    /// <inheritdoc cref="TryGetObjectForIUnknown{TObject}(IUnknown*, bool, out TObject)"/>
     internal static bool TryGetObjectForIUnknown<TObject, TInterface>(
         ComScope<TInterface> comScope,
         [NotNullWhen(true)] out TObject? @object)
         where TObject : class
         where TInterface : unmanaged, IComIID => TryGetObjectForIUnknown(comScope.Value, out @object);
 
-    /// <inheritdoc cref="TryGetObjectForIUnknown{TObject}(IUnknown*, bool, out TObject?)"/>
+    /// <inheritdoc cref="TryGetObjectForIUnknown{TObject}(IUnknown*, bool, out TObject)"/>
     internal static bool TryGetObjectForIUnknown<TObject, TInterface>(
         TInterface* comPointer,
         [NotNullWhen(true)] out TObject? @object)
@@ -190,7 +190,7 @@ internal static unsafe partial class ComHelpers
         return TryGetObjectForIUnknown(unknown, out @object);
     }
 
-    /// <inheritdoc cref="TryGetObjectForIUnknown{TObject}(IUnknown*, bool, out TObject?)"/>
+    /// <inheritdoc cref="TryGetObjectForIUnknown{TObject}(IUnknown*, bool, out TObject)"/>
     internal static bool TryGetObjectForIUnknown<TObject>(
         IUnknown* unknown,
         [NotNullWhen(true)] out TObject? @object) where TObject : class =>
