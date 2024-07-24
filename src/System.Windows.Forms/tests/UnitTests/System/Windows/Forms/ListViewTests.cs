@@ -5203,6 +5203,38 @@ public class ListViewTests
         Assert.True(listView.IsHandleCreated);
     }
 
+    public static TheoryData<ListViewItem> GetListViewItemTheoryData()
+    {
+        return new TheoryData<ListViewItem>
+        {
+            { new("Item 1") },
+            { null }
+        };
+    }
+
+    [WinFormsTheory]
+    [MemberData(nameof(GetListViewItemTheoryData))]
+    public void ListView_VirtualMode_ListViewItemReleaseSuccess(ListViewItem listItem)
+    {
+        using ListView listView = new()
+        {
+            VirtualMode = true,
+            VirtualListSize = 1
+        };
+
+        listView.RetrieveVirtualItem += (s, e) =>
+        {
+            e.Item = e.ItemIndex switch
+            {
+                0 => listItem,
+                _ => throw new NotImplementedException()
+            };
+        };
+
+        Action action = () => listView.Items.GetItemByIndex(0)?.ReleaseUiaProvider();
+        action.Should().NotThrow();
+    }
+
     private class SubListViewAccessibleObject : ListView.ListViewAccessibleObject
     {
         internal string AnnouncedColumn { get; private set; }
