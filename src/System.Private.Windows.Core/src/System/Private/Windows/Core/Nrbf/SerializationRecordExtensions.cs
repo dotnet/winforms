@@ -344,7 +344,7 @@ internal static class SerializationRecordExtensions
             exception = null;
 
             if (record is not ClassRecord classInfo
-                || classInfo.TypeNameMatches(typeof(NotSupportedException)))
+                || !classInfo.TypeNameMatches(typeof(NotSupportedException)))
             {
                 return false;
             }
