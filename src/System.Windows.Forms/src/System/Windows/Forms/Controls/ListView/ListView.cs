@@ -2784,7 +2784,6 @@ public partial class ListView : Control
 
                     // get the node
                     ListViewItem item = Items[(int)nmcd->nmcd.dwItemSpec];
-
                     // if we're doing the whole row in one style, change our result!
                     if (dontmess && item.UseItemStyleForSubItems)
                     {
