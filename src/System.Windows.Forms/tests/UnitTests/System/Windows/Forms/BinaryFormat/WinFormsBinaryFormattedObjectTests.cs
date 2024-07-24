@@ -26,7 +26,7 @@ public class WinFormsBinaryFormattedObjectTests
         root.TypeName.FullName.Should().Be(typeof(Bitmap).FullName);
         root.TypeName.AssemblyName!.FullName.Should().Be(AssemblyRef.SystemDrawing);
         Formats.Nrbf.ArrayRecord arrayRecord = root.GetArrayRecord("Data")!;
-        arrayRecord.Should().BeOfType<SZArrayRecord<byte>>();
+        arrayRecord.Should().BeAssignableTo<SZArrayRecord<byte>>();
         rootRecord.TryGetBitmap(out object? result).Should().BeTrue();
         using Bitmap deserialized = result.Should().BeOfType<Bitmap>().Which;
         deserialized.Size.Should().Be(bitmap.Size);
@@ -79,7 +79,7 @@ public class WinFormsBinaryFormattedObjectTests
         Formats.Nrbf.ClassRecord root = rootRecord.Should().BeAssignableTo<Formats.Nrbf.ClassRecord>().Subject;
         root.TypeName.FullName.Should().Be(typeof(ImageListStreamer).FullName);
         root.TypeName.AssemblyName!.FullName.Should().Be(typeof(WinFormsBinaryFormatWriter).Assembly.FullName);
-        root.GetArrayRecord("Data")!.Should().BeOfType<SZArrayRecord<byte>>();
+        root.GetArrayRecord("Data")!.Should().BeAssignableTo<SZArrayRecord<byte>>();
 
         rootRecord.TryGetImageListStreamer(out object? result).Should().BeTrue();
         using ImageListStreamer deserialized = result.Should().BeOfType<ImageListStreamer>().Which;
