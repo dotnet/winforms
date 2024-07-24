@@ -24,13 +24,14 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists.</param>
         ''' <param name="onUserCancel"></param>
-        Friend Shared Function DownloadFileAsync(addressUri As Uri,
-                                    destinationFileName As String,
-                                    networkCredentials As ICredentials,
-                                    dialog As ProgressDialog,
-                                    connectionTimeout As Integer,
-                                    overwrite As Boolean,
-                                    onUserCancel As UICancelOption) As Task
+        Friend Shared Function DownloadFileAsync(
+            addressUri As Uri,
+            destinationFileName As String,
+            networkCredentials As ICredentials,
+            dialog As ProgressDialog,
+            connectionTimeout As Integer,
+            overwrite As Boolean,
+            onUserCancel As UICancelOption) As Task
 
             Dim clientHandler As HttpClientHandler = If(networkCredentials Is Nothing,
                                                         New HttpClientHandler,
@@ -55,23 +56,28 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="dialog">A ProgressDialog or Nothing.</param>
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists.</param>
-        Friend Shared Async Function DownloadFileAsync(addressUri As Uri,
-                                        destinationFileName As String,
-                                        userName As String,
-                                        password As String,
-                                        dialog As ProgressDialog,
-                                        connectionTimeout As Integer,
-                                        overwrite As Boolean) As Task
+        Friend Shared Async Function DownloadFileAsync(
+            addressUri As Uri,
+            destinationFileName As String,
+            userName As String,
+            password As String,
+            dialog As ProgressDialog,
+            connectionTimeout As Integer,
+            overwrite As Boolean) As Task
 
-            Await DownloadFileAsync(addressUri,
-                    destinationFileName,
-                    userName,
-                    password,
-                    dialog,
-                    connectionTimeout,
-                    overwrite,
-                    onUserCancel:=UICancelOption.ThrowException).ConfigureAwait(continueOnCapturedContext:=False)
+            Dim networkCredentials As ICredentials = GetNetworkCredentials(userName, password)
+
+            Await DownloadFileAsync(
+                addressUri,
+                destinationFileName,
+                networkCredentials,
+                dialog,
+                connectionTimeout,
+                overwrite,
+                onUserCancel:=UICancelOption.ThrowException).ConfigureAwait(continueOnCapturedContext:=False)
         End Function
+
+#If False Then ' This is here of API review determains its needed
 
         ''' <summary>
         '''  Downloads a file from the network to the specified path.
@@ -84,26 +90,29 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists.</param>
         ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing).</param>
-        Friend Shared Async Function DownloadFileAsync(addressUri As Uri,
-                                        destinationFileName As String,
-                                        userName As String,
-                                        password As String,
-                                        dialog As ProgressDialog,
-                                        connectionTimeout As Integer,
-                                        overwrite As Boolean,
-                                        onUserCancel As UICancelOption) As Task
+        Friend Shared Async Function DownloadFileAsync(
+            addressUri As Uri,
+            destinationFileName As String,
+            userName As String,
+            password As String,
+            dialog As ProgressDialog,
+            connectionTimeout As Integer,
+            overwrite As Boolean,
+            onUserCancel As UICancelOption) As Task
 
             ' Get network credentials
             Dim networkCredentials As ICredentials = GetNetworkCredentials(userName, password)
 
-            Await DownloadFileAsync(addressUri,
-                    destinationFileName,
-                    networkCredentials,
-                    dialog,
-                    connectionTimeout,
-                    overwrite,
-                    onUserCancel).ConfigureAwait(continueOnCapturedContext:=False)
+            Await DownloadFileAsync(
+                addressUri,
+                destinationFileName,
+                networkCredentials,
+                dialog,
+                connectionTimeout,
+                overwrite,
+                onUserCancel).ConfigureAwait(continueOnCapturedContext:=False)
         End Function
+#End If
 
         ''' <summary>
         '''  Downloads a file from the network to the specified path.
@@ -116,16 +125,17 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists.</param>
         ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing).</param>
         ''' <remarks>Calls to all the other overloads will come through here.</remarks>
-        Friend Shared Async Function DownloadFileAsync(addressUri As Uri,
-                                        destinationFileName As String,
-                                        clientHandler As HttpClientHandler,
-                                        dialog As ProgressDialog,
-                                        connectionTimeout As Integer,
-                                        overwrite As Boolean,
-                                        onUserCancel As UICancelOption) As Task
+        Friend Shared Async Function DownloadFileAsync(
+            addressUri As Uri,
+            destinationFileName As String,
+            clientHandler As HttpClientHandler,
+            dialog As ProgressDialog,
+            connectionTimeout As Integer,
+            overwrite As Boolean,
+            onUserCancel As UICancelOption) As Task
+
             If connectionTimeout <= 0 Then
-                ' DO NOT USE NameOf(connectionTimeout)
-                Throw ExUtils.GetArgumentExceptionWithArgName("connectionTimeOut", SR.Network_BadConnectionTimeout)
+                Throw ExUtils.GetArgumentExceptionWithArgName(NameOf(connectionTimeout), SR.Network_BadConnectionTimeout)
             End If
 
             If addressUri Is Nothing Then
@@ -190,22 +200,24 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="dialog">A ProgressDialog or Nothing.</param>
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists.</param>
-        Friend Shared Async Function DownloadFileAsync(address As String,
-                                        destinationFileName As String,
-                                        userName As String,
-                                        password As String,
-                                        dialog As ProgressDialog,
-                                        connectionTimeout As Integer,
-                                        overwrite As Boolean) As Task
+        Friend Shared Async Function DownloadFileAsync(
+            address As String,
+            destinationFileName As String,
+            userName As String,
+            password As String,
+            dialog As ProgressDialog,
+            connectionTimeout As Integer,
+            overwrite As Boolean) As Task
 
-            Await DownloadFileAsync(address,
-                    destinationFileName,
-                    userName,
-                    password,
-                    dialog,
-                    connectionTimeout,
-                    overwrite,
-                    onUserCancel:=UICancelOption.ThrowException).ConfigureAwait(continueOnCapturedContext:=False)
+            Await DownloadFileAsync(
+                address,
+                destinationFileName,
+                userName,
+                password,
+                dialog,
+                connectionTimeout,
+                overwrite,
+                onUserCancel:=UICancelOption.ThrowException).ConfigureAwait(continueOnCapturedContext:=False)
         End Function
 
         ''' <summary>
@@ -219,14 +231,15 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists.</param>
         ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing).</param>
-        Friend Shared Async Function DownloadFileAsync(address As String,
-                                        destinationFileName As String,
-                                        userName As String,
-                                        password As String,
-                                        dialog As ProgressDialog,
-                                        connectionTimeout As Integer,
-                                        overwrite As Boolean,
-                                        onUserCancel As UICancelOption) As Task
+        Friend Shared Async Function DownloadFileAsync(
+            address As String,
+            destinationFileName As String,
+            userName As String,
+            password As String,
+            dialog As ProgressDialog,
+            connectionTimeout As Integer,
+            overwrite As Boolean,
+            onUserCancel As UICancelOption) As Task
 
             If String.IsNullOrWhiteSpace(address) Then
                 Throw ExUtils.GetArgumentNullException(NameOf(address))
@@ -237,13 +250,14 @@ Namespace Microsoft.VisualBasic.Devices
             ' Get network credentials
             Dim networkCredentials As ICredentials = GetNetworkCredentials(userName, password)
 
-            Await DownloadFileAsync(addressUri,
-                    destinationFileName,
-                    networkCredentials,
-                    dialog,
-                    connectionTimeout,
-                    overwrite,
-                    onUserCancel).ConfigureAwait(continueOnCapturedContext:=False)
+            Await DownloadFileAsync(
+                addressUri,
+                destinationFileName,
+                networkCredentials,
+                dialog,
+                connectionTimeout,
+                overwrite,
+                onUserCancel).ConfigureAwait(continueOnCapturedContext:=False)
         End Function
 
         ''' <summary>
@@ -258,20 +272,22 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <remarks>
         '''  Function will Throw on unhandled exceptions.
         ''' </remarks>
-        Friend Shared Async Function DownloadFileAsync(addressUri As Uri,
-                                        destinationFileName As String,
-                                        networkCredentials As ICredentials,
-                                        dialog As ProgressDialog,
-                                        connectionTimeout As Integer,
-                                        overwrite As Boolean) As Task
+        Friend Shared Async Function DownloadFileAsync(
+            addressUri As Uri,
+            destinationFileName As String,
+            networkCredentials As ICredentials,
+            dialog As ProgressDialog,
+            connectionTimeout As Integer,
+            overwrite As Boolean) As Task
 
-            Await DownloadFileAsync(addressUri,
-                    destinationFileName,
-                    networkCredentials,
-                    dialog,
-                    connectionTimeout,
-                    overwrite,
-                    onUserCancel:=UICancelOption.ThrowException).ConfigureAwait(continueOnCapturedContext:=False)
+            Await DownloadFileAsync(
+                addressUri,
+                destinationFileName,
+                networkCredentials,
+                dialog,
+                connectionTimeout,
+                overwrite,
+                onUserCancel:=UICancelOption.ThrowException).ConfigureAwait(continueOnCapturedContext:=False)
         End Function
 
     End Class

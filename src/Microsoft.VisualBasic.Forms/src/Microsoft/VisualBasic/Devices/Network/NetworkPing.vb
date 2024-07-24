@@ -72,7 +72,10 @@ Namespace Microsoft.VisualBasic.Devices
             End If
 
             Dim pingMaker As New NetInfoAlias.Ping
-            Dim reply As NetInfoAlias.PingReply = pingMaker.Send(hostNameOrAddress, timeout, PingBuffer)
+            Dim reply As NetInfoAlias.PingReply = pingMaker.Send(
+                hostNameOrAddress,
+                timeout,
+                PingBuffer)
             If reply.Status = NetInfoAlias.IPStatus.Success Then
                 Return True
             End If

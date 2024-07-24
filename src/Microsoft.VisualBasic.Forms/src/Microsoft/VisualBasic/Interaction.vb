@@ -25,11 +25,11 @@ Namespace Microsoft.VisualBasic
             Dim errorCode As Integer = 0
 
             If (PathName Is Nothing) Then
-                Throw New ArgumentNullException(ExUtils.GetResourceString(SR.Argument_InvalidNullValue1, "Pathname"))
+                Throw New ArgumentNullException(ExUtils.GetResourceString(SR.Argument_InvalidNullValue1, NameOf(PathName)))
             End If
 
             If (Style < 0 OrElse Style > 9) Then
-                Throw New ArgumentException(ExUtils.GetResourceString(SR.Argument_InvalidValue1, "Style"))
+                Throw New ArgumentException(ExUtils.GetResourceString(SR.Argument_InvalidValue1, NameOf(Style)))
             End If
 
             NativeMethods.GetStartupInfo(startupInfo)
