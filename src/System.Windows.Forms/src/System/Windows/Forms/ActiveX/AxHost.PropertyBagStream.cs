@@ -2,11 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections;
+using System.Formats.Nrbf;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Private.Windows.Core.BinaryFormat;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Com.StructuredStorage;
 using Windows.Win32.System.Variant;
+using System.Windows.Forms.Nrbf;
 
 namespace System.Windows.Forms;
 
@@ -23,8 +25,8 @@ public abstract unsafe partial class AxHost
             long position = stream.Position;
             try
             {
-                BinaryFormattedObject format = new(stream);
-                if (format.TryGetPrimitiveHashtable(out _bag!))
+                SerializationRecord rootRecord = stream.Decode();
+                if (rootRecord.TryGetPrimitiveHashtable(out _bag!))
                 {
                     return;
                 }

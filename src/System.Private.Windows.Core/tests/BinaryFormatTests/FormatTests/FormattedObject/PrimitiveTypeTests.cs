@@ -6,6 +6,8 @@ using System.Text;
 using System.Private.Windows.Core.BinaryFormat;
 using FormatTests.Common;
 using Record = System.Private.Windows.Core.BinaryFormat.Record;
+using System.Formats.Nrbf;
+using System.Windows.Forms.Nrbf;
 
 namespace FormatTests.FormattedObject;
 
@@ -114,8 +116,8 @@ public class PrimitiveTypeTests : SerializationTest<FormattedObjectSerializer>
     [MemberData(nameof(Primitive_ExtendedData))]
     public void BinaryFormattedObject_ReadPrimitive(object value)
     {
-        BinaryFormattedObject formattedObject = new(Serialize(value));
-        formattedObject.TryGetPrimitiveType(out object? deserialized).Should().BeTrue();
+        SerializationRecord rootRecord = NrbfDecoder.Decode(Serialize(value));
+        rootRecord.TryGetPrimitiveType(out object? deserialized).Should().BeTrue();
         deserialized.Should().Be(value);
     }
 
