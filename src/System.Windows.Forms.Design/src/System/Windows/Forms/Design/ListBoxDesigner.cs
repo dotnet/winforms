@@ -17,10 +17,7 @@ internal class ListBoxDesigner : ControlDesigner
 
     public bool IntegralHeight
     {
-        get
-        {
-            return (bool)ShadowProperties[nameof(IntegralHeight)]!;
-        }
+        get => (bool)ShadowProperties[nameof(IntegralHeight)]!;
         set
         {
             ShadowProperties[nameof(IntegralHeight)] = value;
@@ -131,9 +128,8 @@ internal class ListBoxDesigner : ControlDesigner
         // VSWhidbey 497239 - Setting FormattingEnabled clears the text we set in
         // OnCreateHandle so let's set it here again. We need to keep setting the text in
         // OnCreateHandle, otherwise we introduce VSWhidbey 498162.
-        if (TypeDescriptor.GetProperties(Component)[nameof(ListBox.Name)] is PropertyDescriptor nameProp
-            && nameProp.GetValue(Component) is { } componentName
-            && componentName.ToString() is { } name)
+        if (TypeDescriptorHelper.TryGetPropertyValue(Component, nameof(ListBox.Name), out string? name)
+            && name is not null)
         {
             UpdateControlName(name);
         }
@@ -160,9 +156,8 @@ internal class ListBoxDesigner : ControlDesigner
         if (e.Component == Component
             && e.Member is not null
             && e.Member.Name == nameof(ListBox.Items)
-            && TypeDescriptor.GetProperties(Component)[nameof(ListBox.Name)] is PropertyDescriptor nameProp
-            && nameProp.GetValue(Component) is { } componentName
-            && componentName.ToString() is { } name)
+            && TypeDescriptorHelper.TryGetPropertyValue(Component, nameof(ListBox.Name), out string? name)
+            && name is not null)
         {
             UpdateControlName(name);
         }
@@ -174,9 +169,9 @@ internal class ListBoxDesigner : ControlDesigner
     protected override void OnCreateHandle()
     {
         base.OnCreateHandle();
-        if (TypeDescriptor.GetProperties(Component)[nameof(ListBox.Name)] is PropertyDescriptor nameProp
-            && nameProp.GetValue(Component) is { } componentName
-            && componentName.ToString() is { } name)
+
+        if (TypeDescriptorHelper.TryGetPropertyValue(Component, nameof(ListBox.Name), out string? name)
+            && name is not null)
         {
             UpdateControlName(name);
         }

@@ -14,7 +14,7 @@ public sealed class ListBoxDesignerTests
         using ListBox listBox = new();
         designer.Initialize(listBox);
 
-        designer.IntegralHeight.Should().Be(true);
+        designer.IntegralHeight.Should().BeTrue();
 
         bool value = false;
         designer.IntegralHeight = value;
@@ -28,33 +28,26 @@ public sealed class ListBoxDesignerTests
         yield return new object[] { DockStyle.Fill, false };
         yield return new object[] { DockStyle.Left, false };
         yield return new object[] { DockStyle.Right, false };
-        yield return new object[] { DockStyle.Bottom };
-        yield return new object[] { DockStyle.Top };
+        yield return new object[] { DockStyle.Bottom, true };
+        yield return new object[] { DockStyle.Top, true };
     }
 
     [Theory]
     [MemberData(nameof(SetDockStyle_TestData))]
-    public void IntegralHeight_WhenDockStyleIsFillLeftOrRight_ShouldSetShadowPropertyAndNotListBoxIntegralHeight(DockStyle dockStyle, bool expected = true)
+    public void IntegralHeight_WhenDockStyleIsFillLeftOrRight_ShouldSetShadowPropertyAndNotListBoxIntegralHeight(DockStyle dockStyle, bool value, bool expected = true)
     {
         using ListBoxDesigner designer = new();
         using ListBox listBox = new();
         designer.Initialize(listBox);
 
-        designer.IntegralHeight.Should().Be(true);
+        designer.IntegralHeight.Should().BeTrue();
 
         listBox.Dock = dockStyle;
-        designer.IntegralHeight = expected;
+        designer.IntegralHeight = value;
 
-        designer.IntegralHeight.Should().Be(expected);
-        if (expected is false)
-        {
-            // When DockStyle is Fill/Left/Right, should set ShadowProperty and not set ListBox's IntegralHeight.
-            listBox.IntegralHeight.Should().NotBe(expected);
-        }
-        else
-        {
-            listBox.IntegralHeight.Should().Be(expected);
-        }
+        // When DockStyle is Fill/Left/Right, should set ShadowProperty and not set ListBox's IntegralHeight.
+        designer.IntegralHeight.Should().Be(value);
+        listBox.IntegralHeight.Should().Be(expected);
     }
 
     [Fact]
@@ -69,28 +62,21 @@ public sealed class ListBoxDesignerTests
 
     [Theory]
     [MemberData(nameof(SetDockStyle_TestData))]
-    public void Dock_Set_WhenDockStyleIsFillLeftOrRight_ShouldSetListBoxDockAndSetListBoxIntegralHeightToFalse(DockStyle dockStyle, bool expected = true)
+    public void Dock_Set_WhenDockStyleIsFillLeftOrRight_ShouldSetListBoxDockAndSetListBoxIntegralHeightToFalse(DockStyle dockStyle, bool expected)
     {
         using ListBoxDesigner designer = new();
         using ListBox listBox = new();
         designer.Initialize(listBox);
         designer.Dock = dockStyle;
 
+        // When DockStyle is Fill/Left/Right, should set ListBox's Dock and set ListBox's IntegralHeight to False.
         listBox.Dock.Should().Be(dockStyle);
-        if (expected is false)
-        {
-            // When DockStyle is Fill/Left/Right, should set ListBox's Dock and set ListBox's IntegralHeight to False.
-            listBox.IntegralHeight.Should().BeFalse();
-        }
-        else
-        {
-            listBox.IntegralHeight.Should().BeTrue();
-        }
+        listBox.IntegralHeight.Should().Be(expected);
     }
 
     [Theory]
     [MemberData(nameof(SetDockStyle_TestData))]
-    public void Dock_Set_WhenDockStyleNotFillLeftOrRight_ShouldSetListBoxDockAndRestoreListBoxIntegralHeight(DockStyle dockStyle, bool expected = true)
+    public void Dock_Set_WhenDockStyleNotFillLeftOrRight_ShouldSetListBoxDockAndRestoreListBoxIntegralHeight(DockStyle dockStyle, bool expected)
     {
         using ListBoxDesigner designer = new();
         using ListBox listBox = new();
@@ -102,16 +88,9 @@ public sealed class ListBoxDesignerTests
         designer.IntegralHeight = true;
         designer.Dock = dockStyle;
 
+        // When DockStyle not Fill/Left/Right, should set listBox's Dock and restore ListBox's IntegralHeight.
         listBox.Dock.Should().Be(dockStyle);
-        if (expected is false)
-        {
-            // When DockStyle not Fill/Left/Right, whould set listBox's Dock and restore ListBox's IntegralHeight.
-            listBox.IntegralHeight.Should().BeFalse();
-        }
-        else
-        {
-            listBox.IntegralHeight.Should().BeTrue();
-        }
+        listBox.IntegralHeight.Should().Be(expected);
     }
 
     [Fact]
