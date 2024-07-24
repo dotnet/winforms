@@ -8,10 +8,12 @@ using FormatTests.Common;
 using Record = System.Private.Windows.Core.BinaryFormat.Record;
 using System.Formats.Nrbf;
 using System.Windows.Forms.Nrbf;
+using System.Globalization;
+using System.Runtime.Serialization;
 
 namespace FormatTests.FormattedObject;
 
-public class PrimitiveTypeTests : SerializationTest<FormattedObjectSerializer>
+public class PrimitiveTypeTests : SerializationTest
 {
     [Theory]
     [MemberData(nameof(RoundTrip_Data))]
@@ -86,16 +88,6 @@ public class PrimitiveTypeTests : SerializationTest<FormattedObjectSerializer>
 
     [Theory]
     [MemberData(nameof(Primitive_Data))]
-    public void PrimitiveTypeMemberName(object value)
-    {
-        BinaryFormattedObject format = new(Serialize(value));
-        SystemClassWithMembersAndTypes systemClass = (SystemClassWithMembersAndTypes)format[1];
-        systemClass.MemberNames[0].Should().Be("m_value");
-        systemClass.MemberValues.Count.Should().Be(1);
-    }
-
-    [Theory]
-    [MemberData(nameof(Primitive_Data))]
     [MemberData(nameof(Primitive_ExtendedData))]
     public void BinaryFormatWriter_WritePrimitive(object value)
     {
@@ -152,8 +144,27 @@ public class PrimitiveTypeTests : SerializationTest<FormattedObjectSerializer>
         public static void WritePrimitiveValue(BinaryWriter writer, PrimitiveType type, object value)
             => WritePrimitiveType(writer, type, value);
 
-        public static object ReadPrimitiveValue(BinaryReader reader, PrimitiveType type)
-            => ReadPrimitiveType(reader, type);
+        public static object ReadPrimitiveValue(BinaryReader reader, PrimitiveType primitiveType)
+             => primitiveType switch
+             {
+                 PrimitiveType.Boolean => reader.ReadBoolean(),
+                 PrimitiveType.Byte => reader.ReadByte(),
+                 PrimitiveType.SByte => reader.ReadSByte(),
+                 PrimitiveType.Char => reader.ReadChar(),
+                 PrimitiveType.Int16 => reader.ReadInt16(),
+                 PrimitiveType.UInt16 => reader.ReadUInt16(),
+                 PrimitiveType.Int32 => reader.ReadInt32(),
+                 PrimitiveType.UInt32 => reader.ReadUInt32(),
+                 PrimitiveType.Int64 => reader.ReadInt64(),
+                 PrimitiveType.UInt64 => reader.ReadUInt64(),
+                 PrimitiveType.Single => reader.ReadSingle(),
+                 PrimitiveType.Double => reader.ReadDouble(),
+                 PrimitiveType.Decimal => decimal.Parse(reader.ReadString(), CultureInfo.InvariantCulture),
+                 PrimitiveType.DateTime => reader.ReadDateTime(),
+                 PrimitiveType.TimeSpan => new TimeSpan(reader.ReadInt64()),
+                 // String is handled with a record, never on it's own
+                 _ => throw new SerializationException($"Failure trying to read primitive '{primitiveType}'"),
+             };
 
         private protected override void Write(BinaryWriter writer)
         {

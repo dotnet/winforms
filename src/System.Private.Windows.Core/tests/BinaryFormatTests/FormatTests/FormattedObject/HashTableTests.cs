@@ -14,7 +14,7 @@ namespace FormatTests.FormattedObject;
 
 #pragma warning disable CS0618 // Type or member is obsolete
 
-public class HashtableTests : SerializationTest<FormattedObjectSerializer>
+public class HashtableTests : SerializationTest
 {
     [Fact]
     public void HashTable_GetObjectData()
@@ -58,23 +58,6 @@ public class HashtableTests : SerializationTest<FormattedObjectSerializer>
         enumerator.MoveNext().Should().BeTrue();
         enumerator.Current.Name.Should().Be("Values");
         enumerator.Current.Value.Should().BeEquivalentTo(new object[] { "That" });
-    }
-
-    [Fact]
-    public void HashTable_CustomComparer()
-    {
-        Hashtable hashtable = new(new CustomHashCodeProvider(), StringComparer.OrdinalIgnoreCase)
-        {
-            { "This", "That" }
-        };
-
-        BinaryFormattedObject format = new(Serialize(hashtable));
-        SystemClassWithMembersAndTypes systemClass = format.RootRecord.Should().BeOfType<SystemClassWithMembersAndTypes>().Subject;
-        systemClass.Name.Should().Be("System.Collections.Hashtable");
-        format[(MemberReference)systemClass["Comparer"]!].Should().BeOfType<SystemClassWithMembersAndTypes>().Which.Name.Should().Be("System.OrdinalComparer");
-        format[(MemberReference)systemClass["HashCodeProvider"]!].Should().BeOfType<ClassWithMembersAndTypes>().Which.Name.Should().Be("FormatTests.FormattedObject.HashtableTests+CustomHashCodeProvider");
-        format[(MemberReference)systemClass["Keys"]!].Should().BeOfType<ArraySingleObject>();
-        format[(MemberReference)systemClass["Values"]!].Should().BeOfType<ArraySingleObject>();
     }
 
     [Fact]
