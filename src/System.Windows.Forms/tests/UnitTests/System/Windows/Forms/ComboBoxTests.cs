@@ -630,8 +630,6 @@ public class ComboBoxTests
         public void TestTriggerDoubleClick() => TriggerDoubleClick();
     }
 
-    public class CustomComboBoxTests
-    {
         [WinFormsFact]
         public void ComboBox_DrawItem_AddHandler_ShouldCallHandler()
         {
@@ -731,8 +729,7 @@ public class ComboBoxTests
             control.DoubleClick -= handler;
             control.TestTriggerDoubleClick();
             callCount.Should().Be(expectedCallCount);
-        }
-    }
+        } 
 
     [WinFormsTheory]
     [EnumData<ComboBoxStyle>]
