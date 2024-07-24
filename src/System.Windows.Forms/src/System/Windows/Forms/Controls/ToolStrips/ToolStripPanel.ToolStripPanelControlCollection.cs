@@ -34,14 +34,13 @@ public partial class ToolStripPanel
 
         internal void Sort()
         {
-            if (_owner.Orientation == Orientation.Horizontal)
+            if (InnerList is not List<IArrangedElement> list)
             {
-                InnerList.Sort(new YXComparer());
+                Debug.Fail("InnerList is not a List<IArrangedElement>?");
+                return;
             }
-            else
-            {
-                InnerList.Sort(new XYComparer());
-            }
+
+            list.Sort(_owner.Orientation == Orientation.Horizontal ? new YXComparer() : new XYComparer());
         }
     }
 }
