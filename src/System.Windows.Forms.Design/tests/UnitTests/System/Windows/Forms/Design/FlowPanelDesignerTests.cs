@@ -14,8 +14,8 @@ public sealed class FlowPanelDesignerTests
 {
     private (Panel panel, FlowPanelDesigner designer) SetupDesignerWithPanel()
     {
-        var mockHost = new Mock<IDesignerHost>();
-        var mockContainer = new Mock<IContainer>();
+        Mock<IDesignerHost> mockHost = new();
+        Mock<IContainer> mockContainer = new();
         mockHost.Setup(host => host.Container).Returns(mockContainer.Object);
 
         Panel panel = new();
