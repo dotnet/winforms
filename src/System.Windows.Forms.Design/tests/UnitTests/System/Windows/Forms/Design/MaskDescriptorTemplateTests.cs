@@ -48,5 +48,3 @@ public class MaskDescriptorTemplateTests
         descriptors.Should().Contain(d => d.Name == expectedName2);
     }
 }
-
-
