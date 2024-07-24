@@ -289,7 +289,7 @@
       </trans-unit>
       <trans-unit id="BinaryFormatterNotSupported">
         <source>BinaryFormatter serialization and deserialization are disabled within this application. See https://aka.ms/binaryformatter for more information.</source>
-        <target state="needs-review-translation">Używanie klasy BinaryFormatter nie jest obsługiwane w przyciętych aplikacjach.</target>
+        <target state="translated">Serializacji BinaryFormatter i deserializacji są wyłączone w tej aplikacji. Aby uzyskać więcej informacji, zobacz https://aka.ms/binaryformatter.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
@@ -9706,7 +9706,7 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       </trans-unit>
       <trans-unit id="ToolStripAllowClickThrough">
         <source>Allows the control to be interacted when window does not have focus.</source>
-        <target state="new">Allows the control to be interacted when window does not have focus.</target>
+        <target state="translated">Umożliwia interakcję kontrolki, gdy okno nie ma fokusu.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue">
