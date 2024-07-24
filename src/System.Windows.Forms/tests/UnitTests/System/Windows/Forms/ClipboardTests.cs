@@ -354,7 +354,7 @@ public partial class ClipboardTests
         DataObject dataObject = new(data);
         Clipboard.SetDataObject(dataObject, copy, retryTimes, retryDelay);
 
-        IDataObject actual = Clipboard.GetDataObject().Should().BeOfType<IDataObject>().Which;
+        DataObject actual = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Which;
         actual.GetData(data.GetType()).Should().Be(data);
         Clipboard.ContainsData(data.GetType().FullName).Should().BeTrue();
     }
@@ -368,7 +368,7 @@ public partial class ClipboardTests
     {
         Clipboard.SetDataObject(data, copy, retryTimes, retryDelay);
 
-        IDataObject dataObject = Clipboard.GetDataObject().Should().BeOfType<IDataObject>().Which;
+        DataObject dataObject = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Which;
         dataObject.GetData(data.GetType()).Should().Be(data);
         Clipboard.ContainsData(data.GetType().FullName).Should().BeTrue();
     }
@@ -798,7 +798,7 @@ public partial class ClipboardTests
         using BinaryFormatterScope scope = new(enable: true);
         Clipboard.SetData("TestData", expected);
 
-        Clipboard.GetData("TestData").Should().Be(expected);
+        Clipboard.GetData("TestData").Should().BeEquivalentTo(expected);
     }
 
     [WinFormsFact]
@@ -808,11 +808,9 @@ public partial class ClipboardTests
         using (BinaryFormatterScope scope = new(enable: true))
         {
             Clipboard.SetData("TestData", expected);
-            using BinaryFormatterInClipboardScope clipboardScope = new(enable: true);
-            Clipboard.GetData("TestData").Should().Be(expected);
         }
 
-        object? result = Clipboard.GetData("TestData");
+        Clipboard.GetData("TestData").Should().Be(expected);
     }
 
     [Serializable]
