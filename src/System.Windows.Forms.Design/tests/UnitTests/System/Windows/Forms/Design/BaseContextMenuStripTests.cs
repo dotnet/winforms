@@ -11,8 +11,8 @@ public sealed class BaseContextMenuStripTests
     [Fact]
     public void RefreshItems_SetsFontFromIUIService()
     {
-        var serviceProviderMock = new Mock<IServiceProvider>();
-        var uiServiceMock = new Mock<IUIService>();        
+        Mock<IServiceProvider> serviceProviderMock = new();
+        Mock<IUIService> uiServiceMock = new();
         Font expectedFont = new Font("Arial", 12.0f);
         uiServiceMock.Setup(uis => uis.Styles["DialogFont"]).Returns(expectedFont);
         serviceProviderMock.Setup(sp => sp.GetService(typeof(IUIService))).Returns(uiServiceMock.Object);
