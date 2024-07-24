@@ -4,6 +4,7 @@
 using System.Collections;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Private.Windows.Core.BinaryFormat;
+using System.Drawing;
 
 namespace FormatTests.FormattedObject;
 
@@ -55,6 +56,10 @@ public class BinaryFormatWriterTests
         {
             ((IEnumerable)deserialized).Should().BeEquivalentTo(enumerable);
         }
+        else if (value is Color color)
+        {
+            ((Color)deserialized).Should().BeEquivalentTo(color);
+        }
         else
         {
             deserialized.Should().Be(value);
@@ -70,7 +75,54 @@ public class BinaryFormatWriterTests
         stream.Position = 0;
 
         BinaryFormattedObject format = new(stream);
-        format.TryGetFrameworkObject(out object? deserialized).Should().BeTrue();
+        bool result = format.TryGetFrameworkObject(out object? deserialized);
+        if (!result)
+        {
+            stream.Position = 0;
+            result = format.TryGetDrawingPrimitivesObject(out deserialized);
+        }
+
+        result.Should().BeTrue();
+
+        if (value is Hashtable hashtable)
+        {
+            Hashtable deserializedHashtable = (Hashtable)deserialized!;
+            deserializedHashtable.Count.Should().Be(hashtable.Count);
+            foreach (object? key in hashtable.Keys)
+            {
+                deserializedHashtable[key].Should().Be(hashtable[key]);
+            }
+        }
+        else if (value is IEnumerable enumerable)
+        {
+            ((IEnumerable)deserialized!).Should().BeEquivalentTo(enumerable);
+        }
+        else
+        {
+            deserialized.Should().Be(value);
+        }
+    }
+
+    [Theory]
+    [MemberData(nameof(TryWriteObject_SupportedObjects_TestData))]
+    public void BinaryFormatterSerialize_TryGetObject_SupportedObjects_Read(object value)
+    {
+        using MemoryStream stream = new();
+        // cs/binary-formatter-without-binder
+        BinaryFormatter formatter = new(); // CodeQL [SM04191] : This is a test. Safe use because the deserialization process is performed on trusted data and the types are controlled and validated.
+
+        formatter.Serialize(stream, value);
+        stream.Position = 0;
+
+        BinaryFormattedObject format = new(stream);
+        bool result = format.TryGetFrameworkObject(out object? deserialized);
+        if (!result)
+        {
+            stream.Position = 0;
+            result = format.TryGetDrawingPrimitivesObject(out deserialized);
+        }
+
+        result.Should().BeTrue();
 
         if (value is Hashtable hashtable)
         {

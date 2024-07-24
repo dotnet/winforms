@@ -1,3 +1,6 @@
+Microsoft.VisualBasic.MyServices.ClipboardProxy.SetDataAsJson(Of T)(data As T) -> Void
+Microsoft.VisualBasic.MyServices.ClipboardProxy.TryGetData(Of T)(format As String, ByRef data As T) -> Boolean
+Microsoft.VisualBasic.MyServices.ClipboardProxy.TryGetData(Of T)(format As String, resolver As System.Func(Of System.Reflection.Metadata.TypeName, System.Type), ByRef data As T) -> Boolean
 Overridable Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventHandler.Invoke(sender As Object, e As Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventArgs) -> Void
 Overridable Microsoft.VisualBasic.ApplicationServices.ShutdownEventHandler.Invoke(sender As Object, e As System.EventArgs) -> Void
 Overridable Microsoft.VisualBasic.ApplicationServices.StartupEventHandler.Invoke(sender As Object, e As Microsoft.VisualBasic.ApplicationServices.StartupEventArgs) -> Void

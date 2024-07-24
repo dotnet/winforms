@@ -3,6 +3,7 @@
 
 using System.Collections.Specialized;
 using System.Drawing;
+using System.Reflection.Metadata;
 using System.Runtime.Serialization;
 
 namespace System.Windows.Forms;
@@ -29,53 +30,81 @@ public partial class DataObject
         {
         }
 
-        public virtual object? GetData(string format, bool autoConvert)
+        private bool TryGetDataInternal<T>(
+            string format,
+            bool autoConvert,
+            [NotNullWhen(true), MaybeNullWhen(false)] out T data)
         {
+            data = default;
             if (string.IsNullOrWhiteSpace(format))
             {
-                return null;
+                return false;
             }
 
-            object? baseVar = null;
-            if (_data.TryGetValue(format, out DataStoreEntry? dse))
+            if (_data.TryGetValue(format, out DataStoreEntry? dse) && dse.Data is T t)
             {
-                baseVar = dse.Data;
+                data = t;
+                return true;
             }
 
-            object? original = baseVar;
-
-            if (autoConvert
-                && (dse is null || dse.AutoConvert)
-                && (baseVar is null || baseVar is MemoryStream))
+            if (!autoConvert
+                || !(dse is null || dse.AutoConvert)
+                || GetMappedFormats(format) is not { } mappedFormats)
             {
-                string[]? mappedFormats = GetMappedFormats(format);
-                if (mappedFormats is not null)
+                return false;
+            }
+
+            for (int i = 0; i < mappedFormats.Length; i++)
+            {
+                if (format.Equals(mappedFormats[i]))
                 {
-                    for (int i = 0; i < mappedFormats.Length; i++)
-                    {
-                        if (!format.Equals(mappedFormats[i]))
-                        {
-                            if (_data.TryGetValue(mappedFormats[i], out DataStoreEntry? found))
-                            {
-                                baseVar = found.Data;
-                            }
+                    continue;
+                }
 
-                            if (baseVar is not null and not MemoryStream)
-                            {
-                                original = null;
-                                break;
-                            }
-                        }
-                    }
+                if (_data.TryGetValue(mappedFormats[i], out DataStoreEntry? found) && found.Data is T value)
+                {
+                    data = value;
+                    return true;
                 }
             }
 
-            return original ?? baseVar;
+            return false;
+        }
+
+        public virtual object? GetData(string format, bool autoConvert)
+        {
+            TryGetDataInternal(format, autoConvert, out object? data);
+            return data;
         }
 
         public virtual object? GetData(string format) => GetData(format, autoConvert: true);
 
         public virtual object? GetData(Type format) => GetData(format.FullName!);
+
+        public virtual bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
+            string format,
+            Func<TypeName, Type> resolver,
+            bool autoConvert,
+            [NotNullWhen(true), MaybeNullWhen(false)] out T data)
+        {
+            data = default;
+            return TryGetDataInternal(format, autoConvert, out data);
+        }
+
+        public virtual bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
+            string format,
+            bool autoConvert,
+            [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
+            TryGetDataInternal(format, autoConvert, out data);
+
+        public virtual bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
+            string format,
+            [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
+            TryGetDataInternal(format, autoConvert: false, out data);
+
+        public virtual bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
+            [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
+            TryGetDataInternal(typeof(T).FullName!, autoConvert: false, out data);
 
         public virtual void SetData(string format, bool autoConvert, object? data)
         {
