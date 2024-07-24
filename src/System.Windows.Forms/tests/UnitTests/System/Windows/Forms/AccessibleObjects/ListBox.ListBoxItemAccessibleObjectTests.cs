@@ -180,8 +180,6 @@ public class ListBox_ListBoxItemAccessibleObjectTests
         var boundsAfterHandleCreation = itemAccessibleObject.Bounds;
     }
 
-    # nullable disable
-
     [WinFormsFact]
     public void ListBoxItemAccessibleObject_DefaultAction_VariesByContext()
     {
@@ -190,12 +188,12 @@ public class ListBox_ListBoxItemAccessibleObjectTests
         formDoubleClick.Show();
 
         var itemAccessibleObjectDoubleClick = listBoxDoubleClick.AccessibilityObject.GetChild(0) as ListBox.ListBoxItemAccessibleObject;
-        itemAccessibleObjectDoubleClick.DefaultAction.Should().Be("Double Click");
+        itemAccessibleObjectDoubleClick?.DefaultAction.Should().Be("Double Click");
 
         using ListBox listBoxNullAction = new ListBox { Items = { "Item 2" } };
         var itemAccessibleObjectNullAction = listBoxNullAction.AccessibilityObject.GetChild(0) as ListBox.ListBoxItemAccessibleObject;
 
-        itemAccessibleObjectNullAction.DefaultAction.Should().BeNull();
+        itemAccessibleObjectNullAction?.DefaultAction.Should().BeNull();
     }
 
     [WinFormsFact]
@@ -206,15 +204,15 @@ public class ListBox_ListBoxItemAccessibleObjectTests
 
         var accessibleObject = listBox.AccessibilityObject;
         var itemAccessibleObject = accessibleObject.GetChild(0) as ListBox.ListBoxItemAccessibleObject;
-        itemAccessibleObject.Bounds.Should().Be(Rectangle.Empty);
+        itemAccessibleObject?.Bounds.Should().Be(Rectangle.Empty);
 
         listBox.CreateControl();
         listBox.IsHandleCreated.Should().BeTrue();
 
         itemAccessibleObject.Should().NotBeNull();
-        itemAccessibleObject.Role.Should().Be(AccessibleRole.ListItem);
-        itemAccessibleObject.Name.Should().Be("Item 1");
-        itemAccessibleObject.DefaultAction.Should().NotBeNull();
+        itemAccessibleObject?.Role.Should().Be(AccessibleRole.ListItem);
+        itemAccessibleObject?.Name.Should().Be("Item 1");
+        itemAccessibleObject?.DefaultAction.Should().NotBeNull();
     }
 
     [WinFormsFact]
@@ -254,5 +252,7 @@ public class ListBox_ListBoxItemAccessibleObjectTests
 
         act.Should().NotThrow();
     }
+
+    #nullable disable
 }
 

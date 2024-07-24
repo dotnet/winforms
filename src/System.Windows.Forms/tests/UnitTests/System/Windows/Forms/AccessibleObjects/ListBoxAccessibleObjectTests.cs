@@ -248,6 +248,8 @@ public class ListBoxAccessibleObjectTests
         return accessibilityObject;
     }
 
+    #nullable enable
+
     [WinFormsTheory]
     [InlineData(false, AccessibleStates.Focusable)]
     [InlineData(true, AccessibleStates.Focused | AccessibleStates.Focusable)]
@@ -280,7 +282,7 @@ public class ListBoxAccessibleObjectTests
     public void ListBoxAccessibleObject_ShouldCorrectlyHandleChildrenAndSelection()
     {
         using ListBox listBox = new();
-        listBox.Items.AddRange(new object[] { "Item 1", "Item 2" });
+        listBox.Items.AddRange(new[] { "Item 1", "Item 2" });
         var accessibleObject = listBox.AccessibilityObject;
 
         accessibleObject.GetSelected().Should().BeNull();
@@ -317,7 +319,7 @@ public class ListBoxAccessibleObjectTests
     public void TestGetFocused_ReturnsExpected()
     {
         using ListBox listBox = new();
-        listBox.Items.AddRange(new object[] { "Item 1", "Item 2" });
+        listBox.Items.AddRange(new[] { "Item 1", "Item 2" });
         listBox.CreateControl();
         listBox.SelectedIndex = 1; // Focus the second item
         listBox.Focus();
@@ -336,7 +338,7 @@ public class ListBoxAccessibleObjectTests
     public void TestGetSelected_VariousScenarios(int selectedIndex, int? expectedIndex, bool clearSelection = false, bool multipleSelection = false)
     {
         using ListBox listBox = new() { SelectionMode = multipleSelection ? SelectionMode.MultiExtended : SelectionMode.One };
-        listBox.Items.AddRange(new object[] { "Item 1", "Item 2", "Item 3" });
+        listBox.Items.AddRange(new[] { "Item 1", "Item 2", "Item 3" });
         if (selectedIndex >= 0)
         {
             listBox.SelectedIndices.Add(selectedIndex);
@@ -405,4 +407,6 @@ public class ListBoxAccessibleObjectTests
 
         result.Should().Be(listBox.AccessibilityObject.GetChild(0));
     }
+
+    #nullable disable
 }
