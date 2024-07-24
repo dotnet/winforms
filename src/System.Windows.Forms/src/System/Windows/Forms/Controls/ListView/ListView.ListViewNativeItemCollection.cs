@@ -43,6 +43,11 @@ public partial class ListView
                     // if we are showing virtual items, we need to get the item from the user
                     RetrieveVirtualItemEventArgs rVI = new(displayIndex);
                     _owner.OnRetrieveVirtualItem(rVI);
+                    if (rVI.Item is null)
+                    {
+                        throw new InvalidOperationException(SR.ListViewVirtualItemRequired);
+                    }
+
                     rVI.Item!.SetItemIndex(_owner, displayIndex);
                     return rVI.Item;
                 }
@@ -81,41 +86,6 @@ public partial class ListView
 
                 RemoveAt(displayIndex);
                 Insert(displayIndex, value);
-            }
-        }
-
-        public ListViewItem? GetItemByIndex(int index)
-        {
-            _owner.ApplyUpdateCachedItems();
-
-            if (_owner.VirtualMode)
-            {
-                // if we are showing virtual items, we need to get the item from the user
-                RetrieveVirtualItemEventArgs rVI = new(index);
-                _owner.OnRetrieveVirtualItem(rVI);
-                if (rVI.Item is null)
-                {
-                    return null;
-                }
-
-                rVI.Item!.SetItemIndex(_owner, index);
-                return rVI.Item;
-            }
-            else
-            {
-                ArgumentOutOfRangeException.ThrowIfNegative(index);
-                ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, _owner._itemCount);
-
-                if (_owner.IsHandleCreated && !_owner.ListViewHandleDestroyed)
-                {
-                    _owner._listItemsTable.TryGetValue(DisplayIndexToID(index), out ListViewItem? item);
-                    return item!;
-                }
-                else
-                {
-                    Debug.Assert(_owner._listViewItems is not null, "listItemsArray is null, but the handle isn't created");
-                    return _owner._listViewItems[index];
-                }
             }
         }
 

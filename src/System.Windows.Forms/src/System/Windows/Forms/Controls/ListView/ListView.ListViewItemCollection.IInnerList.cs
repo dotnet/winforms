@@ -26,7 +26,6 @@ public partial class ListView
             ListViewItem Insert(int index, ListViewItem item);
             void Remove(ListViewItem item);
             void RemoveAt(int index);
-            ListViewItem? GetItemByIndex(int index);
         }
     }
 }
