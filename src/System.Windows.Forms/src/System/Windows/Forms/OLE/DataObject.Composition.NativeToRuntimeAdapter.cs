@@ -16,11 +16,11 @@ public unsafe partial class DataObject
         /// <summary>
         ///  Maps native pointer <see cref="Com.IDataObject"/> to <see cref="ComTypes.IDataObject"/>.
         /// </summary>
-        private class NativeDataObjectToRuntimeAdapter : ComTypes.IDataObject
+        private class NativeToRuntimeAdapter : ComTypes.IDataObject
         {
             private readonly AgileComPointer<Com.IDataObject> _nativeDataObject;
 
-            public NativeDataObjectToRuntimeAdapter(Com.IDataObject* dataObject)
+            public NativeToRuntimeAdapter(Com.IDataObject* dataObject)
             {
 #if DEBUG
                 _nativeDataObject = new(dataObject, takeOwnership: true, trackDisposal: false);

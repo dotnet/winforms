@@ -6,7 +6,7 @@ using System.Drawing;
 namespace Windows.Win32.Graphics.Gdi;
 
 /// <summary>
-///  Helper to scope lifetime of an HDC retrieved via <see cref="BeginPaint(HWND, out PAINTSTRUCT)"/>
+///  Helper to scope lifetime of an HDC retrieved via <see cref="PInvoke.BeginPaint(HWND, out PAINTSTRUCT)"/>
 /// </summary>
 /// <remarks>
 ///  <para>

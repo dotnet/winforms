@@ -24,19 +24,19 @@ internal unsafe ref struct RegionScope
     public HRGN Region { get; private set; }
 
     /// <summary>
-    ///  Creates a region with the given rectangle via <see cref="CreateRectRgn(int, int, int, int)"/>.
+    ///  Creates a region with the given rectangle via <see cref="PInvokeCore.CreateRectRgn(int, int, int, int)"/>.
     /// </summary>
     public RegionScope(Rectangle rectangle) =>
         Region = PInvokeCore.CreateRectRgn(rectangle.X, rectangle.Y, rectangle.Right, rectangle.Bottom);
 
     /// <summary>
-    ///  Creates a region with the given rectangle via <see cref="CreateRectRgn(int, int, int, int)"/>.
+    ///  Creates a region with the given rectangle via <see cref="PInvokeCore.CreateRectRgn(int, int, int, int)"/>.
     /// </summary>
     public RegionScope(int x1, int y1, int x2, int y2) =>
         Region = PInvokeCore.CreateRectRgn(x1, y1, x2, y2);
 
     /// <summary>
-    ///  Creates a clipping region copy via <see cref="GetClipRgn(HDC, HRGN)"/> for the given device context.
+    ///  Creates a clipping region copy via <see cref="PInvokeCore.GetClipRgn(HDC, HRGN)"/> for the given device context.
     /// </summary>
     /// <param name="hdc">Handle to a device context to copy the clipping region from.</param>
     public RegionScope(HDC hdc)

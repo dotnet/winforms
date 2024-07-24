@@ -54,7 +54,7 @@ public unsafe partial class DataObject
         public static Composition CreateFromWinFormsDataObject(IDataObject winFormsDataObject)
         {
             WinFormsToNativeAdapter winFormsToNative = new(winFormsDataObject);
-            NativeDataObjectToRuntimeAdapter nativeToRuntime = new(ComHelpers.GetComPointer<Com.IDataObject>(winFormsToNative));
+            NativeToRuntimeAdapter nativeToRuntime = new(ComHelpers.GetComPointer<Com.IDataObject>(winFormsToNative));
             return new(winFormsDataObject, winFormsToNative, nativeToRuntime);
         }
 
@@ -64,7 +64,7 @@ public unsafe partial class DataObject
             nativeDataObject->AddRef();
             nativeDataObject->AddRef();
             NativeToWinFormsAdapter nativeToWinForms = new(nativeDataObject);
-            NativeDataObjectToRuntimeAdapter nativeToRuntime = new(nativeDataObject);
+            NativeToRuntimeAdapter nativeToRuntime = new(nativeDataObject);
             return new(nativeToWinForms, nativeToWinForms, nativeToRuntime);
         }
 

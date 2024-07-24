@@ -6,7 +6,7 @@ using System.Drawing;
 namespace Windows.Win32.Graphics.Gdi;
 
 /// <summary>
-///  Helper to scope the lifetime of a <see cref="HPEN"/>.
+///  Helper to scope the lifetime of a <see cref="Gdi.HPEN"/>.
 /// </summary>
 /// <remarks>
 ///  <para>
@@ -24,7 +24,7 @@ internal readonly ref struct CreatePenScope
 
     /// <summary>
     ///  Creates a solid pen based on the <paramref name="color"/> and <paramref name="width"/> using
-    ///  <see cref="CreatePen(PEN_STYLE, int, COLORREF)" />.
+    ///  <see cref="PInvoke.CreatePen(PEN_STYLE, int, COLORREF)" />.
     /// </summary>
     public CreatePenScope(Color color, int width = 1) =>
         HPEN = PInvoke.CreatePen(PEN_STYLE.PS_SOLID, width, color);

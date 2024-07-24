@@ -4,6 +4,7 @@
 using System.Drawing;
 using System.Reflection;
 using System.Runtime.Serialization;
+using System.Private.Windows.Core.BinaryFormat;
 
 namespace System.Windows.Forms;
 
@@ -15,7 +16,7 @@ public partial class DataObject
     /// </summary>
     /// <remarks>
     ///  <para>
-    ///   This gets skipped when our <see cref="BinaryFormat.BinaryFormattedObject"/> code handles its known types.
+    ///   This gets skipped when our <see cref="BinaryFormattedObject"/> code handles its known types.
     ///   While there are more types allowed (such as <see cref="List{String}"/>, they are all safe.
     ///  </para>
     /// </remarks>

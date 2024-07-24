@@ -24,7 +24,7 @@ internal readonly ref struct SelectObjectScope
 
     /// <summary>
     ///  Selects <paramref name="object"/> into the given <paramref name="hdc"/> using
-    ///  <see cref="SelectObject(HDC, HGDIOBJ)"/>.
+    ///  <see cref="PInvokeCore.SelectObject(HDC, HGDIOBJ)"/>.
     /// </summary>
     public SelectObjectScope(HDC hdc, HGDIOBJ @object)
     {
