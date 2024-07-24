@@ -15,8 +15,7 @@ namespace System.Private.Windows.Core.BinaryFormat;
 /// </remarks>
 internal sealed class ArraySingleObject :
     ArrayRecord<object?>,
-    IRecord<ArraySingleObject>,
-    IBinaryFormatParseable<ArraySingleObject>
+    IRecord<ArraySingleObject>
 {
     public static RecordType RecordType => RecordType.ArraySingleObject;
 
@@ -25,9 +24,6 @@ internal sealed class ArraySingleObject :
     { }
 
     public override BinaryType ElementType => BinaryType.Object;
-
-    static ArraySingleObject IBinaryFormatParseable<ArraySingleObject>.Parse(BinaryFormattedObject.IParseState state) =>
-        new(ArrayInfo.Parse(state.Reader, out Count length), ReadObjectArrayValues(state, length));
 
     private protected override void Write(BinaryWriter writer)
     {

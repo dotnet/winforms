@@ -36,7 +36,7 @@ public abstract unsafe partial class AxHost
                 // Don't usually expect to fall into this case as we should usually not have anything
                 // in the stream other than primitive VARIANTs, which are handled. If there are arrays or
                 // interface pointers we'd hit this.
-                Debug.WriteLine($"PropertyBagStream: {nameof(BinaryFormattedObject)} failed with {ex.Message}");
+                Debug.WriteLine($"PropertyBagStream: {nameof(NrbfDecoder)} failed with {ex.Message}");
             }
 
             try
@@ -105,7 +105,7 @@ public abstract unsafe partial class AxHost
             }
             catch (Exception ex) when (!ex.IsCriticalException())
             {
-                Debug.WriteLine($"PropertyBagStream.Save: {nameof(BinaryFormattedObject)} failed with {ex.Message}");
+                Debug.WriteLine($"PropertyBagStream.Save: {nameof(NrbfDecoder)} failed with {ex.Message}");
 
                 stream.Position = position;
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
