@@ -5203,18 +5203,15 @@ public class ListViewTests
         Assert.True(listView.IsHandleCreated);
     }
 
-    public static TheoryData<ListViewItem> GetListViewItemTheoryData()
+    public static TheoryData<ListViewItem> GetListViewItemTheoryData() => new()
     {
-        return new TheoryData<ListViewItem>
-        {
-            { new("Item 1") },
-            { null }
-        };
-    }
+        { new("Item 1") },
+        { null }
+    };
 
     [WinFormsTheory]
     [MemberData(nameof(GetListViewItemTheoryData))]
-    public void ListView_VirtualMode_ListViewItemReleaseSuccess(ListViewItem listItem)
+    public void ListView_VirtualMode_ListViewReleaseSuccess(ListViewItem listItem)
     {
         using ListView listView = new()
         {
@@ -5231,8 +5228,50 @@ public class ListViewTests
             };
         };
 
-        Action action = () => listView.Items.GetItemByIndex(0)?.ReleaseUiaProvider();
-        action.Should().NotThrow();
+        SubListViewAccessibleObject accessibleObject = new(listView);
+        int accessibilityProperty = listView.TestAccessor().Dynamic.s_accessibilityProperty;
+        listView.Properties.SetObject(accessibilityProperty, accessibleObject);
+        listView.IsAccessibilityObjectCreated.Should().BeTrue();
+        if (listItem is null)
+        {
+            Action action = () => listView.Items.GetItemByIndex(0)?.ReleaseUiaProvider();
+            action.Should().NotThrow();
+            listView.IsHandleCreated.Should().BeFalse();
+            listView.IsAccessibilityObjectCreated.Should().BeTrue();
+        }
+        else
+        {
+            Action action = () => listView.ReleaseUiaProvider(listView.HWND);
+            action.Should().NotThrow();
+            listView.IsHandleCreated.Should().BeTrue();
+            listView.IsAccessibilityObjectCreated.Should().BeFalse();
+        }
+    }
+
+    [WinFormsFact]
+    public void ListView_VirtualMode_GetListViewItemAsExpected()
+    {
+        using ListView listView = new()
+        {
+            VirtualMode = true,
+            VirtualListSize = 2
+        };
+
+        ListViewItem listItem1 = new("Item 1");
+        ListViewItem listItem2 = null;
+        listView.RetrieveVirtualItem += (s, e) =>
+        {
+            e.Item = e.ItemIndex switch
+            {
+                0 => listItem1,
+                1 => listItem2,
+                _ => throw new NotImplementedException()
+            };
+        };
+        listView.Items.GetItemByIndex(0).Should().Be(listView.Items[0]);
+        listView.Items.GetItemByIndex(1).Should().BeNull();
+        Action action = () => listView.Items[1].ToString();
+        action.Should().Throw<InvalidOperationException>(SR.ListViewVirtualItemRequired);
     }
 
     private class SubListViewAccessibleObject : ListView.ListViewAccessibleObject

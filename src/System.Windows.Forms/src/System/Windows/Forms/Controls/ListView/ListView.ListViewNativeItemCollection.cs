@@ -75,7 +75,7 @@ public partial class ListView
                     return !throwInVirtualMode ? null : throw new InvalidOperationException(SR.ListViewVirtualItemRequired);
                 }
 
-                rVI.Item!.SetItemIndex(_owner, index);
+                rVI.Item.SetItemIndex(_owner, index);
                 return rVI.Item;
             }
             else
