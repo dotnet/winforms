@@ -12,38 +12,7 @@ namespace Microsoft.VisualBasic.MyServices.Tests;
 [CollectionDefinition("Sequential", DisableParallelization = true)]
 public class ClipboardProxyTests
 {
-    [WinFormsFact]
-    public void Clear()
-    {
-        var clipboard = (new Computer()).Clipboard;
-        string text = GetUniqueText();
-        clipboard.SetText(text);
-        Assert.True(System.Windows.Forms.Clipboard.ContainsText());
-        clipboard.Clear();
-        Assert.False(System.Windows.Forms.Clipboard.ContainsText());
-    }
-
-    [WinFormsFact]
-    public void Text()
-    {
-        var clipboard = (new Computer()).Clipboard;
-        string text = GetUniqueText();
-        clipboard.SetText(text, TextDataFormat.UnicodeText);
-        Assert.Equal(System.Windows.Forms.Clipboard.ContainsText(), clipboard.ContainsText());
-        Assert.Equal(System.Windows.Forms.Clipboard.GetText(), clipboard.GetText());
-        Assert.Equal(System.Windows.Forms.Clipboard.GetText(TextDataFormat.UnicodeText), clipboard.GetText(TextDataFormat.UnicodeText));
-        Assert.Equal(text, clipboard.GetText(TextDataFormat.UnicodeText));
-    }
-
-    [WinFormsFact]
-    public void Image()
-    {
-        var clipboard = (new Computer()).Clipboard;
-        Bitmap image = new(2, 2);
-        Assert.Equal(System.Windows.Forms.Clipboard.ContainsImage(), clipboard.ContainsImage());
-        Assert.Equal(System.Windows.Forms.Clipboard.GetImage(), clipboard.GetImage());
-        clipboard.SetImage(image);
-    }
+    private static string GetUniqueText() => Guid.NewGuid().ToString("D");
 
     [WinFormsFact]
     public void Audio()
@@ -57,13 +26,14 @@ public class ClipboardProxyTests
     }
 
     [WinFormsFact]
-    public void FileDropList()
+    public void Clear()
     {
         var clipboard = (new Computer()).Clipboard;
-        Assert.Equal(System.Windows.Forms.Clipboard.ContainsFileDropList(), clipboard.ContainsFileDropList());
-        // Not tested:
-        //   Public Function GetFileDropList() As StringCollection
-        //   Public Sub SetFileDropList(filePaths As StringCollection)
+        string text = GetUniqueText();
+        clipboard.SetText(text);
+        Assert.True(System.Windows.Forms.Clipboard.ContainsText());
+        clipboard.Clear();
+        Assert.False(System.Windows.Forms.Clipboard.ContainsText());
     }
 
     [WinFormsFact]
@@ -85,5 +55,35 @@ public class ClipboardProxyTests
         clipboard.SetDataObject(new System.Windows.Forms.DataObject(data));
     }
 
-    private static string GetUniqueText() => Guid.NewGuid().ToString("D");
+    [WinFormsFact]
+    public void FileDropList()
+    {
+        var clipboard = (new Computer()).Clipboard;
+        Assert.Equal(System.Windows.Forms.Clipboard.ContainsFileDropList(), clipboard.ContainsFileDropList());
+        // Not tested:
+        //   Public Function GetFileDropList() As StringCollection
+        //   Public Sub SetFileDropList(filePaths As StringCollection)
+    }
+
+    [WinFormsFact]
+    public void Image()
+    {
+        var clipboard = (new Computer()).Clipboard;
+        Bitmap image = new(2, 2);
+        Assert.Equal(System.Windows.Forms.Clipboard.ContainsImage(), clipboard.ContainsImage());
+        Assert.Equal(System.Windows.Forms.Clipboard.GetImage(), clipboard.GetImage());
+        clipboard.SetImage(image);
+    }
+
+    [WinFormsFact]
+    public void Text()
+    {
+        var clipboard = (new Computer()).Clipboard;
+        string text = GetUniqueText();
+        clipboard.SetText(text, TextDataFormat.UnicodeText);
+        Assert.Equal(System.Windows.Forms.Clipboard.ContainsText(), clipboard.ContainsText());
+        Assert.Equal(System.Windows.Forms.Clipboard.GetText(), clipboard.GetText());
+        Assert.Equal(System.Windows.Forms.Clipboard.GetText(TextDataFormat.UnicodeText), clipboard.GetText(TextDataFormat.UnicodeText));
+        Assert.Equal(text, clipboard.GetText(TextDataFormat.UnicodeText));
+    }
 }
