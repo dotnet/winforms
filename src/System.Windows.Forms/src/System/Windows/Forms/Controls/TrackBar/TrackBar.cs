@@ -54,6 +54,10 @@ public partial class TrackBar : Control, ISupportInitialize
     {
         SetStyle(ControlStyles.UserPaint, false);
         SetStyle(ControlStyles.UseTextForAccessibility, false);
+
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         _requestedDim = PreferredDimension;
     }
 

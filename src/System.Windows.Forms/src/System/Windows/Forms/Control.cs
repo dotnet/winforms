@@ -1407,7 +1407,7 @@ public unsafe partial class Control :
                 cp.Style |= (int)WINDOW_STYLE.WS_VISIBLE;
             }
 
-            // Unlike Visible, Windows doesn't correctly inherit disabledness from its parent -- an enabled child
+            // Unlike Visible, Windows doesn't correctly inherit disabled-ness from its parent -- an enabled child
             // of a disabled parent will look enabled but not get mouse events
             if (!Enabled)
             {
@@ -7715,7 +7715,7 @@ public unsafe partial class Control :
             }
 
 #pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
-            if (Application.IsDarkModeEnabled && !PreventDarkModeThemeChange)
+            if (GetStyle(ControlStyles.ApplyThemingImplicitly))
             {
                 _ = PInvoke.SetWindowTheme(
                     hwnd: HWND,
@@ -9051,13 +9051,6 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public PreProcessControlState PreProcessControlMessage(ref Message msg)
         => PreProcessControlMessageInternal(target: null, ref msg);
-
-    /// <summary>
-    ///  Allows a derived control to opt out of an explicit theme change in the dark mode context.
-    ///  The control indicates that it is self-responsible for dark-mode-rendering itself completely
-    ///  without relying on Windows theming functionality, or that it manages the respective changes itself.
-    /// </summary>
-    protected virtual bool PreventDarkModeThemeChange => false;
 
     internal static PreProcessControlState PreProcessControlMessageInternal(Control? target, ref Message message)
     {

@@ -5010,9 +5010,6 @@ public partial class ListView : Control
         }
     }
 
-    // ListView handles the theme change itself.
-    protected override bool PreventDarkModeThemeChange => true;
-
     private void RealizeAllSubItems()
     {
         LVITEMW item = default;

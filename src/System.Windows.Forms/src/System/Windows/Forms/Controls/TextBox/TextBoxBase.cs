@@ -99,10 +99,15 @@ public abstract partial class TextBoxBase : Control
 
         _textBoxFlags[s_autoSize | s_hideSelection | s_wordWrap | s_shortcutsEnabled] = true;
         SetStyle(ControlStyles.FixedHeight, _textBoxFlags[s_autoSize]);
+
         SetStyle(ControlStyles.StandardClick
                 | ControlStyles.StandardDoubleClick
                 | ControlStyles.UseTextForAccessibility
                 | ControlStyles.UserPaint, false);
+
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
         // cache requested height. Note: Control calls DefaultSize (overridable) in the constructor
         // to set the control's cached height that is returned when calling Height, so we just

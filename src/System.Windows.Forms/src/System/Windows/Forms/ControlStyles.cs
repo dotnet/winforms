@@ -14,55 +14,55 @@ public enum ControlStyles
     /// <summary>
     ///  Indicates whether the control is a container-like control.
     /// </summary>
-    ContainerControl = 0x00000001,
+    ContainerControl = 0b00000001, // 0x00000001
 
     /// <summary>
     ///  The control paints itself; WM_PAINT and WM_ERASEBKGND messages are not
     ///  passed on to the underlying NativeWindow.
     ///  This style only applies to subclasses of Control.
     /// </summary>
-    UserPaint = 0x00000002,
+    UserPaint = 0b00000010, // 0x00000002
 
     /// <summary>
     ///  If specified, a PaintBackground event will not be raised,
     ///  OnPaintBackground will not be called, and Invalidate() will not
     ///  invalidate the background of the HWND.
     /// </summary>
-    Opaque = 0x00000004,
+    Opaque = 0b00000100, // 0x00000004
 
     /// <summary>
     ///  The control is completely redrawn when it is resized.
     /// </summary>
-    ResizeRedraw = 0x00000010,
+    ResizeRedraw = 0b00010000, // 0x00000010
 
     /// <summary>
     ///  The control has a fixed width.
     /// </summary>
-    FixedWidth = 0x00000020,
+    FixedWidth = 0b00100000, // 0x00000020
 
     /// <summary>
     ///  The control has a fixed height.
     /// </summary>
-    FixedHeight = 0x00000040,
+    FixedHeight = 0b01000000, // 0x00000040
 
     /// <summary>
-    ///  If set, windows forms calls OnClick and raises the Click event when the
+    ///  If set, Windows Forms calls OnClick and raises the Click event when the
     ///  control is clicked (unless it's the second click of a double-click and
     ///  StandardDoubleClick is specified).
     ///  Regardless of this style, the control may call OnClick directly.
     /// </summary>
-    StandardClick = 0x00000100,
+    StandardClick = 0b00000001_00000000, // 0x00000100
 
     /// <summary>
     ///  The control can get the focus.
     /// </summary>
-    Selectable = 0x00000200,
+    Selectable = 0b00000010_00000000, // 0x00000200
 
     /// <summary>
     ///  The control does its own mouse processing; WM_MOUSEDOWN, WM_MOUSEMOVE,
     ///  and WM_MOUSEUP messages are not passed on to the underlying NativeWindow.
     /// </summary>
-    UserMouse = 0x00000400,
+    UserMouse = 0b00000100_00000000, // 0x00000400
 
     /// <summary>
     ///  If the BackColor is set to a color whose alpha component is less than
@@ -73,27 +73,27 @@ public enum ControlStyles
     ///  This style only applies to subclasses of Control. It only works if
     ///  UserPaint is set, and the parent control is a Control.
     /// </summary>
-    SupportsTransparentBackColor = 0x00000800,
+    SupportsTransparentBackColor = 0b00001000_00000000, // 0x00000800
 
     /// <summary>
-    ///  If set, windows forms calls OnDoubleClick and raises the DoubleClick
-    ///  event when the control is double clicked.
+    ///  If set, Windows Forms calls OnDoubleClick and raises the DoubleClick
+    ///  event when the control is double-clicked.
     ///  Regardless of whether it is set, the control may call OnDoubleClick
     ///  directly.
     ///  This style is ignored if StandardClick is not set.
     /// </summary>
-    StandardDoubleClick = 0x00001000,
+    StandardDoubleClick = 0b00010000_00000000, // 0x00001000
 
     /// <summary>
     ///  If true, WM_ERASEBKGND is ignored, and both OnPaintBackground and
-    ///  OnPaint are called directly from WM_PAINT.  This generally reduces
+    ///  OnPaint are called directly from WM_PAINT. This generally reduces
     ///  flicker, but can cause problems if other controls send WM_ERASEBKGND
-    ///  messages to us.  (This is sometimes done to achieve a pseudo-transparent
+    ///  messages to us. (This is sometimes done to achieve a pseudo-transparent
     ///  effect similar to ControlStyles.SupportsTransparentBackColor; for instance,
     ///  ToolBar with flat appearance does this).
     ///  This style only makes sense if UserPaint is true.
     /// </summary>
-    AllPaintingInWmPaint = 0x00002000,
+    AllPaintingInWmPaint = 0b00100000_00000000, // 0x00002000
 
     /// <summary>
     ///  If true, the control keeps a copy of the text rather than going to the
@@ -101,28 +101,27 @@ public enum ControlStyles
     ///  difficult to keep the control and hWnd's text synchronized.
     ///  This style defaults to false.
     /// </summary>
-    CacheText = 0x00004000,
+    CacheText = 0b01000000_00000000, // 0x00004000
 
     /// <summary>
     ///  If true, the OnNotifyMessage method will be called for every message
     ///  sent to the control's WndProc.
     ///  This style defaults to false.
     /// </summary>
-    EnableNotifyMessage = 0x00008000,
+    EnableNotifyMessage = 0b10000000_00000000, // 0x00008000
 
     /// <summary>
-    ///  If set, all control painting will be double buffered. You must also
+    ///  If set, all control painting will be double-buffered. You must also
     ///  set the UserPaint and AllPaintingInWmPaint style. Note: This is
-    ///  obsolete, please
-    ///  use OptimizedDoubleBuffer instead.
+    ///  obsolete; please use OptimizedDoubleBuffer instead.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)] // It is recommended that you use the DoubleBuffer property instead.
-    DoubleBuffer = 0x00010000,
+    DoubleBuffer = 0b00000001_00000000_00000000, // 0x00010000
 
     /// <summary>
-    ///  If set, all control painting will be double buffered.
+    ///  If set, all control painting will be double-buffered.
     /// </summary>
-    OptimizedDoubleBuffer = 0x00020000,
+    OptimizedDoubleBuffer = 0b00000010_00000000_00000000, // 0x00020000
 
     /// <summary>
     ///  If this style is set, and there is a value in the control's Text property,
@@ -131,8 +130,18 @@ public enum ControlStyles
     ///  Label control will be used instead.
     ///
     ///  This style is set by default. Certain built-in control types such as
-    ///  TextBox and ComboBox un-set this style, so that their current text will
+    ///  TextBox and ComboBox unset this style, so that their current text will
     ///  not be used by Active Accessibility.
     /// </summary>
-    UseTextForAccessibility = 0x00040000,
+    UseTextForAccessibility = 0b00000100_00000000_00000000, // 0x00040000
+
+    /// <summary>
+    ///  For certain UI-related color modes (Dark Mode/Light Mode), controls
+    ///  can opt-in to automatically apply the appropriate theming. Especially
+    ///  controls which are utilizing system-managed scrollbars can benefit
+    ///  from this setting. Note that using this settings will cause some
+    ///  win32 control theming renderers to become inactive for a specific theme.
+    /// </summary>
+    [Experimental("WFO9001")]
+    ApplyThemingImplicitly = 0b00001000_00000000_00000000, // 0x00080000
 }

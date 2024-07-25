@@ -139,6 +139,9 @@ public partial class MonthCalendar : Control
         _focusedDate = _todaysDate;
         SetStyle(ControlStyles.UserPaint, false);
         SetStyle(ControlStyles.StandardClick, false);
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
         TabStop = true;
     }
@@ -550,9 +553,6 @@ public partial class MonthCalendar : Control
     }
 
     private static DateTime Now => DateTime.Now.Date;
-
-    // MonthCalendar does not support theming.
-    protected override bool PreventDarkModeThemeChange => true;
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]

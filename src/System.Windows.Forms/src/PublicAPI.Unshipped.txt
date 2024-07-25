@@ -9,6 +9,7 @@ static System.Windows.Forms.Control.ControlSystemColors.GetAdaptedDarkModeColorF
 System.Windows.Forms.Control.ControlSystemColors
 System.Windows.Forms.Control.SystemColors.get -> System.Windows.Forms.Control.ControlSystemColors!
 System.Windows.Forms.Control.VisualStylesModeChanged -> System.EventHandler?
+System.Windows.Forms.ControlStyles.ApplyThemingImplicitly = 524288 -> System.Windows.Forms.ControlStyles
 System.Windows.Forms.DarkMode.Disabled = 0 -> System.Windows.Forms.DarkMode
 System.Windows.Forms.DarkMode.Inherited = 1 -> System.Windows.Forms.DarkMode
 System.Windows.Forms.ToolStrip.AllowClickThrough.get -> bool

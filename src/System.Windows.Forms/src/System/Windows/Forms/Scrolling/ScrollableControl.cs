@@ -59,6 +59,10 @@ public partial class ScrollableControl : Control, IArrangedElement
     {
         SetStyle(ControlStyles.ContainerControl, true);
         SetStyle(ControlStyles.AllPaintingInWmPaint, false);
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
         SetScrollState(ScrollStateAutoScrolling, false);
     }
 

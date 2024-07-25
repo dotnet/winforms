@@ -42,10 +42,6 @@ public sealed partial class Application
             {
                 // Don't do anything here -- small perf game of avoiding layout, etc.
             }
-
-            // We must not have a theming change for the marshalling control, otherwise calls
-            // to theming rendering APIs won't succeed.
-            protected override bool PreventDarkModeThemeChange => true;
         }
     }
 }
