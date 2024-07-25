@@ -23,7 +23,14 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="address">Address to the remote file, http, ftp etc...</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved.</param>
         Public Sub DownloadFile(address As String, destinationFileName As String)
-            DownloadFile(address, destinationFileName, DEFAULT_USERNAME, DEFAULT_PASSWORD, False, DEFAULT_TIMEOUT, False)
+            DownloadFile(
+                address,
+                destinationFileName,
+                userName:=DEFAULT_USERNAME,
+                password:=DEFAULT_PASSWORD,
+                showUI:=False,
+                connectionTimeout:=DEFAULT_TIMEOUT,
+                overwrite:=False)
         End Sub
 
         ''' <summary>
@@ -35,11 +42,11 @@ Namespace Microsoft.VisualBasic.Devices
             DownloadFile(
                 address,
                 destinationFileName,
-                DEFAULT_USERNAME,
-                DEFAULT_PASSWORD,
-                False,
-                DEFAULT_TIMEOUT,
-                False)
+                userName:=DEFAULT_USERNAME,
+                password:=DEFAULT_PASSWORD,
+                showUI:=False,
+                connectionTimeout:=DEFAULT_TIMEOUT,
+                overwrite:=False)
         End Sub
 
         ''' <summary>
@@ -61,8 +68,8 @@ Namespace Microsoft.VisualBasic.Devices
                 userName,
                 password,
                 showUI:=False,
-                DEFAULT_TIMEOUT,
-                False)
+                connectionTimeout:=DEFAULT_TIMEOUT,
+                overwrite:=False)
         End Sub
 
         ''' <summary>
@@ -83,9 +90,9 @@ Namespace Microsoft.VisualBasic.Devices
                 destinationFileName,
                 userName,
                 password,
-                False,
-                DEFAULT_TIMEOUT,
-                False)
+                showUI:=False,
+                connectionTimeout:=DEFAULT_TIMEOUT,
+                overwrite:=False)
         End Sub
 
         ''' <summary>
@@ -157,7 +164,7 @@ Namespace Microsoft.VisualBasic.Devices
             Dim networkCredentials As ICredentials = GetNetworkCredentials(userName, password)
 
             DownloadFile(
-                addressUri,
+                address:=addressUri,
                 destinationFileName,
                 networkCredentials,
                 showUI,

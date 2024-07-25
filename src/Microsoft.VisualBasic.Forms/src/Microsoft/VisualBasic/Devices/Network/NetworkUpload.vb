@@ -16,7 +16,13 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="sourceFileName">The file to be uploaded.</param>
         ''' <param name="address">The full name and path of the host destination.</param>
         Public Sub UploadFile(sourceFileName As String, address As String)
-            UploadFile(sourceFileName, address, DEFAULT_USERNAME, DEFAULT_PASSWORD, False, DEFAULT_TIMEOUT)
+            UploadFile(
+                sourceFileName,
+                address,
+                userName:=DEFAULT_USERNAME,
+                password:=DEFAULT_PASSWORD,
+                showUI:=False,
+                connectionTimeout:=DEFAULT_TIMEOUT)
         End Sub
 
         ''' <summary>
@@ -25,7 +31,13 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="sourceFileName">The file to be uploaded.</param>
         ''' <param name="address">Uri representing the destination.</param>
         Public Sub UploadFile(sourceFileName As String, address As Uri)
-            UploadFile(sourceFileName, address, DEFAULT_USERNAME, DEFAULT_PASSWORD, False, DEFAULT_TIMEOUT)
+            UploadFile(
+                sourceFileName,
+                address,
+                userName:=DEFAULT_USERNAME,
+                password:=DEFAULT_PASSWORD,
+                showUI:=False,
+                connectionTimeout:=DEFAULT_TIMEOUT)
         End Sub
 
         ''' <summary>
@@ -41,7 +53,13 @@ Namespace Microsoft.VisualBasic.Devices
             userName As String,
             password As String)
 
-            UploadFile(sourceFileName, address, userName, password, False, DEFAULT_TIMEOUT)
+            UploadFile(
+                sourceFileName,
+                address,
+                userName,
+                password,
+                showUI:=False,
+                connectionTimeout:=DEFAULT_TIMEOUT)
         End Sub
 
         ''' <summary>
@@ -57,7 +75,13 @@ Namespace Microsoft.VisualBasic.Devices
             userName As String,
             password As String)
 
-            UploadFile(sourceFileName, address, userName, password, False, DEFAULT_TIMEOUT)
+            UploadFile(
+                sourceFileName,
+                address,
+                userName,
+                password,
+                showUI:=False,
+                connectionTimeout:=DEFAULT_TIMEOUT)
         End Sub
 
         ''' <summary>
@@ -77,7 +101,14 @@ Namespace Microsoft.VisualBasic.Devices
             showUI As Boolean,
             connectionTimeout As Integer)
 
-            UploadFile(sourceFileName, address, userName, password, showUI, connectionTimeout, UICancelOption.ThrowException)
+            UploadFile(
+                sourceFileName,
+                address,
+                userName,
+                password,
+                showUI,
+                connectionTimeout,
+                onUserCancel:=UICancelOption.ThrowException)
         End Sub
 
         ''' <summary>
@@ -104,7 +135,7 @@ Namespace Microsoft.VisualBasic.Devices
             ' We're safe from UploadFile(Nothing, ...) due to overload failure (UploadFile(String,...) vs. UploadFile(Uri,...)).
             ' However, it is good practice to verify address before calling address.Trim.
             If String.IsNullOrWhiteSpace(address) Then
-                Throw GetArgumentNullException("address")
+                Throw GetArgumentNullException(NameOf(address))
             End If
 
             ' Getting a uri will validate the form of the host address
@@ -115,7 +146,14 @@ Namespace Microsoft.VisualBasic.Devices
                 Throw GetInvalidOperationException(SR.Network_UploadAddressNeedsFilename)
             End If
 
-            UploadFile(sourceFileName, addressUri, userName, password, showUI, connectionTimeout, onUserCancel)
+            UploadFile(
+                sourceFileName,
+                address:=addressUri,
+                userName,
+                password,
+                showUI,
+                connectionTimeout,
+                onUserCancel)
 
         End Sub
 
@@ -136,7 +174,14 @@ Namespace Microsoft.VisualBasic.Devices
             showUI As Boolean,
             connectionTimeout As Integer)
 
-            UploadFile(sourceFileName, address, userName, password, showUI, connectionTimeout, UICancelOption.ThrowException)
+            UploadFile(
+                sourceFileName,
+                address,
+                userName,
+                password,
+                showUI,
+                connectionTimeout,
+                onUserCancel:=UICancelOption.ThrowException)
         End Sub
 
         ''' <summary>
@@ -163,7 +208,13 @@ Namespace Microsoft.VisualBasic.Devices
             ' Get network credentials
             Dim networkCredentials As ICredentials = GetNetworkCredentials(userName, password)
 
-            UploadFile(sourceFileName, address, networkCredentials, showUI, connectionTimeout, onUserCancel)
+            UploadFile(
+                sourceFileName,
+                address,
+                networkCredentials,
+                showUI,
+                connectionTimeout,
+                onUserCancel)
 
         End Sub
 
@@ -182,7 +233,13 @@ Namespace Microsoft.VisualBasic.Devices
             showUI As Boolean,
             connectionTimeout As Integer)
 
-            UploadFile(sourceFileName, address, networkCredentials, showUI, connectionTimeout, UICancelOption.ThrowException)
+            UploadFile(
+                sourceFileName,
+                address,
+                networkCredentials,
+                showUI,
+                connectionTimeout,
+                onUserCancel:=UICancelOption.ThrowException)
         End Sub
 
         ''' <summary>
@@ -212,11 +269,11 @@ Namespace Microsoft.VisualBasic.Devices
             End If
 
             If connectionTimeout <= 0 Then
-                Throw GetArgumentExceptionWithArgName("connectionTimeout", SR.Network_BadConnectionTimeout)
+                Throw GetArgumentExceptionWithArgName(NameOf(connectionTimeout), SR.Network_BadConnectionTimeout)
             End If
 
             If address Is Nothing Then
-                Throw GetArgumentNullException("address")
+                Throw GetArgumentNullException(NameOf(address))
             End If
 
             Using client As New WebClientExtended()

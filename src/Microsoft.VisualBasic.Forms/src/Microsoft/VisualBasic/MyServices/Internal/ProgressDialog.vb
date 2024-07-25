@@ -49,6 +49,11 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Sub
 
         ''' <summary>
+        '''  Event raised when user cancels the dialog or closes it before the operation is completed.
+        ''' </summary>
+        Public Event UserHitCancel()
+
+        ''' <summary>
         '''  This enables a dialog with a close button, sizable borders, and no icon
         ''' </summary>
         Protected Overrides ReadOnly Property CreateParams() As CreateParams
@@ -97,11 +102,6 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                 Return _canceled
             End Get
         End Property
-
-        ''' <summary>
-        '''  Event raised when user cancels the dialog or closes it before the operation is completed.
-        ''' </summary>
-        Public Event UserHitCancel()
 
         ''' <summary>
         '''  Handles user clicking Cancel. Sets a flag read by secondary thread.

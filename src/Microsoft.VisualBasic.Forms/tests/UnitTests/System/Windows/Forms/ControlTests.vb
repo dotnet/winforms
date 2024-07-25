@@ -5,6 +5,7 @@ Imports System.Windows.Forms
 Imports Xunit
 
 Namespace Microsoft.VisualBasic.Forms.Tests
+
     Partial Public Class ControlTests
 
         Public Shared Function FaultingFunc(a As Integer) As Integer

@@ -12,7 +12,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
     ''' </summary>
     Friend NotInheritable Class WebClientCopy
 
-        ' Dialog shown if user wants to see progress UI.  Allows the user to cancel the file transfer.
+        ' Dialog shown if user wants to see progress UI. Allows the user to cancel the file transfer.
         Private WithEvents m_ProgressDialog As ProgressDialog
 
         ' The WebClient performs the downloading or uploading operations for us
@@ -23,9 +23,6 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
 
         ' The percentage of the operation completed
         Private _percentage As Integer
-
-        ' Used for invoking ProgressDialog.Increment
-        Private Delegate Sub DoIncrement(Increment As Integer)
 
         ''' <summary>
         '''  Creates an instance of a WebClientCopy, used to download or upload a file.
@@ -40,6 +37,9 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
             m_ProgressDialog = dialog
 
         End Sub
+
+        ' Used for invoking ProgressDialog.Increment
+        Private Delegate Sub DoIncrement(Increment As Integer)
 
         ''' <summary>
         '''  Posts a message to close the progress dialog.
@@ -84,11 +84,11 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         '''  the current async file transfer operation.
         ''' </summary>
         ''' <remarks>
-        '''  Note that we don't want to close the progress dialog here.  Wait until
+        '''  Note that we don't want to close the progress dialog here. Wait until
         '''  the actual file transfer cancel event comes through and do it there.
         ''' </remarks>
         Private Sub m_ProgressDialog_UserCancelledEvent() Handles m_ProgressDialog.UserHitCancel
-            m_WebClient.CancelAsync() 'cancel the upload/download transfer.  We'll close the ProgressDialog as soon as the WebClient cancels the xfer.
+            m_WebClient.CancelAsync() 'cancel the upload/download transfer. We'll close the ProgressDialog as soon as the WebClient cancels the xfer.
         End Sub
 
         ''' <summary>
