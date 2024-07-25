@@ -95,13 +95,13 @@ Namespace Microsoft.VisualBasic.Devices
                 dialog = GetProgressDialog(address, destinationFileName, showUI)
 
                 Dim t As Task = DownloadFileAsync(
-            address,
-            destinationFileName,
-            userName,
-            password,
+                    address,
+                    destinationFileName,
+                    userName,
+                    password,
                     dialog,
-            connectionTimeout,
-            overwrite,
+                    connectionTimeout,
+                    overwrite,
                     onUserCancel:=UICancelOption.ThrowException)
 
                 If t.IsFaulted Then
