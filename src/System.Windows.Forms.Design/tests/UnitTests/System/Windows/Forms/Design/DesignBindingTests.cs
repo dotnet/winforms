@@ -49,7 +49,7 @@ public sealed class DesignBindingTests
     [InlineData("Object.SubObject.Field", "Field")]
     public void DataField_ReturnsCorrectField(string dataMember, string expectedField)
     {
-        var binding = new DesignBinding(new object(), dataMember);
+        var binding = new DesignBinding(new object(), dataMember ?? string.Empty);
         binding.DataField.Should().Be(expectedField);
     }
 
