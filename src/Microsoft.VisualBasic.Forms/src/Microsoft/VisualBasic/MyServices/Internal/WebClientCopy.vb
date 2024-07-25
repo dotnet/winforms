@@ -24,9 +24,6 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ' The percentage of the operation completed
         Private _percentage As Integer
 
-        ' Used for invoking ProgressDialog.Increment
-        Private Delegate Sub DoIncrement(Increment As Integer)
-
         ''' <summary>
         '''  Creates an instance of a WebClientCopy, used to download or upload a file.
         ''' </summary>
@@ -40,6 +37,9 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
             m_ProgressDialog = dialog
 
         End Sub
+
+        ' Used for invoking ProgressDialog.Increment
+        Private Delegate Sub DoIncrement(Increment As Integer)
 
         ''' <summary>
         '''  Posts a message to close the progress dialog.

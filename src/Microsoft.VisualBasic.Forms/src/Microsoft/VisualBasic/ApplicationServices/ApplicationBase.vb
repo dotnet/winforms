@@ -118,5 +118,5 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             Return variableValue
         End Function
 
-    End Class 'ApplicationBase
+    End Class
 End Namespace

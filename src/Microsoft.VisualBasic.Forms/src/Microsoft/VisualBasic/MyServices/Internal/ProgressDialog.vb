@@ -43,9 +43,6 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ' ShowDialog has been called
         Private _formClosableSemaphore As New ManualResetEvent(False)
 
-        ''' <summary>
-        '''  Constructor
-        ''' </summary>
         Friend Sub New()
             MyBase.New()
             InitializeComponent()
