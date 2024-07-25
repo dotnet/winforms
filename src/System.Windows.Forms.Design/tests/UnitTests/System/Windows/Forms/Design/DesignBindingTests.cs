@@ -21,7 +21,7 @@ public sealed class DesignBindingTests
     {
         object dataSource = new();
         string dataMember = "TestMember";
-        var binding = new DesignBinding(dataSource, dataMember);
+        var binding = new DesignBinding(dataSource, dataMember ?? string.Empty);
 
         binding.DataSource.Should().Be(dataSource);
         binding.DataMember.Should().Be(dataMember);
@@ -58,7 +58,7 @@ public sealed class DesignBindingTests
     {
         object dataSource = new();
         string dataMember = "TestMember";
-        var binding = new DesignBinding(dataSource, dataMember);
+        var binding = new DesignBinding(dataSource, dataMember ?? string.Empty);
 
         binding.Equals(dataSource, dataMember).Should().BeTrue();
     }
@@ -68,7 +68,7 @@ public sealed class DesignBindingTests
     {
         object dataSource = new();
         string dataMember = "TestMember";
-        var binding = new DesignBinding(dataSource, dataMember);
+        var binding = new DesignBinding(dataSource, dataMember ?? string.Empty);
 
         binding.Equals(new object(), dataMember).Should().BeFalse();
     }
@@ -78,7 +78,7 @@ public sealed class DesignBindingTests
     {
         object dataSource = new();
         string dataMember = "TestMember";
-        var binding = new DesignBinding(dataSource, dataMember);
+        var binding = new DesignBinding(dataSource, dataMember ?? string.Empty);
 
         binding.Equals(dataSource, "DifferentMember").Should().BeFalse();
     }
