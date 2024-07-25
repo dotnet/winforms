@@ -41,12 +41,17 @@ public sealed class DesignBindingTests
         binding.IsNull.Should().BeFalse();
     }
 
+    public static IEnumerable<object[]> DataFieldTestData =>
+    new List<object[]>
+    {
+        new object[] { "", "" },
+        new object[] { "Field", "Field" },
+        new object[] { "Object.Field", "Field" },
+        new object[] { "Object.SubObject.Field", "Field" }
+    };
+
     [Theory]
-    [InlineData("", "")]
-    [InlineData("", "")]
-    [InlineData("Field", "Field")]
-    [InlineData("Object.Field", "Field")]
-    [InlineData("Object.SubObject.Field", "Field")]
+    [MemberData(nameof(DataFieldTestData))]
     public void DataField_ReturnsCorrectField(string dataMember, string expectedField)
     {
         var binding = new DesignBinding(new object(), dataMember);
@@ -59,7 +64,6 @@ public sealed class DesignBindingTests
         object dataSource = new();
         string dataMember = "TestMember";
         var binding = new DesignBinding(dataSource, dataMember);
-
         binding.Equals(dataSource, dataMember ?? string.Empty).Should().BeTrue();
     }
 
@@ -69,7 +73,6 @@ public sealed class DesignBindingTests
         object dataSource = new();
         string dataMember = "TestMember";
         var binding = new DesignBinding(dataSource, dataMember);
-
         binding.Equals(new object(), dataMember ?? string.Empty).Should().BeFalse();
     }
 
@@ -79,7 +82,6 @@ public sealed class DesignBindingTests
         object dataSource = new();
         string dataMember = "TestMember";
         var binding = new DesignBinding(dataSource, dataMember);
-
         binding.Equals(dataSource, "DifferentMember").Should().BeFalse();
     }
 }
