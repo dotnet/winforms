@@ -22,7 +22,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Sub
 
         ''' <summary>
-        '''  Creates a new exception
+        '''  Creates a new exception.
         ''' </summary>
         Public Sub New()
             MyBase.New(ExUtils.GetResourceString(SR.AppModel_NoStartupForm))

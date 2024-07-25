@@ -8,8 +8,8 @@ Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 Namespace Microsoft.VisualBasic.ApplicationServices
 
     ''' <summary>
-    '''  Exception for when we launch a single-instance application and it can't connect with the
-    '''  original instance.
+    '''  Exception for when we launch a single-instance application and it can't
+    '''  connect with the original instance.
     ''' </summary>
     <EditorBrowsable(EditorBrowsableState.Never)>
     <Serializable()>
@@ -23,7 +23,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Sub
 
         ''' <summary>
-        '''  Creates a new exception
+        '''  Creates a new <see cref="Exception"/>.
         ''' </summary>
         Public Sub New()
             MyBase.New(ExUtils.GetResourceString(SR.AppModel_SingleInstanceCantConnect))

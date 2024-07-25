@@ -10,9 +10,21 @@ Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 Namespace Microsoft.VisualBasic.Logging
 
     ''' <summary>
-    '''  Enables logging to configured TraceListeners
+    '''  Enables logging to configured TraceListeners.
     ''' </summary>
     Public Class Log
+
+        ' Taken from appConfig
+        Private Const DEFAULT_FILE_LOG_TRACE_LISTENER_NAME As String = "FileLog"
+
+        ' Names of TraceSources
+        Private Const WINAPP_SOURCE_NAME As String = "DefaultSource"
+
+        ' A table of default id values
+        Private Shared ReadOnly s_idHash As Dictionary(Of TraceEventType, Integer) = InitializeIDHash()
+
+        ' The underlying TraceSource for the log
+        Private ReadOnly _traceSource As DefaultTraceSource
 
         ''' <summary>
         '''  Creates a Log and the underlying TraceSource based on the platform.
@@ -37,6 +49,81 @@ Namespace Microsoft.VisualBasic.Logging
             If Not _traceSource.HasBeenConfigured Then
                 InitializeWithDefaultsSinceNoConfigExists()
             End If
+        End Sub
+
+        ''' <summary>
+        '''  Returns the file log trace listener we create for the Log.
+        ''' </summary>
+        ''' <value>The file log trace listener.</value>
+        Public ReadOnly Property DefaultFileLogWriter() As FileLogTraceListener
+            Get
+                Return CType(TraceSource.Listeners(DEFAULT_FILE_LOG_TRACE_LISTENER_NAME), FileLogTraceListener)
+            End Get
+        End Property
+
+        ''' <summary>
+        '''  Gives access to the log's underlying TraceSource.
+        ''' </summary>
+        ''' <value>The log's underlying TraceSource.</value>
+        <EditorBrowsable(EditorBrowsableState.Advanced)>
+        Public ReadOnly Property TraceSource() As TraceSource
+            Get
+                'Note, this is a downcast from the DefaultTraceSource class we are using
+                Return _traceSource
+            End Get
+        End Property
+
+        ''' <summary>
+        '''  Adds the default id values.
+        ''' </summary>
+        ''' <remarks>Fix FxCop violation InitializeReferenceTypeStaticFieldsInline.</remarks>
+        Private Shared Function InitializeIDHash() As Dictionary(Of TraceEventType, Integer)
+            Dim result As New Dictionary(Of TraceEventType, Integer)(10)
+
+            ' Populate table with the fx pre defined ids
+            With result
+                .Add(TraceEventType.Information, 0)
+                .Add(TraceEventType.Warning, 1)
+                .Add(TraceEventType.Error, 2)
+                .Add(TraceEventType.Critical, 3)
+                .Add(TraceEventType.Start, 4)
+                .Add(TraceEventType.Stop, 5)
+                .Add(TraceEventType.Suspend, 6)
+                .Add(TraceEventType.Resume, 7)
+                .Add(TraceEventType.Verbose, 8)
+                .Add(TraceEventType.Transfer, 9)
+            End With
+
+            Return result
+        End Function
+
+        ''' <summary>
+        '''  Converts a TraceEventType to an Id.
+        ''' </summary>
+        ''' <param name="traceEventValue"></param>
+        ''' <returns>The Id.</returns>
+        Private Shared Function TraceEventTypeToId(traceEventValue As TraceEventType) As Integer
+            Dim id As Integer = 0
+            s_idHash.TryGetValue(traceEventValue, id)
+            Return id
+        End Function
+
+        ''' <summary>
+        '''  Make sure we flush the log on exit.
+        ''' </summary>
+        Private Sub CloseOnProcessExit(sender As Object, e As EventArgs)
+            RemoveHandler AppDomain.CurrentDomain.ProcessExit, AddressOf CloseOnProcessExit
+            TraceSource.Close()
+        End Sub
+
+        ''' <summary>
+        '''  When there is no config file to configure the trace source, this function is called in order to
+        '''  configure the trace source according to the defaults they would have had in a default AppConfig.
+        ''' </summary>
+        Protected Friend Overridable Sub InitializeWithDefaultsSinceNoConfigExists()
+            'By default, you get a file log listener that picks everything from level Information on up.
+            _traceSource.Listeners.Add(New FileLogTraceListener(DEFAULT_FILE_LOG_TRACE_LISTENER_NAME))
+            _traceSource.Switch.Level = SourceLevels.Information
         End Sub
 
         ''' <summary>
@@ -79,8 +166,9 @@ Namespace Microsoft.VisualBasic.Logging
         End Sub
 
         ''' <summary>
-        '''  Has the TraceSource fire a TraceEvent for all listeners using information
-        '''   in an exception to form the message and appending additional info.
+        '''   Has the <see cref="TraceSource"/> fire a TraceEvent for all listeners
+        '''   using information in an exception to form the message and appending
+        '''   additional info.
         ''' </summary>
         ''' <param name="ex">The exception being logged.</param>
         ''' <param name="severity">The type of message (error, info, etc...).</param>
@@ -90,8 +178,8 @@ Namespace Microsoft.VisualBasic.Logging
         End Sub
 
         ''' <summary>
-        '''  Has the TraceSource fire a TraceEvent for all listeners using information in
-        '''  an exception to form the message and appending additional info.
+        '''  Has the TraceSource fire a TraceEvent for all listeners using
+        '''  information in an exception to form the message and appending additional info.
         ''' </summary>
         ''' <param name="ex">The exception being logged.</param>
         ''' <param name="severity">The type of message (error, info, etc...).</param>
@@ -116,33 +204,13 @@ Namespace Microsoft.VisualBasic.Logging
         End Sub
 
         ''' <summary>
-        '''  Gives access to the log's underlying TraceSource.
-        ''' </summary>
-        ''' <value>The log's underlying TraceSource.</value>
-        <EditorBrowsable(EditorBrowsableState.Advanced)>
-        Public ReadOnly Property TraceSource() As TraceSource
-            Get
-                'Note, this is a downcast from the DefaultTraceSource class we are using
-                Return _traceSource
-            End Get
-        End Property
-
-        ''' <summary>
-        '''  Returns the file log trace listener we create for the Log.
-        ''' </summary>
-        ''' <value>The file log trace listener.</value>
-        Public ReadOnly Property DefaultFileLogWriter() As FileLogTraceListener
-            Get
-                Return CType(TraceSource.Listeners(DEFAULT_FILE_LOG_TRACE_LISTENER_NAME), FileLogTraceListener)
-            End Get
-        End Property
-
-        ''' <summary>
         '''  Encapsulates a System.Diagnostics.TraceSource. The value add is that
         '''  it knows if it was initialized using a config file or not.
         ''' </summary>
         Friend NotInheritable Class DefaultTraceSource
             Inherits TraceSource
+
+            Private _listenerAttributes As StringDictionary
 
             ''' <summary>
             '''  TraceSource has other constructors, this is the only one we care about
@@ -169,73 +237,6 @@ Namespace Microsoft.VisualBasic.Logging
                 End Get
             End Property
 
-            Private _listenerAttributes As StringDictionary
-
         End Class
-
-        ''' <summary>
-        '''  When there is no config file to configure the trace source, this function is called in order to
-        '''  configure the trace source according to the defaults they would have had in a default AppConfig.
-        ''' </summary>
-        Protected Friend Overridable Sub InitializeWithDefaultsSinceNoConfigExists()
-            'By default, you get a file log listener that picks everything from level Information on up.
-            _traceSource.Listeners.Add(New FileLogTraceListener(DEFAULT_FILE_LOG_TRACE_LISTENER_NAME))
-            _traceSource.Switch.Level = SourceLevels.Information
-        End Sub
-
-        ''' <summary>
-        '''  Make sure we flush the log on exit.
-        ''' </summary>
-        Private Sub CloseOnProcessExit(sender As Object, e As EventArgs)
-            RemoveHandler AppDomain.CurrentDomain.ProcessExit, AddressOf CloseOnProcessExit
-            TraceSource.Close()
-        End Sub
-
-        ''' <summary>
-        '''  Adds the default id values.
-        ''' </summary>
-        ''' <remarks>Fix FxCop violation InitializeReferenceTypeStaticFieldsInline.</remarks>
-        Private Shared Function InitializeIDHash() As Dictionary(Of TraceEventType, Integer)
-            Dim result As New Dictionary(Of TraceEventType, Integer)(10)
-
-            ' Populate table with the fx pre defined ids
-            With result
-                .Add(TraceEventType.Information, 0)
-                .Add(TraceEventType.Warning, 1)
-                .Add(TraceEventType.Error, 2)
-                .Add(TraceEventType.Critical, 3)
-                .Add(TraceEventType.Start, 4)
-                .Add(TraceEventType.Stop, 5)
-                .Add(TraceEventType.Suspend, 6)
-                .Add(TraceEventType.Resume, 7)
-                .Add(TraceEventType.Verbose, 8)
-                .Add(TraceEventType.Transfer, 9)
-            End With
-
-            Return result
-        End Function
-
-        ''' <summary>
-        '''  Converts a TraceEventType to an Id.
-        ''' </summary>
-        ''' <param name="traceEventValue"></param>
-        ''' <returns>The Id.</returns>
-        Private Shared Function TraceEventTypeToId(traceEventValue As TraceEventType) As Integer
-            Dim id As Integer = 0
-            s_idHash.TryGetValue(traceEventValue, id)
-            Return id
-        End Function
-
-        ' The underlying TraceSource for the log
-        Private ReadOnly _traceSource As DefaultTraceSource
-
-        ' A table of default id values
-        Private Shared ReadOnly s_idHash As Dictionary(Of TraceEventType, Integer) = InitializeIDHash()
-
-        ' Names of TraceSources
-        Private Const WINAPP_SOURCE_NAME As String = "DefaultSource"
-        ' Taken from appConfig
-        Private Const DEFAULT_FILE_LOG_TRACE_LISTENER_NAME As String = "FileLog"
-
     End Class
 End Namespace

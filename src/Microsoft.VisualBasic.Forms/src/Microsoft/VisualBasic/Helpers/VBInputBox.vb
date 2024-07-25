@@ -13,10 +13,10 @@ Namespace Microsoft.VisualBasic.CompilerServices
 
 #Disable Warning IDE1006 ' Naming Styles, Justification:=<VBInputBox.resx depends on these names>
         Private ReadOnly components As Container
-        Private TextBox As TextBox
         Private Label As Label
-        Private OKButton As Button
         Private MyCancelButton As Button
+        Private OKButton As Button
+        Private TextBox As TextBox
 #Enable Warning IDE1006 ' Naming Styles
         Public Output As String = String.Empty
 
@@ -30,13 +30,6 @@ Namespace Microsoft.VisualBasic.CompilerServices
             MyBase.New()
             InitializeComponent()
             InitializeInputBox(prompt, title, defaultResponse, xPos, yPos)
-        End Sub
-
-        Protected Overloads Overrides Sub Dispose(disposing As Boolean)
-            If disposing Then
-                components?.Dispose()
-            End If
-            MyBase.Dispose(disposing)
         End Sub
 
         Private Sub InitializeComponent()
@@ -118,13 +111,20 @@ Namespace Microsoft.VisualBasic.CompilerServices
             End If
         End Sub
 
+        Private Sub MyCancelButton_Click(sender As Object, e As EventArgs)
+            Close()
+        End Sub
+
         Private Sub OKButton_Click(sender As Object, e As EventArgs)
             Output = TextBox.Text
             Close()
         End Sub
 
-        Private Sub MyCancelButton_Click(sender As Object, e As EventArgs)
-            Close()
+        Protected Overloads Overrides Sub Dispose(disposing As Boolean)
+            If disposing Then
+                components?.Dispose()
+            End If
+            MyBase.Dispose(disposing)
         End Sub
 
     End Class
