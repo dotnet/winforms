@@ -21,7 +21,7 @@ public sealed class DesignBindingTests
     {
         object dataSource = new();
         string dataMember = "TestMember";
-        var binding = new DesignBinding(dataSource, dataMember ?? string.Empty);
+        var binding = new DesignBinding(dataSource, dataMember);
 
         binding.DataSource.Should().Be(dataSource);
         binding.DataMember.Should().Be(dataMember);
@@ -42,14 +42,14 @@ public sealed class DesignBindingTests
     }
 
     [Theory]
-    [InlineData(null, "")]
+    [InlineData("", "")]
     [InlineData("", "")]
     [InlineData("Field", "Field")]
     [InlineData("Object.Field", "Field")]
     [InlineData("Object.SubObject.Field", "Field")]
     public void DataField_ReturnsCorrectField(string dataMember, string expectedField)
     {
-        var binding = new DesignBinding(new object(), dataMember ?? string.Empty);
+        var binding = new DesignBinding(new object(), dataMember);
         binding.DataField.Should().Be(expectedField);
     }
 
@@ -58,9 +58,9 @@ public sealed class DesignBindingTests
     {
         object dataSource = new();
         string dataMember = "TestMember";
-        var binding = new DesignBinding(dataSource, dataMember ?? string.Empty);
+        var binding = new DesignBinding(dataSource, dataMember);
 
-        binding.Equals(dataSource, dataMember).Should().BeTrue();
+        binding.Equals(dataSource, dataMember ?? string.Empty).Should().BeTrue();
     }
 
     [Fact]
@@ -68,9 +68,9 @@ public sealed class DesignBindingTests
     {
         object dataSource = new();
         string dataMember = "TestMember";
-        var binding = new DesignBinding(dataSource, dataMember ?? string.Empty);
+        var binding = new DesignBinding(dataSource, dataMember);
 
-        binding.Equals(new object(), dataMember).Should().BeFalse();
+        binding.Equals(new object(), dataMember ?? string.Empty).Should().BeFalse();
     }
 
     [Fact]
@@ -78,10 +78,8 @@ public sealed class DesignBindingTests
     {
         object dataSource = new();
         string dataMember = "TestMember";
-        var binding = new DesignBinding(dataSource, dataMember ?? string.Empty);
+        var binding = new DesignBinding(dataSource, dataMember);
 
         binding.Equals(dataSource, "DifferentMember").Should().BeFalse();
     }
 }
-
-
