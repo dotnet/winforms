@@ -36,9 +36,9 @@ public class AppManifestAnalyzerTests
         {
             TestCode = CSharpCode,
             TestState =
-                {
-                    AdditionalFiles = { }
-                }
+            {
+                AdditionalFiles = { }
+            }
         }.RunAsync();
 
     [Fact]
@@ -133,7 +133,7 @@ public class AppManifestAnalyzerTests
             TestState =
             {
                 AdditionalFiles = { (manifestFilePath, manifestFile) },
-                AnalyzerConfigFiles = { ("/.globalconfig", $"is_global = true\r\ndotnet_diagnostic.WFCA010.severity = none") }
+                AnalyzerConfigFiles = { ("/.globalconfig", $"is_global = true\r\ndotnet_diagnostic.{DiagnosticIDs.MigrateHighDpiSettings}.severity = none") }
             }
         }.RunAsync();
     }
@@ -152,7 +152,7 @@ public class AppManifestAnalyzerTests
             TestState =
             {
                 AdditionalFiles = { (manifestFilePath, manifestFile) },
-                AnalyzerConfigFiles = { ("/.globalconfig", $"is_global = true\r\ndotnet_diagnostic.WFCA010.severity = none") }
+                AnalyzerConfigFiles = { ("/.globalconfig", $"is_global = true\r\ndotnet_diagnostic.{DiagnosticIDs.MigrateHighDpiSettings}.severity = none") }
             }
         }.RunAsync();
     }

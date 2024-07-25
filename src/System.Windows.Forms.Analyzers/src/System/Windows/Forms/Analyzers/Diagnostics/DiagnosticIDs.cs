@@ -5,14 +5,18 @@ namespace System.Windows.Forms.Analyzers.Diagnostics;
 
 internal static class DiagnosticIDs
 {
-    // Application Configuration
-    public const string UnsupportedProjectType = "WFCA001";
-    public const string PropertyCantBeSetToValue = "WFCA002";
-    public const string MigrateHighDpiSettings = "WFCA010";
+    // Application Configuration, number group 0001+
+    public const string UnsupportedProjectType = "WFO0001";
+    public const string PropertyCantBeSetToValue = "WFO0002";
+    public const string MigrateHighDpiSettings = "WFO0003";
 
-    // Security
-    public const string MissingPropertySerializationConfiguration = "WFCA100";
+    // Security, number group 1000+
+    public const string MissingPropertySerializationConfiguration = "WFO1000";
 
-    // WinForms Usage
-    public const string DisposeModalDialog = "WFCA500";
+    // WinForms best practize, number group 2000+
+    public const string DisposeModalDialog = "WFO2000";
+
+    // Experimental, number group 9000+
+    public const string ExperimentalVisualStyles = "WFO9000";
+    public const string ExperimentalDarkMode = "WFO9001";
 }

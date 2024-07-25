@@ -105,27 +105,25 @@ internal class ApplicationConfigurationGenerator : IIncrementalGenerator
                     applicationConfigDiagnostics: source.ApplicationConfigDiagnostics));
     }
 
-    public static bool IsSupportedSyntaxNode(SyntaxNode syntaxNode)
-    {
-        return syntaxNode is InvocationExpressionSyntax
+    public static bool IsSupportedSyntaxNode(SyntaxNode syntaxNode) =>
+        syntaxNode is InvocationExpressionSyntax
         {
             ArgumentList.Arguments.Count: 0,
             Expression: MemberAccessExpressionSyntax
             {
                 Name.Identifier.ValueText: "Initialize",
                 Expression:
-                        MemberAccessExpressionSyntax  // For: SourceGenerated.ApplicationConfiguration.Initialize()
-                        {
-                            Name.Identifier.ValueText: "ApplicationConfiguration"
-                        }
+                            MemberAccessExpressionSyntax  // For: SourceGenerated.ApplicationConfiguration.Initialize()
+                            {
+                                Name.Identifier.ValueText: "ApplicationConfiguration"
+                            }
 
-                        or
+                            or
 
-                        IdentifierNameSyntax           // For: ApplicationConfiguration.Initialize() with a using statement
-                        {
-                            Identifier.ValueText: "ApplicationConfiguration"
-                        }
+                            IdentifierNameSyntax           // For: ApplicationConfiguration.Initialize() with a using statement
+                            {
+                                Identifier.ValueText: "ApplicationConfiguration"
+                            }
             }
         };
-    }
 }

@@ -37,7 +37,7 @@ public class MissingPropertySerializationConfigurationAnalyzer : DiagnosticAnaly
             return;
         }
 
-        // Is the read/write and at least internal?
+        // Is the property read/write and at least internal?
         if (propertySymbol.SetMethod is null
             || propertySymbol.DeclaredAccessibility < Accessibility.Internal)
         {

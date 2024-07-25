@@ -9,11 +9,11 @@ Friend Module VisualBasicDiagnosticDescriptors
 
     Public ReadOnly s_missingPropertySerializationConfiguration As New DiagnosticDescriptor(
             id:=DiagnosticIDs.MissingPropertySerializationConfiguration,
-            title:=New LocalizableResourceString(NameOf(SR.WFCA100AnalyzerTitle), SR.ResourceManager, GetType(SR)),
-            messageFormat:=New LocalizableResourceString(NameOf(SR.WFCA100AnalyzerMessageFormat), SR.ResourceManager, GetType(SR)),
+            title:=New LocalizableResourceString(NameOf(SR.WFO1000AnalyzerTitle), SR.ResourceManager, GetType(SR)),
+            messageFormat:=New LocalizableResourceString(NameOf(SR.WFO1000AnalyzerMessageFormat), SR.ResourceManager, GetType(SR)),
             category:=DiagnosticCategories.WinFormsSecurity,
             defaultSeverity:=DiagnosticSeverity.Error,
             isEnabledByDefault:=True,
-            description:=New LocalizableResourceString(NameOf(SR.WFCA100AnalyzerDescription), SR.ResourceManager, GetType(SR)))
+            description:=New LocalizableResourceString(NameOf(SR.WFO1000AnalyzerDescription), SR.ResourceManager, GetType(SR)))
 
 End Module

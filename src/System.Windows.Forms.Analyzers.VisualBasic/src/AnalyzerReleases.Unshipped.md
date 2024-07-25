@@ -4,4 +4,4 @@
 ### New Rules
 Rule ID | Category | Severity | Notes
 --------|----------|----------|-------
-WFCA100 | WinForms Security | Error | ControlPropertySerializationDiagnosticAnalyzer
+WFO1000 | WinForms Security | Error | VisualBasicDiagnosticDescriptors

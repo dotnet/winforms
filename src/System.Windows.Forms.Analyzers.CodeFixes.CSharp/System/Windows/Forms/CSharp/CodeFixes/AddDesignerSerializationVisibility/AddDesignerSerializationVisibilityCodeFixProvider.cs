@@ -71,7 +71,7 @@ internal sealed class AddDesignerSerializationVisibilityCodeFixProvider : CodeFi
             .SelectMany(al => al.Attributes)
             .Any(a => a.Name.ToString() == DesignerSerializationVisibilityAttributeName))
         {
-            Debug.Assert(false, "The attribute should not be there.");
+            Debug.Fail("The attribute should not be there.");
 
             return document;
         }

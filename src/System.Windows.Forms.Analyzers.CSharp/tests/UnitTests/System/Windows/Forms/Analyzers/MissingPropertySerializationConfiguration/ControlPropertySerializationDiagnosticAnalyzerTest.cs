@@ -115,9 +115,9 @@ public class ControlPropertySerializationDiagnosticAnalyzerTest
     // We are testing the analyzer with all versions of the .NET SDK from 6.0 on.
     public static IEnumerable<object[]> GetReferenceAssemblies()
     {
-        // yield return [ReferenceAssemblies.Net.Net60Windows];
-        // yield return [ReferenceAssemblies.Net.Net70Windows];
-        // yield return [ReferenceAssemblies.Net.Net80Windows];
+        yield return [ReferenceAssemblies.Net.Net60Windows];
+        yield return [ReferenceAssemblies.Net.Net70Windows];
+        yield return [ReferenceAssemblies.Net.Net80Windows];
         yield return [ReferenceAssemblies.Net.Net90Windows];
     }
 

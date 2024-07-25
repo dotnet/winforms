@@ -10,16 +10,16 @@ internal static partial class SharedDiagnosticDescriptors
 {
     internal static readonly DiagnosticDescriptor s_cSharpMigrateHighDpiSettings =
         new(id: DiagnosticIDs.MigrateHighDpiSettings,
-            title: new LocalizableResourceString(nameof(SR.WFCA010Title), SR.ResourceManager, typeof(SR)),
-            messageFormat: new LocalizableResourceString(nameof(SR.WFCA010Message_CS), SR.ResourceManager, typeof(SR)),
+            title: new LocalizableResourceString(nameof(SR.WFO0003Title), SR.ResourceManager, typeof(SR)),
+            messageFormat: new LocalizableResourceString(nameof(SR.WFO0003Message_CS), SR.ResourceManager, typeof(SR)),
             category: DiagnosticCategories.ApplicationConfiguration,
             defaultSeverity: DiagnosticSeverity.Warning,
             isEnabledByDefault: true);
 
     internal static readonly DiagnosticDescriptor s_visualBasicMigrateHighDpiSettings =
         new(id: DiagnosticIDs.MigrateHighDpiSettings,
-            title: new LocalizableResourceString(nameof(SR.WFCA010Title), SR.ResourceManager, typeof(SR)),
-            messageFormat: new LocalizableResourceString(nameof(SR.WFCA010Message_VB), SR.ResourceManager, typeof(SR)),
+            title: new LocalizableResourceString(nameof(SR.WFO0003Title), SR.ResourceManager, typeof(SR)),
+            messageFormat: new LocalizableResourceString(nameof(SR.WFO0003Message_VB), SR.ResourceManager, typeof(SR)),
             category: DiagnosticCategories.ApplicationConfiguration,
             defaultSeverity: DiagnosticSeverity.Warning,
             isEnabledByDefault: true);

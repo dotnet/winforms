@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Text;
+using System.Windows.Forms.Analyzers.Diagnostics;
 using System.Windows.Forms.CSharp.Generators.ApplicationConfiguration;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Testing;
@@ -68,7 +69,7 @@ public partial class ApplicationConfigurationGeneratorTests
                 Sources = { SourceCompilationFailed },
                 ExpectedDiagnostics =
                 {
-                    DiagnosticResult.CompilerError("WFCA001").WithArguments("WindowsApplication"),
+                    DiagnosticResult.CompilerError(DiagnosticIDs.UnsupportedProjectType).WithArguments("WindowsApplication"),
                 }
             },
         };
