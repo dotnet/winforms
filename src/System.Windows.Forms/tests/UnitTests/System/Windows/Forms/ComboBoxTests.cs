@@ -630,106 +630,106 @@ public class ComboBoxTests
         public void TestTriggerDoubleClick() => TriggerDoubleClick();
     }
 
-        [WinFormsFact]
-        public void ComboBox_DrawItem_AddHandler_ShouldCallHandler()
+    [WinFormsFact]
+    public void ComboBox_DrawItem_AddHandler_ShouldCallHandler()
+    {
+        using CustomComboBox control = new();
+        using Bitmap bitmap = new(1, 1);
+        Graphics graphics = Graphics.FromImage(bitmap);
+        int callCount = 0;
+
+        DrawItemEventHandler handler = (sender, e) => callCount++;
+
+        control.DrawItem += handler;
+        control.TestRaiseOnDrawItem(new DrawItemEventArgs(graphics, control.Font, new Rectangle(), 0, DrawItemState.Default));
+
+        callCount.Should().Be(1);
+        control.DrawItem -= handler;
+    }
+
+    [WinFormsFact]
+    public void ComboBox_DrawItem_RemoveHandler_ShouldNotCallHandler()
+    {
+        using CustomComboBox control = new();
+        int callCount = 0;
+
+        DrawItemEventHandler handler = (sender, e) => callCount++;
+
+        control.DrawItem += handler;
+        control.DrawItem -= handler;
+        using Bitmap bitmap = new(1, 1);
+        control.TestRaiseOnDrawItem(new DrawItemEventArgs(Graphics.FromImage(bitmap), control.Font, new Rectangle(), 0, DrawItemState.Default));
+
+        callCount.Should().Be(0);
+    }
+
+    [WinFormsFact]
+    public void ComboBox_DrawItem_AddNullHandler_ShouldNotThrow()
+    {
+        using CustomComboBox control = new();
+
+        // No exception means the test passed.
+        control.DrawItem += null;
+        control.DrawItem -= null;
+    }
+
+    [WinFormsFact]
+    public void ComboBox_DrawItem_AddRemoveMultipleHandlers_ShouldCallHandlers()
+    {
+        using CustomComboBox control = new();
+        using Bitmap bitmap = new(1, 1);
+        Graphics graphics = Graphics.FromImage(bitmap);
+        int callCount1 = 0;
+        int callCount2 = 0;
+
+        DrawItemEventHandler handler1 = (sender, e) => callCount1++;
+        DrawItemEventHandler handler2 = (sender, e) => callCount2++;
+
+        control.DrawItem += handler1;
+        control.DrawItem += handler2;
+        control.TestRaiseOnDrawItem(new DrawItemEventArgs(graphics, control.Font, new Rectangle(), 0, DrawItemState.Default));
+
+        callCount1.Should().Be(1);
+        callCount2.Should().Be(1);
+
+        control.DrawItem -= handler1;
+        control.TestRaiseOnDrawItem(new DrawItemEventArgs(graphics, control.Font, new Rectangle(), 0, DrawItemState.Default));
+
+        callCount1.Should().Be(1); // Should not increase
+        callCount2.Should().Be(2); // Should increase
+    }
+
+    [WinFormsFact]
+    public void ComboBox_DrawItem_RemoveNonExistentHandler_ShouldNotThrow()
+    {
+        using CustomComboBox control = new();
+        DrawItemEventHandler handler = (sender, e) => { };
+
+        // No exception means the test passed.
+        control.DrawItem -= handler;
+    }
+
+    [WinFormsTheory]
+    [InlineData(1)]
+    [InlineData(0)]
+    public void ComboBox_DoubleClick_AddRemoveEvent_Success(int expectedCallCount)
+    {
+        using CustomComboBox control = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) => callCount++;
+
+        if (expectedCallCount == 1)
         {
-            using CustomComboBox control = new();
-            using Bitmap bitmap = new(1, 1);
-            Graphics graphics = Graphics.FromImage(bitmap);
-            int callCount = 0;
-
-            DrawItemEventHandler handler = (sender, e) => callCount++;
-
-            control.DrawItem += handler;
-            control.TestRaiseOnDrawItem(new DrawItemEventArgs(graphics, control.Font, new Rectangle(), 0, DrawItemState.Default));
-
-            callCount.Should().Be(1);
-            control.DrawItem -= handler;
+            control.DoubleClick += handler;
         }
 
-        [WinFormsFact]
-        public void ComboBox_DrawItem_RemoveHandler_ShouldNotCallHandler()
-        {
-            using CustomComboBox control = new();
-            int callCount = 0;
+        control.TestTriggerDoubleClick();
+        callCount.Should().Be(expectedCallCount);
 
-            DrawItemEventHandler handler = (sender, e) => callCount++;
-
-            control.DrawItem += handler;
-            control.DrawItem -= handler;
-            using Bitmap bitmap = new(1, 1);
-            control.TestRaiseOnDrawItem(new DrawItemEventArgs(Graphics.FromImage(bitmap), control.Font, new Rectangle(), 0, DrawItemState.Default));
-
-            callCount.Should().Be(0);
-        }
-
-        [WinFormsFact]
-        public void ComboBox_DrawItem_AddNullHandler_ShouldNotThrow()
-        {
-            using CustomComboBox control = new();
-
-            // No exception means the test passed.
-            control.DrawItem += null;
-            control.DrawItem -= null;
-        }
-
-        [WinFormsFact]
-        public void ComboBox_DrawItem_AddRemoveMultipleHandlers_ShouldCallHandlers()
-        {
-            using CustomComboBox control = new();
-            using Bitmap bitmap = new(1, 1);
-            Graphics graphics = Graphics.FromImage(bitmap);
-            int callCount1 = 0;
-            int callCount2 = 0;
-
-            DrawItemEventHandler handler1 = (sender, e) => callCount1++;
-            DrawItemEventHandler handler2 = (sender, e) => callCount2++;
-
-            control.DrawItem += handler1;
-            control.DrawItem += handler2;
-            control.TestRaiseOnDrawItem(new DrawItemEventArgs(graphics, control.Font, new Rectangle(), 0, DrawItemState.Default));
-
-            callCount1.Should().Be(1);
-            callCount2.Should().Be(1);
-
-            control.DrawItem -= handler1;
-            control.TestRaiseOnDrawItem(new DrawItemEventArgs(graphics, control.Font, new Rectangle(), 0, DrawItemState.Default));
-
-            callCount1.Should().Be(1); // Should not increase
-            callCount2.Should().Be(2); // Should increase
-        }
-
-        [WinFormsFact]
-        public void ComboBox_DrawItem_RemoveNonExistentHandler_ShouldNotThrow()
-        {
-            using CustomComboBox control = new();
-            DrawItemEventHandler handler = (sender, e) => { };
-
-            // No exception means the test passed.
-            control.DrawItem -= handler;
-        }
-
-        [WinFormsTheory]
-        [InlineData(1)]
-        [InlineData(0)]
-        public void ComboBox_DoubleClick_AddRemoveEvent_Success(int expectedCallCount)
-        {
-            using CustomComboBox control = new();
-            int callCount = 0;
-            EventHandler handler = (sender, e) => callCount++;
-
-            if (expectedCallCount == 1)
-            {
-                control.DoubleClick += handler;
-            }
-
-            control.TestTriggerDoubleClick();
-            callCount.Should().Be(expectedCallCount);
-
-            control.DoubleClick -= handler;
-            control.TestTriggerDoubleClick();
-            callCount.Should().Be(expectedCallCount);
-        } 
+        control.DoubleClick -= handler;
+        control.TestTriggerDoubleClick();
+        callCount.Should().Be(expectedCallCount);
+    } 
 
     [WinFormsTheory]
     [EnumData<ComboBoxStyle>]
