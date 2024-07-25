@@ -59,23 +59,31 @@ public partial class ControlTests
         AccessibleObject accessibleObject = new();
         yield return new object[] { accessibleObject, accessibleObject };
 
-        var controlAccessibleObject = new Control.ControlAccessibleObject(new Control());
-        yield return new object[] { controlAccessibleObject, controlAccessibleObject };
+        Control control = new();
+        var controlAccessibleObject = new Control.ControlAccessibleObject(control);
+        yield return new object[] { controlAccessibleObject, controlAccessibleObject, control };
     }
 
     [WinFormsTheory]
     [MemberData(nameof(AccessibilityObject_CustomCreateAccessibilityInstance_TestData))]
-    public void Control_AccessibilityObject_GetCustomCreateAccessibilityInstance_ReturnsExpected(AccessibleObject result, AccessibleObject expected)
+    public void Control_AccessibilityObject_GetCustomCreateAccessibilityInstance_ReturnsExpected(AccessibleObject result, AccessibleObject expected, Control originalControl = null)
     {
-        using (new NoAssertContext())
+        try
         {
-            using CustomCreateAccessibilityInstanceControl control = new()
+            using (new NoAssertContext())
             {
-                CreateAccessibilityResult = result
-            };
-            Assert.Same(expected, control.AccessibilityObject);
-            Assert.Same(control.AccessibilityObject, control.AccessibilityObject);
-            Assert.False(control.IsHandleCreated);
+                using CustomCreateAccessibilityInstanceControl control = new()
+                {
+                    CreateAccessibilityResult = result
+                };
+                Assert.Same(expected, control.AccessibilityObject);
+                Assert.Same(control.AccessibilityObject, control.AccessibilityObject);
+                Assert.False(control.IsHandleCreated);
+            }
+        }
+        finally
+        {
+            originalControl?.Dispose();
         }
     }
 
@@ -10506,7 +10514,7 @@ public partial class ControlTests
     }
 
     [WinFormsTheory]
-    [CommonMemberData(typeof(ControlTests), nameof(ControlTests.Get_Control_ShowFocusCues_GetWithHandleMessageSent_ReturnsExpected))]
+    [CommonMemberData(typeof(ControlTests), nameof(Get_Control_ShowFocusCues_GetWithHandleMessageSent_ReturnsExpected))]
     public void Control_ShowFocusCues_GetWithHandleMessageSent_ReturnsExpected(int wParam, bool expected)
     {
         using SubControl control = new();
@@ -10565,7 +10573,7 @@ public partial class ControlTests
     }
 
     [WinFormsTheory]
-    [CommonMemberData(typeof(ControlTests), nameof(ControlTests.Get_Control_ShowKeyboardCues_GetWithHandleMessageSent_ReturnsExpected))]
+    [CommonMemberData(typeof(ControlTests), nameof(Get_Control_ShowKeyboardCues_GetWithHandleMessageSent_ReturnsExpected))]
     public void Control_ShowKeyboardCues_GetWithHandleMessageSent_ReturnsExpected(int wParam, bool expected)
     {
         using SubControl control = new();

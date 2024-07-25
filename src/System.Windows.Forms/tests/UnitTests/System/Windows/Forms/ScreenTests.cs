@@ -88,16 +88,25 @@ public class ScreenTests
     public static IEnumerable<object[]> FromHandle_TestData()
     {
         yield return new object[] { IntPtr.Zero };
-        yield return new object[] { new Control().Handle };
+
+        Control control = new();
+        yield return new object[] { control.Handle, control };
     }
 
     [Theory]
     [MemberData(nameof(FromHandle_TestData))]
-    public void Screen_FromHandle_Invoke_ReturnsExpected(IntPtr handle)
+    public void Screen_FromHandle_Invoke_ReturnsExpected(IntPtr handle, Control control = null)
     {
-        Screen screen = Screen.FromHandle(handle);
-        Assert.NotNull(screen);
-        VerifyScreen(screen);
+        try
+        {
+            Screen screen = Screen.FromHandle(handle);
+            Assert.NotNull(screen);
+            VerifyScreen(screen);
+        }
+        finally
+        {
+            control?.Dispose();
+        }
     }
 
     public static IEnumerable<object[]> FromPoint_TestData()

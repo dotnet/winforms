@@ -1119,17 +1119,24 @@ public class ControlControlCollectionTests
     public void ControlCollection_Add_DifferentThreadValueOwner_ThrowsArgumentException()
     {
         Control owner = null;
-        Thread thread = new(() =>
+        try
         {
-            owner = new Control();
-            Assert.NotEqual(IntPtr.Zero, owner.Handle);
-        });
-        thread.Start();
-        thread.Join();
+            Thread thread = new(() =>
+            {
+                owner = new Control();
+                Assert.NotEqual(IntPtr.Zero, owner.Handle);
+            });
+            thread.Start();
+            thread.Join();
 
-        using Control control = new();
-        var collection = new Control.ControlCollection(owner);
-        Assert.Throws<ArgumentException>(() => collection.Add(control));
+            using Control control = new();
+            var collection = new Control.ControlCollection(owner);
+            Assert.Throws<ArgumentException>(() => collection.Add(control));
+        }
+        finally
+        {
+            owner?.Dispose();
+        }
     }
 
     [Fact] // cross-thread access
@@ -1147,6 +1154,8 @@ public class ControlControlCollectionTests
         using Control owner = new();
         var collection = new Control.ControlCollection(owner);
         Assert.Throws<ArgumentException>(() => collection.Add(control));
+
+        control?.Dispose();
     }
 
     [WinFormsFact]
