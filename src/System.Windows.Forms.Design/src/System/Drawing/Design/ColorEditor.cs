@@ -23,7 +23,7 @@ public partial class ColorEditor : UITypeEditor
             return value;
         }
 
-        using ColorUI? _colorUI= new ColorUI(this);
+        using ColorUI? _colorUI = new(this);
 
         _colorUI.Start(editorService, value);
         editorService.DropDownControl(_colorUI);

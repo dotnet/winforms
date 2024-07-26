@@ -229,7 +229,7 @@ public class Control_ControlAccessibleObjectTests
         yield return new object[] { (IntPtr)(-1) };
         yield return new object[] { (IntPtr)1 };
         yield return new object[] { (IntPtr)250 };
-        Control control = new Control();
+        Control control = new();
         yield return new object[] { control.Handle, control };
     }
 
@@ -245,11 +245,11 @@ public class Control_ControlAccessibleObjectTests
             var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
             Assert.True(ownerControl.IsHandleCreated);
 
-            // Set empty.
+            // Set value.
             accessibleObject.Handle = value;
             Assert.Equal(value, accessibleObject.Handle);
 
-            // Set same.
+            // Set same value.
             accessibleObject.Handle = value;
             Assert.Equal(value, accessibleObject.Handle);
         }

@@ -1143,19 +1143,24 @@ public class ControlControlCollectionTests
     public void ControlCollection_Add_DifferentThreadValueControl_ThrowsArgumentException()
     {
         Control control = null;
-        Thread thread = new(() =>
+        try
         {
-            control = new Control();
-            Assert.NotEqual(IntPtr.Zero, control.Handle);
-        });
-        thread.Start();
-        thread.Join();
+            Thread thread = new(() =>
+            {
+                control = new Control();
+                Assert.NotEqual(IntPtr.Zero, control.Handle);
+            });
+            thread.Start();
+            thread.Join();
 
-        using Control owner = new();
-        var collection = new Control.ControlCollection(owner);
-        Assert.Throws<ArgumentException>(() => collection.Add(control));
-
-        control?.Dispose();
+            using Control owner = new();
+            var collection = new Control.ControlCollection(owner);
+            Assert.Throws<ArgumentException>(() => collection.Add(control));
+        }
+        finally
+        {
+            control?.Dispose();
+        }
     }
 
     [WinFormsFact]
