@@ -23,18 +23,18 @@ public sealed class ListBoxDesignerTests
         listBox.IntegralHeight.Should().Be(value);
     }
 
-    public static IEnumerable<object?[]> SetDockStyle_TestData()
+    public static TheoryData<object[]> SetDockStyle_TheoryData() => new()
     {
-        yield return new object[] { DockStyle.Fill, false };
-        yield return new object[] { DockStyle.Left, false };
-        yield return new object[] { DockStyle.Right, false };
-        yield return new object[] { DockStyle.Bottom, true };
-        yield return new object[] { DockStyle.Top, true };
-    }
+        new object[] { DockStyle.Fill, false },
+        new object[] { DockStyle.Left, false },
+        new object[] { DockStyle.Right, false },
+        new object[] { DockStyle.Bottom, true },
+        new object[] { DockStyle.Top, true }
+    };
 
     [Theory]
-    [MemberData(nameof(SetDockStyle_TestData))]
-    public void IntegralHeight_WhenDockStyleIsFillLeftOrRight_ShouldSetShadowPropertyAndNotListBoxIntegralHeight(DockStyle dockStyle, bool value, bool expected = true)
+    [MemberData(nameof(SetDockStyle_TheoryData))]
+    public void IntegralHeight_WhenDockStyleIsFillLeftOrRight_ShouldSetShadowPropertyAndNotListBoxIntegralHeight(object[] value)
     {
         using ListBoxDesigner designer = new();
         using ListBox listBox = new();
@@ -42,12 +42,15 @@ public sealed class ListBoxDesignerTests
 
         designer.IntegralHeight.Should().BeTrue();
 
+        DockStyle dockStyle= (DockStyle)value[0];
+        bool integralHeight = (bool)value[1];
         listBox.Dock = dockStyle;
-        designer.IntegralHeight = value;
+        designer.IntegralHeight = integralHeight;
 
         // When DockStyle is Fill/Left/Right, should set ShadowProperty and not set ListBox's IntegralHeight.
-        designer.IntegralHeight.Should().Be(value);
-        listBox.IntegralHeight.Should().Be(expected);
+        designer.IntegralHeight.Should().Be(integralHeight);
+        listBox.IntegralHeight.Should().BeTrue();
+        listBox.IsHandleCreated.Should().BeFalse();
     }
 
     [Fact]
@@ -61,22 +64,26 @@ public sealed class ListBoxDesignerTests
     }
 
     [Theory]
-    [MemberData(nameof(SetDockStyle_TestData))]
-    public void Dock_Set_WhenDockStyleIsFillLeftOrRight_ShouldSetListBoxDockAndSetListBoxIntegralHeightToFalse(DockStyle dockStyle, bool expected)
+    [MemberData(nameof(SetDockStyle_TheoryData))]
+    public void Dock_Set_WhenDockStyleIsFillLeftOrRight_ShouldSetListBoxDockAndSetListBoxIntegralHeightToFalse(object[] value)
     {
         using ListBoxDesigner designer = new();
         using ListBox listBox = new();
         designer.Initialize(listBox);
+
+        DockStyle dockStyle = (DockStyle)value[0];
+        bool expected = (bool)value[1];
         designer.Dock = dockStyle;
 
         // When DockStyle is Fill/Left/Right, should set ListBox's Dock and set ListBox's IntegralHeight to False.
         listBox.Dock.Should().Be(dockStyle);
         listBox.IntegralHeight.Should().Be(expected);
+        listBox.IsHandleCreated.Should().BeFalse();
     }
 
     [Theory]
-    [MemberData(nameof(SetDockStyle_TestData))]
-    public void Dock_Set_WhenDockStyleNotFillLeftOrRight_ShouldSetListBoxDockAndRestoreListBoxIntegralHeight(DockStyle dockStyle, bool expected)
+    [MemberData(nameof(SetDockStyle_TheoryData))]
+    public void Dock_Set_WhenDockStyleNotFillLeftOrRight_ShouldSetListBoxDockAndRestoreListBoxIntegralHeight(object[] value)
     {
         using ListBoxDesigner designer = new();
         using ListBox listBox = new();
@@ -86,11 +93,15 @@ public sealed class ListBoxDesignerTests
 
         listBox.IntegralHeight = false;
         designer.IntegralHeight = true;
+
+        DockStyle dockStyle = (DockStyle)value[0];
+        bool expected = (bool)value[1];
         designer.Dock = dockStyle;
 
         // When DockStyle not Fill/Left/Right, should set listBox's Dock and restore ListBox's IntegralHeight.
         listBox.Dock.Should().Be(dockStyle);
         listBox.IntegralHeight.Should().Be(expected);
+        listBox.IsHandleCreated.Should().BeFalse();
     }
 
     [Fact]
