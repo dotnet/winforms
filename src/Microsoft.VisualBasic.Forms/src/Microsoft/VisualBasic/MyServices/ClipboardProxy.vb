@@ -172,8 +172,13 @@ Namespace Microsoft.VisualBasic.MyServices
             Return Clipboard.ContainsData(format)
         End Function
 
+        ''' <inheritdoc cref="Clipboard.SetDataAsJson(Of T)(String, T)"/>
+        Public Sub SetDataAsJson(Of T)(format As String, data As T)
+            Clipboard.SetDataAsJson(format, data)
+        End Sub
+
         ''' <summary>
-        '''  Saves the passed in data to the clipboard in the passed in format.
+        ''' Saves the passed in data to the clipboard in the passed in format
         ''' </summary>
         ''' <param name="format">The format in which to save the data.</param>
         ''' <param name="data">The data to be saved.</param>

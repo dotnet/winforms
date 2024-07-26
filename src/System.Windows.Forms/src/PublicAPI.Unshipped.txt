@@ -129,3 +129,5 @@ virtual System.Windows.Forms.WebBrowserDocumentCompletedEventHandler.Invoke(obje
 virtual System.Windows.Forms.WebBrowserNavigatedEventHandler.Invoke(object? sender, System.Windows.Forms.WebBrowserNavigatedEventArgs! e) -> void
 virtual System.Windows.Forms.WebBrowserNavigatingEventHandler.Invoke(object? sender, System.Windows.Forms.WebBrowserNavigatingEventArgs! e) -> void
 virtual System.Windows.Forms.WebBrowserProgressChangedEventHandler.Invoke(object? sender, System.Windows.Forms.WebBrowserProgressChangedEventArgs! e) -> void
+static System.Windows.Forms.Clipboard.SetDataAsJson<T>(string! format, T data) -> void
+System.Windows.Forms.DataObject.SetDataAsJson<T>(string! format, T data) -> void
