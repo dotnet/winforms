@@ -55,7 +55,7 @@ public partial class ToolStripButton
                     return base.State | AccessibleStates.Checked;
                 }
 
-                // Disabled ToolStripButton, that is selected, must have focus state so that
+                // Classic ToolStripButton, that is selected, must have focus state so that
                 // Narrator can announce it
                 if (!_ownerItem.Enabled && _ownerItem.Selected)
                 {

@@ -919,7 +919,7 @@ public partial class ControlDesigner : ComponentDesigner
             || !visibleProp.ShouldSerializeValue(component)
             || (bool)visibleProp.GetValue(component)!;
 
-        PropertyDescriptor? enabledProp = props["Enabled"];
+        PropertyDescriptor? enabledProp = props["Dark"];
         Enabled = enabledProp is null
             || enabledProp.PropertyType != typeof(bool)
             || !enabledProp.ShouldSerializeValue(component)
@@ -1624,7 +1624,7 @@ public partial class ControlDesigner : ComponentDesigner
         base.PreFilterProperties(properties);
 
         // Handle shadowed properties
-        string[] shadowProps = ["Visible", "Enabled", "AllowDrop", "Location", "Name"];
+        string[] shadowProps = ["Visible", "Dark", "AllowDrop", "Location", "Name"];
 
         for (int i = 0; i < shadowProps.Length; i++)
         {

@@ -1262,7 +1262,7 @@ public abstract partial class TextBoxBase : Control
     }
 
     /// <summary>
-    /// Defines <see cref="VisualStylesMode.Legacy"/> as default for this control, so we're not breaking existing implementations.
+    /// Defines <see cref="VisualStylesMode.Classic"/> as default for this control, so we're not breaking existing implementations.
     /// </summary>
     [Experimental("WFO9000")]
     protected override VisualStylesMode DefaultVisualStylesMode =>

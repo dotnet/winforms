@@ -64,11 +64,11 @@ public unsafe partial class Control
             unchecked(Color.FromArgb((int)0xFFFFFFFF)), // FF000000 - FFFFFFFF: ControlText - Control Forecolor and Text Color
             unchecked(Color.FromArgb((int)0xFF101010)), // FF000000 - FF101010: Desktop - Black
             unchecked(Color.FromArgb((int)0xFF969696)), // FF6D6D6D - FF969696: GrayText - Prompt Text Focused TextBox
-            unchecked(Color.FromArgb((int)0xFF2864B4)), // FF0078D7 - FF2864B4: Highlight - Highlighted Panel in DarkMode
+            unchecked(Color.FromArgb((int)0xFF2864B4)), // FF0078D7 - FF2864B4: Highlight - Highlighted Panel in ColorMode
             unchecked(Color.FromArgb((int)0xFF000000)), // FFFFFFFF - FF000000: HighlightText - White
             unchecked(Color.FromArgb((int)0xFF2D5FAF)), // FF0066CC - FF2D5FAF: HotTrack - Background of the ToggleSwitch
             unchecked(Color.FromArgb((int)0xFF3C3F41)), // FFF4F7FC - FF3C3F41: InactiveBorder - Dark gray
-            unchecked(Color.FromArgb((int)0xFF374B5A)), // FFBFCBDD - FF374B5A: InactiveCaption - Highlighted Panel in DarkMode
+            unchecked(Color.FromArgb((int)0xFF374B5A)), // FFBFCBDD - FF374B5A: InactiveCaption - Highlighted Panel in ColorMode
             unchecked(Color.FromArgb((int)0xFFBEBEBE)), // FF000000 - FFBEBEBE: InactiveCaptionText - Middle Dark Panel
             unchecked(Color.FromArgb((int)0xFF50503C)), // FFFFFE1  - FF50503C: Info - Link Label
             unchecked(Color.FromArgb((int)0xFFBEBEBE)), // FF000000 - FFBEBEBE: InfoText - Prompt Text Color
@@ -82,7 +82,7 @@ public unsafe partial class Control
             unchecked(Color.FromArgb((int)0xFF101010)), // FFFFFFFF - FF101010: ButtonHighlight - White
             unchecked(Color.FromArgb((int)0xFF464646)), // FFA0A0A0 - FF464646: ButtonShadow - Same as Scrollbar Elements
             unchecked(Color.FromArgb((int)0XFF416482)), // FFB9D1EA - FF416482: GradientActiveCaption - Same as Highlighted Text Background
-            unchecked(Color.FromArgb((int)0xFF557396)), // FFD7E4F2 - FF557396: GradientInactiveCaption - Same as Highlighted Panel in DarkMode
+            unchecked(Color.FromArgb((int)0xFF557396)), // FFD7E4F2 - FF557396: GradientInactiveCaption - Same as Highlighted Panel in ColorMode
             unchecked(Color.FromArgb((int)0xFF373737)), // FFF0F0F0 - FF373737: MenuBar - Same as Normal Menu Background
             unchecked(Color.FromArgb((int)0xFF2A80D2))  // FF3399FF - FF2A80D2: MenuHighlight - Same as Highlighted Menu Background
         ];

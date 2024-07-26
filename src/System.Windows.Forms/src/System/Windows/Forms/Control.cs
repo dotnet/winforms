@@ -161,7 +161,7 @@ public unsafe partial class Control :
 
     private static FontHandleWrapper? s_defaultFontHandleWrapper;
 
-    internal const string DarkModeIdentifier = "DarkMode";
+    internal const string DarkModeIdentifier = "ColorMode";
     internal const string ExplorerThemeIdentifier = "Explorer";
     internal const string ItemsViewThemeIdentifier = "ItemsView";
 
@@ -3680,7 +3680,7 @@ public unsafe partial class Control :
     ///  </para>
     ///  <para>
     ///   As an ambient property, if the control is a top-level control and its VisualStylesMode is not explicitly set,
-    ///   it will inherit the setting from <see cref="Application.DefaultVisualStylesMode"/>. Inherited controls can
+    ///   it will inherit the setting from <see cref="Application.DefaultVisualStylesMode"/>. System controls can
     ///   overwrite <see cref="DefaultVisualStylesMode"/> to ensure backwards compatibility for controls, which
     ///   rely on a specific version of the visual styles of a base control (see <see cref="TextBoxBase"/> as an example).
     ///  </para>

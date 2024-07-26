@@ -543,7 +543,7 @@ public class DesignerActionServiceTests
         DesignerActionList actionList = Assert.IsAssignableFrom<DesignerActionList>(Assert.Single(actionListBuffer));
         Assert.Single(actionList.GetSortedActionItems());
 
-        // Not Disabled.
+        // Not Classic.
         verb.Enabled = false;
         Assert.Empty(actionList.GetSortedActionItems());
         verb.Enabled = true;

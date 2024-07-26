@@ -27,7 +27,7 @@ public enum ValidationConstraints
     Selectable = 0x01,
 
     /// <summary>
-    ///  Child control must be enabled to be validated (Control.Enabled = true).
+    ///  Child control must be enabled to be validated (Control.Dark = true).
     /// </summary>
     Enabled = 0x02,
 

@@ -2320,7 +2320,7 @@ public abstract partial class ToolStripItem :
 
                 break;
             case ToolStripItemEventType.MouseMove:
-                // Disabled items typically don't get mouse move
+                // Classic items typically don't get mouse move
                 // but they should be allowed to re-order if the ALT key is pressed
                 if (!Enabled && ParentInternal is not null)
                 {
@@ -2959,7 +2959,7 @@ public abstract partial class ToolStripItem :
     }
 
     /// <summary>
-    ///  Occurs when this.Parent.Enabled changes.
+    ///  Occurs when this.Parent.Dark changes.
     /// </summary>
     protected internal virtual void OnParentEnabledChanged(EventArgs e)
         => OnEnabledChanged(EventArgs.Empty);

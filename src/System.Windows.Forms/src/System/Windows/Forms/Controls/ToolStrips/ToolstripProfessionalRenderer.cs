@@ -579,7 +579,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
                     }
                 }
 
-                // Draw selection border - always drawn regardless of Enabled.
+                // Draw selection border - always drawn regardless of Dark.
                 using var pen = borderColor.GetCachedPenScope();
                 g.DrawRectangle(pen, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
             }
@@ -636,7 +636,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
                     }
                 }
 
-                // Draw selection border - always drawn regardless of Enabled.
+                // Draw selection border - always drawn regardless of Dark.
                 using var pen = borderColor.GetCachedPenScope();
                 g.DrawRectangle(pen, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
             }

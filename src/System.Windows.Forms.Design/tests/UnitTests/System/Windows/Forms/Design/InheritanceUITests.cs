@@ -8,9 +8,9 @@ namespace System.Windows.Forms.Design.Tests;
 public sealed class InheritanceUITests
 {
     [Theory]
-    [InlineData(InheritanceLevel.Inherited, "Inherited control")]
-    [InlineData(InheritanceLevel.InheritedReadOnly, "Inherited control (Private)")]
-    [InlineData(InheritanceLevel.NotInherited, "Inherited control")]
+    [InlineData(InheritanceLevel.Inherited, "System control")]
+    [InlineData(InheritanceLevel.InheritedReadOnly, "System control (Private)")]
+    [InlineData(InheritanceLevel.NotInherited, "System control")]
     public void AddInheritedControl_ShouldSetToolTipText(InheritanceLevel inheritanceLevel, string expectedText)
     {
         InheritanceUI inheritanceUI = new();

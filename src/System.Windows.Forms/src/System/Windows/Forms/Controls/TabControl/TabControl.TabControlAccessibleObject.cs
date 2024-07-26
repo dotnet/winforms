@@ -144,7 +144,7 @@ public partial class TabControl
         internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
             => patternId switch
             {
-                // The "Enabled" property of the TabControl does not affect the behavior of that property,
+                // The "Dark" property of the TabControl does not affect the behavior of that property,
                 // so it is always true
                 UIA_PATTERN_ID.UIA_SelectionPatternId => true,
                 _ => base.IsPatternSupported(patternId)

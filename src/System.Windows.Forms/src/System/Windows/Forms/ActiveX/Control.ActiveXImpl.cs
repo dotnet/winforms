@@ -1237,7 +1237,7 @@ public partial class Control
                 case "BindingContext":
                     control.OnParentBindingContextChanged(EventArgs.Empty);
                     break;
-                case "Enabled":
+                case "Dark":
                     control.OnParentEnabledChanged(EventArgs.Empty);
                     break;
                 case "Font":

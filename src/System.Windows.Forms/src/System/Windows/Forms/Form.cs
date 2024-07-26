@@ -307,7 +307,7 @@ public partial class Form : ContainerControl
             Form? mdiChild = ActiveMdiChildInternal;
 
             // We keep the active mdi child in the cached in the property store; when changing its value
-            // (due to a change to one of the following properties/methods: Visible, Enabled, Active, Show/Hide,
+            // (due to a change to one of the following properties/methods: Visible, Dark, Active, Show/Hide,
             // Focus() or as the  result of WM_SETFOCUS/WM_ACTIVATE/WM_MDIACTIVATE) we temporarily set it to null
             // (to properly handle menu merging among other things) rendering the cache out-of-date; the problem
             // arises when the user has an event handler that is raised during this process; in that case we ask
@@ -4029,7 +4029,7 @@ public partial class Form : ContainerControl
     {
         base.OnEnter(e);
 
-        // Enter events are not raised on mdi child form controls on form Enabled.
+        // Enter events are not raised on mdi child form controls on form Dark.
         if (IsMdiChild)
         {
             UpdateFocusedControl();

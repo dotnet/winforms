@@ -44,7 +44,7 @@ public sealed partial class Application
     private static bool s_useWaitCursor;
 
 #pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-    private static DarkMode? s_darkMode;
+    private static ColorMode? s_darkMode;
 #pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     private const string DarkModeKeyPath = "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
@@ -246,17 +246,17 @@ public sealed partial class Application
         => ThreadContext.FromCurrent().CustomThreadExceptionHandlerAttached;
 
     /// <summary>
-    ///  Gets the default dark mode for the application. This is the DarkMode which either has been set
-    ///  by <see cref="SetDefaultDarkMode(DarkMode)"/> or its default value <see cref="DarkMode.Disabled"/>.
+    ///  Gets the default dark mode for the application. This is the ColorMode which either has been set
+    ///  by <see cref="SetDefaultColorMode(ColorMode, bool)"/> or its default value <see cref="ColorMode.Classic"/>.
     /// </summary>
     [Experimental("WFO9001")]
-    public static DarkMode DefaultDarkMode
+    public static ColorMode DefaultDarkMode
     {
         get
         {
             if (!s_darkMode.HasValue)
             {
-                return DarkMode.Disabled;
+                return ColorMode.Classic;
             }
 
             return s_darkMode.Value;
@@ -267,11 +267,11 @@ public sealed partial class Application
     ///  Sets the default dark mode for the application.
     /// </summary>
     /// <param name="darkMode">The default dark mode to set.</param>
-    /// <param name="throwIfImpossible">Flag, if set to <see langword="true"/>, leads to an exception if the dark mode is not supported.</param>
+    /// <param name="throwIfImpossible">Flag, if set to <see langword="true"/>, leads to an exception if the color mode is not supported.</param>
     [Experimental("WFO9001")]
-    public static void SetDefaultDarkMode(DarkMode darkMode, bool throwIfImpossible = false)
+    public static void SetDefaultColorMode(ColorMode darkMode, bool throwIfImpossible = false)
     {
-        if (GetEnvironmentDarkModeCore() > -1)
+        if (GetSystemColorModeCore() > -1)
         {
             s_darkMode = darkMode;
             return;
@@ -282,7 +282,7 @@ public sealed partial class Application
             throw new ArgumentException(SR.DarkModeNotSupported);
         }
 
-        s_darkMode = DarkMode.Disabled;
+        s_darkMode = ColorMode.Classic;
     }
 
     /// <summary>
@@ -330,37 +330,37 @@ public sealed partial class Application
     internal static Font DefaultFont => s_defaultFontScaled ?? s_defaultFont!;
 
     /// <summary>
-    ///  Gets the dark mode setting of the OS system environment.
+    ///  Gets the color mode setting of the OS system environment.
     /// </summary>
     /// <remarks>
     ///  <para>
-    ///   The dark mode setting is determined based on the operating system version and its system settings. It returns
-    ///   <see cref="DarkMode.Enabled"/> if the dark mode is enabled in the system settings, <see cref="DarkMode.Disabled"/>
-    ///   if the dark mode is disabled, and <see cref="DarkMode.NotSupported"/> if the dark mode is not supported.
+    ///   The color setting is determined based on the operating system version and its system settings. It returns
+    ///   <see cref="ColorMode.Dark"/> if the dark mode is enabled in the system settings, <see cref="ColorMode.Classic"/>
+    ///   if the color mode equals the light, standard color setting.
     ///  </para>
     ///  <para>
-    ///   Dark mode is supported on Windows 11 or later versions.
+    ///   Color modes is supported on Windows 11 or later versions.
     ///  </para>
     ///  <para>
-    ///   Dark mode is not supported, if High Contrast mode has been enabled in the system settings.
+    ///   Color modes is not supported, if the Windows OS <c>High Contrast Mode</c> has been enabled in the system settings.
     ///  </para>
     /// </remarks>
     [Experimental("WFO9001")]
-    public static DarkMode EnvironmentDarkMode =>
-        GetEnvironmentDarkModeCore() switch
+    public static ColorMode SystemColorMode =>
+        GetSystemColorModeCore() switch
         {
-            0 => DarkMode.Enabled,
-            _ => DarkMode.Disabled,
+            0 => ColorMode.Dark,
+            _ => ColorMode.Classic,
         };
 
-    private static int GetEnvironmentDarkModeCore()
+    private static int GetSystemColorModeCore()
     {
         if (SystemInformation.HighContrast)
         {
             return -1;
         }
 
-        int systemDarkMode = -1;
+        int systemColorMode = -1;
 
         // Dark mode is supported when we are >= W11/22000
         // Technically, we could go earlier, but then the APIs we're using weren't officially public.
@@ -368,7 +368,7 @@ public sealed partial class Application
         {
             try
             {
-                systemDarkMode = (int)(Registry.GetValue(
+                systemColorMode = (int)(Registry.GetValue(
                     keyName: DarkModeKeyPath,
                     valueName: DarkModeKey,
                     defaultValue: -1) ?? 0);
@@ -378,7 +378,7 @@ public sealed partial class Application
             }
         }
 
-        return systemDarkMode;
+        return systemColorMode;
     }
 
     /// <summary>
@@ -389,14 +389,14 @@ public sealed partial class Application
     public static bool IsDarkModeEnabled => !SystemInformation.HighContrast
         && DefaultDarkMode switch
         {
-            DarkMode.Enabled => true,
-            DarkMode.Disabled => false,
-            _ => EnvironmentDarkMode switch
+            ColorMode.Dark => true,
+            ColorMode.Classic => false,
+            _ => SystemColorMode switch
             {
-                DarkMode.Enabled => true,
-                DarkMode.Disabled => false,
+                ColorMode.Dark => true,
+                ColorMode.Classic => false,
 
-                // We return false even if DarkMode is not supported so that we ALWAYS have a valid result here.
+                // We return false even if ColorMode is not supported so that we ALWAYS have a valid result here.
                 _ => false
             }
         };

@@ -114,7 +114,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
         set => _editorNode = value;
     }
 
-    // ToolStripItems if Inherited ACT as Readonly.
+    // ToolStripItems if System ACT as Readonly.
     protected override InheritanceAttribute InheritanceAttribute
     {
         get

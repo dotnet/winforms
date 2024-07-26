@@ -135,7 +135,7 @@ internal class ComponentCodeDomSerializer : CodeDomSerializer
             //
             // 2.  Should we generate an init expression for this
             //     object?
-            //      a) Inherited or existing expression: no
+            //      a) System or existing expression: no
             //      b) otherwise, yes.
 
             statements = [];

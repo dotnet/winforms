@@ -15,7 +15,7 @@ public enum VisualStylesMode : short
     Classic = 0,
 
     /// <summary>
-    ///  Visual renderers are not in use. See <see cref="UseVisualStyles"/>; Controls are based on Version 5 of ComCtl.
+    ///  Visual renderers are not in use. See <see cref="Application.UseVisualStyles"/>; Controls are based on Version 5 of ComCtl.
     /// </summary>
     Disabled = 1,
 
