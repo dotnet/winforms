@@ -223,8 +223,10 @@ public class ApplicationTests
     public void Application_SetDefaultFont_SystemFont()
     {
         var applicationTestAccessor = typeof(Application).TestAccessor().Dynamic;
-        Assert.Null(applicationTestAccessor.s_defaultFont);
-        Assert.Null(applicationTestAccessor.s_defaultFontScaled);
+        Font font = applicationTestAccessor.s_defaultFont;
+        font.Should().BeNull();
+        font = applicationTestAccessor.s_defaultFontScaled;
+        font.Should().BeNull();
 
         // This a unholy, but generally at this stage NativeWindow.AnyHandleCreated=true,
         // And we won't be able to set the font, unless we flip the bit
@@ -234,30 +236,32 @@ public class ApplicationTests
         {
             nativeWindowTestAccessor.t_anyHandleCreated = false;
             using Font sysFont = SystemFonts.CaptionFont;
-            Assert.True(sysFont.IsSystemFont);
+            sysFont.IsSystemFont.Should().BeTrue();
             Application.SetDefaultFont(sysFont);
-            Assert.Null(applicationTestAccessor.s_defaultFontScaled);
+            font = applicationTestAccessor.s_defaultFontScaled;
+            font.Should().BeNull();
             // Because we set default font to system font, then in this test it must not be changed,
             // unless, of course, after calling SystemFonts.CaptionFont and this check
             // HKCU\Software\Microsoft\Accessibility\TextScaleFactor is not changed
-            Assert.True(sysFont == Application.DefaultFont);
+            Application.DefaultFont.Should().BeSameAs(sysFont);
 
             // create fake system font
             using Font fakeSysFont = sysFont.WithSize(sysFont.Size * 1.25f);
             // set IsSystemFont flag
             fakeSysFont.TestAccessor().Dynamic.SetSystemFontName(sysFont.SystemFontName);
-            Assert.True(fakeSysFont.IsSystemFont);
+            fakeSysFont.IsSystemFont.Should().BeTrue();
             Application.SetDefaultFont(fakeSysFont);
-            Assert.Null(applicationTestAccessor.s_defaultFontScaled);
-            Assert.False(fakeSysFont.Equals(Application.DefaultFont));
-            Assert.False(sysFont == Application.DefaultFont);
-            Assert.True(sysFont.Equals(Application.DefaultFont));
+            font = applicationTestAccessor.s_defaultFontScaled;
+            font.Should().BeNull();
+            Application.DefaultFont.Should().NotBe(fakeSysFont, "Because we got a new real system font.");
+            Application.DefaultFont.Should().NotBeSameAs(sysFont, "Because we got a new system font.");
+            Application.DefaultFont.Should().Be(sysFont, "Because the new system font is the same as our original system font.");
         }
         finally
         {
             // Flip the bit back
             nativeWindowTestAccessor.t_anyHandleCreated = currentAnyHandleCreated;
-            applicationTestAccessor.s_defaultFont.Dispose();
+            applicationTestAccessor.s_defaultFont?.Dispose();
             applicationTestAccessor.s_defaultFont = null;
         }
     }
@@ -266,11 +270,13 @@ public class ApplicationTests
     public void Application_SetDefaultFont_NonSystemFont()
     {
         var applicationTestAccessor = typeof(Application).TestAccessor().Dynamic;
-        Assert.Null(applicationTestAccessor.s_defaultFont);
-        Assert.Null(applicationTestAccessor.s_defaultFontScaled);
+        Font font = applicationTestAccessor.s_defaultFont;
+        font.Should().BeNull();
+        font = applicationTestAccessor.s_defaultFontScaled;
+        font.Should().BeNull();
 
-        using Font font = new(new FontFamily("Arial"), 12f);
-        Assert.False(font.IsSystemFont);
+        using Font customFont = new(new FontFamily("Arial"), 12f);
+        customFont.IsSystemFont.Should().BeFalse();
 
         // This a unholy, but generally at this stage NativeWindow.AnyHandleCreated=true,
         // And we won't be able to set the font, unless we flip the bit
@@ -279,33 +285,34 @@ public class ApplicationTests
         try
         {
             nativeWindowTestAccessor.t_anyHandleCreated = false;
-            Application.SetDefaultFont(font);
+            Application.SetDefaultFont(customFont);
+            font = applicationTestAccessor.s_defaultFontScaled;
             if (!OsVersion.IsWindows10_1507OrGreater())
             {
-                Assert.Null(applicationTestAccessor.s_defaultFontScaled);
-                Assert.True(font == Application.DefaultFont);
+                font.Should().BeNull();
+                Application.DefaultFont.Should().BeSameAs(customFont);
                 return;
             }
 
             // Retrieve the text scale factor, which is set via Settings > Display > Make Text Bigger.
             using RegistryKey key = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Accessibility");
-            int textScale = (int)(key?.GetValue("TextScaleFactor", 100) ?? 100);
+            int textScale = (int)(key?.GetValue("TextScaleFactor", 100) ?? 100);            
             if (textScale == 100) // Application.DefaultFont must be the same
-            {
-                Assert.Null(applicationTestAccessor.s_defaultFontScaled);
-                Assert.True(font == Application.DefaultFont);
+            {                
+                font.Should().BeNull("Because TextScaleFactor == 100.");
+                Application.DefaultFont.Should().BeSameAs(customFont, "Because TextScaleFactor == 100.");
             }
             else // Application.DefaultFont must be a new scaled font
             {
-                Assert.NotNull(applicationTestAccessor.s_defaultFontScaled);
-                Assert.False(font.Equals(Application.DefaultFont));
+                font.Should().NotBeNull("Because TextScaleFactor != 100.");
+                Application.DefaultFont.Should().NotBe(customFont, "Because textScaleFactor != 100 and we got a new scaled font.");
             }
         }
         finally
         {
             // Flip the bit back
             nativeWindowTestAccessor.t_anyHandleCreated = currentAnyHandleCreated;
-            applicationTestAccessor.s_defaultFont.Dispose();
+            applicationTestAccessor.s_defaultFont?.Dispose();
             applicationTestAccessor.s_defaultFont = null;
             applicationTestAccessor.s_defaultFontScaled?.Dispose();
             applicationTestAccessor.s_defaultFontScaled = null;
