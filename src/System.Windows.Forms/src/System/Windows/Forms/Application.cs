@@ -26,7 +26,7 @@ public sealed partial class Application
     private static EventHandlerList? s_eventHandlers;
     private static Font? s_defaultFont;
     /// <summary>
-    /// Scaled version of non system <see cref="s_defaultFont"/>.
+    ///  Scaled version of non system <see cref="s_defaultFont"/>.
     /// </summary>
     private static Font? s_defaultFontScaled;
     private static string? s_startupPath;
@@ -1212,15 +1212,18 @@ public sealed partial class Application
     }
 
     /// <summary>
-    /// Scale <see cref="s_defaultFont"/> or <see cref="s_defaultFontScaled"/> if needed.
+    ///  Scale <see cref="s_defaultFont"/> or <see cref="s_defaultFontScaled"/> if needed.
     /// </summary>
     internal static void ScaleDefaultFont()
     {
         if (s_defaultFont is null)
+        {
             return;
+        }
 
         if (s_defaultFont.IsSystemFont)
         {
+            s_defaultFontScaled?.Dispose();
             s_defaultFontScaled = null;
             // Recreating the SystemFont will have it scaled to the right size for the current setting. This could be
             // done more efficiently by querying the OS to see if this is necessary for the specific font.
@@ -1242,6 +1245,7 @@ public sealed partial class Application
             Font? font = ScaleHelper.ScaleToSystemTextSize(s_defaultFont);
             if (font is null || !font.Equals(s_defaultFontScaled)) // change s_defaultFontScaled only if needed
             {
+                s_defaultFontScaled?.Dispose();
                 s_defaultFontScaled = font;
             }
             else
