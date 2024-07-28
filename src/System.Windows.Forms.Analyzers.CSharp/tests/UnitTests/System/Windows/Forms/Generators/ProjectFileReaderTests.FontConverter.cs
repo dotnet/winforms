@@ -4,9 +4,9 @@
 using System.ComponentModel;
 using System.Globalization;
 using static System.Windows.Forms.Analyzers.ApplicationConfig;
-using static System.Windows.Forms.Generators.ProjectFileReader;
+using static System.Windows.Forms.CSharp.Generators.ApplicationConfiguration.ProjectFileReader;
 
-namespace System.Windows.Forms.Generators.Tests;
+namespace System.Windows.Forms.Analyzers.Tests;
 
 public partial class ProjectFileReaderTests
 {

@@ -289,7 +289,7 @@
       </trans-unit>
       <trans-unit id="BinaryFormatterNotSupported">
         <source>BinaryFormatter serialization and deserialization are disabled within this application. See https://aka.ms/binaryformatter for more information.</source>
-        <target state="needs-review-translation">Não há suporte para o uso do BinaryFormatter em aplicativos cortados.</target>
+        <target state="translated">A serialização e a desserialização de BinaryFormatter estão desabilitadas neste aplicativo. Consulte https://aka.ms/binaryformatter para obter mais informações.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">

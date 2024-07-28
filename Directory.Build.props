@@ -18,7 +18,11 @@
 
     <IsAnalyzerProject>false</IsAnalyzerProject>
     <IsAnalyzerProject Condition="!$(IsTestProject) and
-                                  ($(MSBuildProjectName.EndsWith('.Analyzers')) or $(MSBuildProjectName.EndsWith('.Analyzers.CSharp')))"
+                                  ($(MSBuildProjectName.EndsWith('.Analyzers')) 
+                                     or $(MSBuildProjectName.EndsWith('.CodeFixes.VisualBasic'))
+                                     or $(MSBuildProjectName.EndsWith('.CodeFixes.CSharp'))
+                                     or $(MSBuildProjectName.EndsWith('.Analyzers.VisualBasic'))
+                                     or $(MSBuildProjectName.EndsWith('.Analyzers.CSharp')))"
                                   >true</IsAnalyzerProject>
   </PropertyGroup>
 

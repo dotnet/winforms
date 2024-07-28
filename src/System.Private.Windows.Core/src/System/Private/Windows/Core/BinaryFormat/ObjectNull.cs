@@ -13,7 +13,7 @@ namespace System.Private.Windows.Core.BinaryFormat;
 ///   </see>
 ///  </para>
 /// </remarks>
-internal sealed class ObjectNull : NullRecord, IRecord<ObjectNull>, IBinaryFormatParseable<ObjectNull>
+internal sealed class ObjectNull : NullRecord, IRecord<ObjectNull>
 {
     public static ObjectNull Instance { get; } = new();
 
@@ -22,9 +22,6 @@ internal sealed class ObjectNull : NullRecord, IRecord<ObjectNull>, IBinaryForma
     public override Count NullCount => 1;
 
     public static RecordType RecordType => RecordType.ObjectNull;
-
-    static ObjectNull IBinaryFormatParseable<ObjectNull>.Parse(
-        BinaryFormattedObject.IParseState state) => Instance;
 
     internal static void Write(BinaryWriter writer) => writer.Write((byte)RecordType);
 

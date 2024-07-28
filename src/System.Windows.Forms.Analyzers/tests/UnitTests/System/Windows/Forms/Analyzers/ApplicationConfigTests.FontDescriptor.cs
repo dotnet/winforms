@@ -22,7 +22,11 @@ public partial class ApplicationConfigTests
         [Fact]
         public void FontDescriptor_ctor()
         {
-            FontDescriptor descriptor = new("fontName", 10f, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            FontDescriptor descriptor = new(
+                fontName: "fontName",
+                emSize: 10f,
+                style: FontStyle.Bold | FontStyle.Italic,
+                unit: GraphicsUnit.Point);
 
             Assert.Equal("fontName", descriptor.Name);
             Assert.Equal(10f, descriptor.Size);
@@ -41,7 +45,11 @@ public partial class ApplicationConfigTests
         [InlineData("Name with \r\n lines", "new global::System.Drawing.Font(new global::System.Drawing.FontFamily(\"Name with  lines\"), 10f, (global::System.Drawing.FontStyle)3, (global::System.Drawing.GraphicsUnit)3)")]
         public void FontDescriptor_ToString(string fontName, string expected)
         {
-            FontDescriptor descriptor = new(fontName, 10f, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            FontDescriptor descriptor = new(
+                fontName: fontName,
+                emSize: 10f,
+                style: FontStyle.Bold | FontStyle.Italic,
+                unit: GraphicsUnit.Point);
 
             _output.WriteLine(descriptor.ToString());
             Assert.Equal(expected, descriptor.ToString());
@@ -61,10 +69,20 @@ public partial class ApplicationConfigTests
         {
             Thread.CurrentThread.CurrentCulture = new CultureInfo(cultureName);
 
-            FontDescriptor descriptor = new("Microsoft Sans Serif", 8.25f, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            FontDescriptor descriptor = new(
+                fontName: "Microsoft Sans Serif",
+                emSize: 8.25f,
+                style: FontStyle.Bold | FontStyle.Italic,
+                unit: GraphicsUnit.Point);
 
             _output.WriteLine(descriptor.ToString());
-            Assert.Equal("new global::System.Drawing.Font(new global::System.Drawing.FontFamily(\"Microsoft Sans Serif\"), 8.25f, (global::System.Drawing.FontStyle)3, (global::System.Drawing.GraphicsUnit)3)", descriptor.ToString());
+
+            Assert.Equal(
+                expected: "new global::System.Drawing.Font(" +
+                          "new global::System.Drawing.FontFamily(\"Microsoft Sans Serif\"), " +
+                          "8.25f, (global::System.Drawing.FontStyle)3, " +
+                          "(global::System.Drawing.GraphicsUnit)3)",
+                actual: descriptor.ToString());
         }
     }
 }
