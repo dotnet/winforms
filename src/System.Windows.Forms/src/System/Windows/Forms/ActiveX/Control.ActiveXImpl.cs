@@ -5,6 +5,7 @@ using System.Buffers;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
+using System.Formats.Nrbf;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -12,14 +13,14 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
-using System.Private.Windows.Core.BinaryFormat;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Com.StructuredStorage;
 using Windows.Win32.System.Ole;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
-using System.Windows.Forms.BinaryFormat;
+using System.Windows.Forms.Nrbf;
 using RECTL = Windows.Win32.Foundation.RECTL;
+using System.Windows.Forms.BinaryFormat;
 
 namespace System.Windows.Forms;
 
@@ -1140,8 +1141,8 @@ public partial class Control
                     object? deserialized = null;
                     try
                     {
-                        BinaryFormattedObject format = new(stream);
-                        success = format.TryGetObject(out deserialized);
+                        SerializationRecord rootRecord = stream.Decode();
+                        success = rootRecord.TryGetObject(out deserialized);
                     }
                     catch (Exception ex) when (!ex.IsCriticalException())
                     {

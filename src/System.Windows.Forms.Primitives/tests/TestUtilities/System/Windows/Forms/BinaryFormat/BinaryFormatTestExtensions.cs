@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
+using System.Formats.Nrbf;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
@@ -10,12 +11,12 @@ namespace System.Private.Windows.Core.BinaryFormat;
 internal static class BinaryFormatTestExtensions
 {
     /// <summary>
-    ///  Serializes the object using the <see cref="BinaryFormatter"/> and reads it into a <see cref="BinaryFormattedObject"/>.
+    ///  Serializes the object using the <see cref="BinaryFormatter"/> and reads it into a <see cref="SerializationRecord"/>.
     /// </summary>
-    public static BinaryFormattedObject SerializeAndParse(this object source)
+    public static SerializationRecord SerializeAndDecode(this object source)
     {
         using Stream stream = source.Serialize();
-        return new(stream);
+        return NrbfDecoder.Decode(stream);
     }
 
     /// <summary>

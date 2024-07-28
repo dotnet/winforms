@@ -13,16 +13,13 @@ namespace System.Private.Windows.Core.BinaryFormat;
 ///   </see>
 ///  </para>
 /// </remarks>
-internal sealed class MemberReference : Record, IRecord<MemberReference>, IBinaryFormatParseable<MemberReference>
+internal sealed class MemberReference : Record, IRecord<MemberReference>
 {
     public Id IdRef { get; }
 
     public MemberReference(Id idRef) => IdRef = idRef;
 
     public static RecordType RecordType => RecordType.MemberReference;
-
-    static MemberReference IBinaryFormatParseable<MemberReference>.Parse(
-        BinaryFormattedObject.IParseState state) => new(state.Reader.ReadInt32());
 
     private protected override void Write(BinaryWriter writer)
     {

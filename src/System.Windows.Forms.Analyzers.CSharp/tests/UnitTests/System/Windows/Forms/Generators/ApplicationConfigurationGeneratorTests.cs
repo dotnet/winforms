@@ -2,39 +2,44 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Text;
-using System.Windows.Forms.Analyzers;
-using System.Windows.Forms.Analyzers.Tests;
+using System.Windows.Forms.Analyzers.Diagnostics;
+using System.Windows.Forms.CSharp.Generators.ApplicationConfiguration;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Testing;
 using Microsoft.CodeAnalysis.Text;
 using static System.Windows.Forms.Analyzers.ApplicationConfig;
 
-namespace System.Windows.Forms.Generators.Tests;
+namespace System.Windows.Forms.Analyzers.Tests;
 
 public partial class ApplicationConfigurationGeneratorTests
 {
-    private const string SourceCompilable = @"
-namespace MyProject
-{
-    class Program
-    {
-        static void Main()
+    private const string SourceCompilable = """
+        namespace MyProject
         {
-             ApplicationConfiguration.Initialize();
+            class Program
+            {
+                static void Main()
+                {
+                     ApplicationConfiguration.Initialize();
+                }
+            }
         }
-    }
-}";
-    private const string SourceCompilationFailed = @"
-namespace MyProject
-{
-    class Program
-    {
-        static void Main()
+
+        """;
+
+    private const string SourceCompilationFailed = """
+        namespace MyProject
         {
-             {|CS0103:ApplicationConfiguration|}.Initialize();
+            class Program
+            {
+                static void Main()
+                {
+                     {|CS0103:ApplicationConfiguration|}.Initialize();
+                }
+            }
         }
-    }
-}";
+
+        """;
 
     public static TheoryData<OutputKind> UnsupportedProjectTypes_TestData()
     {
@@ -54,9 +59,9 @@ namespace MyProject
 
     [Theory]
     [MemberData(nameof(UnsupportedProjectTypes_TestData))]
-    public async Task ApplicationConfigurationGenerator_GenerateInitialize_fails_if_project_type_unsupported(OutputKind projectType)
+    public async Task CS_ApplicationConfigurationGenerator_GenerateInitialize_fails_if_project_type_unsupported(OutputKind projectType)
     {
-        var test = new CSharpIncrementalSourceGeneratorVerifier<ApplicationConfigurationGenerator>.Test
+        var test = new Verifiers.CSharpIncrementalSourceGeneratorVerifier<ApplicationConfigurationGenerator>.Test
         {
             TestState =
             {
@@ -64,7 +69,7 @@ namespace MyProject
                 Sources = { SourceCompilationFailed },
                 ExpectedDiagnostics =
                 {
-                    DiagnosticResult.CompilerError("WFAC001").WithArguments("WindowsApplication"),
+                    DiagnosticResult.CompilerError(DiagnosticIDs.UnsupportedProjectType).WithArguments("WindowsApplication"),
                 }
             },
         };
@@ -75,11 +80,11 @@ namespace MyProject
     [Theory]
     [InlineData(OutputKind.ConsoleApplication)]
     [InlineData(OutputKind.WindowsApplication)]
-    public async Task ApplicationConfigurationGenerator_GenerateInitialize_pass_if_supported_project_type(OutputKind projectType)
+    public async Task CS_ApplicationConfigurationGenerator_GenerateInitialize_pass_if_supported_project_type(OutputKind projectType)
     {
         SourceText generatedCode = LoadFileContent("GenerateInitialize_default_boilerplate");
 
-        var test = new CSharpIncrementalSourceGeneratorVerifier<ApplicationConfigurationGenerator>.Test
+        var test = new Verifiers.CSharpIncrementalSourceGeneratorVerifier<ApplicationConfigurationGenerator>.Test
         {
             TestState =
             {
@@ -96,11 +101,11 @@ namespace MyProject
     }
 
     [Fact]
-    public async Task ApplicationConfigurationGenerator_GenerateInitialize_default_boilerplate()
+    public async Task CS_ApplicationConfigurationGenerator_GenerateInitialize_default_boilerplate()
     {
         SourceText generatedCode = LoadFileContent("GenerateInitialize_default_boilerplate");
 
-        var test = new CSharpIncrementalSourceGeneratorVerifier<ApplicationConfigurationGenerator>.Test
+        var test = new Verifiers.CSharpIncrementalSourceGeneratorVerifier<ApplicationConfigurationGenerator>.Test
         {
             TestState =
             {
@@ -117,11 +122,11 @@ namespace MyProject
     }
 
     [Fact]
-    public async Task ApplicationConfigurationGenerator_GenerateInitialize_user_settings_boilerplate()
+    public async Task CS_ApplicationConfigurationGenerator_GenerateInitialize_user_settings_boilerplate()
     {
         SourceText generatedCode = LoadFileContent("GenerateInitialize_user_settings_boilerplate");
 
-        var test = new CSharpIncrementalSourceGeneratorVerifier<ApplicationConfigurationGenerator>.Test
+        var test = new Verifiers.CSharpIncrementalSourceGeneratorVerifier<ApplicationConfigurationGenerator>.Test
         {
             TestState =
             {
@@ -129,13 +134,15 @@ namespace MyProject
                 Sources = { SourceCompilable },
                 AnalyzerConfigFiles =
                 {
-                    ("/.globalconfig", $@"is_global = true
+                    ("/.globalconfig",
+                    $"""
+                    is_global = true
 
-build_property.{PropertyNameCSharp.DefaultFont} = Microsoft Sans Serif, 8.25px
-build_property.{PropertyNameCSharp.EnableVisualStyles} =
-build_property.{PropertyNameCSharp.HighDpiMode} = {HighDpiMode.DpiUnawareGdiScaled}
-build_property.{PropertyNameCSharp.UseCompatibleTextRendering} = true
-"),
+                    build_property.{PropertyNameCSharp.DefaultFont} = Microsoft Sans Serif, 8.25px
+                    build_property.{PropertyNameCSharp.EnableVisualStyles} =
+                    build_property.{PropertyNameCSharp.HighDpiMode} = {HighDpiMode.DpiUnawareGdiScaled}
+                    build_property.{PropertyNameCSharp.UseCompatibleTextRendering} = true
+                    """),
                 },
                 GeneratedSources =
                 {
@@ -148,15 +155,16 @@ build_property.{PropertyNameCSharp.UseCompatibleTextRendering} = true
     }
 
     [Fact]
-    public async Task ApplicationConfigurationGenerator_GenerateInitialize_default_top_level()
+    public async Task CS_ApplicationConfigurationGenerator_GenerateInitialize_default_top_level()
     {
-        const string source = @"
-ApplicationConfiguration.Initialize();
-";
+        const string source =
+            """
+            ApplicationConfiguration.Initialize();
+            """;
 
         SourceText generatedCode = LoadFileContent("GenerateInitialize_default_top_level");
 
-        var test = new CSharpIncrementalSourceGeneratorVerifier<ApplicationConfigurationGenerator>.Test
+        var test = new Verifiers.CSharpIncrementalSourceGeneratorVerifier<ApplicationConfigurationGenerator>.Test
         {
             TestState =
             {
@@ -173,15 +181,16 @@ ApplicationConfiguration.Initialize();
     }
 
     [Fact]
-    public async Task ApplicationConfigurationGenerator_GenerateInitialize_user_settings_top_level()
+    public async Task CS_ApplicationConfigurationGenerator_GenerateInitialize_user_settings_top_level()
     {
-        const string source = @"
-ApplicationConfiguration.Initialize();
-";
+        const string source =
+            """
+            ApplicationConfiguration.Initialize();
+            """;
 
         SourceText generatedCode = LoadFileContent("GenerateInitialize_user_top_level");
 
-        var test = new CSharpIncrementalSourceGeneratorVerifier<ApplicationConfigurationGenerator>.Test
+        var test = new Verifiers.CSharpIncrementalSourceGeneratorVerifier<ApplicationConfigurationGenerator>.Test
         {
             TestState =
             {
@@ -189,13 +198,15 @@ ApplicationConfiguration.Initialize();
                 Sources = { source },
                 AnalyzerConfigFiles =
                 {
-                    ("/.globalconfig", $@"is_global = true
+                    ("/.globalconfig",
+                    $"""
+                    is_global = true
 
-build_property.{PropertyNameCSharp.DefaultFont} = Microsoft Sans Serif, 8.25px
-build_property.{PropertyNameCSharp.EnableVisualStyles} =
-build_property.{PropertyNameCSharp.HighDpiMode} = {HighDpiMode.DpiUnawareGdiScaled}
-build_property.{PropertyNameCSharp.UseCompatibleTextRendering} = true
-"),
+                    build_property.{PropertyNameCSharp.DefaultFont} = Microsoft Sans Serif, 8.25px
+                    build_property.{PropertyNameCSharp.EnableVisualStyles} =
+                    build_property.{PropertyNameCSharp.HighDpiMode} = {HighDpiMode.DpiUnawareGdiScaled}
+                    build_property.{PropertyNameCSharp.UseCompatibleTextRendering} = true
+                    """),
                 },
                 GeneratedSources =
                 {
@@ -207,8 +218,8 @@ build_property.{PropertyNameCSharp.UseCompatibleTextRendering} = true
         await test.RunAsync();
     }
 
-    private SourceText LoadFileContent(string testName)
-        => SourceText.From(
-                File.ReadAllText($@"System\Windows\Forms\Generators\MockData\{GetType().Name}.{testName}.cs"),
-                Encoding.UTF8);
+    private SourceText LoadFileContent(string testName) =>
+        SourceText.From(
+            File.ReadAllText($@"System\Windows\Forms\Generators\MockData\{GetType().Name}.{testName}.cs"),
+            Encoding.UTF8);
 }
