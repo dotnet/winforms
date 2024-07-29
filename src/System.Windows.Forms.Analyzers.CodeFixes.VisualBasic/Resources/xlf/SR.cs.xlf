@@ -4,7 +4,7 @@
     <body>
       <trans-unit id="AddDesignerSerializationVisibilityCodeFixTitle">
         <source>Add DesignerSerializationVisibilityAttribute to property</source>
-        <target state="new">Add DesignerSerializationVisibilityAttribute to property</target>
+        <target state="translated">Přidat DesignerSerializationVisibilityAttribute do vlastnosti</target>
         <note />
       </trans-unit>
     </body>
