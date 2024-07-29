@@ -4,7 +4,7 @@
     <body>
       <trans-unit id="AddDesignerSerializationVisibilityCodeFixTitle">
         <source>Add DesignerSerializationVisibilityAttribute to property</source>
-        <target state="new">Add DesignerSerializationVisibilityAttribute to property</target>
+        <target state="translated">DesignerSerializationVisibilityAttribute をプロパティに追加する</target>
         <note />
       </trans-unit>
       <trans-unit id="GdiplusFontFamilyNotFound">
@@ -29,42 +29,42 @@
       </trans-unit>
       <trans-unit id="WFO0001Message">
         <source>Only projects with 'OutputType={0}' supported</source>
-        <target state="new">Only projects with 'OutputType={0}' supported</target>
+        <target state="translated">'OutputType ={0}' のプロジェクトのみがサポートされています</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO0001Title">
         <source>Unsupported project type</source>
-        <target state="new">Unsupported project type</target>
+        <target state="translated">サポートされていないプロジェクトの種類</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO0002Message">
         <source>ArgumentException: Project property '{0}' cannot be set to '{1}'</source>
-        <target state="new">ArgumentException: Project property '{0}' cannot be set to '{1}'</target>
+        <target state="translated">ArgumentException: プロジェクト プロパティ '{0}' を '{1}' に設定することはできません</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO0002MessageWithReason">
         <source>ArgumentException: Project property '{0}' cannot be set to '{1}'. Reason: {2}.</source>
-        <target state="new">ArgumentException: Project property '{0}' cannot be set to '{1}'. Reason: {2}.</target>
+        <target state="translated">ArgumentException: プロジェクト プロパティ '{0}' を '{1}' に設定することはできません。理由: {2}。</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO0002Title">
         <source>Unsupported property value</source>
-        <target state="new">Unsupported property value</target>
+        <target state="translated">サポートされていないプロパティの値</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO1000AnalyzerDescription">
         <source>A property should determine its property content serialization with the DesignerSerializationVisibilityAttribute, DefaultValueAttribute or the ShouldSerializeProperty method.</source>
-        <target state="new">A property should determine its property content serialization with the DesignerSerializationVisibilityAttribute, DefaultValueAttribute or the ShouldSerializeProperty method.</target>
+        <target state="translated">プロパティは、DesignerSerializationVisibilityAttribute メソッド、DefaultValueAttribute メソッド、または ShouldSerializeProperty メソッドを使用してプロパティ コンテンツのシリアル化を決定する必要があります。</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO1000AnalyzerMessageFormat">
         <source>Property '{0}' does not configure the code serialization for its property content</source>
-        <target state="new">Property '{0}' does not configure the code serialization for its property content</target>
+        <target state="translated">プロパティ '{0}' は、プロパティ コンテンツのコード シリアル化を構成しません</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO1000AnalyzerTitle">
         <source>Missing code serialization configuration for property content</source>
-        <target state="new">Missing code serialization configuration for property content</target>
+        <target state="translated">プロパティ コンテンツのコード シリアル化構成がありません</target>
         <note />
       </trans-unit>
     </body>
