@@ -44,7 +44,7 @@ public abstract class Behavior
 
     /// <summary>
     ///  Returning true from here indicates to the BehaviorService that all MenuCommands the designer receives
-    ///  should have their state set to 'Dark = false' when this Behavior is active.
+    ///  should have their state set to 'Enabled = false' when this Behavior is active.
     /// </summary>
     public virtual bool DisableAllCommands
     {

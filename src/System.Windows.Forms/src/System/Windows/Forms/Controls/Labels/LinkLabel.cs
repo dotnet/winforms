@@ -1007,7 +1007,7 @@ public partial class LinkLabel : Label, IButtonControl
 
         void PaintEnabled()
         {
-            // Control.Dark not to be confused with Link.Dark
+            // Control.Enabled not to be confused with Link.Enabled
             bool optimizeBackgroundRendering = !GetStyle(ControlStyles.OptimizedDoubleBuffer);
             using var foreBrush = ForeColor.GetCachedSolidBrushScope();
             using var linkBrush = LinkColor.GetCachedSolidBrushScope();
@@ -1262,7 +1262,7 @@ public partial class LinkLabel : Label, IButtonControl
 
             if (link.Enabled)
             {
-                // Not to be confused with Control.Dark.
+                // Not to be confused with Control.Enabled.
                 if ((linkState & LinkState.Active) == LinkState.Active)
                 {
                     brushColor = ActiveLinkColor;

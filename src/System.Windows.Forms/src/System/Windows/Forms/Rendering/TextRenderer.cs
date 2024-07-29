@@ -632,7 +632,7 @@ public static class TextRenderer
             // translation (rotation for example), and this likely impacted the decision to only have a translation
             // flag when this was originally written.
 
-            // Classic. We are getting this pretty much whenever we call a DrawText.
+            // Disabled. We are getting this pretty much whenever we call a DrawText.
 
             // Debug.Assert(apply.HasFlag(ApplyGraphicsProperties.Clipping)
             //    || graphics.Clip is null

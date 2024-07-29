@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Reflection;
 using System.Text;
+using System.Windows.Forms.Analyzers.Diagnostics;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Office;
 using Microsoft.Win32;
@@ -44,7 +45,7 @@ public sealed partial class Application
     private static bool s_useWaitCursor;
 
 #pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-    private static ColorMode? s_darkMode;
+    private static SystemColorMode? s_systemColorMode;
 #pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     private const string DarkModeKeyPath = "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
@@ -246,43 +247,35 @@ public sealed partial class Application
         => ThreadContext.FromCurrent().CustomThreadExceptionHandlerAttached;
 
     /// <summary>
-    ///  Gets the default dark mode for the application. This is the ColorMode which either has been set
-    ///  by <see cref="SetDefaultColorMode(ColorMode, bool)"/> or its default value <see cref="ColorMode.Classic"/>.
+    ///  Gets the default dark mode for the application. This is the SystemColorMode which either has been set
+    ///  by <see cref="SetColorMode(SystemColorMode)"/> or its default value <see cref="SystemColorMode.Classic"/>.
     /// </summary>
     [Experimental("WFO9001")]
-    public static ColorMode DefaultDarkMode
-    {
-        get
-        {
-            if (!s_darkMode.HasValue)
-            {
-                return ColorMode.Classic;
-            }
-
-            return s_darkMode.Value;
-        }
-    }
+    public static SystemColorMode ColorMode =>
+        !s_systemColorMode.HasValue
+            // No value set: we default to classic (light mode)
+            ? SystemColorMode.Classic
+            // If System is set
+            : s_systemColorMode.Value == SystemColorMode.System
+                // We return the system color mode
+                ? SystemColorMode
+                // Otherwise we return the value set by the user
+                : s_systemColorMode.Value;
 
     /// <summary>
     ///  Sets the default dark mode for the application.
     /// </summary>
-    /// <param name="darkMode">The default dark mode to set.</param>
-    /// <param name="throwIfImpossible">Flag, if set to <see langword="true"/>, leads to an exception if the color mode is not supported.</param>
+    /// <param name="systemColorMode">The default dark mode to set.</param>
     [Experimental("WFO9001")]
-    public static void SetDefaultColorMode(ColorMode darkMode, bool throwIfImpossible = false)
+    public static void SetColorMode(SystemColorMode systemColorMode)
     {
-        if (GetSystemColorModeCore() > -1)
+        if (GetSystemColorModeInternal() > -1)
         {
-            s_darkMode = darkMode;
+            s_systemColorMode = systemColorMode;
             return;
         }
 
-        if (throwIfImpossible)
-        {
-            throw new ArgumentException(SR.DarkModeNotSupported);
-        }
-
-        s_darkMode = ColorMode.Classic;
+        s_systemColorMode = SystemColorMode.Classic;
     }
 
     /// <summary>
@@ -330,30 +323,28 @@ public sealed partial class Application
     internal static Font DefaultFont => s_defaultFontScaled ?? s_defaultFont!;
 
     /// <summary>
-    ///  Gets the color mode setting of the OS system environment.
+    ///  Gets the system color mode setting of the OS system environment.
     /// </summary>
     /// <remarks>
     ///  <para>
-    ///   The color setting is determined based on the operating system version and its system settings. It returns
-    ///   <see cref="ColorMode.Dark"/> if the dark mode is enabled in the system settings, <see cref="ColorMode.Classic"/>
-    ///   if the color mode equals the light, standard color setting.
+    ///   The color setting is determined based on the operating system version and its system settings.
+    ///   It returns <see cref="SystemColorMode.Dark"/> if the dark mode is enabled in the system settings,
+    ///   <see cref="SystemColorMode.Classic"/> if the color mode equals the light, standard color setting.
     ///  </para>
     ///  <para>
-    ///   Color modes is supported on Windows 11 or later versions.
+    ///   SystemColorMode is supported on Windows 11 or later versions.
     ///  </para>
     ///  <para>
-    ///   Color modes is not supported, if the Windows OS <c>High Contrast Mode</c> has been enabled in the system settings.
+    ///   SystemColorModes is not supported, if the Windows OS <c>High Contrast Mode</c> has been enabled in the system settings.
     ///  </para>
     /// </remarks>
-    [Experimental("WFO9001")]
-    public static ColorMode SystemColorMode =>
-        GetSystemColorModeCore() switch
-        {
-            0 => ColorMode.Dark,
-            _ => ColorMode.Classic,
-        };
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode)]
+    public static SystemColorMode SystemColorMode =>
+        GetSystemColorModeInternal() == 0
+            ? SystemColorMode.Dark
+            : SystemColorMode.Classic;
 
-    private static int GetSystemColorModeCore()
+    private static int GetSystemColorModeInternal()
     {
         if (SystemInformation.HighContrast)
         {
@@ -382,24 +373,13 @@ public sealed partial class Application
     }
 
     /// <summary>
-    ///  Gets a value indicating whether the application is running in a dark mode context.
+    ///  Gets a value indicating whether the application is running in a dark system color context.
     ///  Note: In a high contrast mode, this will always return <see langword="false"/>.
     /// </summary>
-    [Experimental("WFO9001")]
-    public static bool IsDarkModeEnabled => !SystemInformation.HighContrast
-        && DefaultDarkMode switch
-        {
-            ColorMode.Dark => true,
-            ColorMode.Classic => false,
-            _ => SystemColorMode switch
-            {
-                ColorMode.Dark => true,
-                ColorMode.Classic => false,
-
-                // We return false even if ColorMode is not supported so that we ALWAYS have a valid result here.
-                _ => false
-            }
-        };
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode)]
+    public static bool IsDarkModeEnabled =>
+        !SystemInformation.HighContrast
+        && (ColorMode == SystemColorMode.Dark);
 
     /// <summary>
     ///  Gets the path for the executable file that started the application.

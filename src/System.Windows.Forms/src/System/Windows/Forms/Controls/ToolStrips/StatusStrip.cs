@@ -30,9 +30,8 @@ public partial class StatusStrip : ToolStrip
         CanOverflow = false;
         LayoutStyle = ToolStripLayoutStyle.Table;
 
-        // Default changed for ColorMode from System to ManagerRenderMode.
+        // Default changed for SystemColorMode from System to ManagerRenderMode.
         // Also to be consistent to the MenuStrip.
-        // TODO: We'd need to quirk that!
         RenderMode = ToolStripRenderMode.ManagerRenderMode;
         GripStyle = ToolStripGripStyle.Hidden;
 

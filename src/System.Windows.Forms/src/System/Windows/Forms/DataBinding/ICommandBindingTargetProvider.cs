@@ -95,7 +95,7 @@ internal interface ICommandBindingTargetProvider
             {
                 commandBackingField.CanExecuteChanged -= CommandCanExecuteChangedProc;
 
-                // We need to restore Dark, should we go from a defined Command to an undefined Command.
+                // We need to restore Enabled, should we go from a defined Command to an undefined Command.
                 if (newCommand is null)
                 {
                     if (PreviousEnabledStatus.HasValue)

@@ -124,7 +124,7 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
             };
             // Add event Handlers
             _imageToolStripMenuItem.Click += new EventHandler(OnImageToolStripMenuItemClick);
-            _enabledToolStripMenuItem = CreateBooleanItem("E&nabled", "Dark");
+            _enabledToolStripMenuItem = CreateBooleanItem("E&nabled", "Enabled");
             AddRange([_imageToolStripMenuItem, _enabledToolStripMenuItem]);
             if (selectedItem is ToolStripMenuItem)
             {
@@ -632,7 +632,7 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
         ToolStripItem selectedItem = _currentItem;
         if (selectedItem is not ToolStripControlHost and not ToolStripSeparator)
         {
-            _enabledToolStripMenuItem.Checked = (bool)GetProperty("Dark");
+            _enabledToolStripMenuItem.Checked = (bool)GetProperty("Enabled");
             if (selectedItem is ToolStripMenuItem)
             {
                 _checkedToolStripMenuItem.Checked = (bool)GetProperty("Checked");

@@ -106,7 +106,7 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
         }
     }
 
-    // ContextMenuStrip if System ACT as Readonly.
+    // ContextMenuStrip if Inherited ACT as Readonly.
     protected override InheritanceAttribute InheritanceAttribute
     {
         get

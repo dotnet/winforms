@@ -1207,7 +1207,7 @@ internal class ToolStripDesigner : ControlDesigner
     /// </summary>
     public override void DoDefaultAction()
     {
-        // Don't Fire the Events if the Component is System.
+        // Don't Fire the Events if the Component is Inherited.
         if (InheritanceAttribute != InheritanceAttribute.InheritedReadOnly)
         {
             IComponent selectedItem = SelectionService.PrimarySelection as IComponent;

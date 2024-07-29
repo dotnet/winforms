@@ -31,7 +31,8 @@ internal abstract class AnimatedControlRenderer(Control control)
     public abstract void RenderControl(Graphics graphics);
 
     /// <summary>
-    ///  Invalidates the control, causing it to be redrawn, which in turns triggersRenderControl(PaintEventArgs).
+    ///  Invalidates the control, causing it to be redrawn, which in turns triggers
+    ///  <see cref="RenderControl(Graphics)"/>.
     /// </summary>
     public void Invalidate() => control.Invalidate();
 

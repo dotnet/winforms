@@ -1587,7 +1587,7 @@ internal partial class TableLayoutPanelDesigner : FlowPanelDesigner
                 selCount = selSvc.SelectionCount;
             }
 
-            // Always make sure and set the Dark state in case the user
+            // Always make sure and set the Enabled state in case the user
             // has changed the selection since the last time the menu was shown.
             bool enabled = (selCount == 1) && (InheritanceAttribute != InheritanceAttribute.InheritedReadOnly);
 

@@ -7,7 +7,7 @@ namespace System.Windows.Forms.Design.Behavior;
 
 /// <summary>
 ///  An Adorner manages a collection of UI-related Glyphs.  Each Adorner
-///  can be enabled/disabled.  Only Dark Adorners will receive hit test
+///  can be enabled/disabled.  Only Enabled Adorners will receive hit test
 ///  and paint messages from the BehaviorService.  An Adorner can be viewed
 ///  as a proxy between UI-related elements (all Glyphs) and the BehaviorService.
 /// </summary>

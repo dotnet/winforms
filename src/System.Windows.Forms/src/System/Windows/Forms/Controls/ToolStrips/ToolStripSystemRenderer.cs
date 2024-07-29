@@ -461,7 +461,7 @@ public class ToolStripSystemRenderer : ToolStripRenderer
                         ? SystemColors.Highlight
                         : ProfessionalColors.MenuItemBorder;
 
-                    // Draw selection border - always drawn regardless of Dark.
+                    // Draw selection border - always drawn regardless of Enabled.
                     using var pen = borderColor.GetCachedPenScope();
                     g.DrawRectangle(pen, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
                 }

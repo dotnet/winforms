@@ -83,7 +83,7 @@ public unsafe partial class Control
             unchecked(Color.FromArgb((int)0xFF101010)), // FFFFFFFF - FF101010: ButtonHighlight - White
             unchecked(Color.FromArgb((int)0xFF464646)), // FFA0A0A0 - FF464646: ButtonShadow - Same as Scrollbar Elements
             unchecked(Color.FromArgb((int)0XFF416482)), // FFB9D1EA - FF416482: GradientActiveCaption - Same as Highlighted Text Background
-            unchecked(Color.FromArgb((int)0xFF557396)), // FFD7E4F2 - FF557396: GradientInactiveCaption - Same as Highlighted Panel in ColorMode
+            unchecked(Color.FromArgb((int)0xFF557396)), // FFD7E4F2 - FF557396: GradientInactiveCaption - Same as Highlighted Panel in SystemColorMode
             unchecked(Color.FromArgb((int)0xFF373737)), // FFF0F0F0 - FF373737: MenuBar - Same as Normal Menu Background
             unchecked(Color.FromArgb((int)0xFF2A80D2))  // FF3399FF - FF2A80D2: MenuHighlight - Same as Highlighted Menu Background
         ];

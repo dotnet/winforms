@@ -1,13 +1,13 @@
 override System.Windows.Forms.CheckBox.OnPaint(System.Windows.Forms.PaintEventArgs! pevent) -> void
-static System.Windows.Forms.Application.DefaultDarkMode.get -> System.Windows.Forms.ColorMode
-static System.Windows.Forms.Application.SetDefaultColorMode(System.Windows.Forms.ColorMode darkMode, bool throwIfImpossible = false) -> void
-static System.Windows.Forms.Application.SystemColorMode.get -> System.Windows.Forms.ColorMode
+static System.Windows.Forms.Application.ColorMode.get -> System.Windows.Forms.SystemColorMode
+static System.Windows.Forms.Application.SetColorMode(System.Windows.Forms.SystemColorMode systemColorMode) -> void
+static System.Windows.Forms.Application.SystemColorMode.get -> System.Windows.Forms.SystemColorMode
 static System.Windows.Forms.Control.ControlSystemColors.Current.get -> System.Windows.Forms.Control.ControlSystemColors!
 static System.Windows.Forms.Control.ControlSystemColors.GetAdaptedDarkModeColorFromKnownColor(System.Drawing.KnownColor knownColor, bool darkMode) -> System.Drawing.Color
-System.Windows.Forms.ColorMode
-System.Windows.Forms.ColorMode.Classic = 0 -> System.Windows.Forms.ColorMode
-System.Windows.Forms.ColorMode.Dark = 1 -> System.Windows.Forms.ColorMode
-System.Windows.Forms.ColorMode.System = 2 -> System.Windows.Forms.ColorMode
+System.Windows.Forms.SystemColorMode
+System.Windows.Forms.SystemColorMode.Classic = 0 -> System.Windows.Forms.SystemColorMode
+System.Windows.Forms.SystemColorMode.Dark = 2 -> System.Windows.Forms.SystemColorMode
+System.Windows.Forms.SystemColorMode.System = 1 -> System.Windows.Forms.SystemColorMode
 System.Windows.Forms.Control.ControlSystemColors
 System.Windows.Forms.Control.SystemColors.get -> System.Windows.Forms.Control.ControlSystemColors!
 System.Windows.Forms.Control.VisualStylesModeChanged -> System.EventHandler?
@@ -33,6 +33,7 @@ System.Windows.Forms.Form.WindowCornerPreference.RoundSmall = 3 -> System.Window
 System.Windows.Forms.VisualStylesMode
 System.Windows.Forms.VisualStylesMode.Classic = 0 -> System.Windows.Forms.VisualStylesMode
 System.Windows.Forms.VisualStylesMode.Disabled = 1 -> System.Windows.Forms.VisualStylesMode
+System.Windows.Forms.VisualStylesMode.Latest = 32767 -> System.Windows.Forms.VisualStylesMode
 System.Windows.Forms.VisualStylesMode.Net10 = 2 -> System.Windows.Forms.VisualStylesMode
 virtual System.Windows.Forms.Control.DefaultVisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
 virtual System.Windows.Forms.Control.OnDebuggerBreak(string! ticket) -> bool

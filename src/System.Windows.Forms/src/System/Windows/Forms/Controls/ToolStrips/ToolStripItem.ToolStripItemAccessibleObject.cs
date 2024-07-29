@@ -173,7 +173,7 @@ public abstract partial class ToolStripItem
                         return AccessibleStates.Unavailable | _additionalState | AccessibleStates.Focused;
                     }
 
-                    // Classic menu items that are selected must have focus
+                    // Disabled menu items that are selected must have focus
                     // state so that Narrator can announce them.
                     if (_ownerItem.Selected && _ownerItem is ToolStripMenuItem)
                     {

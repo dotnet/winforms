@@ -726,7 +726,7 @@ public partial class TextBox : TextBoxBase
     /// </summary>
     private unsafe void SetAutoComplete(bool reset)
     {
-        // Autocomplete Not Dark for Password enabled and MultiLine Textboxes.
+        // Autocomplete Not Enabled for Password enabled and MultiLine Textboxes.
         if (Multiline || _passwordChar != 0 || _useSystemPasswordChar || AutoCompleteSource == AutoCompleteSource.None)
         {
             return;

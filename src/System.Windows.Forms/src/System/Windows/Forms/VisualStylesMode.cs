@@ -15,13 +15,20 @@ public enum VisualStylesMode : short
     Classic = 0,
 
     /// <summary>
-    ///  Visual renderers are not in use. See <see cref="Application.UseVisualStyles"/>; Controls are based on Version 5 of ComCtl.
+    ///  Visual renderers are not in use - see <see cref="Application.UseVisualStyles"/>;
+    ///  Controls are based on Version 5 of ComCtl.
     /// </summary>
     Disabled = 1,
 
     /// <summary>
     ///  The .NET 10 version of the visual renderer. Controls are rendered using the latest version
-    ///  of ComCtl and customized adorner rendering and layout handling in addition.
+    ///  of ComCtl and the adorners rendering or the layout of specific controls has been improved/updated
+    ///  based on latest accessibility requirements.
     /// </summary>
-    Net10 = 2
+    Net10 = 2,
+
+    /// <summary>
+    ///  The latest version of the visual renderer.
+    /// </summary>
+    Latest = short.MaxValue
 }
