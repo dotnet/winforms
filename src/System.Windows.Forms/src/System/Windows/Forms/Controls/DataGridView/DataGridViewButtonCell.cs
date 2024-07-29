@@ -361,7 +361,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
                             MeasureTextWidth(
                                 graphics,
                                 formattedString,
-                                cellStyle.Font,
+                                cellStyle.Font!,
                                 constraintSize.Height - borderAndPaddingHeights - marginHeights - 2 * DATAGRIDVIEWBUTTONCELL_verticalTextMargin,
                                 flags),
                             0);
@@ -369,7 +369,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
                     else
                     {
                         preferredSize = new Size(
-                            MeasureTextSize(graphics, formattedString, cellStyle.Font, flags).Width,
+                            MeasureTextSize(graphics, formattedString, cellStyle.Font!, flags).Width,
                             0);
                     }
 
@@ -386,7 +386,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
                             MeasureTextHeight(
                                 graphics,
                                 formattedString,
-                                cellStyle.Font,
+                                cellStyle.Font!,
                                 constraintSize.Width - borderAndPaddingWidths - marginWidths - 2 * DATAGRIDVIEWBUTTONCELL_horizontalTextMargin,
                                 flags));
                     }
@@ -397,7 +397,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
                             MeasureTextSize(
                                 graphics,
                                 formattedString,
-                                cellStyle.Font,
+                                cellStyle.Font!,
                                 flags).Height);
                     }
 
@@ -408,11 +408,11 @@ public partial class DataGridViewButtonCell : DataGridViewCell
                 {
                     if (cellStyle.WrapMode == DataGridViewTriState.True && formattedString.Length > 1)
                     {
-                        preferredSize = MeasureTextPreferredSize(graphics, formattedString, cellStyle.Font, 5.0F, flags);
+                        preferredSize = MeasureTextPreferredSize(graphics, formattedString, cellStyle.Font!, 5.0F, flags);
                     }
                     else
                     {
-                        preferredSize = MeasureTextSize(graphics, formattedString, cellStyle.Font, flags);
+                        preferredSize = MeasureTextSize(graphics, formattedString, cellStyle.Font!, flags);
                     }
 
                     break;
@@ -943,7 +943,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
                         valBounds,
                         Padding.Empty,
                         false,
-                        cellStyle.Font,
+                        cellStyle.Font!,
                         text,
                         DataGridView.Enabled,
                         DataGridViewUtilities.ComputeDrawingContentAlignmentForCellStyleAlignment(cellStyle.Alignment),
@@ -973,7 +973,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
                         valBounds,
                         Padding.Empty,
                         false,
-                        cellStyle.Font,
+                        cellStyle.Font!,
                         text,
                         DataGridView.Enabled,
                         DataGridViewUtilities.ComputeDrawingContentAlignmentForCellStyleAlignment(cellStyle.Alignment),

@@ -89,8 +89,7 @@ internal partial class CommonProperties
     /// </remarks>
     internal static Padding GetMargin(IArrangedElement element)
     {
-        Padding padding = element.Properties.GetPadding(s_marginProperty, out bool found);
-        if (found)
+        if (element.Properties.TryGetValue(s_marginProperty, out Padding padding))
         {
             return padding;
         }
@@ -141,8 +140,7 @@ internal partial class CommonProperties
     /// </remarks>
     internal static Padding GetPadding(IArrangedElement element, Padding defaultPadding)
     {
-        Padding padding = element.Properties.GetPadding(s_paddingProperty, out bool found);
-        if (found)
+        if (element.Properties.TryGetValue(s_paddingProperty, out Padding padding))
         {
             return padding;
         }
@@ -160,8 +158,8 @@ internal partial class CommonProperties
     /// </remarks>
     internal static Rectangle GetSpecifiedBounds(IArrangedElement element)
     {
-        Rectangle rectangle = element.Properties.GetRectangle(s_specifiedBoundsProperty, out bool found);
-        if (found && rectangle != LayoutUtils.s_maxRectangle)
+        if (element.Properties.TryGetValue(s_specifiedBoundsProperty, out Rectangle rectangle)
+            && rectangle != LayoutUtils.s_maxRectangle)
         {
             return rectangle;
         }
@@ -172,14 +170,7 @@ internal partial class CommonProperties
     /// <summary>
     ///  Clears out the padding from the property store.
     /// </summary>
-    internal static void ResetPadding(IArrangedElement element)
-    {
-        object? value = element.Properties.GetObject(s_paddingProperty);
-        if (value is not null)
-        {
-            element.Properties.RemoveObject(s_paddingProperty);
-        }
-    }
+    internal static void ResetPadding(IArrangedElement element) => element.Properties.RemoveValue(s_paddingProperty);
 
     /// <summary>
     ///  Sets whether or not the layout engines should treat this control as auto sized.
@@ -207,7 +198,7 @@ internal partial class CommonProperties
     {
         Debug.Assert(value != GetMargin(element), "PERF: Caller should guard against setting Margin to original value.");
 
-        element.Properties.SetPadding(s_marginProperty, value);
+        element.Properties.AddValue(s_marginProperty, value);
 
         Debug.Assert(GetMargin(element) == value, "Error detected setting Margin.");
 
@@ -273,7 +264,7 @@ internal partial class CommonProperties
             "PERF: Caller should guard against setting Padding to original value.");
 
         value = LayoutUtils.ClampNegativePaddingToZero(value);
-        element.Properties.SetPadding(s_paddingProperty, value);
+        element.Properties.AddValue(s_paddingProperty, value);
 
         Debug.Assert(GetPadding(element, new Padding(-7105)) == value, "Error detected setting Padding.");
     }
@@ -338,7 +329,7 @@ internal partial class CommonProperties
                 originalBounds.Height = height;
             }
 
-            element.Properties.SetRectangle(s_specifiedBoundsProperty, originalBounds);
+            element.Properties.AddValue(s_specifiedBoundsProperty, originalBounds);
         }
         else
         {
@@ -347,7 +338,7 @@ internal partial class CommonProperties
             if (element.Properties.ContainsObject(s_specifiedBoundsProperty))
             {
                 // use MaxRectangle instead of null so we can reuse the SizeWrapper in the property store.
-                element.Properties.SetRectangle(s_specifiedBoundsProperty, LayoutUtils.s_maxRectangle);
+                element.Properties.AddValue(s_specifiedBoundsProperty, LayoutUtils.s_maxRectangle);
             }
         }
     }
@@ -356,7 +347,7 @@ internal partial class CommonProperties
     internal static void UpdateSpecifiedBounds(IArrangedElement element, int x, int y, int width, int height)
     {
         Rectangle bounds = new(x, y, width, height);
-        element.Properties.SetRectangle(s_specifiedBoundsProperty, bounds);
+        element.Properties.AddValue(s_specifiedBoundsProperty, bounds);
     }
 
     /// <summary>

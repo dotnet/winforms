@@ -650,7 +650,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
                             MeasureTextWidth(
                                 graphics,
                                 formattedString,
-                                cellStyle.Font,
+                                cellStyle.Font!,
                                 Math.Max(1, maxHeight),
                                 flags),
                             0);
@@ -664,7 +664,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
                             MeasureTextHeight(
                                 graphics,
                                 formattedString,
-                                cellStyle.Font,
+                                cellStyle.Font!,
                                 Math.Max(1, constraintSize.Width - borderAndPaddingWidths - HorizontalTextMarginLeft - HorizontalTextMarginRight),
                                 flags));
                         break;
@@ -675,7 +675,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
                         preferredSize = MeasureTextPreferredSize(
                             graphics,
                             formattedString,
-                            cellStyle.Font,
+                            cellStyle.Font!,
                             5.0F,
                             flags);
                         break;
@@ -689,7 +689,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
                 case DataGridViewFreeDimension.Width:
                     {
                         preferredSize = new Size(
-                            MeasureTextSize(graphics, formattedString, cellStyle.Font, flags).Width,
+                            MeasureTextSize(graphics, formattedString, cellStyle.Font!, flags).Width,
                             0);
                         break;
                     }
@@ -698,7 +698,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
                     {
                         preferredSize = new Size(
                             0,
-                            MeasureTextSize(graphics, formattedString, cellStyle.Font, flags).Height);
+                            MeasureTextSize(graphics, formattedString, cellStyle.Font!, flags).Height);
                         break;
                     }
 
@@ -707,7 +707,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
                         preferredSize = MeasureTextSize(
                             graphics,
                             formattedString,
-                            cellStyle.Font,
+                            cellStyle.Font!,
                             flags);
                         break;
                     }
@@ -1027,7 +1027,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
             Font? getHoverFont = null;
             bool isActive = (LinkState & LinkState.Active) == LinkState.Active;
 
-            LinkUtilities.EnsureLinkFonts(cellStyle.Font, LinkBehavior, ref getLinkFont, ref getHoverFont, isActive);
+            LinkUtilities.EnsureLinkFonts(cellStyle.Font!, LinkBehavior, ref getLinkFont, ref getHoverFont, isActive);
             using Font linkFont = getLinkFont;
             using Font hoverFont = getHoverFont;
 
