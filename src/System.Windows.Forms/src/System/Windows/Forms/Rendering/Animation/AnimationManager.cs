@@ -109,7 +109,7 @@ internal partial class AnimationManager
         {
             if (Instance._renderer.TryGetValue(animatedControlRenderer, out AnimationRendererItem? renderItem))
             {
-                renderItem.Renderer.IsRunning = false;
+                renderItem.Renderer.StopAnimationInternal();
             }
         }
     }
@@ -140,7 +140,7 @@ internal partial class AnimationManager
                     switch (item.AnimationCycle)
                     {
                         case AnimationCycle.Once:
-                            item.Renderer.StopAnimation();
+                            item.Renderer.EndAnimation();
                             break;
 
                         case AnimationCycle.Loop:
@@ -155,10 +155,6 @@ internal partial class AnimationManager
                             item.Renderer.RestartAnimation();
                             break;
                     }
-
-                    _syncContext?.Post(
-                        d: _ => item.Renderer.AnimationProc(1),
-                        state: null);
 
                     continue;
                 }

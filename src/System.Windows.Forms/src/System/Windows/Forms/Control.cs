@@ -7715,7 +7715,7 @@ public unsafe partial class Control :
             }
 
 #pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
-            if (GetStyle(ControlStyles.ApplyThemingImplicitly))
+            if (Application.IsDarkModeEnabled && GetStyle(ControlStyles.ApplyThemingImplicitly))
             {
                 _ = PInvoke.SetWindowTheme(
                     hwnd: HWND,
@@ -10792,6 +10792,7 @@ public unsafe partial class Control :
 
             bool fireChange = false;
 
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
             if (GetTopLevel())
             {
                 // The processing of WmShowWindow will set the visibility
@@ -10800,14 +10801,13 @@ public unsafe partial class Control :
                 {
                     if (value)
                     {
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
                         PrepareDarkMode(HWND, Application.IsDarkModeEnabled);
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
                     }
 
                     PInvoke.ShowWindow(HWND, value ? ShowParams : SHOW_WINDOW_CMD.SW_HIDE);
                 }
             }
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
             else if (IsHandleCreated || (value && _parent?.Created == true))
             {
                 // We want to mark the control as visible so that CreateControl

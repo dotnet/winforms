@@ -13,7 +13,6 @@ internal class AnimatedBorderStyleRenderer : AnimatedControlRenderer
     private readonly TextBoxBase _textBox;
     private readonly HDC _hdc;
     private Graphics? _graphics;
-    private float? _animationProgress;
 
     public AnimatedBorderStyleRenderer(Control control, HDC hdc) : base(control)
     {
@@ -21,140 +20,136 @@ internal class AnimatedBorderStyleRenderer : AnimatedControlRenderer
         _hdc = hdc;
     }
 
-    protected override (int animationDuration, AnimationCycle animationCycle) OnStartAnimation()
+    protected override (int animationDuration, AnimationCycle animationCycle) OnAnimationStarted()
         => (AnimationDuration, AnimationCycle.Once);
 
     public override void AnimationProc(float animationProgress)
     {
-        _animationProgress = animationProgress;
+        AnimationProgress = animationProgress;
 
         if (_graphics is null)
         {
             _graphics = Graphics.FromHdc(_hdc);
         }
 
-        RenderControl(_graphics, animationProgress);
+        RenderControl(_graphics);
     }
 
-    public void RenderControl(Graphics graphics, float animationProgress)
+    public override void RenderControl(Graphics graphics)
     {
-        if (_animationProgress is null)
+        int borderThickness = 2;
+        int deflateOffset = borderThickness / 2;
+        int cornerRadius = 15;
+
+        Color adornerColor = _textBox.ForeColor;
+        Color parentBackColor = _textBox.Parent?.BackColor ?? _textBox.BackColor;
+        Color clientBackColor = _textBox.BackColor;
+
+        using Brush parentBackgroundBrush = new SolidBrush(parentBackColor);
+        using Brush clientBackgroundBrush = new SolidBrush(clientBackColor);
+        using Brush adornerBrush = new SolidBrush(adornerColor);
+        using Pen adornerPen = new(adornerColor, borderThickness);
+        using Pen focusPen = new(SystemColors.Highlight, borderThickness);
+
+        Rectangle bounds = _textBox.Bounds;
+
+        Rectangle clientBounds = new(
+            (bounds.Width - _textBox.ClientRectangle.Width) / 2,
+            (bounds.Height - _textBox.ClientRectangle.Height) / 2,
+            _textBox.ClientRectangle.Width,
+            _textBox.ClientRectangle.Height);
+
+        Rectangle deflatedBounds = new(
+            x: bounds.Left + _textBox.Padding.Left + deflateOffset,
+            y: bounds.Top + _textBox.Padding.Top + deflateOffset,
+            width: bounds.Width - (_textBox.Padding.Horizontal + deflateOffset + deflateOffset),
+            height: bounds.Height - (_textBox.Padding.Vertical + deflateOffset + deflateOffset));
+
+        // We need Anti-Aliasing:
+        graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+        // Translate the origin to the top-left corner of the control:
+        graphics.TranslateTransform(-bounds.Left, -bounds.Top);
+
+        bounds.Inflate(1, 1);
+
+        Rectangle translatedClientBounds = new(
+            clientBounds.Left,
+            clientBounds.Top,
+            clientBounds.Width,
+            clientBounds.Height);
+
+        // Contrast to Copilot's suggestions, we need to first exclude
+        // the clip, then translate the origin.
+        graphics.ExcludeClip(translatedClientBounds);
+
+        // Fill the background with the specified brush:
+        graphics.FillRectangle(parentBackgroundBrush, bounds);
+
+        switch (_textBox.BorderStyle)
         {
-            int borderThickness = 2;
-            int deflateOffset = borderThickness / 2;
-            int cornerRadius = 15;
+            case BorderStyle.None:
 
-            Color adornerColor = _textBox.ForeColor;
-            Color parentBackColor = _textBox.Parent?.BackColor ?? _textBox.BackColor;
-            Color clientBackColor = _textBox.BackColor;
+                // Draw a rounded Rectangle with the border thickness
+                graphics.FillRectangle(
+                    clientBackgroundBrush,
+                    deflatedBounds);
 
-            using Brush parentBackgroundBrush = new SolidBrush(parentBackColor);
-            using Brush clientBackgroundBrush = new SolidBrush(clientBackColor);
-            using Brush adornerBrush = new SolidBrush(adornerColor);
-            using Pen adornerPen = new(adornerColor, borderThickness);
-            using Pen focusPen = new(SystemColors.Highlight, borderThickness);
+                break;
 
-            Rectangle bounds = _textBox.Bounds;
+            case BorderStyle.FixedSingle:
 
-            Rectangle clientBounds = new(
-                (bounds.Width - _textBox.ClientRectangle.Width) / 2,
-                (bounds.Height - _textBox.ClientRectangle.Height) / 2,
-                _textBox.ClientRectangle.Width,
-                _textBox.ClientRectangle.Height);
+                // Draw a rounded Rectangle with the border thickness
+                graphics.FillRectangle(
+                    clientBackgroundBrush,
+                    deflatedBounds);
 
-            Rectangle deflatedBounds = new(
-                x: bounds.Left + _textBox.Padding.Left + deflateOffset,
-                y: bounds.Top + _textBox.Padding.Top + deflateOffset,
-                width: bounds.Width - (_textBox.Padding.Horizontal + deflateOffset + deflateOffset),
-                height: bounds.Height - (_textBox.Padding.Vertical + deflateOffset + deflateOffset));
+                // Draw a rounded Rectangle with the border thickness
+                graphics.DrawRectangle(
+                    adornerPen,
+                    deflatedBounds);
 
-            // We need Anti-Aliasing:
-            graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                break;
 
-            // Translate the origin to the top-left corner of the control:
-            graphics.TranslateTransform(-bounds.Left, -bounds.Top);
+            default:
 
-            bounds.Inflate(1, 1);
+                // fill a rounded Rectangle
+                graphics.FillRoundedRectangle(
+                    clientBackgroundBrush,
+                    deflatedBounds,
+                    new Size(cornerRadius, cornerRadius));
 
-            Rectangle translatedClientBounds = new(
-                clientBounds.Left,
-                clientBounds.Top,
-                clientBounds.Width,
-                clientBounds.Height);
+                // Draw a rounded Rectangle with the border thickness
+                graphics.DrawRoundedRectangle(
+                    adornerPen,
+                    deflatedBounds,
+                    new Size(cornerRadius, cornerRadius));
 
-            // Contrast to Copilot's suggestions, we need to first exclude
-            // the clip, then translate the origin.
-            graphics.ExcludeClip(translatedClientBounds);
-
-            // Fill the background with the specified brush:
-            graphics.FillRectangle(parentBackgroundBrush, bounds);
-
-            switch (_textBox.BorderStyle)
-            {
-                case BorderStyle.None:
-
-                    // Draw a rounded Rectangle with the border thickness
-                    graphics.FillRectangle(
-                        clientBackgroundBrush,
-                        deflatedBounds);
-
-                    break;
-
-                case BorderStyle.FixedSingle:
-
-                    // Draw a rounded Rectangle with the border thickness
-                    graphics.FillRectangle(
-                        clientBackgroundBrush,
-                        deflatedBounds);
-
-                    // Draw a rounded Rectangle with the border thickness
-                    graphics.DrawRectangle(
-                        adornerPen,
-                        deflatedBounds);
-
-                    break;
-
-                default:
-
-                    // fill a rounded Rectangle
-                    graphics.FillRoundedRectangle(
-                        clientBackgroundBrush,
-                        deflatedBounds,
-                        new Size(cornerRadius, cornerRadius));
-
-                    // Draw a rounded Rectangle with the border thickness
-                    graphics.DrawRoundedRectangle(
-                        adornerPen,
-                        deflatedBounds,
-                        new Size(cornerRadius, cornerRadius));
-
-                    break;
-            }
-
-            // static float EaseOut(float t) => (1 - t) * (1 - t);
-
-            _animationProgress = animationProgress;
-
-            // We draw an animated line at the bottom of the TextBox. That line starts of in the middle of the TextBox,
-            // directly on the border in an 8th of the TextBox's width. It then moves simultaneously to the left and right
-            // until it reaches the border on both sides.
-
-            int lineLength = _textBox.Width / 8;
-            int lineStartX = (_textBox.Width - lineLength) / 2;
-            int lineStartY = _textBox.Height - borderThickness;
-
-            int lineOffset = (int)(lineLength * animationProgress);
-
-            int lineLeftX = lineStartX - lineOffset;
-            int lineRightX = lineStartX + lineLength + lineOffset;
-
-            graphics.DrawLine(focusPen, lineLeftX, lineStartY, lineRightX, lineStartY);
+                break;
         }
+
+        // We draw an animated line at the bottom of the TextBox. That line starts of in the middle of the TextBox,
+        // directly on the border in an 8th of the TextBox's width. It then moves simultaneously to the left and right
+        // until it reaches the border on both sides.
+        int lineLength = _textBox.Width / 8;
+        int lineStartX = (_textBox.Width - lineLength) / 2;
+        int lineStartY = _textBox.Height - borderThickness;
+
+        int lineOffset = (int)(lineLength * AnimationProgress);
+
+        int lineLeftX = lineStartX - lineOffset;
+        int lineRightX = lineStartX + lineLength + lineOffset;
+
+        graphics.DrawLine(focusPen, lineLeftX, lineStartY, lineRightX, lineStartY);
+
+        // static float EaseOut(float t) => (1 - t) * (1 - t);
     }
 
-    protected override void OnStoppedAnimation()
+    protected override void OnAnimationEnded()
     {
     }
 
-    public override void RenderControl(Graphics graphics) => throw new NotImplementedException();
+    protected override void OnAnimationStopped()
+    {
+    }
 }

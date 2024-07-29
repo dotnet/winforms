@@ -8,26 +8,21 @@ namespace System.Windows.Forms.Rendering.Animation;
 /// <summary>
 ///  Represents an abstract base class for animated control renderers.
 /// </summary>
-internal abstract class AnimatedControlRenderer
+/// <param name="control">The control associated with the renderer.</param>
+internal abstract class AnimatedControlRenderer(Control control)
 {
     private bool _disposedValue;
-    private readonly Control _control;
-
-    /// <summary>
-    ///  Initializes a new instance of the <see cref="AnimatedControlRenderer"/> class with the specified control.
-    /// </summary>
-    /// <param name="control">The control associated with the renderer.</param>
-    protected AnimatedControlRenderer(Control control)
-    {
-        _control = control;
-    }
+    protected float AnimationProgress = 1;
 
     /// <summary>
     ///  Callback for the animation progress. This method is called by the animation manager roughly every
     ///  25ms which results in about 40 frames per second.
     /// </summary>
     /// <param name="animationProgress">A fraction between 0 and 1 representing the animation progress.</param>
-    public abstract void AnimationProc(float animationProgress);
+    public virtual void AnimationProc(float animationProgress)
+    {
+        AnimationProgress = animationProgress;
+    }
 
     /// <summary>
     ///  Called when the control needs to be painted.
@@ -38,10 +33,7 @@ internal abstract class AnimatedControlRenderer
     /// <summary>
     ///  Invalidates the control, causing it to be redrawn, which in turns triggersRenderControl(PaintEventArgs).
     /// </summary>
-    public void Invalidate()
-    {
-        _control.Invalidate();
-    }
+    public void Invalidate() => control.Invalidate();
 
     /// <summary>
     ///  Starts the animation and gets the animation parameters.
@@ -54,7 +46,7 @@ internal abstract class AnimatedControlRenderer
         }
 
         // Get the animation parameters
-        (int animationDuration, AnimationCycle animationCycle) = OnStartAnimation();
+        (int animationDuration, AnimationCycle animationCycle) = OnAnimationStarted();
 
         // Register the renderer with the animation manager
         AnimationManager.RegisterOrUpdateAnimationRenderer(
@@ -65,7 +57,9 @@ internal abstract class AnimatedControlRenderer
         IsRunning = true;
     }
 
-    internal void RestartAnimation()
+    internal void StopAnimationInternal() => IsRunning = false;
+
+    public void RestartAnimation()
     {
         if (IsRunning)
         {
@@ -81,33 +75,51 @@ internal abstract class AnimatedControlRenderer
     /// <returns>
     ///  Tuple containing the animation duration and cycle type.
     /// </returns>
-    protected abstract (int animationDuration, AnimationCycle animationCycle) OnStartAnimation();
+    protected abstract (int animationDuration, AnimationCycle animationCycle) OnAnimationStarted();
 
     /// <summary>
-    ///  Stops the animation.
+    ///  Called by the animation manager when the animation ends.
+    /// </summary>
+    internal void EndAnimation()
+    {
+        OnAnimationEnded();
+    }
+
+    /// <summary>
+    ///  Called in a derived class when the animation ends.
+    ///  The derived class can perform any cleanup or state change operations.
+    /// </summary>
+    protected abstract void OnAnimationEnded();
+
+    /// <summary>
+    ///  Can be called by an implementing control, when the Animation needs to be stopped or restarted.
     /// </summary>
     public void StopAnimation()
     {
         AnimationManager.Suspend(this);
-        OnStoppedAnimation();
+        OnAnimationStopped();
     }
 
     /// <summary>
-    ///  Called when the animation stops.
+    ///  Called in the derived class when the animation is stopped.
+    ///  The derived class can perform any cleanup or state change operations.
     /// </summary>
-    protected abstract void OnStoppedAnimation();
+    protected abstract void OnAnimationStopped();
 
     /// <summary>
     ///  Gets the DPI scale of the control.
     /// </summary>
-    protected int DpiScale => (int)(_control.DeviceDpi / 96f);
+    protected int DpiScale => (int)(control.DeviceDpi / 96f);
 
-    public bool IsRunning { get; set; }
+    /// <summary>
+    ///  Gets a value indicating whether the animation is running.
+    /// </summary>
+    public bool IsRunning { get; private set; }
 
     /// <summary>
     ///  Gets the control associated with the renderer.
     /// </summary>
-    protected Control Control => _control;
+    protected Control Control => control;
 
     /// <summary>
     ///  Releases the unmanaged resources used by the <see cref="AnimatedControlRenderer"/> and optionally releases the managed resources.

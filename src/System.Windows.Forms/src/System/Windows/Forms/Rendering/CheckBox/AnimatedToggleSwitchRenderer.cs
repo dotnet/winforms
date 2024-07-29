@@ -12,22 +12,26 @@ internal class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
     private const int AnimationDuration = 300; // milliseconds
 
     private readonly ModernCheckBoxStyle _switchStyle;
-    private float? _animationProgress;
 
-    public AnimatedToggleSwitchRenderer(Control control, ModernCheckBoxStyle switchStyle) : base(control)
+    public AnimatedToggleSwitchRenderer(Control control, ModernCheckBoxStyle switchStyle)
+        : base(control)
     {
         _switchStyle = switchStyle;
     }
 
     private Forms.CheckBox CheckBox => (Forms.CheckBox)Control;
 
-    protected override (int animationDuration, AnimationCycle animationCycle) OnStartAnimation()
-        => (AnimationDuration, AnimationCycle.Once);
-
     public override void AnimationProc(float animationProgress)
     {
-        _animationProgress = animationProgress;
+        base.AnimationProc(animationProgress);
         Invalidate();
+    }
+
+    protected override (int animationDuration, AnimationCycle animationCycle) OnAnimationStarted()
+    {
+        AnimationProgress = 1;
+
+        return (AnimationDuration, AnimationCycle.Once);
     }
 
     /// <summary>
@@ -37,6 +41,8 @@ internal class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
     /// <param name="graphics">The graphics objects to render in.</param>
     public override void RenderControl(Graphics graphics)
     {
+        Debug.Print($"[{DateTime.Now:mm:ss:fff}]:{CheckBox.Name} - Check state: {CheckBox.CheckState} - Progress{AnimationProgress}");
+
         int dpiScale = DpiScale;
 
         int switchWidth = 50 * dpiScale;
@@ -72,20 +78,7 @@ internal class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
 
     private void RenderSwitch(Graphics g, Rectangle rect, int circleDiameter)
     {
-        float animationProgress = 1;
-
-        if (_animationProgress is not null)
-        {
-            // Let's make sure, we don't draw anything if the animation is not running.
-            if (_animationProgress == 0)
-            {
-                return;
-            }
-
-            animationProgress = _animationProgress.Value;
-        }
-
-        Color backgroundColor = CheckBox.Checked ^ (animationProgress < 0.8f)
+        Color backgroundColor = CheckBox.Checked ^ (AnimationProgress < 0.8f)
             ? SystemColors.Highlight
             : SystemColors.ControlDark;
 
@@ -95,8 +88,8 @@ internal class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
         // In the latter case we set the animationProgress to 1, so the circle is drawn
         // at the correct position.
         float circlePosition = CheckBox.Checked
-            ? (rect.Width - circleDiameter) * (1 - EaseOut(animationProgress))
-            : (rect.Width - circleDiameter) * EaseOut(animationProgress);
+            ? (rect.Width - circleDiameter) * (1 - EaseOut(AnimationProgress))
+            : (rect.Width - circleDiameter) * EaseOut(AnimationProgress);
 
         using var backgroundBrush = new SolidBrush(backgroundColor);
         using var circleBrush = new SolidBrush(circleColor);
@@ -129,8 +122,13 @@ internal class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
         static float EaseOut(float t) => (1 - t) * (1 - t);
     }
 
-    protected override void OnStoppedAnimation()
+    protected override void OnAnimationStopped()
     {
-        _animationProgress = null;
+        AnimationProgress = 0;
+    }
+
+    protected override void OnAnimationEnded()
+    {
+        AnimationProgress = 1;
     }
 }

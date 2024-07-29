@@ -195,6 +195,9 @@ public partial class CheckBox : ButtonBase
 
             if (animationHandlingNeeded)
             {
+                // This stops any ongoing animation AND sets
+                // the current progress of the animation to the
+                // current visual state of the checkbox.
                 _toggleSwitchRenderer?.StopAnimation();
             }
 
@@ -222,6 +225,8 @@ public partial class CheckBox : ButtonBase
 
             if (animationHandlingNeeded)
             {
+                // Progress restarts from 0, which is now fine, since we
+                // the check-state now has changed.
                 _toggleSwitchRenderer?.StartAnimation();
             }
         }
