@@ -29,11 +29,15 @@ internal sealed class NameCreationServiceImp : INameCreationService
                 count++;
 
                 string name = comp.Site.Name;
-                if (name.StartsWith(type.Name, StringComparison.OrdinalIgnoreCase))
+                if (name.Contains(type.Name))
                 {
                     try
                     {
-                        int value = int.Parse(name[type.Name.Length..]);
+                        int value = name.IndexOf(type.Name, StringComparison.Ordinal) != -1 ?
+                            name[(name.IndexOf(type.Name, StringComparison.Ordinal) + type.Name.Length)..].Length == 0 ?
+                            0 :
+                            int.Parse(name[(name.IndexOf(type.Name, StringComparison.Ordinal) + type.Name.Length)..]) :
+                            0;
                         if (value < min)
                             min = value;
                         if (value > max)
