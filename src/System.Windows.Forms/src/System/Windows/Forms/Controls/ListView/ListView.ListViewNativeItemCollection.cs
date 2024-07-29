@@ -56,18 +56,16 @@ public partial class ListView
             }
         }
 
-        public ListViewItem? GetItemByIndex(int index)
-        {
-            return GetItemByIndexInternal(index, throwInVirtualMode: false);
-        }
+        public ListViewItem? GetItemByIndex(int index) =>
+            GetItemByIndexInternal(index, throwInVirtualMode: false);
 
-        private ListViewItem? GetItemByIndexInternal(int index, bool throwInVirtualMode)
+        private ListViewItem? GetItemByIndexInternal(int index, [NotNullWhen(true)] bool throwInVirtualMode)
         {
             _owner.ApplyUpdateCachedItems();
 
             if (_owner.VirtualMode)
             {
-                // if we are showing virtual items, we need to get the item from the user
+                // If we are showing virtual items, we need to get the item from the user.
                 RetrieveVirtualItemEventArgs rVI = new(index);
                 _owner.OnRetrieveVirtualItem(rVI);
                 if (rVI.Item is null)

@@ -5211,7 +5211,8 @@ public class ListViewTests
 
     [WinFormsTheory]
     [MemberData(nameof(GetListViewItemTheoryData))]
-    public void ListView_VirtualMode_ListViewReleaseSuccess(ListViewItem listItem)
+    // Regression test for https://github.com/dotnet/winforms/issues/11663.
+    public void ListView_VirtualMode_ReleaseUiaProvider_Success(ListViewItem listItem)
     {
         using ListView listView = new()
         {
@@ -5228,7 +5229,7 @@ public class ListViewTests
             };
         };
 
-        SubListViewAccessibleObject accessibleObject = new(listView);
+        ListView.ListViewAccessibleObject accessibleObject = new(listView);
         int accessibilityProperty = listView.TestAccessor().Dynamic.s_accessibilityProperty;
         listView.Properties.SetObject(accessibilityProperty, accessibleObject);
         listView.IsAccessibilityObjectCreated.Should().BeTrue();
