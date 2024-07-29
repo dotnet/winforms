@@ -8,7 +8,7 @@ namespace System.Windows.Forms.Design.Tests;
 public sealed class DesignBindingTests
 {
     [Fact]
-    public void Null_ReturnsDesignBindingWithNullValues()
+    public void Null_ReturnsPropertiesWithNullValues()
     {
         var nullBinding = DesignBinding.Null;
 
@@ -21,7 +21,7 @@ public sealed class DesignBindingTests
     {
         object dataSource = new();
         string dataMember = "TestMember";
-        var binding = new DesignBinding(dataSource, dataMember);
+        DesignBinding binding = new(dataSource, dataMember);
 
         binding.DataSource.Should().Be(dataSource);
         binding.DataMember.Should().Be(dataMember);
@@ -30,31 +30,31 @@ public sealed class DesignBindingTests
     [Fact]
     public void IsNull_ReturnsTrueWhenDataSourceIsNull()
     {
-        var binding = new DesignBinding(null, "TestMember");
+        DesignBinding binding = new (null, "TestMember");
         binding.IsNull.Should().BeTrue();
     }
 
     [Fact]
     public void IsNull_ReturnsFalseWhenDataSourceIsNotNull()
     {
-        var binding = new DesignBinding(new object(), "TestMember");
+        DesignBinding binding = new (new object(), "TestMember");
         binding.IsNull.Should().BeFalse();
     }
 
-    public static IEnumerable<object[]> DataFieldTestData =>
-    new List<object[]>
+    public static TheoryData<string, string> DataFieldTestData =>
+    new TheoryData<string, string>
     {
-        new object[] { "", "" },
-        new object[] { "Field", "Field" },
-        new object[] { "Object.Field", "Field" },
-        new object[] { "Object.SubObject.Field", "Field" }
+        { "", "" },
+        { "Field", "Field" },
+        { "Object.Field", "Field" },
+        { "Object.SubObject.Field", "Field" }
     };
 
     [Theory]
     [MemberData(nameof(DataFieldTestData))]
-    public void DataField_ReturnsCorrectField(string dataMember, string expectedField)
+    public void DataField_ReturnsExpected(string dataMember, string expectedField)
     {
-        var binding = new DesignBinding(new object(), dataMember);
+        DesignBinding binding = new (new object(), dataMember);
         binding.DataField.Should().Be(expectedField);
     }
 
@@ -63,8 +63,8 @@ public sealed class DesignBindingTests
     {
         object dataSource = new();
         string dataMember = "TestMember";
-        var binding = new DesignBinding(dataSource, dataMember);
-        binding.Equals(dataSource, dataMember ?? string.Empty).Should().BeTrue();
+        DesignBinding binding = new (dataSource, dataMember);
+        binding.Equals(dataSource, dataMember).Should().BeTrue();
     }
 
     [Fact]
@@ -72,8 +72,8 @@ public sealed class DesignBindingTests
     {
         object dataSource = new();
         string dataMember = "TestMember";
-        var binding = new DesignBinding(dataSource, dataMember);
-        binding.Equals(new object(), dataMember ?? string.Empty).Should().BeFalse();
+        DesignBinding binding = new (dataSource, dataMember);
+        binding.Equals(new object(), dataMember).Should().BeFalse();
     }
 
     [Fact]
@@ -81,7 +81,7 @@ public sealed class DesignBindingTests
     {
         object dataSource = new();
         string dataMember = "TestMember";
-        var binding = new DesignBinding(dataSource, dataMember);
+        DesignBinding binding = new (dataSource, dataMember);
         binding.Equals(dataSource, "DifferentMember").Should().BeFalse();
     }
 }
