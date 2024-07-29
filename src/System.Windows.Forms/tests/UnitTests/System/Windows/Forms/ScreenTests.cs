@@ -85,21 +85,21 @@ public class ScreenTests
         Assert.Throws<ArgumentNullException>("control", () => Screen.FromControl(null));
     }
 
-    public static IEnumerable<object[]> FromHandle_TestData()
+    [Fact]
+    public void Screen_FromHandle_ZeroHandle_ReturnsExpected()
     {
-        yield return new object[] { IntPtr.Zero };
-
-        Control control = new();
-        yield return new object[] { control.Handle, control };
+        Screen screen = Screen.FromHandle(IntPtr.Zero);
+        Assert.NotNull(screen);
+        VerifyScreen(screen);
     }
 
-    [Theory]
-    [MemberData(nameof(FromHandle_TestData))]
-    public void Screen_FromHandle_Invoke_ReturnsExpected(IntPtr handle, Control control = null)
+    [Fact]
+    public void Screen_FromHandle_RealHandle_ReturnsExpected()
     {
+        Control control = new();
         try
         {
-            Screen screen = Screen.FromHandle(handle);
+            Screen screen = Screen.FromHandle(control.Handle);
             Assert.NotNull(screen);
             VerifyScreen(screen);
         }
