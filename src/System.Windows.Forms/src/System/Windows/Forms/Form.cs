@@ -2955,7 +2955,9 @@ public partial class Form : ContainerControl
 
             if (!CalledClosing)
             {
+#pragma warning disable CS0618 // Type or member is obsolete - compat
                 OnClosing(e);
+#pragma warning restore CS0618
                 OnFormClosing(e);
                 if (e.Cancel)
                 {
@@ -2972,7 +2974,9 @@ public partial class Form : ContainerControl
             if (!closingOnly && _dialogResult != DialogResult.None)
             {
                 FormClosedEventArgs fc = new(_closeReason);
+#pragma warning disable CS0618 // Type or member is obsolete - compat
                 OnClosed(fc);
+#pragma warning restore CS0618
                 OnFormClosed(fc);
 
                 // reset called closing.
@@ -3817,6 +3821,7 @@ public partial class Form : ContainerControl
     ///  The Closing event is fired when the form is closed.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
+    [Obsolete("The OnClosing method is obsolete starting with the .NET Framework 2.0; use the OnFormClosing method instead.")]
     protected virtual void OnClosing(CancelEventArgs e)
     {
         ((CancelEventHandler?)Events[s_closingEvent])?.Invoke(this, e);
@@ -3826,6 +3831,7 @@ public partial class Form : ContainerControl
     ///  The Closed event is fired when the form is closed.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
+    [Obsolete("The OnClosed method is obsolete starting with the .NET Framework 2.0; use the OnFormClosed method instead.")]
     protected virtual void OnClosed(EventArgs e)
     {
         ((EventHandler?)Events[s_closedEvent])?.Invoke(this, e);
@@ -6134,7 +6140,9 @@ public partial class Form : ContainerControl
                     {
                         if (mdiChild.IsHandleCreated)
                         {
+#pragma warning disable CS0618 // Type or member is obsolete - compat
                             mdiChild.OnClosing(fe);
+#pragma warning restore CS0618
                             mdiChild.OnFormClosing(fe);
                             if (fe.Cancel)
                             {
@@ -6170,7 +6178,9 @@ public partial class Form : ContainerControl
                     }
                 }
 
+#pragma warning disable CS0618 // Type or member is obsolete - compat
                 OnClosing(e);
+#pragma warning restore CS0618
                 OnFormClosing(e);
             }
 
@@ -6211,7 +6221,9 @@ public partial class Form : ContainerControl
                         if (mdiChild.IsHandleCreated)
                         {
                             mdiChild.IsTopMdiWindowClosing = IsClosing;
+#pragma warning disable CS0618 // Type or member is obsolete - compat
                             mdiChild.OnClosed(fc);
+#pragma warning restore CS0618
                             mdiChild.OnFormClosed(fc);
                         }
                     }
@@ -6226,13 +6238,17 @@ public partial class Form : ContainerControl
                     if (ownedForms[i] is not null)
                     {
                         // Call OnClosed and OnFormClosed on the child forms.
+#pragma warning disable CS0618 // Type or member is obsolete - compat
                         ownedForms[i].OnClosed(fc);
+#pragma warning restore CS0618
                         ownedForms[i].OnFormClosed(fc);
                     }
                 }
 
                 fc = new FormClosedEventArgs(CloseReason);
+#pragma warning disable CS0618 // Type or member is obsolete - compat
                 OnClosed(fc);
+#pragma warning restore CS0618
                 OnFormClosed(fc);
 
                 Dispose();

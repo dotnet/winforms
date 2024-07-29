@@ -450,6 +450,7 @@ internal sealed partial class DesignerActionPanel
                 _parent.ActionPanel.SetDropDownActive(true);
             }
 
+            [Obsolete("The OnClosed method is obsolete starting with the .NET Framework 2.0; use the OnFormClosed method instead.")]
             protected override void OnClosed(EventArgs e)
             {
                 base.OnClosed(e);
