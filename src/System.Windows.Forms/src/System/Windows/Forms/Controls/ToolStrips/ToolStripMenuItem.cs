@@ -8,6 +8,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Design;
 using System.Windows.Forms.Layout;
+using static System.Windows.Forms.Control;
 
 namespace System.Windows.Forms;
 
@@ -121,7 +122,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
         Initialize();
         Overflow = ToolStripItemOverflow.Never;
         _nativeMenuCommandID = nativeMenuCommandId;
-        _targetWindowHandle = Control.GetSafeHandle(targetWindow);
+        _targetWindowHandle = GetSafeHandle(targetWindow);
         _nativeMenuHandle = hmenu;
 
         // Since fetching the image and the text is an awful lot of work
@@ -197,7 +198,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
 
     private void Initialize()
     {
-        if (Control.UseComponentModelRegisteredTypes)
+        if (UseComponentModelRegisteredTypes)
         {
             // Register the type with the ComponentModel so as to be trim safe
             TypeDescriptor.RegisterType<Keys>();
@@ -718,7 +719,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
             return null;
         }
 
-        // Ee've mapped to a system defined bitmap we know how to draw.
+        // We've mapped to a system defined bitmap we know how to draw.
         Bitmap image = new(16, 16);
 
         using (Graphics g = Graphics.FromImage(image))
@@ -727,7 +728,9 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
             g.DrawRectangle(SystemPens.Control, 0, 0, image.Width - 1, image.Height - 1);
         }
 
-        image.MakeTransparent(SystemColors.Control);
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        image.MakeTransparent(ControlSystemColors.Current.Control);
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         return image;
     }
 
@@ -963,6 +966,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
         base.OnOwnerChanged(e);
     }
 
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     protected override void OnPaint(PaintEventArgs e)
     {
         if (Owner is null)
@@ -974,7 +978,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
         Graphics g = e.Graphics;
         renderer.DrawMenuItemBackground(new ToolStripItemRenderEventArgs(g, this));
 
-        Color textColor = SystemColors.MenuText;
+        Color textColor = ControlSystemColors.Current.MenuText;
         if (IsForeColorSet)
         {
             textColor = ForeColor;
@@ -983,11 +987,11 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
         {
             if (Selected || Pressed)
             {
-                textColor = SystemColors.HighlightText;
+                textColor = ControlSystemColors.Current.HighlightText;
             }
             else
             {
-                textColor = SystemColors.MenuText;
+                textColor = ControlSystemColors.Current.MenuText;
             }
         }
 
@@ -1029,8 +1033,8 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
             if (HasDropDownItems)
             {
                 ArrowDirection arrowDir = (rightToLeft) ? ArrowDirection.Left : ArrowDirection.Right;
-                Color arrowColor = (Selected || Pressed) ? SystemColors.HighlightText : SystemColors.MenuText;
-                arrowColor = (Enabled) ? arrowColor : SystemColors.ControlDark;
+                Color arrowColor = (Selected || Pressed) ? ControlSystemColors.Current.HighlightText : ControlSystemColors.Current.MenuText;
+                arrowColor = (Enabled) ? arrowColor : ControlSystemColors.Current.ControlDark;
                 renderer.DrawArrow(new ToolStripArrowRenderEventArgs(g, this, menuItemInternalLayout.ArrowRectangle, arrowColor, arrowDir));
             }
 
@@ -1041,7 +1045,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
         }
         else
         {
-            // Toplevel item support, menu items hosted on a plain ToolStrip dropdown
+            // Top-level item support, menu items hosted on a plain ToolStrip dropdown
             if ((DisplayStyle & ToolStripItemDisplayStyle.Text) == ToolStripItemDisplayStyle.Text)
             {
                 renderer.DrawItemText(new ToolStripItemTextRenderEventArgs(g, this, Text, InternalLayout.TextRectangle, textColor, Font, InternalLayout.TextFormat));
@@ -1053,6 +1057,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
             }
         }
     }
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     protected internal override bool ProcessCmdKey(ref Message m, Keys keyData)
     {
@@ -1111,7 +1116,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
     /// <summary> this is to support routing to native menu commands </summary>
     internal void SetNativeTargetWindow(IWin32Window window)
     {
-        _targetWindowHandle = Control.GetSafeHandle(window);
+        _targetWindowHandle = GetSafeHandle(window);
     }
 
     /// <summary> this is to support routing to native menu commands </summary>
@@ -1129,7 +1134,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
             return string.Empty;
         }
 
-        if (!Control.UseComponentModelRegisteredTypes)
+        if (!UseComponentModelRegisteredTypes)
         {
             return TypeDescriptor.GetConverter(typeof(Keys)).ConvertToString(context: null, CultureInfo.CurrentUICulture, shortcutKeys);
         }
