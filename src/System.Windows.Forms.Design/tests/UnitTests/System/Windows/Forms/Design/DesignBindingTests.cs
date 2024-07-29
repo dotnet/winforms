@@ -42,7 +42,7 @@ public sealed class DesignBindingTests
     }
 
     public static TheoryData<string, string> DataFieldTestData =>
-    new TheoryData<string, string>
+    new()
     {
         { "", "" },
         { "Field", "Field" },
