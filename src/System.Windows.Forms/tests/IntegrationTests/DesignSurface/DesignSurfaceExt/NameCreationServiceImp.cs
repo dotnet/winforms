@@ -26,18 +26,13 @@ internal sealed class NameCreationServiceImp : INameCreationService
         {
             if (cc[i] is Component comp && comp.GetType() == type)
             {
-                count++;
-
                 string name = comp.Site.Name;
-                if (name.Contains(type.Name))
+                if (name.StartsWith(type.Name, StringComparison.Ordinal))
                 {
+                    count++;
                     try
                     {
-                        int value = name.IndexOf(type.Name, StringComparison.Ordinal) != -1 ?
-                            name[(name.IndexOf(type.Name, StringComparison.Ordinal) + type.Name.Length)..].Length == 0 ?
-                            0 :
-                            int.Parse(name[(name.IndexOf(type.Name, StringComparison.Ordinal) + type.Name.Length)..]) :
-                            0;
+                        int value = int.Parse(name[type.Name.Length..]);
                         if (value < min)
                             min = value;
                         if (value > max)
