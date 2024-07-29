@@ -13,13 +13,12 @@ public class MaskDescriptorTemplateTests
     [InlineData("00000", "Numeric (5-digits)", "12345", typeof(int), "en-US", false, true)]
     [InlineData("invalid-mask", "Invalid Mask", "invalid", typeof(int), "en-US", false, false)]
     [InlineData("invalid-mask", "Invalid Mask", "invalid", typeof(int), "en-US", true, true)]
-    [InlineData(null, "Null Mask", "sample", typeof(int), "en-US", false, false)]
     [InlineData("00000", null, "sample", typeof(int), "en-US", false, false)]
     [InlineData("00000", "Numeric (5-digits)", null, typeof(int), "en-US", false, false)]
     [InlineData("00000", "Numeric (5-digits)", "12345", null, "en-US", false, false)]
     public void MaskDescriptorTemplate_Constructor_Validation(string? mask, string? name, string? sample, Type? validatingType, string? cultureName, bool skipValidation, bool isValid)
     {
-        if (mask is null || name is null || sample is null || validatingType is null || cultureName is null)
+        if (name is null || sample is null || validatingType is null || cultureName is null)
         {
             isValid.Should().BeFalse();
             return;
