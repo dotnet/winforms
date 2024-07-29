@@ -289,7 +289,7 @@
       </trans-unit>
       <trans-unit id="BinaryFormatterNotSupported">
         <source>BinaryFormatter serialization and deserialization are disabled within this application. See https://aka.ms/binaryformatter for more information.</source>
-        <target state="needs-review-translation">Kırpılmış uygulamalarda BinaryFormatter’ın kullanımı desteklenmiyor.</target>
+        <target state="translated">BinaryFormatter serileştirme ve seri durumdan çıkarma işlemleri bu uygulamada devre dışı. Daha fazla bilgi için https://aka.ms/binaryformatter sayfasına bakın.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
@@ -9706,7 +9706,7 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       </trans-unit>
       <trans-unit id="ToolStripAllowClickThrough">
         <source>Allows the control to be interacted when window does not have focus.</source>
-        <target state="new">Allows the control to be interacted when window does not have focus.</target>
+        <target state="translated">Pencerenin odağı olmadığında kontrolün etkileşime girmesine izin verir.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue">

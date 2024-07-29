@@ -17,16 +17,11 @@ internal abstract partial class NullRecord
     /// </remarks>
     internal sealed class ObjectNullMultiple :
         NullRecord,
-        IRecord<ObjectNullMultiple>,
-        IBinaryFormatParseable<ObjectNullMultiple>
+        IRecord<ObjectNullMultiple>
     {
         public static RecordType RecordType => RecordType.ObjectNullMultiple;
 
         public ObjectNullMultiple(Count count) => NullCount = count;
-
-        static ObjectNullMultiple IBinaryFormatParseable<ObjectNullMultiple>.Parse(
-            BinaryFormattedObject.IParseState state)
-            => new(state.Reader.ReadInt32());
 
         public void Write(BinaryWriter writer)
         {

@@ -13,7 +13,7 @@ namespace System.Private.Windows.Core.BinaryFormat;
 ///   </see>
 ///  </para>
 /// </remarks>
-internal sealed partial class ArraySingleString : ArrayRecord<string?>, IRecord<ArraySingleString>, IBinaryFormatParseable<ArraySingleString>
+internal sealed partial class ArraySingleString : ArrayRecord<string?>, IRecord<ArraySingleString>
 {
     public static RecordType RecordType => RecordType.ArraySingleString;
 
@@ -26,10 +26,6 @@ internal sealed partial class ArraySingleString : ArrayRecord<string?>, IRecord<
     }
 
     public override BinaryType ElementType => BinaryType.String;
-
-    static ArraySingleString IBinaryFormatParseable<ArraySingleString>.Parse(BinaryFormattedObject.IParseState state) => new(
-        ArrayInfo.Parse(state.Reader, out Count length),
-        ReadObjectArrayValues(state, length), state.RecordMap);
 
     private protected override void Write(BinaryWriter writer)
     {

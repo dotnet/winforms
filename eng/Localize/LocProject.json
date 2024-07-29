@@ -113,9 +113,24 @@
                                               "OutputPath":  ".\\src\\System.Windows.Forms.Analyzers\\src\\Resources\\xlf\\"
                                           },
                                           {
+                                              "SourceFile":  ".\\src\\System.Windows.Forms.Analyzers.CodeFixes.CSharp\\Resources\\xlf\\SR.xlf",
+                                              "CopyOption":  "LangIDOnName",
+                                              "OutputPath":  ".\\src\\System.Windows.Forms.Analyzers.CodeFixes.CSharp\\Resources\\xlf\\"
+                                          },
+                                          {
+                                              "SourceFile":  ".\\src\\System.Windows.Forms.Analyzers.CodeFixes.VisualBasic\\Resources\\xlf\\SR.xlf",
+                                              "CopyOption":  "LangIDOnName",
+                                              "OutputPath":  ".\\src\\System.Windows.Forms.Analyzers.CodeFixes.VisualBasic\\Resources\\xlf\\"
+                                          },
+                                          {
                                               "SourceFile":  ".\\src\\System.Windows.Forms.Analyzers.CSharp\\src\\Resources\\xlf\\SR.xlf",
                                               "CopyOption":  "LangIDOnName",
                                               "OutputPath":  ".\\src\\System.Windows.Forms.Analyzers.CSharp\\src\\Resources\\xlf\\"
+                                          },
+                                          {
+                                              "SourceFile":  ".\\src\\System.Windows.Forms.Analyzers.VisualBasic\\src\\Resources\\xlf\\SR.xlf",
+                                              "CopyOption":  "LangIDOnName",
+                                              "OutputPath":  ".\\src\\System.Windows.Forms.Analyzers.VisualBasic\\src\\Resources\\xlf\\"
                                           },
                                           {
                                               "SourceFile":  ".\\src\\System.Windows.Forms.Design\\src\\Resources\\System\\ComponentModel\\Design\\xlf\\BinaryEditor.xlf",

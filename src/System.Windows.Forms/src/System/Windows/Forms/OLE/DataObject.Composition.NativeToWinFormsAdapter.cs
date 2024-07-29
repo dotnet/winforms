@@ -6,10 +6,9 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization.Formatters;
 using System.Text;
-using System.Private.Windows.Core.BinaryFormat;
 using Com = Windows.Win32.System.Com;
 using System.Drawing;
-using System.Windows.Forms.BinaryFormat;
+using System.Windows.Forms.Nrbf;
 
 namespace System.Windows.Forms;
 
@@ -183,7 +182,7 @@ public unsafe partial class DataObject
                         long startPosition = stream.Position;
                         try
                         {
-                            if (new BinaryFormattedObject(stream).TryGetObject(out object? value))
+                            if (stream.Decode().TryGetObject(out object? value))
                             {
                                 return value;
                             }
