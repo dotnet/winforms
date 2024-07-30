@@ -52,22 +52,6 @@ internal class PropertyStore
 
     // REMOVE
     /// <summary>
-    ///  A wrapper around GetObject designed to reduce the boxing hit.
-    /// </summary>
-    public Size GetSize(int key, out bool found)
-    {
-        if (_values.TryGetValue(key, out Value value))
-        {
-            found = true;
-            return value.GetValue<Size>();
-        }
-
-        found = false;
-        return Size.Empty;
-    }
-
-    // REMOVE
-    /// <summary>
     ///  Retrieves an integer value from our property list.
     ///  This will set value to zero and return false if the
     ///  list does not contain the given key.
@@ -159,9 +143,6 @@ internal class PropertyStore
 
     // REMOVE
     public void SetColor(int key, Color value) => _values[key] = value;
-
-    // REMOVE
-    public void SetSize(int key, Size value) => _values[key] = value;
 
     // REMOVE
     /// <summary>
