@@ -31,6 +31,7 @@ System.Windows.Forms.Control.InvokeAsync(System.Func<System.Threading.Tasks.Task
 System.Windows.Forms.Control.InvokeAsync<T>(System.Func<System.Threading.Tasks.Task<T>!>! asyncFunc, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<T>!
 System.Windows.Forms.Control.InvokeAsync<TResult>(System.Func<TResult>! syncFunction) -> System.Threading.Tasks.Task<TResult>!
 System.Windows.Forms.Control.InvokeAsync<TResult>(System.Func<TResult>! syncFunction, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<TResult>!
+System.Windows.Forms.Form.ShowAsync(System.Windows.Forms.IWin32Window? owner = null) -> System.Threading.Tasks.Task!
 System.Windows.Forms.Form.ShowDialogAsync() -> System.Threading.Tasks.Task<System.Windows.Forms.DialogResult>!
 System.Windows.Forms.Form.ShowDialogAsync(System.Windows.Forms.IWin32Window! owner) -> System.Threading.Tasks.Task<System.Windows.Forms.DialogResult>!
 System.Windows.Forms.SystemColorMode

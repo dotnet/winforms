@@ -166,6 +166,7 @@ public partial class Form : ContainerControl
     private Dictionary<int, Size>? _dpiFormSizes;
     private bool _processingDpiChanged;
     private bool _inRecreateHandle;
+    private TaskCompletionSource? _tcs;
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="Form"/> class.
@@ -3632,6 +3633,9 @@ public partial class Form : ContainerControl
                 Properties.RemoveObject(s_propDummyMdiMenu);
                 PInvoke.DestroyMenu(dummyMenu);
             }
+
+            _tcs?.SetResult();
+            _tcs = null;
         }
         else
         {
@@ -4129,6 +4133,9 @@ public partial class Form : ContainerControl
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnFormClosed(FormClosedEventArgs e)
     {
+        // This effectively ends an `await form.ShowAsync();` call.
+        _tcs?.TrySetResult();
+
         // Remove the form from Application.OpenForms (nothing happens if isn't present)
         Application.OpenForms.Remove(this);
 
@@ -5491,6 +5498,53 @@ public partial class Form : ContainerControl
         }
 
         Visible = true;
+    }
+
+    /// <summary>
+    ///  Shows the form asynchronously.
+    /// </summary>
+    /// <param name="owner">The optional owner window.</param>
+    /// <returns>A task that completes when the form is closed.</returns>
+    public async Task ShowAsync(IWin32Window? owner = null)
+    {
+        if (_tcs is not null)
+        {
+            throw new InvalidOperationException("The form has already been shown asynchronously.");
+        }
+
+        _tcs = new TaskCompletionSource();
+
+        BeginInvoke(new Action(ShowFormInternally));
+
+        // Wait until the form is closed or disposed.
+        try
+        {
+            await _tcs.Task.ConfigureAwait(true);
+        }
+        finally
+        {
+            _tcs = null;
+        }
+
+        void ShowFormInternally()
+        {
+            try
+            {
+                // Show the form with an optional owner.
+                if (owner is not null)
+                {
+                    Show(owner);
+                }
+                else
+                {
+                    Show();
+                }
+            }
+            catch (Exception ex)
+            {
+                _tcs.TrySetException(ex);
+            }
+        }
     }
 
     /// <summary>
