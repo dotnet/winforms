@@ -115,13 +115,13 @@ public class DataGridViewCellStyle : ICloneable
     [SRCategory(nameof(SR.CatAppearance))]
     public Color BackColor
     {
-        get => Properties.GetColor(s_propBackColor);
+        get => Properties.GetValueOrDefault<Color>(s_propBackColor);
         set
         {
             Color c = BackColor;
-            if (!value.IsEmpty || Properties.ContainsObject(s_propBackColor))
+            if (!value.IsEmpty || Properties.ContainsKey(s_propBackColor))
             {
-                Properties.SetColor(s_propBackColor, value);
+                Properties.AddValue(s_propBackColor, value);
             }
 
             if (!c.Equals(BackColor))
@@ -384,13 +384,13 @@ public class DataGridViewCellStyle : ICloneable
     [SRCategory(nameof(SR.CatAppearance))]
     public Color SelectionBackColor
     {
-        get => Properties.GetColor(s_propSelectionBackColor);
+        get => Properties.GetValueOrDefault<Color>(s_propSelectionBackColor);
         set
         {
             Color c = SelectionBackColor;
-            if (!value.IsEmpty || Properties.ContainsObject(s_propSelectionBackColor))
+            if (!value.IsEmpty || Properties.ContainsKey(s_propSelectionBackColor))
             {
-                Properties.SetColor(s_propSelectionBackColor, value);
+                Properties.AddValue(s_propSelectionBackColor, value);
             }
 
             if (!c.Equals(SelectionBackColor))
@@ -403,13 +403,13 @@ public class DataGridViewCellStyle : ICloneable
     [SRCategory(nameof(SR.CatAppearance))]
     public Color SelectionForeColor
     {
-        get => Properties.GetColor(s_propSelectionForeColor);
+        get => Properties.GetValueOrDefault<Color>(s_propSelectionForeColor);
         set
         {
             Color c = SelectionForeColor;
-            if (!value.IsEmpty || Properties.ContainsObject(s_propSelectionForeColor))
+            if (!value.IsEmpty || Properties.ContainsKey(s_propSelectionForeColor))
             {
-                Properties.SetColor(s_propSelectionForeColor, value);
+                Properties.AddValue(s_propSelectionForeColor, value);
             }
 
             if (!c.Equals(SelectionForeColor))
@@ -638,8 +638,7 @@ public class DataGridViewCellStyle : ICloneable
 
     private bool ShouldSerializeSelectionForeColor()
     {
-        Properties.GetColor(s_propSelectionForeColor, out bool found);
-        return found;
+        return Properties.TryGetValue(s_propSelectionForeColor, out Color _);
     }
 
     public override string ToString()

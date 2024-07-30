@@ -539,9 +539,9 @@ public abstract partial class ToolStripItem :
         set
         {
             Color c = BackColor;
-            if (!value.IsEmpty || Properties.ContainsObject(s_backColorProperty))
+            if (!value.IsEmpty || Properties.ContainsKey(s_backColorProperty))
             {
-                Properties.SetColor(s_backColorProperty, value);
+                Properties.AddValue(s_backColorProperty, value);
             }
 
             if (!c.Equals(BackColor))
@@ -880,7 +880,7 @@ public abstract partial class ToolStripItem :
     {
         get
         {
-            Color foreColor = Properties.GetColor(s_foreColorProperty);
+            Color foreColor = Properties.GetValueOrDefault<Color>(s_foreColorProperty);
             if (!foreColor.IsEmpty)
             {
                 return foreColor;
@@ -897,9 +897,9 @@ public abstract partial class ToolStripItem :
         set
         {
             Color c = ForeColor;
-            if (!value.IsEmpty || Properties.ContainsObject(s_foreColorProperty))
+            if (!value.IsEmpty || Properties.ContainsKey(s_foreColorProperty))
             {
-                Properties.SetColor(s_foreColorProperty, value);
+                Properties.AddValue(s_foreColorProperty, value);
             }
 
             if (!c.Equals(ForeColor))
@@ -1218,7 +1218,7 @@ public abstract partial class ToolStripItem :
     {
         get
         {
-            Color color = Properties.GetColor(s_foreColorProperty);
+            Color color = Properties.GetValueOrDefault<Color>(s_foreColorProperty);
             if (!color.IsEmpty)
             {
                 return true;
@@ -1658,7 +1658,7 @@ public abstract partial class ToolStripItem :
     /// <summary>
     ///  Returns the value of the backColor field -- no asking the parent with its color is, etc.
     /// </summary>
-    internal Color RawBackColor => Properties.GetColor(s_backColorProperty);
+    internal Color RawBackColor => Properties.GetValueOrDefault<Color>(s_backColorProperty);
 
     /// <summary>
     ///  Returns the parent <see cref="ToolStrip"/>'s renderer
@@ -2932,7 +2932,7 @@ public abstract partial class ToolStripItem :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnParentBackColorChanged(EventArgs e)
     {
-        Color backColor = Properties.GetColor(s_backColorProperty);
+        Color backColor = Properties.GetValueOrDefault<Color>(s_backColorProperty);
         if (backColor.IsEmpty)
         {
             OnBackColorChanged(e);
@@ -2980,7 +2980,7 @@ public abstract partial class ToolStripItem :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnParentForeColorChanged(EventArgs e)
     {
-        Color foreColor = Properties.GetColor(s_foreColorProperty);
+        Color foreColor = Properties.GetValueOrDefault<Color>(s_foreColorProperty);
         if (foreColor.IsEmpty)
         {
             OnForeColorChanged(e);
@@ -3354,7 +3354,7 @@ public abstract partial class ToolStripItem :
     [EditorBrowsable(EditorBrowsableState.Never)]
     internal virtual bool ShouldSerializeBackColor()
     {
-        Color backColor = Properties.GetColor(s_backColorProperty);
+        Color backColor = Properties.GetValueOrDefault<Color>(s_backColorProperty);
         return !backColor.IsEmpty;
     }
 
@@ -3368,7 +3368,7 @@ public abstract partial class ToolStripItem :
     [EditorBrowsable(EditorBrowsableState.Never)]
     internal virtual bool ShouldSerializeForeColor()
     {
-        Color foreColor = Properties.GetColor(s_foreColorProperty);
+        Color foreColor = Properties.GetValueOrDefault<Color>(s_foreColorProperty);
         return !foreColor.IsEmpty;
     }
 

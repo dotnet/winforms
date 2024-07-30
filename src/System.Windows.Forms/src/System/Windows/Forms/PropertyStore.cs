@@ -32,25 +32,6 @@ internal class PropertyStore
     public static int CreateKey() => s_currentKey++;
 
     // REMOVE
-    public Color GetColor(int key) => GetColor(key, out _);
-
-    // REMOVE
-    /// <summary>
-    ///  A wrapper around GetObject designed to reduce the boxing hit
-    /// </summary>
-    public Color GetColor(int key, out bool found)
-    {
-        if (_values.TryGetValue(key, out Value value))
-        {
-            found = true;
-            return value.GetValue<Color>();
-        }
-
-        found = false;
-        return Color.Empty;
-    }
-
-    // REMOVE
     /// <summary>
     ///  Retrieves an integer value from our property list.
     ///  This will set value to zero and return false if the
@@ -140,9 +121,6 @@ internal class PropertyStore
     ///  Removes the given key from the store.
     /// </summary>
     public void RemoveValue(int key) => _values.Remove(key);
-
-    // REMOVE
-    public void SetColor(int key, Color value) => _values[key] = value;
 
     // REMOVE
     /// <summary>
