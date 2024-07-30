@@ -53,7 +53,3 @@ public class BindingSourceDesignerTests
         bindingSource.DataSource.Should().BeNull();
     }
 }
-
-
-
-
