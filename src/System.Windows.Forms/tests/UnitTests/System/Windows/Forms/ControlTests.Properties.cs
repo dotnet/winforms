@@ -52,21 +52,25 @@ public partial class ControlTests
         Assert.Same(control, accessibleObject.Owner);
     }
 
-    public static IEnumerable<object[]> AccessibilityObject_CustomCreateAccessibilityInstance_TestData()
+    public static TheoryData<AccessibleObject, AccessibleObject, Control> AccessibilityObject_CustomCreateAccessibilityInstance_TestData()
     {
-        yield return new object[] { null, null };
-
         AccessibleObject accessibleObject = new();
-        yield return new object[] { accessibleObject, accessibleObject };
-
         Control control = new();
         var controlAccessibleObject = new Control.ControlAccessibleObject(control);
-        yield return new object[] { controlAccessibleObject, controlAccessibleObject, control };
+
+        var data = new TheoryData<AccessibleObject, AccessibleObject, Control>
+        {
+            { null, null, null },
+            { accessibleObject, accessibleObject, null },
+            { controlAccessibleObject, controlAccessibleObject, control }
+        };
+
+        return data;
     }
 
     [WinFormsTheory]
     [MemberData(nameof(AccessibilityObject_CustomCreateAccessibilityInstance_TestData))]
-    public void Control_AccessibilityObject_GetCustomCreateAccessibilityInstance_ReturnsExpected(AccessibleObject result, AccessibleObject expected, Control originalControl = null)
+    public void Control_AccessibilityObject_GetCustomCreateAccessibilityInstance_ReturnsExpected(AccessibleObject result, AccessibleObject expected, Control originalControl)
     {
         try
         {

@@ -223,19 +223,24 @@ public class Control_ControlAccessibleObjectTests
         Assert.Equal(accessibleDescription, accessibleObject.Description);
     }
 
-    public static IEnumerable<object[]> Handle_Set_TestData()
+    public static TheoryData<IntPtr, Control> Handle_Set_TestData()
     {
-        yield return new object[] { IntPtr.Zero };
-        yield return new object[] { (IntPtr)(-1) };
-        yield return new object[] { (IntPtr)1 };
-        yield return new object[] { (IntPtr)250 };
         Control control = new();
-        yield return new object[] { control.Handle, control };
+        var data = new TheoryData<IntPtr, Control>
+        {
+            { IntPtr.Zero, null },
+            { new IntPtr(-1), null },
+            { new IntPtr(1), null },
+            { new IntPtr(250), null },
+            { control.Handle, control }
+        };
+
+        return data;
     }
 
     [WinFormsTheory]
     [MemberData(nameof(Handle_Set_TestData))]
-    public void ControlAccessibleObject_Handle_Set_Success(IntPtr value, Control control = null)
+    public void ControlAccessibleObject_Handle_Set_Success(IntPtr value, Control control)
     {
         try
         {

@@ -93,7 +93,7 @@ public class ScreenTests
         VerifyScreen(screen);
     }
 
-    [Fact]
+    [WinFormsFact]
     public void Screen_FromHandle_RealHandle_ReturnsExpected()
     {
         Control control = new();
