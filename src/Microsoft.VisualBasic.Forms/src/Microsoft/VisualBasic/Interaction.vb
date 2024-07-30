@@ -10,6 +10,7 @@ Imports Microsoft.VisualBasic.CompilerServices
 
 Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 Imports VbUtils = Microsoft.VisualBasic.CompilerServices.Utils
+Imports NativeMethods = Microsoft.VisualBasic.CompilerServices.NativeMethods
 
 Namespace Microsoft.VisualBasic
 

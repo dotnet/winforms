@@ -2,9 +2,11 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.ComponentModel
+Imports System.Diagnostics.CodeAnalysis
 Imports System.Drawing
 Imports System.Runtime.InteropServices
 Imports System.Windows.Forms
+Imports System.Windows.Forms.Analyzers.Diagnostics
 
 Namespace Microsoft.VisualBasic.ApplicationServices
 
@@ -15,11 +17,21 @@ Namespace Microsoft.VisualBasic.ApplicationServices
     Public Class ApplyApplicationDefaultsEventArgs
         Inherits EventArgs
 
+#Disable Warning WFO9001
+#Disable Warning WFO9000
         Friend Sub New(minimumSplashScreenDisplayTime As Integer,
-                highDpiMode As HighDpiMode)
+                highDpiMode As HighDpiMode,
+                colorMode As SystemColorMode,
+                visualStylesMode As VisualStylesMode)
+
             Me.MinimumSplashScreenDisplayTime = minimumSplashScreenDisplayTime
             Me.HighDpiMode = highDpiMode
+            Me.ColorMode = colorMode
+            Me.VisualStylesMode = visualStylesMode
+
         End Sub
+#Enable Warning WFO9000
+#Enable Warning WFO9001
 
         ''' <summary>
         '''  Setting this property inside the event handler causes a new default Font for Forms and UserControls to be set.
@@ -44,5 +56,20 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' </remarks>
         Public Property HighDpiMode As HighDpiMode
 
+        ''' <summary>
+        '''  Setting this property inside the event handler determines the <see cref="Application.ColorMode"/> for the application.
+        ''' </summary>
+        <Experimental(DiagnosticIDs.ExperimentalDarkMode)>
+        Public Property ColorMode As SystemColorMode
+
+        ''' <summary>
+        '''  Setting this property inside the event handler determines the <see cref="VisualStylesMode"/> for the application.
+        ''' </summary>
+        ''' <returns></returns>
+        <Experimental(DiagnosticIDs.ExperimentalVisualStyles)>
+        Public Property VisualStylesMode As VisualStylesMode
+
     End Class
+#Disable Warning WFO9000
+#Disable Warning WFO9001
 End Namespace

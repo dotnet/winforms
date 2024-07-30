@@ -3,6 +3,7 @@
 
 Imports System.Collections.ObjectModel
 Imports System.ComponentModel
+Imports System.Diagnostics.CodeAnalysis
 Imports System.IO.Pipes
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
@@ -10,6 +11,7 @@ Imports System.Runtime.InteropServices
 Imports System.Security
 Imports System.Threading
 Imports System.Windows.Forms
+Imports System.Windows.Forms.Analyzers.Diagnostics
 
 Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 Imports VbUtils = Microsoft.VisualBasic.CompilerServices.Utils
@@ -138,8 +140,19 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ' Informs My.Settings whether to save the settings on exit or not.
         Private _saveMySettingsOnExit As Boolean
 
-        ' The HighDpiMode the user picked from the AppDesigner or assigned to the ApplyHighDpiMode's Event.
+        ' The HighDpiMode the user picked from the AppDesigner or assigned to the ApplyApplicationsDefault event.
         Private _highDpiMode As HighDpiMode = HighDpiMode.SystemAware
+#Disable Warning WFO9001 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
+        ' The ColorMode (Classic/Light, System, Dark) the user assigned to the ApplyApplicationsDefault event.
+        ' Note: We aim to expose this to the App Designer in later runtime/VS versions.
+        Private _colorMode As SystemColorMode = SystemColorMode.Classic
+#Enable Warning WFO9001 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
+
+#Disable Warning WFO9000 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
+        ' The VisualStylesMode (Default is Classic) the user assigned to the ApplyApplicationsDefault event.
+        ' Note: We aim to expose this to the App Designer in later runtime/VS versions.
+        Private _visualStylesMode As VisualStylesMode = VisualStylesMode.Classic
+#Enable Warning WFO9000 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
 
         ''' <summary>
         '''  Occurs when the network availability changes.
@@ -249,15 +262,15 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             RaiseEvent(sender As Object, e As UnhandledExceptionEventArgs)
                 If _unhandledExceptionHandlers IsNot Nothing Then
 
-                    ' In the case that we throw from the <see cref="UnhandledException"/> handler, we don't want to
-                    ' run the <see cref="UnhandledException"/>  handler again.
+                    ' In the case that we throw from the UnhandledException handler, we don't want to
+                    ' run the UnhandledException handler again.
                     _processingUnhandledExceptionEvent = True
 
                     For Each handler As UnhandledExceptionEventHandler In _unhandledExceptionHandlers
                         handler?.Invoke(sender, e)
                     Next
 
-                    ' Now that we are out of the <see cref="UnhandledException"/> handler, treat exceptions normally again.
+                    ' Now that we are out of the UnhandledException handler, treat exceptions normally again.
                     _processingUnhandledExceptionEvent = False
                 End If
             End RaiseEvent
@@ -291,8 +304,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             If authenticationMode = AuthenticationMode.Windows Then
                 Try
                     ' Consider: Sadly, a call to: System.Security.SecurityManager.IsGranted(New SecurityPermission(SecurityPermissionFlag.ControlPrincipal))
-                    ' Will only check THIS caller so you'll always get TRUE.
-                    ' What is needed is a way to get to the value of this on a demand basis.
+                    ' Will only check the THIS caller so you'll always get TRUE.
+                    ' What we need is a way to get to the value of this on a demand basis.
                     ' So I try/catch instead for now but would rather be able to IF my way around this block.
                     Thread.CurrentPrincipal = New Principal.WindowsPrincipal(Principal.WindowsIdentity.GetCurrent)
                 Catch ex As SecurityException
@@ -349,7 +362,11 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     Dim tokenSource As New CancellationTokenSource()
                     tokenSource.CancelAfter(SECOND_INSTANCE_TIMEOUT)
                     Try
-                        Dim awaitable As ConfiguredTaskAwaitable = SendSecondInstanceArgsAsync(applicationInstanceID, commandLine, cancellationToken:=tokenSource.Token).ConfigureAwait(False)
+                        Dim awaitable As ConfiguredTaskAwaitable = SendSecondInstanceArgsAsync(
+                            pipeName:=applicationInstanceID,
+                            args:=commandLine,
+                            cancellationToken:=tokenSource.Token).ConfigureAwait(False)
+
                         awaitable.GetAwaiter().GetResult()
                     Catch ex As Exception
                         Throw New CantStartSingleInstanceException()
@@ -492,20 +509,27 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             '    in a derived class and setting `MyBase.MinimumSplashScreenDisplayTime` there.
             '    We are picking this (probably) changed value up, and pass it to the ApplyDefaultsEvents
             '    where it could be modified (again). So event wins over Override over default value (2 seconds).
-            ' b) We feed the default HighDpiMode (SystemAware) to the EventArgs. With the introduction of
-            '    the HighDpiMode property, we give Project System the chance to reflect the HighDpiMode
-            '    in the App Designer UI and have it code-generated based on a modified Application.myapp, which
-            '    would result it to be set in the derived constructor. (See the hidden file in the Solution Explorer
-            '    "My Project\Application.myapp\Application.Designer.vb for how those UI-set values get applied.)
+            ' b) We feed the defaults for HighDpiMode, ColorMode, VisualStylesMode to the EventArgs. 
+            '    With the introduction of the HighDpiMode property, we changed Project System the chance to reflect 
+            '    those default values in the App Designer UI and have it code-generated based on a modified 
+            '    Application.myapp, which would result it to be set in the derived constructor.
+            '    (See the hidden file in the Solution Explorer "My Project\Application.myapp\Application.Designer.vb
+            '     for how those UI-set values get applied.)
             '    Once all this is done, we give the User another chance to change the value by code through
             '    the ApplyDefaults event.
-            ' Overriding MinimumSplashScreenDisplayTime needs still to keep working!
+            ' Note: Overriding MinimumSplashScreenDisplayTime needs still to keep working!
+#Disable Warning WFO9001 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
+#Disable Warning WFO9000 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
             Dim applicationDefaultsEventArgs As New ApplyApplicationDefaultsEventArgs(
                 MinimumSplashScreenDisplayTime,
-                HighDpiMode) With
+                HighDpiMode,
+                ColorMode,
+                VisualStylesMode) With
             {
                 .MinimumSplashScreenDisplayTime = MinimumSplashScreenDisplayTime
             }
+#Enable Warning WFO9000 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
+#Enable Warning WFO9001 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
 
             RaiseEvent ApplyApplicationDefaults(Me, applicationDefaultsEventArgs)
 
@@ -521,17 +545,26 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
             _highDpiMode = applicationDefaultsEventArgs.HighDpiMode
 
+#Disable Warning WFO9001 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
+#Disable Warning WFO9000 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
+
+            _colorMode = applicationDefaultsEventArgs.ColorMode
+            _visualStylesMode = applicationDefaultsEventArgs.VisualStylesMode
+
             ' Then, it's applying what we got back as HighDpiMode.
             Dim dpiSetResult As Boolean = Application.SetHighDpiMode(_highDpiMode)
+
             If dpiSetResult Then
                 _highDpiMode = Application.HighDpiMode
             End If
             Debug.Assert(dpiSetResult, "We could net set the HighDpiMode.")
 
-            ' And finally we take care of EnableVisualStyles.
-            If _enableVisualStyles Then
-                Application.EnableVisualStyles()
-            End If
+            ' Now, let's set VisualStyles and ColorMode:
+            Application.SetColorMode(_colorMode)
+            Application.SetDefaultVisualStylesMode(_visualStylesMode)
+
+#Enable Warning WFO9000 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
+#Enable Warning WFO9001 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
 
             ' We'll handle "/nosplash" for you.
             If Not (commandLineArgs.Contains("/nosplash") OrElse Me.CommandLineArgs.Contains("-nosplash")) Then
@@ -559,7 +592,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             ' It is important not to create the network object until the ExecutionContext has everything on it.
             ' By now the principal will be on the thread so we can create the network object.
             ' The timing is important because the network object has an AsyncOperationsManager in it that marshals
-            ' the network changed event to the main thread. The asycnOperationsManager does a CreateOperation()
+            ' the network changed event to the main thread. The asyncOperationsManager does a CreateOperation()
             ' which makes a copy of the executionContext. That execution context shows up on your thread during
             ' the callback so I delay creating the network object (and consequently the capturing of the execution context)
             ' until the principal has been set on the thread. This avoids the problem where My.User isn't set
@@ -793,6 +826,32 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             End Get
             Set(value As HighDpiMode)
                 _highDpiMode = value
+            End Set
+        End Property
+
+        ''' <summary>
+        '''  Gets or sets the VisualStylesMode for the Application.
+        ''' </summary>
+        <Experimental(DiagnosticIDs.ExperimentalVisualStyles)>
+        Protected Property VisualStylesMode As VisualStylesMode
+            Get
+                Return _visualStylesMode
+            End Get
+            Set(value As VisualStylesMode)
+                _visualStylesMode = value
+            End Set
+        End Property
+
+        ''' <summary>
+        '''  Gets or sets the ColorMode for the Application.
+        ''' </summary>
+        <Experimental(DiagnosticIDs.ExperimentalDarkMode)>
+        Protected Property ColorMode As SystemColorMode
+            Get
+                Return _colorMode
+            End Get
+            Set(value As SystemColorMode)
+                _colorMode = value
             End Set
         End Property
 
