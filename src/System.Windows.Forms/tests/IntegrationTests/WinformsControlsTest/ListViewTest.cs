@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-
 namespace WinFormsControlsTest;
 
 [DesignerCategory("Default")]
@@ -35,6 +34,18 @@ public partial class ListViewTest : Form
 
         AddCollapsibleGroupToListView();
         AddGroupTasks();
+
+        string[] TestItems = { "Item 1", "Item 2", "Item 3" };
+        listView3.RetrieveVirtualItem += (s, e) =>
+        {
+            e.Item = e.ItemIndex switch
+            {
+                0 => new ListViewItem(TestItems[0]),
+                1 => new ListViewItem(TestItems[1]),
+                2 => new ListViewItem(TestItems[2]),
+                _ => throw new ArgumentOutOfRangeException(),
+            };
+        };
     }
 
     private void CreateMyListView()
@@ -196,6 +207,15 @@ public partial class ListViewTest : Form
         MessageBox.Show(this, "listView2_Click", "event");
     }
 
+    private void listView3_Click(object sender, System.EventArgs e)
+    {
+        var item = ((System.Windows.Forms.ListView)sender).FocusedItem;
+        var clone = (ListViewItem)item.Clone();
+        clone.Checked = true;
+        listView3.TryOnItemChecked(new ItemCheckedEventArgs(clone));
+        MessageBox.Show(this, $"Click {clone.Text} in ListView3", "Click Event");
+    }
+
     private void listView2_SelectedIndexChanged(object sender, System.EventArgs e)
     {
         // MessageBox.Show(this, "listView2_SelectedIndexChanged", "event");
@@ -262,5 +282,21 @@ public partial class ListViewTest : Form
         LargeImageList.Images[listView1.SelectedIndices[0]] = bitmap;
 
         listView1.Refresh();
+    }
+
+    protected class SubListView : ListView
+    {        
+        public void TryOnItemChecked(ItemCheckedEventArgs e)
+        {
+            if (!CheckBoxes)
+            {
+                return;
+            }
+
+            if(e.Item.ListView == this)
+            {
+                base.OnItemChecked(e);
+            }
+        }
     }
 }
