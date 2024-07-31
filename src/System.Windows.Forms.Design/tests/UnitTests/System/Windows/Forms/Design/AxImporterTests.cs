@@ -6,6 +6,7 @@
 using static System.Windows.Forms.Design.AxImporter;
 
 namespace System.Windows.Forms.Design.Tests;
+
 public class AxImporterTests
 {
     [Fact]
