@@ -150,13 +150,13 @@ public class DataGridViewCellStyle : ICloneable
             }
 
             if (value == DBNull.Value &&
-                Properties.ContainsObject(s_propDataSourceNullValue))
+                Properties.ContainsKey(s_propDataSourceNullValue))
             {
-                Properties.RemoveObject(s_propDataSourceNullValue);
+                Properties.RemoveValue(s_propDataSourceNullValue);
             }
             else
             {
-                Properties.SetObject(s_propDataSourceNullValue, value);
+                Properties.AddValue(s_propDataSourceNullValue, value);
             }
 
             Debug.Assert((oldDataSourceNullValue is null && DataSourceNullValue is not null) ||
@@ -318,13 +318,13 @@ public class DataGridViewCellStyle : ICloneable
                 return;
             }
 
-            if (value is string stringValue && stringValue.Length == 0 && Properties.ContainsObject(s_propNullValue))
+            if (value is string stringValue && stringValue.Length == 0 && Properties.ContainsKey(s_propNullValue))
             {
-                Properties.RemoveObject(s_propNullValue);
+                Properties.RemoveValue(s_propNullValue);
             }
             else
             {
-                Properties.SetObject(s_propNullValue, value);
+                Properties.AddValue(s_propNullValue, value);
             }
 
             Debug.Assert((oldNullValue is null && NullValue is not null) ||

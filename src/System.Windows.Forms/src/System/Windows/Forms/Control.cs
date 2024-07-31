@@ -758,14 +758,14 @@ public unsafe partial class Control :
 
             // When DataContext was different than its parent before, but now it is about to become the same,
             // we're removing it altogether, so it can inherit the value from its parent.
-            if (Properties.ContainsObject(s_dataContextProperty) && Equals(ParentInternal?.DataContext, value))
+            if (Properties.ContainsKey(s_dataContextProperty) && Equals(ParentInternal?.DataContext, value))
             {
-                Properties.RemoveObject(s_dataContextProperty);
+                Properties.RemoveValue(s_dataContextProperty);
                 OnDataContextChanged(EventArgs.Empty);
                 return;
             }
 
-            Properties.SetObject(s_dataContextProperty, value);
+            Properties.AddOrRemoveValue(s_dataContextProperty, value);
             OnDataContextChanged(EventArgs.Empty);
         }
     }
@@ -774,7 +774,7 @@ public unsafe partial class Control :
         => Properties.ContainsObject(s_dataContextProperty);
 
     private void ResetDataContext()
-        => Properties.RemoveObject(s_dataContextProperty);
+        => Properties.RemoveValue(s_dataContextProperty);
 
     /// <summary>
     ///  The background color of this control. This is an ambient property and
@@ -7123,10 +7123,10 @@ public unsafe partial class Control :
         if (Properties.ContainsObject(s_dataContextProperty))
         {
             // If this DataContext was the same as the Parent's just became,
-            if (Equals(Properties.GetObject(s_dataContextProperty), Parent?.DataContext))
+            if (Equals(Properties.GetValueOrDefault<object>(s_dataContextProperty), Parent?.DataContext))
             {
                 // we need to make it ambient again by removing it.
-                Properties.RemoveObject(s_dataContextProperty);
+                Properties.RemoveValue(s_dataContextProperty);
 
                 // Even though internally we don't store it any longer, and the
                 // value we had stored therefore changed, technically the value

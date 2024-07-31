@@ -102,12 +102,6 @@ internal class PropertyStore
         return found ? value.GetValue<object?>() : null;
     }
 
-    // REMOVE
-    /// <summary>
-    ///  Removes the given key from the array
-    /// </summary>
-    public void RemoveObject(int key) => _values.Remove(key);
-
     /// <summary>
     ///  Removes the given key from the store.
     /// </summary>

@@ -51,13 +51,7 @@ internal partial class CommonProperties
     /// <summary>
     ///  Removes the maximum size from the property store, making it "unset".
     /// </summary>
-    internal static void ClearMaximumSize(IArrangedElement element)
-    {
-        if (element.Properties.ContainsObject(s_maximumSizeProperty))
-        {
-            element.Properties.RemoveObject(s_maximumSizeProperty);
-        }
-    }
+    internal static void ClearMaximumSize(IArrangedElement element) => element.Properties.RemoveValue(s_maximumSizeProperty);
 
     /// <summary>
     ///  Determines whether or not the <see cref="Layout"/> <see cref="LayoutEngine"/>s

@@ -3343,7 +3343,7 @@ public partial class Form : ContainerControl
 
             if (Properties.TryGetObject(s_propDummyMdiMenu, out HMENU dummyMenu) && !dummyMenu.IsNull)
             {
-                Properties.RemoveObject(s_propDummyMdiMenu);
+                Properties.RemoveValue(s_propDummyMdiMenu);
                 PInvoke.DestroyMenu(dummyMenu);
             }
         }
