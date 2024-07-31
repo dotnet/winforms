@@ -158,9 +158,9 @@ public class BindingNavigator : ToolStrip, ISupportInitialize
         CountItem.Name = $"{ch}indingNavigatorCountItem";
         AddNewItem.Name = $"{ch}indingNavigatorAddNewItem";
         DeleteItem.Name = $"{ch}indingNavigatorDeleteItem";
-        separator1.Name = $"{ch}indingNavigatorSeparator";
-        separator2.Name = $"{ch}indingNavigatorSeparator";
-        separator3.Name = $"{ch}indingNavigatorSeparator";
+        separator1.Name = $"{ch}indingNavigatorSeparator1";
+        separator2.Name = $"{ch}indingNavigatorSeparator2";
+        separator3.Name = $"{ch}indingNavigatorSeparator3";
 
         MoveFirstItem.Text = SR.BindingNavigatorMoveFirstItemText;
         MovePreviousItem.Text = SR.BindingNavigatorMovePreviousItemText;
