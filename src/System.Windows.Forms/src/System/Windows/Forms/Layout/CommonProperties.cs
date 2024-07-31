@@ -725,9 +725,9 @@ internal partial class CommonProperties
     ///  </para>
     /// </remarks>
     internal static BitVector32 GetLayoutState(IArrangedElement element) =>
-        new BitVector32(element.Properties.GetInteger(s_layoutStateProperty));
+        element.Properties.GetValueOrDefault<BitVector32>(s_layoutStateProperty);
 
     internal static void SetLayoutState(IArrangedElement element, BitVector32 state) =>
-        element.Properties.SetInteger(s_layoutStateProperty, state.Data);
+        element.Properties.AddValue(s_layoutStateProperty, state);
     #endregion
 }
