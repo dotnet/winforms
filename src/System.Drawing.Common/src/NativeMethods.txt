@@ -376,8 +376,6 @@ GdipLoadImageFromFile
 GdipLoadImageFromFileICM
 GdipLoadImageFromStream
 GdipLoadImageFromStreamICM
-GdiplusStartup
-GdiplusStartupInputEx
 GdipMeasureCharacterRanges
 GdipMeasureString
 GdipMultiplyLineTransform
