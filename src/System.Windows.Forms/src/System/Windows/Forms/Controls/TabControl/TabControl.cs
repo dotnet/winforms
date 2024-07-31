@@ -83,6 +83,9 @@ public partial class TabControl : Control
 
         _tabCollection = new TabPageCollection(this);
         SetStyle(ControlStyles.UserPaint, false);
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     }
 
     /// <summary>
@@ -171,9 +174,7 @@ public partial class TabControl : Control
             // The tab control can only be rendered in 1 color: System's Control color.
             // So, always return this value... otherwise, we're inheriting the forms BackColor
             // and passing it on to the pab pages.
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             return SystemColors.Control;
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         }
         set
         {

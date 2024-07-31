@@ -59,12 +59,10 @@ namespace System.Windows.Forms;
 [SRDescription(nameof(SR.DescriptionMonthCalendar))]
 public partial class MonthCalendar : Control
 {
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-    private static readonly Color s_defaultTitleBackColor = ControlSystemColors.Current.ActiveCaption;
-    private static readonly Color s_defaultTitleForeColor = ControlSystemColors.Current.ActiveCaptionText;
-    private static readonly Color s_trailingForeColor = ControlSystemColors.Current.GrayText;
+    private static readonly Color s_defaultTitleBackColor = SystemColors.ActiveCaption;
+    private static readonly Color s_defaultTitleForeColor = SystemColors.ActiveCaptionText;
+    private static readonly Color s_trailingForeColor = SystemColors.GrayText;
     private const int MonthsInYear = 12;
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     /// <summary>
     ///  This is the arbitrary number of pixels that the Win32 control

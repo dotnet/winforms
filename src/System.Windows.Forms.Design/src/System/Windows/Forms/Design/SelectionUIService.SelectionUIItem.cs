@@ -135,9 +135,8 @@ internal sealed partial class SelectionUIService
             Rectangle inner = _innerRect;
             Rectangle outer = _outerRect;
             Region oldClip = graphics.Clip;
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-            Color borderColor = ControlSystemColors.Current.Control;
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            Color borderColor = SystemColors.Control;
+
             if (_control is not null && _control.Parent is not null)
             {
                 Control parent = _control.Parent;

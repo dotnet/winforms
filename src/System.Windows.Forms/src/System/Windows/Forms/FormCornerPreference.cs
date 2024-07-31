@@ -7,7 +7,7 @@ namespace System.Windows.Forms;
 
 /// <summary>
 ///  Specifies the corner preference for a <see cref="Form"/> which can be
-///  set using the <see cref="Form.CornerPreference"/> property.
+///  set using the <see cref="Form.FormCornerPreference"/> property.
 /// </summary>
 public enum FormCornerPreference
 {

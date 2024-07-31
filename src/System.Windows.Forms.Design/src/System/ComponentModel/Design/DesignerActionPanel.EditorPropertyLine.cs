@@ -11,7 +11,6 @@ namespace System.ComponentModel.Design;
 
 internal sealed partial class DesignerActionPanel
 {
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     private sealed partial class EditorPropertyLine : TextBoxPropertyLine, IWindowsFormsEditorService, IServiceProvider
     {
         private readonly EditorButton _button;
@@ -109,7 +108,7 @@ internal sealed partial class DesignerActionPanel
 
                 try
                 {
-                    ShowDropDown(listBox, ControlSystemColors.Current.ControlDark);
+                    ShowDropDown(listBox, SystemColors.ControlDark);
                 }
                 finally
                 {
@@ -483,5 +482,4 @@ internal sealed partial class DesignerActionPanel
             public override Type LineType => typeof(EditorPropertyLine);
         }
     }
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 }

@@ -103,10 +103,8 @@ public partial class ListView : Control
 
     // Owner draw data caches...  Only valid inside WM_PAINT.
 
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-    private Color _odCacheForeColor = ControlSystemColors.Current.WindowText;
-    private Color _odCacheBackColor = ControlSystemColors.Current.Window;
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    private Color _odCacheForeColor = SystemColors.WindowText;
+    private Color _odCacheBackColor = SystemColors.Window;
     private Font _odCacheFont;
     private HFONT _odCacheFontHandle;
     private FontHandleWrapper? _odCacheFontHandleWrapper;
@@ -355,9 +353,7 @@ public partial class ListView : Control
             }
             else
             {
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                 return SystemColors.Window;
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             }
         }
         set
@@ -857,9 +853,7 @@ public partial class ListView : Control
             }
             else
             {
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                 return SystemColors.WindowText;
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             }
         }
         set
@@ -2896,7 +2890,6 @@ public partial class ListView : Control
                         // (adding 1 will overflow), else add 1 to it. If the color component is 0,
                         // skip it and go to the next color (unless it is our last option).
 
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                         if (nmcd->clrText == ColorTranslator.ToWin32(SystemColors.HotTrack))
                         {
                             int totalshift = 0;
@@ -2934,7 +2927,6 @@ public partial class ListView : Control
                             }
                             while (!clrAdjusted);
                         }
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
                         if (!haveRenderInfo || riBack.IsEmpty)
                         {

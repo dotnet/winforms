@@ -8,7 +8,6 @@ namespace System.ComponentModel.Design;
 
 internal sealed partial class DesignerActionPanel
 {
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     private class TextBoxPropertyLine : PropertyLine
     {
         private readonly TextBox _textBox;
@@ -33,9 +32,7 @@ internal sealed partial class DesignerActionPanel
             _readOnlyTextBoxLabel = new EditorLabel
             {
                 BackColor = Color.Transparent,
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-                ForeColor = ControlSystemColors.Current.WindowText,
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+                ForeColor = SystemColors.WindowText,
                 TabStop = true,
                 TextAlign = ContentAlignment.TopLeft,
                 UseMnemonic = false,
@@ -160,19 +157,17 @@ internal sealed partial class DesignerActionPanel
             }
         }
 
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         private void OnReadOnlyTextBoxLabelEnter(object? sender, EventArgs e)
         {
-            _readOnlyTextBoxLabel.ForeColor = ControlSystemColors.Current.HighlightText;
-            _readOnlyTextBoxLabel.BackColor = ControlSystemColors.Current.Highlight;
+            _readOnlyTextBoxLabel.ForeColor = SystemColors.HighlightText;
+            _readOnlyTextBoxLabel.BackColor = SystemColors.Highlight;
         }
 
         private void OnReadOnlyTextBoxLabelLeave(object? sender, EventArgs e)
         {
-            _readOnlyTextBoxLabel.ForeColor = ControlSystemColors.Current.WindowText;
-            _readOnlyTextBoxLabel.BackColor = ControlSystemColors.Current.Window;
+            _readOnlyTextBoxLabel.ForeColor = SystemColors.WindowText;
+            _readOnlyTextBoxLabel.BackColor = SystemColors.Window;
         }
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
         protected TypeConverter.StandardValuesCollection? GetStandardValues()
         {
@@ -371,5 +366,4 @@ internal sealed partial class DesignerActionPanel
             public override Type LineType => typeof(TextBoxPropertyLine);
         }
     }
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 }

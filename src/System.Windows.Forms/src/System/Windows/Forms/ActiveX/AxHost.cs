@@ -3361,10 +3361,8 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         }
         else
         {
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
-            qaContainer.colorFore = GetOleColorFromColor(ControlSystemColors.Current.WindowText);
-            qaContainer.colorBack = GetOleColorFromColor(ControlSystemColors.Current.Window);
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+            qaContainer.colorFore = GetOleColorFromColor(SystemColors.WindowText);
+            qaContainer.colorBack = GetOleColorFromColor(SystemColors.Window);
         }
 
         qaContainer.dwAmbientFlags = QACONTAINERFLAGS.QACONTAINER_AUTOCLIP

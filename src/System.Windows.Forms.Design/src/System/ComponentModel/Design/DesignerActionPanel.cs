@@ -13,7 +13,6 @@ namespace System.ComponentModel.Design;
 
 internal sealed partial class DesignerActionPanel : ContainerControl
 {
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     private static readonly object s_eventFormActivated = new();
     private static readonly object s_eventFormDeactivate = new();
 
@@ -118,9 +117,9 @@ internal sealed partial class DesignerActionPanel : ContainerControl
         MinimumSize = new Size(150, 0);
     }
 
-    public Color ActiveLinkColor { get; } = ControlSystemColors.Current.HotTrack;
+    public Color ActiveLinkColor { get; } = SystemColors.HotTrack;
 
-    public Color BorderColor { get; } = ControlSystemColors.Current.ActiveBorder;
+    public Color BorderColor { get; } = SystemColors.ActiveBorder;
 
     /// <summary>
     ///  Returns the list of commands that should be filtered by the form that hosts this panel. This is done so that these specific commands will not get passed on to VS, and can instead be handled by the panel itself.
@@ -168,23 +167,23 @@ internal sealed partial class DesignerActionPanel : ContainerControl
     /// </summary>
     private Line? FocusedLine => ActiveControl?.Tag as Line;
 
-    public Color GradientDarkColor { get; } = ControlSystemColors.Current.Control;
+    public Color GradientDarkColor { get; } = SystemColors.Control;
 
-    public Color GradientLightColor { get; } = ControlSystemColors.Current.Control;
+    public Color GradientLightColor { get; } = SystemColors.Control;
 
     public bool InMethodInvoke { get; internal set; }
 
-    public Color LinkColor { get; } = ControlSystemColors.Current.HotTrack;
+    public Color LinkColor { get; } = SystemColors.HotTrack;
 
-    public Color SeparatorColor { get; } = ControlSystemColors.Current.ControlDark;
+    public Color SeparatorColor { get; } = SystemColors.ControlDark;
 
-    public Color TitleBarColor { get; } = ControlSystemColors.Current.ActiveCaption;
+    public Color TitleBarColor { get; } = SystemColors.ActiveCaption;
 
-    public Color TitleBarTextColor { get; } = ControlSystemColors.Current.ActiveCaptionText;
+    public Color TitleBarTextColor { get; } = SystemColors.ActiveCaptionText;
 
-    public Color TitleBarUnselectedColor { get; } = ControlSystemColors.Current.InactiveCaption;
+    public Color TitleBarUnselectedColor { get; } = SystemColors.InactiveCaption;
 
-    public Color LabelForeColor { get; } = ControlSystemColors.Current.ControlText;
+    public Color LabelForeColor { get; } = SystemColors.ControlText;
 
     /// <summary>
     ///  Helper event so that Lines can be notified of this event.
@@ -909,5 +908,4 @@ internal sealed partial class DesignerActionPanel : ContainerControl
 
         Invalidate();
     }
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 }

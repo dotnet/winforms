@@ -269,13 +269,20 @@ public sealed partial class Application
     [Experimental("WFO9001")]
     public static void SetColorMode(SystemColorMode systemColorMode)
     {
-        if (GetSystemColorModeInternal() > -1)
+        try
         {
-            s_systemColorMode = systemColorMode;
-            return;
-        }
+            if (GetSystemColorModeInternal() > -1)
+            {
+                s_systemColorMode = systemColorMode;
+                return;
+            }
 
-        s_systemColorMode = SystemColorMode.Classic;
+            s_systemColorMode = SystemColorMode.Classic;
+        }
+        finally
+        {
+            SystemColors.UseAlternativeColorSet = IsDarkModeEnabled;
+        }
     }
 
     /// <summary>

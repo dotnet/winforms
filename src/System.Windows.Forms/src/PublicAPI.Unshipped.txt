@@ -2,8 +2,6 @@ override System.Windows.Forms.CheckBox.OnPaint(System.Windows.Forms.PaintEventAr
 static System.Windows.Forms.Application.ColorMode.get -> System.Windows.Forms.SystemColorMode
 static System.Windows.Forms.Application.SetColorMode(System.Windows.Forms.SystemColorMode systemColorMode) -> void
 static System.Windows.Forms.Application.SystemColorMode.get -> System.Windows.Forms.SystemColorMode
-static System.Windows.Forms.Control.ControlSystemColors.Current.get -> System.Windows.Forms.Control.ControlSystemColors!
-static System.Windows.Forms.Control.ControlSystemColors.GetAdaptedDarkModeColorFromKnownColor(System.Drawing.KnownColor knownColor, bool darkMode) -> System.Drawing.Color
 System.Windows.Forms.Form.FormBorderColor.get -> System.Drawing.Color
 System.Windows.Forms.Form.FormBorderColor.set -> void
 System.Windows.Forms.Form.FormBorderColorChanged -> System.EventHandler?
@@ -25,8 +23,6 @@ System.Windows.Forms.SystemColorMode
 System.Windows.Forms.SystemColorMode.Classic = 0 -> System.Windows.Forms.SystemColorMode
 System.Windows.Forms.SystemColorMode.Dark = 2 -> System.Windows.Forms.SystemColorMode
 System.Windows.Forms.SystemColorMode.System = 1 -> System.Windows.Forms.SystemColorMode
-System.Windows.Forms.Control.ControlSystemColors
-System.Windows.Forms.Control.SystemColors.get -> System.Windows.Forms.Control.ControlSystemColors!
 System.Windows.Forms.Control.VisualStylesModeChanged -> System.EventHandler?
 System.Windows.Forms.ControlStyles.ApplyThemingImplicitly = 524288 -> System.Windows.Forms.ControlStyles
 override System.Windows.Forms.ProgressBar.OnCreateControl() -> void
@@ -47,39 +43,6 @@ virtual System.Windows.Forms.Control.DefaultVisualStylesMode.get -> System.Windo
 virtual System.Windows.Forms.Control.OnDebuggerBreak(string! ticket) -> bool
 virtual System.Windows.Forms.Control.OnParentVisualStylesModeChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Control.OnVisualStylesModeChanged(System.EventArgs! e) -> void
-System.Windows.Forms.Control.ControlSystemColors.ActiveBorder.get -> System.Drawing.Color
-System.Windows.Forms.Control.ControlSystemColors.ActiveCaption.get -> System.Drawing.Color
-System.Windows.Forms.Control.ControlSystemColors.ActiveCaptionText.get -> System.Drawing.Color
-System.Windows.Forms.Control.ControlSystemColors.AppWorkspace.get -> System.Drawing.Color
-System.Windows.Forms.Control.ControlSystemColors.ButtonFace.get -> System.Drawing.Color
-System.Windows.Forms.Control.ControlSystemColors.ButtonHighlight.get -> System.Drawing.Color
-System.Windows.Forms.Control.ControlSystemColors.ButtonShadow.get -> System.Drawing.Color
-System.Windows.Forms.Control.ControlSystemColors.Control.get -> System.Drawing.Color
-System.Windows.Forms.Control.ControlSystemColors.ControlDark.get -> System.Drawing.Color
-System.Windows.Forms.Control.ControlSystemColors.ControlDarkDark.get -> System.Drawing.Color
-System.Windows.Forms.Control.ControlSystemColors.ControlLight.get -> System.Drawing.Color
-System.Windows.Forms.Control.ControlSystemColors.ControlLightLight.get -> System.Drawing.Color
-System.Windows.Forms.Control.ControlSystemColors.ControlText.get -> System.Drawing.Color
-System.Windows.Forms.Control.ControlSystemColors.Desktop.get -> System.Drawing.Color
-System.Windows.Forms.Control.ControlSystemColors.GradientActiveCaption.get -> System.Drawing.Color
-System.Windows.Forms.Control.ControlSystemColors.GradientInactiveCaption.get -> System.Drawing.Color
-System.Windows.Forms.Control.ControlSystemColors.GrayText.get -> System.Drawing.Color
-System.Windows.Forms.Control.ControlSystemColors.Highlight.get -> System.Drawing.Color
-System.Windows.Forms.Control.ControlSystemColors.HighlightText.get -> System.Drawing.Color
-System.Windows.Forms.Control.ControlSystemColors.HotTrack.get -> System.Drawing.Color
-System.Windows.Forms.Control.ControlSystemColors.InactiveBorder.get -> System.Drawing.Color
-System.Windows.Forms.Control.ControlSystemColors.InactiveCaption.get -> System.Drawing.Color
-System.Windows.Forms.Control.ControlSystemColors.InactiveCaptionText.get -> System.Drawing.Color
-System.Windows.Forms.Control.ControlSystemColors.Info.get -> System.Drawing.Color
-System.Windows.Forms.Control.ControlSystemColors.InfoText.get -> System.Drawing.Color
-System.Windows.Forms.Control.ControlSystemColors.Menu.get -> System.Drawing.Color
-System.Windows.Forms.Control.ControlSystemColors.MenuBar.get -> System.Drawing.Color
-System.Windows.Forms.Control.ControlSystemColors.MenuHighlight.get -> System.Drawing.Color
-System.Windows.Forms.Control.ControlSystemColors.MenuText.get -> System.Drawing.Color
-System.Windows.Forms.Control.ControlSystemColors.ScrollBar.get -> System.Drawing.Color
-System.Windows.Forms.Control.ControlSystemColors.Window.get -> System.Drawing.Color
-System.Windows.Forms.Control.ControlSystemColors.WindowFrame.get -> System.Drawing.Color
-System.Windows.Forms.Control.ControlSystemColors.WindowText.get -> System.Drawing.Color
 virtual System.Windows.Forms.Form.OnFormBorderColorChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Form.OnFormCaptionBackColorChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Form.OnFormCaptionTextColorChanged(System.EventArgs! e) -> void

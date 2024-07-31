@@ -25,24 +25,22 @@ public partial class DateTimePicker : Control
     /// <summary>
     ///  Specifies the default title back color. This field is read-only.
     /// </summary>
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-    protected static readonly Color DefaultTitleBackColor = ControlSystemColors.Current.ActiveCaption;
+    protected static readonly Color DefaultTitleBackColor = SystemColors.ActiveCaption;
 
     /// <summary>
     ///  Specifies the default foreground color. This field is read-only.
     /// </summary>
-    protected static readonly Color DefaultTitleForeColor = ControlSystemColors.Current.ActiveCaptionText;
+    protected static readonly Color DefaultTitleForeColor = SystemColors.ActiveCaptionText;
 
     /// <summary>
     ///  Specifies the default month background color. This field is read-only.
     /// </summary>
-    protected static readonly Color DefaultMonthBackColor = ControlSystemColors.Current.Window;
+    protected static readonly Color DefaultMonthBackColor = SystemColors.Window;
 
     /// <summary>
     ///  Specifies the default trailing foreground color. This field is read-only.
     /// </summary>
-    protected static readonly Color DefaultTrailingForeColor = ControlSystemColors.Current.GrayText;
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    protected static readonly Color DefaultTrailingForeColor = SystemColors.GrayText;
 
     private static readonly object s_formatChangedEvent = new();
 

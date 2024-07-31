@@ -354,10 +354,8 @@ public partial class DataGridView : Control, ISupportInitialize
 
     private readonly Dictionary<Type, TypeConverter> _converters;
 
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-    private static readonly Color s_defaultBackColor = ControlSystemColors.Current.Window;
-    private static readonly Color s_defaultBackgroundColor = ControlSystemColors.Current.ControlDark;
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    private static readonly Color s_defaultBackColor = SystemColors.Window;
+    private static readonly Color s_defaultBackgroundColor = SystemColors.ControlDark;
 
     private Color _backgroundColor = s_defaultBackgroundColor;
 
@@ -2081,9 +2079,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     private static SolidBrush DefaultForeBrush => (SolidBrush)SystemBrushes.WindowText;
 
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-    private static Color DefaultGridColor => ControlSystemColors.Current.WindowFrame;
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    private static Color DefaultGridColor => SystemColors.WindowFrame;
 
     private static SolidBrush DefaultHeadersBackBrush => (SolidBrush)SystemBrushes.Control;
 

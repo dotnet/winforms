@@ -15,8 +15,7 @@ internal sealed partial class DropDownButton : Button
 
         private void DDB_Draw3DBorder(PaintEventArgs e, Rectangle r, bool raised)
         {
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-            if (Control.BackColor != ControlSystemColors.Current.Control && SystemInformation.HighContrast)
+            if (Control.BackColor != SystemColors.Control && SystemInformation.HighContrast)
             {
                 if (raised)
                 {
@@ -62,7 +61,6 @@ internal sealed partial class DropDownButton : Button
                     ControlPaint.DrawBorderSimple(e, r, ControlPaint.Dark(Control.BackColor));
                 }
             }
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         }
 
         internal override void PaintUp(PaintEventArgs pevent, CheckState state)
@@ -74,9 +72,7 @@ internal sealed partial class DropDownButton : Button
             }
             else
             {
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-                Color c = (ARGB)ControlSystemColors.Current.Window;
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+                Color c = (ARGB)SystemColors.Window;
                 Rectangle rect = Control.ClientRectangle;
                 rect.Inflate(0, -1);
                 ControlPaint.DrawBorder(
@@ -92,9 +88,7 @@ internal sealed partial class DropDownButton : Button
         {
             bool isHighContrastHighlighted = !Control.MouseIsDown && IsHighContrastHighlighted();
 
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-            Color backgroundColor = isHighContrastHighlighted ? ControlSystemColors.Current.Highlight : Control.BackColor;
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            Color backgroundColor = isHighContrastHighlighted ? SystemColors.Highlight : Control.BackColor;
 
             if (ControlPaint.IsDark(backgroundColor) && image is Bitmap bitmap)
             {

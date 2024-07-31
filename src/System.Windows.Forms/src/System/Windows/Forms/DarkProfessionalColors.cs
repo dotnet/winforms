@@ -2,11 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using static System.Windows.Forms.Control;
 
 namespace System.Windows.Forms
 {
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     internal class DarkProfessionalColors : ProfessionalColorTable
     {
         public override Color MenuItemPressedGradientBegin
@@ -19,7 +17,7 @@ namespace System.Windows.Forms
             => Color.FromArgb(0xFF, 0x60, 0x60, 0x60);
 
         public override Color MenuItemSelected
-            => ControlSystemColors.Current.ControlText;
+            => SystemColors.ControlText;
 
         public override Color MenuItemSelectedGradientBegin
             => Color.FromArgb(0xFF, 0x40, 0x40, 0x40);
@@ -28,28 +26,27 @@ namespace System.Windows.Forms
             => Color.FromArgb(0xFF, 0x40, 0x40, 0x40);
 
         public override Color MenuStripGradientBegin
-            => ControlSystemColors.Current.Control;
+            => SystemColors.Control;
 
         public override Color MenuStripGradientEnd
-            => ControlSystemColors.Current.Control;
+            => SystemColors.Control;
 
         public override Color StatusStripGradientBegin
-            => ControlSystemColors.Current.Control;
+            => SystemColors.Control;
 
         public override Color StatusStripGradientEnd
-            => ControlSystemColors.Current.Control;
+            => SystemColors.Control;
 
         public override Color ToolStripDropDownBackground
-            => ControlSystemColors.Current.Control;
+            => SystemColors.Control;
 
         public override Color ImageMarginGradientBegin
-            => ControlSystemColors.Current.Control;
+            => SystemColors.Control;
 
         public override Color ImageMarginGradientMiddle
-            => ControlSystemColors.Current.Control;
+            => SystemColors.Control;
 
         public override Color ImageMarginGradientEnd
-            => ControlSystemColors.Current.Control;
+            => SystemColors.Control;
     }
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 }

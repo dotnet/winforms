@@ -1622,9 +1622,7 @@ public unsafe partial class Control :
     ///  The default BackColor of a generic top-level Control.  Subclasses may have
     ///  different defaults.
     /// </summary>
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-    public static Color DefaultBackColor => ControlSystemColors.Current.Control;
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    public static Color DefaultBackColor => SystemColors.Control;
 
     /// <summary>
     ///  Deriving classes can override this to configure a default cursor for their control.
@@ -1655,9 +1653,7 @@ public unsafe partial class Control :
     ///  The default ForeColor of a generic top-level Control.  Subclasses may have
     ///  different defaults.
     /// </summary>
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-    public static Color DefaultForeColor => ControlSystemColors.Current.ControlText;
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    public static Color DefaultForeColor => SystemColors.ControlText;
 
     protected virtual Padding DefaultMargin => CommonProperties.DefaultMargin;
 
@@ -1707,9 +1703,7 @@ public unsafe partial class Control :
                 if (control is null)
                 {
                     // Don't know what to do, this seems good as anything
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                     color = SystemColors.Control;
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                     break;
                 }
 
@@ -3186,12 +3180,6 @@ public unsafe partial class Control :
         add => Events.AddHandler(s_sizeEvent, value);
         remove => Events.RemoveHandler(s_sizeEvent, value);
     }
-
-    [Experimental("WFO9001")]
-    public ControlSystemColors SystemColors =>
-        Application.IsDarkModeEnabled
-        ? ControlSystemColors.DefaultDarkMode
-        : ControlSystemColors.Default;
 
     /// <summary>
     ///  The tab index of this control.
@@ -8622,9 +8610,7 @@ public unsafe partial class Control :
             // For whatever reason, our parent can't paint our background, but we need some kind of background
             // since we're transparent.
             using DeviceContextHdcScope hdcNoParent = new(e);
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             using CreateBrushScope hbrush = new(SystemColors.Control);
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             hdcNoParent.FillRectangle(rectangle, hbrush);
             return;
         }

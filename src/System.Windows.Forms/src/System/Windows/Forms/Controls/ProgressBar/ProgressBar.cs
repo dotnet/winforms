@@ -25,9 +25,7 @@ public partial class ProgressBar : Control
 
     private int _marqueeAnimationSpeed = 100;
 
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-    private static readonly Color s_defaultForeColor = ControlSystemColors.Current.Highlight;
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    private static readonly Color s_defaultForeColor = SystemColors.Highlight;
 
     private ProgressBarStyle _style = ProgressBarStyle.Blocks;
 
