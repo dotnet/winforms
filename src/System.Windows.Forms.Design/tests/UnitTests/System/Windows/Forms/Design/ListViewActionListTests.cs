@@ -4,9 +4,8 @@
 #nullable enable
 
 using System.ComponentModel.Design;
-using System.Windows.Forms.Design;
 
-namespace System.Windows.Forms.Tests;
+namespace System.Windows.Forms.Design.Tests;
 
 public class ListViewActionListTests
 {
