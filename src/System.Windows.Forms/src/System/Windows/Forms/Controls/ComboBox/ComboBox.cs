@@ -3201,12 +3201,12 @@ public partial class ComboBox : ListControl
 
     private void ResetDropDownWidth()
     {
-        Properties.RemoveInteger(s_propDropDownWidth);
+        Properties.RemoveValue(s_propDropDownWidth);
     }
 
     private void ResetItemHeight()
     {
-        Properties.RemoveInteger(s_propItemHeight);
+        Properties.RemoveValue(s_propItemHeight);
     }
 
     public override void ResetText()

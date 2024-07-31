@@ -106,12 +106,6 @@ internal class PropertyStore
     /// <summary>
     ///  Removes the given key from the array
     /// </summary>
-    public void RemoveInteger(int key) => _values.Remove(key);
-
-    // REMOVE
-    /// <summary>
-    ///  Removes the given key from the array
-    /// </summary>
     public void RemoveObject(int key) => _values.Remove(key);
 
     /// <summary>
