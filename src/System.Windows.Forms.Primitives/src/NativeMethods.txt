@@ -108,6 +108,7 @@ DSH_FLAGS
 DTM_*
 DTN_*
 DTS_*
+DwmGetWindowAttribute
 DwmSetWindowAttribute
 DWM_WINDOW_CORNER_PREFERENCE
 DuplicateHandle

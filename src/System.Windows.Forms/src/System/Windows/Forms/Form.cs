@@ -47,6 +47,10 @@ public partial class Form : ContainerControl
     private static readonly object s_resizeEndEvent = new();
     private static readonly object s_rightToLeftLayoutChangedEvent = new();
     private static readonly object s_dpiChangedEvent = new();
+    private static readonly object s_formBorderColorChanged = new();
+    private static readonly object s_formCaptionBackColorChanged = new();
+    private static readonly object s_formCaptionTextColorChanged = new();
+    private static readonly object s_formCornerPreferenceChanged = new();
 
     //
     // The following flags should be used with formState[..] not formStateEx[..]
@@ -131,6 +135,11 @@ public partial class Form : ContainerControl
 
     private static readonly int s_propOpacity = PropertyStore.CreateKey();
     private static readonly int s_propTransparencyKey = PropertyStore.CreateKey();
+    private static readonly int s_propFormBorderColor = PropertyStore.CreateKey();
+    private static readonly int s_propFormCaptionBackColor = PropertyStore.CreateKey();
+
+    private static readonly int s_propFormCaptionTextColor = PropertyStore.CreateKey();
+    private static readonly int s_propFormCornerPreference = PropertyStore.CreateKey();
 
     // Form per instance members
     // Note: Do not add anything to this list unless absolutely necessary.
@@ -160,14 +169,6 @@ public partial class Form : ContainerControl
     private Dictionary<int, Size>? _dpiFormSizes;
     private bool _processingDpiChanged;
     private bool _inRecreateHandle;
-
-    public enum WindowCornerPreference
-    {
-        Default = DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_DEFAULT,
-        DoNotRound = DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_DONOTROUND,
-        Round = DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUND,
-        RoundSmall = DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUNDSMALL
-    }
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="Form"/> class.
@@ -2342,30 +2343,67 @@ public partial class Form : ContainerControl
     }
 
     /// <summary>
-    ///  Sets the rounding style of the corners of this Form.
+    ///  Sets or gets the rounding style of the corners using the <see cref="FormCornerPreference"/> enum.
     /// </summary>
-    /// <param name="cornerPreference">
-    ///  A value of the <see cref="WindowCornerPreference"/> enum
-    ///  which determines the corner rounding style.
-    /// </param>
-    public void SetWindowCornerPreference(WindowCornerPreference cornerPreference)
+    [DefaultValue(FormCornerPreference.Default)]
+    [SRCategory(nameof(SR.CatWindowStyle))]
+    [SRDescription(nameof(SR.FormCornerPreferenceDescr))]
+    public FormCornerPreference FormCornerPreference
     {
-        SetWindowCornerPreferenceInternal(cornerPreference);
+        get
+        {
+            if (Properties.ContainsInteger(s_propFormCornerPreference))
+            {
+                return (FormCornerPreference)Properties.GetInteger(s_propFormCornerPreference);
+            }
+
+            return FormCornerPreference.Default;
+        }
+        set
+        {
+            if (value == FormCornerPreference)
+            {
+                return;
+            }
+
+            if (value == FormCornerPreference.Default)
+            {
+                Properties.RemoveObject(s_propFormCornerPreference);
+            }
+            else
+            {
+                Properties.SetInteger(s_propFormCornerPreference, (int)value);
+            }
+
+            if (IsHandleCreated)
+            {
+                SetFormCornerPreferenceInternal(value);
+            }
+
+            OnFormCornerPreferenceChanged(EventArgs.Empty);
+        }
     }
 
-    private unsafe void SetWindowCornerPreferenceInternal(WindowCornerPreference cornerPreference)
+    /// <summary>
+    ///  Raises the <see cref="FormCornerPreferenceChanged"/> event when the
+    ///  <see cref="FormCornerPreference"/> property changes.
+    /// </summary>
+    protected virtual void OnFormCornerPreferenceChanged(EventArgs e)
     {
-        if (!IsHandleCreated)
+        if (Events[s_formCornerPreferenceChanged] is EventHandler eventHandler)
         {
-            return;
+            eventHandler(this, e);
         }
+    }
 
+    private unsafe void SetFormCornerPreferenceInternal(FormCornerPreference cornerPreference)
+    {
         DWM_WINDOW_CORNER_PREFERENCE dwmCornerPreference = cornerPreference switch
         {
-            WindowCornerPreference.Default => DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_DEFAULT,
-            WindowCornerPreference.DoNotRound => DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_DONOTROUND,
-            WindowCornerPreference.Round => DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUND,
-            WindowCornerPreference.RoundSmall => DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUNDSMALL,
+            FormCornerPreference.Default => DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_DEFAULT,
+            FormCornerPreference.DoNotRound => DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_DONOTROUND,
+            FormCornerPreference.Round => DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUND,
+            FormCornerPreference.RoundSmall => DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUNDSMALL,
             _ => throw new ArgumentOutOfRangeException(nameof(cornerPreference))
         };
 
@@ -2377,76 +2415,187 @@ public partial class Form : ContainerControl
     }
 
     /// <summary>
-    ///  Sets the color of the border of this Form.
+    ///  Sets or gets the Form's border color.
     /// </summary>
-    /// <param name="color">The border color.</param>
-    public void SetWindowBorderColor(Color color)
+    [SRCategory(nameof(SR.CatWindowStyle))]
+    [SRDescription(nameof(SR.FormBorderColorDescr))]
+    [DefaultValue(typeof(Color), "Empty")]
+    public Color FormBorderColor
     {
-        SetWindowBorderColorInternal(color);
-    }
-
-    private unsafe void SetWindowBorderColorInternal(Color color)
-    {
-        if (!IsHandleCreated)
+        get
         {
-            return;
+            if (Properties.ContainsObject(s_propFormBorderColor))
+            {
+                return Properties.GetColor(s_propFormBorderColor);
+            }
+            else
+            {
+                if (!IsHandleCreated || IsAncestorSiteInDesignMode)
+                {
+                    return Color.Empty;
+                }
+
+                return GetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_BORDER_COLOR);
+            }
         }
+        set
+        {
+            if (value == FormBorderColor)
+            {
+                return;
+            }
 
-        COLORREF colorRef = color;
+            if (!IsHandleCreated)
+            {
+                Properties.SetColor(s_propFormBorderColor, value);
+                return;
+            }
 
-        PInvoke.DwmSetWindowAttribute(
-            HWND,
-            DWMWINDOWATTRIBUTE.DWMWA_BORDER_COLOR,
-            &colorRef,
-            (uint)sizeof(COLORREF));
+            Properties.SetColor(s_propFormBorderColor, value);
+            SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_BORDER_COLOR, value);
+            OnFormBorderColorChanged(EventArgs.Empty);
+        }
     }
 
     /// <summary>
-    ///  Sets the color of the title bar of this Form containing the caption and control buttons.
+    ///  Raises the <see cref="FormBorderColorChanged"/> event when the <see cref="FormBorderColor"/> property changes.
     /// </summary>
-    /// <param name="color">The title bar color.</param>
-    public void SetWindowCaptionColor(Color color)
+    protected virtual void OnFormBorderColorChanged(EventArgs e)
     {
-        SetWindowCaptionColorInternal(color);
-    }
-
-    private unsafe void SetWindowCaptionColorInternal(Color color)
-    {
-        if (!IsHandleCreated)
+        if (Events[s_formBorderColorChanged] is EventHandler eventHandler)
         {
-            return;
+            eventHandler(this, e);
         }
-
-        COLORREF colorRef = color;
-
-        PInvoke.DwmSetWindowAttribute(
-            HWND,
-            DWMWINDOWATTRIBUTE.DWMWA_CAPTION_COLOR,
-            &colorRef,
-            (uint)sizeof(COLORREF));
     }
 
     /// <summary>
-    ///  Sets the color of the text in the title bar of this Form.
+    ///  Sets or gets the Form's title bar back color.
     /// </summary>
-    /// <param name="color">The text color of the title bar.</param>
-    public void SetWindowCaptionTextColor(Color color)
+    [SRCategory(nameof(SR.CatWindowStyle))]
+    [SRDescription(nameof(SR.FormCaptionBackColorDescr))]
+    [DefaultValue(typeof(Color), "Empty")]
+    public Color FormCaptionBackColor
     {
-        SetWindowCaptionTextColorInternal(color);
+        get
+        {
+            if (Properties.ContainsObject(s_propFormCaptionBackColor))
+            {
+                return Properties.GetColor(s_propFormCaptionBackColor);
+            }
+            else
+            {
+                if (!IsHandleCreated || IsAncestorSiteInDesignMode)
+                {
+                    return Color.Empty;
+                }
+
+                return GetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_CAPTION_COLOR);
+            }
+        }
+        set
+        {
+            if (value == FormCaptionBackColor)
+            {
+                return;
+            }
+
+            if (!IsHandleCreated)
+            {
+                Properties.SetColor(s_propFormCaptionBackColor, value);
+                return;
+            }
+
+            Properties.SetColor(s_propFormCaptionBackColor, value);
+            SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_CAPTION_COLOR, value);
+            OnFormCaptionBackColorChanged(EventArgs.Empty);
+        }
     }
 
-    private unsafe void SetWindowCaptionTextColorInternal(Color color)
+    /// <summary>
+    ///  Raises the <see cref="FormCaptionBackColor"/> event when the <see cref="FormCaptionBackColor"/> property changes.
+    /// </summary>
+    protected virtual void OnFormCaptionBackColorChanged(EventArgs e)
     {
-        if (!IsHandleCreated)
+        if (Events[s_formCaptionBackColorChanged] is EventHandler eventHandler)
         {
-            return;
+            eventHandler(this, e);
         }
+    }
 
+    /// <summary>
+    ///  Sets or gets the Form's title bar back color.
+    /// </summary>
+    [SRCategory(nameof(SR.CatWindowStyle))]
+    [SRDescription(nameof(SR.FormCaptionTextColorDescr))]
+    [DefaultValue(typeof(Color), "Empty")]
+    public Color FormCaptionTextColor
+    {
+        get
+        {
+            if (Properties.ContainsObject(s_propFormCaptionTextColor))
+            {
+                return Properties.GetColor(s_propFormCaptionTextColor);
+            }
+            else
+            {
+                if (!IsHandleCreated || IsAncestorSiteInDesignMode)
+                {
+                    return Color.Empty;
+                }
+
+                return GetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_TEXT_COLOR);
+            }
+        }
+        set
+        {
+            if (value == FormCaptionTextColor)
+            {
+                return;
+            }
+
+            if (!IsHandleCreated)
+            {
+                Properties.SetColor(s_propFormCaptionTextColor, value);
+                return;
+            }
+
+            Properties.SetColor(s_propFormCaptionTextColor, value);
+            SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_TEXT_COLOR, value);
+            OnFormCaptionTextColorChanged(EventArgs.Empty);
+        }
+    }
+
+    /// <summary>
+    ///  Raises the <see cref="FormCaptionTextColor"/> event when the <see cref="FormCaptionTextColor"/> property changes.
+    /// </summary>
+    protected virtual void OnFormCaptionTextColorChanged(EventArgs e)
+    {
+        if (Events[s_formCaptionBackColorChanged] is EventHandler eventHandler)
+        {
+            eventHandler(this, e);
+        }
+    }
+
+    private unsafe Color GetFormAttributeColorInternal(DWMWINDOWATTRIBUTE dmwWindowAttribute)
+    {
+        COLORREF colorRef;
+
+        PInvoke.DwmSetWindowAttribute(
+            HWND,
+            dmwWindowAttribute,
+            &colorRef,
+            (uint)sizeof(COLORREF));
+
+        return colorRef;
+    }
+
+    private unsafe void SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE dmwWindowAttribute, Color color)
+    {
         COLORREF colorRef = color;
 
         PInvoke.DwmSetWindowAttribute(
             HWND,
-            DWMWINDOWATTRIBUTE.DWMWA_TEXT_COLOR,
+            dmwWindowAttribute,
             &colorRef,
             (uint)sizeof(COLORREF));
     }
@@ -2580,6 +2729,50 @@ public partial class Form : ContainerControl
     {
         add => Events.AddHandler(s_formClosingEvent, value);
         remove => Events.RemoveHandler(s_formClosingEvent, value);
+    }
+
+    /// <summary>
+    ///  Occurs when the <see cref="FormBorderColor"/> property has changed.
+    /// </summary>
+    [SRCategory(nameof(SR.CatAppearance))]
+    [SRDescription(nameof(SR.FormBorderColorChangedDescr))]
+    public event EventHandler? FormBorderColorChanged
+    {
+        add => Events.AddHandler(s_formBorderColorChanged, value);
+        remove => Events.RemoveHandler(s_formBorderColorChanged, value);
+    }
+
+    /// <summary>
+    ///  Occurs when the <see cref="FormCaptionBackColor"/> property has changed.
+    /// </summary>
+    [SRCategory(nameof(SR.CatAppearance))]
+    [SRDescription(nameof(SR.FormCaptionBackColorChangedDescr))]
+    public event EventHandler? FormCaptionBackColorChanged
+    {
+        add => Events.AddHandler(s_formCaptionBackColorChanged, value);
+        remove => Events.RemoveHandler(s_formCaptionBackColorChanged, value);
+    }
+
+    /// <summary>
+    ///  Occurs when the <see cref="FormCaptionTextColor"/> property has changed.
+    /// </summary>
+    [SRCategory(nameof(SR.CatAppearance))]
+    [SRDescription(nameof(SR.FormCaptionTextColorChangedDescr))]
+    public event EventHandler? FormCaptionTextColorChanged
+    {
+        add => Events.AddHandler(s_formCaptionTextColorChanged, value);
+        remove => Events.RemoveHandler(s_formCaptionTextColorChanged, value);
+    }
+
+    /// <summary>
+    ///  Occurs when the <see cref="FormCornerPreference"/> property has changed.
+    /// </summary>
+    [SRCategory(nameof(SR.CatAppearance))]
+    [SRDescription(nameof(SR.FormCornerPreferenceChangedDescr))]
+    public event EventHandler? FormCornerPreferenceChanged
+    {
+        add => Events.AddHandler(s_formCornerPreferenceChanged, value);
+        remove => Events.RemoveHandler(s_formCornerPreferenceChanged, value);
     }
 
     /// <summary>

@@ -5320,6 +5320,16 @@ Möchten Sie sie ersetzen?</target>
         <target state="translated">Die aktuelle Position der automatischen Schiebeleiste.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormBorderColorChangedDescr">
+        <source>Occurs whenever the FormBorderColor property is changed.</source>
+        <target state="new">Occurs whenever the FormBorderColor property is changed.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormBorderColorDescr">
+        <source>The color of the Form's border.</source>
+        <target state="new">The color of the Form's border.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormBorderStyleDescr">
         <source>Indicates the appearance and behavior of the border and title bar of the form.</source>
         <target state="translated">Gibt die Darstellung und das Verhalten des Rahmens und der Titelleiste des Formulars an.</target>
@@ -5330,9 +5340,39 @@ Möchten Sie sie ersetzen?</target>
         <target state="translated">Die Schaltfläche "Abbrechen" des Formulars. Wenn diese Eigenschaft festgelegt ist, wird auf die Schaltfläche "geklickt", wenn der Benutzer die ESC-Taste drückt.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormCaptionBackColorChangedDescr">
+        <source>Occurs whenever the FormCaptionBackColor property is changed.</source>
+        <target state="new">Occurs whenever the FormCaptionBackColor property is changed.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCaptionBackColorDescr">
+        <source>The back color of the Form's caption (title bar).</source>
+        <target state="new">The back color of the Form's caption (title bar).</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCaptionTextColorChangedDescr">
+        <source>Occurs whenever the FormCaptionTextColor property is changed.</source>
+        <target state="new">Occurs whenever the FormCaptionTextColor property is changed.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCaptionTextColorDescr">
+        <source>The color of the Form's text caption (title bar text).</source>
+        <target state="new">The color of the Form's text caption (title bar text).</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormControlBoxDescr">
         <source>Determines whether a form has a Control/System menu box.</source>
         <target state="translated">Bestimmt, ob ein Formular ein Steuerelement/System-Menüfeld hat.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCornerPreferenceChangedDescr">
+        <source>Occurs whenever the FormCornerPreference property is changed.</source>
+        <target state="new">Occurs whenever the FormCornerPreference property is changed.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCornerPreferenceDescr">
+        <source>The rounding style of the Form's border.</source>
+        <target state="new">The rounding style of the Form's border.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormDesktopBoundsDescr">

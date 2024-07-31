@@ -4,6 +4,23 @@ static System.Windows.Forms.Application.SetColorMode(System.Windows.Forms.System
 static System.Windows.Forms.Application.SystemColorMode.get -> System.Windows.Forms.SystemColorMode
 static System.Windows.Forms.Control.ControlSystemColors.Current.get -> System.Windows.Forms.Control.ControlSystemColors!
 static System.Windows.Forms.Control.ControlSystemColors.GetAdaptedDarkModeColorFromKnownColor(System.Drawing.KnownColor knownColor, bool darkMode) -> System.Drawing.Color
+System.Windows.Forms.Form.FormBorderColor.get -> System.Drawing.Color
+System.Windows.Forms.Form.FormBorderColor.set -> void
+System.Windows.Forms.Form.FormBorderColorChanged -> System.EventHandler?
+System.Windows.Forms.Form.FormCaptionBackColor.get -> System.Drawing.Color
+System.Windows.Forms.Form.FormCaptionBackColor.set -> void
+System.Windows.Forms.Form.FormCaptionBackColorChanged -> System.EventHandler?
+System.Windows.Forms.Form.FormCaptionTextColor.get -> System.Drawing.Color
+System.Windows.Forms.Form.FormCaptionTextColor.set -> void
+System.Windows.Forms.Form.FormCaptionTextColorChanged -> System.EventHandler?
+System.Windows.Forms.Form.FormCornerPreference.get -> System.Windows.Forms.FormCornerPreference
+System.Windows.Forms.Form.FormCornerPreference.set -> void
+System.Windows.Forms.Form.FormCornerPreferenceChanged -> System.EventHandler?
+System.Windows.Forms.FormCornerPreference
+System.Windows.Forms.FormCornerPreference.Default = 0 -> System.Windows.Forms.FormCornerPreference
+System.Windows.Forms.FormCornerPreference.DoNotRound = 1 -> System.Windows.Forms.FormCornerPreference
+System.Windows.Forms.FormCornerPreference.Round = 2 -> System.Windows.Forms.FormCornerPreference
+System.Windows.Forms.FormCornerPreference.RoundSmall = 3 -> System.Windows.Forms.FormCornerPreference
 System.Windows.Forms.SystemColorMode
 System.Windows.Forms.SystemColorMode.Classic = 0 -> System.Windows.Forms.SystemColorMode
 System.Windows.Forms.SystemColorMode.Dark = 2 -> System.Windows.Forms.SystemColorMode
@@ -21,15 +38,6 @@ System.Windows.Forms.Control.DebuggerBreakCounters.get -> System.Collections.Gen
 System.Windows.Forms.Control.DebuggerBreakCounters.set -> void
 System.Windows.Forms.Control.VisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
 System.Windows.Forms.Control.VisualStylesMode.set -> void
-System.Windows.Forms.Form.SetWindowBorderColor(System.Drawing.Color color) -> void
-System.Windows.Forms.Form.SetWindowCaptionColor(System.Drawing.Color color) -> void
-System.Windows.Forms.Form.SetWindowCaptionTextColor(System.Drawing.Color color) -> void
-System.Windows.Forms.Form.SetWindowCornerPreference(System.Windows.Forms.Form.WindowCornerPreference cornerPreference) -> void
-System.Windows.Forms.Form.WindowCornerPreference
-System.Windows.Forms.Form.WindowCornerPreference.Default = 0 -> System.Windows.Forms.Form.WindowCornerPreference
-System.Windows.Forms.Form.WindowCornerPreference.DoNotRound = 1 -> System.Windows.Forms.Form.WindowCornerPreference
-System.Windows.Forms.Form.WindowCornerPreference.Round = 2 -> System.Windows.Forms.Form.WindowCornerPreference
-System.Windows.Forms.Form.WindowCornerPreference.RoundSmall = 3 -> System.Windows.Forms.Form.WindowCornerPreference
 System.Windows.Forms.VisualStylesMode
 System.Windows.Forms.VisualStylesMode.Classic = 0 -> System.Windows.Forms.VisualStylesMode
 System.Windows.Forms.VisualStylesMode.Disabled = 1 -> System.Windows.Forms.VisualStylesMode
@@ -72,3 +80,7 @@ System.Windows.Forms.Control.ControlSystemColors.ScrollBar.get -> System.Drawing
 System.Windows.Forms.Control.ControlSystemColors.Window.get -> System.Drawing.Color
 System.Windows.Forms.Control.ControlSystemColors.WindowFrame.get -> System.Drawing.Color
 System.Windows.Forms.Control.ControlSystemColors.WindowText.get -> System.Drawing.Color
+virtual System.Windows.Forms.Form.OnFormBorderColorChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnFormCaptionBackColorChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnFormCaptionTextColorChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.Form.OnFormCornerPreferenceChanged(System.EventArgs! e) -> void
