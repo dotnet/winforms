@@ -36,6 +36,8 @@ internal static class ImageCodecInfoHelper
         {
             if (s_encoders is null)
             {
+                GdiPlusInitialization.EnsureInitialized();
+
                 uint numEncoders;
                 uint size;
 
