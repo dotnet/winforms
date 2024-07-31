@@ -21,9 +21,6 @@ internal class PropertyStore
     public bool ContainsKey(int key) => _values.ContainsKey(key);
 
     // REMOVE
-    public bool ContainsInteger(int key) => _values.ContainsKey(key);
-
-    // REMOVE
     public bool ContainsObject(int key) => _values.ContainsKey(key);
 
     /// <summary>

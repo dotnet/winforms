@@ -1688,30 +1688,29 @@ public abstract partial class ToolStripItem :
     {
         get
         {
-            int rightToLeft = Properties.GetInteger(s_rightToLeftProperty, out bool found);
-            if (!found)
+            if (!Properties.TryGetValue(s_rightToLeftProperty, out RightToLeft rightToLeft))
             {
-                rightToLeft = (int)RightToLeft.Inherit;
+                rightToLeft = RightToLeft.Inherit;
             }
 
-            if (((RightToLeft)rightToLeft) == RightToLeft.Inherit)
+            if (rightToLeft == RightToLeft.Inherit)
             {
                 if (Owner is not null)
                 {
-                    rightToLeft = (int)Owner.RightToLeft;
+                    rightToLeft = Owner.RightToLeft;
                 }
                 else if (ParentInternal is not null)
                 {
                     // case for Overflow & Grip
-                    rightToLeft = (int)ParentInternal.RightToLeft;
+                    rightToLeft = ParentInternal.RightToLeft;
                 }
                 else
                 {
-                    rightToLeft = (int)DefaultRightToLeft;
+                    rightToLeft = DefaultRightToLeft;
                 }
             }
 
-            return (RightToLeft)rightToLeft;
+            return rightToLeft;
         }
 
         set
@@ -1720,9 +1719,9 @@ public abstract partial class ToolStripItem :
 
             RightToLeft oldValue = RightToLeft;
 
-            if (Properties.ContainsInteger(s_rightToLeftProperty) || value != RightToLeft.Inherit)
+            if (Properties.ContainsKey(s_rightToLeftProperty) || value != RightToLeft.Inherit)
             {
-                Properties.SetInteger(s_rightToLeftProperty, (int)value);
+                Properties.AddValue(s_rightToLeftProperty, value);
             }
 
             if (oldValue != RightToLeft)
@@ -2990,7 +2989,7 @@ public abstract partial class ToolStripItem :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected internal virtual void OnParentRightToLeftChanged(EventArgs e)
     {
-        if (!Properties.ContainsInteger(s_rightToLeftProperty) || ((RightToLeft)Properties.GetInteger(s_rightToLeftProperty)) == RightToLeft.Inherit)
+        if (!Properties.TryGetValue(s_rightToLeftProperty, out RightToLeft rightToLeft) || rightToLeft == RightToLeft.Inherit)
         {
             OnRightToLeftChanged(e);
         }
@@ -3006,13 +3005,12 @@ public abstract partial class ToolStripItem :
         if (Owner is not null)
         {
             // check if we need to fire OnRightToLeftChanged
-            int rightToLeft = Properties.GetInteger(s_rightToLeftProperty, out bool found);
-            if (!found)
+            if (!Properties.TryGetValue(s_rightToLeftProperty, out RightToLeft rightToLeft))
             {
-                rightToLeft = (int)RightToLeft.Inherit;
+                rightToLeft = RightToLeft.Inherit;
             }
 
-            if ((rightToLeft == (int)RightToLeft.Inherit) && RightToLeft != DefaultRightToLeft)
+            if (rightToLeft == RightToLeft.Inherit && RightToLeft != DefaultRightToLeft)
             {
                 OnRightToLeftChanged(EventArgs.Empty);
             }
@@ -3422,13 +3420,12 @@ public abstract partial class ToolStripItem :
     [EditorBrowsable(EditorBrowsableState.Never)]
     internal virtual bool ShouldSerializeRightToLeft()
     {
-        int rightToLeft = Properties.GetInteger(s_rightToLeftProperty, out bool found);
-        if (!found)
+        if (!Properties.TryGetValue(s_rightToLeftProperty, out RightToLeft rightToLeft))
         {
             return false;
         }
 
-        return rightToLeft != (int)DefaultRightToLeft;
+        return rightToLeft != DefaultRightToLeft;
     }
 
     private bool ShouldSerializeTextDirection()

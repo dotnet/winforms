@@ -6976,9 +6976,9 @@ public unsafe partial class Control :
 
         Invalidate();
 
-        if (Properties.ContainsInteger(s_fontHeightProperty))
+        if (Properties.ContainsKey(s_fontHeightProperty))
         {
-            Properties.SetInteger(s_fontHeightProperty, -1);
+            Properties.AddValue(s_fontHeightProperty, -1);
         }
 
         // Cleanup any font handle wrapper.
@@ -10936,9 +10936,9 @@ public unsafe partial class Control :
         // Dispose old FontHandle.
         DisposeFontHandle();
 
-        if (Properties.ContainsInteger(s_fontHeightProperty))
+        if (Properties.ContainsKey(s_fontHeightProperty))
         {
-            Properties.SetInteger(s_fontHeightProperty, scaledFont.Height);
+            Properties.AddValue(s_fontHeightProperty, scaledFont.Height);
         }
 
         if (!raiseOnFontChangedEvent)

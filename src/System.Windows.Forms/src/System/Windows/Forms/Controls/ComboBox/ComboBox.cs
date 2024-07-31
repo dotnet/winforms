@@ -3433,7 +3433,7 @@ public partial class ComboBox : ListControl
 
     internal bool ShouldSerializeDropDownWidth()
     {
-        return (Properties.ContainsInteger(s_propDropDownWidth));
+        return (Properties.ContainsKey(s_propDropDownWidth));
     }
 
     /// <summary>
@@ -3441,7 +3441,7 @@ public partial class ComboBox : ListControl
     /// </summary>
     internal bool ShouldSerializeItemHeight()
     {
-        return (Properties.ContainsInteger(s_propItemHeight));
+        return (Properties.ContainsKey(s_propItemHeight));
     }
 
     /// <summary>
