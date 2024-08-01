@@ -1260,20 +1260,20 @@ public partial class Form : ContainerControl
         if (!MinimumSize.IsEmpty && !value.IsEmpty)
         {
             Size minimumSize = MinimumSize;
-            bool shouldUpdate = false;
+            bool sizeUpdated = false;
             if (minimumSize.Width > value.Width)
             {
                 minimumSize.Width = value.Width;
-                shouldUpdate = true;
+                sizeUpdated = true;
             }
 
             if (minimumSize.Height > value.Height)
             {
                 minimumSize.Height = value.Height;
-                shouldUpdate = true;
+                sizeUpdated = true;
             }
 
-            if (shouldUpdate)
+            if (sizeUpdated)
             {
                 Properties.AddValue(s_propMinTrackSize, minimumSize);
             }
@@ -1381,20 +1381,20 @@ public partial class Form : ContainerControl
         if (!MaximumSize.IsEmpty && !value.IsEmpty)
         {
             Size maximumSize = MaximumSize;
-            bool shouldUpdate = false;
+            bool sizeUpdated = false;
             if (maximumSize.Width < value.Width)
             {
                 maximumSize.Width = value.Width;
-                shouldUpdate = true;
+                sizeUpdated = true;
             }
 
             if (maximumSize.Height < value.Height)
             {
                 maximumSize.Height = value.Height;
-                shouldUpdate = true;
+                sizeUpdated = true;
             }
 
-            if (shouldUpdate)
+            if (sizeUpdated)
             {
                 Properties.AddValue(s_propMaxTrackSize, maximumSize);
             }

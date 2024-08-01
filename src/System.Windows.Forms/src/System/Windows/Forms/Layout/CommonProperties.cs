@@ -709,7 +709,7 @@ internal partial class CommonProperties
     /// </summary>
     internal static bool HasLayoutBounds(IArrangedElement element)
     {
-        return element.Properties.TryGetValue(s_layoutBoundsProperty, out Size _);
+        return element.Properties.ContainsKey(s_layoutBoundsProperty);
     }
 
     #endregion

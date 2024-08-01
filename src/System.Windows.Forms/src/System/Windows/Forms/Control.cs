@@ -765,7 +765,7 @@ public unsafe partial class Control :
                 return;
             }
 
-            Properties.AddOrRemoveValue(s_dataContextProperty, value);
+            Properties.AddValue(s_dataContextProperty, value);
             OnDataContextChanged(EventArgs.Empty);
         }
     }
