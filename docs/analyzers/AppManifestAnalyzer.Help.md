@@ -7,7 +7,7 @@ are automatically referenced for Window Forms .NET applications.
 
 `AppManifestAnalyzer` is automatically invoked when a Windows Forms application (`OutputType=Exe` or `OutputType=WinExe`) has a custom app.manifest.
 
-## [WFAC010](https://aka.ms/winforms-warnings/WFAC010): Unsupported high DPI configuration.
+## [WFO0003](https://aka.ms/winforms-warnings/WFAC010): Unsupported high DPI configuration.
 
 Windows Forms applications should specify application DPI-awareness via the [application configuration](https://aka.ms/applicationconfiguration) or
 [`Application.SetHighDpiMode` API](https://docs.microsoft.com/dotnet/api/system.windows.forms.application.sethighdpimode).
