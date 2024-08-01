@@ -34,35 +34,7 @@ public partial class ListView
 
         public ListViewItem this[int displayIndex]
         {
-            get
-            {
-                _owner.ApplyUpdateCachedItems();
-
-                if (_owner.VirtualMode)
-                {
-                    // if we are showing virtual items, we need to get the item from the user
-                    RetrieveVirtualItemEventArgs rVI = new(displayIndex);
-                    _owner.OnRetrieveVirtualItem(rVI);
-                    rVI.Item!.SetItemIndex(_owner, displayIndex);
-                    return rVI.Item;
-                }
-                else
-                {
-                    ArgumentOutOfRangeException.ThrowIfNegative(displayIndex);
-                    ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(displayIndex, _owner._itemCount);
-
-                    if (_owner.IsHandleCreated && !_owner.ListViewHandleDestroyed)
-                    {
-                        _owner._listItemsTable.TryGetValue(DisplayIndexToID(displayIndex), out ListViewItem? item);
-                        return item!;
-                    }
-                    else
-                    {
-                        Debug.Assert(_owner._listViewItems is not null, "listItemsArray is null, but the handle isn't created");
-                        return _owner._listViewItems[displayIndex];
-                    }
-                }
-            }
+            get => GetItemByIndexInternal(displayIndex, throwInVirtualMode: true)!;
             set
             {
                 _owner.ApplyUpdateCachedItems();
@@ -81,6 +53,44 @@ public partial class ListView
 
                 RemoveAt(displayIndex);
                 Insert(displayIndex, value);
+            }
+        }
+
+        public ListViewItem? GetItemByIndex(int index) =>
+            GetItemByIndexInternal(index, throwInVirtualMode: false);
+
+        private ListViewItem? GetItemByIndexInternal(int index, [NotNullWhen(true)] bool throwInVirtualMode)
+        {
+            _owner.ApplyUpdateCachedItems();
+
+            if (_owner.VirtualMode)
+            {
+                // If we are showing virtual items, we need to get the item from the user.
+                RetrieveVirtualItemEventArgs rVI = new(index);
+                _owner.OnRetrieveVirtualItem(rVI);
+                if (rVI.Item is null)
+                {
+                    return !throwInVirtualMode ? null : throw new InvalidOperationException(SR.ListViewVirtualItemRequired);
+                }
+
+                rVI.Item.SetItemIndex(_owner, index);
+                return rVI.Item;
+            }
+            else
+            {
+                ArgumentOutOfRangeException.ThrowIfNegative(index);
+                ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, _owner._itemCount);
+
+                if (_owner.IsHandleCreated && !_owner.ListViewHandleDestroyed)
+                {
+                    _owner._listItemsTable.TryGetValue(DisplayIndexToID(index), out ListViewItem? item);
+                    return item!;
+                }
+                else
+                {
+                    Debug.Assert(_owner._listViewItems is not null, "listItemsArray is null, but the handle isn't created");
+                    return _owner._listViewItems[index];
+                }
             }
         }
 

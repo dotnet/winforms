@@ -5203,6 +5203,66 @@ public class ListViewTests
         Assert.True(listView.IsHandleCreated);
     }
 
+    public static TheoryData<ListViewItem> GetListViewItemTheoryData() => new()
+    {
+        { new("Item 1") },
+        { null }
+    };
+
+    [WinFormsTheory]
+    [MemberData(nameof(GetListViewItemTheoryData))]
+    // Regression test for https://github.com/dotnet/winforms/issues/11663.
+    public void ListView_VirtualMode_ReleaseUiaProvider_Success(ListViewItem listItem)
+    {
+        using ListView listView = new()
+        {
+            VirtualMode = true,
+            VirtualListSize = 1
+        };
+
+        listView.RetrieveVirtualItem += (s, e) =>
+        {
+            e.Item = e.ItemIndex switch
+            {
+                0 => listItem,
+                _ => throw new NotImplementedException()
+            };
+        };
+
+        listView.AccessibilityObject.Should().NotBeNull();
+
+        Action action = () => listView.ReleaseUiaProvider(listView.InternalHandle);
+        action.Should().NotThrow();
+        listView.IsAccessibilityObjectCreated.Should().BeFalse();
+        listView.IsHandleCreated.Should().BeFalse();
+    }
+
+    [WinFormsFact]
+    public void ListView_VirtualMode_GetListViewItemAsExpected()
+    {
+        using ListView listView = new()
+        {
+            VirtualMode = true,
+            VirtualListSize = 2
+        };
+
+        ListViewItem listItem1 = new("Item 1");
+        ListViewItem listItem2 = null;
+        listView.RetrieveVirtualItem += (s, e) =>
+        {
+            e.Item = e.ItemIndex switch
+            {
+                0 => listItem1,
+                1 => listItem2,
+                _ => throw new NotImplementedException()
+            };
+        };
+        listView.Items.GetItemByIndex(0).Should().Be(listView.Items[0]);
+        listView.Items.GetItemByIndex(1).Should().BeNull();
+        Action action = () => listView.Items[1].ToString();
+        action.Should().Throw<InvalidOperationException>(SR.ListViewVirtualItemRequired);
+    }
+
     private class SubListViewAccessibleObject : ListView.ListViewAccessibleObject
     {
         internal string AnnouncedColumn { get; private set; }
