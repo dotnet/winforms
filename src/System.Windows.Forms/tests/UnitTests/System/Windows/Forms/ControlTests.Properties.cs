@@ -52,42 +52,47 @@ public partial class ControlTests
         Assert.Same(control, accessibleObject.Owner);
     }
 
-    public static TheoryData<AccessibleObject, AccessibleObject, Control> AccessibilityObject_CustomCreateAccessibilityInstance_TestData()
+    public static TheoryData<AccessibleObject, AccessibleObject> AccessibilityObject_CustomCreateAccessibilityInstance_TestData()
     {
         AccessibleObject accessibleObject = new();
-        Control control = new();
-        var controlAccessibleObject = new Control.ControlAccessibleObject(control);
-
-        var data = new TheoryData<AccessibleObject, AccessibleObject, Control>
+        return new TheoryData<AccessibleObject, AccessibleObject>
         {
-            { null, null, null },
-            { accessibleObject, accessibleObject, null },
-            { controlAccessibleObject, controlAccessibleObject, control }
+            { null, null },
+            { accessibleObject, accessibleObject },
         };
-
-        return data;
     }
 
     [WinFormsTheory]
     [MemberData(nameof(AccessibilityObject_CustomCreateAccessibilityInstance_TestData))]
-    public void Control_AccessibilityObject_GetCustomCreateAccessibilityInstance_ReturnsExpected(AccessibleObject result, AccessibleObject expected, Control originalControl)
+    public void Control_AccessibilityObject_GetCustomCreateAccessibilityInstance_ReturnsExpected(AccessibleObject result, AccessibleObject expected)
     {
-        try
+        using (new NoAssertContext())
         {
-            using (new NoAssertContext())
+            using CustomCreateAccessibilityInstanceControl control = new()
             {
-                using CustomCreateAccessibilityInstanceControl control = new()
-                {
-                    CreateAccessibilityResult = result
-                };
-                Assert.Same(expected, control.AccessibilityObject);
-                Assert.Same(control.AccessibilityObject, control.AccessibilityObject);
-                Assert.False(control.IsHandleCreated);
-            }
+                CreateAccessibilityResult = result
+            };
+            Assert.Same(expected, control.AccessibilityObject);
+            Assert.Same(control.AccessibilityObject, control.AccessibilityObject);
+            Assert.False(control.IsHandleCreated);
         }
-        finally
+    }
+
+    [WinFormsFact]
+    public void Control_AccessibilityObject_GetCustomCreateAccessibilityInstance_WithRealControlAccessibleObject_ReturnsExpected()
+    {
+        using Control control1 = new();
+        var controlAccessibleObject = new Control.ControlAccessibleObject(control1);
+
+        using (new NoAssertContext())
         {
-            originalControl?.Dispose();
+            using CustomCreateAccessibilityInstanceControl control = new()
+            {
+                CreateAccessibilityResult = controlAccessibleObject
+            };
+            Assert.Same(controlAccessibleObject, control.AccessibilityObject);
+            Assert.Same(control.AccessibilityObject, control.AccessibilityObject);
+            Assert.False(control.IsHandleCreated);
         }
     }
 

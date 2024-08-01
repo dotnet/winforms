@@ -223,45 +223,46 @@ public class Control_ControlAccessibleObjectTests
         Assert.Equal(accessibleDescription, accessibleObject.Description);
     }
 
-    public static TheoryData<IntPtr, Control> Handle_Set_TestData()
+    public static TheoryData<object> Handle_Set_DataTestData()
     {
-        Control control = new();
-        var data = new TheoryData<IntPtr, Control>
+        return new TheoryData<object>
         {
-            { IntPtr.Zero, null },
-            { new IntPtr(-1), null },
-            { new IntPtr(1), null },
-            { new IntPtr(250), null },
-            { control.Handle, control }
+            null,
+            IntPtr.Zero,
+            new IntPtr(-1),
+            new IntPtr(1),
+            new IntPtr(250)
         };
-
-        return data;
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(Handle_Set_TestData))]
-    public void ControlAccessibleObject_Handle_Set_Success(IntPtr value, Control control)
+    [MemberData(nameof(Handle_Set_DataTestData))]
+    public void ControlAccessibleObject_Handle_Set_Success(object testValue)
     {
-        try
+        IntPtr value;
+        if (testValue is null)
         {
-            using Control ownerControl = new();
-            ownerControl.CreateControl();
-            Assert.True(ownerControl.IsHandleCreated);
-            var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
-            Assert.True(ownerControl.IsHandleCreated);
-
-            // Set value.
-            accessibleObject.Handle = value;
-            Assert.Equal(value, accessibleObject.Handle);
-
-            // Set same value.
-            accessibleObject.Handle = value;
-            Assert.Equal(value, accessibleObject.Handle);
+            using Control control = new();
+            value = control.Handle;
         }
-        finally
+        else
         {
-            control?.Dispose();
+            value = (IntPtr)testValue;
         }
+
+        using Control ownerControl = new();
+        ownerControl.CreateControl();
+        Assert.True(ownerControl.IsHandleCreated);
+        var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
+        Assert.True(ownerControl.IsHandleCreated);
+
+        // Set value.
+        accessibleObject.Handle = value;
+        Assert.Equal(value, accessibleObject.Handle);
+
+        // Set same value.
+        accessibleObject.Handle = value;
+        Assert.Equal(value, accessibleObject.Handle);
     }
 
     [WinFormsTheory]
