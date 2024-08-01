@@ -550,18 +550,14 @@ public partial class Label : Control, IAutomationLiveRegion
     [SRCategory(nameof(SR.CatAppearance))]
     public ContentAlignment ImageAlign
     {
-        get
-        {
-            int imageAlign = Properties.GetInteger(s_propImageAlign, out bool found);
-            return found ? (ContentAlignment)imageAlign : ContentAlignment.MiddleCenter;
-        }
+        get => Properties.TryGetValue(s_propImageAlign, out ContentAlignment imageAlign) ? imageAlign : ContentAlignment.MiddleCenter;
         set
         {
             SourceGenerated.EnumValidator.Validate(value);
 
             if (value != ImageAlign)
             {
-                Properties.SetInteger(s_propImageAlign, (int)value);
+                Properties.AddValue(s_propImageAlign, value);
                 LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.ImageAlign);
                 Invalidate();
             }
@@ -698,18 +694,14 @@ public partial class Label : Control, IAutomationLiveRegion
     [SRCategory(nameof(SR.CatAppearance))]
     public virtual ContentAlignment TextAlign
     {
-        get
-        {
-            int textAlign = Properties.GetInteger(s_propTextAlign, out bool found);
-            return found ? (ContentAlignment)textAlign : ContentAlignment.TopLeft;
-        }
+        get => Properties.TryGetValue(s_propTextAlign, out ContentAlignment textAlign) ? textAlign : ContentAlignment.TopLeft;
         set
         {
             SourceGenerated.EnumValidator.Validate(value);
 
             if (TextAlign != value)
             {
-                Properties.SetInteger(s_propTextAlign, (int)value);
+                Properties.AddValue(s_propTextAlign, value);
                 Invalidate();
 
                 // Change the TextAlignment for SystemDrawn Labels

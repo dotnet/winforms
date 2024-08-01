@@ -254,23 +254,14 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
     [DefaultValue(DataGridViewComboBoxDisplayStyle.DropDownButton)]
     public DataGridViewComboBoxDisplayStyle DisplayStyle
     {
-        get
-        {
-            int displayStyle = Properties.GetInteger(s_propComboBoxCellDisplayStyle, out bool found);
-            if (found)
-            {
-                return (DataGridViewComboBoxDisplayStyle)displayStyle;
-            }
-
-            return DataGridViewComboBoxDisplayStyle.DropDownButton;
-        }
+        get => Properties.TryGetValue(s_propComboBoxCellDisplayStyle, out DataGridViewComboBoxDisplayStyle displayStyle) ? displayStyle : DataGridViewComboBoxDisplayStyle.DropDownButton;
         set
         {
             // Sequential enum.  Valid values are 0x0 to 0x2
             SourceGenerated.EnumValidator.Validate(value);
             if (value != DisplayStyle)
             {
-                Properties.SetInteger(s_propComboBoxCellDisplayStyle, (int)value);
+                Properties.AddValue(s_propComboBoxCellDisplayStyle, value);
                 if (DataGridView is not null)
                 {
                     if (RowIndex != -1)
@@ -293,7 +284,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
             Debug.Assert(value is >= DataGridViewComboBoxDisplayStyle.ComboBox and <= DataGridViewComboBoxDisplayStyle.Nothing);
             if (value != DisplayStyle)
             {
-                Properties.SetInteger(s_propComboBoxCellDisplayStyle, (int)value);
+                Properties.AddValue(s_propComboBoxCellDisplayStyle, value);
             }
         }
     }
@@ -303,14 +294,13 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
     {
         get
         {
-            int displayStyleForCurrentCellOnly = Properties.GetInteger(s_propComboBoxCellDisplayStyleForCurrentCellOnly, out bool found);
-            return found && displayStyleForCurrentCellOnly != 0;
+            return Properties.TryGetValue(s_propComboBoxCellDisplayStyleForCurrentCellOnly, out bool displayStyleForCurrentCellOnly) && displayStyleForCurrentCellOnly;
         }
         set
         {
             if (value != DisplayStyleForCurrentCellOnly)
             {
-                Properties.SetInteger(s_propComboBoxCellDisplayStyleForCurrentCellOnly, value ? 1 : 0);
+                Properties.AddValue(s_propComboBoxCellDisplayStyleForCurrentCellOnly, value);
                 if (DataGridView is not null)
                 {
                     if (RowIndex != -1)
@@ -332,7 +322,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         {
             if (value != DisplayStyleForCurrentCellOnly)
             {
-                Properties.SetInteger(s_propComboBoxCellDisplayStyleForCurrentCellOnly, value ? 1 : 0);
+                Properties.AddValue(s_propComboBoxCellDisplayStyleForCurrentCellOnly, value);
             }
         }
     }
@@ -365,8 +355,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
     {
         get
         {
-            int dropDownWidth = Properties.GetInteger(s_propComboBoxCellDropDownWidth, out bool found);
-            return found ? dropDownWidth : 1;
+            return Properties.TryGetValue(s_propComboBoxCellDropDownWidth, out int dropDownWidth) ? dropDownWidth : 1;
         }
         set
         {
@@ -375,7 +364,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
                 throw new ArgumentOutOfRangeException(nameof(DropDownWidth), value, string.Format(SR.DataGridViewComboBoxCell_DropDownWidthOutOfRange, 1));
             }
 
-            Properties.SetInteger(s_propComboBoxCellDropDownWidth, value);
+            Properties.AddValue(s_propComboBoxCellDropDownWidth, value);
             if (OwnsEditingComboBox(RowIndex))
             {
                 EditingComboBox.DropDownWidth = value;
@@ -401,23 +390,14 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
     [DefaultValue(FlatStyle.Standard)]
     public FlatStyle FlatStyle
     {
-        get
-        {
-            int flatStyle = Properties.GetInteger(s_propComboBoxCellFlatStyle, out bool found);
-            if (found)
-            {
-                return (FlatStyle)flatStyle;
-            }
-
-            return FlatStyle.Standard;
-        }
+        get => Properties.TryGetValue(s_propComboBoxCellFlatStyle, out FlatStyle flatStyle) ? flatStyle : FlatStyle.Standard;
         set
         {
             // Sequential enum.  Valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(value);
             if (value != FlatStyle)
             {
-                Properties.SetInteger(s_propComboBoxCellFlatStyle, (int)value);
+                Properties.AddValue(s_propComboBoxCellFlatStyle, value);
                 OnCommonChange();
             }
         }
@@ -430,7 +410,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
             Debug.Assert(value is >= FlatStyle.Flat and <= FlatStyle.System);
             if (value != FlatStyle)
             {
-                Properties.SetInteger(s_propComboBoxCellFlatStyle, (int)value);
+                Properties.AddValue(s_propComboBoxCellFlatStyle, value);
             }
         }
     }
@@ -445,16 +425,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
     [DefaultValue(DefaultMaxDropDownItems)]
     public virtual int MaxDropDownItems
     {
-        get
-        {
-            int maxDropDownItems = Properties.GetInteger(s_propComboBoxCellMaxDropDownItems, out bool found);
-            if (found)
-            {
-                return maxDropDownItems;
-            }
-
-            return DefaultMaxDropDownItems;
-        }
+        get => Properties.TryGetValue(s_propComboBoxCellMaxDropDownItems, out int maxDropDownItems) ? maxDropDownItems : DefaultMaxDropDownItems;
         set
         {
             if (value is < 1 or > 100)
@@ -462,7 +433,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
                 throw new ArgumentOutOfRangeException(nameof(MaxDropDownItems), value, string.Format(SR.DataGridViewComboBoxCell_MaxDropDownItemsOutOfRange, 1, 100));
             }
 
-            Properties.SetInteger(s_propComboBoxCellMaxDropDownItems, value);
+            Properties.AddValue(s_propComboBoxCellMaxDropDownItems, value);
             if (OwnsEditingComboBox(RowIndex))
             {
                 EditingComboBox.MaxDropDownItems = value;

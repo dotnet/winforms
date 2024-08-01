@@ -263,20 +263,11 @@ public abstract partial class ToolStripItem :
     [SRDescription(nameof(SR.ToolStripItemAccessibleRoleDescr))]
     public AccessibleRole AccessibleRole
     {
-        get
-        {
-            int role = Properties.GetInteger(s_accessibleRoleProperty, out bool found);
-            if (found)
-            {
-                return (AccessibleRole)role;
-            }
-
-            return AccessibleRole.Default;
-        }
+        get => Properties.TryGetValue(s_accessibleRoleProperty, out AccessibleRole role) ? role : AccessibleRole.Default;
         set
         {
             SourceGenerated.EnumValidator.Validate(value);
-            Properties.SetInteger(s_accessibleRoleProperty, (int)value);
+            Properties.AddValue(s_accessibleRoleProperty, value);
             OnAccessibleRoleChanged(EventArgs.Empty);
         }
     }
@@ -1306,21 +1297,11 @@ public abstract partial class ToolStripItem :
     [SRCategory(nameof(SR.CatLayout))]
     public MergeAction MergeAction
     {
-        get
-        {
-            int action = Properties.GetInteger(s_mergeActionProperty, out bool found);
-            if (found)
-            {
-                return (MergeAction)action;
-            }
-
-            return MergeAction.Append;
-        }
+        get => Properties.TryGetValue(s_mergeActionProperty, out MergeAction action) ? action : MergeAction.Append;
         set
         {
             SourceGenerated.EnumValidator.Validate(value);
-
-            Properties.SetInteger(s_mergeActionProperty, (int)value);
+            Properties.AddValue(s_mergeActionProperty, value);
         }
     }
 
@@ -1332,17 +1313,8 @@ public abstract partial class ToolStripItem :
     [SRCategory(nameof(SR.CatLayout))]
     public int MergeIndex
     {
-        get
-        {
-            int index = Properties.GetInteger(s_mergeIndexProperty, out bool found);
-            if (found)
-            {
-                return index;
-            }
-
-            return -1;
-        }
-        set => Properties.SetInteger(s_mergeIndexProperty, value);
+        get => Properties.TryGetValue(s_mergeIndexProperty, out int index) ? index : -1;
+        set => Properties.AddValue(s_mergeIndexProperty, value);
     }
 
     internal bool MouseDownAndUpMustBeInSameItem

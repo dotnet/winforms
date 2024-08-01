@@ -70,21 +70,12 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
     [DefaultValue(DATAGRIDVIEWTEXTBOXCELL_maxInputLength)]
     public virtual int MaxInputLength
     {
-        get
-        {
-            int maxInputLength = Properties.GetInteger(s_propTextBoxCellMaxInputLength, out bool found);
-            if (found)
-            {
-                return maxInputLength;
-            }
-
-            return DATAGRIDVIEWTEXTBOXCELL_maxInputLength;
-        }
+        get => Properties.TryGetValue(s_propTextBoxCellMaxInputLength, out int maxInputLength) ? maxInputLength : DATAGRIDVIEWTEXTBOXCELL_maxInputLength;
         set
         {
             ArgumentOutOfRangeException.ThrowIfNegative(value);
 
-            Properties.SetInteger(s_propTextBoxCellMaxInputLength, value);
+            Properties.AddValue(s_propTextBoxCellMaxInputLength, value);
             if (OwnsEditingTextBox(RowIndex))
             {
                 EditingTextBox.MaxLength = value;

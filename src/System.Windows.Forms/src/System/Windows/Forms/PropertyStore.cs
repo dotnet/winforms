@@ -30,18 +30,6 @@ internal class PropertyStore
 
     // REMOVE
     /// <summary>
-    ///  Retrieves an integer value from our property list.
-    ///  This will set value to zero and return false if the
-    ///  list does not contain the given key.
-    /// </summary>
-    public int GetInteger(int key, out bool found)
-    {
-        found = _values.TryGetValue(key, out Value value);
-        return found ? value.GetValue<int>() : default;
-    }
-
-    // REMOVE
-    /// <summary>
     ///  Retrieves an object value from our property list.
     ///  This will set value to null and return false if the
     ///  list does not contain the given key.

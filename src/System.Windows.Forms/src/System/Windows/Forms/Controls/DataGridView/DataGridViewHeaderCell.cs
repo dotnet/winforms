@@ -28,16 +28,7 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
 
     protected ButtonState ButtonState
     {
-        get
-        {
-            int buttonState = Properties.GetInteger(s_propButtonState, out bool found);
-            if (found)
-            {
-                return (ButtonState)buttonState;
-            }
-
-            return ButtonState.Normal;
-        }
+        get => Properties.TryGetValue(s_propButtonState, out ButtonState buttonState) ? buttonState : ButtonState.Normal;
     }
 
     private ButtonState ButtonStatePrivate
@@ -47,7 +38,7 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
             Debug.Assert(Enum.IsDefined(value));
             if (ButtonState != value)
             {
-                Properties.SetInteger(s_propButtonState, (int)value);
+                Properties.AddValue(s_propButtonState, value);
             }
         }
     }
