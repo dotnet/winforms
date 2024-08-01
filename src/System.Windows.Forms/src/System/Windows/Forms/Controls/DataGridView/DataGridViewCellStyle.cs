@@ -636,10 +636,8 @@ public class DataGridViewCellStyle : ICloneable
         return found;
     }
 
-    private bool ShouldSerializeSelectionForeColor()
-    {
-        return Properties.TryGetValue(s_propSelectionForeColor, out Color _);
-    }
+    private bool ShouldSerializeSelectionForeColor() =>
+        Properties.ContainsKey(s_propSelectionForeColor);
 
     public override string ToString()
     {

@@ -279,7 +279,7 @@ internal partial class FlowLayout : LayoutEngine
     }
 
     public static bool GetWrapContents(IArrangedElement container) =>
-        container.Properties.GetValueOrDefault<bool>(s_wrapContentsProperty);
+        !container.Properties.TryGetValue(s_wrapContentsProperty, out bool wrap) || wrap;
 
     public static void SetWrapContents(IArrangedElement container, bool value)
     {
