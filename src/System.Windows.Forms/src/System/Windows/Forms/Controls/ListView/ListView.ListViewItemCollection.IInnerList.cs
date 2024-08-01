@@ -35,7 +35,7 @@ public partial class ListView
                 {
                     return this[index];
                 }
-                catch
+                catch (InvalidOperationException)
                 {
                     return null;
                 }
