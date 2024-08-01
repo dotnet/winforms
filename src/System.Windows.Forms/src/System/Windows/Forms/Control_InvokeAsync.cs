@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Windows.Forms.Analyzers.Diagnostics;
+
 namespace System.Windows.Forms;
 
 public partial class Control
@@ -10,6 +12,7 @@ public partial class Control
     /// </summary>
     /// <param name="action">The synchronous action to execute.</param>
     /// <returns>A task representing the operation and containing the function's result.</returns>
+    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
     public async Task InvokeAsync(Action action)
         => await InvokeAsync(action, CancellationToken.None).ConfigureAwait(true);
 
@@ -19,6 +22,7 @@ public partial class Control
     /// <param name="action">The synchronous action to execute.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>A task representing the operation and containing the function's result.</returns>
+    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
     public async Task InvokeAsync(Action action, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(action);
@@ -62,6 +66,7 @@ public partial class Control
     /// <typeparam name="TResult">The return type of the synchronous function.</typeparam>
     /// <param name="syncFunction">The synchronous function to execute.</param>
     /// <returns>A task representing the operation and containing the function's result.</returns>
+    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
     public Task<TResult> InvokeAsync<TResult>(Func<TResult> syncFunction)
         => InvokeAsync(syncFunction, CancellationToken.None);
 
@@ -72,6 +77,7 @@ public partial class Control
     /// <param name="syncFunction">The synchronous function to execute.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>A task representing the operation and containing the function's result.</returns>
+    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
     public async Task<TResult> InvokeAsync<TResult>(Func<TResult> syncFunction, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(syncFunction);
@@ -115,6 +121,7 @@ public partial class Control
     /// <param name="asyncFunc">The asynchronous function to execute.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>A task representing the operation.</returns>
+    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
     public async Task InvokeAsync(Func<Task> asyncFunc, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(asyncFunc);
@@ -163,6 +170,7 @@ public partial class Control
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>A task representing the operation and containing the function's result of type T.</returns>
     /// <exception cref="InvalidOperationException">Thrown if the control's handle is not yet created.</exception>
+    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
     public async Task<T> InvokeAsync<T>(Func<Task<T>> asyncFunc, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(asyncFunc);

@@ -5505,6 +5505,7 @@ public partial class Form : ContainerControl
     /// </summary>
     /// <param name="owner">The optional owner window.</param>
     /// <returns>A task that completes when the form is closed.</returns>
+    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
     public async Task ShowAsync(IWin32Window? owner = null)
     {
         if (_tcs is not null)
@@ -5719,6 +5720,7 @@ public partial class Form : ContainerControl
     ///  Shows the form as a modal dialog box asynchronously.
     /// </summary>
     /// <returns>A <see cref="Task{DialogResult}"/> representing the outcome of the dialog.</returns>
+    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
     public Task<DialogResult> ShowDialogAsync()
     {
         return ShowDialogAsyncInternal(null);
@@ -5729,6 +5731,7 @@ public partial class Form : ContainerControl
     /// </summary>
     /// <param name="owner">Any object that implements <see cref="IWin32Window"/> that represents the top-level window that will own the modal dialog box.</param>
     /// <returns>A <see cref="Task{DialogResult}"/> representing the outcome of the dialog.</returns>
+    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
     public Task<DialogResult> ShowDialogAsync(IWin32Window owner)
     {
         return ShowDialogAsyncInternal(owner);
