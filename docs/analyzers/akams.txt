@@ -1,0 +1,7 @@
+https://aka.ms/WfoGenManifest		https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms.Analyzers/AppManifestAnalyzer.Help.md
+https://aka.ms/WfoExperimental		https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms.Analyzers/Experimental.Help.md
+
+https://aka.ms/WfoCsAppConfig		https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms.Analyzers.CSharp/ApplicationConfigurationGenerator.Help.md
+https://aka.ms/WfoCsAnalyzers		https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms.Analyzers.CSharp/WinFormsCSharpAnalyzers.Help.md
+
+https://aka.ms/WfoVbAnalyzers		https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms.Analyzers.VisualBasic/WinFormsVisualBasicAnalyzers.Help.md
