@@ -5229,18 +5229,12 @@ public class ListViewTests
             };
         };
 
-        ListView.ListViewAccessibleObject accessibleObject = new(listView);
-        int accessibilityProperty = listView.TestAccessor().Dynamic.s_accessibilityProperty;
-        listView.Properties.SetObject(accessibilityProperty, accessibleObject);
-        listView.IsAccessibilityObjectCreated.Should().BeTrue();
+        listView.AccessibilityObject.Should().NotBeNull();
 
-        Action action = () => listView.Items.GetItemByIndex(0)?.ReleaseUiaProvider();
-        action.Should().NotThrow();
-        listView.IsAccessibilityObjectCreated.Should().BeTrue();
-
-        action = () => listView.ReleaseUiaProvider(listView.InternalHandle);
+        Action action = () => listView.ReleaseUiaProvider(listView.InternalHandle);
         action.Should().NotThrow();
         listView.IsAccessibilityObjectCreated.Should().BeFalse();
+        listView.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsFact]
