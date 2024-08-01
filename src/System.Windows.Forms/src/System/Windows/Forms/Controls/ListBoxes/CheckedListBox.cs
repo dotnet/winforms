@@ -578,7 +578,6 @@ public partial class CheckedListBox : ListBox
                 textBounds.X = bounds.X;
             }
 
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             Color backColor = (SelectionMode != SelectionMode.None) ? e.BackColor : BackColor;
             Color foreColor = (SelectionMode != SelectionMode.None) ? e.ForeColor : ForeColor;
             if (!Enabled)
@@ -605,7 +604,6 @@ public partial class CheckedListBox : ListBox
                     foreColor = SystemColors.GrayText;
                 }
             }
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
             // Draw the text
 

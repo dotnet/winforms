@@ -718,7 +718,8 @@ public unsafe partial class Control :
             Color color = BackColor;
             HBRUSH backBrush;
 
-            if (color.IsSystemColor)
+#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            if (color.IsSystemColor && !Application.IsDarkModeEnabled)
             {
                 backBrush = PInvoke.GetSysColorBrush(color);
                 SetState(States.OwnCtlBrush, false);
@@ -728,6 +729,7 @@ public unsafe partial class Control :
                 backBrush = PInvoke.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(color));
                 SetState(States.OwnCtlBrush, true);
             }
+#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
             Debug.Assert(!backBrush.IsNull, "Failed to create brushHandle");
             Properties.SetObject(s_backBrushProperty, backBrush);
