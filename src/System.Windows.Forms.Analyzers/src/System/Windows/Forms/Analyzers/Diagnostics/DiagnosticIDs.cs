@@ -13,10 +13,11 @@ internal static class DiagnosticIDs
     // Security, number group 1000+
     public const string MissingPropertySerializationConfiguration = "WFO1000";
 
-    // WinForms best practize, number group 2000+
+    // WinForms best practice, number group 2000+
     public const string DisposeModalDialog = "WFO2000";
 
-    // Experimental, number group 9000+
-    public const string ExperimentalVisualStyles = "WFO9000";
-    public const string ExperimentalDarkMode = "WFO9001";
+    // Experimental, number group 5000+
+    public const string ExperimentalVisualStyles = "WFO5000";
+    public const string ExperimentalDarkMode = "WFO5001";
+    public const string ExperimentalAsync = "WFO5002";
 }

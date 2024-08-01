@@ -4,17 +4,17 @@
     <body>
       <trans-unit id="WFO0003Message_CS">
         <source>Remove high DPI settings from {0} and configure via Application.SetHighDpiMode API or '{1}' project property</source>
-        <target state="new">Remove high DPI settings from {0} and configure via Application.SetHighDpiMode API or '{1}' project property</target>
+        <target state="translated">Удалить параметры высокого DPI из "{0}" и настроить через API приложения Application.SetHighDpiMode или свойство проекта "{1}"</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO0003Message_VB">
         <source>Remove high DPI settings from {0} and configure via '{1}' property in Application Framework</source>
-        <target state="new">Remove high DPI settings from {0} and configure via '{1}' property in Application Framework</target>
+        <target state="translated">Удалить параметры высокого DPI из {0} и настроить через свойство "{1}" в исполняющей среде</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO0003Title">
         <source>Unsupported high DPI configuration</source>
-        <target state="new">Unsupported high DPI configuration</target>
+        <target state="translated">Неподдерживаемая конфигурация высокого DPI</target>
         <note />
       </trans-unit>
     </body>

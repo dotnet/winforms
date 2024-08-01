@@ -19,7 +19,7 @@ public static void Initialize()
 For more information on application configuration refer to https://aka.ms/applicationconfiguration.
 
 
-## [WFAC001](https://aka.ms/winforms-warnings/WFAC001): Unsupported project type.
+## [WFO0001](https://aka.ms/winforms-warnings/WFAC001): Unsupported project type.
 
 Only projects with `OutputType` set to "Exe" or "WinExe" are supported, because only applications projects define an application entry point,
 where the application bootstrap code must reside.
@@ -33,7 +33,7 @@ where the application bootstrap code must reside.
 ---
 
 
-## [WFAC002](https://aka.ms/winforms-warnings/WFAC002): Unsupported property value.
+## [WFO0002](https://aka.ms/winforms-warnings/WFAC002): Unsupported property value.
 
 The specified project property cannot be set to the given value.
 
