@@ -12,7 +12,7 @@ namespace System.Windows.Forms.Design.Tests;
 
 public sealed class FlowPanelDesignerTests
 {
-    private (Panel panel, FlowPanelDesigner designer) SetupDesignerWithPanel()
+    private FlowPanelDesigner SetupDesignerWithPanel()
     {
         Mock<IDesignerHost> mockHost = new();
         Mock<IContainer> mockContainer = new();
@@ -24,13 +24,13 @@ public sealed class FlowPanelDesignerTests
         FlowPanelDesigner designer = new();
         designer.Initialize(panel);
 
-        return (panel, designer);
+        return (designer);
     }
 
     [Fact]
     public void ParticipatesWithSnapLines_ShouldAlwaysReturnFalse()
     {
-        var (_, designer) = SetupDesignerWithPanel();
+        var designer = SetupDesignerWithPanel();
 
         designer.ParticipatesWithSnapLines.Should().BeFalse();
     }
@@ -38,7 +38,7 @@ public sealed class FlowPanelDesignerTests
     [Fact]
     public void SnapLines_ShouldNotContainPaddingSnapLines()
     {
-        var (_, designer) = SetupDesignerWithPanel();
+        var designer = SetupDesignerWithPanel();
 
         var snapLines = designer.SnapLines as IList<SnapLine>;
 
@@ -49,7 +49,7 @@ public sealed class FlowPanelDesignerTests
     [Fact]
     public void SnapLines_ShouldReturnNonPaddingSnapLines()
     {
-        var (_, designer) = SetupDesignerWithPanel();
+        var designer = SetupDesignerWithPanel();
 
         var snapLines = designer.SnapLines as IList<SnapLine>;
 
