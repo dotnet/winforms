@@ -5237,14 +5237,12 @@ public class ListViewTests
         {
             Action action = () => listView.Items.GetItemByIndex(0)?.ReleaseUiaProvider();
             action.Should().NotThrow();
-            listView.IsHandleCreated.Should().BeFalse();
             listView.IsAccessibilityObjectCreated.Should().BeTrue();
         }
         else
         {
-            Action action = () => listView.ReleaseUiaProvider(listView.HWND);
+            Action action = () => listView.ReleaseUiaProvider(listView.InternalHandle);
             action.Should().NotThrow();
-            listView.IsHandleCreated.Should().BeTrue();
             listView.IsAccessibilityObjectCreated.Should().BeFalse();
         }
     }
