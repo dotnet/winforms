@@ -83,13 +83,13 @@ public partial class CheckBox : ButtonBase
                 {
                     UpdateStyles();
 
-#pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning disable WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                     if (value == Appearance.ToggleSwitch
                         && VisualStylesMode == VisualStylesMode.Net10)
                     {
                         Refresh();
                     }
-#pragma warning restore WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning restore WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                 }
 
                 OnAppearanceChanged(EventArgs.Empty);
@@ -180,7 +180,7 @@ public partial class CheckBox : ButtonBase
     {
         get => _checkState;
 
-#pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+#pragma warning disable WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
         set
         {
             SourceGenerated.EnumValidator.Validate(value);
@@ -231,7 +231,7 @@ public partial class CheckBox : ButtonBase
             }
         }
     }
-#pragma warning restore WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+#pragma warning restore WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
 
     /// <hideinheritance/>
     [Browsable(false)]
@@ -264,7 +264,7 @@ public partial class CheckBox : ButtonBase
             }
             else
             {
-#pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+#pragma warning disable WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
                 if (VisualStylesMode == VisualStylesMode.Net10)
                 {
                     SetStyle(ControlStyles.UserPaint, true);
@@ -280,7 +280,7 @@ public partial class CheckBox : ButtonBase
                         cp.Style |= PInvoke.BS_PUSHLIKE;
                     }
                 }
-#pragma warning restore WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+#pragma warning restore WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
 
                 // Determine the alignment of the check box
                 ContentAlignment align = RtlTranslateContent(CheckAlign);
@@ -317,7 +317,7 @@ public partial class CheckBox : ButtonBase
     {
         Size textSize;
 
-#pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+#pragma warning disable WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
         if (Appearance == Appearance.ToggleSwitch
             && VisualStylesMode == VisualStylesMode.Net10)
         {
@@ -333,7 +333,7 @@ public partial class CheckBox : ButtonBase
 
             return new Size(totalWidth, totalHeight);
         }
-#pragma warning restore WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+#pragma warning restore WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
 
         if (Appearance == Appearance.Button)
         {
@@ -357,14 +357,14 @@ public partial class CheckBox : ButtonBase
 
     protected override void OnPaint(PaintEventArgs pevent)
     {
-#pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+#pragma warning disable WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
         if (VisualStylesMode == VisualStylesMode.Net10
             && Appearance == Appearance.ToggleSwitch)
         {
             _toggleSwitchRenderer?.RenderControl(pevent.Graphics);
             return;
         }
-#pragma warning restore WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+#pragma warning restore WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
 
         base.OnPaint(pevent);
     }

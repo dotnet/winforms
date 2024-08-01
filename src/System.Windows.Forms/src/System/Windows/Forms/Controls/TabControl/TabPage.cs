@@ -35,9 +35,9 @@ public partial class TabPage : Panel
     public TabPage() : base()
     {
         SetStyle(ControlStyles.CacheText, true);
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         Text = null;
     }
 
@@ -100,7 +100,7 @@ public partial class TabPage : Panel
         get
         {
             Color color = base.BackColor;
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             if (color != DefaultBackColor)
             {
                 return color;
@@ -113,7 +113,7 @@ public partial class TabPage : Panel
             {
                 return Color.Transparent;
             }
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
             return color;
         }
@@ -603,11 +603,11 @@ public partial class TabPage : Panel
             && UseVisualStyleBackColor
             && (ParentInternal is TabControl parent && parent.Appearance == TabAppearance.Normal))
         {
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             Color bkColor = (UseVisualStyleBackColor && !Application.IsDarkModeEnabled)
                 ? Color.Transparent
                 : BackColor;
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
             Rectangle inflateRect = LayoutUtils.InflateRect(DisplayRectangle, Padding);
 

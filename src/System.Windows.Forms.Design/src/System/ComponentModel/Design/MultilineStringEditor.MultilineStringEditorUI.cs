@@ -11,7 +11,7 @@ namespace System.ComponentModel.Design;
 
 public sealed partial class MultilineStringEditor
 {
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     private class MultilineStringEditorUI : RichTextBox
     {
         private IWindowsFormsEditorService? _editorService;
@@ -422,5 +422,5 @@ public sealed partial class MultilineStringEditor
             }
         }
     }
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 }

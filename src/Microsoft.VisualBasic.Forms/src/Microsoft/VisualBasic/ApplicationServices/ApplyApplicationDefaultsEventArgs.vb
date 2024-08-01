@@ -17,8 +17,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
     Public Class ApplyApplicationDefaultsEventArgs
         Inherits EventArgs
 
-#Disable Warning WFO9001
-#Disable Warning WFO9000
+#Disable Warning WFO5001
+#Disable Warning WFO5000
         Friend Sub New(minimumSplashScreenDisplayTime As Integer,
                 highDpiMode As HighDpiMode,
                 colorMode As SystemColorMode,
@@ -30,8 +30,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             Me.VisualStylesMode = visualStylesMode
 
         End Sub
-#Enable Warning WFO9000
-#Enable Warning WFO9001
+#Enable Warning WFO5000
+#Enable Warning WFO5001
 
         ''' <summary>
         '''  Setting this property inside the event handler causes a new default Font for Forms and UserControls to be set.
@@ -70,6 +70,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Public Property VisualStylesMode As VisualStylesMode
 
     End Class
-#Disable Warning WFO9000
-#Disable Warning WFO9001
+#Disable Warning WFO5000
+#Disable Warning WFO5001
 End Namespace

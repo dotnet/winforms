@@ -77,9 +77,9 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
 
         SetStyle(ControlStyles.UserMouse | ControlStyles.UserPaint, OwnerDraw);
 
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
         SetFlag(FlagUseMnemonic, true);
         SetFlag(FlagShowToolTip, false);
@@ -1260,10 +1260,10 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
     [SRDescription(nameof(SR.ButtonUseVisualStyleBackColorDescr))]
     public bool UseVisualStyleBackColor
     {
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         get => (_isEnableVisualStyleBackgroundSet || (RawBackColor.IsEmpty && (BackColor == SystemColors.Control)))
             && _enableVisualStyleBackground;
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         set
         {
             if (_isEnableVisualStyleBackgroundSet && value == _enableVisualStyleBackground)

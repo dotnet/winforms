@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
+using System.Windows.Forms.Analyzers.Diagnostics;
 
 namespace System.Windows.Forms;
 
@@ -142,6 +143,6 @@ public enum ControlStyles
     ///  from this setting. Note that using this settings will cause some
     ///  win32 control theming renderers to become inactive for a specific theme.
     /// </summary>
-    [Experimental("WFO9001")]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
     ApplyThemingImplicitly = 0b00001000_00000000_00000000, // 0x00080000
 }

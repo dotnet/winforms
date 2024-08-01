@@ -8,7 +8,7 @@ namespace System.Windows.Forms.Design;
 
 public partial class BorderSidesEditor
 {
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     /// <summary>
     ///  Editor UI for the BorderSides editor.
     /// </summary>
@@ -438,5 +438,5 @@ public partial class BorderSidesEditor
             Value = valueSide;
         }
     }
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 }

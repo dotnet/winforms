@@ -142,17 +142,17 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         ' The HighDpiMode the user picked from the AppDesigner or assigned to the ApplyApplicationsDefault event.
         Private _highDpiMode As HighDpiMode = HighDpiMode.SystemAware
-#Disable Warning WFO9001 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
+#Disable Warning WFO5001 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
         ' The ColorMode (Classic/Light, System, Dark) the user assigned to the ApplyApplicationsDefault event.
         ' Note: We aim to expose this to the App Designer in later runtime/VS versions.
         Private _colorMode As SystemColorMode = SystemColorMode.Classic
-#Enable Warning WFO9001 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
+#Enable Warning WFO5001 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
 
-#Disable Warning WFO9000 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
+#Disable Warning WFO5000 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
         ' The VisualStylesMode (Default is Classic) the user assigned to the ApplyApplicationsDefault event.
         ' Note: We aim to expose this to the App Designer in later runtime/VS versions.
         Private _visualStylesMode As VisualStylesMode = VisualStylesMode.Classic
-#Enable Warning WFO9000 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
+#Enable Warning WFO5000 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
 
         ''' <summary>
         '''  Occurs when the network availability changes.
@@ -518,8 +518,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             '    Once all this is done, we give the User another chance to change the value by code through
             '    the ApplyDefaults event.
             ' Note: Overriding MinimumSplashScreenDisplayTime needs still to keep working!
-#Disable Warning WFO9001 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
-#Disable Warning WFO9000 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
+#Disable Warning WFO5001 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
+#Disable Warning WFO5000 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
             Dim applicationDefaultsEventArgs As New ApplyApplicationDefaultsEventArgs(
                 MinimumSplashScreenDisplayTime,
                 HighDpiMode,
@@ -528,8 +528,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             {
                 .MinimumSplashScreenDisplayTime = MinimumSplashScreenDisplayTime
             }
-#Enable Warning WFO9000 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
-#Enable Warning WFO9001 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
+#Enable Warning WFO5000 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
+#Enable Warning WFO5001 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
 
             RaiseEvent ApplyApplicationDefaults(Me, applicationDefaultsEventArgs)
 
@@ -545,8 +545,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
             _highDpiMode = applicationDefaultsEventArgs.HighDpiMode
 
-#Disable Warning WFO9001 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
-#Disable Warning WFO9000 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
+#Disable Warning WFO5001 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
+#Disable Warning WFO5000 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
 
             _colorMode = applicationDefaultsEventArgs.ColorMode
             _visualStylesMode = applicationDefaultsEventArgs.VisualStylesMode
@@ -563,8 +563,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             Application.SetColorMode(_colorMode)
             Application.SetDefaultVisualStylesMode(_visualStylesMode)
 
-#Enable Warning WFO9000 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
-#Enable Warning WFO9001 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
+#Enable Warning WFO5000 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
+#Enable Warning WFO5001 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
 
             ' We'll handle "/nosplash" for you.
             If Not (commandLineArgs.Contains("/nosplash") OrElse Me.CommandLineArgs.Contains("-nosplash")) Then

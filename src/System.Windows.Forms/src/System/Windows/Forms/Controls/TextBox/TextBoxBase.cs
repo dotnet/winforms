@@ -8,6 +8,7 @@ using System.Drawing.Design;
 using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Windows.Forms.Analyzers.Diagnostics;
 using System.Windows.Forms.Layout;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
@@ -105,9 +106,9 @@ public abstract partial class TextBoxBase : Control
                 | ControlStyles.UseTextForAccessibility
                 | ControlStyles.UserPaint, false);
 
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
         // cache requested height. Note: Control calls DefaultSize (overridable) in the constructor
         // to set the control's cached height that is returned when calling Height, so we just
@@ -288,7 +289,6 @@ public abstract partial class TextBoxBase : Control
     {
         get
         {
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             if (ShouldSerializeBackColor())
             {
                 return base.BackColor;
@@ -301,7 +301,6 @@ public abstract partial class TextBoxBase : Control
             {
                 return SystemColors.Window;
             }
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         }
         set => base.BackColor = value;
     }
@@ -427,7 +426,7 @@ public abstract partial class TextBoxBase : Control
             cp.Style &= ~(int)WINDOW_STYLE.WS_BORDER;
             cp.ExStyle &= ~(int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
 
-#pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+#pragma warning disable WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
             if (VisualStylesMode == VisualStylesMode.Net10)
             {
                 // We draw the borders ourselves for the visual styles for .NET 9/10 onwards.
@@ -464,7 +463,7 @@ public abstract partial class TextBoxBase : Control
                     }
                 }
             }
-#pragma warning restore WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+#pragma warning restore WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
 
             return cp;
         }
@@ -528,9 +527,7 @@ public abstract partial class TextBoxBase : Control
             }
             else
             {
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                 return SystemColors.WindowText;
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             }
         }
         set => base.ForeColor = value;
@@ -808,7 +805,7 @@ public abstract partial class TextBoxBase : Control
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [SRDescription(nameof(SR.TextBoxPreferredHeightDescr))]
-#pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+#pragma warning disable WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
     public int PreferredHeight =>
         VisualStylesMode switch
         {
@@ -823,7 +820,7 @@ public abstract partial class TextBoxBase : Control
                 enumClass: typeof(VisualStylesMode))
         };
 
-    [Experimental("WFO9000")]
+    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
     protected virtual int PreferredHeightCore
     {
         get
@@ -836,7 +833,7 @@ public abstract partial class TextBoxBase : Control
             return height;
         }
     }
-#pragma warning restore WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+#pragma warning restore WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
 
     private int PreferredHeightClassic
     {
@@ -916,7 +913,7 @@ public abstract partial class TextBoxBase : Control
             format |= TextFormatFlags.WordBreak;
         }
 
-#pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+#pragma warning disable WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
         if (VisualStylesMode == VisualStylesMode.Net10)
         {
             // For Versions >=10, we take our modern Style adorners into account
@@ -960,7 +957,7 @@ public abstract partial class TextBoxBase : Control
             // Reduce constraints by border/padding size
             proposedConstraints -= bordersAndPadding;
         }
-#pragma warning restore WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+#pragma warning restore WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
 
         Size textSize = TextRenderer.MeasureText(Text, Font, proposedConstraints, format);
 
@@ -1264,7 +1261,7 @@ public abstract partial class TextBoxBase : Control
     /// <summary>
     /// Defines <see cref="VisualStylesMode.Classic"/> as default for this control, so we're not breaking existing implementations.
     /// </summary>
-    [Experimental("WFO9000")]
+    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
     protected override VisualStylesMode DefaultVisualStylesMode =>
         VisualStylesMode.Classic;
 
@@ -2153,7 +2150,7 @@ public abstract partial class TextBoxBase : Control
         }
     }
 
-#pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning disable WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     private bool WmNcPaint(ref Message m)
     {
         if (VisualStylesMode < VisualStylesMode.Net10)
@@ -2181,7 +2178,7 @@ public abstract partial class TextBoxBase : Control
 
         return true;
     }
-#pragma warning restore WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning restore WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     private int GetBorderThicknessDpiFactor()
         => _deviceDpi switch
@@ -2192,7 +2189,7 @@ public abstract partial class TextBoxBase : Control
             _ => 4,
         };
 
-    [Experimental("WFO9000")]
+    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
     private protected virtual void OnNcPaint(Graphics graphics)
     {
         const int cornerRadius = 15;
@@ -2325,13 +2322,13 @@ public abstract partial class TextBoxBase : Control
         // We only want to do this for VisualStylesMode >= Version10.
         // Also, we do that only one time per instance,
         // but we need to reset this, when the handle is recreated.
-#pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning disable WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         if (VisualStylesMode < VisualStylesMode.Net10
             || _triggerNewClientSizeRequest)
         {
             return;
         }
-#pragma warning restore WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning restore WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
         _triggerNewClientSizeRequest = true;
 

@@ -291,11 +291,11 @@ public partial class PrintPreviewControl : Control
 
     [EditorBrowsable(EditorBrowsableState.Never)]
 
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     public override void ResetBackColor() => BackColor = SystemColors.AppWorkspace;
 
     internal override bool ShouldSerializeBackColor() => !BackColor.Equals(SystemColors.AppWorkspace);
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
 
     [EditorBrowsable(EditorBrowsableState.Never)]
     public override void ResetForeColor() => ForeColor = Color.White;
@@ -720,9 +720,9 @@ public partial class PrintPreviewControl : Control
 
         if (isHighContrast)
         {
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             ControlPaint.DrawHighContrastFocusRectangle(e.Graphics, focusRect, SystemColors.ControlText);
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
         }
         else
         {
@@ -742,9 +742,9 @@ public partial class PrintPreviewControl : Control
     /// </returns>
     private Color GetBackColor(bool isHighContract)
     {
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         return (isHighContract && !ShouldSerializeBackColor()) ? SystemColors.ControlDark : BackColor;
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
     }
 
     private static int PixelsToPhysical(int pixels, int dpi) => (int)(pixels * 100.0 / dpi);

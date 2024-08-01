@@ -122,21 +122,21 @@ public partial class DateTimePicker : Control
 
         SetStyle(ControlStyles.UseTextForAccessibility, false);
 
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     }
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public override Color BackColor
     {
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
         get => ShouldSerializeBackColor()
             || Application.IsDarkModeEnabled
                 ? base.BackColor
                 : SystemColors.Window;
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
         set => base.BackColor = value;
     }
 
@@ -497,12 +497,12 @@ public partial class DateTimePicker : Control
     [EditorBrowsable(EditorBrowsableState.Never)]
     public override Color ForeColor
     {
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
         get => ShouldSerializeForeColor()
             || Application.IsDarkModeEnabled
                 ? base.ForeColor
                 : SystemColors.WindowText;
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
 
         set => base.ForeColor = value;
     }

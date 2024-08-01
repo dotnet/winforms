@@ -44,9 +44,9 @@ public sealed partial class Application
     private static readonly Lock s_internalSyncObject = new();
     private static bool s_useWaitCursor;
 
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     private static SystemColorMode? s_systemColorMode;
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     private const string DarkModeKeyPath = "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
     private const string DarkModeKey = "AppsUseLightTheme";
@@ -250,7 +250,7 @@ public sealed partial class Application
     ///  Gets the default dark mode for the application. This is the SystemColorMode which either has been set
     ///  by <see cref="SetColorMode(SystemColorMode)"/> or its default value <see cref="SystemColorMode.Classic"/>.
     /// </summary>
-    [Experimental("WFO9001")]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
     public static SystemColorMode ColorMode =>
         !s_systemColorMode.HasValue
             // No value set: we default to classic (light mode)
@@ -266,7 +266,7 @@ public sealed partial class Application
     ///  Sets the default dark mode for the application.
     /// </summary>
     /// <param name="systemColorMode">The default dark mode to set.</param>
-    [Experimental("WFO9001")]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
     public static void SetColorMode(SystemColorMode systemColorMode)
     {
         try
@@ -300,7 +300,7 @@ public sealed partial class Application
     ///   particularly when backward compatibility to "XP-based VisualStyles" is essential.
     ///  </para>
     /// </remarks>
-    [Experimental("WFO9000")]
+    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
     public static VisualStylesMode DefaultVisualStylesMode { get; private set; }
 
     /// <summary>
@@ -310,7 +310,7 @@ public sealed partial class Application
     ///  as not setting using <see cref="EnableVisualStyles"/>.
     /// </summary>
     /// <param name="styleSetting">The version of visual styles to set.</param>
-    [Experimental("WFO9000")]
+    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
     public static void SetDefaultVisualStylesMode(VisualStylesMode styleSetting)
     {
         if (styleSetting != DefaultVisualStylesMode)
@@ -544,11 +544,11 @@ public sealed partial class Application
     ///  visual styles? If you are doing visual styles rendering, use this to be consistent with the rest
     ///  of the controls in your app.
     /// </summary>
-#pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning disable WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     public static bool RenderWithVisualStyles =>
         ComCtlSupportsVisualStyles
             && DefaultVisualStylesMode != VisualStylesMode.Disabled;
-#pragma warning restore WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning restore WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     /// <summary>
     ///  Gets or sets the format string to apply to top level window captions
@@ -936,14 +936,14 @@ public sealed partial class Application
 
         Debug.Assert(UseVisualStyles, "Enable Visual Styles failed");
 
-#pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+#pragma warning disable WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
 
         // We need to check, if SetDefaultVisualStylesMode was called before EnableVisualStyles, so those will always be in sync!
         if (UseVisualStyles && DefaultVisualStylesMode == VisualStylesMode.Disabled)
         {
             DefaultVisualStylesMode = VisualStylesMode.Classic;
         }
-#pragma warning restore WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+#pragma warning restore WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
 
         s_comCtlSupportsVisualStylesInitialized = false;
     }

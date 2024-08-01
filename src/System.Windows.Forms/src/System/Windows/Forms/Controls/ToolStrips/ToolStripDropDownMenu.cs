@@ -565,9 +565,9 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
         base.OnPaintBackground(e);
         if (ShowCheckMargin || ShowImageMargin)
         {
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             Renderer.DrawImageMargin(new ToolStripRenderEventArgs(e.Graphics, this, ImageMargin, SystemColors.Control));
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         }
     }
 

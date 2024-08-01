@@ -18,6 +18,7 @@ using Windows.Win32.Graphics.Dwm;
 using Com = Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
 using Encoding = System.Text.Encoding;
+using System.Windows.Forms.Analyzers.Diagnostics;
 
 namespace System.Windows.Forms;
 
@@ -718,7 +719,7 @@ public unsafe partial class Control :
             Color color = BackColor;
             HBRUSH backBrush;
 
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             if (color.IsSystemColor && !Application.IsDarkModeEnabled)
             {
                 backBrush = PInvoke.GetSysColorBrush(color);
@@ -729,7 +730,7 @@ public unsafe partial class Control :
                 backBrush = PInvoke.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(color));
                 SetState(States.OwnCtlBrush, true);
             }
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
             Debug.Assert(!backBrush.IsNull, "Failed to create brushHandle");
             Properties.SetObject(s_backBrushProperty, backBrush);
@@ -3642,7 +3643,7 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     // [SRDescription(nameof(SR.ControlVisualStylesModeChangedDescr))]
     [SRDescription("VisualStyleMode Description.")]
-    [Experimental("WFO9000")]
+    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
     public event EventHandler? VisualStylesModeChanged
     {
         add => Events.AddHandler(s_visualStylesModeChangedEvent, value);
@@ -3678,7 +3679,7 @@ public unsafe partial class Control :
     [SRCategory(nameof(SR.CatAppearance))]
     [EditorBrowsable(EditorBrowsableState.Always)]
     [SRDescription(nameof(SR.ControlVisualStylesModeDescr))]
-    [Experimental("WFO9000")]
+    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
     public VisualStylesMode VisualStylesMode
     {
         get => Properties.TryGetObject(s_visualStylesModeProperty, out VisualStylesMode value)
@@ -3745,7 +3746,7 @@ public unsafe partial class Control :
     ///  <see cref="Application.DefaultVisualStylesMode"/> whose default is <see cref="VisualStylesMode.Classic"/>.
     /// </summary>
     /// <returns>The default visual styles mode for the control.</returns>
-    [Experimental("WFO9000")]
+    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
     protected virtual VisualStylesMode DefaultVisualStylesMode => Application.DefaultVisualStylesMode;
 
     /// <summary>
@@ -7399,7 +7400,7 @@ public unsafe partial class Control :
     ///  Occurs when the <see cref="VisualStylesMode"/> property of the parent of this control changed.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    [Experimental("WFO9000")]
+    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
     protected virtual void OnParentVisualStylesModeChanged(EventArgs e)
     {
         if (Properties.ContainsObject(s_visualStylesModeProperty))
@@ -7556,7 +7557,7 @@ public unsafe partial class Control :
     ///  Inheriting classes should override this method to handle this event.
     ///  Call base.<see cref="OnVisualStylesModeChanged"/> to send this event to any registered event listeners.
     /// </summary>
-    [Experimental("WFO9000")]
+    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnVisualStylesModeChanged(EventArgs e)
     {
@@ -7704,7 +7705,7 @@ public unsafe partial class Control :
                 PInvoke.SetWindowText(this, _text);
             }
 
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
             if (Application.IsDarkModeEnabled && GetStyle(ControlStyles.ApplyThemingImplicitly))
             {
                 _ = PInvoke.SetWindowTheme(
@@ -7712,7 +7713,7 @@ public unsafe partial class Control :
                     pszSubAppName: $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}",
                     pszSubIdList: null);
             }
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
 
             if (this is not ScrollableControl
                 && !IsMirrored
@@ -8620,7 +8621,7 @@ public unsafe partial class Control :
         // We need to use theming painting for certain controls (like TabPage) when they parent other controls.
         // But we don't want to to this always as this causes serious performance (at Runtime and DesignTime)
         // so checking for RenderTransparencyWithVisualStyles which is TRUE for TabPage and false by default.
-#pragma warning disable WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+#pragma warning disable WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
         if (Application.DefaultVisualStylesMode != VisualStylesMode.Disabled
             && parent.RenderTransparencyWithVisualStyles)
         {
@@ -8643,7 +8644,7 @@ public unsafe partial class Control :
 
             return;
         }
-#pragma warning restore WFO9000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning restore WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
         // Move the rendering area and setup it's size (we want to translate it to the parent's origin).
         Rectangle shift = new(-Left, -Top, parent.Width, parent.Height);
@@ -10780,7 +10781,7 @@ public unsafe partial class Control :
 
             bool fireChange = false;
 
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
             if (GetTopLevel())
             {
                 // The processing of WmShowWindow will set the visibility
@@ -10795,7 +10796,7 @@ public unsafe partial class Control :
                     PInvoke.ShowWindow(HWND, value ? ShowParams : SHOW_WINDOW_CMD.SW_HIDE);
                 }
             }
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
             else if (IsHandleCreated || (value && _parent?.Created == true))
             {
                 // We want to mark the control as visible so that CreateControl

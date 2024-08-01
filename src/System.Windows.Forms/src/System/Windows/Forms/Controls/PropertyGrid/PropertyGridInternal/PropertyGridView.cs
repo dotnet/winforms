@@ -135,11 +135,11 @@ internal sealed partial class PropertyGridView :
         SetStyle(ControlStyles.ResizeRedraw, false);
         SetStyle(ControlStyles.UserMouse, true);
 
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         BackColor = SystemColors.Window;
         ForeColor = SystemColors.WindowText;
         _grayTextColor = SystemColors.GrayText;
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
         TabStop = true;
 
@@ -209,10 +209,10 @@ internal sealed partial class PropertyGridView :
                 Bitmap bitmap = CreateResizedBitmap("Arrow", DownArrowIconWidth, DownArrowIconHeight);
                 _dropDownButton.Image = bitmap;
 
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                 _dropDownButton.BackColor = SystemColors.Control;
                 _dropDownButton.ForeColor = SystemColors.ControlText;
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
                 _dropDownButton.Click += OnButtonClick;
                 _dropDownButton.GotFocus += OnDropDownButtonGotFocus;
@@ -246,7 +246,7 @@ internal sealed partial class PropertyGridView :
             {
                 OwnerGrid.CheckInCreate();
 
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                 _dialogButton = new DropDownButton
                 {
                     BackColor = SystemColors.Control,
@@ -254,7 +254,7 @@ internal sealed partial class PropertyGridView :
                     TabIndex = 3,
                     Image = CreateResizedBitmap("dotdotdot", DotDotDotIconWidth, DotDotDotIconHeight)
                 };
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
                 _dialogButton.Click += OnButtonClick;
                 _dialogButton.KeyDown += OnButtonKeyDown;
@@ -366,12 +366,12 @@ internal sealed partial class PropertyGridView :
                 return _grayTextColor;
             }
 
-#pragma warning disable WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             if (ForeColor.ToArgb() == SystemColors.WindowText.ToArgb())
             {
                 return SystemColors.GrayText;
             }
-#pragma warning restore WFO9001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
             // Compute the new color by halving the value of the old one.
             int colorRGB = ForeColor.ToArgb();
