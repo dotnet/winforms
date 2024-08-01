@@ -5233,18 +5233,14 @@ public class ListViewTests
         int accessibilityProperty = listView.TestAccessor().Dynamic.s_accessibilityProperty;
         listView.Properties.SetObject(accessibilityProperty, accessibleObject);
         listView.IsAccessibilityObjectCreated.Should().BeTrue();
-        if (listItem is null)
-        {
-            Action action = () => listView.Items.GetItemByIndex(0)?.ReleaseUiaProvider();
-            action.Should().NotThrow();
-            listView.IsAccessibilityObjectCreated.Should().BeTrue();
-        }
-        else
-        {
-            Action action = () => listView.ReleaseUiaProvider(listView.InternalHandle);
-            action.Should().NotThrow();
-            listView.IsAccessibilityObjectCreated.Should().BeFalse();
-        }
+
+        Action action = () => listView.Items.GetItemByIndex(0)?.ReleaseUiaProvider();
+        action.Should().NotThrow();
+        listView.IsAccessibilityObjectCreated.Should().BeTrue();
+
+        action = () => listView.ReleaseUiaProvider(listView.InternalHandle);
+        action.Should().NotThrow();
+        listView.IsAccessibilityObjectCreated.Should().BeFalse();
     }
 
     [WinFormsFact]
