@@ -166,7 +166,9 @@ public partial class Form : ContainerControl
     private Dictionary<int, Size>? _dpiFormSizes;
     private bool _processingDpiChanged;
     private bool _inRecreateHandle;
-    private TaskCompletionSource? _tcs;
+    private TaskCompletionSource? _tcsNonModalForm;
+    private TaskCompletionSource<DialogResult>? _tcsModalForm;
+    private readonly Lock _syncObj = new();
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="Form"/> class.
@@ -3634,8 +3636,8 @@ public partial class Form : ContainerControl
                 PInvoke.DestroyMenu(dummyMenu);
             }
 
-            _tcs?.SetResult();
-            _tcs = null;
+            _tcsNonModalForm?.SetResult();
+            _tcsNonModalForm = null;
         }
         else
         {
@@ -4134,7 +4136,7 @@ public partial class Form : ContainerControl
     protected virtual void OnFormClosed(FormClosedEventArgs e)
     {
         // This effectively ends an `await form.ShowAsync();` call.
-        _tcs?.TrySetResult();
+        _tcsNonModalForm?.TrySetResult();
 
         // Remove the form from Application.OpenForms (nothing happens if isn't present)
         Application.OpenForms.Remove(this);
@@ -5508,23 +5510,26 @@ public partial class Form : ContainerControl
     [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
     public async Task ShowAsync(IWin32Window? owner = null)
     {
-        if (_tcs is not null)
+        lock (_syncObj)
         {
-            throw new InvalidOperationException("The form has already been shown asynchronously.");
+            if (_tcsNonModalForm is not null || _tcsModalForm is not null)
+            {
+                throw new InvalidOperationException("The form has already been shown asynchronously.");
+            }
+
+            _tcsNonModalForm = new TaskCompletionSource();
+
+            BeginInvoke(new Action(ShowFormInternally));
         }
-
-        _tcs = new TaskCompletionSource();
-
-        BeginInvoke(new Action(ShowFormInternally));
 
         // Wait until the form is closed or disposed.
         try
         {
-            await _tcs.Task.ConfigureAwait(true);
+            await _tcsNonModalForm.Task.ConfigureAwait(true);
         }
         finally
         {
-            _tcs = null;
+            _tcsNonModalForm = null;
         }
 
         void ShowFormInternally()
@@ -5543,7 +5548,7 @@ public partial class Form : ContainerControl
             }
             catch (Exception ex)
             {
-                _tcs.TrySetException(ex);
+                _tcsNonModalForm.TrySetException(ex);
             }
         }
     }
@@ -5721,10 +5726,7 @@ public partial class Form : ContainerControl
     /// </summary>
     /// <returns>A <see cref="Task{DialogResult}"/> representing the outcome of the dialog.</returns>
     [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
-    public Task<DialogResult> ShowDialogAsync()
-    {
-        return ShowDialogAsyncInternal(null);
-    }
+    public Task<DialogResult> ShowDialogAsync() => ShowDialogAsyncInternal(null);
 
     /// <summary>
     ///  Shows the form as a modal dialog box with the specified owner asynchronously.
@@ -5732,14 +5734,19 @@ public partial class Form : ContainerControl
     /// <param name="owner">Any object that implements <see cref="IWin32Window"/> that represents the top-level window that will own the modal dialog box.</param>
     /// <returns>A <see cref="Task{DialogResult}"/> representing the outcome of the dialog.</returns>
     [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
-    public Task<DialogResult> ShowDialogAsync(IWin32Window owner)
-    {
-        return ShowDialogAsyncInternal(owner);
-    }
+    public Task<DialogResult> ShowDialogAsync(IWin32Window owner) => ShowDialogAsyncInternal(owner);
 
     private Task<DialogResult> ShowDialogAsyncInternal(IWin32Window? owner)
     {
-        var tcs = new TaskCompletionSource<DialogResult>();
+        lock (_syncObj)
+        {
+            if (_tcsNonModalForm is not null || _tcsModalForm is not null)
+            {
+                throw new InvalidOperationException("The form has already been shown asynchronously.");
+            }
+
+            _tcsModalForm = new TaskCompletionSource<DialogResult>();
+        }
 
         BeginInvoke(new Action(() =>
         {
@@ -5749,15 +5756,19 @@ public partial class Form : ContainerControl
                     ? ShowDialog()
                     : ShowDialog(owner);
 
-                tcs.SetResult(result);
+                _tcsModalForm.SetResult(result);
             }
             catch (Exception ex)
             {
-                tcs.SetException(ex);
+                _tcsModalForm.SetException(ex);
+            }
+            finally
+            {
+                _tcsModalForm = null;
             }
         }), null);
 
-        return tcs.Task;
+        return _tcsModalForm.Task;
     }
 
     /// <summary>
