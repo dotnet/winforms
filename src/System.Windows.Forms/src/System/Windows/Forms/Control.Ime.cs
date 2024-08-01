@@ -230,14 +230,14 @@ public partial class Control
         // after all messages are sent, corresponding WM_CHAR messages are also sent. (in non-unicode
         // windows two WM_CHAR messages are sent per char in the IME).  We need to keep a counter
         // not to process each character twice or more.
-        get => Properties.GetInteger(s_imeWmCharsToIgnoreProperty);
+        get => Properties.GetValueOrDefault<int>(s_imeWmCharsToIgnoreProperty);
         set
         {
             // WM_CHAR is not send after WM_IME_CHAR when the composition has been closed by either, changing the conversion mode or
             // dissociating the IME (for instance when loosing focus and conversion is forced to complete).
             if (ImeWmCharsToIgnore != ImeCharsToIgnoreDisabled)
             {
-                Properties.SetInteger(s_imeWmCharsToIgnoreProperty, value);
+                Properties.AddValue(s_imeWmCharsToIgnoreProperty, value);
             }
         }
     }

@@ -77,7 +77,7 @@ public class PropertyStoreTests
     {
         PropertyStore store = new();
         store.SetObject(key, null);
-        store.RemoveObject(key);
+        store.RemoveValue(key);
         Assert.False(store.ContainsObject(key), "PropertyStore contains key.");
         Assert.False(store.TryGetObject(key, out object? outValue), "PropertyStore contains key.");
         Assert.NotEqual(value, outValue);

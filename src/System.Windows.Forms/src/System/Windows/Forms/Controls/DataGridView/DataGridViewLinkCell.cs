@@ -442,32 +442,32 @@ public partial class DataGridViewLinkCell : DataGridViewCell
 
         CloneInternal(dataGridViewCell);
 
-        if (Properties.ContainsObject(s_propLinkCellActiveLinkColor))
+        if (Properties.ContainsKey(s_propLinkCellActiveLinkColor))
         {
             dataGridViewCell.ActiveLinkColorInternal = ActiveLinkColor;
         }
 
-        if (Properties.ContainsInteger(s_propLinkCellUseColumnTextForLinkValue))
+        if (Properties.ContainsKey(s_propLinkCellUseColumnTextForLinkValue))
         {
             dataGridViewCell.UseColumnTextForLinkValueInternal = UseColumnTextForLinkValue;
         }
 
-        if (Properties.ContainsInteger(s_propLinkCellLinkBehavior))
+        if (Properties.ContainsKey(s_propLinkCellLinkBehavior))
         {
             dataGridViewCell.LinkBehaviorInternal = LinkBehavior;
         }
 
-        if (Properties.ContainsObject(s_propLinkCellLinkColor))
+        if (Properties.ContainsKey(s_propLinkCellLinkColor))
         {
             dataGridViewCell.LinkColorInternal = LinkColor;
         }
 
-        if (Properties.ContainsInteger(s_propLinkCellTrackVisitedState))
+        if (Properties.ContainsKey(s_propLinkCellTrackVisitedState))
         {
             dataGridViewCell.TrackVisitedStateInternal = TrackVisitedState;
         }
 
-        if (Properties.ContainsObject(s_propLinkCellVisitedLinkColor))
+        if (Properties.ContainsKey(s_propLinkCellVisitedLinkColor))
         {
             dataGridViewCell.VisitedLinkColorInternal = VisitedLinkColor;
         }

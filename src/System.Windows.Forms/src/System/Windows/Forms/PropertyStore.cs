@@ -21,58 +21,12 @@ internal class PropertyStore
     public bool ContainsKey(int key) => _values.ContainsKey(key);
 
     // REMOVE
-    public bool ContainsInteger(int key) => _values.ContainsKey(key);
-
-    // REMOVE
     public bool ContainsObject(int key) => _values.ContainsKey(key);
 
     /// <summary>
     ///  Creates a new key for this property store.
     /// </summary>
     public static int CreateKey() => s_currentKey++;
-
-    // REMOVE
-    public Color GetColor(int key) => GetColor(key, out _);
-
-    // REMOVE
-    /// <summary>
-    ///  A wrapper around GetObject designed to reduce the boxing hit
-    /// </summary>
-    public Color GetColor(int key, out bool found)
-    {
-        if (_values.TryGetValue(key, out Value value))
-        {
-            found = true;
-            return value.GetValue<Color>();
-        }
-
-        found = false;
-        return Color.Empty;
-    }
-
-    // REMOVE
-    /// <summary>
-    ///  A wrapper around GetObject designed to reduce the boxing hit.
-    /// </summary>
-    public Size GetSize(int key, out bool found)
-    {
-        if (_values.TryGetValue(key, out Value value))
-        {
-            found = true;
-            return value.GetValue<Size>();
-        }
-
-        found = false;
-        return Size.Empty;
-    }
-
-    // REMOVE
-    /// <summary>
-    ///  Retrieves an integer value from our property list.
-    ///  This will set value to zero and return false if the
-    ///  list does not contain the given key.
-    /// </summary>
-    public int GetInteger(int key) => GetInteger(key, out _);
 
     // REMOVE
     /// <summary>
@@ -140,28 +94,10 @@ internal class PropertyStore
         return found ? value.GetValue<object?>() : null;
     }
 
-    // REMOVE
-    /// <summary>
-    ///  Removes the given key from the array
-    /// </summary>
-    public void RemoveInteger(int key) => _values.Remove(key);
-
-    // REMOVE
-    /// <summary>
-    ///  Removes the given key from the array
-    /// </summary>
-    public void RemoveObject(int key) => _values.Remove(key);
-
     /// <summary>
     ///  Removes the given key from the store.
     /// </summary>
     public void RemoveValue(int key) => _values.Remove(key);
-
-    // REMOVE
-    public void SetColor(int key, Color value) => _values[key] = value;
-
-    // REMOVE
-    public void SetSize(int key, Size value) => _values[key] = value;
 
     // REMOVE
     /// <summary>

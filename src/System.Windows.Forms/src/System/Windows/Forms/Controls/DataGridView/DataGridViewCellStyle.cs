@@ -115,13 +115,13 @@ public class DataGridViewCellStyle : ICloneable
     [SRCategory(nameof(SR.CatAppearance))]
     public Color BackColor
     {
-        get => Properties.GetColor(s_propBackColor);
+        get => Properties.GetValueOrDefault<Color>(s_propBackColor);
         set
         {
             Color c = BackColor;
-            if (!value.IsEmpty || Properties.ContainsObject(s_propBackColor))
+            if (!value.IsEmpty || Properties.ContainsKey(s_propBackColor))
             {
-                Properties.SetColor(s_propBackColor, value);
+                Properties.AddValue(s_propBackColor, value);
             }
 
             if (!c.Equals(BackColor))
@@ -150,13 +150,13 @@ public class DataGridViewCellStyle : ICloneable
             }
 
             if (value == DBNull.Value &&
-                Properties.ContainsObject(s_propDataSourceNullValue))
+                Properties.ContainsKey(s_propDataSourceNullValue))
             {
-                Properties.RemoveObject(s_propDataSourceNullValue);
+                Properties.RemoveValue(s_propDataSourceNullValue);
             }
             else
             {
-                Properties.SetObject(s_propDataSourceNullValue, value);
+                Properties.AddValue(s_propDataSourceNullValue, value);
             }
 
             Debug.Assert((oldDataSourceNullValue is null && DataSourceNullValue is not null) ||
@@ -318,13 +318,13 @@ public class DataGridViewCellStyle : ICloneable
                 return;
             }
 
-            if (value is string stringValue && stringValue.Length == 0 && Properties.ContainsObject(s_propNullValue))
+            if (value is string stringValue && stringValue.Length == 0 && Properties.ContainsKey(s_propNullValue))
             {
-                Properties.RemoveObject(s_propNullValue);
+                Properties.RemoveValue(s_propNullValue);
             }
             else
             {
-                Properties.SetObject(s_propNullValue, value);
+                Properties.AddValue(s_propNullValue, value);
             }
 
             Debug.Assert((oldNullValue is null && NullValue is not null) ||
@@ -384,13 +384,13 @@ public class DataGridViewCellStyle : ICloneable
     [SRCategory(nameof(SR.CatAppearance))]
     public Color SelectionBackColor
     {
-        get => Properties.GetColor(s_propSelectionBackColor);
+        get => Properties.GetValueOrDefault<Color>(s_propSelectionBackColor);
         set
         {
             Color c = SelectionBackColor;
-            if (!value.IsEmpty || Properties.ContainsObject(s_propSelectionBackColor))
+            if (!value.IsEmpty || Properties.ContainsKey(s_propSelectionBackColor))
             {
-                Properties.SetColor(s_propSelectionBackColor, value);
+                Properties.AddValue(s_propSelectionBackColor, value);
             }
 
             if (!c.Equals(SelectionBackColor))
@@ -403,13 +403,13 @@ public class DataGridViewCellStyle : ICloneable
     [SRCategory(nameof(SR.CatAppearance))]
     public Color SelectionForeColor
     {
-        get => Properties.GetColor(s_propSelectionForeColor);
+        get => Properties.GetValueOrDefault<Color>(s_propSelectionForeColor);
         set
         {
             Color c = SelectionForeColor;
-            if (!value.IsEmpty || Properties.ContainsObject(s_propSelectionForeColor))
+            if (!value.IsEmpty || Properties.ContainsKey(s_propSelectionForeColor))
             {
-                Properties.SetColor(s_propSelectionForeColor, value);
+                Properties.AddValue(s_propSelectionForeColor, value);
             }
 
             if (!c.Equals(SelectionForeColor))
@@ -636,11 +636,8 @@ public class DataGridViewCellStyle : ICloneable
         return found;
     }
 
-    private bool ShouldSerializeSelectionForeColor()
-    {
-        Properties.GetColor(s_propSelectionForeColor, out bool found);
-        return found;
-    }
+    private bool ShouldSerializeSelectionForeColor() =>
+        Properties.ContainsKey(s_propSelectionForeColor);
 
     public override string ToString()
     {
