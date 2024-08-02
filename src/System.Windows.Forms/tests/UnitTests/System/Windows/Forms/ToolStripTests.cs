@@ -7344,7 +7344,7 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_ResetGripMargin_SetsGripMarginToDefault()
     {
-        ToolStrip toolStrip = new();
+        using ToolStrip toolStrip = new();
         var defaultMargin = toolStrip.Grip.DefaultMargin;
         toolStrip.GripMargin = new Padding(10, 10, 10, 10);
 
