@@ -6,12 +6,10 @@ static System.Windows.Forms.TaskDialog.ShowDialogAsync(nint hwndOwner, System.Wi
 static System.Windows.Forms.TaskDialog.ShowDialogAsync(nint hwndOwner, System.Windows.Forms.TaskDialogPage! page, System.Windows.Forms.TaskDialogStartupLocation startupLocation) -> System.Threading.Tasks.Task<System.Windows.Forms.TaskDialogButton!>!
 static System.Windows.Forms.TaskDialog.ShowDialogAsync(System.Windows.Forms.TaskDialogPage! page) -> System.Threading.Tasks.Task<System.Windows.Forms.TaskDialogButton!>!
 static System.Windows.Forms.TaskDialog.ShowDialogAsync(System.Windows.Forms.TaskDialogPage! page, System.Windows.Forms.TaskDialogStartupLocation startupLocation) -> System.Threading.Tasks.Task<System.Windows.Forms.TaskDialogButton!>!
-System.Windows.Forms.Control.InvokeAsync(System.Action! action) -> System.Threading.Tasks.Task!
-System.Windows.Forms.Control.InvokeAsync(System.Action! action, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task!
-System.Windows.Forms.Control.InvokeAsync(System.Func<System.Threading.Tasks.Task!>! asyncFunc, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task!
-System.Windows.Forms.Control.InvokeAsync<T>(System.Func<System.Threading.Tasks.Task<T>!>! asyncFunc, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<T>!
-System.Windows.Forms.Control.InvokeAsync<TResult>(System.Func<TResult>! syncFunction) -> System.Threading.Tasks.Task<TResult>!
-System.Windows.Forms.Control.InvokeAsync<TResult>(System.Func<TResult>! syncFunction, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<TResult>!
+System.Windows.Forms.Control.InvokeAsync(System.Action! action, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task!
+System.Windows.Forms.Control.InvokeAsync(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.ValueTask>! callback, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task!
+System.Windows.Forms.Control.InvokeAsync<T>(System.Func<System.Threading.CancellationToken, System.Threading.Tasks.ValueTask<T>>! callback, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<T>!
+System.Windows.Forms.Control.InvokeAsync<T>(System.Func<T>! callback, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken)) -> System.Threading.Tasks.Task<T>!
 System.Windows.Forms.Form.FormBorderColor.get -> System.Drawing.Color
 System.Windows.Forms.Form.FormBorderColor.set -> void
 System.Windows.Forms.Form.FormBorderColorChanged -> System.EventHandler?

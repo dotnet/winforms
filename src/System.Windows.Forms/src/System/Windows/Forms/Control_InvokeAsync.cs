@@ -11,19 +11,12 @@ public partial class Control
     ///  Invokes the specified synchronous function asynchronously on the thread that owns the control's handle.
     /// </summary>
     /// <param name="action">The synchronous action to execute.</param>
-    /// <returns>A task representing the operation and containing the function's result.</returns>
-    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
-    public async Task InvokeAsync(Action action)
-        => await InvokeAsync(action, CancellationToken.None).ConfigureAwait(true);
-
-    /// <summary>
-    ///  Invokes the specified synchronous function asynchronously on the thread that owns the control's handle.
-    /// </summary>
-    /// <param name="action">The synchronous action to execute.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>A task representing the operation and containing the function's result.</returns>
     [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
-    public async Task InvokeAsync(Action action, CancellationToken cancellationToken)
+#pragma warning disable RS0026 // API with optional parameter(s) should have the most parameters amongst its public overloads
+    public async Task InvokeAsync(Action action, CancellationToken cancellationToken = default)
+#pragma warning restore RS0026 // API with optional parameter(s) should have the most parameters amongst its public overloads
     {
         ArgumentNullException.ThrowIfNull(action);
 
@@ -32,17 +25,9 @@ public partial class Control
 
         TaskCompletionSource<object?> tcs = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
-        if (InvokeRequired)
-        {
-            BeginInvoke(WrappedAction);
-        }
-        else
-        {
-            WrappedAction();
-        }
-
         using (cancellationToken.Register(() => tcs.SetCanceled(), useSynchronizationContext: false))
         {
+            BeginInvoke(WrappedAction);
             await tcs.Task.ConfigureAwait(false);
         }
 
@@ -50,6 +35,12 @@ public partial class Control
         {
             try
             {
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    tcs.SetCanceled(cancellationToken);
+                    return;
+                }
+
                 action();
                 tcs.SetResult(null);
             }
@@ -63,35 +54,41 @@ public partial class Control
     /// <summary>
     ///  Invokes the specified synchronous function asynchronously on the thread that owns the control's handle.
     /// </summary>
-    /// <typeparam name="TResult">The return type of the synchronous function.</typeparam>
-    /// <param name="syncFunction">The synchronous function to execute.</param>
-    /// <returns>A task representing the operation and containing the function's result.</returns>
-    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
-    public Task<TResult> InvokeAsync<TResult>(Func<TResult> syncFunction)
-        => InvokeAsync(syncFunction, CancellationToken.None);
-
-    /// <summary>
-    ///  Invokes the specified synchronous function asynchronously on the thread that owns the control's handle.
-    /// </summary>
-    /// <typeparam name="TResult">The return type of the synchronous function.</typeparam>
-    /// <param name="syncFunction">The synchronous function to execute.</param>
+    /// <typeparam name="T">The return type of the synchronous function.</typeparam>
+    /// <param name="callback">The synchronous function to execute.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>A task representing the operation and containing the function's result.</returns>
     [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
-    public async Task<TResult> InvokeAsync<TResult>(Func<TResult> syncFunction, CancellationToken cancellationToken)
+#pragma warning disable RS0026 // Do not add multiple public overloads with optional parameters
+    public async Task<T> InvokeAsync<T>(Func<T> callback, CancellationToken cancellationToken = default)
+#pragma warning restore RS0026 // Do not add multiple public overloads with optional parameters
     {
-        ArgumentNullException.ThrowIfNull(syncFunction);
+        ArgumentNullException.ThrowIfNull(callback);
 
         if (cancellationToken.IsCancellationRequested)
+        {
             return default!;
+        }
 
-        TaskCompletionSource<TResult> tcs = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        TaskCompletionSource<T> tcs = new(TaskCreationOptions.RunContinuationsAsynchronously);
+
+        using (cancellationToken.Register(() => tcs.SetCanceled(), useSynchronizationContext: false))
+        {
+            BeginInvoke(WrappedFunction);
+            return await tcs.Task.ConfigureAwait(false);
+        }
 
         void WrappedFunction()
         {
             try
             {
-                TResult result = syncFunction();
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    tcs.SetCanceled(cancellationToken);
+                    return;
+                }
+
+                T result = callback();
                 tcs.SetResult(result);
             }
             catch (Exception ex)
@@ -99,57 +96,49 @@ public partial class Control
                 tcs.SetException(ex);
             }
         }
-
-        if (InvokeRequired)
-        {
-            BeginInvoke(WrappedFunction);
-        }
-        else
-        {
-            WrappedFunction();
-        }
-
-        using (cancellationToken.Register(() => tcs.SetCanceled(), useSynchronizationContext: false))
-        {
-            return await tcs.Task.ConfigureAwait(false);
-        }
     }
 
     /// <summary>
-    ///  Invokes the specified asynchronous function on the thread that owns the control's handle.
+    ///  Executes the specified asynchronous function on the thread that owns the control's handle.
     /// </summary>
-    /// <param name="asyncFunc">The asynchronous function to execute.</param>
+    /// <param name="callback">
+    ///  The asynchronous function to execute,
+    ///  which takes an input of type T and returns a <see cref="ValueTask{T}"/>.
+    /// </param>
     /// <param name="cancellationToken">The cancellation token.</param>
-    /// <returns>A task representing the operation.</returns>
+    /// <returns>A task representing the operation and containing the function's result of type T.</returns>
+    /// <exception cref="InvalidOperationException">Thrown if the control's handle is not yet created.</exception>
     [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
-    public async Task InvokeAsync(Func<Task> asyncFunc, CancellationToken cancellationToken)
+#pragma warning disable RS0026 // Do not add multiple public overloads with optional parameters
+    public async Task InvokeAsync(Func<CancellationToken, ValueTask> callback, CancellationToken cancellationToken = default)
+#pragma warning restore RS0026 // Do not add multiple public overloads with optional parameters
     {
-        ArgumentNullException.ThrowIfNull(asyncFunc);
+        ArgumentNullException.ThrowIfNull(callback);
 
         if (cancellationToken.IsCancellationRequested)
+        {
             return;
+        }
 
         TaskCompletionSource tcs = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
-        if (InvokeRequired)
-        {
-            BeginInvoke(async () => await WrappedFunctionAsync().ConfigureAwait(true));
-        }
-        else
-        {
-            await WrappedFunctionAsync().ConfigureAwait(true);
-        }
-
         using (cancellationToken.Register(() => tcs.SetCanceled(), useSynchronizationContext: false))
         {
+            BeginInvoke(async () => await WrappedFunction().ConfigureAwait(false));
             await tcs.Task.ConfigureAwait(false);
         }
 
-        async Task WrappedFunctionAsync()
+        async Task WrappedFunction()
         {
             try
             {
-                await asyncFunc().ConfigureAwait(true);
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    tcs.SetCanceled(cancellationToken);
+                    return;
+                }
+
+                await callback(cancellationToken).ConfigureAwait(false);
                 tcs.SetResult();
             }
             catch (Exception ex)
@@ -163,53 +152,44 @@ public partial class Control
     ///  Executes the specified asynchronous function on the thread that owns the control's handle.
     /// </summary>
     /// <typeparam name="T">The type of the input argument to be converted into the args array.</typeparam>
-    /// <param name="asyncFunc">
+    /// <param name="callback">
     ///  The asynchronous function to execute,
-    ///  which takes an input of type T and returns a <see cref="Task{T}"/>.
+    ///  which takes an input of type T and returns a <see cref="ValueTask{T}"/>.
     /// </param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>A task representing the operation and containing the function's result of type T.</returns>
     /// <exception cref="InvalidOperationException">Thrown if the control's handle is not yet created.</exception>
     [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
-    public async Task<T> InvokeAsync<T>(Func<Task<T>> asyncFunc, CancellationToken cancellationToken)
+#pragma warning disable RS0026 // API with optional parameter(s) should have the most parameters amongst its public overloads
+    public async Task<T> InvokeAsync<T>(Func<CancellationToken, ValueTask<T>> callback, CancellationToken cancellationToken = default)
+#pragma warning restore RS0026 // API with optional parameter(s) should have the most parameters amongst its public overloads
     {
-        ArgumentNullException.ThrowIfNull(asyncFunc);
+        ArgumentNullException.ThrowIfNull(callback);
 
         if (cancellationToken.IsCancellationRequested)
+        {
             return default!;
+        }
 
         TaskCompletionSource<T> tcs = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
-        if (InvokeRequired)
-        {
-            BeginInvoke(async () => await WrappedFunction().ConfigureAwait(false));
-        }
-        else
-        {
-            await WrappedFunction().ConfigureAwait(true);
-        }
-
         using (cancellationToken.Register(() => tcs.SetCanceled(), useSynchronizationContext: false))
         {
-            var result = await tcs.Task.ConfigureAwait(false);
-            return result;
+            BeginInvoke(async () => await WrappedCallbackAsync().ConfigureAwait(false));
+            return await tcs.Task.ConfigureAwait(false);
         }
 
-        async Task<T> WrappedFunction()
+        async Task WrappedCallbackAsync()
         {
             try
             {
-                T result = await asyncFunc().ConfigureAwait(true);
-                tcs.SetResult(result);
-
-                return result;
+                var returnValue = await callback(cancellationToken).ConfigureAwait(false);
+                tcs.SetResult(returnValue);
             }
             catch (Exception ex)
             {
                 tcs.SetException(ex);
             }
-
-            return default!;
         }
     }
 }
