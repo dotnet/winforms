@@ -300,7 +300,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
     [SRDescription(nameof(SR.CheckBoxCheckStateDescr))]
     public CheckState CheckState
     {
-        get => Properties.TryGetValue(s_propCheckState, out CheckState checkState) ? checkState : CheckState.Unchecked;
+        get => Properties.GetValueOrDefault<CheckState>(s_propCheckState);
         set
         {
             // Valid values are 0x0 to 0x2
@@ -362,7 +362,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
     [SRDescription(nameof(SR.MenuItemShortCutDescr))]
     public Keys ShortcutKeys
     {
-        get => Properties.TryGetValue(s_propShortcutKeys, out Keys shortcutKeys) ? shortcutKeys : Keys.None;
+        get => Properties.GetValueOrDefault<Keys>(s_propShortcutKeys);
         set
         {
             if ((value != Keys.None) && !ToolStripManager.IsValidShortcut(value))

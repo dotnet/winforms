@@ -292,10 +292,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
     [DefaultValue(false)]
     public bool DisplayStyleForCurrentCellOnly
     {
-        get
-        {
-            return Properties.TryGetValue(s_propComboBoxCellDisplayStyleForCurrentCellOnly, out bool displayStyleForCurrentCellOnly) && displayStyleForCurrentCellOnly;
-        }
+        get => Properties.GetValueOrDefault<bool>(s_propComboBoxCellDisplayStyleForCurrentCellOnly);
         set
         {
             if (value != DisplayStyleForCurrentCellOnly)

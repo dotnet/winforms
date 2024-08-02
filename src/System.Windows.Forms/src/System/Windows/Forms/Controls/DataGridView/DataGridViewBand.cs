@@ -181,7 +181,7 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
 
     internal int DividerThickness
     {
-        get => Properties.TryGetValue(s_propDividerThickness, out int dividerThickness) ? dividerThickness : 0;
+        get => Properties.GetValueOrDefault<int>(s_propDividerThickness);
         set
         {
             ArgumentOutOfRangeException.ThrowIfNegative(value);

@@ -2380,7 +2380,7 @@ public partial class ComboBox : ListControl
             PInvoke.SendMessage(this, PInvoke.CB_SETDROPPEDWIDTH, (WPARAM)dropDownWidth);
         }
 
-        if (Properties.TryGetValue(s_propItemHeight, out int _))
+        if (Properties.ContainsKey(s_propItemHeight))
         {
             // someone has set the item height - update it
             UpdateItemHeight();

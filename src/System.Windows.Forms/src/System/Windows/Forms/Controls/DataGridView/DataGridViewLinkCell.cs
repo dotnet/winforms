@@ -293,10 +293,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
     [DefaultValue(false)]
     public bool UseColumnTextForLinkValue
     {
-        get
-        {
-            return Properties.TryGetValue(s_propLinkCellUseColumnTextForLinkValue, out bool useColumnTextForLinkValue) && useColumnTextForLinkValue;
-        }
+        get => Properties.GetValueOrDefault<bool>(s_propLinkCellUseColumnTextForLinkValue);
         set
         {
             if (value != UseColumnTextForLinkValue)
