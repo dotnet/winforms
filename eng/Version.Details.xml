@@ -184,6 +184,10 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>61126f5d957b6089e8e97604a0fc79c3b4c3ee5a</Sha>
     </Dependency>
+    <Dependency Name="System.Formats.Nrbf" Version="9.0.0-preview.7.24401.8">
+      <Uri>https://github.com/dotnet/runtime</Uri>
+      <Sha>61126f5d957b6089e8e97604a0fc79c3b4c3ee5a</Sha>
+    </Dependency>
   </ProductDependencies>
   <ToolsetDependencies>
     <!-- Arcade -->
