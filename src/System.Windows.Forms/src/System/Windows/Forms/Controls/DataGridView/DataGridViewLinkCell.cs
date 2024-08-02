@@ -144,7 +144,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
             Debug.Assert(value is >= LinkBehavior.SystemDefault and <= LinkBehavior.NeverUnderline);
             if (value != LinkBehavior)
             {
-                Properties.SetInteger(s_propLinkCellLinkBehavior, (int)value);
+                Properties.AddValue(s_propLinkCellLinkBehavior, value);
             }
         }
     }

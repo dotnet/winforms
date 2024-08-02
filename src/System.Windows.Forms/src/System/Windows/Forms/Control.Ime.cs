@@ -625,7 +625,7 @@ public partial class Control
     private void WmImeStartComposition(ref Message m)
     {
         // Need to call the property store directly because the WmImeCharsToIgnore property is locked when ImeCharsToIgnoreDisabled.
-        Properties.SetInteger(s_imeWmCharsToIgnoreProperty, ImeCharsToIgnoreEnabled);
+        Properties.AddValue(s_imeWmCharsToIgnoreProperty, ImeCharsToIgnoreEnabled);
         DefWndProc(ref m);
     }
 

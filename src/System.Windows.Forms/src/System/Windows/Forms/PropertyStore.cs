@@ -91,12 +91,6 @@ internal class PropertyStore
     /// <summary>
     ///  Stores the given value in the key.
     /// </summary>
-    public void SetInteger(int key, int value) => _values[key] = value;
-
-    // REMOVE
-    /// <summary>
-    ///  Stores the given value in the key.
-    /// </summary>
     public void SetObject(int key, object? value) => _values[key] = new(value);
 
     /// <summary>
