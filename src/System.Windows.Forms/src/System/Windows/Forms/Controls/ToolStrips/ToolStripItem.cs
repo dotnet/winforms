@@ -263,7 +263,7 @@ public abstract partial class ToolStripItem :
     [SRDescription(nameof(SR.ToolStripItemAccessibleRoleDescr))]
     public AccessibleRole AccessibleRole
     {
-        get => Properties.TryGetValue(s_accessibleRoleProperty, out AccessibleRole role) ? role : AccessibleRole.Default;
+        get => Properties.GetValueOrDefault(s_accessibleRoleProperty, AccessibleRole.Default);
         set
         {
             SourceGenerated.EnumValidator.Validate(value);
@@ -1297,7 +1297,7 @@ public abstract partial class ToolStripItem :
     [SRCategory(nameof(SR.CatLayout))]
     public MergeAction MergeAction
     {
-        get => Properties.TryGetValue(s_mergeActionProperty, out MergeAction action) ? action : MergeAction.Append;
+        get => Properties.GetValueOrDefault(s_mergeActionProperty, MergeAction.Append);
         set
         {
             SourceGenerated.EnumValidator.Validate(value);

@@ -96,14 +96,14 @@ internal class PropertyStore
     /// <summary>
     ///  Gets the current value for the given key, or the default value for the type if the key is not found.
     /// </summary>
-    public T? GetValueOrDefault<T>(int key)
+    public T? GetValueOrDefault<T>(int key, T? defaultValue = default)
     {
         if (_values.TryGetValue(key, out Value foundValue))
         {
             return foundValue.GetValue<T>();
         }
 
-        return default;
+        return defaultValue;
     }
 
     /// <summary>

@@ -37,7 +37,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
 
     private ButtonState ButtonState
     {
-        get => Properties.TryGetValue(s_propButtonCellState, out ButtonState buttonState) ? buttonState : ButtonState.Normal;
+        get => Properties.GetValueOrDefault(s_propButtonCellState, ButtonState.Normal);
         set
         {
             // ButtonState.Pushed is used for mouse interaction
@@ -63,7 +63,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
     [DefaultValue(FlatStyle.Standard)]
     public FlatStyle FlatStyle
     {
-        get => Properties.TryGetValue(s_propButtonCellFlatStyle, out FlatStyle flatStyle) ? flatStyle : FlatStyle.Standard;
+        get => Properties.GetValueOrDefault(s_propButtonCellFlatStyle, FlatStyle.Standard);
         set
         {
             // Sequential enum.  Valid values are 0x0 to 0x3
@@ -95,7 +95,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
     [DefaultValue(false)]
     public bool UseColumnTextForButtonValue
     {
-        get => Properties.TryGetValue(s_propButtonCellUseColumnTextForButtonValue, out bool useColumnTextForButtonValue) && useColumnTextForButtonValue;
+        get => Properties.GetValueOrDefault<bool>(s_propButtonCellUseColumnTextForButtonValue);
         set
         {
             if (value != UseColumnTextForButtonValue)

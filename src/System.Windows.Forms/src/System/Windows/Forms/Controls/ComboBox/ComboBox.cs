@@ -417,7 +417,7 @@ public partial class ComboBox : ListControl
     [RefreshProperties(RefreshProperties.Repaint)]
     public DrawMode DrawMode
     {
-        get => Properties.TryGetValue(s_propDrawMode, out DrawMode drawMode) ? drawMode : DrawMode.Normal;
+        get => Properties.GetValueOrDefault(s_propDrawMode, DrawMode.Normal);
         set
         {
             if (DrawMode != value)
@@ -1102,7 +1102,7 @@ public partial class ComboBox : ListControl
     [RefreshProperties(RefreshProperties.Repaint)]
     public ComboBoxStyle DropDownStyle
     {
-        get => Properties.TryGetValue(s_propStyle, out ComboBoxStyle style) ? style : ComboBoxStyle.DropDown;
+        get => Properties.GetValueOrDefault(s_propStyle, ComboBoxStyle.DropDown);
         set
         {
             if (DropDownStyle == value)

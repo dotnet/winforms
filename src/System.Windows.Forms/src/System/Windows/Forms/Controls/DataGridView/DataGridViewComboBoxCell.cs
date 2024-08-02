@@ -254,7 +254,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
     [DefaultValue(DataGridViewComboBoxDisplayStyle.DropDownButton)]
     public DataGridViewComboBoxDisplayStyle DisplayStyle
     {
-        get => Properties.TryGetValue(s_propComboBoxCellDisplayStyle, out DataGridViewComboBoxDisplayStyle displayStyle) ? displayStyle : DataGridViewComboBoxDisplayStyle.DropDownButton;
+        get => Properties.GetValueOrDefault(s_propComboBoxCellDisplayStyle, DataGridViewComboBoxDisplayStyle.DropDownButton);
         set
         {
             // Sequential enum.  Valid values are 0x0 to 0x2
@@ -350,10 +350,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
     [DefaultValue(1)]
     public virtual int DropDownWidth
     {
-        get
-        {
-            return Properties.TryGetValue(s_propComboBoxCellDropDownWidth, out int dropDownWidth) ? dropDownWidth : 1;
-        }
+        get => Properties.GetValueOrDefault(s_propComboBoxCellDropDownWidth, 1);
         set
         {
             if (value < 1)
@@ -387,7 +384,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
     [DefaultValue(FlatStyle.Standard)]
     public FlatStyle FlatStyle
     {
-        get => Properties.TryGetValue(s_propComboBoxCellFlatStyle, out FlatStyle flatStyle) ? flatStyle : FlatStyle.Standard;
+        get => Properties.GetValueOrDefault(s_propComboBoxCellFlatStyle, FlatStyle.Standard);
         set
         {
             // Sequential enum.  Valid values are 0x0 to 0x3
@@ -422,7 +419,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
     [DefaultValue(DefaultMaxDropDownItems)]
     public virtual int MaxDropDownItems
     {
-        get => Properties.TryGetValue(s_propComboBoxCellMaxDropDownItems, out int maxDropDownItems) ? maxDropDownItems : DefaultMaxDropDownItems;
+        get => Properties.GetValueOrDefault(s_propComboBoxCellMaxDropDownItems, DefaultMaxDropDownItems);
         set
         {
             if (value is < 1 or > 100)

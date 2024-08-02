@@ -114,7 +114,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
     [DefaultValue(LinkBehavior.SystemDefault)]
     public LinkBehavior LinkBehavior
     {
-        get => Properties.TryGetValue(s_propLinkCellLinkBehavior, out LinkBehavior linkBehavior) ? linkBehavior : LinkBehavior.SystemDefault;
+        get => Properties.GetValueOrDefault(s_propLinkCellLinkBehavior, LinkBehavior.SystemDefault);
         set
         {
             // Sequential enum.  Valid values are 0x0 to 0x3
@@ -210,7 +210,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
 
     private LinkState LinkState
     {
-        get => Properties.TryGetValue(s_propLinkCellLinkState, out LinkState linkState) ? linkState : LinkState.Normal;
+        get => Properties.GetValueOrDefault(s_propLinkCellLinkState, LinkState.Normal);
         set
         {
             if (LinkState != value)
@@ -258,7 +258,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
     [DefaultValue(true)]
     public bool TrackVisitedState
     {
-        get => !Properties.TryGetValue(s_propLinkCellTrackVisitedState, out bool trackVisitedState) || trackVisitedState;
+        get => Properties.GetValueOrDefault(s_propLinkCellTrackVisitedState, true);
         set
         {
             if (value != TrackVisitedState)

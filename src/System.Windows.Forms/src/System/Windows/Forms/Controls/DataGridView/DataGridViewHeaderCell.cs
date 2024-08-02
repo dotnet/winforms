@@ -28,7 +28,7 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
 
     protected ButtonState ButtonState
     {
-        get => Properties.TryGetValue(s_propButtonState, out ButtonState buttonState) ? buttonState : ButtonState.Normal;
+        get => Properties.GetValueOrDefault(s_propButtonState, ButtonState.Normal);
     }
 
     private ButtonState ButtonStatePrivate

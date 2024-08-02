@@ -248,7 +248,7 @@ public partial class Control
     /// </summary>
     private bool LastCanEnableIme
     {
-        get => !Properties.TryGetValue(s_lastCanEnableImeProperty, out bool lastCanEnableIme) || lastCanEnableIme;
+        get => Properties.GetValueOrDefault(s_lastCanEnableImeProperty, true);
         set => Properties.AddValue(s_lastCanEnableImeProperty, value);
     }
 

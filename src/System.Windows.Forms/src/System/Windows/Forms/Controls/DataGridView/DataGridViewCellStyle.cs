@@ -66,7 +66,7 @@ public class DataGridViewCellStyle : ICloneable
     [SRCategory(nameof(SR.CatLayout))]
     public DataGridViewContentAlignment Alignment
     {
-        get => Properties.TryGetValue(s_propAlignment, out DataGridViewContentAlignment alignment) ? alignment : DataGridViewContentAlignment.NotSet;
+        get => Properties.GetValueOrDefault(s_propAlignment, DataGridViewContentAlignment.NotSet);
         set
         {
             switch (value)
@@ -428,7 +428,7 @@ public class DataGridViewCellStyle : ICloneable
     [SRCategory(nameof(SR.CatLayout))]
     public DataGridViewTriState WrapMode
     {
-        get => Properties.TryGetValue(s_propWrapMode, out DataGridViewTriState wrap) ? wrap : DataGridViewTriState.NotSet;
+        get => Properties.GetValueOrDefault(s_propWrapMode, DataGridViewTriState.NotSet);
         set
         {
             // Sequential enum.  Valid values are 0x0 to 0x2

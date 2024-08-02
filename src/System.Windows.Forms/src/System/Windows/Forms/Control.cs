@@ -502,7 +502,7 @@ public unsafe partial class Control :
     [SRDescription(nameof(SR.ControlAccessibleRoleDescr))]
     public AccessibleRole AccessibleRole
     {
-        get => Properties.TryGetValue(s_accessibleRoleProperty, out AccessibleRole role) ? role : AccessibleRole.Default;
+        get => Properties.GetValueOrDefault(s_accessibleRoleProperty, AccessibleRole.Default);
         set
         {
             // valid values are -1 to 0x40

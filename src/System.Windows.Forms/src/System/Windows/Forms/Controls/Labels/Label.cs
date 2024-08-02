@@ -550,7 +550,7 @@ public partial class Label : Control, IAutomationLiveRegion
     [SRCategory(nameof(SR.CatAppearance))]
     public ContentAlignment ImageAlign
     {
-        get => Properties.TryGetValue(s_propImageAlign, out ContentAlignment imageAlign) ? imageAlign : ContentAlignment.MiddleCenter;
+        get => Properties.GetValueOrDefault(s_propImageAlign, ContentAlignment.MiddleCenter);
         set
         {
             SourceGenerated.EnumValidator.Validate(value);
@@ -694,7 +694,7 @@ public partial class Label : Control, IAutomationLiveRegion
     [SRCategory(nameof(SR.CatAppearance))]
     public virtual ContentAlignment TextAlign
     {
-        get => Properties.TryGetValue(s_propTextAlign, out ContentAlignment textAlign) ? textAlign : ContentAlignment.TopLeft;
+        get => Properties.GetValueOrDefault(s_propTextAlign, ContentAlignment.TopLeft);
         set
         {
             SourceGenerated.EnumValidator.Validate(value);

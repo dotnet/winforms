@@ -179,7 +179,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
 
     private ButtonState ButtonState
     {
-        get => Properties.TryGetValue(s_propButtonCellState, out ButtonState buttonState) ? buttonState : ButtonState.Normal;
+        get => Properties.GetValueOrDefault(s_propButtonCellState, ButtonState.Normal);
         set
         {
             // ButtonState.Pushed is used for mouse interaction
@@ -241,7 +241,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
     [DefaultValue(FlatStyle.Standard)]
     public FlatStyle FlatStyle
     {
-        get => Properties.TryGetValue(s_propFlatStyle, out FlatStyle flatStyle) ? flatStyle : FlatStyle.Standard;
+        get => Properties.GetValueOrDefault(s_propFlatStyle, FlatStyle.Standard);
         set
         {
             // Sequential enum.  Valid values are 0x0 to 0x3
