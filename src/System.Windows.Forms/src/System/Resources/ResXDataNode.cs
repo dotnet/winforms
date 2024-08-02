@@ -447,7 +447,8 @@ public sealed class ResXDataNode : ISerializable
             Binder = new ResXSerializationBinder(typeResolver)
         };
 
-        object? result = _binaryFormatter.Deserialize(stream);
+        // cs/dangerous-binary-deserialization
+        object? result = _binaryFormatter.Deserialize(stream); // CodeQL[SM03722] : BinaryFormatter is intended to be used as a fallback for unsupported types. Users must explicitly opt into this behavior
         if (result is ResXNullRef)
         {
             result = null;

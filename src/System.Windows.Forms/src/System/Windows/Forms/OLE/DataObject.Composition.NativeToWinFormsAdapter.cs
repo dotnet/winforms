@@ -204,11 +204,12 @@ public unsafe partial class DataObject
 
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
 #pragma warning disable SYSLIB0050 // Type or member is obsolete
+                        // cs/dangerous-binary-deserialization
                         return new BinaryFormatter()
                         {
                             Binder = restrictDeserialization ? new BitmapBinder() : null,
                             AssemblyFormat = FormatterAssemblyStyle.Simple
-                        }.Deserialize(stream);
+                        }.Deserialize(stream); // CodeQL[SM03722] : BinaryFormatter is intended to be used as a fallback for unsupported types. Users must explicitly opt into this behavior
 #pragma warning restore SYSLIB0050
 #pragma warning restore SYSLIB0011
                     }
