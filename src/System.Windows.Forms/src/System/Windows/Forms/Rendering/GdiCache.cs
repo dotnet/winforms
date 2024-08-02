@@ -94,7 +94,7 @@ internal static partial class GdiCache
 #if DEBUG
         return font is null ? new FontCache.Scope() : s_fontCache.GetEntry(font, quality).CreateScope();
 #else
-        return font is null ? default : s_fontCache.GetEntry(font, quality);
+        return font is null ? default : s_fontCache.GetEntry(font, quality).CreateScope();
 #endif
     }
 

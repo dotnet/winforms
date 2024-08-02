@@ -61,7 +61,7 @@ internal abstract partial class RefCountedCache<TObject, TCacheEntryData, TKey>
         /// </summary>
         public abstract TObject Object { get; }
 
-        public Scope CreateScope() => new Scope(this);
+        public Scope CreateScope() => new(this);
 
         private string DebuggerDisplay => $"Object: {Object} RefCount: {RefCount}";
 
