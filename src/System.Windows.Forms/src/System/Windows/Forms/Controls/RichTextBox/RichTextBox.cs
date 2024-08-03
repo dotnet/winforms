@@ -78,6 +78,7 @@ public partial class RichTextBox : TextBoxBase
     private static int s_richEditMajorVersion = 3;
 
     private BitVector32 _richTextBoxFlags;
+    private bool _firstDebug;
     private static readonly BitVector32.Section s_autoWordSelectionSection = BitVector32.CreateSection(1);
     private static readonly BitVector32.Section s_showSelBarSection = BitVector32.CreateSection(1, s_autoWordSelectionSection);
     private static readonly BitVector32.Section s_autoUrlDetectSection = BitVector32.CreateSection(1, s_showSelBarSection);
@@ -441,9 +442,14 @@ public partial class RichTextBox : TextBoxBase
         // Subtract the scroll bar padding before measuring
         proposedConstraints -= scrollBarPadding;
 
-        Size prefSize = base.GetPreferredSizeCore(proposedConstraints);
+        Size preferredSize = base.GetPreferredSizeCore(proposedConstraints);
 
-        return prefSize + scrollBarPadding;
+        return preferredSize + scrollBarPadding;
+    }
+
+    private protected override void OnNcPaint(Graphics graphics)
+    {
+        base.OnNcPaint(graphics);
     }
 
     private bool InConstructor
@@ -2512,6 +2518,22 @@ public partial class RichTextBox : TextBoxBase
         SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(UserPreferenceChangedHandler);
     }
 
+    private void DefineClientRectangle()
+    {
+        RECT clientSize = default;
+
+        // Define the client area of the RichText.
+        PInvoke.SendMessage(this, PInvoke.EM_GETRECT, (WPARAM)0, ref clientSize);
+        var padding = GetVisualStylesPadding(true);
+
+        clientSize.right -= padding.Horizontal;
+        clientSize.bottom -= padding.Vertical;
+        clientSize.left += padding.Left;
+        clientSize.top += padding.Top;
+
+        PInvoke.SendMessage(this, PInvoke.EM_SETRECT, (WPARAM)0, ref clientSize);
+    }
+
     protected override void OnHandleDestroyed(EventArgs e)
     {
         base.OnHandleDestroyed(e);
@@ -3211,6 +3233,34 @@ public partial class RichTextBox : TextBoxBase
         {
             PInvoke.SendMessage(this, PInvoke.EM_EXLIMITTEXT, 0, (IntPtr)MaxLength);
         }
+    }
+
+    private protected override unsafe void WmNcCalcSize(ref Message m)
+    {
+        if (Debugger.IsAttached && !_firstDebug)
+        {
+            _firstDebug = true;
+            Debugger.Break();
+        }
+
+        bool wParam = m.WParamInternal != 0;
+
+        NCCALCSIZE_PARAMS* ncCalcSizeParams = (NCCALCSIZE_PARAMS*)(void*)m.LParamInternal;
+
+        if (ncCalcSizeParams is not null)
+        {
+            Padding padding = GetVisualStylesPadding(true);
+
+            ncCalcSizeParams->rgrc._0.top += padding.Top;
+            ncCalcSizeParams->rgrc._0.bottom -= padding.Bottom;
+            ncCalcSizeParams->rgrc._0.left += padding.Left;
+            ncCalcSizeParams->rgrc._0.right -= padding.Right;
+
+            m.ResultInternal = (LRESULT)0;
+            return;
+        }
+
+        base.WndProc(ref m);
     }
 
     private void WmReflectCommand(ref Message m)

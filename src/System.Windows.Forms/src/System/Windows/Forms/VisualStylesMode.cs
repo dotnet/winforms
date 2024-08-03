@@ -9,7 +9,7 @@ namespace System.Windows.Forms;
 ///  Represents the version of the visual renderer.
 /// </summary>
 [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
-public enum VisualStylesMode : short
+public enum VisualStylesMode
 {
     /// <summary>
     ///  The classic version of the visual renderer (.NET 8 and earlier), using the Version 6 of ComCtl.
@@ -32,5 +32,5 @@ public enum VisualStylesMode : short
     /// <summary>
     ///  The latest version of the visual renderer.
     /// </summary>
-    Latest = short.MaxValue
+    Latest = int.MaxValue
 }

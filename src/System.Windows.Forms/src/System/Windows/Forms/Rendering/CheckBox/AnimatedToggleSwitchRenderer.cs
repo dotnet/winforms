@@ -41,8 +41,6 @@ internal class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
     /// <param name="graphics">The graphics objects to render in.</param>
     public override void RenderControl(Graphics graphics)
     {
-        Debug.Print($"[{DateTime.Now:mm:ss:fff}]:{CheckBox.Name} - Check state: {CheckBox.CheckState} - Progress{AnimationProgress}");
-
         int dpiScale = DpiScale;
 
         int switchWidth = 50 * dpiScale;

@@ -49,9 +49,10 @@ public abstract partial class TextBoxBase : Control
     private static readonly object s_multilineChangedEvent = new();
     private static readonly object s_readOnlyChangedEvent = new();
 
-    private const int VisualStylesFixed3DBorderPadding = 3;
-    private const int VisualStylesFixedSingleBorderPadding = 2;
-    private const int VisualStylesNoBorderPadding = 1;
+    private const int VisualStylesFixed3DBorderPadding = 4;
+    private const int VisualStylesFixedSingleBorderPadding = 3;
+    private const int VisualStylesNoBorderPadding = 2;
+    private const int BorderThickness = 1;
 
     /// <summary>
     ///  The current border for this edit control.
@@ -427,7 +428,7 @@ public abstract partial class TextBoxBase : Control
             cp.ExStyle &= ~(int)WINDOW_EX_STYLE.WS_EX_CLIENTEDGE;
 
 #pragma warning disable WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
-            if (VisualStylesMode == VisualStylesMode.Net10)
+            if (VisualStylesMode >= VisualStylesMode.Net10)
             {
                 // We draw the borders ourselves for the visual styles for .NET 9/10 onwards.
                 if (_textBoxFlags[s_multiline])
@@ -635,7 +636,7 @@ public abstract partial class TextBoxBase : Control
         }
         set
         {
-            // unparse this string list...
+            // un-parse this string list...
             if (value is not null && value.Length > 0)
             {
                 Text = string.Join(Environment.NewLine, value);
@@ -811,7 +812,7 @@ public abstract partial class TextBoxBase : Control
         {
             VisualStylesMode.Disabled => PreferredHeightClassic,
             VisualStylesMode.Classic => PreferredHeightClassic,
-            VisualStylesMode.Net10 => PreferredHeightCore,
+            >= VisualStylesMode.Net10 => PreferredHeightCore,
 
             // We'll should never be here.
             _ => throw new InvalidEnumArgumentException(
@@ -827,8 +828,7 @@ public abstract partial class TextBoxBase : Control
         {
             // For modern Visual Styles we take the Padding and the adorner padding into account when calculating the preferred height.
             int height = FontHeight
-                + Padding.Vertical
-                + GetVisualStylesSystemPadding().Vertical;
+                + GetVisualStylesPadding(true).Vertical;
 
             return height;
         }
@@ -861,11 +861,11 @@ public abstract partial class TextBoxBase : Control
     ///  part, by which we extend the real-estate of the control with the back color of the parent control.
     /// </summary>
     /// <returns>The visible padding dimensions.</returns>
-    protected virtual Padding GetVisualStylesSystemPadding()
+    private protected Padding GetVisualStylesPadding(bool includeScrollbars)
     {
-        int offset = GetBorderThicknessDpiFactor();
+        int offset = BorderThickness;
 
-        return BorderStyle switch
+        var padding = BorderStyle switch
         {
             BorderStyle.Fixed3D => new Padding(
                 left: VisualStylesFixed3DBorderPadding + offset,
@@ -888,6 +888,36 @@ public abstract partial class TextBoxBase : Control
 
             _ => Padding.Empty,
         };
+
+        if (includeScrollbars)
+        {
+            padding += GetScrollBarPadding();
+        }
+
+        padding += Padding;
+        return padding;
+    }
+
+    private Padding GetScrollBarPadding()
+    {
+        Padding padding = Padding.Empty;
+
+        // Are the scrollbars visible?
+        var gwStyle = (WINDOW_STYLE)PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
+        bool hasHScroll = (gwStyle & WINDOW_STYLE.WS_HSCROLL) != 0;
+        bool hasVScroll = (gwStyle & WINDOW_STYLE.WS_VSCROLL) != 0;
+
+        if (hasHScroll)
+        {
+            padding.Bottom += SystemInformation.GetHorizontalScrollBarHeightForDpi(_deviceDpi);
+        }
+
+        if (hasVScroll)
+        {
+            padding.Right += SystemInformation.GetVerticalScrollBarWidthForDpi(_deviceDpi);
+        }
+
+        return padding;
     }
 
     /// <summary>
@@ -914,15 +944,11 @@ public abstract partial class TextBoxBase : Control
         }
 
 #pragma warning disable WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
-        if (VisualStylesMode == VisualStylesMode.Net10)
+        if (VisualStylesMode >= VisualStylesMode.Net10)
         {
             // For Versions >=10, we take our modern Style adorners into account
             // when we're calculating the preferred height.
-            padding = GetVisualStylesSystemPadding();
-
-            // And also we take the actual Padding property into account
-            // when calculating the preferred height.
-            padding = Padding.Add(padding, Padding);
+            padding = GetVisualStylesPadding(true);
             proposedConstraints -= padding.Size;
         }
         else
@@ -2151,22 +2177,23 @@ public abstract partial class TextBoxBase : Control
     }
 
 #pragma warning disable WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-    private bool WmNcPaint(ref Message m)
+    private void WmNcPaint(ref Message m)
     {
         if (VisualStylesMode < VisualStylesMode.Net10)
         {
-            return false;
+            base.WndProc(ref m);
+            return;
         }
 
         HWND hwnd = (HWND)m.HWnd;
         HDC hdc = PInvokeCore.GetWindowDC((HWND)m.HWnd);
 
         // Get the Graphics Object from the DC:
-
         Graphics graphics = Graphics.FromHdc(hdc);
 
         try
         {
+            base.WndProc(ref m);
             OnNcPaint(graphics);
         }
         finally
@@ -2175,27 +2202,13 @@ public abstract partial class TextBoxBase : Control
             int result = PInvokeCore.ReleaseDC(hwnd, hdc);
             Debug.Assert(result != 0);
         }
-
-        return true;
     }
 #pragma warning restore WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-
-    private int GetBorderThicknessDpiFactor()
-        => _deviceDpi switch
-        {
-            <= 96 => 1,
-            <= 120 => 2,
-            <= 192 => 3,
-            _ => 4,
-        };
-
-    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
     private protected virtual void OnNcPaint(Graphics graphics)
     {
         const int cornerRadius = 15;
 
-        Padding systemPadding = GetVisualStylesSystemPadding();
-        int borderThickness = GetBorderThicknessDpiFactor();
+        Padding systemPadding = GetVisualStylesPadding(false);
 
         Color adornerColor = ForeColor;
         Color parentBackColor = Parent?.BackColor ?? BackColor;
@@ -2204,8 +2217,8 @@ public abstract partial class TextBoxBase : Control
         using Brush parentBackgroundBrush = new SolidBrush(parentBackColor);
         using Brush clientBackgroundBrush = new SolidBrush(clientBackColor);
         using Brush adornerBrush = new SolidBrush(adornerColor);
-        using Pen adornerPen = new(adornerColor, borderThickness);
-        using Pen focusPen = new(SystemColors.Highlight, borderThickness);
+        using Pen adornerPen = new(adornerColor, BorderThickness);
+        using Pen focusPen = new(SystemColors.MenuHighlight, BorderThickness);
 
         Rectangle bounds = new Rectangle(
             x: 0,
@@ -2213,7 +2226,7 @@ public abstract partial class TextBoxBase : Control
             width: Bounds.Width,
             height: Bounds.Height);
 
-        Padding clientPadding = ClientPadding;
+        Padding clientPadding = GetVisualStylesPadding(false);
 
         // This is the client area without the padding:
         Rectangle clientBounds = new(
@@ -2223,7 +2236,7 @@ public abstract partial class TextBoxBase : Control
             bounds.Height - clientPadding.Vertical);
 
         // This is the client area of the actual original edit control.
-        Rectangle deflatedBounds = Add(bounds, Padding);
+        Rectangle deflatedBounds = bounds;
 
         // Making sure we never color outside the lines:
         deflatedBounds.Width -= 1;
@@ -2244,7 +2257,7 @@ public abstract partial class TextBoxBase : Control
         {
             case BorderStyle.None:
 
-                // Draw a rounded Rectangle with the border thickness
+                // Just fill a Rectangle
                 graphics.FillRectangle(
                     clientBackgroundBrush,
                     deflatedBounds);
@@ -2253,12 +2266,12 @@ public abstract partial class TextBoxBase : Control
 
             case BorderStyle.FixedSingle:
 
-                // Draw a rounded Rectangle with the border thickness
+                // Draw a filled Rectangle.
                 graphics.FillRectangle(
                     clientBackgroundBrush,
                     deflatedBounds);
 
-                // Draw a rounded Rectangle with the border thickness
+                // Draw a Rectangle with the border thickness
                 graphics.DrawRectangle(
                     adornerPen,
                     deflatedBounds);
@@ -2267,7 +2280,7 @@ public abstract partial class TextBoxBase : Control
 
             case BorderStyle.Fixed3D:
 
-                // fill a rounded Rectangle
+                // Fill a rounded Rectangle
                 graphics.FillRoundedRectangle(
                     clientBackgroundBrush,
                     deflatedBounds,
@@ -2285,36 +2298,41 @@ public abstract partial class TextBoxBase : Control
         // Draw the focus just as one line over the bottom border:
         if (Focused)
         {
-            int left = 0, right = 0;
-
             switch (BorderStyle)
             {
                 case BorderStyle.None:
                 case BorderStyle.FixedSingle:
-                    left = deflatedBounds.Left;
-                    right = deflatedBounds.Right;
+
+                    DrawStandardFocusLine(
+                        x1: deflatedBounds.Left,
+                        y1: deflatedBounds.Bottom,
+                        x2: deflatedBounds.Right,
+                        y2: deflatedBounds.Bottom);
                     break;
 
                 case BorderStyle.Fixed3D:
                     // We must shorten the line on both side to not draw into the curve:
-                    left = deflatedBounds.Left + (cornerRadius + 1) / 2;
-                    right = deflatedBounds.Right - (cornerRadius + 1) / 2;
+
+                    Draw3DFocusLine(
+                        x1: deflatedBounds.Left + (cornerRadius - 3) / 2,
+                        y1: deflatedBounds.Bottom,
+                        x2: deflatedBounds.Right - (cornerRadius - 3) / 2,
+                        y2: deflatedBounds.Bottom);
                     break;
             }
-
-            graphics.DrawLine(
-                pen: focusPen,
-                x1: left,
-                y1: deflatedBounds.Bottom,
-                x2: right,
-                y2: deflatedBounds.Bottom);
         }
 
-        static Rectangle Add(Rectangle r, Padding p) => new(
-            r.X + p.Left,
-            r.Y + p.Top,
-            r.Width - p.Horizontal,
-            r.Height - p.Vertical);
+        void DrawStandardFocusLine(int x1, int y1, int x2, int y2)
+        {
+            graphics.DrawLine(focusPen, x1, y1, x2, y2);
+            graphics.DrawLine(focusPen, x1, y1 - 1, x2, y2 - 1);
+        }
+
+        void Draw3DFocusLine(int x1, int y1, int x2, int y2)
+        {
+            graphics.DrawLine(focusPen, x1, y1, x2, y2);
+            graphics.DrawLine(focusPen, x1 - 2, y1 - 1, x2 + 2, y2 - 1);
+        }
     }
 
     private protected virtual unsafe void InitializeClientArea(HDC hDC, HWND hwnd)
@@ -2354,18 +2372,16 @@ public abstract partial class TextBoxBase : Control
         Invalidate(true);
     }
 
-    private unsafe void WmNcCalcSize(ref Message m)
+    private protected virtual unsafe void WmNcCalcSize(ref Message m)
     {
         // Make sure _we_ actually kicked this off.
         if (_triggerNewClientSizeRequest)
         {
-            bool wParam = m.WParamInternal != 0;
-
             NCCALCSIZE_PARAMS* ncCalcSizeParams = (NCCALCSIZE_PARAMS*)(void*)m.LParamInternal;
 
             if (ncCalcSizeParams is not null)
             {
-                Padding padding = ClientPadding;
+                Padding padding = GetVisualStylesPadding(true);
 
                 ncCalcSizeParams->rgrc._0.top += padding.Top;
                 ncCalcSizeParams->rgrc._0.bottom -= padding.Bottom;
@@ -2379,8 +2395,6 @@ public abstract partial class TextBoxBase : Control
 
         base.WndProc(ref m);
     }
-
-    private Padding ClientPadding => Padding + GetVisualStylesSystemPadding();
 
     private void WmReflectCommand(ref Message m)
     {
@@ -2461,13 +2475,7 @@ public abstract partial class TextBoxBase : Control
                 break;
 
             case PInvoke.WM_NCPAINT:
-                bool handled = WmNcPaint(ref m);
-
-                if (!handled)
-                {
-                    base.WndProc(ref m);
-                }
-
+                WmNcPaint(ref m);
                 break;
 
             case PInvoke.WM_LBUTTONDBLCLK:
