@@ -351,26 +351,23 @@ internal partial class ResourceCodeDomSerializer : CodeDomSerializer
     }
 
     /// <summary>
-    ///  Serializes the given resource value into the resource set.  This does not effect the code dom values.  The resource is written into the current culture.
+    ///  Serializes the given resource value into the resource set. This does not effect the code dom values.
+    ///  The resource is written into the current culture.
     /// </summary>
     public static void WriteResource(IDesignerSerializationManager manager, string name, object? value)
     {
-        SetValueUsingCommonTraceScope(manager, name, value, false, false, true, false);
+        SerializationResourceManager sm = GetResourceManager(manager);
+        sm.SetValue(manager, name, value, forceInvariant: false, shouldSerializeInvariant: false, ensureInvariant: true, applyingCachedResources: false);
     }
 
     /// <summary>
-    ///  Serializes the given resource value into the resource set.  This does not effect the code dom values.  The resource is written into the invariant culture.
+    ///  Serializes the given resource value into the resource set. This does not effect the code dom values.
+    ///  The resource is written into the invariant culture.
     /// </summary>
     public static void WriteResourceInvariant(IDesignerSerializationManager manager, string name, object? value)
     {
-        SetValueUsingCommonTraceScope(manager, name, value, true, true, true, false);
-    }
-
-    private static void SetValueUsingCommonTraceScope(IDesignerSerializationManager manager, string name, object? value,
-        bool forceInvariant, bool shouldSerializeInvariant, bool ensureInvariant, bool applyingCachedResources)
-    {
         SerializationResourceManager sm = GetResourceManager(manager);
-        sm.SetValue(manager, name, value, forceInvariant, shouldSerializeInvariant, ensureInvariant, applyingCachedResources);
+        sm.SetValue(manager, name, value, forceInvariant: true, shouldSerializeInvariant: true, ensureInvariant: true, applyingCachedResources: false);
     }
 
     /// <summary>

@@ -23,7 +23,9 @@ public partial class ComboBox
         private const int OFFSET_2PIXELS = 2;
         protected static int s_offsetPixels = OFFSET_2PIXELS;
 
-        public FlatComboAdapter(ComboBox comboBox, bool smallButton)
+        private bool ShouldRedrawAsSmallButton { get; }
+
+        public FlatComboAdapter(ComboBox comboBox, bool shouldRedrawAsSmallButton)
         {
             // adapter is re-created when combobox is resized, see IsValid method, thus we don't need to handle DPI changed explicitly
             s_offsetPixels = comboBox.LogicalToDeviceUnits(OFFSET_2PIXELS);
@@ -35,8 +37,10 @@ public partial class ComboBox
             _innerInnerBorder = new Rectangle(_innerBorder.X + 1, _innerBorder.Y + 1, _innerBorder.Width - 2, _innerBorder.Height - 2);
             _dropDownRect = new Rectangle(_innerBorder.Right + 1, _innerBorder.Y, dropDownButtonWidth, _innerBorder.Height + 1);
 
+            ShouldRedrawAsSmallButton = shouldRedrawAsSmallButton;
+
             // fill in several pixels of the dropdown rect with white so that it looks like the combo button is thinner.
-            if (smallButton)
+            if (shouldRedrawAsSmallButton)
             {
                 _whiteFillRect = _dropDownRect;
                 _whiteFillRect.Width = WhiteFillRectWidth;
@@ -65,6 +69,11 @@ public partial class ComboBox
             if (comboBox.DropDownStyle == ComboBoxStyle.Simple)
             {
                 return;
+            }
+
+            if (ShouldRedrawAsSmallButton)
+            {
+                DrawFlatCombo(comboBox, g);
             }
 
             bool rightToLeft = comboBox.RightToLeft == RightToLeft.Yes;

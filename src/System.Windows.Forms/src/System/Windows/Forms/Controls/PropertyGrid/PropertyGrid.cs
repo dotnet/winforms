@@ -2941,20 +2941,16 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             return;
         }
 
-        // Announce the property value change like standalone combobox control do: "[something] selected".
+        // Announce the property value change like standalone combobox control does: "[something] selected".
         bool dropDown = false;
-        Type propertyType = changedItem.PropertyDescriptor!.PropertyType;
-        var editor = (UITypeEditor?)TypeDescriptor.GetEditor(propertyType, typeof(UITypeEditor));
-        if (editor is not null)
+        if (changedItem.PropertyDescriptor?.PropertyType is { } propertyType
+            && TypeDescriptor.GetEditor(propertyType, typeof(UITypeEditor)) is UITypeEditor editor)
         {
             dropDown = editor.GetEditStyle() == UITypeEditorEditStyle.DropDown;
         }
-        else
+        else if (changedItem is GridEntry gridEntry && gridEntry.Enumerable)
         {
-            if (changedItem is GridEntry gridEntry && gridEntry.Enumerable)
-            {
-                dropDown = true;
-            }
+            dropDown = true;
         }
 
         if (IsAccessibilityObjectCreated && dropDown && !_gridView.DropDownVisible)

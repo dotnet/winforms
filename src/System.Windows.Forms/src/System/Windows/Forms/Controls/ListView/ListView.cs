@@ -5117,7 +5117,7 @@ public partial class ListView : Control
 
         for (int i = 0; i < Items.Count; i++)
         {
-            Items[i].ReleaseUiaProvider();
+            Items.GetItemByIndex(i)?.ReleaseUiaProvider();
         }
 
         if (_defaultGroup is not null)
