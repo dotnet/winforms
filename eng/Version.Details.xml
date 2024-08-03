@@ -120,6 +120,10 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>a4fe68fcb3233b8b229444557d38c7565938de05</Sha>
     </Dependency>
+    <Dependency Name="System.Formats.Nrbf" Version="9.0.0-rc.1.24402.7">
+      <Uri>https://github.com/dotnet/runtime</Uri>
+      <Sha>ae30cbaf993d757eec8bfc3420b152e1a7bc4af0</Sha>
+    </Dependency>
     <Dependency Name="System.IO.Hashing" Version="9.0.0-rc.1.24402.7">
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>a4fe68fcb3233b8b229444557d38c7565938de05</Sha>
