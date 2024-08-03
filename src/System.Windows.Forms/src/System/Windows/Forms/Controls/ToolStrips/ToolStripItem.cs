@@ -1313,7 +1313,7 @@ public abstract partial class ToolStripItem :
     [SRCategory(nameof(SR.CatLayout))]
     public int MergeIndex
     {
-        get => Properties.GetValueOrDefault(s_mergeIndexProperty, , -1);
+        get => Properties.GetValueOrDefault(s_mergeIndexProperty, -1);
         set => Properties.AddValue(s_mergeIndexProperty, value);
     }
 
