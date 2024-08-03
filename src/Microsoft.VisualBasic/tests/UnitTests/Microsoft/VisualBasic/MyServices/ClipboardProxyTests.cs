@@ -19,6 +19,7 @@ public class ClipboardProxyTests
     {
         var clipboard = (new Computer()).Clipboard;
         Assert.Equal(System.Windows.Forms.Clipboard.ContainsAudio(), clipboard.ContainsAudio());
+
         // Not tested:
         //   Public Function GetAudioStream() As Stream
         //   Public Sub SetAudio(audioBytes As Byte())

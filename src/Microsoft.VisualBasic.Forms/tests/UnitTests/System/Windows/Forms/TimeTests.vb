@@ -1,6 +1,7 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
+Imports FluentAssertions
 Imports Xunit
 
 Namespace Microsoft.VisualBasic.Forms.Tests
@@ -15,27 +16,28 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <WinFormsFact>
         Public Sub SystemTimeNotNew()
-            Assert.True(Date.Now > New Date)
+            Date.Now.Should.BeAfter(New Date)
         End Sub
 
         <WinFormsFact>
         Public Sub VbGmtTimeCloseToDateUtcNow()
-            Assert.True(timesEqual(My.Computer.Clock.GmtTime, Date.UtcNow, PrecisionTickLimit))
+            timesEqual(My.Computer.Clock.GmtTime, Date.UtcNow, PrecisionTickLimit).Should.BeTrue()
         End Sub
 
         <WinFormsFact>
         Public Sub VbLocalTimeCloseToDateNow()
-            Assert.True(timesEqual(My.Computer.Clock.LocalTime, Date.Now, PrecisionTickLimit))
+            timesEqual(My.Computer.Clock.LocalTime, Date.Now, PrecisionTickLimit).Should.BeTrue()
         End Sub
 
         <WinFormsFact>
         Public Sub VbTickCountCloseToEnvironmentTickCount()
-            Assert.True(Math.Abs(Environment.TickCount - My.Computer.Clock.TickCount) < PrecisionTickLimit)
+            Dim condition As Boolean = Math.Abs(Environment.TickCount - My.Computer.Clock.TickCount) < PrecisionTickLimit
+            condition.Should.BeTrue()
         End Sub
 
         <WinFormsFact>
         Public Sub VbTimeNotNew()
-            Assert.True(My.Computer.Clock.LocalTime > New Date)
+            My.Computer.Clock.LocalTime.Should.BeAfter(New Date)
         End Sub
 
     End Class

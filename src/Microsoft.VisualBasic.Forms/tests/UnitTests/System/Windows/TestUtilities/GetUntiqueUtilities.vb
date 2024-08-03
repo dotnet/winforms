@@ -2,7 +2,7 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Namespace Microsoft.VisualBasic.Forms.Tests
-    Friend Module TestUtilities
+    Friend Module GetUniqueUtilities
 
         Friend Function GetUniqueInteger(positiveOnly As Boolean) As Integer
             If positiveOnly Then

@@ -2,6 +2,7 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.Text
+Imports FluentAssertions
 Imports Xunit
 
 Namespace Microsoft.VisualBasic.Forms.Tests
@@ -18,10 +19,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim sb As New StringBuilder
             For Each [byte] As Byte In publicKey
                 sb.AppendFormat("{0:x2}", [byte])
-            Next [byte]
+            Next
 
-            ' Set breakpoint here to find out what's in sb
-            Assert.Equal(AssemblyPK, sb.ToString())
+            AssemblyPK.Should.Be(sb.ToString())
         End Sub
 
     End Class

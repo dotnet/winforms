@@ -3,6 +3,7 @@
 
 Imports System.Collections.ObjectModel
 Imports System.Text
+Imports FluentAssertions
 Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.MyServices
@@ -31,9 +32,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
             Dim destinationDirectory As String = CreateTempDirectory(lineNumber:=2)
             _fileSystem.CopyDirectory(testDirectory, destinationDirectory, UIOption.OnlyErrorDialogs, UICancelOption.DoNothing)
-            Assert.True(IO.Directory.Exists(testDirectory))
-            Assert.True(IO.Directory.Exists(destinationDirectory))
-            Assert.Equal(IO.Directory.EnumerateFiles(testDirectory).Count, IO.Directory.EnumerateFiles(destinationDirectory).Count)
+            IO.Directory.Exists(testDirectory).Should.BeTrue()
+            IO.Directory.Exists(destinationDirectory).Should.BeTrue()
+            IO.Directory.EnumerateFiles(testDirectory).Count.Should.Be(IO.Directory.EnumerateFiles(destinationDirectory).Count)
             _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
             _fileSystem.DeleteDirectory(destinationDirectory, DeleteDirectoryOption.DeleteAllContents)
         End Sub
@@ -47,9 +48,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
             Dim destinationDirectory As String = CreateTempDirectory(lineNumber:=2)
             _fileSystem.CopyDirectory(testDirectory, destinationDirectory, UIOption.OnlyErrorDialogs)
-            Assert.True(IO.Directory.Exists(testDirectory))
-            Assert.True(IO.Directory.Exists(destinationDirectory))
-            Assert.Equal(IO.Directory.EnumerateFiles(testDirectory).Count, IO.Directory.EnumerateFiles(destinationDirectory).Count)
+            IO.Directory.Exists(testDirectory).Should.BeTrue()
+            IO.Directory.Exists(destinationDirectory).Should.BeTrue()
+            IO.Directory.EnumerateFiles(destinationDirectory).Count.Should.Be(IO.Directory.EnumerateFiles(testDirectory).Count)
             _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
             _fileSystem.DeleteDirectory(destinationDirectory, DeleteDirectoryOption.DeleteAllContents)
         End Sub
@@ -64,8 +65,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim file2 As String = CreateTempFile(testDirectory, NameOf(file2))
             _fileSystem.CopyFile(file1, file2)
             Dim bytes As Byte() = _fileSystem.ReadAllBytes(file2)
-            Assert.Equal(bytes.Length, 1)
-            Assert.Equal(bytes(0), 4)
+            bytes.Length.Should.Be(1)
+            bytes(0).Should.Be(4)
             _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
         End Sub
 
@@ -79,8 +80,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim file2 As String = CreateTempFile(testDirectory, NameOf(file2), size:=1)
             _fileSystem.CopyFile(file1, file2, overwrite:=True)
             Dim bytes As Byte() = _fileSystem.ReadAllBytes(file2)
-            Assert.Equal(bytes.Length, 1)
-            Assert.Equal(bytes(0), 4)
+            bytes.Length.Should.Be(1)
+            bytes(0).Should.Be(4)
             _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
         End Sub
 
@@ -94,8 +95,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim file2 As String = CreateTempFile(testDirectory, NameOf(file2))
             _fileSystem.CopyFile(file1, file2, showUI:=UIOption.OnlyErrorDialogs)
             Dim bytes As Byte() = _fileSystem.ReadAllBytes(file2)
-            Assert.Equal(bytes.Length, 1)
-            Assert.Equal(bytes(0), 4)
+            bytes.Length.Should.Be(1)
+            bytes(0).Should.Be(4)
             _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
         End Sub
 
@@ -109,8 +110,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim file2 As String = CreateTempFile(testDirectory, NameOf(file2))
             _fileSystem.CopyFile(file1, file2, UIOption.OnlyErrorDialogs, UICancelOption.DoNothing)
             Dim bytes As Byte() = _fileSystem.ReadAllBytes(file2)
-            Assert.Equal(bytes.Length, 1)
-            Assert.Equal(bytes(0), 4)
+            bytes.Length.Should.Be(1)
+            bytes(0).Should.Be(4)
             _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
         End Sub
 
@@ -120,10 +121,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim file1 As String = CreateTempFile(testDirectory, NameOf(file1), size:=1)
             Dim byteArray As Byte() = {4}
             _fileSystem.WriteAllBytes(file1, byteArray, append:=False)
-            Assert.True(IO.File.Exists(file1))
+            IO.File.Exists(file1).Should.BeTrue()
 
             _fileSystem.DeleteDirectory(testDirectory, showUI:=UIOption.OnlyErrorDialogs, RecycleOption.DeletePermanently, UICancelOption.DoNothing)
-            Assert.False(IO.Directory.Exists(testDirectory))
+            IO.Directory.Exists(testDirectory).Should.BeFalse()
         End Sub
 
         <WinFormsFact>
@@ -132,10 +133,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim file1 As String = CreateTempFile(testDirectory, NameOf(file1), size:=1)
             Dim byteArray As Byte() = {4}
             _fileSystem.WriteAllBytes(file1, byteArray, append:=False)
-            Assert.True(IO.File.Exists(file1))
+            IO.File.Exists(file1).Should.BeTrue()
 
             _fileSystem.DeleteDirectory(testDirectory, showUI:=UIOption.OnlyErrorDialogs, RecycleOption.DeletePermanently)
-            Assert.False(IO.Directory.Exists(testDirectory))
+            IO.Directory.Exists(testDirectory).Should.BeFalse()
         End Sub
 
         <WinFormsFact>
@@ -144,10 +145,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim file1 As String = CreateTempFile(testDirectory, NameOf(file1), size:=1)
             Dim byteArray As Byte() = {4}
             _fileSystem.WriteAllBytes(file1, byteArray, append:=False)
-            Assert.True(IO.File.Exists(file1))
+            IO.File.Exists(file1).Should.BeTrue()
 
             _fileSystem.DeleteFile(file1)
-            Assert.False(IO.File.Exists(file1))
+            IO.File.Exists(file1).Should.BeFalse()
 
             _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
         End Sub
@@ -158,10 +159,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim file1 As String = CreateTempFile(testDirectory, NameOf(file1), size:=1)
             Dim byteArray As Byte() = {4}
             _fileSystem.WriteAllBytes(file1, byteArray, append:=False)
-            Assert.True(IO.File.Exists(file1))
+            IO.File.Exists(file1).Should.BeTrue()
 
             _fileSystem.DeleteFile(file1, UIOption.OnlyErrorDialogs, RecycleOption.DeletePermanently)
-            Assert.False(IO.File.Exists(file1))
+            IO.File.Exists(file1).Should.BeFalse()
 
             _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
         End Sub
@@ -172,35 +173,39 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim file1 As String = CreateTempFile(testDirectory, NameOf(file1), size:=1)
             Dim byteArray As Byte() = {4}
             _fileSystem.WriteAllBytes(file1, byteArray, append:=False)
-            Assert.True(IO.File.Exists(file1))
+            IO.File.Exists(file1).Should.BeTrue()
 
             _fileSystem.DeleteFile(file1, UIOption.OnlyErrorDialogs, RecycleOption.DeletePermanently, UICancelOption.DoNothing)
-            Assert.False(IO.File.Exists(file1))
+            IO.File.Exists(file1).Should.BeFalse()
 
             _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
         End Sub
 
         <WinFormsFact>
         Public Sub DriveProxyTest()
-            Assert.Equal(_fileSystem.Drives.Count, FileIO.FileSystem.Drives.Count)
+            FileIO.FileSystem.Drives.Count.Should.Be(_fileSystem.Drives.Count)
         End Sub
 
         <WinFormsFact>
         Public Sub FileNormalizePathEmptyStringTest_Fail()
-            Dim ex As Exception = Assert.Throws(Of ArgumentException)(
+            Dim testCode As Action =
                 Sub()
                     FileSystemUtils.NormalizePath("")
-                End Sub)
-            Assert.Equal("The path is empty. (Parameter 'path')", ex.Message)
+                End Sub
+
+            Dim ex As Exception = Assert.Throws(Of ArgumentException)(testCode)
+            ex.Message.Should.Be("The path is empty. (Parameter 'path')")
         End Sub
 
         <WinFormsFact>
         Public Sub FileNormalizePathNullTest_Fail()
-            Dim ex As Exception = Assert.Throws(Of ArgumentNullException)(
+            Dim testCode As Action =
                 Sub()
                     FileSystemUtils.NormalizePath(Nothing)
-                End Sub)
-            Assert.Equal("Value cannot be null. (Parameter 'path')", ex.Message)
+                End Sub
+
+            Dim ex As Exception = Assert.Throws(Of ArgumentNullException)(testCode)
+            ex.Message.Should.Be("Value cannot be null. (Parameter 'path')")
         End Sub
 
         <WinFormsFact>
@@ -217,10 +222,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim fileC As String = CreateTempFile(testDirectory, NameOf(fileC))
             _fileSystem.WriteAllText(fileC, "C", append:=False)
             Dim filenames As ReadOnlyCollection(Of String) = _fileSystem.FindInFiles(testDirectory, containsText:="A", ignoreCase:=True, SearchOption.SearchTopLevelOnly)
-            Assert.Equal(filenames.Count, 1)
-            Assert.Equal(filenames(0), _fileSystem.CombinePath(testDirectory, NameOf(fileA)))
+            filenames.Count.Should.Be(1)
+            _fileSystem.CombinePath(testDirectory, NameOf(fileA)).Should.Be(filenames(0))
             filenames = _fileSystem.FindInFiles(testDirectory, containsText:="A", ignoreCase:=True, SearchOption.SearchTopLevelOnly, "*C")
-            Assert.Equal(filenames.Count, 0)
+            filenames.Count.Should.Be(0)
             _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
         End Sub
 
@@ -233,9 +238,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
             Dim destinationDirectory As String = CreateTempDirectory(lineNumber:=2)
             _fileSystem.MoveDirectory(testDirectory, destinationDirectory, UIOption.OnlyErrorDialogs, UICancelOption.DoNothing)
-            Assert.False(IO.Directory.Exists(testDirectory))
-            Assert.True(IO.Directory.Exists(destinationDirectory))
-            Assert.Equal(1, IO.Directory.EnumerateFiles(destinationDirectory).Count)
+            IO.Directory.Exists(testDirectory).Should.BeFalse()
+            IO.Directory.Exists(destinationDirectory).Should.BeTrue()
+            IO.Directory.EnumerateFiles(destinationDirectory).Count.Should.Be(1)
             _fileSystem.DeleteDirectory(destinationDirectory, DeleteDirectoryOption.DeleteAllContents)
         End Sub
 
@@ -248,9 +253,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
             Dim destinationDirectory As String = CreateTempDirectory(lineNumber:=2)
             _fileSystem.MoveDirectory(testDirectory, destinationDirectory, UIOption.OnlyErrorDialogs)
-            Assert.False(IO.Directory.Exists(testDirectory))
-            Assert.True(IO.Directory.Exists(destinationDirectory))
-            Assert.Equal(1, IO.Directory.EnumerateFiles(destinationDirectory).Count)
+            IO.Directory.Exists(testDirectory).Should.BeFalse()
+            IO.Directory.Exists(destinationDirectory).Should.BeTrue()
+            IO.Directory.EnumerateFiles(destinationDirectory).Count.Should.Be(1)
             _fileSystem.DeleteDirectory(destinationDirectory, DeleteDirectoryOption.DeleteAllContents)
         End Sub
 
@@ -264,10 +269,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim file2 As String = CreateTempFile(testDirectory, NameOf(file2))
             _fileSystem.MoveFile(file1, file2, showUI:=UIOption.OnlyErrorDialogs)
             Dim bytes As Byte() = _fileSystem.ReadAllBytes(file2)
-            Assert.False(IO.File.Exists(file1))
-            Assert.True(IO.File.Exists(file2))
-            Assert.Equal(bytes.Length, 1)
-            Assert.Equal(bytes(0), 4)
+            IO.File.Exists(file1).Should.BeFalse()
+            IO.File.Exists(file2).Should.BeTrue()
+            bytes.Length.Should.Be(1)
+            bytes(0).Should.Be(4)
             _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
         End Sub
 
@@ -281,10 +286,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim file2 As String = CreateTempFile(testDirectory, NameOf(file2))
             _fileSystem.MoveFile(file1, file2, showUI:=UIOption.OnlyErrorDialogs, UICancelOption.DoNothing)
             Dim bytes As Byte() = _fileSystem.ReadAllBytes(file2)
-            Assert.False(IO.File.Exists(file1))
-            Assert.True(IO.File.Exists(file2))
-            Assert.Equal(bytes.Length, 1)
-            Assert.Equal(bytes(0), 4)
+            IO.File.Exists(file1).Should.BeFalse()
+            IO.File.Exists(file2).Should.BeTrue()
+            bytes.Length.Should.Be(1)
+            bytes(0).Should.Be(4)
             _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
         End Sub
 
@@ -298,7 +303,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Using
             Using fileReader As IO.StreamReader = _fileSystem.OpenTextFileReader(fileA, Encoding.ASCII)
                 Dim text As String = fileReader.ReadLine()
-                Assert.Equal(text, "A")
+                text.Should.Be("A")
             End Using
 
             _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
@@ -329,9 +334,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 For Each currentField In currentRow
                     totalFields += 1
                 Next
-                Assert.Equal(7, totalFields)
+                totalFields.Should.Be(7)
             End While
-            Assert.Equal(2, totalRows)
+            totalRows.Should.Be(2)
+
             reader.Close()
             _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
         End Sub
@@ -346,7 +352,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Using
             Using fileReader As IO.StreamReader = _fileSystem.OpenTextFileReader(fileA, Encoding.ASCII)
                 Dim text As String = fileReader.ReadLine()
-                Assert.Equal(text, "A")
+                text.Should.Be("A")
             End Using
 
             _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
@@ -367,14 +373,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 Dim totalFields As Integer = 0
                 For Each currentField In currentRow
                     If totalRows = 1 Then
-                        Assert.Equal(splitData(totalFields), currentField.TrimEnd(";"c))
+                        splitData(totalFields).Should.Be(currentField.TrimEnd(";"c))
                     End If
                     totalFields += 1
                 Next
-                Assert.Equal(6, totalFields)
+                totalFields.Should.Be(6)
                 totalRows += 1
             End While
-            Assert.Equal(2, totalRows)
+            totalRows.Should.Be(2)
             reader.Close()
             _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
         End Sub
@@ -386,7 +392,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             _fileSystem.WriteAllText(fileA, "A", append:=False)
             Using fileReader As IO.StreamReader = _fileSystem.OpenTextFileReader(fileA)
                 Dim text As String = fileReader.ReadLine()
-                Assert.Equal(text, "A")
+                text.Should.Be("A")
             End Using
 
             _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
@@ -400,8 +406,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             _fileSystem.WriteAllBytes(fileA, byteArray, append:=False)
 
             Dim bytes As Byte() = _fileSystem.ReadAllBytes(fileA)
-            Assert.Equal(bytes.Length, 1)
-            Assert.Equal(bytes(0), 4)
+            bytes.Length.Should.Be(1)
+            bytes(0).Should.Be(4)
             _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
         End Sub
 
@@ -411,7 +417,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim fileA As String = CreateTempFile(testDirectory, NameOf(fileA))
             _fileSystem.WriteAllText(fileA, "A", append:=False)
             Dim text As String = _fileSystem.ReadAllText(fileA)
-            Assert.Equal(text, "A")
+            text.Should.Be("A")
             _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
         End Sub
 
@@ -421,7 +427,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim fileA As String = CreateTempFile(testDirectory, NameOf(fileA))
             _fileSystem.WriteAllText(fileA, "A", append:=False, Encoding.UTF8)
             Dim text As String = _fileSystem.ReadAllText(fileA, Encoding.UTF8)
-            Assert.Equal(text, "A")
+            text.Should.Be("A")
             _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
         End Sub
 
