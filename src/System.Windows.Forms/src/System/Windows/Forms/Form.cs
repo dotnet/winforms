@@ -2660,7 +2660,7 @@ public partial class Form : ContainerControl
         }
 
         ownedForms[ownedFormsCount] = ownedForm;
-        Properties.SetInteger(s_propOwnedFormsCount, ownedFormsCount + 1);
+        Properties.AddValue(s_propOwnedFormsCount, ownedFormsCount + 1);
     }
 
     // When shrinking the form (i.e. going from Large Fonts to Small

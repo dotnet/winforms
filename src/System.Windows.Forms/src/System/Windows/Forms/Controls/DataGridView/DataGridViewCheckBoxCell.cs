@@ -179,16 +179,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
 
     private ButtonState ButtonState
     {
-        get
-        {
-            int buttonState = Properties.GetInteger(s_propButtonCellState, out bool found);
-            if (found)
-            {
-                return (ButtonState)buttonState;
-            }
-
-            return ButtonState.Normal;
-        }
+        get => Properties.GetValueOrDefault(s_propButtonCellState, ButtonState.Normal);
         set
         {
             // ButtonState.Pushed is used for mouse interaction
@@ -196,7 +187,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
             Debug.Assert((value & ~(ButtonState.Normal | ButtonState.Pushed | ButtonState.Checked)) == 0);
             if (ButtonState != value)
             {
-                Properties.SetInteger(s_propButtonCellState, (int)value);
+                Properties.AddValue(s_propButtonCellState, value);
             }
         }
     }
@@ -250,23 +241,14 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
     [DefaultValue(FlatStyle.Standard)]
     public FlatStyle FlatStyle
     {
-        get
-        {
-            int flatStyle = Properties.GetInteger(s_propFlatStyle, out bool found);
-            if (found)
-            {
-                return (FlatStyle)flatStyle;
-            }
-
-            return FlatStyle.Standard;
-        }
+        get => Properties.GetValueOrDefault(s_propFlatStyle, FlatStyle.Standard);
         set
         {
             // Sequential enum.  Valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(value);
             if (value != FlatStyle)
             {
-                Properties.SetInteger(s_propFlatStyle, (int)value);
+                Properties.AddValue(s_propFlatStyle, value);
                 OnCommonChange();
             }
         }
@@ -279,7 +261,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
             Debug.Assert(value is >= FlatStyle.Flat and <= FlatStyle.System);
             if (value != FlatStyle)
             {
-                Properties.SetInteger(s_propFlatStyle, (int)value);
+                Properties.AddValue(s_propFlatStyle, value);
             }
         }
     }

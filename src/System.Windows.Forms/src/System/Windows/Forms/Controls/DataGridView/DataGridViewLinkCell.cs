@@ -114,23 +114,14 @@ public partial class DataGridViewLinkCell : DataGridViewCell
     [DefaultValue(LinkBehavior.SystemDefault)]
     public LinkBehavior LinkBehavior
     {
-        get
-        {
-            int linkBehavior = Properties.GetInteger(s_propLinkCellLinkBehavior, out bool found);
-            if (found)
-            {
-                return (LinkBehavior)linkBehavior;
-            }
-
-            return LinkBehavior.SystemDefault;
-        }
+        get => Properties.GetValueOrDefault(s_propLinkCellLinkBehavior, LinkBehavior.SystemDefault);
         set
         {
             // Sequential enum.  Valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(value);
             if (value != LinkBehavior)
             {
-                Properties.SetInteger(s_propLinkCellLinkBehavior, (int)value);
+                Properties.AddValue(s_propLinkCellLinkBehavior, value);
                 if (DataGridView is not null)
                 {
                     if (RowIndex != -1)
@@ -153,7 +144,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
             Debug.Assert(value is >= LinkBehavior.SystemDefault and <= LinkBehavior.NeverUnderline);
             if (value != LinkBehavior)
             {
-                Properties.SetInteger(s_propLinkCellLinkBehavior, (int)value);
+                Properties.AddValue(s_propLinkCellLinkBehavior, value);
             }
         }
     }
@@ -219,21 +210,12 @@ public partial class DataGridViewLinkCell : DataGridViewCell
 
     private LinkState LinkState
     {
-        get
-        {
-            int linkState = Properties.GetInteger(s_propLinkCellLinkState, out bool found);
-            if (found)
-            {
-                return (LinkState)linkState;
-            }
-
-            return LinkState.Normal;
-        }
+        get => Properties.GetValueOrDefault(s_propLinkCellLinkState, LinkState.Normal);
         set
         {
             if (LinkState != value)
             {
-                Properties.SetInteger(s_propLinkCellLinkState, (int)value);
+                Properties.AddValue(s_propLinkCellLinkState, value);
             }
         }
     }
@@ -276,16 +258,12 @@ public partial class DataGridViewLinkCell : DataGridViewCell
     [DefaultValue(true)]
     public bool TrackVisitedState
     {
-        get
-        {
-            int trackVisitedState = Properties.GetInteger(s_propLinkCellTrackVisitedState, out bool found);
-            return !found || trackVisitedState != 0;
-        }
+        get => Properties.GetValueOrDefault(s_propLinkCellTrackVisitedState, true);
         set
         {
             if (value != TrackVisitedState)
             {
-                Properties.SetInteger(s_propLinkCellTrackVisitedState, value ? 1 : 0);
+                Properties.AddValue(s_propLinkCellTrackVisitedState, value);
                 if (DataGridView is not null)
                 {
                     if (RowIndex != -1)
@@ -307,7 +285,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
         {
             if (value != TrackVisitedState)
             {
-                Properties.SetInteger(s_propLinkCellTrackVisitedState, value ? 1 : 0);
+                Properties.AddValue(s_propLinkCellTrackVisitedState, value);
             }
         }
     }
@@ -315,16 +293,12 @@ public partial class DataGridViewLinkCell : DataGridViewCell
     [DefaultValue(false)]
     public bool UseColumnTextForLinkValue
     {
-        get
-        {
-            int useColumnTextForLinkValue = Properties.GetInteger(s_propLinkCellUseColumnTextForLinkValue, out bool found);
-            return found && useColumnTextForLinkValue != 0;
-        }
+        get => Properties.GetValueOrDefault<bool>(s_propLinkCellUseColumnTextForLinkValue);
         set
         {
             if (value != UseColumnTextForLinkValue)
             {
-                Properties.SetInteger(s_propLinkCellUseColumnTextForLinkValue, value ? 1 : 0);
+                Properties.AddValue(s_propLinkCellUseColumnTextForLinkValue, value);
                 OnCommonChange();
             }
         }
@@ -337,7 +311,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
             // Caller is responsible for invalidation
             if (value != UseColumnTextForLinkValue)
             {
-                Properties.SetInteger(s_propLinkCellUseColumnTextForLinkValue, value ? 1 : 0);
+                Properties.AddValue(s_propLinkCellUseColumnTextForLinkValue, value);
             }
         }
     }

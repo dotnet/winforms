@@ -37,16 +37,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
 
     private ButtonState ButtonState
     {
-        get
-        {
-            int buttonState = Properties.GetInteger(s_propButtonCellState, out bool found);
-            if (found)
-            {
-                return (ButtonState)buttonState;
-            }
-
-            return ButtonState.Normal;
-        }
+        get => Properties.GetValueOrDefault(s_propButtonCellState, ButtonState.Normal);
         set
         {
             // ButtonState.Pushed is used for mouse interaction
@@ -54,7 +45,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
             Debug.Assert((value & ~(ButtonState.Normal | ButtonState.Pushed | ButtonState.Checked)) == 0);
             if (ButtonState != value)
             {
-                Properties.SetInteger(s_propButtonCellState, (int)value);
+                Properties.AddValue(s_propButtonCellState, value);
             }
         }
     }
@@ -72,23 +63,14 @@ public partial class DataGridViewButtonCell : DataGridViewCell
     [DefaultValue(FlatStyle.Standard)]
     public FlatStyle FlatStyle
     {
-        get
-        {
-            int flatStyle = Properties.GetInteger(s_propButtonCellFlatStyle, out bool found);
-            if (found)
-            {
-                return (FlatStyle)flatStyle;
-            }
-
-            return FlatStyle.Standard;
-        }
+        get => Properties.GetValueOrDefault(s_propButtonCellFlatStyle, FlatStyle.Standard);
         set
         {
             // Sequential enum.  Valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(value);
             if (value != FlatStyle)
             {
-                Properties.SetInteger(s_propButtonCellFlatStyle, (int)value);
+                Properties.AddValue(s_propButtonCellFlatStyle, value);
                 OnCommonChange();
             }
         }
@@ -101,7 +83,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
             Debug.Assert(value is >= FlatStyle.Flat and <= FlatStyle.System);
             if (value != FlatStyle)
             {
-                Properties.SetInteger(s_propButtonCellFlatStyle, (int)value);
+                Properties.AddValue(s_propButtonCellFlatStyle, value);
             }
         }
     }
@@ -113,21 +95,12 @@ public partial class DataGridViewButtonCell : DataGridViewCell
     [DefaultValue(false)]
     public bool UseColumnTextForButtonValue
     {
-        get
-        {
-            int useColumnTextForButtonValue = Properties.GetInteger(s_propButtonCellUseColumnTextForButtonValue, out bool found);
-            if (found)
-            {
-                return useColumnTextForButtonValue != 0;
-            }
-
-            return false;
-        }
+        get => Properties.GetValueOrDefault<bool>(s_propButtonCellUseColumnTextForButtonValue);
         set
         {
             if (value != UseColumnTextForButtonValue)
             {
-                Properties.SetInteger(s_propButtonCellUseColumnTextForButtonValue, value ? 1 : 0);
+                Properties.AddValue(s_propButtonCellUseColumnTextForButtonValue, value);
                 OnCommonChange();
             }
         }
@@ -139,7 +112,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
         {
             if (value != UseColumnTextForButtonValue)
             {
-                Properties.SetInteger(s_propButtonCellUseColumnTextForButtonValue, value ? 1 : 0);
+                Properties.AddValue(s_propButtonCellUseColumnTextForButtonValue, value);
             }
         }
     }

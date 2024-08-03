@@ -66,16 +66,7 @@ public class DataGridViewCellStyle : ICloneable
     [SRCategory(nameof(SR.CatLayout))]
     public DataGridViewContentAlignment Alignment
     {
-        get
-        {
-            int alignment = Properties.GetInteger(s_propAlignment, out bool found);
-            if (found)
-            {
-                return (DataGridViewContentAlignment)alignment;
-            }
-
-            return DataGridViewContentAlignment.NotSet;
-        }
+        get => Properties.GetValueOrDefault(s_propAlignment, DataGridViewContentAlignment.NotSet);
         set
         {
             switch (value)
@@ -106,7 +97,7 @@ public class DataGridViewCellStyle : ICloneable
             Debug.Assert(Enum.IsDefined(value));
             if (Alignment != value)
             {
-                Properties.SetInteger(s_propAlignment, (int)value);
+                Properties.AddValue(s_propAlignment, value);
                 OnPropertyChanged(DataGridViewCellStylePropertyInternal.Other);
             }
         }
@@ -437,16 +428,7 @@ public class DataGridViewCellStyle : ICloneable
     [SRCategory(nameof(SR.CatLayout))]
     public DataGridViewTriState WrapMode
     {
-        get
-        {
-            int wrap = Properties.GetInteger(s_propWrapMode, out bool found);
-            if (found)
-            {
-                return (DataGridViewTriState)wrap;
-            }
-
-            return DataGridViewTriState.NotSet;
-        }
+        get => Properties.GetValueOrDefault(s_propWrapMode, DataGridViewTriState.NotSet);
         set
         {
             // Sequential enum.  Valid values are 0x0 to 0x2
@@ -462,7 +444,7 @@ public class DataGridViewCellStyle : ICloneable
             Debug.Assert(value is >= DataGridViewTriState.NotSet and <= DataGridViewTriState.False);
             if (WrapMode != value)
             {
-                Properties.SetInteger(s_propWrapMode, (int)value);
+                Properties.AddValue(s_propWrapMode, value);
                 OnPropertyChanged(DataGridViewCellStylePropertyInternal.Other);
             }
         }
