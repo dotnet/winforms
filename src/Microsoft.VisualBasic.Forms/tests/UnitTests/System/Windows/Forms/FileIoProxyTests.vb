@@ -193,8 +193,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     FileSystemUtils.NormalizePath("")
                 End Sub
 
-            Dim ex As Exception = Assert.Throws(Of ArgumentException)(testCode)
-            ex.Message.Should.Be("The path is empty. (Parameter 'path')")
+            testCode.Should.Throw(Of ArgumentException).WithMessage("The path is empty. (Parameter 'path')")
         End Sub
 
         <WinFormsFact>
@@ -204,8 +203,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     FileSystemUtils.NormalizePath(Nothing)
                 End Sub
 
-            Dim ex As Exception = Assert.Throws(Of ArgumentNullException)(testCode)
-            ex.Message.Should.Be("Value cannot be null. (Parameter 'path')")
+            testCode.Should.Throw(Of ArgumentNullException).WithMessage("Value cannot be null. (Parameter 'path')")
         End Sub
 
         <WinFormsFact>

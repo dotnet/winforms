@@ -2,6 +2,7 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.IO
+Imports FluentAssertions
 Imports Microsoft.VisualBasic.ApplicationServices
 Imports Xunit
 
@@ -14,31 +15,33 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub CantStartSingleInstanceExceptionTest()
             Dim ex As Exception = New CantStartSingleInstanceException()
-            Assert.IsType(Of CantStartSingleInstanceException)(ex)
-            Dim expected As String = ExUtils.GetResourceString(SR.AppModel_SingleInstanceCantConnect)
-            Assert.Equal(expected, ex.Message)
+            ex.Should.BeOfType(Of CantStartSingleInstanceException)()
+            ex.Message.Should.Be(ExUtils.GetResourceString(SR.AppModel_SingleInstanceCantConnect))
+
             ex = New CantStartSingleInstanceException("Test")
-            Assert.IsType(Of CantStartSingleInstanceException)(ex)
-            Assert.Equal("Test", ex.Message)
+            ex.Should.BeOfType(Of CantStartSingleInstanceException)()
+            ex.Message.Should.Be("Test")
+
             ex = New CantStartSingleInstanceException("Test1", New DirectoryNotFoundException)
-            Assert.IsType(Of CantStartSingleInstanceException)(ex)
-            Assert.Equal("Test1", ex.Message)
-            Assert.IsType(Of DirectoryNotFoundException)(ex.InnerException)
+            ex.Should.BeOfType(Of CantStartSingleInstanceException)()
+            ex.Message.Should.Be("Test1")
+            ex.InnerException.Should.BeOfType(Of DirectoryNotFoundException)()
         End Sub
 
         <WinFormsFact>
         Public Sub NoStartupFormExceptionTest()
             Dim ex As Exception = New NoStartupFormException()
-            Assert.IsType(Of NoStartupFormException)(ex)
-            Dim expected As String = ExUtils.GetResourceString(SR.AppModel_NoStartupForm)
-            Assert.Equal(expected, ex.Message)
+            ex.Should.BeOfType(Of NoStartupFormException)()
+            ex.Message.Should.Be(ExUtils.GetResourceString(SR.AppModel_NoStartupForm))
+
             ex = New NoStartupFormException("Test")
-            Assert.IsType(Of NoStartupFormException)(ex)
-            Assert.Equal("Test", ex.Message)
+            ex.Should.BeOfType(Of NoStartupFormException)()
+            ex.Message.Should.Be("Test")
+
             ex = New NoStartupFormException("Test1", New DirectoryNotFoundException)
-            Assert.IsType(Of NoStartupFormException)(ex)
-            Assert.Equal("Test1", ex.Message)
-            Assert.IsType(Of DirectoryNotFoundException)(ex.InnerException)
+            ex.Should.BeOfType(Of NoStartupFormException)()
+            ex.Message.Should.Be("Test1")
+            ex.InnerException.Should.BeOfType(Of DirectoryNotFoundException)()
         End Sub
 
     End Class

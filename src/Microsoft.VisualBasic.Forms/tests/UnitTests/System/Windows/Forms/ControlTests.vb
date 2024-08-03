@@ -22,11 +22,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Using _control As New Control
                 _control.CreateControl()
 
-                Dim invoker As Action = AddressOf FaultingMethod
                 Dim testCode As Action =
                     Sub()
-                        _control.Invoke(invoker)
+                        _control.Invoke(AddressOf FaultingMethod)
                     End Sub
+
                 Dim exception As Exception = Assert.Throws(Of DivideByZeroException)(testCode)
 
                 '    Expecting something Like the following.
@@ -53,10 +53,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Using _control As New Control
                 _control.CreateControl()
 
-                Dim invoker As New MethodInvoker(AddressOf FaultingMethod)
                 Dim testCode As Action =
                     Sub()
-                        _control.Invoke(invoker)
+                        _control.Invoke(New MethodInvoker(AddressOf FaultingMethod))
                     End Sub
                 Dim exception As Exception = Assert.Throws(Of DivideByZeroException)(testCode)
 
@@ -74,8 +73,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 '       at System.Windows.Forms.Control.Invoke(Delegate method) in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6393
                 '       at Microsoft.VisualBasic.Forms.Tests.Microsoft.VisualBasic.Forms.Tests.ControlTests._Closure$__1-1._Lambda$__0() in ...\winforms\src\Microsoft.VisualBasic.Forms\tests\UnitTests\ControlTests.vb:line 18
 
-                Assert.Contains(NameOf(FaultingMethod), exception.StackTrace)
-                Assert.Contains(" System.Windows.Forms.Control.Invoke(Delegate method) ", exception.StackTrace)
+                exception.StackTrace.Should.Contain(NameOf(FaultingMethod))
+                exception.StackTrace.Should.Contain(" System.Windows.Forms.Control.Invoke(Delegate method) ")
             End Using
         End Sub
 
@@ -84,10 +83,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Using _control As New Control
                 _control.CreateControl()
 
-                Dim invoker As Func(Of Integer, Integer) = AddressOf FaultingFunc
                 Dim testCode As Action =
                     Sub()
-                        Dim result As Integer = _control.Invoke(Function() invoker(19))
+                        Dim result As Integer = _control.Invoke(Function() CType(AddressOf FaultingFunc, Func(Of Integer, Integer))(19))
                     End Sub
 
                 Dim exception As Exception = Assert.Throws(Of DivideByZeroException)(testCode)
