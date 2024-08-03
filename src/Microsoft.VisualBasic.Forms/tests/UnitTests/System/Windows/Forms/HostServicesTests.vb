@@ -2,6 +2,7 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.Windows.Forms
+Imports FluentAssertions
 Imports Microsoft.VisualBasic.CompilerServices
 Imports Xunit
 
@@ -13,8 +14,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <WinFormsFact>
         Public Sub GetUniqueIntegerTests_Success()
-            Assert.True(GetUniqueInteger(positiveOnly:=True) >= 0)
-            Assert.NotEqual(GetUniqueInteger(positiveOnly:=False), GetUniqueInteger(positiveOnly:=False))
+            Dim condition As Boolean = GetUniqueInteger(positiveOnly:=True) >= 0
+            condition.Should.BeTrue()
+            GetUniqueInteger(positiveOnly:=False).Should.NotBe(GetUniqueInteger(positiveOnly:=False))
         End Sub
 
         <WinFormsFact>
@@ -27,16 +29,16 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim parentWindow As IWin32Window = Nothing
             Dim vbHost As IVbHost = HostServices.VBHost
             Dim inputHandler As New InputBoxHandler(prompt, title, defaultResponse, xPos, yPos, parentWindow)
-            Assert.Equal(Nothing, vbHost)
-            Assert.Equal(Nothing, inputHandler.Exception)
-            Assert.Equal(Nothing, inputHandler.Result)
+            vbHost.Should.BeNull()
+            inputHandler.Exception.Should.BeNull()
+            inputHandler.Result.Should.BeNull()
         End Sub
 
         <WinFormsFact>
         Public Sub VbHostTests_Success()
             Dim vbHost As IVbHost = New TestVbHost
-            Assert.Equal(s_control, vbHost.GetParentWindow)
-            Assert.Equal(s_title, vbHost.GetWindowTitle)
+            CType(vbHost.GetParentWindow, Control).Should.Be(s_control)
+            vbHost.GetWindowTitle.Should.Be(s_title)
         End Sub
 
         Private NotInheritable Class TestVbHost
