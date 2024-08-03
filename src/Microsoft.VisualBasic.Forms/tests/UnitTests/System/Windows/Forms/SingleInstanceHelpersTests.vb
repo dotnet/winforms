@@ -4,6 +4,7 @@
 Imports System.IO.Pipes
 Imports System.Runtime.CompilerServices
 Imports System.Threading
+Imports FluentAssertions
 Imports Microsoft.VisualBasic.ApplicationServices
 
 Imports Xunit
@@ -23,11 +24,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub TryCreatePipeServerTests()
             Dim pipeName As String = GetUniqueText()
             Dim pipeServer As NamedPipeServerStream = Nothing
-            Assert.True(TryCreatePipeServer(pipeName, pipeServer))
-            Assert.True(pipeServer.CanRead)
-            Assert.False(pipeServer.CanSeek)
-            Assert.False(pipeServer.CanWrite)
-            Assert.Equal(PipeTransmissionMode.Byte, pipeServer.TransmissionMode)
+            TryCreatePipeServer(pipeName, pipeServer).Should.BeTrue()
+            pipeServer.CanRead.Should.BeTrue()
+            pipeServer.CanSeek.Should.BeFalse()
+            pipeServer.CanWrite.Should.BeFalse()
+            pipeServer.TransmissionMode.Should.Be(PipeTransmissionMode.Byte)
             pipeServer.Close()
             pipeServer.Dispose()
         End Sub
@@ -36,10 +37,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub TryCreatePipeServerTwiceTests_Fail()
             Dim pipeName As String = GetUniqueText()
             Dim pipeServer As NamedPipeServerStream = Nothing
-            Assert.True(TryCreatePipeServer(pipeName, pipeServer))
+            TryCreatePipeServer(pipeName, pipeServer).Should.BeTrue()
             Dim pipeServer1 As NamedPipeServerStream = Nothing
-            Assert.False(TryCreatePipeServer(pipeName, pipeServer1))
-            Assert.Null(pipeServer1)
+            TryCreatePipeServer(pipeName, pipeServer1).Should.BeFalse()
+            pipeServer1.Should.BeNull()
             pipeServer.Close()
             pipeServer.Dispose()
         End Sub
@@ -64,7 +65,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     Do
                         Await Task.Delay(5)
                     Loop Until _resultArgs IsNot Nothing
-                    Assert.Equal("Hello", _resultArgs(0))
+                    _resultArgs(0).Should.Be("Hello")
                     Await tokenSource.CancelAsync()
                 End Using
             End If

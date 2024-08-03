@@ -1,6 +1,7 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
+Imports FluentAssertions
 Imports Microsoft.VisualBasic.ApplicationServices
 Imports Xunit
 
@@ -11,16 +12,16 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub UserBaseTest()
             Dim testUser As New User
-            Assert.Null(testUser.CurrentPrincipal)
+            testUser.CurrentPrincipal.Should.BeNull()
             Dim userPrincipal As New UserPrincipal(
                             authenticationType:="Basic",
                             name:="Test",
                             isAuthenticated:=True,
                             role:="Guest")
             testUser.CurrentPrincipal = userPrincipal
-            Assert.NotNull(testUser.CurrentPrincipal)
-            Assert.Equal(userPrincipal, testUser.CurrentPrincipal)
-            Assert.Equal("Basic", userPrincipal.Identity.AuthenticationType)
+            testUser.CurrentPrincipal.Should.NotBeNull()
+            testUser.CurrentPrincipal.Should.Be(userPrincipal)
+            userPrincipal.Identity.AuthenticationType.Should.Be("Basic")
         End Sub
 
         <WinFormsFact>
@@ -32,7 +33,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                             isAuthenticated:=True,
                             role:="Guest")
             }
-            Assert.Equal("Test", testUser.Name)
+            testUser.Name.Should.Be("Test")
         End Sub
 
         <WinFormsFact>
@@ -44,7 +45,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                             isAuthenticated:=True,
                             role:="Guest")
             }
-            Assert.Equal(True, testUser.IsAuthenticated)
+            testUser.IsAuthenticated.Should.BeTrue()
         End Sub
 
         <WinFormsFact>
@@ -56,8 +57,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                             isAuthenticated:=True,
                             role:="Guest")
             }
-            Assert.True(testUser.IsInRole("Guest"))
-            Assert.False(testUser.IsInRole("Basic"))
+            testUser.IsInRole("Guest").Should.BeTrue()
+            testUser.IsInRole("Basic").Should.BeFalse()
         End Sub
 
     End Class

@@ -4,6 +4,7 @@
 Imports System.Collections.Specialized
 Imports System.IO
 Imports System.Windows.Forms
+Imports FluentAssertions
 Imports Xunit
 
 Namespace Microsoft.VisualBasic.Forms.Tests
@@ -20,13 +21,13 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim clipboardProxy As New MyServices.ClipboardProxy
             Dim text As String = GetUniqueText()
             clipboardProxy.SetText(text)
-            Assert.Equal(Clipboard.ContainsText, clipboardProxy.ContainsText)
-            Assert.Equal(Clipboard.ContainsText, clipboardProxy.ContainsText(TextDataFormat.Text))
-            Assert.Equal(Clipboard.ContainsData(DataFormats.Text), clipboardProxy.ContainsData(DataFormats.Text))
-            Assert.Equal(text, clipboardProxy.GetText())
+            Clipboard.ContainsText.Should.Be(clipboardProxy.ContainsText)
+            Clipboard.ContainsText.Should.Be(clipboardProxy.ContainsText(TextDataFormat.Text))
+            Clipboard.ContainsData(DataFormats.Text).Should.Be(clipboardProxy.ContainsData(DataFormats.Text))
+            clipboardProxy.GetText().Should.Be(text)
             text = GetUniqueText()
             clipboardProxy.SetText(text, TextDataFormat.Text)
-            Assert.Equal(text, clipboardProxy.GetText(TextDataFormat.Text))
+            clipboardProxy.GetText(TextDataFormat.Text).Should.Be(text)
         End Sub
 
         <WinFormsFact>
@@ -35,7 +36,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim audioBytes As Byte() = {1, 2, 3}
             clipboardProxy.SetAudio(audioBytes)
             Dim result As Stream = clipboardProxy.GetAudioStream()
-            Assert.Equal(result.Length, clipboardProxy.GetAudioStream().Length)
+            clipboardProxy.GetAudioStream().Length.Should.Be(result.Length)
         End Sub
 
         <WinFormsFact>
@@ -43,10 +44,13 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim clipboardProxy As New MyServices.ClipboardProxy
             Dim audioBytes As Byte() = {1, 2, 3}
             clipboardProxy.SetAudio(audioBytes)
-            Assert.True(clipboardProxy.ContainsAudio())
-            Assert.True(clipboardProxy.ContainsData(DataFormats.WaveAudio))
-            Assert.Equal(audioBytes.Length, Assert.IsType(Of MemoryStream)(Assert.IsType(Of MemoryStream)(CType(clipboardProxy.GetAudioStream(), MemoryStream))).Length)
-            Assert.Equal(audioBytes.Length, CType(clipboardProxy.GetData(DataFormats.WaveAudio), MemoryStream).Length)
+            clipboardProxy.ContainsAudio().Should.BeTrue()
+            clipboardProxy.ContainsData(DataFormats.WaveAudio).Should.BeTrue()
+            CType(clipboardProxy.GetData(DataFormats.WaveAudio), MemoryStream).Length.Should.Be(audioBytes.Length)
+
+            Dim audioStream As MemoryStream = CType(clipboardProxy.GetAudioStream(), MemoryStream)
+            audioStream.Should.NotBeNull()
+            audioBytes.Length.Should.Be(CInt(audioStream.Length))
         End Sub
 
         <WinFormsFact>
@@ -56,9 +60,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Using audioStream As New MemoryStream(audioBytes)
                 clipboardProxy.SetAudio(audioStream)
                 Assert.Equal(audioBytes.Length, Assert.IsType(Of MemoryStream)(clipboardProxy.GetAudioStream()).ToArray().Length)
-                Assert.Equal(audioBytes.Length, Assert.IsType(Of MemoryStream)(clipboardProxy.GetData(DataFormats.WaveAudio)).ToArray().Length)
-                Assert.True(clipboardProxy.ContainsAudio())
-                Assert.True(clipboardProxy.ContainsData(DataFormats.WaveAudio))
+                Dim waveAudio As MemoryStream = CType(clipboardProxy.GetData(DataFormats.WaveAudio), MemoryStream)
+                waveAudio.ToArray.Length.Should.Be(audioBytes.Length)
+                clipboardProxy.ContainsAudio().Should.BeTrue()
+                clipboardProxy.ContainsData(DataFormats.WaveAudio).Should.BeTrue()
             End Using
         End Sub
 
@@ -68,8 +73,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim filePaths As New StringCollection From
             {"filePath", "filePath2"}
             clipboardProxy.SetFileDropList(filePaths)
-            Assert.True(clipboardProxy.ContainsFileDropList())
-            Assert.Equal(filePaths, clipboardProxy.GetFileDropList())
+            clipboardProxy.ContainsFileDropList().Should.BeTrue()
+            clipboardProxy.GetFileDropList().Equals(filePaths)
         End Sub
 
     End Class
