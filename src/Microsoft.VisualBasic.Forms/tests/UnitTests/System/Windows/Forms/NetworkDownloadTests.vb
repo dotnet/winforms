@@ -4,9 +4,7 @@
 Imports System.IO
 Imports System.Net
 Imports FluentAssertions
-Imports FluentAssertions.Specialized
 Imports Microsoft.VisualBasic.FileIO
-Imports Microsoft.VisualStudio.TestPlatform.ObjectModel
 Imports Xunit
 
 Namespace Microsoft.VisualBasic.Forms.Tests
