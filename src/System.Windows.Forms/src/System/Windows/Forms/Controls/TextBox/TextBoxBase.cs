@@ -49,9 +49,9 @@ public abstract partial class TextBoxBase : Control
     private static readonly object s_multilineChangedEvent = new();
     private static readonly object s_readOnlyChangedEvent = new();
 
-    private const int VisualStylesFixed3DBorderPadding = 4;
-    private const int VisualStylesFixedSingleBorderPadding = 3;
-    private const int VisualStylesNoBorderPadding = 2;
+    private const int VisualStylesFixed3DBorderPadding = 5;
+    private const int VisualStylesFixedSingleBorderPadding = 4;
+    private const int VisualStylesNoBorderPadding = 3;
     private const int BorderThickness = 1;
 
     /// <summary>
@@ -89,6 +89,8 @@ public abstract partial class TextBoxBase : Control
     // We store all boolean properties in here.
     private BitVector32 _textBoxFlags;
     private bool _triggerNewClientSizeRequest;
+
+    private NonClientBitmapCache? _cachedBitmap;
 
     /// <summary>
     ///  Creates a new TextBox control.  Uses the parent's current font and color
@@ -898,7 +900,7 @@ public abstract partial class TextBoxBase : Control
         return padding;
     }
 
-    private Padding GetScrollBarPadding()
+    private protected virtual Padding GetScrollBarPadding()
     {
         Padding padding = Padding.Empty;
 
@@ -2242,23 +2244,32 @@ public abstract partial class TextBoxBase : Control
         deflatedBounds.Width -= 1;
         deflatedBounds.Height -= 1;
 
-        // We need Anti-Aliasing:
-        graphics.SmoothingMode = SmoothingMode.AntiAlias;
-
+        // When we are later pasting the offscreen bitmap onto the original graphics object,
+        // we need to exclude the client area from the clipping region.
         graphics.Clip = new Region(bounds);
         graphics.ExcludeClip(clientBounds);
+
+        // Create a bitmap to draw on
+        _cachedBitmap ??= new NonClientBitmapCache(this, bounds.Width, bounds.Height);
+        _cachedBitmap.EnsureSize(bounds.Width, bounds.Height);
+
+        Bitmap offscreenBitmap = _cachedBitmap.Bitmap;
+        using Graphics offscreenGraphics = _cachedBitmap.GetNewGraphics();
+
+        // We need Anti-Aliasing:
+        offscreenGraphics.SmoothingMode = SmoothingMode.AntiAlias;
 
         bounds.Inflate(1, 1);
 
         // Fill the background with the specified brush:
-        graphics.FillRectangle(parentBackgroundBrush, bounds);
+        offscreenGraphics.FillRectangle(parentBackgroundBrush, bounds);
 
         switch (BorderStyle)
         {
             case BorderStyle.None:
 
                 // Just fill a Rectangle
-                graphics.FillRectangle(
+                offscreenGraphics.FillRectangle(
                     clientBackgroundBrush,
                     deflatedBounds);
 
@@ -2267,12 +2278,12 @@ public abstract partial class TextBoxBase : Control
             case BorderStyle.FixedSingle:
 
                 // Draw a filled Rectangle.
-                graphics.FillRectangle(
+                offscreenGraphics.FillRectangle(
                     clientBackgroundBrush,
                     deflatedBounds);
 
                 // Draw a Rectangle with the border thickness
-                graphics.DrawRectangle(
+                offscreenGraphics.DrawRectangle(
                     adornerPen,
                     deflatedBounds);
 
@@ -2281,13 +2292,13 @@ public abstract partial class TextBoxBase : Control
             case BorderStyle.Fixed3D:
 
                 // Fill a rounded Rectangle
-                graphics.FillRoundedRectangle(
+                offscreenGraphics.FillRoundedRectangle(
                     clientBackgroundBrush,
                     deflatedBounds,
                     new Size(cornerRadius, cornerRadius));
 
                 // Draw a rounded Rectangle with the border thickness
-                graphics.DrawRoundedRectangle(
+                offscreenGraphics.DrawRoundedRectangle(
                     adornerPen,
                     deflatedBounds,
                     new Size(cornerRadius, cornerRadius));
@@ -2311,7 +2322,7 @@ public abstract partial class TextBoxBase : Control
                     break;
 
                 case BorderStyle.Fixed3D:
-                    // We must shorten the line on both side to not draw into the curve:
+                    // We must shorten the line on both sides to not draw into the curve:
 
                     Draw3DFocusLine(
                         x1: deflatedBounds.Left + (cornerRadius - 3) / 2,
@@ -2322,16 +2333,20 @@ public abstract partial class TextBoxBase : Control
             }
         }
 
+        // Finally, draw the bitmap onto the original graphics object
+        graphics.DrawImageUnscaled(offscreenBitmap, Point.Empty);
+
         void DrawStandardFocusLine(int x1, int y1, int x2, int y2)
         {
-            graphics.DrawLine(focusPen, x1, y1, x2, y2);
-            graphics.DrawLine(focusPen, x1, y1 - 1, x2, y2 - 1);
+            offscreenGraphics.DrawLine(focusPen, x1, y1, x2, y2);
+            offscreenGraphics.DrawLine(focusPen, x1, y1 - 1, x2, y2 - 1);
         }
 
         void Draw3DFocusLine(int x1, int y1, int x2, int y2)
         {
-            graphics.DrawLine(focusPen, x1, y1, x2, y2);
-            graphics.DrawLine(focusPen, x1 - 2, y1 - 1, x2 + 2, y2 - 1);
+            offscreenGraphics.DrawLine(focusPen, x1, y1, x2, y2);
+            offscreenGraphics.DrawLine(focusPen, x1 - 2, y1 - 1, x2 + 2, y2 - 1);
+            offscreenGraphics.DrawLine(focusPen, x1 - 3, y1 - 2, x2 + 3, y2 - 2);
         }
     }
 
@@ -2372,7 +2387,7 @@ public abstract partial class TextBoxBase : Control
         Invalidate(true);
     }
 
-    private protected virtual unsafe void WmNcCalcSize(ref Message m)
+    private unsafe void WmNcCalcSize(ref Message m)
     {
         // Make sure _we_ actually kicked this off.
         if (_triggerNewClientSizeRequest)

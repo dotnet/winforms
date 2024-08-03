@@ -78,7 +78,6 @@ public partial class RichTextBox : TextBoxBase
     private static int s_richEditMajorVersion = 3;
 
     private BitVector32 _richTextBoxFlags;
-    private bool _firstDebug;
     private static readonly BitVector32.Section s_autoWordSelectionSection = BitVector32.CreateSection(1);
     private static readonly BitVector32.Section s_showSelBarSection = BitVector32.CreateSection(1, s_autoWordSelectionSection);
     private static readonly BitVector32.Section s_autoUrlDetectSection = BitVector32.CreateSection(1, s_showSelBarSection);
@@ -3235,20 +3234,17 @@ public partial class RichTextBox : TextBoxBase
         }
     }
 
-    private protected override unsafe void WmNcCalcSize(ref Message m)
+    private unsafe void WmNcCalcSize(ref Message m)
     {
-        if (Debugger.IsAttached && !_firstDebug)
-        {
-            _firstDebug = true;
-            Debugger.Break();
-        }
-
         bool wParam = m.WParamInternal != 0;
 
         NCCALCSIZE_PARAMS* ncCalcSizeParams = (NCCALCSIZE_PARAMS*)(void*)m.LParamInternal;
 
         if (ncCalcSizeParams is not null)
         {
+            // GetVisualStyles also calls GetScrollBarPadding, which we override and return
+            // an empty Padding. The reason is that the RichTextBox calculates its non-client size,
+            // including the scrollbars, so we need to take those out of the calculation.
             Padding padding = GetVisualStylesPadding(true);
 
             ncCalcSizeParams->rgrc._0.top += padding.Top;
@@ -3262,6 +3258,10 @@ public partial class RichTextBox : TextBoxBase
 
         base.WndProc(ref m);
     }
+
+    // RichTextBox does it's own NC calculation, so we need to leave that alone.
+    // (See also comments in WmNcCalcSize, WndProc and GetScrollBarPadding)
+    private protected override Padding GetScrollBarPadding() => Padding.Empty;
 
     private void WmReflectCommand(ref Message m)
     {
@@ -3485,6 +3485,16 @@ public partial class RichTextBox : TextBoxBase
     {
         switch (m.MsgInternal)
         {
+            case PInvoke.WM_NCCALCSIZE:
+                // We need the RichTextBox to calculate its own Nc-Items, otherwise, the rendering fails.
+                // But then, of course, we need to adjust the padding to account for the border when we have
+                // a scrollbar showing.
+                base.WndProc(ref m);
+
+                // And then we do ours on top of that.
+                WmNcCalcSize(ref m);
+                break;
+
             case MessageId.WM_REFLECT_NOTIFY:
                 WmReflectNotify(ref m);
                 break;
