@@ -5,8 +5,8 @@
 
 Rule ID | Category | Severity | Notes
 --------|----------|----------|-------
-WFO0001 | Application Configuration | Error | CSharpDiagnosticDescriptors
-WFO0002 | Application Configuration | Error | CSharpDiagnosticDescriptors
+WFO0001 | Application Configuration | Error | ApplicationConfigurationGenerator, [Documentation](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms.Analyzers.CSharp/ApplicationConfigurationGenerator.Help.md)
+WFO0002 | Application Configuration | Error | ApplicationConfigurationGenerator, [Documentation](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms.Analyzers.CSharp/ApplicationConfigurationGenerator.Help.md)
 WFO1000 | WinForms Security | Error | CSharpDiagnosticDescriptors
 
 ### Removed Rules

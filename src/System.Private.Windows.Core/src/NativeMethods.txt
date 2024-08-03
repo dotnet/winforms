@@ -73,6 +73,8 @@ GdipGetImagePixelFormat
 GdipGetImageRawFormat
 GdipGetRegionHRgn
 GdipIsInfiniteRegion
+GdiplusStartup
+GdiplusStartupInputEx
 GdipSaveImageToStream
 GetClientRect
 GetClipRgn

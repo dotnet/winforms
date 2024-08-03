@@ -4,17 +4,17 @@
     <body>
       <trans-unit id="WFO1000AnalyzerDescription">
         <source>A property should determine its property content serialization with the DesignerSerializationVisibilityAttribute, DefaultValueAttribute or the ShouldSerializeProperty method.</source>
-        <target state="new">A property should determine its property content serialization with the DesignerSerializationVisibilityAttribute, DefaultValueAttribute or the ShouldSerializeProperty method.</target>
+        <target state="translated">Una propiedad debe determinar su serialización de contenido de propiedad con el método DesignerSerializationVisibilityAttribute, DefaultValueAttribute o ShouldSerializeProperty.</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO1000AnalyzerMessageFormat">
         <source>Property '{0}' does not configure the code serialization for its property content</source>
-        <target state="new">Property '{0}' does not configure the code serialization for its property content</target>
+        <target state="translated">La propiedad "{0}" no configura la serialización de código para su contenido de propiedad</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO1000AnalyzerTitle">
         <source>Missing code serialization configuration for property content</source>
-        <target state="new">Missing code serialization configuration for property content</target>
+        <target state="translated">Falta la configuración de serialización de código para el contenido de la propiedad</target>
         <note />
       </trans-unit>
     </body>
