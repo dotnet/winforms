@@ -43,8 +43,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 '       at System.Windows.Forms.Control.Invoke(Delegate method) in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6393
                 '       at Microsoft.VisualBasic.Forms.Tests.Microsoft.VisualBasic.Forms.Tests.ControlTests._Closure$__1-1._Lambda$__0() in ...\winforms\src\Microsoft.VisualBasic.Forms\tests\UnitTests\ControlTests.vb:line 18
 
-                exception.StackTrace.should.contain(NameOf(FaultingMethod))
-                exception.StackTrace.should.contain(" System.Windows.Forms.Control.Invoke(Action method) ")
+                exception.StackTrace.Should.Contain(NameOf(FaultingMethod))
+                exception.StackTrace.Should.Contain(" System.Windows.Forms.Control.Invoke(Action method) ")
             End Using
         End Sub
 
