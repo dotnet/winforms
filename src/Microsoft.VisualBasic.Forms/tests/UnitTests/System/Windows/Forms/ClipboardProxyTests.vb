@@ -59,7 +59,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim audioBytes() As Byte = {1, 2, 3}
             Using audioStream As New MemoryStream(audioBytes)
                 clipboardProxy.SetAudio(audioStream)
-                Assert.Equal(audioBytes.Length, Assert.IsType(Of MemoryStream)(clipboardProxy.GetAudioStream()).ToArray().Length)
+                audioStream.Should.BeOfType(Of MemoryStream)()
+                Dim length As Integer = DirectCast(clipboardProxy.GetAudioStream(), MemoryStream).ToArray().Length
+                audioBytes.Length.Should.Be(length)
                 Dim waveAudio As MemoryStream = CType(clipboardProxy.GetData(DataFormats.WaveAudio), MemoryStream)
                 waveAudio.ToArray.Length.Should.Be(audioBytes.Length)
                 clipboardProxy.ContainsAudio().Should.BeTrue()
