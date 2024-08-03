@@ -111,7 +111,7 @@ public partial class DataGridViewImageCell : DataGridViewCell
     [DefaultValue(DataGridViewImageCellLayout.NotSet)]
     public DataGridViewImageCellLayout ImageLayout
     {
-        get =>Properties.TryGetValue(s_propImageCellLayout, out DataGridViewImageCellLayout imageLayout) ? imageLayout : DataGridViewImageCellLayout.Normal;
+        get => Properties.GetValueOrDefault(s_propImageCellLayout, DataGridViewImageCellLayout.Normal);
         set
         {
             // Sequential enum.  Valid values are 0x0 to 0x3
