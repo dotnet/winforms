@@ -286,18 +286,21 @@ public sealed partial class Application
     }
 
     /// <summary>
-    ///  Gets the default <see cref="DefaultVisualStylesMode"/> used as the rendering style guideline for the application's controls.
+    ///  Gets the default <see cref="DefaultVisualStylesMode"/> used as the rendering style guideline for the
+    ///  application's controls. The default setting is <see cref="VisualStylesMode.Classic"/>.
     /// </summary>
     /// <remarks>
     ///  <para>
-    ///   Starting from .NET 9, controls must adapt to new requirements in certain situations, such as dark mode and enhanced accessibility (A11Y) features.
-    ///   These changes can potentially alter the layout and appearance of forms.
+    ///   Starting from .NET 9, controls must adapt to new requirements in certain situations, such as dark mode and
+    ///   enhanced accessibility (A11Y) features. These changes can potentially alter the layout and appearance of forms.
     ///  </para>
     ///  <para>
-    ///   Therefore, it is necessary to provide mechanisms to finely control backward compatibility for existing and upcoming versions.
-    ///   This includes adjusting control rendering, requesting different sizes for new minimum space requirements, and handling adornments or margins/paddings.
-    ///   This property allows developers to ensure that their applications maintain a consistent appearance and behavior across different .NET versions,
-    ///   particularly when backward compatibility to "XP-based VisualStyles" is essential.
+    ///   Therefore, it is necessary to provide mechanisms to finely control backward compatibility for
+    ///   existing and upcoming versions. This includes adjusting control rendering, requesting different
+    ///   sizes for new minimum space requirements, and handling adornments or margins/paddings. This property
+    ///   allows developers to ensure that their applications maintain a consistent appearance and behavior
+    ///   across different .NET versions, particularly when backward compatibility to "XP-based VisualStyles"
+    ///   is essential.
     ///  </para>
     /// </remarks>
     [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]

@@ -2455,7 +2455,7 @@ public partial class ComboBox : ListControl
         if (Application.IsDarkModeEnabled)
         {
             // Style the ComboBox Open-Button:
-            PInvoke.SetWindowTheme(HWND, "DarkMode_CFD", null);
+            PInvoke.SetWindowTheme(HWND, $"{DarkModeIdentifier}_{ComboBoxButtonThemeIdentifier}", null);
             COMBOBOXINFO cInfo = default;
             cInfo.cbSize = (uint)sizeof(COMBOBOXINFO);
 

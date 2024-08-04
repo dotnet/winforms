@@ -88,7 +88,9 @@ internal sealed partial class DropDownButton : Button
         {
             bool isHighContrastHighlighted = !Control.MouseIsDown && IsHighContrastHighlighted();
 
-            Color backgroundColor = isHighContrastHighlighted ? SystemColors.Highlight : Control.BackColor;
+            Color backgroundColor = isHighContrastHighlighted
+                ? SystemColors.Highlight
+                : Control.BackColor;
 
             if (ControlPaint.IsDark(backgroundColor) && image is Bitmap bitmap)
             {

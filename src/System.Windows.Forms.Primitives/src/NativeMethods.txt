@@ -138,7 +138,6 @@ EXTLOGFONTW
 ExtTextOut
 FDAP
 FillRect
-FillRgn
 FindExecutable
 FINDREPLACE_FLAGS
 FindWindow
@@ -605,7 +604,6 @@ SetActiveWindow
 SetBkColor
 SetBkMode
 SetCapture
-SetCaretPos
 SetCursor
 SetCursorPos
 SetFocus

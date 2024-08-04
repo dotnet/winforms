@@ -165,6 +165,7 @@ public unsafe partial class Control :
     internal const string DarkModeIdentifier = "DarkMode";
     internal const string ExplorerThemeIdentifier = "Explorer";
     internal const string ItemsViewThemeIdentifier = "ItemsView";
+    internal const string ComboBoxButtonThemeIdentifier = "CFD";
 
     private const short PaintLayerBackground = 1;
     private const short PaintLayerForeground = 2;
@@ -3657,7 +3658,7 @@ public unsafe partial class Control :
     /// <value>
     ///  The <see cref="VisualStylesMode"/> for the control. A control's VisualStylesMode default value always derives
     ///  from its parent control, or if there is no parent, from the Application. The Application's
-    ///  <see cref="DefaultVisualStylesMode"/> is <see cref="VisualStylesMode.Net10"/>.
+    ///  <see cref="DefaultVisualStylesMode"/> is <see cref="VisualStylesMode.Classic"/>.
     /// </value>
     /// <remarks>
     ///  <para>

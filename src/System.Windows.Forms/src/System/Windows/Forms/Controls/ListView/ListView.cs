@@ -2882,14 +2882,13 @@ public partial class ListView : Control
                         }
 
                         // Work-around for a comctl quirk where,
-                        // if clrText is the same as Application.SystemColors.HotTrack,
+                        // if clrText is the same as SystemColors.HotTrack,
                         // the subitem's color is not changed to nmcd->clrText.
                         //
                         // Try to tweak the blue component of clrText first, then green, then red.
                         // Basically, if the color component is 0xFF, subtract 1 from it
                         // (adding 1 will overflow), else add 1 to it. If the color component is 0,
                         // skip it and go to the next color (unless it is our last option).
-
                         if (nmcd->clrText == ColorTranslator.ToWin32(SystemColors.HotTrack))
                         {
                             int totalshift = 0;
@@ -2921,7 +2920,7 @@ public partial class ListView : Control
                                     mask >>= 8; // Try the next color.
                                     // We try adjusting Blue, Green, Red in that order,
                                     // since 0x0000FF is the most likely value of
-                                    // Application.SystemColors.HotTrack
+                                    // SystemColors.HotTrack
                                     totalshift += 8;
                                 }
                             }
