@@ -2191,7 +2191,7 @@ public abstract partial class TextBoxBase : Control
         HDC hdc = PInvokeCore.GetWindowDC((HWND)m.HWnd);
 
         // Get the Graphics Object from the DC:
-        Graphics graphics = Graphics.FromHdc(hdc);
+        using Graphics graphics = Graphics.FromHdc(hdc);
 
         try
         {
@@ -2216,11 +2216,11 @@ public abstract partial class TextBoxBase : Control
         Color parentBackColor = Parent?.BackColor ?? BackColor;
         Color clientBackColor = BackColor;
 
-        using Brush parentBackgroundBrush = parentBackColor.GetCachedSolidBrushScope();
-        using Brush clientBackgroundBrush = clientBackColor.GetCachedSolidBrushScope();
-        using Brush adornerBrush = adornerColor.GetCachedSolidBrushScope();
-        using Pen adornerPen = adornerColor.GetCachedPenScope(BorderThickness);
-        using Pen focusPen = SystemColors.MenuHighlight.GetCachedPenScope(BorderThickness);
+        using var parentBackgroundBrush = parentBackColor.GetCachedSolidBrushScope();
+        using var clientBackgroundBrush = clientBackColor.GetCachedSolidBrushScope();
+        using var adornerBrush = adornerColor.GetCachedSolidBrushScope();
+        using var adornerPen = adornerColor.GetCachedPenScope(BorderThickness);
+        using var focusPen = SystemColors.MenuHighlight.GetCachedPenScope(BorderThickness);
 
         Rectangle bounds = new Rectangle(
             x: 0,

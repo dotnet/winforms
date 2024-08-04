@@ -46,11 +46,11 @@ internal class AnimatedBorderStyleRenderer : AnimatedControlRenderer
         Color parentBackColor = _textBox.Parent?.BackColor ?? _textBox.BackColor;
         Color clientBackColor = _textBox.BackColor;
 
-        using Brush parentBackgroundBrush = parentBackColor.GetCachedSolidBrushScope();
-        using Brush clientBackgroundBrush = clientBackColor.GetCachedSolidBrushScope();
-        using Brush adornerBrush = adornerColor.GetCachedSolidBrushScope();
-        using Pen adornerPen = adornerColor.GetCachedPenScope(borderThickness);
-        using Pen focusPen = SystemColors.MenuHighlight.GetCachedPenScope(borderThickness);
+        using var parentBackgroundBrush = parentBackColor.GetCachedSolidBrushScope();
+        using var clientBackgroundBrush = clientBackColor.GetCachedSolidBrushScope();
+        using var adornerBrush = adornerColor.GetCachedSolidBrushScope();
+        using var adornerPen = adornerColor.GetCachedPenScope(borderThickness);
+        using var focusPen = SystemColors.MenuHighlight.GetCachedPenScope(borderThickness);
 
         Rectangle bounds = _textBox.Bounds;
 
