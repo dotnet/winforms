@@ -8,7 +8,6 @@ namespace System.Windows.Forms.Design;
 
 public sealed partial class DockEditor
 {
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     /// <summary>
     ///  User interface for the DockEditor.
     /// </summary>
@@ -304,5 +303,4 @@ public sealed partial class DockEditor
             }
         }
     }
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 }

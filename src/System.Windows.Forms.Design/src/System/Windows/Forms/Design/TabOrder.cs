@@ -17,7 +17,6 @@ namespace System.Windows.Forms.Design;
 [ToolboxItem(false)]
 internal class TabOrder : Control, IMouseHandler, IMenuStatusHandler
 {
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     private IDesignerHost _host;
     private Control? _ctlHover;
     private List<Control>? _tabControls;
@@ -837,5 +836,4 @@ internal class TabOrder : Control, IMouseHandler, IMenuStatusHandler
         {
         }
     }
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 }

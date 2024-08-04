@@ -24,7 +24,6 @@ namespace System.Windows.Forms.Design;
 [ProvideProperty("TrayLocation", typeof(IComponent))]
 public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIHandler, IOleDragClient
 {
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     private static Point InvalidPoint { get; } = new(int.MinValue, int.MinValue);
     private IServiceProvider _serviceProvider; // Where services come from.
     private Point _whiteSpace = Point.Empty; // space to leave between components.
@@ -2913,5 +2912,4 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
             return false;
         }
     }
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 }

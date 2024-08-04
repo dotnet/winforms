@@ -237,10 +237,7 @@ public partial class TrackBar : Control, ISupportInitialize
     [EditorBrowsable(EditorBrowsableState.Never)]
     public override Color ForeColor
     {
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         get => SystemColors.WindowText;
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-
         set { }
     }
 

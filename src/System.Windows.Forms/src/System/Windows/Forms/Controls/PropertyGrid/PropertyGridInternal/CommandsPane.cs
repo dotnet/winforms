@@ -69,7 +69,6 @@ internal partial class CommandsPane : PropertyGrid.SnappableControl
         {
             if (_label is null)
             {
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                 _label = new LinkLabel
                 {
                     Dock = DockStyle.Fill,
@@ -78,7 +77,6 @@ internal partial class CommandsPane : PropertyGrid.SnappableControl
                     // Use default LinkLabel colors for regular, active, and visited.
                     DisabledLinkColor = SystemColors.ControlDark
                 };
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
                 _label.LinkClicked += LinkClicked;
                 Controls.Add(_label);

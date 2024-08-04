@@ -582,9 +582,7 @@ public abstract partial class UpDownBase : ContainerControl
             // we only want to do this when BackColor is not serialized, since otherwise
             // we should display the backcolor instead of the usual grayed textbox.
             editBounds.Inflate(1, 1);
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             ControlPaint.DrawBorderSimple(e, editBounds, SystemColors.Control);
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         }
     }
 

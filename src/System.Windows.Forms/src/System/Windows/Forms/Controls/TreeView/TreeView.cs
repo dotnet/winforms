@@ -195,10 +195,7 @@ public partial class TreeView : Control
     /// </summary>
     public override Color BackColor
     {
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         get => ShouldSerializeBackColor() ? base.BackColor : SystemColors.Window;
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-
         set
         {
             base.BackColor = value;
@@ -442,10 +439,7 @@ public partial class TreeView : Control
     /// </summary>
     public override Color ForeColor
     {
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         get => ShouldSerializeForeColor() ? base.ForeColor : SystemColors.WindowText;
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-
         set
         {
             base.ForeColor = value;
@@ -2845,7 +2839,6 @@ public partial class TreeView : Control
 
                             Font font = node.NodeFont ?? node.TreeView.Font;
 
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                             Color color = (((curState & TreeNodeStates.Selected) == TreeNodeStates.Selected) && node.TreeView.Focused) ? SystemColors.HighlightText : (node.ForeColor != Color.Empty) ? node.ForeColor : node.TreeView.ForeColor;
 
                             // Draw the actual node.
@@ -2862,7 +2855,6 @@ public partial class TreeView : Control
 
                                 TextRenderer.DrawText(g, node.Text, font, bounds, color, TextFormatFlags.Default);
                             }
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                         }
                     }
 

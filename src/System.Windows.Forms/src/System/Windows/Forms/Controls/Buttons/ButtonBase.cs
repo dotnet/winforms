@@ -1260,10 +1260,8 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
     [SRDescription(nameof(SR.ButtonUseVisualStyleBackColorDescr))]
     public bool UseVisualStyleBackColor
     {
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         get => (_isEnableVisualStyleBackgroundSet || (RawBackColor.IsEmpty && (BackColor == SystemColors.Control)))
             && _enableVisualStyleBackground;
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         set
         {
             if (_isEnableVisualStyleBackgroundSet && value == _enableVisualStyleBackground)

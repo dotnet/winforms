@@ -12,7 +12,6 @@ namespace System.ComponentModel.Design;
 
 public partial class CollectionEditor
 {
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     /// <summary>
     ///  This is the collection editor's default implementation of a collection form.
     /// </summary>
@@ -1369,5 +1368,4 @@ public partial class CollectionEditor
             public Type ItemType { get; }
         }
     }
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 }

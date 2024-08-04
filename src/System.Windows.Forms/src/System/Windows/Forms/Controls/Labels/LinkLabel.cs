@@ -234,11 +234,9 @@ public partial class LinkLabel : Label, IButtonControl
     [SRDescription(nameof(SR.LinkLabelLinkColorDescr))]
     public Color LinkColor
     {
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         get => _linkColor.IsEmpty
             ? SystemInformation.HighContrast ? SystemColors.HotTrack : IELinkColor
             : _linkColor;
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         set
         {
             if (_linkColor != value)

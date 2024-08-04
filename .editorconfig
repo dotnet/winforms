@@ -73,10 +73,10 @@ dotnet_sort_system_directives_first = true
 dotnet_style_object_initializer = true:warning
 dotnet_style_collection_initializer = true:suggestion
 dotnet_style_explicit_tuple_names = true:suggestion
-dotnet_style_null_propagation = true:suggestion
-dotnet_style_prefer_is_null_check_over_reference_equality_method = true:suggestion
+dotnet_style_null_propagation = true:warning
+dotnet_style_prefer_is_null_check_over_reference_equality_method = true:error
 dotnet_style_prefer_auto_properties = true:silent
-dotnet_style_prefer_simplified_boolean_expressions = true:suggestion
+dotnet_style_prefer_simplified_boolean_expressions = true:warning
 dotnet_style_prefer_inferred_tuple_names = true:suggestion
 dotnet_style_prefer_inferred_anonymous_type_member_names = true:suggestion
 dotnet_style_prefer_compound_assignment = true:suggestion
@@ -319,9 +319,6 @@ dotnet_diagnostic.CA5397.severity = warning
 
 # RS0041: Public members should not use oblivious types
 dotnet_diagnostic.RS0041.severity = warning
-dotnet_style_coalesce_expression = true:suggestion
-dotnet_style_prefer_conditional_expression_over_assignment = true:silent
-dotnet_style_prefer_conditional_expression_over_return = true:silent
 
 # C# files
 
@@ -374,7 +371,8 @@ dotnet_diagnostic.CA1846.severity = error
 # CA2246: Do not assign a symbol and its member in the same statement
 dotnet_diagnostic.CA2246.severity = error
 
-# CA1855: Use Span<T>.Clear() instead of Span<T>.Fill()
+# CA1855: Use Span<T>
+    .Clear() instead of Span<T>.Fill()
 dotnet_diagnostic.CA1855.severity = error
 
 # CA1857: The parameter expects a constant for optimal performance
@@ -500,9 +498,6 @@ dotnet_diagnostic.CA2016.severity = warning
 # CA2020: Prevent behavioral change caused by built-in operators of IntPtr/UIntPtr
 dotnet_diagnostic.CA2020.severity = warning
 
-# WFO9002:
-dotnet_diagnostic.WFO9002.severity = silent
-
 # .NET diagnostic
 dotnet_diagnostic.RS0041.severity = none
 dotnet_diagnostic.IDE0005.severity = error
@@ -538,9 +533,9 @@ csharp_preserve_single_line_blocks = true
 csharp_preserve_single_line_statements = false
 
 # Expression-bodied members
-csharp_style_expression_bodied_methods = false:silent
-csharp_style_expression_bodied_constructors = false:silent
-csharp_style_expression_bodied_operators = false:silent
+csharp_style_expression_bodied_methods = true:silent
+csharp_style_expression_bodied_constructors = true:silent
+csharp_style_expression_bodied_operators = true:silent
 csharp_style_expression_bodied_properties = true:silent
 csharp_style_expression_bodied_indexers = true:silent
 csharp_style_expression_bodied_accessors = true:silent
@@ -578,12 +573,12 @@ csharp_space_between_method_declaration_parameter_list_parentheses = false
 csharp_space_between_parentheses = false
 csharp_space_between_square_brackets = false
 csharp_using_directive_placement = outside_namespace:silent
-csharp_prefer_simple_using_statement = true:suggestion
+csharp_prefer_simple_using_statement = true:warning
 csharp_prefer_braces = true:silent
-csharp_style_namespace_declarations = block_scoped:silent
+csharp_style_namespace_declarations = file_scoped:silent
 csharp_style_prefer_method_group_conversion = true:silent
 csharp_style_prefer_top_level_statements = true:silent
-csharp_style_prefer_primary_constructors = true:suggestion
+csharp_style_prefer_primary_constructors = true:silent
 csharp_style_expression_bodied_lambdas = true:silent
 csharp_style_expression_bodied_local_functions = false:silent
 csharp_style_allow_embedded_statements_on_same_line_experimental = true:silent
@@ -592,7 +587,6 @@ csharp_style_allow_blank_line_after_colon_in_constructor_initializer_experimenta
 csharp_style_allow_blank_line_after_token_in_conditional_expression_experimental = true:silent
 csharp_style_allow_blank_line_after_token_in_arrow_expression_clause_experimental = true:silent
 csharp_style_deconstructed_variable_declaration = true:suggestion
-csharp_prefer_system_threading_lock = true:suggestion
 
 # Visual Basic files
 

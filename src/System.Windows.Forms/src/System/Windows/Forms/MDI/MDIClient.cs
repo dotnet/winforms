@@ -317,9 +317,7 @@ public sealed partial class MdiClient : Control
 
     internal override bool ShouldSerializeBackColor()
     {
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         return BackColor != SystemColors.AppWorkspace;
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     }
 
     private static bool ShouldSerializeLocation() => false;

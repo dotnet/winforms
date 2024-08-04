@@ -7,7 +7,6 @@ namespace System.Drawing.Design;
 
 public partial class ColorEditor
 {
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     /// <summary>
     ///  A control to display the color palette.
     /// </summary>
@@ -465,5 +464,4 @@ public partial class ColorEditor
             }
         }
     }
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 }
