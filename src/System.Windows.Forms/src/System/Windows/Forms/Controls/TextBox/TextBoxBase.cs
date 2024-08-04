@@ -2318,6 +2318,7 @@ public abstract partial class TextBoxBase : Control
                 case BorderStyle.FixedSingle:
 
                     DrawStandardFocusLine(
+                        focusPen,
                         x1: deflatedBounds.Left,
                         y1: deflatedBounds.Bottom,
                         x2: deflatedBounds.Right,
@@ -2328,6 +2329,7 @@ public abstract partial class TextBoxBase : Control
                     // We must shorten the line on both sides to not draw into the curve:
 
                     Draw3DFocusLine(
+                        focusPen,
                         x1: deflatedBounds.Left + (cornerRadius - 3) / 2,
                         y1: deflatedBounds.Bottom,
                         x2: deflatedBounds.Right - (cornerRadius - 3) / 2,
@@ -2339,13 +2341,13 @@ public abstract partial class TextBoxBase : Control
         // Finally, draw the bitmap onto the original graphics object
         graphics.DrawImageUnscaled(offscreenBitmap, Point.Empty);
 
-        void DrawStandardFocusLine(int x1, int y1, int x2, int y2)
+        void DrawStandardFocusLine(RefCountedCache<Pen, Color, Color>.Scope focusPen, int x1, int y1, int x2, int y2)
         {
             offscreenGraphics.DrawLine(focusPen, x1, y1, x2, y2);
             offscreenGraphics.DrawLine(focusPen, x1, y1 - 1, x2, y2 - 1);
         }
 
-        void Draw3DFocusLine(int x1, int y1, int x2, int y2)
+        void Draw3DFocusLine(RefCountedCache<Pen, Color, Color>.Scope focusPen, int x1, int y1, int x2, int y2)
         {
             offscreenGraphics.DrawLine(focusPen, x1, y1, x2, y2);
             offscreenGraphics.DrawLine(focusPen, x1 - 2, y1 - 1, x2 + 2, y2 - 1);
