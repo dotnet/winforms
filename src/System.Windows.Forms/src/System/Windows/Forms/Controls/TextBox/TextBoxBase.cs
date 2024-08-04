@@ -1362,6 +1362,8 @@ public abstract partial class TextBoxBase : Control
                 {
                     _integralHeightAdjust = false;
                 }
+
+                Invalidate();
             }
         }
         finally

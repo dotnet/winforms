@@ -85,7 +85,7 @@ public partial class CheckBox : ButtonBase
 
 #pragma warning disable WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                     if (value == Appearance.ToggleSwitch
-                        && VisualStylesMode == VisualStylesMode.Net10)
+                        && VisualStylesMode >= VisualStylesMode.Net10)
                     {
                         Refresh();
                     }
@@ -190,7 +190,7 @@ public partial class CheckBox : ButtonBase
                 return;
             }
 
-            bool animationHandlingNeeded = VisualStylesMode == VisualStylesMode.Net10
+            bool animationHandlingNeeded = VisualStylesMode >= VisualStylesMode.Net10
                 && Appearance == Appearance.ToggleSwitch;
 
             if (animationHandlingNeeded)
@@ -265,7 +265,7 @@ public partial class CheckBox : ButtonBase
             else
             {
 #pragma warning disable WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
-                if (VisualStylesMode == VisualStylesMode.Net10)
+                if (VisualStylesMode >= VisualStylesMode.Net10)
                 {
                     SetStyle(ControlStyles.UserPaint, true);
                     SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
@@ -319,7 +319,7 @@ public partial class CheckBox : ButtonBase
 
 #pragma warning disable WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
         if (Appearance == Appearance.ToggleSwitch
-            && VisualStylesMode == VisualStylesMode.Net10)
+            && VisualStylesMode >= VisualStylesMode.Net10)
         {
             _toggleSwitchRenderer ??= new AnimatedToggleSwitchRenderer(this, ModernCheckBoxStyle.Rounded);
             int dpiScale = (int)(DeviceDpi / 96f);
@@ -358,10 +358,12 @@ public partial class CheckBox : ButtonBase
     protected override void OnPaint(PaintEventArgs pevent)
     {
 #pragma warning disable WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
-        if (VisualStylesMode == VisualStylesMode.Net10
+        if (VisualStylesMode >= VisualStylesMode.Net10
             && Appearance == Appearance.ToggleSwitch)
         {
+            var stateScope = new GraphicsStateScope(pevent.Graphics);
             _toggleSwitchRenderer?.RenderControl(pevent.Graphics);
+
             return;
         }
 #pragma warning restore WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates.

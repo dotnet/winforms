@@ -80,7 +80,7 @@ internal class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
             ? SystemColors.Highlight
             : SystemColors.ControlDark;
 
-        Color circleColor = SystemColors.ControlLightLight;
+        Color circleColor = SystemColors.ControlText;
 
         // This works both for when the Animation is running, and when it's not running.
         // In the latter case we set the animationProgress to 1, so the circle is drawn
@@ -89,9 +89,9 @@ internal class AnimatedToggleSwitchRenderer : AnimatedControlRenderer
             ? (rect.Width - circleDiameter) * (1 - EaseOut(AnimationProgress))
             : (rect.Width - circleDiameter) * EaseOut(AnimationProgress);
 
-        using var backgroundBrush = new SolidBrush(backgroundColor);
-        using var circleBrush = new SolidBrush(circleColor);
-        using var backgroundPen = new Pen(SystemColors.WindowFrame, 2 * DpiScale);
+        using var backgroundBrush = backgroundColor.GetCachedSolidBrushScope();
+        using var circleBrush = circleColor.GetCachedSolidBrushScope();
+        using var backgroundPen = SystemColors.WindowFrame.GetCachedPenScope(2 * DpiScale);
 
         g.SmoothingMode = SmoothingMode.AntiAlias;
 

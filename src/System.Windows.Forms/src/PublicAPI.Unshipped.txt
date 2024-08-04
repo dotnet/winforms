@@ -35,7 +35,7 @@ System.Windows.Forms.Control.VisualStylesMode.set -> void
 System.Windows.Forms.VisualStylesMode
 System.Windows.Forms.VisualStylesMode.Classic = 0 -> System.Windows.Forms.VisualStylesMode
 System.Windows.Forms.VisualStylesMode.Disabled = 1 -> System.Windows.Forms.VisualStylesMode
-System.Windows.Forms.VisualStylesMode.Latest = 2147483647 -> System.Windows.Forms.VisualStylesMode
+System.Windows.Forms.VisualStylesMode.Latest = 65535 -> System.Windows.Forms.VisualStylesMode
 System.Windows.Forms.VisualStylesMode.Net10 = 2 -> System.Windows.Forms.VisualStylesMode
 virtual System.Windows.Forms.Control.DefaultVisualStylesMode.get -> System.Windows.Forms.VisualStylesMode
 virtual System.Windows.Forms.Control.OnParentVisualStylesModeChanged(System.EventArgs! e) -> void

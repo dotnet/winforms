@@ -32,5 +32,5 @@ public enum VisualStylesMode
     /// <summary>
     ///  The latest version of the visual renderer.
     /// </summary>
-    Latest = int.MaxValue
+    Latest = 65535
 }

@@ -3690,7 +3690,7 @@ public unsafe partial class Control :
         set
         {
             if (ParentInternal is not null
-                && value != VisualStylesMode)
+                && value == VisualStylesMode)
             {
                 return;
             }
