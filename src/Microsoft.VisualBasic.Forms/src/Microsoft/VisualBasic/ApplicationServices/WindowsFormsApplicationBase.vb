@@ -833,6 +833,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  Gets or sets the VisualStylesMode for the Application.
         ''' </summary>
         <Experimental(DiagnosticIDs.ExperimentalVisualStyles)>
+        <EditorBrowsable(EditorBrowsableState.Never)>
         Protected Property VisualStylesMode As VisualStylesMode
             Get
                 Return _visualStylesMode
@@ -846,6 +847,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  Gets or sets the ColorMode for the Application.
         ''' </summary>
         <Experimental(DiagnosticIDs.ExperimentalDarkMode)>
+        <EditorBrowsable(EditorBrowsableState.Never)>
         Protected Property ColorMode As SystemColorMode
             Get
                 Return _colorMode
