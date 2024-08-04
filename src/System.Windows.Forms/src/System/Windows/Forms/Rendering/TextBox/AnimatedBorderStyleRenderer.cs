@@ -11,6 +11,7 @@ internal class AnimatedBorderStyleRenderer : AnimatedControlRenderer
 {
     private const int AnimationDuration = 200; // milliseconds
     private readonly TextBoxBase _textBox;
+
     private readonly HDC _hdc;
     private Graphics? _graphics;
 
@@ -45,11 +46,11 @@ internal class AnimatedBorderStyleRenderer : AnimatedControlRenderer
         Color parentBackColor = _textBox.Parent?.BackColor ?? _textBox.BackColor;
         Color clientBackColor = _textBox.BackColor;
 
-        using Brush parentBackgroundBrush = new SolidBrush(parentBackColor);
-        using Brush clientBackgroundBrush = new SolidBrush(clientBackColor);
-        using Brush adornerBrush = new SolidBrush(adornerColor);
-        using Pen adornerPen = new(adornerColor, borderThickness);
-        using Pen focusPen = new(SystemColors.Highlight, borderThickness);
+        using Brush parentBackgroundBrush = parentBackColor.GetCachedSolidBrushScope();
+        using Brush clientBackgroundBrush = clientBackColor.GetCachedSolidBrushScope();
+        using Brush adornerBrush = adornerColor.GetCachedSolidBrushScope();
+        using Pen adornerPen = adornerColor.GetCachedPenScope(borderThickness);
+        using Pen focusPen = SystemColors.MenuHighlight.GetCachedPenScope(borderThickness);
 
         Rectangle bounds = _textBox.Bounds;
 
@@ -65,9 +66,10 @@ internal class AnimatedBorderStyleRenderer : AnimatedControlRenderer
             width: bounds.Width - (_textBox.Padding.Horizontal + deflateOffset + deflateOffset),
             height: bounds.Height - (_textBox.Padding.Vertical + deflateOffset + deflateOffset));
 
+        using GraphicsStateScope state = new(graphics);
+
         // We need Anti-Aliasing:
         graphics.SmoothingMode = SmoothingMode.AntiAlias;
-
         // Translate the origin to the top-left corner of the control:
         graphics.TranslateTransform(-bounds.Left, -bounds.Top);
 
@@ -141,8 +143,6 @@ internal class AnimatedBorderStyleRenderer : AnimatedControlRenderer
         int lineRightX = lineStartX + lineLength + lineOffset;
 
         graphics.DrawLine(focusPen, lineLeftX, lineStartY, lineRightX, lineStartY);
-
-        // static float EaseOut(float t) => (1 - t) * (1 - t);
     }
 
     protected override void OnAnimationEnded()

@@ -2216,11 +2216,11 @@ public abstract partial class TextBoxBase : Control
         Color parentBackColor = Parent?.BackColor ?? BackColor;
         Color clientBackColor = BackColor;
 
-        using Brush parentBackgroundBrush = new SolidBrush(parentBackColor);
-        using Brush clientBackgroundBrush = new SolidBrush(clientBackColor);
-        using Brush adornerBrush = new SolidBrush(adornerColor);
-        using Pen adornerPen = new(adornerColor, BorderThickness);
-        using Pen focusPen = new(SystemColors.MenuHighlight, BorderThickness);
+        using Brush parentBackgroundBrush = parentBackColor.GetCachedSolidBrushScope();
+        using Brush clientBackgroundBrush = clientBackColor.GetCachedSolidBrushScope();
+        using Brush adornerBrush = adornerColor.GetCachedSolidBrushScope();
+        using Pen adornerPen = adornerColor.GetCachedPenScope(BorderThickness);
+        using Pen focusPen = SystemColors.MenuHighlight.GetCachedPenScope(BorderThickness);
 
         Rectangle bounds = new Rectangle(
             x: 0,
@@ -2246,7 +2246,8 @@ public abstract partial class TextBoxBase : Control
 
         // When we are later pasting the offscreen bitmap onto the original graphics object,
         // we need to exclude the client area from the clipping region.
-        graphics.Clip = new Region(bounds);
+        using Region region = new(bounds);
+        graphics.Clip = region;
         graphics.ExcludeClip(clientBounds);
 
         // Create a bitmap to draw on

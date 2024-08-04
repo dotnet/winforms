@@ -5,7 +5,7 @@ using System.Drawing;
 
 namespace System.Windows.Forms
 {
-    internal class DarkProfessionalColors : ProfessionalColorTable
+    internal sealed class DarkProfessionalColors : ProfessionalColorTable
     {
         public override Color MenuItemPressedGradientBegin
             => Color.FromArgb(0xFF, 0x60, 0x60, 0x60);

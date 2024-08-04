@@ -366,12 +366,12 @@ public sealed partial class Application
         {
             try
             {
-                systemColorMode = (int)(Registry.GetValue(
+                systemColorMode = (Registry.GetValue(
                     keyName: DarkModeKeyPath,
                     valueName: DarkModeKey,
-                    defaultValue: -1) ?? 0);
+                    defaultValue: -1) as int?) ?? systemColorMode;
             }
-            catch
+            catch (Exception ex) when (!ex.IsCriticalException())
             {
             }
         }

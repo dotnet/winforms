@@ -3378,7 +3378,7 @@ public unsafe partial class Control :
         }
     }
 
-    // This auto upgraded v1 client to per-process doublebuffering logic
+    // This auto upgraded v1 client to per-process double-buffering logic
     private static BufferedGraphicsContext BufferContext => BufferedGraphicsManager.Current;
 
     /// <summary>
@@ -3689,7 +3689,7 @@ public unsafe partial class Control :
         set
         {
             if (ParentInternal is not null
-                && Equals(value, VisualStylesMode))
+                && value != VisualStylesMode)
             {
                 return;
             }
@@ -3714,7 +3714,11 @@ public unsafe partial class Control :
                 elementCausingLayout: this,
                 property: nameof(Padding)))
             {
-                if (IsHandleCreated)
+                if (!IsHandleCreated)
+                {
+                    UpdateStyles();
+                }
+                else
                 {
                     // This implies updating the styles.
                     RecreateHandle();
@@ -3726,10 +3730,6 @@ public unsafe partial class Control :
                         // in whatever could cause a new size (most likely a new BorderStyle related Padding)..
                         LayoutTransaction.DoLayout(this, this, nameof(Padding));
                     }
-                }
-                else
-                {
-                    UpdateStyles();
                 }
             }
         }
@@ -10759,17 +10759,6 @@ public unsafe partial class Control :
         }
     }
 
-    private static unsafe void PrepareDarkMode(HWND hwnd, bool darkModeEnabled)
-    {
-        BOOL value = darkModeEnabled;
-
-        PInvoke.DwmSetWindowAttribute(
-            hwnd,
-            DWMWINDOWATTRIBUTE.DWMWA_USE_IMMERSIVE_DARK_MODE,
-            &value,
-            (uint)sizeof(BOOL));
-    }
-
     protected virtual void SetVisibleCore(bool value)
     {
         if (value != Visible)
@@ -10883,6 +10872,17 @@ public unsafe partial class Control :
                         | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE
                         | (value ? SET_WINDOW_POS_FLAGS.SWP_SHOWWINDOW : SET_WINDOW_POS_FLAGS.SWP_HIDEWINDOW));
             }
+        }
+
+        static unsafe void PrepareDarkMode(HWND hwnd, bool darkModeEnabled)
+        {
+            BOOL value = darkModeEnabled;
+
+            PInvoke.DwmSetWindowAttribute(
+                hwnd,
+                DWMWINDOWATTRIBUTE.DWMWA_USE_IMMERSIVE_DARK_MODE,
+                &value,
+                (uint)sizeof(BOOL));
         }
     }
 
@@ -13361,86 +13361,4 @@ public unsafe partial class Control :
     internal HWND HWND => (HWND)Handle;
 
     internal virtual bool AllowsChildrenToShowToolTips() => true;
-
-    /// <summary>
-    ///  DEBUG ONLY: Maintains a dictionary of counters for each ticket, which let's you invoke a Debugger.Break() call
-    ///  when a respective counter reaches 0.
-    /// </summary>
-    /// <remarks>
-    ///  <para>Usage example:</para>
-    ///  <code>
-    ///     // Create an instance of the class containing the OnDebuggerBreak method.
-    ///     var yourClassInstance = new YourClass();
-    ///
-    ///     // Define breakpoints for specific tickets.
-    ///     yourClassInstance.DebuggerBreakCounters.Add("loadData", 3);
-    ///     yourClassInstance.DebuggerBreakCounters.Add("saveData", -1);
-    ///
-    ///     // Simulate the process where a breakpoint might be necessary.
-    ///     for(int i = 0; i != 5; i++)
-    ///     {
-    ///         if (yourClassInstance.OnDebuggerBreak("loadData"))
-    ///         {
-    ///             Debugger.Break(); // This will trigger a break on the 3rd call.
-    ///         }
-    ///     }
-    ///
-    ///     // Directly call to simulate another ticket without loop.
-    ///     if (yourClassInstance.OnDebuggerBreak("saveData"))
-    ///     {
-    ///         Debugger.Break(); // This will always break.
-    ///     }
-    ///  </code>
-    ///  <para>
-    ///    This setup helps in debugging specific parts of the code by allowing conditional
-    ///    breakpoints based on dynamic runtime conditions.
-    ///   </para>
-    /// </remarks>
-    [Browsable(true)]
-    [EditorBrowsable(EditorBrowsableState.Advanced)]
-    [DefaultValue(0)]
-    [SRCategory(nameof(SR.CatBehavior))]
-    [SRDescription("Debug only property: enter a counter value at which a hard-coded Debugger.Break() call will be invoked.")]
-    public Dictionary<string, int> DebuggerBreakCounters { get; set; } = [];
-
-    private readonly Dictionary<string, int> _currentDebuggerBreakCounters = [];
-
-    protected virtual bool OnDebuggerBreak(string ticket)
-    {
-        if (!Debugger.IsAttached
-            || !DebuggerBreakCounters.TryGetValue(ticket, out int counter))
-        {
-            return false;
-        }
-
-        if (counter == -1)
-        {
-            // We always break!
-            return true;
-        }
-
-        if (counter == 0)
-        {
-            // We never break!
-            return false;
-        }
-
-        if (!_currentDebuggerBreakCounters.TryGetValue(ticket, out int currentCounter))
-        {
-            // let's add the ticket to the current counters, and start counting, if it's not 0.
-            _currentDebuggerBreakCounters.Add(
-                ticket,
-                DebuggerBreakCounters[ticket]);
-        }
-
-        if (--counter > 0)
-        {
-            return false;
-        }
-
-        // Let's reset the counter, but signal breaking!
-        _currentDebuggerBreakCounters[ticket] = DebuggerBreakCounters[ticket];
-
-        return true;
-    }
 }

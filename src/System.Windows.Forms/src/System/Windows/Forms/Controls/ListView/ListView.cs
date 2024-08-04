@@ -6026,7 +6026,10 @@ public partial class ListView : Control
         // We need to set the text color when we are in dark mode,
         // so that the themed headers are actually readable.
 #pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        if (Application.IsDarkModeEnabled && !OwnerDraw && nmhdr->code == PInvoke.NM_CUSTOMDRAW)
+        if (Application.IsDarkModeEnabled
+            && !OwnerDraw
+            && nmhdr->code == PInvoke.NM_CUSTOMDRAW
+            && m.LParamInternal != 0)
         {
             NMLVCUSTOMDRAW* nmlvcd = (NMLVCUSTOMDRAW*)(nint)m.LParamInternal;
 
