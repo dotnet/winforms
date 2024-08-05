@@ -180,7 +180,7 @@ public class DataGridViewCellStyle : ICloneable
         set
         {
             Color c = ForeColor;
-            if (!value.IsEmpty || Properties.ContainsObject(s_propForeColor))
+            if (!value.IsEmpty || Properties.ContainsKey(s_propForeColor))
             {
                 Properties.AddValue(s_propForeColor, value);
             }
@@ -199,24 +199,13 @@ public class DataGridViewCellStyle : ICloneable
     [AllowNull]
     public string Format
     {
-        get
-        {
-            object? format = Properties.GetObject(s_propFormat);
-            if (format is null)
-            {
-                return string.Empty;
-            }
-            else
-            {
-                return (string)format;
-            }
-        }
+        get => Properties.GetValueOrDefault(s_propFormat, string.Empty)!;
         set
         {
             string format = Format;
-            if ((value is not null && value.Length > 0) || Properties.ContainsObject(s_propFormat))
+            if ((value is not null && value.Length > 0) || Properties.ContainsKey(s_propFormat))
             {
-                Properties.SetObject(s_propFormat, value);
+                Properties.AddOrRemoveValue(s_propFormat, value);
             }
 
             if (!format.Equals(Format))
@@ -414,14 +403,8 @@ public class DataGridViewCellStyle : ICloneable
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public object? Tag
     {
-        get => Properties.GetObject(s_propTag);
-        set
-        {
-            if (value is not null || Properties.ContainsObject(s_propTag))
-            {
-                Properties.SetObject(s_propTag, value);
-            }
-        }
+        get => Properties.GetValueOrDefault<object?>(s_propTag);
+        set => Properties.AddOrRemoveValue(s_propTag, value);
     }
 
     [DefaultValue(DataGridViewTriState.NotSet)]

@@ -20,9 +20,6 @@ internal class PropertyStore
     /// </summary>
     public bool ContainsKey(int key) => _values.ContainsKey(key);
 
-    // REMOVE
-    public bool ContainsObject(int key) => _values.ContainsKey(key);
-
     /// <summary>
     ///  Creates a new key for this property store.
     /// </summary>

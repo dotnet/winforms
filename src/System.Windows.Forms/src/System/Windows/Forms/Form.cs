@@ -374,14 +374,14 @@ public partial class Form : ContainerControl
 
                 if (!value)
                 {
-                    if (Properties.ContainsObject(s_propOpacity))
+                    if (Properties.ContainsKey(s_propOpacity))
                     {
-                        Properties.SetObject(s_propOpacity, 1.0f);
+                        Properties.AddValue(s_propOpacity, 1.0f);
                     }
 
-                    if (Properties.ContainsObject(s_propTransparencyKey))
+                    if (Properties.ContainsKey(s_propTransparencyKey))
                     {
-                        Properties.SetObject(s_propTransparencyKey, Color.Empty);
+                        Properties.AddValue(s_propTransparencyKey, Color.Empty);
                     }
 
                     UpdateLayered();
@@ -2157,19 +2157,10 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormTransparencyKeyDescr))]
     public Color TransparencyKey
     {
-        get
-        {
-            object? key = Properties.GetObject(s_propTransparencyKey);
-            if (key is not null)
-            {
-                return (Color)key;
-            }
-
-            return Color.Empty;
-        }
+        get => Properties.GetValueOrDefault(s_propTransparencyKey, Color.Empty);
         set
         {
-            Properties.SetObject(s_propTransparencyKey, value);
+            Properties.AddValue(s_propTransparencyKey, value);
             if (!IsMdiContainer)
             {
                 bool oldLayered = (_formState[s_formStateLayered] == 1);
@@ -3276,24 +3267,24 @@ public partial class Form : ContainerControl
             CalledMakeVisible = false;
             CalledCreateControl = false;
 
-            if (Properties.ContainsObject(s_propAcceptButton))
+            if (Properties.ContainsKey(s_propAcceptButton))
             {
-                Properties.SetObject(s_propAcceptButton, null);
+                Properties.RemoveValue(s_propAcceptButton);
             }
 
-            if (Properties.ContainsObject(s_propCancelButton))
+            if (Properties.ContainsKey(s_propCancelButton))
             {
-                Properties.SetObject(s_propCancelButton, null);
+                Properties.RemoveValue(s_propCancelButton);
             }
 
-            if (Properties.ContainsObject(s_propDefaultButton))
+            if (Properties.ContainsKey(s_propDefaultButton))
             {
-                Properties.SetObject(s_propDefaultButton, null);
+                Properties.RemoveValue(s_propDefaultButton);
             }
 
-            if (Properties.ContainsObject(s_propActiveMdiChild))
+            if (Properties.ContainsKey(s_propActiveMdiChild))
             {
-                Properties.SetObject(s_propActiveMdiChild, null);
+                Properties.RemoveValue(s_propActiveMdiChild);
             }
 
             if (MdiWindowListStrip is not null)
@@ -3314,16 +3305,15 @@ public partial class Form : ContainerControl
                 MainMenuStrip = null;
             }
 
-            Form? owner = (Form?)Properties.GetObject(s_propOwner);
-            if (owner is not null)
+            if (Properties.TryGetValue(s_propOwner, out Form? owner))
             {
                 owner.RemoveOwnedForm(this);
-                Properties.SetObject(s_propOwner, null);
+                Properties.RemoveValue(s_propOwner);
             }
 
-            Properties.SetObject(s_propDialogOwner, null);
+            Properties.RemoveValue(s_propDialogOwner);
 
-            Form?[]? ownedForms = (Form?[]?)Properties.GetObject(s_propOwnedForms);
+            Form?[]? ownedForms = Properties.GetValueOrDefault<Form?[]?>(s_propOwnedForms);
             int ownedFormsCount = Properties.GetValueOrDefault<int>(s_propOwnedFormsCount);
 
             for (int i = ownedFormsCount - 1; i >= 0; i--)

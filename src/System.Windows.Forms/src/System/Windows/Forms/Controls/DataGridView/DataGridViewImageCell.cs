@@ -71,9 +71,9 @@ public partial class DataGridViewImageCell : DataGridViewCell
 
         set
         {
-            if (!string.IsNullOrEmpty(value) || Properties.ContainsObject(s_propImageCellDescription))
+            if (!string.IsNullOrEmpty(value) || Properties.ContainsKey(s_propImageCellDescription))
             {
-                Properties.SetObject(s_propImageCellDescription, value);
+                Properties.AddOrRemoveValue(s_propImageCellDescription, value);
             }
         }
     }

@@ -171,9 +171,9 @@ public partial class DataGridViewRow : DataGridViewBand
         set
         {
             string errorText = ErrorTextInternal;
-            if (!string.IsNullOrEmpty(value) || Properties.ContainsObject(s_propRowErrorText))
+            if (!string.IsNullOrEmpty(value) || Properties.ContainsKey(s_propRowErrorText))
             {
-                Properties.SetObject(s_propRowErrorText, value);
+                Properties.AddOrRemoveValue(s_propRowErrorText, value);
             }
 
             if (DataGridView is not null && !errorText.Equals(ErrorTextInternal))

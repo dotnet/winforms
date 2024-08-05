@@ -83,12 +83,11 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
     {
         get
         {
-            DataGridViewCellStyle? style = (DataGridViewCellStyle?)Properties.GetObject(s_propDefaultCellStyle);
-            if (style is null)
+            if (!Properties.TryGetValue(s_propDefaultCellStyle, out DataGridViewCellStyle? style))
             {
                 style = new DataGridViewCellStyle();
                 style.AddScope(DataGridView, IsRow ? DataGridViewCellStyleScopes.Row : DataGridViewCellStyleScopes.Column);
-                Properties.SetObject(s_propDefaultCellStyle, style);
+                Properties.AddValue(s_propDefaultCellStyle, style);
             }
 
             return style;
@@ -102,10 +101,10 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
                 style.RemoveScope(IsRow ? DataGridViewCellStyleScopes.Row : DataGridViewCellStyleScopes.Column);
             }
 
-            if (value is not null || Properties.ContainsObject(s_propDefaultCellStyle))
+            if (value is not null || Properties.ContainsKey(s_propDefaultCellStyle))
             {
                 value?.AddScope(DataGridView, IsRow ? DataGridViewCellStyleScopes.Row : DataGridViewCellStyleScopes.Column);
-                Properties.SetObject(s_propDefaultCellStyle, value);
+                Properties.AddOrRemoveValue(s_propDefaultCellStyle, value);
             }
 
             if (DataGridView is not null &&
@@ -139,14 +138,14 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
         }
         set
         {
-            if (value is not null || Properties.ContainsObject(s_propDefaultHeaderCellType))
+            if (value is not null || Properties.ContainsKey(s_propDefaultHeaderCellType))
             {
                 if (!typeof(DataGridViewHeaderCell).IsAssignableFrom(value))
                 {
                     throw new ArgumentException(string.Format(SR.DataGridView_WrongType, nameof(DefaultHeaderCellType), "System.Windows.Forms.DataGridViewHeaderCell"), nameof(value));
                 }
 
-                Properties.SetObject(s_propDefaultHeaderCellType, value);
+                Properties.AddOrRemoveValue(s_propDefaultHeaderCellType, value);
             }
         }
     }
@@ -276,8 +275,8 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
         }
         set
         {
-            DataGridViewHeaderCell? headerCell = (DataGridViewHeaderCell?)Properties.GetObject(s_propHeaderCell);
-            if (value is not null || Properties.ContainsObject(s_propHeaderCell))
+            DataGridViewHeaderCell? headerCell = Properties.GetValueOrDefault<DataGridViewHeaderCell?>(s_propHeaderCell);
+            if (value is not null || Properties.ContainsKey(s_propHeaderCell))
             {
                 if (headerCell is not null)
                 {
@@ -333,7 +332,7 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
                     value.DataGridView = DataGridView;
                 }
 
-                Properties.SetObject(s_propHeaderCell, value);
+                Properties.AddOrRemoveValue(s_propHeaderCell, value);
             }
 
             if (((value is null && headerCell is not null) || (value is not null && headerCell is null) || (value is not null && headerCell is not null && !headerCell.Equals(value))) && DataGridView is not null)
@@ -608,14 +607,8 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public object? Tag
     {
-        get => Properties.GetObject(s_propUserData);
-        set
-        {
-            if (value is not null || Properties.ContainsObject(s_propUserData))
-            {
-                Properties.SetObject(s_propUserData, value);
-            }
-        }
+        get => Properties.GetValueOrDefault<object?>(s_propUserData);
+        set => Properties.AddOrRemoveValue(s_propUserData, value);
     }
 
     internal int Thickness
