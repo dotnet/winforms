@@ -85,7 +85,7 @@ public class ClipboardProxyTests
         clipboard.SetText(text, TextDataFormat.UnicodeText);
         System.Windows.Forms.Clipboard.ContainsText().Should().Be(clipboard.ContainsText());
         System.Windows.Forms.Clipboard.GetText().Should().Be(clipboard.GetText());
-        System.Windows.Forms.Clipboard.GetText(TextDataFormat.UnicodeText).Should().Be( clipboard.GetText(TextDataFormat.UnicodeText));
+        System.Windows.Forms.Clipboard.GetText(TextDataFormat.UnicodeText).Should().Be(clipboard.GetText(TextDataFormat.UnicodeText));
         clipboard.GetText(TextDataFormat.UnicodeText).Should().Be(text);
     }
 }
