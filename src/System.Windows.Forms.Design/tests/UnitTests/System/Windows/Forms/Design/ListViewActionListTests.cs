@@ -7,7 +7,7 @@ using System.ComponentModel.Design;
 
 namespace System.Windows.Forms.Design.Tests;
 
-public class ListViewActionListTests
+public sealed class ListViewActionListTests : IDisposable
 {
     private readonly ListView _listView;
     private readonly ComponentDesigner _designer;
@@ -19,6 +19,12 @@ public class ListViewActionListTests
         _designer = new();
         _designer.Initialize(_listView);
         _actionList = new(_designer);
+    }
+
+    public void Dispose()
+    {
+        _listView.Dispose();
+        _designer.Dispose();
     }
 
     [Fact]
@@ -38,7 +44,7 @@ public class ListViewActionListTests
     [Fact]
     public void LargeImageList_Property_ShouldGetAndSet()
     {
-        ImageList largeImageList = new();
+        using ImageList largeImageList = new();
         _actionList.LargeImageList = largeImageList;
         _actionList.LargeImageList.Should().Be(largeImageList);
     }
@@ -46,7 +52,7 @@ public class ListViewActionListTests
     [Fact]
     public void SmallImageList_Property_ShouldGetAndSet()
     {
-        ImageList smallImageList = new();
+        using ImageList smallImageList = new();
         _actionList.SmallImageList = smallImageList;
         _actionList.SmallImageList.Should().Be(smallImageList);
     }
@@ -59,7 +65,7 @@ public class ListViewActionListTests
 
         var enumerableItems = items.Cast<DesignerActionItem>();
         enumerableItems.Should().NotBeEmpty();
-        enumerableItems.Should().HaveCountGreaterThan(0);
+        enumerableItems.Should().HaveCountGreaterThan(3);
 
         var itemNames = enumerableItems.Select(i => i.DisplayName).ToList();
         itemNames.Should().Contain(SR.ListViewActionListEditItemsDisplayName);
