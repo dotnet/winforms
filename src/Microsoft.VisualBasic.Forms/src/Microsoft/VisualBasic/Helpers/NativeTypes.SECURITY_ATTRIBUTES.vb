@@ -9,7 +9,6 @@ Namespace Microsoft.VisualBasic.CompilerServices
 
         <StructLayout(LayoutKind.Sequential)>
         Friend NotInheritable Class SECURITY_ATTRIBUTES
-#Enable Warning CA1812
             Implements IDisposable
 
             Friend Sub New()
