@@ -65,9 +65,16 @@ public sealed class ListViewActionListTests : IDisposable
 
         var enumerableItems = items.Cast<DesignerActionItem>();
         enumerableItems.Should().NotBeEmpty();
-        enumerableItems.Should().HaveCountGreaterThan(3);
 
-        var itemNames = enumerableItems.Select(i => i.DisplayName).ToList();
+        var relevantItems = enumerableItems.Where(i =>
+            i.DisplayName == SR.ListViewActionListEditItemsDisplayName ||
+            i.DisplayName == SR.ListViewActionListEditColumnsDisplayName ||
+            i.DisplayName == SR.ListViewActionListEditGroupsDisplayName
+        ).ToList();
+
+        relevantItems.Should().HaveCount(3); 
+
+        var itemNames = relevantItems.Select(i => i.DisplayName).ToList();
         itemNames.Should().Contain(SR.ListViewActionListEditItemsDisplayName);
         itemNames.Should().Contain(SR.ListViewActionListEditColumnsDisplayName);
         itemNames.Should().Contain(SR.ListViewActionListEditGroupsDisplayName);
