@@ -2,7 +2,6 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.Runtime.InteropServices
-Imports System.Text
 Imports FluentAssertions
 Imports Microsoft.VisualBasic.CompilerServices.NativeTypes
 Imports Xunit
