@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using FluentAssertions;
 using Microsoft.VisualBasic.Devices;
 using DataFormats = System.Windows.Forms.DataFormats;
 using TextDataFormat = System.Windows.Forms.TextDataFormat;
@@ -18,7 +19,7 @@ public class ClipboardProxyTests
     public void Audio()
     {
         var clipboard = (new Computer()).Clipboard;
-        Assert.Equal(System.Windows.Forms.Clipboard.ContainsAudio(), clipboard.ContainsAudio());
+        clipboard.ContainsAudio().Should().Be(System.Windows.Forms.Clipboard.ContainsAudio());
 
         // Not tested:
         //   Public Function GetAudioStream() As Stream
@@ -32,9 +33,9 @@ public class ClipboardProxyTests
         var clipboard = (new Computer()).Clipboard;
         string text = GetUniqueText();
         clipboard.SetText(text);
-        Assert.True(System.Windows.Forms.Clipboard.ContainsText());
+        System.Windows.Forms.Clipboard.ContainsText().Should().BeTrue();
         clipboard.Clear();
-        Assert.False(System.Windows.Forms.Clipboard.ContainsText());
+        System.Windows.Forms.Clipboard.ContainsText().Should().BeFalse();
     }
 
     [WinFormsFact]
@@ -60,7 +61,7 @@ public class ClipboardProxyTests
     public void FileDropList()
     {
         var clipboard = (new Computer()).Clipboard;
-        Assert.Equal(System.Windows.Forms.Clipboard.ContainsFileDropList(), clipboard.ContainsFileDropList());
+        System.Windows.Forms.Clipboard.ContainsFileDropList().Should().Be(clipboard.ContainsFileDropList());
         // Not tested:
         //   Public Function GetFileDropList() As StringCollection
         //   Public Sub SetFileDropList(filePaths As StringCollection)
@@ -71,8 +72,8 @@ public class ClipboardProxyTests
     {
         var clipboard = (new Computer()).Clipboard;
         Bitmap image = new(2, 2);
-        Assert.Equal(System.Windows.Forms.Clipboard.ContainsImage(), clipboard.ContainsImage());
-        Assert.Equal(System.Windows.Forms.Clipboard.GetImage(), clipboard.GetImage());
+        System.Windows.Forms.Clipboard.ContainsImage().Should().Be(clipboard.ContainsImage());
+        System.Windows.Forms.Clipboard.GetImage().Should().Be(clipboard.GetImage());
         clipboard.SetImage(image);
     }
 
@@ -82,9 +83,9 @@ public class ClipboardProxyTests
         var clipboard = (new Computer()).Clipboard;
         string text = GetUniqueText();
         clipboard.SetText(text, TextDataFormat.UnicodeText);
-        Assert.Equal(System.Windows.Forms.Clipboard.ContainsText(), clipboard.ContainsText());
-        Assert.Equal(System.Windows.Forms.Clipboard.GetText(), clipboard.GetText());
-        Assert.Equal(System.Windows.Forms.Clipboard.GetText(TextDataFormat.UnicodeText), clipboard.GetText(TextDataFormat.UnicodeText));
-        Assert.Equal(text, clipboard.GetText(TextDataFormat.UnicodeText));
+        System.Windows.Forms.Clipboard.ContainsText().Should().Be(clipboard.ContainsText());
+        System.Windows.Forms.Clipboard.GetText().Should().Be(clipboard.GetText());
+        System.Windows.Forms.Clipboard.GetText(TextDataFormat.UnicodeText).Should().Be( clipboard.GetText(TextDataFormat.UnicodeText));
+        clipboard.GetText(TextDataFormat.UnicodeText).Should().Be(text);
     }
 }

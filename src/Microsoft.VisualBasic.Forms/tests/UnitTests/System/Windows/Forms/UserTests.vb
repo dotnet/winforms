@@ -14,10 +14,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim testUser As New User
             testUser.CurrentPrincipal.Should.BeNull()
             Dim userPrincipal As New UserPrincipal(
-                            authenticationType:="Basic",
-                            name:="Test",
-                            isAuthenticated:=True,
-                            role:="Guest")
+                authenticationType:="Basic",
+                name:="Test",
+                isAuthenticated:=True,
+                role:="Guest")
             testUser.CurrentPrincipal = userPrincipal
             testUser.CurrentPrincipal.Should.NotBeNull()
             testUser.CurrentPrincipal.Should.Be(userPrincipal)
@@ -27,11 +27,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub UserGetNameTest()
             Dim testUser As New User With {
-                            .CurrentPrincipal = New UserPrincipal(
-                            authenticationType:="Basic",
-                            name:="Test",
-                            isAuthenticated:=True,
-                            role:="Guest")
+                .CurrentPrincipal = New UserPrincipal(
+                authenticationType:="Basic",
+                name:="Test",
+                isAuthenticated:=True,
+                role:="Guest")
             }
             testUser.Name.Should.Be("Test")
         End Sub
@@ -39,11 +39,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub UserIsAuthenticatedTest()
             Dim testUser As New User With {
-                            .CurrentPrincipal = New UserPrincipal(
-                            authenticationType:="Basic",
-                            name:="Test",
-                            isAuthenticated:=True,
-                            role:="Guest")
+                .CurrentPrincipal = New UserPrincipal(
+                authenticationType:="Basic",
+                name:="Test",
+                isAuthenticated:=True,
+                role:="Guest")
             }
             testUser.IsAuthenticated.Should.BeTrue()
         End Sub
@@ -51,11 +51,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub UserIsInRoleTest()
             Dim testUser As New User With {
-                            .CurrentPrincipal = New UserPrincipal(
-                            authenticationType:="Basic",
-                            name:="Test",
-                            isAuthenticated:=True,
-                            role:="Guest")
+                .CurrentPrincipal = New UserPrincipal(
+                authenticationType:="Basic",
+                name:="Test",
+                isAuthenticated:=True,
+                role:="Guest")
             }
             testUser.IsInRole("Guest").Should.BeTrue()
             testUser.IsInRole("Basic").Should.BeFalse()
