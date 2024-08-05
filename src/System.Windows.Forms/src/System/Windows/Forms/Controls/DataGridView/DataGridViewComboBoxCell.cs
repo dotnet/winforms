@@ -194,7 +194,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
     [AllowNull]
     public virtual string DisplayMember
     {
-        get => Properties.GetValueOrDefault(s_propComboBoxCellDisplayMember, string.Empty)!;
+        get => Properties.GetStringOrEmptyString(s_propComboBoxCellDisplayMember);
         set
         {
             DisplayMemberInternal = value;
@@ -215,10 +215,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         set
         {
             InitializeDisplayMemberPropertyDescriptor(value);
-            if ((value is not null && value.Length > 0) || Properties.ContainsKey(s_propComboBoxCellDisplayMember))
-            {
-                Properties.AddOrRemoveValue(s_propComboBoxCellDisplayMember, value);
-            }
+            Properties.AddOrRemoveString(s_propComboBoxCellDisplayMember, value);
         }
     }
 
@@ -462,18 +459,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
     [AllowNull]
     public virtual string ValueMember
     {
-        get
-        {
-            object? valueMember = Properties.GetObject(s_propComboBoxCellValueMember);
-            if (valueMember is null)
-            {
-                return string.Empty;
-            }
-            else
-            {
-                return (string)valueMember;
-            }
-        }
+        get => Properties.GetStringOrEmptyString(s_propComboBoxCellValueMember);
         set
         {
             ValueMemberInternal = value;
@@ -494,10 +480,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         set
         {
             InitializeValueMemberPropertyDescriptor(value);
-            if ((value is not null && value.Length > 0) || Properties.ContainsKey(s_propComboBoxCellValueMember))
-            {
-                Properties.AddOrRemoveValue(s_propComboBoxCellValueMember, value);
-            }
+            Properties.AddOrRemoveString(s_propComboBoxCellValueMember, value);
         }
     }
 

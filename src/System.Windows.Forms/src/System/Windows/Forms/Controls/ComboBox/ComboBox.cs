@@ -666,8 +666,8 @@ public partial class ComboBox : ListControl
     // is used in DropDownList style.
     private string MatchingText
     {
-        get => Properties.GetValueOrDefault(s_propMatchingText, string.Empty)!;
-        set => Properties.AddOrRemoveValue(s_propMatchingText, value);
+        get => Properties.GetStringOrEmptyString(s_propMatchingText);
+        set => Properties.AddOrRemoveString(s_propMatchingText, value);
     }
 
     /// <summary>

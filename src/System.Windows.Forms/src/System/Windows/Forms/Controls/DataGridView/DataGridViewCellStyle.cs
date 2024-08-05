@@ -199,15 +199,10 @@ public class DataGridViewCellStyle : ICloneable
     [AllowNull]
     public string Format
     {
-        get => Properties.GetValueOrDefault(s_propFormat, string.Empty)!;
+        get => Properties.GetStringOrEmptyString(s_propFormat);
         set
         {
-            string format = Format;
-            if ((value is not null && value.Length > 0) || Properties.ContainsKey(s_propFormat))
-            {
-                Properties.AddOrRemoveValue(s_propFormat, value);
-            }
-
+            string format = Properties.AddOrRemoveString(s_propFormat, value);
             if (!format.Equals(Format))
             {
                 OnPropertyChanged(DataGridViewCellStylePropertyInternal.Other);

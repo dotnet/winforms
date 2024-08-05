@@ -207,11 +207,11 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     [AllowNull]
     private string ErrorTextInternal
     {
-        get => Properties.GetValueOrDefault(s_propCellErrorText, string.Empty)!;
+        get => Properties.GetStringOrEmptyString(s_propCellErrorText);
         set
         {
             string errorText = ErrorTextInternal;
-            Properties.AddOrRemoveValue(s_propCellErrorText, value);
+            Properties.AddOrRemoveString(s_propCellErrorText, value);
 
             if (DataGridView is not null && !errorText.Equals(ErrorTextInternal))
             {
@@ -693,12 +693,10 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     [AllowNull]
     private string ToolTipTextInternal
     {
-        get => Properties.GetValueOrDefault(s_propCellToolTipText, string.Empty)!;
+        get => Properties.GetStringOrEmptyString(s_propCellToolTipText);
         set
         {
-            string toolTipText = ToolTipTextInternal;
-            Properties.AddOrRemoveValue(s_propCellToolTipText, value);
-
+            string toolTipText = Properties.AddOrRemoveString(s_propCellToolTipText, value);
             if (DataGridView is not null && !toolTipText.Equals(ToolTipTextInternal))
             {
                 DataGridView.OnCellToolTipTextChanged(this);

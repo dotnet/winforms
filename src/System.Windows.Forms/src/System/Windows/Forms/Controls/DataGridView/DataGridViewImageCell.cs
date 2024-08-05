@@ -58,24 +58,8 @@ public partial class DataGridViewImageCell : DataGridViewCell
     [AllowNull]
     public string Description
     {
-        get
-        {
-            object? description = Properties.GetObject(s_propImageCellDescription);
-            if (description is not null)
-            {
-                return (string)description;
-            }
-
-            return string.Empty;
-        }
-
-        set
-        {
-            if (!string.IsNullOrEmpty(value) || Properties.ContainsKey(s_propImageCellDescription))
-            {
-                Properties.AddOrRemoveValue(s_propImageCellDescription, value);
-            }
-        }
+        get => Properties.GetStringOrEmptyString(s_propImageCellDescription);
+        set => Properties.AddOrRemoveString(s_propImageCellDescription, value);
     }
 
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.Interfaces)]
@@ -118,7 +102,7 @@ public partial class DataGridViewImageCell : DataGridViewCell
             SourceGenerated.EnumValidator.Validate(value);
             if (ImageLayout != value)
             {
-                Properties.AddValue(s_propImageCellLayout, value);
+                Properties.AddOrRemoveValue(s_propImageCellLayout, value);
                 OnCommonChange();
             }
         }
@@ -131,7 +115,7 @@ public partial class DataGridViewImageCell : DataGridViewCell
             Debug.Assert(value is >= DataGridViewImageCellLayout.NotSet and <= DataGridViewImageCellLayout.Zoom);
             if (ImageLayout != value)
             {
-                Properties.AddValue(s_propImageCellLayout, value);
+                Properties.AddOrRemoveValue(s_propImageCellLayout, value);
             }
         }
     }
