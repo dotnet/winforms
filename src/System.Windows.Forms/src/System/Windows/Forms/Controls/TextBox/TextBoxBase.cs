@@ -1287,13 +1287,6 @@ public abstract partial class TextBoxBase : Control
     }
 
     /// <summary>
-    /// Defines <see cref="VisualStylesMode.Classic"/> as default for this control, so we're not breaking existing implementations.
-    /// </summary>
-    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
-    protected override VisualStylesMode DefaultVisualStylesMode =>
-        VisualStylesMode.Classic;
-
-    /// <summary>
     ///  Gets or sets a value indicating whether a multiline text box control
     ///  automatically wraps words to the beginning of the next line when necessary.
     /// </summary>

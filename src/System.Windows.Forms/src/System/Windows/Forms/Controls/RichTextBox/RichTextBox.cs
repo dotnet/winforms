@@ -3084,10 +3084,10 @@ public partial class RichTextBox : TextBoxBase
         {
             int actualLength = (int)PInvoke.SendMessage(this, PInvoke.EM_GETTEXTEX, (WPARAM)pGt, (LPARAM)b);
 
-            // The default behaviour of EM_GETTEXTEX is to normalise line endings to '\r'
+            // The default behavior of EM_GETTEXTEX is to normalize line endings to '\r'
             // (see: GT_DEFAULT, https://docs.microsoft.com/windows/win32/api/richedit/ns-richedit-gettextex#members),
-            // whereas previously we would normalise to '\n'. Unfortunately we can only ask for '\r\n' line endings via GT.USECRLF,
-            // but unable to ask for '\n'. Unless GT.USECRLF was set, convert '\r' with '\n' to retain the original behaviour.
+            // whereas previously we would normalize to '\n'. Unfortunately we can only ask for '\r\n' line endings via GT.USECRLF,
+            // but unable to ask for '\n'. Unless GT.USECRLF was set, convert '\r' with '\n' to retain the original behavior.
             if (!flags.HasFlag(GETTEXTEX_FLAGS.GT_USECRLF))
             {
                 int index = 0;
@@ -3491,8 +3491,14 @@ public partial class RichTextBox : TextBoxBase
                 // a scrollbar showing.
                 base.WndProc(ref m);
 
-                // And then we do ours on top of that.
-                WmNcCalcSize(ref m);
+#pragma warning disable WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+                if (VisualStylesMode >= VisualStylesMode.Net10)
+                {
+                    // And then we do ours on top of that.
+                    WmNcCalcSize(ref m);
+                }
+
+#pragma warning restore WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                 break;
 
             case MessageId.WM_REFLECT_NOTIFY:
