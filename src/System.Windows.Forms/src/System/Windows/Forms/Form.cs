@@ -1789,11 +1789,11 @@ public partial class Form : ContainerControl
             CheckParentingCycle(this, value);
             CheckParentingCycle(value, this);
 
-            Properties.SetObject(s_propOwner, null);
+            Properties.RemoveValue(s_propOwner);
 
             ownerOld?.RemoveOwnedForm(this);
 
-            Properties.SetObject(s_propOwner, value);
+            Properties.AddOrRemoveValue(s_propOwner, value);
 
             value?.AddOwnedForm(this);
 
@@ -1803,10 +1803,7 @@ public partial class Form : ContainerControl
 
     internal Form? OwnerInternal
     {
-        get
-        {
-            return (Form?)Properties.GetObject(s_propOwner);
-        }
+        get => Properties.GetValueOrDefault<Form?>(s_propOwner);
     }
 
     /// <summary>
@@ -2625,7 +2622,7 @@ public partial class Form : ContainerControl
             return;
         }
 
-        Form?[]? ownedForms = (Form?[]?)Properties.GetObject(s_propOwnedForms);
+        Form?[]? ownedForms = Properties.GetValueOrDefault<Form?[]?>(s_propOwnedForms);
         int ownedFormsCount = Properties.GetValueOrDefault<int>(s_propOwnedFormsCount);
 
         // Make sure this isn't already in the list:
@@ -2640,14 +2637,14 @@ public partial class Form : ContainerControl
         if (ownedForms is null)
         {
             ownedForms = new Form[4];
-            Properties.SetObject(s_propOwnedForms, ownedForms);
+            Properties.AddValue(s_propOwnedForms, ownedForms);
         }
         else if (ownedForms.Length == ownedFormsCount)
         {
             Form[] newOwnedForms = new Form[ownedFormsCount * 2];
             Array.Copy(ownedForms, 0, newOwnedForms, 0, ownedFormsCount);
             ownedForms = newOwnedForms;
-            Properties.SetObject(s_propOwnedForms, ownedForms);
+            Properties.AddValue(s_propOwnedForms, ownedForms);
         }
 
         ownedForms[ownedFormsCount] = ownedForm;
@@ -4701,7 +4698,7 @@ public partial class Form : ContainerControl
             return;
         }
 
-        Form?[]? ownedForms = (Form?[]?)Properties.GetObject(s_propOwnedForms);
+        Form?[]? ownedForms = Properties.GetValueOrDefault<Form?[]?>(s_propOwnedForms);
         int ownedFormsCount = Properties.GetValueOrDefault<int>(s_propOwnedFormsCount);
 
         if (ownedForms is not null)
@@ -5529,10 +5526,7 @@ public partial class Form : ContainerControl
         if (IsHandleCreated && TopLevel)
         {
             IHandle<HWND> ownerHwnd = NullHandle<HWND>.Instance;
-
-            Form? owner = (Form?)Properties.GetObject(s_propOwner);
-
-            if (owner is not null)
+            if (Properties.TryGetValue(s_propOwner, out Form? owner))
             {
                 ownerHwnd = owner;
             }
