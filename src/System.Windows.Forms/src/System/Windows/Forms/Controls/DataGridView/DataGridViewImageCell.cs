@@ -100,9 +100,9 @@ public partial class DataGridViewImageCell : DataGridViewCell
         {
             // Sequential enum.  Valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(value);
-            if (ImageLayout != value)
+            DataGridViewImageCellLayout imageLayout = Properties.AddOrRemoveValue(s_propImageCellLayout, value);
+            if (imageLayout != value)
             {
-                Properties.AddOrRemoveValue(s_propImageCellLayout, value);
                 OnCommonChange();
             }
         }
@@ -113,10 +113,7 @@ public partial class DataGridViewImageCell : DataGridViewCell
         set
         {
             Debug.Assert(value is >= DataGridViewImageCellLayout.NotSet and <= DataGridViewImageCellLayout.Zoom);
-            if (ImageLayout != value)
-            {
-                Properties.AddOrRemoveValue(s_propImageCellLayout, value);
-            }
+            Properties.AddOrRemoveValue(s_propImageCellLayout, value);
         }
     }
 

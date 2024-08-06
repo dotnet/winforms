@@ -109,13 +109,8 @@ public class DataGridViewCellStyle : ICloneable
         get => Properties.GetValueOrDefault<Color>(s_propBackColor);
         set
         {
-            Color c = BackColor;
-            if (!value.IsEmpty || Properties.ContainsKey(s_propBackColor))
-            {
-                Properties.AddValue(s_propBackColor, value);
-            }
-
-            if (!c.Equals(BackColor))
+            Color backColor = Properties.AddOrRemoveValue(s_propBackColor, value);
+            if (!backColor.Equals(value))
             {
                 OnPropertyChanged(DataGridViewCellStylePropertyInternal.Color);
             }
@@ -179,13 +174,8 @@ public class DataGridViewCellStyle : ICloneable
         get => Properties.TryGetValue(s_propForeColor, out Color color) ? color : Color.Empty;
         set
         {
-            Color c = ForeColor;
-            if (!value.IsEmpty || Properties.ContainsKey(s_propForeColor))
-            {
-                Properties.AddValue(s_propForeColor, value);
-            }
-
-            if (!c.Equals(ForeColor))
+            Color foreColor = Properties.AddOrRemoveValue(s_propForeColor, value);
+            if (!foreColor.Equals(value))
             {
                 OnPropertyChanged(DataGridViewCellStylePropertyInternal.ForeColor);
             }
@@ -362,13 +352,8 @@ public class DataGridViewCellStyle : ICloneable
         get => Properties.GetValueOrDefault<Color>(s_propSelectionBackColor);
         set
         {
-            Color c = SelectionBackColor;
-            if (!value.IsEmpty || Properties.ContainsKey(s_propSelectionBackColor))
-            {
-                Properties.AddValue(s_propSelectionBackColor, value);
-            }
-
-            if (!c.Equals(SelectionBackColor))
+            Color backColor = Properties.AddOrRemoveValue(s_propSelectionBackColor, value);
+            if (!backColor.Equals(value))
             {
                 OnPropertyChanged(DataGridViewCellStylePropertyInternal.Color);
             }
@@ -381,13 +366,8 @@ public class DataGridViewCellStyle : ICloneable
         get => Properties.GetValueOrDefault<Color>(s_propSelectionForeColor);
         set
         {
-            Color c = SelectionForeColor;
-            if (!value.IsEmpty || Properties.ContainsKey(s_propSelectionForeColor))
-            {
-                Properties.AddValue(s_propSelectionForeColor, value);
-            }
-
-            if (!c.Equals(SelectionForeColor))
+            Color selectionForeColor = Properties.AddOrRemoveValue(s_propSelectionForeColor, value);
+            if (!selectionForeColor.Equals(value))
             {
                 OnPropertyChanged(DataGridViewCellStylePropertyInternal.Color);
             }
