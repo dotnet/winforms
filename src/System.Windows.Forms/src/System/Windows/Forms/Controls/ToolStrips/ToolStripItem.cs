@@ -529,8 +529,9 @@ public abstract partial class ToolStripItem :
         }
         set
         {
-            Color backColor = Properties.AddOrRemoveValue(s_backColorProperty, value);
-            if (!backColor.Equals(value))
+            Color backColor = BackColor;
+            Properties.AddOrRemoveValue(s_backColorProperty, value);
+            if (!backColor.Equals(BackColor))
             {
                 OnBackColorChanged(EventArgs.Empty);
             }
@@ -882,8 +883,9 @@ public abstract partial class ToolStripItem :
         }
         set
         {
-            Color foreColor = Properties.AddOrRemoveValue(s_foreColorProperty, value);
-            if (!foreColor.Equals(value))
+            Color foreColor = ForeColor;
+            Properties.AddOrRemoveValue(s_foreColorProperty, value);
+            if (!foreColor.Equals(ForeColor))
             {
                 OnForeColorChanged(EventArgs.Empty);
             }

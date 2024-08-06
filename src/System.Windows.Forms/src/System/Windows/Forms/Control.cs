@@ -828,8 +828,9 @@ public unsafe partial class Control :
                 throw new ArgumentException(SR.TransparentBackColorNotAllowed);
             }
 
-            Color backColor = Properties.AddOrRemoveValue(s_backColorProperty, value);
-            if (!backColor.Equals(value))
+            Color backColor = BackColor;
+            Properties.AddOrRemoveValue(s_backColorProperty, value);
+            if (!backColor.Equals(BackColor))
             {
                 OnBackColorChanged(EventArgs.Empty);
             }
@@ -2105,8 +2106,9 @@ public unsafe partial class Control :
         }
         set
         {
-            Color color = Properties.AddOrRemoveValue(s_foreColorProperty, value);
-            if (!color.Equals(value))
+            Color color = ForeColor;
+            Properties.AddOrRemoveValue(s_foreColorProperty, value);
+            if (!color.Equals(ForeColor))
             {
                 OnForeColorChanged(EventArgs.Empty);
             }
