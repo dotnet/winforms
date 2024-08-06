@@ -6858,6 +6858,14 @@ public unsafe partial class Control :
         return ev.Cancel;
     }
 
+    /// <summary>
+    ///  Called by the NativeWindow callback, when an exception is caught. This will be rerouted to the
+    ///  Application.ThreadException, but in certain Async scenarios it makes more sense, to be able to
+    ///  catch the exception on the control/form which caused it.
+    /// </summary>
+    /// <returns>true, when the exception has been handled, otherwise false.</returns>
+    private protected virtual bool NotifyThreadException(Exception ex) => false;
+
     // Used by form to notify the control that it has been validated.
     private void NotifyValidated()
     {

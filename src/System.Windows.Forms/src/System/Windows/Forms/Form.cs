@@ -168,6 +168,7 @@ public partial class Form : ContainerControl
     private bool _inRecreateHandle;
     private TaskCompletionSource? _tcsNonModalForm;
     private TaskCompletionSource<DialogResult>? _tcsModalForm;
+    private bool _debugFirst;
     private readonly Lock _syncObj = new();
 
     /// <summary>
@@ -5530,12 +5531,23 @@ public partial class Form : ContainerControl
         var syncContext = SynchronizationContext.Current
             ?? throw new InvalidOperationException(SR.FormOrTaskDialog_NoSyncContextForShowAsync);
 
+        if (Debugger.IsAttached && !_debugFirst)
+        {
+            _debugFirst = true;
+            Debugger.Break();
+        }
+
         syncContext.Post((state) => ShowFormInternally(owner), null);
 
         // Wait until the form is closed or disposed.
         try
         {
             await _tcsNonModalForm.Task.ConfigureAwait(true);
+        }
+        catch(Exception ex)
+        {
+            // We need to rethrow the exception on the caller's context.
+            Application.OnThreadException(ex);
         }
         finally
         {
@@ -5554,6 +5566,20 @@ public partial class Form : ContainerControl
                 _tcsNonModalForm.TrySetException(ex);
             }
         }
+    }
+
+    private protected override bool NotifyThreadException(Exception ex)
+    {
+        lock (_syncObj)
+        {
+            if (_tcsNonModalForm is not null)
+            {
+                _tcsNonModalForm.TrySetException(ex);
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /// <summary>
