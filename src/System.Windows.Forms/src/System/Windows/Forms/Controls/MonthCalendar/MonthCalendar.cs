@@ -1182,7 +1182,7 @@ public partial class MonthCalendar : Control
         // Calculate calendar height
         Size textExtent;
 
-        using (var hfont = GdiCache.GetHFONT(Font))
+        using (var hfont = GdiCache.GetHFONTScope(Font))
         using (var screen = GdiCache.GetScreenHdc())
         {
             // this is the string that Windows uses to determine the extent of the today string

@@ -88,7 +88,7 @@ internal static partial class GdiCache
     ///   copies to the cache.
     ///  </para>
     /// </remarks>
-    public static FontCache.Scope GetHFONT(Font? font, FONT_QUALITY quality = FONT_QUALITY.DEFAULT_QUALITY)
+    public static FontCache.Scope GetHFONTScope(Font? font, FONT_QUALITY quality = FONT_QUALITY.DEFAULT_QUALITY)
     {
         Debug.Assert(font is not null);
 #if DEBUG
@@ -96,17 +96,5 @@ internal static partial class GdiCache
 #else
         return font is null ? default : s_fontCache.GetEntry(font, quality).CreateScope();
 #endif
-    }
-
-    public static FontCache.Scope GetHFONT(Font? font, FONT_QUALITY quality, HDC hdc)
-    {
-        if (font is not null)
-        {
-            return GetHFONT(font, quality);
-        }
-
-        // Font is null, build off of the specified HDC's current font.
-        HFONT hfont = (HFONT)PInvoke.GetCurrentObject(hdc, OBJ_TYPE.OBJ_FONT);
-        return new FontCache.Scope(hfont);
     }
 }

@@ -134,6 +134,7 @@ IStream
 ITypeInfo
 ITypeLib
 IUnknown
+LF_FACESIZE
 LoadIcon
 LoadRegTypeLib
 LPARAM

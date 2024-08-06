@@ -860,7 +860,7 @@ public partial class ComboBox : ListControl
         // controls to be the same height.
         Size textExtent = Size.Empty;
 
-        using (var hfont = GdiCache.GetHFONT(Font))
+        using (var hfont = GdiCache.GetHFONTScope(Font))
         using (var screen = GdiCache.GetScreenHdc())
         {
             // this is the character that Windows uses to determine the extent
