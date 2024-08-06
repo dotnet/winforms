@@ -168,7 +168,6 @@ public partial class Form : ContainerControl
     private bool _inRecreateHandle;
     private TaskCompletionSource? _tcsNonModalForm;
     private TaskCompletionSource<DialogResult>? _tcsModalForm;
-    private bool _debugFirst;
     private readonly Lock _syncObj = new();
 
     /// <summary>
@@ -5508,7 +5507,7 @@ public partial class Form : ContainerControl
     /// </summary>
     /// <param name="owner">The optional owner window.</param>
     /// <returns>A task that completes when the form is closed.</returns>
-    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
+    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
     public async Task ShowAsync(IWin32Window? owner = null)
     {
         // We lock the access to the task completion source to prevent
@@ -5517,7 +5516,7 @@ public partial class Form : ContainerControl
         {
             if (_tcsNonModalForm is not null || _tcsModalForm is not null)
             {
-                throw new InvalidOperationException("The form has already been shown asynchronously.");
+                throw new InvalidOperationException(SR.Form_HasAlreadyBeenShownAsync);
             }
 
             _tcsNonModalForm = new(TaskCreationOptions.RunContinuationsAsynchronously);
@@ -5530,12 +5529,6 @@ public partial class Form : ContainerControl
 
         var syncContext = SynchronizationContext.Current
             ?? throw new InvalidOperationException(SR.FormOrTaskDialog_NoSyncContextForShowAsync);
-
-        if (Debugger.IsAttached && !_debugFirst)
-        {
-            _debugFirst = true;
-            Debugger.Break();
-        }
 
         syncContext.Post((state) => ShowFormInternally(owner), null);
 
@@ -5754,7 +5747,7 @@ public partial class Form : ContainerControl
     ///  Shows the form as a modal dialog box asynchronously.
     /// </summary>
     /// <returns>A <see cref="Task{DialogResult}"/> representing the outcome of the dialog.</returns>
-    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
+    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
     public Task<DialogResult> ShowDialogAsync() => ShowDialogAsyncInternal(null);
 
     /// <summary>
@@ -5762,7 +5755,7 @@ public partial class Form : ContainerControl
     /// </summary>
     /// <param name="owner">Any object that implements <see cref="IWin32Window"/> that represents the top-level window that will own the modal dialog box.</param>
     /// <returns>A <see cref="Task{DialogResult}"/> representing the outcome of the dialog.</returns>
-    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
+    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
     public Task<DialogResult> ShowDialogAsync(IWin32Window owner) => ShowDialogAsyncInternal(owner);
 
     private Task<DialogResult> ShowDialogAsyncInternal(IWin32Window? owner)
@@ -5771,10 +5764,10 @@ public partial class Form : ContainerControl
         {
             if (_tcsNonModalForm is not null || _tcsModalForm is not null)
             {
-                throw new InvalidOperationException("The form has already been shown asynchronously.");
+                throw new InvalidOperationException(SR.Form_HasAlreadyBeenShownAsync);
             }
 
-            _tcsModalForm = new TaskCompletionSource<DialogResult>();
+            _tcsModalForm = new TaskCompletionSource<DialogResult>(TaskCreationOptions.RunContinuationsAsynchronously);
         }
 
         if (SynchronizationContext.Current is null)

@@ -13,7 +13,7 @@ public partial class Control
     /// <param name="action">The synchronous action to execute.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>A task representing the operation and containing the function's result.</returns>
-    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
+    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
 #pragma warning disable RS0026 // API with optional parameter(s) should have the most parameters amongst its public overloads
     public async Task InvokeAsync(Action action, CancellationToken cancellationToken = default)
 #pragma warning restore RS0026 // API with optional parameter(s) should have the most parameters amongst its public overloads
@@ -58,7 +58,7 @@ public partial class Control
     /// <param name="callback">The synchronous function to execute.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>A task representing the operation and containing the function's result.</returns>
-    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
+    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
 #pragma warning disable RS0026 // Do not add multiple public overloads with optional parameters
     public async Task<T> InvokeAsync<T>(Func<T> callback, CancellationToken cancellationToken = default)
 #pragma warning restore RS0026 // Do not add multiple public overloads with optional parameters
@@ -108,7 +108,7 @@ public partial class Control
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>A task representing the operation and containing the function's result of type T.</returns>
     /// <exception cref="InvalidOperationException">Thrown if the control's handle is not yet created.</exception>
-    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
+    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
 #pragma warning disable RS0026 // Do not add multiple public overloads with optional parameters
     public async Task InvokeAsync(Func<CancellationToken, ValueTask> callback, CancellationToken cancellationToken = default)
 #pragma warning restore RS0026 // Do not add multiple public overloads with optional parameters
@@ -159,7 +159,7 @@ public partial class Control
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>A task representing the operation and containing the function's result of type T.</returns>
     /// <exception cref="InvalidOperationException">Thrown if the control's handle is not yet created.</exception>
-    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
+    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
 #pragma warning disable RS0026 // API with optional parameter(s) should have the most parameters amongst its public overloads
     public async Task<T> InvokeAsync<T>(Func<CancellationToken, ValueTask<T>> callback, CancellationToken cancellationToken = default)
 #pragma warning restore RS0026 // API with optional parameter(s) should have the most parameters amongst its public overloads
