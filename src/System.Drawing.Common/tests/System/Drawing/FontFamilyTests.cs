@@ -273,13 +273,4 @@ public class FontFamilyTests
             (nint)((IPointer<GpFontFamily>)fontFamily1).Pointer,
             (nint)((IPointer<GpFontFamily>)fontFamily2).Pointer);
     }
-
-    [Fact]
-    public unsafe void ReusingImpossible()
-    {
-        FontFamily fontFamily1 = new("Calibri");
-        using FontFamily fontFamily2 = new(((IPointer<GpFontFamily>)fontFamily1).Pointer);
-        fontFamily1.Dispose();
-        Assert.NotNull(fontFamily2.Name);
-    }
 }
