@@ -109,8 +109,8 @@ public class DataGridViewCellStyle : ICloneable
         get => Properties.GetValueOrDefault<Color>(s_propBackColor);
         set
         {
-            Color backColor = Properties.AddOrRemoveValue(s_propBackColor, value);
-            if (!backColor.Equals(value))
+            Color previous = Properties.AddOrRemoveValue(s_propBackColor, value);
+            if (!previous.Equals(value))
             {
                 OnPropertyChanged(DataGridViewCellStylePropertyInternal.Color);
             }
@@ -174,8 +174,8 @@ public class DataGridViewCellStyle : ICloneable
         get => Properties.TryGetValue(s_propForeColor, out Color color) ? color : Color.Empty;
         set
         {
-            Color foreColor = Properties.AddOrRemoveValue(s_propForeColor, value);
-            if (!foreColor.Equals(value))
+            Color previous = Properties.AddOrRemoveValue(s_propForeColor, value);
+            if (!previous.Equals(value))
             {
                 OnPropertyChanged(DataGridViewCellStylePropertyInternal.ForeColor);
             }
@@ -352,8 +352,8 @@ public class DataGridViewCellStyle : ICloneable
         get => Properties.GetValueOrDefault<Color>(s_propSelectionBackColor);
         set
         {
-            Color backColor = Properties.AddOrRemoveValue(s_propSelectionBackColor, value);
-            if (!backColor.Equals(value))
+            Color previous = Properties.AddOrRemoveValue(s_propSelectionBackColor, value);
+            if (!previous.Equals(value))
             {
                 OnPropertyChanged(DataGridViewCellStylePropertyInternal.Color);
             }
@@ -366,8 +366,8 @@ public class DataGridViewCellStyle : ICloneable
         get => Properties.GetValueOrDefault<Color>(s_propSelectionForeColor);
         set
         {
-            Color selectionForeColor = Properties.AddOrRemoveValue(s_propSelectionForeColor, value);
-            if (!selectionForeColor.Equals(value))
+            Color previous = Properties.AddOrRemoveValue(s_propSelectionForeColor, value);
+            if (!previous.Equals(value))
             {
                 OnPropertyChanged(DataGridViewCellStylePropertyInternal.Color);
             }

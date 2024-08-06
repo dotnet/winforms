@@ -649,12 +649,8 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
                 dataGridViewCellStyle.RemoveScope(DataGridViewCellStyleScopes.Cell);
             }
 
-            if (value is not null || Properties.ContainsKey(s_propCellStyle))
-            {
-                value?.AddScope(DataGridView, DataGridViewCellStyleScopes.Cell);
-
-                Properties.AddOrRemoveValue(s_propCellStyle, value);
-            }
+            value?.AddScope(DataGridView, DataGridViewCellStyleScopes.Cell);
+            Properties.AddOrRemoveValue(s_propCellStyle, value);
 
             if (((dataGridViewCellStyle is not null && value is null) ||
                 (dataGridViewCellStyle is null && value is not null) ||

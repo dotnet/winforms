@@ -106,8 +106,6 @@ internal class PropertyStore
     /// <summary>
     ///  Gets the current string value for the given key, or <see cref="string.Empty"/> if the key is not found.
     /// </summary>
-    /// <param name="key"></param>
-    /// <returns></returns>
     public string GetStringOrEmptyString(int key)
     {
         if (_values.TryGetValue(key, out Value foundValue))
@@ -155,9 +153,6 @@ internal class PropertyStore
     /// <summary>
     ///  Previous will be `string.Empty` if not set. Setting `string.Empty` will clear the value.
     /// </summary>
-    /// <param name="key"></param>
-    /// <param name="value"></param>
-    /// <returns></returns>
     public string AddOrRemoveString(int key, string? value)
     {
         TryGetValue(key, out string? previous);

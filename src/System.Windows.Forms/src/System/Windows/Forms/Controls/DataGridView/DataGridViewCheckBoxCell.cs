@@ -209,19 +209,16 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
         get => Properties.GetValueOrDefault<object?>(s_propFalseValue);
         set
         {
-            if (value is not null || Properties.ContainsKey(s_propFalseValue))
+            Properties.AddOrRemoveValue(s_propFalseValue, value);
+            if (DataGridView is not null)
             {
-                Properties.AddOrRemoveValue(s_propFalseValue, value);
-                if (DataGridView is not null)
+                if (RowIndex != -1)
                 {
-                    if (RowIndex != -1)
-                    {
-                        DataGridView.InvalidateCell(this);
-                    }
-                    else
-                    {
-                        DataGridView.InvalidateColumnInternal(ColumnIndex);
-                    }
+                    DataGridView.InvalidateCell(this);
+                }
+                else
+                {
+                    DataGridView.InvalidateColumnInternal(ColumnIndex);
                 }
             }
         }
@@ -240,8 +237,8 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
         {
             // Sequential enum.  Valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(value);
-            FlatStyle flatStyle = Properties.AddOrRemoveValue(s_propFlatStyle, value);
-            if (value != flatStyle)
+            FlatStyle previous = Properties.AddOrRemoveValue(s_propFlatStyle, value);
+            if (value != previous)
             {
                 OnCommonChange();
             }
@@ -268,19 +265,16 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
         get => Properties.GetValueOrDefault<object?>(s_propIndeterminateValue);
         set
         {
-            if (value is not null || Properties.ContainsKey(s_propIndeterminateValue))
+            Properties.AddOrRemoveValue(s_propIndeterminateValue, value);
+            if (DataGridView is not null)
             {
-                Properties.AddOrRemoveValue(s_propIndeterminateValue, value);
-                if (DataGridView is not null)
+                if (RowIndex != -1)
                 {
-                    if (RowIndex != -1)
-                    {
-                        DataGridView.InvalidateCell(this);
-                    }
-                    else
-                    {
-                        DataGridView.InvalidateColumnInternal(ColumnIndex);
-                    }
+                    DataGridView.InvalidateCell(this);
+                }
+                else
+                {
+                    DataGridView.InvalidateColumnInternal(ColumnIndex);
                 }
             }
         }

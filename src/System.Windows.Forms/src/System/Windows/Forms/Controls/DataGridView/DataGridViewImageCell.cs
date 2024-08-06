@@ -100,8 +100,8 @@ public partial class DataGridViewImageCell : DataGridViewCell
         {
             // Sequential enum.  Valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(value);
-            DataGridViewImageCellLayout imageLayout = Properties.AddOrRemoveValue(s_propImageCellLayout, value);
-            if (imageLayout != value)
+            DataGridViewImageCellLayout previous = Properties.AddOrRemoveValue(s_propImageCellLayout, value);
+            if (previous != value)
             {
                 OnCommonChange();
             }
