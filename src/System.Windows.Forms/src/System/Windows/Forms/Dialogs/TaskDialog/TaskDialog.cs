@@ -525,6 +525,21 @@ public partial class TaskDialog : IWin32Window
 
         TaskDialog? dialog = null;
 
+        if (SynchronizationContext.Current is null)
+        {
+            WindowsFormsSynchronizationContext.InstallIfNeeded();
+        }
+
+        var syncContext = SynchronizationContext.Current
+            ?? throw new InvalidOperationException(SR.FormOrTaskDialog_NoSyncContextForShowAsync);
+
+        syncContext.Post(_ => ShowDialogProc(), null);
+
+        TaskDialogButton result;
+
+        result = await tcs.Task.ConfigureAwait(true);
+        return result;
+
         void ShowDialogProc()
         {
             try
@@ -537,18 +552,6 @@ public partial class TaskDialog : IWin32Window
                 tcs.SetException(ex);
             }
         }
-
-        if (SynchronizationContext.Current is null)
-        {
-            WindowsFormsSynchronizationContext.InstallIfNeeded();
-        }
-
-        SynchronizationContext.Current!.Post(_ => ShowDialogProc(), null);
-
-        TaskDialogButton result;
-
-        result = await tcs.Task.ConfigureAwait(true);
-        return result;
     }
 
     /// <summary>

@@ -7,12 +7,12 @@ using System.ComponentModel.Design;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using System.Windows.Forms.Analyzers.Diagnostics;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
+using Windows.Win32.Graphics.Dwm;
 using Windows.Win32.System.Threading;
 using Windows.Win32.UI.Accessibility;
-using Windows.Win32.Graphics.Dwm;
-using System.Windows.Forms.Analyzers.Diagnostics;
 
 namespace System.Windows.Forms;
 
@@ -5510,6 +5510,8 @@ public partial class Form : ContainerControl
     [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
     public async Task ShowAsync(IWin32Window? owner = null)
     {
+        // We lock the access to the task completion source to prevent
+        // multiple calls to ShowAsync from interfering with each other.
         lock (_syncObj)
         {
             if (_tcsNonModalForm is not null || _tcsModalForm is not null)
@@ -5517,10 +5519,18 @@ public partial class Form : ContainerControl
                 throw new InvalidOperationException("The form has already been shown asynchronously.");
             }
 
-            _tcsNonModalForm = new TaskCompletionSource();
-
-            BeginInvoke(new Action(ShowFormInternally));
+            _tcsNonModalForm = new(TaskCreationOptions.RunContinuationsAsynchronously);
         }
+
+        if (SynchronizationContext.Current is null)
+        {
+            WindowsFormsSynchronizationContext.InstallIfNeeded();
+        }
+
+        var syncContext = SynchronizationContext.Current
+            ?? throw new InvalidOperationException(SR.FormOrTaskDialog_NoSyncContextForShowAsync);
+
+        syncContext.Post((state) => ShowFormInternally(owner), null);
 
         // Wait until the form is closed or disposed.
         try
@@ -5532,19 +5542,12 @@ public partial class Form : ContainerControl
             _tcsNonModalForm = null;
         }
 
-        void ShowFormInternally()
+        void ShowFormInternally(IWin32Window? owner)
         {
             try
             {
                 // Show the form with an optional owner.
-                if (owner is not null)
-                {
-                    Show(owner);
-                }
-                else
-                {
-                    Show();
-                }
+                Show(owner);
             }
             catch (Exception ex)
             {
@@ -5748,27 +5751,33 @@ public partial class Form : ContainerControl
             _tcsModalForm = new TaskCompletionSource<DialogResult>();
         }
 
-        BeginInvoke(new Action(() =>
+        if (SynchronizationContext.Current is null)
+        {
+            WindowsFormsSynchronizationContext.InstallIfNeeded();
+        }
+
+        var syncContext = SynchronizationContext.Current
+            ?? throw new InvalidOperationException(SR.FormOrTaskDialog_NoSyncContextForShowAsync);
+
+        syncContext.Post((state) => ShowDialogProc(owner), null);
+        return _tcsModalForm.Task;
+
+        void ShowDialogProc(IWin32Window? owner = default)
         {
             try
             {
-                DialogResult result = owner is null
-                    ? ShowDialog()
-                    : ShowDialog(owner);
-
-                _tcsModalForm.SetResult(result);
+                DialogResult result = ShowDialog(owner);
+                _tcsModalForm!.SetResult(result);
             }
             catch (Exception ex)
             {
-                _tcsModalForm.SetException(ex);
+                _tcsModalForm!.SetException(ex);
             }
             finally
             {
                 _tcsModalForm = null;
             }
-        }), null);
-
-        return _tcsModalForm.Task;
+        }
     }
 
     /// <summary>
