@@ -67,7 +67,7 @@ public partial class ProfessionalColorTable
     /// <summary>
     ///  When this is specified, professional colors picks from SystemColors
     ///  rather than colors that match the current theme. If theming is not
-    ///  turned on, we'll fall back to Application.SystemColors.
+    ///  turned on, we'll fall back to SystemColors.
     /// </summary>
     public bool UseSystemColors
     {

@@ -96,7 +96,7 @@ public class FontDialog : CommonDialog
     {
         get
         {
-            // Convert to RGB and back to resolve indirect colors like Application.SystemColors.ControlText
+            // Convert to RGB and back to resolve indirect colors like SystemColors.ControlText
             // to real color values like Color.Lime
             return !_usingDefaultIndirectColor ? _color : ColorTranslator.FromWin32(ColorTranslator.ToWin32(_color));
         }

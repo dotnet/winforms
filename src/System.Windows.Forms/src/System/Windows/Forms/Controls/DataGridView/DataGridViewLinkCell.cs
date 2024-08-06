@@ -406,8 +406,8 @@ public partial class DataGridViewLinkCell : DataGridViewCell
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get
         {
-            // Selected cells have Application.SystemColors.Highlight as a background.
-            // Application.SystemColors.HighlightText is supposed to be in contrast with Application.SystemColors.Highlight.
+            // Selected cells have SystemColors.Highlight as a background.
+            // SystemColors.HighlightText is supposed to be in contrast with SystemColors.Highlight.
             return Selected ? SystemColors.HighlightText : SystemColors.HotTrack;
         }
     }

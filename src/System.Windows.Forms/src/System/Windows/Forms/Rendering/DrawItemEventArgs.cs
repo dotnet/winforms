@@ -108,7 +108,7 @@ public class DrawItemEventArgs : EventArgs, IDisposable, IDeviceContext, IGraphi
     public DrawItemState State { get; }
 
     /// <summary>
-    ///  A suggested color drawing: either Application.SystemColors.WindowText or Application.SystemColors.HighlightText,
+    ///  A suggested color drawing: either SystemColors.WindowText or SystemColors.HighlightText,
     ///  depending on whether this item is selected.
     /// </summary>
     public Color ForeColor
