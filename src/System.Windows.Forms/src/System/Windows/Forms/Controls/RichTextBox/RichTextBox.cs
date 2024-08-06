@@ -446,11 +446,6 @@ public partial class RichTextBox : TextBoxBase
         return preferredSize + scrollBarPadding;
     }
 
-    private protected override void OnNcPaint(Graphics graphics)
-    {
-        base.OnNcPaint(graphics);
-    }
-
     private bool InConstructor
     {
         get => _richTextBoxFlags[s_fInCtorSection] != 0;
@@ -2515,22 +2510,6 @@ public partial class RichTextBox : TextBoxBase
         SendZoomFactor(_zoomMultiplier);
 
         SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(UserPreferenceChangedHandler);
-    }
-
-    private void DefineClientRectangle()
-    {
-        RECT clientSize = default;
-
-        // Define the client area of the RichText.
-        PInvoke.SendMessage(this, PInvoke.EM_GETRECT, (WPARAM)0, ref clientSize);
-        var padding = GetVisualStylesPadding(true);
-
-        clientSize.right -= padding.Horizontal;
-        clientSize.bottom -= padding.Vertical;
-        clientSize.left += padding.Left;
-        clientSize.top += padding.Top;
-
-        PInvoke.SendMessage(this, PInvoke.EM_SETRECT, (WPARAM)0, ref clientSize);
     }
 
     protected override void OnHandleDestroyed(EventArgs e)

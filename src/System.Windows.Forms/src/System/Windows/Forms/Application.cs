@@ -50,6 +50,7 @@ public sealed partial class Application
 
     private const string DarkModeKeyPath = "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
     private const string DarkModeKey = "AppsUseLightTheme";
+    private const int DarkModeNotAvailable = -1;
 
     /// <summary>
     ///  Events the user can hook into
@@ -250,7 +251,7 @@ public sealed partial class Application
     ///  Gets the default dark mode for the application. This is the SystemColorMode which either has been set
     ///  by <see cref="SetColorMode(SystemColorMode)"/> or its default value <see cref="SystemColorMode.Classic"/>.
     /// </summary>
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
     public static SystemColorMode ColorMode =>
         !s_systemColorMode.HasValue
             ? SystemColorMode.Classic
@@ -262,7 +263,7 @@ public sealed partial class Application
     ///  Sets the default dark mode for the application.
     /// </summary>
     /// <param name="systemColorMode">The default dark mode to set.</param>
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
     public static void SetColorMode(SystemColorMode systemColorMode)
     {
         try
@@ -308,7 +309,7 @@ public sealed partial class Application
     ///   is essential.
     ///  </para>
     /// </remarks>
-    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
+    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
     public static VisualStylesMode DefaultVisualStylesMode { get; private set; }
 
     /// <summary>
@@ -318,7 +319,7 @@ public sealed partial class Application
     ///  as not setting using <see cref="EnableVisualStyles"/>.
     /// </summary>
     /// <param name="styleSetting">The version of visual styles to set.</param>
-    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
+    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
     public static void SetDefaultVisualStylesMode(VisualStylesMode styleSetting)
     {
         if (styleSetting != DefaultVisualStylesMode)
@@ -363,10 +364,10 @@ public sealed partial class Application
     {
         if (SystemInformation.HighContrast)
         {
-            return -1;
+            return DarkModeNotAvailable;
         }
 
-        int systemColorMode = -1;
+        int systemColorMode = DarkModeNotAvailable;
 
         // Dark mode is supported when we are >= W11/22000
         // Technically, we could go earlier, but then the APIs we're using weren't officially public.
@@ -377,7 +378,7 @@ public sealed partial class Application
                 systemColorMode = (Registry.GetValue(
                     keyName: DarkModeKeyPath,
                     valueName: DarkModeKey,
-                    defaultValue: -1) as int?) ?? systemColorMode;
+                    defaultValue: DarkModeNotAvailable) as int?) ?? systemColorMode;
             }
             catch (Exception ex) when (!ex.IsCriticalException())
             {

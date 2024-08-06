@@ -2137,6 +2137,11 @@
         <target state="translated">Určuje, zda je ovládací prvek viditelný nebo skrytý.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlVisualStylesModeChangedDescr">
+        <source>Event raised whenever the VisualStylesMode property changes.</source>
+        <target state="new">Event raised whenever the VisualStylesMode property changes.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ControlVisualStylesModeDescr">
         <source>Determines how the control renders itself with visual styles. This ambient property can inherit its value from its parent control or, if it is a top-level control, from the application's default setting.</source>
         <target state="new">Determines how the control renders itself with visual styles. This ambient property can inherit its value from its parent control or, if it is a top-level control, from the application's default setting.</target>

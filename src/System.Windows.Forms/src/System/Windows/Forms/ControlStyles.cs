@@ -143,6 +143,6 @@ public enum ControlStyles
     ///  from this setting. Note that using this settings will cause some
     ///  win32 control theming renderers to become inactive for a specific theme.
     /// </summary>
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
     ApplyThemingImplicitly = 0b00001000_00000000_00000000, // 0x00080000
 }

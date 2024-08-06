@@ -5,7 +5,7 @@ using System.Windows.Forms.Analyzers.Diagnostics;
 
 namespace System.Windows.Forms
 {
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
     public enum SystemColorMode
     {
         /// <summary>

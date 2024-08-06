@@ -7015,4 +7015,7 @@ Stack trace where the illegal operation occurred was:
   <data name="FormCaptionTextColorDescr" xml:space="preserve">
     <value>The color of the Form's text caption (title bar text).</value>
   </data>
+  <data name="ControlVisualStylesModeChangedDescr" xml:space="preserve">
+    <value>Event raised whenever the VisualStylesMode property changes.</value>
+  </data>
 </root>

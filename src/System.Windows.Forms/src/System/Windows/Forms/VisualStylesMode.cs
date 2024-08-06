@@ -8,7 +8,7 @@ namespace System.Windows.Forms;
 /// <summary>
 ///  Represents the version of the visual renderer.
 /// </summary>
-[Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
+[Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
 public enum VisualStylesMode
 {
     /// <summary>

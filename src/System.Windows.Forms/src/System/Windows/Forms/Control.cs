@@ -3642,9 +3642,8 @@ public unsafe partial class Control :
     [SRCategory(nameof(SR.CatAppearance))]
     [Browsable(true)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    // [SRDescription(nameof(SR.ControlVisualStylesModeChangedDescr))]
-    [SRDescription("VisualStyleMode Description.")]
-    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
+    [SRDescription(nameof(SR.ControlVisualStylesModeChangedDescr))]
+    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
     public event EventHandler? VisualStylesModeChanged
     {
         add => Events.AddHandler(s_visualStylesModeChangedEvent, value);
@@ -3680,7 +3679,7 @@ public unsafe partial class Control :
     [SRCategory(nameof(SR.CatAppearance))]
     [EditorBrowsable(EditorBrowsableState.Always)]
     [SRDescription(nameof(SR.ControlVisualStylesModeDescr))]
-    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
+    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
     public VisualStylesMode VisualStylesMode
     {
         get => Properties.TryGetObject(s_visualStylesModeProperty, out VisualStylesMode value)
@@ -3757,7 +3756,7 @@ public unsafe partial class Control :
     ///  <see cref="Application.DefaultVisualStylesMode"/> whose default is <see cref="VisualStylesMode.Classic"/>.
     /// </summary>
     /// <returns>The default visual styles mode for the control.</returns>
-    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
+    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
     protected virtual VisualStylesMode DefaultVisualStylesMode => Application.DefaultVisualStylesMode;
 
     /// <summary>
@@ -7411,22 +7410,19 @@ public unsafe partial class Control :
     ///  Occurs when the <see cref="VisualStylesMode"/> property of the parent of this control changed.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
+    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
     protected virtual void OnParentVisualStylesModeChanged(EventArgs e)
     {
-        if (Properties.ContainsObject(s_visualStylesModeProperty))
+        if (Properties.ContainsObject(s_visualStylesModeProperty)
+            && Equals(Properties.GetObject(s_visualStylesModeProperty), Parent?.VisualStylesMode))
         {
-            // If this DataContext was the same as the Parent's just became,
-            if (Equals(Properties.GetObject(s_visualStylesModeProperty), Parent?.VisualStylesMode))
-            {
-                // we need to make it ambient again by removing it.
-                Properties.RemoveObject(s_visualStylesModeProperty);
+            // we need to make it ambient again by removing it.
+            Properties.RemoveObject(s_visualStylesModeProperty);
 
-                // Even though internally we don't store it any longer, and the
-                // value we had stored therefore changed, technically the value
-                // remains the same, so we don't raise the DataContextChanged event.
-                return;
-            }
+            // Even though internally we don't store it any longer, and the
+            // value we had stored therefore changed, technically the value
+            // remains the same, so we don't raise the DataContextChanged event.
+            return;
         }
 
         // In every other case we're going to raise the event.
@@ -7568,7 +7564,7 @@ public unsafe partial class Control :
     ///  Inheriting classes should override this method to handle this event.
     ///  Call base.<see cref="OnVisualStylesModeChanged"/> to send this event to any registered event listeners.
     /// </summary>
-    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
+    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnVisualStylesModeChanged(EventArgs e)
     {
@@ -10893,7 +10889,8 @@ public unsafe partial class Control :
                 hwnd,
                 DWMWINDOWATTRIBUTE.DWMWA_USE_IMMERSIVE_DARK_MODE,
                 &value,
-                (uint)sizeof(BOOL));
+                (uint)sizeof(BOOL)).AssertSuccess();
+            ;
         }
     }
 

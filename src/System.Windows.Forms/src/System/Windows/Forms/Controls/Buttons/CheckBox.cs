@@ -211,7 +211,7 @@ public partial class CheckBox : ButtonBase
 
             bool checkedChanged = oldChecked != Checked;
 
-            // In here, we take care of both the event changed events for Checked...
+            // In here, we take care of both the changed events for Checked and CheckState.
             if (checkedChanged)
             {
                 OnCheckedChanged(EventArgs.Empty);
@@ -219,7 +219,6 @@ public partial class CheckBox : ButtonBase
 
             _notifyAccessibilityStateChangedNeeded = !checkedChanged;
 
-            // ...and Check_State_.
             OnCheckStateChanged(EventArgs.Empty);
             _notifyAccessibilityStateChangedNeeded = false;
 
