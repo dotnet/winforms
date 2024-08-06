@@ -253,13 +253,9 @@ public sealed partial class Application
     [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = "https://aka.ms/WfoExperimental/{0}")]
     public static SystemColorMode ColorMode =>
         !s_systemColorMode.HasValue
-            // No value set: we default to classic (light mode)
             ? SystemColorMode.Classic
-            // If System is set
             : s_systemColorMode.Value == SystemColorMode.System
-                // We return the system color mode
                 ? SystemColorMode
-                // Otherwise we return the value set by the user
                 : s_systemColorMode.Value;
 
     /// <summary>
@@ -271,6 +267,15 @@ public sealed partial class Application
     {
         try
         {
+            // Can't use the Generator here, since it cannot deal with Experimentals.
+            _ = systemColorMode switch
+            {
+                SystemColorMode.Classic => systemColorMode,
+                SystemColorMode.System => systemColorMode,
+                SystemColorMode.Dark => systemColorMode,
+                _ => throw new ArgumentOutOfRangeException(nameof(systemColorMode))
+            };
+
             if (GetSystemColorModeInternal() > -1)
             {
                 s_systemColorMode = systemColorMode;

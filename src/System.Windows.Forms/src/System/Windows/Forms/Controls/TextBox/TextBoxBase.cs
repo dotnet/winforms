@@ -1690,6 +1690,21 @@ public abstract partial class TextBoxBase : Control
         }
     }
 
+#pragma warning disable WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    protected override unsafe void OnSizeChanged(EventArgs e)
+    {
+        if (VisualStylesMode >= VisualStylesMode.Net10)
+        {
+            // Send a message to invalidate the non-client area to ensure that the border is drawn correctly.
+            PInvoke.RedrawWindow(
+                hWnd: this,
+                lprcUpdate: null,
+                hrgnUpdate: HRGN.Null,
+                flags: REDRAW_WINDOW_FLAGS.RDW_FRAME | REDRAW_WINDOW_FLAGS.RDW_INVALIDATE);
+        }
+    }
+#pragma warning restore WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
     protected override void OnTextChanged(EventArgs e)
     {
         // since AutoSize existed in Everett, (and is the default) we can't

@@ -3695,6 +3695,16 @@ public unsafe partial class Control :
                 return;
             }
 
+            // Can't use the Generator here, since it cannot deal with Experimentals.
+            _ = value switch
+            {
+                VisualStylesMode.Classic => value,
+                VisualStylesMode.Disabled => value,
+                VisualStylesMode.Net10 => value,
+                VisualStylesMode.Latest => value,
+                _ => throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(VisualStylesMode))
+            };
+
             // When VisualStyleMode was different than its parent before, but now it is about to become the same,
             // we're removing it altogether, so it can again inherit the value from its parent.
             if (Properties.ContainsObject(s_visualStylesModeProperty)

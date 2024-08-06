@@ -4619,7 +4619,7 @@ public partial class ListView : Control
             _ = PInvoke.SetWindowTheme(HWND, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null);
 
             // Get the ListView's ColumnHeader handle:
-            var columnHeaderHandle = (HWND)PInvoke.SendMessage(this, PInvoke.LVM_GETHEADER, (WPARAM)0, (LPARAM)0);
+            HWND columnHeaderHandle = (HWND)PInvoke.SendMessage(this, PInvoke.LVM_GETHEADER, (WPARAM)0, (LPARAM)0);
             PInvoke.SetWindowTheme(columnHeaderHandle, $"{DarkModeIdentifier}_{ItemsViewThemeIdentifier}", null);
         }
 #pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
@@ -6027,23 +6027,23 @@ public partial class ListView : Control
 #pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         if (Application.IsDarkModeEnabled
             && !OwnerDraw
-            && nmhdr->code == PInvoke.NM_CUSTOMDRAW
-            && m.LParamInternal != 0)
+            && nmhdr->code == PInvoke.NM_CUSTOMDRAW)
         {
             NMLVCUSTOMDRAW* nmlvcd = (NMLVCUSTOMDRAW*)(nint)m.LParamInternal;
 
             if (nmlvcd->nmcd.dwDrawStage == NMCUSTOMDRAW_DRAW_STAGE.CDDS_PREPAINT)
             {
-                // Request item draw notifications.
+                // We request the notification for the items to be drawn.
                 m.ResultInternal = (LRESULT)(nint)PInvoke.CDRF_NOTIFYITEMDRAW;
-                return true; // And done.
+                return true;
             }
 
             else if (nmlvcd->nmcd.dwDrawStage == NMCUSTOMDRAW_DRAW_STAGE.CDDS_ITEMPREPAINT)
             {
+                // Setting the current ForeColor to the text color.
                 PInvoke.SetTextColor(nmlvcd->nmcd.hdc, ForeColor);
 
-                // ...and then just let the default handling play out.
+                // and the rest remains the same.
                 m.ResultInternal = (LRESULT)(nint)PInvoke.CDRF_DODEFAULT;
                 return false;
             }
