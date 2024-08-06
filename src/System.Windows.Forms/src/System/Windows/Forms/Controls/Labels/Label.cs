@@ -1066,7 +1066,7 @@ public partial class Label : Control, IAutomationLiveRegion
         if (string.IsNullOrEmpty(Text))
         {
             // Empty labels return the font height + borders
-            using var hfont = GdiCache.GetHFONT(Font);
+            using var hfont = GdiCache.GetHFONTScope(Font);
             using var screen = GdiCache.GetScreenHdc();
 
             // This is the character that Windows uses to determine the extent
@@ -1124,7 +1124,7 @@ public partial class Label : Control, IAutomationLiveRegion
             padding = TextPaddingOptions.LeftAndRightPadding;
         }
 
-        using var hfont = GdiCache.GetHFONT(Font);
+        using var hfont = GdiCache.GetHFONTScope(Font);
         DRAWTEXTPARAMS dtParams = hfont.GetTextMargins(padding);
 
         // This is actually leading margin.

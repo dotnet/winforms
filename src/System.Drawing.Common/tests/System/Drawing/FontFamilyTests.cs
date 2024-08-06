@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing.Text;
+using Windows.Win32.Foundation;
+using Windows.Win32.Graphics.GdiPlus;
 
 namespace System.Drawing.Tests;
 
@@ -41,13 +43,19 @@ public class FontFamilyTests
     }
 
     [Theory]
-    [InlineData(null)]
     [InlineData("NoSuchFont")]
     [InlineData("Serif")]
     public void Ctor_NoSuchFontName_ThrowsArgumentException(string? name)
     {
         AssertExtensions.Throws<ArgumentException>(null, () => new FontFamily(name));
         AssertExtensions.Throws<ArgumentException>(null, () => new FontFamily(name, null));
+    }
+
+    [Fact]
+    public void Ctor_NullFontName_ThrowsArgumentNullException()
+    {
+        AssertExtensions.Throws<ArgumentNullException>("name", () => new FontFamily((string)null!));
+        AssertExtensions.Throws<ArgumentNullException>("name", () => new FontFamily(null!, null));
     }
 
     [Fact]
@@ -83,9 +91,6 @@ public class FontFamilyTests
         }
     }
 
-    // This will fail on any platform we use libgdiplus, with any
-    // installed system fonts whose name is longer than 31 chars.
-    // macOS 10.15+ ships out of the box with a problem font
     [Fact]
     public void Families_Get_ReturnsExpected()
     {
@@ -257,5 +262,24 @@ public class FontFamilyTests
         FontFamily fontFamily = FontFamily.GenericMonospace;
         fontFamily.Dispose();
         fontFamily.Dispose();
+    }
+
+    [Fact]
+    public unsafe void MultipleInstancesHaveSameHandle()
+    {
+        using FontFamily fontFamily1 = new("Calibri");
+        using FontFamily fontFamily2 = new("Calibri");
+        Assert.Equal(
+            (nint)((IPointer<GpFontFamily>)fontFamily1).Pointer,
+            (nint)((IPointer<GpFontFamily>)fontFamily2).Pointer);
+    }
+
+    [Fact]
+    public unsafe void ReusingImpossible()
+    {
+        FontFamily fontFamily1 = new("Calibri");
+        using FontFamily fontFamily2 = new(((IPointer<GpFontFamily>)fontFamily1).Pointer);
+        fontFamily1.Dispose();
+        Assert.NotNull(fontFamily2.Name);
     }
 }

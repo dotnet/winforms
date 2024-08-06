@@ -489,20 +489,22 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
         Initialize(_fontFamily, size, style, unit, gdiCharSet, gdiVerticalFont);
     }
 
-    /// <summary>
-    /// Initializes this object's fields.
-    /// </summary>
     private void Initialize(string familyName, float emSize, FontStyle style, GraphicsUnit unit, byte gdiCharSet, bool gdiVerticalFont)
     {
         _originalFontName = familyName;
 
-        SetFontFamily(new FontFamily(StripVerticalName(familyName), createDefaultOnFail: true));
+        ReadOnlySpan<char> name = familyName;
+
+        // Strip the vertical tag ('@') if present.
+        if (name.Length > 1 && name[0] == '@')
+        {
+            name = name[1..];
+        }
+
+        SetFontFamily(new FontFamily(name, createDefaultOnFail: true));
         Initialize(_fontFamily, emSize, style, unit, gdiCharSet, gdiVerticalFont);
     }
 
-    /// <summary>
-    /// Initializes this object's fields.
-    /// </summary>
     private void Initialize(FontFamily family, float emSize, FontStyle style, GraphicsUnit unit, byte gdiCharSet, bool gdiVerticalFont)
     {
         ArgumentNullException.ThrowIfNull(family);
@@ -686,17 +688,6 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
         //
         // Make sure _fontFamily is not finalized so the underlying singleton object is kept alive.
         GC.SuppressFinalize(_fontFamily);
-    }
-
-    [return: NotNullIfNotNull(nameof(familyName))]
-    private static string? StripVerticalName(string? familyName)
-    {
-        if (familyName?.Length > 1 && familyName[0] == '@')
-        {
-            return familyName[1..];
-        }
-
-        return familyName;
     }
 
     public void ToLogFont(object logFont)

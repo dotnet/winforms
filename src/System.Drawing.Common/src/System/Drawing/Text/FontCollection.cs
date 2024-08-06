@@ -6,11 +6,12 @@ namespace System.Drawing.Text;
 /// <summary>
 ///  When inherited, enumerates the FontFamily objects in a collection of fonts.
 /// </summary>
-public abstract unsafe class FontCollection : IDisposable
+public abstract unsafe class FontCollection : IDisposable, IPointer<GpFontCollection>
 {
-    internal GpFontCollection* _nativeFontCollection;
+    private GpFontCollection* _nativeFontCollection;
+    GpFontCollection* IPointer<GpFontCollection>.Pointer => _nativeFontCollection;
 
-    internal FontCollection() => _nativeFontCollection = null;
+    private protected FontCollection(GpFontCollection* nativeFontCollection) => _nativeFontCollection = nativeFontCollection;
 
     /// <summary>
     ///  Disposes of this <see cref='FontCollection'/>
@@ -21,7 +22,7 @@ public abstract unsafe class FontCollection : IDisposable
         GC.SuppressFinalize(this);
     }
 
-    protected virtual void Dispose(bool disposing) { }
+    protected virtual void Dispose(bool disposing) => _nativeFontCollection = null;
 
     /// <summary>
     ///  Gets the array of <see cref='FontFamily'/> objects associated with this <see cref='FontCollection'/>.

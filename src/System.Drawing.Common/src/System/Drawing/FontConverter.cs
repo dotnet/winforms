@@ -367,7 +367,7 @@ public class FontConverter : TypeConverter
         }
         else
         {
-            FontCollection collection = new InstalledFontCollection();
+            FontCollection collection = InstalledFontCollection.Instance;
             FontFamily[] installedFontList = collection.Families;
             foreach (FontFamily font in installedFontList)
             {
