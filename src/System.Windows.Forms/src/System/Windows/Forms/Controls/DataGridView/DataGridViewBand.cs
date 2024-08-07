@@ -128,7 +128,7 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
         }
         set
         {
-            if (value is not null || Properties.ContainsKey(s_propDefaultCellStyle))
+            if (value is not null || Properties.ContainsKey(s_propDefaultHeaderCellType))
             {
                 if (!typeof(DataGridViewHeaderCell).IsAssignableFrom(value))
                 {
