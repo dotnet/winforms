@@ -23,7 +23,7 @@ public partial class Control
         if (cancellationToken.IsCancellationRequested)
             return;
 
-        TaskCompletionSource<object?> tcs = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        TaskCompletionSource tcs = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
         using (cancellationToken.Register(() => tcs.SetCanceled(), useSynchronizationContext: false))
         {
@@ -42,11 +42,11 @@ public partial class Control
                 }
 
                 action();
-                tcs.SetResult(null);
+                tcs.TrySetResult();
             }
             catch (Exception ex)
             {
-                tcs.SetException(ex);
+                tcs.TrySetException(ex);
             }
         }
     }
@@ -84,16 +84,16 @@ public partial class Control
             {
                 if (cancellationToken.IsCancellationRequested)
                 {
-                    tcs.SetCanceled(cancellationToken);
+                    tcs.TrySetCanceled(cancellationToken);
                     return;
                 }
 
                 T result = callback();
-                tcs.SetResult(result);
+                tcs.TrySetResult(result);
             }
             catch (Exception ex)
             {
-                tcs.SetException(ex);
+                tcs.TrySetException(ex);
             }
         }
     }
@@ -134,16 +134,16 @@ public partial class Control
             {
                 if (cancellationToken.IsCancellationRequested)
                 {
-                    tcs.SetCanceled(cancellationToken);
+                    tcs.TrySetCanceled(cancellationToken);
                     return;
                 }
 
                 await callback(cancellationToken).ConfigureAwait(false);
-                tcs.SetResult();
+                tcs.TrySetResult();
             }
             catch (Exception ex)
             {
-                tcs.SetException(ex);
+                tcs.TrySetException(ex);
             }
         }
     }
@@ -184,11 +184,11 @@ public partial class Control
             try
             {
                 var returnValue = await callback(cancellationToken).ConfigureAwait(false);
-                tcs.SetResult(returnValue);
+                tcs.TrySetResult(returnValue);
             }
             catch (Exception ex)
             {
-                tcs.SetException(ex);
+                tcs.TrySetException(ex);
             }
         }
     }

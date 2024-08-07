@@ -3636,7 +3636,7 @@ public partial class Form : ContainerControl
                 PInvoke.DestroyMenu(dummyMenu);
             }
 
-            _tcsNonModalForm?.SetResult();
+            _tcsNonModalForm?.TrySetResult();
             _tcsNonModalForm = null;
         }
         else

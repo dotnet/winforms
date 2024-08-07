@@ -545,11 +545,11 @@ public partial class TaskDialog : IWin32Window
             try
             {
                 dialog = new();
-                tcs.SetResult(dialog.ShowDialogInternal(hwndOwner, page, startupLocation));
+                tcs.TrySetResult(dialog.ShowDialogInternal(hwndOwner, page, startupLocation));
             }
             catch (Exception ex)
             {
-                tcs.SetException(ex);
+                tcs.TrySetException(ex);
             }
         }
     }
