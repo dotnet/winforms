@@ -54,7 +54,7 @@ public class FontFamilyTests
     [Fact]
     public void Ctor_NullFontName_ThrowsArgumentNullException()
     {
-        AssertExtensions.Throws<ArgumentNullException>("name", () => new FontFamily((string)null!));
+        AssertExtensions.Throws<ArgumentNullException>("name", () => new FontFamily(null!));
         AssertExtensions.Throws<ArgumentNullException>("name", () => new FontFamily(null!, null));
     }
 
