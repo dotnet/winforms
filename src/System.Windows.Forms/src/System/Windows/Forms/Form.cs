@@ -2157,7 +2157,7 @@ public partial class Form : ContainerControl
         get => Properties.GetValueOrDefault(s_propTransparencyKey, Color.Empty);
         set
         {
-            Properties.AddValue(s_propTransparencyKey, value);
+            Properties.AddOrRemoveValue(s_propTransparencyKey, value);
             if (!IsMdiContainer)
             {
                 bool oldLayered = (_formState[s_formStateLayered] == 1);

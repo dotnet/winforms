@@ -101,8 +101,8 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
                 style.RemoveScope(IsRow ? DataGridViewCellStyleScopes.Row : DataGridViewCellStyleScopes.Column);
             }
 
-                value?.AddScope(DataGridView, IsRow ? DataGridViewCellStyleScopes.Row : DataGridViewCellStyleScopes.Column);
-                Properties.AddOrRemoveValue(s_propDefaultCellStyle, value);
+            value?.AddScope(DataGridView, IsRow ? DataGridViewCellStyleScopes.Row : DataGridViewCellStyleScopes.Column);
+            Properties.AddOrRemoveValue(s_propDefaultCellStyle, value);
 
             if (DataGridView is not null &&
                ((style is not null ^ value is not null) ||
@@ -124,23 +124,19 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
                 return type;
             }
 
-            if (IsRow)
-            {
-                return typeof(DataGridViewRowHeaderCell);
-            }
-            else
-            {
-                return typeof(DataGridViewColumnHeaderCell);
-            }
+            return IsRow ? typeof(DataGridViewRowHeaderCell) : typeof(DataGridViewColumnHeaderCell);
         }
         set
         {
-            if (value is not null && !typeof(DataGridViewHeaderCell).IsAssignableFrom(value))
+            if (value is not null || Properties.ContainsKey(s_propDefaultCellStyle))
             {
-                throw new ArgumentException(string.Format(SR.DataGridView_WrongType, nameof(DefaultHeaderCellType), "System.Windows.Forms.DataGridViewHeaderCell"), nameof(value));
-            }
+                if (!typeof(DataGridViewHeaderCell).IsAssignableFrom(value))
+                {
+                    throw new ArgumentException(string.Format(SR.DataGridView_WrongType, nameof(DefaultHeaderCellType), "System.Windows.Forms.DataGridViewHeaderCell"), nameof(value));
+                }
 
-            Properties.AddOrRemoveValue(s_propDefaultHeaderCellType, value);
+                Properties.AddOrRemoveValue(s_propDefaultHeaderCellType, value);
+            }
         }
     }
 
