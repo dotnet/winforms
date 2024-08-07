@@ -268,7 +268,7 @@ public sealed partial class Application
     {
         try
         {
-            // Can't use the Generator here, since it cannot deal with Experimentals.
+            // Can't use the Generator here, since it cannot deal with experimentals.
             _ = systemColorMode switch
             {
                 SystemColorMode.Classic => systemColorMode,
@@ -360,6 +360,7 @@ public sealed partial class Application
             ? SystemColorMode.Dark
             : SystemColorMode.Classic;
 
+    // Returns 0 if dark mode is available, otherwise -1 (DarkModeNotAvailable)
     private static int GetSystemColorModeInternal()
     {
         if (SystemInformation.HighContrast)

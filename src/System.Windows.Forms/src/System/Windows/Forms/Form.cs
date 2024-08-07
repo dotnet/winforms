@@ -12,6 +12,7 @@ using System.Windows.Forms.VisualStyles;
 using Windows.Win32.System.Threading;
 using Windows.Win32.UI.Accessibility;
 using Windows.Win32.Graphics.Dwm;
+using System.Windows.Forms.Analyzers.Diagnostics;
 
 namespace System.Windows.Forms;
 
@@ -2348,6 +2349,9 @@ public partial class Form : ContainerControl
     [DefaultValue(FormCornerPreference.Default)]
     [SRCategory(nameof(SR.CatWindowStyle))]
     [SRDescription(nameof(SR.FormCornerPreferenceDescr))]
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
     public FormCornerPreference FormCornerPreference
     {
         get
@@ -2388,6 +2392,7 @@ public partial class Form : ContainerControl
     ///  Raises the <see cref="FormCornerPreferenceChanged"/> event when the
     ///  <see cref="FormCornerPreference"/> property changes.
     /// </summary>
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
     protected virtual void OnFormCornerPreferenceChanged(EventArgs e)
     {
         if (Events[s_formCornerPreferenceChanged] is EventHandler eventHandler)
@@ -2396,7 +2401,9 @@ public partial class Form : ContainerControl
         }
     }
 
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     private unsafe void SetFormCornerPreferenceInternal(FormCornerPreference cornerPreference)
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     {
         DWM_WINDOW_CORNER_PREFERENCE dwmCornerPreference = cornerPreference switch
         {
@@ -2419,7 +2426,9 @@ public partial class Form : ContainerControl
     /// </summary>
     [SRCategory(nameof(SR.CatWindowStyle))]
     [SRDescription(nameof(SR.FormBorderColorDescr))]
-    [DefaultValue(typeof(Color), "Empty")]
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
     public Color FormBorderColor
     {
         get
@@ -2460,6 +2469,7 @@ public partial class Form : ContainerControl
     /// <summary>
     ///  Raises the <see cref="FormBorderColorChanged"/> event when the <see cref="FormBorderColor"/> property changes.
     /// </summary>
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
     protected virtual void OnFormBorderColorChanged(EventArgs e)
     {
         if (Events[s_formBorderColorChanged] is EventHandler eventHandler)
@@ -2473,7 +2483,9 @@ public partial class Form : ContainerControl
     /// </summary>
     [SRCategory(nameof(SR.CatWindowStyle))]
     [SRDescription(nameof(SR.FormCaptionBackColorDescr))]
-    [DefaultValue(typeof(Color), "Empty")]
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
     public Color FormCaptionBackColor
     {
         get
@@ -2514,6 +2526,7 @@ public partial class Form : ContainerControl
     /// <summary>
     ///  Raises the <see cref="FormCaptionBackColor"/> event when the <see cref="FormCaptionBackColor"/> property changes.
     /// </summary>
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
     protected virtual void OnFormCaptionBackColorChanged(EventArgs e)
     {
         if (Events[s_formCaptionBackColorChanged] is EventHandler eventHandler)
@@ -2527,7 +2540,9 @@ public partial class Form : ContainerControl
     /// </summary>
     [SRCategory(nameof(SR.CatWindowStyle))]
     [SRDescription(nameof(SR.FormCaptionTextColorDescr))]
-    [DefaultValue(typeof(Color), "Empty")]
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
     public Color FormCaptionTextColor
     {
         get
@@ -2568,6 +2583,7 @@ public partial class Form : ContainerControl
     /// <summary>
     ///  Raises the <see cref="FormCaptionTextColor"/> event when the <see cref="FormCaptionTextColor"/> property changes.
     /// </summary>
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
     protected virtual void OnFormCaptionTextColorChanged(EventArgs e)
     {
         if (Events[s_formCaptionBackColorChanged] is EventHandler eventHandler)
@@ -2736,6 +2752,7 @@ public partial class Form : ContainerControl
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.FormBorderColorChangedDescr))]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
     public event EventHandler? FormBorderColorChanged
     {
         add => Events.AddHandler(s_formBorderColorChanged, value);
@@ -2747,6 +2764,7 @@ public partial class Form : ContainerControl
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.FormCaptionBackColorChangedDescr))]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
     public event EventHandler? FormCaptionBackColorChanged
     {
         add => Events.AddHandler(s_formCaptionBackColorChanged, value);
@@ -2758,6 +2776,7 @@ public partial class Form : ContainerControl
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.FormCaptionTextColorChangedDescr))]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
     public event EventHandler? FormCaptionTextColorChanged
     {
         add => Events.AddHandler(s_formCaptionTextColorChanged, value);
@@ -2769,6 +2788,7 @@ public partial class Form : ContainerControl
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.FormCornerPreferenceChangedDescr))]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
     public event EventHandler? FormCornerPreferenceChanged
     {
         add => Events.AddHandler(s_formCornerPreferenceChanged, value);

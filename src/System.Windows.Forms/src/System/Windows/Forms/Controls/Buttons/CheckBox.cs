@@ -315,26 +315,35 @@ public partial class CheckBox : ButtonBase
     internal override Size GetPreferredSizeCore(Size proposedConstraints)
     {
         Size textSize;
+        var appearance = Appearance;
 
 #pragma warning disable WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
-        if (Appearance == Appearance.ToggleSwitch
-            && VisualStylesMode >= VisualStylesMode.Net10)
+        if (appearance == Appearance.ToggleSwitch)
         {
-            _toggleSwitchRenderer ??= new AnimatedToggleSwitchRenderer(this, ModernCheckBoxStyle.Rounded);
-            int dpiScale = (int)(DeviceDpi / 96f);
+            if (VisualStylesMode < VisualStylesMode.Net10 || ThreeState)
+            {
+                appearance = Appearance.Normal;
+            }
+            else
+            {
+                // We only support the ToggleSwitch when the appearance has been set
+                // AND the VisualStylesMode is at least Net10 AND we're not using ThreeState.
+                _toggleSwitchRenderer ??= new AnimatedToggleSwitchRenderer(this, ModernCheckBoxStyle.Rounded);
+                int dpiScale = (int)(DeviceDpi / 96f);
 
-            textSize = TextRenderer.MeasureText(Text, Font);
-            int switchWidth = 50 * dpiScale;
-            int switchHeight = 25 * dpiScale;
+                textSize = TextRenderer.MeasureText(Text, Font);
+                int switchWidth = 50 * dpiScale;
+                int switchHeight = 25 * dpiScale;
 
-            int totalWidth = textSize.Width + switchWidth + 20 * dpiScale; // 10 dpi padding on each side
-            int totalHeight = Math.Max(textSize.Height, switchHeight);
+                int totalWidth = textSize.Width + switchWidth + 20 * dpiScale; // 10 dpi padding on each side
+                int totalHeight = Math.Max(textSize.Height, switchHeight);
 
-            return new Size(totalWidth, totalHeight);
+                return new Size(totalWidth, totalHeight);
+            }
         }
 #pragma warning restore WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
 
-        if (Appearance == Appearance.Button)
+        if (appearance == Appearance.Button)
         {
             ButtonStandardAdapter adapter = new(this);
             return adapter.GetPreferredSizeCore(proposedConstraints);

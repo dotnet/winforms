@@ -1595,12 +1595,17 @@ public abstract partial class TextBoxBase : Control
 
     protected override unsafe void OnGotFocus(EventArgs e)
     {
-        // We need to invalidate for NcPaint, so we draw focused adorners.
-        PInvoke.RedrawWindow(
-            hWnd: this,
-            lprcUpdate: null,
-            hrgnUpdate: HRGN.Null,
-            flags: REDRAW_WINDOW_FLAGS.RDW_FRAME | REDRAW_WINDOW_FLAGS.RDW_INVALIDATE);
+#pragma warning disable WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        if (VisualStylesMode >= VisualStylesMode.Net10)
+        {
+            // We need to invalidate for NcPaint, so we draw focused adorners.
+            PInvoke.RedrawWindow(
+                hWnd: this,
+                lprcUpdate: null,
+                hrgnUpdate: HRGN.Null,
+                flags: REDRAW_WINDOW_FLAGS.RDW_FRAME | REDRAW_WINDOW_FLAGS.RDW_INVALIDATE);
+        }
+#pragma warning restore WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
         base.OnGotFocus(e);
     }
@@ -1702,6 +1707,8 @@ public abstract partial class TextBoxBase : Control
                 hrgnUpdate: HRGN.Null,
                 flags: REDRAW_WINDOW_FLAGS.RDW_FRAME | REDRAW_WINDOW_FLAGS.RDW_INVALIDATE);
         }
+
+        base.OnSizeChanged(e);
     }
 #pragma warning restore WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
