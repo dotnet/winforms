@@ -36,7 +36,6 @@ Namespace Microsoft.VisualBasic.Logging
 
         ' Changes to this enum must be reflected in ValidateLogfileLocationEnumValue()
         TempDirectory
-
         LocalUserApplicationDirectory
         CommonApplicationDirectory
         ExecutableDirectory
@@ -79,6 +78,7 @@ Namespace Microsoft.VisualBasic.Logging
 
         ' Attribute keys used to access properties set in the config file
         Private Const KEY_APPEND As String = "append"
+
         Private Const KEY_APPEND_PASCAL As String = "Append"
         Private Const KEY_AUTOFLUSH As String = "autoflush"
         Private Const KEY_AUTOFLUSH_CAMEL As String = "autoFlush"
