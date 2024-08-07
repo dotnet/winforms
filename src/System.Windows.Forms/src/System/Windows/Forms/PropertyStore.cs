@@ -20,9 +20,6 @@ internal class PropertyStore
     /// </summary>
     public bool ContainsKey(int key) => _values.ContainsKey(key);
 
-    // REMOVE
-    public bool ContainsObject(int key) => _values.ContainsKey(key);
-
     /// <summary>
     ///  Creates a new key for this property store.
     /// </summary>
@@ -107,6 +104,19 @@ internal class PropertyStore
     }
 
     /// <summary>
+    ///  Gets the current string value for the given key, or <see cref="string.Empty"/> if the key is not found.
+    /// </summary>
+    public string GetStringOrEmptyString(int key)
+    {
+        if (_values.TryGetValue(key, out Value foundValue))
+        {
+            return foundValue.GetValue<string>();
+        }
+
+        return string.Empty;
+    }
+
+    /// <summary>
     ///  Tries to get the value for the given key. Returns <see langword="true"/> if the value was found and was
     ///  not <see langword="null"/>.
     /// </summary>
@@ -141,13 +151,31 @@ internal class PropertyStore
     }
 
     /// <summary>
+    ///  Previous will be `string.Empty` if not set. Setting `string.Empty` will clear the value.
+    /// </summary>
+    public string AddOrRemoveString(int key, string? value)
+    {
+        TryGetValue(key, out string? previous);
+        if (string.IsNullOrEmpty(value))
+        {
+            _values.Remove(key);
+        }
+        else
+        {
+            _values[key] = new(value);
+        }
+
+        return previous ?? string.Empty;
+    }
+
+    /// <summary>
     ///  Sets the given value or clears it from the store if the value is <see langword="null"/>.
     ///  Returns the previous value if it was set, or <see langword="null"/>.
     /// </summary>
-    public T? AddOrRemoveValue<T>(int key, T? value) where T : class
+    public T? AddOrRemoveValue<T>(int key, T? value)
     {
         TryGetValue(key, out T? previous);
-        if (value is null)
+        if (value is null || EqualityComparer<T>.Default.Equals(value, default))
         {
             _values.Remove(key);
         }

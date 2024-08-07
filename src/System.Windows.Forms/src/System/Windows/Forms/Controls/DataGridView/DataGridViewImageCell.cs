@@ -58,24 +58,8 @@ public partial class DataGridViewImageCell : DataGridViewCell
     [AllowNull]
     public string Description
     {
-        get
-        {
-            object? description = Properties.GetObject(s_propImageCellDescription);
-            if (description is not null)
-            {
-                return (string)description;
-            }
-
-            return string.Empty;
-        }
-
-        set
-        {
-            if (!string.IsNullOrEmpty(value) || Properties.ContainsObject(s_propImageCellDescription))
-            {
-                Properties.SetObject(s_propImageCellDescription, value);
-            }
-        }
+        get => Properties.GetStringOrEmptyString(s_propImageCellDescription);
+        set => Properties.AddOrRemoveString(s_propImageCellDescription, value);
     }
 
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.Interfaces)]
@@ -116,9 +100,9 @@ public partial class DataGridViewImageCell : DataGridViewCell
         {
             // Sequential enum.  Valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(value);
-            if (ImageLayout != value)
+            DataGridViewImageCellLayout previous = Properties.AddOrRemoveValue(s_propImageCellLayout, value);
+            if (previous != value)
             {
-                Properties.AddValue(s_propImageCellLayout, value);
                 OnCommonChange();
             }
         }
@@ -129,10 +113,7 @@ public partial class DataGridViewImageCell : DataGridViewCell
         set
         {
             Debug.Assert(value is >= DataGridViewImageCellLayout.NotSet and <= DataGridViewImageCellLayout.Zoom);
-            if (ImageLayout != value)
-            {
-                Properties.AddValue(s_propImageCellLayout, value);
-            }
+            Properties.AddOrRemoveValue(s_propImageCellLayout, value);
         }
     }
 

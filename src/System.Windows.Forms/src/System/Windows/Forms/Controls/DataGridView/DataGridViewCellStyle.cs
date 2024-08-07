@@ -109,13 +109,8 @@ public class DataGridViewCellStyle : ICloneable
         get => Properties.GetValueOrDefault<Color>(s_propBackColor);
         set
         {
-            Color c = BackColor;
-            if (!value.IsEmpty || Properties.ContainsKey(s_propBackColor))
-            {
-                Properties.AddValue(s_propBackColor, value);
-            }
-
-            if (!c.Equals(BackColor))
+            Color previous = Properties.AddOrRemoveValue(s_propBackColor, value);
+            if (!previous.Equals(value))
             {
                 OnPropertyChanged(DataGridViewCellStylePropertyInternal.Color);
             }
@@ -179,13 +174,8 @@ public class DataGridViewCellStyle : ICloneable
         get => Properties.TryGetValue(s_propForeColor, out Color color) ? color : Color.Empty;
         set
         {
-            Color c = ForeColor;
-            if (!value.IsEmpty || Properties.ContainsObject(s_propForeColor))
-            {
-                Properties.AddValue(s_propForeColor, value);
-            }
-
-            if (!c.Equals(ForeColor))
+            Color previous = Properties.AddOrRemoveValue(s_propForeColor, value);
+            if (!previous.Equals(value))
             {
                 OnPropertyChanged(DataGridViewCellStylePropertyInternal.ForeColor);
             }
@@ -199,26 +189,10 @@ public class DataGridViewCellStyle : ICloneable
     [AllowNull]
     public string Format
     {
-        get
-        {
-            object? format = Properties.GetObject(s_propFormat);
-            if (format is null)
-            {
-                return string.Empty;
-            }
-            else
-            {
-                return (string)format;
-            }
-        }
+        get => Properties.GetStringOrEmptyString(s_propFormat);
         set
         {
-            string format = Format;
-            if ((value is not null && value.Length > 0) || Properties.ContainsObject(s_propFormat))
-            {
-                Properties.SetObject(s_propFormat, value);
-            }
-
+            string format = Properties.AddOrRemoveString(s_propFormat, value);
             if (!format.Equals(Format))
             {
                 OnPropertyChanged(DataGridViewCellStylePropertyInternal.Other);
@@ -378,13 +352,8 @@ public class DataGridViewCellStyle : ICloneable
         get => Properties.GetValueOrDefault<Color>(s_propSelectionBackColor);
         set
         {
-            Color c = SelectionBackColor;
-            if (!value.IsEmpty || Properties.ContainsKey(s_propSelectionBackColor))
-            {
-                Properties.AddValue(s_propSelectionBackColor, value);
-            }
-
-            if (!c.Equals(SelectionBackColor))
+            Color previous = Properties.AddOrRemoveValue(s_propSelectionBackColor, value);
+            if (!previous.Equals(value))
             {
                 OnPropertyChanged(DataGridViewCellStylePropertyInternal.Color);
             }
@@ -397,13 +366,8 @@ public class DataGridViewCellStyle : ICloneable
         get => Properties.GetValueOrDefault<Color>(s_propSelectionForeColor);
         set
         {
-            Color c = SelectionForeColor;
-            if (!value.IsEmpty || Properties.ContainsKey(s_propSelectionForeColor))
-            {
-                Properties.AddValue(s_propSelectionForeColor, value);
-            }
-
-            if (!c.Equals(SelectionForeColor))
+            Color previous = Properties.AddOrRemoveValue(s_propSelectionForeColor, value);
+            if (!previous.Equals(value))
             {
                 OnPropertyChanged(DataGridViewCellStylePropertyInternal.Color);
             }
@@ -414,14 +378,8 @@ public class DataGridViewCellStyle : ICloneable
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public object? Tag
     {
-        get => Properties.GetObject(s_propTag);
-        set
-        {
-            if (value is not null || Properties.ContainsObject(s_propTag))
-            {
-                Properties.SetObject(s_propTag, value);
-            }
-        }
+        get => Properties.GetValueOrDefault<object?>(s_propTag);
+        set => Properties.AddOrRemoveValue(s_propTag, value);
     }
 
     [DefaultValue(DataGridViewTriState.NotSet)]

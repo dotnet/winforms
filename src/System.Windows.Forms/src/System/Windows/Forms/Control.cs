@@ -682,14 +682,13 @@ public unsafe partial class Control :
     {
         get
         {
-            object? customBackBrush = Properties.GetObject(s_backBrushProperty);
-            if (customBackBrush is not null)
+            if (Properties.TryGetValue(s_backBrushProperty, out HBRUSH customBackBrush))
             {
                 // We already have a valid brush.  Unbox, and return.
-                return (HBRUSH)customBackBrush;
+                return customBackBrush;
             }
 
-            if (!Properties.ContainsObject(s_backColorProperty))
+            if (!Properties.ContainsKey(s_backColorProperty))
             {
                 // No custom back color.  See if we can get to our parent.
                 // The color check here is to account for parents and children who
@@ -717,7 +716,7 @@ public unsafe partial class Control :
             }
 
             Debug.Assert(!backBrush.IsNull, "Failed to create brushHandle");
-            Properties.SetObject(s_backBrushProperty, backBrush);
+            Properties.AddValue(s_backBrushProperty, backBrush);
 
             return backBrush;
         }
@@ -767,7 +766,7 @@ public unsafe partial class Control :
     }
 
     private bool ShouldSerializeDataContext()
-        => Properties.ContainsObject(s_dataContextProperty);
+        => Properties.ContainsKey(s_dataContextProperty);
 
     private void ResetDataContext()
         => Properties.RemoveValue(s_dataContextProperty);
@@ -829,13 +828,9 @@ public unsafe partial class Control :
                 throw new ArgumentException(SR.TransparentBackColorNotAllowed);
             }
 
-            Color c = BackColor;
-            if (!value.IsEmpty || Properties.ContainsKey(s_backColorProperty))
-            {
-                Properties.AddValue(s_backColorProperty, value);
-            }
-
-            if (!c.Equals(BackColor))
+            Color previous = BackColor;
+            Properties.AddOrRemoveValue(s_backColorProperty, value);
+            if (!previous.Equals(BackColor))
             {
                 OnBackColorChanged(EventArgs.Empty);
             }
@@ -1729,14 +1724,10 @@ public unsafe partial class Control :
     /// </summary>
     private void DisposeFontHandle()
     {
-        if (Properties.ContainsObject(s_fontHandleWrapperProperty))
+        if (Properties.TryGetValue(s_fontHandleWrapperProperty, out FontHandleWrapper? fontHandle))
         {
-            if (Properties.GetObject(s_fontHandleWrapperProperty) is FontHandleWrapper fontHandle)
-            {
-                fontHandle.Dispose();
-            }
-
-            Properties.SetObject(s_fontHandleWrapperProperty, null);
+            fontHandle.Dispose();
+            Properties.RemoveValue(s_fontHandleWrapperProperty);
         }
     }
 
@@ -1997,12 +1988,10 @@ public unsafe partial class Control :
 
             if (TryGetExplicitlySetFont(out Font? font))
             {
-                FontHandleWrapper? fontHandle = (FontHandleWrapper?)Properties.GetObject(s_fontHandleWrapperProperty);
-                if (fontHandle is null)
+                if (!Properties.TryGetValue(s_fontHandleWrapperProperty, out FontHandleWrapper? fontHandle))
                 {
                     fontHandle = new FontHandleWrapper(font);
-
-                    Properties.SetObject(s_fontHandleWrapperProperty, fontHandle);
+                    Properties.AddValue(s_fontHandleWrapperProperty, fontHandle);
                 }
 
                 return fontHandle.Handle;
@@ -2017,15 +2006,13 @@ public unsafe partial class Control :
             {
                 FontHandleWrapper? fontHandle = null;
 
-                Font? currentAmbient = (Font?)Properties.GetObject(s_currentAmbientFontProperty);
-
-                if (currentAmbient is not null && currentAmbient == ambientFont)
+                if (Properties.TryGetValue(s_currentAmbientFontProperty, out Font? currentAmbient) && currentAmbient == ambientFont)
                 {
-                    fontHandle = (FontHandleWrapper?)Properties.GetObject(s_fontHandleWrapperProperty);
+                    fontHandle = Properties.GetValueOrDefault<FontHandleWrapper?>(s_fontHandleWrapperProperty);
                 }
                 else
                 {
-                    Properties.SetObject(s_currentAmbientFontProperty, ambientFont);
+                    Properties.AddValue(s_currentAmbientFontProperty, ambientFont);
                 }
 
                 if (fontHandle is null)
@@ -2033,7 +2020,7 @@ public unsafe partial class Control :
                     font = ambientFont;
                     fontHandle = new FontHandleWrapper(font);
 
-                    Properties.SetObject(s_fontHandleWrapperProperty, fontHandle);
+                    Properties.AddValue(s_fontHandleWrapperProperty, fontHandle);
                 }
 
                 return fontHandle.Handle;
@@ -2119,13 +2106,9 @@ public unsafe partial class Control :
         }
         set
         {
-            Color color = ForeColor;
-            if (!value.IsEmpty || Properties.ContainsKey(s_foreColorProperty))
-            {
-                Properties.AddValue(s_foreColorProperty, value);
-            }
-
-            if (!color.Equals(ForeColor))
+            Color previous = ForeColor;
+            Properties.AddOrRemoveValue(s_foreColorProperty, value);
+            if (!previous.Equals(ForeColor))
             {
                 OnForeColorChanged(EventArgs.Empty);
             }
@@ -3071,10 +3054,10 @@ public unsafe partial class Control :
             // If the ambients changed, compare each property.
             if (oldAmbients != newAmbients)
             {
-                bool checkFont = !Properties.ContainsObject(s_fontProperty);
-                bool checkBackColor = !Properties.ContainsObject(s_backColorProperty);
-                bool checkForeColor = !Properties.ContainsObject(s_foreColorProperty);
-                bool checkCursor = !Properties.ContainsObject(s_cursorProperty);
+                bool checkFont = !Properties.ContainsKey(s_fontProperty);
+                bool checkBackColor = !Properties.ContainsKey(s_backColorProperty);
+                bool checkForeColor = !Properties.ContainsKey(s_foreColorProperty);
+                bool checkCursor = !Properties.ContainsKey(s_cursorProperty);
 
                 Font? oldFont = null;
                 Color oldBackColor = Color.Empty;
@@ -4829,16 +4812,14 @@ public unsafe partial class Control :
     {
         if (GetState(States.OwnCtlBrush))
         {
-            object? backBrush = Properties.GetObject(s_backBrushProperty);
-            if (backBrush is not null)
+            if (Properties.TryGetValue(s_backBrushProperty, out HBRUSH backBrush))
             {
-                HBRUSH p = (HBRUSH)backBrush;
-                if (!p.IsNull)
+                if (!backBrush.IsNull)
                 {
-                    PInvokeCore.DeleteObject(p);
+                    PInvokeCore.DeleteObject(backBrush);
                 }
 
-                Properties.SetObject(s_backBrushProperty, value: null);
+                Properties.RemoveValue(s_backBrushProperty);
             }
         }
 
@@ -6723,19 +6704,17 @@ public unsafe partial class Control :
             return;
         }
 
-        object? backBrush = Properties.GetObject(s_backBrushProperty);
-        if (backBrush is not null)
+        if (Properties.TryGetValue(s_backBrushProperty, out HBRUSH backBrush))
         {
             if (GetState(States.OwnCtlBrush))
             {
-                HBRUSH p = (HBRUSH)backBrush;
-                if (!p.IsNull)
+                if (!backBrush.IsNull)
                 {
-                    PInvokeCore.DeleteObject(p);
+                    PInvokeCore.DeleteObject(backBrush);
                 }
             }
 
-            Properties.SetObject(s_backBrushProperty, value: null);
+            Properties.RemoveValue(s_backBrushProperty);
         }
 
         Invalidate();
@@ -7115,7 +7094,7 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnParentDataContextChanged(EventArgs e)
     {
-        if (Properties.ContainsObject(s_dataContextProperty))
+        if (Properties.ContainsKey(s_dataContextProperty))
         {
             // If this DataContext was the same as the Parent's just became,
             if (Equals(Properties.GetValueOrDefault<object>(s_dataContextProperty), Parent?.DataContext))
@@ -7631,14 +7610,12 @@ public unsafe partial class Control :
         {
             if (GetState(States.OwnCtlBrush))
             {
-                object? backBrush = Properties.GetObject(s_backBrushProperty);
-                if (backBrush is not null)
+                if (Properties.TryGetValue(s_backBrushProperty, out HBRUSH backBrush))
                 {
-                    Properties.SetObject(s_backBrushProperty, value: null);
-                    HBRUSH p = (HBRUSH)backBrush;
-                    if (!p.IsNull)
+                    Properties.RemoveValue(s_backBrushProperty);
+                    if (!backBrush.IsNull)
                     {
-                        PInvokeCore.DeleteObject(p);
+                        PInvokeCore.DeleteObject(backBrush);
                     }
                 }
             }

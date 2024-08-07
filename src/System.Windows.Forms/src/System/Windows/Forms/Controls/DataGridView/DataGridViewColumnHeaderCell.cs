@@ -55,7 +55,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
         _sortGlyphDirection = SortOrder.None;
     }
 
-    internal bool ContainsLocalValue => Properties.ContainsObject(s_propCellValue);
+    internal bool ContainsLocalValue => Properties.ContainsKey(s_propCellValue);
 
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public SortOrder SortGlyphDirection

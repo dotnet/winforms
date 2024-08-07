@@ -327,7 +327,7 @@ internal partial class CommonProperties
         {
             // SetBoundsCore is going to call this a lot with the same bounds.  Avoid the set object
             // (which indirectly may causes an allocation) if we can.
-            if (element.Properties.ContainsObject(s_specifiedBoundsProperty))
+            if (element.Properties.ContainsKey(s_specifiedBoundsProperty))
             {
                 // use MaxRectangle instead of null so we can reuse the SizeWrapper in the property store.
                 element.Properties.AddValue(s_specifiedBoundsProperty, LayoutUtils.s_maxRectangle);
