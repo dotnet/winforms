@@ -14,9 +14,9 @@ public class AxImporterTests
     {
         Options options = new();
 
-        Action act = () => new AxImporter(options);
+        Action action = () => new AxImporter(options);
 
-        act.Should().Throw<NotImplementedException>()
+        action.Should().Throw<NotImplementedException>()
             .WithMessage(SR.NotImplementedByDesign);
     }
 }
