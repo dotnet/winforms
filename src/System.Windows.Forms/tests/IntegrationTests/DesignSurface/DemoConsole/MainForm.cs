@@ -337,6 +337,19 @@ public partial class MainForm : Form
                         panel.Dock = DockStyle.Bottom;
                         NumericUpDown numericUpDown = surface.CreateControl<NumericUpDown>(new(50, 10), new(10, 10));
                         panel.Controls.Add(numericUpDown);
+                        BindingNavigator bindingNavigator = surface.CreateControl<BindingNavigator>(new(0, 0), new(0, 0));
+
+                        BindingSource bindingSource = new BindingSource
+                        {
+                            DataSource = new List<string> { "Item 1", "Item 2", "Item 3" }
+                        };
+
+                        bindingNavigator.Dock = DockStyle.Bottom;
+                        bindingNavigator.BindingSource = bindingSource;
+
+                        richTextBox.DataBindings.Add(new Binding("Text", bindingSource, "Text", true, DataSourceUpdateMode.OnPropertyChanged));
+
+                        panel.Controls.Add(bindingNavigator);
 
                         tabPage6.Controls.AddRange(toolStripContainer, splitter, panel);
                     }
