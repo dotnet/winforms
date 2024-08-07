@@ -36,7 +36,6 @@ Namespace Microsoft.VisualBasic.Logging
 
         ' Changes to this enum must be reflected in ValidateLogfileLocationEnumValue()
         TempDirectory
-
         LocalUserApplicationDirectory
         CommonApplicationDirectory
         ExecutableDirectory
