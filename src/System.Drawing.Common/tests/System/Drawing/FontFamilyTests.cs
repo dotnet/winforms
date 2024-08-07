@@ -54,7 +54,7 @@ public class FontFamilyTests
     [Fact]
     public void Ctor_NullFontName_ThrowsArgumentNullException()
     {
-        AssertExtensions.Throws<ArgumentNullException>("name", () => new FontFamily((string)null!));
+        AssertExtensions.Throws<ArgumentNullException>("name", () => new FontFamily(null!));
         AssertExtensions.Throws<ArgumentNullException>("name", () => new FontFamily(null!, null));
     }
 
@@ -188,19 +188,25 @@ public class FontFamilyTests
     [Fact]
     public void IsStyleAvailable_Disposed_ThrowsArgumentException()
     {
-        FontFamily fontFamily = FontFamily.GenericMonospace;
-        fontFamily.Dispose();
+        using PrivateFontCollection collection = new();
+        collection.AddFontFile(Helpers.GetTestFontPath("CodeNewRoman.otf"));
 
-        AssertExtensions.Throws<ArgumentException>(null, () => fontFamily.IsStyleAvailable(FontStyle.Italic));
+        FontFamily family = new("Code New Roman", collection);
+        family.Dispose();
+
+        AssertExtensions.Throws<ArgumentException>(null, () => family.IsStyleAvailable(FontStyle.Italic));
     }
 
     [Fact]
     public void GetEmHeight_Disposed_ThrowsArgumentException()
     {
-        FontFamily fontFamily = FontFamily.GenericMonospace;
-        fontFamily.Dispose();
+        using PrivateFontCollection collection = new();
+        collection.AddFontFile(Helpers.GetTestFontPath("CodeNewRoman.otf"));
 
-        AssertExtensions.Throws<ArgumentException>(null, () => fontFamily.GetEmHeight(FontStyle.Italic));
+        FontFamily family = new("Code New Roman", collection);
+        family.Dispose();
+
+        AssertExtensions.Throws<ArgumentException>(null, () => family.GetEmHeight(FontStyle.Italic));
     }
 
     private const int FrenchLCID = 1036;
@@ -223,37 +229,49 @@ public class FontFamilyTests
     [Fact]
     public void GetName_Disposed_ThrowsArgumentException()
     {
-        FontFamily fontFamily = FontFamily.GenericMonospace;
-        fontFamily.Dispose();
+        using PrivateFontCollection collection = new();
+        collection.AddFontFile(Helpers.GetTestFontPath("CodeNewRoman.otf"));
 
-        AssertExtensions.Throws<ArgumentException>(null, () => fontFamily.GetName(0));
+        FontFamily family = new("Code New Roman", collection);
+        family.Dispose();
+
+        AssertExtensions.Throws<ArgumentException>(null, () => family.GetName(0));
     }
 
     [Fact]
     public void GetCellAscent_Disposed_ThrowsArgumentException()
     {
-        FontFamily fontFamily = FontFamily.GenericMonospace;
-        fontFamily.Dispose();
+        using PrivateFontCollection collection = new();
+        collection.AddFontFile(Helpers.GetTestFontPath("CodeNewRoman.otf"));
 
-        AssertExtensions.Throws<ArgumentException>(null, () => fontFamily.GetCellAscent(FontStyle.Italic));
+        FontFamily family = new("Code New Roman", collection);
+        family.Dispose();
+
+        AssertExtensions.Throws<ArgumentException>(null, () => family.GetCellAscent(FontStyle.Italic));
     }
 
     [Fact]
     public void GetCellDescent_Disposed_ThrowsArgumentException()
     {
-        FontFamily fontFamily = FontFamily.GenericMonospace;
-        fontFamily.Dispose();
+        using PrivateFontCollection collection = new();
+        collection.AddFontFile(Helpers.GetTestFontPath("CodeNewRoman.otf"));
 
-        AssertExtensions.Throws<ArgumentException>(null, () => fontFamily.GetCellDescent(FontStyle.Italic));
+        FontFamily family = new("Code New Roman", collection);
+        family.Dispose();
+
+        AssertExtensions.Throws<ArgumentException>(null, () => family.GetCellDescent(FontStyle.Italic));
     }
 
     [Fact]
     public void GetLineSpacing_Disposed_ThrowsArgumentException()
     {
-        FontFamily fontFamily = FontFamily.GenericMonospace;
-        fontFamily.Dispose();
+        using PrivateFontCollection collection = new();
+        collection.AddFontFile(Helpers.GetTestFontPath("CodeNewRoman.otf"));
 
-        AssertExtensions.Throws<ArgumentException>(null, () => fontFamily.GetLineSpacing(FontStyle.Italic));
+        FontFamily family = new("Code New Roman", collection);
+        family.Dispose();
+
+        AssertExtensions.Throws<ArgumentException>(null, () => family.GetLineSpacing(FontStyle.Italic));
     }
 
     [Fact]
