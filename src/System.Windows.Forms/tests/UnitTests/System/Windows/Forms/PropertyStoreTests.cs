@@ -234,4 +234,30 @@ public class PropertyStoreTests
         store.TryGetValue(1, out Padding result).Should().BeTrue();
         result.Should().Be(two);
     }
+
+    [Fact]
+    public void PropertyStore_AddOrRemoveString_GetStringOrEmptyString_Expected()
+    {
+        PropertyStore store = new();
+        store.AddOrRemoveString(1, null);
+        store.ContainsKey(1).Should().BeFalse();
+        store.GetStringOrEmptyString(1).Should().Be(string.Empty);
+
+        store.AddOrRemoveString(1, string.Empty);
+        store.ContainsKey(1).Should().BeFalse();
+        store.GetStringOrEmptyString(1).Should().Be(string.Empty);
+
+        store.AddOrRemoveString(1, "test");
+        store.ContainsKey(1).Should().BeTrue();
+        store.GetStringOrEmptyString(1).Should().Be("test");
+
+        Action action = () => store.AddOrRemoveValue(1, 1);
+        action.Should().Throw<InvalidCastException>();
+
+        store.RemoveValue(1);
+        store.AddOrRemoveValue(1, 1);
+        store.ContainsKey(1).Should().BeTrue();
+        action = () => store.GetStringOrEmptyString(1);
+        action.Should().Throw<InvalidCastException>();
+    }
 }
