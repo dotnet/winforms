@@ -457,9 +457,6 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
             {
                 cs.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
             }
-
-            _component = null;
-            _inheritedProps = null;
         }
     }
 
