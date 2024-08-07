@@ -378,22 +378,6 @@ public class FontConverter : TypeConverter
                 }
             }
 
-            // font family not found in installed fonts
-            if (fontFamily is null)
-            {
-                collection = new PrivateFontCollection();
-                FontFamily[] privateFontList = collection.Families;
-                foreach (FontFamily font in privateFontList)
-                {
-                    if (name.Equals(font.Name, StringComparison.OrdinalIgnoreCase))
-                    {
-                        fontFamily = font;
-                        break;
-                    }
-                }
-            }
-
-            // font family not found in private fonts also
             fontFamily ??= FontFamily.GenericSansSerif;
         }
 

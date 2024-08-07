@@ -39,6 +39,8 @@ public abstract unsafe class FontCollection : IDisposable, IPointer<GpFontCollec
                 return [];
             }
 
+            bool installedFontCollection = GetType() == typeof(InstalledFontCollection);
+
             GpFontFamily*[] gpFamilies = new GpFontFamily*[numFound];
             fixed (GpFontFamily** f = gpFamilies)
             {
@@ -49,9 +51,9 @@ public abstract unsafe class FontCollection : IDisposable, IPointer<GpFontCollec
             FontFamily[] families = new FontFamily[numFound];
             for (int f = 0; f < numFound; f++)
             {
-                GpFontFamily* native;
-                PInvoke.GdipCloneFontFamily(gpFamilies[f], &native).ThrowIfFailed();
-                families[f] = new FontFamily(native);
+                // GetFontCollectionFamilyList doesn't ref count the returned families. The internal constructor
+                // here will add a ref if the font collection is not the installed font collection.
+                families[f] = new FontFamily(gpFamilies[f], installedFontCollection);
             }
 
             GC.KeepAlive(this);

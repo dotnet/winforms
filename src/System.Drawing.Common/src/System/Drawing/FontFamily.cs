@@ -14,6 +14,7 @@ public sealed unsafe class FontFamily : MarshalByRefObject, IDisposable, IPointe
     private const ushort NeutralLanguage = 0;
 
     private GpFontFamily* _nativeFamily;
+    private bool _fromInstalledFontCollection;
 
     GpFontFamily* IPointer<GpFontFamily>.Pointer => _nativeFamily;
 
@@ -23,7 +24,38 @@ public sealed unsafe class FontFamily : MarshalByRefObject, IDisposable, IPointe
         _nativeFamily = family;
     }
 
-    internal FontFamily(GpFontFamily* family) => SetNativeFamily(family);
+    internal FontFamily(GpFontFamily* family, bool fromInstalledFontCollection)
+    {
+        _fromInstalledFontCollection = fromInstalledFontCollection;
+        if (fromInstalledFontCollection)
+        {
+            // No need to clean up FontFamily objects from the installed font collection.
+            GC.SuppressFinalize(this);
+        }
+        else
+        {
+            GpFontFamily* clonedFamily;
+            PInvoke.GdipCloneFontFamily(family, &clonedFamily).ThrowIfFailed();
+
+            // Only the font collection is ref counted, new font family instances are not created.
+            Debug.Assert(clonedFamily == family);
+
+            family = clonedFamily;
+        }
+
+        SetNativeFamily(family);
+    }
+
+    internal FontFamily Clone()
+    {
+        if (_fromInstalledFontCollection)
+        {
+            // No need to copy, we're never going to dispose of the native object.
+            return this;
+        }
+
+        return new(_nativeFamily, fromInstalledFontCollection: false);
+    }
 
     /// <summary>
     ///  Initializes a new instance of the <see cref='FontFamily'/> class with the specified name.
@@ -53,6 +85,9 @@ public sealed unsafe class FontFamily : MarshalByRefObject, IDisposable, IPointe
     {
         GpFontFamily* fontFamily;
         GpFontCollection* nativeFontCollection = fontCollection.Pointer();
+
+        _fromInstalledFontCollection = nativeFontCollection is null
+            || nativeFontCollection == InstalledFontCollection.Instance.Pointer();
 
         Status status = Status.Ok;
         fixed (char* n = name)
@@ -85,6 +120,12 @@ public sealed unsafe class FontFamily : MarshalByRefObject, IDisposable, IPointe
             }
         }
 
+        if (_fromInstalledFontCollection)
+        {
+            // No need to clean up FontFamily objects from the installed font collection.
+            GC.SuppressFinalize(this);
+        }
+
         GC.KeepAlive(fontCollection);
         SetNativeFamily(fontFamily);
     }
@@ -110,6 +151,8 @@ public sealed unsafe class FontFamily : MarshalByRefObject, IDisposable, IPointe
                 break;
         }
 
+        _fromInstalledFontCollection = true;
+
         SetNativeFamily(nativeFamily);
     }
 
@@ -129,14 +172,12 @@ public sealed unsafe class FontFamily : MarshalByRefObject, IDisposable, IPointe
             return true;
         }
 
-        // if obj = null then (obj is FontFamily) = false.
         if (obj is not FontFamily otherFamily)
         {
             return false;
         }
 
-        // We can safely use the ptr to the native GDI+ FontFamily because in windows it is common to
-        // all objects of the same family (singleton RO object).
+        // GDI+ font families are instances in their font collection, so we can compare the pointers.
         return otherFamily.NativeFamily == NativeFamily;
     }
 
@@ -161,7 +202,7 @@ public sealed unsafe class FontFamily : MarshalByRefObject, IDisposable, IPointe
 
     private void Dispose(bool disposing)
     {
-        if (_nativeFamily is null)
+        if (_nativeFamily is null || _fromInstalledFontCollection)
         {
             return;
         }
@@ -211,7 +252,7 @@ public sealed unsafe class FontFamily : MarshalByRefObject, IDisposable, IPointe
     /// <summary>
     ///  Gets a generic SansSerif <see cref='FontFamily'/>.
     /// </summary>
-    public static FontFamily GenericSansSerif => new(GetGdipGenericSansSerif());
+    public static FontFamily GenericSansSerif => new(GetGdipGenericSansSerif(), fromInstalledFontCollection: true);
 
     private static GpFontFamily* GetGdipGenericSansSerif()
     {

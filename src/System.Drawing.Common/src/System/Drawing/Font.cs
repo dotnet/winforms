@@ -485,7 +485,9 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
         PInvoke.GdipGetFontSize(_nativeFont, &size).ThrowIfFailed();
         PInvoke.GdipGetFontStyle(_nativeFont, (int*)&style).ThrowIfFailed();
         PInvoke.GdipGetFamily(_nativeFont, &family).ThrowIfFailed();
-        SetFontFamily(new FontFamily(family));
+
+        // Fonts from native HFONTs are always from the installed font collection.
+        SetFontFamily(new FontFamily(family, fromInstalledFontCollection: true));
         Initialize(_fontFamily, size, style, unit, gdiCharSet, gdiVerticalFont);
     }
 
@@ -524,8 +526,7 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
 
         if (_fontFamily is null)
         {
-            // GDI+ FontFamily is a singleton object.
-            SetFontFamily(new FontFamily(family.NativeFamily));
+            SetFontFamily(family.Clone());
         }
 
         if (_nativeFont is null)
