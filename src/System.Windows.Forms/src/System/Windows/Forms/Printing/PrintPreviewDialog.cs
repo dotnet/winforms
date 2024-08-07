@@ -986,7 +986,11 @@ public partial class PrintPreviewDialog : Form
     /// <summary>
     ///  Forces the preview to be regenerated every time the dialog comes up
     /// </summary>
-    [Obsolete("The OnClosing method is obsolete starting with the .NET Framework 2.0; use the OnFormClosing method instead.")]
+    [Obsolete(
+        Obsoletions.FormOnClosingClosedMessage,
+        error: false,
+        DiagnosticId = Obsoletions.FormOnClosingClosedDiagnosticId,
+        UrlFormat = Obsoletions.SharedUrlFormat)]
     protected override void OnClosing(CancelEventArgs e)
     {
         base.OnClosing(e);

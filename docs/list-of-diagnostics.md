@@ -38,6 +38,7 @@ The acceptance criteria for adding an obsoletion includes:
 |  __`WFDEV001`__ | Casting to/from IntPtr is unsafe, use `ResultInternal`. |
 |  __`WFDEV002`__ | `DomainUpDown.DomainUpDownAccessibleObject` is no longer used to provide accessible support for `DomainUpDown` controls. Use `ControlAccessibleObject` instead. |
 |  __`WFDEV003`__ | `DomainUpDown.DomainItemAccessibleObject` is no longer used to provide accessible support for `DomainUpDown` items. |
+|  __`WFDEV004`__ | `Form.OnClosing` and `Form.OnClosed` are obsolete. Use `Form.OnFormClosing` and `Form.OnFormClosed` instead. |
 
 
 ## Analyzer Warnings
