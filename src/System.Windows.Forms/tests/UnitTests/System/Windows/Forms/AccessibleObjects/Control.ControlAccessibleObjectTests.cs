@@ -223,30 +223,44 @@ public class Control_ControlAccessibleObjectTests
         Assert.Equal(accessibleDescription, accessibleObject.Description);
     }
 
-    public static IEnumerable<object[]> Handle_Set_TestData()
+    public static TheoryData<object> Handle_Set_DataTestData()
     {
-        yield return new object[] { IntPtr.Zero };
-        yield return new object[] { (IntPtr)(-1) };
-        yield return new object[] { (IntPtr)1 };
-        yield return new object[] { (IntPtr)250 };
-        yield return new object[] { new Control().Handle };
+        return new TheoryData<object>
+        {
+            null,
+            IntPtr.Zero,
+            new IntPtr(-1),
+            new IntPtr(1),
+            new IntPtr(250)
+        };
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(Handle_Set_TestData))]
-    public void ControlAccessibleObject_Handle_Set_Success(IntPtr value)
+    [MemberData(nameof(Handle_Set_DataTestData))]
+    public void ControlAccessibleObject_Handle_Set_Success(object testValue)
     {
+        IntPtr value;
+        if (testValue is null)
+        {
+            using Control control = new();
+            value = control.Handle;
+        }
+        else
+        {
+            value = (IntPtr)testValue;
+        }
+
         using Control ownerControl = new();
         ownerControl.CreateControl();
         Assert.True(ownerControl.IsHandleCreated);
         var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
         Assert.True(ownerControl.IsHandleCreated);
 
-        // Set empty.
+        // Set value.
         accessibleObject.Handle = value;
         Assert.Equal(value, accessibleObject.Handle);
 
-        // Set same.
+        // Set same value.
         accessibleObject.Handle = value;
         Assert.Equal(value, accessibleObject.Handle);
     }
@@ -1361,7 +1375,7 @@ public class Control_ControlAccessibleObjectTests
         else
         {
             Assert.Equal(VARIANT.Empty, controlAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId));
-        } 
+        }
     }
 
     public static IEnumerable<object[]> ControlAccessibleObject_GetPropertyValue_ControlTypeProperty_ReturnsCorrectValue_TestData()
