@@ -43,7 +43,7 @@ public abstract unsafe partial class AxHost
             {
                 stream.Position = position;
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-                _bag = (Hashtable)new BinaryFormatter().Deserialize(stream);
+                _bag = (Hashtable)new BinaryFormatter().Deserialize(stream); // CodeQL[SM03722, SM04191] : BinaryFormatter is intended to be used as a fallback for unsupported types. Users must explicitly opt into this behavior"
             }
             catch (Exception inner) when (!inner.IsCriticalException())
             {

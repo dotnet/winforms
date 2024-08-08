@@ -25,6 +25,9 @@ public sealed partial class Application
     /// </summary>
     private static EventHandlerList? s_eventHandlers;
     private static Font? s_defaultFont;
+    /// <summary>
+    ///  Scaled version of non system <see cref="s_defaultFont"/>.
+    /// </summary>
     private static Font? s_defaultFontScaled;
     private static string? s_startupPath;
     private static string? s_executablePath;
@@ -1204,23 +1207,52 @@ public sealed partial class Application
         if (NativeWindow.AnyHandleCreated)
             throw new InvalidOperationException(string.Format(SR.Win32WindowAlreadyCreated, nameof(SetDefaultFont)));
 
-        // If user made a prior call to this API with a different custom fonts, we want to clean it up.
-        if (s_defaultFont is not null && !ReferenceEquals(s_defaultFont, font))
-        {
-            s_defaultFont.Dispose();
-        }
-
         s_defaultFont = font;
         ScaleDefaultFont();
     }
 
+    /// <summary>
+    ///  Scale <see cref="s_defaultFont"/> or <see cref="s_defaultFontScaled"/> if needed.
+    /// </summary>
     internal static void ScaleDefaultFont()
     {
-        // It is possible the existing scaled font will be identical after scaling the default font again. Figuring
-        // that out requires additional complexity that doesn't appear to be strictly necessary.
-        s_defaultFontScaled?.Dispose();
-        s_defaultFontScaled = null;
-        s_defaultFontScaled = ScaleHelper.ScaleToSystemTextSize(s_defaultFont);
+        if (s_defaultFont is null)
+        {
+            return;
+        }
+
+        if (s_defaultFont.IsSystemFont)
+        {
+            s_defaultFontScaled?.Dispose();
+            s_defaultFontScaled = null;
+            // Recreating the SystemFont will have it scaled to the right size for the current setting. This could be
+            // done more efficiently by querying the OS to see if this is necessary for the specific font.
+            //
+            // This should never return null.
+            Font newSystemFont = SystemFonts.GetFontByName(s_defaultFont.SystemFontName)!;
+            if (s_defaultFont.Equals(newSystemFont))
+            {
+                // No point in keeping an identical one, free the resource.
+                newSystemFont.Dispose();
+            }
+            else
+            {
+                s_defaultFont = newSystemFont;
+            }
+        }
+        else // non system Font
+        {
+            Font? font = ScaleHelper.ScaleToSystemTextSize(s_defaultFont);
+            if (font is null || !font.Equals(s_defaultFontScaled)) // change s_defaultFontScaled only if needed
+            {
+                s_defaultFontScaled?.Dispose();
+                s_defaultFontScaled = font;
+            }
+            else
+            {
+                font.Dispose();
+            }
+        }
     }
 
     /// <summary>
