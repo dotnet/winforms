@@ -9,6 +9,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.Marshalling;
 using Microsoft.VisualStudio.Shell;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Com.StructuredStorage;
@@ -3464,7 +3465,15 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         {
             if (_instance is not null)
             {
-                Marshal.ReleaseComObject(_instance);
+                if (_instance is ComObject)
+                {
+                    // TODO: how to release a ComWrappers ComObject?
+                }
+                else
+                {
+                    Marshal.ReleaseComObject(_instance);
+                }
+
                 _instance = null;
                 DisposeHelper.NullAndDispose(ref _iOleInPlaceActiveObjectExternal);
             }
