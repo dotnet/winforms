@@ -68,6 +68,10 @@ public sealed partial class Application
     private static bool s_exiting;
     private static bool s_parkingWindowCreated;
 
+#pragma warning disable WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    private static VisualStylesMode? s_defaultVisualStylesMode;
+#pragma warning restore WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
     /// <summary>
     ///  This class is static, there is no need to ever create it.
     /// </summary>
@@ -315,7 +319,15 @@ public sealed partial class Application
     ///  </para>
     /// </remarks>
     [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = WinFormsExperimentalUrl)]
-    public static VisualStylesMode DefaultVisualStylesMode { get; private set; }
+    public static VisualStylesMode DefaultVisualStylesMode
+    {
+        get => s_defaultVisualStylesMode
+            ??= RenderWithVisualStyles
+                ? VisualStylesMode.Classic
+                : VisualStylesMode.Disabled;
+
+        private set { }
+    }
 
     /// <summary>
     ///  Sets the default <see cref="DefaultVisualStylesMode"/> as the rendering style guideline for the Application's controls to use.
@@ -327,17 +339,35 @@ public sealed partial class Application
     [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = WinFormsExperimentalUrl)]
     public static void SetDefaultVisualStylesMode(VisualStylesMode styleSetting)
     {
-        if (styleSetting != DefaultVisualStylesMode)
+        if (s_defaultVisualStylesMode.HasValue
+            && s_defaultVisualStylesMode.Value != styleSetting)
         {
-            DefaultVisualStylesMode = styleSetting;
+            throw new InvalidOperationException(SR.Application_VisualStylesModeCanOnlyBeSetOnce);
+        }
 
-            if (styleSetting == VisualStylesMode.Disabled)
+        if (!s_defaultVisualStylesMode.HasValue)
+        {
+            if (UseVisualStyles)
             {
-                UseVisualStyles = false;
+                if (styleSetting == VisualStylesMode.Disabled)
+                {
+                    throw new InvalidOperationException(SR.Application_ClassicVisualStyleHadAlreadyBeenSet);
+                }
+
+                s_defaultVisualStylesMode = styleSetting;
                 return;
             }
 
             EnableVisualStyles();
+
+            // Check, if we were able to activate.
+            if (UseVisualStyles)
+            {
+                s_defaultVisualStylesMode = styleSetting;
+                return;
+            }
+
+            s_defaultVisualStylesMode = VisualStylesMode.Disabled;
         }
     }
 
@@ -562,7 +592,8 @@ public sealed partial class Application
 #pragma warning disable WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     public static bool RenderWithVisualStyles =>
         ComCtlSupportsVisualStyles
-            && DefaultVisualStylesMode != VisualStylesMode.Disabled;
+            && VisualStyleRenderer.IsSupported
+            && s_defaultVisualStylesMode != VisualStylesMode.Disabled;
 #pragma warning restore WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     /// <summary>
@@ -953,10 +984,14 @@ public sealed partial class Application
 
 #pragma warning disable WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
 
-        // We need to check, if SetDefaultVisualStylesMode was called before EnableVisualStyles, so those will always be in sync!
-        if (UseVisualStyles && DefaultVisualStylesMode == VisualStylesMode.Disabled)
+        // We need to check, if SetDefaultVisualStylesMode was set before EnableVisualStyles,
+        // so those will always be in sync!
+        if (UseVisualStyles && s_defaultVisualStylesMode == VisualStylesMode.Disabled)
         {
-            DefaultVisualStylesMode = VisualStylesMode.Classic;
+            // If it was disabled, it is now classic.
+            // If it was not set, it remains not set. We exclude setting to disabled in that case.
+            // If it was a version, it's save that it remains the version.
+            s_defaultVisualStylesMode = VisualStylesMode.Classic;
         }
 #pragma warning restore WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
 
