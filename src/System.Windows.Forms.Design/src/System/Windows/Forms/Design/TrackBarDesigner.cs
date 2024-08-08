@@ -19,9 +19,9 @@ internal class TrackBarDesigner : ControlDesigner
             SelectionRules rules = base.SelectionRules;
             rules |= SelectionRules.AllSizeable;
 
-            if (GetPropertyValue<bool>(Component, nameof(TrackBar.AutoSize)))
+            if (GetPropertyValue<bool>(Component!, nameof(TrackBar.AutoSize)))
             {
-                var orientation = GetPropertyValue<Orientation?>(Component, nameof(TrackBar.Orientation)) ?? Orientation.Horizontal;
+                var orientation = GetPropertyValue<Orientation?>(Component!, nameof(TrackBar.Orientation)) ?? Orientation.Horizontal;
 
                 switch (orientation)
                 {

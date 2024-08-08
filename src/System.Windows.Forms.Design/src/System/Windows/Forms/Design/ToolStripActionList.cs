@@ -17,7 +17,7 @@ internal class ToolStripActionList : DesignerActionList
     public ToolStripActionList(ToolStripDesigner designer)
         : base(designer.Component)
     {
-        _toolStrip = (ToolStrip)designer.Component;
+        _toolStrip = (ToolStrip)designer.Component!;
 
         _changeParentVerb = new ChangeToolStripParentVerb(designer);
         if (_toolStrip is not StatusStrip)

@@ -96,7 +96,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
                 // Record if this component is being inherited or not.
                 if (TryGetService(out IInheritanceService? inheritanceService))
                 {
-                    _inheritanceAttribute = inheritanceService.GetInheritanceAttribute(Component);
+                    _inheritanceAttribute = inheritanceService.GetInheritanceAttribute(Component!);
                 }
                 else
                 {
@@ -169,7 +169,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     /// <summary>
     ///  Gets or sets the component this designer is designing.
     /// </summary>
-    public IComponent Component => _component ?? throw new InvalidOperationException("Designer is not initialized");
+    public IComponent? Component => _component;
 
     /// <summary>
     /// Internal utility used primarily to dispose instances
@@ -353,7 +353,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
         // Now show the event code.
         if (thisHandler is not null && thisDefaultEvent is not null)
         {
-            ebs.ShowCode(Component, thisDefaultEvent);
+            ebs.ShowCode(Component!, thisDefaultEvent);
         }
     }
 
@@ -407,7 +407,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
 
         if (!readOnlyInherit)
         {
-            PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(Component);
+            PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(Component!);
 
             // Now loop through all the properties.  For each one, try to match a pre-created property.
             // If that fails, then create a new property.
@@ -431,13 +431,13 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
                 {
                     // This ia a publicly inherited component.  We replace all component properties with inherited
                     // versions that reset the default property values to those that are currently on the component.
-                    props.Add(prop.Name, new(prop, Component));
+                    props.Add(prop.Name, new(prop, Component!));
                 }
             }
         }
 
         _inheritedProps = props;
-        TypeDescriptor.Refresh(Component); // force TypeDescriptor to re-query us.
+        TypeDescriptor.Refresh(Component!); // force TypeDescriptor to re-query us.
     }
 
     /// <summary>
@@ -561,7 +561,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
 
     internal T GetRequiredService<T>() where T : class
     {
-        ISite componentSite = Component.Site ?? throw new InvalidOperationException("Component should have a site");
+        ISite componentSite = Component!.Site ?? throw new InvalidOperationException("Component should have a site");
         return componentSite.GetRequiredService<T>();
     }
 
@@ -721,7 +721,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     ///  You only need to call this when you are affecting component properties directly and not through the MemberDescriptor's accessors.
     /// </summary>
     protected void RaiseComponentChanged(MemberDescriptor? member, object? oldValue, object? newValue)
-        => GetService<IComponentChangeService>()?.OnComponentChanged(Component, member, oldValue, newValue);
+        => GetService<IComponentChangeService>()?.OnComponentChanged(Component!, member, oldValue, newValue);
 
     /// <summary>
     ///  Notifies the <see cref="IComponentChangeService"/> that this component is
@@ -729,5 +729,5 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     ///  not through the MemberDescriptor's accessors.
     /// </summary>
     protected void RaiseComponentChanging(MemberDescriptor? member)
-        => GetService<IComponentChangeService>()?.OnComponentChanging(Component, member);
+        => GetService<IComponentChangeService>()?.OnComponentChanging(Component!, member);
 }

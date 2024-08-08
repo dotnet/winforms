@@ -44,7 +44,7 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
         set
         {
             ShadowProperties[nameof(TopToolStripPanelVisible)] = value;
-            ((ToolStripContainer)Component).TopToolStripPanelVisible = value;
+            ((ToolStripContainer)Component!).TopToolStripPanelVisible = value;
         }
     }
 
@@ -58,7 +58,7 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
         set
         {
             ShadowProperties[nameof(LeftToolStripPanelVisible)] = value;
-            ((ToolStripContainer)Component).LeftToolStripPanelVisible = value;
+            ((ToolStripContainer)Component!).LeftToolStripPanelVisible = value;
         }
     }
 
@@ -72,7 +72,7 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
         set
         {
             ShadowProperties[nameof(RightToolStripPanelVisible)] = value;
-            ((ToolStripContainer)Component).RightToolStripPanelVisible = value;
+            ((ToolStripContainer)Component!).RightToolStripPanelVisible = value;
         }
     }
 
@@ -86,7 +86,7 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
         set
         {
             ShadowProperties[nameof(BottomToolStripPanelVisible)] = value;
-            ((ToolStripContainer)Component).BottomToolStripPanelVisible = value;
+            ((ToolStripContainer)Component!).BottomToolStripPanelVisible = value;
         }
     }
 
