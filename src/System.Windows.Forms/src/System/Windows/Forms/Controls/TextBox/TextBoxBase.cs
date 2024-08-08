@@ -823,7 +823,7 @@ public abstract partial class TextBoxBase : Control
                 enumClass: typeof(VisualStylesMode))
         };
 
-    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
+    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = Application.WinFormsExperimentalUrl)]
     protected virtual int PreferredHeightCore
     {
         get

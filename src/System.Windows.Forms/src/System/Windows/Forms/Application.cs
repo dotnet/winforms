@@ -48,6 +48,8 @@ public sealed partial class Application
     private static SystemColorMode? s_systemColorMode;
 #pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
+    internal const string WinFormsExperimentalUrl = "https://aka.ms/winforms-experimental/{0}";
+
     private const string DarkModeKeyPath = "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
     private const string DarkModeKey = "AppsUseLightTheme";
     private const int DarkModeNotAvailable = -1;
@@ -251,7 +253,7 @@ public sealed partial class Application
     ///  Gets the default dark mode for the application. This is the SystemColorMode which either has been set
     ///  by <see cref="SetColorMode(SystemColorMode)"/> or its default value <see cref="SystemColorMode.Classic"/>.
     /// </summary>
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = WinFormsExperimentalUrl)]
     public static SystemColorMode ColorMode =>
         !s_systemColorMode.HasValue
             ? SystemColorMode.Classic
@@ -263,7 +265,7 @@ public sealed partial class Application
     ///  Sets the default dark mode for the application.
     /// </summary>
     /// <param name="systemColorMode">The default dark mode to set.</param>
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = WinFormsExperimentalUrl)]
     public static void SetColorMode(SystemColorMode systemColorMode)
     {
         try
@@ -295,6 +297,9 @@ public sealed partial class Application
     ///  Gets the default <see cref="DefaultVisualStylesMode"/> used as the rendering style guideline for the
     ///  application's controls. The default setting is <see cref="VisualStylesMode.Classic"/>.
     /// </summary>
+    /// <returns>
+    ///  The <see cref="VisualStylesMode"/> used as the rendering style guideline for the application's controls.
+    /// </returns>
     /// <remarks>
     ///  <para>
     ///   Starting from .NET 9, controls must adapt to new requirements in certain situations, such as dark mode and
@@ -309,7 +314,7 @@ public sealed partial class Application
     ///   is essential.
     ///  </para>
     /// </remarks>
-    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
+    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = WinFormsExperimentalUrl)]
     public static VisualStylesMode DefaultVisualStylesMode { get; private set; }
 
     /// <summary>
@@ -319,7 +324,7 @@ public sealed partial class Application
     ///  as not setting using <see cref="EnableVisualStyles"/>.
     /// </summary>
     /// <param name="styleSetting">The version of visual styles to set.</param>
-    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
+    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = WinFormsExperimentalUrl)]
     public static void SetDefaultVisualStylesMode(VisualStylesMode styleSetting)
     {
         if (styleSetting != DefaultVisualStylesMode)
@@ -354,7 +359,7 @@ public sealed partial class Application
     ///   SystemColorModes is not supported, if the Windows OS <c>High Contrast Mode</c> has been enabled in the system settings.
     ///  </para>
     /// </remarks>
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode)]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = WinFormsExperimentalUrl)]
     public static SystemColorMode SystemColorMode =>
         GetSystemColorModeInternal() == 0
             ? SystemColorMode.Dark
@@ -393,7 +398,7 @@ public sealed partial class Application
     ///  Gets a value indicating whether the application is running in a dark system color context.
     ///  Note: In a high contrast mode, this will always return <see langword="false"/>.
     /// </summary>
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode)]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = WinFormsExperimentalUrl)]
     public static bool IsDarkModeEnabled =>
         !SystemInformation.HighContrast
         && (ColorMode == SystemColorMode.Dark);

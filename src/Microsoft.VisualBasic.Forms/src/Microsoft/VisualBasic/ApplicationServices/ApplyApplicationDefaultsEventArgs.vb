@@ -19,6 +19,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
 #Disable Warning WFO5001
 #Disable Warning WFO5000
+
         Friend Sub New(minimumSplashScreenDisplayTime As Integer,
                 highDpiMode As HighDpiMode,
                 colorMode As SystemColorMode,
@@ -28,8 +29,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             Me.HighDpiMode = highDpiMode
             Me.ColorMode = colorMode
             Me.VisualStylesMode = visualStylesMode
-
         End Sub
+
 #Enable Warning WFO5000
 #Enable Warning WFO5001
 
@@ -46,7 +47,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  Setting this Property inside the event handler determines how long an application's Splash dialog is displayed at a minimum.
         ''' </summary>
         Public Property MinimumSplashScreenDisplayTime As Integer =
-            WindowsFormsApplicationBase.MINIMUM_SPLASH_EXPOSURE_DEFAULT
+            WindowsFormsApplicationBase.MinimumSplashExposureDefault
 
         ''' <summary>
         '''  Setting this Property inside the event handler determines the general HighDpiMode for the application.
@@ -59,14 +60,14 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         '''  Setting this property inside the event handler determines the <see cref="Application.ColorMode"/> for the application.
         ''' </summary>
-        <Experimental(DiagnosticIDs.ExperimentalDarkMode)>
+        <Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat:=WindowsFormsApplicationBase.WinFormsExperimentalUrl)>
         Public Property ColorMode As SystemColorMode
 
         ''' <summary>
         '''  Setting this property inside the event handler determines the <see cref="VisualStylesMode"/> for the application.
         ''' </summary>
         ''' <returns></returns>
-        <Experimental(DiagnosticIDs.ExperimentalVisualStyles)>
+        <Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat:=WindowsFormsApplicationBase.WinFormsExperimentalUrl)>
         Public Property VisualStylesMode As VisualStylesMode
 
     End Class

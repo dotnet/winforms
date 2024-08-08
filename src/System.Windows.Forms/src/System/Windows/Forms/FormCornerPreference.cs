@@ -10,7 +10,7 @@ namespace System.Windows.Forms;
 ///  Specifies the corner preference for a <see cref="Form"/> which can be
 ///  set using the <see cref="Form.FormCornerPreference"/> property.
 /// </summary>
-[Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
+[Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = Application.WinFormsExperimentalUrl)]
 public enum FormCornerPreference
 {
     /// <summary>
