@@ -2418,6 +2418,11 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormOnClosingDescr))]
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete(
+        Obsoletions.FormOnClosingClosedMessage,
+        error: false,
+        DiagnosticId = Obsoletions.FormOnClosingClosedDiagnosticId,
+        UrlFormat = Obsoletions.SharedUrlFormat)]
     public event CancelEventHandler? Closing
     {
         add => Events.AddHandler(s_closingEvent, value);
@@ -2431,6 +2436,11 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormOnClosedDescr))]
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete(
+        Obsoletions.FormOnClosingClosedMessage,
+        error: false,
+        DiagnosticId = Obsoletions.FormOnClosingClosedDiagnosticId,
+        UrlFormat = Obsoletions.SharedUrlFormat)]
     public event EventHandler? Closed
     {
         add => Events.AddHandler(s_closedEvent, value);

@@ -22,6 +22,6 @@ internal static class Obsoletions
 #pragma warning restore WFDEV003 // Type or member is obsolete
     internal const string DomainItemAccessibleObjectDiagnosticId = "WFDEV003";
 
-    internal const string FormOnClosingClosedMessage = "Form.OnClosing and Form.OnClosed are obsolete. Use Form.OnFormClosing and Form.OnFormClosed instead.";
+    internal const string FormOnClosingClosedMessage = "Form.OnClosing, Form.OnClosed and the corresponding events are obsolete. Use Form.OnFormClosing and Form.OnFormClosed instead.";
     internal const string FormOnClosingClosedDiagnosticId = "WFDEV004";
 }
