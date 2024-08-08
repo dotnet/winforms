@@ -359,12 +359,12 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
         }
 
         listManager.CurrentChanged += _currentChanged;
-        listManager.BindingComplete += new BindingCompleteEventHandler(ErrorManager_BindingComplete);
+        listManager.BindingComplete += ErrorManager_BindingComplete;
 
         if (listManager is CurrencyManager currManager)
         {
-            currManager.ItemChanged += new ItemChangedEventHandler(ErrorManager_ItemChanged);
-            currManager.Bindings.CollectionChanged += new CollectionChangeEventHandler(ErrorManager_BindingsChanged);
+            currManager.ItemChanged += ErrorManager_ItemChanged;
+            currManager.Bindings.CollectionChanged += ErrorManager_BindingsChanged;
         }
     }
 
@@ -376,12 +376,12 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
         }
 
         listManager.CurrentChanged -= _currentChanged;
-        listManager.BindingComplete -= new BindingCompleteEventHandler(ErrorManager_BindingComplete);
+        listManager.BindingComplete -= ErrorManager_BindingComplete;
 
         if (listManager is CurrencyManager currManager)
         {
-            currManager.ItemChanged -= new ItemChangedEventHandler(ErrorManager_ItemChanged);
-            currManager.Bindings.CollectionChanged -= new CollectionChangeEventHandler(ErrorManager_BindingsChanged);
+            currManager.ItemChanged -= ErrorManager_ItemChanged;
+            currManager.Bindings.CollectionChanged -= ErrorManager_BindingsChanged;
         }
     }
 
@@ -619,7 +619,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
     {
         if (DataSource is ISupportInitializeNotification dsInit && !dsInit.IsInitialized)
         {
-            dsInit.Initialized += new EventHandler(DataSource_Initialized);
+            dsInit.Initialized += DataSource_Initialized;
         }
         else
         {
@@ -641,7 +641,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
 
         if (dsInit is not null)
         {
-            dsInit.Initialized -= new EventHandler(DataSource_Initialized);
+            dsInit.Initialized -= DataSource_Initialized;
         }
 
         EndInitCore();

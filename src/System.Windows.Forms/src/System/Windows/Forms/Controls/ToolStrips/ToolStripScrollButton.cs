@@ -84,7 +84,7 @@ internal partial class ToolStripScrollButton : ToolStripControlHost
         Scroll();
 
         MouseDownTimer.Interval = s_autoScrollPause;
-        MouseDownTimer.Tick += new EventHandler(OnInitialAutoScrollMouseDown);
+        MouseDownTimer.Tick += OnInitialAutoScrollMouseDown;
         MouseDownTimer.Enabled = true;
     }
 
@@ -102,8 +102,8 @@ internal partial class ToolStripScrollButton : ToolStripControlHost
     private void UnsubscribeAll()
     {
         MouseDownTimer.Enabled = false;
-        MouseDownTimer.Tick -= new EventHandler(OnInitialAutoScrollMouseDown);
-        MouseDownTimer.Tick -= new EventHandler(OnAutoScrollAccelerate);
+        MouseDownTimer.Tick -= OnInitialAutoScrollMouseDown;
+        MouseDownTimer.Tick -= OnAutoScrollAccelerate;
     }
 
     private void OnAutoScrollAccelerate(object? sender, EventArgs e)
@@ -113,11 +113,11 @@ internal partial class ToolStripScrollButton : ToolStripControlHost
 
     private void OnInitialAutoScrollMouseDown(object? sender, EventArgs e)
     {
-        MouseDownTimer.Tick -= new EventHandler(OnInitialAutoScrollMouseDown);
+        MouseDownTimer.Tick -= OnInitialAutoScrollMouseDown;
 
         Scroll();
         MouseDownTimer.Interval = AUTOSCROLL_UPDATE;
-        MouseDownTimer.Tick += new EventHandler(OnAutoScrollAccelerate);
+        MouseDownTimer.Tick += OnAutoScrollAccelerate;
     }
 
     public override Size GetPreferredSize(Size constrainingSize)

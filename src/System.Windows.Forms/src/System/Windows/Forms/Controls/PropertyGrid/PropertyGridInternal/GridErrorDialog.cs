@@ -177,7 +177,7 @@ internal partial class GridErrorDialog : Form
             TabIndex = 2
         };
 
-        _cancelButton.Click += new EventHandler(OnButtonClick);
+        _cancelButton.Click += OnButtonClick;
 
         _buttonTableLayoutPanel = new TableLayoutPanel
         {

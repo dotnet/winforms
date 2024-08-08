@@ -949,8 +949,8 @@ public partial class Label : Control, IAutomationLiveRegion
             // Holding on to images and image list is a memory leak.
             if (ImageList is not null)
             {
-                ImageList.Disposed -= new EventHandler(DetachImageList);
-                ImageList.RecreateHandle -= new EventHandler(ImageListRecreateHandle);
+                ImageList.Disposed -= DetachImageList;
+                ImageList.RecreateHandle -= ImageListRecreateHandle;
                 Properties.SetObject(s_propImageList, null);
             }
 

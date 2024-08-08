@@ -36,7 +36,7 @@ internal static class SystemColorTracker
             if (!s_addedTracker)
             {
                 s_addedTracker = true;
-                SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
+                SystemEvents.UserPreferenceChanged += OnUserPreferenceChanged;
             }
 
             // Strictly speaking, we should grab a lock on this class.  But since the chances

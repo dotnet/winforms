@@ -1262,22 +1262,22 @@ public partial class BindingSource : Component,
     {
         Debug.Assert(cm is not null);
 
-        cm.PositionChanged += new EventHandler(CurrencyManager_PositionChanged);
-        cm.CurrentChanged += new EventHandler(CurrencyManager_CurrentChanged);
-        cm.CurrentItemChanged += new EventHandler(CurrencyManager_CurrentItemChanged);
-        cm.BindingComplete += new BindingCompleteEventHandler(CurrencyManager_BindingComplete);
-        cm.DataError += new BindingManagerDataErrorEventHandler(CurrencyManager_DataError);
+        cm.PositionChanged += CurrencyManager_PositionChanged;
+        cm.CurrentChanged += CurrencyManager_CurrentChanged;
+        cm.CurrentItemChanged += CurrencyManager_CurrentItemChanged;
+        cm.BindingComplete += CurrencyManager_BindingComplete;
+        cm.DataError += CurrencyManager_DataError;
     }
 
     private void UnwireCurrencyManager(CurrencyManager cm)
     {
         Debug.Assert(cm is not null);
 
-        cm.PositionChanged -= new EventHandler(CurrencyManager_PositionChanged);
-        cm.CurrentChanged -= new EventHandler(CurrencyManager_CurrentChanged);
-        cm.CurrentItemChanged -= new EventHandler(CurrencyManager_CurrentItemChanged);
-        cm.BindingComplete -= new BindingCompleteEventHandler(CurrencyManager_BindingComplete);
-        cm.DataError -= new BindingManagerDataErrorEventHandler(CurrencyManager_DataError);
+        cm.PositionChanged -= CurrencyManager_PositionChanged;
+        cm.CurrentChanged -= CurrencyManager_CurrentChanged;
+        cm.CurrentItemChanged -= CurrencyManager_CurrentItemChanged;
+        cm.BindingComplete -= CurrencyManager_BindingComplete;
+        cm.DataError -= CurrencyManager_DataError;
     }
 
     private void WireDataSource()
@@ -1287,8 +1287,8 @@ public partial class BindingSource : Component,
             CurrencyManager? cm = provider.CurrencyManager;
             if (cm is not null)
             {
-                cm.CurrentItemChanged += new EventHandler(ParentCurrencyManager_CurrentItemChanged);
-                cm.MetaDataChanged += new EventHandler(ParentCurrencyManager_MetaDataChanged);
+                cm.CurrentItemChanged += ParentCurrencyManager_CurrentItemChanged;
+                cm.MetaDataChanged += ParentCurrencyManager_MetaDataChanged;
             }
         }
     }
@@ -1300,8 +1300,8 @@ public partial class BindingSource : Component,
             CurrencyManager? cm = provider.CurrencyManager;
             if (cm is not null)
             {
-                cm.CurrentItemChanged -= new EventHandler(ParentCurrencyManager_CurrentItemChanged);
-                cm.MetaDataChanged -= new EventHandler(ParentCurrencyManager_MetaDataChanged);
+                cm.CurrentItemChanged -= ParentCurrencyManager_CurrentItemChanged;
+                cm.MetaDataChanged -= ParentCurrencyManager_MetaDataChanged;
             }
         }
     }
@@ -1310,7 +1310,7 @@ public partial class BindingSource : Component,
     {
         if (_innerList is IBindingList list)
         {
-            list.ListChanged += new ListChangedEventHandler(InnerList_ListChanged);
+            list.ListChanged += InnerList_ListChanged;
         }
     }
 
@@ -1318,7 +1318,7 @@ public partial class BindingSource : Component,
     {
         if (_innerList is IBindingList list)
         {
-            list.ListChanged -= new ListChangedEventHandler(InnerList_ListChanged);
+            list.ListChanged -= InnerList_ListChanged;
         }
     }
 
@@ -1373,7 +1373,7 @@ public partial class BindingSource : Component,
     {
         if (DataSource is ISupportInitializeNotification dsInit && !dsInit.IsInitialized)
         {
-            dsInit.Initialized += new EventHandler(DataSource_Initialized);
+            dsInit.Initialized += DataSource_Initialized;
         }
         else
         {
@@ -1391,7 +1391,7 @@ public partial class BindingSource : Component,
     {
         if (DataSource is ISupportInitializeNotification dsInit)
         {
-            dsInit.Initialized -= new EventHandler(DataSource_Initialized);
+            dsInit.Initialized -= DataSource_Initialized;
         }
 
         EndInitCore();

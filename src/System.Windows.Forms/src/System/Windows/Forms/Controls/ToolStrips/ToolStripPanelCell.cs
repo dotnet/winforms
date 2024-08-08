@@ -53,8 +53,8 @@ internal sealed class ToolStripPanelCell : ArrangedElement
         _wrappedToolStrip = toolStrip;
 
         CommonProperties.SetAutoSize(this, true);
-        _wrappedToolStrip.LocationChanging += new ToolStripLocationCancelEventHandler(OnToolStripLocationChanging);
-        _wrappedToolStrip.VisibleChanged += new EventHandler(OnToolStripVisibleChanged);
+        _wrappedToolStrip.LocationChanging += OnToolStripLocationChanging;
+        _wrappedToolStrip.VisibleChanged += OnToolStripVisibleChanged;
     }
 
     public Rectangle CachedBounds
@@ -229,8 +229,8 @@ internal sealed class ToolStripPanelCell : ArrangedElement
 #if DEBUG
                     t_cellCount--;
 #endif
-                    _wrappedToolStrip.LocationChanging -= new ToolStripLocationCancelEventHandler(OnToolStripLocationChanging);
-                    _wrappedToolStrip.VisibleChanged -= new EventHandler(OnToolStripVisibleChanged);
+                    _wrappedToolStrip.LocationChanging -= OnToolStripLocationChanging;
+                    _wrappedToolStrip.VisibleChanged -= OnToolStripVisibleChanged;
                 }
 
                 _wrappedToolStrip = null!;

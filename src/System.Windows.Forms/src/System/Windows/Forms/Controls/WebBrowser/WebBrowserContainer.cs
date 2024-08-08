@@ -283,7 +283,7 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
         _associatedContainer = container;
         if (site.TryGetService(out IComponentChangeService? service))
         {
-            service.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
+            service.ComponentRemoved += OnComponentRemoved;
         }
 
         return true;
@@ -317,7 +317,7 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
         _associatedContainer = site.Container;
         if (site.TryGetService(out IComponentChangeService? service))
         {
-            service.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
+            service.ComponentRemoved += OnComponentRemoved;
         }
     }
 

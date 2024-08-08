@@ -218,7 +218,7 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
             {
                 _rendererSwitcher = new ToolStripRendererSwitcher(this);
                 HandleRendererChanged(this, EventArgs.Empty);
-                _rendererSwitcher.RendererChanged += new EventHandler(HandleRendererChanged);
+                _rendererSwitcher.RendererChanged += HandleRendererChanged;
             }
 
             return _rendererSwitcher;

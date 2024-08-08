@@ -641,9 +641,9 @@ public partial class TreeView : Control
         if (_imageList is not null)
         {
             // NOTE: any handlers added here should be removed in DetachImageListHandlers
-            _imageList.RecreateHandle += new EventHandler(ImageListRecreateHandle);
-            _imageList.Disposed += new EventHandler(DetachImageList);
-            _imageList.ChangeHandle += new EventHandler(ImageListChangedHandle);
+            _imageList.RecreateHandle += ImageListRecreateHandle;
+            _imageList.Disposed += DetachImageList;
+            _imageList.ChangeHandle += ImageListChangedHandle;
         }
     }
 
@@ -651,9 +651,9 @@ public partial class TreeView : Control
     {
         if (_imageList is not null)
         {
-            _imageList.RecreateHandle -= new EventHandler(ImageListRecreateHandle);
-            _imageList.Disposed -= new EventHandler(DetachImageList);
-            _imageList.ChangeHandle -= new EventHandler(ImageListChangedHandle);
+            _imageList.RecreateHandle -= ImageListRecreateHandle;
+            _imageList.Disposed -= DetachImageList;
+            _imageList.ChangeHandle -= ImageListChangedHandle;
         }
     }
 
@@ -662,9 +662,9 @@ public partial class TreeView : Control
         if (_stateImageList is not null)
         {
             // NOTE: any handlers added here should be removed in DetachStateImageListHandlers
-            _stateImageList.RecreateHandle += new EventHandler(StateImageListRecreateHandle);
-            _stateImageList.Disposed += new EventHandler(DetachStateImageList);
-            _stateImageList.ChangeHandle += new EventHandler(StateImageListChangedHandle);
+            _stateImageList.RecreateHandle += StateImageListRecreateHandle;
+            _stateImageList.Disposed += DetachStateImageList;
+            _stateImageList.ChangeHandle += StateImageListChangedHandle;
         }
     }
 
@@ -672,9 +672,9 @@ public partial class TreeView : Control
     {
         if (_stateImageList is not null)
         {
-            _stateImageList.RecreateHandle -= new EventHandler(StateImageListRecreateHandle);
-            _stateImageList.Disposed -= new EventHandler(DetachStateImageList);
-            _stateImageList.ChangeHandle -= new EventHandler(StateImageListChangedHandle);
+            _stateImageList.RecreateHandle -= StateImageListRecreateHandle;
+            _stateImageList.Disposed -= DetachStateImageList;
+            _stateImageList.ChangeHandle -= StateImageListChangedHandle;
         }
     }
 
@@ -3106,8 +3106,8 @@ public partial class TreeView : Control
 
             // Need to send TVM_SELECTITEM to highlight the node while the contextMenuStrip is being shown.
             PInvoke.PostMessage(this, PInvoke.TVM_SELECTITEM, (WPARAM)PInvoke.TVGN_DROPHILITE, (LPARAM)treeNode.Handle);
-            menu.ShowInternal(this, PointToClient(MousePosition), /*keyboardActivated*/false);
-            menu.Closing += new ToolStripDropDownClosingEventHandler(ContextMenuStripClosing);
+            menu.ShowInternal(this, PointToClient(MousePosition), isKeyboardActivated: false);
+            menu.Closing += ContextMenuStripClosing;
         }
     }
 
@@ -3116,7 +3116,7 @@ public partial class TreeView : Control
     {
         ContextMenuStrip strip = (ContextMenuStrip)sender!;
         // Unhook the Event.
-        strip.Closing -= new ToolStripDropDownClosingEventHandler(ContextMenuStripClosing);
+        strip.Closing -= ContextMenuStripClosing;
         PInvoke.SendMessage(this, PInvoke.TVM_SELECTITEM, (WPARAM)PInvoke.TVGN_DROPHILITE);
     }
 
