@@ -121,22 +121,13 @@ public partial class DateTimePicker : Control
         _format = DateTimePickerFormat.Long;
 
         SetStyle(ControlStyles.UseTextForAccessibility, false);
-
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     }
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public override Color BackColor
     {
-#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
-        get => ShouldSerializeBackColor()
-            || Application.IsDarkModeEnabled
-                ? base.BackColor
-                : SystemColors.Window;
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+        get => ShouldSerializeBackColor() ? base.BackColor : SystemColors.Window;
         set => base.BackColor = value;
     }
 

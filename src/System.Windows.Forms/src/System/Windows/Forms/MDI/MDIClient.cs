@@ -315,10 +315,7 @@ public sealed partial class MdiClient : Control
         }
     }
 
-    internal override bool ShouldSerializeBackColor()
-    {
-        return BackColor != SystemColors.AppWorkspace;
-    }
+    internal override bool ShouldSerializeBackColor() => BackColor != SystemColors.AppWorkspace;
 
     private static bool ShouldSerializeLocation() => false;
 

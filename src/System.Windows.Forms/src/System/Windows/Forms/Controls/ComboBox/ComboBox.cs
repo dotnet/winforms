@@ -2476,11 +2476,11 @@ public partial class ComboBox : ListControl
             {
                 PInvoke.SendMessage(this, PInvoke.CB_SETCURSEL, (WPARAM)_selectedIndex);
                 UpdateText();
+
+                // Setting SelectedIndex must be the last thing we do.
                 _selectedIndex = -1;
             }
         }
-
-        // NOTE: Setting SelectedIndex must be the last thing we do!
     }
 
     /// <summary>

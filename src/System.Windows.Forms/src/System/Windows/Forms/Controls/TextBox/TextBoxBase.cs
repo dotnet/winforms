@@ -971,7 +971,6 @@ public abstract partial class TextBoxBase : Control
             if (BorderStyle == BorderStyle.FixedSingle)
             {
                 // Bump these by 2px to match BorderStyle.Fixed3D - they'll be omitted from the SizeFromClientSize call.
-                // TODO: I am not sure, if this calculation still fits since we got the underlined border style.
                 bordersAndPadding.Width += 2;
                 bordersAndPadding.Height += 2;
             }

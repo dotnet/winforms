@@ -3,24 +3,23 @@
 
 using System.Windows.Forms.Analyzers.Diagnostics;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+[Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = Application.WinFormsExperimentalUrl)]
+public enum SystemColorMode
 {
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = Application.WinFormsExperimentalUrl)]
-    public enum SystemColorMode
-    {
-        /// <summary>
-        ///  Dark mode for the current context is or should be disabled.
-        /// </summary>
-        Classic = 0,
+    /// <summary>
+    ///  Dark mode for the current context is or should be disabled.
+    /// </summary>
+    Classic = 0,
 
-        /// <summary>
-        ///  The setting for the current system color mode is inherited from the Windows OS.
-        /// </summary>
-        System = 1,
+    /// <summary>
+    ///  The setting for the current system color mode is inherited from the Windows OS.
+    /// </summary>
+    System = 1,
 
-        /// <summary>
-        ///  Dark mode for the current context is enabled.
-        /// </summary>
-        Dark = 2
-    }
+    /// <summary>
+    ///  Dark mode for the current context is enabled.
+    /// </summary>
+    Dark = 2
 }

@@ -6037,7 +6037,6 @@ public partial class ListView : Control
                 m.ResultInternal = (LRESULT)(nint)PInvoke.CDRF_NOTIFYITEMDRAW;
                 return true;
             }
-
             else if (nmlvcd->nmcd.dwDrawStage == NMCUSTOMDRAW_DRAW_STAGE.CDDS_ITEMPREPAINT)
             {
                 // Setting the current ForeColor to the text color.

@@ -2354,15 +2354,9 @@ public partial class Form : ContainerControl
     [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = Application.WinFormsExperimentalUrl)]
     public FormCornerPreference FormCornerPreference
     {
-        get
-        {
-            if (Properties.ContainsInteger(s_propFormCornerPreference))
-            {
-                return (FormCornerPreference)Properties.GetInteger(s_propFormCornerPreference);
-            }
-
-            return FormCornerPreference.Default;
-        }
+        get => Properties.ContainsInteger(s_propFormCornerPreference)
+                ? (FormCornerPreference)Properties.GetInteger(s_propFormCornerPreference)
+                : FormCornerPreference.Default;
         set
         {
             if (value == FormCornerPreference)
@@ -2494,15 +2488,13 @@ public partial class Form : ContainerControl
             {
                 return Properties.GetColor(s_propFormCaptionBackColor);
             }
-            else
-            {
-                if (!IsHandleCreated || IsAncestorSiteInDesignMode)
-                {
-                    return Color.Empty;
-                }
 
-                return GetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_CAPTION_COLOR);
+            if (!IsHandleCreated || IsAncestorSiteInDesignMode)
+            {
+                return Color.Empty;
             }
+
+            return GetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_CAPTION_COLOR);
         }
         set
         {
@@ -2551,15 +2543,13 @@ public partial class Form : ContainerControl
             {
                 return Properties.GetColor(s_propFormCaptionTextColor);
             }
-            else
-            {
-                if (!IsHandleCreated || IsAncestorSiteInDesignMode)
-                {
-                    return Color.Empty;
-                }
 
-                return GetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_TEXT_COLOR);
+            if (!IsHandleCreated || IsAncestorSiteInDesignMode)
+            {
+                return Color.Empty;
             }
+
+            return GetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_TEXT_COLOR);
         }
         set
         {
