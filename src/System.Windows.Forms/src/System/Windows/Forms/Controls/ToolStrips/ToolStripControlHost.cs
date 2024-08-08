@@ -708,39 +708,39 @@ public partial class ToolStripControlHost : ToolStripItem
         if (control is not null)
         {
             // Please keep this alphabetized and in sync with Unsubscribe
-            control.Click += new EventHandler(HandleClick);
-            control.BackColorChanged += new EventHandler(HandleBackColorChanged);
-            control.DoubleClick += new EventHandler(HandleDoubleClick);
-            control.DragDrop += new DragEventHandler(HandleDragDrop);
-            control.DragEnter += new DragEventHandler(HandleDragEnter);
-            control.DragLeave += new EventHandler(HandleDragLeave);
-            control.DragOver += new DragEventHandler(HandleDragOver);
-            control.Enter += new EventHandler(HandleEnter);
-            control.EnabledChanged += new EventHandler(HandleEnabledChanged);
-            control.ForeColorChanged += new EventHandler(HandleForeColorChanged);
-            control.GiveFeedback += new GiveFeedbackEventHandler(HandleGiveFeedback);
-            control.GotFocus += new EventHandler(HandleGotFocus);
-            control.Leave += new EventHandler(HandleLeave);
-            control.LocationChanged += new EventHandler(HandleLocationChanged);
-            control.LostFocus += new EventHandler(HandleLostFocus);
-            control.KeyDown += new KeyEventHandler(HandleKeyDown);
-            control.KeyPress += new KeyPressEventHandler(HandleKeyPress);
-            control.KeyUp += new KeyEventHandler(HandleKeyUp);
-            control.MouseDown += new MouseEventHandler(HandleMouseDown);
-            control.MouseEnter += new EventHandler(HandleMouseEnter);
-            control.MouseHover += new EventHandler(HandleMouseHover);
-            control.MouseLeave += new EventHandler(HandleMouseLeave);
-            control.MouseMove += new MouseEventHandler(HandleMouseMove);
-            control.MouseUp += new MouseEventHandler(HandleMouseUp);
-            control.Paint += new PaintEventHandler(HandlePaint);
-            control.QueryAccessibilityHelp += new QueryAccessibilityHelpEventHandler(HandleQueryAccessibilityHelp);
-            control.QueryContinueDrag += new QueryContinueDragEventHandler(HandleQueryContinueDrag);
-            control.Resize += new EventHandler(HandleResize);
-            control.RightToLeftChanged += new EventHandler(HandleRightToLeftChanged);
-            control.TextChanged += new EventHandler(HandleTextChanged);
-            control.VisibleChanged += new EventHandler(HandleControlVisibleChanged);
-            control.Validating += new CancelEventHandler(HandleValidating);
-            control.Validated += new EventHandler(HandleValidated);
+            control.Click += HandleClick;
+            control.BackColorChanged += HandleBackColorChanged;
+            control.DoubleClick += HandleDoubleClick;
+            control.DragDrop += HandleDragDrop;
+            control.DragEnter += HandleDragEnter;
+            control.DragLeave += HandleDragLeave;
+            control.DragOver += HandleDragOver;
+            control.Enter += HandleEnter;
+            control.EnabledChanged += HandleEnabledChanged;
+            control.ForeColorChanged += HandleForeColorChanged;
+            control.GiveFeedback += HandleGiveFeedback;
+            control.GotFocus += HandleGotFocus;
+            control.Leave += HandleLeave;
+            control.LocationChanged += HandleLocationChanged;
+            control.LostFocus += HandleLostFocus;
+            control.KeyDown += HandleKeyDown;
+            control.KeyPress += HandleKeyPress;
+            control.KeyUp += HandleKeyUp;
+            control.MouseDown += HandleMouseDown;
+            control.MouseEnter += HandleMouseEnter;
+            control.MouseHover += HandleMouseHover;
+            control.MouseLeave += HandleMouseLeave;
+            control.MouseMove += HandleMouseMove;
+            control.MouseUp += HandleMouseUp;
+            control.Paint += HandlePaint;
+            control.QueryAccessibilityHelp += HandleQueryAccessibilityHelp;
+            control.QueryContinueDrag += HandleQueryContinueDrag;
+            control.Resize += HandleResize;
+            control.RightToLeftChanged += HandleRightToLeftChanged;
+            control.TextChanged += HandleTextChanged;
+            control.VisibleChanged += HandleControlVisibleChanged;
+            control.Validating += HandleValidating;
+            control.Validated += HandleValidated;
         }
     }
 
@@ -753,39 +753,39 @@ public partial class ToolStripControlHost : ToolStripItem
         if (control is not null)
         {
             // Please keep this alphabetized and in sync with Subscribe
-            control.Click -= new EventHandler(HandleClick);
-            control.BackColorChanged -= new EventHandler(HandleBackColorChanged);
-            control.DoubleClick -= new EventHandler(HandleDoubleClick);
-            control.DragDrop -= new DragEventHandler(HandleDragDrop);
-            control.DragEnter -= new DragEventHandler(HandleDragEnter);
-            control.DragLeave -= new EventHandler(HandleDragLeave);
-            control.DragOver -= new DragEventHandler(HandleDragOver);
-            control.Enter -= new EventHandler(HandleEnter);
-            control.EnabledChanged -= new EventHandler(HandleEnabledChanged);
-            control.ForeColorChanged -= new EventHandler(HandleForeColorChanged);
-            control.GiveFeedback -= new GiveFeedbackEventHandler(HandleGiveFeedback);
-            control.GotFocus -= new EventHandler(HandleGotFocus);
-            control.Leave -= new EventHandler(HandleLeave);
-            control.LocationChanged -= new EventHandler(HandleLocationChanged);
-            control.LostFocus -= new EventHandler(HandleLostFocus);
-            control.KeyDown -= new KeyEventHandler(HandleKeyDown);
-            control.KeyPress -= new KeyPressEventHandler(HandleKeyPress);
-            control.KeyUp -= new KeyEventHandler(HandleKeyUp);
-            control.MouseDown -= new MouseEventHandler(HandleMouseDown);
-            control.MouseEnter -= new EventHandler(HandleMouseEnter);
-            control.MouseHover -= new EventHandler(HandleMouseHover);
-            control.MouseLeave -= new EventHandler(HandleMouseLeave);
-            control.MouseMove -= new MouseEventHandler(HandleMouseMove);
-            control.MouseUp -= new MouseEventHandler(HandleMouseUp);
-            control.Paint -= new PaintEventHandler(HandlePaint);
-            control.QueryAccessibilityHelp -= new QueryAccessibilityHelpEventHandler(HandleQueryAccessibilityHelp);
-            control.QueryContinueDrag -= new QueryContinueDragEventHandler(HandleQueryContinueDrag);
-            control.Resize -= new EventHandler(HandleResize);
-            control.RightToLeftChanged -= new EventHandler(HandleRightToLeftChanged);
-            control.TextChanged -= new EventHandler(HandleTextChanged);
-            control.VisibleChanged -= new EventHandler(HandleControlVisibleChanged);
-            control.Validating -= new CancelEventHandler(HandleValidating);
-            control.Validated -= new EventHandler(HandleValidated);
+            control.Click -= HandleClick;
+            control.BackColorChanged -= HandleBackColorChanged;
+            control.DoubleClick -= HandleDoubleClick;
+            control.DragDrop -= HandleDragDrop;
+            control.DragEnter -= HandleDragEnter;
+            control.DragLeave -= HandleDragLeave;
+            control.DragOver -= HandleDragOver;
+            control.Enter -= HandleEnter;
+            control.EnabledChanged -= HandleEnabledChanged;
+            control.ForeColorChanged -= HandleForeColorChanged;
+            control.GiveFeedback -= HandleGiveFeedback;
+            control.GotFocus -= HandleGotFocus;
+            control.Leave -= HandleLeave;
+            control.LocationChanged -= HandleLocationChanged;
+            control.LostFocus -= HandleLostFocus;
+            control.KeyDown -= HandleKeyDown;
+            control.KeyPress -= HandleKeyPress;
+            control.KeyUp -= HandleKeyUp;
+            control.MouseDown -= HandleMouseDown;
+            control.MouseEnter -= HandleMouseEnter;
+            control.MouseHover -= HandleMouseHover;
+            control.MouseLeave -= HandleMouseLeave;
+            control.MouseMove -= HandleMouseMove;
+            control.MouseUp -= HandleMouseUp;
+            control.Paint -= HandlePaint;
+            control.QueryAccessibilityHelp -= HandleQueryAccessibilityHelp;
+            control.QueryContinueDrag -= HandleQueryContinueDrag;
+            control.Resize -= HandleResize;
+            control.RightToLeftChanged -= HandleRightToLeftChanged;
+            control.TextChanged -= HandleTextChanged;
+            control.VisibleChanged -= HandleControlVisibleChanged;
+            control.Validating -= HandleValidating;
+            control.Validated -= HandleValidated;
         }
     }
 

@@ -768,7 +768,7 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
             ContextMenuStrip? contextMenuStrip = ContextMenuStripInternal;
             if (contextMenuStrip is not null)
             {
-                contextMenuStrip.Disposed -= new EventHandler(DetachContextMenuStrip);
+                contextMenuStrip.Disposed -= DetachContextMenuStrip;
             }
         }
 

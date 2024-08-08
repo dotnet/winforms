@@ -585,7 +585,7 @@ public partial class ProgressBar : Control
         }
 
         StartMarquee();
-        SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(UserPreferenceChangedHandler);
+        SystemEvents.UserPreferenceChanged += UserPreferenceChangedHandler;
     }
 
     /// <summary>
@@ -593,7 +593,7 @@ public partial class ProgressBar : Control
     /// </summary>
     protected override void OnHandleDestroyed(EventArgs e)
     {
-        SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(UserPreferenceChangedHandler);
+        SystemEvents.UserPreferenceChanged -= UserPreferenceChangedHandler;
         base.OnHandleDestroyed(e);
     }
 

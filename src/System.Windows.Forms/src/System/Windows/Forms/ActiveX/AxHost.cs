@@ -887,11 +887,11 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             {
                 if (hook)
                 {
-                    changeService.ComponentRename += new ComponentRenameEventHandler(OnComponentRename);
+                    changeService.ComponentRename += OnComponentRename;
                 }
                 else
                 {
-                    changeService.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
+                    changeService.ComponentRename -= OnComponentRename;
                 }
 
                 _axState[s_renameEventHooked] = hook;
@@ -2554,12 +2554,12 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             _axState[s_refreshProperties] = value;
             if (value && !_axState[s_listeningToIdle])
             {
-                Application.Idle += new EventHandler(OnIdle);
+                Application.Idle += OnIdle;
                 _axState[s_listeningToIdle] = true;
             }
             else if (!value && _axState[s_listeningToIdle])
             {
-                Application.Idle -= new EventHandler(OnIdle);
+                Application.Idle -= OnIdle;
                 _axState[s_listeningToIdle] = false;
             }
         }

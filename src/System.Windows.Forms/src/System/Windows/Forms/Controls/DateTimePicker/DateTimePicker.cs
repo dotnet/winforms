@@ -1097,7 +1097,7 @@ public partial class DateTimePicker : Control
     protected override void OnHandleCreated(EventArgs e)
     {
         base.OnHandleCreated(e);
-        SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(MarshaledUserPreferenceChanged);
+        SystemEvents.UserPreferenceChanged += MarshaledUserPreferenceChanged;
     }
 
     /// <summary>
@@ -1105,7 +1105,7 @@ public partial class DateTimePicker : Control
     /// </summary>
     protected override void OnHandleDestroyed(EventArgs e)
     {
-        SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(MarshaledUserPreferenceChanged);
+        SystemEvents.UserPreferenceChanged -= MarshaledUserPreferenceChanged;
         base.OnHandleDestroyed(e);
     }
 

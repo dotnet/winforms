@@ -45,7 +45,7 @@ public static partial class ToolStripManager
 
     static ToolStripManager()
     {
-        SystemEvents.UserPreferenceChanging += new UserPreferenceChangingEventHandler(OnUserPreferenceChanging);
+        SystemEvents.UserPreferenceChanging += OnUserPreferenceChanging;
     }
 
     internal static Font DefaultFont

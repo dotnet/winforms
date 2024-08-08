@@ -700,7 +700,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         // Unhook the Initialized event.
         if (DataSource is ISupportInitializeNotification dsInit)
         {
-            dsInit.Initialized -= new EventHandler(DataSource_Initialized);
+            dsInit.Initialized -= DataSource_Initialized;
         }
 
         // The wait is over: DataSource is initialized.
@@ -722,7 +722,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         if (EditingComboBox is not null &&
             _flags.HasFlag(DataGridViewComboBoxCellFlags.DropDownHookedUp))
         {
-            EditingComboBox.DropDown -= new EventHandler(ComboBox_DropDown);
+            EditingComboBox.DropDown -= ComboBox_DropDown;
             _flags &= ~DataGridViewComboBoxCellFlags.DropDownHookedUp;
         }
 
@@ -801,7 +801,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
             {
                 if (!_flags.HasFlag(DataGridViewComboBoxCellFlags.DataSourceInitializedHookedUp))
                 {
-                    dsInit.Initialized += new EventHandler(DataSource_Initialized);
+                    dsInit.Initialized += DataSource_Initialized;
                     _flags |= DataGridViewComboBoxCellFlags.DataSourceInitializedHookedUp;
                 }
             }
@@ -1336,7 +1336,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
 
             if (!_flags.HasFlag(DataGridViewComboBoxCellFlags.DropDownHookedUp))
             {
-                comboBox.DropDown += new EventHandler(ComboBox_DropDown);
+                comboBox.DropDown += ComboBox_DropDown;
                 _flags |= DataGridViewComboBoxCellFlags.DropDownHookedUp;
             }
 
@@ -2451,16 +2451,13 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
     /// <summary>
     ///  Gets the row Index and column Index of the cell.
     /// </summary>
-    public override string ToString()
-    {
-        return $"DataGridViewComboBoxCell {{ ColumnIndex={ColumnIndex}, RowIndex={RowIndex} }}";
-    }
+    public override string ToString() => $"DataGridViewComboBoxCell {{ ColumnIndex={ColumnIndex}, RowIndex={RowIndex} }}";
 
     private void UnwireDataSource()
     {
         if (DataSource is IComponent component)
         {
-            component.Disposed -= new EventHandler(DataSource_Disposed);
+            component.Disposed -= DataSource_Disposed;
         }
 
         if (DataSource is ISupportInitializeNotification dsInit && _flags.HasFlag(DataGridViewComboBoxCellFlags.DataSourceInitializedHookedUp))
@@ -2468,7 +2465,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
             // If we previously hooked the data source's ISupportInitializeNotification
             // Initialized event, then unhook it now (we don't always hook this event,
             // only if we needed to because the data source was previously uninitialized)
-            dsInit.Initialized -= new EventHandler(DataSource_Initialized);
+            dsInit.Initialized -= DataSource_Initialized;
             _flags &= ~DataGridViewComboBoxCellFlags.DataSourceInitializedHookedUp;
         }
     }
@@ -2479,7 +2476,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         // so we know when the component is deleted from the form
         if (dataSource is IComponent component)
         {
-            component.Disposed += new EventHandler(DataSource_Disposed);
+            component.Disposed += DataSource_Disposed;
         }
     }
 }
