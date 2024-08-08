@@ -25,7 +25,7 @@ public class PathLengthTests
             ? MaxRootLength
             : MaxRootLength + (MaxRootLength - currentRootLength));
 
-        FileSystemEnumerable<string> enumerator = new(
+        FileSystemEnumerable<string> enumerable = new(
             currentPath,
             (ref FileSystemEntry entry) => entry.ToFullPath(),
             new EnumerationOptions() {  RecurseSubdirectories = true })
@@ -35,6 +35,6 @@ public class PathLengthTests
                     entry.Directory.Length + entry.FileName.Length > maxLength
             };
 
-        string[] paths = enumerator.ToArray();
+        enumerable.Should().BeEmpty();
     }
 }
