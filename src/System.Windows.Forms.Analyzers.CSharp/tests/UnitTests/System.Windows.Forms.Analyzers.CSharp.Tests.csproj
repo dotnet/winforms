@@ -28,8 +28,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="System\Windows\Forms\Generators\MockData\*.cs" />
-    <None Include="System\Windows\Forms\Generators\MockData\*.*">
+    <Compile Remove="Generators\MockData\*.cs" />
+    <None Include="Generators\MockData\*.*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
