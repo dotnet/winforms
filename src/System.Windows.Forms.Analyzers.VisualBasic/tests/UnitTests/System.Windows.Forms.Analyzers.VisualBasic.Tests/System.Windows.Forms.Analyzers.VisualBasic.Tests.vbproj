@@ -28,10 +28,4 @@
     <ProjectReference Include="..\..\..\src\System.Windows.Forms.Analyzers.VisualBasic.vbproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Include="System\Windows\Forms\Generators\MockData\*.*">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>

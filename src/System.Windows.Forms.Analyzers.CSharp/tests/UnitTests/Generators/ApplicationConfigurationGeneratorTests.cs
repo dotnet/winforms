@@ -220,6 +220,6 @@ public partial class ApplicationConfigurationGeneratorTests
 
     private SourceText LoadFileContent(string testName) =>
         SourceText.From(
-            File.ReadAllText($@"System\Windows\Forms\Generators\MockData\{GetType().Name}.{testName}.cs"),
+            File.ReadAllText($@"Generators\MockData\{GetType().Name}.{testName}.cs"),
             Encoding.UTF8);
 }
