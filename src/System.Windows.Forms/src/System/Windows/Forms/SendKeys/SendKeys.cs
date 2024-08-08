@@ -85,7 +85,7 @@ public partial class SendKeys
     /// </summary>
     private static readonly Queue<SKEvent> s_events = new();
 
-    private static readonly object s_lock = new();
+    private static readonly Lock s_lock = new();
     private static bool s_startNewChar;
     private static readonly SKWindow s_messageWindow;
 

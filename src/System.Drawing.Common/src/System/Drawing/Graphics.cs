@@ -25,7 +25,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     /// </summary>
     private GraphicsContext? _previousContext;
 
-    private static readonly object s_syncObject = new();
+    private static readonly Lock s_syncObject = new();
 
     // Object reference used for printing; it could point to a PrintPreviewGraphics to obtain the VisibleClipBounds, or
     // a DeviceContext holding a printer DC.

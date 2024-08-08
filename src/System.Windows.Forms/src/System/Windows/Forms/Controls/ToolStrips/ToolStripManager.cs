@@ -32,7 +32,7 @@ public static partial class ToolStripManager
     private const int StaticEventDefaultRendererChanged = 0;
     private const int StaticEventCount = 1;
 
-    private static readonly object s_internalSyncObject = new();
+    private static readonly Lock s_internalSyncObject = new();
 
     private static void InitializeThread()
     {

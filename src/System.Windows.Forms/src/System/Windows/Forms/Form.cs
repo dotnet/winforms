@@ -97,7 +97,7 @@ public partial class Form : ContainerControl
     private const int SizeGripSize = 16;
 
     private static Icon? s_defaultIcon;
-    private static readonly object s_internalSyncObject = new();
+    private static readonly Lock s_internalSyncObject = new();
 
     // Property store keys for properties.  The property store allocates most efficiently
     // in groups of four, so we try to lump properties in groups of four based on how
@@ -886,13 +886,12 @@ public partial class Form : ContainerControl
     {
         get
         {
-            // Avoid locking if the value is filled in...
+            // Avoid locking if the value is filled in.
             if (s_defaultIcon is null)
             {
                 lock (s_internalSyncObject)
                 {
-                    // Once we grab the lock, we re-check the value to avoid a
-                    // race condition.
+                    // Once we grab the lock, we re-check the value to avoid a race condition.
                     s_defaultIcon ??= new Icon(typeof(Form), "wfc");
                 }
             }
@@ -901,25 +900,13 @@ public partial class Form : ContainerControl
         }
     }
 
-    protected override ImeMode DefaultImeMode
-    {
-        get
-        {
-            return ImeMode.NoControl;
-        }
-    }
+    protected override ImeMode DefaultImeMode => ImeMode.NoControl;
 
     /// <summary>
     ///  Deriving classes can override this to configure a default size for their control.
     ///  This is more efficient than setting the size in the control's constructor.
     /// </summary>
-    protected override Size DefaultSize
-    {
-        get
-        {
-            return new Size(300, 300);
-        }
-    }
+    protected override Size DefaultSize => new Size(300, 300);
 
     /// <summary>
     ///  Gets or sets the size and location of the form on the Windows desktop.
@@ -938,7 +925,6 @@ public partial class Form : ContainerControl
             bounds.Y -= screen.Y;
             return bounds;
         }
-
         set
         {
             SetDesktopBounds(value.X, value.Y, value.Width, value.Height);
@@ -962,7 +948,6 @@ public partial class Form : ContainerControl
             loc.Y -= screen.Y;
             return loc;
         }
-
         set
         {
             SetDesktopLocation(value.X, value.Y);

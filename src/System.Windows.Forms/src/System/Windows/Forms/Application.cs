@@ -40,7 +40,7 @@ public sealed partial class Application
     private static bool s_comCtlSupportsVisualStylesInitialized;
     private static bool s_comCtlSupportsVisualStyles;
     private static FormCollection? s_forms;
-    private static readonly object s_internalSyncObject = new();
+    private static readonly Lock s_internalSyncObject = new();
     private static bool s_useWaitCursor;
 
     /// <summary>
