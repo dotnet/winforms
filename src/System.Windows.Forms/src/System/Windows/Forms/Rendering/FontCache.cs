@@ -21,7 +21,7 @@ namespace System.Windows.Forms;
 /// </remarks>
 internal sealed partial class FontCache : RefCountedCache<HFONT, FontCache.Data, (Font Font, FONT_QUALITY Quality)>
 {
-    private readonly object _lock = new();
+    private readonly Lock _lock = new();
 
     /// <summary>
     ///  Create a <see cref="FontCache"/> with the specified collection limits.

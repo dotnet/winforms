@@ -64,7 +64,7 @@ public partial class PictureBox : Control, ISupportInitialize
     private SendOrPostCallback? _loadCompletedDelegate;
     private SendOrPostCallback? _loadProgressDelegate;
     private bool _handleValid;
-    private readonly object _internalSyncObject = new();
+    private readonly Lock _internalSyncObject = new();
 
     // These default images will be demand loaded.
     private Image? _defaultInitialImage;

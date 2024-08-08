@@ -19,7 +19,7 @@ internal static class SystemColorTracker
     private static WeakReference<ISystemColorTracker>?[] s_list = new WeakReference<ISystemColorTracker>?[INITIAL_SIZE];
     private static int s_count;
     private static bool s_addedTracker;
-    private static readonly object s_lockObject = new();
+    private static readonly Lock s_lockObject = new();
 
     internal static void Add(ISystemColorTracker obj)
     {

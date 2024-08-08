@@ -37,8 +37,8 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
     private static short s_globalID = 1;
     private static readonly Dictionary<HWND, GCHandle> s_windowHandles = [];
     private static readonly Dictionary<short, HWND> s_windowIds = [];
-    private static readonly object s_internalSyncObject = new();
-    private static readonly object s_createWindowSyncObject = new();
+    private static readonly Lock s_internalSyncObject = new();
+    private static readonly Lock s_createWindowSyncObject = new();
 
     // Our window procedure delegate
     private WNDPROC? _windowProc;

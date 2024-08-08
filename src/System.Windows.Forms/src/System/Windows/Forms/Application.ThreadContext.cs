@@ -24,9 +24,7 @@ public sealed partial class Application
 
         private static readonly Dictionary<uint, ThreadContext> s_contextHash = [];
 
-        // When this gets to zero, we'll invoke a full garbage
-        // collect and check for root/window leaks.
-        private static readonly object s_tcInternalSyncObject = new();
+        private static readonly Lock s_tcInternalSyncObject = new();
 
         private static int s_totalMessageLoopCount;
         private static msoloop s_baseLoopReason;

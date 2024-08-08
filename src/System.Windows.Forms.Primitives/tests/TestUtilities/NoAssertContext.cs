@@ -20,7 +20,7 @@ public sealed class NoAssertContext : IDisposable
     // We do, however need to lock around hooking/unhooking our custom listener to make sure that we
     // are rerouting correctly if multiple threads are creating/disposing this class concurrently.
 
-    private static readonly object s_lock = new();
+    private static readonly Lock s_lock = new();
     private static bool s_hooked;
     private static bool s_hasDefaultListener;
     private static bool s_hasThrowingListener;
