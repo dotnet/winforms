@@ -63,6 +63,8 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
 
     private bool _lastPaintWithExplorerStyle;
 
+    private readonly Lock _lock = new();
+
     private static Color InvertColor(Color color)
         => Color.FromArgb(color.A, (byte)~color.R, (byte)~color.G, (byte)~color.B);
 
@@ -2266,8 +2268,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
 
     protected virtual void AddEventHandler(object key, Delegate handler)
     {
-        // Locking 'this' here is ok since this is an internal class.
-        lock (this)
+        lock (_lock)
         {
             if (handler is null)
             {
@@ -2298,8 +2299,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
 
     protected virtual Delegate? GetEventHandler(object key)
     {
-        // Locking 'this' here is ok since this is an internal class.
-        lock (this)
+        lock (_lock)
         {
             for (EventEntry? e = _eventList; e is not null; e = e.Next)
             {
@@ -2315,8 +2315,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
 
     protected virtual void RemoveEventHandler(object key, Delegate handler)
     {
-        // Locking this here is ok since this is an internal class.
-        lock (this)
+        lock (_lock)
         {
             if (handler is null)
             {
