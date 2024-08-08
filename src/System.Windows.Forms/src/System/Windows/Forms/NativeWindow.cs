@@ -40,6 +40,8 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
     private static readonly Lock s_internalSyncObject = new();
     private static readonly Lock s_createWindowSyncObject = new();
 
+    private readonly Lock _lock = new();
+
     // Our window procedure delegate
     private WNDPROC? _windowProc;
 
@@ -88,7 +90,7 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
         HWND handle;
         bool ownedHandle;
 
-        lock (this)
+        lock (_lock)
         {
             handle = HWND;
             ownedHandle = _ownHandle;
@@ -291,7 +293,7 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
 
     internal unsafe void AssignHandle(HWND hwnd, bool assignUniqueID)
     {
-        lock (this)
+        lock (_lock)
         {
             CheckReleased();
             Debug.Assert(!hwnd.IsNull);
@@ -383,7 +385,7 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
     /// </summary>
     private void CheckReleased()
     {
-        if (Handle != IntPtr.Zero)
+        if (Handle != 0)
         {
             throw new InvalidOperationException(SR.HandleAlreadyExists);
         }
@@ -394,7 +396,7 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
     /// </summary>
     public virtual unsafe void CreateHandle(CreateParams cp)
     {
-        lock (this)
+        lock (_lock)
         {
             CheckReleased();
             WindowClass windowClass = WindowClass.Create(cp.ClassName, (WNDCLASS_STYLES)cp.ClassStyle);
@@ -522,7 +524,7 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
     /// </summary>
     public virtual void DestroyHandle()
     {
-        lock (this)
+        lock (_lock)
         {
             if (!HWND.IsNull)
             {
@@ -670,7 +672,7 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
             return;
         }
 
-        lock (this)
+        lock (_lock)
         {
             if (HWND.IsNull)
             {

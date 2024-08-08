@@ -150,13 +150,11 @@ public class Timer : Component
                 }
 
                 _interval = value;
-                if (Enabled)
+
+                if (Enabled && !DesignMode)
                 {
                     // Change the timer value, don't tear down the timer itself.
-                    if (!DesignMode && _timerWindow is not null)
-                    {
-                        _timerWindow.RestartTimer(value);
-                    }
+                    _timerWindow?.RestartTimer(value);
                 }
             }
         }
