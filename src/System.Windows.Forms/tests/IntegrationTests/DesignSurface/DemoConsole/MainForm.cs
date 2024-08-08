@@ -308,7 +308,7 @@ public partial class MainForm : Form
                         splitContainer.BackColor = Color.Red;
 
                         RichTextBox richTextBox = surface.CreateControl<RichTextBox>(new Size(0, 0), new Point(0, 0));
-                        richTextBox.Dock = DockStyle.Left;
+                        richTextBox.Dock = DockStyle.Fill;
                         richTextBox.Width = toolStripContainer.Width;
                         richTextBox.Text = "I'm a RichTextBox";
 
@@ -337,8 +337,6 @@ public partial class MainForm : Form
                         panel.Dock = DockStyle.Bottom;
                         NumericUpDown numericUpDown = surface.CreateControl<NumericUpDown>(new(50, 10), new(10, 10));
                         panel.Controls.Add(numericUpDown);
-
-                        tabPage6.Controls.AddRange(toolStripContainer, splitter, panel);
                     }
 
                     break;
