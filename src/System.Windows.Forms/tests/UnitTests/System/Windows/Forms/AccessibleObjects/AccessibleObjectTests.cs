@@ -2690,6 +2690,10 @@ public partial class AccessibleObjectTests
 
     public static IEnumerable<object[]> AccessibleObject_RuntimeId_IsOverriden_TestData()
     {
+        var typesToIgnore = new[]
+        {
+            typeof(ComboBox.ChildAccessibleObject),
+        };
         Assembly assembly = typeof(AccessibleObject).Assembly;
         foreach (Type type in assembly.GetTypes())
         {
@@ -2699,7 +2703,7 @@ public partial class AccessibleObjectTests
                 continue;
             }
 
-            if (type == typeof(ComboBox.ChildAccessibleObject))
+            if (typesToIgnore.Contains(type))
             {
                 continue;
             }
