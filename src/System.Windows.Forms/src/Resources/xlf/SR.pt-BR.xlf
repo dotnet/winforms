@@ -6855,8 +6855,8 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <note />
       </trans-unit>
       <trans-unit id="ListViewVirtualListSizeDescr">
-        <source>Sets the count of the item collection when the ListView is in virtual mode.</source>
-        <target state="translated">Define a contagem de coleção de itens quando ListView está no modo virtual.</target>
+        <source>Sets the count of the item collection when the ListView is in virtual mode. If VirtualMode is set to true, and the VirtualListSize property is greater than 0, you must handle the RetrieveVirtualItem event providing valid items.</source>
+        <target state="translated">Define a contagem de coleção de itens quando ListView está no modo virtual. Se VirtualMode estiver definido como true e a propriedade VirtualListSize for maior que 0, você deverá manipular o evento RetrieveVirtualItem fornecendo itens válidos.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewVirtualListSizeInvalidArgument">

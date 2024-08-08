@@ -6855,8 +6855,8 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <note />
       </trans-unit>
       <trans-unit id="ListViewVirtualListSizeDescr">
-        <source>Sets the count of the item collection when the ListView is in virtual mode.</source>
-        <target state="translated">Définit le nombre de la collection d'éléments lorsque le ListView est en mode virtuel.</target>
+        <source>Sets the count of the item collection when the ListView is in virtual mode. If VirtualMode is set to true, and the VirtualListSize property is greater than 0, you must handle the RetrieveVirtualItem event providing valid items.</source>
+        <target state="translated">Définit le nombre de la collection d’éléments lorsque le ListView est en mode virtuel. Si VirtualMode a la valeur true et que la propriété VirtualListSize est supérieure à 0, vous devez gérer l’événement RetrieveVirtualItem en fournissant des éléments valides.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewVirtualListSizeInvalidArgument">

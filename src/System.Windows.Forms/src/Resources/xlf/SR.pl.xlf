@@ -6855,8 +6855,8 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <note />
       </trans-unit>
       <trans-unit id="ListViewVirtualListSizeDescr">
-        <source>Sets the count of the item collection when the ListView is in virtual mode.</source>
-        <target state="translated">Ustawia liczbę kolekcji elementów, gdy formant ListView jest w trybie wirtualnym.</target>
+        <source>Sets the count of the item collection when the ListView is in virtual mode. If VirtualMode is set to true, and the VirtualListSize property is greater than 0, you must handle the RetrieveVirtualItem event providing valid items.</source>
+        <target state="translated">Ustawia liczbę kolekcji elementów, gdy formant ListView jest w trybie wirtualnym. Jeśli VirtualMode ma wartość true, a właściwość VirtualListSize jest większa niż 0, należy obsłużyć zdarzenie RetrieveVirtualItem, podając prawidłowe elementy.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewVirtualListSizeInvalidArgument">

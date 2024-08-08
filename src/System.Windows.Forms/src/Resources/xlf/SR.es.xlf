@@ -6855,8 +6855,8 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <note />
       </trans-unit>
       <trans-unit id="ListViewVirtualListSizeDescr">
-        <source>Sets the count of the item collection when the ListView is in virtual mode.</source>
-        <target state="translated">Establece el recuento de la colección de elementos cuando ListView está en modo virtual.</target>
+        <source>Sets the count of the item collection when the ListView is in virtual mode. If VirtualMode is set to true, and the VirtualListSize property is greater than 0, you must handle the RetrieveVirtualItem event providing valid items.</source>
+        <target state="translated">Establece el recuento de la colección de elementos cuando ListView está en modo virtual. Si VirtualMode se establece en true y la propiedad VirtualListSize es mayor que 0, debe controlar el evento RetrieveVirtualItem que proporciona elementos válidos.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewVirtualListSizeInvalidArgument">

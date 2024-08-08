@@ -1157,7 +1157,7 @@ public partial class Control
                         }
 
                         stream.Position = 0;
-                        deserialized = new BinaryFormatter().Deserialize(stream);
+                        deserialized = new BinaryFormatter().Deserialize(stream); // CodeQL[SM03722, SM04191] : BinaryFormatter is intended to be used as a fallback for unsupported types. Users must explicitly opt into this behavior
                     }
 #pragma warning restore
 

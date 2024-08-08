@@ -6855,8 +6855,8 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <note />
       </trans-unit>
       <trans-unit id="ListViewVirtualListSizeDescr">
-        <source>Sets the count of the item collection when the ListView is in virtual mode.</source>
-        <target state="translated">Imposta il numero di elementi nella raccolta quando il controllo ListView è in modalità virtuale.</target>
+        <source>Sets the count of the item collection when the ListView is in virtual mode. If VirtualMode is set to true, and the VirtualListSize property is greater than 0, you must handle the RetrieveVirtualItem event providing valid items.</source>
+        <target state="translated">Imposta il numero di elementi nella raccolta quando il controllo ListView è in modalità virtuale. Se VirtualMode è impostato su true e la proprietà VirtualListSize è maggiore di 0, è necessario gestire l'evento RetrieveVirtualItem che fornisce elementi validi.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewVirtualListSizeInvalidArgument">

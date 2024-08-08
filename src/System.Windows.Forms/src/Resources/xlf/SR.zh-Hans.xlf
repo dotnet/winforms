@@ -6855,8 +6855,8 @@ Stack trace where the illegal operation occurred was:
         <note />
       </trans-unit>
       <trans-unit id="ListViewVirtualListSizeDescr">
-        <source>Sets the count of the item collection when the ListView is in virtual mode.</source>
-        <target state="translated">当 ListView 处于虚拟模式时，设置项集合的计数。</target>
+        <source>Sets the count of the item collection when the ListView is in virtual mode. If VirtualMode is set to true, and the VirtualListSize property is greater than 0, you must handle the RetrieveVirtualItem event providing valid items.</source>
+        <target state="translated">当 ListView 处于虚拟模式时，设置项集合的计数。如果 VirtualMode 设置为 true，且 VirtualListSize 属性大于 0，则必须处理提供有效项的 RetrieveVirtualItem 事件。</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewVirtualListSizeInvalidArgument">
