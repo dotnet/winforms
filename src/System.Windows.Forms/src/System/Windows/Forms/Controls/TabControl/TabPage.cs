@@ -105,7 +105,6 @@ public partial class TabPage : Panel
             {
                 return color;
             }
-
             else if (!Application.IsDarkModeEnabled
                 && Application.RenderWithVisualStyles
                 && UseVisualStyleBackColor

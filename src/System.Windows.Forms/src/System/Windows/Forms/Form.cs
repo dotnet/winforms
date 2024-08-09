@@ -7,11 +7,12 @@ using System.ComponentModel.Design;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using System.Windows.Forms.Analyzers.Diagnostics;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
+using Windows.Win32.Graphics.Dwm;
 using Windows.Win32.System.Threading;
 using Windows.Win32.UI.Accessibility;
-using Windows.Win32.Graphics.Dwm;
 
 namespace System.Windows.Forms;
 
@@ -135,10 +136,6 @@ public partial class Form : ContainerControl
 
     private static readonly int s_propOpacity = PropertyStore.CreateKey();
     private static readonly int s_propTransparencyKey = PropertyStore.CreateKey();
-    private static readonly int s_propFormBorderColor = PropertyStore.CreateKey();
-    private static readonly int s_propFormCaptionBackColor = PropertyStore.CreateKey();
-
-    private static readonly int s_propFormCaptionTextColor = PropertyStore.CreateKey();
     private static readonly int s_propFormCornerPreference = PropertyStore.CreateKey();
 
     // Form per instance members
@@ -169,6 +166,9 @@ public partial class Form : ContainerControl
     private Dictionary<int, Size>? _dpiFormSizes;
     private bool _processingDpiChanged;
     private bool _inRecreateHandle;
+    private TaskCompletionSource? _tcsNonModalForm;
+    private TaskCompletionSource<DialogResult>? _tcsModalForm;
+    private readonly Lock _syncObj = new();
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="Form"/> class.
@@ -2348,23 +2348,29 @@ public partial class Form : ContainerControl
     [DefaultValue(FormCornerPreference.Default)]
     [SRCategory(nameof(SR.CatWindowStyle))]
     [SRDescription(nameof(SR.FormCornerPreferenceDescr))]
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = Application.WinFormsExperimentalUrl)]
     public FormCornerPreference FormCornerPreference
     {
-        get
-        {
-            if (Properties.ContainsInteger(s_propFormCornerPreference))
-            {
-                return (FormCornerPreference)Properties.GetInteger(s_propFormCornerPreference);
-            }
-
-            return FormCornerPreference.Default;
-        }
+        get => Properties.ContainsInteger(s_propFormCornerPreference)
+                ? (FormCornerPreference)Properties.GetInteger(s_propFormCornerPreference)
+                : FormCornerPreference.Default;
         set
         {
             if (value == FormCornerPreference)
             {
                 return;
             }
+
+            _ = value switch
+            {
+                FormCornerPreference.Default => value,
+                FormCornerPreference.DoNotRound => value,
+                FormCornerPreference.Round => value,
+                FormCornerPreference.RoundSmall => value,
+                _ => throw new ArgumentOutOfRangeException(nameof(value))
+            };
 
             if (value == FormCornerPreference.Default)
             {
@@ -2388,6 +2394,7 @@ public partial class Form : ContainerControl
     ///  Raises the <see cref="FormCornerPreferenceChanged"/> event when the
     ///  <see cref="FormCornerPreference"/> property changes.
     /// </summary>
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = Application.WinFormsExperimentalUrl)]
     protected virtual void OnFormCornerPreferenceChanged(EventArgs e)
     {
         if (Events[s_formCornerPreferenceChanged] is EventHandler eventHandler)
@@ -2396,7 +2403,9 @@ public partial class Form : ContainerControl
         }
     }
 
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     private unsafe void SetFormCornerPreferenceInternal(FormCornerPreference cornerPreference)
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     {
         DWM_WINDOW_CORNER_PREFERENCE dwmCornerPreference = cornerPreference switch
         {
@@ -2419,25 +2428,13 @@ public partial class Form : ContainerControl
     /// </summary>
     [SRCategory(nameof(SR.CatWindowStyle))]
     [SRDescription(nameof(SR.FormBorderColorDescr))]
-    [DefaultValue(typeof(Color), "Empty")]
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = Application.WinFormsExperimentalUrl)]
     public Color FormBorderColor
     {
-        get
-        {
-            if (Properties.ContainsObject(s_propFormBorderColor))
-            {
-                return Properties.GetColor(s_propFormBorderColor);
-            }
-            else
-            {
-                if (!IsHandleCreated || IsAncestorSiteInDesignMode)
-                {
-                    return Color.Empty;
-                }
+        get => GetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_BORDER_COLOR);
 
-                return GetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_BORDER_COLOR);
-            }
-        }
         set
         {
             if (value == FormBorderColor)
@@ -2445,14 +2442,11 @@ public partial class Form : ContainerControl
                 return;
             }
 
-            if (!IsHandleCreated)
+            if (IsHandleCreated)
             {
-                Properties.SetColor(s_propFormBorderColor, value);
-                return;
+                SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_BORDER_COLOR, value);
             }
 
-            Properties.SetColor(s_propFormBorderColor, value);
-            SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_BORDER_COLOR, value);
             OnFormBorderColorChanged(EventArgs.Empty);
         }
     }
@@ -2460,6 +2454,7 @@ public partial class Form : ContainerControl
     /// <summary>
     ///  Raises the <see cref="FormBorderColorChanged"/> event when the <see cref="FormBorderColor"/> property changes.
     /// </summary>
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = Application.WinFormsExperimentalUrl)]
     protected virtual void OnFormBorderColorChanged(EventArgs e)
     {
         if (Events[s_formBorderColorChanged] is EventHandler eventHandler)
@@ -2473,25 +2468,12 @@ public partial class Form : ContainerControl
     /// </summary>
     [SRCategory(nameof(SR.CatWindowStyle))]
     [SRDescription(nameof(SR.FormCaptionBackColorDescr))]
-    [DefaultValue(typeof(Color), "Empty")]
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = Application.WinFormsExperimentalUrl)]
     public Color FormCaptionBackColor
     {
-        get
-        {
-            if (Properties.ContainsObject(s_propFormCaptionBackColor))
-            {
-                return Properties.GetColor(s_propFormCaptionBackColor);
-            }
-            else
-            {
-                if (!IsHandleCreated || IsAncestorSiteInDesignMode)
-                {
-                    return Color.Empty;
-                }
-
-                return GetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_CAPTION_COLOR);
-            }
-        }
+        get => GetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_CAPTION_COLOR);
         set
         {
             if (value == FormCaptionBackColor)
@@ -2499,14 +2481,11 @@ public partial class Form : ContainerControl
                 return;
             }
 
-            if (!IsHandleCreated)
+            if (IsHandleCreated)
             {
-                Properties.SetColor(s_propFormCaptionBackColor, value);
-                return;
+                SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_CAPTION_COLOR, value);
             }
 
-            Properties.SetColor(s_propFormCaptionBackColor, value);
-            SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_CAPTION_COLOR, value);
             OnFormCaptionBackColorChanged(EventArgs.Empty);
         }
     }
@@ -2514,6 +2493,7 @@ public partial class Form : ContainerControl
     /// <summary>
     ///  Raises the <see cref="FormCaptionBackColor"/> event when the <see cref="FormCaptionBackColor"/> property changes.
     /// </summary>
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = Application.WinFormsExperimentalUrl)]
     protected virtual void OnFormCaptionBackColorChanged(EventArgs e)
     {
         if (Events[s_formCaptionBackColorChanged] is EventHandler eventHandler)
@@ -2527,25 +2507,12 @@ public partial class Form : ContainerControl
     /// </summary>
     [SRCategory(nameof(SR.CatWindowStyle))]
     [SRDescription(nameof(SR.FormCaptionTextColorDescr))]
-    [DefaultValue(typeof(Color), "Empty")]
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = Application.WinFormsExperimentalUrl)]
     public Color FormCaptionTextColor
     {
-        get
-        {
-            if (Properties.ContainsObject(s_propFormCaptionTextColor))
-            {
-                return Properties.GetColor(s_propFormCaptionTextColor);
-            }
-            else
-            {
-                if (!IsHandleCreated || IsAncestorSiteInDesignMode)
-                {
-                    return Color.Empty;
-                }
-
-                return GetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_TEXT_COLOR);
-            }
-        }
+        get => GetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_TEXT_COLOR);
         set
         {
             if (value == FormCaptionTextColor)
@@ -2553,14 +2520,11 @@ public partial class Form : ContainerControl
                 return;
             }
 
-            if (!IsHandleCreated)
+            if (IsHandleCreated)
             {
-                Properties.SetColor(s_propFormCaptionTextColor, value);
-                return;
+                SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_TEXT_COLOR, value);
             }
 
-            Properties.SetColor(s_propFormCaptionTextColor, value);
-            SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_TEXT_COLOR, value);
             OnFormCaptionTextColorChanged(EventArgs.Empty);
         }
     }
@@ -2568,6 +2532,7 @@ public partial class Form : ContainerControl
     /// <summary>
     ///  Raises the <see cref="FormCaptionTextColor"/> event when the <see cref="FormCaptionTextColor"/> property changes.
     /// </summary>
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = Application.WinFormsExperimentalUrl)]
     protected virtual void OnFormCaptionTextColorChanged(EventArgs e)
     {
         if (Events[s_formCaptionBackColorChanged] is EventHandler eventHandler)
@@ -2580,7 +2545,7 @@ public partial class Form : ContainerControl
     {
         COLORREF colorRef;
 
-        PInvoke.DwmSetWindowAttribute(
+        PInvoke.DwmGetWindowAttribute(
             HWND,
             dmwWindowAttribute,
             &colorRef,
@@ -2736,6 +2701,7 @@ public partial class Form : ContainerControl
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.FormBorderColorChangedDescr))]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = Application.WinFormsExperimentalUrl)]
     public event EventHandler? FormBorderColorChanged
     {
         add => Events.AddHandler(s_formBorderColorChanged, value);
@@ -2747,6 +2713,7 @@ public partial class Form : ContainerControl
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.FormCaptionBackColorChangedDescr))]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = Application.WinFormsExperimentalUrl)]
     public event EventHandler? FormCaptionBackColorChanged
     {
         add => Events.AddHandler(s_formCaptionBackColorChanged, value);
@@ -2758,6 +2725,7 @@ public partial class Form : ContainerControl
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.FormCaptionTextColorChangedDescr))]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = Application.WinFormsExperimentalUrl)]
     public event EventHandler? FormCaptionTextColorChanged
     {
         add => Events.AddHandler(s_formCaptionTextColorChanged, value);
@@ -2769,6 +2737,7 @@ public partial class Form : ContainerControl
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.FormCornerPreferenceChangedDescr))]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = Application.WinFormsExperimentalUrl)]
     public event EventHandler? FormCornerPreferenceChanged
     {
         add => Events.AddHandler(s_formCornerPreferenceChanged, value);
@@ -3666,6 +3635,9 @@ public partial class Form : ContainerControl
                 Properties.RemoveObject(s_propDummyMdiMenu);
                 PInvoke.DestroyMenu(dummyMenu);
             }
+
+            _tcsNonModalForm?.TrySetResult();
+            _tcsNonModalForm = null;
         }
         else
         {
@@ -4163,6 +4135,9 @@ public partial class Form : ContainerControl
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnFormClosed(FormClosedEventArgs e)
     {
+        // This effectively ends an `await form.ShowAsync();` call.
+        _tcsNonModalForm?.TrySetResult();
+
         // Remove the form from Application.OpenForms (nothing happens if isn't present)
         Application.OpenForms.Remove(this);
 
@@ -5528,6 +5503,79 @@ public partial class Form : ContainerControl
     }
 
     /// <summary>
+    ///  Shows the form asynchronously.
+    /// </summary>
+    /// <param name="owner">The optional owner window.</param>
+    /// <returns>A task that completes when the form is closed.</returns>
+    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
+    public async Task ShowAsync(IWin32Window? owner = null)
+    {
+        // We lock the access to the task completion source to prevent
+        // multiple calls to ShowAsync from interfering with each other.
+        lock (_syncObj)
+        {
+            if (_tcsNonModalForm is not null || _tcsModalForm is not null)
+            {
+                throw new InvalidOperationException(SR.Form_HasAlreadyBeenShownAsync);
+            }
+
+            _tcsNonModalForm = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        }
+
+        if (SynchronizationContext.Current is null)
+        {
+            WindowsFormsSynchronizationContext.InstallIfNeeded();
+        }
+
+        var syncContext = SynchronizationContext.Current
+            ?? throw new InvalidOperationException(SR.FormOrTaskDialog_NoSyncContextForShowAsync);
+
+        syncContext.Post((state) => ShowFormInternally(owner), null);
+
+        // Wait until the form is closed or disposed.
+        try
+        {
+            await _tcsNonModalForm.Task.ConfigureAwait(true);
+        }
+        catch(Exception ex)
+        {
+            // We need to rethrow the exception on the caller's context.
+            Application.OnThreadException(ex);
+        }
+        finally
+        {
+            _tcsNonModalForm = null;
+        }
+
+        void ShowFormInternally(IWin32Window? owner)
+        {
+            try
+            {
+                // Show the form with an optional owner.
+                Show(owner);
+            }
+            catch (Exception ex)
+            {
+                _tcsNonModalForm.TrySetException(ex);
+            }
+        }
+    }
+
+    private protected override bool NotifyThreadException(Exception ex)
+    {
+        lock (_syncObj)
+        {
+            if (_tcsNonModalForm is not null)
+            {
+                _tcsNonModalForm.TrySetException(ex);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
     ///  Displays this form as a modal dialog box with no owner window.
     /// </summary>
     public DialogResult ShowDialog() => ShowDialog(null);
@@ -5693,6 +5741,62 @@ public partial class Form : ContainerControl
         }
 
         return DialogResult;
+    }
+
+    /// <summary>
+    ///  Shows the form as a modal dialog box asynchronously.
+    /// </summary>
+    /// <returns>A <see cref="Task{DialogResult}"/> representing the outcome of the dialog.</returns>
+    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
+    public Task<DialogResult> ShowDialogAsync() => ShowDialogAsyncInternal(null);
+
+    /// <summary>
+    ///  Shows the form as a modal dialog box with the specified owner asynchronously.
+    /// </summary>
+    /// <param name="owner">Any object that implements <see cref="IWin32Window"/> that represents the top-level window that will own the modal dialog box.</param>
+    /// <returns>A <see cref="Task{DialogResult}"/> representing the outcome of the dialog.</returns>
+    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
+    public Task<DialogResult> ShowDialogAsync(IWin32Window owner) => ShowDialogAsyncInternal(owner);
+
+    private Task<DialogResult> ShowDialogAsyncInternal(IWin32Window? owner)
+    {
+        lock (_syncObj)
+        {
+            if (_tcsNonModalForm is not null || _tcsModalForm is not null)
+            {
+                throw new InvalidOperationException(SR.Form_HasAlreadyBeenShownAsync);
+            }
+
+            _tcsModalForm = new TaskCompletionSource<DialogResult>(TaskCreationOptions.RunContinuationsAsynchronously);
+        }
+
+        if (SynchronizationContext.Current is null)
+        {
+            WindowsFormsSynchronizationContext.InstallIfNeeded();
+        }
+
+        var syncContext = SynchronizationContext.Current
+            ?? throw new InvalidOperationException(SR.FormOrTaskDialog_NoSyncContextForShowAsync);
+
+        syncContext.Post((state) => ShowDialogProc(owner), null);
+        return _tcsModalForm.Task;
+
+        void ShowDialogProc(IWin32Window? owner = default)
+        {
+            try
+            {
+                DialogResult result = ShowDialog(owner);
+                _tcsModalForm!.SetResult(result);
+            }
+            catch (Exception ex)
+            {
+                _tcsModalForm!.SetException(ex);
+            }
+            finally
+            {
+                _tcsModalForm = null;
+            }
+        }
     }
 
     /// <summary>

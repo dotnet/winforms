@@ -7018,4 +7018,16 @@ Stack trace where the illegal operation occurred was:
   <data name="ControlVisualStylesModeChangedDescr" xml:space="preserve">
     <value>Event raised whenever the VisualStylesMode property changes.</value>
   </data>
+  <data name="FormOrTaskDialog_NoSyncContextForShowAsync" xml:space="preserve">
+    <value>Failed to retrieve the Synchronization Context for showing the Form asynchronously.</value>
+  </data>
+  <data name="Form_HasAlreadyBeenShownAsync" xml:space="preserve">
+    <value>The form has already been shown asynchronously.</value>
+  </data>
+  <data name="Application_ClassicVisualStyleHadAlreadyBeenSet" xml:space="preserve">
+    <value>Classic VisualStyles had already been set. If you want to set the VisualStylesMode to Disabled, make sure that you a) do not call EnableVisualStyles before or b) do not activate it in the Project settings.</value>
+  </data>
+  <data name="Application_VisualStylesModeCanOnlyBeSetOnce" xml:space="preserve">
+    <value>The VisualStylesMode had already been set for this Application. Make sure, that you set this value only once.</value>
+  </data>
 </root>

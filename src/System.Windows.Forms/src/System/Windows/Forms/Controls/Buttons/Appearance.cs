@@ -25,6 +25,6 @@ public enum Appearance
     ///  This setting is not taken into account, when <see cref="VisualStylesMode"/> is set
     ///  to <see cref="VisualStylesMode.Disabled"/> or <see cref="VisualStylesMode.Classic"/>.
     /// </summary>
-    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
+    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = Application.WinFormsExperimentalUrl)]
     ToggleSwitch = 2
 }

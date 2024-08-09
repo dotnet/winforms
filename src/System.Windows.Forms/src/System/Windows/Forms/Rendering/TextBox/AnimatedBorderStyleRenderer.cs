@@ -81,18 +81,14 @@ internal class AnimatedBorderStyleRenderer : AnimatedControlRenderer
             clientBounds.Width,
             clientBounds.Height);
 
-        // Contrast to Copilot's suggestions, we need to first exclude
-        // the clip, then translate the origin.
         graphics.ExcludeClip(translatedClientBounds);
 
-        // Fill the background with the specified brush:
         graphics.FillRectangle(parentBackgroundBrush, bounds);
 
         switch (_textBox.BorderStyle)
         {
             case BorderStyle.None:
 
-                // Draw a rounded Rectangle with the border thickness
                 graphics.FillRectangle(
                     clientBackgroundBrush,
                     deflatedBounds);
@@ -101,12 +97,10 @@ internal class AnimatedBorderStyleRenderer : AnimatedControlRenderer
 
             case BorderStyle.FixedSingle:
 
-                // Draw a rounded Rectangle with the border thickness
                 graphics.FillRectangle(
                     clientBackgroundBrush,
                     deflatedBounds);
 
-                // Draw a rounded Rectangle with the border thickness
                 graphics.DrawRectangle(
                     adornerPen,
                     deflatedBounds);
@@ -115,13 +109,11 @@ internal class AnimatedBorderStyleRenderer : AnimatedControlRenderer
 
             default:
 
-                // fill a rounded Rectangle
                 graphics.FillRoundedRectangle(
                     clientBackgroundBrush,
                     deflatedBounds,
                     new Size(cornerRadius, cornerRadius));
 
-                // Draw a rounded Rectangle with the border thickness
                 graphics.DrawRoundedRectangle(
                     adornerPen,
                     deflatedBounds,

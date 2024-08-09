@@ -54,7 +54,10 @@ public partial class Control
 
         protected override void OnThreadException(Exception e)
         {
-            WndProcException(e);
+            if (!_control.NotifyThreadException(e))
+            {
+                WndProcException(e);
+            }
         }
 
         // IWindowTarget method

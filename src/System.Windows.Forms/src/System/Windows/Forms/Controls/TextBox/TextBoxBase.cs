@@ -823,7 +823,7 @@ public abstract partial class TextBoxBase : Control
                 enumClass: typeof(VisualStylesMode))
         };
 
-    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
+    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = Application.WinFormsExperimentalUrl)]
     protected virtual int PreferredHeightCore
     {
         get
@@ -971,7 +971,6 @@ public abstract partial class TextBoxBase : Control
             if (BorderStyle == BorderStyle.FixedSingle)
             {
                 // Bump these by 2px to match BorderStyle.Fixed3D - they'll be omitted from the SizeFromClientSize call.
-                // TODO: I am not sure, if this calculation still fits since we got the underlined border style.
                 bordersAndPadding.Width += 2;
                 bordersAndPadding.Height += 2;
             }
@@ -1595,12 +1594,17 @@ public abstract partial class TextBoxBase : Control
 
     protected override unsafe void OnGotFocus(EventArgs e)
     {
-        // We need to invalidate for NcPaint, so we draw focused adorners.
-        PInvoke.RedrawWindow(
-            hWnd: this,
-            lprcUpdate: null,
-            hrgnUpdate: HRGN.Null,
-            flags: REDRAW_WINDOW_FLAGS.RDW_FRAME | REDRAW_WINDOW_FLAGS.RDW_INVALIDATE);
+#pragma warning disable WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        if (VisualStylesMode >= VisualStylesMode.Net10)
+        {
+            // We need to invalidate for NcPaint, so we draw focused adorners.
+            PInvoke.RedrawWindow(
+                hWnd: this,
+                lprcUpdate: null,
+                hrgnUpdate: HRGN.Null,
+                flags: REDRAW_WINDOW_FLAGS.RDW_FRAME | REDRAW_WINDOW_FLAGS.RDW_INVALIDATE);
+        }
+#pragma warning restore WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
         base.OnGotFocus(e);
     }
@@ -1702,6 +1706,8 @@ public abstract partial class TextBoxBase : Control
                 hrgnUpdate: HRGN.Null,
                 flags: REDRAW_WINDOW_FLAGS.RDW_FRAME | REDRAW_WINDOW_FLAGS.RDW_INVALIDATE);
         }
+
+        base.OnSizeChanged(e);
     }
 #pragma warning restore WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 

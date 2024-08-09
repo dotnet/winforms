@@ -242,6 +242,16 @@
         <target state="translated">Trybu wyjątków wątku nie można zmienić po utworzeniu jakichkolwiek formantów w aplikacji.</target>
         <note />
       </trans-unit>
+      <trans-unit id="Application_ClassicVisualStyleHadAlreadyBeenSet">
+        <source>Classic VisualStyles had already been set. If you want to set the VisualStylesMode to Disabled, make sure that you a) do not call EnableVisualStyles before or b) do not activate it in the Project settings.</source>
+        <target state="new">Classic VisualStyles had already been set. If you want to set the VisualStylesMode to Disabled, make sure that you a) do not call EnableVisualStyles before or b) do not activate it in the Project settings.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Application_VisualStylesModeCanOnlyBeSetOnce">
+        <source>The VisualStylesMode had already been set for this Application. Make sure, that you set this value only once.</source>
+        <target state="new">The VisualStylesMode had already been set for this Application. Make sure, that you set this value only once.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ApplyCaption">
         <source>&amp;Apply</source>
         <target state="translated">&amp;Zastosuj</target>
@@ -5580,6 +5590,11 @@ Czy chcesz go zamienić?</target>
         <target state="translated">Stopień nieprzezroczystości formantu. </target>
         <note />
       </trans-unit>
+      <trans-unit id="FormOrTaskDialog_NoSyncContextForShowAsync">
+        <source>Failed to retrieve the Synchronization Context for showing the Form asynchronously.</source>
+        <target state="new">Failed to retrieve the Synchronization Context for showing the Form asynchronously.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormOwnedFormsDescr">
         <source>Array of forms owned by this form.</source>
         <target state="translated">Tablica formularzy będących własnością tego formularza.</target>
@@ -5623,6 +5638,11 @@ Czy chcesz go zamienić?</target>
       <trans-unit id="FormWindowStateDescr">
         <source>Determines the initial visual state of the form.</source>
         <target state="translated">Określa początkowy wizualny stan formularza.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Form_HasAlreadyBeenShownAsync">
+        <source>The form has already been shown asynchronously.</source>
+        <target state="new">The form has already been shown asynchronously.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormatControlFormatDescr">

@@ -90,9 +90,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Private Delegate Sub DisposeDelegate()
 
         ' How long a subsequent instance will wait for the original instance to get on its feet.
-        Private Const SECOND_INSTANCE_TIMEOUT As Integer = 2500 ' milliseconds.
+        Private Const SecondInstanceTimeOut As Integer = 2500 ' milliseconds.
 
-        Friend Const MINIMUM_SPLASH_EXPOSURE_DEFAULT As Integer = 2000 ' milliseconds.
+        Friend Const MinimumSplashExposureDefault As Integer = 2000 ' milliseconds.
+        Friend Const WinFormsExperimentalUrl As String = "https://aka.ms/winforms-experimental/{0}"
 
         Private ReadOnly _splashLock As New Object
         Private ReadOnly _appContext As WinFormsAppContext
@@ -133,7 +134,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Private _splashScreen As Form
 
         ' Minimum amount of time to show the splash screen. 0 means hide as soon as the app comes up.
-        Private _minimumSplashExposure As Integer = MINIMUM_SPLASH_EXPOSURE_DEFAULT
+        Private _minimumSplashExposure As Integer = MinimumSplashExposureDefault
         Private _splashTimer As Timers.Timer
         Private _appSynchronizationContext As SynchronizationContext
 
@@ -360,7 +361,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
                     ' --- We are launching a subsequent instance.
                     Dim tokenSource As New CancellationTokenSource()
-                    tokenSource.CancelAfter(SECOND_INSTANCE_TIMEOUT)
+                    tokenSource.CancelAfter(SecondInstanceTimeOut)
                     Try
                         Dim awaitable As ConfiguredTaskAwaitable = SendSecondInstanceArgsAsync(
                             pipeName:=applicationInstanceID,
@@ -835,7 +836,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <returns>
         '''  The <see cref="VisualStylesMode"/> that the application is running in.
         ''' </returns>
-        <Experimental(DiagnosticIDs.ExperimentalVisualStyles)>
+        <Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat:=WinFormsExperimentalUrl)>
         <EditorBrowsable(EditorBrowsableState.Never)>
         Protected Property VisualStylesMode As VisualStylesMode
             Get
@@ -852,7 +853,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <returns>
         '''  The <see cref="SystemColorMode"/> that the application is running in.
         ''' </returns>
-        <Experimental(DiagnosticIDs.ExperimentalDarkMode)>
+        <Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat:=WinFormsExperimentalUrl)>
         <EditorBrowsable(EditorBrowsableState.Never)>
         Protected Property ColorMode As SystemColorMode
             Get

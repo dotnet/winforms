@@ -943,7 +943,7 @@ public partial class TextBox : TextBoxBase
         }
 
         // Handles the WM_PAINT message to render the placeholder text in the TextBox control.
-        unsafe void WmPaintInternal(ref Message m)
+        void WmPaintInternal(ref Message m)
         {
             // The native control tracks its own state, which can lead to two issues:
             //
