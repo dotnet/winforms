@@ -13,10 +13,10 @@ Namespace Microsoft.VisualBasic.CompilerServices
 
 #Disable Warning IDE1006 ' Naming Styles, Justification:=<VBInputBox.resx depends on these names>
         Private ReadOnly components As Container
-        Private TextBox As TextBox
         Private Label As Label
-        Private OKButton As Button
         Private MyCancelButton As Button
+        Private OKButton As Button
+        Private TextBox As TextBox
 #Enable Warning IDE1006 ' Naming Styles
         Public Output As String = String.Empty
 
@@ -32,15 +32,8 @@ Namespace Microsoft.VisualBasic.CompilerServices
             InitializeInputBox(prompt, title, defaultResponse, xPos, yPos)
         End Sub
 
-        Protected Overloads Overrides Sub Dispose(disposing As Boolean)
-            If disposing Then
-                components?.Dispose()
-            End If
-            MyBase.Dispose(disposing)
-        End Sub
-
         Private Sub InitializeComponent()
-            Dim resources As ComponentResourceManager = New ComponentResourceManager(GetType(VBInputBox))
+            Dim resources As New ComponentResourceManager(GetType(VBInputBox))
             OKButton = New Button
             MyCancelButton = New Button
             TextBox = New TextBox
@@ -101,7 +94,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
             If labelSizeNeeded.Height > Label.Height Then
                 'The current label size is not large enough to accommodate the prompt. We need
                 '  to expand the label and the dialog, and move the textbox to make room.
-                Dim dialogHeightChange As Integer = CInt(labelSizeNeeded.Height) - Label.Height
+                Dim dialogHeightChange As Integer = CInt(labelSizeNeeded.Height - Label.Height)
                 Label.Height += dialogHeightChange
                 TextBox.Top += dialogHeightChange
                 Height += dialogHeightChange
@@ -118,13 +111,20 @@ Namespace Microsoft.VisualBasic.CompilerServices
             End If
         End Sub
 
+        Private Sub MyCancelButton_Click(sender As Object, e As EventArgs)
+            Close()
+        End Sub
+
         Private Sub OKButton_Click(sender As Object, e As EventArgs)
             Output = TextBox.Text
             Close()
         End Sub
 
-        Private Sub MyCancelButton_Click(sender As Object, e As EventArgs)
-            Close()
+        Protected Overloads Overrides Sub Dispose(disposing As Boolean)
+            If disposing Then
+                components?.Dispose()
+            End If
+            MyBase.Dispose(disposing)
         End Sub
 
     End Class

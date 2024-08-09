@@ -778,7 +778,7 @@ public partial class TextBoxBaseTests
         provider = control.AccessibilityObject.TestAccessor().Dynamic._textProvider;
 
         // The control's accessible object and its providers shouldn't be cleaned when recreating of the control
-        // because this object and all its providers will continue to be used. 
+        // because this object and all its providers will continue to be used.
         Assert.IsType<TextBoxBase.TextBoxBaseUiaTextProvider>(provider);
     }
 
