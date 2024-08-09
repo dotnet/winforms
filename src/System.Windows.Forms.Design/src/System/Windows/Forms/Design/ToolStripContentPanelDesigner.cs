@@ -15,7 +15,7 @@ internal class ToolStripContentPanelDesigner : PanelDesigner
     {
         get
         {
-            if (_contextMenu is null && Component!.Site is { } site)
+            if (_contextMenu is null && Component.Site is { } site)
             {
                 _contextMenu = new BaseContextMenuStrip(site);
 

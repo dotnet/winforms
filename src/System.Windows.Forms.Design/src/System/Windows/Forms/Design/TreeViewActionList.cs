@@ -15,7 +15,7 @@ internal class TreeViewActionList : DesignerActionList
         : base(designer.Component)
     {
         _designer = designer;
-        _treeView = (TreeView)designer.Component!;
+        _treeView = (TreeView)designer.Component;
     }
 
     public void InvokeNodesDialog()

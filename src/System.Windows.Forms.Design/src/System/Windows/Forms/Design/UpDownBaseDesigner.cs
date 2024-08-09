@@ -44,10 +44,10 @@ internal class UpDownBaseDesigner : ControlDesigner
             IList<SnapLine> snapLines = SnapLinesInternal;
             int baseline = DesignerUtils.GetTextBaseline(Control, Drawing.ContentAlignment.TopLeft);
             BorderStyle borderStyle = BorderStyle.Fixed3D;
-            PropertyDescriptorCollection props = TypeDescriptor.GetProperties(Component!);
+            PropertyDescriptorCollection props = TypeDescriptor.GetProperties(Component);
             props.TryGetPropertyDescriptorValue(
                 "BorderStyle",
-                Component!,
+                Component,
                 ref borderStyle);
 
             baseline += borderStyle == BorderStyle.None ? -1 : 2;

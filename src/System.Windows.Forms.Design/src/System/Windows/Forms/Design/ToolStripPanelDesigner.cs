@@ -63,7 +63,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
         {
             if (_contextMenu is null)
             {
-                ISite? site = Component!.Site;
+                ISite? site = Component.Site;
 
                 if (site is not null)
                 {
@@ -85,7 +85,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
         }
     }
 
-    public override ToolStripPanel Control => (ToolStripPanel)Component!;
+    public override ToolStripPanel Control => (ToolStripPanel)Component;
 
     // ToolStripPanels if Inherited ACT as Readonly.
     protected override InheritanceAttribute? InheritanceAttribute
@@ -252,10 +252,10 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
     /// </summary>
     internal void ExpandTopPanel()
     {
-        if (_containerSelectorGlyph is null && Component!.Site is not null)
+        if (_containerSelectorGlyph is null && Component.Site is not null)
         {
             // get the adorner window-relative coordinates for the container control
-            _behavior = new ToolStripPanelSelectionBehavior(Control, Component!.Site);
+            _behavior = new ToolStripPanelSelectionBehavior(Control, Component.Site);
             _containerSelectorGlyph = new ToolStripPanelSelectionGlyph(Rectangle.Empty, Cursors.Default, Control, Component.Site, _behavior);
         }
 
@@ -283,7 +283,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
     internal Glyph? GetGlyph()
     {
         // Add own Glyphs.
-        if (_containerSelectorGlyph is null && Component!.Site is not null)
+        if (_containerSelectorGlyph is null && Component.Site is not null)
         {
             // get the adorner window-relative coordinates for the container control
             _behavior = new ToolStripPanelSelectionBehavior(Control, Component.Site);
