@@ -208,7 +208,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         overwrite:=False)
                 End Sub
             Try
-
                 testCode.Should() _
                     .Throw(Of ArgumentException)() _
                     .Where(Function(e) e.Message.StartsWith(SR.Network_BadConnectionTimeout))
