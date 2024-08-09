@@ -5521,6 +5521,11 @@ Do you want to replace it?</source>
         <target state="translated">Степень прозрачности элемента управления (в процентах). </target>
         <note />
       </trans-unit>
+      <trans-unit id="FormOrTaskDialog_NoSyncContextForShowAsync">
+        <source>Failed to retrieve the Synchronization Context for showing the Form asynchronously.</source>
+        <target state="new">Failed to retrieve the Synchronization Context for showing the Form asynchronously.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormOwnedFormsDescr">
         <source>Array of forms owned by this form.</source>
         <target state="translated">Массив форм, принадлежащих этой форме.</target>
@@ -5564,6 +5569,11 @@ Do you want to replace it?</source>
       <trans-unit id="FormWindowStateDescr">
         <source>Determines the initial visual state of the form.</source>
         <target state="translated">Определяет исходное видимое состояние данной формы.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Form_HasAlreadyBeenShownAsync">
+        <source>The form has already been shown asynchronously.</source>
+        <target state="new">The form has already been shown asynchronously.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormatControlFormatDescr">

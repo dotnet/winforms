@@ -5520,6 +5520,11 @@ Do you want to replace it?</source>
         <target state="translated">控制項的透明度百分比。</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormOrTaskDialog_NoSyncContextForShowAsync">
+        <source>Failed to retrieve the Synchronization Context for showing the Form asynchronously.</source>
+        <target state="new">Failed to retrieve the Synchronization Context for showing the Form asynchronously.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormOwnedFormsDescr">
         <source>Array of forms owned by this form.</source>
         <target state="translated">此表單擁有的表單陣列。</target>
@@ -5563,6 +5568,11 @@ Do you want to replace it?</source>
       <trans-unit id="FormWindowStateDescr">
         <source>Determines the initial visual state of the form.</source>
         <target state="translated">決定表單的初始可見狀態。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Form_HasAlreadyBeenShownAsync">
+        <source>The form has already been shown asynchronously.</source>
+        <target state="new">The form has already been shown asynchronously.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormatControlFormatDescr">

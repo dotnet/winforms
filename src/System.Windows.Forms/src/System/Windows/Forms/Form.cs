@@ -7,6 +7,7 @@ using System.ComponentModel.Design;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using System.Windows.Forms.Analyzers.Diagnostics;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
 using Windows.Win32.System.Threading;
@@ -159,6 +160,10 @@ public partial class Form : ContainerControl
     private Dictionary<int, Size>? _dpiFormSizes;
     private bool _processingDpiChanged;
     private bool _inRecreateHandle;
+
+    private TaskCompletionSource? _tcsNonModalForm;
+    private readonly TaskCompletionSource<DialogResult>? _tcsModalForm;
+    private readonly Lock _syncObj = new();
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="Form"/> class.
@@ -5201,6 +5206,79 @@ public partial class Form : ContainerControl
         }
 
         Visible = true;
+    }
+
+    /// <summary>
+    ///  Shows the form asynchronously.
+    /// </summary>
+    /// <param name="owner">The optional owner window.</param>
+    /// <returns>A task that completes when the form is closed.</returns>
+    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
+    public async Task ShowAsync(IWin32Window? owner = null)
+    {
+        // We lock the access to the task completion source to prevent
+        // multiple calls to ShowAsync from interfering with each other.
+        lock (_syncObj)
+        {
+            if (_tcsNonModalForm is not null || _tcsModalForm is not null)
+            {
+                throw new InvalidOperationException(SR.Form_HasAlreadyBeenShownAsync);
+            }
+
+            _tcsNonModalForm = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        }
+
+        if (SynchronizationContext.Current is null)
+        {
+            WindowsFormsSynchronizationContext.InstallIfNeeded();
+        }
+
+        var syncContext = SynchronizationContext.Current
+            ?? throw new InvalidOperationException(SR.FormOrTaskDialog_NoSyncContextForShowAsync);
+
+        syncContext.Post((state) => ShowFormInternally(owner), null);
+
+        // Wait until the form is closed or disposed.
+        try
+        {
+            await _tcsNonModalForm.Task.ConfigureAwait(true);
+        }
+        catch (Exception ex)
+        {
+            // We need to rethrow the exception on the caller's context.
+            Application.OnThreadException(ex);
+        }
+        finally
+        {
+            _tcsNonModalForm = null;
+        }
+
+        void ShowFormInternally(IWin32Window? owner)
+        {
+            try
+            {
+                // Show the form with an optional owner.
+                Show(owner);
+            }
+            catch (Exception ex)
+            {
+                _tcsNonModalForm.TrySetException(ex);
+            }
+        }
+    }
+
+    private protected override bool NotifyThreadException(Exception ex)
+    {
+        lock (_syncObj)
+        {
+            if (_tcsNonModalForm is not null)
+            {
+                _tcsNonModalForm.TrySetException(ex);
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /// <summary>
