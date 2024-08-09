@@ -85,7 +85,7 @@ public partial class BindingSource : Component,
         WireCurrencyManager(_currencyManager);
 
         // Create event handlers
-        _listItemPropertyChangedHandler = new EventHandler(ListItem_PropertyChanged);
+        _listItemPropertyChangedHandler = ListItem_PropertyChanged;
 
         // Now set up the inner list properly (which requires the currency manager to be set up beforehand)
         ResetList();

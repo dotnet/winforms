@@ -51,8 +51,8 @@ internal class ToolStripKeyboardHandlingService
         Debug.Assert(_selectionService is not null, "ToolStripKeyboardHandlingService relies on the selection service, which is unavailable.");
         if (_selectionService is not null)
         {
-            _selectionService.SelectionChanging += new EventHandler(OnSelectionChanging);
-            _selectionService.SelectionChanged += new EventHandler(OnSelectionChanged);
+            _selectionService.SelectionChanging += OnSelectionChanging;
+            _selectionService.SelectionChanged += OnSelectionChanged;
         }
 
         _designerHost = (IDesignerHost)_provider.GetService(typeof(IDesignerHost));
@@ -63,7 +63,7 @@ internal class ToolStripKeyboardHandlingService
         Debug.Assert(_componentChangeService is not null, "ToolStripKeyboardHandlingService relies on the componentChange service, which is unavailable.");
         if (_componentChangeService is not null)
         {
-            _componentChangeService.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
+            _componentChangeService.ComponentRemoved += OnComponentRemoved;
         }
     }
 
@@ -1629,14 +1629,14 @@ internal class ToolStripKeyboardHandlingService
 
         if (_selectionService is not null)
         {
-            _selectionService.SelectionChanging -= new EventHandler(OnSelectionChanging);
-            _selectionService.SelectionChanged -= new EventHandler(OnSelectionChanged);
+            _selectionService.SelectionChanging -= OnSelectionChanging;
+            _selectionService.SelectionChanged -= OnSelectionChanged;
             _selectionService = null;
         }
 
         if (_componentChangeService is not null)
         {
-            _componentChangeService.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
+            _componentChangeService.ComponentRemoved -= OnComponentRemoved;
             _componentChangeService = null;
         }
 

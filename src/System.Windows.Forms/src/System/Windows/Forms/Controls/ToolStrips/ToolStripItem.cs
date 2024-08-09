@@ -2057,11 +2057,11 @@ public abstract partial class ToolStripItem :
 
         if (animate)
         {
-            ImageAnimator.Animate(image, new EventHandler(OnAnimationFrameChanged));
+            ImageAnimator.Animate(image, OnAnimationFrameChanged);
         }
         else
         {
-            ImageAnimator.StopAnimate(image, new EventHandler(OnAnimationFrameChanged));
+            ImageAnimator.StopAnimate(image, OnAnimationFrameChanged);
         }
 
         _state[s_stateCurrentlyAnimatingImage] = animate;

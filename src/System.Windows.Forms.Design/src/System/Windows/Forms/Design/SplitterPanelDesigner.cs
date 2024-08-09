@@ -95,7 +95,7 @@ internal class SplitterPanelDesigner : PanelDesigner
     {
         if (TryGetService(out IComponentChangeService? cs))
         {
-            cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
+            cs.ComponentChanged -= OnComponentChanged;
         }
 
         base.Dispose(disposing);
@@ -111,7 +111,7 @@ internal class SplitterPanelDesigner : PanelDesigner
 
         if (TryGetService(out IComponentChangeService? cs))
         {
-            cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
+            cs.ComponentChanged += OnComponentChanged;
         }
 
         PropertyDescriptor? lockedProp = TypeDescriptor.GetProperties(component)["Locked"];

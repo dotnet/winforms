@@ -95,7 +95,8 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
         {
             Tag = new EnumValueDescription(propertyName, value)
         };
-        item.Click += new EventHandler(OnEnumValueChanged);
+
+        item.Click += OnEnumValueChanged;
         return item;
     }
 
@@ -106,7 +107,7 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
         item.Visible = browsable;
         item.Tag = propertyName;
         item.CheckOnClick = true;
-        item.Click += new EventHandler(OnBooleanValueChanged);
+        item.Click += OnBooleanValueChanged;
         return item;
     }
 
@@ -122,10 +123,12 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
                 Image = new Icon(typeof(ToolStripMenuItem), "image").ToBitmap(),
                 ImageTransparentColor = Color.Magenta
             };
+
             // Add event Handlers
-            _imageToolStripMenuItem.Click += new EventHandler(OnImageToolStripMenuItemClick);
+            _imageToolStripMenuItem.Click += OnImageToolStripMenuItemClick;
             _enabledToolStripMenuItem = CreateBooleanItem("E&nabled", "Enabled");
             AddRange([_imageToolStripMenuItem, _enabledToolStripMenuItem]);
+
             if (selectedItem is ToolStripMenuItem)
             {
                 _checkedToolStripMenuItem = CreateBooleanItem("C&hecked", "Checked");
@@ -211,7 +214,7 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
                     {
                         Text = SR.ToolStripDropDownItemCollectionEditorVerb
                     };
-                    _editItemsToolStripMenuItem.Click += new EventHandler(OnEditItemsMenuItemClick);
+                    _editItemsToolStripMenuItem.Click += OnEditItemsMenuItemClick;
                     _editItemsToolStripMenuItem.Image = new Icon(typeof(ToolStripMenuItem), "editdropdownlist").ToBitmap();
                     _editItemsToolStripMenuItem.ImageTransparentColor = Color.Magenta;
                     Add(_editItemsToolStripMenuItem);

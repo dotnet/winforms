@@ -34,7 +34,7 @@ internal class ToolStripInSituService : ISupportInSituService, IDisposable
         Debug.Assert(_componentChangeService is not null, "ToolStripKeyboardHandlingService relies on the componentChange service, which is unavailable.");
         if (_componentChangeService is not null)
         {
-            _componentChangeService.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
+            _componentChangeService.ComponentRemoved += OnComponentRemoved;
         }
     }
 
@@ -57,7 +57,7 @@ internal class ToolStripInSituService : ISupportInSituService, IDisposable
 
         if (_componentChangeService is not null)
         {
-            _componentChangeService.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
+            _componentChangeService.ComponentRemoved -= OnComponentRemoved;
             _componentChangeService = null;
         }
     }

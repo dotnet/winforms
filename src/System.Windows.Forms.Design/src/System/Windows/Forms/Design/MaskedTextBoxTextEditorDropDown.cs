@@ -33,8 +33,8 @@ internal class MaskedTextBoxTextEditorDropDown : UserControl
 
         _cloneMtb.Name = "MaskedTextBoxClone";
         _cloneMtb.TabIndex = 0;
-        _cloneMtb.MaskInputRejected += new MaskInputRejectedEventHandler(maskedTextBox_MaskInputRejected);
-        _cloneMtb.KeyDown += new KeyEventHandler(maskedTextBox_KeyDown);
+        _cloneMtb.MaskInputRejected += maskedTextBox_MaskInputRejected;
+        _cloneMtb.KeyDown += maskedTextBox_KeyDown;
 
         //
         // errorProvider

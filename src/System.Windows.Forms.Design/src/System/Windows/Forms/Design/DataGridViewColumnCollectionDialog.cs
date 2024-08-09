@@ -1167,7 +1167,7 @@ internal class DataGridViewColumnCollectionDialog : Form
     {
         if (componentChangeService is not null)
         {
-            componentChangeService.ComponentChanged -= new ComponentChangedEventHandler(componentChanged);
+            componentChangeService.ComponentChanged -= componentChanged;
         }
     }
 

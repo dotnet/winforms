@@ -132,7 +132,7 @@ partial class CommonControl1
         this.button1.TabIndex = 8;
         this.button1.Text = "Details";
         this.button1.UseVisualStyleBackColor = true;
-        this.button1.Click += new System.EventHandler(this.button1_Click);
+        this.button1.Click += this.button1_Click;
         // 
         // button10
         // 
@@ -176,7 +176,7 @@ partial class CommonControl1
         this.button3.TabIndex = 0;
         this.button3.Text = "List";
         this.button3.UseVisualStyleBackColor = false;
-        this.button3.Click += new System.EventHandler(this.button3_Click);
+        this.button3.Click += this.button3_Click;
         // 
         // button4
         // 
@@ -188,7 +188,7 @@ partial class CommonControl1
         this.button4.TabIndex = 9;
         this.button4.Text = "SmallIcon";
         this.button4.UseVisualStyleBackColor = true;
-        this.button4.Click += new System.EventHandler(this.button4_Click);
+        this.button4.Click += this.button4_Click;
         // 
         // button5
         // 
@@ -211,7 +211,7 @@ partial class CommonControl1
         this.button2.TabIndex = 5;
         this.button2.Text = "LargeIcon";
         this.button2.UseVisualStyleBackColor = true;
-        this.button2.Click += new System.EventHandler(this.button2_Click);
+        this.button2.Click += this.button2_Click;
         // 
         // button6
         // 
@@ -692,7 +692,7 @@ partial class CommonControl1
         this.Name = "CommonControl1";
         this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
         this.Text = "CommonControl1";
-        this.Load += new System.EventHandler(this.MainForm_Load);
+        this.Load += this.MainForm_Load;
         this.groupBox1.ResumeLayout(false);
         this.groupBox1.PerformLayout();
         this.groupBox2.ResumeLayout(false);

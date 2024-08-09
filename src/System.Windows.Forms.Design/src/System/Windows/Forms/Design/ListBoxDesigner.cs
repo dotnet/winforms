@@ -82,13 +82,11 @@ internal class ListBoxDesigner : ControlDesigner
     {
         if (disposing)
         {
-            // Now, hook the component rename event so we can update the text in the
-            // list box.
-            //
+            // Now, hook the component rename event so we can update the text in the list box.
             if (TryGetService<IComponentChangeService>(out IComponentChangeService? componentChangeService))
             {
-                componentChangeService.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
-                componentChangeService.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
+                componentChangeService.ComponentRename -= OnComponentRename;
+                componentChangeService.ComponentChanged -= OnComponentChanged;
             }
         }
 
@@ -102,19 +100,18 @@ internal class ListBoxDesigner : ControlDesigner
     {
         base.Initialize(component);
 
-        ListBox? listBox = component as ListBox;
-        if (listBox is not null)
+        if (component is ListBox listBox)
+        {
             IntegralHeight = listBox.IntegralHeight;
+        }
 
         AutoResizeHandles = true;
 
-        // Now, hook the component rename event so we can update the text in the
-        // list box.
-        //
-        if (TryGetService<IComponentChangeService>(out IComponentChangeService? componentChangeService))
+        // Now, hook the component rename event so we can update the text in the list box.
+        if (TryGetService(out IComponentChangeService? componentChangeService))
         {
-            componentChangeService.ComponentRename += new ComponentRenameEventHandler(OnComponentRename);
-            componentChangeService.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
+            componentChangeService.ComponentRename += OnComponentRename;
+            componentChangeService.ComponentChanged += OnComponentChanged;
         }
     }
 

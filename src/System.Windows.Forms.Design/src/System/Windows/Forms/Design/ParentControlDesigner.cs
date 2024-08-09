@@ -684,14 +684,14 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
 
             if (HasComponent && Control is ScrollableControl control)
             {
-                control.Scroll -= new ScrollEventHandler(OnScroll);
+                control.Scroll -= OnScroll;
             }
 
             IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
             if (host is not null)
             {
-                _changeService.ComponentRemoving -= new ComponentEventHandler(OnComponentRemoving);
-                _changeService.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
+                _changeService.ComponentRemoving -= OnComponentRemoving;
+                _changeService.ComponentRemoved -= OnComponentRemoved;
                 _changeService = null;
             }
         }
@@ -1212,8 +1212,8 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
             _changeService = (IComponentChangeService)host.GetService(typeof(IComponentChangeService));
             if (_changeService is not null)
             {
-                _changeService.ComponentRemoving += new ComponentEventHandler(OnComponentRemoving);
-                _changeService.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
+                _changeService.ComponentRemoving += OnComponentRemoving;
+                _changeService.ComponentRemoved += OnComponentRemoved;
             }
         }
 

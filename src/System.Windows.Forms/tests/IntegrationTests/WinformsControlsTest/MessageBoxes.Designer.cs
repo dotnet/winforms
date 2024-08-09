@@ -44,7 +44,7 @@ partial class MessageBoxes
         this.propertyGrid1.Name = "propertyGrid1";
         this.propertyGrid1.Size = new System.Drawing.Size(332, 430);
         this.propertyGrid1.TabIndex = 0;
-        this.propertyGrid1.SelectedObjectsChanged += new System.EventHandler(this.propertyGrid1_SelectedObjectsChanged);
+        this.propertyGrid1.SelectedObjectsChanged += this.propertyGrid1_SelectedObjectsChanged;
         // 
         // Dialogs
         // 

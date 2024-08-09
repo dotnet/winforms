@@ -81,8 +81,9 @@ public abstract class MaskDescriptor
             FormatProvider = maskDescriptor.Culture,
             Culture = maskDescriptor.Culture
         };
-        maskedTextBox.TypeValidationCompleted += new TypeValidationEventHandler(maskedTextBox1_TypeValidationCompleted);
-        maskedTextBox.MaskInputRejected += new MaskInputRejectedEventHandler(maskedTextBox1_MaskInputRejected);
+
+        maskedTextBox.TypeValidationCompleted += maskedTextBox1_TypeValidationCompleted;
+        maskedTextBox.MaskInputRejected += maskedTextBox1_MaskInputRejected;
 
         // Add sample. If it fails we are done.
         maskedTextBox.Text = maskDescriptor.Sample;
