@@ -9,7 +9,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
     Public Class TimeTests
         Private Const PrecisionTickLimit As Integer = 1000
 
-        Private Function timesEqual(systemLocalTime As Date, vbLocalTime As Date, acceptableDifferenceInTicks As Long) As Boolean
+        Private Function timesEqual(
+            systemLocalTime As Date,
+            vbLocalTime As Date,
+            acceptableDifferenceInTicks As Long) As Boolean
+
             Dim diff As TimeSpan = systemLocalTime - vbLocalTime
             Return Math.Abs(diff.TotalMicroseconds) < acceptableDifferenceInTicks
         End Function
@@ -21,18 +25,24 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <WinFormsFact>
         Public Sub VbGmtTimeCloseToDateUtcNow()
-            timesEqual(My.Computer.Clock.GmtTime, Date.UtcNow, PrecisionTickLimit).Should.BeTrue()
+            timesEqual(
+                systemLocalTime:=My.Computer.Clock.GmtTime,
+                vbLocalTime:=Date.UtcNow,
+                acceptableDifferenceInTicks:=PrecisionTickLimit).Should.BeTrue()
         End Sub
 
         <WinFormsFact>
         Public Sub VbLocalTimeCloseToDateNow()
-            timesEqual(My.Computer.Clock.LocalTime, Date.Now, PrecisionTickLimit).Should.BeTrue()
+            timesEqual(
+                systemLocalTime:=My.Computer.Clock.LocalTime,
+                vbLocalTime:=Date.Now,
+                acceptableDifferenceInTicks:=PrecisionTickLimit).Should.BeTrue()
         End Sub
 
         <WinFormsFact>
         Public Sub VbTickCountCloseToEnvironmentTickCount()
-            Dim condition As Boolean = Math.Abs(Environment.TickCount - My.Computer.Clock.TickCount) < PrecisionTickLimit
-            condition.Should.BeTrue()
+            Dim tickCount As Integer = Math.Abs(Environment.TickCount - My.Computer.Clock.TickCount)
+            Call (tickCount < PrecisionTickLimit).Should.BeTrue()
         End Sub
 
         <WinFormsFact>
