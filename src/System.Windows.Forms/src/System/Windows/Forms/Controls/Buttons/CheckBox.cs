@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.ButtonInternal;
 using System.Windows.Forms.Layout;
+using System.Windows.Forms.Rendering.CheckBox;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 
@@ -35,6 +36,7 @@ public partial class CheckBox : ButtonBase
     // A flag indicating if UIA StateChanged event needs to be triggered,
     // to avoid double-triggering when Checked value changes.
     private bool _notifyAccessibilityStateChangedNeeded;
+    private AnimatedToggleSwitchRenderer? _toggleSwitchRenderer;
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="CheckBox"/> class.
@@ -80,6 +82,14 @@ public partial class CheckBox : ButtonBase
                 else
                 {
                     UpdateStyles();
+
+#pragma warning disable WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+                    if (value == Appearance.ToggleSwitch
+                        && VisualStylesMode >= VisualStylesMode.Net10)
+                    {
+                        Refresh();
+                    }
+#pragma warning restore WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                 }
 
                 OnAppearanceChanged(EventArgs.Empty);
@@ -169,6 +179,8 @@ public partial class CheckBox : ButtonBase
     public CheckState CheckState
     {
         get => _checkState;
+
+#pragma warning disable WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
         set
         {
             SourceGenerated.EnumValidator.Validate(value);
@@ -178,8 +190,18 @@ public partial class CheckBox : ButtonBase
                 return;
             }
 
-            bool oldChecked = Checked;
+            bool animationHandlingNeeded = VisualStylesMode >= VisualStylesMode.Net10
+                && Appearance == Appearance.ToggleSwitch;
 
+            if (animationHandlingNeeded)
+            {
+                // This stops any ongoing animation AND sets
+                // the current progress of the animation to the
+                // current visual state of the checkbox.
+                _toggleSwitchRenderer?.StopAnimation();
+            }
+
+            bool oldChecked = Checked;
             _checkState = value;
 
             if (IsHandleCreated)
@@ -189,16 +211,26 @@ public partial class CheckBox : ButtonBase
 
             bool checkedChanged = oldChecked != Checked;
 
+            // In here, we take care of both the changed events for Checked and CheckState.
             if (checkedChanged)
             {
                 OnCheckedChanged(EventArgs.Empty);
             }
 
             _notifyAccessibilityStateChangedNeeded = !checkedChanged;
+
             OnCheckStateChanged(EventArgs.Empty);
             _notifyAccessibilityStateChangedNeeded = false;
+
+            if (animationHandlingNeeded)
+            {
+                // Progress restarts from 0, which is now fine, since we
+                // the check-state now has changed.
+                _toggleSwitchRenderer?.StartAnimation();
+            }
         }
     }
+#pragma warning restore WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
 
     /// <hideinheritance/>
     [Browsable(false)]
@@ -224,17 +256,30 @@ public partial class CheckBox : ButtonBase
         {
             CreateParams cp = base.CreateParams;
             cp.ClassName = PInvoke.WC_BUTTON;
+
             if (OwnerDraw)
             {
                 cp.Style |= PInvoke.BS_OWNERDRAW;
             }
             else
             {
-                cp.Style |= PInvoke.BS_3STATE;
-                if (Appearance == Appearance.Button)
+#pragma warning disable WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+                if (VisualStylesMode >= VisualStylesMode.Net10)
                 {
-                    cp.Style |= PInvoke.BS_PUSHLIKE;
+                    SetStyle(ControlStyles.UserPaint, true);
+                    SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+                    SetStyle(ControlStyles.ResizeRedraw, true);
+                    cp.Style |= PInvoke.BS_OWNERDRAW;
                 }
+                else
+                {
+                    cp.Style |= PInvoke.BS_3STATE;
+                    if (Appearance == Appearance.Button)
+                    {
+                        cp.Style |= PInvoke.BS_PUSHLIKE;
+                    }
+                }
+#pragma warning restore WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
 
                 // Determine the alignment of the check box
                 ContentAlignment align = RtlTranslateContent(CheckAlign);
@@ -269,7 +314,36 @@ public partial class CheckBox : ButtonBase
 
     internal override Size GetPreferredSizeCore(Size proposedConstraints)
     {
-        if (Appearance == Appearance.Button)
+        Size textSize;
+        var appearance = Appearance;
+
+#pragma warning disable WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+        if (appearance == Appearance.ToggleSwitch)
+        {
+            if (VisualStylesMode < VisualStylesMode.Net10 || ThreeState)
+            {
+                appearance = Appearance.Normal;
+            }
+            else
+            {
+                // We only support the ToggleSwitch when the appearance has been set
+                // AND the VisualStylesMode is at least Net10 AND we're not using ThreeState.
+                _toggleSwitchRenderer ??= new AnimatedToggleSwitchRenderer(this, ModernCheckBoxStyle.Rounded);
+                int dpiScale = (int)(DeviceDpi / 96f);
+
+                textSize = TextRenderer.MeasureText(Text, Font);
+                int switchWidth = 50 * dpiScale;
+                int switchHeight = 25 * dpiScale;
+
+                int totalWidth = textSize.Width + switchWidth + 20 * dpiScale; // 10 dpi padding on each side
+                int totalHeight = Math.Max(textSize.Height, switchHeight);
+
+                return new Size(totalWidth, totalHeight);
+            }
+        }
+#pragma warning restore WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+
+        if (appearance == Appearance.Button)
         {
             ButtonStandardAdapter adapter = new(this);
             return adapter.GetPreferredSizeCore(proposedConstraints);
@@ -280,13 +354,29 @@ public partial class CheckBox : ButtonBase
             return base.GetPreferredSizeCore(proposedConstraints);
         }
 
-        Size textSize = TextRenderer.MeasureText(Text, Font);
+        textSize = TextRenderer.MeasureText(Text, Font);
         Size size = SizeFromClientSize(textSize);
         size.Width += _flatSystemStylePaddingWidth;
 
         // Ensure minimum height to avoid truncation of check-box or text
         size.Height = Math.Max(size.Height + 5, _flatSystemStyleMinimumHeight);
         return size + Padding.Size;
+    }
+
+    protected override void OnPaint(PaintEventArgs pevent)
+    {
+#pragma warning disable WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+        if (VisualStylesMode >= VisualStylesMode.Net10
+            && Appearance == Appearance.ToggleSwitch)
+        {
+            var stateScope = new GraphicsStateScope(pevent.Graphics);
+            _toggleSwitchRenderer?.RenderControl(pevent.Graphics);
+
+            return;
+        }
+#pragma warning restore WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+
+        base.OnPaint(pevent);
     }
 
     internal override Rectangle OverChangeRectangle

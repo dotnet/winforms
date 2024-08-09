@@ -353,8 +353,10 @@ public partial class DataGridView : Control, ISupportInitialize
     private Timer? _horizScrollTimer;
 
     private readonly Dictionary<Type, TypeConverter> _converters;
+
     private static readonly Color s_defaultBackColor = SystemColors.Window;
     private static readonly Color s_defaultBackgroundColor = SystemColors.ControlDark;
+
     private Color _backgroundColor = s_defaultBackgroundColor;
 
     private RECT[]? _cachedScrollableRegion;
@@ -386,6 +388,10 @@ public partial class DataGridView : Control, ISupportInitialize
                  ControlStyles.UserMouse, true);
 
         SetStyle(ControlStyles.SupportsTransparentBackColor, false);
+
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
         // this class overrides GetPreferredSizeCore, let Control automatically cache the result
         SetExtendedState(ExtendedStates.UserPreferredSizeCache, true);

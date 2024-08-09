@@ -108,6 +108,9 @@ DSH_FLAGS
 DTM_*
 DTN_*
 DTS_*
+DwmGetWindowAttribute
+DwmSetWindowAttribute
+DWM_WINDOW_CORNER_PREFERENCE
 DuplicateHandle
 EC_*
 ECO_*
@@ -164,6 +167,7 @@ GetClipboardFormatName
 GetClipBox
 GetClipCursor
 GetClipRgn
+GetComboBoxInfo
 GetCurrentActCtx
 GetCurrentObject
 GetCurrentProcess

@@ -1,0 +1,8 @@
+Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventArgs.ColorMode() -> System.Windows.Forms.SystemColorMode
+Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventArgs.ColorMode(AutoPropertyValue As System.Windows.Forms.SystemColorMode) -> Void
+Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventArgs.VisualStylesMode() -> System.Windows.Forms.VisualStylesMode
+Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventArgs.VisualStylesMode(AutoPropertyValue As System.Windows.Forms.VisualStylesMode) -> Void
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.ColorMode() -> System.Windows.Forms.SystemColorMode
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.ColorMode(value As System.Windows.Forms.SystemColorMode) -> Void
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.VisualStylesMode() -> System.Windows.Forms.VisualStylesMode
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.VisualStylesMode(value As System.Windows.Forms.VisualStylesMode) -> Void

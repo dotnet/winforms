@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Reflection;
 using System.Text;
+using System.Windows.Forms.Analyzers.Diagnostics;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Office;
 using Microsoft.Win32;
@@ -40,8 +41,18 @@ public sealed partial class Application
     private static bool s_comCtlSupportsVisualStylesInitialized;
     private static bool s_comCtlSupportsVisualStyles;
     private static FormCollection? s_forms;
-    private static readonly object s_internalSyncObject = new();
+    private static readonly Lock s_internalSyncObject = new();
     private static bool s_useWaitCursor;
+
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    private static SystemColorMode? s_systemColorMode;
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
+    internal const string WinFormsExperimentalUrl = "https://aka.ms/winforms-experimental/{0}";
+
+    private const string DarkModeKeyPath = "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
+    private const string DarkModeKey = "AppsUseLightTheme";
+    private const int DarkModeNotAvailable = -1;
 
     /// <summary>
     ///  Events the user can hook into
@@ -55,8 +66,11 @@ public sealed partial class Application
 
     // Used to avoid recursive exit
     private static bool s_exiting;
-
     private static bool s_parkingWindowCreated;
+
+#pragma warning disable WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    private static VisualStylesMode? s_defaultVisualStylesMode;
+#pragma warning restore WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     /// <summary>
     ///  This class is static, there is no need to ever create it.
@@ -106,6 +120,7 @@ public sealed partial class Application
         // GetModuleHandle  returns a handle to a mapped module without incrementing its
         // reference count.
         var hModule = PInvoke.GetModuleHandle(Libraries.Comctl32);
+
         fixed (byte* ptr = "ImageList_WriteEx\0"u8)
         {
             if (!hModule.IsNull)
@@ -116,6 +131,7 @@ public sealed partial class Application
 
         // Load comctl since GetModuleHandle failed to find it
         nint ninthModule = PInvoke.LoadComctl32(StartupPath);
+
         if (ninthModule == 0)
         {
             return false;
@@ -237,13 +253,191 @@ public sealed partial class Application
     internal static bool CustomThreadExceptionHandlerAttached
         => ThreadContext.FromCurrent().CustomThreadExceptionHandlerAttached;
 
-    internal static Font? DefaultFont => s_defaultFontScaled ?? s_defaultFont;
+    /// <summary>
+    ///  Gets the default dark mode for the application. This is the SystemColorMode which either has been set
+    ///  by <see cref="SetColorMode(SystemColorMode)"/> or its default value <see cref="SystemColorMode.Classic"/>.
+    /// </summary>
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = WinFormsExperimentalUrl)]
+    public static SystemColorMode ColorMode =>
+        !s_systemColorMode.HasValue
+            ? SystemColorMode.Classic
+            : s_systemColorMode.Value == SystemColorMode.System
+                ? SystemColorMode
+                : s_systemColorMode.Value;
+
+    /// <summary>
+    ///  Sets the default dark mode for the application.
+    /// </summary>
+    /// <param name="systemColorMode">The default dark mode to set.</param>
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = WinFormsExperimentalUrl)]
+    public static void SetColorMode(SystemColorMode systemColorMode)
+    {
+        try
+        {
+            // Can't use the Generator here, since it cannot deal with experimentals.
+            _ = systemColorMode switch
+            {
+                SystemColorMode.Classic => systemColorMode,
+                SystemColorMode.System => systemColorMode,
+                SystemColorMode.Dark => systemColorMode,
+                _ => throw new ArgumentOutOfRangeException(nameof(systemColorMode))
+            };
+
+            if (GetSystemColorModeInternal() > -1)
+            {
+                s_systemColorMode = systemColorMode;
+                return;
+            }
+
+            s_systemColorMode = SystemColorMode.Classic;
+        }
+        finally
+        {
+            SystemColors.UseAlternativeColorSet = IsDarkModeEnabled;
+        }
+    }
+
+    /// <summary>
+    ///  Gets the default <see cref="DefaultVisualStylesMode"/> used as the rendering style guideline for the
+    ///  application's controls. The default setting is <see cref="VisualStylesMode.Classic"/>.
+    /// </summary>
+    /// <returns>
+    ///  The <see cref="VisualStylesMode"/> used as the rendering style guideline for the application's controls.
+    /// </returns>
+    /// <remarks>
+    ///  <para>
+    ///   Starting from .NET 9, controls must adapt to new requirements in certain situations, such as dark mode and
+    ///   enhanced accessibility (A11Y) features. These changes can potentially alter the layout and appearance of forms.
+    ///  </para>
+    ///  <para>
+    ///   Therefore, it is necessary to provide mechanisms to finely control backward compatibility for
+    ///   existing and upcoming versions. This includes adjusting control rendering, requesting different
+    ///   sizes for new minimum space requirements, and handling adornments or margins/paddings. This property
+    ///   allows developers to ensure that their applications maintain a consistent appearance and behavior
+    ///   across different .NET versions, particularly when backward compatibility to "XP-based VisualStyles"
+    ///   is essential.
+    ///  </para>
+    /// </remarks>
+    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = WinFormsExperimentalUrl)]
+    public static VisualStylesMode DefaultVisualStylesMode
+    {
+        get => s_defaultVisualStylesMode
+            ??= RenderWithVisualStyles
+                ? VisualStylesMode.Classic
+                : VisualStylesMode.Disabled;
+
+        private set { }
+    }
+
+    /// <summary>
+    ///  Sets the default <see cref="DefaultVisualStylesMode"/> as the rendering style guideline for the Application's controls to use.
+    ///  Default is <see cref="VisualStylesMode.Net10"/> when visual style rendering is enabled,
+    ///  otherwise <see cref="VisualStylesMode.Disabled"/>. Setting to <see cref="VisualStylesMode.Disabled"/> has the same effect
+    ///  as not setting using <see cref="EnableVisualStyles"/>.
+    /// </summary>
+    /// <param name="styleSetting">The version of visual styles to set.</param>
+    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = WinFormsExperimentalUrl)]
+    public static void SetDefaultVisualStylesMode(VisualStylesMode styleSetting)
+    {
+        if (s_defaultVisualStylesMode.HasValue
+            && s_defaultVisualStylesMode.Value != styleSetting)
+        {
+            throw new InvalidOperationException(SR.Application_VisualStylesModeCanOnlyBeSetOnce);
+        }
+
+        if (!s_defaultVisualStylesMode.HasValue)
+        {
+            if (UseVisualStyles)
+            {
+                if (styleSetting == VisualStylesMode.Disabled)
+                {
+                    throw new InvalidOperationException(SR.Application_ClassicVisualStyleHadAlreadyBeenSet);
+                }
+
+                s_defaultVisualStylesMode = styleSetting;
+                return;
+            }
+
+            EnableVisualStyles();
+
+            // Check, if we were able to activate.
+            if (UseVisualStyles)
+            {
+                s_defaultVisualStylesMode = styleSetting;
+                return;
+            }
+
+            s_defaultVisualStylesMode = VisualStylesMode.Disabled;
+        }
+    }
+
+    internal static Font DefaultFont => s_defaultFontScaled ?? s_defaultFont!;
+
+    /// <summary>
+    ///  Gets the system color mode setting of the OS system environment.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   The color setting is determined based on the operating system version and its system settings.
+    ///   It returns <see cref="SystemColorMode.Dark"/> if the dark mode is enabled in the system settings,
+    ///   <see cref="SystemColorMode.Classic"/> if the color mode equals the light, standard color setting.
+    ///  </para>
+    ///  <para>
+    ///   SystemColorMode is supported on Windows 11 or later versions.
+    ///  </para>
+    ///  <para>
+    ///   SystemColorModes is not supported, if the Windows OS <c>High Contrast Mode</c> has been enabled in the system settings.
+    ///  </para>
+    /// </remarks>
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = WinFormsExperimentalUrl)]
+    public static SystemColorMode SystemColorMode =>
+        GetSystemColorModeInternal() == 0
+            ? SystemColorMode.Dark
+            : SystemColorMode.Classic;
+
+    // Returns 0 if dark mode is available, otherwise -1 (DarkModeNotAvailable)
+    private static int GetSystemColorModeInternal()
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return DarkModeNotAvailable;
+        }
+
+        int systemColorMode = DarkModeNotAvailable;
+
+        // Dark mode is supported when we are >= W11/22000
+        // Technically, we could go earlier, but then the APIs we're using weren't officially public.
+        if (OsVersion.IsWindows11_OrGreater())
+        {
+            try
+            {
+                systemColorMode = (Registry.GetValue(
+                    keyName: DarkModeKeyPath,
+                    valueName: DarkModeKey,
+                    defaultValue: DarkModeNotAvailable) as int?) ?? systemColorMode;
+            }
+            catch (Exception ex) when (!ex.IsCriticalException())
+            {
+            }
+        }
+
+        return systemColorMode;
+    }
+
+    /// <summary>
+    ///  Gets a value indicating whether the application is running in a dark system color context.
+    ///  Note: In a high contrast mode, this will always return <see langword="false"/>.
+    /// </summary>
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = WinFormsExperimentalUrl)]
+    public static bool IsDarkModeEnabled =>
+        !SystemInformation.HighContrast
+        && (ColorMode == SystemColorMode.Dark);
 
     /// <summary>
     ///  Gets the path for the executable file that started the application.
     /// </summary>
-    public static string ExecutablePath =>
-        s_executablePath ??= PInvoke.GetModuleFileNameLongPath(HINSTANCE.Null);
+    public static string ExecutablePath
+        => s_executablePath ??= PInvoke.GetModuleFileNameLongPath(HINSTANCE.Null);
 
     /// <summary>
     ///  Gets the current <see cref="HighDpiMode"/> mode for the process.
@@ -395,8 +589,12 @@ public sealed partial class Application
     ///  visual styles? If you are doing visual styles rendering, use this to be consistent with the rest
     ///  of the controls in your app.
     /// </summary>
-    public static bool RenderWithVisualStyles
-        => ComCtlSupportsVisualStyles && VisualStyleRenderer.IsSupported;
+#pragma warning disable WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    public static bool RenderWithVisualStyles =>
+        ComCtlSupportsVisualStyles
+            && VisualStyleRenderer.IsSupported
+            && s_defaultVisualStylesMode != VisualStylesMode.Disabled;
+#pragma warning restore WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     /// <summary>
     ///  Gets or sets the format string to apply to top level window captions
@@ -775,6 +973,7 @@ public sealed partial class Application
             // Extract the manifest from managed resources.
             using Stream? stream = module.Assembly.GetManifestResourceStream(
                 "System.Windows.Forms.XPThemes.manifest");
+
             if (stream is not null)
             {
                 UseVisualStyles = ThemingScope.CreateActivationContext(stream);
@@ -782,6 +981,19 @@ public sealed partial class Application
         }
 
         Debug.Assert(UseVisualStyles, "Enable Visual Styles failed");
+
+#pragma warning disable WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+
+        // We need to check, if SetDefaultVisualStylesMode was set before EnableVisualStyles,
+        // so those will always be in sync!
+        if (UseVisualStyles && s_defaultVisualStylesMode == VisualStylesMode.Disabled)
+        {
+            // If it was disabled, it is now classic.
+            // If it was not set, it remains not set. We exclude setting to disabled in that case.
+            // If it was a version, it's save that it remains the version.
+            s_defaultVisualStylesMode = VisualStylesMode.Classic;
+        }
+#pragma warning restore WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
 
         s_comCtlSupportsVisualStylesInitialized = false;
     }

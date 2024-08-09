@@ -441,9 +441,9 @@ public partial class RichTextBox : TextBoxBase
         // Subtract the scroll bar padding before measuring
         proposedConstraints -= scrollBarPadding;
 
-        Size prefSize = base.GetPreferredSizeCore(proposedConstraints);
+        Size preferredSize = base.GetPreferredSizeCore(proposedConstraints);
 
-        return prefSize + scrollBarPadding;
+        return preferredSize + scrollBarPadding;
     }
 
     private bool InConstructor
@@ -3063,10 +3063,10 @@ public partial class RichTextBox : TextBoxBase
         {
             int actualLength = (int)PInvoke.SendMessage(this, PInvoke.EM_GETTEXTEX, (WPARAM)pGt, (LPARAM)b);
 
-            // The default behaviour of EM_GETTEXTEX is to normalise line endings to '\r'
+            // The default behavior of EM_GETTEXTEX is to normalize line endings to '\r'
             // (see: GT_DEFAULT, https://docs.microsoft.com/windows/win32/api/richedit/ns-richedit-gettextex#members),
-            // whereas previously we would normalise to '\n'. Unfortunately we can only ask for '\r\n' line endings via GT.USECRLF,
-            // but unable to ask for '\n'. Unless GT.USECRLF was set, convert '\r' with '\n' to retain the original behaviour.
+            // whereas previously we would normalize to '\n'. Unfortunately we can only ask for '\r\n' line endings via GT.USECRLF,
+            // but unable to ask for '\n'. Unless GT.USECRLF was set, convert '\r' with '\n' to retain the original behavior.
             if (!flags.HasFlag(GETTEXTEX_FLAGS.GT_USECRLF))
             {
                 int index = 0;
@@ -3212,6 +3212,35 @@ public partial class RichTextBox : TextBoxBase
             PInvoke.SendMessage(this, PInvoke.EM_EXLIMITTEXT, 0, (IntPtr)MaxLength);
         }
     }
+
+    private unsafe void WmNcCalcSize(ref Message m)
+    {
+        bool wParam = m.WParamInternal != 0;
+
+        NCCALCSIZE_PARAMS* ncCalcSizeParams = (NCCALCSIZE_PARAMS*)(void*)m.LParamInternal;
+
+        if (ncCalcSizeParams is not null)
+        {
+            // GetVisualStyles also calls GetScrollBarPadding, which we override and return
+            // an empty Padding. The reason is that the RichTextBox calculates its non-client size,
+            // including the scrollbars, so we need to take those out of the calculation.
+            Padding padding = GetVisualStylesPadding(true);
+
+            ncCalcSizeParams->rgrc._0.top += padding.Top;
+            ncCalcSizeParams->rgrc._0.bottom -= padding.Bottom;
+            ncCalcSizeParams->rgrc._0.left += padding.Left;
+            ncCalcSizeParams->rgrc._0.right -= padding.Right;
+
+            m.ResultInternal = (LRESULT)0;
+            return;
+        }
+
+        base.WndProc(ref m);
+    }
+
+    // RichTextBox does it's own NC calculation, so we need to leave that alone.
+    // (See also comments in WmNcCalcSize, WndProc and GetScrollBarPadding)
+    private protected override Padding GetScrollBarPadding() => Padding.Empty;
 
     private void WmReflectCommand(ref Message m)
     {
@@ -3435,6 +3464,22 @@ public partial class RichTextBox : TextBoxBase
     {
         switch (m.MsgInternal)
         {
+            case PInvoke.WM_NCCALCSIZE:
+                // We need the RichTextBox to calculate its own Nc-Items, otherwise, the rendering fails.
+                // But then, of course, we need to adjust the padding to account for the border when we have
+                // a scrollbar showing.
+                base.WndProc(ref m);
+
+#pragma warning disable WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+                if (VisualStylesMode >= VisualStylesMode.Net10)
+                {
+                    // And then we do ours on top of that.
+                    WmNcCalcSize(ref m);
+                }
+
+#pragma warning restore WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+                break;
+
             case MessageId.WM_REFLECT_NOTIFY:
                 WmReflectNotify(ref m);
                 break;

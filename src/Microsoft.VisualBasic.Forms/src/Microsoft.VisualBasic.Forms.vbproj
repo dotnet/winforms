@@ -9,7 +9,6 @@
     <AssemblyName>Microsoft.VisualBasic.Forms</AssemblyName>
     <Deterministic>true</Deterministic>
     <OptionExplicit>On</OptionExplicit>
-    <OptionInfer>Off</OptionInfer>
     <OptionStrict>On</OptionStrict>
     <RootNamespace></RootNamespace>
     <LangVersion>Latest</LangVersion>

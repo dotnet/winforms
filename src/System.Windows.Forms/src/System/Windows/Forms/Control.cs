@@ -14,9 +14,11 @@ using System.Windows.Forms.Primitives;
 using Windows.Win32.System.Ole;
 using Windows.Win32.UI.Accessibility;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
+using Windows.Win32.Graphics.Dwm;
 using Com = Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
 using Encoding = System.Text.Encoding;
+using System.Windows.Forms.Analyzers.Diagnostics;
 
 namespace System.Windows.Forms;
 
@@ -142,9 +144,12 @@ public unsafe partial class Control :
     private static readonly object s_causesValidationEvent = new();
     private static readonly object s_regionChangedEvent = new();
     private static readonly object s_marginChangedEvent = new();
-    private protected static readonly object s_paddingChangedEvent = new();
     private static readonly object s_previewKeyDownEvent = new();
-    private static readonly object s_dataContextEvent = new();
+    private static readonly object s_dataContextChangedEvent = new();
+    private static readonly object s_visualStylesModeChangedEvent = new();
+
+    // This needs to be internal for derived controls to access it.
+    private protected static readonly object s_paddingChangedEvent = new();
 
     private static MessageId s_threadCallbackMessage;
     private static ContextCallback? s_invokeMarshaledCallbackHelperDelegate;
@@ -156,6 +161,11 @@ public unsafe partial class Control :
     internal static HelpInfo? t_currentHelpInfo;
 
     private static FontHandleWrapper? s_defaultFontHandleWrapper;
+
+    internal const string DarkModeIdentifier = "DarkMode";
+    internal const string ExplorerThemeIdentifier = "Explorer";
+    internal const string ItemsViewThemeIdentifier = "ItemsView";
+    internal const string ComboBoxButtonThemeIdentifier = "CFD";
 
     private const short PaintLayerBackground = 1;
     private const short PaintLayerForeground = 2;
@@ -216,6 +226,7 @@ public unsafe partial class Control :
     private static readonly int s_ambientPropertiesServiceProperty = PropertyStore.CreateKey();
 
     private static readonly int s_dataContextProperty = PropertyStore.CreateKey();
+    private static readonly int s_visualStylesModeProperty = PropertyStore.CreateKey();
 
     private static bool s_needToLoadComCtl = true;
 
@@ -709,7 +720,8 @@ public unsafe partial class Control :
             Color color = BackColor;
             HBRUSH backBrush;
 
-            if (color.IsSystemColor)
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            if (color.IsSystemColor && !Application.IsDarkModeEnabled)
             {
                 backBrush = PInvoke.GetSysColorBrush(color);
                 SetState(States.OwnCtlBrush, false);
@@ -719,6 +731,7 @@ public unsafe partial class Control :
                 backBrush = PInvoke.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(color));
                 SetState(States.OwnCtlBrush, true);
             }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
             Debug.Assert(!backBrush.IsNull, "Failed to create brushHandle");
             Properties.SetObject(s_backBrushProperty, backBrush);
@@ -1398,7 +1411,7 @@ public unsafe partial class Control :
                 cp.Style |= (int)WINDOW_STYLE.WS_VISIBLE;
             }
 
-            // Unlike Visible, Windows doesn't correctly inherit disabledness from its parent -- an enabled child
+            // Unlike Visible, Windows doesn't correctly inherit disabled-ness from its parent -- an enabled child
             // of a disabled parent will look enabled but not get mouse events
             if (!Enabled)
             {
@@ -1688,6 +1701,7 @@ public unsafe partial class Control :
             }
 
             Control? control = ParentInternal;
+
             while (color.A == 0)
             {
                 if (control is null)
@@ -2910,7 +2924,8 @@ public unsafe partial class Control :
 
     /// <summary>
     ///  This property is required by certain controls (TabPage) to render its transparency using theming API.
-    ///  We don't want all controls (that are have transparent BackColor) to use theming API to render its background because it has  HUGE PERF cost.
+    ///  We don't want all controls (that are have transparent BackColor) to use
+    ///  theming API to render its background because it has HUGE PERF cost.
     /// </summary>
     internal virtual bool RenderTransparencyWithVisualStyles => false;
 
@@ -3364,7 +3379,7 @@ public unsafe partial class Control :
         }
     }
 
-    // This auto upgraded v1 client to per-process doublebuffering logic
+    // This auto upgraded v1 client to per-process double-buffering logic
     private static BufferedGraphicsContext BufferContext => BufferedGraphicsManager.Current;
 
     /// <summary>
@@ -3408,7 +3423,7 @@ public unsafe partial class Control :
             //          ProcessUICues will check the current state of the control using WM_QUERYUISTATE
             //          If WM_QUERYUISTATE indicates that the accelerators are hidden we will
             //                  either call WM_UPDATEUISTATE or WM_CHANGEUISTATE depending on whether we're hosted or not.
-            //          All controls in the heirarchy will be individually called back on WM_UPDATEUISTATE, which will go into WmUpdateUIState.
+            //          All controls in the hierarchy will be individually called back on WM_UPDATEUISTATE, which will go into WmUpdateUIState.
             //   In WmUpdateUIState, we will update our uiCuesState cached value, which
             //   changes the public value of what we return here for ShowKeyboardCues/ShowFocusCues.
 
@@ -3622,6 +3637,129 @@ public unsafe partial class Control :
     }
 
     /// <summary>
+    ///  Occurs when the value of the <see cref="VisualStylesMode"/> property changes.
+    /// </summary>
+    [SRCategory(nameof(SR.CatAppearance))]
+    [Browsable(true)]
+    [EditorBrowsable(EditorBrowsableState.Advanced)]
+    [SRDescription(nameof(SR.ControlVisualStylesModeChangedDescr))]
+    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = Application.WinFormsExperimentalUrl)]
+    public event EventHandler? VisualStylesModeChanged
+    {
+        add => Events.AddHandler(s_visualStylesModeChangedEvent, value);
+        remove => Events.RemoveHandler(s_visualStylesModeChangedEvent, value);
+    }
+
+    /// <summary>
+    ///  Gets or sets how the control renders itself with visual styles. This ambient property can inherit its value
+    ///  from its parent control or, if it is a top-level control, from the application's default setting.
+    /// </summary>
+    /// <value>
+    ///  The <see cref="VisualStylesMode"/> for the control. A control's VisualStylesMode default value always derives
+    ///  from its parent control, or if there is no parent, from the Application. The Application's
+    ///  <see cref="DefaultVisualStylesMode"/> is <see cref="VisualStylesMode.Classic"/>.
+    /// </value>
+    /// <remarks>
+    ///  <para>
+    ///   Starting from .NET 9, controls are required to adapt to new requirements such as dark mode and enhanced
+    ///   accessibility (A11Y) features. These changes can potentially alter the layout and appearance of forms.
+    ///   Therefore, it is necessary to provide mechanisms to finely control backwards compatibility for existing
+    ///   and upcoming versions. This includes adjusting control rendering, requesting different sizes for new
+    ///   minimum space requirements, and handling adornments or margins/paddings. This property allows developers
+    ///   to ensure that their applications maintain a consistent appearance and behavior across different .NET versions,
+    ///   particularly when backwards compatibility is essential.
+    ///  </para>
+    ///  <para>
+    ///   As an ambient property, if the control is a top-level control and its VisualStylesMode is not explicitly set,
+    ///   it will inherit the setting from <see cref="Application.DefaultVisualStylesMode"/>. Inherited controls can
+    ///   overwrite <see cref="DefaultVisualStylesMode"/> to ensure backwards compatibility for controls, which
+    ///   rely on a specific version of the visual styles of a base control (see <see cref="TextBoxBase"/> as an example).
+    ///  </para>
+    /// </remarks>
+    [SRCategory(nameof(SR.CatAppearance))]
+    [EditorBrowsable(EditorBrowsableState.Always)]
+    [SRDescription(nameof(SR.ControlVisualStylesModeDescr))]
+    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = Application.WinFormsExperimentalUrl)]
+    public VisualStylesMode VisualStylesMode
+    {
+        get => Properties.TryGetObject(s_visualStylesModeProperty, out VisualStylesMode value)
+            ? value
+            : ParentInternal?.VisualStylesMode ?? DefaultVisualStylesMode;
+
+        set
+        {
+            if (ParentInternal is not null
+                && value == VisualStylesMode)
+            {
+                return;
+            }
+
+            // Can't use the Generator here, since it cannot deal with Experimentals.
+            _ = value switch
+            {
+                VisualStylesMode.Classic => value,
+                VisualStylesMode.Disabled => value,
+                VisualStylesMode.Net10 => value,
+                VisualStylesMode.Latest => value,
+                _ => throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(VisualStylesMode))
+            };
+
+            // When VisualStyleMode was different than its parent before, but now it is about to become the same,
+            // we're removing it altogether, so it can again inherit the value from its parent.
+            if (Properties.ContainsObject(s_visualStylesModeProperty)
+                && Equals(ParentInternal?.VisualStylesMode, value))
+            {
+                Properties.RemoveObject(s_visualStylesModeProperty);
+            }
+            else
+            {
+                Properties.SetObject(s_visualStylesModeProperty, value);
+            }
+
+            // We need to re-layout, because changing the VisualStylesMode in many cases
+            // affects the layout of the control.
+            using (LayoutTransaction.CreateTransactionIf(
+                condition: AutoSize,
+                controlToLayout: ParentInternal,
+                elementCausingLayout: this,
+                property: nameof(Padding)))
+            {
+                if (!IsHandleCreated)
+                {
+                    UpdateStyles();
+                }
+                else
+                {
+                    // This implies updating the styles.
+                    RecreateHandle();
+
+                    if (GetState(States.LayoutIsDirty))
+                    {
+                        // The above did not cause our layout to be refreshed. We explicitly refresh our
+                        // layout to ensure that any children are repositioned to account for the change
+                        // in whatever could cause a new size (most likely a new BorderStyle related Padding)..
+                        LayoutTransaction.DoLayout(this, this, nameof(Padding));
+                    }
+                }
+            }
+        }
+    }
+
+    private bool ShouldSerializeVisualStylesMode()
+        => Properties.ContainsObject(s_visualStylesModeProperty);
+
+    private void ResetVisualStylesMode()
+        => Properties.RemoveObject(s_visualStylesModeProperty);
+
+    /// <summary>
+    ///  Gets the default visual styles mode for the control. The default setting is ambient to
+    ///  <see cref="Application.DefaultVisualStylesMode"/> whose default is <see cref="VisualStylesMode.Classic"/>.
+    /// </summary>
+    /// <returns>The default visual styles mode for the control.</returns>
+    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = Application.WinFormsExperimentalUrl)]
+    protected virtual VisualStylesMode DefaultVisualStylesMode => Application.DefaultVisualStylesMode;
+
+    /// <summary>
     ///  Wait for the wait handle to receive a signal: throw an exception if the thread is no longer with us.
     /// </summary>
     private unsafe void WaitForWaitHandle(WaitHandle waitHandle)
@@ -3809,8 +3947,8 @@ public unsafe partial class Control :
     [SRDescription(nameof(SR.ControlDataContextChangedDescr))]
     public event EventHandler? DataContextChanged
     {
-        add => Events.AddHandler(s_dataContextEvent, value);
-        remove => Events.RemoveHandler(s_dataContextEvent, value);
+        add => Events.AddHandler(s_dataContextChangedEvent, value);
+        remove => Events.RemoveHandler(s_dataContextChangedEvent, value);
     }
 
     [SRCategory(nameof(SR.CatDragDrop))]
@@ -6917,7 +7055,7 @@ public unsafe partial class Control :
             return;
         }
 
-        if (Events[s_dataContextEvent] is EventHandler eventHandler)
+        if (Events[s_dataContextChangedEvent] is EventHandler eventHandler)
         {
             eventHandler(this, e);
         }
@@ -7268,6 +7406,29 @@ public unsafe partial class Control :
         }
     }
 
+    /// <summary>
+    ///  Occurs when the <see cref="VisualStylesMode"/> property of the parent of this control changed.
+    /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Advanced)]
+    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = Application.WinFormsExperimentalUrl)]
+    protected virtual void OnParentVisualStylesModeChanged(EventArgs e)
+    {
+        if (Properties.ContainsObject(s_visualStylesModeProperty)
+            && Equals(Properties.GetObject(s_visualStylesModeProperty), Parent?.VisualStylesMode))
+        {
+            // we need to make it ambient again by removing it.
+            Properties.RemoveObject(s_visualStylesModeProperty);
+
+            // Even though internally we don't store it any longer, and the
+            // value we had stored therefore changed, technically the value
+            // remains the same, so we don't raise the DataContextChanged event.
+            return;
+        }
+
+        // In every other case we're going to raise the event.
+        OnVisualStylesModeChanged(e);
+    }
+
     // OnVisibleChanged/OnParentVisibleChanged is not called when a parent becomes invisible
     internal virtual void OnParentBecameInvisible()
     {
@@ -7346,9 +7507,9 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Raises the <see cref="Visible"/> event.
+    ///  Raises the <see cref="VisibleChanged"/> event.
     ///  Inheriting classes should override this method to handle this event.
-    ///  Call base.OnVisible to send this event to any registered event listeners.
+    ///  Call base.<see cref="OnVisibleChanged(EventArgs)"/> to send this event to any registered event listeners.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnVisibleChanged(EventArgs e)
@@ -7394,6 +7555,35 @@ public unsafe partial class Control :
                 {
                     ctl.OnParentBecameInvisible();
                 }
+            }
+        }
+    }
+
+    /// <summary>
+    ///  Raises the <see cref="VisualStylesModeChanged"/> event.
+    ///  Inheriting classes should override this method to handle this event.
+    ///  Call base.<see cref="OnVisualStylesModeChanged"/> to send this event to any registered event listeners.
+    /// </summary>
+    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = Application.WinFormsExperimentalUrl)]
+    [EditorBrowsable(EditorBrowsableState.Advanced)]
+    protected virtual void OnVisualStylesModeChanged(EventArgs e)
+    {
+        if (GetAnyDisposingInHierarchy())
+        {
+            return;
+        }
+
+        if (Events[s_visualStylesModeChangedEvent] is EventHandler eventHandler)
+        {
+            eventHandler(this, e);
+        }
+
+        ControlCollection? controlsCollection = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
+        if (controlsCollection is not null)
+        {
+            for (int i = 0; i < controlsCollection.Count; i++)
+            {
+                controlsCollection[i].OnParentVisualStylesModeChanged(e);
             }
         }
     }
@@ -7521,6 +7711,16 @@ public unsafe partial class Control :
             {
                 PInvoke.SetWindowText(this, _text);
             }
+
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+            if (Application.IsDarkModeEnabled && GetStyle(ControlStyles.ApplyThemingImplicitly))
+            {
+                _ = PInvoke.SetWindowTheme(
+                    hwnd: HWND,
+                    pszSubAppName: $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}",
+                    pszSubIdList: null);
+            }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
 
             if (this is not ScrollableControl
                 && !IsMirrored
@@ -8428,7 +8628,9 @@ public unsafe partial class Control :
         // We need to use theming painting for certain controls (like TabPage) when they parent other controls.
         // But we don't want to to this always as this causes serious performance (at Runtime and DesignTime)
         // so checking for RenderTransparencyWithVisualStyles which is TRUE for TabPage and false by default.
-        if (Application.RenderWithVisualStyles && parent.RenderTransparencyWithVisualStyles)
+#pragma warning disable WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+        if (Application.DefaultVisualStylesMode != VisualStylesMode.Disabled
+            && parent.RenderTransparencyWithVisualStyles)
         {
             // When we are rendering with visual styles, we can use the cool DrawThemeParentBackground function
             // that UxTheme provides to render the parent's background. This function is control agnostic, so
@@ -8449,6 +8651,7 @@ public unsafe partial class Control :
 
             return;
         }
+#pragma warning restore WFO5000 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
         // Move the rendering area and setup it's size (we want to translate it to the parent's origin).
         Rectangle shift = new(-Left, -Top, parent.Width, parent.Height);
@@ -10574,15 +10777,22 @@ public unsafe partial class Control :
 
             bool fireChange = false;
 
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
             if (GetTopLevel())
             {
                 // The processing of WmShowWindow will set the visibility
                 // bit and call CreateControl()
                 if (IsHandleCreated || value)
                 {
-                    PInvoke.ShowWindow(this, value ? ShowParams : SHOW_WINDOW_CMD.SW_HIDE);
+                    if (value)
+                    {
+                        PrepareDarkMode(HWND, Application.IsDarkModeEnabled);
+                    }
+
+                    PInvoke.ShowWindow(HWND, value ? ShowParams : SHOW_WINDOW_CMD.SW_HIDE);
                 }
             }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
             else if (IsHandleCreated || (value && _parent?.Created == true))
             {
                 // We want to mark the control as visible so that CreateControl
@@ -10669,6 +10879,18 @@ public unsafe partial class Control :
                         | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE
                         | (value ? SET_WINDOW_POS_FLAGS.SWP_SHOWWINDOW : SET_WINDOW_POS_FLAGS.SWP_HIDEWINDOW));
             }
+        }
+
+        static unsafe void PrepareDarkMode(HWND hwnd, bool darkModeEnabled)
+        {
+            BOOL value = darkModeEnabled;
+
+            PInvoke.DwmSetWindowAttribute(
+                hwnd,
+                DWMWINDOWATTRIBUTE.DWMWA_USE_IMMERSIVE_DARK_MODE,
+                &value,
+                (uint)sizeof(BOOL)).AssertSuccess();
+            ;
         }
     }
 
@@ -11398,9 +11620,11 @@ public unsafe partial class Control :
     {
         // We could simply reflect the message, but it's faster to handle it here if possible.
         Control? control = FromHandle(m.LParamInternal);
+
         if (control is not null)
         {
             m.ResultInternal = (LRESULT)(nint)control.InitializeDCForWmCtlColor((HDC)(nint)m.WParamInternal, m.MsgInternal);
+
             if (m.ResultInternal != 0)
             {
                 return;

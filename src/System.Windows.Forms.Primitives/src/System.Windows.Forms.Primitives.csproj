@@ -56,6 +56,7 @@
 
   <ItemGroup>
     <Compile Include="..\..\Common\src\WeakRefCollection.cs" Link="System\Collections\Generic\WeakRefCollection.cs" />
+    <Compile Include="..\..\System.Windows.Forms.Analyzers\src\System\Windows\Forms\Analyzers\Diagnostics\DiagnosticIDs.cs" Link="System\Windows\Forms\Analyzers\Diagnostics\DiagnosticIDs.cs" />
   </ItemGroup>
 
 </Project>

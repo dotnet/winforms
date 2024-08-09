@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Windows.Forms.Analyzers.Diagnostics;
+
 namespace System.Windows.Forms;
 
 /// <summary>
@@ -17,4 +19,12 @@ public enum Appearance
     ///  The appearance of a Windows button.
     /// </summary>
     Button = 1,
+
+    /// <summary>
+    ///  The appearance of a Modern UI toggle switch.
+    ///  This setting is not taken into account, when <see cref="VisualStylesMode"/> is set
+    ///  to <see cref="VisualStylesMode.Disabled"/> or <see cref="VisualStylesMode.Classic"/>.
+    /// </summary>
+    [Experimental(DiagnosticIDs.ExperimentalVisualStyles, UrlFormat = Application.WinFormsExperimentalUrl)]
+    ToggleSwitch = 2
 }

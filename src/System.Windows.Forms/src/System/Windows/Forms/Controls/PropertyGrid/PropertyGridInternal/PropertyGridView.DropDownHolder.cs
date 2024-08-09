@@ -512,10 +512,12 @@ internal partial class PropertyGridView
 
                 // Draw the divider.
                 int y = _resizeUp ? (s_resizeBarSize - 1) : (Height - s_resizeBarSize);
+
                 using Pen pen = new(SystemColors.ControlDark, 1)
                 {
                     DashStyle = DashStyle.Solid
                 };
+
                 e.Graphics.DrawLine(pen, 0, y, Width, y);
             }
         }

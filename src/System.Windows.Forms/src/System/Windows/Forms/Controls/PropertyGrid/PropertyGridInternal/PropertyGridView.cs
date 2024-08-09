@@ -138,6 +138,7 @@ internal sealed partial class PropertyGridView :
         BackColor = SystemColors.Window;
         ForeColor = SystemColors.WindowText;
         _grayTextColor = SystemColors.GrayText;
+
         TabStop = true;
 
         Text = "PropertyGridView";
@@ -205,8 +206,10 @@ internal sealed partial class PropertyGridView :
 
                 Bitmap bitmap = CreateResizedBitmap("Arrow", DownArrowIconWidth, DownArrowIconHeight);
                 _dropDownButton.Image = bitmap;
+
                 _dropDownButton.BackColor = SystemColors.Control;
                 _dropDownButton.ForeColor = SystemColors.ControlText;
+
                 _dropDownButton.Click += OnButtonClick;
                 _dropDownButton.GotFocus += OnDropDownButtonGotFocus;
                 _dropDownButton.LostFocus += OnChildLostFocus;

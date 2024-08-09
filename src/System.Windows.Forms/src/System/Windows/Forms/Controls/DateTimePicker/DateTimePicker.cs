@@ -80,7 +80,7 @@ public partial class DateTimePicker : Control
     private bool _validTime = true;
 
     // DateTime changeover: DateTime is a value class, not an object, so we need to keep track
-    // of whether or not its values have been initialised in a separate boolean.
+    // of whether or not its values have been initialized in a separate boolean.
     private bool _userHasSetValue;
     private DateTime _value = DateTime.Now;
     private DateTime _creationTime = DateTime.Now;
@@ -488,7 +488,13 @@ public partial class DateTimePicker : Control
     [EditorBrowsable(EditorBrowsableState.Never)]
     public override Color ForeColor
     {
-        get => ShouldSerializeForeColor() ? base.ForeColor : SystemColors.WindowText;
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+        get => ShouldSerializeForeColor()
+            || Application.IsDarkModeEnabled
+                ? base.ForeColor
+                : SystemColors.WindowText;
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+
         set => base.ForeColor = value;
     }
 
@@ -1083,7 +1089,7 @@ public partial class DateTimePicker : Control
     {
         base.OnGotFocus(e);
 
-        // Raise automation event to annouce the control.
+        // Raise automation event to announce the control.
         if (IsAccessibilityObjectCreated)
         {
             _expandCollapseState = ExpandCollapseState.ExpandCollapseState_Collapsed;
@@ -1133,7 +1139,7 @@ public partial class DateTimePicker : Control
     {
         _onValueChanged?.Invoke(this, eventargs);
 
-        // Raise automation event to annouce changed value.
+        // Raise automation event to announce changed value.
         if (IsAccessibilityObjectCreated)
         {
             // If date is changed so dtp value is changed too.

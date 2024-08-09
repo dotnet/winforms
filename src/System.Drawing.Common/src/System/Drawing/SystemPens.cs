@@ -5,6 +5,12 @@ namespace System.Drawing;
 
 public static class SystemPens
 {
+#if NET9_0_OR_GREATER
+#pragma warning disable SYSLIB5002 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    private static bool s_colorSetOnLastAccess = SystemColors.UseAlternativeColorSet;
+#pragma warning restore SYSLIB5002 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#endif
+
     private static readonly object s_systemPensKey = new();
 
     public static Pen ActiveBorder => FromSystemColor(SystemColors.ActiveBorder);
@@ -58,7 +64,20 @@ public static class SystemPens
             throw new ArgumentException(SR.Format(SR.ColorNotSystemColor, c.ToString()));
         }
 
-        if (!Gdip.ThreadData.TryGetValue(s_systemPensKey, out object? tempSystemPens) || tempSystemPens is not Pen[] systemPens)
+#if NET9_0_OR_GREATER
+#pragma warning disable SYSLIB5002 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        if (s_colorSetOnLastAccess != SystemColors.UseAlternativeColorSet)
+        {
+            s_colorSetOnLastAccess = SystemColors.UseAlternativeColorSet;
+
+            // We need to clear the SystemBrushes cache, when the ColorMode had changed.
+            Gdip.ThreadData.Remove(s_systemPensKey);
+        }
+#pragma warning restore SYSLIB5002 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#endif
+
+        if (!Gdip.ThreadData.TryGetValue(s_systemPensKey, out object? tempSystemPens)
+            || tempSystemPens is not Pen[] systemPens)
         {
             systemPens = new Pen[(int)KnownColor.WindowText + (int)KnownColor.MenuHighlight - (int)KnownColor.YellowGreen];
             Gdip.ThreadData[s_systemPensKey] = systemPens;

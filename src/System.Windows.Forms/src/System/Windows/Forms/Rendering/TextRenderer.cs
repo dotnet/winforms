@@ -633,14 +633,14 @@ public static class TextRenderer
             // flag when this was originally written.
 
             Debug.Assert(apply.HasFlag(ApplyGraphicsProperties.Clipping)
-                || graphics.Clip is null
-                || graphics.Clip.GetHrgn(graphics) == IntPtr.Zero,
-                "Must preserve Graphics clipping region!");
+               || graphics.Clip is null
+               || graphics.Clip.GetHrgn(graphics) == IntPtr.Zero,
+               "Must preserve Graphics clipping region!");
 
             Debug.Assert(apply.HasFlag(ApplyGraphicsProperties.TranslateTransform)
-                || graphics.Transform is null
-                || graphics.Transform.IsIdentity,
-                "Must preserve Graphics transformation!");
+               || graphics.Transform is null
+               || graphics.Transform.IsIdentity,
+               "Must preserve Graphics transformation!");
         }
 #endif
 

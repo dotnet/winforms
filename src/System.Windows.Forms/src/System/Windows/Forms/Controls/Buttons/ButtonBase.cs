@@ -50,7 +50,6 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
     // Backing fields for the infrastructure to make ToolStripItem bindable and introduce (bindable) ICommand.
     private Input.ICommand? _command;
     private object? _commandParameter;
-
     internal static readonly object s_commandChangedEvent = new();
     internal static readonly object s_commandParameterChangedEvent = new();
     internal static readonly object s_commandCanExecuteChangedEvent = new();
@@ -77,6 +76,11 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
         SetExtendedState(ExtendedStates.UserPreferredSizeCache, true);
 
         SetStyle(ControlStyles.UserMouse | ControlStyles.UserPaint, OwnerDraw);
+
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
         SetFlag(FlagUseMnemonic, true);
         SetFlag(FlagShowToolTip, false);
     }

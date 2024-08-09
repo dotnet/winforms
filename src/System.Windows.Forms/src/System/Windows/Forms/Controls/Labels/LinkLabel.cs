@@ -20,7 +20,7 @@ namespace System.Windows.Forms;
 public partial class LinkLabel : Label, IButtonControl
 {
     private static readonly object s_eventLinkClicked = new();
-    private static Color s_iedisabledLinkColor = Color.Empty;
+    private static Color s_ieDisabledLinkColor = Color.Empty;
 
     private static readonly LinkComparer s_linkComparer = new();
 
@@ -133,12 +133,12 @@ public partial class LinkLabel : Label, IButtonControl
     {
         get
         {
-            if (s_iedisabledLinkColor.IsEmpty)
+            if (s_ieDisabledLinkColor.IsEmpty)
             {
-                s_iedisabledLinkColor = ControlPaint.Dark(DisabledColor);
+                s_ieDisabledLinkColor = ControlPaint.Dark(DisabledColor);
             }
 
-            return s_iedisabledLinkColor;
+            return s_ieDisabledLinkColor;
         }
     }
 
