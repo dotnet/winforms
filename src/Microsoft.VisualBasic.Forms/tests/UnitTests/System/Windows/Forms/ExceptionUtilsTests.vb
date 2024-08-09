@@ -17,10 +17,13 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub GetArgumentNullExceptionTest_Succeed()
             Const ArgumentName As String = "MainForm"
-            Dim ex As Exception = ExUtils.GetArgumentNullException(ArgumentName, SR.General_PropertyNothing, ArgumentName)
+            Dim ex As Exception = ExUtils.GetArgumentNullException(
+                ArgumentName,
+                resourceID:=SR.General_PropertyNothing,
+                ArgumentName)
             ex.Should.BeOfType(Of ArgumentNullException)()
-            ex.Message.Should.Be($"Property MainForm cannot be set to Nothing. (Parameter '{ArgumentName}')")
             CType(ex, ArgumentNullException).ParamName.Should.Be(ArgumentName)
+            ex.Message.Should.Be($"Property MainForm cannot be set to Nothing. (Parameter '{ArgumentName}')")
         End Sub
 
         <WinFormsFact>
@@ -49,7 +52,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub GetIOExceptionTest_Succeed()
             Dim ex As Exception = ExUtils.GetIOException(SR.IO_FileExists_Path, IO.Path.GetTempPath)
             ex.Should.BeOfType(Of IO.IOException)()
-            ex.Message.Should.Be($"Could not complete operation since a file already exists in this path '{IO.Path.GetTempPath}'.")
+            ex.Message.Should.Be(
+                $"Could not complete operation since a file already exists in this path '{IO.Path.GetTempPath}'.")
         End Sub
 
         <WinFormsFact>

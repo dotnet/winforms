@@ -44,9 +44,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 .hStdInput.Should.Be(IntPtr.Zero)
                 .hStdOutput.Should.Be(IntPtr.Zero)
                 .hStdError.Should.Be(IntPtr.Zero)
-
             End With
-
         End Sub
 
     End Class

@@ -69,7 +69,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     Await tokenSource.CancelAsync()
                 End Using
             End If
-
         End Function
 
     End Class

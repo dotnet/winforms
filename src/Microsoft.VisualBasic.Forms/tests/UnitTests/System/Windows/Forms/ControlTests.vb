@@ -85,7 +85,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 Dim testCode As Action =
                     Sub()
-                        Dim result As Integer = _control.Invoke(Function() CType(AddressOf FaultingFunc, Func(Of Integer, Integer))(19))
+                        Dim result As Integer =
+                            _control.Invoke(Function() CType(AddressOf FaultingFunc, Func(Of Integer, Integer))(19))
                     End Sub
 
                 Dim exception As Exception = Assert.Throws(Of DivideByZeroException)(testCode)

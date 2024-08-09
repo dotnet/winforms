@@ -23,20 +23,44 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     "IndexFirstLastCompanyCityCountry
 4321;1234;321;654321;123;1234567"
 
+        Private Sub CleanupDirectories(testDirectory As String, Optional destinationDirectory As String = Nothing)
+            If String.IsNullOrEmpty(testDirectory) Then
+                Throw New ArgumentException($"'{NameOf(testDirectory)}' cannot be null or empty.", NameOf(testDirectory))
+            End If
+            If testDirectory = IO.Path.GetTempPath Then
+                Throw New ArgumentException($"'{NameOf(testDirectory)}' cannot be {IO.Path.GetTempPath}.", NameOf(testDirectory))
+            End If
+
+            _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
+
+            If destinationDirectory IsNot Nothing Then
+                If destinationDirectory = IO.Path.GetTempPath Then
+                    Throw New ArgumentException($"'{NameOf(destinationDirectory)}' cannot be {IO.Path.GetTempPath}.", NameOf(testDirectory))
+                End If
+                _fileSystem.DeleteDirectory(destinationDirectory, DeleteDirectoryOption.DeleteAllContents)
+            End If
+        End Sub
+
         <WinFormsFact>
         Public Sub CopyDirectoryWithShowUICancelOptionsProxyTest()
             Dim testDirectory As String = CreateTempDirectory(lineNumber:=1)
-            Dim file1 As String = CreateTempFile(testDirectory, NameOf(file1))
+            Dim file1 As String = CreateTempFile(tmpFilePath:=testDirectory, optionalFilename:=NameOf(file1))
             Dim byteArray As Byte() = {4}
             _fileSystem.WriteAllBytes(file1, byteArray, append:=False)
 
             Dim destinationDirectory As String = CreateTempDirectory(lineNumber:=2)
-            _fileSystem.CopyDirectory(testDirectory, destinationDirectory, UIOption.OnlyErrorDialogs, UICancelOption.DoNothing)
+            _fileSystem.CopyDirectory(
+                sourceDirectoryName:=testDirectory,
+                destinationDirectory,
+                showUI:=UIOption.OnlyErrorDialogs,
+                onUserCancel:=UICancelOption.DoNothing)
             IO.Directory.Exists(testDirectory).Should.BeTrue()
             IO.Directory.Exists(destinationDirectory).Should.BeTrue()
-            IO.Directory.EnumerateFiles(testDirectory).Count.Should.Be(IO.Directory.EnumerateFiles(destinationDirectory).Count)
-            _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
-            _fileSystem.DeleteDirectory(destinationDirectory, DeleteDirectoryOption.DeleteAllContents)
+
+            Dim count As Integer = IO.Directory.EnumerateFiles(destinationDirectory).Count
+            IO.Directory.EnumerateFiles(testDirectory).Count.Should.Be(count)
+
+            CleanupDirectories(testDirectory, destinationDirectory)
         End Sub
 
         <WinFormsFact>
@@ -51,8 +75,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             IO.Directory.Exists(testDirectory).Should.BeTrue()
             IO.Directory.Exists(destinationDirectory).Should.BeTrue()
             IO.Directory.EnumerateFiles(destinationDirectory).Count.Should.Be(IO.Directory.EnumerateFiles(testDirectory).Count)
-            _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
-            _fileSystem.DeleteDirectory(destinationDirectory, DeleteDirectoryOption.DeleteAllContents)
+
+            CleanupDirectories(testDirectory, destinationDirectory)
         End Sub
 
         <WinFormsFact>
@@ -67,7 +91,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim bytes As Byte() = _fileSystem.ReadAllBytes(file2)
             bytes.Length.Should.Be(1)
             bytes(0).Should.Be(4)
-            _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
+
+            CleanupDirectories(testDirectory)
         End Sub
 
         <WinFormsFact>
@@ -82,7 +107,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim bytes As Byte() = _fileSystem.ReadAllBytes(file2)
             bytes.Length.Should.Be(1)
             bytes(0).Should.Be(4)
-            _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
+
+            CleanupDirectories(testDirectory)
         End Sub
 
         <WinFormsFact>
@@ -97,7 +123,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim bytes As Byte() = _fileSystem.ReadAllBytes(file2)
             bytes.Length.Should.Be(1)
             bytes(0).Should.Be(4)
-            _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
+
+            CleanupDirectories(testDirectory)
         End Sub
 
         <WinFormsFact>
@@ -112,7 +139,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim bytes As Byte() = _fileSystem.ReadAllBytes(file2)
             bytes.Length.Should.Be(1)
             bytes(0).Should.Be(4)
-            _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
+
+            CleanupDirectories(testDirectory)
         End Sub
 
         <WinFormsFact>
@@ -135,7 +163,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             _fileSystem.WriteAllBytes(file1, byteArray, append:=False)
             IO.File.Exists(file1).Should.BeTrue()
 
-            _fileSystem.DeleteDirectory(testDirectory, showUI:=UIOption.OnlyErrorDialogs, RecycleOption.DeletePermanently)
+            _fileSystem.DeleteDirectory(
+                directory:=testDirectory,
+                showUI:=UIOption.OnlyErrorDialogs,
+                recycle:=RecycleOption.DeletePermanently)
             IO.Directory.Exists(testDirectory).Should.BeFalse()
         End Sub
 
@@ -150,7 +181,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             _fileSystem.DeleteFile(file1)
             IO.File.Exists(file1).Should.BeFalse()
 
-            _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
+            _fileSystem.DeleteDirectory(
+                directory:=testDirectory,
+                onDirectoryNotEmpty:=DeleteDirectoryOption.DeleteAllContents)
         End Sub
 
         <WinFormsFact>
@@ -164,7 +197,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             _fileSystem.DeleteFile(file1, UIOption.OnlyErrorDialogs, RecycleOption.DeletePermanently)
             IO.File.Exists(file1).Should.BeFalse()
 
-            _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
+            _fileSystem.DeleteDirectory(
+                directory:=testDirectory,
+                onDirectoryNotEmpty:=DeleteDirectoryOption.DeleteAllContents)
         End Sub
 
         <WinFormsFact>
@@ -178,7 +213,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             _fileSystem.DeleteFile(file1, UIOption.OnlyErrorDialogs, RecycleOption.DeletePermanently, UICancelOption.DoNothing)
             IO.File.Exists(file1).Should.BeFalse()
 
-            _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
+            CleanupDirectories(testDirectory)
         End Sub
 
         <WinFormsFact>
@@ -193,7 +228,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     FileSystemUtils.NormalizePath("")
                 End Sub
 
-            testCode.Should.Throw(Of ArgumentException).WithMessage("The path is empty. (Parameter 'path')")
+            testCode.Should.Throw(Of ArgumentException).WithMessage(
+                expectedWildcardPattern:="The path is empty. (Parameter 'path')")
         End Sub
 
         <WinFormsFact>
@@ -203,7 +239,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     FileSystemUtils.NormalizePath(Nothing)
                 End Sub
 
-            testCode.Should.Throw(Of ArgumentNullException).WithMessage("Value cannot be null. (Parameter 'path')")
+            testCode.Should.Throw(Of ArgumentNullException).WithMessage(
+                expectedWildcardPattern:="Value cannot be null. (Parameter 'path')")
         End Sub
 
         <WinFormsFact>
@@ -224,7 +261,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             _fileSystem.CombinePath(testDirectory, NameOf(fileA)).Should.Be(filenames(0))
             filenames = _fileSystem.FindInFiles(testDirectory, containsText:="A", ignoreCase:=True, SearchOption.SearchTopLevelOnly, "*C")
             filenames.Count.Should.Be(0)
-            _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
+
+            CleanupDirectories(testDirectory)
         End Sub
 
         <WinFormsFact>
@@ -239,7 +277,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             IO.Directory.Exists(testDirectory).Should.BeFalse()
             IO.Directory.Exists(destinationDirectory).Should.BeTrue()
             IO.Directory.EnumerateFiles(destinationDirectory).Count.Should.Be(1)
-            _fileSystem.DeleteDirectory(destinationDirectory, DeleteDirectoryOption.DeleteAllContents)
+
+            CleanupDirectories(destinationDirectory)
         End Sub
 
         <WinFormsFact>
@@ -254,7 +293,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             IO.Directory.Exists(testDirectory).Should.BeFalse()
             IO.Directory.Exists(destinationDirectory).Should.BeTrue()
             IO.Directory.EnumerateFiles(destinationDirectory).Count.Should.Be(1)
-            _fileSystem.DeleteDirectory(destinationDirectory, DeleteDirectoryOption.DeleteAllContents)
+
+            CleanupDirectories(destinationDirectory)
         End Sub
 
         <WinFormsFact>
@@ -271,7 +311,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             IO.File.Exists(file2).Should.BeTrue()
             bytes.Length.Should.Be(1)
             bytes(0).Should.Be(4)
-            _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
+
+            CleanupDirectories(testDirectory)
         End Sub
 
         <WinFormsFact>
@@ -288,7 +329,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             IO.File.Exists(file2).Should.BeTrue()
             bytes.Length.Should.Be(1)
             bytes(0).Should.Be(4)
-            _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
+
+            CleanupDirectories(testDirectory)
         End Sub
 
         <WinFormsFact>
@@ -304,7 +346,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 text.Should.Be("A")
             End Using
 
-            _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
+            CleanupDirectories(testDirectory)
         End Sub
 
         <WinFormsTheory>
@@ -335,9 +377,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 totalFields.Should.Be(7)
             End While
             totalRows.Should.Be(2)
-
             reader.Close()
-            _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
+
+            CleanupDirectories(testDirectory)
         End Sub
 
         <WinFormsFact>
@@ -353,7 +395,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 text.Should.Be("A")
             End Using
 
-            _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
+            CleanupDirectories(testDirectory)
         End Sub
 
         <WinFormsFact>
@@ -380,7 +422,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End While
             totalRows.Should.Be(2)
             reader.Close()
-            _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
+
+            CleanupDirectories(testDirectory)
         End Sub
 
         <WinFormsFact>
@@ -393,7 +436,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 text.Should.Be("A")
             End Using
 
-            _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
+            CleanupDirectories(testDirectory)
         End Sub
 
         <WinFormsFact>
@@ -406,7 +449,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim bytes As Byte() = _fileSystem.ReadAllBytes(fileA)
             bytes.Length.Should.Be(1)
             bytes(0).Should.Be(4)
-            _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
+
+            CleanupDirectories(testDirectory)
         End Sub
 
         <WinFormsFact>
@@ -416,7 +460,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             _fileSystem.WriteAllText(fileA, "A", append:=False)
             Dim text As String = _fileSystem.ReadAllText(fileA)
             text.Should.Be("A")
-            _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
+
+            CleanupDirectories(testDirectory)
         End Sub
 
         <WinFormsFact>
@@ -426,7 +471,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             _fileSystem.WriteAllText(fileA, "A", append:=False, Encoding.UTF8)
             Dim text As String = _fileSystem.ReadAllText(fileA, Encoding.UTF8)
             text.Should.Be("A")
-            _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
+
+            CleanupDirectories(testDirectory)
         End Sub
 
     End Class
