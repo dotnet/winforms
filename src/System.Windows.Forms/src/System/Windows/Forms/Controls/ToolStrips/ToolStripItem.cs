@@ -2686,7 +2686,7 @@ public abstract partial class ToolStripItem :
 
             if (parent.IsHandleCreated && parent.InvokeRequired)
             {
-                parent.BeginInvoke(OnAnimationFrameChanged, [o, e]);
+                parent.BeginInvoke(new EventHandler(OnAnimationFrameChanged), [o, e]);
                 return;
             }
 

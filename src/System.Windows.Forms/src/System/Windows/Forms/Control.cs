@@ -7478,7 +7478,7 @@ public unsafe partial class Control :
                 && GetExtendedState(ExtendedStates.SetScrollPosition)
                 && !GetExtendedState(ExtendedStates.HaveInvoked))
             {
-                BeginInvoke(OnSetScrollPosition);
+                BeginInvoke(new EventHandler(OnSetScrollPosition));
                 SetExtendedState(ExtendedStates.HaveInvoked, true);
                 SetExtendedState(ExtendedStates.SetScrollPosition, false);
             }

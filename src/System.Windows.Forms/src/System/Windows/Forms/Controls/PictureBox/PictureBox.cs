@@ -1058,7 +1058,7 @@ public partial class PictureBox : Control, ISupportInitialize
             {
                 if (_handleValid)
                 {
-                    BeginInvoke(OnFrameChanged, o, e);
+                    BeginInvoke(new EventHandler(OnFrameChanged), o, e);
                 }
 
                 return;
