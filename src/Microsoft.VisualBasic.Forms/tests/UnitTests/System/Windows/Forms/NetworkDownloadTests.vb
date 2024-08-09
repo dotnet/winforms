@@ -491,7 +491,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     .Throw(Of WebException)() _
                     .WithMessage(SR.net_webstatus_Unauthorized)
                 File.Exists(destinationFileName).Should.BeFalse()
-
             Finally
                 CleanUp(listener, testDirectory)
             End Try
@@ -945,7 +944,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         overwrite:=True)
                 End Sub
             Try
-
                 testCode.Should _
                     .Throw(Of WebException)() _
                     .WithMessage(SR.net_webstatus_Timeout)
@@ -972,7 +970,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         password)
                 End Sub
             Try
-
                 testCode.Should _
                     .Throw(Of WebException)() _
                     .WithMessage(SR.net_webstatus_Unauthorized)
