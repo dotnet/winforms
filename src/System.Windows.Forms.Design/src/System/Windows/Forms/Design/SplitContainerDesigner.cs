@@ -36,10 +36,19 @@ internal partial class SplitContainerDesigner : ParentControlDesigner
     /// <summary>
     ///  Gets the design-time supported actions on the control.
     /// </summary>
-    public override DesignerActionListCollection ActionLists => new()
+    public override DesignerActionListCollection ActionLists
     {
-        new OrientationActionList(this)
-    };
+        get
+        {
+            DesignerActionListCollection designerActionListCollection = new();
+            if (HasComponent)
+            {
+                designerActionListCollection.Add(new OrientationActionList(this));
+            }
+
+            return designerActionListCollection;
+        }
+    }
 
     /// <summary>
     ///  The <see cref="SplitContainerDesigner"/> will not re-parent any controls that are within it's lasso at creation time.
