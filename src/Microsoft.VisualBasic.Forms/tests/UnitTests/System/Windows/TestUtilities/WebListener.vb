@@ -32,7 +32,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         ''' <param name="userName">Name to match for authorization.</param>
         ''' <param name="password">Password to match for authorization.</param>
         ''' <param name="memberName">Passed to Me.New.</param>
-        Public Sub New(fileSize As Integer, userName As String, password As String, <CallerMemberName> Optional memberName As String = Nothing)
+        Public Sub New(
+            fileSize As Integer,
+            userName As String,
+            password As String,
+            <CallerMemberName> Optional memberName As String = Nothing)
+
             Me.New(fileSize, memberName)
             _userName = userName
             _password = password
@@ -61,7 +66,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         response = context.Response
                         Dim identity As HttpListenerBasicIdentity = CType(context.User?.Identity, HttpListenerBasicIdentity)
                         If context.User?.Identity.IsAuthenticated Then
-                            If String.IsNullOrWhiteSpace(identity.Name) OrElse identity.Name <> _userName OrElse String.IsNullOrWhiteSpace(identity.Password) OrElse identity.Password <> _password Then
+                            If String.IsNullOrWhiteSpace(identity.Name) _
+                                OrElse identity.Name <> _userName _
+                                OrElse String.IsNullOrWhiteSpace(identity.Password) _
+                                OrElse identity.Password <> _password Then
+
                                 response.StatusCode = HttpStatusCode.Unauthorized
                                 Exit Try
                             End If
