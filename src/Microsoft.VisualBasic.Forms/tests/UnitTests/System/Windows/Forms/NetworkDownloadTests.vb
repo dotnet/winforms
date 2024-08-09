@@ -547,7 +547,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim exceptionExpression As Expressions.Expression(Of Func(Of ArgumentException, Boolean)) =
                 Function(e) e.Message.StartsWith(SR.IO_FilePathException) _
                     AndAlso e.Message.Contains(NameOf(destinationFileName))
-
             Try
                 testCode.Should _
                     .Throw(Of ArgumentException)() _
