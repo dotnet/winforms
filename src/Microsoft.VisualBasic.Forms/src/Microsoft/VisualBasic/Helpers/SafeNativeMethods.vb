@@ -9,17 +9,16 @@ Namespace Microsoft.VisualBasic.CompilerServices
     <ComVisible(False)>
     Friend Module SafeNativeMethods
 
-        <PreserveSig()> Friend Declare Function _
-            IsWindowEnabled _
-                Lib "user32" (hwnd As IntPtr) As <MarshalAs(UnmanagedType.Bool)> Boolean
+        <PreserveSig()>
+        Friend Declare Function IsWindowEnabled Lib "user32" (hwnd As IntPtr) As <MarshalAs(UnmanagedType.Bool)> Boolean
 
-        <PreserveSig()> Friend Declare Function _
-            IsWindowVisible _
-                Lib "user32" (hwnd As IntPtr) As <MarshalAs(UnmanagedType.Bool)> Boolean
+        <PreserveSig()>
+        Friend Declare Function IsWindowVisible Lib "user32" (hwnd As IntPtr) As <MarshalAs(UnmanagedType.Bool)> Boolean
 
-        <PreserveSig()> Friend Declare Function _
-            GetWindowThreadProcessId _
-                Lib "user32" (hwnd As IntPtr, ByRef lpdwProcessId As Integer) As Integer
+        <PreserveSig()>
+        Friend Declare Function GetWindowThreadProcessId Lib "user32" (
+            hwnd As IntPtr,
+            ByRef lpdwProcessId As Integer) As Integer
 
     End Module
 End Namespace

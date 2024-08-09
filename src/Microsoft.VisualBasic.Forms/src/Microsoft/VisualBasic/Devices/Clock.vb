@@ -45,5 +45,5 @@ Namespace Microsoft.VisualBasic.Devices
             End Get
         End Property
 
-    End Class 'Clock
+    End Class
 End Namespace

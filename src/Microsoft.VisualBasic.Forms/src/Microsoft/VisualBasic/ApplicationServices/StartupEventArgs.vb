@@ -26,7 +26,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Sub
 
         ''' <summary>
-        '''  Returns the command line sent to this application
+        '''  Returns the command line sent to this application.
         ''' </summary>
         Public ReadOnly Property CommandLine() As ReadOnlyCollection(Of String)
 

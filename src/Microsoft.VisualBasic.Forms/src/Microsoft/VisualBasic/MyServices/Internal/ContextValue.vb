@@ -19,6 +19,11 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
     <ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
     Public Class ContextValue(Of T)
 
+        Private Shared s_threadLocal As ThreadLocal(Of IDictionary)
+
+        'An item is stored in the dictionary by a GUID which this string maintains
+        Private ReadOnly _contextKey As String
+
         Public Sub New()
             _contextKey = Guid.NewGuid.ToString
         End Sub
@@ -26,10 +31,16 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' <summary>
         '''  Get the object from the correct thread-appropriate location.
         ''' </summary>
-        Public Property Value() As T 'No SyncLocks required because we are operating upon instance data and the object is not shared across threads
+        ''' <remarks>
+        '''  No SyncLocks required because we are operating upon instance data
+        '''  and the object is not shared across threads
+        ''' </remarks>
+        Public Property Value() As T
             Get
                 Dim dictionary As IDictionary = GetDictionary()
-                Return DirectCast(dictionary(_contextKey), T) 'Note, IDictionary(key) can return Nothing and that's OK
+
+                'Note, IDictionary(key) can return Nothing and that's OK
+                Return DirectCast(dictionary(_contextKey), T)
             End Get
             Set(value As T)
                 Dim dictionary As IDictionary = GetDictionary()
@@ -44,9 +55,5 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
             Return s_threadLocal.Value
         End Function
 
-        Private ReadOnly _contextKey As String 'An item is stored in the dictionary by a GUID which this string maintains
-
-        Private Shared s_threadLocal As ThreadLocal(Of IDictionary)
-
-    End Class 'ContextValue
+    End Class
 End Namespace
