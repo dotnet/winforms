@@ -136,10 +136,6 @@ public partial class Form : ContainerControl
 
     private static readonly int s_propOpacity = PropertyStore.CreateKey();
     private static readonly int s_propTransparencyKey = PropertyStore.CreateKey();
-    private static readonly int s_propFormBorderColor = PropertyStore.CreateKey();
-    private static readonly int s_propFormCaptionBackColor = PropertyStore.CreateKey();
-
-    private static readonly int s_propFormCaptionTextColor = PropertyStore.CreateKey();
     private static readonly int s_propFormCornerPreference = PropertyStore.CreateKey();
 
     // Form per instance members
@@ -2364,6 +2360,15 @@ public partial class Form : ContainerControl
                 return;
             }
 
+            _ = value switch
+            {
+                FormCornerPreference.Default => value,
+                FormCornerPreference.DoNotRound => value,
+                FormCornerPreference.Round => value,
+                FormCornerPreference.RoundSmall => value,
+                _ => throw new ArgumentOutOfRangeException(nameof(value))
+            };
+
             if (value == FormCornerPreference.Default)
             {
                 Properties.RemoveObject(s_propFormCornerPreference);
@@ -2425,22 +2430,8 @@ public partial class Form : ContainerControl
     [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = Application.WinFormsExperimentalUrl)]
     public Color FormBorderColor
     {
-        get
-        {
-            if (Properties.ContainsObject(s_propFormBorderColor))
-            {
-                return Properties.GetColor(s_propFormBorderColor);
-            }
-            else
-            {
-                if (!IsHandleCreated || IsAncestorSiteInDesignMode)
-                {
-                    return Color.Empty;
-                }
+        get => GetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_BORDER_COLOR);
 
-                return GetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_BORDER_COLOR);
-            }
-        }
         set
         {
             if (value == FormBorderColor)
@@ -2448,14 +2439,11 @@ public partial class Form : ContainerControl
                 return;
             }
 
-            if (!IsHandleCreated)
+            if (IsHandleCreated)
             {
-                Properties.SetColor(s_propFormBorderColor, value);
-                return;
+                SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_BORDER_COLOR, value);
             }
 
-            Properties.SetColor(s_propFormBorderColor, value);
-            SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_BORDER_COLOR, value);
             OnFormBorderColorChanged(EventArgs.Empty);
         }
     }
@@ -2482,20 +2470,7 @@ public partial class Form : ContainerControl
     [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = Application.WinFormsExperimentalUrl)]
     public Color FormCaptionBackColor
     {
-        get
-        {
-            if (Properties.ContainsObject(s_propFormCaptionBackColor))
-            {
-                return Properties.GetColor(s_propFormCaptionBackColor);
-            }
-
-            if (!IsHandleCreated || IsAncestorSiteInDesignMode)
-            {
-                return Color.Empty;
-            }
-
-            return GetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_CAPTION_COLOR);
-        }
+        get => GetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_CAPTION_COLOR);
         set
         {
             if (value == FormCaptionBackColor)
@@ -2503,14 +2478,11 @@ public partial class Form : ContainerControl
                 return;
             }
 
-            if (!IsHandleCreated)
+            if (IsHandleCreated)
             {
-                Properties.SetColor(s_propFormCaptionBackColor, value);
-                return;
+                SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_CAPTION_COLOR, value);
             }
 
-            Properties.SetColor(s_propFormCaptionBackColor, value);
-            SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_CAPTION_COLOR, value);
             OnFormCaptionBackColorChanged(EventArgs.Empty);
         }
     }
@@ -2537,20 +2509,7 @@ public partial class Form : ContainerControl
     [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = Application.WinFormsExperimentalUrl)]
     public Color FormCaptionTextColor
     {
-        get
-        {
-            if (Properties.ContainsObject(s_propFormCaptionTextColor))
-            {
-                return Properties.GetColor(s_propFormCaptionTextColor);
-            }
-
-            if (!IsHandleCreated || IsAncestorSiteInDesignMode)
-            {
-                return Color.Empty;
-            }
-
-            return GetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_TEXT_COLOR);
-        }
+        get => GetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_TEXT_COLOR);
         set
         {
             if (value == FormCaptionTextColor)
@@ -2558,14 +2517,11 @@ public partial class Form : ContainerControl
                 return;
             }
 
-            if (!IsHandleCreated)
+            if (IsHandleCreated)
             {
-                Properties.SetColor(s_propFormCaptionTextColor, value);
-                return;
+                SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_TEXT_COLOR, value);
             }
 
-            Properties.SetColor(s_propFormCaptionTextColor, value);
-            SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_TEXT_COLOR, value);
             OnFormCaptionTextColorChanged(EventArgs.Empty);
         }
     }
@@ -2586,7 +2542,7 @@ public partial class Form : ContainerControl
     {
         COLORREF colorRef;
 
-        PInvoke.DwmSetWindowAttribute(
+        PInvoke.DwmGetWindowAttribute(
             HWND,
             dmwWindowAttribute,
             &colorRef,
