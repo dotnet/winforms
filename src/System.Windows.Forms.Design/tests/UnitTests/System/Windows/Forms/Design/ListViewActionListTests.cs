@@ -23,8 +23,8 @@ public sealed class ListViewActionListTests : IDisposable
 
     public void Dispose()
     {
-        _listView.Dispose();
         _designer.Dispose();
+        _listView.Dispose();
     }
 
     [Fact]
