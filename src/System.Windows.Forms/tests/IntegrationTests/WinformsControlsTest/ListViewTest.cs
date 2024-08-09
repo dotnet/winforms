@@ -35,6 +35,7 @@ public partial class ListViewTest : Form
         AddCollapsibleGroupToListView();
         AddGroupTasks();
 
+        // Manual test for https://github.com/dotnet/winforms/issues/11658
         string[] TestItems = { "Item 1", "Item 2", "Item 3" };
         listView3.RetrieveVirtualItem += (s, e) =>
         {
@@ -201,25 +202,23 @@ public partial class ListViewTest : Form
         MessageBox.Show(this, $"Task at group index {e.GroupIndex} was clicked", "GroupClick Event");
     }
 
-    private void listView2_Click(object sender, System.EventArgs e)
+    private void listView2_Click(object sender, EventArgs e)
     {
         Debug.WriteLine(listView1.TileSize);
         MessageBox.Show(this, "listView2_Click", "event");
     }
 
-    private void listView3_Click(object sender, System.EventArgs e)
+    private void listView3_Click(object sender, EventArgs e)
     {
-        var item = ((System.Windows.Forms.ListView)sender).FocusedItem;
+        var item = ((ListView)sender).FocusedItem;
         var clone = (ListViewItem)item.Clone();
         clone.Checked = true;
-        listView3.TryOnItemChecked(new ItemCheckedEventArgs(clone));
+        listView3.InvokeOnItemChecked(new ItemCheckedEventArgs(clone));
         MessageBox.Show(this, $"Click {clone.Text} in ListView3", "Click Event");
     }
 
-    private void listView2_SelectedIndexChanged(object sender, System.EventArgs e)
+    private void listView2_SelectedIndexChanged(object sender, EventArgs e)
     {
-        // MessageBox.Show(this, "listView2_SelectedIndexChanged", "event");
-
         if (sender is not ListView listView2)
         {
             return;
@@ -282,21 +281,5 @@ public partial class ListViewTest : Form
         LargeImageList.Images[listView1.SelectedIndices[0]] = bitmap;
 
         listView1.Refresh();
-    }
-
-    protected class SubListView : ListView
-    {        
-        public void TryOnItemChecked(ItemCheckedEventArgs e)
-        {
-            if (!CheckBoxes)
-            {
-                return;
-            }
-
-            if(e.Item.ListView == this)
-            {
-                base.OnItemChecked(e);
-            }
-        }
     }
 }

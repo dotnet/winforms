@@ -35,7 +35,7 @@ partial class ListViewTest
         System.ComponentModel.ComponentResourceManager resources = new(typeof(ListViewTest));
         this.imageList1 = new System.Windows.Forms.ImageList(this.components);
         this.listView1 = new System.Windows.Forms.ListView();
-        this.listView3 = new SubListView();
+        this.listView3 = new CloneTestListView();
         this.columnHeader1 = (System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader());
         this.columnHeader2 = (System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader());
         this.imageList2 = new System.Windows.Forms.ImageList(this.components);
@@ -163,7 +163,7 @@ partial class ListViewTest
     #endregion
 
     private System.Windows.Forms.ListView listView1;
-    private SubListView listView3;
+    private CloneTestListView listView3;
     private System.Windows.Forms.ImageList imageList1;
     private System.Windows.Forms.ImageList imageList2;
     private System.Windows.Forms.ImageList LargeImageList;
