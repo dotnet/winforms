@@ -57,9 +57,9 @@ internal partial class StringCollectionEditor
 
         private void HookEvents()
         {
-            _textEntry.KeyDown += new KeyEventHandler(Edit1_keyDown);
-            _okButton.Click += new EventHandler(OKButton_click);
-            HelpButtonClicked += new CancelEventHandler(StringCollectionEditor_HelpButtonClicked);
+            _textEntry.KeyDown += Edit1_keyDown;
+            _okButton.Click += OKButton_click;
+            HelpButtonClicked += StringCollectionEditor_HelpButtonClicked;
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ internal partial class StringCollectionEditor
             ShowInTaskbar = false;
             _overarchingLayoutPanel.ResumeLayout(false);
             _overarchingLayoutPanel.PerformLayout();
-            HelpRequested += new HelpEventHandler(Form_HelpRequested);
+            HelpRequested += Form_HelpRequested;
             ResumeLayout(false);
             PerformLayout();
         }

@@ -43,15 +43,15 @@ public abstract partial class UndoEngine : IDisposable
         _serializationService = GetRequiredService<ComponentSerializationService>();
 
         // We need to listen to a slew of events to determine undo state.
-        _host.TransactionOpening += new EventHandler(OnTransactionOpening);
-        _host.TransactionClosed += new DesignerTransactionCloseEventHandler(OnTransactionClosed);
-        ComponentChangeService.ComponentAdding += new ComponentEventHandler(OnComponentAdding);
-        ComponentChangeService.ComponentChanging += new ComponentChangingEventHandler(OnComponentChanging);
-        ComponentChangeService.ComponentRemoving += new ComponentEventHandler(OnComponentRemoving);
-        ComponentChangeService.ComponentAdded += new ComponentEventHandler(OnComponentAdded);
-        ComponentChangeService.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
-        ComponentChangeService.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
-        ComponentChangeService.ComponentRename += new ComponentRenameEventHandler(OnComponentRename);
+        _host.TransactionOpening += OnTransactionOpening;
+        _host.TransactionClosed += OnTransactionClosed;
+        ComponentChangeService.ComponentAdding += OnComponentAdding;
+        ComponentChangeService.ComponentChanging += OnComponentChanging;
+        ComponentChangeService.ComponentRemoving += OnComponentRemoving;
+        ComponentChangeService.ComponentAdded += OnComponentAdded;
+        ComponentChangeService.ComponentChanged += OnComponentChanged;
+        ComponentChangeService.ComponentRemoved += OnComponentRemoved;
+        ComponentChangeService.ComponentRename += OnComponentRename;
     }
 
     /// <summary>
@@ -184,16 +184,16 @@ public abstract partial class UndoEngine : IDisposable
     {
         if (disposing)
         {
-            _host.TransactionOpening -= new EventHandler(OnTransactionOpening);
-            _host.TransactionClosed -= new DesignerTransactionCloseEventHandler(OnTransactionClosed);
+            _host.TransactionOpening -= OnTransactionOpening;
+            _host.TransactionClosed -= OnTransactionClosed;
 
-            ComponentChangeService.ComponentAdding -= new ComponentEventHandler(OnComponentAdding);
-            ComponentChangeService.ComponentChanging -= new ComponentChangingEventHandler(OnComponentChanging);
-            ComponentChangeService.ComponentRemoving -= new ComponentEventHandler(OnComponentRemoving);
-            ComponentChangeService.ComponentAdded -= new ComponentEventHandler(OnComponentAdded);
-            ComponentChangeService.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
-            ComponentChangeService.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
-            ComponentChangeService.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
+            ComponentChangeService.ComponentAdding -= OnComponentAdding;
+            ComponentChangeService.ComponentChanging -= OnComponentChanging;
+            ComponentChangeService.ComponentRemoving -= OnComponentRemoving;
+            ComponentChangeService.ComponentAdded -= OnComponentAdded;
+            ComponentChangeService.ComponentChanged -= OnComponentChanged;
+            ComponentChangeService.ComponentRemoved -= OnComponentRemoved;
+            ComponentChangeService.ComponentRename -= OnComponentRename;
 
             _provider = null!;
         }

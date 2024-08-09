@@ -63,7 +63,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
     {
         _blinkRate = DefaultBlinkRate;
         _blinkStyle = DefaultBlinkStyle;
-        _currentChanged = new EventHandler(ErrorManager_CurrentChanged);
+        _currentChanged = ErrorManager_CurrentChanged;
     }
 
     public ErrorProvider(ContainerControl parentControl)
@@ -72,7 +72,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
         ArgumentNullException.ThrowIfNull(parentControl);
 
         _parentControl = parentControl;
-        _propChangedEvent = new EventHandler(ParentControl_BindingContextChanged);
+        _propChangedEvent = ParentControl_BindingContextChanged;
         parentControl.BindingContextChanged += _propChangedEvent;
     }
 

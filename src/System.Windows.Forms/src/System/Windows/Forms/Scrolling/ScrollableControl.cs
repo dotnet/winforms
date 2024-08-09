@@ -1167,7 +1167,7 @@ public partial class ScrollableControl : Control, IArrangedElement
                 if (_resetRTLHScrollValue && !IsMirrored)
                 {
                     _resetRTLHScrollValue = false;
-                    BeginInvoke(new EventHandler(OnSetScrollPosition));
+                    BeginInvoke(OnSetScrollPosition);
                 }
                 else if (-displayRect.X >= HorizontalScroll._minimum && -displayRect.X < HorizontalScroll._maximum)
                 {

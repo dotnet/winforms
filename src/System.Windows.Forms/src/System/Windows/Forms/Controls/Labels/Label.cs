@@ -1188,7 +1188,7 @@ public partial class Label : Control, IAutomationLiveRegion
 
         if (IsHandleCreated && InvokeRequired)
         {
-            BeginInvoke(new EventHandler(OnFrameChanged), o, e);
+            BeginInvoke(OnFrameChanged, o, e);
             return;
         }
 

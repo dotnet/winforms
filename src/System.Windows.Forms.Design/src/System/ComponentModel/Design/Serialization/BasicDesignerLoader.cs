@@ -181,8 +181,8 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
             }
 
             Initialize();
-            host.Activated += new EventHandler(OnDesignerActivate);
-            host.Deactivated += new EventHandler(OnDesignerDeactivate);
+            host.Activated += OnDesignerActivate;
+            host.Deactivated += OnDesignerDeactivate;
         }
 
         // Now that we're initialized, let's begin the load.  We assume
@@ -243,27 +243,27 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
     {
         if (_state[s_stateReloadAtIdle])
         {
-            Application.Idle -= new EventHandler(OnIdle);
+            Application.Idle -= OnIdle;
         }
 
         UnloadDocument();
 
         if (TryGetService(out IComponentChangeService? cs))
         {
-            cs.ComponentAdded -= new ComponentEventHandler(OnComponentAdded);
-            cs.ComponentAdding -= new ComponentEventHandler(OnComponentAdding);
-            cs.ComponentRemoving -= new ComponentEventHandler(OnComponentRemoving);
-            cs.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
-            cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
-            cs.ComponentChanging -= new ComponentChangingEventHandler(OnComponentChanging);
-            cs.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
+            cs.ComponentAdded -= OnComponentAdded;
+            cs.ComponentAdding -= OnComponentAdding;
+            cs.ComponentRemoving -= OnComponentRemoving;
+            cs.ComponentRemoved -= OnComponentRemoved;
+            cs.ComponentChanged -= OnComponentChanged;
+            cs.ComponentChanging -= OnComponentChanging;
+            cs.ComponentRename -= OnComponentRename;
         }
 
         if (_host is not null)
         {
             _host.RemoveService<IDesignerLoaderService>();
-            _host.Activated -= new EventHandler(OnDesignerActivate);
-            _host.Deactivated -= new EventHandler(OnDesignerDeactivate);
+            _host.Activated -= OnDesignerActivate;
+            _host.Deactivated -= OnDesignerDeactivate;
             _host = null;
         }
     }
@@ -421,13 +421,13 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
             return;
         }
 
-        componentChangeService.ComponentAdded -= new ComponentEventHandler(OnComponentAdded);
-        componentChangeService.ComponentAdding -= new ComponentEventHandler(OnComponentAdding);
-        componentChangeService.ComponentRemoving -= new ComponentEventHandler(OnComponentRemoving);
-        componentChangeService.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
-        componentChangeService.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
-        componentChangeService.ComponentChanging -= new ComponentChangingEventHandler(OnComponentChanging);
-        componentChangeService.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
+        componentChangeService.ComponentAdded -= OnComponentAdded;
+        componentChangeService.ComponentAdding -= OnComponentAdding;
+        componentChangeService.ComponentRemoving -= OnComponentRemoving;
+        componentChangeService.ComponentRemoved -= OnComponentRemoved;
+        componentChangeService.ComponentChanged -= OnComponentChanged;
+        componentChangeService.ComponentChanging -= OnComponentChanging;
+        componentChangeService.ComponentRename -= OnComponentRename;
     }
 
     /// <summary>
@@ -673,13 +673,13 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
 
             if (TryGetService(out IComponentChangeService? componentChangeService))
             {
-                componentChangeService.ComponentAdded += new ComponentEventHandler(OnComponentAdded);
-                componentChangeService.ComponentAdding += new ComponentEventHandler(OnComponentAdding);
-                componentChangeService.ComponentRemoving += new ComponentEventHandler(OnComponentRemoving);
-                componentChangeService.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
-                componentChangeService.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
-                componentChangeService.ComponentChanging += new ComponentChangingEventHandler(OnComponentChanging);
-                componentChangeService.ComponentRename += new ComponentRenameEventHandler(OnComponentRename);
+                componentChangeService.ComponentAdded += OnComponentAdded;
+                componentChangeService.ComponentAdding += OnComponentAdding;
+                componentChangeService.ComponentRemoving += OnComponentRemoving;
+                componentChangeService.ComponentRemoved += OnComponentRemoved;
+                componentChangeService.ComponentChanged += OnComponentChanged;
+                componentChangeService.ComponentChanging += OnComponentChanging;
+                componentChangeService.ComponentRename += OnComponentRename;
             }
 
             EnableComponentNotification(true);
@@ -722,7 +722,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
     /// </summary>
     private void OnIdle(object? sender, EventArgs e)
     {
-        Application.Idle -= new EventHandler(OnIdle);
+        Application.Idle -= OnIdle;
 
         if (!_state[s_stateReloadAtIdle])
         {
@@ -833,7 +833,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
             return;
         }
 
-        Application.Idle += new EventHandler(OnIdle);
+        Application.Idle += OnIdle;
         _state[s_stateReloadAtIdle] = true;
     }
 

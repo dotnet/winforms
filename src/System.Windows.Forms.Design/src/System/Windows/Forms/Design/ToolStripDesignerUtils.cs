@@ -525,8 +525,8 @@ internal sealed class ToolStripDesignerUtils
 
         static DisplayInformation()
         {
-            SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(UserPreferenceChanged);
-            SystemEvents.DisplaySettingsChanged += new EventHandler(DisplaySettingChanged);
+            SystemEvents.UserPreferenceChanged += UserPreferenceChanged;
+            SystemEvents.DisplaySettingsChanged += DisplaySettingChanged;
         }
 
         public static short BitsPerPixel

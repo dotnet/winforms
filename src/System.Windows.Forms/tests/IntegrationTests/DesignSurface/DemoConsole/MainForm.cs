@@ -50,7 +50,7 @@ public partial class MainForm : Form
             IDesignSurfaceExt isurf = _listOfDesignSurface[i];
             _selectionService = (ISelectionService)(isurf.GetIDesignerHost().GetService(typeof(ISelectionService)));
             if (_selectionService is not null)
-                _selectionService.SelectionChanged += new System.EventHandler(OnSelectionChanged);
+                _selectionService.SelectionChanged += OnSelectionChanged;
         }
     }
 
@@ -441,7 +441,7 @@ public partial class MainForm : Form
     {
         InitFormDesigner();
 
-        tabControl1.Selected += new System.Windows.Forms.TabControlEventHandler(OnTabPageSelected);
+        tabControl1.Selected += OnTabPageSelected;
 
         // - select into the propertygrid the current Form
         SelectRootComponent();

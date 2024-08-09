@@ -352,8 +352,8 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
                     host.RemoveService<ToolStripAdornerWindowService>();
                 }
 
-                host.Activated -= new EventHandler(OnDesignerActivate);
-                host.Deactivated -= new EventHandler(OnDesignerDeactivate);
+                host.Activated -= OnDesignerActivate;
+                host.Deactivated -= OnDesignerDeactivate;
 
                 // If the tray wasn't destroyed, then we got some sort of imbalance
                 // in our add/remove calls.  Don't sweat it, but do remove the tray.
@@ -374,15 +374,15 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
                 IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
                 if (cs is not null)
                 {
-                    cs.ComponentAdded -= new ComponentEventHandler(OnComponentAdded);
-                    cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
-                    cs.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
+                    cs.ComponentAdded -= OnComponentAdded;
+                    cs.ComponentChanged -= OnComponentChanged;
+                    cs.ComponentRemoved -= OnComponentRemoved;
                 }
 
                 if (_undoEngine is not null)
                 {
-                    _undoEngine.Undoing -= new EventHandler(OnUndoing);
-                    _undoEngine.Undone -= new EventHandler(OnUndone);
+                    _undoEngine.Undoing -= OnUndoing;
+                    _undoEngine.Undone -= OnUndone;
                 }
 
                 if (_toolboxCreator is not null)
@@ -403,7 +403,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
             ISelectionService ss = (ISelectionService)GetService(typeof(ISelectionService));
             if (ss is not null)
             {
-                ss.SelectionChanged -= new EventHandler(OnSelectionChanged);
+                ss.SelectionChanged -= OnSelectionChanged;
             }
 
             if (_behaviorService is not null)
@@ -689,8 +689,8 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
 
         if (host is not null)
         {
-            host.Activated += new EventHandler(OnDesignerActivate);
-            host.Deactivated += new EventHandler(OnDesignerDeactivate);
+            host.Activated += OnDesignerActivate;
+            host.Deactivated += OnDesignerDeactivate;
 
             ServiceCreatorCallback callback = new(OnCreateService);
             host.AddService<IEventHandlerService>(callback);
@@ -700,7 +700,6 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
             // Create the view for this component. We first create the designer frame so we can provide
             // the overlay and split window services, and then later on we initialize the frame with
             // the designer view.
-            //
             _frame = new DesignerFrame(component.Site);
 
             IOverlayService os = _frame;
@@ -720,9 +719,9 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
             IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
             if (cs is not null)
             {
-                cs.ComponentAdded += new ComponentEventHandler(OnComponentAdded);
-                cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
-                cs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
+                cs.ComponentAdded += OnComponentAdded;
+                cs.ComponentChanged += OnComponentChanged;
+                cs.ComponentRemoved += OnComponentRemoved;
             }
 
             // We must do the inheritance scan early, but not so early that we haven't hooked events
@@ -731,7 +730,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
             // not done an inheritance scan yet, because this will cause the base control
             // class to hook all of the controls we may want to inherit.  So, we do the
             // scan, assign the variable, and then call OnCreateHandle if needed.
-            //
+
             _inheritanceUI = new InheritanceUI();
             host.AddService(_inheritanceUI);
 
@@ -769,7 +768,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
             // Listen for the completed load.  When finished, we need to select the form.  We don'
             // want to do it before we're done, however, or else the dimensions of the selection rectangle
             // could be off because during load, change events are not fired.
-            host.LoadComplete += new EventHandler(OnLoadComplete);
+            host.LoadComplete += OnLoadComplete;
         }
 
         // Setup our menu command structure.
@@ -1091,8 +1090,8 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
             _undoEngine = GetService(typeof(UndoEngine)) as UndoEngine;
             if (_undoEngine is not null)
             {
-                _undoEngine.Undoing += new EventHandler(OnUndoing);
-                _undoEngine.Undone += new EventHandler(OnUndone);
+                _undoEngine.Undoing += OnUndoing;
+                _undoEngine.Undone += OnUndone;
             }
         }
     }
@@ -1117,7 +1116,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
     private void OnLoadComplete(object sender, EventArgs e)
     {
         // Remove the handler; we're done looking at this.
-        ((IDesignerHost)sender).LoadComplete -= new EventHandler(OnLoadComplete);
+        ((IDesignerHost)sender).LoadComplete -= OnLoadComplete;
 
         // Restore the tray layout.
         if (_trayLayoutSuspended && _componentTray is not null)
@@ -1127,7 +1126,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
         ISelectionService ss = (ISelectionService)GetService(typeof(ISelectionService));
         if (ss is not null)
         {
-            ss.SelectionChanged += new EventHandler(OnSelectionChanged);
+            ss.SelectionChanged += OnSelectionChanged;
             ss.SetSelectedComponents(new object[] { Component }, SelectionTypes.Replace);
             Debug.Assert(ss.PrimarySelection == Component, "Bug in selection service:  form should have primary selection.");
         }

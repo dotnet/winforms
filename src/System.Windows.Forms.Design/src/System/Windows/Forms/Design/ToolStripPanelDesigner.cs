@@ -337,12 +337,12 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
 
         if (_componentChangeService is not null)
         {
-            _componentChangeService.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
+            _componentChangeService.ComponentChanged += OnComponentChanged;
         }
 
         // Hook up the ControlAdded Event
-        Control.ControlAdded += new ControlEventHandler(OnControlAdded);
-        Control.ControlRemoved += new ControlEventHandler(OnControlRemoved);
+        Control.ControlAdded += OnControlAdded;
+        Control.ControlRemoved += OnControlRemoved;
     }
 
     /// <summary>

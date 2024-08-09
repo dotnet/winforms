@@ -193,7 +193,7 @@ partial class MainForm
         this.ToolStripMenuItemUnDo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
         this.ToolStripMenuItemUnDo.Size = new System.Drawing.Size(165, 24);
         this.ToolStripMenuItemUnDo.Text = "Undo";
-        this.ToolStripMenuItemUnDo.Click += new System.EventHandler(this.undoToolStripMenuItem_Click);
+        this.ToolStripMenuItemUnDo.Click += this.undoToolStripMenuItem_Click;
         // 
         // ToolStripMenuItemReDo
         // 
@@ -201,7 +201,7 @@ partial class MainForm
         this.ToolStripMenuItemReDo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
         this.ToolStripMenuItemReDo.Size = new System.Drawing.Size(165, 24);
         this.ToolStripMenuItemReDo.Text = "Redo";
-        this.ToolStripMenuItemReDo.Click += new System.EventHandler(this.redoToolStripMenuItem_Click);
+        this.ToolStripMenuItemReDo.Click += this.redoToolStripMenuItem_Click;
         // 
         // toolStripSeparator3
         // 
@@ -216,7 +216,7 @@ partial class MainForm
         this.ToolStripMenuItemCut.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
         this.ToolStripMenuItemCut.Size = new System.Drawing.Size(165, 24);
         this.ToolStripMenuItemCut.Text = "Cut";
-        this.ToolStripMenuItemCut.Click += new System.EventHandler(this.OnMenuClick);
+        this.ToolStripMenuItemCut.Click += this.OnMenuClick;
         // 
         // ToolStripMenuItemCopy
         // 
@@ -226,7 +226,7 @@ partial class MainForm
         this.ToolStripMenuItemCopy.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
         this.ToolStripMenuItemCopy.Size = new System.Drawing.Size(165, 24);
         this.ToolStripMenuItemCopy.Text = "Copy";
-        this.ToolStripMenuItemCopy.Click += new System.EventHandler(this.OnMenuClick);
+        this.ToolStripMenuItemCopy.Click += this.OnMenuClick;
         // 
         // ToolStripMenuItemPaste
         // 
@@ -236,7 +236,7 @@ partial class MainForm
         this.ToolStripMenuItemPaste.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
         this.ToolStripMenuItemPaste.Size = new System.Drawing.Size(165, 24);
         this.ToolStripMenuItemPaste.Text = "Paste";
-        this.ToolStripMenuItemPaste.Click += new System.EventHandler(this.OnMenuClick);
+        this.ToolStripMenuItemPaste.Click += this.OnMenuClick;
         // 
         // ToolStripMenuItemDelete
         // 
@@ -244,7 +244,7 @@ partial class MainForm
         this.ToolStripMenuItemDelete.ShortcutKeys = System.Windows.Forms.Keys.Delete;
         this.ToolStripMenuItemDelete.Size = new System.Drawing.Size(165, 24);
         this.ToolStripMenuItemDelete.Text = "Delete";
-        this.ToolStripMenuItemDelete.Click += new System.EventHandler(this.OnMenuClick);
+        this.ToolStripMenuItemDelete.Click += this.OnMenuClick;
         // 
         // ToolStripMenuItemKeyInvokeSmartTag
         // 
@@ -252,7 +252,7 @@ partial class MainForm
         this.ToolStripMenuItemKeyInvokeSmartTag.ShortcutKeys = System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift | System.Windows.Forms.Keys.F10;
         this.ToolStripMenuItemKeyInvokeSmartTag.Size = new System.Drawing.Size(165, 24);
         this.ToolStripMenuItemKeyInvokeSmartTag.Text = "InvokeSmartTag";
-        this.ToolStripMenuItemKeyInvokeSmartTag.Click += new System.EventHandler(this.OnMenuClick);
+        this.ToolStripMenuItemKeyInvokeSmartTag.Click += this.OnMenuClick;
         // 
         // toolStripSeparator4
         // 
@@ -272,7 +272,7 @@ partial class MainForm
         this.toolStripMenuItemTabOrder.Name = "toolStripMenuItemTabOrder";
         this.toolStripMenuItemTabOrder.Size = new System.Drawing.Size(145, 24);
         this.toolStripMenuItemTabOrder.Text = "Tab Order";
-        this.toolStripMenuItemTabOrder.Click += new System.EventHandler(this.toolStripMenuItemTabOrder_Click);
+        this.toolStripMenuItemTabOrder.Click += this.toolStripMenuItemTabOrder_Click;
         // 
         // helpToolStripMenuItem
         // 
@@ -287,7 +287,7 @@ partial class MainForm
         this.ToolStripMenuItemAbout.Name = "ToolStripMenuItemAbout";
         this.ToolStripMenuItemAbout.Size = new System.Drawing.Size(128, 24);
         this.ToolStripMenuItemAbout.Text = "About...";
-        this.ToolStripMenuItemAbout.Click += new System.EventHandler(this.OnAbout);
+        this.ToolStripMenuItemAbout.Click += this.OnAbout;
         // 
         // MainForm
         // 
@@ -301,7 +301,7 @@ partial class MainForm
         this.Margin = new System.Windows.Forms.Padding(4);
         this.Name = "MainForm";
         this.Text = "Tiny Form Designer";
-        this.Load += new System.EventHandler(this.MainForm_Load);
+        this.Load += this.MainForm_Load;
         this.splitContainer.Panel1.ResumeLayout(false);
         this.splitContainer.Panel2.ResumeLayout(false);
         this.splitContainer.ResumeLayout(false);

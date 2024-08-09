@@ -192,7 +192,6 @@ internal class BaseContextMenuStrip : GroupedContextMenuStrip
     /// </summary>
     private void InitializeContextMenu()
     {
-        // this.Opening += new CancelEventHandler(OnContextMenuOpening);
         Name = "designerContextMenuStrip";
 
         if (_serviceProvider.TryGetService(out IUIService? uis))
@@ -205,7 +204,17 @@ internal class BaseContextMenuStrip : GroupedContextMenuStrip
             }
         }
 
-        GroupOrdering.AddRange([StandardGroups.Code, StandardGroups.ZORder, StandardGroups.Grid, StandardGroups.Lock, StandardGroups.Verbs, StandardGroups.Custom, StandardGroups.Selection, StandardGroups.Edit, StandardGroups.Properties]);
+        GroupOrdering.AddRange([
+            StandardGroups.Code,
+            StandardGroups.ZORder,
+            StandardGroups.Grid,
+            StandardGroups.Lock,
+            StandardGroups.Verbs,
+            StandardGroups.Custom,
+            StandardGroups.Selection,
+            StandardGroups.Edit,
+            StandardGroups.Properties]);
+
         // ADD MENUITEMS
         AddCodeMenuItem();
         AddZorderMenuItem();

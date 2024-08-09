@@ -78,121 +78,121 @@ internal partial class CommandSet : IDisposable
             // Editing commands
             new(
                 this,
-                new EventHandler(OnStatusDelete),
-                new EventHandler(OnMenuDelete),
+                OnStatusDelete,
+                OnMenuDelete,
                 StandardCommands.Delete,
                 _uiService),
 
             new(
                 this,
-                new EventHandler(OnStatusCopy),
-                new EventHandler(OnMenuCopy),
+                OnStatusCopy,
+                OnMenuCopy,
                 StandardCommands.Copy,
                 _uiService),
 
             new(
                 this,
-                new EventHandler(OnStatusCut),
-                new EventHandler(OnMenuCut),
+                OnStatusCut,
+                OnMenuCut,
                 StandardCommands.Cut,
                 _uiService),
 
             new ImmediateCommandSetItem(
                 this,
-                new EventHandler(OnStatusPaste),
-                new EventHandler(OnMenuPaste),
+                OnStatusPaste,
+                OnMenuPaste,
                 StandardCommands.Paste,
                 _uiService),
 
             // Miscellaneous commands
             new(
                 this,
-                new EventHandler(OnStatusSelectAll),
-                new EventHandler(OnMenuSelectAll),
+                OnStatusSelectAll,
+                OnMenuSelectAll,
                 StandardCommands.SelectAll, true,
                 _uiService),
 
             new(
                 this,
-                new EventHandler(OnStatusAlways),
-                new EventHandler(OnMenuDesignerProperties),
+                OnStatusAlways,
+                OnMenuDesignerProperties,
                 MenuCommands.DesignerProperties,
                 _uiService),
 
             // Keyboard commands
             new(
                 this,
-                new EventHandler(OnStatusAlways),
-                new EventHandler(OnKeyCancel),
+                OnStatusAlways,
+                OnKeyCancel,
                 MenuCommands.KeyCancel,
                 _uiService),
 
             new(
                 this,
-                new EventHandler(OnStatusAlways),
-                new EventHandler(OnKeyCancel),
+                OnStatusAlways,
+                OnKeyCancel,
                 MenuCommands.KeyReverseCancel,
                 _uiService),
 
             new(
                 this,
-                new EventHandler(OnStatusPrimarySelection),
-                new EventHandler(OnKeyDefault),
+                OnStatusPrimarySelection,
+                OnKeyDefault,
                 MenuCommands.KeyDefaultAction, true,
                 _uiService),
 
             new(
                 this,
-                new EventHandler(OnStatusAnySelection),
-                new EventHandler(OnKeyMove),
+                OnStatusAnySelection,
+                OnKeyMove,
                 MenuCommands.KeyMoveUp, true,
                 _uiService),
 
             new(
                 this,
-                new EventHandler(OnStatusAnySelection),
-                new EventHandler(OnKeyMove),
+                OnStatusAnySelection,
+                OnKeyMove,
                 MenuCommands.KeyMoveDown, true,
                 _uiService),
 
             new(
                 this,
-                new EventHandler(OnStatusAnySelection),
-                new EventHandler(OnKeyMove),
+                OnStatusAnySelection,
+                OnKeyMove,
                 MenuCommands.KeyMoveLeft, true,
                 _uiService),
 
             new(
                 this,
-                new EventHandler(OnStatusAnySelection),
-                new EventHandler(OnKeyMove),
+                OnStatusAnySelection,
+                OnKeyMove,
                 MenuCommands.KeyMoveRight, true),
 
             new(
                 this,
-                new EventHandler(OnStatusAnySelection),
-                new EventHandler(OnKeyMove),
+                OnStatusAnySelection,
+                OnKeyMove,
                 MenuCommands.KeyNudgeUp, true,
                 _uiService),
 
             new(
                 this,
-                new EventHandler(OnStatusAnySelection),
-                new EventHandler(OnKeyMove),
+                OnStatusAnySelection,
+                OnKeyMove,
                 MenuCommands.KeyNudgeDown, true,
                 _uiService),
 
             new(
                 this,
-                new EventHandler(OnStatusAnySelection),
-                new EventHandler(OnKeyMove),
+                OnStatusAnySelection,
+                OnKeyMove,
                 MenuCommands.KeyNudgeLeft, true,
                 _uiService),
 
             new(
                 this,
-                new EventHandler(OnStatusAnySelection),
-                new EventHandler(OnKeyMove),
+                OnStatusAnySelection,
+                OnKeyMove,
                 MenuCommands.KeyNudgeRight, true,
                 _uiService),
         ];
@@ -201,7 +201,7 @@ internal partial class CommandSet : IDisposable
         Debug.Assert(SelectionService is not null, "CommandSet relies on the selection service, which is unavailable.");
         if (SelectionService is not null)
         {
-            SelectionService.SelectionChanged += new EventHandler(OnSelectionChanged);
+            SelectionService.SelectionChanged += OnSelectionChanged;
         }
 
         IMenuCommandService? menuService = MenuService;
@@ -260,7 +260,8 @@ internal partial class CommandSet : IDisposable
                 {
                     Interval = DesignerUtils.s_snapLineDelay
                 };
-                _snapLineTimer.Tick += new EventHandler(OnSnapLineTimerExpire);
+
+                _snapLineTimer.Tick += OnSnapLineTimerExpire;
             }
 
             return _snapLineTimer;
@@ -2942,7 +2943,7 @@ internal partial class CommandSet : IDisposable
 
         if (marshalControl is not null && marshalControl.IsHandleCreated)
         {
-            marshalControl.BeginInvoke(new EventHandler(OnSnapLineTimerExpireMarshalled), [sender, e]);
+            marshalControl.BeginInvoke(OnSnapLineTimerExpireMarshalled, [sender, e]);
         }
     }
 

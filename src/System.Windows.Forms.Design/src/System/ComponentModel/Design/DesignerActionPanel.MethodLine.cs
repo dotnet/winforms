@@ -27,7 +27,8 @@ internal sealed partial class DesignerActionPanel
                 UseMnemonic = false,
                 VisitedLinkColor = ActionPanel.LinkColor
             };
-            _linkLabel.LinkClicked += new LinkLabelLinkClickedEventHandler(OnLinkLabelLinkClicked);
+
+            _linkLabel.LinkClicked += OnLinkLabelLinkClicked;
             AddedControls.Add(_linkLabel);
         }
 

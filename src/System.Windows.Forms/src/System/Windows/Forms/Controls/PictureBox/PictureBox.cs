@@ -977,7 +977,7 @@ public partial class PictureBox : Control, ISupportInitialize
             {
                 if (_image is not null)
                 {
-                    ImageAnimator.Animate(_image, new EventHandler(OnFrameChanged));
+                    ImageAnimator.Animate(_image, OnFrameChanged);
                     _currentlyAnimating = animate;
                 }
             }
@@ -985,7 +985,7 @@ public partial class PictureBox : Control, ISupportInitialize
             {
                 if (_image is not null)
                 {
-                    ImageAnimator.StopAnimate(_image, new EventHandler(OnFrameChanged));
+                    ImageAnimator.StopAnimate(_image, OnFrameChanged);
                     _currentlyAnimating = animate;
                 }
             }
@@ -1058,7 +1058,7 @@ public partial class PictureBox : Control, ISupportInitialize
             {
                 if (_handleValid)
                 {
-                    BeginInvoke(new EventHandler(OnFrameChanged), o, e);
+                    BeginInvoke(OnFrameChanged, o, e);
                 }
 
                 return;
