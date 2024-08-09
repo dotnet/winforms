@@ -262,7 +262,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         overwrite:=False,
                         onUserCancel:=UICancelOption.DoNothing)
                 End Sub
-
             Try
                 testCode.Should _
                     .Throw(Of ArgumentNullException)() _
