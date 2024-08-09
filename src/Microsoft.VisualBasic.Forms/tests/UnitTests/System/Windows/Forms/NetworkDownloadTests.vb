@@ -97,7 +97,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 Function(e) e.Message.StartsWith(SR.IO_FilePathException) _
                     AndAlso e.Message.Contains(NameOf(destinationFileName))
             Try
-
                 testCode.Should() _
                     .Throw(Of ArgumentException)() _
                     .Where(exceptionExpression)
@@ -131,7 +130,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 Function(e) e.Message.StartsWith(SR.IO_FilePathException) _
                     AndAlso e.Message.Contains(NameOf(destinationFileName))
             Try
-
                 testCode.Should() _
                     .Throw(Of ArgumentException)() _
                     .Where(exceptionExpression)
@@ -842,21 +840,22 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim destinationFileName As String = GetDestinationFileName(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
+            Dim testCode As Action =
+                Sub()
+                    My.Computer.Network.DownloadFile(
+                            address:=webListener.Address,
+                            destinationFileName,
+                            userName:=Nothing,
+                            password:=String.Empty,
+                            showUI:=True,
+                            connectionTimeout:=TestingConnectionTimeout,
+                            overwrite:=False)
+                End Sub
 
-            Try
-                My.Computer.Network.DownloadFile(
-                    address:=webListener.Address,
-                    destinationFileName,
-                    userName:=Nothing,
-                    password:=String.Empty,
-                    showUI:=True,
-                    connectionTimeout:=TestingConnectionTimeout,
-                    overwrite:=False)
+            testCode.Should.NotThrow()
+            ValidateDownload(destinationFileName).Should.Be(DownloadSmallFileSize)
 
-                ValidateDownload(destinationFileName).Should.Be(DownloadSmallFileSize)
-            Finally
-                CleanUp(listener, testDirectory)
-            End Try
+            CleanUp(listener, testDirectory)
         End Sub
 
         <WinFormsFact>
@@ -901,13 +900,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         connectionTimeout:=TestingConnectionTimeout,
                         overwrite:=True)
                 End Sub
-            Try
-                testCode.Should.NotThrow()
-                Directory.Exists(testDirectory).Should.BeTrue()
-                ValidateDownload(destinationFileName).Should.Be(DownloadSmallFileSize)
-            Finally
-                CleanUp(listener, testDirectory)
-            End Try
+
+            testCode.Should.NotThrow()
+            Directory.Exists(testDirectory).Should.BeTrue()
+            ValidateDownload(destinationFileName).Should.Be(DownloadSmallFileSize)
+
+            CleanUp(listener, testDirectory)
         End Sub
 
         <WinFormsFact>
