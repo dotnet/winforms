@@ -12,21 +12,6 @@ Imports Xunit
 Namespace Microsoft.VisualBasic.Forms.Tests
 
     Public Class FileIoProxyTests
-        Protected Friend Class PathTestData
-            Implements IEnumerable(Of Object())
-
-            Public Iterator Function GetEnumerator() As IEnumerator(Of Object()) Implements IEnumerable(Of Object()).GetEnumerator
-                Yield {Nothing}
-                Yield {String.Empty}
-                Yield {" "}
-                Yield {IO.Path.GetPathRoot(IO.Path.GetTempPath)}
-                Yield {IO.Path.GetTempPath}
-            End Function
-
-            Private Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
-                Throw New NotImplementedException()
-            End Function
-        End Class
 
         Private ReadOnly _csvSampleData As String =
             "Index,Customer Id,First Name,Last Name,Company,City,Country
@@ -83,6 +68,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             If destinationDirectory IsNot Nothing Then
                 testCode.Should.Throw(Of ArgumentException)()
             End If
+        End Sub
+
+        <WinFormsFact>
+        Public Sub CleanupDirectoryPathTestDataIteratorTests()
+            Dim testClass As New PathTestData
+            testClass.IEnumerable_GetEnumerator.Should.NotBeNull()
         End Sub
 
         <WinFormsFact>
@@ -519,5 +510,21 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             CleanupDirectories(testDirectory)
         End Sub
 
+        Protected Friend Class PathTestData
+            Implements IEnumerable(Of Object())
+
+            Public Iterator Function GetEnumerator() As IEnumerator(Of Object()) Implements IEnumerable(Of Object()).GetEnumerator
+                Yield {Nothing}
+                Yield {String.Empty}
+                Yield {" "}
+                Yield {IO.Path.GetPathRoot(IO.Path.GetTempPath)}
+                Yield {IO.Path.GetTempPath}
+            End Function
+
+            Public Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
+                Return GetEnumerator()
+            End Function
+
+        End Class
     End Class
 End Namespace
