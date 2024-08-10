@@ -6726,7 +6726,7 @@ public unsafe partial class Control :
     ///   when another form shows the erroneous form. In that case, you cannot directly catch the exception.
     ///  </para>
     ///  <para>
-    ///   It gets marshalled down to <see cref="Application.ThreadException"/>, which is an extreme 
+    ///   It gets marshalled down to <see cref="Application.ThreadException"/>, which is an extreme
     ///   discoverability issue and the root cause for many WinForms apps crashing unexpectedly.
     ///  </para>
     /// </remarks>

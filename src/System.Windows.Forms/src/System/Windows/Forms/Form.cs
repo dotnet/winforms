@@ -5145,41 +5145,41 @@ public partial class Form : ContainerControl
         Location = new Point(workingArea.X + x, workingArea.Y + y);
     }
 
-/// <summary>
-///  Displays the form by setting its <see cref="Control.Visible"/> property to <see langword="true"/>.
-/// </summary>
-/// <param name="owner">
-///  The optional owner window that implements <see cref="IWin32Window"/>.
-/// </param>
-/// <exception cref="InvalidOperationException">
-///  Thrown if:
-///  <list type="bullet">
-///   <item><description>The form is already visible.</description></item>
-///   <item><description>The form is disabled.</description></item>
-///   <item><description>The form is not a top-level form.</description></item>
-///   <item><description>The form is trying to set itself as its own owner.</description></item>
-///   <item><description>The operating system is in a non-interactive mode.</description></item>
-///  </list>
-/// </exception>
-/// <exception cref="ArgumentException">
-///  Thrown if the owner window is trying to set itself as its own owner.
-/// </exception>
-/// <remarks>
-///  <para>
-///   This method makes the form visible by setting the <see cref="Control.Visible"/> property to <see langword="true"/>.
-///  </para>
-///  <para>
-///   If the owner window is provided, it ensures that the owner is topmost and sets the owner for the form.
-///  </para>
-///  <para>
-///   This method also performs several checks to prevent invalid operations, such as trying to display a disabled form,
-///   attempting to display the form when it is not a top-level window, or setting the form as its own owner.
-///  </para>
-///  <para>
-///   If the operating system is in a non-interactive mode, this method will throw an <see cref="InvalidOperationException"/>.
-///  </para>
-/// </remarks>
-public void Show(IWin32Window? owner)
+    /// <summary>
+    ///  Displays the form by setting its <see cref="Control.Visible"/> property to <see langword="true"/>.
+    /// </summary>
+    /// <param name="owner">
+    ///  The optional owner window that implements <see cref="IWin32Window"/>.
+    /// </param>
+    /// <exception cref="InvalidOperationException">
+    ///  <para>Thrown if:</para>
+    ///  <list type="bullet">
+    ///   <item><description>The form is already visible.</description></item>
+    ///   <item><description>The form is disabled.</description></item>
+    ///   <item><description>The form is not a top-level form.</description></item>
+    ///   <item><description>The form is trying to set itself as its own owner.</description></item>
+    ///   <item><description>The operating system is in a non-interactive mode.</description></item>
+    ///  </list>
+    /// </exception>
+    /// <exception cref="ArgumentException">
+    ///  <para>Thrown if the owner window is trying to set itself as its own owner.</para>
+    /// </exception>
+    /// <remarks>
+    ///  <para>
+    ///   This method makes the form visible by setting the <see cref="Control.Visible"/> property to <see langword="true"/>.
+    ///  </para>
+    ///  <para>
+    ///   If the owner window is provided, it ensures that the owner is topmost and sets the owner for the form.
+    ///  </para>
+    ///  <para>
+    ///   This method also performs several checks to prevent invalid operations, such as trying to display a disabled form,
+    ///   attempting to display the form when it is not a top-level window, or setting the form as its own owner.
+    ///  </para>
+    ///  <para>
+    ///   If the operating system is in a non-interactive mode, this method will throw an <see cref="InvalidOperationException"/>.
+    ///  </para>
+    /// </remarks>
+    public void Show(IWin32Window? owner)
     {
         if (owner == this)
         {
@@ -5281,7 +5281,7 @@ public void Show(IWin32Window? owner)
     ///  </para>
     /// </remarks>
     /// <exception cref="InvalidOperationException">
-    ///  Thrown if:
+    ///  <para>Thrown if:</para>
     ///  <list type="bullet">
     ///   <item><description>The form is already visible.</description></item>
     ///   <item><description>The form is disabled.</description></item>
@@ -5295,7 +5295,7 @@ public void Show(IWin32Window? owner)
     ///  </list>
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///  Thrown if the owner window is trying to set itself as its own owner.
+    ///  <para>Thrown if the owner window is trying to set itself as its own owner.</para>
     /// </exception>
     [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = DiagnosticIDs.UrlFormat)]
     public async Task ShowAsync(IWin32Window? owner = null)
@@ -5639,7 +5639,7 @@ public void Show(IWin32Window? owner)
             }
             finally
             {
-                tcsModalForm = null;
+                tcsModalForm = null!;
             }
         }
     }
