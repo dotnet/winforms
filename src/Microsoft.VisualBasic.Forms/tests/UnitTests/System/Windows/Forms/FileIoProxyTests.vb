@@ -12,7 +12,7 @@ Imports Xunit
 Namespace Microsoft.VisualBasic.Forms.Tests
 
     Public Class FileIoProxyTests
-        Public Class PathTestData
+        Protected Friend Class PathTestData
             Implements IEnumerable(Of Object())
 
             Public Iterator Function GetEnumerator() As IEnumerator(Of Object()) Implements IEnumerable(Of Object()).GetEnumerator
