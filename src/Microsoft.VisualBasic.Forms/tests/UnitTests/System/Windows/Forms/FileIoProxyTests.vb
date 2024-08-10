@@ -12,6 +12,21 @@ Imports Xunit
 Namespace Microsoft.VisualBasic.Forms.Tests
 
     Public Class FileIoProxyTests
+        Public Class PathTestData
+            Implements IEnumerable(Of Object())
+
+            Public Iterator Function GetEnumerator() As IEnumerator(Of Object()) Implements IEnumerable(Of Object()).GetEnumerator
+                Yield {Nothing}
+                Yield {String.Empty}
+                Yield {" "}
+                Yield {IO.Path.GetPathRoot(IO.Path.GetTempPath)}
+                Yield {IO.Path.GetTempPath}
+            End Function
+
+            Private Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
+                Throw New NotImplementedException()
+            End Function
+        End Class
 
         Private ReadOnly _csvSampleData As String =
             "Index,Customer Id,First Name,Last Name,Company,City,Country
@@ -23,7 +38,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     "IndexFirstLastCompanyCityCountry
 4321;1234;321;654321;123;1234567"
 
-        Private Sub CleanupDirectories(testDirectory As String, Optional destinationDirectory As String = Nothing)
+        Private Sub CleanupDirectories(testDirectory As String, Optional destinationDirectory As String = Nothing, Optional onDirectoryNotEmpty As DeleteDirectoryOption = DeleteDirectoryOption.DeleteAllContents)
             If String.IsNullOrEmpty(testDirectory) Then
                 Throw New ArgumentException($"'{NameOf(testDirectory)}' cannot be null or empty.", NameOf(testDirectory))
             End If
@@ -34,45 +49,40 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 Throw New ArgumentException($"'{NameOf(testDirectory)}' must start with {IO.Path.GetTempPath}.", NameOf(testDirectory))
             End If
 
-            _fileSystem.DeleteDirectory(testDirectory, DeleteDirectoryOption.DeleteAllContents)
+            _fileSystem.DeleteDirectory(testDirectory, onDirectoryNotEmpty)
 
             If destinationDirectory IsNot Nothing Then
                 If destinationDirectory = IO.Path.GetTempPath Then
                     Throw New ArgumentException($"'{NameOf(destinationDirectory)}' cannot be {IO.Path.GetTempPath}.", NameOf(destinationDirectory))
                 End If
                 If Not destinationDirectory.StartsWith(IO.Path.GetTempPath, StringComparison.InvariantCultureIgnoreCase) Then
-                    Throw New ArgumentException($"'{NameOf(testDirectory)}' must start with {IO.Path.GetTempPath}.", NameOf(destinationDirectory))
+                    Throw New ArgumentException($"'{NameOf(destinationDirectory)}' must start with {IO.Path.GetTempPath}.", NameOf(destinationDirectory))
                 End If
-                _fileSystem.DeleteDirectory(destinationDirectory, DeleteDirectoryOption.DeleteAllContents)
+                _fileSystem.DeleteDirectory(destinationDirectory, onDirectoryNotEmpty)
             End If
         End Sub
 
-        <WinFormsFact>
-        Public Sub CleanupDirectoriesTests()
+        <WinFormsTheory>
+        <ClassData(GetType(PathTestData))>
+        Public Sub CleanupDirectoriesTests(testDirectory As String)
             Dim testCode As Action =
                 Sub()
-                    CleanupDirectories(Nothing)
+                    CleanupDirectories(testDirectory, onDirectoryNotEmpty:=DeleteDirectoryOption.ThrowIfDirectoryNonEmpty)
                 End Sub
             testCode.Should.Throw(Of ArgumentException)()
-            testCode =
-                Sub()
-                    CleanupDirectories(String.Empty)
-                End Sub
+        End Sub
 
-            testCode.Should.Throw(Of ArgumentException)()
-            testCode =
-                Sub()
-                    CleanupDirectories(IO.Path.GetTempPath)
-                End Sub
-
-            testCode.Should.Throw(Of ArgumentException)()
-
-            testCode =
-                Sub()
-                    Dim testDirectory As String = CreateTempDirectory()
-                    CleanupDirectories(testDirectory, String.Empty)
-                End Sub
-            testCode.Should.Throw(Of ArgumentException)()
+        <WinFormsTheory>
+        <ClassData(GetType(PathTestData))>
+        Public Sub CleanupDirectoriesWithDestinationDirectoryTests(destinationDirectory As String)
+            Dim testCode As Action =
+                 Sub()
+                     Dim testDirectory As String = CreateTempDirectory()
+                     CleanupDirectories(testDirectory, destinationDirectory, onDirectoryNotEmpty:=DeleteDirectoryOption.ThrowIfDirectoryNonEmpty)
+                 End Sub
+            If destinationDirectory IsNot Nothing Then
+                testCode.Should.Throw(Of ArgumentException)()
+            End If
         End Sub
 
         <WinFormsFact>
