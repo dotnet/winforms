@@ -162,7 +162,7 @@ public partial class Form : ContainerControl
     private bool _inRecreateHandle;
 
     private TaskCompletionSource? _tcsNonModalForm;
-    private readonly TaskCompletionSource<DialogResult>? _tcsModalForm;
+    private TaskCompletionSource<DialogResult>? _tcsModalForm;
     private readonly Lock _syncObj = new();
 
     /// <summary>
@@ -5447,6 +5447,62 @@ public partial class Form : ContainerControl
         }
 
         return DialogResult;
+    }
+
+    /// <summary>
+    ///  Shows the form as a modal dialog box asynchronously.
+    /// </summary>
+    /// <returns>A <see cref="Task{DialogResult}"/> representing the outcome of the dialog.</returns>
+    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
+    public Task<DialogResult> ShowDialogAsync() => ShowDialogAsyncInternal(null);
+
+    /// <summary>
+    ///  Shows the form as a modal dialog box with the specified owner asynchronously.
+    /// </summary>
+    /// <param name="owner">Any object that implements <see cref="IWin32Window"/> that represents the top-level window that will own the modal dialog box.</param>
+    /// <returns>A <see cref="Task{DialogResult}"/> representing the outcome of the dialog.</returns>
+    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
+    public Task<DialogResult> ShowDialogAsync(IWin32Window owner) => ShowDialogAsyncInternal(owner);
+
+    private Task<DialogResult> ShowDialogAsyncInternal(IWin32Window? owner)
+    {
+        lock (_syncObj)
+        {
+            if (_tcsNonModalForm is not null || _tcsModalForm is not null)
+            {
+                throw new InvalidOperationException(SR.Form_HasAlreadyBeenShownAsync);
+            }
+
+            _tcsModalForm = new TaskCompletionSource<DialogResult>(TaskCreationOptions.RunContinuationsAsynchronously);
+        }
+
+        if (SynchronizationContext.Current is null)
+        {
+            WindowsFormsSynchronizationContext.InstallIfNeeded();
+        }
+
+        var syncContext = SynchronizationContext.Current
+            ?? throw new InvalidOperationException(SR.FormOrTaskDialog_NoSyncContextForShowAsync);
+
+        syncContext.Post((state) => ShowDialogProc(owner), null);
+        return _tcsModalForm.Task;
+
+        void ShowDialogProc(IWin32Window? owner = default)
+        {
+            try
+            {
+                DialogResult result = ShowDialog(owner);
+                _tcsModalForm!.SetResult(result);
+            }
+            catch (Exception ex)
+            {
+                _tcsModalForm!.SetException(ex);
+            }
+            finally
+            {
+                _tcsModalForm = null;
+            }
+        }
     }
 
     /// <summary>
