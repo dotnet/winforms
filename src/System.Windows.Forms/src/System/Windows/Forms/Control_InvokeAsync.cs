@@ -34,7 +34,9 @@ public partial class Control
         ArgumentNullException.ThrowIfNull(callback);
 
         if (cancellationToken.IsCancellationRequested)
+        {
             return;
+        }
 
         TaskCompletionSource tcs = new(TaskCreationOptions.RunContinuationsAsynchronously);
 

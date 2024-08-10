@@ -54,9 +54,9 @@ public partial class Control
 
         protected override void OnThreadException(Exception e)
         {
-            if (!_control.NotifyThreadException(e))
+            if (!_control.SuppressApplicationOnThreadException(e))
             {
-                WndProcException(e);
+                Application.OnThreadException(e);
             }
         }
 

@@ -5145,10 +5145,41 @@ public partial class Form : ContainerControl
         Location = new Point(workingArea.X + x, workingArea.Y + y);
     }
 
-    /// <summary>
-    ///  Makes the control display by setting the visible property to true
-    /// </summary>
-    public void Show(IWin32Window? owner)
+/// <summary>
+///  Displays the form by setting its <see cref="Control.Visible"/> property to <see langword="true"/>.
+/// </summary>
+/// <param name="owner">
+///  The optional owner window that implements <see cref="IWin32Window"/>.
+/// </param>
+/// <exception cref="InvalidOperationException">
+///  Thrown if:
+///  <list type="bullet">
+///   <item><description>The form is already visible.</description></item>
+///   <item><description>The form is disabled.</description></item>
+///   <item><description>The form is not a top-level form.</description></item>
+///   <item><description>The form is trying to set itself as its own owner.</description></item>
+///   <item><description>The operating system is in a non-interactive mode.</description></item>
+///  </list>
+/// </exception>
+/// <exception cref="ArgumentException">
+///  Thrown if the owner window is trying to set itself as its own owner.
+/// </exception>
+/// <remarks>
+///  <para>
+///   This method makes the form visible by setting the <see cref="Control.Visible"/> property to <see langword="true"/>.
+///  </para>
+///  <para>
+///   If the owner window is provided, it ensures that the owner is topmost and sets the owner for the form.
+///  </para>
+///  <para>
+///   This method also performs several checks to prevent invalid operations, such as trying to display a disabled form,
+///   attempting to display the form when it is not a top-level window, or setting the form as its own owner.
+///  </para>
+///  <para>
+///   If the operating system is in a non-interactive mode, this method will throw an <see cref="InvalidOperationException"/>.
+///  </para>
+/// </remarks>
+public void Show(IWin32Window? owner)
     {
         if (owner == this)
         {
@@ -5209,11 +5240,64 @@ public partial class Form : ContainerControl
     }
 
     /// <summary>
-    ///  Shows the form asynchronously.
+    ///  Displays the form asynchronously, by setting its <see cref="Control.Visible"/> property to <see langword="true"/>.
     /// </summary>
-    /// <param name="owner">The optional owner window.</param>
-    /// <returns>A task that completes when the form is closed.</returns>
-    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
+    /// <param name="owner">
+    ///  The optional owner window that implements <see cref="IWin32Window"/>.
+    /// </param>
+    /// <returns>
+    ///  A <see cref="Task"/> that completes when the form is closed or disposed.
+    /// </returns>
+    /// <remarks>
+    ///  <para>
+    ///   This method makes the form visible by setting the <see cref="Control.Visible"/> property to <see langword="true"/>.
+    ///  </para>
+    ///  <para>
+    ///   This method immediately returns, even if the form is large and takes a long time to be set up.
+    ///  </para>
+    ///  <para>
+    ///   The task will complete when the form is closed or disposed.
+    ///  </para>
+    ///  <para>
+    ///   If the owner window is provided, it ensures that the owner is topmost and sets the owner for the form.
+    ///  </para>
+    ///  <para>
+    ///   This method also performs several checks to prevent invalid operations, such as trying to display a disabled form,
+    ///   attempting to display the form when it is not a top-level window, or setting the form as its own owner.
+    ///  </para>
+    ///  <para>
+    ///   If the operating system is in a non-interactive mode, this method will throw an <see cref="InvalidOperationException"/>.
+    ///  </para>
+    ///  <para>
+    ///   If the form is already displayed asynchronously, an <see cref="InvalidOperationException"/> will be thrown.
+    ///  </para>
+    ///  <para>
+    ///   An <see cref="InvalidOperationException"/> will also occur if no
+    ///   <see cref="WindowsFormsSynchronizationContext"/> could be retrieved or installed.
+    ///  </para>
+    ///  <para>
+    ///   There is no need to marshal the call to the UI thread manually if the call
+    ///   originates from a different thread than the UI-Thread. This is handled automatically.
+    ///  </para>
+    /// </remarks>
+    /// <exception cref="InvalidOperationException">
+    ///  Thrown if:
+    ///  <list type="bullet">
+    ///   <item><description>The form is already visible.</description></item>
+    ///   <item><description>The form is disabled.</description></item>
+    ///   <item><description>The form is not a top-level form.</description></item>
+    ///   <item><description>The form is trying to set itself as its own owner.</description></item>
+    ///   <item><description>
+    ///     Thrown if the form is already displayed asynchronously or if no
+    ///     <see cref="WindowsFormsSynchronizationContext"/> could be retrieved or installed.
+    ///     </description></item>
+    ///   <item><description>The operating system is in a non-interactive mode.</description></item>
+    ///  </list>
+    /// </exception>
+    /// <exception cref="ArgumentException">
+    ///  Thrown if the owner window is trying to set itself as its own owner.
+    /// </exception>
+    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = DiagnosticIDs.UrlFormat)]
     public async Task ShowAsync(IWin32Window? owner = null)
     {
         // We lock the access to the task completion source to prevent
@@ -5267,7 +5351,7 @@ public partial class Form : ContainerControl
         }
     }
 
-    private protected override bool NotifyThreadException(Exception ex)
+    private protected override bool SuppressApplicationOnThreadException(Exception ex)
     {
         lock (_syncObj)
         {
@@ -5284,7 +5368,7 @@ public partial class Form : ContainerControl
     /// <summary>
     ///  Displays this form as a modal dialog box with no owner window.
     /// </summary>
-    public DialogResult ShowDialog() => ShowDialog(null);
+    public DialogResult ShowDialog() => ShowDialog(owner: null);
 
     /// <summary>
     ///  Shows this form as a modal dialog with the specified owner.
@@ -5452,16 +5536,68 @@ public partial class Form : ContainerControl
     /// <summary>
     ///  Shows the form as a modal dialog box asynchronously.
     /// </summary>
-    /// <returns>A <see cref="Task{DialogResult}"/> representing the outcome of the dialog.</returns>
-    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
-    public Task<DialogResult> ShowDialogAsync() => ShowDialogAsyncInternal(null);
+    /// <returns>
+    ///  A <see cref="Task{DialogResult}"/> representing the outcome of the dialog. The task completes when the form is closed or disposed.
+    /// </returns>
+    /// <remarks>
+    ///  <para>
+    ///  The task will complete when the form is closed or disposed.
+    ///  </para>
+    ///  <para>
+    ///  This method immediately returns, even if the form is large and takes a long time to be set up.
+    ///  </para>
+    ///  <para>
+    ///  If the form is already displayed asynchronously by <see cref="Form.ShowAsync"/>, an <see cref="InvalidOperationException"/> will be thrown.
+    ///  </para>
+    ///  <para>
+    ///  An <see cref="InvalidOperationException"/> will also occur if no <see cref="WindowsFormsSynchronizationContext"/> could be retrieved or installed.
+    ///  </para>
+    ///  <para>
+    ///  There is no need to marshal the call to the UI thread manually if the call originates from a different thread. This is handled automatically.
+    ///  </para>
+    ///  <para>
+    ///  Any exceptions that occur will be automatically propagated to the calling thread.
+    ///  </para>
+    /// </remarks>
+    /// <exception cref="InvalidOperationException">
+    ///  Thrown if the form is already displayed asynchronously or if no <see cref="WindowsFormsSynchronizationContext"/> could be retrieved or installed.
+    /// </exception>
+    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = DiagnosticIDs.UrlFormat)]
+    public Task<DialogResult> ShowDialogAsync() => ShowDialogAsyncInternal(owner: null);
 
     /// <summary>
     ///  Shows the form as a modal dialog box with the specified owner asynchronously.
     /// </summary>
-    /// <param name="owner">Any object that implements <see cref="IWin32Window"/> that represents the top-level window that will own the modal dialog box.</param>
-    /// <returns>A <see cref="Task{DialogResult}"/> representing the outcome of the dialog.</returns>
-    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = "https://aka.ms/winforms-experimental/{0}")]
+    /// <param name="owner">
+    ///  Any object that implements <see cref="IWin32Window"/> that represents the top-level window that will own the modal dialog box.
+    /// </param>
+    /// <returns>
+    ///  A <see cref="Task{DialogResult}"/> representing the outcome of the dialog. The task completes when the form is closed or disposed.
+    /// </returns>
+    /// <remarks>
+    ///  <para>
+    ///  The task will complete when the form is closed or disposed.
+    ///  </para>
+    ///  <para>
+    ///  This method immediately returns, even if the form is large and takes a long time to be set up.
+    ///  </para>
+    ///  <para>
+    ///  If the form is already displayed asynchronously by <see cref="Form.ShowAsync"/>, an <see cref="InvalidOperationException"/> will be thrown.
+    ///  </para>
+    ///  <para>
+    ///  An <see cref="InvalidOperationException"/> will also occur if no <see cref="WindowsFormsSynchronizationContext"/> could be retrieved or installed.
+    ///  </para>
+    ///  <para>
+    ///  There is no need to marshal the call to the UI thread manually if the call originates from a different thread. This is handled automatically.
+    ///  </para>
+    ///  <para>
+    ///  Any exceptions that occur will be automatically propagated to the calling thread.
+    ///  </para>
+    /// </remarks>
+    /// <exception cref="InvalidOperationException">
+    ///  Thrown if the form is already displayed asynchronously or if no <see cref="WindowsFormsSynchronizationContext"/> could be retrieved or installed.
+    /// </exception>
+    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = DiagnosticIDs.UrlFormat)]
     public Task<DialogResult> ShowDialogAsync(IWin32Window owner) => ShowDialogAsyncInternal(owner);
 
     private Task<DialogResult> ShowDialogAsyncInternal(IWin32Window? owner)
@@ -5484,23 +5620,26 @@ public partial class Form : ContainerControl
         var syncContext = SynchronizationContext.Current
             ?? throw new InvalidOperationException(SR.FormOrTaskDialog_NoSyncContextForShowAsync);
 
-        syncContext.Post((state) => ShowDialogProc(owner), null);
+        syncContext.Post((state) => ShowDialogProc(
+            tcsModalForm: ref _tcsModalForm, owner: owner),
+            state: null);
+
         return _tcsModalForm.Task;
 
-        void ShowDialogProc(IWin32Window? owner = default)
+        void ShowDialogProc(ref TaskCompletionSource<DialogResult> tcsModalForm, IWin32Window? owner = default)
         {
             try
             {
                 DialogResult result = ShowDialog(owner);
-                _tcsModalForm!.SetResult(result);
+                tcsModalForm.SetResult(result);
             }
             catch (Exception ex)
             {
-                _tcsModalForm!.SetException(ex);
+                tcsModalForm.SetException(ex);
             }
             finally
             {
-                _tcsModalForm = null;
+                tcsModalForm = null;
             }
         }
     }

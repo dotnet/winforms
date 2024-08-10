@@ -6713,12 +6713,24 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Called by the NativeWindow callback, when an exception is caught. This will be rerouted to the
-    ///  Application.ThreadException, but in certain Async scenarios it makes more sense, to be able to
-    ///  catch the exception on the control/form which caused it.
+    ///  Called by the NativeWindow callback when an exception is caught.
     /// </summary>
-    /// <returns>true, when the exception has been handled, otherwise false.</returns>
-    private protected virtual bool NotifyThreadException(Exception ex) => false;
+    /// <returns>true, when the exception has been handled; otherwise, false.</returns>
+    /// <remarks>
+    ///  <para>
+    ///   This will usually be rerouted to the <see cref="Application.ThreadException"/>, but in certain
+    ///   (async) scenarios, it makes more sense to catch the exception on the control or form that caused it.
+    ///  </para>
+    ///  <para>
+    ///   Example: When a form throws an exception inside of Form.OnLoad, and the scenario needs to be gracefully handled
+    ///   when another form shows the erroneous form. In that case, you cannot directly catch the exception.
+    ///  </para>
+    ///  <para>
+    ///   It gets marshalled down to <see cref="Application.ThreadException"/>, which is an extreme 
+    ///   discoverability issue and the root cause for many WinForms apps crashing unexpectedly.
+    ///  </para>
+    /// </remarks>
+    private protected virtual bool SuppressApplicationOnThreadException(Exception ex) => false;
 
     // Used by form to notify the control that it is validating.
     private bool NotifyValidating()
@@ -12869,15 +12881,6 @@ public unsafe partial class Control :
         // Keep ourselves rooted until we're done processing the current message. While unlikely, it is possible
         // that we can lose the rooting for `this` and get finalized when it is no longer referenced as a local.
         GC.KeepAlive(this);
-    }
-
-    /// <summary>
-    ///  Called when an exception occurs in dispatching messages through
-    ///  the main window procedure.
-    /// </summary>
-    private static void WndProcException(Exception e)
-    {
-        Application.OnThreadException(e);
     }
 
     ArrangedElementCollection IArrangedElement.Children
