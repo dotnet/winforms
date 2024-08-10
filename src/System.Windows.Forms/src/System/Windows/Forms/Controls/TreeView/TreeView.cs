@@ -170,6 +170,9 @@ public partial class TreeView : Control
         SetStyle(ControlStyles.UserPaint, false);
         SetStyle(ControlStyles.StandardClick, false);
         SetStyle(ControlStyles.UseTextForAccessibility, false);
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     }
 
     internal override void ReleaseUiaProvider(HWND handle)
@@ -1859,7 +1862,7 @@ public partial class TreeView : Control
         }
 
         // Workaround for problem in TreeView where it doesn't recognize the TVS_CHECKBOXES
-        // style if it is set before the window is created.  To get around the problem,
+        // style if it is set before the window is created. To get around the problem,
         // we set it here after the window is created, and we make sure we don't set it
         // in getCreateParams so that this will actually change the value of the bit.
         // This seems to make the TreeView happy.
@@ -1878,19 +1881,21 @@ public partial class TreeView : Control
         }
 
         Color c = BackColor;
-        if (c != SystemColors.Window)
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        if (c != SystemColors.Window || Application.IsDarkModeEnabled)
         {
             PInvoke.SendMessage(this, PInvoke.TVM_SETBKCOLOR, 0, c.ToWin32());
         }
 
         c = ForeColor;
 
-        if (c != SystemColors.WindowText)
+        if (c != SystemColors.WindowText || Application.IsDarkModeEnabled)
         {
             PInvoke.SendMessage(this, PInvoke.TVM_SETTEXTCOLOR, 0, c.ToWin32());
         }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
-        // Put the linecolor into the native control only if set.
+        // Put the LineColor into the native control only if set.
         if (_lineColor != Color.Empty)
         {
             PInvoke.SendMessage(this, PInvoke.TVM_SETLINECOLOR, 0, _lineColor.ToWin32());
@@ -2641,7 +2646,10 @@ public partial class TreeView : Control
         // This stops the style from being removed for any derived classes that set it using P/Invoke.
         if (_treeViewState[TREEVIEWSTATE_doubleBufferedPropertySet])
         {
-            PInvoke.SendMessage(this, PInvoke.TVM_SETEXTENDEDSTYLE, (WPARAM)(nint)PInvoke.TVS_EX_DOUBLEBUFFER, (LPARAM)(nint)(DoubleBuffered ? PInvoke.TVS_EX_DOUBLEBUFFER : 0));
+            PInvoke.SendMessage(this,
+                PInvoke.TVM_SETEXTENDEDSTYLE,
+                (WPARAM)(nint)PInvoke.TVS_EX_DOUBLEBUFFER,
+                (LPARAM)(nint)(DoubleBuffered ? PInvoke.TVS_EX_DOUBLEBUFFER : 0));
         }
     }
 
@@ -2830,6 +2838,7 @@ public partial class TreeView : Control
                             TreeNodeStates curState = e.State;
 
                             Font font = node.NodeFont ?? node.TreeView.Font;
+
                             Color color = (((curState & TreeNodeStates.Selected) == TreeNodeStates.Selected) && node.TreeView.Focused) ? SystemColors.HighlightText : (node.ForeColor != Color.Empty) ? node.ForeColor : node.TreeView.ForeColor;
 
                             // Draw the actual node.

@@ -2,9 +2,11 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.ComponentModel
+Imports System.Diagnostics.CodeAnalysis
 Imports System.Drawing
 Imports System.Runtime.InteropServices
 Imports System.Windows.Forms
+Imports System.Windows.Forms.Analyzers.Diagnostics
 
 Namespace Microsoft.VisualBasic.ApplicationServices
 
@@ -15,11 +17,19 @@ Namespace Microsoft.VisualBasic.ApplicationServices
     Public Class ApplyApplicationDefaultsEventArgs
         Inherits EventArgs
 
+#Disable Warning WFO5001
+
         Friend Sub New(minimumSplashScreenDisplayTime As Integer,
-                highDpiMode As HighDpiMode)
+                highDpiMode As HighDpiMode,
+                colorMode As SystemColorMode)
+
             Me.MinimumSplashScreenDisplayTime = minimumSplashScreenDisplayTime
             Me.HighDpiMode = highDpiMode
+            Me.ColorMode = colorMode
         End Sub
+
+#Enable Warning WFO5000
+#Enable Warning WFO5001
 
         ''' <summary>
         '''  Setting this property inside the event handler causes a new default Font for Forms and UserControls to be set.
@@ -34,7 +44,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  Setting this Property inside the event handler determines how long an application's Splash dialog is displayed at a minimum.
         ''' </summary>
         Public Property MinimumSplashScreenDisplayTime As Integer =
-            WindowsFormsApplicationBase.MINIMUM_SPLASH_EXPOSURE_DEFAULT
+            WindowsFormsApplicationBase.MinimumSplashExposureDefault
 
         ''' <summary>
         '''  Setting this Property inside the event handler determines the general HighDpiMode for the application.
@@ -44,5 +54,12 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' </remarks>
         Public Property HighDpiMode As HighDpiMode
 
+        ''' <summary>
+        '''  Setting this property inside the event handler determines the <see cref="Application.ColorMode"/> for the application.
+        ''' </summary>
+        <Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat:=WindowsFormsApplicationBase.WinFormsExperimentalUrl)>
+        Public Property ColorMode As SystemColorMode
+
     End Class
+#Disable Warning WFO5001
 End Namespace

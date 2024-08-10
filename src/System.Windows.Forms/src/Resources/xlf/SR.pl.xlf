@@ -1527,6 +1527,11 @@
         <target state="translated">Wygląd kursora, gdy wskaźnik myszy przesuwa się nad formantem.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlDarkModeDescr">
+        <source>Determines the dark mode setting for the control. This ambient property inherits its value from its parent control or from the Application class.</source>
+        <target state="new">Determines the dark mode setting for the control. This ambient property inherits its value from its parent control or from the Application class.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ControlDataContextChangedDescr">
         <source>Occurs when the value of the DataContext property changes.</source>
         <target state="translated">Występuje, gdy wartość właściwości DataContext zostanie zmieniona.</target>
@@ -2180,6 +2185,11 @@
       <trans-unit id="CursorNonSerializableHandle">
         <source>Stock cursors cannot be serialized.</source>
         <target state="translated">Typowe kursory nie mogą być serializowane.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DarkModeNotSupported">
+        <source>Dark mode cannot be activated, either because of an activated High-Contrast mode or because the underlying OS does not support it.</source>
+        <target state="new">Dark mode cannot be activated, either because of an activated High-Contrast mode or because the underlying OS does not support it.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataBindingAddNewNotSupportedOnPropertyManager">
@@ -5305,6 +5315,16 @@ Czy chcesz go zamienić?</target>
         <target state="translated">Bieżąca pozycja paska przewijania automatycznego.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormBorderColorChangedDescr">
+        <source>Occurs whenever the FormBorderColor property is changed.</source>
+        <target state="new">Occurs whenever the FormBorderColor property is changed.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormBorderColorDescr">
+        <source>The color of the Form's border.</source>
+        <target state="new">The color of the Form's border.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormBorderStyleDescr">
         <source>Indicates the appearance and behavior of the border and title bar of the form.</source>
         <target state="translated">Wskazuje wygląd i zachowanie obramowania i paska tytułu formularza.</target>
@@ -5315,9 +5335,39 @@ Czy chcesz go zamienić?</target>
         <target state="translated">Przycisk anulowania formularza. Gdy ta właściwość jest ustawiona, to przycisk jest „kliknięty” przy każdym naciśnięciu klawisza ESC.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormCaptionBackColorChangedDescr">
+        <source>Occurs whenever the FormCaptionBackColor property is changed.</source>
+        <target state="new">Occurs whenever the FormCaptionBackColor property is changed.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCaptionBackColorDescr">
+        <source>The back color of the Form's caption (title bar).</source>
+        <target state="new">The back color of the Form's caption (title bar).</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCaptionTextColorChangedDescr">
+        <source>Occurs whenever the FormCaptionTextColor property is changed.</source>
+        <target state="new">Occurs whenever the FormCaptionTextColor property is changed.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCaptionTextColorDescr">
+        <source>The color of the Form's text caption (title bar text).</source>
+        <target state="new">The color of the Form's text caption (title bar text).</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormControlBoxDescr">
         <source>Determines whether a form has a Control/System menu box.</source>
         <target state="translated">Określa, czy w formularzu znajduje się pole menu systemowego/sterowania.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCornerPreferenceChangedDescr">
+        <source>Occurs whenever the FormCornerPreference property is changed.</source>
+        <target state="new">Occurs whenever the FormCornerPreference property is changed.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCornerPreferenceDescr">
+        <source>The rounding style of the Form's border.</source>
+        <target state="new">The rounding style of the Form's border.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormDesktopBoundsDescr">
