@@ -27,9 +27,7 @@ public partial class Control
     ///   <see cref="InvokeAsync{T}(Func{CancellationToken, ValueTask{T}}, CancellationToken)"/>.
     ///  </para>
     /// </remarks>
-#pragma warning disable RS0026 // API with optional parameter(s) should have the most parameters amongst its public overloads
     public async Task InvokeAsync(Action callback, CancellationToken cancellationToken = default)
-#pragma warning restore RS0026 // API with optional parameter(s) should have the most parameters amongst its public overloads
     {
         ArgumentNullException.ThrowIfNull(callback);
 
@@ -38,12 +36,12 @@ public partial class Control
             return;
         }
 
-        TaskCompletionSource tcs = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        TaskCompletionSource completion = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
-        using (cancellationToken.Register(() => tcs.SetCanceled(), useSynchronizationContext: false))
+        using (cancellationToken.Register(() => completion.SetCanceled(), useSynchronizationContext: false))
         {
             BeginInvoke(WrappedAction);
-            await tcs.Task.ConfigureAwait(false);
+            await completion.Task.ConfigureAwait(false);
         }
 
         void WrappedAction()
@@ -52,16 +50,16 @@ public partial class Control
             {
                 if (cancellationToken.IsCancellationRequested)
                 {
-                    tcs.SetCanceled(cancellationToken);
+                    completion.SetCanceled(cancellationToken);
                     return;
                 }
 
                 callback();
-                tcs.TrySetResult();
+                completion.TrySetResult();
             }
             catch (Exception ex)
             {
-                tcs.TrySetException(ex);
+                completion.TrySetException(ex);
             }
         }
     }
@@ -95,9 +93,7 @@ public partial class Control
     ///   <see cref="InvokeAsync{T}(Func{CancellationToken, ValueTask{T}}, CancellationToken)"/>.
     ///  </para>
     /// </remarks>
-#pragma warning disable RS0026 // Do not add multiple public overloads with optional parameters
     public async Task<T> InvokeAsync<T>(Func<T> callback, CancellationToken cancellationToken = default)
-#pragma warning restore RS0026 // Do not add multiple public overloads with optional parameters
     {
         ArgumentNullException.ThrowIfNull(callback);
 
@@ -106,12 +102,12 @@ public partial class Control
             return default!;
         }
 
-        TaskCompletionSource<T> tcs = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        TaskCompletionSource<T> completion = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
-        using (cancellationToken.Register(() => tcs.SetCanceled(), useSynchronizationContext: false))
+        using (cancellationToken.Register(() => completion.SetCanceled(), useSynchronizationContext: false))
         {
             BeginInvoke(WrappedCallback);
-            return await tcs.Task.ConfigureAwait(false);
+            return await completion.Task.ConfigureAwait(false);
         }
 
         void WrappedCallback()
@@ -120,16 +116,16 @@ public partial class Control
             {
                 if (cancellationToken.IsCancellationRequested)
                 {
-                    tcs.TrySetCanceled(cancellationToken);
+                    completion.TrySetCanceled(cancellationToken);
                     return;
                 }
 
                 T result = callback();
-                tcs.TrySetResult(result);
+                completion.TrySetResult(result);
             }
             catch (Exception ex)
             {
-                tcs.TrySetException(ex);
+                completion.TrySetException(ex);
             }
         }
     }
@@ -162,9 +158,7 @@ public partial class Control
     ///   <see cref="InvokeAsync(Action, CancellationToken)"/>.
     ///  </para>
     /// </remarks>
-#pragma warning disable RS0026 // Do not add multiple public overloads with optional parameters
     public async Task InvokeAsync(Func<CancellationToken, ValueTask> callback, CancellationToken cancellationToken = default)
-#pragma warning restore RS0026 // Do not add multiple public overloads with optional parameters
     {
         ArgumentNullException.ThrowIfNull(callback);
 
@@ -173,12 +167,12 @@ public partial class Control
             return;
         }
 
-        TaskCompletionSource tcs = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        TaskCompletionSource completion = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
-        using (cancellationToken.Register(() => tcs.SetCanceled(), useSynchronizationContext: false))
+        using (cancellationToken.Register(() => completion.SetCanceled(), useSynchronizationContext: false))
         {
             BeginInvoke(async () => await WrappedCallbackAsync().ConfigureAwait(false));
-            await tcs.Task.ConfigureAwait(false);
+            await completion.Task.ConfigureAwait(false);
         }
 
         async Task WrappedCallbackAsync()
@@ -187,16 +181,16 @@ public partial class Control
             {
                 if (cancellationToken.IsCancellationRequested)
                 {
-                    tcs.TrySetCanceled(cancellationToken);
+                    completion.TrySetCanceled(cancellationToken);
                     return;
                 }
 
                 await callback(cancellationToken).ConfigureAwait(false);
-                tcs.TrySetResult();
+                completion.TrySetResult();
             }
             catch (Exception ex)
             {
-                tcs.TrySetException(ex);
+                completion.TrySetException(ex);
             }
         }
     }
@@ -228,9 +222,7 @@ public partial class Control
     ///   <see cref="InvokeAsync(Action, CancellationToken)"/>.
     ///  </para>
     /// </remarks>
-#pragma warning disable RS0026 // API with optional parameter(s) should have the most parameters amongst its public overloads
     public async Task<T> InvokeAsync<T>(Func<CancellationToken, ValueTask<T>> callback, CancellationToken cancellationToken = default)
-#pragma warning restore RS0026 // API with optional parameter(s) should have the most parameters amongst its public overloads
     {
         ArgumentNullException.ThrowIfNull(callback);
 
@@ -239,12 +231,12 @@ public partial class Control
             return default!;
         }
 
-        TaskCompletionSource<T> tcs = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        TaskCompletionSource<T> completion = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
-        using (cancellationToken.Register(() => tcs.SetCanceled(), useSynchronizationContext: false))
+        using (cancellationToken.Register(() => completion.SetCanceled(), useSynchronizationContext: false))
         {
             BeginInvoke(async () => await WrappedCallbackAsync().ConfigureAwait(false));
-            return await tcs.Task.ConfigureAwait(false);
+            return await completion.Task.ConfigureAwait(false);
         }
 
         async Task WrappedCallbackAsync()
@@ -252,11 +244,11 @@ public partial class Control
             try
             {
                 var returnValue = await callback(cancellationToken).ConfigureAwait(false);
-                tcs.TrySetResult(returnValue);
+                completion.TrySetResult(returnValue);
             }
             catch (Exception ex)
             {
-                tcs.TrySetException(ex);
+                completion.TrySetException(ex);
             }
         }
     }

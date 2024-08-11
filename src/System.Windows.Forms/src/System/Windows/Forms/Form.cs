@@ -161,9 +161,9 @@ public partial class Form : ContainerControl
     private bool _processingDpiChanged;
     private bool _inRecreateHandle;
 
-    private TaskCompletionSource? _tcsNonModalForm;
-    private TaskCompletionSource<DialogResult>? _tcsModalForm;
-    private readonly Lock _syncObj = new();
+    private TaskCompletionSource? _nonModalFormCompletion;
+    private TaskCompletionSource<DialogResult>? _modalFormCompletion;
+    private readonly Lock _lock = new();
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="Form"/> class.
@@ -3355,7 +3355,7 @@ public partial class Form : ContainerControl
                 PInvoke.DestroyMenu(dummyMenu);
             }
 
-            _tcsNonModalForm?.TrySetResult();
+            _nonModalFormCompletion?.TrySetResult();
         }
         else
         {
@@ -3861,13 +3861,13 @@ public partial class Form : ContainerControl
             ((FormClosedEventHandler?)Events[s_formClosedEvent])?.Invoke(this, e);
 
             // This effectively ends an `await form.ShowAsync();` call.
-            _tcsNonModalForm?.TrySetResult();
+            _nonModalFormCompletion?.TrySetResult();
         }
         catch (Exception ex)
         {
-            if (_tcsNonModalForm is not null)
+            if (_nonModalFormCompletion is not null)
             {
-                _tcsNonModalForm.TrySetException(ex);
+                _nonModalFormCompletion.TrySetException(ex);
             }
             else
             {
@@ -5307,9 +5307,9 @@ public partial class Form : ContainerControl
     ///   <item><description>The form is not a top-level form.</description></item>
     ///   <item><description>The form is trying to set itself as its own owner.</description></item>
     ///   <item><description>
-    ///     Thrown if the form is already displayed asynchronously or if no
-    ///     <see cref="WindowsFormsSynchronizationContext"/> could be retrieved or installed.
-    ///     </description></item>
+    ///    Thrown if the form is already displayed asynchronously or if no
+    ///    <see cref="WindowsFormsSynchronizationContext"/> could be retrieved or installed.
+    ///   </description></item>
     ///   <item><description>The operating system is in a non-interactive mode.</description></item>
     ///  </list>
     /// </exception>
@@ -5321,14 +5321,14 @@ public partial class Form : ContainerControl
     {
         // We lock the access to the task completion source to prevent
         // multiple calls to ShowAsync from interfering with each other.
-        lock (_syncObj)
+        lock (_lock)
         {
-            if (_tcsNonModalForm is not null || _tcsModalForm is not null)
+            if (_nonModalFormCompletion is not null || _modalFormCompletion is not null)
             {
                 throw new InvalidOperationException(SR.Form_HasAlreadyBeenShownAsync);
             }
 
-            _tcsNonModalForm = new(TaskCreationOptions.RunContinuationsAsynchronously);
+            _nonModalFormCompletion = new(TaskCreationOptions.RunContinuationsAsynchronously);
         }
 
         if (SynchronizationContext.Current is null)
@@ -5344,7 +5344,7 @@ public partial class Form : ContainerControl
         // Wait until the form is closed or disposed.
         try
         {
-            await _tcsNonModalForm.Task.ConfigureAwait(true);
+            await _nonModalFormCompletion.Task.ConfigureAwait(true);
         }
         catch (Exception ex)
         {
@@ -5353,7 +5353,7 @@ public partial class Form : ContainerControl
         }
         finally
         {
-            _tcsNonModalForm = null;
+            _nonModalFormCompletion = null;
         }
 
         void ShowFormInternally(IWin32Window? owner)
@@ -5365,23 +5365,23 @@ public partial class Form : ContainerControl
             }
             catch (Exception ex)
             {
-                _tcsNonModalForm.TrySetException(ex);
+                _nonModalFormCompletion.TrySetException(ex);
             }
         }
     }
 
     private protected override bool SuppressApplicationOnThreadException(Exception ex)
     {
-        lock (_syncObj)
+        lock (_lock)
         {
-            if (_tcsNonModalForm is not null)
+            if (_nonModalFormCompletion is not TaskCompletionSource completion)
             {
-                _tcsNonModalForm.TrySetException(ex);
-                return true;
+                return false;
             }
-        }
 
-        return false;
+            completion.TrySetException(ex);
+            return true;
+        }
     }
 
     /// <summary>
@@ -5560,22 +5560,22 @@ public partial class Form : ContainerControl
     /// </returns>
     /// <remarks>
     ///  <para>
-    ///  The task will complete when the form is closed or disposed.
+    ///   The task will complete when the form is closed or disposed.
     ///  </para>
     ///  <para>
-    ///  This method immediately returns, even if the form is large and takes a long time to be set up.
+    ///   This method immediately returns, even if the form is large and takes a long time to be set up.
     ///  </para>
     ///  <para>
-    ///  If the form is already displayed asynchronously by <see cref="Form.ShowAsync"/>, an <see cref="InvalidOperationException"/> will be thrown.
+    ///   If the form is already displayed asynchronously by <see cref="Form.ShowAsync"/>, an <see cref="InvalidOperationException"/> will be thrown.
     ///  </para>
     ///  <para>
-    ///  An <see cref="InvalidOperationException"/> will also occur if no <see cref="WindowsFormsSynchronizationContext"/> could be retrieved or installed.
+    ///   An <see cref="InvalidOperationException"/> will also occur if no <see cref="WindowsFormsSynchronizationContext"/> could be retrieved or installed.
     ///  </para>
     ///  <para>
-    ///  There is no need to marshal the call to the UI thread manually if the call originates from a different thread. This is handled automatically.
+    ///   There is no need to marshal the call to the UI thread manually if the call originates from a different thread. This is handled automatically.
     ///  </para>
     ///  <para>
-    ///  Any exceptions that occur will be automatically propagated to the calling thread.
+    ///   Any exceptions that occur will be automatically propagated to the calling thread.
     ///  </para>
     /// </remarks>
     /// <exception cref="InvalidOperationException">
@@ -5595,22 +5595,22 @@ public partial class Form : ContainerControl
     /// </returns>
     /// <remarks>
     ///  <para>
-    ///  The task will complete when the form is closed or disposed.
+    ///   The task will complete when the form is closed or disposed.
     ///  </para>
     ///  <para>
-    ///  This method immediately returns, even if the form is large and takes a long time to be set up.
+    ///   This method immediately returns, even if the form is large and takes a long time to be set up.
     ///  </para>
     ///  <para>
-    ///  If the form is already displayed asynchronously by <see cref="Form.ShowAsync"/>, an <see cref="InvalidOperationException"/> will be thrown.
+    ///   If the form is already displayed asynchronously by <see cref="Form.ShowAsync"/>, an <see cref="InvalidOperationException"/> will be thrown.
     ///  </para>
     ///  <para>
-    ///  An <see cref="InvalidOperationException"/> will also occur if no <see cref="WindowsFormsSynchronizationContext"/> could be retrieved or installed.
+    ///   An <see cref="InvalidOperationException"/> will also occur if no <see cref="WindowsFormsSynchronizationContext"/> could be retrieved or installed.
     ///  </para>
     ///  <para>
-    ///  There is no need to marshal the call to the UI thread manually if the call originates from a different thread. This is handled automatically.
+    ///   There is no need to marshal the call to the UI thread manually if the call originates from a different thread. This is handled automatically.
     ///  </para>
     ///  <para>
-    ///  Any exceptions that occur will be automatically propagated to the calling thread.
+    ///   Any exceptions that occur will be automatically propagated to the calling thread.
     ///  </para>
     /// </remarks>
     /// <exception cref="InvalidOperationException">
@@ -5621,14 +5621,14 @@ public partial class Form : ContainerControl
 
     private Task<DialogResult> ShowDialogAsyncInternal(IWin32Window? owner)
     {
-        lock (_syncObj)
+        lock (_lock)
         {
-            if (_tcsNonModalForm is not null || _tcsModalForm is not null)
+            if (_nonModalFormCompletion is not null || _modalFormCompletion is not null)
             {
                 throw new InvalidOperationException(SR.Form_HasAlreadyBeenShownAsync);
             }
 
-            _tcsModalForm = new TaskCompletionSource<DialogResult>(TaskCreationOptions.RunContinuationsAsynchronously);
+            _modalFormCompletion = new TaskCompletionSource<DialogResult>(TaskCreationOptions.RunContinuationsAsynchronously);
         }
 
         if (SynchronizationContext.Current is null)
@@ -5640,25 +5640,25 @@ public partial class Form : ContainerControl
             ?? throw new InvalidOperationException(SR.FormOrTaskDialog_NoSyncContextForShowAsync);
 
         syncContext.Post((state) => ShowDialogProc(
-            tcsModalForm: ref _tcsModalForm, owner: owner),
+            modalFormCompletion: ref _modalFormCompletion, owner: owner),
             state: null);
 
-        return _tcsModalForm.Task;
+        return _modalFormCompletion.Task;
 
-        void ShowDialogProc(ref TaskCompletionSource<DialogResult> tcsModalForm, IWin32Window? owner = default)
+        void ShowDialogProc(ref TaskCompletionSource<DialogResult> modalFormCompletion, IWin32Window? owner = default)
         {
             try
             {
                 DialogResult result = ShowDialog(owner);
-                tcsModalForm.SetResult(result);
+                modalFormCompletion.SetResult(result);
             }
             catch (Exception ex)
             {
-                tcsModalForm.SetException(ex);
+                modalFormCompletion.SetException(ex);
             }
             finally
             {
-                tcsModalForm = null!;
+                modalFormCompletion = null!;
             }
         }
     }
