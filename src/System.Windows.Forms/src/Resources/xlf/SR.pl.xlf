@@ -5520,6 +5520,11 @@ Czy chcesz go zamienić?</target>
         <target state="translated">Stopień nieprzezroczystości formantu. </target>
         <note />
       </trans-unit>
+      <trans-unit id="FormOrTaskDialog_NoSyncContextForShowAsync">
+        <source>Failed to retrieve the Synchronization Context for showing the Form asynchronously.</source>
+        <target state="new">Failed to retrieve the Synchronization Context for showing the Form asynchronously.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormOwnedFormsDescr">
         <source>Array of forms owned by this form.</source>
         <target state="translated">Tablica formularzy będących własnością tego formularza.</target>
@@ -5563,6 +5568,11 @@ Czy chcesz go zamienić?</target>
       <trans-unit id="FormWindowStateDescr">
         <source>Determines the initial visual state of the form.</source>
         <target state="translated">Określa początkowy wizualny stan formularza.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Form_HasAlreadyBeenShownAsync">
+        <source>The form has already been shown asynchronously.</source>
+        <target state="new">The form has already been shown asynchronously.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormatControlFormatDescr">

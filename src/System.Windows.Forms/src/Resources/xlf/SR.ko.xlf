@@ -5520,6 +5520,11 @@ Do you want to replace it?</source>
         <target state="translated">컨트롤의 불투명도(%)입니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormOrTaskDialog_NoSyncContextForShowAsync">
+        <source>Failed to retrieve the Synchronization Context for showing the Form asynchronously.</source>
+        <target state="new">Failed to retrieve the Synchronization Context for showing the Form asynchronously.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormOwnedFormsDescr">
         <source>Array of forms owned by this form.</source>
         <target state="translated">이 폼에서 소유하는 폼 배열입니다.</target>
@@ -5563,6 +5568,11 @@ Do you want to replace it?</source>
       <trans-unit id="FormWindowStateDescr">
         <source>Determines the initial visual state of the form.</source>
         <target state="translated">폼의 초기 표시 상태를 결정합니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Form_HasAlreadyBeenShownAsync">
+        <source>The form has already been shown asynchronously.</source>
+        <target state="new">The form has already been shown asynchronously.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormatControlFormatDescr">
