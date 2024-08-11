@@ -3354,6 +3354,8 @@ public partial class Form : ContainerControl
                 Properties.RemoveObject(s_propDummyMdiMenu);
                 PInvoke.DestroyMenu(dummyMenu);
             }
+
+            _tcsNonModalForm?.TrySetResult();
         }
         else
         {
@@ -3854,7 +3856,24 @@ public partial class Form : ContainerControl
         // Remove the form from Application.OpenForms (nothing happens if isn't present)
         Application.OpenForms.Remove(this);
 
-        ((FormClosedEventHandler?)Events[s_formClosedEvent])?.Invoke(this, e);
+        try
+        {
+            ((FormClosedEventHandler?)Events[s_formClosedEvent])?.Invoke(this, e);
+
+            // This effectively ends an `await form.ShowAsync();` call.
+            _tcsNonModalForm?.TrySetResult();
+        }
+        catch (Exception ex)
+        {
+            if (_tcsNonModalForm is not null)
+            {
+                _tcsNonModalForm.TrySetException(ex);
+            }
+            else
+            {
+                throw;
+            }
+        }
     }
 
     /// <summary>
