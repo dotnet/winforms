@@ -19,7 +19,6 @@ internal static class DiagnosticIDs
     public const string DisposeModalDialog = "WFO2000";
 
     // Experimental, number group 5000+
-    public const string ExperimentalVisualStyles = "WFO5000";
     public const string ExperimentalDarkMode = "WFO5001";
     public const string ExperimentalAsync = "WFO5002";
 }

@@ -28,12 +28,9 @@ internal readonly ref struct CreateBrushScope
     /// </summary>
     public CreateBrushScope(Color color)
     {
-#pragma warning disable SYSLIB5002 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        HBRUSH = color.IsSystemColor && !SystemColors.UseAlternativeColorSet
+        HBRUSH = color.IsSystemColor
             ? PInvoke.GetSysColorBrush(color)
             : PInvoke.CreateSolidBrush(color);
-#pragma warning restore SYSLIB5002 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-
         ValidateBrushHandle();
     }
 

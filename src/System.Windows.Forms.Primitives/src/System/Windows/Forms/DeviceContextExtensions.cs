@@ -116,22 +116,7 @@ internal static partial class DeviceContextExtensions
     /// </remarks>
     internal static Color FindNearestColor(this HDC hdc, Color color)
     {
-#pragma warning disable SYSLIB5002 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        if (color.IsSystemColor && SystemColors.UseAlternativeColorSet)
-        {
-            // We need to "un-system" the color for nearest color to work correctly in dark mode,
-            // since GetNearestColor doesn't understand dark mode system colors and internally works
-            // with the light mode colors.
-            color = Color.FromArgb(color.ToArgb());
-            Debug.Assert(!color.IsSystemColor, "Color should not be a system color.");
-        }
-#pragma warning restore SYSLIB5002 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-
-        Color newColor = ColorTranslator.FromWin32(
-            (int)PInvoke.GetNearestColor(
-                hdc: hdc,
-                color: (COLORREF)(uint)ColorTranslator.ToWin32(color)).Value);
-
+        Color newColor = ColorTranslator.FromWin32((int)PInvoke.GetNearestColor(hdc, (COLORREF)(uint)ColorTranslator.ToWin32(color)).Value);
         return newColor.ToArgb() == color.ToArgb() ? color : newColor;
     }
 

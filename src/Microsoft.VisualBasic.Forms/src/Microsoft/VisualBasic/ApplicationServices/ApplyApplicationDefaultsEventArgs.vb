@@ -28,7 +28,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             Me.ColorMode = colorMode
         End Sub
 
-#Enable Warning WFO5000
 #Enable Warning WFO5001
 
         ''' <summary>
@@ -61,5 +60,4 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Public Property ColorMode As SystemColorMode
 
     End Class
-#Disable Warning WFO5001
 End Namespace

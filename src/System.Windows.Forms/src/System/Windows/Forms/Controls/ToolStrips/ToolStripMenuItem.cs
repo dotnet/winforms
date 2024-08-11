@@ -8,7 +8,6 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Design;
 using System.Windows.Forms.Layout;
-using static System.Windows.Forms.Control;
 
 namespace System.Windows.Forms;
 
@@ -122,7 +121,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
         Initialize();
         Overflow = ToolStripItemOverflow.Never;
         _nativeMenuCommandID = nativeMenuCommandId;
-        _targetWindowHandle = GetSafeHandle(targetWindow);
+        _targetWindowHandle = Control.GetSafeHandle(targetWindow);
         _nativeMenuHandle = hmenu;
 
         // Since fetching the image and the text is an awful lot of work
@@ -198,7 +197,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
 
     private void Initialize()
     {
-        if (UseComponentModelRegisteredTypes)
+        if (Control.UseComponentModelRegisteredTypes)
         {
             // Register the type with the ComponentModel so as to be trim safe
             TypeDescriptor.RegisterType<Keys>();
@@ -719,7 +718,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
             return null;
         }
 
-        // We've mapped to a system defined bitmap we know how to draw.
+        // Ee've mapped to a system defined bitmap we know how to draw.
         Bitmap image = new(16, 16);
 
         using (Graphics g = Graphics.FromImage(image))
@@ -1112,7 +1111,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
     /// <summary> this is to support routing to native menu commands </summary>
     internal void SetNativeTargetWindow(IWin32Window window)
     {
-        _targetWindowHandle = GetSafeHandle(window);
+        _targetWindowHandle = Control.GetSafeHandle(window);
     }
 
     /// <summary> this is to support routing to native menu commands </summary>
@@ -1130,7 +1129,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
             return string.Empty;
         }
 
-        if (!UseComponentModelRegisteredTypes)
+        if (!Control.UseComponentModelRegisteredTypes)
         {
             return TypeDescriptor.GetConverter(typeof(Keys)).ConvertToString(context: null, CultureInfo.CurrentUICulture, shortcutKeys);
         }

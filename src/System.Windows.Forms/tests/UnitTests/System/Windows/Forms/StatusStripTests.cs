@@ -122,7 +122,6 @@ public partial class StatusStripTests
         Assert.NotNull(control.Renderer);
         Assert.Same(control.Renderer, control.Renderer);
 
-        // TODO: Assume control.Renderer can be either ToolStripSystemRenderer or ToolStripProfessionalRenderer for the Moment.
         Assert.True(control.Renderer is ToolStripSystemRenderer or ToolStripProfessionalRenderer, "Renderer is not one of the expected types.");
         Assert.True(control.RenderMode is ToolStripRenderMode.System or ToolStripRenderMode.ManagerRenderMode);
 

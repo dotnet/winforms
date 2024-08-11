@@ -48,8 +48,6 @@ public sealed partial class Application
     private static SystemColorMode? s_systemColorMode;
 #pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
-    internal const string WinFormsExperimentalUrl = "https://aka.ms/winforms-experimental/{0}";
-
     private const string DarkModeKeyPath = "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
     private const string DarkModeKey = "AppsUseLightTheme";
     private const int DarkModeNotAvailable = -1;
@@ -252,7 +250,7 @@ public sealed partial class Application
     ///  Gets the default dark mode for the application. This is the SystemColorMode which either has been set
     ///  by <see cref="SetColorMode(SystemColorMode)"/> or its default value <see cref="SystemColorMode.Classic"/>.
     /// </summary>
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = WinFormsExperimentalUrl)]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public static SystemColorMode ColorMode =>
         !s_systemColorMode.HasValue
             ? SystemColorMode.Classic
@@ -264,7 +262,7 @@ public sealed partial class Application
     ///  Sets the default dark mode for the application.
     /// </summary>
     /// <param name="systemColorMode">The default dark mode to set.</param>
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = WinFormsExperimentalUrl)]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public static void SetColorMode(SystemColorMode systemColorMode)
     {
         try
@@ -278,6 +276,11 @@ public sealed partial class Application
                 _ => throw new ArgumentOutOfRangeException(nameof(systemColorMode))
             };
 
+            if (systemColorMode == s_systemColorMode)
+            {
+                return;
+            }
+
             if (GetSystemColorModeInternal() > -1)
             {
                 s_systemColorMode = systemColorMode;
@@ -288,7 +291,40 @@ public sealed partial class Application
         }
         finally
         {
-            SystemColors.UseAlternativeColorSet = IsDarkModeEnabled;
+            bool useAlternateColorSet = SystemColors.UseAlternativeColorSet;
+            bool darkModeEnabled = IsDarkModeEnabled;
+
+            if (useAlternateColorSet != darkModeEnabled)
+            {
+                SystemColors.UseAlternativeColorSet = darkModeEnabled;
+                NotifySystemEventsOfColorChange();
+            }
+        }
+
+        static void NotifySystemEventsOfColorChange()
+        {
+            string s_systemTrackerWindow = $".NET-BroadcastEventWindow.{AppDomain.CurrentDomain.GetHashCode():x}.0";
+
+            HWND hwnd = PInvoke.FindWindow(s_systemTrackerWindow, s_systemTrackerWindow);
+            if (hwnd.IsNull)
+            {
+                // Haven't created the window yet, so no need to notify.
+                return;
+            }
+
+            bool complete = false;
+            bool success = PInvoke.SendMessageCallback(hwnd, PInvoke.WM_SYSCOLORCHANGE + MessageId.WM_REFLECT, () => complete = true);
+            Debug.Assert(success);
+            if (!success)
+            {
+                return;
+            }
+
+            while (!complete)
+            {
+                DoEvents();
+                Thread.Yield();
+            }
         }
     }
 
@@ -310,7 +346,7 @@ public sealed partial class Application
     ///   SystemColorModes is not supported, if the Windows OS <c>High Contrast Mode</c> has been enabled in the system settings.
     ///  </para>
     /// </remarks>
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = WinFormsExperimentalUrl)]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public static SystemColorMode SystemColorMode =>
         GetSystemColorModeInternal() == 0
             ? SystemColorMode.Dark
@@ -349,7 +385,7 @@ public sealed partial class Application
     ///  Gets a value indicating whether the application is running in a dark system color context.
     ///  Note: In a high contrast mode, this will always return <see langword="false"/>.
     /// </summary>
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = WinFormsExperimentalUrl)]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public static bool IsDarkModeEnabled =>
         !SystemInformation.HighContrast
         && (ColorMode == SystemColorMode.Dark);

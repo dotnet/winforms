@@ -5,7 +5,7 @@ using System.Windows.Forms.Analyzers.Diagnostics;
 
 namespace System.Windows.Forms;
 
-[Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = Application.WinFormsExperimentalUrl)]
+[Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
 public enum SystemColorMode
 {
     /// <summary>

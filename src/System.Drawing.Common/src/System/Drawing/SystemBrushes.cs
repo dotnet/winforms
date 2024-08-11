@@ -5,11 +5,6 @@ namespace System.Drawing;
 
 public static class SystemBrushes
 {
-#if NET9_0_OR_GREATER
-#pragma warning disable SYSLIB5002 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-    private static bool s_colorSetOnLastAccess = SystemColors.UseAlternativeColorSet;
-#pragma warning restore SYSLIB5002 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-#endif
     private static readonly object s_systemBrushesKey = new();
 
     public static Brush ActiveBorder => FromSystemColor(SystemColors.ActiveBorder);
@@ -62,20 +57,7 @@ public static class SystemBrushes
             throw new ArgumentException(SR.Format(SR.ColorNotSystemColor, c.ToString()));
         }
 
-#if NET9_0_OR_GREATER
-#pragma warning disable SYSLIB5002 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        if (s_colorSetOnLastAccess != SystemColors.UseAlternativeColorSet)
-        {
-            s_colorSetOnLastAccess = SystemColors.UseAlternativeColorSet;
-
-            // We need to clear the SystemBrushes cache, when the ColorMode had changed.
-            Gdip.ThreadData.Remove(s_systemBrushesKey);
-        }
-#pragma warning restore SYSLIB5002 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-#endif
-
-        if (!Gdip.ThreadData.TryGetValue(s_systemBrushesKey, out object? tempSystemBrushes)
-            || tempSystemBrushes is not Brush[] systemBrushes)
+        if (!Gdip.ThreadData.TryGetValue(s_systemBrushesKey, out object? tempSystemBrushes) || tempSystemBrushes is not Brush[] systemBrushes)
         {
             systemBrushes = new Brush[(int)KnownColor.WindowText + (int)KnownColor.MenuHighlight - (int)KnownColor.YellowGreen];
             Gdip.ThreadData[s_systemBrushesKey] = systemBrushes;

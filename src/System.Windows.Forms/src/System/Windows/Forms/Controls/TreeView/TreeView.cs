@@ -2838,7 +2838,6 @@ public partial class TreeView : Control
                             TreeNodeStates curState = e.State;
 
                             Font font = node.NodeFont ?? node.TreeView.Font;
-
                             Color color = (((curState & TreeNodeStates.Selected) == TreeNodeStates.Selected) && node.TreeView.Focused) ? SystemColors.HighlightText : (node.ForeColor != Color.Empty) ? node.ForeColor : node.TreeView.ForeColor;
 
                             // Draw the actual node.
