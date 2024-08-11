@@ -50,21 +50,15 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsTheory>
         <ClassData(GetType(PathTestData))>
         Public Sub CleanupDirectoriesTests(testDirectory As String)
-            Dim testCode As Action =
-                Sub()
-                    CleanupDirectories(testDirectory, onDirectoryNotEmpty:=DeleteDirectoryOption.ThrowIfDirectoryNonEmpty)
-                End Sub
+            Dim testCode As Action = Sub() CleanupDirectories(testDirectory, onDirectoryNotEmpty:=DeleteDirectoryOption.ThrowIfDirectoryNonEmpty)
             testCode.Should.Throw(Of ArgumentException)()
         End Sub
 
         <WinFormsTheory>
         <ClassData(GetType(PathTestData))>
         Public Sub CleanupDirectoriesWithDestinationDirectoryTests(destinationDirectory As String)
-            Dim testCode As Action =
-                 Sub()
-                     Dim testDirectory As String = CreateTempDirectory()
-                     CleanupDirectories(testDirectory, destinationDirectory, onDirectoryNotEmpty:=DeleteDirectoryOption.ThrowIfDirectoryNonEmpty)
-                 End Sub
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim testCode As Action = Sub() CleanupDirectories(testDirectory, destinationDirectory, onDirectoryNotEmpty:=DeleteDirectoryOption.ThrowIfDirectoryNonEmpty)
             If destinationDirectory IsNot Nothing Then
                 testCode.Should.Throw(Of ArgumentException)()
             End If
@@ -253,34 +247,26 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <WinFormsFact>
         Public Sub DriveProxyTest()
-            FileIO.FileSystem.Drives.Count.Should.Be(_fileSystem.Drives.Count)
+            _fileSystem.Drives.Count.Should.Be(FileIO.FileSystem.Drives.Count)
         End Sub
 
         <WinFormsFact>
         Public Sub FileNormalizePathEmptyStringTest_Fail()
-            Dim testCode As Action =
-                Sub()
-                    FileSystemUtils.NormalizePath("")
-                End Sub
-
+            Dim testCode As Action = Sub() FileSystemUtils.NormalizePath("")
             testCode.Should.Throw(Of ArgumentException).WithMessage(
                 expectedWildcardPattern:="The path is empty. (Parameter 'path')")
         End Sub
 
         <WinFormsFact>
         Public Sub FileNormalizePathNullTest_Fail()
-            Dim testCode As Action =
-                Sub()
-                    FileSystemUtils.NormalizePath(Nothing)
-                End Sub
-
+            Dim testCode As Action = Sub() FileSystemUtils.NormalizePath(Nothing)
             testCode.Should.Throw(Of ArgumentNullException).WithMessage(
                 expectedWildcardPattern:="Value cannot be null. (Parameter 'path')")
         End Sub
 
         <WinFormsFact>
         Public Sub FileNormalizePathTest_Success()
-            FileSystemUtils.NormalizePath(IO.Path.GetTempPath)
+            FileSystemUtils.NormalizePath(IO.Path.GetTempPath).Should.Be(IO.Path.GetTempPath.TrimEnd(IO.Path.DirectorySeparatorChar))
         End Sub
 
         <WinFormsFact>
