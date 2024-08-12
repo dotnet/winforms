@@ -10,9 +10,19 @@ internal static partial class PInvoke
     /// <inheritdoc cref="GetSysColorBrush(SYS_COLOR_INDEX)"/>
     public static HBRUSH GetSysColorBrush(Color systemColor)
     {
+#pragma warning disable SYSLIB5002 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        bool useSolidBrush = SystemColors.UseAlternativeColorSet;
+#pragma warning restore SYSLIB5002
+
+        if (useSolidBrush)
+        {
+            // We don't have a real system color, so we'll just create a solid brush.
+            return CreateSolidBrush(systemColor);
+        }
+
         Debug.Assert(systemColor.IsSystemColor);
 
         // Extract the COLOR value
-        return PInvoke.GetSysColorBrush((SYS_COLOR_INDEX)(ColorTranslator.ToOle(systemColor) & 0xFF));
+        return GetSysColorBrush((SYS_COLOR_INDEX)(ColorTranslator.ToOle(systemColor) & 0xFF));
     }
 }

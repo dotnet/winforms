@@ -2537,6 +2537,13 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     protected override void OnHandleCreated(EventArgs e)
     {
         base.OnHandleCreated(e);
+
+        // Making sure, the _toolBar BackColor gets updated when the
+        // default BackColor is not the typical light-theme one.
+#pragma warning disable CA2245 // Do not assign a property to itself
+        BackColor = BackColor;
+#pragma warning restore CA2245
+
         OnLayoutInternal(dividerOnly: false);
         TypeDescriptor.Refreshed += OnTypeDescriptorRefreshed;
         if (_selectedObjects is not null && _selectedObjects.Length > 0)

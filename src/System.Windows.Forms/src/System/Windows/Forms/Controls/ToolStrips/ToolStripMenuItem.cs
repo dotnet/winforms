@@ -1033,7 +1033,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
         }
         else
         {
-            // Toplevel item support, menu items hosted on a plain ToolStrip dropdown
+            // Top-level item support, menu items hosted on a plain ToolStrip dropdown
             if ((DisplayStyle & ToolStripItemDisplayStyle.Text) == ToolStripItemDisplayStyle.Text)
             {
                 renderer.DrawItemText(new ToolStripItemTextRenderEventArgs(g, this, Text, InternalLayout.TextRectangle, textColor, Font, InternalLayout.TextFormat));

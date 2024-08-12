@@ -1527,6 +1527,11 @@
         <target state="translated">ポインターがコントロールに移動したときに表示されるカーソルです。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlDarkModeDescr">
+        <source>Determines the dark mode setting for the control. This ambient property inherits its value from its parent control or from the Application class.</source>
+        <target state="new">Determines the dark mode setting for the control. This ambient property inherits its value from its parent control or from the Application class.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ControlDataContextChangedDescr">
         <source>Occurs when the value of the DataContext property changes.</source>
         <target state="translated">DataContext プロパティの値が変更されたときに発生します。</target>
@@ -2180,6 +2185,11 @@
       <trans-unit id="CursorNonSerializableHandle">
         <source>Stock cursors cannot be serialized.</source>
         <target state="translated">ストック カーソルをシリアル化できません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DarkModeNotSupported">
+        <source>Dark mode cannot be activated, either because of an activated High-Contrast mode or because the underlying OS does not support it.</source>
+        <target state="new">Dark mode cannot be activated, either because of an activated High-Contrast mode or because the underlying OS does not support it.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataBindingAddNewNotSupportedOnPropertyManager">
@@ -5305,6 +5315,16 @@ Do you want to replace it?</source>
         <target state="translated">自動スクロール機能のスクロール バーの現在の位置です。</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormBorderColorChangedDescr">
+        <source>Occurs whenever the FormBorderColor property is changed.</source>
+        <target state="new">Occurs whenever the FormBorderColor property is changed.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormBorderColorDescr">
+        <source>The color of the Form's border.</source>
+        <target state="new">The color of the Form's border.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormBorderStyleDescr">
         <source>Indicates the appearance and behavior of the border and title bar of the form.</source>
         <target state="translated">フォームの境界線およびタイトル バーの、外観および動作を示します。</target>
@@ -5315,9 +5335,39 @@ Do you want to replace it?</source>
         <target state="translated">フォームの [キャンセル] ボタンです。このプロパティを設定すると、ユーザーが Esc キーを押すたびに、ボタンがクリックされます。</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormCaptionBackColorChangedDescr">
+        <source>Occurs whenever the FormCaptionBackColor property is changed.</source>
+        <target state="new">Occurs whenever the FormCaptionBackColor property is changed.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCaptionBackColorDescr">
+        <source>The back color of the Form's caption (title bar).</source>
+        <target state="new">The back color of the Form's caption (title bar).</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCaptionTextColorChangedDescr">
+        <source>Occurs whenever the FormCaptionTextColor property is changed.</source>
+        <target state="new">Occurs whenever the FormCaptionTextColor property is changed.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCaptionTextColorDescr">
+        <source>The color of the Form's text caption (title bar text).</source>
+        <target state="new">The color of the Form's text caption (title bar text).</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormControlBoxDescr">
         <source>Determines whether a form has a Control/System menu box.</source>
         <target state="translated">フォームにコントロール/システム メニュー ボックスを加えるかどうかを決定します。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCornerPreferenceChangedDescr">
+        <source>Occurs whenever the FormCornerPreference property is changed.</source>
+        <target state="new">Occurs whenever the FormCornerPreference property is changed.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCornerPreferenceDescr">
+        <source>The rounding style of the Form's border.</source>
+        <target state="new">The rounding style of the Form's border.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormDesktopBoundsDescr">
@@ -5520,6 +5570,11 @@ Do you want to replace it?</source>
         <target state="translated">コントロールの不透明度の割合です。</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormOrTaskDialog_NoSyncContextForShowAsync">
+        <source>Failed to retrieve the Synchronization Context for showing the Form asynchronously.</source>
+        <target state="new">Failed to retrieve the Synchronization Context for showing the Form asynchronously.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormOwnedFormsDescr">
         <source>Array of forms owned by this form.</source>
         <target state="translated">このフォームが持つ配列のフォームです。</target>
@@ -5563,6 +5618,11 @@ Do you want to replace it?</source>
       <trans-unit id="FormWindowStateDescr">
         <source>Determines the initial visual state of the form.</source>
         <target state="translated">フォームの最初の表示状態を決定します。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Form_HasAlreadyBeenShownAsync">
+        <source>The form has already been shown asynchronously.</source>
+        <target state="new">The form has already been shown asynchronously.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormatControlFormatDescr">
