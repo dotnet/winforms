@@ -9,8 +9,8 @@
     <AssemblyName>Microsoft.VisualBasic.Forms</AssemblyName>
     <Deterministic>true</Deterministic>
     <OptionExplicit>On</OptionExplicit>
-    <OptionInfer>Off</OptionInfer>
     <OptionStrict>On</OptionStrict>
+    <OptionInfer>On</OptionInfer>
     <RootNamespace></RootNamespace>
     <LangVersion>Latest</LangVersion>
     <VBRuntime>None</VBRuntime>

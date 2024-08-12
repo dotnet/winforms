@@ -12,6 +12,7 @@ using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
 using Windows.Win32.System.Threading;
 using Windows.Win32.UI.Accessibility;
+using Windows.Win32.Graphics.Dwm;
 
 namespace System.Windows.Forms;
 
@@ -47,6 +48,10 @@ public partial class Form : ContainerControl
     private static readonly object s_resizeEndEvent = new();
     private static readonly object s_rightToLeftLayoutChangedEvent = new();
     private static readonly object s_dpiChangedEvent = new();
+    private static readonly object s_formBorderColorChanged = new();
+    private static readonly object s_formCaptionBackColorChanged = new();
+    private static readonly object s_formCaptionTextColorChanged = new();
+    private static readonly object s_formCornerPreferenceChanged = new();
 
     //
     // The following flags should be used with formState[..] not formStateEx[..]
@@ -98,7 +103,7 @@ public partial class Form : ContainerControl
     private const int SizeGripSize = 16;
 
     private static Icon? s_defaultIcon;
-    private static readonly object s_internalSyncObject = new();
+    private static readonly Lock s_internalSyncObject = new();
 
     // Property store keys for properties.  The property store allocates most efficiently
     // in groups of four, so we try to lump properties in groups of four based on how
@@ -131,6 +136,7 @@ public partial class Form : ContainerControl
 
     private static readonly int s_propOpacity = PropertyStore.CreateKey();
     private static readonly int s_propTransparencyKey = PropertyStore.CreateKey();
+    private static readonly int s_propFormCornerPreference = PropertyStore.CreateKey();
 
     // Form per instance members
     // Note: Do not add anything to this list unless absolutely necessary.
@@ -199,6 +205,10 @@ public partial class Form : ContainerControl
 
         SetState(States.Visible, false);
         SetState(States.TopLevel, true);
+
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     }
 
     /// <summary>
@@ -2334,6 +2344,228 @@ public partial class Form : ContainerControl
     }
 
     /// <summary>
+    ///  Sets or gets the rounding style of the corners using the <see cref="FormCornerPreference"/> enum.
+    /// </summary>
+    [DefaultValue(FormCornerPreference.Default)]
+    [SRCategory(nameof(SR.CatWindowStyle))]
+    [SRDescription(nameof(SR.FormCornerPreferenceDescr))]
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
+    public FormCornerPreference FormCornerPreference
+    {
+        get => Properties.ContainsInteger(s_propFormCornerPreference)
+            ? (FormCornerPreference)Properties.GetInteger(s_propFormCornerPreference)
+            : FormCornerPreference.Default;
+        set
+        {
+            if (value == FormCornerPreference)
+            {
+                return;
+            }
+
+            _ = value switch
+            {
+                FormCornerPreference.Default => value,
+                FormCornerPreference.DoNotRound => value,
+                FormCornerPreference.Round => value,
+                FormCornerPreference.RoundSmall => value,
+                _ => throw new ArgumentOutOfRangeException(nameof(value))
+            };
+
+            if (value == FormCornerPreference.Default)
+            {
+                Properties.RemoveObject(s_propFormCornerPreference);
+            }
+            else
+            {
+                Properties.SetInteger(s_propFormCornerPreference, (int)value);
+            }
+
+            if (IsHandleCreated)
+            {
+                SetFormCornerPreferenceInternal(value);
+            }
+
+            OnFormCornerPreferenceChanged(EventArgs.Empty);
+        }
+    }
+
+    /// <summary>
+    ///  Raises the <see cref="FormCornerPreferenceChanged"/> event when the
+    ///  <see cref="FormCornerPreference"/> property changes.
+    /// </summary>
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
+    protected virtual void OnFormCornerPreferenceChanged(EventArgs e)
+    {
+        if (Events[s_formCornerPreferenceChanged] is EventHandler eventHandler)
+        {
+            eventHandler(this, e);
+        }
+    }
+
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    private unsafe void SetFormCornerPreferenceInternal(FormCornerPreference cornerPreference)
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    {
+        DWM_WINDOW_CORNER_PREFERENCE dwmCornerPreference = cornerPreference switch
+        {
+            FormCornerPreference.Default => DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_DEFAULT,
+            FormCornerPreference.DoNotRound => DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_DONOTROUND,
+            FormCornerPreference.Round => DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUND,
+            FormCornerPreference.RoundSmall => DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUNDSMALL,
+            _ => throw new ArgumentOutOfRangeException(nameof(cornerPreference))
+        };
+
+        PInvoke.DwmSetWindowAttribute(
+            HWND,
+            DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE,
+            &dwmCornerPreference,
+            sizeof(DWM_WINDOW_CORNER_PREFERENCE));
+    }
+
+    /// <summary>
+    ///  Sets or gets the Form's border color.
+    /// </summary>
+    [SRCategory(nameof(SR.CatWindowStyle))]
+    [SRDescription(nameof(SR.FormBorderColorDescr))]
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
+    public Color FormBorderColor
+    {
+        get => GetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_BORDER_COLOR);
+        set
+        {
+            if (value == FormBorderColor)
+            {
+                return;
+            }
+
+            if (IsHandleCreated)
+            {
+                SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_BORDER_COLOR, value);
+            }
+
+            OnFormBorderColorChanged(EventArgs.Empty);
+        }
+    }
+
+    /// <summary>
+    ///  Raises the <see cref="FormBorderColorChanged"/> event when the <see cref="FormBorderColor"/> property changes.
+    /// </summary>
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
+    protected virtual void OnFormBorderColorChanged(EventArgs e)
+    {
+        if (Events[s_formBorderColorChanged] is EventHandler eventHandler)
+        {
+            eventHandler(this, e);
+        }
+    }
+
+    /// <summary>
+    ///  Sets or gets the Form's title bar back color.
+    /// </summary>
+    [SRCategory(nameof(SR.CatWindowStyle))]
+    [SRDescription(nameof(SR.FormCaptionBackColorDescr))]
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
+    public Color FormCaptionBackColor
+    {
+        get => GetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_CAPTION_COLOR);
+        set
+        {
+            if (value == FormCaptionBackColor)
+            {
+                return;
+            }
+
+            if (IsHandleCreated)
+            {
+                SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_CAPTION_COLOR, value);
+            }
+
+            OnFormCaptionBackColorChanged(EventArgs.Empty);
+        }
+    }
+
+    /// <summary>
+    ///  Raises the <see cref="FormCaptionBackColor"/> event when the <see cref="FormCaptionBackColor"/> property changes.
+    /// </summary>
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
+    protected virtual void OnFormCaptionBackColorChanged(EventArgs e)
+    {
+        if (Events[s_formCaptionBackColorChanged] is EventHandler eventHandler)
+        {
+            eventHandler(this, e);
+        }
+    }
+
+    /// <summary>
+    ///  Sets or gets the Form's title bar back color.
+    /// </summary>
+    [SRCategory(nameof(SR.CatWindowStyle))]
+    [SRDescription(nameof(SR.FormCaptionTextColorDescr))]
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
+    public Color FormCaptionTextColor
+    {
+        get => GetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_TEXT_COLOR);
+        set
+        {
+            if (value == FormCaptionTextColor)
+            {
+                return;
+            }
+
+            if (IsHandleCreated)
+            {
+                SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_TEXT_COLOR, value);
+            }
+
+            OnFormCaptionTextColorChanged(EventArgs.Empty);
+        }
+    }
+
+    /// <summary>
+    ///  Raises the <see cref="FormCaptionTextColor"/> event when the <see cref="FormCaptionTextColor"/> property changes.
+    /// </summary>
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
+    protected virtual void OnFormCaptionTextColorChanged(EventArgs e)
+    {
+        if (Events[s_formCaptionBackColorChanged] is EventHandler eventHandler)
+        {
+            eventHandler(this, e);
+        }
+    }
+
+    private unsafe Color GetFormAttributeColorInternal(DWMWINDOWATTRIBUTE dmwWindowAttribute)
+    {
+        COLORREF colorRef;
+
+        PInvoke.DwmGetWindowAttribute(
+            HWND,
+            dmwWindowAttribute,
+            &colorRef,
+            (uint)sizeof(COLORREF));
+
+        return colorRef;
+    }
+
+    private unsafe void SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE dmwWindowAttribute, Color color)
+    {
+        COLORREF colorRef = color;
+
+        PInvoke.DwmSetWindowAttribute(
+            HWND,
+            dmwWindowAttribute,
+            &colorRef,
+            (uint)sizeof(COLORREF));
+    }
+
+    /// <summary>
     ///  Gets or sets the form's window state.
     /// </summary>
     [SRCategory(nameof(SR.CatLayout))]
@@ -2462,6 +2694,54 @@ public partial class Form : ContainerControl
     {
         add => Events.AddHandler(s_formClosingEvent, value);
         remove => Events.RemoveHandler(s_formClosingEvent, value);
+    }
+
+    /// <summary>
+    ///  Occurs when the <see cref="FormBorderColor"/> property has changed.
+    /// </summary>
+    [SRCategory(nameof(SR.CatAppearance))]
+    [SRDescription(nameof(SR.FormBorderColorChangedDescr))]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
+    public event EventHandler? FormBorderColorChanged
+    {
+        add => Events.AddHandler(s_formBorderColorChanged, value);
+        remove => Events.RemoveHandler(s_formBorderColorChanged, value);
+    }
+
+    /// <summary>
+    ///  Occurs when the <see cref="FormCaptionBackColor"/> property has changed.
+    /// </summary>
+    [SRCategory(nameof(SR.CatAppearance))]
+    [SRDescription(nameof(SR.FormCaptionBackColorChangedDescr))]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
+    public event EventHandler? FormCaptionBackColorChanged
+    {
+        add => Events.AddHandler(s_formCaptionBackColorChanged, value);
+        remove => Events.RemoveHandler(s_formCaptionBackColorChanged, value);
+    }
+
+    /// <summary>
+    ///  Occurs when the <see cref="FormCaptionTextColor"/> property has changed.
+    /// </summary>
+    [SRCategory(nameof(SR.CatAppearance))]
+    [SRDescription(nameof(SR.FormCaptionTextColorChangedDescr))]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
+    public event EventHandler? FormCaptionTextColorChanged
+    {
+        add => Events.AddHandler(s_formCaptionTextColorChanged, value);
+        remove => Events.RemoveHandler(s_formCaptionTextColorChanged, value);
+    }
+
+    /// <summary>
+    ///  Occurs when the <see cref="FormCornerPreference"/> property has changed.
+    /// </summary>
+    [SRCategory(nameof(SR.CatAppearance))]
+    [SRDescription(nameof(SR.FormCornerPreferenceChangedDescr))]
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
+    public event EventHandler? FormCornerPreferenceChanged
+    {
+        add => Events.AddHandler(s_formCornerPreferenceChanged, value);
+        remove => Events.RemoveHandler(s_formCornerPreferenceChanged, value);
     }
 
     /// <summary>
@@ -2724,7 +3004,8 @@ public partial class Form : ContainerControl
         UpdateWindowState();
         FormWindowState winState = WindowState;
         FormBorderStyle borderStyle = FormBorderStyle;
-        bool sizableBorder = borderStyle is FormBorderStyle.SizableToolWindow or FormBorderStyle.Sizable;
+        bool sizableBorder = (borderStyle is FormBorderStyle.SizableToolWindow
+                              or FormBorderStyle.Sizable);
 
         bool showMin = MinimizeBox && winState != FormWindowState.Minimized;
         bool showMax = MaximizeBox && winState != FormWindowState.Maximized;
@@ -4083,6 +4364,13 @@ public partial class Form : ContainerControl
         // Finally fire the new OnShown(unless the form has already been closed).
         if (IsHandleCreated)
         {
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            if (Application.IsDarkModeEnabled)
+            {
+                PInvoke.SetWindowTheme(HWND, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null);
+            }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
             BeginInvoke(new MethodInvoker(CallShownEvent));
         }
     }
@@ -5816,9 +6104,9 @@ public partial class Form : ContainerControl
             }
         }
 
-        if (containerControl.ActiveControl is IButtonControl buttonControl)
+        if (containerControl.ActiveControl is IButtonControl control)
         {
-            SetDefaultButton(buttonControl);
+            SetDefaultButton(control);
         }
         else
         {

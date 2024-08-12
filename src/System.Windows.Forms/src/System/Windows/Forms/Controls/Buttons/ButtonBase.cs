@@ -77,6 +77,11 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
         SetExtendedState(ExtendedStates.UserPreferredSizeCache, true);
 
         SetStyle(ControlStyles.UserMouse | ControlStyles.UserPaint, OwnerDraw);
+
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
         SetFlag(FlagUseMnemonic, true);
         SetFlag(FlagShowToolTip, false);
     }
