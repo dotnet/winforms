@@ -14,7 +14,6 @@ Imports System.Windows.Forms
 Imports System.Windows.Forms.Analyzers.Diagnostics
 
 Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
-Imports VbUtils = Microsoft.VisualBasic.CompilerServices.Utils
 
 Namespace Microsoft.VisualBasic.ApplicationServices
 
@@ -92,59 +91,59 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ' How long a subsequent instance will wait for the original instance to get on its feet.
         Private Const SecondInstanceTimeOut As Integer = 2500 ' milliseconds.
 
-                Friend Const MINIMUM_SPLASH_EXPOSURE_DEFAULT As Integer = 2000 ' milliseconds.
-                Friend Const WinFormsExperimentalUrl As String = "https://aka.ms/winforms-experimental/{0}"
+        Friend Const MinimumSplashExposureDefault As Integer = 2000 ' milliseconds.
+        Friend Const WinFormsExperimentalUrl As String = "https://aka.ms/winforms-experimental/{0}"
 
-        ''' <summary>
         Private ReadOnly _splashLock As New Object
         Private ReadOnly _appContext As WinFormsAppContext
-        ''' <summary>
+
         ' Sync object
         Private ReadOnly _networkAvailabilityChangeLock As New Object
-        ''' <summary>
+
         Private _unhandledExceptionHandlers As List(Of UnhandledExceptionEventHandler)
         Private _processingUnhandledExceptionEvent As Boolean
-        ''' <summary>
+
         ' Tracks whether we need to create the network object so we can listen to the NetworkAvailabilityChanged event.
         Private _turnOnNetworkListener As Boolean
-        ''' <summary>
+
         ' Whether we have made it through the processing of OnInitialize.
         Private _finishedOnInitialize As Boolean
-        ''' <summary>
+
         Private _networkAvailabilityEventHandlers As List(Of Devices.NetworkAvailableEventHandler)
         Private _networkObject As Devices.Network
-        ' milliseconds.
+
         ' Whether this app runs using Word like instancing behavior.
         Private _isSingleInstance As Boolean
-        ''' <summary>
+
         ' Defines when the application decides to close.
         Private _shutdownStyle As ShutdownMode
-        ' This is a custom event because we want to hook up System.Windows.Forms.Application.ThreadException
+
         ' Whether to use Windows XP styles.
         Private _enableVisualStyles As Boolean
-                _unhandledExceptionHandlers.Add(value)
+
         ' We only need to show the splash screen once.
         ' Protect the user from himself if they are overriding our app model.
         Private _didSplashScreen As Boolean
-        ' Only add the listener once so we don't fire the UnHandledException event over and over for the same exception
+
         ' For splash screens with a minimum display time, this let's us know when that time
         ' has expired and it is OK to close the splash screen.
         Private _splashScreenCompletionSource As TaskCompletionSource(Of Boolean)
-        RemoveHandler(value As UnhandledExceptionEventHandler)
+
         Private _formLoadWaiter As AutoResetEvent
         Private _splashScreen As Form
+
         ' Minimum amount of time to show the splash screen. 0 means hide as soon as the app comes up.
         Private _minimumSplashExposure As Integer = MinimumSplashExposureDefault
-                    Private _splashTimer As Timers.Timer
-                    Private _appSynchronizationContext As SynchronizationContext
+        Private _splashTimer As Timers.Timer
+        Private _appSynchronizationContext As SynchronizationContext
 
-                    RaiseEvent(sender As Object, e As UnhandledExceptionEventArgs)
-                If _unhandledExceptionHandlers IsNot Nothing Then
-
-        ' The HighDpiMode the user picked from the AppDesigner or assigned to the ApplyHighDpiMode's Event.
         ' Informs My.Settings whether to save the settings on exit or not.
         Private _saveMySettingsOnExit As Boolean
-        For Each handler As UnhandledExceptionEventHandler In _unhandledExceptionHandlers
+
+        ' The HighDpiMode the user picked from the AppDesigner or assigned to the ApplyApplicationsDefault event.
+        Private _highDpiMode As HighDpiMode = HighDpiMode.SystemAware
+#Disable Warning WFO5001 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
+        ' The ColorMode (Classic/Light, System, Dark) the user assigned to the ApplyApplicationsDefault event.
         ' Note: We aim to expose this to the App Designer in later runtime/VS versions.
         Private _colorMode As SystemColorMode = SystemColorMode.Classic
 #Enable Warning WFO5001 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
@@ -152,13 +151,13 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         '''  Occurs when the network availability changes.
         ''' </summary>
-
-        ' Now that we are out of the <see cref="UnhandledException"/> handler, treat exceptions normally again.
-        ' if the user writes a handler for it.
-        ' The reason being that it is very expensive to handle and kills our application startup performance.
-        AddHandler(value As Devices.NetworkAvailableEventHandler)
-        SyncLock _networkAvailabilityChangeLock
-        If _networkAvailabilityEventHandlers Is Nothing Then
+        Public Custom Event NetworkAvailabilityChanged As Devices.NetworkAvailableEventHandler
+            ' This is a custom event because we want to hook up the NetworkAvailabilityChanged event only
+            ' if the user writes a handler for it.
+            ' The reason being that it is very expensive to handle and kills our application startup performance.
+            AddHandler(value As Devices.NetworkAvailableEventHandler)
+                SyncLock _networkAvailabilityChangeLock
+                    If _networkAvailabilityEventHandlers Is Nothing Then
                         _networkAvailabilityEventHandlers = New List(Of Devices.NetworkAvailableEventHandler)
                     End If
 
@@ -175,21 +174,21 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     If _networkObject Is Nothing AndAlso _finishedOnInitialize Then
                         _networkObject = New Devices.Network
                         Dim windowsFormsApplicationBase As WindowsFormsApplicationBase = Me
-        AddHandler() _networkObject.NetworkAvailabilityChanged,
+                        AddHandler _networkObject.NetworkAvailabilityChanged,
                             AddressOf windowsFormsApplicationBase.NetworkAvailableEventAdaptor
                     End If
-        End SyncLock
-        End AddHandler
+                End SyncLock
+            End AddHandler
 
-        RemoveHandler(value As Devices.NetworkAvailableEventHandler)
-        If _networkAvailabilityEventHandlers IsNot Nothing AndAlso
+            RemoveHandler(value As Devices.NetworkAvailableEventHandler)
+                If _networkAvailabilityEventHandlers IsNot Nothing AndAlso
                     _networkAvailabilityEventHandlers.Count > 0 Then
 
                     _networkAvailabilityEventHandlers.Remove(value)
 
                     ' Last one to leave - turn out the lights...
                     If _networkAvailabilityEventHandlers.Count = 0 Then
-        RemoveHandler() _networkObject.NetworkAvailabilityChanged, AddressOf NetworkAvailableEventAdaptor
+                        RemoveHandler _networkObject.NetworkAvailabilityChanged, AddressOf NetworkAvailableEventAdaptor
                         If _networkObject IsNot Nothing Then
 
                             ' Stop listening to network change events because we are going to go away.
@@ -198,99 +197,82 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                             ' No sense holding on to this if nobody is listening.
                             _networkObject = Nothing
                         End If
-        End If
-        End If
-        End RemoveHandler
+                    End If
+                End If
+            End RemoveHandler
 
-        RaiseEvent(sender As Object, e As Devices.NetworkAvailableEventArgs)
-        If _networkAvailabilityEventHandlers IsNot Nothing Then
-        For Each handler As Devices.NetworkAvailableEventHandler In _networkAvailabilityEventHandlers
-        Try
-        If handler IsNot Nothing Then handler.Invoke(sender, e)
+            RaiseEvent(sender As Object, e As Devices.NetworkAvailableEventArgs)
+                If _networkAvailabilityEventHandlers IsNot Nothing Then
+                    For Each handler As Devices.NetworkAvailableEventHandler In _networkAvailabilityEventHandlers
+                        Try
+                            If handler IsNot Nothing Then handler.Invoke(sender, e)
                         Catch ex As Exception
-        If Not OnUnhandledException(New UnhandledExceptionEventArgs(True, ex)) Then
+                            If Not OnUnhandledException(New UnhandledExceptionEventArgs(True, ex)) Then
 
-        ' The user didn't write a handler so throw the error up the chain.
-        Throw
-        End If
-        End Try
-        Next
-        End If
-        End RaiseEvent
+                                ' The user didn't write a handler so throw the error up the chain.
+                                Throw
+                            End If
+                        End Try
+                    Next
+                End If
+            End RaiseEvent
         End Event
 
         ''' <summary>
-        '''  Generates the name for the remote singleton that we use to channel multiple instances
-        '''  to the same application model thread.
-        ''' </summary>
-        ''' <param name="entry"></param>
-        ''' <returns>
         '''  Occurs when the application encounters an <see cref="UnhandledException"/>.
-        ''' </returns>
+        ''' </summary>
         Public Custom Event UnhandledException As UnhandledExceptionEventHandler
-                Dim version As Version = entry.GetName.Version
-        ' This is a custom event because we want to hook up System.Windows.Forms.Application.ThreadException
-        ' only if the user writes a handler for this event. We only want to hook the ThreadException event
-        ' if the user is handling this event because the act of listening to Application.ThreadException
-        ' causes WinForms to snuff exceptions and we only want WinForms to do that if we are assured that
-        ' the user wrote their own handler to deal with the error instead.
-        AddHandler(value As UnhandledExceptionEventHandler)
-        If _unhandledExceptionHandlers Is Nothing Then
+
+            ' This is a custom event because we want to hook up System.Windows.Forms.Application.ThreadException
+            ' only if the user writes a handler for this event. We only want to hook the ThreadException event
+            ' if the user is handling this event because the act of listening to Application.ThreadException
+            ' causes WinForms to snuff exceptions and we only want WinForms to do that if we are assured that
+            ' the user wrote their own handler to deal with the error instead.
+            AddHandler(value As UnhandledExceptionEventHandler)
+                If _unhandledExceptionHandlers Is Nothing Then
                     _unhandledExceptionHandlers = New List(Of UnhandledExceptionEventHandler)
                 End If
-        If version IsNot Nothing Then
+
                 _unhandledExceptionHandlers.Add(value)
-                Else
-        ' Only add the listener once so we don't fire the UnHandledException event over and over for the same exception
-        If _unhandledExceptionHandlers.Count = 1 Then
-        AddHandler() Application.ThreadException, AddressOf OnUnhandledExceptionEventAdaptor
+
+                ' Only add the listener once so we don't fire the UnHandledException event over and over for the same exception
+                If _unhandledExceptionHandlers.Count = 1 Then
+                    AddHandler Application.ThreadException, AddressOf OnUnhandledExceptionEventAdaptor
                 End If
-        End AddHandler
-        End If
-        RemoveHandler(value As UnhandledExceptionEventHandler)
-        If _unhandledExceptionHandlers IsNot Nothing AndAlso
+            End AddHandler
+
+            RemoveHandler(value As UnhandledExceptionEventHandler)
+                If _unhandledExceptionHandlers IsNot Nothing AndAlso
                     _unhandledExceptionHandlers.Count > 0 Then
                     _unhandledExceptionHandlers.Remove(value)
 
                     ' Last one to leave, turn out the lights...
                     If _unhandledExceptionHandlers.Count = 0 Then
-        RemoveHandler() Application.ThreadException, AddressOf OnUnhandledExceptionEventAdaptor
+                        RemoveHandler Application.ThreadException, AddressOf OnUnhandledExceptionEventAdaptor
                     End If
-        End If
-        End RemoveHandler
-        ' run the <see cref="UnhandledException"/>  handler again.
-        RaiseEvent(sender As Object, e As UnhandledExceptionEventArgs)
-        If _unhandledExceptionHandlers IsNot Nothing Then
-        For Each handler As UnhandledExceptionEventHandler In _unhandledExceptionHandlers
+                End If
+            End RemoveHandler
+
+            RaiseEvent(sender As Object, e As UnhandledExceptionEventArgs)
+                If _unhandledExceptionHandlers IsNot Nothing Then
+
+                    ' In the case that we throw from the UnhandledException handler, we don't want to
+                    ' run the UnhandledException handler again.
+                    _processingUnhandledExceptionEvent = True
+
+                    For Each handler As UnhandledExceptionEventHandler In _unhandledExceptionHandlers
                         handler?.Invoke(sender, e)
                     Next
 
                     ' Now that we are out of the UnhandledException handler, treat exceptions normally again.
                     _processingUnhandledExceptionEvent = False
                 End If
-        End RaiseEvent
+            End RaiseEvent
         End Event
 
         ''' <summary>
         '''  Constructs the application Shutdown/Startup model object
         ''' </summary>
-        ''' <remarks>
-        Private Shared Sub ValidateShutdownModeEnumValue(value As ShutdownMode, paramName As String)
-            If value < ShutdownMode.AfterMainFormCloses OrElse value > ShutdownMode.AfterAllFormsClose Then
-                Throw New InvalidEnumArgumentException(paramName, value, GetType(ShutdownMode))
-            End If
-        End Sub
-
-        ''' <summary>
-        '''  Displays the splash screen. We get called here from a different thread than what the
-        '''  main form is starting up on. This allows us to process events for the Splash screen so
-        '''  it doesn't freeze up while the main form is getting it together.
-        ''' </summary>
-        Private Sub DisplaySplash()
-            Debug.Assert(_splashScreen IsNot Nothing, "We should have never get here if there is no splash screen")
-
-            '''  Constructs the application Shutdown/Startup model object
-
         ''' <remarks>
         '''  We have to have a parameterless ctor because the platform specific Application object
         '''  derives from this one and it doesn't define a ctor because the partial class generated by the
@@ -298,32 +280,32 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' </remarks>
         Public Sub New()
             Me.New(AuthenticationMode.Windows)
-            Try
-                ' Consider: Sadly, a call to: System.Security.SecurityManager.IsGranted(New SecurityPermission(SecurityPermissionFlag.ControlPrincipal))
-                ' Will only check THIS caller so you'll always get TRUE.
-                '''  Constructs the application Shutdown/Startup model object
-            Catch ex As SecurityException
+        End Sub
+
+        ''' <summary>
+        '''  Constructs the application Shutdown/Startup model object
+        ''' </summary>
         <SecuritySafeCritical()>
         Public Sub New(authenticationMode As AuthenticationMode)
             MyBase.New()
 
             ValidateAuthenticationModeEnumValue(authenticationMode, NameOf(authenticationMode))
-        End Sub
-            ' We need to set the WindowsFormsSynchronizationContext because the network object is going to
-            ' get created after this ctor runs (network gets created during event hookup) and we need the
-            ' context in place for it to latch on to. The WindowsFormsSynchronizationContext won't otherwise
-            ' get created until OnCreateMainForm() when the startup form is created and by then it is too late.
-            ' When the startup form gets created, WinForms is going to push our context into the previous context
-            ' and then restore it when Application.Run() exits.
-            _appSynchronizationContext = AsyncOperationManager.SynchronizationContext
-        End Sub
 
-        ''' <summary>
-        '''  Entry point to kick off the VB Startup/Shutdown Application model.
-        ''' </summary>
-        ''' <param name="commandLine">The command line from Main().</param>
-        ' NO DEBUGGER ATTACHED - we use a catch so that we can run our UnhandledException code
-        ' Note - Sadly, code changes within this IF (that don't pertain to exception handling)
+            ' Setup Windows Authentication if that's what the user wanted. Note, we want to do this now,
+            ' before the Network object gets created because the network object will be doing a
+            ' AsyncOperationsManager.CreateOperation() which captures the execution context. So we must
+            ' have our principal on the thread before that happens.
+            If authenticationMode = AuthenticationMode.Windows Then
+                Try
+                    ' Consider: Sadly, a call to: System.Security.SecurityManager.IsGranted(New SecurityPermission(SecurityPermissionFlag.ControlPrincipal))
+                    ' Will only check the THIS caller so you'll always get TRUE.
+                    ' What we need is a way to get to the value of this on a demand basis.
+                    ' So I try/catch instead for now but would rather be able to IF my way around this block.
+                    Thread.CurrentPrincipal = New Principal.WindowsPrincipal(Principal.WindowsIdentity.GetCurrent)
+                Catch ex As SecurityException
+                End Try
+            End If
+
             _appContext = New WinFormsAppContext(Me)
 
             ' We need to set the WindowsFormsSynchronizationContext because the network object is going to
@@ -333,15 +315,15 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             ' When the startup form gets created, WinForms is going to push our context into the previous context
             ' and then restore it when Application.Run() exits.
             _appSynchronizationContext = AsyncOperationManager.SynchronizationContext
-        Try
-        If OnInitialize(CommandLineArgs) Then
-        If OnStartup(eventArgs) Then
+        End Sub
+
+        ''' <summary>
         '''  Entry point to kick off the VB Startup/Shutdown Application model.
-                            OnShutdown()
+        ''' </summary>
         ''' <param name="commandLine">The command line from Main().</param>
         <SecuritySafeCritical()>
         Public Sub Run(commandLine As String())
-            End If
+
             ' Prime the command line args with what we receive from Main() so that Click-Once windows
             ' apps don't have to do a System.Environment call which would require permissions.
             InternalCommandLine = New ReadOnlyCollection(Of String)(commandLine)
@@ -355,7 +337,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 ' Otherwise, can break single instance.
                 Dim applicationInstanceID As String = GetApplicationInstanceID(Assembly.GetCallingAssembly)
                 Dim pipeServer As NamedPipeServerStream = Nothing
-                Throw New CantStartSingleInstanceException()
+
                 If TryCreatePipeServer(applicationInstanceID, pipeServer) Then
 
                     ' --- This is the first instance of a single-instance application to run.
@@ -369,15 +351,24 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                         tokenSource.Cancel()
                     End Using
                 Else
+
+                    ' --- We are launching a subsequent instance.
                     Dim tokenSource As New CancellationTokenSource()
-#Disable Warning BC42358 ' Call is not awaited.
-                    WaitForClientConnectionsAsync(pipeServer, AddressOf OnStartupNextInstanceMarshallingAdaptor, cancellationToken:=tokenSource.Token)
-#Enable Warning BC42358
-                        DoApplicationModel()
-                        tokenSource.Cancel()
-                    End Using
-                Else
-        '''  itself for the first time.
+                    tokenSource.CancelAfter(SecondInstanceTimeOut)
+                    Try
+                        Dim awaitable As ConfiguredTaskAwaitable = SendSecondInstanceArgsAsync(
+                            pipeName:=applicationInstanceID,
+                            args:=commandLine,
+                            cancellationToken:=tokenSource.Token).ConfigureAwait(False)
+
+                        awaitable.GetAwaiter().GetResult()
+                    Catch ex As Exception
+                        Throw New CantStartSingleInstanceException()
+                    End Try
+                End If
+            End If 'Single-Instance application
+        End Sub
+
         ''' <summary>
         '''  Returns the collection of forms that are open. We no longer have thread
         '''  affinity meaning that this is the WinForms collection that contains Forms that may
@@ -388,19 +379,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 Return Application.OpenForms
             End Get
         End Property
-        '''  Returns the collection of forms that are open. We no longer have thread
-        '''  affinity meaning that this is the WinForms collection that contains Forms that may
-        '''  have been opened on another thread then the one we are calling in on right now.
-        ' since this is eating up a LOT of energy and workload, especially on Notebooks and tablets.
-        Public ReadOnly Property OpenForms() As FormCollection
-            Get
-                Return Application.OpenForms
-            End Get
-        End Property
-        If _splashTimer IsNot Nothing Then
 
+        ''' <summary>
         '''  Provides access to the main form for this application
-
+        ''' </summary>
         Protected Property MainForm() As Form
             Get
                 Return _appContext?.MainForm
@@ -410,43 +392,43 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     Throw ExUtils.GetArgumentNullException("MainForm", SR.General_PropertyNothing, "MainForm")
                 End If
                 If value Is _splashScreen Then
-                    Throw New ArgumentException(VbUtils.GetResourceString(SR.AppModel_SplashAndMainFormTheSame))
+                    Throw New ArgumentException(ExUtils.GetResourceString(SR.AppModel_SplashAndMainFormTheSame))
                 End If
                 _appContext.MainForm = value
             End Set
         End Property
-        End Sub
 
+        ''' <summary>
         '''  Provides access to the splash screen for this application
-        Dim invoked As Boolean = False
+        ''' </summary>
         Public Property SplashScreen() As Form
             Get
                 Return _splashScreen
             End Get
             Set(value As Form)
-                SynchronizationContext.
+
                 ' Allow for the case where they set splash screen = nothing and mainForm is currently nothing.
                 If value IsNot Nothing AndAlso value Is _appContext.MainForm Then
-                    Throw New ArgumentException(VbUtils.GetResourceString(SR.AppModel_SplashAndMainFormTheSame))
-                    '''  Handles the Windows.Forms.Application.ThreadException event and raises our Unhandled
+                    Throw New ArgumentException(ExUtils.GetResourceString(SR.AppModel_SplashAndMainFormTheSame))
+                End If
 
-                    _splashScreen = value
+                _splashScreen = value
             End Set
         End Property
-        ''' </remarks>
-        Private Sub OnUnhandledExceptionEventAdaptor(sender As Object, e As ThreadExceptionEventArgs)
+
+        ''' <summary>
         '''  The splash screen timeout specifies whether there is a minimum time that the splash
         '''  screen should be displayed for. When not set then the splash screen is hidden
         '''  as soon as the main form becomes active.
-
+        ''' </summary>
         ''' <value>The minimum amount of time, in milliseconds, to display the splash screen.</value>
-        '''  Hide the splash screen. The splash screen was created on another thread
+        ''' <remarks>
         '''  This property, although public, used to be set in an `Overrides Function OnInitialize` _before_
         '''  calling `MyBase.OnInitialize`. We want to phase this out, and with the introduction of the
         '''  ApplyApplicationDefaults events have it handled in that event, rather than as awkwardly
         '''  as it is currently suggested to be used in the docs.
         '''  First step for that is to make it hidden in IntelliSense.
-        '''  This function gets called from the main thread by the app fx.
+        ''' </remarks>
         <EditorBrowsable(EditorBrowsableState.Never)>
         Public Property MinimumSplashScreenDisplayTime() As Integer
             Get
@@ -456,25 +438,25 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 _minimumSplashExposure = value
             End Set
         End Property
-        Protected Sub HideSplashScreen()
 
-            '''  Use GDI for the text rendering engine by default.
+        ''' <summary>
+        '''  Use GDI for the text rendering engine by default.
         '''  The user can shadow this function to return True if they want their app
         '''  to use the GDI+ render. We read this function in Main() (My template) to
         '''  determine how to set the text rendering flag on the WinForms application object.
-        ' Dispose on the Splash screen. (we're just swapping the order of the two If blocks.)
+        ''' </summary>
         ''' <returns>True - Use GDI+ renderer. False - use GDI renderer.</returns>
-        ' This is to fix the issue where the main form doesn't come to the front after the
+        <EditorBrowsable(EditorBrowsableState.Advanced)>
         Protected Shared ReadOnly Property UseCompatibleTextRendering() As Boolean
             Get
                 Return False
             End Get
         End Property
-        '''  A designer will override this method and provide a splash screen if this application has one.
-        ''' </summary>
+
+        ''' <summary>
         '''  Provides the WinForms application context that we are running on
-        '''  For instance, a designer would override this method and emit: Me.Splash = new Splash
-        '''  where Splash was designated in the application designer as being the splash screen for this app
+        ''' </summary>
+        <EditorBrowsable(EditorBrowsableState.Advanced)>
         Public ReadOnly Property ApplicationContext() As ApplicationContext
             Get
                 Return _appContext
@@ -492,12 +474,21 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 _saveMySettingsOnExit = value
             End Set
         End Property
-        Protected Overridable Sub OnCreateSplashScreen()
-        End Sub
-        '''  Processes all windows messages currently in the message queue
+
         ''' <summary>
+        '''  Processes all windows messages currently in the message queue
+        ''' </summary>
         Public Sub DoEvents()
             Application.DoEvents()
+        End Sub
+
+        ''' <summary>
+        '''  This exposes the first in a series of extensibility points for the Startup process. By default, it shows
+        '''  the splash screen and does rudimentary processing of the command line to see if /nosplash or its
+        '''  variants was passed in.
+        ''' </summary>
+        ''' <param name="commandLineArgs"></param>
+        ''' <returns>Returning True indicates that we should continue on with the application Startup sequence.</returns>
         ''' <remarks>
         '''  This extensibility point is exposed for people who want to override
         '''  the Startup sequence at the earliest possible point to
@@ -588,7 +579,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             ' It is important not to create the network object until the ExecutionContext has everything on it.
             ' By now the principal will be on the thread so we can create the network object.
             ' The timing is important because the network object has an AsyncOperationsManager in it that marshals
-            ' the network changed event to the main thread. The asycnOperationsManager does a CreateOperation()
+            ' the network changed event to the main thread. The asyncOperationsManager does a CreateOperation()
             ' which makes a copy of the executionContext. That execution context shows up on your thread during
             ' the callback so I delay creating the network object (and consequently the capturing of the execution context)
             ' until the principal has been set on the thread. This avoids the problem where My.User isn't set
@@ -617,15 +608,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
             RaiseEvent StartupNextInstance(Me, eventArgs)
 
-        '''  Extensibility point which raises the StartupNextInstance
-        ''' </summary>
-        ''' <param name="eventArgs"></param>
-        <EditorBrowsable(EditorBrowsableState.Advanced)>
-        <SecuritySafeCritical()>
-        Protected Overridable Sub OnStartupNextInstance(eventArgs As StartupNextInstanceEventArgs)
-
-            RaiseEvent StartupNextInstance(Me, eventArgs)
-
             ' Activate the original instance.
             If eventArgs.BringToForeground AndAlso MainForm IsNot Nothing Then
                 If MainForm.WindowState = FormWindowState.Minimized Then
@@ -637,12 +619,21 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Sub
 
         ''' <summary>
-        ' Activate the original instance.
-        If eventArgs.BringToForeground AndAlso MainForm IsNot Nothing Then
-                If MainForm.WindowState = FormWindowState.Minimized Then
-                    MainForm.WindowState = FormWindowState.Normal
-                End If
+        '''  At this point, the command line args should have been processed and the application will create the
+        '''  main form and enter the message loop.
+        ''' </summary>
+        <SecuritySafeCritical()>
+        <EditorBrowsable(EditorBrowsableState.Advanced)>
+        Protected Overridable Sub OnRun()
 
+            If MainForm Is Nothing Then
+
+                ' A designer overrides OnCreateMainForm() to set the main form we are supposed to use.
+                OnCreateMainForm()
+
+                If MainForm Is Nothing Then
+                    Throw New NoStartupFormException
+                End If
 
                 ' When we have a splash screen that hasn't timed out before the main form is ready to paint, we want to
                 ' block the main form from painting. To do that I let the form get past the Load() event and hold it until
@@ -671,6 +662,24 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Sub
 
         ''' <summary>
+        '''  A designer will override this method and provide a splash screen if this application has one.
+        ''' </summary>
+        ''' <remarks>
+        '''  For instance, a designer would override this method and emit: Me.Splash = new Splash
+        '''  where Splash was designated in the application designer as being the splash screen for this app
+        ''' </remarks>
+        <EditorBrowsable(EditorBrowsableState.Advanced)>
+        Protected Overridable Sub OnCreateSplashScreen()
+        End Sub
+
+        ''' <summary>
+        '''  Provides a hook that designers will override to set the main form.
+        ''' </summary>
+        <EditorBrowsable(EditorBrowsableState.Advanced)>
+        Protected Overridable Sub OnCreateMainForm()
+        End Sub
+
+        ''' <summary>
         '''  The last in a series of extensibility points for the Shutdown process
         ''' </summary>
         <EditorBrowsable(EditorBrowsableState.Advanced)>
@@ -679,30 +688,12 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Sub
 
         ''' <summary>
-        '''  Extensibility point which raises the Startup event
-        '''  A designer will override this method and provide a splash screen if this application has one.
-        ''' <param name="eventArgs"></param>
-        ''' <remarks>
-        '''  For instance, a designer would override this method and emit: Me.Splash = new Splash
-        '''  where Splash was designated in the application designer as being the splash screen for this app
-        ''' </remarks>
+        '''  Raises the <see cref="UnhandledException"/> event and exits the application if the event handler indicated
+        '''  that execution shouldn't continue.
+        ''' </summary>
+        ''' <param name="e"></param>
+        ''' <returns>True indicates the exception event was raised / False it was not.</returns>
         <EditorBrowsable(EditorBrowsableState.Advanced)>
-        Protected Overridable Sub OnCreateSplashScreen()
-            eventArgs.Cancel = False
-
-            ' It is important not to create the network object until the ExecutionContext has everything on it.
-        '''  Provides a hook that designers will override to set the main form.
-        ' The timing is important because the network object has an AsyncOperationsManager in it that marshals
-        ' which makes a copy of the executionContext. That execution context shows up on your thread during
-        Protected Overridable Sub OnCreateMainForm()
-        End Sub
-        RaiseEvent StartupNextInstance(Me, eventArgs)
-
-        '''  The last in a series of extensibility points for the Shutdown process
-            If eventArgs.BringToForeground AndAlso MainForm IsNot Nothing Then
-                    MainForm.WindowState = FormWindowState.Normal
-        Protected Overridable Sub OnShutdown()
-            RaiseEvent Shutdown(Me, EventArgs.Empty)
         Protected Overridable Function OnUnhandledException(e As UnhandledExceptionEventArgs) As Boolean
 
             ' Does the user have a handler for this event?
@@ -913,18 +904,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  we know that the form load event is done and that the form is about to paint
         '''  itself for the first time.
         '''  We can now hide the splash screen.
-
-            _splashScreenCompletionSource.SetResult(True)
         '''  Note that this function gets called from the main thread - the same thread
         '''  that creates the startup form.
         ''' </summary>
-        '''  The Load() event happens before the Shown and Paint events. When we get called here
-        '''  we know that the form load event is done and that the form is about to paint
-        '''  itself for the first time.
-        '''  We can now hide the splash screen.
-        '''  Note that this function gets called from the main thread - the same thread
-        '''  that creates the startup form.
-        ''' <param name="e"></param>
         ''' <param name="sender"></param>
         ''' <param name="e"></param>
         Private Sub MainFormLoadingDone(sender As Object, e As EventArgs)
@@ -949,12 +931,12 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             End If
 
             HideSplashScreen()
-            ' Prime the command line args with what we receive from Main() so that Click-Once windows
-            ' apps don't have to do a System.Environment call which would require permissions.
-            InternalCommandLine = New ReadOnlyCollection(Of String)(commandLine)
-            '''  Handles the Windows.Forms.Application.ThreadException event and raises our Unhandled
-            '''  exception event.
-            If Not IsSingleInstance Then
+        End Sub
+
+        ''' <summary>
+        '''  Handles the Windows.Forms.Application.ThreadException event and raises our Unhandled
+        '''  exception event.
+        ''' </summary>
         ''' <param name="e"></param>
         ''' <remarks>
         '''  Our UnHandledException event has a different signature then the Windows.Forms.Application
@@ -976,7 +958,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                                         New ReadOnlyCollection(Of String)(args),
                                         bringToForegroundFlag:=True))
                     End Sub)
-                Dim pipeServer As NamedPipeServerStream = Nothing
+
                 ' If we have a Main form, we need to make sure that we are on _its_ UI thread
                 ' before we call OnStartupNextInstance.
                 If MainForm IsNot Nothing Then
@@ -1005,22 +987,90 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Private Sub NetworkAvailableEventAdaptor(sender As Object, e As Devices.NetworkAvailableEventArgs)
             RaiseEvent NetworkAvailabilityChanged(sender, e)
         End Sub
-        ' This is the instance that subsequent instances will attach to.
+
         ''' <summary>
         '''  Runs the user's program through the VB Startup/Shutdown application model
         ''' </summary>
         Private Sub DoApplicationModel()
-#Enable Warning BC42358
+
             Dim eventArgs As New StartupEventArgs(CommandLineArgs)
-            tokenSource.Cancel()
+
             ' Only do the try/catch if we aren't running under the debugger.
             ' If we do try/catch under the debugger the debugger never gets
             ' a crack at exceptions which breaks the exception helper.
             If Not Debugger.IsAttached Then
+
+                ' NO DEBUGGER ATTACHED - we use a catch so that we can run our UnhandledException code
+                ' Note - Sadly, code changes within this IF (that don't pertain to exception handling)
+                ' need to be mirrored in the ELSE debugger attached clause below.
+                Try
+                    If OnInitialize(CommandLineArgs) Then
+                        If OnStartup(eventArgs) Then
+                            OnRun()
+                            OnShutdown()
+                        End If
+                    End If
+                Catch ex As Exception
+
+                    ' This catch is for exceptions that happen during the On* methods above,
+                    ' but have occurred outside of the message pump (which exceptions we would
+                    ' have already seen via our hook of System.Windows.Forms.Application.ThreadException).
+                    If _processingUnhandledExceptionEvent Then
+
+                        ' If the UnhandledException handler threw for some reason, throw that error out to the system.
+                        Throw
+                    Else
+
+                        ' We had an exception, but not during the OnUnhandledException handler so give the user
+                        ' a chance to look at what happened in the UnhandledException event handler
+                        If Not OnUnhandledException(New UnhandledExceptionEventArgs(True, ex)) Then
+
+                            ' The user didn't write a handler so throw the error out to the system
+                            Throw
+                        End If
+                    End If
                 End Try
+            Else
+                ' DEBUGGER ATTACHED - we don't have an uber catch when debugging so the exception
+                ' will bubble out to the exception helper.
+                ' We also don't hook up the Application.ThreadException event because WinForms ignores it
+                ' when we are running under the debugger.
+                If OnInitialize(CommandLineArgs) Then
+                    If OnStartup(eventArgs) Then
+                        OnRun()
+                        OnShutdown()
+                    End If
+                End If
             End If
-            End If 'Single-Instance application
         End Sub
+
+        ''' <summary>
+        '''  Generates the name for the remote singleton that we use to channel multiple instances
+        '''  to the same application model thread.
+        ''' </summary>
+        ''' <param name="entry"></param>
+        ''' <returns>
+        '''  A string unique to the application that should be the same for versions of
+        '''  the application that have the same Major and Minor Version Number.
+        ''' </returns>
+        ''' <remarks>If GUID Attribute does not exist fall back to unique ModuleVersionId.</remarks>
+        Private Shared Function GetApplicationInstanceID(entry As Assembly) As String
+
+            Dim guidAttrib As GuidAttribute = entry.GetCustomAttribute(Of GuidAttribute)()
+
+            If guidAttrib IsNot Nothing Then
+
+                Dim version As Version = entry.GetName.Version
+
+                If version IsNot Nothing Then
+                    Return $"{guidAttrib.Value}{version.Major}.{version.Minor}"
+                Else
+                    Return guidAttrib.Value
+                End If
+            End If
+
+            Return entry.ManifestModule.ModuleVersionId.ToString()
+        End Function
 
     End Class
 End Namespace
