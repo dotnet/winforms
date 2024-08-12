@@ -11,7 +11,7 @@ public class ToolStripTextBoxTests : IDisposable
 
     public ToolStripTextBoxTests()
     {
-        _toolStripTextBox = new ToolStripTextBox();
+        _toolStripTextBox = new();
     }
 
     public void Dispose()
@@ -31,7 +31,15 @@ public class ToolStripTextBoxTests : IDisposable
     [WinFormsFact]
     public void ToolStripTextBox_ConstructorWithControl_ThrowsNotSupportedException()
     {
-        new Action(() => new ToolStripTextBox(new Control())).Should().Throw<NotSupportedException>();
+        Control control = new();
+        try
+        {
+            new Action(() => new ToolStripTextBox(control)).Should().Throw<NotSupportedException>();
+        }
+        finally
+        {
+            control?.Dispose();
+        }
     }
 
     public static TheoryData<int, int> ImageData => new()
@@ -44,7 +52,7 @@ public class ToolStripTextBoxTests : IDisposable
     [MemberData(nameof(ImageData))]
     public void ToolStripTextBox_BackgroundImage_GetSet_ReturnsExpected(int width, int height)
     {
-        Image image = new Bitmap(width, height);
+        using Image image = new Bitmap(width, height);
         _toolStripTextBox.BackgroundImage = image;
         _toolStripTextBox.BackgroundImage.Should().Be(image);
 
@@ -274,11 +282,20 @@ public class ToolStripTextBoxTests : IDisposable
     [InlineData(0)]
     [InlineData(1)]
     [InlineData(10)]
-    public void ToolStripTextBox_SelectionLength_GetSet_ReturnsExpected(int textLength)
+    [InlineData(null)]
+    public void ToolStripTextBox_SelectionLength_GetSet_ReturnsExpected(int? textLength)
     {
-        _toolStripTextBox.Text = new string('a', textLength);
-        _toolStripTextBox.SelectionLength = textLength;
-        _toolStripTextBox.SelectionLength.Should().Be(textLength);
+        if (textLength.HasValue)
+        {
+            _toolStripTextBox.Text = new string('a', textLength.Value);
+            _toolStripTextBox.SelectionLength = textLength.Value;
+            _toolStripTextBox.SelectionLength.Should().Be(textLength.Value);
+        }
+        else
+        {
+            _toolStripTextBox.Invoking(t => t.Text = null).Should().NotThrow();
+            _toolStripTextBox.Text.Should().BeNullOrEmpty();
+        }
     }
 
     [WinFormsTheory]
@@ -300,12 +317,15 @@ public class ToolStripTextBoxTests : IDisposable
         _toolStripTextBox.ShortcutsEnabled.Should().Be(shortcutsEnabled);
     }
 
-    [WinFormsFact]
-    public void ToolStripTextBox_TextLength_Get_ReturnsExpected()
+    [WinFormsTheory]
+    [InlineData("Test", 4)]
+    [InlineData("&Test", 5)]
+    [InlineData("T&est", 5)]
+    [InlineData("Line1\nLine2\nLine3", 17)]
+    public void ToolStripTextBox_TextLength_Get_ReturnsExpected(string text, int expectedLength)
     {
-        string text = "Test";
         _toolStripTextBox.Text = text;
-        _toolStripTextBox.TextLength.Should().Be(text.Length);
+        _toolStripTextBox.TextLength.Should().Be(expectedLength);
     }
 
     [WinFormsTheory]
@@ -718,11 +738,16 @@ public class ToolStripTextBoxTests : IDisposable
         _toolStripTextBox.SelectionLength.Should().Be(0);
     }
 
-    [WinFormsFact]
-    public void ToolStripTextBox_GetCharFromPosition_Success()
+    [WinFormsTheory]
+    [InlineData("Hello", 1, 1)]
+    [InlineData("This is a test with &ampersand", 10, 1)]
+    [InlineData("Line1\nLine2\nLine3", 5, 10)]
+    [InlineData("Special characters: !@#$%^&*()", 20, 1)]
+    [InlineData("Mixed: Line1\nLine2 & special!", 15, 5)]
+    public void ToolStripTextBox_GetCharFromPosition_Success(string text, int x, int y)
     {
-        _toolStripTextBox.Text = "Hello";
-        char result = _toolStripTextBox.GetCharFromPosition(new Point(1, 1));
+        _toolStripTextBox.Text = text;
+        char result = _toolStripTextBox.GetCharFromPosition(new Point(x, y));
         result.Should().NotBe('\0');
     }
 
