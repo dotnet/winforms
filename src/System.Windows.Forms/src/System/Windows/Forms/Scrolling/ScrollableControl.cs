@@ -27,7 +27,7 @@ public partial class ScrollableControl : Control, IArrangedElement
     private Rectangle _displayRect = Rectangle.Empty;
 
     /// <summary>
-    ///  Current margins for autoscrolling.
+    ///  Current margins for auto-scrolling.
     /// </summary>
     private Size _scrollMargin = Size.Empty;
 
@@ -60,6 +60,10 @@ public partial class ScrollableControl : Control, IArrangedElement
         SetStyle(ControlStyles.ContainerControl, true);
         SetStyle(ControlStyles.AllPaintingInWmPaint, false);
         SetScrollState(ScrollStateAutoScrolling, false);
+
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     }
 
     /// <summary>
