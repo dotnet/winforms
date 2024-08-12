@@ -28,7 +28,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <WinFormsFact>
         Public Sub GetDirectoryNotFoundExceptionTest_Succeed()
-            Dim resourceString As String = ExUtils.GetResourceString(vbErrors.FileNotFound)
+            Dim resourceString As String = ExUtils.GetResourceString(VbErrors.FileNotFound)
             Dim ex As Exception = ExUtils.GetDirectoryNotFoundException(resourceString)
             ex.Should.BeOfType(Of IO.DirectoryNotFoundException)()
             ex.Message.Should.Be("File not found.")
@@ -36,7 +36,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <WinFormsFact>
         Public Sub GetFileNotFoundExceptionTest_Succeed()
-            Dim resourceString As String = ExUtils.GetResourceString(vbErrors.FileNotFound)
+            Dim resourceString As String = ExUtils.GetResourceString(VbErrors.FileNotFound)
             Dim ex As Exception = ExUtils.GetFileNotFoundException("Test", resourceString)
             ex.Should.BeOfType(Of IO.FileNotFoundException)()
             ex.Message.Should.Be("File not found.")
@@ -71,9 +71,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsTheory>
-        <InlineData(vbErrors.FileNotFound, "File not found.")>
-        <InlineData(vbErrors.PermissionDenied, "Permission denied.")>
-        <InlineData(vbErrors.None, "")>
+        <InlineData(VbErrors.FileNotFound, "File not found.")>
+        <InlineData(VbErrors.PermissionDenied, "Permission denied.")>
+        <InlineData(VbErrors.None, "")>
         Public Sub VbMakeExceptionTest_Succeed(errorCode As Integer, expected As String)
             ExUtils.VbMakeException(errorCode).Message.Should.Be(expected)
         End Sub
