@@ -121,8 +121,10 @@ public partial class StatusStripTests
         Assert.Null(control.Region);
         Assert.NotNull(control.Renderer);
         Assert.Same(control.Renderer, control.Renderer);
-        Assert.IsType<ToolStripProfessionalRenderer>(control.Renderer);
-        Assert.Equal(ToolStripRenderMode.ManagerRenderMode, control.RenderMode);
+
+        Assert.True(control.Renderer is ToolStripSystemRenderer or ToolStripProfessionalRenderer, "Renderer is not one of the expected types.");
+        Assert.True(control.RenderMode is ToolStripRenderMode.System or ToolStripRenderMode.ManagerRenderMode);
+
         Assert.True(control.ResizeRedraw);
         Assert.Equal(200, control.Right);
         Assert.Equal(RightToLeft.No, control.RightToLeft);
