@@ -9,7 +9,6 @@ Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.CompilerServices
 
 Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
-Imports VbUtils = Microsoft.VisualBasic.CompilerServices.Utils
 Imports NativeMethods = Microsoft.VisualBasic.CompilerServices.NativeMethods
 
 Namespace Microsoft.VisualBasic
@@ -27,11 +26,11 @@ Namespace Microsoft.VisualBasic
             Dim errorCode As Integer = 0
 
             If (PathName Is Nothing) Then
-                Throw New ArgumentNullException(VbUtils.GetResourceString(SR.Argument_InvalidNullValue1, "Pathname"))
+                Throw New ArgumentNullException(ExUtils.GetResourceString(SR.Argument_InvalidNullValue1, "Pathname"))
             End If
 
             If (Style < 0 OrElse Style > 9) Then
-                Throw New ArgumentException(VbUtils.GetResourceString(SR.Argument_InvalidValue1, "Style"))
+                Throw New ArgumentException(ExUtils.GetResourceString(SR.Argument_InvalidValue1, "Style"))
             End If
 
             NativeMethods.GetStartupInfo(startupInfo)
@@ -214,7 +213,7 @@ Namespace Microsoft.VisualBasic
 
                 '  if scan failed, return an error
                 If IntPtr.op_Equality(hwndOwned, IntPtr.Zero) Then
-                    Throw New ArgumentException(VbUtils.GetResourceString(SR.ProcessNotFound, processId))
+                    Throw New ArgumentException(ExUtils.GetResourceString(SR.ProcessNotFound, processId))
                 End If
 
                 '  set active window to the owned one
@@ -311,42 +310,6 @@ Namespace Microsoft.VisualBasic
             box.Dispose()
         End Function
 
-        Private Function GetTitleFromAssembly(callingAssembly As Reflection.Assembly) As String
-
-            Dim title As String
-
-            'Get the Assembly name of the calling assembly
-            'Assembly.GetName requires PathDiscovery permission so we try this first
-            'and if it throws we catch the security exception and parse the name
-            'from the full assembly name
-            Try
-                title = callingAssembly.GetName().Name
-            Catch ex As SecurityException
-                Dim fullName As String = callingAssembly.FullName
-
-                'Find the text up to the first comma. Note, this fails if the assembly has
-                'a comma in its name
-                Dim firstCommaLocation As Integer = fullName.IndexOf(","c)
-                If firstCommaLocation >= 0 Then
-                    title = fullName.Substring(0, firstCommaLocation)
-                Else
-                    'The name is not in the format we're expecting so return an empty string
-                    title = String.Empty
-                End If
-            End Try
-
-            Return title
-
-        End Function
-
-        Private Function InternalInputBox(prompt As String, title As String, defaultResponse As String, xPos As Integer, yPos As Integer, parentWindow As IWin32Window) As String
-            Dim box As VBInputBox = New VBInputBox(prompt, title, defaultResponse, xPos, yPos)
-            box.ShowDialog(parentWindow)
-
-            Throw New ArgumentException(VbUtils.GetResourceString(SR.Argument_InvalidValueType2, "Prompt", "String"))
-            box.Dispose()
-        End Function
-
         Public Function MsgBox(Prompt As Object, Buttons As MsgBoxStyle, Title As Object) As MsgBoxResult
             Dim sPrompt As String = Nothing
             Dim sTitle As String
@@ -374,40 +337,40 @@ Namespace Microsoft.VisualBasic
                 End If
             Catch ex As StackOverflowException
                 Throw
-                If (ok <> 0) Then
-                    If Wait Then
-                        ' Is infinite wait okay here ?
-                        ' This is okay since this is marked as requiring the HostPermission with ExternalProcessMgmt rights
-                        ok = NativeMethods.WaitForSingleObject(safeProcessHandle, Timeout)
+            Catch ex As OutOfMemoryException
+                Throw
+            Catch ex As ThreadAbortException
+                Throw
+            Catch
+                Throw New ArgumentException(ExUtils.GetResourceString(SR.Argument_InvalidValueType2, "Prompt", "String"))
+            End Try
 
-                        If ok = 0 Then 'succeeded
-                            'Process ran to completion
-                            Shell = 0
-                        Else
-                            'Wait timed out
-                            Shell = processInfo.dwProcessId
-                        End If
+            Try
+                If Title Is Nothing Then
+                    If vbHost Is Nothing Then
+                        sTitle = GetTitleFromAssembly(Reflection.Assembly.GetCallingAssembly())
                     Else
-                        NativeMethods.WaitForInputIdle(safeProcessHandle, 10000)
-                        Shell = processInfo.dwProcessId
+                        sTitle = vbHost.GetWindowTitle()
                     End If
                 Else
-                    'Check for a win32 error access denied. If it is, make and throw the exception.
-                    'If not, throw FileNotFound
-                    Const ERROR_ACCESS_DENIED As Integer = 5
-                        If errorCode = ERROR_ACCESS_DENIED Then
-                            Throw ExUtils.VbMakeException(vbErrors.PermissionDenied)
-                        End If
-
-                        Throw ExUtils.VbMakeException(vbErrors.FileNotFound)
-                    End If
-                Finally
-                    safeProcessHandle.Close() ' Close the process handle will not cause the process to stop.
-                    safeThreadHandle.Close()
-                End Try
-            Finally
-                startupInfo.Dispose()
+                    sTitle = CStr(Title) 'allows the title to be an expression, e.g. MsgBox(prompt, Title:=1+5)
+                End If
+            Catch ex As StackOverflowException
+                Throw
+            Catch ex As OutOfMemoryException
+                Throw
+            Catch ex As ThreadAbortException
+                Throw
+            Catch
+                Throw New ArgumentException(ExUtils.GetResourceString(SR.Argument_InvalidValueType2, "Title", "String"))
             End Try
+
+            Return CType(MessageBox.Show(parentWindow, sPrompt, sTitle,
+                 CType(Buttons And &HF, MessageBoxButtons),
+                 CType(Buttons And &HF0, MessageBoxIcon),
+                 CType(Buttons And &HF00, MessageBoxDefaultButton),
+                 CType(Buttons And &HFFFFF000, MessageBoxOptions)),
+                 MsgBoxResult)
         End Function
 
     End Module
