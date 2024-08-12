@@ -74,6 +74,10 @@ public partial class Label : Control, IAutomationLiveRegion
 
         SetStyle(ControlStyles.ResizeRedraw, true);
 
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
         CommonProperties.SetSelfAutoSizeInDefaultLayout(this, true);
 
         _labelState[s_stateFlatStyle] = (int)FlatStyle.Standard;
