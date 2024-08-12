@@ -14,6 +14,7 @@ using System.Windows.Forms.Primitives;
 using Windows.Win32.System.Ole;
 using Windows.Win32.UI.Accessibility;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
+using Windows.Win32.Graphics.Dwm;
 using Com = Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
 using Encoding = System.Text.Encoding;
@@ -142,6 +143,7 @@ public unsafe partial class Control :
     private static readonly object s_causesValidationEvent = new();
     private static readonly object s_regionChangedEvent = new();
     private static readonly object s_marginChangedEvent = new();
+    // This needs to be internal for derived controls to access it.
     private protected static readonly object s_paddingChangedEvent = new();
     private static readonly object s_previewKeyDownEvent = new();
     private static readonly object s_dataContextEvent = new();
@@ -156,6 +158,11 @@ public unsafe partial class Control :
     internal static HelpInfo? t_currentHelpInfo;
 
     private static FontHandleWrapper? s_defaultFontHandleWrapper;
+
+    internal const string DarkModeIdentifier = "DarkMode";
+    internal const string ExplorerThemeIdentifier = "Explorer";
+    internal const string ItemsViewThemeIdentifier = "ItemsView";
+    internal const string ComboBoxButtonThemeIdentifier = "CFD";
 
     private const short PaintLayerBackground = 1;
     private const short PaintLayerForeground = 2;
@@ -6665,6 +6672,26 @@ public unsafe partial class Control :
         OnInvalidated(new InvalidateEventArgs(invalidatedArea));
     }
 
+    /// <summary>
+    ///  Called by the NativeWindow callback when an exception is caught.
+    /// </summary>
+    /// <returns>true, when the exception has been handled; otherwise, false.</returns>
+    /// <remarks>
+    ///  <para>
+    ///   This will usually be rerouted to the <see cref="Application.ThreadException"/>, but in certain
+    ///   (async) scenarios, it makes more sense to catch the exception on the control or form that caused it.
+    ///  </para>
+    ///  <para>
+    ///   Example: When a form throws an exception inside of Form.OnLoad, and the scenario needs to be gracefully handled
+    ///   when another form shows the erroneous form. In that case, you cannot directly catch the exception.
+    ///  </para>
+    ///  <para>
+    ///   It gets marshalled down to <see cref="Application.ThreadException"/>, which is an extreme
+    ///   discoverability issue and the root cause for many WinForms apps crashing unexpectedly.
+    ///  </para>
+    /// </remarks>
+    private protected virtual bool SuppressApplicationOnThreadException(Exception ex) => false;
+
     // Used by form to notify the control that it is validating.
     private bool NotifyValidating()
     {
@@ -7472,6 +7499,16 @@ public unsafe partial class Control :
             {
                 PInvoke.SetWindowText(this, _text);
             }
+
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+            if (Application.IsDarkModeEnabled && GetStyle(ControlStyles.ApplyThemingImplicitly))
+            {
+                _ = PInvoke.SetWindowTheme(
+                    hwnd: HWND,
+                    pszSubAppName: $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}",
+                    pszSubIdList: null);
+            }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
 
             if (this is not ScrollableControl
                 && !IsMirrored
@@ -10523,15 +10560,22 @@ public unsafe partial class Control :
 
             bool fireChange = false;
 
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
             if (GetTopLevel())
             {
                 // The processing of WmShowWindow will set the visibility
                 // bit and call CreateControl()
                 if (IsHandleCreated || value)
                 {
-                    PInvoke.ShowWindow(this, value ? ShowParams : SHOW_WINDOW_CMD.SW_HIDE);
+                    if (value)
+                    {
+                        PrepareDarkMode(HWND, Application.IsDarkModeEnabled);
+                    }
+
+                    PInvoke.ShowWindow(HWND, value ? ShowParams : SHOW_WINDOW_CMD.SW_HIDE);
                 }
             }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
             else if (IsHandleCreated || (value && _parent?.Created == true))
             {
                 // We want to mark the control as visible so that CreateControl
@@ -10618,6 +10662,17 @@ public unsafe partial class Control :
                         | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE
                         | (value ? SET_WINDOW_POS_FLAGS.SWP_SHOWWINDOW : SET_WINDOW_POS_FLAGS.SWP_HIDEWINDOW));
             }
+        }
+
+        static unsafe void PrepareDarkMode(HWND hwnd, bool darkModeEnabled)
+        {
+            BOOL value = darkModeEnabled;
+
+            PInvoke.DwmSetWindowAttribute(
+                hwnd,
+                DWMWINDOWATTRIBUTE.DWMWA_USE_IMMERSIVE_DARK_MODE,
+                &value,
+                (uint)sizeof(BOOL)).AssertSuccess();
         }
     }
 
@@ -12808,15 +12863,6 @@ public unsafe partial class Control :
         // Keep ourselves rooted until we're done processing the current message. While unlikely, it is possible
         // that we can lose the rooting for `this` and get finalized when it is no longer referenced as a local.
         GC.KeepAlive(this);
-    }
-
-    /// <summary>
-    ///  Called when an exception occurs in dispatching messages through
-    ///  the main window procedure.
-    /// </summary>
-    private static void WndProcException(Exception e)
-    {
-        Application.OnThreadException(e);
     }
 
     ArrangedElementCollection IArrangedElement.Children

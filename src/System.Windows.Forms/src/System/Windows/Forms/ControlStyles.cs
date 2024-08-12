@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
+using System.Windows.Forms.Analyzers.Diagnostics;
 
 namespace System.Windows.Forms;
 
@@ -135,4 +136,14 @@ public enum ControlStyles
     ///  not be used by Active Accessibility.
     /// </summary>
     UseTextForAccessibility = 0x00040000,
+
+    /// <summary>
+    ///  For certain UI-related color modes (Dark Mode/Light Mode), controls
+    ///  can opt-in to automatically apply the appropriate theming. Especially
+    ///  controls which are utilizing system-managed scrollbars can benefit
+    ///  from this setting. Note that using this settings will cause some
+    ///  win32 control theming renderers to become inactive for a specific theme.
+    /// </summary>
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
+    ApplyThemingImplicitly = 0x00080000
 }

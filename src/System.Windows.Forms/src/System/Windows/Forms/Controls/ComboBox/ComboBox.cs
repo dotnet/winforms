@@ -2326,7 +2326,7 @@ public partial class ComboBox : ListControl
     ///  Inheriting classes should not forget to call
     ///  base.OnHandleCreated()
     /// </summary>
-    protected override void OnHandleCreated(EventArgs e)
+    protected override unsafe void OnHandleCreated(EventArgs e)
     {
         base.OnHandleCreated(e);
 
@@ -2395,6 +2395,20 @@ public partial class ComboBox : ListControl
         {
             _fromHandleCreate = false;
         }
+
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        if (Application.IsDarkModeEnabled)
+        {
+            // Style the ComboBox Open-Button:
+            PInvoke.SetWindowTheme(HWND, $"{DarkModeIdentifier}_{ComboBoxButtonThemeIdentifier}", null);
+            COMBOBOXINFO cInfo = default;
+            cInfo.cbSize = (uint)sizeof(COMBOBOXINFO);
+
+            // Style the ComboBox drop-down (including its ScrollBar(s)):
+            _ = PInvoke.GetComboBoxInfo(HWND, ref cInfo);
+            PInvoke.SetWindowTheme(cInfo.hwndList, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null);
+        }
+#pragma warning restore WFO5001
 
         if (_itemsCollection is not null)
         {
