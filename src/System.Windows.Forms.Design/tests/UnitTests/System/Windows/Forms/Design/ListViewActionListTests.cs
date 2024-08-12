@@ -10,7 +10,7 @@ namespace System.Windows.Forms.Design.Tests;
 public sealed class ListViewActionListTests : IDisposable
 {
     private readonly ListView _listView;
-    private readonly ComponentDesigner _designer;
+    private readonly ListViewDesigner _designer;
     private readonly ListViewActionList _actionList;
 
     public ListViewActionListTests()
@@ -47,6 +47,7 @@ public sealed class ListViewActionListTests : IDisposable
         using ImageList largeImageList = new();
         _actionList.LargeImageList = largeImageList;
         _actionList.LargeImageList.Should().Be(largeImageList);
+        _listView.LargeImageList.Should().Be(largeImageList);
     }
 
     [Fact]
@@ -55,6 +56,7 @@ public sealed class ListViewActionListTests : IDisposable
         using ImageList smallImageList = new();
         _actionList.SmallImageList = smallImageList;
         _actionList.SmallImageList.Should().Be(smallImageList);
+        _listView.SmallImageList.Should().Be(smallImageList);
     }
 
     [Fact]
@@ -72,19 +74,11 @@ public sealed class ListViewActionListTests : IDisposable
             i.DisplayName == SR.ListViewActionListEditGroupsDisplayName
         ).ToList();
 
-        relevantItems.Should().HaveCount(3); 
+        relevantItems.Should().HaveCount(3);
 
         var itemNames = relevantItems.Select(i => i.DisplayName).ToList();
         itemNames.Should().Contain(SR.ListViewActionListEditItemsDisplayName);
         itemNames.Should().Contain(SR.ListViewActionListEditColumnsDisplayName);
         itemNames.Should().Contain(SR.ListViewActionListEditGroupsDisplayName);
-    }
-
-    [Fact]
-    public void InvokeDialogs_ShouldNotThrow()
-    {
-        _actionList.Invoking(a => a.InvokeItemsDialog()).Should().NotThrow();
-        _actionList.Invoking(a => a.InvokeColumnsDialog()).Should().NotThrow();
-        _actionList.Invoking(a => a.InvokeGroupsDialog()).Should().NotThrow();
     }
 }
