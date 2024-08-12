@@ -15,7 +15,7 @@ public class BindingSourceDesignerTests
     [Fact]
     public void BindingUpdatedByUser_SetValue_ShouldUpdateField()
     {
-        BindingSourceDesigner designer = new()
+        using BindingSourceDesigner designer = new()
         {
             BindingUpdatedByUser = true
         };
@@ -41,8 +41,8 @@ public class BindingSourceDesignerTests
         siteMock.Setup(s => s.GetService(typeof(IComponentChangeService))).Returns(componentChangeServiceMock.Object);
         componentMock.Setup(c => c.Site).Returns(siteMock.Object);
 
-        BindingSource bindingSource = new() { DataSource = componentMock.Object };
-        BindingSourceDesigner designer = new();
+        using BindingSource bindingSource = new() { DataSource = componentMock.Object };
+        using BindingSourceDesigner designer = new();
         designer.Initialize(bindingSource);
 
         ComponentEventArgs args = new(componentMock.Object);
