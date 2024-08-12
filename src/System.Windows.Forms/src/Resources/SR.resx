@@ -6979,4 +6979,10 @@ Stack trace where the illegal operation occurred was:
   <data name="DesignTimeFeaturesNotSupported" xml:space="preserve">
     <value>Design time features are not supported.</value>
   </data>
+  <data name="Form_HasAlreadyBeenShownAsync" xml:space="preserve">
+    <value>The form has already been shown asynchronously.</value>
+  </data>
+  <data name="FormOrTaskDialog_NoSyncContextForShowAsync" xml:space="preserve">
+    <value>Failed to retrieve the Synchronization Context for showing the Form asynchronously.</value>
+  </data>
 </root>

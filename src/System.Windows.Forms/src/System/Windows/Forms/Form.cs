@@ -7,6 +7,7 @@ using System.ComponentModel.Design;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using System.Windows.Forms.Analyzers.Diagnostics;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
 using Windows.Win32.System.Threading;
@@ -159,6 +160,10 @@ public partial class Form : ContainerControl
     private Dictionary<int, Size>? _dpiFormSizes;
     private bool _processingDpiChanged;
     private bool _inRecreateHandle;
+
+    private TaskCompletionSource? _nonModalFormCompletion;
+    private TaskCompletionSource<DialogResult>? _modalFormCompletion;
+    private readonly Lock _lock = new();
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="Form"/> class.
@@ -3349,6 +3354,8 @@ public partial class Form : ContainerControl
                 Properties.RemoveObject(s_propDummyMdiMenu);
                 PInvoke.DestroyMenu(dummyMenu);
             }
+
+            _nonModalFormCompletion?.TrySetResult();
         }
         else
         {
@@ -3849,7 +3856,24 @@ public partial class Form : ContainerControl
         // Remove the form from Application.OpenForms (nothing happens if isn't present)
         Application.OpenForms.Remove(this);
 
-        ((FormClosedEventHandler?)Events[s_formClosedEvent])?.Invoke(this, e);
+        try
+        {
+            ((FormClosedEventHandler?)Events[s_formClosedEvent])?.Invoke(this, e);
+
+            // This effectively ends an `await form.ShowAsync();` call.
+            _nonModalFormCompletion?.TrySetResult();
+        }
+        catch (Exception ex)
+        {
+            if (_nonModalFormCompletion is not null)
+            {
+                _nonModalFormCompletion.TrySetException(ex);
+            }
+            else
+            {
+                throw;
+            }
+        }
     }
 
     /// <summary>
@@ -5141,8 +5165,39 @@ public partial class Form : ContainerControl
     }
 
     /// <summary>
-    ///  Makes the control display by setting the visible property to true
+    ///  Displays the form by setting its <see cref="Control.Visible"/> property to <see langword="true"/>.
     /// </summary>
+    /// <param name="owner">
+    ///  The optional owner window that implements <see cref="IWin32Window"/>.
+    /// </param>
+    /// <exception cref="InvalidOperationException">
+    ///  <para>Thrown if:</para>
+    ///  <list type="bullet">
+    ///   <item><description>The form is already visible.</description></item>
+    ///   <item><description>The form is disabled.</description></item>
+    ///   <item><description>The form is not a top-level form.</description></item>
+    ///   <item><description>The form is trying to set itself as its own owner.</description></item>
+    ///   <item><description>The operating system is in a non-interactive mode.</description></item>
+    ///  </list>
+    /// </exception>
+    /// <exception cref="ArgumentException">
+    ///  <para>Thrown if the owner window is trying to set itself as its own owner.</para>
+    /// </exception>
+    /// <remarks>
+    ///  <para>
+    ///   This method makes the form visible by setting the <see cref="Control.Visible"/> property to <see langword="true"/>.
+    ///  </para>
+    ///  <para>
+    ///   If the owner window is provided, it ensures that the owner is topmost and sets the owner for the form.
+    ///  </para>
+    ///  <para>
+    ///   This method also performs several checks to prevent invalid operations, such as trying to display a disabled form,
+    ///   attempting to display the form when it is not a top-level window, or setting the form as its own owner.
+    ///  </para>
+    ///  <para>
+    ///   If the operating system is in a non-interactive mode, this method will throw an <see cref="InvalidOperationException"/>.
+    ///  </para>
+    /// </remarks>
     public void Show(IWin32Window? owner)
     {
         if (owner == this)
@@ -5204,9 +5259,135 @@ public partial class Form : ContainerControl
     }
 
     /// <summary>
+    ///  Displays the form asynchronously, by setting its <see cref="Control.Visible"/> property to <see langword="true"/>.
+    /// </summary>
+    /// <param name="owner">
+    ///  The optional owner window that implements <see cref="IWin32Window"/>.
+    /// </param>
+    /// <returns>
+    ///  A <see cref="Task"/> that completes when the form is closed or disposed.
+    /// </returns>
+    /// <remarks>
+    ///  <para>
+    ///   This method makes the form visible by setting the <see cref="Control.Visible"/> property to <see langword="true"/>.
+    ///  </para>
+    ///  <para>
+    ///   This method immediately returns, even if the form is large and takes a long time to be set up.
+    ///  </para>
+    ///  <para>
+    ///   The task will complete when the form is closed or disposed.
+    ///  </para>
+    ///  <para>
+    ///   If the owner window is provided, it ensures that the owner is topmost and sets the owner for the form.
+    ///  </para>
+    ///  <para>
+    ///   This method also performs several checks to prevent invalid operations, such as trying to display a disabled form,
+    ///   attempting to display the form when it is not a top-level window, or setting the form as its own owner.
+    ///  </para>
+    ///  <para>
+    ///   If the operating system is in a non-interactive mode, this method will throw an <see cref="InvalidOperationException"/>.
+    ///  </para>
+    ///  <para>
+    ///   If the form is already displayed asynchronously, an <see cref="InvalidOperationException"/> will be thrown.
+    ///  </para>
+    ///  <para>
+    ///   An <see cref="InvalidOperationException"/> will also occur if no
+    ///   <see cref="WindowsFormsSynchronizationContext"/> could be retrieved or installed.
+    ///  </para>
+    ///  <para>
+    ///   There is no need to marshal the call to the UI thread manually if the call
+    ///   originates from a different thread than the UI-Thread. This is handled automatically.
+    ///  </para>
+    /// </remarks>
+    /// <exception cref="InvalidOperationException">
+    ///  <para>Thrown if:</para>
+    ///  <list type="bullet">
+    ///   <item><description>The form is already visible.</description></item>
+    ///   <item><description>The form is disabled.</description></item>
+    ///   <item><description>The form is not a top-level form.</description></item>
+    ///   <item><description>The form is trying to set itself as its own owner.</description></item>
+    ///   <item><description>
+    ///    Thrown if the form is already displayed asynchronously or if no
+    ///    <see cref="WindowsFormsSynchronizationContext"/> could be retrieved or installed.
+    ///   </description></item>
+    ///   <item><description>The operating system is in a non-interactive mode.</description></item>
+    ///  </list>
+    /// </exception>
+    /// <exception cref="ArgumentException">
+    ///  <para>Thrown if the owner window is trying to set itself as its own owner.</para>
+    /// </exception>
+    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = DiagnosticIDs.UrlFormat)]
+    public async Task ShowAsync(IWin32Window? owner = null)
+    {
+        // We lock the access to the task completion source to prevent
+        // multiple calls to ShowAsync from interfering with each other.
+        lock (_lock)
+        {
+            if (_nonModalFormCompletion is not null || _modalFormCompletion is not null)
+            {
+                throw new InvalidOperationException(SR.Form_HasAlreadyBeenShownAsync);
+            }
+
+            _nonModalFormCompletion = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        }
+
+        if (SynchronizationContext.Current is null)
+        {
+            WindowsFormsSynchronizationContext.InstallIfNeeded();
+        }
+
+        var syncContext = SynchronizationContext.Current
+            ?? throw new InvalidOperationException(SR.FormOrTaskDialog_NoSyncContextForShowAsync);
+
+        syncContext.Post((state) => ShowFormInternally(owner), null);
+
+        // Wait until the form is closed or disposed.
+        try
+        {
+            await _nonModalFormCompletion.Task.ConfigureAwait(true);
+        }
+        catch (Exception ex)
+        {
+            // We need to rethrow the exception on the caller's context.
+            Application.OnThreadException(ex);
+        }
+        finally
+        {
+            _nonModalFormCompletion = null;
+        }
+
+        void ShowFormInternally(IWin32Window? owner)
+        {
+            try
+            {
+                // Show the form with an optional owner.
+                Show(owner);
+            }
+            catch (Exception ex)
+            {
+                _nonModalFormCompletion.TrySetException(ex);
+            }
+        }
+    }
+
+    private protected override bool SuppressApplicationOnThreadException(Exception ex)
+    {
+        lock (_lock)
+        {
+            if (_nonModalFormCompletion is not TaskCompletionSource completion)
+            {
+                return false;
+            }
+
+            completion.TrySetException(ex);
+            return true;
+        }
+    }
+
+    /// <summary>
     ///  Displays this form as a modal dialog box with no owner window.
     /// </summary>
-    public DialogResult ShowDialog() => ShowDialog(null);
+    public DialogResult ShowDialog() => ShowDialog(owner: null);
 
     /// <summary>
     ///  Shows this form as a modal dialog with the specified owner.
@@ -5369,6 +5550,117 @@ public partial class Form : ContainerControl
         }
 
         return DialogResult;
+    }
+
+    /// <summary>
+    ///  Shows the form as a modal dialog box asynchronously.
+    /// </summary>
+    /// <returns>
+    ///  A <see cref="Task{DialogResult}"/> representing the outcome of the dialog. The task completes when the form is closed or disposed.
+    /// </returns>
+    /// <remarks>
+    ///  <para>
+    ///   The task will complete when the form is closed or disposed.
+    ///  </para>
+    ///  <para>
+    ///   This method immediately returns, even if the form is large and takes a long time to be set up.
+    ///  </para>
+    ///  <para>
+    ///   If the form is already displayed asynchronously by <see cref="Form.ShowAsync"/>, an <see cref="InvalidOperationException"/> will be thrown.
+    ///  </para>
+    ///  <para>
+    ///   An <see cref="InvalidOperationException"/> will also occur if no <see cref="WindowsFormsSynchronizationContext"/> could be retrieved or installed.
+    ///  </para>
+    ///  <para>
+    ///   There is no need to marshal the call to the UI thread manually if the call originates from a different thread. This is handled automatically.
+    ///  </para>
+    ///  <para>
+    ///   Any exceptions that occur will be automatically propagated to the calling thread.
+    ///  </para>
+    /// </remarks>
+    /// <exception cref="InvalidOperationException">
+    ///  Thrown if the form is already displayed asynchronously or if no <see cref="WindowsFormsSynchronizationContext"/> could be retrieved or installed.
+    /// </exception>
+    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = DiagnosticIDs.UrlFormat)]
+    public Task<DialogResult> ShowDialogAsync() => ShowDialogAsyncInternal(owner: null);
+
+    /// <summary>
+    ///  Shows the form as a modal dialog box with the specified owner asynchronously.
+    /// </summary>
+    /// <param name="owner">
+    ///  Any object that implements <see cref="IWin32Window"/> that represents the top-level window that will own the modal dialog box.
+    /// </param>
+    /// <returns>
+    ///  A <see cref="Task{DialogResult}"/> representing the outcome of the dialog. The task completes when the form is closed or disposed.
+    /// </returns>
+    /// <remarks>
+    ///  <para>
+    ///   The task will complete when the form is closed or disposed.
+    ///  </para>
+    ///  <para>
+    ///   This method immediately returns, even if the form is large and takes a long time to be set up.
+    ///  </para>
+    ///  <para>
+    ///   If the form is already displayed asynchronously by <see cref="Form.ShowAsync"/>, an <see cref="InvalidOperationException"/> will be thrown.
+    ///  </para>
+    ///  <para>
+    ///   An <see cref="InvalidOperationException"/> will also occur if no <see cref="WindowsFormsSynchronizationContext"/> could be retrieved or installed.
+    ///  </para>
+    ///  <para>
+    ///   There is no need to marshal the call to the UI thread manually if the call originates from a different thread. This is handled automatically.
+    ///  </para>
+    ///  <para>
+    ///   Any exceptions that occur will be automatically propagated to the calling thread.
+    ///  </para>
+    /// </remarks>
+    /// <exception cref="InvalidOperationException">
+    ///  Thrown if the form is already displayed asynchronously or if no <see cref="WindowsFormsSynchronizationContext"/> could be retrieved or installed.
+    /// </exception>
+    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = DiagnosticIDs.UrlFormat)]
+    public Task<DialogResult> ShowDialogAsync(IWin32Window owner) => ShowDialogAsyncInternal(owner);
+
+    private Task<DialogResult> ShowDialogAsyncInternal(IWin32Window? owner)
+    {
+        lock (_lock)
+        {
+            if (_nonModalFormCompletion is not null || _modalFormCompletion is not null)
+            {
+                throw new InvalidOperationException(SR.Form_HasAlreadyBeenShownAsync);
+            }
+
+            _modalFormCompletion = new TaskCompletionSource<DialogResult>(TaskCreationOptions.RunContinuationsAsynchronously);
+        }
+
+        if (SynchronizationContext.Current is null)
+        {
+            WindowsFormsSynchronizationContext.InstallIfNeeded();
+        }
+
+        var syncContext = SynchronizationContext.Current
+            ?? throw new InvalidOperationException(SR.FormOrTaskDialog_NoSyncContextForShowAsync);
+
+        syncContext.Post((state) => ShowDialogProc(
+            modalFormCompletion: ref _modalFormCompletion, owner: owner),
+            state: null);
+
+        return _modalFormCompletion.Task;
+
+        void ShowDialogProc(ref TaskCompletionSource<DialogResult> modalFormCompletion, IWin32Window? owner = default)
+        {
+            try
+            {
+                DialogResult result = ShowDialog(owner);
+                modalFormCompletion.SetResult(result);
+            }
+            catch (Exception ex)
+            {
+                modalFormCompletion.SetException(ex);
+            }
+            finally
+            {
+                modalFormCompletion = null!;
+            }
+        }
     }
 
     /// <summary>

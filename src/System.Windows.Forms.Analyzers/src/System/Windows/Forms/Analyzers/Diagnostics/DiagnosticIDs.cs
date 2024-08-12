@@ -5,6 +5,8 @@ namespace System.Windows.Forms.Analyzers.Diagnostics;
 
 internal static class DiagnosticIDs
 {
+    public const string UrlFormat = "https://aka.ms/winforms-warnings/{0}";
+
     // Application Configuration, number group 0001+
     public const string UnsupportedProjectType = "WFO0001";
     public const string PropertyCantBeSetToValue = "WFO0002";
