@@ -8,6 +8,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
     Public Class TimeTests
         Private Const PrecisionTickLimit As Integer = 1000
+        Private _newDate As Date
 
         Private Function TimesEqual(
             vbTime As Date,
@@ -20,9 +21,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <WinFormsFact>
         Public Sub SystemTimeNotNew()
-            Date.Now.Should.BeAfter(New Date)
+            Date.Now.Should.BeAfter(_newDate)
         End Sub
 
+        <WinFormsFact>
+        Public Sub VbTickCountCloseToEnvironmentTickCount()
+            Dim tickCount As Integer = Math.Abs(Environment.TickCount - My.Computer.Clock.TickCount)
+            Call (tickCount < PrecisionTickLimit).Should.BeTrue()
+        End Sub
 
         <WinFormsTheory>
         <ClassData(GetType(TimeData))>
@@ -34,14 +40,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsFact>
-        Public Sub VbTickCountCloseToEnvironmentTickCount()
-            Dim tickCount As Integer = Math.Abs(Environment.TickCount - My.Computer.Clock.TickCount)
-            Call (tickCount < PrecisionTickLimit).Should.BeTrue()
-        End Sub
-
-        <WinFormsFact>
         Public Sub VbTimeNotNew()
-            My.Computer.Clock.LocalTime.Should.BeAfter(New Date)
+            My.Computer.Clock.LocalTime.Should.BeAfter(_newDate)
         End Sub
 
         Protected Friend Class TimeData
