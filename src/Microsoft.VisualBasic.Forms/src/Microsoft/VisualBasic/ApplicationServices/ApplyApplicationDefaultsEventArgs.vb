@@ -31,13 +31,17 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 #Enable Warning WFO5001
 
         ''' <summary>
-        '''  Setting this property inside the event handler causes a new default
-        '''  Font for Forms and UserControls to be set.
+        '''  Setting this property inside the event handler determines the <see cref="Application.ColorMode"/> for the application.
+        ''' </summary>
+        <Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat:=WindowsFormsApplicationBase.WinFormsExperimentalUrl)>
+        Public Property ColorMode As SystemColorMode
+
+        ''' <summary>
+        '''  Setting this property inside the event handler causes a new default Font for Forms and UserControls to be set.
         ''' </summary>
         ''' <remarks>
-        '''  When the ApplyApplicationDefault event is raised, this property contains
-        '''  nothing. A new default Font for the application is applied by setting
-        '''  this property with a value different than nothing.
+        '''  When the ApplyApplicationDefault event is raised, this property contains nothing. A new default Font for the
+        '''  application is applied by setting this property with a value different than nothing.
         ''' </remarks>
         Public Property Font As Font
 
@@ -53,7 +57,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  Setting this Property inside the event handler determines how long an application's Splash dialog is displayed at a minimum.
         ''' </summary>
         Public Property MinimumSplashScreenDisplayTime As Integer =
-            WindowsFormsApplicationBase.MINIMUM_SPLASH_EXPOSURE_DEFAULT
+            WindowsFormsApplicationBase.MinimumSplashExposureDefault
 
     End Class
 End Namespace

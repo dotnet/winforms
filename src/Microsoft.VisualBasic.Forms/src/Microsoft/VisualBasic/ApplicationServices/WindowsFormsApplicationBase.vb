@@ -376,10 +376,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' </summary>
         Public Event StartupNextInstance As StartupNextInstanceEventHandler
 
-        ' milliseconds.
-#Disable Warning WFO5001 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
-#Enable Warning WFO5001 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
-
         ''' <summary>
         '''  Occurs when the application encounters an <see cref="UnhandledException"/>.
         ''' </summary>
