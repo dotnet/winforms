@@ -71,10 +71,10 @@ public class ClipboardProxyTests
     public void Image()
     {
         var clipboard = (new Computer()).Clipboard;
-        object data = GetUniqueText();
-        Assert.Equal(System.Windows.Forms.Clipboard.ContainsData(DataFormats.UnicodeText), clipboard.ContainsData(DataFormats.UnicodeText));
-        Assert.Equal(System.Windows.Forms.Clipboard.GetData(DataFormats.UnicodeText), clipboard.GetData(DataFormats.UnicodeText));
-        clipboard.SetData(DataFormats.UnicodeText, data);
+        using Bitmap image = new(2, 2);
+        System.Windows.Forms.Clipboard.ContainsImage().Should().Be(clipboard.ContainsImage());
+        System.Windows.Forms.Clipboard.GetImage().Should().Be(clipboard.GetImage());
+        clipboard.SetImage(image);
     }
 
     [WinFormsFact]

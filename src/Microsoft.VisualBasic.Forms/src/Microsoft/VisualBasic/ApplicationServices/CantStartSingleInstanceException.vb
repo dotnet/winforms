@@ -3,23 +3,30 @@
 
 Imports System.ComponentModel
 
-Imports VbUtils = Microsoft.VisualBasic.CompilerServices.Utils
+Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.ApplicationServices
 
     ''' <summary>
-    '''  Exception for when we launch a single-instance application and it can't connect with the
-    '''  original instance.
+    '''  Exception for when we launch a single-instance application and it can't
+    '''  connect with the original instance.
     ''' </summary>
     <EditorBrowsable(EditorBrowsableState.Never)>
     <Serializable()>
     Public Class CantStartSingleInstanceException : Inherits Exception
 
+        ' Deserialization constructor must be defined since we are serializable
+        <EditorBrowsable(EditorBrowsableState.Advanced)>
+        <Obsolete("Type or member is obsolete", DiagnosticId:="SYSLIB0051")>
+        Protected Sub New(info As Runtime.Serialization.SerializationInfo, context As Runtime.Serialization.StreamingContext)
+            MyBase.New(info, context)
+        End Sub
+
         ''' <summary>
-        '''  Creates a new exception
+        '''  Creates a new <see cref="Exception"/>.
         ''' </summary>
         Public Sub New()
-            MyBase.New(VbUtils.GetResourceString(SR.AppModel_SingleInstanceCantConnect))
+            MyBase.New(ExUtils.GetResourceString(SR.AppModel_SingleInstanceCantConnect))
         End Sub
 
         Public Sub New(message As String)
@@ -28,13 +35,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         Public Sub New(message As String, inner As Exception)
             MyBase.New(message, inner)
-        End Sub
-
-        ' Deserialization constructor must be defined since we are serializable
-        <EditorBrowsable(EditorBrowsableState.Advanced)>
-        <Obsolete("Type or member is obsolete", DiagnosticId:="SYSLIB0051")>
-        Protected Sub New(info As Runtime.Serialization.SerializationInfo, context As Runtime.Serialization.StreamingContext)
-            MyBase.New(info, context)
         End Sub
 
     End Class
