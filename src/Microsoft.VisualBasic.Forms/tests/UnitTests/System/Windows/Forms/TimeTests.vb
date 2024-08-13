@@ -45,6 +45,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsFact>
+        Public Sub VbTickCountCloseToEnvironmentTickCount()
+            Dim tickCount As Integer = Math.Abs(Environment.TickCount - My.Computer.Clock.TickCount)
+            Call (tickCount < PrecisionTickLimit).Should.BeTrue()
+        End Sub
+
+        <WinFormsFact>
         Public Sub VbTimeNotNew()
             My.Computer.Clock.LocalTime.Should.BeAfter(New Date)
         End Sub
