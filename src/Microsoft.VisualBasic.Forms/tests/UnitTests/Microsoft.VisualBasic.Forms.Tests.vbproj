@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
+<PropertyGroup>
     <SourceTargetFramework>$(TargetFramework)</SourceTargetFramework>
     <TargetFramework>$(TargetFramework)-windows7.0</TargetFramework>
     <DisableTransitiveFrameworkReferences>true</DisableTransitiveFrameworkReferences>
