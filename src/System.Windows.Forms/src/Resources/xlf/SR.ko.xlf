@@ -1529,7 +1529,7 @@
       </trans-unit>
       <trans-unit id="ControlDarkModeDescr">
         <source>Determines the dark mode setting for the control. This ambient property inherits its value from its parent control or from the Application class.</source>
-        <target state="new">Determines the dark mode setting for the control. This ambient property inherits its value from its parent control or from the Application class.</target>
+        <target state="translated">컨트롤의 다크 모드 설정을 결정합니다. 이 앰비언트 속성은 부모 컨트롤 또는 애플리케이션 클래스에서 해당 값을 상속합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlDataContextChangedDescr">
@@ -2189,7 +2189,7 @@
       </trans-unit>
       <trans-unit id="DarkModeNotSupported">
         <source>Dark mode cannot be activated, either because of an activated High-Contrast mode or because the underlying OS does not support it.</source>
-        <target state="new">Dark mode cannot be activated, either because of an activated High-Contrast mode or because the underlying OS does not support it.</target>
+        <target state="translated">활성화된 고대비 모드로 인해 또는 기본 OS에서 지원되지 않는 모드이므로 다크 모드를 활성화할 수 없습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataBindingAddNewNotSupportedOnPropertyManager">
@@ -5317,12 +5317,12 @@ Do you want to replace it?</source>
       </trans-unit>
       <trans-unit id="FormBorderColorChangedDescr">
         <source>Occurs whenever the FormBorderColor property is changed.</source>
-        <target state="new">Occurs whenever the FormBorderColor property is changed.</target>
+        <target state="translated">FormBorderColor 속성이 변경될 때마다 발생합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormBorderColorDescr">
         <source>The color of the Form's border.</source>
-        <target state="new">The color of the Form's border.</target>
+        <target state="translated">양식의 테두리 색입니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormBorderStyleDescr">
@@ -5337,22 +5337,22 @@ Do you want to replace it?</source>
       </trans-unit>
       <trans-unit id="FormCaptionBackColorChangedDescr">
         <source>Occurs whenever the FormCaptionBackColor property is changed.</source>
-        <target state="new">Occurs whenever the FormCaptionBackColor property is changed.</target>
+        <target state="translated">FormCaptionBackColor 속성이 변경될 때마다 발생합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormCaptionBackColorDescr">
         <source>The back color of the Form's caption (title bar).</source>
-        <target state="new">The back color of the Form's caption (title bar).</target>
+        <target state="translated">양식의 캡션(제목 표시줄) 배경색입니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormCaptionTextColorChangedDescr">
         <source>Occurs whenever the FormCaptionTextColor property is changed.</source>
-        <target state="new">Occurs whenever the FormCaptionTextColor property is changed.</target>
+        <target state="translated">FormCaptionTextColor 속성이 변경될 때마다 발생합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormCaptionTextColorDescr">
         <source>The color of the Form's text caption (title bar text).</source>
-        <target state="new">The color of the Form's text caption (title bar text).</target>
+        <target state="translated">양식의 텍스트 캡션(제목 표시줄 텍스트) 색입니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormControlBoxDescr">
@@ -5362,12 +5362,12 @@ Do you want to replace it?</source>
       </trans-unit>
       <trans-unit id="FormCornerPreferenceChangedDescr">
         <source>Occurs whenever the FormCornerPreference property is changed.</source>
-        <target state="new">Occurs whenever the FormCornerPreference property is changed.</target>
+        <target state="translated">FormCornerPreference 속성이 변경될 때마다 발생합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormCornerPreferenceDescr">
         <source>The rounding style of the Form's border.</source>
-        <target state="new">The rounding style of the Form's border.</target>
+        <target state="translated">양식 테두리의 모서리 스타일입니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormDesktopBoundsDescr">
@@ -5572,7 +5572,7 @@ Do you want to replace it?</source>
       </trans-unit>
       <trans-unit id="FormOrTaskDialog_NoSyncContextForShowAsync">
         <source>Failed to retrieve the Synchronization Context for showing the Form asynchronously.</source>
-        <target state="new">Failed to retrieve the Synchronization Context for showing the Form asynchronously.</target>
+        <target state="translated">양식을 비동기적으로 표시하기 위한 동기화 컨텍스트를 검색하지 못했습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormOwnedFormsDescr">
@@ -5622,7 +5622,7 @@ Do you want to replace it?</source>
       </trans-unit>
       <trans-unit id="Form_HasAlreadyBeenShownAsync">
         <source>The form has already been shown asynchronously.</source>
-        <target state="new">The form has already been shown asynchronously.</target>
+        <target state="translated">양식이 이미 비동기적으로 표시되었습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormatControlFormatDescr">

@@ -1529,7 +1529,7 @@
       </trans-unit>
       <trans-unit id="ControlDarkModeDescr">
         <source>Determines the dark mode setting for the control. This ambient property inherits its value from its parent control or from the Application class.</source>
-        <target state="new">Determines the dark mode setting for the control. This ambient property inherits its value from its parent control or from the Application class.</target>
+        <target state="translated">Určuje nastavení tmavého režimu ovládacího prvku. Tato ambientní vlastnost dědí svou hodnotu z nadřazeného ovládacího prvku nebo z třídy Application.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlDataContextChangedDescr">
@@ -2189,7 +2189,7 @@
       </trans-unit>
       <trans-unit id="DarkModeNotSupported">
         <source>Dark mode cannot be activated, either because of an activated High-Contrast mode or because the underlying OS does not support it.</source>
-        <target state="new">Dark mode cannot be activated, either because of an activated High-Contrast mode or because the underlying OS does not support it.</target>
+        <target state="translated">Tmavý režim nelze aktivovat, a to buď z důvodu aktivovaného režimu vysokého kontrastu, nebo proto, že ho nepodporuje příslušný operační systém.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataBindingAddNewNotSupportedOnPropertyManager">
@@ -5317,12 +5317,12 @@ Chcete jej nahradit?</target>
       </trans-unit>
       <trans-unit id="FormBorderColorChangedDescr">
         <source>Occurs whenever the FormBorderColor property is changed.</source>
-        <target state="new">Occurs whenever the FormBorderColor property is changed.</target>
+        <target state="translated">Vyvolá se vždy, když je změněna vlastnost FormBorderColor.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormBorderColorDescr">
         <source>The color of the Form's border.</source>
-        <target state="new">The color of the Form's border.</target>
+        <target state="translated">Barva ohraničení formuláře</target>
         <note />
       </trans-unit>
       <trans-unit id="FormBorderStyleDescr">
@@ -5337,22 +5337,22 @@ Chcete jej nahradit?</target>
       </trans-unit>
       <trans-unit id="FormCaptionBackColorChangedDescr">
         <source>Occurs whenever the FormCaptionBackColor property is changed.</source>
-        <target state="new">Occurs whenever the FormCaptionBackColor property is changed.</target>
+        <target state="translated">Vyvolá se vždy, když je změněna vlastnost FormCaptionBackColor.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormCaptionBackColorDescr">
         <source>The back color of the Form's caption (title bar).</source>
-        <target state="new">The back color of the Form's caption (title bar).</target>
+        <target state="translated">Barva pozadí záhlaví formuláře</target>
         <note />
       </trans-unit>
       <trans-unit id="FormCaptionTextColorChangedDescr">
         <source>Occurs whenever the FormCaptionTextColor property is changed.</source>
-        <target state="new">Occurs whenever the FormCaptionTextColor property is changed.</target>
+        <target state="translated">Vyvolá se vždy, když je změněna vlastnost FormCaptionTextColor.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormCaptionTextColorDescr">
         <source>The color of the Form's text caption (title bar text).</source>
-        <target state="new">The color of the Form's text caption (title bar text).</target>
+        <target state="translated">Barva textu záhlaví formuláře</target>
         <note />
       </trans-unit>
       <trans-unit id="FormControlBoxDescr">
@@ -5362,12 +5362,12 @@ Chcete jej nahradit?</target>
       </trans-unit>
       <trans-unit id="FormCornerPreferenceChangedDescr">
         <source>Occurs whenever the FormCornerPreference property is changed.</source>
-        <target state="new">Occurs whenever the FormCornerPreference property is changed.</target>
+        <target state="translated">Vyvolá se vždy, když je změněna vlastnost FormCornerPreference.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormCornerPreferenceDescr">
         <source>The rounding style of the Form's border.</source>
-        <target state="new">The rounding style of the Form's border.</target>
+        <target state="translated">Styl zaoblení okraje formuláře</target>
         <note />
       </trans-unit>
       <trans-unit id="FormDesktopBoundsDescr">
@@ -5572,7 +5572,7 @@ Chcete jej nahradit?</target>
       </trans-unit>
       <trans-unit id="FormOrTaskDialog_NoSyncContextForShowAsync">
         <source>Failed to retrieve the Synchronization Context for showing the Form asynchronously.</source>
-        <target state="new">Failed to retrieve the Synchronization Context for showing the Form asynchronously.</target>
+        <target state="translated">Načtení kontextu synchronizace pro asynchronní zobrazení formuláře se nezdařilo.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormOwnedFormsDescr">
@@ -5622,7 +5622,7 @@ Chcete jej nahradit?</target>
       </trans-unit>
       <trans-unit id="Form_HasAlreadyBeenShownAsync">
         <source>The form has already been shown asynchronously.</source>
-        <target state="new">The form has already been shown asynchronously.</target>
+        <target state="translated">Formulář již byl zobrazen asynchronně.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormatControlFormatDescr">

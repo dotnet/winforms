@@ -1529,7 +1529,7 @@
       </trans-unit>
       <trans-unit id="ControlDarkModeDescr">
         <source>Determines the dark mode setting for the control. This ambient property inherits its value from its parent control or from the Application class.</source>
-        <target state="new">Determines the dark mode setting for the control. This ambient property inherits its value from its parent control or from the Application class.</target>
+        <target state="translated">Determina la configuración de modo oscuro para el control. Esta propiedad de ambiente hereda su valor de su control primario o de la clase de aplicación.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlDataContextChangedDescr">
@@ -2189,7 +2189,7 @@
       </trans-unit>
       <trans-unit id="DarkModeNotSupported">
         <source>Dark mode cannot be activated, either because of an activated High-Contrast mode or because the underlying OS does not support it.</source>
-        <target state="new">Dark mode cannot be activated, either because of an activated High-Contrast mode or because the underlying OS does not support it.</target>
+        <target state="translated">No se puede activar el modo oscuro debido a un modo de alto contraste activado o a que el sistema operativo subyacente no lo admite.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataBindingAddNewNotSupportedOnPropertyManager">
@@ -5317,12 +5317,12 @@ Do you want to replace it?</source>
       </trans-unit>
       <trans-unit id="FormBorderColorChangedDescr">
         <source>Occurs whenever the FormBorderColor property is changed.</source>
-        <target state="new">Occurs whenever the FormBorderColor property is changed.</target>
+        <target state="translated">Tiene lugar cada vez que cambia la propiedad FormBorderColor.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormBorderColorDescr">
         <source>The color of the Form's border.</source>
-        <target state="new">The color of the Form's border.</target>
+        <target state="translated">Color del borde del Formulario.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormBorderStyleDescr">
@@ -5337,22 +5337,22 @@ Do you want to replace it?</source>
       </trans-unit>
       <trans-unit id="FormCaptionBackColorChangedDescr">
         <source>Occurs whenever the FormCaptionBackColor property is changed.</source>
-        <target state="new">Occurs whenever the FormCaptionBackColor property is changed.</target>
+        <target state="translated">Tiene lugar cada vez que cambia la propiedad FormCaptionBackColor.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormCaptionBackColorDescr">
         <source>The back color of the Form's caption (title bar).</source>
-        <target state="new">The back color of the Form's caption (title bar).</target>
+        <target state="translated">Color de fondo del título del Formulario (barra de título).</target>
         <note />
       </trans-unit>
       <trans-unit id="FormCaptionTextColorChangedDescr">
         <source>Occurs whenever the FormCaptionTextColor property is changed.</source>
-        <target state="new">Occurs whenever the FormCaptionTextColor property is changed.</target>
+        <target state="translated">Tiene lugar cada vez que cambia la propiedad FormCaptionTextColor.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormCaptionTextColorDescr">
         <source>The color of the Form's text caption (title bar text).</source>
-        <target state="new">The color of the Form's text caption (title bar text).</target>
+        <target state="translated">Color del título de texto del Formulario (texto de la barra de título).</target>
         <note />
       </trans-unit>
       <trans-unit id="FormControlBoxDescr">
@@ -5362,12 +5362,12 @@ Do you want to replace it?</source>
       </trans-unit>
       <trans-unit id="FormCornerPreferenceChangedDescr">
         <source>Occurs whenever the FormCornerPreference property is changed.</source>
-        <target state="new">Occurs whenever the FormCornerPreference property is changed.</target>
+        <target state="translated">Tiene lugar cada vez que cambia la propiedad FormCornerPreference.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormCornerPreferenceDescr">
         <source>The rounding style of the Form's border.</source>
-        <target state="new">The rounding style of the Form's border.</target>
+        <target state="translated">Estilo de redondeo del borde del Formulario.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormDesktopBoundsDescr">
@@ -5572,7 +5572,7 @@ Do you want to replace it?</source>
       </trans-unit>
       <trans-unit id="FormOrTaskDialog_NoSyncContextForShowAsync">
         <source>Failed to retrieve the Synchronization Context for showing the Form asynchronously.</source>
-        <target state="new">Failed to retrieve the Synchronization Context for showing the Form asynchronously.</target>
+        <target state="translated">No se pudo recuperar el contexto de sincronización para mostrar el Formulario de forma asincrónica.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormOwnedFormsDescr">
@@ -5622,7 +5622,7 @@ Do you want to replace it?</source>
       </trans-unit>
       <trans-unit id="Form_HasAlreadyBeenShownAsync">
         <source>The form has already been shown asynchronously.</source>
-        <target state="new">The form has already been shown asynchronously.</target>
+        <target state="translated">El formulario ya se ha mostrado de forma asincrónica.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormatControlFormatDescr">

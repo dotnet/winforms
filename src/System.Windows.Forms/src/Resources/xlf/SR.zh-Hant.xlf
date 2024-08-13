@@ -1529,7 +1529,7 @@
       </trans-unit>
       <trans-unit id="ControlDarkModeDescr">
         <source>Determines the dark mode setting for the control. This ambient property inherits its value from its parent control or from the Application class.</source>
-        <target state="new">Determines the dark mode setting for the control. This ambient property inherits its value from its parent control or from the Application class.</target>
+        <target state="translated">決定控制項的深色模式設定。此環境屬性會從其父控制項或應用程式類別繼承其值。</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlDataContextChangedDescr">
@@ -2189,7 +2189,7 @@
       </trans-unit>
       <trans-unit id="DarkModeNotSupported">
         <source>Dark mode cannot be activated, either because of an activated High-Contrast mode or because the underlying OS does not support it.</source>
-        <target state="new">Dark mode cannot be activated, either because of an activated High-Contrast mode or because the underlying OS does not support it.</target>
+        <target state="translated">深色模式無法啟用，可能是因為已啟用高對比模式，或因為基礎作業系統不支援它。</target>
         <note />
       </trans-unit>
       <trans-unit id="DataBindingAddNewNotSupportedOnPropertyManager">
@@ -5317,12 +5317,12 @@ Do you want to replace it?</source>
       </trans-unit>
       <trans-unit id="FormBorderColorChangedDescr">
         <source>Occurs whenever the FormBorderColor property is changed.</source>
-        <target state="new">Occurs whenever the FormBorderColor property is changed.</target>
+        <target state="translated">每當 FormBorderColor 屬性變更時就會發生。</target>
         <note />
       </trans-unit>
       <trans-unit id="FormBorderColorDescr">
         <source>The color of the Form's border.</source>
-        <target state="new">The color of the Form's border.</target>
+        <target state="translated">表單框線的色彩。</target>
         <note />
       </trans-unit>
       <trans-unit id="FormBorderStyleDescr">
@@ -5337,22 +5337,22 @@ Do you want to replace it?</source>
       </trans-unit>
       <trans-unit id="FormCaptionBackColorChangedDescr">
         <source>Occurs whenever the FormCaptionBackColor property is changed.</source>
-        <target state="new">Occurs whenever the FormCaptionBackColor property is changed.</target>
+        <target state="translated">每當 FormCaptionBackColor 屬性變更時就會發生。</target>
         <note />
       </trans-unit>
       <trans-unit id="FormCaptionBackColorDescr">
         <source>The back color of the Form's caption (title bar).</source>
-        <target state="new">The back color of the Form's caption (title bar).</target>
+        <target state="translated">表單標題 (標題列) 的背景色彩。</target>
         <note />
       </trans-unit>
       <trans-unit id="FormCaptionTextColorChangedDescr">
         <source>Occurs whenever the FormCaptionTextColor property is changed.</source>
-        <target state="new">Occurs whenever the FormCaptionTextColor property is changed.</target>
+        <target state="translated">每當 FormCaptionTextColor 屬性變更時就會發生。</target>
         <note />
       </trans-unit>
       <trans-unit id="FormCaptionTextColorDescr">
         <source>The color of the Form's text caption (title bar text).</source>
-        <target state="new">The color of the Form's text caption (title bar text).</target>
+        <target state="translated">表單文字標題 (標題列文字) 的色彩。</target>
         <note />
       </trans-unit>
       <trans-unit id="FormControlBoxDescr">
@@ -5362,12 +5362,12 @@ Do you want to replace it?</source>
       </trans-unit>
       <trans-unit id="FormCornerPreferenceChangedDescr">
         <source>Occurs whenever the FormCornerPreference property is changed.</source>
-        <target state="new">Occurs whenever the FormCornerPreference property is changed.</target>
+        <target state="translated">每當 FormCornerPreference 屬性變更時就會發生。</target>
         <note />
       </trans-unit>
       <trans-unit id="FormCornerPreferenceDescr">
         <source>The rounding style of the Form's border.</source>
-        <target state="new">The rounding style of the Form's border.</target>
+        <target state="translated">表單框線的圓角樣式。</target>
         <note />
       </trans-unit>
       <trans-unit id="FormDesktopBoundsDescr">
@@ -5572,7 +5572,7 @@ Do you want to replace it?</source>
       </trans-unit>
       <trans-unit id="FormOrTaskDialog_NoSyncContextForShowAsync">
         <source>Failed to retrieve the Synchronization Context for showing the Form asynchronously.</source>
-        <target state="new">Failed to retrieve the Synchronization Context for showing the Form asynchronously.</target>
+        <target state="translated">無法擷取同步處理內容以透過非同步方式顯示表單。</target>
         <note />
       </trans-unit>
       <trans-unit id="FormOwnedFormsDescr">
@@ -5622,7 +5622,7 @@ Do you want to replace it?</source>
       </trans-unit>
       <trans-unit id="Form_HasAlreadyBeenShownAsync">
         <source>The form has already been shown asynchronously.</source>
-        <target state="new">The form has already been shown asynchronously.</target>
+        <target state="translated">表單已經以非同步方式顯示。</target>
         <note />
       </trans-unit>
       <trans-unit id="FormatControlFormatDescr">
