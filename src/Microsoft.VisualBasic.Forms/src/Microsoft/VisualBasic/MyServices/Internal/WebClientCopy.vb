@@ -98,39 +98,10 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' </summary>
         ''' <param name="sender"></param>
         ''' <param name="e"></param>
-        Private Sub m_WebClient_DownloadFileCompleted(sender As Object, e As System.ComponentModel.AsyncCompletedEventArgs) Handles m_WebClient.DownloadFileCompleted
-            Try
-                ' If the download was interrupted by an exception, keep track of the exception, which we'll throw from the main thread
-                If e.Error IsNot Nothing Then
-                    _exceptionEncounteredDuringFileTransfer = e.Error
-                End If
-
-                If Not e.Cancelled AndAlso e.Error Is Nothing Then
-                    InvokeIncrement(100)
-                End If
-            Finally
-                'We don't close the dialog until we receive the WebClient.DownloadFileCompleted event
-                CloseProgressDialog()
-            End Try
-        End Sub
-
-        ''' <summary>
-        '''  Handles event WebClient fires whenever progress of download changes
-        ''' </summary>
-        ''' <param name="sender"></param>
-        ''' <param name="e"></param>
-        Private Sub m_WebClient_DownloadProgressChanged(sender As Object, e As DownloadProgressChangedEventArgs) Handles m_WebClient.DownloadProgressChanged
-            InvokeIncrement(e.ProgressPercentage)
-        End Sub
-
-        ''' <summary>
-        '''  Handles the WebClient's UploadFileCompleted event
-        ''' </summary>
-        ''' <param name="sender"></param>
-        ''' <param name="e"></param>
         Private Sub m_WebClient_UploadFileCompleted(sender As Object, e As UploadFileCompletedEventArgs) Handles m_WebClient.UploadFileCompleted
 
-            ' If the upload was interrupted by an exception, keep track of the exception, which we'll throw from the main thread
+            ' If the upload was interrupted by an exception, keep track of the
+            ' exception, which we'll throw from the main thread
             Try
                 If e.Error IsNot Nothing Then
                     _exceptionEncounteredDuringFileTransfer = e.Error
@@ -139,13 +110,14 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                     InvokeIncrement(100)
                 End If
             Finally
-                'We don't close the dialog until we receive the WebClient.DownloadFileCompleted event
+                'We don't close the dialog until we receive the
+                'WebClient.DownloadFileCompleted event
                 CloseProgressDialog()
             End Try
         End Sub
 
         ''' <summary>
-        '''  Handles event WebClient fires whenever progress of upload changes
+        '''  Handles event WebClient fires whenever progress of upload changes.
         ''' </summary>
         ''' <param name="sender"></param>
         ''' <param name="e"></param>
@@ -155,34 +127,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Sub
 
         ''' <summary>
-        '''  Downloads a file
-        ''' </summary>
-        ''' <param name="address">The source for the file</param>
-        ''' <param name="destinationFileName">The path and name where the file is saved</param>
-        Public Sub DownloadFile(address As Uri, destinationFileName As String)
-            Debug.Assert(m_WebClient IsNot Nothing, "No WebClient")
-            Debug.Assert(address IsNot Nothing, "No address")
-            Debug.Assert((Not String.IsNullOrWhiteSpace(destinationFileName)) AndAlso Directory.Exists(Path.GetDirectoryName(Path.GetFullPath(destinationFileName))), "Invalid path")
-
-            ' If we have a dialog we need to set up an async download
-            If m_ProgressDialog IsNot Nothing Then
-                m_WebClient.DownloadFileAsync(address, destinationFileName)
-                m_ProgressDialog.ShowProgressDialog() 'returns when the download sequence is over, whether due to success, error, or being canceled
-            Else
-                m_WebClient.DownloadFile(address, destinationFileName)
-            End If
-
-            'Now that we are back on the main thread, throw the exception we encountered if the user didn't cancel.
-            If _exceptionEncounteredDuringFileTransfer IsNot Nothing Then
-                If m_ProgressDialog Is Nothing OrElse Not m_ProgressDialog.UserCanceledTheDialog Then
-                    Throw _exceptionEncounteredDuringFileTransfer
-                End If
-            End If
-
-        End Sub
-
-        ''' <summary>
-        '''  Uploads a file
+        '''  Uploads a file.
         ''' </summary>
         ''' <param name="sourceFileName">The name and path of the source file.</param>
         ''' <param name="address">The address to which the file is uploaded.</param>

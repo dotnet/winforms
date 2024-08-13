@@ -14,7 +14,6 @@ Imports System.Windows.Forms
 Imports System.Windows.Forms.Analyzers.Diagnostics
 
 Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
-Imports VbUtils = Microsoft.VisualBasic.CompilerServices.Utils
 
 Namespace Microsoft.VisualBasic.ApplicationServices
 
@@ -66,7 +65,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
     ''' <remarks>Don't put access on this definition.</remarks>
     Partial Public Class WindowsFormsApplicationBase : Inherits ConsoleApplicationBase
 
-        ' How long a subsequent instance will wait for the original instance to get on its feet.
+        ' How long a subsequent instance will wait for the original instance to get on its feet in milliseconds.
         Private Const SecondInstanceTimeOut As Integer = 2500
 
         Private ReadOnly _appContext As WinFormsAppContext
@@ -130,13 +129,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         Private _unhandledExceptionHandlers As List(Of UnhandledExceptionEventHandler)
 
+        ' Milliseconds.
         Friend Const MinimumSplashExposureDefault As Integer = 2000
 
-        ' milliseconds.
         Friend Const WinFormsExperimentalUrl As String = "https://aka.ms/winforms-experimental/{0}"
-
-        ' Used to marshal a call to Dispose on the Splash Screen.
-        Private Delegate Sub DisposeDelegate()
 
         ''' <summary>
         '''  Constructs the application Shutdown/Startup model object
@@ -185,176 +181,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             _appSynchronizationContext = AsyncOperationManager.SynchronizationContext
         End Sub
 
-        ''' <summary>
-        '''  Use GDI for the text rendering engine by default.
-        '''  The user can shadow this function to return True if they want their app
-        '''  to use the GDI+ render. We read this function in Main() (My template) to
-        '''  determine how to set the text rendering flag on the WinForms application object.
-        ''' </summary>
-        ''' <returns>True - Use GDI+ renderer. False - use GDI renderer.</returns>
-        <EditorBrowsable(EditorBrowsableState.Advanced)>
-        Protected Shared ReadOnly Property UseCompatibleTextRendering() As Boolean
-            Get
-                Return False
-            End Get
-        End Property
-
-        ''' <summary>
-        '''  Gets or sets the ColorMode for the Application.
-        ''' </summary>
-        ''' <returns>
-        '''  The <see cref="SystemColorMode"/> that the application is running in.
-        ''' </returns>
-        <Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat:=WinFormsExperimentalUrl)>
-        <EditorBrowsable(EditorBrowsableState.Never)>
-        Protected Property ColorMode As SystemColorMode
-            Get
-                Return _colorMode
-            End Get
-            Set(value As SystemColorMode)
-                _colorMode = value
-            End Set
-        End Property
-
-        ''' <summary>
-        '''  Determines whether this application will use the XP Windows styles for windows, controls, etc.
-        ''' </summary>
-        Protected Property EnableVisualStyles() As Boolean
-            Get
-                Return _enableVisualStyles
-            End Get
-            Set(value As Boolean)
-                _enableVisualStyles = value
-            End Set
-        End Property
-
-        ''' <summary>
-        '''  Gets or sets the HighDpiMode for the Application.
-        ''' </summary>
-        <EditorBrowsable(EditorBrowsableState.Never)>
-        Protected Property HighDpiMode() As HighDpiMode
-            Get
-                Return _highDpiMode
-            End Get
-            Set(value As HighDpiMode)
-                _highDpiMode = value
-            End Set
-        End Property
-
-        <EditorBrowsable(EditorBrowsableState.Advanced)>
-        Protected Property IsSingleInstance() As Boolean
-            Get
-                Return _isSingleInstance
-            End Get
-            Set(value As Boolean)
-                _isSingleInstance = value
-            End Set
-        End Property
-
-        ''' <summary>
-        '''  Determines when this application will terminate (when the main form goes down, all forms)
-        ''' </summary>
-        Protected Friend Property ShutdownStyle() As ShutdownMode
-            Get
-                Return _shutdownStyle
-            End Get
-            Set(value As ShutdownMode)
-                ValidateShutdownModeEnumValue(value, NameOf(value))
-                _shutdownStyle = value
-            End Set
-        End Property
-
-        ''' <summary>
-        '''  Provides the WinForms application context that we are running on
-        ''' </summary>
-        <EditorBrowsable(EditorBrowsableState.Advanced)>
-        Public ReadOnly Property ApplicationContext() As ApplicationContext
-            Get
-                Return _appContext
-            End Get
-        End Property
-
-        ''' <summary>
-        '''  Informs My.Settings whether to save the settings on exit or not
-        ''' </summary>
-        Public Property SaveMySettingsOnExit() As Boolean
-            Get
-                Return _saveMySettingsOnExit
-            End Get
-            Set(value As Boolean)
-                _saveMySettingsOnExit = value
-            End Set
-        End Property
-
-        ''' <summary>
-        '''  Provides access to the splash screen for this application
-        ''' </summary>
-        Public Property SplashScreen() As Form
-            Get
-                Return _splashScreen
-            End Get
-            Set(value As Form)
-
-                ' Allow for the case where they set splash screen = nothing and mainForm is currently nothing.
-                If value IsNot Nothing AndAlso value Is _appContext.MainForm Then
-                    Throw New ArgumentException(VbUtils.GetResourceString(SR.AppModel_SplashAndMainFormTheSame))
-                End If
-
-                _splashScreen = value
-            End Set
-        End Property
-
-        ''' <summary>
-        '''  Provides access to the main form for this application
-        ''' </summary>
-        Protected Property MainForm() As Form
-            Get
-                Return _appContext?.MainForm
-            End Get
-            Set(value As Form)
-                If value Is Nothing Then
-                    Throw ExUtils.GetArgumentNullException("MainForm", SR.General_PropertyNothing, "MainForm")
-                End If
-                If value Is _splashScreen Then
-                    Throw New ArgumentException(VbUtils.GetResourceString(SR.AppModel_SplashAndMainFormTheSame))
-                End If
-                _appContext.MainForm = value
-            End Set
-        End Property
-
-        ''' <summary>
-        '''  The splash screen timeout specifies whether there is a minimum time that the splash
-        '''  screen should be displayed for. When not set then the splash screen is hidden
-        '''  as soon as the main form becomes active.
-        ''' </summary>
-        ''' <value>The minimum amount of time, in milliseconds, to display the splash screen.</value>
-        ''' <remarks>
-        '''  This property, although public, used to be set in an `Overrides Function OnInitialize` _before_
-        '''  calling `MyBase.OnInitialize`. We want to phase this out, and with the introduction of the
-        '''  ApplyApplicationDefaults events have it handled in that event, rather than as awkwardly
-        '''  as it is currently suggested to be used in the docs.
-        '''  First step for that is to make it hidden in IntelliSense.
-        ''' </remarks>
-        <EditorBrowsable(EditorBrowsableState.Never)>
-        Public Property MinimumSplashScreenDisplayTime() As Integer
-            Get
-                Return _minimumSplashExposure
-            End Get
-            Set(value As Integer)
-                _minimumSplashExposure = value
-            End Set
-        End Property
-
-        ''' <summary>
-        '''  Returns the collection of forms that are open. We no longer have thread
-        '''  affinity meaning that this is the WinForms collection that contains Forms that may
-        '''  have been opened on another thread then the one we are calling in on right now.
-        ''' </summary>
-        Public ReadOnly Property OpenForms() As FormCollection
-            Get
-                Return Application.OpenForms
-            End Get
-        End Property
+        ' Used to marshal a call to Dispose on the Splash Screen.
+        Private Delegate Sub DisposeDelegate()
 
         ''' <summary>
         '''  Occurs when the application is ready to accept default values for various application areas.
@@ -497,6 +325,177 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 End If
             End RaiseEvent
         End Event
+
+        ''' <summary>
+        '''  Use GDI for the text rendering engine by default.
+        '''  The user can shadow this function to return True if they want their app
+        '''  to use the GDI+ render. We read this function in Main() (My template) to
+        '''  determine how to set the text rendering flag on the WinForms application object.
+        ''' </summary>
+        ''' <returns>True - Use GDI+ renderer. False - use GDI renderer.</returns>
+        <EditorBrowsable(EditorBrowsableState.Advanced)>
+        Protected Shared ReadOnly Property UseCompatibleTextRendering() As Boolean
+            Get
+                Return False
+            End Get
+        End Property
+
+        ''' <summary>
+        '''  Gets or sets the ColorMode for the Application.
+        ''' </summary>
+        ''' <returns>
+        '''  The <see cref="SystemColorMode"/> that the application is running in.
+        ''' </returns>
+        <Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat:=WinFormsExperimentalUrl)>
+        <EditorBrowsable(EditorBrowsableState.Never)>
+        Protected Property ColorMode As SystemColorMode
+            Get
+                Return _colorMode
+            End Get
+            Set(value As SystemColorMode)
+                _colorMode = value
+            End Set
+        End Property
+
+        ''' <summary>
+        '''  Determines whether this application will use the XP Windows styles for windows, controls, etc.
+        ''' </summary>
+        Protected Property EnableVisualStyles() As Boolean
+            Get
+                Return _enableVisualStyles
+            End Get
+            Set(value As Boolean)
+                _enableVisualStyles = value
+            End Set
+        End Property
+
+        ''' <summary>
+        '''  Gets or sets the HighDpiMode for the Application.
+        ''' </summary>
+        <EditorBrowsable(EditorBrowsableState.Never)>
+        Protected Property HighDpiMode() As HighDpiMode
+            Get
+                Return _highDpiMode
+            End Get
+            Set(value As HighDpiMode)
+                _highDpiMode = value
+            End Set
+        End Property
+
+        <EditorBrowsable(EditorBrowsableState.Advanced)>
+        Protected Property IsSingleInstance() As Boolean
+            Get
+                Return _isSingleInstance
+            End Get
+            Set(value As Boolean)
+                _isSingleInstance = value
+            End Set
+        End Property
+
+        ''' <summary>
+        '''  Determines when this application will terminate (when the main form goes down, all forms)
+        ''' </summary>
+        Protected Friend Property ShutdownStyle() As ShutdownMode
+            Get
+                Return _shutdownStyle
+            End Get
+            Set(value As ShutdownMode)
+                ValidateShutdownModeEnumValue(value, NameOf(value))
+                _shutdownStyle = value
+            End Set
+        End Property
+
+        ''' <summary>
+        '''  Provides the WinForms application context that we are running on
+        ''' </summary>
+        <EditorBrowsable(EditorBrowsableState.Advanced)>
+        Public ReadOnly Property ApplicationContext() As ApplicationContext
+            Get
+                Return _appContext
+            End Get
+        End Property
+
+        ''' <summary>
+        '''  Informs My.Settings whether to save the settings on exit or not
+        ''' </summary>
+        Public Property SaveMySettingsOnExit() As Boolean
+            Get
+                Return _saveMySettingsOnExit
+            End Get
+            Set(value As Boolean)
+                _saveMySettingsOnExit = value
+            End Set
+        End Property
+
+        ''' <summary>
+        '''  Provides access to the splash screen for this application
+        ''' </summary>
+        Public Property SplashScreen() As Form
+            Get
+                Return _splashScreen
+            End Get
+            Set(value As Form)
+
+                ' Allow for the case where they set splash screen = nothing and mainForm is currently nothing.
+                If value IsNot Nothing AndAlso value Is _appContext.MainForm Then
+                    Throw New ArgumentException(ExUtils.GetResourceString(SR.AppModel_SplashAndMainFormTheSame))
+                End If
+
+                _splashScreen = value
+            End Set
+        End Property
+
+        ''' <summary>
+        '''  Provides access to the main form for this application
+        ''' </summary>
+        Protected Property MainForm() As Form
+            Get
+                Return _appContext?.MainForm
+            End Get
+            Set(value As Form)
+                If value Is Nothing Then
+                    Throw ExUtils.GetArgumentNullException("MainForm", SR.General_PropertyNothing, "MainForm")
+                End If
+                If value Is _splashScreen Then
+                    Throw New ArgumentException(ExUtils.GetResourceString(SR.AppModel_SplashAndMainFormTheSame))
+                End If
+                _appContext.MainForm = value
+            End Set
+        End Property
+
+        ''' <summary>
+        '''  The splash screen timeout specifies whether there is a minimum time that the splash
+        '''  screen should be displayed for. When not set then the splash screen is hidden
+        '''  as soon as the main form becomes active.
+        ''' </summary>
+        ''' <value>The minimum amount of time, in milliseconds, to display the splash screen.</value>
+        ''' <remarks>
+        '''  This property, although public, used to be set in an `Overrides Function OnInitialize` _before_
+        '''  calling `MyBase.OnInitialize`. We want to phase this out, and with the introduction of the
+        '''  ApplyApplicationDefaults events have it handled in that event, rather than as awkwardly
+        '''  as it is currently suggested to be used in the docs.
+        '''  First step for that is to make it hidden in IntelliSense.
+        ''' </remarks>
+        <EditorBrowsable(EditorBrowsableState.Never)>
+        Public Property MinimumSplashScreenDisplayTime() As Integer
+            Get
+                Return _minimumSplashExposure
+            End Get
+            Set(value As Integer)
+                _minimumSplashExposure = value
+            End Set
+        End Property
+
+        ''' <summary>
+        '''  Returns the collection of forms that are open. We no longer have thread
+        '''  affinity meaning that this is the WinForms collection that contains Forms that may
+        '''  have been opened on another thread then the one we are calling in on right now.
+        ''' </summary>
+        Public ReadOnly Property OpenForms() As FormCollection
+            Get
+                Return Application.OpenForms
+            End Get
+        End Property
 
         ''' <summary>
         '''  Generates the name for the remote singleton that we use to channel multiple instances
