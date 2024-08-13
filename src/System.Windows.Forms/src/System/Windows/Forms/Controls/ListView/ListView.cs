@@ -2309,9 +2309,9 @@ public partial class ListView : Control
         }
 
         // NOTE: any handlers added here should be removed in DetachGroupImageListHandlers
-        _imageListGroup.RecreateHandle += new EventHandler(GroupImageListRecreateHandle);
-        _imageListGroup.Disposed += new EventHandler(DetachImageList);
-        _imageListGroup.ChangeHandle += new EventHandler(GroupImageListChangedHandle);
+        _imageListGroup.RecreateHandle += GroupImageListRecreateHandle;
+        _imageListGroup.Disposed += DetachImageList;
+        _imageListGroup.ChangeHandle += GroupImageListChangedHandle;
     }
 
     private void AttachLargeImageListHandlers()
@@ -2322,9 +2322,9 @@ public partial class ListView : Control
         }
 
         // NOTE: any handlers added here should be removed in DetachLargeImageListHandlers
-        _imageListLarge.RecreateHandle += new EventHandler(LargeImageListRecreateHandle);
-        _imageListLarge.Disposed += new EventHandler(DetachImageList);
-        _imageListLarge.ChangeHandle += new EventHandler(LargeImageListChangedHandle);
+        _imageListLarge.RecreateHandle += LargeImageListRecreateHandle;
+        _imageListLarge.Disposed += DetachImageList;
+        _imageListLarge.ChangeHandle += LargeImageListChangedHandle;
     }
 
     private void AttachSmallImageListListHandlers()
@@ -2335,8 +2335,8 @@ public partial class ListView : Control
         }
 
         // NOTE: any handlers added here should be removed in DetachSmallImageListListHandlers
-        _imageListSmall.RecreateHandle += new EventHandler(SmallImageListRecreateHandle);
-        _imageListSmall.Disposed += new EventHandler(DetachImageList);
+        _imageListSmall.RecreateHandle += SmallImageListRecreateHandle;
+        _imageListSmall.Disposed += DetachImageList;
     }
 
     private void AttachStateImageListHandlers()
@@ -2347,8 +2347,8 @@ public partial class ListView : Control
         }
 
         // NOTE: any handlers added here should be removed in DetachStateImageListHandlers
-        _imageListState.RecreateHandle += new EventHandler(StateImageListRecreateHandle);
-        _imageListState.Disposed += new EventHandler(DetachImageList);
+        _imageListState.RecreateHandle += StateImageListRecreateHandle;
+        _imageListState.Disposed += DetachImageList;
     }
 
     public void AutoResizeColumns(ColumnHeaderAutoResizeStyle headerAutoResize)
@@ -3048,9 +3048,9 @@ public partial class ListView : Control
             return;
         }
 
-        _imageListGroup.RecreateHandle -= new EventHandler(GroupImageListRecreateHandle);
-        _imageListGroup.Disposed -= new EventHandler(DetachImageList);
-        _imageListGroup.ChangeHandle -= new EventHandler(GroupImageListChangedHandle);
+        _imageListGroup.RecreateHandle -= GroupImageListRecreateHandle;
+        _imageListGroup.Disposed -= DetachImageList;
+        _imageListGroup.ChangeHandle -= GroupImageListChangedHandle;
     }
 
     private void DetachLargeImageListHandlers()
@@ -3060,9 +3060,9 @@ public partial class ListView : Control
             return;
         }
 
-        _imageListLarge.RecreateHandle -= new EventHandler(LargeImageListRecreateHandle);
-        _imageListLarge.Disposed -= new EventHandler(DetachImageList);
-        _imageListLarge.ChangeHandle -= new EventHandler(LargeImageListChangedHandle);
+        _imageListLarge.RecreateHandle -= LargeImageListRecreateHandle;
+        _imageListLarge.Disposed -= DetachImageList;
+        _imageListLarge.ChangeHandle -= LargeImageListChangedHandle;
     }
 
     private void DetachSmallImageListListHandlers()
@@ -3072,8 +3072,8 @@ public partial class ListView : Control
             return;
         }
 
-        _imageListSmall.RecreateHandle -= new EventHandler(SmallImageListRecreateHandle);
-        _imageListSmall.Disposed -= new EventHandler(DetachImageList);
+        _imageListSmall.RecreateHandle -= SmallImageListRecreateHandle;
+        _imageListSmall.Disposed -= DetachImageList;
     }
 
     private void DetachStateImageListHandlers()
@@ -3083,8 +3083,8 @@ public partial class ListView : Control
             return;
         }
 
-        _imageListState.RecreateHandle -= new EventHandler(StateImageListRecreateHandle);
-        _imageListState.Disposed -= new EventHandler(DetachImageList);
+        _imageListState.RecreateHandle -= StateImageListRecreateHandle;
+        _imageListState.Disposed -= DetachImageList;
     }
 
     /// <summary>
@@ -4613,6 +4613,17 @@ public partial class ListView : Control
             PInvoke.SendMessage(this, PInvoke.CCM_SETVERSION, (WPARAM)5);
         }
 
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        if (Application.IsDarkModeEnabled)
+        {
+            _ = PInvoke.SetWindowTheme(HWND, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null);
+
+            // Get the ListView's ColumnHeader handle:
+            HWND columnHeaderHandle = (HWND)PInvoke.SendMessage(this, PInvoke.LVM_GETHEADER, (WPARAM)0, (LPARAM)0);
+            PInvoke.SetWindowTheme(columnHeaderHandle, $"{DarkModeIdentifier}_{ItemsViewThemeIdentifier}", null);
+        }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
         UpdateExtendedStyles();
         RealizeProperties();
         PInvoke.SendMessage(this, PInvoke.LVM_SETBKCOLOR, (WPARAM)0, (LPARAM)BackColor);
@@ -5008,16 +5019,19 @@ public partial class ListView : Control
         Color c;
 
         c = BackColor;
-        if (c != SystemColors.Window)
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        if (c != SystemColors.Window || Application.IsDarkModeEnabled)
         {
             PInvoke.SendMessage(this, PInvoke.LVM_SETBKCOLOR, (WPARAM)0, (LPARAM)c);
         }
 
         c = ForeColor;
-        if (c != SystemColors.WindowText)
+
+        if (c != SystemColors.WindowText || Application.IsDarkModeEnabled)
         {
             PInvoke.SendMessage(this, PInvoke.LVM_SETTEXTCOLOR, (WPARAM)0, (LPARAM)c);
         }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
         if (_imageListLarge is not null)
         {
@@ -5117,7 +5131,7 @@ public partial class ListView : Control
 
         for (int i = 0; i < Items.Count; i++)
         {
-            Items[i].ReleaseUiaProvider();
+            Items.GetItemByIndex(i)?.ReleaseUiaProvider();
         }
 
         if (_defaultGroup is not null)
@@ -6006,6 +6020,33 @@ public partial class ListView : Control
     private unsafe bool WmNotify(ref Message m)
     {
         NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
+
+        // We need to set the text color when we are in dark mode,
+        // so that the themed headers are actually readable.
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        if (Application.IsDarkModeEnabled
+            && !OwnerDraw
+            && nmhdr->code == PInvoke.NM_CUSTOMDRAW)
+        {
+            NMLVCUSTOMDRAW* nmlvcd = (NMLVCUSTOMDRAW*)(nint)m.LParamInternal;
+
+            if (nmlvcd->nmcd.dwDrawStage == NMCUSTOMDRAW_DRAW_STAGE.CDDS_PREPAINT)
+            {
+                // We request the notification for the items to be drawn.
+                m.ResultInternal = (LRESULT)(nint)PInvoke.CDRF_NOTIFYITEMDRAW;
+                return true;
+            }
+            else if (nmlvcd->nmcd.dwDrawStage == NMCUSTOMDRAW_DRAW_STAGE.CDDS_ITEMPREPAINT)
+            {
+                // Setting the current ForeColor to the text color.
+                PInvoke.SetTextColor(nmlvcd->nmcd.hdc, ForeColor);
+
+                // and the rest remains the same.
+                m.ResultInternal = (LRESULT)(nint)PInvoke.CDRF_DODEFAULT;
+                return false;
+            }
+        }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
         if (nmhdr->code == PInvoke.NM_CUSTOMDRAW && PInvoke.UiaClientsAreListening())
         {

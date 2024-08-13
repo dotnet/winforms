@@ -184,10 +184,11 @@ internal class ToolStripItemBehavior : Behavior.Behavior
         if (_timer is not null)
         {
             _timer.Enabled = false;
-            _timer.Tick -= new EventHandler(OnDoubleClickTimerTick);
+            _timer.Tick -= OnDoubleClickTimerTick;
             _timer.Dispose();
             _timer = null;
-            // Enter Insitu ...
+
+            // Enter Insitu
             if (_selectedGlyph is not null && _selectedGlyph.Item is ToolStripMenuItem)
             {
                 EnterInSituMode(_selectedGlyph);
@@ -235,7 +236,7 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                     if (_timer is not null)
                     {
                         _timer.Enabled = false;
-                        _timer.Tick -= new EventHandler(OnDoubleClickTimerTick);
+                        _timer.Tick -= OnDoubleClickTimerTick;
                         _timer.Dispose();
                         _timer = null;
                     }
@@ -361,7 +362,8 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                     {
                         Interval = SystemInformation.DoubleClickTime
                     };
-                    _timer.Tick += new EventHandler(OnDoubleClickTimerTick);
+
+                    _timer.Tick += OnDoubleClickTimerTick;
                     _timer.Enabled = true;
                     _selectedGlyph = glyph;
                 }
@@ -559,7 +561,7 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                 if (_timer is not null)
                 {
                     _timer.Enabled = false;
-                    _timer.Tick -= new EventHandler(OnDoubleClickTimerTick);
+                    _timer.Tick -= OnDoubleClickTimerTick;
                     _timer.Dispose();
                     _timer = null;
                 }
@@ -569,7 +571,8 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                 {
                     List<ToolStripItem> dragItems = [];
                     ICollection selComps = selSvc.GetSelectedComponents();
-                    // create our list of controls-to-drag
+
+                    // Create our list of controls-to-drag
                     foreach (IComponent comp in selComps)
                     {
                         if (comp is ToolStripItem item)
@@ -583,7 +586,8 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                     {
                         ToolStrip owner = selectedItem.Owner;
                         ToolStripItemDataObject data = new(dragItems, selectedItem, owner);
-                        DropSource.QueryContinueDrag += new QueryContinueDragEventHandler(QueryContinueDrag);
+                        DropSource.QueryContinueDrag += QueryContinueDrag;
+
                         if (glyphItem is ToolStripDropDownItem ddItem)
                         {
                             if (designerHost.GetDesigner(ddItem) is ToolStripMenuItemDesigner itemDesigner)
@@ -604,7 +608,8 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                 }
                 finally
                 {
-                    DropSource.QueryContinueDrag -= new QueryContinueDragEventHandler(QueryContinueDrag);
+                    DropSource.QueryContinueDrag -= QueryContinueDrag;
+
                     // Reset all Drag-Variables
                     SetParentDesignerValuesForDragDrop(glyphItem, false, Point.Empty);
                     ToolStripDesigner.s_dragItem = null;

@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Reflection;
 using System.Text;
+using System.Windows.Forms.Analyzers.Diagnostics;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Office;
 using Microsoft.Win32;
@@ -25,6 +26,9 @@ public sealed partial class Application
     /// </summary>
     private static EventHandlerList? s_eventHandlers;
     private static Font? s_defaultFont;
+    /// <summary>
+    ///  Scaled version of non system <see cref="s_defaultFont"/>.
+    /// </summary>
     private static Font? s_defaultFontScaled;
     private static string? s_startupPath;
     private static string? s_executablePath;
@@ -37,8 +41,16 @@ public sealed partial class Application
     private static bool s_comCtlSupportsVisualStylesInitialized;
     private static bool s_comCtlSupportsVisualStyles;
     private static FormCollection? s_forms;
-    private static readonly object s_internalSyncObject = new();
+    private static readonly Lock s_internalSyncObject = new();
     private static bool s_useWaitCursor;
+
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    private static SystemColorMode? s_systemColorMode;
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
+    private const string DarkModeKeyPath = "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
+    private const string DarkModeKey = "AppsUseLightTheme";
+    private const int DarkModeNotAvailable = -1;
 
     /// <summary>
     ///  Events the user can hook into
@@ -234,7 +246,149 @@ public sealed partial class Application
     internal static bool CustomThreadExceptionHandlerAttached
         => ThreadContext.FromCurrent().CustomThreadExceptionHandlerAttached;
 
-    internal static Font? DefaultFont => s_defaultFontScaled ?? s_defaultFont;
+    /// <summary>
+    ///  Gets the default dark mode for the application. This is the SystemColorMode which either has been set
+    ///  by <see cref="SetColorMode(SystemColorMode)"/> or its default value <see cref="SystemColorMode.Classic"/>.
+    /// </summary>
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
+    public static SystemColorMode ColorMode =>
+        !s_systemColorMode.HasValue
+            ? SystemColorMode.Classic
+            : s_systemColorMode.Value == SystemColorMode.System
+                ? SystemColorMode
+                : s_systemColorMode.Value;
+
+    /// <summary>
+    ///  Sets the default dark mode for the application.
+    /// </summary>
+    /// <param name="systemColorMode">The default dark mode to set.</param>
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
+    public static void SetColorMode(SystemColorMode systemColorMode)
+    {
+        try
+        {
+            // Can't use the Generator here, since it cannot deal with experimentals.
+            _ = systemColorMode switch
+            {
+                SystemColorMode.Classic => systemColorMode,
+                SystemColorMode.System => systemColorMode,
+                SystemColorMode.Dark => systemColorMode,
+                _ => throw new ArgumentOutOfRangeException(nameof(systemColorMode))
+            };
+
+            if (systemColorMode == s_systemColorMode)
+            {
+                return;
+            }
+
+            if (GetSystemColorModeInternal() > -1)
+            {
+                s_systemColorMode = systemColorMode;
+                return;
+            }
+
+            s_systemColorMode = SystemColorMode.Classic;
+        }
+        finally
+        {
+            bool useAlternateColorSet = SystemColors.UseAlternativeColorSet;
+            bool darkModeEnabled = IsDarkModeEnabled;
+
+            if (useAlternateColorSet != darkModeEnabled)
+            {
+                SystemColors.UseAlternativeColorSet = darkModeEnabled;
+                NotifySystemEventsOfColorChange();
+            }
+        }
+
+        static void NotifySystemEventsOfColorChange()
+        {
+            string s_systemTrackerWindow = $".NET-BroadcastEventWindow.{AppDomain.CurrentDomain.GetHashCode():x}.0";
+
+            HWND hwnd = PInvoke.FindWindow(s_systemTrackerWindow, s_systemTrackerWindow);
+            if (hwnd.IsNull)
+            {
+                // Haven't created the window yet, so no need to notify.
+                return;
+            }
+
+            bool complete = false;
+            bool success = PInvoke.SendMessageCallback(hwnd, PInvoke.WM_SYSCOLORCHANGE + MessageId.WM_REFLECT, () => complete = true);
+            Debug.Assert(success);
+            if (!success)
+            {
+                return;
+            }
+
+            while (!complete)
+            {
+                DoEvents();
+                Thread.Yield();
+            }
+        }
+    }
+
+    internal static Font DefaultFont => s_defaultFontScaled ?? s_defaultFont!;
+
+    /// <summary>
+    ///  Gets the system color mode setting of the OS system environment.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   The color setting is determined based on the operating system version and its system settings.
+    ///   It returns <see cref="SystemColorMode.Dark"/> if the dark mode is enabled in the system settings,
+    ///   <see cref="SystemColorMode.Classic"/> if the color mode equals the light, standard color setting.
+    ///  </para>
+    ///  <para>
+    ///   SystemColorMode is supported on Windows 11 or later versions.
+    ///  </para>
+    ///  <para>
+    ///   SystemColorModes is not supported, if the Windows OS <c>High Contrast Mode</c> has been enabled in the system settings.
+    ///  </para>
+    /// </remarks>
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
+    public static SystemColorMode SystemColorMode =>
+        GetSystemColorModeInternal() == 0
+            ? SystemColorMode.Dark
+            : SystemColorMode.Classic;
+
+    // Returns 0 if dark mode is available, otherwise -1 (DarkModeNotAvailable)
+    private static int GetSystemColorModeInternal()
+    {
+        if (SystemInformation.HighContrast)
+        {
+            return DarkModeNotAvailable;
+        }
+
+        int systemColorMode = DarkModeNotAvailable;
+
+        // Dark mode is supported when we are >= W11/22000
+        // Technically, we could go earlier, but then the APIs we're using weren't officially public.
+        if (OsVersion.IsWindows11_OrGreater())
+        {
+            try
+            {
+                systemColorMode = (Registry.GetValue(
+                    keyName: DarkModeKeyPath,
+                    valueName: DarkModeKey,
+                    defaultValue: DarkModeNotAvailable) as int?) ?? systemColorMode;
+            }
+            catch (Exception ex) when (!ex.IsCriticalException())
+            {
+            }
+        }
+
+        return systemColorMode;
+    }
+
+    /// <summary>
+    ///  Gets a value indicating whether the application is running in a dark system color context.
+    ///  Note: In a high contrast mode, this will always return <see langword="false"/>.
+    /// </summary>
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
+    public static bool IsDarkModeEnabled =>
+        !SystemInformation.HighContrast
+        && (ColorMode == SystemColorMode.Dark);
 
     /// <summary>
     ///  Gets the path for the executable file that started the application.
@@ -1204,23 +1358,52 @@ public sealed partial class Application
         if (NativeWindow.AnyHandleCreated)
             throw new InvalidOperationException(string.Format(SR.Win32WindowAlreadyCreated, nameof(SetDefaultFont)));
 
-        // If user made a prior call to this API with a different custom fonts, we want to clean it up.
-        if (s_defaultFont is not null && !ReferenceEquals(s_defaultFont, font))
-        {
-            s_defaultFont.Dispose();
-        }
-
         s_defaultFont = font;
         ScaleDefaultFont();
     }
 
+    /// <summary>
+    ///  Scale <see cref="s_defaultFont"/> or <see cref="s_defaultFontScaled"/> if needed.
+    /// </summary>
     internal static void ScaleDefaultFont()
     {
-        // It is possible the existing scaled font will be identical after scaling the default font again. Figuring
-        // that out requires additional complexity that doesn't appear to be strictly necessary.
-        s_defaultFontScaled?.Dispose();
-        s_defaultFontScaled = null;
-        s_defaultFontScaled = ScaleHelper.ScaleToSystemTextSize(s_defaultFont);
+        if (s_defaultFont is null)
+        {
+            return;
+        }
+
+        if (s_defaultFont.IsSystemFont)
+        {
+            s_defaultFontScaled?.Dispose();
+            s_defaultFontScaled = null;
+            // Recreating the SystemFont will have it scaled to the right size for the current setting. This could be
+            // done more efficiently by querying the OS to see if this is necessary for the specific font.
+            //
+            // This should never return null.
+            Font newSystemFont = SystemFonts.GetFontByName(s_defaultFont.SystemFontName)!;
+            if (s_defaultFont.Equals(newSystemFont))
+            {
+                // No point in keeping an identical one, free the resource.
+                newSystemFont.Dispose();
+            }
+            else
+            {
+                s_defaultFont = newSystemFont;
+            }
+        }
+        else // non system Font
+        {
+            Font? font = ScaleHelper.ScaleToSystemTextSize(s_defaultFont);
+            if (font is null || !font.Equals(s_defaultFontScaled)) // change s_defaultFontScaled only if needed
+            {
+                s_defaultFontScaled?.Dispose();
+                s_defaultFontScaled = font;
+            }
+            else
+            {
+                font.Dispose();
+            }
+        }
     }
 
     /// <summary>

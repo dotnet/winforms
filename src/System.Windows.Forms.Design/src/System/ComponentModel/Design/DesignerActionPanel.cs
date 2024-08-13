@@ -480,6 +480,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
         }
 
         Rectangle originalClip = e.ClipRectangle;
+
         // Determine the first line index to paint
         int index = 0;
         while ((index < (_lineYPositions.Count - 1)) && (_lineYPositions[index + 1] <= originalClip.Top))

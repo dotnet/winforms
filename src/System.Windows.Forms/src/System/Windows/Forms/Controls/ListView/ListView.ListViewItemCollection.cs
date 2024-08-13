@@ -73,6 +73,14 @@ public partial class ListView
             }
         }
 
+        internal ListViewItem? GetItemByIndex(int index)
+        {
+            ArgumentOutOfRangeException.ThrowIfNegative(index);
+            ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, InnerList.Count);
+
+            return InnerList.GetItemByIndex(index);
+        }
+
         object? IList.this[int index]
         {
             get

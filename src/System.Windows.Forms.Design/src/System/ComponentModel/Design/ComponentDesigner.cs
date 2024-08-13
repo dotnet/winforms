@@ -389,7 +389,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
 
         if (TryGetService(out IComponentChangeService? cs))
         {
-            cs.ComponentRename += new ComponentRenameEventHandler(OnComponentRename);
+            cs.ComponentRename += OnComponentRename;
         }
 
         InheritanceAttribute? inheritanceAttribute = InheritanceAttribute;
@@ -455,7 +455,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
         {
             if (TryGetService(out IComponentChangeService? cs))
             {
-                cs.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
+                cs.ComponentRename -= OnComponentRename;
             }
 
             _component = null;

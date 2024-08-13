@@ -124,7 +124,7 @@ internal sealed class DesignerEventService : IDesignerEventService
         _designerList.Add(host);
 
         // Hookup an object disposed handler on the design surface so we know when it's gone.
-        surface.Disposed += new EventHandler(OnDesignerDisposed);
+        surface.Disposed += OnDesignerDisposed;
 
         if (_events?[s_eventDesignerCreated] is DesignerEventHandler eh)
         {
@@ -138,7 +138,7 @@ internal sealed class DesignerEventService : IDesignerEventService
     private void OnDesignerDisposed(object? sender, EventArgs e)
     {
         DesignSurface surface = (DesignSurface)sender!;
-        surface.Disposed -= new EventHandler(OnDesignerDisposed);
+        surface.Disposed -= OnDesignerDisposed;
 
         // Detach the selection change and add/remove events, if we were monitoring such events
         SinkChangeEvents(surface, false);
@@ -242,7 +242,7 @@ internal sealed class DesignerEventService : IDesignerEventService
         {
             if (ss is not null)
             {
-                ss.SelectionChanged += new EventHandler(OnSelectionChanged);
+                ss.SelectionChanged += OnSelectionChanged;
             }
 
             if (cs is not null)
@@ -250,14 +250,15 @@ internal sealed class DesignerEventService : IDesignerEventService
                 ComponentEventHandler ce = new(OnComponentAddedRemoved);
                 cs.ComponentAdded += ce;
                 cs.ComponentRemoved += ce;
-                cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
+                cs.ComponentChanged += OnComponentChanged;
             }
 
             if (host is not null)
             {
-                host.TransactionOpened += new EventHandler(OnTransactionOpened);
-                host.TransactionClosed += new DesignerTransactionCloseEventHandler(OnTransactionClosed);
-                host.LoadComplete += new EventHandler(OnLoadComplete);
+                host.TransactionOpened += OnTransactionOpened;
+                host.TransactionClosed += OnTransactionClosed;
+                host.LoadComplete += OnLoadComplete;
+
                 if (host.InTransaction)
                 {
                     OnTransactionOpened(host, EventArgs.Empty);
@@ -268,7 +269,7 @@ internal sealed class DesignerEventService : IDesignerEventService
         {
             if (ss is not null)
             {
-                ss.SelectionChanged -= new EventHandler(OnSelectionChanged);
+                ss.SelectionChanged -= OnSelectionChanged;
             }
 
             if (cs is not null)
@@ -276,17 +277,18 @@ internal sealed class DesignerEventService : IDesignerEventService
                 ComponentEventHandler ce = new(OnComponentAddedRemoved);
                 cs.ComponentAdded -= ce;
                 cs.ComponentRemoved -= ce;
-                cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
+                cs.ComponentChanged -= OnComponentChanged;
             }
 
             if (host is not null)
             {
-                host.TransactionOpened -= new EventHandler(OnTransactionOpened);
-                host.TransactionClosed -= new DesignerTransactionCloseEventHandler(OnTransactionClosed);
-                host.LoadComplete -= new EventHandler(OnLoadComplete);
+                host.TransactionOpened -= OnTransactionOpened;
+                host.TransactionClosed -= OnTransactionClosed;
+                host.LoadComplete -= OnLoadComplete;
+
                 if (host.InTransaction)
                 {
-                    OnTransactionClosed(host, new DesignerTransactionCloseEventArgs(false, true));
+                    OnTransactionClosed(host, new(commit: false, lastTransaction: true));
                 }
             }
         }

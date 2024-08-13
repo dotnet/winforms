@@ -76,7 +76,7 @@ public class InheritanceService : IInheritanceService, IDisposable
             cs = site.GetService<IComponentChangeService>();
             if (cs is not null)
             {
-                cs.ComponentAdding += new ComponentEventHandler(OnComponentAdding);
+                cs.ComponentAdding += OnComponentAdding;
             }
         }
 

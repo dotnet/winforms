@@ -21,6 +21,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="..\..\..\docs\analyzers\WinFormsVisualBasicAnalyzers.Help.md" Link="WinFormsVisualBasicAnalyzers.Help.md" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\System.Windows.Forms.Analyzers\src\System.Windows.Forms.Analyzers.csproj" />
   </ItemGroup>
 

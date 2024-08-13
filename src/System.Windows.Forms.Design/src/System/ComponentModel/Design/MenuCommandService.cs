@@ -17,7 +17,7 @@ public class MenuCommandService : IMenuCommandService, IDisposable
 {
     private IServiceProvider? _serviceProvider;
     private readonly Dictionary<Guid, List<MenuCommand>> _commandGroups;
-    private readonly object _commandGroupsLock;
+    private readonly Lock _commandGroupsLock = new();
     private readonly EventHandler _commandChangedHandler;
     private MenuCommandsChangedEventHandler? _commandsChangedHandler;
     private List<DesignerVerb>? _globalVerbs;
@@ -38,10 +38,9 @@ public class MenuCommandService : IMenuCommandService, IDisposable
     public MenuCommandService(IServiceProvider? serviceProvider)
     {
         _serviceProvider = serviceProvider;
-        _commandGroupsLock = new object();
         _commandGroups = [];
-        _commandChangedHandler = new EventHandler(OnCommandChanged);
-        TypeDescriptor.Refreshed += new RefreshEventHandler(OnTypeRefreshed);
+        _commandChangedHandler = OnCommandChanged;
+        TypeDescriptor.Refreshed += OnTypeRefreshed;
     }
 
     /// <summary>
@@ -49,14 +48,8 @@ public class MenuCommandService : IMenuCommandService, IDisposable
     /// </summary>
     public event MenuCommandsChangedEventHandler? MenuCommandsChanged
     {
-        add
-        {
-            _commandsChangedHandler += value;
-        }
-        remove
-        {
-            _commandsChangedHandler -= value;
-        }
+        add => _commandsChangedHandler += value;
+        remove => _commandsChangedHandler -= value;
     }
 
     /// <summary>
@@ -151,14 +144,14 @@ public class MenuCommandService : IMenuCommandService, IDisposable
         {
             if (_selectionService is not null)
             {
-                _selectionService.SelectionChanging -= new EventHandler(OnSelectionChanging);
+                _selectionService.SelectionChanging -= OnSelectionChanging;
                 _selectionService = null;
             }
 
             if (_serviceProvider is not null)
             {
                 _serviceProvider = null!;
-                TypeDescriptor.Refreshed -= new RefreshEventHandler(OnTypeRefreshed);
+                TypeDescriptor.Refreshed -= OnTypeRefreshed;
             }
 
             lock (_commandGroupsLock)
@@ -193,7 +186,7 @@ public class MenuCommandService : IMenuCommandService, IDisposable
             {
                 if (TryGetService(out _selectionService))
                 {
-                    _selectionService.SelectionChanging += new EventHandler(OnSelectionChanging);
+                    _selectionService.SelectionChanging += OnSelectionChanging;
                 }
             }
 

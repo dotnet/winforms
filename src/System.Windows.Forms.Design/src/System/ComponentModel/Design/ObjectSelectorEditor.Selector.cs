@@ -30,7 +30,7 @@ public abstract partial class ObjectSelectorEditor
             ShowLines = editor.SubObjectSelector;
             ShowRootLines = editor.SubObjectSelector;
 
-            AfterSelect += new TreeViewEventHandler(OnAfterSelect);
+            AfterSelect += OnAfterSelect;
         }
 
         /// <summary>

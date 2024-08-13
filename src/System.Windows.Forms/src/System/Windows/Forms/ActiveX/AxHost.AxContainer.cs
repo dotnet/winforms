@@ -33,6 +33,7 @@ public abstract partial class AxHost
         private HashSet<Control>? _components;
         private Dictionary<Control, ExtenderProxy>? _extenderCache;
         private AxHost? _controlInEditMode;
+        private readonly Lock _lock = new();
 
         internal AxContainer(ContainerControl parent)
         {
@@ -123,7 +124,7 @@ public abstract partial class AxHost
 
         internal void AddControl(AxHost control)
         {
-            lock (this)
+            lock (_lock)
             {
                 if (_containerCache.Contains(control))
                 {
@@ -148,7 +149,7 @@ public abstract partial class AxHost
 
         internal void RemoveControl(AxHost control)
         {
-            lock (this)
+            lock (_lock)
             {
                 _containerCache.Remove(control);
             }

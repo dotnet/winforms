@@ -464,7 +464,7 @@ public partial class ControlDesigner : ComponentDesigner
                 {
                     if (TryGetService(out IComponentChangeService? componentChangeService))
                     {
-                        componentChangeService.ComponentRemoved -= new ComponentEventHandler(DataSource_ComponentRemoved);
+                        componentChangeService.ComponentRemoved -= DataSource_ComponentRemoved;
                     }
 
                     _removalNotificationHooked = false;
@@ -504,7 +504,7 @@ public partial class ControlDesigner : ComponentDesigner
             e.Control.WindowTarget = new ChildWindowTarget(this, e.Control, oldTarget);
 
             // Controls added in UserControl.OnLoad() do not  setup sniffing WndProc properly.
-            e.Control.ControlAdded += new ControlEventHandler(OnControlAdded);
+            e.Control.ControlAdded += OnControlAdded;
         }
 
         // Some controls (primarily RichEdit) will register themselves as drag-drop source/targets when
@@ -553,7 +553,7 @@ public partial class ControlDesigner : ComponentDesigner
         {
             if (TryGetService(out IComponentChangeService? componentChangeService))
             {
-                componentChangeService.ComponentRemoved -= new ComponentEventHandler(DataSource_ComponentRemoved);
+                componentChangeService.ComponentRemoved -= DataSource_ComponentRemoved;
             }
 
             _removalNotificationHooked = false;
@@ -612,11 +612,11 @@ public partial class ControlDesigner : ComponentDesigner
 
         if (value)
         {
-            rc.DragDrop += new DragEventHandler(OnDragDrop);
-            rc.DragOver += new DragEventHandler(OnDragOver);
-            rc.DragEnter += new DragEventHandler(OnDragEnter);
-            rc.DragLeave += new EventHandler(OnDragLeave);
-            rc.GiveFeedback += new GiveFeedbackEventHandler(OnGiveFeedback);
+            rc.DragDrop += OnDragDrop;
+            rc.DragOver += OnDragOver;
+            rc.DragEnter += OnDragEnter;
+            rc.DragLeave += OnDragLeave;
+            rc.GiveFeedback += OnGiveFeedback;
             _hadDragDrop = rc.AllowDrop;
 
             if (!_hadDragDrop)
@@ -628,11 +628,11 @@ public partial class ControlDesigner : ComponentDesigner
         }
         else
         {
-            rc.DragDrop -= new DragEventHandler(OnDragDrop);
-            rc.DragOver -= new DragEventHandler(OnDragOver);
-            rc.DragEnter -= new DragEventHandler(OnDragEnter);
-            rc.DragLeave -= new EventHandler(OnDragLeave);
-            rc.GiveFeedback -= new GiveFeedbackEventHandler(OnGiveFeedback);
+            rc.DragDrop -= OnDragDrop;
+            rc.DragOver -= OnDragOver;
+            rc.DragEnter -= OnDragEnter;
+            rc.DragLeave -= OnDragLeave;
+            rc.GiveFeedback -= OnGiveFeedback;
 
             if (!_hadDragDrop)
             {
@@ -871,7 +871,7 @@ public partial class ControlDesigner : ComponentDesigner
             if (oldTarget is not ChildWindowTarget)
             {
                 child.WindowTarget = new ChildWindowTarget(this, child, oldTarget);
-                child.ControlAdded += new ControlEventHandler(OnControlAdded);
+                child.ControlAdded += OnControlAdded;
             }
 
             if (child.IsHandleCreated)
@@ -882,7 +882,7 @@ public partial class ControlDesigner : ComponentDesigner
             }
             else
             {
-                child.HandleCreated += new EventHandler(OnChildHandleCreated);
+                child.HandleCreated += OnChildHandleCreated;
             }
 
             // We only hook the children's children if there was no designer. We leave it up to the
@@ -947,15 +947,15 @@ public partial class ControlDesigner : ComponentDesigner
 
         // Hook up the property change notifications we need to track. One for data binding.
         // More for control add / remove notifications
-        _dataBindingsCollectionChanged = new CollectionChangeEventHandler(DataBindingsCollectionChanged);
+        _dataBindingsCollectionChanged = DataBindingsCollectionChanged;
         Control.DataBindings.CollectionChanged += _dataBindingsCollectionChanged;
 
-        Control.ControlAdded += new ControlEventHandler(OnControlAdded);
-        Control.ControlRemoved += new ControlEventHandler(OnControlRemoved);
-        Control.ParentChanged += new EventHandler(OnParentChanged);
+        Control.ControlAdded += OnControlAdded;
+        Control.ControlRemoved += OnControlRemoved;
+        Control.ParentChanged += OnParentChanged;
 
-        Control.SizeChanged += new EventHandler(OnSizeChanged);
-        Control.LocationChanged += new EventHandler(OnLocationChanged);
+        Control.SizeChanged += OnSizeChanged;
+        Control.LocationChanged += OnLocationChanged;
 
         // Replace the control's window target with our own. This allows us to hook messages.
         DesignerTarget = new DesignerWindowTarget(this);
@@ -988,7 +988,7 @@ public partial class ControlDesigner : ComponentDesigner
 
         // we move enabledchanged below the set to avoid any possible stack overflows. this can occur if the parent
         // is not enabled when we set enabled to true.
-        Control.EnabledChanged += new EventHandler(OnEnabledChanged);
+        Control.EnabledChanged += OnEnabledChanged;
 
         // And force some shadow properties that we change in the course of initializing the form.
         AllowDrop = Control.AllowDrop;
@@ -1046,7 +1046,7 @@ public partial class ControlDesigner : ComponentDesigner
                 // Remove the notification for the ComponentRemoved event
                 if (TryGetService(out IComponentChangeService? componentChangeService))
                 {
-                    componentChangeService.ComponentRemoved -= new ComponentEventHandler(DataSource_ComponentRemoved);
+                    componentChangeService.ComponentRemoved -= DataSource_ComponentRemoved;
                 }
 
                 _removalNotificationHooked = false;
@@ -1056,7 +1056,7 @@ public partial class ControlDesigner : ComponentDesigner
                 // Add the notification for the ComponentRemoved event
                 if (TryGetService(out IComponentChangeService? componentChangeService))
                 {
-                    componentChangeService.ComponentRemoved += new ComponentEventHandler(DataSource_ComponentRemoved);
+                    componentChangeService.ComponentRemoved += DataSource_ComponentRemoved;
                 }
 
                 _removalNotificationHooked = true;
@@ -2235,7 +2235,7 @@ public partial class ControlDesigner : ComponentDesigner
                 break;
         }
     }
-#nullable disable
+
     private void PaintException(PaintEventArgs e, Exception ex)
     {
         StringFormat stringFormat = new StringFormat
@@ -2312,7 +2312,7 @@ public partial class ControlDesigner : ComponentDesigner
         stringFormat.Dispose();
     }
 
-    private IOverlayService OverlayService => _overlayService ??= GetService<IOverlayService>();
+    private IOverlayService? OverlayService => _overlayService ??= GetService<IOverlayService>();
 
     private static bool IsMouseMessage(MessageId msg)
     {
@@ -2397,7 +2397,9 @@ public partial class ControlDesigner : ComponentDesigner
     {
         Point pt = PARAM.ToPoint(lParam);
         pt = Control.PointToScreen(pt);
-        pt = Control.Parent.PointToClient(pt);
+
+        // We have already checked if Parent is null before calling the method.
+        pt = Control.Parent!.PointToClient(pt);
         return PARAM.ToInt(pt.X, pt.Y);
     }
 
@@ -2412,7 +2414,7 @@ public partial class ControlDesigner : ComponentDesigner
             }
 
             // Is it a control?
-            Control child = Control.FromHandle(hwndChild);
+            Control? child = Control.FromHandle(hwndChild);
             if (child is null)
             {
                 // No control.  We must subclass this control.
@@ -2480,7 +2482,7 @@ public partial class ControlDesigner : ComponentDesigner
     internal void RemoveSubclassedWindow(IntPtr hwnd) =>
         SubclassedChildWindows.Remove(hwnd);
 
-    internal void SetUnhandledException(Control owner, Exception exception)
+    internal void SetUnhandledException(Control? owner, Exception exception)
     {
         if (_thrownException is not null)
         {
@@ -2490,9 +2492,17 @@ public partial class ControlDesigner : ComponentDesigner
         _thrownException = exception;
         owner ??= Control;
 
-        string[] exceptionLines = exception.StackTrace.Split('\r', '\n');
-        string typeName = owner.GetType().FullName;
-        string stack = string.Join(Environment.NewLine, exceptionLines.Where(l => l.Contains(typeName)));
+        string? typeName = null;
+        string? stack = null;
+        if (exception.StackTrace is not null)
+        {
+            string[] exceptionLines = exception.StackTrace.Split('\r', '\n');
+            typeName = owner.GetType().FullName;
+            if (typeName is not null)
+            {
+                stack = string.Join(Environment.NewLine, exceptionLines.Where(l => l.Contains(typeName)));
+            }
+        }
 
         InvalidOperationException wrapper = new(
             string.Format(SR.ControlDesigner_WndProcException, typeName, exception.Message, stack),

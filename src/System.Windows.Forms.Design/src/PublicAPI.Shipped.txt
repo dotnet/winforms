@@ -881,7 +881,7 @@ System.Windows.Forms.Design.Behavior.ComponentGlyph.ComponentGlyph(System.Compon
 System.Windows.Forms.Design.Behavior.ComponentGlyph.RelatedComponent.get -> System.ComponentModel.IComponent?
 System.Windows.Forms.Design.Behavior.ControlBodyGlyph
 System.Windows.Forms.Design.Behavior.ControlBodyGlyph.ControlBodyGlyph(System.Drawing.Rectangle bounds, System.Windows.Forms.Cursor? cursor, System.ComponentModel.IComponent? relatedComponent, System.Windows.Forms.Design.Behavior.Behavior? behavior) -> void
-System.Windows.Forms.Design.Behavior.ControlBodyGlyph.ControlBodyGlyph(System.Drawing.Rectangle bounds, System.Windows.Forms.Cursor? cursor, System.ComponentModel.IComponent? relatedComponent, System.Windows.Forms.Design.ControlDesigner? designer) -> void
+System.Windows.Forms.Design.Behavior.ControlBodyGlyph.ControlBodyGlyph(System.Drawing.Rectangle bounds, System.Windows.Forms.Cursor? cursor, System.ComponentModel.IComponent? relatedComponent, System.Windows.Forms.Design.ControlDesigner! designer) -> void
 System.Windows.Forms.Design.Behavior.Glyph
 System.Windows.Forms.Design.Behavior.Glyph.Glyph(System.Windows.Forms.Design.Behavior.Behavior? behavior) -> void
 System.Windows.Forms.Design.Behavior.Glyph.SetBehavior(System.Windows.Forms.Design.Behavior.Behavior? behavior) -> void

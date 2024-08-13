@@ -2601,6 +2601,8 @@ public abstract partial class CodeDomSerializerBase
             }
             else if (statement is CodeVariableDeclarationStatement variableDecl)
             {
+                AddStatement(table, variableDecl.Name, variableDecl);
+
                 if (names is not null && variableDecl.Type is not null && !string.IsNullOrEmpty(variableDecl.Type.BaseType))
                 {
                     names[variableDecl.Name] = GetTypeNameFromCodeTypeReference(manager, variableDecl.Type);
@@ -2611,7 +2613,8 @@ public abstract partial class CodeDomSerializerBase
 
             if (expression is not null)
             {
-                // Simplify the expression as much as we can, looking for our target object in the process.  If we find an expression that refers to our target object, we're done and can move on to the next statement.
+                // Simplify the expression as much as we can, looking for our target object in the process. If we find an
+                // expression that refers to our target object, we're done and can move on to the next statement.
                 while (true)
                 {
                     if (expression is CodeCastExpression castEx)

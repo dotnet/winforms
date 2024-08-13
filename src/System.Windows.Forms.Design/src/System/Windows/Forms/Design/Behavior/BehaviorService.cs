@@ -92,7 +92,7 @@ public sealed partial class BehaviorService : IDisposable
         _queriedSnapLines = false;
 
         // Listen to the SystemEvents so that we can resync selection based on display settings etc.
-        SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
+        SystemEvents.UserPreferenceChanged += OnUserPreferenceChanged;
     }
 
     /// <summary>
@@ -176,7 +176,7 @@ public sealed partial class BehaviorService : IDisposable
         }
 
         _adornerWindow.Dispose();
-        SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
+        SystemEvents.UserPreferenceChanged -= OnUserPreferenceChanged;
     }
 
     [MemberNotNull(nameof(_dropSource))]
@@ -185,8 +185,8 @@ public sealed partial class BehaviorService : IDisposable
     internal DragDropEffects DoDragDrop(DropSourceBehavior dropSourceBehavior)
     {
         // Hook events
-        DropSource.QueryContinueDrag += new QueryContinueDragEventHandler(dropSourceBehavior.QueryContinueDrag);
-        DropSource.GiveFeedback += new GiveFeedbackEventHandler(dropSourceBehavior.GiveFeedback);
+        DropSource.QueryContinueDrag += dropSourceBehavior.QueryContinueDrag;
+        DropSource.GiveFeedback += dropSourceBehavior.GiveFeedback;
 
         DragDropEffects res = DragDropEffects.None;
 
@@ -209,8 +209,8 @@ public sealed partial class BehaviorService : IDisposable
             }
             finally
             {
-                DropSource.QueryContinueDrag -= new QueryContinueDragEventHandler(dropSourceBehavior.QueryContinueDrag);
-                DropSource.GiveFeedback -= new GiveFeedbackEventHandler(dropSourceBehavior.GiveFeedback);
+                DropSource.QueryContinueDrag -= dropSourceBehavior.QueryContinueDrag;
+                DropSource.GiveFeedback -= dropSourceBehavior.GiveFeedback;
 
                 // If the drop gets cancelled, we won't get a OnDragDrop, so let's make sure that we stop
                 // processing drag notifications. Also VSWhidbey #354552 and 133339.

@@ -567,7 +567,7 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
             ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(rowIndex, DataGridView.Rows.Count);
         }
 
-        return Properties.GetObject(s_propCellValue);
+        return Properties.GetValueOrDefault<object?>(s_propCellValue);
     }
 
     protected override void Paint(
@@ -852,7 +852,7 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
                         if (TextFitsInBounds(
                             graphics,
                             formattedString,
-                            cellStyle.Font,
+                            cellStyle.Font!,
                             maxBounds,
                             flags))
                         {
@@ -1051,10 +1051,7 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
     protected override bool SetValue(int rowIndex, object? value)
     {
         object? originalValue = GetValue(rowIndex);
-        if (value is not null || Properties.ContainsObject(s_propCellValue))
-        {
-            Properties.SetObject(s_propCellValue, value);
-        }
+        Properties.AddOrRemoveValue(s_propCellValue, value);
 
         if (DataGridView is not null && originalValue != value)
         {

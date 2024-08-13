@@ -252,7 +252,7 @@ public partial class ToolStripProgressBar : ToolStripControlHost
         if (control is ProgressBar bar)
         {
             // Please keep this alphabetized and in sync with Unsubscribe.
-            bar.RightToLeftLayoutChanged += new EventHandler(HandleRightToLeftLayoutChanged);
+            bar.RightToLeftLayoutChanged += HandleRightToLeftLayoutChanged;
         }
 
         base.OnSubscribeControlEvents(control);
@@ -263,7 +263,7 @@ public partial class ToolStripProgressBar : ToolStripControlHost
         if (control is ProgressBar bar)
         {
             // Please keep this alphabetized and in sync with Subscribe.
-            bar.RightToLeftLayoutChanged -= new EventHandler(HandleRightToLeftLayoutChanged);
+            bar.RightToLeftLayoutChanged -= HandleRightToLeftLayoutChanged;
         }
 
         base.OnUnsubscribeControlEvents(control);

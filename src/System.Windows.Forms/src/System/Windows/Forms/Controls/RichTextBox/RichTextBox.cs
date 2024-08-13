@@ -2509,7 +2509,7 @@ public partial class RichTextBox : TextBoxBase
 
         SendZoomFactor(_zoomMultiplier);
 
-        SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(UserPreferenceChangedHandler);
+        SystemEvents.UserPreferenceChanged += UserPreferenceChangedHandler;
     }
 
     protected override void OnHandleDestroyed(EventArgs e)
@@ -2526,12 +2526,11 @@ public partial class RichTextBox : TextBoxBase
         }
 
         _oleCallback = null;
-        SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(UserPreferenceChangedHandler);
+        SystemEvents.UserPreferenceChanged -= UserPreferenceChangedHandler;
     }
 
     /// <summary>
-    ///  Fires an event when the user clicks a RichTextBox control's horizontal
-    ///  scroll bar.
+    ///  Fires an event when the user clicks a RichTextBox control's horizontal scroll bar.
     /// </summary>
     protected virtual void OnHScroll(EventArgs e)
     {
@@ -2539,8 +2538,7 @@ public partial class RichTextBox : TextBoxBase
     }
 
     /// <summary>
-    ///  Fires an event when the user clicks on a link
-    ///  in a rich-edit control.
+    ///  Fires an event when the user clicks on a link in a rich-edit control.
     /// </summary>
     protected virtual void OnLinkClicked(LinkClickedEventArgs e)
     {

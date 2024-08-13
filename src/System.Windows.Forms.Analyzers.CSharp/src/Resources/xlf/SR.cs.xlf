@@ -4,7 +4,7 @@
     <body>
       <trans-unit id="AddDesignerSerializationVisibilityCodeFixTitle">
         <source>Add DesignerSerializationVisibilityAttribute to property</source>
-        <target state="new">Add DesignerSerializationVisibilityAttribute to property</target>
+        <target state="translated">Přidat DesignerSerializationVisibilityAttribute do vlastnosti</target>
         <note />
       </trans-unit>
       <trans-unit id="GdiplusFontFamilyNotFound">
@@ -29,42 +29,42 @@
       </trans-unit>
       <trans-unit id="WFO0001Message">
         <source>Only projects with 'OutputType={0}' supported</source>
-        <target state="new">Only projects with 'OutputType={0}' supported</target>
+        <target state="translated">Podporované jsou jen projekty, kde OutputType={0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO0001Title">
         <source>Unsupported project type</source>
-        <target state="new">Unsupported project type</target>
+        <target state="translated">Nepodporovaný typ projektu</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO0002Message">
         <source>ArgumentException: Project property '{0}' cannot be set to '{1}'</source>
-        <target state="new">ArgumentException: Project property '{0}' cannot be set to '{1}'</target>
+        <target state="translated">ArgumentException: Vlastnost projektu {0} nemůžete nastavit na {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO0002MessageWithReason">
         <source>ArgumentException: Project property '{0}' cannot be set to '{1}'. Reason: {2}.</source>
-        <target state="new">ArgumentException: Project property '{0}' cannot be set to '{1}'. Reason: {2}.</target>
+        <target state="translated">ArgumentException: Vlastnost projektu {0} nemůžete nastavit na {1}. Důvod: {2}.</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO0002Title">
         <source>Unsupported property value</source>
-        <target state="new">Unsupported property value</target>
+        <target state="translated">Nepodporovaná hodnota vlastnosti</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO1000AnalyzerDescription">
         <source>A property should determine its property content serialization with the DesignerSerializationVisibilityAttribute, DefaultValueAttribute or the ShouldSerializeProperty method.</source>
-        <target state="new">A property should determine its property content serialization with the DesignerSerializationVisibilityAttribute, DefaultValueAttribute or the ShouldSerializeProperty method.</target>
+        <target state="translated">Vlastnost by měla určit serializaci obsahu vlastnosti pomocí metody DesignerSerializationVisibilityAttribute, DefaultValueAttribute nebo ShouldSerializeProperty.</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO1000AnalyzerMessageFormat">
         <source>Property '{0}' does not configure the code serialization for its property content</source>
-        <target state="new">Property '{0}' does not configure the code serialization for its property content</target>
+        <target state="translated">Vlastnost {0} nekonfiguruje serializaci kódu pro obsah vlastnosti.</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO1000AnalyzerTitle">
         <source>Missing code serialization configuration for property content</source>
-        <target state="new">Missing code serialization configuration for property content</target>
+        <target state="translated">Chybí konfigurace serializace kódu pro obsah vlastnosti</target>
         <note />
       </trans-unit>
     </body>

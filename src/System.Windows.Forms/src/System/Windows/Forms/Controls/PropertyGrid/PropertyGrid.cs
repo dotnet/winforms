@@ -2537,6 +2537,13 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     protected override void OnHandleCreated(EventArgs e)
     {
         base.OnHandleCreated(e);
+
+        // Making sure, the _toolBar BackColor gets updated when the
+        // default BackColor is not the typical light-theme one.
+#pragma warning disable CA2245 // Do not assign a property to itself
+        BackColor = BackColor;
+#pragma warning restore CA2245
+
         OnLayoutInternal(dividerOnly: false);
         TypeDescriptor.Refreshed += OnTypeDescriptorRefreshed;
         if (_selectedObjects is not null && _selectedObjects.Length > 0)
@@ -2941,20 +2948,16 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             return;
         }
 
-        // Announce the property value change like standalone combobox control do: "[something] selected".
+        // Announce the property value change like standalone combobox control does: "[something] selected".
         bool dropDown = false;
-        Type propertyType = changedItem.PropertyDescriptor!.PropertyType;
-        var editor = (UITypeEditor?)TypeDescriptor.GetEditor(propertyType, typeof(UITypeEditor));
-        if (editor is not null)
+        if (changedItem.PropertyDescriptor?.PropertyType is { } propertyType
+            && TypeDescriptor.GetEditor(propertyType, typeof(UITypeEditor)) is UITypeEditor editor)
         {
             dropDown = editor.GetEditStyle() == UITypeEditorEditStyle.DropDown;
         }
-        else
+        else if (changedItem is GridEntry gridEntry && gridEntry.Enumerable)
         {
-            if (changedItem is GridEntry gridEntry && gridEntry.Enumerable)
-            {
-                dropDown = true;
-            }
+            dropDown = true;
         }
 
         if (IsAccessibilityObjectCreated && dropDown && !_gridView.DropDownVisible)

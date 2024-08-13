@@ -61,7 +61,7 @@ internal partial class FormatControl
         formatGroupBox.Dock = DockStyle.Fill;
         formatGroupBox.Name = "formatGroupBox";
         formatGroupBox.TabStop = false;
-        formatGroupBox.Enter += new System.EventHandler(this.formatGroupBox_Enter);
+        formatGroupBox.Enter += this.formatGroupBox_Enter;
         // 
         // tableLayoutPanel3
         // 
@@ -127,7 +127,7 @@ internal partial class FormatControl
         // 
         resources.ApplyResources(this.nullValueTextBox, "nullValueTextBox");
         nullValueTextBox.Name = "nullValueTextBox";
-        nullValueTextBox.TextChanged += new System.EventHandler(this.nullValueTextBox_TextChanged);
+        nullValueTextBox.TextChanged += this.nullValueTextBox_TextChanged;
         // 
         // decimalPlacesUpDown
         // 
@@ -143,7 +143,7 @@ internal partial class FormatControl
         0,
         0,
         0});
-        decimalPlacesUpDown.ValueChanged += new System.EventHandler(this.decimalPlacesUpDown_ValueChanged);
+        decimalPlacesUpDown.ValueChanged += this.decimalPlacesUpDown_ValueChanged;
         // 
         // thirdRowLabel
         // 
@@ -166,7 +166,7 @@ internal partial class FormatControl
         resources.ApplyResources(this.formatTypeListBox, "formatTypeListBox");
         formatTypeListBox.FormattingEnabled = true;
         formatTypeListBox.Name = "formatTypeListBox";
-        formatTypeListBox.SelectedIndexChanged += new System.EventHandler(this.formatTypeListBox_SelectedIndexChanged);
+        formatTypeListBox.SelectedIndexChanged += this.formatTypeListBox_SelectedIndexChanged;
         // 
         // FormatControl
         // 
@@ -175,7 +175,7 @@ internal partial class FormatControl
         Controls.Add(formatGroupBox);
         MinimumSize = new System.Drawing.Size(390, 237);
         Name = "FormatControl";
-        Load += new System.EventHandler(this.FormatControl_Load);
+        Load += this.FormatControl_Load;
         formatGroupBox.ResumeLayout(false);
         tableLayoutPanel3.ResumeLayout(false);
         tableLayoutPanel3.PerformLayout();

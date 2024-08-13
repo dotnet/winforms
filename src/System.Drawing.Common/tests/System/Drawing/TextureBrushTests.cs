@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing.Drawing2D;
@@ -238,7 +238,7 @@ public class TextureBrushTests
     [Fact]
     public void Ctor_NullImage_ThrowsArgumentNullException()
     {
-        AssertExtensions.Throws<ArgumentNullException>("image", () => new TextureBrush(null));
+        AssertExtensions.Throws<ArgumentNullException>("image", () => new TextureBrush((Image)null));
         AssertExtensions.Throws<ArgumentNullException>("image", () => new TextureBrush(null, WrapMode.Tile));
         AssertExtensions.Throws<ArgumentNullException>("image", () => new TextureBrush(null, RectangleF.Empty));
         AssertExtensions.Throws<ArgumentNullException>("image", () => new TextureBrush(null, Rectangle.Empty));

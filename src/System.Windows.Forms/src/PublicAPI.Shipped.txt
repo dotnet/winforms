@@ -5267,7 +5267,6 @@ System.Windows.Forms.DataGridViewCellStyle.DataGridViewCellStyle() -> void
 System.Windows.Forms.DataGridViewCellStyle.DataGridViewCellStyle(System.Windows.Forms.DataGridViewCellStyle! dataGridViewCellStyle) -> void
 System.Windows.Forms.DataGridViewCellStyle.DataSourceNullValue.get -> object?
 System.Windows.Forms.DataGridViewCellStyle.DataSourceNullValue.set -> void
-System.Windows.Forms.DataGridViewCellStyle.Font.get -> System.Drawing.Font!
 System.Windows.Forms.DataGridViewCellStyle.Font.set -> void
 System.Windows.Forms.DataGridViewCellStyle.ForeColor.get -> System.Drawing.Color
 System.Windows.Forms.DataGridViewCellStyle.ForeColor.set -> void

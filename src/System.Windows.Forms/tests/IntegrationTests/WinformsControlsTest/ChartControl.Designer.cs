@@ -419,7 +419,7 @@ partial class ChartControl
         this.Controls.Add(this.chart1);
         this.Name = "ChartControl";
         this.Text = "Form1";
-        this.Load += new System.EventHandler(this.ChartControl_Load);
+        this.Load += this.ChartControl_Load;
         ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
         ((System.ComponentModel.ISupportInitialize)(this.chart2)).EndInit();
         ((System.ComponentModel.ISupportInitialize)(this.chart3)).EndInit();

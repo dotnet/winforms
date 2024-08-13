@@ -146,21 +146,21 @@ internal class TabControlDesigner : ParentControlDesigner
             ISelectionService svc = (ISelectionService)GetService(typeof(ISelectionService));
             if (svc is not null)
             {
-                svc.SelectionChanged -= new EventHandler(OnSelectionChanged);
+                svc.SelectionChanged -= OnSelectionChanged;
             }
 
             IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
             if (cs is not null)
             {
-                cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
+                cs.ComponentChanged -= OnComponentChanged;
             }
 
             if (HasComponent && Control is TabControl tabControl)
             {
-                tabControl.SelectedIndexChanged -= new EventHandler(OnTabSelectedIndexChanged);
-                tabControl.GotFocus -= new EventHandler(OnGotFocus);
-                tabControl.RightToLeftLayoutChanged -= new EventHandler(OnRightToLeftLayoutChanged);
-                tabControl.ControlAdded -= new ControlEventHandler(OnControlAdded);
+                tabControl.SelectedIndexChanged -= OnTabSelectedIndexChanged;
+                tabControl.GotFocus -= OnGotFocus;
+                tabControl.RightToLeftLayoutChanged -= OnRightToLeftLayoutChanged;
+                tabControl.ControlAdded -= OnControlAdded;
             }
         }
 
@@ -217,21 +217,21 @@ internal class TabControlDesigner : ParentControlDesigner
         ISelectionService svc = (ISelectionService)GetService(typeof(ISelectionService));
         if (svc is not null)
         {
-            svc.SelectionChanged += new EventHandler(OnSelectionChanged);
+            svc.SelectionChanged += OnSelectionChanged;
         }
 
         IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
         if (cs is not null)
         {
-            cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
+            cs.ComponentChanged += OnComponentChanged;
         }
 
         if (control is not null)
         {
-            control.SelectedIndexChanged += new EventHandler(OnTabSelectedIndexChanged);
-            control.GotFocus += new EventHandler(OnGotFocus);
-            control.RightToLeftLayoutChanged += new EventHandler(OnRightToLeftLayoutChanged);
-            control.ControlAdded += new ControlEventHandler(OnControlAdded);
+            control.SelectedIndexChanged += OnTabSelectedIndexChanged;
+            control.GotFocus += OnGotFocus;
+            control.RightToLeftLayoutChanged += OnRightToLeftLayoutChanged;
+            control.ControlAdded += OnControlAdded;
         }
     }
 

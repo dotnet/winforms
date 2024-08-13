@@ -108,6 +108,9 @@ DSH_FLAGS
 DTM_*
 DTN_*
 DTS_*
+DwmGetWindowAttribute
+DwmSetWindowAttribute
+DWM_WINDOW_CORNER_PREFERENCE
 DuplicateHandle
 EC_*
 ECO_*
@@ -164,6 +167,7 @@ GetClipboardFormatName
 GetClipBox
 GetClipCursor
 GetClipRgn
+GetComboBoxInfo
 GetCurrentActCtx
 GetCurrentObject
 GetCurrentProcess
@@ -423,7 +427,6 @@ KillTimer
 LB_*
 LBN_*
 LBS_*
-LF_FACESIZE
 LineTo
 LIST_ITEM_FLAGS
 LIST_ITEM_STATE_FLAGS
@@ -595,6 +598,7 @@ SelectPalette
 SendDlgItemMessage
 SendInput
 SendMessage
+SendMessageCallback
 SendMessageTimeout
 SetActiveWindow
 SetBkColor

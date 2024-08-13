@@ -4,17 +4,17 @@
     <body>
       <trans-unit id="WFO1000AnalyzerDescription">
         <source>A property should determine its property content serialization with the DesignerSerializationVisibilityAttribute, DefaultValueAttribute or the ShouldSerializeProperty method.</source>
-        <target state="new">A property should determine its property content serialization with the DesignerSerializationVisibilityAttribute, DefaultValueAttribute or the ShouldSerializeProperty method.</target>
+        <target state="translated">属性应使用 DesignerSerializationVisibilityAttribute、DefaultValueAttribute 或 ShouldSerializeProperty 方法确定其属性内容序列化。</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO1000AnalyzerMessageFormat">
         <source>Property '{0}' does not configure the code serialization for its property content</source>
-        <target state="new">Property '{0}' does not configure the code serialization for its property content</target>
+        <target state="translated">属性"{0}"没有为其属性内容配置代码序列化</target>
         <note />
       </trans-unit>
       <trans-unit id="WFO1000AnalyzerTitle">
         <source>Missing code serialization configuration for property content</source>
-        <target state="new">Missing code serialization configuration for property content</target>
+        <target state="translated">缺少属性内容的代码序列化配置</target>
         <note />
       </trans-unit>
     </body>

@@ -14,6 +14,7 @@ using System.Windows.Forms.Primitives;
 using Windows.Win32.System.Ole;
 using Windows.Win32.UI.Accessibility;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
+using Windows.Win32.Graphics.Dwm;
 using Com = Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
 using Encoding = System.Text.Encoding;
@@ -142,6 +143,7 @@ public unsafe partial class Control :
     private static readonly object s_causesValidationEvent = new();
     private static readonly object s_regionChangedEvent = new();
     private static readonly object s_marginChangedEvent = new();
+    // This needs to be internal for derived controls to access it.
     private protected static readonly object s_paddingChangedEvent = new();
     private static readonly object s_previewKeyDownEvent = new();
     private static readonly object s_dataContextEvent = new();
@@ -156,6 +158,11 @@ public unsafe partial class Control :
     internal static HelpInfo? t_currentHelpInfo;
 
     private static FontHandleWrapper? s_defaultFontHandleWrapper;
+
+    internal const string DarkModeIdentifier = "DarkMode";
+    internal const string ExplorerThemeIdentifier = "Explorer";
+    internal const string ItemsViewThemeIdentifier = "ItemsView";
+    internal const string ComboBoxButtonThemeIdentifier = "CFD";
 
     private const short PaintLayerBackground = 1;
     private const short PaintLayerForeground = 2;
@@ -502,16 +509,12 @@ public unsafe partial class Control :
     [SRDescription(nameof(SR.ControlAccessibleRoleDescr))]
     public AccessibleRole AccessibleRole
     {
-        get
-        {
-            int role = Properties.GetInteger(s_accessibleRoleProperty, out bool found);
-            return found ? (AccessibleRole)role : AccessibleRole.Default;
-        }
+        get => Properties.GetValueOrDefault(s_accessibleRoleProperty, AccessibleRole.Default);
         set
         {
             // valid values are -1 to 0x40
             SourceGenerated.EnumValidator.Validate(value);
-            Properties.SetInteger(s_accessibleRoleProperty, (int)value);
+            Properties.AddValue(s_accessibleRoleProperty, value);
         }
     }
 
@@ -686,14 +689,13 @@ public unsafe partial class Control :
     {
         get
         {
-            object? customBackBrush = Properties.GetObject(s_backBrushProperty);
-            if (customBackBrush is not null)
+            if (Properties.TryGetValue(s_backBrushProperty, out HBRUSH customBackBrush))
             {
                 // We already have a valid brush.  Unbox, and return.
-                return (HBRUSH)customBackBrush;
+                return customBackBrush;
             }
 
-            if (!Properties.ContainsObject(s_backColorProperty))
+            if (!Properties.ContainsKey(s_backColorProperty))
             {
                 // No custom back color.  See if we can get to our parent.
                 // The color check here is to account for parents and children who
@@ -721,7 +723,7 @@ public unsafe partial class Control :
             }
 
             Debug.Assert(!backBrush.IsNull, "Failed to create brushHandle");
-            Properties.SetObject(s_backBrushProperty, backBrush);
+            Properties.AddValue(s_backBrushProperty, backBrush);
 
             return backBrush;
         }
@@ -758,23 +760,23 @@ public unsafe partial class Control :
 
             // When DataContext was different than its parent before, but now it is about to become the same,
             // we're removing it altogether, so it can inherit the value from its parent.
-            if (Properties.ContainsObject(s_dataContextProperty) && Equals(ParentInternal?.DataContext, value))
+            if (Properties.ContainsKey(s_dataContextProperty) && Equals(ParentInternal?.DataContext, value))
             {
-                Properties.RemoveObject(s_dataContextProperty);
+                Properties.RemoveValue(s_dataContextProperty);
                 OnDataContextChanged(EventArgs.Empty);
                 return;
             }
 
-            Properties.SetObject(s_dataContextProperty, value);
+            Properties.AddValue(s_dataContextProperty, value);
             OnDataContextChanged(EventArgs.Empty);
         }
     }
 
     private bool ShouldSerializeDataContext()
-        => Properties.ContainsObject(s_dataContextProperty);
+        => Properties.ContainsKey(s_dataContextProperty);
 
     private void ResetDataContext()
-        => Properties.RemoveObject(s_dataContextProperty);
+        => Properties.RemoveValue(s_dataContextProperty);
 
     /// <summary>
     ///  The background color of this control. This is an ambient property and
@@ -833,13 +835,9 @@ public unsafe partial class Control :
                 throw new ArgumentException(SR.TransparentBackColorNotAllowed);
             }
 
-            Color c = BackColor;
-            if (!value.IsEmpty || Properties.ContainsObject(s_backColorProperty))
-            {
-                Properties.SetColor(s_backColorProperty, value);
-            }
-
-            if (!c.Equals(BackColor))
+            Color previous = BackColor;
+            Properties.AddOrRemoveValue(s_backColorProperty, value);
+            if (!previous.Equals(BackColor))
             {
                 OnBackColorChanged(EventArgs.Empty);
             }
@@ -1142,7 +1140,7 @@ public unsafe partial class Control :
         get
         {
             // Check if we're caching text.
-            int cacheTextCounter = Properties.GetInteger(s_cacheTextCountProperty, out _);
+            int cacheTextCounter = Properties.GetValueOrDefault<int>(s_cacheTextCountProperty);
 
             return cacheTextCounter > 0 || GetStyle(ControlStyles.CacheText);
         }
@@ -1155,13 +1153,13 @@ public unsafe partial class Control :
             }
 
             // Otherwise, get the state and update the cache if necessary.
-            int cacheTextCounter = Properties.GetInteger(s_cacheTextCountProperty, out _);
+            int cacheTextCounter = Properties.GetValueOrDefault<int>(s_cacheTextCountProperty);
 
             if (value)
             {
                 if (cacheTextCounter == 0)
                 {
-                    Properties.SetObject(s_cacheTextFieldProperty, _text);
+                    Properties.AddOrRemoveValue(s_cacheTextFieldProperty, _text);
                     _text ??= WindowText;
                 }
 
@@ -1172,11 +1170,11 @@ public unsafe partial class Control :
                 cacheTextCounter--;
                 if (cacheTextCounter == 0)
                 {
-                    _text = (string?)Properties.GetObject(s_cacheTextFieldProperty, out _);
+                    _text = Properties.GetValueOrDefault<string?>(s_cacheTextFieldProperty);
                 }
             }
 
-            Properties.SetInteger(s_cacheTextCountProperty, cacheTextCounter);
+            Properties.AddValue(s_cacheTextCountProperty, cacheTextCounter);
         }
     }
 
@@ -1733,14 +1731,10 @@ public unsafe partial class Control :
     /// </summary>
     private void DisposeFontHandle()
     {
-        if (Properties.ContainsObject(s_fontHandleWrapperProperty))
+        if (Properties.TryGetValue(s_fontHandleWrapperProperty, out FontHandleWrapper? fontHandle))
         {
-            if (Properties.GetObject(s_fontHandleWrapperProperty) is FontHandleWrapper fontHandle)
-            {
-                fontHandle.Dispose();
-            }
-
-            Properties.SetObject(s_fontHandleWrapperProperty, null);
+            fontHandle.Dispose();
+            Properties.RemoveValue(s_fontHandleWrapperProperty);
         }
     }
 
@@ -1926,9 +1920,9 @@ public unsafe partial class Control :
                 ClearDpiFonts();
             }
 
-            if (Properties.ContainsInteger(s_fontHeightProperty))
+            if (Properties.ContainsKey(s_fontHeightProperty))
             {
-                Properties.SetInteger(s_fontHeightProperty, (value is null) ? -1 : value.Height);
+                Properties.AddValue(s_fontHeightProperty, (value is null) ? -1 : value.Height);
             }
 
             // Font is an ambient property.  We need to layout our parent because Font may
@@ -2001,12 +1995,10 @@ public unsafe partial class Control :
 
             if (TryGetExplicitlySetFont(out Font? font))
             {
-                FontHandleWrapper? fontHandle = (FontHandleWrapper?)Properties.GetObject(s_fontHandleWrapperProperty);
-                if (fontHandle is null)
+                if (!Properties.TryGetValue(s_fontHandleWrapperProperty, out FontHandleWrapper? fontHandle))
                 {
                     fontHandle = new FontHandleWrapper(font);
-
-                    Properties.SetObject(s_fontHandleWrapperProperty, fontHandle);
+                    Properties.AddValue(s_fontHandleWrapperProperty, fontHandle);
                 }
 
                 return fontHandle.Handle;
@@ -2021,15 +2013,13 @@ public unsafe partial class Control :
             {
                 FontHandleWrapper? fontHandle = null;
 
-                Font? currentAmbient = (Font?)Properties.GetObject(s_currentAmbientFontProperty);
-
-                if (currentAmbient is not null && currentAmbient == ambientFont)
+                if (Properties.TryGetValue(s_currentAmbientFontProperty, out Font? currentAmbient) && currentAmbient == ambientFont)
                 {
-                    fontHandle = (FontHandleWrapper?)Properties.GetObject(s_fontHandleWrapperProperty);
+                    fontHandle = Properties.GetValueOrDefault<FontHandleWrapper?>(s_fontHandleWrapperProperty);
                 }
                 else
                 {
-                    Properties.SetObject(s_currentAmbientFontProperty, ambientFont);
+                    Properties.AddValue(s_currentAmbientFontProperty, ambientFont);
                 }
 
                 if (fontHandle is null)
@@ -2037,7 +2027,7 @@ public unsafe partial class Control :
                     font = ambientFont;
                     fontHandle = new FontHandleWrapper(font);
 
-                    Properties.SetObject(s_fontHandleWrapperProperty, fontHandle);
+                    Properties.AddValue(s_fontHandleWrapperProperty, fontHandle);
                 }
 
                 return fontHandle.Handle;
@@ -2052,8 +2042,7 @@ public unsafe partial class Control :
     {
         get
         {
-            int fontHeight = Properties.GetInteger(s_fontHeightProperty, out bool found);
-            if (found && fontHeight != -1)
+            if (Properties.TryGetValue(s_fontHeightProperty, out int fontHeight) && fontHeight != -1)
             {
                 return fontHeight;
             }
@@ -2061,7 +2050,7 @@ public unsafe partial class Control :
             if (TryGetExplicitlySetFont(out Font? font))
             {
                 fontHeight = font.Height;
-                Properties.SetInteger(s_fontHeightProperty, fontHeight);
+                Properties.AddValue(s_fontHeightProperty, fontHeight);
                 return fontHeight;
             }
 
@@ -2077,12 +2066,12 @@ public unsafe partial class Control :
             if (localFontHeight == -1)
             {
                 localFontHeight = Font.Height;
-                Properties.SetInteger(s_fontHeightProperty, localFontHeight);
+                Properties.AddValue(s_fontHeightProperty, localFontHeight);
             }
 
             return localFontHeight;
         }
-        set => Properties.SetInteger(s_fontHeightProperty, value);
+        set => Properties.AddValue(s_fontHeightProperty, value);
     }
 
     /// <summary>
@@ -2095,7 +2084,7 @@ public unsafe partial class Control :
     {
         get
         {
-            Color color = Properties.GetColor(s_foreColorProperty);
+            Properties.TryGetValue(s_foreColorProperty, out Color color);
             if (!color.IsEmpty)
             {
                 return color;
@@ -2124,13 +2113,9 @@ public unsafe partial class Control :
         }
         set
         {
-            Color color = ForeColor;
-            if (!value.IsEmpty || Properties.ContainsObject(s_foreColorProperty))
-            {
-                Properties.SetColor(s_foreColorProperty, value);
-            }
-
-            if (!color.Equals(ForeColor))
+            Color previous = ForeColor;
+            Properties.AddOrRemoveValue(s_foreColorProperty, value);
+            if (!previous.Equals(ForeColor))
             {
                 OnForeColorChanged(EventArgs.Empty);
             }
@@ -2794,7 +2779,7 @@ public unsafe partial class Control :
     internal PropertyStore Properties { get; }
 
     // Returns the value of the backColor field -- no asking the parent with its color is, etc.
-    internal Color RawBackColor => Properties.GetColor(s_backColorProperty);
+    internal Color RawBackColor => Properties.GetValueOrDefault<Color>(s_backColorProperty);
 
     /// <summary>
     ///  Indicates whether the control is currently recreating its handle. This
@@ -2988,26 +2973,13 @@ public unsafe partial class Control :
     {
         get
         {
-            int rightToLeft = Properties.GetInteger(s_rightToLeftProperty, out bool found);
-            if (!found)
+            if (!Properties.TryGetValue(s_rightToLeftProperty, out RightToLeft rightToLeft)
+                || rightToLeft == RightToLeft.Inherit)
             {
-                rightToLeft = (int)RightToLeft.Inherit;
+                rightToLeft = ParentInternal?.RightToLeft ?? DefaultRightToLeft;
             }
 
-            if (((RightToLeft)rightToLeft) == RightToLeft.Inherit)
-            {
-                Control? parent = ParentInternal;
-                if (parent is not null)
-                {
-                    rightToLeft = (int)parent.RightToLeft;
-                }
-                else
-                {
-                    rightToLeft = (int)DefaultRightToLeft;
-                }
-            }
-
-            return (RightToLeft)rightToLeft;
+            return rightToLeft;
         }
         set
         {
@@ -3016,9 +2988,9 @@ public unsafe partial class Control :
 
             RightToLeft oldValue = RightToLeft;
 
-            if (Properties.ContainsInteger(s_rightToLeftProperty) || value != RightToLeft.Inherit)
+            if (Properties.ContainsKey(s_rightToLeftProperty) || value != RightToLeft.Inherit)
             {
-                Properties.SetInteger(s_rightToLeftProperty, (int)value);
+                Properties.AddValue(s_rightToLeftProperty, value);
             }
 
             if (oldValue != RightToLeft)
@@ -3065,9 +3037,9 @@ public unsafe partial class Control :
             _scaledFontWrapper = null;
 
             _scaledControlFont = value;
-            if (Properties.ContainsInteger(s_fontHeightProperty))
+            if (Properties.ContainsKey(s_fontHeightProperty))
             {
-                Properties.SetInteger(s_fontHeightProperty, (value is null) ? -1 : value.Height);
+                Properties.AddValue(s_fontHeightProperty, (value is null) ? -1 : value.Height);
             }
         }
     }
@@ -3089,10 +3061,10 @@ public unsafe partial class Control :
             // If the ambients changed, compare each property.
             if (oldAmbients != newAmbients)
             {
-                bool checkFont = !Properties.ContainsObject(s_fontProperty);
-                bool checkBackColor = !Properties.ContainsObject(s_backColorProperty);
-                bool checkForeColor = !Properties.ContainsObject(s_foreColorProperty);
-                bool checkCursor = !Properties.ContainsObject(s_cursorProperty);
+                bool checkFont = !Properties.ContainsKey(s_fontProperty);
+                bool checkBackColor = !Properties.ContainsKey(s_backColorProperty);
+                bool checkForeColor = !Properties.ContainsKey(s_foreColorProperty);
+                bool checkCursor = !Properties.ContainsKey(s_cursorProperty);
 
                 Font? oldFont = null;
                 Color oldBackColor = Color.Empty;
@@ -3537,24 +3509,14 @@ public unsafe partial class Control :
     /// </remarks>
     internal bool UseCompatibleTextRenderingInternal
     {
-        get
-        {
-            if (Properties.ContainsInteger(s_useCompatibleTextRenderingProperty))
-            {
-                int value = Properties.GetInteger(s_useCompatibleTextRenderingProperty, out bool found);
-                if (found)
-                {
-                    return value == 1;
-                }
-            }
-
-            return UseCompatibleTextRenderingDefault;
-        }
+        get => Properties.TryGetValue(s_useCompatibleTextRenderingProperty, out bool value)
+            ? value
+            : UseCompatibleTextRenderingDefault;
         set
         {
             if (SupportsUseCompatibleTextRendering && UseCompatibleTextRenderingInternal != value)
             {
-                Properties.SetInteger(s_useCompatibleTextRenderingProperty, value ? 1 : 0);
+                Properties.AddValue(s_useCompatibleTextRenderingProperty, value);
 
                 // Update the preferred size cache since we will be rendering text using a different engine.
                 LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.UseCompatibleTextRendering);
@@ -4857,16 +4819,14 @@ public unsafe partial class Control :
     {
         if (GetState(States.OwnCtlBrush))
         {
-            object? backBrush = Properties.GetObject(s_backBrushProperty);
-            if (backBrush is not null)
+            if (Properties.TryGetValue(s_backBrushProperty, out HBRUSH backBrush))
             {
-                HBRUSH p = (HBRUSH)backBrush;
-                if (!p.IsNull)
+                if (!backBrush.IsNull)
                 {
-                    PInvokeCore.DeleteObject(p);
+                    PInvokeCore.DeleteObject(backBrush);
                 }
 
-                Properties.SetObject(s_backBrushProperty, value: null);
+                Properties.RemoveValue(s_backBrushProperty);
             }
         }
 
@@ -6712,6 +6672,26 @@ public unsafe partial class Control :
         OnInvalidated(new InvalidateEventArgs(invalidatedArea));
     }
 
+    /// <summary>
+    ///  Called by the NativeWindow callback when an exception is caught.
+    /// </summary>
+    /// <returns>true, when the exception has been handled; otherwise, false.</returns>
+    /// <remarks>
+    ///  <para>
+    ///   This will usually be rerouted to the <see cref="Application.ThreadException"/>, but in certain
+    ///   (async) scenarios, it makes more sense to catch the exception on the control or form that caused it.
+    ///  </para>
+    ///  <para>
+    ///   Example: When a form throws an exception inside of Form.OnLoad, and the scenario needs to be gracefully handled
+    ///   when another form shows the erroneous form. In that case, you cannot directly catch the exception.
+    ///  </para>
+    ///  <para>
+    ///   It gets marshalled down to <see cref="Application.ThreadException"/>, which is an extreme
+    ///   discoverability issue and the root cause for many WinForms apps crashing unexpectedly.
+    ///  </para>
+    /// </remarks>
+    private protected virtual bool SuppressApplicationOnThreadException(Exception ex) => false;
+
     // Used by form to notify the control that it is validating.
     private bool NotifyValidating()
     {
@@ -6751,19 +6731,17 @@ public unsafe partial class Control :
             return;
         }
 
-        object? backBrush = Properties.GetObject(s_backBrushProperty);
-        if (backBrush is not null)
+        if (Properties.TryGetValue(s_backBrushProperty, out HBRUSH backBrush))
         {
             if (GetState(States.OwnCtlBrush))
             {
-                HBRUSH p = (HBRUSH)backBrush;
-                if (!p.IsNull)
+                if (!backBrush.IsNull)
                 {
-                    PInvokeCore.DeleteObject(p);
+                    PInvokeCore.DeleteObject(backBrush);
                 }
             }
 
-            Properties.SetObject(s_backBrushProperty, value: null);
+            Properties.RemoveValue(s_backBrushProperty);
         }
 
         Invalidate();
@@ -6999,9 +6977,9 @@ public unsafe partial class Control :
 
         Invalidate();
 
-        if (Properties.ContainsInteger(s_fontHeightProperty))
+        if (Properties.ContainsKey(s_fontHeightProperty))
         {
-            Properties.SetInteger(s_fontHeightProperty, -1);
+            Properties.AddValue(s_fontHeightProperty, -1);
         }
 
         // Cleanup any font handle wrapper.
@@ -7109,7 +7087,7 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnParentBackColorChanged(EventArgs e)
     {
-        Color backColor = Properties.GetColor(s_backColorProperty);
+        Color backColor = Properties.GetValueOrDefault<Color>(s_backColorProperty);
         if (backColor.IsEmpty)
         {
             OnBackColorChanged(e);
@@ -7143,13 +7121,13 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnParentDataContextChanged(EventArgs e)
     {
-        if (Properties.ContainsObject(s_dataContextProperty))
+        if (Properties.ContainsKey(s_dataContextProperty))
         {
             // If this DataContext was the same as the Parent's just became,
-            if (Equals(Properties.GetObject(s_dataContextProperty), Parent?.DataContext))
+            if (Equals(Properties.GetValueOrDefault<object>(s_dataContextProperty), Parent?.DataContext))
             {
                 // we need to make it ambient again by removing it.
-                Properties.RemoveObject(s_dataContextProperty);
+                Properties.RemoveValue(s_dataContextProperty);
 
                 // Even though internally we don't store it any longer, and the
                 // value we had stored therefore changed, technically the value
@@ -7232,7 +7210,7 @@ public unsafe partial class Control :
         // Move this control over to the parking window.
 
         // If we left it parented to the parent control, DestroyWindow would force us to destroy our handle as well.
-        // Temporarilty parenting to the parking window avoids having to recreate our handle from scratch.
+        // Temporarily parenting to the parking window avoids having to recreate our handle from scratch.
 
         if (IsHandleCreated)
         {
@@ -7243,7 +7221,7 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnParentForeColorChanged(EventArgs e)
     {
-        Color foreColor = Properties.GetColor(s_foreColorProperty);
+        Color foreColor = Properties.GetValueOrDefault<Color>(s_foreColorProperty);
         if (foreColor.IsEmpty)
         {
             OnForeColorChanged(e);
@@ -7253,7 +7231,7 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnParentRightToLeftChanged(EventArgs e)
     {
-        if (!Properties.ContainsInteger(s_rightToLeftProperty) || ((RightToLeft)Properties.GetInteger(s_rightToLeftProperty)) == RightToLeft.Inherit)
+        if (!Properties.TryGetValue(s_rightToLeftProperty, out RightToLeft rightToLeft) || rightToLeft == RightToLeft.Inherit)
         {
             OnRightToLeftChanged(e);
         }
@@ -7522,6 +7500,16 @@ public unsafe partial class Control :
                 PInvoke.SetWindowText(this, _text);
             }
 
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+            if (Application.IsDarkModeEnabled && GetStyle(ControlStyles.ApplyThemingImplicitly))
+            {
+                _ = PInvoke.SetWindowTheme(
+                    hwnd: HWND,
+                    pszSubAppName: $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}",
+                    pszSubIdList: null);
+            }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+
             if (this is not ScrollableControl
                 && !IsMirrored
                 && GetExtendedState(ExtendedStates.SetScrollPosition)
@@ -7659,14 +7647,12 @@ public unsafe partial class Control :
         {
             if (GetState(States.OwnCtlBrush))
             {
-                object? backBrush = Properties.GetObject(s_backBrushProperty);
-                if (backBrush is not null)
+                if (Properties.TryGetValue(s_backBrushProperty, out HBRUSH backBrush))
                 {
-                    Properties.SetObject(s_backBrushProperty, value: null);
-                    HBRUSH p = (HBRUSH)backBrush;
-                    if (!p.IsNull)
+                    Properties.RemoveValue(s_backBrushProperty);
+                    if (!backBrush.IsNull)
                     {
-                        PInvokeCore.DeleteObject(p);
+                        PInvokeCore.DeleteObject(backBrush);
                     }
                 }
             }
@@ -10574,15 +10560,22 @@ public unsafe partial class Control :
 
             bool fireChange = false;
 
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
             if (GetTopLevel())
             {
                 // The processing of WmShowWindow will set the visibility
                 // bit and call CreateControl()
                 if (IsHandleCreated || value)
                 {
-                    PInvoke.ShowWindow(this, value ? ShowParams : SHOW_WINDOW_CMD.SW_HIDE);
+                    if (value)
+                    {
+                        PrepareDarkMode(HWND, Application.IsDarkModeEnabled);
+                    }
+
+                    PInvoke.ShowWindow(HWND, value ? ShowParams : SHOW_WINDOW_CMD.SW_HIDE);
                 }
             }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
             else if (IsHandleCreated || (value && _parent?.Created == true))
             {
                 // We want to mark the control as visible so that CreateControl
@@ -10670,6 +10663,17 @@ public unsafe partial class Control :
                         | (value ? SET_WINDOW_POS_FLAGS.SWP_SHOWWINDOW : SET_WINDOW_POS_FLAGS.SWP_HIDEWINDOW));
             }
         }
+
+        static unsafe void PrepareDarkMode(HWND hwnd, bool darkModeEnabled)
+        {
+            BOOL value = darkModeEnabled;
+
+            PInvoke.DwmSetWindowAttribute(
+                hwnd,
+                DWMWINDOWATTRIBUTE.DWMWA_USE_IMMERSIVE_DARK_MODE,
+                &value,
+                (uint)sizeof(BOOL)).AssertSuccess();
+        }
     }
 
     /// <summary>
@@ -10709,7 +10713,7 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Never)]
     internal virtual bool ShouldSerializeBackColor()
     {
-        Color backColor = Properties.GetColor(s_backColorProperty);
+        Color backColor = Properties.GetValueOrDefault<Color>(s_backColorProperty);
         return !backColor.IsEmpty;
     }
 
@@ -10737,7 +10741,7 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Never)]
     internal virtual bool ShouldSerializeForeColor()
     {
-        Color foreColor = Properties.GetColor(s_foreColorProperty);
+        Color foreColor = Properties.GetValueOrDefault<Color>(s_foreColorProperty);
         return !foreColor.IsEmpty;
     }
 
@@ -10754,11 +10758,9 @@ public unsafe partial class Control :
     ///  Returns true if the RightToLeft should be persisted in code gen.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    internal virtual bool ShouldSerializeRightToLeft()
-    {
-        int rtl = Properties.GetInteger(s_rightToLeftProperty, out bool found);
-        return (found && rtl != (int)RightToLeft.Inherit);
-    }
+    internal virtual bool ShouldSerializeRightToLeft() =>
+        Properties.TryGetValue(s_rightToLeftProperty, out RightToLeft rightToLeft)
+            && rightToLeft != RightToLeft.Inherit;
 
     /// <summary>
     ///  Returns true if the visible property should be persisted in code gen.
@@ -10961,9 +10963,9 @@ public unsafe partial class Control :
         // Dispose old FontHandle.
         DisposeFontHandle();
 
-        if (Properties.ContainsInteger(s_fontHeightProperty))
+        if (Properties.ContainsKey(s_fontHeightProperty))
         {
-            Properties.SetInteger(s_fontHeightProperty, scaledFont.Height);
+            Properties.AddValue(s_fontHeightProperty, scaledFont.Height);
         }
 
         if (!raiseOnFontChangedEvent)
@@ -12785,11 +12787,34 @@ public unsafe partial class Control :
                         // SPI_SETICONTITLELOGFONT. Waiting for SPI_SETICONTITLELOGFONT has some sort of timing issue
                         // where layout doesn't always update correctly.
                         //
-                        // Historically we reset the font on WM_SYSCOLORCHANGE, which does come through before any
+                        // Historically we reset the font (s_defaultFont) on WM_SYSCOLORCHANGE, which does come through before any
                         // of the WM_SETTINGCHANGE messages. SPI_SETNONCLIENTMETRICS seems more correct.
+                        //
+                        // We don't want reset font if scaling not actually changed: https://github.com/dotnet/winforms/issues/11037
+                        // Most (if not all) of these problems was solved with moving this code to SPI_SETNONCLIENTMETRICS!
+                        // s_defaultFont = Application.DefaultFont ?? SystemFonts.MessageBoxFont;
+                        // So we need to check both variants - manually set font (Application.DefaultFont is not null) and auto system font
 
-                        s_defaultFont = null;
-                        Application.ScaleDefaultFont();
+                        if (Application.DefaultFont is null) // auto system font
+                        {
+                            if (s_defaultFont is not null) // we need to check only if s_defaultFont already set
+                            {
+                                Font font = SystemFonts.MessageBoxFont!;
+                                if (!s_defaultFont.Equals(font)) // the font has changed
+                                {
+                                    s_defaultFont = font;
+                                }
+                                else
+                                {
+                                    font.Dispose();
+                                }
+                            }
+                        }
+                        else // manually set font
+                        {
+                            Application.ScaleDefaultFont(); // will update Application.s_defaultFont or Application.s_defaultFontScaled only if needed
+                            s_defaultFont = Application.DefaultFont; // Application.s_defaultFontScaled ?? Application.s_defaultFont
+                        }
                     }
                 }
 
@@ -12838,15 +12863,6 @@ public unsafe partial class Control :
         // Keep ourselves rooted until we're done processing the current message. While unlikely, it is possible
         // that we can lose the rooting for `this` and get finalized when it is no longer referenced as a local.
         GC.KeepAlive(this);
-    }
-
-    /// <summary>
-    ///  Called when an exception occurs in dispatching messages through
-    ///  the main window procedure.
-    /// </summary>
-    private static void WndProcException(Exception e)
-    {
-        Application.OnThreadException(e);
     }
 
     ArrangedElementCollection IArrangedElement.Children

@@ -31,6 +31,7 @@ public sealed partial class BehaviorService
 
             private bool _isHooked;
             private int _lastLButtonDownTimeStamp;
+            private readonly Lock _lock = new();
 
             public MouseHook()
             {
@@ -60,7 +61,7 @@ public sealed partial class BehaviorService
             private unsafe void HookMouse()
             {
                 Debug.Assert(s_adornerWindowList.Count > 0, "No AdornerWindow available to create the mouse hook");
-                lock (this)
+                lock (_lock)
                 {
                     if (_mouseHookHandle != 0 || s_adornerWindowList.Count == 0)
                     {
@@ -126,7 +127,7 @@ public sealed partial class BehaviorService
 
             private void UnhookMouse()
             {
-                lock (this)
+                lock (_lock)
                 {
                     if (_mouseHookHandle != 0)
                     {

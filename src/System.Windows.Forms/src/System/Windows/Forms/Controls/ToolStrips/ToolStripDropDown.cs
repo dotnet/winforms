@@ -82,9 +82,9 @@ public partial class ToolStripDropDown : ToolStrip
 
                 if (!value)
                 {
-                    if (Properties.ContainsObject(s_propOpacity))
+                    if (Properties.ContainsKey(s_propOpacity))
                     {
-                        Properties.SetObject(s_propOpacity, 1.0f);
+                        Properties.AddValue(s_propOpacity, 1.0f);
                     }
 
                     UpdateLayered();
