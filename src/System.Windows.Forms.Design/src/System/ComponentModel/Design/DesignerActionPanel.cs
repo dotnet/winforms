@@ -417,7 +417,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
         ((EventHandler?)Events[s_eventFormActivated])?.Invoke(sender, e);
     }
 
-    private void OnFormClosing(object? sender, CancelEventArgs e)
+    private void OnFormClosing(object? sender, FormClosingEventArgs e)
     {
         if (!e.Cancel && TopLevelControl is not null)
         {
@@ -425,9 +425,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
             Form form = (Form)TopLevelControl;
             if (form is not null)
             {
-#pragma warning disable WFDEV004 // Type or member is obsolete - compat
-                form.Closing -= new CancelEventHandler(OnFormClosing);
-#pragma warning restore WFDEV004
+                form.FormClosing -= OnFormClosing;
             }
         }
     }
@@ -442,9 +440,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
         base.OnHandleCreated(e);
         if (TopLevelControl is Form form)
         {
-#pragma warning disable WFDEV004 // Type or member is obsolete - compat
-            form.Closing += new CancelEventHandler(OnFormClosing);
-#pragma warning restore WFDEV004
+            form.FormClosing += OnFormClosing;
         }
     }
 

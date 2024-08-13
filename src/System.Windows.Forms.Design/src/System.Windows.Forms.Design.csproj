@@ -72,7 +72,6 @@
 
   <ItemGroup>
     <Compile Include="..\..\Common\src\RTLAwareMessageBox.cs" Link="Common\RTLAwareMessageBox.cs" />
-    <Compile Include="..\..\Common\src\Obsoletions.cs" Link="Common\Obsoletions.cs" />
   </ItemGroup>
   
   <!-- Embedded Resources are globbed based on their location. -->

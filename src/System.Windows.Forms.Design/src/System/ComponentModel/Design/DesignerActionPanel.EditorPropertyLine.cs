@@ -450,14 +450,9 @@ internal sealed partial class DesignerActionPanel
                 _parent.ActionPanel.SetDropDownActive(true);
             }
 
-            [Obsolete(
-                Obsoletions.FormOnClosingClosedMessage,
-                error: false,
-                DiagnosticId = Obsoletions.FormOnClosingClosedDiagnosticId,
-                UrlFormat = Obsoletions.SharedUrlFormat)]
-            protected override void OnClosed(EventArgs e)
+            protected override void OnFormClosed(FormClosedEventArgs e)
             {
-                base.OnClosed(e);
+                base.OnFormClosed(e);
                 _parent.ActionPanel.SetDropDownActive(false);
             }
 
