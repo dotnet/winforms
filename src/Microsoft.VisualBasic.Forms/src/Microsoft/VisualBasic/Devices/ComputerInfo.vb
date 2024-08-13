@@ -17,6 +17,9 @@ Namespace Microsoft.VisualBasic.Devices
 
         ' Keep the debugger proxy current as you change this class - see the nested ComputerInfoDebugView below.
 
+        ' Cache our InternalMemoryStatus
+        Private _internalMemoryStatus As InternalMemoryStatus
+
         ''' <summary>
         '''  Default constructor
         ''' </summary>
@@ -124,36 +127,127 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         '''  Gets the total size of physical memory on the machine.
         ''' </summary>
-        ''' <value>
-        '''  A 64-bit unsigned integer containing the size of total physical
-        '''  memory on the machine, in bytes.
-        '''  </value>
-        ''' <exception cref="ComponentModel.Win32Exception">
-        '''  Throw if we are unable to obtain the memory status.
-        ''' </exception>
-        <CLSCompliant(False)>
-        Public ReadOnly Property TotalPhysicalMemory() As UInt64
-            Get
-                Return MemoryStatus.TotalPhysicalMemory
-            End Get
-        End Property
+        Friend NotInheritable Class ComputerInfoDebugView
+            Public Sub New(RealClass As ComputerInfo)
+                _instanceBeingWatched = RealClass
+            End Sub
+
+#Disable Warning IDE0049  ' Use language keywords instead of framework type names for type references, Justification:=<Public API>
+            <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
+            Public ReadOnly Property TotalPhysicalMemory() As UInt64
+                Get
+                    Return _instanceBeingWatched.TotalPhysicalMemory
+                End Get
+            End Property
+
+            <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
+            Public ReadOnly Property AvailablePhysicalMemory() As UInt64
+                Get
+                    Return _instanceBeingWatched.AvailablePhysicalMemory
+                End Get
+            End Property
+
+            <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
+            Public ReadOnly Property TotalVirtualMemory() As UInt64
+                Get
+                    Return _instanceBeingWatched.TotalVirtualMemory
+                End Get
+            End Property
+
+            <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
+            Public ReadOnly Property AvailableVirtualMemory() As UInt64
+                Get
+                    Return _instanceBeingWatched.AvailableVirtualMemory
+                End Get
+            End Property
+#Enable Warning IDE0049  ' Use language keywords instead of framework type names for type references
+
+            <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
+            Public ReadOnly Property InstalledUICulture() As Globalization.CultureInfo
+                Get
+                    Return _instanceBeingWatched.InstalledUICulture
+                End Get
+            End Property
+
+            <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
+            Public ReadOnly Property OSPlatform() As String
+                Get
+                    Return _instanceBeingWatched.OSPlatform
+                End Get
+            End Property
+
+            <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
+            Public ReadOnly Property OSVersion() As String
+                Get
+                    Return _instanceBeingWatched.OSVersion
+                End Get
+            End Property
+
+            <DebuggerBrowsable(DebuggerBrowsableState.Never)>
+            Private ReadOnly _instanceBeingWatched As ComputerInfo
+        End Class
 
         ''' <summary>
-        '''  Gets the total size of user potion of virtual address space for calling process.
+        '''  Gets the whole memory information details.
         ''' </summary>
-        ''' <value>
-        '''   A 64-bit unsigned integer containing the size of user potion of virtual
-        '''   address space for calling process, in bytes.
-        '''  </value>
-        ''' <exception cref="ComponentModel.Win32Exception">
-        '''  Throw if we are unable to obtain the memory status.
-        ''' </exception>
-        <CLSCompliant(False)>
-        Public ReadOnly Property TotalVirtualMemory() As UInt64
+        ''' <value>An InternalMemoryStatus class.</value>
+        Private ReadOnly Property MemoryStatus() As InternalMemoryStatus
             Get
-                Return MemoryStatus.TotalVirtualMemory
+                If _internalMemoryStatus Is Nothing Then
+                    _internalMemoryStatus = New InternalMemoryStatus
+                End If
+                Return _internalMemoryStatus
             End Get
         End Property
 
+        Private _internalMemoryStatus As InternalMemoryStatus ' Cache our InternalMemoryStatus
+
+        ''' <summary>
+        '''  Calls GlobalMemoryStatusEx and returns the correct value.
+        ''' </summary>
+        Private NotInheritable Class InternalMemoryStatus
+            Friend Sub New()
+            End Sub
+
+#Disable Warning IDE0049  ' Use language keywords instead of framework type names for type references, Justification:=<Public API>
+            Friend ReadOnly Property TotalPhysicalMemory() As UInt64
+                Get
+                    Refresh()
+                    Return _memoryStatusEx.ullTotalPhys
+                End Get
+            End Property
+
+            Friend ReadOnly Property AvailablePhysicalMemory() As UInt64
+                Get
+                    Refresh()
+                    Return _memoryStatusEx.ullAvailPhys
+                End Get
+            End Property
+
+            Friend ReadOnly Property TotalVirtualMemory() As UInt64
+                Get
+                    Refresh()
+                    Return _memoryStatusEx.ullTotalVirtual
+                End Get
+            End Property
+
+            Friend ReadOnly Property AvailableVirtualMemory() As UInt64
+                Get
+                    Refresh()
+                    Return _memoryStatusEx.ullAvailVirtual
+                End Get
+            End Property
+#Enable Warning IDE0049  ' Use language keywords instead of framework type names for type references
+
+            Private Sub Refresh()
+                _memoryStatusEx = New NativeMethods.MEMORYSTATUSEX
+                _memoryStatusEx.Init()
+                If (Not NativeMethods.GlobalMemoryStatusEx(_memoryStatusEx)) Then
+                    Throw ExceptionUtils.GetWin32Exception(SR.DiagnosticInfo_Memory)
+                End If
+            End Sub
+
+            Private _memoryStatusEx As NativeMethods.MEMORYSTATUSEX
+        End Class
     End Class
 End Namespace
