@@ -89,6 +89,19 @@ Namespace Microsoft.VisualBasic.Devices
         End Property
 
         ''' <summary>
+        '''  This property returns the Keyboard object representing some
+        '''  keyboard properties and a send keys method
+        ''' </summary>
+        ''' <value>An instance of the Keyboard class.</value>
+        Public ReadOnly Property Keyboard() As Keyboard
+            Get
+                If s_keyboardInstance IsNot Nothing Then Return s_keyboardInstance
+                s_keyboardInstance = New Keyboard
+                Return s_keyboardInstance
+            End Get
+        End Property
+
+        ''' <summary>
         '''  This property returns the primary display screen.
         ''' </summary>
         ''' <value>A <see cref="System.Windows.Forms.Screen"/> object as the primary screen.</value>
