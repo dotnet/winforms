@@ -4069,4 +4069,15 @@ public partial class DataGridViewTests : IDisposable
         _dataGridView.CurrentCell = _dataGridView.Rows[_dataGridView.NewRowIndex].Cells[1];
         callCount.Should().Be(1);
     }
+
+    [WinFormsFact]
+    public void DataGridView_Dispose_KeyboardToolTip_Disposed()
+    {
+        DataGridView dataGridView = new();
+        int toolTipDisposeCount = 0;
+        ToolTip toolTip = dataGridView.KeyboardToolTip;
+        toolTip.Disposed += (sender, e) => toolTipDisposeCount++;
+        dataGridView.Dispose();
+        toolTipDisposeCount.Should().Be(1);
+    }
 }
