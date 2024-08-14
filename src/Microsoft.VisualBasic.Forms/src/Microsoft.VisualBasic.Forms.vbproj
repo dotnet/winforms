@@ -1,4 +1,4 @@
-<Project>
+﻿<Project>
   <!--
     https://github.com/dotnet/winforms/issues/2107#issuecomment-559289716
     https://github.com/microsoft/msbuild/issues/4923#issuecomment-554265394
@@ -11,7 +11,6 @@
     <OptionExplicit>On</OptionExplicit>
     <OptionStrict>On</OptionStrict>
     <OptionInfer>On</OptionInfer>
-    <RootNamespace></RootNamespace>
     <LangVersion>Latest</LangVersion>
     <VBRuntime>None</VBRuntime>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
