@@ -2627,6 +2627,27 @@ public class ComboBoxTests
         control.SelectionLength.Should().Be(control.Text.Length);
     }
 
+    // Unit test for https://github.com/microsoft/winforms-designer/issues/2707
+    [WinFormsFact]
+    public void ComboBox_CorrectHeightAfterSetDropDownStyleSimple()
+    {
+        using ComboBox comboBox = new ComboBox();
+
+        int handleCreatedInvoked = 0;
+        comboBox.HandleCreated += (s, e) =>
+        {
+            handleCreatedInvoked++;
+        };
+
+        comboBox.CreateControl();
+
+        comboBox.DropDownStyle.Should().Be(ComboBoxStyle.DropDown);
+
+        comboBox.DropDownStyle = ComboBoxStyle.Simple;
+
+        handleCreatedInvoked.Should().Be(2);
+    }
+
     private void InitializeItems(ComboBox comboBox, int numItems)
     {
         for (int i = 0; i < numItems; i++)
