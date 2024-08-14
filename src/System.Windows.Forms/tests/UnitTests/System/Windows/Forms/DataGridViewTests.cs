@@ -4073,6 +4073,9 @@ public partial class DataGridViewTests : IDisposable
     [WinFormsFact]
     public void DataGridView_Dispose_KeyboardToolTip_Disposed()
     {
+        // Test to ensure disposal of the DataGridView KeyboardToolTip
+        // to avoid calls to disposed DataGridView from
+        // the KeyBoardToolTip as seen in https://github.com/dotnet/winforms/issues/11837
         DataGridView dataGridView = new();
         int toolTipDisposeCount = 0;
         ToolTip toolTip = dataGridView.KeyboardToolTip;
