@@ -23,6 +23,17 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Date.Now.Should.BeAfter(New Date)
         End Sub
 
+        <WinFormsFact>
+        Public Sub TimeTestsDataIteratorTests()
+            Dim testClass As New TimeData
+            testClass.IEnumerable_GetEnumerator.Should.NotBeNull()
+        End Sub
+
+        <WinFormsFact>
+        Public Sub VbTickCountCloseToEnvironmentTickCount()
+            Dim tickCount As Integer = Math.Abs(Environment.TickCount - My.Computer.Clock.TickCount)
+            Call (tickCount < PrecisionTickLimit).Should.BeTrue()
+        End Sub
 
         <WinFormsTheory>
         <ClassData(GetType(TimeData))>
@@ -31,12 +42,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             vbTime,
             systemTime,
             acceptableDifferenceInTicks:=PrecisionTickLimit).Should.BeTrue()
-        End Sub
-
-        <WinFormsFact>
-        Public Sub VbTickCountCloseToEnvironmentTickCount()
-            Dim tickCount As Integer = Math.Abs(Environment.TickCount - My.Computer.Clock.TickCount)
-            Call (tickCount < PrecisionTickLimit).Should.BeTrue()
         End Sub
 
         <WinFormsFact>
