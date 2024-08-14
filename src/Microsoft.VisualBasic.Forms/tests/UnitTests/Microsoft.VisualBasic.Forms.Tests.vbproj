@@ -10,10 +10,10 @@
     <OptionExplicit>On</OptionExplicit>
     <OptionInfer>Off</OptionInfer>
     <OptionStrict>On</OptionStrict>
-    <RootNamespace></RootNamespace>
     <MyType>WindowsFormsWithCustomSubMain</MyType>
     <UseApplicationFramework>True</UseApplicationFramework>
     <OutputType>Library</OutputType>
+    <RootNamespace></RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
