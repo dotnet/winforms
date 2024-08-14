@@ -11,6 +11,7 @@
     <OptionExplicit>On</OptionExplicit>
     <OptionStrict>On</OptionStrict>
     <OptionInfer>Off</OptionInfer>
+    <RootNamespace></RootNamespace>
     <LangVersion>Latest</LangVersion>
     <VBRuntime>None</VBRuntime>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
