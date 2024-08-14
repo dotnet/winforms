@@ -60,8 +60,6 @@ public class SplitContainerDesignerTests
 
         splitContainerDesigner.Dispose();
 
-        Action action = () => _ = splitContainerDesigner.ActionLists;
-        action.Should().NotThrow();
         splitContainerDesigner.ActionLists.Count.Should().Be(0);
     }
 }
