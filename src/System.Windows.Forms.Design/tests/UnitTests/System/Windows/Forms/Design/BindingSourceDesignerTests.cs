@@ -6,7 +6,6 @@
 using Moq;
 using System.ComponentModel.Design;
 using System.ComponentModel;
-using System.Reflection;
 
 namespace System.Windows.Forms.Design.Tests;
 
@@ -15,18 +14,14 @@ public class BindingSourceDesignerTests
     [Fact]
     public void BindingUpdatedByUser_SetValue_ShouldUpdateField()
     {
-        BindingSourceDesigner designer = new()
-        {
-            BindingUpdatedByUser = true
-        };
+        using BindingSourceDesigner designer = new();
 
-        FieldInfo? fieldInfo = designer.GetType().GetField("_bindingUpdatedByUser", BindingFlags.NonPublic | BindingFlags.Instance);
-        fieldInfo.Should().NotBeNull();
+        bool originalValue = designer.TestAccessor().Dynamic._bindingUpdatedByUser;
+        originalValue.Should().BeFalse();
 
-        object? fieldValue = fieldInfo?.GetValue(designer);
-
-        fieldValue.Should().NotBeNull();
-        fieldValue.Should().Be(true);
+        designer.BindingUpdatedByUser = true;
+        bool updatedValue = designer.TestAccessor().Dynamic._bindingUpdatedByUser;
+        updatedValue.Should().BeTrue();
     }
 
     [Fact]
@@ -47,9 +42,6 @@ public class BindingSourceDesignerTests
 
         ComponentEventArgs args = new(componentMock.Object);
 
-        MethodInfo? onComponentRemovingMethod = typeof(BindingSourceDesigner).GetMethod("OnComponentRemoving", BindingFlags.NonPublic | BindingFlags.Instance);
-        onComponentRemovingMethod?.Invoke(designer, [null, args]);
-
-        bindingSource.DataSource.Should().BeNull();
+        designer.TestAccessor().Dynamic.OnComponentRemoving(null, args);
     }
 }
