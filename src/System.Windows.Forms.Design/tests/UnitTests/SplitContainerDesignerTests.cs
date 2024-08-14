@@ -4,17 +4,14 @@
 using System.ComponentModel.Design;
 using Moq;
 using System.Windows.Forms.Design.Tests.Mocks;
+using System.ComponentModel;
 
 namespace System.Windows.Forms.Design.Tests;
 
 public class SplitContainerDesignerTests
 {
-    [WinFormsFact]
-    public void SplitContainerDesigner_AssociatedComponentsTest()
+    private Mock<ISite> GetMockSize(SplitContainer splitContainer, SplitContainerDesigner splitContainerDesigner)
     {
-        using SplitContainer splitContainer = new();
-        using SplitContainerDesigner splitContainerDesigner = new();
-
         Mock<IDesignerHost> mockDesignerHost = new(MockBehavior.Strict);
         mockDesignerHost
             .Setup(h => h.RootComponent)
@@ -27,7 +24,16 @@ public class SplitContainerDesignerTests
             .Setup(s => s.GetService(typeof(IComponentChangeService)))
             .Returns(mockComponentChangeService.Object);
 
-        var mockSite = MockSite.CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
+        return  MockSite.CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
+    }
+
+    [WinFormsFact]
+    public void SplitContainerDesigner_AssociatedComponentsTest()
+    {
+        using SplitContainer splitContainer = new();
+        using SplitContainerDesigner splitContainerDesigner = new();
+
+        var mockSite = GetMockSize(splitContainer, splitContainerDesigner);
         splitContainer.Site = mockSite.Object;
 
         splitContainerDesigner.Initialize(splitContainer);
@@ -38,5 +44,22 @@ public class SplitContainerDesignerTests
         control.Parent = splitContainer.Panel1;
 
         Assert.Equal(1, splitContainerDesigner.AssociatedComponents.Count);
+    }
+
+    // Regression test for https://github.com/dotnet/winforms/issues/11793
+    [WinFormsFact]
+    public void SplitContainerDesigner_ActionListsTest()
+    {
+        using SplitContainer splitContainer = new();
+        SplitContainerDesigner splitContainerDesigner = new();
+
+        var mockSite = GetMockSize(splitContainer, splitContainerDesigner);
+        splitContainer.Site = mockSite.Object;
+
+        splitContainerDesigner.Initialize(splitContainer);
+
+        splitContainerDesigner.Dispose();
+
+        splitContainerDesigner.ActionLists.Count.Should().Be(0);
     }
 }
