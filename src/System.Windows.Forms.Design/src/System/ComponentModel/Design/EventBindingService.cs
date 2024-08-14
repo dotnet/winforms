@@ -242,7 +242,7 @@ public abstract partial class EventBindingService : IEventBindingService
         _showCodeComponent = component;
         _showCodeEventDescriptor = e;
         _showCodeMethodName = methodName;
-        Application.Idle += new EventHandler(ShowCodeIdle);
+        Application.Idle += ShowCodeIdle;
 
         return true;
     }
@@ -253,7 +253,7 @@ public abstract partial class EventBindingService : IEventBindingService
     /// </summary>
     private void ShowCodeIdle(object? sender, EventArgs e)
     {
-        Application.Idle -= new EventHandler(ShowCodeIdle);
+        Application.Idle -= ShowCodeIdle;
 
         try
         {

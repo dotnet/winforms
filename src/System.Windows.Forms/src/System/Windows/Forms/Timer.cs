@@ -27,7 +27,7 @@ public class Timer : Component
     // Holder for the HWND that handles our Timer messages.
     private TimerNativeWindow? _timerWindow;
 
-    private readonly object _syncObj = new();
+    private readonly Lock _lock = new();
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="Timer"/> class.
@@ -91,31 +91,35 @@ public class Timer : Component
         get => _timerWindow is null ? _enabled : _timerWindow.IsTimerRunning;
         set
         {
-            lock (_syncObj)
+            lock (_lock)
             {
-                if (_enabled != value)
+                if (_enabled == value)
                 {
-                    _enabled = value;
+                    return;
+                }
 
-                    // At runtime, enable or disable the corresponding Windows timer
-                    if (!DesignMode)
+                _enabled = value;
+
+                // At runtime, enable or disable the corresponding Windows timer
+                if (DesignMode)
+                {
+                    return;
+                }
+
+                if (value)
+                {
+                    // Create the timer window if needed.
+                    _timerWindow ??= new TimerNativeWindow(this);
+
+                    _timerRoot = GCHandle.Alloc(this);
+                    _timerWindow.StartTimer(_interval);
+                }
+                else
+                {
+                    _timerWindow?.StopTimer();
+                    if (_timerRoot.IsAllocated)
                     {
-                        if (value)
-                        {
-                            // Create the timer window if needed.
-                            _timerWindow ??= new TimerNativeWindow(this);
-
-                            _timerRoot = GCHandle.Alloc(this);
-                            _timerWindow.StartTimer(_interval);
-                        }
-                        else
-                        {
-                            _timerWindow?.StopTimer();
-                            if (_timerRoot.IsAllocated)
-                            {
-                                _timerRoot.Free();
-                            }
-                        }
+                        _timerRoot.Free();
                     }
                 }
             }
@@ -133,24 +137,24 @@ public class Timer : Component
         get => _interval;
         set
         {
-            lock (_syncObj)
+            lock (_lock)
             {
                 if (value < 1)
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.TimerInvalidInterval, value, 0));
                 }
 
-                if (_interval != value)
+                if (_interval == value)
                 {
-                    _interval = value;
-                    if (Enabled)
-                    {
-                        // Change the timer value, don't tear down the timer itself.
-                        if (!DesignMode && _timerWindow is not null)
-                        {
-                            _timerWindow.RestartTimer(value);
-                        }
-                    }
+                    return;
+                }
+
+                _interval = value;
+
+                if (Enabled && !DesignMode)
+                {
+                    // Change the timer value, don't tear down the timer itself.
+                    _timerWindow?.RestartTimer(value);
                 }
             }
         }
@@ -187,6 +191,8 @@ public class Timer : Component
 
         // Setting this when we are stopping the timer so someone can't restart it in the process.
         private bool _stoppingTimer;
+
+        private readonly Lock _lock = new();
 
         internal TimerNativeWindow(Timer owner)
         {
@@ -279,8 +285,7 @@ public class Timer : Component
                 return;
             }
 
-            // Locking 'this' here is ok since this is an internal class.
-            lock (this)
+            lock (_lock)
             {
                 if (_stoppingTimer || hwnd.IsNull || !PInvoke.IsWindow(hwnd))
                 {

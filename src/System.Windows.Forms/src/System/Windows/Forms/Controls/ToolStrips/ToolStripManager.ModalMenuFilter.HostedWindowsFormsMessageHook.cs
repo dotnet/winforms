@@ -14,6 +14,7 @@ public static partial class ToolStripManager
             private HHOOK _messageHookHandle;
             private bool _isHooked;
             private HOOKPROC? _callBack;
+            private readonly Lock _lock = new();
 
             public HostedWindowsFormsMessageHook()
             {
@@ -53,7 +54,7 @@ public static partial class ToolStripManager
 
             private unsafe void InstallMessageHook()
             {
-                lock (this)
+                lock (_lock)
                 {
                     if (!_messageHookHandle.IsNull)
                     {
@@ -99,7 +100,7 @@ public static partial class ToolStripManager
 
             private void UninstallMessageHook()
             {
-                lock (this)
+                lock (_lock)
                 {
                     if (!_messageHookHandle.IsNull)
                     {

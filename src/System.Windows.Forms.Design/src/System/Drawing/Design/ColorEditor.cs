@@ -13,8 +13,6 @@ namespace System.Drawing.Design;
 [CLSCompliant(false)]
 public partial class ColorEditor : UITypeEditor
 {
-    private ColorUI? _colorUI;
-
     /// <summary>
     ///  Edits the given object value using the editor style provided by ColorEditor.GetEditStyle.
     /// </summary>
@@ -25,7 +23,7 @@ public partial class ColorEditor : UITypeEditor
             return value;
         }
 
-        _colorUI ??= new ColorUI(this);
+        using ColorUI? _colorUI = new(this);
 
         _colorUI.Start(editorService, value);
         editorService.DropDownControl(_colorUI);

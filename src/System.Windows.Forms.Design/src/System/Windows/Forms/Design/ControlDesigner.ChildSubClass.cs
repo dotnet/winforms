@@ -15,7 +15,7 @@ public partial class ControlDesigner
             _designer = designer;
             if (designer is not null)
             {
-                designer.DisposingHandler += new EventHandler(OnDesignerDisposing);
+                designer.DisposingHandler += OnDesignerDisposing;
             }
 
             AssignHandle(hwnd);

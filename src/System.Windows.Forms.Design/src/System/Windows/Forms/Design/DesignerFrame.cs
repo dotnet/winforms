@@ -76,7 +76,7 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
 
             if (_splitter is not null)
             {
-                _splitter.SplitterMoved -= new SplitterEventHandler(OnSplitterMoved);
+                _splitter.SplitterMoved -= OnSplitterMoved;
             }
         }
 
@@ -276,11 +276,12 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
             _splitter.BorderStyle = BorderStyle.Fixed3D;
             _splitter.Height = 7;
             _splitter.Dock = DockStyle.Bottom;
-            _splitter.SplitterMoved += new SplitterEventHandler(OnSplitterMoved);
+            _splitter.SplitterMoved += OnSplitterMoved;
         }
 
         SuspendLayout();
         window.Dock = DockStyle.Bottom;
+
         // Compute a minimum height for this window.
         int minHeight = 80;
         if (window.Height < minHeight)

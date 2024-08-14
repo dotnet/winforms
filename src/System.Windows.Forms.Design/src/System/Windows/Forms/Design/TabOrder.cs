@@ -128,9 +128,9 @@ internal class TabOrder : Control, IMouseHandler, IMenuStatusHandler
         IComponentChangeService? cs = (IComponentChangeService?)host.GetService(typeof(IComponentChangeService));
         if (cs is not null)
         {
-            cs.ComponentAdded += new ComponentEventHandler(OnComponentAddRemove);
-            cs.ComponentRemoved += new ComponentEventHandler(OnComponentAddRemove);
-            cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
+            cs.ComponentAdded += OnComponentAddRemove;
+            cs.ComponentRemoved += OnComponentAddRemove;
+            cs.ComponentChanged += OnComponentChanged;
         }
     }
 
@@ -169,9 +169,9 @@ internal class TabOrder : Control, IMouseHandler, IMenuStatusHandler
                 IComponentChangeService? cs = (IComponentChangeService?)_host.GetService(typeof(IComponentChangeService));
                 if (cs is not null)
                 {
-                    cs.ComponentAdded -= new ComponentEventHandler(OnComponentAddRemove);
-                    cs.ComponentRemoved -= new ComponentEventHandler(OnComponentAddRemove);
-                    cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
+                    cs.ComponentAdded -= OnComponentAddRemove;
+                    cs.ComponentRemoved -= OnComponentAddRemove;
+                    cs.ComponentChanged -= OnComponentChanged;
                 }
 
                 IHelpService? hs = (IHelpService?)_host.GetService(typeof(IHelpService));

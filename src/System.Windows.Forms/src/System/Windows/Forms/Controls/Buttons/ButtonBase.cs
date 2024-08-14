@@ -753,7 +753,7 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
             {
                 if (_image is not null)
                 {
-                    ImageAnimator.Animate(_image, new EventHandler(OnFrameChanged));
+                    ImageAnimator.Animate(_image, OnFrameChanged);
                     SetFlag(FlagCurrentlyAnimating, animate);
                 }
             }
@@ -761,7 +761,7 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
             {
                 if (_image is not null)
                 {
-                    ImageAnimator.StopAnimate(_image, new EventHandler(OnFrameChanged));
+                    ImageAnimator.StopAnimate(_image, OnFrameChanged);
                     SetFlag(FlagCurrentlyAnimating, animate);
                 }
             }

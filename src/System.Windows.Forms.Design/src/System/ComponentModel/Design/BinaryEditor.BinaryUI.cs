@@ -185,7 +185,7 @@ public sealed partial class BinaryEditor
             _buttonOK.MinimumSize = new Size(75, 23);
             _buttonOK.Name = "buttonOK";
             _buttonOK.Padding = new Padding(10, 0, 10, 0);
-            _buttonOK.Click += new EventHandler(ButtonOK_click);
+            _buttonOK.Click += ButtonOK_click;
             //
             // buttonSave
             //
@@ -195,7 +195,7 @@ public sealed partial class BinaryEditor
             _buttonSave.MinimumSize = new Size(75, 23);
             _buttonSave.Name = "buttonSave";
             _buttonSave.Padding = new Padding(10, 0, 10, 0);
-            _buttonSave.Click += new EventHandler(ButtonSave_click);
+            _buttonSave.Click += ButtonSave_click;
             //
             // groupBoxMode
             //
@@ -227,7 +227,7 @@ public sealed partial class BinaryEditor
             resources.ApplyResources(_radioUnicode, "radioUnicode");
             _radioUnicode.Margin = new Padding(3, 0, 0, 0);
             _radioUnicode.Name = "radioUnicode";
-            _radioUnicode.CheckedChanged += new EventHandler(RadioUnicode_checkedChanged);
+            _radioUnicode.CheckedChanged += RadioUnicode_checkedChanged;
             //
             // radioAuto
             //
@@ -235,21 +235,21 @@ public sealed partial class BinaryEditor
             _radioAuto.Checked = true;
             _radioAuto.Margin = new Padding(0, 0, 3, 0);
             _radioAuto.Name = "radioAuto";
-            _radioAuto.CheckedChanged += new EventHandler(RadioAuto_checkedChanged);
+            _radioAuto.CheckedChanged += RadioAuto_checkedChanged;
             //
             // radioAnsi
             //
             resources.ApplyResources(_radioAnsi, "radioAnsi");
             _radioAnsi.Margin = new Padding(3, 0, 3, 0);
             _radioAnsi.Name = "radioAnsi";
-            _radioAnsi.CheckedChanged += new EventHandler(RadioAnsi_checkedChanged);
+            _radioAnsi.CheckedChanged += RadioAnsi_checkedChanged;
             //
             // radioHex
             //
             resources.ApplyResources(_radioHex, "radioHex");
             _radioHex.Margin = new Padding(3, 0, 3, 0);
             _radioHex.Name = "radioHex";
-            _radioHex.CheckedChanged += new EventHandler(RadioHex_checkedChanged);
+            _radioHex.CheckedChanged += RadioHex_checkedChanged;
             //
             // okSaveTableLayoutPanel
             //
@@ -290,8 +290,8 @@ public sealed partial class BinaryEditor
             Name = "BinaryUI";
             ShowIcon = false;
             ShowInTaskbar = false;
-            HelpRequested += new HelpEventHandler(Form_HelpRequested);
-            HelpButtonClicked += new CancelEventHandler(Form_HelpButtonClicked);
+            HelpRequested += Form_HelpRequested;
+            HelpButtonClicked += Form_HelpButtonClicked;
             _byteViewer.ResumeLayout(false);
             _byteViewer.PerformLayout();
             _groupBoxMode.ResumeLayout(false);

@@ -182,20 +182,20 @@ internal class TreeNodeCollectionEditor : CollectionEditor
 
         private void HookEvents()
         {
-            _okButton.Click += new EventHandler(BtnOK_click);
-            _btnCancel.Click += new EventHandler(BtnCancel_click);
-            _btnAddChild.Click += new EventHandler(BtnAddChild_click);
-            _btnAddRoot.Click += new EventHandler(BtnAddRoot_click);
-            _btnDelete.Click += new EventHandler(BtnDelete_click);
-            _propertyGrid1.PropertyValueChanged += new PropertyValueChangedEventHandler(PropertyGrid_propertyValueChanged);
-            _treeView1.AfterSelect += new TreeViewEventHandler(treeView1_afterSelect);
-            _treeView1.DragEnter += new DragEventHandler(treeView1_DragEnter);
-            _treeView1.ItemDrag += new ItemDragEventHandler(treeView1_ItemDrag);
-            _treeView1.DragDrop += new DragEventHandler(treeView1_DragDrop);
-            _treeView1.DragOver += new DragEventHandler(treeView1_DragOver);
-            HelpButtonClicked += new CancelEventHandler(TreeNodeCollectionEditor_HelpButtonClicked);
-            _moveDownButton.Click += new EventHandler(moveDownButton_Click);
-            _moveUpButton.Click += new EventHandler(moveUpButton_Click);
+            _okButton.Click += BtnOK_click;
+            _btnCancel.Click += BtnCancel_click;
+            _btnAddChild.Click += BtnAddChild_click;
+            _btnAddRoot.Click += BtnAddRoot_click;
+            _btnDelete.Click += BtnDelete_click;
+            _propertyGrid1.PropertyValueChanged += PropertyGrid_propertyValueChanged;
+            _treeView1.AfterSelect += treeView1_afterSelect;
+            _treeView1.DragEnter += treeView1_DragEnter;
+            _treeView1.ItemDrag += treeView1_ItemDrag;
+            _treeView1.DragDrop += treeView1_DragDrop;
+            _treeView1.DragOver += treeView1_DragOver;
+            HelpButtonClicked += TreeNodeCollectionEditor_HelpButtonClicked;
+            _moveDownButton.Click += moveDownButton_Click;
+            _moveUpButton.Click += moveUpButton_Click;
         }
 
         /// <summary>

@@ -511,7 +511,7 @@ public partial class GroupBox : Control
                 flags |= DRAW_TEXT_FORMAT.DT_RIGHT;
             }
 
-            using var hfont = GdiCache.GetHFONT(Font);
+            using var hfont = GdiCache.GetHFONTScope(Font);
             textSize = hdc.HDC.MeasureText(Text, hfont, new Size(textRectangle.Width, int.MaxValue), (TextFormatFlags)flags);
 
             if (Enabled)

@@ -25,7 +25,7 @@ public sealed class VisualStyleRenderer : IHandle<HTHEME>
 
     static VisualStyleRenderer()
     {
-        SystemEvents.UserPreferenceChanging += new UserPreferenceChangingEventHandler(OnUserPreferenceChanging);
+        SystemEvents.UserPreferenceChanging += OnUserPreferenceChanging;
     }
 
     /// <summary>

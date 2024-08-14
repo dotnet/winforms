@@ -88,16 +88,16 @@ internal class MaskDesignerDialog : Form
 
     private void HookEvents()
     {
-        _listViewCannedMasks.SelectedIndexChanged += new EventHandler(listViewCannedMasks_SelectedIndexChanged);
-        _listViewCannedMasks.ColumnClick += new ColumnClickEventHandler(listViewCannedMasks_ColumnClick);
-        _listViewCannedMasks.Enter += new EventHandler(listViewCannedMasks_Enter);
-        _btnOK.Click += new EventHandler(btnOK_Click);
-        _txtBoxMask.TextChanged += new EventHandler(txtBoxMask_TextChanged);
-        _txtBoxMask.Validating += new CancelEventHandler(txtBoxMask_Validating);
-        _maskedTextBox.KeyDown += new KeyEventHandler(maskedTextBox_KeyDown);
-        _maskedTextBox.MaskInputRejected += new MaskInputRejectedEventHandler(maskedTextBox_MaskInputRejected);
-        Load += new EventHandler(MaskDesignerDialog_Load);
-        HelpButtonClicked += new CancelEventHandler(MaskDesignerDialog_HelpButtonClicked);
+        _listViewCannedMasks.SelectedIndexChanged += listViewCannedMasks_SelectedIndexChanged;
+        _listViewCannedMasks.ColumnClick += listViewCannedMasks_ColumnClick;
+        _listViewCannedMasks.Enter += listViewCannedMasks_Enter;
+        _btnOK.Click += btnOK_Click;
+        _txtBoxMask.TextChanged += txtBoxMask_TextChanged;
+        _txtBoxMask.Validating += txtBoxMask_Validating;
+        _maskedTextBox.KeyDown += maskedTextBox_KeyDown;
+        _maskedTextBox.MaskInputRejected += maskedTextBox_MaskInputRejected;
+        Load += MaskDesignerDialog_Load;
+        HelpButtonClicked += MaskDesignerDialog_HelpButtonClicked;
     }
 
     [MemberNotNull(nameof(_components))]

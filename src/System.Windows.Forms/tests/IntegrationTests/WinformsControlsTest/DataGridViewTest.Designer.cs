@@ -152,7 +152,7 @@ partial class DataGridViewTest
         this.changeFontButton.TabIndex = 1;
         this.changeFontButton.Text = "Change DGV font";
         this.changeFontButton.UseVisualStyleBackColor = true;
-        this.changeFontButton.Click += new System.EventHandler(this.changeFontButton_Click);
+        this.changeFontButton.Click += this.changeFontButton_Click;
         // 
         // numericUpDown1
         // 
@@ -177,7 +177,7 @@ partial class DataGridViewTest
         0,
         0,
         0});
-        this.numericUpDown1.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
+        this.numericUpDown1.ValueChanged += this.numericUpDown1_ValueChanged;
         // 
         // label1
         // 
@@ -200,7 +200,7 @@ partial class DataGridViewTest
         this.resetFontButton.TabIndex = 4;
         this.resetFontButton.Text = "Reset DGV font";
         this.resetFontButton.UseVisualStyleBackColor = true;
-        this.resetFontButton.Click += new System.EventHandler(this.resetFontButton_Click);
+        this.resetFontButton.Click += this.resetFontButton_Click;
         // 
         // DataGridViewTest
         // 

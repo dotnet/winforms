@@ -165,7 +165,7 @@ public partial class ToolStripTextBox
                 {
                     try
                     {
-                        SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
+                        SystemEvents.UserPreferenceChanged += OnUserPreferenceChanged;
                     }
                     finally
                     {
@@ -177,7 +177,7 @@ public partial class ToolStripTextBox
             {
                 try
                 {
-                    SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
+                    SystemEvents.UserPreferenceChanged -= OnUserPreferenceChanged;
                 }
                 finally
                 {

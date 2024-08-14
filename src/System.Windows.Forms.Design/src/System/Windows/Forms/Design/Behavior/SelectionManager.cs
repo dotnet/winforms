@@ -39,12 +39,12 @@ internal sealed class SelectionManager : IDisposable
         _designerHost = serviceProvider.GetRequiredService<IDesignerHost>();
 
         // sync the BehaviorService's begindrag event
-        behaviorService.BeginDrag += new BehaviorDragDropEventHandler(OnBeginDrag);
+        behaviorService.BeginDrag += OnBeginDrag;
 
         // sync the BehaviorService's Synchronize event
-        behaviorService.Synchronize += new EventHandler(OnSynchronize);
+        behaviorService.Synchronize += OnSynchronize;
 
-        _selectionService.SelectionChanged += new EventHandler(OnSelectionChanged);
+        _selectionService.SelectionChanged += OnSelectionChanged;
         _rootComponent = (Control)_designerHost.RootComponent;
 
         // create and add both of our adorners,
@@ -59,12 +59,12 @@ internal sealed class SelectionManager : IDisposable
 
         if (_serviceProvider.TryGetService(out IComponentChangeService? cs))
         {
-            cs.ComponentAdded += new ComponentEventHandler(OnComponentAdded);
-            cs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
-            cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
+            cs.ComponentAdded += OnComponentAdded;
+            cs.ComponentRemoved += OnComponentRemoved;
+            cs.ComponentChanged += OnComponentChanged;
         }
 
-        _designerHost.TransactionClosed += new DesignerTransactionCloseEventHandler(OnTransactionClosed);
+        _designerHost.TransactionClosed += OnTransactionClosed;
 
         // designeraction UI
         DesignerOptionService? options = _designerHost.GetService<DesignerOptionService>();
@@ -169,7 +169,7 @@ internal sealed class SelectionManager : IDisposable
     {
         if (_designerHost is not null)
         {
-            _designerHost.TransactionClosed -= new DesignerTransactionCloseEventHandler(OnTransactionClosed);
+            _designerHost.TransactionClosed -= OnTransactionClosed;
             _designerHost = null!;
         }
 
@@ -177,14 +177,14 @@ internal sealed class SelectionManager : IDisposable
         {
             if (_serviceProvider.TryGetService(out IComponentChangeService? cs))
             {
-                cs.ComponentAdded -= new ComponentEventHandler(OnComponentAdded);
-                cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
-                cs.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
+                cs.ComponentAdded -= OnComponentAdded;
+                cs.ComponentChanged -= OnComponentChanged;
+                cs.ComponentRemoved -= OnComponentRemoved;
             }
 
             if (_selectionService is not null)
             {
-                _selectionService.SelectionChanged -= new EventHandler(OnSelectionChanged);
+                _selectionService.SelectionChanged -= OnSelectionChanged;
                 _selectionService = null!;
             }
 
@@ -195,8 +195,8 @@ internal sealed class SelectionManager : IDisposable
         {
             _behaviorService.Adorners.Remove(BodyGlyphAdorner);
             _behaviorService.Adorners.Remove(SelectionGlyphAdorner);
-            _behaviorService.BeginDrag -= new BehaviorDragDropEventHandler(OnBeginDrag);
-            _behaviorService.Synchronize -= new EventHandler(OnSynchronize);
+            _behaviorService.BeginDrag -= OnBeginDrag;
+            _behaviorService.Synchronize -= OnSynchronize;
             _behaviorService = null!;
         }
 

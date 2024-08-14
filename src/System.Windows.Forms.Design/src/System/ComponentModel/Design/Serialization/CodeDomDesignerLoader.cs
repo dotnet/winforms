@@ -90,8 +90,8 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
     {
         if (TryGetService(out IComponentChangeService? componentChangeService))
         {
-            componentChangeService.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
-            componentChangeService.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
+            componentChangeService.ComponentRemoved -= OnComponentRemoved;
+            componentChangeService.ComponentRename -= OnComponentRename;
         }
 
         if (TryGetService(out IDesignerHost? host))
@@ -693,8 +693,8 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
 
         if (TryGetService(out IComponentChangeService? componentChangeService))
         {
-            componentChangeService.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
-            componentChangeService.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
+            componentChangeService.ComponentRemoved -= OnComponentRemoved;
+            componentChangeService.ComponentRename -= OnComponentRename;
         }
 
         base.OnBeginLoad();
@@ -775,8 +775,8 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
             return;
         }
 
-        cs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
-        cs.ComponentRename += new ComponentRenameEventHandler(OnComponentRename);
+        cs.ComponentRemoved += OnComponentRemoved;
+        cs.ComponentRename += OnComponentRename;
     }
 
     /// <summary>

@@ -42,7 +42,7 @@ partial class DialogControls
         this.ColorDialog.TabIndex = 0;
         this.ColorDialog.Text = "ColorDialog";
         this.ColorDialog.UseVisualStyleBackColor = true;
-        this.ColorDialog.Click += new System.EventHandler(this.ColorDialog_Click);
+        this.ColorDialog.Click += this.ColorDialog_Click;
         // 
         // FolderBrowserDialog
         // 
@@ -53,7 +53,7 @@ partial class DialogControls
         this.FolderBrowserDialog.TabIndex = 1;
         this.FolderBrowserDialog.Text = "FolderBrowserDialog";
         this.FolderBrowserDialog.UseVisualStyleBackColor = true;
-        this.FolderBrowserDialog.Click += new System.EventHandler(this.FolderBrowserDialog_Click);
+        this.FolderBrowserDialog.Click += this.FolderBrowserDialog_Click;
         // 
         // OpenFileDialog
         // 
@@ -64,7 +64,7 @@ partial class DialogControls
         this.OpenFileDialog.TabIndex = 2;
         this.OpenFileDialog.Text = "OpenFileDialog";
         this.OpenFileDialog.UseVisualStyleBackColor = true;
-        this.OpenFileDialog.Click += new System.EventHandler(this.OpenFileDialog_Click);
+        this.OpenFileDialog.Click += this.OpenFileDialog_Click;
         // 
         // SaveFileDialog
         // 
@@ -75,7 +75,7 @@ partial class DialogControls
         this.SaveFileDialog.TabIndex = 3;
         this.SaveFileDialog.Text = "SaveFileDialog";
         this.SaveFileDialog.UseVisualStyleBackColor = true;
-        this.SaveFileDialog.Click += new System.EventHandler(this.SaveFileDialog_Click);
+        this.SaveFileDialog.Click += this.SaveFileDialog_Click;
         // 
         // DialogControls
         // 

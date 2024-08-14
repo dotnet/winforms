@@ -363,7 +363,7 @@ public abstract partial class UpDownBase
                 _timer = new Timer();
 
                 // Add the timer handler
-                _timer.Tick += new EventHandler(TimerHandler);
+                _timer.Tick += TimerHandler;
             }
 
             _timerInterval = DefaultTimerInterval;

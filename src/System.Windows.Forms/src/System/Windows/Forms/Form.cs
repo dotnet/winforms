@@ -119,10 +119,8 @@ public partial class Form : ContainerControl
     private static readonly int s_propMaximizedBounds = PropertyStore.CreateKey();
     private static readonly int s_propOwnedFormsCount = PropertyStore.CreateKey();
 
-    private static readonly int s_propMinTrackSizeWidth = PropertyStore.CreateKey();
-    private static readonly int s_propMinTrackSizeHeight = PropertyStore.CreateKey();
-    private static readonly int s_propMaxTrackSizeWidth = PropertyStore.CreateKey();
-    private static readonly int s_propMaxTrackSizeHeight = PropertyStore.CreateKey();
+    private static readonly int s_propMinTrackSize = PropertyStore.CreateKey();
+    private static readonly int s_propMaxTrackSize = PropertyStore.CreateKey();
 
     private static readonly int s_propFormMdiParent = PropertyStore.CreateKey();
     private static readonly int s_propActiveMdiChild = PropertyStore.CreateKey();
@@ -391,14 +389,14 @@ public partial class Form : ContainerControl
 
                 if (!value)
                 {
-                    if (Properties.ContainsObject(s_propOpacity))
+                    if (Properties.ContainsKey(s_propOpacity))
                     {
-                        Properties.SetObject(s_propOpacity, 1.0f);
+                        Properties.AddValue(s_propOpacity, 1.0f);
                     }
 
-                    if (Properties.ContainsObject(s_propTransparencyKey))
+                    if (Properties.ContainsKey(s_propTransparencyKey))
                     {
-                        Properties.SetObject(s_propTransparencyKey, Color.Empty);
+                        Properties.AddValue(s_propTransparencyKey, Color.Empty);
                     }
 
                     UpdateLayered();
@@ -903,13 +901,12 @@ public partial class Form : ContainerControl
     {
         get
         {
-            // Avoid locking if the value is filled in...
+            // Avoid locking if the value is filled in.
             if (s_defaultIcon is null)
             {
                 lock (s_internalSyncObject)
                 {
-                    // Once we grab the lock, we re-check the value to avoid a
-                    // race condition.
+                    // Once we grab the lock, we re-check the value to avoid a race condition.
                     s_defaultIcon ??= new Icon(typeof(Form), "wfc");
                 }
             }
@@ -918,25 +915,13 @@ public partial class Form : ContainerControl
         }
     }
 
-    protected override ImeMode DefaultImeMode
-    {
-        get
-        {
-            return ImeMode.NoControl;
-        }
-    }
+    protected override ImeMode DefaultImeMode => ImeMode.NoControl;
 
     /// <summary>
     ///  Deriving classes can override this to configure a default size for their control.
     ///  This is more efficient than setting the size in the control's constructor.
     /// </summary>
-    protected override Size DefaultSize
-    {
-        get
-        {
-            return new Size(300, 300);
-        }
-    }
+    protected override Size DefaultSize => new Size(300, 300);
 
     /// <summary>
     ///  Gets or sets the size and location of the form on the Windows desktop.
@@ -955,7 +940,6 @@ public partial class Form : ContainerControl
             bounds.Y -= screen.Y;
             return bounds;
         }
-
         set
         {
             SetDesktopBounds(value.X, value.Y, value.Width, value.Height);
@@ -979,7 +963,6 @@ public partial class Form : ContainerControl
             loc.Y -= screen.Y;
             return loc;
         }
-
         set
         {
             SetDesktopLocation(value.X, value.Y);
@@ -1219,17 +1202,16 @@ public partial class Form : ContainerControl
     }
 
     /// <summary>
-    ///  Gets the size of the form when it is
-    ///  maximized.
+    ///  Gets the size of the form when it is maximized.
     /// </summary>
     protected Rectangle MaximizedBounds
     {
-        get => Properties.GetRectangle(s_propMaximizedBounds, out _);
+        get => Properties.GetValueOrDefault<Rectangle>(s_propMaximizedBounds);
         set
         {
             if (!value.Equals(MaximizedBounds))
             {
-                Properties.SetRectangle(s_propMaximizedBounds, value);
+                Properties.AddValue(s_propMaximizedBounds, value);
                 OnMaximizedBoundsChanged(EventArgs.Empty);
             }
         }
@@ -1255,15 +1237,7 @@ public partial class Form : ContainerControl
     [DefaultValue(typeof(Size), "0, 0")]
     public override Size MaximumSize
     {
-        get
-        {
-            if (Properties.ContainsInteger(s_propMaxTrackSizeWidth))
-            {
-                return new Size(Properties.GetInteger(s_propMaxTrackSizeWidth), Properties.GetInteger(s_propMaxTrackSizeHeight));
-            }
-
-            return Size.Empty;
-        }
+        get => Properties.TryGetValue(s_propMaxTrackSize, out Size maximumSize) ? maximumSize : Size.Empty;
         set
         {
             if (!value.Equals(MaximumSize))
@@ -1280,20 +1254,28 @@ public partial class Form : ContainerControl
 
     private void UpdateMaximumSize(Size value, bool updateFormSize = true)
     {
-        Properties.SetInteger(s_propMaxTrackSizeWidth, value.Width);
-        Properties.SetInteger(s_propMaxTrackSizeHeight, value.Height);
+        Properties.AddValue(s_propMaxTrackSize, value);
 
         // Bump minimum size if necessary
         if (!MinimumSize.IsEmpty && !value.IsEmpty)
         {
-            if (Properties.GetInteger(s_propMinTrackSizeWidth) > value.Width)
+            Size minimumSize = MinimumSize;
+            bool sizeUpdated = false;
+            if (minimumSize.Width > value.Width)
             {
-                Properties.SetInteger(s_propMinTrackSizeWidth, value.Width);
+                minimumSize.Width = value.Width;
+                sizeUpdated = true;
             }
 
-            if (Properties.GetInteger(s_propMinTrackSizeHeight) > value.Height)
+            if (minimumSize.Height > value.Height)
             {
-                Properties.SetInteger(s_propMinTrackSizeHeight, value.Height);
+                minimumSize.Height = value.Height;
+                sizeUpdated = true;
+            }
+
+            if (sizeUpdated)
+            {
+                Properties.AddValue(s_propMinTrackSize, minimumSize);
             }
         }
 
@@ -1372,15 +1354,7 @@ public partial class Form : ContainerControl
     [RefreshProperties(RefreshProperties.Repaint)]
     public override Size MinimumSize
     {
-        get
-        {
-            if (Properties.ContainsInteger(s_propMinTrackSizeWidth))
-            {
-                return new Size(Properties.GetInteger(s_propMinTrackSizeWidth), Properties.GetInteger(s_propMinTrackSizeHeight));
-            }
-
-            return DefaultMinimumSize;
-        }
+        get => Properties.TryGetValue(s_propMinTrackSize, out Size minimumSize) ? minimumSize : DefaultMinimumSize;
         set
         {
             if (!value.Equals(MinimumSize))
@@ -1401,20 +1375,28 @@ public partial class Form : ContainerControl
 
     private void UpdateMinimumSize(Size value, bool updateFormSize = true)
     {
-        Properties.SetInteger(s_propMinTrackSizeWidth, value.Width);
-        Properties.SetInteger(s_propMinTrackSizeHeight, value.Height);
+        Properties.AddValue(s_propMinTrackSize, value);
 
         // Bump maximum size if necessary
         if (!MaximumSize.IsEmpty && !value.IsEmpty)
         {
-            if (Properties.GetInteger(s_propMaxTrackSizeWidth) < value.Width)
+            Size maximumSize = MaximumSize;
+            bool sizeUpdated = false;
+            if (maximumSize.Width < value.Width)
             {
-                Properties.SetInteger(s_propMaxTrackSizeWidth, value.Width);
+                maximumSize.Width = value.Width;
+                sizeUpdated = true;
             }
 
-            if (Properties.GetInteger(s_propMaxTrackSizeHeight) < value.Height)
+            if (maximumSize.Height < value.Height)
             {
-                Properties.SetInteger(s_propMaxTrackSizeHeight, value.Height);
+                maximumSize.Height = value.Height;
+                sizeUpdated = true;
+            }
+
+            if (sizeUpdated)
+            {
+                Properties.AddValue(s_propMaxTrackSize, maximumSize);
             }
         }
 
@@ -1766,7 +1748,7 @@ public partial class Form : ContainerControl
         get
         {
             Form?[]? ownedForms = (Form?[]?)Properties.GetObject(s_propOwnedForms);
-            int ownedFormsCount = Properties.GetInteger(s_propOwnedFormsCount);
+            int ownedFormsCount = Properties.GetValueOrDefault<int>(s_propOwnedFormsCount);
 
             Form[] result = new Form[ownedFormsCount];
             if (ownedFormsCount > 0)
@@ -1807,11 +1789,11 @@ public partial class Form : ContainerControl
             CheckParentingCycle(this, value);
             CheckParentingCycle(value, this);
 
-            Properties.SetObject(s_propOwner, null);
+            Properties.RemoveValue(s_propOwner);
 
             ownerOld?.RemoveOwnedForm(this);
 
-            Properties.SetObject(s_propOwner, value);
+            Properties.AddOrRemoveValue(s_propOwner, value);
 
             value?.AddOwnedForm(this);
 
@@ -1821,10 +1803,7 @@ public partial class Form : ContainerControl
 
     internal Form? OwnerInternal
     {
-        get
-        {
-            return (Form?)Properties.GetObject(s_propOwner);
-        }
+        get => Properties.GetValueOrDefault<Form?>(s_propOwner);
     }
 
     /// <summary>
@@ -2175,19 +2154,10 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormTransparencyKeyDescr))]
     public Color TransparencyKey
     {
-        get
-        {
-            object? key = Properties.GetObject(s_propTransparencyKey);
-            if (key is not null)
-            {
-                return (Color)key;
-            }
-
-            return Color.Empty;
-        }
+        get => Properties.GetValueOrDefault(s_propTransparencyKey, Color.Empty);
         set
         {
-            Properties.SetObject(s_propTransparencyKey, value);
+            Properties.AddOrRemoveValue(s_propTransparencyKey, value);
             if (!IsMdiContainer)
             {
                 bool oldLayered = (_formState[s_formStateLayered] == 1);
@@ -2354,9 +2324,7 @@ public partial class Form : ContainerControl
     [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public FormCornerPreference FormCornerPreference
     {
-        get => Properties.ContainsInteger(s_propFormCornerPreference)
-            ? (FormCornerPreference)Properties.GetInteger(s_propFormCornerPreference)
-            : FormCornerPreference.Default;
+        get => Properties.GetValueOrDefault(s_propFormCornerPreference, FormCornerPreference.Default);
         set
         {
             if (value == FormCornerPreference)
@@ -2373,14 +2341,7 @@ public partial class Form : ContainerControl
                 _ => throw new ArgumentOutOfRangeException(nameof(value))
             };
 
-            if (value == FormCornerPreference.Default)
-            {
-                Properties.RemoveObject(s_propFormCornerPreference);
-            }
-            else
-            {
-                Properties.SetInteger(s_propFormCornerPreference, (int)value);
-            }
+            Properties.AddOrRemoveValue(s_propFormCornerPreference, value);
 
             if (IsHandleCreated)
             {
@@ -2922,8 +2883,8 @@ public partial class Form : ContainerControl
             return;
         }
 
-        Form?[]? ownedForms = (Form?[]?)Properties.GetObject(s_propOwnedForms);
-        int ownedFormsCount = Properties.GetInteger(s_propOwnedFormsCount);
+        Form?[]? ownedForms = Properties.GetValueOrDefault<Form?[]?>(s_propOwnedForms);
+        int ownedFormsCount = Properties.GetValueOrDefault<int>(s_propOwnedFormsCount);
 
         // Make sure this isn't already in the list:
         for (int i = 0; i < ownedFormsCount; i++)
@@ -2937,18 +2898,18 @@ public partial class Form : ContainerControl
         if (ownedForms is null)
         {
             ownedForms = new Form[4];
-            Properties.SetObject(s_propOwnedForms, ownedForms);
+            Properties.AddValue(s_propOwnedForms, ownedForms);
         }
         else if (ownedForms.Length == ownedFormsCount)
         {
             Form[] newOwnedForms = new Form[ownedFormsCount * 2];
             Array.Copy(ownedForms, 0, newOwnedForms, 0, ownedFormsCount);
             ownedForms = newOwnedForms;
-            Properties.SetObject(s_propOwnedForms, ownedForms);
+            Properties.AddValue(s_propOwnedForms, ownedForms);
         }
 
         ownedForms[ownedFormsCount] = ownedForm;
-        Properties.SetInteger(s_propOwnedFormsCount, ownedFormsCount + 1);
+        Properties.AddValue(s_propOwnedFormsCount, ownedFormsCount + 1);
     }
 
     // When shrinking the form (i.e. going from Large Fonts to Small
@@ -3565,24 +3526,24 @@ public partial class Form : ContainerControl
             CalledMakeVisible = false;
             CalledCreateControl = false;
 
-            if (Properties.ContainsObject(s_propAcceptButton))
+            if (Properties.ContainsKey(s_propAcceptButton))
             {
-                Properties.SetObject(s_propAcceptButton, null);
+                Properties.RemoveValue(s_propAcceptButton);
             }
 
-            if (Properties.ContainsObject(s_propCancelButton))
+            if (Properties.ContainsKey(s_propCancelButton))
             {
-                Properties.SetObject(s_propCancelButton, null);
+                Properties.RemoveValue(s_propCancelButton);
             }
 
-            if (Properties.ContainsObject(s_propDefaultButton))
+            if (Properties.ContainsKey(s_propDefaultButton))
             {
-                Properties.SetObject(s_propDefaultButton, null);
+                Properties.RemoveValue(s_propDefaultButton);
             }
 
-            if (Properties.ContainsObject(s_propActiveMdiChild))
+            if (Properties.ContainsKey(s_propActiveMdiChild))
             {
-                Properties.SetObject(s_propActiveMdiChild, null);
+                Properties.RemoveValue(s_propActiveMdiChild);
             }
 
             if (MdiWindowListStrip is not null)
@@ -3603,17 +3564,16 @@ public partial class Form : ContainerControl
                 MainMenuStrip = null;
             }
 
-            Form? owner = (Form?)Properties.GetObject(s_propOwner);
-            if (owner is not null)
+            if (Properties.TryGetValue(s_propOwner, out Form? owner))
             {
                 owner.RemoveOwnedForm(this);
-                Properties.SetObject(s_propOwner, null);
+                Properties.RemoveValue(s_propOwner);
             }
 
-            Properties.SetObject(s_propDialogOwner, null);
+            Properties.RemoveValue(s_propDialogOwner);
 
-            Form?[]? ownedForms = (Form?[]?)Properties.GetObject(s_propOwnedForms);
-            int ownedFormsCount = Properties.GetInteger(s_propOwnedFormsCount);
+            Form?[]? ownedForms = Properties.GetValueOrDefault<Form?[]?>(s_propOwnedForms);
+            int ownedFormsCount = Properties.GetValueOrDefault<int>(s_propOwnedFormsCount);
 
             for (int i = ownedFormsCount - 1; i >= 0; i--)
             {
@@ -3632,7 +3592,7 @@ public partial class Form : ContainerControl
 
             if (Properties.TryGetObject(s_propDummyMdiMenu, out HMENU dummyMenu) && !dummyMenu.IsNull)
             {
-                Properties.RemoveObject(s_propDummyMdiMenu);
+                Properties.RemoveValue(s_propDummyMdiMenu);
                 PInvoke.DestroyMenu(dummyMenu);
             }
 
@@ -4895,7 +4855,7 @@ public partial class Form : ContainerControl
         {
             // Fire FormClosed event on all the forms that this form owns and are not in the Application.OpenForms collection
             // This is to be consistent with what WmClose does.
-            int ownedFormsCount = Properties.GetInteger(s_propOwnedFormsCount);
+            int ownedFormsCount = Properties.GetValueOrDefault<int>(s_propOwnedFormsCount);
             if (ownedFormsCount > 0)
             {
                 Form[] ownedForms = OwnedForms;
@@ -4925,7 +4885,7 @@ public partial class Form : ContainerControl
         {
             // Fire FormClosing event on all the forms that this form owns and are not in the Application.OpenForms collection
             // This is to be consistent with what WmClose does.
-            int ownedFormsCount = Properties.GetInteger(s_propOwnedFormsCount);
+            int ownedFormsCount = Properties.GetValueOrDefault<int>(s_propOwnedFormsCount);
             if (ownedFormsCount > 0)
             {
                 Form[] ownedForms = OwnedForms;
@@ -5026,8 +4986,8 @@ public partial class Form : ContainerControl
             return;
         }
 
-        Form?[]? ownedForms = (Form?[]?)Properties.GetObject(s_propOwnedForms);
-        int ownedFormsCount = Properties.GetInteger(s_propOwnedFormsCount);
+        Form?[]? ownedForms = Properties.GetValueOrDefault<Form?[]?>(s_propOwnedForms);
+        int ownedFormsCount = Properties.GetValueOrDefault<int>(s_propOwnedFormsCount);
 
         if (ownedForms is not null)
         {
@@ -5049,7 +5009,7 @@ public partial class Form : ContainerControl
                 }
             }
 
-            Properties.SetInteger(s_propOwnedFormsCount, ownedFormsCount);
+            Properties.AddValue(s_propOwnedFormsCount, ownedFormsCount);
         }
     }
 
@@ -6122,10 +6082,7 @@ public partial class Form : ContainerControl
         if (IsHandleCreated && TopLevel)
         {
             IHandle<HWND> ownerHwnd = NullHandle<HWND>.Instance;
-
-            Form? owner = (Form?)Properties.GetObject(s_propOwner);
-
-            if (owner is not null)
+            if (Properties.TryGetValue(s_propOwner, out Form? owner))
             {
                 ownerHwnd = owner;
             }
@@ -6733,7 +6690,7 @@ public partial class Form : ContainerControl
 
                 // Call OnClosing/OnFormClosing on all the forms that current form owns.
                 Form[] ownedForms = OwnedForms;
-                int ownedFormsCount = Properties.GetInteger(s_propOwnedFormsCount);
+                int ownedFormsCount = Properties.GetValueOrDefault<int>(s_propOwnedFormsCount);
                 for (int i = ownedFormsCount - 1; i >= 0; i--)
                 {
                     FormClosingEventArgs cfe = new(CloseReason.FormOwnerClosing, e.Cancel);
@@ -6799,7 +6756,7 @@ public partial class Form : ContainerControl
 
                 // Call OnClosed/OnFormClosed on all the forms that current form owns.
                 Form[] ownedForms = OwnedForms;
-                int ownedFormsCount = Properties.GetInteger(s_propOwnedFormsCount);
+                int ownedFormsCount = Properties.GetValueOrDefault<int>(s_propOwnedFormsCount);
                 for (int i = ownedFormsCount - 1; i >= 0; i--)
                 {
                     fc = new FormClosedEventArgs(CloseReason.FormOwnerClosing);

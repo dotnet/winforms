@@ -437,12 +437,14 @@ public class ByteViewer : TableLayoutPanel
     {
         _scrollbarHeight = SystemInformation.HorizontalScrollBarHeight;
         _scrollbarWidth = SystemInformation.VerticalScrollBarWidth;
+
         // For backwards compat
-        Size = new Size(SCROLLBAR_START_X + _scrollbarWidth + BORDER_GAP + INSET_GAP,
-                             2 * (BORDER_GAP + INSET_GAP) + _rowCount * (CELL_HEIGHT));
+        Size = new Size(
+            SCROLLBAR_START_X + _scrollbarWidth + BORDER_GAP + INSET_GAP,
+            2 * (BORDER_GAP + INSET_GAP) + _rowCount * (CELL_HEIGHT));
 
         _scrollBar = new VScrollBar();
-        _scrollBar.ValueChanged += new EventHandler(ScrollChanged);
+        _scrollBar.ValueChanged += ScrollChanged;
         _scrollBar.TabStop = true;
         _scrollBar.TabIndex = 0;
         _scrollBar.Dock = DockStyle.Right;
@@ -557,8 +559,9 @@ public class ByteViewer : TableLayoutPanel
         if (Dock == DockStyle.None)
         {
             // For backwards compatibility
-            Size = new Size(SCROLLBAR_START_X + _scrollbarWidth + BORDER_GAP + INSET_GAP,
-                            2 * (BORDER_GAP + INSET_GAP) + _rowCount * (CELL_HEIGHT));
+            Size = new Size(
+                SCROLLBAR_START_X + _scrollbarWidth + BORDER_GAP + INSET_GAP,
+                2 * (BORDER_GAP + INSET_GAP) + _rowCount * (CELL_HEIGHT));
         }
 
         if (_scrollBar is not null)
