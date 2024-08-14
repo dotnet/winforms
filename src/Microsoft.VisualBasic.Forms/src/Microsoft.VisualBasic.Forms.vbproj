@@ -10,7 +10,7 @@
     <Deterministic>true</Deterministic>
     <OptionExplicit>On</OptionExplicit>
     <OptionStrict>On</OptionStrict>
-    <OptionInfer>On</OptionInfer>
+    <OptionInfer>Off</OptionInfer>
     <LangVersion>Latest</LangVersion>
     <VBRuntime>None</VBRuntime>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
