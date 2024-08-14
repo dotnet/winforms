@@ -1724,6 +1724,12 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
             return;
         }
 
+        if (win is Control control && control.IsDisposed)
+        {
+            Debug.Fail("The passed in control is disposed.");
+            return;
+        }
+
         if (GetHandleCreated())
         {
             ToolInfoWrapper<HandleRef<HWND>> info = new(Control.GetSafeHandle(win));
