@@ -62,5 +62,6 @@ public class SplitContainerDesignerTests
 
         Action action = () => _ = splitContainerDesigner.ActionLists;
         action.Should().NotThrow();
+        splitContainerDesigner.ActionLists.Count.Should().Be(0);
     }
 }
