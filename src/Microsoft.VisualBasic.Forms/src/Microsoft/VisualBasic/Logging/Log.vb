@@ -9,7 +9,7 @@ Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 Namespace Microsoft.VisualBasic.Logging
 
     ''' <summary>
-    '''  Enables logging to configured TraceListeners
+    '''  Enables logging to configured TraceListeners.
     ''' </summary>
     Partial Public Class Log
 

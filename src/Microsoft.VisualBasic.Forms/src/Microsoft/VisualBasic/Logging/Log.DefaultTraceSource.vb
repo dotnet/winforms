@@ -36,7 +36,9 @@ Namespace Microsoft.VisualBasic.Logging
                         _listenerAttributes = Attributes
                     End If
 
-                    ' TODO: This is a temporary fix, which will break configuring logging via file for the time being. See: https://github.com/dotnet/winforms/pull/7590
+                    ' TODO: This is a temporary fix, which will break configuring logging via
+                    ' file for the time being. See: https://github.com/dotnet/winforms/pull/7590
+                    ' REVIEWERS: Is this still true and should it be fixed?
                     Return False
                 End Get
             End Property

@@ -10,7 +10,7 @@ Namespace Microsoft.VisualBasic.Devices
     '''  current process.
     ''' </summary>
     <DebuggerTypeProxy(GetType(ComputerInfo.ComputerInfoDebugView))>
-    Public Class ComputerInfo
+    Partial Public Class ComputerInfo
 
         ' Cache our InternalMemoryStatus
         Private _internalMemoryStatus As InternalMemoryStatus
