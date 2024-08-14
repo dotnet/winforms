@@ -9,7 +9,7 @@
 
   <PropertyGroup>
     <_AxHostsPath>$([MSBuild]::NormalizePath('$(MSBuildProjectDirectory)', '..', 'System.Windows.Forms', 'tests', 'AxHosts', 'AxHosts.csproj'))</_AxHostsPath>
-    <_ProjectArgs>/p:Configuration=$(Configuration) /p:Platform=AnyCPU</_ProjectArgs>
+    <_ProjectArgs>/p:BuildWithNetFrameworkHostedCompiler=false /p:Configuration=$(Configuration) /p:Platform=AnyCPU</_ProjectArgs>
   </PropertyGroup>
 
   <Target Name="BuildAxHosts" BeforeTargets="AfterBuild" DependsOnTargets="FindFrameworkMsbuild">
