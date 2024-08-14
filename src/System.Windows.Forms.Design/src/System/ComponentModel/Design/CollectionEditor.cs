@@ -225,6 +225,13 @@ public partial class CollectionEditor : UITypeEditor
 
         Context = context;
 
+        // Check for custom editor
+        var customEditor = GetCustomEditor(context?.PropertyDescriptor);
+        if (customEditor != null)
+        {
+            return customEditor.EditValue(context, provider, value);
+        }
+
         // Child modal dialog - launching in SystemAware mode.
         CollectionForm localCollectionForm = ScaleHelper.InvokeInSystemAwareContext(CreateCollectionForm);
         ITypeDescriptorContext? lastContext = Context;
@@ -408,5 +415,30 @@ public partial class CollectionEditor : UITypeEditor
         {
             helpService.ShowHelpFromKeyword(HelpTopic);
         }
+    }
+
+    /// <summary>
+    ///  Gets a custom editor for the specified property descriptor, if available.
+    /// </summary>
+    private UITypeEditor? GetCustomEditor(PropertyDescriptor? propertyDescriptor)
+    {
+        if (propertyDescriptor is null)
+        {
+            return null;
+        }
+
+        var editorAttribute = propertyDescriptor.Attributes[typeof(EditorAttribute)] as EditorAttribute;
+        if (editorAttribute is null)
+        {
+            return null;
+        }
+
+        var editorType = Type.GetType(editorAttribute.EditorTypeName);
+        if (editorType is null)
+        {
+            return null;
+        }
+
+        return Activator.CreateInstance(editorType) as UITypeEditor;
     }
 }

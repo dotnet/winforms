@@ -100,9 +100,89 @@ public partial class CollectionEditor
                     }
 
                     break;
+
+                case PInvoke.WM_DRAWITEM:
+                    ListBox_drawItem(this, new DrawItemEventArgs(m.WParamInternal, m.LParamInternal));
+                    break;
             }
 
             base.WndProc(ref m);
+        }
+
+        private void ListBox_drawItem(object? sender, DrawItemEventArgs e)
+        {
+            if (e.Index != -1)
+            {
+                ListItem item = (ListItem)Items[e.Index];
+
+                Graphics g = e.Graphics;
+
+                int c = Items.Count;
+                int maxC = (c > 1) ? c - 1 : c;
+                // We add the +4 is a fudge factor...
+                SizeF sizeW = g.MeasureString(maxC.ToString(CultureInfo.CurrentCulture), Font);
+
+                int charactersInNumber = ((int)(Math.Log(maxC) / s_log10) + 1); // Luckily, this is never called if count = 0
+                int w = 4 + charactersInNumber * (Font.Height / 2);
+
+                w = Math.Max(w, (int)Math.Ceiling(sizeW.Width));
+                w += SystemInformation.BorderSize.Width * 4;
+
+                Rectangle button = e.Bounds with { Width = w };
+
+                ControlPaint.DrawButton(g, button, ButtonState.Normal);
+                button.Inflate(-SystemInformation.BorderSize.Width * 2, -SystemInformation.BorderSize.Height * 2);
+
+                int offset = w;
+
+                Color backColor = SystemColors.Window;
+                Color textColor = SystemColors.WindowText;
+                if ((e.State & DrawItemState.Selected) == DrawItemState.Selected)
+                {
+                    backColor = SystemColors.Highlight;
+                    textColor = SystemColors.HighlightText;
+                }
+
+                Rectangle res = e.Bounds with { X = e.Bounds.X + offset, Width = e.Bounds.Width - offset };
+                g.FillRectangle(new SolidBrush(backColor), res);
+                if ((e.State & DrawItemState.Focus) == DrawItemState.Focus)
+                {
+                    ControlPaint.DrawFocusRectangle(g, res);
+                }
+
+                offset += 2;
+
+                if (item.Editor is not null && item.Editor.GetPaintValueSupported())
+                {
+                    Rectangle baseVar = new(e.Bounds.X + offset, e.Bounds.Y + 1, PaintWidth, e.Bounds.Height - 3);
+                    g.DrawRectangle(SystemPens.ControlText, baseVar.X, baseVar.Y, baseVar.Width - 1, baseVar.Height - 1);
+                    baseVar.Inflate(-1, -1);
+                    item.Editor.PaintValue(item.Value, g, baseVar);
+                    offset += PaintIndent + TextIndent;
+                }
+
+                using (StringFormat format = new())
+                {
+                    format.Alignment = StringAlignment.Center;
+                    g.DrawString(e.Index.ToString(CultureInfo.CurrentCulture), Font, SystemBrushes.ControlText,
+                        e.Bounds with { Width = w }, format);
+                }
+
+                string itemText = GetDisplayText(item);
+
+                using (Brush textBrush = new SolidBrush(textColor))
+                {
+                    g.DrawString(itemText, Font, textBrush,
+                        e.Bounds with { X = e.Bounds.X + offset, Width = e.Bounds.Width - offset });
+                }
+
+                // Check to see if we need to change the horizontal extent of the listBox
+                int width = offset + (int)g.MeasureString(itemText, Font).Width;
+                if (width > e.Bounds.Width && HorizontalExtent < width)
+                {
+                    HorizontalExtent = width;
+                }
+            }
         }
     }
 }

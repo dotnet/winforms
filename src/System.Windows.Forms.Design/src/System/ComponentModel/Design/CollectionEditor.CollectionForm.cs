@@ -190,5 +190,30 @@ public partial class CollectionEditor
         ///  This is called when the value property in the <see cref="CollectionForm"/> has changed.
         /// </summary>
         protected abstract void OnEditValueChanged();
+
+        /// <summary>
+        ///  Gets a custom editor for the specified property descriptor, if available.
+        /// </summary>
+        protected UITypeEditor? GetCustomEditor(PropertyDescriptor? propertyDescriptor)
+        {
+            if (propertyDescriptor is null)
+            {
+                return null;
+            }
+
+            var editorAttribute = propertyDescriptor.Attributes[typeof(EditorAttribute)] as EditorAttribute;
+            if (editorAttribute is null)
+            {
+                return null;
+            }
+
+            var editorType = Type.GetType(editorAttribute.EditorTypeName);
+            if (editorType is null)
+            {
+                return null;
+            }
+
+            return Activator.CreateInstance(editorType) as UITypeEditor;
+        }
     }
 }
