@@ -76,5 +76,5 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             Return InternalPrincipal.IsInRole(role)
         End Function
 
-    End Class 'User
+    End Class
 End Namespace

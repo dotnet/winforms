@@ -139,5 +139,5 @@ Namespace Microsoft.VisualBasic.Logging
             End Sub
 
         End Class 'ReferencedStream
-    End Class 'FileLogTraceListener
+    End Class
 End Namespace
