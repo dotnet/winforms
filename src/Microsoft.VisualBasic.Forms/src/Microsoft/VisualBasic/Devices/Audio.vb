@@ -149,7 +149,7 @@ Namespace Microsoft.VisualBasic
 
             End Sub
 
-        End Class 'Audio
+        End Class
     End Namespace
 
     ''' <summary>

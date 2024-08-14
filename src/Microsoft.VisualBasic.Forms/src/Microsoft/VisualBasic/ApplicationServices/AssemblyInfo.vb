@@ -18,6 +18,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
     '''  framework, but reduced to a number of relevant properties.
     ''' </remarks>
     Public Class AssemblyInfo
+
         ' The assembly with the information.
         Private ReadOnly _assembly As Assembly
 

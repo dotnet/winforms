@@ -2,7 +2,6 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.Runtime.InteropServices
-Imports Microsoft.VisualBasic.CompilerServices
 
 Namespace Microsoft.VisualBasic.Devices
 
@@ -13,10 +12,10 @@ Namespace Microsoft.VisualBasic.Devices
     <DebuggerTypeProxy(GetType(ComputerInfo.ComputerInfoDebugView))>
     Public Class ComputerInfo
 
-        ' Keep the debugger proxy current as you change this class - see the nested ComputerInfoDebugView below.
-
         ' Cache our InternalMemoryStatus
         Private _internalMemoryStatus As InternalMemoryStatus
+
+        ' Keep the debugger proxy current as you change this class - see the nested ComputerInfoDebugView below.
 
         ''' <summary>
         '''  Default constructor
@@ -156,125 +155,5 @@ Namespace Microsoft.VisualBasic.Devices
             End Get
         End Property
 
-#Enable Warning IDE0049  ' Use language keywords instead of framework type names for type references
-
-        ''' <summary>
-        '''  Calls GlobalMemoryStatusEx and returns the correct value.
-        ''' </summary>
-        Private NotInheritable Class InternalMemoryStatus
-            Private _memoryStatusEx As NativeMethods.MEMORYSTATUSEX
-
-            Friend Sub New()
-            End Sub
-
-#Disable Warning IDE0049  ' Use language keywords instead of framework type names for type references, Justification:=<Public API>
-
-            Friend ReadOnly Property AvailablePhysicalMemory() As UInt64
-                Get
-                    Refresh()
-                    Return _memoryStatusEx.ullAvailPhys
-                End Get
-            End Property
-
-            Friend ReadOnly Property AvailableVirtualMemory() As UInt64
-                Get
-                    Refresh()
-                    Return _memoryStatusEx.ullAvailVirtual
-                End Get
-            End Property
-
-            Friend ReadOnly Property TotalPhysicalMemory() As UInt64
-                Get
-                    Refresh()
-                    Return _memoryStatusEx.ullTotalPhys
-                End Get
-            End Property
-
-            Friend ReadOnly Property TotalVirtualMemory() As UInt64
-                Get
-                    Refresh()
-                    Return _memoryStatusEx.ullTotalVirtual
-                End Get
-            End Property
-
-#Enable Warning IDE0049  ' Use language keywords instead of framework type names for type references
-
-            Private Sub Refresh()
-                _memoryStatusEx = New NativeMethods.MEMORYSTATUSEX
-                _memoryStatusEx.Init()
-                If (Not NativeMethods.GlobalMemoryStatusEx(_memoryStatusEx)) Then
-                    Throw ExceptionUtils.GetWin32Exception(SR.DiagnosticInfo_Memory)
-                End If
-            End Sub
-
-        End Class
-
-        ''' <summary>
-        '''  Debugger proxy for the <see cref="ComputerInfo"/>  class. The problem
-        '''  is that OSFullName can time out the debugger so we offer a view
-        '''  that doesn't have that field.
-        ''' </summary>
-        Friend NotInheritable Class ComputerInfoDebugView
-
-            <DebuggerBrowsable(DebuggerBrowsableState.Never)>
-            Private ReadOnly _instanceBeingWatched As ComputerInfo
-
-            Public Sub New(RealClass As ComputerInfo)
-                _instanceBeingWatched = RealClass
-            End Sub
-
-#Disable Warning IDE0049  ' Use language keywords instead of framework type names for type references, Justification:=<Public API>
-
-            <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
-            Public ReadOnly Property AvailablePhysicalMemory() As UInt64
-                Get
-                    Return _instanceBeingWatched.AvailablePhysicalMemory
-                End Get
-            End Property
-
-            <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
-            Public ReadOnly Property AvailableVirtualMemory() As UInt64
-                Get
-                    Return _instanceBeingWatched.AvailableVirtualMemory
-                End Get
-            End Property
-
-            <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
-            Public ReadOnly Property InstalledUICulture() As Globalization.CultureInfo
-                Get
-                    Return _instanceBeingWatched.InstalledUICulture
-                End Get
-            End Property
-
-            <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
-            Public ReadOnly Property OSPlatform() As String
-                Get
-                    Return _instanceBeingWatched.OSPlatform
-                End Get
-            End Property
-
-            <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
-            Public ReadOnly Property OSVersion() As String
-                Get
-                    Return _instanceBeingWatched.OSVersion
-                End Get
-            End Property
-
-            <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
-            Public ReadOnly Property TotalPhysicalMemory() As UInt64
-                Get
-                    Return _instanceBeingWatched.TotalPhysicalMemory
-                End Get
-            End Property
-
-            <DebuggerBrowsable(DebuggerBrowsableState.RootHidden)>
-            Public ReadOnly Property TotalVirtualMemory() As UInt64
-                Get
-                    Return _instanceBeingWatched.TotalVirtualMemory
-                End Get
-            End Property
-#Enable Warning IDE0049  ' Use language keywords instead of framework type names for type references
-
-        End Class
     End Class
 End Namespace

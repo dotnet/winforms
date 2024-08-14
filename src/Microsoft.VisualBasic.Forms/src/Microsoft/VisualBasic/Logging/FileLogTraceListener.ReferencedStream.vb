@@ -11,7 +11,7 @@ Namespace Microsoft.VisualBasic.Logging
             Implements IDisposable
 
             ' Used for synchronizing writing and reference counting
-            Private ReadOnly _syncObject As Object = New Object
+            Private ReadOnly _syncObject As New Object
 
             ' Indicates whether or not the object has been disposed
             Private _disposed As Boolean
@@ -139,5 +139,5 @@ Namespace Microsoft.VisualBasic.Logging
             End Sub
 
         End Class 'ReferencedStream
-    End Class 'FileLogTraceListener
+    End Class
 End Namespace

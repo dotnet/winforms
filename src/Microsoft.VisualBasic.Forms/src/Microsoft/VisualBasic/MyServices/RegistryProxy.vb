@@ -64,7 +64,10 @@ Namespace Microsoft.VisualBasic.MyServices
             Registry.SetValue(keyName, valueName, value)
         End Sub
 
-        Public Sub SetValue(keyName As String, valueName As String, value As Object,
+        Public Sub SetValue(
+            keyName As String,
+            valueName As String,
+            value As Object,
             valueKind As RegistryValueKind)
 
             Registry.SetValue(keyName, valueName, value, valueKind)
