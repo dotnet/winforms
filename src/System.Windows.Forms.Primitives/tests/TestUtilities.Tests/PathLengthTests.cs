@@ -21,14 +21,16 @@ public class PathLengthTests
 
         const int MaxRootLength = 40;
 
-        int maxLength = 260 - (currentRootLength > MaxRootLength
-            ? MaxRootLength
-            : MaxRootLength + (MaxRootLength - currentRootLength));
+        // Workaround for MAX_PATH limitation - https://learn.microsoft.com/windows/win32/fileio/maximum-file-path-limitation?tabs=registry
+        // Leave a char for the trailing null (MAX_PATH is 260)
+        int maxLength = 260 - 1 - (currentRootLength > MaxRootLength
+            ? 0
+            : MaxRootLength - currentRootLength);
 
         FileSystemEnumerable<string> enumerable = new(
             currentPath,
             (ref FileSystemEntry entry) => entry.ToFullPath(),
-            new EnumerationOptions() {  RecurseSubdirectories = true })
+            new EnumerationOptions() { RecurseSubdirectories = true })
             {
                 ShouldIncludePredicate = (ref FileSystemEntry entry) =>
                     // Directory doesn't contain a trailing slash
