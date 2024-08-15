@@ -40,8 +40,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  Setting this property inside the event handler causes a new default Font for Forms and UserControls to be set.
         ''' </summary>
         ''' <remarks>
-        '''  When the ApplyApplicationDefault event is raised, this property contains nothing. A new default Font for the
-        '''  application is applied by setting this property with a value different than nothing.
+        '''  When the ApplyApplicationDefault event is raised, this property contains
+        '''  nothing. A new default Font for the application is applied by setting
+        '''  this property with a value different than nothing.
         ''' </remarks>
         Public Property Font As Font
 

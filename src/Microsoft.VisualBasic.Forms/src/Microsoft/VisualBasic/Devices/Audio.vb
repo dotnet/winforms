@@ -149,27 +149,17 @@ Namespace Microsoft.VisualBasic
 
             End Sub
 
-            ''' <summary>
-            '''  Gets the full name and path for the file. Throws if unable to get full name and path.
-            ''' </summary>
-            ''' <param name="location">The filename being tested.</param>
-            ''' <returns>A full name and path of the file.</returns>
-            Private Shared Function ValidateFilename(location As String) As String
-                If String.IsNullOrEmpty(location) Then
-                    Throw ExUtils.GetArgumentNullException(NameOf(location))
-                End If
+        End Class
+    End Namespace
 
-                Return location
-            End Function
-
-            ''' <summary>
-            '''  Enum for three ways to play a .wav file.
-            ''' </summary>
-            Public Enum AudioPlayMode
-                ' Any changes to this enum must be reflected in ValidateAudioPlayModeEnum()
-                WaitToComplete = 0 'Synchronous
-                Background = 1     'Asynchronous
-                BackgroundLoop = 2 'Asynchronous and looping
-            End Enum
+    ''' <summary>
+    '''  Enum for three ways to play a .wav file.
+    ''' </summary>
+    Public Enum AudioPlayMode
+        ' Any changes to this enum must be reflected in ValidateAudioPlayModeEnum()
+        WaitToComplete = 0 'Synchronous
+        Background = 1     'Asynchronous
+        BackgroundLoop = 2 'Asynchronous and looping
+    End Enum
 
 End Namespace
