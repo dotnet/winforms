@@ -181,7 +181,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  to use the GDI+ render. We read this function in Main() (My template) to
         '''  determine how to set the text rendering flag on the WinForms application object.
         ''' </summary>
-        ''' <returns>True - Use GDI+ renderer. False - use GDI renderer.</returns>
+        ''' <returns><see langword="True"/> if uses GDI+ renderer. <see langword="False"/> if uses GDI renderer.</returns>
         <EditorBrowsable(EditorBrowsableState.Advanced)>
         Protected Shared ReadOnly Property UseCompatibleTextRendering() As Boolean
             Get
