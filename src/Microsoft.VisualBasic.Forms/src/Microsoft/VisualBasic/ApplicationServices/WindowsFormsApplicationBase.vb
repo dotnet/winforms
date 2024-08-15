@@ -252,23 +252,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             ' Informs My.Settings whether to save the settings on exit or not.
             Private _saveMySettingsOnExit As Boolean
 
-            ' The HighDpiMode the user picked from the AppDesigner or assigned to the ApplyApplicationsDefault event.
-            Private _highDpiMode As HighDpiMode = HighDpiMode.SystemAware
+            ' milliseconds.
 #Disable Warning WFO5001 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
-            ' The ColorMode (Classic/Light, System, Dark) the user assigned to the ApplyApplicationsDefault event.
-            ' Note: We aim to expose this to the App Designer in later runtime/VS versions.
-            Private _colorMode As SystemColorMode = SystemColorMode.Classic
 #Enable Warning WFO5001 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
-
-            For Each handler As UnhandledExceptionEventHandler In _unhandledExceptionHandlers
-                        handler?.Invoke(sender, e)
-                    Next
-
-                    ' Now that we are out of the UnhandledException handler, treat exceptions normally again.
-                    _processingUnhandledExceptionEvent = False
-                End If
-            End RaiseEvent
-            End Event
 
             ''' <summary>
             '''  Occurs when the application encounters an <see cref="UnhandledException"/>.

@@ -36,31 +36,30 @@ Namespace Microsoft.VisualBasic
                     hwndOwned = NativeMethods.GetWindow(hwndOwned, NativeTypes.GW_HWNDNEXT)
                 Loop
 
-                '  if scan failed, return an error
-                If IntPtr.op_Equality(hwndOwned, IntPtr.Zero) Then
-                    Throw New ArgumentException(ExUtils.GetResourceString(SR.ProcessNotFound, processId))
+                If (PathName Is Nothing) Then
+                    Throw New ArgumentNullException(VbUtils.GetResourceString(SR.Argument_InvalidNullValue1, "Pathname"))
                 End If
 
-                '  set active window to the owned one
-                hwndApp = hwndOwned
-            End If
+                If (Style < 0 OrElse Style > 9) Then
+                    Throw New ArgumentException(VbUtils.GetResourceString(SR.Argument_InvalidValue1, "Style"))
+                End If
 
-            ' SetActiveWindow on Win32 only activates the Window - it does
-            ' not bring to to the foreground unless the window belongs to
-            ' the current thread. NativeMethods.SetForegroundWindow() activates the
-            ' window, moves it to the foreground, and bumps the priority
-            ' of the thread which owns the window.
+                ' SetActiveWindow on Win32 only activates the Window - it does
+                ' not bring to to the foreground unless the window belongs to
+                ' the current thread. NativeMethods.SetForegroundWindow() activates the
+                ' window, moves it to the foreground, and bumps the priority
+                ' of the thread which owns the window.
 
-            Dim dwDummy As Integer ' dummy arg for SafeNativeMethods.GetWindowThreadProcessId
+                Dim dwDummy As Integer ' dummy arg for SafeNativeMethods.GetWindowThreadProcessId
 
-            ' Attach ourselves to the window we want to set focus to
-            NativeMethods.AttachThreadInput(0, SafeNativeMethods.GetWindowThreadProcessId(hwndApp, dwDummy), 1)
-            ' Make it foreground and give it focus, this will occur
-            ' synchronously because we are attached.
-            NativeMethods.SetForegroundWindow(hwndApp)
-            NativeMethods.SetFocus(hwndApp)
-            ' Unattached ourselves from the window
-            NativeMethods.AttachThreadInput(0, SafeNativeMethods.GetWindowThreadProcessId(hwndApp, dwDummy), 0)
+                ' Attach ourselves to the window we want to set focus to
+                NativeMethods.AttachThreadInput(0, SafeNativeMethods.GetWindowThreadProcessId(hwndApp, dwDummy), 1)
+                ' Make it foreground and give it focus, this will occur
+                ' synchronously because we are attached.
+                NativeMethods.SetForegroundWindow(hwndApp)
+                NativeMethods.SetFocus(hwndApp)
+                ' Unattached ourselves from the window
+                NativeMethods.AttachThreadInput(0, SafeNativeMethods.GetWindowThreadProcessId(hwndApp, dwDummy), 0)
         End Sub
 
         Private Function GetTitleFromAssembly(callingAssembly As Reflection.Assembly) As String
@@ -76,15 +75,33 @@ Namespace Microsoft.VisualBasic
             Catch ex As SecurityException
                 Dim fullName As String = callingAssembly.FullName
 
-                'Find the text up to the first comma. Note, this fails if the assembly has
-                'a comma in its name
-                Dim firstCommaLocation As Integer = fullName.IndexOf(","c)
-                If firstCommaLocation >= 0 Then
-                    title = fullName.Substring(0, firstCommaLocation)
+                If ok = 0 Then 'succeeded
+                    'Process ran to completion
+                    Shell = 0
                 Else
-                    'The name is not in the format we're expecting so return an empty string
-                    title = String.Empty
+                    'Wait timed out
+                    Shell = processInfo.dwProcessId
                 End If
+                Else
+                NativeMethods.WaitForInputIdle(safeProcessHandle, 10000)
+                Shell = processInfo.dwProcessId
+                End If
+                Else
+                'Check for a win32 error access denied. If it is, make and throw the exception.
+                'If not, throw FileNotFound
+                Const ERROR_ACCESS_DENIED As Integer = 5
+                If errorCode = ERROR_ACCESS_DENIED Then
+                    Throw ExUtils.VbMakeException(vbErrors.PermissionDenied)
+                End If
+
+                Throw ExUtils.VbMakeException(vbErrors.FileNotFound)
+                End If
+            Finally
+                safeProcessHandle.Close() ' Close the process handle will not cause the process to stop.
+                safeThreadHandle.Close()
+            End Try
+            Finally
+            startupInfo.Dispose()
             End Try
 
             Return title
@@ -197,6 +214,52 @@ Namespace Microsoft.VisualBasic
             Else
                 AppActivateHelper(windowHandle, Title)
             End If
+        End Sub
+
+        Private Sub AppActivateHelper(hwndApp As IntPtr, processId As String)
+            '  if no window with name (full or truncated) or task id, return an error
+            '  if the window is not enabled or not visible, get the first window owned by it that is not enabled or not visible
+            Dim hwndOwned As IntPtr
+            If (Not SafeNativeMethods.IsWindowEnabled(hwndApp) OrElse Not SafeNativeMethods.IsWindowVisible(hwndApp)) Then
+                '  scan to the next window until failure
+                hwndOwned = NativeMethods.GetWindow(hwndApp, NativeTypes.GW_HWNDFIRST)
+                Do While IntPtr.op_Inequality(hwndOwned, IntPtr.Zero)
+                    If IntPtr.op_Equality(NativeMethods.GetWindow(hwndOwned, NativeTypes.GW_OWNER), hwndApp) Then
+                        If (Not SafeNativeMethods.IsWindowEnabled(hwndOwned) OrElse Not SafeNativeMethods.IsWindowVisible(hwndOwned)) Then
+                            hwndApp = hwndOwned
+                            hwndOwned = NativeMethods.GetWindow(hwndApp, NativeTypes.GW_HWNDFIRST)
+                        Else
+                            Exit Do
+                        End If
+                    End If
+                    hwndOwned = NativeMethods.GetWindow(hwndOwned, NativeTypes.GW_HWNDNEXT)
+                Loop
+
+                '  if scan failed, return an error
+                If IntPtr.op_Equality(hwndOwned, IntPtr.Zero) Then
+                    Throw New ArgumentException(VbUtils.GetResourceString(SR.ProcessNotFound, processId))
+                End If
+
+                '  set active window to the owned one
+                hwndApp = hwndOwned
+            End If
+
+            ' SetActiveWindow on Win32 only activates the Window - it does
+            ' not bring to to the foreground unless the window belongs to
+            ' the current thread. NativeMethods.SetForegroundWindow() activates the
+            ' window, moves it to the foreground, and bumps the priority
+            ' of the thread which owns the window.
+
+            Dim dwDummy As Integer ' dummy arg for SafeNativeMethods.GetWindowThreadProcessId
+
+            ' Attach ourselves to the window we want to set focus to
+            NativeMethods.AttachThreadInput(0, SafeNativeMethods.GetWindowThreadProcessId(hwndApp, dwDummy), 1)
+            ' Make it foreground and give it focus, this will occur
+            ' synchronously because we are attached.
+            NativeMethods.SetForegroundWindow(hwndApp)
+            NativeMethods.SetFocus(hwndApp)
+            ' Unattached ourselves from the window
+            NativeMethods.AttachThreadInput(0, SafeNativeMethods.GetWindowThreadProcessId(hwndApp, dwDummy), 0)
         End Sub
 
         Public Function InputBox(Prompt As String, Title As String, DefaultResponse As String, XPos As Integer, YPos As Integer) As String
