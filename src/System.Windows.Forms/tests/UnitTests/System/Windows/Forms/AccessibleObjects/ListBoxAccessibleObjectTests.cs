@@ -248,18 +248,15 @@ public class ListBoxAccessibleObjectTests
         return accessibilityObject;
     }
 
-    #nullable enable
+#nullable enable
 
-    [WinFormsTheory]
-    [InlineData(false, AccessibleStates.Focusable)]
-    [InlineData(true, AccessibleStates.Focused | AccessibleStates.Focusable)]
-    public void ListBoxAccessibleObject_State_ShouldBeExpected(bool focusControl, AccessibleStates expectedState)
+    [WinFormsFact]
+    public void ListBoxAccessibleObject_State_ShouldBeExpected()
     {
         using Form form = new();
         using ListBox listBox = new();
-        form.Controls.Add(listBox);
-
         using TextBox textBox = new();
+        form.Controls.Add(listBox);
         form.Controls.Add(textBox);
 
         form.Show();
@@ -267,15 +264,11 @@ public class ListBoxAccessibleObjectTests
 
         textBox.Focus();
         listBox.Focused.Should().BeFalse();
+        listBox.AccessibilityObject.State.Should().Be(AccessibleStates.Focusable);
 
-        if (focusControl)
-        {
-            listBox.Focus();
-        }
-
-        var state = listBox.AccessibilityObject.State;
-
-        state.Should().Be(expectedState);
+        listBox.Focus();
+        listBox.Focused.Should().BeTrue();
+        listBox.AccessibilityObject.State.Should().Be(AccessibleStates.Focused | AccessibleStates.Focusable);
     }
 
     [WinFormsFact]
@@ -295,6 +288,8 @@ public class ListBoxAccessibleObjectTests
 
         listBox.ClearSelected();
         accessibleObject.GetSelected().Should().BeNull();
+
+        listBox.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsTheory]
@@ -308,11 +303,9 @@ public class ListBoxAccessibleObjectTests
             listBox.Items.Add($"Item {i + 1}");
         }
 
-        var accessibleObject = new ListBox.ListBoxAccessibleObject(listBox);
+        var accessibleObject = listBox.AccessibilityObject;
 
-        int childCount = accessibleObject.GetChildCount();
-
-        childCount.Should().Be(expectedCount);
+        accessibleObject.GetChildCount().Should().Be(expectedCount);
     }
 
     [WinFormsFact]
@@ -328,6 +321,8 @@ public class ListBoxAccessibleObjectTests
         var focusedObject = accessibleObject.GetFocused();
 
         focusedObject.Should().BeEquivalentTo(accessibleObject.GetChild(1));
+
+        listBox.IsHandleCreated.Should().BeTrue();
     }
 
     [WinFormsTheory]
@@ -344,7 +339,7 @@ public class ListBoxAccessibleObjectTests
             listBox.SelectedIndices.Add(selectedIndex);
             if (multipleSelection)
             {
-                listBox.SelectedIndices.Add(2); // Select an additional item for multiple selection scenarios
+                listBox.SelectedIndices.Add(2);
             }
         }
 
@@ -353,7 +348,7 @@ public class ListBoxAccessibleObjectTests
             listBox.ClearSelected();
         }
 
-        var accessibleObject = new ListBox.ListBoxAccessibleObject(listBox);
+        var accessibleObject = listBox.AccessibilityObject;
         var selectedObject = accessibleObject.GetSelected();
 
         if (expectedIndex.HasValue)
@@ -376,6 +371,7 @@ public class ListBoxAccessibleObjectTests
         var result = listBox.AccessibilityObject.HitTest(testPoint.X, testPoint.Y);
 
         result.Should().BeNull();
+        listBox.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsFact]
