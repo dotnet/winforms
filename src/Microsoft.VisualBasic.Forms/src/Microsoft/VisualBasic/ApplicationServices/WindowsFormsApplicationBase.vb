@@ -78,9 +78,11 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         Private _appSynchronizationContext As SynchronizationContext
 
+#Disable Warning WFO5001 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
         ' The ColorMode (Classic/Light, System, Dark) the user assigned to the ApplyApplicationsDefault event.
         ' Note: We aim to expose this to the App Designer in later runtime/VS versions.
         Private _colorMode As SystemColorMode = SystemColorMode.Classic
+#Enable Warning WFO5001 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
 
         ' We only need to show the splash screen once.
         ' Protect the user from himself if they are overriding our app model.
@@ -128,7 +130,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         Private _unhandledExceptionHandlers As List(Of UnhandledExceptionEventHandler)
 
-        ' milliseconds.
+        ' Milliseconds.
         Friend Const MinimumSplashExposureDefault As Integer = 2000
 
         Friend Const WinFormsExperimentalUrl As String = "https://aka.ms/winforms-experimental/{0}"
@@ -373,10 +375,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  Occurs when attempting to start a single-instance application and the application is already active.
         ''' </summary>
         Public Event StartupNextInstance As StartupNextInstanceEventHandler
-
-        ' milliseconds.
-#Disable Warning WFO5001 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
-#Enable Warning WFO5001 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
 
         ''' <summary>
         '''  Occurs when the application encounters an <see cref="UnhandledException"/>.
