@@ -53,11 +53,6 @@ Namespace Microsoft.VisualBasic.CompilerServices
         End Sub
 
         <DllImport("user32", CharSet:=CharSet.Auto, PreserveSig:=True, SetLastError:=True)>
-        Friend Function GetWindowText(hWnd As IntPtr, <Out(), MarshalAs(UnmanagedType.LPTStr)> lpString As StringBuilder, nMaxCount As Integer) As Integer
-#Enable Warning CA1838 ' Avoid 'StringBuilder' parameters for P/Invokes
-        End Function
-
-        <PreserveSig()>
         Friend Function GetWindowText(
             hWnd As IntPtr,
             <Out(),

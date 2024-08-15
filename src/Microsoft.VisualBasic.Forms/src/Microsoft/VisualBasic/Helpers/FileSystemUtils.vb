@@ -140,7 +140,6 @@ Namespace Microsoft.VisualBasic.CompilerServices
             path As String,
             paramName As String) As String
 
-            paramName As String) As String
             CheckFilePathTrailingSeparator(path, paramName)
             Return NormalizePath(path)
         End Function
