@@ -95,8 +95,8 @@ Namespace Microsoft.VisualBasic.Devices
         '''  Gets the platform OS name.
         ''' </summary>
         ''' <value>
-        '''  A string containing a Platform ID like "Win32NT", "Win32S",
-        '''  "Win32Windows". See PlatformID enum.
+        '''  A string containing a <see cref="PlatformID"/>  like "Win32NT", "Win32S",
+        '''  "Win32Windows". See <see cref="PlatformID"/> enum.
         ''' </value>
         ''' <exception cref="ExecutionEngineException">
         '''  Thrown if cannot obtain the OS Version information.

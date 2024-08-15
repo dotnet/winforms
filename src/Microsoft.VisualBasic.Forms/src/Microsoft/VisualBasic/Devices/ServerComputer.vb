@@ -63,7 +63,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         '''  Gets the object representing information about the computer's state
         ''' </summary>
-        ''' <value>A <see cref="ComputerInfo"/>  object.</value>
+        ''' <value>A <see cref="ComputerInfo"/> object.</value>
         ''' <remarks>
         '''  The instance returned by this property is lazy initialized and cached.
         ''' </remarks>
