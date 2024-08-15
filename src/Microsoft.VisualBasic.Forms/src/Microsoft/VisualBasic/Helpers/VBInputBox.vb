@@ -126,5 +126,6 @@ Namespace Microsoft.VisualBasic.CompilerServices
             End If
             MyBase.Dispose(disposing)
         End Sub
+
     End Class
 End Namespace

@@ -68,6 +68,7 @@ Namespace Microsoft.VisualBasic.Devices
                     Return _instanceBeingWatched.TotalVirtualMemory
                 End Get
             End Property
+
 #Enable Warning IDE0049  ' Use language keywords instead of framework type names for type references
 
         End Class

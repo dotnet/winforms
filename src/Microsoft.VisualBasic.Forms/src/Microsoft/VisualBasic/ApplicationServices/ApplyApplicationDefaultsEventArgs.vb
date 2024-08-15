@@ -46,12 +46,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Public Property Font As Font
 
         ''' <summary>
-        '''  Setting this Property inside the event handler determines how long an application's Splash dialog is displayed at a minimum.
-        ''' </summary>
-        Public Property MinimumSplashScreenDisplayTime As Integer =
-            WindowsFormsApplicationBase.MinimumSplashExposureDefault
-
-        ''' <summary>
         '''  Setting this Property inside the event handler determines the general HighDpiMode for the application.
         ''' </summary>
         ''' <remarks>
