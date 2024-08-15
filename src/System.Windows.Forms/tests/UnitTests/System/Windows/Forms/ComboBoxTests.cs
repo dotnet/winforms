@@ -2631,7 +2631,7 @@ public class ComboBoxTests
     [WinFormsFact]
     public void ComboBox_CorrectHeightAfterSetDropDownStyleSimple()
     {
-        using ComboBox comboBox = new ComboBox();
+        using ComboBox comboBox = new();
 
         int handleCreatedInvoked = 0;
         comboBox.HandleCreated += (s, e) =>
