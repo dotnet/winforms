@@ -48,18 +48,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
     <EditorBrowsable(EditorBrowsableState.Advanced)>
     Public Delegate Sub UnhandledExceptionEventHandler(sender As Object, e As UnhandledExceptionEventArgs)
 
-    ' Any changes to this enum must be reflected in ValidateAuthenticationModeEnumValue().
-    Public Enum AuthenticationMode
-        Windows
-        ApplicationDefined
-    End Enum
-
-    ' Any changes to this enum must be reflected in ValidateShutdownModeEnumValue().
-    Public Enum ShutdownMode
-        AfterMainFormCloses
-        AfterAllFormsClose
-    End Enum
-
     ''' <summary>
     '''  Provides the infrastructure for the VB Windows Forms application model.
     ''' </summary>

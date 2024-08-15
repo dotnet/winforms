@@ -172,10 +172,10 @@ public sealed partial class Application
                     Assembly? entryAssembly = Assembly.GetEntryAssembly();
                     if (entryAssembly is not null)
                     {
-                        object[] attrs = entryAssembly.GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
-                        if (attrs is not null && attrs.Length > 0)
+                        object[] attributes = entryAssembly.GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
+                        if (attributes is not null && attributes.Length > 0)
                         {
-                            s_companyName = ((AssemblyCompanyAttribute)attrs[0]).Company;
+                            s_companyName = ((AssemblyCompanyAttribute)attributes[0]).Company;
                         }
                     }
 
@@ -267,7 +267,7 @@ public sealed partial class Application
     {
         try
         {
-            // Can't use the Generator here, since it cannot deal with experimentals.
+            // Can't use the Generator here, since it cannot deal with experimentalIDs.
             _ = systemColorMode switch
             {
                 SystemColorMode.Classic => systemColorMode,
@@ -439,10 +439,10 @@ public sealed partial class Application
                     Assembly? entryAssembly = Assembly.GetEntryAssembly();
                     if (entryAssembly is not null)
                     {
-                        object[] attrs = entryAssembly.GetCustomAttributes(typeof(AssemblyProductAttribute), false);
-                        if (attrs is not null && attrs.Length > 0)
+                        object[] attributes = entryAssembly.GetCustomAttributes(typeof(AssemblyProductAttribute), false);
+                        if (attributes is not null && attributes.Length > 0)
                         {
-                            s_productName = ((AssemblyProductAttribute)attrs[0]).Product;
+                            s_productName = ((AssemblyProductAttribute)attributes[0]).Product;
                         }
                     }
 
@@ -507,10 +507,10 @@ public sealed partial class Application
                     Assembly? entryAssembly = Assembly.GetEntryAssembly();
                     if (entryAssembly is not null)
                     {
-                        object[] attrs = entryAssembly.GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false);
-                        if (attrs is not null && attrs.Length > 0)
+                        object[] attributes = entryAssembly.GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false);
+                        if (attributes is not null && attributes.Length > 0)
                         {
-                            s_productVersion = ((AssemblyInformationalVersionAttribute)attrs[0]).InformationalVersion;
+                            s_productVersion = ((AssemblyInformationalVersionAttribute)attributes[0]).InformationalVersion;
                         }
                     }
 
@@ -854,7 +854,7 @@ public sealed partial class Application
     }
 
     /// <summary>
-    ///  Occurs when an untrapped thread exception is thrown.
+    ///  Occurs when an un-trapped thread exception is thrown.
     /// </summary>
     public static event ThreadExceptionEventHandler? ThreadException
     {
