@@ -19,12 +19,20 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Sub
 
         ''' <summary>
-        '''  The name of the current user
+        '''  The principal representing the current user.
         ''' </summary>
-        Public ReadOnly Property Name() As String
+        ''' <value>An IPrincipal representing the current user</value>
+        ''' <remarks>
+        '''  This should be overridden by derived classes that don't get the current
+        '''  user from the current thread
+        ''' </remarks>
+        Protected Overridable Property InternalPrincipal() As IPrincipal
             Get
-                Return InternalPrincipal.Identity.Name
+                Return Thread.CurrentPrincipal
             End Get
+            Set(value As IPrincipal)
+                Thread.CurrentPrincipal = value
+            End Set
         End Property
 
         ''' <summary>
@@ -51,6 +59,15 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
         ''' <summary>
+        '''  The name of the current user
+        ''' </summary>
+        Public ReadOnly Property Name() As String
+            Get
+                Return InternalPrincipal.Identity.Name
+            End Get
+        End Property
+
+        ''' <summary>
         '''  Indicates whether or not the current user is a member of the passed in role
         ''' </summary>
         ''' <param name="role">The name of the role</param>
@@ -59,22 +76,5 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             Return InternalPrincipal.IsInRole(role)
         End Function
 
-        ''' <summary>
-        '''  The principal representing the current user.
-        ''' </summary>
-        ''' <value>An IPrincipal representing the current user</value>
-        ''' <remarks>
-        '''  This should be overridden by derived classes that don't get the current
-        '''  user from the current thread
-        ''' </remarks>
-        Protected Overridable Property InternalPrincipal() As IPrincipal
-            Get
-                Return Thread.CurrentPrincipal
-            End Get
-            Set(value As IPrincipal)
-                Thread.CurrentPrincipal = value
-            End Set
-        End Property
-
-    End Class 'User
+    End Class
 End Namespace
