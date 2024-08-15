@@ -15,7 +15,7 @@ Namespace Microsoft.VisualBasic.Devices
     '''   environment variables, etc. This class represent a general computer
     '''   available from a Windows Application, Web app, Dll library, etc.
     ''' </summary>
-    Public Class Computer : Inherits ServerComputer
+    Partial Public Class Computer : Inherits ServerComputer
 
         '  NOTE: The .Net design guidelines state that access to Instance members does not
         '  have to be thread-safe. Access to Shared members does have to be thread-safe.
