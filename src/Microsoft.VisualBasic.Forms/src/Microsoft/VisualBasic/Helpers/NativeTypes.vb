@@ -8,7 +8,6 @@ Namespace Microsoft.VisualBasic.CompilerServices
     <ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
     Partial Friend NotInheritable Class NativeTypes
 
-
         ' GetWindow() Constants
         Friend Const GW_HWNDFIRST As Integer = 0
         Friend Const GW_HWNDLAST As Integer = 1
