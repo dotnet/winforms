@@ -7,7 +7,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
 
     Partial Friend NotInheritable Class NativeTypes
 
-        ' Handle Values
+#Disable Warning CA1812 ' Supress warning as this is a type used in PInvoke and shouldn't be changed.
 
         ''' <summary>
         '''  Important!  This class should be used where the API being called has allocated the strings. That is why lpReserved, etc. are declared as IntPtrs instead
