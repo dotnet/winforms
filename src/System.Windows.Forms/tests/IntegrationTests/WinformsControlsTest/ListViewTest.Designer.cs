@@ -112,7 +112,7 @@ partial class ListViewTest
         this.btnClearListView1.TabIndex = 1;
         this.btnClearListView1.Text = "Clear";
         this.btnClearListView1.UseVisualStyleBackColor = true;
-        this.btnClearListView1.Click += new System.EventHandler(this.btnClearListView1_Click);
+        this.btnClearListView1.Click += this.btnClearListView1_Click;
         // 
         // btnLoadImagesListView1
         // 
@@ -122,7 +122,7 @@ partial class ListViewTest
         this.btnLoadImagesListView1.TabIndex = 2;
         this.btnLoadImagesListView1.Text = "Load images";
         this.btnLoadImagesListView1.UseVisualStyleBackColor = true;
-        this.btnLoadImagesListView1.Click += new System.EventHandler(this.btnLoadImagesListView1_Click);
+        this.btnLoadImagesListView1.Click += this.btnLoadImagesListView1_Click;
         // 
         // LargeImageList
         // 
@@ -144,7 +144,7 @@ partial class ListViewTest
         this.btnReplaceImageListView1.TabIndex = 3;
         this.btnReplaceImageListView1.Text = "Replace image";
         this.btnReplaceImageListView1.UseVisualStyleBackColor = true;
-        this.btnReplaceImageListView1.Click += new System.EventHandler(this.btnReplaceImageListView1_Click);
+        this.btnReplaceImageListView1.Click += this.btnReplaceImageListView1_Click;
         // 
         // ListViewTest
         // 

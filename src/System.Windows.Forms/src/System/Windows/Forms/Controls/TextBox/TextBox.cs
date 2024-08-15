@@ -188,7 +188,7 @@ public partial class TextBox : TextBoxBase
             if (_autoCompleteCustomSource is null)
             {
                 _autoCompleteCustomSource = [];
-                _autoCompleteCustomSource.CollectionChanged += new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
+                _autoCompleteCustomSource.CollectionChanged += OnAutoCompleteCustomSourceChanged;
             }
 
             return _autoCompleteCustomSource;
@@ -199,14 +199,14 @@ public partial class TextBox : TextBoxBase
             {
                 if (_autoCompleteCustomSource is not null)
                 {
-                    _autoCompleteCustomSource.CollectionChanged -= new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
+                    _autoCompleteCustomSource.CollectionChanged -= OnAutoCompleteCustomSourceChanged;
                 }
 
                 _autoCompleteCustomSource = value;
 
                 if (_autoCompleteCustomSource is not null)
                 {
-                    _autoCompleteCustomSource.CollectionChanged += new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
+                    _autoCompleteCustomSource.CollectionChanged += OnAutoCompleteCustomSourceChanged;
                 }
 
                 SetAutoComplete(false);
@@ -514,7 +514,7 @@ public partial class TextBox : TextBoxBase
             ResetAutoComplete(true);
             if (_autoCompleteCustomSource is not null)
             {
-                _autoCompleteCustomSource.CollectionChanged -= new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
+                _autoCompleteCustomSource.CollectionChanged -= OnAutoCompleteCustomSourceChanged;
             }
 
             if (_stringSource is not null)

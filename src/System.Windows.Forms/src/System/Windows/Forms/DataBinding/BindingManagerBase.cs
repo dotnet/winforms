@@ -34,8 +34,8 @@ public abstract class BindingManagerBase
                 _bindings = new ListManagerBindingsCollection(this);
 
                 // Hook collection change events on collection, so we can hook or unhook the BindingComplete events on individual bindings
-                _bindings.CollectionChanging += new CollectionChangeEventHandler(OnBindingsCollectionChanging);
-                _bindings.CollectionChanged += new CollectionChangeEventHandler(OnBindingsCollectionChanged);
+                _bindings.CollectionChanging += OnBindingsCollectionChanging;
+                _bindings.CollectionChanged += OnBindingsCollectionChanged;
             }
 
             return _bindings;
@@ -304,15 +304,15 @@ public abstract class BindingManagerBase
         switch (e.Action)
         {
             case CollectionChangeAction.Add:
-                binding.BindingComplete += new BindingCompleteEventHandler(Binding_BindingComplete);
+                binding.BindingComplete += Binding_BindingComplete;
                 break;
             case CollectionChangeAction.Remove:
-                binding.BindingComplete -= new BindingCompleteEventHandler(Binding_BindingComplete);
+                binding.BindingComplete -= Binding_BindingComplete;
                 break;
             case CollectionChangeAction.Refresh:
                 foreach (Binding bi in Bindings)
                 {
-                    bi.BindingComplete += new BindingCompleteEventHandler(Binding_BindingComplete);
+                    bi.BindingComplete += Binding_BindingComplete;
                 }
 
                 break;
@@ -328,7 +328,7 @@ public abstract class BindingManagerBase
 
         foreach (Binding bi in Bindings)
         {
-            bi.BindingComplete -= new BindingCompleteEventHandler(Binding_BindingComplete);
+            bi.BindingComplete -= Binding_BindingComplete;
         }
     }
 

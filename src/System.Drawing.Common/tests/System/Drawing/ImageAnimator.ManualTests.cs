@@ -48,7 +48,7 @@ public class ImageAnimatorManualTests
             Directory.CreateDirectory(testOutputFolder);
             frameIndexes[imageName] = 0;
 
-            handlers[imageName] = new EventHandler(new Action<object, EventArgs>((object o, EventArgs e) =>
+            handlers[imageName] = new(new Action<object, EventArgs>((object o, EventArgs e) =>
             {
                 Bitmap animation = (Bitmap)o;
                 ImageAnimator.UpdateFrames(animation);

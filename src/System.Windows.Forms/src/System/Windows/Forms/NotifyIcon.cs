@@ -31,7 +31,7 @@ public sealed partial class NotifyIcon : Component
     private const int WM_TRAYMOUSEMESSAGE = (int)PInvoke.WM_USER + 1024;
     private static uint WM_TASKBARCREATED { get; } = PInvoke.RegisterWindowMessage("TaskbarCreated");
 
-    private readonly object _syncObj = new();
+    private readonly Lock _lock = new();
 
     private Icon? _icon;
     private string _text = string.Empty;
@@ -623,7 +623,7 @@ public sealed partial class NotifyIcon : Component
     /// </summary>
     private unsafe void UpdateIcon(bool showIconInTray)
     {
-        lock (_syncObj)
+        lock (_lock)
         {
             // Bail if in design mode...
             if (DesignMode)

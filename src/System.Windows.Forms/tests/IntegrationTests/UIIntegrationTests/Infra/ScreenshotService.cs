@@ -8,7 +8,7 @@ namespace System.Windows.Forms.UITests;
 
 internal static class ScreenshotService
 {
-    private static readonly object s_gate = new();
+    private static readonly Lock s_lock = new();
 
     /// <summary>
     /// Takes a picture of the screen and saves it to the location specified by
@@ -22,7 +22,7 @@ internal static class ScreenshotService
         // 1. Only one screenshot is held in memory at a time to prevent running out of memory for large displays
         // 2. Only one screenshot is written to disk at a time to avoid exceptions if concurrent calls are writing
         //    to the same file
-        lock (s_gate)
+        lock (s_lock)
         {
             using var bitmap = TryCaptureFullScreen();
             if (bitmap is null)

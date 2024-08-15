@@ -201,7 +201,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         }
 
         _oleSite = new OleInterfaces(this);
-        _selectionChangeHandler = new EventHandler(OnNewSelection);
+        _selectionChangeHandler = OnNewSelection;
         _clsid = new Guid(clsid);
         _flags = flags;
 
@@ -210,7 +210,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         _axState[s_rejectSelection] = true;
 
         _isMaskEdit = _clsid.Equals(s_maskEdit_Clsid);
-        _onContainerVisibleChanged = new EventHandler(OnContainerVisibleChanged);
+        _onContainerVisibleChanged = OnContainerVisibleChanged;
     }
 
     private bool CanUIActivate => IsUserMode() || _editMode != EDITM_NONE;
@@ -887,11 +887,11 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             {
                 if (hook)
                 {
-                    changeService.ComponentRename += new ComponentRenameEventHandler(OnComponentRename);
+                    changeService.ComponentRename += OnComponentRename;
                 }
                 else
                 {
-                    changeService.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
+                    changeService.ComponentRename -= OnComponentRename;
                 }
 
                 _axState[s_renameEventHooked] = hook;
@@ -2554,12 +2554,12 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             _axState[s_refreshProperties] = value;
             if (value && !_axState[s_listeningToIdle])
             {
-                Application.Idle += new EventHandler(OnIdle);
+                Application.Idle += OnIdle;
                 _axState[s_listeningToIdle] = true;
             }
             else if (!value && _axState[s_listeningToIdle])
             {
-                Application.Idle -= new EventHandler(OnIdle);
+                Application.Idle -= OnIdle;
                 _axState[s_listeningToIdle] = false;
             }
         }

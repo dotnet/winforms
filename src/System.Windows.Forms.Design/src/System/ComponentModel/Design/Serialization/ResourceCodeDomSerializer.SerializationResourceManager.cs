@@ -34,17 +34,21 @@ internal partial class ResourceCodeDomSerializer
         {
             _manager = manager;
             _nameTable = [];
+
             // We need to know when we're done so we can push the resource file out.
-            manager.SerializationComplete += new EventHandler(OnSerializationComplete);
+            manager.SerializationComplete += OnSerializationComplete;
         }
 
         /// <summary>
-        ///  State the serializers use to determine if the declaration of this resource manager has been performed.  This is just per-document state we keep; we do not actually care about this value.
+        ///  State the serializers use to determine if the declaration of this resource manager has been performed. This
+        ///  is just per-document state we keep; we do not actually care about this value.
         /// </summary>
         public bool DeclarationAdded { get; set; }
 
         /// <summary>
-        ///  When a declaration is added, we also setup an expression other serializers can use to reference our resource declaration.  This bit tracks if we have setup this expression yet.  Note that the expression and declaration may be added at different times, if the declaration was added by a cached component.
+        ///  When a declaration is added, we also setup an expression other serializers can use to reference our resource
+        ///  declaration. This bit tracks if we have setup this expression yet. Note that the expression and declaration
+        ///  may be added at different times, if the declaration was added by a cached component.
         /// </summary>
         public bool ExpressionAdded { get; set; }
 

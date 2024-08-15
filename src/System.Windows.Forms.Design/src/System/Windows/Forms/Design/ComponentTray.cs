@@ -102,9 +102,9 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
             Debug.Assert(_menucmdArrangeIcons is null, "Non-Null Menu Command for ArrangeIcons");
             Debug.Assert(_menucmdLineupIcons is null, "Non-Null Menu Command for LineupIcons");
             Debug.Assert(_menucmdLargeIcons is null, "Non-Null Menu Command for LargeIcons");
-            _menucmdArrangeIcons = new MenuCommand(new EventHandler(OnMenuArrangeIcons), StandardCommands.ArrangeIcons);
-            _menucmdLineupIcons = new MenuCommand(new EventHandler(OnMenuLineupIcons), StandardCommands.LineupIcons);
-            _menucmdLargeIcons = new MenuCommand(new EventHandler(OnMenuShowLargeIcons), StandardCommands.ShowLargeIcons);
+            _menucmdArrangeIcons = new MenuCommand(OnMenuArrangeIcons, StandardCommands.ArrangeIcons);
+            _menucmdLineupIcons = new MenuCommand(OnMenuLineupIcons, StandardCommands.LineupIcons);
+            _menucmdLargeIcons = new MenuCommand(OnMenuShowLargeIcons, StandardCommands.ShowLargeIcons);
             _menucmdArrangeIcons.Checked = AutoArrange;
             _menucmdLargeIcons.Checked = ShowLargeIcons;
             mcs.AddCommand(_menucmdArrangeIcons);
@@ -115,7 +115,7 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
         IComponentChangeService componentChangeService = (IComponentChangeService)GetService(typeof(IComponentChangeService));
         if (componentChangeService is not null)
         {
-            componentChangeService.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
+            componentChangeService.ComponentRemoved += OnComponentRemoved;
         }
 
         if (GetService(typeof(IUIService)) is IUIService uiService)
@@ -158,13 +158,13 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
         ISelectionService selSvc = (ISelectionService)GetService(typeof(ISelectionService));
         if (selSvc is not null)
         {
-            selSvc.SelectionChanged += new EventHandler(OnSelectionChanged);
+            selSvc.SelectionChanged += OnSelectionChanged;
         }
 
         // Listen to the SystemEvents so that we can resync selection based on display settings etc.
-        SystemEvents.DisplaySettingsChanged += new EventHandler(OnSystemSettingChanged);
-        SystemEvents.InstalledFontsChanged += new EventHandler(OnSystemSettingChanged);
-        SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
+        SystemEvents.DisplaySettingsChanged += OnSystemSettingChanged;
+        SystemEvents.InstalledFontsChanged += OnSystemSettingChanged;
+        SystemEvents.UserPreferenceChanged += OnUserPreferenceChanged;
 
         if (GetService(typeof(BehaviorService)) is BehaviorService behSvc)
         {

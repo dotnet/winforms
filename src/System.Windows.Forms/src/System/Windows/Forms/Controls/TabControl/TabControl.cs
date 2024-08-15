@@ -1017,7 +1017,7 @@ public partial class TabControl : Control
         {
             if (_imageList is not null)
             {
-                _imageList.Disposed -= new EventHandler(DetachImageList);
+                _imageList.Disposed -= DetachImageList;
             }
         }
 

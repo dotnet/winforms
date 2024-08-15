@@ -4,11 +4,18 @@
     <SourceTargetFramework>$(TargetFramework)</SourceTargetFramework>
     <TargetFramework>$(TargetFramework)-windows7.0</TargetFramework>
     <DisableTransitiveFrameworkReferences>true</DisableTransitiveFrameworkReferences>
-    <RootNamespace>Microsoft.VisualBasic.Forms.Tests</RootNamespace>
+    <RootNamespace></RootNamespace>
     <LangVersion>latest</LangVersion>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <OptionExplicit>On</OptionExplicit>
+    <OptionInfer>Off</OptionInfer>
+    <OptionStrict>On</OptionStrict>
+    <MyType>WindowsFormsWithCustomSubMain</MyType>
+    <UseApplicationFramework>True</UseApplicationFramework>
+    <OutputType>Library</OutputType>
+    <RootNamespace></RootNamespace>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\..\..\System.Design\src\System.Design.Facade.csproj" />
     <ProjectReference Include="..\..\..\System.Drawing\src\System.Drawing.Facade.csproj" />

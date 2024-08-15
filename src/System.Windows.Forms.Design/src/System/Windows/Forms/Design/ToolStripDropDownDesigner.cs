@@ -235,8 +235,8 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
             // Unhook our services
             if (_selectionService is not null)
             {
-                _selectionService.SelectionChanged -= new EventHandler(OnSelectionChanged);
-                _selectionService.SelectionChanging -= new EventHandler(OnSelectionChanging);
+                _selectionService.SelectionChanged -= OnSelectionChanged;
+                _selectionService.SelectionChanging -= OnSelectionChanging;
             }
 
             DisposeMenu();
@@ -253,7 +253,7 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
 
             if (_undoEngine is not null)
             {
-                _undoEngine.Undone -= new EventHandler(OnUndone);
+                _undoEngine.Undone -= OnUndone;
             }
         }
 
@@ -371,8 +371,8 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
                 _selectionService.SetSelectedComponents(new IComponent[] { _host.RootComponent }, SelectionTypes.Replace);
             }
 
-            _selectionService.SelectionChanging += new EventHandler(OnSelectionChanging);
-            _selectionService.SelectionChanged += new EventHandler(OnSelectionChanged);
+            _selectionService.SelectionChanging += OnSelectionChanging;
+            _selectionService.SelectionChanged += OnSelectionChanged;
         }
 
         _designMenu = new MenuStrip
@@ -409,7 +409,7 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
         // Use the UndoEngine.Undone to show the dropdown again
         if (_undoEngine is null && TryGetService(out _undoEngine))
         {
-            _undoEngine.Undone += new EventHandler(OnUndone);
+            _undoEngine.Undone += OnUndone;
         }
     }
 

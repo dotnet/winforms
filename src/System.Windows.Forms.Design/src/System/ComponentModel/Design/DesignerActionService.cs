@@ -31,7 +31,7 @@ public class DesignerActionService : IDisposable
 
             if (serviceProvider.TryGetService(out IComponentChangeService? componentChangeService))
             {
-                componentChangeService.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
+                componentChangeService.ComponentRemoved += OnComponentRemoved;
             }
 
             _selectionService = serviceProvider.GetService<ISelectionService>();
@@ -128,7 +128,7 @@ public class DesignerActionService : IDisposable
 
             if (_serviceProvider.TryGetService(out IComponentChangeService? componentChangeService))
             {
-                componentChangeService.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
+                componentChangeService.ComponentRemoved -= OnComponentRemoved;
             }
         }
     }
@@ -192,7 +192,7 @@ public class DesignerActionService : IDisposable
 
                         if (hookupEvents)
                         {
-                            verb.CommandChanged += new EventHandler(OnVerbStatusChanged);
+                            verb.CommandChanged += OnVerbStatusChanged;
                         }
 
                         if (verb is { Enabled: true, Visible: true })

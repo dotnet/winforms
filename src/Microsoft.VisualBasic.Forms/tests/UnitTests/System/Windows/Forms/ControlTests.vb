@@ -2,9 +2,11 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.Windows.Forms
+Imports FluentAssertions
 Imports Xunit
 
 Namespace Microsoft.VisualBasic.Forms.Tests
+
     Partial Public Class ControlTests
 
         Public Shared Function FaultingFunc(a As Integer) As Integer
@@ -20,9 +22,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Using _control As New Control
                 _control.CreateControl()
 
-                Dim invoker As Action = AddressOf FaultingMethod
-                Dim exception As Exception = Assert.Throws(Of DivideByZeroException)(
-                    Sub() _control.Invoke(invoker))
+                Dim testCode As Action =
+                    Sub()
+                        _control.Invoke(AddressOf FaultingMethod)
+                    End Sub
+
+                Dim exception As Exception = Assert.Throws(Of DivideByZeroException)(testCode)
 
                 '    Expecting something Like the following.
                 '    The first frame must be the this method, followed by MarshaledInvoke at previous location.
@@ -38,8 +43,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 '       at System.Windows.Forms.Control.Invoke(Delegate method) in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6393
                 '       at Microsoft.VisualBasic.Forms.Tests.Microsoft.VisualBasic.Forms.Tests.ControlTests._Closure$__1-1._Lambda$__0() in ...\winforms\src\Microsoft.VisualBasic.Forms\tests\UnitTests\ControlTests.vb:line 18
 
-                Assert.Contains(NameOf(FaultingMethod), exception.StackTrace)
-                Assert.Contains(" System.Windows.Forms.Control.Invoke(Action method) ", exception.StackTrace)
+                exception.StackTrace.Should.Contain(NameOf(FaultingMethod))
+                exception.StackTrace.Should.Contain(" System.Windows.Forms.Control.Invoke(Action method) ")
             End Using
         End Sub
 
@@ -48,9 +53,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Using _control As New Control
                 _control.CreateControl()
 
-                Dim invoker As New MethodInvoker(AddressOf FaultingMethod)
-                Dim exception As Exception = Assert.Throws(Of DivideByZeroException)(
-                    Sub() _control.Invoke(invoker))
+                Dim testCode As Action =
+                    Sub()
+                        _control.Invoke(New MethodInvoker(AddressOf FaultingMethod))
+                    End Sub
+                Dim exception As Exception = Assert.Throws(Of DivideByZeroException)(testCode)
 
                 '    Expecting something Like the following.
                 '    The first frame must be the this method, followed by MarshaledInvoke at previous location.
@@ -66,8 +73,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 '       at System.Windows.Forms.Control.Invoke(Delegate method) in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6393
                 '       at Microsoft.VisualBasic.Forms.Tests.Microsoft.VisualBasic.Forms.Tests.ControlTests._Closure$__1-1._Lambda$__0() in ...\winforms\src\Microsoft.VisualBasic.Forms\tests\UnitTests\ControlTests.vb:line 18
 
-                Assert.Contains(NameOf(FaultingMethod), exception.StackTrace)
-                Assert.Contains(" System.Windows.Forms.Control.Invoke(Delegate method) ", exception.StackTrace)
+                exception.StackTrace.Should.Contain(NameOf(FaultingMethod))
+                exception.StackTrace.Should.Contain(" System.Windows.Forms.Control.Invoke(Delegate method) ")
             End Using
         End Sub
 
@@ -76,11 +83,13 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Using _control As New Control
                 _control.CreateControl()
 
-                Dim invoker As Func(Of Integer, Integer) = AddressOf FaultingFunc
-                Dim exception As Exception = Assert.Throws(Of DivideByZeroException)(
+                Dim testCode As Action =
                     Sub()
-                        Dim result As Integer = _control.Invoke(Function() invoker(19))
-                    End Sub)
+                        Dim result As Integer =
+                            _control.Invoke(Function() CType(AddressOf FaultingFunc, Func(Of Integer, Integer))(19))
+                    End Sub
+
+                Dim exception As Exception = Assert.Throws(Of DivideByZeroException)(testCode)
 
                 '    Expecting something Like the following.
                 '    The first frame must be the this method, followed by MarshaledInvoke at previous location.
@@ -94,8 +103,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 '       at Microsoft.VisualBasic.Forms.Tests.Microsoft.VisualBasic.Forms.Tests.ControlTests._Closure$__4-1._Lambda$__0() in ...\winforms\src\Microsoft.VisualBasic.Forms\tests\UnitTests\ControlTests.vb:line 111
                 '       at Xunit.Assert.RecordException(Action testCode) in C:\Dev\xunit\xunit\src\xunit.assert\Asserts\Record.cs:line 27
 
-                Assert.Contains(NameOf(FaultingFunc), exception.StackTrace)
-                Assert.Contains(" System.Windows.Forms.Control.Invoke[T](Func`1 method) ", exception.StackTrace)
+                exception.StackTrace.Should.Contain(NameOf(FaultingFunc))
+                exception.StackTrace.Should.Contain(" System.Windows.Forms.Control.Invoke[T](Func`1 method) ")
             End Using
         End Sub
 

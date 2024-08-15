@@ -281,7 +281,7 @@ public partial class ErrorProvider
             if (_timer is null)
             {
                 _timer = new Timer();
-                _timer.Tick += new EventHandler(OnTimer);
+                _timer.Tick += OnTimer;
             }
 
             _timer.Interval = _provider.BlinkRate;

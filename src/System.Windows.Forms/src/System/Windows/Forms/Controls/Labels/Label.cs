@@ -554,18 +554,14 @@ public partial class Label : Control, IAutomationLiveRegion
     [SRCategory(nameof(SR.CatAppearance))]
     public ContentAlignment ImageAlign
     {
-        get
-        {
-            int imageAlign = Properties.GetInteger(s_propImageAlign, out bool found);
-            return found ? (ContentAlignment)imageAlign : ContentAlignment.MiddleCenter;
-        }
+        get => Properties.GetValueOrDefault(s_propImageAlign, ContentAlignment.MiddleCenter);
         set
         {
             SourceGenerated.EnumValidator.Validate(value);
 
             if (value != ImageAlign)
             {
-                Properties.SetInteger(s_propImageAlign, (int)value);
+                Properties.AddValue(s_propImageAlign, value);
                 LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.ImageAlign);
                 Invalidate();
             }
@@ -702,18 +698,14 @@ public partial class Label : Control, IAutomationLiveRegion
     [SRCategory(nameof(SR.CatAppearance))]
     public virtual ContentAlignment TextAlign
     {
-        get
-        {
-            int textAlign = Properties.GetInteger(s_propTextAlign, out bool found);
-            return found ? (ContentAlignment)textAlign : ContentAlignment.TopLeft;
-        }
+        get => Properties.GetValueOrDefault(s_propTextAlign, ContentAlignment.TopLeft);
         set
         {
             SourceGenerated.EnumValidator.Validate(value);
 
             if (TextAlign != value)
             {
-                Properties.SetInteger(s_propTextAlign, (int)value);
+                Properties.AddValue(s_propTextAlign, value);
                 Invalidate();
 
                 // Change the TextAlignment for SystemDrawn Labels
@@ -961,8 +953,8 @@ public partial class Label : Control, IAutomationLiveRegion
             // Holding on to images and image list is a memory leak.
             if (ImageList is not null)
             {
-                ImageList.Disposed -= new EventHandler(DetachImageList);
-                ImageList.RecreateHandle -= new EventHandler(ImageListRecreateHandle);
+                ImageList.Disposed -= DetachImageList;
+                ImageList.RecreateHandle -= ImageListRecreateHandle;
                 Properties.SetObject(s_propImageList, null);
             }
 
@@ -1078,7 +1070,7 @@ public partial class Label : Control, IAutomationLiveRegion
         if (string.IsNullOrEmpty(Text))
         {
             // Empty labels return the font height + borders
-            using var hfont = GdiCache.GetHFONT(Font);
+            using var hfont = GdiCache.GetHFONTScope(Font);
             using var screen = GdiCache.GetScreenHdc();
 
             // This is the character that Windows uses to determine the extent
@@ -1136,7 +1128,7 @@ public partial class Label : Control, IAutomationLiveRegion
             padding = TextPaddingOptions.LeftAndRightPadding;
         }
 
-        using var hfont = GdiCache.GetHFONT(Font);
+        using var hfont = GdiCache.GetHFONTScope(Font);
         DRAWTEXTPARAMS dtParams = hfont.GetTextMargins(padding);
 
         // This is actually leading margin.

@@ -7,7 +7,7 @@ internal class Command : WeakReference
 {
     private static Command?[]? s_cmds;
     private static int s_icmdTry;
-    private static readonly object s_internalSyncObject = new();
+    private static readonly Lock s_internalSyncObject = new();
     private const int IdMin = 0x00100;
     private const int IdLim = 0x10000;
 
@@ -19,13 +19,7 @@ internal class Command : WeakReference
         AssignID(this);
     }
 
-    public virtual int ID
-    {
-        get
-        {
-            return _id;
-        }
-    }
+    public virtual int ID => _id;
 
     protected static void AssignID(Command cmd)
     {

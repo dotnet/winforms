@@ -163,18 +163,11 @@ public partial class DataGridViewRow : DataGridViewBand
 
     private string ErrorTextInternal
     {
-        get
-        {
-            object? errorText = Properties.GetObject(s_propRowErrorText);
-            return (string?)errorText ?? string.Empty;
-        }
+        get => Properties.GetStringOrEmptyString(s_propRowErrorText);
         set
         {
             string errorText = ErrorTextInternal;
-            if (!string.IsNullOrEmpty(value) || Properties.ContainsObject(s_propRowErrorText))
-            {
-                Properties.SetObject(s_propRowErrorText, value);
-            }
+            Properties.AddOrRemoveString(s_propRowErrorText, value);
 
             if (DataGridView is not null && !errorText.Equals(ErrorTextInternal))
             {

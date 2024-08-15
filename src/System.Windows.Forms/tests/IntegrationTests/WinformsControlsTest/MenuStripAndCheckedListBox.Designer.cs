@@ -288,8 +288,8 @@ partial class MenuStripAndCheckedListBox
         this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
         this.Name = "MenuStripAndCheckedListBox";
         this.Text = "MenuStrip and CheckedListBox";
-        this.Load += new System.EventHandler(this.MenuStripScaling_Load);
-        this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.MenuStripAndCheckedListBox_DpiChanged);
+        this.Load += this.MenuStripScaling_Load;
+        this.DpiChanged += this.MenuStripAndCheckedListBox_DpiChanged;
         this.menuStrip1.ResumeLayout(false);
         this.menuStrip1.PerformLayout();
         this.ResumeLayout(false);

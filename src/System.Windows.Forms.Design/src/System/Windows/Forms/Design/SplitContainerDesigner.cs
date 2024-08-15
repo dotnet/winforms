@@ -166,15 +166,15 @@ internal partial class SplitContainerDesigner : ParentControlDesigner
     {
         if (TryGetService(out ISelectionService? svc))
         {
-            svc.SelectionChanged -= new EventHandler(OnSelectionChanged);
+            svc.SelectionChanged -= OnSelectionChanged;
         }
 
         if (_splitContainer is not null)
         {
-            _splitContainer.MouseDown -= new MouseEventHandler(OnSplitContainer);
-            _splitContainer.SplitterMoved -= new SplitterEventHandler(OnSplitterMoved);
-            _splitContainer.SplitterMoving -= new SplitterCancelEventHandler(OnSplitterMoving);
-            _splitContainer.DoubleClick -= new EventHandler(OnSplitContainerDoubleClick);
+            _splitContainer.MouseDown -= OnSplitContainer;
+            _splitContainer.SplitterMoved -= OnSplitterMoved;
+            _splitContainer.SplitterMoving -= OnSplitterMoving;
+            _splitContainer.DoubleClick -= OnSplitContainerDoubleClick;
         }
 
         base.Dispose(disposing);
@@ -234,14 +234,14 @@ internal partial class SplitContainerDesigner : ParentControlDesigner
             Selected = _splitterPanel1;
         }
 
-        _splitContainer.MouseDown += new MouseEventHandler(OnSplitContainer);
-        _splitContainer.SplitterMoved += new SplitterEventHandler(OnSplitterMoved);
-        _splitContainer.SplitterMoving += new SplitterCancelEventHandler(OnSplitterMoving);
-        _splitContainer.DoubleClick += new EventHandler(OnSplitContainerDoubleClick);
+        _splitContainer.MouseDown += OnSplitContainer;
+        _splitContainer.SplitterMoved += OnSplitterMoved;
+        _splitContainer.SplitterMoving += OnSplitterMoving;
+        _splitContainer.DoubleClick += OnSplitContainerDoubleClick;
 
         if (TryGetService(out ISelectionService? svc))
         {
-            svc.SelectionChanged += new EventHandler(OnSelectionChanged);
+            svc.SelectionChanged += OnSelectionChanged;
         }
     }
 

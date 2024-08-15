@@ -24,9 +24,8 @@ public sealed partial class Application
 
         private static readonly Dictionary<uint, ThreadContext> s_contextHash = [];
 
-        // When this gets to zero, we'll invoke a full garbage
-        // collect and check for root/window leaks.
-        private static readonly object s_tcInternalSyncObject = new();
+        private static readonly Lock s_lock = new();
+        private readonly Lock _marshallingControlLock = new();
 
         private static int s_totalMessageLoopCount;
         private static msoloop s_baseLoopReason;
@@ -89,7 +88,7 @@ public sealed partial class Application
             _messageLoopCount = 0;
             t_currentThreadContext = this;
 
-            lock (s_tcInternalSyncObject)
+            lock (s_lock)
             {
                 s_contextHash[_id] = this;
             }
@@ -171,7 +170,7 @@ public sealed partial class Application
         }
 
         /// <summary>
-        ///  Retrieves the <see cref="MarshallingControl"/>.
+        ///  Retrieves the thread's marshalling control.
         /// </summary>
         internal Control MarshallingControl
         {
@@ -182,7 +181,7 @@ public sealed partial class Application
                     return control;
                 }
 
-                lock (this)
+                lock (_marshallingControlLock)
                 {
                     if (_marshallingControl is null)
                     {
@@ -317,7 +316,7 @@ public sealed partial class Application
                 }
                 finally
                 {
-                    lock (s_tcInternalSyncObject)
+                    lock (s_lock)
                     {
                         s_contextHash.Remove(_id);
                     }
@@ -445,7 +444,7 @@ public sealed partial class Application
 
         private static void ExitCommon(bool disposing)
         {
-            lock (s_tcInternalSyncObject)
+            lock (s_lock)
             {
                 if (s_contextHash is not null)
                 {

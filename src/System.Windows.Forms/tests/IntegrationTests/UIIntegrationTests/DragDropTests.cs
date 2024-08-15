@@ -955,7 +955,7 @@ public class DragDropTests : ControlTestBase
                 ImageScalingSize = new Size(25, 25)
             };
 
-            _contextMenuStrip.Opening += new CancelEventHandler(ContextMenuStrip_Opening);
+            _contextMenuStrip.Opening += ContextMenuStrip_Opening;
 
             ToolStrip = new()
             {

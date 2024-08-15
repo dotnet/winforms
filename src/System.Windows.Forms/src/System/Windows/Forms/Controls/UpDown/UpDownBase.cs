@@ -496,7 +496,7 @@ public abstract partial class UpDownBase : ContainerControl
     {
         base.OnHandleCreated(e);
         PositionControls();
-        SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(UserPreferenceChanged);
+        SystemEvents.UserPreferenceChanged += UserPreferenceChanged;
     }
 
     /// <summary>
@@ -504,7 +504,7 @@ public abstract partial class UpDownBase : ContainerControl
     /// </summary>
     protected override void OnHandleDestroyed(EventArgs e)
     {
-        SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(UserPreferenceChanged);
+        SystemEvents.UserPreferenceChanged -= UserPreferenceChanged;
         base.OnHandleDestroyed(e);
     }
 

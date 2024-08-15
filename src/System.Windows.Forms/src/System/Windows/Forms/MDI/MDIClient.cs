@@ -371,12 +371,12 @@ public sealed partial class MdiClient : Control
 
     internal override void OnInvokedSetScrollPosition(object? sender, EventArgs e)
     {
-        Application.Idle += new EventHandler(OnIdle); // do this on idle (it must be mega-delayed).
+        Application.Idle += OnIdle; // do this on idle (it must be mega-delayed).
     }
 
     private void OnIdle(object? sender, EventArgs e)
     {
-        Application.Idle -= new EventHandler(OnIdle);
+        Application.Idle -= OnIdle;
         base.OnInvokedSetScrollPosition(sender, e);
     }
 }

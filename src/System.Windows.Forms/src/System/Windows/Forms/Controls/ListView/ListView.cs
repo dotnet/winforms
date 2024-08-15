@@ -2309,9 +2309,9 @@ public partial class ListView : Control
         }
 
         // NOTE: any handlers added here should be removed in DetachGroupImageListHandlers
-        _imageListGroup.RecreateHandle += new EventHandler(GroupImageListRecreateHandle);
-        _imageListGroup.Disposed += new EventHandler(DetachImageList);
-        _imageListGroup.ChangeHandle += new EventHandler(GroupImageListChangedHandle);
+        _imageListGroup.RecreateHandle += GroupImageListRecreateHandle;
+        _imageListGroup.Disposed += DetachImageList;
+        _imageListGroup.ChangeHandle += GroupImageListChangedHandle;
     }
 
     private void AttachLargeImageListHandlers()
@@ -2322,9 +2322,9 @@ public partial class ListView : Control
         }
 
         // NOTE: any handlers added here should be removed in DetachLargeImageListHandlers
-        _imageListLarge.RecreateHandle += new EventHandler(LargeImageListRecreateHandle);
-        _imageListLarge.Disposed += new EventHandler(DetachImageList);
-        _imageListLarge.ChangeHandle += new EventHandler(LargeImageListChangedHandle);
+        _imageListLarge.RecreateHandle += LargeImageListRecreateHandle;
+        _imageListLarge.Disposed += DetachImageList;
+        _imageListLarge.ChangeHandle += LargeImageListChangedHandle;
     }
 
     private void AttachSmallImageListListHandlers()
@@ -2335,8 +2335,8 @@ public partial class ListView : Control
         }
 
         // NOTE: any handlers added here should be removed in DetachSmallImageListListHandlers
-        _imageListSmall.RecreateHandle += new EventHandler(SmallImageListRecreateHandle);
-        _imageListSmall.Disposed += new EventHandler(DetachImageList);
+        _imageListSmall.RecreateHandle += SmallImageListRecreateHandle;
+        _imageListSmall.Disposed += DetachImageList;
     }
 
     private void AttachStateImageListHandlers()
@@ -2347,8 +2347,8 @@ public partial class ListView : Control
         }
 
         // NOTE: any handlers added here should be removed in DetachStateImageListHandlers
-        _imageListState.RecreateHandle += new EventHandler(StateImageListRecreateHandle);
-        _imageListState.Disposed += new EventHandler(DetachImageList);
+        _imageListState.RecreateHandle += StateImageListRecreateHandle;
+        _imageListState.Disposed += DetachImageList;
     }
 
     public void AutoResizeColumns(ColumnHeaderAutoResizeStyle headerAutoResize)
@@ -3048,9 +3048,9 @@ public partial class ListView : Control
             return;
         }
 
-        _imageListGroup.RecreateHandle -= new EventHandler(GroupImageListRecreateHandle);
-        _imageListGroup.Disposed -= new EventHandler(DetachImageList);
-        _imageListGroup.ChangeHandle -= new EventHandler(GroupImageListChangedHandle);
+        _imageListGroup.RecreateHandle -= GroupImageListRecreateHandle;
+        _imageListGroup.Disposed -= DetachImageList;
+        _imageListGroup.ChangeHandle -= GroupImageListChangedHandle;
     }
 
     private void DetachLargeImageListHandlers()
@@ -3060,9 +3060,9 @@ public partial class ListView : Control
             return;
         }
 
-        _imageListLarge.RecreateHandle -= new EventHandler(LargeImageListRecreateHandle);
-        _imageListLarge.Disposed -= new EventHandler(DetachImageList);
-        _imageListLarge.ChangeHandle -= new EventHandler(LargeImageListChangedHandle);
+        _imageListLarge.RecreateHandle -= LargeImageListRecreateHandle;
+        _imageListLarge.Disposed -= DetachImageList;
+        _imageListLarge.ChangeHandle -= LargeImageListChangedHandle;
     }
 
     private void DetachSmallImageListListHandlers()
@@ -3072,8 +3072,8 @@ public partial class ListView : Control
             return;
         }
 
-        _imageListSmall.RecreateHandle -= new EventHandler(SmallImageListRecreateHandle);
-        _imageListSmall.Disposed -= new EventHandler(DetachImageList);
+        _imageListSmall.RecreateHandle -= SmallImageListRecreateHandle;
+        _imageListSmall.Disposed -= DetachImageList;
     }
 
     private void DetachStateImageListHandlers()
@@ -3083,8 +3083,8 @@ public partial class ListView : Control
             return;
         }
 
-        _imageListState.RecreateHandle -= new EventHandler(StateImageListRecreateHandle);
-        _imageListState.Disposed -= new EventHandler(DetachImageList);
+        _imageListState.RecreateHandle -= StateImageListRecreateHandle;
+        _imageListState.Disposed -= DetachImageList;
     }
 
     /// <summary>
