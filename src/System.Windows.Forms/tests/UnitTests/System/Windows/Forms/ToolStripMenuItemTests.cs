@@ -183,6 +183,225 @@ public class ToolStripMenuItemTests
         yield return new object[] { new CultureInfo("de-DE"), new CultureInfo("de-DE"), "Strg+Umschalttaste+K" };
     }
 
+    [WinFormsFact]
+    public void ToolStripMenuItem_Ctors_ShouldInitializeCorrectly()
+    {
+        using Image image = new Bitmap(10, 10);
+        const string text = "Test Item";
+
+        using ToolStripMenuItem itemWithImage = new(image);
+        itemWithImage.Image.Should().Be(image);
+        itemWithImage.Text.Should().BeNull();
+
+        using ToolStripMenuItem itemWithTextAndImage = new(text, image);
+        itemWithTextAndImage.Text.Should().Be(text);
+        itemWithTextAndImage.Image.Should().Be(image);
+    }
+
+    [WinFormsFact]
+    public void ToolStripMenuItem_Ctor_WithTextImageOnClickName_ShouldInitializeCorrectly()
+    {
+        using Image image = new Bitmap(10, 10);
+        const string text = "Test Item";
+        const string name = "TestName";
+        EventHandler onClick = (sender, e) => { };
+
+        using ToolStripMenuItem item = new(text, image, onClick, name);
+
+        item.Text.Should().Be(text);
+        item.Image.Should().Be(image);
+        item.Name.Should().Be(name);
+        item.Click += onClick;
+    }
+
+    [WinFormsFact]
+    public void ToolStripMenuItem_Ctor_WithTextImageOnClickShortcutKeys_ShouldInitializeCorrectly()
+    {
+        using Image image = new Bitmap(10, 10);
+        const string text = "Test Item";
+        EventHandler onClick = (sender, e) => { };
+        Keys shortcutKeys = Keys.Control | Keys.A;
+
+        using ToolStripMenuItem item = new(text, image, onClick, shortcutKeys);
+
+        item.Text.Should().Be(text);
+        item.Image.Should().Be(image);
+        item.Click += onClick;
+        item.ShortcutKeys.Should().Be(shortcutKeys);
+    }
+
+    [WinFormsFact]
+    public void ToolStripMenuItem_Ctor_TextImageDropDownItems_ShouldInitializeCorrectly()
+    {
+        using Image image = new Bitmap(10, 10);
+        string text = "Test Item";
+        ToolStripItem[] dropDownItems = { new ToolStripMenuItem("SubItem1"), new ToolStripMenuItem("SubItem2") };
+
+        using ToolStripMenuItem item = new(text, image, dropDownItems);
+
+        item.Text.Should().Be(text);
+        item.Image.Should().Be(image);
+        item.DropDownItems.Count.Should().Be(2);
+        item.DropDownItems[0].Text.Should().Be("SubItem1");
+        item.DropDownItems[1].Text.Should().Be("SubItem2");
+    }
+
+    [WinFormsFact]
+    public void ToolStripMenuItem_MdiForm_ShouldReturnExpected()
+    {
+        using Form mdiForm = new();
+        using ToolStripMenuItem itemWithMdiForm = new(mdiForm);
+        itemWithMdiForm.MdiForm.Should().Be(mdiForm);
+
+        using ToolStripMenuItem itemWithoutMdiForm = new(null as Form);
+        itemWithoutMdiForm.MdiForm.Should().BeNull();
+    }
+
+    [WinFormsFact]
+    public void ToolStripMenuItem_Clone_ShouldReturnExpected()
+    {
+        using ToolStripMenuItem original = new()
+        {
+            AccessibleName = "AccessibleName",
+            AccessibleRole = AccessibleRole.MenuItem,
+            Alignment = ToolStripItemAlignment.Right,
+            AllowDrop = true,
+            Anchor = AnchorStyles.Bottom,
+            AutoSize = false,
+            AutoToolTip = true,
+            BackColor = Color.Red,
+            BackgroundImage = new Bitmap(10, 10),
+            BackgroundImageLayout = ImageLayout.Center,
+            Checked = true,
+            CheckOnClick = true,
+            CheckState = CheckState.Checked,
+            DisplayStyle = ToolStripItemDisplayStyle.Image,
+            Dock = DockStyle.Bottom,
+            DoubleClickEnabled = true,
+            Enabled = false,
+            Font = new Font("Arial", 12),
+            ForeColor = Color.Blue,
+            Image = new Bitmap(10, 10),
+            ImageAlign = ContentAlignment.BottomCenter,
+            ImageScaling = ToolStripItemImageScaling.None,
+            ImageTransparentColor = Color.Green,
+            Margin = new Padding(1),
+            MergeAction = MergeAction.Append,
+            MergeIndex = 1,
+            Name = "Name",
+            Overflow = ToolStripItemOverflow.Always,
+            Padding = new Padding(2),
+            RightToLeft = RightToLeft.Yes,
+            ShortcutKeys = Keys.Control | Keys.A,
+            ShowShortcutKeys = false,
+            Tag = "Tag",
+            Text = "Text",
+            TextAlign = ContentAlignment.BottomRight,
+            TextDirection = ToolStripTextDirection.Vertical90,
+            TextImageRelation = TextImageRelation.ImageAboveText,
+            ToolTipText = "ToolTipText",
+            Visible = true,
+            Size = new Size(100, 50)
+        };
+
+        using ToolStripMenuItem clone = original.Clone();
+
+        clone.Should().NotBeSameAs(original);
+        clone.AccessibleName.Should().Be(original.AccessibleName);
+        clone.AccessibleRole.Should().Be(original.AccessibleRole);
+        clone.Alignment.Should().Be(original.Alignment);
+        clone.AllowDrop.Should().Be(original.AllowDrop);
+        clone.Anchor.Should().Be(original.Anchor);
+        clone.AutoSize.Should().Be(original.AutoSize);
+        clone.AutoToolTip.Should().Be(original.AutoToolTip);
+        clone.BackColor.Should().Be(original.BackColor);
+        clone.BackgroundImage.Should().Be(original.BackgroundImage);
+        clone.BackgroundImageLayout.Should().Be(original.BackgroundImageLayout);
+        clone.Checked.Should().Be(original.Checked);
+        clone.CheckOnClick.Should().Be(original.CheckOnClick);
+        clone.CheckState.Should().Be(original.CheckState);
+        clone.DisplayStyle.Should().Be(original.DisplayStyle);
+        clone.Dock.Should().Be(original.Dock);
+        clone.DoubleClickEnabled.Should().Be(original.DoubleClickEnabled);
+        clone.Enabled.Should().Be(original.Enabled);
+        clone.Font.Should().Be(original.Font);
+        clone.ForeColor.Should().Be(original.ForeColor);
+        clone.Image.Should().Be(original.Image);
+        clone.ImageAlign.Should().Be(original.ImageAlign);
+        clone.ImageScaling.Should().Be(original.ImageScaling);
+        clone.ImageTransparentColor.Should().Be(original.ImageTransparentColor);
+        clone.Margin.Should().Be(original.Margin);
+        clone.MergeAction.Should().Be(original.MergeAction);
+        clone.MergeIndex.Should().Be(original.MergeIndex);
+        clone.Name.Should().Be(original.Name);
+        clone.Overflow.Should().Be(original.Overflow);
+        clone.Padding.Should().Be(original.Padding);
+        clone.RightToLeft.Should().Be(original.RightToLeft);
+        clone.ShortcutKeys.Should().Be(original.ShortcutKeys);
+        clone.ShowShortcutKeys.Should().Be(original.ShowShortcutKeys);
+        clone.Tag.Should().Be(original.Tag);
+        clone.Text.Should().Be(original.Text);
+        clone.TextAlign.Should().Be(original.TextAlign);
+        clone.TextDirection.Should().Be(original.TextDirection);
+        clone.TextImageRelation.Should().Be(original.TextImageRelation);
+        clone.ToolTipText.Should().Be(original.ToolTipText);
+        clone.Visible.Should().Be(original.Visible);
+        clone.Size.Should().Be(original.Size);
+    }
+
+    [WinFormsFact]
+    public void ToolStripMenuItem_SetDeviceDpi_ShouldUpdateDpiAndDisposeImages()
+    {
+        using ToolStripMenuItem item = new();
+        dynamic accessor = item.TestAccessor().Dynamic;
+
+        accessor.DeviceDpi = 96;
+
+        accessor.t_indeterminateCheckedImage = new Bitmap(10, 10);
+        accessor.t_checkedImage = new Bitmap(10, 10);
+
+        accessor.DeviceDpi = 120;
+
+        ((object)accessor.t_indeterminateCheckedImage).Should().BeNull();
+        ((object)accessor.t_checkedImage).Should().BeNull();
+    }
+
+    [WinFormsFact]
+    public void ToolStripMenuItem_CheckedChanged_InvokeHandler()
+    {
+        ToolStripMenuItem item = new();
+        bool eventCalled = false;
+        EventHandler handler = (sender, e) => { eventCalled = true; };
+
+        item.CheckedChanged += handler;
+
+        item.Checked = true;
+        eventCalled.Should().BeTrue();
+
+        eventCalled = false;
+        item.Checked = false;
+        eventCalled.Should().BeTrue();
+
+        item.CheckedChanged -= handler;
+    }
+
+    [WinFormsFact]
+    public void ToolStripMenuItem_CheckStateChanged_InvokeHandler()
+    {
+        ToolStripMenuItem item = new();
+        bool eventInvoked = false;
+        EventHandler handler = (sender, e) => { eventInvoked = true; };
+
+        item.CheckStateChanged += handler;
+
+        item.CheckState = CheckState.Checked;
+        eventInvoked.Should().BeTrue();
+
+        eventInvoked = false;
+        item.CheckState = CheckState.Unchecked;
+        eventInvoked.Should().BeTrue();
+    }
+
     private class SubToolStripMenuItem : ToolStripMenuItem
     {
         public SubToolStripMenuItem() : base()
