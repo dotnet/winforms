@@ -4,7 +4,7 @@
 Imports Microsoft.VisualBasic.CompilerServices
 
 Namespace Microsoft.VisualBasic.Devices
-    Public Class ComputerInfo
+    Partial Public Class ComputerInfo
 
 #Enable Warning IDE0049  ' Use language keywords instead of framework type names for type references
 

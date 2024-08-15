@@ -2,7 +2,7 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Namespace Microsoft.VisualBasic.Devices
-    Public Class ComputerInfo
+    Partial Public Class ComputerInfo
 
         ''' <summary>
         '''  Debugger proxy for the <see cref="ComputerInfo"/>  class. The problem

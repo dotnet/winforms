@@ -54,7 +54,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Public Property HighDpiMode As HighDpiMode
 
         ''' <summary>
-        '''  Setting this Property inside the event handler determines how long an application's Splash dialog is displayed at a minimum.
+        '''  Setting this property inside the event handler determines how long an application's Splash dialog is displayed at a minimum.
         ''' </summary>
         Public Property MinimumSplashScreenDisplayTime As Integer =
             WindowsFormsApplicationBase.MinimumSplashExposureDefault
