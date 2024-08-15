@@ -8,16 +8,15 @@ Namespace Microsoft.VisualBasic.CompilerServices
     <ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
     Partial Friend NotInheritable Class NativeTypes
 
-#Disable Warning CA1812 ' Supress warning as this is a type used in PInvoke and shouldn't be changed.
-        Friend Const GW_CHILD As Integer = 5
 
         ' GetWindow() Constants
         Friend Const GW_HWNDFIRST As Integer = 0
         Friend Const GW_HWNDLAST As Integer = 1
         Friend Const GW_HWNDNEXT As Integer = 2
         Friend Const GW_HWNDPREV As Integer = 3
-        Friend Const GW_MAX As Integer = 5
         Friend Const GW_OWNER As Integer = 4
+        Friend Const GW_CHILD As Integer = 5
+        Friend Const GW_MAX As Integer = 5
 
         Friend Const NORMAL_PRIORITY_CLASS As Integer = &H20
 
