@@ -119,22 +119,22 @@ internal sealed class AddDesignerSerializationVisibilityCodeFixProvider : CodeFi
             .OfType<CompilationUnitSyntax>()
             .First();
 
-        var originalCompilationUnit = compilationUnit;
+        CompilationUnitSyntax originalCompilationUnit = compilationUnit;
 
         if (!hasUsings)
         {
             // We need to add a new line before the namespace/file-scoped-namespace declaration:
-            SyntaxTriviaList? leadingTriviaForNamespace = compilationUnit
+            SyntaxTriviaList? firstNodesLeadingTrivia = compilationUnit
                 .DescendantNodes()
-                .OfType<BaseNamespaceDeclarationSyntax>()
                 .FirstOrDefault()
                 .GetLeadingTrivia();
 
-            if (leadingTriviaForNamespace is not null)
-            {
-                compilationUnit = compilationUnit
-                    .WithLeadingTrivia(leadingTriviaForNamespace.Value.Add(SyntaxFactory.CarriageReturnLineFeed));
-            }
+            compilationUnit = firstNodesLeadingTrivia is null
+                ? compilationUnit
+                    .WithLeadingTrivia(SyntaxFactory.CarriageReturnLineFeed)
+                : compilationUnit
+                    .WithLeadingTrivia(firstNodesLeadingTrivia.Value
+                        .Add(SyntaxFactory.CarriageReturnLineFeed));
         }
 
         UsingDirectiveSyntax usingDirective = SyntaxFactory
