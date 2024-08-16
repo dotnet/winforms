@@ -2645,6 +2645,7 @@ public class ComboBoxTests
 
         comboBox.DropDownStyle = ComboBoxStyle.Simple;
 
+        comboBox.DropDownStyle.Should().Be(ComboBoxStyle.Simple);
         handleCreatedInvoked.Should().Be(2);
     }
 
