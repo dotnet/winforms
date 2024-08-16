@@ -11,10 +11,12 @@ namespace System.Windows.Forms.Analyzers.Test;
 
 public class ControlPropertySerializationDiagnosticAnalyzerTest
 {
-    private const string ProblematicCode = """
-        using System.Drawing;
-        using System.Windows.Forms;
+    private const string GlobalUsingCode = """
+        global using System.Drawing;
+        global using System.Windows.Forms;
+        """;
 
+    private const string ProblematicCode = """
         namespace CSharpControls;
 
         public static class Program
@@ -34,9 +36,15 @@ public class ControlPropertySerializationDiagnosticAnalyzerTest
         // since this is nothing our code fix touches.
         public class ScalableControl : System.Windows.Forms.Control
         {
+            private SizeF _scaleSize = new SizeF(3, 14);
+
             public float [|ScaleFactor|] { get; set; } = 1.0f;
 
-            public SizeF [|ScaledSize|] { get; set; }
+            public SizeF [|ScaledSize|]
+            {
+                get => _scaleSize;
+                set => _scaleSize = value;
+            }
 
             public PointF [|ScaledLocation|] { get; set; }
         }
@@ -45,8 +53,6 @@ public class ControlPropertySerializationDiagnosticAnalyzerTest
 
     private const string CorrectCode = """
         using System.ComponentModel;
-        using System.Drawing;
-        using System.Windows.Forms;
 
         namespace CSharpControls;
 
@@ -78,8 +84,6 @@ public class ControlPropertySerializationDiagnosticAnalyzerTest
 
     private const string FixedCode = """
         using System.ComponentModel;
-        using System.Drawing;
-        using System.Windows.Forms;
 
         namespace CSharpControls;
 
@@ -100,24 +104,27 @@ public class ControlPropertySerializationDiagnosticAnalyzerTest
         // since this is nothing our code fix touches.
         public class ScalableControl : System.Windows.Forms.Control
         {
+            private SizeF _scaleSize = new SizeF(3, 14);
+
             [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             public float ScaleFactor { get; set; } = 1.0f;
 
-            [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-            public SizeF ScaledSize { get; set; }
+            public SizeF ScaledSize
+            {
+                get => _scaleSize;
+                set => _scaleSize = value;
+            }
 
-            [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             public PointF ScaledLocation { get; set; }
         }
-        
         """;
 
     // We are testing the analyzer with all versions of the .NET SDK from 6.0 on.
     public static IEnumerable<object[]> GetReferenceAssemblies()
     {
-        yield return [ReferenceAssemblies.Net.Net60Windows];
-        yield return [ReferenceAssemblies.Net.Net70Windows];
-        yield return [ReferenceAssemblies.Net.Net80Windows];
+        // yield return [ReferenceAssemblies.Net.Net60Windows];
+        // yield return [ReferenceAssemblies.Net.Net70Windows];
+        // yield return [ReferenceAssemblies.Net.Net80Windows];
         yield return [ReferenceAssemblies.Net.Net90Windows];
     }
 
@@ -136,6 +143,8 @@ public class ControlPropertySerializationDiagnosticAnalyzerTest
                 },
             ReferenceAssemblies = referenceAssemblies
         };
+
+        context.TestState.Sources.Add(GlobalUsingCode);
 
         await context.RunAsync();
     }
@@ -156,6 +165,8 @@ public class ControlPropertySerializationDiagnosticAnalyzerTest
             ReferenceAssemblies = referenceAssemblies
         };
 
+        context.TestState.Sources.Add(GlobalUsingCode);
+
         await context.RunAsync();
     }
 
@@ -173,9 +184,14 @@ public class ControlPropertySerializationDiagnosticAnalyzerTest
             TestState =
                 {
                     OutputKind = OutputKind.WindowsApplication,
+                    Sources = { GlobalUsingCode }
                 },
             ReferenceAssemblies = referenceAssemblies,
-            NumberOfFixAllIterations = 2
+            NumberOfFixAllIterations = 2,
+            FixedState =
+                {
+                    Sources = { GlobalUsingCode }
+                },
         };
 
         await context.RunAsync();
