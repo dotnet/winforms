@@ -4835,7 +4835,7 @@ public partial class ListView : Control
             return;
         }
 
-        if (IsAccessibilityObjectCreated)
+        if (IsAccessibilityObjectCreated && e.Item.ListView == this)
         {
             ListViewItem item = e.Item;
             ToggleState oldValue = item.Checked ? ToggleState.ToggleState_Off : ToggleState.ToggleState_On;
