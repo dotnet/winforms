@@ -9,7 +9,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests;
 
-public class DateTimePickerTests: IDisposable
+public class DateTimePickerTests : IDisposable
 {
     private readonly DateTimePicker _dateTimePicker;
 
@@ -813,6 +813,46 @@ public class DateTimePickerTests: IDisposable
         control.ForeColorChanged -= handler;
         control.ForeColor = Color.Blue;
         callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_ForeColor_WithSerialize_GetAndSet_Success()
+    {
+        using DateTimePicker control = new();
+        control.ForeColor = Color.AliceBlue;
+
+        bool serializeForeColor = control.TestAccessor().Dynamic.ShouldSerializeForeColor();
+        serializeForeColor.Should().BeTrue();
+
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        Application.SetColorMode(SystemColorMode.System);
+        Application.IsDarkModeEnabled.Should().BeFalse();
+        control.ForeColor.Should().Be(Color.AliceBlue);
+
+        Application.SetColorMode(SystemColorMode.Dark);
+        Application.IsDarkModeEnabled.Should().BeTrue();
+        control.ForeColor.Should().Be(Color.AliceBlue);
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    }
+
+    [WinFormsFact]
+    public void DateTimePicker_ForeColor_WithoutSerialize_GetAndSet_Success()
+    {
+        using DateTimePicker control = new();
+        Color originalColor= control.ForeColor;
+
+        bool serializeForeColor = control.TestAccessor().Dynamic.ShouldSerializeForeColor();
+        serializeForeColor.Should().BeFalse();
+
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        Application.SetColorMode(SystemColorMode.System);
+        Application.IsDarkModeEnabled.Should().BeFalse();
+        control.ForeColor.Should().Be(originalColor);
+
+        Application.SetColorMode(SystemColorMode.Dark);
+        Application.IsDarkModeEnabled.Should().BeTrue();
+        control.ForeColor.Should().Be(SystemColors.WindowText);
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     }
 
     [WinFormsFact]
