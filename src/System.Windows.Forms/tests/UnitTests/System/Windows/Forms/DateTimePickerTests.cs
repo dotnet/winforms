@@ -845,12 +845,12 @@ public class DateTimePickerTests : IDisposable
         serializeForeColor.Should().BeFalse();
 
 #pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-        Application.SetColorMode(SystemColorMode.System);
-        Application.IsDarkModeEnabled.Should().BeFalse();
-        control.ForeColor.Should().Be(originalColor);
-
         Application.SetColorMode(SystemColorMode.Dark);
         Application.IsDarkModeEnabled.Should().BeTrue();
+        control.ForeColor.Should().Be(SystemColors.ControlText);
+
+        Application.SetColorMode(SystemColorMode.System);
+        Application.IsDarkModeEnabled.Should().BeFalse();
         control.ForeColor.Should().Be(SystemColors.WindowText);
 #pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     }
