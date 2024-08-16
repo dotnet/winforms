@@ -107,25 +107,36 @@ internal sealed class AddDesignerSerializationVisibilityCodeFixProvider : CodeFi
         root = root.ReplaceNode(propertyDeclarationSyntax, newProperty);
 
         // Let's check if we already have the using directive:
-        if (!root.DescendantNodes()
-                .OfType<UsingDirectiveSyntax>()
-                .Any(u => u?.Name?.ToString() == SystemComponentModelName))
+        if (root.DescendantNodes()
+            .OfType<UsingDirectiveSyntax>()
+            .Any(u => u?.Name?.ToString() == SystemComponentModelName))
         {
-            UsingDirectiveSyntax usingDirective = SyntaxFactory
-                .UsingDirective(SyntaxFactory.ParseName(SystemComponentModelName));
-
-            usingDirective = usingDirective
-                .WithAdditionalAnnotations(Simplifier.Annotation)
-                .WithAdditionalAnnotations(Formatter.Annotation);
-
-            // We need to add the using directive:
-            SyntaxNode firstNode = root.DescendantNodes().First();
-            root = root.InsertNodesBefore(firstNode, [usingDirective]);
+            document = document.WithSyntaxRoot(root);
+            return document;
         }
 
-        document = document.WithSyntaxRoot(root);
+        // Get the compilation unit:
+        CompilationUnitSyntax compilationUnit = root
+            .DescendantNodesAndSelf()
+            .OfType<CompilationUnitSyntax>()
+            .First();
+
+        UsingDirectiveSyntax usingDirective = SyntaxFactory
+            .UsingDirective(SyntaxFactory.ParseName(SystemComponentModelName));
+
+        usingDirective = usingDirective
+            .NormalizeWhitespace()
+            .WithTrailingTrivia(SyntaxFactory.CarriageReturnLineFeed)
+            .WithTrailingTrivia(SyntaxFactory.CarriageReturnLineFeed)
+            .WithAdditionalAnnotations(Simplifier.Annotation)
+            .WithAdditionalAnnotations(Formatter.Annotation);
 
         // Generate the new document:
+        document = document.WithSyntaxRoot(
+            root.ReplaceNode(
+                compilationUnit,
+                compilationUnit.AddUsings(usingDirective)));
+
         return document;
     }
 }
