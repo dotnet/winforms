@@ -252,11 +252,7 @@ public sealed partial class Application
     /// </summary>
     [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public static SystemColorMode ColorMode =>
-        !s_systemColorMode.HasValue
-            ? SystemColorMode.Classic
-            : s_systemColorMode.Value == SystemColorMode.System
-                ? SystemColorMode
-                : s_systemColorMode.Value;
+        s_systemColorMode ?? SystemColorMode.Classic;
 
     /// <summary>
     ///  Sets the default dark mode for the application.
@@ -388,7 +384,7 @@ public sealed partial class Application
     [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public static bool IsDarkModeEnabled =>
         !SystemInformation.HighContrast
-        && (ColorMode == SystemColorMode.Dark);
+        && (SystemColorMode == SystemColorMode.Dark);
 
     /// <summary>
     ///  Gets the path for the executable file that started the application.
