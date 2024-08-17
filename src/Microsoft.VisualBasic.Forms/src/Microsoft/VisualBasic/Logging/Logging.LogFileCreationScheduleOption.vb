@@ -12,5 +12,4 @@ Namespace Microsoft.VisualBasic.Logging
         Weekly      'YYYY-MM-DD for first day of this week
     End Enum
 
-
 End Namespace
