@@ -2496,7 +2496,7 @@ public partial class Form : ContainerControl
     [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     protected virtual void OnFormCaptionTextColorChanged(EventArgs e)
     {
-        if (Events[s_formCaptionBackColorChanged] is EventHandler eventHandler)
+        if (Events[s_formCaptionTextColorChanged] is EventHandler eventHandler)
         {
             eventHandler(this, e);
         }
