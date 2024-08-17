@@ -4,7 +4,7 @@
 Imports System.IO
 Imports System.Security
 
-Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
+Imports VbUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.CompilerServices
 
@@ -120,11 +120,11 @@ Namespace Microsoft.VisualBasic.CompilerServices
                                 paramName As String)
             ' Check for argument null
             If String.IsNullOrEmpty(path) Then
-                Throw ExUtils.GetArgumentNullException(paramName)
+                Throw VbUtils.GetArgumentNullException(paramName)
             End If
             If path.EndsWith(IO.Path.DirectorySeparatorChar, StringComparison.Ordinal) Or
                 path.EndsWith(IO.Path.AltDirectorySeparatorChar, StringComparison.Ordinal) Then
-                Throw ExUtils.GetArgumentExceptionWithArgName(paramName, SR.IO_FilePathException)
+                Throw VbUtils.GetArgumentExceptionWithArgName(paramName, SR.IO_FilePathException)
             End If
         End Sub
 

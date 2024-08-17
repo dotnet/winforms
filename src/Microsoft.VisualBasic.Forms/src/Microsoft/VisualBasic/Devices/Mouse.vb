@@ -3,7 +3,7 @@
 
 Imports System.Windows.Forms
 
-Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
+Imports VbUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.Devices
 
@@ -29,7 +29,7 @@ Namespace Microsoft.VisualBasic.Devices
                 If SystemInformation.MousePresent Then
                     Return SystemInformation.MouseButtonsSwapped
                 Else
-                    Throw ExUtils.GetInvalidOperationException(SR.Mouse_NoMouseIsPresent)
+                    Throw VbUtils.GetInvalidOperationException(SR.Mouse_NoMouseIsPresent)
                 End If
             End Get
         End Property
@@ -44,7 +44,7 @@ Namespace Microsoft.VisualBasic.Devices
                 If SystemInformation.MousePresent Then
                     Return SystemInformation.MouseWheelPresent
                 Else
-                    Throw ExUtils.GetInvalidOperationException(SR.Mouse_NoMouseIsPresent)
+                    Throw VbUtils.GetInvalidOperationException(SR.Mouse_NoMouseIsPresent)
                 End If
             End Get
         End Property
@@ -59,7 +59,7 @@ Namespace Microsoft.VisualBasic.Devices
                 If WheelExists Then
                     Return SystemInformation.MouseWheelScrollLines
                 Else
-                    Throw ExUtils.GetInvalidOperationException(SR.Mouse_NoWheelIsPresent)
+                    Throw VbUtils.GetInvalidOperationException(SR.Mouse_NoWheelIsPresent)
                 End If
             End Get
         End Property

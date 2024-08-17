@@ -4,7 +4,7 @@
 Imports System.ComponentModel
 Imports System.Text
 
-Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
+Imports VbUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.Logging
 
@@ -187,7 +187,7 @@ Namespace Microsoft.VisualBasic.Logging
         Public Sub WriteException(ex As Exception, severity As TraceEventType, additionalInfo As String, id As Integer)
 
             If ex Is Nothing Then
-                Throw ExUtils.GetArgumentNullException(NameOf(ex))
+                Throw VbUtils.GetArgumentNullException(NameOf(ex))
             End If
 
             Dim builder As New StringBuilder()
