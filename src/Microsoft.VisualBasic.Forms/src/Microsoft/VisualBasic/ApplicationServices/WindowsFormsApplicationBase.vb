@@ -72,7 +72,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ' Note: We aim to expose this to the App Designer in later runtime/VS versions.
         Private _colorMode As SystemColorMode = SystemColorMode.Classic
 
-#Enable Warning WFO5001 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
+#Enable Warning WFO5001
 
         ' We only need to show the splash screen once.
         ' Protect the user from himself if they are overriding our app model.
@@ -181,7 +181,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  to use the GDI+ render. We read this function in Main() (My template) to
         '''  determine how to set the text rendering flag on the WinForms application object.
         ''' </summary>
-        ''' <returns><see langword="True"/> if uses GDI+ renderer. <see langword="False"/> if uses GDI renderer.</returns>
+        ''' <value><see langword="True"/> if uses GDI+ renderer. <see langword="False"/> if uses GDI renderer.</value>
         <EditorBrowsable(EditorBrowsableState.Advanced)>
         Protected Shared ReadOnly Property UseCompatibleTextRendering() As Boolean
             Get
@@ -192,9 +192,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         '''  Gets or sets the ColorMode for the Application.
         ''' </summary>
-        ''' <returns>
+        ''' <value>
         '''  The <see cref="SystemColorMode"/> that the application is running in.
-        ''' </returns>
+        ''' </value>
         <Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat:=WinFormsExperimentalUrl)>
         <EditorBrowsable(EditorBrowsableState.Never)>
         Protected Property ColorMode As SystemColorMode
@@ -799,7 +799,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             {
                 .MinimumSplashScreenDisplayTime = MinimumSplashScreenDisplayTime
             }
-#Enable Warning WFO5001 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
+#Enable Warning WFO5001
 
             RaiseEvent ApplyApplicationDefaults(Me, applicationDefaultsEventArgs)
 
@@ -830,7 +830,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             ' Now, let's set VisualStyles and ColorMode:
             Application.SetColorMode(_colorMode)
 
-#Enable Warning WFO5001 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
+#Enable Warning WFO5001
 
             ' We'll handle "/nosplash" for you.
             If Not (commandLineArgs.Contains("/nosplash") OrElse Me.CommandLineArgs.Contains("-nosplash")) Then
@@ -953,7 +953,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  that execution shouldn't continue.
         ''' </summary>
         ''' <param name="e"></param>
-        ''' <returns>True indicates the exception event was raised / False it was not.</returns>
+        ''' <returns><see langword="True"/> indicates the exception event was raised / <see langword="False"/> it was not.</returns>
         <EditorBrowsable(EditorBrowsableState.Advanced)>
         Protected Overridable Function OnUnhandledException(e As UnhandledExceptionEventArgs) As Boolean
 

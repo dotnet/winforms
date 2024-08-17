@@ -28,7 +28,7 @@ Namespace Microsoft.VisualBasic.Logging
             ''' <summary>
             '''  Tells us whether this TraceSource found a config file to configure itself from.
             ''' </summary>
-            ''' <value>True - The TraceSource was configured from a config file.</value>
+            ''' <value><see langword="True"/> - The TraceSource was configured from a config file.</value>
             Public ReadOnly Property HasBeenConfigured() As Boolean
                 Get
                     ' This forces initialization of the attributes list

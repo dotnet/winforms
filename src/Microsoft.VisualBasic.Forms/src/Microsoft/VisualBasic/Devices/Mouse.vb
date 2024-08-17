@@ -37,7 +37,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         '''  Gets a value indicating whether a mouse with a mouse wheel is installed
         ''' </summary>
-        ''' <value>true if a mouse with a mouse wheel is installed, false otherwise.</value>
+        ''' <value><see langword="True"/> if a mouse with a mouse wheel is installed, false otherwise.</value>
         ''' <exception cref="InvalidOperationException">If no mouse is installed.</exception>
         Public ReadOnly Property WheelExists() As Boolean
             Get

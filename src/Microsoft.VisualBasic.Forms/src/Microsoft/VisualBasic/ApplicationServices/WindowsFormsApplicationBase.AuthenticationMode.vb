@@ -9,10 +9,4 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ApplicationDefined
     End Enum
 
-    ' Any changes to this enum must be reflected in ValidateShutdownModeEnumValue().
-    Public Enum ShutdownMode
-        AfterMainFormCloses
-        AfterAllFormsClose
-    End Enum
-
 End Namespace

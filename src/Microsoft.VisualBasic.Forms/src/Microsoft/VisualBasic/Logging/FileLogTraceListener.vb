@@ -291,7 +291,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <summary>
         '''  Indicates whether or not the file should be appended to or overwritten.
         ''' </summary>
-        ''' <value>True if the file should be appended to, otherwise False.</value>
+        ''' <value><see langword="True"/> if the file should be appended to, otherwise <see langword="False"/>.</value>
         Public Property Append() As Boolean
             Get
                 If Not _propertiesSet(APPEND_INDEX) Then
@@ -318,7 +318,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <summary>
         '''  Indicates whether or not the stream should be flushed after every write.
         ''' </summary>
-        ''' <value>True if the stream should be flushed after every write, otherwise False.</value>
+        ''' <value><see langword="True"/> if the stream should be flushed after every write, otherwise <see langword="False"/>.</value>
         Public Property AutoFlush() As Boolean
             Get
                 If Not _propertiesSet(AUTOFLUSH_INDEX) Then
@@ -478,7 +478,7 @@ Namespace Microsoft.VisualBasic.Logging
         '''  Indicates whether or not the host name of the logging machine should
         '''  be included in the output.
         ''' </summary>
-        ''' <value>True if the HostId should be included, otherwise False.</value>
+        ''' <value><see langword="True"/> if the HostId should be included, otherwise <see langword="False"/>.</value>
         Public Property IncludeHostName() As Boolean
             Get
                 If Not _propertiesSet(INCLUDEHOSTNAME_INDEX) Then
@@ -677,7 +677,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <summary>
         '''  Indicates whether or not the current date has changed to new day.
         ''' </summary>
-        ''' <returns>True if the date has changed, otherwise False.</returns>
+        ''' <returns><see langword="True"/> if the date has changed, otherwise <see langword="False">.</see>.</returns>
         Private Function DayChanged() As Boolean
             Return _day.Date <> Now.Date
         End Function
@@ -850,7 +850,7 @@ Namespace Microsoft.VisualBasic.Logging
         '''  the free disk space against the user's limits.
         ''' </summary>
         ''' <param name="newEntrySize">The size of what's about to be written to the file.</param>
-        ''' <returns>True if the limits aren't trespassed, otherwise False.</returns>
+        ''' <returns><see langword="True"/> if the limits aren't trespassed, otherwise <see langword="False"/>.</returns>
         ''' <remarks>This method is not 100% accurate if AutoFlush is False.</remarks>
         Private Function ResourcesAvailable(newEntrySize As Long) As Boolean
 
@@ -874,7 +874,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <summary>
         '''  Indicates whether or not the date has changed to a new week.
         ''' </summary>
-        ''' <returns>True if the date has changed, otherwise False.</returns>
+        ''' <returns><see langword="True"/> if the date has changed, otherwise <see langword="False"/>.</returns>
         Private Function WeekChanged() As Boolean
             Return _firstDayOfWeek.Date <> GetFirstDayOfWeek(Now.Date)
         End Function

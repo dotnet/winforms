@@ -6,12 +6,6 @@ Imports System.Threading
 
 Namespace Microsoft.VisualBasic.CompilerServices
 
-    Friend Enum VbErrors
-        None = 0
-        FileNotFound = 53
-        PermissionDenied = 70
-    End Enum
-
     ' Implements error utilities for Basic
     Friend Module ExceptionUtils
 

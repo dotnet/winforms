@@ -92,8 +92,8 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <summary>
         '''  Obtains information about the system's current usage of both physical and virtual memory.
         ''' </summary>
-        ''' <param name="lpBuffer">Pointer to a MEMORYSTATUSEX structure.</param>
-        ''' <returns>True if the function succeeds. Otherwise, False.</returns>
+        ''' <param name="lpBuffer">Pointer to a <see cref="MEMORYSTATUSEX"/> structure.</param>
+        ''' <returns><see langword="True"/> if the function succeeds. Otherwise, <see langword="False"/>.</returns>
         <DllImport("Kernel32.dll", CharSet:=CharSet.Auto, SetLastError:=True)>
         Friend Function GlobalMemoryStatusEx(ByRef lpBuffer As MEMORYSTATUSEX) As <MarshalAs(UnmanagedType.Bool)> Boolean
         End Function
