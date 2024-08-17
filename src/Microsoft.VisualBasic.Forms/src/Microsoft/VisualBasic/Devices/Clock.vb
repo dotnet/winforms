@@ -32,7 +32,7 @@ Namespace Microsoft.VisualBasic.Devices
             End Get
         End Property
 
-#Enable Warning IDE0049  ' Use language keywords instead of framework type names for type references
+#Enable Warning IDE0049
 
         ''' <summary>
         '''  This property wraps the Environment.TickCount property to get the
