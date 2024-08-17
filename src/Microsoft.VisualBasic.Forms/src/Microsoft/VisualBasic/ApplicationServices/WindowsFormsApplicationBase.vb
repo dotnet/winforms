@@ -550,6 +550,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             Debug.Assert(dpiSetResult, "We could net set the HighDpiMode.")
 
             ' Now, let's set VisualStyles and ColorMode:
+            If (_enableVisualStyles) Then
+                Application.EnableVisualStyles()
+            End If
+
             Application.SetColorMode(_colorMode)
 
 #Enable Warning WFO5001 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
