@@ -122,8 +122,8 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <returns>A new instance of <see cref="ComponentModel.Win32Exception"/>.</returns>
         ''' <remarks>There is no way to exclude the Win32 error so this function will call Marshal.GetLastWin32Error all the time.</remarks>
         Friend Function GetWin32Exception(
-                resourceID As String,
-                ParamArray placeHolders() As String) As ComponentModel.Win32Exception
+            resourceID As String,
+            ParamArray placeHolders() As String) As ComponentModel.Win32Exception
 
             Return New ComponentModel.Win32Exception(Marshal.GetLastWin32Error(), GetResourceString(resourceID, placeHolders))
         End Function
@@ -146,6 +146,29 @@ Namespace Microsoft.VisualBasic.CompilerServices
                 Case Else
                     Return New Exception(description)
             End Select
+
+        End Function
+
+        Friend Function VbMakeException(hr As Integer) As Exception
+            Dim sMsg As String
+
+            If hr > 0 AndAlso hr <= &HFFFFI Then
+                sMsg = VbUtils.GetResourceString(CType(hr, VbErrors))
+            Else
+                sMsg = String.Empty
+            End If
+            VbMakeException = VbMakeExceptionEx(hr, sMsg)
+        End Function
+
+        Friend Function VbMakeExceptionEx(number As Integer, sMsg As String) As Exception
+            Dim vBDefinedError As Boolean
+
+            VbMakeExceptionEx = BuildException(number, sMsg, vBDefinedError)
+
+            If vBDefinedError Then
+                ' .NET Framework implementation calls:
+                ' Err().SetUnmappedError(number)
+            End If
 
         End Function
 
