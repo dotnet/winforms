@@ -18,9 +18,9 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <returns>A new instance of <see cref="ArgumentException"/>.</returns>
         ''' <remarks>This is the preferred way to construct an argument exception.</remarks>
         Friend Function GetArgumentExceptionWithArgName(
-                argumentName As String,
-                resourceID As String,
-                ParamArray placeHolders() As String) As ArgumentException
+            argumentName As String,
+            resourceID As String,
+            ParamArray placeHolders() As String) As ArgumentException
 
             Return New ArgumentException(GetResourceString(resourceID, placeHolders), argumentName)
         End Function
@@ -43,9 +43,9 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <param name="placeHolders">Strings that will replace place holders in the resource string, if any.</param>
         ''' <returns>A new instance of <see cref="ArgumentNullException"/>.</returns>
         Friend Function GetArgumentNullException(
-                argumentName As String,
-                resourceID As String,
-                ParamArray placeHolders() As String) As ArgumentNullException
+            argumentName As String,
+            resourceID As String,
+            ParamArray placeHolders() As String) As ArgumentNullException
 
             Return New ArgumentNullException(argumentName, GetResourceString(resourceID, placeHolders))
         End Function
@@ -57,8 +57,8 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <param name="placeHolders">Strings that will replace place holders in the resource string, if any.</param>
         ''' <returns>A new instance of <see cref="IO.DirectoryNotFoundException"/>.</returns>
         Friend Function GetDirectoryNotFoundException(
-                resourceID As String,
-                ParamArray placeHolders() As String) As IO.DirectoryNotFoundException
+            resourceID As String,
+            ParamArray placeHolders() As String) As IO.DirectoryNotFoundException
 
             Return New IO.DirectoryNotFoundException(GetResourceString(resourceID, placeHolders))
         End Function
@@ -71,9 +71,9 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <param name="placeHolders">Strings that will replace place holders in the resource string, if any.</param>
         ''' <returns>A new instance of <see cref="IO.FileNotFoundException"/>.</returns>
         Friend Function GetFileNotFoundException(
-                fileName As String,
-                resourceID As String,
-                ParamArray placeHolders() As String) As IO.FileNotFoundException
+            fileName As String,
+            resourceID As String,
+            ParamArray placeHolders() As String) As IO.FileNotFoundException
 
             Return New IO.FileNotFoundException(GetResourceString(resourceID, placeHolders), fileName)
         End Function
@@ -85,8 +85,8 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <param name="placeHolders">Strings that will replace place holders in the resource string, if any.</param>
         ''' <returns>A new instance of <see cref="InvalidOperationException"/>.</returns>
         Friend Function GetInvalidOperationException(
-                resourceID As String,
-                ParamArray placeHolders() As String) As InvalidOperationException
+            resourceID As String,
+            ParamArray placeHolders() As String) As InvalidOperationException
 
             Return New InvalidOperationException(GetResourceString(resourceID, placeHolders))
         End Function
@@ -98,8 +98,8 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <param name="placeHolders">Strings that will replace place holders in the resource string, if any.</param>
         ''' <returns>A new instance of <see cref="IO.IOException"/>.</returns>
         Friend Function GetIOException(
-                resourceID As String,
-                ParamArray placeHolders() As String) As IO.IOException
+            resourceID As String,
+            ParamArray placeHolders() As String) As IO.IOException
 
             Return New IO.IOException(GetResourceString(resourceID, placeHolders))
         End Function
