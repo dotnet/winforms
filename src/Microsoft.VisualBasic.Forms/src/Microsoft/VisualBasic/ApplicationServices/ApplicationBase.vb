@@ -3,7 +3,7 @@
 
 Imports System.Threading
 
-Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
+Imports VbUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.ApplicationServices
 
@@ -112,7 +112,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
             ' Since the explicitly requested a specific environment variable and we couldn't find it, throw
             If variableValue Is Nothing Then
-                Throw ExUtils.GetArgumentExceptionWithArgName(
+                Throw VbUtils.GetArgumentExceptionWithArgName(
                     NameOf(name),
                     SR.EnvVarNotFound_Name,
                     name)

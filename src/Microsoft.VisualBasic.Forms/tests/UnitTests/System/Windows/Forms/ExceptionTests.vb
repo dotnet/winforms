@@ -6,7 +6,7 @@ Imports FluentAssertions
 Imports Microsoft.VisualBasic.ApplicationServices
 Imports Xunit
 
-Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
+Imports VbUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.Forms.Tests
 
@@ -16,7 +16,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub CantStartSingleInstanceExceptionTest()
             Dim ex As Exception = New CantStartSingleInstanceException()
             ex.Should.BeOfType(Of CantStartSingleInstanceException)()
-            ex.Message.Should.Be(ExUtils.GetResourceString(SR.AppModel_SingleInstanceCantConnect))
+            ex.Message.Should.Be(VbUtils.GetResourceString(SR.AppModel_SingleInstanceCantConnect))
 
             ex = New CantStartSingleInstanceException("Test")
             ex.Should.BeOfType(Of CantStartSingleInstanceException)()
@@ -32,7 +32,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub NoStartupFormExceptionTest()
             Dim ex As Exception = New NoStartupFormException()
             ex.Should.BeOfType(Of NoStartupFormException)()
-            ex.Message.Should.Be(ExUtils.GetResourceString(SR.AppModel_NoStartupForm))
+            ex.Message.Should.Be(VbUtils.GetResourceString(SR.AppModel_NoStartupForm))
 
             ex = New NoStartupFormException("Test")
             ex.Should.BeOfType(Of NoStartupFormException)()

@@ -3,7 +3,7 @@
 
 Imports System.IO
 
-Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
+Imports VbUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.Devices
 
@@ -38,7 +38,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <returns>A full name and path of the file.</returns>
         Private Shared Function ValidateFilename(location As String) As String
             If String.IsNullOrEmpty(location) Then
-                Throw ExUtils.GetArgumentNullException(NameOf(location))
+                Throw VbUtils.GetArgumentNullException(NameOf(location))
             End If
 
             Return location
@@ -110,7 +110,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="playMode">The mode in which the array should be played.</param>
         Public Sub Play(data() As Byte, playMode As AudioPlayMode)
             If data Is Nothing Then
-                Throw ExUtils.GetArgumentNullException(NameOf(data))
+                Throw VbUtils.GetArgumentNullException(NameOf(data))
             End If
             ValidateAudioPlayModeEnum(playMode, NameOf(playMode))
 
@@ -127,7 +127,7 @@ Namespace Microsoft.VisualBasic.Devices
         Public Sub Play(stream As Stream, playMode As AudioPlayMode)
             ValidateAudioPlayModeEnum(playMode, NameOf(playMode))
             If stream Is Nothing Then
-                Throw ExUtils.GetArgumentNullException(NameOf(stream))
+                Throw VbUtils.GetArgumentNullException(NameOf(stream))
             End If
 
             Play(New Media.SoundPlayer(stream), playMode)
@@ -140,7 +140,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <remarks>Plays the sound asynchronously.</remarks>
         Public Sub PlaySystemSound(systemSound As Media.SystemSound)
             If systemSound Is Nothing Then
-                Throw ExUtils.GetArgumentNullException(NameOf(systemSound))
+                Throw VbUtils.GetArgumentNullException(NameOf(systemSound))
             End If
 
             systemSound.Play()

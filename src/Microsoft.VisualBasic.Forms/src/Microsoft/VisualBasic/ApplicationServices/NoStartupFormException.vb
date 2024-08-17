@@ -3,7 +3,7 @@
 
 Imports System.ComponentModel
 
-Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
+Imports VbUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.ApplicationServices
 
@@ -25,7 +25,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  Creates a new exception.
         ''' </summary>
         Public Sub New()
-            MyBase.New(ExUtils.GetResourceString(SR.AppModel_NoStartupForm))
+            MyBase.New(VbUtils.GetResourceString(SR.AppModel_NoStartupForm))
         End Sub
 
         Public Sub New(message As String)

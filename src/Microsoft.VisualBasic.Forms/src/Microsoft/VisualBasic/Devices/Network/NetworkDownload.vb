@@ -5,7 +5,7 @@ Imports System.Net
 Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.MyServices.Internal
 
-Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
+Imports VbUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.Devices
 
@@ -155,7 +155,7 @@ Namespace Microsoft.VisualBasic.Devices
             ' We're safe from DownloadFile(Nothing, ...) due to overload failure (DownloadFile(String,...) vs. DownloadFile(Uri,...)).
             ' However, it is good practice to verify address before calling Trim.
             If String.IsNullOrWhiteSpace(address) Then
-                Throw ExUtils.GetArgumentNullException(NameOf(address))
+                Throw VbUtils.GetArgumentNullException(NameOf(address))
             End If
 
             Dim addressUri As Uri = GetUri(address.Trim())
@@ -306,11 +306,11 @@ Namespace Microsoft.VisualBasic.Devices
             onUserCancel As UICancelOption)
 
             If connectionTimeout <= 0 Then
-                Throw ExUtils.GetArgumentExceptionWithArgName(NameOf(connectionTimeout), SR.Network_BadConnectionTimeout)
+                Throw VbUtils.GetArgumentExceptionWithArgName(NameOf(connectionTimeout), SR.Network_BadConnectionTimeout)
             End If
 
             If address Is Nothing Then
-                Throw ExUtils.GetArgumentNullException(NameOf(address))
+                Throw VbUtils.GetArgumentNullException(NameOf(address))
             End If
 
             Using client As New WebClientExtended
@@ -325,12 +325,12 @@ Namespace Microsoft.VisualBasic.Devices
                 ' Sometime a path that can't be parsed is normalized to the current directory. This makes sure we really
                 ' have a file and path
                 If IO.Directory.Exists(fullFilename) Then
-                    Throw ExUtils.GetInvalidOperationException(SR.Network_DownloadNeedsFilename)
+                    Throw VbUtils.GetInvalidOperationException(SR.Network_DownloadNeedsFilename)
                 End If
 
                 'Throw if the file exists and the user doesn't want to overwrite
                 If IO.File.Exists(fullFilename) And Not overwrite Then
-                    Throw New IO.IOException(ExUtils.GetResourceString(SR.IO_FileExists_Path, destinationFileName))
+                    Throw New IO.IOException(VbUtils.GetResourceString(SR.IO_FileExists_Path, destinationFileName))
                 End If
 
                 ' Set credentials if we have any
@@ -341,8 +341,8 @@ Namespace Microsoft.VisualBasic.Devices
                 Dim dialog As ProgressDialog = Nothing
                 If showUI AndAlso Environment.UserInteractive Then
                     dialog = New ProgressDialog With {
-                        .Text = ExUtils.GetResourceString(SR.ProgressDialogDownloadingTitle, address.AbsolutePath),
-                        .LabelText = ExUtils.GetResourceString(SR.ProgressDialogDownloadingLabel, address.AbsolutePath, fullFilename)
+                        .Text = VbUtils.GetResourceString(SR.ProgressDialogDownloadingTitle, address.AbsolutePath),
+                        .LabelText = VbUtils.GetResourceString(SR.ProgressDialogDownloadingLabel, address.AbsolutePath, fullFilename)
                     }
                 End If
 
@@ -351,7 +351,7 @@ Namespace Microsoft.VisualBasic.Devices
 
                 ' Make sure we have a meaningful directory. If we don't, the destinationFileName is suspect
                 If String.IsNullOrEmpty(targetDirectory) Then
-                    Throw ExUtils.GetInvalidOperationException(SR.Network_DownloadNeedsFilename)
+                    Throw VbUtils.GetInvalidOperationException(SR.Network_DownloadNeedsFilename)
                 End If
 
                 If Not IO.Directory.Exists(targetDirectory) Then
