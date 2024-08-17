@@ -12,7 +12,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
     ''' </summary>
     Friend NotInheritable Class WebClientCopy
 
-        ' Dialog shown if user wants to see progress UI.  Allows the user to cancel the file transfer.
+        ' Dialog shown if user wants to see progress UI. Allows the user to cancel the file transfer.
         Private WithEvents m_ProgressDialog As ProgressDialog
 
         ' The WebClient performs the downloading or uploading operations for us
@@ -84,11 +84,13 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         '''  the current async file transfer operation.
         ''' </summary>
         ''' <remarks>
-        '''  Note: that we don't want to close the progress dialog here.  Wait until
+        '''  Note: that we don't want to close the progress dialog here. Wait until
         '''  the actual file transfer cancel event comes through and do it there.
         ''' </remarks>
         Private Sub m_ProgressDialog_UserCancelledEvent() Handles m_ProgressDialog.UserHitCancel
-            m_WebClient.CancelAsync() 'cancel the upload/download transfer.  We'll close the ProgressDialog as soon as the WebClient cancels the xfer.
+            'cancel the upload/download transfer. We'll close the ProgressDialog
+            'as soon as the WebClient cancels the xfer.
+            m_WebClient.CancelAsync()
         End Sub
 
         ''' <summary>
@@ -128,7 +130,8 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' <param name="e"></param>
         Private Sub m_WebClient_UploadFileCompleted(sender As Object, e As UploadFileCompletedEventArgs) Handles m_WebClient.UploadFileCompleted
 
-            ' If the upload was interrupted by an exception, keep track of the exception, which we'll throw from the main thread
+            ' If the upload was interrupted by an exception, keep track of the
+            ' exception, which we'll throw from the main thread
             Try
                 If e.Error IsNot Nothing Then
                     _exceptionEncounteredDuringFileTransfer = e.Error
@@ -137,7 +140,8 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                     InvokeIncrement(100)
                 End If
             Finally
-                'We don't close the dialog until we receive the WebClient.DownloadFileCompleted event
+                'We don't close the dialog until we receive the
+                'WebClient.DownloadFileCompleted event
                 CloseProgressDialog()
             End Try
         End Sub
@@ -197,7 +201,8 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                 m_WebClient.UploadFile(address, sourceFileName)
             End If
 
-            'Now that we are back on the main thread, throw the exception we encountered if the user didn't cancel.
+            'Now that we are back on the main thread, throw the exception we
+            'encountered if the user didn't cancel.
             If _exceptionEncounteredDuringFileTransfer IsNot Nothing Then
                 If m_ProgressDialog Is Nothing OrElse Not m_ProgressDialog.UserCanceledTheDialog Then
                     Throw _exceptionEncounteredDuringFileTransfer
