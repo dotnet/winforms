@@ -32,7 +32,6 @@ Namespace Microsoft.VisualBasic.Devices
                     dialog:=Nothing,
                     connectionTimeout:=DEFAULT_TIMEOUT,
                     overwrite:=False).Wait()
-
             Catch ex As Exception
                 If ex.InnerException IsNot Nothing Then
                     Throw ex.InnerException

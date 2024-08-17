@@ -84,7 +84,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         '''  the current async file transfer operation.
         ''' </summary>
         ''' <remarks>
-        '''  Note that we don't want to close the progress dialog here. Wait until
+        '''  Note: that we don't want to close the progress dialog here. Wait until
         '''  the actual file transfer cancel event comes through and do it there.
         ''' </remarks>
         Private Sub m_ProgressDialog_UserCancelledEvent() Handles m_ProgressDialog.UserHitCancel
