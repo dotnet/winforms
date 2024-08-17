@@ -8,12 +8,12 @@ Imports System.Threading
 Namespace Microsoft.VisualBasic.ApplicationServices
 
     ''' <summary>
-    '''  Class abstracting the computer user
+    '''  Class abstracting the computer user.
     ''' </summary>
     Public Class User
 
         ''' <summary>
-        '''  Creates an instance of User
+        '''  Creates an instance of User.
         ''' </summary>
         Public Sub New()
         End Sub
@@ -21,9 +21,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         '''  The principal representing the current user.
         ''' </summary>
-        ''' <value>An IPrincipal representing the current user</value>
+        ''' <value>An <see cref="IPrincipal"/> representing the current user.</value>
         ''' <remarks>
-        '''  This should be overridden by derived classes that don't get the current
+        '''  This should be overridden by derived classes that don't get the current.
         '''  user from the current thread
         ''' </remarks>
         Protected Overridable Property InternalPrincipal() As IPrincipal
@@ -38,7 +38,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         '''  The current <see cref="IPrincipal"/> which represents the current user.
         ''' </summary>
-        ''' <value>An IPrincipal representing the current user</value>
+        ''' <value>An IPrincipal representing the current user.</value>
         <EditorBrowsable(EditorBrowsableState.Advanced)>
         Public Property CurrentPrincipal() As IPrincipal
             Get
@@ -59,7 +59,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
         ''' <summary>
-        '''  The name of the current user
+        '''  The name of the current user.
         ''' </summary>
         Public ReadOnly Property Name() As String
             Get
@@ -68,10 +68,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
         ''' <summary>
-        '''  Indicates whether or not the current user is a member of the passed in role
+        '''  Indicates whether or not the current user is a member of the passed in role.
         ''' </summary>
-        ''' <param name="role">The name of the role</param>
-        ''' <returns>True if the user is a member of the role otherwise False</returns>
+        ''' <param name="role">The name of the role.</param>
+        ''' <returns><see langword="True"/> if the user is a member of the role otherwise <see langword="False"/>.</returns>
         Public Function IsInRole(role As String) As Boolean
             Return InternalPrincipal.IsInRole(role)
         End Function

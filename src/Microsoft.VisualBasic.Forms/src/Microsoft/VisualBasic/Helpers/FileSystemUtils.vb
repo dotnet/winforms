@@ -72,7 +72,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         '''  Checks if the full path is a root path.
         ''' </summary>
         ''' <param name="path">The path to check.</param>
-        ''' <returns>True if FullPath is a root path, False otherwise.</returns>
+        ''' <returns><see langword="True"/> if FullPath is a root path, <see langword="False"/> otherwise.</returns>
         ''' <remarks>
         '''   IO.Path.GetPathRoot: C: -> C:, C:\ -> C:\, \\machine\share -> \\machine\share,
         '''           BUT \\machine\share\ -> \\machine\share (No separator here).

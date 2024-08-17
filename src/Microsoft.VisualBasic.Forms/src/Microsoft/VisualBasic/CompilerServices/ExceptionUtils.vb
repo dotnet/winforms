@@ -6,12 +6,6 @@ Imports VbUtils = Microsoft.VisualBasic.CompilerServices.Utils
 
 Namespace Microsoft.VisualBasic.CompilerServices
 
-    Friend Enum vbErrors
-        None = 0
-        FileNotFound = 53
-        PermissionDenied = 70
-    End Enum
-
     ' Implements error utilities for Basic
     Friend Module ExceptionUtils
 
@@ -19,7 +13,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
             Dim sMsg As String
 
             If hr > 0 AndAlso hr <= &HFFFFI Then
-                sMsg = VbUtils.GetResourceString(CType(hr, vbErrors))
+                sMsg = VbUtils.GetResourceString(CType(hr, VbErrors))
             Else
                 sMsg = String.Empty
             End If
@@ -46,12 +40,12 @@ Namespace Microsoft.VisualBasic.CompilerServices
 
             Select Case resourceId
 
-                Case vbErrors.None
+                Case VbErrors.None
 
-                Case vbErrors.FileNotFound
+                Case VbErrors.FileNotFound
                     Return New IO.FileNotFoundException(description)
 
-                Case vbErrors.PermissionDenied
+                Case VbErrors.PermissionDenied
                     Return New IO.IOException(description)
 
                 Case Else
