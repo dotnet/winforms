@@ -92,7 +92,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' <summary>
         '''  Indicated if the user has clicked the cancel button.
         ''' </summary>
-        ''' <value>True if the user has canceled, otherwise False.</value>
+        ''' <value><see langword="True"/> if the user has canceled, otherwise <see langword="False"/>.</value>
         ''' <remarks>
         '''  The secondary thread checks this property directly. If it's True, the thread
         '''  breaks out of its loop.

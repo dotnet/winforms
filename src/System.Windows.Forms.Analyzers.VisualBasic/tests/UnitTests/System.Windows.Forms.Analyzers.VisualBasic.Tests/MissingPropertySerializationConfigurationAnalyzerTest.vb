@@ -8,8 +8,7 @@ Imports Xunit
 Public Class ControlPropertySerializationDiagnosticAnalyzerTest
 
     Private Const ProblematicCode As String =
-"
-Imports System.Drawing
+"Imports System.Drawing
 Imports System.Windows.Forms
 
 Namespace VBControls
@@ -50,13 +49,13 @@ Namespace VBControls
     Public Module Program
         Public Sub Main()
             Dim control As New ScalableControl()
-        
+
             control.ScaleFactor = 1.5F
             control.ScaledSize = New SizeF(100, 100)
             control.ScaledLocation = New PointF(10, 10)
         End Sub
     End Module
-        
+
     Public Class ScalableControl
         Inherits Control
 
@@ -71,14 +70,14 @@ Namespace VBControls
             Return Me.ScaledLocation <> PointF.Empty
         End Function
     End Class
-        
+
 End Namespace
 "
 
     Private Const FixedCode As String =
-"Imports System.ComponentModel
-Imports System.Drawing
+"Imports System.Drawing
 Imports System.Windows.Forms
+Imports System.ComponentModel
 
 Namespace VBControls
 

@@ -51,7 +51,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         '''  Gets the name of the file containing the manifest (usually the .exe file).
         ''' </summary>
-        ''' <returns>A String containing the file name.</returns>
+        ''' <value>A String containing the file name.</value>
         Public ReadOnly Property AssemblyName() As String
             Get
                 Return _assembly.GetName.Name
@@ -61,10 +61,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         '''  Gets the company name associated with the assembly.
         ''' </summary>
-        ''' <returns>
+        ''' <value>
         '''  A String containing the <see cref="AssemblyCompanyAttribute"/>
         '''  associated with the assembly.
-        ''' </returns>
+        ''' </value>
         ''' <exception cref="InvalidOperationException">
         '''  Thrown if <see cref="AssemblyCompanyAttribute"/> is not defined.
         ''' </exception>
@@ -86,10 +86,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         '''  Gets the copyright notices associated with the assembly.
         ''' </summary>
-        ''' <returns>
+        ''' <value>
         '''  A String containing the <see cref="AssemblyCopyrightAttribute"/>
         '''  associated with the assembly.
-        ''' </returns>
+        ''' </value>
         ''' <exception cref="InvalidOperationException">
         '''  Thrown if <see cref="AssemblyCopyrightAttribute"/> is not defined.
         ''' </exception>
@@ -110,10 +110,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         '''  Gets the description associated with the assembly.
         ''' </summary>
-        ''' <returns>
+        ''' <value>
         '''  String containing the <see cref="AssemblyDescriptionAttribute"/>
         '''  associated with the assembly.
-        ''' </returns>
+        ''' </value>
         ''' <exception cref="InvalidOperationException">
         '''  Thrown if <see cref="AssemblyDescriptionAttribute"/> is not defined.
         ''' </exception>
@@ -144,9 +144,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         '''  Returns the names of all assemblies loaded by the current application.
         ''' </summary>
-        ''' <returns>
+        ''' <value>
         '''  A <see cref="ReadOnlyCollection(Of Assembly)"/> containing all the loaded assemblies.
-        ''' </returns>
+        ''' </value>
         ''' <exception cref="AppDomainUnloadedException">
         '''  Attempt on an unloaded application domain.
         ''' </exception>
@@ -163,10 +163,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         '''  Gets the product name associated with the assembly.
         ''' </summary>
-        ''' <returns>
+        ''' <value>
         '''  String containing the <see cref="AssemblyProductAttribute"/> associated
         '''  with the assembly.
-        ''' </returns>
+        ''' </value>
         ''' <exception cref="InvalidOperationException">
         '''  Thrown if <see cref="AssemblyProductAttribute"/> is not defined.
         ''' </exception>
@@ -187,9 +187,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         '''  Returns the current stack trace information.
         ''' </summary>
-        ''' <returns>
+        ''' <value>
         '''  String containing stack trace information. Value can be <see cref="String.Empty"/>.
-        ''' </returns>
+        ''' </value>
         ''' <exception cref="ArgumentOutOfRangeException">
         '''  Thrown if the requested stack trace information is out of range.
         ''' </exception>
@@ -202,10 +202,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         '''  Gets the company name associated with the assembly.
         ''' </summary>
-        ''' <returns>
+        ''' <value>
         '''  String containing the <see cref="AssemblyTitleAttribute"/>
         '''  associated with the assembly.
-        ''' </returns>
+        ''' </value>
         ''' <exception cref="InvalidOperationException">
         ''' Thrown if <see cref="AssemblyTitleAttribute"/> is not defined.</exception>
         Public ReadOnly Property Title() As String
@@ -226,12 +226,12 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         '''  Gets the trademark notices associated with the assembly.
         ''' </summary>
-        ''' <returns>
+        ''' <value>
         '''  String containing the <see cref="AssemblyTrademarkAttribute"/> associated
         '''  with the assembly.
-        ''' </returns>
+        ''' </value>
         ''' <exception cref="InvalidOperationException">
-        ''' Thrown if the <see cref="AssemblyTrademarkAttribute"/> is not defined.
+        '''  Thrown if the <see cref="AssemblyTrademarkAttribute"/> is not defined.
         ''' </exception>
         Public ReadOnly Property Trademark() As String
             Get
@@ -250,9 +250,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         '''  Gets the version number of the assembly.
         ''' </summary>
-        ''' <returns>
+        ''' <value>
         '''  A <see cref="System.Version"/> class containing the version number of the assembly.
-        ''' </returns>>
+        ''' </value>
         ''' <remarks>
         '''  Cannot use <see cref="AssemblyVersionAttribute"/> since it always return Nothing.
         ''' </remarks>
@@ -265,10 +265,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         '''  Gets the amount of physical memory mapped to the process context.
         ''' </summary>
-        ''' <returns>
+        ''' <value>
         '''  A 64-bit signed integer containing the size of physical memory mapped
         '''  to the process context, in bytes.
-        ''' </returns>
+        ''' </value>>
         Public ReadOnly Property WorkingSet() As Long
             Get
                 Return Environment.WorkingSet

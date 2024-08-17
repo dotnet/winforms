@@ -32,7 +32,7 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' <summary>
         '''  Indicates whether or not there's an audio stream saved to the clipboard.
         ''' </summary>
-        ''' <returns>True if an audio stream is available, otherwise False.</returns>
+        ''' <returns><see langword="True"/> if an audio stream is available, otherwise <see langword="False"/>.</returns>
         Public Function ContainsAudio() As Boolean
             Return Clipboard.ContainsAudio()
         End Function
@@ -41,7 +41,7 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  Indicates whether or not there is data on the clipboard in the passed in format.
         ''' </summary>
         ''' <param name="format"></param>
-        ''' <returns>True if there's data in the passed in format, otherwise False.</returns>
+        ''' <returns><see langword="True"/> if there's data in the passed in format, otherwise <see langword="False"/>.</returns>
         Public Function ContainsData(format As String) As Boolean
             Return Clipboard.ContainsData(format)
         End Function
@@ -49,7 +49,7 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' <summary>
         '''  Indicates whether or not a file drop list has been saved to the clipboard.
         ''' </summary>
-        ''' <returns>True if a file drop list is available, otherwise False.</returns>
+        ''' <returns><see langword="True"/> if a file drop list is available, otherwise <see langword="False"/>.</returns>
         Public Function ContainsFileDropList() As Boolean
             Return Clipboard.ContainsFileDropList()
         End Function
@@ -57,7 +57,7 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' <summary>
         '''  Indicate whether or not an image has been saved to the clipboard.
         ''' </summary>
-        ''' <returns>True if an image is available, otherwise False.</returns>
+        ''' <returns><see langword="True"/> if an image is available, otherwise <see langword="False"/>.</returns>
         Public Function ContainsImage() As Boolean
             Return Clipboard.ContainsImage()
         End Function
@@ -65,7 +65,7 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' <summary>
         '''  Indicates whether or not text is available on the clipboard.
         ''' </summary>
-        ''' <returns>True if text is available, otherwise False.</returns>
+        ''' <returns><see langword="True"/> if text is available, otherwise <see langword="False"/>.</returns>
         Public Function ContainsText() As Boolean
             Return Clipboard.ContainsText
         End Function
@@ -75,7 +75,7 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  the passed in format.
         ''' </summary>
         ''' <param name="format">The type of text being checked for.</param>
-        ''' <returns>True if text is available, otherwise False.</returns>
+        ''' <returns><see langword="True"/> if text is available, otherwise <see langword="False"/>.</returns>
         Public Function ContainsText(format As TextDataFormat) As Boolean
             Return Clipboard.ContainsText(format)
         End Function
