@@ -3,17 +3,15 @@
 
 using System.Collections.Immutable;
 using System.Composition;
-using System.Windows.Forms.Analyzers.Diagnostics;
 using System.Windows.Forms.Analyzers.CodeFixes.Resources;
+using System.Windows.Forms.Analyzers.Diagnostics;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Text;
-using System.Diagnostics;
-using Microsoft.CodeAnalysis.Simplification;
 using Microsoft.CodeAnalysis.Formatting;
+using Microsoft.CodeAnalysis.Text;
 
 namespace System.Windows.Forms.CSharp.CodeFixes.AddDesignerSerializationVisibility;
 
@@ -71,10 +69,13 @@ internal sealed class AddDesignerSerializationVisibilityCodeFixProvider : CodeFi
             .SelectMany(al => al.Attributes)
             .Any(a => a.Name.ToString() == DesignerSerializationVisibilityAttributeName))
         {
-            Debug.Fail("The attribute should not be there.");
-
+            // Already there, nothing to do.
             return document;
         }
+
+        // Let's check, if we already have the using directive or if we need to add it:
+        // (Remember: We can't throw here, as we are in a code fixer. But this also cannot be null.)
+        SyntaxNode root = (await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false))!;
 
         // Generate the Attribute we need to put on the property
         AttributeSyntax designerSerializationVisibilityAttribute = SyntaxFactory.Attribute(
@@ -91,41 +92,65 @@ internal sealed class AddDesignerSerializationVisibilityCodeFixProvider : CodeFi
                 SyntaxFactory.AttributeList(
                     SyntaxFactory.SingletonSeparatedList(designerSerializationVisibilityAttribute)));
 
-        // Let's format the property, so the attribute is on top of it:
-        newProperty = newProperty.NormalizeWhitespace();
-
         // Let's restore the original trivia:
         newProperty = newProperty.WithLeadingTrivia(leadingTrivia);
         newProperty = newProperty.WithTrailingTrivia(trailingTrivia);
-        newProperty = newProperty.WithAdditionalAnnotations(Formatter.Annotation);
-
-        // Let's check, if we already have the using directive or if we need to add it:
-        // (Remember: We can't throw here, as we are in a code fixer. But this also cannot be null.)
-        SyntaxNode root = (await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false))!;
 
         // Produce a new root, which has the updated property with the attribute.
         root = root.ReplaceNode(propertyDeclarationSyntax, newProperty);
 
         // Let's check if we already have the using directive:
-        if (!root.DescendantNodes()
-                .OfType<UsingDirectiveSyntax>()
-                .Any(u => u?.Name?.ToString() == SystemComponentModelName))
+        if (root.DescendantNodes()
+            .OfType<UsingDirectiveSyntax>()
+            .Any(u => u?.Name?.ToString() == SystemComponentModelName))
         {
-            UsingDirectiveSyntax usingDirective = SyntaxFactory
-                .UsingDirective(SyntaxFactory.ParseName(SystemComponentModelName));
-
-            usingDirective = usingDirective
-                .WithAdditionalAnnotations(Simplifier.Annotation)
-                .WithAdditionalAnnotations(Formatter.Annotation);
-
-            // We need to add the using directive:
-            SyntaxNode firstNode = root.DescendantNodes().First();
-            root = root.InsertNodesBefore(firstNode, [usingDirective]);
+            document = document.WithSyntaxRoot(root);
+            return document;
         }
 
-        document = document.WithSyntaxRoot(root);
+        // Let's check if we have _a_ using directive:
+        bool hasUsings = root.DescendantNodes()
+            .OfType<UsingDirectiveSyntax>()
+            .FirstOrDefault() is not null;
+
+        // Get the compilation unit:
+        CompilationUnitSyntax compilationUnit = root
+            .DescendantNodesAndSelf()
+            .OfType<CompilationUnitSyntax>()
+            .First();
+
+        CompilationUnitSyntax originalCompilationUnit = compilationUnit;
+
+        if (!hasUsings)
+        {
+            // We need to add a new line before the namespace/file-scoped-namespace declaration:
+            SyntaxTriviaList? firstNodesLeadingTrivia = compilationUnit
+                .DescendantNodes()
+                .FirstOrDefault()
+                .GetLeadingTrivia();
+
+            compilationUnit = firstNodesLeadingTrivia is null
+                ? compilationUnit
+                    .WithLeadingTrivia(SyntaxFactory.CarriageReturnLineFeed)
+                : compilationUnit
+                    .WithLeadingTrivia(firstNodesLeadingTrivia.Value
+                        .Add(SyntaxFactory.CarriageReturnLineFeed));
+        }
+
+        UsingDirectiveSyntax usingDirective = SyntaxFactory
+            .UsingDirective(SyntaxFactory.ParseName(SystemComponentModelName));
+
+        usingDirective = usingDirective
+            .NormalizeWhitespace()
+            .WithTrailingTrivia(SyntaxFactory.CarriageReturnLineFeed)
+            .WithAdditionalAnnotations(Formatter.Annotation);
 
         // Generate the new document:
+        document = document.WithSyntaxRoot(
+            root.ReplaceNode(
+                originalCompilationUnit,
+                compilationUnit.AddUsings(usingDirective)));
+
         return document;
     }
 }
