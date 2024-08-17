@@ -65,10 +65,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  Gets the information about the current culture used by the Resource
         '''  Manager to look up culture-specific resource at run time.
         ''' </summary>
-        ''' <returns>
-        '''  The CultureInfo object that represents the culture used by the
+        ''' <value>
+        '''  The <see cref="Globalization.CultureInfo"/> object that represents the culture used by the
         '''  Resource Manager to look up culture-specific resources at run time.
-        ''' </returns>
+        ''' </value>
         Public ReadOnly Property UICulture() As Globalization.CultureInfo
             Get
                 Return Thread.CurrentThread.CurrentUICulture
@@ -79,7 +79,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  Changes the culture currently in used by the current thread.
         ''' </summary>
         ''' <remarks>
-        '''  CultureInfo constructor will throw exceptions if cultureName is Nothing
+        '''  <see cref="Globalization.CultureInfo"/> constructor will throw exceptions if cultureName is Nothing
         '''  or an invalid CultureInfo ID. We are not catching those exceptions.
         ''' </remarks>
         Public Sub ChangeCulture(cultureName As String)
@@ -91,7 +91,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  up culture-specific resource at runtime.
         ''' </summary>
         ''' <remarks>
-        '''  CultureInfo constructor will throw exceptions if cultureName is Nothing
+        '''  <see cref="Globalization.CultureInfo"/> constructor will throw exceptions if cultureName is Nothing
         '''  or an invalid CultureInfo ID. We are not catching those exceptions.
         ''' </remarks>
         Public Sub ChangeUICulture(cultureName As String)
@@ -112,7 +112,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
             ' Since the explicitly requested a specific environment variable and we couldn't find it, throw
             If variableValue Is Nothing Then
-                Throw ExUtils.GetArgumentExceptionWithArgName(NameOf(name), SR.EnvVarNotFound_Name, name)
+                Throw ExUtils.GetArgumentExceptionWithArgName(
+                    NameOf(name),
+                    SR.EnvVarNotFound_Name,
+                    name)
             End If
 
             Return variableValue
