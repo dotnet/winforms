@@ -30,7 +30,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' <summary>
         '''  Creates an instance of a WebClientCopy, used to download or upload a file.
         ''' </summary>
-        ''' <param name="client">The WebClient used to do the downloading or uploading.</param>
+        ''' <param name="client">The <see cref="WebClient"/> used to do the downloading or uploading.</param>
         ''' <param name="dialog">UI for indicating progress.</param>
         Public Sub New(client As WebClient, dialog As ProgressDialog)
 
