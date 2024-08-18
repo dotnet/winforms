@@ -7,6 +7,8 @@ Imports Xunit
 
 Namespace Microsoft.VisualBasic.Forms.Tests
 
+    <Collection("Sequential")>
+    <CollectionDefinition("Sequential", DisableParallelization:=True)>
     Partial Public Class ControlTests
 
         Public Shared Function FaultingFunc(a As Integer) As Integer

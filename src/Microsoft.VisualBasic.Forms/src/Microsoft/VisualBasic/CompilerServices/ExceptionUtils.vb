@@ -104,8 +104,10 @@ Namespace Microsoft.VisualBasic.CompilerServices
             Return New IO.IOException(GetResourceString(resourceID, placeHolders))
         End Function
 
-        Friend Function GetResourceString(resourceKey As String,
-                                                                                    ParamArray args() As String) As String
+        Friend Function GetResourceString(
+            resourceKey As String,
+            ParamArray args() As String) As String
+
             Return String.Format(Thread.CurrentThread.CurrentCulture, resourceKey, args)
         End Function
 

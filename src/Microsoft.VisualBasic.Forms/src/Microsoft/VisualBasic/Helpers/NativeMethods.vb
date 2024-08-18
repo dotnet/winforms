@@ -58,7 +58,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
             <Out(),
             MarshalAs(UnmanagedType.LPTStr)> lpString As StringBuilder,
             nMaxCount As Integer) As Integer
-#Enable Warning CA1838 ' Avoid 'StringBuilder' parameters for P/Invokes
+#Enable Warning CA1838
         End Function
 
         <PreserveSig()>
@@ -124,14 +124,14 @@ Namespace Microsoft.VisualBasic.CompilerServices
             Friend ullTotalVirtual As UInt64
             Friend ullAvailVirtual As UInt64
             Friend ullAvailExtendedVirtual As UInt64
-#Enable Warning IDE1006 ' Naming Styles
+#Enable Warning IDE1006
 
             Friend Sub Init()
                 dwLength = CType(Marshal.SizeOf(GetType(MEMORYSTATUSEX)), UInt32)
             End Sub
 
         End Structure
-#Enable Warning IDE0049  ' Use language keywords instead of framework type names for type references
+#Enable Warning IDE0049
 
     End Module
 End Namespace

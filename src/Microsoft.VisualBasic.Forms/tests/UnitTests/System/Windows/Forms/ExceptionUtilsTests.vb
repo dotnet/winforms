@@ -5,7 +5,7 @@ Imports FluentAssertions
 Imports Microsoft.VisualBasic.CompilerServices
 Imports Xunit
 
-Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
+Imports VbUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.Forms.Tests
 
@@ -17,7 +17,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub GetArgumentNullExceptionTest_Succeed()
             Const ArgumentName As String = "MainForm"
-            Dim ex As Exception = ExUtils.GetArgumentNullException(
+            Dim ex As Exception = VbUtils.GetArgumentNullException(
                 ArgumentName,
                 resourceID:=SR.General_PropertyNothing,
                 ArgumentName)
@@ -28,16 +28,16 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <WinFormsFact>
         Public Sub GetDirectoryNotFoundExceptionTest_Succeed()
-            Dim resourceString As String = ExUtils.GetResourceString(VbErrors.FileNotFound)
-            Dim ex As Exception = ExUtils.GetDirectoryNotFoundException(resourceString)
+            Dim resourceString As String = VbUtils.GetResourceString(VbErrors.FileNotFound)
+            Dim ex As Exception = VbUtils.GetDirectoryNotFoundException(resourceString)
             ex.Should.BeOfType(Of IO.DirectoryNotFoundException)()
             ex.Message.Should.Be("File not found.")
         End Sub
 
         <WinFormsFact>
         Public Sub GetFileNotFoundExceptionTest_Succeed()
-            Dim resourceString As String = ExUtils.GetResourceString(VbErrors.FileNotFound)
-            Dim ex As Exception = ExUtils.GetFileNotFoundException("Test", resourceString)
+            Dim resourceString As String = VbUtils.GetResourceString(VbErrors.FileNotFound)
+            Dim ex As Exception = VbUtils.GetFileNotFoundException("Test", resourceString)
             ex.Should.BeOfType(Of IO.FileNotFoundException)()
             ex.Message.Should.Be("File not found.")
             CType(ex, IO.FileNotFoundException).FileName.Should.Be("Test")
@@ -45,12 +45,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <WinFormsFact>
         Public Sub GetInvalidOperationExceptionTest_Succeed()
-            ExUtils.GetInvalidOperationException(SR.Mouse_NoMouseIsPresent).Should.BeOfType(Of InvalidOperationException)()
+            VbUtils.GetInvalidOperationException(SR.Mouse_NoMouseIsPresent).Should.BeOfType(Of InvalidOperationException)()
         End Sub
 
         <WinFormsFact>
         Public Sub GetIOExceptionTest_Succeed()
-            Dim ex As Exception = ExUtils.GetIOException(SR.IO_FileExists_Path, IO.Path.GetTempPath)
+            Dim ex As Exception = VbUtils.GetIOException(SR.IO_FileExists_Path, IO.Path.GetTempPath)
             ex.Should.BeOfType(Of IO.IOException)()
             ex.Message.Should.Be(
                 $"Could not complete operation since a file already exists in this path '{IO.Path.GetTempPath}'.")
@@ -58,7 +58,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <WinFormsFact>
         Public Sub GetWin32ExceptionTest_Succeed()
-            Dim ex As Exception = ExUtils.GetWin32Exception(SR.DiagnosticInfo_Memory)
+            Dim ex As Exception = VbUtils.GetWin32Exception(SR.DiagnosticInfo_Memory)
             ex.Should.BeOfType(Of ComponentModel.Win32Exception)()
         End Sub
 
@@ -75,7 +75,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <InlineData(VbErrors.PermissionDenied, "Permission denied.")>
         <InlineData(VbErrors.None, "")>
         Public Sub VbMakeExceptionTest_Succeed(errorCode As Integer, expected As String)
-            ExUtils.VbMakeException(errorCode).Message.Should.Be(expected)
+            VbUtils.VbMakeException(errorCode).Message.Should.Be(expected)
         End Sub
 
     End Class

@@ -5,7 +5,7 @@ Imports System.Net
 Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.MyServices.Internal
 
-Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
+Imports VbUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.Devices
 
@@ -162,7 +162,7 @@ Namespace Microsoft.VisualBasic.Devices
             ' We're safe from DownloadFile(Nothing, ...) due to overload failure (DownloadFile(String,...) vs. DownloadFile(Uri,...)).
             ' However, it is good practice to verify address before calling Trim.
             If String.IsNullOrWhiteSpace(address) Then
-                Throw ExUtils.GetArgumentNullException(NameOf(address))
+                Throw VbUtils.GetArgumentNullException(NameOf(address))
             End If
 
             Dim addressUri As Uri = GetUri(address.Trim())
@@ -226,7 +226,7 @@ Namespace Microsoft.VisualBasic.Devices
             overwrite As Boolean)
 
             If address Is Nothing Then
-                Throw ExUtils.GetArgumentNullException(NameOf(address))
+                Throw VbUtils.GetArgumentNullException(NameOf(address))
             End If
 
             Dim dialog As ProgressDialog = Nothing
@@ -281,11 +281,11 @@ Namespace Microsoft.VisualBasic.Devices
             onUserCancel As UICancelOption)
 
             If connectionTimeout <= 0 Then
-                Throw ExUtils.GetArgumentExceptionWithArgName(NameOf(connectionTimeout), SR.Network_BadConnectionTimeout)
+                Throw VbUtils.GetArgumentExceptionWithArgName(NameOf(connectionTimeout), SR.Network_BadConnectionTimeout)
             End If
 
             If address Is Nothing Then
-                Throw ExUtils.GetArgumentNullException(NameOf(address))
+                Throw VbUtils.GetArgumentNullException(NameOf(address))
             End If
 
             Dim dialog As ProgressDialog = Nothing
@@ -340,7 +340,7 @@ Namespace Microsoft.VisualBasic.Devices
             overwrite As Boolean)
 
             If address Is Nothing Then
-                Throw ExUtils.GetArgumentNullException(NameOf(address))
+                Throw VbUtils.GetArgumentNullException(NameOf(address))
             End If
 
             Dim dialog As ProgressDialog = Nothing
@@ -399,7 +399,7 @@ Namespace Microsoft.VisualBasic.Devices
             onUserCancel As UICancelOption)
 
             If address Is Nothing Then
-                Throw ExUtils.GetArgumentNullException(NameOf(address))
+                Throw VbUtils.GetArgumentNullException(NameOf(address))
             End If
 
             ' Get network credentials
