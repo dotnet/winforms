@@ -190,7 +190,7 @@ internal class SplitterPanelDesigner : PanelDesigner
         using Font drawFont = new("Arial", 8);
         int watermarkX = rectangle.Width / 2 - (int)g.MeasureString(name, drawFont).Width / 2;
         int watermarkY = rectangle.Height / 2;
-        TextRenderer.DrawText(g, name, drawFont, new Point(watermarkX, watermarkY), waterMarkTextColor, TextFormatFlags.Default);
+        TextRenderer.DrawText(g, name, drawFont, new Point(watermarkX, watermarkY), waterMarkTextColor, TextFormatFlags.PreserveGraphicsClipping | TextFormatFlags.PreserveGraphicsTranslateTransform);
     }
 
     protected override void OnPaintAdornments(PaintEventArgs pe)
