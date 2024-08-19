@@ -8,6 +8,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests;
 
+[Collection("Sequential")]
 public partial class ControlTests
 {
     [WinFormsFact]
