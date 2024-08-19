@@ -4309,6 +4309,29 @@ public partial class Form : ContainerControl
     {
         _formStateEx[s_formStateExUseMdiChildProc] = (IsMdiChild && Visible) ? 1 : 0;
         base.OnHandleCreated(e);
+
+        if (Properties.TryGetValue(s_propFormBorderColor, out Color? formBorderColor))
+        {
+            SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_BORDER_COLOR, formBorderColor.Value);
+        }
+
+        if (Properties.TryGetValue(s_propFormCaptionBackColor, out Color? formCaptionBackColor))
+        {
+            SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_CAPTION_COLOR, formCaptionBackColor.Value);
+        }
+
+        if (Properties.TryGetValue(s_propFormCaptionTextColor, out Color? formCaptionTextColor))
+        {
+            SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_TEXT_COLOR, formCaptionTextColor.Value);
+        }
+
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        if (Properties.TryGetValue(s_propFormCornerPreference, out FormCornerPreference? cornerPreference))
+        {
+            SetFormCornerPreferenceInternal(cornerPreference.Value);
+        }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
         UpdateLayered();
     }
 
@@ -5912,7 +5935,7 @@ public partial class Form : ContainerControl
     ///   This method immediately returns, even if the form is large and takes a long time to be set up.
     ///  </para>
     ///  <para>
-    ///   If the form is already displayed asynchronously by <see cref="Form.ShowAsync"/>, an <see cref="InvalidOperationException"/> will be thrown.
+    ///   If the form is already displayed asynchronously by <see cref="ShowAsync"/>, an <see cref="InvalidOperationException"/> will be thrown.
     ///  </para>
     ///  <para>
     ///   An <see cref="InvalidOperationException"/> will also occur if no <see cref="WindowsFormsSynchronizationContext"/> could be retrieved or installed.
@@ -5947,7 +5970,7 @@ public partial class Form : ContainerControl
     ///   This method immediately returns, even if the form is large and takes a long time to be set up.
     ///  </para>
     ///  <para>
-    ///   If the form is already displayed asynchronously by <see cref="Form.ShowAsync"/>, an <see cref="InvalidOperationException"/> will be thrown.
+    ///   If the form is already displayed asynchronously by <see cref="ShowAsync"/>, an <see cref="InvalidOperationException"/> will be thrown.
     ///  </para>
     ///  <para>
     ///   An <see cref="InvalidOperationException"/> will also occur if no <see cref="WindowsFormsSynchronizationContext"/> could be retrieved or installed.

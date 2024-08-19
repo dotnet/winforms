@@ -50,7 +50,7 @@ public sealed partial class Application
 
     private const string DarkModeKeyPath = "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
     private const string DarkModeKey = "AppsUseLightTheme";
-    private const int DarkModeNotAvailable = -1;
+    private const int SystemDarkModeDisabled = -1;
 
     /// <summary>
     ///  Events the user can hook into
@@ -277,9 +277,16 @@ public sealed partial class Application
                 return;
             }
 
-            if (GetSystemColorModeInternal() > -1)
+            if ((systemColorMode == SystemColorMode.Dark && IsSystemDarkModeAvailable)
+                || systemColorMode == SystemColorMode.Classic)
             {
                 s_systemColorMode = systemColorMode;
+                return;
+            }
+
+            if (GetSystemColorModeInternal() > SystemDarkModeDisabled)
+            {
+                s_systemColorMode = SystemColorMode.Dark;
                 return;
             }
 
@@ -348,34 +355,32 @@ public sealed partial class Application
             ? SystemColorMode.Dark
             : SystemColorMode.Classic;
 
-    // Returns 0 if dark mode is available, otherwise -1 (DarkModeNotAvailable)
+    // Returns 0 if dark mode is enabled in the system, otherwise -1 (SystemDarkModeDisabled)
     private static int GetSystemColorModeInternal()
     {
-        if (SystemInformation.HighContrast)
+        if (!IsSystemDarkModeAvailable)
         {
-            return DarkModeNotAvailable;
+            return SystemDarkModeDisabled;
         }
 
-        int systemColorMode = DarkModeNotAvailable;
+        int systemColorMode = SystemDarkModeDisabled;
 
-        // Dark mode is supported when we are >= W11/22000
-        // Technically, we could go earlier, but then the APIs we're using weren't officially public.
-        if (OsVersion.IsWindows11_OrGreater())
+        try
         {
-            try
-            {
-                systemColorMode = (Registry.GetValue(
-                    keyName: DarkModeKeyPath,
-                    valueName: DarkModeKey,
-                    defaultValue: DarkModeNotAvailable) as int?) ?? systemColorMode;
-            }
-            catch (Exception ex) when (!ex.IsCriticalException())
-            {
-            }
+            systemColorMode = (Registry.GetValue(
+                keyName: DarkModeKeyPath,
+                valueName: DarkModeKey,
+                defaultValue: SystemDarkModeDisabled) as int?) ?? systemColorMode;
+        }
+        catch (Exception ex) when (!ex.IsCriticalException())
+        {
         }
 
         return systemColorMode;
     }
+
+    private static bool IsSystemDarkModeAvailable =>
+        !SystemInformation.HighContrast && OsVersion.IsWindows11_OrGreater();
 
     /// <summary>
     ///  Gets a value indicating whether the application is running in a dark system color context.
@@ -384,7 +389,7 @@ public sealed partial class Application
     [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public static bool IsDarkModeEnabled =>
         !SystemInformation.HighContrast
-        && (SystemColorMode == SystemColorMode.Dark);
+        && (ColorMode == SystemColorMode.Dark);
 
     /// <summary>
     ///  Gets the path for the executable file that started the application.
