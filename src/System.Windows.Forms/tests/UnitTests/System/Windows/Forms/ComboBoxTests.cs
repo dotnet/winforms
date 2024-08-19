@@ -2639,12 +2639,16 @@ public class ComboBoxTests
             handleCreatedInvoked++;
         };
 
+        comboBox.Height.Should().Be(23);
+
         comboBox.CreateControl();
 
+        comboBox.Height.Should().Be(23);
         comboBox.DropDownStyle.Should().Be(ComboBoxStyle.DropDown);
 
         comboBox.DropDownStyle = ComboBoxStyle.Simple;
 
+        comboBox.Height.Should().Be(150);
         comboBox.DropDownStyle.Should().Be(ComboBoxStyle.Simple);
         handleCreatedInvoked.Should().Be(2);
     }
