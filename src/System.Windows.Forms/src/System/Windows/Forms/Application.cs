@@ -50,7 +50,7 @@ public sealed partial class Application
 
     private const string DarkModeKeyPath = "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
     private const string DarkModeKey = "AppsUseLightTheme";
-    private const int SystemDarkModeDisabled = -1;
+    private const int SystemDarkModeDisabled = 1;
 
     /// <summary>
     ///  Events the user can hook into
@@ -284,7 +284,7 @@ public sealed partial class Application
                 return;
             }
 
-            if (GetSystemColorModeInternal() > SystemDarkModeDisabled)
+            if (GetSystemColorModeInternal() != SystemDarkModeDisabled)
             {
                 s_systemColorMode = SystemColorMode.Dark;
                 return;
@@ -367,10 +367,11 @@ public sealed partial class Application
 
         try
         {
-            systemColorMode = (Registry.GetValue(
+            // 0 for dark mode and |1| for light mode.
+            systemColorMode = Math.Abs((Registry.GetValue(
                 keyName: DarkModeKeyPath,
                 valueName: DarkModeKey,
-                defaultValue: SystemDarkModeDisabled) as int?) ?? systemColorMode;
+                defaultValue: SystemDarkModeDisabled) as int?) ?? systemColorMode);
         }
         catch (Exception ex) when (!ex.IsCriticalException())
         {
