@@ -135,6 +135,10 @@ public partial class Form : ContainerControl
     private static readonly int s_propOpacity = PropertyStore.CreateKey();
     private static readonly int s_propTransparencyKey = PropertyStore.CreateKey();
     private static readonly int s_propFormCornerPreference = PropertyStore.CreateKey();
+    private static readonly int s_propFormBorderColor = PropertyStore.CreateKey();
+
+    private static readonly int s_propFormCaptionTextColor = PropertyStore.CreateKey();
+    private static readonly int s_propFormCaptionBackColor = PropertyStore.CreateKey();
 
     // Form per instance members
     // Note: Do not add anything to this list unless absolutely necessary.
@@ -2314,8 +2318,21 @@ public partial class Form : ContainerControl
     }
 
     /// <summary>
-    ///  Sets or gets the rounding style of the corners using the <see cref="FormCornerPreference"/> enum.
+    ///  Sets or gets the rounding style of the Form's corners using the <see cref="FormCornerPreference"/> enum.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   Note: Reading this property is only for tracking purposes. If the Form's corner preference is
+    ///   changed through other external means (Win32 calls), reading this property will not reflect
+    ///   those changes, as the Win32 API does not provide a mechanism to retrieve the current title
+    ///   bar color.
+    ///  </para>
+    ///  <para>
+    ///   The property only reflects the value that was previously set using this property. The
+    ///   <see cref="FormCornerPreferenceChanged"/> event is raised accordingly when the value is
+    ///   changed, which allows the property to be participating in binding scenarios.
+    ///  </para>
+    /// </remarks>
     [DefaultValue(FormCornerPreference.Default)]
     [SRCategory(nameof(SR.CatWindowStyle))]
     [SRDescription(nameof(SR.FormCornerPreferenceDescr))]
@@ -2341,7 +2358,14 @@ public partial class Form : ContainerControl
                 _ => throw new ArgumentOutOfRangeException(nameof(value))
             };
 
-            Properties.AddOrRemoveValue(s_propFormCornerPreference, value);
+            if (value == FormCornerPreference.Default)
+            {
+                Properties.RemoveValue(s_propFormCornerPreference);
+            }
+            else
+            {
+                Properties.AddValue(s_propFormCornerPreference, value);
+            }
 
             if (IsHandleCreated)
             {
@@ -2356,6 +2380,9 @@ public partial class Form : ContainerControl
     ///  Raises the <see cref="FormCornerPreferenceChanged"/> event when the
     ///  <see cref="FormCornerPreference"/> property changes.
     /// </summary>
+    /// <param name="e">
+    ///  An <see cref="EventArgs"/> that contains the event data, in this case empty.
+    /// </param>
     [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     protected virtual void OnFormCornerPreferenceChanged(EventArgs e)
     {
@@ -2388,6 +2415,24 @@ public partial class Form : ContainerControl
     /// <summary>
     ///  Sets or gets the Form's border color.
     /// </summary>
+    /// <returns>
+    ///  The <see cref="Color"/> which has be previously set using this property or <see cref="Color.Empty"/>.
+    ///  Note that the underlying Win32 API does not provide a reliable mechanism to retrieve the current
+    ///  border color.
+    /// </returns>
+    /// <remarks>
+    ///  <para>
+    ///   Note: Reading this property is only for tracking purposes. If the Form's border color is
+    ///   changed through other external means (Win32 calls), reading this property will not reflect
+    ///   those changes, as the Win32 API does not provide a mechanism to retrieve the current title
+    ///   bar color.
+    ///  </para>
+    ///  <para>
+    ///   The property only reflects the value that was previously set using this property. The
+    ///   <see cref="FormBorderColorChanged"/> event is raised accordingly when the value is
+    ///   changed, which allows the property to be participating in binding scenarios.
+    ///  </para>
+    /// </remarks>
     [SRCategory(nameof(SR.CatWindowStyle))]
     [SRDescription(nameof(SR.FormBorderColorDescr))]
     [Browsable(false)]
@@ -2395,13 +2440,15 @@ public partial class Form : ContainerControl
     [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public Color FormBorderColor
     {
-        get => GetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_BORDER_COLOR);
+        get => Properties.GetValueOrDefault(s_propFormBorderColor, Color.Empty);
         set
         {
             if (value == FormBorderColor)
             {
                 return;
             }
+
+            Properties.AddValue(s_propFormBorderColor, value);
 
             if (IsHandleCreated)
             {
@@ -2415,6 +2462,9 @@ public partial class Form : ContainerControl
     /// <summary>
     ///  Raises the <see cref="FormBorderColorChanged"/> event when the <see cref="FormBorderColor"/> property changes.
     /// </summary>
+    /// <param name="e">
+    ///  An <see cref="EventArgs"/> that contains the event data, in this case empty.
+    /// </param>
     [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     protected virtual void OnFormBorderColorChanged(EventArgs e)
     {
@@ -2425,8 +2475,26 @@ public partial class Form : ContainerControl
     }
 
     /// <summary>
-    ///  Sets or gets the Form's title bar back color.
+    ///  Sets or gets the Form's title bar back color (caption back color).
     /// </summary>
+    /// <returns>
+    ///  The <see cref="Color"/>, which has be previously set using this property or <see cref="Color.Empty"/>.
+    ///  Note that the underlying Win32 API does not provide a reliable mechanism to retrieve the current title
+    ///  bar color.
+    /// </returns>
+    /// <remarks>
+    ///  <para>
+    ///   Note: Reading this property is only for tracking purposes. If the window's title bar color is
+    ///   changed through other external means (Win32 calls), reading this property will not reflect
+    ///   those changes, as the Win32 API does not provide a mechanism to retrieve the current title
+    ///   bar color.
+    ///  </para>
+    ///  <para>
+    ///   The property only reflects the value that was previously set using this property. The
+    ///   <see cref="FormCaptionBackColorChanged"/> event is raised accordingly when the value is
+    ///   changed, which allows the property to be participating in binding scenarios.
+    ///  </para>
+    /// </remarks>
     [SRCategory(nameof(SR.CatWindowStyle))]
     [SRDescription(nameof(SR.FormCaptionBackColorDescr))]
     [Browsable(false)]
@@ -2434,13 +2502,15 @@ public partial class Form : ContainerControl
     [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public Color FormCaptionBackColor
     {
-        get => GetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_CAPTION_COLOR);
+        get => Properties.GetValueOrDefault(s_propFormCaptionBackColor, Color.Empty);
         set
         {
             if (value == FormCaptionBackColor)
             {
                 return;
             }
+
+            Properties.AddValue(s_propFormCaptionBackColor, value);
 
             if (IsHandleCreated)
             {
@@ -2452,8 +2522,12 @@ public partial class Form : ContainerControl
     }
 
     /// <summary>
-    ///  Raises the <see cref="FormCaptionBackColor"/> event when the <see cref="FormCaptionBackColor"/> property changes.
+    ///  Raises the <see cref="FormCaptionBackColorChanged"/> event when the <see cref="FormCaptionBackColor"/>
+    ///  property changes.
     /// </summary>
+    /// <param name="e">
+    ///  An <see cref="EventArgs"/> that contains the event data, in this case empty.
+    /// </param>
     [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     protected virtual void OnFormCaptionBackColorChanged(EventArgs e)
     {
@@ -2464,8 +2538,26 @@ public partial class Form : ContainerControl
     }
 
     /// <summary>
-    ///  Sets or gets the Form's title bar back color.
+    ///  Sets or gets the Form's title bar text color (windows caption text color).
     /// </summary>
+    /// <returns>
+    ///  The <see cref="Color"/>, which has be previously set using this property or <see cref="Color.Empty"/>.
+    ///  Note that the underlying Win32 API does not provide a reliable mechanism to retrieve the current title
+    ///  bar text color.
+    /// </returns>
+    /// <remarks>
+    ///  <para>
+    ///   Note: Reading this property is only for tracking purposes. If the Form's title bar's text color
+    ///   (window caption text) is changed through other external means (Win32 calls), reading this property
+    ///   will not reflect those changes, as the Win32 API does not provide a mechanism to retrieve the
+    ///   current title bar color.
+    ///  </para>
+    ///  <para>
+    ///   The property only reflects the value that was previously set using this property. The
+    ///   <see cref="FormCaptionTextColorChanged"/> event is raised accordingly when the value is
+    ///   changed, which allows the property to be participating in binding scenarios.
+    ///  </para>
+    /// </remarks>
     [SRCategory(nameof(SR.CatWindowStyle))]
     [SRDescription(nameof(SR.FormCaptionTextColorDescr))]
     [Browsable(false)]
@@ -2473,13 +2565,15 @@ public partial class Form : ContainerControl
     [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public Color FormCaptionTextColor
     {
-        get => GetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_TEXT_COLOR);
+        get => Properties.GetValueOrDefault(s_propFormCaptionTextColor, Color.Empty);
         set
         {
             if (value == FormCaptionTextColor)
             {
                 return;
             }
+
+            Properties.AddValue(s_propFormCaptionTextColor, value);
 
             if (IsHandleCreated)
             {
@@ -2491,12 +2585,16 @@ public partial class Form : ContainerControl
     }
 
     /// <summary>
-    ///  Raises the <see cref="FormCaptionTextColor"/> event when the <see cref="FormCaptionTextColor"/> property changes.
+    ///  Raises the <see cref="FormCaptionTextColorChanged"/> event when the
+    ///  <see cref="FormCaptionTextColor"/> property changes.
     /// </summary>
+    /// <param name="e">
+    ///  An <see cref="EventArgs"/> that contains the event data, in this case empty.
+    /// </param>
     [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     protected virtual void OnFormCaptionTextColorChanged(EventArgs e)
     {
-        if (Events[s_formCaptionBackColorChanged] is EventHandler eventHandler)
+        if (Events[s_formCaptionTextColorChanged] is EventHandler eventHandler)
         {
             eventHandler(this, e);
         }
@@ -4211,6 +4309,29 @@ public partial class Form : ContainerControl
     {
         _formStateEx[s_formStateExUseMdiChildProc] = (IsMdiChild && Visible) ? 1 : 0;
         base.OnHandleCreated(e);
+
+        if (Properties.TryGetValue(s_propFormBorderColor, out Color? formBorderColor))
+        {
+            SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_BORDER_COLOR, formBorderColor.Value);
+        }
+
+        if (Properties.TryGetValue(s_propFormCaptionBackColor, out Color? formCaptionBackColor))
+        {
+            SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_CAPTION_COLOR, formCaptionBackColor.Value);
+        }
+
+        if (Properties.TryGetValue(s_propFormCaptionTextColor, out Color? formCaptionTextColor))
+        {
+            SetFormAttributeColorInternal(DWMWINDOWATTRIBUTE.DWMWA_TEXT_COLOR, formCaptionTextColor.Value);
+        }
+
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        if (Properties.TryGetValue(s_propFormCornerPreference, out FormCornerPreference? cornerPreference))
+        {
+            SetFormCornerPreferenceInternal(cornerPreference.Value);
+        }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
         UpdateLayered();
     }
 
@@ -5814,7 +5935,7 @@ public partial class Form : ContainerControl
     ///   This method immediately returns, even if the form is large and takes a long time to be set up.
     ///  </para>
     ///  <para>
-    ///   If the form is already displayed asynchronously by <see cref="Form.ShowAsync"/>, an <see cref="InvalidOperationException"/> will be thrown.
+    ///   If the form is already displayed asynchronously by <see cref="ShowAsync"/>, an <see cref="InvalidOperationException"/> will be thrown.
     ///  </para>
     ///  <para>
     ///   An <see cref="InvalidOperationException"/> will also occur if no <see cref="WindowsFormsSynchronizationContext"/> could be retrieved or installed.
@@ -5849,7 +5970,7 @@ public partial class Form : ContainerControl
     ///   This method immediately returns, even if the form is large and takes a long time to be set up.
     ///  </para>
     ///  <para>
-    ///   If the form is already displayed asynchronously by <see cref="Form.ShowAsync"/>, an <see cref="InvalidOperationException"/> will be thrown.
+    ///   If the form is already displayed asynchronously by <see cref="ShowAsync"/>, an <see cref="InvalidOperationException"/> will be thrown.
     ///  </para>
     ///  <para>
     ///   An <see cref="InvalidOperationException"/> will also occur if no <see cref="WindowsFormsSynchronizationContext"/> could be retrieved or installed.
