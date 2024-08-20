@@ -73,7 +73,7 @@ public class ToolStripMenuItemTests
         Assert.Null(item.MdiForm);
         Assert.Equal(MergeAction.Append, item.MergeAction);
         Assert.Equal(-1, item.MergeIndex);
-        Assert.Empty(item.Name);
+        Assert.Empty(item.Text ?? string.Empty);
         Assert.Equal(ToolStripItemOverflow.Never, item.Overflow);
         Assert.Null(item.OwnerItem);
         Assert.Equal(new Padding(4, 0, 4, 0), item.Padding);
