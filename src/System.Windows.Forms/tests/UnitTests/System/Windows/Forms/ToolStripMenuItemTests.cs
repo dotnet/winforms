@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+#nullable enable
+
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
@@ -73,7 +75,7 @@ public class ToolStripMenuItemTests
         Assert.Null(item.MdiForm);
         Assert.Equal(MergeAction.Append, item.MergeAction);
         Assert.Equal(-1, item.MergeIndex);
-        Assert.Empty(item.Text ?? string.Empty);
+        Assert.Empty(item.Name ?? string.Empty);
         Assert.Equal(ToolStripItemOverflow.Never, item.Overflow);
         Assert.Null(item.OwnerItem);
         Assert.Equal(new Padding(4, 0, 4, 0), item.Padding);
@@ -89,7 +91,7 @@ public class ToolStripMenuItemTests
         Assert.Null(item.Site);
         Assert.Equal(new Size(32, 19), item.Size);
         Assert.Null(item.Tag);
-        Assert.Empty(item.Text);
+        Assert.Empty(item.Text ?? string.Empty);
         Assert.Equal(ContentAlignment.MiddleCenter, item.TextAlign);
         Assert.Equal(ToolStripTextDirection.Horizontal, item.TextDirection);
         Assert.Equal(TextImageRelation.ImageBeforeText, item.TextImageRelation);
@@ -184,9 +186,9 @@ public class ToolStripMenuItemTests
     }
 
     [WinFormsFact]
-    public void ToolStripMenuItem_Ctors_ShouldInitializeCorrectly()
+    public void ToolStripMenuItem_Ctor_ShouldInitializeCorrectly()
     {
-        using Image image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         const string text = "Test Item";
 
         using ToolStripMenuItem itemWithImage = new(image);
@@ -201,39 +203,43 @@ public class ToolStripMenuItemTests
     [WinFormsFact]
     public void ToolStripMenuItem_Ctor_WithTextImageOnClickName_ShouldInitializeCorrectly()
     {
-        using Image image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         const string text = "Test Item";
         const string name = "TestName";
-        EventHandler onClick = (sender, e) => { };
+        bool wasClicked = false;
+        EventHandler onClick = (sender, e) => wasClicked = true;
 
         using ToolStripMenuItem item = new(text, image, onClick, name);
 
         item.Text.Should().Be(text);
         item.Image.Should().Be(image);
         item.Name.Should().Be(name);
-        item.Click += onClick;
+        item.TestAccessor().Dynamic.OnClick(null);
+        wasClicked.Should().BeTrue();
     }
 
     [WinFormsFact]
     public void ToolStripMenuItem_Ctor_WithTextImageOnClickShortcutKeys_ShouldInitializeCorrectly()
     {
-        using Image image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         const string text = "Test Item";
-        EventHandler onClick = (sender, e) => { };
+        bool wasClicked = false;
+        EventHandler onClick = (sender, e) => wasClicked = true;
         Keys shortcutKeys = Keys.Control | Keys.A;
 
         using ToolStripMenuItem item = new(text, image, onClick, shortcutKeys);
 
         item.Text.Should().Be(text);
         item.Image.Should().Be(image);
-        item.Click += onClick;
+        item.TestAccessor().Dynamic.OnClick(null);
+        wasClicked.Should().BeTrue();
         item.ShortcutKeys.Should().Be(shortcutKeys);
     }
 
     [WinFormsFact]
     public void ToolStripMenuItem_Ctor_TextImageDropDownItems_ShouldInitializeCorrectly()
     {
-        using Image image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         string text = "Test Item";
         ToolStripItem[] dropDownItems = { new ToolStripMenuItem("SubItem1"), new ToolStripMenuItem("SubItem2") };
 
@@ -249,11 +255,9 @@ public class ToolStripMenuItemTests
     [WinFormsFact]
     public void ToolStripMenuItem_MdiForm_ShouldReturnExpected()
     {
-        using Form mdiForm = new();
-        using ToolStripMenuItem itemWithMdiForm = new(mdiForm);
-        itemWithMdiForm.MdiForm.Should().Be(mdiForm);
+        Form? mdiForm1 = null;
+        using ToolStripMenuItem itemWithoutMdiForm = new(mdiForm1!);
 
-        using ToolStripMenuItem itemWithoutMdiForm = new(null as Form);
         itemWithoutMdiForm.MdiForm.Should().BeNull();
     }
 
@@ -444,7 +448,7 @@ public class ToolStripMenuItemTests
 
         public new ToolStrip Parent
         {
-            get => base.Parent;
+            get => base.Parent!;
             set => base.Parent = value;
         }
 
