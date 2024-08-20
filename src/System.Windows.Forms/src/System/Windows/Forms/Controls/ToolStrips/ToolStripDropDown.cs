@@ -1253,7 +1253,6 @@ public partial class ToolStripDropDown : ToolStrip
                    || !(dismissingItem.HasDropDownItems))
                 {    // clicking on a item w/dropdown does not dismiss window
                     Close(ToolStripDropDownCloseReason.ItemClicked);
-                    SelectPreviousToolStrip();
                 }
             }
         }
@@ -1360,7 +1359,7 @@ public partial class ToolStripDropDown : ToolStrip
     {
         // snap the owner item before calling hide as non-auto created dropdowns will
         // exit menu mode if there's no OwnerItem.
-        ToolStripItem? itemOnPreviousMenuToSelect = GetToplevelOwnerItem();
+        ToolStripItem? itemOnPreviousMenuToSelect = OwnerItem;
         Hide();
 
         if (itemOnPreviousMenuToSelect is not null)
