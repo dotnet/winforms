@@ -168,10 +168,10 @@ public class ListBox_ListBoxItemAccessibleObjectTests
         using Form form = new();
         using ListBox listBox = new() { Parent = form };
         listBox.Items.Add("Test Item");
-        var itemAccessibleObject = (ListBox.ListBoxItemAccessibleObject)listBox.AccessibilityObject.GetChild(0)!;
+
+        var itemAccessibleObject = listBox.AccessibilityObject.GetChild(0).Should().BeOfType<ListBox.ListBoxItemAccessibleObject>().Which;
 
         var boundsBeforeHandleCreation = itemAccessibleObject.Bounds;
-
         boundsBeforeHandleCreation.Should().Be(Rectangle.Empty);
 
         form.Show();
@@ -180,12 +180,11 @@ public class ListBox_ListBoxItemAccessibleObjectTests
         listBox.Width = 100;
 
         var boundsAfterHandleCreation = itemAccessibleObject.Bounds;
-
         boundsAfterHandleCreation.Should().NotBe(Rectangle.Empty);
-
         boundsAfterHandleCreation.Width.Should().BeLessOrEqualTo(listBox.Width);
         boundsAfterHandleCreation.Height.Should().BeLessOrEqualTo(listBox.Height);
     }
+
 
     [WinFormsFact]
     public void ListBoxItemAccessibleObject_DefaultAction_VariesByContext()
@@ -194,14 +193,12 @@ public class ListBox_ListBoxItemAccessibleObjectTests
         using ListBox listBoxDoubleClick = new() { Items = { "Item 1" }, Parent = formDoubleClick };
         formDoubleClick.Show();
 
-        var itemAccessibleObjectDoubleClick = (ListBox.ListBoxItemAccessibleObject?)listBoxDoubleClick.AccessibilityObject.GetChild(0);
-        itemAccessibleObjectDoubleClick.Should().NotBeNull();
-        itemAccessibleObjectDoubleClick!.DefaultAction.Should().Be("Double Click");
+        var itemAccessibleObjectDoubleClick = listBoxDoubleClick.AccessibilityObject.GetChild(0).Should().BeOfType<ListBox.ListBoxItemAccessibleObject>().Which;
+        itemAccessibleObjectDoubleClick.DefaultAction.Should().Be("Double Click");
 
         using ListBox listBoxNullAction = new ListBox { Items = { "Item 2" } };
-        var itemAccessibleObjectNullAction = listBoxNullAction.AccessibilityObject.GetChild(0);
-        itemAccessibleObjectNullAction.Should().NotBeNull();
-        itemAccessibleObjectNullAction.Should().BeOfType<ListBox.ListBoxItemAccessibleObject>();
+        var itemAccessibleObjectNullAction = listBoxNullAction.AccessibilityObject.GetChild(0).Should().BeOfType<ListBox.ListBoxItemAccessibleObject>().Which;
+        itemAccessibleObjectNullAction.DefaultAction.Should().BeNull();
     }
 
     [WinFormsFact]
@@ -211,13 +208,13 @@ public class ListBox_ListBoxItemAccessibleObjectTests
         listBox.Items.Add("Item 1");
 
         var accessibleObject = listBox.AccessibilityObject;
-        var itemAccessibleObject = (ListBox.ListBoxItemAccessibleObject?)accessibleObject.GetChild(0);
-        itemAccessibleObject!.Bounds.Should().Be(Rectangle.Empty);
+        var itemAccessibleObject = accessibleObject.GetChild(0).Should().BeOfType<ListBox.ListBoxItemAccessibleObject>().Which;
+
+        itemAccessibleObject.Bounds.Should().Be(Rectangle.Empty);
 
         listBox.CreateControl();
         listBox.IsHandleCreated.Should().BeTrue();
 
-        itemAccessibleObject.Should().NotBeNull();
         itemAccessibleObject.Role.Should().Be(AccessibleRole.ListItem);
         itemAccessibleObject.Name.Should().Be("Item 1");
         itemAccessibleObject.DefaultAction.Should().NotBeNull();
@@ -230,8 +227,8 @@ public class ListBox_ListBoxItemAccessibleObjectTests
         using ListBox listBox = new() { Parent = form };
         listBox.Items.Add("Test Item");
 
-        var itemAccessibleObject = (ListBox.ListBoxItemAccessibleObject?)listBox.AccessibilityObject.GetChild(0);
-        itemAccessibleObject!.DoDefaultAction();
+        var itemAccessibleObject = listBox.AccessibilityObject.GetChild(0).Should().BeOfType<ListBox.ListBoxItemAccessibleObject>().Which;
+        itemAccessibleObject.DoDefaultAction();
 
         listBox.Focused.Should().BeFalse();
 
