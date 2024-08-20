@@ -2714,6 +2714,11 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormOnClosingDescr))]
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete(
+        Obsoletions.FormOnClosingClosedMessage,
+        error: false,
+        DiagnosticId = Obsoletions.FormOnClosingClosedDiagnosticId,
+        UrlFormat = Obsoletions.SharedUrlFormat)]
     public event CancelEventHandler? Closing
     {
         add => Events.AddHandler(s_closingEvent, value);
@@ -2727,6 +2732,11 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormOnClosedDescr))]
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete(
+        Obsoletions.FormOnClosingClosedMessage,
+        error: false,
+        DiagnosticId = Obsoletions.FormOnClosingClosedDiagnosticId,
+        UrlFormat = Obsoletions.SharedUrlFormat)]
     public event EventHandler? Closed
     {
         add => Events.AddHandler(s_closedEvent, value);
@@ -3300,7 +3310,9 @@ public partial class Form : ContainerControl
 
             if (!CalledClosing)
             {
+#pragma warning disable WFDEV004 // Type or member is obsolete - compat
                 OnClosing(e);
+#pragma warning restore WFDEV004
                 OnFormClosing(e);
                 if (e.Cancel)
                 {
@@ -3317,7 +3329,9 @@ public partial class Form : ContainerControl
             if (!closingOnly && _dialogResult != DialogResult.None)
             {
                 FormClosedEventArgs fc = new(_closeReason);
+#pragma warning disable WFDEV004 // Type or member is obsolete - compat
                 OnClosed(fc);
+#pragma warning restore WFDEV004
                 OnFormClosed(fc);
 
                 // reset called closing.
@@ -4162,7 +4176,12 @@ public partial class Form : ContainerControl
     /// <summary>
     ///  The Closing event is fired when the form is closed.
     /// </summary>
-    [EditorBrowsable(EditorBrowsableState.Advanced)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete(
+        Obsoletions.FormOnClosingClosedMessage,
+        error: false,
+        DiagnosticId = Obsoletions.FormOnClosingClosedDiagnosticId,
+        UrlFormat = Obsoletions.SharedUrlFormat)]
     protected virtual void OnClosing(CancelEventArgs e)
     {
         ((CancelEventHandler?)Events[s_closingEvent])?.Invoke(this, e);
@@ -4171,7 +4190,12 @@ public partial class Form : ContainerControl
     /// <summary>
     ///  The Closed event is fired when the form is closed.
     /// </summary>
-    [EditorBrowsable(EditorBrowsableState.Advanced)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Obsolete(
+        Obsoletions.FormOnClosingClosedMessage,
+        error: false,
+        DiagnosticId = Obsoletions.FormOnClosingClosedDiagnosticId,
+        UrlFormat = Obsoletions.SharedUrlFormat)]
     protected virtual void OnClosed(EventArgs e)
     {
         ((EventHandler?)Events[s_closedEvent])?.Invoke(this, e);
@@ -6792,7 +6816,9 @@ public partial class Form : ContainerControl
                     {
                         if (mdiChild.IsHandleCreated)
                         {
+#pragma warning disable WFDEV004 // Type or member is obsolete - compat
                             mdiChild.OnClosing(fe);
+#pragma warning restore WFDEV004
                             mdiChild.OnFormClosing(fe);
                             if (fe.Cancel)
                             {
@@ -6828,7 +6854,9 @@ public partial class Form : ContainerControl
                     }
                 }
 
+#pragma warning disable WFDEV004 // Type or member is obsolete - compat
                 OnClosing(e);
+#pragma warning restore WFDEV004
                 OnFormClosing(e);
             }
 
@@ -6869,7 +6897,9 @@ public partial class Form : ContainerControl
                         if (mdiChild.IsHandleCreated)
                         {
                             mdiChild.IsTopMdiWindowClosing = IsClosing;
+#pragma warning disable WFDEV004 // Type or member is obsolete - compat
                             mdiChild.OnClosed(fc);
+#pragma warning restore WFDEV004
                             mdiChild.OnFormClosed(fc);
                         }
                     }
@@ -6884,13 +6914,17 @@ public partial class Form : ContainerControl
                     if (ownedForms[i] is not null)
                     {
                         // Call OnClosed and OnFormClosed on the child forms.
+#pragma warning disable WFDEV004 // Type or member is obsolete - compat
                         ownedForms[i].OnClosed(fc);
+#pragma warning restore WFDEV004
                         ownedForms[i].OnFormClosed(fc);
                     }
                 }
 
                 fc = new FormClosedEventArgs(CloseReason);
+#pragma warning disable WFDEV004 // Type or member is obsolete - compat
                 OnClosed(fc);
+#pragma warning restore WFDEV004
                 OnFormClosed(fc);
 
                 Dispose();
