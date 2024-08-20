@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
-using System.Media;
 using FluentAssertions;
 
 namespace Microsoft.VisualBasic.Devices.Tests;
@@ -62,17 +61,6 @@ public class AudioTests
     }
 
     [Fact]
-    public void PlaySoundStream()
-    {
-        Audio audio = new();
-        Action testCode = () => audio.PlaySystemSound(SystemSounds.Asterisk);
-        testCode.Should().NotThrow();
-
-        testCode = () => audio.PlaySystemSound(null);
-        testCode.Should().Throw<ArgumentNullException>();
-    }
-
-    [Fact]
     public void PlayStream()
     {
         var data = new MemoryStream();
@@ -84,6 +72,9 @@ public class AudioTests
         testCode = () => audio.Play(data, AudioPlayMode.Background);
         testCode.Should().Throw<ArgumentNullException>();
     }
+
+    // Not tested:
+    //    Public Sub PlaySystemSound(systemSound As System.Media.SystemSound)
 
     [Fact]
     public void Stop()
