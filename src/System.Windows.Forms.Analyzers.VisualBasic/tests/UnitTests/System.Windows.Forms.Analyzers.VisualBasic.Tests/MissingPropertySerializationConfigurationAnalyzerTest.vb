@@ -8,8 +8,7 @@ Imports Xunit
 Public Class ControlPropertySerializationDiagnosticAnalyzerTest
 
     Private Const ProblematicCode As String =
-"
-Imports System.Drawing
+"Imports System.Drawing
 Imports System.Windows.Forms
 
 Namespace VBControls
@@ -76,9 +75,9 @@ End Namespace
 "
 
     Private Const FixedCode As String =
-"Imports System.ComponentModel
-Imports System.Drawing
+"Imports System.Drawing
 Imports System.Windows.Forms
+Imports System.ComponentModel
 
 Namespace VBControls
 
