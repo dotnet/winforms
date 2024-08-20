@@ -45,7 +45,7 @@ public sealed partial class Application
     private static bool s_useWaitCursor;
 
 #pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-    private static SystemColorMode? s_systemColorMode;
+    private static SystemColorMode? s_colorMode;
 #pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     private const string DarkModeKeyPath = "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
@@ -247,23 +247,51 @@ public sealed partial class Application
         => ThreadContext.FromCurrent().CustomThreadExceptionHandlerAttached;
 
     /// <summary>
-    ///  Gets the default dark mode for the application. This is the SystemColorMode which either has been set
-    ///  by <see cref="SetColorMode(SystemColorMode)"/> or its default value <see cref="SystemColorMode.Classic"/>.
+    ///  Gets the default color mode (dark mode) for the application.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   This is the <see cref="SystemColorMode"/> which either has been set by <see cref="SetColorMode(SystemColorMode)"/>
+    ///   or its default value <see cref="SystemColorMode.Classic"/>. If it has been set to <see cref="SystemColorMode.System"/>,
+    ///   then the actual color mode is determined by the system settings (which can be retrieved by the
+    ///   static (shared in VB) <see cref="Application.SystemColorMode"/> property.
+    ///  </para>
+    /// </remarks>
     [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public static SystemColorMode ColorMode =>
-        s_systemColorMode ?? SystemColorMode.Classic;
+        s_colorMode ?? SystemColorMode.Classic;
 
     /// <summary>
-    ///  Sets the default dark mode for the application.
+    ///  Sets the default color mode (dark mode) for the application.
     /// </summary>
-    /// <param name="systemColorMode">The default dark mode to set.</param>
+    /// <param name="systemColorMode">The application's default color mode (dark mode) to set.</param>
+    /// <remarks>
+    ///  <para>
+    ///   You should use this method to set the default color mode (dark mode) for the application. Set it,
+    ///   before creating any UI elements, to ensure that the correct color mode is used. You can set it to
+    ///   dark mode (<see cref="SystemColorMode.Dark"/>), light mode (<see cref="SystemColorMode.Classic"/>)
+    ///   or to the system setting (<see cref="SystemColorMode.System"/>).
+    ///  </para>
+    ///  <para>
+    ///   If you set it to <see cref="SystemColorMode.System"/>, the actual color mode is determined by the
+    ///   Windows system settings. If the system setting is changed, the application will not automatically
+    ///   adapt to the new setting.
+    ///  </para>
+    ///  <para>
+    ///   Note that the dark color mode is only available from Windows 11 on or later versions. If the system
+    ///   is set to a high contrast mode, the dark mode is not available.
+    ///  </para>
+    ///  <para>
+    ///   <b>Note for Visual Basic:</b> If you are using the Visual Basic Application Framework, you should set the
+    ///   color mode by handling the Application Events (see "WindowsFormsApplicationBase.ApplyApplicationDefaults").
+    ///  </para>
+    /// </remarks>
     [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public static void SetColorMode(SystemColorMode systemColorMode)
     {
         try
         {
-            // Can't use the Generator here, since it cannot deal with experimentals.
+            // Can't use the Generator here, since it cannot deal with [Experimental].
             _ = systemColorMode switch
             {
                 SystemColorMode.Classic => systemColorMode,
@@ -272,25 +300,12 @@ public sealed partial class Application
                 _ => throw new ArgumentOutOfRangeException(nameof(systemColorMode))
             };
 
-            if (systemColorMode == s_systemColorMode)
+            if (systemColorMode == s_colorMode)
             {
                 return;
             }
 
-            if ((systemColorMode == SystemColorMode.Dark && IsSystemDarkModeAvailable)
-                || systemColorMode == SystemColorMode.Classic)
-            {
-                s_systemColorMode = systemColorMode;
-                return;
-            }
-
-            if (GetSystemColorModeInternal() != SystemDarkModeDisabled)
-            {
-                s_systemColorMode = SystemColorMode.Dark;
-                return;
-            }
-
-            s_systemColorMode = SystemColorMode.Classic;
+            s_colorMode = systemColorMode;
         }
         finally
         {
@@ -318,6 +333,7 @@ public sealed partial class Application
             bool complete = false;
             bool success = PInvoke.SendMessageCallback(hwnd, PInvoke.WM_SYSCOLORCHANGE + MessageId.WM_REFLECT, () => complete = true);
             Debug.Assert(success);
+
             if (!success)
             {
                 return;
@@ -390,7 +406,8 @@ public sealed partial class Application
     [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public static bool IsDarkModeEnabled =>
         !SystemInformation.HighContrast
-        && (ColorMode == SystemColorMode.Dark);
+        && (ColorMode == SystemColorMode.Dark
+            || (ColorMode == SystemColorMode.System && SystemColorMode == SystemColorMode.Dark));
 
     /// <summary>
     ///  Gets the path for the executable file that started the application.
