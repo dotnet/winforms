@@ -2648,6 +2648,7 @@ public class ComboBoxTests
 
         comboBox.DropDownStyle = ComboBoxStyle.Simple;
 
+        // DefaultSimpleStyleHeight is 150 in ComboBox class
         comboBox.Height.Should().Be(150);
         comboBox.DropDownStyle.Should().Be(ComboBoxStyle.Simple);
         handleCreatedInvoked.Should().Be(2);
