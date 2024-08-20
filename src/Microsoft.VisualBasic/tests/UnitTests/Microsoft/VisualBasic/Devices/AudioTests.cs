@@ -19,15 +19,6 @@ public class AudioTests
         testCode.Should().Throw<FileNotFoundException>();
     }
 
-    [Fact]
-    public void PlayInvalidMode_Throws()
-    {
-        string location = Path.Combine(Path.GetTempPath(), GetUniqueName());
-        Audio audio = new();
-        Action testCode = () => audio.Play(location, (AudioPlayMode)(-1));
-        testCode.Should().Throw<InvalidEnumArgumentException>();
-    }
-
     [Theory]
     [InlineData(AudioPlayMode.Background)]
     [InlineData(AudioPlayMode.BackgroundLoop)]
@@ -38,6 +29,48 @@ public class AudioTests
         Audio audio = new();
         Action testCode = () => audio.Play(location, mode);
         testCode.Should().Throw<FileNotFoundException>();
+    }
+
+    [Fact]
+    public void PlayBytes_Throws()
+    {
+        byte[] data = Array.Empty<byte>();
+        Audio audio = new();
+        Action testCode = () => audio.Play(data, AudioPlayMode.Background);
+        testCode.Should().Throw<InvalidOperationException>();
+
+        data = null;
+        testCode = () => audio.Play(data, AudioPlayMode.Background);
+        testCode.Should().Throw<ArgumentNullException>();
+    }
+
+    public void PlayEmptyFileName_Throws()
+    {
+        Audio audio = new();
+        Action testCode = () => audio.Play(string.Empty);
+        testCode.Should().Throw<ArgumentNullException>();
+    }
+
+    [Fact]
+    public void PlayInvalidMode_Throws()
+    {
+        string location = Path.Combine(Path.GetTempPath(), GetUniqueName());
+        Audio audio = new();
+        Action testCode = () => audio.Play(location, (AudioPlayMode)(-1));
+        testCode.Should().Throw<InvalidEnumArgumentException>();
+    }
+
+    [Fact]
+    public void PlayStream()
+    {
+        var data = new MemoryStream();
+        Audio audio = new();
+        Action testCode = () => audio.Play(data, AudioPlayMode.Background);
+        testCode.Should().Throw<InvalidOperationException>();
+
+        data = null;
+        testCode = () => audio.Play(data, AudioPlayMode.Background);
+        testCode.Should().Throw<ArgumentNullException>();
     }
 
     // Not tested:
