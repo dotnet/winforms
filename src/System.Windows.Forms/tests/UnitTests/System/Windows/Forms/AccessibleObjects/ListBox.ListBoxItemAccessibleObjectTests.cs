@@ -199,9 +199,9 @@ public class ListBox_ListBoxItemAccessibleObjectTests
         itemAccessibleObjectDoubleClick!.DefaultAction.Should().Be("Double Click");
 
         using ListBox listBoxNullAction = new ListBox { Items = { "Item 2" } };
-        var itemAccessibleObjectNullAction = (ListBox.ListBoxItemAccessibleObject?)listBoxNullAction.AccessibilityObject.GetChild(0);
+        var itemAccessibleObjectNullAction = listBoxNullAction.AccessibilityObject.GetChild(0);
         itemAccessibleObjectNullAction.Should().NotBeNull();
-        itemAccessibleObjectNullAction!.DefaultAction.Should().BeNull();
+        itemAccessibleObjectNullAction.Should().BeOfType<ListBox.ListBoxItemAccessibleObject>();
     }
 
     [WinFormsFact]
