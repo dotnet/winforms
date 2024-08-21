@@ -146,6 +146,37 @@ public class ApplicationTests
         Assert.NotNull(stream);
     }
 
+#pragma warning disable SYSLIB5002 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    [Fact]
+    public void Application_SetColorMode_PlausibilityTests()
+    {
+        if (SystemInformation.HighContrast)
+        {
+            // We don't run this test in HighContrast mode.
+            return;
+        }
+
+        SystemColorMode systemColorMode = Application.SystemColorMode;
+
+        Application.SetColorMode(SystemColorMode.Classic);
+        Assert.False(Application.IsDarkModeEnabled);
+        Assert.Equal(SystemColorMode.Classic, Application.ColorMode);
+        Assert.False(SystemColors.UseAlternativeColorSet);
+
+        Application.SetColorMode(SystemColorMode.Dark);
+        Assert.True(Application.IsDarkModeEnabled);
+        Assert.Equal(SystemColorMode.Dark, Application.ColorMode);
+        Assert.True(SystemColors.UseAlternativeColorSet);
+
+        Application.SetColorMode(SystemColorMode.System);
+        Assert.False(Application.IsDarkModeEnabled ^ systemColorMode == SystemColorMode.Dark);
+        Assert.Equal(SystemColorMode.System, Application.ColorMode);
+        Assert.False(SystemColors.UseAlternativeColorSet ^ systemColorMode == SystemColorMode.Dark);
+    }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning restore SYSLIB5002 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
     [WinFormsFact]
     public void Application_DefaultFont_ReturnsNull_IfNoFontSet()
     {

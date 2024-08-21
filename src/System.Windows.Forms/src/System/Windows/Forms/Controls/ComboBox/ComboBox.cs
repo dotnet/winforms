@@ -119,7 +119,7 @@ public partial class ComboBox : ListControl
                  ControlStyles.UseTextForAccessibility |
                  ControlStyles.StandardClick, false);
 
-        _requestedHeight = DefaultSimpleStyleHeight;
+        _requestedHeight = ScaleHelper.ScaleToInitialSystemDpi(DefaultSimpleStyleHeight);
 
         // this class overrides GetPreferredSizeCore, let Control automatically cache the result
         SetExtendedState(ExtendedStates.UserPreferredSizeCache, true);
@@ -3333,8 +3333,7 @@ public partial class ComboBox : ListControl
     {
         // If we are changing height, store the requested height.
         // Requested height is used if the style is changed to simple.
-        // (
-        if ((specified & BoundsSpecified.Height) != BoundsSpecified.None)
+        if ((specified & BoundsSpecified.Height) != BoundsSpecified.None && DropDownStyle == ComboBoxStyle.Simple)
         {
             _requestedHeight = height;
         }
