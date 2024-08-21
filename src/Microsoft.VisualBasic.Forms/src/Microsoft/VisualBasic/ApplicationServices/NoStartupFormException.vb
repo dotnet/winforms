@@ -14,8 +14,15 @@ Namespace Microsoft.VisualBasic.ApplicationServices
     <Serializable()>
     Public Class NoStartupFormException : Inherits Exception
 
+        ' De-serialization constructor must be defined since we are serializable
+        <EditorBrowsable(EditorBrowsableState.Advanced)>
+        <Obsolete("Type or member obsolete.", DiagnosticId:="SYSLIB0051")>
+        Protected Sub New(info As Runtime.Serialization.SerializationInfo, context As Runtime.Serialization.StreamingContext)
+            MyBase.New(info, context)
+        End Sub
+
         ''' <summary>
-        '''  Creates a new exception
+        '''  Creates a new exception.
         ''' </summary>
         Public Sub New()
             MyBase.New(VbUtils.GetResourceString(SR.AppModel_NoStartupForm))
@@ -27,13 +34,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         Public Sub New(message As String, inner As Exception)
             MyBase.New(message, inner)
-        End Sub
-
-        ' De-serialization constructor must be defined since we are serializable
-        <EditorBrowsable(EditorBrowsableState.Advanced)>
-        <Obsolete("Type or member obsolete.", DiagnosticId:="SYSLIB0051")>
-        Protected Sub New(info As Runtime.Serialization.SerializationInfo, context As Runtime.Serialization.StreamingContext)
-            MyBase.New(info, context)
         End Sub
 
     End Class

@@ -11,7 +11,7 @@ Namespace Microsoft.VisualBasic.Logging
             Implements IDisposable
 
             ' Used for synchronizing writing and reference counting
-            Private ReadOnly _syncObject As Object = New Object
+            Private ReadOnly _syncObject As New Object
 
             ' Indicates whether or not the object has been disposed
             Private _disposed As Boolean
@@ -52,7 +52,7 @@ Namespace Microsoft.VisualBasic.Logging
             ''' <summary>
             '''  Indicates whether or not the stream is still in use by a FileLogTraceListener.
             ''' </summary>
-            ''' <value>True if the stream is being used, otherwise False.</value>
+            ''' <value><see langword="True"/> if the stream is being used, otherwise <see langword="False"/>.</value>
             Friend ReadOnly Property IsInUse() As Boolean
                 Get
                     Return _stream IsNot Nothing
@@ -139,5 +139,5 @@ Namespace Microsoft.VisualBasic.Logging
             End Sub
 
         End Class 'ReferencedStream
-    End Class 'FileLogTraceListener
+    End Class
 End Namespace

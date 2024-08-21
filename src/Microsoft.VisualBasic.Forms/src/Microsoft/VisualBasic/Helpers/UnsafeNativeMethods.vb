@@ -36,9 +36,13 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <param name="UserSpaceFree">The amount of free space available to the current user.</param>
         ''' <param name="TotalUserSpace">The total amount of space on the disk relative to the current user.</param>
         ''' <param name="TotalFreeSpace">The amount of free space on the disk.</param>
-        ''' <returns>True if function succeeds in getting info otherwise False.</returns>
+        ''' <returns><see langword="True"/> if function succeeds in getting info otherwise <see langword="False"/>.</returns>
         <DllImport("Kernel32.dll", CharSet:=CharSet.Auto, BestFitMapping:=False, SetLastError:=True)>
-        Friend Function GetDiskFreeSpaceEx(Directory As String, ByRef UserSpaceFree As Long, ByRef TotalUserSpace As Long, ByRef TotalFreeSpace As Long) As <MarshalAs(UnmanagedType.Bool)> Boolean
+        Friend Function GetDiskFreeSpaceEx(
+            Directory As String,
+            ByRef UserSpaceFree As Long,
+            ByRef TotalUserSpace As Long,
+            ByRef TotalFreeSpace As Long) As <MarshalAs(UnmanagedType.Bool)> Boolean
         End Function
 
     End Module

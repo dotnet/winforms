@@ -12,6 +12,24 @@ Namespace Microsoft.VisualBasic.MyServices
     <EditorBrowsable(EditorBrowsableState.Never)>
     Public Class RegistryProxy
 
+        ''' <summary>
+        '''  Proxy class can only created by internal classes.
+        ''' </summary>
+        Friend Sub New()
+        End Sub
+
+        Public ReadOnly Property ClassesRoot() As RegistryKey
+            Get
+                Return Registry.ClassesRoot
+            End Get
+        End Property
+
+        Public ReadOnly Property CurrentConfig() As RegistryKey
+            Get
+                Return Registry.CurrentConfig
+            End Get
+        End Property
+
         Public ReadOnly Property CurrentUser() As RegistryKey
             Get
                 Return Registry.CurrentUser
@@ -24,27 +42,15 @@ Namespace Microsoft.VisualBasic.MyServices
             End Get
         End Property
 
-        Public ReadOnly Property ClassesRoot() As RegistryKey
-            Get
-                Return Registry.ClassesRoot
-            End Get
-        End Property
-
-        Public ReadOnly Property Users() As RegistryKey
-            Get
-                Return Registry.Users
-            End Get
-        End Property
-
         Public ReadOnly Property PerformanceData() As RegistryKey
             Get
                 Return Registry.PerformanceData
             End Get
         End Property
 
-        Public ReadOnly Property CurrentConfig() As RegistryKey
+        Public ReadOnly Property Users() As RegistryKey
             Get
-                Return Registry.CurrentConfig
+                Return Registry.Users
             End Get
         End Property
 
@@ -58,16 +64,13 @@ Namespace Microsoft.VisualBasic.MyServices
             Registry.SetValue(keyName, valueName, value)
         End Sub
 
-        Public Sub SetValue(keyName As String, valueName As String, value As Object,
+        Public Sub SetValue(
+            keyName As String,
+            valueName As String,
+            value As Object,
             valueKind As RegistryValueKind)
 
             Registry.SetValue(keyName, valueName, value, valueKind)
-        End Sub
-
-        ''' <summary>
-        '''  Proxy class can only created by internal classes.
-        ''' </summary>
-        Friend Sub New()
         End Sub
 
     End Class

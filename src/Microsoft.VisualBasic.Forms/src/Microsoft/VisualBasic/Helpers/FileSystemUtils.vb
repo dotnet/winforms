@@ -4,7 +4,7 @@
 Imports System.IO
 Imports System.Security
 
-Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
+Imports VbUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.CompilerServices
 
@@ -12,46 +12,6 @@ Namespace Microsoft.VisualBasic.CompilerServices
     '''  Internal utilities from Microsoft.VisualBasic.FileIO.FileSystem.
     ''' </summary>
     Friend NotInheritable Class FileSystemUtils
-
-        ''' <summary>
-        '''  Normalize the path, but throw exception if the path ends with separator.
-        ''' </summary>
-        ''' <param name="path">The input path.</param>
-        ''' <param name="paramName">The parameter name to include in the exception if one is raised.</param>
-        ''' <returns>The normalized path.</returns>
-        Friend Shared Function NormalizeFilePath(path As String,
-                                    paramName As String) As String
-            CheckFilePathTrailingSeparator(path, paramName)
-            Return NormalizePath(path)
-        End Function
-
-        ''' <summary>
-        '''  Get full path, get long format, and remove any pending separator.
-        ''' </summary>
-        ''' <param name="path">The path to be normalized.</param>
-        ''' <returns>The normalized path.</returns>
-        ''' <exception cref="IO.Path.GetFullPath">See IO.Path.GetFullPath for possible exceptions.</exception>
-        ''' <remarks>Keep this function since we might change the implementation / behavior later.</remarks>
-        Friend Shared Function NormalizePath(path As String) As String
-            Return GetLongPath(RemoveEndingSeparator(IO.Path.GetFullPath(path)))
-        End Function
-
-        ''' <summary>
-        '''  Throw <see cref="ArgumentException "/> if the file path ends with a separator.
-        ''' </summary>
-        ''' <param name="path">The file path.</param>
-        ''' <param name="paramName">The parameter name to include in <see cref="ArgumentException "/> .</param>
-        Friend Shared Sub CheckFilePathTrailingSeparator(path As String,
-                                paramName As String)
-            ' Check for argument null
-            If String.IsNullOrEmpty(path) Then
-                Throw ExUtils.GetArgumentNullException(paramName)
-            End If
-            If path.EndsWith(IO.Path.DirectorySeparatorChar, StringComparison.Ordinal) Or
-                path.EndsWith(IO.Path.AltDirectorySeparatorChar, StringComparison.Ordinal) Then
-                Throw ExUtils.GetArgumentExceptionWithArgName(paramName, SR.IO_FilePathException)
-            End If
-        End Sub
 
         ''' <summary>
         '''  Returns the given path in long format (v.s 8.3 format) if the path exists.
@@ -112,7 +72,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         '''  Checks if the full path is a root path.
         ''' </summary>
         ''' <param name="path">The path to check.</param>
-        ''' <returns>True if FullPath is a root path, False otherwise.</returns>
+        ''' <returns><see langword="True"/> if FullPath is a root path, <see langword="False"/> otherwise.</returns>
         ''' <remarks>
         '''   IO.Path.GetPathRoot: C: -> C:, C:\ -> C:\, \\machine\share -> \\machine\share,
         '''           BUT \\machine\share\ -> \\machine\share (No separator here).
@@ -149,6 +109,54 @@ Namespace Microsoft.VisualBasic.CompilerServices
 
             ' Otherwise, remove all separators at the end.
             Return path.TrimEnd(IO.Path.DirectorySeparatorChar, IO.Path.AltDirectorySeparatorChar)
+        End Function
+
+        ''' <summary>
+        '''  Throw <see cref="ArgumentException "/> if the file path ends with a separator.
+        ''' </summary>
+        ''' <param name="path">The file path.</param>
+        ''' <param name="paramName">The parameter name to include in <see cref="ArgumentException "/> .</param>
+        Friend Shared Sub CheckFilePathTrailingSeparator(path As String,
+                                paramName As String)
+            ' Check for argument null
+            If String.IsNullOrEmpty(path) Then
+                Throw VbUtils.GetArgumentNullException(paramName)
+            End If
+            If path.EndsWith(IO.Path.DirectorySeparatorChar, StringComparison.Ordinal) Or
+                path.EndsWith(IO.Path.AltDirectorySeparatorChar, StringComparison.Ordinal) Then
+                Throw VbUtils.GetArgumentExceptionWithArgName(paramName, SR.IO_FilePathException)
+            End If
+        End Sub
+
+        ''' <summary>
+        '''  Normalize the path, but throw exception if the path ends with separator.
+        ''' </summary>
+        ''' <param name="path">The input path.</param>
+        ''' <param name="paramName">The parameter name to include in the
+        '''  exception if one is raised.
+        ''' </param>
+        ''' <returns>The normalized path.</returns>
+        Friend Shared Function NormalizeFilePath(
+            path As String,
+            paramName As String) As String
+
+            CheckFilePathTrailingSeparator(path, paramName)
+            Return NormalizePath(path)
+        End Function
+
+        ''' <summary>
+        '''  Get full path, get long format, and remove any pending separator.
+        ''' </summary>
+        ''' <param name="path">The path to be normalized.</param>
+        ''' <returns>The normalized path.</returns>
+        ''' <exception cref="IO.Path.GetFullPath">
+        '''  <see cref="IO.Path.GetFullPath"/> for possible exceptions.
+        ''' </exception>
+        ''' <remarks>
+        '''  Keep this function since we might change the implementation / behavior later.
+        ''' </remarks>
+        Friend Shared Function NormalizePath(path As String) As String
+            Return GetLongPath(RemoveEndingSeparator(IO.Path.GetFullPath(path)))
         End Function
 
     End Class

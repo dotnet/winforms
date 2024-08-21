@@ -18,6 +18,21 @@ Namespace Microsoft.VisualBasic.Devices
         'But that is completely consistent with the rest of the FX design. It is MY.* that is thread safe and leads to best practice access to these objects.
         'If you dim them up yourself, you are responsible for managing the threading.
 
+        'Lazy initialized cache for the Clock class. SHARED because Clock behaves as a readonly singleton class
+        Private Shared s_clock As Clock
+
+        'Lazy initialized cache for ComputerInfo
+        Private _computerInfo As ComputerInfo
+
+        'Lazy initialized cache for the FileSystem.
+        Private _fileIO As FileSystemProxy
+
+        'Lazy initialized cache for the Network class.
+        Private _network As Network
+
+        'Lazy initialized cache for the Registry class
+        Private _registryInstance As RegistryProxy
+
         ''' <summary>
         '''  Returns the Clock object which contains the LocalTime and GMTTime.
         ''' </summary>
@@ -33,7 +48,9 @@ Namespace Microsoft.VisualBasic.Devices
         '''  Gets the object representing the file system of the computer.
         ''' </summary>
         ''' <value>A System.IO.FileSystem object.</value>
-        ''' <remarks>The instance returned by this property is lazy initialized and cached.</remarks>
+        ''' <remarks>
+        '''  The instance returned by this property is lazy initialized and cached.
+        ''' </remarks>
         Public ReadOnly Property FileSystem() As FileSystemProxy
             Get
                 If _fileIO Is Nothing Then
@@ -46,14 +63,27 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         '''  Gets the object representing information about the computer's state
         ''' </summary>
-        ''' <value>A Microsoft.VisualBasic.MyServices.ComputerInfo object.</value>
-        ''' <remarks>The instance returned by this property is lazy initialized and cached.</remarks>
+        ''' <value>A <see cref="ComputerInfo"/> object.</value>
+        ''' <remarks>
+        '''  The instance returned by this property is lazy initialized and cached.
+        ''' </remarks>
         Public ReadOnly Property Info() As ComputerInfo
             Get
                 If _computerInfo Is Nothing Then
                     _computerInfo = New ComputerInfo
                 End If
                 Return _computerInfo
+            End Get
+        End Property
+
+        ''' <summary>
+        '''  This property wraps the <see cref="Environment.MachineName"/> property
+        '''  in the .NET framework to return the name of the computer.
+        ''' </summary>
+        ''' <value>A string containing the name of the computer.</value>
+        Public ReadOnly Property Name() As String
+            Get
+                Return Environment.MachineName
             End Get
         End Property
 
@@ -71,17 +101,6 @@ Namespace Microsoft.VisualBasic.Devices
         End Property
 
         ''' <summary>
-        '''  This property wraps the <see cref="Environment.MachineName"/> property
-        '''  in the .NET framework to return the name of the computer.
-        ''' </summary>
-        ''' <value>A string containing the name of the computer.</value>
-        Public ReadOnly Property Name() As String
-            Get
-                Return Environment.MachineName
-            End Get
-        End Property
-
-        ''' <summary>
         '''  Gets the Registry object, which can be used to read, set and
         '''  enumerate keys and values in the system registry.
         ''' </summary>
@@ -94,11 +113,5 @@ Namespace Microsoft.VisualBasic.Devices
             End Get
         End Property
 
-        Private _computerInfo As ComputerInfo 'Lazy initialized cache for ComputerInfo
-        Private _fileIO As FileSystemProxy 'Lazy initialized cache for the FileSystem.
-        Private _network As Network 'Lazy initialized cache for the Network class.
-        Private _registryInstance As RegistryProxy 'Lazy initialized cache for the Registry class
-        Private Shared s_clock As Clock 'Lazy initialized cache for the Clock class. SHARED because Clock behaves as a readonly singleton class
-
-    End Class 'MyServerComputer
+    End Class
 End Namespace
