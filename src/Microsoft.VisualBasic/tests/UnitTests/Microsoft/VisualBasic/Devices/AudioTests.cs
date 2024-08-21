@@ -44,6 +44,7 @@ public class AudioTests
         testCode.Should().Throw<ArgumentNullException>();
     }
 
+    [Fact]
     public void PlayEmptyFileName_Throws()
     {
         Audio audio = new();
