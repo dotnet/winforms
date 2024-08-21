@@ -185,7 +185,6 @@ public class ListBox_ListBoxItemAccessibleObjectTests
         boundsAfterHandleCreation.Height.Should().BeLessOrEqualTo(listBox.Height);
     }
 
-
     [WinFormsFact]
     public void ListBoxItemAccessibleObject_DefaultAction_VariesByContext()
     {
