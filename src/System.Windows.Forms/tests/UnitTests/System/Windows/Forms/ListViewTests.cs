@@ -7,6 +7,7 @@ using System.Windows.Forms.Automation;
 using Microsoft.DotNet.RemoteExecutor;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ListViewItem;
+
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
@@ -4405,6 +4406,38 @@ public class ListViewTests
         Assert.Equal(expectedCallCount, customAccessibleObject?.RaiseAutomationEventCalls);
     }
 
+    [WinFormsFact]
+    // Regression test for https://github.com/dotnet/winforms/issues/11658
+    public void ListView_OnItemChecked_VirtualMode()
+    {
+        ListViewItem listItem1 = new("Test 1");
+
+        using SubListView listView = new SubListView
+        {
+            VirtualMode = true,
+            VirtualListSize = 1,
+            CheckBoxes = true
+        };
+
+        listView.RetrieveVirtualItem += (s, e) =>
+        {
+            e.Item = e.ItemIndex switch
+            {
+                0 => listItem1,
+                _ => throw new NotImplementedException()
+            };
+        };
+        listView.CreateControl();
+
+        AccessibleObject accessibleObject = listView.AccessibilityObject;
+        listView.Items[0].Focused = true;
+        listView.OnGotFocus(new EventArgs());
+        var clone = (ListViewItem)listView.Items[0].Clone();
+        clone.Checked = true;
+        Action action = () => listView.OnItemChecked(new ItemCheckedEventArgs(clone));
+        action.Should().NotThrow();
+    }
+
     public static IEnumerable<object[]> ListView_Checkboxes_VirtualMode_Disabling_TestData()
     {
         foreach (View view in Enum.GetValues(typeof(View)))
@@ -6134,6 +6167,8 @@ public class ListViewTests
         public new void OnAfterLabelEdit(LabelEditEventArgs e) => base.OnAfterLabelEdit(e);
 
         public new void OnCacheVirtualItems(CacheVirtualItemsEventArgs e) => base.OnCacheVirtualItems(e);
+
+        public new void OnItemChecked(ItemCheckedEventArgs e) => base.OnItemChecked(e);
     }
 
     private SubListView GetSubListViewWithData(View view, bool virtualMode, bool showGroups, bool withinGroup, bool createControl)

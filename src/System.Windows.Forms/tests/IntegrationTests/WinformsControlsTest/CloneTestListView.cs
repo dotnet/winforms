@@ -12,9 +12,6 @@ internal class CloneTestListView : ListView
             return;
         }
 
-        if (e.Item.ListView == this)
-        {
-            base.OnItemChecked(e);
-        }
+        base.OnItemChecked(e);
     }
 }
