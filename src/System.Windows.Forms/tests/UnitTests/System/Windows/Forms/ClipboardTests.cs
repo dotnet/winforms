@@ -16,8 +16,16 @@ namespace System.Windows.Forms.Tests;
 
 [Collection("Sequential")]
 [CollectionDefinition("Sequential", DisableParallelization = true)]
-public partial class ClipboardTests
+public class ClipboardTests
 {
+    [WinFormsFact]
+    public void Clipboard_SetText_InvokeString_GetReturnsExpected()
+    {
+        Clipboard.SetText("text");
+        Clipboard.GetText().Should().Be("text");
+        Clipboard.ContainsText().Should().BeTrue();
+    }
+
     [WinFormsFact]
     public void Clipboard_Clear_InvokeMultipleTimes_Success()
     {
