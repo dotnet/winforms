@@ -6415,6 +6415,19 @@ public partial class DataGridViewCellTests
     }
 
     [WinFormsFact]
+    public void DataGridViewCell_ImageCell_ImageLayout_Set_NotSet_Success()
+    {
+        using DataGridView dataGridView = new();
+        using DataGridViewImageColumn imageColumn = new();
+        dataGridView.Columns.Add(imageColumn);
+
+        DataGridViewImageCell cell = dataGridView.Rows[0].Cells[0].Should().BeOfType<DataGridViewImageCell>().Which;
+        cell.ImageLayout.Should().Be(DataGridViewImageCellLayout.Normal);
+        cell.ImageLayout = DataGridViewImageCellLayout.NotSet;
+        cell.ImageLayout.Should().Be(DataGridViewImageCellLayout.NotSet);
+    }
+
+    [WinFormsFact]
     public void DataGridViewCell_OnContentClick_InvokeInternalRaiseAutomationNotification()
     {
         using SubDataGridViewCheckBoxCell cellTemplate = new();
