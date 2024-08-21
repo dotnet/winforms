@@ -22,11 +22,11 @@ public class LogTests : FileCleanupTestBase
         listener.CustomLocation = GetTestFilePath();
 
         log.WriteEntry("WriteEntry");
-        log.WriteEntry("WriteEntry", severity: System.Diagnostics.TraceEventType.Warning);
-        log.WriteEntry("WriteEntry", severity: System.Diagnostics.TraceEventType.Error, id: 3);
+        log.WriteEntry("WriteEntry", severity: TraceEventType.Warning);
+        log.WriteEntry("WriteEntry", severity: TraceEventType.Error, id: 3);
 
         log.WriteException(new ArgumentException());
-        log.WriteException(new ArgumentException(), severity: System.Diagnostics.TraceEventType.Warning, additionalInfo: "AdditionalInfo");
-        log.WriteException(new ArgumentException(), severity: System.Diagnostics.TraceEventType.Warning, additionalInfo: "AdditionalInfo", id: 6);
+        log.WriteException(new ArgumentException(), severity: TraceEventType.Warning, additionalInfo: "AdditionalInfo");
+        log.WriteException(new ArgumentException(), severity: TraceEventType.Warning, additionalInfo: "AdditionalInfo", id: 6);
     }
 }
