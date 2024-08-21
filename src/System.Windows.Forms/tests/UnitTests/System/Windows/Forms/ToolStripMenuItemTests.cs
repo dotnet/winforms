@@ -373,7 +373,7 @@ public class ToolStripMenuItemTests
     [WinFormsFact]
     public void ToolStripMenuItem_CheckedChanged_InvokeHandler()
     {
-        ToolStripMenuItem item = new();
+        using ToolStripMenuItem item = new();
         bool eventCalled = false;
         EventHandler handler = (sender, e) => { eventCalled = true; };
 
@@ -385,14 +385,12 @@ public class ToolStripMenuItemTests
         eventCalled = false;
         item.Checked = false;
         eventCalled.Should().BeTrue();
-
-        item.CheckedChanged -= handler;
     }
 
     [WinFormsFact]
     public void ToolStripMenuItem_CheckStateChanged_InvokeHandler()
     {
-        ToolStripMenuItem item = new();
+        using ToolStripMenuItem item = new();
         bool eventInvoked = false;
         EventHandler handler = (sender, e) => { eventInvoked = true; };
 
