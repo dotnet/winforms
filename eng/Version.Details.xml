@@ -191,29 +191,29 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
   </ProductDependencies>
   <ToolsetDependencies>
     <!-- Arcade -->
-    <Dependency Name="Microsoft.DotNet.Arcade.Sdk" Version="9.0.0-beta.24420.6">
+    <Dependency Name="Microsoft.DotNet.Arcade.Sdk" Version="9.0.0-beta.24421.2">
       <Uri>https://github.com/dotnet/arcade</Uri>
-      <Sha>b435d26f349d3960d12281321972ed323c35319d</Sha>
+      <Sha>9b24668b7196b9639e60770465683cf81465d89a</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.DotNet.GenFacades" Version="9.0.0-beta.24420.6">
+    <Dependency Name="Microsoft.DotNet.GenFacades" Version="9.0.0-beta.24421.2">
       <Uri>https://github.com/dotnet/arcade</Uri>
-      <Sha>b435d26f349d3960d12281321972ed323c35319d</Sha>
+      <Sha>9b24668b7196b9639e60770465683cf81465d89a</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.DotNet.CMake.Sdk" Version="9.0.0-beta.24420.6">
+    <Dependency Name="Microsoft.DotNet.CMake.Sdk" Version="9.0.0-beta.24421.2">
       <Uri>https://github.com/dotnet/arcade</Uri>
-      <Sha>b435d26f349d3960d12281321972ed323c35319d</Sha>
+      <Sha>9b24668b7196b9639e60770465683cf81465d89a</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.DotNet.Helix.Sdk" Version="9.0.0-beta.24420.6">
+    <Dependency Name="Microsoft.DotNet.Helix.Sdk" Version="9.0.0-beta.24421.2">
       <Uri>https://github.com/dotnet/arcade</Uri>
-      <Sha>b435d26f349d3960d12281321972ed323c35319d</Sha>
+      <Sha>9b24668b7196b9639e60770465683cf81465d89a</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.DotNet.RemoteExecutor" Version="9.0.0-beta.24420.6">
+    <Dependency Name="Microsoft.DotNet.RemoteExecutor" Version="9.0.0-beta.24421.2">
       <Uri>https://github.com/dotnet/arcade</Uri>
-      <Sha>b435d26f349d3960d12281321972ed323c35319d</Sha>
+      <Sha>9b24668b7196b9639e60770465683cf81465d89a</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.DotNet.XUnitExtensions" Version="9.0.0-beta.24420.6">
+    <Dependency Name="Microsoft.DotNet.XUnitExtensions" Version="9.0.0-beta.24421.2">
       <Uri>https://github.com/dotnet/arcade</Uri>
-      <Sha>b435d26f349d3960d12281321972ed323c35319d</Sha>
+      <Sha>9b24668b7196b9639e60770465683cf81465d89a</Sha>
     </Dependency>
   </ToolsetDependencies>
 </Dependencies>
