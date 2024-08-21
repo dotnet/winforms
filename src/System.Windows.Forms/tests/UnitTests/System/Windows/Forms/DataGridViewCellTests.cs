@@ -11,7 +11,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests;
 
-public class DataGridViewCellTests
+public partial class DataGridViewCellTests
 {
     [WinFormsFact]
     public void DataGridViewCell_Ctor_Default()
@@ -3561,125 +3561,6 @@ public class DataGridViewCellTests
         Assert.False(cell.EnterUnsharesRow(-1, true));
     }
 
-    public static IEnumerable<object[]> GetClipboardContent_TestData()
-    {
-        yield return new object[] { -2, true, true, true, true, "format", null };
-        yield return new object[] { -2, true, true, true, true, null, null };
-        yield return new object[] { -1, true, true, true, true, "format", null };
-        yield return new object[] { -1, true, true, true, true, null, null };
-        yield return new object[] { 0, true, true, true, true, "format", null };
-        yield return new object[] { 0, true, true, true, true, null, null };
-    }
-
-    [WinFormsTheory]
-    [MemberData(nameof(GetClipboardContent_TestData))]
-    public void DataGridViewCell_GetClipboardContent_Invoke_ReturnsExpected(int rowIndex, bool firstCell, bool lastCell, bool inFirstRow, bool inLastRow, string format, object expected)
-    {
-        using SubDataGridViewCell cell = new();
-        Assert.Equal(expected, cell.GetClipboardContent(rowIndex, firstCell, lastCell, inFirstRow, inLastRow, format));
-    }
-
-    [WinFormsTheory]
-    [MemberData(nameof(GetClipboardContent_TestData))]
-    public void DataGridViewCell_GetClipboardContent_InvokeWithRow_ReturnsExpected(int rowIndex, bool firstCell, bool lastCell, bool inFirstRow, bool inLastRow, string format, object expected)
-    {
-        using DataGridViewRow row = new();
-        using SubDataGridViewCell cell = new();
-        row.Cells.Add(cell);
-        Assert.Equal(expected, cell.GetClipboardContent(rowIndex, firstCell, lastCell, inFirstRow, inLastRow, format));
-    }
-
-    public static IEnumerable<object[]> GetClipboardContent_WithColumn_TestData()
-    {
-        yield return new object[] { true, true, true, true, "format", null };
-        yield return new object[] { true, true, true, true, null, null };
-    }
-
-    [WinFormsTheory]
-    [MemberData(nameof(GetClipboardContent_WithColumn_TestData))]
-    public void DataGridViewCell_GetClipboardContent_InvokeWithColumn_ReturnsExpected(bool firstCell, bool lastCell, bool inFirstRow, bool inLastRow, string format, object expected)
-    {
-        using DataGridViewColumn column = new();
-        using SubDataGridViewColumnHeaderCell cell = new();
-        column.HeaderCell = cell;
-        Assert.Equal(expected, cell.GetClipboardContent(-1, firstCell, lastCell, inFirstRow, inLastRow, format));
-    }
-
-    [WinFormsTheory]
-    [MemberData(nameof(GetClipboardContent_WithColumn_TestData))]
-    public void DataGridViewCell_GetClipboardContent_InvokeWithDataGridView_ReturnsExpected(bool firstCell, bool lastCell, bool inFirstRow, bool inLastRow, string format, object expected)
-    {
-        using SubDataGridViewCell cellTemplate = new();
-        using DataGridViewColumn column = new()
-        {
-            CellTemplate = cellTemplate
-        };
-        using DataGridView control = new();
-        control.Columns.Add(column);
-        SubDataGridViewCell cell = (SubDataGridViewCell)control.Rows[0].Cells[0];
-        Assert.Equal(expected, cell.GetClipboardContent(0, firstCell, lastCell, inFirstRow, inLastRow, format));
-    }
-
-    [WinFormsTheory]
-    [MemberData(nameof(GetClipboardContent_WithColumn_TestData))]
-    public void DataGridViewCell_GetClipboardContent_InvokeShared_ReturnsExpected(bool firstCell, bool lastCell, bool inFirstRow, bool inLastRow, string format, object expected)
-    {
-        using SubDataGridViewCell cellTemplate = new();
-        using DataGridViewColumn column = new()
-        {
-            CellTemplate = cellTemplate
-        };
-        using DataGridView control = new();
-        control.Columns.Add(column);
-        SubDataGridViewCell cell = (SubDataGridViewCell)control.Rows.SharedRow(0).Cells[0];
-        Assert.Equal(expected, cell.GetClipboardContent(0, firstCell, lastCell, inFirstRow, inLastRow, format));
-    }
-
-    [WinFormsTheory]
-    [InlineData(-2)]
-    [InlineData(0)]
-    public void DataGridViewCell_GetClipboardContent_InvalidRowIndexWithColumn_ThrowsArgumentOutOfRangeException(int rowIndex)
-    {
-        using DataGridViewColumn column = new();
-        using SubDataGridViewColumnHeaderCell cell = new();
-        column.HeaderCell = cell;
-        Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => cell.GetClipboardContent(rowIndex, true, true, true, true, "format"));
-    }
-
-    [WinFormsTheory]
-    [InlineData(-2)]
-    [InlineData(-1)]
-    [InlineData(1)]
-    public void DataGridViewCell_GetClipboardContent_InvalidRowIndexWithDataGridView_ThrowsArgumentOutOfRangeException(int rowIndex)
-    {
-        using SubDataGridViewCell cellTemplate = new();
-        using DataGridViewColumn column = new()
-        {
-            CellTemplate = cellTemplate
-        };
-        using DataGridView control = new();
-        control.Columns.Add(column);
-        SubDataGridViewCell cell = (SubDataGridViewCell)control.Rows[0].Cells[0];
-        Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => cell.GetClipboardContent(rowIndex, true, true, true, true, "format"));
-    }
-
-    [WinFormsTheory]
-    [InlineData(-2)]
-    [InlineData(-1)]
-    [InlineData(1)]
-    public void DataGridViewCell_GetClipboardContent_InvalidRowIndexShared_ThrowsArgumentOutOfRangeException(int rowIndex)
-    {
-        using SubDataGridViewCell cellTemplate = new();
-        using DataGridViewColumn column = new()
-        {
-            CellTemplate = cellTemplate
-        };
-        using DataGridView control = new();
-        control.Columns.Add(column);
-        SubDataGridViewCell cell = (SubDataGridViewCell)control.Rows.SharedRow(0).Cells[0];
-        Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => cell.GetClipboardContent(rowIndex, true, true, true, true, "format"));
-    }
-
     [WinFormsTheory]
     [InlineData(-2)]
     [InlineData(-1)]
@@ -6613,9 +6494,9 @@ public class DataGridViewCellTests
 
         protected override AccessibleObject CreateAccessibilityInstance() => MockAccessibleObject;
 
-        public void MouseClick(DataGridViewCellMouseEventArgs e) => base.OnMouseUpInternal(e);
+        public void MouseClick(DataGridViewCellMouseEventArgs e) => OnMouseUpInternal(e);
 
-        public void OnKeyClick(KeyEventArgs e, int rowIndex) => base.OnKeyUp(e, rowIndex);
+        public void OnKeyClick(KeyEventArgs e, int rowIndex) => OnKeyUp(e, rowIndex);
     }
 
     private class SubDataGridViewColumnHeaderCell : DataGridViewColumnHeaderCell
