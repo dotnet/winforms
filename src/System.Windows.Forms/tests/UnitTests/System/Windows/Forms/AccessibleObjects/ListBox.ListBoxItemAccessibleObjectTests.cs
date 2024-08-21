@@ -249,8 +249,8 @@ public class ListBox_ListBoxItemAccessibleObjectTests
     {
         using ListBox listBox = new();
         ItemArray.Entry itemEntry = new ItemArray.Entry("Test Item");
-        ListBox.ListBoxAccessibleObject listBoxAccessibleObject = new ListBox.ListBoxAccessibleObject(listBox);
-        ListBox.ListBoxItemAccessibleObject listBoxItemAccessibleObject = new ListBox.ListBoxItemAccessibleObject(listBox, itemEntry, listBoxAccessibleObject);
+        ListBox.ListBoxAccessibleObject listBoxAccessibleObject = new(listBox);
+        ListBox.ListBoxItemAccessibleObject listBoxItemAccessibleObject = new(listBox, itemEntry, listBoxAccessibleObject);
 
         Action action = () => listBoxItemAccessibleObject.Select(flags);
 
