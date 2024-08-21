@@ -986,9 +986,13 @@ public partial class PrintPreviewDialog : Form
     /// <summary>
     ///  Forces the preview to be regenerated every time the dialog comes up
     /// </summary>
+#pragma warning disable CS0672 // Member overrides obsolete member
     protected override void OnClosing(CancelEventArgs e)
+#pragma warning restore CS0672 // Member overrides obsolete member
     {
+#pragma warning disable WFDEV004 // Type or member is obsolete
         base.OnClosing(e);
+#pragma warning restore WFDEV004 // Type or member is obsolete
         _previewControl.InvalidatePreview();
     }
 

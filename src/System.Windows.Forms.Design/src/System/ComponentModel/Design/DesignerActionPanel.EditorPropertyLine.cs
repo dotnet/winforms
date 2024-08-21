@@ -451,9 +451,9 @@ internal sealed partial class DesignerActionPanel
                 _parent.ActionPanel.SetDropDownActive(true);
             }
 
-            protected override void OnClosed(EventArgs e)
+            protected override void OnFormClosed(FormClosedEventArgs e)
             {
-                base.OnClosed(e);
+                base.OnFormClosed(e);
                 _parent.ActionPanel.SetDropDownActive(false);
             }
 
