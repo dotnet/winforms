@@ -22,8 +22,8 @@ public class ClipboardTests
     public void Clipboard_SetText_InvokeString_GetReturnsExpected()
     {
         Clipboard.SetText("text");
-        Assert.Equal("text", Clipboard.GetText());
-        Assert.True(Clipboard.ContainsText());
+        Clipboard.GetText().Should().Be("text");
+        Clipboard.ContainsText().Should().BeTrue();
     }
 
     [WinFormsFact]

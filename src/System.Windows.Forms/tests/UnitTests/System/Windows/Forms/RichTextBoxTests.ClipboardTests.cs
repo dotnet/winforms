@@ -14,14 +14,14 @@ public partial class RichTextBoxTests
         public void RichTextBox_OleObject_IncompleteOleObject_DoNothing()
         {
             using RichTextBox control = new();
-            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            control.Handle.Should().NotBe(IntPtr.Zero);
 
             using MemoryStream memoryStream = new();
             using Bitmap bitmap = new(100, 100);
             bitmap.Save(memoryStream, Drawing.Imaging.ImageFormat.Png);
             Clipboard.SetData("Embed Source", memoryStream);
 
-            Assert.Equal(string.Empty, control.Text);
+            control.Text.Should().BeEmpty();
         }
 
         public static TheoryData<string> PlainTextData => new()
@@ -55,7 +55,7 @@ public partial class RichTextBoxTests
             Clipboard.Clear();
             richTextBox1.Paste(DataFormats.GetFormat(DataFormats.Text));
 
-            richTextBox1.Text.Should().Be("");
+            richTextBox1.Text.Should().BeEmpty();
         }
 
         public static TheoryData<string> RtfData => new()
