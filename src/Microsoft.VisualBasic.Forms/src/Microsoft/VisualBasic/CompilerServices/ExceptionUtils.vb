@@ -151,28 +151,5 @@ Namespace Microsoft.VisualBasic.CompilerServices
 
         End Function
 
-        Friend Function VbMakeException(hr As Integer) As Exception
-            Dim sMsg As String
-
-            If hr > 0 AndAlso hr <= &HFFFFI Then
-                sMsg = VbUtils.GetResourceString(CType(hr, VbErrors))
-            Else
-                sMsg = String.Empty
-            End If
-            VbMakeException = VbMakeExceptionEx(hr, sMsg)
-        End Function
-
-        Friend Function VbMakeExceptionEx(number As Integer, sMsg As String) As Exception
-            Dim vBDefinedError As Boolean
-
-            VbMakeExceptionEx = BuildException(number, sMsg, vBDefinedError)
-
-            If vBDefinedError Then
-                ' .NET Framework implementation calls:
-                ' Err().SetUnmappedError(number)
-            End If
-
-        End Function
-
     End Module
 End Namespace
