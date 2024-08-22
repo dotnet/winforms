@@ -1251,8 +1251,12 @@ public partial class ToolStripDropDown : ToolStrip
                 if ((!(e.ClickedItem is ToolStripDropDownItem dismissingItem))                   // it's not a dropdownitem
                    || (dismissingItem is ToolStripSplitButton && !dismissingItem.DropDown.Visible) // clicking on the split button button dismisses
                    || !(dismissingItem.HasDropDownItems))
-                {    // clicking on a item w/dropdown does not dismiss window
+                {   // clicking on a item w/dropdown does not dismiss window
                     Close(ToolStripDropDownCloseReason.ItemClicked);
+                    if (_ownerItem!.Owner!.Focused)
+                    {
+                        SelectPreviousToolStrip();
+                    }
                 }
             }
         }
@@ -1359,7 +1363,7 @@ public partial class ToolStripDropDown : ToolStrip
     {
         // snap the owner item before calling hide as non-auto created dropdowns will
         // exit menu mode if there's no OwnerItem.
-        ToolStripItem? itemOnPreviousMenuToSelect = OwnerItem;
+        ToolStripItem? itemOnPreviousMenuToSelect = GetToplevelOwnerItem();
         Hide();
 
         if (itemOnPreviousMenuToSelect is not null)
