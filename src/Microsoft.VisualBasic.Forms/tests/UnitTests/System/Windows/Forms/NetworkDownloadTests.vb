@@ -48,6 +48,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
             Return fileInfo.Length
         End Function
+
         <WinFormsFact>
         Public Sub DownloadFile_UriOnly_Success()
             Dim testDirectory As String = CreateTempDirectory()

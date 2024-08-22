@@ -7,7 +7,6 @@ Namespace Microsoft.VisualBasic.Logging
     '''  Options for the location of a log's directory.
     ''' </summary>
     Public Enum LogFileLocation As Integer
-
         ' Changes to this enum must be reflected in ValidateLogfileLocationEnumValue()
         TempDirectory
         LocalUserApplicationDirectory
