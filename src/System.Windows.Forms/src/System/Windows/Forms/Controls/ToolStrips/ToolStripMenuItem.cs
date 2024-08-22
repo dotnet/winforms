@@ -1055,7 +1055,6 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
                 return true;
             }
 
-
             FireEvent(ToolStripItemEventType.Click);
             return true;
         }
