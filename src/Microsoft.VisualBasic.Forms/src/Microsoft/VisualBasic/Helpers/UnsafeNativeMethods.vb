@@ -9,6 +9,22 @@ Namespace Microsoft.VisualBasic.CompilerServices
     Friend Module UnsafeNativeMethods
 
         ''' <summary>
+        '''  Used to determine how much free space is on a disk.
+        ''' </summary>
+        ''' <param name="Directory">Path including drive we're getting information about.</param>
+        ''' <param name="UserSpaceFree">The amount of free space available to the current user.</param>
+        ''' <param name="TotalUserSpace">The total amount of space on the disk relative to the current user.</param>
+        ''' <param name="TotalFreeSpace">The amount of free space on the disk.</param>
+        ''' <returns><see langword="True"/> if function succeeds in getting info otherwise <see langword="False"/>.</returns>
+        <DllImport("Kernel32.dll", CharSet:=CharSet.Auto, BestFitMapping:=False, SetLastError:=True)>
+        Friend Function GetDiskFreeSpaceEx(
+            Directory As String,
+            ByRef UserSpaceFree As Long,
+            ByRef TotalUserSpace As Long,
+            ByRef TotalFreeSpace As Long) As <MarshalAs(UnmanagedType.Bool)> Boolean
+        End Function
+
+        ''' <summary>
         '''  Gets the state of the specified key on the keyboard when the function
         '''  is called.
         ''' </summary>
@@ -27,22 +43,6 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' </summary>
         <DllImport("kernel32", ExactSpelling:=True, SetLastError:=True)>
         Friend Function LocalFree(LocalHandle As IntPtr) As IntPtr
-        End Function
-
-        ''' <summary>
-        '''  Used to determine how much free space is on a disk.
-        ''' </summary>
-        ''' <param name="Directory">Path including drive we're getting information about.</param>
-        ''' <param name="UserSpaceFree">The amount of free space available to the current user.</param>
-        ''' <param name="TotalUserSpace">The total amount of space on the disk relative to the current user.</param>
-        ''' <param name="TotalFreeSpace">The amount of free space on the disk.</param>
-        ''' <returns><see langword="True"/> if function succeeds in getting info otherwise <see langword="False"/>.</returns>
-        <DllImport("Kernel32.dll", CharSet:=CharSet.Auto, BestFitMapping:=False, SetLastError:=True)>
-        Friend Function GetDiskFreeSpaceEx(
-            Directory As String,
-            ByRef UserSpaceFree As Long,
-            ByRef TotalUserSpace As Long,
-            ByRef TotalFreeSpace As Long) As <MarshalAs(UnmanagedType.Bool)> Boolean
         End Function
 
     End Module
