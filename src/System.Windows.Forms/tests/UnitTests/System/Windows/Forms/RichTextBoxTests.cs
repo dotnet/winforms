@@ -17,7 +17,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests;
 
-public class RichTextBoxTests
+public partial class RichTextBoxTests
 {
     private static readonly int s_preferredHeight = Control.DefaultFont.Height + SystemInformation.BorderSize.Height * 4 + 3;
 
@@ -7906,20 +7906,6 @@ public class RichTextBoxTests
     }
 
     [WinFormsFact]
-    public void RichTextBox_OleObject_IncompleteOleObject_DoNothing()
-    {
-        using RichTextBox control = new();
-        Assert.NotEqual(IntPtr.Zero, control.Handle);
-
-        using MemoryStream memoryStream = new();
-        using Bitmap bitmap = new(100, 100);
-        bitmap.Save(memoryStream, Drawing.Imaging.ImageFormat.Png);
-        Clipboard.SetData("Embed Source", memoryStream);
-
-        Assert.Equal(string.Empty, control.Text);
-    }
-
-    [WinFormsFact]
     public void RichTextBox_CanPaste_NullFormat_ThrowsNullReferenceException()
     {
         using RichTextBox control = new();
@@ -10731,62 +10717,6 @@ public class RichTextBoxTests
         finally
         {
             File.Delete(filePath);
-        }
-    }
-
-    public static TheoryData<string> PlainTextData => new()
-    {
-        { "Hello World"},
-        { new string('a', 10000) },
-        { "Special characters: !@#$%^&*()" },
-    };
-
-    [WinFormsTheory]
-    [MemberData(nameof(PlainTextData))]
-    public void RichTextBox_Paste_PlainText_Data(string value)
-    {
-        using RichTextBox richTextBox1 = new();
-
-        if (!string.IsNullOrEmpty(value))
-        {
-            Clipboard.SetText(value);
-            richTextBox1.Paste(DataFormats.GetFormat(DataFormats.Text));
-
-            richTextBox1.Text.Should().Be(value);
-        }
-    }
-
-    [WinFormsFact]
-    public void RichTextBox_Paste_EmptyString_Data()
-    {
-        using RichTextBox richTextBox1 = new();
-
-        Clipboard.SetText("non-empty");
-        Clipboard.Clear();
-        richTextBox1.Paste(DataFormats.GetFormat(DataFormats.Text));
-
-        richTextBox1.Text.Should().Be("");
-    }
-
-    public static TheoryData<string> RtfData => new()
-    {
-        { "{\\rtf Hello World}" },
-        { "{\\rtf1\\ansi{Sample for {\\v HIDDEN }text}}" },
-        { "{\\rtf1\\ansi{Invalid RTF data" },
-    };
-
-    [WinFormsTheory]
-    [MemberData(nameof(RtfData))]
-    public void RichTextBox_Paste_Rtf_Data(string rtf)
-    {
-        using RichTextBox richTextBox1 = new();
-
-        if (!string.IsNullOrEmpty(rtf))
-        {
-            Clipboard.SetText(rtf);
-            richTextBox1.Paste(DataFormats.GetFormat(DataFormats.Rtf));
-
-            richTextBox1.Rtf.Should().StartWith("{\\rtf");
         }
     }
 

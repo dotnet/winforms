@@ -144,13 +144,13 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                 m_WebClient.UploadFile(address, sourceFileName)
             End If
 
-            'Now that we are back on the main thread, throw the exception we
-            'encountered if the user didn't cancel.
-            If _exceptionEncounteredDuringFileTransfer IsNot Nothing Then
-                If m_ProgressDialog Is Nothing OrElse Not m_ProgressDialog.UserCanceledTheDialog Then
-                    Throw _exceptionEncounteredDuringFileTransfer
-                End If
-            End If
+        'Now that we are back on the main thread, throw the exception we
+        'encountered if the user didn't cancel.
+        If _exceptionEncounteredDuringFileTransfer IsNot Nothing Then
+        If m_ProgressDialog Is Nothing OrElse Not m_ProgressDialog.UserCanceledTheDialog Then
+        Throw _exceptionEncounteredDuringFileTransfer
+        End If
+        End If
         End Sub
 
     End Class
