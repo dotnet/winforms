@@ -333,7 +333,7 @@ public partial class ErrorProvider
                             showIcon = (item.BlinkPhase == 0) || (item.BlinkPhase > 0 && (item.BlinkPhase & 1) == (i & 1));
                             break;
                         case ErrorBlinkStyle.AlwaysBlink:
-                            showIcon =  ((i & 1) == 0) == _provider.ShowIcon;
+                            showIcon = ((i & 1) == 0) == _provider.ShowIcon;
                             break;
                     }
                 }
