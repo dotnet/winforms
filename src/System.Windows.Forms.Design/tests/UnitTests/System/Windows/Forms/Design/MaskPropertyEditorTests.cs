@@ -15,15 +15,15 @@ public class MaskPropertyEditorTests
 
     public MaskPropertyEditorTests()
     {
-        _maskedTextBox = new MaskedTextBox();
-        _editor = new MaskPropertyEditor();
+        _maskedTextBox = new();
+        _editor = new();
     }
 
-    [Fact]
+    [WinFormsFact]
     public void EditValue_WhenContextOrProviderAreNull_ShouldReturnOriginalValue()
     {
         var context = new Mock<ITypeDescriptorContext>().Object;
-        var provider = new Mock<IServiceProvider>();
+        Mock<IServiceProvider> provider = new();
 
         object? result;
         if (context.Instance is MaskedTextBox maskedTextBox)
