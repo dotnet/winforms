@@ -189,7 +189,7 @@ public class ToolStripMenuItemTests
     public void ToolStripMenuItem_Ctor_ShouldInitializeCorrectly()
     {
         using Bitmap image = new(10, 10);
-        const string text = "Test Item";
+        string text = "Test Item";
 
         using ToolStripMenuItem itemWithImage = new(image);
         itemWithImage.Image.Should().Be(image);
@@ -204,8 +204,8 @@ public class ToolStripMenuItemTests
     public void ToolStripMenuItem_Ctor_WithTextImageOnClickName_ShouldInitializeCorrectly()
     {
         using Bitmap image = new(10, 10);
-        const string text = "Test Item";
-        const string name = "TestName";
+        string text = "Test Item";
+        string name = "TestName";
         bool wasClicked = false;
         EventHandler onClick = (sender, e) => wasClicked = true;
 
@@ -222,7 +222,7 @@ public class ToolStripMenuItemTests
     public void ToolStripMenuItem_Ctor_WithTextImageOnClickShortcutKeys_ShouldInitializeCorrectly()
     {
         using Bitmap image = new(10, 10);
-        const string text = "Test Item";
+        string text = "Test Item";
         bool wasClicked = false;
         EventHandler onClick = (sender, e) => wasClicked = true;
         Keys shortcutKeys = Keys.Control | Keys.A;
