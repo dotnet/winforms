@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Collections.Immutable;
 using System.Windows.Forms.CSharp.Analyzers.ConsiderNotPassingATaskWithoutCancellationToken;
 using System.Windows.Forms.CSharp.CodeFixes.AddDesignerSerializationVisibility;
 using Microsoft.CodeAnalysis;
@@ -11,6 +12,48 @@ namespace System.Windows.Forms.Analyzers.Test;
 
 public class ConsiderNotPassingFuncReturningTaskWithoutCancellationToken
 {
+    // For the cases where InvokeAsync does not yet exist in the APIs.
+    private const string AsyncControl = """
+        namespace System.Windows.Forms
+        {
+            public class AsyncControl : Control
+            {
+                // BEGIN ASYNC API
+                public Task InvokeAsync<T>(
+                    Func<T> callback,
+                    CancellationToken cancellationToken = default)
+                {
+                    var tcs = new TaskCompletionSource<T>();
+
+                    // Note: Code is INCORRECT, it's just here to satisfy the compiler!
+                    using (cancellationToken.Register(() => tcs.TrySetCanceled()))
+                    {
+                        BeginInvoke(callback);
+                    }
+
+                    return tcs.Task;
+                }
+
+                public Task InvokeAsync(
+                    Func<CancellationToken, ValueTask> callback,
+                    CancellationToken cancellationToken = default)
+                {
+                    var tcs = new TaskCompletionSource();
+
+                    // Note: Code is INCORRECT, it's just here to satisfy the compiler!
+                    using (cancellationToken.Register(() => tcs.TrySetCanceled()))
+                    {
+                        BeginInvoke(callback);
+                    }
+
+                    return tcs.Task;
+                }
+                // END ASYNC API
+            }
+        }
+        
+        """;
+
     private const string ProblematicCode = """
         using System;
         using System.Threading.Tasks;
@@ -150,7 +193,8 @@ public class ConsiderNotPassingFuncReturningTaskWithoutCancellationToken
     // We are testing the analyzer with all versions of the .NET SDK from 9.0 on.
     public static IEnumerable<object[]> GetReferenceAssemblies()
     {
-        yield return [ReferenceAssemblies.Net.Net90Windows];
+        var assemblies = NetReferenceAssemblies.Net90RC;
+        yield return [assemblies];
     }
 
     [Theory]
@@ -192,5 +236,20 @@ public class ConsiderNotPassingFuncReturningTaskWithoutCancellationToken
         };
 
         await context.RunAsync();
+    }
+}
+
+public static class NetReferenceAssemblies
+{
+    public static ReferenceAssemblies Net90RC
+    {
+        get
+        {
+            var assemblies = new ReferenceAssemblies("net90-windows");
+            PackageIdentity identity = new PackageIdentity("Microsoft.WindowsDesktop.App.Ref", "9.0.0-rc.1.24414.5");
+            ImmutableArray<PackageIdentity> immutableArray =ImmutableArray.Create(identity);
+            assemblies = assemblies.AddPackages(immutableArray);
+            return assemblies;
+        }
     }
 }
