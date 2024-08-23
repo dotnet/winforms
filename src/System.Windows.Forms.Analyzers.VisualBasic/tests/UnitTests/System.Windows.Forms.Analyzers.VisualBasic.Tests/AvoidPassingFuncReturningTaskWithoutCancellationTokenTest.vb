@@ -8,7 +8,7 @@ Imports Microsoft.CodeAnalysis.Testing
 Imports Microsoft.CodeAnalysis.VisualBasic.Testing
 Imports Xunit
 
-Public Class ConsiderNotPassingFuncReturningTaskWithoutCancellationToken
+Public Class AvoidPassingFuncReturningTaskWithoutCancellationTokenTest
     ' Currently, we do not have Control.InvokeAsync in the .NET 9.0 Windows reference assemblies.
     ' That's why we need to add this Async Control. Once it's there, this test will fail.
     ' We can then remove the AsyncControl and the test will pass, replace AsyncControl with
@@ -151,12 +151,12 @@ End Namespace
 
     <Theory>
     <MemberData(NameOf(GetReferenceAssemblies))>
-    Public Async Function VB_ConsiderNotPassingFuncReturningTaskWithoutCancellationAnalyzer(referenceAssemblies As ReferenceAssemblies) As Task
+    Public Async Function VB_AvoidPassingFuncReturningTaskWithoutCancellationAnalyzer(referenceAssemblies As ReferenceAssemblies) As Task
         ' If the API does not exist, we need to add it to the test.
         Dim customControlSource As String = AsyncControl
-        Dim diagnosticId As String = DiagnosticIDs.ConsiderNotPassingFuncReturningTaskWithoutCancellationToken
+        Dim diagnosticId As String = DiagnosticIDs.AvoidPassingFuncReturningTaskWithoutCancellationToken
 
-        Dim context As New VisualBasicAnalyzerTest(Of ConsiderNotPassingFuncReturningTaskWithoutCancellationTokenAnalyzer, DefaultVerifier) With
+        Dim context As New VisualBasicAnalyzerTest(Of AvoidPassingFuncReturningTaskWithoutCancellationTokenAnalyzer, DefaultVerifier) With
             {
                 .TestCode = TestCode,
                 .ReferenceAssemblies = referenceAssemblies

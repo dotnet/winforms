@@ -8,17 +8,17 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace System.Windows.Forms.CSharp.Analyzers.ConsiderNotPassingATaskWithoutCancellationToken;
+namespace System.Windows.Forms.CSharp.Analyzers.AvoidPassingTaskWithoutCancellationToken;
 
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
-public class ConsiderNotPassingFuncReturningTaskWithoutCancellationTokenAnalyzer : DiagnosticAnalyzer
+public class AvoidPassingFuncReturningTaskWithoutCancellationTokenAnalyzer : DiagnosticAnalyzer
 {
     private const string InvokeAsyncString = "InvokeAsync";
     private const string TaskString = "Task";
     private const string ValueTaskString = "ValueTask";
 
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
-        => [CSharpDiagnosticDescriptors.s_considerNotPassingFuncReturningTaskWithoutCancellationToken];
+        => [CSharpDiagnosticDescriptors.s_avoidPassingFuncReturningTaskWithoutCancellationToken];
 
     public override void Initialize(AnalysisContext context)
     {
@@ -67,7 +67,7 @@ public class ConsiderNotPassingFuncReturningTaskWithoutCancellationTokenAnalyzer
             && returnType.Name is TaskString or ValueTaskString)
         {
             Diagnostic diagnostic = Diagnostic.Create(
-                CSharpDiagnosticDescriptors.s_considerNotPassingFuncReturningTaskWithoutCancellationToken,
+                CSharpDiagnosticDescriptors.s_avoidPassingFuncReturningTaskWithoutCancellationToken,
                 invocationExpr.GetLocation());
 
             context.ReportDiagnostic(diagnostic);

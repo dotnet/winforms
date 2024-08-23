@@ -16,8 +16,8 @@ Friend Module VisualBasicDiagnosticDescriptors
             isEnabledByDefault:=True,
             description:=New LocalizableResourceString(NameOf(SR.WFO1000AnalyzerDescription), SR.ResourceManager, GetType(SR)))
 
-    Public ReadOnly s_considerNotPassingFuncReturningTaskWithoutCancellationToken As New DiagnosticDescriptor(
-            id:=DiagnosticIDs.ConsiderNotPassingFuncReturningTaskWithoutCancellationToken,
+    Public ReadOnly s_avoidFuncReturningTaskWithoutCancellationToken As New DiagnosticDescriptor(
+            id:=DiagnosticIDs.AvoidPassingFuncReturningTaskWithoutCancellationToken,
             title:=New LocalizableResourceString(NameOf(SR.WFO2001AnalyzerTitle), SR.ResourceManager, GetType(SR)),
             messageFormat:=New LocalizableResourceString(NameOf(SR.WFO2001AnalyzerMessageFormat), SR.ResourceManager, GetType(SR)),
             category:=DiagnosticCategories.WinFormsSecurity,

@@ -10,7 +10,7 @@ Imports Microsoft.CodeAnalysis.Diagnostics
 Namespace System.Windows.Forms.VisualBasic.Analyzers.ConsiderNotPassingATaskWithoutCancellationToken
 
     <DiagnosticAnalyzer(LanguageNames.VisualBasic)>
-    Public Class ConsiderNotPassingFuncReturningTaskWithoutCancellationTokenAnalyzer
+    Public Class AvoidPassingFuncReturningTaskWithoutCancellationTokenAnalyzer
         Inherits DiagnosticAnalyzer
 
         Private Const InvokeAsyncString As String = "InvokeAsync"
@@ -19,7 +19,7 @@ Namespace System.Windows.Forms.VisualBasic.Analyzers.ConsiderNotPassingATaskWith
 
         Public Overrides ReadOnly Property SupportedDiagnostics As ImmutableArray(Of DiagnosticDescriptor)
             Get
-                Return ImmutableArray.Create(s_considerNotPassingFuncReturningTaskWithoutCancellationToken)
+                Return ImmutableArray.Create(s_avoidFuncReturningTaskWithoutCancellationToken)
             End Get
         End Property
 
@@ -80,7 +80,7 @@ Namespace System.Windows.Forms.VisualBasic.Analyzers.ConsiderNotPassingATaskWith
 
                 If returnType IsNot Nothing AndAlso (returnType.Name = TaskString OrElse returnType.Name = ValueTaskString) Then
                     Dim diagnostic As Diagnostic = diagnostic.Create(
-                        s_considerNotPassingFuncReturningTaskWithoutCancellationToken,
+                        s_avoidFuncReturningTaskWithoutCancellationToken,
                         invocationExpr.GetLocation())
 
                     context.ReportDiagnostic(diagnostic)
