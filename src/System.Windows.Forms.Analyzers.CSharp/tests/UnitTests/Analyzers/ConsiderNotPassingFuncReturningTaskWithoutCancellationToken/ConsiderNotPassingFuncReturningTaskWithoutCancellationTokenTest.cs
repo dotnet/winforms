@@ -186,9 +186,9 @@ public class ConsiderNotPassingFuncReturningTaskWithoutCancellationToken
                     Sources = { customControlSource },
                     ExpectedDiagnostics =
                     {
-                        DiagnosticResult.CompilerError(diagnosticId).WithSpan(41, 21, 41, 97),
-                        DiagnosticResult.CompilerError(diagnosticId).WithSpan(44, 21, 44, 97),
-                        DiagnosticResult.CompilerError(diagnosticId).WithSpan(47, 21, 47, 98),
+                        DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(41, 21, 41, 97),
+                        DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(44, 21, 44, 97),
+                        DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(47, 21, 47, 98),
                     },
                 },
             ReferenceAssemblies = referenceAssemblies

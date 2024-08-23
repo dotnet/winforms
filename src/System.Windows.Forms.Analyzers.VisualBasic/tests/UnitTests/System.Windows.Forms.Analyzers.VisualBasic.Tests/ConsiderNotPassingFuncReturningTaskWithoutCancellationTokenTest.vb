@@ -151,7 +151,7 @@ End Namespace
 
     <Theory>
     <MemberData(NameOf(GetReferenceAssemblies))>
-    Public Async Function CS_ConsiderNotPassingFuncReturningTaskWithoutCancellationAnalyzer(referenceAssemblies As ReferenceAssemblies) As Task
+    Public Async Function VB_ConsiderNotPassingFuncReturningTaskWithoutCancellationAnalyzer(referenceAssemblies As ReferenceAssemblies) As Task
         ' If the API does not exist, we need to add it to the test.
         Dim customControlSource As String = AsyncControl
         Dim diagnosticId As String = DiagnosticIDs.ConsiderNotPassingFuncReturningTaskWithoutCancellationToken
@@ -166,9 +166,9 @@ End Namespace
         context.TestState.Sources.Add(customControlSource)
         context.TestState.ExpectedDiagnostics.AddRange(
                 {
-                    DiagnosticResult.CompilerError(diagnosticId).WithSpan(40, 25, 40, 101),
-                    DiagnosticResult.CompilerError(diagnosticId).WithSpan(43, 25, 43, 101),
-                    DiagnosticResult.CompilerError(diagnosticId).WithSpan(46, 25, 46, 102)
+                    DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(40, 25, 40, 101),
+                    DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(43, 25, 43, 101),
+                    DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(46, 25, 46, 102)
                 })
 
         Await context.RunAsync()
