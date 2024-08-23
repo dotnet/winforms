@@ -803,7 +803,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
             RaiseEvent ApplyApplicationDefaults(Me, applicationDefaultsEventArgs)
 
-            If (applicationDefaultsEventArgs.Font IsNot Nothing) Then
+            If applicationDefaultsEventArgs.Font IsNot Nothing Then
                 Application.SetDefaultFont(applicationDefaultsEventArgs.Font)
             End If
 
@@ -828,7 +828,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             Debug.Assert(dpiSetResult, "We could net set the HighDpiMode.")
 
             ' Now, let's set VisualStyles and ColorMode:
-            If (_enableVisualStyles) Then
+            If _enableVisualStyles Then
                 Application.EnableVisualStyles()
             End If
 
