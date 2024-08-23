@@ -1,7 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Collections.Immutable;
 using System.Windows.Forms.CSharp.Analyzers.ConsiderNotPassingATaskWithoutCancellationToken;
 using System.Windows.Forms.CSharp.CodeFixes.AddDesignerSerializationVisibility;
 using Microsoft.CodeAnalysis;
@@ -65,7 +64,7 @@ public class ConsiderNotPassingFuncReturningTaskWithoutCancellationToken
         {
             public static void Main()
             {
-                var control = new Control();
+                var control = new AsyncControl();
 
                 // An Action Delegate:
                 var action = new Action(() => control.Text = "Hello, World!");
@@ -111,7 +110,7 @@ public class ConsiderNotPassingFuncReturningTaskWithoutCancellationToken
         {
             public static void Main()
             {
-                var control = new Control();
+                var control = new AsyncControl();
         
                 // An Action Delegate:
                 var action = new Action(() => control.Text = "Hello, World!");
@@ -155,7 +154,7 @@ public class ConsiderNotPassingFuncReturningTaskWithoutCancellationToken
         {
             public static void Main()
             {
-                var control = new Control();
+                var control = new AsyncControl();
         
                 // An Action Delegate:
                 var action = new Action(() => control.Text = ""Hello, World!"");
@@ -201,6 +200,36 @@ public class ConsiderNotPassingFuncReturningTaskWithoutCancellationToken
     [MemberData(nameof(GetReferenceAssemblies))]
     public async Task CS_ConsiderNotPassingFuncReturningTaskWithoutCancellationAnalyzer(ReferenceAssemblies referenceAssemblies)
     {
+        // If the API does not exist, we need to add it to the test.
+        string customControlSource = AsyncControl;
+
+        var conditionContext=new CSharpAnalyzerTest
+            <ConsiderNotPassingFuncReturningTaskWithoutCancellationTokenAnalyzer,
+             DefaultVerifier>
+        {
+            TestCode = AsyncControl,
+            TestState =
+                {
+                    OutputKind = OutputKind.WindowsApplication,
+                },
+            ReferenceAssemblies = referenceAssemblies
+        };
+
+        try
+        {
+            await conditionContext.RunAsync();
+        }
+        catch (Exception)
+        {
+            // If this fails, we know that the API has been added, and we can
+            // skip adding the AsyncControl source to the actual test.
+
+            // We need to eliminate the text (including) between '// BEGIN ASYNC API' and '// END ASYNC API':
+            int beginIndex = customControlSource.IndexOf("// BEGIN ASYNC API", StringComparison.Ordinal);
+            int endIndex = customControlSource.IndexOf("// END ASYNC API", StringComparison.Ordinal);
+            customControlSource = customControlSource.Remove(beginIndex, endIndex - beginIndex);
+        }
+
         var context = new CSharpAnalyzerTest
             <ConsiderNotPassingFuncReturningTaskWithoutCancellationTokenAnalyzer,
              DefaultVerifier>
@@ -209,6 +238,7 @@ public class ConsiderNotPassingFuncReturningTaskWithoutCancellationToken
             TestState =
                 {
                     OutputKind = OutputKind.WindowsApplication,
+                    Sources = { customControlSource },
                 },
             ReferenceAssemblies = referenceAssemblies
         };
@@ -236,20 +266,5 @@ public class ConsiderNotPassingFuncReturningTaskWithoutCancellationToken
         };
 
         await context.RunAsync();
-    }
-}
-
-public static class NetReferenceAssemblies
-{
-    public static ReferenceAssemblies Net90RC
-    {
-        get
-        {
-            var assemblies = new ReferenceAssemblies("net90-windows");
-            PackageIdentity identity = new PackageIdentity("Microsoft.WindowsDesktop.App.Ref", "9.0.0-rc.1.24414.5");
-            ImmutableArray<PackageIdentity> immutableArray =ImmutableArray.Create(identity);
-            assemblies = assemblies.AddPackages(immutableArray);
-            return assemblies;
-        }
     }
 }
