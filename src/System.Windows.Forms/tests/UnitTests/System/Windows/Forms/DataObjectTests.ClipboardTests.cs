@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+#nullable enable
+
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
@@ -41,7 +43,7 @@ public partial class DataObjectTests
             "System.Drawing.Bitmap",
             "  ",  // the last 3 return null and don't process the payload.
             string.Empty,
-            null
+            null!
         ];
 
         private static readonly string[] s_unboundedClipboardFormats =
@@ -132,9 +134,9 @@ public partial class DataObjectTests
             dataObject.GetDataPresent(format, autoConvert).Should().BeFalse();
         }
 
-        public static TheoryData<string, string, bool, bool> SetData_StringObject_TheoryData()
+        public static TheoryData<string, string?, bool, bool> SetData_StringObject_TheoryData()
         {
-            TheoryData<string, string, bool, bool> theoryData = new();
+            TheoryData<string, string?, bool, bool> theoryData = new();
             foreach (string format in s_restrictedClipboardFormats)
             {
                 if (string.IsNullOrWhiteSpace(format) || format == typeof(Bitmap).FullName || format.StartsWith("FileName", StringComparison.Ordinal))
@@ -146,8 +148,8 @@ public partial class DataObjectTests
                 theoryData.Add(format, "input", format == DataFormats.FileDrop, format == DataFormats.Bitmap);
             }
 
-            theoryData.Add(typeof(Bitmap).FullName, null, false, true);
-            theoryData.Add(typeof(Bitmap).FullName, "input", false, true);
+            theoryData.Add(typeof(Bitmap).FullName!, null, false, true);
+            theoryData.Add(typeof(Bitmap).FullName!, "input", false, true);
 
             theoryData.Add("FileName", null, true, false);
             theoryData.Add("FileName", "input", true, false);
@@ -160,7 +162,7 @@ public partial class DataObjectTests
 
         [Theory]
         [MemberData(nameof(SetData_StringObject_TheoryData))]
-        private void DataObject_SetData_InvokeStringObject_GetReturnsExpected(string format, string input, bool expectedContainsFileDropList, bool expectedContainsImage)
+        private void DataObject_SetData_InvokeStringObject_GetReturnsExpected(string format, string? input, bool expectedContainsFileDropList, bool expectedContainsImage)
         {
             DataObject dataObject = new();
             dataObject.SetData(format, input);
@@ -184,9 +186,9 @@ public partial class DataObjectTests
             dataObject.ContainsText(TextDataFormat.CommaSeparatedValue).Should().Be(format == DataFormats.CommaSeparatedValue);
         }
 
-        public static TheoryData<string, bool, string, bool, bool> SetData_StringBoolObject_TheoryData()
+        public static TheoryData<string, bool, string?, bool, bool> SetData_StringBoolObject_TheoryData()
         {
-            TheoryData<string, bool, string, bool, bool> theoryData = new();
+            TheoryData<string, bool, string?, bool, bool> theoryData = new();
 
             foreach (string format in s_restrictedClipboardFormats)
             {
@@ -202,10 +204,10 @@ public partial class DataObjectTests
                 }
             }
 
-            theoryData.Add(typeof(Bitmap).FullName, false, null, false, false);
-            theoryData.Add(typeof(Bitmap).FullName, false, "input", false, false);
-            theoryData.Add(typeof(Bitmap).FullName, true, null, false, true);
-            theoryData.Add(typeof(Bitmap).FullName, true, "input", false, true);
+            theoryData.Add(typeof(Bitmap).FullName!, false, null, false, false);
+            theoryData.Add(typeof(Bitmap).FullName!, false, "input", false, false);
+            theoryData.Add(typeof(Bitmap).FullName!, true, null, false, true);
+            theoryData.Add(typeof(Bitmap).FullName!, true, "input", false, true);
 
             theoryData.Add("FileName", false, null, false, false);
             theoryData.Add("FileName", false, "input", false, false);
@@ -222,7 +224,7 @@ public partial class DataObjectTests
 
         [Theory]
         [MemberData(nameof(SetData_StringBoolObject_TheoryData))]
-        private void DataObject_SetData_InvokeStringBoolObject_GetReturnsExpected(string format, bool autoConvert, string input, bool expectedContainsFileDropList, bool expectedContainsImage)
+        private void DataObject_SetData_InvokeStringBoolObject_GetReturnsExpected(string format, bool autoConvert, string? input, bool expectedContainsFileDropList, bool expectedContainsImage)
         {
             DataObject dataObject = new();
             dataObject.SetData(format, autoConvert, input);
