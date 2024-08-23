@@ -17,6 +17,21 @@
         <target state="translated">プロパティ コンテンツのコード シリアル化構成がありません</target>
         <note />
       </trans-unit>
+      <trans-unit id="WFO2001AnalyzerDescription">
+        <source>Please consider not passing a Func&lt;T&gt; to InvokeAsync  where T is a Task or ValueTask, since it will not be awaited. Consider using only Func&lt;CancellationToken, ValueTask&gt; or Func&lt;CancellationToken, ValueTask&lt;T&gt;&gt; for that purpose, so that the function delegate passed to InvokeAsync can be awaited.</source>
+        <target state="new">Please consider not passing a Func&lt;T&gt; to InvokeAsync  where T is a Task or ValueTask, since it will not be awaited. Consider using only Func&lt;CancellationToken, ValueTask&gt; or Func&lt;CancellationToken, ValueTask&lt;T&gt;&gt; for that purpose, so that the function delegate passed to InvokeAsync can be awaited.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2001AnalyzerMessageFormat">
+        <source>Do not pass a Task to InvokeAsync without a cancellation token</source>
+        <target state="new">Do not pass a Task to InvokeAsync without a cancellation token</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2001AnalyzerTitle">
+        <source>Do not pass a Task to InvokeAsync without a cancellation token</source>
+        <target state="new">Do not pass a Task to InvokeAsync without a cancellation token</target>
+        <note />
+      </trans-unit>
     </body>
   </file>
 </xliff>

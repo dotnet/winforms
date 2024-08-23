@@ -126,4 +126,13 @@
   <data name="WFO1000AnalyzerMessageFormat" xml:space="preserve">
     <value>Property '{0}' does not configure the code serialization for its property content</value>
   </data>
+  <data name="WFO2001AnalyzerDescription" xml:space="preserve">
+    <value>Please consider not passing a Func&lt;T&gt; to InvokeAsync  where T is a Task or ValueTask, since it will not be awaited. Consider using only Func&lt;CancellationToken, ValueTask&gt; or Func&lt;CancellationToken, ValueTask&lt;T&gt;&gt; for that purpose, so that the function delegate passed to InvokeAsync can be awaited.</value>
+  </data>
+  <data name="WFO2001AnalyzerMessageFormat" xml:space="preserve">
+    <value>Do not pass a Task to InvokeAsync without a cancellation token</value>
+  </data>
+  <data name="WFO2001AnalyzerTitle" xml:space="preserve">
+    <value>Do not pass a Task to InvokeAsync without a cancellation token</value>
+  </data>
 </root>

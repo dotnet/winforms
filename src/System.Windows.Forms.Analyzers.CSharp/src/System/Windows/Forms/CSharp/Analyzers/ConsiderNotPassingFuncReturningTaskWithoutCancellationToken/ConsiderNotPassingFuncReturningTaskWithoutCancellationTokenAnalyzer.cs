@@ -38,24 +38,45 @@ public class ConsiderNotPassingFuncReturningTaskWithoutCancellationTokenAnalyzer
             return;
         }
 
+        // Get the symbol of the method's instance:
+        TypeInfo objectTypeInfo = context.SemanticModel.GetTypeInfo(memberAccessExpr.Expression);
         IParameterSymbol funcParameter = methodSymbol.Parameters[0];
 
+        // If the function delegate has a parameter (which makes then 2 type arguments),
+        // we can safely assume it's a CancellationToken, otherwise the compiler would have
+        // complained before, because this is the only overload type we're accepting in a
+        // func as a passed parameter.
         if (funcParameter.Type is not INamedTypeSymbol funcType
+            || funcType.TypeArguments.Length != 1
             || !funcType.ContainingNamespace.ToString().Equals("System"))
         {
             return;
         }
 
-        if (funcType.DelegateInvokeMethod?.ReturnType is INamedTypeSymbol returnType)
+        // Let's make absolute clear, we're dealing with InvokeAsync of Control.
+        // (Not merging If statements to make it easier to read.)
+        if (objectTypeInfo.Type is not INamedTypeSymbol objectType
+            || !IsAncestorOrSelfOfType(objectType, "System.Windows.Forms.Control"))
         {
-            if (returnType.Name is TaskString or ValueTaskString)
-            {
-                Diagnostic diagnostic = Diagnostic.Create(
-                    CSharpDiagnosticDescriptors.s_considerNotPassingFuncReturningTaskWithoutCancellationToken,
-                    invocationExpr.GetLocation());
-
-                context.ReportDiagnostic(diagnostic);
-            }
+            return;
         }
+
+        // And finally, let's check if the return type is Task or ValueTask, because those
+        // can become now fire-and-forgets.
+        if (funcType.DelegateInvokeMethod?.ReturnType is INamedTypeSymbol returnType
+            && returnType.Name is TaskString or ValueTaskString)
+        {
+            Diagnostic diagnostic = Diagnostic.Create(
+                CSharpDiagnosticDescriptors.s_considerNotPassingFuncReturningTaskWithoutCancellationToken,
+                invocationExpr.GetLocation());
+
+            context.ReportDiagnostic(diagnostic);
+        }
+
+        // Helper method to check if a type is of a certain type or a derived type.
+        static bool IsAncestorOrSelfOfType(INamedTypeSymbol? type, string typeName) =>
+            type is not null
+            && (type.ToString().Equals(typeName)
+            || IsAncestorOrSelfOfType(type.BaseType, typeName));
     }
 }
