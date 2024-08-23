@@ -146,13 +146,11 @@ public partial class ToolStripMenuItem
                 _ => ToggleState.ToggleState_Indeterminate
             };
 
-        internal void OnCheckStateChanged(CheckState oldValue, CheckState newValue)
-        {
+        internal void OnCheckStateChanged(CheckState oldValue, CheckState newValue) =>
             RaiseAutomationPropertyChangedEvent(
                 UIA_PROPERTY_ID.UIA_ToggleToggleStatePropertyId,
                 (VARIANT)(int)CheckStateToToggleState(oldValue),
                 (VARIANT)(int)CheckStateToToggleState(newValue));
-        }
 
         private static ToggleState CheckStateToToggleState(CheckState checkState)
             => checkState switch
