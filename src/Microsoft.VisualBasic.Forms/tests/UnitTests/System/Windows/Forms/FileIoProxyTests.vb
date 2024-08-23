@@ -2,6 +2,7 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.Collections.ObjectModel
+Imports System.IO
 Imports System.Text
 Imports FluentAssertions
 Imports Microsoft.VisualBasic.CompilerServices
@@ -27,35 +28,39 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             If String.IsNullOrEmpty(testDirectory) Then
                 Throw New ArgumentException($"'{NameOf(testDirectory)}' cannot be null or empty.", NameOf(testDirectory))
             End If
-            If testDirectory = IO.Path.GetTempPath Then
-                Throw New ArgumentException($"'{NameOf(testDirectory)}' cannot be {IO.Path.GetTempPath}.", NameOf(testDirectory))
+            If testDirectory = Path.GetTempPath Then
+                Throw New ArgumentException($"'{NameOf(testDirectory)}' cannot be {Path.GetTempPath}.", NameOf(testDirectory))
             End If
-            If Not testDirectory.StartsWith(IO.Path.GetTempPath, StringComparison.InvariantCultureIgnoreCase) Then
-                Throw New ArgumentException($"'{NameOf(testDirectory)}' must start with {IO.Path.GetTempPath}.", NameOf(testDirectory))
+            If Not testDirectory.StartsWith(Path.GetTempPath, StringComparison.InvariantCultureIgnoreCase) Then
+                Throw New ArgumentException($"'{NameOf(testDirectory)}' must start with {Path.GetTempPath}.", NameOf(testDirectory))
             End If
 
             _fileSystem.DeleteDirectory(testDirectory, onDirectoryNotEmpty)
 
             If destinationDirectory IsNot Nothing Then
-                If destinationDirectory = IO.Path.GetTempPath Then
-                    Throw New ArgumentException($"'{NameOf(destinationDirectory)}' cannot be {IO.Path.GetTempPath}.", NameOf(destinationDirectory))
+                If destinationDirectory = Path.GetTempPath Then
+                    Throw New ArgumentException($"'{NameOf(destinationDirectory)}' cannot be {Path.GetTempPath}.", NameOf(destinationDirectory))
                 End If
-                If Not destinationDirectory.StartsWith(IO.Path.GetTempPath, StringComparison.InvariantCultureIgnoreCase) Then
-                    Throw New ArgumentException($"'{NameOf(destinationDirectory)}' must start with {IO.Path.GetTempPath}.", NameOf(destinationDirectory))
+                If Not destinationDirectory.StartsWith(Path.GetTempPath, StringComparison.InvariantCultureIgnoreCase) Then
+                    Throw New ArgumentException($"'{NameOf(destinationDirectory)}' must start with {Path.GetTempPath}.", NameOf(destinationDirectory))
                 End If
                 _fileSystem.DeleteDirectory(destinationDirectory, onDirectoryNotEmpty)
             End If
         End Sub
 
         <WinFormsTheory>
-        <ClassData(GetType(PathTestData))>
+        <ClassData(GetType(BadPathsTestData))>
         Public Sub CleanupDirectoriesTests(testDirectory As String)
-            Dim testCode As Action = Sub() CleanupDirectories(testDirectory, onDirectoryNotEmpty:=DeleteDirectoryOption.ThrowIfDirectoryNonEmpty)
+            Dim testCode As Action =
+                Sub()
+                    CleanupDirectories(testDirectory, onDirectoryNotEmpty:=DeleteDirectoryOption.ThrowIfDirectoryNonEmpty)
+                End Sub
+
             testCode.Should.Throw(Of ArgumentException)()
         End Sub
 
         <WinFormsTheory>
-        <ClassData(GetType(PathTestData))>
+        <ClassData(GetType(BadPathsTestData))>
         Public Sub CleanupDirectoriesWithDestinationDirectoryTests(destinationDirectory As String)
             Dim testDirectory As String = CreateTempDirectory()
             Dim testCode As Action = Sub() CleanupDirectories(testDirectory, destinationDirectory, onDirectoryNotEmpty:=DeleteDirectoryOption.ThrowIfDirectoryNonEmpty)
@@ -65,9 +70,44 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsFact>
-        Public Sub CleanupDirectoryPathTestDataIteratorTests()
-            Dim testClass As New PathTestData
-            testClass.IEnumerable_GetEnumerator.Should.NotBeNull()
+        Public Sub CopyDirectoryProxyTest()
+            Dim testDirectory As String = CreateTempDirectory(lineNumber:=1)
+            Dim file1 As String = CreateTempFile(tmpFilePath:=testDirectory, optionalFilename:=NameOf(file1))
+            Dim byteArray As Byte() = {4}
+            _fileSystem.WriteAllBytes(file1, byteArray, append:=False)
+
+            Dim destinationDirectory As String = CreateTempDirectory(lineNumber:=2)
+            _fileSystem.CopyDirectory(
+                sourceDirectoryName:=testDirectory,
+                destinationDirectoryName:=destinationDirectory)
+            Directory.Exists(testDirectory).Should.BeTrue()
+            Directory.Exists(destinationDirectory).Should.BeTrue()
+
+            Dim count As Integer = Directory.EnumerateFiles(destinationDirectory).Count
+            Directory.EnumerateFiles(testDirectory).Count.Should.Be(count)
+
+            CleanupDirectories(testDirectory, destinationDirectory)
+        End Sub
+
+        <WinFormsFact>
+        Public Sub CopyDirectoryProxyWithOverwriteTest()
+            Dim testDirectory As String = CreateTempDirectory(lineNumber:=1)
+            Dim file1 As String = CreateTempFile(tmpFilePath:=testDirectory, optionalFilename:=NameOf(file1))
+            Dim byteArray As Byte() = {4}
+            _fileSystem.WriteAllBytes(file1, byteArray, append:=False)
+
+            Dim destinationDirectory As String = CreateTempDirectory(lineNumber:=2)
+            _fileSystem.CopyDirectory(
+                sourceDirectoryName:=testDirectory,
+                destinationDirectoryName:=destinationDirectory,
+                overwrite:=False)
+            Directory.Exists(testDirectory).Should.BeTrue()
+            Directory.Exists(destinationDirectory).Should.BeTrue()
+
+            Dim count As Integer = Directory.EnumerateFiles(destinationDirectory).Count
+            Directory.EnumerateFiles(testDirectory).Count.Should.Be(count)
+
+            CleanupDirectories(testDirectory, destinationDirectory)
         End Sub
 
         <WinFormsFact>
@@ -80,14 +120,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim destinationDirectory As String = CreateTempDirectory(lineNumber:=2)
             _fileSystem.CopyDirectory(
                 sourceDirectoryName:=testDirectory,
-                destinationDirectory,
+                destinationDirectoryName:=destinationDirectory,
                 showUI:=UIOption.OnlyErrorDialogs,
                 onUserCancel:=UICancelOption.DoNothing)
-            IO.Directory.Exists(testDirectory).Should.BeTrue()
-            IO.Directory.Exists(destinationDirectory).Should.BeTrue()
+            Directory.Exists(testDirectory).Should.BeTrue()
+            Directory.Exists(destinationDirectory).Should.BeTrue()
 
-            Dim count As Integer = IO.Directory.EnumerateFiles(destinationDirectory).Count
-            IO.Directory.EnumerateFiles(testDirectory).Count.Should.Be(count)
+            Dim count As Integer = Directory.EnumerateFiles(destinationDirectory).Count
+            Directory.EnumerateFiles(testDirectory).Count.Should.Be(count)
 
             CleanupDirectories(testDirectory, destinationDirectory)
         End Sub
@@ -101,9 +141,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
             Dim destinationDirectory As String = CreateTempDirectory(lineNumber:=2)
             _fileSystem.CopyDirectory(testDirectory, destinationDirectory, UIOption.OnlyErrorDialogs)
-            IO.Directory.Exists(testDirectory).Should.BeTrue()
-            IO.Directory.Exists(destinationDirectory).Should.BeTrue()
-            IO.Directory.EnumerateFiles(destinationDirectory).Count.Should.Be(IO.Directory.EnumerateFiles(testDirectory).Count)
+            Directory.Exists(testDirectory).Should.BeTrue()
+            Directory.Exists(destinationDirectory).Should.BeTrue()
+            Directory.EnumerateFiles(destinationDirectory).Count.Should.Be(Directory.EnumerateFiles(testDirectory).Count)
 
             CleanupDirectories(testDirectory, destinationDirectory)
         End Sub
@@ -173,15 +213,34 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsFact>
+        Public Sub CreateDirectoryTest()
+            Dim testDirectory As String = Path.Combine(s_baseTempPath, $"A{GetUniqueText()}")
+            _fileSystem.CreateDirectory(testDirectory)
+            IO.Directory.Exists(testDirectory).Should.BeTrue()
+            CleanupDirectories(testDirectory)
+        End Sub
+
+        <WinFormsFact>
+        Public Sub CurrentDirectoryTest()
+            Dim testDirectory As String = CreateTempDirectory(lineNumber:=1)
+            Dim savedCurrentDirectory As String = FileIO.FileSystem.CurrentDirectory
+            _fileSystem.CurrentDirectory = testDirectory
+            _fileSystem.CurrentDirectory.Should.Be(testDirectory)
+            _fileSystem.CurrentDirectory = savedCurrentDirectory
+            _fileSystem.CurrentDirectory.Should.NotBe(testDirectory)
+            CleanupDirectories(testDirectory)
+        End Sub
+
+        <WinFormsFact>
         Public Sub DeleteDirectoryRecycleWithUICancelOptionsProxyTest()
             Dim testDirectory As String = CreateTempDirectory()
             Dim file1 As String = CreateTempFile(testDirectory, NameOf(file1), size:=1)
             Dim byteArray As Byte() = {4}
             _fileSystem.WriteAllBytes(file1, byteArray, append:=False)
-            IO.File.Exists(file1).Should.BeTrue()
+            File.Exists(file1).Should.BeTrue()
 
             _fileSystem.DeleteDirectory(testDirectory, showUI:=UIOption.OnlyErrorDialogs, RecycleOption.DeletePermanently, UICancelOption.DoNothing)
-            IO.Directory.Exists(testDirectory).Should.BeFalse()
+            Directory.Exists(testDirectory).Should.BeFalse()
         End Sub
 
         <WinFormsFact>
@@ -190,13 +249,13 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim file1 As String = CreateTempFile(testDirectory, NameOf(file1), size:=1)
             Dim byteArray As Byte() = {4}
             _fileSystem.WriteAllBytes(file1, byteArray, append:=False)
-            IO.File.Exists(file1).Should.BeTrue()
+            File.Exists(file1).Should.BeTrue()
 
             _fileSystem.DeleteDirectory(
                 directory:=testDirectory,
                 showUI:=UIOption.OnlyErrorDialogs,
                 recycle:=RecycleOption.DeletePermanently)
-            IO.Directory.Exists(testDirectory).Should.BeFalse()
+            Directory.Exists(testDirectory).Should.BeFalse()
         End Sub
 
         <WinFormsFact>
@@ -205,10 +264,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim file1 As String = CreateTempFile(testDirectory, NameOf(file1), size:=1)
             Dim byteArray As Byte() = {4}
             _fileSystem.WriteAllBytes(file1, byteArray, append:=False)
-            IO.File.Exists(file1).Should.BeTrue()
+            File.Exists(file1).Should.BeTrue()
 
             _fileSystem.DeleteFile(file1)
-            IO.File.Exists(file1).Should.BeFalse()
+            File.Exists(file1).Should.BeFalse()
 
             _fileSystem.DeleteDirectory(
                 directory:=testDirectory,
@@ -221,10 +280,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim file1 As String = CreateTempFile(testDirectory, NameOf(file1), size:=1)
             Dim byteArray As Byte() = {4}
             _fileSystem.WriteAllBytes(file1, byteArray, append:=False)
-            IO.File.Exists(file1).Should.BeTrue()
+            File.Exists(file1).Should.BeTrue()
 
             _fileSystem.DeleteFile(file1, UIOption.OnlyErrorDialogs, RecycleOption.DeletePermanently)
-            IO.File.Exists(file1).Should.BeFalse()
+            File.Exists(file1).Should.BeFalse()
 
             _fileSystem.DeleteDirectory(
                 directory:=testDirectory,
@@ -237,18 +296,104 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim file1 As String = CreateTempFile(testDirectory, NameOf(file1), size:=1)
             Dim byteArray As Byte() = {4}
             _fileSystem.WriteAllBytes(file1, byteArray, append:=False)
-            IO.File.Exists(file1).Should.BeTrue()
+            File.Exists(file1).Should.BeTrue()
 
             _fileSystem.DeleteFile(file1, UIOption.OnlyErrorDialogs, RecycleOption.DeletePermanently, UICancelOption.DoNothing)
-            IO.File.Exists(file1).Should.BeFalse()
+            File.Exists(file1).Should.BeFalse()
 
             CleanupDirectories(testDirectory)
+        End Sub
+
+        <WinFormsFact>
+        Public Sub DirectoryExistsProxyTest()
+            _fileSystem.DirectoryExists(s_baseTempPath).Should.BeTrue()
         End Sub
 
         <WinFormsFact>
         Public Sub DriveProxyTest()
             _fileSystem.Drives.Count.Should.Be(FileIO.FileSystem.Drives.Count)
         End Sub
+
+        <WinFormsFact>
+        Public Sub FileExistsProxyTest()
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim file1 As String = CreateTempFile(testDirectory, NameOf(file1), size:=1)
+            _fileSystem.FileExists(file1).Should.BeTrue()
+            CleanupDirectories(testDirectory)
+        End Sub
+
+        <WinFormsFact>
+        Public Sub GetDirectoriesProxyTest()
+            Dim testDirectory As String = CreateTempDirectory()
+            _fileSystem.GetDirectories(s_baseTempPath).Count.Should.BeGreaterThan(0)
+            CleanupDirectories(testDirectory)
+        End Sub
+
+        <WinFormsFact>
+        Public Sub GetDirectoriesWithSearchTypeProxyTest()
+            Dim testDirectory As String = CreateTempDirectory()
+            _fileSystem.GetDirectories(s_baseTempPath, FileIO.SearchOption.SearchAllSubDirectories, "*").Count.Should.BeGreaterThan(0)
+            CleanupDirectories(testDirectory)
+        End Sub
+
+        <WinFormsFact>
+        Public Sub GetDirectoryInfoProxyTest()
+            Dim testDirectory As String = CreateTempDirectory()
+            _fileSystem.GetDirectoryInfo(testDirectory).FullName.Should.Be(testDirectory)
+            CleanupDirectories(testDirectory)
+        End Sub
+
+        <WinFormsFact>
+        Public Sub GetDriveInfoProxyTest()
+            Dim drive0Name As String = IO.DriveInfo.GetDrives(0).Name
+            _fileSystem.GetDriveInfo(drive0Name).Name.Should.Be(drive0Name)
+        End Sub
+
+        <WinFormsFact>
+        Public Sub GetFileInfoProxyTest()
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim file1 As String = CreateTempFile(testDirectory, NameOf(file1), size:=1)
+            _fileSystem.GetFileInfo(file1).Exists.Should.BeTrue()
+            CleanupDirectories(testDirectory)
+        End Sub
+
+        <WinFormsFact>
+        Public Sub GetFilesProxyTest()
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim file1 As String = CreateTempFile(testDirectory, NameOf(file1), size:=1)
+            _fileSystem.GetFiles(testDirectory).Count.Should.Be(1)
+            CleanupDirectories(testDirectory)
+        End Sub
+
+        <WinFormsFact>
+        Public Sub GetFilesWithDirectoryAndSearchOptionProxyTest()
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim file1 As String = CreateTempFile(testDirectory, NameOf(file1), size:=1)
+            _fileSystem.GetFiles(testDirectory, FileIO.SearchOption.SearchTopLevelOnly, {"*"}).Count.Should.Be(1)
+            CleanupDirectories(testDirectory)
+        End Sub
+
+        <WinFormsFact>
+        Public Sub GetNameProxyTest() ' As String
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim file1 As String = CreateTempFile(testDirectory, NameOf(file1), size:=1)
+            _fileSystem.GetName(file1).Should.Be(NameOf(file1))
+            CleanupDirectories(testDirectory)
+        End Sub
+
+        <WinFormsFact>
+        Public Sub GetParentPathProxyTest()
+            Dim testDirectory As String = CreateTempDirectory()
+            _fileSystem.GetParentPath(testDirectory).Should.Be(s_baseTempPath)
+        End Sub
+
+        <WinFormsFact>
+        Public Sub GetTempFileNameProxyTest()
+            Dim tmpFileName As String = _fileSystem.GetTempFileName
+            File.Exists(tmpFileName).Should.BeTrue()
+            File.Delete(tmpFileName)
+        End Sub
+
 
         <WinFormsFact>
         Public Sub FileNormalizePathEmptyStringTest_Fail()
@@ -266,7 +411,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <WinFormsFact>
         Public Sub FileNormalizePathTest_Success()
-            FileSystemUtils.NormalizePath(IO.Path.GetTempPath).Should.Be(IO.Path.GetTempPath.TrimEnd(IO.Path.DirectorySeparatorChar))
+            FileSystemUtils.NormalizePath(Path.GetTempPath).Should.Be(Path.GetTempPath.TrimEnd(Path.DirectorySeparatorChar))
         End Sub
 
         <WinFormsFact>
@@ -277,13 +422,45 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim fileB As String = CreateTempFile(testDirectory, NameOf(fileB), size:=1)
             Dim fileC As String = CreateTempFile(testDirectory, NameOf(fileC))
             _fileSystem.WriteAllText(fileC, "C", append:=False)
-            Dim filenames As ReadOnlyCollection(Of String) = _fileSystem.FindInFiles(testDirectory, containsText:="A", ignoreCase:=True, SearchOption.SearchTopLevelOnly)
+            Dim filenames As ReadOnlyCollection(Of String) = _fileSystem.FindInFiles(testDirectory, containsText:="A", ignoreCase:=True, FileIO.SearchOption.SearchTopLevelOnly)
             filenames.Count.Should.Be(1)
             _fileSystem.CombinePath(testDirectory, NameOf(fileA)).Should.Be(filenames(0))
-            filenames = _fileSystem.FindInFiles(testDirectory, containsText:="A", ignoreCase:=True, SearchOption.SearchTopLevelOnly, "*C")
+            filenames = _fileSystem.FindInFiles(testDirectory, containsText:="A", ignoreCase:=True, FileIO.SearchOption.SearchTopLevelOnly, "*C")
             filenames.Count.Should.Be(0)
 
             CleanupDirectories(testDirectory)
+        End Sub
+
+        <WinFormsFact>
+        Public Sub MoveDirectoryWithNoOptionsProxyTest()
+            Dim testDirectory As String = CreateTempDirectory(lineNumber:=1)
+            Dim file1 As String = CreateTempFile(testDirectory, NameOf(file1))
+            Dim byteArray As Byte() = {4}
+            _fileSystem.WriteAllBytes(file1, byteArray, append:=False)
+
+            Dim destinationDirectory As String = CreateTempDirectory(lineNumber:=2)
+            _fileSystem.MoveDirectory(testDirectory, destinationDirectory)
+            Directory.Exists(testDirectory).Should.BeFalse()
+            Directory.Exists(destinationDirectory).Should.BeTrue()
+            Directory.EnumerateFiles(destinationDirectory).Count.Should.Be(1)
+
+            CleanupDirectories(destinationDirectory)
+        End Sub
+
+        <WinFormsFact>
+        Public Sub MoveDirectoryWithOverwriteProxyTest()
+            Dim testDirectory As String = CreateTempDirectory(lineNumber:=1)
+            Dim file1 As String = CreateTempFile(testDirectory, NameOf(file1))
+            Dim byteArray As Byte() = {4}
+            _fileSystem.WriteAllBytes(file1, byteArray, append:=False)
+
+            Dim destinationDirectory As String = CreateTempDirectory(lineNumber:=2)
+            _fileSystem.MoveDirectory(testDirectory, destinationDirectory, overwrite:=True)
+            Directory.Exists(testDirectory).Should.BeFalse()
+            Directory.Exists(destinationDirectory).Should.BeTrue()
+            Directory.EnumerateFiles(destinationDirectory).Count.Should.Be(1)
+
+            CleanupDirectories(destinationDirectory)
         End Sub
 
         <WinFormsFact>
@@ -295,9 +472,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
             Dim destinationDirectory As String = CreateTempDirectory(lineNumber:=2)
             _fileSystem.MoveDirectory(testDirectory, destinationDirectory, UIOption.OnlyErrorDialogs, UICancelOption.DoNothing)
-            IO.Directory.Exists(testDirectory).Should.BeFalse()
-            IO.Directory.Exists(destinationDirectory).Should.BeTrue()
-            IO.Directory.EnumerateFiles(destinationDirectory).Count.Should.Be(1)
+            Directory.Exists(testDirectory).Should.BeFalse()
+            Directory.Exists(destinationDirectory).Should.BeTrue()
+            Directory.EnumerateFiles(destinationDirectory).Count.Should.Be(1)
 
             CleanupDirectories(destinationDirectory)
         End Sub
@@ -311,11 +488,47 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
             Dim destinationDirectory As String = CreateTempDirectory(lineNumber:=2)
             _fileSystem.MoveDirectory(testDirectory, destinationDirectory, UIOption.OnlyErrorDialogs)
-            IO.Directory.Exists(testDirectory).Should.BeFalse()
-            IO.Directory.Exists(destinationDirectory).Should.BeTrue()
-            IO.Directory.EnumerateFiles(destinationDirectory).Count.Should.Be(1)
+            Directory.Exists(testDirectory).Should.BeFalse()
+            Directory.Exists(destinationDirectory).Should.BeTrue()
+            Directory.EnumerateFiles(destinationDirectory).Count.Should.Be(1)
 
             CleanupDirectories(destinationDirectory)
+        End Sub
+
+        <WinFormsFact>
+        Public Sub MoveFileTest()
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim file1 As String = CreateTempFile(testDirectory, NameOf(file1))
+            Dim byteArray As Byte() = {4}
+            _fileSystem.WriteAllBytes(file1, byteArray, append:=False)
+
+            Dim file2 As String = CreateTempFile(testDirectory, NameOf(file2))
+            _fileSystem.MoveFile(file1, file2)
+            Dim bytes As Byte() = _fileSystem.ReadAllBytes(file2)
+            File.Exists(file1).Should.BeFalse()
+            File.Exists(file2).Should.BeTrue()
+            bytes.Length.Should.Be(1)
+            bytes(0).Should.Be(4)
+
+            CleanupDirectories(testDirectory)
+        End Sub
+
+        <WinFormsFact>
+        Public Sub MoveFileWithOverwriteTest()
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim file1 As String = CreateTempFile(testDirectory, NameOf(file1))
+            Dim byteArray As Byte() = {4}
+            _fileSystem.WriteAllBytes(file1, byteArray, append:=False)
+
+            Dim file2 As String = CreateTempFile(testDirectory, NameOf(file2))
+            _fileSystem.MoveFile(file1, file2, overwrite:=True)
+            Dim bytes As Byte() = _fileSystem.ReadAllBytes(file2)
+            File.Exists(file1).Should.BeFalse()
+            File.Exists(file2).Should.BeTrue()
+            bytes.Length.Should.Be(1)
+            bytes(0).Should.Be(4)
+
+            CleanupDirectories(testDirectory)
         End Sub
 
         <WinFormsFact>
@@ -328,8 +541,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim file2 As String = CreateTempFile(testDirectory, NameOf(file2))
             _fileSystem.MoveFile(file1, file2, showUI:=UIOption.OnlyErrorDialogs)
             Dim bytes As Byte() = _fileSystem.ReadAllBytes(file2)
-            IO.File.Exists(file1).Should.BeFalse()
-            IO.File.Exists(file2).Should.BeTrue()
+            File.Exists(file1).Should.BeFalse()
+            File.Exists(file2).Should.BeTrue()
             bytes.Length.Should.Be(1)
             bytes(0).Should.Be(4)
 
@@ -346,8 +559,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim file2 As String = CreateTempFile(testDirectory, NameOf(file2))
             _fileSystem.MoveFile(file1, file2, showUI:=UIOption.OnlyErrorDialogs, UICancelOption.DoNothing)
             Dim bytes As Byte() = _fileSystem.ReadAllBytes(file2)
-            IO.File.Exists(file1).Should.BeFalse()
-            IO.File.Exists(file2).Should.BeTrue()
+            File.Exists(file1).Should.BeFalse()
+            File.Exists(file2).Should.BeTrue()
             bytes.Length.Should.Be(1)
             bytes(0).Should.Be(4)
 
@@ -496,21 +709,57 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             CleanupDirectories(testDirectory)
         End Sub
 
-        Protected Friend Class PathTestData
-            Implements IEnumerable(Of Object())
+        <WinFormsFact>
+        Public Sub RenameDirectoryTest()
+            Dim testDirectory As String = CreateTempDirectory(lineNumber:=1)
+            Dim file1 As String = CreateTempFile(testDirectory, NameOf(file1))
+            Dim byteArray As Byte() = {4}
+            _fileSystem.WriteAllBytes(file1, byteArray, append:=False)
 
-            Public Iterator Function GetEnumerator() As IEnumerator(Of Object()) Implements IEnumerable(Of Object()).GetEnumerator
-                Yield {Nothing}
-                Yield {String.Empty}
-                Yield {" "}
-                Yield {IO.Path.GetPathRoot(IO.Path.GetTempPath)}
-                Yield {IO.Path.GetTempPath}
-            End Function
+            Dim destinationDirectory As String = CreateTempDirectory(lineNumber:=2)
+            Dim destinationFileName As String = Path.GetFileName(destinationDirectory)
+            IO.Directory.Delete(destinationDirectory)
+            _fileSystem.RenameDirectory(testDirectory, destinationFileName)
+            Directory.Exists(testDirectory).Should.BeFalse()
+            Directory.Exists(destinationDirectory).Should.BeTrue()
+            Directory.EnumerateFiles(destinationDirectory).Count.Should.Be(1)
 
-            Public Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
-                Return GetEnumerator()
-            End Function
+            CleanupDirectories(destinationDirectory)
+        End Sub
 
-        End Class
+        <WinFormsFact>
+        Public Sub RenameFileTest()
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim file1 As String = CreateTempFile(testDirectory, NameOf(file1))
+            Dim byteArray As Byte() = {4}
+            _fileSystem.WriteAllBytes(file1, byteArray, append:=False)
+
+            Dim file2 As String = CreateTempFile(testDirectory, NameOf(file2))
+            _fileSystem.RenameFile(file1, NameOf(file2))
+            Dim bytes As Byte() = _fileSystem.ReadAllBytes(file2)
+            File.Exists(file1).Should.BeFalse()
+            File.Exists(file2).Should.BeTrue()
+            bytes.Length.Should.Be(1)
+            bytes(0).Should.Be(4)
+
+            CleanupDirectories(testDirectory)
+        End Sub
+
+        <WinFormsFact>
+        Public Sub SpecialDirectoriesTest()
+            _fileSystem.SpecialDirectories.AllUsersApplicationData.Should.Be(SpecialDirectories.AllUsersApplicationData)
+            _fileSystem.SpecialDirectories.CurrentUserApplicationData.Should.Be(SpecialDirectories.CurrentUserApplicationData)
+            _fileSystem.SpecialDirectories.Desktop.Should.Be(SpecialDirectories.Desktop)
+            _fileSystem.SpecialDirectories.MyDocuments.Should.Be(SpecialDirectories.MyDocuments)
+            _fileSystem.SpecialDirectories.MyMusic.Should.Be(SpecialDirectories.MyMusic)
+            _fileSystem.SpecialDirectories.MyPictures.Should.Be(SpecialDirectories.MyPictures)
+            _fileSystem.SpecialDirectories.ProgramFiles.Should.Be(SpecialDirectories.ProgramFiles)
+            _fileSystem.SpecialDirectories.Programs.Should.Be(SpecialDirectories.Programs)
+            Dim temp As String = _fileSystem.SpecialDirectories.Temp
+            temp.Should.Be(SpecialDirectories.Temp)
+            temp &= Path.DirectorySeparatorChar
+            temp.Should.Be(Path.GetTempPath)
+        End Sub
+
     End Class
 End Namespace

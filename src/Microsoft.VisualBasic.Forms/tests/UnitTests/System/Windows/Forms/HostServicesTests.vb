@@ -13,13 +13,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Private Shared ReadOnly s_title As String = GetUniqueText()
 
         <WinFormsFact>
-        Public Sub GetUniqueIntegerTests_Success()
-            Dim condition As Boolean = GetUniqueInteger(positiveOnly:=True) >= 0
-            condition.Should.BeTrue()
-            GetUniqueInteger(positiveOnly:=False).Should.NotBe(GetUniqueInteger(positiveOnly:=False))
-        End Sub
-
-        <WinFormsFact>
         Public Sub InputHandlerTests_Success()
             Dim prompt As String = GetUniqueText()
             Dim title As String = GetUniqueText()
