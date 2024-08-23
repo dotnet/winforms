@@ -52,7 +52,7 @@ Namespace Microsoft.VisualBasic.Devices
             Private Sub Refresh()
                 _memoryStatusEx = New NativeMethods.MEMORYSTATUSEX
                 _memoryStatusEx.Init()
-                If (Not NativeMethods.GlobalMemoryStatusEx(_memoryStatusEx)) Then
+                If Not NativeMethods.GlobalMemoryStatusEx(_memoryStatusEx) Then
                     Throw ExceptionUtils.GetWin32Exception(SR.DiagnosticInfo_Memory)
                 End If
             End Sub
