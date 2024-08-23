@@ -1267,6 +1267,13 @@ public sealed partial class Application
         => ThreadContext.FromCurrent().RemoveMessageFilter(value);
 
     /// <summary>
+    /// Get current application context
+    /// </summary>
+    /// <returns>Current application context</returns>
+    public static ApplicationContext? GetCurrentApplicationContext()
+        => ThreadContext.FromCurrent().ApplicationContext;
+
+    /// <summary>
     ///  Restarts the application.
     /// </summary>
     public static void Restart()
