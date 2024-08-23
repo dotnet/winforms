@@ -814,8 +814,8 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
     protected virtual void OnCheckStateChanged(EventArgs e)
     {
         AccessibilityNotifyClients(AccessibleEvents.StateChange);
-        if (IsAccessibilityObjectCreated &&
-            AccessibilityObject is ToolStripMenuItemAccessibleObject accessibilityObject)
+        if (IsAccessibilityObjectCreated
+            && AccessibilityObject is ToolStripMenuItemAccessibleObject accessibilityObject)
         {
             accessibilityObject.OnCheckStateChanged(_prevCheckState, CheckState);
         }

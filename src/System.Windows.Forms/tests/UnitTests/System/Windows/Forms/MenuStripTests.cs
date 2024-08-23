@@ -820,6 +820,32 @@ public class MenuStripTests
         Assert.Equal(0, createdCallCount);
     }
 
+    [WinFormsFact]
+    public void MenuStrip_ProcessCmdKey_InvokeMenuItem_GetFocus()
+    {
+        using Form form = new Form();
+        using MenuStrip menuStrip = new() { TabStop = true };
+        using ToolStripMenuItem toolStripMenuItem1 = new();
+        using ToolStripMenuItem toolStripMenuItem2 = new() { CheckOnClick = true };
+        using ToolStripMenuItem toolStripMenuItem3 = new();
+        toolStripMenuItem1.DropDownItems.AddRange(toolStripMenuItem2, toolStripMenuItem3);
+        menuStrip.Items.AddRange(toolStripMenuItem1);
+        form.Controls.Add(menuStrip);
+        form.Show();
+
+        Message m = new();
+        menuStrip.Focused.Should().BeTrue();
+        toolStripMenuItem1.ProcessCmdKey(ref m, keyData: Keys.Enter);
+        toolStripMenuItem2.Checked.Should().BeFalse();
+        toolStripMenuItem2.ProcessCmdKey(ref m, keyData: Keys.Space);
+        toolStripMenuItem2.Checked.Should().BeTrue();
+        toolStripMenuItem2.ProcessCmdKey(ref m, keyData: Keys.Space);
+        toolStripMenuItem2.Checked.Should().BeFalse();
+
+        toolStripMenuItem3.ProcessCmdKey(ref m, keyData: Keys.Enter);
+        menuStrip.Focused.Should().BeTrue();
+    }
+
     private class CustomProcessControl : Control
     {
         public Func<Message, Keys, bool> ProcessCmdKeyAction { get; set; }
