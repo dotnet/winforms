@@ -10,7 +10,7 @@ public class ContextMenuStripGroupCollectionTests
     [Fact]
     public void Indexer_ShouldCreateNewGroupIfKeyDoesNotExist()
     {
-        ContextMenuStripGroupCollection collection = new ContextMenuStripGroupCollection();
+        ContextMenuStripGroupCollection collection = new();
 
         ContextMenuStripGroup group = collection["newKey"];
 
@@ -22,7 +22,7 @@ public class ContextMenuStripGroupCollectionTests
     [Fact]
     public void ContainsKey_ShouldReturnFalseIfKeyDoesNotExist()
     {
-        ContextMenuStripGroupCollection collection = new ContextMenuStripGroupCollection();
+        ContextMenuStripGroupCollection collection = new();
 
         bool containsKey = collection.ContainsKey("nonExistentKey");
 
@@ -32,7 +32,7 @@ public class ContextMenuStripGroupCollectionTests
     [Fact]
     public void Indexer_ShouldReturnSameGroupForSameKey()
     {
-        ContextMenuStripGroupCollection collection = new ContextMenuStripGroupCollection();
+        ContextMenuStripGroupCollection collection = new();
 
         ContextMenuStripGroup group1 = collection["newKey"];
         ContextMenuStripGroup group2 = collection["newKey"];
@@ -43,7 +43,7 @@ public class ContextMenuStripGroupCollectionTests
     [Fact]
     public void Indexer_ShouldReturnDifferentGroupsForDifferentKeys()
     {
-        ContextMenuStripGroupCollection collection = new ContextMenuStripGroupCollection();
+        ContextMenuStripGroupCollection collection = new();
 
         ContextMenuStripGroup group1 = collection["key1"];
         ContextMenuStripGroup group2 = collection["key2"];
