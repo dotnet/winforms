@@ -191,6 +191,24 @@ public class BindingNavigatorTests
         Assert.Equal($"of {rowsCount2}", control.CountItem.Text);
     }
 
+    [WinFormsFact]
+    public void BindingNavigator_AddStandardItems_AddsCorrectItems()
+    {
+        using BindingNavigator navigator = new();
+        navigator.AddStandardItems();
+        navigator.Items[0].Name.Should().Be("bindingNavigatorMoveFirstItem");
+        navigator.Items[1].Name.Should().Be("bindingNavigatorMovePreviousItem");
+        navigator.Items[2].Name.Should().Be("bindingNavigatorSeparator1");
+        navigator.Items[3].Name.Should().Be("bindingNavigatorPositionItem");
+        navigator.Items[4].Name.Should().Be("bindingNavigatorCountItem");
+        navigator.Items[5].Name.Should().Be("bindingNavigatorSeparator2");
+        navigator.Items[6].Name.Should().Be("bindingNavigatorMoveNextItem");
+        navigator.Items[7].Name.Should().Be("bindingNavigatorMoveLastItem");
+        navigator.Items[8].Name.Should().Be("bindingNavigatorSeparator3");
+        navigator.Items[9].Name.Should().Be("bindingNavigatorAddNewItem");
+        navigator.Items[10].Name.Should().Be("bindingNavigatorDeleteItem");
+    }
+
     private BindingSource GetTestBindingSource(int rowsCount)
     {
         DataTable dt = new();
