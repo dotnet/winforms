@@ -19,8 +19,10 @@ Namespace Microsoft.VisualBasic.Devices
         Private _useNonPassiveFtp As Boolean
 
 #Disable Warning BC41004 ' First statement of this 'Sub New' should be an explicit call to 'MyBase.New' or 'MyClass.New' because the constructor in the base class is marked obsolete
+
         Friend Sub New()
         End Sub
+
 #Enable Warning BC41004 ' First statement of this 'Sub New' should be an explicit call to 'MyBase.New' or 'MyClass.New' because the constructor in the base class is marked obsolete
 
         ''' <summary>

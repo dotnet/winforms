@@ -4,6 +4,7 @@
 Imports Microsoft.VisualBasic.CompilerServices
 
 Namespace Microsoft.VisualBasic.Devices
+
     Partial Public Class ComputerInfo
 
         ''' <summary>
