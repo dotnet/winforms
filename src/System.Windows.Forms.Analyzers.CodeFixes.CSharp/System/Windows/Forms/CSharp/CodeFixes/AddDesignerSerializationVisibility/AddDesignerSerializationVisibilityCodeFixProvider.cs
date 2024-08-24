@@ -82,19 +82,17 @@ internal sealed class AddDesignerSerializationVisibilityCodeFixProvider : CodeFi
             SyntaxFactory.ParseName(DesignerSerializationVisibilityAttributeName),
             SyntaxFactory.ParseAttributeArgumentList("(DesignerSerializationVisibility.Hidden)"));
 
-        // Make sure, we keep the white spaces before and after the property
         SyntaxTriviaList leadingTrivia = propertyDeclarationSyntax.GetLeadingTrivia();
-        SyntaxTriviaList trailingTrivia = propertyDeclarationSyntax.GetTrailingTrivia();
+        PropertyDeclarationSyntax newProperty = propertyDeclarationSyntax.WithoutLeadingTrivia();
 
         // Add the attribute to the property:
-        PropertyDeclarationSyntax newProperty = propertyDeclarationSyntax
+        newProperty = newProperty
             .AddAttributeLists(
                 SyntaxFactory.AttributeList(
                     SyntaxFactory.SingletonSeparatedList(designerSerializationVisibilityAttribute)));
 
-        // Let's restore the original trivia:
+        // Add the leading trivia back:
         newProperty = newProperty.WithLeadingTrivia(leadingTrivia);
-        newProperty = newProperty.WithTrailingTrivia(trailingTrivia);
 
         // Produce a new root, which has the updated property with the attribute.
         root = root.ReplaceNode(propertyDeclarationSyntax, newProperty);
