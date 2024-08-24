@@ -284,13 +284,7 @@ Namespace Microsoft.VisualBasic.Devices
                     client.Credentials = networkCredentials
                 End If
 
-                Dim dialog As ProgressDialog = Nothing
-                If showUI AndAlso Environment.UserInteractive Then
-                    dialog = New ProgressDialog With {
-                        .Text = GetResourceString(SR.ProgressDialogUploadingTitle, sourceFileName),
-                        .LabelText = GetResourceString(SR.ProgressDialogUploadingLabel, sourceFileName, address.AbsolutePath)
-                    }
-                End If
+                Dim dialog As ProgressDialog = GetProgressDialog(address.AbsolutePath, sourceFileName, showUI)
 
                 'Create the copier
                 Dim copier As New WebClientCopy(client, dialog)

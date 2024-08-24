@@ -5,6 +5,7 @@ Imports System.IO
 Imports System.Net
 Imports System.Net.Http
 Imports System.Threading
+Imports Microsoft.VisualBasic.Devices.NetworkUtilities
 
 Namespace Microsoft.VisualBasic.MyServices.Internal
 
@@ -45,24 +46,6 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                 AddHandler m_ProgressDialog.UserHitCancel, AddressOf m_ProgressDialog_UserHitCancel
             End If
 
-        End Sub
-
-        ''' <summary>
-        '''  Posts a message to close the progress dialog
-        ''' </summary>
-        Private Sub CloseProgressDialog()
-            ' Don't invoke unless dialog is up and running
-            If m_ProgressDialog IsNot Nothing Then
-                m_ProgressDialog.IndicateClosing()
-
-                If m_ProgressDialog.IsHandleCreated Then
-                    m_ProgressDialog.BeginInvoke(New System.Windows.Forms.MethodInvoker(AddressOf m_ProgressDialog.CloseDialog))
-                Else
-                    ' Ensure dialog is closed. If we get here it means the file was copied before the handle for
-                    ' the progress dialog was created.
-                    m_ProgressDialog.Close()
-                End If
-            End If
         End Sub
 
         ''' <summary>
@@ -150,7 +133,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                                         bytesRead = Await responseStream.ReadAsync(buffer.AsMemory(0, buffer.Length), _cancelTokenSourceRead.Token).ConfigureAwait(False)
                                     Loop
                                 Finally
-                                    CloseProgressDialog()
+                                    CloseProgressDialog(m_ProgressDialog)
                                 End Try
                             End Using
                         End Using

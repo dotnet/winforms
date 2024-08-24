@@ -4,6 +4,7 @@
 Imports System.IO
 Imports System.Net
 Imports System.Windows.Forms
+Imports Microsoft.VisualBasic.Devices.NetworkUtilities
 
 Namespace Microsoft.VisualBasic.MyServices.Internal
 
@@ -39,24 +40,6 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
             m_WebClient = client
             m_ProgressDialog = dialog
 
-        End Sub
-
-        ''' <summary>
-        '''  Posts a message to close the progress dialog.
-        ''' </summary>
-        Private Sub CloseProgressDialog()
-            ' Don't invoke unless dialog is up and running
-            If m_ProgressDialog IsNot Nothing Then
-                m_ProgressDialog.IndicateClosing()
-
-                If m_ProgressDialog.IsHandleCreated Then
-                    m_ProgressDialog.BeginInvoke(New MethodInvoker(AddressOf m_ProgressDialog.CloseDialog))
-                Else
-                    ' Ensure dialog is closed. If we get here it means the file was copied before the handle for
-                    ' the progress dialog was created.
-                    m_ProgressDialog.Close()
-                End If
-            End If
         End Sub
 
         ''' <summary>
@@ -112,7 +95,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
             Finally
                 'We don't close the dialog until we receive the
                 'WebClient.DownloadFileCompleted event
-                CloseProgressDialog()
+                CloseProgressDialog(m_ProgressDialog)
             End Try
         End Sub
 
@@ -144,13 +127,13 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                 m_WebClient.UploadFile(address, sourceFileName)
             End If
 
-        'Now that we are back on the main thread, throw the exception we
-        'encountered if the user didn't cancel.
-        If _exceptionEncounteredDuringFileTransfer IsNot Nothing Then
-        If m_ProgressDialog Is Nothing OrElse Not m_ProgressDialog.UserCanceledTheDialog Then
-        Throw _exceptionEncounteredDuringFileTransfer
-        End If
-        End If
+            'Now that we are back on the main thread, throw the exception we
+            'encountered if the user didn't cancel.
+            If _exceptionEncounteredDuringFileTransfer IsNot Nothing Then
+                If m_ProgressDialog Is Nothing OrElse Not m_ProgressDialog.UserCanceledTheDialog Then
+                    Throw _exceptionEncounteredDuringFileTransfer
+                End If
+            End If
         End Sub
 
     End Class
