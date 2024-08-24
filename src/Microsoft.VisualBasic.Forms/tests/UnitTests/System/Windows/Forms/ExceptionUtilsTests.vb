@@ -2,7 +2,6 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports FluentAssertions
-Imports Microsoft.VisualBasic.CompilerServices
 Imports Xunit
 
 Imports VbUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
