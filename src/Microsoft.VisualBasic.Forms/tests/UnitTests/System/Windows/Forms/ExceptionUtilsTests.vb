@@ -16,10 +16,15 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub GetArgumentExceptionWithArgNameTest_Succeed()
             Const ArgumentName As String = "MainForm"
-            Dim ex As Exception = VbUtils.GetArgumentNullException(ArgumentName)
-            ex.Should.BeOfType(Of ArgumentNullException)()
-            CType(ex, ArgumentNullException).ParamName.Should.Be(ArgumentName)
-            ex.Message.Should.StartWith(VbUtils.GetResourceString(SR.General_ArgumentNullException))
+            Dim resourceID As String = SR.General_PropertyNothing
+            Dim ex As Exception = VbUtils.GetArgumentExceptionWithArgName(
+                ArgumentName,
+                resourceID,
+                ArgumentName
+)
+            ex.Should.BeOfType(Of ArgumentException)()
+            CType(ex, ArgumentException).ParamName.Should.Be(ArgumentName)
+            ex.Message.Should.StartWith(VbUtils.GetResourceString(resourceID, ArgumentName), ArgumentName)
         End Sub
 
         <WinFormsFact>
