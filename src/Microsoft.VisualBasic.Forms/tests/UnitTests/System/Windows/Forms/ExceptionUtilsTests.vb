@@ -2,7 +2,6 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports FluentAssertions
-Imports Microsoft.VisualBasic.CompilerServices
 Imports Xunit
 
 Imports VbUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
@@ -15,20 +14,45 @@ Namespace Microsoft.VisualBasic.Forms.Tests
     Public Class ExceptionUtilsTests
 
         <WinFormsFact>
+        Public Sub GetArgumentExceptionWithArgNameTest_Succeed()
+            Const ArgumentName As String = "MainForm"
+            Dim resourceID As String = SR.General_PropertyNothing
+            Dim ex As Exception = VbUtils.GetArgumentExceptionWithArgName(
+                ArgumentName,
+                resourceID,
+                ArgumentName
+)
+            ex.Should.BeOfType(Of ArgumentException)()
+            CType(ex, ArgumentException).ParamName.Should.Be(ArgumentName)
+            ex.Message.Should.StartWith(VbUtils.GetResourceString(resourceID, ArgumentName), ArgumentName)
+        End Sub
+
+        <WinFormsFact>
         Public Sub GetArgumentNullExceptionTest_Succeed()
             Const ArgumentName As String = "MainForm"
-            Dim ex As Exception = VbUtils.GetArgumentNullException(
-                ArgumentName,
-                resourceID:=SR.General_PropertyNothing,
-                ArgumentName)
+            Dim ex As Exception = VbUtils.GetArgumentNullException(ArgumentName)
             ex.Should.BeOfType(Of ArgumentNullException)()
             CType(ex, ArgumentNullException).ParamName.Should.Be(ArgumentName)
-            ex.Message.Should.Be($"Property MainForm cannot be set to Nothing. (Parameter '{ArgumentName}')")
+            ex.Message.Should.StartWith($"{VbUtils.GetResourceString(SR.General_ArgumentNullException)}")
+        End Sub
+
+        <WinFormsFact>
+        Public Sub GetArgumentNullExceptionWithAllParametersTest_Succeed()
+            Const ArgumentName As String = "MainForm"
+            Dim resourceID As String = SR.General_PropertyNothing
+            Dim ex As Exception = VbUtils.GetArgumentNullException(
+                ArgumentName,
+                resourceID,
+                ArgumentName
+                )
+            ex.Should.BeOfType(Of ArgumentNullException)()
+            CType(ex, ArgumentNullException).ParamName.Should.Be(ArgumentName)
+            ex.Message.Should.StartWith(VbUtils.GetResourceString(resourceID, ArgumentName))
         End Sub
 
         <WinFormsFact>
         Public Sub GetDirectoryNotFoundExceptionTest_Succeed()
-            Dim resourceString As String = VbUtils.GetResourceString(VbErrors.FileNotFound)
+            Dim resourceString As String = VbUtils.GetResourceString(CompilerServices.VbErrors.FileNotFound)
             Dim ex As Exception = VbUtils.GetDirectoryNotFoundException(resourceString)
             ex.Should.BeOfType(Of IO.DirectoryNotFoundException)()
             ex.Message.Should.Be("File not found.")
@@ -36,7 +60,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <WinFormsFact>
         Public Sub GetFileNotFoundExceptionTest_Succeed()
-            Dim resourceString As String = VbUtils.GetResourceString(VbErrors.FileNotFound)
+            Dim resourceString As String = VbUtils.GetResourceString(CompilerServices.VbErrors.FileNotFound)
             Dim ex As Exception = VbUtils.GetFileNotFoundException("Test", resourceString)
             ex.Should.BeOfType(Of IO.FileNotFoundException)()
             ex.Message.Should.Be("File not found.")
@@ -67,13 +91,13 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <InlineData(0)>
         Public Sub VbMakeExceptionInvalidValuesTest_Succeed(BadResourceId As Integer)
             Dim id As String = $"ID{BadResourceId}"
-            VbMakeException(BadResourceId).Message.Should.Be($"{SR.GetResourceString(id, id)}")
+            VbUtils.VbMakeException(BadResourceId).Message.Should.Be($"{SR.GetResourceString(id, id)}")
         End Sub
 
         <WinFormsTheory>
-        <InlineData(VbErrors.FileNotFound, "File not found.")>
-        <InlineData(VbErrors.PermissionDenied, "Permission denied.")>
-        <InlineData(VbErrors.None, "")>
+        <InlineData(CompilerServices.VbErrors.FileNotFound, "File not found.")>
+        <InlineData(CompilerServices.VbErrors.PermissionDenied, "Permission denied.")>
+        <InlineData(CompilerServices.VbErrors.None, "")>
         Public Sub VbMakeExceptionTest_Succeed(errorCode As Integer, expected As String)
             VbUtils.VbMakeException(errorCode).Message.Should.Be(expected)
         End Sub
