@@ -338,13 +338,7 @@ Namespace Microsoft.VisualBasic.Devices
                     client.Credentials = networkCredentials
                 End If
 
-                Dim dialog As ProgressDialog = Nothing
-                If showUI AndAlso Environment.UserInteractive Then
-                    dialog = New ProgressDialog With {
-                        .Text = VbUtils.GetResourceString(SR.ProgressDialogDownloadingTitle, address.AbsolutePath),
-                        .LabelText = VbUtils.GetResourceString(SR.ProgressDialogDownloadingLabel, address.AbsolutePath, fullFilename)
-                    }
-                End If
+                Dim dialog As ProgressDialog = GetProgressDialog(address.AbsolutePath, fullFilename, showUI)
 
                 'Check to see if the target directory exists. If it doesn't, create it
                 Dim targetDirectory As String = IO.Path.GetDirectoryName(fullFilename)
