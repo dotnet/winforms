@@ -17,6 +17,7 @@ internal static class DiagnosticIDs
 
     // WinForms best practice, number group 2000+
     public const string DisposeModalDialog = "WFO2000";
+    public const string AvoidPassingFuncReturningTaskWithoutCancellationToken = "WFO2001";
 
     // Experimental, number group 5000+
     public const string ExperimentalDarkMode = "WFO5001";

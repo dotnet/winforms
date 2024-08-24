@@ -5,3 +5,4 @@
 Rule ID | Category | Severity | Notes
 --------|----------|----------|-------
 WFO1000 | WinForms Security | Error | VisualBasicDiagnosticDescriptors
+WFO2001 | WinForms Security | Warning | VisualBasicDiagnosticDescriptors
