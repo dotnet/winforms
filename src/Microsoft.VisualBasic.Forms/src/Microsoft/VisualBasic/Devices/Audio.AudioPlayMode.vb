@@ -2,6 +2,7 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Namespace Microsoft.VisualBasic
+
     ''' <summary>
     '''  Enum for three ways to play a .wav file.
     ''' </summary>
