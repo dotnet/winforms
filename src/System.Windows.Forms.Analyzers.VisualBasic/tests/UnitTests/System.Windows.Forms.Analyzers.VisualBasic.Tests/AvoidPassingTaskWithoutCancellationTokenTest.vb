@@ -2,13 +2,13 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.Windows.Forms.Analyzers.Diagnostics
-Imports System.Windows.Forms.VisualBasic.Analyzers.ConsiderNotPassingATaskWithoutCancellationToken
+Imports System.Windows.Forms.VisualBasic.Analyzers.AvoidPassingTaskWithoutCancellationToken
 Imports Microsoft.CodeAnalysis
 Imports Microsoft.CodeAnalysis.Testing
 Imports Microsoft.CodeAnalysis.VisualBasic.Testing
 Imports Xunit
 
-Public Class AvoidPassingFuncReturningTaskWithoutCancellationTokenTest
+Public Class AvoidPassingTaskWithoutCancellationTokenTest
     ' Currently, we do not have Control.InvokeAsync in the .NET 9.0 Windows reference assemblies.
     ' That's why we need to add this Async Control. Once it's there, this test will fail.
     ' We can then remove the AsyncControl and the test will pass, replace AsyncControl with
@@ -156,7 +156,7 @@ End Namespace
         Dim customControlSource As String = AsyncControl
         Dim diagnosticId As String = DiagnosticIDs.AvoidPassingFuncReturningTaskWithoutCancellationToken
 
-        Dim context As New VisualBasicAnalyzerTest(Of AvoidPassingFuncReturningTaskWithoutCancellationTokenAnalyzer, DefaultVerifier) With
+        Dim context As New VisualBasicAnalyzerTest(Of AvoidPassingTaskWithoutCancellationTokenAnalyzer, DefaultVerifier) With
             {
                 .TestCode = TestCode,
                 .ReferenceAssemblies = referenceAssemblies
