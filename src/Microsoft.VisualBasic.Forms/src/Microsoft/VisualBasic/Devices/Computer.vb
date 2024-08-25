@@ -29,10 +29,13 @@ Namespace Microsoft.VisualBasic.Devices
 
         'Lazy initialized cache for the clipboard class. (proxies can be shared - they have no state)
         Private Shared s_clipboard As ClipboardProxy
+
         'Lazy initialized cache for the Keyboard class. SHARED because Keyboard behaves as a ReadOnly singleton class
         Private Shared s_keyboardInstance As Keyboard
+
         'Lazy initialized cache for the Mouse class. SHARED because Mouse behaves as a ReadOnly singleton class
         Private Shared s_mouse As Mouse
+
         'Lazy initialized cache for the Audio class.
         Private _audio As Audio
 

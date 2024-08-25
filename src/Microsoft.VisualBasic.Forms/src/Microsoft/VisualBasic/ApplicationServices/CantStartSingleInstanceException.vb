@@ -3,7 +3,7 @@
 
 Imports System.ComponentModel
 
-Imports VbUtils = Microsoft.VisualBasic.CompilerServices.Utils
+Imports VbUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.ApplicationServices
 
