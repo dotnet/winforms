@@ -144,6 +144,8 @@ public static class TabRenderer
     internal static void DrawTabPage(IDeviceContext deviceContext, Rectangle bounds)
     {
 #pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        // Using DarkMode Theme Subclass.
+        // see https://learn.microsoft.com/en-us/windows/win32/controls/theme-subclasses.
         VisualStyleElement darkTabPaneElement = VisualStyleElement.CreateElement("DarkMode::ExplorerNavPane", 0, 0);
         VisualStyleElement lightTabPaneElement = VisualStyleElement.Tab.Pane.Normal;
         VisualStyleElement tabPaneElement = Application.IsDarkModeEnabled
