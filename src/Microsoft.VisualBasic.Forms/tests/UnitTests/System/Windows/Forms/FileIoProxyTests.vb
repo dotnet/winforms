@@ -25,7 +25,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 4321;1234;321;654321;123;1234567"
 
         Private Sub CleanupDirectories(testDirectory As String, Optional destinationDirectory As String = Nothing, Optional onDirectoryNotEmpty As DeleteDirectoryOption = DeleteDirectoryOption.DeleteAllContents)
-            If String.IsNullOrEmpty(testDirectory) Then
+            If String.IsNullOrWhiteSpace(testDirectory) Then
                 Throw New ArgumentException($"'{NameOf(testDirectory)}' cannot be null or empty.", NameOf(testDirectory))
             End If
             If testDirectory = Path.GetTempPath Then
@@ -64,9 +64,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub CleanupDirectoriesWithDestinationDirectoryTests(destinationDirectory As String)
             Dim testDirectory As String = CreateTempDirectory()
             Dim testCode As Action = Sub() CleanupDirectories(testDirectory, destinationDirectory, onDirectoryNotEmpty:=DeleteDirectoryOption.ThrowIfDirectoryNonEmpty)
-            If destinationDirectory IsNot Nothing Then
+            If destinationDirectory Is Nothing Then
+                testCode.Should.NotThrow()
+            Else
                 testCode.Should.Throw(Of ArgumentException)()
             End If
+            Directory.Exists(testDirectory).Should.BeFalse()
         End Sub
 
         <WinFormsFact>
@@ -385,6 +388,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub GetParentPathProxyTest()
             Dim testDirectory As String = CreateTempDirectory()
             _fileSystem.GetParentPath(testDirectory).Should.Be(s_baseTempPath)
+            CleanupDirectories(testDirectory)
         End Sub
 
         <WinFormsFact>
