@@ -17,7 +17,11 @@ public partial class DataGridViewButtonCell : DataGridViewCell
     private static readonly int s_propButtonCellFlatStyle = PropertyStore.CreateKey();
     private static readonly int s_propButtonCellState = PropertyStore.CreateKey();
     private static readonly int s_propButtonCellUseColumnTextForButtonValue = PropertyStore.CreateKey();
-    private static readonly VisualStyleElement s_buttonElement = VisualStyleElement.Button.PushButton.Normal;
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    private static readonly VisualStyleElement s_darkButtonElement = VisualStyleElement.CreateElement("DarkMode_Explorer::BUTTON", 1, 1);
+    private static readonly VisualStyleElement s_lightButtonElement = VisualStyleElement.Button.PushButton.Normal;
+    private static readonly VisualStyleElement s_buttonElement = Application.IsDarkModeEnabled ? s_darkButtonElement : s_lightButtonElement;
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     private const byte DATAGRIDVIEWBUTTONCELL_themeMargin = 100; // Used to calculate the margins required for theming rendering
     private const byte DATAGRIDVIEWBUTTONCELL_horizontalTextMargin = 2;
