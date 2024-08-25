@@ -11,7 +11,11 @@ namespace System.Windows.Forms;
 
 public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
 {
-    private static readonly VisualStyleElement s_headerElement = VisualStyleElement.Header.Item.Normal;
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    private static readonly VisualStyleElement s_headerElement = Application.IsDarkModeEnabled ?
+        VisualStyleElement.CreateElement("DarkMode_ItemsView::Header", 1, 1)
+        : VisualStyleElement.Header.Item.Normal;
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     private const byte SortGlyphSeparatorWidth = 2;     // additional 2 pixels between caption and glyph
     private const byte SortGlyphHorizontalMargin = 4;   // 4 pixels on left & right of glyph

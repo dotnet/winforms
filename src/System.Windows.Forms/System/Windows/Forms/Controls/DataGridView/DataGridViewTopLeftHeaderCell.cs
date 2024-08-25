@@ -8,7 +8,11 @@ namespace System.Windows.Forms;
 
 public partial class DataGridViewTopLeftHeaderCell : DataGridViewColumnHeaderCell
 {
-    private static readonly VisualStyleElement s_headerElement = VisualStyleElement.Header.Item.Normal;
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    private static readonly VisualStyleElement s_headerElement = Application.IsDarkModeEnabled ?
+        VisualStyleElement.CreateElement("DarkMode_ItemsView::Header", 1, 1)
+        : VisualStyleElement.Header.Item.Normal;
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
     private const byte DATAGRIDVIEWTOPLEFTHEADERCELL_horizontalTextMarginLeft = 1;
     private const byte DATAGRIDVIEWTOPLEFTHEADERCELL_horizontalTextMarginRight = 2;
