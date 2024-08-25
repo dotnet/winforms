@@ -3,6 +3,7 @@
 
 using System.Drawing;
 using System.Drawing.Interop;
+using System.Windows.Forms.Analyzers.Diagnostics;
 using Microsoft.Win32;
 
 namespace System.Windows.Forms.VisualStyles;
@@ -58,6 +59,32 @@ public sealed class VisualStyleRenderer : IHandle<HTHEME>
                 // could fail for some other reason. Try creating a theme handle here - if successful, return true,
                 // else return false.
                 IntPtr hTheme = GetHandle("BUTTON", false); // Button is an arbitrary choice.
+                supported = hTheme != IntPtr.Zero;
+            }
+
+            return supported;
+        }
+    }
+
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
+    /// <summary>
+    ///  Returns true if Dark Mode visual styles subclass are 1) supported by the OS 2) enabled in the client area
+    ///  and 3) currently applied to this application. Otherwise, it returns false. Note that
+    ///  if it returns false, attempting to instantiate/use objects of this class
+    ///  will result in exceptions being thrown.
+    /// </summary>
+    public static bool IsDarkModeSupported
+    {
+        get
+        {
+            bool supported = AreClientAreaVisualStylesSupported;
+
+            if (supported)
+            {
+                // In some cases, this check isn't enough, since the theme handle creation
+                // could fail for some other reason. Try creating a theme handle here - if successful, return true,
+                // else return false.
+                IntPtr hTheme = GetHandle("DarkMode_Explorer::BUTTON", false); // Button is an arbitrary choice.
                 supported = hTheme != IntPtr.Zero;
             }
 

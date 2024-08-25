@@ -48,8 +48,6 @@ public sealed partial class Application
     private static SystemColorMode? s_colorMode;
 #pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
-    private const string DarkModeKeyPath = "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
-    private const string DarkModeKey = "AppsUseLightTheme";
     private const int SystemDarkModeDisabled = 1;
 
     /// <summary>
@@ -379,21 +377,9 @@ public sealed partial class Application
             return SystemDarkModeDisabled;
         }
 
-        int systemColorMode = SystemDarkModeDisabled;
-
-        try
-        {
-            // 0 for dark mode and |1| for light mode.
-            systemColorMode = Math.Abs((Registry.GetValue(
-                keyName: DarkModeKeyPath,
-                valueName: DarkModeKey,
-                defaultValue: SystemDarkModeDisabled) as int?) ?? systemColorMode);
-        }
-        catch (Exception ex) when (!ex.IsCriticalException())
-        {
-        }
-
-        return systemColorMode;
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        return VisualStyleRenderer.IsDarkModeSupported ? 0 : 1;
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     }
 
     private static bool IsSystemDarkModeAvailable =>
