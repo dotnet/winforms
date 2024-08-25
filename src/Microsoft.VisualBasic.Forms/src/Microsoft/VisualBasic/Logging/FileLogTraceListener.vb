@@ -256,11 +256,11 @@ Namespace Microsoft.VisualBasic.Logging
                 ' Add DateTime Stamp
                 Select Case LogFileCreationSchedule
                     Case LogFileCreationScheduleOption.Daily
-                        fileName += "-" & Now.Date.ToString(DATE_FORMAT, CultureInfo.InvariantCulture)
+                        fileName += $"-{Now.Date.ToString(DATE_FORMAT, CultureInfo.InvariantCulture)}"
                     Case LogFileCreationScheduleOption.Weekly
                         ' Get first day of week
                         _firstDayOfWeek = Now.AddDays(-Now.DayOfWeek)
-                        fileName += "-" & _firstDayOfWeek.Date.ToString(DATE_FORMAT, CultureInfo.InvariantCulture)
+                        fileName += $"-{_firstDayOfWeek.Date.ToString(DATE_FORMAT, CultureInfo.InvariantCulture)}"
                     Case LogFileCreationScheduleOption.None
                     Case Else
                         Debug.Fail("Unrecognized LogFileCreationSchedule")
@@ -613,7 +613,7 @@ Namespace Microsoft.VisualBasic.Logging
             Dim sb As New StringBuilder()
 
             For Each obj As Object In stack
-                sb.Append(obj.ToString() & STACK_DELIMITER)
+                sb.Append($"{obj}{STACK_DELIMITER}")
             Next
 
             ' Escape the quotes
@@ -762,7 +762,7 @@ Namespace Microsoft.VisualBasic.Logging
             ' FileLogTraceListener in the same process
             Dim i As Integer = 0
             Dim refStream As ReferencedStream = Nothing
-            Dim baseStreamName As String = Path.GetFullPath(LogFileName & FILE_EXTENSION)
+            Dim baseStreamName As String = Path.GetFullPath($"{LogFileName}{FILE_EXTENSION}")
 
             While refStream Is Nothing AndAlso i < MAX_OPEN_ATTEMPTS
                 ' This should only be true if processes outside our process have
@@ -770,9 +770,9 @@ Namespace Microsoft.VisualBasic.Logging
 
                 Dim fileName As String
                 If i = 0 Then
-                    fileName = Path.GetFullPath(LogFileName & FILE_EXTENSION)
+                    fileName = Path.GetFullPath($"{LogFileName}{FILE_EXTENSION}")
                 Else
-                    fileName = Path.GetFullPath(LogFileName & "-" & i.ToString(CultureInfo.InvariantCulture) & FILE_EXTENSION)
+                    fileName = Path.GetFullPath($"{LogFileName}-{i.ToString(CultureInfo.InvariantCulture)}{FILE_EXTENSION}")
                 End If
 
                 Dim caseInsensitiveKey As String = fileName.ToUpper(CultureInfo.InvariantCulture)
@@ -973,13 +973,13 @@ Namespace Microsoft.VisualBasic.Logging
 
             ' Add fields that always appear (source, eventType, id, message)
             ' source
-            outBuilder.Append(source & Delimiter)
+            outBuilder.Append($"{source}{Delimiter}")
 
             ' eventType
-            outBuilder.Append([Enum].GetName(GetType(TraceEventType), eventType) & Delimiter)
+            outBuilder.Append($"{[Enum].GetName(GetType(TraceEventType), eventType)}{Delimiter}")
 
             ' id
-            outBuilder.Append(id.ToString(CultureInfo.InvariantCulture) & Delimiter)
+            outBuilder.Append($"{id.ToString(CultureInfo.InvariantCulture)}{Delimiter}")
 
             ' message
             outBuilder.Append(message)
@@ -987,38 +987,38 @@ Namespace Microsoft.VisualBasic.Logging
             ' Add optional fields
             ' Callstack
             If (TraceOutputOptions And TraceOptions.Callstack) = TraceOptions.Callstack Then
-                outBuilder.Append(Delimiter & eventCache.Callstack)
+                outBuilder.Append($"{Delimiter}{eventCache.Callstack}")
             End If
 
             ' LogicalOperationStack
             If (TraceOutputOptions And TraceOptions.LogicalOperationStack) = TraceOptions.LogicalOperationStack Then
-                outBuilder.Append(Delimiter & StackToString(eventCache.LogicalOperationStack))
+                outBuilder.Append($"{Delimiter}{StackToString(eventCache.LogicalOperationStack)}")
             End If
 
             ' DateTime
             If (TraceOutputOptions And TraceOptions.DateTime) = TraceOptions.DateTime Then
                 ' Add DateTime. Time will be in GMT.
-                outBuilder.Append(Delimiter & eventCache.DateTime.ToString("u", CultureInfo.InvariantCulture))
+                outBuilder.Append($"{Delimiter}{eventCache.DateTime.ToString("u", CultureInfo.InvariantCulture)}")
             End If
 
             ' ProcessId
             If (TraceOutputOptions And TraceOptions.ProcessId) = TraceOptions.ProcessId Then
-                outBuilder.Append(Delimiter & eventCache.ProcessId.ToString(CultureInfo.InvariantCulture))
+                outBuilder.Append($"{Delimiter}{eventCache.ProcessId.ToString(CultureInfo.InvariantCulture)}")
             End If
 
             ' ThreadId
             If (TraceOutputOptions And TraceOptions.ThreadId) = TraceOptions.ThreadId Then
-                outBuilder.Append(Delimiter & eventCache.ThreadId)
+                outBuilder.Append($"{Delimiter}{eventCache.ThreadId}")
             End If
 
             ' Timestamp
             If (TraceOutputOptions And TraceOptions.Timestamp) = TraceOptions.Timestamp Then
-                outBuilder.Append(Delimiter & eventCache.Timestamp.ToString(CultureInfo.InvariantCulture))
+                outBuilder.Append($"{Delimiter}{eventCache.Timestamp.ToString(CultureInfo.InvariantCulture)}")
             End If
 
             ' HostName
             If IncludeHostName Then
-                outBuilder.Append(Delimiter & HostName)
+                outBuilder.Append($"{Delimiter}{HostName}")
             End If
 
             WriteLine(outBuilder.ToString())
@@ -1084,7 +1084,7 @@ Namespace Microsoft.VisualBasic.Logging
                 HandleDateChange()
 
                 ' Check resources
-                Dim newEntrySize As Long = Encoding.GetByteCount(message & vbCrLf)
+                Dim newEntrySize As Long = Encoding.GetByteCount($"{message}{vbCrLf}")
 
                 If ResourcesAvailable(newEntrySize) Then
                     ListenerStream.WriteLine(message)
