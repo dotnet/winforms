@@ -1259,6 +1259,13 @@ public partial class TabControl : Control
                     0, 0, 0, 0,
                     SET_WINDOW_POS_FLAGS.SWP_NOMOVE | SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
             }
+
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            if (Application.IsDarkModeEnabled)
+            {
+                PInvoke.SendMessage(tooltipHwnd, PInvoke.TTM_SETWINDOWTHEME, default, "DarkMode_Explorer");
+            }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         }
 
         // Add the pages
@@ -1288,6 +1295,17 @@ public partial class TabControl : Control
         }
 
         UpdateTabSelection(false);
+        // TabControl didn't have Tab Appearance in  Dark mode  theme to support Dark Mode Tab Appearance we need to draw The buttons in paint event.
+
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        if (Application.IsDarkModeEnabled && GetStyle(ControlStyles.ApplyThemingImplicitly))
+        {
+            _ = PInvoke.SetWindowTheme(
+                hwnd: HWND,
+                pszSubAppName: null,
+                pszSubIdList: $"{DarkModeIdentifier}::{TabThemeIdentifier}");
+        }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     }
 
     protected override void OnHandleDestroyed(EventArgs e)
