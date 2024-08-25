@@ -66,13 +66,13 @@ public sealed class VisualStyleRenderer : IHandle<HTHEME>
         }
     }
 
-    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     /// <summary>
     ///  Returns true if Dark Mode visual styles subclass are 1) supported by the OS 2) enabled in the client area
     ///  and 3) currently applied to this application. Otherwise, it returns false. Note that
     ///  if it returns false, attempting to instantiate/use objects of this class
     ///  will result in exceptions being thrown.
     /// </summary>
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public static bool IsDarkModeSupported
     {
         get
