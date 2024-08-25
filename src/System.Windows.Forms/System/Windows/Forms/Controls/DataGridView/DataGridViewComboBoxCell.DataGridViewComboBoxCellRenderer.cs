@@ -12,10 +12,29 @@ public partial class DataGridViewComboBoxCell
     {
         [ThreadStatic]
         private static VisualStyleRenderer? t_visualStyleRenderer;
-        private static readonly VisualStyleElement s_comboBoxBorder = VisualStyleElement.ComboBox.Border.Normal;
-        private static readonly VisualStyleElement s_comboBoxDropDownButtonRight = VisualStyleElement.ComboBox.DropDownButtonRight.Normal;
-        private static readonly VisualStyleElement s_comboBoxDropDownButtonLeft = VisualStyleElement.ComboBox.DropDownButtonLeft.Normal;
-        private static readonly VisualStyleElement s_comboBoxReadOnlyButton = VisualStyleElement.ComboBox.ReadOnlyButton.Normal;
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        private static readonly VisualStyleElement s_comboBoxBorder = Application.IsDarkModeEnabled ?
+            VisualStyleElement.CreateElement("DarkMode_CFD::COMBOBOX", 4, 1)
+            : VisualStyleElement.ComboBox.Border.Normal;
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        private static readonly VisualStyleElement s_comboBoxDropDownButtonRight = Application.IsDarkModeEnabled ?
+            VisualStyleElement.CreateElement("DarkMode_CFD::COMBOBOX", 6, 1)
+            : VisualStyleElement.ComboBox.DropDownButtonRight.Normal;
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        private static readonly VisualStyleElement s_comboBoxDropDownButtonLeft = Application.IsDarkModeEnabled ?
+            VisualStyleElement.CreateElement("DarkMode_CFD::COMBOBOX", 7, 1) :
+            VisualStyleElement.ComboBox.DropDownButtonLeft.Normal;
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        private static readonly VisualStyleElement s_comboBoxReadOnlyButton = Application.IsDarkModeEnabled ?
+            VisualStyleElement.CreateElement("DarkMode_CFD::COMBOBOX", 5, 1)
+            : VisualStyleElement.ComboBox.ReadOnlyButton.Normal;
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
         public static VisualStyleRenderer VisualStyleRenderer
         {
