@@ -772,7 +772,7 @@ Namespace Microsoft.VisualBasic.Logging
                 If i = 0 Then
                     fileName = Path.GetFullPath($"{LogFileName}{FILE_EXTENSION}")
                 Else
-                    fileName = Path.GetFullPath($"{LogFileName}-{i.ToString(CultureInfo.InvariantCulture)}{FILE_EXTENSION}")
+                    fileName = Path.GetFullPath(FormattableString.Invariant($"{LogFileName}-{i}{FILE_EXTENSION}"))
                 End If
 
                 Dim caseInsensitiveKey As String = fileName.ToUpper(CultureInfo.InvariantCulture)
@@ -979,7 +979,7 @@ Namespace Microsoft.VisualBasic.Logging
             outBuilder.Append($"{[Enum].GetName(GetType(TraceEventType), eventType)}{Delimiter}")
 
             ' id
-            outBuilder.Append($"{id.ToString(CultureInfo.InvariantCulture)}{Delimiter}")
+            outBuilder.Append(FormattableString.Invariant($"{id}{Delimiter}"))
 
             ' message
             outBuilder.Append(message)
@@ -998,12 +998,12 @@ Namespace Microsoft.VisualBasic.Logging
             ' DateTime
             If (TraceOutputOptions And TraceOptions.DateTime) = TraceOptions.DateTime Then
                 ' Add DateTime. Time will be in GMT.
-                outBuilder.Append($"{Delimiter}{eventCache.DateTime.ToString("u", CultureInfo.InvariantCulture)}")
+                outBuilder.Append(FormattableString.Invariant($"{Delimiter}{eventCache.DateTime:u}"))
             End If
 
             ' ProcessId
             If (TraceOutputOptions And TraceOptions.ProcessId) = TraceOptions.ProcessId Then
-                outBuilder.Append($"{Delimiter}{eventCache.ProcessId.ToString(CultureInfo.InvariantCulture)}")
+                outBuilder.Append(FormattableString.Invariant($"{Delimiter}{eventCache.ProcessId}"))
             End If
 
             ' ThreadId
@@ -1013,7 +1013,7 @@ Namespace Microsoft.VisualBasic.Logging
 
             ' Timestamp
             If (TraceOutputOptions And TraceOptions.Timestamp) = TraceOptions.Timestamp Then
-                outBuilder.Append($"{Delimiter}{eventCache.Timestamp.ToString(CultureInfo.InvariantCulture)}")
+                outBuilder.Append(FormattableString.Invariant($"{Delimiter}{eventCache.Timestamp}"))
             End If
 
             ' HostName
