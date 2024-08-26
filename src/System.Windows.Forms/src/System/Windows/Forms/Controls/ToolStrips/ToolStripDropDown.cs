@@ -1253,7 +1253,7 @@ public partial class ToolStripDropDown : ToolStrip
                    || !(dismissingItem.HasDropDownItems))
                 {   // clicking on a item w/dropdown does not dismiss window
                     Close(ToolStripDropDownCloseReason.ItemClicked);
-                    if (_ownerItem?.Owner?.Focused == true)
+                    if (GetToplevelOwnerItem()?.Owner?.Focused == true)
                     {
                         SelectPreviousToolStrip();
                     }
