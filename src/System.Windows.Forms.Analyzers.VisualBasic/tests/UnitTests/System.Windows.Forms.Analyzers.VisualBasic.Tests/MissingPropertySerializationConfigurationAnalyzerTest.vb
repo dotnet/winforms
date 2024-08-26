@@ -49,13 +49,13 @@ Namespace VBControls
     Public Module Program
         Public Sub Main()
             Dim control As New ScalableControl()
-        
+
             control.ScaleFactor = 1.5F
             control.ScaledSize = New SizeF(100, 100)
             control.ScaledLocation = New PointF(10, 10)
         End Sub
     End Module
-        
+
     Public Class ScalableControl
         Inherits Control
 
@@ -70,7 +70,7 @@ Namespace VBControls
             Return Me.ScaledLocation <> PointF.Empty
         End Function
     End Class
-        
+
 End Namespace
 "
 
