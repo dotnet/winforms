@@ -10,6 +10,8 @@ Imports Xunit
 Namespace Microsoft.VisualBasic.Forms.Tests
 
     Public Class NetworkTests
+        Inherits VbFileCleanupTestBase
+
         Private Const DefaultPassword As String = "TBD"
         Private Const DefaultUserName As String = "TBD"
         Private Const DownloadLargeFileSize As Integer = 104857600
@@ -52,7 +54,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UriOnly_Success()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
@@ -72,7 +74,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UriOnlyWhereAddressIsEmptyString_Throws()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
@@ -93,7 +95,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UriOnlyWhereAddressIsNothing_Throws()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
@@ -136,7 +138,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UriWithAllOptions_ExceptOnUserCancel_Success()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize, DefaultUserName, DefaultPassword)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim networkCredentials As New NetworkCredential(DefaultUserName, DefaultPassword)
@@ -266,7 +268,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <ClassData(GetType(WrongPasswordTestData))>
         Public Sub DownloadFile_UriWithAllOptions_ExceptOnUserCancelWherePasswordWrong_Throws(password As String)
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize, DefaultUserName, DefaultPassword)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
@@ -293,7 +295,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UriWithAllOptions_ExceptOnUserCancelWhereTimeOut_Throws()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadLargeFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
@@ -320,7 +322,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UriWithAllOptions_ExceptOnUserCancelWhereTimeoutNegative_Throws()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadLargeFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
@@ -347,7 +349,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UriWithAllOptions_ExceptOnUserCancelWhereUriIsNothing_Throws()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
@@ -375,7 +377,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UriWithAllOptions_ExceptOnUserCancelWhereUrlInvalid_Throws()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
@@ -401,7 +403,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UriWithAllOptions_ExceptOnUserCancelWhereUsernameIsNothing_Success()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
@@ -425,7 +427,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UriWithAllOptionsAndNetworkCredentials_Success()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize, DefaultUserName, DefaultPassword)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim networkCredentials As New NetworkCredential(DefaultUserName, DefaultPassword)
@@ -451,7 +453,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UriWithAllOptionsDoNotShowUI_ExceptOnUserCancelWhereInvalidUrl_Throws()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
@@ -481,7 +483,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <InlineData("/")>
         Public Sub DownloadFile_UriWithAllOptionsWhereCheckFilePathTrailingSeparators_Throw(separator As String)
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
@@ -541,7 +543,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <InlineData("\\myshare\mydir\")>
         Public Sub DownloadFile_UriWithAllOptionsWhereDestinationIsRootDirectory_Throw(root As String)
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
@@ -574,7 +576,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <InlineData("/")>
         Public Sub DownloadFile_UriWithAllOptionsWhereFilePathTrailingSeparatorsAreInvalid_Throw(separator As String)
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
@@ -605,7 +607,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UriWithAllOptionsWhereOnUserCancelIsDoNothing_Success()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
@@ -633,7 +635,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <InlineData("\\myshare\mydir")>
         Public Sub DownloadFile_UriWithAllOptionsWhereRootDirectoryInvalid_Throw(root As String)
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
@@ -663,7 +665,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <InlineData("\\myshare\mydir\")>
         Public Sub DownloadFile_UriWithAllOptionsWhereRootDirectoryTrailingSeparatorInvalid_Throw(root As String)
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
@@ -694,7 +696,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UriWithAllOptionsWhereTargetDirectoryNonexistent_Success()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Directory.Delete(testDirectory, recursive:=True)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
@@ -721,7 +723,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UriWithAllOptionsWhereUriIsNothing_Throws()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
@@ -749,7 +751,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UriWithAllOptionsWithAllOptions_Success()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
@@ -774,7 +776,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UriWithAllOptionsWithAllOptionsWithAllOptionsWhereDestinationIsDirectory_Throws()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
@@ -802,7 +804,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UriWithUserNamePassword_Success()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize, DefaultUserName, DefaultPassword)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
@@ -825,7 +827,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <ClassData(GetType(WrongPasswordTestData))>
         Public Sub DownloadFile_UriWithUserNamePasswordWherePasswordWrong_Throw(password As String)
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize, DefaultUserName, String.Empty)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
@@ -850,7 +852,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <ClassData(GetType(WrongPasswordTestData))>
         Public Sub DownloadFile_UriWithUserNamePasswordWherePasswordWrong_Throws(password As String)
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize, DefaultUserName, DefaultPassword)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
@@ -874,7 +876,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UrlOnly_Success()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
@@ -895,7 +897,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <ClassData(GetType(NullOrEmptyPathTestData))>
         Public Sub DownloadFile_UrlOnlyWhereAddressInvalid_Throws(address As String)
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
@@ -993,7 +995,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UrlWithAllOptions_ExceptOnUserCancelWhereInvalidUrlDoNotShowUI_Throws()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
@@ -1073,7 +1075,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UrlWithAllOptions_ExceptOnUserCancelWhereTimeOut_Throws()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadLargeFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
@@ -1100,7 +1102,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UrlWithAllOptions_ExceptOnUserCancelWhereTimeoutNegative_Throws()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadLargeFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
@@ -1127,7 +1129,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UrlWithAllOptions_ExceptOnUserCancelWhereUrlInvalid_Throws()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
@@ -1154,7 +1156,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UrlWithAllOptions_ExceptOnUserCancelWhereUsernameIsNothing_Success()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
@@ -1178,7 +1180,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UrlWithAllOptionsAndNetworkCredentials_Success()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize, DefaultUserName, DefaultPassword)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim networkCredentials As New NetworkCredential(DefaultUserName, DefaultPassword)
@@ -1204,7 +1206,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UrlWithAllOptionsDoNotShowUI_ExceptOnUserCancelWhereInvalidUrl_Throws()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
@@ -1263,7 +1265,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <InlineData("\\myshare\mydir\")>
         Public Sub DownloadFile_UrlWithAllOptionsWhereDestinationIsRootDirectory_Throw(root As String)
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
@@ -1296,7 +1298,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <InlineData("/")>
         Public Sub DownloadFile_UrlWithAllOptionsWhereFilePathTrailingSeparatorsAreInvalid_Throw(separator As String)
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
@@ -1327,7 +1329,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UrlWithAllOptionsWhereOnUserCancelIsDoNothing_Success()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
@@ -1355,7 +1357,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <InlineData("\\myshare\mydir")>
         Public Sub DownloadFile_UrlWithAllOptionsWhereRootDirectoryInvalid_Throw(root As String)
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
@@ -1385,7 +1387,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <InlineData("\\myshare\mydir\")>
         Public Sub DownloadFile_UrlWithAllOptionsWhereRootDirectoryTrailingSeparatorInvalid_Throw(root As String)
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
@@ -1416,7 +1418,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UrlWithAllOptionsWhereTargetDirectoryNonexistent_Success()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Directory.Delete(testDirectory, recursive:=True)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
@@ -1443,7 +1445,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UrlWithAllOptionsWhereUriIsNothing_Throws()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
@@ -1471,7 +1473,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UrlWithAllOptionsWithAllOptions_Success()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
@@ -1496,7 +1498,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UrlWithAllOptionsWithAllOptionsWithAllOptionsWhereDestinationIsDirectory_Throws()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
@@ -1524,7 +1526,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub DownloadFile_UrlWithUserNamePassword_Success()
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize, DefaultUserName, DefaultPassword)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
@@ -1548,7 +1550,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <ClassData(GetType(WrongPasswordTestData))>
         Public Sub DownloadFile_UrlWithUserNamePasswordWherePasswordWrong_Throw(password As String)
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize, DefaultUserName, String.Empty)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
@@ -1573,7 +1575,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <ClassData(GetType(WrongPasswordTestData))>
         Public Sub DownloadFile_UrlWithUserNamePasswordWherePasswordWrong_Throws(password As String)
             Dim testDirectory As String = CreateTempDirectory()
-            Dim destinationFileName As String = GetDestinationFileName(testDirectory)
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize, DefaultUserName, DefaultPassword)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
