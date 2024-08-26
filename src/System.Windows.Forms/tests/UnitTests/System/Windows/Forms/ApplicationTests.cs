@@ -99,6 +99,10 @@ public class ApplicationTests
         thread2.Start();
         event1.Wait();
         event2.Wait();
+        Assert.NotNull(applicationContext1);
+        Assert.NotNull(applicationContext2);
+        Assert.NotNull(mainForm1);
+        Assert.NotNull(mainForm2);
         Assert.NotSame(applicationContext1, applicationContext2);
         Assert.Same(form1, mainForm1);
         Assert.Same(form2, mainForm2);
