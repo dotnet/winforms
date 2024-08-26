@@ -66,6 +66,44 @@ public class ApplicationTests
         }).Dispose();
     }
 
+    [STAThread]
+    [WinFormsFact]
+    public void Application_GetCurrentApplicationContext()
+    {
+        Application.EnableVisualStyles();
+        var form1 = new Form();
+        var form2 = new Form();
+        var event1 = new ManualResetEventSlim();
+        var event2 = new ManualResetEventSlim();
+        ApplicationContext applicationContext1 = default, applicationContext2 = default;
+        Form mainForm1 = default, mainForm2 = default;
+        form1.Load += (s, e) =>
+        {
+            applicationContext1 = Application.GetCurrentApplicationContext();
+            mainForm1 = applicationContext1.MainForm;
+            form1.Close();
+            event1.Set();
+        };
+        form2.Load += (s, e) =>
+        {
+            applicationContext2 = Application.GetCurrentApplicationContext();
+            mainForm2 = applicationContext2.MainForm;
+            form2.Close();
+            event2.Set();
+        };
+        var thread1 = new Thread(() => Application.Run(form1));
+        var thread2 = new Thread(() => Application.Run(form2));
+        thread1.SetApartmentState(ApartmentState.STA);
+        thread2.SetApartmentState(ApartmentState.STA);
+        thread1.Start();
+        thread2.Start();
+        event1.Wait();
+        event2.Wait();
+        Assert.NotSame(applicationContext1, applicationContext2);
+        Assert.Same(form1, mainForm1);
+        Assert.Same(form2, mainForm2);
+    }
+
     [WinFormsFact]
     public void Application_CurrentCulture_SetNull_ThrowsArgumentNullException()
     {
@@ -327,9 +365,9 @@ public class ApplicationTests
 
             // Retrieve the text scale factor, which is set via Settings > Display > Make Text Bigger.
             using RegistryKey key = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Accessibility");
-            int textScale = (int)(key?.GetValue("TextScaleFactor", 100) ?? 100);            
+            int textScale = (int)(key?.GetValue("TextScaleFactor", 100) ?? 100);
             if (textScale == 100) // Application.DefaultFont must be the same
-            {                
+            {
                 font.Should().BeNull("Because TextScaleFactor == 100.");
                 Application.DefaultFont.Should().BeSameAs(customFont, "Because TextScaleFactor == 100.");
             }
