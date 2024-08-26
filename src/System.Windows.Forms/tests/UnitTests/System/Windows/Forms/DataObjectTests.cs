@@ -11,12 +11,48 @@ using Moq;
 using Windows.Win32.System.Ole;
 using Com = Windows.Win32.System.Com;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
+using Point = System.Drawing.Point;
 
 namespace System.Windows.Forms.Tests;
 
 // NB: doesn't require thread affinity
 public partial class DataObjectTests
 {
+    private static readonly string[] s_restrictedClipboardFormats =
+    [
+        DataFormats.CommaSeparatedValue,
+        DataFormats.Dib,
+        DataFormats.Dif,
+        DataFormats.PenData,
+        DataFormats.Riff,
+        DataFormats.Tiff,
+        DataFormats.WaveAudio,
+        DataFormats.SymbolicLink,
+        DataFormats.StringFormat,
+        DataFormats.Bitmap,
+        DataFormats.EnhancedMetafile,
+        DataFormats.FileDrop,
+        DataFormats.Html,
+        DataFormats.MetafilePict,
+        DataFormats.OemText,
+        DataFormats.Palette,
+        DataFormats.Rtf,
+        DataFormats.Text,
+        DataFormats.UnicodeText,
+        "FileName",
+        "FileNameW",
+        "System.Drawing.Bitmap",
+        "  ",  // the last 3 return null and don't process the payload.
+        string.Empty,
+        null
+    ];
+
+    private static readonly string[] s_unboundedClipboardFormats =
+    [
+        DataFormats.Serializable,
+        "something custom"
+    ];
+
     [Fact]
     public void DataObject_ContainsAudio_InvokeDefault_ReturnsFalse()
     {
@@ -201,6 +237,19 @@ public partial class DataObjectTests
         mockDataObject.Verify(o => o.GetData(DataFormats.WaveAudio, false), Times.Once());
     }
 
+    public static TheoryData<string> GetData_String_TheoryData() => s_restrictedClipboardFormats.ToTheoryData();
+
+    public static TheoryData<string> GetData_String_UnboundedFormat_TheoryData() => s_unboundedClipboardFormats.ToTheoryData();
+
+    [Theory]
+    [MemberData(nameof(GetData_String_TheoryData))]
+    [MemberData(nameof(GetData_String_UnboundedFormat_TheoryData))]
+    public void DataObject_GetData_InvokeStringDefault_ReturnsNull(string format)
+    {
+        DataObject dataObject = new();
+        dataObject.GetData(format).Should().BeNull();
+    }
+
     public static TheoryData<string, object> GetData_InvokeStringMocked_TheoryData()
     {
         TheoryData<string, object> theoryData = new();
@@ -312,6 +361,15 @@ public partial class DataObjectTests
             .Verifiable();
         mockDataObject.Object.GetData(format).Should().BeSameAs(expectedResult);
         mockDataObject.Verify(o => o.GetData(formatName), Times.Exactly(expectedCallCount));
+    }
+
+    [Theory]
+    [MemberData(nameof(GetData_String_TheoryData))]
+    [MemberData(nameof(GetData_String_UnboundedFormat_TheoryData))]
+    public void DataObject_GetDataPresent_InvokeStringDefault_ReturnsFalse(string format)
+    {
+        DataObject dataObject = new();
+        dataObject.GetDataPresent(format).Should().BeFalse();
     }
 
     public static TheoryData<string, bool> GetDataPresent_StringMocked_TheoryData()
@@ -2069,6 +2127,49 @@ public partial class DataObjectTests
         }
     }
 
+    public static TheoryData<TextDataFormat, short> GetDataHere_UnicodeText_TheoryData() => new()
+    {
+        { TextDataFormat.Text, (short)CLIPBOARD_FORMAT.CF_UNICODETEXT },
+        { TextDataFormat.UnicodeText, (short)CLIPBOARD_FORMAT.CF_UNICODETEXT }
+    };
+
+    [WinFormsTheory]
+    [MemberData(nameof(GetDataHere_UnicodeText_TheoryData))]
+    public unsafe void IComDataObjectGetDataHere_UnicodeText_Success(TextDataFormat textDataFormat, short cfFormat)
+    {
+        DataObject dataObject = new();
+        dataObject.SetText("text", textDataFormat);
+        IComDataObject iComDataObject = dataObject;
+
+        FORMATETC formatetc = new()
+        {
+            tymed = TYMED.TYMED_HGLOBAL,
+            cfFormat = cfFormat
+        };
+
+        STGMEDIUM stgMedium = new()
+        {
+            tymed = TYMED.TYMED_HGLOBAL
+        };
+
+        HGLOBAL handle = PInvokeCore.GlobalAlloc(
+            GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT,
+            1);
+
+        try
+        {
+            stgMedium.unionmember = handle;
+            iComDataObject.GetDataHere(ref formatetc, ref stgMedium);
+
+            char* pChar = *(char**)stgMedium.unionmember;
+            new string(pChar).Should().Be("text");
+        }
+        finally
+        {
+            PInvokeCore.GlobalFree(handle);
+        }
+    }
+
     [WinFormsTheory]
     [MemberData(nameof(GetDataHere_Text_TheoryData))]
     public unsafe void IComDataObjectGetDataHere_TextNoData_ThrowsArgumentException(TextDataFormat textDataFormat, short cfFormat)
@@ -2089,6 +2190,146 @@ public partial class DataObjectTests
         };
 
         ((Action)(() => iComDataObject.GetDataHere(ref formatetc, ref stgMedium))).Should().Throw<ArgumentException>();
+    }
+
+    [WinFormsTheory]
+    [MemberData(nameof(GetDataHere_UnicodeText_TheoryData))]
+    public unsafe void IComDataObjectGetDataHere_UnicodeTextNoData_ThrowsArgumentException(TextDataFormat textDataFormat, short cfFormat)
+    {
+        DataObject dataObject = new();
+        dataObject.SetText("text", textDataFormat);
+        IComDataObject iComDataObject = dataObject;
+
+        FORMATETC formatetc = new()
+        {
+            tymed = TYMED.TYMED_HGLOBAL,
+            cfFormat = cfFormat
+        };
+
+        STGMEDIUM stgMedium = new()
+        {
+            tymed = TYMED.TYMED_HGLOBAL
+        };
+
+        ((Action)(() => iComDataObject.GetDataHere(ref formatetc, ref stgMedium))).Should().Throw<ArgumentException>();
+    }
+
+    [WinFormsFact]
+    public unsafe void IComDataObjectGetDataHere_FileNames_Success()
+    {
+        DataObject dataObject = new();
+        dataObject.SetFileDropList(["Path1", "Path2"]);
+        IComDataObject iComDataObject = dataObject;
+
+        FORMATETC formatetc = new()
+        {
+            tymed = TYMED.TYMED_HGLOBAL,
+            cfFormat = (short)CLIPBOARD_FORMAT.CF_HDROP
+        };
+
+        STGMEDIUM stgMedium = new()
+        {
+            tymed = TYMED.TYMED_HGLOBAL
+        };
+
+        HGLOBAL handle = PInvokeCore.GlobalAlloc(
+            GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT,
+            1);
+
+        try
+        {
+            stgMedium.unionmember = handle;
+            iComDataObject.GetDataHere(ref formatetc, ref stgMedium);
+
+            DROPFILES* pDropFiles = *(DROPFILES**)stgMedium.unionmember;
+            pDropFiles->pFiles.Should().Be(20u);
+            pDropFiles->pt.Should().Be(Point.Empty);
+            pDropFiles->fNC.Should().Be(BOOL.FALSE);
+            pDropFiles->fWide.Should().Be(BOOL.TRUE);
+            char* text = (char*)IntPtr.Add((IntPtr)pDropFiles, (int)pDropFiles->pFiles);
+            new string(text, 0, "Path1".Length + 1 + "Path2".Length + 1 + 1).Should().Be("Path1\0Path2\0\0");
+        }
+        finally
+        {
+            PInvokeCore.GlobalFree(handle);
+        }
+    }
+
+    [WinFormsFact]
+    public unsafe void IComDataObjectGetDataHere_EmptyFileNames_Success()
+    {
+        DataObject dataObject = new();
+        dataObject.SetFileDropList([]);
+        IComDataObject iComDataObject = dataObject;
+
+        FORMATETC formatetc = new()
+        {
+            tymed = TYMED.TYMED_HGLOBAL,
+            cfFormat = (short)CLIPBOARD_FORMAT.CF_HDROP
+        };
+
+        STGMEDIUM stgMedium = new()
+        {
+            tymed = TYMED.TYMED_HGLOBAL
+        };
+
+        HGLOBAL handle = PInvokeCore.GlobalAlloc(
+           GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT,
+           (uint)sizeof(DROPFILES));
+
+        try
+        {
+            stgMedium.unionmember = handle;
+            iComDataObject.GetDataHere(ref formatetc, ref stgMedium);
+
+            DROPFILES* pDropFiles = *(DROPFILES**)stgMedium.unionmember;
+            pDropFiles->pFiles.Should().Be(0u);
+            pDropFiles->pt.Should().Be(Point.Empty);
+            pDropFiles->fNC.Should().Be(BOOL.FALSE);
+            pDropFiles->fWide.Should().Be(BOOL.FALSE);
+        }
+        finally
+        {
+            PInvokeCore.GlobalFree(handle);
+        }
+    }
+
+    [WinFormsFact]
+    public unsafe void IComDataObjectGetDataHere_FileNamesNoData_ThrowsArgumentException()
+    {
+        DataObject dataObject = new();
+        dataObject.SetFileDropList(["Path1", "Path2"]);
+        IComDataObject iComDataObject = dataObject;
+
+        FORMATETC formatetc = new()
+        {
+            tymed = TYMED.TYMED_HGLOBAL,
+            cfFormat = (short)CLIPBOARD_FORMAT.CF_HDROP
+        };
+        STGMEDIUM stgMedium = new()
+        {
+            tymed = TYMED.TYMED_HGLOBAL
+        };
+        ((Action)(() => iComDataObject.GetDataHere(ref formatetc, ref stgMedium))).Should().Throw<ArgumentException>();
+    }
+
+    [WinFormsFact]
+    public unsafe void IComDataObjectGetDataHere_EmptyFileNamesNoData_Success()
+    {
+        DataObject dataObject = new();
+        dataObject.SetFileDropList([]);
+        IComDataObject iComDataObject = dataObject;
+
+        FORMATETC formatetc = new()
+        {
+            tymed = TYMED.TYMED_HGLOBAL,
+            cfFormat = (short)CLIPBOARD_FORMAT.CF_HDROP
+        };
+        STGMEDIUM stgMedium = new()
+        {
+            tymed = TYMED.TYMED_HGLOBAL
+        };
+        iComDataObject.GetDataHere(ref formatetc, ref stgMedium);
     }
 
     [WinFormsTheory]
@@ -2113,6 +2354,32 @@ public partial class DataObjectTests
 
         ((Action)(() => iComDataObject.GetDataHere(ref formatetc, ref stgMedium))).Should().Throw<COMException>()
             .Where(e => e.HResult == HRESULT.DV_E_TYMED);
+    }
+
+    [WinFormsTheory]
+    [InlineData(TYMED.TYMED_HGLOBAL, TYMED.TYMED_HGLOBAL, (short)CLIPBOARD_FORMAT.CF_UNICODETEXT)]
+    [InlineData(TYMED.TYMED_HGLOBAL, TYMED.TYMED_HGLOBAL, (short)CLIPBOARD_FORMAT.CF_HDROP)]
+    [InlineData(TYMED.TYMED_ISTREAM, TYMED.TYMED_ISTREAM, (short)CLIPBOARD_FORMAT.CF_UNICODETEXT)]
+    [InlineData(TYMED.TYMED_ISTREAM, TYMED.TYMED_ISTREAM, (short)CLIPBOARD_FORMAT.CF_HDROP)]
+    [InlineData(TYMED.TYMED_GDI, TYMED.TYMED_GDI, (short)CLIPBOARD_FORMAT.CF_UNICODETEXT)]
+    [InlineData(TYMED.TYMED_GDI, TYMED.TYMED_GDI, (short)CLIPBOARD_FORMAT.CF_HDROP)]
+    public void IComDataObjectGetDataHere_NoDataPresentNoData_ThrowsCOMException(TYMED formatetcTymed, TYMED stgMediumTymed, short cfFormat)
+    {
+        DataObject dataObject = new();
+        IComDataObject iComDataObject = dataObject;
+
+        FORMATETC formatetc = new()
+        {
+            tymed = formatetcTymed,
+            cfFormat = cfFormat
+        };
+        STGMEDIUM stgMedium = new()
+        {
+            tymed = stgMediumTymed
+        };
+
+        ((Action)(() => iComDataObject.GetDataHere(ref formatetc, ref stgMedium))).Should().Throw<COMException>()
+            .Where(e => e.HResult == HRESULT.DV_E_FORMATETC);
     }
 
     private class DerivedDataObject : DataObject { }
