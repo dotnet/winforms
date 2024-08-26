@@ -11,11 +11,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Return Guid.NewGuid().GetHashCode()
         End Function
 
-        Public Function GetUniqueFileName() As String
+        Friend Function GetUniqueFileName() As String
             Return "Test" & GetUniqueText()
         End Function
 
-        Public Function GetUniqueText() As String
+        Friend Function GetUniqueText() As String
             Return Guid.NewGuid().ToString("D")
         End Function
 

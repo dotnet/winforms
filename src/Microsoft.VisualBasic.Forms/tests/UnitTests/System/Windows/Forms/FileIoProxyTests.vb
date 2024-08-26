@@ -156,7 +156,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <WinFormsFact>
         Public Sub CreateDirectoryTest()
-            Dim testDirectory As String = Path.Combine(BaseTempPath, GetUniqueText())
+            Dim testDirectory As String = Path.Combine(BaseTempPath, GetUniqueFileName)
             _fileSystem.CreateDirectory(testDirectory)
             Directory.Exists(testDirectory).Should.BeTrue()
         End Sub
