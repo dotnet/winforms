@@ -61,13 +61,13 @@ public class ControlPropertySerializationDiagnosticAnalyzerTest
             public static void Main()
             {
                 var control = new ScalableControl();
-
+        
                 control.ScaleFactor = 1.5f;
                 control.ScaledSize = new SizeF(100, 100);
                 control.ScaledLocation = new PointF(10, 10);
             }
         }
-
+        
         public class ScalableControl : Control
         {
             [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -79,7 +79,7 @@ public class ControlPropertySerializationDiagnosticAnalyzerTest
             public PointF ScaledLocation { get; set; }
             private bool ShouldSerializeScaledLocation() => this.ScaledLocation != PointF.Empty;
         }
-
+        
         """;
 
     private const string FixedCode = """
