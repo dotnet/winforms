@@ -4,6 +4,7 @@
 using System.ComponentModel;
 using System.Drawing.Design;
 using System.Windows.Forms.TestUtilities;
+using Moq;
 
 namespace System.Windows.Forms.Design.Tests;
 
@@ -37,6 +38,29 @@ public class FolderNameEditorTests
     {
         SubFolderNameEditor editor = new();
         editor.InitializeDialog();
+    }
+
+    [WinFormsFact]
+    public void FolderNameEditor_EditValue_Invoke_ReturnsExpected()
+    {
+        FolderNameEditor editor = new();
+        Mock<IServiceProvider> serviceProviderMock = new();
+        var serviceProvider = serviceProviderMock.Object;
+        string value = "value";
+
+        Thread thread = new(() =>
+        {
+            Thread.Sleep(500);
+            SendKeys.SendWait("{ESC}");
+        });
+
+        thread.Start();
+
+        object result = editor.EditValue(context: null, provider: serviceProvider, value: value);
+
+        result.Should().Be(value);
+
+        thread.Join();
     }
 
     public class FolderBrowserTests : FolderNameEditor
