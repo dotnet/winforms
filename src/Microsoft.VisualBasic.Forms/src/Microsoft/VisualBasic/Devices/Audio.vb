@@ -16,7 +16,7 @@ Namespace Microsoft.VisualBasic.Devices
         Private _sound As Media.SoundPlayer
 
         ''' <summary>
-        '''  Creates a new Audio object.
+        '''  Creates a new <see cref="Audio"/> object.
         ''' </summary>
         Public Sub New()
         End Sub
@@ -32,10 +32,13 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        '''  Gets the full name and path for the file. Throws if unable to get full name and path.
+        '''  Gets the full name and path for the file.
         ''' </summary>
         ''' <param name="location">The filename being tested.</param>
         ''' <returns>A full name and path of the file.</returns>
+        ''' <exception cref="ArgumentNullException">
+        '''  If location is <see langword="Nothing"/> or <see cref="String.Empty"/>.
+        ''' </exception>
         Private Shared Function ValidateFilename(location As String) As String
             If String.IsNullOrEmpty(location) Then
                 Throw VbUtils.GetArgumentNullException(NameOf(location))
@@ -45,7 +48,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Function
 
         ''' <summary>
-        '''  Plays the passed in SoundPlayer in the passed in mode.
+        '''  Plays the passed in <see cref="Media.SoundPlayer"/> in the passed in <see cref="AudioPlayMode"/>.
         ''' </summary>
         ''' <param name="sound">The SoundPlayer to play.</param>
         ''' <param name="mode">The mode in which to play the sound.</param>
@@ -106,8 +109,9 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         '''   Plays a Byte array representation of a .wav file in the passed in mode.
         ''' </summary>
-        ''' <param name="data">The array representing the .wav file.</param>
+        ''' <param name="data">The <see langword="Byte"/> array representing the .wav file.</param>
         ''' <param name="playMode">The mode in which the array should be played.</param>
+        ''' <exception cref="ArgumentNullException">if data is <see langword="Nothing"/>.</exception>
         Public Sub Play(data() As Byte, playMode As AudioPlayMode)
             If data Is Nothing Then
                 Throw VbUtils.GetArgumentNullException(NameOf(data))
@@ -120,10 +124,11 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        '''  Plays a stream representation of a .wav file in the passed in mode.
+        '''  Plays a <see cref="Stream"/> representation of a .wav file in the passed in <see cref="AudioPlayMode"/>.
         ''' </summary>
         ''' <param name="stream">The stream representing the .wav file.</param>
         ''' <param name="playMode">The mode in which the stream should be played.</param>
+        ''' <exception cref="ArgumentNullException">if stream is <see langword="Nothing"/>.</exception>
         Public Sub Play(stream As Stream, playMode As AudioPlayMode)
             ValidateAudioPlayModeEnum(playMode, NameOf(playMode))
             If stream Is Nothing Then
@@ -134,10 +139,11 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        '''   Plays a system messageBeep sound.
+        '''   Plays a system sound.
         ''' </summary>
         ''' <param name="systemSound">The sound to be played.</param>
         ''' <remarks>Plays the sound asynchronously.</remarks>
+        ''' <exception cref="ArgumentNullException">if systemSound is <see langword="Nothing"/>.</exception>
         Public Sub PlaySystemSound(systemSound As Media.SystemSound)
             If systemSound Is Nothing Then
                 Throw VbUtils.GetArgumentNullException(NameOf(systemSound))
