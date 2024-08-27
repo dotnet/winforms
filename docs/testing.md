@@ -15,8 +15,8 @@ This document describes our approach to testing.
             - [Naming](#naming)
             - [Decoration](#decoration)
             - [Disposal](#dispose-created-objects)
-            - [Theory tests](#theory-tests#theory-tests)
-        - [Throw unhandled exceptions](#throw-unhandled-exceptions)
+            - [Theory tests](#theory-tests)
+        - [Strategy](#strategy)
 * [Rendering Tests](#rendering-tests)
 * [Functional Tests](#functional-tests)
     * [Running functional tests](#running-functional-tests)
@@ -26,6 +26,7 @@ This document describes our approach to testing.
         - [Troubleshooting Visual Studio functional test errors](#troubleshooting-visual-studio-functional-test-errors)
     * [Adding new functional tests](#adding-new-functional-tests)
         - [Test placement](#therefore-you-just-need-to-put-your-tests-in-the-right-place-in-order-for-them-to-run-1)
+ * [Clipboard-Related Tests](#clipboard-related-tests)
  * [Testing for Accessibility](#testing-for-accessibility)
  * [Running and debugging crashed tests](#running-and-debugging-crashed-tests)
     
@@ -308,7 +309,37 @@ Functional tests are built and executed by file name convention
   * For example, if I wanted to test the `Button` class in System.Windows.Forms.dll, I would look for a Button.cs under src\System.Windows.Forms\tests
 * If the file exists, add your tests there. If it doesn't exist, feel free to create it.
   * **Note that you don't have to modify the csproj at all.** Since the project is a Microsoft.NET.Sdk project, all source files next to it are automatically included
- 
+
+# Clipboard-Related Tests
+
+All Clipboard-related unit tests should be placed in the sequencial collection. This ensures that tests which may have dependencies on the Clipboard state or involve operations like Drag and Drop, Copy/Paste, and format registration are executed in a controlled and predictable manner.
+
+* What is a Sequential Collection?
+  - A sequential collection is a grouping of unit tests that are executed in a specific order. This is particularly important for tests that interact with shared resources or have side effects that could impact other tests. By running these tests sequentially, we can avoid issues related to concurrency and ensure the reliability of our test results.
+* Clipboard operations is sensitive to the state of the system and interfere with each other if run in parallel. To maintain the integrity of our tests and ensure accurate results, all unit tests that involve the following operations should be included in the sequential collection:
+  - **Clipboard APIs**: Any test that interacts with the system Clipboard, such as setting or retrieving data.
+  - **Drag and Drop**: Tests that simulate drag-and-drop operations, which often involve the Clipboard.
+  - **Copy/Paste**: Tests that perform copy and paste actions, which rely on the Clipboard to transfer data.
+  - **Register Formats**: Tests that register custom Clipboard formats.
+* Example
+  ```cs
+    [Collection("Sequential")]
+    public class ClipboardTests
+    {
+        [WinFormsFact]
+        public void RichTextBox_OleObject_IncompleteOleObject_DoNothing()
+        {
+            using RichTextBox control = new();
+            control.Handle.Should().NotBe(IntPtr.Zero);
+
+            using MemoryStream memoryStream = new();
+            using Bitmap bitmap = new(100, 100);
+            bitmap.Save(memoryStream, Drawing.Imaging.ImageFormat.Png);
+            Clipboard.SetData("Embed Source", memoryStream);
+
+            control.Text.Should().BeEmpty();
+        }
+  ```
   
 # Testing for Accessibility
 
