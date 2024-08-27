@@ -7,7 +7,8 @@ using System.Drawing;
 
 namespace System.Windows.Forms.Tests;
 
-[Collection("Sequential")]
+[Collection("Sequential")] // Each registered Clipboard format is an OS singleton,
+                           // and we should not run this test at the same time as other tests using the same format.
 public partial class ClipboardTests
 {
     [WinFormsFact]
