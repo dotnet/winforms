@@ -12,7 +12,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Function
 
         Friend Function GetUniqueFileName() As String
-            Return "Test" & GetUniqueText()
+            Return $"Test{GetUniqueText()}"
         End Function
 
         Friend Function GetUniqueText() As String
