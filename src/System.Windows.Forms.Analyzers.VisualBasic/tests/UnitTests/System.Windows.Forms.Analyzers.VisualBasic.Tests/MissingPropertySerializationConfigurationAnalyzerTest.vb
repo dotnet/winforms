@@ -17,22 +17,35 @@ Namespace VBControls
         Public Sub Main()
             Dim control As New ScalableControl()
 
-            ' We deliberately format this weirdly, to make sure we only format code our code fix touches.
             control.ScaleFactor = 1.5F
             control.ScaledSize = New SizeF(100, 100)
             control.ScaledLocation = New PointF(10, 10)
         End Sub
     End Module
 
-    ' We are writing the fully-qualified name here to make sure, the Simplifier doesn't remove it,
-    ' since this is nothing our code fix touches.
     Public Class ScalableControl
         Inherits System.Windows.Forms.Control
 
+        private _scaledSize as SizeF
+
         Public Property [|ScaleFactor|] As Single = 1.0F
 
+        ''' <Summary>
+        '''  Sets or gets the scaled size of some foo bar thing.
+        ''' </Summary>
+        <System.ComponentModel.Description(""Sets or gets the scaled size of some foo bar thing."")>
         Public Property [|ScaledSize|] As SizeF
+            Get
+                Return _scaledSize
+            End Get
+            Set(value As SizeF)
+                _scaledSize = value
+            End Set
+        End Property
 
+        ''' <Summary>
+        '''  Sets or gets the scaled location of some foo bar thing.
+        ''' </Summary>
         Public Property [|ScaledLocation|] As PointF
     End Class
 
@@ -57,20 +70,36 @@ Namespace VBControls
     End Module
 
     Public Class ScalableControl
-        Inherits Control
+        Inherits System.Windows.Forms.Control
 
-        <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
+        private _scaledSize as SizeF
+
+        <DefaultValue(1.0F)>
         Public Property ScaleFactor As Single = 1.0F
 
-        <DefaultValue(GetType(SizeF), ""0,0"")>
+        ''' <Summary>
+        '''  Sets or gets the scaled size of some foo bar thing.
+        ''' </Summary>
+        <System.ComponentModel.Description(""Sets or gets the scaled size of some foo bar thing."")>
+        <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
         Public Property ScaledSize As SizeF
+            Get
+                Return _scaledSize
+            End Get
+            Set(value As SizeF)
+                _scaledSize = value
+            End Set
+        End Property
 
+        ''' <Summary>
+        '''  Sets or gets the scaled location of some foo bar thing.
+        ''' </Summary>
         Public Property ScaledLocation As PointF
-        Private Function ShouldSerializeScaledLocation() As Boolean
-            Return Me.ScaledLocation <> PointF.Empty
+
+        Private Function ShouldSerializeScaledLocation as Boolean
+            Return False
         End Function
     End Class
-
 End Namespace
 "
 
@@ -85,24 +114,37 @@ Namespace VBControls
         Public Sub Main()
             Dim control As New ScalableControl()
 
-            ' We deliberately format this weirdly, to make sure we only format code our code fix touches.
             control.ScaleFactor = 1.5F
             control.ScaledSize = New SizeF(100, 100)
             control.ScaledLocation = New PointF(10, 10)
         End Sub
     End Module
 
-    ' We are writing the fully-qualified name here to make sure, the Simplifier doesn't remove it,
-    ' since this is nothing our code fix touches.
     Public Class ScalableControl
         Inherits System.Windows.Forms.Control
+
+        private _scaledSize as SizeF
 
         <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
         Public Property ScaleFactor As Single = 1.0F
 
+        ''' <Summary>
+        '''  Sets or gets the scaled size of some foo bar thing.
+        ''' </Summary>
+        <System.ComponentModel.Description(""Sets or gets the scaled size of some foo bar thing."")>
         <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
         Public Property ScaledSize As SizeF
+            Get
+                Return _scaledSize
+            End Get
+            Set(value As SizeF)
+                _scaledSize = value
+            End Set
+        End Property
 
+        ''' <Summary>
+        '''  Sets or gets the scaled location of some foo bar thing.
+        ''' </Summary>
         <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
         Public Property ScaledLocation As PointF
     End Class
@@ -120,13 +162,13 @@ End Namespace
 
     <Theory>
     <MemberData(NameOf(GetReferenceAssemblies))>
-    Public Async Function VB_ControlPropertySerializationConfigurationAnalyzer(referenceAssemblies As ReferenceAssemblies) As Task
+    Public Async Function VB_MissingControlPropertySerializationConfigurationAnalyzer(referenceAssemblies As ReferenceAssemblies) As Task
         Dim context = New VisualBasicAnalyzerTest(Of
             MissingPropertySerializationConfigurationAnalyzer,
             DefaultVerifier) With
             {
-                .TestCode = CorrectCode,
-                .ReferenceAssemblies = referenceAssemblies
+                .TestCode = ProblematicCode,
+                .referenceAssemblies = referenceAssemblies
             }
 
         context.TestState.OutputKind = OutputKind.WindowsApplication
@@ -136,13 +178,13 @@ End Namespace
 
     <Theory>
     <MemberData(NameOf(GetReferenceAssemblies))>
-    Public Async Function VB_MissingControlPropertySerializationConfigurationAnalyzer(referenceAssemblies As ReferenceAssemblies) As Task
+    Public Async Function VB_ControlPropertySerializationConfigurationAnalyzer(referenceAssemblies As ReferenceAssemblies) As Task
         Dim context = New VisualBasicAnalyzerTest(Of
             MissingPropertySerializationConfigurationAnalyzer,
             DefaultVerifier) With
             {
-                .TestCode = ProblematicCode,
-                .ReferenceAssemblies = referenceAssemblies
+                .TestCode = CorrectCode,
+                .referenceAssemblies = referenceAssemblies
             }
 
         context.TestState.OutputKind = OutputKind.WindowsApplication
@@ -160,7 +202,7 @@ End Namespace
             {
                 .TestCode = ProblematicCode,
                 .FixedCode = FixedCode,
-                .ReferenceAssemblies = referenceAssemblies,
+                .referenceAssemblies = referenceAssemblies,
                 .NumberOfFixAllIterations = 2
             }
 
