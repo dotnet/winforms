@@ -2788,6 +2788,11 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         ToolStripItem? selectedItem = GetSelectedItem();
         if (selectedItem is not null)
         {
+            if (selectedItem is ToolStripComboBox or ToolStripTextBox or ToolStripDropDownButton or ToolStripSplitButton)
+            {
+                return base.ProcessCmdKey(ref m, keyData);
+            }
+
             if (selectedItem is ToolStripButton && selectedItem.ProcessDialogKey(keyData))
             {
                 return true;
