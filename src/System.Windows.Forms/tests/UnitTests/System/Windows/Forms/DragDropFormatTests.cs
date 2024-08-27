@@ -15,7 +15,8 @@ using Com = Windows.Win32.System.Com;
 
 namespace System.Windows.Forms.Tests;
 
-[Collection("Sequential")] // All tests related to the clipboard need to be executed in sequence.
+[Collection("Sequential")] // Each registered Clipboard format is an OS singleton,
+                           // and we should not run this test at the same time as other tests using the same format.
 public unsafe class DragDropFormatTests
 {
     public static IEnumerable<object[]> DragDropFormat_TestData()

@@ -9,7 +9,8 @@ namespace System.Windows.Forms.Tests;
 
 public partial class DataObjectTests
 {
-    [Collection("Sequential")]
+    [Collection("Sequential")] // Each registered Clipboard format is an OS singleton,
+                               // and we should not run this test at the same time as other tests using the same format.
     public class ClipboardTests
     {
         public static TheoryData<string, bool> GetData_StringBool_TheoryData()
