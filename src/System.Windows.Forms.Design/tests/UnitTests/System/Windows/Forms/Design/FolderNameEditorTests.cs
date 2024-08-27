@@ -4,7 +4,6 @@
 using System.ComponentModel;
 using System.Drawing.Design;
 using System.Windows.Forms.TestUtilities;
-using Moq;
 
 namespace System.Windows.Forms.Design.Tests;
 
