@@ -9,7 +9,8 @@ using TextDataFormat = System.Windows.Forms.TextDataFormat;
 
 namespace Microsoft.VisualBasic.MyServices.Tests;
 
-[Collection("Sequential")]
+[Collection("Sequential")] // Each registered Clipboard format is an OS singleton,
+                           // and we should not run this test at the same time as other tests using the same format.
 [CollectionDefinition("Sequential", DisableParallelization = true)]
 public class ClipboardProxyTests
 {
