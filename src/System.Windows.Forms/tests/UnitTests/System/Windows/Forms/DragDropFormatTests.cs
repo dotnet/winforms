@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+#nullable enable
+
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
@@ -13,6 +15,8 @@ using Com = Windows.Win32.System.Com;
 
 namespace System.Windows.Forms.Tests;
 
+[Collection("Sequential")] // Each registered Clipboard format is an OS singleton,
+                           // and we should not run this test at the same time as other tests using the same format.
 public unsafe class DragDropFormatTests
 {
     public static IEnumerable<object[]> DragDropFormat_TestData()
@@ -63,7 +67,7 @@ public unsafe class DragDropFormatTests
     [MemberData(nameof(DragDropFormat_TestData))]
     public void DragDropFormat_Set_Dispose_ReturnsExpected(FORMATETC formatEtc, STGMEDIUM medium)
     {
-        DragDropFormat dragDropFormat = default;
+        DragDropFormat? dragDropFormat = default;
 
         try
         {
@@ -85,7 +89,7 @@ public unsafe class DragDropFormatTests
     [MemberData(nameof(DragDropFormat_TestData))]
     public void DragDropFormat_Set_GetData_ReturnsExpected(FORMATETC formatEtc, STGMEDIUM medium)
     {
-        DragDropFormat dragDropFormat = default;
+        DragDropFormat? dragDropFormat = default;
 
         try
         {
@@ -124,7 +128,7 @@ public unsafe class DragDropFormatTests
     [MemberData(nameof(DragDropFormat_TestData))]
     public void DragDropFormat_Set_RefreshData_ReturnsExpected(FORMATETC formatEtc, STGMEDIUM medium)
     {
-        DragDropFormat dragDropFormat = default;
+        DragDropFormat? dragDropFormat = default;
 
         try
         {
