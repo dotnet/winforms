@@ -314,6 +314,7 @@ Functional tests are built and executed by file name convention
 
 * A sequential collection is a grouping of unit tests that are executed in a specific order.
   - All unit tests in the `Sequential` collection are executed sequentially.
+    
 * Unit tests that involve the following situations should be included in the `Sequential` collection:
   - Clipboard operations is sensitive to the state of the system and interfere with each other if run in parallel.
     - **Clipboard APIs**: Any test that interacts with the system Clipboard, such as setting or retrieving data.
@@ -340,7 +341,14 @@ Functional tests are built and executed by file name convention
             control.Text.Should().BeEmpty();
         }
      ```
-  - Other tests that rely on a global state, such as [WebBrowser control related tests](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms/tests/UnitTests/System/Windows/Forms/HtmlElementTests.cs), [PropertyGridTests](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms/tests/InteropTests/PropertyGridTests.cs), [ITypeInfoTests](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms.Primitives/tests/UnitTests/Interop/Oleaut32/ITypeInfoTests.cs)...
+  - Other tests that rely on a global state, refer to existing tests
+    
+     - [Clipboard related tests](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms/tests/UnitTests/System/Windows/Forms/ClipboardTests.cs)
+     - [WebBrowser control related tests](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms/tests/UnitTests/System/Windows/Forms/HtmlElementTests.cs)
+     - [PropertyGridTests](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms/tests/InteropTests/PropertyGridTests.cs)
+     - [ITypeInfoTests](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms.Primitives/tests/UnitTests/Interop/Oleaut32/ITypeInfoTests.cs)
+     - [IPictureTests](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms.Primitives/tests/UnitTests/Interop/Ole32/IPictureTests.cs)
+     - [IDispatchTests](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms.Primitives/tests/UnitTests/Windows/Win32/System/Com/IDispatchTests.cs)  
   
 # Testing for Accessibility
 
