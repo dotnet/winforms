@@ -26,7 +26,7 @@ This document describes our approach to testing.
         - [Troubleshooting Visual Studio functional test errors](#troubleshooting-visual-studio-functional-test-errors)
     * [Adding new functional tests](#adding-new-functional-tests)
         - [Test placement](#therefore-you-just-need-to-put-your-tests-in-the-right-place-in-order-for-them-to-run-1)
- * [Clipboard-Related Tests](#clipboard-related-tests)
+ * [Sequential collection](#sequential-collection)
  * [Testing for Accessibility](#testing-for-accessibility)
  * [Running and debugging crashed tests](#running-and-debugging-crashed-tests)
     
@@ -310,19 +310,19 @@ Functional tests are built and executed by file name convention
 * If the file exists, add your tests there. If it doesn't exist, feel free to create it.
   * **Note that you don't have to modify the csproj at all.** Since the project is a Microsoft.NET.Sdk project, all source files next to it are automatically included
 
-# Clipboard-Related Tests
+# Sequential Collection
 
-All Clipboard-related unit tests should be placed in the sequencial collection. This ensures that tests which may have dependencies on the Clipboard state or involve operations like Drag and Drop, Copy/Paste, and format registration are executed in a controlled and predictable manner.
-
-* What is a Sequential Collection?
-  - A sequential collection is a grouping of unit tests that are executed in a specific order. This is particularly important for tests that interact with shared resources or have side effects that could impact other tests. By running these tests sequentially, we can avoid issues related to concurrency and ensure the reliability of our test results.
-* Clipboard operations is sensitive to the state of the system and interfere with each other if run in parallel. To maintain the integrity of our tests and ensure accurate results, all unit tests that involve the following operations should be included in the sequential collection:
-  - **Clipboard APIs**: Any test that interacts with the system Clipboard, such as setting or retrieving data.
-  - **Drag and Drop**: Tests that simulate drag-and-drop operations, which often involve the Clipboard.
-  - **Copy/Paste**: Tests that perform copy and paste actions, which rely on the Clipboard to transfer data.
-  - **Register Formats**: Tests that register custom Clipboard formats.
-* Example
-  ```cs
+* A sequential collection is a grouping of unit tests that are executed in a specific order.
+  - All unit tests in the `Sequential` collection are executed sequentially.
+* Unit tests that involve the following situations should be included in the `Sequential` collection:
+  - Clipboard operations is sensitive to the state of the system and interfere with each other if run in parallel.
+    - **Clipboard APIs**: Any test that interacts with the system Clipboard, such as setting or retrieving data.
+    - **Drag and Drop**: Tests that simulate drag-and-drop operations, which often involve the Clipboard.
+    - **Copy/Paste**: Tests that perform copy and paste actions, which rely on the Clipboard to transfer data.
+    - **Register Formats**: Tests that register custom Clipboard formats.
+      
+    E.g.
+    ```cs
     [Collection("Sequential")]
     public class ClipboardTests
     {
@@ -339,7 +339,8 @@ All Clipboard-related unit tests should be placed in the sequencial collection. 
 
             control.Text.Should().BeEmpty();
         }
-  ```
+     ```
+  - Other tests that rely on a global state, such as [WebBrowser control related tests](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms/tests/UnitTests/System/Windows/Forms/HtmlElementTests.cs), [PropertyGridTests](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms/tests/InteropTests/PropertyGridTests.cs), [ITypeInfoTests](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms.Primitives/tests/UnitTests/Interop/Oleaut32/ITypeInfoTests.cs)...
   
 # Testing for Accessibility
 
