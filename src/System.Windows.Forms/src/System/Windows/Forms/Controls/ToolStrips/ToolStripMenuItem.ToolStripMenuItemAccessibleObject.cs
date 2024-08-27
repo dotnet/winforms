@@ -117,7 +117,7 @@ public partial class ToolStripMenuItem
 
         public override string DefaultAction =>
             Owner.AccessibleDefaultActionDescription
-                ?? (_owningToolStripMenuItem.CheckOnClick ? SR.AccessibleActionCheck : base.DefaultAction);
+                ?? (_owningToolStripMenuItem.CheckOnClick ? _owningToolStripMenuItem.Checked ? SR.AccessibleActionUncheck : SR.AccessibleActionCheck : base.DefaultAction);
 
         private protected override bool IsInternal => true;
 
