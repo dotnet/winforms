@@ -13,7 +13,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
     Public Class FileLogTraceListenerTests
         Inherits VbFileCleanupTestBase
 
-        Private Shared Function DirectoryIsAccessable(DirectoryPath As String) As Boolean
+        Private Shared Function DirectoryIsAccessible(DirectoryPath As String) As Boolean
             If String.IsNullOrWhiteSpace(DirectoryPath) Then
                 Return False
             End If
@@ -38,52 +38,58 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <WinFormsFact>
         Public Sub ListenerPropertiesTest()
-            Dim testDirectory As String = CreateTempDirectory()
-            Using listener As New FileLogTraceListener() With {
-                .Location = LogFileLocation.Custom,
-                .CustomLocation = testDirectory
-            }
+            Dim testCode As Action =
+                Sub()
+                    Dim testDirectory As String = CreateTempDirectory()
+                    Using listener As New FileLogTraceListener() With {
+                        .Location = LogFileLocation.Custom,
+                        .CustomLocation = testDirectory}
 
-                listener.BaseFileName.Should.BeEquivalentTo("testHost")
+                        listener.BaseFileName.Should.BeEquivalentTo("testHost")
 
-                listener.AutoFlush.Should.BeFalse()
-                listener.AutoFlush = True
-                listener.AutoFlush.Should.BeTrue()
+                        listener.AutoFlush.Should.BeFalse()
+                        listener.AutoFlush = True
+                        listener.AutoFlush.Should.BeTrue()
 
-                listener.IncludeHostName.Should.BeFalse()
-                listener.IncludeHostName = True
-                listener.IncludeHostName.Should.BeTrue()
+                        listener.IncludeHostName.Should.BeFalse()
+                        listener.IncludeHostName = True
+                        listener.IncludeHostName.Should.BeTrue()
 
-                listener.Append.Should.BeTrue()
-                listener.Append = False
-                listener.Append.Should.BeFalse()
+                        listener.Append.Should.BeTrue()
+                        listener.Append = False
+                        listener.Append.Should.BeFalse()
 
-                listener.DiskSpaceExhaustedBehavior.Should.Be(DiskSpaceExhaustedOption.DiscardMessages)
-                listener.DiskSpaceExhaustedBehavior = DiskSpaceExhaustedOption.ThrowException
-                listener.DiskSpaceExhaustedBehavior.Should.Be(DiskSpaceExhaustedOption.ThrowException)
+                        listener.DiskSpaceExhaustedBehavior.Should.Be(DiskSpaceExhaustedOption.DiscardMessages)
+                        listener.DiskSpaceExhaustedBehavior = DiskSpaceExhaustedOption.ThrowException
+                        listener.DiskSpaceExhaustedBehavior.Should.Be(DiskSpaceExhaustedOption.ThrowException)
 
-                listener.FullLogFileName.Should.BeEquivalentTo(Path.Combine(testDirectory, "testHost.log"))
+                        listener.FullLogFileName.Should.BeEquivalentTo(Path.Combine(testDirectory, "testHost.log"))
 
-                listener.LogFileCreationSchedule.Should.Be(LogFileCreationScheduleOption.None)
-                listener.LogFileCreationSchedule = LogFileCreationScheduleOption.Daily
-                listener.LogFileCreationSchedule.Should.Be(LogFileCreationScheduleOption.Daily)
+                        listener.LogFileCreationSchedule.Should.Be(LogFileCreationScheduleOption.None)
+                        listener.LogFileCreationSchedule = LogFileCreationScheduleOption.Daily
+                        listener.LogFileCreationSchedule.Should.Be(LogFileCreationScheduleOption.Daily)
 
-                listener.MaxFileSize.Should.Be(5_000_000L)
-                listener.MaxFileSize = 500_000L
-                listener.MaxFileSize.Should.Be(500_000L)
+                        listener.MaxFileSize.Should.Be(5_000_000L)
+                        listener.MaxFileSize = 500_000L
+                        listener.MaxFileSize.Should.Be(500_000L)
 
-                listener.ReserveDiskSpace.Should.Be(10_000_000L)
-                listener.ReserveDiskSpace = 1_000_000L
-                listener.ReserveDiskSpace.Should.Be(1_000_000L)
+                        listener.ReserveDiskSpace.Should.Be(10_000_000L)
+                        listener.ReserveDiskSpace = 1_000_000L
+                        listener.ReserveDiskSpace.Should.Be(1_000_000L)
 
-                listener.Delimiter.Should.Be(vbTab)
-                listener.Delimiter = ";"
-                listener.Delimiter.Should.Be(";")
+                        listener.Delimiter.Should.Be(vbTab)
+                        listener.Delimiter = ";"
+                        listener.Delimiter.Should.Be(";")
 
-                listener.Encoding.Should.Be(Encoding.UTF8)
-                listener.Encoding = Text.Encoding.ASCII
-                listener.Encoding.Should.Be(Encoding.ASCII)
-            End Using
+                        listener.Encoding.Should.Be(Encoding.UTF8)
+                        listener.Encoding = Text.Encoding.ASCII
+                        listener.Encoding.Should.Be(Encoding.ASCII)
+                    End Using
+                End Sub
+
+            If DirectoryIsAccessible(Application.CommonAppDataPath) Then
+                testCode.Should.NotThrow()
+            End If
         End Sub
 
         <WinFormsFact>
@@ -97,27 +103,34 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         fullLogFileName = listener.FullLogFileName
                         fullLogFileName.Should.StartWith(Application.CommonAppDataPath)
                     End Using
-                    File.Delete(fullLogFileName)
+                    If File.Exists(fullLogFileName) Then
+                        File.Delete(fullLogFileName)
+                    End If
                 End Sub
 
-            If DirectoryIsAccessable(Application.CommonAppDataPath) Then
+            If DirectoryIsAccessible(Application.CommonAppDataPath) Then
                 testCode.Should.NotThrow()
             End If
         End Sub
 
         <WinFormsFact>
         Public Sub LocationPropertyWithCustomLocationTest()
-            Dim testDirectory As String = CreateTempDirectory()
-            Using listener As New FileLogTraceListener() With {
-                .Location = LogFileLocation.Custom,
-                .CustomLocation = testDirectory}
+            Dim testCode As Action =
+                Sub()
+                    Dim testDirectory As String = CreateTempDirectory()
+                    Using listener As New FileLogTraceListener() With {
+                        .Location = LogFileLocation.Custom,
+                        .CustomLocation = testDirectory}
 
-                listener.Location.Should.Be(LogFileLocation.Custom)
-                listener.CustomLocation.Should.Be(testDirectory)
-            End Using
+                        listener.Location.Should.Be(LogFileLocation.Custom)
+                        listener.CustomLocation.Should.Be(testDirectory)
+                    End Using
+                End Sub
+
+            testCode.Should.NotThrow()
         End Sub
 
-        <WinFormsFact(Skip:="Causes test run to abort, must be run manually.")>
+        <WinFormsFact>
         Public Sub LocationPropertyWithExecutableDirectoryLocationTest()
             Dim testCode As Action =
                 Sub()
@@ -128,10 +141,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         fullLogFileName = listener.FullLogFileName
                         fullLogFileName.Should.StartWith(Path.GetDirectoryName(Application.ExecutablePath))
                     End Using
-                    File.Delete(fullLogFileName)
+                    If File.Exists(fullLogFileName) Then
+                        File.Delete(fullLogFileName)
+                    End If
                 End Sub
 
-            If DirectoryIsAccessable(Path.GetDirectoryName(Application.ExecutablePath)) Then
+            If DirectoryIsAccessible(Path.GetDirectoryName(Application.ExecutablePath)) Then
                 testCode.Should.NotThrow()
             End If
         End Sub
@@ -147,9 +162,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         fullLogFileName = listener.FullLogFileName
                         fullLogFileName.Should.StartWith(Application.UserAppDataPath)
                     End Using
-                    File.Delete(fullLogFileName)
+                    If File.Exists(fullLogFileName) Then
+                        File.Delete(fullLogFileName)
+                    End If
                 End Sub
-            If DirectoryIsAccessable(Application.UserAppDataPath) Then
+
+            If DirectoryIsAccessible(Application.UserAppDataPath) Then
                 testCode.Should.NotThrow()
             End If
         End Sub
@@ -165,9 +183,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         fullLogFileName = listener.FullLogFileName
                         fullLogFileName.Should.StartWith(Path.GetTempPath)
                     End Using
-                    File.Delete(fullLogFileName)
+                    If File.Exists(fullLogFileName) Then
+                        File.Delete(fullLogFileName)
+                    End If
                 End Sub
-            If DirectoryIsAccessable(Application.UserAppDataPath) Then
+
+            If DirectoryIsAccessible(Application.UserAppDataPath) Then
                 testCode.Should.NotThrow()
             End If
         End Sub
