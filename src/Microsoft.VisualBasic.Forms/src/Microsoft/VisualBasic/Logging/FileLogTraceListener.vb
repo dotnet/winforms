@@ -23,110 +23,10 @@ Namespace Microsoft.VisualBasic.Logging
     Partial Public Class FileLogTraceListener
         Inherits TraceListener
 
-        Private Const APPEND_INDEX As Integer = 0
-
-        Private Const AUTOFLUSH_INDEX As Integer = 1
-
-        Private Const BASEFILENAME_INDEX As Integer = 2
-
-        Private Const CUSTOMLOCATION_INDEX As Integer = 3
-
-        Private Const DATE_FORMAT As String = "yyyy-MM-dd"
-
-        ' Name to be used when parameterless constructor is called
-        Private Const DEFAULT_NAME As String = "FileLogTraceListener"
-
-        Private Const DELIMITER_INDEX As Integer = 4
-
-        Private Const DISKSPACEEXHAUSTEDBEHAVIOR_INDEX As Integer = 5
-
-        Private Const ENCODING_INDEX As Integer = 6
-
-        Private Const FILE_EXTENSION As String = ".log"
-
-        Private Const INCLUDEHOSTNAME_INDEX As Integer = 7
-
-        ' Attribute keys used to access properties set in the config file
-        Private Const KEY_APPEND As String = "append"
-
-        Private Const KEY_APPEND_PASCAL As String = "Append"
-        Private Const KEY_AUTOFLUSH As String = "autoflush"
-        Private Const KEY_AUTOFLUSH_CAMEL As String = "autoFlush"
-        Private Const KEY_AUTOFLUSH_PASCAL As String = "AutoFlush"
-        Private Const KEY_BASEFILENAME As String = "basefilename"
-        Private Const KEY_BASEFILENAME_CAMEL As String = "baseFilename"
-        Private Const KEY_BASEFILENAME_CAMEL_ALT As String = "baseFileName"
-        Private Const KEY_BASEFILENAME_PASCAL As String = "BaseFilename"
-        Private Const KEY_BASEFILENAME_PASCAL_ALT As String = "BaseFileName"
-        Private Const KEY_CUSTOMLOCATION As String = "customlocation"
-        Private Const KEY_CUSTOMLOCATION_CAMEL As String = "customLocation"
-        Private Const KEY_CUSTOMLOCATION_PASCAL As String = "CustomLocation"
-        Private Const KEY_DELIMITER As String = "delimiter"
-        Private Const KEY_DELIMITER_PASCAL As String = "Delimiter"
-        Private Const KEY_DISKSPACEEXHAUSTEDBEHAVIOR As String = "diskspaceexhaustedbehavior"
-        Private Const KEY_DISKSPACEEXHAUSTEDBEHAVIOR_CAMEL As String = "diskSpaceExhaustedBehavior"
-        Private Const KEY_DISKSPACEEXHAUSTEDBEHAVIOR_PASCAL As String = "DiskSpaceExhaustedBehavior"
-        Private Const KEY_ENCODING As String = "encoding"
-        Private Const KEY_ENCODING_PASCAL As String = "Encoding"
-        Private Const KEY_INCLUDEHOSTNAME As String = "includehostname"
-        Private Const KEY_INCLUDEHOSTNAME_CAMEL As String = "includeHostName"
-        Private Const KEY_INCLUDEHOSTNAME_PASCAL As String = "IncludeHostName"
-        Private Const KEY_LOCATION As String = "location"
-        Private Const KEY_LOCATION_PASCAL As String = "Location"
-        Private Const KEY_LOGFILECREATIONSCHEDULE As String = "logfilecreationschedule"
-        Private Const KEY_LOGFILECREATIONSCHEDULE_CAMEL As String = "logFileCreationSchedule"
-        Private Const KEY_LOGFILECREATIONSCHEDULE_PASCAL As String = "LogFileCreationSchedule"
-        Private Const KEY_MAXFILESIZE As String = "maxfilesize"
-        Private Const KEY_MAXFILESIZE_CAMEL As String = "maxFileSize"
-        Private Const KEY_MAXFILESIZE_PASCAL As String = "MaxFileSize"
-        Private Const KEY_RESERVEDISKSPACE As String = "reservediskspace"
-        Private Const KEY_RESERVEDISKSPACE_CAMEL As String = "reserveDiskSpace"
-        Private Const KEY_RESERVEDISKSPACE_PASCAL As String = "ReserveDiskSpace"
-
-        Private Const LOCATION_INDEX As Integer = 8
-
-        Private Const LOGFILECREATIONSCHEDULE_INDEX As Integer = 9
-
-        Private Const MAX_OPEN_ATTEMPTS As Integer = Integer.MaxValue
-
-        Private Const MAXFILESIZE_INDEX As Integer = 10
-
-        ' The minimum setting allowed for maximum file size
-        Private Const MIN_FILE_SIZE As Integer = 1000
-
-        ' Identifies properties in the BitArray
-        Private Const PROPERTY_COUNT As Integer = 12
-
-        Private Const RESERVEDISKSPACE_INDEX As Integer = 11
-
-        ' Delimiter used when converting a stack to a string
-        Private Const STACK_DELIMITER As String = ", "
-
         ' Table of all of the files opened by any FileLogTraceListener in the current process
         Private Shared ReadOnly s_streams As New Dictionary(Of String, ReferencedStream)
 
         Private ReadOnly _day As Date = Now.Date
-
-        ' Indicates whether or not properties have been set
-        ' Note: Properties that use m_PropertiesSet to track whether or not
-        '       they've been set should always be set through the property setter and not
-        '       by directly changing the corresponding private field.
-        Private ReadOnly _propertiesSet As New BitArray(PROPERTY_COUNT, False)
-
-        ' A list of supported attributes
-        Private ReadOnly _supportedAttributes() As String = New String() {
-            KEY_APPEND, KEY_APPEND_PASCAL, KEY_AUTOFLUSH, KEY_AUTOFLUSH_PASCAL,
-            KEY_AUTOFLUSH_CAMEL, KEY_BASEFILENAME, KEY_BASEFILENAME_PASCAL,
-            KEY_BASEFILENAME_CAMEL, KEY_BASEFILENAME_PASCAL_ALT,
-            KEY_BASEFILENAME_CAMEL_ALT, KEY_CUSTOMLOCATION, KEY_CUSTOMLOCATION_PASCAL,
-            KEY_CUSTOMLOCATION_CAMEL, KEY_DELIMITER, KEY_DELIMITER_PASCAL,
-            KEY_DISKSPACEEXHAUSTEDBEHAVIOR, KEY_DISKSPACEEXHAUSTEDBEHAVIOR_PASCAL,
-            KEY_DISKSPACEEXHAUSTEDBEHAVIOR_CAMEL, KEY_ENCODING, KEY_ENCODING_PASCAL,
-            KEY_INCLUDEHOSTNAME, KEY_INCLUDEHOSTNAME_PASCAL, KEY_INCLUDEHOSTNAME_CAMEL,
-            KEY_LOCATION, KEY_LOCATION_PASCAL, KEY_LOGFILECREATIONSCHEDULE,
-            KEY_LOGFILECREATIONSCHEDULE_PASCAL, KEY_LOGFILECREATIONSCHEDULE_CAMEL,
-            KEY_MAXFILESIZE, KEY_MAXFILESIZE_PASCAL, KEY_MAXFILESIZE_CAMEL,
-            KEY_RESERVEDISKSPACE, KEY_RESERVEDISKSPACE_PASCAL, KEY_RESERVEDISKSPACE_CAMEL}
 
         ' Indicates whether to append to or overwrite the log file
         Private _append As Boolean = True
@@ -166,10 +66,10 @@ Namespace Microsoft.VisualBasic.Logging
         Private _logFileDateStamp As LogFileCreationScheduleOption = LogFileCreationScheduleOption.None
 
         ' The maximum size of the log file
-        Private _maxFileSize As Long = 5000000L
+        Private _maxFileSize As Long = 5_000_000L
 
         ' The amount of free disk space there needs to be on the drive of the log file
-        Private _reserveDiskSpace As Long = 10000000L
+        Private _reserveDiskSpace As Long = 10_000_000L
 
         ' Reference counted stream used for writing to the log file
         Private _stream As ReferencedStream
