@@ -160,7 +160,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             _fileSystem.CreateDirectory(testDirectory)
             Directory.Exists(testDirectory).Should.BeTrue()
             Directory.Delete(testDirectory)
-            Directory.Exists(testDirectory).Should.Befalse()
+            Directory.Exists(testDirectory).Should.BeFalse()
         End Sub
 
         <WinFormsFact>

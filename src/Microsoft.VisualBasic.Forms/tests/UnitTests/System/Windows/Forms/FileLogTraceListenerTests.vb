@@ -26,7 +26,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Using listener As New FileLogTraceListener() With {
                 .Location = LogFileLocation.TempDirectory}
 
-                listener.FullLogFileName.Should.StartWith(IO.Path.GetTempPath)
+                listener.FullLogFileName.Should.StartWith(Path.GetTempPath)
             End Using
 
             Using listener As New FileLogTraceListener() With {

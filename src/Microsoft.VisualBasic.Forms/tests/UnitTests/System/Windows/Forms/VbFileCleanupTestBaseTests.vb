@@ -33,7 +33,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim testDirectory As String = CreateTempDirectory()
             Dim testFile1 As String = GetUniqueFileNameWithPath(testDirectory)
             testFile1.Should.NotBe(GetUniqueFileNameWithPath(testDirectory))
-            testDirectory.Should.Be(IO.Path.GetDirectoryName(testFile1))
+            testDirectory.Should.Be(Path.GetDirectoryName(testFile1))
             File.Exists(testFile1).Should.BeFalse()
         End Sub
 
