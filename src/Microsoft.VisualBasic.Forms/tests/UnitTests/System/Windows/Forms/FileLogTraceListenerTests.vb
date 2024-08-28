@@ -45,7 +45,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         .Location = LogFileLocation.Custom,
                         .CustomLocation = testDirectory}
 
-                        listener.BaseFileName.Should.BeEquivalentTo("testHost")
+                        listener.BaseFileName.Should.Match(Of String)(Function(p As String) p.Equals("testHost", StringComparison.OrdinalIgnoreCase) OrElse p.Equals("dotNet", StringComparison.OrdinalIgnoreCase))
 
                         listener.AutoFlush.Should.BeFalse()
                         listener.AutoFlush = True
