@@ -13,52 +13,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Inherits VbFileCleanupTestBase
 
         <Fact>
-        Public Sub LocationPropertyTest()
-            Dim testDirectory As String = CreateTempDirectory()
+        Public Sub ListenerPropertiesTest()
             Using listener As New FileLogTraceListener() With {
                 .Location = LogFileLocation.Custom,
-                .CustomLocation = testDirectory
+                .CustomLocation = CreateTempDirectory()
             }
-                listener.Location.Should.Be(LogFileLocation.Custom)
-                listener.CustomLocation.Should.Be(testDirectory)
-            End Using
-
-            Using listener As New FileLogTraceListener() With {
-                .Location = LogFileLocation.TempDirectory}
-
-                listener.FullLogFileName.Should.StartWith(Path.GetTempPath)
-            End Using
-
-            Using listener As New FileLogTraceListener() With {
-                .Location = LogFileLocation.LocalUserApplicationDirectory}
-
-                listener.FullLogFileName.Should.StartWith(Application.UserAppDataPath)
-            End Using
-
-            Using listener As New FileLogTraceListener() With {
-                .Location = LogFileLocation.CommonApplicationDirectory}
-
-                listener.FullLogFileName.Should.StartWith(Application.CommonAppDataPath)
-            End Using
-
-            Using listener As New FileLogTraceListener() With {
-                .Location = LogFileLocation.ExecutableDirectory}
-
-                listener.FullLogFileName.Should.StartWith(Path.GetDirectoryName(Application.ExecutablePath))
-            End Using
-
-        End Sub
-
-        <Fact>
-        Public Sub PropertiesTest()
-            Dim testDirectory As String = CreateTempDirectory()
-            Using listener As New FileLogTraceListener() With {
-                .Location = LogFileLocation.Custom,
-                .CustomLocation = testDirectory
-            }
-
-                listener.Location.Should.Be(LogFileLocation.Custom)
-                listener.CustomLocation.Should.Be(testDirectory)
 
                 listener.BaseFileName.Should.BeEquivalentTo("testHost")
 
@@ -78,7 +37,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 listener.DiskSpaceExhaustedBehavior = DiskSpaceExhaustedOption.ThrowException
                 listener.DiskSpaceExhaustedBehavior.Should.Be(DiskSpaceExhaustedOption.ThrowException)
 
-                listener.FullLogFileName.Should.BeEquivalentTo(IO.Path.Combine(testDirectory, "testHost.log"))
+                listener.FullLogFileName.Should.BeEquivalentTo(Path.Combine(CreateTempDirectory(), "testHost.log"))
 
                 listener.LogFileCreationSchedule.Should.Be(LogFileCreationScheduleOption.None)
                 listener.LogFileCreationSchedule = LogFileCreationScheduleOption.Daily
@@ -100,6 +59,62 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 listener.Encoding = Text.Encoding.ASCII
                 listener.Encoding.EncodingName.Should.Be("US-ASCII")
             End Using
+        End Sub
+
+        <Fact>
+        Public Sub LocationPropertyWithCommonApplicationDirectoryLocationTest()
+
+            Using listener As New FileLogTraceListener() With {
+                .Location = LogFileLocation.CommonApplicationDirectory}
+
+                listener.FullLogFileName.Should.StartWith(Application.CommonAppDataPath)
+            End Using
+
+        End Sub
+
+        <Fact>
+        Public Sub LocationPropertyWithCustomLocationTest()
+            Dim testDirectory As String = CreateTempDirectory()
+            Using listener As New FileLogTraceListener() With {
+                .Location = LogFileLocation.Custom,
+                .CustomLocation = testDirectory
+            }
+                listener.Location.Should.Be(LogFileLocation.Custom)
+                listener.CustomLocation.Should.Be(testDirectory)
+            End Using
+        End Sub
+
+        <Fact>
+        Public Sub LocationPropertyWithExecutableDirectoryLocationTest()
+
+            Using listener As New FileLogTraceListener() With {
+                .Location = LogFileLocation.ExecutableDirectory}
+
+                listener.FullLogFileName.Should.StartWith(Path.GetDirectoryName(Application.ExecutablePath))
+            End Using
+
+        End Sub
+
+        <Fact>
+        Public Sub LocationPropertyWithLocalUserApplicationDirectoryLocationTest()
+
+            Using listener As New FileLogTraceListener() With {
+                .Location = LogFileLocation.LocalUserApplicationDirectory}
+
+                listener.FullLogFileName.Should.StartWith(Application.UserAppDataPath)
+            End Using
+
+        End Sub
+
+        <Fact>
+        Public Sub LocationPropertyWithTempDirectoryLocationTest()
+
+            Using listener As New FileLogTraceListener() With {
+                    .Location = LogFileLocation.TempDirectory}
+
+                listener.FullLogFileName.Should.StartWith(Path.GetTempPath)
+            End Using
+
         End Sub
 
     End Class
