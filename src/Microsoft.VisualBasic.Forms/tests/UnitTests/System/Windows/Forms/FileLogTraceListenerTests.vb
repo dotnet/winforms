@@ -36,7 +36,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Return True
         End Function
 
-        <Fact>
+        <WinFormsFact(Skip:="Causes test run to abort, must be run manually.")>
         Public Sub ListenerPropertiesTest()
             Dim testDirectory As String = CreateTempDirectory()
             Using listener As New FileLogTraceListener() With {
@@ -86,7 +86,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Using
         End Sub
 
-        <Fact>
+        <WinFormsFact(Skip:="Causes test run to abort, must be run manually.")>
         Public Sub LocationPropertyWithCommonApplicationDirectoryLocationTest()
             Dim testCode As Action =
                 Sub()
@@ -117,7 +117,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Using
         End Sub
 
-        <Fact>
+        <WinFormsFact(Skip:="Causes test run to abort, must be run manually.")>
         Public Sub LocationPropertyWithExecutableDirectoryLocationTest()
             Dim testCode As Action =
                 Sub()
@@ -136,7 +136,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End If
         End Sub
 
-        <Fact>
+        <WinFormsFact(Skip:="Causes test run to abort, must be run manually.")>
         Public Sub LocationPropertyWithLocalUserApplicationDirectoryLocationTest()
             Dim testCode As Action =
                 Sub()
@@ -154,7 +154,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End If
         End Sub
 
-        <Fact>
+        <WinFormsFact(Skip:="Causes test run to abort, must be run manually.")>
         Public Sub LocationPropertyWithTempDirectoryLocationTest()
             Dim testCode As Action =
                 Sub()
