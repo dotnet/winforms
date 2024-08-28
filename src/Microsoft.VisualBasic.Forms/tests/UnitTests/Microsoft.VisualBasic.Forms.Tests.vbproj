@@ -15,10 +15,6 @@
     <OutputType>Library</OutputType>
   </PropertyGroup>
 
-<ItemGroup>
-  <Compile Remove="System\Windows\Forms\FileLogTraceListenerTests.vb" />
-</ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\..\System.Design\src\System.Design.Facade.csproj" />
     <ProjectReference Include="..\..\..\System.Drawing\src\System.Drawing.Facade.csproj" />

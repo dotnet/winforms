@@ -159,6 +159,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim testDirectory As String = Path.Combine(BaseTempPath, GetUniqueFileName)
             _fileSystem.CreateDirectory(testDirectory)
             Directory.Exists(testDirectory).Should.BeTrue()
+            Directory.Delete(testDirectory)
+            Directory.Exists(testDirectory).Should.BeFalse()
         End Sub
 
         <WinFormsFact>
@@ -356,6 +358,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim tmpFileName As String = _fileSystem.GetTempFileName
             File.Exists(tmpFileName).Should.BeTrue()
             File.Delete(tmpFileName)
+            File.Exists(tmpFileName).Should.BeFalse()
         End Sub
 
         <WinFormsFact>
