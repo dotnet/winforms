@@ -12,11 +12,32 @@ Namespace Microsoft.VisualBasic.Forms.Tests
     Public Class FileLogTraceListenerTests
         Inherits VbFileCleanupTestBase
 
+        Private Shared Function DirectoryHasPermission(DirectoryPath As String) As Boolean
+            If String.IsNullOrWhiteSpace(DirectoryPath) Then
+                Return False
+            End If
+
+            Try
+                Dim info As New DirectoryInfo(DirectoryPath)
+                If Not info.Exists Then
+                    Return False
+                End If
+                Dim path As String = IO.Path.Combine(DirectoryPath, GetUniqueFileName())
+                Dim stream As FileStream = File.Create(path)
+                stream.Close()
+                File.Delete(path)
+            Catch s As Security.SecurityException
+                Return False
+            End Try
+            Return True
+        End Function
+
         <Fact>
         Public Sub ListenerPropertiesTest()
+            Dim testDirectory As String = CreateTempDirectory()
             Using listener As New FileLogTraceListener() With {
                 .Location = LogFileLocation.Custom,
-                .CustomLocation = CreateTempDirectory()
+                .CustomLocation = testDirectory
             }
 
                 listener.BaseFileName.Should.BeEquivalentTo("testHost")
@@ -37,7 +58,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 listener.DiskSpaceExhaustedBehavior = DiskSpaceExhaustedOption.ThrowException
                 listener.DiskSpaceExhaustedBehavior.Should.Be(DiskSpaceExhaustedOption.ThrowException)
 
-                listener.FullLogFileName.Should.BeEquivalentTo(Path.Combine(CreateTempDirectory(), "testHost.log"))
+                listener.FullLogFileName.Should.BeEquivalentTo(Path.Combine(testDirectory, "testHost.log"))
 
                 listener.LogFileCreationSchedule.Should.Be(LogFileCreationScheduleOption.None)
                 listener.LogFileCreationSchedule = LogFileCreationScheduleOption.Daily
@@ -63,13 +84,16 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <Fact>
         Public Sub LocationPropertyWithCommonApplicationDirectoryLocationTest()
+            If DirectoryHasPermission(Application.CommonAppDataPath) Then
+                Dim fullLogFileName As String
+                Using listener As New FileLogTraceListener() With {
+                    .Location = LogFileLocation.CommonApplicationDirectory}
 
-            Using listener As New FileLogTraceListener() With {
-                .Location = LogFileLocation.CommonApplicationDirectory}
-
-                listener.FullLogFileName.Should.StartWith(Application.CommonAppDataPath)
-            End Using
-
+                    fullLogFileName = listener.FullLogFileName
+                    fullLogFileName.Should.StartWith(Application.CommonAppDataPath)
+                End Using
+                File.Delete(fullLogFileName)
+            End If
         End Sub
 
         <Fact>
@@ -77,8 +101,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim testDirectory As String = CreateTempDirectory()
             Using listener As New FileLogTraceListener() With {
                 .Location = LogFileLocation.Custom,
-                .CustomLocation = testDirectory
-            }
+                .CustomLocation = testDirectory}
+
                 listener.Location.Should.Be(LogFileLocation.Custom)
                 listener.CustomLocation.Should.Be(testDirectory)
             End Using
@@ -86,35 +110,45 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <Fact>
         Public Sub LocationPropertyWithExecutableDirectoryLocationTest()
+            If DirectoryHasPermission(Path.GetDirectoryName(Application.ExecutablePath)) Then
+                Dim fullLogFileName As String
+                Using listener As New FileLogTraceListener() With {
+                     .Location = LogFileLocation.ExecutableDirectory}
 
-            Using listener As New FileLogTraceListener() With {
-                .Location = LogFileLocation.ExecutableDirectory}
-
-                listener.FullLogFileName.Should.StartWith(Path.GetDirectoryName(Application.ExecutablePath))
-            End Using
-
+                    fullLogFileName = listener.FullLogFileName
+                    fullLogFileName.Should.StartWith(Path.GetDirectoryName(Application.ExecutablePath))
+                End Using
+                File.Delete(fullLogFileName)
+            End If
         End Sub
 
         <Fact>
         Public Sub LocationPropertyWithLocalUserApplicationDirectoryLocationTest()
+            If DirectoryHasPermission(Application.UserAppDataPath) Then
+                Dim fullLogFileName As String
+                Using listener As New FileLogTraceListener() With {
+                    .Location = LogFileLocation.LocalUserApplicationDirectory}
 
-            Using listener As New FileLogTraceListener() With {
-                .Location = LogFileLocation.LocalUserApplicationDirectory}
-
-                listener.FullLogFileName.Should.StartWith(Application.UserAppDataPath)
-            End Using
-
+                    fullLogFileName = listener.FullLogFileName
+                    fullLogFileName.Should.StartWith(Application.UserAppDataPath)
+                End Using
+                File.Delete(fullLogFileName)
+            End If
         End Sub
 
         <Fact>
         Public Sub LocationPropertyWithTempDirectoryLocationTest()
+            If DirectoryHasPermission(Application.UserAppDataPath) Then
+                Dim fullLogFileName As String
 
-            Using listener As New FileLogTraceListener() With {
+                Using listener As New FileLogTraceListener() With {
                     .Location = LogFileLocation.TempDirectory}
 
-                listener.FullLogFileName.Should.StartWith(Path.GetTempPath)
-            End Using
-
+                    fullLogFileName = listener.FullLogFileName
+                    fullLogFileName.Should.StartWith(Path.GetTempPath)
+                End Using
+                File.Delete(fullLogFileName)
+            End If
         End Sub
 
     End Class
