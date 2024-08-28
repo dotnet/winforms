@@ -2,7 +2,7 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Namespace Microsoft.VisualBasic.Logging
-    Public Class FileLogTraceListener
+    Partial Public Class FileLogTraceListener
         Private Const DATE_FORMAT As String = "yyyy-MM-dd"
 
         Private Const DEFAULT_NAME As String = "FileLogTraceListener"
