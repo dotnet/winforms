@@ -12,7 +12,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
     Public Class FileLogTraceListenerTests
         Inherits VbFileCleanupTestBase
 
-        Private Shared Function DirectoryHasPermission(DirectoryPath As String) As Boolean
+        Private Shared Function DirectoryIsAccessable(DirectoryPath As String) As Boolean
             If String.IsNullOrWhiteSpace(DirectoryPath) Then
                 Return False
             End If
@@ -23,10 +23,13 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     Return False
                 End If
                 Dim path As String = IO.Path.Combine(DirectoryPath, GetUniqueFileName())
-                Dim stream As FileStream = File.Create(path)
-                stream.Close()
+                Using stream As FileStream = File.Create(path)
+                    stream.Close()
+                End Using
                 File.Delete(path)
             Catch s As Security.SecurityException
+                Return False
+            Catch
                 Return False
             End Try
             Return True
@@ -84,7 +87,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <Fact>
         Public Sub LocationPropertyWithCommonApplicationDirectoryLocationTest()
-            If DirectoryHasPermission(Application.CommonAppDataPath) Then
+            If DirectoryIsAccessable(Application.CommonAppDataPath) Then
                 Dim fullLogFileName As String
                 Using listener As New FileLogTraceListener() With {
                     .Location = LogFileLocation.CommonApplicationDirectory}
@@ -110,7 +113,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <Fact>
         Public Sub LocationPropertyWithExecutableDirectoryLocationTest()
-            If DirectoryHasPermission(Path.GetDirectoryName(Application.ExecutablePath)) Then
+            If DirectoryIsAccessable(Path.GetDirectoryName(Application.ExecutablePath)) Then
                 Dim fullLogFileName As String
                 Using listener As New FileLogTraceListener() With {
                      .Location = LogFileLocation.ExecutableDirectory}
@@ -124,7 +127,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <Fact>
         Public Sub LocationPropertyWithLocalUserApplicationDirectoryLocationTest()
-            If DirectoryHasPermission(Application.UserAppDataPath) Then
+            If DirectoryIsAccessable(Application.UserAppDataPath) Then
                 Dim fullLogFileName As String
                 Using listener As New FileLogTraceListener() With {
                     .Location = LogFileLocation.LocalUserApplicationDirectory}
@@ -138,7 +141,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <Fact>
         Public Sub LocationPropertyWithTempDirectoryLocationTest()
-            If DirectoryHasPermission(Application.UserAppDataPath) Then
+            If DirectoryIsAccessable(Application.UserAppDataPath) Then
                 Dim fullLogFileName As String
 
                 Using listener As New FileLogTraceListener() With {
