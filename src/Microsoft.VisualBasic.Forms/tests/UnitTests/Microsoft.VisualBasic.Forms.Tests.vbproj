@@ -18,7 +18,6 @@
 
   <ItemGroup>
     <Compile Remove="System\Windows\Forms\FileIoProxyTests.vb" />
-    <Compile Remove="System\Windows\Forms\FileLogTraceListenerTests.vb" />
   </ItemGroup>
 
   <ItemGroup>
