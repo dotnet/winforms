@@ -168,7 +168,7 @@ End Namespace
             DefaultVerifier) With
             {
                 .TestCode = ProblematicCode,
-                .referenceAssemblies = referenceAssemblies
+                .ReferenceAssemblies = referenceAssemblies
             }
 
         context.TestState.OutputKind = OutputKind.WindowsApplication
@@ -184,7 +184,7 @@ End Namespace
             DefaultVerifier) With
             {
                 .TestCode = CorrectCode,
-                .referenceAssemblies = referenceAssemblies
+                .ReferenceAssemblies = referenceAssemblies
             }
 
         context.TestState.OutputKind = OutputKind.WindowsApplication
@@ -202,7 +202,7 @@ End Namespace
             {
                 .TestCode = ProblematicCode,
                 .FixedCode = FixedCode,
-                .referenceAssemblies = referenceAssemblies,
+                .ReferenceAssemblies = referenceAssemblies,
                 .NumberOfFixAllIterations = 2
             }
 
