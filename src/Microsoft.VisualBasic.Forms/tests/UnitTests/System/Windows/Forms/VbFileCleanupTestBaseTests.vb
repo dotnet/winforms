@@ -15,9 +15,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim tempDirectory As String = CreateTempDirectory()
             tempDirectory.Should.StartWith(Path.GetTempPath)
             tempDirectory = CreateTempDirectory()
-            s_testDirectories.Count.Should.Be(1)
+            _testDirectories.Count.Should.Be(1)
             tempDirectory = CreateTempDirectory(lineNumber:=1)
-            s_testDirectories.Count.Should.Be(2)
+            _testDirectories.Count.Should.Be(2)
         End Sub
 
         <Fact>
@@ -33,7 +33,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim testDirectory As String = CreateTempDirectory()
             Dim testFile1 As String = GetUniqueFileNameWithPath(testDirectory)
             testFile1.Should.NotBe(GetUniqueFileNameWithPath(testDirectory))
-            testDirectory.Should.Be(IO.Path.GetDirectoryName(testFile1))
+            testDirectory.Should.Be(Path.GetDirectoryName(testFile1))
             File.Exists(testFile1).Should.BeFalse()
         End Sub
 

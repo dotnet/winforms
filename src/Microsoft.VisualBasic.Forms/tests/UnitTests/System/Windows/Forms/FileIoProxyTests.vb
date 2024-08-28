@@ -20,7 +20,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Private ReadOnly _fileSystem As FileSystemProxy = New Devices.ServerComputer().FileSystem
 
         Private ReadOnly _sampleDataCVS As String =
-                            "Index,Customer Id,First Name,Last Name,Company,City,Country" & vbCrLf &
+            "Index,Customer Id,First Name,Last Name,Company,City,Country" & vbCrLf &
             "1,DD37Cf93aecA6Dc,Sheryl,Baxter,Rasmussen Group,East Leonard,Chile"
 
         Private ReadOnly _sampleDataFixed As String =
