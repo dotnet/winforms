@@ -10,7 +10,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
     Public Class VbFileCleanupTestBaseTests
         Inherits VbFileCleanupTestBase
 
-        <Fact>
+        <WinFormsFact>
         Public Sub CreateTempDirectoryTest()
             Dim tempDirectory As String = CreateTempDirectory()
             tempDirectory.Should.StartWith(Path.GetTempPath)
@@ -20,7 +20,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             _testDirectories.Count.Should.Be(2)
         End Sub
 
-        <Fact>
+        <WinFormsFact>
         Public Sub CreateTempFileTest()
             Dim tempDirectory As String = CreateTempDirectory()
             CreateTempFile(tempDirectory).Should.StartWith(Path.GetTempPath)
@@ -28,7 +28,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             CreateTempFile(tempDirectory, "Testing1.Txt").Should.EndWith("Testing1.Txt")
         End Sub
 
-        <Fact>
+        <WinFormsFact>
         Public Sub GetTestFileNameWithPathTest()
             Dim testDirectory As String = CreateTempDirectory()
             Dim testFile1 As String = GetUniqueFileNameWithPath(testDirectory)

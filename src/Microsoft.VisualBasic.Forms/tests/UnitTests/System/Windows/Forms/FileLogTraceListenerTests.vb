@@ -36,7 +36,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Return True
         End Function
 
-        <Fact>
+        <WinFormsFact>
         Public Sub ListenerPropertiesTest()
             Dim testDirectory As String = CreateTempDirectory()
             Using listener As New FileLogTraceListener() With {
@@ -82,11 +82,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 listener.Encoding.Should.Be(Encoding.UTF8)
                 listener.Encoding = Text.Encoding.ASCII
-                listener.Encoding.EncodingName.Should.Be(Encoding.ASCII)
+                listener.Encoding.Should.Be(Encoding.ASCII)
             End Using
         End Sub
 
-        <Fact>
+        <WinFormsFact>
         Public Sub LocationPropertyWithCommonApplicationDirectoryLocationTest()
             Dim testCode As Action =
                 Sub()
@@ -105,7 +105,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End If
         End Sub
 
-        <Fact>
+        <WinFormsFact>
         Public Sub LocationPropertyWithCustomLocationTest()
             Dim testDirectory As String = CreateTempDirectory()
             Using listener As New FileLogTraceListener() With {
@@ -117,7 +117,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Using
         End Sub
 
-        <Fact>
+        <WinFormsFact(Skip:="Causes test run to abort, must be run manually.")>
         Public Sub LocationPropertyWithExecutableDirectoryLocationTest()
             Dim testCode As Action =
                 Sub()
@@ -136,7 +136,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End If
         End Sub
 
-        <Fact>
+        <WinFormsFact>
         Public Sub LocationPropertyWithLocalUserApplicationDirectoryLocationTest()
             Dim testCode As Action =
                 Sub()
@@ -154,7 +154,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End If
         End Sub
 
-        <Fact>
+        <WinFormsFact>
         Public Sub LocationPropertyWithTempDirectoryLocationTest()
             Dim testCode As Action =
                 Sub()
