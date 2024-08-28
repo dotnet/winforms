@@ -2,6 +2,7 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.IO
+Imports System.Text
 Imports System.Windows.Forms
 Imports FluentAssertions
 Imports Microsoft.VisualBasic.Logging
@@ -67,35 +68,40 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 listener.LogFileCreationSchedule = LogFileCreationScheduleOption.Daily
                 listener.LogFileCreationSchedule.Should.Be(LogFileCreationScheduleOption.Daily)
 
-                listener.MaxFileSize.Should.Be(5_000_000)
-                listener.MaxFileSize = 500_000
-                listener.MaxFileSize.Should.Be(500_000)
+                listener.MaxFileSize.Should.Be(5_000_000L)
+                listener.MaxFileSize = 500_000L
+                listener.MaxFileSize.Should.Be(500_000L)
 
-                listener.ReserveDiskSpace.Should.Be(10_000_000)
-                listener.ReserveDiskSpace = 1_000_000
-                listener.ReserveDiskSpace.Should.Be(1_000_000)
+                listener.ReserveDiskSpace.Should.Be(10_000_000L)
+                listener.ReserveDiskSpace = 1_000_000L
+                listener.ReserveDiskSpace.Should.Be(1_000_000L)
 
                 listener.Delimiter.Should.Be(vbTab)
                 listener.Delimiter = ";"
                 listener.Delimiter.Should.Be(";")
 
-                listener.Encoding.EncodingName.Should.Be("Unicode (UTF-8)")
+                listener.Encoding.Should.Be(Encoding.UTF8)
                 listener.Encoding = Text.Encoding.ASCII
-                listener.Encoding.EncodingName.Should.Be("US-ASCII")
+                listener.Encoding.EncodingName.Should.Be(Encoding.ASCII)
             End Using
         End Sub
 
         <Fact>
         Public Sub LocationPropertyWithCommonApplicationDirectoryLocationTest()
-            If DirectoryIsAccessable(Application.CommonAppDataPath) Then
-                Dim fullLogFileName As String
-                Using listener As New FileLogTraceListener() With {
-                    .Location = LogFileLocation.CommonApplicationDirectory}
+            Dim testCode As Action =
+                Sub()
+                    Dim fullLogFileName As String
+                    Using listener As New FileLogTraceListener() With {
+                        .Location = LogFileLocation.CommonApplicationDirectory}
 
-                    fullLogFileName = listener.FullLogFileName
-                    fullLogFileName.Should.StartWith(Application.CommonAppDataPath)
-                End Using
-                File.Delete(fullLogFileName)
+                        fullLogFileName = listener.FullLogFileName
+                        fullLogFileName.Should.StartWith(Application.CommonAppDataPath)
+                    End Using
+                    File.Delete(fullLogFileName)
+                End Sub
+
+            If DirectoryIsAccessable(Application.CommonAppDataPath) Then
+                testCode.Should.NotThrow()
             End If
         End Sub
 
@@ -113,44 +119,56 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <Fact>
         Public Sub LocationPropertyWithExecutableDirectoryLocationTest()
-            If DirectoryIsAccessable(Path.GetDirectoryName(Application.ExecutablePath)) Then
-                Dim fullLogFileName As String
-                Using listener As New FileLogTraceListener() With {
-                     .Location = LogFileLocation.ExecutableDirectory}
+            Dim testCode As Action =
+                Sub()
+                    Dim fullLogFileName As String
+                    Using listener As New FileLogTraceListener() With {
+                        .Location = LogFileLocation.ExecutableDirectory}
 
-                    fullLogFileName = listener.FullLogFileName
-                    fullLogFileName.Should.StartWith(Path.GetDirectoryName(Application.ExecutablePath))
-                End Using
-                File.Delete(fullLogFileName)
+                        fullLogFileName = listener.FullLogFileName
+                        fullLogFileName.Should.StartWith(Path.GetDirectoryName(Application.ExecutablePath))
+                    End Using
+                    File.Delete(fullLogFileName)
+                End Sub
+
+            If DirectoryIsAccessable(Path.GetDirectoryName(Application.ExecutablePath)) Then
+                testCode.Should.NotThrow()
             End If
         End Sub
 
         <Fact>
         Public Sub LocationPropertyWithLocalUserApplicationDirectoryLocationTest()
-            If DirectoryIsAccessable(Application.UserAppDataPath) Then
-                Dim fullLogFileName As String
-                Using listener As New FileLogTraceListener() With {
-                    .Location = LogFileLocation.LocalUserApplicationDirectory}
+            Dim testCode As Action =
+                Sub()
+                    Dim fullLogFileName As String
+                    Using listener As New FileLogTraceListener() With {
+                        .Location = LogFileLocation.LocalUserApplicationDirectory}
 
-                    fullLogFileName = listener.FullLogFileName
-                    fullLogFileName.Should.StartWith(Application.UserAppDataPath)
-                End Using
-                File.Delete(fullLogFileName)
+                        fullLogFileName = listener.FullLogFileName
+                        fullLogFileName.Should.StartWith(Application.UserAppDataPath)
+                    End Using
+                    File.Delete(fullLogFileName)
+                End Sub
+            If DirectoryIsAccessable(Application.UserAppDataPath) Then
+                testCode.Should.NotThrow()
             End If
         End Sub
 
         <Fact>
         Public Sub LocationPropertyWithTempDirectoryLocationTest()
+            Dim testCode As Action =
+                Sub()
+                    Dim fullLogFileName As String
+                    Using listener As New FileLogTraceListener() With {
+                        .Location = LogFileLocation.TempDirectory}
+
+                        fullLogFileName = listener.FullLogFileName
+                        fullLogFileName.Should.StartWith(Path.GetTempPath)
+                    End Using
+                    File.Delete(fullLogFileName)
+                End Sub
             If DirectoryIsAccessable(Application.UserAppDataPath) Then
-                Dim fullLogFileName As String
-
-                Using listener As New FileLogTraceListener() With {
-                    .Location = LogFileLocation.TempDirectory}
-
-                    fullLogFileName = listener.FullLogFileName
-                    fullLogFileName.Should.StartWith(Path.GetTempPath)
-                End Using
-                File.Delete(fullLogFileName)
+                testCode.Should.NotThrow()
             End If
         End Sub
 
