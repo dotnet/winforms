@@ -20,7 +20,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Private ReadOnly _fileSystem As FileSystemProxy = New Devices.ServerComputer().FileSystem
 
         Private ReadOnly _sampleDataCVS As String =
-                            "Index,Customer Id,First Name,Last Name,Company,City,Country" & vbCrLf &
+            "Index,Customer Id,First Name,Last Name,Company,City,Country" & vbCrLf &
             "1,DD37Cf93aecA6Dc,Sheryl,Baxter,Rasmussen Group,East Leonard,Chile"
 
         Private ReadOnly _sampleDataFixed As String =
@@ -159,6 +159,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim testDirectory As String = Path.Combine(BaseTempPath, GetUniqueFileName)
             _fileSystem.CreateDirectory(testDirectory)
             Directory.Exists(testDirectory).Should.BeTrue()
+            Directory.Delete(testDirectory)
+            Directory.Exists(testDirectory).Should.Befalse()
         End Sub
 
         <WinFormsFact>
@@ -356,6 +358,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim tmpFileName As String = _fileSystem.GetTempFileName
             File.Exists(tmpFileName).Should.BeTrue()
             File.Delete(tmpFileName)
+            File.Exists(tmpFileName).Should.BeFalse()
         End Sub
 
         <WinFormsFact>
