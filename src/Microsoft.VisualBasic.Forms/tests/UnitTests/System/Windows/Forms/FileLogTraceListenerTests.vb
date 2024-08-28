@@ -26,7 +26,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Using listener As New FileLogTraceListener() With {
                 .Location = LogFileLocation.TempDirectory}
 
-                listener.FullLogFileName.Should.StartWith(IO.Path.GetTempPath)
+                listener.FullLogFileName.Should.StartWith(Path.GetTempPath)
             End Using
 
             Using listener As New FileLogTraceListener() With {
@@ -78,7 +78,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 listener.DiskSpaceExhaustedBehavior = DiskSpaceExhaustedOption.ThrowException
                 listener.DiskSpaceExhaustedBehavior.Should.Be(DiskSpaceExhaustedOption.ThrowException)
 
-                listener.FullLogFileName.Should.BeEquivalentTo(IO.Path.Combine(testDirectory, "testHost.log"))
+                listener.FullLogFileName.Should.BeEquivalentTo(Path.Combine(testDirectory, "testHost.log"))
 
                 listener.LogFileCreationSchedule.Should.Be(LogFileCreationScheduleOption.None)
                 listener.LogFileCreationSchedule = LogFileCreationScheduleOption.Daily

@@ -11,7 +11,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         Private Shared ReadOnly s_baseTempPath As String = Path.Combine(Path.GetTempPath, "DownLoadTest9d9e3a8-7a46-4333-a0eb-4faf76994801")
 
-        Friend ReadOnly _testDirectories As New List(Of String)
+        Friend ReadOnly _testDirectories As New HashSet(Of String)
 
         Protected Overrides Sub Finalize()
             Dispose(disposing:=False)
@@ -51,9 +51,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 folder = Path.Combine(BaseTempPath, memberName)
             End If
 
-            If Not _testDirectories.Contains(folder) Then
+            If _testDirectories.Add(folder) Then
                 Directory.CreateDirectory(folder)
-                _testDirectories.Add(folder)
             End If
 
             Return folder
