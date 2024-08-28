@@ -8,7 +8,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
     Public Class GetUniqueUtilitiesTests
 
-        <Fact>
+        <WinFormsFact>
         Public Sub GetUniqueFileNameTest()
             Dim unexpected As String = GetUniqueFileName()
             unexpected.Should.NotBe(GetUniqueFileName())
@@ -28,7 +28,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Next
         End Sub
 
-        <Fact>
+        <WinFormsFact>
         Public Sub GetUniqueTextTest()
             For i As Integer = 0 To 99
                 Dim unexpected As String = GetUniqueText()
