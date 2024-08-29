@@ -45,7 +45,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         .Location = LogFileLocation.Custom,
                         .CustomLocation = testDirectory}
 
-                        listener.BaseFileName.Should.Match(Of String)(Function(p As String) p.Equals("testHost", StringComparison.OrdinalIgnoreCase) OrElse p.Equals("dotNet", StringComparison.OrdinalIgnoreCase))
+                        Dim expectedBaseFileName As String = Path.GetFileNameWithoutExtension(Application.ExecutablePath)
+                        listener.BaseFileName.Should.BeEquivalentTo(expectedBaseFileName)
 
                         listener.AutoFlush.Should.BeFalse()
                         listener.AutoFlush = True
@@ -63,7 +64,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         listener.DiskSpaceExhaustedBehavior = DiskSpaceExhaustedOption.ThrowException
                         listener.DiskSpaceExhaustedBehavior.Should.Be(DiskSpaceExhaustedOption.ThrowException)
 
-                        listener.FullLogFileName.Should.BeEquivalentTo(Path.Combine(testDirectory, "testHost.log"))
+                        listener.FullLogFileName.Should.BeEquivalentTo(Path.Combine(testDirectory, expectedBaseFileName & ".log"))
 
                         listener.LogFileCreationSchedule.Should.Be(LogFileCreationScheduleOption.None)
                         listener.LogFileCreationSchedule = LogFileCreationScheduleOption.Daily
@@ -82,7 +83,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         listener.Delimiter.Should.Be(";")
 
                         listener.Encoding.Should.Be(Encoding.UTF8)
-                        listener.Encoding = Text.Encoding.ASCII
+                        listener.Encoding = Encoding.ASCII
                         listener.Encoding.Should.Be(Encoding.ASCII)
                     End Using
                 End Sub
