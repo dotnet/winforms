@@ -29,6 +29,18 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsFact>
+        Public Sub DirectoryIsAccessibleWithNonexistentPath()
+            Dim directoryPath As String = Path.Combine(CreateTempDirectory(), GetUniqueFileName)
+            DirectoryIsAccessible(directoryPath).Should.BeFalse()
+        End Sub
+
+        <WinFormsTheory>
+        <ClassData(GetType(NullOrEmptyPathTestData))>
+        Public Sub DirectoryIsAccessibleWithNullOrEmptyPathTests(directoryPath As String)
+            DirectoryIsAccessible(directoryPath).Should.BeFalse()
+        End Sub
+
+        <WinFormsFact>
         Public Sub GetTestFileNameWithPathTest()
             Dim testDirectory As String = CreateTempDirectory()
             Dim testFile1 As String = GetUniqueFileNameWithPath(testDirectory)
