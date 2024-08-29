@@ -81,6 +81,29 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Return filename
         End Function
 
+        Friend Shared Function DirectoryIsAccessible(directoryPath As String) As Boolean
+            If String.IsNullOrWhiteSpace(directoryPath) Then
+                Return False
+            End If
+
+            Try
+                Dim info As New DirectoryInfo(directoryPath)
+                If Not info.Exists Then
+                    Return False
+                End If
+                Dim path As String = IO.Path.Combine(directoryPath, GetUniqueFileName())
+                Using stream As FileStream = File.Create(path)
+                    stream.Close()
+                End Using
+                File.Delete(path)
+            Catch s As Security.SecurityException
+                Return False
+            Catch
+                Return False
+            End Try
+            Return True
+        End Function
+
         Friend Sub Dispose() Implements IDisposable.Dispose
             Dispose(disposing:=True)
             GC.SuppressFinalize(Me)

@@ -13,29 +13,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
     Public Class FileLogTraceListenerTests
         Inherits VbFileCleanupTestBase
 
-        Private Shared Function DirectoryIsAccessible(DirectoryPath As String) As Boolean
-            If String.IsNullOrWhiteSpace(DirectoryPath) Then
-                Return False
-            End If
-
-            Try
-                Dim info As New DirectoryInfo(DirectoryPath)
-                If Not info.Exists Then
-                    Return False
-                End If
-                Dim path As String = IO.Path.Combine(DirectoryPath, GetUniqueFileName())
-                Using stream As FileStream = File.Create(path)
-                    stream.Close()
-                End Using
-                File.Delete(path)
-            Catch s As Security.SecurityException
-                Return False
-            Catch
-                Return False
-            End Try
-            Return True
-        End Function
-
         <WinFormsFact>
         Public Sub ListenerPropertiesTest()
             Dim testCode As Action =
