@@ -1,7 +1,6 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.MyServices
 
 Namespace Microsoft.VisualBasic.Devices
@@ -95,7 +94,7 @@ Namespace Microsoft.VisualBasic.Devices
         '''  This property returns the primary display screen.
         ''' </summary>
         ''' <value>A <see cref="System.Windows.Forms.Screen"/> object as the primary screen.</value>
-        Public ReadOnly Property Screen() As Screen
+        Public ReadOnly Property Screen() As System.Windows.Forms.Screen
             Get
                 'Don't cache this. The Screen class responds to display resolution changes by nulling out AllScreens, which
                 'PrimaryScreen relies on to find the primary. So we always need to access the latest PrimaryScreen so we
