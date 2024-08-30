@@ -171,7 +171,7 @@ public class MonthCalendarTests : ControlTestBase
         }
     }
 
-    private Point GetCellPositionByDate(MonthCalendar calendar, DateTime dateTime)
+    private static Point GetCellPositionByDate(MonthCalendar calendar, DateTime dateTime)
     {
         MonthCalendarAccessibleObject accessibleObject = (MonthCalendarAccessibleObject)calendar.AccessibilityObject;
         CalendarCellAccessibleObject cell = accessibleObject.TestAccessor().Dynamic.GetCellByDate(dateTime.Date);
