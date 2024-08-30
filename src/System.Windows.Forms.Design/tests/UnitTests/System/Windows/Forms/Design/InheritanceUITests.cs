@@ -76,7 +76,6 @@ public sealed class InheritanceUITests
         glyphRect.Size.Should().Be(glyph.Size);
     }
 
-
     [Theory]
     [InlineData(InheritanceLevel.Inherited, "Inherited control")]
     [InlineData(InheritanceLevel.InheritedReadOnly, "Inherited control (Private)")]
@@ -95,7 +94,6 @@ public sealed class InheritanceUITests
         toolTip.GetToolTip(control).Should().Be(expectedText);
         toolTip.GetToolTip(childControl).Should().Be(expectedText);
     }
-
 
     [Fact]
     public void AddAndRemoveInheritedControl_ShouldSetAndUnsetToolTipText_ForNonSitedChildren()
@@ -121,7 +119,6 @@ public sealed class InheritanceUITests
         toolTip.GetToolTip(sitedChildControl).Should().BeEmpty();
     }
 
-
     [Fact]
     public void Dispose_ShouldDisposeToolTip_And_NotThrowIfToolTipIsNull()
     {
@@ -140,7 +137,6 @@ public sealed class InheritanceUITests
         inheritanceUI = new InheritanceUI();
         inheritanceUI.Invoking(ui => ui.Dispose()).Should().NotThrow();
     }
-
 
     [Fact]
     public void RemoveInheritedControl_ShouldUnsetToolTipText_And_NotThrowIfToolTipIsNull()
@@ -161,8 +157,6 @@ public sealed class InheritanceUITests
         toolTip.GetToolTip(parentControl).Should().BeEmpty();
         toolTip.GetToolTip(sitedChildControl).Should().BeEmpty();
     }
-
-
 }
 
 #nullable disable
