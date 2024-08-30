@@ -99,7 +99,7 @@ Namespace Microsoft.VisualBasic.Devices
                 'Don't cache this. The Screen class responds to display resolution changes by nulling out AllScreens, which
                 'PrimaryScreen relies on to find the primary. So we always need to access the latest PrimaryScreen so we
                 'will get the current resolution reported.
-                Return Screen.PrimaryScreen
+                Return System.Windows.Forms.Screen.PrimaryScreen
             End Get
         End Property
 
