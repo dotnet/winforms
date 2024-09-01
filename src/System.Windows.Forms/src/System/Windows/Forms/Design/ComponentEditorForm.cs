@@ -418,7 +418,7 @@ public partial class ComponentEditorForm : Form
     }
 
     /// <summary>
-    ///  Sets the controls of the form to dirty.  This enables the "apply"
+    ///  Sets the controls of the form to dirty. This enables the "apply"
     ///  button.
     /// </summary>
     internal virtual void SetDirty()

@@ -133,7 +133,7 @@ internal class ListBoxDesigner : ControlDesigner
     }
 
     /// <summary>
-    ///  Raised when a component's name changes.  Here we update the contents of the list box
+    ///  Raised when a component's name changes. Here we update the contents of the list box
     ///  if we are displaying the component's name in it.
     /// </summary>
     private void OnComponentRename(object? sender, ComponentRenameEventArgs e)
@@ -175,7 +175,7 @@ internal class ListBoxDesigner : ControlDesigner
     }
 
     /// <summary>
-    ///  Updates the name being displayed on this control.  This will do nothing if
+    ///  Updates the name being displayed on this control. This will do nothing if
     ///  the control has items in it.
     /// </summary>
     private void UpdateControlName(string name)

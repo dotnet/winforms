@@ -103,7 +103,7 @@ public partial class ListBox
         }
 
         /// <summary>
-        ///  This is the item array that stores our data.  We share this backing store
+        ///  This is the item array that stores our data. We share this backing store
         ///  with the main object collection.
         /// </summary>
         private ItemArray InnerArray
@@ -216,7 +216,7 @@ public partial class ListBox
         }
 
         /// <summary>
-        ///  This method returns if the actual item index is selected.  The index is the index to the MAIN
+        ///  This method returns if the actual item index is selected. The index is the index to the MAIN
         ///  collection, not this one.
         /// </summary>
         internal bool GetSelected(int index)

@@ -103,7 +103,7 @@ internal abstract partial class ButtonBaseAdapter
         /// <summary>
         ///  TextImageInset compensates for two factors: 3d text when the button is disabled,
         ///  and moving text on 3d-look buttons. These factors make the text require a couple
-        ///  more pixels of space.  We inset image by the same amount so they line up.
+        ///  more pixels of space. We inset image by the same amount so they line up.
         /// </summary>
         public int TextImageInset { get; set; } = 2;
 
@@ -504,7 +504,7 @@ internal abstract partial class ButtonBaseAdapter
             }
             else
             {
-                // Rearrange text/image to prevent overlay.  Pack text into maxBounds - space reserved for image.
+                // Rearrange text/image to prevent overlay. Pack text into maxBounds - space reserved for image.
                 Size maxTextSize = LayoutUtils.SubAlignedRegion(maxBounds.Size, ImageSize, textImageRelation);
                 Size textSize = GetTextSize(maxTextSize);
                 Rectangle maxCombinedBounds = maxBounds;
@@ -515,11 +515,11 @@ internal abstract partial class ButtonBaseAdapter
                 Rectangle combinedBounds = LayoutUtils.Align(combinedSize, maxCombinedBounds, ContentAlignment.MiddleCenter);
 
                 // ImageEdge indicates whether the combination of ImageAlign and TextImageRelation place
-                // the image along the edge of the control.  If so, we can increase the space for text.
+                // the image along the edge of the control. If so, we can increase the space for text.
                 bool imageEdge = (AnchorStyles)(ImageAlignToRelation(imageAlign) & textImageRelation) != AnchorStyles.None;
 
                 // TextEdge indicates whether the combination of TextAlign and TextImageRelation place
-                // the text along the edge of the control.  If so, we can increase the space for image.
+                // the text along the edge of the control. If so, we can increase the space for image.
                 bool textEdge = (AnchorStyles)(TextAlignToRelation(textAlign) & textImageRelation) != AnchorStyles.None;
 
                 if (imageEdge)

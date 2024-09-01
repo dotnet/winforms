@@ -71,7 +71,7 @@ public abstract partial class ToolStripItem
         {
             get
             {
-                // This really is the Mnemonic - NOT the shortcut.  E.g. in notepad Edit->Replace is Control+H
+                // This really is the Mnemonic - NOT the shortcut. E.g. in notepad Edit->Replace is Control+H
                 // but the KeyboardShortcut comes up as the mnemonic 'r'.
                 char mnemonic = WindowsFormsUtils.GetMnemonic(_ownerItem.Text, false);
                 if (_ownerItem.IsOnDropDown)

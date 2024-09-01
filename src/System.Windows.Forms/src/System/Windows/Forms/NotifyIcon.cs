@@ -47,7 +47,7 @@ public sealed partial class NotifyIcon : Component
     private bool _doubleClick; // checks if doubleclick is fired
 
     // Visible defaults to false, but the NotifyIconDesigner makes it seem like the default is
-    // true.  We do this because while visible is the more common case, if it was a true default,
+    // true. We do this because while visible is the more common case, if it was a true default,
     // there would be no way to create a hidden NotifyIcon without being visible for a moment.
     private bool _visible;
 

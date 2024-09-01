@@ -171,7 +171,7 @@ internal partial class MergePropertyDescriptor : PropertyDescriptor
             return clonedValue;
         }
 
-        // We failed.  This object's reference will be set on each property.
+        // We failed. This object's reference will be set on each property.
         return value;
     }
 

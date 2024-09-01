@@ -46,7 +46,7 @@ internal partial class DesignerActionUI : IDisposable
     private delegate void ActionChangedEventHandler(object sender, DesignerActionListsChangedEventArgs e);
 
     /// <summary>
-    ///  Constructor that takes a service provider.  This is needed to establish references to the BehaviorService
+    ///  Constructor that takes a service provider. This is needed to establish references to the BehaviorService
     ///  and SelectionService, as well as spin-up the DesignerActionService.
     /// </summary>
     public DesignerActionUI(IServiceProvider serviceProvider, Adorner containerAdorner)
@@ -362,7 +362,7 @@ internal partial class DesignerActionUI : IDisposable
     }
 
     /// <summary>
-    ///  This event is fired by the DesignerActionService in response to a DesignerActionCollection changing.  The event args contains information about the related object, the type of change (added or removed) and the remaining DesignerActionCollection for the object. Note that when new DesignerActions are added, if the related control/ is not yet parented - we add these actions to a "delay" list and they are later created when the control is finally parented.
+    ///  This event is fired by the DesignerActionService in response to a DesignerActionCollection changing. The event args contains information about the related object, the type of change (added or removed) and the remaining DesignerActionCollection for the object. Note that when new DesignerActions are added, if the related control/ is not yet parented - we add these actions to a "delay" list and they are later created when the control is finally parented.
     /// </summary>
     private void OnDesignerActionsChanged(object sender, DesignerActionListsChangedEventArgs e)
     {

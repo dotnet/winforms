@@ -16,13 +16,13 @@ namespace System.Windows.Forms.Design.Behavior;
 /// <summary>
 ///  The BehaviorService essentially manages all things UI in the designer.
 ///  When the BehaviorService is created it adds a transparent window over the
-///  designer frame.  The BehaviorService can then use this window to render UI
-///  elements (called Glyphs) as well as catch all mouse messages.  By doing
-///  so - the BehaviorService can control designer behavior.  The BehaviorService
-///  supports a BehaviorStack.  'Behavior' objects can be pushed onto this stack.
+///  designer frame. The BehaviorService can then use this window to render UI
+///  elements (called Glyphs) as well as catch all mouse messages. By doing
+///  so - the BehaviorService can control designer behavior. The BehaviorService
+///  supports a BehaviorStack. 'Behavior' objects can be pushed onto this stack.
 ///  When a message is intercepted via the transparent window, the BehaviorService
-///  can send the message to the Behavior at the top of the stack.  This allows
-///  for different UI modes depending on the currently pushed Behavior.  The
+///  can send the message to the Behavior at the top of the stack. This allows
+///  for different UI modes depending on the currently pushed Behavior. The
 ///  BehaviorService is used to render all 'Glyphs': selection borders, grab handles,
 ///  smart tags etc... as well as control many of the design-time behaviors: dragging,
 ///  selection, snap lines, etc...
@@ -110,7 +110,7 @@ public sealed partial class BehaviorService : IDisposable
     internal bool HasCapture => _captureBehavior is not null;
 
     /// <summary>
-    ///  Returns the LayoutMode setting of the current designer session.  Either SnapLines or SnapToGrid.
+    ///  Returns the LayoutMode setting of the current designer session. Either SnapLines or SnapToGrid.
     /// </summary>
     internal bool UseSnapLines
     {
@@ -359,19 +359,19 @@ public sealed partial class BehaviorService : IDisposable
     }
 
     /// <summary>
-    ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refresh of all Adorners
+    ///  Invalidates the BehaviorService's AdornerWindow. This will force a refresh of all Adorners
     ///  and, in turn, all Glyphs.
     /// </summary>
     public void Invalidate() => _adornerWindow.InvalidateAdornerWindow();
 
     /// <summary>
-    ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refresh of all Adorners
+    ///  Invalidates the BehaviorService's AdornerWindow. This will force a refresh of all Adorners
     ///  and, in turn, all Glyphs.
     /// </summary>
     public void Invalidate(Rectangle rect) => _adornerWindow.InvalidateAdornerWindow(rect);
 
     /// <summary>
-    ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refresh of all Adorners
+    ///  Invalidates the BehaviorService's AdornerWindow. This will force a refresh of all Adorners
     ///  and, in turn, all Glyphs.
     /// </summary>
     public void Invalidate(Region r) => _adornerWindow.InvalidateAdornerWindow(r);
@@ -422,7 +422,7 @@ public sealed partial class BehaviorService : IDisposable
     }
 
     /// <summary>
-    ///  Pushes a Behavior object onto the BehaviorStack.  This is often done through hit-tested Glyph.
+    ///  Pushes a Behavior object onto the BehaviorStack. This is often done through hit-tested Glyph.
     /// </summary>
     public void PushBehavior(Behavior behavior)
     {
@@ -440,7 +440,7 @@ public sealed partial class BehaviorService : IDisposable
 
     /// <summary>
     ///  Pushes a Behavior object onto the BehaviorStack and assigns mouse capture to the behavior.
-    ///  This is often done through hit-tested Glyph.  If a behavior calls this the behavior's OnLoseCapture
+    ///  This is often done through hit-tested Glyph. If a behavior calls this the behavior's OnLoseCapture
     ///  will be called if mouse capture is lost.
     /// </summary>
     public void PushCaptureBehavior(Behavior behavior)

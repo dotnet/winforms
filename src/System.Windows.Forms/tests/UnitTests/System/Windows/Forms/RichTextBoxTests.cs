@@ -10653,7 +10653,7 @@ public partial class RichTextBoxTests
         Assert.Equal(0, createdCallCount);
     }
 
-    // DrawToBitmap doesn't work for this control, so we should hide it.  We'll
+    // DrawToBitmap doesn't work for this control, so we should hide it.We'll
     // still call base so that this has a chance to work if it can.
     [WinFormsFact]
     public void RichTextBox_DrawToBitmap_Invoke_Success()

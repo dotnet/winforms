@@ -167,7 +167,7 @@ public partial class ColumnHeader : Component, ICloneable
     internal int DisplayIndexInternal { get; set; } = -1;
 
     /// <summary>
-    ///  The index of this column.  This index does not necessarily correspond
+    ///  The index of this column. This index does not necessarily correspond
     ///  to the current visual position of the column in the ListView, because the
     ///  user may order columns if the allowColumnReorder property is true.
     /// </summary>
@@ -257,7 +257,7 @@ public partial class ColumnHeader : Component, ICloneable
     }
 
     /// <summary>
-    ///  Returns the ListView control that this column is displayed in.  May be null
+    ///  Returns the ListView control that this column is displayed in. May be null
     /// </summary>
     [Browsable(false)]
     public ListView? ListView { get; private set; }

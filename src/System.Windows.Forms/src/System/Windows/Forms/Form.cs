@@ -105,7 +105,7 @@ public partial class Form : ContainerControl
     private static Icon? s_defaultIcon;
     private static readonly Lock s_internalSyncObject = new();
 
-    // Property store keys for properties.  The property store allocates most efficiently
+    // Property store keys for properties. The property store allocates most efficiently
     // in groups of four, so we try to lump properties in groups of four based on how
     // likely they are going to be used in a group.
 
@@ -337,7 +337,7 @@ public partial class Form : ContainerControl
     }
 
     /// <summary>
-    ///  Property to be used internally.  See comments a on ActiveMdiChild property.
+    ///  Property to be used internally. See comments a on ActiveMdiChild property.
     /// </summary>
     internal Form? ActiveMdiChildInternal
     {
@@ -352,7 +352,7 @@ public partial class Form : ContainerControl
         }
     }
 
-    // we don't repaint the mdi child that used to be active any more.  We used to do this in Activated, but no
+    // we don't repaint the mdi child that used to be active any more. We used to do this in Activated, but no
     // longer do because of added event Deactivate.
     private Form? FormerlyActiveMdiChild
     {
@@ -482,8 +482,8 @@ public partial class Form : ContainerControl
 
         set
         {
-            // Only allow the set when not in designmode, this prevents us from
-            // preserving an old value.  The form design should prevent this for
+            // Only allow the set when not in DesignMode, this prevents us from
+            // preserving an old value. The form design should prevent this for
             // us by shadowing this property, so we just assert that the designer
             // is doing its job.
             //
@@ -575,7 +575,7 @@ public partial class Form : ContainerControl
 
                 if (toLayout is not null)
                 {
-                    // DefaultLayout does not keep anchor information until it needs to.  When
+                    // DefaultLayout does not keep anchor information until it needs to. When
                     // AutoSize became a common property, we could no longer blindly call into
                     // DefaultLayout, so now we do a special InitLayout just for DefaultLayout.
                     if (toLayout.LayoutEngine == DefaultLayout.Instance)
@@ -1825,9 +1825,9 @@ public partial class Form : ContainerControl
                 && _restoreBounds.Y == -1)
             {
                 // Form scaling depends on this property being
-                // set correctly.  In some cases (where the size has not yet been set or
+                // set correctly. In some cases (where the size has not yet been set or
                 // has only been set to the default, restoreBounds will remain uninitialized until the
-                // handle has been created.  In this case, return the current Bounds.
+                // handle has been created. In this case, return the current Bounds.
                 return Bounds;
             }
 
@@ -2969,7 +2969,7 @@ public partial class Form : ContainerControl
         }
 
         // Note: It is possible that we are raising this event when the activeMdiChild is null,
-        // this is the case when the only visible mdi child is being closed.  See DeactivateMdiChild
+        // this is the case when the only visible mdi child is being closed. See DeactivateMdiChild
         // for more info.
         OnMdiChildActivate(EventArgs.Empty);
     }
@@ -3961,7 +3961,7 @@ public partial class Form : ContainerControl
 
     /// <summary>
     ///  When an MDI form is hidden it means its handle has not yet been created or has been destroyed (see
-    ///  SetVisibleCore).  If the handle is recreated, the form will be made visible which should be avoided.
+    ///  SetVisibleCore). If the handle is recreated, the form will be made visible which should be avoided.
     /// </summary>
     internal bool CanRecreateHandle()
     {
@@ -5206,7 +5206,7 @@ public partial class Form : ContainerControl
 
     /// <summary>
     ///  This is called when we have just been restored after being
-    ///  minimized.  At this point we resume our layout.
+    ///  minimized. At this point we resume our layout.
     /// </summary>
     private void ResumeLayoutFromMinimize()
     {
@@ -5365,7 +5365,7 @@ public partial class Form : ContainerControl
     }
 
     /// <summary>
-    ///  Scale this form.  Form overrides this to enforce a maximum / minimum size.
+    ///  Scale this form. Form overrides this to enforce a maximum / minimum size.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
@@ -6110,9 +6110,9 @@ public partial class Form : ContainerControl
     internal override bool SupportsUiaProviders => true;
 
     /// <summary>
-    ///  This is called when we are about to become minimized.  Laying out
+    ///  This is called when we are about to become minimized. Laying out
     ///  while minimized can be a problem because the physical dimensions
-    ///  of the window are very small.  So, we simply suspend.
+    ///  of the window are very small. So, we simply suspend.
     /// </summary>
     private void SuspendLayoutForMinimize()
     {
@@ -6444,7 +6444,7 @@ public partial class Form : ContainerControl
                     ToolStripManager.RevertMergeInternal(mdiControlStrip.MergedMenu, mdiControlStrip, revertMDIControls: true);
 
 #if DEBUG
-                    // double check that RevertMerge doesnt accidentally revert more than it should.
+                    // double check that RevertMerge doesn't accidentally revert more than it should.
                     if (MdiWindowListStrip is not null && MdiWindowListStrip.MergedMenu is not null && MdiWindowListStrip.MergedMenu.MdiWindowListItem is not null)
                     {
                         Debug.Assert(numWindowListItems == MdiWindowListStrip.MergedMenu.MdiWindowListItem.DropDownItems.Count, "Calling RevertMerge modified the mdiwindowlistitem");
@@ -6601,7 +6601,7 @@ public partial class Form : ContainerControl
     private unsafe void UpdateWindowState()
     {
         // This function is called from all over the place, including my personal favorite,
-        // WM_ERASEBKGRND.  Seems that's one of the first messages we get when a user clicks the min/max
+        // WM_ERASEBKGRND. Seems that's one of the first messages we get when a user clicks the min/max
         // button, even before WM_WINDOWPOSCHANGED.
 
         if (!IsHandleCreated)
@@ -6757,7 +6757,7 @@ public partial class Form : ContainerControl
         PInvoke.GetStartupInfo(out STARTUPINFOW si);
 
         // If we've been created from explorer, it may
-        // force us to show up normal.  Force our current window state to
+        // force us to show up normal. Force our current window state to
         // the specified state, unless it's _specified_ max or min
         if (TopLevel && (si.dwFlags & STARTUPINFOW_FLAGS.STARTF_USESHOWWINDOW) != 0)
         {
@@ -6792,7 +6792,7 @@ public partial class Form : ContainerControl
 
                 CalledClosing = false;
 
-                // if this comes back false, someone canceled the close.  we want
+                // if this comes back false, someone canceled the close. we want
                 // to call this here so that we can get the cancel event properly,
                 // and if this is a WM_QUERYENDSESSION, appropriately set the result
                 // based on this call.
@@ -7085,7 +7085,7 @@ public partial class Form : ContainerControl
     {
         base.WndProc(ref m);
 
-        // Destroy the owner window, if we created one.  We
+        // Destroy the owner window, if we created one. We
         // cannot do this in OnHandleDestroyed, because at
         // that point our handle is not actually destroyed so
         // destroying our parent actually causes a recursive
@@ -7118,7 +7118,7 @@ public partial class Form : ContainerControl
             Size clientSize = ClientSize;
 
             // If the grip is not fully visible the grip area could overlap with the system control box; we need to disable
-            // the grip area in this case not to get in the way of the control box.  We only need to check for the client's
+            // the grip area in this case not to get in the way of the control box. We only need to check for the client's
             // height since the window width will be at least the size of the control box which is always bigger than the
             // grip width.
             if (point.X >= (clientSize.Width - SizeGripSize) &&

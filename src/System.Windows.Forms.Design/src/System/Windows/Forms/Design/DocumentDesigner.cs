@@ -57,7 +57,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
     private ToolboxItemCreatorCallback _toolboxCreator;
 
     /// <summary>
-    ///  Property shadow for ContainerControl's AutoScaleDimensions.  We shadow here so it
+    ///  Property shadow for ContainerControl's AutoScaleDimensions. We shadow here so it
     ///  always returns the CurrentAutoScaleDimensions for the control. This way the control's
     ///  state always adapts to the current font / monitor.
     /// </summary>
@@ -85,7 +85,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
     }
 
     /// <summary>
-    ///  Property shadow for ContainerControl's AutoScaleMode.  We shadow here so it
+    ///  Property shadow for ContainerControl's AutoScaleMode. We shadow here so it
     ///  never gets to the control; it can be very distracting if you change the font
     ///  and have the form you're designing suddenly move on you.
     /// </summary>
@@ -122,7 +122,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
     }
 
     /// <summary>
-    ///  BackColor property on control.  We shadow this property at design time.
+    ///  BackColor property on control. We shadow this property at design time.
     /// </summary>
     private Color BackColor
     {
@@ -143,7 +143,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
     }
 
     /// <summary>
-    ///  Location property on control.  We shadow this property at design time.
+    ///  Location property on control. We shadow this property at design time.
     /// </summary>
     [DefaultValue(typeof(Point), "0, 0")]
     private Point Location
@@ -173,7 +173,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
     }
 
     /// <summary>
-    ///  Determines if the tab order UI is active.  When tab order is active, we don't want to forward
+    ///  Determines if the tab order UI is active. When tab order is active, we don't want to forward
     ///  any WndProc messages to the menu editor service (those are all non-selectable components)
     /// </summary>
     private bool TabOrderActive
@@ -356,7 +356,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
                 host.Deactivated -= OnDesignerDeactivate;
 
                 // If the tray wasn't destroyed, then we got some sort of imbalance
-                // in our add/remove calls.  Don't sweat it, but do remove the tray.
+                // in our add/remove calls. Don't sweat it, but do remove the tray.
                 //
                 if (_componentTray is not null)
                 {
@@ -499,7 +499,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
 
     /// <summary>
     ///  Returns an array of Glyph objects representing the selection
-    ///  borders and grab handles for the related Component.  Note that
+    ///  borders and grab handles for the related Component. Note that
     ///  based on 'selType' the Glyphs returned will either: represent
     ///  a fully resizeable selection border with grab handles, a locked
     ///  selection border, or a single 'hidden' selection Glyph.
@@ -579,9 +579,9 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
     }
 
     /// <summary>
-    ///  Examines the current selection for a suitable frame designer.  This
+    ///  Examines the current selection for a suitable frame designer. This
     ///  is used when we are creating a new component so we know what control
-    ///  to parent the component to.  This will always return a frame designer,
+    ///  to parent the component to. This will always return a frame designer,
     ///  and may walk all the way up the control parent chain to this designer
     ///  if it needs to.
     /// </summary>
@@ -592,9 +592,9 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
 
         if (s is not null)
         {
-            // We first try the primary selection.  If that is null
+            // We first try the primary selection. If that is null
             // or isn't a Control, we then walk the set of selected
-            // objects.  Failing all of this, we default to us.
+            // objects. Failing all of this, we default to us.
             //
             object sel = s.PrimarySelection;
 
@@ -651,7 +651,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
     /// <summary>
     ///  Determines if the given tool is supported by this designer.
     ///  If a tool is supported then it will be enabled in the toolbox
-    ///  when this designer regains focus.  Otherwise, it will be disabled.
+    ///  when this designer regains focus. Otherwise, it will be disabled.
     ///  Once a tool is marked as enabled or disabled it may not be
     ///  queried again.
     /// </summary>
@@ -661,7 +661,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
     }
 
     /// <summary>
-    ///  Initializes the designer with the given component.  The designer can
+    ///  Initializes the designer with the given component. The designer can
     ///  get the component's site and request services from it in this call.
     /// </summary>
     public override void Initialize(IComponent component)
@@ -725,10 +725,10 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
             }
 
             // We must do the inheritance scan early, but not so early that we haven't hooked events
-            // to handle invisible components.  We also use the variable "inheritanceService"
+            // to handle invisible components. We also use the variable "inheritanceService"
             // as a check in OnCreateHandle -- we cannot call base.OnCreateHandle if we have
             // not done an inheritance scan yet, because this will cause the base control
-            // class to hook all of the controls we may want to inherit.  So, we do the
+            // class to hook all of the controls we may want to inherit. So, we do the
             // scan, assign the variable, and then call OnCreateHandle if needed.
 
             _inheritanceUI = new InheritanceUI();
@@ -765,7 +765,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
                 toolbox.AddCreator(_toolboxCreator, OleDragDropHandler.NestedToolboxItemFormat, host);
             }
 
-            // Listen for the completed load.  When finished, we need to select the form.  We don'
+            // Listen for the completed load. When finished, we need to select the form. We don'
             // want to do it before we're done, however, or else the dimensions of the selection rectangle
             // could be off because during load, change events are not fired.
             host.LoadComplete += OnLoadComplete;
@@ -775,7 +775,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
         Debug.Assert(component.Site is not null, "Designer host should have given us a site by now.");
         _commandSet = new ControlCommandSet(component.Site);
 
-        // Finally hook the designer view into the frame.  We do this last because the frame may
+        // Finally hook the designer view into the frame. We do this last because the frame may
         // cause the control to be created, and if this happens before the inheritance scan we
         // will subclass the inherited controls before we get a chance to attach designers.
         _frame.Initialize(Control);
@@ -788,7 +788,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
 
     /// <summary>
     ///  Checks to see if the give CLSID is an ActiveX control
-    ///  that we support.  This ignores designtime controls.
+    ///  that we support. This ignores designtime controls.
     /// </summary>
     private static bool IsSupportedActiveXControl(string clsid)
     {
@@ -884,7 +884,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
 
             bool addControl = true;
 
-            // This is the mirror to logic in ParentControlDesigner.  The component should be
+            // This is the mirror to logic in ParentControlDesigner. The component should be
             // added somewhere, and this logic decides where.
 
             // LETS SEE IF WE ARE TOOLSTRIP in which case we want to get added
@@ -976,7 +976,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
     }
 
     /// <summary>
-    ///  Called when the context menu should be displayed.  This displays the document
+    ///  Called when the context menu should be displayed. This displays the document
     ///  context menu.
     /// </summary>
     protected override void OnContextMenu(int x, int y)
@@ -987,7 +987,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
             ISelectionService selSvc = (ISelectionService)GetService(typeof(ISelectionService));
             if (selSvc is not null)
             {
-                // Here we check to see if we're the only component selected.  If not, then
+                // Here we check to see if we're the only component selected. If not, then
                 // we'll display the standard component menu.
                 //
                 if (selSvc.SelectionCount == 1 && selSvc.GetComponentSelected(Component))
@@ -1052,7 +1052,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
     }
 
     /// <summary>
-    ///  Called when our document becomes active.  We paint our form's
+    ///  Called when our document becomes active. We paint our form's
     ///  border the appropriate color here.
     /// </summary>
     private ToolboxItem OnCreateToolboxItem(object serializedData, string format)
@@ -1080,7 +1080,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
     }
 
     /// <summary>
-    ///  Called when our document becomes active.  Here we try to
+    ///  Called when our document becomes active. Here we try to
     ///  select the appropriate toolbox tab.
     /// </summary>
     private void OnDesignerActivate(object source, EventArgs evevent)
@@ -1097,7 +1097,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
     }
 
     /// <summary>
-    ///  Called by the host when we become inactive.  Here we update the
+    ///  Called by the host when we become inactive. Here we update the
     ///  title bar of our form so it's the inactive color.
     /// </summary>
     private unsafe void OnDesignerDeactivate(object sender, EventArgs e)
@@ -1111,7 +1111,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
     }
 
     /// <summary>
-    ///  Called when the designer is finished loading.  Here we select the form.
+    ///  Called when the designer is finished loading. Here we select the form.
     /// </summary>
     private void OnLoadComplete(object sender, EventArgs e)
     {
@@ -1155,7 +1155,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
     }
 
     /// <summary>
-    ///  Called by the selection service when the selection has changed.  We do a number
+    ///  Called by the selection service when the selection has changed. We do a number
     ///  of selection-related things here.
     /// </summary>
     private void OnSelectionChanged(object sender, EventArgs e)
@@ -1189,8 +1189,8 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
                 (int)PInvoke.CHILDID_SELF);
         }
 
-        // See if there are visual controls selected.  If so, we add a context attribute.
-        // Otherwise, we remove the attribute.  We do not count the form.
+        // See if there are visual controls selected. If so, we add a context attribute.
+        // Otherwise, we remove the attribute. We do not count the form.
         IHelpService hs = (IHelpService)GetService(typeof(IHelpService));
 
         if (hs is not null)
@@ -1239,7 +1239,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
     /// <summary>
     ///  Allows a designer to filter the set of properties
     ///  the component it is designing will expose through the
-    ///  TypeDescriptor object.  This method is called
+    ///  TypeDescriptor object. This method is called
     ///  immediately before its corresponding "Post" method.
     ///  If you are overriding this method you should call
     ///  the base implementation before you perform your own
@@ -1331,7 +1331,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
         // Visual inheritance always adds default
         // value attributes that adopt the current values. This
         // isn't right for auto scale, however,because we always
-        // want to write out the auto scale values.  So, we have
+        // want to write out the auto scale values. So, we have
         // to be a bit sleazy here and trick the inheritance engine
         // to think that these properties currently have their
         // default values.
@@ -1343,7 +1343,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
         // Visual inheritance always adds default
         // value attributes that adopt the current values. This
         // isn't right for auto scale, however,because we always
-        // want to write out the auto scale values.  So, we have
+        // want to write out the auto scale values. So, we have
         // to be a bit sleazy here and trick the inheritance engine
         // to think that these properties currently have their
         // default values.
@@ -1356,7 +1356,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
     private bool ShouldSerializeBackColor()
     {
         // We push Color.Empty into our shadow cash during
-        // init and also whenever we are reset.  We do this
+        // init and also whenever we are reset. We do this
         // so we can push a real color into the controls
         // back color to stop it from walking the parent chain.
         // But, we want it to look like we didn't push a color
@@ -1371,7 +1371,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
 
     /// <summary>
     ///  This will be called when the user double-clicks on a
-    ///  toolbox item.  The document designer should create
+    ///  toolbox item. The document designer should create
     ///  a component for the given tool.
     /// </summary>
     protected virtual void ToolPicked(ToolboxItem tool)
@@ -1416,8 +1416,8 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
     /// <internalonly/>
     /// <summary>
     /// The list of technologies that this designer can support
-    /// for its view.  Examples of different technologies are
-    /// WinForms and Web Forms.  Other object models can be
+    /// for its view. Examples of different technologies are
+    /// WinForms and Web Forms. Other object models can be
     /// supported at design time, but they most be able to
     /// provide a view in one of the supported technologies.
     /// </summary>
@@ -1446,7 +1446,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
     /// <summary>
     ///  Determines if the given tool is supported by this designer.
     ///  If a tool is supported then it will be enabled in the toolbox
-    ///  when this designer regains focus.  Otherwise, it will be disabled.
+    ///  when this designer regains focus. Otherwise, it will be disabled.
     ///  Once a tool is marked as enabled or disabled it may not be
     ///  queried again.
     /// </summary>

@@ -15,7 +15,7 @@ internal class ListManagerBindingsCollection : BindingsCollection
     private readonly BindingManagerBase _bindingManagerBase;
 
     /// <summary>
-    ///  ColumnsCollection constructor.  Used only by DataSource.
+    ///  ColumnsCollection constructor. Used only by DataSource.
     /// </summary>
     internal ListManagerBindingsCollection(BindingManagerBase bindingManagerBase) : base()
     {

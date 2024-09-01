@@ -11,7 +11,7 @@ using System.Drawing;
 namespace System.Windows.Forms.Design.Behavior;
 
 /// <summary>
-///  This behavior is associated with the ContainerGlyph offered up by ParentControlDesigner.  This Behavior simply  starts a new dragdrop behavior.
+///  This behavior is associated with the ContainerGlyph offered up by ParentControlDesigner. This Behavior simply  starts a new dragdrop behavior.
 /// </summary>
 internal sealed class ContainerSelectorBehavior : Behavior
 {
@@ -63,7 +63,7 @@ internal sealed class ContainerSelectorBehavior : Behavior
     }
 
     /// <summary>
-    ///  This will be true when we detect a mousedown on our glyph.  The Glyph can use this state to always return 'true' from hittesting indicating that it would like all messages (like mousemove).
+    ///  This will be true when we detect a mousedown on our glyph. The Glyph can use this state to always return 'true' from hittesting indicating that it would like all messages (like mousemove).
     /// </summary>
     public bool OkToMove
     {

@@ -6,9 +6,9 @@ using System.Drawing;
 
 namespace System.Windows.Forms.Layout;
 
-// Some LayoutEngines extend the same properties to their children.  We want
+// Some LayoutEngines extend the same properties to their children. We want
 // these extended properties to retain their value when moved from one container
-// to another.  (For example, set BoxStretchInternal on a control in FlowPanel and then move
+// to another. (For example, set BoxStretchInternal on a control in FlowPanel and then move
 // the control to GridPanel.)  CommonProperties is a place to define keys and
 // accessors for such properties.
 internal partial class CommonProperties
@@ -213,7 +213,7 @@ internal partial class CommonProperties
         bounds.Height = Math.Min(bounds.Height, value.Height);
         element.SetBounds(bounds, BoundsSpecified.Size);
 
-        // element.SetBounds does a SetBoundsCore.  We still need to explicitly refresh parent layout.
+        // element.SetBounds does a SetBoundsCore. We still need to explicitly refresh parent layout.
         LayoutTransaction.DoLayout(element.Container, element, PropertyNames.MaximumSize);
 
         Debug.Assert(GetMaximumSize(element, new Size(-7109, -7107)) == value, "Error detected setting MaximumSize.");
@@ -270,7 +270,7 @@ internal partial class CommonProperties
     ///   <see cref="Control.Width"/>, <see cref="Control.Height"/>, <see cref="Control.Bounds"/>, property. (Its the
     ///   whole reason the <see cref="BoundsSpecified"/> enum exists.) Consider this scenario. You set a <see cref="Button"/>
     ///   to <see cref="DockStyle.Fill"/>, then <see cref="DockStyle.None"/>. When filled, the <see cref="Control.Size"/>
-    ///   changed to 300,300.  When you set it back to <see cref="DockStyle.None"/> the size switches back to 100,23.
+    ///   changed to 300,300. When you set it back to <see cref="DockStyle.None"/> the size switches back to 100,23.
     ///   How does this happen?
     ///  </para>
     ///  <para>
@@ -325,7 +325,7 @@ internal partial class CommonProperties
         }
         else
         {
-            // SetBoundsCore is going to call this a lot with the same bounds.  Avoid the set object
+            // SetBoundsCore is going to call this a lot with the same bounds. Avoid the set object
             // (which indirectly may causes an allocation) if we can.
             if (element.Properties.ContainsKey(s_specifiedBoundsProperty))
             {
@@ -344,7 +344,7 @@ internal partial class CommonProperties
 
     /// <summary>
     ///  Clears the preferred size cached for any control that overrides the internal
-    ///  <see cref="Control.GetPreferredSizeCore(Size)"/> method.  DO NOT CALL DIRECTLY
+    ///  <see cref="Control.GetPreferredSizeCore(Size)"/> method. DO NOT CALL DIRECTLY
     ///  unless it is understood how the size of the control is going to be updated.
     /// </summary>
     internal static void xClearPreferredSizeCache(IArrangedElement element)
@@ -363,7 +363,7 @@ internal partial class CommonProperties
         ArrangedElementCollection controlsCollection = start.Children;
 
         // This may have changed the sizes of our children.
-        // PERFNOTE: This is more efficient than using Foreach.  Foreach
+        // PERFNOTE: This is more efficient than using Foreach. Foreach
         // forces the creation of an array subset enum each time we
         // enumerate
         for (int i = 0; i < controlsCollection.Count; i++)
@@ -470,7 +470,7 @@ internal partial class CommonProperties
     ///  Compat flag for controls that previously sized themselves.
     ///  Some controls rolled their own implementation of AutoSize in V1 for Dock and Anchor
     ///  In V2, the LayoutEngine is the one responsible for sizing the child items when
-    ///  they're AutoSized.  For new layout engines, the controls will let the layout engine
+    ///  they're AutoSized. For new layout engines, the controls will let the layout engine
     ///  size them, but for DefaultLayout, they're left to size themselves.
     /// </summary>
     internal static bool GetSelfAutoSizeInDefaultLayout(IArrangedElement element)
@@ -568,7 +568,7 @@ internal partial class CommonProperties
     }
 
     ///  xGetDock
-    ///  Do not use this.  Use DefaultLayout.GetDock.
+    ///  Do not use this. Use DefaultLayout.GetDock.
     ///  Note that Dock and Anchor are exclusive, so we store their enums in the same section.
     internal static DockStyle xGetDock(IArrangedElement element)
     {
@@ -587,7 +587,7 @@ internal partial class CommonProperties
     }
 
     ///  xSetAnchor -
-    ///  Do not use this.  Use DefaultLayout.SetAnchor.
+    ///  Do not use this. Use DefaultLayout.SetAnchor.
     ///  Note that Dock and Anchor are exclusive, so we store their enums in the same section.
     internal static void xSetAnchor(IArrangedElement element, AnchorStyles value)
     {
@@ -606,7 +606,7 @@ internal partial class CommonProperties
     }
 
     ///  xSetDock
-    ///  Do not use this.  Use DefaultLayout.SetDock.
+    ///  Do not use this. Use DefaultLayout.SetDock.
     ///  Note that Dock and Anchor are exclusive, so we store their enums in the same section.
     internal static void xSetDock(IArrangedElement element, DockStyle value)
     {

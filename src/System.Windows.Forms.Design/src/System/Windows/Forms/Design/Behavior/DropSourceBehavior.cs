@@ -11,7 +11,7 @@ using System.Drawing;
 namespace System.Windows.Forms.Design.Behavior;
 
 /// <summary>
-///  The DropSourceBehavior is created by ControlDesigner when it detects that  a drag operation has started.  This object is passed to the BehaviorService and is used to route GiveFeedback and QueryContinueDrag drag/drop messages. In response to GiveFeedback messages, this class will render the dragging controls in real-time with the help of the DragAssistanceManager (Snaplines) object or by simply snapping to grid dots.
+///  The DropSourceBehavior is created by ControlDesigner when it detects that  a drag operation has started. This object is passed to the BehaviorService and is used to route GiveFeedback and QueryContinueDrag drag/drop messages. In response to GiveFeedback messages, this class will render the dragging controls in real-time with the help of the DragAssistanceManager (Snaplines) object or by simply snapping to grid dots.
 /// </summary>
 internal sealed partial class DropSourceBehavior : Behavior, IComparer
 {
@@ -275,7 +275,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
     }
 
     /// <summary>
-    ///  This is where we end the drag and commit the new control locations. To do this correctly, we loop through every control and find its propertyDescriptor for the Location.  Then call SetValue().  After this we re-enable the adorners.  Finally, we pop ourselves from the BehaviorStack.
+    ///  This is where we end the drag and commit the new control locations. To do this correctly, we loop through every control and find its propertyDescriptor for the Location. Then call SetValue(). After this we re-enable the adorners. Finally, we pop ourselves from the BehaviorStack.
     /// </summary>
     private void EndDragDrop(bool allowSetChildIndexOnDrop)
     {
@@ -515,7 +515,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
                         }
                     }
 
-                    // We need to CleanupDrag BEFORE we commit the transaction.  The reason is that cleaning up can potentially cause a layout, and then any changes that happen due to the layout would be in a separate UndoUnit. We want the D&D to be undoable in one step.
+                    // We need to CleanupDrag BEFORE we commit the transaction. The reason is that cleaning up can potentially cause a layout, and then any changes that happen due to the layout would be in a separate UndoUnit. We want the D&D to be undoable in one step.
                     CleanupDrag(false);
                     if (transSource is not null)
                     {
@@ -561,7 +561,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
     }
 
     /// <summary>
-    ///  Called by the BehaviorService when the GiveFeedback event is fired. Here, we attempt to render all of our dragging control snapshots.  *After, of course, we let the DragAssistanceManager adjust the position due to any SnapLine activity.
+    ///  Called by the BehaviorService when the GiveFeedback event is fired. Here, we attempt to render all of our dragging control snapshots. *After, of course, we let the DragAssistanceManager adjust the position due to any SnapLine activity.
     /// </summary>
     internal void GiveFeedback(object sender, GiveFeedbackEventArgs e)
     {
@@ -1101,7 +1101,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
                     _behaviorServiceTarget.SyncSelection();
                 }
 
-                // Layout may have caused controls to resize, which would mean their BodyGlyphs are wrong.  We need to sync these.
+                // Layout may have caused controls to resize, which would mean their BodyGlyphs are wrong. We need to sync these.
                 _behaviorServiceSource?.SyncSelection();
 
                 if (_dragImageRegion is not null)

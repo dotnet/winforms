@@ -250,7 +250,7 @@ internal sealed partial class DesignerHost
                     nameService.ValidateName(value);
                 }
 
-                // It is OK to change the name to this value.  Announce the change and do it.
+                // It is OK to change the name to this value. Announce the change and do it.
                 string? oldName = _name;
                 _name = value;
                 _host.OnComponentRename(_component, oldName, _name);
