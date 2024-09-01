@@ -737,7 +737,7 @@ public partial class TextBox : TextBoxBase
             if (!_fromHandleCreate)
             {
                 // RecreateHandle to avoid Leak.
-                // notice the use of member variable to avoid re-entrancy
+                // notice the use of member variable to avoid reentrancy
                 AutoCompleteMode backUpMode = AutoCompleteMode;
                 _autoCompleteMode = AutoCompleteMode.None;
                 RecreateHandle();

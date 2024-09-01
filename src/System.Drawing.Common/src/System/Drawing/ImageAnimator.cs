@@ -11,7 +11,7 @@ namespace System.Drawing;
 ///     See the ImageInfo.cs file for the helper nested ImageInfo class.
 ///
 ///     A common pattern for using this class is as follows (See PictureBox control):
-///     1. The winform app (user's code) calls ImageAnimator.Animate() from the main thread.
+///     1. The WinForm app (user's code) calls ImageAnimator.Animate() from the main thread.
 ///     2. Animate() spawns the animating (worker) thread in the background, which will update the image
 ///        frames and raise the OnFrameChanged event, which handler will be executed in the main thread.
 ///     3. The main thread triggers a paint event (Invalidate()) from the OnFrameChanged handler.
@@ -69,7 +69,7 @@ public sealed partial class ImageAnimator
     ///
     ///  The comment above refers to the COM STA message pump, not to be confused with the UI message pump.
     ///  However, the effect is the same, the COM message pump will pump messages and dispatch them to the
-    ///  window while waiting on the writer lock; this has the potential of creating a re-entrancy situation
+    ///  window while waiting on the writer lock; this has the potential of creating a reentrancy situation
     ///  that if during the message processing a wait on a reader lock is originated the thread will be block
     ///  on itself.
     ///

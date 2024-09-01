@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Design;
 internal partial class DesignerExtenders
 {
     /// <summary>
-    ///  This is the base extender provider for all winform document
+    ///  This is the base extender provider for all WinForms document
     ///  designers. It provides the "Name" property.
     /// </summary>
     [ProvideProperty("Name", typeof(IComponent))]

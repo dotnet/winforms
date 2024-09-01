@@ -101,7 +101,7 @@ public partial class Control
     protected virtual ImeMode DefaultImeMode => ImeMode.Inherit;
 
     /// <summary>
-    ///  Flag used to avoid re-entrancy during WM_IME_NOTIFY message processing - see WmImeNotify().
+    ///  Flag used to avoid reentrancy during WM_IME_NOTIFY message processing - see WmImeNotify().
     ///  Also to avoid raising the ImeModeChanged event more than once during the process of changing the ImeMode.
     /// </summary>
     internal int DisableImeModeChangedCount
@@ -591,8 +591,8 @@ public partial class Control
             //   and IMN_SETOPENSTATUS when changing between the active modes or when enabling/disabling the IME.
             // In any case we update the cache.
             // Warning:
-            // Attempting to change the IME mode from here will cause re-entrancy - WM_IME_NOTIFY is resent.
-            // We guard against re-entrancy since the ImeModeChanged event can be raised and any changes from the handler could
+            // Attempting to change the IME mode from here will cause reentrancy - WM_IME_NOTIFY is resent.
+            // We guard against reentrancy since the ImeModeChanged event can be raised and any changes from the handler could
             // lead to another WM_IME_NOTIFY loop.
 
             if (wparam is ((int)PInvoke.IMN_SETCONVERSIONMODE) or ((int)PInvoke.IMN_SETOPENSTATUS))
