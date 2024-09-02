@@ -33,7 +33,7 @@ partial class ObsoleteControls
     /// </summary>
     private void InitializeComponent()
     {
-#pragma warning disable WFDEV004, WFDEV005, WFDEV024, WFDEV026, WFDEV030, WFDEV036, WFDEV039 // Type or member is obsolete
+#pragma warning disable WFDEV005, WFDEV006, WFDEV025, WFDEV027, WFDEV031, WFDEV037, WFDEV040 // Type or member is obsolete
         this.components = new System.ComponentModel.Container();
         this.button1 = new System.Windows.Forms.Button();
         this.button2 = new System.Windows.Forms.Button();
@@ -124,5 +124,5 @@ partial class ObsoleteControls
     private System.Windows.Forms.StatusBar statusBar1;
     private System.Windows.Forms.StatusBarPanel panel1;
     private System.Windows.Forms.StatusBarPanel panel2;
-#pragma warning restore WFDEV004, WFDEV005, WFDEV024, WFDEV026, WFDEV030, WFDEV036, WFDEV039 // Type or member is obsolete
+#pragma warning restore WFDEV005, WFDEV006, WFDEV025, WFDEV027, WFDEV031, WFDEV037, WFDEV040 // Type or member is obsolete
 }

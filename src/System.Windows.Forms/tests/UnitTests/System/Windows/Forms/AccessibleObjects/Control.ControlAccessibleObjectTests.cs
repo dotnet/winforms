@@ -1233,12 +1233,12 @@ public class Control_ControlAccessibleObjectTests
 
     public static IEnumerable<object[]> ControlAccessibleObject_TestData()
     {
-#pragma warning disable WFDEV005, WFDEV015, WFDEV026, WFDEV036 // Type or member is obsolete
+#pragma warning disable WFDEV006, WFDEV016, WFDEV027, WFDEV037 // Type or member is obsolete
         var typesToIgnore = new[]
         {
             typeof(DataGrid), typeof(StatusBar), typeof(ToolBar), typeof(DataGridTextBox)
         };
-#pragma warning restore WFDEV005, WFDEV015, WFDEV026, WFDEV036 // Type or member is obsolete
+#pragma warning restore WFDEV006, WFDEV016, WFDEV027, WFDEV037 // Type or member is obsolete
 
         return ReflectionHelper.GetPublicNotAbstractClasses<Control>()
            .Where(t => !typesToIgnore.Contains(t))
@@ -1355,12 +1355,12 @@ public class Control_ControlAccessibleObjectTests
             { typeof(MaskedTextBox), string.Empty}
         };
 
-#pragma warning disable WFDEV005, WFDEV015, WFDEV026, WFDEV036 // Type or member is obsolete
+#pragma warning disable WFDEV006, WFDEV016, WFDEV027, WFDEV037 // Type or member is obsolete
         var typesToIgnore = new[]
         {
             typeof(DataGrid), typeof(StatusBar), typeof(ToolBar), typeof(DataGridTextBox)
         };
-#pragma warning restore WFDEV005, WFDEV015, WFDEV026, WFDEV036 // Type or member is obsolete
+#pragma warning restore WFDEV006, WFDEV016, WFDEV027, WFDEV037 // Type or member is obsolete
 
         foreach (Type type in ReflectionHelper.GetPublicNotAbstractClasses<Control>())
         {
