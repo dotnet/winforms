@@ -727,7 +727,7 @@ internal partial class DesignerActionUI : IDisposable
         }
     }
 
-    private void OnShowComplete(object? sender, EventArgs e)
+    private void OnShowComplete()
     {
         _cancelClose = false;
 
