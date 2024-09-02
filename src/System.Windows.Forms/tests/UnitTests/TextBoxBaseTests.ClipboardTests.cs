@@ -11,6 +11,7 @@ public partial class TextBoxBaseTests
         [WinFormsFact]
         public void TextBoxBase_ClearUndo_CanUndo_Success()
         {
+            Clipboard.Clear();
             using SubTextBox control = new()
             {
                 Text = "abc",
@@ -22,6 +23,8 @@ public partial class TextBoxBaseTests
             control.Text = "text";
             control.SelectionLength = 2;
             control.Paste();
+
+            Clipboard.GetText().Should().Be("bc");
             Assert.Equal("bcxt", control.Text);
 
             control.ClearUndo();
@@ -32,6 +35,7 @@ public partial class TextBoxBaseTests
         [WinFormsFact]
         public void TextBoxBase_Copy_PasteNotEmpty_Success()
         {
+            Clipboard.Clear();
             using SubTextBox control = new()
             {
                 Text = "abc",
@@ -45,6 +49,8 @@ public partial class TextBoxBaseTests
             control.Text = "text";
             control.SelectionLength = 2;
             control.Paste();
+
+            Clipboard.GetText().Should().Be("bc");
             Assert.Equal("bcxt", control.Text);
             Assert.True(control.CanUndo);
             Assert.True(control.Modified);
@@ -54,6 +60,7 @@ public partial class TextBoxBaseTests
         [WinFormsFact]
         public void TextBoxBase_Copy_PasteNotEmptyWithHandle_Success()
         {
+            Clipboard.Clear();
             using SubTextBox control = new()
             {
                 Text = "abc",
@@ -78,6 +85,8 @@ public partial class TextBoxBaseTests
             control.Text = "text";
             control.SelectionLength = 2;
             control.Paste();
+
+            Clipboard.GetText().Should().Be("bc");
             Assert.Equal("bcxt", control.Text);
             Assert.True(control.CanUndo);
             Assert.True(control.Modified);
@@ -90,6 +99,7 @@ public partial class TextBoxBaseTests
         [WinFormsFact]
         public void TextBoxBase_Cut_PasteNotEmpty_Success()
         {
+            Clipboard.Clear();
             using SubTextBox control = new()
             {
                 Text = "abc",
@@ -103,6 +113,8 @@ public partial class TextBoxBaseTests
             control.Text = "text";
             control.SelectionLength = 2;
             control.Paste();
+
+            Clipboard.GetText().Should().Be("bc");
             Assert.Equal("bcxt", control.Text);
             Assert.True(control.CanUndo);
             Assert.True(control.Modified);
@@ -112,6 +124,7 @@ public partial class TextBoxBaseTests
         [WinFormsFact]
         public void TextBoxBase_Cut_PasteNotEmptyWithHandle_Success()
         {
+            Clipboard.Clear();
             using SubTextBox control = new()
             {
                 Text = "abc",
@@ -136,6 +149,8 @@ public partial class TextBoxBaseTests
             control.Text = "text";
             control.SelectionLength = 2;
             control.Paste();
+
+            Clipboard.GetText().Should().Be("bc");
             Assert.Equal("bcxt", control.Text);
             Assert.True(control.CanUndo);
             Assert.True(control.Modified);
@@ -148,6 +163,7 @@ public partial class TextBoxBaseTests
         [WinFormsFact]
         public void TextBoxBase_Paste_InvokeEmpty_Success()
         {
+            Clipboard.Clear();
             using SubTextBox control = new();
             control.Paste();
             Assert.NotNull(control.Text);
@@ -157,6 +173,7 @@ public partial class TextBoxBaseTests
         [WinFormsFact]
         public void TextBoxBase_Paste_InvokeNotEmpty_Success()
         {
+            Clipboard.Clear();
             using SubTextBox control = new()
             {
                 Text = "abc",
@@ -171,6 +188,7 @@ public partial class TextBoxBaseTests
         [WinFormsFact]
         public void TextBoxBase_Undo_CanUndo_Success()
         {
+            Clipboard.Clear();
             using SubTextBox control = new()
             {
                 Text = "abc",
@@ -182,6 +200,8 @@ public partial class TextBoxBaseTests
             control.Text = "text";
             control.SelectionLength = 2;
             control.Paste();
+
+            Clipboard.GetText().Should().Be("bc");
             Assert.Equal("bcxt", control.Text);
 
             control.Undo();
@@ -191,6 +211,7 @@ public partial class TextBoxBaseTests
         [WinFormsFact]
         public void TextBoxBase_Copy_PasteEmpty_Success()
         {
+            Clipboard.Clear();
             using SubTextBox control = new();
             control.Copy();
             Assert.Empty(control.Text);
@@ -205,6 +226,7 @@ public partial class TextBoxBaseTests
         [WinFormsFact]
         public void TextBoxBase_Copy_PasteEmptyWithHandle_Success()
         {
+            Clipboard.Clear();
             using SubTextBox control = new();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             int invalidatedCallCount = 0;
