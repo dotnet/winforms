@@ -366,7 +366,7 @@ public class DataGrid : Control, ISupportInitialize, IDataGridEditingService
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    new public event EventHandler CursorChanged
+    public new event EventHandler CursorChanged
     {
         add => throw new PlatformNotSupportedException();
         remove => throw new PlatformNotSupportedException();
@@ -390,7 +390,7 @@ public class DataGrid : Control, ISupportInitialize, IDataGridEditingService
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    new public event EventHandler BackgroundImageChanged
+    public new event EventHandler BackgroundImageChanged
     {
         add => throw new PlatformNotSupportedException();
         remove => throw new PlatformNotSupportedException();
@@ -398,7 +398,7 @@ public class DataGrid : Control, ISupportInitialize, IDataGridEditingService
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    new public event EventHandler BackgroundImageLayoutChanged
+    public new event EventHandler BackgroundImageLayoutChanged
     {
         add => throw new PlatformNotSupportedException();
         remove => throw new PlatformNotSupportedException();
@@ -508,7 +508,7 @@ public class DataGrid : Control, ISupportInitialize, IDataGridEditingService
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    new public event EventHandler TextChanged
+    public new event EventHandler TextChanged
     {
         add => throw new PlatformNotSupportedException();
         remove => throw new PlatformNotSupportedException();
@@ -690,7 +690,7 @@ public class DataGrid : Control, ISupportInitialize, IDataGridEditingService
 
     protected bool ProcessTabKey(Keys keyData) => throw new PlatformNotSupportedException();
 
-    virtual protected void CancelEditing() => throw new PlatformNotSupportedException();
+    protected virtual void CancelEditing() => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]

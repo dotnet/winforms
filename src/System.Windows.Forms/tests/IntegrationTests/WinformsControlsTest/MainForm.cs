@@ -6,6 +6,9 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms.IntegrationTests.Common;
 using Microsoft.Win32;
 using WindowsFormsApp1;
+
+using WinformsControlsTest;
+
 using WinFormsControlsTest.UserControls;
 
 namespace WinFormsControlsTest;
@@ -226,6 +229,10 @@ public partial class MainForm : Form
         {
             MainFormControlsTabOrder.ScrollableControlsButton,
             new InitInfo("ScrollableControlsButton", (obj, e) => new ScrollableControls().Show(this))
+        },
+        {
+            MainFormControlsTabOrder.ObsoleteControlsButton,
+            new InitInfo("ObsoleteControlsButton", (obj, e) => new ObsoleteControls().Show(this))
         }
     };
 

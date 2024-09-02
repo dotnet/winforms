@@ -29,7 +29,7 @@ public class StatusBar : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    new public event EventHandler BackColorChanged
+    public new event EventHandler BackColorChanged
     {
         add => throw new PlatformNotSupportedException();
         remove => throw new PlatformNotSupportedException();
@@ -45,7 +45,7 @@ public class StatusBar : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    new public event EventHandler BackgroundImageChanged
+    public new event EventHandler BackgroundImageChanged
     {
         add => throw new PlatformNotSupportedException();
         remove => throw new PlatformNotSupportedException();
@@ -61,7 +61,7 @@ public class StatusBar : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    new public event EventHandler BackgroundImageLayoutChanged
+    public new event EventHandler BackgroundImageLayoutChanged
     {
         add => throw new PlatformNotSupportedException();
         remove => throw new PlatformNotSupportedException();
@@ -105,7 +105,7 @@ public class StatusBar : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    new public event EventHandler ForeColorChanged
+    public new event EventHandler ForeColorChanged
     {
         add => throw new PlatformNotSupportedException();
         remove => throw new PlatformNotSupportedException();
@@ -113,7 +113,7 @@ public class StatusBar : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    new public ImeMode ImeMode
+    public new ImeMode ImeMode
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
@@ -157,7 +157,7 @@ public class StatusBar : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    new public bool TabStop
+    public new bool TabStop
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
