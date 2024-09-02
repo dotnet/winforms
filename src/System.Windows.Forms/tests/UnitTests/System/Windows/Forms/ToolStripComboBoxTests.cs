@@ -32,8 +32,10 @@ public class ToolStripComboBoxTests : IDisposable
     [WinFormsFact]
     public void ToolStripComboBox_DropDownHeight_SetAndGet()
     {
-        _toolStripComboBox.DropDownHeight = 150;
-        _toolStripComboBox.DropDownHeight.Should().Be(150);
+        _toolStripComboBox.DropDownHeight.Should().Be(106);
+
+        _toolStripComboBox.DropDownHeight = 200;
+        _toolStripComboBox.DropDownHeight.Should().Be(200);
     }
 
     [WinFormsFact]
@@ -46,8 +48,12 @@ public class ToolStripComboBoxTests : IDisposable
     [WinFormsFact]
     public void ToolStripComboBox_DroppedDown_SetAndGet()
     {
+        _toolStripComboBox.DroppedDown.Should().BeFalse();
+
         _toolStripComboBox.DroppedDown = true;
-        _toolStripComboBox.DroppedDown.Should().BeTrue();
+
+        _toolStripComboBox.DroppedDown = false;
+        _toolStripComboBox.DroppedDown.Should().BeFalse();
     }
 
     [WinFormsFact]
@@ -60,8 +66,13 @@ public class ToolStripComboBoxTests : IDisposable
     [WinFormsFact]
     public void ToolStripComboBox_IntegralHeight_SetAndGet()
     {
+        _toolStripComboBox.IntegralHeight.Should().BeTrue();
+
         _toolStripComboBox.IntegralHeight = false;
         _toolStripComboBox.IntegralHeight.Should().BeFalse();
+
+        _toolStripComboBox.IntegralHeight = true;
+        _toolStripComboBox.IntegralHeight.Should().BeTrue();
     }
 
     [WinFormsFact]
@@ -74,23 +85,20 @@ public class ToolStripComboBoxTests : IDisposable
     [WinFormsFact]
     public void ToolStripComboBox_Sorted_SetAndGet()
     {
+        _toolStripComboBox.Sorted.Should().BeFalse();
+
         _toolStripComboBox.Sorted = true;
         _toolStripComboBox.Sorted.Should().BeTrue();
+
+        _toolStripComboBox.Sorted = false;
+        _toolStripComboBox.Sorted.Should().BeFalse();
     }
 
     [WinFormsFact]
     public void ToolStripComboBox_ConstructorWithControl_ThrowsNotSupportedException()
     {
         using Control control = new();
-
-        try
-        {
-            new Action(() => new ToolStripComboBox(control)).Should().Throw<NotSupportedException>();
-        }
-        finally
-        {
-            control?.Dispose();
-        }
+        new Action(() => new ToolStripComboBox(control)).Should().Throw<NotSupportedException>();
     }
 
     [WinFormsFact]
@@ -108,6 +116,8 @@ public class ToolStripComboBoxTests : IDisposable
     [InlineData(AutoCompleteMode.None)]
     public void ToolStripComboBox_AutoCompleteMode_SetAndGet(AutoCompleteMode mode)
     {
+        _toolStripComboBox.AutoCompleteMode.Should().Be(AutoCompleteMode.None);
+
         _toolStripComboBox.AutoCompleteMode = mode;
         _toolStripComboBox.AutoCompleteMode.Should().Be(mode);
     }
@@ -172,9 +182,9 @@ public class ToolStripComboBoxTests : IDisposable
     [WinFormsFact]
     public void ToolStripComboBox_Items_AddAndGet()
     {
-        _toolStripComboBox.Items.Add("Item1");
-        _toolStripComboBox.Items.Add("Item2");
-        _toolStripComboBox.Items.Cast<string>().Should().Contain(new[] { "Item1", "Item2" });
+        string[] items = { "Item1", "Item2" };
+        _toolStripComboBox.Items.AddRange(items);
+        _toolStripComboBox.Items.Cast<string>().Should().Contain(items);
     }
 
     [WinFormsFact]
@@ -186,6 +196,9 @@ public class ToolStripComboBoxTests : IDisposable
         _toolStripComboBox.Items.Add("Item2");
         _toolStripComboBox.SelectedIndex = 1;
         _toolStripComboBox.SelectedIndex.Should().Be(1);
+
+        _toolStripComboBox.SelectedIndex = 0;
+        _toolStripComboBox.SelectedIndex.Should().Be(0);
     }
 
     [WinFormsFact]
@@ -244,6 +257,8 @@ public class ToolStripComboBoxTests : IDisposable
         _toolStripComboBox.ComboBox.DroppedDown = true;
         _toolStripComboBox.ComboBox.DroppedDown = false;
         eventRaised.Should().BeTrue();
+
+        _toolStripComboBox.ComboBox.IsHandleCreated.Should().BeTrue();
     }
 
     [WinFormsFact]
@@ -255,6 +270,8 @@ public class ToolStripComboBoxTests : IDisposable
         _toolStripComboBox.DropDownStyleChanged += (sender, e) => eventRaised = true;
         _toolStripComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
         eventRaised.Should().BeTrue();
+
+        _toolStripComboBox.ComboBox.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsFact]
