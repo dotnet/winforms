@@ -10,7 +10,7 @@ public sealed partial class Application
     /// <summary>
     ///  Lighter weight <see cref="ThreadContext"/> that doesn't support <see cref="IMsoComponent"/>.
     /// </summary>
-    internal unsafe sealed class LightThreadContext : ThreadContext
+    internal sealed unsafe class LightThreadContext : ThreadContext
     {
         protected override bool? GetMessageLoopInternal(bool mustBeActive, int loopCount)
         {

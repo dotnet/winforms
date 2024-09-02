@@ -124,13 +124,13 @@ public partial class ToolStripTextBox : ToolStripControlHost
         if (control is TextBox textBox)
         {
             // Please keep this alphabetized and in sync with Unsubscribe.
-            textBox.AcceptsTabChanged += new EventHandler(HandleAcceptsTabChanged);
-            textBox.BorderStyleChanged += new EventHandler(HandleBorderStyleChanged);
-            textBox.HideSelectionChanged += new EventHandler(HandleHideSelectionChanged);
-            textBox.ModifiedChanged += new EventHandler(HandleModifiedChanged);
-            textBox.MultilineChanged += new EventHandler(HandleMultilineChanged);
-            textBox.ReadOnlyChanged += new EventHandler(HandleReadOnlyChanged);
-            textBox.TextAlignChanged += new EventHandler(HandleTextBoxTextAlignChanged);
+            textBox.AcceptsTabChanged += HandleAcceptsTabChanged;
+            textBox.BorderStyleChanged += HandleBorderStyleChanged;
+            textBox.HideSelectionChanged += HandleHideSelectionChanged;
+            textBox.ModifiedChanged += HandleModifiedChanged;
+            textBox.MultilineChanged += HandleMultilineChanged;
+            textBox.ReadOnlyChanged += HandleReadOnlyChanged;
+            textBox.TextAlignChanged += HandleTextBoxTextAlignChanged;
         }
 
         base.OnSubscribeControlEvents(control);
@@ -141,13 +141,13 @@ public partial class ToolStripTextBox : ToolStripControlHost
         if (control is TextBox textBox)
         {
             // Please keep this alphabetized and in sync with Subscribe.
-            textBox.AcceptsTabChanged -= new EventHandler(HandleAcceptsTabChanged);
-            textBox.BorderStyleChanged -= new EventHandler(HandleBorderStyleChanged);
-            textBox.HideSelectionChanged -= new EventHandler(HandleHideSelectionChanged);
-            textBox.ModifiedChanged -= new EventHandler(HandleModifiedChanged);
-            textBox.MultilineChanged -= new EventHandler(HandleMultilineChanged);
-            textBox.ReadOnlyChanged -= new EventHandler(HandleReadOnlyChanged);
-            textBox.TextAlignChanged -= new EventHandler(HandleTextBoxTextAlignChanged);
+            textBox.AcceptsTabChanged -= HandleAcceptsTabChanged;
+            textBox.BorderStyleChanged -= HandleBorderStyleChanged;
+            textBox.HideSelectionChanged -= HandleHideSelectionChanged;
+            textBox.ModifiedChanged -= HandleModifiedChanged;
+            textBox.MultilineChanged -= HandleMultilineChanged;
+            textBox.ReadOnlyChanged -= HandleReadOnlyChanged;
+            textBox.TextAlignChanged -= HandleTextBoxTextAlignChanged;
         }
 
         base.OnUnsubscribeControlEvents(control);

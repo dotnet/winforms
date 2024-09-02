@@ -22,7 +22,7 @@ internal static partial class PInvoke
         static extern HWND LocalExternFunction(HWND hwndCaller, PCWSTR pszFile, uint uCommand, nuint dwData);
     }
 
-    /// <inheritdoc cref="HtmlHelp(HWND, PCWSTR, HTML_HELP_COMMAND, nuint)" />
+    /// <inheritdoc cref="HtmlHelp(HWND, string, HTML_HELP_COMMAND, nuint)" />
     internal static unsafe HWND HtmlHelp<T>(T hwndCaller, string? pszFile, HTML_HELP_COMMAND uCommand, string? dwData)
         where T : IHandle<HWND>
     {
@@ -34,7 +34,7 @@ internal static partial class PInvoke
         }
     }
 
-    /// <inheritdoc cref="HtmlHelp(HWND, PCWSTR, HTML_HELP_COMMAND, nuint)" />
+    /// <inheritdoc cref="HtmlHelp(HWND, string, HTML_HELP_COMMAND, nuint)" />
     internal static unsafe HWND HtmlHelp<TCaller, TData>(
         TCaller hwndCaller,
         string? pszFile,

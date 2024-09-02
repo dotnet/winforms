@@ -488,7 +488,13 @@ public partial class DateTimePicker : Control
     [EditorBrowsable(EditorBrowsableState.Never)]
     public override Color ForeColor
     {
-        get => ShouldSerializeForeColor() ? base.ForeColor : SystemColors.WindowText;
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+        get => ShouldSerializeForeColor()
+            || Application.IsDarkModeEnabled
+                ? base.ForeColor
+                : SystemColors.WindowText;
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+
         set => base.ForeColor = value;
     }
 
@@ -1097,7 +1103,7 @@ public partial class DateTimePicker : Control
     protected override void OnHandleCreated(EventArgs e)
     {
         base.OnHandleCreated(e);
-        SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(MarshaledUserPreferenceChanged);
+        SystemEvents.UserPreferenceChanged += MarshaledUserPreferenceChanged;
     }
 
     /// <summary>
@@ -1105,7 +1111,7 @@ public partial class DateTimePicker : Control
     /// </summary>
     protected override void OnHandleDestroyed(EventArgs e)
     {
-        SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(MarshaledUserPreferenceChanged);
+        SystemEvents.UserPreferenceChanged -= MarshaledUserPreferenceChanged;
         base.OnHandleDestroyed(e);
     }
 

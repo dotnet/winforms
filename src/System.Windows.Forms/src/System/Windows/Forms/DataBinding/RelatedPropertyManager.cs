@@ -26,7 +26,7 @@ internal class RelatedPropertyManager : PropertyManager
         _fieldInfo = parentManager.GetItemProperties().Find(dataField, true) ??
             throw new ArgumentException(string.Format(SR.RelatedListManagerChild, dataField));
 
-        parentManager.CurrentItemChanged += new EventHandler(ParentManager_CurrentItemChanged);
+        parentManager.CurrentItemChanged += ParentManager_CurrentItemChanged;
         Refresh();
     }
 

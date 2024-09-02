@@ -170,6 +170,9 @@ public partial class TreeView : Control
         SetStyle(ControlStyles.UserPaint, false);
         SetStyle(ControlStyles.StandardClick, false);
         SetStyle(ControlStyles.UseTextForAccessibility, false);
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     }
 
     internal override void ReleaseUiaProvider(HWND handle)
@@ -641,9 +644,9 @@ public partial class TreeView : Control
         if (_imageList is not null)
         {
             // NOTE: any handlers added here should be removed in DetachImageListHandlers
-            _imageList.RecreateHandle += new EventHandler(ImageListRecreateHandle);
-            _imageList.Disposed += new EventHandler(DetachImageList);
-            _imageList.ChangeHandle += new EventHandler(ImageListChangedHandle);
+            _imageList.RecreateHandle += ImageListRecreateHandle;
+            _imageList.Disposed += DetachImageList;
+            _imageList.ChangeHandle += ImageListChangedHandle;
         }
     }
 
@@ -651,9 +654,9 @@ public partial class TreeView : Control
     {
         if (_imageList is not null)
         {
-            _imageList.RecreateHandle -= new EventHandler(ImageListRecreateHandle);
-            _imageList.Disposed -= new EventHandler(DetachImageList);
-            _imageList.ChangeHandle -= new EventHandler(ImageListChangedHandle);
+            _imageList.RecreateHandle -= ImageListRecreateHandle;
+            _imageList.Disposed -= DetachImageList;
+            _imageList.ChangeHandle -= ImageListChangedHandle;
         }
     }
 
@@ -662,9 +665,9 @@ public partial class TreeView : Control
         if (_stateImageList is not null)
         {
             // NOTE: any handlers added here should be removed in DetachStateImageListHandlers
-            _stateImageList.RecreateHandle += new EventHandler(StateImageListRecreateHandle);
-            _stateImageList.Disposed += new EventHandler(DetachStateImageList);
-            _stateImageList.ChangeHandle += new EventHandler(StateImageListChangedHandle);
+            _stateImageList.RecreateHandle += StateImageListRecreateHandle;
+            _stateImageList.Disposed += DetachStateImageList;
+            _stateImageList.ChangeHandle += StateImageListChangedHandle;
         }
     }
 
@@ -672,9 +675,9 @@ public partial class TreeView : Control
     {
         if (_stateImageList is not null)
         {
-            _stateImageList.RecreateHandle -= new EventHandler(StateImageListRecreateHandle);
-            _stateImageList.Disposed -= new EventHandler(DetachStateImageList);
-            _stateImageList.ChangeHandle -= new EventHandler(StateImageListChangedHandle);
+            _stateImageList.RecreateHandle -= StateImageListRecreateHandle;
+            _stateImageList.Disposed -= DetachStateImageList;
+            _stateImageList.ChangeHandle -= StateImageListChangedHandle;
         }
     }
 
@@ -1859,7 +1862,7 @@ public partial class TreeView : Control
         }
 
         // Workaround for problem in TreeView where it doesn't recognize the TVS_CHECKBOXES
-        // style if it is set before the window is created.  To get around the problem,
+        // style if it is set before the window is created. To get around the problem,
         // we set it here after the window is created, and we make sure we don't set it
         // in getCreateParams so that this will actually change the value of the bit.
         // This seems to make the TreeView happy.
@@ -1878,19 +1881,21 @@ public partial class TreeView : Control
         }
 
         Color c = BackColor;
-        if (c != SystemColors.Window)
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        if (c != SystemColors.Window || Application.IsDarkModeEnabled)
         {
             PInvoke.SendMessage(this, PInvoke.TVM_SETBKCOLOR, 0, c.ToWin32());
         }
 
         c = ForeColor;
 
-        if (c != SystemColors.WindowText)
+        if (c != SystemColors.WindowText || Application.IsDarkModeEnabled)
         {
             PInvoke.SendMessage(this, PInvoke.TVM_SETTEXTCOLOR, 0, c.ToWin32());
         }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
-        // Put the linecolor into the native control only if set.
+        // Put the LineColor into the native control only if set.
         if (_lineColor != Color.Empty)
         {
             PInvoke.SendMessage(this, PInvoke.TVM_SETLINECOLOR, 0, _lineColor.ToWin32());
@@ -2641,7 +2646,10 @@ public partial class TreeView : Control
         // This stops the style from being removed for any derived classes that set it using P/Invoke.
         if (_treeViewState[TREEVIEWSTATE_doubleBufferedPropertySet])
         {
-            PInvoke.SendMessage(this, PInvoke.TVM_SETEXTENDEDSTYLE, (WPARAM)(nint)PInvoke.TVS_EX_DOUBLEBUFFER, (LPARAM)(nint)(DoubleBuffered ? PInvoke.TVS_EX_DOUBLEBUFFER : 0));
+            PInvoke.SendMessage(this,
+                PInvoke.TVM_SETEXTENDEDSTYLE,
+                (WPARAM)(nint)PInvoke.TVS_EX_DOUBLEBUFFER,
+                (LPARAM)(nint)(DoubleBuffered ? PInvoke.TVS_EX_DOUBLEBUFFER : 0));
         }
     }
 
@@ -3106,8 +3114,8 @@ public partial class TreeView : Control
 
             // Need to send TVM_SELECTITEM to highlight the node while the contextMenuStrip is being shown.
             PInvoke.PostMessage(this, PInvoke.TVM_SELECTITEM, (WPARAM)PInvoke.TVGN_DROPHILITE, (LPARAM)treeNode.Handle);
-            menu.ShowInternal(this, PointToClient(MousePosition), /*keyboardActivated*/false);
-            menu.Closing += new ToolStripDropDownClosingEventHandler(ContextMenuStripClosing);
+            menu.ShowInternal(this, PointToClient(MousePosition), isKeyboardActivated: false);
+            menu.Closing += ContextMenuStripClosing;
         }
     }
 
@@ -3116,7 +3124,7 @@ public partial class TreeView : Control
     {
         ContextMenuStrip strip = (ContextMenuStrip)sender!;
         // Unhook the Event.
-        strip.Closing -= new ToolStripDropDownClosingEventHandler(ContextMenuStripClosing);
+        strip.Closing -= ContextMenuStripClosing;
         PInvoke.SendMessage(this, PInvoke.TVM_SELECTITEM, (WPARAM)PInvoke.TVGN_DROPHILITE);
     }
 

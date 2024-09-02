@@ -25,7 +25,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     /// </summary>
     private GraphicsContext? _previousContext;
 
-    private static readonly object s_syncObject = new();
+    private static readonly Lock s_syncObject = new();
 
     // Object reference used for printing; it could point to a PrintPreviewGraphics to obtain the VisibleClipBounds, or
     // a DeviceContext holding a printer DC.
@@ -114,6 +114,11 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     public static Graphics FromHwndInternal(IntPtr hwnd)
     {
         GpGraphics* nativeGraphics;
+
+        // This is one of the few places we need to manually ensure GDI+ is initialized. Other calls to PInvoke will do
+        // this automatically, PInvokeCore cannot and as such needs to be manually initialized if we've never called
+        // another PInvoke method.
+        GdiPlusInitialization.EnsureInitialized();
         Gdip.CheckStatus(PInvokeCore.GdipCreateFromHWND((HWND)hwnd, &nativeGraphics));
         return new Graphics(nativeGraphics);
     }

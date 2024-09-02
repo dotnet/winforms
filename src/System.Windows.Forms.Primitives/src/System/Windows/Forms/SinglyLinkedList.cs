@@ -76,7 +76,7 @@ internal class SinglyLinkedList<T>
         private Node? _current = null;
         private Node? _previous = null;
 
-        public readonly Node? Current => _current;
+        public readonly Node Current => _current!;
 
         /// <summary>
         ///  Resets the enumerator.

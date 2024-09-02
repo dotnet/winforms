@@ -222,7 +222,7 @@ public partial class Binding
             BindingContext.UpdateBinding((BindableComponent is not null && IsComponentCreated(BindableComponent) ? BindableComponent.BindingContext : null), this);
             if (value is Form form)
             {
-                form.Load += new EventHandler(FormLoaded);
+                form.Load += FormLoaded;
             }
         }
     }
@@ -245,14 +245,14 @@ public partial class Binding
             {
                 if (_bindingManagerBase is CurrencyManager oldCurrencyManager)
                 {
-                    oldCurrencyManager.MetaDataChanged -= new EventHandler(binding_MetaDataChanged);
+                    oldCurrencyManager.MetaDataChanged -= binding_MetaDataChanged;
                 }
 
                 _bindingManagerBase = value;
 
                 if (value is CurrencyManager newCurrencyManager)
                 {
-                    newCurrencyManager.MetaDataChanged += new EventHandler(binding_MetaDataChanged);
+                    newCurrencyManager.MetaDataChanged += binding_MetaDataChanged;
                 }
 
                 _bindToObject.SetBindingManagerBase(value);

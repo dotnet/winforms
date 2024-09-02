@@ -63,21 +63,21 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
         _selSvc = host.GetService<ISelectionService>();
         if (_selSvc is not null)
         {
-            _selSvc.SelectionChanged += new EventHandler(OnSelectionChanged);
+            _selSvc.SelectionChanged += OnSelectionChanged;
         }
 
         // And configure the events we want to listen to.
-        host.TransactionOpened += new EventHandler(OnTransactionOpened);
-        host.TransactionClosed += new DesignerTransactionCloseEventHandler(OnTransactionClosed);
+        host.TransactionOpened += OnTransactionOpened;
+        host.TransactionClosed += OnTransactionClosed;
         if (host.InTransaction)
         {
             OnTransactionOpened(host, EventArgs.Empty);
         }
 
         // Listen to the SystemEvents so that we can resync selection based on display settings etc.
-        SystemEvents.DisplaySettingsChanged += new EventHandler(OnSystemSettingChanged);
-        SystemEvents.InstalledFontsChanged += new EventHandler(OnSystemSettingChanged);
-        SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
+        SystemEvents.DisplaySettingsChanged += OnSystemSettingChanged;
+        SystemEvents.InstalledFontsChanged += OnSystemSettingChanged;
+        SystemEvents.UserPreferenceChanged += OnUserPreferenceChanged;
     }
 
     /// <summary>
@@ -138,13 +138,13 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
         {
             if (_selSvc is not null)
             {
-                _selSvc.SelectionChanged -= new EventHandler(OnSelectionChanged);
+                _selSvc.SelectionChanged -= OnSelectionChanged;
             }
 
             if (_host is not null)
             {
-                _host.TransactionOpened -= new EventHandler(OnTransactionOpened);
-                _host.TransactionClosed -= new DesignerTransactionCloseEventHandler(OnTransactionClosed);
+                _host.TransactionOpened -= OnTransactionOpened;
+                _host.TransactionClosed -= OnTransactionClosed;
                 if (_host.InTransaction)
                 {
                     OnTransactionClosed(_host, new DesignerTransactionCloseEventArgs(true, true));
@@ -159,9 +159,9 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
             _selectionHandlers.Clear();
             _selectionItems.Clear();
             // Listen to the SystemEvents so that we can resync selection based on display settings etc.
-            SystemEvents.DisplaySettingsChanged -= new EventHandler(OnSystemSettingChanged);
-            SystemEvents.InstalledFontsChanged -= new EventHandler(OnSystemSettingChanged);
-            SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
+            SystemEvents.DisplaySettingsChanged -= OnSystemSettingChanged;
+            SystemEvents.InstalledFontsChanged -= OnSystemSettingChanged;
+            SystemEvents.UserPreferenceChanged -= OnUserPreferenceChanged;
         }
 
         base.Dispose(disposing);

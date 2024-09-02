@@ -1,9 +1,6 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Option Explicit On
-Option Strict On
-
 Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.CompilerServices
 
@@ -16,7 +13,7 @@ Namespace Microsoft.VisualBasic.Devices
     Public Class Keyboard
 
         ''' <summary>
-        ''' Sends keys to the active window as if typed as keyboard with wait = false.
+        '''  Sends keys to the active window as if typed as keyboard with wait = false.
         ''' </summary>
         ''' <param name="keys">A string containing the keys to be sent (typed).</param>
         Public Sub SendKeys(keys As String)
@@ -24,8 +21,8 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        ''' Sends keys to the active window as if typed at keyboard. This overloaded
-        ''' version uses the same conventions as the VB6 SendKeys.
+        '''  Sends keys to the active window as if typed at keyboard. This overloaded
+        '''  version uses the same conventions as the VB6 SendKeys.
         ''' </summary>
         ''' <param name="keys">A string containing the keys to be sent (typed).</param>
         ''' <param name="wait">Wait for messages to be processed before returning.</param>
@@ -38,40 +35,40 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
-        ''' Gets the state (up or down) of the Shift key.
+        '''  Gets the state (up or down) of the Shift key.
         ''' </summary>
         ''' <returns>True if the key is down otherwise false.</returns>
         Public ReadOnly Property ShiftKeyDown() As Boolean
             Get
-                Dim Keys As Keys = Control.ModifierKeys
-                Return CType(Keys And Keys.Shift, Boolean)
+                Dim keys As Keys = Control.ModifierKeys
+                Return CType(keys And Keys.Shift, Boolean)
             End Get
         End Property
 
         ''' <summary>
-        ''' Gets the state (up or down) of the Alt key.
+        '''  Gets the state (up or down) of the Alt key.
         ''' </summary>
         ''' <returns>True if the key is down otherwise false.</returns>
         Public ReadOnly Property AltKeyDown() As Boolean
             Get
-                Dim Keys As Keys = Control.ModifierKeys
-                Return CType(Keys And Keys.Alt, Boolean)
+                Dim keys As Keys = Control.ModifierKeys
+                Return CType(keys And Keys.Alt, Boolean)
             End Get
         End Property
 
         ''' <summary>
-        ''' Gets the state (up or down) of the Ctrl key.
+        '''  Gets the state (up or down) of the Ctrl key.
         ''' </summary>
         ''' <returns>True if the key is down otherwise false.</returns>
         Public ReadOnly Property CtrlKeyDown() As Boolean
             Get
-                Dim Keys As Keys = Control.ModifierKeys
-                Return CType(Keys And Keys.Control, Boolean)
+                Dim keys As Keys = Control.ModifierKeys
+                Return CType(keys And Keys.Control, Boolean)
             End Get
         End Property
 
         ''' <summary>
-        ''' Gets the toggle state of the Caps Lock key.
+        '''  Gets the toggle state of the Caps Lock key.
         ''' </summary>
         ''' <returns>True if the key is down otherwise false.</returns>
         Public ReadOnly Property CapsLock() As Boolean
@@ -85,7 +82,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Property
 
         ''' <summary>
-        ''' Gets the toggle state of the Num Lock key.
+        '''  Gets the toggle state of the Num Lock key.
         ''' </summary>
         ''' <returns>True if the key is down otherwise false.</returns>
         Public ReadOnly Property NumLock() As Boolean
@@ -99,7 +96,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Property
 
         ''' <summary>
-        ''' Gets the toggle state of the Scroll Lock key.
+        '''  Gets the toggle state of the Scroll Lock key.
         ''' </summary>
         ''' <returns>True if the key is down otherwise false.</returns>
         Public ReadOnly Property ScrollLock() As Boolean
@@ -113,5 +110,4 @@ Namespace Microsoft.VisualBasic.Devices
         End Property
 
     End Class
-
 End Namespace

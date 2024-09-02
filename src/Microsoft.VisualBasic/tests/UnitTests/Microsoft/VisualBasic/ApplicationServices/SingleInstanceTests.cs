@@ -96,7 +96,7 @@ public class SingleInstanceTests
     }
 
     [Fact]
-    public async void MultipleServers_Overlapping()
+    public async Task MultipleServers_Overlapping()
     {
         string pipeName = GetUniqueName();
         const int n = 10;
@@ -144,7 +144,7 @@ public class SingleInstanceTests
     }
 
     [Fact]
-    public async void MultipleClients_Overlapping()
+    public async Task MultipleClients_Overlapping()
     {
         string pipeName = GetUniqueName();
         Assert.True(TryCreatePipeServer(pipeName, out var pipeServer));
@@ -205,7 +205,7 @@ public class SingleInstanceTests
     }
 
     [Fact]
-    public async void ClientConnectionTimeout()
+    public async Task ClientConnectionTimeout()
     {
         string pipeName = GetUniqueName();
         Assert.True(TryCreatePipeServer(pipeName, out var pipeServer));
@@ -219,7 +219,7 @@ public class SingleInstanceTests
 
     // Corresponds to second instance crash sending incomplete args.
     [Fact]
-    public async void ClientConnectBeforeWaitForClientConnection()
+    public async Task ClientConnectBeforeWaitForClientConnection()
     {
         string pipeName = GetUniqueName();
         Assert.True(TryCreatePipeServer(pipeName, out var pipeServer));

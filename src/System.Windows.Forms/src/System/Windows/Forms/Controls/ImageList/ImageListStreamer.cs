@@ -3,7 +3,7 @@
 
 using System.IO.Compression;
 using System.Runtime.Serialization;
-using System.Windows.Forms.BinaryFormat;
+using System.Private.Windows.Core.BinaryFormat;
 using Windows.Win32.System.Com;
 
 namespace System.Windows.Forms;
@@ -13,7 +13,7 @@ public sealed class ImageListStreamer : ISerializable, IDisposable
 {
     // Compressed magic header. If we see this, the image stream is compressed.
     private static ReadOnlySpan<byte> HeaderMagic => "MSFt"u8;
-    private static readonly object s_syncObject = new();
+    private static readonly Lock s_syncObject = new();
 
     private readonly ImageList? _imageList;
     private ImageList.NativeImageList? _nativeImageList;

@@ -3,7 +3,6 @@
 
 using System.Drawing;
 using System.Windows.Forms.Layout;
-using System.Windows.Forms.Primitives;
 using Xunit.Abstractions;
 
 namespace System.Windows.Forms.UITests;
@@ -44,23 +43,14 @@ public class AnchorLayoutTests : ControlTestBase
     [InlineData(AnchorStyles.Bottom | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Left, 20, 30, 220, 330)]
     public void Control_AnchorLayoutV2_ResizeAnchoredControls_ParentHandleCreated_NewAnchorsApplied(AnchorStyles anchors, int expectedX, int expectedY, int expectedWidth, int expectedHeight)
     {
-        int previousLayoutSwitch = SetAnchorLayoutV2();
-
-        try
-        {
-            LaunchFormAndVerify(anchors, expectedX, expectedY, expectedWidth, expectedHeight);
-        }
-        finally
-        {
-            // Reset switch.
-            SetAnchorLayoutV2Switch(previousLayoutSwitch);
-        }
+        using AnchorLayoutV2Scope scope = new(enable: true);
+        LaunchFormAndVerify(anchors, expectedX, expectedY, expectedWidth, expectedHeight);
     }
 
     [WinFormsFact]
     public void Control_NotParented_AnchorsNotComputed()
     {
-        int previousSwitchValue = SetAnchorLayoutV2();
+        using AnchorLayoutV2Scope scope = new(enable: true);
         (Form form, Button button) = GetFormWithAnchoredButton(AnchorAllDirection);
 
         try
@@ -77,8 +67,6 @@ public class AnchorLayoutTests : ControlTestBase
         }
         finally
         {
-            // Reset switch.
-            SetAnchorLayoutV2Switch(previousSwitchValue);
             Dispose(form, button);
         }
     }
@@ -86,7 +74,7 @@ public class AnchorLayoutTests : ControlTestBase
     [WinFormsFact]
     public void Control_SuspendedLayout_AnchorsNotComputed()
     {
-        int previousSwitchValue = SetAnchorLayoutV2();
+        using AnchorLayoutV2Scope scope = new(enable: true);
         (Form form, Button button) = GetFormWithAnchoredButton(AnchorAllDirection);
 
         try
@@ -100,8 +88,6 @@ public class AnchorLayoutTests : ControlTestBase
         }
         finally
         {
-            // Reset switch.
-            SetAnchorLayoutV2Switch(previousSwitchValue);
             Dispose(form, button);
         }
     }
@@ -109,7 +95,7 @@ public class AnchorLayoutTests : ControlTestBase
     [WinFormsFact]
     public void Control_ResumedLayout_AnchorsComputed()
     {
-        int previousSwitchValue = SetAnchorLayoutV2();
+        using AnchorLayoutV2Scope scope = new(enable: true);
         (Form form, Button button) = GetFormWithAnchoredButton(AnchorAllDirection);
 
         try
@@ -127,8 +113,6 @@ public class AnchorLayoutTests : ControlTestBase
         }
         finally
         {
-            // Reset switch.
-            SetAnchorLayoutV2Switch(previousSwitchValue);
             Dispose(form, button);
         }
     }
@@ -136,7 +120,7 @@ public class AnchorLayoutTests : ControlTestBase
     [WinFormsFact]
     public void ConfigSwitch_Disabled_SuspendedLayout_AnchorsComputed()
     {
-        int previousSwitchValue = SetAnchorLayoutV1();
+        using AnchorLayoutV2Scope scope = new(enable: false);
         (Form form, Button button) = GetFormWithAnchoredButton(AnchorAllDirection);
 
         try
@@ -148,8 +132,6 @@ public class AnchorLayoutTests : ControlTestBase
         }
         finally
         {
-            // Reset switch.
-            SetAnchorLayoutV2Switch(previousSwitchValue);
             Dispose(form, button);
         }
     }
@@ -157,7 +139,7 @@ public class AnchorLayoutTests : ControlTestBase
     [WinFormsFact]
     public void NestedContainer_AnchorsComputed()
     {
-        int previousSwitchValue = SetAnchorLayoutV2();
+        using AnchorLayoutV2Scope scope = new(enable: true);
         (Form form, Button button) = GetFormWithAnchoredButton(AnchorAllDirection);
         try
         {
@@ -179,8 +161,6 @@ public class AnchorLayoutTests : ControlTestBase
         }
         finally
         {
-            // Reset switch.
-            SetAnchorLayoutV2Switch(previousSwitchValue);
             Dispose(form, button);
         }
     }
@@ -188,7 +168,7 @@ public class AnchorLayoutTests : ControlTestBase
     [WinFormsFact]
     public void ParentChanged_AnchorsUpdated()
     {
-        int previousSwitchValue = SetAnchorLayoutV2();
+        using AnchorLayoutV2Scope scope = new(enable: true);
         (Form form, Button button) = GetFormWithAnchoredButton(AnchorAllDirection);
         try
         {
@@ -218,8 +198,6 @@ public class AnchorLayoutTests : ControlTestBase
         }
         finally
         {
-            // Reset switch.
-            SetAnchorLayoutV2Switch(previousSwitchValue);
             Dispose(form, button);
         }
     }
@@ -227,7 +205,7 @@ public class AnchorLayoutTests : ControlTestBase
     [WinFormsFact]
     public void SetBoundsOnAnchoredControl_BoundsChanged()
     {
-        int previousSwitchValue = SetAnchorLayoutV2();
+        using AnchorLayoutV2Scope scope = new(enable: true);
         (Form form, Button button) = GetFormWithAnchoredButton(AnchorAllDirection);
         try
         {
@@ -254,8 +232,6 @@ public class AnchorLayoutTests : ControlTestBase
         }
         finally
         {
-            // Reset switch.
-            SetAnchorLayoutV2Switch(previousSwitchValue);
             Dispose(form, button);
         }
     }
@@ -312,23 +288,6 @@ public class AnchorLayoutTests : ControlTestBase
 
         return (form, button);
     }
-
-    private static int SetAnchorLayoutV2Switch(int value)
-    {
-        // TargetFramework on the test host.exe is NetCoreApp2.1. AppContext.TargetFrameworkName return this value
-        // while running unit tests. To avoid using this invalid target framework for unit tests, we are
-        // explicitly setting and unsetting the switch.
-        // Switch value has 3 states: 0 - unknown, 1 - true, -1 - false
-        dynamic localAppContextSwitches = typeof(LocalAppContextSwitches).TestAccessor().Dynamic;
-        int previousSwitchValue = localAppContextSwitches.s_anchorLayoutV2;
-        localAppContextSwitches.s_anchorLayoutV2 = value;
-
-        return previousSwitchValue;
-    }
-
-    private static int SetAnchorLayoutV2() => SetAnchorLayoutV2Switch(value: 1);
-
-    private static int SetAnchorLayoutV1() => SetAnchorLayoutV2Switch(value: -1);
 
     private static void Dispose(Form form, Button button)
     {

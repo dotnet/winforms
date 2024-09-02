@@ -2,3 +2,7 @@
 
 # Collapse XLF files in PRs by default
 *.xlf linguist-generated=true
+
+
+# VerifyTests
+*.verified.txt text eol=lf working-tree-encoding=UTF-8

@@ -70,7 +70,7 @@ internal class ResourcePropertyMemberCodeDomSerializer : MemberCodeDomSerializer
 
         if (manager is not null)
         {
-            manager.SerializationComplete -= new EventHandler(OnSerializationComplete);
+            manager.SerializationComplete -= OnSerializationComplete;
         }
     }
 
@@ -92,7 +92,7 @@ internal class ResourcePropertyMemberCodeDomSerializer : MemberCodeDomSerializer
                         // hook up the event the first time to clear out our cache at the end of the serialization
                         if (_localizationLanguage is null)
                         {
-                            manager.SerializationComplete += new EventHandler(OnSerializationComplete);
+                            manager.SerializationComplete += OnSerializationComplete;
                         }
 
                         if (GetLocalizationLanguage(manager) != CultureInfo.InvariantCulture)

@@ -270,28 +270,23 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
 
     private bool RegisterControl(WebBrowserBase ctl)
     {
-        if (ctl.Site is ISite site)
+        if (ctl.Site is not ISite site || site.Container is not IContainer container)
         {
-            if (site.Container is IContainer cont)
-            {
-                if (_associatedContainer is not null)
-                {
-                    return cont == _associatedContainer;
-                }
-                else
-                {
-                    _associatedContainer = cont;
-                    if (site.GetService(typeof(IComponentChangeService)) is IComponentChangeService ccs)
-                    {
-                        ccs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
-                    }
-
-                    return true;
-                }
-            }
+            return false;
         }
 
-        return false;
+        if (_associatedContainer is not null)
+        {
+            return container == _associatedContainer;
+        }
+
+        _associatedContainer = container;
+        if (site.TryGetService(out IComponentChangeService? service))
+        {
+            service.ComponentRemoved += OnComponentRemoved;
+        }
+
+        return true;
     }
 
     private void OnComponentRemoved(object? sender, ComponentEventArgs e)
@@ -314,16 +309,15 @@ internal unsafe class WebBrowserContainer : IOleContainer.Interface, IOleInPlace
 
         _containerCache.Add(ctl);
 
-        if (_associatedContainer is null)
+        if (_associatedContainer is not null || ctl.Site is not ISite site)
         {
-            if (ctl.Site is ISite site)
-            {
-                _associatedContainer = site.Container;
-                if (site.GetService(typeof(IComponentChangeService)) is IComponentChangeService ccs)
-                {
-                    ccs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
-                }
-            }
+            return;
+        }
+
+        _associatedContainer = site.Container;
+        if (site.TryGetService(out IComponentChangeService? service))
+        {
+            service.ComponentRemoved += OnComponentRemoved;
         }
     }
 

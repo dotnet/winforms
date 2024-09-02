@@ -121,8 +121,10 @@ public partial class StatusStripTests
         Assert.Null(control.Region);
         Assert.NotNull(control.Renderer);
         Assert.Same(control.Renderer, control.Renderer);
-        Assert.IsType<ToolStripSystemRenderer>(control.Renderer);
-        Assert.Equal(ToolStripRenderMode.System, control.RenderMode);
+
+        Assert.True(control.Renderer is ToolStripSystemRenderer or ToolStripProfessionalRenderer, "Renderer is not one of the expected types.");
+        Assert.True(control.RenderMode is ToolStripRenderMode.System or ToolStripRenderMode.ManagerRenderMode);
+
         Assert.True(control.ResizeRedraw);
         Assert.Equal(200, control.Right);
         Assert.Equal(RightToLeft.No, control.RightToLeft);
@@ -554,7 +556,7 @@ public partial class StatusStripTests
 
         control.RenderMode = ToolStripRenderMode.System;
         Assert.Equal(ToolStripRenderMode.System, control.RenderMode);
-        Assert.False(property.CanResetValue(control));
+        Assert.True(property.CanResetValue(control));
 
         control.Renderer = new SubToolStripRenderer();
         Assert.Equal(ToolStripRenderMode.Custom, control.RenderMode);
@@ -562,10 +564,10 @@ public partial class StatusStripTests
 
         control.RenderMode = ToolStripRenderMode.ManagerRenderMode;
         Assert.Equal(ToolStripRenderMode.ManagerRenderMode, control.RenderMode);
-        Assert.True(property.CanResetValue(control));
+        Assert.False(property.CanResetValue(control));
 
         property.ResetValue(control);
-        Assert.Equal(ToolStripRenderMode.System, control.RenderMode);
+        Assert.Equal(ToolStripRenderMode.ManagerRenderMode, control.RenderMode);
         Assert.False(property.CanResetValue(control));
     }
 
@@ -582,7 +584,7 @@ public partial class StatusStripTests
 
         control.RenderMode = ToolStripRenderMode.System;
         Assert.Equal(ToolStripRenderMode.System, control.RenderMode);
-        Assert.False(property.ShouldSerializeValue(control));
+        Assert.True(property.ShouldSerializeValue(control));
 
         control.Renderer = new SubToolStripRenderer();
         Assert.Equal(ToolStripRenderMode.Custom, control.RenderMode);
@@ -590,10 +592,10 @@ public partial class StatusStripTests
 
         control.RenderMode = ToolStripRenderMode.ManagerRenderMode;
         Assert.Equal(ToolStripRenderMode.ManagerRenderMode, control.RenderMode);
-        Assert.True(property.ShouldSerializeValue(control));
+        Assert.False(property.ShouldSerializeValue(control));
 
         property.ResetValue(control);
-        Assert.Equal(ToolStripRenderMode.System, control.RenderMode);
+        Assert.Equal(ToolStripRenderMode.ManagerRenderMode, control.RenderMode);
         Assert.False(property.ShouldSerializeValue(control));
     }
 

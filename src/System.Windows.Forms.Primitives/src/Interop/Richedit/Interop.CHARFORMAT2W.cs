@@ -20,7 +20,7 @@ internal partial class Interop
             public byte bCharSet;
             public byte bPitchAndFamily;
 
-            public fixed char _szFaceName[(int)PInvoke.LF_FACESIZE];
+            public fixed char _szFaceName[(int)PInvokeCore.LF_FACESIZE];
 
             public ushort wWeight;
             public short sSpacing;
@@ -38,7 +38,7 @@ internal partial class Interop
 
             private Span<char> szFaceName
             {
-                get { fixed (char* c = _szFaceName) { return new Span<char>(c, (int)PInvoke.LF_FACESIZE); } }
+                get { fixed (char* c = _szFaceName) { return new Span<char>(c, (int)PInvokeCore.LF_FACESIZE); } }
             }
 
             public ReadOnlySpan<char> FaceName

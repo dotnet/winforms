@@ -203,6 +203,9 @@ public static class Clipboard
     /// <summary>
     ///  Retrieves data from the <see cref="Clipboard"/> in the specified format.
     /// </summary>
+    /// <exception cref="ThreadStateException">
+    ///  The current thread is not in single-threaded apartment (STA) mode.
+    /// </exception>
     public static object? GetData(string format) =>
         string.IsNullOrWhiteSpace(format) ? null : GetData(format, autoConvert: false);
 
@@ -288,7 +291,7 @@ public static class Clipboard
             // These are the only error states for Path.GetFullPath
             if (string.IsNullOrEmpty(path) || path.Contains('\0'))
             {
-                throw new ArgumentException(string.Format(SR.Clipboard_InvalidPath, path, "filePaths"));
+                throw new ArgumentException(string.Format(SR.Clipboard_InvalidPath, path, nameof(filePaths)));
             }
         }
 

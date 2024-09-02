@@ -7,6 +7,7 @@ using System.Windows.Forms.Automation;
 using Microsoft.DotNet.RemoteExecutor;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ListViewItem;
+
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
@@ -4405,6 +4406,38 @@ public class ListViewTests
         Assert.Equal(expectedCallCount, customAccessibleObject?.RaiseAutomationEventCalls);
     }
 
+    [WinFormsFact]
+    // Regression test for https://github.com/dotnet/winforms/issues/11658
+    public void ListView_OnItemChecked_VirtualMode()
+    {
+        ListViewItem listItem1 = new("Test 1");
+
+        using SubListView listView = new SubListView
+        {
+            VirtualMode = true,
+            VirtualListSize = 1,
+            CheckBoxes = true
+        };
+
+        listView.RetrieveVirtualItem += (s, e) =>
+        {
+            e.Item = e.ItemIndex switch
+            {
+                0 => listItem1,
+                _ => throw new NotImplementedException()
+            };
+        };
+        listView.CreateControl();
+
+        AccessibleObject accessibleObject = listView.AccessibilityObject;
+        listView.Items[0].Focused = true;
+        listView.OnGotFocus(new EventArgs());
+        var clone = (ListViewItem)listView.Items[0].Clone();
+        clone.Checked = true;
+        Action action = () => listView.OnItemChecked(new ItemCheckedEventArgs(clone));
+        action.Should().NotThrow();
+    }
+
     public static IEnumerable<object[]> ListView_Checkboxes_VirtualMode_Disabling_TestData()
     {
         foreach (View view in Enum.GetValues(typeof(View)))
@@ -5203,6 +5236,66 @@ public class ListViewTests
         Assert.True(listView.IsHandleCreated);
     }
 
+    public static TheoryData<ListViewItem> GetListViewItemTheoryData() => new()
+    {
+        { new("Item 1") },
+        { null }
+    };
+
+    [WinFormsTheory]
+    [MemberData(nameof(GetListViewItemTheoryData))]
+    // Regression test for https://github.com/dotnet/winforms/issues/11663.
+    public void ListView_VirtualMode_ReleaseUiaProvider_Success(ListViewItem listItem)
+    {
+        using ListView listView = new()
+        {
+            VirtualMode = true,
+            VirtualListSize = 1
+        };
+
+        listView.RetrieveVirtualItem += (s, e) =>
+        {
+            e.Item = e.ItemIndex switch
+            {
+                0 => listItem,
+                _ => throw new NotImplementedException()
+            };
+        };
+
+        listView.AccessibilityObject.Should().NotBeNull();
+
+        Action action = () => listView.ReleaseUiaProvider(listView.InternalHandle);
+        action.Should().NotThrow();
+        listView.IsAccessibilityObjectCreated.Should().BeFalse();
+        listView.IsHandleCreated.Should().BeFalse();
+    }
+
+    [WinFormsFact]
+    public void ListView_VirtualMode_GetListViewItemAsExpected()
+    {
+        using ListView listView = new()
+        {
+            VirtualMode = true,
+            VirtualListSize = 2
+        };
+
+        ListViewItem listItem1 = new("Item 1");
+        ListViewItem listItem2 = null;
+        listView.RetrieveVirtualItem += (s, e) =>
+        {
+            e.Item = e.ItemIndex switch
+            {
+                0 => listItem1,
+                1 => listItem2,
+                _ => throw new NotImplementedException()
+            };
+        };
+        listView.Items.GetItemByIndex(0).Should().Be(listView.Items[0]);
+        listView.Items.GetItemByIndex(1).Should().BeNull();
+        Action action = () => listView.Items[1].ToString();
+        action.Should().Throw<InvalidOperationException>(SR.ListViewVirtualItemRequired);
+    }
+
     private class SubListViewAccessibleObject : ListView.ListViewAccessibleObject
     {
         internal string AnnouncedColumn { get; private set; }
@@ -5881,6 +5974,96 @@ public class ListViewTests
         callCount.Should().Be(1);
     }
 
+    [WinFormsFact]
+    public void ListView_ColumnClick_AddRemoveHandlers_ShouldCorrectlyInvokeOrNotInvokeEvent()
+    {
+        using SubListView listView = new();
+        int firstHandlerInvokeCount = 0;
+        int secondHandlerInvokeCount = 0;
+        ColumnClickEventArgs eventArgs = null;
+
+        ColumnClickEventHandler firstHandler = (sender, e) =>
+        {
+            firstHandlerInvokeCount++;
+            eventArgs = e;
+        };
+
+        ColumnClickEventHandler secondHandler = (sender, e) => { secondHandlerInvokeCount++; };
+
+        // Add first handler and simulate the column click event
+        listView.ColumnClick += firstHandler;
+        ColumnClickEventArgs args = new(1);
+        listView.TestAccessor().Dynamic.OnColumnClick(args);
+
+        firstHandlerInvokeCount.Should().Be(1);
+        secondHandlerInvokeCount.Should().Be(0);
+        eventArgs.Should().NotBeNull();
+        eventArgs.Column.Should().Be(1);
+
+        // Add second handler and simulate the event again
+        listView.ColumnClick += secondHandler;
+        listView.TestAccessor().Dynamic.OnColumnClick(args);
+
+        firstHandlerInvokeCount.Should().Be(2); // First handler called again
+        secondHandlerInvokeCount.Should().Be(1); // Second handler called for the first time
+
+        // Remove first handler and simulate the event again
+        listView.ColumnClick -= firstHandler;
+        listView.TestAccessor().Dynamic.OnColumnClick(args);
+
+        // First handler should not be called again, second handler should be called again
+        firstHandlerInvokeCount.Should().Be(2);
+        secondHandlerInvokeCount.Should().Be(2);
+    }
+
+    [WinFormsFact]
+    public void ListView_GroupTaskLinkClick_EventHandling_ShouldBehaveAsExpected()
+    {
+        using SubListView listView = new();
+        int callCount = 0;
+        object eventSender = null;
+        ListViewGroupEventArgs eventArgs = null;
+
+        EventHandler<ListViewGroupEventArgs> handler1 = (sender, e) =>
+        {
+            callCount++;
+            eventSender = sender;
+            eventArgs = e;
+        };
+
+        EventHandler<ListViewGroupEventArgs> handler2 = (sender, e) => { callCount++; };
+
+        // Test adding and invoking first handler.
+        listView.GroupTaskLinkClick += handler1;
+        ListViewGroupEventArgs expectedEventArgs = new(1);
+        listView.TestAccessor().Dynamic.OnGroupTaskLinkClick(expectedEventArgs);
+
+        callCount.Should().Be(1);
+        eventSender.Should().Be(listView);
+        eventArgs.Should().Be(expectedEventArgs);
+
+        // Test adding and invoking both handlers.
+        listView.GroupTaskLinkClick += handler2;
+        listView.TestAccessor().Dynamic.OnGroupTaskLinkClick(new ListViewGroupEventArgs(2));
+
+        // Expect callCount to be 3 because both handlers should be called.
+        callCount.Should().Be(3);
+
+        // Test removing first handler and invoking.
+        listView.GroupTaskLinkClick -= handler1;
+        listView.TestAccessor().Dynamic.OnGroupTaskLinkClick(new ListViewGroupEventArgs(3));
+
+        // Expect callCount to be 4 because only second handler should be called.
+        callCount.Should().Be(4);
+
+        // Test removing second handler and ensuring no invocation.
+        listView.GroupTaskLinkClick -= handler2;
+        listView.TestAccessor().Dynamic.OnGroupTaskLinkClick(new ListViewGroupEventArgs(4));
+
+        // Expect callCount to remain 4 because no handlers should be called.
+        callCount.Should().Be(4);
+    }
+
     private class SubListViewItem : ListViewItem
     {
         public AccessibleObject CustomAccessibleObject { get; set; }
@@ -5984,6 +6167,8 @@ public class ListViewTests
         public new void OnAfterLabelEdit(LabelEditEventArgs e) => base.OnAfterLabelEdit(e);
 
         public new void OnCacheVirtualItems(CacheVirtualItemsEventArgs e) => base.OnCacheVirtualItems(e);
+
+        public new void OnItemChecked(ItemCheckedEventArgs e) => base.OnItemChecked(e);
     }
 
     private SubListView GetSubListViewWithData(View view, bool virtualMode, bool showGroups, bool withinGroup, bool createControl)

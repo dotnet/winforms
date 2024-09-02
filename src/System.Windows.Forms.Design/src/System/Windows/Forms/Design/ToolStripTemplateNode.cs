@@ -482,12 +482,13 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
 
                 SelectionService.SetSelectedComponents(null, SelectionTypes.Replace);
                 ToolStripDropDown oldContextMenu = _contextMenu;
+
                 // PERF: Consider refresh mechanism for the derived items.
                 if (oldContextMenu is not null)
                 {
-                    oldContextMenu.Closed -= new ToolStripDropDownClosedEventHandler(OnContextMenuClosed);
+                    oldContextMenu.Closed -= OnContextMenuClosed;
                     oldContextMenu.Closing -= OnContextMenuClosing;
-                    oldContextMenu.Opened -= new EventHandler(OnContextMenuOpened);
+                    oldContextMenu.Opened -= OnContextMenuOpened;
                     oldContextMenu.Dispose();
                 }
 
@@ -674,32 +675,32 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
 
             if (_component is ToolStrip strip)
             {
-                strip.RightToLeftChanged -= new EventHandler(OnRightToLeftChanged);
+                strip.RightToLeftChanged -= OnRightToLeftChanged;
             }
             else
             {
                 if (_component is ToolStripDropDownItem stripItem)
                 {
-                    stripItem.RightToLeftChanged -= new EventHandler(OnRightToLeftChanged);
+                    stripItem.RightToLeftChanged -= OnRightToLeftChanged;
                 }
             }
 
             if (_centerLabel is not null)
             {
-                _centerLabel.MouseUp -= new MouseEventHandler(CenterLabelClick);
-                _centerLabel.MouseEnter -= new EventHandler(CenterLabelMouseEnter);
-                _centerLabel.MouseMove -= new MouseEventHandler(CenterLabelMouseMove);
-                _centerLabel.MouseLeave -= new EventHandler(CenterLabelMouseLeave);
+                _centerLabel.MouseUp -= CenterLabelClick;
+                _centerLabel.MouseEnter -= CenterLabelMouseEnter;
+                _centerLabel.MouseMove -= CenterLabelMouseMove;
+                _centerLabel.MouseLeave -= CenterLabelMouseLeave;
                 _centerLabel.Dispose();
                 _centerLabel = null;
             }
 
             if (_addItemButton is not null)
             {
-                _addItemButton.MouseMove -= new MouseEventHandler(OnMouseMove);
-                _addItemButton.MouseUp -= new MouseEventHandler(OnMouseUp);
-                _addItemButton.MouseDown -= new MouseEventHandler(OnMouseDown);
-                _addItemButton.DropDownOpened -= new EventHandler(OnAddItemButtonDropDownOpened);
+                _addItemButton.MouseMove -= OnMouseMove;
+                _addItemButton.MouseUp -= OnMouseUp;
+                _addItemButton.MouseDown -= OnMouseDown;
+                _addItemButton.DropDownOpened -= OnAddItemButtonDropDownOpened;
                 _addItemButton.DropDown.Dispose();
                 _addItemButton.Dispose();
                 _addItemButton = null;
@@ -707,19 +708,20 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
 
             if (_contextMenu is not null)
             {
-                _contextMenu.Closed -= new ToolStripDropDownClosedEventHandler(OnContextMenuClosed);
+                _contextMenu.Closed -= OnContextMenuClosed;
                 _contextMenu.Closing -= OnContextMenuClosing;
-                _contextMenu.Opened -= new EventHandler(OnContextMenuOpened);
+                _contextMenu.Opened -= OnContextMenuOpened;
                 _contextMenu = null;
             }
 
-            _miniToolStrip.MouseLeave -= new EventHandler(OnMouseLeave);
+            _miniToolStrip.MouseLeave -= OnMouseLeave;
             _miniToolStrip.Dispose();
             _miniToolStrip = null;
+
             // Surface can be null. VS Whidbey #572862
             if (_designSurface is not null)
             {
-                _designSurface.Flushed -= new EventHandler(OnLoaderFlushed);
+                _designSurface.Flushed -= OnLoaderFlushed;
                 _designSurface = null;
             }
 
@@ -921,12 +923,12 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
                     // swap in our insitu textbox
                     _miniToolStrip.Items.Insert(index, _centerLabel);
                     _miniToolStrip.Items.Remove(_centerTextBox);
-                    ((TextBox)(_centerTextBox.Control)).KeyUp -= new KeyEventHandler(OnKeyUp);
-                    ((TextBox)(_centerTextBox.Control)).KeyDown -= new KeyEventHandler(OnKeyDown);
+                    ((TextBox)(_centerTextBox.Control)).KeyUp -= OnKeyUp;
+                    ((TextBox)(_centerTextBox.Control)).KeyDown -= OnKeyDown;
                 }
 
-                _centerTextBox.MouseEnter -= new EventHandler(CenterTextBoxMouseEnter);
-                _centerTextBox.MouseLeave -= new EventHandler(CenterTextBoxMouseLeave);
+                _centerTextBox.MouseEnter -= CenterTextBoxMouseEnter;
+                _centerTextBox.MouseLeave -= CenterTextBoxMouseLeave;
                 _centerTextBox.Dispose();
                 _centerTextBox = null;
                 _inSituMode = false;
@@ -1280,16 +1282,29 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
                 if (_contextMenu is null)
                 {
                     _isPopulated = true;
-                    _contextMenu = ToolStripDesignerUtils.GetNewItemDropDown(_component, null, new EventHandler(AddNewItemClick), false, _component.Site, true);
-                    _contextMenu.Closed += new ToolStripDropDownClosedEventHandler(OnContextMenuClosed);
+                    _contextMenu = ToolStripDesignerUtils.GetNewItemDropDown(
+                        _component,
+                        currentItem: null,
+                        AddNewItemClick,
+                        convertTo: false,
+                        _component.Site,
+                        populateCustom: true);
+
+                    _contextMenu.Closed += OnContextMenuClosed;
                     _contextMenu.Closing += OnContextMenuClosing;
-                    _contextMenu.Opened += new EventHandler(OnContextMenuOpened);
+                    _contextMenu.Opened += OnContextMenuOpened;
                     _contextMenu.Text = "ItemSelectionMenu";
                 }
                 else if (!_isPopulated)
                 {
                     _isPopulated = true;
-                    ToolStripDesignerUtils.GetCustomNewItemDropDown(_contextMenu, _component, null, new EventHandler(AddNewItemClick), false, _component.Site);
+                    ToolStripDesignerUtils.GetCustomNewItemDropDown(
+                        _contextMenu,
+                        _component,
+                        currentItem: null,
+                        AddNewItemClick,
+                        convertTo: false,
+                        _component.Site);
                 }
 
                 if (_component is ToolStrip strip)
@@ -1330,6 +1345,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
 
             Margin = new Padding(1)
         };
+
         if (currentItem is ToolStripDropDownItem)
         {
             _centerLabel.Margin = new Padding(1, 2, 1, 3);
@@ -1339,10 +1355,10 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
         _centerLabel.Name = CenterLabelName;
         _centerLabel.Size = _miniToolStrip.DisplayRectangle.Size - _centerLabel.Margin.Size;
         _centerLabel.ToolTipText = SR.ToolStripDesignerTemplateNodeLabelToolTip;
-        _centerLabel.MouseUp += new MouseEventHandler(CenterLabelClick);
-        _centerLabel.MouseEnter += new EventHandler(CenterLabelMouseEnter);
-        _centerLabel.MouseMove += new MouseEventHandler(CenterLabelMouseMove);
-        _centerLabel.MouseLeave += new EventHandler(CenterLabelMouseLeave);
+        _centerLabel.MouseUp += CenterLabelClick;
+        _centerLabel.MouseEnter += CenterLabelMouseEnter;
+        _centerLabel.MouseMove += CenterLabelMouseMove;
+        _centerLabel.MouseLeave += CenterLabelMouseLeave;
 
         _miniToolStrip.Items.AddRange((ToolStripItem[])[_centerLabel]);
     }
@@ -1369,15 +1385,22 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
             _addItemButton.ToolTipText = SR.ToolStripDesignerTemplateNodeSplitButtonToolTip;
         }
 
-        _addItemButton.MouseDown += new MouseEventHandler(OnMouseDown);
-        _addItemButton.MouseMove += new MouseEventHandler(OnMouseMove);
-        _addItemButton.MouseUp += new MouseEventHandler(OnMouseUp);
+        _addItemButton.MouseDown += OnMouseDown;
+        _addItemButton.MouseMove += OnMouseMove;
+        _addItemButton.MouseUp += OnMouseUp;
         _addItemButton.DropDownOpened += OnAddItemButtonDropDownOpened;
-        _contextMenu = ToolStripDesignerUtils.GetNewItemDropDown(component, null, new EventHandler(AddNewItemClick), false, component.Site, false);
+        _contextMenu = ToolStripDesignerUtils.GetNewItemDropDown(
+            component,
+            currentItem: null,
+            AddNewItemClick,
+            convertTo: false,
+            component.Site,
+            populateCustom: false);
+
         _contextMenu.Text = "ItemSelectionMenu";
-        _contextMenu.Closed += new ToolStripDropDownClosedEventHandler(OnContextMenuClosed);
+        _contextMenu.Closed += OnContextMenuClosed;
         _contextMenu.Closing += OnContextMenuClosing;
-        _contextMenu.Opened += new EventHandler(OnContextMenuOpened);
+        _contextMenu.Opened += OnContextMenuOpened;
         _addItemButton.DropDown = _contextMenu;
         _addItemButton.AccessibleName = SR.ToolStripDesignerTemplateNodeSplitButtonStatusStripAccessibleName;
         _addItemButton.AccessibleRole = AccessibleRole.ButtonDropDown;
@@ -1420,15 +1443,17 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
         if (currentItem is ToolStrip strip)
         {
             _miniToolStrip.RightToLeft = strip.RightToLeft;
-            strip.RightToLeftChanged += new EventHandler(OnRightToLeftChanged);
-            // Make TransparentToolStrip has the same "Site" as ToolStrip. This could make sure TransparentToolStrip has the same design time behavior as ToolStrip.
+            strip.RightToLeftChanged += OnRightToLeftChanged;
+
+            // Make TransparentToolStrip has the same "Site" as ToolStrip. This could make sure TransparentToolStrip
+            // has the same design time behavior as ToolStrip.
             _miniToolStrip.Site = strip.Site;
         }
 
         if (currentItem is ToolStripDropDownItem stripItem)
         {
             _miniToolStrip.RightToLeft = stripItem.RightToLeft;
-            stripItem.RightToLeftChanged += new EventHandler(OnRightToLeftChanged);
+            stripItem.RightToLeftChanged += OnRightToLeftChanged;
         }
 
         _miniToolStrip.SuspendLayout();
@@ -1454,7 +1479,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
             _miniToolStrip.AccessibleRole = AccessibleRole.ButtonDropDown;
         }
 
-        _miniToolStrip.MouseLeave += new EventHandler(OnMouseLeave);
+        _miniToolStrip.MouseLeave += OnMouseLeave;
         _miniToolStrip.ResumeLayout();
     }
 
@@ -1553,7 +1578,9 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
 
                 // 1.Slowly click on a menu strip item twice to make it editable, while the item's dropdown menu is visible
                 // 2.Select the text of the item and right click on it
-                // 3.Left click 'Copy' or 'Cut' in the context menu IDE crashed because left click in step3 invoked glyph  behavior, which commited and destroyed the insitu edit box and thus  the 'copy' or 'cut' action has no text to work with.  Thus need to block glyph behaviors while the context menu is displayed.
+                // 3.Left click 'Copy' or 'Cut' in the context menu IDE crashed because left click in step3 invoked glyph
+                //   behavior, which commited and destroyed the insitu edit box and thus  the 'copy' or 'cut' action has no
+                //   text to work with.  Thus need to block glyph behaviors while the context menu is displayed.
                 case PInvoke.WM_CONTEXTMENU:
                     _owner.IsSystemContextMenuDisplayed = true;
                     base.WndProc(ref m);

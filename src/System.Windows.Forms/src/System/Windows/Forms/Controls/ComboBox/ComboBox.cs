@@ -119,7 +119,7 @@ public partial class ComboBox : ListControl
                  ControlStyles.UseTextForAccessibility |
                  ControlStyles.StandardClick, false);
 
-        _requestedHeight = DefaultSimpleStyleHeight;
+        _requestedHeight = ScaleHelper.ScaleToInitialSystemDpi(DefaultSimpleStyleHeight);
 
         // this class overrides GetPreferredSizeCore, let Control automatically cache the result
         SetExtendedState(ExtendedStates.UserPreferredSizeCache, true);
@@ -221,7 +221,7 @@ public partial class ComboBox : ListControl
             if (_autoCompleteCustomSource is null)
             {
                 _autoCompleteCustomSource = [];
-                _autoCompleteCustomSource.CollectionChanged += new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
+                _autoCompleteCustomSource.CollectionChanged += OnAutoCompleteCustomSourceChanged;
             }
 
             return _autoCompleteCustomSource;
@@ -235,14 +235,14 @@ public partial class ComboBox : ListControl
 
             if (_autoCompleteCustomSource is not null)
             {
-                _autoCompleteCustomSource.CollectionChanged -= new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
+                _autoCompleteCustomSource.CollectionChanged -= OnAutoCompleteCustomSourceChanged;
             }
 
             _autoCompleteCustomSource = value;
 
             if (_autoCompleteCustomSource is not null)
             {
-                _autoCompleteCustomSource.CollectionChanged += new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
+                _autoCompleteCustomSource.CollectionChanged += OnAutoCompleteCustomSourceChanged;
             }
 
             SetAutoComplete(false, true);
@@ -417,16 +417,7 @@ public partial class ComboBox : ListControl
     [RefreshProperties(RefreshProperties.Repaint)]
     public DrawMode DrawMode
     {
-        get
-        {
-            int drawMode = Properties.GetInteger(s_propDrawMode, out bool found);
-            if (found)
-            {
-                return (DrawMode)drawMode;
-            }
-
-            return DrawMode.Normal;
-        }
+        get => Properties.GetValueOrDefault(s_propDrawMode, DrawMode.Normal);
         set
         {
             if (DrawMode != value)
@@ -434,7 +425,7 @@ public partial class ComboBox : ListControl
                 // valid values are 0x0 to 0x2.
                 SourceGenerated.EnumValidator.Validate(value);
                 ResetHeightCache();
-                Properties.SetInteger(s_propDrawMode, (int)value);
+                Properties.AddValue(s_propDrawMode, value);
                 RecreateHandle();
             }
         }
@@ -447,18 +438,14 @@ public partial class ComboBox : ListControl
     [SRDescription(nameof(SR.ComboBoxDropDownWidthDescr))]
     public int DropDownWidth
     {
-        get
-        {
-            int dropDownWidth = Properties.GetInteger(s_propDropDownWidth, out bool found);
-            return found ? dropDownWidth : Width;
-        }
+        get => Properties.TryGetValue(s_propDropDownWidth, out int dropDownWidth) ? dropDownWidth : Width;
         set
         {
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
 
-            if (Properties.GetInteger(s_propDropDownWidth) != value)
+            if (Properties.GetValueOrDefault<int>(s_propDropDownWidth) != value)
             {
-                Properties.SetInteger(s_propDropDownWidth, value);
+                Properties.AddValue(s_propDropDownWidth, value);
                 if (IsHandleCreated)
                 {
                     PInvoke.SendMessage(this, PInvoke.CB_SETDROPPEDWIDTH, (WPARAM)value);
@@ -477,35 +464,24 @@ public partial class ComboBox : ListControl
     [DefaultValue(106)]
     public int DropDownHeight
     {
-        get
-        {
-            int dropDownHeight = Properties.GetInteger(s_propDropDownHeight, out bool found);
-            if (found)
-            {
-                return dropDownHeight;
-            }
-            else
-            {
-                return DefaultDropDownHeight;
-            }
-        }
+        get => Properties.TryGetValue(s_propDropDownHeight, out int dropDownHeight) ? dropDownHeight : DefaultDropDownHeight;
         set
         {
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
 
-            if (Properties.GetInteger(s_propDropDownHeight) != value)
+            if (Properties.GetValueOrDefault<int>(s_propDropDownHeight) != value)
             {
-                Properties.SetInteger(s_propDropDownHeight, value);
+                Properties.AddValue(s_propDropDownHeight, value);
 
                 // The dropDownHeight is not reflected unless the
-                // combobox integralHeight == false..
+                // ComboBox integralHeight == false..
                 IntegralHeight = false;
             }
         }
     }
 
     /// <summary>
-    ///  Indicates whether the DropDown of the combo is  currently dropped down.
+    ///  Indicates whether the DropDown of the combo is currently dropped down.
     /// </summary>
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -636,27 +612,19 @@ public partial class ComboBox : ListControl
                 drawMode == DrawMode.OwnerDrawVariable ||
                 !IsHandleCreated)
             {
-                int itemHeight = Properties.GetInteger(s_propItemHeight, out bool found);
-                if (found)
-                {
-                    return itemHeight;
-                }
-                else
-                {
-                    return FontHeight + 2;
-                }
+                return Properties.TryGetValue(s_propItemHeight, out int itemHeight) ? itemHeight : FontHeight + 2;
             }
 
             // Note that the above if clause deals with the case when the handle has not yet been created
             Debug.Assert(IsHandleCreated, "Handle should be created at this point");
 
-            int h = (int)PInvoke.SendMessage(this, PInvoke.CB_GETITEMHEIGHT);
-            if (h == -1)
+            int height = (int)PInvoke.SendMessage(this, PInvoke.CB_GETITEMHEIGHT);
+            if (height == -1)
             {
                 throw new Win32Exception();
             }
 
-            return h;
+            return height;
         }
         set
         {
@@ -664,9 +632,9 @@ public partial class ComboBox : ListControl
 
             ResetHeightCache();
 
-            if (Properties.GetInteger(s_propItemHeight) != value)
+            if (Properties.GetValueOrDefault<int>(s_propItemHeight) != value)
             {
-                Properties.SetInteger(s_propItemHeight, value);
+                Properties.AddValue(s_propItemHeight, value);
                 if (DrawMode != DrawMode.Normal)
                 {
                     UpdateItemHeight();
@@ -698,18 +666,8 @@ public partial class ComboBox : ListControl
     // is used in DropDownList style.
     private string MatchingText
     {
-        get
-        {
-            string? matchingText = (string?)Properties.GetObject(s_propMatchingText);
-            return matchingText ?? string.Empty;
-        }
-        set
-        {
-            if (value is not null || Properties.ContainsObject(s_propMatchingText))
-            {
-                Properties.SetObject(s_propMatchingText, value);
-            }
-        }
+        get => Properties.GetStringOrEmptyString(s_propMatchingText);
+        set => Properties.AddOrRemoveString(s_propMatchingText, value);
     }
 
     /// <summary>
@@ -759,7 +717,7 @@ public partial class ComboBox : ListControl
     {
         get
         {
-            return Properties.GetInteger(s_propMaxLength);
+            return Properties.GetValueOrDefault<int>(s_propMaxLength);
         }
         set
         {
@@ -770,7 +728,7 @@ public partial class ComboBox : ListControl
 
             if (MaxLength != value)
             {
-                Properties.SetInteger(s_propMaxLength, value);
+                Properties.AddValue(s_propMaxLength, value);
                 if (IsHandleCreated)
                 {
                     PInvoke.SendMessage(this, PInvoke.CB_LIMITTEXT, (WPARAM)value);
@@ -892,7 +850,7 @@ public partial class ComboBox : ListControl
         // controls to be the same height.
         Size textExtent = Size.Empty;
 
-        using (var hfont = GdiCache.GetHFONT(Font))
+        using (var hfont = GdiCache.GetHFONTScope(Font))
         using (var screen = GdiCache.GetScreenHdc())
         {
             // this is the character that Windows uses to determine the extent
@@ -1134,16 +1092,7 @@ public partial class ComboBox : ListControl
     [RefreshProperties(RefreshProperties.Repaint)]
     public ComboBoxStyle DropDownStyle
     {
-        get
-        {
-            int style = Properties.GetInteger(s_propStyle, out bool found);
-            if (found)
-            {
-                return (ComboBoxStyle)style;
-            }
-
-            return ComboBoxStyle.DropDown;
-        }
+        get => Properties.GetValueOrDefault(s_propStyle, ComboBoxStyle.DropDown);
         set
         {
             if (DropDownStyle == value)
@@ -1165,7 +1114,7 @@ public partial class ComboBox : ListControl
             // reset preferred height.
             ResetHeightCache();
 
-            Properties.SetInteger(s_propStyle, (int)value);
+            Properties.AddValue(s_propStyle, value);
 
             if (IsHandleCreated)
             {
@@ -1941,7 +1890,7 @@ public partial class ComboBox : ListControl
         {
             if (_autoCompleteCustomSource is not null)
             {
-                _autoCompleteCustomSource.CollectionChanged -= new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
+                _autoCompleteCustomSource.CollectionChanged -= OnAutoCompleteCustomSourceChanged;
             }
 
             if (_stringSource is not null)
@@ -2377,7 +2326,7 @@ public partial class ComboBox : ListControl
     ///  Inheriting classes should not forget to call
     ///  base.OnHandleCreated()
     /// </summary>
-    protected override void OnHandleCreated(EventArgs e)
+    protected override unsafe void OnHandleCreated(EventArgs e)
     {
         base.OnHandleCreated(e);
 
@@ -2416,14 +2365,12 @@ public partial class ComboBox : ListControl
             }
         }
 
-        int dropDownWidth = Properties.GetInteger(s_propDropDownWidth, out bool found);
-        if (found)
+        if (Properties.TryGetValue(s_propDropDownWidth, out int dropDownWidth))
         {
             PInvoke.SendMessage(this, PInvoke.CB_SETDROPPEDWIDTH, (WPARAM)dropDownWidth);
         }
 
-        _ = Properties.GetInteger(s_propItemHeight, out found);
-        if (found)
+        if (Properties.ContainsKey(s_propItemHeight))
         {
             // someone has set the item height - update it
             UpdateItemHeight();
@@ -2448,6 +2395,20 @@ public partial class ComboBox : ListControl
         {
             _fromHandleCreate = false;
         }
+
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        if (Application.IsDarkModeEnabled)
+        {
+            // Style the ComboBox Open-Button:
+            PInvoke.SetWindowTheme(HWND, $"{DarkModeIdentifier}_{ComboBoxButtonThemeIdentifier}", null);
+            COMBOBOXINFO cInfo = default;
+            cInfo.cbSize = (uint)sizeof(COMBOBOXINFO);
+
+            // Style the ComboBox drop-down (including its ScrollBar(s)):
+            _ = PInvoke.GetComboBoxInfo(HWND, ref cInfo);
+            PInvoke.SetWindowTheme(cInfo.hwndList, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null);
+        }
+#pragma warning restore WFO5001
 
         if (_itemsCollection is not null)
         {
@@ -3201,12 +3162,12 @@ public partial class ComboBox : ListControl
 
     private void ResetDropDownWidth()
     {
-        Properties.RemoveInteger(s_propDropDownWidth);
+        Properties.RemoveValue(s_propDropDownWidth);
     }
 
     private void ResetItemHeight()
     {
-        Properties.RemoveInteger(s_propItemHeight);
+        Properties.RemoveValue(s_propItemHeight);
     }
 
     public override void ResetText()
@@ -3372,8 +3333,7 @@ public partial class ComboBox : ListControl
     {
         // If we are changing height, store the requested height.
         // Requested height is used if the style is changed to simple.
-        // (
-        if ((specified & BoundsSpecified.Height) != BoundsSpecified.None)
+        if ((specified & BoundsSpecified.Height) != BoundsSpecified.None && DropDownStyle == ComboBoxStyle.Simple)
         {
             _requestedHeight = height;
         }
@@ -3431,18 +3391,12 @@ public partial class ComboBox : ListControl
         return _autoCompleteCustomSource is not null && _autoCompleteCustomSource.Count > 0;
     }
 
-    internal bool ShouldSerializeDropDownWidth()
-    {
-        return (Properties.ContainsInteger(s_propDropDownWidth));
-    }
+    internal bool ShouldSerializeDropDownWidth() => Properties.ContainsKey(s_propDropDownWidth);
 
     /// <summary>
     ///  Indicates whether the itemHeight property should be persisted.
     /// </summary>
-    internal bool ShouldSerializeItemHeight()
-    {
-        return (Properties.ContainsInteger(s_propItemHeight));
-    }
+    internal bool ShouldSerializeItemHeight() => Properties.ContainsKey(s_propItemHeight);
 
     /// <summary>
     ///  Determines if the Text property needs to be persisted.
@@ -3885,7 +3839,14 @@ public partial class ComboBox : ListControl
                     }
 
                     using Graphics g = Graphics.FromHdcInternal((IntPtr)dc);
-                    FlatComboBoxAdapter.DrawFlatCombo(this, g);
+                    if ((!Enabled || FlatStyle == FlatStyle.Popup) && MouseIsOver)
+                    {
+                        FlatComboBoxAdapter.DrawPopUpCombo(this, g);
+                    }
+                    else
+                    {
+                        FlatComboBoxAdapter.DrawFlatCombo(this, g);
+                    }
 
                     return;
                 }
@@ -3958,10 +3919,10 @@ public partial class ComboBox : ListControl
     {
         get
         {
-            if (!(Properties.GetObject(s_propFlatComboAdapter) is FlatComboAdapter comboAdapter) || !comboAdapter.IsValid(this))
+            if (!Properties.TryGetValue(s_propFlatComboAdapter, out FlatComboAdapter? comboAdapter) || !comboAdapter.IsValid(this))
             {
                 comboAdapter = CreateFlatComboAdapterInstance();
-                Properties.SetObject(s_propFlatComboAdapter, comboAdapter);
+                Properties.AddValue(s_propFlatComboAdapter, comboAdapter);
             }
 
             return comboAdapter;
@@ -3969,5 +3930,5 @@ public partial class ComboBox : ListControl
     }
 
     internal virtual FlatComboAdapter CreateFlatComboAdapterInstance()
-        => new(this, smallButton: false);
+        => new(this, shouldRedrawAsSmallButton: false);
 }

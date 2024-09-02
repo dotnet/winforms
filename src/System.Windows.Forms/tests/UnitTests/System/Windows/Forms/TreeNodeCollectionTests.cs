@@ -214,6 +214,121 @@ public class TreeNodeCollectionTests
         Assert.Empty(collection.Find(key, searchAllChildren: false));
     }
 
+    [WinFormsFact]
+    public void TreeNodeCollection_Sort_ShouldAfterAddingItems()
+    {
+        using TreeView treeView = new();
+        string key = "7";
+        TreeNode child1 = new()
+        {
+            Name = "8",
+            Text = "8"
+        };
+        TreeNode child2 = new()
+        {
+            Name = "5",
+            Text = "5"
+        };
+        TreeNode child3 = new()
+        {
+            Name = "7",
+            Text = "7"
+        };
+
+        treeView.Nodes.Add(child1);
+        treeView.Nodes.Add(child2);
+        treeView.Nodes.Add(child3);
+
+        treeView.Sort();
+        treeView.CreateControl();
+
+        TreeNode[] treeNodeArray =
+        [
+            new()
+            {
+                Name = "2",
+                Text = "2"
+            },
+            new()
+            {
+                Name = "1",
+                Text = "1"
+            }
+        ];
+
+        treeView.Nodes.AddRange(treeNodeArray);
+
+        TreeNode treeNode = treeView.Nodes.Find(key, searchAllChildren: true)[0];
+        treeNode.Should().NotBeNull();
+        treeView.Nodes.IndexOf(treeNode).Should().Be(3);
+    }
+
+    [WinFormsFact]
+    public void TreeNodeCollection_TreeNodeCollectionAddRangeRespectsSortOrderSwitch()
+    {
+        TreeNode child1 = new()
+        {
+            Name = "8",
+            Text = "8"
+        };
+        TreeNode child2 = new()
+        {
+            Name = "5",
+            Text = "5"
+        };
+        TreeNode child3 = new()
+        {
+            Name = "7",
+            Text = "7"
+        };
+        TreeNode[] treeNodeArray =
+        [
+            new()
+            {
+                Name = "2",
+                Text = "2"
+            },
+            new()
+            {
+                Name = "1",
+                Text = "1"
+            }
+        ];
+
+        TreeNode treeNode;
+        using (TreeNodeCollectionAddRangeRespectsSortOrderScope scope = new(enable: true))
+        {
+            using TreeView treeView2 = new();
+
+            treeView2.Nodes.Add(child1);
+            treeView2.Nodes.Add(child2);
+            treeView2.Nodes.Add(child3);
+
+            treeView2.CreateControl();
+            treeView2.Sort();
+            treeView2.Nodes.AddRange(treeNodeArray);
+
+            treeNode = treeView2.Nodes.Find("2", searchAllChildren: true)[0];
+            treeNode.Should().NotBeNull();
+            treeView2.Nodes.IndexOf(treeNode).Should().Be(1);
+            treeView2.Nodes.Clear();
+        }
+
+        using TreeView treeView3 = new();
+
+        treeView3.Nodes.Add(child1);
+        treeView3.Nodes.Add(child2);
+        treeView3.Nodes.Add(child3);
+
+        treeView3.CreateControl();
+        treeView3.Sort();
+        treeView3.Nodes.AddRange(treeNodeArray);
+
+        treeNode = treeView3.Nodes.Find("2", searchAllChildren: true)[0];
+        treeNode.Should().NotBeNull();
+        treeView3.Nodes.IndexOf(treeNode).Should().Be(1);
+    }
+
     [WinFormsTheory]
     [NullAndEmptyStringData]
     public void TreeNodeCollection_Find_NullOrEmptyKey_ThrowsArgumentNullException(string key)
@@ -386,5 +501,38 @@ public class TreeNodeCollectionTests
 
         treeNode.Should().Be(collection[0]);
         treeNode.ImageIndex.Should().Be(imageIndex);
+    }
+
+    [WinFormsTheory]
+    [InlineData("name1", true)]
+    [InlineData("name2", true)]
+    [InlineData("NonExistentNode", false)]
+    public void TreeNodeCollection_Contains_VariousScenarios_ReturnsExpected(string nodeName, bool expected)
+    {
+        var collection = CreateCollectionWithNodes();
+        TreeNode node = new(nodeName);
+        collection.Add(node);
+
+        bool result = collection.Contains(collection[nodeName]);
+
+        if (nodeName == "NonExistentNode")
+        {
+            collection.Remove(node);
+        }
+
+        result.Should().Be(expected);
+    }
+
+    [WinFormsFact]
+    public void TreeNodeCollection_Contains_SpecialCases_ReturnsFalse()
+    {
+        var collection = CreateCollectionWithNodes();
+        var nodeToRemove = collection[0];
+
+        collection.Remove(nodeToRemove);
+        collection.Contains(nodeToRemove).Should().BeFalse();
+
+        collection.Clear();
+        collection.Contains(nodeToRemove).Should().BeFalse();
     }
 }

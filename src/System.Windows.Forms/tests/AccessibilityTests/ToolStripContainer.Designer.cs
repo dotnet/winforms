@@ -590,7 +590,7 @@ partial class ToolStripContainer
         // 
         this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
         this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-        this.ClientSize = new System.Drawing.Size(627, 362);
+        this.ClientSize = new System.Drawing.Size(700, 422);
         this.Controls.Add(this.button1);
         this.Controls.Add(this.toolStripContainer2);
         this.MainMenuStrip = this.menuStrip1;

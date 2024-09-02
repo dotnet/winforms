@@ -291,16 +291,16 @@ internal class FormDocumentDesigner : DocumentDesigner
 
             if (host is not null)
             {
-                host.LoadComplete -= new EventHandler(OnLoadComplete);
-                host.Activated -= new EventHandler(OnDesignerActivate);
-                host.Deactivated -= new EventHandler(OnDesignerDeactivate);
+                host.LoadComplete -= OnLoadComplete;
+                host.Activated -= OnDesignerActivate;
+                host.Deactivated -= OnDesignerDeactivate;
             }
 
             IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
             if (cs is not null)
             {
-                cs.ComponentAdded -= new ComponentEventHandler(OnComponentAdded);
-                cs.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
+                cs.ComponentAdded -= OnComponentAdded;
+                cs.ComponentRemoved -= OnComponentRemoved;
             }
         }
 
@@ -335,9 +335,9 @@ internal class FormDocumentDesigner : DocumentDesigner
         IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
         if (host is not null)
         {
-            host.LoadComplete += new EventHandler(OnLoadComplete);
-            host.Activated += new EventHandler(OnDesignerActivate);
-            host.Deactivated += new EventHandler(OnDesignerDeactivate);
+            host.LoadComplete += OnLoadComplete;
+            host.Activated += OnDesignerActivate;
+            host.Deactivated += OnDesignerDeactivate;
         }
 
         Form form = (Form)Control;
@@ -346,12 +346,11 @@ internal class FormDocumentDesigner : DocumentDesigner
         ShadowProperties[nameof(CancelButton)] = form.CancelButton;
 
         // Monitor component/remove add events for our tray
-        //
         IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
         if (cs is not null)
         {
-            cs.ComponentAdded += new ComponentEventHandler(OnComponentAdded);
-            cs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
+            cs.ComponentAdded += OnComponentAdded;
+            cs.ComponentRemoved += OnComponentRemoved;
         }
     }
 

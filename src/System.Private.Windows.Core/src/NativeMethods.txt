@@ -73,6 +73,8 @@ GdipGetImagePixelFormat
 GdipGetImageRawFormat
 GdipGetRegionHRgn
 GdipIsInfiniteRegion
+GdiplusStartup
+GdiplusStartupInputEx
 GdipSaveImageToStream
 GetClientRect
 GetClipRgn
@@ -132,6 +134,7 @@ IStream
 ITypeInfo
 ITypeLib
 IUnknown
+LF_FACESIZE
 LoadIcon
 LoadRegTypeLib
 LPARAM

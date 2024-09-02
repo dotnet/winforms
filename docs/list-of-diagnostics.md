@@ -27,7 +27,7 @@ The acceptance criteria for adding an obsoletion includes:
 * Register the `WFDEV###` URL in `aka.ms`
     * The vanity name will be `winforms-warnings/WFDEV###`
     * Ensure the link's group owner matches the group owner of `winforms-warnings/WFDEV001`
-    * Connect with `@igveliko` or `@gewarren` with any questions
+    * Connect with `@lonitra` or `@gewarren` with any questions
 
 ### Obsoletion Diagnostics (`WFDEV001` - `WFDEV999`)
 
@@ -38,6 +38,7 @@ The acceptance criteria for adding an obsoletion includes:
 |  __`WFDEV001`__ | Casting to/from IntPtr is unsafe, use `ResultInternal`. |
 |  __`WFDEV002`__ | `DomainUpDown.DomainUpDownAccessibleObject` is no longer used to provide accessible support for `DomainUpDown` controls. Use `ControlAccessibleObject` instead. |
 |  __`WFDEV003`__ | `DomainUpDown.DomainItemAccessibleObject` is no longer used to provide accessible support for `DomainUpDown` items. |
+|  __`WFDEV004`__ | `Form.OnClosing`, `Form.OnClosed` and the corresponding events are obsolete. Use `Form.OnFormClosing`, `Form.OnFormClosed`, `Form.FormClosing` and `Form.FormClosed` instead. |
 
 
 ## Analyzer Warnings

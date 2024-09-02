@@ -1,18 +1,17 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Windows.Forms;
-using System.Windows.Forms.BinaryFormat;
+using System.Private.Windows.Core.BinaryFormat;
 
 namespace FormatTests.FormattedObject;
 
 public class RecordMapTests
 {
-    private class Record : IRecord
+    private class Record : IWritableRecord
     {
         public Id Id => 1;
 
-        void IBinaryWriteable.Write(BinaryWriter writer) { }
+        void IWritableRecord.Write(BinaryWriter writer) { }
     }
 
     [Fact]

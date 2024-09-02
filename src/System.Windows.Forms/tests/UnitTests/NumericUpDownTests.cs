@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms.Metafiles;
 
 namespace System.Windows.Forms.Tests;
@@ -219,5 +220,631 @@ public class NumericUpDownTests
         [EMREOF]
 
         */
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_Accelerations_Get_ReturnsExpected()
+    {
+        using NumericUpDown upDown = new();
+        NumericUpDownAccelerationCollection accelerations1 = upDown.Accelerations;
+        NumericUpDownAccelerationCollection accelerations2 = upDown.Accelerations;
+
+        accelerations1.Should().BeSameAs(accelerations2);
+
+        accelerations1.Should().NotBeNull();
+        accelerations1.Should().BeEmpty();
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_Accelerations_GetAfterAddingValue_ReturnsExpected()
+    {
+        using NumericUpDown upDown = new();
+        NumericUpDownAccelerationCollection accelerations = upDown.Accelerations;
+        accelerations.Add(new NumericUpDownAcceleration(2, 1));
+        accelerations.Should().HaveCount(1);
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_Accelerations_GetNotNullValue_ReturnsExpected()
+    {
+        using NumericUpDown upDown = new();
+        NumericUpDownAcceleration acceleration = new(2, 1);
+        upDown.Accelerations.Add(acceleration);
+        NumericUpDownAccelerationCollection accelerations = upDown.Accelerations;
+        accelerations.Should().NotBeNull();
+        accelerations[0].Should().Be(acceleration);
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_Hexadecimal_Get_ReturnsExpected()
+    {
+        using NumericUpDown upDown = new();
+        upDown.Hexadecimal.Should().BeFalse();
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_Hexadecimal_Set_GetReturnsExpected()
+    {
+        using NumericUpDown upDown = new();
+        upDown.Hexadecimal = true;
+        upDown.Hexadecimal.Should().BeTrue();
+
+        upDown.Hexadecimal = false;
+        upDown.Hexadecimal.Should().BeFalse();
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_Hexadecimal_SetWithUpdateEditText_CallsUpdateEditText()
+    {
+        using SubNumericUpDown subUpDown = new();
+        subUpDown.Hexadecimal = true;
+        subUpDown.Hexadecimal.Should().BeTrue();
+        subUpDown.UpdateEditTextCallCount.Should().BeGreaterThan(0);
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_Increment_Get_ReturnsExpected()
+    {
+        using NumericUpDown upDown = new();
+        upDown.Increment.Should().Be(1);
+
+        upDown.Increment = 2;
+        upDown.Increment.Should().Be(2);
+
+        upDown.Increment = 0;
+        upDown.Increment.Should().Be(0);
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_Increment_SetNegative_ThrowsArgumentOutOfRangeException()
+    {
+        using NumericUpDown upDown = new();
+        Action act = () => upDown.Increment = -1;
+        act.Should().Throw<ArgumentOutOfRangeException>().And.ParamName.Should().Be("value");
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_Increment_Set_GetReturnsExpected()
+    {
+        using NumericUpDown upDown = new();
+        upDown.Increment = 2;
+        upDown.Increment.Should().Be(2);
+
+        upDown.Increment = 0;
+        upDown.Increment.Should().Be(0);
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_Maximum_SetLessThanMinimum_SetsMinimumToMaximum()
+    {
+        using NumericUpDown upDown = new();
+        decimal minimumValue = 100m;
+        decimal maximumValue = 50m;
+        upDown.Minimum = minimumValue;
+
+        upDown.Maximum = maximumValue;
+
+        upDown.Maximum.Should().Be(maximumValue);
+        upDown.Minimum.Should().Be(maximumValue);
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_Maximum_SetGreaterThanMinimum_KeepsMinimumUnchanged()
+    {
+        using NumericUpDown upDown = new();
+        decimal minimumValue = 50m;
+        decimal maximumValue = 100m;
+        upDown.Minimum = minimumValue;
+
+        upDown.Maximum = maximumValue;
+
+        upDown.Maximum.Should().Be(maximumValue);
+        upDown.Minimum.Should().Be(minimumValue);
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_Minimum_SetGreaterThanMaximum_SetsMaximumToMinimum()
+    {
+        using NumericUpDown upDown = new();
+        upDown.Maximum = 10;
+        upDown.Minimum = 20;
+        upDown.Maximum.Should().Be(20);
+        upDown.Minimum.Should().Be(20);
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_Minimum_SetLessThanMaximum_KeepsMaximumUnchanged()
+    {
+        using NumericUpDown upDown = new();
+        upDown.Maximum = 30;
+        upDown.Minimum = 10;
+        upDown.Maximum.Should().Be(30);
+        upDown.Minimum.Should().Be(10);
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_Padding_Set_GetReturnsExpected()
+    {
+        using NumericUpDown upDown = new();
+        Padding padding = new(1, 2, 3, 4);
+        upDown.Padding = padding;
+        upDown.Padding.Should().Be(padding);
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_PaddingChangedEvent_AddRemove_Success()
+    {
+        using NumericUpDown upDown = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().BeSameAs(upDown);
+            e.Should().BeSameAs(EventArgs.Empty);
+            callCount++;
+        };
+
+        upDown.PaddingChanged += handler;
+        upDown.Padding = new Padding(1);
+        callCount.Should().Be(1);
+        upDown.Padding.Should().Be(new Padding(1));
+
+        upDown.PaddingChanged -= handler;
+        upDown.Padding = new Padding(2);
+        callCount.Should().Be(1);
+        upDown.Padding.Should().Be(new Padding(2));
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_PaddingChangedEvent_UnsubscribeInHandler_Success()
+    {
+        using NumericUpDown upDown = new();
+        int callCount = 0;
+        EventHandler handler = null;
+        handler = (sender, e) =>
+        {
+            sender.Should().BeSameAs(upDown);
+            e.Should().BeSameAs(EventArgs.Empty);
+            callCount++;
+            upDown.PaddingChanged -= handler;
+        };
+
+        upDown.PaddingChanged += handler;
+        upDown.Padding = new Padding(1);
+        callCount.Should().Be(1);
+        upDown.Padding.Should().Be(new Padding(1));
+
+        upDown.Padding = new Padding(2);
+        callCount.Should().Be(1);
+        upDown.Padding.Should().Be(new Padding(2));
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_TextChanged_AddRemove_Success()
+    {
+        using NumericUpDown upDown = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            callCount++;
+            sender.Should().Be(upDown);
+            e.Should().Be(EventArgs.Empty);
+        };
+
+        upDown.TextChanged += handler;
+        upDown.Text = "1";
+        callCount.Should().Be(1);
+        upDown.TextChanged -= handler;
+        upDown.Text = "2";
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_TextChanged_UnsubscribeInHandler_Success()
+    {
+        using NumericUpDown upDown = new();
+        int callCount = 0;
+        EventHandler handler = null;
+        handler = (sender, e) =>
+        {
+            callCount++;
+            sender.Should().Be(upDown);
+            e.Should().Be(EventArgs.Empty);
+            upDown.TextChanged -= handler;
+        };
+
+        upDown.TextChanged += handler;
+        upDown.Text = "1";
+        callCount.Should().Be(1);
+        upDown.Text = "2";
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_ThousandsSeparator_Get_ReturnsExpected()
+    {
+        using SubNumericUpDown subUpDown = new();
+        subUpDown.ThousandsSeparator.Should().BeFalse();
+        subUpDown.UpdateEditTextCallCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_ThousandsSeparator_Set_GetReturnsExpected()
+    {
+        using SubNumericUpDown subUpDown = new();
+        subUpDown.ThousandsSeparator = true;
+        subUpDown.ThousandsSeparator.Should().BeTrue();
+        subUpDown.UpdateEditTextCallCount.Should().Be(2);
+
+        subUpDown.ThousandsSeparator = true;
+        subUpDown.ThousandsSeparator.Should().BeTrue();
+        subUpDown.UpdateEditTextCallCount.Should().Be(3);
+
+        subUpDown.ThousandsSeparator = false;
+        subUpDown.ThousandsSeparator.Should().BeFalse();
+        subUpDown.UpdateEditTextCallCount.Should().Be(4);
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_ThousandsSeparator_SetWithHandler_CallsUpdateEditText()
+    {
+        using SubNumericUpDown subUpDown = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(subUpDown);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        subUpDown.ThousandsSeparator = true;
+        subUpDown.ThousandsSeparator.Should().BeTrue();
+        subUpDown.UpdateEditTextCallCount.Should().Be(2);
+        callCount.Should().Be(0);
+
+        subUpDown.ThousandsSeparator = true;
+        subUpDown.ThousandsSeparator.Should().BeTrue();
+        subUpDown.UpdateEditTextCallCount.Should().Be(3);
+        callCount.Should().Be(0);
+
+        subUpDown.ThousandsSeparator = false;
+        subUpDown.ThousandsSeparator.Should().BeFalse();
+        subUpDown.UpdateEditTextCallCount.Should().Be(4);
+        callCount.Should().Be(0);
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_UserEdit_True_CallsValidateEditText()
+    {
+        using SubNumericUpDown subUpDown = new();
+        subUpDown.PublicUserEdit = true;
+        subUpDown.Value = 10;
+        subUpDown.ResetUpdateEditTextCallCount();
+        subUpDown.CallUpdateEditText();
+        subUpDown.UpdateEditTextCallCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_UserEdit_False_DoesNotCallValidateEditText()
+    {
+        using SubNumericUpDown subUpDown = new();
+        subUpDown.PublicUserEdit = false;
+        subUpDown.Value = 10;
+        subUpDown.ResetUpdateEditTextCallCount();
+        subUpDown.UpdateEditTextCallCount.Should().Be(0);
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_UserEdit_True_ThenFalse_DoesNotCallValidateEditText()
+    {
+        using SubNumericUpDown subUpDown = new();
+        subUpDown.PublicUserEdit = false;
+        subUpDown.Value = 10;
+        subUpDown.ResetUpdateEditTextCallCount();
+        subUpDown.UpdateEditTextCallCount.Should().Be(0);
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_DefaultValues()
+    {
+        using NumericUpDown upDown = new();
+        upDown.Value.Should().Be(0);
+        upDown.Minimum.Should().Be(0);
+        upDown.Maximum.Should().Be(100);
+        upDown.Increment.Should().Be(1);
+        upDown.DecimalPlaces.Should().Be(0);
+        upDown.Hexadecimal.Should().BeFalse();
+        upDown.ThousandsSeparator.Should().BeFalse();
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_SetValue()
+    {
+        using NumericUpDown upDown = new();
+        upDown.Value = 50;
+        upDown.Value.Should().Be(50);
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_SetMinimum()
+    {
+        using NumericUpDown upDown = new();
+        upDown.Minimum = 10;
+        upDown.Minimum.Should().Be(10);
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_SetMaximum()
+    {
+        using NumericUpDown upDown = new();
+        upDown.Maximum = 200;
+        upDown.Maximum.Should().Be(200);
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_SetIncrement()
+    {
+        using NumericUpDown upDown = new();
+        upDown.Increment = 5;
+        upDown.Increment.Should().Be(5);
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_SetDecimalPlaces()
+    {
+        using NumericUpDown upDown = new();
+        upDown.DecimalPlaces = 2;
+        upDown.DecimalPlaces.Should().Be(2);
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_SetHexadecimal()
+    {
+        using NumericUpDown upDown = new();
+        upDown.Hexadecimal = true;
+        upDown.Hexadecimal.Should().BeTrue();
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_SetThousandsSeparator()
+    {
+        using NumericUpDown upDown = new();
+        upDown.ThousandsSeparator = true;
+        upDown.ThousandsSeparator.Should().BeTrue();
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_OnValueChanged_AddRemove_Success()
+    {
+        using SubNumericUpDown subUpDown = new();
+        bool eventWasRaised = false;
+
+        EventHandler handler = (sender, e) =>
+        {
+            eventWasRaised = true;
+        };
+
+        subUpDown.ValueChanged += handler;
+        subUpDown.Value = 10;
+        eventWasRaised.Should().BeTrue("because the ValueChanged event should be raised when the value changes");
+
+        eventWasRaised = false;
+        subUpDown.ValueChanged -= handler;
+        subUpDown.Value = 20;
+        eventWasRaised.Should().BeFalse("because the ValueChanged event should not be raised after the handler is removed");
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_BeginInit_SetsInitializingToTrue()
+    {
+        using SubNumericUpDown subUpDown = new();
+        subUpDown.IsInitializing.Should().BeFalse();
+        subUpDown.BeginInit();
+        subUpDown.IsInitializing.Should().BeTrue();
+    }
+
+    [WinFormsFact]
+    public void DownButton_ValueAtMinimum_DoesNotChangeValue()
+    {
+        using NumericUpDown upDown = new() { Value = 0, Minimum = 0, Increment = 1 };
+        upDown.DownButton();
+        upDown.Value.Should().Be(0);
+    }
+
+    [WinFormsFact]
+    public void DownButton_NonNumericText_IgnoresText()
+    {
+        using NumericUpDown upDown = new() { Value = 10, Increment = 1, Text = "Not a number" };
+        upDown.DownButton();
+        upDown.Value.Should().Be(9);
+    }
+
+    [WinFormsFact]
+    public void DownButton_TextOutsideRange_ParsesText()
+    {
+        using NumericUpDown upDown = new() { Value = 10, Minimum = 0, Maximum = 20, Increment = 1, Text = "30" };
+        upDown.DownButton();
+        upDown.Value.Should().Be(19);
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_DownButton_ValueEqualToMinimum_ValueRemainsSame()
+    {
+        using NumericUpDown upDown = new()
+        {
+            Minimum = 10,
+            Value = 10 
+        };
+
+        upDown.DownButton();
+
+        upDown.Value.Should().Be(10);
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_DownButton_ValueLessThanMinimum_SetsValueToMinimum()
+    {
+        using SubNumericUpDown subUpDown = new()
+        {
+            Minimum = 10,
+            Value = 15,
+            Increment = 10
+        };
+
+        subUpDown.DownButton();
+
+        subUpDown.Value.Should().Be(subUpDown.Minimum);
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_DownButton_ValueGreaterThanMinimum_DecrementsValue()
+    {
+        using NumericUpDown upDown = new()
+        {
+            Minimum = 10,
+            Value = 11
+        };
+
+        upDown.DownButton();
+
+        upDown.Value.Should().Be(10);
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_DownButton_SpinningTrue_StopsAcceleration()
+    {
+        using SubNumericUpDown upDown = new()
+        {
+            Minimum = 10,
+            Value = 11,
+            PublicUserEdit = true
+        };
+
+        upDown.DownButton();
+
+        upDown.PublicUserEdit.Should().BeFalse();
+    }
+
+    [WinFormsFact]
+    public void NumericUpDown_ToString_ReturnsExpected()
+    {
+        using NumericUpDown upDown = new();
+        upDown.Minimum = 10;
+        upDown.Maximum = 100;
+        string s = upDown.ToString();
+        s.Should().Contain("Minimum = 10");
+        s.Should().Contain("Maximum = 100");
+    }
+
+    [WinFormsFact]
+    public void UpButton_ValueAtMaximum_DoesNotChangeValue()
+    {
+        using NumericUpDown upDown = new() { Value = 100, Maximum = 100, Increment = 1 };
+        upDown.UpButton();
+        upDown.Value.Should().Be(100);
+    }
+
+    [WinFormsFact]
+    public void UpButton_NonNumericText_IgnoresText()
+    {
+        using NumericUpDown upDown = new() { Value = 10, Increment = 1, Text = "Not a number" };
+        upDown.UpButton();
+        upDown.Value.Should().Be(11);
+    }
+
+    [WinFormsFact]
+    public void UpButton_TextOutsideRange_ParsesText()
+    {
+        using NumericUpDown upDown = new() { Value = 10, Minimum = 0, Maximum = 20, Increment = 1, Text = "30" };
+        upDown.UpButton();
+        upDown.Value.Should().Be(20);
+    }
+
+    [WinFormsFact]
+    public void UpButton_ValueEqualToMaximum_ValueRemainsSame()
+    {
+        using NumericUpDown upDown = new() { Value = 100, Maximum = 100 };
+        upDown.UpButton();
+        upDown.Value.Should().Be(100);
+    }
+
+    [WinFormsFact]
+    public void UpButton_ValueLessThanMaximum_IncrementsValue()
+    {
+        using NumericUpDown upDown = new() { Value = 99, Maximum = 100 };
+        upDown.UpButton();
+        upDown.Value.Should().Be(100);
+    }
+
+    [WinFormsFact]
+    public void UpButton_ValueGreaterThanMaximum_SetsValueToMaximum()
+    {
+        using NumericUpDown upDown = new() { Value = 100, Maximum = 100 };
+        upDown.UpButton();
+        upDown.Value.Should().Be(100);
+    }
+
+    [WinFormsFact]
+    public void UpButton_SpinningTrue_StopsAcceleration()
+    {
+        using SubNumericUpDown upDown = new() { Value = 100, Maximum = 100, PublicUserEdit = true };
+        upDown.UpButton();
+        upDown.PublicUserEdit.Should().BeFalse();
+    }
+
+    [WinFormsFact]
+    public void UpButton_ValueCausesOverflow_SetsValueToMaximum()
+    {
+        using NumericUpDown upDown = new();
+        upDown.Maximum = decimal.MaxValue;
+        upDown.Value = decimal.MaxValue;
+        upDown.UpButton();
+        upDown.Value.Should().Be(decimal.MaxValue);
+    }
+
+    [WinFormsFact]
+    public void UpButton_IncrementCausesOverflow_SetsValueToMaximum()
+    {
+        using NumericUpDown upDown = new();
+        upDown.Maximum = decimal.MaxValue;
+        upDown.Value = decimal.MaxValue - 1;
+        upDown.Increment = 2;
+        upDown.UpButton();
+        upDown.Value.Should().Be(decimal.MaxValue);
+    }
+
+    private class SubNumericUpDown : NumericUpDown
+    {
+        public int UpdateEditTextCallCount { get; private set; }
+
+        public bool PublicUserEdit
+        {
+            get { return UserEdit; }
+            set { UserEdit = value; }
+        }
+
+        public bool IsInitializing
+        {
+            get
+            {
+                var field = typeof(NumericUpDown).GetField("_initializing", BindingFlags.NonPublic | BindingFlags.Instance);
+                return (bool)field.GetValue(this);
+            }
+        }
+
+        protected override void UpdateEditText()
+        {
+            UpdateEditTextCallCount++;
+            base.UpdateEditText();
+        }
+
+        public void ResetUpdateEditTextCallCount()
+        {
+            UpdateEditTextCallCount = 0;
+        }
+
+        public void CallUpdateEditText()
+        {
+            UpdateEditText();
+        }
     }
 }

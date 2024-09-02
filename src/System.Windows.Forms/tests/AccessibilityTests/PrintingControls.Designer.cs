@@ -49,7 +49,7 @@ partial class PrintingControls
         // 
         // printDocument1
         // 
-        this.printDocument1.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(this.printDocument1_PrintPage);
+        this.printDocument1.PrintPage += this.printDocument1_PrintPage;
         // 
         // printDialog1
         // 
@@ -95,7 +95,7 @@ partial class PrintingControls
         this.btnSetting.TabIndex = 2;
         this.btnSetting.Text = "&Setting";
         this.btnSetting.UseVisualStyleBackColor = true;
-        this.btnSetting.Click += new System.EventHandler(this.BtnSetting_Click);
+        this.btnSetting.Click += this.BtnSetting_Click;
         // 
         // btnPreView
         // 
@@ -106,7 +106,7 @@ partial class PrintingControls
         this.btnPreView.TabIndex = 3;
         this.btnPreView.Text = "P&review";
         this.btnPreView.UseVisualStyleBackColor = true;
-        this.btnPreView.Click += new System.EventHandler(this.BtnPreView_Click);
+        this.btnPreView.Click += this.BtnPreView_Click;
         // 
         // btnPrint
         // 
@@ -117,7 +117,7 @@ partial class PrintingControls
         this.btnPrint.TabIndex = 4;
         this.btnPrint.Text = "&Print";
         this.btnPrint.UseVisualStyleBackColor = true;
-        this.btnPrint.Click += new System.EventHandler(this.BtnPrint_Click);
+        this.btnPrint.Click += this.BtnPrint_Click;
         // 
         // button1
         // 
@@ -128,7 +128,7 @@ partial class PrintingControls
         this.button1.TabIndex = 6;
         this.button1.Text = "Preview &Control";
         this.button1.UseVisualStyleBackColor = true;
-        this.button1.Click += new System.EventHandler(this.Button1_Click);
+        this.button1.Click += this.Button1_Click;
         // 
         // label2
         // 

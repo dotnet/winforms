@@ -247,7 +247,7 @@ public class ToolStripContentPanel : Panel
             {
                 _rendererSwitcher = new ToolStripRendererSwitcher(this, ToolStripRenderMode.System);
                 HandleRendererChanged(this, EventArgs.Empty);
-                _rendererSwitcher.RendererChanged += new EventHandler(HandleRendererChanged);
+                _rendererSwitcher.RendererChanged += HandleRendererChanged;
             }
 
             return _rendererSwitcher;

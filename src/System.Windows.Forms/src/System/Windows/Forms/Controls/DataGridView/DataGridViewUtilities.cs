@@ -173,11 +173,11 @@ internal static class DataGridViewUtilities
                         {
                             if (cellStyle.WrapMode == DataGridViewTriState.True)
                             {
-                                preferredWidth = DataGridViewCell.MeasureTextWidth(graphics, val, cellStyle.Font, maxHeight, flags);
+                                preferredWidth = DataGridViewCell.MeasureTextWidth(graphics, val, cellStyle.Font!, maxHeight, flags);
                             }
                             else
                             {
-                                preferredWidth = DataGridViewCell.MeasureTextSize(graphics, val, cellStyle.Font, flags).Width;
+                                preferredWidth = DataGridViewCell.MeasureTextSize(graphics, val, cellStyle.Font!, flags).Width;
                             }
 
                             preferredWidth += 2 * ContentMarginWidth + HorizontalTextMarginLeft + HorizontalTextMarginRight;
@@ -234,11 +234,11 @@ internal static class DataGridViewUtilities
                                             HorizontalTextMarginRight;
                             if (cellStyle.WrapMode == DataGridViewTriState.True)
                             {
-                                minHeightContent = DataGridViewCell.MeasureTextHeight(graphics, val, cellStyle.Font, allowedWidth, flags);
+                                minHeightContent = DataGridViewCell.MeasureTextHeight(graphics, val, cellStyle.Font!, allowedWidth, flags);
                             }
                             else
                             {
-                                minHeightContent = DataGridViewCell.MeasureTextSize(graphics, val, cellStyle.Font, flags).Height;
+                                minHeightContent = DataGridViewCell.MeasureTextSize(graphics, val, cellStyle.Font!, flags).Height;
                             }
 
                             minHeightContent += 2 * VerticalTextMargin;
@@ -261,11 +261,11 @@ internal static class DataGridViewUtilities
                     {
                         if (cellStyle.WrapMode == DataGridViewTriState.True)
                         {
-                            preferredSize = DataGridViewCell.MeasureTextPreferredSize(graphics, val, cellStyle.Font, 5.0F, flags);
+                            preferredSize = DataGridViewCell.MeasureTextPreferredSize(graphics, val, cellStyle.Font!, 5.0F, flags);
                         }
                         else
                         {
-                            preferredSize = DataGridViewCell.MeasureTextSize(graphics, val, cellStyle.Font, flags);
+                            preferredSize = DataGridViewCell.MeasureTextSize(graphics, val, cellStyle.Font!, flags);
                         }
 
                         preferredSize.Width += 2 * ContentMarginWidth +
@@ -307,7 +307,7 @@ internal static class DataGridViewUtilities
         TextFormatFlags flags,
         DataGridViewCellStyle cellStyle)
     {
-        return GetTextBounds(cellBounds, text, flags, cellStyle, cellStyle.Font);
+        return GetTextBounds(cellBounds, text, flags, cellStyle, cellStyle.Font!);
     }
 
     internal static Rectangle GetTextBounds(

@@ -6,10 +6,9 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms.TestUtilities;
 using Moq;
+using Windows.Win32.System.Ole;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
-using Windows.Win32.System.Ole;
-using System.Windows.Forms.Primitives;
 
 namespace System.Windows.Forms.Tests;
 
@@ -1622,34 +1621,41 @@ public partial class ToolStripTests
     [WinFormsFact]
     public void ToolStrip_Font_ApplyParentFontToMenus_GetReturnFont_SameAsForm()
     {
-        LocalAppContextSwitches.SetLocalAppContextSwitchValue(LocalAppContextSwitches.ApplyParentFontToMenusSwitchName, true);
-
+        using ApplyParentFontToMenusScope scope = new(enable: true);
         using Font font = new("Microsoft Sans Serif", 8.25f);
         using Form form = new();
         using ToolStrip toolStrip1 = new();
         using SubToolStripItem item1 = new();
         using SubToolStripItem item2 = new();
 
-        try
-        {
-            toolStrip1.Items.Add(item1);
-            toolStrip1.Items.Add(item2);
-            form.Controls.Add(toolStrip1);
-            form.Font = font;
+        toolStrip1.Items.Add(item1);
+        toolStrip1.Items.Add(item2);
+        form.Controls.Add(toolStrip1);
+        form.Font = font;
 
-            Assert.True(LocalAppContextSwitches.ApplyParentFontToMenus);
-            Assert.Same(form.Font, toolStrip1.Font);
-            Assert.Same(form.Font, item1.Font);
-            Assert.Same(form.Font, item2.Font);
-        }
-        finally
-        {
-            LocalAppContextSwitches.SetLocalAppContextSwitchValue(LocalAppContextSwitches.ApplyParentFontToMenusSwitchName, false);
-        }
+        Assert.Same(form.Font, toolStrip1.Font);
+        Assert.Same(form.Font, item1.Font);
+        Assert.Same(form.Font, item2.Font);
+    }
+
+    [WinFormsFact]
+    public void ToolStrip_Font_ApplyParentFontToMenus_GetReturnFont_SameAsToolStripManagerDefaultFont()
+    {
+        using ApplyParentFontToMenusScope scope = new(enable: false);
+        using Font font = new("Microsoft Sans Serif", 8.25f);
+        using Form form = new();
+        using ToolStrip toolStrip1 = new();
+        using SubToolStripItem item1 = new();
+        using SubToolStripItem item2 = new();
+
+        toolStrip1.Items.Add(item1);
+        toolStrip1.Items.Add(item2);
+        form.Controls.Add(toolStrip1);
+        form.Font = font;
 
         Assert.Equal(ToolStripManager.DefaultFont, toolStrip1.Font);
-        Assert.Equal(ToolStripManager.DefaultFont, item2.Font);
         Assert.Equal(ToolStripManager.DefaultFont, item1.Font);
+        Assert.Equal(ToolStripManager.DefaultFont, item2.Font);
     }
 
     public static IEnumerable<object[]> DefaultDropDownDirection_Get_TestData()
@@ -7296,6 +7302,96 @@ public partial class ToolStripTests
         Assert.Equal(toolStrip.Items[0], previousToolStripItem2);
 
         Assert.False(toolStrip.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [InlineData(10, 10)]
+    [InlineData(0, 0)]
+    [InlineData(-10, -10)]
+    public void ToolStrip_GetChildAtPoint_WithoutSkipValue_Invoke_ReturnsExpected(int x, int y)
+    {
+        using ToolStrip toolStrip = new();
+        var child = toolStrip.GetChildAtPoint(new Point(x, y));
+
+        child.Should().BeNull();
+    }
+
+    [WinFormsTheory]
+    [InlineData(GetChildAtPointSkip.None)]
+    [InlineData(GetChildAtPointSkip.Disabled)]
+    [InlineData(GetChildAtPointSkip.Invisible)]
+    [InlineData(GetChildAtPointSkip.Transparent)]
+    public void ToolStrip_GetChildAtPoint_WithSkipValue_Invoke_ReturnsExpected(GetChildAtPointSkip skipValue)
+    {
+        using ToolStrip toolStrip = new();
+        var child = toolStrip.GetChildAtPoint(new Point(10, 10), skipValue);
+
+        child.Should().BeNull();
+    }
+
+    [WinFormsFact]
+    public void ToolStrip_ResetMinimumSize_Invoke_Success()
+    {
+        using ToolStrip toolStrip = new();
+        Size oldSize = toolStrip.MinimumSize;
+
+        toolStrip.ResetMinimumSize();
+
+        oldSize.Should().NotBe(toolStrip.MinimumSize);
+        toolStrip.MinimumSize.Should().Be(new Size(-1, -1));
+    }
+
+    [WinFormsFact]
+    public void ToolStrip_ResetGripMargin_SetsGripMarginToDefault()
+    {
+        using ToolStrip toolStrip = new();
+        var defaultMargin = toolStrip.Grip.DefaultMargin;
+        toolStrip.GripMargin = new Padding(10, 10, 10, 10);
+
+        toolStrip.TestAccessor().Dynamic.ResetGripMargin();
+
+        toolStrip.GripMargin.Should().Be(defaultMargin);
+    }
+
+    [WinFormsFact]
+    public void ToolStrip_SetAutoScrollMargin_Invoke_Success()
+    {
+        using var toolStrip = new ToolStrip() { AutoScrollMargin = new Size(10, 20) };
+
+        toolStrip.AutoScrollMargin.Should().Be(new Size(10, 20));
+    }
+
+    [WinFormsFact]
+    public void ToolStrip_ShouldSerializeLayoutStyle_Invoke_ReturnsExpected()
+    {
+        using ToolStrip toolStrip = new();
+        toolStrip.ShouldSerializeLayoutStyle().Should().BeFalse();
+
+        toolStrip.LayoutStyle = ToolStripLayoutStyle.Flow;
+        toolStrip.ShouldSerializeLayoutStyle().Should().BeTrue();
+
+        toolStrip.LayoutStyle = ToolStripLayoutStyle.HorizontalStackWithOverflow;
+        toolStrip.ShouldSerializeLayoutStyle().Should().BeTrue();
+
+        toolStrip.LayoutStyle = ToolStripLayoutStyle.VerticalStackWithOverflow;
+        toolStrip.ShouldSerializeLayoutStyle().Should().BeTrue();
+
+        toolStrip.LayoutStyle = ToolStripLayoutStyle.Table;
+        toolStrip.ShouldSerializeLayoutStyle().Should().BeTrue();
+
+        toolStrip.LayoutStyle = ToolStripLayoutStyle.StackWithOverflow;
+        toolStrip.ShouldSerializeLayoutStyle().Should().BeFalse();
+    }
+
+    [WinFormsFact]
+    public void ToolStrip_ShouldSerializeGripMargin_Invoke_ReturnsExpected()
+    {
+        using ToolStrip toolStrip = new() { GripMargin = new Padding(1) };
+        ((bool)toolStrip.TestAccessor().Dynamic.ShouldSerializeGripMargin()).Should().BeTrue();
+
+        var defaultGripMargin = (Padding)toolStrip.TestAccessor().Dynamic.DefaultGripMargin;
+        toolStrip.GripMargin = defaultGripMargin;
+        ((bool)toolStrip.TestAccessor().Dynamic.ShouldSerializeGripMargin()).Should().BeFalse();
     }
 
     private class SubAxHost : AxHost

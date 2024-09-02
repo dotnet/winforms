@@ -8,6 +8,8 @@ Microsoft.VisualBasic.ApplicationServices.ApplicationBase.Log() -> Microsoft.Vis
 Microsoft.VisualBasic.ApplicationServices.ApplicationBase.New() -> Void
 Microsoft.VisualBasic.ApplicationServices.ApplicationBase.UICulture() -> System.Globalization.CultureInfo
 Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventArgs
+Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventArgs.ColorMode() -> System.Windows.Forms.SystemColorMode
+Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventArgs.ColorMode(AutoPropertyValue As System.Windows.Forms.SystemColorMode) -> Void
 Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventArgs.Font() -> System.Drawing.Font
 Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventArgs.Font(AutoPropertyValue As System.Drawing.Font) -> Void
 Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventArgs.HighDpiMode() -> System.Windows.Forms.HighDpiMode
@@ -75,6 +77,8 @@ Microsoft.VisualBasic.ApplicationServices.User.New() -> Void
 Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase
 Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.ApplicationContext() -> System.Windows.Forms.ApplicationContext
 Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.ApplyApplicationDefaults -> Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventHandler
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.ColorMode() -> System.Windows.Forms.SystemColorMode
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.ColorMode(value As System.Windows.Forms.SystemColorMode) -> Void
 Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.DoEvents() -> Void
 Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.EnableVisualStyles() -> Boolean
 Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.EnableVisualStyles(value As Boolean) -> Void
@@ -354,6 +358,11 @@ Microsoft.VisualBasic.MyServices.SpecialDirectoriesProxy.MyPictures() -> String
 Microsoft.VisualBasic.MyServices.SpecialDirectoriesProxy.ProgramFiles() -> String
 Microsoft.VisualBasic.MyServices.SpecialDirectoriesProxy.Programs() -> String
 Microsoft.VisualBasic.MyServices.SpecialDirectoriesProxy.Temp() -> String
+Overridable Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventHandler.Invoke(sender As Object, e As Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventArgs) -> Void
+Overridable Microsoft.VisualBasic.ApplicationServices.ShutdownEventHandler.Invoke(sender As Object, e As System.EventArgs) -> Void
+Overridable Microsoft.VisualBasic.ApplicationServices.StartupEventHandler.Invoke(sender As Object, e As Microsoft.VisualBasic.ApplicationServices.StartupEventArgs) -> Void
+Overridable Microsoft.VisualBasic.ApplicationServices.StartupNextInstanceEventHandler.Invoke(sender As Object, e As Microsoft.VisualBasic.ApplicationServices.StartupNextInstanceEventArgs) -> Void
+Overridable Microsoft.VisualBasic.ApplicationServices.UnhandledExceptionEventHandler.Invoke(sender As Object, e As Microsoft.VisualBasic.ApplicationServices.UnhandledExceptionEventArgs) -> Void
 Overridable Microsoft.VisualBasic.ApplicationServices.User.InternalPrincipal() -> System.Security.Principal.IPrincipal
 Overridable Microsoft.VisualBasic.ApplicationServices.User.InternalPrincipal(value As System.Security.Principal.IPrincipal) -> Void
 Overridable Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.OnCreateMainForm() -> Void
@@ -364,6 +373,7 @@ Overridable Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBas
 Overridable Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.OnStartup(eventArgs As Microsoft.VisualBasic.ApplicationServices.StartupEventArgs) -> Boolean
 Overridable Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.OnStartupNextInstance(eventArgs As Microsoft.VisualBasic.ApplicationServices.StartupNextInstanceEventArgs) -> Void
 Overridable Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.OnUnhandledException(e As Microsoft.VisualBasic.ApplicationServices.UnhandledExceptionEventArgs) -> Boolean
+Overridable Microsoft.VisualBasic.Devices.NetworkAvailableEventHandler.Invoke(sender As Object, e As Microsoft.VisualBasic.Devices.NetworkAvailableEventArgs) -> Void
 Overridable Microsoft.VisualBasic.Logging.Log.InitializeWithDefaultsSinceNoConfigExists() -> Void
 Overrides Microsoft.VisualBasic.Logging.FileLogTraceListener.Close() -> Void
 Overrides Microsoft.VisualBasic.Logging.FileLogTraceListener.Dispose(disposing As Boolean) -> Void

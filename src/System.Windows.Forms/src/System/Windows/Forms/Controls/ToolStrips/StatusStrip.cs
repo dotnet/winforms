@@ -29,7 +29,10 @@ public partial class StatusStrip : ToolStrip
         SuspendLayout();
         CanOverflow = false;
         LayoutStyle = ToolStripLayoutStyle.Table;
-        RenderMode = ToolStripRenderMode.System;
+
+        // Default changed for SystemColorMode from System to ManagerRenderMode.
+        // Also to be consistent to the MenuStrip.
+        RenderMode = ToolStripRenderMode.ManagerRenderMode;
         GripStyle = ToolStripGripStyle.Hidden;
 
         SetStyle(ControlStyles.ResizeRedraw, true);
@@ -426,17 +429,6 @@ public partial class StatusStrip : ToolStrip
         }
 
         base.SetDisplayedItems();
-    }
-
-    internal override void ResetRenderMode()
-    {
-        RenderMode = ToolStripRenderMode.System;
-    }
-
-    internal override bool ShouldSerializeRenderMode()
-    {
-        // We should NEVER serialize custom.
-        return (RenderMode is not ToolStripRenderMode.System and not ToolStripRenderMode.Custom);
     }
 
     /// <summary>
