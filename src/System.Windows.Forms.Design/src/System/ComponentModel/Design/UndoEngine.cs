@@ -26,7 +26,7 @@ public abstract partial class UndoEngine : IDisposable
     private Dictionary<IComponent, List<ReferencingComponent>>? _refToRemovedComponent;
 
     /// <summary>
-    ///  Creates a new UndoEngine. UndoEngine requires a service provider for access to various services. The following services must be available or else UndoEngine will  throw an exception:
+    ///  Creates a new UndoEngine. UndoEngine requires a service provider for access to various services. The following services must be available or else UndoEngine will throw an exception:
     ///  IDesignerHost
     ///  IComponentChangeService
     ///  IDesignerSerializationService

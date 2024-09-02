@@ -10653,8 +10653,8 @@ public partial class RichTextBoxTests
         Assert.Equal(0, createdCallCount);
     }
 
-    // DrawToBitmap doesn't work for this control, so we should hide it.We'll
-    // still call base so that this has a chance to work if it can.
+    // DrawToBitmap doesn't work for this control, so we should hide it.
+    // We'll still call base so that this has a chance to work if it can.
     [WinFormsFact]
     public void RichTextBox_DrawToBitmap_Invoke_Success()
     {
@@ -10676,7 +10676,7 @@ public partial class RichTextBoxTests
          using RichTextBox richTextBox2 = new();
 
         string fileName = "SaveRichTextBox.rtf";
-        string projectDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "..");     
+        string projectDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "..");
         string filePath = $"{projectDirectory}/src/System.Windows.Forms/tests/UnitTests/TestResources/Files/{fileName}";
 
         try
@@ -10703,9 +10703,9 @@ public partial class RichTextBoxTests
     [InlineData(RichTextBoxStreamType.RichNoOleObjs)]
     [InlineData(RichTextBoxStreamType.TextTextOleObjs)]
     public void RichTextBox_SaveFile_Invoke_Success(RichTextBoxStreamType fileType)
-    {       
+    {
         using RichTextBox richTextBox1 = new();
-        
+
         string projectDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "..");
         string filePath = Path.Combine(projectDirectory, "src", "System.Windows.Forms", "tests", "UnitTests", "TestResources", "Files", "Test");
 
@@ -10841,7 +10841,7 @@ public partial class RichTextBoxTests
         richTextBox1.GiveFeedback += handler;
         richTextBox1.OnGiveFeedback(giveFeedbackEventArgs);
         callCount.Should().Be(1);
-        
+
         richTextBox1.GiveFeedback -= handler;
         richTextBox1.OnGiveFeedback(giveFeedbackEventArgs);
         callCount.Should().Be(1);
@@ -10857,7 +10857,7 @@ public partial class RichTextBoxTests
             sender.Should().Be(richTextBox1);
             callCount++;
         };
-          
+
         QueryContinueDragEventArgs queryContinueDragEventArgs = new(keyState: 0, escapePressed: true, action: DragAction.Continue);
 
         richTextBox1.QueryContinueDrag += handler;
@@ -11006,7 +11006,7 @@ public partial class RichTextBoxTests
         public new void OnDragLeave(EventArgs e) => base.OnDragLeave(e);
 
         public new void OnDragOver(DragEventArgs e) => base.OnDragOver(e);
- 
+
         public new void OnGiveFeedback(GiveFeedbackEventArgs e) => base.OnGiveFeedback(e);
 
         public new void OnQueryContinueDrag(QueryContinueDragEventArgs e) => base.OnQueryContinueDrag(e);
