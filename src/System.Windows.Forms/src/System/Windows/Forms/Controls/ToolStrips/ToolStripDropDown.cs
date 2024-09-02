@@ -1253,10 +1253,6 @@ public partial class ToolStripDropDown : ToolStrip
                    || !dismissingItem.HasDropDownItems)
                 {   // clicking on a item w/dropdown does not dismiss window
                     Close(ToolStripDropDownCloseReason.ItemClicked);
-                    if (GetToplevelOwnerItem()?.Owner?.Focused == true)
-                    {
-                        SelectTopLevelToolStrip();
-                    }
                 }
             }
         }
@@ -1356,48 +1352,6 @@ public partial class ToolStripDropDown : ToolStrip
             {
                 OnFontChanged(e);
             }
-        }
-    }
-
-    internal void SelectTopLevelToolStrip()
-    {
-        // snap the owner item before calling hide as non-auto created dropdowns will
-        // exit menu mode if there's no OwnerItem.
-        ToolStripItem? itemOnPreviousMenuToSelect = GetToplevelOwnerItem();
-        Hide();
-
-        if (itemOnPreviousMenuToSelect is not null)
-        {
-            itemOnPreviousMenuToSelect.Select(forceRaiseAccessibilityFocusChanged: true);
-
-            KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(itemOnPreviousMenuToSelect);
-
-            if (OwnerToolStrip is not null)
-            {
-                // make sure we send keyboard handling where we've just
-                // sent selection
-                if (!OwnerToolStrip.IsDropDown)
-                {
-                    if (ToolStripManager.ModalMenuFilter.GetActiveToolStrip() != OwnerToolStrip)
-                    {
-                        ToolStripManager.ModalMenuFilter.SetActiveToolStrip(OwnerToolStrip);
-                    }
-
-                    // escape should cancel auto expansion
-                    OwnerToolStrip.MenuAutoExpand = false;
-                    // When the control cannot be select (TabStop), we can press "Tab" to
-                    // navigate inside the owner toolstrip. Otherwise, press "Tab" will leave
-                    // the owner toolstrip so it should exit the menu mode.
-                    if (OwnerToolStrip.CanSelect)
-                    {
-                        ToolStripManager.ModalMenuFilter.ExitMenuMode();
-                    }
-                }
-            }
-        }
-        else
-        {
-            ToolStripManager.ModalMenuFilter.ExitMenuMode();
         }
     }
 

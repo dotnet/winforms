@@ -117,7 +117,7 @@ public partial class ToolStripMenuItem
 
         public override string DefaultAction =>
             Owner.AccessibleDefaultActionDescription
-                ?? (_owningToolStripMenuItem.CheckOnClick ? _owningToolStripMenuItem.Checked ? SR.AccessibleActionUncheck : SR.AccessibleActionCheck : base.DefaultAction);
+                ?? (_owningToolStripMenuItem.CheckOnClick ? SR.AccessibleActionCheck : base.DefaultAction);
 
         private protected override bool IsInternal => true;
 
@@ -140,20 +140,6 @@ public partial class ToolStripMenuItem
 
         internal override ToggleState ToggleState =>
             _owningToolStripMenuItem.CheckState switch
-            {
-                CheckState.Checked => ToggleState.ToggleState_On,
-                CheckState.Unchecked => ToggleState.ToggleState_Off,
-                _ => ToggleState.ToggleState_Indeterminate
-            };
-
-        internal void OnCheckStateChanged(CheckState oldValue, CheckState newValue) =>
-            RaiseAutomationPropertyChangedEvent(
-                UIA_PROPERTY_ID.UIA_ToggleToggleStatePropertyId,
-                (VARIANT)(int)CheckStateToToggleState(oldValue),
-                (VARIANT)(int)CheckStateToToggleState(newValue));
-
-        private static ToggleState CheckStateToToggleState(CheckState checkState)
-            => checkState switch
             {
                 CheckState.Checked => ToggleState.ToggleState_On,
                 CheckState.Unchecked => ToggleState.ToggleState_Off,

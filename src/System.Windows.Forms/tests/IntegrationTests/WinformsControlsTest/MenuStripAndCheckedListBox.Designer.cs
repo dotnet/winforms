@@ -76,6 +76,7 @@ partial class MenuStripAndCheckedListBox
         this.menuStrip1.Size = new System.Drawing.Size(736, 46);
         this.menuStrip1.TabIndex = 0;
         this.menuStrip1.Text = "menuStrip1";
+        this.menuStrip1.TabStop = true;
         //
         // fileToolStripMenuItem
         //
