@@ -89,8 +89,8 @@ public sealed class VisualStyleRenderer : IHandle<HTHEME>
 
             if (supported)
             {
-                IntPtr hTheme = GetHandle($"{Control.DarkModeIdentifier}_{Control.ExplorerThemeIdentifier}::BUTTON", false); // Button is an arbitrary choice.
-                supported = hTheme != IntPtr.Zero && !SystemInformation.HighContrast;
+                HTHEME hTheme = GetHandle($"{Control.DarkModeIdentifier}_{Control.ExplorerThemeIdentifier}::BUTTON", false); // Button is an arbitrary choice.
+                supported = !hTheme.IsNull && !SystemInformation.HighContrast;
             }
 
             return supported;
