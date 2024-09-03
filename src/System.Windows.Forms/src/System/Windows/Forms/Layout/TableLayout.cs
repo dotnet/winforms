@@ -295,7 +295,7 @@ internal partial class TableLayout : LayoutEngine
             {
                 // I am assuming that the division will put us pretty close to the right
                 // number of columns. If this assumption is wrong, a binary search
-                // between the number we get by dividing and childrenInfo's.Count
+                // between the number we get by dividing and `childrenInfo.Count`
                 // could be more efficient. It would certainly degenerate better.
                 estimatedCols++;
             }
