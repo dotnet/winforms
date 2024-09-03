@@ -12,8 +12,8 @@ namespace System.Windows.Forms;
 public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
 {
 #pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-    private static readonly VisualStyleElement s_headerElement = Application.IsDarkModeEnabled ?
-        VisualStyleElement.CreateElement("DarkMode_ItemsView::Header", 1, 1)
+    private static readonly VisualStyleElement s_headerElement = Application.IsDarkModeEnabled
+        ? VisualStyleElement.CreateElement($"{Control.DarkModeIdentifier}_{Control.ItemsViewThemeIdentifier}::Header", 1, 1)
         : VisualStyleElement.Header.Item.Normal;
 #pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 

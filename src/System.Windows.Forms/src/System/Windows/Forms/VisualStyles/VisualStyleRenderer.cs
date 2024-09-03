@@ -67,10 +67,18 @@ public sealed class VisualStyleRenderer : IHandle<HTHEME>
     }
 
     /// <summary>
-    ///  Returns true if Dark Mode visual styles subclass are 1) supported by the OS 2) enabled in the client area
-    ///  and 3) currently applied to this application. Otherwise, it returns false. Note that
-    ///  if it returns false, attempting to instantiate/use objects of this class
-    ///  will result in exceptions being thrown.
+    /// <para>
+    /// Gets a value specifying whether the operating system has Dark Mode visual styles subclass and the Application can  use this subclass to draw controls with Dark Mode theme.
+    ///</para>
+    ///<para>
+    ///<return>
+    ///<para> Returns true if Visual Style Dark Mode subclass is: </para>
+    /// <para> 1) Supported by the operating system.</para>
+    /// <para> 2) Enabled in the client area.</para>
+    /// <para> 3) operating system not ruining in high contrast mode</para>
+    /// <para> Otherwise, returns false. Note that if false is returned, attempts to create/use objects of this class will throw exceptions.</para>
+    ///</return>
+    ///</para>
     /// </summary>
     [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
     public static bool IsDarkModeSupported
@@ -81,11 +89,8 @@ public sealed class VisualStyleRenderer : IHandle<HTHEME>
 
             if (supported)
             {
-                // In some cases, this check isn't enough, since the theme handle creation
-                // could fail for some other reason. Try creating a theme handle here - if successful, return true,
-                // else return false.
-                HTHEME hTheme = GetHandle("DarkMode_Explorer::BUTTON", false); // Button is an arbitrary choice.
-                supported = !hTheme.IsNull;
+                IntPtr hTheme = GetHandle($"{Control.DarkModeIdentifier}_{Control.ExplorerThemeIdentifier}::BUTTON", false); // Button is an arbitrary choice.
+                supported = hTheme != IntPtr.Zero && !SystemInformation.HighContrast;
             }
 
             return supported;

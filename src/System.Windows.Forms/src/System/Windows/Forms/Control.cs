@@ -163,7 +163,8 @@ public unsafe partial class Control :
     internal const string ExplorerThemeIdentifier = "Explorer";
     internal const string ItemsViewThemeIdentifier = "ItemsView";
     internal const string ComboBoxButtonThemeIdentifier = "CFD";
-    internal const string TabThemeIdentifier = "FileExplorerBannerContainer";
+    internal const string BannerContainerThemeIdentifier = "FileExplorerBannerContainer";
+    internal const string NavPaneThemeIdentifier = "ExplorerNavPane";
     private const short PaintLayerBackground = 1;
     private const short PaintLayerForeground = 2;
 
