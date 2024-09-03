@@ -84,8 +84,8 @@ public sealed class VisualStyleRenderer : IHandle<HTHEME>
                 // In some cases, this check isn't enough, since the theme handle creation
                 // could fail for some other reason. Try creating a theme handle here - if successful, return true,
                 // else return false.
-                IntPtr hTheme = GetHandle("DarkMode_Explorer::BUTTON", false); // Button is an arbitrary choice.
-                supported = hTheme != IntPtr.Zero;
+                HTHEME hTheme = GetHandle("DarkMode_Explorer::BUTTON", false); // Button is an arbitrary choice.
+                supported = !hTheme.IsNull;
             }
 
             return supported;
