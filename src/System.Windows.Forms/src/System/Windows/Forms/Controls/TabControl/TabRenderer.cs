@@ -145,7 +145,7 @@ public static class TabRenderer
     {
 #pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         // Using DarkMode Theme Subclass.
-        // see https://learn.microsoft.com/en-us/windows/win32/controls/theme-subclasses.
+        // see https://learn.microsoft.com/windows/win32/controls/theme-subclasses.
         VisualStyleElement darkTabPaneElement = VisualStyleElement.CreateElement($"{Control.DarkModeIdentifier}::{Control.NavPaneThemeIdentifier}", 0, 0);
         VisualStyleElement lightTabPaneElement = VisualStyleElement.Tab.Pane.Normal;
         VisualStyleElement tabPaneElement = Application.IsDarkModeEnabled
