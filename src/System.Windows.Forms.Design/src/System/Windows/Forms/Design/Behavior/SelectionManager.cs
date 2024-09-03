@@ -17,7 +17,7 @@ internal sealed class SelectionManager : IDisposable
     private readonly Dictionary<IComponent, ControlDesigner> _componentToDesigner;    // used for quick look up of designers related to components
     private readonly Control _rootComponent;            // root component being designed
     private ISelectionService _selectionService;        // we cache the selection service for perf.
-    private IDesignerHost _designerHost;                // we cache the designerHost for perf.
+    private IDesignerHost _designerHost;                // we cache the designerhost for perf.
     private Rectangle[]? _previousSelectionBounds;      // used to only repaint the changing part of the selection
     private object? _previousPrimarySelection;          // used to check if the primary selection changed
     private Rectangle[]? _currentSelectionBounds;

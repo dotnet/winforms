@@ -3480,7 +3480,7 @@ public partial class RichTextBox : TextBoxBase
             case PInvoke.WM_GETOBJECT:
                 base.WndProc(ref m);
 
-                // OLEACC.DLL uses window class names to identify standard control types. But WinForm controls use app-specific window
+                // OLEACC.DLL uses window class names to identify standard control types. But WinForms controls use app-specific window
                 // classes. Usually this doesn't matter, because system controls always identify their window class explicitly through
                 // the WM_GETOBJECT+OBJID_QUERYCLASSNAMEIDX message. But RICHEDIT20 doesn't do that - so we must do it ourselves.
                 // Otherwise OLEACC will treat rich edit controls as custom controls, so the accessible Role and Value will be wrong.

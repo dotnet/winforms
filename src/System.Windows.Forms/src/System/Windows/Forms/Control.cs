@@ -9490,7 +9490,7 @@ public unsafe partial class Control :
             if (
                 // The window has a parent Win32 window before re-creation
                 !parentHandle.IsNull
-                // But the parent is not a managed WinForm Control, or this.Parent is null
+                // But the parent is not a managed WinForms Control, or this.Parent is null
                 && (FromHandle(parentHandle) is null || _parent is null)
                 // Still, parentHandle is a valid native Win32 window handle, e.g. the desktop window.
                 && PInvoke.IsWindow(parentHandle))
