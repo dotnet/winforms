@@ -797,13 +797,6 @@ public partial class PrintPreviewDialog : Form
 
         _toolStrip1.Name = "toolStrip1";
 
-        // In High Contrast mode the color scheme provided by ToolStripSystemRenderer
-        // is not sufficiently contrast; so disable it in High Contrast mode.
-        if (!SystemInformation.HighContrast)
-        {
-            _toolStrip1.RenderMode = ToolStripRenderMode.System;
-        }
-
         _toolStrip1.GripStyle = ToolStripGripStyle.Hidden;
 
         _printToolStripButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
