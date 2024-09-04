@@ -25,23 +25,15 @@ public class CustomMenuItemCollectionTests
         CustomMenuItemCollection collection = new();
         ToolStripMenuItem[] items =
         [
-            new ToolStripMenuItem("Item1"),
-            new ToolStripMenuItem("Item2")
+            new("Item1"),
+            new("Item2")
         ];
 
         collection.AddRange(items);
-
         collection.Count.Should().Be(2);
-    }
 
-    [Fact]
-    public void RefreshItems_ShouldNotThrowException()
-    {
-        CustomMenuItemCollection collection = new();
-
-        Action action = () => collection.RefreshItems();
-
-        action.Should().NotThrow();
+        collection.RefreshItems();
+        collection.Count.Should().Be(2);
     }
 
     [Fact]
@@ -62,13 +54,14 @@ public class CustomMenuItemCollectionTests
         CustomMenuItemCollection collection = new();
         ToolStripMenuItem[] items =
         [
-            new ToolStripMenuItem("Item1"),
-            new ToolStripMenuItem("Item2")
+            new("Item1"),
+            new("Item2")
         ];
 
         collection.AddRange(items);
-        collection.Clear();
+        collection.Count.Should().Be(2);
 
+        collection.Clear();
         collection.Count.Should().Be(0);
     }
 }
