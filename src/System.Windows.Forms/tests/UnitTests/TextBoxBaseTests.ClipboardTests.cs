@@ -11,7 +11,6 @@ public partial class TextBoxBaseTests
         [WinFormsFact]
         public void TextBoxBase_ClearUndo_CanUndo_Success()
         {
-            Clipboard.Clear();
             using SubTextBox control = new()
             {
                 Text = "abc",
@@ -24,18 +23,16 @@ public partial class TextBoxBaseTests
             control.SelectionLength = 2;
             control.Paste();
 
-            Clipboard.GetText().Should().Be("bc");
-            Assert.Equal("bcxt", control.Text);
+            control.Text.Should().Be("bcxt");
 
             control.ClearUndo();
             control.Undo();
-            Assert.Equal("bcxt", control.Text);
+            control.Text.Should().Be("bcxt");
         }
 
         [WinFormsFact]
         public void TextBoxBase_Copy_PasteNotEmpty_Success()
         {
-            Clipboard.Clear();
             using SubTextBox control = new()
             {
                 Text = "abc",
@@ -43,31 +40,29 @@ public partial class TextBoxBaseTests
                 SelectionLength = 2
             };
             control.Copy();
-            Assert.Equal("abc", control.Text);
-            Assert.True(control.IsHandleCreated);
+            control.Text.Should().Be("abc");
+            control.IsHandleCreated.Should().BeTrue();
 
             control.Text = "text";
             control.SelectionLength = 2;
             control.Paste();
 
-            Clipboard.GetText().Should().Be("bc");
-            Assert.Equal("bcxt", control.Text);
-            Assert.True(control.CanUndo);
-            Assert.True(control.Modified);
-            Assert.True(control.IsHandleCreated);
+            control.Text.Should().Be("bcxt");
+            control.CanUndo.Should().BeTrue();
+            control.Modified.Should().BeTrue();
+            control.IsHandleCreated.Should().BeTrue();
         }
 
         [WinFormsFact]
         public void TextBoxBase_Copy_PasteNotEmptyWithHandle_Success()
         {
-            Clipboard.Clear();
             using SubTextBox control = new()
             {
                 Text = "abc",
                 SelectionStart = 1,
                 SelectionLength = 2
             };
-            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            control.Handle.Should().NotBe(IntPtr.Zero);
             int invalidatedCallCount = 0;
             control.Invalidated += (sender, e) => invalidatedCallCount++;
             int styleChangedCallCount = 0;
@@ -76,30 +71,28 @@ public partial class TextBoxBaseTests
             control.HandleCreated += (sender, e) => createdCallCount++;
 
             control.Copy();
-            Assert.Equal("abc", control.Text);
-            Assert.True(control.IsHandleCreated);
-            Assert.Equal(0, invalidatedCallCount);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, createdCallCount);
+            control.Text.Should().Be("abc");
+            control.IsHandleCreated.Should().BeTrue();
+            invalidatedCallCount.Should().Be(0);
+            styleChangedCallCount.Should().Be(0);
+            createdCallCount.Should().Be(0);
 
             control.Text = "text";
             control.SelectionLength = 2;
             control.Paste();
 
-            Clipboard.GetText().Should().Be("bc");
-            Assert.Equal("bcxt", control.Text);
-            Assert.True(control.CanUndo);
-            Assert.True(control.Modified);
-            Assert.True(control.IsHandleCreated);
-            Assert.Equal(0, invalidatedCallCount);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, createdCallCount);
+            control.Text.Should().Be("bcxt");
+            control.CanUndo.Should().BeTrue();
+            control.Modified.Should().BeTrue();
+            control.IsHandleCreated.Should().BeTrue();
+            invalidatedCallCount.Should().Be(0);
+            styleChangedCallCount.Should().Be(0);
+            createdCallCount.Should().Be(0);
         }
 
         [WinFormsFact]
         public void TextBoxBase_Cut_PasteNotEmpty_Success()
         {
-            Clipboard.Clear();
             using SubTextBox control = new()
             {
                 Text = "abc",
@@ -107,31 +100,29 @@ public partial class TextBoxBaseTests
                 SelectionLength = 2
             };
             control.Cut();
-            Assert.Equal("a", control.Text);
-            Assert.True(control.IsHandleCreated);
+            control.Text.Should().Be("a");
+            control.IsHandleCreated.Should().BeTrue();
 
             control.Text = "text";
             control.SelectionLength = 2;
             control.Paste();
 
-            Clipboard.GetText().Should().Be("bc");
-            Assert.Equal("bcxt", control.Text);
-            Assert.True(control.CanUndo);
-            Assert.True(control.Modified);
-            Assert.True(control.IsHandleCreated);
+            control.Text.Should().Be("bcxt");
+            control.CanUndo.Should().BeTrue();
+            control.Modified.Should().BeTrue();
+            control.IsHandleCreated.Should().BeTrue();
         }
 
         [WinFormsFact]
         public void TextBoxBase_Cut_PasteNotEmptyWithHandle_Success()
         {
-            Clipboard.Clear();
             using SubTextBox control = new()
             {
                 Text = "abc",
                 SelectionStart = 1,
                 SelectionLength = 2
             };
-            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            control.Handle.Should().NotBe(IntPtr.Zero);
             int invalidatedCallCount = 0;
             control.Invalidated += (sender, e) => invalidatedCallCount++;
             int styleChangedCallCount = 0;
@@ -140,24 +131,23 @@ public partial class TextBoxBaseTests
             control.HandleCreated += (sender, e) => createdCallCount++;
 
             control.Cut();
-            Assert.Equal("a", control.Text);
-            Assert.True(control.IsHandleCreated);
-            Assert.Equal(0, invalidatedCallCount);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, createdCallCount);
+            control.Text.Should().Be("a");
+            control.IsHandleCreated.Should().BeTrue();
+            invalidatedCallCount.Should().Be(0);
+            styleChangedCallCount.Should().Be(0);
+            createdCallCount.Should().Be(0);
 
             control.Text = "text";
             control.SelectionLength = 2;
             control.Paste();
 
-            Clipboard.GetText().Should().Be("bc");
-            Assert.Equal("bcxt", control.Text);
-            Assert.True(control.CanUndo);
-            Assert.True(control.Modified);
-            Assert.True(control.IsHandleCreated);
-            Assert.Equal(0, invalidatedCallCount);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, createdCallCount);
+            control.Text.Should().Be("bcxt");
+            control.CanUndo.Should().BeTrue();
+            control.Modified.Should().BeTrue();
+            control.IsHandleCreated.Should().BeTrue();
+            invalidatedCallCount.Should().Be(0);
+            styleChangedCallCount.Should().Be(0);
+            createdCallCount.Should().Be(0);
         }
 
         [WinFormsFact]
@@ -166,8 +156,8 @@ public partial class TextBoxBaseTests
             Clipboard.Clear();
             using SubTextBox control = new();
             control.Paste();
-            Assert.NotNull(control.Text);
-            Assert.True(control.IsHandleCreated);
+            control.Text.Should().NotBeNull();
+            control.IsHandleCreated.Should().BeTrue();
         }
 
         [WinFormsFact]
@@ -181,14 +171,13 @@ public partial class TextBoxBaseTests
                 SelectionLength = 2
             };
             control.Paste();
-            Assert.Equal("abc", control.Text);
-            Assert.True(control.IsHandleCreated);
+            control.Text.Should().Be("a");
+            control.IsHandleCreated.Should().BeTrue();
         }
 
         [WinFormsFact]
         public void TextBoxBase_Undo_CanUndo_Success()
         {
-            Clipboard.Clear();
             using SubTextBox control = new()
             {
                 Text = "abc",
@@ -201,34 +190,31 @@ public partial class TextBoxBaseTests
             control.SelectionLength = 2;
             control.Paste();
 
-            Clipboard.GetText().Should().Be("bc");
-            Assert.Equal("bcxt", control.Text);
+            control.Text.Should().Be("bcxt");
 
             control.Undo();
-            Assert.Equal("text", control.Text);
+            control.Text.Should().Be("text");
         }
 
         [WinFormsFact]
         public void TextBoxBase_Copy_PasteEmpty_Success()
         {
-            Clipboard.Clear();
             using SubTextBox control = new();
             control.Copy();
-            Assert.Empty(control.Text);
-            Assert.True(control.IsHandleCreated);
+            control.Text.Should().BeEmpty();
+            control.IsHandleCreated.Should().BeTrue();
 
             control.Text = "text";
             control.SelectionLength = 2;
-            Assert.Equal("text", control.Text);
-            Assert.True(control.IsHandleCreated);
+            control.Text.Should().Be("text");
+            control.IsHandleCreated.Should().BeTrue();
         }
 
         [WinFormsFact]
         public void TextBoxBase_Copy_PasteEmptyWithHandle_Success()
         {
-            Clipboard.Clear();
             using SubTextBox control = new();
-            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            control.Handle.Should().NotBe(IntPtr.Zero);
             int invalidatedCallCount = 0;
             control.Invalidated += (sender, e) => invalidatedCallCount++;
             int styleChangedCallCount = 0;
@@ -237,19 +223,19 @@ public partial class TextBoxBaseTests
             control.HandleCreated += (sender, e) => createdCallCount++;
 
             control.Copy();
-            Assert.Empty(control.Text);
-            Assert.True(control.IsHandleCreated);
-            Assert.Equal(0, invalidatedCallCount);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, createdCallCount);
+            control.Text.Should().BeEmpty();
+            control.IsHandleCreated.Should().BeTrue();
+            invalidatedCallCount.Should().Be(0);
+            styleChangedCallCount.Should().Be(0);
+            createdCallCount.Should().Be(0);
 
             control.Text = "text";
             control.SelectionLength = 2;
-            Assert.Equal("text", control.Text);
-            Assert.True(control.IsHandleCreated);
-            Assert.Equal(0, invalidatedCallCount);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, createdCallCount);
+            control.Text.Should().Be("text");
+            control.IsHandleCreated.Should().BeTrue();
+            invalidatedCallCount.Should().Be(0);
+            styleChangedCallCount.Should().Be(0);
+            createdCallCount.Should().Be(0);
         }
     }
 }
