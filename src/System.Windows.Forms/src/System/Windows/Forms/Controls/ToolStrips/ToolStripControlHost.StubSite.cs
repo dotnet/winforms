@@ -107,7 +107,7 @@ public partial class ToolStripControlHost
         }
 
         /// <summary>
-        ///  Stores the given key-value pair in an object's site.  This key-value
+        ///  Stores the given key-value pair in an object's site. This key-value
         ///  pair is stored on a per-object basis, and is a handy place to save
         ///  additional information about a component.
         /// </summary>

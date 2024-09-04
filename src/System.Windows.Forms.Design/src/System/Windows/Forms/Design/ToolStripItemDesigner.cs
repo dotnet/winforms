@@ -892,7 +892,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
     }
 
     /// <summary>
-    ///  Raised when a component's name changes.  Here we update the AccessibleName Property to match the newName.
+    ///  Raised when a component's name changes. Here we update the AccessibleName Property to match the newName.
     /// </summary>
     private void OnComponentRename(object sender, ComponentRenameEventArgs e)
     {
@@ -1021,7 +1021,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
     }
 
     /// <summary>
-    ///  Allows a designer to filter the set of properties the component it is designing will expose through the TypeDescriptor object.  This method is called immediately before its corresponding "Post" method. If you are overriding this method you should call the base implementation before you perform your own filtering.
+    ///  Allows a designer to filter the set of properties the component it is designing will expose through the TypeDescriptor object. This method is called immediately before its corresponding "Post" method. If you are overriding this method you should call the base implementation before you perform your own filtering.
     /// </summary>
     protected override void PreFilterProperties(IDictionary properties)
     {

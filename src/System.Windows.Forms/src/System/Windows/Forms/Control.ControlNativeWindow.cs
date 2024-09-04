@@ -80,7 +80,7 @@ public partial class Control
         protected override void WndProc(ref Message m)
         {
             // There are certain messages that we want to process
-            // regardless of what window target we are using.  These
+            // regardless of what window target we are using. These
             // messages cause other messages or state transitions
             // to occur within control.
             switch (m.MsgInternal)

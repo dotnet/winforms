@@ -62,7 +62,7 @@ public partial class TrackBar : Control, ISupportInitialize
     }
 
     /// <summary>
-    ///  Indicates if the control is being auto-sized.  If true, the
+    ///  Indicates if the control is being auto-sized. If true, the
     ///  TrackBar will adjust either its height or width [depending on
     ///  orientation] to make sure that only the required amount of
     ///  space is used.
@@ -267,7 +267,7 @@ public partial class TrackBar : Control, ISupportInitialize
 
     /// <summary>
     ///  The number of ticks by which the TrackBar will change when an
-    ///  event considered a "large change" occurs.  These include, Clicking the
+    ///  event considered a "large change" occurs. These include, Clicking the
     ///  mouse to the side of the button, or using the PgUp/PgDn keys on the
     ///  keyboard.
     /// </summary>
@@ -471,7 +471,7 @@ public partial class TrackBar : Control, ISupportInitialize
 
     /// <summary>
     ///  The number of ticks by which the TrackBar will change when an
-    ///  event considered a "small change" occurs.  These are most commonly
+    ///  event considered a "small change" occurs. These are most commonly
     ///  seen by using the arrow keys to move the TrackBar thumb around.
     /// </summary>
     [SRCategory(nameof(SR.CatBehavior))]

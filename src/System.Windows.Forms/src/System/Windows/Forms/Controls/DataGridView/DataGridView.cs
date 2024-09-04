@@ -1075,7 +1075,7 @@ public partial class DataGridView : Control, ISupportInitialize
         get => _borderStyle;
         set
         {
-            // Sequential enum.  Valid values are 0x0 to 0x2
+            // Sequential enum. Valid values are 0x0 to 0x2
             SourceGenerated.EnumValidator.Validate(value);
             if (_borderStyle != value)
             {
@@ -1234,7 +1234,7 @@ public partial class DataGridView : Control, ISupportInitialize
         }
         set
         {
-            // Sequential enum.  Valid values are 0x0 to 0xa
+            // Sequential enum. Valid values are 0x0 to 0xa
             SourceGenerated.EnumValidator.Validate(value);
 
             if (value != CellBorderStyle)
@@ -1374,7 +1374,7 @@ public partial class DataGridView : Control, ISupportInitialize
         get => _clipboardCopyMode;
         set
         {
-            // Sequential enum.  Valid values are 0x0 to 0x3
+            // Sequential enum. Valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(value);
             _clipboardCopyMode = value;
         }
@@ -1452,7 +1452,7 @@ public partial class DataGridView : Control, ISupportInitialize
         };
         set
         {
-            // Sequential enum.  Valid values are 0x0 to 0x4
+            // Sequential enum. Valid values are 0x0 to 0x4
             SourceGenerated.EnumValidator.Validate(value);
             if (value != ColumnHeadersBorderStyle)
             {
@@ -1608,7 +1608,7 @@ public partial class DataGridView : Control, ISupportInitialize
         get => _columnHeadersHeightSizeMode;
         set
         {
-            // Sequential enum.  Valid values are 0x0 to 0x2
+            // Sequential enum. Valid values are 0x0 to 0x2
             SourceGenerated.EnumValidator.Validate(value);
             if (_columnHeadersHeightSizeMode != value)
             {
@@ -2146,7 +2146,7 @@ public partial class DataGridView : Control, ISupportInitialize
         get => _editMode;
         set
         {
-            // Sequential enum.  Valid values are 0x0 to 0x4
+            // Sequential enum. Valid values are 0x0 to 0x4
             SourceGenerated.EnumValidator.Validate(value);
 
             if (_editMode != value)
@@ -3239,7 +3239,7 @@ public partial class DataGridView : Control, ISupportInitialize
         };
         set
         {
-            // Sequential enum.  Valid values are 0x0 to 0x4
+            // Sequential enum. Valid values are 0x0 to 0x4
             SourceGenerated.EnumValidator.Validate(value);
 
             if (value != RowHeadersBorderStyle)
@@ -3450,7 +3450,7 @@ public partial class DataGridView : Control, ISupportInitialize
         }
         set
         {
-            // Sequential enum.  Valid values are 0x0 to 0x4
+            // Sequential enum. Valid values are 0x0 to 0x4
             SourceGenerated.EnumValidator.Validate(value);
             if (_rowHeadersWidthSizeMode != value)
             {
@@ -3578,7 +3578,7 @@ public partial class DataGridView : Control, ISupportInitialize
         get => _scrollBars;
         set
         {
-            // Sequential enum.  Valid values are 0x0 to 0x3
+            // Sequential enum. Valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(value);
 
             if (_scrollBars != value)
@@ -3739,7 +3739,7 @@ public partial class DataGridView : Control, ISupportInitialize
         get => _selectionMode;
         set
         {
-            // Sequential enum.  Valid values are 0x0 to 0x4
+            // Sequential enum. Valid values are 0x0 to 0x4
             SourceGenerated.EnumValidator.Validate(value);
 
             if (SelectionMode != value)

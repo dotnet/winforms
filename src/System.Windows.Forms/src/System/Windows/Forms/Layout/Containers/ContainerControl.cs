@@ -1677,7 +1677,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
     /// </summary>
     private void EnsureUnvalidatedControl(Control? candidate)
     {
-        // Don't change the unvalidated control while in the middle of validation (re-entrancy)
+        // Don't change the unvalidated control while in the middle of validation (reentrancy)
         if (_state[s_stateValidating])
         {
             return;

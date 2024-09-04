@@ -487,9 +487,9 @@ public partial class Binding
             PropertyDescriptorCollection propInfos;
 
             // If the control is being inherited, then get the properties for
-            // the control's type rather than for the control itself.  Getting
+            // the control's type rather than for the control itself. Getting
             // properties for the control will merge the control's properties with
-            // those of its designer.  Normally we want that, but for
+            // those of its designer. Normally we want that, but for
             // inherited controls we don't because an inherited control should
             // "act" like a runtime control.
             InheritanceAttribute? attr = (InheritanceAttribute?)TypeDescriptor.GetAttributes(BindableComponent)[typeof(InheritanceAttribute)];

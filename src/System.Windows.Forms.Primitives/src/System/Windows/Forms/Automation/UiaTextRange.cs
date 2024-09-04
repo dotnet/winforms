@@ -1020,7 +1020,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
                     ValidateEndpoints();
 
                     // We'll move 1 format unit if we aren't already at the end of the
-                    // document.  Otherwise, we won't move at all.
+                    // document. Otherwise, we won't move at all.
                     moved = index < limit ? 1 : 0;
                     index = limit;
                 }
@@ -1092,7 +1092,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
 
                         // If a line other than the first consists of only "\r\n",
                         // you can move backwards past this line and the position changes,
-                        // hence this is counted.  The first line is special, though:
+                        // hence this is counted. The first line is special, though:
                         // if it is empty, and you move say from the second line back up
                         // to the first, you cannot move further; however if the first line
                         // is nonempty, you can move from the end of the first line to its
@@ -1150,7 +1150,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
                     // "pages" and document.
 
                     // We'll move 1 format unit if we aren't already at the beginning of the
-                    // document.  Otherwise, we won't move at all.
+                    // document. Otherwise, we won't move at all.
                     moved = index > 0 ? -1 : 0;
                     index = 0;
                 }

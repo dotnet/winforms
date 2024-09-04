@@ -12,8 +12,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop;
 /// <remarks>
 ///  <para>
 ///   A note here: we compare string values when looking for the value of an item. Typically these aren't large
-///   lists and the perf is worth it.  The reason stems from IPerPropertyBrowsing, which supplies a list of names
-///   and a list of variants to mimic enum functionality.  If the actual property value is a DWORD, which translates
+///   lists and the perf is worth it. The reason stems from IPerPropertyBrowsing, which supplies a list of names
+///   and a list of variants to mimic enum functionality. If the actual property value is a DWORD, which translates
 ///   to VT_UI4, and they specify their values as VT_I4 (which is a common mistake), they won't compare properly and
 ///   values can't be updated. By comparing strings, we avoid this problem and add flexibility to the system.
 ///  </para>

@@ -574,7 +574,7 @@ public abstract class ToolStripDropDownItem : ToolStripItem
             {
                 if (Enabled || DesignMode)
                 {
-                    // |__[ * File ]_____|  * is where you are.  Up or down arrow hit should expand menu.
+                    // |__[ * File ]_____|  * is where you are. Up or down arrow hit should expand menu.
                     ShowDropDown();
                     KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
                     DropDown.SelectNextToolStripItem(start: null, forward: true);

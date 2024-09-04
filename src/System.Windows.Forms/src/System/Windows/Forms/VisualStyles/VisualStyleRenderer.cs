@@ -775,8 +775,8 @@ public sealed class VisualStyleRenderer : IHandle<HTHEME>
     }
 
     /// <summary>
-    ///  This is similar to GetLastError in Win32.  It returns the last HRESULT returned from a native call
-    ///  into theme apis.  We eat the errors and let the user handle any errors that occurred.
+    ///  This is similar to GetLastError in Win32. It returns the last HRESULT returned from a native call
+    ///  into theme apis. We eat the errors and let the user handle any errors that occurred.
     /// </summary>
     public int LastHResult => (int)_lastHResult;
 

@@ -40,7 +40,7 @@ internal partial class PropertyGridView
         private static readonly Size s_minDropDownSize =
             new(SystemInformation.VerticalScrollBarWidth * 4, SystemInformation.HorizontalScrollBarHeight * 4);
 
-        // Our cached size grip glyph.  Control paint only does right bottom glyphs, so we cache a mirrored one.
+        // Our cached size grip glyph. Control paint only does right bottom glyphs, so we cache a mirrored one.
         private Bitmap? _sizeGripGlyph;
 
         private const int DropDownHolderBorder = 1;
@@ -103,7 +103,7 @@ internal partial class PropertyGridView
 
         /// <summary>
         ///  This gets set to true if there isn't enough space below the currently selected
-        ///  row for the drop down, so it appears above the row.  In this case, we make the resize
+        ///  row for the drop down, so it appears above the row. In this case, we make the resize
         ///  grip appear at the top left.
         /// </summary>
         public bool ResizeUp
@@ -178,7 +178,7 @@ internal partial class PropertyGridView
         private static InstanceCreationEditor? GetInstanceCreationEditor(PropertyDescriptorGridEntry? entry)
         {
             // First we look on the property type, and if we don't find that we'll go up to the editor type
-            // itself.  That way people can associate the InstanceCreationEditor with the type of DropDown
+            // itself. That way people can associate the InstanceCreationEditor with the type of DropDown
             // UIType Editor.
 
             if (entry is null)
@@ -224,7 +224,7 @@ internal partial class PropertyGridView
                 // Mirror the image around the x-axis to get a gripper handle that works for the lower left.
                 Matrix m = new();
 
-                // Mirroring is just scaling by -1 on the X-axis.  So any point that's like (10, 10) goes to (-10, 10).
+                // Mirroring is just scaling by -1 on the X-axis. So any point that's like (10, 10) goes to (-10, 10).
                 // That mirrors it, but also moves everything to the negative axis, so we just bump the whole thing
                 // over by it's width.
                 //

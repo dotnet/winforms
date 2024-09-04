@@ -23,12 +23,12 @@ internal class ResourcePropertyMemberCodeDomSerializer : MemberCodeDomSerializer
     }
 
     /// <summary>
-    ///  This method actually performs the serialization.  When the member is serialized
+    ///  This method actually performs the serialization. When the member is serialized
     ///  the necessary statements will be added to the statements collection.
     /// </summary>
     public override void Serialize(IDesignerSerializationManager manager, object value, MemberDescriptor descriptor, CodeStatementCollection statements)
     {
-        // We push the localization model to indicate that our serializer is in control.  Our
+        // We push the localization model to indicate that our serializer is in control. Our
         // serialization provider looks for this and decides what type of resource serializer
         // to give us.
         manager.Context.Push(_model);

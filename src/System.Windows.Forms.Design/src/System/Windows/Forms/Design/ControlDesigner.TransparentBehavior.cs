@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Design;
 public partial class ControlDesigner
 {
     /// <summary>
-    ///  This TransparentBehavior is associated with the BodyGlyph for this ControlDesigner.  When the
+    ///  This TransparentBehavior is associated with the BodyGlyph for this ControlDesigner. When the
     ///  BehaviorService hittests a glyph w/a TransparentBehavior, all messages will be passed through the
     ///  BehaviorService directly to the ControlDesigner. During a Drag operation, when the BehaviorService hittests
     /// </summary>

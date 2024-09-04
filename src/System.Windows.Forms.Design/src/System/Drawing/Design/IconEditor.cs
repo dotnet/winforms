@@ -91,7 +91,7 @@ public class IconEditor : UITypeEditor
     }
 
     /// <summary>
-    /// Retrieves the editing style of the Edit method.  If the method
+    /// Retrieves the editing style of the Edit method. If the method
     /// is not supported, this will return None.
     /// </summary>
     public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context)

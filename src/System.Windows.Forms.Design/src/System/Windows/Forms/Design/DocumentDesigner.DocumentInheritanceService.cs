@@ -10,7 +10,7 @@ namespace System.Windows.Forms.Design;
 public partial class DocumentDesigner
 {
     /// <summary>
-    ///  Document designer's version of the inheritance service.  For UI
+    ///  Document designer's version of the inheritance service. For UI
     ///  components, we will allow private controls if those controls are
     ///  children of our document, since they will be visible.
     /// </summary>

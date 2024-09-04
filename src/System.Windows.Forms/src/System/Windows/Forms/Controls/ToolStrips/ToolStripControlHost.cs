@@ -173,7 +173,7 @@ public partial class ToolStripControlHost : ToolStripItem
 
     /// <summary>
     ///  For control hosts, this property has no effect
-    ///  as they get their own clicks.  Use ControlStyles.StandardClick
+    ///  as they get their own clicks. Use ControlStyles.StandardClick
     ///  instead.
     /// </summary>
     [DefaultValue(false)]
@@ -452,7 +452,7 @@ public partial class ToolStripControlHost : ToolStripItem
     /// </summary>
     protected override void Dispose(bool disposing)
     {
-        // Call base first so other things stop trying to talk to the control.  This will
+        // Call base first so other things stop trying to talk to the control. This will
         // unparent the host item which will cause a SyncControlParent, so the control
         // will be correctly unparented before being disposed.
         base.Dispose(disposing);
@@ -636,7 +636,7 @@ public partial class ToolStripControlHost : ToolStripItem
     protected virtual void OnKeyUp(KeyEventArgs e) => RaiseKeyEvent(s_keyUpEvent, e);
 
     /// <summary>
-    ///  Called when the items bounds are changed.  Here, we update the Control's bounds.
+    ///  Called when the items bounds are changed. Here, we update the Control's bounds.
     /// </summary>
     protected override void OnBoundsChanged()
     {

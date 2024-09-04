@@ -43,7 +43,7 @@ public sealed partial class CodeDomComponentSerializationService
             private bool TypeResolutionAvailable => _typeSvcAvailable ??= GetService(typeof(ITypeResolutionService)) is not null;
 
             /// <summary>
-            ///  Override of GetType.  We favor the base implementation first, which uses the type resolution service if it is available.  If that fails, we will try to load assemblies from the given array of assembly names.
+            ///  Override of GetType. We favor the base implementation first, which uses the type resolution service if it is available. If that fails, we will try to load assemblies from the given array of assembly names.
             /// </summary>
             protected override Type? GetType(string? name)
             {

@@ -14,28 +14,28 @@ namespace System.Windows.Forms.Design;
 internal interface ISelectionUIHandler
 {
     /// <summary>
-    ///  Begins a drag on the currently selected designer.  The designer should provide
-    ///  UI feedback about the drag at this time.  Typically, this feedback consists
+    ///  Begins a drag on the currently selected designer. The designer should provide
+    ///  UI feedback about the drag at this time. Typically, this feedback consists
     ///  of an inverted rectangle for each component, or a caret if the component
     ///  is text.
     /// </summary>
     bool BeginDrag(object[] components, SelectionRules rules, int initialX, int initialY);
 
     /// <summary>
-    ///  Called when the user has moved the mouse.  This will only be called on
-    ///  the designer that returned true from beginDrag.  The designer
+    ///  Called when the user has moved the mouse. This will only be called on
+    ///  the designer that returned true from beginDrag. The designer
     ///  should update its UI feedback here.
     /// </summary>
     void DragMoved(object[] components, Rectangle offset);
 
     /// <summary>
-    ///  Called when the user has completed the drag.  The designer should
+    ///  Called when the user has completed the drag. The designer should
     ///  remove any UI feedback it may be providing.
     /// </summary>
     void EndDrag(object[] components, bool cancel);
 
     /// <summary>
-    ///  Retrieves the shape of the component.  The component's shape should be in
+    ///  Retrieves the shape of the component. The component's shape should be in
     ///  absolute coordinates and in pixels, where 0,0 is the upper left corner of
     ///  the screen.
     /// </summary>
@@ -43,7 +43,7 @@ internal interface ISelectionUIHandler
 
     /// <summary>
     ///  Retrieves a set of rules concerning the movement capabilities of a component.
-    ///  This should be one or more flags from the SelectionRules class.  If no designer
+    ///  This should be one or more flags from the SelectionRules class. If no designer
     ///  provides rules for a component, the component will not get any UI services.
     /// </summary>
     SelectionRules GetComponentRules(object component);

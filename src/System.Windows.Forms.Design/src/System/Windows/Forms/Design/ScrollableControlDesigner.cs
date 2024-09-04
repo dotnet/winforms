@@ -16,7 +16,7 @@ public class ScrollableControlDesigner : ParentControlDesigner
 
     /// <summary>
     ///  Overrides the base class's GetHitTest method to determine regions of the
-    ///  control that should always be UI-Active.  For a form, if it has autoscroll
+    ///  control that should always be UI-Active. For a form, if it has autoscroll
     ///  set the scroll bars are always UI active.
     /// </summary>
     protected override bool GetHitTest(Point pt)
@@ -53,7 +53,7 @@ public class ScrollableControlDesigner : ParentControlDesigner
             case (int)PInvoke.WM_VSCROLL:
 
                 // When we scroll, we reposition a control without causing a
-                // property change event.  Therefore, we must tell the
+                // property change event. Therefore, we must tell the
                 // SelectionManager to refresh its glyphs.
                 _selectionManager ??= GetService<SelectionManager>();
 

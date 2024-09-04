@@ -240,9 +240,9 @@ public sealed class Cursor : IDisposable, ISerializable, IHandle<HICON>, IHandle
     }
 
     /// <summary>
-    ///  Draws this image to a graphics object.  The drawing command originates on the graphics
-    ///  object, but a graphics object generally has no idea how to render a given image.  So,
-    ///  it passes the call to the actual image.  This version crops the image to the given
+    ///  Draws this image to a graphics object. The drawing command originates on the graphics
+    ///  object, but a graphics object generally has no idea how to render a given image. So,
+    ///  it passes the call to the actual image. This version crops the image to the given
     ///  dimensions and allows the user to specify a rectangle within the image to draw.
     /// </summary>
     private void DrawImageCore(Graphics graphics, Rectangle imageRect, Rectangle targetRect, bool stretch)

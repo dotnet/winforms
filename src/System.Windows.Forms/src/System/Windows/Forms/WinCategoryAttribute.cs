@@ -20,9 +20,9 @@ internal sealed class WinCategoryAttribute : CategoryAttribute
 
     /// <summary>
     ///  This method is called the first time the category property
-    ///  is accessed.  It provides a way to lookup a localized string for
-    ///  the given category.  Classes may override this to add their
-    ///  own localized names to categories.  If a localized string is
+    ///  is accessed. It provides a way to lookup a localized string for
+    ///  the given category. Classes may override this to add their
+    ///  own localized names to categories. If a localized string is
     ///  available for the given value, the method should return it.
     ///  Otherwise, it should return null.
     /// </summary>
