@@ -9,7 +9,7 @@ namespace System.Windows.Forms;
 
 public partial class PrintControllerWithStatusDialog
 {
-    private class StatusDialog : Form
+    private partial class StatusDialog : Form
     {
         internal TextBox _cancellingTextBox;
         private Button _cancelButton;
@@ -95,7 +95,7 @@ public partial class PrintControllerWithStatusDialog
             _backgroundThread._canceled = true;
         }
 
-        protected override AccessibleObject CreateAccessibilityInstance() => new ControlAccessibleObject(this);
+        protected override AccessibleObject CreateAccessibilityInstance() => new StatusDialogAccessibility(this);
 
         private void OnCancellingTextBoxTextChanged(object? sender, EventArgs e)
         {
