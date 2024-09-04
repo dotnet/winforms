@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.Testing;
 
 namespace System.Windows.Forms.Analyzers.Test;
 
-public class AvoidPassingFuncReturningTaskWithoutCancellationTokenTest
+public class AvoidPassingTaskWithoutCancellationTokenTest
 {
     // Currently, we do not have Control.InvokeAsync in the .NET 9.0 Windows reference assemblies.
     // That's why we need to add this Async Control. Once it's there, this test will fail.
@@ -169,14 +169,14 @@ public class AvoidPassingFuncReturningTaskWithoutCancellationTokenTest
 
     [Theory]
     [MemberData(nameof(GetReferenceAssemblies))]
-    public async Task CS_AvoidPassingFuncReturningTaskWithoutCancellationAnalyzer(ReferenceAssemblies referenceAssemblies)
+    public async Task CS_AvoidPassingTaskWithoutCancellationAnalyzer(ReferenceAssemblies referenceAssemblies)
     {
         // If the API does not exist, we need to add it to the test.
         string customControlSource = AsyncControl;
         string diagnosticId = DiagnosticIDs.AvoidPassingFuncReturningTaskWithoutCancellationToken;
 
         var context = new CSharpAnalyzerTest
-            <AvoidPassingFuncReturningTaskWithoutCancellationTokenAnalyzer,
+            <AvoidPassingTaskWithoutCancellationTokenAnalyzer,
              DefaultVerifier>
         {
             TestCode = TestCode,

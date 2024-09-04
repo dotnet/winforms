@@ -7,10 +7,10 @@ Imports Microsoft.CodeAnalysis.VisualBasic
 Imports Microsoft.CodeAnalysis.VisualBasic.Syntax
 Imports Microsoft.CodeAnalysis.Diagnostics
 
-Namespace System.Windows.Forms.VisualBasic.Analyzers.ConsiderNotPassingATaskWithoutCancellationToken
+Namespace Global.System.Windows.Forms.VisualBasic.Analyzers.AvoidPassingTaskWithoutCancellationToken
 
     <DiagnosticAnalyzer(LanguageNames.VisualBasic)>
-    Public Class AvoidPassingFuncReturningTaskWithoutCancellationTokenAnalyzer
+    Public Class AvoidPassingTaskWithoutCancellationTokenAnalyzer
         Inherits DiagnosticAnalyzer
 
         Private Const InvokeAsyncString As String = "InvokeAsync"
@@ -79,7 +79,7 @@ Namespace System.Windows.Forms.VisualBasic.Analyzers.ConsiderNotPassingATaskWith
                 Dim returnType = TryCast(funcType.DelegateInvokeMethod.ReturnType, INamedTypeSymbol)
 
                 If returnType IsNot Nothing AndAlso (returnType.Name = TaskString OrElse returnType.Name = ValueTaskString) Then
-                    Dim diagnostic As Diagnostic = diagnostic.Create(
+                    Dim diagnostic As Diagnostic = Diagnostic.Create(
                         s_avoidFuncReturningTaskWithoutCancellationToken,
                         invocationExpr.GetLocation())
 

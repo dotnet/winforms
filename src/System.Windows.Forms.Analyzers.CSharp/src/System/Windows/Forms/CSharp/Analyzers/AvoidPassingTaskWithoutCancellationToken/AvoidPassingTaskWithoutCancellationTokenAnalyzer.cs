@@ -11,7 +11,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace System.Windows.Forms.CSharp.Analyzers.AvoidPassingTaskWithoutCancellationToken;
 
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
-public class AvoidPassingFuncReturningTaskWithoutCancellationTokenAnalyzer : DiagnosticAnalyzer
+public class AvoidPassingTaskWithoutCancellationTokenAnalyzer : DiagnosticAnalyzer
 {
     private const string InvokeAsyncString = "InvokeAsync";
     private const string TaskString = "Task";
