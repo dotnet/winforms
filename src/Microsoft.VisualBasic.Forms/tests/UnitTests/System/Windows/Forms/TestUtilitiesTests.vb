@@ -9,7 +9,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
     Public Class TestUtilitiesTests
 
         <WinFormsFact>
-        Public Sub NullOrEmptyPathTestDataIteratorTests()
+        Public Sub TimeTestDataIteratorTests()
             Dim testClass As New TimeTestData
             testClass.IEnumerable_GetEnumerator.Should.NotBeNull()
         End Sub
