@@ -904,7 +904,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
         }
         catch
         {
-            // There might be scenarios where the ComponentAdding is fired but the Added doesn't get fired. Is such cases the InsertTransaction might be still active...  So we need to cancel that too here.
+            // There might be scenarios where the ComponentAdding is fired but the Added doesn't get fired. Is such cases the InsertTransaction might be still active... So we need to cancel that too here.
             CommitInsertTransaction(false);
             if (outerTransaction is not null)
             {
@@ -1662,7 +1662,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
     }
 
     /// <summary>
-    ///  Fired after a component has been added.  Here, we add it to the ToolStrip and select it.
+    ///  Fired after a component has been added. Here, we add it to the ToolStrip and select it.
     /// </summary>
     private void ComponentChangeSvc_ComponentAdded(object sender, ComponentEventArgs e)
     {
@@ -2255,7 +2255,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
     }
 
     /// <summary>
-    ///  Allows a designer to filter the set of properties the component it is designing will expose through the TypeDescriptor object.  This method is called immediately before its corresponding "Post" method. If you are overriding this method you should call the base implementation before you perform your own filtering.
+    ///  Allows a designer to filter the set of properties the component it is designing will expose through the TypeDescriptor object. This method is called immediately before its corresponding "Post" method. If you are overriding this method you should call the base implementation before you perform your own filtering.
     /// </summary>
     protected override void PreFilterProperties(IDictionary properties)
     {
@@ -2545,7 +2545,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
     /// </summary>
     internal void ShowOwnerDropDown(ToolStripDropDownItem currentSelection)
     {
-        // We MIGHT HAVE TO START TOP - DOWN Instead of BOTTOM-UP.  Sometimes we DON'T get the Owner POPUP and hence all the popup are parented to Wrong guy.
+        // We MIGHT HAVE TO START TOP - DOWN Instead of BOTTOM-UP. Sometimes we DON'T get the Owner POPUP and hence all the popup are parented to Wrong guy.
         while (currentSelection is not null && currentSelection.Owner is ToolStripDropDown dropDown)
         {
             ToolStripDropDown currentDropDown = dropDown;

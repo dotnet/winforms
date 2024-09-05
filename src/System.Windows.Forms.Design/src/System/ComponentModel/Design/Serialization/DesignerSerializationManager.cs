@@ -8,7 +8,7 @@ using System.Runtime.Serialization;
 namespace System.ComponentModel.Design.Serialization;
 
 /// <summary>
-///  This object is a complete implementation of IDesignerSerializationManager.  It can be used to  begin the serialization / deserialization process for any serialization scheme that utilizes  IDesignerSerializationManager.
+///  This object is a complete implementation of IDesignerSerializationManager. It can be used to  begin the serialization / deserialization process for any serialization scheme that utilizes  IDesignerSerializationManager.
 /// </summary>
 public class DesignerSerializationManager : IDesignerSerializationManager
 {
@@ -54,7 +54,7 @@ public class DesignerSerializationManager : IDesignerSerializationManager
     }
 
     /// <summary>
-    ///  Provides access to the container that components will be added to.  The default implementation searches for IDesignerHost in the service provider and uses its container if it exists.
+    ///  Provides access to the container that components will be added to. The default implementation searches for IDesignerHost in the service provider and uses its container if it exists.
     /// </summary>
     public IContainer? Container
     {
@@ -78,7 +78,7 @@ public class DesignerSerializationManager : IDesignerSerializationManager
     }
 
     /// <summary>
-    ///  This retrieves the collection of errors that have been reported to the serialization manager.  Additionally, new errors can be added to the list by accessing this property.
+    ///  This retrieves the collection of errors that have been reported to the serialization manager. Additionally, new errors can be added to the list by accessing this property.
     /// </summary>
     public IList Errors
     {
@@ -91,7 +91,7 @@ public class DesignerSerializationManager : IDesignerSerializationManager
     }
 
     /// <summary>
-    ///  This property determines the behavior of the CreateInstance method.  If true, CreateInstance will  pass the given component name.  If false, CreateInstance will check for the presence of the given name in the container.  If it does not exist, it will use the given name. If it does exist, it will pass a null value as the name of a component when adding  it to the container, thereby giving it a new name. This second variation is useful for implementing a serializer that always duplicates objects, rather than assuming those objects do not exist.  Paste commands often use this type of serializer. The default value of this property is true.
+    ///  This property determines the behavior of the CreateInstance method. If true, CreateInstance will  pass the given component name. If false, CreateInstance will check for the presence of the given name in the container. If it does not exist, it will use the given name. If it does exist, it will pass a null value as the name of a component when adding  it to the container, thereby giving it a new name. This second variation is useful for implementing a serializer that always duplicates objects, rather than assuming those objects do not exist. Paste commands often use this type of serializer. The default value of this property is true.
     /// </summary>
     public bool PreserveNames
     {
@@ -104,7 +104,7 @@ public class DesignerSerializationManager : IDesignerSerializationManager
     }
 
     /// <summary>
-    ///  This property returns the object that should be used to provide properties to the serialization manager's Properties property.  This object's  public properties will be inspected and wrapped in new property descriptors that have a target object of the serialization manager.
+    ///  This property returns the object that should be used to provide properties to the serialization manager's Properties property. This object's  public properties will be inspected and wrapped in new property descriptors that have a target object of the serialization manager.
     /// </summary>
     public object? PropertyProvider
     {
@@ -120,7 +120,7 @@ public class DesignerSerializationManager : IDesignerSerializationManager
     }
 
     /// <summary>
-    ///  This property determines the behavior of the CreateInstance method.  If false, CreateInstance will always create a new instance of an object.  If true, CreateInstance will first search the nametable and container for an object of the same name.  If such an object exists and is of the same type, CreateInstance will return the existing object instance.  This second variation is useful for implementing a serializer that applies serialization state to an existing set of objects, rather than always creating a new tree.  Undo often uses this type of serializer. The default value of this property is false.
+    ///  This property determines the behavior of the CreateInstance method. If false, CreateInstance will always create a new instance of an object. If true, CreateInstance will first search the nametable and container for an object of the same name. If such an object exists and is of the same type, CreateInstance will return the existing object instance. This second variation is useful for implementing a serializer that applies serialization state to an existing set of objects, rather than always creating a new tree. Undo often uses this type of serializer. The default value of this property is false.
     /// </summary>
     public bool RecycleInstances
     {
@@ -133,7 +133,7 @@ public class DesignerSerializationManager : IDesignerSerializationManager
     }
 
     /// <summary>
-    ///  This property determines the behavior of the CreateInstance method and only applies if RecycleInstances is true.  If true, and  an existing instance is found for the given name, it will only be returned if the two types match.  If false, the instance will be returned even if the two types do not match.  This is useful for "morphing" one type of object to another if they have similar properties but share no common parent or interface. The default value of this property is true.
+    ///  This property determines the behavior of the CreateInstance method and only applies if RecycleInstances is true. If true, and  an existing instance is found for the given name, it will only be returned if the two types match. If false, the instance will be returned even if the two types do not match. This is useful for "morphing" one type of object to another if they have similar properties but share no common parent or interface. The default value of this property is true.
     /// </summary>
     public bool ValidateRecycledTypes
     {
@@ -164,7 +164,7 @@ public class DesignerSerializationManager : IDesignerSerializationManager
     }
 
     /// <summary>
-    ///  Used to verify that no session is active.  If there is, this method throws.
+    ///  Used to verify that no session is active. If there is, this method throws.
     /// </summary>
     private void CheckNoSession()
     {
@@ -203,7 +203,7 @@ public class DesignerSerializationManager : IDesignerSerializationManager
         }
 
         object? instance = null;
-        // If we have been asked to recycle instances, look in our nametable and container first for an object matching this name and type.  If we find it, we will use it.
+        // If we have been asked to recycle instances, look in our nametable and container first for an object matching this name and type. If we find it, we will use it.
         if (RecycleInstances && name is not null)
         {
             _instancesByName?.TryGetValue(name, out instance);
@@ -215,18 +215,18 @@ public class DesignerSerializationManager : IDesignerSerializationManager
 
             if (instance is not null && ValidateRecycledTypes && instance.GetType() != type)
             {
-                // We got an instance, but it is not of the correct type.  We don't allow this.
+                // We got an instance, but it is not of the correct type. We don't allow this.
                 instance = null;
             }
         }
 
         // If the stars properly align, we will let the designer host create the component.
         // For this to happen, the following criteria must hold true:
-        // 1.  The type must be a component.
-        // 2.  addToContainer is true.
-        // 3.  The type has a null constructor or an IContainer constructor.
-        // 4.  The host is available and its container matches our container.
-        // The reason for this is that if we went through activator, and if the object already specified a constructor that took an IContainer, our deserialization mechanism would equate the container to the designer host.  This is the correct thing to do, but it has the side effect of adding the component to the designer host twice -- once with a default name, and a second time with the name we provide.  This equates to a component rename, which isn't cheap,  so we don't want to do it when we load each and every component.
+        // 1. The type must be a component.
+        // 2. addToContainer is true.
+        // 3. The type has a null constructor or an IContainer constructor.
+        // 4. The host is available and its container matches our container.
+        // The reason for this is that if we went through activator, and if the object already specified a constructor that took an IContainer, our deserialization mechanism would equate the container to the designer host. This is the correct thing to do, but it has the side effect of adding the component to the designer host twice -- once with a default name, and a second time with the name we provide. This equates to a component rename, which isn't cheap,  so we don't want to do it when we load each and every component.
         if (instance is null && addToContainer && typeof(IComponent).IsAssignableFrom(type) && (argArray is null || argArray.Length == 0 || (argArray.Length == 1 && argArray[0] == Container)))
         {
             if (GetService(typeof(IDesignerHost)) is IDesignerHost host && host.Container == Container)
@@ -234,7 +234,7 @@ public class DesignerSerializationManager : IDesignerSerializationManager
                 bool ignoreName = false;
                 if (!PreserveNames && name is not null)
                 {
-                    // Check if this name exists in the container.  If so, don't use it.
+                    // Check if this name exists in the container. If so, don't use it.
                     if (Container.Components[name] is not null)
                     {
                         ignoreName = true;
@@ -254,7 +254,7 @@ public class DesignerSerializationManager : IDesignerSerializationManager
             {
                 try
                 {
-                    // First, just try to create the object directly with the arguments.  generally this should work.
+                    // First, just try to create the object directly with the arguments. generally this should work.
                     instance = TypeDescriptor.CreateInstance(_provider, type, argTypes: null, argArray);
                 }
                 catch (MissingMethodException)
@@ -292,7 +292,7 @@ public class DesignerSerializationManager : IDesignerSerializationManager
                                     {
                                         try
                                         {
-                                            // try the IConvertible route.  If it works, we'll call it a match for this parameter and continue on.
+                                            // try the IConvertible route. If it works, we'll call it a match for this parameter and continue on.
                                             tempArgs[t] = convertible.ToType(parameters[t].ParameterType, null);
                                             continue;
                                         }
@@ -333,7 +333,7 @@ public class DesignerSerializationManager : IDesignerSerializationManager
                 bool ignoreName = false;
                 if (!PreserveNames && name is not null)
                 {
-                    // Check if this name exists in the container.  If so, don't use it.
+                    // Check if this name exists in the container. If so, don't use it.
                     if (Container.Components[name] is not null)
                     {
                         ignoreName = true;
@@ -368,7 +368,7 @@ public class DesignerSerializationManager : IDesignerSerializationManager
     }
 
     /// <summary>
-    ///  Creates a new serialization session.  Most data within the serialization manager is transient and only lives for the life of a serialization session.  When a session is disposed, serialization is considered to be complete and this transient state is cleared.  This allows a single instance of a serialization manager to be used to serialize multiple object trees.  Some state, including the service provider and any custom serialization providers that were added to the serialization manager, span sessions.
+    ///  Creates a new serialization session. Most data within the serialization manager is transient and only lives for the life of a serialization session. When a session is disposed, serialization is considered to be complete and this transient state is cleared. This allows a single instance of a serialization manager to be used to serialize multiple object trees. Some state, including the service provider and any custom serialization providers that were added to the serialization manager, span sessions.
     /// </summary>
     public IDisposable CreateSession()
     {
@@ -474,7 +474,7 @@ public class DesignerSerializationManager : IDesignerSerializationManager
             _defaultProviderTable.Add(serializerType);
         }
 
-        // Designer serialization providers can override our metadata discovery. We loop until we reach steady state.  This breaks order dependencies by allowing all providers a chance to party on each other's serializers.
+        // Designer serialization providers can override our metadata discovery. We loop until we reach steady state. This breaks order dependencies by allowing all providers a chance to party on each other's serializers.
         if (_designerSerializationProviders is not null)
         {
             bool continueLoop = true;
@@ -940,7 +940,7 @@ public class DesignerSerializationManager : IDesignerSerializationManager
     }
 
     /// <summary>
-    ///  Wrapped property descriptor.  Takes the given property  and wraps it in a new one that can take the designer serialization manager as a target.
+    ///  Wrapped property descriptor. Takes the given property  and wraps it in a new one that can take the designer serialization manager as a target.
     /// </summary>
     private sealed class WrappedPropertyDescriptor : PropertyDescriptor
     {

@@ -1794,7 +1794,7 @@ public abstract partial class ToolStripItem :
     }
 
     /// <summary>
-    ///  Raises the <see cref="SelectedChanged" /> event.  This method will be called when selected <see cref="ToolStripItem" /> changes.
+    ///  Raises the <see cref="SelectedChanged" /> event. This method will be called when selected <see cref="ToolStripItem" /> changes.
     ///  Call base.OnSelectedChanged to send this event to any registered event listeners.
     /// </summary>
     protected virtual void OnSelectedChanged(EventArgs e) => RaiseEvent(s_selectedChangedEvent, e);

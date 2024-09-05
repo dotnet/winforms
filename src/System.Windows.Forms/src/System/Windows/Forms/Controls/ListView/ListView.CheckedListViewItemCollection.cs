@@ -257,7 +257,7 @@ public partial class ListView
                 }
             }
 
-            // step 3 - we didn't find it.  Invalidate the last accessed index and return -1.
+            // step 3 - we didn't find it. Invalidate the last accessed index and return -1.
             _lastAccessedIndex = -1;
             return -1;
         }

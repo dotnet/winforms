@@ -10,7 +10,7 @@ using System.Drawing.Drawing2D;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-///  This class handles all design time behavior for the panel class.  This draws a visible border on the panel if it doesn't have a border so the
+///  This class handles all design time behavior for the panel class. This draws a visible border on the panel if it doesn't have a border so the
 ///  user knows where the boundaries of the panel lie.
 /// </summary>
 internal class SplitterPanelDesigner : PanelDesigner

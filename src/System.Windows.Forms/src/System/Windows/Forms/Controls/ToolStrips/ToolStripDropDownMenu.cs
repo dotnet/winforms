@@ -728,7 +728,7 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
     {
         UpdateScrollButtonStatus();
 
-        // calling this to get ScrollWindowEx.  In actuality it does nothing
+        // calling this to get ScrollWindowEx. In actuality it does nothing
         // to change the display rect!
         int delta;
         if (_indexOfFirstDisplayedItem == -1 || _indexOfFirstDisplayedItem >= Items.Count)

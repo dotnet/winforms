@@ -110,7 +110,7 @@ public partial class ComboBox : ListControl
     private bool _dropDownWillBeClosed;
 
     /// <summary>
-    ///  Creates a new ComboBox control.  The default style for the combo is
+    ///  Creates a new ComboBox control. The default style for the combo is
     ///  a regular DropDown Combo.
     /// </summary>
     public ComboBox()
@@ -408,7 +408,7 @@ public partial class ComboBox : ListControl
     }
 
     /// <summary>
-    ///  Retrieves the value of the DrawMode property.  The DrawMode property
+    ///  Retrieves the value of the DrawMode property. The DrawMode property
     ///  controls whether the control is drawn by Windows or by the user.
     /// </summary>
     [SRCategory(nameof(SR.CatBehavior))]
@@ -568,9 +568,9 @@ public partial class ComboBox : ListControl
     }
 
     /// <summary>
-    ///  Indicates if the combo should avoid showing partial Items.  If so,
+    ///  Indicates if the combo should avoid showing partial Items. If so,
     ///  then only full items will be displayed, and the list portion will be resized
-    ///  to prevent partial items from being shown.  Otherwise, they will be
+    ///  to prevent partial items from being shown. Otherwise, they will be
     ///  shown
     /// </summary>
     [SRCategory(nameof(SR.CatBehavior))]
@@ -672,7 +672,7 @@ public partial class ComboBox : ListControl
 
     /// <summary>
     ///  The maximum number of items to be shown in the dropdown portion
-    ///  of the ComboBox.  This number can be between 1 and 100.
+    ///  of the ComboBox. This number can be between 1 and 100.
     /// </summary>
     [SRCategory(nameof(SR.CatBehavior))]
     [DefaultValue(8)]
@@ -797,7 +797,7 @@ public partial class ComboBox : ListControl
                 //  (c) this updated requestedheight
                 //  (d) if the user then changed the combo to simple style, the height did not change.
                 // We simply cannot match this behavior if PreferredHeight is corrected so that (b) never
-                // occurs.  We simply do not know when Size was set.
+                // occurs. We simply do not know when Size was set.
 
                 // So in whidbey, the behavior will be:
                 //  (1) user uses default size = setting dropdownstyle=simple will revert to simple height
@@ -840,7 +840,7 @@ public partial class ComboBox : ListControl
     }
 
     // ComboBox.PreferredHeight returns incorrect values
-    // This is translated from windows implementation.  Since we cannot control the size
+    // This is translated from windows implementation. Since we cannot control the size
     // of the combo box, we need to use the same calculation they do.
     private int GetComboHeight()
     {
@@ -861,12 +861,12 @@ public partial class ComboBox : ListControl
 
         if (DrawMode != DrawMode.Normal)
         {
-            // This is an ownerdraw combo.  Have the owner tell us how tall this
+            // This is an ownerdraw combo. Have the owner tell us how tall this
             // item is.
             dyEdit = ItemHeight;
         }
 
-        // Set the initial width to be the combo box rect.  Later we will shorten it
+        // Set the initial width to be the combo box rect. Later we will shorten it
         // if there is a dropdown button.
         Size fixedFrameBoderSize = SystemInformation.FixedFrameBorderSize;
         cyCombo = 2 * fixedFrameBoderSize.Height + dyEdit;
@@ -1083,7 +1083,7 @@ public partial class ComboBox : ListControl
     }
 
     /// <summary>
-    ///  The type of combo that we are right now.  The value would come
+    ///  The type of combo that we are right now. The value would come
     ///  from the System.Windows.Forms.ComboBoxStyle enumeration.
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
@@ -1219,9 +1219,9 @@ public partial class ComboBox : ListControl
 
         if (setSelectedIndex)
         {
-            // Process return key.  This is sent by the AutoComplete DropDown when a
+            // Process return key. This is sent by the AutoComplete DropDown when a
             // selection is made from the DropDown
-            // Check to see if the Text Changed.  If so, at least fire a TextChanged
+            // Check to see if the Text Changed. If so, at least fire a TextChanged
             int index = FindStringIgnoreCase(text);
 
             if ((index != -1) && (index != SelectedIndex))
@@ -1361,7 +1361,7 @@ public partial class ComboBox : ListControl
     }
 
     /// <summary>
-    ///  Performs the work of adding the specified items to the combobox
+    ///  Performs the work of adding the specified items to the ComboBox
     /// </summary>
     [Obsolete("This method has been deprecated.  There is no replacement.  https://go.microsoft.com/fwlink/?linkid=14202")]
     protected virtual void AddItemsCore(object[]? value)
@@ -2264,7 +2264,7 @@ public partial class ComboBox : ListControl
     }
 
     /// <summary>
-    ///  Inserts the given item to the native combo box at the index.  This asserts if the handle hasn't been
+    ///  Inserts the given item to the native combo box at the index. This asserts if the handle hasn't been
     ///  created or if the resulting insert index doesn't match the passed in index.
     /// </summary>
     private int NativeInsert(int index, object item)
@@ -2288,7 +2288,7 @@ public partial class ComboBox : ListControl
         Debug.Assert(IsHandleCreated, "Shouldn't be calling Native methods before the handle is created.");
 
         // Windows combo does not invalidate the selected region if you remove the
-        // currently selected item.  Test for this and invalidate.  Note that because
+        // currently selected item. Test for this and invalidate. Note that because
         // invalidate will lazy-paint we can actually invalidate before we send the
         // delete message.
 
@@ -2430,7 +2430,7 @@ public partial class ComboBox : ListControl
     }
 
     /// <summary>
-    ///  We need to un-subclasses everything here.  Inheriting classes should
+    ///  We need to un-subclasses everything here. Inheriting classes should
     ///  not forget to call base.OnHandleDestroyed()
     /// </summary>
     protected override void OnHandleDestroyed(EventArgs e)
@@ -2456,7 +2456,7 @@ public partial class ComboBox : ListControl
     }
 
     /// <summary>
-    ///  This is the code that actually fires the drawItem event.  Don't
+    ///  This is the code that actually fires the drawItem event. Don't
     ///  forget to call base.onDrawItem() to ensure that drawItem events
     ///  are correctly fired at all other times.
     /// </summary>
@@ -2466,7 +2466,7 @@ public partial class ComboBox : ListControl
     }
 
     /// <summary>
-    ///  This is the code that actually fires the dropDown event.  Don't
+    ///  This is the code that actually fires the dropDown event. Don't
     ///  forget to call base.onDropDown() to ensure that dropDown events
     ///  are correctly fired at all other times.
     /// </summary>
@@ -2563,7 +2563,7 @@ public partial class ComboBox : ListControl
     };
 
     /// <summary>
-    ///  This is the code that actually fires the OnMeasureItem event.  Don't
+    ///  This is the code that actually fires the OnMeasureItem event. Don't
     ///  forget to call base.onMeasureItem() to ensure that OnMeasureItem
     ///  events are correctly fired at all other times.
     /// </summary>
@@ -3201,7 +3201,7 @@ public partial class ComboBox : ListControl
         if (!_fromHandleCreate && recreate && IsHandleCreated)
         {
             // RecreateHandle to avoid Leak.
-            // notice the use of member variable to avoid re-entrancy
+            // notice the use of member variable to avoid reentrancy
             AutoCompleteMode backUpMode = AutoCompleteMode;
             _autoCompleteMode = AutoCompleteMode.None;
             RecreateHandle();
@@ -3486,7 +3486,7 @@ public partial class ComboBox : ListControl
     private void UpdateText()
     {
         // Fire text changed for dropdown combos when the selection
-        //           changes, since the text really does change.  We've got
+        //           changes, since the text really does change. We've got
         //           to do this asynchronously because the actual edit text
         //           isn't updated until a bit later
         //
@@ -3695,7 +3695,7 @@ public partial class ComboBox : ListControl
     }
 
     /// <summary>
-    ///  The Combobox's window procedure.  Inheriting classes can override this
+    ///  The ComboBox's window procedure. Inheriting classes can override this
     ///  to add extra functionality, but should not forget to call
     ///  base.wndProc(m); to ensure the combo continues to function properly.
     /// </summary>

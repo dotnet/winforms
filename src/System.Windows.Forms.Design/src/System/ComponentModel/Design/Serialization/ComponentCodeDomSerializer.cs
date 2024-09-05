@@ -80,8 +80,8 @@ internal class ComponentCodeDomSerializer : CodeDomSerializer
     }
 
     /// <summary>
-    ///  This method is invoked during deserialization to obtain an instance of an object.  When this is called, an instance
-    ///  of the requested type should be returned.  This implementation calls base and then tries to deserialize design
+    ///  This method is invoked during deserialization to obtain an instance of an object. When this is called, an instance
+    ///  of the requested type should be returned. This implementation calls base and then tries to deserialize design
     ///  time properties for the component.
     /// </summary>
     protected override object DeserializeInstance(IDesignerSerializationManager manager, Type type, object?[]? parameters, string? name, bool addToContainer)
@@ -113,7 +113,7 @@ internal class ComponentCodeDomSerializer : CodeDomSerializer
             return GetExpression(manager, value);
         }
 
-        // If the object is being inherited, we will will not emit a variable declaration.  Also, we won't
+        // If the object is being inherited, we will will not emit a variable declaration. Also, we won't
         // do any serialization at all if the object is privately inherited.
         InheritanceLevel inheritanceLevel = InheritanceLevel.NotInherited;
 
@@ -122,18 +122,18 @@ internal class ComponentCodeDomSerializer : CodeDomSerializer
             inheritanceLevel = inheritanceAttribute.InheritanceLevel;
         }
 
-        // First, skip everything if we're privately inherited.  We cannot write any code that would affect this
+        // First, skip everything if we're privately inherited. We cannot write any code that would affect this
         // component.
         if (inheritanceLevel != InheritanceLevel.InheritedReadOnly)
         {
             // Things we need to know:
             //
-            // 1.  What expression should we use for the left hand side
+            // 1. What expression should we use for the left hand side
             //      a) already given to us via GetExpression?
             //      b) a local variable?
             //      c) a member variable?
             //
-            // 2.  Should we generate an init expression for this
+            // 2. Should we generate an init expression for this
             //     object?
             //      a) Inherited or existing expression: no
             //      b) otherwise, yes.
@@ -156,13 +156,13 @@ internal class ComponentCodeDomSerializer : CodeDomSerializer
                 generateObject = false;
 
                 // if we have an existing expression and this is not
-                // a sited component, do not serialize it.  We need this for Everett / 1.0
+                // a sited component, do not serialize it. We need this for Everett / 1.0
                 // backwards compat (even though it's wrong).
                 if (value is IComponent { Site: null })
                 {
                     // We were in a serialize content
-                    // property and would still serialize it.  This code reverses what the
-                    // outer if block does for this specific case.  We also need this
+                    // property and would still serialize it. This code reverses what the
+                    // outer if block does for this specific case. We also need this
                     // for Everett / 1.0 backwards compat.
                     if (!manager.TryGetContext(out ExpressionContext? expCtx) || expCtx.PresetValue != value)
                     {
@@ -174,8 +174,8 @@ internal class ComponentCodeDomSerializer : CodeDomSerializer
             {
                 if (inheritanceLevel == InheritanceLevel.NotInherited)
                 {
-                    // See if there is a "GenerateMember" property.  If so,
-                    // we might want to generate a local variable.  Otherwise,
+                    // See if there is a "GenerateMember" property. If so,
+                    // we might want to generate a local variable. Otherwise,
                     // we want to generate a field.
                     PropertyDescriptor? generateProp = props["GenerateMember"];
                     if (generateProp is not null && generateProp.TryGetValue(value, out bool b) && !b)
@@ -196,7 +196,7 @@ internal class ComponentCodeDomSerializer : CodeDomSerializer
                 }
             }
 
-            // Push the component being serialized onto the stack.  It may be handy to
+            // Push the component being serialized onto the stack. It may be handy to
             // be able to discover this.
             manager.Context.Push(value);
             manager.Context.Push(statements);
@@ -214,8 +214,8 @@ internal class ComponentCodeDomSerializer : CodeDomSerializer
                     {
                         if (inheritanceLevel == InheritanceLevel.NotInherited)
                         {
-                            // We need to generate the field declaration.  See if there is a modifiers property on
-                            // the object.  If not, look for a DefaultModifies, and finally assume it's private.
+                            // We need to generate the field declaration. See if there is a modifiers property on
+                            // the object. If not, look for a DefaultModifies, and finally assume it's private.
                             CodeMemberField field = new(typeName, name);
                             PropertyDescriptor? modifiersProp = props["Modifiers"];
 
@@ -246,14 +246,14 @@ internal class ComponentCodeDomSerializer : CodeDomSerializer
                     }
                 }
 
-                // Now output an object create if we need to.  We always see if there is a
+                // Now output an object create if we need to. We always see if there is a
                 // type converter that can provide us guidance
 
                 if (generateObject)
                 {
                     // Ok, now that we've decided if we have a local or a member variable, its now time to serialize the rest of the code.
-                    // The first step is to create an assign statement to "new" the object.  For that, we need to know if
-                    // the component wants a special IContainer constructor or not.  For that to be valid we must also know
+                    // The first step is to create an assign statement to "new" the object. For that, we need to know if
+                    // the component wants a special IContainer constructor or not. For that to be valid we must also know
                     // that we can get to an actual IContainer.
                     IContainer? container = manager.GetService<IContainer>();
                     ConstructorInfo? ctor = null;
@@ -282,8 +282,8 @@ internal class ComponentCodeDomSerializer : CodeDomSerializer
                     {
                         if (assignLhs is null)
                         {
-                            // We cannot do much more for this object.  If isComplete is true,
-                            // then the RHS now becomes our LHS.  Otherwise, I'm afraid we have
+                            // We cannot do much more for this object. If isComplete is true,
+                            // then the RHS now becomes our LHS. Otherwise, I'm afraid we have
                             // just failed to serialize this object.
                             if (isComplete)
                             {
@@ -343,8 +343,8 @@ internal class ComponentCodeDomSerializer : CodeDomSerializer
                         persistSettings = GetReflectionTypeFromTypeHelper(manager, typeof(IPersistComponentSettings)).IsAssignableFrom(reflectionType);
                     }
 
-                    // We implement statement caching only for the main code generation phase.  We don't implement it for other
-                    // serialization managers.  How do we tell the difference?  The main serialization manager exists as a service.
+                    // We implement statement caching only for the main code generation phase. We don't implement it for other
+                    // serialization managers. How do we tell the difference?  The main serialization manager exists as a service.
                     IDesignerSerializationManager? mainManager = manager.GetService<IDesignerSerializationManager>();
 
                     if (supportInitialize)
@@ -354,8 +354,8 @@ internal class ComponentCodeDomSerializer : CodeDomSerializer
 
                     SerializePropertiesToResources(manager, statements, value, s_designTimeFilter);
 
-                    // Writing out properties is expensive.  But, we're very smart and we cache the results
-                    // in ComponentCache.  See if we have cached results.  If so, use 'em.  If not, generate
+                    // Writing out properties is expensive. But, we're very smart and we cache the results
+                    // in ComponentCache. See if we have cached results. If so, use 'em. If not, generate
                     // code and then see if we can cache the results for later.
                     ComponentCache? cache = manager.GetService<ComponentCache>();
                     ComponentCache.Entry? entry = null;
@@ -384,7 +384,7 @@ internal class ComponentCodeDomSerializer : CodeDomSerializer
                             entry = new ComponentCache.Entry();
 
                             // We cache components even if they're not valid so dependencies are
-                            // still tracked correctly (see comment below).  The problem is, we will create a
+                            // still tracked correctly (see comment below). The problem is, we will create a
                             // new entry object even if there is still an existing one that is just invalid, and it
                             // might have dependencies that will be lost.
                             // we need to make sure we copy over any dependencies that are also tracked.
@@ -408,7 +408,7 @@ internal class ComponentCodeDomSerializer : CodeDomSerializer
 
                         // This entry will only be used if the valid bit is set.
                         // This is useful because we still need to setup dependency relationships
-                        // between components even if they are not cached.  See VSWhidbey 263053.
+                        // between components even if they are not cached. See VSWhidbey 263053.
                         bool correctManager = manager == mainManager;
                         entry.Valid = correctManager && CanCacheComponent(manager, value, props);
 
@@ -468,7 +468,7 @@ internal class ComponentCodeDomSerializer : CodeDomSerializer
                         }
                     }
 
-                    // Regardless, apply statements.  Either we created them or we got them
+                    // Regardless, apply statements. Either we created them or we got them
                     // out of the cache.
                     statements.AddRange(entry.Statements);
 

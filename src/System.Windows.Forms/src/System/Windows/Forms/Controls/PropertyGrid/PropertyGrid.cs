@@ -1757,13 +1757,13 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             {
                 if (site.TryGetService(out IMenuCommandService? menuCommandService))
                 {
-                    // Got the menu command service.  Let it deal with the set of verbs for this component.
+                    // Got the menu command service. Let it deal with the set of verbs for this component.
                     verbs = new DesignerVerb[menuCommandService.Verbs.Count];
                     menuCommandService.Verbs.CopyTo(verbs, 0);
                 }
                 else
                 {
-                    // No menu command service.  Go straight to the component's designer.  We can only do this
+                    // No menu command service. Go straight to the component's designer. We can only do this
                     // if the object count is 1, because designers do not support verbs across a multi-selection.
                     if (_selectedObjects.Length == 1 && site.TryGetService(out IDesignerHost? designerHost))
                     {
@@ -3513,7 +3513,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             killTab = true;
         }
 
-        // We don't remove PropertyTabScope.Global tabs here.  Our owner has to do that.
+        // We don't remove PropertyTabScope.Global tabs here. Our owner has to do that.
         if (killTab && _tabs[tabIndex].Scope > PropertyTabScope.Global)
         {
             RemoveTab(tabIndex, false);

@@ -10,7 +10,7 @@ using Windows.Win32.UI.Accessibility;
 namespace System.Windows.Forms;
 
 /// <summary>
-///  The raw "preview" part of print previewing, without any dialogs or buttons.  Most <see cref="PrintPreviewControl"/>
+///  The raw "preview" part of print previewing, without any dialogs or buttons. Most <see cref="PrintPreviewControl"/>
 ///  objects are found on <see cref="PrintPreviewDialog"/> objects, but they don't have to be.
 /// </summary>
 [DefaultProperty(nameof(Document))]

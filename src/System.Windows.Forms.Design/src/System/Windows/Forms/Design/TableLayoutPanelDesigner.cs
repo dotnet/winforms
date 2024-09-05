@@ -566,7 +566,7 @@ internal partial class TableLayoutPanelDesigner : FlowPanelDesigner
             }
 
             // if we are locally repositioning this control - remove it (internally)
-            // from the table's child collection and add something in its place.  This
+            // from the table's child collection and add something in its place. This
             // will be a control to swap it with
             if (localReposition)
             {

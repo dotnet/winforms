@@ -105,7 +105,7 @@ internal static class TextExtensions
         TextPaddingOptions padding = default)
     {
         // DrawText(Ex) adds a small space at the beginning of the text bounding box but not at the end,
-        // this is more noticeable when the font has the italic style.  We compensate with this factor.
+        // this is more noticeable when the font has the italic style. We compensate with this factor.
 
         int leftMargin = 0;
         int rightMargin = 0;

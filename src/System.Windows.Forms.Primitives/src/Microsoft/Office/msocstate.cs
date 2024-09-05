@@ -16,7 +16,7 @@ internal enum msocstate : uint
     /// <summary>
     ///  If app is entering modal state, host/component should disable
     ///  its toplevel windows, and reenable them when app exits this
-    ///  state.  Also, when this state is entered or exited, host/component
+    ///  state. Also, when this state is entered or exited, host/component
     ///  should notify appropriate inplace objects via
     ///  IOleInPlaceActiveObject::EnableModeless.
     /// </summary>

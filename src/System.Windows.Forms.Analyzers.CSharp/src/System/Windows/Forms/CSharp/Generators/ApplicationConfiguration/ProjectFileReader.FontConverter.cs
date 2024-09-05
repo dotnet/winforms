@@ -144,7 +144,7 @@ internal static partial class ProjectFileReader
             if (length > 0)
             {
                 // text is expected to have a format like " 8,25pt, ". Leading and trailing spaces (trimmed above),
-                // last comma, unit and decimal value may not appear.  We need to make it ####.##CC
+                // last comma, unit and decimal value may not appear. We need to make it ####.##CC
                 for (splitPoint = 0; splitPoint < length; splitPoint++)
                 {
                     if (char.IsLetter(text[splitPoint]))

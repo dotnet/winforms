@@ -881,7 +881,7 @@ public static partial class ToolStripManager
     /// <summary>
     ///  This function handles when Alt is pressed.
     ///  If it finds a menustrip to select, it returns true,
-    ///  If it doesnt it returns false.
+    ///  If it doesn't it returns false.
     ///  If it finds a win32 menu is already associated with the control it bails, returning false.
     /// </summary>
     internal static bool ProcessMenuKey(ref Message m)

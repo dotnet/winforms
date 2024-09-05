@@ -269,7 +269,7 @@ public unsafe partial class PrinterSettings : ICloneable
     public PaperSourceCollection PaperSources => new(Get_PaperSources());
 
     /// <summary>
-    ///  Whether the print dialog has been displayed.  In SafePrinting mode, a print dialog is required to print.
+    ///  Whether the print dialog has been displayed. In SafePrinting mode, a print dialog is required to print.
     ///  After printing, this property is set to false if the program does not have AllPrinting; this guarantees
     ///  a document is only printed once each time the print dialog is shown.
     /// </summary>

@@ -442,7 +442,7 @@ internal sealed partial class PropertyGridView :
     }
 
     /// <summary>
-    ///  Returns a default location for showing the context menu.  This
+    ///  Returns a default location for showing the context menu. This
     ///  location is the center of the active property label in the grid, and
     ///  is used to position the context menu when the menu is invoked
     ///  via the keyboard.
@@ -3688,7 +3688,7 @@ internal sealed partial class PropertyGridView :
             object[] rgItems = gridEntry.GetPropertyValueList();
             int maxWidth = 0;
 
-            // The listbox draws with GDI, not GDI+.  So we use a normal DC here.
+            // The listbox draws with GDI, not GDI+. So we use a normal DC here.
 
             using GetDcScope hdc = new(DropDownListBox.HWND);
 
@@ -4653,7 +4653,7 @@ internal sealed partial class PropertyGridView :
                 InPropertySet = true;
 
                 // If this propentry is enumerable, then once a value is selected from the editor,
-                // we'll want to close the drop down (like true/false).  Otherwise, if we're
+                // we'll want to close the drop down (like true/false). Otherwise, if we're
                 // working with Anchor for ex., then we should be able to select different values
                 // from the editor, without having it close every time.
                 if (entry is not null && entry.Enumerable && closeDropDown)

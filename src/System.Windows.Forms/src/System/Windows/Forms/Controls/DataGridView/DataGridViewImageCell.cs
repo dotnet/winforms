@@ -98,7 +98,7 @@ public partial class DataGridViewImageCell : DataGridViewCell
         get => Properties.GetValueOrDefault(s_propImageCellLayout, DataGridViewImageCellLayout.Normal);
         set
         {
-            // Sequential enum.  Valid values are 0x0 to 0x3
+            // Sequential enum. Valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(value);
             if (ImageLayout != value)
             {

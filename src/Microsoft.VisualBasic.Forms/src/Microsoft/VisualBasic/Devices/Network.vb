@@ -52,7 +52,7 @@ Namespace Microsoft.VisualBasic.Devices
                 Catch ex As PlatformNotSupportedException
                     Return
                 End Try
-                SyncLock _syncObject 'we don't want our event firing before we've finished setting up the infrastructure.  Also, need to assure there are no races in here so we don't hook up the OS listener twice, etc.
+                SyncLock _syncObject 'we don't want our event firing before we've finished setting up the infrastructure. Also, need to assure there are no races in here so we don't hook up the OS listener twice, etc.
                     If _networkAvailabilityEventHandlers Is Nothing Then _networkAvailabilityEventHandlers = New List(Of NetworkAvailableEventHandler)
                     _networkAvailabilityEventHandlers.Add(handler)
 
@@ -644,9 +644,9 @@ Namespace Microsoft.VisualBasic.Devices
         'Listens to the AddressChanged event from the OS which comes in on an arbitrary thread
         Private Sub OS_NetworkAvailabilityChangedListener(sender As Object, e As EventArgs)
             SyncLock _syncObject 'Ensure we don't handle events until after we've finished setting up the event marshalling infrastructure
-                'Don't call AsyncOperationManager.OperationSynchronizationContext.Post.  The reason we want to go through m_SynchronizationContext is that
-                'the OperationSynchronizationContext is thread static.  Since we are getting called on some random thread, the context that was
-                'in place when the Network object was created won't be available (it is on the original thread).  To hang on to the original
+                'Don't call AsyncOperationManager.OperationSynchronizationContext.Post. The reason we want to go through m_SynchronizationContext is that
+                'the OperationSynchronizationContext is thread static. Since we are getting called on some random thread, the context that was
+                'in place when the Network object was created won't be available (it is on the original thread). To hang on to the original
                 'context associated with the thread that the network object is created on, I use m_SynchronizationContext.
                 _synchronizationContext.Post(_networkAvailabilityChangedCallback, Nothing)
             End SyncLock

@@ -75,7 +75,7 @@ public class ComponentDocumentDesigner : ComponentDesigner, IRootDesigner, ITool
     }
 
     /// <summary>
-    ///  The view for this document.  The designer
+    ///  The view for this document. The designer
     ///  should assume that the view will be shown shortly
     ///  after this call is made and make any necessary
     ///  preparations.

@@ -10,10 +10,10 @@ public abstract partial class EventBindingService
 {
     /// <summary>
     ///  This is an EventDescriptor cleverly wrapped in a PropertyDescriptor
-    ///  of type String.  Note that we now handle subobjects by storing their
+    ///  of type String. Note that we now handle subobjects by storing their
     ///  event information in their base component's site's dictionary.
     ///  Note also that when a value is set for this property we will code-gen
-    ///  the event method.  If the property is set to a new value we will
+    ///  the event method. If the property is set to a new value we will
     ///  remove the old event method ONLY if it is empty.
     /// </summary>
     private class EventPropertyDescriptor : PropertyDescriptor
@@ -31,11 +31,11 @@ public abstract partial class EventBindingService
         }
 
         /// <summary>
-        ///  Indicates whether reset will change the value of the component.  If there
+        ///  Indicates whether reset will change the value of the component. If there
         ///  is a DefaultValueAttribute, then this will return true if getValue returns
-        ///  something different than the default value.  If there is a reset method and
+        ///  something different than the default value. If there is a reset method and
         ///  a shouldPersist method, this will return what shouldPersist returns.
-        ///  If there is just a reset method, this always returns true.  If none of these
+        ///  If there is just a reset method, this always returns true. If none of these
         ///  cases apply, this returns false.
         /// </summary>
         public override bool CanResetValue(object component) => GetValue(component) is not null;
@@ -71,7 +71,7 @@ public abstract partial class EventBindingService
 
         /// <summary>
         ///  Retrieves the current value of the property on component,
-        ///  invoking the getXXX method.  An exception in the getXXX
+        ///  invoking the getXXX method. An exception in the getXXX
         ///  method will pass through.
         /// </summary>
         public override object? GetValue(object? component)
@@ -95,7 +95,7 @@ public abstract partial class EventBindingService
 
             if (site is null)
             {
-                // Object not sited, so we weren't able to set a value on it.  Setting a value will fail.
+                // Object not sited, so we weren't able to set a value on it. Setting a value will fail.
                 return null;
             }
 
@@ -111,26 +111,26 @@ public abstract partial class EventBindingService
         }
 
         /// <summary>
-        ///  Will reset the default value for this property on the component.  If
+        ///  Will reset the default value for this property on the component. If
         ///  there was a default value passed in as a DefaultValueAttribute, that
-        ///  value will be set as the value of the property on the component.  If
+        ///  value will be set as the value of the property on the component. If
         ///  there was no default value passed in, a ResetXXX method will be looked
-        ///  for.  If one is found, it will be invoked.  If one is not found, this
+        ///  for. If one is found, it will be invoked. If one is not found, this
         ///  is a nop.
         /// </summary>
         public override void ResetValue(object component) => SetValue(component, null);
 
         /// <summary>
         ///  This will set value to be the new value of this property on the
-        ///  component by invoking the setXXX method on the component.  If the
+        ///  component by invoking the setXXX method on the component. If the
         ///  value specified is invalid, the component should throw an exception
-        ///  which will be passed up.  The component designer should design the
+        ///  which will be passed up. The component designer should design the
         ///  property so that getXXX following a setXXX should return the value
         ///  passed in if no exception was thrown in the setXXX call.
         /// </summary>
         public override void SetValue(object? component, object? value)
         {
-            // Argument, state checking.  Is it ok to set this event?
+            // Argument, state checking. Is it ok to set this event?
             if (IsReadOnly)
             {
                 throw new InvalidOperationException(string.Format(SR.EventBindingServiceEventReadOnly, Name))
@@ -154,7 +154,7 @@ public abstract partial class EventBindingService
                 name = null;
             }
 
-            // Obtain the site for the component.  Note that this can be a site
+            // Obtain the site for the component. Note that this can be a site
             // to a parent component if we can get to the reference service.
             ISite? site = (component as IComponent)?.Site;
 
@@ -206,7 +206,7 @@ public abstract partial class EventBindingService
             }
 
             // If there is a designer host, create a transaction so there is a
-            // nice name for this change.  We don't want a name like
+            // nice name for this change. We don't want a name like
             // "Change property 'Click', because to users, this isn't a property.
             DesignerTransaction? transaction = null;
 
@@ -217,7 +217,7 @@ public abstract partial class EventBindingService
 
             try
             {
-                // The names are different.  Fire a changing event to make
+                // The names are different. Fire a changing event to make
                 // sure it's OK to perform the change.
 
                 if (site.TryGetService(out IComponentChangeService? changeService))
@@ -269,8 +269,8 @@ public abstract partial class EventBindingService
         ///  other words, it indicates whether the state of the property is distinct
         ///  from when the component is first instantiated. If there is a default
         ///  value specified in this PropertyDescriptor, it will be compared against the
-        ///  property's current value to determine this.  If there isn't, the
-        ///  shouldPersistXXX method is looked for and invoked if found.  If both
+        ///  property's current value to determine this. If there isn't, the
+        ///  shouldPersistXXX method is looked for and invoked if found. If both
         ///  these routes fail, true will be returned.
         ///  If this returns false, a tool should not persist this property's value.
         /// </summary>
@@ -332,10 +332,10 @@ public abstract partial class EventBindingService
             }
 
             /// <summary>
-            ///  Converts the given object to another type.  The most common types to convert
-            ///  are to and from a string object.  The default implementation will make a call
+            ///  Converts the given object to another type. The most common types to convert
+            ///  are to and from a string object. The default implementation will make a call
             ///  to ToString on the object if the object is valid and if the destination
-            ///  type is string.  If this cannot convert to the destination type, this will
+            ///  type is string. If this cannot convert to the destination type, this will
             ///  throw a NotSupportedException.
             /// </summary>
             public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
@@ -350,7 +350,7 @@ public abstract partial class EventBindingService
 
             /// <summary>
             ///  Retrieves a collection containing a set of standard values
-            ///  for the data type this validator is designed for.  This
+            ///  for the data type this validator is designed for. This
             ///  will return null if the data type does not support a
             ///  standard set of values.
             /// </summary>
@@ -371,9 +371,9 @@ public abstract partial class EventBindingService
 
             /// <summary>
             ///  Determines if the list of standard values returned from
-            ///  GetStandardValues is an exclusive list.  If the list
+            ///  GetStandardValues is an exclusive list. If the list
             ///  is exclusive, then no other values are valid, such as
-            ///  in an enum data type.  If the list is not exclusive,
+            ///  in an enum data type. If the list is not exclusive,
             ///  then there are other valid values besides the list of
             ///  standard values GetStandardValues provides.
             /// </summary>
@@ -388,7 +388,7 @@ public abstract partial class EventBindingService
 
         /// <summary>
         ///  This is a combination of a reference and a property, so that it can be used
-        ///  as the key of a hashtable.  This is because we may have subobjects that share
+        ///  as the key of a hashtable. This is because we may have subobjects that share
         ///  the same property.
         /// </summary>
         private class ReferenceEventClosure

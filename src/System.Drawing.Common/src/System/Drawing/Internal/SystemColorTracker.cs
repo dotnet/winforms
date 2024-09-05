@@ -39,7 +39,7 @@ internal static class SystemColorTracker
                 SystemEvents.UserPreferenceChanged += OnUserPreferenceChanged;
             }
 
-            // Strictly speaking, we should grab a lock on this class.  But since the chances
+            // Strictly speaking, we should grab a lock on this class. But since the chances
             // of a problem are so low, the consequences so minimal (something will get accidentally dropped
             // from the list), and the performance of locking so lousy, we'll risk it.
             int index = s_count;

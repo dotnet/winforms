@@ -210,7 +210,7 @@ public enum EmfPlusRecordType
 
     // That is the END of the GDI EMF records.
 
-    // Now we start the list of EMF+ records.  We leave quite
+    // Now we start the list of EMF+ records. We leave quite
     // a bit of room here for the addition of any new GDI
     // records that may be added later.
 

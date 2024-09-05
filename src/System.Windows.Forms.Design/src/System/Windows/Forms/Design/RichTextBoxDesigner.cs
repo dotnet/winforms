@@ -16,8 +16,8 @@ internal class RichTextBoxDesigner : TextBoxBaseDesigner
     private DesignerActionListCollection? _actionLists;
 
     /// <summary>
-    ///  Called when the designer is initialized.  This allows the designer to provide some
-    ///  meaningful default values in the control.  The default implementation of this
+    ///  Called when the designer is initialized. This allows the designer to provide some
+    ///  meaningful default values in the control. The default implementation of this
     ///  sets the control's text to its name.
     /// </summary>
     public override void InitializeNewComponent(IDictionary? defaultValues)
@@ -52,7 +52,7 @@ internal class RichTextBoxDesigner : TextBoxBaseDesigner
     /// <summary>
     ///  Allows a designer to filter the set of properties
     ///  the component it is designing will expose through the
-    ///  TypeDescriptor object.  This method is called
+    ///  TypeDescriptor object. This method is called
     ///  immediately before its corresponding "Post" method.
     ///  If you are overriding this method you should call
     ///  the base implementation before you perform your own

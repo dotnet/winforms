@@ -254,19 +254,19 @@ public class ResXResourceWriter : IResourceWriter
     }
 
     /// <summary>
-    ///  Adds the given value to the collection of metadata.  These name/value pairs
+    ///  Adds the given value to the collection of metadata. These name/value pairs
     ///  will be emitted to the &lt;metadata&gt; elements in the .resx file.
     /// </summary>
     public void AddMetadata(string name, byte[] value) => AddDataRow(MetadataStr, name, value);
 
     /// <summary>
-    ///  Adds the given value to the collection of metadata.  These name/value pairs
+    ///  Adds the given value to the collection of metadata. These name/value pairs
     ///  will be emitted to the &lt;metadata&gt; elements in the .resx file.
     /// </summary>
     public void AddMetadata(string name, string? value) => AddDataRow(MetadataStr, name, value);
 
     /// <summary>
-    ///  Adds the given value to the collection of metadata.  These name/value pairs
+    ///  Adds the given value to the collection of metadata. These name/value pairs
     ///  will be emitted to the &lt;metadata&gt; elements in the .resx file.
     /// </summary>
     public void AddMetadata(string name, object? value) => AddDataRow(MetadataStr, name, value);

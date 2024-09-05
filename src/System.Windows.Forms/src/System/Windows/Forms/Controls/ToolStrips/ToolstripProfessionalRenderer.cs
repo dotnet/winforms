@@ -281,7 +281,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
             Rectangle buttonBounds = item.ButtonBounds;
             // We subtract 1 from each side except the right.
             // This is because we've already drawn the border, and we don't
-            // want to draw over it.  We don't do the right edge, because we
+            // want to draw over it. We don't do the right edge, because we
             // drew the border around the whole control, not the button.
             Padding deflatePadding = item.RightToLeft == RightToLeft.Yes ? new Padding(0, 1, 1, 1) : new Padding(1, 1, 0, 1);
             buttonBounds = LayoutUtils.DeflateRect(buttonBounds, deflatePadding);
@@ -1006,7 +1006,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
         }
         else
         {
-            // not big enough for a swath in the middle.  lets just do a single gradient.
+            // not big enough for a swath in the middle. lets just do a single gradient.
             using Brush b = new LinearGradientBrush(bounds, beginColor, endColor, mode);
             g.FillRectangle(b, bounds);
         }
