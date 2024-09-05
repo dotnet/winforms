@@ -34,19 +34,19 @@ partial class ObsoleteControls
     private void InitializeComponent()
     {
 #pragma warning disable WFDEV005, WFDEV006, WFDEV025, WFDEV027, WFDEV031, WFDEV037, WFDEV040 // Type or member is obsolete
-        this.components = new System.ComponentModel.Container();
-        this.button1 = new System.Windows.Forms.Button();
-        this.button2 = new System.Windows.Forms.Button();
-        this.dataGrid1 = new System.Windows.Forms.DataGrid();
-        this.contextMenu1 = new System.Windows.Forms.ContextMenu();
-        this.menuItem1 = new System.Windows.Forms.MenuItem();
-        this.toolBar1 = new System.Windows.Forms.ToolBar();
-        this.toolBarButton1 = new System.Windows.Forms.ToolBarButton();
-        this.toolBarButton2 = new System.Windows.Forms.ToolBarButton();
-        this.statusBar1 = new System.Windows.Forms.StatusBar();
-        this.panel1 = new System.Windows.Forms.StatusBarPanel();
-        this.panel2 = new System.Windows.Forms.StatusBarPanel();
-        this.SuspendLayout();
+        components = new System.ComponentModel.Container();
+        button1 = new System.Windows.Forms.Button();
+        button2 = new System.Windows.Forms.Button();
+        dataGrid1 = new System.Windows.Forms.DataGrid();
+        contextMenu1 = new System.Windows.Forms.ContextMenu();
+        menuItem1 = new System.Windows.Forms.MenuItem();
+        toolBar1 = new System.Windows.Forms.ToolBar();
+        toolBarButton1 = new System.Windows.Forms.ToolBarButton();
+        toolBarButton2 = new System.Windows.Forms.ToolBarButton();
+        statusBar1 = new System.Windows.Forms.StatusBar();
+        panel1 = new System.Windows.Forms.StatusBarPanel();
+        panel2 = new System.Windows.Forms.StatusBarPanel();
+        SuspendLayout();
         // 
         // button1
         // 
@@ -68,46 +68,46 @@ partial class ObsoleteControls
         dataGrid1.Size = new Size(300, 200);
         dataGrid1.CaptionText = "Microsoft DataGrid Control";
         dataGrid1.MouseUp += new MouseEventHandler(Grid_MouseUp);
-        // dataGrid1.ContextMenu = this.contextMenu1;
+        // dataGrid1.ContextMenu = contextMenu1;
         // 
         // contextMenu1
         // 
-        this.contextMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.menuItem1});
+        contextMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            menuItem1});
         // 
         // menuItem1
         // 
-        this.menuItem1.Index = 0;
-        this.menuItem1.Text = "New";
-        this.menuItem1.Click += new System.EventHandler(this.menuItem1_Click);
+        menuItem1.Index = 0;
+        menuItem1.Text = "New";
+        menuItem1.Click += new System.EventHandler(menuItem1_Click);
         //
         // toolBar1
         //
-        this.toolBar1.Buttons.AddRange(new System.Windows.Forms.ToolBarButton[] { this.toolBarButton1, this.toolBarButton2 });
-        this.toolBar1.Dock = System.Windows.Forms.DockStyle.Bottom;
-        this.toolBarButton1.Text = "Save";
-        this.toolBarButton2.Text = "Open";
+        toolBar1.Buttons.AddRange(new System.Windows.Forms.ToolBarButton[] { toolBarButton1, toolBarButton2 });
+        toolBar1.Dock = System.Windows.Forms.DockStyle.Bottom;
+        toolBarButton1.Text = "Save";
+        toolBarButton2.Text = "Open";
         //
         // statusBar1
         //
-        this.statusBar1.Location = new System.Drawing.Point(4, 300);
-        this.statusBar1.Size = new System.Drawing.Size(50, 50);
-        this.statusBar1.ShowPanels = true;
-        this.panel1.Text = "Ready";
-        this.panel2.Text = "Loading...";
-        this.statusBar1.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[] { this.panel1, this.panel2 });
+        statusBar1.Location = new System.Drawing.Point(4, 300);
+        statusBar1.Size = new System.Drawing.Size(50, 50);
+        statusBar1.ShowPanels = true;
+        panel1.Text = "Ready";
+        panel2.Text = "Loading...";
+        statusBar1.Panels.AddRange(new System.Windows.Forms.StatusBarPanel[] { panel1, panel2 });
         // 
         // Form1
         // 
-        this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-        this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-        this.ClientSize = new System.Drawing.Size(800, 450);
-        this.Controls.Add(this.button1);
-        this.Controls.Add(this.button2);
-        this.Controls.Add(this.dataGrid1);
-        this.Name = "Obsolete-DataGrid";
-        this.Text = "Obsolete-DataGrid";
-        this.ResumeLayout(false);
+        AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+        AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+        ClientSize = new System.Drawing.Size(800, 450);
+        Controls.Add(button1);
+        Controls.Add(button2);
+        Controls.Add(dataGrid1);
+        Name = "Obsolete-DataGrid";
+        Text = "Obsolete-DataGrid";
+        ResumeLayout(false);
     }
 
     #endregion
