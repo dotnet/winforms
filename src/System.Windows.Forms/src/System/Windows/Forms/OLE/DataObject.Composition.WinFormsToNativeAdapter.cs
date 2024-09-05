@@ -3,9 +3,7 @@
 
 using System.Drawing;
 using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
-using System.Windows.Forms.BinaryFormat;
 using Windows.Win32.System.Com;
 using Com = Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
@@ -323,36 +321,9 @@ public unsafe partial class DataObject
             {
                 using MemoryStream stream = new();
                 stream.Write(s_serializedObjectID);
-                long position = stream.Position;
-                bool success = false;
 
-                try
-                {
-                    success = WinFormsBinaryFormatWriter.TryWriteObject(stream, data);
-                }
-                catch (Exception ex) when (!ex.IsCriticalException())
-                {
-                    // Being extra cautious here, but the Try method above should never throw in normal circumstances.
-                    Debug.Fail($"Unexpected exception writing binary formatted data. {ex.Message}");
-                }
-
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
-                if (!success)
-                {
-                    // This check is to help in trimming scenarios with a trim warning on a call to BinaryFormatter.Serialize(), which has a RequiresUnreferencedCode annotation.
-                    // If the flag is false, the trimmer will not generate a warning, since BinaryFormatter.Serialize(), will not be called,
-                    // If the flag is true, the trimmer will generate a warning for calling a method that has a RequiresUnreferencedCode annotation.
-                    if (!EnableUnsafeBinaryFormatterInNativeObjectSerialization)
-                    {
-                        throw new NotSupportedException(SR.BinaryFormatterNotSupported);
-                    }
-
-                    new BinaryFormatter()
-                    {
-                        Binder = restrictSerialization ? new BitmapBinder() : null
-                    }.Serialize(stream, data);
-                }
-#pragma warning restore SYSLIB0011
+                // Throws in case of serialization failure.
+                BinaryFormatUtilities.WriteObjectToStream(stream, data, restrictSerialization);
 
                 return SaveStreamToHGLOBAL(ref hglobal, stream);
             }
