@@ -62,7 +62,7 @@ internal class StandardMenuStripVerb
     }
 
     /// <summary>
-    ///  Here is where all the fun stuff starts.  We create the structure and apply the naming here.
+    ///  Here is where all the fun stuff starts. We create the structure and apply the naming here.
     /// </summary>
     private void CreateStandardMenuStrip(IDesignerHost host, MenuStrip tool)
     {
@@ -125,7 +125,7 @@ internal class StandardMenuStripVerb
                 for (int i = 0; i < menuArray.Length; i++)
                 {
                     name = null;
-                    // for separators, just use the default name.  Otherwise, remove any non-characters and  get the name from the text.
+                    // for separators, just use the default name. Otherwise, remove any non-characters and  get the name from the text.
                     string itemText = menuArray[i];
                     name = NameFromText(itemText, typeof(ToolStripMenuItem), nameCreationService, true);
                     ToolStripItem item = null;
@@ -254,7 +254,7 @@ internal class StandardMenuStripVerb
     }
 
     /// <summary>
-    ///  Here is where all the fun stuff starts.  We create the structure and apply the naming here.
+    ///  Here is where all the fun stuff starts. We create the structure and apply the naming here.
     /// </summary>
     private void CreateStandardToolStrip(IDesignerHost host, ToolStrip tool)
     {
@@ -295,7 +295,7 @@ internal class StandardMenuStripVerb
             foreach (string itemText in menuItemNames)
             {
                 name = null;
-                // for separators, just use the default name.  Otherwise, remove any non-characters and get the name from the text.
+                // for separators, just use the default name. Otherwise, remove any non-characters and get the name from the text.
                 defaultName = "ToolStripButton";
                 name = NameFromText(itemText, typeof(ToolStripButton), nameCreationService, true);
                 ToolStripItem item = null;
@@ -456,7 +456,7 @@ internal class StandardMenuStripVerb
         else
         {
             string nameSuffix = itemType.Name;
-            // remove all the non letter and number characters.   Append length of "MenuItem"
+            // remove all the non letter and number characters. Append length of "MenuItem"
             Text.StringBuilder name = new(text.Length + nameSuffix.Length);
             bool firstCharSeen = false;
             for (int i = 0; i < text.Length; i++)

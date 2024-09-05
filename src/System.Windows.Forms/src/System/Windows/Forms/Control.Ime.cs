@@ -13,18 +13,18 @@ namespace System.Windows.Forms;
 public partial class Control
 {
     /// <summary>
-    ///  Constants starting/ending the WM_CHAR messages to ignore count.  See ImeWmCharsToIgnore property.
+    ///  Constants starting/ending the WM_CHAR messages to ignore count. See ImeWmCharsToIgnore property.
     /// </summary>
     private const int ImeCharsToIgnoreDisabled = -1;
     private const int ImeCharsToIgnoreEnabled = 0;
 
     /// <summary>
-    ///  The ImeMode value for controls with ImeMode = ImeMode.NoControl.  See PropagatingImeMode property.
+    ///  The ImeMode value for controls with ImeMode = ImeMode.NoControl. See PropagatingImeMode property.
     /// </summary>
     private static ImeMode s_propagatingImeMode = ImeMode.Inherit; // Inherit means uninitialized.
 
     /// <summary>
-    ///  This flag prevents resetting ImeMode value of the focused control.  See IgnoreWmImeNotify property.
+    ///  This flag prevents resetting ImeMode value of the focused control. See IgnoreWmImeNotify property.
     /// </summary>
     private static bool s_ignoreWmImeNotify;
 
@@ -80,7 +80,7 @@ public partial class Control
     }
 
     /// <summary>
-    ///  Gets the current IME context mode.  If no IME associated, ImeMode.Inherit is returned.
+    ///  Gets the current IME context mode. If no IME associated, ImeMode.Inherit is returned.
     /// </summary>
     internal ImeMode CurrentImeContextMode
     {
@@ -101,7 +101,7 @@ public partial class Control
     protected virtual ImeMode DefaultImeMode => ImeMode.Inherit;
 
     /// <summary>
-    ///  Flag used to avoid re-entrancy during WM_IME_NOTIFY message processing - see WmImeNotify().
+    ///  Flag used to avoid reentrancy during WM_IME_NOTIFY message processing - see WmImeNotify().
     ///  Also to avoid raising the ImeModeChanged event more than once during the process of changing the ImeMode.
     /// </summary>
     internal int DisableImeModeChangedCount
@@ -139,7 +139,7 @@ public partial class Control
         {
             ImeMode imeMode = ImeModeBase;
 
-            if (imeMode == ImeMode.OnHalf) // This is for compatibility.  See QFE#4448.
+            if (imeMode == ImeMode.OnHalf) // This is for compatibility. See QFE#4448.
             {
                 imeMode = ImeMode.On;
             }
@@ -153,7 +153,7 @@ public partial class Control
     }
 
     /// <summary>
-    ///  Internal version of ImeMode property.  This is provided for controls that override CanEnableIme and that
+    ///  Internal version of ImeMode property. This is provided for controls that override CanEnableIme and that
     ///  return ImeMode.Disable for the ImeMode property when CanEnableIme is false - See TextBoxBase controls.
     /// </summary>
     protected virtual ImeMode ImeModeBase
@@ -227,7 +227,7 @@ public partial class Control
     {
         // The IME sends WM_IME_CHAR messages for each character in the composition string, and then
         // after all messages are sent, corresponding WM_CHAR messages are also sent. (in non-unicode
-        // windows two WM_CHAR messages are sent per char in the IME).  We need to keep a counter
+        // windows two WM_CHAR messages are sent per char in the IME). We need to keep a counter
         // not to process each character twice or more.
         get => Properties.GetValueOrDefault<int>(s_imeWmCharsToIgnoreProperty);
         set
@@ -253,7 +253,7 @@ public partial class Control
     }
 
     /// <summary>
-    ///  Represents the internal ImeMode value for controls with ImeMode = ImeMode.NoControl.  This property is changed
+    ///  Represents the internal ImeMode value for controls with ImeMode = ImeMode.NoControl. This property is changed
     ///  only by user interaction and is required to set the IME context appropriately while keeping the ImeMode property
     ///  unchanged.
     /// </summary>
@@ -338,12 +338,12 @@ public partial class Control
             if (CurrentImeContextMode != newImeContextMode && newImeContextMode != ImeMode.Inherit)
             {
                 // If the context changes the window will receive one or more WM_IME_NOTIFY messages and as part of its
-                // processing it will raise the ImeModeChanged event if needed.  We need to prevent the event from been
+                // processing it will raise the ImeModeChanged event if needed. We need to prevent the event from been
                 // raised here from here.
                 DisableImeModeChangedCount++;
 
-                // Setting IME status to Disable will first close the IME and then disable it.  For CHN IME, the first action will
-                // update the PropagatingImeMode to ImeMode.Close which is incorrect.  We need to save the PropagatingImeMode in
+                // Setting IME status to Disable will first close the IME and then disable it. For CHN IME, the first action will
+                // update the PropagatingImeMode to ImeMode.Close which is incorrect. We need to save the PropagatingImeMode in
                 // this case and restore it after the context has been changed.
                 // Also this call here is very important since it will initialize the PropagatingImeMode if not already initialized
                 // before setting the IME context to the control's ImeMode value which could be different from the propagating value.
@@ -497,7 +497,7 @@ public partial class Control
     [EditorBrowsable(EditorBrowsableState.Never)]
     internal virtual bool ShouldSerializeImeMode()
     {
-        // This method is for designer support.  If the ImeMode has not been changed or it is the same as the
+        // This method is for designer support. If the ImeMode has not been changed or it is the same as the
         // default value it should not be serialized.
         return Properties.TryGetValue(s_imeModeProperty, out ImeMode imeMode) && imeMode != DefaultImeMode;
     }
@@ -591,8 +591,8 @@ public partial class Control
             //   and IMN_SETOPENSTATUS when changing between the active modes or when enabling/disabling the IME.
             // In any case we update the cache.
             // Warning:
-            // Attempting to change the IME mode from here will cause re-entrancy - WM_IME_NOTIFY is resent.
-            // We guard against re-entrancy since the ImeModeChanged event can be raised and any changes from the handler could
+            // Attempting to change the IME mode from here will cause reentrancy - WM_IME_NOTIFY is resent.
+            // We guard against reentrancy since the ImeModeChanged event can be raised and any changes from the handler could
             // lead to another WM_IME_NOTIFY loop.
 
             if (wparam is ((int)PInvoke.IMN_SETCONVERSIONMODE) or ((int)PInvoke.IMN_SETOPENSTATUS))
@@ -947,7 +947,7 @@ public static class ImeContext
 }
 
 /// <summary>
-///  Helper class that provides information about IME conversion mode.  Conversion mode refers to how IME interprets input like
+///  Helper class that provides information about IME conversion mode. Conversion mode refers to how IME interprets input like
 ///  ALPHANUMERIC or HIRAGANA and depending on its value the IME enables/disables the IME conversion window appropriately.
 /// </summary>
 public readonly struct ImeModeConversion

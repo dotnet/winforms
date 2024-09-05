@@ -1458,7 +1458,7 @@ public partial class VisualStyleElement
             public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
         }
 
-        // The verb, not the noun.  Matches "Log Off" button.
+        // The verb, not the noun. Matches "Log Off" button.
         public static class LogOff
         {
             private const int Part = 8;
@@ -1468,7 +1468,7 @@ public partial class VisualStyleElement
             public static VisualStyleElement Normal => s_normal ??= new VisualStyleElement(ClassName, Part, 0);
         }
 
-        // The verb, not the noun.  Matches "Log Off" button.
+        // The verb, not the noun. Matches "Log Off" button.
         public static class LogOffButtons
         {
             private const int Part = 9;

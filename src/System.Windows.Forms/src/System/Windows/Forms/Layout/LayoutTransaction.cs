@@ -5,7 +5,7 @@ namespace System.Windows.Forms.Layout;
 
 // Frequently when you need to do a PreformLayout, you also need to invalidate the
 // PreferredSizeCache (you are laying out because you know that the action has changed
-// the PreferredSize of the control and/or its container).  LayoutTransaction wraps both
+// the PreferredSize of the control and/or its container). LayoutTransaction wraps both
 // of these operations into one, plus adds a check for null to make our code more
 // concise.
 //

@@ -6,7 +6,7 @@ Imports System.ComponentModel
 Imports Microsoft.CodeAnalysis
 Imports Microsoft.CodeAnalysis.Diagnostics
 
-Namespace System.Windows.Forms.VisualBasic.Analyzers.MissingPropertySerializationConfiguration
+Namespace Global.System.Windows.Forms.VisualBasic.Analyzers.MissingPropertySerializationConfiguration
 
     <DiagnosticAnalyzer(LanguageNames.VisualBasic)>
     Public Class MissingPropertySerializationConfigurationAnalyzer

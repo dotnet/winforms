@@ -336,7 +336,7 @@ public partial class ProfessionalColorTable
     private static void InitCommonColors(ref Dictionary<KnownColors, Color> rgbTable)
     {
         // We need to calculate our own alpha blended color based on the Highlight and Window
-        // colors on the system. Since terminalserver + alphablending doesnt work we can't just do a
+        // colors on the system. Since terminalserver + alphablending doesn't work we can't just do a
         // FromARGB here. So we have a simple function which calculates the blending for us.
         if (!DisplayInformation.LowResolution)
         {
@@ -1401,7 +1401,7 @@ public partial class ProfessionalColorTable
         {
             // On Vista running Aero theme, Office looks like it's using SystemColors
             // With the exception of the MenuItemSelected Color for MenuStrip items that
-            // are contained in DropDowns.  We're going to copy their behavior
+            // are contained in DropDowns. We're going to copy their behavior
             InitSystemColors(ref rgbTable);
             _usingSystemColors = true;
             initializedTable = true;

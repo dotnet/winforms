@@ -21,9 +21,9 @@ public class CodeDomSerializer : CodeDomSerializerBase
     internal static CodeDomSerializer Default => s_default ??= new CodeDomSerializer();
 
     /// <summary>
-    ///  Determines which statement group the given statement should belong to.  The expression parameter
+    ///  Determines which statement group the given statement should belong to. The expression parameter
     ///  is an expression that the statement has been reduced to, and targetType represents the type
-    ///  of this statement.  This method returns the name of the component this statement should be grouped
+    ///  of this statement. This method returns the name of the component this statement should be grouped
     ///  with.
     /// </summary>
     public virtual string? GetTargetComponentName(CodeStatement? statement, CodeExpression? expression, Type? targetType)
@@ -37,9 +37,9 @@ public class CodeDomSerializer : CodeDomSerializerBase
     }
 
     /// <summary>
-    ///  Deserializes the given CodeDom object into a real object.  This
+    ///  Deserializes the given CodeDom object into a real object. This
     ///  will use the serialization manager to create objects and resolve
-    ///  data types.  The root of the object graph is returned.
+    ///  data types. The root of the object graph is returned.
     /// </summary>
     public virtual object? Deserialize(IDesignerSerializationManager manager, object codeObject)
     {
@@ -91,7 +91,7 @@ public class CodeDomSerializer : CodeDomSerializerBase
     }
 
     /// <summary>
-    ///  This method deserializes a single statement.  It is equivalent of calling
+    ///  This method deserializes a single statement. It is equivalent of calling
     ///  DeserializeStatement, except that it returns an object instance if the
     ///  resulting statement was a variable assign statement, a variable
     ///  declaration with an init expression, or a field assign statement.
@@ -120,7 +120,7 @@ public class CodeDomSerializer : CodeDomSerializerBase
         }
         else
         {
-            // This statement isn't one that will return a named object.  Deserialize it normally.
+            // This statement isn't one that will return a named object. Deserialize it normally.
             DeserializeStatement(manager, statement);
         }
 
@@ -231,7 +231,7 @@ public class CodeDomSerializer : CodeDomSerializerBase
 
         CodeStatementCollection statements = [];
 
-        // See if we have an existing expression for this member.  If not, fabricate one
+        // See if we have an existing expression for this member. If not, fabricate one
         CodeExpression? expression = GetExpression(manager, owningObject);
         if (expression is null)
         {
@@ -283,9 +283,9 @@ public class CodeDomSerializer : CodeDomSerializerBase
     }
 
     /// <summary>
-    ///  This serializes the given value to an expression.  It will return null if the value could not be
-    ///  serialized.  This is similar to SerializeToExpression, except that it will stop
-    ///  if it cannot obtain a simple reference expression for the value.  Call this method
+    ///  This serializes the given value to an expression. It will return null if the value could not be
+    ///  serialized. This is similar to SerializeToExpression, except that it will stop
+    ///  if it cannot obtain a simple reference expression for the value. Call this method
     ///  when you expect the resulting expression to be used as a parameter or target
     ///  of a statement.
     /// </summary>
@@ -313,7 +313,7 @@ public class CodeDomSerializer : CodeDomSerializerBase
 
             if (name is not null)
             {
-                // Check to see if this is a reference to the root component.  If it is, then use "this".
+                // Check to see if this is a reference to the root component. If it is, then use "this".
                 if (manager.TryGetContext(out RootContext? root) && root.Value == value)
                 {
                     expression = root.Expression;

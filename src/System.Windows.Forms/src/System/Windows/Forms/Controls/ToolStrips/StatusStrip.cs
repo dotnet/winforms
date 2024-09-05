@@ -433,7 +433,7 @@ public partial class StatusStrip : ToolStrip
 
     /// <summary>
     ///  Override this function if you want to do custom table layouts for the
-    ///  StatusStrip.  The default layoutstyle is tablelayout, and we need to play
+    ///  StatusStrip. The default layoutstyle is tablelayout, and we need to play
     ///  with the row/column styles
     /// </summary>
     protected virtual void OnSpringTableLayoutCore()
@@ -571,7 +571,7 @@ public partial class StatusStrip : ToolStrip
                 // double check that we're at the bottom right hand corner of the window.
                 if (!rootHwnd.IsNull && !PInvoke.IsZoomed(rootHwnd))
                 {
-                    // get the client area of the topmost window.  If we're next to the edge then
+                    // get the client area of the topmost window. If we're next to the edge then
                     // the sizing grip is valid.
                     PInvokeCore.GetClientRect(rootHwnd, out RECT rootHwndClientArea);
 

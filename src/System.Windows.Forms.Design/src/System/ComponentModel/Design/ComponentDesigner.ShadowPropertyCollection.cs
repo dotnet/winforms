@@ -32,7 +32,7 @@ public partial class ComponentDesigner
                     return existing;
                 }
 
-                // Next, check to see if the name is in the descriptors table.  If it isn't, we will search the
+                // Next, check to see if the name is in the descriptors table. If it isn't, we will search the
                 // underlying component and add it.
                 PropertyDescriptor property = GetShadowedPropertyDescriptor(propertyName) ?? throw new ArgumentException("The requested property does not exist", nameof(propertyName));
 

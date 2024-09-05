@@ -729,7 +729,7 @@ public partial class BindingSource : Component,
     {
         // Set recursive flag
         // Basically, we can have computed columns that cause our parent
-        // to change when our list changes.  This can cause recursion because we update
+        // to change when our list changes. This can cause recursion because we update
         // when our parent updates which then causes our parent to update which
         // then causes us to update which then causes our parent to update which
         // then causes us to update which then causes our parent to update...

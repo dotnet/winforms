@@ -233,7 +233,7 @@ public sealed unsafe class Bitmap : Image, IPointer<GpBitmap>
         Size size = Size;
 
         // The new bitmap must be in 32bppARGB  format, because that's the only
-        // thing that supports alpha.  (And that's what the image is initialized to -- transparent)
+        // thing that supports alpha. (And that's what the image is initialized to -- transparent)
         using Bitmap result = new(size.Width, size.Height, PixelFormat.Format32bppArgb);
         using var graphics = Graphics.FromImage(result);
 

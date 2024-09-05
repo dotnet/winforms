@@ -71,7 +71,7 @@ public sealed class SplitterPanel : Panel
     }
 
     /// <summary>
-    ///  Indicates what type of border the Splitter control has.  This value
+    ///  Indicates what type of border the Splitter control has. This value
     ///  comes from the System.Windows.Forms.BorderStyle enumeration.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]

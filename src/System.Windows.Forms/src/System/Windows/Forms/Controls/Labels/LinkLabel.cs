@@ -613,7 +613,7 @@ public partial class LinkLabel : Label, IButtonControl
     }
 
     /// <summary>
-    ///  Calculate character ranges taking into account the locale.  Provided for surrogate chars support.
+    ///  Calculate character ranges taking into account the locale. Provided for surrogate chars support.
     /// </summary>
     private CharacterRange[] AdjustCharacterRangesForSurrogateChars()
     {

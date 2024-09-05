@@ -20,13 +20,13 @@ public partial class TextBox : TextBoxBase
 
     /// <summary>
     ///  Controls whether or not the edit box consumes/respects ENTER key
-    ///  presses.  While this is typically desired by multiline edits, this
+    ///  presses. While this is typically desired by multiline edits, this
     ///  can interfere with normal key processing in a dialog.
     /// </summary>
     private bool _acceptsReturn;
 
     /// <summary>
-    ///  Indicates what the current special password character is.  This is
+    ///  Indicates what the current special password character is. This is
     ///  displayed instead of any other text the user might enter.
     /// </summary>
     private char _passwordChar;
@@ -50,7 +50,7 @@ public partial class TextBox : TextBoxBase
     private HorizontalAlignment _textAlign = HorizontalAlignment.Left;
 
     /// <summary>
-    ///  True if the selection has been set by the user.  If the selection has
+    ///  True if the selection has been set by the user. If the selection has
     ///  never been set and we get focus, we focus all the text in the control
     ///  so we mimic the Windows dialog manager.
     /// </summary>
@@ -464,7 +464,7 @@ public partial class TextBox : TextBoxBase
     /// <summary>
     ///  Indicates if the text in the edit control should appear as
     ///  the default password character. This property has precedence
-    ///  over the PasswordChar property.  Whenever the UseSystemPasswordChar
+    ///  over the PasswordChar property. Whenever the UseSystemPasswordChar
     ///  is set to true, the default system password character is used,
     ///  any character set into PasswordChar is ignored.
     /// </summary>
@@ -581,7 +581,7 @@ public partial class TextBox : TextBoxBase
         base.OnGotFocus(e);
         if (!_selectionSet)
         {
-            // We get one shot at selecting when we first get focus.  If we don't
+            // We get one shot at selecting when we first get focus. If we don't
             // do it, we still want to act like the selection was set.
             _selectionSet = true;
 
@@ -737,7 +737,7 @@ public partial class TextBox : TextBoxBase
             if (!_fromHandleCreate)
             {
                 // RecreateHandle to avoid Leak.
-                // notice the use of member variable to avoid re-entrancy
+                // notice the use of member variable to avoid reentrancy
                 AutoCompleteMode backUpMode = AutoCompleteMode;
                 _autoCompleteMode = AutoCompleteMode.None;
                 RecreateHandle();

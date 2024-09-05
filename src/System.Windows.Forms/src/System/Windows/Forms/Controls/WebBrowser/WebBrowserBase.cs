@@ -153,7 +153,7 @@ public unsafe partial class WebBrowserBase : Control
     {
     }
 
-    // DrawToBitmap doesn't work for this control, so we should hide it.  We'll
+    // DrawToBitmap doesn't work for this control, so we should hide it. We'll
     // still call base so that this has a chance to work if it can.
     [EditorBrowsable(EditorBrowsableState.Never)]
     public new void DrawToBitmap(Bitmap bitmap, Rectangle targetBounds)
@@ -679,9 +679,9 @@ public unsafe partial class WebBrowserBase : Control
     // Returns this control's logically containing form.
     // At design time this is always the form being designed.
     // At runtime it is the parent form.
-    // By default, the parent form performs that function.  It is
+    // By default, the parent form performs that function. It is
     // however possible for another form higher in the parent chain
-    // to serve in that role.  The logical container of this
+    // to serve in that role. The logical container of this
     // control determines the set of logical sibling control.
     // This property exists only to enable some specific
     // behaviors of ActiveX controls.

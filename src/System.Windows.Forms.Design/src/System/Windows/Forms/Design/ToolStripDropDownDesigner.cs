@@ -73,7 +73,7 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
     }
 
     /// <summary>
-    ///  The ToolStripItems are the associated components.   We want those to come with in any cut, copy opreations.
+    ///  The ToolStripItems are the associated components. We want those to come with in any cut, copy operations.
     /// </summary>
     public override ICollection AssociatedComponents
     {
@@ -87,8 +87,8 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
     }
 
     /// <summary>
-    ///  Set by the ToolStripItemCollectionEditor when it's launched for this The Items property doesnt open another instance
-    ///  of collectioneditor.  We count this so that we can deal with nestings.
+    ///  Set by the ToolStripItemCollectionEditor when it's launched for this The Items property doesn't open another instance
+    ///  of collectionEditor. We count this so that we can deal with nestings.
     /// </summary>
     internal bool EditingCollection
     {
@@ -547,7 +547,7 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
     }
 
     /// <summary>
-    ///  Allows a designer to filter the set of properties the component it is designing will expose through the TypeDescriptor object.  This method is called immediately before its corresponding "Post" method. If you are overriding this method you should call the base implementation before you perform your own filtering.
+    ///  Allows a designer to filter the set of properties the component it is designing will expose through the TypeDescriptor object. This method is called immediately before its corresponding "Post" method. If you are overriding this method you should call the base implementation before you perform your own filtering.
     /// </summary>
     protected override void PreFilterProperties(IDictionary properties)
     {

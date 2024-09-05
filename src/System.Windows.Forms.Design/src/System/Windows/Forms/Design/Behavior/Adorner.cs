@@ -6,9 +6,9 @@ using System.Drawing;
 namespace System.Windows.Forms.Design.Behavior;
 
 /// <summary>
-///  An Adorner manages a collection of UI-related Glyphs.  Each Adorner
-///  can be enabled/disabled.  Only Enabled Adorners will receive hit test
-///  and paint messages from the BehaviorService.  An Adorner can be viewed
+///  An Adorner manages a collection of UI-related Glyphs. Each Adorner
+///  can be enabled/disabled. Only Enabled Adorners will receive hit test
+///  and paint messages from the BehaviorService. An Adorner can be viewed
 ///  as a proxy between UI-related elements (all Glyphs) and the BehaviorService.
 /// </summary>
 public sealed class Adorner
@@ -17,7 +17,7 @@ public sealed class Adorner
     private readonly GlyphCollection _glyphs; // collection of Glyphs that this particular Adorner manages
 
     /// <summary>
-    ///  Standard constructor.  Creates a new GlyphCollection and by default is enabled.
+    ///  Standard constructor. Creates a new GlyphCollection and by default is enabled.
     /// </summary>
     public Adorner()
     {

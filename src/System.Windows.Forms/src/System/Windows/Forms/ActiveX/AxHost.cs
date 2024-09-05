@@ -245,7 +245,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     /// <summary>
     ///  AxHost will call this when it is ready to create the underlying ActiveX object.
     ///  Wrappers will override this and cast the pointer obtained by calling getOcx() to
-    ///  their own interfaces.  getOcx() should not usually be called before this function.
+    ///  their own interfaces. getOcx() should not usually be called before this function.
     ///  Note: calling begin will result in a call to this function.
     /// </summary>
     protected virtual void AttachInterfaces()
@@ -2341,7 +2341,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     }
 
     /// <summary>
-    ///  Called to create the ActiveX control.  Override this member to perform your own creation logic
+    ///  Called to create the ActiveX control. Override this member to perform your own creation logic
     ///  or call base to do the default creation logic.
     /// </summary>
     protected virtual object? CreateInstanceCore(Guid clsid)
@@ -2458,7 +2458,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     }
 
     /// <summary>
-    ///  Retrieves the class name for this object.  If null is returned,
+    ///  Retrieves the class name for this object. If null is returned,
     ///  the type name is used.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -2468,7 +2468,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     }
 
     /// <summary>
-    ///  Retrieves the name for this object.  If null is returned,
+    ///  Retrieves the name for this object. If null is returned,
     ///  the default is used.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]

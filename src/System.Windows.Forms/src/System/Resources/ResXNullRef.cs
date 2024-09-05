@@ -4,8 +4,8 @@
 namespace System.Resources;
 
 /// <summary>
-///  ResX Null Reference class.  This class allows ResX to store null values.
-///  It is a placeholder that is written into the file.  On read, it is replaced
+///  ResX Null Reference class. This class allows ResX to store null values.
+///  It is a placeholder that is written into the file. On read, it is replaced
 ///  with null.
 /// </summary>
 internal sealed class ResXNullRef

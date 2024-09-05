@@ -19,7 +19,7 @@ internal class UserControlDocumentDesigner : DocumentDesigner
     }
 
     /// <summary>
-    ///  On user controls, size == client size.  We do this so we can mess around
+    ///  On user controls, size == client size. We do this so we can mess around
     ///  with the non-client area of the user control when editing menus and not
     ///  mess up the size property.
     /// </summary>
@@ -32,7 +32,7 @@ internal class UserControlDocumentDesigner : DocumentDesigner
     /// <summary>
     ///  Allows a designer to filter the set of properties
     ///  the component it is designing will expose through the
-    ///  TypeDescriptor object.  This method is called
+    ///  TypeDescriptor object. This method is called
     ///  immediately before its corresponding "Post" method.
     ///  If you are overriding this method you should call
     ///  the base implementation before you perform your own

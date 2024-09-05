@@ -235,7 +235,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
         get => Properties.GetValueOrDefault(s_propFlatStyle, FlatStyle.Standard);
         set
         {
-            // Sequential enum.  Valid values are 0x0 to 0x3
+            // Sequential enum. Valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(value);
             FlatStyle previous = Properties.AddOrRemoveValue(s_propFlatStyle, value);
             if (value != previous)

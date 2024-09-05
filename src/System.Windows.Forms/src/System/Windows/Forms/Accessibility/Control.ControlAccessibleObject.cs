@@ -203,8 +203,8 @@ public partial class Control
 
         /// <remarks>
         ///  <para>
-        ///    This is used only if control supports <see cref="IAccessibleEx" />.  We need to provide a unique ID.
-        ///    Others are implementing this in the same manner.  First item is static - <see cref="AccessibleObject.RuntimeIDFirstItem"/>).
+        ///    This is used only if control supports <see cref="IAccessibleEx" />. We need to provide a unique ID.
+        ///    Others are implementing this in the same manner. First item is static - <see cref="AccessibleObject.RuntimeIDFirstItem"/>).
         ///    Second item can be anything unique, Win32 uses <see cref="HWND"/>, we copied that.
         ///  </para>
         /// </remarks>

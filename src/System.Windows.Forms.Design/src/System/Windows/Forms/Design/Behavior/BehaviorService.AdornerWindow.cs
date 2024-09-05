@@ -202,7 +202,7 @@ public sealed partial class BehaviorService
             ProcessingDrag = true;
 
             // Determine if this is a local drag, if it is, do normal processing otherwise, force a
-            // PropagateHitTest.  We need to force this because the OLE D&D service suspends mouse messages
+            // PropagateHitTest. We need to force this because the OLE D&D service suspends mouse messages
             // when the drag is not local so the mouse hook never sees them.
             if (!IsLocalDrag(e))
             {
@@ -271,7 +271,7 @@ public sealed partial class BehaviorService
 
         /// <summary>
         ///  The AdornerWindow intercepts all designer-related messages and forwards them to the BehaviorService
-        ///  for appropriate actions.  Note that Paint and HitTest messages are correctly parsed and translated
+        ///  for appropriate actions. Note that Paint and HitTest messages are correctly parsed and translated
         ///  to AdornerWindow coords.
         /// </summary>
         protected override unsafe void WndProc(ref Message m)

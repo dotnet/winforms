@@ -173,7 +173,7 @@ internal class TabControlDesigner : ParentControlDesigner
 
         // tabControlSelected tells us if a tab page or the tab control itself is selected.
         // If the tab control is selected, then we need to return true from here - so we can switch back and forth
-        // between tabs.  If we're not currently selected, we want to select the tab control
+        // between tabs. If we're not currently selected, we want to select the tab control
         // so return false.
         if (_tabControlSelected)
         {

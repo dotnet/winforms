@@ -231,7 +231,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         get => Properties.GetValueOrDefault(s_propComboBoxCellDisplayStyle, DataGridViewComboBoxDisplayStyle.DropDownButton);
         set
         {
-            // Sequential enum.  Valid values are 0x0 to 0x2
+            // Sequential enum. Valid values are 0x0 to 0x2
             SourceGenerated.EnumValidator.Validate(value);
             if (value != DisplayStyle)
             {
@@ -355,7 +355,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         get => Properties.GetValueOrDefault(s_propComboBoxCellFlatStyle, FlatStyle.Standard);
         set
         {
-            // Sequential enum.  Valid values are 0x0 to 0x3
+            // Sequential enum. Valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(value);
             if (value != FlatStyle)
             {

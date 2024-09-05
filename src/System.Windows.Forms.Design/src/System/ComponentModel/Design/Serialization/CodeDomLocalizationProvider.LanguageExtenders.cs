@@ -37,7 +37,7 @@ public sealed partial class CodeDomLocalizationProvider
         }
 
         /// <summary>
-        ///  A collection of custom supported cultures.  This can be null, indicating that the
+        ///  A collection of custom supported cultures. This can be null, indicating that the
         ///  type converter should use the default set of supported cultures.
         /// </summary>
         internal TypeConverter.StandardValuesCollection? SupportedCultures { get; }
@@ -62,10 +62,10 @@ public sealed partial class CodeDomLocalizationProvider
 
         /// <summary>
         ///  This method compares the current root component
-        ///  with the last one we saw.  If they don't match,
+        ///  with the last one we saw. If they don't match,
         ///  that means the designer has reloaded and we
         ///  should set all of our properties back to their
-        ///  defaults.  This is more efficient than syncing
+        ///  defaults. This is more efficient than syncing
         ///  an event.
         /// </summary>
         private void CheckRoot()
@@ -121,7 +121,7 @@ public sealed partial class CodeDomLocalizationProvider
         }
 
         /// <summary>
-        ///  Sets the language to use.  When the language is set the designer will be reloaded.
+        ///  Sets the language to use. When the language is set the designer will be reloaded.
         /// </summary>
         public void SetLanguage(IComponent o, CultureInfo? language)
         {

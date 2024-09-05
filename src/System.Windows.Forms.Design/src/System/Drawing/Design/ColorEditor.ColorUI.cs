@@ -330,7 +330,7 @@ public partial class ColorEditor
 
         protected override bool ProcessDialogKey(Keys keyData)
         {
-            // We treat tab characters as switching tab pages.  In most other contexts,
+            // We treat tab characters as switching tab pages. In most other contexts,
             // ctrl-tab switches tab pages, but I couldn't get that to work, and besides,
             // then there would be nothing for tab to do in this editor.
             if ((keyData & Keys.Alt) == 0

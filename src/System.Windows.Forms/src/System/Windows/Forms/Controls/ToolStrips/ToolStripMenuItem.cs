@@ -125,7 +125,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
 
         // Since fetching the image and the text is an awful lot of work
         // we're going to just cache it and assume the native stuff
-        // doesnt update.
+        // doesn't update.
         // we'll only live-update enabled.
         // if this becomes a problem we can override Image and Text properties
         // to live-return the results.
@@ -885,7 +885,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
             }
             else if (!isMouseDown && !showDropDown)
             {
-                // closing should happen on mouse up.  ensure it's not the mouse
+                // closing should happen on mouse up. Ensure it's not the mouse
                 // up for the mouse down we opened with.
                 Debug.Assert(ParentInternal is not null, "Parent is null here, not going to get accurate ID");
                 byte closeMouseId = (ParentInternal is null) ? (byte)0 : ParentInternal.GetMouseId();
@@ -1071,7 +1071,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
     {
         if (InternalLayout is ToolStripMenuItemInternalLayout internalLayout && internalLayout.UseMenuLayout)
         {
-            // Scooch over by the padding amount.  The padding is added to
+            // Scooch over by the padding amount. The padding is added to
             // the ToolStripDropDownMenu to keep the non-menu item riffraff
             // aligned to the text rectangle. When flow layout comes through to set our position
             // via IArrangedElement DEFY IT!

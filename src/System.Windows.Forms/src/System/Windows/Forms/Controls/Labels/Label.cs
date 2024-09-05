@@ -241,7 +241,7 @@ public partial class Label : Control, IAutomationLiveRegion
     internal virtual bool CanUseTextRenderer => true;
 
     /// <summary>
-    ///  Overrides Control.  A Label is a Win32 STATIC control, which we setup here.
+    ///  Overrides Control. A Label is a Win32 STATIC control, which we setup here.
     /// </summary>
     protected override CreateParams CreateParams
     {
@@ -934,7 +934,7 @@ public partial class Label : Control, IAutomationLiveRegion
         if (!MeasureTextCache.TextRequiresWordBreak(Text, Font, constrainingSize, flags))
         {
             // The effect of the TextBoxControl flag is that in-word line breaking will occur if needed, this happens when AutoSize
-            // is false and a one-word line still doesn't fit the binding box (width).  The other effect is that partially visible
+            // is false and a one-word line still doesn't fit the binding box (width). The other effect is that partially visible
             // lines are clipped; this is how GDI+ works by default.
             flags &= ~(TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl);
         }
@@ -1309,7 +1309,7 @@ public partial class Label : Control, IAutomationLiveRegion
             else
             {
                 // Theme specs -- if the backcolor is darker than Control, we use
-                // ControlPaint.Dark(backcolor).  Otherwise we use ControlDark.
+                // ControlPaint.Dark(backcolor). Otherwise we use ControlDark.
 
                 Color disabledTextForeColor = TextRenderer.DisabledTextColor(BackColor);
                 TextRenderer.DrawTextInternal(e, Text, Font, face, disabledTextForeColor, flags: flags);
@@ -1437,7 +1437,7 @@ public partial class Label : Control, IAutomationLiveRegion
         switch (m.MsgInternal)
         {
             case PInvoke.WM_NCHITTEST:
-                // Label returns HT_TRANSPARENT for everything, so all messages get routed to the parent.  Change
+                // Label returns HT_TRANSPARENT for everything, so all messages get routed to the parent. Change
                 // this so we can tell what's going on.
 
                 Rectangle rectInScreen = RectangleToScreen(new Rectangle(0, 0, Width, Height));
