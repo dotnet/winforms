@@ -19,7 +19,7 @@ public class TableLayoutControlCollection : Control.ControlCollection
     }
 
     /// <summary>
-    /// Gets the parent <see cref="TableLayoutPanel"/> that contains the controls in the collection.
+    ///  Gets the parent <see cref="TableLayoutPanel"/> that contains the controls in the collection.
     /// </summary>
     public TableLayoutPanel Container { get; }
 

@@ -471,7 +471,9 @@ public class ApplicationTests
     /// Test <see cref="Application.Exit()"/> fire Closing events in which we close existing and open new forms.
     /// </summary>
     /// <param name="childFormCountParam">Count of child forms.</param>
-    /// <param name="removedFormCountParam">Count of forms that we will remove during last form <see cref="Form.OnFormClosing(FormClosingEventArgs)"/>.</param>
+    /// <param name="removedFormCountParam">
+    ///  Count of forms that we will remove during last form <see cref="Form.OnFormClosing(FormClosingEventArgs)"/>.
+    /// </param>
     /// <param name="addFormCountParam">Count of forms that we will add during last form <see cref="Form.OnFormClosing(FormClosingEventArgs)"/>.</param>
     /// <param name="cancelParam">If set to <see langword="true" /> we will cancel application exit process.</param>
     [WinFormsTheory]

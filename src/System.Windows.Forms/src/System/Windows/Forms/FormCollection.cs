@@ -14,7 +14,7 @@ public class FormCollection : ReadOnlyCollectionBase
     internal static object CollectionSyncRoot { get; } = new();
 
     /// <summary>
-    /// Changes when a new form is added.
+    ///  Changes when a new form is added.
     /// </summary>
     internal int AddVersion { get; private set; }
 

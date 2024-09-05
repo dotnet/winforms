@@ -7,48 +7,48 @@ using System.Globalization;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-/// MaskDescriptor abstract class defines the set of methods mask descriptors need to implement for the
-/// MaskedTextBox.Mask UITypeEditor to include as options in the property editor. MaskDescriptor
-/// types are discovered at designed time by querying the ITypeDiscoveryService service provider from
-/// the UITypeEditor object.
+///  MaskDescriptor abstract class defines the set of methods mask descriptors need to implement for the
+///  MaskedTextBox.Mask UITypeEditor to include as options in the property editor. MaskDescriptor
+///  types are discovered at designed time by querying the ITypeDiscoveryService service provider from
+///  the UITypeEditor object.
 /// </summary>
 public abstract class MaskDescriptor
 {
     /// <summary>
-    /// The mask being described.
+    ///  The mask being described.
     /// </summary>
     public abstract string? Mask { get; }
 
     /// <summary>
-    /// The friendly name of the mask descriptor.
-    /// Used also as the description for the mask.
+    ///  The friendly name of the mask descriptor.
+    ///  Used also as the description for the mask.
     /// </summary>
     public abstract string? Name { get; }
 
     /// <summary>
-    /// A sample text following the mask specification.
+    ///  A sample text following the mask specification.
     /// </summary>
     public abstract string? Sample { get; }
 
     /// <summary>
-    /// A Type representing the type providing validation for this mask.
+    ///  A Type representing the type providing validation for this mask.
     /// </summary>
     public abstract Type? ValidatingType { get; }
 
     /// <summary>
-    /// The CultureInfo representing the locale the mask is designed for.
+    ///  The CultureInfo representing the locale the mask is designed for.
     /// </summary>
     public virtual CultureInfo Culture => Thread.CurrentThread.CurrentCulture;
 
     /// <summary>
-    /// Determines whether the specified mask descriptor is valid and hence can be added to the canned masks list.
-    /// A valid MaskDescriptor must meet the following conditions:
-    /// 1. Not null.
-    /// 2. Not null or empty mask.
-    /// 3. Not null or empty name.
-    /// 4. Not null or empty sample.
-    /// 5. The sample is correct based on the mask and all required edit characters have been provided (mask completed - not necessarily full).
-    /// 6. The sample is valid based on the ValidatingType object (if any).
+    ///  Determines whether the specified mask descriptor is valid and hence can be added to the canned masks list.
+    ///  A valid MaskDescriptor must meet the following conditions:
+    ///   1. Not null.
+    ///   2. Not null or empty mask.
+    ///   3. Not null or empty name.
+    ///   4. Not null or empty sample.
+    ///   5. The sample is correct based on the mask and all required edit characters have been provided (mask completed - not necessarily full).
+    ///   6. The sample is valid based on the ValidatingType object (if any).
     /// </summary>
     public static bool IsValidMaskDescriptor([NotNullWhen(true)] MaskDescriptor? maskDescriptor)
     {
@@ -122,12 +122,11 @@ public abstract class MaskDescriptor
     }
 
     /// <summary>
-    /// Determines whether this mask descriptor and the passed object describe the same mask.
-    /// True if the following conditions are met in both, this and the passed object:
-    /// 1. Mask property is the same.
-    /// 2. Validating type is the same
-    /// Observe that the Name property is not considered since MaskedTextProvider/Box are not
-    /// aware of it.
+    ///  Determines whether this mask descriptor and the passed object describe the same mask.
+    ///  True if the following conditions are met in both, this and the passed object:
+    ///   1. Mask property is the same.
+    ///   2. Validating type is the same
+    ///  Observe that the Name property is not considered since MaskedTextProvider/Box are not aware of it.
     /// </summary>
     public override bool Equals(object? maskDescriptor)
     {

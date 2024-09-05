@@ -12,7 +12,11 @@ public static partial class ToolStripManager
     ///    This installs a message filter when a dropdown becomes active. The filter:
     ///   </para>
     ///   <list type="bullet">
-    ///    <item><description>Eats WM_MOUSEMOVEs so that the window underneath doesn't get highlight processing/tooltips.</description></item>
+    ///    <item>
+    ///     <description>
+    ///      Eats WM_MOUSEMOVEs so that the window underneath doesn't get highlight processing/tooltips.
+    ///     </description>
+    ///    </item>
     ///    <item><description>Dismisses the menu if clicked outside the dropdown.</description></item>
     ///    <item><description>Dismisses all dropdowns if the active window changes.</description></item>
     ///    <item><description>Redirects keyboard messages to the active dropdown.</description></item>

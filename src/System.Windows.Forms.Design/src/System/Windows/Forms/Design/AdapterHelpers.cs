@@ -16,7 +16,9 @@ internal static class AdapterHelpers
     /// </summary>
     /// <typeparam name="T">The type of elements in the <see cref="IList&lt;T&gt;"/>.</typeparam>
     /// <param name="list">The IList&lt;T&gt; to unwrap.</param>
-    /// <returns>The underlying non-generic <see cref="IList"/> if available; otherwise, the original <see cref="IList&lt;T&gt;"/>.</returns>
+    /// <returns>
+    ///  The underlying non-generic <see cref="IList"/> if available; otherwise, the original <see cref="IList&lt;T&gt;"/>.
+    /// </returns>
     internal static IList Unwrap<T>(this IList<T> list) => list is IWrapper<IList> wrapper ? wrapper.Unwrap() : (IList)list;
 
     /// <summary>
@@ -26,7 +28,8 @@ internal static class AdapterHelpers
     /// <typeparam name="T">The desired type of elements in the resulting <see cref="IList&lt;T&gt;"/>.</typeparam>
     /// <param name="list">The non-generic <see cref="IList"/> to adapt.</param>
     /// <returns>
-    /// A generic <see cref="IList&lt;T&gt;"/> if the input IList can be cast to <see cref="IList&lt;T&gt;"/> otherwise, a new <see cref="ListAdapter&lt;T&gt;"/> wrapping the input IList.
+    ///  A generic <see cref="IList&lt;T&gt;"/> if the input IList can be cast to <see cref="IList&lt;T&gt;"/> otherwise,
+    ///  a new <see cref="ListAdapter&lt;T&gt;"/> wrapping the input IList.
     /// </returns>
     internal static IList<T> Adapt<T>(this IList list) => list is IList<T> iList ? iList : new ListAdapter<T>(list);
 }

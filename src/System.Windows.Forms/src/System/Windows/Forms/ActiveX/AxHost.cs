@@ -1665,12 +1665,14 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     ///
     ///  The keyboard processing of input keys to AxHost controls go in 3 steps inside AxHost.PreProcessMessage()
     ///
-    ///  (1) Call the OCX's TranslateAccelerator. This may or may not call back into us using IOleControlSite::TranslateAccelerator()
+    ///  (1) Call the OCX's TranslateAccelerator. This may or may not call back into us
+    ///  using IOleControlSite::TranslateAccelerator()
     ///
     ///  (2) If the control completely processed this without calling us back:
     ///  -- If this returns S_OK, then it means that the control already processed this message and we return true,
     ///  forcing us to not do any more processing or dispatch the message.
-    ///  -- If this returns S_FALSE, then it means that the control wants us to dispatch the message without doing any processing on our side.
+    ///  -- If this returns S_FALSE, then it means that the control wants us to dispatch the message
+    ///  without doing any processing on our side.
     ///
     ///  (3) If the control completely processed this by calling us back:
     ///  -- If this returns S_OK, then it means that the control processed this message and we return true,

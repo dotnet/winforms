@@ -4,7 +4,7 @@
 namespace System.Windows.Forms;
 
 /// <summary>
-/// Specifies the position that a task dialog will be shown in when it is first opened.
+///  Specifies the position that a task dialog will be shown in when it is first opened.
 /// </summary>
 public enum TaskDialogStartupLocation
 {

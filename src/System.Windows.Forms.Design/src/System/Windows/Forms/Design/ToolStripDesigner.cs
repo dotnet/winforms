@@ -184,7 +184,8 @@ internal class ToolStripDesigner : ControlDesigner
     }
 
     /// <summary>
-    /// This boolean indicates whether the Control will allow SnapLines to be shown when any other targetControl is dragged on the design surface. This is true by default.
+    /// This boolean indicates whether the Control will allow SnapLines to be shown when any other targetControl
+    /// is dragged on the design surface. This is true by default.
     /// </summary>
     internal override bool ControlSupportsSnaplines => ToolStrip.Parent is not ToolStripPanel;
 

@@ -10,7 +10,8 @@ namespace System.Windows.Forms;
 public partial class ComboBox
 {
     /// <summary>
-    ///  Represents the ComboBox's child text (is used instead of inner Edit when style is DropDownList but not DropDown) accessible object.
+    ///  Represents the ComboBox's child text (is used instead of inner Edit when style is DropDownList
+    ///  but not DropDown) accessible object.
     /// </summary>
     internal sealed class ComboBoxChildTextUiaProvider : AccessibleObject
     {

@@ -4,12 +4,12 @@
 namespace System.Windows.Forms;
 
 /// <summary>
-/// Provides data for the <see cref="TaskDialogPage.LinkClicked"/> event.
+///  Provides data for the <see cref="TaskDialogPage.LinkClicked"/> event.
 /// </summary>
 public class TaskDialogLinkClickedEventArgs : EventArgs
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="TaskDialogLinkClickedEventArgs"/> class.
+    ///  Initializes a new instance of the <see cref="TaskDialogLinkClickedEventArgs"/> class.
     /// </summary>
     public TaskDialogLinkClickedEventArgs(string linkHref)
     {
@@ -17,7 +17,7 @@ public class TaskDialogLinkClickedEventArgs : EventArgs
     }
 
     /// <summary>
-    /// Gets the value of the <c>href</c> attribute of the link that the user clicked.
+    ///  Gets the value of the <c>href</c> attribute of the link that the user clicked.
     /// </summary>
     /// <remarks>
     ///  <para>

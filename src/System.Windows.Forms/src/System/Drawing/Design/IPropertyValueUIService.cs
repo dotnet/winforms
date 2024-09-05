@@ -6,12 +6,14 @@ using System.ComponentModel;
 namespace System.Drawing.Design;
 
 /// <summary>
-///  Provides an interface to manage the images, ToolTips, and event handlers for the properties of a component displayed in a property browser.
+///  Provides an interface to manage the images, ToolTips, and event handlers for the properties of a
+///  component displayed in a property browser.
 /// </summary>
 public interface IPropertyValueUIService
 {
     ///  <summary>
-    ///  Adds or removes an <see cref="EventHandler"/> that will be invoked when the global list of <see cref="PropertyValueUIItem"/> is modified.
+    ///   Adds or removes an <see cref="EventHandler"/> that will be invoked when the global list
+    ///   of <see cref="PropertyValueUIItem"/> is modified.
     ///  </summary>
     event EventHandler? PropertyUIValueItemsChanged;
 
@@ -22,16 +24,22 @@ public interface IPropertyValueUIService
     void AddPropertyValueUIHandler(PropertyValueUIHandler newHandler);
 
     /// <summary>
-    ///  Gets the <see cref="PropertyValueUIItem" /> objects that match the specified context and property descriptor characteristics.
+    ///  Gets the <see cref="PropertyValueUIItem" /> objects that match the specified context
+    ///  and property descriptor characteristics.
     /// </summary>
     /// <returns>An array of <see cref="PropertyValueUIItem" /> objects that match the specified parameters.</returns>
-    /// <param name="context">An <see cref="ITypeDescriptorContext" /> that can be used to gain additional context information. </param>
-    /// <param name="propDesc">A <see cref="PropertyDescriptor" /> that indicates the property to match with the properties to return. </param>
+    /// <param name="context">
+    ///  An <see cref="ITypeDescriptorContext" /> that can be used to gain additional context information.
+    /// </param>
+    /// <param name="propDesc">
+    ///  A <see cref="PropertyDescriptor" /> that indicates the property to match with the properties to return.
+    /// </param>
     PropertyValueUIItem[] GetPropertyUIValueItems(ITypeDescriptorContext context, PropertyDescriptor propDesc);
 
-    ///  <summary>
-    ///  Notifies the <see cref="IPropertyValueUIService"/> implementation that the global list of <see cref="PropertyValueUIItem"/> has been modified.
-    ///  </summary>
+    /// <summary>
+    ///  Notifies the <see cref="IPropertyValueUIService"/> implementation that the
+    ///  global list of <see cref="PropertyValueUIItem"/> has been modified.
+    /// </summary>
     void NotifyPropertyValueUIItemsChanged();
 
     /// <summary>

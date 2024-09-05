@@ -1124,7 +1124,7 @@ public partial class TrackBar : Control, ISupportInitialize
     }
 
     /// <summary>
-    /// This checks all the use cases that we potentially might want to keep `TBS_AUTOTICKS`.
+    ///  This checks all the use cases that we potentially might want to keep `TBS_AUTOTICKS`.
     /// </summary>
     private bool ShouldAutoDrawTicks()
     {

@@ -9,9 +9,8 @@ using System.Windows.Forms.Layout;
 namespace System.Windows.Forms;
 
 /// <summary>
-///  Represents an empty control that can be used in the Forms Designer to create other  controls. By extending form, UserControl inherits all of
-///  the standard positioning and mnemonic handling code that is necessary
-///  in a user control.
+///  Represents an empty control that can be used in the Forms Designer to create other  controls. By extending form,
+///  UserControl inherits all of the standard positioning and mnemonic handling code that is necessary in a user control.
 /// </summary>
 [Designer($"System.Windows.Forms.Design.UserControlDocumentDesigner, {AssemblyRef.SystemDesign}", typeof(IRootDesigner))]
 [Designer($"System.Windows.Forms.Design.ControlDesigner, {AssemblyRef.SystemDesign}")]

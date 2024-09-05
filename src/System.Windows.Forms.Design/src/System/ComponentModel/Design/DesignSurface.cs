@@ -26,7 +26,9 @@ public class DesignSurface : IDisposable, IServiceProvider
     /// <summary>
     ///  Creates a new DesignSurface given a parent service provider.
     /// </summary>
-    /// <param name="parentProvider"> The parent service provider. If there is no parent used to resolve services this can be null. </param>
+    /// <param name="parentProvider">
+    ///  The parent service provider. If there is no parent used to resolve services this can be null.
+    /// </param>
     public DesignSurface(IServiceProvider? parentProvider)
     {
         _serviceContainer = new DesignSurfaceServiceContainer(parentProvider);
@@ -53,7 +55,9 @@ public class DesignSurface : IDisposable, IServiceProvider
     /// <summary>
     ///  Creates a new DesignSurface given a parent service provider.
     /// </summary>
-    /// <param name="parentProvider"> The parent service provider. If there is no parent used to resolve services this can be null. </param>
+    /// <param name="parentProvider">
+    ///  The parent service provider. If there is no parent used to resolve services this can be null.
+    /// </param>
     public DesignSurface(IServiceProvider? parentProvider, Type rootComponentType) : this(parentProvider)
     {
         ArgumentNullException.ThrowIfNull(rootComponentType);
@@ -307,7 +311,7 @@ public class DesignSurface : IDisposable, IServiceProvider
     /// <summary>
     ///  Protected override of Dispose that allows for cleanup.
     /// </summary>
-    /// <param name="disposing"> True if Dispose is being called or false if this is being invoked by a finalizer. </param>
+    /// <param name="disposing">True if Dispose is being called or false if this is being invoked by a finalizer.</param>
     protected virtual void Dispose(bool disposing)
     {
         if (disposing)
@@ -352,8 +356,8 @@ public class DesignSurface : IDisposable, IServiceProvider
     /// <summary>
     ///  Retrieves a service in this design surface's service container.
     /// </summary>
-    /// <param name="serviceType"> The type of service to retrieve. </param>
-    /// <returns> An instance of the requested service or null if the service could not be found. </returns>
+    /// <param name="serviceType">The type of service to retrieve.</param>
+    /// <returns> An instance of the requested service or null if the service could not be found.</returns>
     public object? GetService(Type serviceType)
     {
         return _serviceContainer?.GetService(serviceType);
@@ -370,9 +374,11 @@ public class DesignSurface : IDisposable, IServiceProvider
     /// <summary>
     ///  Private method that demand-creates services we offer.
     /// </summary>
-    /// <param name="container"> The service container requesting the service. </param>
-    /// <param name="serviceType"> The type of service being requested. </param>
-    /// <returns> A new instance of the service. It is an error to call this with a service type it doesn't know how to create </returns>
+    /// <param name="container">The service container requesting the service.</param>
+    /// <param name="serviceType">The type of service being requested.</param>
+    /// <returns>
+    ///  A new instance of the service. It is an error to call this with a service type it doesn't know how to create.
+    /// </returns>
     private object OnCreateService(IServiceContainer container, Type serviceType)
     {
         if (serviceType == typeof(ISelectionService))

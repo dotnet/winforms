@@ -49,12 +49,12 @@ public enum DialogResult
     No = MESSAGEBOX_RESULT.IDNO,
 
     /// <summary>
-    /// The dialog box return value is Try Again (usually sent from a button labeled Try Again).
+    ///  The dialog box return value is Try Again (usually sent from a button labeled Try Again).
     /// </summary>
     TryAgain = MESSAGEBOX_RESULT.IDTRYAGAIN,
 
     /// <summary>
-    /// The dialog box return value is Continue (usually sent from a button labeled Continue).
+    ///  The dialog box return value is Continue (usually sent from a button labeled Continue).
     /// </summary>
     Continue = MESSAGEBOX_RESULT.IDCONTINUE,
 }

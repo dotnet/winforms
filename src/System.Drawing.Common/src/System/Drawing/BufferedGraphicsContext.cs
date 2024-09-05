@@ -39,10 +39,10 @@ public sealed unsafe class BufferedGraphicsContext : IDisposable
     }
 
     /// <summary>
-    /// Allows you to set the maximum width and height of the buffer that will be retained in memory.
-    /// You can allocate a buffer of any size, however any request for a buffer that would have a total
-    /// memory footprint larger that the maximum size will be allocated temporarily and then discarded
-    /// with the BufferedGraphics is released.
+    ///  Allows you to set the maximum width and height of the buffer that will be retained in memory.
+    ///  You can allocate a buffer of any size, however any request for a buffer that would have a total
+    ///  memory footprint larger that the maximum size will be allocated temporarily and then discarded
+    ///  with the BufferedGraphics is released.
     /// </summary>
     public Size MaximumBuffer
     {

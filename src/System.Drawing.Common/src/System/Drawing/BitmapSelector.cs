@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.IO;
@@ -27,13 +27,15 @@ internal static class BitmapSelector
     }
 
     /// <summary>
-    /// Returns a resource stream loaded from the appropriate location according to the current
+    ///  Returns a resource stream loaded from the appropriate location according to the current
     /// suffix.
     /// </summary>
-    /// <param name="type">The type from whose assembly the stream is loaded and whose namespace is used to scope the resource name</param>
+    /// <param name="type">
+    ///  The type from whose assembly the stream is loaded and whose namespace is used to scope the resource name.
+    /// </param>
     /// <param name="originalName">The name of the manifest resource being requested</param>
     /// <returns>
-    /// The manifest resource stream corresponding to <paramref name="originalName"/>.
+    ///  The manifest resource stream corresponding to <paramref name="originalName"/>.
     /// </returns>
     public static Stream? GetResourceStream(Type type, string originalName)
     {

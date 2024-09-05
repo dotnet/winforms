@@ -4,6 +4,6 @@
 namespace System.Windows.Forms;
 
 /// <summary>
-/// Represents a method that will handle the <see cref="ListView.ItemMouseHover"/> event.
+///  Represents a method that will handle the <see cref="ListView.ItemMouseHover"/> event.
 /// </summary>
 public delegate void ListViewItemMouseHoverEventHandler(object? sender, ListViewItemMouseHoverEventArgs e);

@@ -13,7 +13,9 @@ public class EmfValidateHelper
     ///  Helps immensely with debugging metafile tests.
     /// </summary>
     /// <param name="emf">The EmfScope instance to extract log information from.</param>
-    /// <param name="methodName">The name of the calling method. Use <see cref="MethodBase.GetCurrentMethod()"/> and property <see cref="MemberInfo.Name"/>.</param>
+    /// <param name="methodName">
+    ///  The name of the calling method. Use <see cref="MethodBase.GetCurrentMethod()"/> and property <see cref="MemberInfo.Name"/>.
+    /// </param>
     /// <param name="parameters">Optional parameters to include in the log information.</param>
     internal void LogEmfValidateToFile(EmfScope emf, string methodName, params object[] parameters)
     {
