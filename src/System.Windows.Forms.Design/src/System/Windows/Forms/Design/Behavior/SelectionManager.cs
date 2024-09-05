@@ -328,7 +328,7 @@ internal sealed class SelectionManager : IDisposable
         }
 
         // we need to make sure all of the rectangles in the smaller array are
-        // accounted for.  Any that don't intersect a rect in the larger
+        // accounted for. Any that don't intersect a rectangle in the larger
         // array need to be included in the region to repaint.
         bool[] intersected = new bool[smaller.Length];
         for (int i = 0; i < smaller.Length; i++)
