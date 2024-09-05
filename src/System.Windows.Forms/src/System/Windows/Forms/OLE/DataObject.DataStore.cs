@@ -86,7 +86,7 @@ public partial class DataObject
             }
 
             // We do not have proper support for Dibs, so if the user explicitly asked
-            // for Dib and provided a Bitmap object we can't convert.  Instead, publish as an HBITMAP
+            // for Dib and provided a Bitmap object we can't convert. Instead, publish as an HBITMAP
             // and let the system provide the conversion for us.
             if (data is Bitmap && format.Equals(DataFormats.Dib))
             {

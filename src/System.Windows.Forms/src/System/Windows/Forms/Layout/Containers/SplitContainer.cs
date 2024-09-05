@@ -122,7 +122,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
     {
         get
         {
-            // Always return false ... as Splitcontainer doesnt support AutoScroll
+            // Always return false ... as Splitcontainer doesn't support AutoScroll
             return false;
         }
         set => base.AutoScroll = value;
@@ -227,7 +227,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
     }
 
     /// <summary>
-    ///  Indicates what type of border the Splitter control has.  This value
+    ///  Indicates what type of border the Splitter control has. This value
     ///  comes from the System.Windows.Forms.BorderStyle enumeration.
     /// </summary>
     [DefaultValue(BorderStyle.None)]
@@ -330,7 +330,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
     }
 
     /// <summary>
-    ///  Indicates what type of border the Splitter control has.  This value
+    ///  Indicates what type of border the Splitter control has. This value
     ///  comes from the System.Windows.Forms.BorderStyle enumeration.
     /// </summary>
     [DefaultValue(FixedPanel.None)]
@@ -1741,7 +1741,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
     /// <summary>
     ///  Scales an individual control's location, size, padding and margin.
     ///  If the control is top level, this will not scale the control's location.
-    ///  This does not scale children or the size of auto sized controls.  You can
+    ///  This does not scale children or the size of auto sized controls. You can
     ///  omit scaling in any direction by changing BoundsSpecified.
     ///
     ///  After the control is scaled the RequiredScaling property is set to

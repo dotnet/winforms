@@ -48,7 +48,7 @@ public abstract partial class CodeDomDesignerLoader
             => GetConverter(context).CreateInstance(context, propertyValues);
 
         /// <summary>
-        ///  Returns the type converter for the member attributes enum.  We search the context
+        ///  Returns the type converter for the member attributes enum. We search the context
         ///  for a code dom provider that can provide us more information.
         /// </summary>
         private static TypeConverter GetConverter(ITypeDescriptorContext? context)

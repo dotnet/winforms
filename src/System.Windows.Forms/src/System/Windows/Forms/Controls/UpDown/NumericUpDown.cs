@@ -761,7 +761,7 @@ public partial class NumericUpDown : UpDownBase, ISupportInitialize
     }
 
     // This is not a breaking change -- Even though this control previously autosized to height,
-    // it didn't actually have an AutoSize property.  The new AutoSize property enables the
+    // it didn't actually have an AutoSize property. The new AutoSize property enables the
     // smarter behavior.
     internal override Size GetPreferredSizeCore(Size proposedConstraints)
     {
@@ -769,7 +769,7 @@ public partial class NumericUpDown : UpDownBase, ISupportInitialize
 
         int baseSize = Hexadecimal ? 16 : 10;
         int digit = GetLargestDigit(0, baseSize);
-        // The floor of log is intentionally 1 less than the number of digits.  We initialize
+        // The floor of log is intentionally 1 less than the number of digits. We initialize
         // testNumber to account for the missing digit.
         int numDigits = (int)Math.Floor(Math.Log(Math.Max(-(double)Minimum, (double)Maximum), baseSize));
         int maxDigits;
@@ -793,7 +793,7 @@ public partial class NumericUpDown : UpDownBase, ISupportInitialize
         else
         {
             // zero can not be the leading digit if we need more than
-            // one digit.  (0*baseSize = 0 in the loop below)
+            // one digit. (0*baseSize = 0 in the loop below)
             testNumber = GetLargestDigit(1, baseSize);
         }
 

@@ -64,7 +64,7 @@ internal partial class StringCollectionEditor
 
         /// <summary>
         ///  NOTE: The following code is required by the form designer.
-        ///  It can be modified using the form editor.  Do not modify it using the code editor.
+        ///  It can be modified using the form editor. Do not modify it using the code editor.
         /// </summary>
         [MemberNotNull(nameof(_instruction))]
         [MemberNotNull(nameof(_textEntry))]

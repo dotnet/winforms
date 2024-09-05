@@ -8,7 +8,7 @@ using System.Drawing;
 namespace System.Windows.Forms.Design.Behavior;
 
 /// <summary>
-///  The SelectionBehavior is pushed onto the BehaviorStack in response to a positively hit tested SelectionGlyph.  The SelectionBehavior performs  two main tasks: 1) forward messages to the related ControlDesigner, and 2) calls upon the SelectionManager to push a potential DragBehavior.
+///  The SelectionBehavior is pushed onto the BehaviorStack in response to a positively hit tested SelectionGlyph. The SelectionBehavior performs  two main tasks: 1) forward messages to the related ControlDesigner, and 2) calls upon the SelectionManager to push a potential DragBehavior.
 /// </summary>
 internal sealed class SelectionManager : IDisposable
 {
@@ -16,17 +16,17 @@ internal sealed class SelectionManager : IDisposable
     private IServiceProvider _serviceProvider;          // standard service provider
     private readonly Dictionary<IComponent, ControlDesigner> _componentToDesigner;    // used for quick look up of designers related to components
     private readonly Control _rootComponent;            // root component being designed
-    private ISelectionService _selectionService;                  // we cache the selection service for perf.
+    private ISelectionService _selectionService;        // we cache the selection service for perf.
     private IDesignerHost _designerHost;                // we cache the designerhost for perf.
-    private Rectangle[]? _previousSelectionBounds;           // used to only repaint the changing part of the selection
-    private object? _previousPrimarySelection;               // used to check if the primary selection changed
+    private Rectangle[]? _previousSelectionBounds;      // used to only repaint the changing part of the selection
+    private object? _previousPrimarySelection;          // used to check if the primary selection changed
     private Rectangle[]? _currentSelectionBounds;
     private int _curCompIndex;
-    private DesignerActionUI? _designerActionUI;         // the "container" for all things related to the designer action (smarttags) UI
+    private DesignerActionUI? _designerActionUI;        // the "container" for all things related to the designer action (smarttags) UI
     private bool _selectionChanging;                    // we don't want the OnSelectionChanged to be recursively called.
 
     /// <summary>
-    ///  Constructor.  Here we query for necessary services and cache them for perf. reasons. We also hook to Component Added/Removed/Changed notifications so we can keep in sync when the designers' components change.  Also, we create our custom Adorner and add it to the BehaviorService.
+    ///  Constructor. Here we query for necessary services and cache them for perf. reasons. We also hook to Component Added/Removed/Changed notifications so we can keep in sync when the designers' components change. Also, we create our custom Adorner and add it to the BehaviorService.
     /// </summary>
     public SelectionManager(IServiceProvider serviceProvider, BehaviorService behaviorService)
     {
@@ -317,7 +317,7 @@ internal sealed class SelectionManager : IDisposable
         }
 
         // we need to make sure all of the rects in the smaller array are
-        // accounted for.  Any that don't intersect a rect in the larger
+        // accounted for. Any that don't intersect a rect in the larger
         // array need to be included in the region to repaint.
         bool[] intersected = new bool[smaller.Length];
         for (int i = 0; i < smaller.Length; i++)

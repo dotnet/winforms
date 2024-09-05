@@ -101,7 +101,7 @@ public class DrawItemEventArgs : EventArgs, IDisposable, IDeviceContext, IGraphi
 
     /// <summary>
     ///  Miscellaneous state information, such as whether the item is
-    ///  "selected", "focused", or some other such information.  ComboBoxes
+    ///  "selected", "focused", or some other such information. ComboBoxes
     ///  have one special piece of information which indicates if the item
     ///  being painted is the editable portion of the ComboBox.
     /// </summary>

@@ -83,7 +83,7 @@ internal static partial class GdiCache
     ///   Use in a using statement for proper cleanup.
     ///  </para>
     ///  <para>
-    ///   When disposed the <see cref="HFONT"/> will be returned to the cache.  If you must pass the scope to
+    ///   When disposed the <see cref="HFONT"/> will be returned to the cache. If you must pass the scope to
     ///   another method it must be passed by reference or you risk double disposal and accidentally returning extra
     ///   copies to the cache.
     ///  </para>

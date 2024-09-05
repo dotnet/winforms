@@ -10,7 +10,7 @@ internal partial class TableLayout
 {
     /// <summary>
     ///  this class contains layout related information pertaining to the container
-    ///  being laid out by this instance of the TableLayout.  It contains references
+    ///  being laid out by this instance of the TableLayout. It contains references
     ///  to all the information that should be used from the table layout engine,
     ///  as this class is responsible for caching information about the control and
     ///  it's children being layed out.
@@ -167,7 +167,7 @@ internal partial class TableLayout
         }
 
         /// <summary>
-        ///  Gets/sets the grow style for our containerinfo.  This
+        ///  Gets/sets the grow style for our ContainerInfo. This
         ///  is used to determine if we will add rows/cols/or throw
         ///  when the table gets full.
         /// </summary>

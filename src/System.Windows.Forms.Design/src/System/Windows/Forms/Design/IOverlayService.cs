@@ -11,17 +11,17 @@ namespace System.Windows.Forms.Design;
 internal interface IOverlayService
 {
     /// <summary>
-    ///  Pushes the given control on top of the overlay list.  This is a "push" operation, meaning that it forces this control to the top of the existing overlay list.
+    ///  Pushes the given control on top of the overlay list. This is a "push" operation, meaning that it forces this control to the top of the existing overlay list.
     /// </summary>
     int PushOverlay(Control control);
 
     /// <summary>
-    ///  Removes the given control from the overlay list.  Unlike pushOverlay, this can remove a control from the middle of the overlay list.
+    ///  Removes the given control from the overlay list. Unlike pushOverlay, this can remove a control from the middle of the overlay list.
     /// </summary>
     void RemoveOverlay(Control control);
 
     /// <summary>
-    ///  Inserts the given control from the overlay list.  You need to pass the index of the overlay.
+    ///  Inserts the given control from the overlay list. You need to pass the index of the overlay.
     /// </summary>
     void InsertOverlay(Control control, int index);
 

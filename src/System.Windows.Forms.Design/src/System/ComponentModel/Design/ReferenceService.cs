@@ -320,7 +320,7 @@ internal sealed class ReferenceService : IReferenceService, IDisposable
         }
 
         /// <summary>
-        ///  Resets the name of this reference holder.  It will be re-acquired on demand
+        ///  Resets the name of this reference holder. It will be re-acquired on demand
         /// </summary>
         internal void ResetName()
         {

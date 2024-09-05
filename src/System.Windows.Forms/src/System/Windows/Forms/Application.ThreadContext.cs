@@ -11,8 +11,8 @@ namespace System.Windows.Forms;
 public sealed partial class Application
 {
     /// <summary>
-    ///  This class is the embodiment of TLS for windows forms.  We do not expose this to end users because
-    ///  TLS is really just an unfortunate artifact of using Win 32.  We want the world to be free
+    ///  This class is the embodiment of TLS for windows forms. We do not expose this to end users because
+    ///  TLS is really just an unfortunate artifact of using Win 32. We want the world to be free
     ///  threaded.
     /// </summary>
     internal abstract unsafe partial class ThreadContext : MarshalByRefObject, IHandle<HANDLE>
@@ -246,7 +246,7 @@ public sealed partial class Application
 
         protected virtual void BeginModalMessageLoop() { }
 
-        // Disables windows in preparation of going modal.  If parameter is true, we disable all
+        // Disables windows in preparation of going modal. If parameter is true, we disable all
         // windows, if false, only windows forms windows (i.e., windows controlled by this MsoComponent).
         // See also IMsoComponent.OnEnterState.
         internal void DisableWindowsForModalLoop(bool onlyWinForms, ApplicationContext? context)
@@ -352,13 +352,13 @@ public sealed partial class Application
         {
             if (_parkingWindows.Count != 0)
             {
-                // We take two paths here.  If we are on the same thread as
-                // the parking window, we can destroy its handle.  If not,
-                // we just null it and let it GC.  When it finalizes it
+                // We take two paths here. If we are on the same thread as
+                // the parking window, we can destroy its handle. If not,
+                // we just null it and let it GC. When it finalizes it
                 // will disconnect its handle and post a WM_CLOSE.
                 //
                 // It is important that we just call DestroyHandle here
-                // and do not call Dispose.  Otherwise we would destroy
+                // and do not call Dispose. Otherwise we would destroy
                 // controls that are living on the parking window.
                 uint hwndThread = PInvoke.GetWindowThreadProcessId(_parkingWindows[0], out _);
                 uint currentThread = PInvoke.GetCurrentThreadId();
@@ -398,7 +398,7 @@ public sealed partial class Application
             }
         }
 
-        // Enables windows in preparation of stopping modal.  If parameter is true, we enable all windows,
+        // Enables windows in preparation of stopping modal. If parameter is true, we enable all windows,
         // if false, only windows forms windows (i.e., windows controlled by this MsoComponent).
         // See also IMsoComponent.OnEnterState.
         internal void EnableWindowsForModalLoop(bool onlyWinForms, ApplicationContext? context)
@@ -521,7 +521,7 @@ public sealed partial class Application
 
         /// <summary>
         ///  Determines if it is OK to allow an application to quit and shutdown
-        ///  the runtime.  We only allow this if we own the base message pump.
+        ///  the runtime. We only allow this if we own the base message pump.
         /// </summary>
         internal static bool GetAllowQuit()
             => s_totalMessageLoopCount > 0 && s_baseLoopReason == msoloop.Main;
@@ -748,10 +748,10 @@ public sealed partial class Application
             {
                 fullModal = true;
 
-                // We're about to disable all windows in the thread so our modal dialog can be the top dog.  Because this can interact
+                // We're about to disable all windows in the thread so our modal dialog can be the top dog. Because this can interact
                 // with external MSO things, and also because the modal dialog could have already had its handle created,
                 // Check to see if the handle exists and if the window is currently enabled. We remember this so we can set the
-                // window back to enabled after disabling everyone else.  This is just a precaution against someone doing the
+                // window back to enabled after disabling everyone else. This is just a precaution against someone doing the
                 // wrong thing and disabling our dialog.
 
                 bool modalEnabled = CurrentForm is not null && CurrentForm.Enabled;
@@ -778,7 +778,7 @@ public sealed partial class Application
                     }
                 }
 
-                // The second half of the modalEnabled flag above.  Here, if we were previously
+                // The second half of the modalEnabled flag above. Here, if we were previously
                 // enabled, make sure that's still the case.
                 if (CurrentForm is not null && CurrentForm.IsHandleCreated && PInvoke.IsWindowEnabled(CurrentForm) != modalEnabled)
                 {
@@ -790,16 +790,16 @@ public sealed partial class Application
             {
                 bool result;
 
-                // Register marshaller for background tasks.  At this point,
+                // Register marshaller for background tasks. At this point,
                 // need to be able to successfully get the handle to the
-                // parking window.  Only do it when we're entering the first
+                // parking window. Only do it when we're entering the first
                 // message loop for this thread.
                 if (_messageLoopCount == 1)
                 {
                     WindowsFormsSynchronizationContext.InstallIfNeeded();
                 }
 
-                // Need to do this in a try/finally.  Also good to do after we installed the synch context.
+                // Need to do this in a try/finally. Also good to do after we installed the synch context.
                 if (fullModal && CurrentForm is not null)
                 {
                     CurrentForm.Visible = true;
@@ -982,12 +982,12 @@ public sealed partial class Application
             else
             {
                 // See if this is a dialog message -- this is for handling any native dialogs that are launched from
-                // WinForms code.  This can happen with ActiveX controls that launch dialogs specifically
+                // WinForms code. This can happen with ActiveX controls that launch dialogs specifically
 
                 // First, get the first top-level window in the hierarchy.
                 HWND hwndRoot = PInvoke.GetAncestor(msg.hwnd, GET_ANCESTOR_FLAGS.GA_ROOT);
 
-                // If we got a valid HWND, then call IsDialogMessage on it.  If that returns true, it's been processed
+                // If we got a valid HWND, then call IsDialogMessage on it. If that returns true, it's been processed
                 // so we should return true to prevent Translate/Dispatch from being called.
                 if (!hwndRoot.IsNull && PInvoke.IsDialogMessage(hwndRoot, in msg))
                 {

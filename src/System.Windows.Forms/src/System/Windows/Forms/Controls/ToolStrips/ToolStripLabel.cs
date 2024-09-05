@@ -228,7 +228,7 @@ public partial class ToolStripLabel : ToolStripItem
 
     /// <summary>
     ///  Invalidates the current set of fonts we use when painting
-    ///  links.  The fonts will be recreated when needed.
+    ///  links. The fonts will be recreated when needed.
     /// </summary>
     private void InvalidateLinkFonts()
     {

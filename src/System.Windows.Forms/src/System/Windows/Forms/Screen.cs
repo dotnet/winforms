@@ -313,7 +313,7 @@ public partial class Screen
     public override int GetHashCode() => PARAM.ToInt(_hmonitor);
 
     /// <summary>
-    ///  Called by the SystemEvents class when our display settings are changing.  We cache screen information and
+    ///  Called by the SystemEvents class when our display settings are changing. We cache screen information and
     ///  at this point we must invalidate our cache.
     /// </summary>
     private static void OnDisplaySettingsChanging(object? sender, EventArgs e)
