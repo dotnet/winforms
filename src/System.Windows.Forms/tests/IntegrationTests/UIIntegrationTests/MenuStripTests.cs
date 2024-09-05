@@ -11,7 +11,7 @@ public class MenuStripTests
     [BoolData]
     public void MenuStrip_ProcessCmdKey_InvokeSpaceKey(bool value)
     {
-        using Form form = new Form();
+        using Form form = new();
         using MenuStrip menuStrip = new() { TabStop = value };
         using ToolStripMenuItem toolStripMenuItem1 = new();
         using ToolStripMenuItem toolStripMenuItem2 = new() { CheckOnClick = true };
@@ -21,29 +21,15 @@ public class MenuStripTests
         form.Controls.Add(menuStrip);
         form.Show();
 
-        Message m = new();
-        if (value)
-        {
-            menuStrip.Focused.Should().BeTrue();
-        }
-        else
-        {
-            menuStrip.Focused.Should().BeFalse();
-        }
+        Message message = new();
+        menuStrip.Focused.Should().Be(value);
 
-        toolStripMenuItem1.ProcessCmdKey(ref m, keyData: Keys.Enter);
+        toolStripMenuItem1.ProcessCmdKey(ref message, keyData: Keys.Enter);
         toolStripMenuItem2.Checked.Should().BeFalse();
-        toolStripMenuItem2.ProcessCmdKey(ref m, keyData: Keys.Space);
+        toolStripMenuItem2.ProcessCmdKey(ref message, keyData: Keys.Space);
         toolStripMenuItem2.Checked.Should().BeFalse();
 
-        toolStripMenuItem3.ProcessCmdKey(ref m, keyData: Keys.Enter);
-        if (value)
-        {
-            menuStrip.Focused.Should().BeTrue();
-        }
-        else
-        {
-            menuStrip.Focused.Should().BeFalse();
-        }
+        toolStripMenuItem3.ProcessCmdKey(ref message, keyData: Keys.Enter);
+        menuStrip.Focused.Should().Be(value);
     }
 }
