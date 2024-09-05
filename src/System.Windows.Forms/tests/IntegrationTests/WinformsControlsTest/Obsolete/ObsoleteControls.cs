@@ -21,6 +21,8 @@ public partial class ObsoleteControls : Form
         try
         {
             InitializeComponent();
+            CreateMainMenu();
+            SetUp();
         }
         catch (PlatformNotSupportedException ex)
         {
