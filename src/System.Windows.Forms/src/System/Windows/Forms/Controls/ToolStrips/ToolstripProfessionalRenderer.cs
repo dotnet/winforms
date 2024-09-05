@@ -887,8 +887,8 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
     }
 
     /// <summary>
-    /// We want to make sure the overflow button looks like it's the last thing on the toolbar.
-    /// This touches up the few pixels that get clobbered by painting the border.
+    ///  We want to make sure the overflow button looks like it's the last thing on the toolbar.
+    ///  This touches up the few pixels that get clobbered by painting the border.
     /// </summary>
     private void RenderOverflowButtonEffectsOverBorder(ToolStripRenderEventArgs e)
     {

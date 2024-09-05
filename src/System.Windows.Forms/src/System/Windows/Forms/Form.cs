@@ -1495,9 +1495,12 @@ public partial class Form : ContainerControl
     }
 
     /// <summary>
-    /// Gets or sets the anchoring for minimized MDI children.
+    ///  Gets or sets the anchoring for minimized MDI children.
     /// </summary>
-    /// <value><see langword="true" /> to anchor minimized MDI children to the bottom left of the parent form; <see langword="false" /> to anchor to the top left of the parent form.</value>
+    /// <value>
+    ///  <see langword="true" /> to anchor minimized MDI children to the bottom left of the parent form;
+    ///  <see langword="false" /> to anchor to the top left of the parent form.
+    /// </value>
     /// <remarks>
     ///  <para>
     ///   By default Windows Forms anchors MDI children to the bottom left of the parent form, whilst the Windows default is top left.
@@ -2186,7 +2189,7 @@ public partial class Form : ContainerControl
     }
 
     /// <summary>
-    /// Adjusts form location based on <see cref="FormStartPosition"/>
+    ///  Adjusts form location based on <see cref="FormStartPosition"/>
     /// </summary>
     internal void AdjustFormPosition()
     {
@@ -4758,7 +4761,8 @@ public partial class Form : ContainerControl
     ///  If the application responds to this message, the resulting size will be the candidate rectangle
     ///  sent to WM_DPICHANGED. The WPARAM contains a Dpi value. The size needs to be computed if
     ///  the window were to switch to this Dpi. LPARAM is used to store the Size desired for top-level window.
-    ///  A return value of zero indicates that the app does not want any special behavior and the candidate rectangle will be computed linearly.
+    ///  A return value of zero indicates that the app does not want any special behavior and the candidate rectangle
+    ///  will be computed linearly.
     /// </summary>
     private unsafe void WmGetDpiScaledSize(ref Message m)
     {
@@ -5323,11 +5327,14 @@ public partial class Form : ContainerControl
     }
 
     /// <summary>
-    /// Scales Form's properties Min and Max size with the scale factor provided.
+    ///  Scales Form's properties Min and Max size with the scale factor provided.
     /// </summary>
     /// <param name="xScaleFactor">The scale factor to be applied on width of the property being scaled.</param>
     /// <param name="yScaleFactor">The scale factor to be applied on height of the property being scaled.</param>
-    /// <param name="updateContainerSize"><see langword="true"/> to resize of the Form along with properties being scaled; otherwise, <see langword="false"/>.</param>
+    /// <param name="updateContainerSize">
+    ///  <see langword="true"/> to resize of the Form along with properties being scaled;
+    ///  otherwise, <see langword="false"/>.
+    /// </param>
     protected override void ScaleMinMaxSize(float xScaleFactor, float yScaleFactor, bool updateContainerSize = true)
     {
         base.ScaleMinMaxSize(xScaleFactor, yScaleFactor, updateContainerSize);
@@ -5949,7 +5956,8 @@ public partial class Form : ContainerControl
     ///  Shows the form as a modal dialog box asynchronously.
     /// </summary>
     /// <returns>
-    ///  A <see cref="Task{DialogResult}"/> representing the outcome of the dialog. The task completes when the form is closed or disposed.
+    ///  A <see cref="Task{DialogResult}"/> representing the outcome of the dialog. The task completes when the form is
+    ///  closed or disposed.
     /// </returns>
     /// <remarks>
     ///  <para>
@@ -5959,20 +5967,24 @@ public partial class Form : ContainerControl
     ///   This method immediately returns, even if the form is large and takes a long time to be set up.
     ///  </para>
     ///  <para>
-    ///   If the form is already displayed asynchronously by <see cref="ShowAsync"/>, an <see cref="InvalidOperationException"/> will be thrown.
+    ///   If the form is already displayed asynchronously by <see cref="ShowAsync"/>,
+    ///   an <see cref="InvalidOperationException"/> will be thrown.
     ///  </para>
     ///  <para>
-    ///   An <see cref="InvalidOperationException"/> will also occur if no <see cref="WindowsFormsSynchronizationContext"/> could be retrieved or installed.
+    ///   An <see cref="InvalidOperationException"/> will also occur if no
+    ///   <see cref="WindowsFormsSynchronizationContext"/> could be retrieved or installed.
     ///  </para>
     ///  <para>
-    ///   There is no need to marshal the call to the UI thread manually if the call originates from a different thread. This is handled automatically.
+    ///   There is no need to marshal the call to the UI thread manually if the call originates from a
+    ///   different thread. This is handled automatically.
     ///  </para>
     ///  <para>
     ///   Any exceptions that occur will be automatically propagated to the calling thread.
     ///  </para>
     /// </remarks>
     /// <exception cref="InvalidOperationException">
-    ///  Thrown if the form is already displayed asynchronously or if no <see cref="WindowsFormsSynchronizationContext"/> could be retrieved or installed.
+    ///  Thrown if the form is already displayed asynchronously or if no
+    ///  <see cref="WindowsFormsSynchronizationContext"/> could be retrieved or installed.
     /// </exception>
     [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = DiagnosticIDs.UrlFormat)]
     public Task<DialogResult> ShowDialogAsync() => ShowDialogAsyncInternal(owner: null);
@@ -5984,7 +5996,8 @@ public partial class Form : ContainerControl
     ///  Any object that implements <see cref="IWin32Window"/> that represents the top-level window that will own the modal dialog box.
     /// </param>
     /// <returns>
-    ///  A <see cref="Task{DialogResult}"/> representing the outcome of the dialog. The task completes when the form is closed or disposed.
+    ///  A <see cref="Task{DialogResult}"/> representing the outcome of the dialog.
+    ///  The task completes when the form is closed or disposed.
     /// </returns>
     /// <remarks>
     ///  <para>
@@ -5994,20 +6007,24 @@ public partial class Form : ContainerControl
     ///   This method immediately returns, even if the form is large and takes a long time to be set up.
     ///  </para>
     ///  <para>
-    ///   If the form is already displayed asynchronously by <see cref="ShowAsync"/>, an <see cref="InvalidOperationException"/> will be thrown.
+    ///   If the form is already displayed asynchronously by <see cref="ShowAsync"/>,
+    ///   an <see cref="InvalidOperationException"/> will be thrown.
     ///  </para>
     ///  <para>
-    ///   An <see cref="InvalidOperationException"/> will also occur if no <see cref="WindowsFormsSynchronizationContext"/> could be retrieved or installed.
+    ///   An <see cref="InvalidOperationException"/> will also occur if no
+    ///   <see cref="WindowsFormsSynchronizationContext"/> could be retrieved or installed.
     ///  </para>
     ///  <para>
-    ///   There is no need to marshal the call to the UI thread manually if the call originates from a different thread. This is handled automatically.
+    ///   There is no need to marshal the call to the UI thread manually if the call originates from a different thread.
+    ///   This is handled automatically.
     ///  </para>
     ///  <para>
     ///   Any exceptions that occur will be automatically propagated to the calling thread.
     ///  </para>
     /// </remarks>
     /// <exception cref="InvalidOperationException">
-    ///  Thrown if the form is already displayed asynchronously or if no <see cref="WindowsFormsSynchronizationContext"/> could be retrieved or installed.
+    ///  Thrown if the form is already displayed asynchronously or if
+    ///  no <see cref="WindowsFormsSynchronizationContext"/> could be retrieved or installed.
     /// </exception>
     [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = DiagnosticIDs.UrlFormat)]
     public Task<DialogResult> ShowDialogAsync(IWin32Window owner) => ShowDialogAsyncInternal(owner);

@@ -9,42 +9,42 @@ namespace System.Windows.Forms;
 public enum DropImageType
 {
     /// <summary>
-    /// No drop image preference; use the default image.
+    ///  No drop image preference; use the default image.
     /// </summary>
     Invalid = -1,
 
     /// <summary>
-    /// A red bisected circle such as that found on a "no smoking" sign.
+    ///  A red bisected circle such as that found on a "no smoking" sign.
     /// </summary>
     None = 0,
 
     /// <summary>
-    /// A plus sign (+) that indicates a copy operation.
+    ///  A plus sign (+) that indicates a copy operation.
     /// </summary>
     Copy = DragDropEffects.Copy,
 
     /// <summary>
-    /// An arrow that indicates a move operation.
+    ///  An arrow that indicates a move operation.
     /// </summary>
     Move = DragDropEffects.Move,
 
     /// <summary>
-    /// An arrow that indicates a link.
+    ///  An arrow that indicates a link.
     /// </summary>
     Link = DragDropEffects.Link,
 
     /// <summary>
-    /// A tag icon that indicates that the metadata will be changed.
+    ///  A tag icon that indicates that the metadata will be changed.
     /// </summary>
     Label = 6,
 
     /// <summary>
-    /// A yellow exclamation mark that indicates that a problem has been encountered in the operation.
+    ///  A yellow exclamation mark that indicates that a problem has been encountered in the operation.
     /// </summary>
     Warning = 7,
 
     /// <summary>
-    /// Windows 7 and later. Use no drop image.
+    ///  Windows 7 and later. Use no drop image.
     /// </summary>
     NoImage = 8
 }

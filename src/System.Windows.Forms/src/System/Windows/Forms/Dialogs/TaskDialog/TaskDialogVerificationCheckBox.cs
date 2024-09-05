@@ -80,14 +80,15 @@ public sealed class TaskDialogVerificationCheckBox : TaskDialogControl
     /// </para>
     /// </remarks>
     /// <exception cref="InvalidOperationException">
-    ///   The property is set on a verification checkbox instance that is currently bound to a task dialog, but it's not visible as its initial
-    ///   <see cref="Text"/> property value was <see langword="null"/> or an empty string.
+    ///   The property is set on a verification checkbox instance that is currently bound to a task dialog,
+    ///   but it's not visible as its initial <see cref="Text"/> property value was
+    ///   <see langword="null"/> or an empty string.
     ///   - or -
-    ///   The property is set and the task dialog has started navigating to a new page containing this verification checkbox instance,
-    ///   but the <see cref="TaskDialogPage.Created"/> event has not been raised yet.
+    ///   The property is set and the task dialog has started navigating to a new page containing this
+    ///   verification checkbox instance, but the <see cref="TaskDialogPage.Created"/> event has not been raised yet.
     ///   - or -
-    ///   The property is set on a verification checkbox instance that is currently bound to a task dialog, but the dialog has just
-    ///   started navigating to a different page.
+    ///   The property is set on a verification checkbox instance that is currently bound to a task dialog,
+    ///   but the dialog has just started navigating to a different page.
     /// </exception>
     public bool Checked
     {
