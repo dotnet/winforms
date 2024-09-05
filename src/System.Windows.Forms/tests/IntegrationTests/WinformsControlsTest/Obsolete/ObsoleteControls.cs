@@ -11,9 +11,11 @@ namespace WinformsControlsTest;
 /// <summary>
 /// This is added to test compile time compatibility only. 
 /// </summary>
+// Obsolete controls test for https://github.com/dotnet/winforms/issues/3783
 public partial class ObsoleteControls : Form
 {
     private bool _tablesAlreadyAdded;
+
     public ObsoleteControls()
     {
         try
@@ -30,7 +32,7 @@ public partial class ObsoleteControls : Form
 
     private void CreateMainMenu()
     {
-        MainMenu mainMenu = new MainMenu();
+        MainMenu mainMenu = new();
         MenuItem fileMenuItem = new MenuItem("File", new EventHandler(menuItem2_Click));
         mainMenu.MenuItems.Add(fileMenuItem);
     }
@@ -49,6 +51,7 @@ public partial class ObsoleteControls : Form
     {
         if (_tablesAlreadyAdded)
             return;
+
         AddCustomDataTableStyle();
     }
 
@@ -56,7 +59,7 @@ public partial class ObsoleteControls : Form
     {
         BindingManagerBase bmGrid;
         bmGrid = BindingContext[myDataSet, "Customers"];
-        MessageBox.Show("Current BindingManager Position: " + bmGrid.Position);
+        MessageBox.Show($"Current BindingManager Position: { bmGrid.Position }");
     }
 
     private void Grid_MouseUp(object sender, MouseEventArgs e)
@@ -75,36 +78,36 @@ public partial class ObsoleteControls : Form
     {
         try
         {
-            DataGridTableStyle ts1 = new DataGridTableStyle
+            DataGridTableStyle customerDGTableStyle = new DataGridTableStyle
             {
                 MappingName = "Customers",
                 // Set other properties.
                 AlternatingBackColor = Color.LightGray
             };
 
-            /* Add a GridColumnStyle and set its MappingName 
-            to the name of a DataColumn in the DataTable. 
-            Set the HeaderText and Width properties. */
+            // Add a GridColumnStyle and set its MappingName 
+            // to the name of a DataColumn in the DataTable. 
+            // Set the HeaderText and Width properties.
 
-            DataGridColumnStyle boolCol = new DataGridBoolColumn
+            DataGridColumnStyle currentDGTableStyle = new DataGridBoolColumn
             {
                 MappingName = "Current",
                 HeaderText = "IsCurrent Customer",
                 Width = 150
             };
-            ts1.GridColumnStyles.Add(boolCol);
+            customerDGTableStyle.GridColumnStyles.Add(currentDGTableStyle);
 
             // Add a second column style.
-            DataGridColumnStyle TextCol = new DataGridTextBoxColumn
+            DataGridColumnStyle custNameDGTableStyle = new DataGridTextBoxColumn
             {
                 MappingName = "custName",
                 HeaderText = "Customer Name",
                 Width = 250
             };
-            ts1.GridColumnStyles.Add(TextCol);
+            customerDGTableStyle.GridColumnStyles.Add(custNameDGTableStyle);
 
             // Create the second table style with columns.
-            DataGridTableStyle ts2 = new DataGridTableStyle
+            DataGridTableStyle OrderDGTableStyle = new DataGridTableStyle
             {
                 MappingName = "Orders",
 
@@ -113,34 +116,34 @@ public partial class ObsoleteControls : Form
             };
 
             // Create new ColumnStyle objects
-            DataGridColumnStyle cOrderDate = new DataGridTextBoxColumn
+            DataGridColumnStyle orderDateDGColumnStyle = new DataGridTextBoxColumn
             {
                 MappingName = "OrderDate",
                 HeaderText = "Order Date",
                 Width = 100
             };
-            ts2.GridColumnStyles.Add(cOrderDate);
+            OrderDGTableStyle.GridColumnStyles.Add(orderDateDGColumnStyle);
 
-            /* Use a PropertyDescriptor to create a formatted
-            column. First get the PropertyDescriptorCollection
-            for the data source and data member. */
+            // Use a PropertyDescriptor to create a formatted
+            // column. First get the PropertyDescriptorCollection
+            // for the data source and data member.
             PropertyDescriptorCollection pcol = BindingContext
             [myDataSet, "Customers.custToOrders"].GetItemProperties();
 
-            /* Create a formatted column using a PropertyDescriptor.
-            The formatting character "c" specifies a currency format. */
+            // Create a formatted column using a PropertyDescriptor.
+            // The formatting character "c" specifies a currency format.
             DataGridColumnStyle csOrderAmount = new DataGridTextBoxColumn(pcol["OrderAmount"], "c", true)
             {
                 MappingName = "OrderAmount",
                 HeaderText = "Total",
                 Width = 100
             };
-            ts2.GridColumnStyles.Add(csOrderAmount);
+            OrderDGTableStyle.GridColumnStyles.Add(csOrderAmount);
 
-            /* Add the DataGridTableStyle instances to 
-            the GridTableStylesCollection. */
-            dataGrid1.TableStyles.Add(ts1);
-            dataGrid1.TableStyles.Add(ts2);
+            // Add the DataGridTableStyle instances to 
+            // the GridTableStylesCollection.
+            dataGrid1.TableStyles.Add(customerDGTableStyle);
+            dataGrid1.TableStyles.Add(OrderDGTableStyle);
 
             // Sets the TablesAlreadyAdded to true so this doesn't happen again.
             _tablesAlreadyAdded = true;
@@ -155,8 +158,8 @@ public partial class ObsoleteControls : Form
     {
         // Create a DataSet with two tables and one relation.
         MakeDataSet();
-        /* Bind the DataGrid to the DataSet. The dataMember
-        specifies that the Customers table should be displayed.*/
+        // Bind the DataGrid to the DataSet. The dataMember
+        // specifies that the Customers table should be displayed.
         dataGrid1.SetDataBinding(myDataSet, "Customers");
     }
 
@@ -167,72 +170,72 @@ public partial class ObsoleteControls : Form
         myDataSet = new DataSet("myDataSet");
 
         // Create two DataTables.
-        DataTable tCust = new DataTable("Customers");
-        DataTable tOrders = new DataTable("Orders");
+        DataTable custDataTable = new DataTable("Customers");
+        DataTable orderDataTable = new DataTable("Orders");
 
         // Create two columns, and add them to the first table.
-        DataColumn cCustID = new DataColumn("CustID", typeof(int));
-        DataColumn cCustName = new DataColumn("CustName");
-        DataColumn cCurrent = new DataColumn("Current", typeof(bool));
-        tCust.Columns.Add(cCustID);
-        tCust.Columns.Add(cCustName);
-        tCust.Columns.Add(cCurrent);
+        DataColumn custIdDataColumn = new DataColumn("CustID", typeof(int));
+        DataColumn custNameDataColumn = new DataColumn("CustName");
+        DataColumn currentDataColumn = new DataColumn("Current", typeof(bool));
+        custDataTable.Columns.Add(custIdDataColumn);
+        custDataTable.Columns.Add(custNameDataColumn);
+        custDataTable.Columns.Add(currentDataColumn);
 
         // Create three columns, and add them to the second table.
-        DataColumn cID =
+        DataColumn idDataColumn =
         new DataColumn("CustID", typeof(int));
-        DataColumn cOrderDate =
+        DataColumn orderDateDataColumn =
         new DataColumn("orderDate", typeof(DateTime));
-        DataColumn cOrderAmount =
+        DataColumn orderAmountDataColumn =
         new DataColumn("OrderAmount", typeof(decimal));
-        tOrders.Columns.Add(cOrderAmount);
-        tOrders.Columns.Add(cID);
-        tOrders.Columns.Add(cOrderDate);
+        orderDataTable.Columns.Add(orderAmountDataColumn);
+        orderDataTable.Columns.Add(idDataColumn);
+        orderDataTable.Columns.Add(orderDateDataColumn);
 
         // Add the tables to the DataSet.
-        myDataSet.Tables.Add(tCust);
-        myDataSet.Tables.Add(tOrders);
+        myDataSet.Tables.Add(custDataTable);
+        myDataSet.Tables.Add(orderDataTable);
 
         // Create a DataRelation, and add it to the DataSet.
-        DataRelation dr = new DataRelation
-        ("custToOrders", cCustID, cID);
-        myDataSet.Relations.Add(dr);
+        DataRelation dataRelation = new DataRelation
+        ("custToOrders", custIdDataColumn, idDataColumn);
+        myDataSet.Relations.Add(dataRelation);
 
-        /* Populates the tables. For each customer and order, 
-        creates two DataRow variables. */
+        // Populates the tables. For each customer and order, 
+        // creates two DataRow variables.
         DataRow newRow1;
         DataRow newRow2;
 
         // Create three customers in the Customers Table.
         for (int i = 1; i < 4; i++)
         {
-            newRow1 = tCust.NewRow();
+            newRow1 = custDataTable.NewRow();
             newRow1["custID"] = i;
             // Add the row to the Customers table.
-            tCust.Rows.Add(newRow1);
+            custDataTable.Rows.Add(newRow1);
         }
 
         // Give each customer a distinct name.
-        tCust.Rows[0]["custName"] = "Customer1";
-        tCust.Rows[1]["custName"] = "Customer2";
-        tCust.Rows[2]["custName"] = "Customer3";
+        custDataTable.Rows[0]["custName"] = "Customer1";
+        custDataTable.Rows[1]["custName"] = "Customer2";
+        custDataTable.Rows[2]["custName"] = "Customer3";
 
         // Give the Current column a value.
-        tCust.Rows[0]["Current"] = true;
-        tCust.Rows[1]["Current"] = true;
-        tCust.Rows[2]["Current"] = false;
+        custDataTable.Rows[0]["Current"] = true;
+        custDataTable.Rows[1]["Current"] = true;
+        custDataTable.Rows[2]["Current"] = false;
 
         // For each customer, create five rows in the Orders table.
         for (int i = 1; i < 4; i++)
         {
             for (int j = 1; j < 6; j++)
             {
-                newRow2 = tOrders.NewRow();
+                newRow2 = orderDataTable.NewRow();
                 newRow2["CustID"] = i;
                 newRow2["orderDate"] = new DateTime(2001, i, j * 2);
                 newRow2["OrderAmount"] = i * 10 + j * .1;
                 // Add the row to the Orders table.
-                tOrders.Rows.Add(newRow2);
+                orderDataTable.Rows.Add(newRow2);
             }
         }
     }

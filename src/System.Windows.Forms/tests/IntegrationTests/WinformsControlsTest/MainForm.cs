@@ -232,7 +232,7 @@ public partial class MainForm : Form
         },
         {
             MainFormControlsTabOrder.ObsoleteControlsButton,
-            new InitInfo("ObsoleteControlsButton", (obj, e) => new ObsoleteControls().Show(this))
+            new InitInfo("ObsoleteControl", (obj, e) => new ObsoleteControls().Show(this))
         }
     };
 
