@@ -35,7 +35,7 @@ internal sealed class SelectionManager : IDisposable
     private bool _selectionChanging;
 
     /// <summary>
-    ///  Constructor. Here we query for necessary services and cache them for perf. reasons.
+    ///  Here we query for necessary services and cache them for performance reasons.
     ///  We also hook to Component Added/Removed/Changed notifications so we can keep in sync when the designers'
     ///  components change. Also, we create our custom Adorner and add it to the BehaviorService.
     /// </summary>
