@@ -14,13 +14,13 @@ public abstract partial class UndoEngine
             // Static data we hang onto about this change.
             private readonly string _componentName;
             private readonly MemberDescriptor? _member;
-            // Before and after state.  Before state is built in the constructor. After state is built right before we undo for the first time.
+            // Before and after state. Before state is built in the constructor. After state is built right before we undo for the first time.
             private SerializationStore? _before;
             private SerializationStore? _after;
             private bool _savedAfterState;
 
             /// <summary>
-            ///  Creates a new component change undo event.  This event consists of a before and after snapshot of a single component.  A snapshot will not be taken if a name for the component cannot be determined.
+            ///  Creates a new component change undo event. This event consists of a before and after snapshot of a single component. A snapshot will not be taken if a name for the component cannot be determined.
             /// </summary>
             public ChangeUndoEvent(UndoEngine engine, ComponentChangingEventArgs e, bool serializeBeforeState)
             {
@@ -38,7 +38,7 @@ public abstract partial class UndoEngine
 
             /// <summary>
             ///  Indicates that undoing this event may cause side effects in other objects.
-            ///  Change events fall into this category because, for example, a change involving adding an object to one collection may have a side effect of removing it from another collection.  Events with side effects are grouped at undo time so all their BeforeUndo methods are called before their Undo methods.
+            ///  Change events fall into this category because, for example, a change involving adding an object to one collection may have a side effect of removing it from another collection. Events with side effects are grouped at undo time so all their BeforeUndo methods are called before their Undo methods.
             ///  Events without side effects have their BeforeUndo called and then their Undo called immediately after.
             /// </summary>
             public override bool CausesSideEffects => true;
@@ -85,7 +85,7 @@ public abstract partial class UndoEngine
             }
 
             /// <summary>
-            ///  Commits the unit.  Committing the unit saves the "after" snapshot of the unit.  If commit is called multiple times only the first commit is registered.
+            ///  Commits the unit. Committing the unit saves the "after" snapshot of the unit. If commit is called multiple times only the first commit is registered.
             /// </summary>
             public void Commit()
             {
@@ -109,7 +109,7 @@ public abstract partial class UndoEngine
                     component = host.Container.Components[_componentName];
                 }
 
-                // It is OK for us to not find a component here.  That can happen if our "after" state is owned by another change, like an add of the component.
+                // It is OK for us to not find a component here. That can happen if our "after" state is owned by another change, like an add of the component.
                 if (component is not null)
                 {
                     _after = Serialize(engine, component, _member);
@@ -135,11 +135,11 @@ public abstract partial class UndoEngine
             }
 
             /// <summary>
-            ///  Performs the actual undo.  AFter it finishes it will reverse the role of _before and _after
+            ///  Performs the actual undo. After it finishes it will reverse the role of _before and _after
             /// </summary>
             public override void Undo(UndoEngine engine)
             {
-                Debug.Assert(_savedAfterState, "After state not saved.  BeforeUndo was not called?");
+                Debug.Assert(_savedAfterState, "After state not saved. BeforeUndo was not called?");
 
                 if (_before is not null)
                 {

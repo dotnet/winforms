@@ -570,7 +570,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
             transaction = host?.CreateTransaction(undoText ?? string.Format(SR.PropertyGridSetValue, PropertyDescriptor.Name));
 
             // Usually IComponent things are sited and this notification will be fired automatically by
-            // the PropertyDescriptor.  However, for non-IComponent sub objects or sub objects that are
+            // the PropertyDescriptor. However, for non-IComponent sub objects or sub objects that are
             // non-sited sub components, we need to manually fire the notification.
 
             bool needChangeNotify = owner is not IComponent component || component.Site is null;
@@ -617,7 +617,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
 
             EventDescriptor? eventDescriptor = null;
 
-            // This is possibly an event.  Check it out.
+            // This is possibly an event. Check it out.
             if (owner is not null && value is string)
             {
                 _eventBindings ??= this.GetService<IEventBindingService>();
@@ -730,7 +730,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
                 realOwner = descriptor.GetPropertyOwner(PropertyDescriptor);
             }
 
-            // Check the type of the object we are modifying.  If it's a value type or an array,
+            // Check the type of the object we are modifying. If it's a value type or an array,
             // we need to modify the object and push the value back up to the parent.
 
             bool treatAsValueType = false;

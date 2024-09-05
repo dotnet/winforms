@@ -74,9 +74,9 @@ public sealed unsafe class HtmlHistory : IDisposable
     /// <summary>
     ///  Go to a specific url(string) in the history
     /// </summary>
-    ///  Note: We intentionally have a string overload (apparently Mort wants one).  We don't have
+    ///  Note: We intentionally have a string overload (apparently Mort wants one). We don't have
     ///  string overloads call Uri overloads because that breaks Uris that aren't fully qualified
-    ///  (things like "www.microsoft.com") that the underlying objects support and we don't want to
+    ///  (things like "www.Microsoft.com") that the underlying objects support and we don't want to
     ///  break.
     public void Go(string urlString)
     {

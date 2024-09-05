@@ -12,7 +12,7 @@ public partial class ToolStripSplitButton
     ///  It exists so that we can use our existing methods for text and image layout
     ///  and have a place to stick certain state information like pushed and selected
     ///  Note since this is NOT an actual item hosted on the ToolStrip - it won't get things
-    ///  like MouseOver, won't be laid out by the ToolStrip, etc etc.  This is purely internal
+    ///  like MouseOver, won't be laid out by the ToolStrip, etc etc. This is purely internal
     ///  convenience.
     /// </summary>
     private class ToolStripSplitButtonButton : ToolStripButton

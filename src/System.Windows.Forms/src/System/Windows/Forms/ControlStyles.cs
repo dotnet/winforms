@@ -87,9 +87,9 @@ public enum ControlStyles
 
     /// <summary>
     ///  If true, WM_ERASEBKGND is ignored, and both OnPaintBackground and
-    ///  OnPaint are called directly from WM_PAINT.  This generally reduces
+    ///  OnPaint are called directly from WM_PAINT. This generally reduces
     ///  flicker, but can cause problems if other controls send WM_ERASEBKGND
-    ///  messages to us.  (This is sometimes done to achieve a pseudo-transparent
+    ///  messages to us. (This is sometimes done to achieve a pseudo-transparent
     ///  effect similar to ControlStyles.SupportsTransparentBackColor; for instance,
     ///  ToolBar with flat appearance does this).
     ///  This style only makes sense if UserPaint is true.

@@ -11,7 +11,7 @@ using System.Windows.Forms.Design.Behavior;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-///  This class handles all design time behavior for the SplitContainer class.  This
+///  This class handles all design time behavior for the SplitContainer class. This
 ///  draws a visible border on the splitter if it doesn't have a border so the
 ///  user knows where the boundaries of the splitter lie.
 /// </summary>
@@ -149,11 +149,11 @@ internal partial class SplitContainerDesigner : ParentControlDesigner
     protected override void OnDragEnter(DragEventArgs de) => de.Effect = DragDropEffects.None;
 
     /// <summary>
-    ///  This is the worker method of all CreateTool methods.  It is the only one that can be overridden.
+    ///  This is the worker method of all CreateTool methods. It is the only one that can be overridden.
     /// </summary>
     protected override IComponent[]? CreateToolCore(ToolboxItem tool, int x, int y, int width, int height, bool hasLocation, bool hasSize)
     {
-        // We invoke the drag drop handler for this.  This implementation is shared between all designers that create components.
+        // We invoke the drag drop handler for this. This implementation is shared between all designers that create components.
         Selected ??= _splitterPanel1!;
         var selectedPanelDesigner = (SplitterPanelDesigner)_designerHost!.GetDesigner(Selected)!;
         InvokeCreateTool(selectedPanelDesigner, tool);
@@ -381,7 +381,7 @@ internal partial class SplitContainerDesigner : ParentControlDesigner
     }
 
     /// <summary>
-    ///  Called when the current selection changes.  Here we check to see if the newly selected component is one of our Panels.  If it is, we make sure that the tab is the currently visible tab.
+    ///  Called when the current selection changes. Here we check to see if the newly selected component is one of our Panels. If it is, we make sure that the tab is the currently visible tab.
     /// </summary>
     private void OnSelectionChanged(object? sender, EventArgs e)
     {
@@ -419,7 +419,7 @@ internal partial class SplitContainerDesigner : ParentControlDesigner
     private static SplitterPanel? CheckIfPanelSelected(object comp) => comp as SplitterPanel;
 
     /// <summary>
-    ///  Called when one of the child splitter panels receives a MouseHover message.  Here, we will simply call the parenting SplitContainer.OnMouseHover so we can get a
+    ///  Called when one of the child splitter panels receives a MouseHover message. Here, we will simply call the parenting SplitContainer.OnMouseHover so we can get a
     ///  grab handle for moving this thing around.
     /// </summary>
     internal void SplitterPanelHover() => OnMouseHover();

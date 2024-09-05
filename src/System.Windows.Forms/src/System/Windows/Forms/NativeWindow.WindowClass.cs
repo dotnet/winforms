@@ -50,7 +50,7 @@ public partial class NativeWindow
         }
 
         /// <summary>
-        ///  Retrieves a WindowClass object for use.  This will create a new
+        ///  Retrieves a WindowClass object for use. This will create a new
         ///  object if there is no such class/style available, or return a
         ///  cached object if one exists.
         /// </summary>
@@ -124,7 +124,7 @@ public partial class NativeWindow
             if (localClassName is null)
             {
                 // If we don't use a hollow brush here, Windows will "pre paint" us with COLOR_WINDOW which
-                // creates a little bit if flicker.  This happens even though we are overriding wm_erasebackgnd.
+                // creates a little bit if flicker. This happens even though we are overriding wm_erasebackgnd.
                 // Make this hollow to avoid all flicker.
 
                 windowClass.hbrBackground = (HBRUSH)PInvokeCore.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH);

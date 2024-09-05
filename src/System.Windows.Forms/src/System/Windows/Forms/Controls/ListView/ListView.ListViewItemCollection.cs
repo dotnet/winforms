@@ -120,7 +120,7 @@ public partial class ListView
         }
 
         /// <summary>
-        ///  Add an item to the ListView.  The item will be inserted either in
+        ///  Add an item to the ListView. The item will be inserted either in
         ///  the correct sorted position, or, if no sorting is set, at the end
         ///  of the list.
         /// </summary>
@@ -145,7 +145,7 @@ public partial class ListView
         }
 
         /// <summary>
-        ///  Add an item to the ListView.  The item will be inserted either in
+        ///  Add an item to the ListView. The item will be inserted either in
         ///  the correct sorted position, or, if no sorting is set, at the end
         ///  of the list.
         /// </summary>
@@ -157,7 +157,7 @@ public partial class ListView
         }
 
         /// <summary>
-        ///  Add an item to the ListView.  The item will be inserted either in
+        ///  Add an item to the ListView. The item will be inserted either in
         ///  the correct sorted position, or, if no sorting is set, at the end
         ///  of the list.
         /// </summary>
@@ -170,7 +170,7 @@ public partial class ListView
         // <-- NEW ADD OVERLOADS IN WHIDBEY
 
         /// <summary>
-        ///  Add an item to the ListView.  The item will be inserted either in
+        ///  Add an item to the ListView. The item will be inserted either in
         ///  the correct sorted position, or, if no sorting is set, at the end
         ///  of the list.
         /// </summary>
@@ -182,7 +182,7 @@ public partial class ListView
         }
 
         /// <summary>
-        ///  Add an item to the ListView.  The item will be inserted either in
+        ///  Add an item to the ListView. The item will be inserted either in
         ///  the correct sorted position, or, if no sorting is set, at the end
         ///  of the list.
         /// </summary>
@@ -197,7 +197,7 @@ public partial class ListView
         }
 
         /// <summary>
-        ///  Add an item to the ListView.  The item will be inserted either in
+        ///  Add an item to the ListView. The item will be inserted either in
         ///  the correct sorted position, or, if no sorting is set, at the end
         ///  of the list.
         /// </summary>
@@ -359,7 +359,7 @@ public partial class ListView
                 }
             }
 
-            // step 3 - we didn't find it.  Invalidate the last accessed index and return -1.
+            // step 3 - we didn't find it. Invalidate the last accessed index and return -1.
             _lastAccessedIndex = -1;
             return -1;
         }

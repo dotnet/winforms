@@ -53,7 +53,7 @@ public class DesignSurface : IDisposable, IServiceProvider
     /// <summary>
     ///  Creates a new DesignSurface given a parent service provider.
     /// </summary>
-    /// <param name="parentProvider"> The parent service provider.  If there is no parent used to resolve services this can be null. </param>
+    /// <param name="parentProvider"> The parent service provider. If there is no parent used to resolve services this can be null. </param>
     public DesignSurface(IServiceProvider? parentProvider, Type rootComponentType) : this(parentProvider)
     {
         ArgumentNullException.ThrowIfNull(rootComponentType);
@@ -119,7 +119,7 @@ public class DesignSurface : IDisposable, IServiceProvider
             IComponent? rootComponent = ((IDesignerHost)_host).RootComponent;
             if (rootComponent is null)
             {
-                // Check to see if we have any load errors.  If so, use them.
+                // Check to see if we have any load errors. If so, use them.
                 if (_loadErrors is not null)
                 {
                     foreach (object o in _loadErrors)
@@ -135,7 +135,7 @@ public class DesignSurface : IDisposable, IServiceProvider
                     }
                 }
 
-                // loader didn't provide any help.  Just generally fail.
+                // loader didn't provide any help. Just generally fail.
                 throw new InvalidOperationException(SR.DesignSurfaceNoRootComponent)
                 {
                     HelpLink = SR.DesignSurfaceNoRootComponent
@@ -175,7 +175,7 @@ public class DesignSurface : IDisposable, IServiceProvider
     public event EventHandler? Flushed;
 
     /// <summary>
-    ///  Called when the designer load has completed.  This is called for successful loads as well as unsuccessful ones.  If code in this event handler throws an exception the designer will be unloaded.
+    ///  Called when the designer load has completed. This is called for successful loads as well as unsuccessful ones. If code in this event handler throws an exception the designer will be unloaded.
     /// </summary>
     public event LoadedEventHandler? Loaded;
 
@@ -196,25 +196,25 @@ public class DesignSurface : IDisposable, IServiceProvider
     public event EventHandler? Unloading;
 
     /// <summary>
-    ///  Called when someone has called the Activate method on IDesignerHost.  You should attach a handler to this event that activates the window for this design surface.
+    ///  Called when someone has called the Activate method on IDesignerHost. You should attach a handler to this event that activates the window for this design surface.
     /// </summary>
     public event EventHandler? ViewActivated;
 
     /// <summary>
-    ///  This method begins the loading process with the given designer loader.  Designer loading can be asynchronous, so the loading may continue to  progress after this call has returned.  Listen to the Loaded event to know when the design surface has completed loading.
+    ///  This method begins the loading process with the given designer loader. Designer loading can be asynchronous, so the loading may continue to  progress after this call has returned. Listen to the Loaded event to know when the design surface has completed loading.
     /// </summary>
     public void BeginLoad(DesignerLoader loader)
     {
         ArgumentNullException.ThrowIfNull(loader);
         ObjectDisposedException.ThrowIf(_host is null, this);
 
-        // Create the designer host.  We need the host so we can begin the loading process.
+        // Create the designer host. We need the host so we can begin the loading process.
         _loadErrors = null;
         _host.BeginLoad(loader);
     }
 
     /// <summary>
-    ///  This method begins the loading process for a component of the given type.  This will create an instance of the component type and initialize a designer for that instance.  Loaded is raised before this method returns.
+    ///  This method begins the loading process for a component of the given type. This will create an instance of the component type and initialize a designer for that instance. Loaded is raised before this method returns.
     /// </summary>
     public void BeginLoad(Type rootComponentType)
     {
@@ -246,7 +246,7 @@ public class DesignSurface : IDisposable, IServiceProvider
     }
 
     /// <summary>
-    ///  This method is called to create an instance of the given type.  If the type is a component
+    ///  This method is called to create an instance of the given type. If the type is a component
     ///  this will search for a constructor of type IContainer first, and then an empty constructor.
     /// </summary>
     protected internal virtual object? CreateInstance(Type type)
@@ -279,7 +279,7 @@ public class DesignSurface : IDisposable, IServiceProvider
     }
 
     /// <summary>
-    ///  Creates a container suitable for nesting controls or components.  Adding a component to a  nested container creates its designer and makes it eligible for all all services available from the design surface.  Components added to nested containers do not participate in serialization. You may provide an additional name for this container by passing a value into containerName.
+    ///  Creates a container suitable for nesting controls or components. Adding a component to a  nested container creates its designer and makes it eligible for all all services available from the design surface. Components added to nested containers do not participate in serialization. You may provide an additional name for this container by passing a value into containerName.
     /// </summary>
     public INestedContainer CreateNestedContainer(IComponent owningComponent)
     {
@@ -287,7 +287,7 @@ public class DesignSurface : IDisposable, IServiceProvider
     }
 
     /// <summary>
-    ///  Creates a container suitable for nesting controls or components.  Adding a component to a  nested container creates its designer and makes it eligible for all all services available from the design surface.  Components added to nested containers do not participate in serialization. You may provide an additional name for this container by passing a value into containerName.
+    ///  Creates a container suitable for nesting controls or components. Adding a component to a  nested container creates its designer and makes it eligible for all all services available from the design surface. Components added to nested containers do not participate in serialization. You may provide an additional name for this container by passing a value into containerName.
     /// </summary>
     public INestedContainer CreateNestedContainer(IComponent owningComponent, string? containerName)
     {
@@ -312,7 +312,7 @@ public class DesignSurface : IDisposable, IServiceProvider
     {
         if (disposing)
         {
-            // technically we should raise this after we've destroyed ourselves.  Unfortunately, too many things query us for services so they can detach.
+            // technically we should raise this after we've destroyed ourselves. Unfortunately, too many things query us for services so they can detach.
             Disposed?.Invoke(this, EventArgs.Empty);
 
             // Destroying the host also destroys all components. In most cases destroying the root component will destroy its designer which also kills the view. So, we destroy the view below last (remember, this view is a "view container" so we are destroying the innermost view first and then destroying our own view).
@@ -372,7 +372,7 @@ public class DesignSurface : IDisposable, IServiceProvider
     /// </summary>
     /// <param name="container"> The service container requesting the service. </param>
     /// <param name="serviceType"> The type of service being requested. </param>
-    /// <returns> A new instance of the service.  It is an error to call this with a service type it doesn't know how to create </returns>
+    /// <returns> A new instance of the service. It is an error to call this with a service type it doesn't know how to create </returns>
     private object OnCreateService(IServiceContainer container, Type serviceType)
     {
         if (serviceType == typeof(ISelectionService))
@@ -432,7 +432,7 @@ public class DesignSurface : IDisposable, IServiceProvider
     }
 
     /// <summary>
-    ///  Called when the loading process has completed.  This is invoked for both successful and unsuccessful loads. The EventArgs passed into this method can be used to tell a successful from an unsuccessful load.  It can also be used to create a view for this design surface.  If code in this event handler or override throws an exception,
+    ///  Called when the loading process has completed. This is invoked for both successful and unsuccessful loads. The EventArgs passed into this method can be used to tell a successful from an unsuccessful load. It can also be used to create a view for this design surface. If code in this event handler or override throws an exception,
     ///  the designer will be unloaded.
     /// </summary>
     protected virtual void OnLoaded(LoadedEventArgs e)
@@ -490,7 +490,7 @@ public class DesignSurface : IDisposable, IServiceProvider
     }
 
     /// <summary>
-    ///  Called when someone has called the Activate method on IDesignerHost.  You should attach a handler to this event that activates the window for this design surface.
+    ///  Called when someone has called the Activate method on IDesignerHost. You should attach a handler to this event that activates the window for this design surface.
     /// </summary>
     protected virtual void OnViewActivate(EventArgs e)
     {
@@ -498,7 +498,7 @@ public class DesignSurface : IDisposable, IServiceProvider
     }
 
     /// <summary>
-    ///  This is a simple designer loader that creates an instance of the given type and then calls EndLoad.  If a collection of objects was passed, this will simply add those objects to the container.
+    ///  This is a simple designer loader that creates an instance of the given type and then calls EndLoad. If a collection of objects was passed, this will simply add those objects to the container.
     /// </summary>
     private class DefaultDesignerLoader : DesignerLoader
     {

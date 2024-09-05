@@ -80,7 +80,7 @@ internal partial class OleDragDropHandler
         private CfCodeToolboxItem NestedToolboxItem => _toolboxItemData ??= new CfCodeToolboxItem(GetData(DataFormat));
 
         /// <summary>
-        ///  Used to retrieve the selection for a copy.  The default implementation
+        ///  Used to retrieve the selection for a copy. The default implementation
         ///  retrieves the current selection.
         /// </summary>
         private object[] GetComponentList(object[] components)

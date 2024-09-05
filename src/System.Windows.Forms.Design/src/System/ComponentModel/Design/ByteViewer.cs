@@ -166,7 +166,7 @@ public class ByteViewer : TableLayoutPanel
     }
 
     // Char.IsPrintable is going away because it's a mostly meaningless concept.
-    // Copied code here to preserve semantics.  -- BrianGru, 10/3/2000
+    // Copied code here to preserve semantics. -- BrianGru, 10/3/2000
     private static bool CharIsPrintable(char c)
     {
         UnicodeCategory uc = char.GetUnicodeCategory(c);

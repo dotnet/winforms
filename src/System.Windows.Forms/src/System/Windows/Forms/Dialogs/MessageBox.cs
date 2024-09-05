@@ -74,7 +74,7 @@ public class MessageBox
     private static void PopHelpInfo()
     {
         // we roll our own stack here because we want a pretty lightweight implementation.
-        // usually there's only going to be one message box shown at a time.  But if
+        // usually there's only going to be one message box shown at a time. But if
         // someone shows two message boxes (say by launching them via a WM_TIMER message)
         // we've got to gracefully handle the current help info.
         if (t_helpInfoTable is null)
@@ -100,7 +100,7 @@ public class MessageBox
     private static void PushHelpInfo(HelpInfo hpi)
     {
         // we roll our own stack here because we want a pretty lightweight implementation.
-        // usually there's only going to be one message box shown at a time.  But if
+        // usually there's only going to be one message box shown at a time. But if
         // someone shows two message boxes (say by launching them via a WM_TIMER message)
         // we've got to gracefully handle the current help info.
 

@@ -9,14 +9,14 @@ namespace System.ComponentModel.Design;
 public abstract partial class UndoEngine
 {
     /// <summary>
-    ///  This class embodies a unit of undoable work.  The undo engine creates an undo unit when a change to the designer is about to be made.  The undo unit is responsible for tracking changes.  The undo engine will call Close on the unit when it no longer needs to track changes.
+    ///  This class embodies a unit of undoable work. The undo engine creates an undo unit when a change to the designer is about to be made. The undo unit is responsible for tracking changes. The undo engine will call Close on the unit when it no longer needs to track changes.
     /// </summary>
     protected partial class UndoUnit
     {
         private List<UndoEvent>? _events; // the list of events we've captured
-        private List<ChangeUndoEvent>? _changeEvents; // the list of change events we're currently capturing.  Only valid until Commit is called.
-        private List<AddRemoveUndoEvent>? _removeEvents; // the list of remove events we're currently capturing.  Only valid until a matching Removed is encountered.
-        private List<IComponent>? _ignoreAddingList; // the list of objects that are currently being added.  We ignore change events between adding and added.
+        private List<ChangeUndoEvent>? _changeEvents; // the list of change events we're currently capturing. Only valid until Commit is called.
+        private List<AddRemoveUndoEvent>? _removeEvents; // the list of remove events we're currently capturing. Only valid until a matching Removed is encountered.
+        private List<IComponent>? _ignoreAddingList; // the list of objects that are currently being added. We ignore change events between adding and added.
         private List<IComponent>? _ignoreAddedList; // the list of objects that are added. We do not serialize before state for change events that happen in the same transaction
         private bool _reverse; // if true, we walk the events list from the bottom up
         private readonly Dictionary<string, IContainer>? _lastSelection; // the selection as it was before we gathered undo info
@@ -46,7 +46,7 @@ public abstract partial class UndoEngine
         public string Name { get; }
 
         /// <summary>
-        ///  This returns true if the undo unit has nothing in it to undo.  The unit will be discarded.
+        ///  This returns true if the undo unit has nothing in it to undo. The unit will be discarded.
         /// </summary>
         public virtual bool IsEmpty => _events is null || _events.Count == 0;
 
@@ -63,7 +63,7 @@ public abstract partial class UndoEngine
         }
 
         /// <summary>
-        ///  Called by the undo engine when it wants to close this unit.  The unit should do any final work it needs to do to close.
+        ///  Called by the undo engine when it wants to close this unit. The unit should do any final work it needs to do to close.
         /// </summary>
         public virtual void Close()
         {
@@ -83,7 +83,7 @@ public abstract partial class UndoEngine
                 }
             }
 
-            // At close time we are done with this list.  All change events were simultaneously added to the _events list.
+            // At close time we are done with this list. All change events were simultaneously added to the _events list.
             _changeEvents = null;
             _removeEvents = null;
             _ignoreAddingList = null;
@@ -189,7 +189,7 @@ public abstract partial class UndoEngine
         /// </summary>
         public virtual void ComponentChanging(ComponentChangingEventArgs e)
         {
-            // If we are in the process of adding this component, ignore any changes to it.  The ending "Added" event will capture the component's state.  This not just an optimization.  If we get a change during an add, we can have an undo order that specifies a remove, and then a change to a removed component.
+            // If we are in the process of adding this component, ignore any changes to it. The ending "Added" event will capture the component's state. This not just an optimization. If we get a change during an add, we can have an undo order that specifies a remove, and then a change to a removed component.
             if (_ignoreAddingList is not null && _ignoreAddingList.Contains(e.Component))
             {
                 return;
@@ -197,10 +197,10 @@ public abstract partial class UndoEngine
 
             _changeEvents ??= [];
 
-            // The site check here is done because the data team is calling us for components that are not yet sited.  We end up writing them out as Guid-named locals.  That's fine, except that we cannot capture after state for these types of things so we assert.
+            // The site check here is done because the data team is calling us for components that are not yet sited.We end up writing them out as Guid-named locals.That's fine, except that we cannot capture after state for these types of things so we assert.
             if (UndoEngine.GetName(e.Component, false) is not null)
             {
-                // The caller provided us with a component.  This is the common case.  We will add a new change event provided there is not already one open for this component.
+                // The caller provided us with a component. This is the common case. We will add a new change event provided there is not already one open for this component.
                 bool hasChange = false;
 
                 for (int idx = 0; idx < _changeEvents.Count; idx++)
@@ -267,7 +267,7 @@ public abstract partial class UndoEngine
         /// </summary>
         public virtual void ComponentRemoved(ComponentEventArgs e)
         {
-            // We should gather undo state in ComponentRemoved, but by this time the component's designer has been destroyed so it's too late.  Instead, we captured state in the Removing method.  But, it is possible for there to be component changes to other objects that happen between removing and removed,  so we need to reorder the removing event so it's positioned after any changes.
+            // We should gather undo state in ComponentRemoved, but by this time the component's designer has been destroyed so it's too late. Instead, we captured state in the Removing method. But, it is possible for there to be component changes to other objects that happen between removing and removed,  so we need to reorder the removing event so it's positioned after any changes.
             if (_events is not null && e is not null)
             {
                 ChangeUndoEvent? changeEvt = null;
@@ -350,7 +350,7 @@ public abstract partial class UndoEngine
         public override string ToString() => Name;
 
         /// <summary>
-        ///  Either performs undo, or redo, depending on the state of the unit.  UndoUnit initially assumes that the undoable work has already been "done", so the first call to undo will undo the work.  The next call will undo the "undo", performing a redo.
+        ///  Either performs undo, or redo, depending on the state of the unit. UndoUnit initially assumes that the undoable work has already been "done", so the first call to undo will undo the work. The next call will undo the "undo", performing a redo.
         /// </summary>
         public void Undo()
         {
@@ -387,7 +387,7 @@ public abstract partial class UndoEngine
         }
 
         /// <summary>
-        ///  The undo method invokes this method to perform the actual undo / redo work.  You should never call this method directly; override it if you wish, but always call the public Undo method to perform undo work.  Undo notifies the undo engine to suspend undo data gathering until  this undo is completed, which prevents new undo units from being created in response to this unit doing work.
+        ///  The undo method invokes this method to perform the actual undo / redo work. You should never call this method directly; override it if you wish, but always call the public Undo method to perform undo work. Undo notifies the undo engine to suspend undo data gathering until  this undo is completed, which prevents new undo units from being created in response to this unit doing work.
         /// </summary>
         protected virtual void UndoCore()
         {
@@ -395,10 +395,10 @@ public abstract partial class UndoEngine
             {
                 if (_reverse)
                 {
-                    // How does BeforeUndo work?  You'd think you should just call this in one pass, and then call Undo in another, but you'd be wrong. The complexity arises because there are undo events that have dependencies on other undo events.  There are also undo events that have side effects with respect to other events.  Here are examples:
-                    // Rename is an undo event that other undo events depend on, because they store names.  It must be performed in the right order and it must be  performed before any subsequent event's BeforeUndo is called.
-                    // Property change is an undo event that may have an unknown side effect if changing the property results in other property changes (for example, reparenting a control removes the control from its former parent).  A property change undo event must have all BeforeUndo methods called before any Undo method is called. To do this, we have a property on UndoEvent called CausesSideEffects.
-                    // As we run through UndoEvents, consecutive events that return true from this property are grouped so that their BeforeUndo methods are all called before their Undo methods.  For events that do not have  side effects, their BeforeUndo and Undo are invoked immediately.
+                    // How does BeforeUndo work?  You'd think you should just call this in one pass, and then call Undo in another, but you'd be wrong. The complexity arises because there are undo events that have dependencies on other undo events.There are also undo events that have side effects with respect to other events. Here are examples:
+                    // Rename is an undo event that other undo events depend on, because they store names. It must be performed in the right order and it must be  performed before any subsequent event's BeforeUndo is called.
+                    // Property change is an undo event that may have an unknown side effect if changing the property results in other property changes (for example, reparenting a control removes the control from its former parent) .A property change undo event must have all BeforeUndo methods called before any Undo method is called. To do this, we have a property on UndoEvent called CausesSideEffects.
+                    // As we run through UndoEvents, consecutive events that return true from this property are grouped so that their BeforeUndo methods are all called before their Undo methods. For events that do not have  side effects, their BeforeUndo and Undo are invoked immediately.
                     for (int idx = _events.Count - 1; idx >= 0; idx--)
                     {
                         int groupEndIdx = idx;

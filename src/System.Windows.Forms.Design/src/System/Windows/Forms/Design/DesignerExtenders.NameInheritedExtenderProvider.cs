@@ -21,7 +21,7 @@ internal partial class DesignerExtenders
         }
 
         /// <summary>
-        ///  Determines if ths extender provider can extend the given object.  We extend
+        ///  Determines if ths extender provider can extend the given object. We extend
         ///  all objects, so we always return true.
         /// </summary>
         public override bool CanExtend(object o)
@@ -34,7 +34,7 @@ internal partial class DesignerExtenders
                 return false;
             }
 
-            // See if this object is inherited.  If so, then we are interested in it.
+            // See if this object is inherited. If so, then we are interested in it.
             //
             if (!TypeDescriptor.GetAttributes(o)[typeof(InheritanceAttribute)]?.Equals(InheritanceAttribute.NotInherited) ?? false)
             {

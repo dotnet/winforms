@@ -174,7 +174,7 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
 
     /// <summary>
     ///  Specifies if a TableLayoutPanel will gain additional rows or columns once its existing cells
-    ///  become full.  If the value is 'FixedSize' then the TableLayoutPanel will throw an exception
+    ///  become full. If the value is 'FixedSize' then the TableLayoutPanel will throw an exception
     ///  when the TableLayoutPanel is over-filled.
     /// </summary>
     [SRDescription(nameof(SR.TableLayoutPanelGrowStyleDescr))]

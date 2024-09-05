@@ -5,18 +5,18 @@ namespace System.Windows.Forms.Design;
 
 /// <summary>
 ///  The event handler service provides a unified way to handle
-///  the various events that our form designer must process.  What
+///  the various events that our form designer must process. What
 ///  we want to be able to do is to write code in one place that
-///  handles events of a certain type.  We also may need to globally
+///  handles events of a certain type. We also may need to globally
 ///  change the behavior of these events for modal functions like
-///  the tab order UI.  Our designer, however, is in many pieces
+///  the tab order UI. Our designer, however, is in many pieces
 ///  so we must somehow funnel these events to a common place.
 ///  This service implements an "event stack" that contains the
-///  current set of event handlers.  There can be different
-///  types of handlers on the stack.  For example, we may push
-///  a keyboard handler and a mouse handler.  When you request
+///  current set of event handlers. There can be different
+///  types of handlers on the stack. For example, we may push
+///  a keyboard handler and a mouse handler. When you request
 ///  a handler, we will find the topmost handler on the stack
-///  that fits the class you requested.  This way the service
+///  that fits the class you requested. This way the service
 ///  can be extended to any eventing scheme, and it also allows
 ///  sections of a handler to be replaced (eg, you can replace
 ///  mouse handling without effecting menus or the keyboard).

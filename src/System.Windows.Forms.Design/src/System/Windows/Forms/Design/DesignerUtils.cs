@@ -413,7 +413,7 @@ internal static class DesignerUtils
     }
 
     /// <summary>
-    ///  Uses WM_PRINT to get a snapshot of the control.  This method will return true if the control properly responded to the wm_print message.
+    ///  Uses WM_PRINT to get a snapshot of the control. This method will return true if the control properly responded to the wm_print message.
     /// </summary>
     public static bool GenerateSnapShotWithWM_PRINT(Control control, out Bitmap image)
     {
@@ -430,7 +430,7 @@ internal static class DesignerUtils
         }
 
         // To validate that the control responded to the wm_print message, we pre-populate the bitmap with a
-        //  colored center pixel.  We assume that the control _did not_ respond to wm_print if these center pixel
+        //  colored center pixel. We assume that the control _did not_ respond to wm_print if these center pixel
         //  is still this value.
 
         Color testColor = Color.FromArgb(255, 252, 186, 238);

@@ -12,7 +12,7 @@ using Windows.Win32.UI.Accessibility;
 namespace System.Windows.Forms;
 
 /// <summary>
-///  The TabControl.  This control has a lot of the functionality of a TabStrip
+///  The TabControl. This control has a lot of the functionality of a TabStrip
 ///  but manages a list of TabPages which are the 'pages' that appear on each tab.
 /// </summary>
 [DefaultProperty(nameof(TabPages))]
@@ -56,9 +56,9 @@ public partial class TabControl : Control
 
     /// <summary>
     ///  This message is posted by the control to itself after a TabPage is
-    ///  added to it.  On certain occasions, after items are added to a
+    ///  added to it. On certain occasions, after items are added to a
     ///  TabControl in quick succession, TCM_ADJUSTRECT calls return the wrong
-    ///  display rectangle.  When the message is received, the control calls
+    ///  display rectangle. When the message is received, the control calls
     ///  updateTabSelection() to layout the TabPages correctly.
     /// </summary>
     private readonly MessageId _tabBaseReLayoutMessage = PInvoke.RegisterWindowMessage($"{Application.WindowMessagesVersion}{TabBaseReLayoutMessageName}");
@@ -90,7 +90,7 @@ public partial class TabControl : Control
 
     /// <summary>
     ///  Returns on what area of the control the tabs reside on (A TabAlignment value).
-    ///  The possibilities are Top (the default), Bottom, Left, and Right.  When alignment
+    ///  The possibilities are Top (the default), Bottom, Left, and Right. When alignment
     ///  is left or right, the Multiline property is ignored and Multiline is implicitly on.
     ///  If the alignment is anything other than top, TabAppearance.FlatButtons degenerates
     ///  to TabAppearance.Buttons.
@@ -261,8 +261,8 @@ public partial class TabControl : Control
     }
 
     /// <summary>
-    ///  Returns the parameters needed to create the handle.  Inheriting classes
-    ///  can override this to provide extra functionality.  They should not,
+    ///  Returns the parameters needed to create the handle. Inheriting classes
+    ///  can override this to provide extra functionality. They should not,
     ///  however, forget to call base.getCreateParams() first to get the struct
     ///  filled up with the basic info.
     /// </summary>
@@ -347,7 +347,7 @@ public partial class TabControl : Control
 
     /// <summary>
     ///  The rectangle that represents the Area of the tab strip not
-    ///  taken up by the tabs, borders, or anything else owned by the Tab.  This
+    ///  taken up by the tabs, borders, or anything else owned by the Tab. This
     ///  is typically the rectangle you want to use to place the individual
     ///  children of the tab strip.
     /// </summary>
@@ -394,7 +394,7 @@ public partial class TabControl : Control
     }
 
     /// <summary>
-    ///  The drawing mode of the tabs in the tab strip.  This will indicate
+    ///  The drawing mode of the tabs in the tab strip. This will indicate
     /// </summary>
     [SRCategory(nameof(SR.CatBehavior))]
     [DefaultValue(TabDrawMode.Normal)]
@@ -442,7 +442,7 @@ public partial class TabControl : Control
     }
 
     /// <summary>
-    ///  Returns the imageList the control points at.  This is where tabs that have imageIndex
+    ///  Returns the imageList the control points at. This is where tabs that have imageIndex
     ///  set will get there images from.
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
@@ -543,10 +543,10 @@ public partial class TabControl : Control
     }
 
     /// <summary>
-    ///  Indicates if there can be more than one row of tabs.  By default [when
+    ///  Indicates if there can be more than one row of tabs. By default [when
     ///  this property is false], if there are more tabs than available display
     ///  space, arrows are shown to let the user navigate between the extra
-    ///  tabs, but only one row is shown.  If this property is set to true, then
+    ///  tabs, but only one row is shown. If this property is set to true, then
     ///  Windows spills extra tabs over on to second rows.
     /// </summary>
     [SRCategory(nameof(SR.CatBehavior))]
@@ -632,7 +632,7 @@ public partial class TabControl : Control
 
     /// <summary>
     ///  The number of rows currently being displayed in
-    ///  the tab strip.  This is most commonly used when the Multiline property
+    ///  the tab strip. This is most commonly used when the Multiline property
     ///  is 'true' and you want to know how many rows the tabs are currently
     ///  taking up.
     /// </summary>
@@ -645,7 +645,7 @@ public partial class TabControl : Control
 
     /// <summary>
     ///  The index of the currently selected tab in the strip, if there
-    ///  is one.  If the value is -1, there is currently no selection.  If the
+    ///  is one. If the value is -1, there is currently no selection. If the
     ///  value is 0 or greater, than the value is the index of the currently
     ///  selected tab.
     /// </summary>
@@ -712,7 +712,7 @@ public partial class TabControl : Control
 
     /// <summary>
     ///  The selection to the given tab, provided it .equals a tab in the
-    ///  list.  The return value is the index of the tab that was selected,
+    ///  list. The return value is the index of the tab that was selected,
     ///  or -1 if no tab was selected.
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
@@ -740,7 +740,7 @@ public partial class TabControl : Control
 
     /// <summary>
     ///  By default, tabs are big enough to display their text, and any space
-    ///  on the right of the strip is left as such.  However, you can also
+    ///  on the right of the strip is left as such. However, you can also
     ///  set it such that the tabs are stretched to fill out the right extent
     ///  of the strip, if necessary, or you can set it such that all tabs
     ///  the same width.
@@ -1308,9 +1308,9 @@ public partial class TabControl : Control
     }
 
     /// <summary>
-    ///  Actually goes and fires the OnDrawItem event.  Inheriting controls
+    ///  Actually goes and fires the OnDrawItem event. Inheriting controls
     ///  should use this to know when the event is fired [this is preferable to
-    ///  adding an event handler on yourself for this event].  They should,
+    ///  adding an event handler on yourself for this event]. They should,
     ///  however, remember to call base.onDrawItem(e); to ensure the event is
     ///  still fired to external listeners
     /// </summary>
@@ -1320,9 +1320,9 @@ public partial class TabControl : Control
     }
 
     /// <summary>
-    ///  Actually goes and fires the OnLeave event.  Inheriting controls
+    ///  Actually goes and fires the OnLeave event. Inheriting controls
     ///  should use this to know when the event is fired [this is preferable to
-    ///  adding an event handler on yourself for this event].  They should,
+    ///  adding an event handler on yourself for this event]. They should,
     ///  however, remember to call base.OnLeave(e); to ensure the event is
     ///  still fired to external listeners
     ///  This listener is overidden so that we can fire SAME ENTER and LEAVE
@@ -1340,16 +1340,16 @@ public partial class TabControl : Control
     }
 
     /// <summary>
-    ///  Actually goes and fires the OnLeave event.  Inheriting controls
+    ///  Actually goes and fires the OnLeave event. Inheriting controls
     ///  should use this to know when the event is fired [this is preferable to
-    ///  adding an event handler on yourself for this event].  They should,
+    ///  adding an event handler on yourself for this event]. They should,
     ///  however, remember to call base.OnLeave(e); to ensure the event is
     ///  still fired to external listeners
-    ///  This listener is overidden so that we can fire SAME ENTER and LEAVE
+    ///  This listener is overridden so that we can fire SAME ENTER and LEAVE
     ///  events on the TabPage.
     ///  TabPage should fire enter when the focus is on the TABPAGE and not when the control
     ///  within the TabPage gets Focused.
-    ///  Similary the Leave event  should fire when the TabControl (and hence the TabPage) looses
+    ///  Similarly the Leave event should fire when the TabControl (and hence the TabPage) looses
     ///  Focus. To be Backward compatible we have added new bool which can be set to true
     ///  to the get the NEW SANE ENTER-LEAVE EVENTS ON THE TABPAGE.
     /// </summary>
@@ -1433,9 +1433,9 @@ public partial class TabControl : Control
     }
 
     /// <summary>
-    ///  Actually goes and fires the onSelectedIndexChanged event.  Inheriting controls
+    ///  Actually goes and fires the onSelectedIndexChanged event. Inheriting controls
     ///  should use this to know when the event is fired [this is preferable to
-    ///  adding an event handler on yourself for this event].  They should,
+    ///  adding an event handler on yourself for this event]. They should,
     ///  however, remember to call base.onSelectedIndexChanged(e); to ensure the event is
     ///  still fired to external listeners
     /// </summary>
@@ -1810,9 +1810,9 @@ public partial class TabControl : Control
             if (index != -1)
             {
                 // Changing the bounds of the tabPage during scaling
-                // will force a layout to occur.  After this layout
+                // will force a layout to occur. After this layout
                 // the tabpage will then be scaled again resulting
-                // in incorrect sizes.  Suspend Layout in this case.
+                // in incorrect sizes. Suspend Layout in this case.
                 if (_currentlyScaling)
                 {
                     tabPages[index].SuspendLayout();
@@ -2020,7 +2020,7 @@ public partial class TabControl : Control
     }
 
     /// <summary>
-    ///  The tab's window procedure.  Inheriting classes can override this
+    ///  The tab's window procedure. Inheriting classes can override this
     ///  to add extra functionality, but should not forget to call
     ///  base.wndProc(m); to ensure the tab continues to function properly.
     /// </summary>

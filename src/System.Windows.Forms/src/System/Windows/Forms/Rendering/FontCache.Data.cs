@@ -10,7 +10,7 @@ internal sealed partial class FontCache
     internal struct Data : IDisposable
     {
         // Note: These defaults are according to the ones in GDI+ but those are not necessarily the same as the system
-        // default font.  The GetSystemDefaultHFont() method should be used if needed.
+        // default font. The GetSystemDefaultHFont() method should be used if needed.
         private const string DefaultFaceName = "Microsoft Sans Serif";
         private const byte True = 1;
         private const byte False = 0;

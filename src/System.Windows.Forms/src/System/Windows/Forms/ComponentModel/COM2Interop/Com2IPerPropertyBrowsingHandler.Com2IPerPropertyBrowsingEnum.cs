@@ -134,8 +134,8 @@ internal partial class Com2IPerPropertyBrowsingHandler
 
                     if (itemCount > 0)
                     {
-                        // Shorten the arrays to ignore the failed ones.  This isn't terribly
-                        // efficient but shouldn't happen very often.  It's rare for these to fail.
+                        // Shorten the arrays to ignore the failed ones. This isn't terribly
+                        // efficient but shouldn't happen very often. It's rare for these to fail.
                         Array.Copy(_names, i, _names, i + 1, itemCount);
                         Array.Copy(valueItems, i, valueItems, i + 1, itemCount);
                     }

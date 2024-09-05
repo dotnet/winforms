@@ -21,7 +21,7 @@ internal interface IArrangedElement : IComponent
     void SetBounds(Rectangle bounds, BoundsSpecified specified);
 
     /// <summary>
-    ///  Query element for its preferred size.  There is no guarantee
+    ///  Query element for its preferred size. There is no guarantee
     ///  that layout engine will assign the element the returned size.
     ///  ProposedSize is a hint about constraints.
     /// </summary>
@@ -42,7 +42,7 @@ internal interface IArrangedElement : IComponent
 
     /// <summary>
     ///  Internally, layout engines will get properties from the
-    ///  property store on this interface.  In Orcas, this will be
+    ///  property store on this interface. In Orcas, this will be
     ///  replaced with a global PropertyManager for DPs.
     /// </summary>
     PropertyStore Properties { get; }

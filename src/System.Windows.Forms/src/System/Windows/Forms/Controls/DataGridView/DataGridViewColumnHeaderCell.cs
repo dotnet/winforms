@@ -63,7 +63,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
         get => _sortGlyphDirection;
         set
         {
-            // Sequential enum.  Valid values are 0x0 to 0x2
+            // Sequential enum. Valid values are 0x0 to 0x2
             SourceGenerated.EnumValidator.Validate(value);
             if (OwningColumn is null || DataGridView is null)
             {

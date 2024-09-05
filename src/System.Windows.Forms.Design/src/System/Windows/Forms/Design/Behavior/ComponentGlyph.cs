@@ -8,7 +8,7 @@ namespace System.Windows.Forms.Design.Behavior;
 
 /// <summary>
 ///  The ComponentGlyph class simply contains a pointer back
-///  to it's related Component.  This can be used to trace
+///  to it's related Component. This can be used to trace
 ///  Glyphs (during drag operations or otherwise) back to
 ///  their component.
 /// </summary>

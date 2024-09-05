@@ -54,7 +54,7 @@ public partial class ToolStripDropDownButton
             {
                 if (_ownerItem.TextDirection == ToolStripTextDirection.Horizontal)
                 {
-                    // We're rendering horizontal....  make sure to take care of RTL issues.
+                    // We're rendering horizontal.... make sure to take care of RTL issues.
 
                     int widthOfDropDown = s_dropDownArrowSize.Width + _dropDownArrowPadding.Horizontal;
                     options.Client.Width -= widthOfDropDown;

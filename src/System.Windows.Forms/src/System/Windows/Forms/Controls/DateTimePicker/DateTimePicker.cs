@@ -565,9 +565,9 @@ public partial class DateTimePicker : Control
         return minDate;
     }
 
-    // Similarly, make sure the maxDate respects the current culture.  No
+    // Similarly, make sure the maxDate respects the current culture. No
     // problems are anticipated here: I don't believe there are calendars
-    // around that have max dates on them.  But if there are, we'll deal with
+    // around that have max dates on them. But if there are, we'll deal with
     // them correctly.
     internal static DateTime EffectiveMaxDate(DateTime maxDate)
     {
@@ -676,7 +676,7 @@ public partial class DateTimePicker : Control
     }
 
     // We restrict the available dates to >= 1753 because of oddness in the Gregorian calendar about
-    // that time.  We do this even for cultures that don't use the Gregorian calendar -- we're not
+    // that time. We do this even for cultures that don't use the Gregorian calendar -- we're not
     // really that worried about calendars for >250 years ago.
 
     /// <summary>
@@ -812,8 +812,8 @@ public partial class DateTimePicker : Control
     internal override bool SupportsUiaProviders => true;
 
     /// <summary>
-    ///  Overrides Text to allow for setting of the value via a string.  Also, returns
-    ///  a formatted Value when getting the text.  The DateTime class will throw
+    ///  Overrides Text to allow for setting of the value via a string. Also, returns
+    ///  a formatted Value when getting the text. The DateTime class will throw
     ///  an exception if the string (value) being passed in is invalid.
     /// </summary>
     [Browsable(false)]

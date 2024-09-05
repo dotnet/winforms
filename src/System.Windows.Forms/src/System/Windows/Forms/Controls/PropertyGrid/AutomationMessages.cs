@@ -47,7 +47,7 @@ internal static class AutomationMessages
     }
 
     /// <summary>
-    ///  Writes the contents of a test file as text.  This file needs to have the following naming convention:
+    ///  Writes the contents of a test file as text. This file needs to have the following naming convention:
     ///  %TEMP%\"Maui.[file id].log", where 'file id' is a unique id sent to this window.
     ///  This is to support MAUI interaction with the PropertyGrid control and MAUI should create/delete this file.
     /// </summary>

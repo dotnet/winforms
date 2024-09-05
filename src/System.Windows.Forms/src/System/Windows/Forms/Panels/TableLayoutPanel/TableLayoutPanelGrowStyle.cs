@@ -5,7 +5,7 @@ namespace System.Windows.Forms;
 
 /// <summary>
 ///  Specifies if a TableLayoutPanel will gain additional rows or columns once
-///  its existing cells become full.  If the value is 'None' then the
+///  its existing cells become full. If the value is 'None' then the
 ///  TableLayoutPanel will throw an exception when the TableLayoutPanel is
 ///  over-filled.
 /// </summary>

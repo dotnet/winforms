@@ -123,7 +123,7 @@ public class TreeNodeCollection : IList
     public bool IsReadOnly => false;
 
     /// <summary>
-    ///  Creates a new child node under this node.  Child node is positioned after siblings.
+    ///  Creates a new child node under this node. Child node is positioned after siblings.
     /// </summary>
     public virtual TreeNode Add(string? text)
     {
@@ -135,7 +135,7 @@ public class TreeNodeCollection : IList
     // <-- NEW ADD OVERLOADS IN WHIDBEY
 
     /// <summary>
-    ///  Creates a new child node under this node.  Child node is positioned after siblings.
+    ///  Creates a new child node under this node. Child node is positioned after siblings.
     /// </summary>
     public virtual TreeNode Add(string? key, string? text)
     {
@@ -148,7 +148,7 @@ public class TreeNodeCollection : IList
     }
 
     /// <summary>
-    ///  Creates a new child node under this node.  Child node is positioned after siblings.
+    ///  Creates a new child node under this node. Child node is positioned after siblings.
     /// </summary>
     public virtual TreeNode Add(string? key, string? text, int imageIndex)
     {
@@ -162,7 +162,7 @@ public class TreeNodeCollection : IList
     }
 
     /// <summary>
-    ///  Creates a new child node under this node.  Child node is positioned after siblings.
+    ///  Creates a new child node under this node. Child node is positioned after siblings.
     /// </summary>
     public virtual TreeNode Add(string? key, string? text, string? imageKey)
     {
@@ -176,7 +176,7 @@ public class TreeNodeCollection : IList
     }
 
     /// <summary>
-    ///  Creates a new child node under this node.  Child node is positioned after siblings.
+    ///  Creates a new child node under this node. Child node is positioned after siblings.
     /// </summary>
     public virtual TreeNode Add(string? key, string? text, int imageIndex, int selectedImageIndex)
     {
@@ -189,7 +189,7 @@ public class TreeNodeCollection : IList
     }
 
     /// <summary>
-    ///  Creates a new child node under this node.  Child node is positioned after siblings.
+    ///  Creates a new child node under this node. Child node is positioned after siblings.
     /// </summary>
     public virtual TreeNode Add(string? key, string? text, string? imageKey, string? selectedImageKey)
     {
@@ -290,7 +290,7 @@ public class TreeNodeCollection : IList
     }
 
     /// <summary>
-    ///  Adds a new child node to this node.  Child node is positioned after siblings.
+    ///  Adds a new child node to this node. Child node is positioned after siblings.
     /// </summary>
     public virtual int Add(TreeNode node) => AddInternal(node, delta: 0);
 
@@ -424,13 +424,13 @@ public class TreeNodeCollection : IList
             }
         }
 
-        // step 3 - we didn't find it.  Invalidate the last accessed index and return -1.
+        // step 3 - we didn't find it. Invalidate the last accessed index and return -1.
         _lastAccessedIndex = -1;
         return -1;
     }
 
     /// <summary>
-    ///  Inserts a new child node on this node.  Child node is positioned as specified by index.
+    ///  Inserts a new child node on this node. Child node is positioned as specified by index.
     /// </summary>
     public virtual void Insert(int index, TreeNode node)
     {
@@ -487,7 +487,7 @@ public class TreeNodeCollection : IList
     // <-- NEW INSERT OVERLOADS IN WHIDBEY
 
     /// <summary>
-    ///  Inserts a new child node on this node.  Child node is positioned as specified by index.
+    ///  Inserts a new child node on this node. Child node is positioned as specified by index.
     /// </summary>
     public virtual TreeNode Insert(int index, string? text)
     {
@@ -497,7 +497,7 @@ public class TreeNodeCollection : IList
     }
 
     /// <summary>
-    ///  Inserts a new child node on this node.  Child node is positioned as specified by index.
+    ///  Inserts a new child node on this node. Child node is positioned as specified by index.
     /// </summary>
     public virtual TreeNode Insert(int index, string? key, string? text)
     {
@@ -510,7 +510,7 @@ public class TreeNodeCollection : IList
     }
 
     /// <summary>
-    ///  Inserts a new child node on this node.  Child node is positioned as specified by index.
+    ///  Inserts a new child node on this node. Child node is positioned as specified by index.
     /// </summary>
     public virtual TreeNode Insert(int index, string? key, string? text, int imageIndex)
     {
@@ -524,7 +524,7 @@ public class TreeNodeCollection : IList
     }
 
     /// <summary>
-    ///  Inserts a new child node on this node.  Child node is positioned as specified by index.
+    ///  Inserts a new child node on this node. Child node is positioned as specified by index.
     /// </summary>
     public virtual TreeNode Insert(int index, string? key, string? text, string? imageKey)
     {
@@ -538,7 +538,7 @@ public class TreeNodeCollection : IList
     }
 
     /// <summary>
-    ///  Inserts a new child node on this node.  Child node is positioned as specified by index.
+    ///  Inserts a new child node on this node. Child node is positioned as specified by index.
     /// </summary>
     public virtual TreeNode Insert(int index, string? key, string? text, int imageIndex, int selectedImageIndex)
     {
@@ -551,7 +551,7 @@ public class TreeNodeCollection : IList
     }
 
     /// <summary>
-    ///  Inserts a new child node on this node.  Child node is positioned as specified by index.
+    ///  Inserts a new child node on this node. Child node is positioned as specified by index.
     /// </summary>
     public virtual TreeNode Insert(int index, string? key, string? text, string? imageKey, string? selectedImageKey)
     {

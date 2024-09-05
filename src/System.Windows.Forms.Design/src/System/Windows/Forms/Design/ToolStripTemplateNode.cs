@@ -60,7 +60,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
     // reqd as rtb does accept Enter..
     internal bool _ignoreFirstKeyUp;
 
-    // This is the Bounding Rectangle for the ToolStripTemplateNode. This is set by the itemDesigner in terms of the "AdornerWindow" bounds.  The ToolStripEditorManager uses this Bounds to actually activate the  editor on the AdornerWindow.
+    // This is the Bounding Rectangle for the ToolStripTemplateNode. This is set by the itemDesigner in terms of the "AdornerWindow" bounds. The ToolStripEditorManager uses this Bounds to actually activate the  editor on the AdornerWindow.
     private Rectangle _boundingRect;
     // Keeps track of Insitu Mode.
     private bool _inSituMode;
@@ -796,7 +796,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
     }
 
     /// <summary>
-    ///  This private function performs the job of committing the current InSitu Editor. This will call the CommitEdit(...) function for the appropriate designers so that they can actually do their own Specific things for committing (or ROLLING BACK) the Insitu Edit mode.  The commit flag is used for commit or rollback. BE SURE TO ALWAYS call ExitInSituEdit from this function to put the EditorToolStrip in a sane "NON EDIT" mode.
+    ///  This private function performs the job of committing the current InSitu Editor. This will call the CommitEdit(...) function for the appropriate designers so that they can actually do their own Specific things for committing (or ROLLING BACK) the Insitu Edit mode. The commit flag is used for commit or rollback. BE SURE TO ALWAYS call ExitInSituEdit from this function to put the EditorToolStrip in a sane "NON EDIT" mode.
     /// </summary>
     private void CommitEditor(bool commit, bool enterKeyPressed, bool tabKeyPressed)
     {
@@ -829,7 +829,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
     }
 
     /// <summary>
-    ///  The ToolStripTemplateNode enters into InSitu Edit Mode through this Function. This Function is called by FocusEditor( ) which starts the InSitu. The centerLabel is SWAPPED by centerTextBox and the ToolStripTemplateNode is Ready for  Text.  Settting "Active = true" pushes the IEventHandler which now intercepts the  Escape and Enter keys to ROLLBACK or COMMIT the InSitu Editing respectively.
+    ///  The ToolStripTemplateNode enters into InSitu Edit Mode through this Function. This Function is called by FocusEditor( ) which starts the InSitu. The centerLabel is SWAPPED by centerTextBox and the ToolStripTemplateNode is Ready for  Text. Setting "Active = true" pushes the IEventHandler which now intercepts the  Escape and Enter keys to ROLLBACK or COMMIT the InSitu Editing respectively.
     /// </summary>
     private void EnterInSituEdit()
     {
@@ -903,7 +903,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
     }
 
     /// <summary>
-    ///  The ToolStripTemplateNode exits from InSitu Edit Mode through this Function. This Function is called by CommitEditor( ) which stops the InSitu. The centerTextBox is SWAPPED by centerLabel and the ToolStripTemplateNode is exits the   InSitu Mode.  Settting "Active = false" pops the IEventHandler.
+    ///  The ToolStripTemplateNode exits from InSitu Edit Mode through this Function. This Function is called by CommitEditor( ) which stops the InSitu. The centerTextBox is SWAPPED by centerLabel and the ToolStripTemplateNode is exits the InSitu Mode. Settting "Active = false" pops the IEventHandler.
     /// </summary>
     private void ExitInSituEdit()
     {
@@ -1026,7 +1026,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
     }
 
     /// <summary>
-    ///  Called by the design surface when it is being flushed.  This will save any changes made to TemplateNode.
+    ///  Called by the design surface when it is being flushed. This will save any changes made to TemplateNode.
     /// </summary>
     private void OnLoaderFlushed(object sender, EventArgs e)
     {
@@ -1034,7 +1034,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
     }
 
     /// <summary>
-    ///  This is small HACK. For some reason if the InSituEditor's textbox has focus the escape key is lost and the menu service doesnt get it.... but the textbox gets it. So need to check for the escape key here and call CommitEditor(false) which  will ROLLBACK the edit.
+    ///  This is small HACK. For some reason if the InSituEditor's textbox has focus the escape key is lost and the menu service doesn't get it.... but the textbox gets it. So need to check for the escape key here and call CommitEditor(false) which  will ROLLBACK the edit.
     /// </summary>
     private void OnKeyUp(object sender, KeyEventArgs e)
     {
@@ -1579,8 +1579,8 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
                 // 1.Slowly click on a menu strip item twice to make it editable, while the item's dropdown menu is visible
                 // 2.Select the text of the item and right click on it
                 // 3.Left click 'Copy' or 'Cut' in the context menu IDE crashed because left click in step3 invoked glyph
-                //   behavior, which commited and destroyed the insitu edit box and thus  the 'copy' or 'cut' action has no
-                //   text to work with.  Thus need to block glyph behaviors while the context menu is displayed.
+                //   behavior, which committed and destroyed the InSitu edit box and thus  the 'copy' or 'cut' action has no
+                //   text to work with. Thus need to block glyph behaviors while the context menu is displayed.
                 case PInvoke.WM_CONTEXTMENU:
                     _owner.IsSystemContextMenuDisplayed = true;
                     base.WndProc(ref m);

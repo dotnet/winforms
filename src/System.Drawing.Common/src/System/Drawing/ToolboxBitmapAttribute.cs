@@ -258,9 +258,9 @@ public class ToolboxBitmapAttribute : Attribute
                 else
                 {
                     // We don't recognize the name as either bmp or ico. we need to try three things.
-                    // 1.  the name as a bitmap (back compat)
-                    // 2.  name+.bmp
-                    // 3.  name+.ico
+                    // 1. the name as a bitmap (back compat)
+                    // 2. name+.bmp
+                    // 3. name+.ico
                     rawBmpName = name;
                     bmpName = $"{name}.bmp";
                     iconName = $"{name}.ico";
