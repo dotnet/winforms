@@ -19,29 +19,9 @@ public partial class PrintControllerWithStatusDialog
             internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
                 propertyID switch
                 {
-                    UIA_PROPERTY_ID.UIA_IsDialogPropertyId => (VARIANT)true,
+                    UIA_PROPERTY_ID.UIA_IsDialogPropertyId => VARIANT.True,
                     _ => base.GetPropertyValue(propertyID)
                 };
-
-            public override string? Name
-            {
-                get
-                {
-                    if (this.TryGetOwnerAs(out StatusDialog? owner) && owner.AccessibleName is { } name)
-                    {
-                        return name;
-                    }
-
-                    return owner?.Text;
-                }
-                set
-                {
-                    if (this.TryGetOwnerAs(out StatusDialog? owner))
-                    {
-                        owner.AccessibleName = value;
-                    }
-                }
-            }
         }
     }
 }
