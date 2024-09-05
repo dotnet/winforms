@@ -460,7 +460,7 @@ internal sealed class SelectionManager : IDisposable
     }
 
     /// <summary>
-    ///  When a transaction that involves one of our components closes,  refresh to reflect any changes.
+    ///  When a transaction that involves one of our components closes, refresh to reflect any changes.
     /// </summary>
     private void OnTransactionClosed(object? sender, DesignerTransactionCloseEventArgs e)
     {
