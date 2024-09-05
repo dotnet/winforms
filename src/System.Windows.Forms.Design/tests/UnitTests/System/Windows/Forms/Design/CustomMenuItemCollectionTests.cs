@@ -5,63 +5,65 @@
 
 namespace System.Windows.Forms.Design.Tests;
 
-public class CustomMenuItemCollectionTests
+public class CustomMenuItemCollectionTests : IDisposable
 {
+    private readonly CustomMenuItemCollection _collection;
+
+    public CustomMenuItemCollectionTests() => _collection = [];
+
+    public void Dispose() => _collection.Clear();
+
     [Fact]
     public void Add_ShouldAddItemToCollection()
     {
-        CustomMenuItemCollection collection = new();
         ToolStripMenuItem item = new("TestItem");
 
-        int index = collection.Add(item);
+        int index = _collection.Add(item);
 
         index.Should().Be(0);
-        collection.Count.Should().Be(1);
+        _collection.Count.Should().Be(1);
     }
 
     [Fact]
     public void AddRange_ShouldAddMultipleItemsToCollection()
     {
-        CustomMenuItemCollection collection = new();
         ToolStripMenuItem[] items =
         [
             new("Item1"),
             new("Item2")
         ];
 
-        collection.AddRange(items);
-        collection.Count.Should().Be(2);
+        _collection.AddRange(items);
+        _collection.Count.Should().Be(2);
 
-        collection.RefreshItems();
-        collection.Count.Should().Be(2);
+        _collection.RefreshItems();
+        _collection.Count.Should().Be(2);
     }
 
     [Fact]
     public void AddRange_EmptyArray_ShouldNotThrowException()
     {
-        CustomMenuItemCollection collection = new();
         ToolStripMenuItem[] items = [];
 
-        Action action = () => collection.AddRange(items);
+        Action action = () => _collection.AddRange(items);
 
         action.Should().NotThrow();
-        collection.Count.Should().Be(0);
+        _collection.Count.Should().Be(0);
     }
 
     [Fact]
     public void Clear_ShouldClearCollection()
     {
-        CustomMenuItemCollection collection = new();
         ToolStripMenuItem[] items =
         [
             new("Item1"),
             new("Item2")
         ];
 
-        collection.AddRange(items);
-        collection.Count.Should().Be(2);
+        _collection.AddRange(items);
+        _collection.Count.Should().Be(2);
 
-        collection.Clear();
-        collection.Count.Should().Be(0);
+        _collection.Clear();
+        _collection.Count.Should().Be(0);
     }
 }
