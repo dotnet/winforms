@@ -317,27 +317,32 @@ public class ComboBoxTests
         control.ItemHeight.Should().NotBe(initialItemHeight);
     }
 
+    public class TestComboBox : ComboBox
+    {
+        public void TriggerMeasureItem(MeasureItemEventArgs e)
+        {
+            base.OnMeasureItem(e);
+        }
+    }
+
     [WinFormsFact]
     public void ComboBox_MeasureItem_RemoveHandler()
     {
-        using ComboBox control = new();
+        using TestComboBox control = new();
         int handlerCallCount = 0;
         MeasureItemEventHandler handler = (sender, e) => { handlerCallCount++; };
 
         control.MeasureItem += handler;
+
+        // Simulate the MeasureItem event
+        control.TriggerMeasureItem(new MeasureItemEventArgs(Graphics.FromHwnd(IntPtr.Zero), 0, 0));
+
         control.MeasureItem -= handler;
 
-        handlerCallCount.Should().Be(0, "The MeasureItem event handler was not removed as expected.");
-    }
+        // Simulate the MeasureItem event again to ensure the handler was removed
+        control.TriggerMeasureItem(new MeasureItemEventArgs(Graphics.FromHwnd(IntPtr.Zero), 0, 0));
 
-    [WinFormsFact]
-    public void ComboBox_MeasureItem_AddAndRemoveHandler()
-    {
-        using ComboBox control = new();
-
-        MeasureItemEventHandler handler = (sender, e) => { };
-        control.MeasureItem += handler;
-        control.MeasureItem -= handler;
+        handlerCallCount.Should().Be(1, "The MeasureItem event handler was not removed as expected.");
     }
 
     public class TestableComboBox : ComboBox
@@ -357,7 +362,7 @@ public class ComboBoxTests
         PaintEventHandler handler = (sender, e) => callCount++;
 
         comboBox.Paint += handler;
-        comboBox.InvokeOnPaint(new PaintEventArgs(Graphics.FromHwnd(comboBox.Handle), new Rectangle()));
+        comboBox.TestAccessor().Dynamic.OnPaint(new PaintEventArgs(Graphics.FromHwnd(comboBox.Handle), new Rectangle()));
 
         callCount.Should().Be(1);
     }
@@ -381,7 +386,7 @@ public class ComboBoxTests
     public void ComboBox_Paint_EventHandlerCalledOnPaint()
     {
         using TestableComboBox comboBox = new();
-        Bitmap bitmap = new Bitmap(100, 100);
+        Bitmap bitmap = new(100, 100);
         Graphics graphics = Graphics.FromImage(bitmap);
         bool handlerCalled = false;
 
