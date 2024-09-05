@@ -238,7 +238,7 @@ public partial class ScrollableControl : Control, IArrangedElement
     }
 
     /// <summary>
-    /// Gets the Horizontal Scroll bar for this ScrollableControl.
+    ///  Gets the Horizontal Scroll bar for this ScrollableControl.
     /// </summary>
     [SRCategory(nameof(SR.CatLayout))]
     [SRDescription(nameof(SR.ScrollableControlHorizontalScrollDescr))]
@@ -842,11 +842,11 @@ public partial class ScrollableControl : Control, IArrangedElement
     }
 
     /// <summary>
-    ///  Allow containers to tweak autoscrolling. when you tab between controls contained in the scrollable control
-    ///  this allows you to set the scroll location. This would allow you to scroll to the middle of a control, where as the default is
-    ///  the top of the control.
-    ///  Additionally there is a new AutoScrollOffset property on the child controls themselves. This lets them control where they want to
-    ///  be scrolled to. E.g. In SelectedIndexChanged for a ListBox, you could do:
+    ///  Allow containers to tweak AutoScrolling. when you tab between controls contained in the scrollable control
+    ///  this allows you to set the scroll location. This would allow you to scroll to the middle of a control,
+    ///  where as the default is the top of the control.
+    ///  Additionally there is a new AutoScrollOffset property on the child controls themselves. This lets them control
+    ///  where they want to be scrolled to. E.g. In SelectedIndexChanged for a ListBox, you could do:
     ///  listBox1.AutoScrollOffset = parent.AutoScrollPosition;
     /// </summary>
     protected virtual Point ScrollToControl(Control activeControl)

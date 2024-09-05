@@ -34,27 +34,32 @@ internal enum TaskDialogStandardIcon : int
     Shield = ushort.MaxValue - 3, // TD_SHIELD_ICON
 
     /// <summary>
-    ///   The task dialog contains an icon consisting of an user account control (UAC) shield and shows a blue bar around the icon.
+    ///   The task dialog contains an icon consisting of an user account control (UAC) shield
+    ///   and shows a blue bar around the icon.
     /// </summary>
     ShieldBlueBar = ushort.MaxValue - 4,
 
     /// <summary>
-    ///   The task dialog contains an icon consisting of an user account control (UAC) shield and shows a gray bar around the icon.
+    ///   The task dialog contains an icon consisting of an user account control (UAC) shield
+    ///   and shows a gray bar around the icon.
     /// </summary>
     ShieldGrayBar = ushort.MaxValue - 8,
 
     /// <summary>
-    ///   The task dialog contains an icon consisting of an exclamation point in a yellow shield and shows a yellow bar around the icon.
+    ///   The task dialog contains an icon consisting of an exclamation point in a yellow shield
+    ///   and shows a yellow bar around the icon.
     /// </summary>
     ShieldWarningYellowBar = ushort.MaxValue - 5,
 
     /// <summary>
-    ///   The task dialog contains an icon consisting of white "x" in a red shield and shows a red bar around the icon.
+    ///   The task dialog contains an icon consisting of white "x" in a red shield
+    ///   and shows a red bar around the icon.
     /// </summary>
     ShieldErrorRedBar = ushort.MaxValue - 6,
 
     /// <summary>
-    ///   The task dialog contains an icon consisting of white tick in a green shield and shows a green bar around the icon.
+    ///   The task dialog contains an icon consisting of white tick in a green shield
+    ///   and shows a green bar around the icon.
     /// </summary>
     ShieldSuccessGreenBar = ushort.MaxValue - 7,
 }

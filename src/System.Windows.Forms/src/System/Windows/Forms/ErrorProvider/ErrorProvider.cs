@@ -190,7 +190,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
     }
 
     /// <summary>
-    /// Gets a value that indicates if this <see cref="ErrorProvider"/> has any errors for any of the associated controls.
+    ///  Gets a value that indicates if this <see cref="ErrorProvider"/> has any errors for any of the associated controls.
     /// </summary>
     public bool HasErrors => _errorCount > 0;
 

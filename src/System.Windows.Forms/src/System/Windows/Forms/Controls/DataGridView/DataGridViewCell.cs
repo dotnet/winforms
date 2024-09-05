@@ -47,8 +47,8 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     private static Bitmap? s_errorBmp;
 
     /// <summary>
-    /// Contains non-empty neighboring cells around the current cell.
-    /// Used in <see cref="IKeyboardToolTip.GetNeighboringToolsRectangles"/> method.
+    ///  Contains non-empty neighboring cells around the current cell.
+    ///  Used in <see cref="IKeyboardToolTip.GetNeighboringToolsRectangles"/> method.
     /// </summary>
     private readonly List<Rectangle> _nonEmptyNeighbors;
 
@@ -1116,10 +1116,10 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     }
 
     /// <summary>
-    /// Gets the value indicating whether DataGridView editing control should be processed in accessible
-    /// hierarchy restructuring. This check is necessary to not restructure the accessible hierarchy for
-    /// custom editing controls and for derived classes as inherited accessibility may differ or
-    /// may be not inherited at all.
+    ///  Gets the value indicating whether DataGridView editing control should be processed in accessible
+    ///  hierarchy restructuring. This check is necessary to not restructure the accessible hierarchy for
+    ///  custom editing controls and for derived classes as inherited accessibility may differ or
+    ///  may be not inherited at all.
     /// </summary>
     /// <returns>True if accessible hierarchy should be manually recreated for the cell and editing control, otherwise False.</returns>
     private bool AccessibleRestructuringNeeded

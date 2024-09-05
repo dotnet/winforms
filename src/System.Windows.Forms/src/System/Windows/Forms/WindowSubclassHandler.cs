@@ -125,8 +125,9 @@ internal class WindowSubclassHandler : IDisposable
     /// </para>
     /// </remarks>
     /// <exception cref="Win32Exception">The subclassing could not be undone.</exception>
-    /// <exception cref="InvalidOperationException">The current window procedure is not the
-    /// expected one.</exception>
+    /// <exception cref="InvalidOperationException">
+    ///  The current window procedure is not the expected one.
+    /// </exception>
     public void Dispose()
     {
         Dispose(true);
@@ -158,14 +159,15 @@ internal class WindowSubclassHandler : IDisposable
     }
 
     /// <summary>
-    /// Releases the unmanaged resources used by the <see cref="WindowSubclassHandler"/> and
-    /// optionally releases the managed resources.
+    ///  Releases the unmanaged resources used by the <see cref="WindowSubclassHandler"/> and
+    ///  optionally releases the managed resources.
     /// </summary>
     /// <param name="disposing"><see langword="true"/> to release both managed and unmanaged resources;
     /// <see langword="false"/> to release only unmanaged resources.</param>
     /// <exception cref="Win32Exception">The subclassing could not be undone.</exception>
-    /// <exception cref="InvalidOperationException">The current window procedure is not the
-    /// expected one.</exception>
+    /// <exception cref="InvalidOperationException">
+    ///  The current window procedure is not the expected one.
+    /// </exception>
     protected virtual unsafe void Dispose(bool disposing)
     {
         if (_disposed)
@@ -238,8 +240,9 @@ internal class WindowSubclassHandler : IDisposable
     ///   <see cref="HandleWndProcException(Exception)"/>.
     /// </summary>
     /// <param name="exception"></param>
-    /// <returns><see langword="true"/> to catch the exception, or <see langword="false"/>
-    /// to let it bubble up to the caller.</returns>
+    /// <returns>
+    ///  <see langword="true"/> to catch the exception, or <see langword="false"/> to let it bubble up to the caller.
+    /// </returns>
     protected virtual bool CanCatchWndProcException(Exception exception)
     {
         // By default, don't catch exceptions.

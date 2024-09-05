@@ -39,12 +39,12 @@ public class LinkClickedEventArgs : EventArgs
     }
 
     /// <summary>
-    /// Gets the length of the link span being clicked.
+    ///  Gets the length of the link span being clicked.
     /// </summary>
     public int LinkLength { get; }
 
     /// <summary>
-    /// Gets the start of the link span being clicked.
+    ///  Gets the start of the link span being clicked.
     /// </summary>
     public int LinkStart { get; }
 

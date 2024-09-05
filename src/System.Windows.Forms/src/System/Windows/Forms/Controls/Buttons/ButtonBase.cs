@@ -1054,7 +1054,8 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
     protected virtual void OnCommandParameterChanged(EventArgs e) => RaiseEvent(s_commandParameterChangedEvent, e);
 
     /// <summary>
-    ///  Called in the context of <see cref="OnClick(EventArgs)"/> to invoke <see cref="Input.ICommand.Execute(object?)"/> if the context allows.
+    ///  Called in the context of <see cref="OnClick(EventArgs)"/> to invoke
+    ///  <see cref="Input.ICommand.Execute(object?)"/> if the context allows.
     /// </summary>
     /// <param name="e">An empty <see cref="EventArgs"/> instance.</param>
     protected virtual void OnRequestCommandExecute(EventArgs e) =>

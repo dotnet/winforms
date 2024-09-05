@@ -201,7 +201,10 @@ internal static class DataCollectionService
     /// <param name="timestamp">The timestamp of the failure.</param>
     /// <param name="testName">The current test name, or <c>Unknown</c> if the test is not known.</param>
     /// <param name="errorId">The error ID, e.g. the name of the exception instance.</param>
-    /// <param name="logId">The log ID (e.g. <c>DotNet</c> or <c>Watson</c>). This may be an empty string for one log output of a particular <paramref name="extension"/>.</param>
+    /// <param name="logId">
+    ///  The log ID (e.g. <c>DotNet</c> or <c>Watson</c>). This may be an empty string for one log output of a
+    ///  particular <paramref name="extension"/>.
+    /// </param>
     /// <param name="extension">The log file extension, without a dot (e.g. <c>log</c>).</param>
     /// <returns>The fully qualified log file name.</returns>
     private static string CreateLogFileName(string logDirectory, DateTimeOffset timestamp, string testName, string errorId, string logId, string extension)

@@ -12,8 +12,9 @@ internal partial class FlowLayout
     ///  flow directions we have "Proxies" for the Container (the thing laying out) and for setting the bounds of the
     ///  child elements.
     ///
-    ///  We have a base ContainerProxy, and derived proxies for all of the flow directions. In order to achieve flow direction of RightToLeft,
-    ///  the RightToLeft container proxy detects when we're going to set the bounds and translates it to the right.
+    ///  We have a base ContainerProxy, and derived proxies for all of the flow directions. In order to achieve flow
+    ///  direction of RightToLeft, the RightToLeft container proxy detects when we're going to set the bounds
+    ///  and translates it to the right.
     ///
     ///  In order to do a vertical flow, such as TopDown, we pretend we're laying out horizontally. The main way this is
     ///  achieved is through the use of the VerticalElementProxy, which flips all rectangles and sizes.

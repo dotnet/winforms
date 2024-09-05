@@ -8,59 +8,60 @@ namespace System.Windows.Forms;
 internal interface ICommandBindingTargetProvider
 {
     /// <summary>
-    /// Occurs when the <see cref="Command"/> property has changed.
+    ///  Occurs when the <see cref="Command"/> property has changed.
     /// </summary>
     event EventHandler? CommandChanged;
 
     /// <summary>
-    /// Occurs when the execution context of the <see cref="Command"/> was changed.
+    ///  Occurs when the execution context of the <see cref="Command"/> was changed.
     /// </summary>
     event EventHandler? CommandCanExecuteChanged;
 
     /// <summary>
-    /// Gets or sets the Command to invoke, when the implementing Component or Control is triggered by the user.
+    ///  Gets or sets the Command to invoke, when the implementing Component or Control is triggered by the user.
     /// </summary>
     ICommand? Command { get; set; }
 
     /// <summary>
-    /// Gets or sets the CommandParameter for the Component or Control.
+    ///  Gets or sets the CommandParameter for the Component or Control.
     /// </summary>
     object? CommandParameter { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether the control can respond to user interaction.
+    ///  Gets or sets a value indicating whether the control can respond to user interaction.
     /// </summary>
     bool Enabled { get; set; }
 
     /// <summary>
-    /// Gets or sets the previous value of the <see cref="Enabled"/> property, so that it can be restored to
-    /// its original value on assignment of a new command.
+    ///  Gets or sets the previous value of the <see cref="Enabled"/> property, so that it can be restored to
+    ///  its original value on assignment of a new command.
     /// </summary>
     protected bool? PreviousEnabledStatus { get; set; }
 
     /// <summary>
-    /// An implementation should raise the <see cref="CommandChanged"/> event  by calling component's or
-    /// control's OnRaiseCommandChanged method.
+    ///  An implementation should raise the <see cref="CommandChanged"/> event  by calling component's or
+    ///  control's OnRaiseCommandChanged method.
     /// </summary>
     /// <param name="e">An empty <see cref="EventArgs"/> instance.</param>
     protected void RaiseCommandChanged(EventArgs e);
 
     /// <summary>
-    /// An implementation should raise the <see cref="CommandCanExecuteChanged"/> event
-    /// by calling component's or control's OnCommandCanExecuteChanged method.
+    ///  An implementation should raise the <see cref="CommandCanExecuteChanged"/> event
+    ///  by calling component's or control's OnCommandCanExecuteChanged method.
     /// </summary>
     /// <param name="e">An empty <see cref="EventArgs"/> instance.</param>
     protected void RaiseCommandCanExecuteChanged(EventArgs e);
 
     /// <summary>
-    /// Method which should be called by a class implementing this interface in the setter of the
+    ///  Method which should be called by a class implementing this interface in the setter of the
     /// <see cref="Command"/> property.
     /// </summary>
     /// <param name="commandComponent">Instance of the class implementing this interface.</param>
     /// <param name="newCommand">The new value of the <see cref="Command"/>
-    /// which should be assigned to the property.</param>
-    /// <param name="commandBackingField">The backing field for
-    /// the <see cref="Command"/> property.</param>
+    ///  which should be assigned to the property.</param>
+    /// <param name="commandBackingField">
+    ///  The backing field for the <see cref="Command"/> property.
+    /// </param>
     protected static void CommandSetter(
         ICommandBindingTargetProvider commandComponent,
         ICommand? newCommand,
@@ -68,7 +69,7 @@ internal interface ICommandBindingTargetProvider
         => commandComponent.CommandSetter(newCommand, ref commandBackingField);
 
     /// <summary>
-    /// Method which should be called by the class implementing this interface, when the assigned
+    ///  Method which should be called by the class implementing this interface, when the assigned
     /// <see cref="Command"/> should be executed.
     /// </summary>
     /// <remarks>
