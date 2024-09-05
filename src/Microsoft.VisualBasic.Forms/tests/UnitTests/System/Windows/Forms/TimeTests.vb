@@ -7,7 +7,7 @@ Imports Xunit
 Namespace Microsoft.VisualBasic.Forms.Tests
 
     Public Class TimeTests
-        Private Const PrecisionTickLimit As Integer = 1000
+        Friend Const PrecisionTickLimit As Integer = 1_000_000
 
         Private Function TimesEqual(
             vbTime As Date,

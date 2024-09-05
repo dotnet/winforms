@@ -9,14 +9,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             TimeName = zone.ToString
             Select Case zone
                 Case TimeZoneNames.GMT
-                    SystemTime = Date.UtcNow
                     ComputerTime = My.Computer.Clock.GmtTime
+                    SystemTime = Date.UtcNow
                 Case TimeZoneNames.Local
+                    ComputerTime = My.Computer.Clock.LocalTime
                     SystemTime = Date.Now
-                    ComputerTime = My.Computer.Clock.LocalTime
                 Case Else
-                    SystemTime = Date.Now.AddDays(1)
                     ComputerTime = My.Computer.Clock.LocalTime
+                    SystemTime = Date.Now.AddSeconds(1)
             End Select
         End Sub
 
