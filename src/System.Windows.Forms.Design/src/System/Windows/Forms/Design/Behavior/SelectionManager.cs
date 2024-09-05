@@ -63,7 +63,7 @@ internal sealed class SelectionManager : IDisposable
         SelectionGlyphAdorner = new Adorner();
         BodyGlyphAdorner = new Adorner();
         behaviorService.Adorners.Add(BodyGlyphAdorner);
-        // adding this will cause the adorner to get setup with a ptr to the beh.svc.
+        // Adding this will cause the adorner to get set up with the BehaviorService.
         behaviorService.Adorners.Add(SelectionGlyphAdorner);
 
         _componentToDesigner = [];
