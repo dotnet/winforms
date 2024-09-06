@@ -11,7 +11,9 @@ internal static partial class PInvoke
     ///   the RegisterClassEx function will fail.
     ///  </para>
     ///  <para><see href="https://learn.microsoft.com/windows/win32/api/winuser/ns-winuser-wndclassexw#members">
-    ///  Read more on docs.Microsoft.com.</see></para>
+    ///    Read more on learn.Microsoft.com.
+    ///   </see>
+    ///  </para>
     /// </summary>
     public const int MaxClassName = 256;
 }

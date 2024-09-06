@@ -677,7 +677,9 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <summary>
         '''  Indicates whether or not the current date has changed to new day.
         ''' </summary>
-        ''' <returns><see langword="True"/> if the date has changed, otherwise <see langword="False">.</see></returns>
+        ''' <returns>
+        '''  <see langword="True"/> if the date has changed, otherwise <see langword="False">.</see>
+        ''' </returns>
         Private Function DayChanged() As Boolean
             Return _day.Date <> Now.Date
         End Function

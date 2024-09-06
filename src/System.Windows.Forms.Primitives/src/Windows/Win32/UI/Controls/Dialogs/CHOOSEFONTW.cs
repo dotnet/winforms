@@ -17,8 +17,10 @@ internal partial struct CHOOSEFONTW
 {
     /// <summary>
     ///  <para>Type: <b>DWORD</b> The length of the structure, in bytes.</para>
-    ///  <para><see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-choosefontw#members">
-    ///   Read more on learn.Microsoft.com.</see>
+    ///  <para>
+    ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-choosefontw#members">
+    ///    Read more on learn.Microsoft.com.
+    ///   </see>
     ///  </para>
     /// </summary>
     public uint lStructSize;
@@ -47,8 +49,8 @@ internal partial struct CHOOSEFONTW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-choosefontw#members">
-    ///    Read more on learn.Microsoft.com
-    ///   .</see>
+    ///    Read more on learn.Microsoft.com.
+    ///   </see>
     ///  </para>
     /// </summary>
     public HDC hDC;
@@ -179,8 +181,10 @@ internal partial struct CHOOSEFONTW
     ///   uses the data in this buffer to initialize the <b>Font Style</b> combo box. When the user closes the
     ///   dialog box, <b>ChooseFont</b> copies the string in the <b>Font Style</b> combo box into this buffer.
     ///  </para>
-    ///  <para><see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-choosefontw#members">
-    ///   Read more on learn.Microsoft.com.</see>
+    ///  <para>
+    ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-choosefontw#members">
+    ///    Read more on learn.Microsoft.com.
+    ///  </see>
     ///  </para>
     /// </summary>
     public PWSTR lpszStyle;
@@ -191,14 +195,29 @@ internal partial struct CHOOSEFONTW
     public ushort ___MISSING_ALIGNMENT__;
 
     /// <summary>
-    ///  <para>Type: <b>INT</b> The minimum point size a user can select. <a href="https://learn.microsoft.com/previous-versions/windows/desktop/legacy/ms646914(v=vs.85)">ChooseFont</a> recognizes this member only if the <b>CF_LIMITSIZE</b> flag is specified.</para>
-    ///  <para><see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-choosefontw#members">Read more on learn.Microsoft.com.</see></para>
+    ///  <para>
+    ///   Type: <b>INT</b> The minimum point size a user can select.
+    ///   <a href="https://learn.microsoft.com/previous-versions/windows/desktop/legacy/ms646914(v=vs.85)">
+    ///   ChooseFont</a> recognizes this member only if the <b>CF_LIMITSIZE</b> flag is specified.</para>
+    ///  <para>
+    ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-choosefontw#members">
+    ///    Read more on learn.Microsoft.com.
+    ///   </see>
+    ///  </para>
     /// </summary>
     public int nSizeMin;
 
     /// <summary>
-    ///  <para>Type: <b>INT</b> The maximum point size a user can select. <a href="https://learn.microsoft.com/previous-versions/windows/desktop/legacy/ms646914(v=vs.85)">ChooseFont</a> recognizes this member only if the <b>CF_LIMITSIZE</b> flag is specified.</para>
-    ///  <para><see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-choosefontw#members">Read more on learn.Microsoft.com.</see></para>
+    ///  <para>
+    ///   Type: <b>INT</b> The maximum point size a user can select.
+    ///   <a href="https://learn.microsoft.com/previous-versions/windows/desktop/legacy/ms646914(v=vs.85)">
+    ///   ChooseFont</a> recognizes this member only if the <b>CF_LIMITSIZE</b> flag is specified.
+    ///  </para>
+    ///  <para>
+    ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-choosefontw#members">
+    ///    Read more on learn.Microsoft.com.
+    ///   </see>
+    ///  </para>
     /// </summary>
     public int nSizeMax;
 }

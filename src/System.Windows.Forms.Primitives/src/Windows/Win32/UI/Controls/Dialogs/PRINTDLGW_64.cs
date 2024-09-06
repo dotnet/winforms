@@ -137,7 +137,9 @@ internal partial struct PRINTDLGW_64
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgw#members">
-    ///   Read more on learn.Microsoft.com.</see></para>
+    ///    Read more on learn.Microsoft.com.
+    ///   </see>
+    ///  </para>
     /// </summary>
     public ushort nFromPage;
 
@@ -152,7 +154,9 @@ internal partial struct PRINTDLGW_64
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgw#members">
-    ///  Read more on learn.Microsoft.com.</see></para>
+    ///    Read more on learn.Microsoft.com.
+    ///   </see>
+    ///  </para>
     /// </summary>
     public ushort nToPage;
 
