@@ -18,7 +18,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim testCode As Action =
                 Sub()
                     Dim testDirectory As String = CreateTempDirectory()
-                    Using listener As New FileLogTraceListener() With {
+                    Using listener As New FileLogTraceListener("FileLogTraceListenerTest") With {
                         .Location = LogFileLocation.Custom,
                         .CustomLocation = testDirectory}
 
