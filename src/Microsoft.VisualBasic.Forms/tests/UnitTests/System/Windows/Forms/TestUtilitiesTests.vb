@@ -14,5 +14,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             testClass.IEnumerable_GetEnumerator.Should.NotBeNull()
         End Sub
 
+        <WinFormsFact>
+        Public Sub TimeTestDataIteratorTests()
+            Dim testClass As New TimeTestData
+            testClass.IEnumerable_GetEnumerator.Should.NotBeNull()
+        End Sub
+
     End Class
 End Namespace
