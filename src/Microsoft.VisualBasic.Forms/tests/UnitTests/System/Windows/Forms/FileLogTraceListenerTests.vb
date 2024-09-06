@@ -62,6 +62,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         listener.Encoding.Should.Be(Encoding.UTF8)
                         listener.Encoding = Encoding.ASCII
                         listener.Encoding.Should.Be(Encoding.ASCII)
+
+                        listener.TraceOutputOptions.Should.Be(TraceOptions.None)
+                        listener.TraceOutputOptions = TraceOptions.Callstack
+                        listener.TraceOutputOptions.Should.Be(TraceOptions.Callstack)
                     End Using
                 End Sub
 
