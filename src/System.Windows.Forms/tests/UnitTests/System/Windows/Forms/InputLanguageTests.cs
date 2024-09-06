@@ -147,7 +147,7 @@ public class InputLanguageTests
         }
 
         // Also installs default keyboard layout for this language
-        // https://learn.microsoft.com/windows-hardware/manufacture/desktop/default-input-locales-for-windows-language-packs
+        // https://learn.Microsoft.com/windows-hardware/manufacture/desktop/default-input-locales-for-windows-language-packs
         InstallUserLanguage(languageTag);
 
         try

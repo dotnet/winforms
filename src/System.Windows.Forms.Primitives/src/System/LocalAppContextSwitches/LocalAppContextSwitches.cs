@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Primitives;
 // Borrowed from https://github.com/dotnet/runtime/blob/main/src/libraries/Common/src/System/LocalAppContextSwitches.Common.cs
 internal static partial class LocalAppContextSwitches
 {
-    // Enabling switches in Core is different from Framework. See https://learn.microsoft.com/dotnet/core/runtime-config/
+    // Enabling switches in Core is different from Framework. See https://learn.Microsoft.com/dotnet/core/runtime-config/
     // for details on how to set switches.
 
     // Switch names declared internal below are used in unit/integration tests. Refer to
@@ -150,7 +150,8 @@ internal static partial class LocalAppContextSwitches
     }
 
     /// <summary>
-    ///  Gets or sets a value indicating whether the parent font (as set by <see cref="M:System.Windows.Forms.Application.SetDefaultFont(System.Drawing.Font)" />
+    ///  Gets or sets a value indicating whether the parent font (as set by
+    ///  <see cref="M:System.Windows.Forms.Application.SetDefaultFont(System.Drawing.Font)" />
     ///  or by the parent control or form's font) is applied to menus.
     /// </summary>
     public static bool ApplyParentFontToMenus

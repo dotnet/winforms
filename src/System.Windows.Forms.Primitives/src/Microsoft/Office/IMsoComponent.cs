@@ -240,7 +240,9 @@ internal unsafe struct IMsoComponent : IComIID, IVTable<IMsoComponent, IMsoCompo
     ///   <see cref="IMsoComponentManager.FGetActiveComponent"/>.
     ///  </para>
     ///  <para>
-    ///   <see href="https://learn.microsoft.com/previous-versions/office/developer/office-2007/ff518955(v=office.12)">Microsoft documentation</see>
+    ///   <see href="https://learn.microsoft.com/previous-versions/office/developer/office-2007/ff518955(v=office.12)">
+    ///    Microsoft documentation
+    ///   </see>
     ///  </para>
     /// </remarks>
     [ComImport]

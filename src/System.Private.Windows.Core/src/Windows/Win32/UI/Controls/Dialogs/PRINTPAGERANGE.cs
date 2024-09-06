@@ -7,7 +7,7 @@ namespace Windows.Win32.UI.Controls.Dialogs;
 ///  Represents a range of pages in a print job. A print job can have more than one page range. This information is
 ///  supplied in the <see cref="PRINTDLGEXW"/> structure when calling the <see cref="PInvokeCore.PrintDlgEx"/> function.</summary>
 /// <remarks>
-///  <para><see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printpagerange">Learn more about this API from learn.microsoft.com</see>.</para>
+///  <para><see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printpagerange">Learn more about this API from learn.Microsoft.com</see>.</para>
 /// </remarks>
 /// <devdoc>
 ///  Manually copied from a 64 bit project CsWin32 generated wrapper. We can't directly use CsWin32 for this as it
@@ -23,13 +23,13 @@ internal partial struct PRINTPAGERANGE
 {
     /// <summary>
     /// <para>Type: <b>DWORD</b> The first page of the range.</para>
-    /// <para><see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printpagerange#members">Read more on learn.microsoft.com</see>.</para>
+    /// <para><see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printpagerange#members">Read more on learn.Microsoft.com</see>.</para>
     /// </summary>
     public uint nFromPage;
 
     /// <summary>
     /// <para>Type: <b>DWORD</b> The last page of the range.</para>
-    /// <para><see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printpagerange#members">Read more on learn.microsoft.com</see>.</para>
+    /// <para><see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printpagerange#members">Read more on learn.Microsoft.com</see>.</para>
     /// </summary>
     public uint nToPage;
 }

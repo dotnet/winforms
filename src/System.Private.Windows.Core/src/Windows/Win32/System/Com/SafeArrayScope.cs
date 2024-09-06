@@ -7,8 +7,10 @@ using Windows.Win32.System.Variant;
 namespace Windows.Win32.System.Com;
 
 /// <summary>
-///  Helper to scope lifetime of a <see cref="SAFEARRAY"/> created via <see cref="PInvokeCore.SafeArrayCreate(VARENUM, uint, SAFEARRAYBOUND*)"/>
-///  Destroys the <see cref="SAFEARRAY"/> (if any) when disposed. Note that this scope currently only works for a one dimensional <see cref="SAFEARRAY"/>.
+///  Helper to scope lifetime of a <see cref="SAFEARRAY"/> created via
+///  <see cref="PInvokeCore.SafeArrayCreate(VARENUM, uint, SAFEARRAYBOUND*)"/>
+///  Destroys the <see cref="SAFEARRAY"/> (if any) when disposed. Note that this scope currently only works for a
+///  one dimensional <see cref="SAFEARRAY"/>.
 /// </summary>
 /// <remarks>
 ///  <para>
