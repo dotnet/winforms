@@ -62,7 +62,12 @@ Namespace Microsoft.VisualBasic.MyServices
             FileIO.FileSystem.CopyDirectory(sourceDirectoryName, destinationDirectoryName, showUI)
         End Sub
 
-        Public Sub CopyDirectory(sourceDirectoryName As String, destinationDirectoryName As String, showUI As UIOption, onUserCancel As UICancelOption)
+        Public Sub CopyDirectory(
+            sourceDirectoryName As String,
+            destinationDirectoryName As String,
+            showUI As UIOption,
+            onUserCancel As UICancelOption)
+
             FileIO.FileSystem.CopyDirectory(sourceDirectoryName, destinationDirectoryName, showUI, onUserCancel)
         End Sub
 
@@ -78,7 +83,11 @@ Namespace Microsoft.VisualBasic.MyServices
             FileIO.FileSystem.CopyFile(sourceFileName, destinationFileName, showUI)
         End Sub
 
-        Public Sub CopyFile(sourceFileName As String, destinationFileName As String, showUI As UIOption, onUserCancel As UICancelOption)
+        Public Sub CopyFile(
+            sourceFileName As String,
+            destinationFileName As String,
+            showUI As UIOption,
+            onUserCancel As UICancelOption)
             FileIO.FileSystem.CopyFile(sourceFileName, destinationFileName, showUI, onUserCancel)
         End Sub
 
@@ -86,15 +95,20 @@ Namespace Microsoft.VisualBasic.MyServices
             FileIO.FileSystem.CreateDirectory(directory)
         End Sub
 
-        Public Sub DeleteDirectory(directory As String, onDirectoryNotEmpty As DeleteDirectoryOption)
-            FileIO.FileSystem.DeleteDirectory(directory, onDirectoryNotEmpty)
-        End Sub
-
         Public Sub DeleteDirectory(directory As String, showUI As UIOption, recycle As RecycleOption)
             FileIO.FileSystem.DeleteDirectory(directory, showUI, recycle)
         End Sub
 
-        Public Sub DeleteDirectory(directory As String, showUI As UIOption, recycle As RecycleOption, onUserCancel As UICancelOption)
+        Public Sub DeleteDirectory(directory As String, onDirectoryNotEmpty As DeleteDirectoryOption)
+            FileIO.FileSystem.DeleteDirectory(directory, onDirectoryNotEmpty)
+        End Sub
+
+        Public Sub DeleteDirectory(
+            directory As String,
+            showUI As UIOption,
+            recycle As RecycleOption,
+            onUserCancel As UICancelOption)
+
             FileIO.FileSystem.DeleteDirectory(directory, showUI, recycle, onUserCancel)
         End Sub
 
@@ -102,12 +116,17 @@ Namespace Microsoft.VisualBasic.MyServices
             FileIO.FileSystem.DeleteFile(file)
         End Sub
 
-        Public Sub DeleteFile(file As String, showUI As UIOption, recycle As RecycleOption)
-            FileIO.FileSystem.DeleteFile(file, showUI, recycle)
+        Public Sub DeleteFile(
+            file As String,
+            showUI As UIOption,
+            recycle As RecycleOption,
+            onUserCancel As UICancelOption)
+
+            FileIO.FileSystem.DeleteFile(file, showUI, recycle, onUserCancel)
         End Sub
 
-        Public Sub DeleteFile(file As String, showUI As UIOption, recycle As RecycleOption, onUserCancel As UICancelOption)
-            FileIO.FileSystem.DeleteFile(file, showUI, recycle, onUserCancel)
+        Public Sub DeleteFile(file As String, showUI As UIOption, recycle As RecycleOption)
+            FileIO.FileSystem.DeleteFile(file, showUI, recycle)
         End Sub
 
         Public Function DirectoryExists(directory As String) As Boolean
@@ -118,11 +137,19 @@ Namespace Microsoft.VisualBasic.MyServices
             Return FileIO.FileSystem.FileExists(file)
         End Function
 
-        Public Function FindInFiles(directory As String, containsText As String, ignoreCase As Boolean, searchType As SearchOption) As ReadOnlyCollection(Of String)
+        Public Function FindInFiles(directory As String,
+            containsText As String, ignoreCase As Boolean, searchType As SearchOption) As ReadOnlyCollection(Of String)
+
             Return FileIO.FileSystem.FindInFiles(directory, containsText, ignoreCase, searchType)
         End Function
 
-        Public Function FindInFiles(directory As String, containsText As String, ignoreCase As Boolean, searchType As SearchOption, ParamArray fileWildcards() As String) As ReadOnlyCollection(Of String)
+        Public Function FindInFiles(
+            directory As String,
+            containsText As String,
+            ignoreCase As Boolean,
+            searchType As SearchOption,
+            ParamArray fileWildcards() As String) As ReadOnlyCollection(Of String)
+
             Return FileIO.FileSystem.FindInFiles(directory, containsText, ignoreCase, searchType, fileWildcards)
         End Function
 
@@ -130,7 +157,11 @@ Namespace Microsoft.VisualBasic.MyServices
             Return FileIO.FileSystem.GetDirectories(directory)
         End Function
 
-        Public Function GetDirectories(directory As String, searchType As SearchOption, ParamArray wildcards() As String) As ReadOnlyCollection(Of String)
+        Public Function GetDirectories(
+            directory As String,
+            searchType As SearchOption,
+            ParamArray wildcards() As String) As ReadOnlyCollection(Of String)
+
             Return FileIO.FileSystem.GetDirectories(directory, searchType, wildcards)
         End Function
 
@@ -150,7 +181,11 @@ Namespace Microsoft.VisualBasic.MyServices
             Return FileIO.FileSystem.GetFiles(directory)
         End Function
 
-        Public Function GetFiles(directory As String, searchType As SearchOption, ParamArray wildcards() As String) As ReadOnlyCollection(Of String)
+        Public Function GetFiles(
+            directory As String,
+            searchType As SearchOption,
+            ParamArray wildcards() As String) As ReadOnlyCollection(Of String)
+
             Return FileIO.FileSystem.GetFiles(directory, searchType, wildcards)
         End Function
 
@@ -178,7 +213,12 @@ Namespace Microsoft.VisualBasic.MyServices
             FileIO.FileSystem.MoveDirectory(sourceDirectoryName, destinationDirectoryName, showUI)
         End Sub
 
-        Public Sub MoveDirectory(sourceDirectoryName As String, destinationDirectoryName As String, showUI As UIOption, onUserCancel As UICancelOption)
+        Public Sub MoveDirectory(
+            sourceDirectoryName As String,
+            destinationDirectoryName As String,
+            showUI As UIOption,
+            onUserCancel As UICancelOption)
+
             FileIO.FileSystem.MoveDirectory(sourceDirectoryName, destinationDirectoryName, showUI, onUserCancel)
         End Sub
 
@@ -194,7 +234,12 @@ Namespace Microsoft.VisualBasic.MyServices
             FileIO.FileSystem.MoveFile(sourceFileName, destinationFileName, showUI)
         End Sub
 
-        Public Sub MoveFile(sourceFileName As String, destinationFileName As String, showUI As UIOption, onUserCancel As UICancelOption)
+        Public Sub MoveFile(
+            sourceFileName As String,
+            destinationFileName As String,
+            showUI As UIOption,
+            onUserCancel As UICancelOption)
+
             FileIO.FileSystem.MoveFile(sourceFileName, destinationFileName, showUI, onUserCancel)
         End Sub
 
@@ -214,15 +259,19 @@ Namespace Microsoft.VisualBasic.MyServices
             Return FileIO.FileSystem.OpenTextFileReader(file)
         End Function
 
-        Public Function OpenTextFileWriter(file As String, append As Boolean) As IO.StreamWriter
-            Return FileIO.FileSystem.OpenTextFileWriter(file, append)
-        End Function
-
         Public Function OpenTextFileReader(file As String, encoding As Encoding) As IO.StreamReader
             Return FileIO.FileSystem.OpenTextFileReader(file, encoding)
         End Function
 
-        Public Function OpenTextFileWriter(file As String, append As Boolean, encoding As Encoding) As IO.StreamWriter
+        Public Function OpenTextFileWriter(file As String, append As Boolean) As IO.StreamWriter
+            Return FileIO.FileSystem.OpenTextFileWriter(file, append)
+        End Function
+
+        Public Function OpenTextFileWriter(
+            file As String,
+            append As Boolean,
+            encoding As Encoding) As IO.StreamWriter
+
             Return FileIO.FileSystem.OpenTextFileWriter(file, append, encoding)
         End Function
 
@@ -254,7 +303,12 @@ Namespace Microsoft.VisualBasic.MyServices
             FileIO.FileSystem.WriteAllText(file, text, append)
         End Sub
 
-        Public Sub WriteAllText(file As String, text As String, append As Boolean, encoding As Encoding)
+        Public Sub WriteAllText(
+            file As String,
+            text As String,
+            append As Boolean,
+            encoding As Encoding)
+
             FileIO.FileSystem.WriteAllText(file, text, append, encoding)
         End Sub
 
