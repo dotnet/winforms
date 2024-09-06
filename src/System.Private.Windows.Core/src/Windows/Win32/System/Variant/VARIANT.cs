@@ -53,7 +53,7 @@ internal unsafe partial struct VARIANT : IDisposable
         // If the VARTYPE is a VT_VECTOR, the contents are cleared as above and CoTaskMemFree is also called on
         // cabstr.pElems.
         //
-        // https://learn.Microsoft.com/windows/win32/api/oleauto/nf-oleauto-variantclear#remarks
+        // https://learn.microsoft.com/windows/win32/api/oleauto/nf-oleauto-variantclear#remarks
         //
         //     - VT_BSTR (SysFreeString)
         //     - VT_DISPATCH / VT_UNKOWN (->Release(), if not VT_BYREF)
