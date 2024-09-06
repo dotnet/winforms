@@ -6,8 +6,8 @@ using System.Globalization;
 namespace Xunit;
 
 /// <summary>
-///  Apply this attribute to your test method to replace the <see cref="Thread.CurrentThread" /> <see cref="CultureInfo.CurrentCulture" /> and
-///  <see cref="CultureInfo.CurrentUICulture" /> with another culture.
+///  Apply this attribute to your test method to replace the <see cref="Thread.CurrentThread" />
+///  <see cref="CultureInfo.CurrentCulture" /> and <see cref="CultureInfo.CurrentUICulture" /> with another culture.
 /// </summary>
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
 public class UseDefaultXunitCultureAttribute : UseCultureAttribute

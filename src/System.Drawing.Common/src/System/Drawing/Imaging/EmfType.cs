@@ -19,7 +19,8 @@ public enum EmfType
     EmfPlusOnly = MetafileType.EmfPlusOnly,
 
     /// <summary>
-    ///  Dual Windows enhanced metafile. Contains equivalent GDI and GDI+ commands. Metafiles of this type are referred to as an EMF+ file.
+    ///  Dual Windows enhanced metafile. Contains equivalent GDI and GDI+ commands.
+    ///  Metafiles of this type are referred to as an EMF+ file.
     /// </summary>
     EmfPlusDual = MetafileType.EmfPlusDual
 }

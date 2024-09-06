@@ -10,7 +10,8 @@ using System.Drawing.Imaging;
 namespace System.Drawing.Design;
 
 /// <summary>
-///  Provides a base class for editors that may provide users with a user interface to visually edit the values of the supported type or types.
+///  Provides a base class for editors that may provide users with a user interface to visually edit the values
+///  of the supported type or types.
 /// </summary>
 public class UITypeEditor
 {
@@ -85,7 +86,9 @@ public class UITypeEditor
     /// <summary>
     ///  Edits the specified value using the editor style provided by <see cref="GetEditStyle()"/>.
     /// </summary>
-    /// <param name="context">The <see cref="ITypeDescriptorContext" /> that can be used to gain additional context information.</param>
+    /// <param name="context">
+    ///  The <see cref="ITypeDescriptorContext" /> that can be used to gain additional context information.
+    /// </param>
     /// <param name="provider">The <see cref="IServiceProvider" /> that this editor can use to obtain services.</param>
     /// <param name="value">The object to edit.</param>
     public virtual object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value) => value;
@@ -103,13 +106,17 @@ public class UITypeEditor
     /// <summary>
     ///  Gets a value indicating whether this editor supports painting a representation of an object's value.
     /// </summary>
-    /// <param name="context">The <see cref="ITypeDescriptorContext" /> that can be used to gain additional context information.</param>
+    /// <param name="context">
+    ///  The <see cref="ITypeDescriptorContext" /> that can be used to gain additional context information.
+    /// </param>
     public virtual bool GetPaintValueSupported(ITypeDescriptorContext? context) => false;
 
     /// <summary>
     ///  Gets the editing style of the Edit method.
     /// </summary>
-    /// <param name="context">The <see cref="ITypeDescriptorContext" /> that can be used to gain additional context information.</param>
+    /// <param name="context">
+    ///  The <see cref="ITypeDescriptorContext" /> that can be used to gain additional context information.
+    /// </param>
     public virtual UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context) => UITypeEditorEditStyle.None;
 
     /// <summary>

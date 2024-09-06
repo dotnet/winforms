@@ -34,8 +34,12 @@ public sealed unsafe class CachedBitmap : IDisposable
     ///  <paramref name="graphics"/>
     /// </summary>
     /// <param name="bitmap">The <see cref="Bitmap"/> to convert.</param>
-    /// <param name="graphics">The <see cref="Graphics"/> object to use to format the cached copy of the <paramref name="bitmap"/>.</param>
-    /// <exception cref="ArgumentNullException"><paramref name="bitmap"/> or <paramref name="graphics"/> is <see langword="null"/>.</exception>
+    /// <param name="graphics">
+    ///  The <see cref="Graphics"/> object to use to format the cached copy of the <paramref name="bitmap"/>.
+    /// </param>
+    /// <exception cref="ArgumentNullException">
+    ///  <paramref name="bitmap"/> or <paramref name="graphics"/> is <see langword="null"/>.
+    /// </exception>
     public CachedBitmap(Bitmap bitmap, Graphics graphics)
     {
         ArgumentNullException.ThrowIfNull(bitmap);

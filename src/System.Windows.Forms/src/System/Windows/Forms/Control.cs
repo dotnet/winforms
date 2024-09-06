@@ -11,10 +11,10 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms.Automation;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.Primitives;
+using Windows.Win32.Graphics.Dwm;
 using Windows.Win32.System.Ole;
 using Windows.Win32.UI.Accessibility;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
-using Windows.Win32.Graphics.Dwm;
 using Com = Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
 using Encoding = System.Text.Encoding;
@@ -255,12 +255,14 @@ public unsafe partial class Control :
     private ExtendedStates _extendedState;
 
     /// <summary>
-    /// User supplied control style
+    ///  User supplied control style
     /// </summary>
     private ControlStyles _controlStyle;
     private int _tabIndex;
-    private string? _text;                       // See ControlStyles.CacheText for usage notes
-    private byte _requiredScaling;              // bits 0-4: BoundsSpecified stored in RequiredScaling property. Bit 5: RequiredScalingEnabled property.
+    // See ControlStyles.CacheText for usage notes
+    private string? _text;
+    // bits 0-4: BoundsSpecified stored in RequiredScaling property. Bit 5: RequiredScalingEnabled property.
+    private byte _requiredScaling;
     private TRACKMOUSEEVENT _trackMouseEvent;
     private short _updateCount;
     private LayoutEventArgs? _cachedLayoutEventArgs;
@@ -1465,7 +1467,8 @@ public unsafe partial class Control :
     /// <summary>
     ///  returns bool indicating whether the Top MDI Window is closing.
     ///  This property is set in the MDI children in WmClose method in form.cs when the top window is closing.
-    ///  This property will be used in ActiveControl to determine if we want to skip set focus and window handle re-creation for the control.
+    ///  This property will be used in ActiveControl to determine if we want to skip set focus and
+    ///  window handle re-creation for the control.
     /// </summary>
     internal bool IsTopMdiWindowClosing
     {
@@ -2895,7 +2898,8 @@ public unsafe partial class Control :
 
     /// <summary>
     ///  This property is required by certain controls (TabPage) to render its transparency using theming API.
-    ///  We don't want all controls (that are have transparent BackColor) to use theming API to render its background because it has  HUGE PERF cost.
+    ///  We don't want all controls (that are have transparent BackColor) to use theming API to render its background
+    ///  because it has  HUGE PERF cost.
     /// </summary>
     internal virtual bool RenderTransparencyWithVisualStyles => false;
 
@@ -3023,10 +3027,10 @@ public unsafe partial class Control :
     protected virtual bool ScaleChildren => true;
 
     /// <summary>
-    /// Stores scaled font from Dpi changed values. This is required to distinguish the Font change from
-    /// Dpi changed events and explicit Font change/assignment. Caching Font values for each Dpi is complex.
-    /// ToDo: Look into caching Dpi and control bounds for each Dpi to improve perf.
-    /// https://github.com/dotnet/winforms/issues/5047
+    ///  Stores scaled font from Dpi changed values. This is required to distinguish the Font change from
+    ///  Dpi changed events and explicit Font change/assignment. Caching Font values for each Dpi is complex.
+    ///  ToDo: Look into caching Dpi and control bounds for each Dpi to improve perf.
+    ///  https://github.com/dotnet/winforms/issues/5047
     /// </summary>
     internal Font? ScaledControlFont
     {
@@ -4933,26 +4937,29 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Begins a drag operation. The <paramref name="allowedEffects"/> determine which drag operations can occur. If the drag operation
-    ///  needs to interop with applications in another process, <paramref name="data"/> should either be a base managed class
-    ///  (<see cref="string"/>, <see cref="Bitmap"/>, or <see cref="Drawing.Imaging.Metafile"/>) or some <see cref="object"/> that implements
-    ///  <see cref="Runtime.Serialization.ISerializable"/>. <paramref name="data"/> can also be any <see cref="object"/> that implements
-    ///  <see cref="IDataObject"/>. <paramref name="dragImage"/> is the bitmap that will be displayed during the  drag operation and
-    ///  <paramref name="cursorOffset"/> specifies the location of the cursor within <paramref name="dragImage"/>, which is an offset from the
-    ///  upper-left corner. Specify <see langword="true"/> for <paramref name="useDefaultDragImage"/> to use a layered window drag image with a
-    ///  size of 96x96; otherwise <see langword="false"/>. Note the outer edges of <paramref name="dragImage"/> are blended out if the image width
-    ///  or height exceeds 300 pixels.
+    ///  Begins a drag operation. The <paramref name="allowedEffects"/> determine which drag operations can occur.
+    ///  If the drag operation needs to interop with applications in another process, <paramref name="data"/>
+    ///  should either be a base managed class (<see cref="string"/>, <see cref="Bitmap"/>,
+    ///  or <see cref="Drawing.Imaging.Metafile"/>) or some <see cref="object"/> that implements
+    ///  <see cref="Runtime.Serialization.ISerializable"/>. <paramref name="data"/> can also be any
+    ///  <see cref="object"/> that implements <see cref="IDataObject"/>. <paramref name="dragImage"/> is the bitmap
+    ///  that will be displayed during the  drag operation and <paramref name="cursorOffset"/> specifies the location
+    ///  of the cursor within <paramref name="dragImage"/>, which is an offset from the upper-left corner.
+    ///  Specify <see langword="true"/> for <paramref name="useDefaultDragImage"/> to use a layered window drag image
+    ///  with a size of 96x96; otherwise <see langword="false"/>. Note the outer edges of <paramref name="dragImage"/>
+    ///  are blended out if the image width or height exceeds 300 pixels.
     /// </summary>
     /// <returns>
-    ///  A value from the <see cref="DragDropEffects"/> enumeration that represents the final effect that was performed during the drag-and-drop
-    ///  operation.
+    ///  A value from the <see cref="DragDropEffects"/> enumeration that represents the final effect that was performed
+    ///  during the drag-and-drop operation.
     /// </returns>
     /// <remarks>
     ///  <para>
-    ///   Because <see cref="DoDragDrop(object, DragDropEffects, Bitmap, Point, bool)"/> always performs the RGB multiplication step in calculating
-    ///   the alpha value, you should always pass a <see cref="Bitmap"/> without premultiplied alpha blending. Note that no error will result from
-    ///   passing a <see cref="Bitmap"/> with premultiplied alpha blending, but this method will multiply it again, doubling the resulting alpha
-    ///   value.
+    ///   Because <see cref="DoDragDrop(object, DragDropEffects, Bitmap, Point, bool)"/> always performs the
+    ///   RGB multiplication step in calculating the alpha value, you should always pass a <see cref="Bitmap"/>
+    ///   without pre-multiplied alpha blending. Note that no error will result from passing a <see cref="Bitmap"/>
+    ///   with pre-multiplied alpha blending, but this method will multiply it again,
+    ///   doubling the resulting alpha value.
     ///  </para>
     /// </remarks>
     public DragDropEffects DoDragDrop(
@@ -5366,9 +5373,10 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  This new Internal method checks the updateCount to signify that the control is within the "BeginUpdate" and "EndUpdate" cycle.
-    ///  Check out : for usage of this. The Treeview tries to ForceUpdate the scrollbars by calling "WM_SETREDRAW"
-    ///  even if the control in "Begin - End" update cycle. Using this Function we can guard against repetitively redrawing the control.
+    ///  This new Internal method checks the updateCount to signify that the control is within the "BeginUpdate"
+    ///  and "EndUpdate" cycle. Check out : for usage of this. The TreeView tries to ForceUpdate the scrollbars
+    ///  by calling "WM_SETREDRAW" even if the control in "Begin - End" update cycle. Using this Function we can guard
+    ///  against repetitively redrawing the control.
     /// </summary>
     internal bool IsUpdating() => _updateCount > 0;
 
@@ -9786,19 +9794,25 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    /// Scales control and its children given a pair of scaling factors.
-    /// IncludedFactor will be applied to the dimensions of controls based on
-    /// their <see cref="RequiredScaling"/> property. For example, if a control's
-    /// RequiredScaling property returns Width, the width of the control will
-    /// be scaled according to the includedFactor value.
+    ///  Scales control and its children given a pair of scaling factors.
+    ///  IncludedFactor will be applied to the dimensions of controls based on
+    ///  their <see cref="RequiredScaling"/> property. For example, if a control's
+    ///  RequiredScaling property returns Width, the width of the control will
+    ///  be scaled according to the includedFactor value.
     /// </summary>
-    /// <param name="includedFactor">Control bounds that are included in <see cref="RequiredScaling"/>.
-    /// If the factor is empty, it indicates that no scaling of those control dimensions should be done.</param>
-    /// <param name="excludedFactor">Control bounds that are not included in <see cref="RequiredScaling"/>.
-    /// If the factor is empty, it indicates that no scaling of those control dimensions should be done.</param>
+    /// <param name="includedFactor">
+    ///  Control bounds that are included in <see cref="RequiredScaling"/>.
+    ///  If the factor is empty, it indicates that no scaling of those control dimensions should be done.
+    /// </param>
+    /// <param name="excludedFactor">
+    ///  Control bounds that are not included in <see cref="RequiredScaling"/>.
+    ///  If the factor is empty, it indicates that no scaling of those control dimensions should be done.
+    /// </param>
     /// <param name="requestingControl">Control that has requested the scaling function.</param>
-    /// <param name="causedByFontChanged">Indicates if it need to update Window font for controls
-    /// that need it, i.e. controls using default or inherited font, that are also not user-painted.</param>
+    /// <param name="causedByFontChanged">
+    ///  Indicates if it need to update Window font for controls that need it, i.e. controls using default or
+    ///  inherited font,that are also not user-painted.
+    /// </param>
     internal virtual void Scale(SizeF includedFactor, SizeF excludedFactor, Control requestingControl, bool causedByFontChanged = false)
     {
         // When we scale, we are establishing new baselines for the
@@ -9818,19 +9832,23 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    /// Scales control and its children given a pair of scaling factors.
-    /// IncludedFactor will be applied to the dimensions of controls based on
-    /// their <see cref="RequiredScaling"/> property. For example, if a control's
-    /// RequiredScaling property returns Width, the width of the control will
-    /// be scaled according to the includedFactor value.
+    ///  Scales control and its children given a pair of scaling factors.
+    ///  IncludedFactor will be applied to the dimensions of controls based on
+    ///  their <see cref="RequiredScaling"/> property. For example, if a control's
+    ///  RequiredScaling property returns Width, the width of the control will
+    ///  be scaled according to the includedFactor value.
     /// </summary>
-    /// <param name="includedFactor">Control bounds that are included in <see cref="RequiredScaling"/>.
-    /// If the factor is empty, it indicates that no scaling of those control dimensions should be done.</param>
-    /// <param name="excludedFactor">Control bounds that are not included in <see cref="RequiredScaling"/>.
-    /// If the factor is empty, it indicates that no scaling of those control dimensions should be done.</param>
+    /// <param name="includedFactor">
+    ///  Control bounds that are included in <see cref="RequiredScaling"/>.
+    ///  If the factor is empty, it indicates that no scaling of those control dimensions should be done.
+    /// </param>
+    /// <param name="excludedFactor">
+    ///  Control bounds that are not included in <see cref="RequiredScaling"/>.
+    ///  If the factor is empty, it indicates that no scaling of those control dimensions should be done.
+    /// </param>
     /// <param name="requestingControl">Control that has requested the scaling function.</param>
     /// <param name="causedByFontChanged">Indicates if it need to update Window font for controls
-    /// that need it, i.e. controls using default or inherited font, that are also not user-painted.</param>
+    ///  that need it, i.e. controls using default or inherited font, that are also not user-painted.</param>
     internal void ScaleChildControls(SizeF includedFactor, SizeF excludedFactor, Control requestingControl, bool causedByFontChanged = false)
     {
         if (ScaleChildren)

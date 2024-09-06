@@ -48,7 +48,9 @@ internal static class TraceSwitchExtensions
         /// <summary>
         ///  Creates an instance of the handler.
         /// </summary>
-        /// <param name="literalLength">The number of constant characters outside of interpolation expressions in the interpolated string.</param>
+        /// <param name="literalLength">
+        ///  The number of constant characters outside of interpolation expressions in the interpolated string.
+        /// </param>
         /// <param name="formattedCount">The number of interpolation expressions in the interpolated string.</param>
         /// <param name="traceSwitch">The TraceSwitch passed to the <see cref="TraceSwitchExtensions"/> method.</param>
         /// <param name="shouldAppend">A value indicating whether formatting should proceed.</param>

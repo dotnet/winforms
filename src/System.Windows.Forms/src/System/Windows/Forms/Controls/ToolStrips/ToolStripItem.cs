@@ -553,7 +553,7 @@ public abstract partial class ToolStripItem :
     public virtual Rectangle Bounds => _bounds;
 
     /// <summary>
-    /// Zero-based rectangle, same concept as ClientRect
+    ///  Zero-based rectangle, same concept as ClientRect
     /// </summary>
     internal Rectangle ClientBounds
     {
@@ -1756,18 +1756,24 @@ public abstract partial class ToolStripItem :
     ///  if the item is selected we return true.
     ///
     ///  FAQ: Why don't we have a Hot or MouseIsOver property?
-    ///  After going through the scenarios, we've decided NOT to add a separate MouseIsOver or Hot flag to ToolStripItem. The thing to use is 'Selected'.
-    ///  Why?  While the selected thing can be different than the moused over item, the selected item is ALWAYS the one you want to paint differently
+    ///  After going through the scenarios, we've decided NOT to add a separate MouseIsOver or Hot flag to ToolStripItem.
+    ///  The thing to use is 'Selected'.
+    ///  Why?  While the selected thing can be different than the moused over item, the selected item is ALWAYS the
+    ///  one you want to paint differently
     ///
     ///  Scenario 1:  Keyboard select an item then select a different item with the mouse.
     ///  -          Do Alt+F to expand your File menu, keyboard down several items.
     ///  -          Mouse over a different item
-    ///  -          Notice how two things are never painted hot at the same time, and how the selection changes from the keyboard selected item to the one selected with the mouse. In  this case the selection should move with the mouse selection.
+    ///  -          Notice how two things are never painted hot at the same time, and how the selection changes
+    ///  -          from the keyboard selected item to the one selected with the mouse. In  this case the selection
+    ///  -          should move with the mouse selection.
     ///  -          Notice how if you hit enter when the mouse is over it, it executes the item. That's selection.
     ///  Scenario 2: Put focus into a combo box, then mouse over a different item
-    ///  -          Notice how all the other items you mouse over do not change the way they are painted, if you hit enter, that goes to the combobox, rather than executing the current item.
+    ///  -          Notice how all the other items you mouse over do not change the way they are painted, if you
+    ///  -          hit enter, that goes to the ComboBox, rather than executing the current item.
     ///
-    ///  At first look "MouseIsOver" or "Hot" seems to be the thing people want, but its almost never the desired behavior. A unified selection model is simpler and seems to meet the scenarios.
+    ///  At first look "MouseIsOver" or "Hot" seems to be the thing people want, but its almost never the desired
+    ///  behavior. A unified selection model is simpler and seems to meet the scenarios.
     /// </summary>
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -1794,8 +1800,9 @@ public abstract partial class ToolStripItem :
     }
 
     /// <summary>
-    ///  Raises the <see cref="SelectedChanged" /> event. This method will be called when selected <see cref="ToolStripItem" /> changes.
-    ///  Call base.OnSelectedChanged to send this event to any registered event listeners.
+    ///  Raises the <see cref="SelectedChanged" /> event. This method will be called when selected
+    ///  <see cref="ToolStripItem" /> changes. Call base.OnSelectedChanged to send this event to any registered
+    ///  event listeners.
     /// </summary>
     protected virtual void OnSelectedChanged(EventArgs e) => RaiseEvent(s_selectedChangedEvent, e);
 
@@ -2151,26 +2158,28 @@ public abstract partial class ToolStripItem :
     }
 
     /// <summary>
-    ///  Begins a drag operation. The <paramref name="allowedEffects"/> determine which drag operations can occur. If the drag operation
-    ///  needs to interop with applications in another process, <paramref name="data"/> should either be a base managed class
-    ///  (<see cref="string"/>, <see cref="Bitmap"/>, or <see cref="Metafile"/>) or some <see cref="object"/> that implements
-    ///  <see cref="Runtime.Serialization.ISerializable"/>. <paramref name="data"/> can also be any <see cref="object"/> that implements
-    ///  <see cref="IDataObject"/>. <paramref name="dragImage"/> is the bitmap that will be displayed during the  drag operation and
-    ///  <paramref name="cursorOffset"/> specifies the location of the cursor within <paramref name="dragImage"/>, which is an offset from the
-    ///  upper-left corner. Specify <see langword="true"/> for <paramref name="useDefaultDragImage"/> to use a layered window drag image with a
-    ///  size of 96x96; otherwise <see langword="false"/>. Note the outer edges of <paramref name="dragImage"/> are blended out if the image width
-    ///  or height exceeds 300 pixels.
+    ///  Begins a drag operation. The <paramref name="allowedEffects"/> determine which drag operations can occur.
+    ///  If the drag operation needs to interop with applications in another process, <paramref name="data"/> should
+    ///  either be a base managed class (<see cref="string"/>, <see cref="Bitmap"/>, or <see cref="Metafile"/>)
+    ///  or some <see cref="object"/> that implements <see cref="Runtime.Serialization.ISerializable"/>.
+    ///  <paramref name="data"/> can also be any <see cref="object"/> that implements <see cref="IDataObject"/>.
+    ///  <paramref name="dragImage"/> is the bitmap that will be displayed during the  drag operation and
+    ///  <paramref name="cursorOffset"/> specifies the location of the cursor within <paramref name="dragImage"/>,
+    ///  which is an offset from the upper-left corner. Specify <see langword="true"/> for
+    ///  <paramref name="useDefaultDragImage"/> to use a layered window drag image with a
+    ///  size of 96x96; otherwise <see langword="false"/>. Note the outer edges of <paramref name="dragImage"/>
+    ///  are blended out if the image width or height exceeds 300 pixels.
     /// </summary>
     /// <returns>
-    ///  A value from the <see cref="DragDropEffects"/> enumeration that represents the final effect that was performed during the drag-and-drop
-    ///  operation.
+    ///  A value from the <see cref="DragDropEffects"/> enumeration that represents the final effect that was performed
+    ///  during the drag-and-drop operation.
     /// </returns>
     /// <remarks>
     ///  <para>
-    ///   Because <see cref="DoDragDrop(object, DragDropEffects, Bitmap, Point, bool)"/> always performs the RGB multiplication step in calculating
-    ///   the alpha value, you should always pass a <see cref="Bitmap"/> without premultiplied alpha blending. Note that no error will result from
-    ///   passing a <see cref="Bitmap"/> with premultiplied alpha blending, but this method will multiply it again, doubling the resulting alpha
-    ///   value.
+    ///   Because <see cref="DoDragDrop(object, DragDropEffects, Bitmap, Point, bool)"/> always performs the
+    ///   RGB multiplication step in calculating the alpha value, you should always pass a <see cref="Bitmap"/>
+    ///   without pre-multiplied alpha blending. Note that no error will result from passing a <see cref="Bitmap"/>
+    ///   with pre-multiplied alpha blending, but this method will multiply it again, doubling the resulting alpha value.
     ///  </para>
     /// </remarks>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -3668,7 +3677,7 @@ public abstract partial class ToolStripItem :
     internal virtual bool IsBeingTabbedTo() => Control.AreCommonNavigationalKeysDown();
 
     /// <summary>
-    /// Query font from property bag.
+    ///  Query font from property bag.
     /// </summary>
     internal bool TryGetExplicitlySetFont([NotNullWhen(true)] out Font? local)
     {
