@@ -317,12 +317,10 @@ public class ComboBoxTests
         control.ItemHeight.Should().NotBe(initialItemHeight);
     }
 
-    public class TestComboBox : ComboBox
+    private class TestComboBox : ComboBox
     {
-        public void TriggerMeasureItem(MeasureItemEventArgs e)
-        {
+        public void TriggerMeasureItem(MeasureItemEventArgs e) =>
             base.OnMeasureItem(e);
-        }
     }
 
     [WinFormsFact]
@@ -345,12 +343,9 @@ public class ComboBoxTests
         handlerCallCount.Should().Be(1, "The MeasureItem event handler was not removed as expected.");
     }
 
-    public class TestableComboBox : ComboBox
+    private class TestableComboBox : ComboBox
     {
-        public void InvokeOnPaint(PaintEventArgs e)
-        {
-            base.OnPaint(e);
-        }
+        public void InvokeOnPaint(PaintEventArgs e) => base.OnPaint(e);
     }
 
     [WinFormsFact]
@@ -386,7 +381,7 @@ public class ComboBoxTests
     public void ComboBox_Paint_EventHandlerCalledOnPaint()
     {
         using TestableComboBox comboBox = new();
-        Bitmap bitmap = new(100, 100);
+        using Bitmap bitmap = new(100, 100);
         Graphics graphics = Graphics.FromImage(bitmap);
         bool handlerCalled = false;
 
