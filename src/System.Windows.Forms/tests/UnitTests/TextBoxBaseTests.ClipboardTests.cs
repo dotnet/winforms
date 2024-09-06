@@ -156,7 +156,7 @@ public partial class TextBoxBaseTests
             Clipboard.Clear();
             using SubTextBox control = new();
             control.Paste();
-            control.Text.Should().NotBeNull();
+            control.Text.Should().BeEmpty();
             control.IsHandleCreated.Should().BeTrue();
         }
 
