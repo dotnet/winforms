@@ -6,9 +6,6 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms.IntegrationTests.Common;
 using Microsoft.Win32;
 using WindowsFormsApp1;
-
-using WinformsControlsTest;
-
 using WinFormsControlsTest.UserControls;
 
 namespace WinFormsControlsTest;
