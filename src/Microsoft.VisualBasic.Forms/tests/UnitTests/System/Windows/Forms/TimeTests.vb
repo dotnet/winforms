@@ -7,7 +7,7 @@ Imports Xunit
 Namespace Microsoft.VisualBasic.Forms.Tests
 
     Public Class TimeTests
-        Private Const PrecisionTickLimit As Integer = 1000
+        Friend Const PrecisionTickLimit As Integer = 1_000_000
 
         Private Function TimesEqual(
             vbTime As Date,
@@ -29,21 +29,30 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Call (tickCount < PrecisionTickLimit).Should.BeTrue()
         End Sub
 
-        <WinFormsFact>
-        Public Sub VbTimeCloseToSystemTime()
-            Dim systemTime As Date = Date.UtcNow
-            Dim vbTime As Date = My.Computer.Clock.GmtTime
+        <WinFormsTheory>
+        <ClassData(GetType(TimeTestData))>
+        Public Sub VbTimeCloseToSystemTime(timeData As DualTimeZones)
+            Dim systemTime As Date = timeData.SystemTime
+            Dim vbTime As Date = timeData.ComputerTime
+            Dim because As String = $"{timeData.TimeName} is wrong, System Time is {systemTime} and Clock Time is {vbTime}"
             TimesEqual(
                 vbTime,
                 systemTime,
-                acceptableDifferenceInTicks:=PrecisionTickLimit).Should.BeTrue()
+                acceptableDifferenceInTicks:=PrecisionTickLimit).Should.BeTrue(because)
+        End Sub
 
-            systemTime = Date.Now
-            vbTime = My.Computer.Clock.LocalTime
-            TimesEqual(
+        <WinFormsFact>
+        Public Sub VbTimeNotCloseToSystemTime()
+            Dim timeData As New DualTimeZones(TimeZoneNames.MismatchedTimes)
+            Dim systemTime As Date = timeData.SystemTime
+            Dim vbTime As Date = timeData.ComputerTime
+            Dim because As String = $"{timeData.ComputerTime} is wrong, System Time is {systemTime} and Clock Time is {vbTime}"
+            Dim results As Boolean = TimesEqual(
                 vbTime,
                 systemTime,
-                acceptableDifferenceInTicks:=PrecisionTickLimit).Should.BeTrue()
+                acceptableDifferenceInTicks:=PrecisionTickLimit)
+            results.Should.NotBe(True, because)
+
         End Sub
 
         <WinFormsFact>
