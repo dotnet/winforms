@@ -28,8 +28,10 @@ internal partial struct CHOOSEFONTW
     ///   Type: <b>HWND</b> A handle to the window that owns the dialog box. This member can be any valid window handle,
     ///   or it can be <b>NULL</b> if the dialog box has no owner.
     ///  </para>
-    ///  <para><see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-choosefontw#members">
-    ///   Read more on learn.Microsoft.com</see>.
+    ///  <para>
+    ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-choosefontw#members">
+    ///    Read more on learn.Microsoft.com.
+    ///   </see>
     ///  </para>
     /// </summary>
     public HWND hwndOwner;
