@@ -333,7 +333,8 @@ public class TaskDialogButton : TaskDialogControl
     /// <exception cref="InvalidOperationException">
     ///   This button instance is not currently bound to a task dialog.
     ///   - or -
-    ///   The task dialog has started navigating to a new page containing this button instance, but the <see cref="TaskDialogPage.Created"/> event has not been raised yet.
+    ///   The task dialog has started navigating to a new page containing this button instance,
+    ///   but the <see cref="TaskDialogPage.Created"/> event has not been raised yet.
     ///   - or -
     ///   This button is currently bound to a task dialog, but the dialog has just started navigating to a different page.
     /// </exception>

@@ -2691,7 +2691,8 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     /// <summary>
     ///  This override fires the LocationChanging event if
     ///  1) We are not currently Rafting .. since this cause this infinite times...
-    ///  2) If we haven't been called once .. Since the "LocationChanging" is listened to by the RaftingCell and calls "JOIN" which may call us back.
+    ///  2) If we haven't been called once .. Since the "LocationChanging" is listened to by the RaftingCell and
+    ///  calls "JOIN" which may call us back.
     /// </summary>
     protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
     {
@@ -2935,7 +2936,8 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     /// <summary>
     ///  Rules for parsing mnemonics
     ///  PASS 1: Real mnemonics
-    ///  Check items for the character after the &amp;. If it matches, perform the click event or open the dropdown (in the case that it has dropdown items)
+    ///  Check items for the character after the &amp;. If it matches, perform the click event or open the dropdown
+    ///  (in the case that it has dropdown items)
     ///  PASS 2: Fake mnemonics
     ///  Begin with the current selection and parse through the first character in the items in the menu.
     ///  If there is only one item that matches
@@ -4591,7 +4593,9 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     ///  Updates a tooltip for the given toolstrip item.
     /// </summary>
     /// <param name="item">The toolstrip item.</param>
-    /// <param name="refresh">see langword="true"/> to force-update the tooltip (if it is configured); otherwise <see langword="false"/>.</param>
+    /// <param name="refresh">
+    ///  see langword="true"/> to force-update the tooltip (if it is configured); otherwise <see langword="false"/>.
+    /// </param>
     internal void UpdateToolTip(ToolStripItem? item, bool refresh = false)
     {
         if (ShowItemToolTips)

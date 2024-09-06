@@ -115,7 +115,8 @@ public sealed class TaskDialogRadioButton : TaskDialogControl
     ///   The property is set on a radio button instance that is currently bound to a task dialog,
     ///   but the value to be set is <see langword="false"/>.
     ///   - or -
-    ///   The property is set within the <see cref="CheckedChanged"/> event of one of the radio buttons of the currently bound task dialog.
+    ///   The property is set within the <see cref="CheckedChanged"/> event of one of the radio buttons of the
+    ///   currently bound task dialog.
     ///   - or -
     ///   The property is set on a radio button instance that is currently bound to a task dialog, but the dialog
     ///   has just started navigating to a different page.

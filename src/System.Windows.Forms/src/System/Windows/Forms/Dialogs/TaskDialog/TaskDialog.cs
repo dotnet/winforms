@@ -518,7 +518,7 @@ public partial class TaskDialog : IWin32Window
     ///   <paramref name="page"/> is <see langword="null"/>.
     /// </exception>
     /// <exception cref="InvalidOperationException">
-    /// The specified <paramref name="page"/> contains an invalid configuration.
+    ///  The specified <paramref name="page"/> contains an invalid configuration.
     /// </exception>
     public static unsafe TaskDialogButton ShowDialog(
         IntPtr hwndOwner,

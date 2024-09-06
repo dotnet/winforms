@@ -197,7 +197,7 @@ public class PropertyManager : BindingManagerBase
     public override int Count => 1;
 
     /// <summary>
-    /// Throws a <see cref="NotSupportedException" /> in all cases.
+    ///  Throws a <see cref="NotSupportedException" /> in all cases.
     /// </summary>
     /// <exception cref="NotSupportedException">In all cases.</exception>
     public override void AddNew()
