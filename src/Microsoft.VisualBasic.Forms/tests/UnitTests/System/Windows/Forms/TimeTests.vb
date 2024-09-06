@@ -43,7 +43,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <WinFormsFact>
         Public Sub VbTimeNotCloseToSystemTime()
-            Dim timeData As New DualTimeZones(TimeZoneNames.MismatchedTimes)
+            Dim timeData As New DualTimeZones(TimeZone.MismatchedTimes)
             Dim systemTime As Date = timeData.SystemTime
             Dim vbTime As Date = timeData.ComputerTime
             Dim because As String = $"{timeData.ComputerTime} is wrong, System Time is {systemTime} and Clock Time is {vbTime}"
