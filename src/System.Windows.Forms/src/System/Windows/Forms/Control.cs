@@ -12461,7 +12461,7 @@ public unsafe partial class Control :
     ///  <para>
     ///   The <see cref="WndProc(ref Message)"/> method corresponds exactly to the Windows <c>WindowProc</c>
     ///   function. For more information about processing Windows messages see the
-    ///   <see href="https://go.microsoft.com/fwlink/?LinkId=181565">WindowProc function</see>.
+    ///   <see href="https://go.microsoft.com/fwlink/?LinkId=181565">WindowProc function.</see>
     ///  </para>
     /// </remarks>
     /// <notesToInheritors>

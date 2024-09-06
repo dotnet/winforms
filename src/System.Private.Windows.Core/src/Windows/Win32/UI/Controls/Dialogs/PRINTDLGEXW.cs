@@ -12,8 +12,8 @@ namespace Windows.Win32.UI.Controls.Dialogs;
 /// <remarks>
 ///  <para>
 ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#">
-///    Read more on learn.Microsoft.com
-///   </see>.
+///    Read more on learn.Microsoft.com.
+///   </see>
 ///  </para>
 /// </remarks>
 /// <devdoc>
@@ -32,8 +32,8 @@ internal partial struct PRINTDLGEXW
     ///  <para>Type: <b>DWORD</b> The structure size, in bytes.</para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///    Read more on learn.Microsoft.com
-    ///   </see>.
+    ///    Read more on learn.Microsoft.com.
+    ///   </see>
     ///  </para>
     /// </summary>
     public uint lStructSize;
@@ -45,8 +45,8 @@ internal partial struct PRINTDLGEXW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///    Read more on learn.Microsoft.com
-    ///   </see>.
+    ///    Read more on learn.Microsoft.com.
+    ///   </see>
     ///  </para>
     /// </summary>
     public HWND hwndOwner;
@@ -70,8 +70,8 @@ internal partial struct PRINTDLGEXW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///    Read more on learn.Microsoft.com
-    ///   </see>.
+    ///    Read more on learn.Microsoft.com.
+    ///   </see>
     ///  </para>
     /// </summary>
     public HGLOBAL hDevMode;
@@ -96,8 +96,8 @@ internal partial struct PRINTDLGEXW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///    Read more on learn.Microsoft.com
-    ///   </see>.
+    ///    Read more on learn.Microsoft.com.
+    ///   </see>
     ///  </para>
     /// </summary>
     public HGLOBAL hDevNames;
@@ -110,8 +110,8 @@ internal partial struct PRINTDLGEXW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///    Read more on learn.Microsoft.com
-    ///   </see>.
+    ///    Read more on learn.Microsoft.com.
+    ///   </see>
     ///  </para>
     /// </summary>
     public HDC hDC;
@@ -132,8 +132,8 @@ internal partial struct PRINTDLGEXW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///    Read more on learn.Microsoft.com
-    ///   </see>.
+    ///    Read more on learn.Microsoft.com.
+    ///   </see>
     ///  </para>
     /// </summary>
     public uint ExclusionFlags;
@@ -148,8 +148,8 @@ internal partial struct PRINTDLGEXW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///    Read more on learn.Microsoft.com
-    ///   </see>.
+    ///    Read more on learn.Microsoft.com.
+    ///   </see>
     ///  </para>
     /// </summary>
     public uint nPageRanges;
@@ -163,8 +163,8 @@ internal partial struct PRINTDLGEXW
     ///  </para>
     ///  <para>
     ///    <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///     Read more on learn.Microsoft.com
-    ///    </see>.
+    ///     Read more on learn.Microsoft.com.
+    ///    </see>
     ///   </para>
     /// </summary>
     public uint nMaxPageRanges;
@@ -181,8 +181,8 @@ internal partial struct PRINTDLGEXW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///    Read more on learn.Microsoft.com
-    ///   </see>.
+    ///    Read more on learn.Microsoft.com.
+    ///   </see>
     ///  </para>
     /// </summary>
     public unsafe PRINTPAGERANGE* lpPageRanges;
@@ -194,8 +194,8 @@ internal partial struct PRINTDLGEXW
     /// </para>
     /// <para>
     ///  <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///   Read more on learn.Microsoft.com
-    ///  </see>.
+    ///   Read more on learn.Microsoft.com.
+    ///  </see>
     ///  </para>
     /// </summary>
     public uint nMinPage;
@@ -207,8 +207,8 @@ internal partial struct PRINTDLGEXW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///    Read more on learn.Microsoft.com
-    ///   </see>.
+    ///    Read more on learn.Microsoft.com.
+    ///   </see>
     ///  </para>
     /// </summary>
     public uint nMaxPage;
@@ -230,8 +230,8 @@ internal partial struct PRINTDLGEXW
     ///   </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///    Read more on learn.Microsoft.com
-    ///   </see>.
+    ///    Read more on learn.Microsoft.com.
+    ///   </see>
     ///  </para>
     /// </summary>
     public uint nCopies;
@@ -247,9 +247,9 @@ internal partial struct PRINTDLGEXW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///    Read more on learn.Microsoft.com
-    ///     </see>.
-    ///    </para>
+    ///    Read more on learn.Microsoft.com.
+    ///   </see>
+    ///  </para>
     /// </summary>
     public HINSTANCE hInstance;
 
@@ -263,8 +263,8 @@ internal partial struct PRINTDLGEXW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///    Read more on learn.Microsoft.com
-    ///   </see>.
+    ///    Read more on learn.Microsoft.com.
+    ///   </see>
     ///   </para>
     /// </summary>
     public PCWSTR lpPrintTemplateName;
@@ -288,7 +288,9 @@ internal partial struct PRINTDLGEXW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///   Read more on learn.Microsoft.com</see>.</para>
+    ///    Read more on learn.Microsoft.com.
+    ///   </see>
+    ///  </para>
     /// </summary>
     public unsafe IUnknown* lpCallback;
 
@@ -296,8 +298,8 @@ internal partial struct PRINTDLGEXW
     /// <para>Type: <b>DWORD</b> The number of property page handles in the <b>lphPropertyPages</b> array.</para>
     ///   <para>
     ///    <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///     Read more on learn.Microsoft.com
-    ///    </see>.
+    ///     Read more on learn.Microsoft.com.
+    ///    </see>
     ///  </para>
     /// </summary>
     public uint nPropertyPages;
@@ -314,8 +316,8 @@ internal partial struct PRINTDLGEXW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///    Read more on learn.Microsoft.com
-    ///   </see>.
+    ///    Read more on learn.Microsoft.com.
+    ///   </see>
     ///  </para>
     /// </summary>
     public unsafe HPROPSHEETPAGE* lphPropertyPages;
@@ -329,8 +331,8 @@ internal partial struct PRINTDLGEXW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///     Read more on learn.Microsoft.com
-    ///    </see>.
+    ///     Read more on learn.Microsoft.com.
+    ///    </see>
     ///   </para>
     /// </summary>
     public uint nStartPage;

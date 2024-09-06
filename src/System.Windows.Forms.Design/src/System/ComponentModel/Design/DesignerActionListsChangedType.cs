@@ -4,7 +4,8 @@
 namespace System.ComponentModel.Design;
 
 /// <summary>
-///  An enum that defines what type of action happened to the related object's <see cref="DesignerActionListCollection">designer action lists collection</see>.
+///  An enum that defines what type of action happened to the related object's
+///  <see cref="DesignerActionListCollection">designer action lists collection.</see>
 /// </summary>
 public enum DesignerActionListsChangedType
 {

@@ -16,8 +16,8 @@ namespace System.Windows.Forms;
 /// </summary>
 /// <remarks>
 /// <para>
-///   For more information, see
-/// <see href="https://docs.microsoft.com/windows/desktop/Controls/task-dialogs-overview">About Task Dialogs</see>.
+///  For more information, see
+///  <see href="https://docs.microsoft.com/windows/desktop/Controls/task-dialogs-overview">About Task Dialogs.</see>
 /// </para>
 /// <para>
 ///   Note: In order to use the dialog, you need ensure <see cref="Application.EnableVisualStyles"/>

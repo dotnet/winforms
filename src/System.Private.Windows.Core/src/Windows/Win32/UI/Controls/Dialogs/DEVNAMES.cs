@@ -9,8 +9,8 @@ namespace Windows.Win32.UI.Controls.Dialogs;
 /// <remarks>
 ///  <para>
 ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-devnames">
-///    Learn more about this API from learn.Microsoft.com
-///   </see>.
+///    Learn more about this API from learn.Microsoft.com.
+///   </see>
 ///  </para>
 /// </remarks>
 /// <devdoc>
@@ -33,8 +33,8 @@ internal partial struct DEVNAMES
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-devnames#members">
-    ///    Read more on learn.Microsoft.com
-    ///   </see>.
+    ///    Read more on learn.Microsoft.com.
+    ///   </see>
     ///  </para>
     /// </summary>
     public ushort wDriverOffset;
@@ -46,8 +46,8 @@ internal partial struct DEVNAMES
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-devnames#members">
-    ///    Read more on learn.Microsoft.com
-    ///   </see>.
+    ///    Read more on learn.Microsoft.com.
+    ///   </see>
     ///  </para>
     /// </summary>
     public ushort wDeviceOffset;
@@ -59,8 +59,8 @@ internal partial struct DEVNAMES
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-devnames#members">
-    ///    Read more on learn.Microsoft.com
-    ///    </see>.
+    ///    Read more on learn.Microsoft.com.
+    ///    </see>
     ///  </para>
     /// </summary>
     public ushort wOutputOffset;
@@ -71,11 +71,15 @@ internal partial struct DEVNAMES
     ///   default printer. This string is used to verify that the default printer has not changed since the last
     ///   print operation. If any of the strings do not match, a warning message is displayed informing the user
     ///   that the document may need to be reformatted. On output, the <b>wDefault</b> member is changed only if
-    ///   the <b>Print Setup</b> dialog box was displayed and the user chose the <b>OK</b> button. The <b>DN_DEFAULTPRN</b> flag is used if the default printer was selected. If a specific printer is selected, the flag is not used. All other flags in this member are reserved for internal use by the dialog box procedure for the <b>Print</b> property sheet or <b>Print</b> dialog box.</para>
+    ///   the <b>Print Setup</b> dialog box was displayed and the user chose the <b>OK</b> button.
+    ///   The <b>DN_DEFAULTPRN</b> flag is used if the default printer was selected. If a specific printer is selected,
+    ///   the flag is not used. All other flags in this member are reserved for internal use by the dialog box
+    ///   procedure for the <b>Print</b> property sheet or <b>Print</b> dialog box.
+    ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-devnames#members">
     ///    Read more on learn.Microsoft.com
-    ///   </see>.
+    ///   </see>
     ///  </para>
     /// </summary>
     public ushort wDefault;

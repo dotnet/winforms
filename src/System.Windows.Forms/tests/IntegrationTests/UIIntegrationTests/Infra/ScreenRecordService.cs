@@ -109,8 +109,9 @@ internal class ScreenRecordService : IDisposable
         Source = 0,
 
         /// <summary>
-        /// The frame should be composited onto the output buffer based on its alpha, using a simple OVER operation as
-        /// described in <see href="https://www.w3.org/TR/png/#13Alpha-channel-processing">Alpha Channel Processing</see>.
+        ///  The frame should be composited onto the output buffer based on its alpha, using a simple OVER operation as
+        ///  described in <see href="https://www.w3.org/TR/png/#13Alpha-channel-processing">
+        ///  Alpha Channel Processing.</see>
         /// </summary>
         Over = 1,
     }
