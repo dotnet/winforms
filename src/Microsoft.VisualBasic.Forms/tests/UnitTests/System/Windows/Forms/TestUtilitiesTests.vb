@@ -17,6 +17,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub WrongPasswordTestDataIteratorTests()
             Dim testClass As New WrongPasswordTestData
+        Public Sub TimeTestDataIteratorTests()
+            Dim testClass As New TimeTestData
             testClass.IEnumerable_GetEnumerator.Should.NotBeNull()
         End Sub
 

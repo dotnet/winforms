@@ -68,7 +68,7 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
     }
 
     /// <summary>
-    /// Cache window DpiContext awareness information that helps to create handle with right context at the later time.
+    ///  Cache window DpiContext awareness information that helps to create handle with right context at the later time.
     /// </summary>
     internal DPI_AWARENESS_CONTEXT DpiAwarenessContext { get; } = PInvoke.GetThreadDpiAwarenessContextInternal();
 
