@@ -9,7 +9,7 @@ Imports Microsoft.VisualBasic.FileIO
 Namespace Microsoft.VisualBasic.MyServices
 
     ''' <summary>
-    '''  An extremely thin wrapper around Microsoft.VisualBasic.FileIO.FileSystem to expose the type through My.
+    '''  An extremely thin wrapper around <see cref="FileIO.FileSystem"/> to expose the type through <see cref="My"/>.
     ''' </summary>
     <EditorBrowsable(EditorBrowsableState.Never)>
     Public Class FileSystemProxy
