@@ -3,7 +3,7 @@
 
 Namespace Microsoft.VisualBasic.Forms.Tests
 
-    Public Enum TimeZone
+    Public Enum TimeZoneNames
         GMT
         Local
         MismatchedTimes
