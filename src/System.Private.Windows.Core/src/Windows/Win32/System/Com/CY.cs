@@ -12,7 +12,7 @@ internal partial struct CY : IEquatable<CY>
     public static bool operator ==(CY left, CY right) => left.Equals(right);
     public static bool operator !=(CY left, CY right) => !left.Equals(right);
 
-    // https://learn.Microsoft.com/openspecs/windows_protocols/ms-oaut/5a2b34c4-d109-438e-9ec8-84816d8de40d
+    // https://learn.microsoft.com/openspecs/windows_protocols/ms-oaut/5a2b34c4-d109-438e-9ec8-84816d8de40d
 
     public static explicit operator decimal(CY value) => decimal.FromOACurrency(value.int64);
     public static explicit operator CY(decimal value) => new() { int64 = decimal.ToOACurrency(value) };
