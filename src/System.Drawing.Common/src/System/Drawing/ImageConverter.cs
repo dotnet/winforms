@@ -114,7 +114,7 @@ public partial class ImageConverter : TypeConverter
 
         // [MS-OLEDS]: Object Linking and Embedding (OLE)
         // 2.2.5 EmbeddedObject
-        // https://learn.Microsoft.com/openspecs/windows_protocols/ms-oleds/3395d95d-97f0-49ff-b792-28d331f254f1
+        // https://learn.microsoft.com/openspecs/windows_protocols/ms-oleds/3395d95d-97f0-49ff-b792-28d331f254f1
 
         // Read and validate the ObjectHeader
         if (!reader.TryRead(out uint version)
