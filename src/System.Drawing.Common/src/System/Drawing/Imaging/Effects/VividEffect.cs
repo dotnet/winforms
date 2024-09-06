@@ -10,6 +10,9 @@ namespace System.Drawing.Imaging.Effects;
 /// </summary>
 public sealed class VividEffect : ColorMatrixEffect
 {
+    /// <summary>
+    ///  Creates a new <see cref="ColorMatrixEffect"/> that makes colors more vivid.
+    /// </summary>
     public VividEffect() : base(
         new(
         [
