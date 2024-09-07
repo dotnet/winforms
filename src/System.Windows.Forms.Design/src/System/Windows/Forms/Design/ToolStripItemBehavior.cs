@@ -13,7 +13,8 @@ using System.Windows.Forms.Design.Behavior;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-///  The behavior for the glyph that covers the items themselves. This selects the items when they are clicked, and will (when implemented) do the dragging/reordering of them.
+///  The behavior for the glyph that covers the items themselves. This selects the items when they are clicked,
+///  and will (when implemented) do the dragging/reordering of them.
 /// </summary>
 internal class ToolStripItemBehavior : Behavior.Behavior
 {
@@ -69,7 +70,8 @@ internal class ToolStripItemBehavior : Behavior.Behavior
             return;
         }
 
-        // stuff away the lastInsertionMarkRect  and clear it out _before_ we call paint OW the call to invalidate won't help as it will get repainted.
+        // stuff away the lastInsertionMarkRect and clear it out _before_ we call paint OW the call to invalidate
+        // won't help as it will get repainted.
         if (item is not null && item.Site is not null)
         {
             IDesignerHost designerHost = (IDesignerHost)item.Site.GetService(typeof(IDesignerHost));
@@ -164,7 +166,12 @@ internal class ToolStripItemBehavior : Behavior.Behavior
         return bounds;
     }
 
-    // This helper function will return true if any other MouseHandler (say TabOrder UI) is active, in which case we should not handle any Mouse Messages.. Since the TabOrder UI is pre-Whidbey when the TabOrder UI is up,  It adds a new Overlay (a window) to the DesignerFrame (something similar to AdornerWindow). This UI is a transparent control which has overrides for Mouse Messages. It listens for all mouse messages through the IMouseHandler interface instead of using the new  BehaviorService. Hence we have to special case this scenario. (CONTROL DESIGNER ALSO DOES THIS).
+    // This helper function will return true if any other MouseHandler (say TabOrder UI) is active,
+    // in which case we should not handle any Mouse Messages.. Since the TabOrder UI is pre-Whidbey
+    // when the TabOrder UI is up, it adds a new Overlay (a window) to the DesignerFrame
+    // (something similar to AdornerWindow). This UI is a transparent control which has overrides for Mouse Messages.
+    // It listens for all mouse messages through the IMouseHandler interface instead of using the new BehaviorService.
+    // Hence we have to special case this scenario. (CONTROL DESIGNER ALSO DOES THIS).
     private bool MouseHandlerPresent(ToolStripItem item)
     {
         IMouseHandler mouseHandler = null;
@@ -350,8 +357,9 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                 }
 
                 // start Double Click Timer
-                // This is required for the second down in selection which can be the first down of a Double click on the glyph confusing... hence this comment ...
-                // Heres the scenario ....
+                // This is required for the second down in selection which can be the first down of a
+                // Double click on the glyph confusing... hence this comment ...
+                // Here's the scenario ....
                 // DOWN 1 - selects the ITEM
                 // DOWN 2 - ITEM goes into INSITU....
                 // DOUBLE CLICK - don't show code..
@@ -374,11 +382,14 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                 // We should process MouseDown only if we are not yet selected....
                 if (!selSvc.GetComponentSelected(glyphItem))
                 {
-                    // Reset the State... On the Glyphs .. we get MouseDown - Mouse UP (for single Click) And we get MouseDown - MouseUp - DoubleClick - Up (for double Click) Hence reset the state at start....
+                    // Reset the State... On the Glyphs .. we get MouseDown - Mouse UP (for single Click) And we get
+                    // MouseDown - MouseUp - DoubleClick - Up (for double Click) Hence reset the state at start....
                     _mouseUpFired = false;
                     _doubleClickFired = false;
                     // Implementing Shift + Click....
-                    // we have 2 items, namely, selectedItem (current PrimarySelection) and glyphItem (item which has received mouseDown) FIRST check if they have common parent... IF YES then get the indices of the two and SELECT all items from LOWER index to the HIGHER index.
+                    // we have 2 items, namely, selectedItem (current PrimarySelection) and
+                    // glyphItem (item which has received mouseDown) FIRST check if they have common parent...
+                    // IF YES then get the indices of the two and SELECT all items from LOWER index to the HIGHER index.
                     if (shiftPressed && (selectedItem is not null && CommonParent(selectedItem, glyphItem)))
                     {
                         ToolStrip parent = null;
@@ -509,7 +520,9 @@ internal class ToolStripItemBehavior : Behavior.Behavior
     }
 
     /// <summary>
-    ///  When any MouseMove message enters the BehaviorService's AdornerWindow (mousemove, ncmousemove) it is first passed here, to the top-most Behavior in the BehaviorStack. Returning 'true' from this function signifies that  the Message was 'handled' by the Behavior and should not continue to be processed.
+    ///  When any MouseMove message enters the BehaviorService's AdornerWindow (MouseMove, ncMouseMove) it is first
+    ///  passed here, to the top-most Behavior in the BehaviorStack. Returning 'true' from this function signifies that
+    ///  the Message was 'handled' by the Behavior and should not continue to be processed.
     /// </summary>
     public override bool OnMouseMove(Glyph g, MouseButtons button, Point mouseLoc)
     {
@@ -954,13 +967,15 @@ internal class ToolStripItemBehavior : Behavior.Behavior
             return;
         }
 
-        // Remember the point where the mouse down occurred. The DragSize indicates the size that the mouse can move before a drag event should be started.
+        // Remember the point where the mouse down occurred. The DragSize indicates the size that the
+        // mouse can move before a drag event should be started.
         Size dragSize = new(1, 1);
 
         IDesignerHost designerHost = (IDesignerHost)glyphItem.Site.GetService(typeof(IDesignerHost));
         Debug.Assert(designerHost is not null, "Invalid DesignerHost");
 
-        // implement Drag Drop for individual ToolStrip Items While this item is getting selected.. Get the index of the item the mouse is below.
+        // implement Drag Drop for individual ToolStrip Items While this item is getting selected..
+        // Get the index of the item the mouse is below.
         if (glyphItem.Placement == ToolStripItemPlacement.Overflow || (glyphItem.Placement == ToolStripItemPlacement.Main && !(glyphItem.IsOnDropDown)))
         {
             ToolStripItemDesigner itemDesigner = designerHost.GetDesigner(glyphItem) as ToolStripItemDesigner;
@@ -970,7 +985,9 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                 if (setValues)
                 {
                     parentDesigner.IndexOfItemUnderMouseToDrag = parentToolStrip.Items.IndexOf(glyphItem);
-                    // Create a rectangle using the DragSize, with the mouse position being at the center of the rectangle. On SelectionChanged we recreate the Glyphs ... so need to stash this value on the parentDesigner....
+                    // Create a rectangle using the DragSize, with the mouse position being at the center
+                    // of the rectangle. On SelectionChanged we recreate the Glyphs ...
+                    // so need to stash this value on the parentDesigner....
                     parentDesigner.DragBoxFromMouseDown = _dragBoxFromMouseDown = new Rectangle(new Point(mouseLoc.X - (dragSize.Width / 2), mouseLoc.Y - (dragSize.Height / 2)), dragSize);
                 }
                 else
@@ -991,7 +1008,9 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                     if (setValues)
                     {
                         ownerItemDesigner._indexOfItemUnderMouseToDrag = parentDropDown.Items.IndexOf(glyphItem);
-                        // Create a rectangle using the DragSize, with the mouse position being at the center of the rectangle. On SelectionChanged we recreate the Glyphs ... so need to stash this value on the parentDesigner....
+                        // Create a rectangle using the DragSize, with the mouse position being at the center
+                        // of the rectangle. On SelectionChanged we recreate the Glyphs ... so need to stash
+                        // this value on the parentDesigner....
                         ownerItemDesigner._dragBoxFromMouseDown = _dragBoxFromMouseDown = new Rectangle(new Point(mouseLoc.X - (dragSize.Width / 2), mouseLoc.Y - (dragSize.Height / 2)), dragSize);
                     }
                     else

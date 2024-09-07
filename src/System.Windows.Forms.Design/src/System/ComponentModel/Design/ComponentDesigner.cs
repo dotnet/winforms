@@ -23,7 +23,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     private protected const string SettingsKeyName = "SettingsKey";
 
     /// <summary>
-    ///  Gets the design-time actionlists supported by the component associated with the designer.
+    ///  Gets the design-time ActionLists supported by the component associated with the designer.
     /// </summary>
     public virtual DesignerActionListCollection ActionLists => _actionLists ??= [];
 
@@ -643,7 +643,8 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     }
 
     /// <summary>
-    ///  Allows a designer to filter the set of properties the component it is designing will expose through the TypeDescriptor object.
+    ///  Allows a designer to filter the set of properties the component it is
+    ///  designing will expose through the TypeDescriptor object.
     /// </summary>
     protected virtual void PostFilterProperties(IDictionary properties)
     {
@@ -718,7 +719,8 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
 
     /// <summary>
     ///  Notifies the <see cref="IComponentChangeService"/> that this component has been changed.
-    ///  You only need to call this when you are affecting component properties directly and not through the MemberDescriptor's accessors.
+    ///  You only need to call this when you are affecting component properties directly and not through
+    ///  the MemberDescriptor's accessors.
     /// </summary>
     protected void RaiseComponentChanged(MemberDescriptor? member, object? oldValue, object? newValue)
         => GetService<IComponentChangeService>()?.OnComponentChanged(Component, member, oldValue, newValue);

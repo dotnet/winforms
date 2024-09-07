@@ -19,7 +19,8 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     // State flags for the state of the designer host
     private static readonly int s_stateLoading = BitVector32.CreateMask(); // Designer is currently loading from the loader host.
     private static readonly int s_stateUnloading = BitVector32.CreateMask(s_stateLoading); // Designer is currently unloading.
-    private static readonly int s_stateIsClosingTransaction = BitVector32.CreateMask(s_stateUnloading); // A transaction is in the process of being Canceled or Commited.
+    // A transaction is in the process of being Canceled or Committed.
+    private static readonly int s_stateIsClosingTransaction = BitVector32.CreateMask(s_stateUnloading);
 
     private static readonly Type[] s_defaultServices = [typeof(IDesignerHost), typeof(IContainer), typeof(IComponentChangeService), typeof(IDesignerLoaderHost2)];
 
@@ -485,7 +486,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     internal void Flush() => _loader?.Flush();
 
     /// <summary>
-    ///  Override of Container's GetService method. This just delegates to the  parent service provider.
+    ///  Override of Container's GetService method. This just delegates to the parent service provider.
     /// </summary>
     /// <param name="service">The type of service to retrieve.</param>
     /// <returns>An instance of the service.</returns>
@@ -668,11 +669,11 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
 
     internal void RemoveFromContainerPostProcess(IComponent component)
     {
-        // At one point during Whidbey, the component used to be unsited earlier in this process and
-        // it would be temporarily resited here before raising OnComponentRemoved. The problem with
-        // resiting it is that some 3rd party controls take action when a component is sited (such as
-        // displaying  a dialog a control is dropped on the form) and resiting here caused them to think
-        // they were being initialized for the first time. To preserve compat, we shouldn't resite the
+        // At one point during Whidbey, the component used to be un-sited earlier in this process and
+        // it would be temporarily re-sited here before raising OnComponentRemoved. The problem with
+        // re-siting it is that some 3rd party controls take action when a component is sited (such as
+        // displaying a dialog a control is dropped on the form) and re-siting here caused them to think
+        // they were being initialized for the first time. To preserve compat, we shouldn't re-site the
         // component during Remove.
         try
         {
@@ -1158,7 +1159,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
             return;
         }
 
-        // Flush the loader to make sure there aren't any pending  changes. We always route through the design
+        // Flush the loader to make sure there aren't any pending changes. We always route through the design
         // surface so it can correctly raise its Flushed event.
         _surface!.Flush();
 
