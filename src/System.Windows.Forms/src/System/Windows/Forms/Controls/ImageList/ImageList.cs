@@ -39,7 +39,8 @@ public sealed partial class ImageList : Component, IHandle<HIMAGELIST>
 
     // The usual handle virtualization problem, with a new twist: image
     // lists are lossy. At runtime, we delay handle creation as long as possible, and store
-    // away the original images until handle creation (and hope no one disposes of the images!). At design time, we keep the originals around indefinitely.
+    // away the original images until handle creation (and hope no one disposes of the images!).
+    // At design time, we keep the originals around indefinitely.
     // This variable will become null when the original images are lost.
     private List<Original>? _originals = [];
     private EventHandler? _recreateHandler;

@@ -286,10 +286,12 @@ public unsafe partial class Control :
     // Contains a collection of calculated fonts for various Dpi values of the control in the PerMonV2 mode.
     private Dictionary<int, Font>? _dpiFonts;
 
-    // Flag to signify whether any child controls necessitate the calculation of AnchorsInfo, particularly in cases involving nested containers.
+    // Flag to signify whether any child controls necessitate the calculation of AnchorsInfo,
+    // particularly in cases involving nested containers.
     internal bool _childControlsNeedAnchorLayout;
 
-    // Inform whether the AnchorsInfo needs to be reevaluated, especially when the control's bounds have been altered explicitly.
+    // Inform whether the AnchorsInfo needs to be reevaluated,
+    // especially when the control's bounds have been altered explicitly.
     internal bool _forceAnchorCalculations;
 
     internal byte LayoutSuspendCount { get; private set; }
@@ -3377,14 +3379,15 @@ public unsafe partial class Control :
             // Why? Well the way the API seems to work is that it stores in a bit flag for the hidden
             // state.
 
-            // Details from the Menu keydown to changed value of _uiCuesState.
+            // Details from the Menu keyDown to changed value of _uiCuesState.
 
             // When someone does press the ALT (Menu)/F10 key we will
             //   Call ProcessUICues on the control that had focus at the time
             //          ProcessUICues will check the current state of the control using WM_QUERYUISTATE
             //          If WM_QUERYUISTATE indicates that the accelerators are hidden we will
             //                  either call WM_UPDATEUISTATE or WM_CHANGEUISTATE depending on whether we're hosted or not.
-            //          All controls in the heirarchy will be individually called back on WM_UPDATEUISTATE, which will go into WmUpdateUIState.
+            //          All controls in the hierarchy will be individually called back on WM_UPDATEUISTATE,
+            //          which will go into WmUpdateUIState.
             //   In WmUpdateUIState, we will update our uiCuesState cached value, which
             //   changes the public value of what we return here for ShowKeyboardCues/ShowFocusCues.
 
@@ -3603,7 +3606,8 @@ public unsafe partial class Control :
         HANDLE threadHandle = ctx.Handle;
         bool processed = false;
 
-        // setting default exitcode to 0, though it won't be accessed in current code below due to short-circuit logic in condition (returnValue will be false when exitCode is undefined)
+        // setting default exitcode to 0, though it won't be accessed in current code below due to short-circuit logic
+        // in condition (returnValue will be false when exitCode is undefined)
         uint exitCode = 0;
         bool returnValue = false;
         while (!processed)

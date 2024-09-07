@@ -120,12 +120,17 @@ public class ContextMenuStrip : ToolStripDropDownMenu
         base.SetVisibleCore(visible);
 
         // There are two problems we're facing when trying to scale ContextMenuStrip:
-        //    1. ContextMenuStrip is a top level window and thus only receive "WM_DPICHANGED" message but not WM_DPICHANGED_BEFOREPARENT/WM_DPICHANGED_AFTERPARENT.
-        //       Unfortunately, we do not handle scaling of controls in "WM_DPICHANGED" message. In WinForms, "WM_DPICHANGED" message is intended for Top-level Forms/ContainerControls.
-        //       As a result, the ContextMenuStrip window doesn't scale itself when moved from one monitor to another on the "PerMonitorV2" process.
-        //    2. When ContextMenuStrip changes to invisible(with "visible" set to false), owner of the window is changed to a ParkingWindow that may possibly parked on primary monitor.
+        //    1. ContextMenuStrip is a top level window and thus only receive "WM_DPICHANGED" message
+        //       but not WM_DPICHANGED_BEFOREPARENT/WM_DPICHANGED_AFTERPARENT.
+        //       Unfortunately, we do not handle scaling of controls in "WM_DPICHANGED" message.
+        //       In WinForms, "WM_DPICHANGED" message is intended for Top-level Forms/ContainerControls.
+        //       As a result, the ContextMenuStrip window doesn't scale itself when moved from one monitor
+        //       to another on the "PerMonitorV2" process.
+        //    2. When ContextMenuStrip changes to invisible(with "visible" set to false), owner of the window
+        //       is changed to a ParkingWindow that may possibly parked on primary monitor.
         //       The "GetDpiForWindow()" API on ContextMenuStrip thus returns the DPI of the primary monitor.
-        // Because of this inconsistency, we intentionally recreate the handle that triggers scaling according to the new DPI, after setting the "visible" property.
+        // Because of this inconsistency, we intentionally recreate the handle that triggers scaling according
+        // to the new DPI, after setting the "visible" property.
         if (visible
             && IsHandleCreated
             && ScaleHelper.IsThreadPerMonitorV2Aware

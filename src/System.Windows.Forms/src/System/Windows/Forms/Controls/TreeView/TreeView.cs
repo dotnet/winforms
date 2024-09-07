@@ -3119,7 +3119,8 @@ public partial class TreeView : Control
         }
     }
 
-    // Need to send TVM_SELECTITEM to reset the node-highlighting while the contextMenuStrip is being closed so that the treeView reselects the SelectedNode.
+    // Need to send TVM_SELECTITEM to reset the node-highlighting while the contextMenuStrip is being closed so that the
+    // treeView reselects the SelectedNode.
     private void ContextMenuStripClosing(object? sender, ToolStripDropDownClosingEventArgs e)
     {
         ContextMenuStrip strip = (ContextMenuStrip)sender!;

@@ -3291,7 +3291,8 @@ public partial class ListView : Control
             Rectangle itemBounds = lvi.Bounds;
             // LVM_FINDITEM is a nightmare
             // LVM_FINDITEM will use the top left corner of icon rectangle to determine the closest item
-            // What happens if there is no icon for this item? then the top left corner of the icon rectangle falls INSIDE the item label (???)
+            // What happens if there is no icon for this item? then the top left corner of the icon rectangle
+            // falls INSIDE the item label (???)
 
             Rectangle iconBounds = GetItemRect(lvi.Index, ItemBoundsPortion.Icon);
 
@@ -4451,8 +4452,9 @@ public partial class ListView : Control
         if (Items.Count > 0)
         {
             // APPCOMPAT
-            // V1.* users implement virtualization by communicating directly to the native ListView and by passing our virtualization implementation.
-            // In that case, the native list view may have an item under the mouse even if our wrapper thinks the item count is 0.
+            // V1.* users implement virtualization by communicating directly to the native ListView
+            // and by passing our virtualization implementation. In that case, the native list view may
+            // have an item under the mouse even if our wrapper thinks the item count is 0.
             // And that may cause GetItemAt to throw an out of bounds exception.
 
             Point pos = Cursor.Position;

@@ -77,7 +77,8 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     }
 
     // NOTE: currently this finalizer is unneeded (empty). See https://github.com/dotnet/winforms/issues/6858.
-    // All classes that are not need to be finalized must be checked in DataGridViewElement() constructor. Consider to modify it if needed.
+    // All classes that are not need to be finalized must be checked in DataGridViewElement() constructor.
+    // Consider to modify it if needed.
     ~DataGridViewCell() => Dispose(disposing: false);
 
     [Browsable(false)]
@@ -1121,7 +1122,9 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     ///  custom editing controls and for derived classes as inherited accessibility may differ or
     ///  may be not inherited at all.
     /// </summary>
-    /// <returns>True if accessible hierarchy should be manually recreated for the cell and editing control, otherwise False.</returns>
+    /// <returns>
+    ///  True if accessible hierarchy should be manually recreated for the cell and editing control, otherwise False.
+    /// </returns>
     private bool AccessibleRestructuringNeeded
     {
         get
@@ -1154,8 +1157,9 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             }
         }
 
-        // If you are adding releasing unmanaged resources code here (disposing == false), you need to remove this class type
-        // (and all of its subclasses) from check in DataGridViewElement() constructor and DataGridViewElement_Subclasses_SuppressFinalizeCall test!
+        // If you are adding releasing unmanaged resources code here (disposing == false), you need to remove this
+        // class type(and all of its subclasses) from check in DataGridViewElement() constructor and
+        // DataGridViewElement_Subclasses_SuppressFinalizeCall test!
         // Also consider to modify ~DataGridViewCell() description.
     }
 
