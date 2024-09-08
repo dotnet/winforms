@@ -931,7 +931,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
         IComponent? component;
         LicenseContext oldContext = LicenseManager.CurrentContext;
 
-        // We don't want if there is a recursivity (creating a component create another one) to change the context again.
+        // We don't want if there is a recursively (creating a component create another one) to change the context again.
         // We already have the one we want and that would create a locking problem.
         bool changingContext = false;
         if (oldContext != LicenseContext)
@@ -1197,7 +1197,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
 
     bool IDesignerLoaderHost2.CanReloadWithErrors { get; set; }
 
-    // We implement IReflect to keep our reflection surface contstrained to IDesignerHost.
+    // We implement IReflect to keep our reflection surface constrained to IDesignerHost.
 
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods)]
     MethodInfo? IReflect.GetMethod(string name, BindingFlags bindingAttr, Binder? binder, Type[] types, ParameterModifier[]? modifiers) =>

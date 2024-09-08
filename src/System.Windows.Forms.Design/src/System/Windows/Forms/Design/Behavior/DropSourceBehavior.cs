@@ -36,7 +36,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
 
     private bool _targetAllowsSnapLines; // indicates if the drop target allows snaplines (flowpanels don't for ex)
     private IComponent _lastDropTarget; // indicates the drop target on the last 'give feedback' event
-    private Point _lastSnapOffset; // the last snapoffset we used.
+    private Point _lastSnapOffset; // the last SnapOffset we used.
     // These 2 could be different (e.g. if dropping between forms)
     private readonly BehaviorService _behaviorServiceSource; // ptr back to the BehaviorService in the drop source
     private BehaviorService _behaviorServiceTarget; // ptr back to the BehaviorService in the drop target
@@ -44,7 +44,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
     // this object will integrate SnapLines into the drag
     private DragAssistanceManager _dragAssistanceManager;
 
-    private Graphics _graphicsTarget; // graphics object of the adornerwindows (via BehaviorService) in drop target
+    private Graphics _graphicsTarget; // graphics object of the AdornerWindows (via BehaviorService) in drop target
 
     private readonly IServiceProvider _serviceProviderSource;
     private IServiceProvider _serviceProviderTarget;

@@ -34,7 +34,7 @@ internal class ToolStripMenuItemCodeDomSerializer : CodeDomSerializer
     public override object? Serialize(IDesignerSerializationManager manager, object value)
     {
         // Don't Serialize if we are Dummy Item ...
-        if (value is ToolStripMenuItem {IsOnDropDown: false} item)
+        if (value is ToolStripMenuItem { IsOnDropDown: false } item)
         {
             ToolStrip? parent = item.GetCurrentParent();
             if (parent is not null && parent.Site is null)
