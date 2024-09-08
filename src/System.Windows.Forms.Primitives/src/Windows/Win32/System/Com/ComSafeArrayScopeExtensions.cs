@@ -11,7 +11,8 @@ internal static class ComSafeArrayScopeExtensions
     /// </summary>
     /// <remarks>
     ///  <para>
-    ///   <typeparamref name="TComStruct"/> must implement <see cref="IComInterface{T}"/> where T is <typeparamref name="TComInterface"/>.
+    ///   <typeparamref name="TComStruct"/>
+    ///    must implement <see cref="IComInterface{T}"/> where T is <typeparamref name="TComInterface"/>.
     ///  </para>
     /// </remarks>
     public static unsafe ComSafeArrayScope<TComStruct> CreateComSafeArrayScope<TComStruct, TComInterface>(this TComInterface[] interfaces)

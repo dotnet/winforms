@@ -675,7 +675,8 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
     private static bool IsApostrophe(char ch) => ch is '\'' or ((char)0x2019); // Unicode Right Single Quote Mark
 
     /// <devdoc>
-    ///  Attribute values and their types are defined here - https://learn.Microsoft.com/windows/win32/winauto/uiauto-textattribute-ids
+    ///  Attribute values and their types are defined here -
+    ///  https://learn.Microsoft.com/windows/win32/winauto/uiauto-textattribute-ids
     /// </devdoc>
     private VARIANT GetAttributeValue(UIA_TEXTATTRIBUTE_ID textAttributeIdentifier)
     {

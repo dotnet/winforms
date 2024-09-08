@@ -93,7 +93,10 @@ internal partial struct PAGESETUPDLGW
     /// <summary>
     ///  <para>
     ///   Type: <b><a href="https://learn.microsoft.com/windows/win32/api/windef/ns-windef-point">
-    ///   POINT</a></b> The dimensions of the paper selected by the user. The <b>PSD_INTHOUSANDTHSOFINCHES</b> or <b>PSD_INHUNDREDTHSOFMILLIMETERS</b> flag indicates the units of measurement.</para>
+    ///   POINT</a></b> The dimensions of the paper selected by the user.
+    ///   The <b>PSD_INTHOUSANDTHSOFINCHES</b> or <b>PSD_INHUNDREDTHSOFMILLIMETERS</b> flag indicates
+    ///   the units of measurement.
+    ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-pagesetupdlgw#members">
     ///    Read more on learn.Microsoft.com.
@@ -152,11 +155,19 @@ internal partial struct PAGESETUPDLGW
     public HINSTANCE hInstance;
 
     /// <summary>
-    /// <para>
-    ///  Type: <b>LPARAM</b> Application-defined data that the system passes to the hook procedure identified by the
-    ///  <b>lpfnPageSetupHook</b> member. When the system sends the <a href="https://learn.microsoft.com/windows/desktop/dlgbox/wm-initdialog">WM_INITDIALOG</a> message to the hook procedure, the message's <i>lParam</i> parameter is a pointer to the <b>PAGESETUPDLG</b> structure specified when the dialog was created. The hook procedure can use this pointer to get the <b>lCustData</b> value.</para>
-    /// <para>
-    ///  <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-pagesetupdlgw#members">Read more on learn.Microsoft.com.</see></para>
+    ///  <para>
+    ///   Type: <b>LPARAM</b> Application-defined data that the system passes to the hook procedure identified by the
+    ///   <b>lpfnPageSetupHook</b> member. When the system sends the
+    ///   <a href="https://learn.microsoft.com/windows/desktop/dlgbox/wm-initdialog">WM_INITDIALOG</a>
+    ///   message to the hook procedure, the message's <i>lParam</i> parameter is a pointer to the <b>PAGESETUPDLG</b>
+    ///   structure specified when the dialog was created. The hook procedure can use this pointer to get the
+    ///   <b>lCustData</b> value.
+    ///  </para>
+    ///  <para>
+    ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-pagesetupdlgw#members">
+    ///    Read more on learn.Microsoft.com.
+    ///   </see>
+    ///  </para>
     /// </summary>
     public LPARAM lCustData;
 

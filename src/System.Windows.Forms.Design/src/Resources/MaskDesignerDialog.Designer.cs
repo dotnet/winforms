@@ -298,7 +298,8 @@ internal class MaskDesignerDialog {
     }
     
     /// <summary>
-    ///  Looks up a localized string similar to &amp;Select a predefined mask description from the list below or select Custom to define a custom mask..
+    ///  Looks up a localized string similar to &amp;Select a predefined mask description from the list below or
+    ///  select Custom to define a custom mask..
     /// </summary>
     internal static string lblHeader_Text {
         get {
@@ -582,7 +583,16 @@ internal class MaskDesignerDialog {
     }
     
     /// <summary>
-    ///  Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-16&quot;?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name=&quot;checkBoxUseValidatingType&quot; Row=&quot;0&quot; RowSpan=&quot;1&quot; Column=&quot;2&quot; ColumnSpan=&quot;1&quot; /&gt;&lt;Control Name=&quot;lblMask&quot; Row=&quot;0&quot; RowSpan=&quot;1&quot; Column=&quot;0&quot; ColumnSpan=&quot;1&quot; /&gt;&lt;Control Name=&quot;txtBoxMask&quot; Row=&quot;0&quot; RowSpan=&quot;1&quot; Column=&quot;1&quot; ColumnSpan=&quot;1&quot; /&gt;&lt;Control Name=&quot;lblTryIt&quot; Row=&quot;1&quot; RowSpan=&quot;1&quot; Column=&quot;0&quot; ColumnSpan=&quot;1&quot; /&gt;&lt;Control Name=&quot;maskedTextBox&quot; Row=&quot;1&quot; RowSpan=&quot;1&quot; Column=&quot;1&quot; ColumnSpan=&quot;1&quot; /&gt;&lt;/Controls&gt;&lt;Columns Styles=&quot;AutoSize,0,Percent,100,Aut [rest of string was truncated]&quot;;.
+    ///  Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-16&quot;?&gt;&lt;
+    ///  TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name=&quot;checkBoxUseValidatingType&quot; Row=&quot;
+    ///  0&quot; RowSpan=&quot;1&quot; Column=&quot;2&quot; ColumnSpan=&quot;1&quot; /&gt;&lt;Control Name=&quot;
+    ///  lblMask&quot; Row=&quot;0&quot; RowSpan=&quot;1&quot; Column=&quot;0&quot; ColumnSpan=&quot;1&quot; /&gt;&lt;
+    ///  Control Name=&quot;txtBoxMask&quot; Row=&quot;0&quot; RowSpan=&quot;1&quot; Column=&quot;
+    ///  1&quot; ColumnSpan=&quot;1&quot; /&gt;&lt;Control Name=&quot;lblTryIt&quot; Row=&quot;
+    ///  1&quot; RowSpan=&quot;1&quot; Column=&quot;0&quot; ColumnSpan=&quot;1&quot; /&gt;&lt;Control Name=&quot;
+    ///  maskedTextBox&quot; Row=&quot;1&quot; RowSpan=&quot;1&quot; Column=&quot;1&quot; ColumnSpan=&quot;
+    ///  1&quot; /&gt;&lt;/Controls&gt;&lt;Columns Styles=&quot;
+    ///  AutoSize,0,Percent,100,Aut [rest of string was truncated]&quot;;.
     /// </summary>
     internal static string maskTryItTable_LayoutSettings {
         get {
@@ -661,7 +671,12 @@ internal class MaskDesignerDialog {
     }
     
     /// <summary>
-    ///  Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-16&quot;?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name=&quot;btnCancel&quot; Row=&quot;0&quot; RowSpan=&quot;1&quot; Column=&quot;1&quot; ColumnSpan=&quot;1&quot; /&gt;&lt;Control Name=&quot;btnOK&quot; Row=&quot;0&quot; RowSpan=&quot;1&quot; Column=&quot;0&quot; ColumnSpan=&quot;1&quot; /&gt;&lt;/Controls&gt;&lt;Columns Styles=&quot;Percent,50,Percent,50&quot; /&gt;&lt;Rows Styles=&quot;AutoSize,0&quot; /&gt;&lt;/TableLayoutSettings&gt;.
+    ///  Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-16&quot;?&gt;&lt;
+    ///  TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name=&quot;btnCancel&quot; Row=&quot;
+    ///  0&quot; RowSpan=&quot;1&quot; Column=&quot;1&quot; ColumnSpan=&quot;1&quot; /&gt;&lt;
+    ///  Control Name=&quot;btnOK&quot; Row=&quot;0&quot; RowSpan=&quot;1&quot; Column=&quot;
+    ///  0&quot; ColumnSpan=&quot;1&quot; /&gt;&lt;/Controls&gt;&lt;Columns Styles=&quot;
+    ///  Percent,50,Percent,50&quot; /&gt;&lt;Rows Styles=&quot;AutoSize,0&quot; /&gt;&lt;/TableLayoutSettings&gt;.
     /// </summary>
     internal static string okCancelTableLayoutPanel_LayoutSettings {
         get {
@@ -730,7 +745,15 @@ internal class MaskDesignerDialog {
     }
     
     /// <summary>
-    ///  Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-16&quot;?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name=&quot;maskTryItTable&quot; Row=&quot;3&quot; RowSpan=&quot;1&quot; Column=&quot;0&quot; ColumnSpan=&quot;1&quot; /&gt;&lt;Control Name=&quot;okCancelTableLayoutPanel&quot; Row=&quot;4&quot; RowSpan=&quot;1&quot; Column=&quot;0&quot; ColumnSpan=&quot;1&quot; /&gt;&lt;Control Name=&quot;lblHeader&quot; Row=&quot;1&quot; RowSpan=&quot;1&quot; Column=&quot;0&quot; ColumnSpan=&quot;1&quot; /&gt;&lt;Control Name=&quot;listViewCannedMasks&quot; Row=&quot;2&quot; RowSpan=&quot;1&quot; Column=&quot;0&quot; ColumnSpan=&quot;1&quot; /&gt;&lt;/Controls&gt;&lt;Columns Styles=&quot;Percent,50&quot; /&gt;&lt;Rows Styles=&quot;AutoSize,0,AutoSize,0,Percent,50,AutoSize,0,AutoSize,0&quot; /&gt;&lt;/ [rest of string was truncated]&quot;;.
+    ///  Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-16&quot;?&gt;&lt;
+    ///  TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name=&quot;maskTryItTable&quot; Row=&quot;3&quot;
+    ///  RowSpan=&quot;1&quot; Column=&quot;0&quot; ColumnSpan=&quot;1&quot; /&gt;&lt;Control Name=&quot;
+    ///  okCancelTableLayoutPanel&quot; Row=&quot;4&quot; RowSpan=&quot;1&quot; Column=&quot;0&quot; ColumnSpan=&quot;
+    ///  1&quot; /&gt;&lt;Control Name=&quot;lblHeader&quot; Row=&quot;1&quot; RowSpan=&quot;1&quot; Column=&quot;
+    ///  0&quot; ColumnSpan=&quot;1&quot; /&gt;&lt;Control Name=&quot;listViewCannedMasks&quot; Row=&quot;2&quot;
+    ///  RowSpan=&quot;1&quot; Column=&quot;0&quot; ColumnSpan=&quot;1&quot; /&gt;&lt;/Controls&gt;&lt;
+    ///  Columns Styles=&quot;Percent,50&quot; /&gt;&lt;Rows Styles=&quot;
+    ///  AutoSize,0,AutoSize,0,Percent,50,AutoSize,0,AutoSize,0&quot; /&gt;&lt;/ [rest of string was truncated]&quot;;.
     /// </summary>
     internal static string overarchingTableLayoutPanel_LayoutSettings {
         get {
