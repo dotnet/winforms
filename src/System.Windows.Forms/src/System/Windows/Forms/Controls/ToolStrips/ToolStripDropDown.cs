@@ -1252,8 +1252,8 @@ public partial class ToolStripDropDown : ToolStrip
             {
                 if ((!(e.ClickedItem is ToolStripDropDownItem dismissingItem))                   // it's not a dropdownitem
                    || (dismissingItem is ToolStripSplitButton && !dismissingItem.DropDown.Visible) // clicking on the split button button dismisses
-                   || !(dismissingItem.HasDropDownItems))
-                {    // clicking on a item w/dropdown does not dismiss window
+                   || !dismissingItem.HasDropDownItems)
+                {   // clicking on a item w/dropdown does not dismiss window
                     Close(ToolStripDropDownCloseReason.ItemClicked);
                 }
             }
