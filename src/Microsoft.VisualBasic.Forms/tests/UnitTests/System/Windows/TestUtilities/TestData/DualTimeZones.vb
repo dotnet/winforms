@@ -5,13 +5,13 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
     Public Class DualTimeZones
 
-        Public Sub New(zone As TimeZoneNames)
+        Public Sub New(zone As TimeZone)
             TimeName = zone.ToString
             Select Case zone
-                Case TimeZoneNames.GMT
+                Case TimeZone.GMT
                     ComputerTime = My.Computer.Clock.GmtTime
                     SystemTime = Date.UtcNow
-                Case TimeZoneNames.Local
+                Case TimeZone.Local
                     ComputerTime = My.Computer.Clock.LocalTime
                     SystemTime = Date.Now
                 Case Else
