@@ -55,25 +55,25 @@ public class ControlDesignerDesignerControlCollectionTests : IDisposable
     [Fact]
     public void Add_ShouldAddControlToCollection()
     {
-        Control controlToAdd = new();
-        ((IList)_collection).Add(controlToAdd);
-        _control.Controls.Cast<Control>().Should().Contain(controlToAdd);
+        Control control = new();
+        ((IList)_collection).Add(control);
+        _control.Controls.Cast<Control>().Should().Contain(control);
     }
 
     [Fact]
     public void AddRange_ShouldAddMultipleControlsToCollection()
     {
-        Control[] controlsToAdd = { new(), new() };
-        _collection.AddRange(controlsToAdd);
-        _control.Controls.Cast<Control>().Should().Contain(controlsToAdd);
+        Control[] control = { new(), new() };
+        _collection.AddRange(control);
+        _control.Controls.Cast<Control>().Should().Contain(control);
     }
 
     [Fact]
     public void Contains_ShouldReturnTrueIfControlExists()
     {
-        Control controlToAdd = new();
-        ((IList)_collection).Add(controlToAdd);
-        ((IList)_collection).Contains(controlToAdd).Should().BeTrue();
+        Control control = new();
+        ((IList)_collection).Add(control);
+        ((IList)_collection).Contains(control).Should().BeTrue();
     }
 
     [Fact]
@@ -98,65 +98,67 @@ public class ControlDesignerDesignerControlCollectionTests : IDisposable
     [Fact]
     public void IndexOf_ShouldReturnCorrectIndex()
     {
-        Control controlToAdd = new();
-        ((IList)_collection).Add(controlToAdd);
-        ((IList)_collection).IndexOf(controlToAdd).Should().Be(_control.Controls.IndexOf(controlToAdd));
+        Control control = new();
+        ((IList)_collection).Add(control);
+        ((IList)_collection).IndexOf(control).Should().Be(_control.Controls.IndexOf(control));
     }
 
     [Fact]
     public void Insert_ShouldInsertControlAtCorrectIndex()
     {
-        Control controlToInsert = new();
+        Control control = new();
         Control anotherControl = new();
         ((IList)_collection).Add(anotherControl);
-        ((IList)_collection).Add(controlToInsert);
-        _collection.SetChildIndex(controlToInsert, 0);
-        _control.Controls[0].Should().Be(controlToInsert);
+        ((IList)_collection).Add(control);
+        _collection.SetChildIndex(control, 0);
+        _control.Controls[0].Should().Be(control);
     }
 
     [Fact]
     public void Remove_ShouldRemoveControlFromCollection()
     {
-        Control controlToRemove = new();
-        ((IList)_collection).Add(controlToRemove);
-        ((IList)_collection).Remove(controlToRemove);
-        _control.Controls.Contains(controlToRemove).Should().BeFalse();
+        Control control = new();
+        ((IList)_collection).Add(control);
+        ((IList)_collection).Remove(control);
+        _control.Controls.Contains(control).Should().BeFalse();
     }
 
     [Fact]
     public void RemoveAt_ShouldRemoveControlAtSpecifiedIndex()
     {
-        Control controlToRemove = new();
-        ((IList)_collection).Add(controlToRemove);
+        Control control = new();
+        ((IList)_collection).Add(control);
         ((IList)_collection).RemoveAt(0);
-        _control.Controls.Contains(controlToRemove).Should().BeFalse();
+        _control.Controls.Contains(control).Should().BeFalse();
     }
 
     [Fact]
     public void GetChildIndex_ShouldReturnCorrectIndex()
     {
-        Control child = new();
-        _collection.Add(child);
-        _collection.GetChildIndex(child, false).Should().Be(_control.Controls.GetChildIndex(child, false));
+        Control control = new();
+        _collection.Add(control);
+        _collection.GetChildIndex(control, false).Should().Be(_control.Controls.GetChildIndex(control, false));
     }
 
     [Fact]
     public void SetChildIndex_ShouldSetCorrectIndex()
     {
-        Control child = new();
-        _collection.Add(child);
-        _collection.SetChildIndex(child, 0);
-        _control.Controls.GetChildIndex(child).Should().Be(0);
+        Control control = new();
+        _collection.Add(control);
+        _collection.SetChildIndex(control, 0);
+        _control.Controls.GetChildIndex(control).Should().Be(0);
     }
 
     [Fact]
     public void Clear_ShouldRemoveAllControlsFromCollection()
     {
-        Control child = new();
-        child.Site = new DummySite { Component = child, DesignMode = true };
-        _collection.Add(child);
+        Control control = new();
+        control.Site = new DummySite { Component = control, DesignMode = true };
+        _collection.Add(control);
+        _control.Controls.Contains(control).Should().BeTrue();
+
         _collection.Clear();
-        _control.Controls.Contains(child).Should().BeFalse();
+        _control.Controls.Contains(control).Should().BeFalse();
     }
 
     private class DummySite : ISite
