@@ -21,7 +21,7 @@ public partial class ObsoleteControls : Form
         try
         {
             InitializeComponent();
-            CreateMainMenu();            
+            CreateMainMenu();
             SetUp(); // This code is only valid when redirected to NET48.
         }
         catch (PlatformNotSupportedException ex)
