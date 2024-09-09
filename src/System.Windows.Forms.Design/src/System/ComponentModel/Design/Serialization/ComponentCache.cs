@@ -60,7 +60,9 @@ internal sealed partial class ComponentCache : IDisposable
                 _cache ??= [];
             }
 
-            // it's a 1:1 relationship so we can go back from entry to  component (if it's not setup yet.. which should not happen, see ComponentCodeDomSerializer.cs::Serialize for more info)
+            // it's a 1:1 relationship so we can go back from entry to component
+            // (if it's not setup yet.. which should not happen,
+            // see ComponentCodeDomSerializer.cs::Serialize for more info)
             if (_cache is not null && component is IComponent)
             {
                 value.Component ??= component;
@@ -112,7 +114,8 @@ internal sealed partial class ComponentCache : IDisposable
 
     private void OnComponentRename(object? source, ComponentRenameEventArgs? args)
     {
-        // we might have a symbolic rename that has side effects beyond our control, so we don't have a choice but to clear the whole cache when a component gets renamed...
+        // we might have a symbolic rename that has side effects beyond our control,
+        // so we don't have a choice but to clear the whole cache when a component gets renamed...
         _cache?.Clear();
     }
 

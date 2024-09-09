@@ -12,7 +12,7 @@ internal partial class CommandSet
     ///  We extend MenuCommand for our command set items. A command set item
     ///  is a menu command with an added delegate that is used to determine the
     ///  flags for the menu item. We have different classes of delegates here.
-    ///  For example, many  menu items may be enabled when there is at least
+    ///  For example, many menu items may be enabled when there is at least
     ///  one object selected, while others are only enabled if there is more than
     ///  one object or if there is a primary selection.
     /// </summary>

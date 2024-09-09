@@ -61,7 +61,9 @@ internal partial class ResourceCodeDomSerializer : CodeDomSerializer
     private const string ResourceManagerName = "resources";
 
     /// <summary>
-    ///  Deserializes the given CodeDom object into a real object. This will use the serialization manager to create objects and resolve data types. The root of the object graph is returned.
+    ///  Deserializes the given CodeDom object into a real object.
+    ///  This will use the serialization manager to create objects and resolve data types.
+    ///  The root of the object graph is returned.
     /// </summary>
     public override object? Deserialize(IDesignerSerializationManager manager, object codeObject)
     {
@@ -79,7 +81,8 @@ internal partial class ResourceCodeDomSerializer : CodeDomSerializer
         {
             foreach (CodeStatement element in statements)
             {
-                // We create the resource manager ourselves here because it's not just a straight parse of the code. Do special parsing of the resources statement
+                // We create the resource manager ourselves here because it's not just a straight parse of the code.
+                // Do special parsing of the resources statement
                 if (element is CodeVariableDeclarationStatement statement)
                 {
                     if (statement.Name.Equals(ResourceManagerName))
@@ -89,7 +92,8 @@ internal partial class ResourceCodeDomSerializer : CodeDomSerializer
                 }
                 else
                 {
-                    // If we do not yet have an instance, we will need to pick through the  statements and see if we can find one.
+                    // If we do not yet have an instance,
+                    // we will need to pick through the statements and see if we can find one.
                     if (instance is null)
                     {
                         instance = DeserializeStatementToInstance(manager, element);
@@ -217,9 +221,11 @@ internal partial class ResourceCodeDomSerializer : CodeDomSerializer
     }
 
     /// <summary>
-    ///  Serializes the given object into a CodeDom object. This expects the following values to be available on the context stack:
-    ///  A CodeStatementCollection that we can add our resource declaration to,  if necessary.
-    ///  An ExpressionContext that contains the property, field or method that is being serialized, along with the object being serialized. We need this so we can create a unique resource name for the object.
+    ///  Serializes the given object into a CodeDom object.
+    ///  This expects the following values to be available on the context stack:
+    ///  A CodeStatementCollection that we can add our resource declaration to, if necessary.
+    ///  An ExpressionContext that contains the property, field or method that is being serialized,
+    ///  along with the object being serialized. We need this so we can create a unique resource name for the object.
     /// </summary>
     public override object Serialize(IDesignerSerializationManager manager, object value)
     {
@@ -227,7 +233,10 @@ internal partial class ResourceCodeDomSerializer : CodeDomSerializer
     }
 
     /// <summary>
-    ///  Serializes the given object into a CodeDom object. This expects the following values to be available on the context stack: A CodeStatementCollection that we can add our resource declaration to,  if necessary. An ExpressionContext that contains the property, field or method that is being serialized, along with the object being serialized. We need this so we can create a unique resource name for the object.
+    ///  Serializes the given object into a CodeDom object. This expects the following values
+    ///  to be available on the context stack: A CodeStatementCollection that we can add our resource declaration to,
+    ///  if necessary. An ExpressionContext that contains the property, field or method that is being serialized,
+    ///  along with the object being serialized. We need this so we can create a unique resource name for the object.
     /// </summary>
     public object Serialize(IDesignerSerializationManager manager, object value, bool shouldSerializeInvariant)
     {
@@ -235,7 +244,11 @@ internal partial class ResourceCodeDomSerializer : CodeDomSerializer
     }
 
     /// <summary>
-    ///  Serializes the given object into a CodeDom object. This expects the following values to be available on the context stack: A CodeStatementCollection that we can add our resource declaration to, if necessary. An ExpressionContext that contains the property, field or method that is being serialized, along with the object being serialized. We need this so we can create a unique resource name for the object.
+    ///  Serializes the given object into a CodeDom object.
+    ///  This expects the following values to be available on the context stack:
+    ///  A CodeStatementCollection that we can add our resource declaration to, if necessary.
+    ///  An ExpressionContext that contains the property, field or method that is being serialized,
+    ///  along with the object being serialized. We need this so we can create a unique resource name for the object.
     /// </summary>
     public object Serialize(IDesignerSerializationManager manager, object? value, bool shouldSerializeInvariant, bool ensureInvariant)
     {
@@ -247,19 +260,28 @@ internal partial class ResourceCodeDomSerializer : CodeDomSerializer
     /// </summary>
     private CodeExpression Serialize(IDesignerSerializationManager manager, object? value, bool forceInvariant, bool shouldSerializeInvariant, bool ensureInvariant)
     {
-        // Resource serialization is a little inconsistent. We deserialize our own resource manager creation statement, but we will never be asked to serialize a resource manager, because it doesn't exist as a product of the design container; it is purely an artifact of serializing. Some not-so-obvious side effects of this are:
-        //      This method will never ever be called by the serialization system directly. There is no attribute or metadata that will invoke it. Instead, other serializers will call this method to see if we should serialize to resources.
-        //      We need a way to inject the local variable declaration into the method body for the resource manager if we actually do emit a resource, which we shove into the statements collection.
+        // Resource serialization is a little inconsistent. We deserialize our own resource manager creation statement,
+        // but we will never be asked to serialize a resource manager,
+        // because it doesn't exist as a product of the design container; it is purely an artifact of serializing.
+        // Some not-so-obvious side effects of this are:
+        //     This method will never ever be called by the serialization system directly.
+        //     There is no attribute or metadata that will invoke it.
+        //     Instead, other serializers will call this method to see if we should serialize to resources.
+        //     We need a way to inject the local variable declaration into the method body
+        //     for the resource manager if we actually do emit a resource,which we shove into the statements collection.
         SerializationResourceManager sm = GetResourceManager(manager);
         CodeStatementCollection? statements = manager.GetContext<CodeStatementCollection>();
-        // If this serialization resource manager has never been used to output culture-sensitive statements, then we must emit the local variable hookup. Culture invariant statements are used to save random data that is not representable in code, so there is no need to emit a declaration.
+        // If this serialization resource manager has never been used to output culture-sensitive statements,
+        // then we must emit the local variable hookup. Culture invariant statements are used to save
+        // random data that is not representable in code, so there is no need to emit a declaration.
         if (!forceInvariant)
         {
             if (!sm.DeclarationAdded)
             {
                 sm.DeclarationAdded = true;
 
-                // If we have a root context, then we can write out a reasonable resource manager constructor. If not, then we're a bit hobbled because we have to guess at the resource name.
+                // If we have a root context, then we can write out a reasonable resource manager constructor.
+                // If not, then we're a bit hobbled because we have to guess at the resource name.
                 if (statements is not null)
                 {
                     CodeExpression[] parameters;
@@ -281,7 +303,9 @@ internal partial class ResourceCodeDomSerializer : CodeDomSerializer
             }
             else
             {
-                // Check to see if we have an expression for SM yet. If we have cached the declaration  in the component cache, the expression may not be setup so we should re-apply it.
+                // Check to see if we have an expression for SM yet.
+                // If we have cached the declaration in the component cache,
+                // the expression may not be setup so we should re-apply it.
                 if (!sm.ExpressionAdded)
                 {
                     if (GetExpression(manager, sm) is null)
@@ -298,7 +322,8 @@ internal partial class ResourceCodeDomSerializer : CodeDomSerializer
         ExpressionContext? tree = manager.GetContext<ExpressionContext>();
         string resourceName = sm.SetValue(manager, tree, value, forceInvariant, shouldSerializeInvariant, ensureInvariant, false);
 
-        // Now the next step is to discover the type of the given value. If it is a string, we will invoke "GetString"  Otherwise, we will invoke "GetObject" and supply a cast to the proper value.
+        // Now the next step is to discover the type of the given value. If it is a string,
+        // we will invoke "GetString"  Otherwise, we will invoke "GetObject" and supply a cast to the proper value.
         bool needCast;
         string methodName;
 
@@ -333,8 +358,11 @@ internal partial class ResourceCodeDomSerializer : CodeDomSerializer
     }
 
     /// <summary>
-    ///  Serializes the given object into a CodeDom object saving resources in the invariant culture, rather than the current culture. This expects the following values to be available on the context stack: A CodeStatementCollection that we can add our resource declaration to,  if necessary.
-    ///  An ExpressionContext that contains the property, field or method that is being serialized, along with the object being serialized. We need this so we can create a unique resource name for the object.
+    ///  Serializes the given object into a CodeDom object saving resources in the invariant culture,
+    ///  rather than the current culture. This expects the following values to be available on the context stack:
+    ///  A CodeStatementCollection that we can add our resource declaration to, if necessary.
+    ///  An ExpressionContext that contains the property, field or method that is being serialized,
+    ///  along with the object being serialized. We need this so we can create a unique resource name for the object.
     /// </summary>
     public object SerializeInvariant(IDesignerSerializationManager manager, object value, bool shouldSerializeValue)
     {

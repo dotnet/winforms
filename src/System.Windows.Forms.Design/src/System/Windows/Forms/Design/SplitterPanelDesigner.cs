@@ -10,8 +10,9 @@ using System.Drawing.Drawing2D;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-///  This class handles all design time behavior for the panel class. This draws a visible border on the panel if it doesn't have a border so the
-///  user knows where the boundaries of the panel lie.
+///  This class handles all design time behavior for the panel class.
+///  This draws a visible border on the panel if it doesn't have a border
+///  so the user knows where the boundaries of the panel lie.
 /// </summary>
 internal class SplitterPanelDesigner : PanelDesigner
 {
@@ -223,7 +224,7 @@ internal class SplitterPanelDesigner : PanelDesigner
         properties.Remove("Locked");
         properties.Remove("GenerateMember");
 
-        // Remove the "(Name)" property  from the property grid.
+        // Remove the "(Name)" property from the property grid.
         foreach (DictionaryEntry de in properties)
         {
             PropertyDescriptor descriptor = (PropertyDescriptor)de.Value!;
@@ -236,7 +237,8 @@ internal class SplitterPanelDesigner : PanelDesigner
     }
 
     /// <summary>
-    ///  Returns a list of SnapLine objects representing interesting alignment points for this control. These SnapLines are used to assist in the positioning of the control on a parent's surface.
+    ///  Returns a list of SnapLine objects representing interesting alignment points for this control.
+    ///  These SnapLines are used to assist in the positioning of the control on a parent's surface.
     /// </summary>
     public override IList SnapLines
     {
@@ -252,7 +254,8 @@ internal class SplitterPanelDesigner : PanelDesigner
     }
 
     /// <summary>
-    ///  Retrieves a set of rules concerning the movement capabilities of a component. This should be one or more flags from the SelectionRules class.
+    ///  Retrieves a set of rules concerning the movement capabilities of a component.
+    ///  This should be one or more flags from the SelectionRules class.
     ///  If no designer provides rules for a component, the component will not get any UI services.
     /// </summary>
     public override SelectionRules SelectionRules => Control.Parent is SplitContainer ? SelectionRules.Locked : SelectionRules.None;

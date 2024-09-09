@@ -323,7 +323,7 @@ internal sealed partial class DesignerActionPanel
                     return true;
                 }
 
-                // Not passing Alt key event to base class to prevent  closing 'Combobox Tasks window'
+                // Not passing Alt key event to base class to prevent closing 'Combobox Tasks window'
                 else if ((keyData & Keys.Alt) == Keys.Alt)
                 {
                     return true;
