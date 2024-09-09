@@ -10,7 +10,7 @@ namespace System.ComponentModel.Design.Serialization;
 public abstract class MemberCodeDomSerializer : CodeDomSerializerBase
 {
     /// <summary>
-    ///  This method actually performs the serialization.  When the member is serialized the necessary statements will be added to the statements collection.
+    ///  This method actually performs the serialization. When the member is serialized the necessary statements will be added to the statements collection.
     /// </summary>
     public abstract void Serialize(IDesignerSerializationManager manager, object value, MemberDescriptor descriptor, CodeStatementCollection statements);
 

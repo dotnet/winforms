@@ -12,20 +12,18 @@
     <Copyright>$(CopyrightNetFoundation)</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
-    <LangVersion>preview</LangVersion>
+    <LangVersion Condition="'$(LangVersion)' == ''">preview</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
 
     <IsAnalyzerProject>false</IsAnalyzerProject>
     <IsAnalyzerProject Condition="!$(IsTestProject) and
-                                  ($(MSBuildProjectName.EndsWith('.Analyzers')) or $(MSBuildProjectName.EndsWith('.Analyzers.CSharp')))"
+                                  ($(MSBuildProjectName.EndsWith('.Analyzers')) 
+                                     or $(MSBuildProjectName.EndsWith('.CodeFixes.VisualBasic'))
+                                     or $(MSBuildProjectName.EndsWith('.CodeFixes.CSharp'))
+                                     or $(MSBuildProjectName.EndsWith('.Analyzers.VisualBasic'))
+                                     or $(MSBuildProjectName.EndsWith('.Analyzers.CSharp')))"
                                   >true</IsAnalyzerProject>
-
-    <!--
-     XML cref tags don't resolve the same way code does. Until we can get this resolved we need to turn this off in
-     order to use CsWin32 in both System.Drawing and System.Windows.Forms.
-    -->
-    <NoWarn>$(NoWarn);CS1574;CS1580</NoWarn>
   </PropertyGroup>
 
   <!--

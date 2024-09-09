@@ -14,7 +14,7 @@ namespace System.Windows.Forms.Design;
 internal class TableLayoutControlCollectionCodeDomSerializer : CollectionCodeDomSerializer
 {
     /// <summary>
-    ///  Serializes the given collection.  targetExpression will refer to the expression used to rever to the
+    ///  Serializes the given collection. targetExpression will refer to the expression used to rever to the
     ///  collection, but it can be null.
     /// </summary>
     protected override object SerializeCollection(IDesignerSerializationManager manager, CodeExpression? targetExpression, Type targetType, ICollection originalCollection, ICollection valuesToSerialize)

@@ -24,7 +24,7 @@ namespace System.Windows.Forms;
 public abstract partial class TextBoxBase : Control
 {
     // The boolean properties for this control are contained in the textBoxFlags bit
-    // vector.  We can store up to 32 boolean values in this one vector.  Here we
+    // vector. We can store up to 32 boolean values in this one vector. Here we
     // create the bitmasks for each bit in the vector.
 
     private static readonly int s_autoSize = BitVector32.CreateMask();
@@ -83,7 +83,7 @@ public abstract partial class TextBoxBase : Control
     private BitVector32 _textBoxFlags;
 
     /// <summary>
-    ///  Creates a new TextBox control.  Uses the parent's current font and color
+    ///  Creates a new TextBox control. Uses the parent's current font and color
     ///  set.
     /// </summary>
     internal TextBoxBase() : base()
@@ -97,6 +97,10 @@ public abstract partial class TextBoxBase : Control
                 | ControlStyles.StandardDoubleClick
                 | ControlStyles.UseTextForAccessibility
                 | ControlStyles.UserPaint, false);
+
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001
 
         // cache requestedHeight. Note: Control calls DefaultSize (overridable) in the constructor
         // to set the control's cached height that is returned when calling Height, so we just
@@ -248,8 +252,8 @@ public abstract partial class TextBoxBase : Control
         }
         set
         {
-            // Note that we intentionally do not call base.  TextBoxes size themselves by
-            // overriding SetBoundsCore (old RTM code).  We let CommonProperties.GetAutoSize
+            // Note that we intentionally do not call base. TextBoxes size themselves by
+            // overriding SetBoundsCore (old RTM code). We let CommonProperties.GetAutoSize
             // continue to return false to keep our LayoutEngines from messing with TextBoxes.
             // This is done for backwards compatibility since the new AutoSize behavior differs.
             if (_textBoxFlags[s_autoSize] != value)
@@ -539,7 +543,7 @@ public abstract partial class TextBoxBase : Control
     }
 
     /// <summary>
-    ///  Internal version of ImeMode property.  The ImeMode of TextBoxBase controls depend on its IME restricted
+    ///  Internal version of ImeMode property. The ImeMode of TextBoxBase controls depend on its IME restricted
     ///  mode which is determined by the CanEnableIme property which checks whether the control is in Password or
     ///  ReadOnly mode.
     /// </summary>
@@ -662,7 +666,7 @@ public abstract partial class TextBoxBase : Control
                 bool curState = (int)PInvoke.SendMessage(this, PInvoke.EM_GETMODIFY) != 0;
                 if (_textBoxFlags[s_modified] != curState)
                 {
-                    // Raise ModifiedChanged event.  See WmReflectCommand for more info.
+                    // Raise ModifiedChanged event. See WmReflectCommand for more info.
                     _textBoxFlags[s_modified] = curState;
                     OnModifiedChanged(EventArgs.Empty);
                 }
@@ -771,7 +775,7 @@ public abstract partial class TextBoxBase : Control
     }
 
     /// <summary>
-    ///  Determines if the control is in password protect mode.  This is overridden in TextBox and
+    ///  Determines if the control is in password protect mode. This is overridden in TextBox and
     ///  MaskedTextBox and is false by default so RichTextBox that doesn't support Password doesn't
     ///  have to care about this.
     /// </summary>
@@ -791,7 +795,7 @@ public abstract partial class TextBoxBase : Control
         get
         {
             // COMPAT we must return the same busted height we did in Everett, even
-            // if it doesnt take multiline and word wrap into account.  For better accuracy and/or wrapping use
+            // if it doesn't take multiline and word wrap into account. For better accuracy and/or wrapping use
             // GetPreferredSize instead.
             int height = FontHeight;
             if (_borderStyle != BorderStyle.None)
@@ -852,7 +856,7 @@ public abstract partial class TextBoxBase : Control
     }
 
     /// <summary>
-    ///  Get the currently selected text start position and length.  Use this method internally
+    ///  Get the currently selected text start position and length. Use this method internally
     ///  to avoid calling SelectionStart + SelectionLength each of which does essentially the
     ///  same (save one message round trip).
     /// </summary>
@@ -863,7 +867,7 @@ public abstract partial class TextBoxBase : Control
         if (!IsHandleCreated)
         {
             // It is possible that the cached values are no longer valid if the Text has been changed
-            // while the control does not have a handle. We need to return valid values.  We also need
+            // while the control does not have a handle. We need to return valid values. We also need
             // to keep the old cached values in case the Text is changed again making the cached values
             // valid again.
             AdjustSelectionStartAndEnd(_selectionStart, _selectionLength, out start, out end, -1);
@@ -877,7 +881,7 @@ public abstract partial class TextBoxBase : Control
             start = startResult;
 
             // Here, we return the max of either 0 or the # returned by
-            // the windows call.  This eliminates a problem on nt4 where
+            // the windows call. This eliminates a problem on nt4 where
             // a huge negative # is being returned.
             start = Math.Max(0, start);
             // ditto for end
@@ -1082,7 +1086,7 @@ public abstract partial class TextBoxBase : Control
 
     [Browsable(false)]
     public virtual int TextLength
-        // Note: Currently WinForms does not fully support surrogates.  If
+        // Note: Currently WinForms does not fully support surrogates. If
         // the text contains surrogate characters this property may return incorrect values.
 
         => IsHandleCreated ? PInvoke.GetWindowTextLength(this) : Text.Length;
@@ -1305,7 +1309,7 @@ public abstract partial class TextBoxBase : Control
     public void Cut() => PInvoke.SendMessage(this, PInvoke.WM_CUT);
 
     /// <summary>
-    ///  Returns the text end position (one past the last input character).  This property is virtual to allow MaskedTextBox
+    ///  Returns the text end position (one past the last input character). This property is virtual to allow MaskedTextBox
     ///  to set the last input char position as opposed to the last char position which may be a mask character.
     /// </summary>
     internal virtual int GetEndPosition()
@@ -2058,7 +2062,7 @@ public abstract partial class TextBoxBase : Control
     }
 
     /// <summary>
-    ///  The control's window procedure.  Inheriting classes can override this
+    ///  The control's window procedure. Inheriting classes can override this
     ///  to add extra functionality, but should not forget to call
     ///  base.wndProc(m); to ensure the control continues to function properly.
     /// </summary>

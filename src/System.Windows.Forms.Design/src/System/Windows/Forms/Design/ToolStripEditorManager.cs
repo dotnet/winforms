@@ -124,7 +124,7 @@ internal class ToolStripEditorManager
         {
             _wrappedEditor = editorToolStrip;
             Bounds1 = bounds;
-            _wrappedEditor.Resize += new EventHandler(OnWrappedEditorResize);
+            _wrappedEditor.Resize += OnWrappedEditorResize;
             Controls.Add(editorToolStrip);
             Location = new Point(bounds.X, bounds.Y);
             Text = "InSituEditorWrapper";

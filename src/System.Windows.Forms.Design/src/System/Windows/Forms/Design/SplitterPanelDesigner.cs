@@ -10,7 +10,7 @@ using System.Drawing.Drawing2D;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-///  This class handles all design time behavior for the panel class.  This draws a visible border on the panel if it doesn't have a border so the
+///  This class handles all design time behavior for the panel class. This draws a visible border on the panel if it doesn't have a border so the
 ///  user knows where the boundaries of the panel lie.
 /// </summary>
 internal class SplitterPanelDesigner : PanelDesigner
@@ -95,7 +95,7 @@ internal class SplitterPanelDesigner : PanelDesigner
     {
         if (TryGetService(out IComponentChangeService? cs))
         {
-            cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
+            cs.ComponentChanged -= OnComponentChanged;
         }
 
         base.Dispose(disposing);
@@ -111,7 +111,7 @@ internal class SplitterPanelDesigner : PanelDesigner
 
         if (TryGetService(out IComponentChangeService? cs))
         {
-            cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
+            cs.ComponentChanged += OnComponentChanged;
         }
 
         PropertyDescriptor? lockedProp = TypeDescriptor.GetProperties(component)["Locked"];
@@ -190,7 +190,7 @@ internal class SplitterPanelDesigner : PanelDesigner
         using Font drawFont = new("Arial", 8);
         int watermarkX = rectangle.Width / 2 - (int)g.MeasureString(name, drawFont).Width / 2;
         int watermarkY = rectangle.Height / 2;
-        TextRenderer.DrawText(g, name, drawFont, new Point(watermarkX, watermarkY), waterMarkTextColor, TextFormatFlags.Default);
+        TextRenderer.DrawText(g, name, drawFont, new Point(watermarkX, watermarkY), waterMarkTextColor, TextFormatFlags.PreserveGraphicsClipping | TextFormatFlags.PreserveGraphicsTranslateTransform);
     }
 
     protected override void OnPaintAdornments(PaintEventArgs pe)

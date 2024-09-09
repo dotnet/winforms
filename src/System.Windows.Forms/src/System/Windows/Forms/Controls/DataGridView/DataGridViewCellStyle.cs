@@ -66,16 +66,7 @@ public class DataGridViewCellStyle : ICloneable
     [SRCategory(nameof(SR.CatLayout))]
     public DataGridViewContentAlignment Alignment
     {
-        get
-        {
-            int alignment = Properties.GetInteger(s_propAlignment, out bool found);
-            if (found)
-            {
-                return (DataGridViewContentAlignment)alignment;
-            }
-
-            return DataGridViewContentAlignment.NotSet;
-        }
+        get => Properties.GetValueOrDefault(s_propAlignment, DataGridViewContentAlignment.NotSet);
         set
         {
             switch (value)
@@ -106,7 +97,7 @@ public class DataGridViewCellStyle : ICloneable
             Debug.Assert(Enum.IsDefined(value));
             if (Alignment != value)
             {
-                Properties.SetInteger(s_propAlignment, (int)value);
+                Properties.AddValue(s_propAlignment, value);
                 OnPropertyChanged(DataGridViewCellStylePropertyInternal.Other);
             }
         }
@@ -115,16 +106,11 @@ public class DataGridViewCellStyle : ICloneable
     [SRCategory(nameof(SR.CatAppearance))]
     public Color BackColor
     {
-        get => Properties.GetColor(s_propBackColor);
+        get => Properties.GetValueOrDefault<Color>(s_propBackColor);
         set
         {
-            Color c = BackColor;
-            if (!value.IsEmpty || Properties.ContainsObject(s_propBackColor))
-            {
-                Properties.SetColor(s_propBackColor, value);
-            }
-
-            if (!c.Equals(BackColor))
+            Color previous = Properties.AddOrRemoveValue(s_propBackColor, value);
+            if (!previous.Equals(value))
             {
                 OnPropertyChanged(DataGridViewCellStylePropertyInternal.Color);
             }
@@ -150,13 +136,13 @@ public class DataGridViewCellStyle : ICloneable
             }
 
             if (value == DBNull.Value &&
-                Properties.ContainsObject(s_propDataSourceNullValue))
+                Properties.ContainsKey(s_propDataSourceNullValue))
             {
-                Properties.RemoveObject(s_propDataSourceNullValue);
+                Properties.RemoveValue(s_propDataSourceNullValue);
             }
             else
             {
-                Properties.SetObject(s_propDataSourceNullValue, value);
+                Properties.AddValue(s_propDataSourceNullValue, value);
             }
 
             Debug.Assert((oldDataSourceNullValue is null && DataSourceNullValue is not null) ||
@@ -168,21 +154,14 @@ public class DataGridViewCellStyle : ICloneable
     }
 
     [SRCategory(nameof(SR.CatAppearance))]
-    [AllowNull]
-    public Font Font
+    public Font? Font
     {
-        get => (Font)Properties.GetObject(s_propFont)!;
+        get => Properties.GetValueOrDefault<Font>(s_propFont);
         set
         {
-            Font f = Font;
-            if (value is not null || Properties.ContainsObject(s_propFont))
-            {
-                Properties.SetObject(s_propFont, value);
-            }
+            Font? previous = Properties.AddOrRemoveValue(s_propFont, value);
 
-            if ((f is null && value is not null) ||
-                (f is not null && value is null) ||
-                (f is not null && value is not null && !f.Equals(Font)))
+            if (previous != value || (previous is not null && !previous.Equals(value)))
             {
                 OnPropertyChanged(DataGridViewCellStylePropertyInternal.Font);
             }
@@ -192,16 +171,11 @@ public class DataGridViewCellStyle : ICloneable
     [SRCategory(nameof(SR.CatAppearance))]
     public Color ForeColor
     {
-        get => Properties.GetColor(s_propForeColor);
+        get => Properties.TryGetValue(s_propForeColor, out Color color) ? color : Color.Empty;
         set
         {
-            Color c = ForeColor;
-            if (!value.IsEmpty || Properties.ContainsObject(s_propForeColor))
-            {
-                Properties.SetColor(s_propForeColor, value);
-            }
-
-            if (!c.Equals(ForeColor))
+            Color previous = Properties.AddOrRemoveValue(s_propForeColor, value);
+            if (!previous.Equals(value))
             {
                 OnPropertyChanged(DataGridViewCellStylePropertyInternal.ForeColor);
             }
@@ -215,26 +189,10 @@ public class DataGridViewCellStyle : ICloneable
     [AllowNull]
     public string Format
     {
-        get
-        {
-            object? format = Properties.GetObject(s_propFormat);
-            if (format is null)
-            {
-                return string.Empty;
-            }
-            else
-            {
-                return (string)format;
-            }
-        }
+        get => Properties.GetStringOrEmptyString(s_propFormat);
         set
         {
-            string format = Format;
-            if ((value is not null && value.Length > 0) || Properties.ContainsObject(s_propFormat))
-            {
-                Properties.SetObject(s_propFormat, value);
-            }
-
+            string format = Properties.AddOrRemoveString(s_propFormat, value);
             if (!format.Equals(Format))
             {
                 OnPropertyChanged(DataGridViewCellStylePropertyInternal.Other);
@@ -325,13 +283,13 @@ public class DataGridViewCellStyle : ICloneable
                 return;
             }
 
-            if (value is string stringValue && stringValue.Length == 0 && Properties.ContainsObject(s_propNullValue))
+            if (value is string stringValue && stringValue.Length == 0 && Properties.ContainsKey(s_propNullValue))
             {
-                Properties.RemoveObject(s_propNullValue);
+                Properties.RemoveValue(s_propNullValue);
             }
             else
             {
-                Properties.SetObject(s_propNullValue, value);
+                Properties.AddValue(s_propNullValue, value);
             }
 
             Debug.Assert((oldNullValue is null && NullValue is not null) ||
@@ -345,7 +303,7 @@ public class DataGridViewCellStyle : ICloneable
     [SRCategory(nameof(SR.CatLayout))]
     public Padding Padding
     {
-        get => Properties.GetPadding(s_propPadding, out _);
+        get => Properties.GetValueOrDefault<Padding>(s_propPadding);
         set
         {
             if (value.Left < 0 || value.Right < 0 || value.Top < 0 || value.Bottom < 0)
@@ -378,7 +336,7 @@ public class DataGridViewCellStyle : ICloneable
             Debug.Assert(value.Bottom >= 0);
             if (value != Padding)
             {
-                Properties.SetPadding(s_propPadding, value);
+                Properties.AddValue(s_propPadding, value);
                 OnPropertyChanged(DataGridViewCellStylePropertyInternal.Other);
             }
         }
@@ -391,16 +349,11 @@ public class DataGridViewCellStyle : ICloneable
     [SRCategory(nameof(SR.CatAppearance))]
     public Color SelectionBackColor
     {
-        get => Properties.GetColor(s_propSelectionBackColor);
+        get => Properties.GetValueOrDefault<Color>(s_propSelectionBackColor);
         set
         {
-            Color c = SelectionBackColor;
-            if (!value.IsEmpty || Properties.ContainsObject(s_propSelectionBackColor))
-            {
-                Properties.SetColor(s_propSelectionBackColor, value);
-            }
-
-            if (!c.Equals(SelectionBackColor))
+            Color previous = Properties.AddOrRemoveValue(s_propSelectionBackColor, value);
+            if (!previous.Equals(value))
             {
                 OnPropertyChanged(DataGridViewCellStylePropertyInternal.Color);
             }
@@ -410,16 +363,11 @@ public class DataGridViewCellStyle : ICloneable
     [SRCategory(nameof(SR.CatAppearance))]
     public Color SelectionForeColor
     {
-        get => Properties.GetColor(s_propSelectionForeColor);
+        get => Properties.GetValueOrDefault<Color>(s_propSelectionForeColor);
         set
         {
-            Color c = SelectionForeColor;
-            if (!value.IsEmpty || Properties.ContainsObject(s_propSelectionForeColor))
-            {
-                Properties.SetColor(s_propSelectionForeColor, value);
-            }
-
-            if (!c.Equals(SelectionForeColor))
+            Color previous = Properties.AddOrRemoveValue(s_propSelectionForeColor, value);
+            if (!previous.Equals(value))
             {
                 OnPropertyChanged(DataGridViewCellStylePropertyInternal.Color);
             }
@@ -430,33 +378,18 @@ public class DataGridViewCellStyle : ICloneable
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public object? Tag
     {
-        get => Properties.GetObject(s_propTag);
-        set
-        {
-            if (value is not null || Properties.ContainsObject(s_propTag))
-            {
-                Properties.SetObject(s_propTag, value);
-            }
-        }
+        get => Properties.GetValueOrDefault<object?>(s_propTag);
+        set => Properties.AddOrRemoveValue(s_propTag, value);
     }
 
     [DefaultValue(DataGridViewTriState.NotSet)]
     [SRCategory(nameof(SR.CatLayout))]
     public DataGridViewTriState WrapMode
     {
-        get
-        {
-            int wrap = Properties.GetInteger(s_propWrapMode, out bool found);
-            if (found)
-            {
-                return (DataGridViewTriState)wrap;
-            }
-
-            return DataGridViewTriState.NotSet;
-        }
+        get => Properties.GetValueOrDefault(s_propWrapMode, DataGridViewTriState.NotSet);
         set
         {
-            // Sequential enum.  Valid values are 0x0 to 0x2
+            // Sequential enum. Valid values are 0x0 to 0x2
             SourceGenerated.EnumValidator.Validate(value);
             WrapModeInternal = value;
         }
@@ -469,7 +402,7 @@ public class DataGridViewCellStyle : ICloneable
             Debug.Assert(value is >= DataGridViewTriState.NotSet and <= DataGridViewTriState.False);
             if (WrapMode != value)
             {
-                Properties.SetInteger(s_propWrapMode, (int)value);
+                Properties.AddValue(s_propWrapMode, value);
                 OnPropertyChanged(DataGridViewCellStylePropertyInternal.Other);
             }
         }
@@ -626,19 +559,11 @@ public class DataGridViewCellStyle : ICloneable
         }
     }
 
-    private bool ShouldSerializeBackColor()
-    {
-        Properties.GetColor(s_propBackColor, out bool found);
-        return found;
-    }
+    private bool ShouldSerializeBackColor() => Properties.ContainsKey(s_propBackColor);
 
-    private bool ShouldSerializeFont() => Properties.ContainsObjectThatIsNotNull(s_propFont);
+    private bool ShouldSerializeFont() => Properties.TryGetValueOrNull(s_propFont, out Font? font) && font is not null;
 
-    private bool ShouldSerializeForeColor()
-    {
-        Properties.GetColor(s_propForeColor, out bool found);
-        return found;
-    }
+    private bool ShouldSerializeForeColor() => Properties.ContainsKey(s_propForeColor);
 
     private bool ShouldSerializeFormatProvider() =>
         Properties.ContainsObjectThatIsNotNull(s_propFormatProvider);
@@ -651,11 +576,8 @@ public class DataGridViewCellStyle : ICloneable
         return found;
     }
 
-    private bool ShouldSerializeSelectionForeColor()
-    {
-        Properties.GetColor(s_propSelectionForeColor, out bool found);
-        return found;
-    }
+    private bool ShouldSerializeSelectionForeColor() =>
+        Properties.ContainsKey(s_propSelectionForeColor);
 
     public override string ToString()
     {

@@ -158,9 +158,9 @@ public class BindingNavigator : ToolStrip, ISupportInitialize
         CountItem.Name = $"{ch}indingNavigatorCountItem";
         AddNewItem.Name = $"{ch}indingNavigatorAddNewItem";
         DeleteItem.Name = $"{ch}indingNavigatorDeleteItem";
-        separator1.Name = $"{ch}indingNavigatorSeparator";
-        separator2.Name = $"{ch}indingNavigatorSeparator";
-        separator3.Name = $"{ch}indingNavigatorSeparator";
+        separator1.Name = $"{ch}indingNavigatorSeparator1";
+        separator2.Name = $"{ch}indingNavigatorSeparator2";
+        separator3.Name = $"{ch}indingNavigatorSeparator3";
 
         MoveFirstItem.Text = SR.BindingNavigatorMoveFirstItemText;
         MovePreviousItem.Text = SR.BindingNavigatorMovePreviousItemText;
@@ -270,7 +270,7 @@ public class BindingNavigator : ToolStrip, ISupportInitialize
 
         set
         {
-            WireUpButton(ref _moveFirstItem, value, new EventHandler(OnMoveFirst));
+            WireUpButton(ref _moveFirstItem, value, OnMoveFirst);
         }
     }
 
@@ -294,7 +294,7 @@ public class BindingNavigator : ToolStrip, ISupportInitialize
 
         set
         {
-            WireUpButton(ref _movePreviousItem, value, new EventHandler(OnMovePrevious));
+            WireUpButton(ref _movePreviousItem, value, OnMovePrevious);
         }
     }
 
@@ -318,7 +318,7 @@ public class BindingNavigator : ToolStrip, ISupportInitialize
 
         set
         {
-            WireUpButton(ref _moveNextItem, value, new EventHandler(OnMoveNext));
+            WireUpButton(ref _moveNextItem, value, OnMoveNext);
         }
     }
 
@@ -342,7 +342,7 @@ public class BindingNavigator : ToolStrip, ISupportInitialize
 
         set
         {
-            WireUpButton(ref _moveLastItem, value, new EventHandler(OnMoveLast));
+            WireUpButton(ref _moveLastItem, value, OnMoveLast);
         }
     }
 
@@ -368,11 +368,11 @@ public class BindingNavigator : ToolStrip, ISupportInitialize
         {
             if (_addNewItem != value && value is not null)
             {
-                value.InternalEnabledChanged += new EventHandler(OnAddNewItemEnabledChanged);
+                value.InternalEnabledChanged += OnAddNewItemEnabledChanged;
                 _addNewItemUserEnabled = value.Enabled;
             }
 
-            WireUpButton(ref _addNewItem, value, new EventHandler(OnAddNew));
+            WireUpButton(ref _addNewItem, value, OnAddNew);
         }
     }
 
@@ -398,11 +398,11 @@ public class BindingNavigator : ToolStrip, ISupportInitialize
         {
             if (_deleteItem != value && value is not null)
             {
-                value.InternalEnabledChanged += new EventHandler(OnDeleteItemEnabledChanged);
+                value.InternalEnabledChanged += OnDeleteItemEnabledChanged;
                 _deleteItemUserEnabled = value.Enabled;
             }
 
-            WireUpButton(ref _deleteItem, value, new EventHandler(OnDelete));
+            WireUpButton(ref _deleteItem, value, OnDelete);
         }
     }
 
@@ -426,7 +426,7 @@ public class BindingNavigator : ToolStrip, ISupportInitialize
 
         set
         {
-            WireUpTextBox(ref _positionItem, value, new KeyEventHandler(OnPositionKey), new EventHandler(OnPositionLostFocus));
+            WireUpTextBox(ref _positionItem, value, OnPositionKey, OnPositionLostFocus);
         }
     }
 
@@ -447,7 +447,6 @@ public class BindingNavigator : ToolStrip, ISupportInitialize
 
             return _countItem;
         }
-
         set
         {
             WireUpLabel(ref _countItem, value);
@@ -465,7 +464,6 @@ public class BindingNavigator : ToolStrip, ISupportInitialize
         {
             return _countItemFormat;
         }
-
         set
         {
             if (_countItemFormat != value)
@@ -901,24 +899,24 @@ public class BindingNavigator : ToolStrip, ISupportInitialize
         {
             if (oldBindingSource is not null)
             {
-                oldBindingSource.PositionChanged -= new EventHandler(OnBindingSourceStateChanged);
-                oldBindingSource.CurrentChanged -= new EventHandler(OnBindingSourceStateChanged);
-                oldBindingSource.CurrentItemChanged -= new EventHandler(OnBindingSourceStateChanged);
-                oldBindingSource.DataSourceChanged -= new EventHandler(OnBindingSourceStateChanged);
-                oldBindingSource.DataMemberChanged -= new EventHandler(OnBindingSourceStateChanged);
-                oldBindingSource.ListChanged -= new ListChangedEventHandler(OnBindingSourceListChanged);
-                oldBindingSource.Disposed -= new EventHandler(OnBindingSourceDisposed);
+                oldBindingSource.PositionChanged -= OnBindingSourceStateChanged;
+                oldBindingSource.CurrentChanged -= OnBindingSourceStateChanged;
+                oldBindingSource.CurrentItemChanged -= OnBindingSourceStateChanged;
+                oldBindingSource.DataSourceChanged -= OnBindingSourceStateChanged;
+                oldBindingSource.DataMemberChanged -= OnBindingSourceStateChanged;
+                oldBindingSource.ListChanged -= OnBindingSourceListChanged;
+                oldBindingSource.Disposed -= OnBindingSourceDisposed;
             }
 
             if (newBindingSource is not null)
             {
-                newBindingSource.PositionChanged += new EventHandler(OnBindingSourceStateChanged);
-                newBindingSource.CurrentChanged += new EventHandler(OnBindingSourceStateChanged);
-                newBindingSource.CurrentItemChanged += new EventHandler(OnBindingSourceStateChanged);
-                newBindingSource.DataSourceChanged += new EventHandler(OnBindingSourceStateChanged);
-                newBindingSource.DataMemberChanged += new EventHandler(OnBindingSourceStateChanged);
-                newBindingSource.ListChanged += new ListChangedEventHandler(OnBindingSourceListChanged);
-                newBindingSource.Disposed += new EventHandler(OnBindingSourceDisposed);
+                newBindingSource.PositionChanged += OnBindingSourceStateChanged;
+                newBindingSource.CurrentChanged += OnBindingSourceStateChanged;
+                newBindingSource.CurrentItemChanged += OnBindingSourceStateChanged;
+                newBindingSource.DataSourceChanged += OnBindingSourceStateChanged;
+                newBindingSource.DataMemberChanged += OnBindingSourceStateChanged;
+                newBindingSource.ListChanged += OnBindingSourceListChanged;
+                newBindingSource.Disposed += OnBindingSourceDisposed;
             }
 
             oldBindingSource = newBindingSource;

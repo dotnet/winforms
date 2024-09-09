@@ -177,7 +177,7 @@ internal class MdiWindowListStrip : MenuStrip
         }
     }
 
-    /// <summary> handler for 1 - 9.  This is similar to MenuItem.cs</summary>
+    /// <summary> handler for 1 - 9. This is similar to MenuItem.cs</summary>
     private void OnWindowListItemClick(object? sender, EventArgs e)
     {
         if (sender is ToolStripMenuItem windowListItem)

@@ -4,13 +4,14 @@
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
+using System.Formats.Nrbf;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
-using System.Private.Windows.Core.BinaryFormat;
 using System.Xml;
+using System.Windows.Forms.Nrbf;
 using System.Windows.Forms.BinaryFormat;
 
 namespace System.Resources;
@@ -428,8 +429,8 @@ public sealed class ResXDataNode : ISerializable
 
         try
         {
-            BinaryFormattedObject format = new(stream);
-            if (format.TryGetObject(out object? value))
+            SerializationRecord rootRecord = stream.Decode();
+            if (rootRecord.TryGetObject(out object? value))
             {
                 return value;
             }
@@ -446,7 +447,8 @@ public sealed class ResXDataNode : ISerializable
             Binder = new ResXSerializationBinder(typeResolver)
         };
 
-        object? result = _binaryFormatter.Deserialize(stream);
+        // cs/dangerous-binary-deserialization
+        object? result = _binaryFormatter.Deserialize(stream); // CodeQL[SM03722] : BinaryFormatter is intended to be used as a fallback for unsupported types. Users must explicitly opt into this behavior
         if (result is ResXNullRef)
         {
             result = null;

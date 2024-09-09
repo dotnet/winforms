@@ -252,14 +252,14 @@ public class HelpProvider : Component, IExtenderProvider
         bool isBound = _boundControls.Contains(ctl);
         if (showHelp && !isBound)
         {
-            ctl.HelpRequested += new HelpEventHandler(OnControlHelp);
-            ctl.QueryAccessibilityHelp += new QueryAccessibilityHelpEventHandler(OnQueryAccessibilityHelp);
+            ctl.HelpRequested += OnControlHelp;
+            ctl.QueryAccessibilityHelp += OnQueryAccessibilityHelp;
             _boundControls.Add(ctl);
         }
         else if (!showHelp && isBound)
         {
-            ctl.HelpRequested -= new HelpEventHandler(OnControlHelp);
-            ctl.QueryAccessibilityHelp -= new QueryAccessibilityHelpEventHandler(OnQueryAccessibilityHelp);
+            ctl.HelpRequested -= OnControlHelp;
+            ctl.QueryAccessibilityHelp -= OnQueryAccessibilityHelp;
             _boundControls.Remove(ctl);
         }
     }

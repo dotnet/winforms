@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
 using Newtonsoft.Json.Linq;
+using Windows.Win32;
 
 namespace System.Windows.Forms.IntegrationTests.Common;
 
@@ -405,7 +406,7 @@ public static class TestHelpers
     /// <returns>Whether or not the key(s) were pressed on the process</returns>
     /// <seealso cref="Process.MainWindowHandle"/>
     /// <seealso cref="PInvoke.SetForegroundWindow{T}(T)"/>
-    /// <seealso cref="PInvoke.GetForegroundWindow()"/>
+    /// <seealso cref="PInvokeCore.GetForegroundWindow()"/>
     /// <seealso cref="SendKeys.SendWait(string)"/>
     /// <seealso cref="Thread.Sleep(int)"/>
     internal static bool SendKeysToProcess(Process process, string keys, bool switchToMainWindow = true)

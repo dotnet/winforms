@@ -7,10 +7,10 @@ using System.Resources;
 namespace System.ComponentModel.Design.Serialization;
 
 /// <summary>
-///  This is a serialization provider that provides a localization feature.  This provider
-///  adds two properties to the root component:  Language and Localizable.  If Localizable
+///  This is a serialization provider that provides a localization feature. This provider
+///  adds two properties to the root component:  Language and Localizable. If Localizable
 ///  is set to true this provider will change the way that component properties are generated
-///  and will route their values to a resource file.  Two localization models are
+///  and will route their values to a resource file. Two localization models are
 ///  supported.
 /// </summary>
 public sealed partial class CodeDomLocalizationProvider : IDisposable, IDesignerSerializationProvider
@@ -22,10 +22,10 @@ public sealed partial class CodeDomLocalizationProvider : IDisposable, IDesigner
     private Dictionary<MemberCodeDomSerializer, ResourcePropertyMemberCodeDomSerializer>? _nopMemberSerializers;
 
     /// <summary>
-    ///  Creates a new adapter and attaches it to the serialization manager.  This
+    ///  Creates a new adapter and attaches it to the serialization manager. This
     ///  will add itself as a serializer for resources into the serialization manager, and,
     ///  if not already added, will add itself as an extender provider to the roost component
-    ///  and provide the Language and Localizable properties.  The latter piece is only
+    ///  and provide the Language and Localizable properties. The latter piece is only
     ///  supplied if CodeDomLocalizationModel is not �none�.
     /// </summary>
     public CodeDomLocalizationProvider(IServiceProvider provider, CodeDomLocalizationModel model)
@@ -37,10 +37,10 @@ public sealed partial class CodeDomLocalizationProvider : IDisposable, IDesigner
     }
 
     /// <summary>
-    ///  Creates a new adapter and attaches it to the serialization manager.  This
+    ///  Creates a new adapter and attaches it to the serialization manager. This
     ///  will add itself as a serializer for resources into the serialization manager, and,
     ///  if not already added, will add itself as an extender provider to the roost component
-    ///  and provide the Language and Localizable properties.  The latter piece is only
+    ///  and provide the Language and Localizable properties. The latter piece is only
     ///  supplied if CodeDomLocalizationModel is not �none�.
     /// </summary>
     public CodeDomLocalizationProvider(IServiceProvider provider, CodeDomLocalizationModel model, CultureInfo?[] supportedCultures)
@@ -96,7 +96,7 @@ public sealed partial class CodeDomLocalizationProvider : IDisposable, IDesigner
             return null;
         }
 
-        // Here's how this works.  We have two different types of serializers to offer :  a
+        // Here's how this works. We have two different types of serializers to offer :  a
         // serializer that writes out code like this:
         //
         //      this.Button1.Text = rm.GetString("Button1_Text");
@@ -146,9 +146,9 @@ public sealed partial class CodeDomLocalizationProvider : IDisposable, IDesigner
             return null;
         }
 
-        // Ok, we got a property descriptor.  If we're being localized
-        // we provide a different type of serializer.  But, we only
-        // do this if we were given a current serializer.  Otherwise
+        // Ok, we got a property descriptor. If we're being localized
+        // we provide a different type of serializer. But, we only
+        // do this if we were given a current serializer. Otherwise
         // we don't know how to perform the serialization.
         // We can only provide a custom serializer if we have an existing one
         // to base off of.

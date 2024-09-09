@@ -120,7 +120,7 @@ public class TableLayoutPanel : Panel, IExtenderProvider
 
     /// <summary>
     ///  Specifies if a TableLayoutPanel will gain additional rows or columns once its existing cells
-    ///  become full.  If the value is 'FixedSize' then the TableLayoutPanel will throw an exception
+    ///  become full. If the value is 'FixedSize' then the TableLayoutPanel will throw an exception
     ///  when the TableLayoutPanel is over-filled.
     /// </summary>
     [SRDescription(nameof(SR.TableLayoutPanelGrowStyleDescr))]
@@ -489,7 +489,7 @@ public class TableLayoutPanel : Panel, IExtenderProvider
     }
 
     /// <summary>
-    ///  Scale this form.  Form overrides this to enforce a maximum / minimum size.
+    ///  Scale this form. Form overrides this to enforce a maximum / minimum size.
     /// </summary>
     protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
     {

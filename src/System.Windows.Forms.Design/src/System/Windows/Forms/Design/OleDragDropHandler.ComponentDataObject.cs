@@ -80,7 +80,7 @@ internal partial class OleDragDropHandler
         private CfCodeToolboxItem NestedToolboxItem => _toolboxItemData ??= new CfCodeToolboxItem(GetData(DataFormat));
 
         /// <summary>
-        ///  Used to retrieve the selection for a copy.  The default implementation
+        ///  Used to retrieve the selection for a copy. The default implementation
         ///  retrieves the current selection.
         /// </summary>
         private object[] GetComponentList(object[] components)
@@ -139,7 +139,7 @@ internal partial class OleDragDropHandler
             {
                 SerializationStream!.Seek(0, SeekOrigin.Begin);
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-                return new BinaryFormatter().Deserialize(SerializationStream);
+                return new BinaryFormatter().Deserialize(SerializationStream); // CodeQL[SM03722, SM04191] : The operation is essential for the design experience when users are running their own designers they have created. This cannot be achieved without BinaryFormatter
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
             }
             else if (format.Equals(NestedToolboxItemFormat))
@@ -211,7 +211,7 @@ internal partial class OleDragDropHandler
             try
             {
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-                _serializationData ??= new BinaryFormatter().Deserialize(SerializationStream!);
+                _serializationData ??= new BinaryFormatter().Deserialize(SerializationStream!); // CodeQL[SM03722, SM04191] : The operation is essential for the design experience when users are running their own designers they have created. This cannot be achieved without BinaryFormatter
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
 
                 if (removeCurrentComponents && _components is not null)

@@ -74,7 +74,7 @@ public partial class ErrorProvider
 
         /// <summary>
         ///  Returns or set the phase of blinking that this control is currently
-        ///  in.  If zero, the control is not blinking. If odd, then the control
+        ///  in. If zero, the control is not blinking. If odd, then the control
         ///  is blinking, but invisible. If even, the control is blinking and
         ///  currently visible. Each time the blink timer fires, this value is
         ///  reduced by one (until zero), thus causing the error icon to appear

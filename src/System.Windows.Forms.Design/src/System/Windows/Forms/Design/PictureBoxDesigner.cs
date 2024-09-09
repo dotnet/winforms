@@ -9,7 +9,7 @@ using System.Drawing.Drawing2D;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-///  This class handles all design time behavior for the group box class.  Group
+///  This class handles all design time behavior for the group box class. Group
 ///  boxes may contain sub-components and therefore use the frame designer.
 /// </summary>
 internal class PictureBoxDesigner : ControlDesigner
@@ -22,7 +22,7 @@ internal class PictureBoxDesigner : ControlDesigner
     }
 
     /// <summary>
-    ///  This draws a nice border around our pictureBox.  We need
+    ///  This draws a nice border around our pictureBox. We need
     ///  this because the pictureBox can have no border and you can't
     ///  tell where it is.
     /// </summary>
@@ -58,8 +58,8 @@ internal class PictureBoxDesigner : ControlDesigner
     }
 
     /// <summary>
-    ///  Overrides our base class.  Here we check to see if there
-    ///  is no border on the pictureBox.  If not, we draw one so that
+    ///  Overrides our base class. Here we check to see if there
+    ///  is no border on the pictureBox. If not, we draw one so that
     ///  the pictureBox shape is visible at design time.
     /// </summary>
     protected override void OnPaintAdornments(PaintEventArgs pe)
@@ -76,7 +76,7 @@ internal class PictureBoxDesigner : ControlDesigner
 
     /// <summary>
     ///  Retrieves a set of rules concerning the movement capabilities of a component.
-    ///  This should be one or more flags from the SelectionRules class.  If no designer
+    ///  This should be one or more flags from the SelectionRules class. If no designer
     ///  provides rules for a component, the component will not get any UI services.
     /// </summary>
     public override SelectionRules SelectionRules

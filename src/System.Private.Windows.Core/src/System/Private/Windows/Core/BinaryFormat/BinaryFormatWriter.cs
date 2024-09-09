@@ -347,6 +347,9 @@ internal static class BinaryFormatWriter
                 case List<char> typedList:
                     WritePrimitiveList(stream, typedList);
                     return true;
+                case List<bool> typedList:
+                    WritePrimitiveList(stream, typedList);
+                    return true;
             }
 
             return false;

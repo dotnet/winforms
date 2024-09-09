@@ -35,7 +35,7 @@ public partial class Screen
 
     private readonly int _bitDepth;
 
-    private static readonly object s_syncLock = new(); // used to lock this class before syncing to SystemEvents
+    private static readonly Lock s_syncLock = new(); // used to lock this class before syncing to SystemEvents
 
     private static int s_desktopChangedCount = -1; // static counter of desktop size changes
 
@@ -313,7 +313,7 @@ public partial class Screen
     public override int GetHashCode() => PARAM.ToInt(_hmonitor);
 
     /// <summary>
-    ///  Called by the SystemEvents class when our display settings are changing.  We cache screen information and
+    ///  Called by the SystemEvents class when our display settings are changing. We cache screen information and
     ///  at this point we must invalidate our cache.
     /// </summary>
     private static void OnDisplaySettingsChanging(object? sender, EventArgs e)

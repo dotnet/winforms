@@ -187,7 +187,7 @@ public partial class ComponentEditorForm : Form
         {
             ImageList = _selectorImageList
         };
-        _selector.AfterSelect += new TreeViewEventHandler(OnSelChangeSelector);
+        _selector.AfterSelect += OnSelChangeSelector;
 
         Label grayStrip = new Label
         {
@@ -265,28 +265,28 @@ public partial class ComponentEditorForm : Form
 
         _helpButton.Bounds = bounds;
         _helpButton.Text = SR.HelpCaption;
-        _helpButton.Click += new EventHandler(OnButtonClick);
+        _helpButton.Click += OnButtonClick;
         _helpButton.Enabled = false;
         _helpButton.FlatStyle = FlatStyle.System;
 
         bounds.X -= (BUTTON_WIDTH + BUTTON_PAD);
         _applyButton.Bounds = bounds;
         _applyButton.Text = SR.ApplyCaption;
-        _applyButton.Click += new EventHandler(OnButtonClick);
+        _applyButton.Click += OnButtonClick;
         _applyButton.Enabled = false;
         _applyButton.FlatStyle = FlatStyle.System;
 
         bounds.X -= (BUTTON_WIDTH + BUTTON_PAD);
         _cancelButton.Bounds = bounds;
         _cancelButton.Text = SR.CancelCaption;
-        _cancelButton.Click += new EventHandler(OnButtonClick);
+        _cancelButton.Click += OnButtonClick;
         _cancelButton.FlatStyle = FlatStyle.System;
         CancelButton = _cancelButton;
 
         bounds.X -= (BUTTON_WIDTH + BUTTON_PAD);
         _okButton.Bounds = bounds;
         _okButton.Text = SR.OKCaption;
-        _okButton.Click += new EventHandler(OnButtonClick);
+        _okButton.Click += OnButtonClick;
         _okButton.FlatStyle = FlatStyle.System;
         AcceptButton = _okButton;
 
@@ -418,7 +418,7 @@ public partial class ComponentEditorForm : Form
     }
 
     /// <summary>
-    ///  Sets the controls of the form to dirty.  This enables the "apply"
+    ///  Sets the controls of the form to dirty. This enables the "apply"
     ///  button.
     /// </summary>
     internal virtual void SetDirty()

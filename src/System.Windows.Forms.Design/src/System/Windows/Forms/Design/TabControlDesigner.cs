@@ -146,21 +146,21 @@ internal class TabControlDesigner : ParentControlDesigner
             ISelectionService svc = (ISelectionService)GetService(typeof(ISelectionService));
             if (svc is not null)
             {
-                svc.SelectionChanged -= new EventHandler(OnSelectionChanged);
+                svc.SelectionChanged -= OnSelectionChanged;
             }
 
             IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
             if (cs is not null)
             {
-                cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
+                cs.ComponentChanged -= OnComponentChanged;
             }
 
             if (HasComponent && Control is TabControl tabControl)
             {
-                tabControl.SelectedIndexChanged -= new EventHandler(OnTabSelectedIndexChanged);
-                tabControl.GotFocus -= new EventHandler(OnGotFocus);
-                tabControl.RightToLeftLayoutChanged -= new EventHandler(OnRightToLeftLayoutChanged);
-                tabControl.ControlAdded -= new ControlEventHandler(OnControlAdded);
+                tabControl.SelectedIndexChanged -= OnTabSelectedIndexChanged;
+                tabControl.GotFocus -= OnGotFocus;
+                tabControl.RightToLeftLayoutChanged -= OnRightToLeftLayoutChanged;
+                tabControl.ControlAdded -= OnControlAdded;
             }
         }
 
@@ -173,7 +173,7 @@ internal class TabControlDesigner : ParentControlDesigner
 
         // tabControlSelected tells us if a tab page or the tab control itself is selected.
         // If the tab control is selected, then we need to return true from here - so we can switch back and forth
-        // between tabs.  If we're not currently selected, we want to select the tab control
+        // between tabs. If we're not currently selected, we want to select the tab control
         // so return false.
         if (_tabControlSelected)
         {
@@ -217,21 +217,21 @@ internal class TabControlDesigner : ParentControlDesigner
         ISelectionService svc = (ISelectionService)GetService(typeof(ISelectionService));
         if (svc is not null)
         {
-            svc.SelectionChanged += new EventHandler(OnSelectionChanged);
+            svc.SelectionChanged += OnSelectionChanged;
         }
 
         IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
         if (cs is not null)
         {
-            cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
+            cs.ComponentChanged += OnComponentChanged;
         }
 
         if (control is not null)
         {
-            control.SelectedIndexChanged += new EventHandler(OnTabSelectedIndexChanged);
-            control.GotFocus += new EventHandler(OnGotFocus);
-            control.RightToLeftLayoutChanged += new EventHandler(OnRightToLeftLayoutChanged);
-            control.ControlAdded += new ControlEventHandler(OnControlAdded);
+            control.SelectedIndexChanged += OnTabSelectedIndexChanged;
+            control.GotFocus += OnGotFocus;
+            control.RightToLeftLayoutChanged += OnRightToLeftLayoutChanged;
+            control.ControlAdded += OnControlAdded;
         }
     }
 

@@ -59,16 +59,17 @@ internal sealed class SelectionService : ISelectionService, IDisposable
         if (_selection is null)
         {
             _selection = [];
+
             // Now is the opportune time to hook up all of our events
             if (GetService(typeof(IComponentChangeService)) is IComponentChangeService cs)
             {
-                cs.ComponentRemoved += new ComponentEventHandler(OnComponentRemove);
+                cs.ComponentRemoved += OnComponentRemove;
             }
 
             if (GetService(typeof(IDesignerHost)) is IDesignerHost host)
             {
-                host.TransactionOpened += new EventHandler(OnTransactionOpened);
-                host.TransactionClosed += new DesignerTransactionCloseEventHandler(OnTransactionClosed);
+                host.TransactionOpened += OnTransactionOpened;
+                host.TransactionClosed += OnTransactionClosed;
                 if (host.InTransaction)
                 {
                     OnTransactionOpened(host, EventArgs.Empty);
@@ -174,7 +175,7 @@ internal sealed class SelectionService : ISelectionService, IDisposable
     private void ApplicationIdle(object? source, EventArgs args)
     {
         UpdateHelpKeyword(false);
-        Application.Idle -= new EventHandler(ApplicationIdle);
+        Application.Idle -= ApplicationIdle;
     }
 
     /// <summary>
@@ -191,7 +192,7 @@ internal sealed class SelectionService : ISelectionService, IDisposable
                 // beforehand and doing class pushcontext on it to try to
                 // stack up help context in the HelpService to be flushed when we get the
                 // documentation event may not work, so we need to wait for a HelpService instead.
-                Application.Idle += new EventHandler(ApplicationIdle);
+                Application.Idle += ApplicationIdle;
             }
 
             return;
@@ -271,17 +272,17 @@ internal sealed class SelectionService : ISelectionService, IDisposable
         {
             if (GetService(typeof(IDesignerHost)) is IDesignerHost host)
             {
-                host.TransactionOpened -= new EventHandler(OnTransactionOpened);
-                host.TransactionClosed -= new DesignerTransactionCloseEventHandler(OnTransactionClosed);
+                host.TransactionOpened -= OnTransactionOpened;
+                host.TransactionClosed -= OnTransactionClosed;
                 if (host.InTransaction)
                 {
-                    OnTransactionClosed(host, new DesignerTransactionCloseEventArgs(true, true));
+                    OnTransactionClosed(host, new(commit: true, lastTransaction: true));
                 }
             }
 
             if (GetService(typeof(IComponentChangeService)) is IComponentChangeService cs)
             {
-                cs.ComponentRemoved -= new ComponentEventHandler(OnComponentRemove);
+                cs.ComponentRemoved -= OnComponentRemove;
             }
 
             _selection.Clear();

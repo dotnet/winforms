@@ -4,6 +4,9 @@
 using System.Collections;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Private.Windows.Core.BinaryFormat;
+using System.Formats.Nrbf;
+using System.Windows.Forms.Nrbf;
+using System.Drawing;
 
 namespace FormatTests.FormattedObject;
 
@@ -69,8 +72,8 @@ public class BinaryFormatWriterTests
         BinaryFormatWriter.TryWriteFrameworkObject(stream, value).Should().BeTrue();
         stream.Position = 0;
 
-        BinaryFormattedObject format = new(stream);
-        format.TryGetFrameworkObject(out object? deserialized).Should().BeTrue();
+        SerializationRecord rootRecord = NrbfDecoder.Decode(stream);
+        rootRecord.TryGetFrameworkObject(out object? deserialized).Should().BeTrue();
 
         if (value is Hashtable hashtable)
         {
@@ -105,12 +108,41 @@ public class BinaryFormatWriterTests
             ListTests.PrimitiveLists_TestData).Concat(
             ListTests.ArrayLists_TestData).Concat(
             PrimitiveTypeTests.Primitive_Data).Concat(
-            SystemDrawingTests.SystemDrawing_TestData).Concat(
-            ArrayTests.Array_TestData).Skip(9);
+            SystemDrawing_TestData).Concat(
+            Array_TestData).Skip(9);
 
     public static IEnumerable<object[]?> TryWriteObject_UnsupportedObjects_TestData =>
         HashtableTests.Hashtables_UnsupportedTestData.Concat(
             ListTests.Lists_UnsupportedTestData).Concat(
             ListTests.ArrayLists_UnsupportedTestData).Concat(
-            ArrayTests.Array_UnsupportedTestData);
+            Array_UnsupportedTestData);
+
+    public static TheoryData<object> SystemDrawing_TestData => new()
+    {
+        new PointF(),
+        new RectangleF()
+    };
+
+    public static TheoryData<string?[]> StringArray_Parse_Data => new()
+    {
+        new string?[] { "one", "two" },
+        new string?[] { "yes", "no", null },
+        new string?[] { "same", "same", "same" }
+    };
+
+    public static TheoryData<Array> PrimitiveArray_Parse_Data => new()
+    {
+        new int[] { 1, 2, 3 },
+        new int[] { 1, 2, 1 },
+        new float[] { 1.0f, float.NaN, float.PositiveInfinity },
+        new DateTime[] { DateTime.MaxValue }
+    };
+
+    public static IEnumerable<object[]> Array_TestData => StringArray_Parse_Data.Concat(PrimitiveArray_Parse_Data);
+
+    public static TheoryData<Array> Array_UnsupportedTestData => new()
+    {
+        new Point[] { new() },
+        new object[] { new() },
+    };
 }

@@ -171,7 +171,7 @@ public partial class ControlDesigner : ComponentDesigner
 
     /// <summary>
     ///  Returns the parent component for this control designer. The default implementation just checks to see if
-    ///  the component being designed is a control, and if it is it returns its parent.  This property can return
+    ///  the component being designed is a control, and if it is it returns its parent. This property can return
     ///  null if there is no parent component.
     /// </summary>
     protected override IComponent? ParentComponent =>
@@ -192,7 +192,7 @@ public partial class ControlDesigner : ComponentDesigner
 
     /// <summary>
     ///  Retrieves a set of rules concerning the movement capabilities of a component. This should be one or more
-    ///  flags from the SelectionRules class.  If no designer provides rules for a component, the component will
+    ///  flags from the SelectionRules class. If no designer provides rules for a component, the component will
     ///  not get any UI services.
     /// </summary>
     public virtual SelectionRules SelectionRules
@@ -391,8 +391,8 @@ public partial class ControlDesigner : ComponentDesigner
     public virtual ControlDesigner? InternalControlDesigner(int internalControlIndex) => null;
 
     /// <summary>
-    ///  Default processing for messages.  This method causes the message to get processed by windows, skipping the
-    ///  control.  This is useful if you want to block this message from getting to the control, but you do not
+    ///  Default processing for messages. This method causes the message to get processed by windows, skipping the
+    ///  control. This is useful if you want to block this message from getting to the control, but you do not
     ///  want to block it from getting to Windows itself because it causes other messages to be generated.
     /// </summary>
     protected void BaseWndProc(ref Message m)
@@ -464,7 +464,7 @@ public partial class ControlDesigner : ComponentDesigner
                 {
                     if (TryGetService(out IComponentChangeService? componentChangeService))
                     {
-                        componentChangeService.ComponentRemoved -= new ComponentEventHandler(DataSource_ComponentRemoved);
+                        componentChangeService.ComponentRemoved -= DataSource_ComponentRemoved;
                     }
 
                     _removalNotificationHooked = false;
@@ -504,7 +504,7 @@ public partial class ControlDesigner : ComponentDesigner
             e.Control.WindowTarget = new ChildWindowTarget(this, e.Control, oldTarget);
 
             // Controls added in UserControl.OnLoad() do not  setup sniffing WndProc properly.
-            e.Control.ControlAdded += new ControlEventHandler(OnControlAdded);
+            e.Control.ControlAdded += OnControlAdded;
         }
 
         // Some controls (primarily RichEdit) will register themselves as drag-drop source/targets when
@@ -553,7 +553,7 @@ public partial class ControlDesigner : ComponentDesigner
         {
             if (TryGetService(out IComponentChangeService? componentChangeService))
             {
-                componentChangeService.ComponentRemoved -= new ComponentEventHandler(DataSource_ComponentRemoved);
+                componentChangeService.ComponentRemoved -= DataSource_ComponentRemoved;
             }
 
             _removalNotificationHooked = false;
@@ -563,17 +563,17 @@ public partial class ControlDesigner : ComponentDesigner
     }
 
     /// <summary>
-    ///  Enables design time functionality for a child control.  The child control is a child of this control
-    ///  designer's control.  The child does not directly participate in persistence, but it will if it is exposed
-    ///  as a property of the main control.  Consider a control like the SplitContainer:  it has two panels,
-    ///  Panel1 and Panel2.  These panels are exposed through read only Panel1 and Panel2 properties on the
+    ///  Enables design time functionality for a child control. The child control is a child of this control
+    ///  designer's control. The child does not directly participate in persistence, but it will if it is exposed
+    ///  as a property of the main control. Consider a control like the SplitContainer:  it has two panels,
+    ///  Panel1 and Panel2. These panels are exposed through read only Panel1 and Panel2 properties on the
     ///  SplitContainer class. SplitContainer's designer calls EnableDesignTime for each panel, which allows other
-    ///  components to be dropped on them.  But, in order for the contents of Panel1 and Panel2 to be saved,
+    ///  components to be dropped on them. But, in order for the contents of Panel1 and Panel2 to be saved,
     ///  SplitContainer itself needed to expose the panels as public properties. The child parameter is the control
-    ///  to enable.  The name parameter is the name of this control as exposed to the end user.  Names need to be
+    ///  to enable. The name parameter is the name of this control as exposed to the end user. Names need to be
     ///  unique within a control designer, but do not have to be unique to other control designer's children. This
     ///  method returns true if the child control could be enabled for design time, or false if the hosting
-    ///  infrastructure does not support it.  To support this feature, the hosting infrastructure must expose the
+    ///  infrastructure does not support it. To support this feature, the hosting infrastructure must expose the
     ///  INestedContainer class as a service off of the site.
     /// </summary>
     protected bool EnableDesignMode(Control child, string name)
@@ -600,7 +600,7 @@ public partial class ControlDesigner : ComponentDesigner
     }
 
     /// <summary>
-    ///  Enables or disables drag/drop support.  This hooks drag event handlers to the control.
+    ///  Enables or disables drag/drop support. This hooks drag event handlers to the control.
     /// </summary>
     protected void EnableDragDrop(bool value)
     {
@@ -612,11 +612,11 @@ public partial class ControlDesigner : ComponentDesigner
 
         if (value)
         {
-            rc.DragDrop += new DragEventHandler(OnDragDrop);
-            rc.DragOver += new DragEventHandler(OnDragOver);
-            rc.DragEnter += new DragEventHandler(OnDragEnter);
-            rc.DragLeave += new EventHandler(OnDragLeave);
-            rc.GiveFeedback += new GiveFeedbackEventHandler(OnGiveFeedback);
+            rc.DragDrop += OnDragDrop;
+            rc.DragOver += OnDragOver;
+            rc.DragEnter += OnDragEnter;
+            rc.DragLeave += OnDragLeave;
+            rc.GiveFeedback += OnGiveFeedback;
             _hadDragDrop = rc.AllowDrop;
 
             if (!_hadDragDrop)
@@ -628,11 +628,11 @@ public partial class ControlDesigner : ComponentDesigner
         }
         else
         {
-            rc.DragDrop -= new DragEventHandler(OnDragDrop);
-            rc.DragOver -= new DragEventHandler(OnDragOver);
-            rc.DragEnter -= new DragEventHandler(OnDragEnter);
-            rc.DragLeave -= new EventHandler(OnDragLeave);
-            rc.GiveFeedback -= new GiveFeedbackEventHandler(OnGiveFeedback);
+            rc.DragDrop -= OnDragDrop;
+            rc.DragOver -= OnDragOver;
+            rc.DragEnter -= OnDragEnter;
+            rc.DragLeave -= OnDragLeave;
+            rc.GiveFeedback -= OnGiveFeedback;
 
             if (!_hadDragDrop)
             {
@@ -721,7 +721,7 @@ public partial class ControlDesigner : ComponentDesigner
 
     /// <summary>
     ///  Returns a collection of Glyph objects representing the selection borders and grab handles for a standard
-    ///  control.  Note that based on 'selectionType' the Glyphs returned will either: represent a fully resizeable
+    ///  control. Note that based on 'selectionType' the Glyphs returned will either: represent a fully resizeable
     ///  selection border with grab handles, a locked selection border, or a single 'hidden' selection Glyph.
     /// </summary>
     public virtual GlyphCollection GetGlyphs(GlyphSelectionType selectionType)
@@ -839,7 +839,7 @@ public partial class ControlDesigner : ComponentDesigner
 
     /// <summary>
     ///  Demand creates the StandardBehavior related to this
-    ///  ControlDesigner.  This is used to associate the designer's
+    ///  ControlDesigner. This is used to associate the designer's
     ///  selection glyphs to a common Behavior (resize in this case).
     /// </summary>
     internal virtual Behavior.Behavior StandardBehavior => _resizeBehavior ??= new ResizeBehavior(Component.Site);
@@ -847,14 +847,14 @@ public partial class ControlDesigner : ComponentDesigner
     internal virtual bool SerializePerformLayout => false;
 
     /// <summary>
-    ///  Allows your component to support a design time user interface.  A TabStrip control, for example, has a
-    ///  design time user interface that allows the user to click the tabs to change tabs.  To implement this,
+    ///  Allows your component to support a design time user interface. A TabStrip control, for example, has a
+    ///  design time user interface that allows the user to click the tabs to change tabs. To implement this,
     ///  TabStrip returns true whenever the given point is within its tabs.
     /// </summary>
     protected virtual bool GetHitTest(Point point) => false;
 
     /// <summary>
-    ///  Hooks the children of the given control.  We need to do this for child controls that are not in design
+    ///  Hooks the children of the given control. We need to do this for child controls that are not in design
     ///  mode, which is the case for composite controls.
     /// </summary>
     protected void HookChildControls(Control firstChild)
@@ -871,7 +871,7 @@ public partial class ControlDesigner : ComponentDesigner
             if (oldTarget is not ChildWindowTarget)
             {
                 child.WindowTarget = new ChildWindowTarget(this, child, oldTarget);
-                child.ControlAdded += new ControlEventHandler(OnControlAdded);
+                child.ControlAdded += OnControlAdded;
             }
 
             if (child.IsHandleCreated)
@@ -882,7 +882,7 @@ public partial class ControlDesigner : ComponentDesigner
             }
             else
             {
-                child.HandleCreated += new EventHandler(OnChildHandleCreated);
+                child.HandleCreated += OnChildHandleCreated;
             }
 
             // We only hook the children's children if there was no designer. We leave it up to the
@@ -911,7 +911,7 @@ public partial class ControlDesigner : ComponentDesigner
     {
         // Visibility works as follows:  If the control's property is not actually set, then set our shadow to true.
         // Otherwise, grab the shadow value from the control directly and then set the control to be visible if it
-        // is not the root component.  Root components will be set to visible = true in their own time by the view.
+        // is not the root component. Root components will be set to visible = true in their own time by the view.
         PropertyDescriptorCollection props = TypeDescriptor.GetProperties(component.GetType());
         PropertyDescriptor? visibleProp = props["Visible"];
         Visible = visibleProp is null
@@ -947,15 +947,15 @@ public partial class ControlDesigner : ComponentDesigner
 
         // Hook up the property change notifications we need to track. One for data binding.
         // More for control add / remove notifications
-        _dataBindingsCollectionChanged = new CollectionChangeEventHandler(DataBindingsCollectionChanged);
+        _dataBindingsCollectionChanged = DataBindingsCollectionChanged;
         Control.DataBindings.CollectionChanged += _dataBindingsCollectionChanged;
 
-        Control.ControlAdded += new ControlEventHandler(OnControlAdded);
-        Control.ControlRemoved += new ControlEventHandler(OnControlRemoved);
-        Control.ParentChanged += new EventHandler(OnParentChanged);
+        Control.ControlAdded += OnControlAdded;
+        Control.ControlRemoved += OnControlRemoved;
+        Control.ParentChanged += OnParentChanged;
 
-        Control.SizeChanged += new EventHandler(OnSizeChanged);
-        Control.LocationChanged += new EventHandler(OnLocationChanged);
+        Control.SizeChanged += OnSizeChanged;
+        Control.LocationChanged += OnLocationChanged;
 
         // Replace the control's window target with our own. This allows us to hook messages.
         DesignerTarget = new DesignerWindowTarget(this);
@@ -983,12 +983,12 @@ public partial class ControlDesigner : ComponentDesigner
             Control.Visible = true;
         }
 
-        // Always make controls enabled, event inherited ones.  Otherwise we won't be able to select them.
+        // Always make controls enabled, event inherited ones. Otherwise we won't be able to select them.
         Control.Enabled = true;
 
         // we move enabledchanged below the set to avoid any possible stack overflows. this can occur if the parent
         // is not enabled when we set enabled to true.
-        Control.EnabledChanged += new EventHandler(OnEnabledChanged);
+        Control.EnabledChanged += OnEnabledChanged;
 
         // And force some shadow properties that we change in the course of initializing the form.
         AllowDrop = Control.AllowDrop;
@@ -1046,7 +1046,7 @@ public partial class ControlDesigner : ComponentDesigner
                 // Remove the notification for the ComponentRemoved event
                 if (TryGetService(out IComponentChangeService? componentChangeService))
                 {
-                    componentChangeService.ComponentRemoved -= new ComponentEventHandler(DataSource_ComponentRemoved);
+                    componentChangeService.ComponentRemoved -= DataSource_ComponentRemoved;
                 }
 
                 _removalNotificationHooked = false;
@@ -1056,7 +1056,7 @@ public partial class ControlDesigner : ComponentDesigner
                 // Add the notification for the ComponentRemoved event
                 if (TryGetService(out IComponentChangeService? componentChangeService))
                 {
-                    componentChangeService.ComponentRemoved += new ComponentEventHandler(DataSource_ComponentRemoved);
+                    componentChangeService.ComponentRemoved += DataSource_ComponentRemoved;
                 }
 
                 _removalNotificationHooked = true;
@@ -1082,7 +1082,7 @@ public partial class ControlDesigner : ComponentDesigner
     }
 
     /// <summary>
-    ///  Accessor for AllowDrop.  Since we often turn this on, we shadow it so it doesn't show up to the user.
+    ///  Accessor for AllowDrop. Since we often turn this on, we shadow it so it doesn't show up to the user.
     /// </summary>
     private bool AllowDrop
     {
@@ -1127,10 +1127,10 @@ public partial class ControlDesigner : ComponentDesigner
     }
 
     /// <summary>
-    ///  ControlDesigner overrides this method.  It will look at the default property for the control and,
-    ///  if it is of type string, it will set this property's value to the name of the component.  It only does
-    ///  this if the designer has been configured with this option in the options service.  This method also
-    ///  connects the control to its parent and positions it.  If you override this method, you should always
+    ///  ControlDesigner overrides this method. It will look at the default property for the control and,
+    ///  if it is of type string, it will set this property's value to the name of the component. It only does
+    ///  this if the designer has been configured with this option in the options service. This method also
+    ///  connects the control to its parent and positions it. If you override this method, you should always
     ///  call base.
     /// </summary>
     public override void InitializeNewComponent(IDictionary? defaultValues)
@@ -1188,8 +1188,8 @@ public partial class ControlDesigner : ComponentDesigner
     }
 
     /// <summary>
-    ///  Called when the designer is initialized.  This allows the designer to provide some meaningful default
-    ///  values in the component.  The default implementation of this sets the components's default property to
+    ///  Called when the designer is initialized. This allows the designer to provide some meaningful default
+    ///  values in the component. The default implementation of this sets the components default property to
     ///  it's name, if that property is a string.
     /// </summary>
     [Obsolete("This method has been deprecated. Use InitializeNewComponent instead.  https://go.microsoft.com/fwlink/?linkid=14202")]
@@ -1316,7 +1316,7 @@ public partial class ControlDesigner : ComponentDesigner
     }
 
     /// <summary>
-    ///  Called at the end of a drag operation.  This either commits or rolls back the drag.
+    ///  Called at the end of a drag operation. This either commits or rolls back the drag.
     /// </summary>
     protected virtual void OnMouseDragEnd(bool cancel)
     {
@@ -1359,7 +1359,7 @@ public partial class ControlDesigner : ComponentDesigner
             return;
         }
 
-        // We must check to ensure that UI service is still in drag mode.  It is possible that the user hit escape,
+        // We must check to ensure that UI service is still in drag mode. It is possible that the user hit escape,
         // which will cancel drag mode.
         if (_selectionUIService.Dragging)
         {
@@ -1532,7 +1532,7 @@ public partial class ControlDesigner : ComponentDesigner
     }
 
     /// <summary>
-    ///  Called when the control we're designing has finished painting.  This method gives the designer a chance
+    ///  Called when the control we're designing has finished painting. This method gives the designer a chance
     ///  to paint any additional adornments on top of the control.
     /// </summary>
     protected virtual void OnPaintAdornments(PaintEventArgs pe)
@@ -1616,7 +1616,7 @@ public partial class ControlDesigner : ComponentDesigner
 
     /// <summary>
     ///  Allows a designer to filter the set of properties the component it is designing will expose through the
-    ///  TypeDescriptor object.  This method is called immediately before its corresponding "Post" method. If you
+    ///  TypeDescriptor object. This method is called immediately before its corresponding "Post" method. If you
     ///  are overriding this method you should call the base implementation before you perform your own filtering.
     /// </summary>
     protected override void PreFilterProperties(IDictionary properties)
@@ -1665,7 +1665,7 @@ public partial class ControlDesigner : ComponentDesigner
     }
 
     /// <summary>
-    ///  Hooks the children of the given control.  We need to do this for child controls that are not in design
+    ///  Hooks the children of the given control. We need to do this for child controls that are not in design
     ///  mode, which is the case for composite controls.
     /// </summary>
     protected void UnhookChildControls(Control firstChild)
@@ -1785,7 +1785,7 @@ public partial class ControlDesigner : ComponentDesigner
             location = PARAM.ToPoint(m.LParamInternal);
         }
 
-        // This is implemented on the base designer for UI activation support.  We call it so that we can support
+        // This is implemented on the base designer for UI activation support. We call it so that we can support
         // UI activation.
         MouseButtons button = MouseButtons.None;
         switch (m.MsgInternal)
@@ -2120,7 +2120,7 @@ public partial class ControlDesigner : ComponentDesigner
 
                 // For some reason we don't always get an NCPAINT with the WM_NCACTIVATE usually this repros with
                 // themes on.... this can happen when someone calls RedrawWindow without the flags to send an
-                // NCPAINT.  So that we don't double process this event, our calls to redraw window should not have
+                // NCPAINT. So that we don't double process this event, our calls to redraw window should not have
                 // RDW_ERASENOW | RDW_UPDATENOW.
                 if (OverlayService is not null)
                 {
@@ -2201,7 +2201,7 @@ public partial class ControlDesigner : ComponentDesigner
                 }
 
                 // We handle this in addition to a right mouse button. Why?  Because we often eat the right mouse
-                // button, so it may never generate a WM_CONTEXTMENU.  However, the system may generate one in
+                // button, so it may never generate a WM_CONTEXTMENU. However, the system may generate one in
                 // response to an F-10.
                 location = PARAM.ToPoint(m.LParamInternal);
 
@@ -2227,7 +2227,7 @@ public partial class ControlDesigner : ComponentDesigner
                 }
                 else if (m.MsgInternal < PInvoke.WM_KEYFIRST || m.MsgInternal > PInvoke.WM_KEYLAST)
                 {
-                    // We eat all key handling to the control.  Controls generally should not be getting focus
+                    // We eat all key handling to the control. Controls generally should not be getting focus
                     // anyway, so this shouldn't happen. However, we want to prevent this as much as possible.
                     DefWndProc(ref m);
                 }
@@ -2235,7 +2235,7 @@ public partial class ControlDesigner : ComponentDesigner
                 break;
         }
     }
-#nullable disable
+
     private void PaintException(PaintEventArgs e, Exception ex)
     {
         StringFormat stringFormat = new StringFormat
@@ -2312,7 +2312,7 @@ public partial class ControlDesigner : ComponentDesigner
         stringFormat.Dispose();
     }
 
-    private IOverlayService OverlayService => _overlayService ??= GetService<IOverlayService>();
+    private IOverlayService? OverlayService => _overlayService ??= GetService<IOverlayService>();
 
     private static bool IsMouseMessage(MessageId msg)
     {
@@ -2397,7 +2397,9 @@ public partial class ControlDesigner : ComponentDesigner
     {
         Point pt = PARAM.ToPoint(lParam);
         pt = Control.PointToScreen(pt);
-        pt = Control.Parent.PointToClient(pt);
+
+        // We have already checked if Parent is null before calling the method.
+        pt = Control.Parent!.PointToClient(pt);
         return PARAM.ToInt(pt.X, pt.Y);
     }
 
@@ -2412,10 +2414,10 @@ public partial class ControlDesigner : ComponentDesigner
             }
 
             // Is it a control?
-            Control child = Control.FromHandle(hwndChild);
+            Control? child = Control.FromHandle(hwndChild);
             if (child is null)
             {
-                // No control.  We must subclass this control.
+                // No control. We must subclass this control.
                 if (!SubclassedChildWindows.ContainsKey(hwndChild))
                 {
                     // Some controls (primarily RichEdit) will register themselves as
@@ -2430,7 +2432,7 @@ public partial class ControlDesigner : ComponentDesigner
             }
 
             // UserControl is a special ContainerControl which should "hook to all the WindowHandles"
-            // Since it doesnt allow the Mouse to pass through any of its contained controls.
+            // Since it doesn't allow the Mouse to pass through any of its contained controls.
             // Please refer to VsWhidbey : 293117
             if (child is null || Control is UserControl)
             {
@@ -2480,7 +2482,7 @@ public partial class ControlDesigner : ComponentDesigner
     internal void RemoveSubclassedWindow(IntPtr hwnd) =>
         SubclassedChildWindows.Remove(hwnd);
 
-    internal void SetUnhandledException(Control owner, Exception exception)
+    internal void SetUnhandledException(Control? owner, Exception exception)
     {
         if (_thrownException is not null)
         {
@@ -2490,9 +2492,17 @@ public partial class ControlDesigner : ComponentDesigner
         _thrownException = exception;
         owner ??= Control;
 
-        string[] exceptionLines = exception.StackTrace.Split('\r', '\n');
-        string typeName = owner.GetType().FullName;
-        string stack = string.Join(Environment.NewLine, exceptionLines.Where(l => l.Contains(typeName)));
+        string? typeName = null;
+        string? stack = null;
+        if (exception.StackTrace is not null)
+        {
+            string[] exceptionLines = exception.StackTrace.Split('\r', '\n');
+            typeName = owner.GetType().FullName;
+            if (typeName is not null)
+            {
+                stack = string.Join(Environment.NewLine, exceptionLines.Where(l => l.Contains(typeName)));
+            }
+        }
 
         InvalidOperationException wrapper = new(
             string.Format(SR.ControlDesigner_WndProcException, typeName, exception.Message, stack),

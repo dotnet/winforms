@@ -288,8 +288,8 @@
         <note />
       </trans-unit>
       <trans-unit id="BinaryFormatterNotSupported">
-        <source>Using the BinaryFormatter is not supported in trimmed applications.</source>
-        <target state="translated">修剪後的應用程式不支援使用 BinaryFormatter。</target>
+        <source>BinaryFormatter serialization and deserialization are disabled within this application. See https://aka.ms/binaryformatter for more information.</source>
+        <target state="translated">此應用程式內已停用 BinaryFormatter 序列化和還原序列化。如需詳細資訊，請參閱 https://aka.ms/binaryformatter。</target>
         <note />
       </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
@@ -1527,6 +1527,11 @@
         <target state="translated">當指標移到控制項時所顯示的游標。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlDarkModeDescr">
+        <source>Determines the dark mode setting for the control. This ambient property inherits its value from its parent control or from the Application class.</source>
+        <target state="translated">決定控制項的深色模式設定。此環境屬性會從其父控制項或應用程式類別繼承其值。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ControlDataContextChangedDescr">
         <source>Occurs when the value of the DataContext property changes.</source>
         <target state="translated">DataCoNtext 屬性的值變更時發生。</target>
@@ -2180,6 +2185,11 @@
       <trans-unit id="CursorNonSerializableHandle">
         <source>Stock cursors cannot be serialized.</source>
         <target state="translated">無法序列化內建游標。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DarkModeNotSupported">
+        <source>Dark mode cannot be activated, either because of an activated High-Contrast mode or because the underlying OS does not support it.</source>
+        <target state="translated">深色模式無法啟用，可能是因為已啟用高對比模式，或因為基礎作業系統不支援它。</target>
         <note />
       </trans-unit>
       <trans-unit id="DataBindingAddNewNotSupportedOnPropertyManager">
@@ -5305,6 +5315,16 @@ Do you want to replace it?</source>
         <target state="translated">自動捲動捲軸目前的位置。</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormBorderColorChangedDescr">
+        <source>Occurs whenever the FormBorderColor property is changed.</source>
+        <target state="translated">每當 FormBorderColor 屬性變更時就會發生。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormBorderColorDescr">
+        <source>The color of the Form's border.</source>
+        <target state="translated">表單框線的色彩。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormBorderStyleDescr">
         <source>Indicates the appearance and behavior of the border and title bar of the form.</source>
         <target state="translated">表示表單框線和標題列的外觀和行為。</target>
@@ -5315,9 +5335,39 @@ Do you want to replace it?</source>
         <target state="translated">表單的取消按鈕。如果設定此屬性，當使用者按下 'ESC' 鍵時就代表「已按下」該按鈕。</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormCaptionBackColorChangedDescr">
+        <source>Occurs whenever the FormCaptionBackColor property is changed.</source>
+        <target state="translated">每當 FormCaptionBackColor 屬性變更時就會發生。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCaptionBackColorDescr">
+        <source>The back color of the Form's caption (title bar).</source>
+        <target state="translated">表單標題 (標題列) 的背景色彩。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCaptionTextColorChangedDescr">
+        <source>Occurs whenever the FormCaptionTextColor property is changed.</source>
+        <target state="translated">每當 FormCaptionTextColor 屬性變更時就會發生。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCaptionTextColorDescr">
+        <source>The color of the Form's text caption (title bar text).</source>
+        <target state="translated">表單文字標題 (標題列文字) 的色彩。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormControlBoxDescr">
         <source>Determines whether a form has a Control/System menu box.</source>
         <target state="translated">決定表單是否有系統控制功能表方塊。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCornerPreferenceChangedDescr">
+        <source>Occurs whenever the FormCornerPreference property is changed.</source>
+        <target state="translated">每當 FormCornerPreference 屬性變更時就會發生。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCornerPreferenceDescr">
+        <source>The rounding style of the Form's border.</source>
+        <target state="translated">表單框線的圓角樣式。</target>
         <note />
       </trans-unit>
       <trans-unit id="FormDesktopBoundsDescr">
@@ -5520,6 +5570,11 @@ Do you want to replace it?</source>
         <target state="translated">控制項的透明度百分比。</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormOrTaskDialog_NoSyncContextForShowAsync">
+        <source>Failed to retrieve the Synchronization Context for showing the Form asynchronously.</source>
+        <target state="translated">無法擷取同步處理內容以透過非同步方式顯示表單。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormOwnedFormsDescr">
         <source>Array of forms owned by this form.</source>
         <target state="translated">此表單擁有的表單陣列。</target>
@@ -5563,6 +5618,11 @@ Do you want to replace it?</source>
       <trans-unit id="FormWindowStateDescr">
         <source>Determines the initial visual state of the form.</source>
         <target state="translated">決定表單的初始可見狀態。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Form_HasAlreadyBeenShownAsync">
+        <source>The form has already been shown asynchronously.</source>
+        <target state="translated">表單已經以非同步方式顯示。</target>
         <note />
       </trans-unit>
       <trans-unit id="FormatControlFormatDescr">
@@ -6855,8 +6915,8 @@ Stack trace where the illegal operation occurred was:
         <note />
       </trans-unit>
       <trans-unit id="ListViewVirtualListSizeDescr">
-        <source>Sets the count of the item collection when the ListView is in virtual mode.</source>
-        <target state="translated">設定 ListView 處於虛擬模式時項目集合的計數。</target>
+        <source>Sets the count of the item collection when the ListView is in virtual mode. If VirtualMode is set to true, and the VirtualListSize property is greater than 0, you must handle the RetrieveVirtualItem event providing valid items.</source>
+        <target state="translated">設定 ListView 處於虛擬模式時項目集合的計數。如果 VirtualMode 設定為 true，並且 VirtualListSize 屬性大於 0，則必須處理提供有效項目的 RetrieveVirtualItem 事件。</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewVirtualListSizeInvalidArgument">
@@ -9706,7 +9766,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ToolStripAllowClickThrough">
         <source>Allows the control to be interacted when window does not have focus.</source>
-        <target state="new">Allows the control to be interacted when window does not have focus.</target>
+        <target state="translated">允許控制件在視窗沒有焦點時進行互動。</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue">

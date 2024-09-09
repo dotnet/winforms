@@ -10,7 +10,7 @@ namespace System.ComponentModel.Design;
 /// </summary>
 public class DesignerActionService : IDisposable
 {
-    private readonly Dictionary<IComponent, DesignerActionListCollection> _designerActionLists; // this is how we store 'em.  Syntax: key = object, value = DesignerActionListCollection
+    private readonly Dictionary<IComponent, DesignerActionListCollection> _designerActionLists; // this is how we store 'em. Syntax: key = object, value = DesignerActionListCollection
     private DesignerActionListsChangedEventHandler? _designerActionListsChanged;
     private readonly IServiceProvider? _serviceProvider; // standard service provider
     private readonly ISelectionService? _selectionService; // selection service
@@ -31,7 +31,7 @@ public class DesignerActionService : IDisposable
 
             if (serviceProvider.TryGetService(out IComponentChangeService? componentChangeService))
             {
-                componentChangeService.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
+                componentChangeService.ComponentRemoved += OnComponentRemoved;
             }
 
             _selectionService = serviceProvider.GetService<ISelectionService>();
@@ -128,7 +128,7 @@ public class DesignerActionService : IDisposable
 
             if (_serviceProvider.TryGetService(out IComponentChangeService? componentChangeService))
             {
-                componentChangeService.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
+                componentChangeService.ComponentRemoved -= OnComponentRemoved;
             }
         }
     }
@@ -192,7 +192,7 @@ public class DesignerActionService : IDisposable
 
                         if (hookupEvents)
                         {
-                            verb.CommandChanged += new EventHandler(OnVerbStatusChanged);
+                            verb.CommandChanged += OnVerbStatusChanged;
                         }
 
                         if (verb is { Enabled: true, Visible: true })
@@ -288,7 +288,7 @@ public class DesignerActionService : IDisposable
     }
 
     /// <summary>
-    ///  This will remove all DesignerActions associated with the 'comp' object.  All alarms will be unhooked and the DesignerActionsChanged event will be fired.
+    ///  This will remove all DesignerActions associated with the 'comp' object. All alarms will be unhooked and the DesignerActionsChanged event will be fired.
     /// </summary>
     public void Remove(IComponent comp)
     {
@@ -301,7 +301,7 @@ public class DesignerActionService : IDisposable
     }
 
     /// <summary>
-    ///  This will remove the specified Designeraction from the DesignerActionService.  All alarms will be unhooked and the DesignerActionsChanged event will be fired.
+    ///  This will remove the specified Designeraction from the DesignerActionService. All alarms will be unhooked and the DesignerActionsChanged event will be fired.
     /// </summary>
     public void Remove(DesignerActionList actionList)
     {

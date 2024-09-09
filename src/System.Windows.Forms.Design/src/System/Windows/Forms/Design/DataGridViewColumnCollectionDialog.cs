@@ -624,7 +624,7 @@ internal class DataGridViewColumnCollectionDialog : Form
         ShowIcon = false;
         ShowInTaskbar = false;
         HelpButtonClicked += DataGridViewColumnCollectionDialog_HelpButtonClicked;
-        Closed += DataGridViewColumnCollectionDialog_Closed;
+        FormClosed += DataGridViewColumnCollectionDialog_Closed;
         Load += DataGridViewColumnCollectionDialog_Load;
         HelpRequested += DataGridViewColumnCollectionDialog_HelpRequested;
         _overarchingTableLayoutPanel.ResumeLayout(false);
@@ -1167,7 +1167,7 @@ internal class DataGridViewColumnCollectionDialog : Form
     {
         if (componentChangeService is not null)
         {
-            componentChangeService.ComponentChanged -= new ComponentChangedEventHandler(componentChanged);
+            componentChangeService.ComponentChanged -= componentChanged;
         }
     }
 

@@ -4018,7 +4018,7 @@ Stack trace where the illegal operation occurred was:
     <value>Occurs whenever the state of a virtual item is changed.</value>
   </data>
   <data name="ListViewVirtualListSizeDescr" xml:space="preserve">
-    <value>Sets the count of the item collection when the ListView is in virtual mode.</value>
+    <value>Sets the count of the item collection when the ListView is in virtual mode. If VirtualMode is set to true, and the VirtualListSize property is greater than 0, you must handle the RetrieveVirtualItem event providing valid items.</value>
   </data>
   <data name="ListViewVirtualListSizeInvalidArgument" xml:space="preserve">
     <value>Value of '{1}' is not valid for '{0}'. {0} should be greater than or equal to 0.</value>
@@ -6971,12 +6971,48 @@ Stack trace where the illegal operation occurred was:
     <value>Binding operations are not supported when application trimming is enabled.</value>
   </data>
   <data name="BinaryFormatterNotSupported" xml:space="preserve">
-    <value>Using the BinaryFormatter is not supported in trimmed applications.</value>
+    <value>BinaryFormatter serialization and deserialization are disabled within this application. See https://aka.ms/binaryformatter for more information.</value>
   </data>
   <data name="ControlNotSupportedInTrimming" xml:space="preserve">
     <value>'{0}' is not supported in trimmed applications.</value>
   </data>
   <data name="DesignTimeFeaturesNotSupported" xml:space="preserve">
     <value>Design time features are not supported.</value>
+  </data>
+  <data name="ControlDarkModeDescr" xml:space="preserve">
+    <value>Determines the dark mode setting for the control. This ambient property inherits its value from its parent control or from the Application class.</value>
+  </data>
+  <data name="DarkModeNotSupported" xml:space="preserve">
+    <value>Dark mode cannot be activated, either because of an activated High-Contrast mode or because the underlying OS does not support it.</value>
+  </data>
+  <data name="FormBorderColorChangedDescr" xml:space="preserve">
+    <value>Occurs whenever the FormBorderColor property is changed.</value>
+  </data>
+  <data name="FormCaptionBackColorChangedDescr" xml:space="preserve">
+    <value>Occurs whenever the FormCaptionBackColor property is changed.</value>
+  </data>
+  <data name="FormCaptionTextColorChangedDescr" xml:space="preserve">
+    <value>Occurs whenever the FormCaptionTextColor property is changed.</value>
+  </data>
+  <data name="FormCornerPreferenceChangedDescr" xml:space="preserve">
+    <value>Occurs whenever the FormCornerPreference property is changed.</value>
+  </data>
+  <data name="FormCornerPreferenceDescr" xml:space="preserve">
+    <value>The rounding style of the Form's border.</value>
+  </data>
+  <data name="FormBorderColorDescr" xml:space="preserve">
+    <value>The color of the Form's border.</value>
+  </data>
+  <data name="FormCaptionBackColorDescr" xml:space="preserve">
+    <value>The back color of the Form's caption (title bar).</value>
+  </data>
+  <data name="FormCaptionTextColorDescr" xml:space="preserve">
+    <value>The color of the Form's text caption (title bar text).</value>
+  </data>
+  <data name="Form_HasAlreadyBeenShownAsync" xml:space="preserve">
+    <value>The form has already been shown asynchronously.</value>
+  </data>
+  <data name="FormOrTaskDialog_NoSyncContextForShowAsync" xml:space="preserve">
+    <value>Failed to retrieve the Synchronization Context for showing the Form asynchronously.</value>
   </data>
 </root>

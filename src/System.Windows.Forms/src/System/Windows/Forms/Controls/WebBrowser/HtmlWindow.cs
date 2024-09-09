@@ -311,9 +311,9 @@ public sealed unsafe partial class HtmlWindow
         htmlWindow.Value->navigate(bstrUrl).ThrowOnFailure();
     }
 
-    ///  Note: We intentionally have a string overload (apparently Mort wants one).  We don't have
+    ///  Note: We intentionally have a string overload (apparently Mort wants one). We don't have
     ///  string overloads call Uri overloads because that breaks Uris that aren't fully qualified
-    ///  (things like "www.microsoft.com") that the underlying objects support and we don't want to
+    ///  (things like "www.Microsoft.com") that the underlying objects support and we don't want to
     ///  break.
     public void Navigate(string urlString)
     {
@@ -322,9 +322,9 @@ public sealed unsafe partial class HtmlWindow
         htmlWindow.Value->navigate(url).ThrowOnFailure();
     }
 
-    ///  Note: We intentionally have a string overload (apparently Mort wants one).  We don't have
+    ///  Note: We intentionally have a string overload (apparently Mort wants one). We don't have
     ///  string overloads call Uri overloads because that breaks Uris that aren't fully qualified
-    ///  (things like "www.microsoft.com") that the underlying objects support and we don't want to
+    ///  (things like "www.Microsoft.com") that the underlying objects support and we don't want to
     ///  break.
     public HtmlWindow? Open(string urlString, string target, string windowOptions, bool replaceEntry)
     {
@@ -340,9 +340,9 @@ public sealed unsafe partial class HtmlWindow
     public HtmlWindow? Open(Uri url, string target, string windowOptions, bool replaceEntry) =>
         Open(url.ToString(), target, windowOptions, replaceEntry);
 
-    ///  Note: We intentionally have a string overload (apparently Mort wants one).  We don't have
+    ///  Note: We intentionally have a string overload (apparently Mort wants one). We don't have
     ///  string overloads call Uri overloads because that breaks Uris that aren't fully qualified
-    ///  (things like "www.microsoft.com") that the underlying objects support and we don't want to
+    ///  (things like "www.Microsoft.com") that the underlying objects support and we don't want to
     ///  break.
     public HtmlWindow? OpenNew(string urlString, string windowOptions)
     {

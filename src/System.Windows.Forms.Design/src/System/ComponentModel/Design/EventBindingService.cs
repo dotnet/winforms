@@ -28,7 +28,7 @@ public abstract partial class EventBindingService : IEventBindingService
     }
 
     /// <summary>
-    ///  Creates a unique method name.  The name must be
+    ///  Creates a unique method name. The name must be
     ///  compatible with the script language being used and
     ///  it must not conflict with any other name in the user's
     ///  code.
@@ -37,19 +37,19 @@ public abstract partial class EventBindingService : IEventBindingService
 
     /// <summary>
     ///  This provides a notification that a particular method
-    ///  is no longer being used by an event handler.  Some implementations
+    ///  is no longer being used by an event handler. Some implementations
     ///  may want to remove the event hander when no events are using
-    ///  it.  By overriding UseMethod and FreeMethod, an implementation
+    ///  it. By overriding UseMethod and FreeMethod, an implementation
     ///  can know when a method is no longer needed.
     /// </summary>
     protected virtual void FreeMethod(IComponent component, EventDescriptor e, string methodName)
     { }
 
     /// <summary>
-    ///  Returns a collection of strings.  Each string is
+    ///  Returns a collection of strings. Each string is
     ///  the method name of a method whose signature is
     ///  compatible with the delegate contained in the
-    ///  event descriptor.  This should return an empty
+    ///  event descriptor. This should return an empty
     ///  collection if no names are compatible.
     /// </summary>
     protected abstract ICollection GetCompatibleMethods(EventDescriptor e);
@@ -60,16 +60,16 @@ public abstract partial class EventBindingService : IEventBindingService
     protected object? GetService(Type serviceType) => _provider.GetService(serviceType);
 
     /// <summary>
-    ///  Shows the user code.  This method does not show any
+    ///  Shows the user code. This method does not show any
     ///  particular code; generally it shows the last code the
-    ///  user typed.  This returns true if it was possible to
+    ///  user typed. This returns true if it was possible to
     ///  show the code, or false if not.
     /// </summary>
     protected abstract bool ShowCode();
 
     /// <summary>
-    ///  Shows the user code at the given line number.  Line
-    ///  numbers are one-based.  This returns true if it was
+    ///  Shows the user code at the given line number. Line
+    ///  numbers are one-based. This returns true if it was
     ///  possible to show the code, or false if not.
     /// </summary>
     protected abstract bool ShowCode(int lineNumber);
@@ -83,9 +83,9 @@ public abstract partial class EventBindingService : IEventBindingService
 
     /// <summary>
     ///  This provides a notification that a particular method
-    ///  is being used by an event handler.  Some implementations
+    ///  is being used by an event handler. Some implementations
     ///  may want to remove the event hander when no events are using
-    ///  it.  By overriding UseMethod and FreeMethod, an implementation
+    ///  it. By overriding UseMethod and FreeMethod, an implementation
     ///  can know when a method is no longer needed.
     /// </summary>
     protected virtual void UseMethod(IComponent component, EventDescriptor e, string methodName)
@@ -93,7 +93,7 @@ public abstract partial class EventBindingService : IEventBindingService
 
     /// <summary>
     ///  This validates that the provided method name is valid for
-    ///  the language / script being used.  The default does nothing.
+    ///  the language / script being used. The default does nothing.
     ///  You may override this and throw an exception if the name
     ///  is invalid for your use.
     /// </summary>
@@ -102,7 +102,7 @@ public abstract partial class EventBindingService : IEventBindingService
 
     /// <summary>
     ///  This creates a name for an event handling method for the given component
-    ///  and event.  The name that is created is guaranteed to be unique in the user's source
+    ///  and event. The name that is created is guaranteed to be unique in the user's source
     ///  code.
     /// </summary>
     string IEventBindingService.CreateUniqueMethodName(IComponent component, EventDescriptor e)
@@ -114,7 +114,7 @@ public abstract partial class EventBindingService : IEventBindingService
     }
 
     /// <summary>
-    ///  Retrieves a collection of strings.  Each string is the name of a method
+    ///  Retrieves a collection of strings. Each string is the name of a method
     ///  in user code that has a signature that is compatible with the given event.
     /// </summary>
     ICollection IEventBindingService.GetCompatibleMethods(EventDescriptor e)
@@ -175,7 +175,7 @@ public abstract partial class EventBindingService : IEventBindingService
 
         List<PropertyDescriptor> props = new(events.Count);
 
-        // We cache the property descriptors here for speed.  Create those for
+        // We cache the property descriptors here for speed. Create those for
         // events that we don't have yet.
         for (int i = 0; i < events.Count; i++)
         {
@@ -204,7 +204,7 @@ public abstract partial class EventBindingService : IEventBindingService
     }
 
     /// <summary>
-    ///  Displays the user code for this designer.  This will return true if the user
+    ///  Displays the user code for this designer. This will return true if the user
     ///  code could be displayed, or false otherwise.
     /// </summary>
     bool IEventBindingService.ShowCode()
@@ -213,7 +213,7 @@ public abstract partial class EventBindingService : IEventBindingService
     }
 
     /// <summary>
-    ///  Displays the user code for the designer.  This will return true if the user
+    ///  Displays the user code for the designer. This will return true if the user
     ///  code could be displayed, or false otherwise.
     /// </summary>
     bool IEventBindingService.ShowCode(int lineNumber)
@@ -222,7 +222,7 @@ public abstract partial class EventBindingService : IEventBindingService
     }
 
     /// <summary>
-    ///  Displays the user code for the given event.  This will return true if the user
+    ///  Displays the user code for the given event. This will return true if the user
     ///  code could be displayed, or false otherwise.
     /// </summary>
     bool IEventBindingService.ShowCode(IComponent component, EventDescriptor e)
@@ -242,18 +242,18 @@ public abstract partial class EventBindingService : IEventBindingService
         _showCodeComponent = component;
         _showCodeEventDescriptor = e;
         _showCodeMethodName = methodName;
-        Application.Idle += new EventHandler(ShowCodeIdle);
+        Application.Idle += ShowCodeIdle;
 
         return true;
     }
 
     /// <summary>
-    ///  Displays the user code for the given event.  This will return true if the user
+    ///  Displays the user code for the given event. This will return true if the user
     ///  code could be displayed, or false otherwise.
     /// </summary>
     private void ShowCodeIdle(object? sender, EventArgs e)
     {
-        Application.Idle -= new EventHandler(ShowCodeIdle);
+        Application.Idle -= ShowCodeIdle;
 
         try
         {

@@ -710,16 +710,16 @@ public abstract class ListControl : Control
                     {
                         if (_dataManager is not null)
                         {
-                            _dataManager.ItemChanged -= new ItemChangedEventHandler(DataManager_ItemChanged);
-                            _dataManager.PositionChanged -= new EventHandler(DataManager_PositionChanged);
+                            _dataManager.ItemChanged -= DataManager_ItemChanged;
+                            _dataManager.PositionChanged -= DataManager_PositionChanged;
                         }
 
                         _dataManager = newDataManager;
 
                         if (_dataManager is not null)
                         {
-                            _dataManager.ItemChanged += new ItemChangedEventHandler(DataManager_ItemChanged);
-                            _dataManager.PositionChanged += new EventHandler(DataManager_PositionChanged);
+                            _dataManager.ItemChanged += DataManager_ItemChanged;
+                            _dataManager.PositionChanged += DataManager_PositionChanged;
                         }
                     }
 
@@ -770,7 +770,7 @@ public abstract class ListControl : Control
         // If the source is a component, then unhook the Disposed event
         if (_dataSource is IComponent componentDataSource)
         {
-            componentDataSource.Disposed -= new EventHandler(DataSourceDisposed);
+            componentDataSource.Disposed -= DataSourceDisposed;
         }
 
         if (_dataSource is ISupportInitializeNotification dsInit && _isDataSourceInitEventHooked)
@@ -778,7 +778,7 @@ public abstract class ListControl : Control
             // If we previously hooked the data source's ISupportInitializeNotification
             // Initialized event, then unhook it now (we don't always hook this event,
             // only if we needed to because the data source was previously uninitialized)
-            dsInit.Initialized -= new EventHandler(DataSourceInitialized);
+            dsInit.Initialized -= DataSourceInitialized;
             _isDataSourceInitEventHooked = false;
         }
     }
@@ -789,7 +789,7 @@ public abstract class ListControl : Control
         // so we know when the component is deleted from the form
         if (_dataSource is IComponent componentDataSource)
         {
-            componentDataSource.Disposed += new EventHandler(DataSourceDisposed);
+            componentDataSource.Disposed += DataSourceDisposed;
         }
 
         if (_dataSource is ISupportInitializeNotification dsInit && !dsInit.IsInitialized)
@@ -797,7 +797,7 @@ public abstract class ListControl : Control
             // If the source provides initialization notification, and is not yet
             // fully initialized, then hook the Initialized event, so that we can
             // delay connecting to it until it *is* initialized.
-            dsInit.Initialized += new EventHandler(DataSourceInitialized);
+            dsInit.Initialized += DataSourceInitialized;
             _isDataSourceInitEventHooked = true;
             _isDataSourceInitialized = false;
         }

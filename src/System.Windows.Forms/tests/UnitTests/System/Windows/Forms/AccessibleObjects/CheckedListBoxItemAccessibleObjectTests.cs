@@ -323,4 +323,52 @@ public class CheckedListBoxItemAccessibleObjectTests
         Assert.Equal(isChecked, bool.Parse(((BSTR)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId)).ToStringAndFree()));
         Assert.False(checkedListBox.IsHandleCreated);
     }
+
+    [WinFormsFact]
+    public void CheckedListBoxItemAccessibleObject_State_ReturnsNone_WhenHandleNotCreated()
+    {
+        using CheckedListBox checkedListBox = new();
+        var item = new CheckedListBox.CheckedListBoxItemAccessibleObject(
+            checkedListBox,
+            new ItemArray.Entry("Item 1"),
+            (CheckedListBoxAccessibleObject)checkedListBox.AccessibilityObject);
+
+        item.State.Should().Be(AccessibleStates.None);
+    }
+
+    [WinFormsTheory]
+    [InlineData(null, AccessibleStates.Indeterminate)]
+    [InlineData(true, AccessibleStates.Checked)]
+    [InlineData(false, AccessibleStates.None)]
+    public void CheckedListBoxItemAccessibleObject_State_ReturnsExpected(bool? isChecked, AccessibleStates expectedState)
+    {
+        using CheckedListBox checkedListBox = new();
+        checkedListBox.Items.Add("Item 1",
+            isChecked.HasValue
+                ? (isChecked.Value ? CheckState.Checked : CheckState.Unchecked)
+                : CheckState.Indeterminate);
+        checkedListBox.CreateControl();
+        var item = new CheckedListBox.CheckedListBoxItemAccessibleObject(
+            checkedListBox,
+            checkedListBox.Items.InnerArray.GetEntryObject(0, 0),
+            (CheckedListBoxAccessibleObject)checkedListBox.AccessibilityObject);
+
+        item.State.Should().HaveFlag(expectedState);
+    }
+
+    [WinFormsFact]
+    public void CheckedListBoxItemAccessibleObject_State_ReturnsExpected_ForSelectedAndFocusedItem()
+    {
+        using CheckedListBox checkedListBox = new();
+        checkedListBox.Items.Add("Item 1");
+        checkedListBox.CreateControl();
+        checkedListBox.SelectedIndex = 0; // Select and focus the first item
+        var item = new CheckedListBox.CheckedListBoxItemAccessibleObject(
+            checkedListBox,
+            checkedListBox.Items.InnerArray.GetEntryObject(0, 0),
+            (CheckedListBoxAccessibleObject)checkedListBox.AccessibilityObject);
+
+        item.State.Should().HaveFlag(AccessibleStates.Selected)
+                       .And.HaveFlag(AccessibleStates.Focused);
+    }
 }

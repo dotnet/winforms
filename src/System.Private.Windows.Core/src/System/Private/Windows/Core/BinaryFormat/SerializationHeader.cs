@@ -13,7 +13,7 @@ namespace System.Private.Windows.Core.BinaryFormat;
 ///   </see>
 ///  </para>
 /// </remarks>
-internal sealed class SerializationHeader : IRecord<SerializationHeader>, IBinaryFormatParseable<SerializationHeader>
+internal sealed class SerializationHeader : IRecord<SerializationHeader>
 {
     /// <summary>
     ///  The id of the root object record.
@@ -43,15 +43,6 @@ internal sealed class SerializationHeader : IRecord<SerializationHeader>, IBinar
         RootId = 1,
         HeaderId = -1,
     };
-
-    static SerializationHeader IBinaryFormatParseable<SerializationHeader>.Parse(
-        BinaryFormattedObject.IParseState state) => new()
-        {
-            RootId = state.Reader.ReadInt32(),
-            HeaderId = state.Reader.ReadInt32(),
-            MajorVersion = state.Reader.ReadInt32(),
-            MinorVersion = state.Reader.ReadInt32()
-        };
 
     public void Write(BinaryWriter writer)
     {

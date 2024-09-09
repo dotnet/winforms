@@ -38,10 +38,11 @@ internal sealed partial class DesignerActionPanel
                 UseMnemonic = false,
                 Visible = false
             };
-            _readOnlyTextBoxLabel.MouseClick += new MouseEventHandler(OnReadOnlyTextBoxLabelClick);
-            _readOnlyTextBoxLabel.Enter += new EventHandler(OnReadOnlyTextBoxLabelEnter);
-            _readOnlyTextBoxLabel.Leave += new EventHandler(OnReadOnlyTextBoxLabelLeave);
-            _readOnlyTextBoxLabel.KeyDown += new KeyEventHandler(OnReadOnlyTextBoxLabelKeyDown);
+
+            _readOnlyTextBoxLabel.MouseClick += OnReadOnlyTextBoxLabelClick;
+            _readOnlyTextBoxLabel.Enter += OnReadOnlyTextBoxLabelEnter;
+            _readOnlyTextBoxLabel.Leave += OnReadOnlyTextBoxLabelLeave;
+            _readOnlyTextBoxLabel.KeyDown += OnReadOnlyTextBoxLabelKeyDown;
 
             _textBox = new TextBox
             {
@@ -49,9 +50,10 @@ internal sealed partial class DesignerActionPanel
                 TextAlign = HorizontalAlignment.Left,
                 Visible = false
             };
-            _textBox.TextChanged += new EventHandler(OnTextBoxTextChanged);
-            _textBox.KeyDown += new KeyEventHandler(OnTextBoxKeyDown);
-            _textBox.LostFocus += new EventHandler(OnTextBoxLostFocus);
+
+            _textBox.TextChanged += OnTextBoxTextChanged;
+            _textBox.KeyDown += OnTextBoxKeyDown;
+            _textBox.LostFocus += OnTextBoxLostFocus;
 
             AddedControls.Add(_readOnlyTextBoxLabel);
             AddedControls.Add(_textBox);

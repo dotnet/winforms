@@ -57,7 +57,7 @@ public sealed class DataGridViewAdvancedBorderStyle : ICloneable
         }
         set
         {
-            // Sequential enum.  Valid values are 0x0 to 0x7
+            // Sequential enum. Valid values are 0x0 to 0x7
             SourceGenerated.EnumValidator.Validate(value);
             if (value == DataGridViewAdvancedCellBorderStyle.NotSet ||
                 value == _banned1 ||
@@ -89,7 +89,7 @@ public sealed class DataGridViewAdvancedBorderStyle : ICloneable
         }
         set
         {
-            // Sequential enum.  Valid values are 0x0 to 0x7
+            // Sequential enum. Valid values are 0x0 to 0x7
             SourceGenerated.EnumValidator.Validate(value);
             if (value == DataGridViewAdvancedCellBorderStyle.NotSet)
             {
@@ -134,7 +134,7 @@ public sealed class DataGridViewAdvancedBorderStyle : ICloneable
         }
         set
         {
-            // Sequential enum.  Valid values are 0x0 to 0x7
+            // Sequential enum. Valid values are 0x0 to 0x7
             SourceGenerated.EnumValidator.Validate(value);
             if (value == DataGridViewAdvancedCellBorderStyle.NotSet)
             {
@@ -190,7 +190,7 @@ public sealed class DataGridViewAdvancedBorderStyle : ICloneable
         }
         set
         {
-            // Sequential enum.  Valid values are 0x0 to 0x7
+            // Sequential enum. Valid values are 0x0 to 0x7
             SourceGenerated.EnumValidator.Validate(value);
             if (value == DataGridViewAdvancedCellBorderStyle.NotSet)
             {
@@ -236,7 +236,7 @@ public sealed class DataGridViewAdvancedBorderStyle : ICloneable
         }
         set
         {
-            // Sequential enum.  Valid values are 0x0 to 0x7
+            // Sequential enum. Valid values are 0x0 to 0x7
             SourceGenerated.EnumValidator.Validate(value);
             if (value == DataGridViewAdvancedCellBorderStyle.NotSet)
             {

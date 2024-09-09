@@ -15,8 +15,8 @@ This document describes our approach to testing.
             - [Naming](#naming)
             - [Decoration](#decoration)
             - [Disposal](#dispose-created-objects)
-            - [Theory tests](#theory-tests#theory-tests)
-        - [Throw unhandled exceptions](#throw-unhandled-exceptions)
+            - [Theory tests](#theory-tests)
+        - [Strategy](#strategy)
 * [Rendering Tests](#rendering-tests)
 * [Functional Tests](#functional-tests)
     * [Running functional tests](#running-functional-tests)
@@ -26,6 +26,7 @@ This document describes our approach to testing.
         - [Troubleshooting Visual Studio functional test errors](#troubleshooting-visual-studio-functional-test-errors)
     * [Adding new functional tests](#adding-new-functional-tests)
         - [Test placement](#therefore-you-just-need-to-put-your-tests-in-the-right-place-in-order-for-them-to-run-1)
+ * [Sequential collection](#sequential-collection)
  * [Testing for Accessibility](#testing-for-accessibility)
  * [Running and debugging crashed tests](#running-and-debugging-crashed-tests)
     
@@ -308,7 +309,46 @@ Functional tests are built and executed by file name convention
   * For example, if I wanted to test the `Button` class in System.Windows.Forms.dll, I would look for a Button.cs under src\System.Windows.Forms\tests
 * If the file exists, add your tests there. If it doesn't exist, feel free to create it.
   * **Note that you don't have to modify the csproj at all.** Since the project is a Microsoft.NET.Sdk project, all source files next to it are automatically included
- 
+
+# Sequential Collection
+
+* A sequential collection is a grouping of unit tests that are executed in a specific order.
+  - All unit tests in the `Sequential` collection are executed sequentially.
+    
+* Unit tests that involve the following situations should be included in the `Sequential` collection:
+  - Clipboard operations is sensitive to the state of the system and interfere with each other if run in parallel.
+    - **Clipboard APIs**: Any test that interacts with the system Clipboard, such as setting or retrieving data.
+    - **Drag and Drop**: Tests that simulate drag-and-drop operations, which often involve the Clipboard.
+    - **Copy/Paste**: Tests that perform copy and paste actions, which rely on the Clipboard to transfer data.
+    - **Register Formats**: Tests that register custom Clipboard formats.
+      
+    E.g.
+    ```cs
+    [Collection("Sequential")]
+    public class ClipboardTests
+    {
+        [WinFormsFact]
+        public void RichTextBox_OleObject_IncompleteOleObject_DoNothing()
+        {
+            using RichTextBox control = new();
+            control.Handle.Should().NotBe(IntPtr.Zero);
+
+            using MemoryStream memoryStream = new();
+            using Bitmap bitmap = new(100, 100);
+            bitmap.Save(memoryStream, Drawing.Imaging.ImageFormat.Png);
+            Clipboard.SetData("Embed Source", memoryStream);
+
+            control.Text.Should().BeEmpty();
+        }
+     ```
+  - Other tests that rely on a global state, refer to existing tests
+    
+     - [Clipboard related tests](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms/tests/UnitTests/System/Windows/Forms/ClipboardTests.cs)
+     - [WebBrowser control related tests](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms/tests/UnitTests/System/Windows/Forms/HtmlElementTests.cs)
+     - [PropertyGridTests](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms/tests/InteropTests/PropertyGridTests.cs)
+     - [ITypeInfoTests](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms.Primitives/tests/UnitTests/Interop/Oleaut32/ITypeInfoTests.cs)
+     - [IPictureTests](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms.Primitives/tests/UnitTests/Interop/Ole32/IPictureTests.cs)
+     - [IDispatchTests](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms.Primitives/tests/UnitTests/Windows/Win32/System/Com/IDispatchTests.cs)  
   
 # Testing for Accessibility
 

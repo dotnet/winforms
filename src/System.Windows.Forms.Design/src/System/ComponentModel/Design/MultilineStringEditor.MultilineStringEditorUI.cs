@@ -166,7 +166,7 @@ public sealed partial class MultilineStringEditor
             // DANGER:  This assumes we will grow to the left. This is true for propertygrid (DropDownHolder::OnCurrentControlResize)
             int maxDelta = location.X - workingArea.Left;
 
-            // NOTE:  If we are shrinking, requestedWidth will be negative, so the Min will not bound shrinking by maxDelta.  This is intentional.
+            // NOTE:  If we are shrinking, requestedWidth will be negative, so the Min will not bound shrinking by maxDelta. This is intentional.
             int requestedDelta = Math.Min((requestedSize.Width - ClientSize.Width), maxDelta);
             ClientSize = new Size(ClientSize.Width + requestedDelta, MinimumSize.Height);
         }

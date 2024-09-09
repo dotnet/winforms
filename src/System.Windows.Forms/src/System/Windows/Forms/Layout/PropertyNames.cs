@@ -3,8 +3,8 @@
 
 namespace System.Windows.Forms.Layout;
 
-// LayoutEventArgs takes a string for AffectedProperty.  This class contains const
-// strings to use as property names.  Doing this allows us to use reference comparisons
+// LayoutEventArgs takes a string for AffectedProperty. This class contains const
+// strings to use as property names. Doing this allows us to use reference comparisons
 // which is advantageous because 1) pref and 2) we will not accidently collide with
 // names that extenders provide.
 internal static class PropertyNames

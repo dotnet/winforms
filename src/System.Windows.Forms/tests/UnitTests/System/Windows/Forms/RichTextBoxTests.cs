@@ -17,7 +17,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests;
 
-public class RichTextBoxTests
+public partial class RichTextBoxTests
 {
     private static readonly int s_preferredHeight = Control.DefaultFont.Height + SystemInformation.BorderSize.Height * 4 + 3;
 
@@ -7906,20 +7906,6 @@ public class RichTextBoxTests
     }
 
     [WinFormsFact]
-    public void RichTextBox_OleObject_IncompleteOleObject_DoNothing()
-    {
-        using RichTextBox control = new();
-        Assert.NotEqual(IntPtr.Zero, control.Handle);
-
-        using MemoryStream memoryStream = new();
-        using Bitmap bitmap = new(100, 100);
-        bitmap.Save(memoryStream, Drawing.Imaging.ImageFormat.Png);
-        Clipboard.SetData("Embed Source", memoryStream);
-
-        Assert.Equal(string.Empty, control.Text);
-    }
-
-    [WinFormsFact]
     public void RichTextBox_CanPaste_NullFormat_ThrowsNullReferenceException()
     {
         using RichTextBox control = new();
@@ -10667,8 +10653,8 @@ public class RichTextBoxTests
         Assert.Equal(0, createdCallCount);
     }
 
-    // DrawToBitmap doesn't work for this control, so we should hide it.  We'll
-    // still call base so that this has a chance to work if it can.
+    // DrawToBitmap doesn't work for this control, so we should hide it.
+    // We'll still call base so that this has a chance to work if it can.
     [WinFormsFact]
     public void RichTextBox_DrawToBitmap_Invoke_Success()
     {
@@ -10690,7 +10676,7 @@ public class RichTextBoxTests
          using RichTextBox richTextBox2 = new();
 
         string fileName = "SaveRichTextBox.rtf";
-        string projectDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "..");     
+        string projectDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "..");
         string filePath = $"{projectDirectory}/src/System.Windows.Forms/tests/UnitTests/TestResources/Files/{fileName}";
 
         try
@@ -10717,9 +10703,9 @@ public class RichTextBoxTests
     [InlineData(RichTextBoxStreamType.RichNoOleObjs)]
     [InlineData(RichTextBoxStreamType.TextTextOleObjs)]
     public void RichTextBox_SaveFile_Invoke_Success(RichTextBoxStreamType fileType)
-    {       
+    {
         using RichTextBox richTextBox1 = new();
-        
+
         string projectDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "..");
         string filePath = Path.Combine(projectDirectory, "src", "System.Windows.Forms", "tests", "UnitTests", "TestResources", "Files", "Test");
 
@@ -10731,62 +10717,6 @@ public class RichTextBoxTests
         finally
         {
             File.Delete(filePath);
-        }
-    }
-
-    public static TheoryData<string> PlainTextData => new()
-    {
-        { "Hello World"},
-        { new string('a', 10000) },
-        { "Special characters: !@#$%^&*()" },
-    };
-
-    [WinFormsTheory]
-    [MemberData(nameof(PlainTextData))]
-    public void RichTextBox_Paste_PlainText_Data(string value)
-    {
-        using RichTextBox richTextBox1 = new();
-
-        if (!string.IsNullOrEmpty(value))
-        {
-            Clipboard.SetText(value);
-            richTextBox1.Paste(DataFormats.GetFormat(DataFormats.Text));
-
-            richTextBox1.Text.Should().Be(value);
-        }
-    }
-
-    [WinFormsFact]
-    public void RichTextBox_Paste_EmptyString_Data()
-    {
-        using RichTextBox richTextBox1 = new();
-
-        Clipboard.SetText("non-empty");
-        Clipboard.Clear();
-        richTextBox1.Paste(DataFormats.GetFormat(DataFormats.Text));
-
-        richTextBox1.Text.Should().Be("");
-    }
-
-    public static TheoryData<string> RtfData => new()
-    {
-        { "{\\rtf Hello World}" },
-        { "{\\rtf1\\ansi{Sample for {\\v HIDDEN }text}}" },
-        { "{\\rtf1\\ansi{Invalid RTF data" },
-    };
-
-    [WinFormsTheory]
-    [MemberData(nameof(RtfData))]
-    public void RichTextBox_Paste_Rtf_Data(string rtf)
-    {
-        using RichTextBox richTextBox1 = new();
-
-        if (!string.IsNullOrEmpty(rtf))
-        {
-            Clipboard.SetText(rtf);
-            richTextBox1.Paste(DataFormats.GetFormat(DataFormats.Rtf));
-
-            richTextBox1.Rtf.Should().StartWith("{\\rtf");
         }
     }
 
@@ -10911,7 +10841,7 @@ public class RichTextBoxTests
         richTextBox1.GiveFeedback += handler;
         richTextBox1.OnGiveFeedback(giveFeedbackEventArgs);
         callCount.Should().Be(1);
-        
+
         richTextBox1.GiveFeedback -= handler;
         richTextBox1.OnGiveFeedback(giveFeedbackEventArgs);
         callCount.Should().Be(1);
@@ -10927,7 +10857,7 @@ public class RichTextBoxTests
             sender.Should().Be(richTextBox1);
             callCount++;
         };
-          
+
         QueryContinueDragEventArgs queryContinueDragEventArgs = new(keyState: 0, escapePressed: true, action: DragAction.Continue);
 
         richTextBox1.QueryContinueDrag += handler;
@@ -11076,7 +11006,7 @@ public class RichTextBoxTests
         public new void OnDragLeave(EventArgs e) => base.OnDragLeave(e);
 
         public new void OnDragOver(DragEventArgs e) => base.OnDragOver(e);
- 
+
         public new void OnGiveFeedback(GiveFeedbackEventArgs e) => base.OnGiveFeedback(e);
 
         public new void OnQueryContinueDrag(QueryContinueDragEventArgs e) => base.OnQueryContinueDrag(e);

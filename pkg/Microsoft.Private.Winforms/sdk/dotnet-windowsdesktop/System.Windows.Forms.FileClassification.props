@@ -10,12 +10,15 @@
     <FrameworkListFileClass Include="System.Drawing.Common.dll" Profile="WindowsForms" />
     <FrameworkListFileClass Include="System.Drawing.Design.dll" Profile="WindowsForms" />
     <FrameworkListFileClass Include="System.Drawing.dll" Profile="WindowsForms" />
+    <FrameworkListFileClass Include="System.Private.Windows.Core.dll" Profile="WindowsForms" />
+    <FrameworkListFileClass Include="System.Windows.Forms.Analyzers.CodeFixes.CSharp.dll" Profile="WindowsForms" />
+    <FrameworkListFileClass Include="System.Windows.Forms.Analyzers.CodeFixes.VisualBasic.dll" Profile="WindowsForms" />
     <FrameworkListFileClass Include="System.Windows.Forms.Analyzers.CSharp.dll" Profile="WindowsForms" />
     <FrameworkListFileClass Include="System.Windows.Forms.Analyzers.dll" Profile="WindowsForms" />
+    <FrameworkListFileClass Include="System.Windows.Forms.Analyzers.VisualBasic.dll" Profile="WindowsForms" />
     <FrameworkListFileClass Include="System.Windows.Forms.Design.dll" Profile="WindowsForms" />
     <FrameworkListFileClass Include="System.Windows.Forms.Design.Editors.dll" Profile="WindowsForms" />
     <FrameworkListFileClass Include="System.Windows.Forms.dll" Profile="WindowsForms" />
     <FrameworkListFileClass Include="System.Windows.Forms.Primitives.dll" Profile="WindowsForms" />
-    <FrameworkListFileClass Include="System.Private.Windows.Core.dll" Profile="WindowsForms" />
   </ItemGroup>
 </Project>

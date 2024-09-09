@@ -114,7 +114,7 @@ public partial struct LinkArea
         /// <summary>
         ///  Creates an instance of this type given a set of property values
         ///  for the object. This is useful for objects that are immutable, but still
-        ///  want to provide changable properties.
+        ///  want to provide changeable properties.
         /// </summary>
         public override object CreateInstance(ITypeDescriptorContext? context, IDictionary propertyValues)
         {

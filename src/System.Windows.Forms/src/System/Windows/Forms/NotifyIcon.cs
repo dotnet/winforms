@@ -31,7 +31,7 @@ public sealed partial class NotifyIcon : Component
     private const int WM_TRAYMOUSEMESSAGE = (int)PInvoke.WM_USER + 1024;
     private static uint WM_TASKBARCREATED { get; } = PInvoke.RegisterWindowMessage("TaskbarCreated");
 
-    private readonly object _syncObj = new();
+    private readonly Lock _lock = new();
 
     private Icon? _icon;
     private string _text = string.Empty;
@@ -47,7 +47,7 @@ public sealed partial class NotifyIcon : Component
     private bool _doubleClick; // checks if doubleclick is fired
 
     // Visible defaults to false, but the NotifyIconDesigner makes it seem like the default is
-    // true.  We do this because while visible is the more common case, if it was a true default,
+    // true. We do this because while visible is the more common case, if it was a true default,
     // there would be no way to create a hidden NotifyIcon without being visible for a moment.
     private bool _visible;
 
@@ -623,7 +623,7 @@ public sealed partial class NotifyIcon : Component
     /// </summary>
     private unsafe void UpdateIcon(bool showIconInTray)
     {
-        lock (_syncObj)
+        lock (_lock)
         {
             // Bail if in design mode...
             if (DesignMode)

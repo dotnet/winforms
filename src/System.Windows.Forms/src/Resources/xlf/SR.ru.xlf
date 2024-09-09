@@ -288,8 +288,8 @@
         <note />
       </trans-unit>
       <trans-unit id="BinaryFormatterNotSupported">
-        <source>Using the BinaryFormatter is not supported in trimmed applications.</source>
-        <target state="translated">Использование BinaryFormatter не поддерживается в обрезанных приложениях.</target>
+        <source>BinaryFormatter serialization and deserialization are disabled within this application. See https://aka.ms/binaryformatter for more information.</source>
+        <target state="translated">Сериализация и десериализация BinaryFormatter отключены в этом приложении. Дополнительные сведения см. https://aka.ms/binaryformatter.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
@@ -1527,6 +1527,11 @@
         <target state="translated">Курсор, отображаемый при наведении указателя мыши на данный элемент управления.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlDarkModeDescr">
+        <source>Determines the dark mode setting for the control. This ambient property inherits its value from its parent control or from the Application class.</source>
+        <target state="translated">Определяет настройку темного режима для элемента управления. Это внешнее свойство наследует свое значение от родительского элемента управления или от класса приложения.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ControlDataContextChangedDescr">
         <source>Occurs when the value of the DataContext property changes.</source>
         <target state="translated">Возникает при изменении значения свойства DataContext.</target>
@@ -2180,6 +2185,11 @@
       <trans-unit id="CursorNonSerializableHandle">
         <source>Stock cursors cannot be serialized.</source>
         <target state="translated">Невозможно сериализовать Stock курсоры.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DarkModeNotSupported">
+        <source>Dark mode cannot be activated, either because of an activated High-Contrast mode or because the underlying OS does not support it.</source>
+        <target state="translated">Темный режим не удается активировать из-за включенного режима высокой контрастности или из-за того, что базовая ОС не поддерживает его.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataBindingAddNewNotSupportedOnPropertyManager">
@@ -5306,6 +5316,16 @@ Do you want to replace it?</source>
         <target state="translated">Текущее положение автоматической полосы прокрутки.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormBorderColorChangedDescr">
+        <source>Occurs whenever the FormBorderColor property is changed.</source>
+        <target state="translated">Происходит при смене свойства FormBorderColor.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormBorderColorDescr">
+        <source>The color of the Form's border.</source>
+        <target state="translated">Цвет границы формы.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormBorderStyleDescr">
         <source>Indicates the appearance and behavior of the border and title bar of the form.</source>
         <target state="translated">Определяет внешний вид и поведение границы и строки заголовка данной формы.</target>
@@ -5316,9 +5336,39 @@ Do you want to replace it?</source>
         <target state="translated">Кнопка отмены для данной формы. Если это свойство задано, можно сделать нажатие клавиши ESC эквивалентным нажатию этой кнопки.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormCaptionBackColorChangedDescr">
+        <source>Occurs whenever the FormCaptionBackColor property is changed.</source>
+        <target state="translated">Происходит при смене свойства FormCaptionBackColor.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCaptionBackColorDescr">
+        <source>The back color of the Form's caption (title bar).</source>
+        <target state="translated">Цвет фона заголовка формы (строки заголовка).</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCaptionTextColorChangedDescr">
+        <source>Occurs whenever the FormCaptionTextColor property is changed.</source>
+        <target state="translated">Происходит при изменении свойства FormCaptionTextColor.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCaptionTextColorDescr">
+        <source>The color of the Form's text caption (title bar text).</source>
+        <target state="translated">Цвет текстовой надписи формы (текст заголовка).</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormControlBoxDescr">
         <source>Determines whether a form has a Control/System menu box.</source>
         <target state="translated">Определяет, содержит ли форма значок меню окна/системного меню.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCornerPreferenceChangedDescr">
+        <source>Occurs whenever the FormCornerPreference property is changed.</source>
+        <target state="translated">Происходит при смене свойства FormCornerPreference.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCornerPreferenceDescr">
+        <source>The rounding style of the Form's border.</source>
+        <target state="translated">Стиль закругления границы формы.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormDesktopBoundsDescr">
@@ -5521,6 +5571,11 @@ Do you want to replace it?</source>
         <target state="translated">Степень прозрачности элемента управления (в процентах). </target>
         <note />
       </trans-unit>
+      <trans-unit id="FormOrTaskDialog_NoSyncContextForShowAsync">
+        <source>Failed to retrieve the Synchronization Context for showing the Form asynchronously.</source>
+        <target state="translated">Не удалось получить контекст синхронизации для асинхронного отображения формы.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormOwnedFormsDescr">
         <source>Array of forms owned by this form.</source>
         <target state="translated">Массив форм, принадлежащих этой форме.</target>
@@ -5564,6 +5619,11 @@ Do you want to replace it?</source>
       <trans-unit id="FormWindowStateDescr">
         <source>Determines the initial visual state of the form.</source>
         <target state="translated">Определяет исходное видимое состояние данной формы.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Form_HasAlreadyBeenShownAsync">
+        <source>The form has already been shown asynchronously.</source>
+        <target state="translated">Форма уже была показана асинхронно.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormatControlFormatDescr">
@@ -6856,8 +6916,8 @@ Stack trace where the illegal operation occurred was:
         <note />
       </trans-unit>
       <trans-unit id="ListViewVirtualListSizeDescr">
-        <source>Sets the count of the item collection when the ListView is in virtual mode.</source>
-        <target state="translated">Устанавливает счетчик коллекции элементов, когда ListView находится в виртуальном режиме.</target>
+        <source>Sets the count of the item collection when the ListView is in virtual mode. If VirtualMode is set to true, and the VirtualListSize property is greater than 0, you must handle the RetrieveVirtualItem event providing valid items.</source>
+        <target state="translated">Устанавливает счетчик коллекции элементов, когда ListView находится в виртуальном режиме. Если для VirtualMode настроено значение true, а значение свойства VirtualListSize больше 0, необходимо обработать событие RetrieveVirtualItem, указав допустимые элементы.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewVirtualListSizeInvalidArgument">
@@ -9707,7 +9767,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ToolStripAllowClickThrough">
         <source>Allows the control to be interacted when window does not have focus.</source>
-        <target state="new">Allows the control to be interacted when window does not have focus.</target>
+        <target state="translated">Позволяет взаимодействовать с элементом управления, если окно не имеет фокуса.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue">

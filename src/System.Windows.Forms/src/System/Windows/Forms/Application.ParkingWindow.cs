@@ -68,7 +68,7 @@ public sealed partial class Application
             // If so, we can destroy immediately.
             //
             // This is important for scenarios where apps leak controls until after the
-            // messagepump is gone and then decide to clean them up.  We should clean
+            // messagepump is gone and then decide to clean them up. We should clean
             // up the parkingwindow in this case and a postmessage won't do it.
             uint id = PInvoke.GetWindowThreadProcessId(HWNDInternal, out _);
             ThreadContext? context = ThreadContext.FromId(id);

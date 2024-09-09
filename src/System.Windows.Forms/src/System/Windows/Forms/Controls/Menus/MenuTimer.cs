@@ -15,8 +15,8 @@ internal class MenuTimer
 
     public MenuTimer()
     {
-        // MenuShowDelay can be set to 0.  In this case, set to something low so it's imperceptible.
-        _autoMenuExpandTimer.Tick += new EventHandler(OnTick);
+        // MenuShowDelay can be set to 0. In this case, set to something low so it's imperceptible.
+        _autoMenuExpandTimer.Tick += OnTick;
 
         // since MenuShowDelay is registry tweakable we've gotta make sure we've got some sort
         // of interval

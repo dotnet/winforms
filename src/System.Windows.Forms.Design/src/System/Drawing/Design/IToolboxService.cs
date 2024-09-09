@@ -99,7 +99,7 @@ public interface IToolboxService
 
     /// <summary>
     ///  Determines if the given designer host contains a designer that supports the serialized
-    ///  toolbox item.  This will return false if the designer doesn't support the item, or if the
+    ///  toolbox item. This will return false if the designer doesn't support the item, or if the
     ///  serializedObject parameter does not contain a toolbox item.
     /// </summary>
     bool IsSupported(object serializedObject, IDesignerHost host);
@@ -152,7 +152,7 @@ public interface IToolboxService
     void SelectedToolboxItemUsed();
 
     /// <summary>
-    ///  Takes the given toolbox item and serializes it to a persistent object.  This object can then
+    ///  Takes the given toolbox item and serializes it to a persistent object. This object can then
     ///  be stored in a stream or passed around in a drag and drop or clipboard operation.
     /// </summary>
     object SerializeToolboxItem(ToolboxItem toolboxItem);

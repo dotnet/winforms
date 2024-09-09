@@ -29,10 +29,12 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
     private int _itemIdCounter;
     private int _blinkRate;
     private ErrorBlinkStyle _blinkStyle;
-    private bool _showIcon = true; // used for blinking
-    private bool _inSetErrorManager;
-    private bool _setErrorManagerOnEndInit;
-    private bool _initializing;
+    private ErrorProviderStates _state = ErrorProviderStates.ShowIcon;
+    private bool ShowIcon
+    {
+        get => _state.HasFlag(ErrorProviderStates.ShowIcon);
+        set => _state.ChangeFlags(ErrorProviderStates.ShowIcon, value);
+    }
 
     [ThreadStatic]
     private static Icon? t_defaultIcon;
@@ -53,7 +55,6 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
 
     private EventHandler? _onRightToLeftChanged;
 
-    private bool _rightToLeft;
     private int _errorCount;
 
     /// <summary>
@@ -63,7 +64,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
     {
         _blinkRate = DefaultBlinkRate;
         _blinkStyle = DefaultBlinkStyle;
-        _currentChanged = new EventHandler(ErrorManager_CurrentChanged);
+        _currentChanged = ErrorManager_CurrentChanged;
     }
 
     public ErrorProvider(ContainerControl parentControl)
@@ -72,7 +73,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
         ArgumentNullException.ThrowIfNull(parentControl);
 
         _parentControl = parentControl;
-        _propChangedEvent = new EventHandler(ParentControl_BindingContextChanged);
+        _propChangedEvent = ParentControl_BindingContextChanged;
         parentControl.BindingContextChanged += _propChangedEvent;
     }
 
@@ -131,7 +132,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
             if (value == ErrorBlinkStyle.AlwaysBlink)
             {
                 // Need to start blinking on all the controlItems in our items dictionary.
-                _showIcon = true;
+                _state.ChangeFlags(ErrorProviderStates.ShowIcon, true);
                 _blinkStyle = ErrorBlinkStyle.AlwaysBlink;
                 foreach (ErrorWindow w in _windows.Values)
                 {
@@ -189,7 +190,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
     }
 
     /// <summary>
-    /// Gets a value that indicates if this <see cref="ErrorProvider"/> has any errors for any of the associated controls.
+    ///  Gets a value that indicates if this <see cref="ErrorProvider"/> has any errors for any of the associated controls.
     /// </summary>
     public bool HasErrors => _errorCount > 0;
 
@@ -203,15 +204,15 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
     [SRDescription(nameof(SR.ControlRightToLeftDescr))]
     public virtual bool RightToLeft
     {
-        get => _rightToLeft;
+        get => _state.HasFlag(ErrorProviderStates.RightToLeft);
         set
         {
-            if (value == _rightToLeft)
+            if (value == _state.HasFlag(ErrorProviderStates.RightToLeft))
             {
                 return;
             }
 
-            _rightToLeft = value;
+            _state.ChangeFlags(ErrorProviderStates.RightToLeft, value);
             OnRightToLeftChanged(EventArgs.Empty);
         }
     }
@@ -237,12 +238,12 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
 
     private void SetErrorManager(object? newDataSource, string? newDataMember, bool force)
     {
-        if (_inSetErrorManager)
+        if (_state.HasFlag(ErrorProviderStates.InSetErrorManager))
         {
             return;
         }
 
-        _inSetErrorManager = true;
+        _state.ChangeFlags(ErrorProviderStates.InSetErrorManager, true);
         try
         {
             bool dataSourceChanged = DataSource != newDataSource;
@@ -258,9 +259,9 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
             _dataSource = newDataSource;
             _dataMember = newDataMember;
 
-            if (_initializing)
+            if (_state.HasFlag(ErrorProviderStates.Initializing))
             {
-                _setErrorManagerOnEndInit = true;
+                _state.ChangeFlags(ErrorProviderStates.SetErrorManagerOnEndInit, true);
             }
             else
             {
@@ -290,7 +291,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
         }
         finally
         {
-            _inSetErrorManager = false;
+            _state.ChangeFlags(ErrorProviderStates.InSetErrorManager, false);
         }
     }
 
@@ -359,12 +360,12 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
         }
 
         listManager.CurrentChanged += _currentChanged;
-        listManager.BindingComplete += new BindingCompleteEventHandler(ErrorManager_BindingComplete);
+        listManager.BindingComplete += ErrorManager_BindingComplete;
 
         if (listManager is CurrencyManager currManager)
         {
-            currManager.ItemChanged += new ItemChangedEventHandler(ErrorManager_ItemChanged);
-            currManager.Bindings.CollectionChanged += new CollectionChangeEventHandler(ErrorManager_BindingsChanged);
+            currManager.ItemChanged += ErrorManager_ItemChanged;
+            currManager.Bindings.CollectionChanged += ErrorManager_BindingsChanged;
         }
     }
 
@@ -376,12 +377,12 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
         }
 
         listManager.CurrentChanged -= _currentChanged;
-        listManager.BindingComplete -= new BindingCompleteEventHandler(ErrorManager_BindingComplete);
+        listManager.BindingComplete -= ErrorManager_BindingComplete;
 
         if (listManager is CurrencyManager currManager)
         {
-            currManager.ItemChanged -= new ItemChangedEventHandler(ErrorManager_ItemChanged);
-            currManager.Bindings.CollectionChanged -= new CollectionChangeEventHandler(ErrorManager_BindingsChanged);
+            currManager.ItemChanged -= ErrorManager_ItemChanged;
+            currManager.Bindings.CollectionChanged -= ErrorManager_BindingsChanged;
         }
     }
 
@@ -593,7 +594,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
     /// </summary>
     void ISupportInitialize.BeginInit()
     {
-        _initializing = true;
+        _state.ChangeFlags(ErrorProviderStates.Initializing, true);
     }
 
     /// <summary>
@@ -601,11 +602,11 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
     /// </summary>
     private void EndInitCore()
     {
-        _initializing = false;
+        _state.ChangeFlags(ErrorProviderStates.Initializing, false);
 
-        if (_setErrorManagerOnEndInit)
+        if (_state.HasFlag(ErrorProviderStates.SetErrorManagerOnEndInit))
         {
-            _setErrorManagerOnEndInit = false;
+            _state.ChangeFlags(ErrorProviderStates.SetErrorManagerOnEndInit, false);
             SetErrorManager(DataSource, DataMember, true);
         }
     }
@@ -619,7 +620,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
     {
         if (DataSource is ISupportInitializeNotification dsInit && !dsInit.IsInitialized)
         {
-            dsInit.Initialized += new EventHandler(DataSource_Initialized);
+            dsInit.Initialized += DataSource_Initialized;
         }
         else
         {
@@ -641,7 +642,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
 
         if (dsInit is not null)
         {
-            dsInit.Initialized -= new EventHandler(DataSource_Initialized);
+            dsInit.Initialized -= DataSource_Initialized;
         }
 
         EndInitCore();

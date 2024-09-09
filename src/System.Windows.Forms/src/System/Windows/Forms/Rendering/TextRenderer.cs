@@ -362,7 +362,7 @@ public static class TextRenderer
         Color backColor,
         TextFormatFlags flags)
     {
-        using var hfont = GdiCache.GetHFONT(font, fontQuality, hdc);
+        using var hfont = GetFontOrHdcHFONT(font, fontQuality, hdc);
         hdc.DrawText(text, hfont, bounds, foreColor, flags, backColor);
     }
 
@@ -518,7 +518,7 @@ public static class TextRenderer
             return Size.Empty;
 
         using var screen = GdiCache.GetScreenHdc();
-        using var hfont = GdiCache.GetHFONT(font, FONT_QUALITY.DEFAULT_QUALITY, screen);
+        using var hfont = GetFontOrHdcHFONT(font, FONT_QUALITY.DEFAULT_QUALITY, screen);
 
         return screen.HDC.MeasureText(text, hfont, proposedSize, flags);
     }
@@ -541,7 +541,7 @@ public static class TextRenderer
         // Applying state may not impact text size measurements. Rather than risk missing some
         // case we'll apply as we have historically to avoid surprise regressions.
         using DeviceContextHdcScope hdc = dc.ToHdcScope(GetApplyStateFlags(dc, flags));
-        using var hfont = GdiCache.GetHFONT(font, quality, hdc);
+        using var hfont = GetFontOrHdcHFONT(font, quality, hdc);
         return hdc.HDC.MeasureText(text, hfont, proposedSize, flags);
     }
 
@@ -633,17 +633,37 @@ public static class TextRenderer
             // flag when this was originally written.
 
             Debug.Assert(apply.HasFlag(ApplyGraphicsProperties.Clipping)
-                || graphics.Clip is null
-                || graphics.Clip.GetHrgn(graphics) == IntPtr.Zero,
-                "Must preserve Graphics clipping region!");
+               || graphics.Clip is null
+               || graphics.Clip.GetHrgn(graphics) == IntPtr.Zero,
+               "Must preserve Graphics clipping region!");
 
             Debug.Assert(apply.HasFlag(ApplyGraphicsProperties.TranslateTransform)
-                || graphics.Transform is null
-                || graphics.Transform.IsIdentity,
-                "Must preserve Graphics transformation!");
+               || graphics.Transform is null
+               || graphics.Transform.IsIdentity,
+               "Must preserve Graphics transformation!");
         }
 #endif
 
         return apply;
+    }
+
+    /// <inheritdoc cref="GdiCache.GetHFONTScope(Font?, FONT_QUALITY)"/>
+    /// <summary>
+    ///  Get a cached <see cref="HFONT"/> based off of the given <paramref name="font"/> and <paramref name="quality"/>,
+    ///  falling back to the <paramref name="hdc"/>'s current font if <paramref name="font"/> is <see langword="null"/>.
+    /// </summary>
+    /// <param name="hdc">
+    ///  The <see cref="HDC"/> to get the font from if <paramref name="font"/> is <see langword="null"/>.
+    /// </param>
+    private static FontCache.Scope GetFontOrHdcHFONT(Font? font, FONT_QUALITY quality, HDC hdc)
+    {
+        if (font is not null)
+        {
+            return GdiCache.GetHFONTScope(font, quality);
+        }
+
+        // Font is null, build off of the specified HDC's current font.
+        HFONT hfont = (HFONT)PInvoke.GetCurrentObject(hdc, OBJ_TYPE.OBJ_FONT);
+        return new FontCache.Scope(hfont);
     }
 }

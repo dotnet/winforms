@@ -8,7 +8,7 @@ namespace System.ComponentModel.Design;
 
 /// <summary>
 ///  The menu command service allows designers to add and respond to
-///  menu and toolbar items.  It is based on two interfaces.  Designers
+///  menu and toolbar items. It is based on two interfaces. Designers
 ///  request IMenuCommandService to add menu command handlers, while
 ///  the document or tool window forwards IOleCommandTarget requests
 ///  to this object.
@@ -17,7 +17,7 @@ public class MenuCommandService : IMenuCommandService, IDisposable
 {
     private IServiceProvider? _serviceProvider;
     private readonly Dictionary<Guid, List<MenuCommand>> _commandGroups;
-    private readonly object _commandGroupsLock;
+    private readonly Lock _commandGroupsLock = new();
     private readonly EventHandler _commandChangedHandler;
     private MenuCommandsChangedEventHandler? _commandsChangedHandler;
     private List<DesignerVerb>? _globalVerbs;
@@ -38,10 +38,9 @@ public class MenuCommandService : IMenuCommandService, IDisposable
     public MenuCommandService(IServiceProvider? serviceProvider)
     {
         _serviceProvider = serviceProvider;
-        _commandGroupsLock = new object();
         _commandGroups = [];
-        _commandChangedHandler = new EventHandler(OnCommandChanged);
-        TypeDescriptor.Refreshed += new RefreshEventHandler(OnTypeRefreshed);
+        _commandChangedHandler = OnCommandChanged;
+        TypeDescriptor.Refreshed += OnTypeRefreshed;
     }
 
     /// <summary>
@@ -49,19 +48,13 @@ public class MenuCommandService : IMenuCommandService, IDisposable
     /// </summary>
     public event MenuCommandsChangedEventHandler? MenuCommandsChanged
     {
-        add
-        {
-            _commandsChangedHandler += value;
-        }
-        remove
-        {
-            _commandsChangedHandler -= value;
-        }
+        add => _commandsChangedHandler += value;
+        remove => _commandsChangedHandler -= value;
     }
 
     /// <summary>
     ///  Retrieves a set of verbs that are global to all objects on the design
-    ///  surface.  This set of verbs will be merged with individual component verbs.
+    ///  surface. This set of verbs will be merged with individual component verbs.
     ///  In the case of a name conflict, the component verb will NativeMethods.
     /// </summary>
     public virtual DesignerVerbCollection Verbs
@@ -74,7 +67,7 @@ public class MenuCommandService : IMenuCommandService, IDisposable
     }
 
     /// <summary>
-    ///  Adds a menu command to the document.  The menu command must already exist
+    ///  Adds a menu command to the document. The menu command must already exist
     ///  on a menu; this merely adds a handler for it.
     /// </summary>
     public virtual void AddCommand(MenuCommand command)
@@ -114,7 +107,7 @@ public class MenuCommandService : IMenuCommandService, IDisposable
     }
 
     /// <summary>
-    ///  Adds a verb to the set of global verbs.  Individual components should
+    ///  Adds a verb to the set of global verbs. Individual components should
     ///  use the Verbs property of their designer, rather than call this method.
     ///  This method is intended for objects that want to offer a verb that is
     ///  available regardless of what components are selected.
@@ -151,14 +144,14 @@ public class MenuCommandService : IMenuCommandService, IDisposable
         {
             if (_selectionService is not null)
             {
-                _selectionService.SelectionChanging -= new EventHandler(OnSelectionChanging);
+                _selectionService.SelectionChanging -= OnSelectionChanging;
                 _selectionService = null;
             }
 
             if (_serviceProvider is not null)
             {
                 _serviceProvider = null!;
-                TypeDescriptor.Refreshed -= new RefreshEventHandler(OnTypeRefreshed);
+                TypeDescriptor.Refreshed -= OnTypeRefreshed;
             }
 
             lock (_commandGroupsLock)
@@ -193,7 +186,7 @@ public class MenuCommandService : IMenuCommandService, IDisposable
             {
                 if (TryGetService(out _selectionService))
                 {
-                    _selectionService.SelectionChanging += new EventHandler(OnSelectionChanging);
+                    _selectionService.SelectionChanging += OnSelectionChanging;
                 }
             }
 
@@ -410,8 +403,8 @@ public class MenuCommandService : IMenuCommandService, IDisposable
 
     /// <summary>
     ///  Invokes a command on the local form or in the global environment.
-    ///  The local form is first searched for the given command ID.  If it is
-    ///  found, it is invoked.  Otherwise the command ID is passed to the
+    ///  The local form is first searched for the given command ID. If it is
+    ///  found, it is invoked. Otherwise the command ID is passed to the
     ///  global environment command handler, if one is available.
     /// </summary>
     public virtual bool GlobalInvoke(CommandID commandID)
@@ -429,8 +422,8 @@ public class MenuCommandService : IMenuCommandService, IDisposable
 
     /// <summary>
     ///  Invokes a command on the local form or in the global environment.
-    ///  The local form is first searched for the given command ID.  If it is
-    ///  found, it is invoked.  Otherwise the command ID is passed to the
+    ///  The local form is first searched for the given command ID. If it is
+    ///  found, it is invoked. Otherwise the command ID is passed to the
     ///  global environment command handler, if one is available.
     /// </summary>
     public virtual bool GlobalInvoke(CommandID commandId, object arg)
@@ -460,7 +453,7 @@ public class MenuCommandService : IMenuCommandService, IDisposable
     }
 
     /// <summary>
-    ///  Called by TypeDescriptor when a type changes.  If this type is currently holding
+    ///  Called by TypeDescriptor when a type changes. If this type is currently holding
     ///  our verb, invalidate the list.
     /// </summary>
     private void OnTypeRefreshed(RefreshEventArgs e)
@@ -472,7 +465,7 @@ public class MenuCommandService : IMenuCommandService, IDisposable
     }
 
     /// <summary>
-    ///  This is called by the selection service when the selection has changed.  Here
+    ///  This is called by the selection service when the selection has changed. Here
     ///  we invalidate our verb list.
     /// </summary>
     private void OnSelectionChanging(object? sender, EventArgs e)

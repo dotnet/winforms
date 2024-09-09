@@ -19,7 +19,6 @@ namespace System.Windows.Forms;
     $"System.ComponentModel.Design.Serialization.CodeDomSerializer, {AssemblyRef.SystemDesign}")]
 public partial class ToolStripMenuItem : ToolStripDropDownItem
 {
-    private CheckState _prevCheckState = CheckState.Unchecked;
     private static readonly MenuTimer s_menuTimer = new();
 
     private static readonly int s_propShortcutKeys = PropertyStore.CreateKey();
@@ -126,7 +125,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
 
         // Since fetching the image and the text is an awful lot of work
         // we're going to just cache it and assume the native stuff
-        // doesnt update.
+        // doesn't update.
         // we'll only live-update enabled.
         // if this becomes a problem we can override Image and Text properties
         // to live-return the results.
@@ -300,11 +299,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
     [SRDescription(nameof(SR.CheckBoxCheckStateDescr))]
     public CheckState CheckState
     {
-        get
-        {
-            object checkState = Properties.GetInteger(s_propCheckState, out bool found);
-            return (found) ? (CheckState)checkState : CheckState.Unchecked;
-        }
+        get => Properties.GetValueOrDefault<CheckState>(s_propCheckState, CheckState.Unchecked);
         set
         {
             // Valid values are 0x0 to 0x2
@@ -312,8 +307,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
 
             if (value != CheckState)
             {
-                _prevCheckState = CheckState;
-                Properties.SetInteger(s_propCheckState, (int)value);
+                Properties.AddValue(s_propCheckState, value);
                 OnCheckedChanged(EventArgs.Empty);
                 OnCheckStateChanged(EventArgs.Empty);
             }
@@ -366,11 +360,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
     [SRDescription(nameof(SR.MenuItemShortCutDescr))]
     public Keys ShortcutKeys
     {
-        get
-        {
-            object shortcutKeys = Properties.GetInteger(s_propShortcutKeys, out bool found);
-            return (found) ? (Keys)shortcutKeys : Keys.None;
-        }
+        get => Properties.GetValueOrDefault<Keys>(s_propShortcutKeys, Keys.None);
         set
         {
             if ((value != Keys.None) && !ToolStripManager.IsValidShortcut(value))
@@ -403,7 +393,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
                     }
                 }
 
-                Properties.SetInteger(s_propShortcutKeys, (int)value);
+                Properties.AddValue(s_propShortcutKeys, value);
 
                 if (ShowShortcutKeys && IsOnDropDown)
                 {
@@ -822,13 +812,6 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
     protected virtual void OnCheckStateChanged(EventArgs e)
     {
         AccessibilityNotifyClients(AccessibleEvents.StateChange);
-
-        if (IsAccessibilityObjectCreated &&
-            AccessibilityObject is ToolStripMenuItemAccessibleObject accessibilityObject)
-        {
-            accessibilityObject.OnCheckStateChanged(_prevCheckState, CheckState);
-        }
-
         ((EventHandler?)Events[s_eventCheckStateChanged])?.Invoke(this, e);
     }
 
@@ -902,7 +885,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
             }
             else if (!isMouseDown && !showDropDown)
             {
-                // closing should happen on mouse up.  ensure it's not the mouse
+                // closing should happen on mouse up. Ensure it's not the mouse
                 // up for the mouse down we opened with.
                 Debug.Assert(ParentInternal is not null, "Parent is null here, not going to get accurate ID");
                 byte closeMouseId = (ParentInternal is null) ? (byte)0 : ParentInternal.GetMouseId();
@@ -1041,7 +1024,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
         }
         else
         {
-            // Toplevel item support, menu items hosted on a plain ToolStrip dropdown
+            // Top-level item support, menu items hosted on a plain ToolStrip dropdown
             if ((DisplayStyle & ToolStripItemDisplayStyle.Text) == ToolStripItemDisplayStyle.Text)
             {
                 renderer.DrawItemText(new ToolStripItemTextRenderEventArgs(g, this, Text, InternalLayout.TextRectangle, textColor, Font, InternalLayout.TextFormat));
@@ -1056,14 +1039,8 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
 
     protected internal override bool ProcessCmdKey(ref Message m, Keys keyData)
     {
-        if (Enabled && !HasDropDownItems && (ShortcutKeys == keyData || keyData == Keys.Space))
+        if (Enabled && ShortcutKeys == keyData && !HasDropDownItems)
         {
-            if (keyData is Keys.Space)
-            {
-                Checked = CheckOnClick ? !Checked : Checked;
-                return true;
-            }
-
             FireEvent(ToolStripItemEventType.Click);
             return true;
         }
@@ -1094,7 +1071,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
     {
         if (InternalLayout is ToolStripMenuItemInternalLayout internalLayout && internalLayout.UseMenuLayout)
         {
-            // Scooch over by the padding amount.  The padding is added to
+            // Scooch over by the padding amount. The padding is added to
             // the ToolStripDropDownMenu to keep the non-menu item riffraff
             // aligned to the text rectangle. When flow layout comes through to set our position
             // via IArrangedElement DEFY IT!

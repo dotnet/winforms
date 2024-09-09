@@ -141,7 +141,7 @@ public class ApplicationContext : IDisposable
         Form form = (Form)sender;
         if (!form.RecreatingHandle)
         {
-            form.HandleDestroyed -= new EventHandler(OnMainFormDestroy);
+            form.HandleDestroyed -= OnMainFormDestroy;
             OnMainFormClosed(sender, e);
         }
     }

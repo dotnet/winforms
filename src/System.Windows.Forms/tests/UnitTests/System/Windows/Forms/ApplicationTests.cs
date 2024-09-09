@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.DotNet.RemoteExecutor;
+using Microsoft.Win32;
 
 namespace System.Windows.Forms.Tests;
 
@@ -145,6 +146,37 @@ public class ApplicationTests
         Assert.NotNull(stream);
     }
 
+#pragma warning disable SYSLIB5002 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    [Fact]
+    public void Application_SetColorMode_PlausibilityTests()
+    {
+        if (SystemInformation.HighContrast)
+        {
+            // We don't run this test in HighContrast mode.
+            return;
+        }
+
+        SystemColorMode systemColorMode = Application.SystemColorMode;
+
+        Application.SetColorMode(SystemColorMode.Classic);
+        Assert.False(Application.IsDarkModeEnabled);
+        Assert.Equal(SystemColorMode.Classic, Application.ColorMode);
+        Assert.False(SystemColors.UseAlternativeColorSet);
+
+        Application.SetColorMode(SystemColorMode.Dark);
+        Assert.True(Application.IsDarkModeEnabled);
+        Assert.Equal(SystemColorMode.Dark, Application.ColorMode);
+        Assert.True(SystemColors.UseAlternativeColorSet);
+
+        Application.SetColorMode(SystemColorMode.System);
+        Assert.False(Application.IsDarkModeEnabled ^ systemColorMode == SystemColorMode.Dark);
+        Assert.Equal(SystemColorMode.System, Application.ColorMode);
+        Assert.False(SystemColors.UseAlternativeColorSet ^ systemColorMode == SystemColorMode.Dark);
+    }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning restore SYSLIB5002 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
     [WinFormsFact]
     public void Application_DefaultFont_ReturnsNull_IfNoFontSet()
     {
@@ -219,36 +251,101 @@ public class ApplicationTests
     }
 
     [WinFormsFact]
-    public void Application_SetDefaultFont_MustNotCloneSystemFont()
+    public void Application_SetDefaultFont_SystemFont()
     {
         var applicationTestAccessor = typeof(Application).TestAccessor().Dynamic;
-        Assert.Null(applicationTestAccessor.s_defaultFont);
-        Assert.Null(applicationTestAccessor.s_defaultFontScaled);
-
-        Font systemCaptionFont = SystemFonts.CaptionFont;
-        Assert.True(systemCaptionFont.IsSystemFont);
+        Font font = applicationTestAccessor.s_defaultFont;
+        font.Should().BeNull();
+        font = applicationTestAccessor.s_defaultFontScaled;
+        font.Should().BeNull();
 
         // This a unholy, but generally at this stage NativeWindow.AnyHandleCreated=true,
         // And we won't be able to set the font, unless we flip the bit
         var nativeWindowTestAccessor = typeof(NativeWindow).TestAccessor().Dynamic;
         bool currentAnyHandleCreated = nativeWindowTestAccessor.t_anyHandleCreated;
-
         try
         {
             nativeWindowTestAccessor.t_anyHandleCreated = false;
-            Application.SetDefaultFont(systemCaptionFont);
+            using Font sysFont = SystemFonts.CaptionFont;
+            sysFont.IsSystemFont.Should().BeTrue();
+            Application.SetDefaultFont(sysFont);
+            font = applicationTestAccessor.s_defaultFontScaled;
+            font.Should().BeNull();
+            // Because we set default font to system font, then in this test it must not be changed,
+            // unless, of course, after calling SystemFonts.CaptionFont and this check
+            // HKCU\Software\Microsoft\Accessibility\TextScaleFactor is not changed
+            Application.DefaultFont.Should().BeSameAs(sysFont);
 
-            // We now handle the system font case within the ScaleHelper so we have no need to clone it.
-            Assert.True(applicationTestAccessor.s_defaultFont.IsSystemFont);
+            // create fake system font
+            using Font fakeSysFont = sysFont.WithSize(sysFont.Size * 1.25f);
+            // set IsSystemFont flag
+            fakeSysFont.TestAccessor().Dynamic.SetSystemFontName(sysFont.SystemFontName);
+            fakeSysFont.IsSystemFont.Should().BeTrue();
+            Application.SetDefaultFont(fakeSysFont);
+            font = applicationTestAccessor.s_defaultFontScaled;
+            font.Should().BeNull();
+            Application.DefaultFont.Should().NotBe(fakeSysFont, "Because we got a new real system font.");
+            Application.DefaultFont.Should().NotBeSameAs(sysFont, "Because we got a new system font.");
+            Application.DefaultFont.Should().Be(sysFont, "Because the new system font is the same as our original system font.");
         }
         finally
         {
             // Flip the bit back
             nativeWindowTestAccessor.t_anyHandleCreated = currentAnyHandleCreated;
-
-            applicationTestAccessor.s_defaultFont.Dispose();
-            applicationTestAccessor.s_defaultFontScaled?.Dispose();
+            applicationTestAccessor.s_defaultFont?.Dispose();
             applicationTestAccessor.s_defaultFont = null;
+        }
+    }
+
+    [WinFormsFact]
+    public void Application_SetDefaultFont_NonSystemFont()
+    {
+        var applicationTestAccessor = typeof(Application).TestAccessor().Dynamic;
+        Font font = applicationTestAccessor.s_defaultFont;
+        font.Should().BeNull();
+        font = applicationTestAccessor.s_defaultFontScaled;
+        font.Should().BeNull();
+
+        using Font customFont = new(new FontFamily("Arial"), 12f);
+        customFont.IsSystemFont.Should().BeFalse();
+
+        // This a unholy, but generally at this stage NativeWindow.AnyHandleCreated=true,
+        // And we won't be able to set the font, unless we flip the bit
+        var nativeWindowTestAccessor = typeof(NativeWindow).TestAccessor().Dynamic;
+        bool currentAnyHandleCreated = nativeWindowTestAccessor.t_anyHandleCreated;
+        try
+        {
+            nativeWindowTestAccessor.t_anyHandleCreated = false;
+            Application.SetDefaultFont(customFont);
+            font = applicationTestAccessor.s_defaultFontScaled;
+            if (!OsVersion.IsWindows10_1507OrGreater())
+            {
+                font.Should().BeNull();
+                Application.DefaultFont.Should().BeSameAs(customFont);
+                return;
+            }
+
+            // Retrieve the text scale factor, which is set via Settings > Display > Make Text Bigger.
+            using RegistryKey key = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Accessibility");
+            int textScale = (int)(key?.GetValue("TextScaleFactor", 100) ?? 100);            
+            if (textScale == 100) // Application.DefaultFont must be the same
+            {                
+                font.Should().BeNull("Because TextScaleFactor == 100.");
+                Application.DefaultFont.Should().BeSameAs(customFont, "Because TextScaleFactor == 100.");
+            }
+            else // Application.DefaultFont must be a new scaled font
+            {
+                font.Should().NotBeNull("Because TextScaleFactor != 100.");
+                Application.DefaultFont.Should().NotBe(customFont, "Because textScaleFactor != 100 and we got a new scaled font.");
+            }
+        }
+        finally
+        {
+            // Flip the bit back
+            nativeWindowTestAccessor.t_anyHandleCreated = currentAnyHandleCreated;
+            applicationTestAccessor.s_defaultFont?.Dispose();
+            applicationTestAccessor.s_defaultFont = null;
+            applicationTestAccessor.s_defaultFontScaled?.Dispose();
             applicationTestAccessor.s_defaultFontScaled = null;
         }
     }
@@ -374,7 +471,9 @@ public class ApplicationTests
     /// Test <see cref="Application.Exit()"/> fire Closing events in which we close existing and open new forms.
     /// </summary>
     /// <param name="childFormCountParam">Count of child forms.</param>
-    /// <param name="removedFormCountParam">Count of forms that we will remove during last form <see cref="Form.OnFormClosing(FormClosingEventArgs)"/>.</param>
+    /// <param name="removedFormCountParam">
+    ///  Count of forms that we will remove during last form <see cref="Form.OnFormClosing(FormClosingEventArgs)"/>.
+    /// </param>
     /// <param name="addFormCountParam">Count of forms that we will add during last form <see cref="Form.OnFormClosing(FormClosingEventArgs)"/>.</param>
     /// <param name="cancelParam">If set to <see langword="true" /> we will cancel application exit process.</param>
     [WinFormsTheory]

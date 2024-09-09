@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel.Design;
 using System.ComponentModel;
 using System.Collections;
@@ -15,14 +13,11 @@ namespace System.Windows.Forms.Design;
 /// </summary>
 internal class ListBoxDesigner : ControlDesigner
 {
-    private DesignerActionListCollection _actionLists;
+    private DesignerActionListCollection? _actionLists;
 
     public bool IntegralHeight
     {
-        get
-        {
-            return (bool)ShadowProperties[nameof(IntegralHeight)];
-        }
+        get => (bool)ShadowProperties[nameof(IntegralHeight)]!;
         set
         {
             ShadowProperties[nameof(IntegralHeight)] = value;
@@ -60,23 +55,21 @@ internal class ListBoxDesigner : ControlDesigner
                 // Restore the IntegralHeight after we dock. Order is necessary here. Setting IntegralHeight will
                 // potentially resize the control height, but we don't want to base the height on the dock.
                 // Instead, undock the control first, so the IntegralHeight is based on the restored size.
-                listBox.IntegralHeight = (bool)ShadowProperties[nameof(IntegralHeight)];
+                listBox.IntegralHeight = (bool)ShadowProperties[nameof(IntegralHeight)]!;
             }
         }
     }
 
     protected override void PreFilterProperties(IDictionary properties)
     {
-        PropertyDescriptor integralHeightProp = (PropertyDescriptor)properties["IntegralHeight"];
-        if (integralHeightProp is not null)
+        if (properties[nameof(IntegralHeight)] is PropertyDescriptor integralHeightProp)
         {
-            properties["IntegralHeight"] = TypeDescriptor.CreateProperty(typeof(ListBoxDesigner), integralHeightProp, []);
+            properties[nameof(IntegralHeight)] = TypeDescriptor.CreateProperty(typeof(ListBoxDesigner), integralHeightProp, []);
         }
 
-        PropertyDescriptor dockProp = (PropertyDescriptor)properties["Dock"];
-        if (dockProp is not null)
+        if (properties[nameof(Dock)] is PropertyDescriptor dockProp)
         {
-            properties["Dock"] = TypeDescriptor.CreateProperty(typeof(ListBoxDesigner), dockProp, []);
+            properties[nameof(Dock)] = TypeDescriptor.CreateProperty(typeof(ListBoxDesigner), dockProp, []);
         }
 
         base.PreFilterProperties(properties);
@@ -89,14 +82,11 @@ internal class ListBoxDesigner : ControlDesigner
     {
         if (disposing)
         {
-            // Now, hook the component rename event so we can update the text in the
-            // list box.
-            //
-            IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-            if (cs is not null)
+            // Now, hook the component rename event so we can update the text in the list box.
+            if (TryGetService<IComponentChangeService>(out IComponentChangeService? componentChangeService))
             {
-                cs.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
-                cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
+                componentChangeService.ComponentRename -= OnComponentRename;
+                componentChangeService.ComponentChanged -= OnComponentChanged;
             }
         }
 
@@ -110,24 +100,22 @@ internal class ListBoxDesigner : ControlDesigner
     {
         base.Initialize(component);
 
-        ListBox listBox = component as ListBox;
-        if (listBox is not null)
+        if (component is ListBox listBox)
+        {
             IntegralHeight = listBox.IntegralHeight;
+        }
 
         AutoResizeHandles = true;
 
-        // Now, hook the component rename event so we can update the text in the
-        // list box.
-        //
-        IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-        if (cs is not null)
+        // Now, hook the component rename event so we can update the text in the list box.
+        if (TryGetService(out IComponentChangeService? componentChangeService))
         {
-            cs.ComponentRename += new ComponentRenameEventHandler(OnComponentRename);
-            cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
+            componentChangeService.ComponentRename += OnComponentRename;
+            componentChangeService.ComponentChanged += OnComponentChanged;
         }
     }
 
-    public override void InitializeNewComponent(IDictionary defaultValues)
+    public override void InitializeNewComponent(IDictionary? defaultValues)
     {
         base.InitializeNewComponent(defaultValues);
 
@@ -137,20 +125,20 @@ internal class ListBoxDesigner : ControlDesigner
         // VSWhidbey 497239 - Setting FormattingEnabled clears the text we set in
         // OnCreateHandle so let's set it here again. We need to keep setting the text in
         // OnCreateHandle, otherwise we introduce VSWhidbey 498162.
-        PropertyDescriptor nameProp = TypeDescriptor.GetProperties(Component)["Name"];
-        if (nameProp is not null)
+        if (TypeDescriptorHelper.TryGetPropertyValue(Component, nameof(ListBox.Name), out string? name)
+            && name is not null)
         {
-            UpdateControlName(nameProp.GetValue(Component).ToString());
+            UpdateControlName(name);
         }
     }
 
     /// <summary>
-    ///  Raised when a component's name changes.  Here we update the contents of the list box
+    ///  Raised when a component's name changes. Here we update the contents of the list box
     ///  if we are displaying the component's name in it.
     /// </summary>
-    private void OnComponentRename(object sender, ComponentRenameEventArgs e)
+    private void OnComponentRename(object? sender, ComponentRenameEventArgs e)
     {
-        if (e.Component == Component)
+        if (e.Component == Component && e.NewName is not null)
         {
             UpdateControlName(e.NewName);
         }
@@ -160,15 +148,15 @@ internal class ListBoxDesigner : ControlDesigner
     ///  Raised when ComponentChanges. We listen to this to check if the "Items" propertychanged.
     ///  and if so .. then update the Text within the ListBox.
     /// </summary>
-    private void OnComponentChanged(object sender, ComponentChangedEventArgs e)
+    private void OnComponentChanged(object? sender, ComponentChangedEventArgs e)
     {
-        if (e.Component == Component && e.Member is not null && e.Member.Name == "Items")
+        if (e.Component == Component
+            && e.Member is not null
+            && e.Member.Name == nameof(ListBox.Items)
+            && TypeDescriptorHelper.TryGetPropertyValue(Component, nameof(ListBox.Name), out string? name)
+            && name is not null)
         {
-            PropertyDescriptor nameProp = TypeDescriptor.GetProperties(Component)["Name"];
-            if (nameProp is not null)
-            {
-                UpdateControlName(nameProp.GetValue(Component).ToString());
-            }
+            UpdateControlName(name);
         }
     }
 
@@ -178,24 +166,25 @@ internal class ListBoxDesigner : ControlDesigner
     protected override void OnCreateHandle()
     {
         base.OnCreateHandle();
-        PropertyDescriptor nameProp = TypeDescriptor.GetProperties(Component)["Name"];
-        if (nameProp is not null)
+
+        if (TypeDescriptorHelper.TryGetPropertyValue(Component, nameof(ListBox.Name), out string? name)
+            && name is not null)
         {
-            UpdateControlName(nameProp.GetValue(Component).ToString());
+            UpdateControlName(name);
         }
     }
 
     /// <summary>
-    ///  Updates the name being displayed on this control.  This will do nothing if
+    ///  Updates the name being displayed on this control. This will do nothing if
     ///  the control has items in it.
     /// </summary>
     private void UpdateControlName(string name)
     {
-        ListBox lb = (ListBox)Control;
-        if (lb.IsHandleCreated && lb.Items.Count == 0)
+        ListBox listBox = (ListBox)Control;
+        if (listBox.IsHandleCreated && listBox.Items.Count == 0)
         {
-            PInvoke.SendMessage(lb, PInvoke.LB_RESETCONTENT);
-            PInvoke.SendMessage(lb, PInvoke.LB_ADDSTRING, 0, name);
+            PInvoke.SendMessage(listBox, PInvoke.LB_RESETCONTENT);
+            PInvoke.SendMessage(listBox, PInvoke.LB_ADDSTRING, 0, name);
         }
     }
 

@@ -45,30 +45,6 @@ internal static class TypeInfo
     internal static string CorelibAssemblyString { get; } = CorelibAssembly.FullName!;
 
     /// <summary>
-    ///  Returns the <see cref="PrimitiveType"/> for the given <paramref name="typeName"/>.
-    /// </summary>
-    internal static PrimitiveType GetPrimitiveType(ReadOnlySpan<char> typeName) => typeName switch
-    {
-        BooleanType => PrimitiveType.Boolean,
-        CharType => PrimitiveType.Char,
-        SByteType => PrimitiveType.SByte,
-        ByteType => PrimitiveType.Byte,
-        Int16Type => PrimitiveType.Int16,
-        UInt16Type => PrimitiveType.UInt16,
-        Int32Type => PrimitiveType.Int32,
-        UInt32Type => PrimitiveType.UInt32,
-        Int64Type => PrimitiveType.Int64,
-        UInt64Type => PrimitiveType.UInt64,
-        SingleType => PrimitiveType.Single,
-        DoubleType => PrimitiveType.Double,
-        DecimalType => PrimitiveType.Decimal,
-        DateTimeType => PrimitiveType.DateTime,
-        StringType => PrimitiveType.String,
-        TimeSpanType => PrimitiveType.TimeSpan,
-        _ => default,
-    };
-
-    /// <summary>
     ///  Returns the <see cref="PrimitiveType"/> for the given <paramref name="type"/>.
     /// </summary>
     /// <returns><see cref="PrimitiveType"/> or <see langword="default"/> if not a <see cref="PrimitiveType"/>.</returns>
@@ -139,52 +115,4 @@ internal static class TypeInfo
             return BinaryType.Primitive;
         }
     }
-
-    /// <summary>
-    ///  Returns the <see cref="Type"/> for the given <paramref name="primitiveType"/>.
-    /// </summary>
-    internal static Type GetPrimitiveTypeType(this PrimitiveType primitiveType) => primitiveType switch
-    {
-        PrimitiveType.Boolean => typeof(bool),
-        PrimitiveType.Char => typeof(char),
-        PrimitiveType.SByte => typeof(sbyte),
-        PrimitiveType.Byte => typeof(byte),
-        PrimitiveType.Int16 => typeof(short),
-        PrimitiveType.UInt16 => typeof(ushort),
-        PrimitiveType.Int32 => typeof(int),
-        PrimitiveType.UInt32 => typeof(uint),
-        PrimitiveType.Int64 => typeof(long),
-        PrimitiveType.UInt64 => typeof(ulong),
-        PrimitiveType.Single => typeof(float),
-        PrimitiveType.Double => typeof(double),
-        PrimitiveType.Decimal => typeof(decimal),
-        PrimitiveType.DateTime => typeof(DateTime),
-        PrimitiveType.String => typeof(string),
-        PrimitiveType.TimeSpan => typeof(TimeSpan),
-        _ => throw new NotSupportedException(),
-    };
-
-    /// <summary>
-    ///  Returns the <see cref="Type"/> for the given <paramref name="primitiveType"/>.
-    /// </summary>
-    internal static Type GetArrayPrimitiveTypeType(this PrimitiveType primitiveType) => primitiveType switch
-    {
-        PrimitiveType.Boolean => typeof(bool[]),
-        PrimitiveType.Char => typeof(char[]),
-        PrimitiveType.SByte => typeof(sbyte[]),
-        PrimitiveType.Byte => typeof(byte[]),
-        PrimitiveType.Int16 => typeof(short[]),
-        PrimitiveType.UInt16 => typeof(ushort[]),
-        PrimitiveType.Int32 => typeof(int[]),
-        PrimitiveType.UInt32 => typeof(uint[]),
-        PrimitiveType.Int64 => typeof(long[]),
-        PrimitiveType.UInt64 => typeof(ulong[]),
-        PrimitiveType.Single => typeof(float[]),
-        PrimitiveType.Double => typeof(double[]),
-        PrimitiveType.Decimal => typeof(decimal[]),
-        PrimitiveType.DateTime => typeof(DateTime[]),
-        PrimitiveType.String => typeof(string[]),
-        PrimitiveType.TimeSpan => typeof(TimeSpan[]),
-        _ => throw new NotSupportedException(),
-    };
 }

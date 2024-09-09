@@ -186,9 +186,9 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
             }
 
             MenuItem.DropDown.OwnerItem = MenuItem;
-            // hook up to the Disposed event ...
-            MenuItem.DropDown.Disposed += new EventHandler(OnDropDownDisposed);
-            // show the dropDown.
+            MenuItem.DropDown.Disposed += OnDropDownDisposed;
+
+            // Show the drop down.
             if (MenuItem.Equals(_selectionService.PrimarySelection))
             {
                 // Add TypeHereNode & show the Dropdown
@@ -904,7 +904,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
         }
         catch
         {
-            // There might be scenarios where the ComponentAdding is fired but the Added doesn't get fired. Is such cases the InsertTransaction might be still active...  So we need to cancel that too here.
+            // There might be scenarios where the ComponentAdding is fired but the Added doesn't get fired. Is such cases the InsertTransaction might be still active... So we need to cancel that too here.
             CommitInsertTransaction(false);
             if (outerTransaction is not null)
             {
@@ -987,19 +987,18 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
             // clean up
             if (_selectionService is not null)
             {
-                _selectionService.SelectionChanged -= new EventHandler(OnSelectionChanged);
+                _selectionService.SelectionChanged -= OnSelectionChanged;
             }
 
             if (_undoEngine is not null)
             {
-                _undoEngine.Undoing -= new EventHandler(OnUndoing);
-                _undoEngine.Undone -= new EventHandler(OnUndone);
+                _undoEngine.Undoing -= OnUndoing;
+                _undoEngine.Undone -= OnUndone;
             }
 
             if (MenuItem is not null && MenuItem.HasDropDown)
             {
                 MenuItem.DropDown.Hide();
-                // Unhook the events...
                 UnHookEvents();
             }
 
@@ -1479,21 +1478,22 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
     }
 
     /// <summary>
-    ///  This will listen to the necessary dropDown events... now we add the events on selection and unhook when the dropDown is closed.
+    ///  This will listen to the necessary dropDown events.
+    ///  Now we add the events on selection and unhook when the dropDown is closed.
     /// </summary>
     internal void HookEvents()
     {
         if (MenuItem is not null)
         {
-            MenuItem.DropDown.Closing += new ToolStripDropDownClosingEventHandler(OnDropDownClosing);
-            MenuItem.DropDownOpening += new EventHandler(DropDownItem_DropDownOpening);
-            MenuItem.DropDownOpened += new EventHandler(DropDownItem_DropDownOpened);
-            MenuItem.DropDownClosed += new EventHandler(DropDownItem_DropDownClosed);
-            MenuItem.DropDown.Resize += new EventHandler(DropDownResize);
-            MenuItem.DropDown.ItemAdded += new ToolStripItemEventHandler(OnItemAdded);
-            MenuItem.DropDown.Paint += new PaintEventHandler(DropDownPaint);
-            MenuItem.DropDown.Click += new EventHandler(DropDownClick);
-            MenuItem.DropDown.LocationChanged += new EventHandler(DropDownLocationChanged);
+            MenuItem.DropDown.Closing += OnDropDownClosing;
+            MenuItem.DropDownOpening += DropDownItem_DropDownOpening;
+            MenuItem.DropDownOpened += DropDownItem_DropDownOpened;
+            MenuItem.DropDownClosed += DropDownItem_DropDownClosed;
+            MenuItem.DropDown.Resize += DropDownResize;
+            MenuItem.DropDown.ItemAdded += OnItemAdded;
+            MenuItem.DropDown.Paint += DropDownPaint;
+            MenuItem.DropDown.Click += DropDownClick;
+            MenuItem.DropDown.LocationChanged += DropDownLocationChanged;
         }
     }
 
@@ -1511,7 +1511,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
         // Hook our services
         if (TryGetService(out _selectionService))
         {
-            _selectionService.SelectionChanged += new EventHandler(OnSelectionChanged);
+            _selectionService.SelectionChanged += OnSelectionChanged;
         }
 
         // Hookup to the AdornerService
@@ -1532,8 +1532,8 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
 
         if (_undoEngine is null && TryGetService(out _undoEngine))
         {
-            _undoEngine.Undoing += new EventHandler(OnUndoing);
-            _undoEngine.Undone += new EventHandler(OnUndone);
+            _undoEngine.Undoing += OnUndoing;
+            _undoEngine.Undone += OnUndone;
         }
     }
 
@@ -1662,7 +1662,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
     }
 
     /// <summary>
-    ///  Fired after a component has been added.  Here, we add it to the ToolStrip and select it.
+    ///  Fired after a component has been added. Here, we add it to the ToolStrip and select it.
     /// </summary>
     private void ComponentChangeSvc_ComponentAdded(object sender, ComponentEventArgs e)
     {
@@ -2010,7 +2010,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
         {
             if (MenuItem.DropDown is not null)
             {
-                MenuItem.DropDown.Disposed -= new EventHandler(OnDropDownDisposed);
+                MenuItem.DropDown.Disposed -= OnDropDownDisposed;
             }
 
             // This is necessary when the MenuItem's DropDown property is SET to something other than the default DropDown.
@@ -2032,12 +2032,12 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                 if (currentIndexOfEditor >= 0 && currentIndexOfEditor < MenuItem.DropDown.Items.Count - 1)
                 {
                     // we now know the editor is there, but isn't currently at the end of the line. lets add it.
-                    MenuItem.DropDown.ItemAdded -= new ToolStripItemEventHandler(OnItemAdded);
+                    MenuItem.DropDown.ItemAdded -= OnItemAdded;
                     MenuItem.DropDown.SuspendLayout();
                     MenuItem.DropDown.Items.Remove(_typeHereNode);
                     MenuItem.DropDown.Items.Add(_typeHereNode);
                     MenuItem.DropDown.ResumeLayout();
-                    MenuItem.DropDown.ItemAdded += new ToolStripItemEventHandler(OnItemAdded);
+                    MenuItem.DropDown.ItemAdded += OnItemAdded;
                 }
                 else
                 {
@@ -2255,7 +2255,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
     }
 
     /// <summary>
-    ///  Allows a designer to filter the set of properties the component it is designing will expose through the TypeDescriptor object.  This method is called immediately before its corresponding "Post" method. If you are overriding this method you should call the base implementation before you perform your own filtering.
+    ///  Allows a designer to filter the set of properties the component it is designing will expose through the TypeDescriptor object. This method is called immediately before its corresponding "Post" method. If you are overriding this method you should call the base implementation before you perform your own filtering.
     /// </summary>
     protected override void PreFilterProperties(IDictionary properties)
     {
@@ -2545,7 +2545,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
     /// </summary>
     internal void ShowOwnerDropDown(ToolStripDropDownItem currentSelection)
     {
-        // We MIGHT HAVE TO START TOP - DOWN Instead of BOTTOM-UP.  Sometimes we DON'T get the Owner POPUP and hence all the popup are parented to Wrong guy.
+        // We MIGHT HAVE TO START TOP - DOWN Instead of BOTTOM-UP. Sometimes we DON'T get the Owner POPUP and hence all the popup are parented to Wrong guy.
         while (currentSelection is not null && currentSelection.Owner is ToolStripDropDown dropDown)
         {
             ToolStripDropDown currentDropDown = dropDown;
@@ -2566,22 +2566,19 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
         }
     }
 
-    /// <summary>
-    ///  This will listen to the necessary dropDown events... now we add the events on selection and unhook when the dropDown is closed.
-    /// </summary>
     internal void UnHookEvents()
     {
         if (MenuItem is not null)
         {
-            MenuItem.DropDown.Closing -= new ToolStripDropDownClosingEventHandler(OnDropDownClosing);
-            MenuItem.DropDownOpening -= new EventHandler(DropDownItem_DropDownOpening);
-            MenuItem.DropDownOpened -= new EventHandler(DropDownItem_DropDownOpened);
-            MenuItem.DropDownClosed -= new EventHandler(DropDownItem_DropDownClosed);
-            MenuItem.DropDown.Resize -= new EventHandler(DropDownResize);
-            MenuItem.DropDown.ItemAdded -= new ToolStripItemEventHandler(OnItemAdded);
-            MenuItem.DropDown.Paint -= new PaintEventHandler(DropDownPaint);
-            MenuItem.DropDown.LocationChanged -= new EventHandler(DropDownLocationChanged);
-            MenuItem.DropDown.Click -= new EventHandler(DropDownClick);
+            MenuItem.DropDown.Closing -= OnDropDownClosing;
+            MenuItem.DropDownOpening -= DropDownItem_DropDownOpening;
+            MenuItem.DropDownOpened -= DropDownItem_DropDownOpened;
+            MenuItem.DropDownClosed -= DropDownItem_DropDownClosed;
+            MenuItem.DropDown.Resize -= DropDownResize;
+            MenuItem.DropDown.ItemAdded -= OnItemAdded;
+            MenuItem.DropDown.Paint -= DropDownPaint;
+            MenuItem.DropDown.LocationChanged -= DropDownLocationChanged;
+            MenuItem.DropDown.Click -= DropDownClick;
         }
     }
 

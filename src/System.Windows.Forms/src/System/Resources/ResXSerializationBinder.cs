@@ -66,7 +66,8 @@ internal class ResXSerializationBinder : SerializationBinder
         type ??= _typeResolver.GetType(parsed.FullName);
 
         // Hand back what we found or null to let the default loader take over.
-        return type;
+        // cs/deserialization/nullbindtotype
+        return type; // CodeQL[SM04225] : This binder isn't intended as a security facility; it's allowable for us to return null.
     }
 
     public override void BindToName(Type serializedType, out string? assemblyName, out string? typeName)

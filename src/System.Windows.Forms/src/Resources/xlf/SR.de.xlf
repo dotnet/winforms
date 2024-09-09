@@ -288,8 +288,8 @@
         <note />
       </trans-unit>
       <trans-unit id="BinaryFormatterNotSupported">
-        <source>Using the BinaryFormatter is not supported in trimmed applications.</source>
-        <target state="translated">Die Verwendung von BinaryFormatter wird in gekürzten Anwendungen nicht unterstützt.</target>
+        <source>BinaryFormatter serialization and deserialization are disabled within this application. See https://aka.ms/binaryformatter for more information.</source>
+        <target state="translated">Die Serialisierung und Deserialisierung von BinaryFormatter sind in dieser Anwendung deaktiviert. Weitere Informationen finden Sie unter https://aka.ms/binaryformatter.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
@@ -1527,6 +1527,11 @@
         <target state="translated">Der angezeigte Cursor, wenn der Zeiger über das Steuerelement bewegt wird.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlDarkModeDescr">
+        <source>Determines the dark mode setting for the control. This ambient property inherits its value from its parent control or from the Application class.</source>
+        <target state="translated">Bestimmt die Einstellung für den dunklen Modus für das Steuerelement. Diese Umgebungseigenschaft erbt ihren Wert vom übergeordneten Steuerelement oder von der Anwendungsklasse.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ControlDataContextChangedDescr">
         <source>Occurs when the value of the DataContext property changes.</source>
         <target state="translated">Tritt auf, wenn sich der Wert der DataSource-Eigenschaft ändert.</target>
@@ -2180,6 +2185,11 @@
       <trans-unit id="CursorNonSerializableHandle">
         <source>Stock cursors cannot be serialized.</source>
         <target state="translated">Vordefinierte Cursor können nicht serialisiert werden.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DarkModeNotSupported">
+        <source>Dark mode cannot be activated, either because of an activated High-Contrast mode or because the underlying OS does not support it.</source>
+        <target state="translated">Der dunkle Modus kann nicht aktiviert werden, entweder aufgrund eines aktivierten Modus für hohen Kontrast oder weil das zugrunde liegende Betriebssystem ihn nicht unterstützt.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataBindingAddNewNotSupportedOnPropertyManager">
@@ -5305,6 +5315,16 @@ Möchten Sie sie ersetzen?</target>
         <target state="translated">Die aktuelle Position der automatischen Schiebeleiste.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormBorderColorChangedDescr">
+        <source>Occurs whenever the FormBorderColor property is changed.</source>
+        <target state="translated">Tritt ein, wenn die FormBorderColor-Eigenschaft geändert wird.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormBorderColorDescr">
+        <source>The color of the Form's border.</source>
+        <target state="translated">Die Farbe des Formularrahmens.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormBorderStyleDescr">
         <source>Indicates the appearance and behavior of the border and title bar of the form.</source>
         <target state="translated">Gibt die Darstellung und das Verhalten des Rahmens und der Titelleiste des Formulars an.</target>
@@ -5315,9 +5335,39 @@ Möchten Sie sie ersetzen?</target>
         <target state="translated">Die Schaltfläche "Abbrechen" des Formulars. Wenn diese Eigenschaft festgelegt ist, wird auf die Schaltfläche "geklickt", wenn der Benutzer die ESC-Taste drückt.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormCaptionBackColorChangedDescr">
+        <source>Occurs whenever the FormCaptionBackColor property is changed.</source>
+        <target state="translated">Tritt ein, wenn die FormCaptionBackColor-Eigenschaft geändert wird.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCaptionBackColorDescr">
+        <source>The back color of the Form's caption (title bar).</source>
+        <target state="translated">Die Hintergrundfarbe der Beschriftung des Formulars (Titelleiste).</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCaptionTextColorChangedDescr">
+        <source>Occurs whenever the FormCaptionTextColor property is changed.</source>
+        <target state="translated">Tritt ein, wenn die FormCaptionTextColor-Eigenschaft geändert wird.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCaptionTextColorDescr">
+        <source>The color of the Form's text caption (title bar text).</source>
+        <target state="translated">Die Farbe der Textbeschriftung des Formulars (Text der Titelleiste).</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormControlBoxDescr">
         <source>Determines whether a form has a Control/System menu box.</source>
         <target state="translated">Bestimmt, ob ein Formular ein Steuerelement/System-Menüfeld hat.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCornerPreferenceChangedDescr">
+        <source>Occurs whenever the FormCornerPreference property is changed.</source>
+        <target state="translated">Tritt ein, wenn die FormCornerPreference-Eigenschaft geändert wird.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCornerPreferenceDescr">
+        <source>The rounding style of the Form's border.</source>
+        <target state="translated">Der abgerundete Stil des Formularrahmens.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormDesktopBoundsDescr">
@@ -5520,6 +5570,11 @@ Möchten Sie sie ersetzen?</target>
         <target state="translated">Der Prozentsatz der Durchlässigkeit des Steuerelements. </target>
         <note />
       </trans-unit>
+      <trans-unit id="FormOrTaskDialog_NoSyncContextForShowAsync">
+        <source>Failed to retrieve the Synchronization Context for showing the Form asynchronously.</source>
+        <target state="translated">Fehler beim Abrufen des Synchronisierungskontexts zum asynchronen Anzeigen des Formulars.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormOwnedFormsDescr">
         <source>Array of forms owned by this form.</source>
         <target state="translated">Das Array der Formulare, die dieses Formular besitzt.</target>
@@ -5563,6 +5618,11 @@ Möchten Sie sie ersetzen?</target>
       <trans-unit id="FormWindowStateDescr">
         <source>Determines the initial visual state of the form.</source>
         <target state="translated">Bestimmt den ersten visuellen Zustand des Formulars.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Form_HasAlreadyBeenShownAsync">
+        <source>The form has already been shown asynchronously.</source>
+        <target state="translated">Das Formular wurde bereits asynchron angezeigt.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormatControlFormatDescr">
@@ -6855,8 +6915,8 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <note />
       </trans-unit>
       <trans-unit id="ListViewVirtualListSizeDescr">
-        <source>Sets the count of the item collection when the ListView is in virtual mode.</source>
-        <target state="translated">Legt die Anzahl der Elemente für die Elementesammlung fest, wenn sich die ListView im virtuellen Modus befindet.</target>
+        <source>Sets the count of the item collection when the ListView is in virtual mode. If VirtualMode is set to true, and the VirtualListSize property is greater than 0, you must handle the RetrieveVirtualItem event providing valid items.</source>
+        <target state="translated">Legt die Anzahl der Elemente für die Elementesammlung fest, wenn sich die ListView im virtuellen Modus befindet. Wenn VirtualMode auf TRUE festgelegt ist und die VirtualListSize-Eigenschaft größer als 0 ist, müssen Sie das RetrieveVirtualItem-Ereignis behandeln, das gültige Elemente bereitstellt.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewVirtualListSizeInvalidArgument">
@@ -9706,7 +9766,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="ToolStripAllowClickThrough">
         <source>Allows the control to be interacted when window does not have focus.</source>
-        <target state="new">Allows the control to be interacted when window does not have focus.</target>
+        <target state="translated">Ermöglicht die Interaktion des Steuerelements, wenn das Fenster keinen Fokus hat.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue">

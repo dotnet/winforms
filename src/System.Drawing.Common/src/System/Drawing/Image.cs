@@ -331,7 +331,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
     }
 
     /// <summary>
-    ///  Adds an <see cref='Imagin.EncoderParameters'/> to this <see cref='Image'/>.
+    ///  Adds an <see cref='EncoderParameters'/> to this <see cref='Image'/>.
     /// </summary>
     public void SaveAdd(Imaging.EncoderParameters? encoderParams)
     {

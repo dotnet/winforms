@@ -26,7 +26,7 @@ internal class ToolStripKeyboardHandlingService
     // is the templateNode in Insitu Mode?
     private bool _templateNodeActive;
     private ToolStripTemplateNode _activeTemplateNode;
-    // is the TemplateNode ContextMenu open. When the TemplateNode AddItems ContextMenu is opened we want to Disable all the Commands... And we enable them when the contextMenu closes...  But if the menu closes by "enter Key" we get OnKeyDefault and hence go into InSitu Edit Mode.. to avoid this we have a new flag to IGNORE the first OnKeyDefault.
+    // is the TemplateNode ContextMenu open. When the TemplateNode AddItems ContextMenu is opened we want to Disable all the Commands... And we enable them when the contextMenu closes... But if the menu closes by "enter Key" we get OnKeyDefault and hence go into InSitu Edit Mode.. to avoid this we have a new flag to IGNORE the first OnKeyDefault.
     private bool _templateNodeContextMenuOpen;
     // old commands
     private List<MenuCommand> _oldCommands;
@@ -51,8 +51,8 @@ internal class ToolStripKeyboardHandlingService
         Debug.Assert(_selectionService is not null, "ToolStripKeyboardHandlingService relies on the selection service, which is unavailable.");
         if (_selectionService is not null)
         {
-            _selectionService.SelectionChanging += new EventHandler(OnSelectionChanging);
-            _selectionService.SelectionChanged += new EventHandler(OnSelectionChanged);
+            _selectionService.SelectionChanging += OnSelectionChanging;
+            _selectionService.SelectionChanged += OnSelectionChanged;
         }
 
         _designerHost = (IDesignerHost)_provider.GetService(typeof(IDesignerHost));
@@ -63,7 +63,7 @@ internal class ToolStripKeyboardHandlingService
         Debug.Assert(_componentChangeService is not null, "ToolStripKeyboardHandlingService relies on the componentChange service, which is unavailable.");
         if (_componentChangeService is not null)
         {
-            _componentChangeService.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
+            _componentChangeService.ComponentRemoved += OnComponentRemoved;
         }
     }
 
@@ -85,7 +85,7 @@ internal class ToolStripKeyboardHandlingService
         set => _contextMenuShownByKeyBoard = value;
     }
 
-    // When Copy (Through Control + Drag) this boolean is set to true.  Problem is that during copy the DesignerUtils creates new components and as a result the ToolStripMenuItemDesigner and ToolStripDesigners get the "ComponentAdding/ComponentAdded" events where they try to parent the components.  We don't need to "parent" in case of control + drag.
+    // When Copy (Through Control + Drag) this boolean is set to true. Problem is that during copy the DesignerUtils creates new components and as a result the ToolStripMenuItemDesigner and ToolStripDesigners get the "ComponentAdding/ComponentAdded" events where they try to parent the components. We don't need to "parent" in case of control + drag.
     internal bool CopyInProgress
     {
         get => _copyInProgress;
@@ -313,7 +313,7 @@ internal class ToolStripKeyboardHandlingService
                 bool hitCtl = false;
                 Control found = null;
                 Control p = ctl.Parent;
-                // Cycle through the controls in z-order looking for the one with the next highest tab index.  Because there can be dups, we have to start with the existing tab index and remember to exclude the current control.
+                // Cycle through the controls in z-order looking for the one with the next highest tab index. Because there can be dups, we have to start with the existing tab index and remember to exclude the current control.
                 int parentControlCount = 0;
                 Control.ControlCollection parentControls = p.Controls;
                 if (parentControls is not null)
@@ -326,13 +326,13 @@ internal class ToolStripKeyboardHandlingService
                     // The logic for this is a bit lengthy, so I have broken it into separate clauses: We are not interested in ourself.
                     if (parentControls[c] != ctl)
                     {
-                        // We are interested in controls with >= tab indexes to ctl.  We must include those controls with equal indexes to account for duplicate indexes.
+                        // We are interested in controls with >= tab indexes to ctl. We must include those controls with equal indexes to account for duplicate indexes.
                         if (parentControls[c].TabIndex >= targetIndex)
                         {
                             // Check to see if this control replaces the "best match" we've already found.
                             if (found is null || found.TabIndex > parentControls[c].TabIndex)
                             {
-                                // Finally, check to make sure that if this tab index is the same as ctl, that we've already encountered ctl in the z-order.  If it isn't the same, than we're more than happy with it.
+                                // Finally, check to make sure that if this tab index is the same as ctl, that we've already encountered ctl in the z-order. If it isn't the same, than we're more than happy with it.
                                 if ((parentControls[c].Site is not null && parentControls[c].TabIndex != targetIndex) || hitCtl)
                                 {
                                     found = parentControls[c];
@@ -342,7 +342,7 @@ internal class ToolStripKeyboardHandlingService
                     }
                     else
                     {
-                        // We track when we have encountered "ctl".  We never want to select ctl again, but we want to know when we've seen it in case we find another control with the same tab index.
+                        // We track when we have encountered "ctl". We never want to select ctl again, but we want to know when we've seen it in case we find another control with the same tab index.
                         hitCtl = true;
                     }
                 }
@@ -363,7 +363,7 @@ internal class ToolStripKeyboardHandlingService
                 bool hitCtl = false;
                 Control found = null;
                 Control p = ctl.Parent;
-                // Cycle through the controls in reverse z-order looking for the next lowest tab index.  We must start with the same tab index as ctl, because there can be dups.
+                // Cycle through the controls in reverse z-order looking for the next lowest tab index. We must start with the same tab index as ctl, because there can be dups.
                 int parentControlCount = 0;
                 Control.ControlCollection parentControls = p.Controls;
                 if (parentControls is not null)
@@ -376,13 +376,13 @@ internal class ToolStripKeyboardHandlingService
                     // The logic for this is a bit lengthy, so I have broken it into separate clauses: We are not interested in ourself.
                     if (parentControls[c] != ctl)
                     {
-                        // We are interested in controls with <= tab indexes to ctl.  We must include those controls with equal indexes to account for duplicate indexes.
+                        // We are interested in controls with <= tab indexes to ctl. We must include those controls with equal indexes to account for duplicate indexes.
                         if (parentControls[c].TabIndex <= targetIndex)
                         {
                             // Check to see if this control replaces the "best match" we've already found.
                             if (found is null || found.TabIndex < parentControls[c].TabIndex)
                             {
-                                // Finally, check to make sure that if this tab index is the same as ctl, that we've already encountered ctl in the z-order.  If it isn't the same, than we're more than happy with it.
+                                // Finally, check to make sure that if this tab index is the same as ctl, that we've already encountered ctl in the z-order. If it isn't the same, than we're more than happy with it.
                                 if (parentControls[c].TabIndex != targetIndex || hitCtl)
                                 {
                                     found = parentControls[c];
@@ -392,12 +392,12 @@ internal class ToolStripKeyboardHandlingService
                     }
                     else
                     {
-                        // We track when we have encountered "ctl".  We never want to select ctl again, but we want to know when we've seen it in case we find another control with the same tab index.
+                        // We track when we have encountered "ctl". We never want to select ctl again, but we want to know when we've seen it in case we find another control with the same tab index.
                         hitCtl = true;
                     }
                 }
 
-                // If we were unable to find a control we should return the control's parent.  However, if that parent is us, return NULL.
+                // If we were unable to find a control we should return the control's parent. However, if that parent is us, return NULL.
                 if (found is not null)
                 {
                     ctl = found;
@@ -469,7 +469,7 @@ internal class ToolStripKeyboardHandlingService
             y = p.Y;
         }
 
-        // This has to be done since ToolStripTemplateNode is unsited component that supports its own contextMenu. When the Selection is null, templateNode can be selected.  So this block of code here checks if ToolStripKeyBoardHandlingService is present if so, tries to check if the templatenode is selected if so, then gets the templateNode and shows the ContextMenu.
+        // This has to be done since ToolStripTemplateNode is unsited component that supports its own contextMenu. When the Selection is null, templateNode can be selected. So this block of code here checks if ToolStripKeyBoardHandlingService is present if so, tries to check if the templatenode is selected if so, then gets the templateNode and shows the ContextMenu.
         if (SelectionService.PrimarySelection is not Component)
         {
             if (SelectedDesignerControl is DesignerToolStripControlHost controlHost)
@@ -529,7 +529,7 @@ internal class ToolStripKeyboardHandlingService
                 }
             }
 
-            // this is done So that the Data Behavior doesnt mess up with the copy command during addition of the ToolStrip..
+            // this is done So that the Data Behavior doesn't mess up with the copy command during addition of the ToolStrip..
             IMenuCommandService mcs = MenuService;
             if (mcs is not null)
             {
@@ -821,7 +821,7 @@ internal class ToolStripKeyboardHandlingService
             return;
         }
 
-        // Return key.  Handle it like a double-click on the primary selection
+        // Return key. Handle it like a double-click on the primary selection
         ISelectionService selSvc = SelectionService;
         IDesignerHost host = Host;
         if (selSvc is not null)
@@ -957,7 +957,7 @@ internal class ToolStripKeyboardHandlingService
     /// </summary>
     private void OnKeyMove(object sender, EventArgs e)
     {
-        // Arrow keys.  Begin a drag if the selection isn't locked.
+        // Arrow keys. Begin a drag if the selection isn't locked.
         ISelectionService selSvc = SelectionService;
         if (selSvc is not null)
         {
@@ -1072,7 +1072,7 @@ internal class ToolStripKeyboardHandlingService
     }
 
     /// <summary>
-    ///  Called when the current selection changes.  Here we determine what commands can and can't be enabled.
+    ///  Called when the current selection changes. Here we determine what commands can and can't be enabled.
     /// </summary>
     private void OnSelectionChanging(object sender, EventArgs e)
     {
@@ -1100,7 +1100,7 @@ internal class ToolStripKeyboardHandlingService
     }
 
     /// <summary>
-    ///  Called when the current selection changes.  Here we determine what commands can and can't be enabled.
+    ///  Called when the current selection changes. Here we determine what commands can and can't be enabled.
     /// </summary>
     private void OnSelectionChanged(object sender, EventArgs e)
     {
@@ -1629,14 +1629,14 @@ internal class ToolStripKeyboardHandlingService
 
         if (_selectionService is not null)
         {
-            _selectionService.SelectionChanging -= new EventHandler(OnSelectionChanging);
-            _selectionService.SelectionChanged -= new EventHandler(OnSelectionChanged);
+            _selectionService.SelectionChanging -= OnSelectionChanging;
+            _selectionService.SelectionChanged -= OnSelectionChanged;
             _selectionService = null;
         }
 
         if (_componentChangeService is not null)
         {
-            _componentChangeService.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
+            _componentChangeService.ComponentRemoved -= OnComponentRemoved;
             _componentChangeService = null;
         }
 
@@ -1755,7 +1755,7 @@ internal class ToolStripKeyboardHandlingService
 
         IContainer container = host.Container;
         baseCtl = (Control)host.RootComponent;
-        // We must handle two cases of logic here.  We are responsible for handling selection within ourself, and also for components on the tray.  For our own tabbing around, we want to go by tab-order.  When we get to the end of the form, however, we go by selection order into the tray.  And,  when we're at the end of the tray we start back at the form.  We must reverse this logic to go backwards.
+        // We must handle two cases of logic here. We are responsible for handling selection within ourself, and also for components on the tray. For our own tabbing around, we want to go by tab-order. When we get to the end of the form, however, we go by selection order into the tray. And,  when we're at the end of the tray we start back at the form. We must reverse this logic to go backwards.
         currentSelection = selSvc.PrimarySelection;
         if (_shiftPressed && ShiftPrimaryItem is not null)
         {
@@ -1765,7 +1765,7 @@ internal class ToolStripKeyboardHandlingService
         if (currentSelection is null)
         {
             currentSelection = SelectedDesignerControl;
-            // If we are on templateNode and tabbing ahead ...  the select the next Control on the parent ...
+            // If we are on templateNode and tabbing ahead ... the select the next Control on the parent ...
             if (currentSelection is not null)
             {
                 if (currentSelection is DesignerToolStripControlHost templateNodeItem && (!templateNodeItem.IsOnDropDown || (templateNodeItem.IsOnDropDown && templateNodeItem.IsOnOverflow)))
@@ -1958,7 +1958,7 @@ internal class ToolStripKeyboardHandlingService
 
         if (targetSelection is null && ctl is not null && (baseCtl.Contains(ctl) || baseCtl == currentSelection))
         {
-            // Our current selection is a control.  Select the next control in  the z-order.
+            // Our current selection is a control. Select the next control in  the z-order.
             while ((ctl = GetNextControlInTab(baseCtl, ctl, !backwards)) is not null)
             {
                 if (ctl.Site is not null && ctl.Site.Container == container && !(ctl is ToolStripPanel))

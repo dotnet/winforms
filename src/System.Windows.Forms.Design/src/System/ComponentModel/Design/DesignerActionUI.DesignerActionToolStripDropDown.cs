@@ -137,8 +137,8 @@ internal partial class DesignerActionUI
 
             Debug.Assert(relatedGlyph is not null, "related glyph cannot be null");
             _relatedGlyph = relatedGlyph;
-            panel.SizeChanged += new EventHandler(PanelResized);
-            // hook up the event
+            panel.SizeChanged += PanelResized;
+
             if (_panel is not null)
             {
                 Items.Remove(_panel);
@@ -148,7 +148,7 @@ internal partial class DesignerActionUI
 
             _panel = new ToolStripControlHost(panel)
             {
-                // we don't want no margin
+                // We don't want a margin
                 Margin = Padding.Empty,
                 Size = panel.Size
             };

@@ -356,7 +356,7 @@ internal class TableLayoutPanelBehavior : Behavior
                 _table.ResumeLayout(true);
 
                 // now determine if the values we pushed into the TLP
-                // actually had any effect.  If they didn't,
+                // actually had any effect. If they didn't,
                 // we delay updating the last mouse position so that
                 // next time a mouse move message comes in the delta is larger.
                 bool updatedSize = true;

@@ -51,7 +51,7 @@ partial class Main
         this.button1.TabIndex = 0;
         this.button1.Text = "Common_Controls1: Testing the controls under the Common_Controls Tab";
         this.button1.UseVisualStyleBackColor = true;
-        this.button1.Click += new System.EventHandler(this.Button1_Click);
+        this.button1.Click += this.Button1_Click;
         // 
         // button2
         // 
@@ -62,7 +62,7 @@ partial class Main
         this.button2.TabIndex = 1;
         this.button2.Text = "Common_Controls2: Testing the controls under the Common_Controls Tab";
         this.button2.UseVisualStyleBackColor = true;
-        this.button2.Click += new System.EventHandler(this.Button2_Click);
+        this.button2.Click += this.Button2_Click;
         // 
         // button3
         // 
@@ -73,7 +73,7 @@ partial class Main
         this.button3.TabIndex = 2;
         this.button3.Text = "Data_Controls: Testing the controls under the Data Tab";
         this.button3.UseVisualStyleBackColor = true;
-        this.button3.Click += new System.EventHandler(this.Button3_Click);
+        this.button3.Click += this.Button3_Click;
         // 
         // button4
         // 
@@ -84,7 +84,7 @@ partial class Main
         this.button4.TabIndex = 3;
         this.button4.Text = "Dialogs_Controls: Testing the controls under the Dialogs Tab";
         this.button4.UseVisualStyleBackColor = true;
-        this.button4.Click += new System.EventHandler(this.Button4_Click);
+        this.button4.Click += this.Button4_Click;
         // 
         // button5
         // 
@@ -95,7 +95,7 @@ partial class Main
         this.button5.TabIndex = 4;
         this.button5.Text = "MenuToolbars_Controls: Testing the controls under the Menu & Toolbars Tab";
         this.button5.UseVisualStyleBackColor = true;
-        this.button5.Click += new System.EventHandler(this.Button5_Click);
+        this.button5.Click += this.Button5_Click;
         // 
         // button6
         // 
@@ -106,7 +106,7 @@ partial class Main
         this.button6.TabIndex = 5;
         this.button6.Text = "Printing_Controls: Testing the controls under the Printing Tab";
         this.button6.UseVisualStyleBackColor = true;
-        this.button6.Click += new System.EventHandler(this.Button6_Click);
+        this.button6.Click += this.Button6_Click;
         // 
         // button7
         // 
@@ -117,7 +117,7 @@ partial class Main
         this.button7.TabIndex = 6;
         this.button7.Text = "Remaining_Controls_Testing";
         this.button7.UseVisualStyleBackColor = true;
-        this.button7.Click += new System.EventHandler(this.Button7_Click);
+        this.button7.Click += this.Button7_Click;
         // 
         // button8
         // 
@@ -128,7 +128,7 @@ partial class Main
         this.button8.TabIndex = 7;
         this.button8.Text = "Containers_Controls: Testing the controls under the Containers Tab";
         this.button8.UseVisualStyleBackColor = true;
-        this.button8.Click += new System.EventHandler(this.Button8_Click);
+        this.button8.Click += this.Button8_Click;
         // 
         // button9
         // 
@@ -139,7 +139,7 @@ partial class Main
         this.button9.TabIndex = 8;
         this.button9.Text = "Containers_Controls_2: Testing the controls under the Containers Tab";
         this.button9.UseVisualStyleBackColor = true;
-        this.button9.Click += new System.EventHandler(this.button9_Click);
+        this.button9.Click += this.button9_Click;
         // 
         // button10
         // 
@@ -149,7 +149,7 @@ partial class Main
         this.button10.TabIndex = 9;
         this.button10.Text = "TaskDialog: Testing the task dialog";
         this.button10.UseVisualStyleBackColor = true;
-        this.button10.Click += new System.EventHandler(this.button10_Click);
+        this.button10.Click += this.button10_Click;
         // 
         // button12
         // 
@@ -159,7 +159,7 @@ partial class Main
         this.button12.TabIndex = 11;
         this.button12.Text = "DataBinding Example";
         this.button12.UseVisualStyleBackColor = true;
-        this.button12.Click += new System.EventHandler(this.button12_Click);
+        this.button12.Click += this.button12_Click;
         // 
         // Main
         // 

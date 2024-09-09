@@ -25,7 +25,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     /// </summary>
     private GraphicsContext? _previousContext;
 
-    private static readonly object s_syncObject = new();
+    private static readonly Lock s_syncObject = new();
 
     // Object reference used for printing; it could point to a PrintPreviewGraphics to obtain the VisibleClipBounds, or
     // a DeviceContext holding a printer DC.
@@ -114,6 +114,11 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     public static Graphics FromHwndInternal(IntPtr hwnd)
     {
         GpGraphics* nativeGraphics;
+
+        // This is one of the few places we need to manually ensure GDI+ is initialized. Other calls to PInvoke will do
+        // this automatically, PInvokeCore cannot and as such needs to be manually initialized if we've never called
+        // another PInvoke method.
+        GdiPlusInitialization.EnsureInitialized();
         Gdip.CheckStatus(PInvokeCore.GdipCreateFromHWND((HWND)hwnd, &nativeGraphics));
         return new Graphics(nativeGraphics);
     }
@@ -1399,9 +1404,17 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     ///  Fills the interior of a pie section defined by an ellipse and two radial lines.
     /// </summary>
     /// <param name="brush">A Brush that determines the characteristics of the fill.</param>
-    /// <param name="rect">A Rectangle structure that represents the bounding rectangle that defines the ellipse from which the pie section comes.</param>
-    /// <param name="startAngle">Angle in degrees measured clockwise from the x-axis to the first side of the pie section.</param>
-    /// <param name="sweepAngle">Angle in degrees measured clockwise from the <paramref name="startAngle"/> parameter to the second side of the pie section.</param>
+    /// <param name="rect">
+    ///  A Rectangle structure that represents the bounding rectangle that defines the ellipse from which
+    ///  the pie section comes.
+    /// </param>
+    /// <param name="startAngle">
+    ///  Angle in degrees measured clockwise from the x-axis to the first side of the pie section.
+    /// </param>
+    /// <param name="sweepAngle">
+    ///  Angle in degrees measured clockwise from the <paramref name="startAngle"/> parameter
+    ///  to the second side of the pie section.
+    /// </param>
     public void FillPie(Brush brush, RectangleF rect, float startAngle, float sweepAngle) =>
         FillPie(brush, rect.X, rect.Y, rect.Width, rect.Height, startAngle, sweepAngle);
 
@@ -1900,7 +1913,9 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     /// <param name="text">Text to measure.</param>
     /// <param name="font"><see cref="Font"/> that defines the text format.</param>
     /// <param name="layoutRect"><see cref="RectangleF"/> structure that specifies the layout rectangle for the text.</param>
-    /// <param name="stringFormat"><see cref="StringFormat"/> that represents formatting information, such as line spacing, for the text.</param>
+    /// <param name="stringFormat">
+    ///  <see cref="StringFormat"/> that represents formatting information, such as line spacing, for the text.
+    /// </param>
     /// <returns>
     ///  This method returns an array of <see cref="Region"/> objects, each of which bounds a range of character
     ///  positions within the specified text.

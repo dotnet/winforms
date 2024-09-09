@@ -4,7 +4,7 @@
 namespace System.Windows.Forms;
 
 /// <summary>
-///  Provides data for the <see cref="Form.OnClosed"/> event.
+///  Provides data for <see cref="Form.OnFormClosing"/> and <see cref="Form.OnClosing"/> events.
 /// </summary>
 public class FormClosedEventArgs : EventArgs
 {

@@ -5,7 +5,7 @@ namespace Windows.Win32.UI.Controls.Dialogs;
 
 /// <summary>
 ///  Represents a range of pages in a print job. A print job can have more than one page range. This information is
-///  supplied in the <see cref="PRINTDLGEXW"/> structure when calling the <see cref="PInvoke.PrintDlgEx"/> function.</summary>
+///  supplied in the <see cref="PRINTDLGEXW"/> structure when calling the <see cref="PInvokeCore.PrintDlgEx"/> function.</summary>
 /// <remarks>
 ///  <para><see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printpagerange">Learn more about this API from learn.microsoft.com</see>.</para>
 /// </remarks>

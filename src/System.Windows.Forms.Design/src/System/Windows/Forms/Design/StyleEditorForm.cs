@@ -746,10 +746,10 @@ internal partial class StyleCollectionEditor
             // Unhook the event while we reset.
             // If we didn't the setting the value would cause OnValueChanged below to get called.
             // If we then go ahead and update the listView, which we don't want in the reset case.
-            _absoluteNumericUpDown.ValueChanged -= new EventHandler(OnValueChanged);
+            _absoluteNumericUpDown.ValueChanged -= OnValueChanged;
             _absoluteNumericUpDown.Enabled = false;
             _absoluteNumericUpDown.Value = DesignerUtils.s_minimumStyleSize;
-            _absoluteNumericUpDown.ValueChanged += new EventHandler(OnValueChanged);
+            _absoluteNumericUpDown.ValueChanged += OnValueChanged;
         }
 
         private void ResetPercent()
@@ -757,10 +757,10 @@ internal partial class StyleCollectionEditor
             // Unhook the event while we reset.
             // If we didn't the setting the value would cause OnValueChanged below to get called.
             // If we then go ahead and update the listView, which we don't want in the reset case.
-            _percentNumericUpDown.ValueChanged -= new EventHandler(OnValueChanged);
+            _percentNumericUpDown.ValueChanged -= OnValueChanged;
             _percentNumericUpDown.Enabled = false;
             _percentNumericUpDown.Value = DesignerUtils.s_minimumStylePercent;
-            _percentNumericUpDown.ValueChanged += new EventHandler(OnValueChanged);
+            _percentNumericUpDown.ValueChanged += OnValueChanged;
         }
 
         private void UpdateGroupBox(SizeType type, float value)

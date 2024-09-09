@@ -59,7 +59,7 @@ public partial class Button : ButtonBase, IButtonControl
                 SetAutoSizeMode(value);
                 if (ParentInternal is not null)
                 {
-                    // DefaultLayout does not keep anchor information until it needs to.  When
+                    // DefaultLayout does not keep anchor information until it needs to. When
                     // AutoSize became a common property, we could no longer blindly call into
                     // DefaultLayout, so now we do a special InitLayout just for DefaultLayout.
                     if (ParentInternal.LayoutEngine == DefaultLayout.Instance)

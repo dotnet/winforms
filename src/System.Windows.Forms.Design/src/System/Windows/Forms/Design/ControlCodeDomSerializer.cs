@@ -11,14 +11,14 @@ namespace System.Windows.Forms.Design;
 
 /// <summary>
 ///  Control's provide their own serializer so they can write out resource hierarchy
-///  information.  We delegate nearly everything to our base class's serializer.
+///  information. We delegate nearly everything to our base class's serializer.
 /// </summary>
 internal class ControlCodeDomSerializer : CodeDomSerializer
 {
     /// <summary>
-    ///  Deserializes the given CodeDom object into a real object.  This
+    ///  Deserializes the given CodeDom object into a real object. This
     ///  will use the serialization manager to create objects and resolve
-    ///  data types.  The root of the object graph is returned.
+    ///  data types. The root of the object graph is returned.
     /// </summary>
     public override object? Deserialize(IDesignerSerializationManager manager, object codeObject)
     {
@@ -167,11 +167,11 @@ internal class ControlCodeDomSerializer : CodeDomSerializer
 
         if (inheritanceLevel != InheritanceLevel.InheritedReadOnly)
         {
-            // Next, see if we are in localization mode.  If we are, and if we can get
+            // Next, see if we are in localization mode. If we are, and if we can get
             // to a ResourceManager through the service provider, then emit the hierarchy information for
-            // this object.  There is a small fragile assumption here:  The resource manager is demand
+            // this object. There is a small fragile assumption here:  The resource manager is demand
             // created, so if all of the properties of this control had default values it is possible
-            // there will be no resource manager for us.  I'm letting that slip a bit, however, because
+            // there will be no resource manager for us. I'm letting that slip a bit, however, because
             // for Control classes, we always emit at least the location / size information for the
             // control.
             IDesignerHost? host = manager.GetService<IDesignerHost>();
@@ -188,7 +188,7 @@ internal class ControlCodeDomSerializer : CodeDomSerializer
             {
                 Control control = (Control)value;
 
-                // Serialize a suspend / resume pair.  We always serialize this
+                // Serialize a suspend / resume pair. We always serialize this
                 // for the root component
                 if ((host is not null && control == host.RootComponent) || HasSitedNonReadonlyChildren(control))
                 {
@@ -202,7 +202,7 @@ internal class ControlCodeDomSerializer : CodeDomSerializer
                     }
                 }
 
-                // And now serialize the correct z-order relationships for the controls.  We only need to
+                // And now serialize the correct z-order relationships for the controls. We only need to
                 // do this if there are controls in the collection that are inherited.
                 if (HasMixedInheritedChildren(control))
                 {
@@ -332,7 +332,7 @@ internal class ControlCodeDomSerializer : CodeDomSerializer
     }
 
     /// <summary>
-    ///  Serializes a method invocation on the control being serialized.  Used to serialize Suspend/ResumeLayout pairs, etc.
+    ///  Serializes a method invocation on the control being serialized. Used to serialize Suspend/ResumeLayout pairs, etc.
     /// </summary>
     private void SerializeMethodInvocation(IDesignerSerializationManager manager, CodeStatementCollection statements, object control, string methodName, CodeExpressionCollection? parameters, Type[] paramTypes, StatementOrdering ordering)
     {

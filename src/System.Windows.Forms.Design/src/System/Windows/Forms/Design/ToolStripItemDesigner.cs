@@ -458,18 +458,18 @@ internal class ToolStripItemDesigner : ComponentDesigner
 
             if (ToolStripItem is not null)
             {
-                ToolStripItem.Paint -= new PaintEventHandler(OnItemPaint);
+                ToolStripItem.Paint -= OnItemPaint;
             }
 
             // Now, unhook the component rename event
             if (TryGetService(out IComponentChangeService cs))
             {
-                cs.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
+                cs.ComponentRename -= OnComponentRename;
             }
 
             if (_selectionService is not null)
             {
-                _selectionService.SelectionChanged -= new EventHandler(OnSelectionChanged);
+                _selectionService.SelectionChanged -= OnSelectionChanged;
             }
 
             // Clean up the ToolStripItem Glyph if Any
@@ -644,7 +644,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
 
         // Shadow the AccessibleName as we are going to change it at DesignTime
         AccessibleName = ToolStripItem.AccessibleName;
-        ToolStripItem.Paint += new PaintEventHandler(OnItemPaint);
+        ToolStripItem.Paint += OnItemPaint;
 
         // Change the AccessibleName to point to ToolStirpItem.Name
         ToolStripItem.AccessibleName = ToolStripItem.Name;
@@ -652,12 +652,12 @@ internal class ToolStripItemDesigner : ComponentDesigner
         // Now, hook the component rename event so we can update the AccessibleName
         if (TryGetService(out IComponentChangeService cs))
         {
-            cs.ComponentRename += new ComponentRenameEventHandler(OnComponentRename);
+            cs.ComponentRename += OnComponentRename;
         }
 
         if (TryGetService(out _selectionService))
         {
-            _selectionService.SelectionChanged += new EventHandler(OnSelectionChanged);
+            _selectionService.SelectionChanged += OnSelectionChanged;
         }
     }
 
@@ -892,7 +892,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
     }
 
     /// <summary>
-    ///  Raised when a component's name changes.  Here we update the AccessibleName Property to match the newName.
+    ///  Raised when a component's name changes. Here we update the AccessibleName Property to match the newName.
     /// </summary>
     private void OnComponentRename(object sender, ComponentRenameEventArgs e)
     {
@@ -1021,7 +1021,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
     }
 
     /// <summary>
-    ///  Allows a designer to filter the set of properties the component it is designing will expose through the TypeDescriptor object.  This method is called immediately before its corresponding "Post" method. If you are overriding this method you should call the base implementation before you perform your own filtering.
+    ///  Allows a designer to filter the set of properties the component it is designing will expose through the TypeDescriptor object. This method is called immediately before its corresponding "Post" method. If you are overriding this method you should call the base implementation before you perform your own filtering.
     /// </summary>
     protected override void PreFilterProperties(IDictionary properties)
     {

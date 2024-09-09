@@ -288,8 +288,8 @@
         <note />
       </trans-unit>
       <trans-unit id="BinaryFormatterNotSupported">
-        <source>Using the BinaryFormatter is not supported in trimmed applications.</source>
-        <target state="translated">트리밍된 애플리케이션에서는 BinaryFormatter를 사용할 수 없습니다.</target>
+        <source>BinaryFormatter serialization and deserialization are disabled within this application. See https://aka.ms/binaryformatter for more information.</source>
+        <target state="translated">이 애플리케이션 내에서 BinaryFormatter 직렬화 및 역직렬화를 사용할 수 없습니다. 자세한 내용은 https://aka.ms/binaryformatter 페이지를 참조하세요.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
@@ -1527,6 +1527,11 @@
         <target state="translated">포인터가 컨트롤 위로 이동할 때 나타나는 커서입니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlDarkModeDescr">
+        <source>Determines the dark mode setting for the control. This ambient property inherits its value from its parent control or from the Application class.</source>
+        <target state="translated">컨트롤의 다크 모드 설정을 결정합니다. 이 앰비언트 속성은 부모 컨트롤 또는 애플리케이션 클래스에서 해당 값을 상속합니다.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ControlDataContextChangedDescr">
         <source>Occurs when the value of the DataContext property changes.</source>
         <target state="translated">DataContext 속성의 값이 변경되면 발생합니다.</target>
@@ -2180,6 +2185,11 @@
       <trans-unit id="CursorNonSerializableHandle">
         <source>Stock cursors cannot be serialized.</source>
         <target state="translated">스톡 커서를 serialize할 수 없습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DarkModeNotSupported">
+        <source>Dark mode cannot be activated, either because of an activated High-Contrast mode or because the underlying OS does not support it.</source>
+        <target state="translated">활성화된 고대비 모드로 인해 또는 기본 OS에서 지원되지 않는 모드이므로 다크 모드를 활성화할 수 없습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataBindingAddNewNotSupportedOnPropertyManager">
@@ -5305,6 +5315,16 @@ Do you want to replace it?</source>
         <target state="translated">자동으로 스크롤되는 스크롤 막대의 현재 위치입니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormBorderColorChangedDescr">
+        <source>Occurs whenever the FormBorderColor property is changed.</source>
+        <target state="translated">FormBorderColor 속성이 변경될 때마다 발생합니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormBorderColorDescr">
+        <source>The color of the Form's border.</source>
+        <target state="translated">양식의 테두리 색입니다.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormBorderStyleDescr">
         <source>Indicates the appearance and behavior of the border and title bar of the form.</source>
         <target state="translated">폼의 테두리 및 제목 표시줄의 모양과 동작을 나타냅니다.</target>
@@ -5315,9 +5335,39 @@ Do you want to replace it?</source>
         <target state="translated">폼의 취소 단추입니다. 이 속성을 설정하면 &lt;Esc&gt; 키를 누를 때마다 단추가 '클릭'됩니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormCaptionBackColorChangedDescr">
+        <source>Occurs whenever the FormCaptionBackColor property is changed.</source>
+        <target state="translated">FormCaptionBackColor 속성이 변경될 때마다 발생합니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCaptionBackColorDescr">
+        <source>The back color of the Form's caption (title bar).</source>
+        <target state="translated">양식의 캡션(제목 표시줄) 배경색입니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCaptionTextColorChangedDescr">
+        <source>Occurs whenever the FormCaptionTextColor property is changed.</source>
+        <target state="translated">FormCaptionTextColor 속성이 변경될 때마다 발생합니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCaptionTextColorDescr">
+        <source>The color of the Form's text caption (title bar text).</source>
+        <target state="translated">양식의 텍스트 캡션(제목 표시줄 텍스트) 색입니다.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormControlBoxDescr">
         <source>Determines whether a form has a Control/System menu box.</source>
         <target state="translated">폼에 컨트롤/시스템 메뉴 상자를 포함할지 여부를 결정합니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCornerPreferenceChangedDescr">
+        <source>Occurs whenever the FormCornerPreference property is changed.</source>
+        <target state="translated">FormCornerPreference 속성이 변경될 때마다 발생합니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCornerPreferenceDescr">
+        <source>The rounding style of the Form's border.</source>
+        <target state="translated">양식 테두리의 모서리 스타일입니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormDesktopBoundsDescr">
@@ -5520,6 +5570,11 @@ Do you want to replace it?</source>
         <target state="translated">컨트롤의 불투명도(%)입니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormOrTaskDialog_NoSyncContextForShowAsync">
+        <source>Failed to retrieve the Synchronization Context for showing the Form asynchronously.</source>
+        <target state="translated">양식을 비동기적으로 표시하기 위한 동기화 컨텍스트를 검색하지 못했습니다.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormOwnedFormsDescr">
         <source>Array of forms owned by this form.</source>
         <target state="translated">이 폼에서 소유하는 폼 배열입니다.</target>
@@ -5563,6 +5618,11 @@ Do you want to replace it?</source>
       <trans-unit id="FormWindowStateDescr">
         <source>Determines the initial visual state of the form.</source>
         <target state="translated">폼의 초기 표시 상태를 결정합니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Form_HasAlreadyBeenShownAsync">
+        <source>The form has already been shown asynchronously.</source>
+        <target state="translated">양식이 이미 비동기적으로 표시되었습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormatControlFormatDescr">
@@ -6855,8 +6915,8 @@ Stack trace where the illegal operation occurred was:
         <note />
       </trans-unit>
       <trans-unit id="ListViewVirtualListSizeDescr">
-        <source>Sets the count of the item collection when the ListView is in virtual mode.</source>
-        <target state="translated">ListView가 가상 모드에 있는 경우 항목 컬렉션의 개수를 설정합니다.</target>
+        <source>Sets the count of the item collection when the ListView is in virtual mode. If VirtualMode is set to true, and the VirtualListSize property is greater than 0, you must handle the RetrieveVirtualItem event providing valid items.</source>
+        <target state="translated">ListView가 가상 모드에 있는 경우 항목 컬렉션의 개수를 설정합니다. VirtualMode가 true로 설정되어 있고 VirtualListSize 속성이 0보다 큰 경우 유효한 항목을 제공하는 RetrieveVirtualItem 이벤트를 처리해야 합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewVirtualListSizeInvalidArgument">
@@ -9706,7 +9766,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ToolStripAllowClickThrough">
         <source>Allows the control to be interacted when window does not have focus.</source>
-        <target state="new">Allows the control to be interacted when window does not have focus.</target>
+        <target state="translated">창에 포커스가 없을 때 컨트롤이 상호 작용할 수 있도록 허용합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue">

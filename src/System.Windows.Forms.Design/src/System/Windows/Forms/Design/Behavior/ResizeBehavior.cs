@@ -10,7 +10,7 @@ using System.Drawing;
 namespace System.Windows.Forms.Design.Behavior;
 
 /// <summary>
-///  The ResizeBehavior is pushed onto the BehaviorStack in response to a positively hit tested SelectionGlyph.  The ResizeBehavior simply tracks the MouseMove messages and updates the bounds of the related control based on the new mouse location and the resize Rules.
+///  The ResizeBehavior is pushed onto the BehaviorStack in response to a positively hit tested SelectionGlyph. The ResizeBehavior simply tracks the MouseMove messages and updates the bounds of the related control based on the new mouse location and the resize Rules.
 /// </summary>
 internal class ResizeBehavior : Behavior
 {
@@ -194,7 +194,7 @@ internal class ResizeBehavior : Behavior
     }
 
     /// <summary>
-    ///  This is called in response to the mouse moving far enough away from its initial point.  Basically, we calculate the bounds for each control we're resizing and disable any adorners.
+    ///  This is called in response to the mouse moving far enough away from its initial point. Basically, we calculate the bounds for each control we're resizing and disable any adorners.
     /// </summary>
     private void InitiateResize()
     {
@@ -352,7 +352,7 @@ internal class ResizeBehavior : Behavior
     }
 
     /// <summary>
-    ///  This method is called when we lose capture, which can occur when another window requests capture or the user presses ESC during a drag.  We check to see if we are currently dragging, and if we are we abort the transaction.  We pop our behavior off the stack at this time.
+    ///  This method is called when we lose capture, which can occur when another window requests capture or the user presses ESC during a drag. We check to see if we are currently dragging, and if we are we abort the transaction. We pop our behavior off the stack at this time.
     /// </summary>
     public override void OnLoseCapture(Glyph g, EventArgs e)
     {
@@ -442,7 +442,7 @@ internal class ResizeBehavior : Behavior
     }
 
     /// <summary>
-    ///  This method will either initiate a new resize operation or continue with an existing one.  If we're currently dragging (i.e. resizing) then we look at the resize rules and set the bounds of each control to the new location of the mouse pointer.
+    ///  This method will either initiate a new resize operation or continue with an existing one. If we're currently dragging (i.e. resizing) then we look at the resize rules and set the bounds of each control to the new location of the mouse pointer.
     /// </summary>
     public override bool OnMouseMove(Glyph g, MouseButtons button, Point mouseLoc)
     {
@@ -463,7 +463,7 @@ internal class ResizeBehavior : Behavior
             return true;
         }
 
-        // When DesignerWindowPane has scrollbars and we resize, shrinking the DesignerWindowPane makes it look like the mouse has moved to the BS.  To compensate for that we keep track of the mouse's previous position in screen coordinates, and use that to compare if the mouse has really moved.
+        // When DesignerWindowPane has scrollbars and we resize, shrinking the DesignerWindowPane makes it look like the mouse has moved to the BS. To compensate for that we keep track of the mouse's previous position in screen coordinates, and use that to compare if the mouse has really moved.
         if (_lastMouseAbs != Point.Empty)
         {
             Point mouseLocAbs = new(mouseLoc.X, mouseLoc.Y);
@@ -492,7 +492,7 @@ internal class ResizeBehavior : Behavior
             return false;
         }
 
-        // we do these separately so as not to disturb the cached sizes for values we're not actually changing.  For example, if a control is docked top and we modify the height, the width shouldn't be modified.
+        // we do these separately so as not to disturb the cached sizes for values we're not actually changing. For example, if a control is docked top and we modify the height, the width shouldn't be modified.
         PropertyDescriptor propWidth = null;
         PropertyDescriptor propHeight = null;
         PropertyDescriptor propTop = null;
@@ -602,11 +602,11 @@ internal class ResizeBehavior : Behavior
             Control control = _resizeComponents[i].resizeControl;
             Rectangle bounds = control.Bounds;
             Rectangle oldBounds = bounds;
-            // We need to compute the offset based on the original cached Bounds ... ListBox doesnt allow drag on the top boundary if this is not done when it is "IntegralHeight"
+            // We need to compute the offset based on the original cached Bounds ... ListBox doesn't allow drag on the top boundary if this is not done when it is "IntegralHeight"
             Rectangle baseBounds = _resizeComponents[i].resizeBounds;
             Rectangle oldBorderRect = BehaviorService.ControlRectInAdornerWindow(control);
             bool needToUpdate = true;
-            // The ResizeBehavior can easily get into a situation where we are fighting with a layout engine. E.g., We resize control to 50px, LayoutEngine lays out and finds 50px was too small and resized back to 100px.  This is what should happen, but it looks bad in the designer.  To avoid the flicker we temporarily turn off painting while we do the resize.
+            // The ResizeBehavior can easily get into a situation where we are fighting with a layout engine. E.g., We resize control to 50px, LayoutEngine lays out and finds 50px was too small and resized back to 100px. This is what should happen, but it looks bad in the designer. To avoid the flicker we temporarily turn off painting while we do the resize.
             PInvoke.SendMessage(control, PInvoke.WM_SETREDRAW, (WPARAM)(BOOL)false);
             try
             {
@@ -617,7 +617,7 @@ internal class ResizeBehavior : Behavior
                     fRTL = true;
                 }
 
-                // figure out which ones we're actually changing so we don't blow away the controls cached sizing state.  This is important if things are docked we don't want to destroy their "pre-dock" size.
+                // figure out which ones we're actually changing so we don't blow away the controls cached sizing state. This is important if things are docked we don't want to destroy their "pre-dock" size.
                 BoundsSpecified specified = BoundsSpecified.None;
                 // When we check if we should change height, width, location,  we first have to check if the targetControl allows resizing, and then if the control we are currently resizing allows it as well.
                 SelectionRules resizeRules = _resizeComponents[i].resizeRules;
@@ -728,7 +728,7 @@ internal class ResizeBehavior : Behavior
                     propTop.SetValue(_resizeComponents[i].resizeControl, bounds.Y);
                 }
 
-                // We check the dragging bit here at every turn, because if there was a popup we may have lost capture and we are terminated.  At that point we shouldn't make any changes.
+                // We check the dragging bit here at every turn, because if there was a popup we may have lost capture and we are terminated. At that point we shouldn't make any changes.
                 if (_dragging)
                 {
                     control.SetBounds(bounds.X, bounds.Y, bounds.Width, bounds.Height, specified);
@@ -760,7 +760,7 @@ internal class ResizeBehavior : Behavior
             }
             finally
             {
-                // While we were resizing we discarded painting messages to reduce flicker.  We now turn painting back on and manually refresh the controls.
+                // While we were resizing we discarded painting messages to reduce flicker. We now turn painting back on and manually refresh the controls.
                 PInvoke.SendMessage(control, PInvoke.WM_SETREDRAW, (WPARAM)(BOOL)true);
                 // update the control
                 if (needToUpdate)
@@ -783,7 +783,7 @@ internal class ResizeBehavior : Behavior
                 {
                     using Region newRegion = new(newBorderRect);
                     newRegion.Exclude(Rectangle.Inflate(newBorderRect, -BorderSize, -BorderSize));
-                    // No reason to get smart about only invalidating part of the border. Thought we could be but no.The reason is the order: ... the new border is drawn (last resize) On next mousemove, the control is resized which redraws the control AND ERASES THE BORDER Then we draw the new border - flash baby.                            Thus this will always flicker.
+                    // No reason to get smart about only invalidating part of the border. Thought we could be but no.The reason is the order: ... the new border is drawn (last resize) On next mousemove, the control is resized which redraws the control AND ERASES THE BORDER Then we draw the new border - flash baby. Thus this will always flicker.
                     if (needToUpdate)
                     {
                         using Region oldRegion = new(oldBorderRect);
@@ -826,7 +826,7 @@ internal class ResizeBehavior : Behavior
     }
 
     /// <summary>
-    ///  This ends the Behavior by popping itself from the BehaviorStack.  Also, all Adorners are re-enabled at the end of a successful drag.
+    ///  This ends the Behavior by popping itself from the BehaviorStack. Also, all Adorners are re-enabled at the end of a successful drag.
     /// </summary>
     public override bool OnMouseUp(Glyph g, MouseButtons button)
     {
@@ -844,7 +844,7 @@ internal class ResizeBehavior : Behavior
 
                 if (_resizeComponents is not null && _resizeComponents.Length > 0)
                 {
-                    // we do these separately so as not to disturb the cached sizes for values we're not actually changing.  For example, if a control is docked top and we modify the height, the width shouldn't be modified.
+                    // we do these separately so as not to disturb the cached sizes for values we're not actually changing. For example, if a control is docked top and we modify the height, the width shouldn't be modified.
                     PropertyDescriptor propWidth = TypeDescriptor.GetProperties(_resizeComponents[0].resizeControl)["Width"];
                     PropertyDescriptor propHeight = TypeDescriptor.GetProperties(_resizeComponents[0].resizeControl)["Height"];
                     PropertyDescriptor propTop = TypeDescriptor.GetProperties(_resizeComponents[0].resizeControl)["Top"];

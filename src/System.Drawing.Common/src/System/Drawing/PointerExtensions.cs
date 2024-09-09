@@ -13,7 +13,12 @@ internal static unsafe class PointerExtensions
     public static GdiPlus.Matrix* Pointer(this Matrix? matrix) => matrix is null ? null : matrix.NativeMatrix;
     public static GpPen* Pointer(this Pen? pen) => pen is null ? null : pen.NativePen;
     public static GpStringFormat* Pointer(this StringFormat? format) => format is null ? null : format._nativeFormat;
-    public static GpFontFamily* Pointer(this FontFamily? family) => family is null ? null : family.NativeFamily;
+
+    internal static GpFontFamily* Pointer(this IPointer<GpFontFamily>? family) => family is null ? null : family.Pointer;
+
+    internal static GpFontCollection* Pointer(this IPointer<GpFontCollection>? fontCollection) =>
+        fontCollection is null ? null : fontCollection.Pointer;
+
     public static GpPath* Pointer(this Drawing2D.GraphicsPath? path) => path is null ? null : path._nativePath;
     public static GpBrush* Pointer(this Brush? brush) => brush is null ? null : brush.NativeBrush;
     public static GpImageAttributes* Pointer(this ImageAttributes? imageAttr) => imageAttr is null ? null : imageAttr._nativeImageAttributes;

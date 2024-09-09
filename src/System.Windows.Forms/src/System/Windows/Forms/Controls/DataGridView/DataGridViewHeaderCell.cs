@@ -28,16 +28,7 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
 
     protected ButtonState ButtonState
     {
-        get
-        {
-            int buttonState = Properties.GetInteger(s_propButtonState, out bool found);
-            if (found)
-            {
-                return (ButtonState)buttonState;
-            }
-
-            return ButtonState.Normal;
-        }
+        get => Properties.GetValueOrDefault(s_propButtonState, ButtonState.Normal);
     }
 
     private ButtonState ButtonStatePrivate
@@ -47,7 +38,7 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
             Debug.Assert(Enum.IsDefined(value));
             if (ButtonState != value)
             {
-                Properties.SetInteger(s_propButtonState, (int)value);
+                Properties.AddValue(s_propButtonState, value);
             }
         }
     }
@@ -96,17 +87,8 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
 
     internal Bitmap? FlipXPThemesBitmap
     {
-        get
-        {
-            return (Bitmap?)Properties.GetObject(s_propFlipXPThemesBitmap);
-        }
-        set
-        {
-            if (value is not null || Properties.ContainsObject(s_propFlipXPThemesBitmap))
-            {
-                Properties.SetObject(s_propFlipXPThemesBitmap, value);
-            }
-        }
+        get => Properties.GetValueOrDefault<Bitmap?>(s_propFlipXPThemesBitmap);
+        set => Properties.AddOrRemoveValue(s_propFlipXPThemesBitmap, value);
     }
 
     public override Type FormattedValueType => s_defaultFormattedValueType;
@@ -185,23 +167,8 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
 
     public override Type? ValueType
     {
-        get
-        {
-            Type? valueType = (Type?)Properties.GetObject(s_propValueType);
-            if (valueType is not null)
-            {
-                return valueType;
-            }
-
-            return s_defaultValueType;
-        }
-        set
-        {
-            if (value is not null || Properties.ContainsObject(s_propValueType))
-            {
-                Properties.SetObject(s_propValueType, value);
-            }
-        }
+        get => Properties.GetValueOrDefault<Type?>(s_propValueType, s_defaultValueType);
+        set => Properties.AddOrRemoveValue(s_propValueType, value);
     }
 
     [Browsable(false)]

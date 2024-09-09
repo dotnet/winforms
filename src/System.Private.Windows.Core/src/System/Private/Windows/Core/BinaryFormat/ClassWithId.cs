@@ -15,7 +15,7 @@ namespace System.Private.Windows.Core.BinaryFormat;
 ///   </see>
 ///  </para>
 /// </remarks>
-internal sealed class ClassWithId : ClassRecord, IRecord<ClassWithId>, IBinaryFormatParseable<ClassWithId>
+internal sealed class ClassWithId : ClassRecord, IRecord<ClassWithId>
 {
     private readonly ClassRecord _metadataClass;
 
@@ -23,8 +23,8 @@ internal sealed class ClassWithId : ClassRecord, IRecord<ClassWithId>, IBinaryFo
     public override Id LibraryId { get; }
 
     /// <summary>
-    ///  The ObjectId of a prior <see cref="SystemClassWithMembers"/>, <see cref="SystemClassWithMembersAndTypes"/>,
-    ///  <see cref="ClassWithMembers"/>, or <see cref="ClassWithMembersAndTypes"/>.
+    ///  The ObjectId of a prior <see cref="SystemClassWithMembersAndTypes"/>
+    ///  or <see cref="ClassWithMembersAndTypes"/>.
     /// </summary>
     public Id MetadataId { get; }
 
@@ -44,23 +44,6 @@ internal sealed class ClassWithId : ClassRecord, IRecord<ClassWithId>, IBinaryFo
 
     public static RecordType RecordType => RecordType.ClassWithId;
 
-    static ClassWithId IBinaryFormatParseable<ClassWithId>.Parse(
-        BinaryFormattedObject.IParseState state)
-    {
-        Id objectId = state.Reader.ReadInt32();
-        Id metadataId = state.Reader.ReadInt32();
-
-        if (state.RecordMap[metadataId] is not ClassRecord referencedRecord)
-        {
-            throw new SerializationException("Invalid referenced record type.");
-        }
-
-        return new(
-            objectId,
-            referencedRecord,
-            ReadObjectMemberValues(state, referencedRecord.MemberTypeInfo));
-    }
-
     private protected override void Write(BinaryWriter writer)
     {
         writer.Write((byte)RecordType);
@@ -74,9 +57,6 @@ internal sealed class ClassWithId : ClassRecord, IRecord<ClassWithId>, IBinaryFo
                 break;
             case SystemClassWithMembersAndTypes systemClassWithMembersAndTypes:
                 WriteValuesFromMemberTypeInfo(writer, systemClassWithMembersAndTypes.MemberTypeInfo, MemberValues);
-                break;
-            case ClassWithMembers or SystemClassWithMembers:
-                WriteRecords(writer, MemberValues, coalesceNulls: false);
                 break;
             default:
                 throw new SerializationException();

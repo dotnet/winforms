@@ -5727,6 +5727,12 @@ public partial class DataGridView
             _dataGridViewOper[OperationInDispose] = true;
             try
             {
+                if (Properties.TryGetObject(s_propToolTip, out ToolTip? keyboardToolTip))
+                {
+                    // null is never set for s_propToolTip
+                    keyboardToolTip!.Dispose();
+                }
+
                 // Remove any Columns contained in this control
                 for (int i = 0; i < Columns.Count; i++)
                 {
@@ -15640,12 +15646,12 @@ public partial class DataGridView
             OnGlobalAutoSize();
         }
 
-        SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
+        SystemEvents.UserPreferenceChanged += OnUserPreferenceChanged;
     }
 
     protected override void OnHandleDestroyed(EventArgs e)
     {
-        SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
+        SystemEvents.UserPreferenceChanged -= OnUserPreferenceChanged;
         base.OnHandleDestroyed(e);
     }
 
@@ -29279,40 +29285,40 @@ public partial class DataGridView
     private void UnwireEditingControlEvents()
     {
         Debug.Assert(_editingPanel is not null);
-        _editingPanel.Click -= new EventHandler(EditingControls_Click);
-        _editingPanel.DoubleClick -= new EventHandler(EditingControls_DoubleClick);
-        _editingPanel.MouseClick -= new MouseEventHandler(EditingControls_MouseClick);
-        _editingPanel.MouseDoubleClick -= new MouseEventHandler(EditingControls_MouseDoubleClick);
-        _editingPanel.MouseDown -= new MouseEventHandler(EditingControls_MouseDown);
-        _editingPanel.MouseEnter -= new EventHandler(EditingControls_MouseEnter);
-        _editingPanel.MouseLeave -= new EventHandler(EditingControls_MouseLeave);
-        _editingPanel.MouseMove -= new MouseEventHandler(EditingControls_MouseMove);
-        _editingPanel.MouseUp -= new MouseEventHandler(EditingControls_MouseUp);
+        _editingPanel.Click -= EditingControls_Click;
+        _editingPanel.DoubleClick -= EditingControls_DoubleClick;
+        _editingPanel.MouseClick -= EditingControls_MouseClick;
+        _editingPanel.MouseDoubleClick -= EditingControls_MouseDoubleClick;
+        _editingPanel.MouseDown -= EditingControls_MouseDown;
+        _editingPanel.MouseEnter -= EditingControls_MouseEnter;
+        _editingPanel.MouseLeave -= EditingControls_MouseLeave;
+        _editingPanel.MouseMove -= EditingControls_MouseMove;
+        _editingPanel.MouseUp -= EditingControls_MouseUp;
 
         Debug.Assert(EditingControl is not null);
-        EditingControl.Click -= new EventHandler(EditingControls_Click);
-        EditingControl.DoubleClick -= new EventHandler(EditingControls_DoubleClick);
-        EditingControl.MouseClick -= new MouseEventHandler(EditingControls_MouseClick);
-        EditingControl.MouseDoubleClick -= new MouseEventHandler(EditingControls_MouseDoubleClick);
-        EditingControl.MouseDown -= new MouseEventHandler(EditingControls_MouseDown);
-        EditingControl.MouseEnter -= new EventHandler(EditingControls_MouseEnter);
-        EditingControl.MouseLeave -= new EventHandler(EditingControls_MouseLeave);
-        EditingControl.MouseMove -= new MouseEventHandler(EditingControls_MouseMove);
-        EditingControl.MouseUp -= new MouseEventHandler(EditingControls_MouseUp);
+        EditingControl.Click -= EditingControls_Click;
+        EditingControl.DoubleClick -= EditingControls_DoubleClick;
+        EditingControl.MouseClick -= EditingControls_MouseClick;
+        EditingControl.MouseDoubleClick -= EditingControls_MouseDoubleClick;
+        EditingControl.MouseDown -= EditingControls_MouseDown;
+        EditingControl.MouseEnter -= EditingControls_MouseEnter;
+        EditingControl.MouseLeave -= EditingControls_MouseLeave;
+        EditingControl.MouseMove -= EditingControls_MouseMove;
+        EditingControl.MouseUp -= EditingControls_MouseUp;
     }
 
     private void UnwireScrollBarsEvents()
     {
         if (_horizScrollBar is not null)
         {
-            _horizScrollBar.MouseEnter -= new EventHandler(ScrollBar_MouseEnter);
-            _horizScrollBar.MouseLeave -= new EventHandler(ScrollBar_MouseLeave);
+            _horizScrollBar.MouseEnter -= ScrollBar_MouseEnter;
+            _horizScrollBar.MouseLeave -= ScrollBar_MouseLeave;
         }
 
         if (_vertScrollBar is not null)
         {
-            _vertScrollBar.MouseEnter -= new EventHandler(ScrollBar_MouseEnter);
-            _vertScrollBar.MouseLeave -= new EventHandler(ScrollBar_MouseLeave);
+            _vertScrollBar.MouseEnter -= ScrollBar_MouseEnter;
+            _vertScrollBar.MouseLeave -= ScrollBar_MouseLeave;
         }
     }
 
@@ -30393,40 +30399,40 @@ public partial class DataGridView
     private void WireEditingControlEvents()
     {
         Debug.Assert(_editingPanel is not null);
-        _editingPanel.Click += new EventHandler(EditingControls_Click);
-        _editingPanel.DoubleClick += new EventHandler(EditingControls_DoubleClick);
-        _editingPanel.MouseClick += new MouseEventHandler(EditingControls_MouseClick);
-        _editingPanel.MouseDoubleClick += new MouseEventHandler(EditingControls_MouseDoubleClick);
-        _editingPanel.MouseDown += new MouseEventHandler(EditingControls_MouseDown);
-        _editingPanel.MouseEnter += new EventHandler(EditingControls_MouseEnter);
-        _editingPanel.MouseLeave += new EventHandler(EditingControls_MouseLeave);
-        _editingPanel.MouseMove += new MouseEventHandler(EditingControls_MouseMove);
-        _editingPanel.MouseUp += new MouseEventHandler(EditingControls_MouseUp);
+        _editingPanel.Click += EditingControls_Click;
+        _editingPanel.DoubleClick += EditingControls_DoubleClick;
+        _editingPanel.MouseClick += EditingControls_MouseClick;
+        _editingPanel.MouseDoubleClick += EditingControls_MouseDoubleClick;
+        _editingPanel.MouseDown += EditingControls_MouseDown;
+        _editingPanel.MouseEnter += EditingControls_MouseEnter;
+        _editingPanel.MouseLeave += EditingControls_MouseLeave;
+        _editingPanel.MouseMove += EditingControls_MouseMove;
+        _editingPanel.MouseUp += EditingControls_MouseUp;
 
         Debug.Assert(EditingControl is not null);
-        EditingControl.Click += new EventHandler(EditingControls_Click);
-        EditingControl.DoubleClick += new EventHandler(EditingControls_DoubleClick);
-        EditingControl.MouseClick += new MouseEventHandler(EditingControls_MouseClick);
-        EditingControl.MouseDoubleClick += new MouseEventHandler(EditingControls_MouseDoubleClick);
-        EditingControl.MouseDown += new MouseEventHandler(EditingControls_MouseDown);
-        EditingControl.MouseEnter += new EventHandler(EditingControls_MouseEnter);
-        EditingControl.MouseLeave += new EventHandler(EditingControls_MouseLeave);
-        EditingControl.MouseMove += new MouseEventHandler(EditingControls_MouseMove);
-        EditingControl.MouseUp += new MouseEventHandler(EditingControls_MouseUp);
+        EditingControl.Click += EditingControls_Click;
+        EditingControl.DoubleClick += EditingControls_DoubleClick;
+        EditingControl.MouseClick += EditingControls_MouseClick;
+        EditingControl.MouseDoubleClick += EditingControls_MouseDoubleClick;
+        EditingControl.MouseDown += EditingControls_MouseDown;
+        EditingControl.MouseEnter += EditingControls_MouseEnter;
+        EditingControl.MouseLeave += EditingControls_MouseLeave;
+        EditingControl.MouseMove += EditingControls_MouseMove;
+        EditingControl.MouseUp += EditingControls_MouseUp;
     }
 
     private void WireScrollBarsEvents()
     {
         if (_horizScrollBar is not null)
         {
-            _horizScrollBar.MouseEnter += new EventHandler(ScrollBar_MouseEnter);
-            _horizScrollBar.MouseLeave += new EventHandler(ScrollBar_MouseLeave);
+            _horizScrollBar.MouseEnter += ScrollBar_MouseEnter;
+            _horizScrollBar.MouseLeave += ScrollBar_MouseLeave;
         }
 
         if (_vertScrollBar is not null)
         {
-            _vertScrollBar.MouseEnter += new EventHandler(ScrollBar_MouseEnter);
-            _vertScrollBar.MouseLeave += new EventHandler(ScrollBar_MouseLeave);
+            _vertScrollBar.MouseEnter += ScrollBar_MouseEnter;
+            _vertScrollBar.MouseLeave += ScrollBar_MouseLeave;
         }
     }
 

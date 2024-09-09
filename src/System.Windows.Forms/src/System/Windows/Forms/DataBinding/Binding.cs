@@ -222,7 +222,7 @@ public partial class Binding
             BindingContext.UpdateBinding((BindableComponent is not null && IsComponentCreated(BindableComponent) ? BindableComponent.BindingContext : null), this);
             if (value is Form form)
             {
-                form.Load += new EventHandler(FormLoaded);
+                form.Load += FormLoaded;
             }
         }
     }
@@ -245,14 +245,14 @@ public partial class Binding
             {
                 if (_bindingManagerBase is CurrencyManager oldCurrencyManager)
                 {
-                    oldCurrencyManager.MetaDataChanged -= new EventHandler(binding_MetaDataChanged);
+                    oldCurrencyManager.MetaDataChanged -= binding_MetaDataChanged;
                 }
 
                 _bindingManagerBase = value;
 
                 if (value is CurrencyManager newCurrencyManager)
                 {
-                    newCurrencyManager.MetaDataChanged += new EventHandler(binding_MetaDataChanged);
+                    newCurrencyManager.MetaDataChanged += binding_MetaDataChanged;
                 }
 
                 _bindToObject.SetBindingManagerBase(value);
@@ -487,9 +487,9 @@ public partial class Binding
             PropertyDescriptorCollection propInfos;
 
             // If the control is being inherited, then get the properties for
-            // the control's type rather than for the control itself.  Getting
+            // the control's type rather than for the control itself. Getting
             // properties for the control will merge the control's properties with
-            // those of its designer.  Normally we want that, but for
+            // those of its designer. Normally we want that, but for
             // inherited controls we don't because an inherited control should
             // "act" like a runtime control.
             InheritanceAttribute? attr = (InheritanceAttribute?)TypeDescriptor.GetAttributes(BindableComponent)[typeof(InheritanceAttribute)];

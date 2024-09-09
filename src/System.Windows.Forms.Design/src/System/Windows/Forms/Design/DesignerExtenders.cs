@@ -7,7 +7,7 @@ using System.ComponentModel.Design;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-///  This class provides the Modifiers property to components.  It is shared between
+///  This class provides the Modifiers property to components. It is shared between
 ///  the document designer and the component document designer.
 /// </summary>
 internal partial class DesignerExtenders

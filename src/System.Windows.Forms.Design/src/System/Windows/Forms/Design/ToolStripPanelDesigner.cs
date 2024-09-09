@@ -111,7 +111,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
 
     /// <summary>
     ///  Retrieves a set of rules concerning the movement capabilities of a component.
-    ///  This should be one or more flags from the SelectionRules class.  If no designer
+    ///  This should be one or more flags from the SelectionRules class. If no designer
     ///  provides rules for a component, the component will not get any UI services.
     /// </summary>
     public override SelectionRules SelectionRules
@@ -159,7 +159,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
         => _containerSelectorGlyph?.UpdateGlyph();
 
     /// <summary>
-    ///  This is the worker method of all CreateTool methods.  It is the only one
+    ///  This is the worker method of all CreateTool methods. It is the only one
     ///  that can be overridden.
     /// </summary>
     protected override IComponent[]? CreateToolCore(ToolboxItem tool, int x, int y, int width, int height, bool hasLocation, bool hasSize)
@@ -230,7 +230,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
     }
 
     /// <summary>
-    ///  This draws a nice border around our RaftingContainer.  We need
+    ///  This draws a nice border around our RaftingContainer. We need
     ///  this because the Control can have no border and you can't
     ///  tell where it is.
     /// </summary>
@@ -337,12 +337,12 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
 
         if (_componentChangeService is not null)
         {
-            _componentChangeService.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
+            _componentChangeService.ComponentChanged += OnComponentChanged;
         }
 
         // Hook up the ControlAdded Event
-        Control.ControlAdded += new ControlEventHandler(OnControlAdded);
-        Control.ControlRemoved += new ControlEventHandler(OnControlRemoved);
+        Control.ControlAdded += OnControlAdded;
+        Control.ControlRemoved += OnControlRemoved;
     }
 
     /// <summary>

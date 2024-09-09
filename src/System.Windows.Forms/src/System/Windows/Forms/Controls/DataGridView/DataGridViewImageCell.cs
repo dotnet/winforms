@@ -58,24 +58,8 @@ public partial class DataGridViewImageCell : DataGridViewCell
     [AllowNull]
     public string Description
     {
-        get
-        {
-            object? description = Properties.GetObject(s_propImageCellDescription);
-            if (description is not null)
-            {
-                return (string)description;
-            }
-
-            return string.Empty;
-        }
-
-        set
-        {
-            if (!string.IsNullOrEmpty(value) || Properties.ContainsObject(s_propImageCellDescription))
-            {
-                Properties.SetObject(s_propImageCellDescription, value);
-            }
-        }
+        get => Properties.GetStringOrEmptyString(s_propImageCellDescription);
+        set => Properties.AddOrRemoveString(s_propImageCellDescription, value);
     }
 
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.Interfaces)]
@@ -111,23 +95,14 @@ public partial class DataGridViewImageCell : DataGridViewCell
     [DefaultValue(DataGridViewImageCellLayout.NotSet)]
     public DataGridViewImageCellLayout ImageLayout
     {
-        get
-        {
-            int imageLayout = Properties.GetInteger(s_propImageCellLayout, out bool found);
-            if (found)
-            {
-                return (DataGridViewImageCellLayout)imageLayout;
-            }
-
-            return DataGridViewImageCellLayout.Normal;
-        }
+        get => Properties.GetValueOrDefault(s_propImageCellLayout, DataGridViewImageCellLayout.Normal);
         set
         {
-            // Sequential enum.  Valid values are 0x0 to 0x3
+            // Sequential enum. Valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(value);
             if (ImageLayout != value)
             {
-                Properties.SetInteger(s_propImageCellLayout, (int)value);
+                Properties.AddValue(s_propImageCellLayout, value);
                 OnCommonChange();
             }
         }
@@ -138,10 +113,7 @@ public partial class DataGridViewImageCell : DataGridViewCell
         set
         {
             Debug.Assert(value is >= DataGridViewImageCellLayout.NotSet and <= DataGridViewImageCellLayout.Zoom);
-            if (ImageLayout != value)
-            {
-                Properties.SetInteger(s_propImageCellLayout, (int)value);
-            }
+            Properties.AddValue(s_propImageCellLayout, value);
         }
     }
 

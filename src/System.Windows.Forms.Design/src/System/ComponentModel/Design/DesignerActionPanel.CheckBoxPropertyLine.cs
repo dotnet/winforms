@@ -23,7 +23,8 @@ internal sealed partial class DesignerActionPanel
                 UseMnemonic = false,
                 ForeColor = ActionPanel.LabelForeColor
             };
-            _checkBox.CheckedChanged += new EventHandler(OnCheckBoxCheckedChanged);
+
+            _checkBox.CheckedChanged += OnCheckBoxCheckedChanged;
 
             AddedControls.Add(_checkBox);
         }

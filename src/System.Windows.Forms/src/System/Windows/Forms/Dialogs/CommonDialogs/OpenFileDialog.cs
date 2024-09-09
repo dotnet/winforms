@@ -89,7 +89,7 @@ public sealed partial class OpenFileDialog : FileDialog
     }
 
     /// <summary>
-    ///  Opens the file selected by the user with read-only permission.  The file
+    ///  Opens the file selected by the user with read-only permission. The file
     ///  attempted is specified by the <see cref="FileDialog.FileName"/> property.
     /// </summary>
     public Stream OpenFile()

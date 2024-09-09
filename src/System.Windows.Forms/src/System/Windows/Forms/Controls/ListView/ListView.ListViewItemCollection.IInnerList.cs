@@ -26,6 +26,20 @@ public partial class ListView
             ListViewItem Insert(int index, ListViewItem item);
             void Remove(ListViewItem item);
             void RemoveAt(int index);
+            ListViewItem? GetItemByIndex(int index)
+            {
+                ArgumentOutOfRangeException.ThrowIfNegative(index);
+                ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, Count);
+
+                try
+                {
+                    return this[index];
+                }
+                catch (InvalidOperationException)
+                {
+                    return null;
+                }
+            }
         }
     }
 }

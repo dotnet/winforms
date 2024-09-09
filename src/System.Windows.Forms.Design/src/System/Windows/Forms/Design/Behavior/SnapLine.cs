@@ -7,10 +7,10 @@ namespace System.Windows.Forms.Design.Behavior;
 ///  The SnapLine class represents a UI-guideline that will be rendered
 ///  during control movement (drag, keyboard, and resize) operations.
 ///  SnapLines will assist a user in aligning controls relative to one
-///  one another.  Each SnapLine will have a type: top, bottom, etc...
+///  one another. Each SnapLine will have a type: top, bottom, etc...
 ///  Only SnapLines of like-types are allowed to align with each other.
 ///  The 'offset' will represent the distance from the origin (upper-left
-///  corner) of the control to where the SnapLine is located.  And finally
+///  corner) of the control to where the SnapLine is located. And finally
 ///  the 'filter' is a string used to define custom types of SnapLines.
 ///  This enables a SnapLine with a filter of "TypeX" to only snap to
 ///  other "TypeX" filtered lines.

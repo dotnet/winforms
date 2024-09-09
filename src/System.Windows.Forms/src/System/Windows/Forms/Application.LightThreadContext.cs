@@ -47,7 +47,7 @@ public sealed partial class Application
                     case msoloop.ModalForm:
 
                         // For modal forms, check to see if the current active form has been
-                        // dismissed.  If there is no active form, then it is an error that
+                        // dismissed. If there is no active form, then it is an error that
                         // we got into here, so we terminate the loop.
 
                         if (CurrentForm is not { } form || form.CheckCloseDialog(closingOnly: false))

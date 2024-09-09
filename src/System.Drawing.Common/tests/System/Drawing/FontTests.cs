@@ -334,7 +334,10 @@ public class FontTests
     [Fact]
     public void Ctor_DisposedFamily_ThrowsArgumentException()
     {
-        FontFamily family = FontFamily.GenericSansSerif;
+        using PrivateFontCollection collection = new();
+        collection.AddFontFile(Helpers.GetTestFontPath("CodeNewRoman.otf"));
+
+        FontFamily family = new("Code New Roman", collection);
         family.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => new Font(family, 10));

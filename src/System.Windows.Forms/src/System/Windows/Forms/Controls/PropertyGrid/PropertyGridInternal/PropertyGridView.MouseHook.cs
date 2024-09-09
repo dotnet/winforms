@@ -20,6 +20,8 @@ internal partial class PropertyGridView
 
         private bool _processing;
 
+        private readonly Lock _lock = new();
+
         public MouseHook(Control control, IMouseHookClient client, PropertyGridView gridView)
         {
             _control = control;
@@ -76,8 +78,7 @@ internal partial class PropertyGridView
         /// </summary>
         private unsafe void HookMouse()
         {
-            // Locking 'this' here is ok since this is an internal class.
-            lock (this)
+            lock (_lock)
             {
                 if (!_mouseHookHandle.IsNull)
                 {
@@ -138,8 +139,7 @@ internal partial class PropertyGridView
         /// </summary>
         private void UnhookMouse()
         {
-            // Locking 'this' here is ok since this is an internal class.
-            lock (this)
+            lock (_lock)
             {
                 if (!_mouseHookHandle.IsNull)
                 {

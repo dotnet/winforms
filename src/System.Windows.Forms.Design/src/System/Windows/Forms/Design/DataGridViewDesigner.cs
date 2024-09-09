@@ -324,7 +324,7 @@ internal class DataGridViewDesigner : ControlDesigner
     {
         // Clear out the DisplayIndex for columns removed at design time.
         // If we don't do this, the columns will be reordered after build when there are both databound
-        // columns and non databound columns.  See VSWhidbey 572859. Ideally, we would do this on the Clear
+        // columns and non databound columns. See VSWhidbey 572859. Ideally, we would do this on the Clear
         // of the column collection but there is no event there and we are restricted from adding any
         // Note: this does not break Undo/Redo because Undo/Redo uses serialization the same way
         // the build does and DisplayIndex is not serialized

@@ -138,7 +138,7 @@ public partial class CheckedListBox
         }
 
         /// <summary>
-        ///  This is the item array that stores our data.  We share this backing store
+        ///  This is the item array that stores our data. We share this backing store
         ///  with the main object collection.
         /// </summary>
         private ItemArray InnerArray

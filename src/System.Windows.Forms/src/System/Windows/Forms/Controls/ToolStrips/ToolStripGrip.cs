@@ -158,7 +158,7 @@ internal partial class ToolStripGrip : ToolStripButton
             if (leftMouseButtonDown)
             {
                 Point endLocation = TranslatePoint(new Point(mea.X, mea.Y), ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ScreenCoords);
-                // protect against calling when the mouse hasnt really moved.  moving the toolstrip/creating the feedback rect
+                // protect against calling when the mouse hasn't really moved. Moving the toolstrip/creating the feedback rect
                 // can cause extra mousemove events, we want to make sure we're not doing all this work
                 // for nothing.
                 if (endLocation != _lastEndLocation)
@@ -171,7 +171,7 @@ internal partial class ToolStripGrip : ToolStripButton
             }
             else
             {
-                // sometimes we don't get mouseup in DT.   Release now.
+                // sometimes we don't get mouseup in DT. Release now.
                 MovingToolStrip = false;
             }
         }

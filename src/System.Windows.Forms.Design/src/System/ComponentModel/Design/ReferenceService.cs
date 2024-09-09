@@ -68,9 +68,9 @@ internal sealed class ReferenceService : IReferenceService, IDisposable
             Debug.Assert(cs is not null, "Reference service relies on IComponentChangeService");
             if (cs is not null)
             {
-                cs.ComponentAdded += new ComponentEventHandler(OnComponentAdded);
-                cs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
-                cs.ComponentRename += new ComponentRenameEventHandler(OnComponentRename);
+                cs.ComponentAdded += OnComponentAdded;
+                cs.ComponentRemoved += OnComponentRemoved;
+                cs.ComponentRename += OnComponentRename;
             }
 
             if (_provider.GetService(typeof(IContainer)) is not IContainer container)
@@ -191,9 +191,9 @@ internal sealed class ReferenceService : IReferenceService, IDisposable
         {
             if (_provider.TryGetService(out IComponentChangeService? cs))
             {
-                cs.ComponentAdded -= new ComponentEventHandler(OnComponentAdded);
-                cs.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
-                cs.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
+                cs.ComponentAdded -= OnComponentAdded;
+                cs.ComponentRemoved -= OnComponentRemoved;
+                cs.ComponentRename -= OnComponentRename;
             }
 
             _references = null;
@@ -320,7 +320,7 @@ internal sealed class ReferenceService : IReferenceService, IDisposable
         }
 
         /// <summary>
-        ///  Resets the name of this reference holder.  It will be re-acquired on demand
+        ///  Resets the name of this reference holder. It will be re-acquired on demand
         /// </summary>
         internal void ResetName()
         {

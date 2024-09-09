@@ -27,7 +27,7 @@ internal class ToolStripMenuItemCodeDomSerializer : CodeDomSerializer
         => manager.GetSerializer<CodeDomSerializer>(typeof(Component))!;
 
     /// <summary>
-    /// We implement this for the abstract method on CodeDomSerializer.  This method
+    /// We implement this for the abstract method on CodeDomSerializer. This method
     /// takes an object graph, and serializes the object into CodeDom elements.
     /// </summary>
     public override object? Serialize(IDesignerSerializationManager manager, object value)

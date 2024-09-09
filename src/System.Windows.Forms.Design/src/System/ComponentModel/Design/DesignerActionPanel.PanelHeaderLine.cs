@@ -18,7 +18,7 @@ internal sealed partial class DesignerActionPanel
         private PanelHeaderLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
             : base(serviceProvider, actionPanel)
         {
-            actionPanel.FontChanged += new EventHandler(OnParentControlFontChanged);
+            actionPanel.FontChanged += OnParentControlFontChanged;
 
             _titleLabel = new Label
             {
@@ -40,8 +40,8 @@ internal sealed partial class DesignerActionPanel
             AddedControls.Add(_subtitleLabel);
 
             // TODO: Need to figure out how to unhook these events. Perhaps have Initialize() and Cleanup() methods.
-            ActionPanel.FormActivated += new EventHandler(OnFormActivated);
-            ActionPanel.FormDeactivate += new EventHandler(OnFormDeactivate);
+            ActionPanel.FormActivated += OnFormActivated;
+            ActionPanel.FormDeactivate += OnFormDeactivate;
         }
 
         public override string FocusId => string.Empty;

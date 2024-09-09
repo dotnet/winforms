@@ -82,9 +82,9 @@ public partial class ToolStripDropDown : ToolStrip
 
                 if (!value)
                 {
-                    if (Properties.ContainsObject(s_propOpacity))
+                    if (Properties.ContainsKey(s_propOpacity))
                     {
-                        Properties.SetObject(s_propOpacity, 1.0f);
+                        Properties.AddValue(s_propOpacity, 1.0f);
                     }
 
                     UpdateLayered();
@@ -249,7 +249,7 @@ public partial class ToolStripDropDown : ToolStrip
             }
 
             // We're turning off CLIPSIBLINGS because in the designer the elements of the form beneath
-            // are actually sibling controls.  We want to paint right over them as if we were a toplevel window.
+            // are actually sibling controls. We want to paint right over them as if we were a toplevel window.
 
             return cp;
         }
@@ -1170,7 +1170,7 @@ public partial class ToolStripDropDown : ToolStrip
     }
 
     /// <summary>
-    ///  Returns the ToolStrip from which all the dropdowns started from.  This can be null.
+    ///  Returns the ToolStrip from which all the dropdowns started from. This can be null.
     /// </summary>
     internal override ToolStrip? GetToplevelOwnerToolStrip()
     {
@@ -1250,10 +1250,9 @@ public partial class ToolStripDropDown : ToolStrip
             {
                 if ((!(e.ClickedItem is ToolStripDropDownItem dismissingItem))                   // it's not a dropdownitem
                    || (dismissingItem is ToolStripSplitButton && !dismissingItem.DropDown.Visible) // clicking on the split button button dismisses
-                   || !(dismissingItem.HasDropDownItems))
-                {    // clicking on a item w/dropdown does not dismiss window
+                   || !dismissingItem.HasDropDownItems)
+                {   // clicking on a item w/dropdown does not dismiss window
                     Close(ToolStripDropDownCloseReason.ItemClicked);
-                    SelectPreviousToolStrip();
                 }
             }
         }
@@ -1303,7 +1302,7 @@ public partial class ToolStripDropDown : ToolStrip
             try
             {
                 // scrollable control forces a layout here for scrollbar reasons only
-                // since we toggle visibility a lot this is expensive.  Let's be clever and
+                // since we toggle visibility a lot this is expensive. Let's be clever and
                 // not do it.
                 base.OnVisibleChanged(e);
             }
@@ -1360,7 +1359,7 @@ public partial class ToolStripDropDown : ToolStrip
     {
         // snap the owner item before calling hide as non-auto created dropdowns will
         // exit menu mode if there's no OwnerItem.
-        ToolStripItem? itemOnPreviousMenuToSelect = GetToplevelOwnerItem();
+        ToolStripItem? itemOnPreviousMenuToSelect = OwnerItem;
         Hide();
 
         if (itemOnPreviousMenuToSelect is not null)
@@ -1414,7 +1413,7 @@ public partial class ToolStripDropDown : ToolStrip
             if (!IsFirstDropDown && !forward)
             {
                 // this is the case where you've cascaded out to a second level dropdown and you hit the back arrow
-                // key.  In this case we want to just hide the current dropdown
+                // key. In this case we want to just hide the current dropdown
                 Visible = false;
                 return true;
             }
@@ -1541,7 +1540,7 @@ public partial class ToolStripDropDown : ToolStrip
         // If we're visible, then we'll have set our parent hwnd to the active control.
         // That means that re-create handle will set it as our parent, but that's not what
         // we want, since that means that from now on we'll be displayed in that controls
-        // client co-ordinates.  To fix this, we first re-parent ourselves back to the
+        // client co-ordinates. To fix this, we first re-parent ourselves back to the
         // hidden window, do the re-create, then set the parent again.
         if (Visible)
         {
@@ -1621,7 +1620,7 @@ public partial class ToolStripDropDown : ToolStrip
     }
 
     /// <summary>
-    ///  Scale this form.  Form overrides this to enforce a maximum / minimum size.
+    ///  Scale this form. Form overrides this to enforce a maximum / minimum size.
     /// </summary>
     protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
     {
@@ -1800,7 +1799,7 @@ public partial class ToolStripDropDown : ToolStrip
                         // delay evaluate only in the case we need it
                         if (!e.Cancel)
                         {
-                            // setting to not visible.  Dismiss our child drop downs, reset, set ourselves visible false.
+                            // setting to not visible. Dismiss our child drop downs, reset, set ourselves visible false.
                             DismissActiveDropDowns();
 
                             // Make sure we cancel auto expansion on the root
@@ -2033,7 +2032,7 @@ public partial class ToolStripDropDown : ToolStrip
         {
             case PInvoke.WM_NCACTIVATE:
                 // if someone clicks on a child control of the toolstrip dropdown, we want
-                // the title bar to continue appearing active.  Normally we just show without
+                // the title bar to continue appearing active. Normally we just show without
                 // taking window activation (ShowWindow(SHOWNOACTIVATE)) but we can't stop
                 // child controls from taking focus.
                 WmNCActivate(ref m);
@@ -2103,7 +2102,7 @@ public partial class ToolStripDropDown : ToolStrip
 
     /// <summary>
     ///  If someone clicks on a child control of the toolstrip dropdown, we want
-    ///  the title bar to continue appearing active.  Normally we just show without
+    ///  the title bar to continue appearing active. Normally we just show without
     ///  taking window activation (ShowWindow(SHOWNOACTIVATE)) but we can't stop
     ///  child controls from taking focus.
     /// </summary>

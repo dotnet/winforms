@@ -10,7 +10,8 @@ namespace System.Windows.Forms;
 public partial class ComboBox
 {
     /// <summary>
-    ///  Represents the ComboBox's child (inner) edit native window control accessible object with UI Automation provider functionality.
+    ///  Represents the ComboBox's child (inner) edit native window control accessible object with UI Automation
+    ///  provider functionality.
     /// </summary>
     internal unsafe class ComboBoxChildEditUiaProvider : ChildAccessibleObject
     {

@@ -15,7 +15,7 @@ public partial class ControlDesigner
             _designer = designer;
             if (designer is not null)
             {
-                designer.DisposingHandler += new EventHandler(OnDesignerDisposing);
+                designer.DisposingHandler += OnDesignerDisposing;
             }
 
             AssignHandle(hwnd);
@@ -46,7 +46,7 @@ public partial class ControlDesigner
             }
 
             // We want these messages to go through the designer's WndProc method, and we want people to be able
-            // to do default processing with the designer's DefWndProc.  So, we stuff ourselves into the designers
+            // to do default processing with the designer's DefWndProc. So, we stuff ourselves into the designers
             // window target and call their WndProc.
             IDesignerTarget? designerTarget = _designer.DesignerTarget;
             _designer.DesignerTarget = this;

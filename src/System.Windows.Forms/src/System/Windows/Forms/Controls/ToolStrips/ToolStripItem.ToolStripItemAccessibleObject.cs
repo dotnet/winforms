@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Globalization;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
+using PInvoke = Windows.Win32.PInvoke;
 
 namespace System.Windows.Forms;
 
@@ -70,7 +71,7 @@ public abstract partial class ToolStripItem
         {
             get
             {
-                // This really is the Mnemonic - NOT the shortcut.  E.g. in notepad Edit->Replace is Control+H
+                // This really is the Mnemonic - NOT the shortcut. E.g. in notepad Edit->Replace is Control+H
                 // but the KeyboardShortcut comes up as the mnemonic 'r'.
                 char mnemonic = WindowsFormsUtils.GetMnemonic(_ownerItem.Text, false);
                 if (_ownerItem.IsOnDropDown)
@@ -90,7 +91,7 @@ public abstract partial class ToolStripItem
         ///    First item should be <see cref="PInvoke.UiaAppendRuntimeId" /> since this is not a top-level
         ///    element of the fragment. Second item can be anything, but here it is the owner hash code.
         ///    For <see cref="ToolStrip" /> hash code is unique even with child controls.
-        ///    <see cref="ToolStrip.Handle" /> is not.
+        ///    <see cref="Control.Handle" /> is not.
         ///  </para>
         /// </remarks>
         /// <inheritdoc cref="AccessibleObject.RuntimeId" />

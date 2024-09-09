@@ -13,7 +13,7 @@ using System.Windows.Forms.Design.Behavior;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-///  The behavior for the glyph that covers the items themselves.  This selects the items when they are clicked, and will (when implemented) do the dragging/reordering of them.
+///  The behavior for the glyph that covers the items themselves. This selects the items when they are clicked, and will (when implemented) do the dragging/reordering of them.
 /// </summary>
 internal class ToolStripItemBehavior : Behavior.Behavior
 {
@@ -164,7 +164,7 @@ internal class ToolStripItemBehavior : Behavior.Behavior
         return bounds;
     }
 
-    // This helper function will return true if any other MouseHandler (say TabOrder UI) is active, in which case we should not handle any Mouse Messages.. Since the TabOrder UI is pre-Whidbey when the TabOrder UI is up,  It adds a new Overlay (a window) to the DesignerFrame (something similar to AdornerWindow).  This UI is a transparent control which has overrides for Mouse Messages. It listens for all mouse messages through the IMouseHandler interface instead of using the new  BehaviorService. Hence we have to special case this scenario. (CONTROL DESIGNER ALSO DOES THIS).
+    // This helper function will return true if any other MouseHandler (say TabOrder UI) is active, in which case we should not handle any Mouse Messages.. Since the TabOrder UI is pre-Whidbey when the TabOrder UI is up,  It adds a new Overlay (a window) to the DesignerFrame (something similar to AdornerWindow). This UI is a transparent control which has overrides for Mouse Messages. It listens for all mouse messages through the IMouseHandler interface instead of using the new  BehaviorService. Hence we have to special case this scenario. (CONTROL DESIGNER ALSO DOES THIS).
     private bool MouseHandlerPresent(ToolStripItem item)
     {
         IMouseHandler mouseHandler = null;
@@ -184,10 +184,11 @@ internal class ToolStripItemBehavior : Behavior.Behavior
         if (_timer is not null)
         {
             _timer.Enabled = false;
-            _timer.Tick -= new EventHandler(OnDoubleClickTimerTick);
+            _timer.Tick -= OnDoubleClickTimerTick;
             _timer.Dispose();
             _timer = null;
-            // Enter Insitu ...
+
+            // Enter Insitu
             if (_selectedGlyph is not null && _selectedGlyph.Item is ToolStripMenuItem)
             {
                 EnterInSituMode(_selectedGlyph);
@@ -235,7 +236,7 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                     if (_timer is not null)
                     {
                         _timer.Enabled = false;
-                        _timer.Tick -= new EventHandler(OnDoubleClickTimerTick);
+                        _timer.Tick -= OnDoubleClickTimerTick;
                         _timer.Dispose();
                         _timer = null;
                     }
@@ -361,7 +362,8 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                     {
                         Interval = SystemInformation.DoubleClickTime
                     };
-                    _timer.Tick += new EventHandler(OnDoubleClickTimerTick);
+
+                    _timer.Tick += OnDoubleClickTimerTick;
                     _timer.Enabled = true;
                     _selectedGlyph = glyph;
                 }
@@ -376,7 +378,7 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                     _mouseUpFired = false;
                     _doubleClickFired = false;
                     // Implementing Shift + Click....
-                    // we have 2 items, namely, selectedItem (current PrimarySelection) and glyphItem (item which has received mouseDown) FIRST check if they have common parent...  IF YES then get the indices of the two and SELECT all items from LOWER index to the HIGHER index.
+                    // we have 2 items, namely, selectedItem (current PrimarySelection) and glyphItem (item which has received mouseDown) FIRST check if they have common parent... IF YES then get the indices of the two and SELECT all items from LOWER index to the HIGHER index.
                     if (shiftPressed && (selectedItem is not null && CommonParent(selectedItem, glyphItem)))
                     {
                         ToolStrip parent = null;
@@ -507,7 +509,7 @@ internal class ToolStripItemBehavior : Behavior.Behavior
     }
 
     /// <summary>
-    ///  When any MouseMove message enters the BehaviorService's AdornerWindow (mousemove, ncmousemove) it is first passed here, to the top-most Behavior in the BehaviorStack.  Returning 'true' from this function signifies that  the Message was 'handled' by the Behavior and should not continue to be processed.
+    ///  When any MouseMove message enters the BehaviorService's AdornerWindow (mousemove, ncmousemove) it is first passed here, to the top-most Behavior in the BehaviorStack. Returning 'true' from this function signifies that  the Message was 'handled' by the Behavior and should not continue to be processed.
     /// </summary>
     public override bool OnMouseMove(Glyph g, MouseButtons button, Point mouseLoc)
     {
@@ -559,7 +561,7 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                 if (_timer is not null)
                 {
                     _timer.Enabled = false;
-                    _timer.Tick -= new EventHandler(OnDoubleClickTimerTick);
+                    _timer.Tick -= OnDoubleClickTimerTick;
                     _timer.Dispose();
                     _timer = null;
                 }
@@ -569,7 +571,8 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                 {
                     List<ToolStripItem> dragItems = [];
                     ICollection selComps = selSvc.GetSelectedComponents();
-                    // create our list of controls-to-drag
+
+                    // Create our list of controls-to-drag
                     foreach (IComponent comp in selComps)
                     {
                         if (comp is ToolStripItem item)
@@ -583,7 +586,8 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                     {
                         ToolStrip owner = selectedItem.Owner;
                         ToolStripItemDataObject data = new(dragItems, selectedItem, owner);
-                        DropSource.QueryContinueDrag += new QueryContinueDragEventHandler(QueryContinueDrag);
+                        DropSource.QueryContinueDrag += QueryContinueDrag;
+
                         if (glyphItem is ToolStripDropDownItem ddItem)
                         {
                             if (designerHost.GetDesigner(ddItem) is ToolStripMenuItemDesigner itemDesigner)
@@ -604,7 +608,8 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                 }
                 finally
                 {
-                    DropSource.QueryContinueDrag -= new QueryContinueDragEventHandler(QueryContinueDrag);
+                    DropSource.QueryContinueDrag -= QueryContinueDrag;
+
                     // Reset all Drag-Variables
                     SetParentDesignerValuesForDragDrop(glyphItem, false, Point.Empty);
                     ToolStripDesigner.s_dragItem = null;

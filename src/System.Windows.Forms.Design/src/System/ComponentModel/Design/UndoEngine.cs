@@ -26,7 +26,7 @@ public abstract partial class UndoEngine : IDisposable
     private Dictionary<IComponent, List<ReferencingComponent>>? _refToRemovedComponent;
 
     /// <summary>
-    ///  Creates a new UndoEngine.  UndoEngine requires a service provider for access to various services.  The following services must be available or else UndoEngine will  throw an exception:
+    ///  Creates a new UndoEngine. UndoEngine requires a service provider for access to various services. The following services must be available or else UndoEngine will throw an exception:
     ///  IDesignerHost
     ///  IComponentChangeService
     ///  IDesignerSerializationService
@@ -37,21 +37,21 @@ public abstract partial class UndoEngine : IDisposable
         _unitStack = new Stack<UndoUnit>();
         Enabled = true;
 
-        // Validate that all required services are available.  Because undo is a passive activity we must know up front if it is going to work or not.
+        // Validate that all required services are available. Because undo is a passive activity we must know up front if it is going to work or not.
         _host = GetRequiredService<IDesignerHost>();
         ComponentChangeService = GetRequiredService<IComponentChangeService>();
         _serializationService = GetRequiredService<ComponentSerializationService>();
 
         // We need to listen to a slew of events to determine undo state.
-        _host.TransactionOpening += new EventHandler(OnTransactionOpening);
-        _host.TransactionClosed += new DesignerTransactionCloseEventHandler(OnTransactionClosed);
-        ComponentChangeService.ComponentAdding += new ComponentEventHandler(OnComponentAdding);
-        ComponentChangeService.ComponentChanging += new ComponentChangingEventHandler(OnComponentChanging);
-        ComponentChangeService.ComponentRemoving += new ComponentEventHandler(OnComponentRemoving);
-        ComponentChangeService.ComponentAdded += new ComponentEventHandler(OnComponentAdded);
-        ComponentChangeService.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
-        ComponentChangeService.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
-        ComponentChangeService.ComponentRename += new ComponentRenameEventHandler(OnComponentRename);
+        _host.TransactionOpening += OnTransactionOpening;
+        _host.TransactionClosed += OnTransactionClosed;
+        ComponentChangeService.ComponentAdding += OnComponentAdding;
+        ComponentChangeService.ComponentChanging += OnComponentChanging;
+        ComponentChangeService.ComponentRemoving += OnComponentRemoving;
+        ComponentChangeService.ComponentAdded += OnComponentAdded;
+        ComponentChangeService.ComponentChanged += OnComponentChanged;
+        ComponentChangeService.ComponentRemoved += OnComponentRemoved;
+        ComponentChangeService.ComponentRename += OnComponentRename;
     }
 
     /// <summary>
@@ -60,12 +60,12 @@ public abstract partial class UndoEngine : IDisposable
     public bool UndoInProgress => _executingUnit is not null;
 
     /// <summary>
-    ///  This property returns true if the Undo engine is currently enabled.  When enabled, the undo engine tracks changes made to the designer.  When disabled, changes are ignored.
+    ///  This property returns true if the Undo engine is currently enabled. When enabled, the undo engine tracks changes made to the designer. When disabled, changes are ignored.
     ///  If the UndoEngine is set to disabled while in the middle of processing change notifications from the designer, the undo engine will only ignore additional changes.
     ///  That is, it will finish recording the changes that are in process and only ignore additional changes.
-    ///  Caution should be used when disabling undo.  If undo is disabled it is easy to make a change that would cause other undo actions to become invalid.
+    ///  Caution should be used when disabling undo. If undo is disabled it is easy to make a change that would cause other undo actions to become invalid.
     ///  For example, if myButton.Text was changed, and then myButton was renamed while undo was disabled, attempting to undo the text change would fail because there is no longer a control called myButton.
-    ///  Generally, you should never make changes to components with undo disabled unless you are certain to put the components back the way they were before undo was disabled.  An example of this would be to replace one instance of "Button" with another, say "SuperButton", fixing up all the property values as you go.  The result is a new component, but because it has the same component name and property values, undo state will still be consistent.
+    ///  Generally, you should never make changes to components with undo disabled unless you are certain to put the components back the way they were before undo was disabled. An example of this would be to replace one instance of "Button" with another, say "SuperButton", fixing up all the property values as you go. The result is a new component, but because it has the same component name and property values, undo state will still be consistent.
     /// </summary>
     public bool Enabled { get; set; }
 
@@ -88,35 +88,35 @@ public abstract partial class UndoEngine : IDisposable
     }
 
     /// <summary>
-    ///  Adds the given undo unit into the undo stack.  UndoEngine does not maintain its own undo stack, so you must implement this method yourself.
+    ///  Adds the given undo unit into the undo stack. UndoEngine does not maintain its own undo stack, so you must implement this method yourself.
     /// </summary>
     protected abstract void AddUndoUnit(UndoUnit unit);
 
     /// <summary>
-    ///  This method will check to see if the current undo unit needs to be popped from the stack.  If it does, it will pop it and add it to the undo stack.
+    ///  This method will check to see if the current undo unit needs to be popped from the stack. If it does, it will pop it and add it to the undo stack.
     ///  There must be at least one unit on the stack to call this method.
     ///
     ///  When calling CheckPopUnit you must supply a reason for the call.
     ///  There are three reasons:
     ///
     ///  Normal
-    ///  Call with Normal if you are not calling in response to a closing transaction.  For normal pop reasons, the unit will be popped if there is no current transaction.  If the unit is not empty it will be added to the undo engine.  If there is a transaction in progress, this method will do nothing.
+    ///  Call with Normal if you are not calling in response to a closing transaction. For normal pop reasons, the unit will be popped if there is no current transaction. If the unit is not empty it will be added to the undo engine. If there is a transaction in progress, this method will do nothing.
     ///
     ///  TransactionCommit
-    ///  Call with TransactionCommit if you are calling in response to a transaction closing, and if that transaction is marked as being committed.  CheckPopUnit will pop the unit off of the stack and add it to the undo engine if it is not empty.
+    ///  Call with TransactionCommit if you are calling in response to a transaction closing, and if that transaction is marked as being committed. CheckPopUnit will pop the unit off of the stack and add it to the undo engine if it is not empty.
     ///
     ///  TransactionCancel
-    ///  Call with TransactionCancel if you are calling in response to a transaction closing, and if that transaction is marked as being cancelled.  CheckPopUnit will pop the unit off of the stack.  If the unit is not empty Undo will be called on the unit to roll back the transaction work.  The unit will never be added to the undo engine.
+    ///  Call with TransactionCancel if you are calling in response to a transaction closing, and if that transaction is marked as being cancelled. CheckPopUnit will pop the unit off of the stack. If the unit is not empty Undo will be called on the unit to roll back the transaction work. The unit will never be added to the undo engine.
     /// </summary>
     private void CheckPopUnit(PopUnitReason reason)
     {
-        // The logic in here is subtle.  This code handles both committing and cancelling of nested transactions.  Here's a summary of how it works:
-        // 1.  Each time a transaction is opened, a new unit is pushed onto  the unit stack.
-        // 2.  When a change occurs, the change event checks to see if there is a currently executing unit.  It also checks to see if the current unit stack is empty.  If there is no executing unit (meaning that nothing is performing an undo right now), and if the unit stack is empty, the change event will create a new undo unit and push it on the stack.
-        // 3.  The change event always runs through all undo units in the undo stack and calls the corresponding change method.  In the normal case of a single transaction or no transaction, this will operate on just one unit.  In the case of nested transactions there are two possibilities:
-        //          a)  We are adding undo information to a nested transaction. We want to add the undo information to all levels of nested transactions.  Why?  Because as a nested transaction is closed, it is either committed or cancelled.  If committed, and if the transaction is not the top-most transaction, the transaction is actually just thrown away because its data is redundantly stored in the next transaction on the stack.
-        //          b)  We are adding undo information to a nested transaction, but that undo information is being created because an undo unit is being "undone".  Remember that for nested transactions each undo unit higher on the stack has all the data that the lower units have.  When a lower unit is undone, it is popped from the stack and all of the changes it makes are recorded on the higher level units.  This combines the "do" and "undo" data into the higher level unit, which in effect subtracts the undone data from the higher level unit.
-        // 4.  When a unit is undone it stores itself in a member variable called _executingUnit.  All change events examine this variable and if it is set they do not create a new unit in response to a change.  Instead, they just run through all the existing units.  This builds the undo history for a transaction that is being rolled back.
+        // The logic in here is subtle. This code handles both committing and cancelling of nested transactions. Here's a summary of how it works:
+        // 1. Each time a transaction is opened, a new unit is pushed onto  the unit stack.
+        // 2. When a change occurs, the change event checks to see if there is a currently executing unit. It also checks to see if the current unit stack is empty. If there is no executing unit (meaning that nothing is performing an undo right now), and if the unit stack is empty, the change event will create a new undo unit and push it on the stack.
+        // 3. The change event always runs through all undo units in the undo stack and calls the corresponding change method. In the normal case of a single transaction or no transaction, this will operate on just one unit. In the case of nested transactions there are two possibilities:
+        //          a)  We are adding undo information to a nested transaction. We want to add the undo information to all levels of nested transactions. Why?  Because as a nested transaction is closed, it is either committed or cancelled. If committed, and if the transaction is not the top-most transaction, the transaction is actually just thrown away because its data is redundantly stored in the next transaction on the stack.
+        //          b)  We are adding undo information to a nested transaction, but that undo information is being created because an undo unit is being "undone". Remember that for nested transactions each undo unit higher on the stack has all the data that the lower units have. When a lower unit is undone, it is popped from the stack and all of the changes it makes are recorded on the higher level units. This combines the "do" and "undo" data into the higher level unit, which in effect subtracts the undone data from the higher level unit.
+        // 4. When a unit is undone it stores itself in a member variable called _executingUnit. All change events examine this variable and if it is set they do not create a new unit in response to a change. Instead, they just run through all the existing units. This builds the undo history for a transaction that is being rolled back.
         if (reason != PopUnitReason.Normal || !_host.InTransaction)
         {
             UndoUnit unit = _unitStack.Pop();
@@ -152,8 +152,8 @@ public abstract partial class UndoEngine : IDisposable
     }
 
     /// <summary>
-    ///  This virtual method creates a new instance of an  UndoUnit class.  The default implementation just returns a new instance of UndoUnit.  Those providing their own UndoEngine can derive from UndoUnit to customize the actions it performs.  This is also a handy way to connect UndoEngine into an existing undo stack.
-    ///  If the primary parameter is set to true, the undo unit will eventually be passed to either the AddUndoUnit or DiscardUndoUnit methods.  If the primary parameter is false, the undo unit is part of a nested transaction and will never be passed to AddUndoUnit or DiscardUndoUnit; only the encompassing unit will be passed, because the undo engine will either include or exclude the contents of the nested unit when it is closed.
+    ///  This virtual method creates a new instance of an  UndoUnit class. The default implementation just returns a new instance of UndoUnit. Those providing their own UndoEngine can derive from UndoUnit to customize the actions it performs. This is also a handy way to connect UndoEngine into an existing undo stack.
+    ///  If the primary parameter is set to true, the undo unit will eventually be passed to either the AddUndoUnit or DiscardUndoUnit methods. If the primary parameter is false, the undo unit is part of a nested transaction and will never be passed to AddUndoUnit or DiscardUndoUnit; only the encompassing unit will be passed, because the undo engine will either include or exclude the contents of the nested unit when it is closed.
     /// </summary>
     protected virtual UndoUnit CreateUndoUnit(string? name, bool primary)
     {
@@ -163,7 +163,7 @@ public abstract partial class UndoEngine : IDisposable
     internal IComponentChangeService ComponentChangeService { get; }
 
     /// <summary>
-    ///  This method is called instead of AddUndoUnit for undo units that have been canceled.  For undo systems that just treat undo as a simple stack of undo units, typically you do not need to override this method.  This method does give you a chance to perform any clean-up for a unit
+    ///  This method is called instead of AddUndoUnit for undo units that have been canceled. For undo systems that just treat undo as a simple stack of undo units, typically you do not need to override this method. This method does give you a chance to perform any clean-up for a unit
     /// </summary>
     protected virtual void DiscardUndoUnit(UndoUnit unit)
     {
@@ -184,16 +184,16 @@ public abstract partial class UndoEngine : IDisposable
     {
         if (disposing)
         {
-            _host.TransactionOpening -= new EventHandler(OnTransactionOpening);
-            _host.TransactionClosed -= new DesignerTransactionCloseEventHandler(OnTransactionClosed);
+            _host.TransactionOpening -= OnTransactionOpening;
+            _host.TransactionClosed -= OnTransactionClosed;
 
-            ComponentChangeService.ComponentAdding -= new ComponentEventHandler(OnComponentAdding);
-            ComponentChangeService.ComponentChanging -= new ComponentChangingEventHandler(OnComponentChanging);
-            ComponentChangeService.ComponentRemoving -= new ComponentEventHandler(OnComponentRemoving);
-            ComponentChangeService.ComponentAdded -= new ComponentEventHandler(OnComponentAdded);
-            ComponentChangeService.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
-            ComponentChangeService.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
-            ComponentChangeService.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
+            ComponentChangeService.ComponentAdding -= OnComponentAdding;
+            ComponentChangeService.ComponentChanging -= OnComponentChanging;
+            ComponentChangeService.ComponentRemoving -= OnComponentRemoving;
+            ComponentChangeService.ComponentAdded -= OnComponentAdded;
+            ComponentChangeService.ComponentChanged -= OnComponentChanged;
+            ComponentChangeService.ComponentRemoved -= OnComponentRemoved;
+            ComponentChangeService.ComponentRename -= OnComponentRename;
 
             _provider = null!;
         }
@@ -299,7 +299,7 @@ public abstract partial class UndoEngine : IDisposable
             _unitStack.Push(CreateUndoUnit(name, true));
         }
 
-        // Now walk all the units and notify them.  We don't care which order the units are notified.
+        // Now walk all the units and notify them. We don't care which order the units are notified.
         foreach (UndoUnit unit in _unitStack)
         {
             unit.ComponentAdding(e);
@@ -342,7 +342,7 @@ public abstract partial class UndoEngine : IDisposable
             _unitStack.Push(CreateUndoUnit(name, true));
         }
 
-        // Now walk all the units and notify them.  We don't care which order the units are notified.
+        // Now walk all the units and notify them. We don't care which order the units are notified.
         foreach (UndoUnit unit in _unitStack)
         {
             unit.ComponentChanging(e);
@@ -436,7 +436,7 @@ public abstract partial class UndoEngine : IDisposable
             }
         }
 
-        // Now walk all the units and notify them.  We don't care which order the units are notified.  By notifying all transactions we automatically support the cancelling of nested transactions.
+        // Now walk all the units and notify them. We don't care which order the units are notified. By notifying all transactions we automatically support the cancelling of nested transactions.
         foreach (UndoUnit unit in _unitStack)
         {
             unit.ComponentRemoving(e);
@@ -452,7 +452,7 @@ public abstract partial class UndoEngine : IDisposable
             _unitStack.Push(CreateUndoUnit(name, true));
         }
 
-        // Now walk all the units and notify them.  We don't care which order the units are notified.  By notifying all transactions we automatically support the cancelling of nested transactions.
+        // Now walk all the units and notify them. We don't care which order the units are notified. By notifying all transactions we automatically support the cancelling of nested transactions.
         foreach (UndoUnit unit in _unitStack)
         {
             unit.ComponentRename(e);
@@ -470,7 +470,7 @@ public abstract partial class UndoEngine : IDisposable
 
     private void OnTransactionOpening(object? sender, EventArgs e)
     {
-        // When a transaction is opened, we always push a new unit unless we're executing a unit.  We can push multiple units onto the stack to handle nested transactions.
+        // When a transaction is opened, we always push a new unit unless we're executing a unit. We can push multiple units onto the stack to handle nested transactions.
         if (Enabled && _executingUnit is null)
         {
             _unitStack.Push(CreateUndoUnit(_host.TransactionDescription, _unitStack.Count == 0));

@@ -61,6 +61,9 @@ variables:
   value: /p:DotNetSignType=$(_SignType) /p:TeamName=$(_TeamName) /p:Sign=$(_Sign)
 - name: _Sign
   value: true
+- ${{ if and(notin(variables['Build.Reason'], 'PullRequest'), eq(variables['Build.SourceBranch'], 'refs/heads/main')) }}:
+  - name: enableSourceIndex
+    value: true
 resources:
   repositories:
   - repository: 1ESPipelineTemplates
@@ -70,6 +73,12 @@ resources:
 extends:
   template: v1/1ES.Official.PipelineTemplate.yml@1ESPipelineTemplates
   parameters:
+    sdl:
+      policheck:
+        enabled: true
+      tsa:
+        enabled: true
+        configFile: '$(Build.SourcesDirectory)/eng/pipelines/tsaoptions.json'
     featureFlags:
       autoBaseline: true
     pool:
@@ -107,6 +116,15 @@ extends:
           targetArchitecture: arm64
           skipTests: $(SkipTests)
 
+      - ${{ if eq(variables.enableSourceIndex, 'true') }}:
+        - template: /eng/common/templates-official/job/source-index-stage1.yml@self
+          parameters:
+            sourceIndexBuildCommand: eng\cibuild.cmd -restore -build -configuration Release /p:Platform=x64 /p:TargetArchitecture=x64 /bl:msbuild.binlog
+            binlogPath: msbuild.binlog
+            pool:
+              name: $(DncEngInternalBuildPool)
+              demands: ImageOverride -equals 1es-windows-2022
+
     - ${{ if eq(variables['EnableLoc'], 'true') }}:
       - stage: OneLocBuild
         displayName: Publish localizable content to OneLocBuild
@@ -141,17 +159,4 @@ extends:
         enableSigningValidation: false
         enableNugetValidation: false
         enableSourceLinkValidation: false
-        # these param values come from the DotNet-Winforms-SDLValidation-Params azdo variable group
-        SDLValidationParameters:
-          enable: false
-          params: ' -SourceToolsList $(_TsaSourceToolsList)
-          -TsaInstanceURL $(_TsaInstanceURL)
-          -TsaProjectName $(_TsaProjectName)
-          -TsaNotificationEmail $(_TsaNotificationEmail)
-          -TsaCodebaseAdmin $(_TsaCodebaseAdmin)
-          -TsaBugAreaPath $(_TsaBugAreaPath)
-          -TsaIterationPath $(_TsaIterationPath)
-          -TsaRepositoryName $(_TsaRepositoryName)
-          -TsaCodebaseName $(_TsaCodebaseName)
-          -TsaOnboard $(_TsaOnboard)
-          -TsaPublish $(_TsaPublish)'
+

@@ -11,7 +11,8 @@ namespace System.Windows.Forms;
 public class InputLanguageCollection : ReadOnlyCollectionBase
 {
     /// <summary>
-    ///  Initializes a new instance of <see cref="InputLanguageCollection"/> containing any array of <see cref="InputLanguage"/> objects.
+    ///  Initializes a new instance of <see cref="InputLanguageCollection"/> containing any array of
+    ///  <see cref="InputLanguage"/> objects.
     /// </summary>
     internal InputLanguageCollection(InputLanguage[] value)
     {

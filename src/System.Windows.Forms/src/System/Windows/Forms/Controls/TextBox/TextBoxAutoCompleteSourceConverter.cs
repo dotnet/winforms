@@ -23,7 +23,7 @@ internal class TextBoxAutoCompleteSourceConverter : EnumConverter
         {
             if (values[i] is object currentItem)
             {
-                if (string.Equals(currentItem.ToString(), "ListItems"))
+                if (!string.Equals(currentItem.ToString(), nameof(AutoCompleteSource.ListItems)))
                 {
                     list.Add(currentItem);
                 }

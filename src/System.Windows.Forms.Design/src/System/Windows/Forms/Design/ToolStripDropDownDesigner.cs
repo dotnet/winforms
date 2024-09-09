@@ -73,7 +73,7 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
     }
 
     /// <summary>
-    ///  The ToolStripItems are the associated components.   We want those to come with in any cut, copy opreations.
+    ///  The ToolStripItems are the associated components. We want those to come with in any cut, copy operations.
     /// </summary>
     public override ICollection AssociatedComponents
     {
@@ -87,8 +87,8 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
     }
 
     /// <summary>
-    ///  Set by the ToolStripItemCollectionEditor when it's launched for this The Items property doesnt open another instance
-    ///  of collectioneditor.  We count this so that we can deal with nestings.
+    ///  Set by the ToolStripItemCollectionEditor when it's launched for this The Items property doesn't open another instance
+    ///  of collectionEditor. We count this so that we can deal with nestings.
     /// </summary>
     internal bool EditingCollection
     {
@@ -235,8 +235,8 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
             // Unhook our services
             if (_selectionService is not null)
             {
-                _selectionService.SelectionChanged -= new EventHandler(OnSelectionChanged);
-                _selectionService.SelectionChanging -= new EventHandler(OnSelectionChanging);
+                _selectionService.SelectionChanged -= OnSelectionChanged;
+                _selectionService.SelectionChanging -= OnSelectionChanging;
             }
 
             DisposeMenu();
@@ -253,7 +253,7 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
 
             if (_undoEngine is not null)
             {
-                _undoEngine.Undone -= new EventHandler(OnUndone);
+                _undoEngine.Undone -= OnUndone;
             }
         }
 
@@ -371,8 +371,8 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
                 _selectionService.SetSelectedComponents(new IComponent[] { _host.RootComponent }, SelectionTypes.Replace);
             }
 
-            _selectionService.SelectionChanging += new EventHandler(OnSelectionChanging);
-            _selectionService.SelectionChanged += new EventHandler(OnSelectionChanged);
+            _selectionService.SelectionChanging += OnSelectionChanging;
+            _selectionService.SelectionChanged += OnSelectionChanged;
         }
 
         _designMenu = new MenuStrip
@@ -409,7 +409,7 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
         // Use the UndoEngine.Undone to show the dropdown again
         if (_undoEngine is null && TryGetService(out _undoEngine))
         {
-            _undoEngine.Undone += new EventHandler(OnUndone);
+            _undoEngine.Undone += OnUndone;
         }
     }
 
@@ -547,7 +547,7 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
     }
 
     /// <summary>
-    ///  Allows a designer to filter the set of properties the component it is designing will expose through the TypeDescriptor object.  This method is called immediately before its corresponding "Post" method. If you are overriding this method you should call the base implementation before you perform your own filtering.
+    ///  Allows a designer to filter the set of properties the component it is designing will expose through the TypeDescriptor object. This method is called immediately before its corresponding "Post" method. If you are overriding this method you should call the base implementation before you perform your own filtering.
     /// </summary>
     protected override void PreFilterProperties(IDictionary properties)
     {

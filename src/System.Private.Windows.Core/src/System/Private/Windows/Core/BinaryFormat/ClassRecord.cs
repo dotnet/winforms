@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Runtime.Serialization;
-
 namespace System.Private.Windows.Core.BinaryFormat;
 
 /// <summary>
@@ -53,40 +51,6 @@ internal abstract class ClassRecord : ObjectRecord
         ClassInfo = classInfo;
         MemberValues = memberValues;
         MemberTypeInfo = memberTypeInfo;
-    }
-
-    /// <summary>
-    ///  Reads object member values using <paramref name="memberTypeInfo"/>.
-    /// </summary>
-    private protected static IReadOnlyList<object?> ReadObjectMemberValues(
-        BinaryFormattedObject.IParseState state,
-        IReadOnlyList<MemberTypeInfo> memberTypeInfo)
-    {
-        int count = memberTypeInfo.Count;
-        if (count == 0)
-        {
-            return [];
-        }
-
-        ArrayBuilder<object?> memberValues = new(count);
-        foreach (MemberTypeInfo info in memberTypeInfo)
-        {
-            object value = ReadValue(state, info);
-            if (value is not ObjectNull nullValue)
-            {
-                memberValues.Add(value);
-                continue;
-            }
-
-            if (nullValue.NullCount != 1)
-            {
-                throw new SerializationException("Member values can only have one null assigned.");
-            }
-
-            memberValues.Add(null);
-        }
-
-        return memberValues.ToArray();
     }
 
     /// <summary>

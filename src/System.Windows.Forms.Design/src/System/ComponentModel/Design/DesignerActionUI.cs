@@ -46,7 +46,7 @@ internal partial class DesignerActionUI : IDisposable
     private delegate void ActionChangedEventHandler(object sender, DesignerActionListsChangedEventArgs e);
 
     /// <summary>
-    ///  Constructor that takes a service provider.  This is needed to establish references to the BehaviorService
+    ///  Constructor that takes a service provider. This is needed to establish references to the BehaviorService
     ///  and SelectionService, as well as spin-up the DesignerActionService.
     /// </summary>
     public DesignerActionUI(IServiceProvider serviceProvider, Adorner containerAdorner)
@@ -81,18 +81,18 @@ internal partial class DesignerActionUI : IDisposable
         _designerActionService = designerActionService;
         _designerActionUIService = designerActionUIService;
 
-        _designerActionUIService.DesignerActionUIStateChange += new DesignerActionUIStateChangeEventHandler(OnDesignerActionUIStateChange);
-        _designerActionService.DesignerActionListsChanged += new DesignerActionListsChangedEventHandler(OnDesignerActionsChanged);
+        _designerActionUIService.DesignerActionUIStateChange += OnDesignerActionUIStateChange;
+        _designerActionService.DesignerActionListsChanged += OnDesignerActionsChanged;
         _lastPanelComponent = null;
 
         if (serviceProvider.TryGetService(out IComponentChangeService? cs))
         {
-            cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
+            cs.ComponentChanged += OnComponentChanged;
         }
 
         if (menuCommandService is not null)
         {
-            _cmdShowDesignerActions = new MenuCommand(new EventHandler(OnKeyShowDesignerActions), MenuCommands.KeyInvokeSmartTag);
+            _cmdShowDesignerActions = new MenuCommand(OnKeyShowDesignerActions, MenuCommands.KeyInvokeSmartTag);
             menuCommandService.AddCommand(_cmdShowDesignerActions);
         }
 
@@ -122,7 +122,7 @@ internal partial class DesignerActionUI : IDisposable
         {
             if (_serviceProvider.TryGetService(out IComponentChangeService? cs))
             {
-                cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
+                cs.ComponentChanged -= OnComponentChanged;
             }
 
             if (_cmdShowDesignerActions is not null)
@@ -135,9 +135,10 @@ internal partial class DesignerActionUI : IDisposable
         _serviceProvider = null!;
         _behaviorService = null!;
         _selectionService = null!;
+
         if (_designerActionService is not null)
         {
-            _designerActionService.DesignerActionListsChanged -= new DesignerActionListsChangedEventHandler(OnDesignerActionsChanged);
+            _designerActionService.DesignerActionListsChanged -= OnDesignerActionsChanged;
             if (_disposeActionService)
             {
                 _designerActionService.Dispose();
@@ -148,7 +149,7 @@ internal partial class DesignerActionUI : IDisposable
 
         if (_designerActionUIService is not null)
         {
-            _designerActionUIService.DesignerActionUIStateChange -= new DesignerActionUIStateChangeEventHandler(OnDesignerActionUIStateChange);
+            _designerActionUIService.DesignerActionUIStateChange -= OnDesignerActionUIStateChange;
             if (_disposeActionUIService)
             {
                 _designerActionUIService.Dispose();
@@ -169,7 +170,8 @@ internal partial class DesignerActionUI : IDisposable
         // check this component origin, this class or is it readonly because inherited...
         InheritanceAttribute? attribute = (InheritanceAttribute?)TypeDescriptor.GetAttributes(comp)[typeof(InheritanceAttribute)];
         if (attribute == InheritanceAttribute.InheritedReadOnly)
-        { // only do it if we can change the control...
+        {
+            // Only do it if we can change the control.
             return null;
         }
 
@@ -287,10 +289,15 @@ internal partial class DesignerActionUI : IDisposable
     {
         if (e.LastTransaction && _relatedComponentTransaction is not null)
         {
-            // surprise surprise we can get multiple even with e.LastTransaction set to true, even though we unhook here this is because the list on which we enumerate (the event handler list) is copied before it's enumerated on which means that if the undo engine for example creates and commit a transaction during the OnCancel of another  completed transaction we will get this twice. So we have to check also for relatedComponentTransaction is not null
+            // We can get multiple even with e.LastTransaction set to true, even though we unhook here. This is because
+            // the list on which we enumerate (the event handler list) is copied before it's enumerated on which means
+            // that if the undo engine for example creates and commit a transaction during the OnCancel of another
+            // completed transaction we will get this twice. So we have to check also for relatedComponentTransaction
+            // is not null.
+
             _inTransaction = false;
             IDesignerHost host = _serviceProvider.GetRequiredService<IDesignerHost>();
-            host.TransactionClosed -= new DesignerTransactionCloseEventHandler(DesignerTransactionClosed);
+            host.TransactionClosed -= DesignerTransactionClosed;
             RecreateInternal(_relatedComponentTransaction);
             _relatedComponentTransaction = null;
         }
@@ -355,7 +362,7 @@ internal partial class DesignerActionUI : IDisposable
     }
 
     /// <summary>
-    ///  This event is fired by the DesignerActionService in response to a DesignerActionCollection changing.  The event args contains information about the related object, the type of change (added or removed) and the remaining DesignerActionCollection for the object. Note that when new DesignerActions are added, if the related control/ is not yet parented - we add these actions to a "delay" list and they are later created when the control is finally parented.
+    ///  This event is fired by the DesignerActionService in response to a DesignerActionCollection changing. The event args contains information about the related object, the type of change (added or removed) and the remaining DesignerActionCollection for the object. Note that when new DesignerActions are added, if the related control/ is not yet parented - we add these actions to a "delay" list and they are later created when the control is finally parented.
     /// </summary>
     private void OnDesignerActionsChanged(object sender, DesignerActionListsChangedEventArgs e)
     {
@@ -516,7 +523,7 @@ internal partial class DesignerActionUI : IDisposable
         // we only do this when we're in a transaction, see bug VSWHIDBEY 418709. This is for compat reason - infragistic. if we're not in a transaction, too bad, we don't update the screen
         if (_serviceProvider.TryGetService(out IDesignerHost? host) && host.InTransaction)
         {
-            host.TransactionClosed += new DesignerTransactionCloseEventHandler(InvalidateGlyphOnLastTransaction);
+            host.TransactionClosed += InvalidateGlyphOnLastTransaction;
             _relatedGlyphTransaction = glyph;
         }
     }
@@ -527,7 +534,7 @@ internal partial class DesignerActionUI : IDisposable
         {
             if (_serviceProvider.TryGetService(out IDesignerHost? host))
             {
-                host.TransactionClosed -= new DesignerTransactionCloseEventHandler(InvalidateGlyphOnLastTransaction);
+                host.TransactionClosed -= InvalidateGlyphOnLastTransaction;
             }
 
             _relatedGlyphTransaction?.InvalidateOwnerLocation();
@@ -680,7 +687,7 @@ internal partial class DesignerActionUI : IDisposable
                 Renderer = new NoBorderRenderer(),
                 Text = "DesignerActionTopLevelForm"
             };
-            _designerActionHost.Closing += new ToolStripDropDownClosingEventHandler(ToolStripDropDown_Closing);
+            _designerActionHost.Closing += ToolStripDropDown_Closing;
         }
 
         // set the accessible name of the panel to the same title as the panel header. do that every time
@@ -705,8 +712,12 @@ internal partial class DesignerActionUI : IDisposable
             _cancelClose = true;
             _designerActionHost.Show(location);
             _designerActionHost.Focus();
-            // when a control is drag and dropped and autoshow is set to true the vs designer is going to get activated as soon as the control is dropped we don't want to close the panel then, so we post a message (using the trick to call begin invoke) and once everything is settled re-activate the autoclose logic
-            _designerActionHost.BeginInvoke(new EventHandler(OnShowComplete));
+
+            // When a control is drag and dropped and autoshow is set to true the vs designer is going to get activated
+            // as soon as the control is dropped we don't want to close the panel then, so we post a message (using the
+            // trick to call begin invoke) and once everything is settled re-activate the autoclose logic.
+            _designerActionHost.BeginInvoke(OnShowComplete);
+
             // invalidate the glyph to have it point the other way
             glyph.InvalidateOwnerLocation();
             _lastPanelComponent = relatedComponent;
@@ -716,10 +727,12 @@ internal partial class DesignerActionUI : IDisposable
         }
     }
 
-    private void OnShowComplete(object? sender, EventArgs e)
+    private void OnShowComplete()
     {
         _cancelClose = false;
-        // force the panel to be the active window - for some reason someone else could have forced VS to become active for real while we were ignoring close. This might be bad cause we'd be in a bad state.
+
+        // Force the panel to be the active window - for some reason someone else could have forced VS to become active
+        // for real while we were ignoring close. This might be bad cause we'd be in a bad state.
         if (_designerActionHost is not null && _designerActionHost.Handle != 0 && _designerActionHost.Visible)
         {
             PInvoke.SetActiveWindow(_designerActionHost);

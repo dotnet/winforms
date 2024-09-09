@@ -32,7 +32,7 @@ public static partial class ToolStripManager
     private const int StaticEventDefaultRendererChanged = 0;
     private const int StaticEventCount = 1;
 
-    private static readonly object s_internalSyncObject = new();
+    private static readonly Lock s_internalSyncObject = new();
 
     private static void InitializeThread()
     {
@@ -45,7 +45,7 @@ public static partial class ToolStripManager
 
     static ToolStripManager()
     {
-        SystemEvents.UserPreferenceChanging += new UserPreferenceChangingEventHandler(OnUserPreferenceChanging);
+        SystemEvents.UserPreferenceChanging += OnUserPreferenceChanging;
     }
 
     internal static Font DefaultFont
@@ -550,12 +550,24 @@ public static partial class ToolStripManager
 
     internal static ToolStripRenderer CreateRenderer(ToolStripManagerRenderMode renderMode)
     {
-        return renderMode switch
+        switch (renderMode)
         {
-            ToolStripManagerRenderMode.System => new ToolStripSystemRenderer(isDefault: true),
-            ToolStripManagerRenderMode.Professional => new ToolStripProfessionalRenderer(isDefault: true),
-            _ => new ToolStripSystemRenderer(isDefault: true),
-        };
+            case ToolStripManagerRenderMode.System:
+                return new ToolStripSystemRenderer(isDefault: true);
+            case ToolStripManagerRenderMode.Professional:
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+                if (Application.IsDarkModeEnabled)
+                {
+                    return new ToolStripProfessionalRenderer(new DarkProfessionalColors());
+                }
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
+                return new ToolStripProfessionalRenderer(isDefault: true);
+
+            case ToolStripManagerRenderMode.Custom:
+            default:
+                return new ToolStripSystemRenderer(isDefault: true);
+        }
     }
 
     internal static ToolStripRenderer CreateRenderer(ToolStripRenderMode renderMode)
@@ -869,7 +881,7 @@ public static partial class ToolStripManager
     /// <summary>
     ///  This function handles when Alt is pressed.
     ///  If it finds a menustrip to select, it returns true,
-    ///  If it doesnt it returns false.
+    ///  If it doesn't it returns false.
     ///  If it finds a win32 menu is already associated with the control it bails, returning false.
     /// </summary>
     internal static bool ProcessMenuKey(ref Message m)

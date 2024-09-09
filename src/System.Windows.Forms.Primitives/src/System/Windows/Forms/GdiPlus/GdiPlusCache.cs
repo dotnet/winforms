@@ -21,8 +21,8 @@ internal static class GdiPlusCache
     // Picking soft and hard limits expecting that 30 of each is a reasonable upper limit of permanently reserved
     // space. These items are roughly .5KB each, with _most_ of the memory being native (in the GDI+ object).
 
-    private static PenCache PenCache => s_penCache ??= new PenCache(softLimit: 30, hardLimit: 40);
-    private static SolidBrushCache BrushCache => s_brushCache ??= new SolidBrushCache(softLimit: 30, hardLimit: 40);
+    private static PenCache PenCache => s_penCache ??= new(softLimit: 30, hardLimit: 40);
+    private static SolidBrushCache BrushCache => s_brushCache ??= new(softLimit: 30, hardLimit: 40);
 
     private static PenCache.Scope GetPenScope(Color color)
     {
@@ -38,7 +38,7 @@ internal static class GdiPlusCache
             }
         }
 
-        return PenCache.GetEntry(color);
+        return PenCache.GetEntry(color).CreateScope();
     }
 
     private static SolidBrushCache.Scope GetSolidBrushScope(Color color)
@@ -55,7 +55,7 @@ internal static class GdiPlusCache
             }
         }
 
-        return BrushCache.GetEntry(color);
+        return BrushCache.GetEntry(color).CreateScope();
     }
 
     /// <summary>

@@ -334,7 +334,9 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
         Assert.NotNull(control);
 
         dialog.Activated += (sender, e) => gate.TrySetResult(default);
+#pragma warning disable VSTHRD103 // Call async methods when in an async method
         dialog.ShowDialog();
+#pragma warning restore VSTHRD103 // Call async methods when in an async method
 
         await test.JoinAsync();
     }
@@ -375,7 +377,9 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
         Assert.NotNull(dialog);
 
         dialog.Activated += (sender, e) => gate.TrySetResult(default);
+#pragma warning disable VSTHRD103 // Call async methods when in an async method
         dialog.ShowDialog();
+#pragma warning restore VSTHRD103 // Call async methods when in an async method
 
         await test.JoinAsync();
     }

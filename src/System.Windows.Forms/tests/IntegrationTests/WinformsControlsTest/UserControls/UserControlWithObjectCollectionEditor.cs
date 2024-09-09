@@ -20,6 +20,7 @@ internal class UserControlWithObjectCollectionEditor : UserControl
     [EditorBrowsable(EditorBrowsableState.Always)]
     [Category("Accessibility")]
     [TypeConverter(typeof(SomeCollectionTypeConverter))]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public IList<int> AAAAAFirstCollection
     {
         get { return new List<int>(new int[] { 1, 2, 3 }); }

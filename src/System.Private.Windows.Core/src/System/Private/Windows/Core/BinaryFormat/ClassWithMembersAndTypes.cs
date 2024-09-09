@@ -15,8 +15,7 @@ namespace System.Private.Windows.Core.BinaryFormat;
 /// </remarks>
 internal sealed class ClassWithMembersAndTypes :
     ClassRecord,
-    IRecord<ClassWithMembersAndTypes>,
-    IBinaryFormatParseable<ClassWithMembersAndTypes>
+    IRecord<ClassWithMembersAndTypes>
 {
     public override Id LibraryId { get; }
 
@@ -40,19 +39,6 @@ internal sealed class ClassWithMembersAndTypes :
     }
 
     public static RecordType RecordType => RecordType.ClassWithMembersAndTypes;
-
-    static ClassWithMembersAndTypes IBinaryFormatParseable<ClassWithMembersAndTypes>.Parse(
-        BinaryFormattedObject.IParseState state)
-    {
-        ClassInfo classInfo = ClassInfo.Parse(state.Reader, out Count memberCount);
-        IReadOnlyList<MemberTypeInfo> memberTypeInfo = BinaryFormat.MemberTypeInfo.Parse(state.Reader, memberCount);
-
-        return new(
-            classInfo,
-            state.Reader.ReadInt32(),
-            memberTypeInfo,
-            ReadObjectMemberValues(state, memberTypeInfo));
-    }
 
     private protected override void Write(BinaryWriter writer)
     {

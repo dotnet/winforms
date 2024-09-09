@@ -16,7 +16,7 @@ public sealed partial class ImageList
         private const int GrowBy = 4;
         private const int InitialCapacity = 4;
 
-        private static readonly object s_syncLock = new();
+        private static readonly Lock s_syncLock = new();
 
         public unsafe NativeImageList(IStream.Interface pstm)
         {

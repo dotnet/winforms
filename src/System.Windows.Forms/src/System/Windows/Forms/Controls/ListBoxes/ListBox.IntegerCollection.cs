@@ -244,7 +244,7 @@ public partial class ListBox
         }
 
         /// <summary>
-        ///  Removes the given item from the array.  If
+        ///  Removes the given item from the array. If
         ///  the item is not in the array, this does nothing.
         /// </summary>
         public void Remove(int item)

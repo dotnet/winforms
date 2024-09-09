@@ -784,7 +784,7 @@ public partial class DataGridView
             // Unhook the Initialized event.
             if (DataSource is ISupportInitializeNotification dsInit)
             {
-                dsInit.Initialized -= new EventHandler(DataSource_Initialized);
+                dsInit.Initialized -= DataSource_Initialized;
             }
 
             // The wait is over: DataSource is initialized.
@@ -1040,7 +1040,7 @@ public partial class DataGridView
                 // If we previously hooked the data source's ISupportInitializeNotification
                 // Initialized event, then unhook it now (we don't always hook this event,
                 // only if we needed to because the data source was previously uninitialized)
-                dsInit.Initialized -= new EventHandler(DataSource_Initialized);
+                dsInit.Initialized -= DataSource_Initialized;
                 _dataConnectionState[DATACONNECTIONSTATE_dataSourceInitializedHookedUp] = false;
             }
 
@@ -1065,7 +1065,7 @@ public partial class DataGridView
                     {
                         if (!_dataConnectionState[DATACONNECTIONSTATE_dataSourceInitializedHookedUp])
                         {
-                            dsInit.Initialized += new EventHandler(DataSource_Initialized);
+                            dsInit.Initialized += DataSource_Initialized;
                             _dataConnectionState[DATACONNECTIONSTATE_dataSourceInitializedHookedUp] = true;
                         }
 
@@ -1543,8 +1543,8 @@ public partial class DataGridView
         {
             if (CurrencyManager is not null)
             {
-                CurrencyManager.PositionChanged -= new EventHandler(currencyManager_PositionChanged);
-                CurrencyManager.ListChanged -= new ListChangedEventHandler(currencyManager_ListChanged);
+                CurrencyManager.PositionChanged -= currencyManager_PositionChanged;
+                CurrencyManager.ListChanged -= currencyManager_ListChanged;
                 _dataConnectionState[DATACONNECTIONSTATE_interestedInRowEvents] = false;
             }
         }
@@ -1553,8 +1553,8 @@ public partial class DataGridView
         {
             if (CurrencyManager is not null)
             {
-                CurrencyManager.PositionChanged += new EventHandler(currencyManager_PositionChanged);
-                CurrencyManager.ListChanged += new ListChangedEventHandler(currencyManager_ListChanged);
+                CurrencyManager.PositionChanged += currencyManager_PositionChanged;
+                CurrencyManager.ListChanged += currencyManager_ListChanged;
                 _dataConnectionState[DATACONNECTIONSTATE_interestedInRowEvents] = true;
             }
         }

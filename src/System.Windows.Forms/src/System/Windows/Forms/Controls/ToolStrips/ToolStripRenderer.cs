@@ -666,7 +666,7 @@ public abstract class ToolStripRenderer
     }
 
     /// <summary>
-    ///  Draw the ToolStrip background.  ToolStrip users should override this if they want to draw differently.
+    ///  Draw the ToolStrip background. ToolStrip users should override this if they want to draw differently.
     /// </summary>
     protected virtual void OnRenderToolStripBackground(ToolStripRenderEventArgs e)
     {
@@ -678,7 +678,7 @@ public abstract class ToolStripRenderer
     }
 
     /// <summary>
-    ///  Draw the border around the ToolStrip.  This should be done as the last step.
+    ///  Draw the border around the ToolStrip. This should be done as the last step.
     /// </summary>
     protected virtual void OnRenderToolStripBorder(ToolStripRenderEventArgs e)
     {
@@ -690,7 +690,7 @@ public abstract class ToolStripRenderer
     }
 
     /// <summary>
-    ///  Draw the grip.  ToolStrip users should override this if they want to draw differently.
+    ///  Draw the grip. ToolStrip users should override this if they want to draw differently.
     /// </summary>
     protected virtual void OnRenderGrip(ToolStripGripRenderEventArgs e)
     {
@@ -762,7 +762,7 @@ public abstract class ToolStripRenderer
     }
 
     /// <summary>
-    ///  Draw the item's image.  ToolStrip users should override this function to change the
+    ///  Draw the item's image. ToolStrip users should override this function to change the
     ///  drawing of all images.
     /// </summary>
     protected virtual void OnRenderItemImage(ToolStripItemImageRenderEventArgs e)
@@ -848,7 +848,7 @@ public abstract class ToolStripRenderer
     }
 
     /// <summary>
-    ///  Draw the item's text.  ToolStrip users should override this function to change the
+    ///  Draw the item's text. ToolStrip users should override this function to change the
     ///  drawing of all text.
     /// </summary>
     protected virtual void OnRenderItemText(ToolStripItemTextRenderEventArgs e)
@@ -965,7 +965,7 @@ public abstract class ToolStripRenderer
 
         Graphics g = e.Graphics;
 
-        // we have a set of stock rectangles.  Translate them over to where the grip is to be drawn
+        // we have a set of stock rectangles. Translate them over to where the grip is to be drawn
         // for the white set, then translate them up and right one pixel for the grey.
 
         if (e.ToolStrip is StatusStrip statusStrip)

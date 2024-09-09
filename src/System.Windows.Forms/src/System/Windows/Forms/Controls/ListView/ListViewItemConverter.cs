@@ -12,7 +12,7 @@ namespace System.Windows.Forms;
 
 /// <summary>
 ///  ListViewItemConverter is a class that can be used to convert
-///  ListViewItem objects from one data type to another.  Access this
+///  ListViewItem objects from one data type to another. Access this
 ///  class through the TypeDescriptor.
 /// </summary>
 public class ListViewItemConverter : ExpandableObjectConverter

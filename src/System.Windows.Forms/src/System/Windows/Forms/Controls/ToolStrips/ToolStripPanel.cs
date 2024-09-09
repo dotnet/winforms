@@ -218,7 +218,7 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
             {
                 _rendererSwitcher = new ToolStripRendererSwitcher(this);
                 HandleRendererChanged(this, EventArgs.Empty);
-                _rendererSwitcher.RendererChanged += new EventHandler(HandleRendererChanged);
+                _rendererSwitcher.RendererChanged += HandleRendererChanged;
             }
 
             return _rendererSwitcher;
@@ -661,7 +661,7 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
                 {
                     // OK this is weird but here we're in the midst of a suspend layout.
                     // the only way we can deterministically place these guys is to force a layout
-                    // each time we've added a new row.  Otherwise we won't find the correct
+                    // each time we've added a new row. Otherwise we won't find the correct
                     // row to add the control to (PointToRow will fail as Row.Bounds isn't set yet)
                     OnLayout(new LayoutEventArgs(this, PropertyNames.Rows));
                 }
@@ -1019,7 +1019,7 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
 
     /// <summary>
     ///  Given a point within the ToolStripPanel client area -
-    ///  it returns the row.  If no such row exists, returns null
+    ///  it returns the row. If no such row exists, returns null
     /// </summary>
     public ToolStripPanelRow? PointToRow(Point clientLocation)
     {
@@ -1029,7 +1029,7 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
         {
             Rectangle bounds = LayoutUtils.InflateRect(row.Bounds, row.Margin);
 
-            // at this point we may not be sized correctly.  Guess.
+            // at this point we may not be sized correctly. Guess.
             if (ParentInternal is not null)
             {
                 if (Orientation == Orientation.Horizontal && (bounds.Width == 0))

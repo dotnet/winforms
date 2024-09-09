@@ -8,7 +8,7 @@ using System.Drawing;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-///  This class handles all design time behavior for the group box class.  Group
+///  This class handles all design time behavior for the group box class. Group
 ///  boxes may contain sub-components and therefore use the frame designer.
 /// </summary>
 internal class GroupBoxDesigner : ParentControlDesigner
@@ -30,7 +30,7 @@ internal class GroupBoxDesigner : ParentControlDesigner
 
 #if TESTVALUEUI
     /// <summary>
-    ///  Initializes the designer with the given component.  The designer can
+    ///  Initializes the designer with the given component. The designer can
     ///  get the component's site and request services from it in this call.
     /// </summary>
     public override void Initialize(IComponent component) {
@@ -97,7 +97,7 @@ internal class GroupBoxDesigner : ParentControlDesigner
 
     /// <summary>
     ///  We override our base class's WndProc here because
-    ///  the group box always returns HTTRANSPARENT.  This
+    ///  the group box always returns HTTRANSPARENT. This
     ///  causes the mouse to go "through" the group box, but
     ///  that's not what we want at design time.
     /// </summary>
@@ -106,7 +106,7 @@ internal class GroupBoxDesigner : ParentControlDesigner
         switch (m.Msg)
         {
             case (int)PInvoke.WM_NCHITTEST:
-                // The group box always fires HTTRANSPARENT, which causes the message to go to our parent.  We want
+                // The group box always fires HTTRANSPARENT, which causes the message to go to our parent. We want
                 // the group box's designer to get these messages, however, so change this.
                 base.WndProc(ref m);
 

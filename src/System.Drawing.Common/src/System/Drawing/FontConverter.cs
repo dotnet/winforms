@@ -268,7 +268,7 @@ public class FontConverter : TypeConverter
         if (length > 0)
         {
             // text is expected to have a format like " 8,25pt, ". Leading and trailing spaces (trimmed above),
-            // last comma, unit and decimal value may not appear.  We need to make it ####.##CC
+            // last comma, unit and decimal value may not appear. We need to make it ####.##CC
             for (splitPoint = 0; splitPoint < length; splitPoint++)
             {
                 if (char.IsLetter(text[splitPoint]))
@@ -367,7 +367,7 @@ public class FontConverter : TypeConverter
         }
         else
         {
-            FontCollection collection = new InstalledFontCollection();
+            FontCollection collection = InstalledFontCollection.Instance;
             FontFamily[] installedFontList = collection.Families;
             foreach (FontFamily font in installedFontList)
             {
@@ -378,22 +378,6 @@ public class FontConverter : TypeConverter
                 }
             }
 
-            // font family not found in installed fonts
-            if (fontFamily is null)
-            {
-                collection = new PrivateFontCollection();
-                FontFamily[] privateFontList = collection.Families;
-                foreach (FontFamily font in privateFontList)
-                {
-                    if (name.Equals(font.Name, StringComparison.OrdinalIgnoreCase))
-                    {
-                        fontFamily = font;
-                        break;
-                    }
-                }
-            }
-
-            // font family not found in private fonts also
             fontFamily ??= FontFamily.GenericSansSerif;
         }
 

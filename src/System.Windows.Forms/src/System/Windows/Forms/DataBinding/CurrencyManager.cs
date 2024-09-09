@@ -996,7 +996,7 @@ public partial class CurrencyManager : BindingManagerBase
     {
         if (list is IBindingList bindingList && bindingList.SupportsChangeNotification)
         {
-            bindingList.ListChanged -= new ListChangedEventHandler(List_ListChanged);
+            bindingList.ListChanged -= List_ListChanged;
         }
     }
 
@@ -1074,7 +1074,7 @@ public partial class CurrencyManager : BindingManagerBase
     {
         if (list is IBindingList bindingList && bindingList.SupportsChangeNotification)
         {
-            bindingList.ListChanged += new ListChangedEventHandler(List_ListChanged);
+            bindingList.ListChanged += List_ListChanged;
         }
     }
 }

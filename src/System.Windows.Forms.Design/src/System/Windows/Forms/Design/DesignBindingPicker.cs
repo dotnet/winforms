@@ -1849,7 +1849,12 @@ namespace System.Windows.Forms.Design
         {
             protected override void OnPaint(PaintEventArgs e)
             {
-                TextFormatFlags formatFlags = TextFormatFlags.WordBreak | TextFormatFlags.EndEllipsis | TextFormatFlags.TextBoxControl;
+                TextFormatFlags formatFlags =
+                    TextFormatFlags.WordBreak |
+                    TextFormatFlags.EndEllipsis |
+                    TextFormatFlags.TextBoxControl |
+                    TextFormatFlags.PreserveGraphicsClipping |
+                    TextFormatFlags.PreserveGraphicsTranslateTransform;
                 Rectangle rect = new(ClientRectangle.Location, ClientRectangle.Size);
                 rect.Inflate(-2, -2);
                 TextRenderer.DrawText(e.Graphics, Text, Font, rect, ForeColor, formatFlags);

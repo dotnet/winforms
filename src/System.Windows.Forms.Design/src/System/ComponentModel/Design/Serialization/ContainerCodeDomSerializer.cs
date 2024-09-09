@@ -6,7 +6,7 @@ using System.CodeDom;
 namespace System.ComponentModel.Design.Serialization;
 
 /// <summary>
-///  This class is used to serialize things of type "IContainer".  We route all containers
+///  This class is used to serialize things of type "IContainer". We route all containers
 ///  to the designer host's container.
 /// </summary>
 internal class ContainerCodeDomSerializer : CodeDomSerializer
@@ -39,7 +39,7 @@ internal class ContainerCodeDomSerializer : CodeDomSerializer
     }
 
     /// <summary>
-    ///  Serializes the given object into a CodeDom object.  We serialize an IContainer by
+    ///  Serializes the given object into a CodeDom object. We serialize an IContainer by
     ///  declaring an IContainer member variable and then assigning a Container into it.
     /// </summary>
     public override object Serialize(IDesignerSerializationManager manager, object value)

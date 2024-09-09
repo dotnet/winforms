@@ -1115,7 +1115,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         ClearTopLevelControlEvents();
         _topLevelControl = null;
 
-        // We must re-acquire this control.  If the existing top level control's handle
+        // We must re-acquire this control. If the existing top level control's handle
         // was never created, but the new parent has a handle, if we don't re-get
         // the top level control here we won't ever create the tooltip handle.
         _topLevelControl = TopLevelControl;
@@ -1697,7 +1697,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
     }
 
     /// <summary>
-    ///  Private Function to encapsulate TTM_TRACKPOSITION so that this doesnt fire an extra POP event
+    ///  Private Function to encapsulate TTM_TRACKPOSITION so that this doesn't fire an extra POP event
     /// </summary>
     private void SetTrackPosition(int pointX, int pointY)
     {
@@ -1721,6 +1721,12 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
 
         if (_window is null)
         {
+            return;
+        }
+
+        if (win is Control control && control.IsDisposed)
+        {
+            Debug.Fail("The passed in control is disposed.");
             return;
         }
 

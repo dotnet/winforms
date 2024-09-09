@@ -20,7 +20,7 @@ public abstract unsafe partial class AxHost
         /// <summary>
         ///  Indicated that the context menu for the control should contain
         ///  a "Properties..." verb which may be used to show the property
-        ///  pages for the control.  Note that even if this flag is
+        ///  pages for the control. Note that even if this flag is
         ///  specified, the verb will not appear unless the control
         ///  proffers a set of property pages.
         ///  [Since most activeX controls already have their own properties verb

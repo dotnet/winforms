@@ -42,7 +42,7 @@ internal class InheritanceUI
     }
 
     /// <summary>
-    ///  Adds an inherited control to our list.  This creates a tool tip for that control.
+    ///  Adds an inherited control to our list. This creates a tool tip for that control.
     /// </summary>
     public void AddInheritedControl(Control c, InheritanceLevel level)
     {

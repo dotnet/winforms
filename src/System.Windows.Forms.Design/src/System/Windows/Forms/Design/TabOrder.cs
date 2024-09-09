@@ -63,7 +63,7 @@ internal class TabOrder : Control, IMouseHandler, IMenuStatusHandler
 
         _tabProperties = [];
 
-        // Set up a NULL brush so we never try to invalidate the control.  This is
+        // Set up a NULL brush so we never try to invalidate the control. This is
         // more efficient for what we're doing
         SetStyle(ControlStyles.Opaque, true);
 
@@ -118,7 +118,7 @@ internal class TabOrder : Control, IMouseHandler, IMenuStatusHandler
             }
         }
 
-        // We also override keyboard, menu and mouse handlers.  Our override relies on the
+        // We also override keyboard, menu and mouse handlers. Our override relies on the
         // above array of menu commands, so this must come after we initialize the array.
         IEventHandlerService? ehs = (IEventHandlerService?)host.GetService(typeof(IEventHandlerService));
         ehs?.PushHandler(this);
@@ -128,9 +128,9 @@ internal class TabOrder : Control, IMouseHandler, IMenuStatusHandler
         IComponentChangeService? cs = (IComponentChangeService?)host.GetService(typeof(IComponentChangeService));
         if (cs is not null)
         {
-            cs.ComponentAdded += new ComponentEventHandler(OnComponentAddRemove);
-            cs.ComponentRemoved += new ComponentEventHandler(OnComponentAddRemove);
-            cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
+            cs.ComponentAdded += OnComponentAddRemove;
+            cs.ComponentRemoved += OnComponentAddRemove;
+            cs.ComponentChanged += OnComponentChanged;
         }
     }
 
@@ -169,9 +169,9 @@ internal class TabOrder : Control, IMouseHandler, IMenuStatusHandler
                 IComponentChangeService? cs = (IComponentChangeService?)_host.GetService(typeof(IComponentChangeService));
                 if (cs is not null)
                 {
-                    cs.ComponentAdded -= new ComponentEventHandler(OnComponentAddRemove);
-                    cs.ComponentRemoved -= new ComponentEventHandler(OnComponentAddRemove);
-                    cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
+                    cs.ComponentAdded -= OnComponentAddRemove;
+                    cs.ComponentRemoved -= OnComponentAddRemove;
+                    cs.ComponentChanged -= OnComponentChanged;
                 }
 
                 IHelpService? hs = (IHelpService?)_host.GetService(typeof(IHelpService));
@@ -371,7 +371,7 @@ internal class TabOrder : Control, IMouseHandler, IMenuStatusHandler
 
     /// <summary>
     ///  Retrieves the next parent control that would be usable
-    ///  by the tab order UI.  We only want parents that are
+    ///  by the tab order UI. We only want parents that are
     ///  sited by the designer host.
     /// </summary>
     private Control? GetSitedParent(Control child)
@@ -412,9 +412,9 @@ internal class TabOrder : Control, IMouseHandler, IMenuStatusHandler
 
         Control ctlTab;
 
-        // Now actually count the controls.  We add them to the list in reverse
+        // Now actually count the controls. We add them to the list in reverse
         // order because the Controls collection is in z-order, and our list
-        // needs to be in reverse z-order.  When done, we want this list to be
+        // needs to be in reverse z-order. When done, we want this list to be
         // in z-order from back-most to top-most, and from parent-most to
         // child-most.
         int count = control.Controls.Count;
@@ -462,7 +462,7 @@ internal class TabOrder : Control, IMouseHandler, IMenuStatusHandler
     }
 
     /// <summary>
-    ///  Called in response to a component add or remove event.  Here we re-acquire our
+    ///  Called in response to a component add or remove event. Here we re-acquire our
     ///  set of tabs.
     /// </summary>
     private void OnComponentAddRemove(object? sender, ComponentEventArgs ce)
@@ -483,7 +483,7 @@ internal class TabOrder : Control, IMouseHandler, IMenuStatusHandler
     }
 
     /// <summary>
-    ///  Called in response to a component change event.  Here we update our
+    ///  Called in response to a component change event. Here we update our
     ///  tab order and redraw.
     /// </summary>
     private void OnComponentChanged(object? sender, ComponentChangedEventArgs ce)
@@ -543,7 +543,7 @@ internal class TabOrder : Control, IMouseHandler, IMenuStatusHandler
     }
 
     /// <summary>
-    ///  This is called when the user double clicks on a component.  The typical
+    ///  This is called when the user double clicks on a component. The typical
     ///  behavior is to create an event handler for the component's default event
     ///  and delegate (?) to the handler.
     /// </summary>
@@ -552,7 +552,7 @@ internal class TabOrder : Control, IMouseHandler, IMenuStatusHandler
     }
 
     /// <summary>
-    ///  This is called when a mouse button is depressed.  This will perform
+    ///  This is called when a mouse button is depressed. This will perform
     ///  the default drag action for the selected components,  which is to
     ///  move those components around by the mouse.
     /// </summary>
@@ -565,7 +565,7 @@ internal class TabOrder : Control, IMouseHandler, IMenuStatusHandler
     }
 
     /// <summary>
-    ///  Overrides control.OnMouseDown.  Here we set the tab index.  We must
+    ///  Overrides control.OnMouseDown. Here we set the tab index. We must
     ///  do this as well as the above OnMouseDown to take into account clicks
     ///  in the tab index numbers.
     /// </summary>
@@ -599,7 +599,7 @@ internal class TabOrder : Control, IMouseHandler, IMenuStatusHandler
     }
 
     /// <summary>
-    ///  Overrides control.  We update our cursor here.  We must do this
+    ///  Overrides control. We update our cursor here. We must do this
     ///  as well as the OnSetCursor to take into account mouse movements
     ///  over the tab index numbers.
     /// </summary>
@@ -705,9 +705,9 @@ internal class TabOrder : Control, IMouseHandler, IMenuStatusHandler
             }
         }
 
-        // Overriding the status of commands is easy.  We only
+        // Overriding the status of commands is easy. We only
         // get commands that the designer implements, so we don't
-        // have to pick and choose which ones to get rid of.  We
+        // have to pick and choose which ones to get rid of. We
         // keep a select view and disable the rest.
         if (!Equals(cmd.CommandID, StandardCommands.TabOrder))
         {

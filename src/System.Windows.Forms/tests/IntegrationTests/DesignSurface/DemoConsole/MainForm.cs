@@ -4,6 +4,7 @@ using System.ComponentModel.Design;
 
 using DesignSurfaceExt;
 using Timer = System.Windows.Forms.Timer;
+using System.ComponentModel;
 
 namespace TestConsole;
 
@@ -25,12 +26,14 @@ public partial class MainForm : Form
         CreateDesignSurface(3);
         CreateDesignSurface(4);
         CreateDesignSurface(5);
+        CreateDesignSurface(6);
 
         tabPage1.Text = "Use SnapLines";
         tabPage2.Text = "Use Grid (Snap to the grid)";
         tabPage3.Text = "Use Grid";
         tabPage4.Text = "Align control by hand";
         tabPage5.Text = "TabControl and TableLayoutPanel";
+        tabPage6.Text = "ToolStripContainer";
 
         // - enable the UndoEngines
         for (int i = 0; i < tabControl1.TabCount; i++)
@@ -47,7 +50,7 @@ public partial class MainForm : Form
             IDesignSurfaceExt isurf = _listOfDesignSurface[i];
             _selectionService = (ISelectionService)(isurf.GetIDesignerHost().GetService(typeof(ISelectionService)));
             if (_selectionService is not null)
-                _selectionService.SelectionChanged += new System.EventHandler(OnSelectionChanged);
+                _selectionService.SelectionChanged += OnSelectionChanged;
         }
     }
 
@@ -93,6 +96,9 @@ public partial class MainForm : Form
                 surface.UseNoGuides();
                 break;
             case 5:
+                surface.UseNoGuides();
+                break;
+            case 6:
                 surface.UseNoGuides();
                 break;
             default:
@@ -265,6 +271,90 @@ public partial class MainForm : Form
                     }
 
                     break;
+                case 6:
+                    {
+                        rootComponent = surface.CreateRootComponent<Form>(new Size(800, 600));
+                        rootComponent.BackColor = Color.Pink;
+                        rootComponent.Text = "Root Component hosted by the DesignSurface N.6";
+
+                        ToolStripContainer toolStripContainer = surface.CreateControl<ToolStripContainer>(new Size(800, 200), new Point(0, 0));
+                        toolStripContainer.Dock = DockStyle.Fill;
+
+                        MenuStrip menuStrip1 = new();
+                        MenuStrip menuStrip2 = new();
+
+                        ToolStripMenuItem toolStripMenuItem1 = new("TopMenuItem1");
+                        ToolStripMenuItem toolStripMenuItem2 = new("TopMenuItem2");
+                        ToolStripMenuItem menu1 = new("BottomMenuItem1");
+                        ToolStripMenuItem menuNew1 = new("BottomMenuItem2");
+
+                        menuStrip1.Items.Add(toolStripMenuItem1);
+                        menuStrip1.Items.Add(toolStripMenuItem2);
+                        menuStrip2.Items.Add(menu1);
+                        menuStrip2.Items.Add(menuNew1);
+
+                        toolStripMenuItem1.DropDownItems.Add("DropDownItem1");
+                        toolStripMenuItem2.DropDownItems.Add("DropDownItem12");
+
+                        ToolStripPanel topToolStripPanel = surface.CreateControl<ToolStripPanel>(new(50, 50), new(0, 0));
+                        topToolStripPanel = toolStripContainer.TopToolStripPanel;
+                        topToolStripPanel.Join(menuStrip1);
+                        ToolStripPanel bottomToolStripPanel = surface.CreateControl<ToolStripPanel>(new(50, 50), new(0, 0));
+                        bottomToolStripPanel = toolStripContainer.BottomToolStripPanel;
+                        bottomToolStripPanel.Join(menuStrip2);
+
+                        SplitContainer splitContainer = surface.CreateControl<SplitContainer>(new(0, 0), new(0, 0));
+                        splitContainer.Dock = DockStyle.Fill;
+                        splitContainer.BackColor = Color.Red;
+
+                        RichTextBox richTextBox = surface.CreateControl<RichTextBox>(new Size(0, 0), new Point(0, 0));
+                        richTextBox.Dock = DockStyle.Fill;
+                        richTextBox.Width = toolStripContainer.Width;
+                        richTextBox.Text = "I'm a RichTextBox";
+
+                        MyUserControl userControl = surface.CreateControl<MyUserControl>(new Size(0, 0), new Point(0, 0));
+                        userControl.Dock = DockStyle.Fill;
+                        userControl.BackColor = Color.LightSkyBlue;
+
+                        MyScrollableControl scrollableControl = surface.CreateControl<MyScrollableControl>(new Size(0, 0), new Point(0, 0));
+                        scrollableControl.Dock = DockStyle.Fill;
+                        scrollableControl.InjectControl(userControl);
+
+                        SplitterPanel splitterPanel1 = splitContainer.Panel1;
+                        SplitterPanel splitterPanel2 = splitContainer.Panel2;
+                        splitterPanel1.Controls.Add(richTextBox);
+                        splitterPanel2.Controls.Add(scrollableControl);
+
+                        toolStripContainer.ContentPanel.Controls.AddRange(splitContainer);
+
+                        Component component = surface.CreateComponent<Component>();
+
+                        Splitter splitter = surface.CreateControl<Splitter>(new(5, 0), new(0, 0));
+                        splitter.BackColor = Color.Green;
+                        splitter.Dock = DockStyle.Bottom;
+
+                        Panel panel = surface.CreateControl<Panel>(new(0, tabPage6.Height/2), new(0, 0));
+                        panel.Dock = DockStyle.Bottom;
+                        NumericUpDown numericUpDown = surface.CreateControl<NumericUpDown>(new(50, 10), new(10, 10));
+                        panel.Controls.Add(numericUpDown);
+
+                        BindingNavigator bindingNavigator = surface.CreateControl<BindingNavigator>(new(0, 0), new(0, 0));
+
+                        BindingSource bindingSource = new()
+                        {
+                            DataSource = new List<string> { "Item 1", "Item 2", "Item 3" }
+                        };
+
+                        bindingNavigator.Dock = DockStyle.Bottom;
+                        bindingNavigator.BindingSource = bindingSource;
+
+                        richTextBox.DataBindings.Add(new Binding("Text", bindingSource, "Text", true, DataSourceUpdateMode.OnPropertyChanged));
+
+                        panel.Controls.Add(bindingNavigator);
+                    }
+
+                    break;
+
                 default:
                     Console.WriteLine("Invalid selection");
                     break;
@@ -297,6 +387,9 @@ public partial class MainForm : Form
                     break;
                 case 5:
                     view.Parent = tabPage5;
+                    break;
+                case 6:
+                    view.Parent = tabPage6;
                     break;
                 default:
                     Console.WriteLine("Invalid selection");
@@ -362,7 +455,7 @@ public partial class MainForm : Form
     {
         InitFormDesigner();
 
-        tabControl1.Selected += new System.Windows.Forms.TabControlEventHandler(OnTabPageSelected);
+        tabControl1.Selected += OnTabPageSelected;
 
         // - select into the propertygrid the current Form
         SelectRootComponent();

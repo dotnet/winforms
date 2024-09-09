@@ -258,9 +258,9 @@ public class ToolboxBitmapAttribute : Attribute
                 else
                 {
                     // We don't recognize the name as either bmp or ico. we need to try three things.
-                    // 1.  the name as a bitmap (back compat)
-                    // 2.  name+.bmp
-                    // 3.  name+.ico
+                    // 1. the name as a bitmap (back compat)
+                    // 2. name+.bmp
+                    // 3. name+.ico
                     rawBmpName = name;
                     bmpName = $"{name}.bmp";
                     iconName = $"{name}.ico";
@@ -311,9 +311,6 @@ public class ToolboxBitmapAttribute : Attribute
 #pragma warning disable CA1810 // DummyFunction apparently needs to be invoked prior to the rest of the initialization
     static ToolboxBitmapAttribute()
     {
-        // When we call Gdip.DummyFunction, JIT will make sure Gdip..cctor will be called.
-        Gdip.DummyFunction();
-
         Stream? stream = BitmapSelector.GetResourceStream(typeof(ToolboxBitmapAttribute), "DefaultComponent.bmp");
         Debug.Assert(stream is not null, "DefaultComponent.bmp must be present as an embedded resource.");
 

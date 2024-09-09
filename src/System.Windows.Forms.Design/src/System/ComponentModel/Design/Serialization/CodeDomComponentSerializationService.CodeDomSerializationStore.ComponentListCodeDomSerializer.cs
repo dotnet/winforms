@@ -60,7 +60,7 @@ public sealed partial class CodeDomComponentSerializationService
             }
 
             /// <summary>
-            ///  Deserializes the given object state.  The results are contained within the  serialization manager's name table.  The objectNames list is used to  deserialize in the proper order, as objectState is unordered.
+            ///  Deserializes the given object state. The results are contained within the  serialization manager's name table. The objectNames list is used to  deserialize in the proper order, as objectState is unordered.
             /// </summary>
             internal void Deserialize(IDesignerSerializationManager manager, Dictionary<string, CodeDomComponentSerializationState> objectState, List<string> objectNames, bool applyDefaults)
             {
@@ -86,7 +86,7 @@ public sealed partial class CodeDomComponentSerializationService
                 // generate statement table keyed on component name
                 FillStatementTable(manager, _statementsTable, mappedStatements);
 
-                // We need to also ensure that for every entry in the statement table we have a corresponding entry in objectNames.  Otherwise, we won't deserialize completely.
+                // We need to also ensure that for every entry in the statement table we have a corresponding entry in objectNames. Otherwise, we won't deserialize completely.
                 HashSet<string> completeNames = new(objectNames);
                 completeNames.UnionWith(_statementsTable.Keys);
 
@@ -185,7 +185,7 @@ public sealed partial class CodeDomComponentSerializationService
             }
 
             /// <summary>
-            ///  This is used to resolve nested component references.  NestedComponents don't exist as sited components within the DesignerHost, they are actually sited within a parent component.  This method takes the FullName defined on INestedSite and returns the component which matches it. outerComponent is the name of the topmost component which does exist in the DesignerHost
+            ///  This is used to resolve nested component references. NestedComponents don't exist as sited components within the DesignerHost, they are actually sited within a parent component. This method takes the FullName defined on INestedSite and returns the component which matches it. outerComponent is the name of the topmost component which does exist in the DesignerHost
             ///  This code also exists in VSCodeDomDesignerLoader -- please keep them in sync.
             /// </summary>
             private static IComponent? ResolveNestedName(IDesignerSerializationManager? manager, string name, [NotNullIfNotNull(nameof(manager))] out string? outerComponent)
@@ -241,7 +241,7 @@ public sealed partial class CodeDomComponentSerializationService
                     if (nestedComp is not null && parentName is not null)
                     {
                         manager.SetName(nestedComp, name);
-                        // What is the point of this?  Well, the nested components won't be in the statement table with its nested name.  However, their most parent component will be, so forcing a resolve of their name will actually deserialize the nested statements.
+                        // What is the point of this?  Well, the nested components won't be in the statement table with its nested name. However, their most parent component will be, so forcing a resolve of their name will actually deserialize the nested statements.
                         ResolveName(manager, parentName, canInvokeManager);
                     }
                     else
@@ -250,9 +250,9 @@ public sealed partial class CodeDomComponentSerializationService
                     }
                 }
 
-                // First we check to see if the statements table contains an OrderedCodeStatementCollection for this name.  If it does this means we have not resolved this name yet, so we grab its OrderedCodeStatementCollection and deserialize that, along with any default properties and design-time properties.
+                // First we check to see if the statements table contains an OrderedCodeStatementCollection for this name. If it does this means we have not resolved this name yet, so we grab its OrderedCodeStatementCollection and deserialize that, along with any default properties and design-time properties.
                 // If it doesn't contain an OrderedCodeStatementsCollection this means one of two things:
-                // 1. We already resolved this name and shoved an instance in there.  In this case we just return the instance
+                // 1. We already resolved this name and shoved an instance in there. In this case we just return the instance
                 // 2. There are no statements corresponding to this name, but there might be expressions that have never been deserialized, so we check for that and deserialize those.
                 _statementsTable.TryGetValue(name, out OrderedCodeStatementCollection? statements);
                 if (statements is not null)
@@ -282,7 +282,7 @@ public sealed partial class CodeDomComponentSerializationService
                             CodeDomSerializer? serializer = GetSerializer(manager, type);
                             if (serializer is null)
                             {
-                                // We report this as an error.  This indicates that there are code statements in initialize component that we do not know how to load.
+                                // We report this as an error. This indicates that there are code statements in initialize component that we do not know how to load.
                                 manager.ReportError(new CodeDomSerializerException(
                                     string.Format(SR.SerializerNoSerializerForComponent, type.FullName), manager));
                             }

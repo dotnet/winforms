@@ -14,8 +14,8 @@ namespace System.Windows.Forms.Design;
 /// </summary>
 internal abstract class SelectionUIHandler
 {
-    // These handle our drag feedback.  These come into play when we're
-    // actually moving components around.  The selection UI service
+    // These handle our drag feedback. These come into play when we're
+    // actually moving components around. The selection UI service
     // dictates when this happens.
     //
     private Rectangle _dragOffset = Rectangle.Empty;        // this gets added to a component's x, y, width, height
@@ -27,10 +27,10 @@ internal abstract class SelectionUIHandler
     private const int MinControlHeight = 3;
 
     /// <summary>
-    ///  Begins a drag operation.  A designer should examine the list of components
-    ///  to see if it wants to support the drag.  If it does, it should return
-    ///  true.  If it returns true, the designer should provide
-    ///  UI feedback about the drag at this time.  Typically, this feedback consists
+    ///  Begins a drag operation. A designer should examine the list of components
+    ///  to see if it wants to support the drag. If it does, it should return
+    ///  true. If it returns true, the designer should provide
+    ///  UI feedback about the drag at this time. Typically, this feedback consists
     ///  of an inverted rectangle for each component, or a caret if the component
     ///  is text.
     /// </summary>
@@ -48,8 +48,8 @@ internal abstract class SelectionUIHandler
             Debug.Assert(_dragControls[i] is not null, "Everyone must have a control");
         }
 
-        // allow the cliprect to go just beyond the window by one grid.  This helps with round off
-        // problems.  We can only do this if the container itself is not in the selection.  Also,
+        // allow the cliprect to go just beyond the window by one grid. This helps with round off
+        // problems. We can only do this if the container itself is not in the selection. Also,
         // if the container is a form and it has autoscroll turned on, we allow a drag beyond the
         // container boundary on the width and height, but not top and left.
         //
@@ -83,7 +83,7 @@ internal abstract class SelectionUIHandler
 
     /// <summary>
     ///  This is called by MoveControls when the user has requested that the move be
-    ///  cancelled.  This puts all the controls back to where they were.
+    ///  cancelled. This puts all the controls back to where they were.
     /// </summary>
     private static void CancelControlMove(Control[] controls, BoundsInfo[] bounds)
     {
@@ -120,8 +120,8 @@ internal abstract class SelectionUIHandler
     }
 
     /// <summary>
-    ///  Called when the user has moved the mouse.  This will only be called on
-    ///  the designer that returned true from beginDrag.  The designer
+    ///  Called when the user has moved the mouse. This will only be called on
+    ///  the designer that returned true from beginDrag. The designer
     ///  should update its UI feedback here.
     /// </summary>
     public virtual void DragMoved(object[] components, Rectangle offset)
@@ -132,7 +132,7 @@ internal abstract class SelectionUIHandler
     }
 
     /// <summary>
-    ///  Called when the user has completed the drag.  The designer should
+    ///  Called when the user has completed the drag. The designer should
     ///  remove any UI feedback it may be providing.
     /// </summary>
     public virtual void EndDrag(object[] components, bool cancel)
@@ -196,14 +196,14 @@ internal abstract class SelectionUIHandler
 
     /// <summary>
     ///  Given a rectangle, this updates the dimensions of it
-    ///  with any grid snaps and returns a new rectangle.  If
+    ///  with any grid snaps and returns a new rectangle. If
     ///  no changes to the rectangle's size were needed, this
     ///  may return the same rectangle.
     /// </summary>
     public abstract Rectangle GetUpdatedRect(Rectangle orignalRect, Rectangle dragRect, bool updateSize);
 
     /// <summary>
-    ///  Called when we need to move the controls on our frame while dragging.  This
+    ///  Called when we need to move the controls on our frame while dragging. This
     ///  can perform three operations:  It can update the current controls location,
     ///  it can commit the new controls (final move), and it can roll back a movement
     ///  to the beginning of the operation.
@@ -250,7 +250,7 @@ internal abstract class SelectionUIHandler
         }
 
         // We must keep track of the original coordinates of each control, just in case
-        // the user cancels out of moving them.  So, we create a "BoundsInfo" object for
+        // the user cancels out of moving them. So, we create a "BoundsInfo" object for
         // each control that saves this state.
         //
         if (_originalCoordinates is null && !finalMove)
@@ -264,8 +264,8 @@ internal abstract class SelectionUIHandler
             bounds = _originalCoordinates;
         }
 
-        // Two passes here.  First pass suspends all parent layout and updates the
-        // component positions.  Second pass re-enables layout.
+        // Two passes here. First pass suspends all parent layout and updates the
+        // component positions. Second pass re-enables layout.
         //
         for (int i = 0; i < controls.Length; i++)
         {
@@ -292,7 +292,7 @@ internal abstract class SelectionUIHandler
             }
 
             // Our "target" values are the ones we would like to set
-            // the control to.  We may modify them if they would mke the control
+            // the control to. We may modify them if they would mke the control
             // size negative or zero, however.
             //
             int targetX = ctlBounds.lastRequestedX;
@@ -383,12 +383,12 @@ internal abstract class SelectionUIHandler
             bool sizeChanged = (offset.Width != 0 || offset.Height != 0);
 
             // If both the location and size changed, attempt to update the control in
-            // one step.  This will prevent flicker.
+            // one step. This will prevent flicker.
             //
             if (locChanged && sizeChanged)
             {
                 // We shouldn't care if we're directly manipulating the control or not during
-                // the move.  For perf, just call directly on the control.  For the final
+                // the move. For perf, just call directly on the control. For the final
                 // move, however, we must go through the property descriptor.
                 //
                 PropertyDescriptor? boundsProp = TypeDescriptor.GetProperties(components[i])["Bounds"];
@@ -412,8 +412,8 @@ internal abstract class SelectionUIHandler
                 }
             }
 
-            // Adjust the location property with the new value.  ONLY do this if the offset
-            // is nonzero, however.  Otherwise we may get round-off errors that can cause flicker.
+            // Adjust the location property with the new value. ONLY do this if the offset
+            // is nonzero, however. Otherwise we may get round-off errors that can cause flicker.
             // Plus, why set the property if it shouldn't be?
             //
             if (locChanged)
@@ -430,7 +430,7 @@ internal abstract class SelectionUIHandler
                 else
                 {
                     // We shouldn't care if we're directly manipulating the control or not during
-                    // the move.  For perf, just call directly on the control.  For the final
+                    // the move. For perf, just call directly on the control. For the final
                     // move, however, we must go through the property descriptor.
                     //
                     PropertyDescriptor? leftProp = TypeDescriptor.GetProperties(components[i])["Left"];
@@ -472,13 +472,13 @@ internal abstract class SelectionUIHandler
                 }
             }
 
-            // Adjust the size property with the new value.  ONLY do this if the offset
-            // is nonzero, however.  Otherwise we may get round-off errors that can cause flicker.
+            // Adjust the size property with the new value. ONLY do this if the offset
+            // is nonzero, however. Otherwise we may get round-off errors that can cause flicker.
             // Plus, why set the property if it shouldn't be?
             //
             if (sizeChanged)
             {
-                // If you are tempted to hoist this "new" out of the loop, don't.  The undo
+                // If you are tempted to hoist this "new" out of the loop, don't. The undo
                 // unit below just holds a reference to it.
                 //
                 Size size = new(Math.Max(MinControlWidth, newBounds.Width), Math.Max(MinControlHeight, newBounds.Height));

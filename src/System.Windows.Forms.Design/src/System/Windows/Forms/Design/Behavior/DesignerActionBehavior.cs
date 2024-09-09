@@ -8,7 +8,7 @@ using System.Drawing;
 namespace System.Windows.Forms.Design.Behavior;
 
 /// <summary>
-///  This is the Behavior that represents DesignerActions for a particular control.  The DesignerActionBehavior is responsible for responding to the MouseDown message and either 1) selecting the control and changing the  DesignerActionGlyph's image or 2) building up a chrome menu  and requesting it to be shown. Also, this Behavior acts as a proxy between "clicked" context menu items and the actual DesignerActions that they represent.
+///  This is the Behavior that represents DesignerActions for a particular control. The DesignerActionBehavior is responsible for responding to the MouseDown message and either 1) selecting the control and changing the  DesignerActionGlyph's image or 2) building up a chrome menu  and requesting it to be shown. Also, this Behavior acts as a proxy between "clicked" context menu items and the actual DesignerActions that they represent.
 /// </summary>
 internal sealed class DesignerActionBehavior : Behavior
 {

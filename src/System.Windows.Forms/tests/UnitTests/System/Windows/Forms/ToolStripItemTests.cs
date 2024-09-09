@@ -388,6 +388,16 @@ public class ToolStripItemTests
         Assert.Equal(value, item.Alignment);
     }
 
+    [WinFormsFact]
+    public void ToolStripItem_Renderer_GetReturnsExpected()
+    {
+        using ToolStrip toolStrip = new();
+        using SubToolStripItem item = new();
+        toolStrip.Items.Add(item);
+
+        Assert.Same(toolStrip.Renderer, item.Renderer);
+    }
+
     [WinFormsTheory]
     [EnumData<ToolStripItemAlignment>]
     public void ToolStripItem_Alignment_SetWithParent_GetReturnsExpected(ToolStripItemAlignment value)
@@ -15441,7 +15451,7 @@ public class ToolStripItemTests
         Assert.Equal(1, callBackInvokedCount);
     }
 
-    private class MyMenuStrip: MenuStrip
+    private class MyMenuStrip : MenuStrip
     {
         public void MoveMouse(MouseEventArgs mea)
         {
@@ -15617,7 +15627,7 @@ public class ToolStripItemTests
         public new void SetVisibleCore(bool visible) => base.SetVisibleCore(visible);
     }
 
-    private class  ToolStripWithDisconnectCount : ToolStrip
+    private class ToolStripWithDisconnectCount : ToolStrip
     {
         public ToolStripWithDisconnectCount() : base() { }
 

@@ -184,7 +184,8 @@ internal class ToolStripDesigner : ControlDesigner
     }
 
     /// <summary>
-    /// This boolean indicates whether the Control will allow SnapLines to be shown when any other targetControl is dragged on the design surface. This is true by default.
+    /// This boolean indicates whether the Control will allow SnapLines to be shown when any other targetControl
+    /// is dragged on the design surface. This is true by default.
     /// </summary>
     internal override bool ControlSupportsSnaplines => ToolStrip.Parent is not ToolStripPanel;
 
@@ -223,7 +224,7 @@ internal class ToolStripDesigner : ControlDesigner
     }
 
     /// <summary>
-    ///  Set by the ToolStripItemCollectionEditor when it's launched for this ToolStrip so we won't pick up it's items when added.  We count this so that we can deal with nestings.
+    ///  Set by the ToolStripItemCollectionEditor when it's launched for this ToolStrip so we won't pick up it's items when added. We count this so that we can deal with nestings.
     /// </summary>
     internal bool EditingCollection
     {
@@ -501,7 +502,7 @@ internal class ToolStripDesigner : ControlDesigner
             ToolStripItemDesigner designer = null;
             try
             {
-                // The code in ComponentAdded will actually get the add done.  This should be inside the try finally because it could throw an exception and keep the toolstrip in SuspendLayout mode
+                // The code in ComponentAdded will actually get the add done. This should be inside the try finally because it could throw an exception and keep the toolstrip in SuspendLayout mode
                 component = _host.CreateComponent(t);
                 designer = _host.GetDesigner(component) as ToolStripItemDesigner;
                 designer.InternalCreate = true;
@@ -864,7 +865,7 @@ internal class ToolStripDesigner : ControlDesigner
     }
 
     /// <summary>
-    ///  Fired after a component has been added.  Here, we add it to the ToolStrip and select it.
+    ///  Fired after a component has been added. Here, we add it to the ToolStrip and select it.
     /// </summary>
     private void ComponentChangeSvc_ComponentAdded(object sender, ComponentEventArgs e)
     {
@@ -1445,7 +1446,7 @@ internal class ToolStripDesigner : ControlDesigner
     }
 
     /// <summary>
-    ///  ControlDesigner overrides this method.  It will look at the default property for the control and, if it is of type string, it will set this property's value to the name of the component.  It only does this if the designer has been configured with this option in the options service.  This method also connects the control to its parent and positions it.  If you override this method, you should always call base.
+    ///  ControlDesigner overrides this method. It will look at the default property for the control and, if it is of type string, it will set this property's value to the name of the component. It only does this if the designer has been configured with this option in the options service. This method also connects the control to its parent and positions it. If you override this method, you should always call base.
     /// </summary>
     public override void InitializeNewComponent(IDictionary defaultValues)
     {
@@ -1724,7 +1725,7 @@ internal class ToolStripDesigner : ControlDesigner
         name.Append(nameSuffix);
         string baseName = name.ToString();
 
-        // verify we have a valid name.  If not, start appending numbers if it matches one in the container. see if this name matches another one in the container..
+        // verify we have a valid name. If not, start appending numbers if it matches one in the container. see if this name matches another one in the container..
         object existingComponent = container.Components[baseName];
 
         if (existingComponent is null)
@@ -2179,7 +2180,7 @@ internal class ToolStripDesigner : ControlDesigner
     }
 
     /// <summary>
-    ///  Allows a designer to filter the set of properties the component it is designing will expose through the TypeDescriptor object.  This method is called immediately before its corresponding "Post" method. If you are overriding this method you should call the base implementation before you perform your own filtering.
+    ///  Allows a designer to filter the set of properties the component it is designing will expose through the TypeDescriptor object. This method is called immediately before its corresponding "Post" method. If you are overriding this method you should call the base implementation before you perform your own filtering.
     /// </summary>
     protected override void PreFilterProperties(IDictionary properties)
     {

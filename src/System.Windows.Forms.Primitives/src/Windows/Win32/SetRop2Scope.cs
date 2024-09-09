@@ -23,7 +23,7 @@ internal readonly ref struct SetRop2Scope
     private readonly HDC _hdc;
 
     /// <summary>
-    ///  Selects <paramref name="rop2"/> into the given <paramref name="hdc"/> using <see cref="SetROP2(HDC, R2_MODE)"/>.
+    ///  Selects <paramref name="rop2"/> into the given <paramref name="hdc"/> using <see cref="PInvoke.SetROP2(HDC, R2_MODE)"/>.
     /// </summary>
     public SetRop2Scope(HDC hdc, R2_MODE rop2)
     {

@@ -8,9 +8,9 @@ using System.Drawing;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-///  This is the designer for tree view controls.  It inherits
+///  This is the designer for tree view controls. It inherits
 ///  from the base control designer and adds live hit testing
-///  capabilites for the tree view control.
+///  capabilities for the tree view control.
 /// </summary>
 internal class TreeViewDesigner : ControlDesigner
 {

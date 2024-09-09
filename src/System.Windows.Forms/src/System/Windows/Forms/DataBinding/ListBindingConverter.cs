@@ -55,10 +55,10 @@ public class ListBindingConverter : TypeConverter
     }
 
     /// <summary>
-    ///  Converts the given object to another type.  The most common types to convert
-    ///  are to and from a string object.  The default implementation will make a call
+    ///  Converts the given object to another type. The most common types to convert
+    ///  are to and from a string object. The default implementation will make a call
     ///  to ToString on the object if the object is valid and if the destination
-    ///  type is string.  If this cannot convert to the destination type, this will
+    ///  type is string. If this cannot convert to the destination type, this will
     ///  throw a NotSupportedException.
     /// </summary>
     public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
@@ -76,8 +76,8 @@ public class ListBindingConverter : TypeConverter
 
     /// <summary>
     ///  Creates an instance of this type given a set of property values
-    ///  for the object.  This is useful for objects that are immutable, but still
-    ///  want to provide changable properties.
+    ///  for the object. This is useful for objects that are immutable, but still
+    ///  want to provide changeable properties.
     /// </summary>
     public override object CreateInstance(ITypeDescriptorContext? context, IDictionary propertyValues)
     {

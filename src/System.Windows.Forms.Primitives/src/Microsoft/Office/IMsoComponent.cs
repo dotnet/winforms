@@ -387,7 +387,7 @@ internal unsafe struct IMsoComponent : IComIID, IVTable<IMsoComponent, IMsoCompo
             uint dwReserved);
 
         /// <summary>
-        ///  Give component a chance to do idle time tasks.  grfidlef is a group of
+        ///  Give component a chance to do idle time tasks. grfidlef is a group of
         ///  bit flags taken from the enumeration of <see cref="msoidlef"/> values,
         ///  indicating the type of idle tasks to perform.
         /// </summary>

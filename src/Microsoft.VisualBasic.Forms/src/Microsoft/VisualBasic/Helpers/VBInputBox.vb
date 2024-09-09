@@ -13,12 +13,12 @@ Namespace Microsoft.VisualBasic.CompilerServices
 
 #Disable Warning IDE1006 ' Naming Styles, Justification:=<VBInputBox.resx depends on these names>
         Private ReadOnly components As Container
-        Private TextBox As TextBox
         Private Label As Label
-        Private OKButton As Button
         Private MyCancelButton As Button
+        Private OKButton As Button
+        Private TextBox As TextBox
 #Enable Warning IDE1006 ' Naming Styles
-        Public Output As String = ""
+        Public Output As String = String.Empty
 
         'This constructor needed to be able to show the designer at design-time.
         Friend Sub New()
@@ -26,21 +26,14 @@ Namespace Microsoft.VisualBasic.CompilerServices
             InitializeComponent()
         End Sub
 
-        Friend Sub New(Prompt As String, Title As String, DefaultResponse As String, XPos As Integer, YPos As Integer)
+        Friend Sub New(prompt As String, title As String, defaultResponse As String, xPos As Integer, yPos As Integer)
             MyBase.New()
             InitializeComponent()
-            InitializeInputBox(Prompt, Title, DefaultResponse, XPos, YPos)
-        End Sub
-
-        Protected Overloads Overrides Sub Dispose(disposing As Boolean)
-            If disposing Then
-                components?.Dispose()
-            End If
-            MyBase.Dispose(disposing)
+            InitializeInputBox(prompt, title, defaultResponse, xPos, yPos)
         End Sub
 
         Private Sub InitializeComponent()
-            Dim resources As ComponentResourceManager = New ComponentResourceManager(GetType(VBInputBox))
+            Dim resources As New ComponentResourceManager(GetType(VBInputBox))
             OKButton = New Button
             MyCancelButton = New Button
             TextBox = New TextBox
@@ -87,35 +80,39 @@ Namespace Microsoft.VisualBasic.CompilerServices
         End Sub
 
         'Initialize labels etc from the args passed in to InputBox()
-        Private Sub InitializeInputBox(Prompt As String, Title As String, DefaultResponse As String, XPos As Integer, YPos As Integer)
-            Text = Title
-            Label.Text = Prompt
-            TextBox.Text = DefaultResponse
+        Private Sub InitializeInputBox(prompt As String, title As String, defaultResponse As String, xPos As Integer, yPos As Integer)
+            Text = title
+            Label.Text = prompt
+            TextBox.Text = defaultResponse
             AddHandler OKButton.Click, AddressOf OKButton_Click
             AddHandler MyCancelButton.Click, AddressOf MyCancelButton_Click
 
             'Re-size the dialog if the prompt is too large
-            Dim LabelGraphics As Graphics = Label.CreateGraphics
-            Dim LabelSizeNeeded As SizeF = LabelGraphics.MeasureString(Prompt, Label.Font, Label.Width)
-            LabelGraphics.Dispose()
-            If LabelSizeNeeded.Height > Label.Height Then
-                'The current label size is not large enough to accommodate the prompt.  We need
+            Dim labelGraphics As Graphics = Label.CreateGraphics
+            Dim labelSizeNeeded As SizeF = labelGraphics.MeasureString(prompt, Label.Font, Label.Width)
+            labelGraphics.Dispose()
+            If labelSizeNeeded.Height > Label.Height Then
+                'The current label size is not large enough to accommodate the prompt. We need
                 '  to expand the label and the dialog, and move the textbox to make room.
-                Dim DialogHeightChange As Integer = CInt(LabelSizeNeeded.Height) - Label.Height
-                Label.Height += DialogHeightChange
-                TextBox.Top += DialogHeightChange
-                Height += DialogHeightChange
+                Dim dialogHeightChange As Integer = CInt(labelSizeNeeded.Height - Label.Height)
+                Label.Height += dialogHeightChange
+                TextBox.Top += dialogHeightChange
+                Height += dialogHeightChange
             End If
 
             'Position the form
-            If (XPos = -1) AndAlso (YPos = -1) Then
+            If (xPos = -1) AndAlso (yPos = -1) Then
                 StartPosition = FormStartPosition.CenterScreen
             Else
-                If (XPos = -1) Then XPos = 600
-                If (YPos = -1) Then YPos = 350
+                If (xPos = -1) Then xPos = 600
+                If (yPos = -1) Then yPos = 350
                 StartPosition = FormStartPosition.Manual
-                DesktopLocation = New Point(XPos, YPos)
+                DesktopLocation = New Point(xPos, yPos)
             End If
+        End Sub
+
+        Private Sub MyCancelButton_Click(sender As Object, e As EventArgs)
+            Close()
         End Sub
 
         Private Sub OKButton_Click(sender As Object, e As EventArgs)
@@ -123,9 +120,12 @@ Namespace Microsoft.VisualBasic.CompilerServices
             Close()
         End Sub
 
-        Private Sub MyCancelButton_Click(sender As Object, e As EventArgs)
-            Close()
+        Protected Overloads Overrides Sub Dispose(disposing As Boolean)
+            If disposing Then
+                components?.Dispose()
+            End If
+            MyBase.Dispose(disposing)
         End Sub
-    End Class
 
+    End Class
 End Namespace

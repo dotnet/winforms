@@ -16,7 +16,7 @@ internal sealed partial class DesignerActionPanel
         protected TextLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
             : base(serviceProvider, actionPanel)
         {
-            actionPanel.FontChanged += new EventHandler(OnParentControlFontChanged);
+            actionPanel.FontChanged += OnParentControlFontChanged;
             _label = new Label
             {
                 BackColor = Color.Transparent,
@@ -24,6 +24,7 @@ internal sealed partial class DesignerActionPanel
                 TextAlign = ContentAlignment.MiddleLeft,
                 UseMnemonic = false,
             };
+
             AddedControls.Add(_label);
         }
 

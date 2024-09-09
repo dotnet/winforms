@@ -288,8 +288,8 @@
         <note />
       </trans-unit>
       <trans-unit id="BinaryFormatterNotSupported">
-        <source>Using the BinaryFormatter is not supported in trimmed applications.</source>
-        <target state="translated">Použití deserializace BinaryFormatter se v aplikacích s pročištěným kódem nepodporuje.</target>
+        <source>BinaryFormatter serialization and deserialization are disabled within this application. See https://aka.ms/binaryformatter for more information.</source>
+        <target state="translated">Serializace a deserializace BinaryFormatter jsou v této aplikaci zakázané. Další informace najdete na https://aka.ms/binaryformatter.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
@@ -1527,6 +1527,11 @@
         <target state="translated">Ukazatel myši, který se zobrazí, pokud jej přesunete přes ovládací prvek.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlDarkModeDescr">
+        <source>Determines the dark mode setting for the control. This ambient property inherits its value from its parent control or from the Application class.</source>
+        <target state="translated">Určuje nastavení tmavého režimu ovládacího prvku. Tato ambientní vlastnost dědí svou hodnotu z nadřazeného ovládacího prvku nebo z třídy Application.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ControlDataContextChangedDescr">
         <source>Occurs when the value of the DataContext property changes.</source>
         <target state="translated">Vyvolá se při změně hodnoty vlastnosti DataContext.</target>
@@ -2180,6 +2185,11 @@
       <trans-unit id="CursorNonSerializableHandle">
         <source>Stock cursors cannot be serialized.</source>
         <target state="translated">Ukazatele zásobníku nelze serializovat.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DarkModeNotSupported">
+        <source>Dark mode cannot be activated, either because of an activated High-Contrast mode or because the underlying OS does not support it.</source>
+        <target state="translated">Tmavý režim nelze aktivovat, a to buď z důvodu aktivovaného režimu vysokého kontrastu, nebo proto, že ho nepodporuje příslušný operační systém.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataBindingAddNewNotSupportedOnPropertyManager">
@@ -5305,6 +5315,16 @@ Chcete jej nahradit?</target>
         <target state="translated">Aktuální pozice posuvníku automatického posouvání.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormBorderColorChangedDescr">
+        <source>Occurs whenever the FormBorderColor property is changed.</source>
+        <target state="translated">Vyvolá se vždy, když je změněna vlastnost FormBorderColor.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormBorderColorDescr">
+        <source>The color of the Form's border.</source>
+        <target state="translated">Barva ohraničení formuláře</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormBorderStyleDescr">
         <source>Indicates the appearance and behavior of the border and title bar of the form.</source>
         <target state="translated">Určuje vzhled a chování ohraničení a záhlaví formuláře.</target>
@@ -5315,9 +5335,39 @@ Chcete jej nahradit?</target>
         <target state="translated">Stornovací tlačítko formuláře. Je-li tato vlastnost nastavena, dojde k aktivaci tohoto tlačítka vždy, když uživatel stiskne klávesu Esc.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormCaptionBackColorChangedDescr">
+        <source>Occurs whenever the FormCaptionBackColor property is changed.</source>
+        <target state="translated">Vyvolá se vždy, když je změněna vlastnost FormCaptionBackColor.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCaptionBackColorDescr">
+        <source>The back color of the Form's caption (title bar).</source>
+        <target state="translated">Barva pozadí záhlaví formuláře</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCaptionTextColorChangedDescr">
+        <source>Occurs whenever the FormCaptionTextColor property is changed.</source>
+        <target state="translated">Vyvolá se vždy, když je změněna vlastnost FormCaptionTextColor.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCaptionTextColorDescr">
+        <source>The color of the Form's text caption (title bar text).</source>
+        <target state="translated">Barva textu záhlaví formuláře</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormControlBoxDescr">
         <source>Determines whether a form has a Control/System menu box.</source>
         <target state="translated">Určuje, zda má formulář systémovou a řídicí nabídku.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCornerPreferenceChangedDescr">
+        <source>Occurs whenever the FormCornerPreference property is changed.</source>
+        <target state="translated">Vyvolá se vždy, když je změněna vlastnost FormCornerPreference.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCornerPreferenceDescr">
+        <source>The rounding style of the Form's border.</source>
+        <target state="translated">Styl zaoblení okraje formuláře</target>
         <note />
       </trans-unit>
       <trans-unit id="FormDesktopBoundsDescr">
@@ -5520,6 +5570,11 @@ Chcete jej nahradit?</target>
         <target state="translated">Míra průhlednosti ovládacího prvku v procentech</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormOrTaskDialog_NoSyncContextForShowAsync">
+        <source>Failed to retrieve the Synchronization Context for showing the Form asynchronously.</source>
+        <target state="translated">Načtení kontextu synchronizace pro asynchronní zobrazení formuláře se nezdařilo.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormOwnedFormsDescr">
         <source>Array of forms owned by this form.</source>
         <target state="translated">Pole formulářů vlastněných tímto formulářem.</target>
@@ -5563,6 +5618,11 @@ Chcete jej nahradit?</target>
       <trans-unit id="FormWindowStateDescr">
         <source>Determines the initial visual state of the form.</source>
         <target state="translated">Určuje počáteční stav viditelnosti formuláře.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Form_HasAlreadyBeenShownAsync">
+        <source>The form has already been shown asynchronously.</source>
+        <target state="translated">Formulář již byl zobrazen asynchronně.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormatControlFormatDescr">
@@ -6855,8 +6915,8 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <note />
       </trans-unit>
       <trans-unit id="ListViewVirtualListSizeDescr">
-        <source>Sets the count of the item collection when the ListView is in virtual mode.</source>
-        <target state="translated">Nastaví počet pro kolekci položek v případě, že je vlastnost ListView ve virtuálním režimu.</target>
+        <source>Sets the count of the item collection when the ListView is in virtual mode. If VirtualMode is set to true, and the VirtualListSize property is greater than 0, you must handle the RetrieveVirtualItem event providing valid items.</source>
+        <target state="translated">Nastaví počet pro kolekci položek v případě, že je vlastnost ListView ve virtuálním režimu. Pokud je vlastnost VirtualMode nastavena na hodnotu true a vlastnost VirtualListSize je větší než 0, je nutné zpracovat událost RetrieveVirtualItem tak, že poskytnete platné položky.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewVirtualListSizeInvalidArgument">
@@ -9706,7 +9766,7 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="ToolStripAllowClickThrough">
         <source>Allows the control to be interacted when window does not have focus.</source>
-        <target state="new">Allows the control to be interacted when window does not have focus.</target>
+        <target state="translated">Umožňuje interakci s ovládacím prvkem, pokud okno nemá fokus.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue">

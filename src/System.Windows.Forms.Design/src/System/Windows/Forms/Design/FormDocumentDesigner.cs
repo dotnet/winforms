@@ -13,7 +13,7 @@ using System.Windows.Forms.Design.Behavior;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-///  The FormDocumentDesigner class builds on the DocumentDesigner.  It adds shadowing for form properties that need
+///  The FormDocumentDesigner class builds on the DocumentDesigner. It adds shadowing for form properties that need
 ///  to be shadowed and it also adds logic to properly paint the form's title bar to match the active document window.
 /// </summary>
 internal class FormDocumentDesigner : DocumentDesigner
@@ -52,9 +52,9 @@ internal class FormDocumentDesigner : DocumentDesigner
     }
 
     /// <summary>
-    ///  Shadowed version of the AutoScaleBaseSize property.  We shadow this so that it always persists.  Normally
+    ///  Shadowed version of the AutoScaleBaseSize property. We shadow this so that it always persists. Normally
     ///  only properties that differ from the default values at instantiation are persisted, but this should always
-    ///  be written.  So, we shadow it and add our own ShouldSerialize method.
+    ///  be written. So, we shadow it and add our own ShouldSerialize method.
     /// </summary>
     private Size AutoScaleBaseSize
     {
@@ -154,7 +154,7 @@ internal class FormDocumentDesigner : DocumentDesigner
     }
 
     /// <summary>
-    ///  Opacity property on control.  We shadow this property at design time.
+    ///  Opacity property on control. We shadow this property at design time.
     /// </summary>
     private double Opacity
     {
@@ -178,7 +178,7 @@ internal class FormDocumentDesigner : DocumentDesigner
     }
 
     /// <summary>
-    ///  Overrides the default implementation of ParentControlDesigner SnapLines.  Note that if the Padding property
+    ///  Overrides the default implementation of ParentControlDesigner SnapLines. Note that if the Padding property
     ///  is not set on our Form - we'll special case this and add default Padding values to our SnapLines. This was
     ///  a usability request specific to the Form itself. Note that a Form only has Padding SnapLines.
     /// </summary>
@@ -242,7 +242,7 @@ internal class FormDocumentDesigner : DocumentDesigner
     }
 
     /// <summary>
-    ///  Accessor method for the showInTaskbar property on control.  We shadow this property at design time.
+    ///  Accessor method for the showInTaskbar property on control. We shadow this property at design time.
     /// </summary>
     private bool ShowInTaskbar
     {
@@ -251,7 +251,7 @@ internal class FormDocumentDesigner : DocumentDesigner
     }
 
     /// <summary>
-    ///  Accessor method for the windowState property on control.  We shadow this property at design time.
+    ///  Accessor method for the windowState property on control. We shadow this property at design time.
     /// </summary>
     private FormWindowState WindowState
     {
@@ -261,7 +261,7 @@ internal class FormDocumentDesigner : DocumentDesigner
 
     private static void ApplyAutoScaling(SizeF baseVar, Form form)
     {
-        // We also don't do this if the property is empty.  Otherwise we will perform two GetAutoScaleBaseSize calls
+        // We also don't do this if the property is empty. Otherwise we will perform two GetAutoScaleBaseSize calls
         // only to find that they returned the same value.
         if (!baseVar.IsEmpty)
         {
@@ -291,16 +291,16 @@ internal class FormDocumentDesigner : DocumentDesigner
 
             if (host is not null)
             {
-                host.LoadComplete -= new EventHandler(OnLoadComplete);
-                host.Activated -= new EventHandler(OnDesignerActivate);
-                host.Deactivated -= new EventHandler(OnDesignerDeactivate);
+                host.LoadComplete -= OnLoadComplete;
+                host.Activated -= OnDesignerActivate;
+                host.Deactivated -= OnDesignerDeactivate;
             }
 
             IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
             if (cs is not null)
             {
-                cs.ComponentAdded -= new ComponentEventHandler(OnComponentAdded);
-                cs.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
+                cs.ComponentAdded -= OnComponentAdded;
+                cs.ComponentRemoved -= OnComponentRemoved;
             }
         }
 
@@ -313,7 +313,7 @@ internal class FormDocumentDesigner : DocumentDesigner
     }
 
     /// <summary>
-    ///  Initializes the designer with the given component.  The designer can get the component's site and request
+    ///  Initializes the designer with the given component. The designer can get the component's site and request
     ///  services from it in this call.
     /// </summary>
     public override void Initialize(IComponent component)
@@ -335,9 +335,9 @@ internal class FormDocumentDesigner : DocumentDesigner
         IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
         if (host is not null)
         {
-            host.LoadComplete += new EventHandler(OnLoadComplete);
-            host.Activated += new EventHandler(OnDesignerActivate);
-            host.Deactivated += new EventHandler(OnDesignerDeactivate);
+            host.LoadComplete += OnLoadComplete;
+            host.Activated += OnDesignerActivate;
+            host.Deactivated += OnDesignerDeactivate;
         }
 
         Form form = (Form)Control;
@@ -346,12 +346,11 @@ internal class FormDocumentDesigner : DocumentDesigner
         ShadowProperties[nameof(CancelButton)] = form.CancelButton;
 
         // Monitor component/remove add events for our tray
-        //
         IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
         if (cs is not null)
         {
-            cs.ComponentAdded += new ComponentEventHandler(OnComponentAdded);
-            cs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
+            cs.ComponentAdded += OnComponentAdded;
+            cs.ComponentRemoved += OnComponentRemoved;
         }
     }
 
@@ -392,7 +391,7 @@ internal class FormDocumentDesigner : DocumentDesigner
         }
     }
 
-    // Called when our document becomes active.  We paint our form's border the appropriate color here.
+    // Called when our document becomes active. We paint our form's border the appropriate color here.
     private unsafe void OnDesignerActivate(object source, EventArgs evevent)
     {
         // Paint the form's title bar UI-active
@@ -404,7 +403,7 @@ internal class FormDocumentDesigner : DocumentDesigner
     }
 
     /// <summary>
-    ///  Called by the host when we become inactive.  Here we update the title bar of our form so it's the inactive color.
+    ///  Called by the host when we become inactive. Here we update the title bar of our form so it's the inactive color.
     /// </summary>
     private unsafe void OnDesignerDeactivate(object sender, EventArgs e)
     {
@@ -416,7 +415,7 @@ internal class FormDocumentDesigner : DocumentDesigner
     }
 
     /// <summary>
-    ///  Called when our code loads.  Here we connect us as the selection UI handler for ourselves.  This is a
+    ///  Called when our code loads. Here we connect us as the selection UI handler for ourselves. This is a
     ///  special case because for the top level document, we are our own selection UI handler.
     /// </summary>
     private void OnLoadComplete(object source, EventArgs evevent)
@@ -449,7 +448,7 @@ internal class FormDocumentDesigner : DocumentDesigner
     }
 
     /// <summary>
-    ///  Allows a designer to filter the set of properties the component it is designing will expose through the TypeDescriptor object.  This method is called immediately before its corresponding "Post" method. If you are overriding this method you should call the base implementation before you perform your own filtering.
+    ///  Allows a designer to filter the set of properties the component it is designing will expose through the TypeDescriptor object. This method is called immediately before its corresponding "Post" method. If you are overriding this method you should call the base implementation before you perform your own filtering.
     /// </summary>
     protected override void PreFilterProperties(IDictionary properties)
     {

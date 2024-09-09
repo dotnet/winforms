@@ -417,7 +417,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
         ((EventHandler?)Events[s_eventFormActivated])?.Invoke(sender, e);
     }
 
-    private void OnFormClosing(object? sender, CancelEventArgs e)
+    private void OnFormClosing(object? sender, FormClosingEventArgs e)
     {
         if (!e.Cancel && TopLevelControl is not null)
         {
@@ -425,7 +425,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
             Form form = (Form)TopLevelControl;
             if (form is not null)
             {
-                form.Closing -= new CancelEventHandler(OnFormClosing);
+                form.FormClosing -= OnFormClosing;
             }
         }
     }
@@ -440,7 +440,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
         base.OnHandleCreated(e);
         if (TopLevelControl is Form form)
         {
-            form.Closing += new CancelEventHandler(OnFormClosing);
+            form.FormClosing += OnFormClosing;
         }
     }
 
@@ -480,6 +480,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
         }
 
         Rectangle originalClip = e.ClipRectangle;
+
         // Determine the first line index to paint
         int index = 0;
         while ((index < (_lineYPositions.Count - 1)) && (_lineYPositions[index + 1] <= originalClip.Top))

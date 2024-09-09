@@ -235,7 +235,7 @@ public partial class ListBox
         }
 
         /// <summary>
-        ///  Removes all items from the ListBox.  Bypasses the data source check.
+        ///  Removes all items from the ListBox. Bypasses the data source check.
         /// </summary>
         internal void ClearInternal()
         {

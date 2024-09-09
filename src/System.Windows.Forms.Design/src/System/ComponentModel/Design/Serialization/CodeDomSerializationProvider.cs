@@ -47,7 +47,7 @@ internal sealed class CodeDomSerializationProvider : IDesignerSerializationProvi
     /// </summary>
     private static object? GetCodeDomSerializer(Type? objectType)
     {
-        // Null is a valid value that can be passed into GetSerializer.  It indicates
+        // Null is a valid value that can be passed into GetSerializer. It indicates
         // that the value we need to serialize is null, in which case we handle it
         // through the PrimitiveCodeDomSerializer.
         //
@@ -62,7 +62,7 @@ internal sealed class CodeDomSerializationProvider : IDesignerSerializationProvi
             return ComponentCodeDomSerializer.Default;
         }
 
-        // We special case enums.  They do have instance descriptors, but we want
+        // We special case enums. They do have instance descriptors, but we want
         // better looking code than the instance descriptor can provide for flags,
         // so we do it ourselves.
         if (typeof(Enum).IsAssignableFrom(objectType))

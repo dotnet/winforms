@@ -64,7 +64,7 @@ public partial class PictureBox : Control, ISupportInitialize
     private SendOrPostCallback? _loadCompletedDelegate;
     private SendOrPostCallback? _loadProgressDelegate;
     private bool _handleValid;
-    private readonly object _internalSyncObject = new();
+    private readonly Lock _internalSyncObject = new();
 
     // These default images will be demand loaded.
     private Image? _defaultInitialImage;
@@ -110,6 +110,10 @@ public partial class PictureBox : Control, ISupportInitialize
 
         SetStyle(ControlStyles.Opaque | ControlStyles.Selectable, false);
         SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.SupportsTransparentBackColor, true);
+
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
         TabStop = false;
         _savedSize = Size;
@@ -977,7 +981,7 @@ public partial class PictureBox : Control, ISupportInitialize
             {
                 if (_image is not null)
                 {
-                    ImageAnimator.Animate(_image, new EventHandler(OnFrameChanged));
+                    ImageAnimator.Animate(_image, OnFrameChanged);
                     _currentlyAnimating = animate;
                 }
             }
@@ -985,7 +989,7 @@ public partial class PictureBox : Control, ISupportInitialize
             {
                 if (_image is not null)
                 {
-                    ImageAnimator.StopAnimate(_image, new EventHandler(OnFrameChanged));
+                    ImageAnimator.StopAnimate(_image, OnFrameChanged);
                     _currentlyAnimating = animate;
                 }
             }

@@ -40,7 +40,7 @@ public sealed partial class Application
             _ = ComponentManager;
 
         /// <summary>
-        ///  Retrieves the component manager for this process.  If there is no component manager
+        ///  Retrieves the component manager for this process. If there is no component manager
         ///  currently installed, we install our own.
         /// </summary>
         internal IMsoComponentManager.Interface? ComponentManager
@@ -53,12 +53,12 @@ public sealed partial class Application
                 }
 
                 // The CLR is a good COM citizen and will pump messages when things are waiting.
-                // This is nice; it keeps the world responsive.  But, it is also very hard for
+                // This is nice; it keeps the world responsive. But, it is also very hard for
                 // us because most of the code below causes waits, and the likelihood that
-                // a message will come in and need a component manager is very high.  Recursing
+                // a message will come in and need a component manager is very high. Recursing
                 // here is very very bad, and will almost certainly lead to application failure
-                // later on as we come out of the recursion.  So, we guard it here and return
-                // null.  EVERYONE who accesses the component manager must handle a NULL return!
+                // later on as we come out of the recursion. So, we guard it here and return
+                // null. EVERYONE who accesses the component manager must handle a NULL return!
 
                 _fetchingComponentManager = true;
 
@@ -369,7 +369,7 @@ public sealed partial class Application
 
             if (uStateID == msocstate.Modal)
             {
-                // We should only be messing with windows we own.  See the "ctrl-shift-N" test above.
+                // We should only be messing with windows we own. See the "ctrl-shift-N" test above.
                 if (fEnter)
                 {
                     DisableWindowsForModalLoop(true, null); // WinFormsOnly = true
@@ -437,7 +437,7 @@ public sealed partial class Application
                     case msoloop.ModalForm:
 
                         // For modal forms, check to see if the current active form has been
-                        // dismissed.  If there is no active form, then it is an error that
+                        // dismissed. If there is no active form, then it is an error that
                         // we got into here, so we terminate the loop.
 
                         if (CurrentForm is null || CurrentForm.CheckCloseDialog(false))

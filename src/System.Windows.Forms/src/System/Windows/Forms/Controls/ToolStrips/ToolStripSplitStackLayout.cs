@@ -70,7 +70,7 @@ internal class ToolStripSplitStackLayout : LayoutEngine
 
                 if (!((IArrangedElement)item).ParticipatesInLayout)
                 {
-                    // skip over items not participating in layout.  E.G. not visible items
+                    // skip over items not participating in layout. E.G. not visible items
                     continue;
                 }
 
@@ -120,7 +120,7 @@ internal class ToolStripSplitStackLayout : LayoutEngine
 
                 if (!((IArrangedElement)item).ParticipatesInLayout)
                 {
-                    // skip over items not participating in layout.  E.G. not visible items
+                    // skip over items not participating in layout. E.G. not visible items
                     continue;
                 }
 
@@ -262,7 +262,7 @@ internal class ToolStripSplitStackLayout : LayoutEngine
 
                 if (!((IArrangedElement)item).ParticipatesInLayout)
                 {
-                    // skip over items not participating in layout.  E.G. not visible items
+                    // skip over items not participating in layout. E.G. not visible items
                     continue;
                 }
 
@@ -404,7 +404,7 @@ internal class ToolStripSplitStackLayout : LayoutEngine
                 item = toolStrip.Items[j];
                 if (!((IArrangedElement)item).ParticipatesInLayout)
                 {
-                    // skip over items not participating in layout.  E.G. not visible items
+                    // skip over items not participating in layout. E.G. not visible items
                     continue;
                 }
 
@@ -570,7 +570,7 @@ internal class ToolStripSplitStackLayout : LayoutEngine
             ToolStripItem item = ToolStrip.Items[BackwardsWalkingIndex];
             if (!((IArrangedElement)item).ParticipatesInLayout)
             {
-                // skip over items not participating in layout.  E.G. not visible items
+                // skip over items not participating in layout. E.G. not visible items
                 continue;
             }
 

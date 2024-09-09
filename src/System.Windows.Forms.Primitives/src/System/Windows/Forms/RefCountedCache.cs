@@ -66,40 +66,34 @@ internal abstract partial class RefCountedCache<TObject, TCacheEntryData, TKey> 
     ///   Override if you want to modify behavior or lock cache access.
     ///  </para>
     /// </remarks>
-    public virtual Scope GetEntry(TKey key)
+    public virtual CacheEntry GetEntry(TKey key)
     {
         // NOTE: Measure carefully when changing logic in this method. Code has been optimized for performance.
         ArgumentNullException.ThrowIfNull(key);
 
-        Scope scope;
-
-        if (Find(key, out Scope foundScope))
+        if (!Find(key, out CacheEntry entry))
         {
-            scope = foundScope;
-        }
-        else
-        {
-            scope = Add(key);
+            entry = Add(key);
         }
 
-        return scope;
+        return entry;
 
         [SkipLocalsInit]
-        bool Find(TKey key, out Scope scope)
+        bool Find(TKey key, out CacheEntry entry)
         {
             bool success = false;
-            scope = default!;
+            entry = default!;
             int position = MoveToFront;
 
             var enumerator = _list.GetEnumerator();
             while (enumerator.MoveNext())
             {
                 var node = enumerator.Current;
-                var cacheEntry = node!.Value;
+                CacheEntry currentEntry = node.Value;
 
-                if (IsMatch(key, cacheEntry))
+                if (IsMatch(key, currentEntry))
                 {
-                    scope = new Scope(cacheEntry);
+                    entry = currentEntry;
                     if (position < 0)
                     {
                         // Moving to the front as the cost of walking this far in outweighs the cost of moving
@@ -118,28 +112,28 @@ internal abstract partial class RefCountedCache<TObject, TCacheEntryData, TKey> 
         }
 
         [SkipLocalsInit]
-        Scope Add(TKey key)
+        CacheEntry Add(TKey key)
         {
+            CacheEntry entry;
+
             if (_list.Count >= _softLimit)
             {
                 // Try to free up space
                 Clean();
             }
 
-            Scope scope;
             if (_list.Count < _hardLimit)
             {
                 // We've got space, add to the cache
-                var data = CreateEntry(key, cached: true);
-                _list.AddFirst(data);
-                scope = new Scope(data);
+                entry = CreateEntry(key, cached: true);
+                _list.AddFirst(entry);
             }
             else
             {
-                scope = new Scope(CreateEntry(key, cached: false));
+                entry = CreateEntry(key, cached: false);
             }
 
-            return scope;
+            return entry;
         }
 
         void Clean()

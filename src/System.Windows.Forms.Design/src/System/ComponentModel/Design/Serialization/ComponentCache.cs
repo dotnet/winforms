@@ -102,11 +102,11 @@ internal sealed partial class ComponentCache : IDisposable
     {
         if (_serManager.TryGetService(out IComponentChangeService? cs))
         {
-            cs.ComponentChanging -= new ComponentChangingEventHandler(OnComponentChanging);
-            cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
-            cs.ComponentRemoving -= new ComponentEventHandler(OnComponentRemove);
-            cs.ComponentRemoved -= new ComponentEventHandler(OnComponentRemove);
-            cs.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
+            cs.ComponentChanging -= OnComponentChanging;
+            cs.ComponentChanged -= OnComponentChanged;
+            cs.ComponentRemoving -= OnComponentRemove;
+            cs.ComponentRemoved -= OnComponentRemove;
+            cs.ComponentRename -= OnComponentRename;
         }
     }
 
@@ -135,7 +135,9 @@ internal sealed partial class ComponentCache : IDisposable
                         }
                         else
                         {
-                            // Hmm. We were notified about an object change, but were unable to relate it back to a component we know about. In this situation, we have no option but to clear the whole cache, since we don't want serialization to miss something.
+                            // Hmm. We were notified about an object change, but were unable to relate it back to a
+                            // component we know about. In this situation, we have no option but to clear the whole
+                            // cache, since we don't want serialization to miss something.
                             _cache.Clear();
                         }
                     }
@@ -166,7 +168,9 @@ internal sealed partial class ComponentCache : IDisposable
                         }
                         else
                         {
-                            // Hmm. We were notified about an object change, but were unable to relate it back to a component we know about. In this situation, we have no option but to clear the whole cache, since we don't want serialization to miss something.
+                            // Hmm. We were notified about an object change, but were unable to relate it back to a
+                            // component we know about. In this situation, we have no option but to clear the whole
+                            // cache, since we don't want serialization to miss something.
                             _cache.Clear();
                         }
                     }

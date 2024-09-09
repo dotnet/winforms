@@ -14,9 +14,19 @@ using ComTypes = System.Runtime.InteropServices.ComTypes;
 
 namespace System.Windows.Forms.Tests;
 
+// Note: each registered Clipboard format is an OS singleton
+// and we should not run this test at the same time as other tests using the same format.
 [Collection("Sequential")]
-public partial class ClipboardTests
+public class ClipboardTests
 {
+    [WinFormsFact]
+    public void Clipboard_SetText_InvokeString_GetReturnsExpected()
+    {
+        Clipboard.SetText("text");
+        Clipboard.GetText().Should().Be("text");
+        Clipboard.ContainsText().Should().BeTrue();
+    }
+
     [WinFormsFact]
     public void Clipboard_Clear_InvokeMultipleTimes_Success()
     {
@@ -313,7 +323,7 @@ public partial class ClipboardTests
     [WinFormsTheory]
     [MemberData(nameof(Clipboard_SetDataObject_Null_TheoryData))]
     public void Clipboard_SetDataObject_NullData_ThrowsArgumentNullException(Action action)
-    { 
+    {
         action.Should().Throw<ArgumentNullException>().WithParameterName("data");
     }
 

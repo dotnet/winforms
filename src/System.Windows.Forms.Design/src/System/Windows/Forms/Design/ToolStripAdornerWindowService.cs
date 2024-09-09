@@ -112,7 +112,7 @@ internal sealed class ToolStripAdornerWindowService : IDisposable
     }
 
     /// <summary>
-    ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refresh of all Adorners and, in turn, all Glyphs.
+    ///  Invalidates the BehaviorService's AdornerWindow. This will force a refresh of all Adorners and, in turn, all Glyphs.
     /// </summary>
     public void Invalidate()
     {
@@ -120,7 +120,7 @@ internal sealed class ToolStripAdornerWindowService : IDisposable
     }
 
     /// <summary>
-    ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refresh of all Adorners and, in turn, all Glyphs.
+    ///  Invalidates the BehaviorService's AdornerWindow. This will force a refresh of all Adorners and, in turn, all Glyphs.
     /// </summary>
     public void Invalidate(Rectangle rect)
     {
@@ -128,7 +128,7 @@ internal sealed class ToolStripAdornerWindowService : IDisposable
     }
 
     /// <summary>
-    ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refresh of all Adorners and, in turn, all Glyphs.
+    ///  Invalidates the BehaviorService's AdornerWindow. This will force a refresh of all Adorners and, in turn, all Glyphs.
     /// </summary>
     public void Invalidate(Region r)
     {
@@ -154,7 +154,7 @@ internal sealed class ToolStripAdornerWindowService : IDisposable
     }
 
     /// <summary>
-    ///  The AdornerWindow is a transparent window that resides ontop of the Designer's Frame.  This window is used by the ToolStripAdornerWindowService to parent the MenuItem DropDowns.
+    ///  The AdornerWindow is a transparent window that resides ontop of the Designer's Frame. This window is used by the ToolStripAdornerWindowService to parent the MenuItem DropDowns.
     /// </summary>
     private class ToolStripAdornerWindow : Control
     {
@@ -232,7 +232,7 @@ internal sealed class ToolStripAdornerWindowService : IDisposable
         }
 
         /// <summary>
-        ///  Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate.  Note the they use of the .Update() call for perf. purposes.
+        ///  Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate. Note the they use of the .Update() call for perf. purposes.
         /// </summary>
         internal void InvalidateAdornerWindow()
         {
@@ -244,7 +244,7 @@ internal sealed class ToolStripAdornerWindowService : IDisposable
         }
 
         /// <summary>
-        ///  Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate.  Note the they use of the .Update() call for perf. purposes.
+        ///  Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate. Note the they use of the .Update() call for perf. purposes.
         /// </summary>
         internal void InvalidateAdornerWindow(Region region)
         {
@@ -256,7 +256,7 @@ internal sealed class ToolStripAdornerWindowService : IDisposable
         }
 
         /// <summary>
-        ///  Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate.  Note the they use of the .Update() call for perf. purposes.
+        ///  Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate. Note the they use of the .Update() call for perf. purposes.
         /// </summary>
         internal void InvalidateAdornerWindow(Rectangle rectangle)
         {
@@ -268,7 +268,7 @@ internal sealed class ToolStripAdornerWindowService : IDisposable
         }
 
         /// <summary>
-        ///  The AdornerWindow intercepts all designer-related messages and forwards them to the BehaviorService for appropriate actions.  Note that Paint and HitTest  messages are correctly parsed and translated to AdornerWindow coords.
+        ///  The AdornerWindow intercepts all designer-related messages and forwards them to the BehaviorService for appropriate actions. Note that Paint and HitTest  messages are correctly parsed and translated to AdornerWindow coords.
         /// </summary>
         protected override void WndProc(ref Message m)
         {

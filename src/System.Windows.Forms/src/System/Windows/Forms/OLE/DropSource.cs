@@ -68,7 +68,7 @@ internal class DropSource : IDropSource.Interface, IDropSourceNotify.Interface, 
 
         _peer.OnGiveFeedback(gfbEvent);
 
-        if (IsDropTargetWindowInCurrentThread() && !gfbEvent.Equals(_lastGiveFeedbackEventArgs))
+        if (IsDropTargetWindowInCurrentThread() && gfbEvent.DragImage is not null && !gfbEvent.Equals(_lastGiveFeedbackEventArgs))
         {
             _lastGiveFeedbackEventArgs = gfbEvent.Clone();
             UpdateDragImage(_lastGiveFeedbackEventArgs, _dataObject, _lastHwndTarget);
@@ -106,7 +106,7 @@ internal class DropSource : IDropSource.Interface, IDropSourceNotify.Interface, 
 
     public HRESULT DragLeaveTarget()
     {
-        if (IsDropTargetWindowInCurrentThread())
+        if (IsDropTargetWindowInCurrentThread() && _lastGiveFeedbackEventArgs?.DragImage is not null)
         {
             DragDropHelper.DragLeave();
         }

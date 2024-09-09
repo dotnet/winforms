@@ -11,10 +11,10 @@ public class RefCacheTests
     public void RefCountTests()
     {
         ObjectCache<object> cache = new(5, 10);
-        var firstScope = cache.GetEntry(1);
+        var firstScope = cache.GetEntry(1).CreateScope();
         Assert.Equal(1, firstScope.RefCount);
         object first = firstScope.Object;
-        var secondScope = cache.GetEntry(1);
+        var secondScope = cache.GetEntry(1).CreateScope();
         object second = secondScope.Object;
         Assert.Equal(2, firstScope.RefCount);
         Assert.Equal(2, secondScope.RefCount);
@@ -23,7 +23,7 @@ public class RefCacheTests
         Assert.Equal(1, secondScope.RefCount);
         secondScope.Dispose();
         Assert.Equal(0, secondScope.RefCount);
-        using var thirdScope = cache.GetEntry(1);
+        using var thirdScope = cache.GetEntry(1).CreateScope();
         Assert.Equal(1, thirdScope.RefCount);
         Assert.Same(first, thirdScope.Object);
     }
@@ -34,18 +34,18 @@ public class RefCacheTests
         ObjectCache<DisposalCounter> cache = new(2, 4);
 
         // Fill to the hard limit
-        var firstScope = cache.GetEntry(1);
-        var secondScope = cache.GetEntry(2);
-        var thirdScope = cache.GetEntry(3);
-        var fourthScope = cache.GetEntry(4);
+        var firstScope = cache.GetEntry(1).CreateScope();
+        var secondScope = cache.GetEntry(2).CreateScope();
+        var thirdScope = cache.GetEntry(3).CreateScope();
+        var fourthScope = cache.GetEntry(4).CreateScope();
         Assert.Equal(0, firstScope.Object.DisposeCount);
         Assert.Equal(0, secondScope.Object.DisposeCount);
         Assert.Equal(0, thirdScope.Object.DisposeCount);
         Assert.Equal(0, fourthScope.Object.DisposeCount);
 
         // New objects shouldn't be cached
-        var fifthScope = cache.GetEntry(5);
-        var sixthScope = cache.GetEntry(5);
+        var fifthScope = cache.GetEntry(5).CreateScope();
+        var sixthScope = cache.GetEntry(5).CreateScope();
 
         Assert.NotSame(fifthScope.Object, sixthScope.Object);
 
@@ -66,7 +66,7 @@ public class RefCacheTests
         Assert.Equal(1, fifthScope.Object.DisposeCount);
         Assert.Equal(1, sixthScope.Object.DisposeCount);
 
-        using var seventhScope = cache.GetEntry(7);
+        using var seventhScope = cache.GetEntry(7).CreateScope();
 
         // Now that the other scopes are closed, the earliest entries should have been cleaned
         Assert.Equal(1, firstScope.Object.DisposeCount);

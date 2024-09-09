@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 //
-// (C) 2004 Ximian, Inc.  http://www.ximian.com
+// (C) 2004 Ximian, Inc. http://www.ximian.com
 // Copyright (C) 2004,2006-2007 Novell, Inc (http://www.novell.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining

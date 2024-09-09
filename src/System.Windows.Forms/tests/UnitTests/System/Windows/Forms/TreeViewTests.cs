@@ -7531,6 +7531,42 @@ public class TreeViewTests
         treeView.ToString().Should().Be($"System.Windows.Forms.TreeView, Nodes.Count: 2, Nodes[0]: {treeView.Nodes[0]}");
     }
 
+    [WinFormsFact]
+    public void ArraySubsetEnumerator_Behavior_AfterMoveNextAndReset()
+    {
+        object[] array = { "a", "b", "c" };
+        ArraySubsetEnumerator enumerator = new(array, 2);
+
+        enumerator.MoveNext().Should().BeTrue();
+        enumerator.Current.Should().Be("a");
+
+        enumerator.MoveNext().Should().BeTrue();
+        enumerator.Current.Should().Be("b");
+
+        enumerator.Reset();
+        enumerator.Current.Should().BeNull();
+
+        enumerator.MoveNext().Should().BeTrue();
+        enumerator.Current.Should().Be("a");
+    }
+
+    [WinFormsTheory]
+    [InlineData(5)]
+    [InlineData(10)]
+    public void TreeView_VisibleCount_MultipleNodes_ReturnsExpected(int nodeCount)
+    {
+        using TreeView treeView = new();
+
+        for (int i = 0; i < nodeCount; i++)
+        {
+            treeView.Nodes.Add($"Node{i}");
+        }
+
+        treeView.CreateControl();
+        treeView.Height = 100; 
+        treeView.VisibleCount.Should().Be(5); 
+    }
+
     private class SubTreeView : TreeView
     {
         public new bool CanEnableIme => base.CanEnableIme;

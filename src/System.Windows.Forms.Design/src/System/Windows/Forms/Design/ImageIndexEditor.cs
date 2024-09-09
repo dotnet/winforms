@@ -73,8 +73,8 @@ internal class ImageIndexEditor : UITypeEditor
 
                 if (imageListProperty is null)
                 {
-                    // We didn't find the image list in this component.  See if the
-                    // component has a "parent" property.  If so, walk the tree.
+                    // We didn't find the image list in this component. See if the
+                    // component has a "parent" property. If so, walk the tree.
                     instance = properties[ParentImageListProperty]?.GetValue(instance);
                 }
             }

@@ -8,7 +8,7 @@ internal partial class CommandSet
     protected partial class CommandSetItem
     {
         /// <summary>
-        /// This class saves the state for a given command.  It keeps track of the results
+        /// This class saves the state for a given command. It keeps track of the results
         /// of the last status handler invocation and what "selection version" that happened on.
         /// </summary>
         private class StatusState

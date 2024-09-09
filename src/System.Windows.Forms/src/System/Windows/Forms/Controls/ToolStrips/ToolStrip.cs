@@ -171,7 +171,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     }
 
     // This is only for use in determining whether to show scroll bars on
-    // ToolStripDropDownMenus.  No one else should be using it for anything.
+    // ToolStripDropDownMenus. No one else should be using it for anything.
     internal virtual bool AllItemsVisible
     {
         get
@@ -196,7 +196,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
             if (IsInToolStripPanel && base.AutoSize && !value)
             {
                 // Restoring the bounds can change the location of the toolstrip -
-                // which would join it to a new row.  Set the specified bounds to the new location to
+                // which would join it to a new row. Set the specified bounds to the new location to
                 // prevent this.
                 Rectangle bounds = CommonProperties.GetSpecifiedBounds(this);
                 bounds.Location = Location;
@@ -687,7 +687,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
                 {
                     // We don't call base.Dock = value, because that would cause us to get 2 LocationChanged events.
                     // The first is when the parent gets a Layout due to the DockChange, and the second comes from when we
-                    // change the orientation.  Instead we've duplicated the logic of Control.Dock.set here, but with a
+                    // change the orientation. Instead we've duplicated the logic of Control.Dock.set here, but with a
                     // LayoutTransaction on the Parent as well.
                     DefaultLayout.SetDock(this, value);
                     UpdateLayoutStyle(Dock);
@@ -724,7 +724,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
 
     /// <summary>
     ///  Returns the drop target manager that all the hwndless
-    ///  items and this ToolStrip share.  this is necessary as
+    ///  items and this ToolStrip share. this is necessary as
     ///  RegisterDragDrop requires an HWND.
     /// </summary>
     [AllowNull]
@@ -883,7 +883,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     }
 
     /// <summary>
-    ///  The boundaries of the grip on the ToolStrip.  If it is invisible - returns Rectangle.Empty.
+    ///  The boundaries of the grip on the ToolStrip. If it is invisible - returns Rectangle.Empty.
     /// </summary>
     [Browsable(false)]
     public Rectangle GripRectangle
@@ -1068,7 +1068,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     /// <summary>
     ///  The items that belong to this ToolStrip.
     ///  Note - depending on space and layout preferences, not all items
-    ///  in this collection will be displayed.  They may not even be displayed
+    ///  in this collection will be displayed. They may not even be displayed
     ///  on this ToolStrip (say in the case where we're overflowing the item).
     ///  The collection of _Displayed_ items is the DisplayedItems collection.
     ///  The displayed items collection also includes things like the OverflowButton
@@ -1116,9 +1116,9 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     ///  [ toolstrip double buffer hdc ] ← onpaint hands us this buffer, after we're done DBuf is copied to "main hdc"/
     ///  [tsi dc] ← we copy the background from the DBuf, then paint the item into this DC, then BitBlt back up to DBuf
     ///
-    ///  This is done because GDI won't honor GDI+ TranslateTransform.  We used to use DCMapping to change the viewport
+    ///  This is done because GDI won't honor GDI+ TranslateTransform. We used to use DCMapping to change the viewport
     ///  origin and clipping rect of the toolstrip double buffer hdc to paint each item, but this proves costly
-    ///  because you need to allocate GDI+ Graphics objects for every single item.  This method allows us to only
+    ///  because you need to allocate GDI+ Graphics objects for every single item. This method allows us to only
     ///  allocate 1 Graphics object and share it between all the items in OnPaint.
     /// </summary>
     private CachedItemHdcInfo ItemHdcInfo
@@ -1533,7 +1533,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     internal override bool SupportsUiaProviders => true;
 
     /// <summary>
-    ///  The renderer is used to paint the hwndless ToolStrip items.  If someone wanted to
+    ///  The renderer is used to paint the hwndless ToolStrip items. If someone wanted to
     ///  change the "Hot" look of all of their buttons to be a green triangle, they should
     ///  create a class that derives from ToolStripRenderer, assign it to this property and call
     ///  invalidate.
@@ -1653,7 +1653,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
 
     /// <summary>
     ///  ToolStripItems need to access this to determine if they should be showing underlines
-    ///  for their accelerators.  Since they are not HWNDs, and this method is protected on control
+    ///  for their accelerators. Since they are not HWNDs, and this method is protected on control
     ///  we need a way for them to get at it.
     /// </summary>
     internal bool ShowKeyboardCuesInternal
@@ -2299,7 +2299,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
           || (down && tanWinner.Bounds.Top > hypotenuseWinner.Bounds.Bottom))
         {
             // we prefer the case where the angle is smaller than
-            // the case where the hypotenuse is smaller.  The only
+            // the case where the hypotenuse is smaller. The only
             // scenarios where that is not the case is when the hypotenuse
             // winner is clearly closer than the angle winner.
 
@@ -2569,8 +2569,8 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
             {
                 try
                 {
-                    ToolStripManager.RendererChanged += new EventHandler(OnDefaultRendererChanged);
-                    SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
+                    ToolStripManager.RendererChanged += OnDefaultRendererChanged;
+                    SystemEvents.UserPreferenceChanged += OnUserPreferenceChanged;
                 }
                 finally
                 {
@@ -2582,8 +2582,8 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         {
             try
             {
-                ToolStripManager.RendererChanged -= new EventHandler(OnDefaultRendererChanged);
-                SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
+                ToolStripManager.RendererChanged -= OnDefaultRendererChanged;
+                SystemEvents.UserPreferenceChanged -= OnUserPreferenceChanged;
             }
             finally
             {
@@ -2691,7 +2691,8 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     /// <summary>
     ///  This override fires the LocationChanging event if
     ///  1) We are not currently Rafting .. since this cause this infinite times...
-    ///  2) If we haven't been called once .. Since the "LocationChanging" is listened to by the RaftingCell and calls "JOIN" which may call us back.
+    ///  2) If we haven't been called once .. Since the "LocationChanging" is listened to by the RaftingCell and
+    ///  calls "JOIN" which may call us back.
     /// </summary>
     protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
     {
@@ -2743,7 +2744,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         return ProcessCmdKey(ref m, keyData);
     }
 
-    // This function will print to the PrinterDC. ToolStrip have there own buffered painting and doesnt play very well
+    // This function will print to the PrinterDC. ToolStrip have there own buffered painting and doesn't play very well
     // with the DC translations done by base Control class. Hence we do our own Painting and the BitBLT the DC into the printerDc.
     private protected override void PrintToMetaFileRecursive(HDC hDC, IntPtr lParam, Rectangle bounds)
     {
@@ -2867,8 +2868,8 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         switch (keyCode)
         {
             case Keys.Back:
-                // if it's focused itself, process.  if it's not focused, make sure a child control
-                // doesnt have focus before processing
+                // if it's focused itself, process. if it's not focused, make sure a child control
+                // doesn't have focus before processing
                 if (!ContainsFocus)
                 {
                     // shift backspace/backspace work as backspace, which is the same as shift+tab
@@ -2935,7 +2936,8 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     /// <summary>
     ///  Rules for parsing mnemonics
     ///  PASS 1: Real mnemonics
-    ///  Check items for the character after the &amp;. If it matches, perform the click event or open the dropdown (in the case that it has dropdown items)
+    ///  Check items for the character after the &amp;. If it matches, perform the click event or open the dropdown
+    ///  (in the case that it has dropdown items)
     ///  PASS 2: Fake mnemonics
     ///  Begin with the current selection and parse through the first character in the items in the menu.
     ///  If there is only one item that matches
@@ -3126,7 +3128,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
             // TabStop = false
             // this means we don't want the toolstrip in the normal tab order (default).
             // We got focus to the toolstrip by putting focus into a control contained on the toolstrip or
-            // via a mnemonic e.g. Bold.  In this case we want to wrap.
+            // via a mnemonic e.g. Bold. In this case we want to wrap.
             // arrow keys would continue to wrap
             if (RightToLeft == RightToLeft.Yes)
             {
@@ -3418,7 +3420,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     /// </summary>
     protected override void OnMouseDown(MouseEventArgs mea)
     {
-        // NEVER use this directly from another class.  Always use GetMouseID so that
+        // NEVER use this directly from another class. Always use GetMouseID so that
         // 0 is not returned to another class.
         _mouseDownID++;
 
@@ -3461,7 +3463,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         if (!Grip.MovingToolStrip)
         {
             // If we had a particular item that was "entered"
-            // notify it that we have entered.  It's fair to put
+            // notify it that we have entered. It's fair to put
             // this in the MouseMove event, as MouseEnter is fired during
             // control's WM_MOUSEMOVE. Waiting until this event gives us
             // the actual coordinates.
@@ -3566,7 +3568,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         // Paint the items
         //
         // The idea here is to let items pretend they are controls. They should get paint events at 0,0 and have
-        // proper clipping regions set up for them.  We cannot use g.TranslateTransform as that does not translate
+        // proper clipping regions set up for them. We cannot use g.TranslateTransform as that does not translate
         // the GDI world, and things like Visual Styles and the TextRenderer only know how to speak GDI.
         //
         // The previous approach was to set up the GDI clipping region and allocate a graphics from that, but that
@@ -3574,7 +3576,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         //
         // So now we allocate an offscreen bitmap of size == MaxItemSize, copy the background of the toolstrip into
         // that bitmap, paint the item on top of the bitmap, then finally copy the contents of the bitmap back onto
-        // the toolstrip. This gives us our paint event starting at 0,0.  Combine this with double buffering of the
+        // the toolstrip. This gives us our paint event starting at 0,0. Combine this with double buffering of the
         // toolstrip and the entire toolstrip is updated after returning from this function.
 
         if (!LayoutUtils.IsZeroWidthOrHeight(bitmapSize))
@@ -3638,7 +3640,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
                         // check if our item buffer is large enough to handle.
                         if (!LayoutUtils.AreWidthAndHeightLarger(bitmapSize, itemSize))
                         {
-                            // the cached HDC isn't big enough for this item.  make it bigger.
+                            // the cached HDC isn't big enough for this item. make it bigger.
                             _largestDisplayedItemSize = itemSize;
                             bitmapSize = itemSize;
                             // dispose the old graphics - create a new, bigger one.
@@ -4058,7 +4060,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
 
     private void RestoreFocusInternal(bool wasInMenuMode)
     {
-        // This is called from the RestoreFocusFilter.  If the state of MenuMode has changed
+        // This is called from the RestoreFocusFilter. If the state of MenuMode has changed
         // since we posted this message, we do not know enough information about whether
         // we should exit menu mode.
         if (wasInMenuMode == ToolStripManager.ModalMenuFilter.InMenuMode)
@@ -4091,7 +4093,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         }
 
         // this matches the case where you click on a toolstrip control host
-        // then tab off of it, then hit ESC.  ESC would "restore focus" and
+        // then tab off of it, then hit ESC. ESC would "restore focus" and
         // we should cancel keyboard activation if this method has cancelled focus.
         if (KeyboardActive && !Focused && !ContainsFocus)
         {
@@ -4433,7 +4435,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         }
         else
         {
-            // NOT a SplitStack layout.  We don't change the order of the displayed items collection
+            // NOT a SplitStack layout. We don't change the order of the displayed items collection
             // for custom keyboard handling override GetNextItem.
             Rectangle clientBounds = ClientRectangle;
 
@@ -4591,7 +4593,9 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     ///  Updates a tooltip for the given toolstrip item.
     /// </summary>
     /// <param name="item">The toolstrip item.</param>
-    /// <param name="refresh">see langword="true"/> to force-update the tooltip (if it is configured); otherwise <see langword="false"/>.</param>
+    /// <param name="refresh">
+    ///  see langword="true"/> to force-update the tooltip (if it is configured); otherwise <see langword="false"/>.
+    /// </param>
     internal void UpdateToolTip(ToolStripItem? item, bool refresh = false)
     {
         if (ShowItemToolTips)
@@ -4751,7 +4755,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
 
         if (m.Msg == (int)PInvoke.WM_NCDESTROY)
         {
-            // Destroy the owner window, if we created one.  We
+            // Destroy the owner window, if we created one. We
             // cannot do this in OnHandleDestroyed, because at
             // that point our handle is not actually destroyed so
             // destroying our parent actually causes a recursive

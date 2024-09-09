@@ -120,6 +120,10 @@ public partial class ListBox : ListControl
     {
         SetStyle(ControlStyles.UserPaint | ControlStyles.StandardClick | ControlStyles.UseTextForAccessibility, false);
 
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
         // This class overrides GetPreferredSizeCore, let Control automatically cache the result.
         SetExtendedState(ExtendedStates.UserPreferredSizeCache, true);
 
@@ -195,7 +199,7 @@ public partial class ListBox : ListControl
     }
 
     /// <summary>
-    ///  Retrieves the current border style.  Values for this are taken from
+    ///  Retrieves the current border style. Values for this are taken from
     ///  The System.Windows.Forms.BorderStyle enumeration.
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
@@ -378,8 +382,8 @@ public partial class ListBox : ListControl
     }
 
     /// <summary>
-    ///  Retrieves the style of the listBox.  This will indicate if the system
-    ///  draws it, or if the user paints each item manually.  It also indicates
+    ///  Retrieves the style of the listBox. This will indicate if the system
+    ///  draws it, or if the user paints each item manually. It also indicates
     ///  whether or not items have to be of the same height.
     /// </summary>
     [SRCategory(nameof(SR.CatBehavior))]
@@ -522,9 +526,9 @@ public partial class ListBox : ListControl
     }
 
     /// <summary>
-    ///  Indicates if the listBox should avoid showing partial Items.  If so,
+    ///  Indicates if the listBox should avoid showing partial Items. If so,
     ///  then only full items will be displayed, and the listBox will be resized
-    ///  to prevent partial items from being shown.  Otherwise, they will be
+    ///  to prevent partial items from being shown. Otherwise, they will be
     ///  shown
     /// </summary>
     [SRCategory(nameof(SR.CatBehavior))]
@@ -809,9 +813,9 @@ public partial class ListBox : ListControl
 
     /// <summary>
     ///  The index of the currently selected item in the list, if there
-    ///  is one.  If the value is -1, there is currently no selection.  If the
+    ///  is one. If the value is -1, there is currently no selection. If the
     ///  value is 0 or greater, than the value is the index of the currently
-    ///  selected item.  If the MultiSelect property on the ListBox is true,
+    ///  selected item. If the MultiSelect property on the ListBox is true,
     ///  then a non-zero value for this property is the index of the first
     ///  selection
     /// </summary>
@@ -920,7 +924,7 @@ public partial class ListBox : ListControl
 
     /// <summary>
     ///  The value of the currently selected item in the list, if there
-    ///  is one.  If the value is null, there is currently no selection.  If the
+    ///  is one. If the value is null, there is currently no selection. If the
     ///  value is non-null, then the value is that of the currently selected
     ///  item. If the MultiSelect property on the ListBox is true, then a
     ///  non-null return value for this method is the value of the first item
@@ -1018,7 +1022,7 @@ public partial class ListBox : ListControl
     }
 
     /// <summary>
-    ///  Indicates if the ListBox is sorted or not.  'true' means that strings in
+    ///  Indicates if the ListBox is sorted or not. 'true' means that strings in
     ///  the list will be sorted alphabetically
     /// </summary>
     [SRCategory(nameof(SR.CatBehavior))]
@@ -1075,7 +1079,7 @@ public partial class ListBox : ListControl
         {
             base.Text = value;
 
-            // Scan through the list items looking for the supplied text string.  If we find it,
+            // Scan through the list items looking for the supplied text string. If we find it,
             // select it.
             if (SelectionMode != SelectionMode.None && value is not null && (SelectedItem is null || !value.Equals(GetItemText(SelectedItem))))
             {
@@ -1250,10 +1254,10 @@ public partial class ListBox : ListControl
     /// <summary>
     ///  While the preferred way to insert items is to set Items.All,
     ///  and set all the items at once, there are times when you may wish to
-    ///  insert each item one at a time.  To help with the performance of this,
+    ///  insert each item one at a time. To help with the performance of this,
     ///  it is desirable to prevent the ListBox from painting during these
-    ///  operations.  This method, along with EndUpdate, is the preferred
-    ///  way of doing this.  Don't forget to call EndUpdate when you're done,
+    ///  operations. This method, along with EndUpdate, is the preferred
+    ///  way of doing this. Don't forget to call EndUpdate when you're done,
     ///  or else the ListBox won't paint properly afterwards.
     /// </summary>
     public void BeginUpdate()
@@ -1342,10 +1346,10 @@ public partial class ListBox : ListControl
     /// <summary>
     ///  While the preferred way to insert items is to set Items.All,
     ///  and set all the items at once, there are times when you may wish to
-    ///  insert each item one at a time.  To help with the performance of this,
+    ///  insert each item one at a time. To help with the performance of this,
     ///  it is desirable to prevent the ListBox from painting during these
-    ///  operations.  This method, along with BeginUpdate, is the preferred
-    ///  way of doing this.  BeginUpdate should be called first, and this method
+    ///  operations. This method, along with BeginUpdate, is the preferred
+    ///  way of doing this. BeginUpdate should be called first, and this method
     ///  should be called when you want the control to start painting again.
     /// </summary>
     public void EndUpdate()
@@ -1432,7 +1436,7 @@ public partial class ListBox : ListControl
 
     /// <summary>
     ///  Retrieves a Rectangle object which describes the bounding rectangle
-    ///  around an item in the list.  If the item in question is not visible,
+    ///  around an item in the list. If the item in question is not visible,
     ///  the rectangle will be empty.
     /// </summary>
     public Rectangle GetItemRectangle(int index)
@@ -1454,7 +1458,7 @@ public partial class ListBox : ListControl
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected override Rectangle GetScaledBounds(Rectangle bounds, SizeF factor, BoundsSpecified specified)
     {
-        // update bounds' height to use the requested height, not the current height.  These
+        // update bounds' height to use the requested height, not the current height. These
         // can be different if integral height is turned on.
         bounds.Height = _requestedHeight;
         return base.GetScaledBounds(bounds, factor, specified);
@@ -1576,7 +1580,7 @@ public partial class ListBox : ListControl
     }
 
     /// <summary>
-    ///  Inserts the given item to the native List box at the index.  This asserts if the handle hasn't been
+    ///  Inserts the given item to the native List box at the index. This asserts if the handle hasn't been
     ///  created or if the resulting insert index doesn't match the passed in index.
     /// </summary>
     private int NativeInsert(int index, object item)
@@ -1622,7 +1626,7 @@ public partial class ListBox : ListControl
     }
 
     /// <summary>
-    ///  Sets the selection of the given index to the native window.  This does not change
+    ///  Sets the selection of the given index to the native window. This does not change
     ///  the collection; you must update the collection yourself.
     /// </summary>
     private void NativeSetSelected(int index, bool value)
@@ -1642,7 +1646,7 @@ public partial class ListBox : ListControl
 
     /// <summary>
     ///  This is called by the SelectedObjectCollection in response to the first
-    ///  query on that collection after we have called Dirty().  Dirty() is called
+    ///  query on that collection after we have called Dirty(). Dirty() is called
     ///  when we receive a LBN_SELCHANGE message.
     /// </summary>
     private unsafe void NativeUpdateSelection()
@@ -1719,9 +1723,9 @@ public partial class ListBox : ListControl
     }
 
     /// <summary>
-    ///  Actually goes and fires the drawItem event.  Inheriting controls
+    ///  Actually goes and fires the drawItem event. Inheriting controls
     ///  should use this to know when the event is fired [this is preferable to
-    ///  adding an event handler yourself for this event].  They should,
+    ///  adding an event handler yourself for this event]. They should,
     ///  however, remember to call base.onDrawItem(e); to ensure the event is
     ///  still fired to external listeners
     /// </summary>
@@ -1798,7 +1802,7 @@ public partial class ListBox : ListControl
 
     /// <summary>
     ///  Overridden to make sure that we set up and clear out items
-    ///  correctly.  Inheriting controls should not forget to call
+    ///  correctly. Inheriting controls should not forget to call
     ///  base.OnHandleDestroyed()
     /// </summary>
     protected override void OnHandleDestroyed(EventArgs e)
@@ -1854,9 +1858,9 @@ public partial class ListBox : ListControl
     }
 
     /// <summary>
-    ///  Actually goes and fires the selectedIndexChanged event.  Inheriting controls
+    ///  Actually goes and fires the selectedIndexChanged event. Inheriting controls
     ///  should use this to know when the event is fired [this is preferable to
-    ///  adding an event handler on yourself for this event].  They should,
+    ///  adding an event handler on yourself for this event]. They should,
     ///  however, remember to call base.OnSelectedIndexChanged(e); to ensure the event is
     ///  still fired to external listeners
     /// </summary>
@@ -2132,7 +2136,7 @@ public partial class ListBox : ListControl
     }
 
     /// <summary>
-    ///  Allows the user to set an item as being selected or not.  This should
+    ///  Allows the user to set an item as being selected or not. This should
     ///  only be used with ListBoxes that allow some sort of multi-selection.
     /// </summary>
     public void SetSelected(int index, bool value)
@@ -2388,7 +2392,7 @@ public partial class ListBox : ListControl
     }
 
     /// <summary>
-    ///  The list's window procedure.  Inheriting classes can override this
+    ///  The list's window procedure. Inheriting classes can override this
     ///  to add extra functionality, but should not forget to call
     ///  base.wndProc(m); to ensure the list continues to function properly.
     /// </summary>

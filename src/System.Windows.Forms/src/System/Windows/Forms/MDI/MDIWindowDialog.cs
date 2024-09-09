@@ -74,7 +74,7 @@ internal sealed partial class MdiWindowDialog : Form
 
     /// <summary>
     ///  NOTE: The following code is required by the Windows Forms
-    ///  designer.  It can be modified using the form editor.  Do not
+    ///  designer. It can be modified using the form editor. Do not
     ///  modify it using the code editor.
     /// </summary>
     [MemberNotNull(nameof(_itemList))]
@@ -94,8 +94,8 @@ internal sealed partial class MdiWindowDialog : Form
         _cancelButton = new Button();
         _okCancelTableLayoutPanel = new TableLayoutPanel();
         _okCancelTableLayoutPanel.SuspendLayout();
-        _itemList.DoubleClick += new EventHandler(ItemList_doubleClick);
-        _itemList.SelectedIndexChanged += new EventHandler(ItemList_selectedIndexChanged);
+        _itemList.DoubleClick += ItemList_doubleClick;
+        _itemList.SelectedIndexChanged += ItemList_selectedIndexChanged;
         SuspendLayout();
         //
         // _itemList

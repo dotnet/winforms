@@ -159,7 +159,7 @@ public sealed class BehaviorServiceAdornerCollection : CollectionBase
     ///  <see cref="BehaviorServiceAdornerCollection"/> is greater than the
     ///  available space between <paramref name="index"/> and the end of <paramref name="array"/>.
     /// </exception>
-    /// <exception cref="ArgumentNullException"><paramref name="array"/> is <see langword="null"/>. </exception>
+    /// <exception cref="ArgumentNullException"><paramref name="array"/> is <see langword="null"/>.</exception>
     /// <exception cref="ArgumentOutOfRangeException">
     ///  <paramref name="index"/> is less than
     ///  <paramref name="array"/>'s lowbound.
@@ -225,7 +225,7 @@ public sealed class BehaviorServiceAdornerCollection : CollectionBase
     /// <returns>
     ///  None.
     /// </returns>
-    /// <exception cref="ArgumentException"><paramref name="value"/> is not found in the Collection. </exception>
+    /// <exception cref="ArgumentException"><paramref name="value"/> is not found in the Collection.</exception>
     public void Remove(Adorner value)
     {
         List.Remove(value);

@@ -10,7 +10,7 @@ namespace System.Windows.Forms.Design.Behavior;
 
 /// <summary>
 ///  This class implements the behavior provided by DocumentDesigner
-///  when the user is dragging a valid toolbox item.  Here, we'll render a
+///  when the user is dragging a valid toolbox item. Here, we'll render a
 ///  default 'box' beneath the cursor that snaps to edges of other
 ///  components on the designer's surface.
 /// </summary>
@@ -100,7 +100,7 @@ internal class ToolboxItemSnapLineBehavior : Behavior
 
     /// <summary>
     ///  Called on a DragDrop - this generates our extra drag info
-    ///  to pass along to the base class.  Basically, we get the
+    ///  to pass along to the base class. Basically, we get the
     ///  last-rendered snaplines before the drop and attempt to
     ///  identify to which direction the mouse was snapped.
     /// </summary>
