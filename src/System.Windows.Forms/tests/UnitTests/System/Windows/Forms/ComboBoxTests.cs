@@ -369,12 +369,13 @@ public class ComboBoxTests
         int callCount = 0;
 
         PaintEventHandler handler = (sender, e) => callCount++;
-
         comboBox.Paint += handler;
+        comboBox.InvokeOnPaint(new PaintEventArgs(Graphics.FromHwnd(comboBox.Handle), new Rectangle()));
+        callCount.Should().Be(1);
+
         comboBox.Paint -= handler;
         comboBox.InvokeOnPaint(new PaintEventArgs(Graphics.FromHwnd(comboBox.Handle), new Rectangle()));
-
-        callCount.Should().Be(0);
+        callCount.Should().Be(1);
     }
 
     [WinFormsFact]
