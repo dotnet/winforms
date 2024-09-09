@@ -10,6 +10,9 @@ namespace System.Drawing.Imaging.Effects;
 /// </summary>
 public sealed class GrayScaleEffect : ColorMatrixEffect
 {
+    /// <summary>
+    ///  Creates a <see cref="ColorMatrixEffect"/> that converts an image to grayscale.
+    /// </summary>
     public GrayScaleEffect() : base(
         new(
         [
