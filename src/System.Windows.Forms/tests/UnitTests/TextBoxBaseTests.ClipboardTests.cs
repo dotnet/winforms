@@ -17,10 +17,13 @@ public partial class TextBoxBaseTests
                 SelectionStart = 1,
                 SelectionLength = 2
             };
+            control.Focus();
+            Thread.Sleep(100);
             control.Copy();
 
             control.Text = "text";
             control.SelectionLength = 2;
+            Thread.Sleep(100);
             control.Paste();
 
             control.Text.Should().Be("bcxt");
@@ -45,6 +48,7 @@ public partial class TextBoxBaseTests
 
             control.Text = "text";
             control.SelectionLength = 2;
+            Thread.Sleep(100);
             control.Paste();
 
             control.Text.Should().Be("bcxt");
@@ -79,6 +83,7 @@ public partial class TextBoxBaseTests
 
             control.Text = "text";
             control.SelectionLength = 2;
+            Thread.Sleep(100);
             control.Paste();
 
             control.Text.Should().Be("bcxt");
@@ -105,6 +110,7 @@ public partial class TextBoxBaseTests
 
             control.Text = "text";
             control.SelectionLength = 2;
+            Thread.Sleep(100);
             control.Paste();
 
             control.Text.Should().Be("bcxt");
@@ -130,6 +136,7 @@ public partial class TextBoxBaseTests
             int createdCallCount = 0;
             control.HandleCreated += (sender, e) => createdCallCount++;
 
+            Thread.Sleep(100);
             control.Cut();
             control.Text.Should().Be("a");
             control.IsHandleCreated.Should().BeTrue();
@@ -139,6 +146,7 @@ public partial class TextBoxBaseTests
 
             control.Text = "text";
             control.SelectionLength = 2;
+            Thread.Sleep(100);
             control.Paste();
 
             control.Text.Should().Be("bcxt");
@@ -155,6 +163,7 @@ public partial class TextBoxBaseTests
         {
             Clipboard.Clear();
             using SubTextBox control = new();
+            Thread.Sleep(100);
             control.Paste();
             control.Text.Should().BeEmpty();
             control.IsHandleCreated.Should().BeTrue();
@@ -170,6 +179,7 @@ public partial class TextBoxBaseTests
                 SelectionStart = 1,
                 SelectionLength = 2
             };
+            Thread.Sleep(100);
             control.Paste();
             control.Text.Should().Be("a");
             control.IsHandleCreated.Should().BeTrue();
@@ -188,6 +198,7 @@ public partial class TextBoxBaseTests
 
             control.Text = "text";
             control.SelectionLength = 2;
+            Thread.Sleep(100);
             control.Paste();
 
             control.Text.Should().Be("bcxt");
