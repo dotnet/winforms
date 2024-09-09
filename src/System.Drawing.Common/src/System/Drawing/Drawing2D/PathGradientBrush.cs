@@ -26,7 +26,7 @@ public sealed unsafe class PathGradientBrush : Brush
     /// </summary>
     public PathGradientBrush(PointF[] points, WrapMode wrapMode) : this(wrapMode, points.OrThrowIfNull().AsSpan()) { }
 
-    /// <inheritdoc cref="PathGradientBrush(PointF[])"/>
+    /// <inheritdoc cref="PathGradientBrush(PointF[], WrapMode)"/>
 #if NET9_0_OR_GREATER
     public
 #else
