@@ -10,6 +10,9 @@ namespace System.Drawing.Imaging.Effects;
 /// </summary>
 public sealed class InvertEffect : ColorMatrixEffect
 {
+    /// <summary>
+    ///  Creates a <see cref="ColorMatrixEffect"/> that inverts the colors in an image.
+    /// </summary>
     public InvertEffect() : base(
         new(
         [

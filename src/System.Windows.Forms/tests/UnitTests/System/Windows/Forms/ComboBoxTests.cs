@@ -306,6 +306,93 @@ public class ComboBoxTests
     }
 
     [WinFormsFact]
+    public void ComboBox_MeasureItem_AddHandler()
+    {
+        using ComboBox control = new();
+        int initialItemHeight = control.ItemHeight;
+
+        MeasureItemEventHandler handler = (sender, e) => { };
+        control.MeasureItem += handler;
+
+        control.ItemHeight.Should().NotBe(initialItemHeight);
+    }
+
+    private class TestComboBox : ComboBox
+    {
+        public void TriggerMeasureItem(MeasureItemEventArgs e) =>
+            base.OnMeasureItem(e);
+    }
+
+    [WinFormsFact]
+    public void ComboBox_MeasureItem_RemoveHandler()
+    {
+        using TestComboBox control = new();
+        int handlerCallCount = 0;
+        MeasureItemEventHandler handler = (sender, e) => { handlerCallCount++; };
+
+        control.MeasureItem += handler;
+
+        // Simulate the MeasureItem event
+        control.TriggerMeasureItem(new MeasureItemEventArgs(Graphics.FromHwnd(IntPtr.Zero), 0, 0));
+
+        control.MeasureItem -= handler;
+
+        // Simulate the MeasureItem event again to ensure the handler was removed
+        control.TriggerMeasureItem(new MeasureItemEventArgs(Graphics.FromHwnd(IntPtr.Zero), 0, 0));
+
+        handlerCallCount.Should().Be(1, "The MeasureItem event handler was not removed as expected.");
+    }
+
+    private class TestableComboBox : ComboBox
+    {
+        public void InvokeOnPaint(PaintEventArgs e) => base.OnPaint(e);
+    }
+
+    [WinFormsFact]
+    public void ComboBox_Paint_AddHandler_ShouldSubscribeEvent()
+    {
+        using TestableComboBox comboBox = new();
+        int callCount = 0;
+
+        PaintEventHandler handler = (sender, e) => callCount++;
+
+        comboBox.Paint += handler;
+        comboBox.TestAccessor().Dynamic.OnPaint(new PaintEventArgs(Graphics.FromHwnd(comboBox.Handle), new Rectangle()));
+
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void ComboBox_Paint_RemoveHandler_ShouldUnsubscribeEvent()
+    {
+        using TestableComboBox comboBox = new();
+        int callCount = 0;
+
+        PaintEventHandler handler = (sender, e) => callCount++;
+        comboBox.Paint += handler;
+        comboBox.InvokeOnPaint(new PaintEventArgs(Graphics.FromHwnd(comboBox.Handle), new Rectangle()));
+        callCount.Should().Be(1);
+
+        comboBox.Paint -= handler;
+        comboBox.InvokeOnPaint(new PaintEventArgs(Graphics.FromHwnd(comboBox.Handle), new Rectangle()));
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void ComboBox_Paint_EventHandlerCalledOnPaint()
+    {
+        using TestableComboBox comboBox = new();
+        using Bitmap bitmap = new(100, 100);
+        Graphics graphics = Graphics.FromImage(bitmap);
+        bool handlerCalled = false;
+
+        comboBox.Paint += (sender, e) => handlerCalled = true;
+        comboBox.InvokeOnPaint(new PaintEventArgs(graphics, new Rectangle(0, 0, 100, 100)));
+
+        handlerCalled.Should().BeTrue();
+    }
+
+    [WinFormsFact]
     public void VerifyAutoCompleteEntries()
     {
         void AssertAutoCompleteCustomSource(string[] items, bool isHandleCreated)

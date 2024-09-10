@@ -54,10 +54,14 @@ internal static class WinFormsSerializationRecordExtensions
     }
 
     /// <summary>
-    ///  Try to get a supported object.
+    ///  Try to get a supported object. This supports common types used in WinForms that do not have type converters.
     /// </summary>
-    public static bool TryGetObject(this SerializationRecord record, [NotNullWhen(true)] out object? value) =>
+    public static bool TryGetResXObject(this SerializationRecord record, [NotNullWhen(true)] out object? value) =>
         record.TryGetFrameworkObject(out value)
         || record.TryGetBitmap(out value)
         || record.TryGetImageListStreamer(out value);
+
+    public static bool TryGetCommonObject(this SerializationRecord record, [NotNullWhen(true)] out object? value) =>
+        record.TryGetResXObject(out value)
+        || record.TryGetDrawingPrimitivesObject(out value);
 }

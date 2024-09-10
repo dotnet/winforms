@@ -3,6 +3,7 @@
 
 using System.Collections;
 using System.Drawing;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 
@@ -30,6 +31,8 @@ internal static class BinaryFormatWriter
     private static readonly string[] s_primitiveMemberName = ["m_value"];
     private static readonly string[] s_pointMemberNames = ["x", "y"];
     private static readonly string[] s_rectangleMemberNames = ["x", "y", "width", "height"];
+    private static readonly string[] s_sizeMemberNames = ["width", "height"];
+    private static readonly string[] s_colorMemberNames = ["name", "value", "knownColor", "state"];
     private static readonly string[] s_valueName = ["value"];
     private static readonly string[] s_ticksName = ["_ticks"];
 
@@ -125,6 +128,67 @@ internal static class BinaryFormatWriter
     }
 
     /// <summary>
+    ///  Writes a <see cref="Point"/> in binary format.
+    /// </summary>
+    public static void WritePoint(Stream stream, Point value)
+    {
+        using BinaryFormatWriterScope writer = new(stream);
+        new BinaryLibrary(2, TypeInfo.SystemDrawingAssemblyName).Write(writer);
+        new ClassWithMembersAndTypes(
+            new ClassInfo(1, typeof(Point).FullName!, s_pointMemberNames),
+            libraryId: 2,
+            new MemberTypeInfo[]
+            {
+                new(BinaryType.Primitive, PrimitiveType.Int32),
+                new(BinaryType.Primitive, PrimitiveType.Int32)
+            },
+            value.X,
+            value.Y).Write(writer);
+    }
+
+    /// <summary>
+    ///  Writes a <see cref="Rectangle"/> in binary format.
+    /// </summary>
+    public static void WriteRectangle(Stream stream, Rectangle value)
+    {
+        using BinaryFormatWriterScope writer = new(stream);
+        new BinaryLibrary(2, TypeInfo.SystemDrawingAssemblyName).Write(writer);
+        new ClassWithMembersAndTypes(
+            new ClassInfo(1, typeof(Rectangle).FullName!, s_rectangleMemberNames),
+            libraryId: 2,
+            new MemberTypeInfo[]
+            {
+                new(BinaryType.Primitive, PrimitiveType.Int32),
+                new(BinaryType.Primitive, PrimitiveType.Int32),
+                new(BinaryType.Primitive, PrimitiveType.Int32),
+                new(BinaryType.Primitive, PrimitiveType.Int32)
+            },
+            value.X,
+            value.Y,
+            value.Width,
+            value.Height).Write(writer);
+    }
+
+    /// <summary>
+    ///  Writes a <see cref="Size"/> in binary format.
+    /// </summary>
+    public static void WriteSize(Stream stream, Size value)
+    {
+        using BinaryFormatWriterScope writer = new(stream);
+        new BinaryLibrary(2, TypeInfo.SystemDrawingAssemblyName).Write(writer);
+        new ClassWithMembersAndTypes(
+            new ClassInfo(1, typeof(Size).FullName!, s_sizeMemberNames),
+            libraryId: 2,
+            new MemberTypeInfo[]
+            {
+                new(BinaryType.Primitive, PrimitiveType.Int32),
+                new(BinaryType.Primitive, PrimitiveType.Int32)
+            },
+            value.Width,
+            value.Height).Write(writer);
+    }
+
+    /// <summary>
     ///  Writes a <see cref="PointF"/> in binary format.
     /// </summary>
     public static void WritePointF(Stream stream, PointF value)
@@ -164,6 +228,51 @@ internal static class BinaryFormatWriter
             value.Y,
             value.Width,
             value.Height).Write(writer);
+    }
+
+    /// <summary>
+    ///  Writes a <see cref="SizeF"/> in binary format.
+    /// </summary>
+    public static void WriteSizeF(Stream stream, SizeF value)
+    {
+        using BinaryFormatWriterScope writer = new(stream);
+        new BinaryLibrary(2, TypeInfo.SystemDrawingAssemblyName).Write(writer);
+        new ClassWithMembersAndTypes(
+            new ClassInfo(1, typeof(SizeF).FullName!, s_sizeMemberNames),
+            libraryId: 2,
+            new MemberTypeInfo[]
+            {
+                new(BinaryType.Primitive, PrimitiveType.Single),
+                new(BinaryType.Primitive, PrimitiveType.Single)
+            },
+            value.Width,
+            value.Height).Write(writer);
+    }
+
+    /// <summary>
+    ///  Writes a <see cref="Color"/> in binary format.
+    /// </summary>
+    public static void WriteColor(Stream stream, Color value)
+    {
+        using BinaryFormatWriterScope writer = new(stream);
+        new BinaryLibrary(2, TypeInfo.SystemDrawingAssemblyName).Write(writer);
+        new ClassWithMembersAndTypes(
+            new ClassInfo(1, typeof(Color).FullName!, s_colorMemberNames),
+            libraryId: 2,
+            new MemberTypeInfo[]
+            {
+                new(BinaryType.String, null),
+                new(BinaryType.Primitive, PrimitiveType.Int64),
+                new(BinaryType.Primitive, PrimitiveType.Int16),
+                new(BinaryType.Primitive, PrimitiveType.Int16)
+            },
+            new List<object?>
+            {
+                typeof(Color).GetField("name", BindingFlags.NonPublic | BindingFlags.Instance)!.GetValue(value) is not string name ? null : new BinaryObjectString(2, name),
+                (long)typeof(Color).GetField("value", BindingFlags.NonPublic | BindingFlags.Instance)!.GetValue(value)!,
+                (short)typeof(Color).GetField("knownColor", BindingFlags.NonPublic | BindingFlags.Instance)!.GetValue(value)!,
+                (short)typeof(Color).GetField("state", BindingFlags.NonPublic | BindingFlags.Instance)!.GetValue(value)!
+            }).Write(writer);
     }
 
     /// <summary>
@@ -614,7 +723,40 @@ internal static class BinaryFormatWriter
     }
 
     /// <summary>
-    ///  Simple wrapper to ensure the <paramref name="stream"/> is reset to it's original position if the
+    ///  Writes the given <paramref name="value"/> to stream, only types that have TypeConverters are supported.
+    ///  This function is needed for the Clipboard serialization as Clipboard is not using TypeConverters.
+    /// </summary>
+    public static bool TryWriteDrawingPrimitivesObject(Stream stream, object value)
+    {
+        return TryWrite(Write, stream, value);
+
+        static bool Write(Stream stream, object value)
+        {
+            switch (value)
+            {
+                case Point point:
+                    WritePoint(stream, point);
+                    return true;
+                case SizeF sizeF:
+                    WriteSizeF(stream, sizeF);
+                    return true;
+                case Size size:
+                    WriteSize(stream, size);
+                    return true;
+                case Rectangle rectangle:
+                    WriteRectangle(stream, rectangle);
+                    return true;
+                case Color color:
+                    WriteColor(stream, color);
+                    return true;
+            }
+
+            return false;
+        }
+    }
+
+    /// <summary>
+    ///  Simple wrapper to ensure the <paramref name="stream"/> is reset to its original position if the
     ///  <paramref name="action"/> throws.
     /// </summary>
     public static bool TryWrite<T>(Action<Stream, T> action, Stream stream, T value)
@@ -624,7 +766,7 @@ internal static class BinaryFormatWriter
             value);
 
     /// <summary>
-    ///  Simple wrapper to ensure the <paramref name="stream"/> is reset to it's original position if the
+    ///  Simple wrapper to ensure the <paramref name="stream"/> is reset to its original position if the
     ///  <paramref name="func"/> throws or returns <see langword="false"/>.
     /// </summary>
     public static bool TryWrite<T>(Func<Stream, T, bool> func, Stream stream, T value)
