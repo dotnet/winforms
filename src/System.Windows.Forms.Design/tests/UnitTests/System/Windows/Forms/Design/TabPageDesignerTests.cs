@@ -68,4 +68,3 @@ public class TabPageDesignerTests
         selectionRules.Should().Be(SelectionRules.AllSizeable | SelectionRules.Moveable | SelectionRules.Visible);
     }
 }
-
