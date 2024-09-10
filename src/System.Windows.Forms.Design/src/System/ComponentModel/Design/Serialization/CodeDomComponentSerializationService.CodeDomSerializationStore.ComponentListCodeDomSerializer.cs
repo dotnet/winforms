@@ -271,10 +271,10 @@ public sealed partial class CodeDomComponentSerializationService
                 // and design-time properties.
                 // If it doesn't contain an OrderedCodeStatementsCollection this means one of two things:
                 // 1. We already resolved this name and shoved an instance in there.
-                // In this case we just return the instance
+                //    In this case we just return the instance
                 // 2. There are no statements corresponding to this name,
-                // but there might be expressions that have never been deserialized,
-                // so we check for that and deserialize those.
+                //    but there might be expressions that have never been deserialized,
+                //    so we check for that and deserialize those.
                 _statementsTable.TryGetValue(name, out OrderedCodeStatementCollection? statements);
                 if (statements is not null)
                 {
