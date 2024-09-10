@@ -980,7 +980,7 @@ public partial class Control
         internal HRESULT IsDirty() => _activeXState[s_isDirty] ? HRESULT.S_OK : HRESULT.S_FALSE;
 
         /// <summary>
-        ///  Looks at the property to see if it should be loaded / saved as a resource or  through a type converter.
+        ///  Looks at the property to see if it should be loaded / saved as a resource or through a type converter.
         /// </summary>
         private bool IsResourceProperty(PropertyDescriptor property)
         {
@@ -1142,7 +1142,7 @@ public partial class Control
                     try
                     {
                         SerializationRecord rootRecord = stream.Decode();
-                        success = rootRecord.TryGetObject(out deserialized);
+                        success = rootRecord.TryGetResXObject(out deserialized);
                     }
                     catch (Exception ex) when (!ex.IsCriticalException())
                     {
