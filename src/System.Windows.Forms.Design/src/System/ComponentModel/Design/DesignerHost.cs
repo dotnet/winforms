@@ -21,7 +21,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     private static readonly int s_stateLoading = BitVector32.CreateMask();
     // Designer is currently unloading.
     private static readonly int s_stateUnloading = BitVector32.CreateMask(s_stateLoading);
-00000    // A transaction is in the process of being Canceled or Committed.
+    // A transaction is in the process of being Canceled or Committed.
     private static readonly int s_stateIsClosingTransaction = BitVector32.CreateMask(s_stateUnloading);
 
     private static readonly Type[] s_defaultServices = [typeof(IDesignerHost), typeof(IContainer), typeof(IComponentChangeService), typeof(IDesignerLoaderHost2)];
