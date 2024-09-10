@@ -25,13 +25,13 @@ internal static unsafe class CoreImageExtensions
         }
 
         using var iStream = stream.ToIStream();
-        PInvokeCore.GdipSaveImageToStream(image.Pointer, iStream, &encoder, encoderParameters).ThrowIfFailed();
+        PInvokeCore.GdipSaveImageToStream(image.GetPointer(), iStream, &encoder, encoderParameters).ThrowIfFailed();
     }
 
     internal static void Save(this IImage image, MemoryStream stream)
     {
         Guid format = default;
-        PInvokeCore.GdipGetImageRawFormat(image.Pointer, &format).ThrowIfFailed();
+        PInvokeCore.GdipGetImageRawFormat(image.GetPointer(), &format).ThrowIfFailed();
 
         Guid encoder = ImageCodecInfoHelper.GetEncoderClsid(format);
 
