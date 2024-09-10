@@ -296,7 +296,8 @@ public sealed unsafe class StringFormat : MarshalByRefObject, ICloneable, IDispo
     ///
     ///     - No string format flags are set.
     ///     - Character alignment and line alignment are set to StringAlignmentNear.
-    ///     - Language ID is set to neutral language, which means that the current language associated with the calling thread is used.
+    ///     - Language ID is set to neutral language, which means that the current language associated
+    ///       with the calling thread is used.
     ///     - String digit substitution is set to StringDigitSubstituteUser.
     ///     - Hot key prefix is set to HotkeyPrefixNone.
     ///     - Number of tab stops is set to zero.
@@ -318,9 +319,11 @@ public sealed unsafe class StringFormat : MarshalByRefObject, ICloneable, IDispo
     /// <devdoc>
     ///  Remarks from MSDN: A generic, typographic StringFormat object has the following characteristics:
     ///
-    ///     - String format flags StringFormatFlagsLineLimit, StringFormatFlagsNoClip, and StringFormatFlagsNoFitBlackBox are set.
+    ///     - String format flags StringFormatFlagsLineLimit, StringFormatFlagsNoClip,
+    ///       and StringFormatFlagsNoFitBlackBox are set.
     ///     - Character alignment and line alignment are set to StringAlignmentNear.
-    ///     - Language ID is set to neutral language, which means that the current language associated with the calling thread is used.
+    ///     - Language ID is set to neutral language, which means that the current language associated
+    ///       with the calling thread is used.
     ///     - String digit substitution is set to StringDigitSubstituteUser.
     ///     - Hot key prefix is set to HotkeyPrefixNone.
     ///     - Number of tab stops is set to zero.

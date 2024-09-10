@@ -2653,7 +2653,7 @@ public unsafe partial class AccessibleObject :
 
     private VARIANT AsChildIdVariant(AccessibleObject? obj)
     {
-        // https://learn.Microsoft.com/windows/win32/winauto/how-child-ids-are-used-in-parameters
+        // https://learn.microsoft.com/windows/win32/winauto/how-child-ids-are-used-in-parameters
         if (obj == this)
         {
             return (VARIANT)(int)PInvoke.CHILDID_SELF;

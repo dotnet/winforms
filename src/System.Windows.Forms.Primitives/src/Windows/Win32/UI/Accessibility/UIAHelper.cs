@@ -30,7 +30,7 @@ internal static class UIAHelper
         {
             vt = VARENUM.VT_I4,
             // Only the lower 32 bits in window handles contain significant information -
-            // https://learn.Microsoft.com/windows/win32/winprog64/interprocess-communication
+            // https://learn.microsoft.com/windows/win32/winprog64/interprocess-communication
             data = new() { intVal = (int)(handle & 0xFFFF_FFFF) }
         };
 }

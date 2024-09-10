@@ -676,7 +676,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
 
     /// <devdoc>
     ///  Attribute values and their types are defined here -
-    ///  https://learn.Microsoft.com/windows/win32/winauto/uiauto-textattribute-ids
+    ///  https://learn.microsoft.com/windows/win32/winauto/uiauto-textattribute-ids
     /// </devdoc>
     private VARIANT GetAttributeValue(UIA_TEXTATTRIBUTE_ID textAttributeIdentifier)
     {

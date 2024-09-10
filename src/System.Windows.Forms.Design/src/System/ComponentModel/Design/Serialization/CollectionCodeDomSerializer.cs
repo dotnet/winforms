@@ -134,12 +134,12 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
         object? result = null;
 
         // We serialize collections as follows:
-        //      If the collection is an array, we write out the array.
-        //      If the collection has a method called AddRange, we will call that, providing an array.
-        //      If the collection has an Add method, we will call it repeatedly.
-        //      If the collection is an IList, we will cast to IList and add to it.
-        //      If the collection has no add method, but is marked with PersistContents,
-        //      we will enumerate the collection and serialize each element.
+        // If the collection is an array, we write out the array.
+        // If the collection has a method called AddRange, we will call that, providing an array.
+        // If the collection has an Add method, we will call it repeatedly.
+        // If the collection is an IList, we will cast to IList and add to it.
+        // If the collection has no add method, but is marked with PersistContents,
+        // we will enumerate the collection and serialize each element.
         // Check to see if there is a CodePropertyReferenceExpression on the stack.
         // If there is, we can use it as a guide for serialization.
         CodeExpression? target;

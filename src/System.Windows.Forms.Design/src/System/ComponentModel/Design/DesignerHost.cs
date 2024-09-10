@@ -17,8 +17,10 @@ namespace System.ComponentModel.Design;
 internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, IDesignerHostTransactionState, IComponentChangeService, IReflect
 {
     // State flags for the state of the designer host
-    private static readonly int s_stateLoading = BitVector32.CreateMask(); // Designer is currently loading from the loader host.
-    private static readonly int s_stateUnloading = BitVector32.CreateMask(s_stateLoading); // Designer is currently unloading.
+    // Designer is currently loading from the loader host.
+    private static readonly int s_stateLoading = BitVector32.CreateMask();
+    // Designer is currently unloading.
+    private static readonly int s_stateUnloading = BitVector32.CreateMask(s_stateLoading);
     // A transaction is in the process of being Canceled or Committed.
     private static readonly int s_stateIsClosingTransaction = BitVector32.CreateMask(s_stateUnloading);
 
@@ -38,7 +40,8 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     private static readonly object s_eventComponentAdded = new(); // A component was just added to the container
     private static readonly object s_eventComponentChanging = new(); // A component is about to be changed
     private static readonly object s_eventComponentChanged = new(); // A component has changed
-    private static readonly object s_eventComponentRemoving = new(); // A component is about to be removed from the container
+    // A component is about to be removed from the container
+    private static readonly object s_eventComponentRemoving = new();
     private static readonly object s_eventComponentRemoved = new(); // A component has been removed from the container
     private static readonly object s_eventComponentRename = new(); // A component has been renamed
 
@@ -237,8 +240,8 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
         IDesigner? designer;
 
         // Is this the first component the loader has created? If so, then it must be the root component (by definition)
-        // so we will expect there to be a root designer associated with the component. Otherwise, we search for a normal
-        // designer, which can be optionally provided.
+        // so we will expect there to be a root designer associated with the component.
+        // Otherwise, we search for a normal designer, which can be optionally provided.
         if (_rootComponent is null)
         {
             designer = _surface!.CreateDesigner(component, true) as IRootDesigner;
@@ -355,7 +358,8 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
 
         if (_designerEventService is null)
         {
-            // If there is no designer event service, make this designer the currently active designer. It will remain active.
+            // If there is no designer event service, make this designer the currently active designer.
+            // It will remain active.
             OnActiveDesignerChanged(sender: null, new ActiveDesignerEventArgs(oldDesigner: null, this));
         }
     }

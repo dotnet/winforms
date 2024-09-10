@@ -219,7 +219,7 @@ public class DesignerActionService : IDisposable
             // time doing this twice but don't have much of a choice here... the panel is not yet displayed and
             // we want to know if a non empty panel is present...
             // NOTE: We do this AFTER the verb check that way to disable auto verb upgrading you can just return an
-            //       empty actionList collection
+            // empty actionList collection
             if (pullCollection is not null)
             {
                 foreach (DesignerActionList actionList in pullCollection)

@@ -21,7 +21,8 @@ public class PathLengthTests
 
         const int MaxRootLength = 40;
 
-        // Workaround for MAX_PATH limitation - https://learn.Microsoft.com/windows/win32/fileio/maximum-file-path-limitation?tabs=registry
+        // Workaround for MAX_PATH limitation
+        // - https://learn.Microsoft.com/windows/win32/fileio/maximum-file-path-limitation?tabs=registry
         // Leave a char for the trailing null (MAX_PATH is 260)
         int maxLength = 260 - 1 - (currentRootLength > MaxRootLength
             ? 0
