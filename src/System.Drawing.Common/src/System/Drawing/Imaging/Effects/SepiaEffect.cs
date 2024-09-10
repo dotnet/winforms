@@ -10,6 +10,9 @@ namespace System.Drawing.Imaging.Effects;
 /// </summary>
 public sealed class SepiaEffect : ColorMatrixEffect
 {
+    /// <summary>
+    ///  Creates a new <see cref="ColorMatrixEffect"/> that converts an image to sepia.
+    /// </summary>
     public SepiaEffect() : base(
         new(
         [

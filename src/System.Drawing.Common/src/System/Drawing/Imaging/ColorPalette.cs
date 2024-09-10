@@ -42,6 +42,7 @@ public sealed unsafe class ColorPalette
     /// <summary>
     ///  Create a standard color palette.
     /// </summary>
+    /// <param name="fixedPaletteType">The palette type.</param>
     public ColorPalette(PaletteType fixedPaletteType)
     {
         ColorPalette palette = InitializePalette(fixedPaletteType, 0, useTransparentColor: false, bitmap: null);
