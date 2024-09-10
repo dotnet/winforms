@@ -18,13 +18,13 @@ public class ControlDesignerDesignerControlCollectionTests : IDisposable
     public ControlDesignerDesignerControlCollectionTests()
     {
         _control = new();
-        _collection = new ControlDesigner.DesignerControlCollection(_control);
+        _collection = new(_control);
     }
 
     [Fact]
     public void Constructor_ShouldThrowArgumentNullException_WhenControlIsNull()
     {
-        Action act = () => new ControlDesigner.DesignerControlCollection(null);
+        Action act = () => new ControlDesigner.DesignerControlCollection(null!);
         act.Should().Throw<ArgumentNullException>();
     }
 
@@ -137,7 +137,7 @@ public class ControlDesignerDesignerControlCollectionTests : IDisposable
     {
         Control control = new();
         _collection.Add(control);
-        _collection.GetChildIndex(control, false).Should().Be(_control.Controls.GetChildIndex(control, false));
+        _collection.GetChildIndex(control, throwException: false).Should().Be(_control.Controls.GetChildIndex(control, throwException: false));
     }
 
     [Fact]
@@ -153,7 +153,7 @@ public class ControlDesignerDesignerControlCollectionTests : IDisposable
     public void Clear_ShouldRemoveAllControlsFromCollection()
     {
         Control control = new();
-        control.Site = new DummySite { Component = control, DesignMode = true };
+        control.Site = new MockSite { Component = control, DesignMode = true };
         _collection.Add(control);
         _control.Controls.Contains(control).Should().BeTrue();
 
@@ -161,7 +161,7 @@ public class ControlDesignerDesignerControlCollectionTests : IDisposable
         _control.Controls.Contains(control).Should().BeFalse();
     }
 
-    private class DummySite : ISite
+    private class MockSite : ISite
     {
         public IComponent Component { get; set; }
         public IContainer Container { get; set; }
