@@ -261,6 +261,7 @@ public sealed unsafe class Matrix : MarshalByRefObject, IDisposable
         TransformPoints(pts.AsSpan());
     }
 
+    /// <inheritdoc cref="TransformPoints(Point[])"/>
 #if NET9_0_OR_GREATER
     public
 #else
