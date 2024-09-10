@@ -6723,7 +6723,7 @@ System.Windows.Forms.HtmlElement.InnerHtml.get -> string!
 System.Windows.Forms.HtmlElement.InnerHtml.set -> void
 System.Windows.Forms.HtmlElement.InnerText.get -> string!
 System.Windows.Forms.HtmlElement.InnerText.set -> void
-System.Windows.Forms.HtmlElement.InsertAdjacentElement(System.Windows.Forms.HtmlElementInsertionOrientation orient, System.Windows.Forms.HtmlElement! newElement) -> System.Windows.Forms.HtmlElement?
+System.Windows.Forms.HtmlElement.InsertAdjacentElement(System.Windows.Forms.HtmlElementInsertionOrientation orientation, System.Windows.Forms.HtmlElement! newElement) -> System.Windows.Forms.HtmlElement?
 System.Windows.Forms.HtmlElement.InvokeMember(string! methodName) -> object?
 System.Windows.Forms.HtmlElement.InvokeMember(string! methodName, params object![]? parameter) -> object?
 System.Windows.Forms.HtmlElement.KeyDown -> System.Windows.Forms.HtmlElementEventHandler?

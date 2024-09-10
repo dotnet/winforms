@@ -547,10 +547,10 @@ public sealed unsafe partial class HtmlElement
         return iHTMLElementCollection is not null ? new HtmlElementCollection(_shimManager, iHTMLElementCollection) : new HtmlElementCollection(_shimManager);
     }
 
-    public HtmlElement? InsertAdjacentElement(HtmlElementInsertionOrientation orient, HtmlElement newElement)
+    public HtmlElement? InsertAdjacentElement(HtmlElementInsertionOrientation orientation, HtmlElement newElement)
     {
         using var htmlElement2 = GetHtmlElement<IHTMLElement2>();
-        using BSTR where = new(orient.ToString());
+        using BSTR where = new(orientation.ToString());
         using var htmlElement = NativeHtmlElement.GetInterface();
         using var insertedElement = ComHelpers.GetComScope<IHTMLElement>(newElement.DomElement);
         IHTMLElement* adjElement;
