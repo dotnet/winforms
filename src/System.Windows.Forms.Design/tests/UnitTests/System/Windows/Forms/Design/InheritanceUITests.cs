@@ -1,22 +1,72 @@
-﻿using Moq;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+
+using FluentAssertions.Execution;
+using FluentAssertions.Primitives;
+using Moq;
 using Moq.Protected;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
-using System.Reflection;
 using static System.Windows.Forms.Design.ComponentTray;
 
 namespace System.Windows.Forms.Design.Tests;
 
-public sealed class InheritanceUITests
+public static class RectangleAssertionsExtensions
 {
+    public static AndConstraint<ObjectAssertions> BeEmpty(this ObjectAssertions assertions, string because = "", params object[] becauseArgs)
+    {
+        Execute.Assertion
+            .ForCondition(assertions.Subject is Rectangle rect && rect == Rectangle.Empty)
+            .BecauseOf(because, becauseArgs)
+            .FailWith("Expected {context:rectangle} to be empty{reason}, but found {0}.", assertions.Subject);
+
+        return new AndConstraint<ObjectAssertions>(assertions);
+    }
+
+    public static AndConstraint<ObjectAssertions> NotBeEmpty(this ObjectAssertions assertions, string because = "", params object[] becauseArgs)
+    {
+        Execute.Assertion
+            .ForCondition(assertions.Subject is Rectangle rect && rect != Rectangle.Empty)
+            .BecauseOf(because, becauseArgs)
+            .FailWith("Expected {context:rectangle} not to be empty{reason}, but found {0}.", assertions.Subject);
+
+        return new AndConstraint<ObjectAssertions>(assertions);
+    }
+}
+
+public sealed class InheritanceUITests : IDisposable
+{
+    private readonly InheritanceUI _inheritanceUI;
+    private readonly Form _form;
+    private readonly Control _control;
+    private readonly Control _childControl;
+    private readonly Control _sitedChildControl;
+
+    public InheritanceUITests()
+    {
+        _inheritanceUI = new InheritanceUI();
+        _form = new Form();
+        _control = new Control { Parent = _form };
+        _childControl = new Control { Parent = _control };
+        _sitedChildControl = new Control { Parent = _control, Site = new Mock<ISite>().Object };
+    }
+
+    public void Dispose()
+    {
+        _sitedChildControl.Dispose();
+        _childControl.Dispose();
+        _control.Dispose();
+        _form.Dispose();
+        _inheritanceUI.Dispose();
+    }
+
     [Theory]
     [InlineData(InheritanceLevel.Inherited, "Inherited control")]
     [InlineData(InheritanceLevel.InheritedReadOnly, "Inherited control (Private)")]
     [InlineData(InheritanceLevel.NotInherited, "Inherited control")]
     public void AddInheritedControl_ShouldSetToolTipText(InheritanceLevel inheritanceLevel, string expectedText)
     {
-        InheritanceUI inheritanceUI = new();
         Mock<IDesigner> mockDesigner = new(MockBehavior.Strict);
         Mock<IExtenderProviderService> mockExtenderProviderService = new();
         Mock<IServiceProvider> mockServiceProvider = new();
@@ -29,10 +79,10 @@ public sealed class InheritanceUITests
 
         using (new NoAssertContext())
         {
-            inheritanceUI.AddInheritedControl(trayControl, inheritanceLevel);
+            _inheritanceUI.AddInheritedControl(trayControl, inheritanceLevel);
         }
 
-        ToolTip toolTip = inheritanceUI.TestAccessor().Dynamic._toolTip;
+        ToolTip toolTip = _inheritanceUI.TestAccessor().Dynamic._toolTip;
         string text = toolTip.GetToolTip(trayControl);
         text.Should().Be(expectedText);
     }
@@ -40,7 +90,6 @@ public sealed class InheritanceUITests
     [Fact]
     public void RemoveInheritedControl_ShouldUnsetToolTipText()
     {
-        InheritanceUI inheritanceUI = new();
         Mock<IDesigner> mockDesigner = new(MockBehavior.Strict);
         Mock<IExtenderProviderService> mockExtenderProviderService = new();
         Mock<IServiceProvider> mockServiceProvider = new();
@@ -53,12 +102,12 @@ public sealed class InheritanceUITests
 
         using (new NoAssertContext())
         {
-            inheritanceUI.AddInheritedControl(trayControl, InheritanceLevel.Inherited);
+            _inheritanceUI.AddInheritedControl(trayControl, InheritanceLevel.Inherited);
         }
 
-        inheritanceUI.RemoveInheritedControl(trayControl);
+        _inheritanceUI.RemoveInheritedControl(trayControl);
 
-        ToolTip toolTip = inheritanceUI.TestAccessor().Dynamic._toolTip;
+        ToolTip toolTip = _inheritanceUI.TestAccessor().Dynamic._toolTip;
         string text = toolTip.GetToolTip(trayControl);
         text.Should().BeEmpty();
     }
@@ -72,7 +121,7 @@ public sealed class InheritanceUITests
         Rectangle glyphRect = InheritanceUI.InheritanceGlyphRectangle;
 
         glyph.Should().NotBeNull().And.BeOfType<Bitmap>();
-        glyphRect.Should().NotBe(Rectangle.Empty);
+        glyphRect.Should().NotBeEmpty();
         glyphRect.Size.Should().Be(glyph.Size);
     }
 
@@ -81,81 +130,58 @@ public sealed class InheritanceUITests
     [InlineData(InheritanceLevel.InheritedReadOnly, "Inherited control (Private)")]
     public void AddInheritedControl_ShouldSetToolTipText_And_InitializeToolTip(InheritanceLevel inheritanceLevel, string expectedText)
     {
-        InheritanceUI inheritanceUI = new();
-        using Form form = new();
-        using Control control = new() { Parent = form };
-        using Control childControl = new() { Parent = control };
-
-        inheritanceUI.AddInheritedControl(control, inheritanceLevel);
-        ToolTip toolTip = inheritanceUI.TestAccessor().Dynamic._toolTip;
+        _inheritanceUI.AddInheritedControl(_control, inheritanceLevel);
+        ToolTip toolTip = _inheritanceUI.TestAccessor().Dynamic._toolTip;
 
         toolTip.Should().NotBeNull().And.BeOfType<ToolTip>();
         toolTip.ShowAlways.Should().BeTrue();
-        toolTip.GetToolTip(control).Should().Be(expectedText);
-        toolTip.GetToolTip(childControl).Should().Be(expectedText);
+        toolTip.GetToolTip(_control).Should().Be(expectedText);
+        toolTip.GetToolTip(_childControl).Should().Be(expectedText);
     }
 
     [Fact]
     public void AddAndRemoveInheritedControl_ShouldSetAndUnsetToolTipText_ForNonSitedChildren()
     {
-        InheritanceUI inheritanceUI = new();
-        using Form form = new();
-        using Control parentControl = new() { Parent = form };
-        using Control childControl = new() { Parent = parentControl };
-        using Control sitedChildControl = new() { Parent = parentControl, Site = new Mock<ISite>().Object };
-
-        inheritanceUI.AddInheritedControl(parentControl, InheritanceLevel.Inherited);
-        ToolTip toolTip = inheritanceUI.TestAccessor().Dynamic._toolTip;
+        _inheritanceUI.AddInheritedControl(_control, InheritanceLevel.Inherited);
+        ToolTip toolTip = _inheritanceUI.TestAccessor().Dynamic._toolTip;
 
         toolTip.Should().NotBeNull().And.BeOfType<ToolTip>();
-        toolTip.GetToolTip(parentControl).Should().Be("Inherited control");
-        toolTip.GetToolTip(childControl).Should().Be("Inherited control");
-        toolTip.GetToolTip(sitedChildControl).Should().BeEmpty();
+        toolTip.GetToolTip(_control).Should().Be("Inherited control");
+        toolTip.GetToolTip(_childControl).Should().Be("Inherited control");
+        toolTip.GetToolTip(_sitedChildControl).Should().BeEmpty();
 
-        inheritanceUI.RemoveInheritedControl(parentControl);
+        _inheritanceUI.RemoveInheritedControl(_control);
 
-        toolTip.GetToolTip(parentControl).Should().BeEmpty();
-        toolTip.GetToolTip(childControl).Should().BeEmpty();
-        toolTip.GetToolTip(sitedChildControl).Should().BeEmpty();
+        toolTip.GetToolTip(_control).Should().BeEmpty();
+        toolTip.GetToolTip(_childControl).Should().BeEmpty();
+        toolTip.GetToolTip(_sitedChildControl).Should().BeEmpty();
     }
 
     [Fact]
     public void Dispose_ShouldDisposeToolTip_And_NotThrowIfToolTipIsNull()
     {
-        var inheritanceUI = new InheritanceUI();
-        var mockToolTip = new Mock<ToolTip>();
-        bool isDisposed = false;
+        Mock<ToolTip> mockToolTip = new();
+        mockToolTip.Protected().Setup("Dispose", ItExpr.IsAny<bool>());
 
-        mockToolTip.Protected().Setup("Dispose", ItExpr.IsAny<bool>()).Callback(() => isDisposed = true);
+        _inheritanceUI.TestAccessor().Dynamic._toolTip = mockToolTip.Object;
 
-        typeof(InheritanceUI).GetField("_toolTip", BindingFlags.NonPublic | BindingFlags.Instance)
-            ?.SetValue(inheritanceUI, mockToolTip.Object);
-
-        inheritanceUI.Invoking(ui => ui.Dispose()).Should().NotThrow();
-        isDisposed.Should().BeTrue();
-
-        inheritanceUI = new InheritanceUI();
-        inheritanceUI.Invoking(ui => ui.Dispose()).Should().NotThrow();
+        _inheritanceUI.Invoking(ui => ui.Dispose()).Should().NotThrow();
+        mockToolTip.Protected().Verify("Dispose", Times.Once(), ItExpr.IsAny<bool>());
     }
 
     [Fact]
     public void RemoveInheritedControl_ShouldUnsetToolTipText_And_NotThrowIfToolTipIsNull()
     {
-        InheritanceUI inheritanceUI = new();
-        using Form form = new();
-        using Control parentControl = new() { Parent = form };
-        using Control sitedChildControl = new() { Parent = parentControl, Site = new Mock<ISite>().Object };
+        _inheritanceUI.Invoking(ui => ui.RemoveInheritedControl(_control)).Should().NotThrow();
 
-        inheritanceUI.Invoking(ui => ui.RemoveInheritedControl(parentControl)).Should().NotThrow();
+        _inheritanceUI.AddInheritedControl(_control, InheritanceLevel.Inherited);
+        _inheritanceUI.RemoveInheritedControl(_control);
 
-        inheritanceUI.AddInheritedControl(parentControl, InheritanceLevel.Inherited);
-        inheritanceUI.RemoveInheritedControl(parentControl);
-
-        ToolTip toolTip = inheritanceUI.TestAccessor().Dynamic._toolTip;
+        ToolTip toolTip = _inheritanceUI.TestAccessor().Dynamic._toolTip;
 
         toolTip.Should().NotBeNull().And.BeOfType<ToolTip>();
-        toolTip.GetToolTip(parentControl).Should().BeEmpty();
-        toolTip.GetToolTip(sitedChildControl).Should().BeEmpty();
+        toolTip.GetToolTip(_control).Should().BeEmpty();
+        toolTip.GetToolTip(_sitedChildControl).Should().BeEmpty();
     }
 }
 
