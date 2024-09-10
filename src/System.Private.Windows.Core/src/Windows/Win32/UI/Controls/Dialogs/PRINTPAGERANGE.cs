@@ -30,7 +30,7 @@ internal partial struct PRINTPAGERANGE
     ///  <para>Type: <b>DWORD</b> The first page of the range.</para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printpagerange#members">
-    ///    Read more on learn.Microsoft.com.
+    ///    Read more on learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -40,7 +40,7 @@ internal partial struct PRINTPAGERANGE
     ///  <para>Type: <b>DWORD</b> The last page of the range.</para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printpagerange#members">
-    ///    Read more on learn.Microsoft.com.
+    ///    Read more on learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
