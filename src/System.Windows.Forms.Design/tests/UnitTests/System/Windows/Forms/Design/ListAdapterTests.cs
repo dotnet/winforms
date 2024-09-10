@@ -20,5 +20,3 @@ public class ListAdapterTests
         unwrappedList.Should().BeSameAs(originalList);
     }
 }
-
-
