@@ -10585,7 +10585,9 @@ public unsafe partial class Control :
                 // bit and call CreateControl()
                 if (IsHandleCreated || value)
                 {
-                    if (value)
+                    // We shouldn't mess with the color mode if users haven't specifically set it.
+                    // https://github.com/dotnet/winforms/issues/12014
+                    if (value && Application.ColorModeSet)
                     {
                         PrepareDarkMode(HWND, Application.IsDarkModeEnabled);
                     }
