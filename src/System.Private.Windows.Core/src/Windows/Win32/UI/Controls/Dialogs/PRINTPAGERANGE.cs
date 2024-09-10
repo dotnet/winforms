@@ -10,7 +10,7 @@ namespace Windows.Win32.UI.Controls.Dialogs;
 /// <remarks>
 ///  <para>
 ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printpagerange">
-///    Learn more about this API from learn.Microsoft.com.
+///    Learn more about this API from learn.microsoft.com.
 ///   </see>
 ///  </para>
 /// </remarks>
