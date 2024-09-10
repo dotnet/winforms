@@ -134,7 +134,7 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
         object? result = null;
 
         // We serialize collections as follows:
-        //      If the collection is an array, we write out the array.
+        // If the collection is an array, we write out the array.
         // If the collection has a method called AddRange, we will call that, providing an array.
         // If the collection has an Add method, we will call it repeatedly.
         // If the collection is an IList, we will cast to IList and add to it.
