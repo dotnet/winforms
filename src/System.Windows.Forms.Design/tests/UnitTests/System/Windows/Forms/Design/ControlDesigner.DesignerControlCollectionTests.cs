@@ -13,12 +13,16 @@ public class ControlDesignerDesignerControlCollectionTests : IDisposable
     private readonly Control _control;
     private readonly ControlDesigner.DesignerControlCollection _collection;
 
-    public void Dispose() => _collection.Clear();
-
     public ControlDesignerDesignerControlCollectionTests()
     {
         _control = new();
         _collection = new(_control);
+    }
+
+    public void Dispose()
+    {
+        _collection.Clear();
+        _control.Dispose();
     }
 
     [Fact]
