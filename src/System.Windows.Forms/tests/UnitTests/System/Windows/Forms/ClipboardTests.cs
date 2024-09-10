@@ -8,7 +8,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
-using System.Runtime.Serialization.Formatters.Binary;
 using Com = Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
 
@@ -482,29 +481,25 @@ public class ClipboardTests
     }
 
     [WinFormsFact]
-    public void Clipboard_SetData_CustomFormat_Color_BinaryFormatterDisabled_SerializesException()
+    public void Clipboard_SetData_CustomFormat_Color()
+    {
+        string format = nameof(Clipboard_SetData_CustomFormat_Color);
+        Clipboard.SetData(format, Color.Black);
+
+        Clipboard.ContainsData(format).Should().BeTrue();
+        Clipboard.GetData(format).Should().Be(Color.Black);
+    }
+
+    [WinFormsFact]
+    public void Clipboard_SetData_CustomFormat_Exception_BinaryFormatterDisabled_SerializesException()
     {
         using BinaryFormatterScope scope = new(enable: false);
-        string format = nameof(Clipboard_SetData_CustomFormat_Color_BinaryFormatterDisabled_SerializesException);
+        string format = nameof(Clipboard_SetData_CustomFormat_Exception_BinaryFormatterDisabled_SerializesException);
 
         // This will fail and NotSupportedException will be put on the Clipboard instead.
-        Clipboard.SetData(format, Color.Black);
+        Clipboard.SetData(format, new FileNotFoundException());
         Clipboard.ContainsData(format).Should().BeTrue();
-
-        using MemoryStream stream = new();
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
-        BinaryFormatter formatter = new();
-#pragma warning restore SYSLIB0011
-        try
-        {
-            formatter.Serialize(stream, new object());
-        }
-        catch (NotSupportedException)
-        {
-            return;
-        }
-
-        Assert.Fail("Formatting should have failed.");
+        Clipboard.GetData(format).Should().BeOfType<NotSupportedException>();
     }
 
     [WinFormsFact]

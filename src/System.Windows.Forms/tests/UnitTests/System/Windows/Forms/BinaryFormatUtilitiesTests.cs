@@ -59,7 +59,12 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
         (nuint)12,
         decimal.MaxValue,
         new PointF(1, 2),
-        new RectangleF(1, 2, 3, 4)
+        new RectangleF(1, 2, 3, 4),
+        new Point(-1, int.MaxValue),
+        new Rectangle(-1, int.MinValue, 10, 13),
+        new Size(int.MaxValue, int.MinValue),
+        new SizeF(float.MaxValue, float.MinValue),
+        Color.Red
     };
 
     public static TheoryData<IList> PrimitiveListObjects_TheoryData => new()
