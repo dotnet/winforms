@@ -3,7 +3,6 @@
 
 using System.Drawing.Text;
 using Windows.Win32.Foundation;
-using Windows.Win32.Graphics.GdiPlus;
 
 namespace System.Drawing.Tests;
 
@@ -288,7 +287,7 @@ public class FontFamilyTests
         using FontFamily fontFamily1 = new("Calibri");
         using FontFamily fontFamily2 = new("Calibri");
         Assert.Equal(
-            ((IPointer<GpFontFamily>)fontFamily1).Pointer,
-            ((IPointer<GpFontFamily>)fontFamily2).Pointer);
+            (nint)fontFamily1.GetPointer(),
+            (nint)fontFamily2.GetPointer());
     }
 }

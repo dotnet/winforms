@@ -13,5 +13,6 @@ namespace Windows.Win32.Foundation;
 /// </remarks>
 internal unsafe interface IPointer<TPointer> where TPointer : unmanaged
 {
+    [Obsolete("Use extension method GetPointer on IPointer<T> to get the typed pointer instead.")]
     nint Pointer { get; }
 }
