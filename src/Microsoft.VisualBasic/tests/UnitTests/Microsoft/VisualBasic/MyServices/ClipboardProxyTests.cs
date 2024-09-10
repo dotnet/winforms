@@ -10,7 +10,7 @@ namespace Microsoft.VisualBasic.MyServices.Tests;
 
 // Each registered Clipboard format is an OS singleton,
 // and we should not run this test at the same time as other tests using the same format.
-[Collection("Sequential")] 
+[Collection("Sequential")]
 [CollectionDefinition("Sequential", DisableParallelization = true)]
 public class ClipboardProxyTests
 {
