@@ -75,4 +75,13 @@ internal static class WinFormsBinaryFormatWriter
             return false;
         }
     }
+
+    /// <summary>
+    ///  Writes the given Framework, WinForms or System.Drawing.Primitives <paramref name="value"/> if supported.
+    /// </summary>
+    public static bool TryWriteCommonObject(Stream stream, object value)
+    {
+        return TryWriteObject(stream, value)
+            || BinaryFormatWriter.TryWriteDrawingPrimitivesObject(stream, value);
+    }
 }

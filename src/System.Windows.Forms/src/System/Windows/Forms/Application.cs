@@ -258,8 +258,12 @@ public sealed partial class Application
     ///  </para>
     /// </remarks>
     [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
-    public static SystemColorMode ColorMode =>
-        s_colorMode ?? SystemColorMode.Classic;
+    public static SystemColorMode ColorMode => s_colorMode ?? SystemColorMode.Classic;
+
+    /// <summary>
+    ///  True if the <see cref="ColorMode"/> has been set at least once.
+    /// </summary>
+    internal static bool ColorModeSet => s_colorMode is not null;
 
     /// <summary>
     ///  Sets the default color mode (dark mode) for the application.

@@ -446,7 +446,7 @@ internal partial class ResourceCodeDomSerializer
 
         /// <summary>
         ///  Event handler that gets called when serialization or deserialization is complete.
-        ///  Here we need to write any resources to disk. Sine we open resources for write on demand,
+        ///  Here we need to write any resources to disk. Since we open resources for write on demand,
         ///  this code handles the case of reading resources as well.
         /// </summary>
         private void OnSerializationComplete(object? sender, EventArgs e)

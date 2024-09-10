@@ -727,7 +727,8 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     ///  Draws the outline of the specified rounded rectangle.
     /// </summary>
     /// <param name="pen">The <see cref="Pen"/> to draw the outline with.</param>
-    /// <inheritdoc cref="FillRoundedRectangle(Brush, RectangleF, SizeF)"/>
+    /// <param name="rect">The bounds of the rounded rectangle.</param>
+    /// <param name="radius">The radius width and height used to round the corners of the rectangle.</param>
     public void DrawRoundedRectangle(Pen pen, RectangleF rect, SizeF radius)
     {
         using GraphicsPath path = new();
@@ -1842,8 +1843,12 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     public SizeF MeasureString(ReadOnlySpan<char> text, Font font, SizeF layoutArea) => MeasureString(text, font, layoutArea, null);
 #endif
 
-    /// <param name="stringFormat"><see cref="StringFormat"/> that represents formatting information, such as line spacing, for the text.</param>
-    /// <param name="layoutArea"><see cref="SizeF"/> structure that specifies the maximum layout area for the text.</param>
+    /// <param name="stringFormat">
+    ///  <see cref="StringFormat"/> that represents formatting information, such as line spacing, for the text.
+    /// </param>
+    /// <param name="layoutArea">
+    ///  <see cref="SizeF"/> structure that specifies the maximum layout area for the text.
+    /// </param>
     /// <inheritdoc cref="MeasureString(string?, Font, int, StringFormat?)"/>
     public SizeF MeasureString(string? text, Font font, SizeF layoutArea, StringFormat? stringFormat) =>
         MeasureStringInternal(text, font, new(default, layoutArea), stringFormat, out _, out _);
@@ -1895,7 +1900,9 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         MeasureString(text, font, new SizeF(width, 999999));
 #endif
 
-    /// <param name="format"><see cref="StringFormat"/> that represents formatting information, such as line spacing, for the text.</param>
+    /// <param name="format">
+    ///  <see cref="StringFormat"/> that represents formatting information, such as line spacing, for the text.
+    /// </param>
     /// <inheritdoc cref="MeasureString(string?, Font, int)"/>
     public SizeF MeasureString(string? text, Font font, int width, StringFormat? format) =>
         MeasureString(text, font, new SizeF(width, 999999), format);

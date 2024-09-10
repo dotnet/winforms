@@ -102,7 +102,7 @@ public sealed class InputLanguage
     {
         get
         {
-            // https://learn.Microsoft.com/windows/win32/intl/using-registry-string-redirection#create-resources-for-keyboard-layout-strings
+            // https://learn.microsoft.com/windows/win32/intl/using-registry-string-redirection#create-resources-for-keyboard-layout-strings
             using RegistryKey? key = Registry.LocalMachine.OpenSubKey($@"{KeyboardLayoutsRegistryPath}\{LayoutId}");
             return key.GetMUIString("Layout Display Name", "Layout Text") ?? SR.UnknownInputLanguageLayout;
         }
@@ -189,8 +189,8 @@ public sealed class InputLanguage
 
             // We need to convert the language identifier to a language tag, because they are deprecated and may have a
             // transient value.
-            // https://learn.Microsoft.com/globalization/locale/other-locale-names#lcid
-            // https://learn.Microsoft.com/windows/win32/winmsg/wm-inputlangchange#remarks
+            // https://learn.microsoft.com/globalization/locale/other-locale-names#lcid
+            // https://learn.microsoft.com/windows/win32/winmsg/wm-inputlangchange#remarks
             //
             // It turns out that the LCIDToLocaleName API, which is used inside CultureInfo, may return incorrect
             // language tags for transient language identifiers. For example, it returns "nqo-GN" and "jv-Java-ID"

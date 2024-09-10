@@ -50,7 +50,9 @@ internal class GrabHandleGlyph : SelectionGlyphBase
                 rules = SelectionRules.BottomSizeable | SelectionRules.LeftSizeable;
                 break;
             case GrabHandleGlyphType.MiddleTop:
-                // Only add this one if there's room enough. Room is enough is as follows: 2*HANDLEOVERLAP for UpperLeft and UpperRight handles, 1 HANDLESIZE for the MiddleTop handle, 1 HANDLESIZE for padding
+                // Only add this one if there's room enough. Room is enough is as follows:
+                //     2*HANDLEOVERLAP for UpperLeft and UpperRight handles,
+                //     1 HANDLESIZE for the MiddleTop handle, 1 HANDLESIZE for padding
                 if (controlBounds.Width >= (2 * DesignerUtils.s_handleOverlap) + (2 * DesignerUtils.s_handleSize))
                 {
                     bounds = new Rectangle(controlBounds.X + (controlBounds.Width / 2) - (DesignerUtils.s_handleSize / 2), controlBounds.Y + DesignerUtils.s_handleOverlap - DesignerUtils.s_handleSize, DesignerUtils.s_handleSize, DesignerUtils.s_handleSize);
@@ -60,7 +62,9 @@ internal class GrabHandleGlyph : SelectionGlyphBase
 
                 break;
             case GrabHandleGlyphType.MiddleBottom:
-                // Only add this one if there's room enough. Room is enough is as follows: 2*HANDLEOVERLAP for LowerLeft and LowerRight handles, 1 HANDLESIZE for the MiddleBottom handle, 1 HANDLESIZE for padding
+                // Only add this one if there's room enough. Room is enough is as follows:
+                //     2*HANDLEOVERLAP for LowerLeft and LowerRight handles,
+                //     1 HANDLESIZE for the MiddleBottom handle, 1 HANDLESIZE for padding
                 if (controlBounds.Width >= (2 * DesignerUtils.s_handleOverlap) + (2 * DesignerUtils.s_handleSize))
                 {
                     bounds = new Rectangle(controlBounds.X + (controlBounds.Width / 2) - (DesignerUtils.s_handleSize / 2), controlBounds.Bottom - DesignerUtils.s_handleOverlap, DesignerUtils.s_handleSize, DesignerUtils.s_handleSize);
@@ -70,7 +74,9 @@ internal class GrabHandleGlyph : SelectionGlyphBase
 
                 break;
             case GrabHandleGlyphType.MiddleLeft:
-                // Only add this one if there's room enough. Room is enough is as follows: 2*HANDLEOVERLAP for UpperLeft and LowerLeft handles, 1 HANDLESIZE for the MiddleLeft handle, 1 HANDLESIZE for padding
+                // Only add this one if there's room enough. Room is enough is as follows:
+                //     2*HANDLEOVERLAP for UpperLeft and LowerLeft handles,
+                //     1 HANDLESIZE for the MiddleLeft handle, 1 HANDLESIZE for padding
                 if (controlBounds.Height >= (2 * DesignerUtils.s_handleOverlap) + (2 * DesignerUtils.s_handleSize))
                 {
                     bounds = new Rectangle(controlBounds.X + DesignerUtils.s_handleOverlap - DesignerUtils.s_handleSize, controlBounds.Y + (controlBounds.Height / 2) - (DesignerUtils.s_handleSize / 2), DesignerUtils.s_handleSize, DesignerUtils.s_handleSize);
@@ -80,7 +86,9 @@ internal class GrabHandleGlyph : SelectionGlyphBase
 
                 break;
             case GrabHandleGlyphType.MiddleRight:
-                // Only add this one if there's room enough. Room is enough is as follows: 2*HANDLEOVERLAP for UpperRight and LowerRight handles, 1 HANDLESIZE for the MiddleRight handle, 1 HANDLESIZE for padding
+                // Only add this one if there's room enough. Room is enough is as follows:
+                //     2*HANDLEOVERLAP for UpperRight and LowerRight handles,
+                //     1 HANDLESIZE for the MiddleRight handle, 1 HANDLESIZE for padding
                 if (controlBounds.Height >= (2 * DesignerUtils.s_handleOverlap) + (2 * DesignerUtils.s_handleSize))
                 {
                     bounds = new Rectangle(controlBounds.Right - DesignerUtils.s_handleOverlap, controlBounds.Y + (controlBounds.Height / 2) - (DesignerUtils.s_handleSize / 2), DesignerUtils.s_handleSize, DesignerUtils.s_handleSize);

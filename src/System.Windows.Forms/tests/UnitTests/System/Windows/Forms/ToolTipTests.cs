@@ -701,7 +701,8 @@ public class ToolTipTests
         Assert.Equal(expected, toolTip.GetToolTip(control));
 
         // NB: disposing the component with strictly mocked object causes tests to fail
-        // Moq.MockException : ISite.Container invocation failed with mock behavior Strict. All invocations on the mock must have a corresponding setup.
+        // Moq.MockException : ISite.Container invocation failed with mock behavior Strict.
+        // All invocations on the mock must have a corresponding setup.
         toolTip.Site = null;
     }
 

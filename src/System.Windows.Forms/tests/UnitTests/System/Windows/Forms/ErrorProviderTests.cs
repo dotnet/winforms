@@ -678,7 +678,8 @@ public class ErrorProviderTests
         Assert.Same(value, provider.Site);
 
         // NB: disposing the component with strictly mocked object causes tests to fail
-        // Moq.MockException : ISite.Container invocation failed with mock behavior Strict. All invocations on the mock must have a corresponding setup.
+        // Moq.MockException : ISite.Container invocation failed with mock behavior Strict.
+        // All invocations on the mock must have a corresponding setup.
         provider.Site = null;
     }
 
@@ -703,7 +704,8 @@ public class ErrorProviderTests
         Assert.Same(value, provider.Site);
 
         // NB: disposing the component with strictly mocked object causes tests to fail
-        // Moq.MockException : ISite.Container invocation failed with mock behavior Strict. All invocations on the mock must have a corresponding setup.
+        // Moq.MockException : ISite.Container invocation failed with mock behavior Strict.
+        // All invocations on the mock must have a corresponding setup.
         provider.Site = null;
     }
 
@@ -741,7 +743,8 @@ public class ErrorProviderTests
         mockDesignerHost.Verify(h => h.RootComponent, Times.Once());
 
         // NB: disposing the component with strictly mocked object causes tests to fail
-        // Moq.MockException : ISite.Container invocation failed with mock behavior Strict. All invocations on the mock must have a corresponding setup.
+        // Moq.MockException : ISite.Container invocation failed with mock behavior Strict.
+        // All invocations on the mock must have a corresponding setup.
         provider.Site = null;
     }
 

@@ -1475,7 +1475,8 @@ public class ListViewItem_ListViewItemAccessibleObjectTests
         Assert.Null(accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
         Assert.Equal(accessibleObject2, accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
 
-        // Since "List" mode does not support ListViewGroups, adding a ListViewGroup should not affect the operation of availability objects
+        // Since "List" mode does not support ListViewGroups, adding a ListViewGroup should not affect the operation
+        // of availability objects
         listView.Groups.Add(new ListViewGroup());
         listView.Items[1].Group = listView.Groups[0];
 
@@ -1491,7 +1492,8 @@ public class ListViewItem_ListViewItemAccessibleObjectTests
         Assert.Null(accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
         Assert.Equal(accessibleObject2, accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
 
-        // Since "List" mode does not support ListViewGroups, updating a ListViewGroup should not affect the operation of availability objects
+        // Since "List" mode does not support ListViewGroups, updating a ListViewGroup should not affect the operation
+        // of availability objects
         listView.Groups[0].Items.Insert(0, listView.Items[0]);
 
         Assert.Equal(listView.AccessibilityObject, accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
@@ -1506,7 +1508,8 @@ public class ListViewItem_ListViewItemAccessibleObjectTests
         Assert.Null(accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
         Assert.Equal(accessibleObject2, accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
 
-        // Since "List" mode does not support ListViewGroups, removing a ListViewGroup should not affect the operation of availability objects
+        // Since "List" mode does not support ListViewGroups, removing a ListViewGroup should not affect the operation
+        // of availability objects
         listView.Groups.RemoveAt(0);
 
         Assert.Equal(listView.AccessibilityObject, accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
