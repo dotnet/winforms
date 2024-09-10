@@ -128,7 +128,7 @@ public sealed unsafe class Bitmap : Image, IPointer<GpBitmap>
     {
     }
 
-    nint IPointer.Pointer => NativeImage;
+    nint IPointer<GpBitmap>.Pointer => (nint)((Image)this).Pointer();
 
     public static Bitmap FromHicon(IntPtr hicon)
     {

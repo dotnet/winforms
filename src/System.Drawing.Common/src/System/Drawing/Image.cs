@@ -32,9 +32,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
     // to modify it, in order to preserve compatibility.
     public delegate bool GetThumbnailImageAbort();
 
-    nint IPointer.Pointer => NativeImage;
-
-    protected internal nint NativeImage => (nint)_nativeImage;
+    nint IPointer<GpImage>.Pointer => (nint)_nativeImage;
 
     [NonSerialized]
     private GpImage* _nativeImage;

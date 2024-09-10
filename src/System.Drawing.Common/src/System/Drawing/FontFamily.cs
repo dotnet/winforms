@@ -16,7 +16,7 @@ public sealed unsafe class FontFamily : MarshalByRefObject, IDisposable, IPointe
     private GpFontFamily* _nativeFamily;
     private bool _fromInstalledFontCollection;
 
-    nint IPointer.Pointer => (nint)_nativeFamily;
+    nint IPointer<GpFontFamily>.Pointer => (nint)_nativeFamily;
 
     private void SetNativeFamily(GpFontFamily* family)
     {
