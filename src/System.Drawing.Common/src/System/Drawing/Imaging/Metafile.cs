@@ -21,7 +21,7 @@ public sealed unsafe class Metafile : Image, IPointer<GpMetafile>
     // GDI+ doesn't handle filenames over MAX_PATH very well
     private const int MaxPath = 260;
 
-    GpMetafile* IPointer<GpMetafile>.Pointer => this.Pointer();
+    nint IPointer<GpMetafile>.Pointer => (nint)this.Pointer();
 
     /// <summary>
     ///  Initializes a new instance of the <see cref='Metafile'/> class from the specified handle and
