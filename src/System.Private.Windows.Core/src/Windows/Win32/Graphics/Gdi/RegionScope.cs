@@ -62,7 +62,7 @@ internal unsafe ref struct RegionScope
     /// </summary>
     public RegionScope(IPointer<GpRegion> region, IPointer<GpGraphics> graphics)
     {
-        InitializeFromGdiPlus(region.GetPointer(), (GpGraphics*)graphics.Pointer);
+        InitializeFromGdiPlus(region.GetPointer(), graphics.GetPointer());
         GC.KeepAlive(region);
         GC.KeepAlive(graphics);
     }
