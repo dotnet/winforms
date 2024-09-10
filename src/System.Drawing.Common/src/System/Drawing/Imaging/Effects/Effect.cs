@@ -36,9 +36,12 @@ public abstract unsafe class Effect : IDisposable
         }
     }
 
+    /// <summary>
+    ///  Cleans up Windows resources for this <see cref="Effect"/>
+    /// </summary>
     ~Effect() => Dispose(disposing: false);
 
-    public virtual void Dispose(bool disposing)
+    protected virtual void Dispose(bool disposing)
     {
         if (_nativeEffect is not null)
         {
