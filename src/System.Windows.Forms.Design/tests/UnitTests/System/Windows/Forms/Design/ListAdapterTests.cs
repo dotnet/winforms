@@ -7,20 +7,17 @@ using System.Collections;
 
 namespace System.Windows.Forms.Design.Tests;
 
-public class ListAdapterTest
+public class ListAdapterTests
 {
     [Fact]
     public void ListAdapter_Unwrap_ReturnsOriginalList()
     {
-        // Arrange
-        var originalList = new ArrayList { 1, 2, 3 };
+        ArrayList originalList = new() { 1, 2, 3 };
         ListAdapter<int> adapter = new(originalList);
 
-        // Act
-        var unwrappedList = adapter.Unwrap();
+        IList unwrappedList = adapter.Unwrap();
 
-        // Assert
-        Assert.Same(originalList, unwrappedList);
+        unwrappedList.Should().BeSameAs(originalList);
     }
 }
 
