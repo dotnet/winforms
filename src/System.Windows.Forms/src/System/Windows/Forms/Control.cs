@@ -2200,13 +2200,13 @@ public unsafe partial class Control :
     {
         get
         {
-            if (CheckForIllegalCrossThreadCalls && !t_inCrossThreadSafeCall && InvokeRequired)
-            {
-                throw new InvalidOperationException(string.Format(SR.IllegalCrossThreadCall, Name));
-            }
-
             if (!IsHandleCreated)
             {
+                if (CheckForIllegalCrossThreadCalls && !t_inCrossThreadSafeCall && InvokeRequired)
+                {
+                    throw new InvalidOperationException(string.Format(SR.IllegalCrossThreadCall, Name));
+                }
+
                 CreateHandle();
             }
 
