@@ -8,7 +8,7 @@ internal static unsafe class GpMetafileExtensions
     public static HENHMETAFILE GetHENHMETAFILE(this IPointer<GpMetafile> metafile)
     {
         HENHMETAFILE hemf;
-        PInvokeCore.GdipGetHemfFromMetafile(metafile.Pointer, &hemf).ThrowIfFailed();
+        PInvokeCore.GdipGetHemfFromMetafile((GpMetafile*)metafile.Pointer, &hemf).ThrowIfFailed();
         GC.KeepAlive(metafile);
         return hemf;
     }

@@ -9,7 +9,7 @@ public sealed unsafe class Region : MarshalByRefObject, IDisposable, IPointer<Gp
 {
     internal GpRegion* NativeRegion { get; private set; }
 
-    GpRegion* IPointer<GpRegion>.Pointer => NativeRegion;
+    nint IPointer.Pointer => (nint)NativeRegion;
 
     public Region()
     {

@@ -17,7 +17,7 @@ internal static unsafe class GpBitmapExtensions
     {
         // LockBits always creates a temporary copy of the data.
         PInvokeCore.GdipBitmapLockBits(
-            bitmap.Pointer,
+            (GpBitmap*)bitmap.Pointer,
             rect.IsEmpty ? null : (Rect*)&rect,
             (uint)flags,
             (int)format,
@@ -28,7 +28,7 @@ internal static unsafe class GpBitmapExtensions
 
     public static void UnlockBits(this IPointer<GpBitmap> bitmap, ref BitmapData data)
     {
-        PInvokeCore.GdipBitmapUnlockBits(bitmap.Pointer, (BitmapData*)Unsafe.AsPointer(ref data)).ThrowIfFailed();
+        PInvokeCore.GdipBitmapUnlockBits((GpBitmap*)bitmap.Pointer, (BitmapData*)Unsafe.AsPointer(ref data)).ThrowIfFailed();
         GC.KeepAlive(bitmap);
     }
 
@@ -38,7 +38,7 @@ internal static unsafe class GpBitmapExtensions
     {
         HBITMAP hbitmap;
         PInvokeCore.GdipCreateHBITMAPFromBitmap(
-            bitmap.Pointer,
+            (GpBitmap*)bitmap.Pointer,
             &hbitmap,
             (uint)ColorTranslator.ToWin32(background)).ThrowIfFailed();
 

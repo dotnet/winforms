@@ -14,7 +14,7 @@ internal static unsafe class GpImageExtensions
         RectangleF bounds;
         Unit unit;
 
-        PInvokeCore.GdipGetImageBounds(image.Pointer, (RectF*)&bounds, &unit).ThrowIfFailed();
+        PInvokeCore.GdipGetImageBounds((GpImage*)image.Pointer, (RectF*)&bounds, &unit).ThrowIfFailed();
         GC.KeepAlive(image);
         return bounds;
     }
@@ -24,7 +24,7 @@ internal static unsafe class GpImageExtensions
     {
         int format;
 
-        Status status = PInvokeCore.GdipGetImagePixelFormat(image.Pointer, &format);
+        Status status = PInvokeCore.GdipGetImagePixelFormat((GpImage*)image.Pointer, &format);
         GC.KeepAlive(image);
         return status == Status.Ok ? (PixelFormat)format : PixelFormat.Undefined;
     }

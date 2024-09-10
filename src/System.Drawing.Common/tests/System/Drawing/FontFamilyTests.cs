@@ -288,7 +288,7 @@ public class FontFamilyTests
         using FontFamily fontFamily1 = new("Calibri");
         using FontFamily fontFamily2 = new("Calibri");
         Assert.Equal(
-            (nint)((IPointer<GpFontFamily>)fontFamily1).Pointer,
-            (nint)((IPointer<GpFontFamily>)fontFamily2).Pointer);
+            ((IPointer<GpFontFamily>)fontFamily1).Pointer,
+            ((IPointer<GpFontFamily>)fontFamily2).Pointer);
     }
 }

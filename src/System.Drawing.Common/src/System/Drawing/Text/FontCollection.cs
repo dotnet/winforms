@@ -9,7 +9,7 @@ namespace System.Drawing.Text;
 public abstract unsafe class FontCollection : IDisposable, IPointer<GpFontCollection>
 {
     private GpFontCollection* _nativeFontCollection;
-    GpFontCollection* IPointer<GpFontCollection>.Pointer => _nativeFontCollection;
+    nint IPointer.Pointer => (nint)_nativeFontCollection;
 
     private protected FontCollection(GpFontCollection* nativeFontCollection) => _nativeFontCollection = nativeFontCollection;
 

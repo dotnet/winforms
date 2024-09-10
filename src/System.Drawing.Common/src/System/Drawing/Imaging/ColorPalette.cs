@@ -108,7 +108,7 @@ public sealed unsafe class ColorPalette
                 (GdiPlus.PaletteType)fixedPaletteType,
                 colorCount,
                 useTransparentColor,
-                bitmap is null ? null : bitmap.Pointer).ThrowIfFailed();
+                bitmap is null ? null : (GpBitmap*)bitmap.Pointer).ThrowIfFailed();
         }
 
         GC.KeepAlive(bitmap);

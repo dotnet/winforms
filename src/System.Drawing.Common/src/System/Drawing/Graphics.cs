@@ -195,7 +195,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     /// </summary>
     internal GpGraphics* NativeGraphics { get; private set; }
 
-    GpGraphics* IPointer<GpGraphics>.Pointer => NativeGraphics;
+    nint IPointer.Pointer => (nint)NativeGraphics;
 
     public Region Clip
     {

@@ -4,14 +4,21 @@
 namespace Windows.Win32.Foundation;
 
 /// <summary>
-///  Used to indicate ownership of a native resource pointer.
+///  Used to indicate ownership of a native resource pointer with type information.
 /// </summary>
 /// <remarks>
 ///  <para>
 ///   This should never be put on a struct.
 ///  </para>
 /// </remarks>
-internal unsafe interface IPointer<TPointer> where TPointer : unmanaged
+internal unsafe interface IPointer<TPointer> : IPointer where TPointer : unmanaged
 {
-    TPointer* Pointer { get; }
+}
+
+/// <summary>
+///  Used to indicate ownership of a native resource pointer.
+/// </summary>
+internal interface IPointer
+{
+    nint Pointer { get; }
 }
