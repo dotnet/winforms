@@ -100,16 +100,22 @@ public class MaskedTextBoxTests : IDisposable
         using MaskedTextBox control = new();
         control.Handle.Should().NotBe(IntPtr.Zero);
 
-        // These events are tested to ensure that they are not accidentally triggered when the BeepOnError property is set.
-        // The Invalidated event is triggered when the control or part of it needs to be redrawn. If the setting of BeepOnError causes the control to be redrawn, it may trigger unnecessary performance overhead.
+        // These events are tested to ensure that they are not accidentally triggered
+        // when the BeepOnError property is set.
+        // The Invalidated event is triggered when the control or part of it needs to be redrawn.
+        // If the setting of BeepOnError causes the control to be redrawn,
+        // it may trigger unnecessary performance overhead.
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
 
-        // The StyleChanged event is triggered when the style of the control has changed. If the setting of BeepOnError causes a style change, it may affect the appearance or behavior of the control.
+        // The StyleChanged event is triggered when the style of the control has changed.
+        // If the setting of BeepOnError causes a style change, it may affect the appearance or behavior of the control.
         int styleChangedCallCount = 0;
         control.StyleChanged += (sender, e) => styleChangedCallCount++;
 
-        // The HandleCreated event is triggered when a handle to the control is created. If the setting of BeepOnError causes a handle to be created, it may affect the control's lifecycle or behavior.
+        // The HandleCreated event is triggered when a handle to the control is created.
+        // If the setting of BeepOnError causes a handle to be created, it may affect the
+        // control's lifecycle or behavior.
         int createdCallCount = 0;
         control.HandleCreated += (sender, e) => createdCallCount++;
 

@@ -7,7 +7,8 @@ namespace WinFormsControlsTest;
 public partial class DataGridViewInVirtualModeTest : Form
 {
     // Declare fields for testing DGV in the Virtual mode
-    // The example was taken from: https://docs.microsoft.com/dotnet/desktop/winforms/controls/implementing-virtual-mode-wf-datagridview-control
+    // The example was taken from:
+    // https://docs.microsoft.com/dotnet/desktop/winforms/controls/implementing-virtual-mode-wf-datagridview-control
 
     // Declare a List to serve as the test data source
     private readonly List<TestCustomer> _customers = [];

@@ -27,7 +27,9 @@ internal sealed class InheritedPropertyDescriptor : PropertyDescriptor
 
         InitInheritedDefaultValue(component);
 
-        // Check to see if this property points to a collection of objects that are not IComponents. We cannot serialize the delta between two collections if they do not contain components, so if we detect this case we will make the property invisible to serialization.
+        // Check to see if this property points to a collection of objects that are not IComponents.
+        // We cannot serialize the delta between two collections if they do not contain components,
+        // so if we detect this case we will make the property invisible to serialization.
         // We only do this if there are already items in the collection. Otherwise, it is safe.
         bool readOnlyCollection = false;
 
@@ -36,7 +38,8 @@ internal sealed class InheritedPropertyDescriptor : PropertyDescriptor
         {
             if (propertyDescriptor.GetValue(component) is ICollection { Count: > 0 } collection)
             {
-                // Trawl Add and AddRange methods looking for the first compatible serializable method. All we need is the data type.
+                // Trawl Add and AddRange methods looking for the first compatible serializable method.
+                // All we need is the data type.
                 bool addComponentExists = false;
                 bool addNonComponentExists = false;
                 foreach (MethodInfo method in TypeDescriptor.GetReflectionType(collection).GetMethods(BindingFlags.Public | BindingFlags.Instance))
@@ -149,7 +152,8 @@ internal sealed class InheritedPropertyDescriptor : PropertyDescriptor
     [return: NotNullIfNotNull(nameof(value))]
     private object? ClonedDefaultValue(object? value)
     {
-        // if we have a persist contents guy, we'll need to try to clone the value because otherwise we won't be able to tell when it's been modified.
+        // if we have a persist contents guy, we'll need to try to clone the value because otherwise
+        // we won't be able to tell when it's been modified.
         if (value is null ||
             !_propertyDescriptor.TryGetAttribute(out DesignerSerializationVisibilityAttribute? dsva) ||
             dsva.Visibility != DesignerSerializationVisibility.Content)
@@ -192,8 +196,11 @@ internal sealed class InheritedPropertyDescriptor : PropertyDescriptor
         try
         {
             object? currentValue;
-            // Don't just get the default value. Check to see if the propertyDescriptor has indicated ShouldSerialize, and if it hasn't try to use the default value.
-            // We need to do this for properties that inherit from their parent. If we are processing properties on the root component, we always favor the presence of a default value attribute.
+            // Don't just get the default value. Check to see if the propertyDescriptor has indicated ShouldSerialize,
+            // and if it hasn't try to use the default value.
+            // We need to do this for properties that inherit from their parent.
+            // If we are processing properties on the root component,
+            // we always favor the presence of a default value attribute.
             // The root component is always inherited but some values should always be written into code.
             if (!_propertyDescriptor.ShouldSerializeValue(component))
             {

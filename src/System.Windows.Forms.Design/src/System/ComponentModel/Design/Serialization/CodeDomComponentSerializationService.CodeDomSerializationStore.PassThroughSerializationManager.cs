@@ -62,7 +62,10 @@ public sealed partial class CodeDomComponentSerializationService
             {
                 object? instance = ((IDesignerSerializationManager)Manager).GetInstance(name);
 
-                // If an object is retrieved from the current container as a result of GetInstance(), we need to make sure and fully deserialize it before returning it. To do this, we will force a resolve on this name and not interfere the next time GetInstance() is called with this component. This will force the component to completely deserialize.
+                // If an object is retrieved from the current container as a result of GetInstance(),
+                // we need to make sure and fully deserialize it before returning it.
+                // To do this, we will force a resolve on this name and not interfere the next time GetInstance()
+                // is called with this component. This will force the component to completely deserialize.
                 if (_resolveNameEventHandler is not null && instance is not null &&
                     Manager.PreserveNames && Manager.Container?.Components[name] is not null && _resolved.Add(name))
                 {

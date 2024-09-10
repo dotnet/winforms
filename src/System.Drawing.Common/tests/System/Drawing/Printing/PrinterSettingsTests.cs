@@ -572,9 +572,10 @@ public class PrinterSettingsTests
 
     private static readonly string[] s_testPrinterNames =
     [
-        // Our method of testing some apis requires a printer that supports multi-copy printing, collating, color and duplex settings. Not all printers
-        // support these so rather than trust the machine running the test to have configured such a printer as the default, use the name of
-        // a known compliant printer that ships with Windows 10.
+        // Our method of testing some apis requires a printer that supports multi-copy printing,
+        // collating, color and duplex settings. Not all printers support these so
+        // rather than trust the machine running the test to have configured such a printer as the default,
+        // use the name of a known compliant printer that ships with Windows 10.
         "Microsoft Print to PDF",
         "Microsoft XPS Document Writer", // Backup for older Windows
     ];

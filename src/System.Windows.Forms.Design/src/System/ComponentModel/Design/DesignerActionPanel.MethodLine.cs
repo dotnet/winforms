@@ -102,7 +102,10 @@ internal sealed partial class DesignerActionPanel
                     switch (keyCode)
                     {
                         case Keys.Tab:
-                            // We specifically ignore Ctrl+Tab because it prevents the window switcher dialog from showing up in VS. Normally the key combination is only needed when a LinkLabel contains multiple links, but that can't happen inside the DesignerActionPanel.
+                            // We specifically ignore Ctrl+Tab because it prevents the window switcher dialog
+                            // from showing up in VS. Normally the key combination is only needed
+                            // when a LinkLabel contains multiple links, but that can't happen
+                            // inside the DesignerActionPanel.
                             return false;
                     }
                 }

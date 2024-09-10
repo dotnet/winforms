@@ -840,7 +840,8 @@ public class PictureBoxTests
         Assert.Equal(value, pictureBox.ImageLocation);
 
         // NB: disposing the component with strictly mocked object causes tests to fail
-        // Moq.MockException : ISite.Container invocation failed with mock behavior Strict. All invocations on the mock must have a corresponding setup.
+        // Moq.MockException : ISite.Container invocation failed with mock behavior Strict.
+        // All invocations on the mock must have a corresponding setup.
         pictureBox.Site = null;
     }
 
@@ -869,7 +870,8 @@ public class PictureBoxTests
         Assert.Null(pictureBox.Image);
 
         // NB: disposing the component with strictly mocked object causes tests to fail
-        // Moq.MockException : ISite.Container invocation failed with mock behavior Strict. All invocations on the mock must have a corresponding setup.
+        // Moq.MockException : ISite.Container invocation failed with mock behavior Strict.
+        // All invocations on the mock must have a corresponding setup.
         pictureBox.Site = null;
     }
 
@@ -2053,7 +2055,8 @@ public class PictureBoxTests
         Assert.Equal(value, pictureBox.ImageLocation);
 
         // NB: disposing the component with strictly mocked object causes tests to fail
-        // Moq.MockException : ISite.Container invocation failed with mock behavior Strict. All invocations on the mock must have a corresponding setup.
+        // Moq.MockException : ISite.Container invocation failed with mock behavior Strict.
+        // All invocations on the mock must have a corresponding setup.
         pictureBox.Site = null;
     }
 
@@ -2082,7 +2085,8 @@ public class PictureBoxTests
         Assert.Null(pictureBox.Image);
 
         // NB: disposing the component with strictly mocked object causes tests to fail
-        // Moq.MockException : ISite.Container invocation failed with mock behavior Strict. All invocations on the mock must have a corresponding setup.
+        // Moq.MockException : ISite.Container invocation failed with mock behavior Strict.
+        // All invocations on the mock must have a corresponding setup.
         pictureBox.Site = null;
     }
 
