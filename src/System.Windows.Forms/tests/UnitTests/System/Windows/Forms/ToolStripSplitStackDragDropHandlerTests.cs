@@ -17,10 +17,7 @@ public class ToolStripSplitStackDragDropHandlerTests : IDisposable
         _toolStripSplitStackDragDropHandler = new(_toolStrip);
     }
 
-    public void Dispose()
-    {
-        _toolStrip.Dispose();
-    }
+    public void Dispose() => _toolStrip.Dispose();
 
     [WinFormsFact]
     public void OnDragEnter_SetsEffectToMove_WhenDataIsToolStripItem()
@@ -97,7 +94,7 @@ public class ToolStripSplitStackDragDropHandlerTests : IDisposable
     [WinFormsFact]
     public void OnGiveFeedback_DoesNotThrowException()
     {
-        GiveFeedbackEventArgs giveFeedbackEventArgs = new(DragDropEffects.None, false);
+        GiveFeedbackEventArgs giveFeedbackEventArgs = new(effect: DragDropEffects.None, useDefaultCursors: false);
 
         Action action = () => _toolStripSplitStackDragDropHandler.OnGiveFeedback(giveFeedbackEventArgs);
         action.Should().NotThrow();
@@ -106,7 +103,7 @@ public class ToolStripSplitStackDragDropHandlerTests : IDisposable
     [WinFormsFact]
     public void OnQueryContinueDrag_DoesNotThrowException()
     {
-        QueryContinueDragEventArgs queryContinueDragEventArgs = new(0, false, DragAction.Continue);
+        QueryContinueDragEventArgs queryContinueDragEventArgs = new(0, escapePressed: false, DragAction.Continue);
 
         Action action = () => _toolStripSplitStackDragDropHandler.OnQueryContinueDrag(queryContinueDragEventArgs);
 
