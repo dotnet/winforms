@@ -136,7 +136,7 @@ public partial class ControlDesigner : ComponentDesigner
     public virtual Control Control => (Control)Component;
 
     /// <summary>
-    ///  Determines whether drag rects can be drawn on this designer.
+    ///  Determines whether drag rectangles can be drawn on this designer.
     /// </summary>
     protected virtual bool EnableDragRect => false;
 
@@ -231,7 +231,7 @@ public partial class ControlDesigner : ComponentDesigner
                 DockStyle dock = (DockStyle)(int)propDock.GetValue(component)!;
 
                 // gotta adjust if the control's parent is mirrored... this is just such that we add the right
-                // resize handles. We need to do it this way, since resize glyphs are added in  AdornerWindow
+                // resize handles. We need to do it this way, since resize glyphs are added in AdornerWindow
                 // coords, and the AdornerWindow is never mirrored.
                 if (Control.Parent is not null && Control.Parent.IsMirrored)
                 {
@@ -503,7 +503,7 @@ public partial class ControlDesigner : ComponentDesigner
         {
             e.Control.WindowTarget = new ChildWindowTarget(this, e.Control, oldTarget);
 
-            // Controls added in UserControl.OnLoad() do not  setup sniffing WndProc properly.
+            // Controls added in UserControl.OnLoad() do not setup sniffing WndProc properly.
             e.Control.ControlAdded += OnControlAdded;
         }
 
@@ -2469,7 +2469,7 @@ public partial class ControlDesigner : ComponentDesigner
         //
         // There are three types of child handles and we are interested in two of them:
         //
-        //  1. Child handles that do not have a Control associated  with them. We must subclass these and prevent
+        //  1. Child handles that do not have a Control associated with them. We must subclass these and prevent
         //      them from getting design-time events.
         //  2. Child handles that do have a Control associated with them, but the control does not have a designer.
         //      We must hook the WindowTarget on these controls and prevent them from getting design-time events.

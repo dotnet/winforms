@@ -6,7 +6,8 @@ using System.Collections;
 namespace System.ComponentModel.Design;
 
 /// <summary>
-///  This service is requested by TypeDescriptor when asking for type information for a component.  Our implementation forwards this filter onto IDesignerFilter on the component's designer, should one exist.
+///  This service is requested by TypeDescriptor when asking for type information for a component.
+///  Our implementation forwards this filter onto IDesignerFilter on the component's designer, should one exist.
 /// </summary>
 internal sealed class TypeDescriptorFilterService : ITypeDescriptorFilterService
 {

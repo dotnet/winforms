@@ -366,7 +366,7 @@ internal sealed class SelectionService : ISelectionService, IDisposable
         // We always want to allow NULL arrays coming in.
         components ??= Array.Empty<IComponent>();
 
-        // If toggle, replace, remove or add are not specifically specified, infer them from  the state of the modifier keys.
+        // If toggle, replace, remove or add are not specifically specified, infer them from the state of the modifier keys.
         // This creates the "Auto" selection type for us by default.
         if (fAuto)
         {
