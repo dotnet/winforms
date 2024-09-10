@@ -9,7 +9,7 @@ namespace Windows.Win32.UI.Controls.Dialogs;
 /// <remarks>
 ///  <para>
 ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-devnames">
-///    Learn more about this API from learn.Microsoft.com.
+///    Learn more about this API from http://learn.microsoft.com.
 ///   </see>
 ///  </para>
 /// </remarks>
@@ -33,7 +33,7 @@ internal partial struct DEVNAMES
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-devnames#members">
-    ///    Read more on learn.Microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -46,7 +46,7 @@ internal partial struct DEVNAMES
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-devnames#members">
-    ///    Read more on learn.Microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -59,8 +59,8 @@ internal partial struct DEVNAMES
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-devnames#members">
-    ///    Read more on learn.Microsoft.com.
-    ///    </see>
+    ///    Read more on http://learn.microsoft.com.
+    ///   </see>
     ///  </para>
     /// </summary>
     public ushort wOutputOffset;
@@ -78,7 +78,7 @@ internal partial struct DEVNAMES
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-devnames#members">
-    ///    Read more on learn.Microsoft.com
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>

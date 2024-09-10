@@ -11,7 +11,7 @@ internal static unsafe class AccessibiltyExtensions
     /// <inheritdoc cref="PInvoke.LresultFromObject(Guid*, WPARAM, IUnknown*)"/>
     internal static LRESULT GetLRESULT(this IAccessible accessible, WPARAM wparam)
     {
-        // https://learn.Microsoft.com/windows/win32/winauto/how-to-handle-wm-getobject
+        // https://learn.mcrosoft.com/windows/win32/winauto/how-to-handle-wm-getobject
 
         using var unknown = ComHelpers.TryGetComScope<IUnknown>(accessible, out _);
 
