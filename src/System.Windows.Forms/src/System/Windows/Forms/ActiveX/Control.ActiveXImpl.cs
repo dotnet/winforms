@@ -1643,7 +1643,7 @@ public partial class Control
                 // Callers don't increment the ref count when they pass IOleClientSite, it is up to us to do so as we're
                 // maintaining a reference to the pointer. Validated this behavior with the ATL/MFC sources.
                 //
-                // https://learn.microsoft.com/windows/win32/api/oleidl/nf-oleidl-ioleobject-setclientsite#notes-to-implementers
+                // https://learn.Microsoft.com/windows/win32/api/oleidl/nf-oleidl-ioleobject-setclientsite#notes-to-implementers
 
                 value->AddRef();
                 _clientSite = new(value, takeOwnership: true);

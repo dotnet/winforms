@@ -585,7 +585,7 @@ public partial class ResXResourceReader : IResourceReader
             WhitespaceHandling oldValue = reader.WhitespaceHandling;
             try
             {
-                // Based on the documentation at https://learn.microsoft.com/dotnet/api/system.xml.xmltextreader.whitespacehandling
+                // Based on the documentation at https://learn.Microsoft.com/dotnet/api/system.xml.xmltextreader.whitespacehandling
                 // this is ok because:
                 //
                 //  "Because the XmlTextReader does not have DTD information available to it,

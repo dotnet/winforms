@@ -28,7 +28,8 @@ internal static class TraceSwitchExtensions
     }
 
     /// <summary>
-    ///  Provides an interpolated string handler for <see cref="TraceVerbose(TraceSwitch?, ref TraceVerboseInterpolatedStringHandler)"/>
+    ///  Provides an interpolated string handler for
+    ///  <see cref="TraceVerbose(TraceSwitch?, ref TraceVerboseInterpolatedStringHandler)"/>
     ///  that only performs formatting if the condition applies.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]

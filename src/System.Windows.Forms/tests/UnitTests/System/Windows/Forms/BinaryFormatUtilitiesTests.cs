@@ -33,7 +33,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
     }
 
     // Primitive types as defined by the NRBF spec.
-    // https://learn.microsoft.com/dotnet/api/system.formats.nrbf.primitivetyperecord
+    // https://learn.Microsoft.com/dotnet/api/system.formats.nrbf.primitivetyperecord
     public static TheoryData<object> PrimitiveObjects_TheoryData => new()
     {
         (byte)1,

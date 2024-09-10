@@ -10,8 +10,8 @@ namespace System.Private.Windows.Core.BinaryFormat;
 ///  <para>
 ///   Includes the values for the class (which trail the record)
 ///   <see href="https://learn.microsoft.com/openspecs/windows_protocols/ms-nrbf/c9bc3af3-5a0c-4b29-b517-1b493b51f7bb">
-///    [MS-NRBF] 2.3
-///   </see>.
+///    [MS-NRBF] 2.3.
+///   </see>
 ///  </para>
 /// </remarks>
 internal abstract class ClassRecord : ObjectRecord
