@@ -151,7 +151,8 @@ public partial class DataGridViewColumnCollection : BaseCollection, IList
 
         if (DataGridView.InDisplayIndexAdjustments)
         {
-            // We are within columns display indexes adjustments. We do not allow changing the column collection while adjusting display indexes.
+            // We are within columns display indexes adjustments.
+            // We do not allow changing the column collection while adjusting display indexes.
             throw new InvalidOperationException(SR.DataGridView_CannotAlterDisplayIndexWithinAdjustments);
         }
 
@@ -183,7 +184,8 @@ public partial class DataGridViewColumnCollection : BaseCollection, IList
 
         if (DataGridView.InDisplayIndexAdjustments)
         {
-            // We are within columns display indexes adjustments. We do not allow changing the column collection while adjusting display indexes.
+            // We are within columns display indexes adjustments.
+            // We do not allow changing the column collection while adjusting display indexes.
             throw new InvalidOperationException(SR.DataGridView_CannotAlterDisplayIndexWithinAdjustments);
         }
 
@@ -272,7 +274,8 @@ public partial class DataGridViewColumnCollection : BaseCollection, IList
 
             if (DataGridView.InDisplayIndexAdjustments)
             {
-                // We are within columns display indexes adjustments. We do not allow changing the column collection while adjusting display indexes.
+                // We are within columns display indexes adjustments.
+                // We do not allow changing the column collection while adjusting display indexes.
                 throw new InvalidOperationException(SR.DataGridView_CannotAlterDisplayIndexWithinAdjustments);
             }
 
@@ -869,7 +872,8 @@ public partial class DataGridViewColumnCollection : BaseCollection, IList
 
         if (DataGridView.InDisplayIndexAdjustments)
         {
-            // We are within columns display indexes adjustments. We do not allow changing the column collection while adjusting display indexes.
+            // We are within columns display indexes adjustments.
+            // We do not allow changing the column collection while adjusting display indexes.
             throw new InvalidOperationException(SR.DataGridView_CannotAlterDisplayIndexWithinAdjustments);
         }
 
@@ -1037,7 +1041,8 @@ public partial class DataGridViewColumnCollection : BaseCollection, IList
 
         if (DataGridView.InDisplayIndexAdjustments)
         {
-            // We are within columns display indexes adjustments. We do not allow changing the column collection while adjusting display indexes.
+            // We are within columns display indexes adjustments.
+            // We do not allow changing the column collection while adjusting display indexes.
             throw new InvalidOperationException(SR.DataGridView_CannotAlterDisplayIndexWithinAdjustments);
         }
 

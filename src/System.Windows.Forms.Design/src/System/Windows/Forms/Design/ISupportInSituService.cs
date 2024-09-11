@@ -4,7 +4,7 @@
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-///  Provides an interface for a designer to support Insitu editing for selected components.
+///  Provides an interface for a designer to support InSitu editing for selected components.
 /// </summary>
 internal interface ISupportInSituService
 {
@@ -14,7 +14,8 @@ internal interface ISupportInSituService
     bool IgnoreMessages { get; }
 
     /// <summary>
-    ///  This method allows the service to handle the first WM_CHAR message. The implementer for this service can perform any tasks that it wants when it gets this message.
+    ///  This method allows the service to handle the first WM_CHAR message.
+    ///  The implementer for this service can perform any tasks that it wants when it gets this message.
     ///  e.g : ToolStripInSituService shows the Editor for each ToolStripItem in HandleKeyChar()
     /// </summary>
     void HandleKeyChar();

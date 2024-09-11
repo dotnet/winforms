@@ -69,10 +69,13 @@ public abstract class ListControl : Control
             {
                 // There are several possibilities why setting the data source throws an exception:
                 // 1. the app throws an exception in the events that fire when we change the data source: DataSourceChanged,
-                // 2. we get an exception when we set the data source and populate the list controls (say,something went wrong while formatting the data)
-                // 3. the DisplayMember does not fit w/ the new data source (this could happen if the user resets the data source but did not reset the DisplayMember)
+                // 2. we get an exception when we set the data source and populate the list controls
+                //    (say,something went wrong while formatting the data)
+                // 3. the DisplayMember does not fit w/ the new data source (this could happen if the user resets the
+                //    data source but did not reset the DisplayMember)
                 // in all cases ListControl should reset the DisplayMember to String.Empty
-                // the ListControl should also eat the exception - this is the RTM behavior and doing anything else is a breaking change
+                // the ListControl should also eat the exception - this is the RTM behavior and doing anything
+                // else is a breaking change
                 DisplayMember = string.Empty;
             }
 

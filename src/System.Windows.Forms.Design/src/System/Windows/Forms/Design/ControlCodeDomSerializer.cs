@@ -261,7 +261,7 @@ internal class ControlCodeDomSerializer : CodeDomSerializer
             {
                 name = manager.GetName(value);
 
-                // if we get null back, this must be an unsited control
+                // if we get null back, this must be an un-sited control
                 if (name is null)
                 {
                     Debug.Assert(value is not IComponent { Site: not null }, "Unnamed, sited control in hierarchy");

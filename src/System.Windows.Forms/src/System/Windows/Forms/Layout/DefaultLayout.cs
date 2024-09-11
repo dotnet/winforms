@@ -789,7 +789,8 @@ internal partial class DefaultLayout : LayoutEngine
         {
             if (ScaleHelper.IsScalingRequirementMet && (anchorInfo.Bottom - parentHeight > 0) && (oldAnchorInfo.Bottom < 0))
             {
-                // The parent was resized to fit its parent or the screen, we need to reuse the old anchors info to prevent positioning the control beyond the bottom edge.
+                // The parent was resized to fit its parent or the screen, we need to reuse the old anchors info
+                // to prevent positioning the control beyond the bottom edge.
                 anchorInfo.Bottom = oldAnchorInfo.Bottom;
 
                 if (!IsAnchored(anchor, AnchorStyles.Top))

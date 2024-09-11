@@ -6,14 +6,16 @@ Imports Xunit
 Namespace Microsoft.VisualBasic.Forms.Tests
 
     Public Class TimeTestData
-        Inherits TheoryData(Of DualTimeZones)
+        Implements IEnumerable(Of Object())
 
-#Disable Warning CA1825 ' Avoid zero-length array allocations
-        Public Sub New()
-            Add(New DualTimeZones(TimeZone.GMT))
-            Add(New DualTimeZones(TimeZone.Local))
-        End Sub
-#Enable Warning CA1825 ' Avoid zero-length array allocations
+        Public Iterator Function GetEnumerator() As IEnumerator(Of Object()) Implements IEnumerable(Of Object()).GetEnumerator
+            Yield {New DualTimeZones(TimeZone.GMT)}
+            Yield {New DualTimeZones(TimeZone.Local)}
+        End Function
+
+        Public Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
+            Return GetEnumerator()
+        End Function
 
     End Class
 End Namespace
