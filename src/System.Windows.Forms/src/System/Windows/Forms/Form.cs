@@ -5993,7 +5993,8 @@ public partial class Form : ContainerControl
     ///  Shows the form as a modal dialog box with the specified owner asynchronously.
     /// </summary>
     /// <param name="owner">
-    ///  Any object that implements <see cref="IWin32Window"/> that represents the top-level window that will own the modal dialog box.
+    ///  Any object that implements <see cref="IWin32Window"/>
+    ///  that represents the top-level window that will own the modal dialog box.
     /// </param>
     /// <returns>
     ///  A <see cref="Task{DialogResult}"/> representing the outcome of the dialog.

@@ -189,7 +189,8 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
         if (horizontal)
         {
             rightToLeftShift = rightToLeft ? -2 : 0;
-            // width of the both lines is 1 pixel and lines are drawn next to each other, this the highlight line is 1 pixel below the black line
+            // width of the both lines is 1 pixel and lines are drawn next to each other,
+            // this the highlight line is 1 pixel below the black line.
             g.DrawLine(SystemPens.ControlText,
                 middle.X - Offset2X,
                 overflowArrowRect.Y - Offset2Y,
@@ -817,7 +818,11 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
 
         e.Graphics.Clear(ColorTable.ToolStripContentPanelGradientEnd);
 
-        // RenderBackgroundGradient(e.Graphics, toolStripContentPanel, ColorTable.ToolStripContentPanelGradientBegin, ColorTable.ToolStripContentPanelGradientEnd);
+        // RenderBackgroundGradient(
+        //     e.Graphics,
+        //     toolStripContentPanel,
+        //     ColorTable.ToolStripContentPanelGradientBegin,
+        //     ColorTable.ToolStripContentPanelGradientEnd);
     }
 
     #region PrivatePaintHelpers

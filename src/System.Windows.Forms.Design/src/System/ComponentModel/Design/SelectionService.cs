@@ -189,7 +189,7 @@ internal sealed class SelectionService : ISelectionService, IDisposable
             {
                 // We don't have a HelpService yet, hook up to the ApplicationIdle event.
                 // VS is always returning a UserContext, so instantiating the HelpService
-                // beforehand and doing class pushcontext on it to try to
+                // beforehand and doing class PushContext on it to try to
                 // stack up help context in the HelpService to be flushed when we get the
                 // documentation event may not work, so we need to wait for a HelpService instead.
                 Application.Idle += ApplicationIdle;

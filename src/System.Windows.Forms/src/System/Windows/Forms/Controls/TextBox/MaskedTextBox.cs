@@ -642,7 +642,8 @@ public partial class MaskedTextBox : TextBoxBase
             //
             // We don't do anything if:
             // 1. IsNullOrEmpty( value )->[Reset control] && _flagState[IS_NULL_MASK]==>Already Reset.
-            // 2. !IsNullOrEmpty( value )->[Set control] && !_flagState[IS_NULL_MASK][control is set] && [value is the same]==>No need to update.
+            // 2. !IsNullOrEmpty( value )->[Set control] && !_flagState[IS_NULL_MASK][control is set] &&
+            //    [value is the same]==>No need to update.
             //
             if (_flagState[s_isNullMask] == string.IsNullOrEmpty(value) && (_flagState[s_isNullMask] || value == _maskedTextProvider.Mask))
             {
@@ -912,7 +913,8 @@ public partial class MaskedTextBox : TextBoxBase
                     throw new InvalidOperationException(SR.MaskedTextBoxPasswordAndPromptCharError);
                 }
 
-                // Recreate masked text provider to be consistent with AllowPromptAsInput - current text may have chars with same value as new prompt.
+                // Recreate masked text provider to be consistent with AllowPromptAsInput
+                // - current text may have chars with same value as new prompt.
                 MaskedTextProvider newProvider = new(
                     _maskedTextProvider.Mask,
                     _maskedTextProvider.Culture,

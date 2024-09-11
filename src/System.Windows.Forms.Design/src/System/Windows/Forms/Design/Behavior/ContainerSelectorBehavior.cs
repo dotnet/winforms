@@ -111,13 +111,13 @@ internal sealed class ContainerSelectorBehavior : Behavior
                             continue;
                         }
 
-                        // Don't care if we are looking at the same containerselectorglyph
+                        // Don't care if we are looking at the same ContainerSelectorGlyph
                         if (selNew.Equals(selOld))
                         {
                             continue;
                         }
 
-                        // Check if the containercontrols are the same
+                        // Check if the containerControls are the same
                         if (!(selNew.RelatedBehavior is ContainerSelectorBehavior behNew) || !(selOld.RelatedBehavior is ContainerSelectorBehavior behOld))
                         {
                             continue;
@@ -238,7 +238,7 @@ internal sealed class ContainerSelectorBehavior : Behavior
             Point controlOrigin;
             if (_setInitialDragPoint)
             {
-                // In this case we want the initialmouselocation to be the control's origin.
+                // In this case we want the initialMouseLocation to be the control's origin.
                 controlOrigin = _behaviorService.ControlToAdornerWindow(_containerControl);
                 controlOrigin = _behaviorService.AdornerWindowPointToScreen(controlOrigin);
             }

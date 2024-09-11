@@ -37,7 +37,8 @@ public class ToolStripSystemRenderer : ToolStripRenderer
     {
         get
         {
-            // If system in high contrast mode 'false' flag should be passed to render filled selected button background. This is in consistence with ToolStripProfessionalRenderer.
+            // If system in high contrast mode 'false' flag should be passed to render filled selected button background.
+            // This is in consistence with ToolStripProfessionalRenderer.
             _toolStripHighContrastRenderer ??= new ToolStripHighContrastRenderer(systemRenderMode: false);
 
             return _toolStripHighContrastRenderer;

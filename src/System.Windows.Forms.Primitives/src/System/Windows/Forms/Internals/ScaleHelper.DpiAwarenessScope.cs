@@ -26,7 +26,8 @@ internal static partial class ScaleHelper
         /// <param name="behavior"><see cref="DPI_HOSTING_BEHAVIOR"/> to be set on the thread.</param>
         public DpiAwarenessScope(DPI_AWARENESS_CONTEXT context, DPI_HOSTING_BEHAVIOR behavior)
         {
-            // Full support for DPI_AWARENESS_CONTEXT and mixed mode DPI_HOSTING_BEHAVIOR on the thread is only available after the RS4 OS release.
+            // Full support for DPI_AWARENESS_CONTEXT and mixed mode DPI_HOSTING_BEHAVIOR on the thread
+            // is only available after the RS4 OS release.
             if (!OsVersion.IsWindows10_18030rGreater())
             {
                 Debug.Fail("Full support for DPI_AWARENESS_CONTEXT and mixed mode DPI_HOSTING_BEHAVIOR on the thread is only available after the RS4 OS release");

@@ -854,8 +854,10 @@ public partial class CurrencyManager : BindingManagerBase
                 // if currencyManager changed position then we have two cases:
                 // 1. the previous lastGoodKnownRow was valid: in that case we fell back so do not fire onCurrentChanged
                 // 2. the previous lastGoodKnownRow was invalid: we have two cases:
-                //      a. FindGoodRow actually found a good row, so it can't be the one before the user changed the position: fire the onCurrentChanged
-                //      b. FindGoodRow did not find a good row: we should have gotten an exception so we should not even execute this code
+                //      a. FindGoodRow actually found a good row, so it can't be the one before the user changed
+                //         the position: fire the onCurrentChanged
+                //      b. FindGoodRow did not find a good row: we should have gotten an exception so we should
+                //         not even execute this code
                 if (!positionChanged || (positionChanged && curLastGoodKnownRow != -1))
                 {
                     onCurrentChangedHandler?.Invoke(this, e);

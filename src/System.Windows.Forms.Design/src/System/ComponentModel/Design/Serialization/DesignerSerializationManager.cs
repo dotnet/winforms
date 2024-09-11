@@ -775,9 +775,9 @@ public class DesignerSerializationManager : IDesignerSerializationManager
         // When RecycleInstances is true if there was a collision the object would have been returned,
         // so there is no need to store locally.
         if (name is not null // If we were given a name
-            && (!(instance is IComponent) // And it's not an icomponent
+            && (!(instance is IComponent) // And it's not an IComponent
                 || !RecycleInstances))
-        { // Or it is an icomponent but recycle instances is turned off
+        { // Or it is an IComponent but recycle instances is turned off
             _instancesByName ??= new(StringComparer.CurrentCulture);
             _namesByInstance ??= new(new ReferenceComparer());
             _instancesByName[name] = instance;
