@@ -28,7 +28,8 @@ internal readonly ref struct CreateBitmapScope
         HBITMAP = PInvokeCore.CreateBitmap(nWidth, nHeight, nPlanes, nBitCount, lpvBits);
 
     /// <summary>
-    ///  Creates a bitmap compatible with the given <see cref="HDC"/> via <see cref="PInvokeCore.CreateCompatibleBitmap(HDC, int, int)"/>
+    ///  Creates a bitmap compatible with the given <see cref="HDC"/> via
+    ///  <see cref="PInvokeCore.CreateCompatibleBitmap(HDC, int, int)"/>
     /// </summary>
     public CreateBitmapScope(HDC hdc, int cx, int cy) => HBITMAP = PInvokeCore.CreateCompatibleBitmap(hdc, cx, cy);
 

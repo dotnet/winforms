@@ -9,7 +9,8 @@ internal static class UIAHelper
 {
     /// <summary>
     ///  Converts a window handle to a <see cref="VARIANT"/> for UIA purposes.
-    ///  Specifically, for <see cref="IRawElementProviderSimple.GetPropertyValue(IRawElementProviderSimple*, UIA_PROPERTY_ID, VARIANT*)"/>
+    ///  Specifically, for
+    ///  <see cref="IRawElementProviderSimple.GetPropertyValue(IRawElementProviderSimple*, UIA_PROPERTY_ID, VARIANT*)"/>
     ///  with <see cref="UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId"/> passed.
     /// </summary>
     /// <param name="handle">The handle to the window</param>
@@ -29,7 +30,7 @@ internal static class UIAHelper
         {
             vt = VARENUM.VT_I4,
             // Only the lower 32 bits in window handles contain significant information -
-            // https://learn.microsoft.com/windows/win32/winprog64/interprocess-communication
+            // https://learn.Microsoft.com/windows/win32/winprog64/interprocess-communication
             data = new() { intVal = (int)(handle & 0xFFFF_FFFF) }
         };
 }

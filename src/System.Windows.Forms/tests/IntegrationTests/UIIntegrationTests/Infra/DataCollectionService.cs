@@ -46,12 +46,14 @@ internal static class DataCollectionService
     }
 
     /// <summary>
-    /// Register a custom logger to collect data in the event of a test failure.
+    ///  Register a custom logger to collect data in the event of a test failure.
     /// </summary>
     /// <remarks>
-    /// <para>The <paramref name="logId"/> and <paramref name="extension"/> should be chosen to avoid conflicts with
-    /// other loggers. Otherwise, it is possible for logs to be overwritten during data collection. Built-in logs
-    /// include:</para>
+    /// <para>
+    ///  The <paramref name="logId"/> and <paramref name="extension"/> should be chosen to avoid conflicts with
+    ///  other loggers. Otherwise, it is possible for logs to be overwritten during data collection. Built-in logs
+    ///  include:
+    /// </para>
     ///
     /// <list type="table">
     ///   <listheader>
@@ -71,7 +73,9 @@ internal static class DataCollectionService
     ///   </item>
     /// </list>
     /// </remarks>
-    /// <param name="callback">The callback to invoke to collect log information. The argument to the callback is the fully-qualified file path where the log data should be written.</param>
+    /// <param name="callback">The callback to invoke to collect log information. The argument to the callback is
+    ///  the fully-qualified file path where the log data should be written.
+    /// </param>
     /// <param name="logId">An optional log identifier to include in the resulting file name.</param>
     /// <param name="extension">The extension to give the resulting file.</param>
     public static void RegisterCustomLogger(Action<string> callback, string logId, string extension)
@@ -195,7 +199,7 @@ internal static class DataCollectionService
     }
 
     /// <summary>
-    /// Computes a full log file name.
+    ///  Computes a full log file name.
     /// </summary>
     /// <param name="logDirectory">The location where logs are saved.</param>
     /// <param name="timestamp">The timestamp of the failure.</param>

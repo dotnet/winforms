@@ -21,7 +21,7 @@ public unsafe partial class DataObject
 
                 try
                 {
-                    success = WinFormsBinaryFormatWriter.TryWriteObject(stream, data);
+                    success = WinFormsBinaryFormatWriter.TryWriteCommonObject(stream, data);
                 }
                 catch (Exception ex) when (!ex.IsCriticalException())
                 {
@@ -55,7 +55,7 @@ public unsafe partial class DataObject
                 long startPosition = stream.Position;
                 try
                 {
-                    if (stream.Decode().TryGetObject(out object? value))
+                    if (stream.Decode().TryGetCommonObject(out object? value))
                     {
                         return value;
                     }

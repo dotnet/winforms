@@ -134,7 +134,8 @@ internal unsafe class ClassPropertyDispatchAdapter
     /// </summary>
     /// <remarks>
     ///  <para>
-    ///   Matches up to <see cref="IDispatchEx.InvokeEx(IDispatchEx*, int, uint, ushort, DISPPARAMS*, VARIANT*, EXCEPINFO*, Com.IServiceProvider*)"/>
+    ///   Matches up to
+    ///   <see cref="IDispatchEx.InvokeEx(IDispatchEx*, int, uint, ushort, DISPPARAMS*, VARIANT*, EXCEPINFO*, Com.IServiceProvider*)"/>
     ///  </para>
     /// </remarks>
     [UnconditionalSuppressMessage(
