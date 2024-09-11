@@ -2280,7 +2280,7 @@ public unsafe partial class Control :
                         }
 
                         // #32770 is the standard windows dialog class name
-                        // https://learn.microsoft.com/windows/win32/winmsg/about-window-classes#system-classes
+                        // https://learn.Microsoft.com/windows/win32/winmsg/about-window-classes#system-classes
                         ReadOnlySpan<char> className = "#32770";
                         if (className.Equals(buffer[..length], StringComparison.Ordinal))
                         {
@@ -10585,7 +10585,9 @@ public unsafe partial class Control :
                 // bit and call CreateControl()
                 if (IsHandleCreated || value)
                 {
-                    if (value)
+                    // We shouldn't mess with the color mode if users haven't specifically set it.
+                    // https://github.com/dotnet/winforms/issues/12014
+                    if (value && Application.ColorModeSet)
                     {
                         PrepareDarkMode(HWND, Application.IsDarkModeEnabled);
                     }
@@ -11160,10 +11162,10 @@ public unsafe partial class Control :
         //
         // See:
         //
-        // https://learn.microsoft.com/cpp/mfc/tn061-on-notify-and-wm-notify-messages
-        // https://learn.microsoft.com/cpp/mfc/tn062-message-reflection-for-windows-controls?view=msvc-170
-        // https://learn.microsoft.com/windows/win32/controls/wm-notify
-        // https://learn.microsoft.com/windows/win32/controls/wm-drawitem
+        // https://learn.Microsoft.com/cpp/mfc/tn061-on-notify-and-wm-notify-messages
+        // https://learn.Microsoft.com/cpp/mfc/tn062-message-reflection-for-windows-controls?view=msvc-170
+        // https://learn.Microsoft.com/windows/win32/controls/wm-notify
+        // https://learn.Microsoft.com/windows/win32/controls/wm-drawitem
 
         if (!Disposing && IsHandleCreated)
         {
@@ -12461,7 +12463,7 @@ public unsafe partial class Control :
     ///  <para>
     ///   The <see cref="WndProc(ref Message)"/> method corresponds exactly to the Windows <c>WindowProc</c>
     ///   function. For more information about processing Windows messages see the
-    ///   <see href="https://go.microsoft.com/fwlink/?LinkId=181565">WindowProc function</see>.
+    ///   <see href="https://go.microsoft.com/fwlink/?LinkId=181565">WindowProc function.</see>
     ///  </para>
     /// </remarks>
     /// <notesToInheritors>

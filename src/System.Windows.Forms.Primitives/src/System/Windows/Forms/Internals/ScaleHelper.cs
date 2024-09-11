@@ -19,7 +19,7 @@ internal static partial class ScaleHelper
     /// <remarks>
     ///  <para>
     ///   Some historical discussion of this can be found
-    ///   <see href="https://en.wikipedia.org/wiki/Dots_per_inch#Computer_monitor_DPI_standards">here</see>.
+    ///   <see href="https://en.wikipedia.org/wiki/Dots_per_inch#Computer_monitor_DPI_standards">here.</see>
     ///  </para>
     /// </remarks>
     internal const int OneHundredPercentLogicalDpi = 96;

@@ -15,7 +15,7 @@ namespace System.Windows.Forms;
 public static class Clipboard
 {
     /// <summary>
-    ///  Places nonpersistent data on the system <see cref="Clipboard"/>.
+    ///  Places non-persistent data on the system <see cref="Clipboard"/>.
     /// </summary>
     public static void SetDataObject(object data) => SetDataObject(data, copy: false);
 
@@ -81,7 +81,7 @@ public static class Clipboard
         if (Application.OleRequired() != ApartmentState.STA)
         {
             // Only throw if a message loop was started. This makes the case of trying to query the clipboard from the
-            // finalizer or non-ui MTA thread silently fail, instead of making the app die.
+            // finalizer or non-ui MTA thread silently fail, instead of making the application die.
             return Application.MessageLoop ? throw new ThreadStateException(SR.ThreadMustBeSTA) : null;
         }
 
@@ -166,7 +166,7 @@ public static class Clipboard
         !string.IsNullOrWhiteSpace(format) && ContainsData(format, autoConvert: false);
 
     private static bool ContainsData(string format, bool autoConvert) =>
-        GetDataObject() is { } dataObject && dataObject.GetDataPresent(format, autoConvert: autoConvert);
+        GetDataObject() is IDataObject dataObject && dataObject.GetDataPresent(format, autoConvert: autoConvert);
 
     /// <summary>
     ///  Indicates whether there is data on the Clipboard that is in the <see cref="DataFormats.FileDrop"/> format
@@ -210,7 +210,7 @@ public static class Clipboard
         string.IsNullOrWhiteSpace(format) ? null : GetData(format, autoConvert: false);
 
     private static object? GetData(string format, bool autoConvert) =>
-        GetDataObject() is { } dataObject ? dataObject.GetData(format, autoConvert) : null;
+        GetDataObject() is IDataObject dataObject ? dataObject.GetData(format, autoConvert) : null;
 
     /// <summary>
     ///  Retrieves a collection of file names from the <see cref="Clipboard"/>.

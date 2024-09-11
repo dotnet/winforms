@@ -105,7 +105,9 @@ internal unsafe struct IProvidePropertyBuilder : IComIID
         /// <param name="dispid">The DISPID of the property in question.</param>
         /// <param name="pdwCtlBldType">The builder to be mapped.</param>
         /// <param name="pbstrGuidBldr">The GUID that identifies the builder for this property.</param>
-        /// <param name="builderAvailable">This parameter is <see cref="VARIANT_BOOL.VARIANT_TRUE"/> if this property currently supports a builder.</param>
+        /// <param name="builderAvailable">
+        ///  This parameter is <see cref="VARIANT_BOOL.VARIANT_TRUE"/> if this property currently supports a builder.
+        /// </param>
         [PreserveSig]
         HRESULT MapPropertyToBuilder(
             int dispid,
