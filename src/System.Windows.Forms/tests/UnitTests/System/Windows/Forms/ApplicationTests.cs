@@ -68,26 +68,23 @@ public class ApplicationTests
 
     [STAThread]
     [WinFormsFact]
-    public void Application_GetCurrentApplicationContext()
+    public void Application_CurrentMainForm_Get()
     {
         Application.EnableVisualStyles();
         var form1 = new Form();
         var form2 = new Form();
         var event1 = new ManualResetEventSlim();
         var event2 = new ManualResetEventSlim();
-        ApplicationContext applicationContext1 = default, applicationContext2 = default;
         Form mainForm1 = default, mainForm2 = default;
         form1.Load += (s, e) =>
         {
-            applicationContext1 = Application.GetCurrentApplicationContext();
-            mainForm1 = applicationContext1.MainForm;
+            mainForm1 = Application.CurrentMainForm;
             form1.Close();
             event1.Set();
         };
         form2.Load += (s, e) =>
         {
-            applicationContext2 = Application.GetCurrentApplicationContext();
-            mainForm2 = applicationContext2.MainForm;
+            mainForm2 = Application.CurrentMainForm;
             form2.Close();
             event2.Set();
         };
@@ -99,11 +96,9 @@ public class ApplicationTests
         thread2.Start();
         event1.Wait();
         event2.Wait();
-        Assert.NotNull(applicationContext1);
-        Assert.NotNull(applicationContext2);
         Assert.NotNull(mainForm1);
         Assert.NotNull(mainForm2);
-        Assert.NotSame(applicationContext1, applicationContext2);
+        Assert.NotSame(mainForm1, mainForm2);
         Assert.Same(form1, mainForm1);
         Assert.Same(form2, mainForm2);
     }

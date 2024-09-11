@@ -243,6 +243,12 @@ public sealed partial class Application
         set => InputLanguage.CurrentInputLanguage = value;
     }
 
+    /// <summary>
+    /// Get current application context main form
+    /// </summary>
+    /// <returns>Current application context</returns>
+    public static Form? CurrentMainForm { get => ThreadContext.FromCurrent().ApplicationContext?.MainForm; }
+
     internal static bool CustomThreadExceptionHandlerAttached
         => ThreadContext.FromCurrent().CustomThreadExceptionHandlerAttached;
 
@@ -1265,13 +1271,6 @@ public sealed partial class Application
     /// </summary>
     public static void RemoveMessageFilter(IMessageFilter value)
         => ThreadContext.FromCurrent().RemoveMessageFilter(value);
-
-    /// <summary>
-    /// Get current application context
-    /// </summary>
-    /// <returns>Current application context</returns>
-    public static ApplicationContext? GetCurrentApplicationContext()
-        => ThreadContext.FromCurrent().ApplicationContext;
 
     /// <summary>
     ///  Restarts the application.
