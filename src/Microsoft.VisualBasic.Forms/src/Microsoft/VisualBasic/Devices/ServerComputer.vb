@@ -12,10 +12,12 @@ Namespace Microsoft.VisualBasic.Devices
     ''' </summary>
     Public Class ServerComputer
 
-        'NOTE: The .Net design guidelines state that access to Instance members does not have to be thread-safe. Access to Shared members does have to be thread-safe.
-        'Since My.Computer creates the instance of Computer in a thread-safe way, access to the Computer will necessarily be thread-safe.
-        'There is nothing to prevent a user from passing our computer object across threads or creating their own instance and then getting into trouble.
-        'But that is completely consistent with the rest of the FX design. It is MY.* that is thread safe and leads to best practice access to these objects.
+        'NOTE: The .Net design guidelines state that access to Instance members does not have to be thread-safe.
+        'Access to Shared members does have to be thread-safe. Since My.Computer creates the instance of Computer
+        'in a thread-safe way, access to the Computer will necessarily be thread-safe. There is nothing to prevent
+        'a user from passing our computer object across threads or creating their own instance and
+        'then getting into trouble. But that is completely consistent with the rest of the FX design.
+        'It is MY.* that is thread safe and leads to best practice access to these objects.
         'If you dim them up yourself, you are responsible for managing the threading.
 
         'Lazy initialized cache for the Clock class. SHARED because Clock behaves as a readonly singleton class

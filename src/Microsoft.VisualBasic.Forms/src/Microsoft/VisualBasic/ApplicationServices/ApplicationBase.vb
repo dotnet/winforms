@@ -38,7 +38,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Public ReadOnly Property Info() As AssemblyInfo
             Get
                 If _info Is Nothing Then
-                    Dim assembly As Reflection.Assembly = If(Reflection.Assembly.GetEntryAssembly(), Reflection.Assembly.GetCallingAssembly())
+                    Dim assembly As Reflection.Assembly =
+                        If(Reflection.Assembly.GetEntryAssembly(), Reflection.Assembly.GetCallingAssembly())
+
                     _info = New AssemblyInfo(assembly)
                 End If
                 Return _info

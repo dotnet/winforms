@@ -20,10 +20,12 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <returns>The given path in long format if the path exists.</returns>
         ''' <remarks>
         '''  GetLongPathName is a PInvoke call and requires unmanaged code permission.
-        '''  Use <see cref="DirectoryInfo.GetFiles"/> and <see cref="DirectoryInfo.GetDirectories"/> (which call FindFirstFile) so that we always have permission.
+        '''  Use <see cref="DirectoryInfo.GetFiles"/> and
+        '''  <see cref="DirectoryInfo.GetDirectories"/> (which call FindFirstFile) so that we always have permission.
         '''</remarks>
         Private Shared Function GetLongPath(fullPath As String) As String
-            Debug.Assert(Not String.IsNullOrEmpty(fullPath) AndAlso IO.Path.IsPathRooted(fullPath), "Must be full path")
+            Debug.Assert(Not String.IsNullOrEmpty(fullPath) AndAlso
+                Path.IsPathRooted(fullPath), "Must be full path")
             Try
                 ' If root path, return itself. UNC path do not recognize 8.3 format in root path, so this is fine.
                 If IsRoot(fullPath) Then
@@ -46,8 +48,9 @@ Namespace Microsoft.VisualBasic.CompilerServices
                     Return fullPath
                 End If
             Catch ex As Exception
-                ' Ignore these type of exceptions and return FullPath. These type of exceptions should either be caught by calling functions
-                ' or indicate that caller does not have enough permission and should get back the 8.3 path.
+                ' Ignore these type of exceptions and return FullPath. These type of exceptions should
+                ' either be caught by calling functions or indicate that caller does not have enough permission and
+                ' should get back the 8.3 path.
                 If TypeOf ex Is ArgumentException OrElse
                     TypeOf ex Is ArgumentNullException OrElse
                     TypeOf ex Is IO.PathTooLongException OrElse

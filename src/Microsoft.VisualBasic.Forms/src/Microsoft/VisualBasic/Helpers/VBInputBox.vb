@@ -80,7 +80,13 @@ Namespace Microsoft.VisualBasic.CompilerServices
         End Sub
 
         'Initialize labels etc from the args passed in to InputBox()
-        Private Sub InitializeInputBox(prompt As String, title As String, defaultResponse As String, xPos As Integer, yPos As Integer)
+        Private Sub InitializeInputBox(
+            prompt As String,
+            title As String,
+            defaultResponse As String,
+            xPos As Integer,
+            yPos As Integer)
+
             Text = title
             Label.Text = prompt
             TextBox.Text = defaultResponse

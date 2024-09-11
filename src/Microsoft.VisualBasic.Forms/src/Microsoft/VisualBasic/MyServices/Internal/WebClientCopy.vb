@@ -18,7 +18,8 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ' The WebClient performs the downloading or uploading operations for us
         Private WithEvents m_WebClient As WebClient
 
-        'Keeps track of the error that happened during upload/download so we can throw it once we can guarantee we are back on the main thread
+        'Keeps track of the error that happened during upload/download so we can throw it
+        'once we can guarantee we are back on the main thread
         Private _exceptionEncounteredDuringFileTransfer As Exception
 
         ' The percentage of the operation completed
@@ -80,10 +81,12 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' </summary>
         ''' <param name="sender"></param>
         ''' <param name="e"></param>
-        Private Sub m_WebClient_UploadFileCompleted(sender As Object, e As UploadFileCompletedEventArgs) Handles m_WebClient.UploadFileCompleted
+        Private Sub m_WebClient_UploadFileCompleted(
+            sender As Object,
+            e As UploadFileCompletedEventArgs) Handles m_WebClient.UploadFileCompleted
 
-            ' If the upload was interrupted by an exception, keep track of the
-            ' exception, which we'll throw from the main thread
+            ' If the upload was interrupted by an exception, keep track of the exception,
+            ' which we'll throw from the main thread
             Try
                 If e.Error IsNot Nothing Then
                     _exceptionEncounteredDuringFileTransfer = e.Error
@@ -103,7 +106,10 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' </summary>
         ''' <param name="sender"></param>
         ''' <param name="e"></param>
-        Private Sub m_WebClient_UploadProgressChanged(sender As Object, e As UploadProgressChangedEventArgs) Handles m_WebClient.UploadProgressChanged
+        Private Sub m_WebClient_UploadProgressChanged(
+            sender As Object,
+            e As UploadProgressChangedEventArgs) Handles m_WebClient.UploadProgressChanged
+
             Dim increment As Long = (e.BytesSent * 100) \ e.TotalBytesToSend
             InvokeIncrement(CInt(increment))
         End Sub
@@ -116,12 +122,15 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         Public Sub UploadFile(sourceFileName As String, address As Uri)
             Debug.Assert(m_WebClient IsNot Nothing, "No WebClient")
             Debug.Assert(address IsNot Nothing, "No address")
-            Debug.Assert((Not String.IsNullOrWhiteSpace(sourceFileName)) AndAlso File.Exists(sourceFileName), "Invalid file")
+            Debug.Assert((Not String.IsNullOrWhiteSpace(sourceFileName)) AndAlso
+                File.Exists(sourceFileName), "Invalid file")
 
             ' If we have a dialog we need to set up an async download
             If m_ProgressDialog IsNot Nothing Then
                 m_WebClient.UploadFileAsync(address, sourceFileName)
-                m_ProgressDialog.ShowProgressDialog() 'returns when the download sequence is over, whether due to success, error, or being canceled
+
+                'returns when the download sequence is over, whether due to success, error, or being canceled
+                m_ProgressDialog.ShowProgressDialog()
             Else
                 m_WebClient.UploadFile(address, sourceFileName)
             End If

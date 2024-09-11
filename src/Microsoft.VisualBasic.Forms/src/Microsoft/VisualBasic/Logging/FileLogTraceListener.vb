@@ -218,7 +218,10 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <summary>
         '''  Indicates whether or not the stream should be flushed after every write.
         ''' </summary>
-        ''' <value><see langword="True"/> if the stream should be flushed after every write, otherwise <see langword="False"/>.</value>
+        ''' <value>
+        '''  <see langword="True"/> if the stream should be flushed after every write,
+        '''  otherwise <see langword="False"/>.
+        ''' </value>
         Public Property AutoFlush() As Boolean
             Get
                 If Not _propertiesSet(AUTOFLUSH_INDEX) Then
@@ -293,7 +296,11 @@ Namespace Microsoft.VisualBasic.Logging
 
                 ' If we're using custom location and the value is changing we need to
                 ' close the stream
-                If Location = LogFileLocation.Custom And Not String.Equals(tempPath, _customLocation, StringComparison.OrdinalIgnoreCase) Then
+                If Location = LogFileLocation.Custom AndAlso
+                    Not String.Equals(
+                        tempPath,
+                        _customLocation,
+                        StringComparison.OrdinalIgnoreCase) Then
                     CloseCurrentStream()
                 End If
 
@@ -334,8 +341,12 @@ Namespace Microsoft.VisualBasic.Logging
             Get
                 If Not _propertiesSet(DISKSPACEEXHAUSTEDBEHAVIOR_INDEX) Then
                     If Attributes.ContainsKey(KEY_DISKSPACEEXHAUSTEDBEHAVIOR) Then
-                        Dim converter As TypeConverter = TypeDescriptor.GetConverter(GetType(DiskSpaceExhaustedOption))
-                        Me.DiskSpaceExhaustedBehavior = DirectCast(converter.ConvertFromInvariantString(Attributes(KEY_DISKSPACEEXHAUSTEDBEHAVIOR)), DiskSpaceExhaustedOption)
+                        Dim type As Type = GetType(DiskSpaceExhaustedOption)
+                        Dim converter As TypeConverter = TypeDescriptor.GetConverter(type)
+                        Dim text As String = Attributes(KEY_DISKSPACEEXHAUSTEDBEHAVIOR)
+                        Me.DiskSpaceExhaustedBehavior = DirectCast(
+                            converter.ConvertFromInvariantString(text),
+                            DiskSpaceExhaustedOption)
                     End If
                 End If
                 Return _diskSpaceExhaustedBehavior
@@ -429,8 +440,12 @@ Namespace Microsoft.VisualBasic.Logging
             Get
                 If Not _propertiesSet(LOGFILECREATIONSCHEDULE_INDEX) Then
                     If Attributes.ContainsKey(KEY_LOGFILECREATIONSCHEDULE) Then
-                        Dim converter As TypeConverter = TypeDescriptor.GetConverter(GetType(LogFileCreationScheduleOption))
-                        Me.LogFileCreationSchedule = DirectCast(converter.ConvertFromInvariantString(Attributes(KEY_LOGFILECREATIONSCHEDULE)), LogFileCreationScheduleOption)
+                        Dim converter As TypeConverter = TypeDescriptor.GetConverter(
+                            GetType(LogFileCreationScheduleOption))
+                        Dim text As String = Attributes(KEY_LOGFILECREATIONSCHEDULE)
+                        Me.LogFileCreationSchedule = DirectCast(
+                            converter.ConvertFromInvariantString(text),
+                            LogFileCreationScheduleOption)
                     End If
                 End If
                 Return _logFileDateStamp
@@ -486,7 +501,10 @@ Namespace Microsoft.VisualBasic.Logging
             Set(value As Long)
                 DemandWritePermission()
                 If value < 0 Then
-                    Throw VbUtils.GetArgumentExceptionWithArgName(NameOf(value), SR.ApplicationLog_NegativeNumber, "ReserveDiskSpace")
+                    Throw VbUtils.GetArgumentExceptionWithArgName(
+                        NameOf(value),
+                        SR.ApplicationLog_NegativeNumber,
+                        "ReserveDiskSpace")
                 End If
                 _reserveDiskSpace = value
                 _propertiesSet(RESERVEDISKSPACE_INDEX) = True
@@ -542,9 +560,15 @@ Namespace Microsoft.VisualBasic.Logging
         '''  Validates that the value being passed as an LogFileCreationScheduleOption enum is a legal value.
         ''' </summary>
         ''' <param name="value"></param>
-        Private Shared Sub ValidateLogFileCreationScheduleOptionEnumValue(value As LogFileCreationScheduleOption, paramName As String)
+        Private Shared Sub ValidateLogFileCreationScheduleOptionEnumValue(
+            value As LogFileCreationScheduleOption,
+            paramName As String)
+
             If value < LogFileCreationScheduleOption.None OrElse value > LogFileCreationScheduleOption.Weekly Then
-                Throw New InvalidEnumArgumentException(paramName, value, GetType(LogFileCreationScheduleOption))
+                Throw New InvalidEnumArgumentException(
+                    argumentName:=paramName,
+                    invalidValue:=value,
+                    enumClass:=GetType(LogFileCreationScheduleOption))
             End If
         End Sub
 
@@ -591,7 +615,10 @@ Namespace Microsoft.VisualBasic.Logging
         '''  This ensures these API cannot be used to circumvent CAS.
         '''</remarks>
         Private Sub DemandWritePermission()
-            Debug.Assert(Not String.IsNullOrWhiteSpace(Path.GetDirectoryName(LogFileName)), "The log directory shouldn't be empty.")
+            Debug.Assert(
+                condition:=Not String.IsNullOrWhiteSpace(Path.GetDirectoryName(LogFileName)),
+                message:="The log directory shouldn't be empty.")
+
             Dim fileName As String = Path.GetDirectoryName(LogFileName)
         End Sub
 
@@ -822,7 +849,12 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <param name="eventType">The eventType of the message.</param>
         ''' <param name="id">The id of the message.</param>
         ''' <param name="data">An object containing the message to be logged.</param>
-        Public Overrides Sub TraceData(eventCache As TraceEventCache, source As String, eventType As TraceEventType, id As Integer, data As Object)
+        Public Overrides Sub TraceData(
+            eventCache As TraceEventCache,
+            source As String,
+            eventType As TraceEventType,
+            id As Integer,
+            data As Object)
 
             Dim message As String = String.Empty
             If data IsNot Nothing Then
@@ -840,7 +872,12 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <param name="eventType">The eventType of the message.</param>
         ''' <param name="id">The id of the message.</param>
         ''' <param name="data">A list of objects making up the message to be logged.</param>
-        Public Overrides Sub TraceData(eventCache As TraceEventCache, source As String, eventType As TraceEventType, id As Integer, ParamArray data As Object())
+        Public Overrides Sub TraceData(
+            eventCache As TraceEventCache,
+            source As String,
+            eventType As TraceEventType,
+            id As Integer,
+            ParamArray data As Object())
 
             Dim messageBuilder As New StringBuilder()
             If data IsNot Nothing Then
@@ -864,10 +901,23 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <param name="eventType">The eventType of the message.</param>
         ''' <param name="id">The id of the message.</param>
         ''' <param name="message">The message.</param>
-        Public Overrides Sub TraceEvent(eventCache As TraceEventCache, source As String, eventType As TraceEventType, id As Integer, message As String)
+        Public Overrides Sub TraceEvent(
+            eventCache As TraceEventCache,
+            source As String,
+            eventType As TraceEventType,
+            id As Integer,
+            message As String)
 
             If Filter IsNot Nothing Then
-                If Not Filter.ShouldTrace(eventCache, source, eventType, id, message, Nothing, Nothing, Nothing) Then
+                If Not Filter.ShouldTrace(
+                        cache:=eventCache,
+                        source,
+                        eventType,
+                        id,
+                        formatOrMessage:=message,
+                        args:=Nothing,
+                        data1:=Nothing,
+                        data:=Nothing) Then
                     Return
                 End If
             End If
@@ -936,7 +986,13 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <param name="id">The id of the message.</param>
         ''' <param name="format">A string with placeholders that serves as a format for the message.</param>
         ''' <param name="args">The values for the placeholders in format.</param>
-        Public Overrides Sub TraceEvent(eventCache As TraceEventCache, source As String, eventType As TraceEventType, id As Integer, format As String, ParamArray args() As Object)
+        Public Overrides Sub TraceEvent(
+            eventCache As TraceEventCache,
+            source As String,
+            eventType As TraceEventType,
+            id As Integer,
+            format As String,
+            ParamArray args() As Object)
 
             ' Create the message
             Dim message As String

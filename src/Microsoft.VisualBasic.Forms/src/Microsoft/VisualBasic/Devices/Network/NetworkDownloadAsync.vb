@@ -151,9 +151,12 @@ Namespace Microsoft.VisualBasic.Devices
             client.Timeout = New TimeSpan(0, 0, 0, 0, connectionTimeout)
 
             'Construct the local file. This will validate the full name and path
-            Dim normalizedFilePath As String = FileSystemUtils.NormalizeFilePath(destinationFileName, NameOf(destinationFileName))
-            ' Sometime a path that can't be parsed is normalized to the current directory. This makes sure we really
-            ' have a file and path
+            Dim normalizedFilePath As String = FileSystemUtils.NormalizeFilePath(
+                path:=destinationFileName,
+                paramName:=NameOf(destinationFileName))
+
+            ' Sometime a path that can't be parsed is normalized to the current directory.
+            ' This makes sure we really have a file and path
             If IO.Directory.Exists(normalizedFilePath) Then
                 Throw VbUtils.GetInvalidOperationException(SR.Network_DownloadNeedsFilename)
             End If

@@ -115,7 +115,9 @@ Namespace Microsoft.VisualBasic.Devices
                 End If
             Catch ex As Exception
                 If ex.InnerException IsNot Nothing Then
-                    If TryCast(ex.InnerException, OperationCanceledException) IsNot Nothing AndAlso Environment.UserInteractive Then
+                    If TryCast(ex.InnerException, OperationCanceledException) IsNot Nothing AndAlso
+                        Environment.UserInteractive Then
+
                         If showUI AndAlso Environment.UserInteractive Then
                             Try
                                 IO.File.Delete(destinationFileName)
@@ -159,7 +161,8 @@ Namespace Microsoft.VisualBasic.Devices
             overwrite As Boolean,
             onUserCancel As UICancelOption)
 
-            ' We're safe from DownloadFile(Nothing, ...) due to overload failure (DownloadFile(String,...) vs. DownloadFile(Uri,...)).
+            ' We're safe from DownloadFile(Nothing, ...) due to overload failure (DownloadFile(String,...) vs.
+            ' DownloadFile(Uri,...)).
             ' However, it is good practice to verify address before calling Trim.
             If String.IsNullOrWhiteSpace(address) Then
                 Throw VbUtils.GetArgumentNullException(NameOf(address))
@@ -174,7 +177,10 @@ Namespace Microsoft.VisualBasic.Devices
             Try
                 If showUI AndAlso Environment.UserInteractive Then
                     'Construct the local file. This will validate the full name and path
-                    Dim fullFilename As String = CompilerServices.FileSystemUtils.NormalizeFilePath(destinationFileName, NameOf(destinationFileName))
+                    Dim fullFilename As String = CompilerServices.FileSystemUtils.NormalizeFilePath(
+                        path:=destinationFileName,
+                        paramName:=NameOf(destinationFileName))
+
                     dialog = GetProgressDialog(address, destinationFileName, showUI)
                 End If
 

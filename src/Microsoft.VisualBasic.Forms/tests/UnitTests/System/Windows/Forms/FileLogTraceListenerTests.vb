@@ -41,7 +41,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         listener.DiskSpaceExhaustedBehavior = DiskSpaceExhaustedOption.ThrowException
                         listener.DiskSpaceExhaustedBehavior.Should.Be(DiskSpaceExhaustedOption.ThrowException)
 
-                        listener.FullLogFileName.Should.BeEquivalentTo(Path.Combine(testDirectory, expectedBaseFileName & ".log"))
+                        Dim expected As String = Path.Combine(testDirectory, expectedBaseFileName & ".log")
+                        listener.FullLogFileName.Should.BeEquivalentTo(expected)
 
                         listener.LogFileCreationSchedule.Should.Be(LogFileCreationScheduleOption.None)
                         listener.LogFileCreationSchedule = LogFileCreationScheduleOption.Daily

@@ -92,7 +92,9 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         Friend Async Function DownloadFileWorkerAsync(addressUri As Uri, normalizedFilePath As String) As Task
             Debug.Assert(_httpClient IsNot Nothing, "No HttpClient")
             Debug.Assert(addressUri IsNot Nothing, "No address")
-            Debug.Assert((Not String.IsNullOrWhiteSpace(normalizedFilePath)) AndAlso Directory.Exists(Path.GetDirectoryName(Path.GetFullPath(normalizedFilePath))), "Invalid path")
+            Dim directoryPath As String = Path.GetDirectoryName(Path.GetFullPath(normalizedFilePath))
+            Debug.Assert((Not String.IsNullOrWhiteSpace(normalizedFilePath)) AndAlso
+                         Directory.Exists(directoryPath), "Invalid path")
 
             _cancelTokenSourceGet = New CancellationTokenSource()
             _cancelTokenSourceRead = New CancellationTokenSource()
@@ -101,7 +103,11 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
 
             Dim response As HttpResponseMessage = Nothing
             Try
-                response = Await _httpClient.GetAsync(addressUri, HttpCompletionOption.ResponseHeadersRead, _cancelTokenSourceGet.Token).ConfigureAwait(False)
+                response = Await _httpClient.GetAsync(
+                    requestUri:=addressUri,
+                    completionOption:=HttpCompletionOption.ResponseHeadersRead,
+                    cancellationToken:=_cancelTokenSourceGet.Token).ConfigureAwait(continueOnCapturedContext:=False)
+
             Catch ex As TaskCanceledException
                 If ex.CancellationToken = _cancelTokenSourceRead.Token Then
                     ' a real cancellation, triggered by the caller
@@ -114,23 +120,41 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                 Case HttpStatusCode.OK
                     Dim contentLength? As Long = response?.Content.Headers.ContentLength
                     If contentLength.HasValue Then
-                        Using responseStream As Stream = Await response.Content.ReadAsStreamAsync(_cancelTokenSourceReadStream.Token).ConfigureAwait(False)
-                            Using fileStream As New FileStream(normalizedFilePath, FileMode.Create, FileAccess.Write, FileShare.None)
+                        Using responseStream As Stream = Await response.Content.ReadAsStreamAsync(
+                            cancellationToken:=_cancelTokenSourceReadStream.Token).
+                            ConfigureAwait(continueOnCapturedContext:=False)
+
+                            Using fileStream As New FileStream(
+                                path:=normalizedFilePath,
+                                mode:=FileMode.Create,
+                                access:=FileAccess.Write,
+                                share:=FileShare.None)
 
                                 Dim buffer(8191) As Byte
                                 Dim totalBytesRead As Long = 0
                                 Dim bytesRead As Integer
                                 Try
-                                    bytesRead = Await responseStream.ReadAsync(buffer.AsMemory(0, buffer.Length), _cancelTokenSourceRead.Token).ConfigureAwait(False)
+                                    bytesRead = Await responseStream.ReadAsync(
+                                        buffer.AsMemory(start:=0, buffer.Length),
+                                        _cancelTokenSourceRead.Token).
+                                            ConfigureAwait(continueOnCapturedContext:=False)
+
                                     Do While bytesRead > 0
                                         totalBytesRead += bytesRead
 
-                                        Await fileStream.WriteAsync(buffer.AsMemory(0, bytesRead), _cancelTokenSourceWrite.Token).ConfigureAwait(False)
+                                        Await fileStream.WriteAsync(
+                                            buffer.AsMemory(0, bytesRead),
+                                            _cancelTokenSourceWrite.Token).
+                                                ConfigureAwait(False)
+
                                         If m_ProgressDialog IsNot Nothing Then
                                             Dim percentage As Integer = CInt(totalBytesRead / contentLength.Value * 100)
                                             InvokeIncrement(percentage)
                                         End If
-                                        bytesRead = Await responseStream.ReadAsync(buffer.AsMemory(0, buffer.Length), _cancelTokenSourceRead.Token).ConfigureAwait(False)
+                                        bytesRead = Await responseStream.ReadAsync(
+                                            buffer.AsMemory(0, buffer.Length),
+                                            _cancelTokenSourceRead.Token).
+                                                ConfigureAwait(False)
                                     Loop
                                 Finally
                                     CloseProgressDialog(m_ProgressDialog)
@@ -153,7 +177,8 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
             response?.Dispose()
         End Function
 
-#If False Then
+
+#If False Then ' Future code to implement upload using Http
         ''' <summary>
         '''  Uploads a file
         ''' </summary>
@@ -162,12 +187,14 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         Public Sub UploadFile(sourceFileName As String, address As Uri)
             Debug.Assert(_httpClient IsNot Nothing, "No WebClient")
             Debug.Assert(address IsNot Nothing, "No address")
-            Debug.Assert((Not String.IsNullOrWhiteSpace(sourceFileName)) AndAlso File.Exists(sourceFileName), "Invalid file")
+            Debug.Assert((Not String.IsNullOrWhiteSpace(sourceFileName)) AndAlso
+                File.Exists(sourceFileName), "Invalid file")
 
             ' If we have a dialog we need to set up an async download
             If m_ProgressDialog IsNot Nothing Then
                 _httpClient.UploadFileAsync(address, sourceFileName)
-                m_ProgressDialog.ShowProgressDialog() 'returns when the download sequence is over, whether due to success, error, or being canceled
+                 'returns when the download sequence is over, whether due to success, error, or being canceled
+                m_ProgressDialog.ShowProgressDialog()
             Else
                 _httpClient.UploadFile(address, sourceFileName)
             End If

@@ -181,7 +181,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             _fileSystem.WriteAllBytes(file1, byteArray, append:=False)
             File.Exists(file1).Should.BeTrue()
 
-            _fileSystem.DeleteDirectory(testDirectory, showUI:=UIOption.OnlyErrorDialogs, RecycleOption.DeletePermanently, UICancelOption.DoNothing)
+            _fileSystem.DeleteDirectory(
+                directory:=testDirectory,
+                showUI:=UIOption.OnlyErrorDialogs,
+                recycle:=RecycleOption.DeletePermanently,
+                onUserCancel:=UICancelOption.DoNothing)
+
             Directory.Exists(testDirectory).Should.BeFalse()
         End Sub
 
@@ -288,10 +293,19 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim fileB As String = CreateTempFile(testDirectory, NameOf(fileB), size:=1)
             Dim fileC As String = CreateTempFile(testDirectory, NameOf(fileC))
             _fileSystem.WriteAllText(fileC, "C", append:=False)
-            Dim filenames As ReadOnlyCollection(Of String) = _fileSystem.FindInFiles(testDirectory, containsText:="A", ignoreCase:=True, FileIO.SearchOption.SearchTopLevelOnly)
+            Dim filenames As ReadOnlyCollection(Of String) = _fileSystem.FindInFiles(
+                directory:=testDirectory,
+                containsText:="A",
+                ignoreCase:=True,
+                searchType:=FileIO.SearchOption.SearchTopLevelOnly)
             filenames.Count.Should.Be(1)
             _fileSystem.CombinePath(testDirectory, NameOf(fileA)).Should.Be(filenames(0))
-            filenames = _fileSystem.FindInFiles(testDirectory, containsText:="A", ignoreCase:=True, FileIO.SearchOption.SearchTopLevelOnly, "*C")
+            filenames = _fileSystem.FindInFiles(
+                directory:=testDirectory,
+                containsText:="A",
+                ignoreCase:=True,
+                searchType:=FileIO.SearchOption.SearchTopLevelOnly,
+                "*C")
             filenames.Count.Should.Be(0)
         End Sub
 
@@ -304,7 +318,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub GetDirectoriesWithSearchTypeProxyTest()
             Dim testDirectory As String = CreateTempDirectory()
-            _fileSystem.GetDirectories(BaseTempPath, FileIO.SearchOption.SearchAllSubDirectories, "*").Count.Should.BeGreaterThan(0)
+            _fileSystem.GetDirectories(
+                directory:=BaseTempPath,
+                searchType:=FileIO.SearchOption.SearchAllSubDirectories,
+                "*").Count.Should.BeGreaterThan(0)
         End Sub
 
         <WinFormsFact>

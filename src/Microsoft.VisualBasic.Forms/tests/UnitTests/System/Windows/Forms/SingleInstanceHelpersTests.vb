@@ -53,14 +53,24 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 Using pipeServer
                     Dim tokenSource As New CancellationTokenSource()
-                    Dim clientConnection As Task = WaitForClientConnectionsAsync(pipeServer, AddressOf OnStartupNextInstanceMarshallingAdaptor, cancellationToken:=tokenSource.Token)
+                    Dim clientConnection As Task = WaitForClientConnectionsAsync(
+                        pipeServer,
+                        callback:=AddressOf OnStartupNextInstanceMarshallingAdaptor,
+                        cancellationToken:=tokenSource.Token)
+
                     Dim commandLine As String() = {"Hello"}
-                    Dim awaitable As ConfiguredTaskAwaitable = SendSecondInstanceArgsAsync(pipeName, commandLine, cancellationToken:=tokenSource.Token).ConfigureAwait(False)
+                    Dim awaitable As ConfiguredTaskAwaitable = SendSecondInstanceArgsAsync(
+                        pipeName,
+                        args:=commandLine,
+                        cancellationToken:=tokenSource.Token).ConfigureAwait(False)
+
                     awaitable.GetAwaiter().GetResult()
                     Dim CancelToken As New CancellationToken
                     Dim buffer As Byte() = New Byte(commandLine.Length) {}
 
-                    Dim count As Integer = Await pipeServer.ReadAsync(buffer.AsMemory(0, commandLine.Length))
+                    Dim count As Integer = Await pipeServer.ReadAsync(
+                        buffer:=buffer.AsMemory(0, commandLine.Length))
+
                     ' Ensure the result is set
                     Do
                         Await Task.Delay(5)

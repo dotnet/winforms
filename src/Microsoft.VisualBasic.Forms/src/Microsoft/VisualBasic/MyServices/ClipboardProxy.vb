@@ -30,9 +30,13 @@ Namespace Microsoft.VisualBasic.MyServices
         End Sub
 
         ''' <summary>
-        '''  Indicates whether there is data on the <see cref="Clipboard"/> in the <see cref="DataFormats.WaveAudio"/> format./>.
+        '''  Indicates whether there is data on the <see cref="Clipboard"/>
+        '''  in the <see cref="DataFormats.WaveAudio"/> format./>.
         ''' </summary>
-        ''' <returns><see langword="True"/> if an audio <see cref="Stream"/> is available, otherwise <see langword="False"/>.</returns>
+        ''' <returns>
+        '''  <see langword="True"/> if an audio <see cref="Stream"/> is available,
+        '''  otherwise <see langword="False"/>.
+        ''' </returns>
         Public Function ContainsAudio() As Boolean
             Return Clipboard.ContainsAudio()
         End Function
@@ -66,7 +70,8 @@ Namespace Microsoft.VisualBasic.MyServices
         End Function
 
         ''' <summary>
-        '''  Indicates whether there is text data on the <see cref="Clipboard"/> in <see cref="TextDataFormat.UnicodeText"/> format.
+        '''  Indicates whether there is text data on the <see cref="Clipboard"/>
+        '''  in <see cref="TextDataFormat.UnicodeText"/> format.
         ''' </summary>
         ''' <returns><see langword="True"/> if text is available, otherwise <see langword="False"/>.</returns>
         Public Function ContainsText() As Boolean

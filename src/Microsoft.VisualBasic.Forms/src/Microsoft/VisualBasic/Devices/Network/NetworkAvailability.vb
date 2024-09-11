@@ -46,11 +46,13 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="Sender">Has no meaning for this event.</param>
         ''' <param name="e">Has no meaning for this event.</param>
         Public Custom Event NetworkAvailabilityChanged As NetworkAvailableEventHandler
-            'This is a custom event because we want to hook up the NetworkAvailabilityChanged event only if the user writes a handler for it.
+            'This is a custom event because we want to hook up
+            'the NetworkAvailabilityChanged event only if the user writes a handler for it.
             'The reason being that it is very expensive to handle and kills our application startup perf.
             AddHandler(handler As NetworkAvailableEventHandler)
 
-                ' Set the current state of connectedness, swallow known exceptions since user won't be able to correct problem
+                ' Set the current state of connectedness, swallow known exceptions
+                ' since user won't be able to correct problem
                 Try
                     _connected = IsAvailable
                 Catch ex As SecurityException
@@ -58,7 +60,9 @@ Namespace Microsoft.VisualBasic.Devices
                 Catch ex As PlatformNotSupportedException
                     Return
                 End Try
-                SyncLock _syncObject 'we don't want our event firing before we've finished setting up the infrastructure. Also, need to assure there are no races in here so we don't hook up the OS listener twice, etc.
+                'we don't want our event firing before we've finished setting up the infrastructure.
+                'Also, need to assure there are no races in here so we don't hook up the OS listener twice, etc.
+                SyncLock _syncObject
                     If _networkAvailabilityEventHandlers Is Nothing Then
                         _networkAvailabilityEventHandlers = New List(Of NetworkAvailableEventHandler)
                     End If
@@ -66,12 +70,20 @@ Namespace Microsoft.VisualBasic.Devices
 
                     'Only setup the event Marshalling infrastructure once
                     If _networkAvailabilityEventHandlers.Count = 1 Then
-                        _networkAvailabilityChangedCallback = New SendOrPostCallback(AddressOf NetworkAvailabilityChangedHandler) 'the async operation posts to this delegate
+                        'the async operation posts to this delegate
+                        _networkAvailabilityChangedCallback = New SendOrPostCallback(
+                            AddressOf NetworkAvailabilityChangedHandler)
+
                         If AsyncOperationManager.SynchronizationContext IsNot Nothing Then
-                            _synchronizationContext = AsyncOperationManager.SynchronizationContext 'We need to hang on to the synchronization context associated with the thread the network object is created on
+                            'We need to hang on to the synchronization context associated
+                            'with the thread the network object is created on
+                            _synchronizationContext = AsyncOperationManager.SynchronizationContext
                             Try
                                 ' Exceptions are thrown if the user isn't an admin.
-                                AddHandler NetInfoAlias.NetworkChange.NetworkAddressChanged, New NetInfoAlias.NetworkAddressChangedEventHandler(AddressOf OS_NetworkAvailabilityChangedListener) 'listen to the OS event
+                                'listen to the OS event
+                                AddHandler NetInfoAlias.NetworkChange.NetworkAddressChanged,
+                                    New NetInfoAlias.NetworkAddressChangedEventHandler(
+                                        AddressOf OS_NetworkAvailabilityChangedListener)
                             Catch ex As PlatformNotSupportedException
                             Catch ex As NetInfoAlias.NetworkInformationException
                             End Try
@@ -81,12 +93,19 @@ Namespace Microsoft.VisualBasic.Devices
             End AddHandler
 
             RemoveHandler(handler As NetworkAvailableEventHandler)
-                If _networkAvailabilityEventHandlers IsNot Nothing AndAlso _networkAvailabilityEventHandlers.Count > 0 Then
+                If _networkAvailabilityEventHandlers IsNot Nothing AndAlso
+                    _networkAvailabilityEventHandlers.Count > 0 Then
+
                     _networkAvailabilityEventHandlers.Remove(handler)
                     'Last one to leave, turn out the lights...
                     If _networkAvailabilityEventHandlers.Count = 0 Then
-                        RemoveHandler NetInfoAlias.NetworkChange.NetworkAddressChanged, New NetInfoAlias.NetworkAddressChangedEventHandler(AddressOf OS_NetworkAvailabilityChangedListener) 'listen to the OS event
-                        DisconnectListener() 'Stop listening to network change events since nobody is listening to us anymore
+                        'listen to the OS event
+                        RemoveHandler NetInfoAlias.NetworkChange.NetworkAddressChanged,
+                            New NetInfoAlias.NetworkAddressChangedEventHandler(
+                                AddressOf OS_NetworkAvailabilityChangedListener)
+
+                        'Stop listening to network change events since nobody is listening to us anymore
+                        DisconnectListener()
                     End If
                 End If
             End RemoveHandler
@@ -100,7 +119,8 @@ Namespace Microsoft.VisualBasic.Devices
             End RaiseEvent
         End Event
 
-        'Listens to the AddressChanged event which will come on the same thread that this class was created on (AsyncEventManager is responsible for getting the event here)
+        'Listens to the AddressChanged event which will come on the same thread that this
+        'class was created on (AsyncEventManager is responsible for getting the event here)
         Private Sub NetworkAvailabilityChangedHandler(state As Object)
             Dim connected As Boolean = IsAvailable
             ' Fire an event only if the connected state has changed
@@ -112,17 +132,22 @@ Namespace Microsoft.VisualBasic.Devices
 
         'Listens to the AddressChanged event from the OS which comes in on an arbitrary thread
         Private Sub OS_NetworkAvailabilityChangedListener(sender As Object, e As EventArgs)
-            SyncLock _syncObject 'Ensure we don't handle events until after we've finished setting up the event marshalling infrastructure
-                'Don't call AsyncOperationManager.OperationSynchronizationContext.Post. The reason we want to go through m_SynchronizationContext is that
-                'the OperationSynchronizationContext is thread static. Since we are getting called on some random thread, the context that was
-                'in place when the Network object was created won't be available (it is on the original thread). To hang on to the original
-                'context associated with the thread that the network object is created on, I use m_SynchronizationContext.
+            SyncLock _syncObject
+                'Ensure we don't handle events until after we've finished setting up the event
+                'marshalling infrastructure. Don't call AsyncOperationManager.OperationSynchronizationContext.Post.
+                'The reason we want to go through m_SynchronizationContext is that the
+                'OperationSynchronizationContext is thread static. Since we are getting called on some random thread,
+                'the context that was in place when the Network object was created won't be available
+                '(it is on the original thread). To hang on to the original context associated with the thread
+                'that the network object is created on, I use m_SynchronizationContext.
                 _synchronizationContext.Post(_networkAvailabilityChangedCallback, Nothing)
             End SyncLock
         End Sub
 
         Friend Sub DisconnectListener()
-            RemoveHandler NetInfoAlias.NetworkChange.NetworkAddressChanged, New NetInfoAlias.NetworkAddressChangedEventHandler(AddressOf OS_NetworkAvailabilityChangedListener)
+            RemoveHandler NetInfoAlias.NetworkChange.NetworkAddressChanged,
+                New NetInfoAlias.NetworkAddressChangedEventHandler(
+                    AddressOf OS_NetworkAvailabilityChangedListener)
         End Sub
 
     End Class

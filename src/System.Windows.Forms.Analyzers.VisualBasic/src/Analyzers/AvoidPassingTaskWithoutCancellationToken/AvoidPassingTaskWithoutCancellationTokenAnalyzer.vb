@@ -39,7 +39,9 @@ Namespace Global.System.Windows.Forms.VisualBasic.Analyzers.AvoidPassingTaskWith
             Dim memberAccessExpr = DirectCast(invocationExpr.Expression, MemberAccessExpressionSyntax)
             Dim methodSymbol = TryCast(context.SemanticModel.GetSymbolInfo(memberAccessExpr).Symbol, IMethodSymbol)
 
-            If methodSymbol Is Nothing OrElse methodSymbol.Name <> InvokeAsyncString OrElse methodSymbol.Parameters.Length <> 2 Then
+            If methodSymbol Is Nothing OrElse methodSymbol.Name <> InvokeAsyncString OrElse
+                methodSymbol.Parameters.Length <> 2 Then
+
                 Return
             End If
 

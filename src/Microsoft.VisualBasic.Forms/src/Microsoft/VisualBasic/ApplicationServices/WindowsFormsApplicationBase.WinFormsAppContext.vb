@@ -43,11 +43,16 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     Dim forms As FormCollection = Application.OpenForms
 
                     If forms.Count > 0 Then
-                        'Note: Initially I used Process::MainWindowHandle to obtain an open form. But that is bad for two reasons:
-                        '1 - It appears to be broken and returns NULL sometimes even when there is still a window around. WinForms people are looking at that issue.
-                        '2 - It returns the first window it hits from enum thread windows, which is not necessarily a windows forms form, so that doesn't help us even if it did work
-                        'all the time. So I'll use one of our open forms. We may not necessarily get a visible form here but that's OK. Some apps may run on an invisible window
-                        'and we need to keep them going until all windows close.
+                        'Note: Initially I used Process::MainWindowHandle to obtain an open form.
+                        'But that is bad for two reasons:
+                        '1 - It appears to be broken and returns NULL sometimes even when
+                        '    there is still a window around WinForms people are looking at that issue.
+                        '2 - It returns the first window it hits from enum thread windows,
+                        '    which is not necessarily a windows forms form, so that doesn't help
+                        '    us even if it did work all the time. So I'll use one of our open forms.
+                        '    We may not necessarily get a visible form here but that's OK.
+                        '    Some apps may run on an invisible window and we need to keep them going
+                        '    until all windows close.
                         MainForm = forms(0)
                     Else
                         MyBase.OnMainFormClosed(sender, e)

@@ -154,7 +154,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             ' have our principal on the thread before that happens.
             If authenticationMode = AuthenticationMode.Windows Then
                 Try
-                    ' Consider: Sadly, a call to: System.Security.SecurityManager.IsGranted(New SecurityPermission(SecurityPermissionFlag.ControlPrincipal))
+                    ' Consider: Sadly, a call to:
+                    ' System.Security.SecurityManager.IsGranted(New SecurityPermission(SecurityPermissionFlag.ControlPrincipal))
                     ' Will only check the THIS caller so you'll always get TRUE.
                     ' What we need is a way to get to the value of this on a demand basis.
                     ' So I try/catch instead for now but would rather be able to IF my way around this block.
@@ -867,16 +868,18 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 End If
 
                 ' When we have a splash screen that hasn't timed out before the main form is ready to paint, we want to
-                ' block the main form from painting. To do that I let the form get past the Load() event and hold it until
-                ' the splash screen goes down. Then I let the main form continue it's startup sequence. The ordering of
-                ' Form startup events for reference is: Ctor(), Load Event, Layout event, Shown event, Activated event, Paint event.
+                ' block the main form from painting. To do that I let the form get past the Load() event and
+                ' hold it until the splash screen goes down. Then I let the main form continue it's startup sequence.
+                ' The ordering of Form startup events for reference is:
+                ' Ctor(), Load Event, Layout event, Shown event, Activated event, Paint event.
                 AddHandler MainForm.Load, AddressOf MainFormLoadingDone
             End If
 
             ' Run() eats all exceptions (unless running under the debugger). If the user wrote an
             ' UnhandledException handler we will hook the System.Windows.Forms.Application.ThreadException event
             ' (see Public Custom Event UnhandledException) which will raise our UnhandledException Event.
-            ' If our user didn't write an UnhandledException event, then we land in the try/catch handler for Forms.Application.Run().
+            ' If our user didn't write an UnhandledException event, then we land in the try/catch handler
+            ' for Forms.Application.Run().
             Try
                 Application.Run(_appContext)
             Finally
@@ -956,7 +959,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  that execution shouldn't continue.
         ''' </summary>
         ''' <param name="e"></param>
-        ''' <returns><see langword="True"/> indicates the exception event was raised / <see langword="False"/> it was not.</returns>
+        ''' <returns>
+        '''  <see langword="True"/> indicates the exception event was raised
+        '''  <see langword="False"/> it was not.
+        ''' </returns>
         <EditorBrowsable(EditorBrowsableState.Advanced)>
         Protected Overridable Function OnUnhandledException(e As UnhandledExceptionEventArgs) As Boolean
 
@@ -1050,7 +1056,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     Using pipeServer
                         Dim tokenSource As New CancellationTokenSource()
 #Disable Warning BC42358 ' Call is not awaited.
-                        WaitForClientConnectionsAsync(pipeServer, AddressOf OnStartupNextInstanceMarshallingAdaptor, cancellationToken:=tokenSource.Token)
+                        WaitForClientConnectionsAsync(
+                            pipeServer,
+                            AddressOf OnStartupNextInstanceMarshallingAdaptor,
+                            cancellationToken:=tokenSource.Token)
 #Enable Warning BC42358
                         DoApplicationModel()
                         tokenSource.Cancel()

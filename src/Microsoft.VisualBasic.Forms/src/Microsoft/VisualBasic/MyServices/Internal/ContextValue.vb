@@ -50,7 +50,10 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
 
         Private Shared Function GetDictionary() As IDictionary
             If s_threadLocal Is Nothing Then
-                Interlocked.CompareExchange(s_threadLocal, New ThreadLocal(Of IDictionary)(Function() New Dictionary(Of String, T)), Nothing)
+                Interlocked.CompareExchange(
+                    location1:=s_threadLocal,
+                    value:=New ThreadLocal(Of IDictionary)(Function() New Dictionary(Of String, T)),
+                    comparand:=Nothing)
             End If
             Return s_threadLocal.Value
         End Function

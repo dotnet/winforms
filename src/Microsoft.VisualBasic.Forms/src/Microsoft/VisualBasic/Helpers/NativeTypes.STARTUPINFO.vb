@@ -10,11 +10,15 @@ Namespace Microsoft.VisualBasic.CompilerServices
 #Disable Warning CA1812 ' Supress warning as this is a type used in PInvoke and shouldn't be changed.
 
         ''' <summary>
-        '''  Important!  This class should be used where the API being called has allocated the strings. That is why lpReserved, etc. are declared as IntPtrs instead
-        '''  of Strings - so that the marshaling layer won't release the memory. This caused us problems in the shell() functions. We would call GetStartupInfo()
-        '''  which doesn't expect the memory for the strings to be freed. But because the strings were previously defined as type String, the marshaller would
+        '''  Important!  This class should be used where the API being called has allocated the strings.
+        '''  That is why lpReserved, etc. are declared as IntPtrs instead of Strings
+        '''  - so that the marshaling layer won't release the memory.
+        '''  This caused us problems in the shell() functions. We would call GetStartupInfo()
+        '''  which doesn't expect the memory for the strings to be freed.
+        '''  But because the strings were previously defined as type String, the marshaller would
         '''  and we got memory corruption problems detectable while running AppVerifier.
-        '''  If you use this structure with an API like CreateProcess() then you are supplying the strings so you'll need another version of this class that defines lpReserved, etc.
+        '''  If you use this structure with an API like CreateProcess() then you are supplying the strings
+        '''  so you'll need another version of this class that defines lpReserved, etc.
         '''  as String so that the memory will get cleaned up.
         ''' </summary>
         <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Auto)>

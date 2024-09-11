@@ -19,14 +19,21 @@ Namespace Microsoft.VisualBasic
 
         Private Sub AppActivateHelper(hwndApp As IntPtr, processId As String)
             '  if no window with name (full or truncated) or task id, return an error
-            '  if the window is not enabled or not visible, get the first window owned by it that is not enabled or not visible
+            '  if the window is not enabled or not visible, get the first window owned
+            '  by it that is not enabled or not visible
             Dim hwndOwned As IntPtr
-            If Not SafeNativeMethods.IsWindowEnabled(hwndApp) OrElse Not SafeNativeMethods.IsWindowVisible(hwndApp) Then
+            If Not SafeNativeMethods.IsWindowEnabled(hwndApp) OrElse
+                Not SafeNativeMethods.IsWindowVisible(hwndApp) Then
+
                 '  scan to the next window until failure
                 hwndOwned = NativeMethods.GetWindow(hwndApp, NativeTypes.GW_HWNDFIRST)
                 Do While IntPtr.op_Inequality(hwndOwned, IntPtr.Zero)
-                    If IntPtr.op_Equality(NativeMethods.GetWindow(hwndOwned, NativeTypes.GW_OWNER), hwndApp) Then
-                        If Not SafeNativeMethods.IsWindowEnabled(hwndOwned) OrElse Not SafeNativeMethods.IsWindowVisible(hwndOwned) Then
+
+                    Dim value1 As IntPtr = NativeMethods.GetWindow(hwndOwned, NativeTypes.GW_OWNER)
+                    If IntPtr.op_Equality(value1, hwndApp) Then
+                        If Not SafeNativeMethods.IsWindowEnabled(hwndOwned) OrElse
+                            Not SafeNativeMethods.IsWindowVisible(hwndOwned) Then
+
                             hwndApp = hwndOwned
                             hwndOwned = NativeMethods.GetWindow(hwndApp, NativeTypes.GW_HWNDFIRST)
                         Else
@@ -91,7 +98,14 @@ Namespace Microsoft.VisualBasic
 
         End Function
 
-        Private Function InternalInputBox(prompt As String, title As String, defaultResponse As String, xPos As Integer, yPos As Integer, parentWindow As IWin32Window) As String
+        Private Function InternalInputBox(
+            prompt As String,
+            title As String,
+            defaultResponse As String,
+            xPos As Integer,
+            yPos As Integer,
+            parentWindow As IWin32Window) As String
+
             Dim box As VBInputBox = New VBInputBox(prompt, title, defaultResponse, xPos, yPos)
             box.ShowDialog(parentWindow)
 
@@ -100,7 +114,8 @@ Namespace Microsoft.VisualBasic
         End Function
 
         Public Sub AppActivateByProcessId(ProcessId As Integer)
-            'As an optimization, we will only check the UI permission once we actually know we found the app to activate - we'll do that in AppActivateHelper
+            'As an optimization, we will only check the UI permission once we actually know we found the app to activate
+            '- we'll do that in AppActivateHelper
 
             Dim processIdOwningWindow As Integer
             'Note, a process can have multiple windows. What we want to do is dig through to find one
@@ -110,15 +125,19 @@ Namespace Microsoft.VisualBasic
 
             Do While IntPtr.op_Inequality(windowHandle, IntPtr.Zero)
                 SafeNativeMethods.GetWindowThreadProcessId(windowHandle, processIdOwningWindow)
-                If (processIdOwningWindow = ProcessId) AndAlso SafeNativeMethods.IsWindowEnabled(windowHandle) AndAlso SafeNativeMethods.IsWindowVisible(windowHandle) Then
-                    Exit Do 'We found a window belonging to the desired process that we can actually activate and will support user input
+                If (processIdOwningWindow = ProcessId) AndAlso
+                    SafeNativeMethods.IsWindowEnabled(windowHandle) AndAlso SafeNativeMethods.IsWindowVisible(windowHandle) Then
+
+                    'We found a window belonging to the desired process that we can actually activate and will support user input
+                    Exit Do
                 End If
 
                 'keep rummaging through windows looking for one that belongs to the process we are after
                 windowHandle = NativeMethods.GetWindow(windowHandle, NativeTypes.GW_HWNDNEXT)
             Loop
 
-            'If we didn't find a window during the pass above, try the less desirable route of finding any window that belongs to the process
+            'If we didn't find a window during the pass above,
+            'try the less desirable route of finding any window that belongs to the process
             If IntPtr.op_Equality(windowHandle, IntPtr.Zero) Then
                 windowHandle = NativeMethods.GetWindow(NativeMethods.GetDesktopWindow(), NativeTypes.GW_CHILD)
 
@@ -141,8 +160,10 @@ Namespace Microsoft.VisualBasic
         End Sub
 
         Public Sub AppActivateByTitle(Title As String)
-            'As an optimization, we will only check the UI permission once we actually know we found the app to activate - we'll do that in AppActivateHelper
-            Dim windowHandle As IntPtr = NativeMethods.FindWindow(Nothing, Title) 'see if we can find the window using an exact match on the title
+            'As an optimization, we will only check the UI permission once we actually know we found the app to activate
+            '- we'll do that in AppActivateHelper
+            'See if we can find the window using an exact match on the title
+            Dim windowHandle As IntPtr = NativeMethods.FindWindow(Nothing, Title)
             Const MAX_TITLE_LENGTH As Integer = 511
 
             '  if no match, search through all parent windows
@@ -177,11 +198,22 @@ Namespace Microsoft.VisualBasic
 
                     Do While IntPtr.op_Inequality(windowHandle, IntPtr.Zero)
                         '  get the window caption and test for a right-aligned substring
-                        appTitleLength = NativeMethods.GetWindowText(windowHandle, appTitleBuilder, appTitleBuilder.Capacity)
+                        appTitleLength = NativeMethods.GetWindowText(
+                            hWnd:=windowHandle,
+                            lpString:=appTitleBuilder,
+                            nMaxCount:=appTitleBuilder.Capacity)
+
                         appTitle = appTitleBuilder.ToString()
 
                         If appTitleLength >= titleLength Then
-                            If String.Compare(Right(appTitle, titleLength), 0, Title, 0, titleLength, StringComparison.OrdinalIgnoreCase) = 0 Then
+                            If String.Compare(
+                                strA:=Right(str:=appTitle, Length:=titleLength),
+                                indexA:=0,
+                                strB:=Title,
+                                indexB:=0,
+                                length:=titleLength,
+                                comparisonType:=StringComparison.OrdinalIgnoreCase) = 0 Then
+
                                 Exit Do 'found a match
                             End If
                         End If
@@ -199,12 +231,20 @@ Namespace Microsoft.VisualBasic
             End If
         End Sub
 
-        Public Function InputBox(Prompt As String, Title As String, DefaultResponse As String, XPos As Integer, YPos As Integer) As String
+        Public Function InputBox(
+            Prompt As String,
+            Title As String,
+            DefaultResponse As String,
+            XPos As Integer,
+            YPos As Integer) As String
+
             Dim vbHost As IVbHost
             Dim parentWindow As IWin32Window = Nothing
 
             vbHost = HostServices.VBHost
-            If vbHost IsNot Nothing Then 'If we are hosted then we want to use the host as the parent window. If no parent window that's fine.
+
+            'If we are hosted then we want to use the host as the parent window. If no parent window that's fine.
+            If vbHost IsNot Nothing Then
                 parentWindow = vbHost.GetParentWindow()
             End If
 
@@ -267,7 +307,8 @@ Namespace Microsoft.VisualBasic
             Catch ex As ThreadAbortException
                 Throw
             Catch
-                Throw New ArgumentException(Utils.GetResourceString(SR.Argument_InvalidValueType2, "Prompt", "String"))
+                Throw New ArgumentException(
+                    Utils.GetResourceString(SR.Argument_InvalidValueType2, "Prompt", "String"))
             End Try
 
             Try
@@ -280,6 +321,7 @@ Namespace Microsoft.VisualBasic
                 Else
                     sTitle = CStr(Title) 'allows the title to be an expression, e.g. MsgBox(prompt, Title:=1+5)
                 End If
+
             Catch ex As StackOverflowException
                 Throw
             Catch ex As OutOfMemoryException
@@ -287,7 +329,8 @@ Namespace Microsoft.VisualBasic
             Catch ex As ThreadAbortException
                 Throw
             Catch
-                Throw New ArgumentException(Utils.GetResourceString(SR.Argument_InvalidValueType2, "Title", "String"))
+                Throw New ArgumentException(
+                    Utils.GetResourceString(SR.Argument_InvalidValueType2, "Title", "String"))
             End Try
 
             Return CType(MessageBox.Show(parentWindow, sPrompt, sTitle,
@@ -307,25 +350,40 @@ Namespace Microsoft.VisualBasic
             Dim errorCode As Integer = 0
 
             If PathName Is Nothing Then
-                Throw New ArgumentNullException(Utils.GetResourceString(SR.Argument_InvalidNullValue1, "Pathname"))
+                Throw New ArgumentNullException(
+                    paramName:=Utils.GetResourceString(ResourceKey:=SR.Argument_InvalidNullValue1, "Pathname"))
             End If
 
             If Style < 0 OrElse Style > 9 Then
-                Throw New ArgumentException(Utils.GetResourceString(SR.Argument_InvalidValue1, "Style"))
+                Throw New ArgumentException(
+                    message:=Utils.GetResourceString(ResourceKey:=SR.Argument_InvalidValue1, "Style"))
             End If
 
             NativeMethods.GetStartupInfo(startupInfo)
             Try
-                startupInfo.dwFlags = NativeTypes.STARTF_USESHOWWINDOW  ' we want to specify the initial window style (minimized, etc) so set this bit.
+                ' we want to specify the initial window style (minimized, etc) so set this bit.
+                startupInfo.dwFlags = NativeTypes.STARTF_USESHOWWINDOW
                 startupInfo.wShowWindow = Style
 
                 'We have to have unmanaged permissions to do this, so asking for path permissions would be redundant
-                'Note: We are using the StartupInfo (defined in NativeTypes.StartupInfo) in CreateProcess() even though this version
-                'of the StartupInfo type uses IntPtr instead of String because GetStartupInfo() above requires that version so we don't
-                'free the string fields since the API manages it instead. But its OK here because we are just passing along the memory
-                'that GetStartupInfo() allocated along to CreateProcess() which just reads the string fields.
+                'Note: We are using the StartupInfo (defined in NativeTypes.StartupInfo) in CreateProcess()
+                'even though this version of the StartupInfo type uses IntPtr instead of String because
+                'GetStartupInfo() above requires that version so we don't free the string fields since the API manages
+                'it instead. But its OK here because we are just passing along the memory that GetStartupInfo()
+                'allocated along to CreateProcess() which just reads the string fields.
 
-                ok = NativeMethods.CreateProcess(Nothing, PathName, Nothing, Nothing, False, NativeTypes.NORMAL_PRIORITY_CLASS, Nothing, Nothing, startupInfo, processInfo)
+                ok = NativeMethods.CreateProcess(
+                    lpApplicationName:=Nothing,
+                    lpCommandLine:=PathName,
+                    lpProcessAttributes:=Nothing,
+                    lpThreadAttributes:=Nothing,
+                    bInheritHandles:=False,
+                    dwCreationFlags:=NativeTypes.NORMAL_PRIORITY_CLASS,
+                    lpEnvironment:=Nothing,
+                    lpCurrentDirectory:=Nothing,
+                    lpStartupInfo:=startupInfo,
+                    lpProcessInformation:=processInfo)
+
                 If ok = 0 Then
                     errorCode = Marshal.GetLastWin32Error()
                 End If
@@ -339,8 +397,9 @@ Namespace Microsoft.VisualBasic
                 Try
                     If ok <> 0 Then
                         If Wait Then
-                            ' Is infinite wait okay here ?
-                            ' This is okay since this is marked as requiring the HostPermission with ExternalProcessMgmt rights
+                            ' Is infinite wait okay here?
+                            ' This is okay since this is marked as requiring the HostPermission
+                            ' with ExternalProcessMgmt rights
                             ok = NativeMethods.WaitForSingleObject(safeProcessHandle, Timeout)
 
                             If ok = 0 Then 'succeeded
