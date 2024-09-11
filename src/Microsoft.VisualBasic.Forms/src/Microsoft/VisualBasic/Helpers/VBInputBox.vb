@@ -104,8 +104,8 @@ Namespace Microsoft.VisualBasic.CompilerServices
             If (xPos = -1) AndAlso (yPos = -1) Then
                 StartPosition = FormStartPosition.CenterScreen
             Else
-                If (xPos = -1) Then xPos = 600
-                If (yPos = -1) Then yPos = 350
+                If xPos = -1 Then xPos = 600
+                If yPos = -1 Then yPos = 350
                 StartPosition = FormStartPosition.Manual
                 DesktopLocation = New Point(xPos, yPos)
             End If

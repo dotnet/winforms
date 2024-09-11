@@ -553,7 +553,7 @@ public partial class DataGridViewCellTests
         // While calling control.Handle we will create a new handle.
         // During this process DataGridView call MakeFirstDisplayedCellCurrentCell().
         // Where if we have cell to display (columnVisible) we will set it as CurrentCell.
-        // Which in turn will lead to unsharing of the raw in any case.
+        // Which in turn will lead to un-sharing of the raw in any case.
         // MakeFirstDisplayedCellCurrentCell() -> SetAndSelectCurrentCellAddress() -> SetCurrentCellAddressCore()
         //   -> OnCurrentCellChanged() -> CurrentCell.get() -> Rows[index]
         // See https://github.com/dotnet/winforms/issues/6930#issuecomment-1090213559.

@@ -1762,11 +1762,6 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
                     if (_owner._addItemButton is null)
                     {
                         // only adding patterns to _miniToolStrip associated with MenuStrip or ContextMenu
-                        // m.Result = AutomationInteropProvider.ReturnRawElementProvider(
-                        //     Handle,
-                        //     m.WParam,
-                        //     m.LParam,
-                        //     (IRawElementProviderSimple)(new TransparentToolStripUiaProvider(this)));
                         return;
                     }
 

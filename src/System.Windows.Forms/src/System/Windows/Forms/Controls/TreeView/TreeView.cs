@@ -75,7 +75,7 @@ public partial class TreeView : Control
     private const int TREEVIEWSTATE_doubleBufferedPropertySet = 0x00020000;
 
     // PERF: take all the bools and put them into a state variable
-    private Collections.Specialized.BitVector32 _treeViewState; // see TREEVIEWSTATE_ consts above
+    private Collections.Specialized.BitVector32 _treeViewState; // see TREEVIEWSTATE_ constants above
 
     private static bool s_isScalingInitialized;
     private static Size? s_stateImageSize;

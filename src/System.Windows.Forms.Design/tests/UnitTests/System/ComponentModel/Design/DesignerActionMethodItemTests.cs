@@ -195,7 +195,7 @@ public class DesignerActionMethodItemTests
         item.Invoke();
         Assert.Equal(memberName, list.CalledMethod);
 
-        // Call again to test caching behaviour.
+        // Call again to test caching behavior.
         list.CalledMethod = null;
         item.Invoke();
         Assert.Equal(memberName, list.CalledMethod);

@@ -37,9 +37,9 @@ public static class TestHelpers
                 .GetCustomAttributes(typeof(Runtime.Versioning.TargetFrameworkAttribute), false)
                 .SingleOrDefault();
 
-            string[] etractedTokens = frameworkAttribute.FrameworkName.Split("=v"); // "NetcoreApp, Version=v7.0"
+            string[] extractedTokens = frameworkAttribute.FrameworkName.Split("=v"); // "NetCoreApp, Version=v7.0"
 
-            return $"net{etractedTokens[1]}";
+            return $"net{extractedTokens[1]}";
         }
     }
 
@@ -55,7 +55,9 @@ public static class TestHelpers
             throw new ArgumentNullException(nameof(projectName));
 
         string repoRoot = GetRepoRoot();
-        string exePath = Path.Combine(repoRoot, $"artifacts\\bin\\{projectName}\\{Config}\\{TargetFramework}\\{projectName}.exe");
+        string exePath = Path.Combine(
+            repoRoot,
+            $"artifacts\\bin\\{projectName}\\{Config}\\{TargetFramework}\\{projectName}.exe");
 
         if (!File.Exists(exePath))
             throw new FileNotFoundException("File does not exist", exePath);
@@ -171,7 +173,9 @@ public static class TestHelpers
     ///
     ///  All we care about is the dotnet entry under tools
     /// </summary>
-    /// <returns>The path to the globally installed dotnet that matches the version specified in the global.json.</returns>
+    /// <returns>
+    ///  The path to the globally installed dotnet that matches the version specified in the global.json.
+    /// </returns>
     private static string GetGlobalDotNetPath()
     {
         // find the repo root
@@ -331,7 +335,7 @@ public static class TestHelpers
     }
 
     /// <summary>
-    ///  Presses Alt plus choosen letter on the given process if it can be made the foreground process
+    ///  Presses Alt plus chosen letter on the given process if it can be made the foreground process
     /// </summary>
     /// <param name="process">The process to send the Alt and key to</param>
     /// <param name="letter">Letter in addition to Alt to send to process.</param>

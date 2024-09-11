@@ -26,7 +26,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
     private const byte ColumnIsBrowsableInternal = 0x08;
     private const byte DisplayIndexHasChangedInternal = 0x10;
 
-    private byte _flags;  // see DATAGRIDVIEWCOLUMN_ consts above
+    private byte _flags;  // see DATAGRIDVIEWCOLUMN_ constants above
     private string _name;
     private int _displayIndex;
     private float _fillWeight, _usedFillWeight;

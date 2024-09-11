@@ -49,7 +49,7 @@ public partial class TabControl : Control
     private static readonly object s_selectedEvent = new();
     private static readonly object s_rightToLeftLayoutChangedEvent = new();
 
-    // Perf: take all the bools and put them into a state variable: see TabControlState consts above
+    // Perf: take all the bools and put them into a state variable: see TabControlState constants above
     private BitVector32 _tabControlState;
 
     private const string TabBaseReLayoutMessageName = "_TabBaseReLayout";

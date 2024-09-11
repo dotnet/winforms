@@ -44,10 +44,10 @@ public unsafe partial class WebBrowser : WebBrowserBase
     private const int WEBBROWSERSTATE_allowNavigation = 0x00000040;
 
     // PERF: take all the bools and put them into a state variable
-    private Collections.Specialized.BitVector32 _webBrowserState;          // see TREEVIEWSTATE_ consts above
+    private Collections.Specialized.BitVector32 _webBrowserState;          // see TREEVIEWSTATE_ constants above
 
     //
-    // 8856f961-340a-11d0-a96b-00c04fd705a2 is the clsid for the native webbrowser control
+    // 8856f961-340a-11d0-a96b-00c04fd705a2 is the clsid for the native WebBrowser control
     //
     /// <summary>
     ///  Creates an instance of the <see cref="WebBrowser"/> control.
