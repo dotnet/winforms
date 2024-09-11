@@ -180,7 +180,8 @@ internal partial struct PAGESETUPDLGW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-pagesetupdlgw#members">
-    ///   Read more on learn.microsoft.com.</see>
+    ///    Read more on learn.microsoft.com.
+    ///   </see>
     ///  </para>
     /// </summary>
     public unsafe delegate* unmanaged[Stdcall]<HWND, uint, WPARAM, LPARAM, nuint> lpfnPageSetupHook;
@@ -195,7 +196,8 @@ internal partial struct PAGESETUPDLGW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-pagesetupdlgw#members">
-    ///   Read more on learn.microsoft.com.</see>
+    ///    Read more on learn.microsoft.com.
+    ///   </see>
     ///  </para>
     /// </summary>
     public unsafe delegate* unmanaged[Stdcall]<HWND, uint, WPARAM, LPARAM, nuint> lpfnPagePaintHook;
@@ -211,7 +213,8 @@ internal partial struct PAGESETUPDLGW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-pagesetupdlgw#members">
-    ///   Read more on learn.microsoft.com.</see>
+    ///    Read more on learn.microsoft.com.
+    ///   </see>
     ///  </para>
     /// </summary>
     public PCWSTR lpPageSetupTemplateName;
@@ -222,8 +225,9 @@ internal partial struct PAGESETUPDLGW
     ///   <b>hPageSetupTemplate</b> is a handle to a memory object containing a dialog box template.
     ///  </para>
     ///  <para>
-    ///  <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-pagesetupdlgw#members">
-    ///   Read more on learn.microsoft.com.</see>
+    ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-pagesetupdlgw#members">
+    ///    Read more on learn.microsoft.com.
+    ///   </see>
     ///  </para>
     /// </summary>
     public HGLOBAL hPageSetupTemplate;
