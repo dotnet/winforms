@@ -1,9 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using Moq;
-using Moq.Protected;
-
 namespace System.Windows.Forms.Tests;
 
 public class ApplicationContextTests
@@ -218,10 +215,18 @@ public class ApplicationContextTests
 
         public int DisposeCallCount { get; private set; }
 
+        public int ExitThreadCoreCount { get; private set; }
+
         protected override void Dispose(bool disposing)
         {
             DisposeCallCount++;
             base.Dispose(disposing);
+        }
+
+        protected override void ExitThreadCore()
+        {
+            ExitThreadCoreCount++;
+            base.ExitThreadCore();
         }
     }
 
@@ -307,20 +312,13 @@ public class ApplicationContextTests
     [WinFormsFact]
     public void ExitThread_Invoke_CallsExitThreadCore()
     {
-        Mock<ApplicationContext> mockContext = new(MockBehavior.Strict);
-        mockContext
-            .Protected()
-            .Setup("ExitThreadCore")
-            .Verifiable();
-        mockContext
-            .Protected()
-            .Setup("Dispose", false);
-        mockContext.Object.ExitThread();
-        mockContext.Protected().Verify("ExitThreadCore", Times.Once());
+        TestApplicationContext context = new();
+        context.ExitThread();
+        context.ExitThreadCoreCount.Should().Be(1);
 
         // Call again.
-        mockContext.Object.ExitThread();
-        mockContext.Protected().Verify("ExitThreadCore", Times.Exactly(2));
+        context.ExitThread();
+        context.ExitThreadCoreCount.Should().Be(2);
     }
 
     [WinFormsFact]
