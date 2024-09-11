@@ -3,7 +3,9 @@
 
 using System.Drawing;
 using FluentAssertions.Collections;
+using FluentAssertions.Execution;
 using FluentAssertions.Numeric;
+using FluentAssertions.Primitives;
 
 namespace FluentAssertions;
 
@@ -98,4 +100,30 @@ public static class FluentAssertExtensions
                     && ComparisonHelpers.EqualsFloating(expected.Y, actual.Y, precision),
             because,
             becauseArgs);
+
+    /// <summary>
+    ///  Asserts a <see cref="Rectangle"/> is empty.
+    /// </summary>
+    public static AndConstraint<ObjectAssertions> BeEmpty(this ObjectAssertions assertions, string because = "", params object[] becauseArgs)
+    {
+        Execute.Assertion
+            .ForCondition(assertions.Subject is Rectangle rect && rect.IsEmpty)
+            .BecauseOf(because, becauseArgs)
+            .FailWith($"Expected {{context:rectangle}} to be empty{{reason}}, but found {assertions.Subject}.");
+
+        return new AndConstraint<ObjectAssertions>(assertions);
+    }
+
+    /// <summary>
+    ///  Asserts a <see cref="Rectangle"/> is not empty.
+    /// </summary>
+    public static AndConstraint<ObjectAssertions> NotBeEmpty(this ObjectAssertions assertions, string because = "", params object[] becauseArgs)
+    {
+        Execute.Assertion
+            .ForCondition(assertions.Subject is Rectangle rect && !rect.IsEmpty)
+            .BecauseOf(because, becauseArgs)
+            .FailWith($"Expected {{context:rectangle}} not to be empty{{reason}}, but found {assertions.Subject}.");
+
+        return new AndConstraint<ObjectAssertions>(assertions);
+    }
 }

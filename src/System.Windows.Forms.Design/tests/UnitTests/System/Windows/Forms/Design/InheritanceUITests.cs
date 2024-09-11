@@ -1,39 +1,14 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using FluentAssertions.Execution;
-using FluentAssertions.Primitives;
-using Moq;
-using Moq.Protected;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
+using Moq;
+using Moq.Protected;
 using static System.Windows.Forms.Design.ComponentTray;
 
 namespace System.Windows.Forms.Design.Tests;
-
-public static class RectangleAssertionsExtensions
-{
-    public static AndConstraint<ObjectAssertions> BeEmpty(this ObjectAssertions assertions, string because = "", params object[] becauseArgs)
-    {
-        Execute.Assertion
-            .ForCondition(assertions.Subject is Rectangle rect && rect == Rectangle.Empty)
-            .BecauseOf(because, becauseArgs)
-            .FailWith("Expected {context:rectangle} to be empty{reason}, but found {0}.", assertions.Subject);
-
-        return new AndConstraint<ObjectAssertions>(assertions);
-    }
-
-    public static AndConstraint<ObjectAssertions> NotBeEmpty(this ObjectAssertions assertions, string because = "", params object[] becauseArgs)
-    {
-        Execute.Assertion
-            .ForCondition(assertions.Subject is Rectangle rect && rect != Rectangle.Empty)
-            .BecauseOf(because, becauseArgs)
-            .FailWith("Expected {context:rectangle} not to be empty{reason}, but found {0}.", assertions.Subject);
-
-        return new AndConstraint<ObjectAssertions>(assertions);
-    }
-}
 
 public sealed class InheritanceUITests : IDisposable
 {
