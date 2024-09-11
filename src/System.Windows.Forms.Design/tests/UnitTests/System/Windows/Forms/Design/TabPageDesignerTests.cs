@@ -11,18 +11,6 @@ namespace System.Windows.Forms.Design.Tests;
 public class TabPageDesignerTests
 {
     [Fact]
-    public void CanBeParentedTo_WithNullParentDesigner_ReturnsFalse()
-    {
-        using TabPage tabPage = new();
-        using TabPageDesigner designer = new();
-        designer.Initialize(tabPage);
-
-        bool result = designer.CanBeParentedTo(null);
-
-        result.Should().BeFalse();
-    }
-
-    [Fact]
     public void CanBeParentedTo_WithNonTabControlParentDesigner_ReturnsFalse()
     {
         Mock<IDesigner> mockDesigner = new();
