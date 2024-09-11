@@ -9,8 +9,8 @@ public class PrintDialogDesignerTests
     [Fact]
     public void InitializeNewComponent_SetsUseEXDialogToTrue()
     {
-        PrintDialogDesigner designer = new();
-        PrintDialog printDialog = new();
+        using PrintDialogDesigner designer = new();
+        using PrintDialog printDialog = new();
         designer.Initialize(printDialog);
 
         designer.InitializeNewComponent(null);
