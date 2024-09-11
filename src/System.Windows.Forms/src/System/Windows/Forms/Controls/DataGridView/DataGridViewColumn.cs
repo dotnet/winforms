@@ -630,8 +630,8 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
             // So while the Control can fall back to Site.Name if the user did not explicitly set Control::Name,
             // the DataGridViewColumn should always go first to the Site.Name to retrieve the name.
             //
-            // NOTE: one side effect of bringing together the design time and the run time "Name" properties is that DataGridViewColumn::Name changes.
-            // However, DataGridView does not fire ColumnNameChanged event.
+            // NOTE: one side effect of bringing together the design time and the run time "Name" properties is that
+            // DataGridViewColumn::Name changes. However, DataGridView does not fire ColumnNameChanged event.
             // We can't fix this because ISite does not provide Name change notification. So in effect
             // DataGridViewColumn does not know when its name changed.
             // I talked w/ MarkRi and he is perfectly fine w/ DataGridViewColumn::Name changing w/o ColumnNameChanged
@@ -856,8 +856,9 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
                 }
             }
 
-            // If you are adding releasing unmanaged resources code here (disposing == false), you need to remove this class type
-            // (and all of its subclasses) from check in DataGridViewElement() constructor and DataGridViewElement_Subclasses_SuppressFinalizeCall test!
+            // If you are adding releasing unmanaged resources code here (disposing == false), you need to remove this
+            // class type (and all of its subclasses) from check in DataGridViewElement()
+            // constructor and DataGridViewElement_Subclasses_SuppressFinalizeCall test!
             // Also consider to modify ~DataGridViewBand() description.
         }
         finally

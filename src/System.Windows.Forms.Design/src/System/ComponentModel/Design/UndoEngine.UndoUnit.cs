@@ -9,7 +9,9 @@ namespace System.ComponentModel.Design;
 public abstract partial class UndoEngine
 {
     /// <summary>
-    ///  This class embodies a unit of undoable work. The undo engine creates an undo unit when a change to the designer is about to be made. The undo unit is responsible for tracking changes. The undo engine will call Close on the unit when it no longer needs to track changes.
+    ///  This class embodies a unit of undoable work. The undo engine creates an undo unit when a change to
+    ///  the designer is about to be made. The undo unit is responsible for tracking changes. The undo engine will
+    ///  call Close on the unit when it no longer needs to track changes.
     /// </summary>
     protected partial class UndoUnit
     {
@@ -166,7 +168,7 @@ public abstract partial class UndoEngine
             {
                 for (int i = 0; i < _events.Count; i++)
                 {
-                    // Determine if we've located the UndoEvent which was  created as a result of a corresponding ComponentChanging event.
+                    // Determine if we've located the UndoEvent which was created as a result of a corresponding ComponentChanging event.
                     // If so, reposition to the "Changed" spot in the list if the following is true:
                     //          - It must be for a DSV.Content property
                     //          - There must be a AddEvent between the Changing and Changed
@@ -283,8 +285,8 @@ public abstract partial class UndoEngine
                     if (_events[idx] is AddRemoveUndoEvent evt && evt.OpenComponent == e.Component)
                     {
                         evt.Commit();
-                        // We should only reorder events if there  are change events coming between OnRemoving and OnRemoved.
-                        // If there are other events (such as AddRemoving), the serialization  done in OnComponentRemoving might refer to components that aren't available.
+                        // We should only reorder events if there are change events coming between OnRemoving and OnRemoved.
+                        // If there are other events (such as AddRemoving), the serialization done in OnComponentRemoving might refer to components that aren't available.
                         if (idx != _events.Count - 1 && changeEvt is not null)
                         {
                             // ensure only change change events exist between these two events
@@ -350,7 +352,9 @@ public abstract partial class UndoEngine
         public override string ToString() => Name;
 
         /// <summary>
-        ///  Either performs undo, or redo, depending on the state of the unit. UndoUnit initially assumes that the undoable work has already been "done", so the first call to undo will undo the work. The next call will undo the "undo", performing a redo.
+        ///  Either performs undo, or redo, depending on the state of the unit.
+        ///  UndoUnit initially assumes that the undoable work has already been "done",
+        ///  so the first call to undo will undo the work. The next call will undo the "undo", performing a redo.
         /// </summary>
         public void Undo()
         {
@@ -387,7 +391,10 @@ public abstract partial class UndoEngine
         }
 
         /// <summary>
-        ///  The undo method invokes this method to perform the actual undo / redo work. You should never call this method directly; override it if you wish, but always call the public Undo method to perform undo work. Undo notifies the undo engine to suspend undo data gathering until  this undo is completed, which prevents new undo units from being created in response to this unit doing work.
+        ///  The undo method invokes this method to perform the actual undo / redo work.
+        ///  You should never call this method directly; override it if you wish, but always call the public Undo method
+        ///  to perform undo work. Undo notifies the undo engine to suspend undo data gathering until this
+        ///  undo is completed, which prevents new undo units from being created in response to this unit doing work.
         /// </summary>
         protected virtual void UndoCore()
         {
@@ -396,9 +403,9 @@ public abstract partial class UndoEngine
                 if (_reverse)
                 {
                     // How does BeforeUndo work?  You'd think you should just call this in one pass, and then call Undo in another, but you'd be wrong. The complexity arises because there are undo events that have dependencies on other undo events.There are also undo events that have side effects with respect to other events. Here are examples:
-                    // Rename is an undo event that other undo events depend on, because they store names. It must be performed in the right order and it must be  performed before any subsequent event's BeforeUndo is called.
+                    // Rename is an undo event that other undo events depend on, because they store names. It must be performed in the right order and it must be performed before any subsequent event's BeforeUndo is called.
                     // Property change is an undo event that may have an unknown side effect if changing the property results in other property changes (for example, reparenting a control removes the control from its former parent) .A property change undo event must have all BeforeUndo methods called before any Undo method is called. To do this, we have a property on UndoEvent called CausesSideEffects.
-                    // As we run through UndoEvents, consecutive events that return true from this property are grouped so that their BeforeUndo methods are all called before their Undo methods. For events that do not have  side effects, their BeforeUndo and Undo are invoked immediately.
+                    // As we run through UndoEvents, consecutive events that return true from this property are grouped so that their BeforeUndo methods are all called before their Undo methods. For events that do not have side effects, their BeforeUndo and Undo are invoked immediately.
                     for (int idx = _events.Count - 1; idx >= 0; idx--)
                     {
                         int groupEndIdx = idx;

@@ -159,8 +159,8 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
     /// <summary>
     ///  Called when we receive a DragEnter notification - here we attempt to cache child position and information
     ///  intended to be used by drag move and drop messages. Basically we pass through the children twice - first
-    ///  we build up an array of rects representing the children bounds (w/margins) and identify where the row/
-    ///  column changes are. Secondly, we normalize the child rects so that children in each row/column are the
+    ///  we build up an array of rectangles representing the children bounds (w/margins) and identify where the row/
+    ///  column changes are. Secondly, we normalize the child rectangles so that children in each row/column are the
     ///  same height/width;
     /// </summary>
     private void CreateMarginBoundsList()
@@ -193,7 +193,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
         Point offset = Control.PointToScreen(Point.Empty);
         int i;
 
-        // Pass 1 - store off the original margin rects & identify row/column sizes
+        // Pass 1 - store off the original margin rectangles & identify row/column sizes
         for (i = 0; i < children.Count; i++)
         {
             var currentControl = children[i];

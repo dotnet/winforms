@@ -151,7 +151,8 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
     }
 
     /// <summary>
-    ///  We override this to do nothing. Otherwise, all the nice keyboard messages we want would get run through the Form's keyboard handling procedure.
+    ///  We override this to do nothing. Otherwise, all the nice keyboard messages we want would get run through
+    ///  the Form's keyboard handling procedure.
     /// </summary>
     protected override bool ProcessDialogKey(Keys keyData)
     {

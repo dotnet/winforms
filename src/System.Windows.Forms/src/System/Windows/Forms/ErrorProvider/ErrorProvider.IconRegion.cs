@@ -44,8 +44,9 @@ public partial class ErrorProvider
                 using HBITMAP mask = (HBITMAP)ControlPaint.CreateHBitmapTransparencyMask(bitmap);
                 bitmap.Dispose();
 
-                // It is been observed that users can use non standard size icons (not a 16 bit multiples for width and height)
-                // and GetBitmapBits method allocate bytes in multiple of 16 bits for each row. Following calculation is to get right width in bytes.
+                // It is been observed that users can use non standard size icons
+                // (not a 16 bit multiples for width and height) and GetBitmapBits method allocate bytes in multiple
+                // of 16 bits for each row. Following calculation is to get right width in bytes.
                 int bitmapBitsAllocationSize = 16;
 
                 // If width is not multiple of 16, we need to allocate BitmapBitsAllocationSize for remaining bits.

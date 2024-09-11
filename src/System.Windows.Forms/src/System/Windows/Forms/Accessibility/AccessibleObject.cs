@@ -2653,7 +2653,7 @@ public unsafe partial class AccessibleObject :
 
     private VARIANT AsChildIdVariant(AccessibleObject? obj)
     {
-        // https://learn.Microsoft.com/windows/win32/winauto/how-child-ids-are-used-in-parameters
+        // https://learn.microsoft.com/windows/win32/winauto/how-child-ids-are-used-in-parameters
         if (obj == this)
         {
             return (VARIANT)(int)PInvoke.CHILDID_SELF;
@@ -2776,7 +2776,8 @@ public unsafe partial class AccessibleObject :
     /// <remarks>
     ///  <para>
     ///   This is basically just a wrapper for <see cref="GetSysChild(AccessibleNavigation, out AccessibleObject?)"/>
-    ///   that does some of the dirty work. Usage is similar to <see cref="GetSysChild(AccessibleNavigation, out AccessibleObject?)"/>.
+    ///   that does some of the dirty work. Usage is similar to
+    ///   <see cref="GetSysChild(AccessibleNavigation, out AccessibleObject?)"/>.
     ///   Called prior to calling <see cref="UIA.IAccessible.get_accName(VARIANT, BSTR*)"/> on the 'inner' system
     ///   accessible object.
     ///  </para>

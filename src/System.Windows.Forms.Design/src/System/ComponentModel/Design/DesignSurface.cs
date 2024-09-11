@@ -78,7 +78,9 @@ public class DesignSurface : IDisposable, IServiceProvider
     }
 
     /// <summary>
-    ///  Returns true if the design surface is currently loaded. This will be true when a successful load has completed, or false for all other cases.
+    ///  Returns true if the design surface is currently loaded.
+    ///  This will be <see langword="true"/> when a successful load has completed,
+    ///  or <see langword="false"/> for all other cases.
     /// </summary>
     public bool IsLoaded { get; private set; }
 
@@ -109,10 +111,15 @@ public class DesignSurface : IDisposable, IServiceProvider
     }
 
     /// <summary>
-    ///  This property will return the view for the root designer. BeginLoad must have been called beforehand to start the loading process. It is possible to return a view before the designer loader finishes loading because the root designer, which supplies the view, is the first object created by the designer loader. If a view is unavailable this method will throw an exception.
+    ///  This property will return the view for the root designer. BeginLoad must have been called beforehand to
+    ///  start the loading process. It is possible to return a view before the designer loader finishes loading because
+    ///  the root designer, which supplies the view, is the first object created by the designer loader.
+    ///  If a view is unavailable this method will throw an exception.
     ///  Possible exceptions:
-    ///  The design surface is not loading or the designer loader has not yet created a root designer: InvalidOperationException
-    ///  The design surface finished the load, but failed. (Various. This will throw the first exception the designer loader added to the error collection).
+    ///  The design surface is not loading or the designer loader has not yet created
+    ///  a root designer: <see cref="InvalidOperationException"/>.
+    ///  The design surface finished the load, but failed.
+    ///  (Various. This will throw the first exception the designer loader added to the error collection).
     /// </summary>
     public object View
     {
@@ -174,12 +181,14 @@ public class DesignSurface : IDisposable, IServiceProvider
     public event EventHandler? Disposed;
 
     /// <summary>
-    ///  Adds a event handler to listen to the Flushed event on the component. This is called after the design surface has asked the designer loader to flush its state.
+    ///  Adds a event handler to listen to the Flushed event on the component.
+    ///  This is called after the design surface has asked the designer loader to flush its state.
     /// </summary>
     public event EventHandler? Flushed;
 
     /// <summary>
-    ///  Called when the designer load has completed. This is called for successful loads as well as unsuccessful ones. If code in this event handler throws an exception the designer will be unloaded.
+    ///  Called when the designer load has completed. This is called for successful loads as well as unsuccessful ones.
+    ///  If code in this event handler throws an exception the designer will be unloaded.
     /// </summary>
     public event LoadedEventHandler? Loaded;
 
@@ -195,17 +204,21 @@ public class DesignSurface : IDisposable, IServiceProvider
     public event EventHandler? Unloaded;
 
     /// <summary>
-    ///  Called when a designer is about to begin reloading. When a designer reloads, all of the state for that designer is recreated, including the designer's view. The view should be unparented at this time.
+    ///  Called when a designer is about to begin reloading. When a designer reloads,
+    ///  all of the state for that designer is recreated, including the designer's view. The view should be unparented at this time.
     /// </summary>
     public event EventHandler? Unloading;
 
     /// <summary>
-    ///  Called when someone has called the Activate method on IDesignerHost. You should attach a handler to this event that activates the window for this design surface.
+    ///  Called when someone has called the Activate method on IDesignerHost.
+    ///  You should attach a handler to this event that activates the window for this design surface.
     /// </summary>
     public event EventHandler? ViewActivated;
 
     /// <summary>
-    ///  This method begins the loading process with the given designer loader. Designer loading can be asynchronous, so the loading may continue to  progress after this call has returned. Listen to the Loaded event to know when the design surface has completed loading.
+    ///  This method begins the loading process with the given designer loader. Designer loading can be asynchronous,
+    ///  so the loading may continue to progress after this call has returned. Listen to the Loaded event to know
+    ///  when the design surface has completed loading.
     /// </summary>
     public void BeginLoad(DesignerLoader loader)
     {
@@ -218,7 +231,9 @@ public class DesignSurface : IDisposable, IServiceProvider
     }
 
     /// <summary>
-    ///  This method begins the loading process for a component of the given type. This will create an instance of the component type and initialize a designer for that instance. Loaded is raised before this method returns.
+    ///  This method begins the loading process for a component of the given type.
+    ///  This will create an instance of the component type and initialize a designer for that instance.
+    ///  Loaded is raised before this method returns.
     /// </summary>
     public void BeginLoad(Type rootComponentType)
     {
@@ -283,7 +298,10 @@ public class DesignSurface : IDisposable, IServiceProvider
     }
 
     /// <summary>
-    ///  Creates a container suitable for nesting controls or components. Adding a component to a  nested container creates its designer and makes it eligible for all all services available from the design surface. Components added to nested containers do not participate in serialization. You may provide an additional name for this container by passing a value into containerName.
+    ///  Creates a container suitable for nesting controls or components. Adding a component to a nested container
+    ///  creates its designer and makes it eligible for all all services available from the design surface.
+    ///  Components added to nested containers do not participate in serialization.
+    ///  You may provide an additional name for this container by passing a value into containerName.
     /// </summary>
     public INestedContainer CreateNestedContainer(IComponent owningComponent)
     {
@@ -291,7 +309,10 @@ public class DesignSurface : IDisposable, IServiceProvider
     }
 
     /// <summary>
-    ///  Creates a container suitable for nesting controls or components. Adding a component to a  nested container creates its designer and makes it eligible for all all services available from the design surface. Components added to nested containers do not participate in serialization. You may provide an additional name for this container by passing a value into containerName.
+    ///  Creates a container suitable for nesting controls or components. Adding a component to a nested container
+    ///  creates its designer and makes it eligible for all all services available from the design surface.
+    ///  Components added to nested containers do not participate in serialization. You may provide an additional name
+    ///  for this container by passing a value into containerName.
     /// </summary>
     public INestedContainer CreateNestedContainer(IComponent owningComponent, string? containerName)
     {
@@ -316,10 +337,14 @@ public class DesignSurface : IDisposable, IServiceProvider
     {
         if (disposing)
         {
-            // technically we should raise this after we've destroyed ourselves. Unfortunately, too many things query us for services so they can detach.
+            // technically we should raise this after we've destroyed ourselves.
+            // Unfortunately, too many things query us for services so they can detach.
             Disposed?.Invoke(this, EventArgs.Empty);
 
-            // Destroying the host also destroys all components. In most cases destroying the root component will destroy its designer which also kills the view. So, we destroy the view below last (remember, this view is a "view container" so we are destroying the innermost view first and then destroying our own view).
+            // Destroying the host also destroys all components. In most cases destroying the root component
+            // will destroy its designer which also kills the view. So, we destroy the view below last
+            // (remember, this view is a "view container" so we are destroying the innermost view first and
+            // then destroying our own view).
             try
             {
                 try
@@ -438,8 +463,10 @@ public class DesignSurface : IDisposable, IServiceProvider
     }
 
     /// <summary>
-    ///  Called when the loading process has completed. This is invoked for both successful and unsuccessful loads. The EventArgs passed into this method can be used to tell a successful from an unsuccessful load. It can also be used to create a view for this design surface. If code in this event handler or override throws an exception,
-    ///  the designer will be unloaded.
+    ///  Called when the loading process has completed. This is invoked for both successful and unsuccessful loads.
+    ///  The EventArgs passed into this method can be used to tell a successful from an unsuccessful load.
+    ///  It can also be used to create a view for this design surface.
+    ///  If code in this event handler or override throws an exception, the designer will be unloaded.
     /// </summary>
     protected virtual void OnLoaded(LoadedEventArgs e)
     {
@@ -488,7 +515,9 @@ public class DesignSurface : IDisposable, IServiceProvider
     }
 
     /// <summary>
-    ///  Called when a designer is about to begin reloading. When a designer reloads, all of the state for that designer is recreated, including the designer's view. The view should be unparented at this time.
+    ///  Called when a designer is about to begin reloading. When a designer reloads,
+    ///  all of the state for that designer is recreated, including the designer's view.
+    ///  The view should be unparented at this time.
     /// </summary>
     protected virtual void OnUnloading(EventArgs e)
     {
@@ -496,7 +525,8 @@ public class DesignSurface : IDisposable, IServiceProvider
     }
 
     /// <summary>
-    ///  Called when someone has called the Activate method on IDesignerHost. You should attach a handler to this event that activates the window for this design surface.
+    ///  Called when someone has called the Activate method on IDesignerHost.
+    ///  You should attach a handler to this event that activates the window for this design surface.
     /// </summary>
     protected virtual void OnViewActivate(EventArgs e)
     {
@@ -504,7 +534,8 @@ public class DesignSurface : IDisposable, IServiceProvider
     }
 
     /// <summary>
-    ///  This is a simple designer loader that creates an instance of the given type and then calls EndLoad. If a collection of objects was passed, this will simply add those objects to the container.
+    ///  This is a simple designer loader that creates an instance of the given type and then calls EndLoad.
+    ///  If a collection of objects was passed, this will simply add those objects to the container.
     /// </summary>
     private class DefaultDesignerLoader : DesignerLoader
     {

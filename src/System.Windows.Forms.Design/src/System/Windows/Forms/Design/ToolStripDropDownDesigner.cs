@@ -196,7 +196,8 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
     // We have to add the glyphs ourselves.
     private void AddSelectionGlyphs(SelectionManager selectionManager, ISelectionService selectionService)
     {
-        // If one or many of our items are selected then Add Selection Glyphs ourselves since this is a ComponentDesigner which won't get called on the "GetGlyphs"
+        // If one or many of our items are selected then Add Selection Glyphs ourselves since this is a
+        // ComponentDesigner which won't get called on the "GetGlyphs"
         ICollection selComponents = selectionService.GetSelectedComponents();
         GlyphCollection glyphs = [];
         foreach (object selComp in selComponents)
@@ -352,7 +353,7 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
         ToolStripKeyboardHandlingService keyboardHandlingService = (ToolStripKeyboardHandlingService)GetService(typeof(ToolStripKeyboardHandlingService));
         keyboardHandlingService ??= new ToolStripKeyboardHandlingService(component.Site);
 
-        // Add the InsituEditService so that the ToolStrip can do its own Insitu Editing
+        // Add the InsituEditService so that the ToolStrip can do its own InSitu Editing
         ISupportInSituService inSituService = (ISupportInSituService)GetService(typeof(ISupportInSituService));
         inSituService ??= new ToolStripInSituService(Component.Site);
 
@@ -547,7 +548,9 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
     }
 
     /// <summary>
-    ///  Allows a designer to filter the set of properties the component it is designing will expose through the TypeDescriptor object. This method is called immediately before its corresponding "Post" method. If you are overriding this method you should call the base implementation before you perform your own filtering.
+    ///  Allows a designer to filter the set of properties the component it is designing will expose through
+    ///  the TypeDescriptor object. This method is called immediately before its corresponding "Post" method.
+    ///  If you are overriding this method you should call the base implementation before you perform your own filtering.
     /// </summary>
     protected override void PreFilterProperties(IDictionary properties)
     {
@@ -615,7 +618,8 @@ internal class ToolStripDropDownDesigner : ComponentDesigner
     }
 
     /// <summary>
-    ///  Show the MenuDesigner; used by ToolStripMenuItemDesigner to show the menu when the user selects the dropDown item through the PG or Document outline. The editor node will be selected by default.
+    ///  Show the MenuDesigner; used by ToolStripMenuItemDesigner to show the menu when the user
+    ///  selects the dropDown item through the PG or Document outline. The editor node will be selected by default.
     /// </summary>
     public void ShowMenu()
     {

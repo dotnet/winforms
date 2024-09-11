@@ -184,10 +184,11 @@ internal partial class DesignerActionUI : IDisposable
             {
                 DesignerActionBehavior dab = new(_serviceProvider, comp, dalColl, this);
 
-                // if comp is a component then try to find a traycontrol associated with it... this should really be in ComponentTray but there is no behaviorService for the CT
+                // if comp is a component then try to find a TrayControl associated with it...
+                // this should really be in ComponentTray but there is no behaviorService for the CT
                 if (comp is not Control or ToolStripDropDown)
                 {
-                    // Here, we'll try to get the traycontrol associated with the comp and supply the glyph with an alternative bounds
+                    // Here, we'll try to get the TrayControl associated with the comp and supply the glyph with an alternative bounds
                     ComponentTray? componentTray = _serviceProvider.GetService<ComponentTray>();
                     if (componentTray is not null)
                     {
@@ -200,7 +201,8 @@ internal partial class DesignerActionUI : IDisposable
                     }
                 }
 
-                // either comp is a control or we failed to find a traycontrol (which could be the case for toolstripitem components) - in this case just create a standard glyph.
+                // either comp is a control or we failed to find a traycontrol
+                // (which could be the case for toolstripitem components) - in this case just create a standard glyph.
                 // if the related comp is a control, then this shortcut will be off its bounds
                 designerActionGlyph ??= new DesignerActionGlyph(dab, _designerActionAdorner);
 
@@ -228,7 +230,7 @@ internal partial class DesignerActionUI : IDisposable
     }
 
     /// <summary>
-    ///  We monitor this event so we can update smart tag locations when  controls move.
+    ///  We monitor this event so we can update smart tag locations when controls move.
     /// </summary>
     private void OnComponentChanged(object? source, ComponentChangedEventArgs ce)
     {
@@ -238,7 +240,8 @@ internal partial class DesignerActionUI : IDisposable
             return;
         }
 
-        // If the smart tag is showing, we only move the smart tag if the changing  component is the component for the currently showing smart tag.
+        // If the smart tag is showing, we only move the smart tag if the changing component is the component
+        // for the currently showing smart tag.
         if (_lastPanelComponent is not null && !_lastPanelComponent.Equals(ce.Component))
         {
             return;
@@ -362,11 +365,15 @@ internal partial class DesignerActionUI : IDisposable
     }
 
     /// <summary>
-    ///  This event is fired by the DesignerActionService in response to a DesignerActionCollection changing. The event args contains information about the related object, the type of change (added or removed) and the remaining DesignerActionCollection for the object. Note that when new DesignerActions are added, if the related control/ is not yet parented - we add these actions to a "delay" list and they are later created when the control is finally parented.
+    ///  This event is fired by the DesignerActionService in response to a DesignerActionCollection changing.
+    ///  The event args contains information about the related object, the type of change (added or removed)
+    ///  and the remaining DesignerActionCollection for the object. Note that when new DesignerActions are added,
+    ///  if the related control/ is not yet parented - we add these actions to a "delay" list and they are later
+    ///  created when the control is finally parented.
     /// </summary>
     private void OnDesignerActionsChanged(object sender, DesignerActionListsChangedEventArgs e)
     {
-        // We need to invoke this async because the designer action service will  raise this event from the thread pool.
+        // We need to invoke this async because the designer action service will raise this event from the thread pool.
         if (_marshalingControl is not null && _marshalingControl.IsHandleCreated)
         {
             _marshalingControl.BeginInvoke(new ActionChangedEventHandler(OnInvokedDesignerActionChanged), [sender, e]);
@@ -453,14 +460,19 @@ internal partial class DesignerActionUI : IDisposable
     }
 
     /// <summary>
-    ///  Called when our KeyShowDesignerActions menu command is fired  (a.k.a. Alt+Shift+F10) - we will find the primary selection, see if it has designer actions, and if so - show the menu.
+    ///  Called when our KeyShowDesignerActions menu command is fired
+    ///  (a.k.a. Alt+Shift+F10) - we will find the primary selection,
+    ///  see if it has designer actions, and if so - show the menu.
     /// </summary>
     private void OnKeyShowDesignerActions(object? sender, EventArgs e)
     {
         ShowDesignerActionPanelForPrimarySelection();
     }
 
-    // we cannot attach several menu command to the same command id, we need a single entry point, we put it in designershortcutui. but we need a way to call the show ui on the related behavior hence this internal function to hack it together. we return false if we have nothing to display, we hide it and return true if we're already displaying
+    // we cannot attach several menu command to the same command id, we need a single entry point,
+    // we put it in designershortcutui. but we need a way to call the show ui on the related behavior
+    // hence this internal function to hack it together. we return false if we have nothing to display,
+    // we hide it and return true if we're already displaying
     internal bool ShowDesignerActionPanelForPrimarySelection()
     {
         // can't do anything w/o selection service
@@ -495,7 +507,8 @@ internal partial class DesignerActionUI : IDisposable
     }
 
     /// <summary>
-    ///  When all the DesignerActions have been removed for a particular object, we remove any UI (glyphs) that we may have been managing.
+    ///  When all the DesignerActions have been removed for a particular object,
+    ///  we remove any UI (glyphs) that we may have been managing.
     /// </summary>
     internal void RemoveActionGlyph(object? relatedObject)
     {
@@ -520,7 +533,8 @@ internal partial class DesignerActionUI : IDisposable
         _designerActionAdorner.Glyphs.Remove(glyph);
         _componentToGlyph.Remove(relatedObject);
 
-        // we only do this when we're in a transaction, see bug VSWHIDBEY 418709. This is for compat reason - infragistic. if we're not in a transaction, too bad, we don't update the screen
+        // we only do this when we're in a transaction, see bug VSWHIDBEY 418709.
+        // This is for compat reason - infragistic. if we're not in a transaction, too bad, we don't update the screen
         if (_serviceProvider.TryGetService(out IDesignerHost? host) && host.InTransaction)
         {
             host.TransactionClosed += InvalidateGlyphOnLastTransaction;
