@@ -170,7 +170,14 @@ public class ControlDesignerDesignerControlCollectionTests : IDisposable
         public IComponent Component { get; set; }
         public IContainer Container { get; set; }
         public bool DesignMode { get; set; }
-        public string Name { get; set; }
-        public object GetService(Type serviceType) => null;
+        public string? Name { get; set; }
+
+        public MockSite()
+        {
+            Component = new Component();
+            Container = new Container();
+        }
+
+        public object? GetService(Type serviceType) => null;
     }
 }
