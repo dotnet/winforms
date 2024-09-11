@@ -210,20 +210,31 @@ public class ApplicationContextTests
         Assert.Null(context.MainForm);
     }
 
+    private class TestApplicationContext : ApplicationContext
+    {
+        public TestApplicationContext() : base()
+        {
+        }
+
+        public int DisposeCallCount { get; private set; }
+
+        protected override void Dispose(bool disposing)
+        {
+            DisposeCallCount++;
+            base.Dispose(disposing);
+        }
+    }
+
     [WinFormsFact]
     public void Dispose_Invoke_CallsDisposeDisposing()
     {
-        Mock<ApplicationContext> mockContext = new(MockBehavior.Strict);
-        mockContext
-            .Protected()
-            .Setup("Dispose", true)
-            .Verifiable();
-        mockContext.Object.Dispose();
-        mockContext.Protected().Verify("Dispose", Times.Once(), true);
+        TestApplicationContext context = new();
+        context.Dispose();
+        context.DisposeCallCount.Should().Be(1);
 
         // Call again.
-        mockContext.Object.Dispose();
-        mockContext.Protected().Verify("Dispose", Times.Exactly(2), true);
+        context.Dispose();
+        context.DisposeCallCount.Should().Be(2);
     }
 
     [WinFormsFact]
