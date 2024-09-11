@@ -6,11 +6,20 @@ using System.CodeDom;
 namespace System.ComponentModel.Design.Serialization;
 
 /// <summary>
-///  An expression context is an object that is placed on the context stack and contains the most relevant expression during serialization. For example, take the following statement:
+///  An expression context is an object that is placed on the context stack and contains the most
+///  relevant expression during serialization. For example, take the following statement:
 ///  button1.Text = "Hello";
-///  During serialization several serializers will be responsible for creating this single statement. One of those serializers will be responsible for writing "Hello". There are times when that serializer may need to know the context in which it is creating its expression. In the above example, this isn't needed, but take this slightly modified example:
+///  During serialization several serializers will be responsible for creating this single statement.
+///  One of those serializers will be responsible for writing "Hello".
+///  There are times when that serializer may need to know the context in which it is creating its expression.
+///  In the above example, this isn't needed, but take this slightly modified example:
 ///  button1.Text = rm.GetString("button1_Text");
-///  Here, the serializer responsible for writing the resource expression needs to know the names of the target objects. The ExpressionContext class can be used for this. As each serializer creates an expression and invokes a serializer to handle a smaller part of the statement as a whole, the serializer pushes an expression context on the context stack. Each expression context has a parent property that locates the next expression context on the stack, which provides a way for easy traversal.
+///  Here, the serializer responsible for writing the resource expression needs to know the names of the target objects.
+///  The ExpressionContext class can be used for this. As each serializer creates an expression and
+///  invokes a serializer to handle a smaller part of the statement as a whole,
+///  the serializer pushes an expression context on the context stack.
+///  Each expression context has a parent property that locates the next expression context on the stack,
+///  which provides a way for easy traversal.
 /// </summary>
 public sealed class ExpressionContext
 {
@@ -33,7 +42,7 @@ public sealed class ExpressionContext
 
     /// <summary>
     ///  The type of the expression. This can be used to determine if a
-    ///  cast is needed when assigning  to the expression.
+    ///  cast is needed when assigning to the expression.
     /// </summary>
     public Type ExpressionType { get; }
 

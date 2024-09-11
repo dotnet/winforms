@@ -253,7 +253,9 @@ internal partial class DesignerActionUI
 
         protected override bool ProcessDialogKey(Keys keyData)
         {
-            // since we're not hosted in a form we need to do the same logic as Form.cs. If we get an enter key we need to find the current focused control. if it's a button, we click it and return that we handled the message
+            // since we're not hosted in a form we need to do the same logic as Form.cs.
+            // If we get an enter key we need to find the current focused control.
+            // if it's a button, we click it and return that we handled the message
             if (keyData == Keys.Enter)
             {
                 HWND focusedControlPtr = PInvoke.GetFocus();

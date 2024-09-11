@@ -18,7 +18,8 @@ public partial class Dialogs : Form
     {
         InitializeComponent();
 
-        // expose ClientGuid to be configurable in the property grid by overriding the metadata, but only for these specific instance of the dialogs, not in general
+        // expose ClientGuid to be configurable in the property grid by overriding the metadata,
+        // but only for these specific instance of the dialogs, not in general
         TypeDescriptor.AddProvider(new AssociatedMetadataTypeTypeDescriptionProvider(openFileDialog1.GetType(), typeof(ExposedClientGuidMetadata)), openFileDialog1);
         TypeDescriptor.AddProvider(new AssociatedMetadataTypeTypeDescriptionProvider(saveFileDialog1.GetType(), typeof(ExposedClientGuidMetadata)), saveFileDialog1);
         TypeDescriptor.AddProvider(new AssociatedMetadataTypeTypeDescriptionProvider(folderBrowserDialog1.GetType(), typeof(ExposedClientGuidMetadata)), folderBrowserDialog1);

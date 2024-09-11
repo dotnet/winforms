@@ -526,7 +526,9 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
     }
 
     /// <summary>
-    ///  Set some properties to non-browsable depending on the Parent. (StandAlone ToolStripPanel should support properties that are usually hidden when its a part of ToolStripContainer)
+    ///  Set some properties to non-browsable depending on the Parent.
+    ///  (StandAlone ToolStripPanel should support properties that are
+    ///  usually hidden when its a part of ToolStripContainer)
     /// </summary>
     protected override void PreFilterProperties(IDictionary properties)
     {

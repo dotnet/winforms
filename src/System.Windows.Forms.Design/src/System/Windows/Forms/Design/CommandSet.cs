@@ -1489,7 +1489,8 @@ internal partial class CommandSet : IDisposable
                                     continue;
                                 }
 
-                                // Perf: We suspend Component Changing Events on parent for bulk changes to avoid unnecessary serialization\deserialization for undo
+                                // Perf: We suspend Component Changing Events on parent for bulk changes
+                                // to avoid unnecessary serialization\deserialization for undo
                                 // see bug 488115
                                 Control? parent = c.Parent;
                                 if (parent is not null

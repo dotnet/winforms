@@ -4,7 +4,7 @@
 namespace System.ComponentModel.Design;
 
 /// <summary>
-///  A service container that supports "fixed" services. Fixed  services cannot be removed.
+///  A service container that supports "fixed" services. Fixed services cannot be removed.
 /// </summary>
 internal sealed class DesignSurfaceServiceContainer : ServiceContainer
 {

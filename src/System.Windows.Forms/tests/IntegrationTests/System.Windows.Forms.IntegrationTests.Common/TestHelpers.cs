@@ -221,10 +221,13 @@ public static class TestHelpers
     }
 
     /// <summary>
-    ///  Looks backwards form the current executing directory until it finds a sibling directory seek, then returns the full path of that sibling
+    ///  Looks backwards form the current executing directory until it finds a sibling directory seek,
+    ///  then returns the full path of that sibling.
     /// </summary>
     /// <param name="seek">The sibling directory to look for</param>
-    /// <returns>The full path of the first sibling directory by the current executing directory, away from the root</returns>
+    /// <returns>
+    ///  The full path of the first sibling directory by the current executing directory, away from the root.
+    /// </returns>
     private static string RelativePathBackwardsUntilFind(string seek)
     {
         if (string.IsNullOrEmpty(seek))
