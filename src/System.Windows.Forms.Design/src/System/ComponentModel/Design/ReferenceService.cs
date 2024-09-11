@@ -59,7 +59,9 @@ internal sealed class ReferenceService : IReferenceService, IDisposable
     [MemberNotNull(nameof(_references))]
     private void EnsureReferences()
     {
-        // If the references are null, create them for the first time and connect up our events to listen to changes to the container. Otherwise, check to see if the added or removed lists contain anything for us to sync up.
+        // If the references are null, create them for the first time and
+        // connect up our events to listen to changes to the container.
+        // Otherwise, check to see if the added or removed lists contain anything for us to sync up.
         if (_references is null)
         {
             ObjectDisposedException.ThrowIf(_provider is null, typeof(IReferenceService));

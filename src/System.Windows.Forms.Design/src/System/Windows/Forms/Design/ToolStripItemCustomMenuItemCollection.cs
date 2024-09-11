@@ -395,13 +395,15 @@ internal class ToolStripItemCustomMenuItemCollection : CustomMenuItemCollection
             }
 
             parent.Items.Insert(dummyIndex, (ToolStripItem)component);
-            // set the selection to our new item.. since we destroyed Original component.. we have to ask SelectionService from new Component
+            // set the selection to our new item.. since we destroyed Original component..
+            // we have to ask SelectionService from new Component
             ISelectionService selSvc = (ISelectionService)_serviceProvider.GetService(typeof(ISelectionService));
             selSvc?.SetSelectedComponents(new object[] { component }, SelectionTypes.Replace);
         }
         catch (Exception ex)
         {
-            // We need to cancel the ToolStripDesigner's nested MenuItemTransaction; otherwise, we can't cancel our Transaction and the Designer will be left in an unusable state
+            // We need to cancel the ToolStripDesigner's nested MenuItemTransaction; otherwise,
+            // we can't cancel our Transaction and the Designer will be left in an unusable state
             if ((parent is not null) && (parent.OwnerItem is not null) && (parent.OwnerItem.Owner is not null))
             {
                 if (designerHost.GetDesigner(parent.OwnerItem.Owner) is ToolStripDesigner toolStripDesigner)

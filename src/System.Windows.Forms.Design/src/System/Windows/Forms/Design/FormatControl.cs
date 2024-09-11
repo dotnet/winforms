@@ -355,7 +355,8 @@ internal partial class FormatControl : UserControl
         thirdRowLabel.AutoSize = true;
         tableLayoutPanel1.ResumeLayout(performLayout: true);
 
-        // Now that PerformLayout set the bounds for the tableLayoutPanel we can use these bounds to specify the tableLayoutPanel minimumSize.
+        // Now that PerformLayout set the bounds for the tableLayoutPanel we can use these bounds
+        // to specify the tableLayoutPanel minimumSize.
         tableLayoutPanel1.MinimumSize = new Drawing.Size(tableLayoutPanel1.Width, tableLayoutPanel1.Height);
     }
 

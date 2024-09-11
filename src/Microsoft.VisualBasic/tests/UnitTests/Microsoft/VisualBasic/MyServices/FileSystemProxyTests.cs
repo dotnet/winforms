@@ -650,7 +650,10 @@ public class FileSystemProxyTests : FileCleanupTestBase
         string NewFDirectoryPath = Path.Combine(TestDirectory, "NewFDirectory");
         Assert.True(Directory.Exists(NewFDirectoryPath));
         Assert.False(Directory.Exists(OrigDirectoryWithPath));
-        // <exception cref="IO.IOException">If directory points to a root directory or if there's an existing directory or an existing file with the same name.</exception>
+        // <exception cref="IO.IOException">
+        //  If directory points to a root directory or if there's an existing directory or
+        //  an existing file with the same name.
+        // </exception>
         Directory.CreateDirectory(OrigDirectoryWithPath);
         Assert.Throws<IOException>(() => _fileSystem.RenameDirectory(NewFDirectoryPath, "OriginalDirectory"));
     }

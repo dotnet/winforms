@@ -45,7 +45,8 @@ public partial class DataBindingExample : Form
             new(4, "StudentD", "Male", 12124, "1004", "Football", true, 10, 11),
         };
 
-        // Binding Data For TextBox/Label/DomainUpDown/NumericUpDown/LinkLabel/CheckBox/RadioButton/RichTextBox/MaskedTextBox/Button controls by using DadaBindings property
+        // Binding Data For TextBox/Label/DomainUpDown/NumericUpDown/LinkLabel/CheckBox/RadioButton/RichTextBox/MaskedTextBox/Button
+        // controls by using DadaBindings property
         Student stu = new(1, "Number", "Female", 12121, "HomeNumber", "Habits\nBasketball\nFootball", true, 10, 11);
         textBox1.DataBindings.Add("Text", stu, "StudentNumber");
         domainUpDown1.DataBindings.Add("Text", stu, "LuckyNumber");

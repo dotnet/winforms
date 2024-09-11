@@ -162,7 +162,7 @@ internal sealed class DesignerActionGlyph : Glyph
     }
 
     /// <summary>
-    ///  Used to manage the mouse-pointer-is-over-glyph state. If this is true,  then we will shade our BoxImage
+    ///  Used to manage the mouse-pointer-is-over-glyph state. If this is true, then we will shade our BoxImage
     ///  in the Paint logic.
     /// </summary>
     private bool MouseOver
@@ -180,7 +180,7 @@ internal sealed class DesignerActionGlyph : Glyph
     }
 
     /// <summary>
-    ///  Responds to a paint event. This Glyph will paint its current image and, if  MouseHover is true,
+    ///  Responds to a paint event. This Glyph will paint its current image and, if MouseHover is true,
     ///  we'll paint over the image with the 'hoverBrush'.
     /// </summary>
     public override void Paint(PaintEventArgs pe)

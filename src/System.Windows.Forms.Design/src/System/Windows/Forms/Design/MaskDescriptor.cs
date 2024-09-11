@@ -47,7 +47,8 @@ public abstract class MaskDescriptor
     ///   2. Not null or empty mask.
     ///   3. Not null or empty name.
     ///   4. Not null or empty sample.
-    ///   5. The sample is correct based on the mask and all required edit characters have been provided (mask completed - not necessarily full).
+    ///   5. The sample is correct based on the mask and all required edit characters have been provided
+    ///      (mask completed - not necessarily full).
     ///   6. The sample is valid based on the ValidatingType object (if any).
     /// </summary>
     public static bool IsValidMaskDescriptor([NotNullWhen(true)] MaskDescriptor? maskDescriptor)

@@ -180,7 +180,8 @@ public class ListViewLabelEditAccessibleObjectTests
         {
             if (disposing)
             {
-                // End the label edit because ListView cannot be correctly disposed with an active label edit when AccessibilityObject is created for the ListView
+                // End the label edit because ListView cannot be correctly disposed with an active label edit when
+                // AccessibilityObject is created for the ListView
                 PInvoke.SendMessage(this, PInvoke.LVM_CANCELEDITLABEL);
             }
 

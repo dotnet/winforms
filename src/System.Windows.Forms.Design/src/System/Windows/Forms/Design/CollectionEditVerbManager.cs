@@ -11,7 +11,8 @@ using System.Drawing.Design;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-///  Class for sharing code for launching the ToolStripItemsCollectionEditor from a verb. This class implements the IWindowsFormsEditorService and ITypeDescriptorContext to display the dialog.
+///  Class for sharing code for launching the ToolStripItemsCollectionEditor from a verb.
+///  This class implements the IWindowsFormsEditorService and ITypeDescriptorContext to display the dialog.
 /// </summary>
 internal class CollectionEditVerbManager : IWindowsFormsEditorService, ITypeDescriptorContext
 {

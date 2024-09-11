@@ -1843,8 +1843,12 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     public SizeF MeasureString(ReadOnlySpan<char> text, Font font, SizeF layoutArea) => MeasureString(text, font, layoutArea, null);
 #endif
 
-    /// <param name="stringFormat"><see cref="StringFormat"/> that represents formatting information, such as line spacing, for the text.</param>
-    /// <param name="layoutArea"><see cref="SizeF"/> structure that specifies the maximum layout area for the text.</param>
+    /// <param name="stringFormat">
+    ///  <see cref="StringFormat"/> that represents formatting information, such as line spacing, for the text.
+    /// </param>
+    /// <param name="layoutArea">
+    ///  <see cref="SizeF"/> structure that specifies the maximum layout area for the text.
+    /// </param>
     /// <inheritdoc cref="MeasureString(string?, Font, int, StringFormat?)"/>
     public SizeF MeasureString(string? text, Font font, SizeF layoutArea, StringFormat? stringFormat) =>
         MeasureStringInternal(text, font, new(default, layoutArea), stringFormat, out _, out _);
@@ -1896,7 +1900,9 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
         MeasureString(text, font, new SizeF(width, 999999));
 #endif
 
-    /// <param name="format"><see cref="StringFormat"/> that represents formatting information, such as line spacing, for the text.</param>
+    /// <param name="format">
+    ///  <see cref="StringFormat"/> that represents formatting information, such as line spacing, for the text.
+    /// </param>
     /// <inheritdoc cref="MeasureString(string?, Font, int)"/>
     public SizeF MeasureString(string? text, Font font, int width, StringFormat? format) =>
         MeasureString(text, font, new SizeF(width, 999999), format);

@@ -22,7 +22,8 @@ internal class ListViewDesigner : ControlDesigner
 
     /// <summary>
     ///  <para>
-    ///  Retrieves a list of associated components. These are components that should be included in a cut or copy operation on this component.
+    ///  Retrieves a list of associated components.
+    ///  These are components that should be included in a cut or copy operation on this component.
     ///  </para>
     /// </summary>
     public override ICollection AssociatedComponents

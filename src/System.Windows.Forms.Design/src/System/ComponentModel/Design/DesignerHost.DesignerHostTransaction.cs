@@ -6,7 +6,7 @@ namespace System.ComponentModel.Design;
 internal sealed partial class DesignerHost
 {
     /// <summary>
-    ///  DesignerHostTransaction is our implementation of the  DesignerTransaction abstract class.
+    ///  DesignerHostTransaction is our implementation of the DesignerTransaction abstract class.
     /// </summary>
     private sealed class DesignerHostTransaction : DesignerTransaction
     {
