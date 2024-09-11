@@ -234,7 +234,8 @@ internal static unsafe partial class ComHelpers
     }
 
     /// <summary>
-    ///  Returns <see langword="true"/> if the given <paramref name="object"/> is projected as the given <paramref name="comPointer"/>.
+    ///  Returns <see langword="true"/> if the given <paramref name="object"/>
+    ///  is projected as the given <paramref name="comPointer"/>.
     /// </summary>
     internal static bool WrapsManagedObject<T>(object @object, T* comPointer)
         where T : unmanaged, IComIID

@@ -6,7 +6,8 @@ using System.Collections;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-///  Returns an enumeration of windows and flags of how their scrollbars need to be themed when the designer is running inside Visual Studio.
+///  Returns an enumeration of windows and flags of how their scrollbars need to be themed
+///  when the designer is running inside Visual Studio.
 /// </summary>
 public interface IContainsThemedScrollbarWindows
 {

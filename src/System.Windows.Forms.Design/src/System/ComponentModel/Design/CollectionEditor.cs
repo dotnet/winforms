@@ -214,7 +214,7 @@ public partial class CollectionEditor : UITypeEditor
     }
 
     /// <summary>
-    ///  Edits the specified object value using the editor style  provided by <see cref="GetEditStyle"/>.
+    ///  Edits the specified object value using the editor style provided by <see cref="GetEditStyle"/>.
     /// </summary>
     public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
     {
@@ -297,7 +297,7 @@ public partial class CollectionEditor : UITypeEditor
         // If the object implements IComponent, and is not sited, check with the inheritance service (if it exists)
         // to see if this is a component that is being inherited from another class. If it is, then we do not want
         // to place it in the collection editor. If the inheritance service chose not to site the component, that
-        // indicates it should be hidden from  the user.
+        // indicates it should be hidden from the user.
 
         IInheritanceService? inheritanceService = null;
         bool isInheritanceServiceInitialized = false;

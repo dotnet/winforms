@@ -112,7 +112,7 @@ internal partial struct PRINTDLGW_64
     ///   <b>PD_RETURNDC</b> has priority.
     ///  </para>
     ///  <para>
-    ///  <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgw#members">
+    ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgw#members">
     ///    Read more on learn.microsoft.com.
     ///   </see>
     ///  </para>
@@ -246,7 +246,7 @@ internal partial struct PRINTDLGW_64
     ///   This member is ignored unless the <b>PD_ENABLEPRINTHOOK</b> flag is set in the <b>Flags</b> member.
     ///  </para>
     ///  <para>
-    ///  <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgw#members">
+    ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgw#members">
     ///    Read more on learn.microsoft.com.
     ///   </see>
     ///  </para>

@@ -30,8 +30,11 @@ namespace System.Resources.Tools;
 ///   <see cref="ResourceManager.GetObject(string)"/> methods.
 ///  </para>
 ///  <para>
-///   The basic functionality for strongly typed resource support is provided by the <see cref="StronglyTypedResourceBuilder"/>
-///   class (as well as the /str command-line option in the <seealso href="https://docs.microsoft.com/dotnet/framework/tools/resgen-exe-resource-file-generator">Resgen.exe(Resource File Generator)</seealso>).
+///   The basic functionality for strongly typed resource support is provided by th
+///   <see cref="StronglyTypedResourceBuilder"/> class (as well as the /str command-line option in the
+///   <seealso href="https://docs.microsoft.com/dotnet/framework/tools/resgen-exe-resource-file-generator">
+///    Resgen.exe(Resource File Generator)
+///   </seealso>).
 ///   The output of the <see cref="Create(IDictionary, string, string, CodeDomProvider, bool, out string[])"/> method
 ///   is a class that contains strongly typed properties that match the resources that are referenced in the input
 ///   parameter. This class provides read-only access to the resources that are available in the file processed.

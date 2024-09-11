@@ -98,7 +98,10 @@ internal sealed partial class DesignerActionPanel
             }
 
             /// <summary>
-            ///  General purpose method, based on Control.Contains()... Determines whether a given window (specified using native window handle) is a descendant of this control. This catches both contained descendants and 'owned' windows such as modal dialogs. Using window handles rather than Control objects allows it to catch un-managed windows as well.
+            ///  General purpose method, based on Control.Contains()...
+            ///  Determines whether a given window (specified using native window handle) is a descendant of this control.
+            ///  This catches both contained descendants and 'owned' windows such as modal dialogs.
+            ///  Using window handles rather than Control objects allows it to catch un-managed windows as well.
             /// </summary>
             private bool OwnsWindow(HWND hWnd)
             {
@@ -153,7 +156,8 @@ internal sealed partial class DesignerActionPanel
                 {
                     PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, IntPtr.Zero);
 
-                    // sometimes activation goes to LALA land - if our parent control is still  around, remind it to take focus.
+                    // sometimes activation goes to LALA land - if our parent control is still around,
+                    // remind it to take focus.
                     if (parent is not null && parent.Visible)
                     {
                         parent.Focus();

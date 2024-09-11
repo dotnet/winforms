@@ -215,7 +215,10 @@ public sealed partial class CodeDomComponentSerializationService
 
             bool recycleInstances = objects is null;
 
-            // RecycleInstances is used so that we re-use objects already in the container. PreserveNames is used raise errors in the case of duplicate names. We only care about name preservation when we are recycling instances. Otherwise, we'd prefer to create objects with different names.
+            // RecycleInstances is used so that we re-use objects already in the container.
+            // PreserveNames is used raise errors in the case of duplicate names.
+            // We only care about name preservation when we are recycling instances.
+            // Otherwise, we'd prefer to create objects with different names.
             delegator.Manager.RecycleInstances = recycleInstances;
             delegator.Manager.PreserveNames = recycleInstances;
             delegator.Manager.ValidateRecycledTypes = validateRecycledTypes;

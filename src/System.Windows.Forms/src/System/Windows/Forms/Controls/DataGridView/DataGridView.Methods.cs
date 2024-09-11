@@ -364,7 +364,7 @@ public partial class DataGridView
         Debug.Assert(autoSizeColumnCriteriaFilter != DataGridViewAutoSizeColumnCriteriaInternal.None);
         Debug.Assert((autoSizeColumnCriteriaFilter & DataGridViewAutoSizeColumnCriteriaInternal.Fill) == 0);
 
-        bool ret = false; // No column autosizes by default
+        bool ret = false; // No column auto sizing by default
         DataGridViewColumn? dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
         while (dataGridViewColumn is not null)
         {
@@ -392,7 +392,6 @@ public partial class DataGridView
             or DataGridViewAutoSizeRowsMode.DisplayedCellsExceptHeaders
             or DataGridViewAutoSizeRowsMode.DisplayedCells);
 
-        // Use of WindowsFormsUtils.CreateMeasurementGraphics() avoid use of this.Handle
         int width = 0;
         DataGridViewCell dataGridViewCell;
         if (columnIndex > -1 && (((DataGridViewAutoSizeRowsModeInternal)_autoSizeRowsMode) & DataGridViewAutoSizeRowsModeInternal.AllColumns) != 0)
@@ -1691,7 +1690,7 @@ public partial class DataGridView
         Debug.Assert(autoSizeColumnCriteriaFilter != DataGridViewAutoSizeColumnCriteriaInternal.None);
         Debug.Assert((autoSizeColumnCriteriaFilter & DataGridViewAutoSizeColumnCriteriaInternal.Fill) == 0);
 
-        bool ret = false; // No column autosizes by default
+        bool ret = false; // No column auto sizing by default
         DataGridViewColumn? dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
         while (dataGridViewColumn is not null)
         {
@@ -10982,7 +10981,7 @@ public partial class DataGridView
 
         if (!fixedColumnWidth)
         {
-            // This is the first time the column autosizes. Save current column width for later reuse.
+            // This is the first time the column auto sizes. Save current column width for later reuse.
             dataGridViewColumn.CachedThickness = dataGridViewColumn.Thickness;
             AutoResizeColumnInternal(
                 dataGridViewColumn.Index,
@@ -14801,7 +14800,7 @@ public partial class DataGridView
                 if (autoSizeColumnMode is not DataGridViewAutoSizeColumnMode.None
                     and not DataGridViewAutoSizeColumnMode.Fill)
                 {
-                    // Column autosizes
+                    // Column auto size
                     int width = dataGridViewColumn.ThicknessInternal;
                     if (dataGridViewColumn.Visible)
                     {

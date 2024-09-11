@@ -50,7 +50,7 @@ internal partial class CommandSet
             }
 
             /// <summary>
-            /// Updates this status object  with the state from the given item,
+            /// Updates this status object with the state from the given item,
             /// and saves the selection version.
             /// </summary>
             internal void SaveState(CommandSetItem item, int version)

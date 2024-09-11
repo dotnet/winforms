@@ -11,7 +11,11 @@ namespace Windows.Win32.Foundation;
 ///   any conversion in <see cref="Color"/>, <see cref="ColorTranslator"/>, etc. as they can change the value.
 ///   <see cref="COLORREF"/> is a DWORD- passing constants in native code would just pass the value as is.
 ///  </para>
-///  <para><see href="https://learn.microsoft.com/windows/win32/gdi/colorref#">Read more on learn.microsoft.com.</see></para>
+///  <para>
+///   <see href="https://learn.microsoft.com/windows/win32/gdi/colorref#">
+///    Read more on learn.microsoft.com.
+///   </see>
+///  </para>
 /// </remarks>
 internal readonly partial struct COLORREF
 {
