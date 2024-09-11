@@ -4,9 +4,8 @@
 Imports Microsoft.VisualBasic.CompilerServices
 
 Namespace Microsoft.VisualBasic.Devices
-    Partial Public Class ComputerInfo
 
-#Enable Warning IDE0049
+    Partial Public Class ComputerInfo
 
         ''' <summary>
         '''  Calls GlobalMemoryStatusEx and returns the correct value.
@@ -52,7 +51,7 @@ Namespace Microsoft.VisualBasic.Devices
             Private Sub Refresh()
                 _memoryStatusEx = New NativeMethods.MEMORYSTATUSEX
                 _memoryStatusEx.Init()
-                If (Not NativeMethods.GlobalMemoryStatusEx(_memoryStatusEx)) Then
+                If Not NativeMethods.GlobalMemoryStatusEx(_memoryStatusEx) Then
                     Throw ExceptionUtils.GetWin32Exception(SR.DiagnosticInfo_Memory)
                 End If
             End Sub

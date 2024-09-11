@@ -358,7 +358,7 @@ internal class ToolStripDesigner : ControlDesigner
     }
 
     /// <summary>
-    ///  This is the new item Transaction. This is used when the Insitu editor adds new Item.
+    ///  This is the new item Transaction. This is used when the InSitu editor adds new Item.
     /// </summary>
     public DesignerTransaction NewItemTransaction
     {
@@ -1276,7 +1276,7 @@ internal class ToolStripDesigner : ControlDesigner
             object primarySelection = SelectionService.PrimarySelection;
             Behavior.Behavior toolStripBehavior = new ToolStripItemBehavior();
 
-            // Sometimes the Collection changes when the ToolStrip gets the Selection and we are in a dummy insitu
+            // Sometimes the Collection changes when the ToolStrip gets the Selection and we are in a dummy InSitu
             // edit so remove that before accessing the collection
             if (ToolStrip.Items.Count > 0)
             {
@@ -2539,7 +2539,7 @@ internal class ToolStripDesigner : ControlDesigner
                 break;
             case PInvoke.WM_LBUTTONDOWN:
             case PInvoke.WM_RBUTTONDOWN:
-                // commit any insitu if any...
+                // commit any InSitu if any...
                 Commit();
                 base.WndProc(ref m);
                 break;

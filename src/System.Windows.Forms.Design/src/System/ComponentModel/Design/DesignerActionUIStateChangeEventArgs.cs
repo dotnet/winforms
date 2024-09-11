@@ -4,12 +4,14 @@
 namespace System.ComponentModel.Design;
 
 /// <summary>
-///  This EventArgs class is used by the DesignerActionService to signify that there has been a change in DesignerActionLists (added or removed) on the related object.
+///  This EventArgs class is used by the DesignerActionService to signify that there has been a change in
+///  DesignerActionLists (added or removed) on the related object.
 /// </summary>
 public class DesignerActionUIStateChangeEventArgs : EventArgs
 {
     /// <summary>
-    ///  Constructor that requires the object in question, the type of change and the remaining actionlists left for the object on the related object.
+    ///  Constructor that requires the object in question,
+    ///  the type of change and the remaining ActionLists left for the object on the related object.
     /// </summary>
     public DesignerActionUIStateChangeEventArgs(object? relatedObject, DesignerActionUIStateChangeType changeType)
     {

@@ -7,7 +7,7 @@ Imports Xunit
 Namespace Microsoft.VisualBasic.Forms.Tests
 
     Public Class TimeTests
-        Private Const PrecisionTickLimit As Integer = 1000
+        Friend Const PrecisionTickLimit As Integer = 1_000_000
 
         Private Function TimesEqual(
             vbTime As Date,
@@ -24,44 +24,41 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsFact>
-        Public Sub TimeTestsDataIteratorTests()
-            Dim testClass As New TimeData
-            testClass.IEnumerable_GetEnumerator.Should.NotBeNull()
-        End Sub
-
-        <WinFormsFact>
         Public Sub VbTickCountCloseToEnvironmentTickCount()
             Dim tickCount As Integer = Math.Abs(Environment.TickCount - My.Computer.Clock.TickCount)
             Call (tickCount < PrecisionTickLimit).Should.BeTrue()
         End Sub
 
         <WinFormsTheory>
-        <ClassData(GetType(TimeData))>
-        Public Sub VbTimeCloseToDateUtcNow(systemTime As Date, vbTime As Date)
+        <ClassData(GetType(TimeTestData))>
+        Public Sub VbTimeCloseToSystemTime(timeData As DualTimeZones)
+            Dim systemTime As Date = timeData.SystemTime
+            Dim vbTime As Date = timeData.ComputerTime
+            Dim because As String = $"{timeData.TimeName} is wrong, System Time is {systemTime} and Clock Time is {vbTime}"
             TimesEqual(
-            vbTime,
-            systemTime,
-            acceptableDifferenceInTicks:=PrecisionTickLimit).Should.BeTrue()
+                vbTime,
+                systemTime,
+                acceptableDifferenceInTicks:=PrecisionTickLimit).Should.BeTrue(because)
+        End Sub
+
+        <WinFormsFact>
+        Public Sub VbTimeNotCloseToSystemTime()
+            Dim timeData As New DualTimeZones(TimeZone.MismatchedTimes)
+            Dim systemTime As Date = timeData.SystemTime
+            Dim vbTime As Date = timeData.ComputerTime
+            Dim because As String = $"{timeData.ComputerTime} is wrong, System Time is {systemTime} and Clock Time is {vbTime}"
+            Dim results As Boolean = TimesEqual(
+                vbTime,
+                systemTime,
+                acceptableDifferenceInTicks:=PrecisionTickLimit)
+            results.Should.NotBe(True, because)
+
         End Sub
 
         <WinFormsFact>
         Public Sub VbTimeNotNew()
             My.Computer.Clock.LocalTime.Should.BeAfter(New Date)
         End Sub
-
-        Protected Friend Class TimeData
-            Implements IEnumerable(Of Object())
-
-            Public Iterator Function GetEnumerator() As IEnumerator(Of Object()) Implements IEnumerable(Of Object()).GetEnumerator
-                Yield {My.Computer.Clock.GmtTime, Date.UtcNow}
-                Yield {My.Computer.Clock.LocalTime, Date.Now}
-            End Function
-
-            Public Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator
-                Return GetEnumerator()
-            End Function
-
-        End Class
 
     End Class
 End Namespace

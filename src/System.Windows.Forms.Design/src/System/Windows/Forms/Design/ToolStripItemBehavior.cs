@@ -98,7 +98,7 @@ internal class ToolStripItemBehavior : Behavior.Behavior
         }
     }
 
-    // Tries to put the item in the Insitu edit mode after the double click timer has ticked
+    // Tries to put the item in the InSitu edit mode after the double click timer has ticked
     private static void EnterInSituMode(ToolStripItemGlyph glyph)
     {
         if (glyph.ItemDesigner is not null && !glyph.ItemDesigner.IsEditorActive)
@@ -185,7 +185,7 @@ internal class ToolStripItemBehavior : Behavior.Behavior
         return (mouseHandler is not null);
     }
 
-    // Occurs when the timer ticks after user has doubleclicked an item
+    // Occurs when the timer ticks after user has double clicked an item
     private void OnDoubleClickTimerTick(object sender, EventArgs e)
     {
         if (_timer is not null)
@@ -195,7 +195,7 @@ internal class ToolStripItemBehavior : Behavior.Behavior
             _timer.Dispose();
             _timer = null;
 
-            // Enter Insitu
+            // Enter InSitu
             if (_selectedGlyph is not null && _selectedGlyph.Item is ToolStripMenuItem)
             {
                 EnterInSituMode(_selectedGlyph);

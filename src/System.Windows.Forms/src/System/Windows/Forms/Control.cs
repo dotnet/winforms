@@ -2282,7 +2282,7 @@ public unsafe partial class Control :
                         }
 
                         // #32770 is the standard windows dialog class name
-                        // https://learn.Microsoft.com/windows/win32/winmsg/about-window-classes#system-classes
+                        // https://learn.microsoft.com/windows/win32/winmsg/about-window-classes#system-classes
                         ReadOnlySpan<char> className = "#32770";
                         if (className.Equals(buffer[..length], StringComparison.Ordinal))
                         {
@@ -11166,10 +11166,10 @@ public unsafe partial class Control :
         //
         // See:
         //
-        // https://learn.Microsoft.com/cpp/mfc/tn061-on-notify-and-wm-notify-messages
-        // https://learn.Microsoft.com/cpp/mfc/tn062-message-reflection-for-windows-controls?view=msvc-170
-        // https://learn.Microsoft.com/windows/win32/controls/wm-notify
-        // https://learn.Microsoft.com/windows/win32/controls/wm-drawitem
+        // https://learn.microsoft.com/cpp/mfc/tn061-on-notify-and-wm-notify-messages
+        // https://learn.microsoft.com/cpp/mfc/tn062-message-reflection-for-windows-controls?view=msvc-170
+        // https://learn.microsoft.com/windows/win32/controls/wm-notify
+        // https://learn.microsoft.com/windows/win32/controls/wm-drawitem
 
         if (!Disposing && IsHandleCreated)
         {

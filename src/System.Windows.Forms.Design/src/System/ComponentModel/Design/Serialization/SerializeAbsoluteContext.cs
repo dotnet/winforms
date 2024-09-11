@@ -35,7 +35,8 @@ public sealed class SerializeAbsoluteContext
     }
 
     /// <summary>
-    ///  This property returns the member this context is bound to. It may be null to indicate the context is bound to all members of an object.
+    ///  This property returns the member this context is bound to.
+    ///  It may be null to indicate the context is bound to all members of an object.
     /// </summary>
     public MemberDescriptor? Member { get; }
 
