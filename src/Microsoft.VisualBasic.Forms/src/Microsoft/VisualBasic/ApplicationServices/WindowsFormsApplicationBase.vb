@@ -13,7 +13,6 @@ Imports System.Threading
 Imports System.Windows.Forms
 Imports System.Windows.Forms.Analyzers.Diagnostics
 
-Imports Utils = Microsoft.VisualBasic.CompilerServices.Utils
 Imports VbUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.ApplicationServices
@@ -310,7 +309,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
                 ' Allow for the case where they set splash screen = nothing and mainForm is currently nothing.
                 If value IsNot Nothing AndAlso value Is _appContext.MainForm Then
-                    Throw New ArgumentException(Utils.GetResourceString(SR.AppModel_SplashAndMainFormTheSame))
+                    Throw New ArgumentException(VbUtils.GetResourceString(SR.AppModel_SplashAndMainFormTheSame))
                 End If
 
                 _splashScreen = value
@@ -329,7 +328,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     Throw VbUtils.GetArgumentNullException("MainForm", SR.General_PropertyNothing, "MainForm")
                 End If
                 If value Is _splashScreen Then
-                    Throw New ArgumentException(Utils.GetResourceString(SR.AppModel_SplashAndMainFormTheSame))
+                    Throw New ArgumentException(VbUtils.GetResourceString(SR.AppModel_SplashAndMainFormTheSame))
                 End If
                 _appContext.MainForm = value
             End Set
@@ -803,7 +802,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
             RaiseEvent ApplyApplicationDefaults(Me, applicationDefaultsEventArgs)
 
-            If (applicationDefaultsEventArgs.Font IsNot Nothing) Then
+            If applicationDefaultsEventArgs.Font IsNot Nothing Then
                 Application.SetDefaultFont(applicationDefaultsEventArgs.Font)
             End If
 
@@ -828,7 +827,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             Debug.Assert(dpiSetResult, "We could net set the HighDpiMode.")
 
             ' Now, let's set VisualStyles and ColorMode:
-            If (_enableVisualStyles) Then
+            If _enableVisualStyles Then
                 Application.EnableVisualStyles()
             End If
 
