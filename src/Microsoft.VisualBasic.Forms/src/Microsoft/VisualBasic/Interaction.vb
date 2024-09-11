@@ -8,8 +8,8 @@ Imports System.Threading
 Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.CompilerServices
 
-Imports VbUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 Imports NativeMethods = Microsoft.VisualBasic.CompilerServices.NativeMethods
+Imports VbUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic
 
@@ -21,12 +21,12 @@ Namespace Microsoft.VisualBasic
             '  if no window with name (full or truncated) or task id, return an error
             '  if the window is not enabled or not visible, get the first window owned by it that is not enabled or not visible
             Dim hwndOwned As IntPtr
-            If (Not SafeNativeMethods.IsWindowEnabled(hwndApp) OrElse Not SafeNativeMethods.IsWindowVisible(hwndApp)) Then
+            If Not SafeNativeMethods.IsWindowEnabled(hwndApp) OrElse Not SafeNativeMethods.IsWindowVisible(hwndApp) Then
                 '  scan to the next window until failure
                 hwndOwned = NativeMethods.GetWindow(hwndApp, NativeTypes.GW_HWNDFIRST)
                 Do While IntPtr.op_Inequality(hwndOwned, IntPtr.Zero)
                     If IntPtr.op_Equality(NativeMethods.GetWindow(hwndOwned, NativeTypes.GW_OWNER), hwndApp) Then
-                        If (Not SafeNativeMethods.IsWindowEnabled(hwndOwned) OrElse Not SafeNativeMethods.IsWindowVisible(hwndOwned)) Then
+                        If Not SafeNativeMethods.IsWindowEnabled(hwndOwned) OrElse Not SafeNativeMethods.IsWindowVisible(hwndOwned) Then
                             hwndApp = hwndOwned
                             hwndOwned = NativeMethods.GetWindow(hwndApp, NativeTypes.GW_HWNDFIRST)
                         Else
@@ -108,7 +108,7 @@ Namespace Microsoft.VisualBasic
             'or keyboard input
             Dim windowHandle As IntPtr = NativeMethods.GetWindow(NativeMethods.GetDesktopWindow(), NativeTypes.GW_CHILD)
 
-            Do While (IntPtr.op_Inequality(windowHandle, IntPtr.Zero))
+            Do While IntPtr.op_Inequality(windowHandle, IntPtr.Zero)
                 SafeNativeMethods.GetWindowThreadProcessId(windowHandle, processIdOwningWindow)
                 If (processIdOwningWindow = ProcessId) AndAlso SafeNativeMethods.IsWindowEnabled(windowHandle) AndAlso SafeNativeMethods.IsWindowVisible(windowHandle) Then
                     Exit Do 'We found a window belonging to the desired process that we can actually activate and will support user input
@@ -124,7 +124,7 @@ Namespace Microsoft.VisualBasic
 
                 Do While IntPtr.op_Inequality(windowHandle, IntPtr.Zero)
                     SafeNativeMethods.GetWindowThreadProcessId(windowHandle, processIdOwningWindow)
-                    If (processIdOwningWindow = ProcessId) Then
+                    If processIdOwningWindow = ProcessId Then
                         Exit Do
                     End If
 
@@ -306,11 +306,11 @@ Namespace Microsoft.VisualBasic
             Dim safeThreadHandle As New NativeTypes.LateInitSafeHandleZeroOrMinusOneIsInvalid()
             Dim errorCode As Integer = 0
 
-            If (PathName Is Nothing) Then
+            If PathName Is Nothing Then
                 Throw New ArgumentNullException(Utils.GetResourceString(SR.Argument_InvalidNullValue1, "Pathname"))
             End If
 
-            If (Style < 0 OrElse Style > 9) Then
+            If Style < 0 OrElse Style > 9 Then
                 Throw New ArgumentException(Utils.GetResourceString(SR.Argument_InvalidValue1, "Style"))
             End If
 
@@ -337,7 +337,7 @@ Namespace Microsoft.VisualBasic
                 End If
 
                 Try
-                    If (ok <> 0) Then
+                    If ok <> 0 Then
                         If Wait Then
                             ' Is infinite wait okay here ?
                             ' This is okay since this is marked as requiring the HostPermission with ExternalProcessMgmt rights

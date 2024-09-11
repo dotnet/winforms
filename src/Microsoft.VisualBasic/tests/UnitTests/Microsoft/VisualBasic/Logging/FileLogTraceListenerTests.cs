@@ -8,7 +8,7 @@ public class FileLogTraceListenerTests : FileCleanupTestBase
     [Fact]
     public void Properties()
     {
-        FileLogTraceListener listener = new();
+        using FileLogTraceListener listener = new();
         _ = listener.Location;
         _ = listener.AutoFlush;
         _ = listener.IncludeHostName;
@@ -28,7 +28,7 @@ public class FileLogTraceListenerTests : FileCleanupTestBase
     public void Write()
     {
         TraceEventCache cache = new();
-        FileLogTraceListener listener = new()
+        using FileLogTraceListener listener = new()
         {
             Location = LogFileLocation.Custom,
             CustomLocation = GetTestFilePath()
@@ -36,6 +36,7 @@ public class FileLogTraceListenerTests : FileCleanupTestBase
 
         listener.Write("Write");
         listener.WriteLine("WriteLine");
+        listener.TraceOutputOptions = TraceOptions.LogicalOperationStack | TraceOptions.DateTime | TraceOptions.Timestamp | TraceOptions.ProcessId | TraceOptions.ThreadId;
         listener.TraceEvent(eventCache: cache, source: "Source", eventType: TraceEventType.Warning, id: 3, message: "TraceEvent");
         listener.TraceData(eventCache: cache, source: "Source", eventType: TraceEventType.Error, id: 4, data: "TraceData");
         listener.Flush();
