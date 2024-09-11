@@ -42,18 +42,20 @@ internal static class DesignerUtils
     // Although the selection border is only 1, we actually want a 3 pixel hittestarea
     public static int s_selectionBorderHitArea = ScaleLogicalToDeviceUnitsX(3);
 
-    // We want to make sure that the 1 pixel selectionborder is centered on the handles.
-    // The fact that the border is actually 3 pixels wide works like magic. If you draw a picture, then you will see why.
-    // grabhandle size (diameter)
+    // We want to make sure that the 1 pixel selectionBorder is centered on the handles.
+    // The fact that the border is actually 3 pixels wide works like magic.
+    // If you draw a picture, then you will see why.
+    // GrabHandle size (diameter)
     public static int s_handleSize = ScaleLogicalToDeviceUnitsX(7);
-    // how much should the grabhandle overlap the control
+    // how much should the GrabHandle overlap the control
     public static int s_handleOverlap = ScaleLogicalToDeviceUnitsX(2);
-    // we want the selection border to be centered on a grabhandle, so how much do. we need to offset the border from the control to make that happen
+    // we want the selection border to be centered on a GrabHandle,
+    // so how much do. we need to offset the border from the control to make that happen
     public static int s_selectionBorderOffset = ((s_handleSize - s_selectionBorderSize) / 2) - s_handleOverlap;
 
     // no-resize handle size (diameter)
     public static int s_noResizeHandleSize = ScaleLogicalToDeviceUnitsX(5);
-    // we want the selection border to be centered on a grabhandle, so how much do
+    // we want the selection border to be centered on a GrabHandle, so how much do
     // we need to offset the border from the control to make that happen
     public static int s_noResizeBorderOffset = ((s_noResizeHandleSize - s_selectionBorderSize) / 2);
 
@@ -106,7 +108,8 @@ internal static class DesignerUtils
     public const ContentAlignment AnyMiddleAlignment = ContentAlignment.MiddleLeft | ContentAlignment.MiddleCenter | ContentAlignment.MiddleRight;
 
     /// <summary>
-    ///  Used when the user clicks and drags a toolbox item onto the documentdesigner - this is the small box that is painted beneath the mouse pointer.
+    ///  Used when the user clicks and drags a toolbox item onto the <see cref="DocumentDesigner"/>
+    ///  - this is the small box that is painted beneath the mouse pointer.
     /// </summary>
     public static Image BoxImage
     {
@@ -196,7 +199,7 @@ internal static class DesignerUtils
         g.DrawLine(pen, 0, 1, 0, imageSize.Height - 2);
         g.DrawLine(pen, imageSize.Width - 1, 1, imageSize.Width - 1, imageSize.Height - 2);
 
-        // loop through drawing inner-rects until we get the proper thickness
+        // loop through drawing inner-rectangles until we get the proper thickness
         for (int i = 1; i < borderSize; i++)
         {
             g.DrawRectangle(pen, i, i, imageSize.Width - (2 + i), imageSize.Height - (2 + i));
@@ -332,7 +335,8 @@ internal static class DesignerUtils
     }
 
     /// <summary>
-    ///  Retrieves the width and height of a selection border grab handle. Designers may need this to properly position their user interfaces.
+    ///  Retrieves the width and height of a selection border grab handle.
+    ///  Designers may need this to properly position their user interfaces.
     /// </summary>
     public static Size GetAdornmentDimensions(AdornmentType adornmentType) => adornmentType switch
     {
@@ -399,7 +403,7 @@ internal static class DesignerUtils
 
         using DeviceContextHdcScope destDC = new(gDest, applyGraphicsState: false);
 
-        // Perform our bitblit operation to push the image into the dest bitmap
+        // Perform our BitBlt operation to push the image into the dest bitmap
         PInvokeCore.BitBlt(
             destDC,
             x: 0,
@@ -413,7 +417,8 @@ internal static class DesignerUtils
     }
 
     /// <summary>
-    ///  Uses WM_PRINT to get a snapshot of the control. This method will return true if the control properly responded to the wm_print message.
+    ///  Uses WM_PRINT to get a snapshot of the control. This method will return true
+    ///  if the control properly responded to the wm_print message.
     /// </summary>
     public static bool GenerateSnapShotWithWM_PRINT(Control control, out Bitmap image)
     {
@@ -456,7 +461,8 @@ internal static class DesignerUtils
     }
 
     /// <summary>
-    ///  Used by the Glyphs and ComponentTray to determine the Top, Left, Right, Bottom and Body bound rects related to their original bounds and bordersize.
+    ///  Used by the Glyphs and ComponentTray to determine the Top, Left, Right, Bottom and Body bound rectangles
+    ///  related to their original bounds and borderSize.
     /// </summary>
     public static Rectangle GetBoundsForSelectionType(Rectangle originalBounds, SelectionBorderGlyphType type, int borderSize) =>
         type switch
@@ -470,8 +476,9 @@ internal static class DesignerUtils
         };
 
     /// <summary>
-    ///  Used by the Glyphs and ComponentTray to determine the Top, Left, Right, Bottom and Body bound rects related to their original bounds and bordersize.
-    ///  Offset - how many pixels between the border glyph and the control
+    ///  Used by the Glyphs and ComponentTray to determine the Top, Left, Right, Bottom and Body bound rectangles
+    ///  related to their original bounds and borderSize.
+    ///  Offset - how many pixels between the border glyph and the control.
     /// </summary>
     private static Rectangle GetBoundsForSelectionType(Rectangle originalBounds, SelectionBorderGlyphType type, int bordersize, int offset)
     {
@@ -506,7 +513,8 @@ internal static class DesignerUtils
     }
 
     /// <summary>
-    ///  Used by the Glyphs and ComponentTray to determine the Top, Left, Right, Bottom and Body bound rects related to their original bounds and bordersize.
+    ///  Used by the Glyphs and ComponentTray to determine the Top, Left, Right, Bottom and Body bound rectangles
+    ///  related to their original bounds and borderSize.
     /// </summary>
     public static Rectangle GetBoundsForSelectionType(Rectangle originalBounds, SelectionBorderGlyphType type)
     {

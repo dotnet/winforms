@@ -590,7 +590,7 @@ internal partial class OleDragDropHandler
         // ASURT 43757: By the time we come here, it means that the user completed the drag-drop and
         // we compute the new location/size of the controls if needed and set the property values.
         // We have to stop freezePainting right here, so that controls can get a chance to validate
-        // their new rects.
+        // their new rectangles.
         //
         FreezePainting = false;
 
@@ -859,7 +859,7 @@ internal partial class OleDragDropHandler
     public void DoOleDragEnter(DragEventArgs de)
     {
         /*
-        this causes focus rects to be drawn, which we don't want to happen.
+        this causes focus rectangles to be drawn, which we don't want to happen.
 
         Control dragHost = client.GetDesignerControl();
 
@@ -964,7 +964,7 @@ internal partial class OleDragDropHandler
         {
             Point convertedPoint = Destination.GetDesignerControl().PointToClient(new Point(de.X, de.Y));
 
-            // draw the shadow rects.
+            // draw the shadow rectangles.
             Point newOffset;
             if (_forceDrawFrames)
             {

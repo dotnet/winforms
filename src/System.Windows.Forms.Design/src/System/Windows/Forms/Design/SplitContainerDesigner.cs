@@ -51,35 +51,40 @@ internal partial class SplitContainerDesigner : ParentControlDesigner
     }
 
     /// <summary>
-    ///  The <see cref="SplitContainerDesigner"/> will not re-parent any controls that are within it's lasso at creation time.
+    ///  The <see cref="SplitContainerDesigner"/> will not re-parent any controls
+    ///  that are within it's lasso at creation time.
     /// </summary>
     protected override bool AllowControlLasso => false;
 
     protected override bool DrawGrid => !_disableDrawGrid && base.DrawGrid;
 
     /// <summary>
-    ///  This property is used by deriving classes to determine if it returns the control being designed or some other Container while adding a component to it.
-    ///  e.g: When SplitContainer is selected and a component is being added, the SplitContainer designer would return a SelectedPanel as the ParentControl
+    ///  This property is used by deriving classes to determine if it returns the control being designed or
+    ///  some other Container while adding a component to it.
+    ///  e.g: When SplitContainer is selected and a component is being added,
+    ///  the SplitContainer designer would return a SelectedPanel as the ParentControl
     ///  for all the items being added rather than itself.
     /// </summary>
     protected override Control? GetParentForComponent(IComponent component) => _splitterPanel1;
 
     /// <summary>
-    ///  Returns a list of SnapLine objects representing interesting alignment points for this control. These SnapLines are used to assist in the positioning
-    ///  of the control on a parent's surface.
+    ///  Returns a list of SnapLine objects representing interesting alignment points for this control.
+    ///  These SnapLines are used to assist in the positioning of the control on a parent's surface.
     /// </summary>
     public override IList SnapLines =>
         // We don't want padding snaplines, so call directly to the internal method.
         EdgeAndMarginSnapLines().Unwrap();
 
     /// <summary>
-    ///  Returns the number of internal control designers in the <see cref="SplitContainerDesigner"/>. An internal control is a control that is not in the
-    ///  IDesignerHost.Container.Components collection. We use this to get SnapLines for the internal control designers.
+    ///  Returns the number of internal control designers in the <see cref="SplitContainerDesigner"/>.
+    ///  An internal control is a control that is not in the IDesignerHost.Container.Components collection.
+    ///  We use this to get SnapLines for the internal control designers.
     /// </summary>
     public override int NumberOfInternalControlDesigners() => NumberOfSplitterPanels;
 
     /// <summary>
-    ///  Returns the internal control designer with the specified index in the <see cref="ControlDesigner"/>. InternalControlIndex is zero-based.
+    ///  Returns the internal control designer with the specified index in the <see cref="ControlDesigner"/>.
+    ///  InternalControlIndex is zero-based.
     /// </summary>
     public override ControlDesigner? InternalControlDesigner(int internalControlIndex)
     {
@@ -101,7 +106,8 @@ internal partial class SplitContainerDesigner : ParentControlDesigner
     }
 
     /// <summary>
-    ///  This is the internal Property which stores the currently selected panel. If the user double clicks a controls it is placed in the SelectedPanel.
+    ///  This is the internal Property which stores the currently selected panel.
+    ///  If the user double clicks a controls it is placed in the SelectedPanel.
     /// </summary>
     internal SplitterPanel? Selected
     {
@@ -183,7 +189,9 @@ internal partial class SplitContainerDesigner : ParentControlDesigner
     protected override bool GetHitTest(Point point) => !(InheritanceAttribute == InheritanceAttribute.InheritedReadOnly) && _splitContainerSelected;
 
     /// <summary>
-    ///  Returns a 'BodyGlyph' representing the bounds of this control. The BodyGlyph is responsible for hit testing the related CtrlDes and forwarding messages directly to the designer.
+    ///  Returns a 'BodyGlyph' representing the bounds of this control.
+    ///  The BodyGlyph is responsible for hit testing the related CtrlDes and
+    ///  forwarding messages directly to the designer.
     /// </summary>
     protected override ControlBodyGlyph GetControlGlyph(GlyphSelectionType selectionType)
     {
@@ -265,8 +273,8 @@ internal partial class SplitContainerDesigner : ParentControlDesigner
     }
 
     /// <summary>
-    ///  Determines if the this designer can parent to the specified designer. Generally this means if the control for this designer can parent the
-    ///  given ControlDesigner's designer.
+    ///  Determines if the this designer can parent to the specified designer.
+    ///  Generally this means if the control for this designer can parent the given ControlDesigner's designer.
     /// </summary>
     public override bool CanParent(Control control) => false;
 
@@ -341,10 +349,12 @@ internal partial class SplitContainerDesigner : ParentControlDesigner
             return;
         }
 
-        // We are moving the splitter via the mouse or key and not as a result of resize of the container itself (through the ResizeBehavior::OnMouseMove).
+        // We are moving the splitter via the mouse or key and not as a result of resize of the container itself
+        // (through the ResizeBehavior::OnMouseMove).
         _disabledGlyphs = true;
 
-        // Find our BodyGlyph adorner offered by the behavior service. We don't want to disable the transparent body glyphs.
+        // Find our BodyGlyph adorner offered by the behavior service. We don't want to disable
+        // the transparent body glyphs.
         SelectionManager? selMgr = GetService<SelectionManager>();
         Adorner? bodyGlyphAdorner = selMgr?.BodyGlyphAdorner;
 
@@ -381,7 +391,8 @@ internal partial class SplitContainerDesigner : ParentControlDesigner
     }
 
     /// <summary>
-    ///  Called when the current selection changes. Here we check to see if the newly selected component is one of our Panels. If it is, we make sure that the tab is the currently visible tab.
+    ///  Called when the current selection changes. Here we check to see if the newly selected component
+    ///  is one of our Panels. If it is, we make sure that the tab is the currently visible tab.
     /// </summary>
     private void OnSelectionChanged(object? sender, EventArgs e)
     {
@@ -414,12 +425,14 @@ internal partial class SplitContainerDesigner : ParentControlDesigner
     }
 
     /// <summary>
-    ///  Given a component, this retrieves the splitter panel that it's parented to, or null if it's not parented to any splitter panel.
+    ///  Given a component, this retrieves the splitter panel that it's parented to,
+    ///  or null if it's not parented to any splitter panel.
     /// </summary>
     private static SplitterPanel? CheckIfPanelSelected(object comp) => comp as SplitterPanel;
 
     /// <summary>
-    ///  Called when one of the child splitter panels receives a MouseHover message. Here, we will simply call the parenting SplitContainer.OnMouseHover so we can get a
+    ///  Called when one of the child splitter panels receives a MouseHover message.
+    ///  Here, we will simply call the parenting SplitContainer.OnMouseHover so we can get a
     ///  grab handle for moving this thing around.
     /// </summary>
     internal void SplitterPanelHover() => OnMouseHover();

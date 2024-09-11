@@ -41,7 +41,8 @@ internal class ToolStripItemDesigner : ComponentDesigner
         set
         {
             bool autoSize = (bool)ShadowProperties[nameof(AutoSize)];
-            // always set this in regardless of whether the property changed. it can come back to bite later after in-situ editing if we don't.
+            // always set this in regardless of whether the property changed.
+            // it can come back to bite later after in-situ editing if we don't.
             ShadowProperties[nameof(AutoSize)] = value;
             if (value != autoSize)
             {
@@ -106,7 +107,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
     }
 
     /// <summary>
-    ///  ToolStripEditorManager used this internal property to  Activate the editor.
+    ///  ToolStripEditorManager used this internal property to Activate the editor.
     /// </summary>
     internal virtual ToolStripTemplateNode Editor
     {
@@ -129,7 +130,8 @@ internal class ToolStripItemDesigner : ComponentDesigner
     }
 
     /// <summary>
-    ///  ToolStripEditorManager used this internal property to  set the designer's IsEditorActive to notify  if this item has entered or exited the InSitu Edit Mode.
+    ///  ToolStripEditorManager used this internal property to set the designer's IsEditorActive to notify
+    ///  if this item has entered or exited the InSitu Edit Mode.
     /// </summary>
     internal bool IsEditorActive
     {
@@ -138,7 +140,9 @@ internal class ToolStripItemDesigner : ComponentDesigner
     }
 
     /// <summary>
-    ///  When the ToolStripItem is created we don't want InitializeNewComponent to set the "text" we do it ourselves from the Text the User has provided in the InSitu Edit Mode. Reason being the item and the Parent unnecessarily Layout and cause flicker.
+    ///  When the ToolStripItem is created we don't want InitializeNewComponent to set the "text" we do it ourselves
+    ///  from the Text the User has provided in the InSitu Edit Mode.
+    ///  Reason being the item and the Parent unnecessarily Layout and cause flicker.
     /// </summary>
     internal bool InternalCreate
     {
@@ -312,7 +316,8 @@ internal class ToolStripItemDesigner : ComponentDesigner
     }
 
     /// <summary>
-    ///  This is called by the TemplateNode to Commit the Edit. This Function Simply changes the "Text and Image" property of the  current ToolStripItem.
+    ///  This is called by the TemplateNode to Commit the Edit.
+    ///  This Function Simply changes the "Text and Image" property of the current ToolStripItem.
     /// </summary>
     // Standard 'catch all - rethrow critical' exception pattern
     internal virtual void CommitEdit(Type type, string text, bool commit, bool enterKeyPressed, bool tabKeyPressed)
@@ -690,7 +695,8 @@ internal class ToolStripItemDesigner : ComponentDesigner
         }
 
         base.InitializeNewComponent(defaultValues);
-        // ComboBoxes and TextBoxes shouldn't have Texts... In TextBoxBaseDesigner we do similar thing where we call the base (which sets the text) and then reset it back
+        // ComboBoxes and TextBoxes shouldn't have Texts... In TextBoxBaseDesigner we do similar thing where
+        // we call the base (which sets the text) and then reset it back.
         if (Component is ToolStripTextBox or ToolStripComboBox)
         {
             PropertyDescriptor textProp = TypeDescriptor.GetProperties(Component)["Text"];
@@ -846,7 +852,8 @@ internal class ToolStripItemDesigner : ComponentDesigner
             }
 
             FireComponentChanged(dropDownItem);
-            // Add the Glyph for the DropDown ... We are responsible for the Glyph Addition since BodyGlyphs for DropDownItems are added by us.
+            // Add the Glyph for the DropDown ... We are responsible for the Glyph Addition
+            // since BodyGlyphs for DropDownItems are added by us.
             if (newItem.IsOnDropDown && ownerItemDesigner is not null)
             {
                 ownerItemDesigner.RemoveItemBodyGlyph(newItem);
@@ -1021,7 +1028,10 @@ internal class ToolStripItemDesigner : ComponentDesigner
     }
 
     /// <summary>
-    ///  Allows a designer to filter the set of properties the component it is designing will expose through the TypeDescriptor object. This method is called immediately before its corresponding "Post" method. If you are overriding this method you should call the base implementation before you perform your own filtering.
+    ///  Allows a designer to filter the set of properties the component it is designing will expose through
+    ///  the TypeDescriptor object. This method is called immediately before its corresponding "Post" method.
+    ///  If you are overriding this method you should call the base implementation before
+    ///  you perform your own filtering.
     /// </summary>
     protected override void PreFilterProperties(IDictionary properties)
     {
@@ -1191,7 +1201,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
     private bool ShouldSerializeOverflow() => (ShadowProperties[nameof(Overflow)] is not null);
 
     /// <summary>
-    ///  This Function is called thru the ToolStripEditorManager which is listening for the  F2 command.
+    ///  This Function is called thru the ToolStripEditorManager which is listening for the F2 command.
     /// </summary>
     internal virtual void ShowEditNode(bool clicked)
     {
@@ -1286,7 +1296,10 @@ internal class ToolStripItemDesigner : ComponentDesigner
         }
     }
 
-    // This method is called by the ToolStripDesigner to SetSelections to proper ToolStripItems  after the parent ToolStripItem is committed. Consider this : the ToolStrip would cause the NEXT item on the TOPLEVEL to get selected... while on MenuStrip.. we would want the Child ToolStripItem in the DropDown to get  selected after the TopLevel MenuStripItem is commited.
+    // This method is called by the ToolStripDesigner to SetSelections to proper ToolStripItems after
+    // the parent ToolStripItem is committed. Consider this : the ToolStrip would cause the NEXT item on the
+    // TOPLEVEL to get selected... while on MenuStrip.. we would want the Child ToolStripItem in the DropDown to get
+    // selected after the TopLevel MenuStripItem is committed.
     internal virtual bool SetSelection(bool enterKeyPressed) => false;
 
     internal override void ShowContextMenu(int x, int y)

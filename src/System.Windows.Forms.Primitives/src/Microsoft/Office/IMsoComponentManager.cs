@@ -477,7 +477,7 @@ internal unsafe partial struct IMsoComponentManager : IComIID
             void* pvLoopData);
 
         /// <summary>
-        ///  Cause the component manager to create a "sub" component manager, which  will be one of its
+        ///  Cause the component manager to create a "sub" component manager, which will be one of its
         ///  children in the hierarchical tree of component managers used to maintain state contexts
         ///  (see "Comments on State Contexts" in <see cref="IMsoComponentManager"/> remarks).
         /// </summary>

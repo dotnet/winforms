@@ -475,8 +475,10 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
 #if DEBUG
                 if (OsVersion.IsWindows10_18030rGreater())
                 {
-                    // In a mixed DPI hosting environment, the DPI settings for child windows can be determined by either the parent window or the thread hosting it,
-                    // based on the window properties and the behavior of the thread. For additional information, please refer to
+                    // In a mixed DPI hosting environment, the DPI settings for child windows can be determined by
+                    // either the parent window or the thread hosting it,
+                    // based on the window properties and the behavior of the thread. For additional information,
+                    // please refer to
                     // https://microsoft.visualstudio.com/OS/_git/os.2020?path=/clientcore/windows/Core/ntuser/kernel/windows/createw.cxx&version=GBofficial/main&line=881&lineEnd=882&lineStartColumn=1&lineEndColumn=1&lineStyle=plain&_a=contents
                     DPI_AWARENESS_CONTEXT controlHandleDpiContext = PInvoke.GetWindowDpiAwarenessContext(HWND);
                     Debug.Assert(DpiAwarenessContext.IsEquivalent(controlHandleDpiContext),

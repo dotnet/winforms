@@ -20,7 +20,8 @@ public sealed class LoadedEventArgs : EventArgs
     }
 
     /// <summary>
-    ///  True to indicate the designer load was successful. Even successful loads can have errors, if the errors were not too severe to prevent the designer from loading.
+    ///  True to indicate the designer load was successful. Even successful loads can have errors,
+    ///  if the errors were not too severe to prevent the designer from loading.
     /// </summary>
     public bool HasSucceeded { get; }
 

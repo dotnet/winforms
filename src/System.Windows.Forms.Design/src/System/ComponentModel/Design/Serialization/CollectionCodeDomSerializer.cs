@@ -9,7 +9,9 @@ using System.Reflection;
 namespace System.ComponentModel.Design.Serialization;
 
 /// <summary>
-///  This serializer serializes collections. This can either create statements or expressions. It will create an expression and assign it to the statement in the current context stack if the object is an array. If it is a collection with an add range or similar method, it will create a statement calling the method.
+///  This serializer serializes collections. This can either create statements or expressions.
+///  It will create an expression and assign it to the statement in the current context stack if the object is an array.
+///  If it is a collection with an add range or similar method, it will create a statement calling the method.
 /// </summary>
 public class CollectionCodeDomSerializer : CodeDomSerializer
 {
@@ -21,7 +23,11 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
     internal static new CollectionCodeDomSerializer Default => s_defaultSerializer ??= new CollectionCodeDomSerializer();
 
     /// <summary>
-    ///  Computes the delta between an existing collection and a modified one. This is for the case of inherited items that have collection properties so we only generate Add/AddRange calls for the items that have been added. It works by Hashing up the items in the original collection and then walking the modified collection and only returning those items which do not exist in the base collection.
+    ///  Computes the delta between an existing collection and a modified one.
+    ///  This is for the case of inherited items that have collection properties so we only
+    ///  generate Add/AddRange calls for the items that have been added.
+    ///  It works by Hashing up the items in the original collection and then walking the modified collection
+    ///  and only returning those items which do not exist in the base collection.
     /// </summary>
     [return: NotNullIfNotNull(nameof(modified))]
     private static ICollection? GetCollectionDelta(ICollection? original, ICollection? modified)
@@ -62,7 +68,7 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
 
             if (originalValues.TryGetValue(value, out int count))
             {
-                // we've got one we need to remove, so  create our array list, and push all the values we've passed into it.
+                // we've got one we need to remove, so create our array list, and push all the values we've passed into it.
                 if (result is null)
                 {
                     result = [];
@@ -86,7 +92,7 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
                     originalValues[value] = count;
                 }
             }
-            else                     // this one isn't in the old list, so add it to our  result list.
+            else // this one isn't in the old list, so add it to our result list.
             {
                 result?.Add(value);
             }
@@ -128,17 +134,21 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
         object? result = null;
 
         // We serialize collections as follows:
-        //      If the collection is an array, we write out the array.
-        //      If the collection has a method called AddRange, we will call that, providing an array.
-        //      If the collection has an Add method, we will call it repeatedly.
-        //      If the collection is an IList, we will cast to IList and add to it.
-        //      If the collection has no add method, but is marked with PersistContents, we will enumerate the collection and serialize each element.
-        // Check to see if there is a CodePropertyReferenceExpression on the stack. If there is, we can use it as a guide for serialization.
+        // If the collection is an array, we write out the array.
+        // If the collection has a method called AddRange, we will call that, providing an array.
+        // If the collection has an Add method, we will call it repeatedly.
+        // If the collection is an IList, we will cast to IList and add to it.
+        // If the collection has no add method, but is marked with PersistContents,
+        // we will enumerate the collection and serialize each element.
+        // Check to see if there is a CodePropertyReferenceExpression on the stack.
+        // If there is, we can use it as a guide for serialization.
         CodeExpression? target;
         if (manager.TryGetContext(out ExpressionContext? context) && context.PresetValue == value &&
             manager.TryGetContext(out PropertyDescriptor? property) && property.PropertyType == context.ExpressionType)
         {
-            // We only want to give out an expression target if  this is our context (we find this out by comparing types above) and if the context type is not an array. If it is an array, we will  just return the array create expression.
+            // We only want to give out an expression target if this is our context
+            // (we find this out by comparing types above) and if the context type is not an array. If it is an array,
+            // we will just return the array create expression.
             target = context.Expression;
         }
         else
@@ -213,7 +223,7 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
     }
 
     /// <summary>
-    ///  Given a set of methods and objects, determines the method with the correct of  parameter type for all objects.
+    ///  Given a set of methods and objects, determines the method with the correct of parameter type for all objects.
     /// </summary>
     private static MethodInfo? ChooseMethodByType(TypeDescriptionProvider provider, List<MethodInfo> methods, ICollection values)
     {
@@ -280,7 +290,8 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
     }
 
     /// <summary>
-    ///  Serializes the given collection. targetExpression will refer to the expression used to rever to the  collection, but it can be null.
+    ///  Serializes the given collection. targetExpression will refer to the expression used
+    ///  to refer to the collection, but it can be null.
     /// </summary>
     protected virtual object? SerializeCollection(IDesignerSerializationManager manager, CodeExpression? targetExpression, Type targetType, ICollection originalCollection, ICollection valuesToSerialize)
     {
@@ -395,7 +406,8 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
             bool arrayOk = true;
             foreach (object o in valuesToSerialize)
             {
-                // If this object is being privately inherited, it cannot be inside this collection. Since we're writing an entire array here, we cannot write any of it.
+                // If this object is being privately inherited, it cannot be inside this collection.
+                // Since we're writing an entire array here, we cannot write any of it.
                 if (o is IComponent && TypeDescriptor.GetAttributes(o).Contains(InheritanceAttribute.InheritedReadOnly))
                 {
                     arrayOk = false;
@@ -403,7 +415,8 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
                 }
 
                 CodeExpression? expression = null;
-                // If there is an expression context on the stack at this point, we need to fix up the ExpressionType on it to be the array element type.
+                // If there is an expression context on the stack at this point, we need to fix up the ExpressionType
+                // on it to be the array element type.
                 ExpressionContext? newContext = null;
                 if (manager.TryGetContext(out ExpressionContext? context))
                 {
@@ -571,7 +584,8 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
             if (genCode)
             {
                 CodeExpression? expression = null;
-                // If there is an expression context on the stack at this point, we need to fix up the ExpressionType on it to be the element type.
+                // If there is an expression context on the stack at this point, we need to fix up the ExpressionType
+                // on it to be the element type.
                 ExpressionContext? newContext = null;
 
                 if (manager.TryGetContext(out ExpressionContext? ctx))

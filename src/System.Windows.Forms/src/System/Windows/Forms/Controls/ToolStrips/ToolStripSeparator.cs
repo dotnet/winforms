@@ -269,7 +269,8 @@ public partial class ToolStripSeparator : ToolStripItem
         }
 
         // This is always true!
-        // parent.LayoutStyle != ToolStripLayoutStyle.HorizontalStackWithOverflow || parent.LayoutStyle != ToolStripLayoutStyle.VerticalStackWithOverflow
+        // parent.LayoutStyle != ToolStripLayoutStyle.HorizontalStackWithOverflow ||
+        // parent.LayoutStyle != ToolStripLayoutStyle.VerticalStackWithOverflow
         {
             // we don't actually know what size to make it, so just keep it a stock size.
             constrainingSize.Width = SeparatorHeight;

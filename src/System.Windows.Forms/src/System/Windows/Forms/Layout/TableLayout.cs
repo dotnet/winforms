@@ -517,7 +517,8 @@ internal partial class TableLayout : LayoutEngine
             return true;
         }
 
-        // if the element is bumped to a column after its specified column position, it also means that the element overlaps with previous controls
+        // if the element is bumped to a column after its specified column position, it also means that the element
+        // overlaps with previous controls
         if (fixedLayoutInfo.RowPosition == insertionRow && fixedLayoutInfo.ColumnPosition < insertionCol)
         {
             return true;
@@ -532,7 +533,8 @@ internal partial class TableLayout : LayoutEngine
     /// </summary>
     private static bool IsOverlappingWithReservationGrid(LayoutInfo fixedLayoutInfo, ReservationGrid reservationGrid, int currentRow)
     {
-        // since we shall not put anything above our current row, this means that the fixedLayoutInfo overlaps with something already placed on the table
+        // since we shall not put anything above our current row, this means that the fixedLayoutInfo overlaps
+        // with something already placed on the table
         if (fixedLayoutInfo.RowPosition < currentRow)
         {
             return true;

@@ -143,7 +143,7 @@ public class InheritanceService : IInheritanceService, IDisposable
                     bool ignoreMember = IgnoreInheritedMember(member, component);
 
                     // We now have an inherited member. Gather some information about it and then add it to our list.
-                    // We must always add to our list, but we may not want to  add it to the container. That is up to
+                    // We must always add to our list, but we may not want to add it to the container. That is up to
                     // the IgnoreInheritedMember method. We add here because there are components in the world that,
                     // when sited, add their children to the container too. That's fine, but we want to make sure we
                     // account for them in the inheritance service too.
@@ -263,7 +263,7 @@ public class InheritanceService : IInheritanceService, IDisposable
         {
             _inheritedComponents[ce.Component!] = InheritanceAttribute.InheritedReadOnly;
 
-            // If this component is being added to a nested container of addingComponent, it should  get the same inheritance level.
+            // If this component is being added to a nested container of addingComponent, it should get the same inheritance level.
             if (sender is INestedContainer nested && nested.Owner == _addingComponent)
             {
                 _inheritedComponents[ce.Component!] = _addingAttribute!;

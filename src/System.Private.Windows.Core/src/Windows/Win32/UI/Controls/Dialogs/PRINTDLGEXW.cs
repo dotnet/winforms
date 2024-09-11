@@ -12,7 +12,7 @@ namespace Windows.Win32.UI.Controls.Dialogs;
 /// <remarks>
 ///  <para>
 ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#">
-///    Read more on learn.Microsoft.com.
+///    Read more on learn.microsoft.com.
 ///   </see>
 ///  </para>
 /// </remarks>
@@ -32,7 +32,7 @@ internal partial struct PRINTDLGEXW
     ///  <para>Type: <b>DWORD</b> The structure size, in bytes.</para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///    Read more on learn.Microsoft.com.
+    ///    Read more on learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -45,7 +45,7 @@ internal partial struct PRINTDLGEXW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///    Read more on learn.Microsoft.com.
+    ///    Read more on learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -70,7 +70,7 @@ internal partial struct PRINTDLGEXW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///    Read more on learn.Microsoft.com.
+    ///    Read more on learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -96,7 +96,7 @@ internal partial struct PRINTDLGEXW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///    Read more on learn.Microsoft.com.
+    ///    Read more on learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -110,7 +110,7 @@ internal partial struct PRINTDLGEXW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///    Read more on learn.Microsoft.com.
+    ///    Read more on learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -132,7 +132,7 @@ internal partial struct PRINTDLGEXW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///    Read more on learn.Microsoft.com.
+    ///    Read more on learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -148,7 +148,7 @@ internal partial struct PRINTDLGEXW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///    Read more on learn.Microsoft.com.
+    ///    Read more on learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -163,7 +163,7 @@ internal partial struct PRINTDLGEXW
     ///  </para>
     ///  <para>
     ///    <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///     Read more on learn.Microsoft.com.
+    ///     Read more on learn.microsoft.com.
     ///    </see>
     ///   </para>
     /// </summary>
@@ -181,7 +181,7 @@ internal partial struct PRINTDLGEXW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///    Read more on learn.Microsoft.com.
+    ///    Read more on learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -194,7 +194,7 @@ internal partial struct PRINTDLGEXW
     /// </para>
     /// <para>
     ///  <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///   Read more on learn.Microsoft.com.
+    ///   Read more on learn.microsoft.com.
     ///  </see>
     ///  </para>
     /// </summary>
@@ -207,7 +207,7 @@ internal partial struct PRINTDLGEXW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///    Read more on learn.Microsoft.com.
+    ///    Read more on learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -230,7 +230,7 @@ internal partial struct PRINTDLGEXW
     ///   </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///    Read more on learn.Microsoft.com.
+    ///    Read more on learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -247,7 +247,7 @@ internal partial struct PRINTDLGEXW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///    Read more on learn.Microsoft.com.
+    ///    Read more on learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -263,7 +263,7 @@ internal partial struct PRINTDLGEXW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///    Read more on learn.Microsoft.com.
+    ///    Read more on learn.microsoft.com.
     ///   </see>
     ///   </para>
     /// </summary>
@@ -288,7 +288,7 @@ internal partial struct PRINTDLGEXW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///    Read more on learn.Microsoft.com.
+    ///    Read more on learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -298,7 +298,7 @@ internal partial struct PRINTDLGEXW
     /// <para>Type: <b>DWORD</b> The number of property page handles in the <b>lphPropertyPages</b> array.</para>
     ///   <para>
     ///    <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///     Read more on learn.Microsoft.com.
+    ///     Read more on learn.microsoft.com.
     ///    </see>
     ///  </para>
     /// </summary>
@@ -316,7 +316,7 @@ internal partial struct PRINTDLGEXW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///    Read more on learn.Microsoft.com.
+    ///    Read more on learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -331,7 +331,7 @@ internal partial struct PRINTDLGEXW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///     Read more on learn.Microsoft.com.
+    ///     Read more on learn.microsoft.com.
     ///    </see>
     ///   </para>
     /// </summary>

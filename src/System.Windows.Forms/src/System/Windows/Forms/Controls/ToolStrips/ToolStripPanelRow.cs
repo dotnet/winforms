@@ -372,7 +372,8 @@ public partial class ToolStripPanelRow : Component, IArrangedElement
             {
                 ToolStripPanelCell cell = (ToolStripPanelCell)element;
                 element.SetBounds(cell.CachedBounds, BoundsSpecified.None);
-                // Debug.Assert( cell.Control is null || cell.CachedBounds.Location == cell.Control.Bounds.Location, "CachedBounds out of sync with bounds!");
+                // Debug.Assert( cell.Control is null || cell.CachedBounds.Location == cell.Control.Bounds.Location,
+                // "CachedBounds out of sync with bounds!");
             }
         }
     }

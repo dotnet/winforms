@@ -160,7 +160,7 @@ internal static unsafe class AccessibleObjectExtensions
     public static void TrySetName(this AgileComPointer<IAccessible>? agile, VARIANT child, BSTR name)
     {
         // This is not technically supported any more, unclear if this ever actually does anything.
-        // https://learn.Microsoft.com/windows/win32/api/oleacc/nf-oleacc-iaccessible-put_accname
+        // https://learn.microsoft.com/windows/win32/api/oleacc/nf-oleacc-iaccessible-put_accname
 
         if (name.IsNull)
         {
