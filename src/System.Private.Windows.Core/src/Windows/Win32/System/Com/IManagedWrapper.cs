@@ -33,7 +33,7 @@ internal unsafe interface IManagedWrapper
 
 /// <summary>
 ///  Apply to a class to apply a COM callable wrapper of the given <typeparamref name="TComInterface"/>. The class
-///  must also derive from the given COM wrapper struct's nested Interface.
+///  must also derive from the given COM wrapper <see langword="struct"/>'s nested Interface.
 /// </summary>
 internal unsafe interface IManagedWrapper<TComInterface> : IManagedWrapper
     where TComInterface : unmanaged, IVTable, IComIID
@@ -44,8 +44,9 @@ internal unsafe interface IManagedWrapper<TComInterface> : IManagedWrapper
 }
 
 /// <summary>
-///  Apply to a class to apply a COM callable wrapper of the given <typeparamref name="TComInterface1"/> and <typeparamref name="TComInterface2"/>.
-///  The class must also derive from both of the given COM wrapper struct's nested Interface.
+///  Apply to a class to apply a COM callable wrapper of the given <typeparamref name="TComInterface1"/> and
+///  <typeparamref name="TComInterface2"/>. The class must also derive from both of the given COM wrapper
+///  <see langword="struct"/>'s nested Interface.
 /// </summary>
 internal unsafe interface IManagedWrapper<TComInterface1, TComInterface2> : IManagedWrapper
     where TComInterface1 : unmanaged, IVTable, IComIID

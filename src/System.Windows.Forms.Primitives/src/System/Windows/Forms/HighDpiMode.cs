@@ -41,7 +41,8 @@ public enum HighDpiMode
     PerMonitor,
 
     /// <summary>
-    ///  Similar to <see cref="PerMonitor"/>, but enables child window DPI change notification, improved scaling of comctl32 controls and dialog scaling.
+    ///  Similar to <see cref="PerMonitor"/>, but enables child window DPI change notification, improved scaling of
+    ///  comctl32 controls and dialog scaling.
     /// </summary>
     PerMonitorV2,
 

@@ -6,7 +6,8 @@ namespace Windows.Win32.System.Com;
 internal static class ComSafeArrayScopeExtensions
 {
     /// <summary>
-    ///  Creates a <see cref="ComSafeArrayScope{T}"/> where T is <typeparamref name="TComStruct"/> from an array of <typeparamref name="TComInterface"/>.
+    ///  Creates a <see cref="ComSafeArrayScope{T}"/> where T is <typeparamref name="TComStruct"/> from an array of
+    ///  <typeparamref name="TComInterface"/>.
     /// </summary>
     /// <remarks>
     ///  <para>

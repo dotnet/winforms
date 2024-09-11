@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections;
+using System.ComponentModel;
 using System.Drawing;
 using System.Formats.Nrbf;
 using System.Reflection;
@@ -29,7 +30,7 @@ internal static class SerializationRecordExtensions
         {
             return NrbfDecoder.Decode(stream, leaveOpen: true);
         }
-        catch (Exception ex) when(ex is ArgumentException or InvalidCastException or ArithmeticException or IOException)
+        catch (Exception ex) when (ex is ArgumentException or InvalidCastException or ArithmeticException or IOException)
         {
             // Make the exception easier to catch, but retain the original stack trace.
             throw ex.ConvertToSerializationException();
@@ -58,6 +59,87 @@ internal static class SerializationRecordExtensions
     }
 
     /// <summary>
+    ///  Tries to get this object as a <see cref="Point"/>.
+    /// </summary>
+    public static bool TryGetPoint(this SerializationRecord record, [NotNullWhen(true)] out object? value)
+    {
+        return TryGet(Get, record, out value);
+
+        static bool Get(SerializationRecord record, [NotNullWhen(true)] out object? value)
+        {
+            value = default;
+
+            if (record is not ClassRecord classInfo
+                 || !classInfo.TypeNameMatches(typeof(Point))
+                 || !classInfo.HasMember("x")
+                 || !classInfo.HasMember("y"))
+            {
+                return false;
+            }
+
+            value = new Point(classInfo.GetInt32("x"), classInfo.GetInt32("y"));
+
+            return true;
+        }
+    }
+
+    /// <summary>
+    ///  Tries to get this object as a <see cref="Size"/>.
+    /// </summary>
+    public static bool TryGetSize(this SerializationRecord record, [NotNullWhen(true)] out object? value)
+    {
+        return TryGet(Get, record, out value);
+
+        static bool Get(SerializationRecord record, [NotNullWhen(true)] out object? value)
+        {
+            value = default;
+
+            if (record is not ClassRecord classInfo
+                || !classInfo.TypeNameMatches(typeof(Size))
+                || !classInfo.HasMember("height")
+                || !classInfo.HasMember("width"))
+            {
+                return false;
+            }
+
+            value = new Size(classInfo.GetInt32("width"), classInfo.GetInt32("height"));
+
+            return true;
+        }
+    }
+
+    /// <summary>
+    ///  Tries to get this object as a <see cref="Rectangle"/>.
+    /// </summary>
+    public static bool TryGetRectangle(this SerializationRecord record, [NotNullWhen(true)] out object? value)
+    {
+        return TryGet(Get, record, out value);
+
+        static bool Get(SerializationRecord record, [NotNullWhen(true)] out object? value)
+        {
+            value = default;
+
+            if (record is not ClassRecord classInfo
+                || !classInfo.TypeNameMatches(typeof(Rectangle))
+                || !classInfo.HasMember("x")
+                || !classInfo.HasMember("y")
+                || !classInfo.HasMember("width")
+                || !classInfo.HasMember("height"))
+            {
+                return false;
+            }
+
+            value = new Rectangle(
+                classInfo.GetInt32("x"),
+                classInfo.GetInt32("y"),
+                classInfo.GetInt32("width"),
+                classInfo.GetInt32("height"));
+
+            return true;
+        }
+    }
+
+    /// <summary>
     ///  Tries to get this object as a <see cref="PointF"/>.
     /// </summary>
     public static bool TryGetPointF(this SerializationRecord record, [NotNullWhen(true)] out object? value)
@@ -77,6 +159,31 @@ internal static class SerializationRecordExtensions
             }
 
             value = new PointF(classInfo.GetSingle("x"), classInfo.GetSingle("y"));
+
+            return true;
+        }
+    }
+
+        /// <summary>
+    ///  Tries to get this object as a <see cref="SizeF"/>.
+    /// </summary>
+    public static bool TryGetSizeF(this SerializationRecord record, [NotNullWhen(true)] out object? value)
+    {
+        return TryGet(Get, record, out value);
+
+        static bool Get(SerializationRecord record, [NotNullWhen(true)] out object? value)
+        {
+            value = default;
+
+            if (record is not ClassRecord classInfo
+                || !classInfo.TypeNameMatches(typeof(SizeF))
+                || !classInfo.HasMember("height")
+                || !classInfo.HasMember("width"))
+            {
+                return false;
+            }
+
+            value = new SizeF(classInfo.GetSingle("width"), classInfo.GetSingle("height"));
 
             return true;
         }
@@ -108,6 +215,44 @@ internal static class SerializationRecordExtensions
                 classInfo.GetSingle("y"),
                 classInfo.GetSingle("width"),
                 classInfo.GetSingle("height"));
+
+            return true;
+        }
+    }
+
+    /// <summary>
+    ///  Tries to get this object as a <see cref="Color"/>.
+    /// </summary>
+    public static bool TryGetColor(this SerializationRecord record, [NotNullWhen(true)] out object? value)
+    {
+        return TryGet(Get, record, out value);
+
+        static bool Get(SerializationRecord record, [NotNullWhen(true)] out object? value)
+        {
+            value = default;
+
+            if (record is not ClassRecord classInfo
+                || !classInfo.TypeNameMatches(typeof(Color))
+                || !classInfo.HasMember("name")
+                || !classInfo.HasMember("value")
+                || !classInfo.HasMember("knownColor")
+                || !classInfo.HasMember("state"))
+            {
+                return false;
+            }
+
+            ConstructorInfo? ctor = typeof(Color).GetConstructor(
+                BindingFlags.Instance | BindingFlags.NonPublic, [typeof(long), typeof(short), typeof(string), typeof(KnownColor)]);
+            if (ctor is null)
+            {
+                return false;
+            }
+
+            value = ctor.Invoke([
+                classInfo.GetInt64("value"),
+                classInfo.GetInt16("state"),
+                classInfo.GetString("name"),
+                (KnownColor)Convert.ToInt32(classInfo.GetInt16("knownColor"))]);
 
             return true;
         }
@@ -355,7 +500,7 @@ internal static class SerializationRecordExtensions
     }
 
     /// <summary>
-    ///  Try to get a supported .NET type object (not WinForms).
+    ///  Try to get a supported .NET type object (not WinForms) that has no <see cref="TypeConverter"/>.
     /// </summary>
     public static bool TryGetFrameworkObject(
         this SerializationRecord record,
@@ -369,6 +514,19 @@ internal static class SerializationRecordExtensions
             || record.TryGetPointF(out value)
             || record.TryGetNotSupportedException(out value);
 
-    private static bool IsPrimitiveArrayRecord(SerializationRecord serializationRecord)
-        => serializationRecord.RecordType is SerializationRecordType.ArraySingleString or SerializationRecordType.ArraySinglePrimitive;
+    /// <summary>
+    ///  Try to get a supported System.Drawing.Primitives object that has a <see cref="TypeConverter"/>.
+    ///  This method is used for Clipboard payload deserialization. ResX deserialization uses <see cref="TypeConverter"/>s for these types.
+    /// </summary>
+    public static bool TryGetDrawingPrimitivesObject(
+        this SerializationRecord record,
+        [NotNullWhen(true)] out object? value) =>
+        record.TryGetPoint(out value)
+            || record.TryGetSize(out value)
+            || record.TryGetSizeF(out value)
+            || record.TryGetRectangle(out value)
+            || record.TryGetColor(out value);
+
+    private static bool IsPrimitiveArrayRecord(SerializationRecord serializationRecord) =>
+        serializationRecord.RecordType is SerializationRecordType.ArraySingleString or SerializationRecordType.ArraySinglePrimitive;
 }

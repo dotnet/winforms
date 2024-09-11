@@ -430,7 +430,7 @@ public sealed class ResXDataNode : ISerializable
         try
         {
             SerializationRecord rootRecord = stream.Decode();
-            if (rootRecord.TryGetObject(out object? value))
+            if (rootRecord.TryGetResXObject(out object? value))
             {
                 return value;
             }
