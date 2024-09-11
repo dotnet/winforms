@@ -50,8 +50,9 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
             FlipXPThemesBitmap.Dispose();
         }
 
-        // If you are adding releasing unmanaged resources code here (disposing == false), you need to remove this class type
-        // (and all of its subclasses) from check in DataGridViewElement() constructor and DataGridViewElement_Subclasses_SuppressFinalizeCall test!
+        // If you are adding releasing unmanaged resources code here (disposing == false), you need to remove this
+        // class type(and all of its subclasses) from check in DataGridViewElement() constructor and
+        // DataGridViewElement_Subclasses_SuppressFinalizeCall test!
         // Also consider to modify ~DataGridViewCell() description.
 
         base.Dispose(disposing);
@@ -401,7 +402,8 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
             s_rectThemeMargins.Y = rectContent.Y;
             s_rectThemeMargins.Width = ThemeMargin - rectContent.Right;
             s_rectThemeMargins.Height = ThemeMargin - rectContent.Bottom;
-            // On older platforms, the theming margins for a header are unexpectedly (3, 0, 0, 0) when you'd expect something like (0, 0, 2, 3)
+            // On older platforms, the theming margins for a header are unexpectedly (3, 0, 0, 0) when you'd
+            // expect something like (0, 0, 2, 3)
             if (s_rectThemeMargins.X == 3 &&
                 s_rectThemeMargins.Y + s_rectThemeMargins.Width + s_rectThemeMargins.Height == 0)
             {
@@ -409,9 +411,11 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
             }
             else
             {
-                // On some platforms, the theming margins for a header are unexpectedly (0, 0, 0, 0) when you'd expect something like (2, 1, 0, 2)
-                // Padding themePadding = DataGridViewHeaderCellRenderer.VisualStyleRenderer.GetMargins(g, MarginProperty.ContentMargins); /* or MarginProperty.SizingMargins */
-                // does not work either at this time. It AVs -So we hard code the margins for now.
+                // On some platforms, the theming margins for a header are unexpectedly (0, 0, 0, 0) when you'd expect
+                // something like (2, 1, 0, 2) Padding
+                // themePadding = DataGridViewHeaderCellRenderer.VisualStyleRenderer.GetMargins(g, MarginProperty.ContentMargins);
+                // /* or MarginProperty.SizingMargins */ does not work either at this time. It AVs -So we hard code
+                // the margins for now.
                 try
                 {
                     string themeFilename = Path.GetFileName(VisualStyles.VisualStyleInformation.ThemeFilename);

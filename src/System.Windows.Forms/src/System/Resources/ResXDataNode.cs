@@ -42,7 +42,8 @@ public sealed class ResXDataNode : ISerializable
 
     // Callback function to get type name for multitargeting.
     // No public property to force using constructors for the following reasons:
-    // 1. one of the constructors needs this field (if used) to initialize the object, make it consistent with the other constructors to avoid errors.
+    // 1. one of the constructors needs this field (if used) to initialize the object, make it consistent with the
+    //    other constructors to avoid errors.
     // 2. once the object is constructed the delegate should not be changed to avoid getting inconsistent results.
     private Func<Type?, string>? _typeNameConverter;
 

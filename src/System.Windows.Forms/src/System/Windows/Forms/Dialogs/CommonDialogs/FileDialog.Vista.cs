@@ -52,7 +52,7 @@ public partial class FileDialog
         if (ClientGuid is { } clientGuid)
         {
             // IFileDialog::SetClientGuid should be called immediately after creation of the dialog object.
-            // https://learn.Microsoft.com/windows/win32/api/shobjidl_core/nf-shobjidl_core-ifiledialog-setclientguid#remarks
+            // https://learn.microsoft.com/windows/win32/api/shobjidl_core/nf-shobjidl_core-ifiledialog-setclientguid#remarks
             dialog->SetClientGuid(in clientGuid);
         }
 

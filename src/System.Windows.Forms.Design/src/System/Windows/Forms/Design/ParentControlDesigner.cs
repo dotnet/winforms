@@ -200,7 +200,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
     }
 
     /// <summary>
-    ///  Determines whether drag rects can be drawn on this designer.
+    ///  Determines whether drag rectangles can be drawn on this designer.
     /// </summary>
     protected override bool EnableDragRect => true;
 
@@ -2092,7 +2092,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
     {
         base.PreFilterProperties(properties);
 
-        // add the "GridSize, SnapToGrid and DrawGrid" property  from the property grid
+        // add the "GridSize, SnapToGrid and DrawGrid" property from the property grid
         // iff the LayoutOption.SnapToGrid Attribute is Set...
 
         if (!DefaultUseSnapLines)

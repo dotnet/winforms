@@ -60,7 +60,9 @@ public sealed partial class CodeDomComponentSerializationService
             }
 
             /// <summary>
-            ///  Deserializes the given object state. The results are contained within the  serialization manager's name table. The objectNames list is used to  deserialize in the proper order, as objectState is unordered.
+            ///  Deserializes the given object state. The results are contained within the serialization manager's
+            ///  name table. The objectNames list is used to deserialize in the proper order,
+            ///  as objectState is unordered.
             /// </summary>
             internal void Deserialize(IDesignerSerializationManager manager, Dictionary<string, CodeDomComponentSerializationState> objectState, List<string> objectNames, bool applyDefaults)
             {
@@ -133,7 +135,7 @@ public sealed partial class CodeDomComponentSerializationService
 
             private void DeserializeDefaultProperties(IDesignerSerializationManager manager, string name, List<string>? defProps)
             {
-                // Next, default properties, but only if we successfully  resolved.
+                // Next, default properties, but only if we successfully resolved.
                 if (defProps is null || !_applyDefaults)
                 {
                     return;
@@ -185,7 +187,11 @@ public sealed partial class CodeDomComponentSerializationService
             }
 
             /// <summary>
-            ///  This is used to resolve nested component references. NestedComponents don't exist as sited components within the DesignerHost, they are actually sited within a parent component. This method takes the FullName defined on INestedSite and returns the component which matches it. outerComponent is the name of the topmost component which does exist in the DesignerHost
+            ///  This is used to resolve nested component references.
+            ///  NestedComponents don't exist as sited components within the DesignerHost,
+            ///  they are actually sited within a parent component.
+            ///  This method takes the FullName defined on INestedSite and returns the component which matches it.
+            ///  outerComponent is the name of the topmost component which does exist in the DesignerHost
             ///  This code also exists in VSCodeDomDesignerLoader -- please keep them in sync.
             /// </summary>
             private static IComponent? ResolveNestedName(IDesignerSerializationManager? manager, string name, [NotNullIfNotNull(nameof(manager))] out string? outerComponent)
@@ -350,7 +356,7 @@ public sealed partial class CodeDomComponentSerializationService
                             }
                         }
 
-                        // Sometimes components won't be in either the statements table or the expressions table, for example, this occurs for resources  during undo/redo. In these cases the component should be resolvable by the manager. Never do this when we have been asked by the serialization manager to resolve the name;  otherwise we may infinitely recurse.
+                        // Sometimes components won't be in either the statements table or the expressions table, for example, this occurs for resources during undo/redo. In these cases the component should be resolvable by the manager. Never do this when we have been asked by the serialization manager to resolve the name;  otherwise we may infinitely recurse.
                         if (!resolved && canInvokeManager)
                         {
                             resolved = manager.GetInstance(name) is not null;

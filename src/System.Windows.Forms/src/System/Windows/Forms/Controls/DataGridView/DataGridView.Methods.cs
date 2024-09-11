@@ -393,7 +393,6 @@ public partial class DataGridView
             or DataGridViewAutoSizeRowsMode.DisplayedCells);
 
         // Use of WindowsFormsUtils.CreateMeasurementGraphics() avoid use of this.Handle
-        // IntPtr handle = this.Handle; // Force creation of control's handle because for databound grids, handle creation wipes out and recreates the columns/rows.
         int width = 0;
         DataGridViewCell dataGridViewCell;
         if (columnIndex > -1 && (((DataGridViewAutoSizeRowsModeInternal)_autoSizeRowsMode) & DataGridViewAutoSizeRowsModeInternal.AllColumns) != 0)
@@ -984,7 +983,8 @@ public partial class DataGridView
 
                 if (availableWidth <= requiredWidthSum)
                 {
-                    // All auto filled columns need to take their minimum width. If (availableWidth < requiredWidthSum) a horizontal scrollbar appears.
+                    // All auto filled columns need to take their minimum width. If (availableWidth < requiredWidthSum)
+                    // a horizontal scrollbar appears.
                     availableWidth = 0;
                     for (columnEntry = 0; columnEntry < autoFillColumns!.Count; columnEntry++)
                     {
@@ -1785,7 +1785,8 @@ public partial class DataGridView
         {
             _noAutoSizeCount++;
             // Use of WindowsFormsUtils.CreateMeasurementGraphics() avoid use of this.Handle
-            // IntPtr handle = this.Handle; // Force creation of control's handle because for databound grids, handle creation wipes out and recreates the columns/rows.
+            // IntPtr handle = this.Handle; // Force creation of control's handle because for databound grids,
+            // handle creation wipes out and recreates the columns/rows.
             int preferredHeight = 0;
             if (_layout.TopLeftHeader.Width > 0)
             {
@@ -1859,7 +1860,8 @@ public partial class DataGridView
         {
             _noAutoSizeCount++;
             // Use of WindowsFormsUtils.CreateMeasurementGraphics() avoid use of this.Handle
-            // IntPtr handle = this.Handle; // Force creation of control's handle because for databound grids, handle creation wipes out and recreates the columns/rows.
+            // IntPtr handle = this.Handle; // Force creation of control's handle because for databound grids,
+            // handle creation wipes out and recreates the columns/rows.
             int preferredHeight = 0;
             if (_layout.TopLeftHeader.Width > 0)
             {
@@ -1933,7 +1935,8 @@ public partial class DataGridView
         {
             _noAutoSizeCount++;
             // Use of WindowsFormsUtils.CreateMeasurementGraphics() avoid use of this.Handle
-            // IntPtr handle = this.Handle; // Force creation of control's handle because for databound grids, handle creation wipes out and recreates the columns.
+            // IntPtr handle = this.Handle; // Force creation of control's handle because for databound grids,
+            // handle creation wipes out and recreates the columns.
             // Note: Even none-resizable column can programmatically be resized.
             DataGridViewColumn dataGridViewColumn = Columns[columnIndex];
             int preferredColumnWidth = dataGridViewColumn.GetPreferredWidth((DataGridViewAutoSizeColumnMode)autoSizeColumnCriteriaInternal, fixedHeight);
@@ -2060,7 +2063,8 @@ public partial class DataGridView
         {
             _noAutoSizeCount++;
             // Use of WindowsFormsUtils.CreateMeasurementGraphics() avoid use of this.Handle
-            // IntPtr handle = this.Handle; // Force creation of control's handle because for databound grids, handle creation wipes out and recreates the columns/rows.
+            // IntPtr handle = this.Handle; // Force creation of control's handle because for databound grids,
+            // handle creation wipes out and recreates the columns/rows.
             int preferredWidth = 0, rowIndex;
             if (_layout.TopLeftHeader.Width > 0)
             {
@@ -2246,7 +2250,8 @@ public partial class DataGridView
         {
             _noAutoSizeCount++;
             // Use of WindowsFormsUtils.CreateMeasurementGraphics() avoid use of this.Handle
-            // IntPtr handle = this.Handle; // Force creation of control's handle because for databound grids, handle creation wipes out and recreates the columns/rows.
+            // IntPtr handle = this.Handle; // Force creation of control's handle because for databound grids,
+            // handle creation wipes out and recreates the columns/rows.
             int preferredWidth = 0, rowIndexTmp;
             if (_layout.TopLeftHeader.Width > 0)
             {
@@ -2386,7 +2391,8 @@ public partial class DataGridView
         {
             _noAutoSizeCount++;
             // Use of WindowsFormsUtils.CreateMeasurementGraphics() avoid use of this.Handle
-            // IntPtr handle = this.Handle; // Force creation of control's handle because for databound grids, handle creation wipes out and recreates the columns/rows.
+            // IntPtr handle = this.Handle; // Force creation of control's handle because for databound grids,
+            // handle creation wipes out and recreates the columns/rows.
             // Note: Even none-resizable row can programmatically be resized.
             DataGridViewRow dataGridViewRow = Rows.SharedRow(rowIndex);
             dataGridViewRow.GetHeightInfo(rowIndex, out int height, out int minimumHeight);
@@ -3402,8 +3408,8 @@ public partial class DataGridView
         else
         {
             // This is an external tool tip control which wants to show a tool tip over the DataGridView.
-            // ToolTips from the data Grid view ( the error text, or the formatted text that does not fit in, or the tool tip text from the cell)
-            // and the ShowCellToolTips take precedence over the external tool tip.
+            // ToolTips from the data Grid view ( the error text, or the formatted text that does not fit in,
+            // or the tool tip text from the cell) and the ShowCellToolTips take precedence over the external tool tip.
             return string.IsNullOrEmpty(ToolTipPrivate) && ShowCellToolTips;
         }
     }
@@ -15119,7 +15125,8 @@ public partial class DataGridView
                             && dataGridViewColumn.InheritedAutoSizeMode == DataGridViewAutoSizeColumnMode.Fill)
                         {
                             // alternative: throw new InvalidOperationException(SR.DataGridView_CannotMakeAutoFillColumnVisible);
-                            //              DataGridView_CannotMakeAutoFillColumnVisible=The column cannot be made visible because its autosizing mode is Fill and it is frozen.
+                            //              DataGridView_CannotMakeAutoFillColumnVisible=The column cannot be made visible
+                            //              because its autosizing mode is Fill and it is frozen.
                             // Removing the Fill auto size mode when frozen column becomes visible (instead of throwing an exception)
                             dataGridViewColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
                         }

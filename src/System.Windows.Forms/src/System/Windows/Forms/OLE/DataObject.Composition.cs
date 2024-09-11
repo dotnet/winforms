@@ -34,8 +34,9 @@ public unsafe partial class DataObject
         private readonly ComTypes.IDataObject _runtimeDataObject;
 
         // Feature switch, when set to false, BinaryFormatter is not supported in trimmed applications.
-        // This field, using the default BinaryFormatter switch, is used to control trim warnings related to using BinaryFormatter in WinForms trimming.
-        // The trimmer will generate a warning when set to true and will not generate a warning when set to false.
+        // This field, using the default BinaryFormatter switch, is used to control trim warnings related
+        // to using BinaryFormatter in WinForms trimming. The trimmer will generate a warning when set
+        // to true and will not generate a warning when set to false.
         [FeatureSwitchDefinition("System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization")]
         internal static bool EnableUnsafeBinaryFormatterInNativeObjectSerialization =>
             !AppContext.TryGetSwitch("System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization", out bool isEnabled) || isEnabled;

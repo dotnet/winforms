@@ -1033,10 +1033,12 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
         attr.SetRemapTable(ColorAdjustType.Bitmap, new ReadOnlySpan<(Color OldColor, Color NewColor)>(ref map));
 
         if (SystemInformation.HighContrast &&
-            // We can't replace black with white and vice versa as in other cases due to the colors of images are not exactly black and white.
-            // Also, we can't make a decision of inverting every pixel by comparing it with a background because it causes artifacts in the image.
-            // Because the primary color of all images provided to this method is similar to black (brightness almost zero),
-            // the decision to invert color may be made by checking the background color's brightness.
+            // We can't replace black with white and vice versa as in other cases due to the colors of images are
+            // not exactly black and white. Also, we can't make a decision of inverting every pixel by comparing
+            // it with a background because it causes artifacts in the image.
+            // Because the primary color of all images provided to this method is similar to
+            // black (brightness almost zero), the decision to invert color may be made by checking
+            // the background color's brightness.
             ControlPaint.IsDark(backColor))
         {
             using Bitmap invertedBitmap = ControlPaint.CreateBitmapWithInvertedForeColor(bmp, backColor);

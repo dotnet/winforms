@@ -56,7 +56,8 @@ public class CodeDomSerializer : CodeDomSerializerBase
         {
             foreach (CodeStatement element in statements)
             {
-                // If we do not yet have an instance, we will need to pick through the  statements and see if we can find one.
+                // If we do not yet have an instance, we will need to pick through the statements
+                // and see if we can find one.
                 if (instance is null)
                 {
                     instance = DeserializeStatementToInstance(manager, element);

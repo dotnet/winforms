@@ -183,7 +183,8 @@ internal sealed partial class SelectionUIService
         }
 
         /// <summary>
-        ///  Retrieves an appropriate cursor at the given point. If there is no appropriate cursor here (ie, the point lies outside the selection rectangle), then this will return null.
+        ///  Retrieves an appropriate cursor at the given point. If there is no appropriate cursor here
+        ///  (ie, the point lies outside the selection rectangle), then this will return null.
         /// </summary>
         public virtual Cursor? GetCursorAtPoint(Point point)
         {
@@ -221,7 +222,7 @@ internal sealed partial class SelectionUIService
         /// </summary>
         public virtual int GetHitTest(Point pt)
         {
-            // Is it within our rects?
+            // Is it within our rectangles?
             if (!PointWithinSelection(pt))
             {
                 return NOHIT;
@@ -320,7 +321,8 @@ internal sealed partial class SelectionUIService
         }
 
         /// <summary>
-        ///  returns a region handle that defines this selection. This is used to piece together a paint region for the surface that we draw our selection handles on
+        ///  returns a region handle that defines this selection. This is used to piece together a paint region
+        ///  for the surface that we draw our selection handles on.
         /// </summary>
         public virtual Region GetRegion()
         {
@@ -487,7 +489,9 @@ internal sealed partial class SelectionUIService
         }
 
         /// <summary>
-        ///  rebuilds the inner and outer rectangles based on the current selItem.component dimensions. We could calculate this every time, but that would be expensive for functions like getHitTest that are called a lot (like on every mouse move)
+        ///  rebuilds the inner and outer rectangles based on the current selItem.component dimensions.
+        ///  We could calculate this every time, but that would be expensive for functions like getHitTest
+        ///  that are called a lot (like on every mouse move)
         /// </summary>
         public virtual bool UpdateSize()
         {
