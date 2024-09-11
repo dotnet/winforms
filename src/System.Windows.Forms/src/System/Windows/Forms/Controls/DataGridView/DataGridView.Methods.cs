@@ -393,8 +393,6 @@ public partial class DataGridView
             or DataGridViewAutoSizeRowsMode.DisplayedCells);
 
         // Use of WindowsFormsUtils.CreateMeasurementGraphics() avoid use of this.Handle
-        // IntPtr handle = this.Handle; // Force creation of control's handle because for databound grids,
-        // handle creation wipes out and recreates the columns/rows.
         int width = 0;
         DataGridViewCell dataGridViewCell;
         if (columnIndex > -1 && (((DataGridViewAutoSizeRowsModeInternal)_autoSizeRowsMode) & DataGridViewAutoSizeRowsModeInternal.AllColumns) != 0)
