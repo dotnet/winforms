@@ -38,7 +38,8 @@ internal readonly struct DCMapping : IDisposable
         bool success = PInvokeCore.GetViewportOrgEx(hdc, &viewportOrg);
         Debug.Assert(success, "GetViewportOrgEx() failed.");
 
-        // Create a new rectangular clipping region based off of the bounds specified, shifted over by the x & y specified in the viewport origin.
+        // Create a new rectangular clipping region based off of the bounds specified,
+        // shifted over by the x & y specified in the viewport origin.
         RegionScope clippingRegion = new(
             viewportOrg.X + bounds.Left,
             viewportOrg.Y + bounds.Top,

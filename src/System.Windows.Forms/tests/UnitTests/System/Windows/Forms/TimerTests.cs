@@ -74,7 +74,8 @@ public class TimerTests
         Assert.Equal(value, timer.Enabled);
 
         // NB: disposing the component with strictly mocked object causes tests to fail
-        // Moq.MockException : ISite.Container invocation failed with mock behavior Strict. All invocations on the mock must have a corresponding setup.
+        // Moq.MockException : ISite.Container invocation failed with mock behavior Strict.
+        // All invocations on the mock must have a corresponding setup.
         timer.Site = null;
     }
 
@@ -104,7 +105,8 @@ public class TimerTests
         Assert.Equal(value, timer.Enabled);
 
         // NB: disposing the component with strictly mocked object causes tests to fail
-        // Moq.MockException : ISite.Container invocation failed with mock behavior Strict. All invocations on the mock must have a corresponding setup.
+        // Moq.MockException : ISite.Container invocation failed with mock behavior Strict.
+        // All invocations on the mock must have a corresponding setup.
         timer.Site = null;
     }
 
@@ -178,7 +180,8 @@ public class TimerTests
         Assert.Equal(value, timer.Interval);
 
         // NB: disposing the component with strictly mocked object causes tests to fail
-        // Moq.MockException : ISite.Container invocation failed with mock behavior Strict. All invocations on the mock must have a corresponding setup.
+        // Moq.MockException : ISite.Container invocation failed with mock behavior Strict.
+        // All invocations on the mock must have a corresponding setup.
         timer.Site = null;
     }
 
@@ -209,7 +212,8 @@ public class TimerTests
         Assert.Equal(value, timer.Interval);
 
         // NB: disposing the component with strictly mocked object causes tests to fail
-        // Moq.MockException : ISite.Container invocation failed with mock behavior Strict. All invocations on the mock must have a corresponding setup.
+        // Moq.MockException : ISite.Container invocation failed with mock behavior Strict.
+        // All invocations on the mock must have a corresponding setup.
         timer.Site = null;
     }
 
@@ -257,7 +261,8 @@ public class TimerTests
         Assert.Same(value, timer.Tag);
 
         // NB: disposing the component with strictly mocked object causes tests to fail
-        // Moq.MockException : ISite.Container invocation failed with mock behavior Strict. All invocations on the mock must have a corresponding setup.
+        // Moq.MockException : ISite.Container invocation failed with mock behavior Strict.
+        // All invocations on the mock must have a corresponding setup.
         timer.Site = null;
     }
 
@@ -282,7 +287,8 @@ public class TimerTests
         Assert.False(timer.Enabled);
 
         // NB: disposing the component with strictly mocked object causes tests to fail
-        // Moq.MockException : ISite.Container invocation failed with mock behavior Strict. All invocations on the mock must have a corresponding setup.
+        // Moq.MockException : ISite.Container invocation failed with mock behavior Strict.
+        // All invocations on the mock must have a corresponding setup.
         timer.Site = null;
     }
 
@@ -307,7 +313,8 @@ public class TimerTests
         Assert.True(timer.Enabled);
 
         // NB: disposing the component with strictly mocked object causes tests to fail
-        // Moq.MockException : ISite.Container invocation failed with mock behavior Strict. All invocations on the mock must have a corresponding setup.
+        // Moq.MockException : ISite.Container invocation failed with mock behavior Strict.
+        // All invocations on the mock must have a corresponding setup.
         timer.Site = null;
     }
 
@@ -340,7 +347,8 @@ public class TimerTests
         Assert.False(timer.Enabled);
 
         // NB: disposing the component with strictly mocked object causes tests to fail
-        // Moq.MockException : ISite.Container invocation failed with mock behavior Strict. All invocations on the mock must have a corresponding setup.
+        // Moq.MockException : ISite.Container invocation failed with mock behavior Strict.
+        // All invocations on the mock must have a corresponding setup.
         timer.Site = null;
     }
 
@@ -369,7 +377,8 @@ public class TimerTests
         Assert.False(timer.Enabled);
 
         // NB: disposing the component with strictly mocked object causes tests to fail
-        // Moq.MockException : ISite.Container invocation failed with mock behavior Strict. All invocations on the mock must have a corresponding setup.
+        // Moq.MockException : ISite.Container invocation failed with mock behavior Strict.
+        // All invocations on the mock must have a corresponding setup.
         timer.Site = null;
     }
 

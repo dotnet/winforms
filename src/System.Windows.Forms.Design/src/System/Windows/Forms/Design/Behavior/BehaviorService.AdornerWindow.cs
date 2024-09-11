@@ -155,7 +155,7 @@ public sealed partial class BehaviorService
         }
 
         /// <summary>
-        ///  The AdornerWindow hooks all Drag/Drop notification so  they can be forwarded to the appropriate
+        ///  The AdornerWindow hooks all Drag/Drop notification so they can be forwarded to the appropriate
         ///  Behavior via the BehaviorService.
         /// </summary>
         protected override void OnDragDrop(DragEventArgs e)
@@ -194,7 +194,7 @@ public sealed partial class BehaviorService
         }
 
         /// <summary>
-        ///  The AdornerWindow hooks all Drag/Drop notification so  they can be forwarded to the appropriate
+        ///  The AdornerWindow hooks all Drag/Drop notification so they can be forwarded to the appropriate
         ///  Behavior via the BehaviorService.
         /// </summary>
         protected override void OnDragEnter(DragEventArgs e)

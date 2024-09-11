@@ -124,13 +124,11 @@ public sealed class BehaviorServiceAdornerCollection : CollectionBase
 
     /// <summary>
     ///  Gets a value indicating whether the
-    ///  <see cref="BehaviorServiceAdornerCollection"/> contains the specified
-    ///  <see cref="Adorner"/>.
+    ///  <see cref="BehaviorServiceAdornerCollection"/> contains the specified <see cref="Adorner"/>.
     /// </summary>
     /// <param name="value">The <see cref="Adorner"/> to locate.</param>
     /// <returns>
-    ///  <see langword="true"/> if the <see cref="Adorner"/> is contained in the
-    ///  collection;
+    ///  <see langword="true"/> if the <see cref="Adorner"/> is contained in the collection;
     ///  otherwise, <see langword="false"/>.
     /// </returns>
     /// <seealso cref="IndexOf"/>
@@ -146,7 +144,7 @@ public sealed class BehaviorServiceAdornerCollection : CollectionBase
     /// </summary>
     /// <param name="array">
     ///  The one-dimensional <see cref="Array"/> that is the destination of the values copied from
-    ///  <see cref="BehaviorServiceAdornerCollection"/> .
+    ///  <see cref="BehaviorServiceAdornerCollection"/>.
     /// </param>
     /// <param name="index">The index in <paramref name="array"/> where copying begins.</param>
     /// <returns>
@@ -162,7 +160,7 @@ public sealed class BehaviorServiceAdornerCollection : CollectionBase
     /// <exception cref="ArgumentNullException"><paramref name="array"/> is <see langword="null"/>.</exception>
     /// <exception cref="ArgumentOutOfRangeException">
     ///  <paramref name="index"/> is less than
-    ///  <paramref name="array"/>'s lowbound.
+    ///  <paramref name="array"/>'s low bound.
     /// </exception>
     /// <seealso cref="Array"/>
     public void CopyTo(Adorner[] array, int index)

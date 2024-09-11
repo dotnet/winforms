@@ -89,7 +89,8 @@ internal sealed partial class DesignerActionPanel
 
         public override Size LayoutControls(int top, int width, bool measureOnly)
         {
-            // Figure out our minimum width, Compare to proposed width, If we are smaller, widen the textbox to fit the line based on the bonus
+            // Figure out our minimum width, Compare to proposed width,
+            // If we are smaller, widen the textbox to fit the line based on the bonus
             int textBoxPreferredHeight = _textBox.GetPreferredSize(new Size(int.MaxValue, int.MaxValue)).Height;
             textBoxPreferredHeight += TextBoxHeightFixup;
             int height = textBoxPreferredHeight + LineVerticalPadding + TextBoxLineInnerPadding * 2 + 2; // 2 == border size

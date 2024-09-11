@@ -721,10 +721,13 @@ namespace System.Windows.Forms.Design
             }
 
             // Special case: Data source is a list type (or list item type) rather than a list instance.
-            //    Arises when some component's DataSource property is bound to a Type, and the user opens the dropdown for the DataMember property.
-            //    We need to create a temporary instance of the correct list type, and use that as our data source for the purpose of determining
-            //    data members. Since only BindingSource supports type binding, we bind a temporary BindingSource to the specified type - it will
-            //    create an instance of the correct list type for us. Fixes VSWhidbey bugs 302757 and 280708.
+            //    Arises when some component's DataSource property is bound to a Type, and the user opens
+            //    the dropdown for the DataMember property.
+            //    We need to create a temporary instance of the correct list type,
+            //    and use that as our data source for the purpose of determining data members.
+            //    Since only BindingSource supports type binding, we bind a temporary BindingSource
+            //    to the specified type - it will create an instance of the correct list type for us.
+            //    Fixes VSWhidbey bugs 302757 and 280708.
             if (dataSource is Type)
             {
                 try

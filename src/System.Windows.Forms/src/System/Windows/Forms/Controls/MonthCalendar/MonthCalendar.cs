@@ -1653,7 +1653,8 @@ public partial class MonthCalendar : Control
         Rectangle oldBounds = Bounds;
         Size max = SystemInformation.MaxWindowTrackSize;
 
-        // Second argument to GetPreferredWidth and GetPreferredHeight is a boolean specifying if we should update the number of rows/columns.
+        // Second argument to GetPreferredWidth and GetPreferredHeight is a boolean specifying
+        // if we should update the number of rows/columns.
         // We only want to update the number of rows/columns if we are not currently being scaled.
         bool updateRowsAndColumns = !ScaleHelper.IsScalingRequirementMet || !ScalingInProgress;
 
