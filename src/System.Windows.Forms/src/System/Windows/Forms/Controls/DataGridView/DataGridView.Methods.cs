@@ -1690,7 +1690,7 @@ public partial class DataGridView
         Debug.Assert(autoSizeColumnCriteriaFilter != DataGridViewAutoSizeColumnCriteriaInternal.None);
         Debug.Assert((autoSizeColumnCriteriaFilter & DataGridViewAutoSizeColumnCriteriaInternal.Fill) == 0);
 
-        bool ret = false; // No column auto sizes by default
+        bool ret = false; // No column auto sizing by default
         DataGridViewColumn? dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
         while (dataGridViewColumn is not null)
         {
@@ -14800,7 +14800,7 @@ public partial class DataGridView
                 if (autoSizeColumnMode is not DataGridViewAutoSizeColumnMode.None
                     and not DataGridViewAutoSizeColumnMode.Fill)
                 {
-                    // Column auto sizes
+                    // Column auto size
                     int width = dataGridViewColumn.ThicknessInternal;
                     if (dataGridViewColumn.Visible)
                     {
