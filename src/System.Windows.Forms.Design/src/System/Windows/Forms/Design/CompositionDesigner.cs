@@ -17,7 +17,7 @@ public class ComponentDocumentDesigner : ComponentDesigner, IRootDesigner, ITool
     ITypeDescriptorFilterService
 {
     /// <summary>
-    ///  Gets  the control for this designer.
+    ///  Gets the control for this designer.
     /// </summary>
     public Control Control => throw new NotImplementedException(SR.NotImplementedByDesign);
 

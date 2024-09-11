@@ -49,7 +49,9 @@ public sealed partial class CodeDomComponentSerializationService
             }
 
             /// <summary>
-            ///  If true, the object should be serialized such that during deserialization to an existing object the object is reconstructed entirely. If false, serialize normally
+            ///  If <see langword="true"/>, the object should be serialized such that during deserialization
+            ///  to an existing object the object is reconstructed entirely.
+            ///  If <see langword="false"/>, serialize normally
             /// </summary>
             internal bool Absolute { get; set; }
 

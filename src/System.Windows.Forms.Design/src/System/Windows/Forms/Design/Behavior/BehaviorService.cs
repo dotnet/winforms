@@ -116,7 +116,7 @@ public sealed partial class BehaviorService : IDisposable
     {
         get
         {
-            // we only check for this service/value once since we require the  user to re-open the designer session
+            // we only check for this service/value once since we require the user to re-open the designer session
             // after these types of option have been modified
             if (!_queriedSnapLines)
             {
@@ -494,7 +494,10 @@ public sealed partial class BehaviorService : IDisposable
                 Cursor? hitTestCursor = Adorners[i].Glyphs[j].GetHitTest(pt);
                 if (hitTestCursor is not null)
                 {
-                    // InvokeMouseEnterGlyph will cause the selection to change, which might change the number of glyphs, so we need to remember the new glyph before calling InvokeMouseEnterLeave. VSWhidbey #396611
+                    // InvokeMouseEnterGlyph will cause the selection to change,
+                    // which might change the number of glyphs,
+                    // so we need to remember the new glyph before calling InvokeMouseEnterLeave.
+                    // VSWhidbey #396611
                     Glyph newGlyph = Adorners[i].Glyphs[j];
 
                     // with a valid hit test, fire enter/leave events

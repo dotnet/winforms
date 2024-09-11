@@ -534,7 +534,7 @@ internal partial class DesignerActionUI : IDisposable
         _componentToGlyph.Remove(relatedObject);
 
         // we only do this when we're in a transaction, see bug VSWHIDBEY 418709.
-        // This is for compat reason - infragistic. if we're not in a transaction, too bad, we don't update the screen
+        // This is for compatibility reason - infragistic. if we're not in a transaction, too bad, we don't update the screen
         if (_serviceProvider.TryGetService(out IDesignerHost? host) && host.InTransaction)
         {
             host.TransactionClosed += InvalidateGlyphOnLastTransaction;

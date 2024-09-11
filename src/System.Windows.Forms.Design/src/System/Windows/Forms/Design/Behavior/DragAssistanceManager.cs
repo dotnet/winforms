@@ -9,7 +9,13 @@ using System.Drawing;
 namespace System.Windows.Forms.Design.Behavior;
 
 /// <summary>
-///  The DragAssistanceManager, for lack of a better name, is responsible for integrating SnapLines into the DragBehavior. At the beginning of a DragBehavior this class is instantiated and at every mouse move this class is called and given the opportunity to adjust the position of the drag. The DragAssistanceManager needs to work as fast as possible - so not to interrupt a drag operation. Because of this, this class has many global variables that are re-used, in hopes to limit the # of allocations per mouse move / drag operation. Also, for loops are used extensively (instead of foreach calls) to eliminate the creation of an enumerator.
+///  The DragAssistanceManager, for lack of a better name, is responsible for integrating SnapLines
+///  into the DragBehavior. At the beginning of a DragBehavior this class is instantiated and
+///  at every mouse move this class is called and given the opportunity to adjust the position of the drag.
+///  The DragAssistanceManager needs to work as fast as possible - so not to interrupt a drag operation.
+///  Because of this, this class has many global variables that are re-used,
+///  in hopes to limit the # of allocations per mouse move / drag operation. Also,
+///  for loops are used extensively (instead of foreach calls) to eliminate the creation of an enumerator.
 /// </summary>
 internal sealed partial class DragAssistanceManager
 {
@@ -21,35 +27,52 @@ internal sealed partial class DragAssistanceManager
     private readonly Pen _edgePen = SystemPens.Highlight;
     private readonly bool _disposeEdgePen;
     private readonly Pen _baselinePen = new(Color.Fuchsia);
-    // These are global lists of all the existing vertical and horizontal snaplineson the designer's surface excluding the targetControl. All SnapLine coords in these lists have been properly adjusted for the AdornerWindow coords.
+    // These are global lists of all the existing vertical and horizontal snaplineson the designer's surface
+    // excluding the targetControl. All SnapLine coords in these lists have been properly
+    // adjusted for the AdornerWindow coords.
     private readonly List<SnapLine> _verticalSnapLines = [];
     private readonly List<SnapLine> _horizontalSnapLines = [];
     // These are SnapLines that represent our target control.
     private readonly List<SnapLine> _targetVerticalSnapLines = [];
     private readonly List<SnapLine> _targetHorizontalSnapLines = [];
-    // This is a list of all the different type of SnapLines our target control has. When compiling our global SnapLine lists, if we see a SnapLineType that doesn't exist on our target - we can safely ignore it
+    // This is a list of all the different type of SnapLines our target control has.
+    // When compiling our global SnapLine lists, if we see a SnapLineType that doesn't exist on our target
+    // - we can safely ignore it
     private readonly List<SnapLineType> _targetSnapLineTypes = [];
-    // These are created in our init() method (so we don't have to recreate them for every mousemove). These arrays represent the closest distance to any snap point on our target control. Once these are calculated - we can: 1) remove anything > than snapDistance and 2) determine the smallest distanceoverall
+    // These are created in our init() method (so we don't have to recreate them for every mousemove).
+    // These arrays represent the closest distance to any snap point on our target control. Once these are calculated
+    // - we can:
+    // 1) remove anything > than snapDistance and
+    // 2) determine the smallest distanceoverall
     private int[] _verticalDistances;
     private int[] _horizontalDistances;
-    // These are cleared and populated on every mouse move. These lists contain all the new vertical and horizontal lines we need to draw. At the end of each mouse move - these lines are stored off in the vertLines and horzLines arrays. This way - we can keep track of old snap lines and can avoid erasing and redrawing the same line. HA.
+    // These are cleared and populated on every mouse move.
+    // These lists contain all the new vertical and horizontal lines we need to draw.
+    // At the end of each mouse move - these lines are stored off in the vertLines and horzLines arrays.
+    // This way - we can keep track of old snap lines and can avoid erasing and redrawing the same line. HA.
     private readonly List<Line> _tempVertLines = [];
     private readonly List<Line> _tempHorzLines = [];
     private Line[] _vertLines = [];
     private Line[] _horzLines = [];
-    // When we draw snap lines - we only draw lines from the targetControl to the control we're snapping to. To do this, we'll keep a dictionary... format: snapLineToBounds[SnapLine]=ControlBounds.
+    // When we draw snap lines - we only draw lines from the targetControl to the control we're snapping to.
+    // To do this, we'll keep a dictionary... format: snapLineToBounds[SnapLine]=ControlBounds.
     private readonly Dictionary<SnapLine, Rectangle> _snapLineToBounds = [];
-    // We remember the last set of (vert & horz) lines we draw so that we can push them to the beh. svc. From there, if we receive a test hook message requesting these - we got 'em
+    // We remember the last set of (vert & horz) lines we draw so that we can push them to the beh. svc.
+    // From there, if we receive a test hook message requesting these - we got 'em
     private Line[]? _recentLines;
-    private readonly Image? _backgroundImage; // instead of calling .invalidate on the windows below us, we'll just draw over w/the background image
+    private readonly Image? _backgroundImage; // instead of calling .invalidate on the windows below us,
+                                              // we'll just draw over w/the background image
     private const int SnapDistance = 8; // default snapping distance (pixels)
-    private int _snapPointX, _snapPointY; // defines the snap adjustment that needs to be made during the mousemove/drag operation
+    private int _snapPointX, _snapPointY; // defines the snap adjustment that needs to be made
+                                          // during the mousemove/drag operation
     private const int INVALID_VALUE = 0x1111; // used to represent 'un-set' distances
     private readonly bool _resizing; // Are we resizing?
     private readonly bool _ctrlDrag; // Are we in a ctrl-drag?
 
     /// <summary>
-    ///  Internal constructor called that only takes a service provider. Here it is assumed that all painting will be done to the AdornerWindow and that there are no target controls to exclude from snapping.
+    ///  Internal constructor called that only takes a service provider.
+    ///  Here it is assumed that all painting will be done to the AdornerWindow and
+    ///  that there are no target controls to exclude from snapping.
     /// </summary>
     internal DragAssistanceManager(IServiceProvider serviceProvider)
         : this(
@@ -161,7 +184,12 @@ internal sealed partial class DragAssistanceManager
     }
 
     /// <summary>
-    ///  Adjusts then adds each snap line the designer has to offer to either our global horizontal and vertical lists or our target lists. Note that we also keep track of our target snapline types - 'cause we can safely ignore all other types. If valid target is false- then we don't yet know what we're snapping against - so we'll exclude the check below to skip unwanted snap line types.
+    ///  Adjusts then adds each snap line the designer has to offer to either our global horizontal and
+    ///  vertical lists or our target lists. Note that we also keep track of our target snapline types
+    ///  - 'cause we can safely ignore all other types.
+    ///  If valid target is <see langword="false"/>
+    ///  - then we don't yet know what we're snapping against
+    ///  - so we'll exclude the check below to skip unwanted snap line types.
     /// </summary>
     private void AddSnapLines(ControlDesigner controlDesigner, List<SnapLine> horizontalList, List<SnapLine> verticalList, bool isTarget, bool validTarget)
     {
@@ -177,7 +205,12 @@ internal sealed partial class DragAssistanceManager
         int yOffset = controlBounds.Top;
 
         // THIS IS ONLY NEEDED FOR PADDING SNAPLINES
-        // We need to adjust the bounds to the client area. This is so that we don't include borders + titlebar in the snaplines. In order to add padding, we need to get the offset from the usable client area of our control and the actual origin of our control. In other words: how big is the non-client area here? Ex: we want to add padding on a form to the insides of the borders and below the titlebar.
+        // We need to adjust the bounds to the client area.
+        // This is so that we don't include borders + titlebar in the snaplines.
+        // In order to add padding, we need to get the offset from the
+        // usable client area of our control and the actual origin of our control. In other words:
+        // how big is the non-client area here? Ex: we want to add padding on a form to the insides of the
+        // borders and below the titlebar.
         Point offset = controlDesigner.GetOffsetToClientArea();
         controlRect.X += offset.X; // offset for non-client area
         controlRect.Y += offset.Y; // offset for non-client area
@@ -205,7 +238,8 @@ internal sealed partial class DragAssistanceManager
                     continue;
                 }
 
-                // store off the bounds in our dictionary, so if we draw snaplines we know the length of the line we need to remember different bounds based on what type of snapline this is.
+                // store off the bounds in our dictionary, so if we draw snaplines we know the length
+                // of the line we need to remember different bounds based on what type of snapline this is.
                 if ((snapLine.Filter is not null) && snapLine.Filter.StartsWith(SnapLine.Padding, StringComparison.Ordinal))
                 {
                     _snapLineToBounds.Add(snapLine, controlRect);
@@ -230,7 +264,8 @@ internal sealed partial class DragAssistanceManager
     }
 
     /// <summary>
-    ///  Build up a distance array of all same-type-alignment pts to the closest point on our targetControl. Also, keep track of the smallest distance overall.
+    ///  Build up a distance array of all same-type-alignment pts to the closest point on our targetControl.
+    ///  Also, keep track of the smallest distance overall.
     /// </summary>
     private int BuildDistanceArray(List<SnapLine> snapLines, List<SnapLine> targetSnapLines, int[] distances, Rectangle dragBounds)
     {
@@ -267,7 +302,14 @@ internal sealed partial class DragAssistanceManager
 
             distances[i] = smallestDelta;
             int pri = (int)snapLines[i].Priority;
-            // save off this delta for the overall smallest delta! Need to check the priority here as well if the distance is the same. E.g. smallestDistance so far is 1, for a Low snapline. We now find another distance of -1, for a Medium snapline. The old check if (Math.Abs(smallestDelta) < Math.Abs(smallestDistance)) would not set smallestDistance to -1, since the ABSOLUTE values are the same. Since the return value is used to physically move the control, we would move the control in the direction of the Low snapline, but draw the Medium snapline in the opposite direction.
+            // save off this delta for the overall smallest delta! Need to check the priority
+            // here as well if the distance is the same. E.g. smallestDistance so far is 1,
+            // for a Low snapline. We now find another distance of -1, for a Medium snapline.
+            // The old check if (Math.Abs(smallestDelta) < Math.Abs(smallestDistance))
+            // would not set smallestDistance to -1, since the ABSOLUTE values are the same.
+            // Since the return value is used to physically move the control,
+            // we would move the control in the direction of the Low snapline,
+            // but draw the Medium snapline in the opposite direction.
             if ((Math.Abs(smallestDelta) < Math.Abs(smallestDistance)) ||
                 ((Math.Abs(smallestDelta) == Math.Abs(smallestDistance)) && (pri > highestPriority)))
             {
@@ -283,7 +325,9 @@ internal sealed partial class DragAssistanceManager
     }
 
     /// <summary>
-    ///  Here, we erase all of our old horizontal and vertical snaplines UNLESS they are also contained in our tempHorzLines or tempVertLines arrays - if they are - then erasing them would be redundant (since we know we want to draw them on this mousemove)
+    ///  Here, we erase all of our old horizontal and vertical snaplines UNLESS they are also contained
+    ///  in our tempHorzLines or tempVertLines arrays
+    ///  - if they are - then erasing them would be redundant (since we know we want to draw them on this mousemove)
     /// </summary>
     private Line[] EraseOldSnapLines(Line[] lines, List<Line>? tempLines)
     {
@@ -300,7 +344,23 @@ internal sealed partial class DragAssistanceManager
                     {
                         if (line.LineType != tempLines[j].LineType)
                         {
-                            // If the lines are not the same type, then we should forcefully try to remove it. Say you have a Panel with a Button in it. By default Panel.Padding = 0, and Button.Margin = 3. As you move the button to the left, you will first get the combined LEFT margin+padding snap line. If you keep moving the button, you will now snap to the Left edge, and you will get the Blue snapline. You now move the button back to the right, and you will immediately snap to the LEFT Padding snapline. But what's gonna happen. Both the old (Left) snapline, and the LEFT Padding snapline (remember these are the panels) have the same coordinates, since Panel.Padding is 0. Thus Line.GetDiffs will return a non-null diffs. BUT e.g the first line will result in an invalidRect of (x1,y1,0,0), this we end up invalidating only a small portion of the existing Blue (left) Snapline. That's actually not okay since VERTICAL (e.g. LEFT) padding snaplines actually end up getting drawn HORIZONTALLY - thus we didn't really invalidate correctly.
+                            // If the lines are not the same type, then we should forcefully try to remove it.
+                            // Say you have a Panel with a Button in it.
+                            // By default Panel.Padding = 0, and Button.Margin = 3.
+                            // As you move the button to the left,
+                            // you will first get the combined LEFT margin+padding snap line.
+                            // If you keep moving the button, you will now snap to the Left edge,
+                            // and you will get the Blue snapline.
+                            // You now move the button back to the right,
+                            // and you will immediately snap to the LEFT Padding snapline.
+                            // But what's gonna happen. Both the old (Left) snapline,
+                            // and the LEFT Padding snapline (remember these are the panels)
+                            // have the same coordinates, since Panel.Padding is 0.
+                            // Thus Line.GetDiffs will return a non-null diffs.
+                            // BUT e.g the first line will result in an invalidRect of (x1,y1,0,0),
+                            // this we end up invalidating only a small portion of the existing Blue (left) Snapline.
+                            // That's actually not okay since VERTICAL (e.g. LEFT) padding snaplines actually
+                            // end up getting drawn HORIZONTALLY - thus we didn't really invalidate correctly.
                             continue;
                         }
 
@@ -346,7 +406,8 @@ internal sealed partial class DragAssistanceManager
 
         if (tempLines is not null)
         {
-            // Now, store off all the new lines (from the temp structures), so next time around (next mousemove message) we know which lines to erase and which ones to keep
+            // Now, store off all the new lines (from the temp structures),
+            // so next time around (next mousemove message) we know which lines to erase and which ones to keep
             lines = new Line[tempLines.Count];
             tempLines.CopyTo(lines);
         }
@@ -365,7 +426,9 @@ internal sealed partial class DragAssistanceManager
     }
 
     /// <summary>
-    ///  This internal method returns a snap line[] representing the last SnapLines that were rendered before this algorithm was stopped (usually by an OnMouseUp). This is used for storing additional toolbox drag/drop info and testing hooks.
+    ///  This internal method returns a snap line[] representing the last SnapLines that were rendered
+    ///  before this algorithm was stopped (usually by an OnMouseUp). This is used for storing additional
+    ///  toolbox drag/drop info and testing hooks.
     /// </summary>
     internal Line[] GetRecentLines()
     {
@@ -436,7 +499,8 @@ internal sealed partial class DragAssistanceManager
     // Returns true if we should add snaplines for this control
     private bool AddControlSnaplinesWhenResizing(ControlDesigner designer, Control control, Control? targetControl)
     {
-        // do not add snaplines if we are resizing the control is a container control with AutoSize set to true and the control is the parent of the targetControl
+        // do not add snaplines if we are resizing the control is a container control with
+        // AutoSize set to true and the control is the parent of the targetControl
         if (_resizing &&
             (designer is ParentControlDesigner) &&
             (control.AutoSize) &&
@@ -465,10 +529,13 @@ internal sealed partial class DragAssistanceManager
         }
 
         Control rootControl = (Control)host.RootComponent;
-        // the clipping bounds will be used to ignore all controls that are completely outside of our rootcomponent's bounds -this way we won't end up snapping to controls that are not visible on the form's surface
+        // the clipping bounds will be used to ignore all controls that are
+        // completely outside of our rootcomponent's bounds
+        // -this way we won't end up snapping to controls that are not visible on the form's surface
         Rectangle clipBounds = new(0, 0, rootControl.ClientRectangle.Width, rootControl.ClientRectangle.Height);
         clipBounds.Inflate(-1, -1);
-        // determine the screen offset from our rootComponent to the AdornerWindow (since all drag notification coords will be in adorner window coords)
+        // determine the screen offset from our rootComponent to the AdornerWindow
+        // (since all drag notification coords will be in adorner window coords)
         if (targetControl is not null)
         {
             _dragOffset = _behaviorService.ControlToAdornerWindow(targetControl);
@@ -530,7 +597,8 @@ internal sealed partial class DragAssistanceManager
                     AddSnapLines(designer, _horizontalSnapLines, _verticalSnapLines, false, targetControl is not null);
                 }
 
-                // Does the designer have internal control designers for which we need to add snaplines (like SplitPanelContainer, ToolStripContainer)
+                // Does the designer have internal control designers for which we need to add snaplines
+                // (like SplitPanelContainer, ToolStripContainer)
                 int numInternalDesigners = designer.NumberOfInternalControlDesigners();
                 for (int i = 0; i < numInternalDesigners; i++)
                 {
@@ -545,7 +613,8 @@ internal sealed partial class DragAssistanceManager
             }
         }
 
-        // Now that we know how many snaplines everyone has, we can create temp arrays now. Intentionally avoiding this on every mousemove.
+        // Now that we know how many snaplines everyone has, we can create temp arrays now.
+        // Intentionally avoiding this on every mousemove.
         _verticalDistances = new int[_verticalSnapLines.Count];
         _horizontalDistances = new int[_horizontalSnapLines.Count];
     }
@@ -585,7 +654,9 @@ internal sealed partial class DragAssistanceManager
     }
 
     /// <summary>
-    ///  Returns the offset in which the targetControl's rect needs to be re-positioned (given the direction by 'directionOffset') in order to align with the nearest possible snapline. This is called by commandSet during keyboard movements to auto-snap the control around the designer.
+    ///  Returns the offset in which the targetControl's rect needs to be re-positioned
+    ///  (given the direction by 'directionOffset') in order to align with the nearest possible snapline.
+    ///  This is called by commandSet during keyboard movements to auto-snap the control around the designer.
     /// </summary>
     internal Point OffsetToNearestSnapLocation(Control targetControl, IList targetSnaplines, Point directionOffset)
     {
@@ -608,7 +679,9 @@ internal sealed partial class DragAssistanceManager
     }
 
     /// <summary>
-    ///  Returns the offset in which the targetControl's rect needs to be re-positioned (given the direction by 'directionOffset') in order to align with the nearest possible snapline. This is called by commandSet during keyboard movements to auto-snap the control around the designer.
+    ///  Returns the offset in which the targetControl's rect needs to be re-positioned
+    ///  (given the direction by 'directionOffset') in order to align with the nearest possible snapline.
+    ///  This is called by commandSet during keyboard movements to auto-snap the control around the designer.
     /// </summary>
     internal Point OffsetToNearestSnapLocation(Control targetControl, Point directionOffset)
     {
@@ -713,7 +786,8 @@ internal sealed partial class DragAssistanceManager
         // find the next smallest
         for (int i = 0; i < distances.Length; i++)
         {
-            // If a distance is 0 or if it is to our left and we're heading right or if it is to our right and we're heading left then we can null this value out
+            // If a distance is 0 or if it is to our left and we're heading right or
+            // if it is to our right and we're heading left then we can null this value out
             if (distances[i] == 0 ||
               (distances[i] > 0 && direction > 0) ||
               (distances[i] < 0 && direction < 0))
@@ -821,7 +895,8 @@ internal sealed partial class DragAssistanceManager
     }
 
     /// <summary>
-    ///  Performance improvement: Given an snapline we will render, check if it overlaps with an existing snapline. If so, combine the two.
+    ///  Performance improvement: Given an snapline we will render, check if it overlaps with an existing snapline.
+    ///  If so, combine the two.
     /// </summary>
     private static void CombineSnaplines(Line snapLine, List<Line> currentLines)
     {
@@ -888,7 +963,9 @@ internal sealed partial class DragAssistanceManager
         if (IsMarginOrPaddingSnapLine(snapLine))
         {
             line.OriginalBounds = bounds;
-            // need to know which padding line (left, right) we are storing. The original check in RenderSnapLines was wrong. It assume that the dragRect was completely within the OriginalBounds which is not necessarily true
+            // need to know which padding line (left, right) we are storing.
+            // The original check in RenderSnapLines was wrong.
+            // It assume that the dragRect was completely within the OriginalBounds which is not necessarily true
             if (line.LineType == LineType.Padding)
             {
                 switch (snapLine.Filter)
@@ -914,7 +991,10 @@ internal sealed partial class DragAssistanceManager
     }
 
     /// <summary>
-    ///  This function validates a Margin or Padding SnapLine. A valid Margin SnapLine is one that will be drawn only if the target control being dragged somehow intersects (vertically or horizontally) the coords of the given snapLine. This is done so we don't start drawing margin lines when controls are large distances apart (too much mess);
+    ///  This function validates a Margin or Padding SnapLine. A valid Margin SnapLine is one that will
+    ///  be drawn only if the target control being dragged somehow intersects (vertically or horizontally)
+    ///  the coords of the given snapLine. This is done so we don't start drawing margin lines when controls
+    ///  are large distances apart (too much mess);
     /// </summary>
     private bool ValidateMarginOrPaddingLine(SnapLine snapLine, Rectangle dragBounds)
     {
@@ -959,7 +1039,9 @@ internal sealed partial class DragAssistanceManager
     }
 
     /// <summary>
-    ///  Called by the DragBehavior on every mouse move. We first offset all of our drag-control's snap lines by the amount of the mouse move then follow our 2-pass heuristic to determine which SnapLines to render.
+    ///  Called by the DragBehavior on every mouse move. We first offset all
+    ///  of our drag-control's snap lines by the amount of the mouse move
+    ///  then follow our 2-pass heuristic to determine which SnapLines to render.
     /// </summary>
     internal Point OnMouseMove(Rectangle dragBounds, SnapLine[] snapLines, ref bool didSnap, bool shouldSnapHorizontally)
     {
@@ -987,7 +1069,8 @@ internal sealed partial class DragAssistanceManager
     }
 
     /// <summary>
-    ///  Called by the DragBehavior on every mouse move. We first offset all of our drag-control's snap lines by the amount of the mouse move then follow our 2-pass heuristic to determine which SnapLines to render.
+    ///  Called by the DragBehavior on every mouse move. We first offset all of our drag-control's snap lines
+    ///  by the amount of the mouse move then follow our 2-pass heuristic to determine which SnapLines to render.
     /// </summary>
     internal Point OnMouseMove(Rectangle dragBounds)
     {
@@ -996,7 +1079,8 @@ internal sealed partial class DragAssistanceManager
     }
 
     /// <summary>
-    ///  Called by the resizebehavior. It needs to know whether we really snapped or not. The snapPoint could be (0,0) even though we snapped.
+    ///  Called by the resizebehavior.
+    ///  It needs to know whether we really snapped or not. The snapPoint could be (0,0) even though we snapped.
     /// </summary>
     internal Point OnMouseMove(Control targetControl, SnapLine[] snapLines, ref bool didSnap, bool shouldSnapHorizontally)
     {
@@ -1006,7 +1090,8 @@ internal sealed partial class DragAssistanceManager
     }
 
     /// <summary>
-    ///  Called by the DragBehavior on every mouse move. We first offset all of our drag-control's snap lines by the amount of the mouse move then follow our 2-pass heuristic to determine which SnapLines to render.
+    ///  Called by the DragBehavior on every mouse move. We first offset all of our drag-control's snap lines
+    ///  by the amount of the mouse move then follow our 2-pass heuristic to determine which SnapLines to render.
     /// </summary>
     private Point OnMouseMove(Rectangle dragBounds, bool offsetSnapLines, ref bool didSnap, bool shouldSnapHorizontally)
     {
@@ -1027,7 +1112,8 @@ internal sealed partial class DragAssistanceManager
             }
         }
 
-        // First pass - build up a distance array of all same-type-alignment pts to the closest point on our targetControl. Also, keep track of the smallestdistance overall
+        // First pass - build up a distance array of all same-type-alignment pts to the closest point
+        // on our targetControl. Also, keep track of the smallestdistance overall
         int smallestDistanceVert = BuildDistanceArray(_verticalSnapLines, _targetVerticalSnapLines, _verticalDistances, dragBounds);
         int smallestDistanceHorz = INVALID_VALUE;
         if (shouldSnapHorizontally)
@@ -1035,10 +1121,12 @@ internal sealed partial class DragAssistanceManager
             smallestDistanceHorz = BuildDistanceArray(_horizontalSnapLines, _targetHorizontalSnapLines, _horizontalDistances, dragBounds);
         }
 
-        // Second Pass!  We only need to do a second pass if the smallest delta is <= SnapDistance. If this is the case - then we draw snap lines for every line equal to the smallest distance available in the distance array
+        // Second Pass!  We only need to do a second pass if the smallest delta is <= SnapDistance.
+        // If this is the case - then we draw snap lines for every line equal to the smallest distance available in the distance array
         _snapPointX = (Math.Abs(smallestDistanceVert) <= SnapDistance) ? -smallestDistanceVert : INVALID_VALUE;
         _snapPointY = (Math.Abs(smallestDistanceHorz) <= SnapDistance) ? -smallestDistanceHorz : INVALID_VALUE;
-        // certain behaviors (like resize) might want to know whether we really snapped or not. They can't check the returned snapPoint for (0,0) since that is a valid snapPoint.
+        // certain behaviors (like resize) might want to know whether we really snapped or not.
+        // They can't check the returned snapPoint for (0,0) since that is a valid snapPoint.
         didSnap = false;
         if (_snapPointX != INVALID_VALUE)
         {
@@ -1059,15 +1147,18 @@ internal sealed partial class DragAssistanceManager
         _horzLines = EraseOldSnapLines(_horzLines, _tempHorzLines);
         // store this drag rect - we'll use it when we are (eventually) called back on to actually render our lines
 
-        // NOTE NOTE NOTE: If OnMouseMove is called during a resize operation, then cachedDragRect is not guaranteed to work. That is why I introduced RenderSnapLinesInternal(dragRect)
+        // NOTE NOTE NOTE: If OnMouseMove is called during a resize operation,
+        // then cachedDragRect is not guaranteed to work. That is why I introduced RenderSnapLinesInternal(dragRect)
         _cachedDragRect = tempDragRect;
         // reset the dragoffset to this last location
         _dragOffset = dragBounds.Location;
-        // this 'snapPoint' will be the amount we want the dragBehavior to shift the dragging control by ('cause we snapped somewhere)
+        // this 'snapPoint' will be the amount we want the dragBehavior to shift the dragging control by
+        // ('cause we snapped somewhere)
         return snapPoint;
     }
 
-    // NOTE NOTE NOTE: If OnMouseMove is called during a resize operation, then cachedDragRect is not guaranteed to work. That is why I introduced RenderSnapLinesInternal(dragRect)
+    // NOTE NOTE NOTE: If OnMouseMove is called during a resize operation,
+    // then cachedDragRect is not guaranteed to work. That is why I introduced RenderSnapLinesInternal(dragRect)
     /// <summary>
     ///  Called by the ResizeBehavior after it has finished drawing
     /// </summary>
@@ -1078,7 +1169,8 @@ internal sealed partial class DragAssistanceManager
     }
 
     /// <summary>
-    ///  Called by the DropSourceBehavior after it finished drawing its' dragging images so that we can draw our lines on top of everything.
+    ///  Called by the DropSourceBehavior after it finished drawing its' dragging images
+    ///  so that we can draw our lines on top of everything.
     /// </summary>
     internal void RenderSnapLinesInternal()
     {

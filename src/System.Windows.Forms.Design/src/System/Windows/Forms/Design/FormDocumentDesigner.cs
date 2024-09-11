@@ -61,7 +61,7 @@ internal class FormDocumentDesigner : DocumentDesigner
         get
         {
             // we don't want to get inherited value from a base form that might have been designed in a different
-            // DPI so we recalculate the thing instead of getting  AutoScaleBaseSize (QFE 2280)
+            // DPI so we recalculate the thing instead of getting AutoScaleBaseSize (QFE 2280)
             SizeF real = Form.GetAutoScaleSize(((Form)Component).Font);
             return new Size((int)Math.Round(real.Width), (int)Math.Round(real.Height));
         }
@@ -448,7 +448,10 @@ internal class FormDocumentDesigner : DocumentDesigner
     }
 
     /// <summary>
-    ///  Allows a designer to filter the set of properties the component it is designing will expose through the TypeDescriptor object. This method is called immediately before its corresponding "Post" method. If you are overriding this method you should call the base implementation before you perform your own filtering.
+    ///  Allows a designer to filter the set of properties the component it is designing
+    ///  will expose through the TypeDescriptor object. This method is called immediately before
+    ///  its corresponding "Post" method. If you are overriding this method you should
+    ///  call the base implementation before you perform your own filtering.
     /// </summary>
     protected override void PreFilterProperties(IDictionary properties)
     {
@@ -466,7 +469,7 @@ internal class FormDocumentDesigner : DocumentDesigner
             }
         }
 
-        // Mark auto scale base size as serializable again so we can monitor it for backwards compat.
+        // Mark auto scale base size as serializable again so we can monitor it for backwards compatibility.
         prop = (PropertyDescriptor)properties["AutoScaleBaseSize"];
         if (prop is not null)
         {

@@ -2465,7 +2465,8 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
             maxSize.Height += gripMargin.Vertical + toolStrip.Grip.GripThickness;
         }
 
-        // note here the difference in vertical - we want the strings to fit perfectly so we're not going to constrain by the specified size.
+        // note here the difference in vertical - we want the strings to fit perfectly
+        // so we're not going to constrain by the specified size.
         if (toolStrip.Size != maxSize)
         {
             CommonProperties.xClearPreferredSizeCache(toolStrip);

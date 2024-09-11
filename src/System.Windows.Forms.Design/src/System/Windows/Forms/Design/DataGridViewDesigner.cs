@@ -124,7 +124,8 @@ internal class DataGridViewDesigner : ControlDesigner
         DataGridView dataGridView = Control;
 
         // DataGridViewDesigner::Initialize runs after InitializeComponent was deserialized.
-        // just in case the user tinkered w/ InitializeComponent set AutoGenerateColumns to TRUE if there is no DataSource, otherwise set it to FALSE
+        // just in case the user tinkered w/ InitializeComponent set AutoGenerateColumns to
+        // TRUE if there is no DataSource, otherwise set it to FALSE
         dataGridView.AutoGenerateColumns = dataGridView.DataSource is null;
 
         // hook up the DataSourceChanged event, DataMemberChanged event

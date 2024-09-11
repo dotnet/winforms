@@ -75,7 +75,7 @@ public class ByteViewer : TableLayoutPanel
         SetStyle(ControlStyles.ResizeRedraw, true);
     }
 
-    // Stole this code from  XmlScanner
+    // Stole this code from XmlScanner
     private static int AnalyzeByteOrderMark(byte[] buffer, int index)
     {
         int c1 = buffer[index + 0] << 8 | buffer[index + 1];
@@ -371,7 +371,7 @@ public class ByteViewer : TableLayoutPanel
     /// </summary>
     public virtual DisplayMode GetDisplayMode() => _displayMode;
 
-    // Stole this code from  XmlScanner
+    // Stole this code from XmlScanner
     private static int GetEncodingIndex(int c1) => c1 switch
     {
         0x0000 => 1,
@@ -438,7 +438,7 @@ public class ByteViewer : TableLayoutPanel
         _scrollbarHeight = SystemInformation.HorizontalScrollBarHeight;
         _scrollbarWidth = SystemInformation.VerticalScrollBarWidth;
 
-        // For backwards compat
+        // For backwards compatibility
         Size = new Size(
             SCROLLBAR_START_X + _scrollbarWidth + BORDER_GAP + INSET_GAP,
             2 * (BORDER_GAP + INSET_GAP) + _rowCount * (CELL_HEIGHT));
