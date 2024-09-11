@@ -392,7 +392,6 @@ public partial class DataGridView
             or DataGridViewAutoSizeRowsMode.DisplayedCellsExceptHeaders
             or DataGridViewAutoSizeRowsMode.DisplayedCells);
 
-        // Use of WindowsFormsUtils.CreateMeasurementGraphics() avoid use of this.Handle
         int width = 0;
         DataGridViewCell dataGridViewCell;
         if (columnIndex > -1 && (((DataGridViewAutoSizeRowsModeInternal)_autoSizeRowsMode) & DataGridViewAutoSizeRowsModeInternal.AllColumns) != 0)

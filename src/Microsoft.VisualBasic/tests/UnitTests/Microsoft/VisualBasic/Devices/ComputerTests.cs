@@ -3,6 +3,8 @@
 
 namespace Microsoft.VisualBasic.Devices.Tests;
 
+[Collection("Sequential")]
+[CollectionDefinition("Sequential", DisableParallelization = true)]
 public class ComputerTests
 {
     [Fact]
