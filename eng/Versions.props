@@ -76,7 +76,7 @@
     <MicrosoftVisualStudioThreadingVersion>17.0.15-alpha</MicrosoftVisualStudioThreadingVersion>
     <!-- This is needed for Verify.Xunit to pull correct version of System.Speech -->
     <MicrosoftWindowsCompatibilityVersion>7.0.0</MicrosoftWindowsCompatibilityVersion>
-    <MoqPackageVersion>4.10.0</MoqPackageVersion>
+    <MoqPackageVersion>4.20.70</MoqPackageVersion>
     <FluentAssertionsVersion>6.11.0</FluentAssertionsVersion>
     <SystemComponentModelTypeConverterTestDataVersion>8.0.0-beta.23107.1</SystemComponentModelTypeConverterTestDataVersion>
     <SystemDrawingCommonTestDataVersion>8.0.0-beta.23107.1</SystemDrawingCommonTestDataVersion>
@@ -103,7 +103,7 @@
     <MicrosoftCodeAnalysisPublicApiAnalyzersVersion>$(MicrosoftCodeAnalysisAnalyzersVersion)</MicrosoftCodeAnalysisPublicApiAnalyzersVersion>
     <MicrosoftCodeAnalysisNetAnalyzersVersion>8.0.0-preview.23327.3</MicrosoftCodeAnalysisNetAnalyzersVersion>
     <StyleCopAnalyzersVersion>1.2.0-beta.556</StyleCopAnalyzersVersion>
-    <NugetPackagingVersion>6.3.4</NugetPackagingVersion>
+    <NugetPackagingVersion>6.11.0</NugetPackagingVersion>
   </PropertyGroup>
   <!-- Additional unchanging dependencies -->
   <PropertyGroup>
@@ -111,5 +111,7 @@
     <MicrosoftWindowsDesktopAppRefv30PackageVersion>3.0.0</MicrosoftWindowsDesktopAppRefv30PackageVersion>
     <NewtonsoftJsonVersion>13.0.1</NewtonsoftJsonVersion>
     <VsWherePackageVersion>2.6.7</VsWherePackageVersion>
+    <!-- Pin transitive dependency to avoid vulnerable 8.0.0 version. -->
+    <SystemFormatsAsn1PackageVersion>8.0.1</SystemFormatsAsn1PackageVersion>
   </PropertyGroup>
 </Project>
