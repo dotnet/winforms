@@ -3,7 +3,9 @@
 
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+#if DEBUG
 using System.Runtime.InteropServices;
+#endif
 
 namespace Windows.Win32;
 
