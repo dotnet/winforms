@@ -23,7 +23,7 @@ HRESULT STDMETHODCALLTYPE RawErrorInfoUsageTest::InterfaceSupportsErrorInfo(
     // This is hack, in order to not implement IDispatch.
     // By default implementations wrap any error during invoke into DISP_E_EXCEPTION
     // and consume IErrorInfo. Some implementation behave differently, so this is emulation
-    // of that behaviour.
+    // of that behavior.
     ComSmartPtr<ICreateErrorInfo> cei;
     if (SUCCEEDED(::CreateErrorInfo(&cei)))
     {

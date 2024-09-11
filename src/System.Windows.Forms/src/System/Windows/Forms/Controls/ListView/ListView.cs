@@ -98,8 +98,8 @@ public partial class ListView : Control
     private const int MAXTILECOLUMNS = 20;
 
     // PERF: take all the bools and put them into a state variable
-    private Collections.Specialized.BitVector32 _listViewState; // see LISTVIEWSTATE_ consts above
-    private Collections.Specialized.BitVector32 _listViewState1; // see LISTVIEWSTATE1_ consts above
+    private Collections.Specialized.BitVector32 _listViewState; // see LISTVIEWSTATE_ constants above
+    private Collections.Specialized.BitVector32 _listViewState1; // see LISTVIEWSTATE1_ constants above
 
     // Ownerdraw data caches... Only valid inside WM_PAINT.
 
@@ -5965,7 +5965,7 @@ public partial class ListView : Control
 
     private void WmMouseDown(ref Message m, MouseButtons button, int clicks)
     {
-        // Always Reset the MouseupFired....
+        // Always Reset the MouseUpFired....
         _listViewState[LISTVIEWSTATE_mouseUpFired] = false;
         _listViewState[LISTVIEWSTATE_expectingMouseUp] = true;
 
@@ -6678,7 +6678,7 @@ public partial class ListView : Control
                         // Windows common control always fires
                         // this event twice, once with newState, oldState, and again with
                         // oldState, newState.
-                        // Changing this affects the behaviour as the control never
+                        // Changing this affects the behavior as the control never
                         // fires the event on a Deselect of an Items from multiple selections.
                         // So leave it as it is...
                         if (newState != oldState)

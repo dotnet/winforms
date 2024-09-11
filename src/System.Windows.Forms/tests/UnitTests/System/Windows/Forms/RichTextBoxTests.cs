@@ -6897,7 +6897,7 @@ public partial class RichTextBoxTests
                 control.Text = text;
                 Assert.Equal(expectedText, control.Text);
 
-                // verify the old behaviour via StreamOut(SF.TEXT | SF.UNICODE)
+                // verify the old behavior via StreamOut(SF.TEXT | SF.UNICODE)
                 string textOldWay = control.TestAccessor().Dynamic.StreamOut(PInvoke.SF_TEXT | PInvoke.SF_UNICODE);
                 Assert.Equal(oldWayExpectedText, textOldWay);
 
