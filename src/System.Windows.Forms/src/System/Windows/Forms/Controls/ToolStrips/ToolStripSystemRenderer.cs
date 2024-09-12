@@ -617,6 +617,12 @@ public class ToolStripSystemRenderer : ToolStripRenderer
 
             DrawArrow(new ToolStripArrowRenderEventArgs(g, splitButton, dropDownRect, arrowColor, ArrowDirection.Down));
         }
+
+        if (e.Item is ToolStripSplitButton item && (item.ButtonPressed || item.Selected || item.ButtonSelected))
+        {
+            using var brush = SystemColors.WindowFrame.GetCachedSolidBrushScope();
+            g.FillRectangle(brush, item.SplitterBounds);
+        }
     }
 
     /// <summary>
