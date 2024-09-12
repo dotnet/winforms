@@ -9,7 +9,8 @@ Imports Microsoft.VisualBasic.FileIO
 Namespace Microsoft.VisualBasic.MyServices
 
     ''' <summary>
-    '''  An extremely thin wrapper around <see cref="FileIO.FileSystem"/> to expose the type through <see cref="My"/>.
+    '''  An extremely thin wrapper around <see cref="FileIO.FileSystem"/>
+    '''  to expose the type through <see cref="My"/>.
     ''' </summary>
     <EditorBrowsable(EditorBrowsableState.Never)>
     Public Class FileSystemProxy
@@ -22,6 +23,10 @@ Namespace Microsoft.VisualBasic.MyServices
         Friend Sub New()
         End Sub
 
+        ''' <summary>
+        ''' Gets the current directory.
+        ''' </summary>
+        ''' <returns>The current directory for file I/O operations.</returns>
         Public Property CurrentDirectory() As String
             Get
                 Return FileIO.FileSystem.CurrentDirectory
@@ -54,7 +59,11 @@ Namespace Microsoft.VisualBasic.MyServices
             FileIO.FileSystem.CopyDirectory(sourceDirectoryName, destinationDirectoryName)
         End Sub
 
-        Public Sub CopyDirectory(sourceDirectoryName As String, destinationDirectoryName As String, overwrite As Boolean)
+        Public Sub CopyDirectory(
+            sourceDirectoryName As String,
+            destinationDirectoryName As String,
+            overwrite As Boolean)
+
             FileIO.FileSystem.CopyDirectory(sourceDirectoryName, destinationDirectoryName, overwrite)
         End Sub
 

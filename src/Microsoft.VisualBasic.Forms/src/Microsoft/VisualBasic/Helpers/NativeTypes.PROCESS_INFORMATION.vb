@@ -8,7 +8,8 @@ Namespace Microsoft.VisualBasic.CompilerServices
     Partial Friend NotInheritable Class NativeTypes
 
         ''' <summary>
-        '''  Represent Win32 PROCESS_INFORMATION structure. IMPORTANT: Copy the handles to a SafeHandle before use them.
+        '''  Represent Win32 PROCESS_INFORMATION structure.
+        '''  IMPORTANT: Copy the handles to a SafeHandle before use them.
         ''' </summary>
         ''' <remarks>
         '''  The handles in PROCESS_INFORMATION are initialized in unmanaged function.

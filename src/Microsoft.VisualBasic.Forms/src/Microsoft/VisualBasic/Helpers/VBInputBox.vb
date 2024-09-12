@@ -48,7 +48,11 @@ Namespace Microsoft.VisualBasic.CompilerServices
             'MyCancelButton
             '
             MyCancelButton.DialogResult = DialogResult.Cancel
-            resources.ApplyResources(MyCancelButton, "MyCancelButton", CultureInfo.CurrentUICulture)
+            resources.ApplyResources(
+                value:=MyCancelButton,
+                objectName:="MyCancelButton",
+                culture:=CultureInfo.CurrentUICulture)
+
             MyCancelButton.Name = "MyCancelButton"
             '
             'TextBox

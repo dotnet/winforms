@@ -46,25 +46,34 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  or can be converted to that format.
         ''' </summary>
         ''' <param name="format"></param>
-        ''' <returns><see langword="True"/> if there's data in the passed in format, otherwise <see langword="False"/>.</returns>
+        ''' <returns>
+        '''  <see langword="True"/> if there's data in the passed in format,
+        '''  otherwise <see langword="False"/>.
+        ''' </returns>
         Public Function ContainsData(format As String) As Boolean
             Return Clipboard.ContainsData(format)
         End Function
 
         ''' <summary>
-        '''  Indicates whether there is data on the <see cref="Clipboard"/> that is in the <see cref="DataFormats.FileDrop"/>
-        '''   format or can be converted to that format.
+        '''  Indicates whether there is data on the <see cref="Clipboard"/>
+        '''  that is in the <see cref="DataFormats.FileDrop"/> format or can be converted to that format.
         ''' </summary>
-        ''' <returns><see langword="True"/> if a file drop list is available, otherwise <see langword="False"/>.</returns>
+        ''' <returns>
+        '''  <see langword="True"/> if a file drop list is available,
+        '''  otherwise <see langword="False"/>.
+        ''' </returns>
         Public Function ContainsFileDropList() As Boolean
             Return Clipboard.ContainsFileDropList()
         End Function
 
         ''' <summary>
-        '''  Indicates whether there Is data on the <see cref="Clipboard"/> that Is in the <see cref="DataFormats.Bitmap"/>
-        '''   format or can be converted to that format.
+        '''  Indicates whether there Is data on the <see cref="Clipboard"/>
+        '''  that Is in the <see cref="DataFormats.Bitmap"/> format or can be converted to that format.
         ''' </summary>
-        ''' <returns><see langword="True"/> if an image is available, otherwise <see langword="False"/>.</returns>
+        ''' <returns>
+        '''  <see langword="True"/> if an image is available,
+        '''  otherwise <see langword="False"/>.
+        ''' </returns>
         Public Function ContainsImage() As Boolean
             Return Clipboard.ContainsImage()
         End Function
@@ -73,7 +82,10 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  Indicates whether there is text data on the <see cref="Clipboard"/>
         '''  in <see cref="TextDataFormat.UnicodeText"/> format.
         ''' </summary>
-        ''' <returns><see langword="True"/> if text is available, otherwise <see langword="False"/>.</returns>
+        ''' <returns>
+        '''  <see langword="True"/> if text is available,
+        '''  otherwise <see langword="False"/>.
+        ''' </returns>
         Public Function ContainsText() As Boolean
             Return Clipboard.ContainsText
         End Function
@@ -83,7 +95,10 @@ Namespace Microsoft.VisualBasic.MyServices
         '''   specified <see cref="TextDataFormat"/> value.
         ''' </summary>
         ''' <param name="format">The type of text being checked for.</param>
-        ''' <returns><see langword="True"/> if text is available, otherwise <see langword="False"/>.</returns>
+        ''' <returns>
+        '''  <see langword="True"/> if text is available,
+        '''  otherwise <see langword="False"/>.
+        ''' </returns>
         Public Function ContainsText(format As TextDataFormat) As Boolean
             Return Clipboard.ContainsText(format)
         End Function
@@ -109,7 +124,9 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  Retrieves the data that is currently on the system <see cref="Clipboard"/>.
         ''' </summary>
         ''' <returns>The <see cref="IDataObject"/>.</returns>
-        ''' <remarks>This gives the ability to save an object in multiple formats.</remarks>
+        ''' <remarks>
+        '''  This gives the ability to save an object in multiple formats.
+        ''' </remarks>
         <EditorBrowsable(EditorBrowsableState.Advanced)>
         Public Function GetDataObject() As IDataObject
             Return Clipboard.GetDataObject()
@@ -132,7 +149,8 @@ Namespace Microsoft.VisualBasic.MyServices
         End Function
 
         ''' <summary>
-        '''  Retrieves text data from the <see cref="Clipboard"/> in the <see cref="TextDataFormat.UnicodeText"/> format.
+        '''  Retrieves text data from the <see cref="Clipboard"/>
+        '''  in the <see cref="TextDataFormat.UnicodeText"/> format.
         ''' </summary>
         ''' <returns>The text as a <see cref="String"/>.</returns>
         Public Function GetText() As String
@@ -140,8 +158,8 @@ Namespace Microsoft.VisualBasic.MyServices
         End Function
 
         ''' <summary>
-        '''  Retrieves text data from the <see cref="Clipboard"/> in the format indicated by the specified
-        '''  <see cref="TextDataFormat"/> value.
+        '''  Retrieves text data from the <see cref="Clipboard"/>
+        '''  in the format indicated by the specified <see cref="TextDataFormat"/> value.
         ''' </summary>
         ''' <param name="format">The type of text to get.</param>
         ''' <returns>The text as a <see cref="String"/>.</returns>
@@ -150,7 +168,8 @@ Namespace Microsoft.VisualBasic.MyServices
         End Function
 
         ''' <summary>
-        '''  Clears the <see cref="Clipboard"/> and then adds data in the <see cref="DataFormats.WaveAudio"/> format.
+        '''  Clears the <see cref="Clipboard"/> and
+        '''  then adds data in the <see cref="DataFormats.WaveAudio"/> format.
         ''' </summary>
         ''' <param name="audioBytes">The byte array to be saved.</param>
         Public Sub SetAudio(audioBytes As Byte())
@@ -158,7 +177,8 @@ Namespace Microsoft.VisualBasic.MyServices
         End Sub
 
         ''' <summary>
-        '''  Clears the <see cref="Clipboard"/> and then adds data in the <see cref="DataFormats.WaveAudio"/> format.
+        '''  Clears the <see cref="Clipboard"/> and
+        '''  then adds data in the <see cref="DataFormats.WaveAudio"/> format.
         ''' </summary>
         ''' <param name="audioStream">The <see cref="Stream"/> to be saved.</param>
         Public Sub SetAudio(audioStream As Stream)
@@ -166,7 +186,8 @@ Namespace Microsoft.VisualBasic.MyServices
         End Sub
 
         ''' <summary>
-        '''  Clears the <see cref="Clipboard"/> and then adds data in the specified format.
+        '''  Clears the <see cref="Clipboard"/> and
+        '''  then adds data in the specified format.
         ''' </summary>
         ''' <param name="format">The format in which to save the data.</param>
         ''' <param name="data">The data to be saved.</param>
@@ -188,13 +209,16 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  Clears the <see cref="Clipboard"/>> and then adds a collection of file names
         '''  in the <see cref="DataFormats.FileDrop"/> format.
         ''' </summary>
-        ''' <param name="filePaths">The file drop list as a <see cref="StringCollection"/>.</param>
+        ''' <param name="filePaths">
+        '''  The file drop list as a <see cref="StringCollection"/>.
+        ''' </param>
         Public Sub SetFileDropList(filePaths As StringCollection)
             Clipboard.SetFileDropList(filePaths)
         End Sub
 
         ''' <summary>
-        '''  Clears the Clipboard and then adds an <see cref="Image"/> in the <see cref="DataFormats.Bitmap"/> format.
+        '''  Clears the Clipboard and then adds an <see cref="Image"/>
+        '''  in the <see cref="DataFormats.Bitmap"/> format.
         ''' </summary>
         ''' <param name="image">The <see cref="Image"/> to be saved.</param>
         Public Sub SetImage(image As Image)
@@ -202,7 +226,8 @@ Namespace Microsoft.VisualBasic.MyServices
         End Sub
 
         ''' <summary>
-        '''  Clears the Clipboard and then adds text data in the <see cref="TextDataFormat.UnicodeText"/> format.
+        '''  Clears the Clipboard and then adds text data
+        '''  in the <see cref="TextDataFormat.UnicodeText"/> format.
         ''' </summary>
         ''' <param name="text">The <see cref="String"/> to save.</param>
         Public Sub SetText(text As String)
@@ -210,7 +235,8 @@ Namespace Microsoft.VisualBasic.MyServices
         End Sub
 
         ''' <summary>
-        '''  Clears the Clipboard and then adds text data in the format indicated by the specified
+        '''  Clears the Clipboard and then adds text data
+        '''  in the format indicated by the specified
         '''  <see cref="TextDataFormat"/> value.
         ''' </summary>
         ''' <param name="text">The <see cref="String"/> to save.</param>

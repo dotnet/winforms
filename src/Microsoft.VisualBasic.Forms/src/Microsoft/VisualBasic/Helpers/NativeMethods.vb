@@ -68,7 +68,8 @@ Namespace Microsoft.VisualBasic.CompilerServices
             fAttach As Integer) As Integer
 
         <PreserveSig()>
-        Friend Declare Function SetForegroundWindow Lib "user32" (hwnd As IntPtr) As <MarshalAs(UnmanagedType.Bool)> Boolean
+        Friend Declare Function SetForegroundWindow Lib "user32" (
+            hwnd As IntPtr) As <MarshalAs(UnmanagedType.Bool)> Boolean
 
         <PreserveSig()>
         Friend Declare Function SetFocus Lib "user32" (hwnd As IntPtr) As IntPtr
@@ -86,7 +87,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
             hHandle As NativeTypes.LateInitSafeHandleZeroOrMinusOneIsInvalid,
             dwMilliseconds As Integer) As Integer
 
-#Disable Warning IDE0049  ' Use language keywords instead of framework type names for type references, Justification:=<Types come from Windows Native API>
+#Disable Warning IDE0049 ' Use language keywords instead of framework type names for type references, Justification:=<Types come from Windows Native API>
 #Disable Warning IDE1006 ' Naming Styles, Justification:=<Names come from Windows Native API>
 
         ''' <summary>

@@ -28,7 +28,9 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <summary>
         '''  Creates a Log and the underlying TraceSource based on the platform.
         ''' </summary>
-        ''' <remarks>Right now we only support WinApp as an application platform.</remarks>
+        ''' <remarks>
+        '''  Right now we only support WinApp as an application platform.
+        ''' </remarks>
         Public Sub New()
             ' Set trace source for platform. Right now we only support WinApp
             _traceSource = New DefaultTraceSource(WINAPP_SOURCE_NAME)

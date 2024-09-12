@@ -9,7 +9,7 @@ Imports VbUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 Namespace Microsoft.VisualBasic.CompilerServices
 
     ''' <summary>
-    '''  Internal utilities from Microsoft.VisualBasic.FileIO.FileSystem.
+    '''  Internal utilities from <see cref="Microsoft.VisualBasic.FileIO.FileSystem"/>.
     ''' </summary>
     Friend NotInheritable Class FileSystemUtils
 
@@ -75,9 +75,12 @@ Namespace Microsoft.VisualBasic.CompilerServices
         '''  Checks if the full path is a root path.
         ''' </summary>
         ''' <param name="path">The path to check.</param>
-        ''' <returns><see langword="True"/> if FullPath is a root path, <see langword="False"/> otherwise.</returns>
+        ''' <returns>
+        '''  <see langword="True"/> if FullPath is a root path,
+        '''  <see langword="False"/> otherwise.
+        ''' </returns>
         ''' <remarks>
-        '''   IO.Path.GetPathRoot: C: -> C:, C:\ -> C:\, \\machine\share -> \\machine\share,
+        '''   <see cref="IO.Path.GetPathRoot"/>: C: -> C:, C:\ -> C:\, \\machine\share -> \\machine\share,
         '''           BUT \\machine\share\ -> \\machine\share (No separator here).
         '''   Therefore, remove any separators at the end to have correct result.
         ''' </remarks>
@@ -97,7 +100,9 @@ Namespace Microsoft.VisualBasic.CompilerServices
         '''  Removes all directory separators at the end of a path.
         ''' </summary>
         ''' <param name="path">a full or relative path.</param>
-        ''' <returns>If Path is a root path, the same value. Otherwise, removes any directory separators at the end.</returns>
+        ''' <returns>
+        '''  If Path is a root path, the same value. Otherwise, removes any directory separators at the end.
+        ''' </returns>
         ''' <remarks>We decided not to return path with separators at the end.</remarks>
         Private Shared Function RemoveEndingSeparator(path As String) As String
             If IO.Path.IsPathRooted(path) Then
