@@ -208,7 +208,7 @@ public class PropertyGridTests : IDisposable
 
         AttributeCollection newAttributes = new(new BrowsableAttribute(true));
         _propertyGrid.BrowsableAttributes = newAttributes;
-        (_propertyGrid.BrowsableAttributes).Contains(newAttributes[0]).Should().BeTrue();
+        _propertyGrid.BrowsableAttributes.Contains(newAttributes[0]).Should().BeTrue();
     }
 
     [WinFormsFact]
@@ -249,7 +249,7 @@ public class PropertyGridTests : IDisposable
 
         using TextBox textBox = new();
         _propertyGrid.Controls.Add(textBox);
-        (_propertyGrid.Controls).Contains(textBox).Should().BeTrue();
+        _propertyGrid.Controls.Contains(textBox).Should().BeTrue();
     }
 
     [WinFormsFact]
@@ -289,24 +289,13 @@ public class PropertyGridTests : IDisposable
     }
 
     [WinFormsFact]
-    public void PropertyGrid_PropertyTabs_GetSet_ReturnsExpected()
+    public void PropertyGrid_PropertyTabs_Get_ReturnsExpected()
     {
         _propertyGrid.PropertyTabs.Should().NotBeNull();
-        _propertyGrid.PropertyTabs.Count.Should().BeGreaterThan(0);
 
-        PropertyTabCollection ptc = _propertyGrid.PropertyTabs;
-        using TextBox tb1 = new();
-        using TextBox tb2 = new();
-        tb2.Top = tb1.Bottom + 10;
-        _propertyGrid.Controls.Add(tb1);
-        _propertyGrid.Controls.Add(tb2);
-
-        string propertiesTabName = "Properties";
-        tb1.Text = propertiesTabName.Trim();
-        tb2.Text = ptc[0].TabName?.Trim();
-        Application.DoEvents();
-
-        propertiesTabName.Trim().Should().Be(ptc[0].TabName?.Trim());
+        PropertyTabCollection propertyTabCollection = _propertyGrid.PropertyTabs;
+        PropertyGrid propertyGrid = propertyTabCollection.TestAccessor().Dynamic._ownerPropertyGrid;
+        propertyGrid.Should().Be(_propertyGrid);
     }
 
     [WinFormsFact]
@@ -317,6 +306,9 @@ public class PropertyGridTests : IDisposable
         using TextBox textBox1 = new();
         _propertyGrid.SelectedObject = textBox1;
         _propertyGrid.SelectedObject.Should().Be(textBox1);
+
+        _propertyGrid.SelectedObject = null;
+        _propertyGrid.SelectedObject.Should().BeNull();
     }
 
     [WinFormsFact]
@@ -324,12 +316,20 @@ public class PropertyGridTests : IDisposable
     {
         _propertyGrid.SelectedObjects.Should().Contain(_form);
 
-        TextBox[] textBoxes1 = new TextBox[1];
-        using TextBox tbx1 = new TextBox();
-        textBoxes1[0] = tbx1;
+        object[] objects = [new Button(), new TextBox(), new ComboBox()];
+        _propertyGrid.SelectedObjects = objects;
+        _propertyGrid.SelectedObjects.Should().Contain(objects);
 
-        _propertyGrid.SelectedObjects = textBoxes1;
-        (_propertyGrid.SelectedObjects)[0].Should().Be(tbx1);
+        _propertyGrid.SelectedObjects = Array.Empty<object>();
+        _propertyGrid.SelectedObjects.Should().BeEmpty();
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_SelectedObjects_Set_ThrowExpectedException()
+    {
+        object[] objects = [null!];
+        Action act = () => _propertyGrid.SelectedObjects = objects;
+        act.Should().Throw<ArgumentException>();
     }
 
     [WinFormsFact]
@@ -341,17 +341,15 @@ public class PropertyGridTests : IDisposable
     [WinFormsFact]
     public void PropertyGrid_SelectedGridItem_GetSet_ReturnsExpected()
     {
-        if (_propertyGrid.SelectedGridItem is not null)
-        {
-            _propertyGrid.SelectedGridItem.Label.Should().Be("Text");
+        _propertyGrid.SelectedGridItem.Should().NotBeNull();
+        _propertyGrid.SelectedGridItem!.Label.Should().Be("Text");
 
-            _propertyGrid.SelectedObject = _propertyGrid;
-            _propertyGrid.SelectedGridItem.Label.Should().Be("Accessibility");
+        _propertyGrid.SelectedObject = _propertyGrid;
+        _propertyGrid.SelectedGridItem.Label.Should().Be("Accessibility");
 
-            GridItem gridItem = _propertyGrid.SelectedGridItem.GridItems[0];
-            _propertyGrid.SelectedGridItem = gridItem;
-            _propertyGrid.SelectedGridItem.Should().Be(gridItem);
-        }     
+        GridItem gridItem = _propertyGrid.SelectedGridItem.GridItems[0];
+        _propertyGrid.SelectedGridItem = gridItem;
+        _propertyGrid.SelectedGridItem.Should().Be(gridItem);
     }
 
     [WinFormsFact]
@@ -470,7 +468,7 @@ public class PropertyGridTests : IDisposable
             _propertyGrid.ExpandAllGridItems();
 
             foreach (GridItem item in gridItems)
-            {          
+            {
                 if (item.Expandable == true)
                 {
                     item.Expanded.Should().BeTrue();
