@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
-using Castle.Core.Internal;
 
 namespace System.Windows.Forms.Tests;
 
@@ -38,7 +37,7 @@ public class AxSystemMonitorTests : IDisposable
         foreach(PropertyDescriptor prop in properties)
         {
             string assemblyFromTestingControl = prop.ComponentType.Assembly.GetName().Name;
-            if (!assemblyFromTestingControl.IsNullOrEmpty()
+            if (!string.IsNullOrEmpty(assemblyFromTestingControl)
                 && assemblyFromTestingControl == assemblyNameFromType)
             {
                 testingControlProps.Add(prop.Name);
@@ -49,7 +48,7 @@ public class AxSystemMonitorTests : IDisposable
         foreach(EventDescriptor singleEvent in events)
         {
             string assemblyFromTestingControl = singleEvent.ComponentType.Assembly.GetName().Name;
-            if (!assemblyFromTestingControl.IsNullOrEmpty()
+            if (!string.IsNullOrEmpty(assemblyFromTestingControl)
                 && assemblyFromTestingControl == assemblyNameFromType)
             {
                 testingControlEvents.Add(singleEvent.Name);

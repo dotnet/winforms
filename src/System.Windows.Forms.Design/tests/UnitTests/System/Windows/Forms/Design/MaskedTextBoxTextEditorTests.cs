@@ -17,7 +17,7 @@ public class MaskedTextBoxTextEditorTests
         Mock<ITypeDescriptorContext> mockContext = new(MockBehavior.Strict);
         mockContext
             .Setup(c => c.Instance)
-            .Returns(null);
+            .Returns((object?)null);
 
         Mock<IWindowsFormsEditorService> mockEditorService = new(MockBehavior.Strict);
         mockEditorService
