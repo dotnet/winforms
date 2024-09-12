@@ -4,6 +4,7 @@
 #nullable enable
 
 namespace System.Windows.Forms.Design.Tests;
+
 public class PrintDialogDesignerTests
 {
     [Fact]
