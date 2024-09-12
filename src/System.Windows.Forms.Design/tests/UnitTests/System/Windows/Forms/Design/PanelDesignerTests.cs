@@ -10,7 +10,8 @@ public class PanelDesignerTests
     [Fact]
     public void Constructor_SetsAutoResizeHandlesToTrue()
     {
-        PanelDesigner designer = new();
+        using PanelDesigner designer = new();
+        designer.Initialize(new Panel());
 
         designer.AutoResizeHandles.Should().BeTrue();
     }
