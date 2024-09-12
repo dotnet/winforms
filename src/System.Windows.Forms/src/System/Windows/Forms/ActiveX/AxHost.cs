@@ -1971,7 +1971,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     ///  </para>
     ///  <para>
     ///   The logical container of this control determines the set of logical sibling controls. In general this
-    ///   property exists only to enable some specific behaviours of ActiveX controls and should not be set by
+    ///   property exists only to enable some specific behaviors of ActiveX controls and should not be set by
     ///   the user.
     ///  </para>
     /// </devdoc>

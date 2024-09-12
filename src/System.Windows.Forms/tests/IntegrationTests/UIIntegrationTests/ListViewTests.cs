@@ -9,7 +9,7 @@ using Xunit.Abstractions;
 namespace System.Windows.Forms.UITests;
 
 // NOTE: This class contains many tests which don't require user input. Although they arguably belong to the unit
-// tests project, these tests assert behaviours of ListView.View=View.Tile, which doesn't work correctly unless
+// tests project, these tests assert behaviors of ListView.View=View.Tile, which doesn't work correctly unless
 // we ran an app.
 
 public class ListViewTests : ControlTestBase

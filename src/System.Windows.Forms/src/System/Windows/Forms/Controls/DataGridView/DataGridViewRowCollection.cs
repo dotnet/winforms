@@ -95,7 +95,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
     {
         get
         {
-            // All rows need to be unshared
+            // All rows need to be un-shared
             // Accessing List property should be avoided.
             int rowCount = Count;
             for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
@@ -133,7 +133,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
                     return dataGridViewRow;
                 }
 
-                // unshare row
+                // un-share row
                 DataGridViewRow newDataGridViewRow = (DataGridViewRow)dataGridViewRow.Clone();
                 newDataGridViewRow.Index = index;
                 newDataGridViewRow.DataGridView = dataGridViewRow.DataGridView;
@@ -1919,7 +1919,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
         OnCollectionChanged_PreNotification(e.Action, rowIndex, rowCount, ref dataGridViewRow, false);
         if (originalIndex == -1 && SharedRow(rowIndex).Index != -1)
         {
-            // row got unshared inside OnCollectionChanged_PreNotification
+            // row got un-shared inside OnCollectionChanged_PreNotification
             e = new CollectionChangeEventArgs(e.Action, dataGridViewRow);
         }
 
@@ -1945,7 +1945,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
         OnCollectionChanged_PreNotification(e.Action, rowIndex, rowCount, ref dataGridViewRow, changeIsInsertion);
         if (originalIndex == -1 && SharedRow(rowIndex).Index != -1)
         {
-            // row got unshared inside OnCollectionChanged_PreNotification
+            // row got un-shared inside OnCollectionChanged_PreNotification
             e = new CollectionChangeEventArgs(e.Action, dataGridViewRow);
         }
 
@@ -2217,7 +2217,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
 
         if (IsCollectionChangedListenedTo || dataGridViewRow.GetDisplayed(index))
         {
-            dataGridViewRow = this[index]; // need to unshare row because dev is listening to OnCollectionChanged event or the row is displayed
+            dataGridViewRow = this[index]; // need to un-share row because dev is listening to OnCollectionChanged event or the row is displayed
         }
 
         dataGridViewRow = SharedRow(index);
@@ -2227,7 +2227,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
         if (dataGridViewRow.Index != -1)
         {
             _rowStates[index] = dataGridViewRow.State;
-            // Only detach unshared rows, since a shared row has never been accessed by the user
+            // Only detach un-shared rows, since a shared row has never been accessed by the user
             dataGridViewRow.DetachFromDataGridView();
         }
 
@@ -2313,7 +2313,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
         }
         else
         {
-            // row is unshared
+            // row is un-shared
             switch (state)
             {
                 case DataGridViewElementStates.Displayed:
@@ -2436,7 +2436,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
                     (_rowsHeightVisibleFrozen != -1 &&
                      ((rowStates & (DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen)) == (DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen))))
                 {
-                    // dataGridViewRow may become unshared in GetHeight call
+                    // dataGridViewRow may become un-shared in GetHeight call
                     rowHeightIncrement = adding ? dataGridViewRow!.GetHeight(rowIndex) : -dataGridViewRow!.GetHeight(rowIndex);
                     dataGridViewRow = SharedRow(rowIndex);
                 }

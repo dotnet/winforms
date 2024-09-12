@@ -495,7 +495,6 @@ Namespace Microsoft.VisualBasic.Devices
                 End If
                 Throw
             End Try
-
         End Sub
 
     End Class

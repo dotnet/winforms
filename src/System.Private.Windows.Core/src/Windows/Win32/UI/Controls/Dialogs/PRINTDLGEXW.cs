@@ -12,7 +12,7 @@ namespace Windows.Win32.UI.Controls.Dialogs;
 /// <remarks>
 ///  <para>
 ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#">
-///    Read more on learn.microsoft.com.
+///    Read more on http://learn.microsoft.com.
 ///   </see>
 ///  </para>
 /// </remarks>
@@ -32,7 +32,7 @@ internal partial struct PRINTDLGEXW
     ///  <para>Type: <b>DWORD</b> The structure size, in bytes.</para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -45,7 +45,7 @@ internal partial struct PRINTDLGEXW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -70,7 +70,7 @@ internal partial struct PRINTDLGEXW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -96,7 +96,7 @@ internal partial struct PRINTDLGEXW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -110,7 +110,7 @@ internal partial struct PRINTDLGEXW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -132,7 +132,7 @@ internal partial struct PRINTDLGEXW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -148,7 +148,7 @@ internal partial struct PRINTDLGEXW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -162,10 +162,10 @@ internal partial struct PRINTDLGEXW
     ///   value must be greater than zero.
     ///  </para>
     ///  <para>
-    ///    <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///     Read more on learn.microsoft.com.
-    ///    </see>
-    ///   </para>
+    ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
+    ///    Read more on http://learn.microsoft.com.
+    ///   </see>
+    ///  </para>
     /// </summary>
     public uint nMaxPageRanges;
 
@@ -181,21 +181,21 @@ internal partial struct PRINTDLGEXW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
     public unsafe PRINTPAGERANGE* lpPageRanges;
 
     /// <summary>
-    /// <para>
-    ///  Type: <b>DWORD</b> The minimum value for the page ranges specified in the <b>Pages</b> edit control.
-    ///  If the <b>PD_NOPAGENUMS</b> flag is specified, this value is not valid.
-    /// </para>
-    /// <para>
-    ///  <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///   Read more on learn.microsoft.com.
-    ///  </see>
+    ///  <para>
+    ///   Type: <b>DWORD</b> The minimum value for the page ranges specified in the <b>Pages</b> edit control.
+    ///   If the <b>PD_NOPAGENUMS</b> flag is specified, this value is not valid.
+    ///  </para>
+    ///  <para>
+    ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
+    ///    Read more on http://learn.microsoft.com.
+    ///   </see>
     ///  </para>
     /// </summary>
     public uint nMinPage;
@@ -207,7 +207,7 @@ internal partial struct PRINTDLGEXW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -227,10 +227,10 @@ internal partial struct PRINTDLGEXW
     ///   multiple copies. If the flag is not set, the application is responsible for printing the number of copies
     ///   specified by <b>nCopies</b>. For more information, see the description of the
     ///   <b>PD_USEDEVMODECOPIESANDCOLLATE</b> flag.
-    ///   </para>
+    ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -247,7 +247,7 @@ internal partial struct PRINTDLGEXW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -263,9 +263,9 @@ internal partial struct PRINTDLGEXW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
-    ///   </para>
+    ///  </para>
     /// </summary>
     public PCWSTR lpPrintTemplateName;
 
@@ -288,18 +288,19 @@ internal partial struct PRINTDLGEXW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
     public unsafe IUnknown* lpCallback;
 
     /// <summary>
-    /// <para>Type: <b>DWORD</b> The number of property page handles in the <b>lphPropertyPages</b> array.</para>
-    ///   <para>
-    ///    <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///     Read more on learn.microsoft.com.
-    ///    </see>
+    ///  <para>Type: <b>DWORD</b> The number of property page handles in the <b>lphPropertyPages</b> array.
+    ///  </para>
+    ///  <para>
+    ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
+    ///    Read more on http://learn.microsoft.com.
+    ///   </see>
     ///  </para>
     /// </summary>
     public uint nPropertyPages;
@@ -316,7 +317,7 @@ internal partial struct PRINTDLGEXW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -331,9 +332,9 @@ internal partial struct PRINTDLGEXW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgexw#members">
-    ///     Read more on learn.microsoft.com.
-    ///    </see>
-    ///   </para>
+    ///    Read more on http://learn.microsoft.com.
+    ///   </see>
+    ///  </para>
     /// </summary>
     public uint nStartPage;
 

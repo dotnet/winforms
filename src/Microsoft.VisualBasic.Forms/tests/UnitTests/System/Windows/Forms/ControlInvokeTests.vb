@@ -7,7 +7,7 @@ Imports Xunit
 
 Namespace Microsoft.VisualBasic.Forms.Tests
 
-    Partial Public Class ControlInvokeTests
+    Public Class ControlInvokeTests
 
         Public Shared Function FaultingFunc(a As Integer) As Integer
             Return a \ 0
