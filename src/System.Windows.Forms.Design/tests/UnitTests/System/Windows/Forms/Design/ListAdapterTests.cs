@@ -12,7 +12,7 @@ public class ListAdapterTests
     [Fact]
     public void ListAdapter_Unwrap_ReturnsOriginalList()
     {
-        ArrayList originalList = new() { 1, 2, 3 };
+        ArrayList originalList = [1, 2, 3];
         ListAdapter<int> adapter = new(originalList);
 
         IList unwrappedList = adapter.Unwrap();
