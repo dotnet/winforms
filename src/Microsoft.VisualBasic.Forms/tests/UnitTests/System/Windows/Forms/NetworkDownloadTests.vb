@@ -364,7 +364,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         showUI:=True,
                         connectionTimeout:=TestingConnectionTimeout,
                         overwrite:=False)
-
                 End Sub
             Try
                 testCode.Should _

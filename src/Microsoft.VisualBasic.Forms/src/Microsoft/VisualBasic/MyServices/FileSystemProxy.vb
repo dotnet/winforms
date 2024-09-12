@@ -24,7 +24,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Sub
 
         ''' <summary>
-        ''' Gets the current directory.
+        '''  Gets the current directory.
         ''' </summary>
         ''' <returns>The current directory for file I/O operations.</returns>
         Public Property CurrentDirectory() As String

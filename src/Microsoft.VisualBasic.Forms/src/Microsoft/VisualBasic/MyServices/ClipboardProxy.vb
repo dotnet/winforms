@@ -91,8 +91,8 @@ Namespace Microsoft.VisualBasic.MyServices
         End Function
 
         ''' <summary>
-        '''  Indicates whether there is text data on the <see cref="Clipboard"/> in the format indicated by the
-        '''   specified <see cref="TextDataFormat"/> value.
+        '''  Indicates whether there is text data on the <see cref="Clipboard"/> in the format
+        '''  indicated by the specified <see cref="TextDataFormat"/> value.
         ''' </summary>
         ''' <param name="format">The type of text being checked for.</param>
         ''' <returns>
