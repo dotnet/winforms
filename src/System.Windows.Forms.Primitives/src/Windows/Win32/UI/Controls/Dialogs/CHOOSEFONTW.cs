@@ -9,7 +9,7 @@ namespace Windows.Win32.UI.Controls.Dialogs;
 /// <remarks>
 ///  <para>
 ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-choosefontw#">
-///    Read more on learn.microsoft.com
+///    Read more on http://learn.microsoft.com.
 ///   </see>
 ///  </para>
 /// </remarks>
@@ -19,7 +19,7 @@ internal partial struct CHOOSEFONTW
     ///  <para>Type: <b>DWORD</b> The length of the structure, in bytes.</para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-choosefontw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -32,7 +32,7 @@ internal partial struct CHOOSEFONTW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-choosefontw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -49,7 +49,7 @@ internal partial struct CHOOSEFONTW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-choosefontw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -68,7 +68,7 @@ internal partial struct CHOOSEFONTW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-choosefontw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -82,7 +82,7 @@ internal partial struct CHOOSEFONTW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-choosefontw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -102,7 +102,7 @@ internal partial struct CHOOSEFONTW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-choosefontw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -120,7 +120,7 @@ internal partial struct CHOOSEFONTW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-choosefontw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -135,7 +135,7 @@ internal partial struct CHOOSEFONTW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-choosefontw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -152,7 +152,7 @@ internal partial struct CHOOSEFONTW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-choosefontw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -168,7 +168,7 @@ internal partial struct CHOOSEFONTW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-choosefontw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -183,7 +183,7 @@ internal partial struct CHOOSEFONTW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-choosefontw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///  </see>
     ///  </para>
     /// </summary>
@@ -198,10 +198,11 @@ internal partial struct CHOOSEFONTW
     ///  <para>
     ///   Type: <b>INT</b> The minimum point size a user can select.
     ///   <a href="https://learn.microsoft.com/previous-versions/windows/desktop/legacy/ms646914(v=vs.85)">
-    ///   ChooseFont</a> recognizes this member only if the <b>CF_LIMITSIZE</b> flag is specified.</para>
+    ///   ChooseFont</a> recognizes this member only if the <b>CF_LIMITSIZE</b> flag is specified.
+    ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-choosefontw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -215,7 +216,7 @@ internal partial struct CHOOSEFONTW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-choosefontw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>

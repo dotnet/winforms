@@ -10,7 +10,7 @@ namespace Windows.Win32.UI.Controls.Dialogs;
 /// <remarks>
 ///  <para>
 ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printpagerange">
-///    Learn more about this API from learn.microsoft.com.
+///    Learn more about this API from http://learn.microsoft.com.
 ///   </see>
 ///  </para>
 /// </remarks>
@@ -30,7 +30,7 @@ internal partial struct PRINTPAGERANGE
     ///  <para>Type: <b>DWORD</b> The first page of the range.</para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printpagerange#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -40,7 +40,7 @@ internal partial struct PRINTPAGERANGE
     ///  <para>Type: <b>DWORD</b> The last page of the range.</para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printpagerange#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>

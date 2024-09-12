@@ -69,7 +69,7 @@ public partial class CheckedListBox : ListBox
 
     /// <summary>
     ///  Indicates whether or not the checkbox should be toggled whenever an
-    ///  item is selected. The default behaviour is to just change the
+    ///  item is selected. The default behavior is to just change the
     ///  selection, and then make the user click again to check it. However,
     ///  some may prefer checking the item as soon as it is clicked.
     /// </summary>

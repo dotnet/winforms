@@ -645,7 +645,7 @@ internal unsafe partial struct VARIANT : IDisposable
             && !(vt == VT_UNKNOWN && arrayVarType == VT_DISPATCH)
             && !(arrayVarType == VT_RECORD))
         {
-            // To match CLR behaviour.
+            // To match CLR behavior.
             throw new SafeArrayTypeMismatchException();
         }
 

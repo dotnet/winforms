@@ -79,7 +79,7 @@ public partial class TrackBar : Control, ISupportInitialize
         set
         {
             // Note that we intentionally do not call base.AutoSize. Labels size themselves by
-            // overriding SetBoundsCore (legacy behaviour). We let CommonProperties.GetAutoSize
+            // overriding SetBoundsCore (legacy behavior). We let CommonProperties.GetAutoSize
             // continue to return false to keep our LayoutEngines from messing with TextBoxes.
             // This is done for backwards compatibility since the new AutoSize behavior differs.
             if (_autoSize != value)

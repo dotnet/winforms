@@ -658,7 +658,7 @@ public class ColumnHeaderCollectionTests
 
         Assert.Equal(expected, collection.IndexOfKey(key));
 
-        // Call again to validate caching behaviour.
+        // Call again to validate caching behavior.
         Assert.Equal(expected, collection.IndexOfKey(key));
         Assert.Equal(-1, collection.IndexOfKey("noSuchKey"));
     }

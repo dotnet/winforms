@@ -12,7 +12,7 @@ namespace Windows.Win32.UI.Controls.Dialogs;
 /// <remarks>
 ///  <para>
 ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-pagesetupdlgw#">
-///    Read more on learn.microsoft.com.
+///    Read more on http://learn.microsoft.com.
 ///   </see>
 ///  </para>
 /// </remarks>
@@ -32,7 +32,7 @@ internal partial struct PAGESETUPDLGW
     ///  <para>Type: <b>DWORD</b> The size, in bytes, of this structure.</para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-pagesetupdlgw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -45,7 +45,7 @@ internal partial struct PAGESETUPDLGW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-pagesetupdlgw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -62,7 +62,7 @@ internal partial struct PAGESETUPDLGW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-pagesetupdlgw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -81,7 +81,7 @@ internal partial struct PAGESETUPDLGW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-pagesetupdlgw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -99,7 +99,7 @@ internal partial struct PAGESETUPDLGW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-pagesetupdlgw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -116,7 +116,7 @@ internal partial struct PAGESETUPDLGW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-pagesetupdlgw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -134,7 +134,7 @@ internal partial struct PAGESETUPDLGW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-pagesetupdlgw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -148,7 +148,7 @@ internal partial struct PAGESETUPDLGW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-pagesetupdlgw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -165,7 +165,7 @@ internal partial struct PAGESETUPDLGW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-pagesetupdlgw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -180,7 +180,7 @@ internal partial struct PAGESETUPDLGW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-pagesetupdlgw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -196,7 +196,7 @@ internal partial struct PAGESETUPDLGW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-pagesetupdlgw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -213,7 +213,7 @@ internal partial struct PAGESETUPDLGW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-pagesetupdlgw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -226,7 +226,7 @@ internal partial struct PAGESETUPDLGW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-pagesetupdlgw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>

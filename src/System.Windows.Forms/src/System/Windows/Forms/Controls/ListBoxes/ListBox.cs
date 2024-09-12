@@ -549,7 +549,7 @@ public partial class ListBox : ListControl
             {
                 _integralHeight = value;
                 RecreateHandle();
-                // Avoid the listBox and textbox behaviour in Collection editors
+                // Avoid the listBox and textbox behavior in Collection editors
 
                 _integralHeightAdjust = true;
                 try
@@ -1828,7 +1828,7 @@ public partial class ListBox : ListControl
         // Changing the font causes us to resize, always rounding down.
         // Make sure we do this after base.OnPropertyChanged, which sends the WM_SETFONT message
 
-        // Avoid the listBox and textbox behaviour in Collection editors
+        // Avoid the listBox and textbox behavior in Collection editors
         UpdateFontCache();
     }
 
@@ -2081,7 +2081,7 @@ public partial class ListBox : ListControl
     /// </summary>
     protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
     {
-        // Avoid the listBox and textbox behaviour in Collection editors
+        // Avoid the listBox and textbox behavior in Collection editors
         if (!_integralHeightAdjust && height != Height)
         {
             _requestedHeight = height;
