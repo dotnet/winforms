@@ -244,9 +244,9 @@ public sealed partial class Application
     }
 
     /// <summary>
-    /// Get current application context main form
+    /// Get current application context's main form
     /// </summary>
-    /// <returns>Current application context</returns>
+    /// <returns>Current application context's main form</returns>
     public static Form? CurrentMainForm { get => ThreadContext.FromCurrent().ApplicationContext?.MainForm; }
 
     internal static bool CustomThreadExceptionHandlerAttached
