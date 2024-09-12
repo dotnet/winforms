@@ -56,7 +56,7 @@ public partial class DataGridViewRowCollection
             }
             else
             {
-                return _dataGridViewRows[rowIndex]; // Unsharing compared rows!
+                return _dataGridViewRows[rowIndex]; // Un-sharing compared rows!
             }
         }
 

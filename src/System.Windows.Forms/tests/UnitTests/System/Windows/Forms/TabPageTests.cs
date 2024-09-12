@@ -556,7 +556,7 @@ public class TabPageTests
     [WinFormsTheory]
     [InlineData(true, TabAppearance.Buttons)]
     [InlineData(true, TabAppearance.FlatButtons)]
-    // Has different behaviour with VisualStyles on, see: TabPage_BackColor_TabAppearance_Normal_GetWithParent_ReturnsExpected
+    // Has different behavior with VisualStyles on, see: TabPage_BackColor_TabAppearance_Normal_GetWithParent_ReturnsExpected
     // [InlineData(true, TabAppearance.Normal)]
     [InlineData(false, TabAppearance.Buttons)]
     [InlineData(false, TabAppearance.FlatButtons)]

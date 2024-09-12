@@ -3304,7 +3304,7 @@ public class ListBoxTests
         int createdCallCount = 0;
         control.HandleCreated += (sender, e) => createdCallCount++;
 
-        // Set MakeCustom after the Handle is created to allow for default behaviour.
+        // Set MakeCustom after the Handle is created to allow for default behavior.
         control.MakeCustom = true;
 
         // Verify equal lengths.
