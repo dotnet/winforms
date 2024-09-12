@@ -13,7 +13,7 @@ public partial class DataGridViewRowCollection
         private int _current;
 
         /// <summary>
-        ///  Creates a new enumerator that will enumerate over the rows and unshare the accessed rows if needed.
+        ///  Creates a new enumerator that will enumerate over the rows and un-share the accessed rows if needed.
         /// </summary>
         public UnsharingRowEnumerator(DataGridViewRowCollection owner)
         {

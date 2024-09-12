@@ -31,7 +31,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
     internal bool _dummyItemAdded;
     // Needed to Store the DRAGDROP Rect from the ToolStripItemBehavior.
     internal Rectangle _dragBoxFromMouseDown = Rectangle.Empty;
-    // defaulted to invalid index. this will be set by the behaviour.
+    // defaulted to invalid index. this will be set by the behavior.
     internal int _indexOfItemUnderMouseToDrag = -1;
     private ToolStripItemCustomMenuItemCollection _toolStripItemCustomMenuItemCollection;
 

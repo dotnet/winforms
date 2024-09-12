@@ -332,7 +332,7 @@ internal sealed partial class DesignerActionPanel
 
                 // Since we are not a standard focusable control, we have to raise our own accessibility events.
                 // objectID = OBJID_WINDOW, childID = CHILDID_SELF - 1 (the -1 is because WinForms always adds 1 to the value)
-                // (these consts are defined in winuser.h)
+                // (these constants are defined in winuser.h)
                 AccessibilityNotifyClients(AccessibleEvents.Focus, 0, -1);
             }
 

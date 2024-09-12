@@ -88,7 +88,7 @@ public partial class PictureBox : Control, ISupportInitialize
     private const int InInitializationState = 0x00000040;
 
     // PERF: take all the bools and put them into a state variable
-    private BitVector32 _pictureBoxState; // see PICTUREBOXSTATE_ consts above
+    private BitVector32 _pictureBoxState; // see PICTUREBOXSTATE_ constants above
 
     /// <summary>
     ///  https://docs.microsoft.com/dotnet/api/system.drawing.image.fromstream#System_Drawing_Image_FromStream_System_IO_Stream_

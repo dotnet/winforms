@@ -52,8 +52,10 @@ internal class ScreenRecordService : IDisposable
     private enum PngCompressionMethod : byte
     {
         /// <summary>
-        /// <see href="https://www.w3.org/TR/png/#dfn-deflate">deflate</see> compression with a sliding window of at
-        /// most 32768 bytes.
+        ///  <see href="https://www.w3.org/TR/png/#dfn-deflate">
+        ///   deflate
+        ///  </see>
+        ///  compression with a sliding window of at most 32768 bytes.
         /// </summary>
         Deflate = 0,
     }
@@ -61,7 +63,7 @@ internal class ScreenRecordService : IDisposable
     private enum PngFilterMethod : byte
     {
         /// <summary>
-        /// Adaptive filtering with five basic filter types.
+        ///  Adaptive filtering with five basic filter types.
         /// </summary>
         Adaptive = 0,
     }
@@ -69,12 +71,12 @@ internal class ScreenRecordService : IDisposable
     private enum PngInterlaceMethod : byte
     {
         /// <summary>
-        /// No interlacing.
+        ///  No interlacing.
         /// </summary>
         None = 0,
 
         /// <summary>
-        /// Adam7 interlace.
+        ///  Adam7 interlace.
         /// </summary>
         Adam7 = 1,
     }
@@ -82,20 +84,20 @@ internal class ScreenRecordService : IDisposable
     private enum ApngDisposeOp : byte
     {
         /// <summary>
-        /// No disposal is done on this frame before rendering the next; the contents of the output buffer are left
-        /// as-is.
+        ///  No disposal is done on this frame before rendering the next;
+        ///  the contents of the output buffer are left as-is.
         /// </summary>
         None = 0,
 
         /// <summary>
-        /// The frame's region of the output buffer is to be cleared to fully transparent black before rendering the
-        /// next frame.
+        ///  The frame's region of the output buffer is to be cleared to
+        ///  fully transparent black before rendering the next frame.
         /// </summary>
         Background = 1,
 
         /// <summary>
-        /// The frame's region of the output buffer is to be reverted to the previous contents before rendering the next
-        /// frame.
+        ///  The frame's region of the output buffer is to be reverted
+        ///  to the previous contents before rendering the next frame.
         /// </summary>
         Previous = 2,
     }
@@ -103,15 +105,17 @@ internal class ScreenRecordService : IDisposable
     private enum ApngBlendOp : byte
     {
         /// <summary>
-        /// All color components of the frame, including alpha, overwrite the current contents of the frame's output
-        /// buffer region.
+        ///  All color components of the frame, including alpha,
+        ///  overwrite the current contents of the frame's output buffer region.
         /// </summary>
         Source = 0,
 
         /// <summary>
         ///  The frame should be composited onto the output buffer based on its alpha, using a simple OVER operation as
-        ///  described in <see href="https://www.w3.org/TR/png/#13Alpha-channel-processing">
-        ///  Alpha Channel Processing.</see>
+        ///  described in
+        ///  <see href="https://www.w3.org/TR/png/#13Alpha-channel-processing">
+        ///   Alpha Channel Processing.
+        ///  </see>
         /// </summary>
         Over = 1,
     }

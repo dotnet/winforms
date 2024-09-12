@@ -235,9 +235,9 @@ public partial class DataGridView : Control, ISupportInitialize
 
     private const int FocusRectOffset = 2;
 
-    private BitVector32 _dataGridViewState1;  // see State1_ consts above
-    private BitVector32 _dataGridViewState2;  // see State2_ consts above
-    private BitVector32 _dataGridViewOper;    // see Operation consts above
+    private BitVector32 _dataGridViewState1;  // see State1_ constants above
+    private BitVector32 _dataGridViewState2;  // see State2_ constants above
+    private BitVector32 _dataGridViewOper;    // see Operation constants above
 
     private const BorderStyle DefaultBorderStyle = BorderStyle.FixedSingle;
     private const DataGridViewAdvancedCellBorderStyle DefaultAdvancedCellBorderStyle
@@ -1706,7 +1706,7 @@ public partial class DataGridView : Control, ISupportInitialize
             Debug.Assert(_ptCurrentCell.X >= 0 && _ptCurrentCell.Y >= 0);
             Debug.Assert(_ptCurrentCell.X < Columns.Count);
             Debug.Assert(_ptCurrentCell.Y < Rows.Count);
-            DataGridViewRow dataGridViewRow = Rows[_ptCurrentCell.Y]; // unsharing row
+            DataGridViewRow dataGridViewRow = Rows[_ptCurrentCell.Y]; // un-sharing row
             return dataGridViewRow.Cells[_ptCurrentCell.X];
         }
         set
@@ -2278,7 +2278,7 @@ public partial class DataGridView : Control, ISupportInitialize
             Point firstDisplayedCellAddress = FirstDisplayedCellAddress;
             if (firstDisplayedCellAddress.X >= 0)
             {
-                return Rows[firstDisplayedCellAddress.Y].Cells[firstDisplayedCellAddress.X]; // unshares the row of first displayed cell
+                return Rows[firstDisplayedCellAddress.Y].Cells[firstDisplayedCellAddress.X]; // un-shares the row of first displayed cell
             }
 
             return null;
@@ -3639,7 +3639,7 @@ public partial class DataGridView : Control, ISupportInitialize
                     {
                         foreach (int columnIndex in _selectedBandIndexes)
                         {
-                            foreach (DataGridViewRow dataGridViewRow in Rows)   // unshares all rows!
+                            foreach (DataGridViewRow dataGridViewRow in Rows)   // u-nshares all rows!
                             {
                                 stcc.Add(dataGridViewRow.Cells[columnIndex]);
                             }
@@ -3658,7 +3658,7 @@ public partial class DataGridView : Control, ISupportInitialize
                     {
                         foreach (int rowIndex in _selectedBandIndexes)
                         {
-                            DataGridViewRow dataGridViewRow = Rows[rowIndex]; // unshares the selected row
+                            DataGridViewRow dataGridViewRow = Rows[rowIndex]; // un-shares the selected row
                             foreach (DataGridViewCell dataGridViewCell in dataGridViewRow.Cells)
                             {
                                 stcc.Add(dataGridViewCell);
@@ -3720,7 +3720,7 @@ public partial class DataGridView : Control, ISupportInitialize
                 case DataGridViewSelectionMode.RowHeaderSelect:
                     foreach (int rowIndex in _selectedBandIndexes)
                     {
-                        strc.Add(Rows[rowIndex]); // unshares the selected row
+                        strc.Add(Rows[rowIndex]); // un-shares the selected row
                     }
 
                     break;

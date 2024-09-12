@@ -25,7 +25,7 @@ internal unsafe partial struct CHOOSECOLORW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-choosecolorw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -38,7 +38,7 @@ internal unsafe partial struct CHOOSECOLORW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-choosecolorw#members">
-    ///    Read more on learn.microsoft.com
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -54,7 +54,7 @@ internal unsafe partial struct CHOOSECOLORW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-choosecolorw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -73,7 +73,7 @@ internal unsafe partial struct CHOOSECOLORW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-choosecolorw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -92,7 +92,7 @@ internal unsafe partial struct CHOOSECOLORW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-choosecolorw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -107,7 +107,7 @@ internal unsafe partial struct CHOOSECOLORW
     ///  <para>This doc was truncated.</para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-choosecolorw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -124,7 +124,7 @@ internal unsafe partial struct CHOOSECOLORW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-choosecolorw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -139,7 +139,7 @@ internal unsafe partial struct CHOOSECOLORW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-choosecolorw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -156,7 +156,7 @@ internal unsafe partial struct CHOOSECOLORW
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-choosecolorw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on http://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>

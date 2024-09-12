@@ -893,7 +893,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
         return rect;
     }
 
-    // Called when the row that owns the editing control gets unshared.
+    // Called when the row that owns the editing control gets un-shared.
     // Too late in the product cycle to make this a public method.
     internal virtual void CacheEditingControl()
     {
