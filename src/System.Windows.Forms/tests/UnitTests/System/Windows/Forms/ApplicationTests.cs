@@ -75,7 +75,7 @@ public class ApplicationTests
         var form2 = new Form();
         var event1 = new ManualResetEventSlim();
         var event2 = new ManualResetEventSlim();
-        Form mainForm1 = default, mainForm2 = default;
+        Form mainForm1 = default, mainForm2 = default, mainForm3 = default, mainForm4 = default;
         form1.Load += (s, e) =>
         {
             mainForm1 = Application.CurrentMainForm;
@@ -90,14 +90,21 @@ public class ApplicationTests
         };
         var thread1 = new Thread(() => Application.Run(form1));
         var thread2 = new Thread(() => Application.Run(form2));
+        var thread3 = new Thread(() => mainForm3 = Application.CurrentMainForm);
+        var thread4 = new Thread(() => mainForm4 = Application.CurrentMainForm);
         thread1.SetApartmentState(ApartmentState.STA);
         thread2.SetApartmentState(ApartmentState.STA);
+        thread3.SetApartmentState(ApartmentState.STA);
         thread1.Start();
         thread2.Start();
+        thread3.Start();
+        thread4.Start();
         event1.Wait();
         event2.Wait();
         Assert.NotNull(mainForm1);
         Assert.NotNull(mainForm2);
+        Assert.Null(mainForm3);
+        Assert.Null(mainForm4);
         Assert.NotSame(mainForm1, mainForm2);
         Assert.Same(form1, mainForm1);
         Assert.Same(form2, mainForm2);
