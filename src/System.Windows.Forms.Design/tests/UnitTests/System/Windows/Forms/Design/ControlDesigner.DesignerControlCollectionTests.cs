@@ -19,11 +19,7 @@ public class ControlDesignerDesignerControlCollectionTests : IDisposable
         _collection = new(_control);
     }
 
-    public void Dispose()
-    {
-        _collection.Clear();
-        _control.Dispose();
-    }
+    public void Dispose() => _collection.Clear();
 
     [Fact]
     public void Constructor_ShouldThrowArgumentNullException_WhenControlIsNull()
@@ -59,7 +55,7 @@ public class ControlDesignerDesignerControlCollectionTests : IDisposable
     [Fact]
     public void Add_ShouldAddControlToCollection()
     {
-        Control control = new();
+        using Control control = new();
         ((IList)_collection).Add(control);
         _control.Controls.Cast<Control>().Should().Contain(control);
     }
@@ -67,17 +63,28 @@ public class ControlDesignerDesignerControlCollectionTests : IDisposable
     [Fact]
     public void AddRange_ShouldAddMultipleControlsToCollection()
     {
-        Control[] control = { new(), new() };
-        _collection.AddRange(control);
-        _control.Controls.Cast<Control>().Should().Contain(control);
+        using Control control1 = new();
+        using Control control2 = new();
+        Control[] controls = { control1, control2 };
+        _collection.AddRange(controls);
+        _control.Controls.Cast<Control>().Should().Contain(controls);
     }
 
     [Fact]
     public void Contains_ShouldReturnTrueIfControlExists()
     {
-        Control control = new();
-        ((IList)_collection).Add(control);
-        ((IList)_collection).Contains(control).Should().BeTrue();
+        using Control control = new();
+        try
+        {
+            ((IList)_collection).Add(control);
+            ((IList)_collection).Contains(control).Should().BeTrue();
+
+            Dispose();
+        }
+        finally
+        {
+            control?.Dispose();
+        }
     }
 
     [Fact]
@@ -102,7 +109,7 @@ public class ControlDesignerDesignerControlCollectionTests : IDisposable
     [Fact]
     public void IndexOf_ShouldReturnCorrectIndex()
     {
-        Control control = new();
+        using Control control = new();
         ((IList)_collection).Add(control);
         ((IList)_collection).IndexOf(control).Should().Be(_control.Controls.IndexOf(control));
     }
@@ -110,8 +117,8 @@ public class ControlDesignerDesignerControlCollectionTests : IDisposable
     [Fact]
     public void Insert_ShouldInsertControlAtCorrectIndex()
     {
-        Control control = new();
-        Control anotherControl = new();
+        using Control control = new();
+        using Control anotherControl = new();
         ((IList)_collection).Add(anotherControl);
         ((IList)_collection).Add(control);
         _collection.SetChildIndex(control, 0);
@@ -121,7 +128,7 @@ public class ControlDesignerDesignerControlCollectionTests : IDisposable
     [Fact]
     public void Remove_ShouldRemoveControlFromCollection()
     {
-        Control control = new();
+        using Control control = new();
         ((IList)_collection).Add(control);
         ((IList)_collection).Remove(control);
         _control.Controls.Contains(control).Should().BeFalse();
@@ -130,7 +137,7 @@ public class ControlDesignerDesignerControlCollectionTests : IDisposable
     [Fact]
     public void RemoveAt_ShouldRemoveControlAtSpecifiedIndex()
     {
-        Control control = new();
+        using Control control = new();
         ((IList)_collection).Add(control);
         ((IList)_collection).RemoveAt(0);
         _control.Controls.Contains(control).Should().BeFalse();
@@ -139,7 +146,7 @@ public class ControlDesignerDesignerControlCollectionTests : IDisposable
     [Fact]
     public void GetChildIndex_ShouldReturnCorrectIndex()
     {
-        Control control = new();
+        using Control control = new();
         _collection.Add(control);
         _collection.GetChildIndex(control, throwException: false).Should().Be(_control.Controls.GetChildIndex(control, throwException: false));
     }
@@ -147,7 +154,7 @@ public class ControlDesignerDesignerControlCollectionTests : IDisposable
     [Fact]
     public void SetChildIndex_ShouldSetCorrectIndex()
     {
-        Control control = new();
+        using Control control = new();
         _collection.Add(control);
         _collection.SetChildIndex(control, 0);
         _control.Controls.GetChildIndex(control).Should().Be(0);
@@ -156,7 +163,7 @@ public class ControlDesignerDesignerControlCollectionTests : IDisposable
     [Fact]
     public void Clear_ShouldRemoveAllControlsFromCollection()
     {
-        Control control = new();
+        using Control control = new();
         control.Site = new MockSite { Component = control, DesignMode = true };
         _collection.Add(control);
         _control.Controls.Contains(control).Should().BeTrue();
