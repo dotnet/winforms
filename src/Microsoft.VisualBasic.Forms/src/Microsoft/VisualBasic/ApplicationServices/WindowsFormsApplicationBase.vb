@@ -654,7 +654,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
             If _splashTimer IsNot Nothing Then
 
-                'We only have a timer if there was a minimum timeout on the splash screen.
+                ' We only have a timer if there was a minimum timeout on the splash screen.
                 _splashTimer.Dispose()
                 _splashTimer = Nothing
             End If
@@ -726,7 +726,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         <SecuritySafeCritical()>
         Protected Sub HideSplashScreen()
 
-            'This ultimately wasn't necessary. I suppose we better keep it for backwards compatibility.
+            ' This ultimately wasn't necessary. I suppose we better keep it for backwards compatibility.
             SyncLock _splashLock
 
                 ' .NET Framework 4.0 (Dev10 #590587) - we now activate the main form before calling
@@ -889,7 +889,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 ' can't fire any events in response to changing network availability conditions through a dead context.
                 If _networkObject IsNot Nothing Then _networkObject.DisconnectListener()
 
-                'Restore the prior sync context.
+                ' Restore the prior sync context.
                 AsyncOperationManager.SynchronizationContext = _appSynchronizationContext
                 _appSynchronizationContext = Nothing
             End Try
@@ -1080,7 +1080,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                         Throw New CantStartSingleInstanceException()
                     End Try
                 End If
-            End If 'Single-Instance application
+            End If ' Single-Instance application
         End Sub
 
     End Class

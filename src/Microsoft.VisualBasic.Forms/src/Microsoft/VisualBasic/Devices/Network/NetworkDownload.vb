@@ -176,7 +176,7 @@ Namespace Microsoft.VisualBasic.Devices
             Dim dialog As ProgressDialog = Nothing
             Try
                 If showUI AndAlso Environment.UserInteractive Then
-                    'Construct the local file. This will validate the full name and path
+                    ' Construct the local file. This will validate the full name and path
                     Dim fullFilename As String = CompilerServices.FileSystemUtils.NormalizeFilePath(
                         path:=destinationFileName,
                         paramName:=NameOf(destinationFileName))

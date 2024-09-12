@@ -26,7 +26,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ' Constant used to get re-sizable dialog with border style set to fixed dialog.
         Private Const WS_THICKFRAME As Integer = &H40000
 
-        'Required by the Windows Form Designer
+        ' Required by the Windows Form Designer
         Private ReadOnly _components As System.ComponentModel.IContainer
 
         ' Indicates whether or not the user has canceled the copy
@@ -114,9 +114,9 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
             RaiseEvent UserHitCancel()
         End Sub
 
-        'NOTE: The following procedure is required by the Windows Form Designer
-        'It can be modified using the Windows Form Designer.
-        'Do not modify it using the code editor.
+        ' NOTE: The following procedure is required by the Windows Form Designer
+        '       It can be modified using the Windows Form Designer.
+        '       Do not modify it using the code editor.
         <DebuggerStepThrough()>
         Private Sub InitializeComponent()
             Dim resources As New System.ComponentModel.ComponentResourceManager(GetType(ProgressDialog))
@@ -125,23 +125,23 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
             ButtonCloseDialog = New Button
             SuspendLayout()
             '
-            'LabelInfo
+            ' LabelInfo
             '
             resources.ApplyResources(LabelInfo, "LabelInfo", CultureInfo.CurrentUICulture)
             LabelInfo.MaximumSize = New Size(300, 0)
             LabelInfo.Name = "LabelInfo"
             '
-            'ProgressBarWork
+            ' ProgressBarWork
             '
             resources.ApplyResources(ProgressBarWork, "ProgressBarWork", CultureInfo.CurrentUICulture)
             ProgressBarWork.Name = "ProgressBarWork"
             '
-            'ButtonCloseDialog
+            ' ButtonCloseDialog
             '
             resources.ApplyResources(ButtonCloseDialog, "ButtonCloseDialog", CultureInfo.CurrentUICulture)
             ButtonCloseDialog.Name = "ButtonCloseDialog"
             '
-            'ProgressDialog
+            ' ProgressDialog
             '
             resources.ApplyResources(Me, "$this", CultureInfo.CurrentUICulture)
             Controls.Add(ButtonCloseDialog)
@@ -204,7 +204,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
             LabelInfo.MaximumSize = New Size(ClientSize.Width - BORDER_SIZE, 0)
         End Sub
 
-        'Form overrides dispose to clean up the component list.
+        ' Form overrides dispose to clean up the component list.
         Protected Overloads Overrides Sub Dispose(disposing As Boolean)
             If disposing Then
                 _components?.Dispose()

@@ -69,7 +69,7 @@ Namespace Microsoft.VisualBasic.Logging
         <EditorBrowsable(EditorBrowsableState.Advanced)>
         Public ReadOnly Property TraceSource() As TraceSource
             Get
-                'Note, this is a downcast from the DefaultTraceSource class we are using
+                ' Note: This is a downcast from the DefaultTraceSource class we are using
                 Return _traceSource
             End Get
         End Property
@@ -122,7 +122,7 @@ Namespace Microsoft.VisualBasic.Logging
         '''  configure the trace source according to the defaults they would have had in a default AppConfig.
         ''' </summary>
         Protected Friend Overridable Sub InitializeWithDefaultsSinceNoConfigExists()
-            'By default, you get a file log listener that picks everything from level Information on up.
+            ' By default, you get a file log listener that picks everything from level Information on up.
             _traceSource.Listeners.Add(New FileLogTraceListener(DEFAULT_FILE_LOG_TRACE_LISTENER_NAME))
             _traceSource.Switch.Level = SourceLevels.Information
         End Sub

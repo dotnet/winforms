@@ -26,9 +26,9 @@ Namespace Microsoft.VisualBasic.CompilerServices
             Implements IDisposable
 
             Public cb As Integer
-            Public lpReserved As IntPtr = IntPtr.Zero 'not string - see summary
-            Public lpDesktop As IntPtr = IntPtr.Zero 'not string - see summary
-            Public lpTitle As IntPtr = IntPtr.Zero 'not string - see summary
+            Public lpReserved As IntPtr = IntPtr.Zero ' Not string - see summary
+            Public lpDesktop As IntPtr = IntPtr.Zero ' Not string - see summary
+            Public lpTitle As IntPtr = IntPtr.Zero ' Not string - see summary
             Public dwX As Integer
             Public dwY As Integer
             Public dwXSize As Integer
@@ -77,7 +77,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
                                 NativeMethods.CloseHandle(hStdError)
                                 hStdError = s_invalidHandle
                             End If
-                        End If 'Me.dwFlags and STARTF_USESTDHANDLES
+                        End If ' Me.dwFlags and STARTF_USESTDHANDLES
 
                     End If
                 End If

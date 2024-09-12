@@ -50,17 +50,17 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Public ReadOnly Property CommandLineArgs() As ObjectModel.ReadOnlyCollection(Of String)
             Get
                 If _commandLineArgs Is Nothing Then
-                    'Get rid of Arg(0) which is the path of the executing program. Main(args() as string)
-                    'doesn't report the name of the app and neither will we
+                    ' Get rid of Arg(0) which is the path of the executing program. Main(args() as string)
+                    ' doesn't report the name of the app and neither will we
                     Dim envArgs As String() = Environment.GetCommandLineArgs
 
                     '1 element means no args, just the executing program.
                     If envArgs.GetLength(0) >= 2 Then
-                        '>= 2 means executing program + one or more command line arguments
-                        'dimming z(0) gives a z() of 1 element.
+                        ' >= 2 means executing program + one or more command line arguments
+                        ' dimming z(0) gives a z() of 1 element.
                         Dim newArgs(envArgs.GetLength(0) - 2) As String
 
-                        'copy everything but the 0th element (the path of the executing program)
+                        ' Copy everything but the 0th element (the path of the executing program)
                         Dim length As Integer = envArgs.GetLength(0) - 1
                         Array.Copy(
                             sourceArray:=envArgs,
@@ -70,7 +70,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                             length)
                         _commandLineArgs = New ObjectModel.ReadOnlyCollection(Of String)(newArgs)
                     Else
-                        'provide the empty set
+                        ' Provide the empty set
                         _commandLineArgs = New ObjectModel.ReadOnlyCollection(Of String)(Array.Empty(Of String)())
                     End If
                 End If

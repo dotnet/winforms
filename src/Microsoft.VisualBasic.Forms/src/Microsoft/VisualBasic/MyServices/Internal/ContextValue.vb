@@ -21,7 +21,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
 
         Private Shared s_threadLocal As ThreadLocal(Of IDictionary)
 
-        'An item is stored in the dictionary by a GUID which this string maintains
+        ' An item is stored in the dictionary by a GUID which this string maintains
         Private ReadOnly _contextKey As String
 
         Public Sub New()
@@ -39,7 +39,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
             Get
                 Dim dictionary As IDictionary = GetDictionary()
 
-                'Note, IDictionary(key) can return Nothing and that's OK
+                ' Note: IDictionary(key) can return Nothing and that's OK
                 Return DirectCast(dictionary(_contextKey), T)
             End Get
             Set(value As T)

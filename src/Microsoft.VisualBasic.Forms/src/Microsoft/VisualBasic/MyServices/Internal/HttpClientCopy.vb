@@ -77,7 +77,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         '''  the actual file transfer cancel event comes through and do it there.
         ''' </remarks>
         Private Sub m_ProgressDialog_UserHitCancel()
-            'cancel the upload/download transfer. We'll close the ProgressDialog as soon as the HttpClient cancels the xfer.
+            ' Cancel the upload/download transfer. We'll close the ProgressDialog as soon as the HttpClient cancels the xfer.
             _cancelTokenSourceGet.Cancel()
             _cancelTokenSourceRead.Cancel()
             _cancelTokenSourceReadStream.Cancel()
@@ -193,13 +193,13 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
             ' If we have a dialog we need to set up an async download
             If m_ProgressDialog IsNot Nothing Then
                 _httpClient.UploadFileAsync(address, sourceFileName)
-                 'returns when the download sequence is over, whether due to success, error, or being canceled
+                 ' returns when the download sequence is over, whether due to success, error, or being canceled
                 m_ProgressDialog.ShowProgressDialog()
             Else
                 _httpClient.UploadFile(address, sourceFileName)
             End If
 
-            'Now that we are back on the main thread, throw the exception we encountered if the user didn't cancel.
+            ' Now that we are back on the main thread, throw the exception we encountered if the user didn't cancel.
             If _exceptionEncounteredDuringFileTransfer IsNot Nothing Then
                 If m_ProgressDialog Is Nothing OrElse Not m_ProgressDialog.UserCanceledTheDialog Then
                     Throw _exceptionEncounteredDuringFileTransfer

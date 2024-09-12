@@ -62,7 +62,7 @@ Namespace Microsoft.VisualBasic.Devices
             showUI As Boolean) As ProgressDialog
 
             If showUI AndAlso Environment.UserInteractive Then
-                'Construct the local file. This will validate the full name and path
+                ' Construct the local file. This will validate the full name and path
                 Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(
                     path:=destinationFileName,
                     paramName:=NameOf(destinationFileName))
@@ -86,7 +86,7 @@ Namespace Microsoft.VisualBasic.Devices
             Try
                 Return New Uri(address)
             Catch ex As UriFormatException
-                'Throw an exception with an error message more appropriate to our API
+                ' Throw an exception with an error message more appropriate to our API
                 Throw GetArgumentExceptionWithArgName(NameOf(address), SR.Network_InvalidUriString, address)
             End Try
         End Function

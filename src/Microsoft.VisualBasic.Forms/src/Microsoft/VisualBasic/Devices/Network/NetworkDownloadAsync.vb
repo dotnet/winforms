@@ -150,7 +150,7 @@ Namespace Microsoft.VisualBasic.Devices
             ' Set credentials if we have any
             client.Timeout = New TimeSpan(0, 0, 0, 0, connectionTimeout)
 
-            'Construct the local file. This will validate the full name and path
+            ' Construct the local file. This will validate the full name and path
             Dim normalizedFilePath As String = FileSystemUtils.NormalizeFilePath(
                 path:=destinationFileName,
                 paramName:=NameOf(destinationFileName))
@@ -161,12 +161,12 @@ Namespace Microsoft.VisualBasic.Devices
                 Throw VbUtils.GetInvalidOperationException(SR.Network_DownloadNeedsFilename)
             End If
 
-            'Throw if the file exists and the user doesn't want to overwrite
+            ' Throw if the file exists and the user doesn't want to overwrite
             If Not overwrite AndAlso IO.File.Exists(normalizedFilePath) Then
                 Throw New IO.IOException(VbUtils.GetResourceString(SR.IO_FileExists_Path, destinationFileName))
             End If
 
-            'Check to see if the target directory exists. If it doesn't, create it
+            ' Check to see if the target directory exists. If it doesn't, create it
             Dim targetDirectory As String = IO.Path.GetDirectoryName(normalizedFilePath)
 
             ' Make sure we have a meaningful directory. If we don't, the destinationFileName is suspect
@@ -178,10 +178,10 @@ Namespace Microsoft.VisualBasic.Devices
                 IO.Directory.CreateDirectory(targetDirectory)
             End If
 
-            'Create the copier
+            ' Create the copier
             Dim copier As New HttpClientCopy(client, dialog)
 
-            'Download the file
+            ' Download the file
             Try
                 Await copier.DownloadFileWorkerAsync(addressUri,
                                                      normalizedFilePath).ConfigureAwait(continueOnCapturedContext:=False)

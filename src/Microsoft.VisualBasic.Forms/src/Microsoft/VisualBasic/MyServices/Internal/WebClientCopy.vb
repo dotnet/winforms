@@ -18,8 +18,8 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ' The WebClient performs the downloading or uploading operations for us
         Private WithEvents m_WebClient As WebClient
 
-        'Keeps track of the error that happened during upload/download so we can throw it
-        'once we can guarantee we are back on the main thread
+        ' Keeps track of the error that happened during upload/download so we can throw it
+        ' once we can guarantee we are back on the main thread
         Private _exceptionEncounteredDuringFileTransfer As Exception
 
         ' The percentage of the operation completed
@@ -71,8 +71,8 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         '''  the actual file transfer cancel event comes through and do it there.
         ''' </remarks>
         Private Sub m_ProgressDialog_UserCancelledEvent() Handles m_ProgressDialog.UserHitCancel
-            'cancel the upload/download transfer. We'll close the ProgressDialog
-            'as soon as the WebClient cancels the xfer.
+            ' Cancel the upload/download transfer. We'll close the ProgressDialog
+            ' as soon as the WebClient cancels the xfer.
             m_WebClient.CancelAsync()
         End Sub
 
@@ -95,8 +95,8 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                     InvokeIncrement(100)
                 End If
             Finally
-                'We don't close the dialog until we receive the
-                'WebClient.DownloadFileCompleted event
+                ' We don't close the dialog until we receive the
+                ' WebClient.DownloadFileCompleted event
                 CloseProgressDialog(m_ProgressDialog)
             End Try
         End Sub
@@ -129,14 +129,15 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
             If m_ProgressDialog IsNot Nothing Then
                 m_WebClient.UploadFileAsync(address, sourceFileName)
 
-                'returns when the download sequence is over, whether due to success, error, or being canceled
+                ' Returns when the download sequence is over,
+                ' whether due to success, error, or being canceled
                 m_ProgressDialog.ShowProgressDialog()
             Else
                 m_WebClient.UploadFile(address, sourceFileName)
             End If
 
-            'Now that we are back on the main thread, throw the exception we
-            'encountered if the user didn't cancel.
+            ' Now that we are back on the main thread, throw the exception we
+            ' encountered if the user didn't cancel.
             If _exceptionEncounteredDuringFileTransfer IsNot Nothing Then
                 If m_ProgressDialog Is Nothing OrElse Not m_ProgressDialog.UserCanceledTheDialog Then
                     Throw _exceptionEncounteredDuringFileTransfer

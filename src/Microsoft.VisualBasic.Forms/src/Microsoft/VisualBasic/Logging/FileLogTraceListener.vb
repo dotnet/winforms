@@ -641,11 +641,11 @@ Namespace Microsoft.VisualBasic.Logging
                 Dim reader As StreamReader = Nothing
                 Try
 
-                    'Attempt to determine the encoding of the file. The call to Reader.ReadLine
-                    'will change the current encoding of Reader to that of the file.
+                    ' Attempt to determine the encoding of the file. The call to Reader.ReadLine
+                    ' will change the current encoding of Reader to that of the file.
                     reader = New StreamReader(fileName, Encoding, True)
 
-                    'Ignore 0 length file
+                    ' Ignore 0 length file
                     If reader.BaseStream.Length > 0 Then
                         reader.ReadLine()
 
@@ -667,7 +667,7 @@ Namespace Microsoft.VisualBasic.Logging
         Private Function GetFreeDiskSpace() As Long
             Dim pathName As String = Path.GetPathRoot(Path.GetFullPath(FullLogFileName))
 
-            'Initialize FreeUserSpace so we can determine if its value is changed by the API call
+            ' Initialize FreeUserSpace so we can determine if its value is changed by the API call
             Dim freeUserSpace As Long = -1
             Dim totalUserSpace As Long
             Dim totalFreeSpace As Long
@@ -750,8 +750,9 @@ Namespace Microsoft.VisualBasic.Logging
                     i += 1
                 End SyncLock
             End While
-            'If we fall out the loop, we have failed to obtain a valid stream name. This occurs if there are files on your system
-            'ranging from BaseStreamName0..BaseStreamName{integer.MaxValue} which is pretty unlikely but hey.
+            ' If we fall out the loop, we have failed to obtain a valid stream name.
+            ' This occurs if there are files on your system ranging from BaseStreamName0..
+            ' BaseStreamName{integer.MaxValue} which is pretty unlikely but hey.
             Throw VbUtils.GetInvalidOperationException(SR.ApplicationLog_ExhaustedPossibleStreamNames, baseStreamName)
         End Function
 
@@ -1056,5 +1057,5 @@ Namespace Microsoft.VisualBasic.Logging
             End Try
         End Sub
 
-    End Class 'FileLogTraceListener
+    End Class
 End Namespace

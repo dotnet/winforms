@@ -104,7 +104,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' </summary>
         <StructLayout(LayoutKind.Sequential)>
         Friend Structure MEMORYSTATUSEX
-            'typedef struct _MEMORYSTATUSEX {
+            ' typedef struct _MEMORYSTATUSEX {
             '   DWORD dwLength;                     Size of the structure. Must set before calling GlobalMemoryStatusEx.
             '   DWORD dwMemoryLoad;                 Number between 0 and 100 on current memory utilization.
             '   DWORDLONG ullTotalPhys;             Total size of physical memory.
@@ -116,7 +116,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
             '                                       virtual address space.
             '   DWORDLONG ullAvailExtendedVirtual;  Total size of unreserved and uncommitted memory in
             '                                       extended portion of virtual address.
-            '} MEMORYSTATUSEX, *LPMEMORYSTATUSEX;
+            ' } MEMORYSTATUSEX, *LPMEMORYSTATUSEX;
 
             Friend dwLength As UInt32
             Friend dwMemoryLoad As UInt32

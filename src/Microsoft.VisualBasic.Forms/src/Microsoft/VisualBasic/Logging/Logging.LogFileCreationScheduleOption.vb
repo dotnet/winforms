@@ -7,9 +7,9 @@ Namespace Microsoft.VisualBasic.Logging
     '''  Options for the date stamp in the name of a log file.
     ''' </summary>
     Public Enum LogFileCreationScheduleOption As Integer
-        None        '(default)
-        Daily       'YYYY-MM-DD for today
-        Weekly      'YYYY-MM-DD for first day of this week
+        None        ' (default)
+        Daily       ' YYYY-MM-DD for today
+        Weekly      ' YYYY-MM-DD for first day of this week
     End Enum
 
 End Namespace
