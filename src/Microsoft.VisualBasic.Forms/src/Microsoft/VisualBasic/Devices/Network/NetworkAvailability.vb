@@ -34,9 +34,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <value>True if connected, otherwise False.</value>
         Public ReadOnly Property IsAvailable() As Boolean
             Get
-
                 Return NetInfoAlias.NetworkInterface.GetIsNetworkAvailable()
-
             End Get
         End Property
 
