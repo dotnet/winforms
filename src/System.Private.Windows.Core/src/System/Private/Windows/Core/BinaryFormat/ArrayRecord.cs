@@ -10,9 +10,11 @@ namespace System.Private.Windows.Core.BinaryFormat;
 /// </summary>
 /// <devdoc>
 ///  <see href="https://learn.microsoft.com/openspecs/windows_protocols/ms-nrbf/f57d41e5-d3c0-4340-add8-fa4449a68d1c">
-///  [MS-NRBF] 2.4</see> describes how item records must follow the array record and how multiple null records
-///  can be coalesced into an <see cref="NullRecord.ObjectNullMultiple"/> or <see cref="NullRecord.ObjectNullMultiple256"/>
-///  record.
+///   [MS-NRBF] 2.4
+///  </see>
+///  describes how item records must follow the array record and how multiple null records
+///  can be coalesced into an <see cref="NullRecord.ObjectNullMultiple"/> or
+///  <see cref="NullRecord.ObjectNullMultiple256"/> record.
 /// </devdoc>
 internal abstract class ArrayRecord : ObjectRecord, IEnumerable
 {

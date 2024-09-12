@@ -789,7 +789,7 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
         using ListView listView = new() { ShowGroups = true };
 
         // This test checks the case of collapsing of the second group.
-        // The first group state might affect behaviour, so check both states.
+        // The first group state might affect behavior, so check both states.
         ListViewGroup group1 = new("Group 1") { CollapsedState = firstGroupSate };
         ListViewGroup group2 = new("Group 2") { CollapsedState = ListViewGroupCollapsedState.Expanded };
         ListViewGroup group3 = new("Group 3") { CollapsedState = ListViewGroupCollapsedState.Expanded };

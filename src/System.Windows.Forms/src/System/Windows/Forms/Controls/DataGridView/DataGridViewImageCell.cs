@@ -20,7 +20,7 @@ public partial class DataGridViewImageCell : DataGridViewCell
 
     private const byte CellValueIsIcon = 0x01;
 
-    private byte _flags;  // see DATAGRIDVIEWIMAGECELL_ consts above
+    private byte _flags;  // see DATAGRIDVIEWIMAGECELL_ constants above
 
     public DataGridViewImageCell()
         : this(valueIsIcon: false)
