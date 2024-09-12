@@ -74,17 +74,8 @@ public class ControlDesignerDesignerControlCollectionTests : IDisposable
     public void Contains_ShouldReturnTrueIfControlExists()
     {
         using Control control = new();
-        try
-        {
-            ((IList)_collection).Add(control);
-            ((IList)_collection).Contains(control).Should().BeTrue();
-
-            Dispose();
-        }
-        finally
-        {
-            control?.Dispose();
-        }
+        ((IList)_collection).Add(control);
+        ((IList)_collection).Contains(control).Should().BeTrue();
     }
 
     [Fact]
