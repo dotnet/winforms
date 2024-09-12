@@ -147,6 +147,7 @@ internal class ToolStripHighContrastRenderer : ToolStripSystemRenderer
             {
                 g.FillRectangle(SystemBrushes.Highlight, bounds);
                 g.DrawRectangle(SystemPens.HighlightText, dropDownRect);
+
                 DrawHightContrastDashedBorder(g, e.Item);
             }
 
