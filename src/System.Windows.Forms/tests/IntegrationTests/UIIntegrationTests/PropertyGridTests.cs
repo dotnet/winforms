@@ -314,9 +314,9 @@ public class PropertyGridTests : IDisposable
     {
         _propertyGrid.SelectedObject.Should().Be(_form);
 
-        using Button button1 = new();
-        _propertyGrid.SelectedObject = button1;
-        _propertyGrid.SelectedObject.Should().Be(button1);
+        using TextBox textBox1 = new();
+        _propertyGrid.SelectedObject = textBox1;
+        _propertyGrid.SelectedObject.Should().Be(textBox1);
     }
 
     [WinFormsFact]
@@ -324,12 +324,12 @@ public class PropertyGridTests : IDisposable
     {
         _propertyGrid.SelectedObjects.Should().Contain(_form);
 
-        Button[] buttons1 = new Button[1];
-        using Button btn1 = new Button();
-        buttons1[0] = btn1;
+        TextBox[] textBoxes1 = new TextBox[1];
+        using TextBox tbx1 = new TextBox();
+        textBoxes1[0] = tbx1;
 
-        _propertyGrid.SelectedObjects = buttons1;
-        (_propertyGrid.SelectedObjects)[0].Should().Be(btn1);
+        _propertyGrid.SelectedObjects = textBoxes1;
+        (_propertyGrid.SelectedObjects)[0].Should().Be(tbx1);
     }
 
     [WinFormsFact]
@@ -499,19 +499,19 @@ public class PropertyGridTests : IDisposable
     [WinFormsFact]
     public void PropertyGrid_ResetSelectedPropertyEvent_Raised_Success()
     {
-        using Button button = new();
-        _propertyGrid.SelectedObject = button;
+        using TextBox textBox = new();
+        _propertyGrid.SelectedObject = textBox;
 
-        PropertyDescriptor? propertyDescriptor = TypeDescriptor.GetProperties(button)["Text"];
+        PropertyDescriptor? propertyDescriptor = TypeDescriptor.GetProperties(textBox)["Text"];
         propertyDescriptor.Should().NotBeNull();
 
-        string originalValue = propertyDescriptor?.GetValue(button) as string ?? string.Empty;
+        string originalValue = propertyDescriptor?.GetValue(textBox) as string ?? string.Empty;
         originalValue.Should().NotBeNull();
 
-        button.Text = "New Button Text";
+        textBox.Text = "New TextBox Text";
 
         _propertyGrid.ResetSelectedProperty();
-        propertyDescriptor!.GetValue(button).Should().Be(originalValue);
+        propertyDescriptor!.GetValue(textBox).Should().Be(originalValue);
     }
 
     [WinFormsFact]
