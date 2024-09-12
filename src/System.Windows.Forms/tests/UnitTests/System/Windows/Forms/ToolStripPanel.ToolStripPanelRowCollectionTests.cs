@@ -21,9 +21,29 @@ public class ToolStripPanel_ToolStripPanelRowCollectionTests : IDisposable
     public void Dispose() => _toolStripPanel.Dispose();
 
     [WinFormsFact]
+    public void ToolStripPanelRowCollection_ConstructorWithOwner_SetsOwner()
+    {
+        ToolStripPanelRowCollection toolStripPanelRowCollection = new(_toolStripPanel);
+        ToolStripPanel toolStripPanel = toolStripPanelRowCollection.TestAccessor().Dynamic._owner;
+        toolStripPanel.Should().BeSameAs(_toolStripPanel);
+    }
+
+    [WinFormsFact]
+    public void ToolStripPanelRowCollection_ConstructorWithOwnerAndRows_SetsOwnerAndAddsRows()
+    {
+        ToolStripPanelRow toolStripPanelRow1 = new(_toolStripPanel);
+        ToolStripPanelRow[] toolStripPanelRowArray = { toolStripPanelRow1 };
+        ToolStripPanelRowCollection toolStripPanelRowCollection = new(_toolStripPanel, toolStripPanelRowArray);
+        ToolStripPanel toolStripPanel = toolStripPanelRowCollection.TestAccessor().Dynamic._owner;
+
+        toolStripPanel.Should().BeSameAs(_toolStripPanel);
+        toolStripPanelRowCollection.Count.Should().Be(1);
+    }
+
+    [WinFormsFact]
     public void ToolStripPanelRowCollection_ConstructorWithOwnerAndValue_AddsRows()
     {
-        var rows = AddRowsToCollection(_toolStripPanelRowCollection, _toolStripPanel, 2);
+        var rows = AddRowsToCollection(collection: _toolStripPanelRowCollection, panel: _toolStripPanel, count: 2);
 
         _toolStripPanelRowCollection.Count.Should().Be(2);
         _toolStripPanelRowCollection[0].Should().Be(rows[0]);
@@ -33,7 +53,7 @@ public class ToolStripPanel_ToolStripPanelRowCollectionTests : IDisposable
     [WinFormsFact]
     public void ToolStripPanelRowCollection_Add_AddsRow()
     {
-        var row = AddRowToCollection(_toolStripPanelRowCollection, _toolStripPanel);
+        var row = AddRowToCollection(collection: _toolStripPanelRowCollection, panel: _toolStripPanel);
 
         _toolStripPanelRowCollection.Count.Should().Be(1);
         _toolStripPanelRowCollection[0].Should().Be(row);
@@ -42,33 +62,25 @@ public class ToolStripPanel_ToolStripPanelRowCollectionTests : IDisposable
     [WinFormsFact]
     public void ToolStripPanelRowCollection_Add_NullValue_ThrowsArgumentNullException()
     {
-        Action action = () => _toolStripPanelRowCollection.Add(null!);
+        Action action = () => _toolStripPanelRowCollection.Add(value: null!);
 
-        action.Should().Throw<ArgumentNullException>();
-    }
-
-    [WinFormsFact]
-    public void ToolStripPanelRowCollection_AddRange_AddsRows()
-    {
-        var rows = AddRowsToCollection(_toolStripPanelRowCollection, _toolStripPanel, 2);
-
-        _toolStripPanelRowCollection.Count.Should().Be(2);
-        _toolStripPanelRowCollection[0].Should().Be(rows[0]);
-        _toolStripPanelRowCollection[1].Should().Be(rows[1]);
+        action.Should().Throw<ArgumentNullException>()
+            .WithMessage("Value cannot be null. (Parameter 'value')");
     }
 
     [WinFormsFact]
     public void ToolStripPanelRowCollection_AddRange_NullValue_ThrowsArgumentNullException()
     {
-        Action action = () => _toolStripPanelRowCollection.AddRange((ToolStripPanelRow[])null!);
+        Action action = () => _toolStripPanelRowCollection.AddRange(value: (ToolStripPanelRow[])null!);
 
-        action.Should().Throw<ArgumentNullException>();
+        action.Should().Throw<ArgumentNullException>()
+            .WithMessage("Value cannot be null. (Parameter 'value')");
     }
 
     [WinFormsFact]
     public void ToolStripPanelRowCollection_AddRange_Collection_AddsRows()
     {
-        var rows = AddRowsToCollection(_toolStripPanelRowCollection, _toolStripPanel, 2);
+        var rows = AddRowsToCollection(collection: _toolStripPanelRowCollection, panel: _toolStripPanel, count: 2);
 
         _toolStripPanelRowCollection.AddRange(new ToolStripPanelRowCollection(_toolStripPanel) { rows[0], rows[1] });
 
@@ -80,15 +92,18 @@ public class ToolStripPanel_ToolStripPanelRowCollectionTests : IDisposable
     [WinFormsFact]
     public void ToolStripPanelRowCollection_AddRange_Collection_NullValue_ThrowsArgumentNullException()
     {
-        Action action = () => _toolStripPanelRowCollection.AddRange((ToolStripPanelRowCollection)null!);
+        Action action = () => _toolStripPanelRowCollection.AddRange(value: (ToolStripPanelRowCollection)null!);
 
-        action.Should().Throw<ArgumentNullException>();
+        action.Should().Throw<ArgumentNullException>()
+            .WithMessage("Value cannot be null. (Parameter 'value')");
     }
 
     [WinFormsFact]
     public void ToolStripPanelRowCollection_Clear_RemovesAllRows()
     {
-        AddRowsToCollection(_toolStripPanelRowCollection, _toolStripPanel, 2);
+        AddRowsToCollection(collection: _toolStripPanelRowCollection, panel: _toolStripPanel, count: 2);
+
+        _toolStripPanelRowCollection.Count.Should().Be(2);
 
         _toolStripPanelRowCollection.Clear();
 
@@ -106,7 +121,7 @@ public class ToolStripPanel_ToolStripPanelRowCollectionTests : IDisposable
     [WinFormsFact]
     public void ToolStripPanelRowCollection_Remove_RemovesRow()
     {
-        var row = AddRowToCollection(_toolStripPanelRowCollection, _toolStripPanel);
+        var row = AddRowToCollection(collection: _toolStripPanelRowCollection, panel: _toolStripPanel);
 
         _toolStripPanelRowCollection.Remove(row);
 
@@ -116,7 +131,7 @@ public class ToolStripPanel_ToolStripPanelRowCollectionTests : IDisposable
     [WinFormsFact]
     public void ToolStripPanelRowCollection_Remove_RowNotInCollection_DoesNothing()
     {
-        var row1 = AddRowToCollection(_toolStripPanelRowCollection, _toolStripPanel);
+        var row1 = AddRowToCollection(collection: _toolStripPanelRowCollection, panel: _toolStripPanel);
         ToolStripPanelRow row2 = new(_toolStripPanel);
 
         _toolStripPanelRowCollection.Remove(row2);
@@ -128,8 +143,8 @@ public class ToolStripPanel_ToolStripPanelRowCollectionTests : IDisposable
     [WinFormsFact]
     public void ToolStripPanelRowCollection_RemoveAt_RemovesRowAtIndex()
     {
-        AddRowToCollection(_toolStripPanelRowCollection, _toolStripPanel);
-        var row2 = AddRowToCollection(_toolStripPanelRowCollection, _toolStripPanel);
+        AddRowToCollection(collection: _toolStripPanelRowCollection, panel: _toolStripPanel);
+        var row2 = AddRowToCollection(collection: _toolStripPanelRowCollection, panel: _toolStripPanel);
 
         _toolStripPanelRowCollection.RemoveAt(0);
 
@@ -140,11 +155,12 @@ public class ToolStripPanel_ToolStripPanelRowCollectionTests : IDisposable
     [WinFormsFact]
     public void ToolStripPanelRowCollection_RemoveAt_IndexOutOfRange_ThrowsArgumentOutOfRangeException()
     {
-        var row = AddRowToCollection(_toolStripPanelRowCollection, _toolStripPanel);
+        var row = AddRowToCollection(collection: _toolStripPanelRowCollection, panel: _toolStripPanel);
 
         Action action = () => _toolStripPanelRowCollection.RemoveAt(1);
 
-        action.Should().Throw<ArgumentOutOfRangeException>();
+        action.Should().Throw<ArgumentOutOfRangeException>()
+            .WithMessage("Index was out of range. Must be non-negative and less than the size of the collection. (Parameter 'index')");
     }
 
     [WinFormsFact]
@@ -152,16 +168,17 @@ public class ToolStripPanel_ToolStripPanelRowCollectionTests : IDisposable
     {
         Action action = () => _toolStripPanelRowCollection.RemoveAt(0);
 
-        action.Should().Throw<ArgumentOutOfRangeException>();
+        action.Should().Throw<ArgumentOutOfRangeException>()
+            .WithMessage("Index was out of range. Must be non-negative and less than the size of the collection. (Parameter 'index')");
     }
 
     [WinFormsFact]
     public void ToolStripPanelRowCollection_CopyTo_CopiesRowsToArray()
     {
-        var rows = AddRowsToCollection(_toolStripPanelRowCollection, _toolStripPanel, 2);
+        var rows = AddRowsToCollection(collection: _toolStripPanelRowCollection, panel: _toolStripPanel, count: 2);
         var array = new ToolStripPanelRow[2];
 
-        _toolStripPanelRowCollection.CopyTo(array, 0);
+        _toolStripPanelRowCollection.CopyTo(array: array, index: 0);
 
         array[0].Should().Be(rows[0]);
         array[1].Should().Be(rows[1]);
@@ -170,32 +187,34 @@ public class ToolStripPanel_ToolStripPanelRowCollectionTests : IDisposable
     [WinFormsFact]
     public void ToolStripPanelRowCollection_CopyTo_NullArray_ThrowsArgumentNullException()
     {
-        Action action = () => _toolStripPanelRowCollection.CopyTo(null!, 0);
+        Action action = () => _toolStripPanelRowCollection.CopyTo(array: null!, index: 0);
 
-        action.Should().Throw<ArgumentNullException>();
+        action.Should().Throw<ArgumentNullException>()
+            .WithMessage("Value cannot be null. (Parameter 'destinationArray')");
     }
 
     [WinFormsFact]
     public void ToolStripPanelRowCollection_CopyTo_IndexOutOfRange_ThrowsArgumentException()
     {
-        var row = AddRowToCollection(_toolStripPanelRowCollection, _toolStripPanel);
+        var row = AddRowToCollection(collection: _toolStripPanelRowCollection, panel: _toolStripPanel);
         var array = new ToolStripPanelRow[1];
 
-        Action act = () => _toolStripPanelRowCollection.CopyTo(array, 1);
+        Action action = () => _toolStripPanelRowCollection.CopyTo(array: array, index: 1);
 
-        act.Should().Throw<ArgumentException>()
+        action.Should().Throw<ArgumentException>()
             .WithMessage("Destination array was not long enough. Check the destination index, length, and the array's lower bounds. (Parameter 'destinationArray')");
     }
 
     [WinFormsFact]
     public void ToolStripPanelRowCollection_CopyTo_ArrayTooSmall_ThrowsArgumentException()
     {
-        var rows = AddRowsToCollection(_toolStripPanelRowCollection, _toolStripPanel, 2);
+        var rows = AddRowsToCollection(collection: _toolStripPanelRowCollection, panel: _toolStripPanel, count: 2);
         var array = new ToolStripPanelRow[1];
 
-        Action action = () => _toolStripPanelRowCollection.CopyTo(array, 0);
+        Action action = () => _toolStripPanelRowCollection.CopyTo(array: array, index: 0);
 
-        action.Should().Throw<ArgumentException>();
+        action.Should().Throw<ArgumentException>()
+            .WithMessage("Destination array was not long enough. Check the destination index, length, and the array's lower bounds. (Parameter 'destinationArray')");
     }
 
     private ToolStripPanelRow AddRowToCollection(ToolStripPanelRowCollection collection, ToolStripPanel panel)
