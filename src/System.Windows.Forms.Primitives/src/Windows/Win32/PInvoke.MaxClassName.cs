@@ -12,7 +12,7 @@ internal static partial class PInvoke
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/winuser/ns-winuser-wndclassexw#members">
-    ///    Read more on http://learn.microsoft.com.
+    ///    Read more on https://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
