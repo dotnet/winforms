@@ -16,7 +16,7 @@ public class NetworkTests
     public void Ping_ShortTimeout_Success()
     {
         Network network = new();
-        network.Ping("127.0.0.1", 1).Should().BeTrue();
+        network.Ping("https:\\www.microsoft.com", 1).Should().BeTrue();
     }
 
     [Fact]
