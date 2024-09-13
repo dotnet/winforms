@@ -604,9 +604,6 @@ public class CollectionEditorTests
         Mock<DesignerTransaction> mockTransaction = new(MockBehavior.Strict);
         mockTransaction
             .Protected()
-            .Setup("Dispose", It.IsAny<bool>());
-        mockTransaction
-            .Protected()
             .Setup("OnCommit")
             .Verifiable();
 
@@ -652,9 +649,6 @@ public class CollectionEditorTests
             .Returns(mockEditorService.Object);
 
         Mock<DesignerTransaction> mockTransaction = new(MockBehavior.Strict);
-        mockTransaction
-            .Protected()
-            .Setup("Dispose", It.IsAny<bool>());
         mockTransaction
             .Protected()
             .Setup("OnCancel")
