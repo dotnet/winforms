@@ -3639,7 +3639,7 @@ public partial class DataGridView : Control, ISupportInitialize
                     {
                         foreach (int columnIndex in _selectedBandIndexes)
                         {
-                            foreach (DataGridViewRow dataGridViewRow in Rows)   // u-nshares all rows!
+                            foreach (DataGridViewRow dataGridViewRow in Rows)   // un-shares all rows!
                             {
                                 stcc.Add(dataGridViewRow.Cells[columnIndex]);
                             }
