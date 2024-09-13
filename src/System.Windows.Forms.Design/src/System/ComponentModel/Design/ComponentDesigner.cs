@@ -614,7 +614,8 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     }
 
     /// <summary>
-    ///  Allows a designer to filter the set of events the component it is designing will expose through the TypeDescriptor object.
+    ///  Allows a designer to filter the set of events the component
+    ///  it is designing will expose through the TypeDescriptor object.
     /// </summary>
     protected virtual void PostFilterEvents(IDictionary events)
     {

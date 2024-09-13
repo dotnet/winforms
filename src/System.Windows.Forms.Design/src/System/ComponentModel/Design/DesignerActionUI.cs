@@ -216,7 +216,9 @@ internal partial class DesignerActionUI : IDisposable
                     behavior.ActionLists = dalColl;
                 }
 
-                designerActionGlyph.Invalidate(); // need to invalidate here too, someone could have called refresh too soon, causing the glyph to get created in the wrong place
+                // need to invalidate here too, someone could have called refresh too soon,
+                // causing the glyph to get created in the wrong place
+                designerActionGlyph.Invalidate();
             }
 
             return designerActionGlyph;
@@ -275,7 +277,8 @@ internal partial class DesignerActionUI : IDisposable
             return;
         }
 
-        // we check whether or not we're in a transaction, if we are, we only the refresh at the end of the transaction to avoid flicker.
+        // we check whether or not we're in a transaction, if we are,
+        // we only the refresh at the end of the transaction to avoid flicker.
         IDesignerHost? host = _serviceProvider.GetService<IDesignerHost>();
         if (host is { InTransaction: true } and not IDesignerHostTransactionState { IsClosingTransaction: true })
         {

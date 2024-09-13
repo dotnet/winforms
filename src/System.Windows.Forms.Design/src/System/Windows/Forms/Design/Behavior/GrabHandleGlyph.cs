@@ -26,7 +26,8 @@ internal class GrabHandleGlyph : SelectionGlyphBase
         hitTestCursor = Cursors.Default;
         rules = SelectionRules.None;
 
-        // We +/- DesignerUtils.HANDLEOVERLAP because we want each GrabHandle to overlap the control by DesignerUtils.HANDLEOVERLAP pixels
+        // We +/- DesignerUtils.HANDLEOVERLAP because we want each GrabHandle to overlap the control
+        // by DesignerUtils.HANDLEOVERLAP pixels
         switch (type)
         {
             case GrabHandleGlyphType.UpperLeft:

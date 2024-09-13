@@ -44,7 +44,8 @@ internal unsafe ref struct SpanReader<T>(ReadOnlySpan<T> span) where T : unmanag
     /// </summary>
     /// <param name="span">The read data, if any.</param>
     /// <param name="delimiter">The delimiter to look for.</param>
-    /// <param name="advancePastDelimiter"><see langword="true"/> to move past the <paramref name="delimiter"/> if found.</param>
+    /// <param name="advancePastDelimiter">
+    ///  <see langword="true"/> to move past the <paramref name="delimiter"/> if found.</param>
     /// <returns><see langword="true"/> if the <paramref name="delimiter"/> was found.</returns>
     public bool TryReadTo(T delimiter, bool advancePastDelimiter, out ReadOnlySpan<T> span)
     {

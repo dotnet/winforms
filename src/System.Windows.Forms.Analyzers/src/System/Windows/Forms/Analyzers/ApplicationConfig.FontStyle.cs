@@ -5,7 +5,8 @@ namespace System.Windows.Forms.Analyzers;
 
 internal partial record ApplicationConfig
 {
-    // Copied from https://github.com/dotnet/runtime/blob/00ee1c18715723e62484c9bc8a14f517455fc3b3/src/libraries/System.Drawing.Common/src/System/Drawing/FontStyle.cs
+    // Copied from
+    // https://github.com/dotnet/runtime/blob/00ee1c18715723e62484c9bc8a14f517455fc3b3/src/libraries/System.Drawing.Common/src/System/Drawing/FontStyle.cs
     [Flags]
     public enum FontStyle
     {

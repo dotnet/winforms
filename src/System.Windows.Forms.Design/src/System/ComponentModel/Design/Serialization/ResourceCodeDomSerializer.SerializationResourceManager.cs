@@ -191,7 +191,8 @@ internal partial class ResourceCodeDomSerializer
         {
             culture ??= ReadCulture;
 
-            // .NET Framework 4.0 (Dev10 #425129): Control location moves due to incorrect anchor info when resource files are reloaded.
+            // .NET Framework 4.0 (Dev10 #425129): Control location moves due to
+            // incorrect anchor info when resource files are reloaded.
             Windows.Forms.Control? control = value as Windows.Forms.Control;
             control?.SuspendLayout();
 
@@ -410,7 +411,8 @@ internal partial class ResourceCodeDomSerializer
                         resourceSet = [];
                     }
 
-                    // resourceSet may be null here. We add it to the cache anyway as a sentinel so we don't repeatedly ask for the same resource.
+                    // resourceSet may be null here. We add it to the cache anyway as a sentinel
+                    // so we don't repeatedly ask for the same resource.
                     ResourceTable[culture] = resourceSet;
                 }
             }

@@ -521,7 +521,8 @@ internal sealed partial class DragAssistanceManager
     [MemberNotNull(nameof(_horizontalDistances))]
     private void Initialize(List<IComponent>? dragComponents, IDesignerHost host)
     {
-        // our targetControl will always be the 0th component in our dragComponents array list (a.k.a. the primary selected component).
+        // our targetControl will always be the 0th component in our dragComponents array list
+        // (a.k.a. the primary selected component).
         Control? targetControl = null;
         if (dragComponents is not null && dragComponents.Count > 0)
         {
@@ -1122,7 +1123,8 @@ internal sealed partial class DragAssistanceManager
         }
 
         // Second Pass!  We only need to do a second pass if the smallest delta is <= SnapDistance.
-        // If this is the case - then we draw snap lines for every line equal to the smallest distance available in the distance array
+        // If this is the case - then we draw snap lines for every line equal
+        // to the smallest distance available in the distance array
         _snapPointX = (Math.Abs(smallestDistanceVert) <= SnapDistance) ? -smallestDistanceVert : INVALID_VALUE;
         _snapPointY = (Math.Abs(smallestDistanceHorz) <= SnapDistance) ? -smallestDistanceHorz : INVALID_VALUE;
         // certain behaviors (like resize) might want to know whether we really snapped or not.

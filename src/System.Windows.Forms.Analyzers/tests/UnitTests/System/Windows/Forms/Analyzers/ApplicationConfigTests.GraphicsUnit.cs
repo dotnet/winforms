@@ -8,7 +8,8 @@ namespace System.Windows.Forms.Analyzers.Tests;
 
 public partial class ApplicationConfigTests
 {
-    // Copied from https://github.com/dotnet/runtime/blob/00ee1c18715723e62484c9bc8a14f517455fc3b3/src/libraries/System.Drawing.Common/tests/System/Drawing/FontConverterTests.cs#L203
+    // Copied from
+    // https://github.com/dotnet/runtime/blob/00ee1c18715723e62484c9bc8a14f517455fc3b3/src/libraries/System.Drawing.Common/tests/System/Drawing/FontConverterTests.cs#L203
     public class GraphicsUnitTests
     {
         [Fact]

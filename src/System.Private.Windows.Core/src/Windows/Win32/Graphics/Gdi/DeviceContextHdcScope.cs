@@ -36,9 +36,10 @@ internal readonly ref struct DeviceContextHdcScope
     /// </summary>
     /// <remarks>
     ///  <para>
-    ///   When a <see cref="T:System.Drawing.Graphics"/> object is created from a <see cref="Gdi.HDC"/> the clipping region and
-    ///   the viewport origin are applied (<see cref="PInvokeCore.GetViewportExtEx(HDC, SIZE*)"/>). The clipping
-    ///   region isn't reflected in <see cref="P:System.Drawing.Graphics.Clip"/>, which is combined with the HDC HRegion.
+    ///   When a <see cref="T:System.Drawing.Graphics"/> object is created from a <see cref="Gdi.HDC"/>
+    ///   the clipping region and the viewport origin are applied
+    ///   (<see cref="PInvokeCore.GetViewportExtEx(HDC, SIZE*)"/>). The clipping region isn't reflected in
+    ///   <see cref="P:System.Drawing.Graphics.Clip"/>, which is combined with the HDC HRegion.
     ///  </para>
     ///  <para>
     ///   The Graphics object saves and restores DC state when performing operations that would modify the DC to

@@ -267,8 +267,9 @@ public partial class CollectionEditor
 
                 _removedItems?.Clear();
 
-                // Restore the original contents. Because objects get parented during CreateAndAddInstance, the underlying collection
-                // gets changed during add, but not other operations. Not all consumers of this dialog can roll back every single change,
+                // Restore the original contents. Because objects get parented during CreateAndAddInstance,
+                // the underlying collection gets changed during add, but not other operations.
+                // Not all consumers of this dialog can roll back every single change,
                 // but this will at least roll back the additions, removals and reordering. See ASURT #85470.
                 if (_originalItems is not null && _originalItems.Count > 0)
                 {
@@ -361,9 +362,10 @@ public partial class CollectionEditor
 
         /// <summary>
         ///  Retrieves the display text for the given list item (if any). The item determines its own display text
-        ///  through its ToString() method, which delegates to the GetDisplayText() override on the parent CollectionEditor.
-        ///  This means in theory that the text can change at any time (ie. its not fixed when the item is added to the list).
-        ///  The item returns its display text through ToString() so that the same text will be reported to Accessibility clients.
+        ///  through its ToString() method, which delegates to the GetDisplayText() override
+        ///  on the parent CollectionEditor. This means in theory that the text can change at any time
+        ///  (ie. its not fixed when the item is added to the list). The item returns its display text
+        ///  through ToString() so that the same text will be reported to Accessibility clients.
         /// </summary>
         private static string GetDisplayText(ListItem? item)
         {
@@ -1088,7 +1090,8 @@ public partial class CollectionEditor
         }
 
         /// <summary>
-        ///  When the form is first shown, update controls due to the edit value changes which happened when the form is invisible.
+        ///  When the form is first shown, update controls due to the edit value
+        ///  changes which happened when the form is invisible.
         /// </summary>
         private void Form_Shown(object? sender, EventArgs e)
         {

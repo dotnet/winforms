@@ -53,7 +53,8 @@ internal partial class PInvoke
     /// </param>
     /// <returns>
     ///  <para>
-    ///   Type: <b>HRESULT</b> If this function succeeds, it returns <b>S_OK</b>. Otherwise, it returns an <b>HRESULT</b> error code.
+    ///   Type: <b>HRESULT</b> If this function succeeds, it returns <b>S_OK</b>.
+    ///   Otherwise, it returns an <b>HRESULT</b> error code.
     ///  </para>
     /// </returns>
     /// <remarks>

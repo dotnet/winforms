@@ -46,7 +46,8 @@ public partial class CollectionEditor : UITypeEditor
     protected Type[] NewItemTypes => _newItemTypes ??= CreateNewItemTypes();
 
     /// <summary>
-    ///  Gets the help topic to display for the dialog help button or pressing F1. Override to display a different help topic.
+    ///  Gets the help topic to display for the dialog help button or
+    ///  pressing F1. Override to display a different help topic.
     /// </summary>
     protected virtual string HelpTopic => "net.ComponentModel.CollectionEditor";
 

@@ -36,8 +36,10 @@ internal sealed class SelectionManager : IDisposable
 
     /// <summary>
     ///  Here we query for necessary services and cache them for performance reasons.
-    ///  We also hook to <see cref="Component" /> Added/Removed/Changed notifications so we can keep in sync when the designers'
-    ///  components change. Also, we create our custom <see cref="Adorner" /> and add it to the <see cref="BehaviorService" />.
+    ///  We also hook to <see cref="Component" /> Added/Removed/Changed notifications
+    ///  so we can keep in sync when the designers'
+    ///  components change. Also, we create our custom <see cref="Adorner" /> and
+    ///  add it to the <see cref="BehaviorService" />.
     /// </summary>
     public SelectionManager(IServiceProvider serviceProvider, BehaviorService behaviorService)
     {

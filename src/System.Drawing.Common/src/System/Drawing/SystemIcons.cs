@@ -68,7 +68,9 @@ public static class SystemIcons
     ///   should be disposed when no longer needed.
     ///  </para>
     /// </remarks>
-    /// <exception cref="ArgumentException"><paramref name="stockIcon"/> is an invalid <see cref="StockIconId"/>.</exception>
+    /// <exception cref="ArgumentException"><paramref name="stockIcon"/>
+    ///  is an invalid <see cref="StockIconId"/>.
+    /// </exception>
     public static unsafe Icon GetStockIcon(StockIconId stockIcon, StockIconOptions options = StockIconOptions.Default)
     {
         // Note that we don't explicitly check for invalid StockIconId to allow for accessing newer ids introduced

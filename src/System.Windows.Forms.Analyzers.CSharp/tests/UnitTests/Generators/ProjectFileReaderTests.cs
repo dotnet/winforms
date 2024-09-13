@@ -133,7 +133,8 @@ public partial class ProjectFileReaderTests
             { $"Arial{s_separator}" },
             { $"{s_separator} 10{s_separator} style=bold" },
 
-            // NOTE: in .NET runtime these tests will result in FontName='', but the implementation relies on GDI+, which we don't have...
+            // NOTE: in .NET runtime these tests will result in FontName='',
+            // but the implementation relies on GDI+, which we don't have...
             { $"11px{s_separator} Style=Bold" },
             { $"11px" },
             { $"Style=Bold" },

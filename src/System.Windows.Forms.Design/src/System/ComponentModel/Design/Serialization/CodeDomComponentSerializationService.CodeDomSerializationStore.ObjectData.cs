@@ -32,7 +32,8 @@ public sealed partial class CodeDomComponentSerializationService
             internal readonly string _name;
 
             /// <summary>
-            ///  If true, the entire object should be serialized. If false, only the members in the member list should be serialized.
+            ///  If <see langword="true"/>, the entire object should be serialized.
+            ///  If <see langword="false"/>, only the members in the member list should be serialized.
             /// </summary>
             internal bool EntireObject
             {

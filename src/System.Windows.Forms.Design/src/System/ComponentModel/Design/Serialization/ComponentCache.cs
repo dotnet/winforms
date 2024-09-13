@@ -6,7 +6,8 @@ using System.CodeDom;
 namespace System.ComponentModel.Design.Serialization;
 
 /// <summary>
-///  This class is used to cache serialized properties and events of components to speed-up Design to Code view switches
+///  This class is used to cache serialized properties and events of components
+///  to speed-up Design to Code view switches.
 /// </summary>
 internal sealed partial class ComponentCache : IDisposable
 {

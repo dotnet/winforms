@@ -10,7 +10,8 @@ namespace System.Windows.Forms.CSharp.Generators.ApplicationConfiguration;
 
 internal static partial class ProjectFileReader
 {
-    // Copied from https://github.com/dotnet/runtime/blob/00ee1c18715723e62484c9bc8a14f517455fc3b3/src/libraries/System.Drawing.Common/src/System/Drawing/FontConverter.cs
+    // Copied from
+    // https://github.com/dotnet/runtime/blob/00ee1c18715723e62484c9bc8a14f517455fc3b3/src/libraries/System.Drawing.Common/src/System/Drawing/FontConverter.cs
     internal static class FontConverter
     {
         private const string StylePrefix = "style=";

@@ -97,7 +97,8 @@ internal enum PixelFormat
 
     /// <summary>
     ///  Specifies that pixel format is 32 bits per pixel. The color information specifies 16777216 shades of color
-    ///  of which 8 bits are red, 8 bits are green and 8 bits are blue. The 8 additional bits are pre-multiplied alpha bits.
+    ///  of which 8 bits are red, 8 bits are green and 8 bits are blue.
+    ///  The 8 additional bits are pre-multiplied alpha bits.
     /// </summary>
     Format32bppPArgb = 11 | (32 << 8) | Alpha | PAlpha | Gdi,
 

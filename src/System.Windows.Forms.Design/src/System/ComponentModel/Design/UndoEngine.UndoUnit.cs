@@ -15,13 +15,24 @@ public abstract partial class UndoEngine
     /// </summary>
     protected partial class UndoUnit
     {
-        private List<UndoEvent>? _events; // the list of events we've captured
-        private List<ChangeUndoEvent>? _changeEvents; // the list of change events we're currently capturing. Only valid until Commit is called.
-        private List<AddRemoveUndoEvent>? _removeEvents; // the list of remove events we're currently capturing. Only valid until a matching Removed is encountered.
-        private List<IComponent>? _ignoreAddingList; // the list of objects that are currently being added. We ignore change events between adding and added.
-        private List<IComponent>? _ignoreAddedList; // the list of objects that are added. We do not serialize before state for change events that happen in the same transaction
-        private bool _reverse; // if true, we walk the events list from the bottom up
-        private readonly Dictionary<string, IContainer>? _lastSelection; // the selection as it was before we gathered undo info
+        // the list of events we've captured
+        private List<UndoEvent>? _events;
+        // the list of change events we're currently capturing.
+        // Only valid until Commit is called.
+        private List<ChangeUndoEvent>? _changeEvents;
+        // the list of remove events we're currently capturing.
+        // Only valid until a matching Removed is encountered.
+        private List<AddRemoveUndoEvent>? _removeEvents;
+        // the list of objects that are currently being added.
+        // We ignore change events between adding and added.
+        private List<IComponent>? _ignoreAddingList;
+        // the list of objects that are added. We do not serialize before state for change events
+        // that happen in the same transaction
+        private List<IComponent>? _ignoreAddedList;
+        // if true, we walk the events list from the bottom up
+        private bool _reverse;
+       // the selection as it was before we gathered undo info
+        private readonly Dictionary<string, IContainer>? _lastSelection;
 
         public UndoUnit(UndoEngine engine, string? name)
         {
@@ -65,7 +76,8 @@ public abstract partial class UndoEngine
         }
 
         /// <summary>
-        ///  Called by the undo engine when it wants to close this unit. The unit should do any final work it needs to do to close.
+        ///  Called by the undo engine when it wants to close this unit.
+        ///  The unit should do any final work it needs to do to close.
         /// </summary>
         public virtual void Close()
         {

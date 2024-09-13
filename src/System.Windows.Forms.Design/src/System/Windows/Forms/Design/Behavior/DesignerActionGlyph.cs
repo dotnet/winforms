@@ -43,7 +43,8 @@ internal sealed class DesignerActionGlyph : Glyph
     }
 
     /// <summary>
-    ///  Constructor that sets the dropdownbox size, creates a our hottrack brush and invalidates the glyph (to configure location).
+    ///  Constructor that sets the DropDownBox size, creates a our hottrack brush and
+    ///  invalidates the glyph (to configure location).
     /// </summary>
     private DesignerActionGlyph(DesignerActionBehavior? behavior, Adorner? adorner, Rectangle alternativeBounds, Control? alternativeParent)
         : base(behavior)

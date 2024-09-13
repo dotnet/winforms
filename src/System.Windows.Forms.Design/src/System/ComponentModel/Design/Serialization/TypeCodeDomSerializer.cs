@@ -9,7 +9,8 @@ using System.Collections.Specialized;
 namespace System.ComponentModel.Design.Serialization;
 
 /// <summary>
-///  This class performs the same tasks as a CodeDomSerializer only serializing an object through this class defines a new type.
+///  This class performs the same tasks as a CodeDomSerializer only serializing
+///  an object through this class defines a new type.
 /// </summary>
 [DefaultSerializationProvider(typeof(CodeDomSerializationProvider))]
 public partial class TypeCodeDomSerializer : CodeDomSerializerBase
@@ -96,7 +97,8 @@ public partial class TypeCodeDomSerializer : CodeDomSerializerBase
                 {
                     if (!string.Equals(member.Name, declaration.Name, compare))
                     {
-                        // always skip members with the same name as the type -- because that's the name we use when we resolve "base" and "this" items...
+                        // always skip members with the same name as the type -- because that's the name
+                        // we use when we resolve "base" and "this" items...
                         _nameTable[member.Name] = member;
 
                         if (member.Type is not null && !string.IsNullOrEmpty(member.Type.BaseType))
@@ -176,7 +178,8 @@ public partial class TypeCodeDomSerializer : CodeDomSerializerBase
             OrderedCodeStatementCollection[] statementArray = new OrderedCodeStatementCollection[_statementTable.Count];
             _statementTable.Values.CopyTo(statementArray, 0);
             Array.Sort(statementArray, StatementOrderComparer.s_default);
-            // make sure we have fully deserialized everything that is referenced in the statement table. Skip the root object for last
+            // make sure we have fully deserialized everything that is referenced in the statement table.
+            // Skip the root object for last
             OrderedCodeStatementCollection? rootStatements = null;
             foreach (OrderedCodeStatementCollection statements in statementArray)
             {

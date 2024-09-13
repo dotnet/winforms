@@ -17,7 +17,8 @@ namespace Windows.Win32.System.Com;
 ///   Use in a <see langword="using" /> statement to ensure the <see cref="SAFEARRAY"/> gets disposed.
 ///  </para>
 ///  <para>
-///   If the <see cref="SAFEARRAY"/> you are intending to scope the lifetime of has type <see cref="VARENUM.VT_UNKNOWN"/>,
+///   If the <see cref="SAFEARRAY"/> you are intending to scope the lifetime
+///   of has type <see cref="VARENUM.VT_UNKNOWN"/>,
 ///   use <see cref="T:Windows.Win32.System.Com.ComSafeArrayScope`1"/> for better usability.
 ///  </para>
 /// </remarks>

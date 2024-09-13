@@ -4,8 +4,9 @@
 namespace Windows.Win32.UI.Controls.Dialogs;
 
 /// <summary>
-///  Represents a range of pages in a print job. A print job can have more than one page range. This information is
-///  supplied in the <see cref="PRINTDLGEXW"/> structure when calling the <see cref="PInvokeCore.PrintDlgEx"/> function.
+///  Represents a range of pages in a print job. A print job can have more than one page range.
+///  This information is supplied in the <see cref="PRINTDLGEXW"/> structure when calling
+///  the <see cref="PInvokeCore.PrintDlgEx"/> function.
 /// </summary>
 /// <remarks>
 ///  <para>

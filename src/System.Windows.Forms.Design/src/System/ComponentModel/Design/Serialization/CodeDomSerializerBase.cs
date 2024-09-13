@@ -656,7 +656,8 @@ public abstract partial class CodeDomSerializerBase
         object? result = expression;
 
         // Perf: is -> as changes, change ordering based on possibility of occurrence
-        // If you are adding to this, use as instead of is + cast and order new expressions in order of frequency in typical user code.
+        // If you are adding to this, use as instead of is + cast and
+        // order new expressions in order of frequency in typical user code.
 
         while (result is not null)
         {
@@ -748,7 +749,8 @@ public abstract partial class CodeDomSerializerBase
                                 }
                             }
 
-                            // Technically, the parameters are not OK. Our special case above, if successful, would have produced a "result" object for us.
+                            // Technically, the parameters are not OK. Our special case above,
+                            // if successful, would have produced a "result" object for us.
                             paramsOk = false;
                             break;
                         }
@@ -756,7 +758,8 @@ public abstract partial class CodeDomSerializerBase
 
                     if (paramsOk)
                     {
-                        // Create an instance of the object. If the caller provided a name, then ask the manager to add this object to the container.
+                        // Create an instance of the object.
+                        // If the caller provided a name, then ask the manager to add this object to the container.
                         result = DeserializeInstance(manager, type, parameters, name, (name is not null));
                     }
                 }
@@ -782,7 +785,8 @@ public abstract partial class CodeDomSerializerBase
                 object? target = DeserializeExpression(manager, null, fieldReferenceEx.TargetObject);
                 if (target is not null and not CodeExpression)
                 {
-                    // If the target is the root object, then this won't be found through reflection. Instead, ask the manager for the field by name.
+                    // If the target is the root object, then this won't be found through reflection.
+                    // Instead, ask the manager for the field by name.
                     RootContext? rootExp = manager.GetContext<RootContext>();
                     if (rootExp is not null && rootExp.Value == target)
                     {
@@ -1187,10 +1191,12 @@ public abstract partial class CodeDomSerializerBase
 
         if (statement.Listener is CodeObjectCreateExpression objCreate)
         {
-            // now walk into the CodeObjectCreateExpression and get the parameters so we can get the name of the method, e.g. button1_Click
+            // Now walk into the CodeObjectCreateExpression and
+            // get the parameters so we can get the name of the method, e.g. button1_Click
             if (objCreate.Parameters.Count == 1)
             {
-                // if this is a delegate create (new EventHandler(this.button1_Click)), then the first parameter should be a method ref.
+                // if this is a delegate create (new EventHandler(this.button1_Click)),
+                // then the first parameter should be a method ref.
                 if (objCreate.Parameters[0] is CodeMethodReferenceExpression methodRef)
                 {
                     handlerMethodName = methodRef.MethodName;
@@ -1797,7 +1803,8 @@ public abstract partial class CodeDomSerializerBase
 
                             if (realSerializerType == desiredSerializerType)
                             {
-                                // Ok, we found a serializer. If it matches the one we found for the value, then we can still use the default implementation.
+                                // Ok, we found a serializer. If it matches the one we found for the value,
+                                // then we can still use the default implementation.
                                 if (valueSerializerTypeName.Equals(da.SerializerTypeName))
                                 {
                                     valueSerializerTypeName = null;
@@ -1881,7 +1888,8 @@ public abstract partial class CodeDomSerializerBase
 
         TypeConverter converter = TypeDescriptor.GetConverter(value);
 
-        // See if there is an ExpressionContext with a preset value we're interested in. If so, that will dictate our creation expression.
+        // See if there is an ExpressionContext with a preset value we're interested in.
+        // If so, that will dictate our creation expression.
         if (manager.TryGetContext(out ExpressionContext? ctx) && ReferenceEquals(ctx.PresetValue, value))
         {
             CodeExpression expression = ctx.Expression;
@@ -2810,7 +2818,8 @@ public abstract partial class CodeDomSerializerBase
         }
         else
         {
-            // push in an order key so we know what position this item was in the list of declarations. this allows us to preserve ZOrder.
+            // Push in an order key so we know what position this item was in the list of declarations.
+            // This allows us to preserve ZOrder.
             statements = new OrderedCodeStatementCollection(table.Count, name);
             table[name] = statements;
         }

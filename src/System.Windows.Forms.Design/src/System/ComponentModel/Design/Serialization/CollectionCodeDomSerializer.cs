@@ -10,8 +10,9 @@ namespace System.ComponentModel.Design.Serialization;
 
 /// <summary>
 ///  This serializer serializes collections. This can either create statements or expressions.
-///  It will create an expression and assign it to the statement in the current context stack if the object is an array.
-///  If it is a collection with an add range or similar method, it will create a statement calling the method.
+///  It will create an expression and assign it to the statement in the current context stack
+///  if the object is an array. If it is a collection with an add range or similar method,
+///  it will create a statement calling the method.
 /// </summary>
 public class CollectionCodeDomSerializer : CodeDomSerializer
 {
@@ -48,7 +49,8 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
         Dictionary<object, int> originalValues = [];
         foreach (object originalValue in original)
         {
-            // the array could contain multiple copies of the same value (think of a string collection), so we need to be sensitive of that.
+            // the array could contain multiple copies of the same value (think of a string collection),
+            // so we need to be sensitive of that.
             if (originalValues.TryGetValue(originalValue, out int count))
             {
                 originalValues[originalValue] = count + 1;
