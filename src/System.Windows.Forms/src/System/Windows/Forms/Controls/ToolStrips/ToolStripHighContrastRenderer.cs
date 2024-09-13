@@ -146,8 +146,9 @@ internal class ToolStripHighContrastRenderer : ToolStripSystemRenderer
             else if (item.Selected)
             {
                 g.FillRectangle(SystemBrushes.Highlight, bounds);
+                g.DrawRectangle(SystemPens.HighlightText, dropDownRect);
+
                 DrawHightContrastDashedBorder(g, e.Item);
-                g.DrawRectangle(SystemPens.ButtonHighlight, dropDownRect);
             }
 
             Color arrowColor = item.Selected && !item.Pressed ? SystemColors.HighlightText : SystemColors.ControlText;
