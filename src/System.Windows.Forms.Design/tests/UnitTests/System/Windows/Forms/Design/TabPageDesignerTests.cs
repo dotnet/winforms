@@ -10,23 +10,25 @@ namespace System.Windows.Forms.Design.Tests;
 
 public class TabPageDesignerTests
 {
-    private TabPageDesigner InitializeDesignerWithTabPage()
+    private (TabPageDesigner designer, TabPage tabPage) InitializeDesignerWithTabPage()
     {
-        using TabPage tabPage = new();
+        TabPage tabPage = new();
         TabPageDesigner designer = new();
         designer.Initialize(tabPage);
-        return designer;
+        return (designer, tabPage);
     }
 
     [Fact]
     public void CanBeParentedTo_WithNonTabControlParentDesigner_ReturnsFalse()
     {
         Mock<IDesigner> mockDesigner = new();
-        using var designer = InitializeDesignerWithTabPage();
-
-        bool result = designer.CanBeParentedTo(mockDesigner.Object);
-
-        result.Should().BeFalse();
+        var (designer, tabPage) = InitializeDesignerWithTabPage();
+        using (designer)
+        using (tabPage)
+        {
+            bool result = designer.CanBeParentedTo(mockDesigner.Object);
+            result.Should().BeFalse();
+        }
     }
 
     [Fact]
@@ -35,11 +37,13 @@ public class TabPageDesignerTests
         Mock<TabControl> mockTabControl = new();
         Mock<IDesigner> mockDesigner = new();
         mockDesigner.Setup(d => d.Component).Returns(mockTabControl.Object);
-        using var designer = InitializeDesignerWithTabPage();
-
-        bool result = designer.CanBeParentedTo(mockDesigner.Object);
-
-        result.Should().BeTrue();
+        var (designer, tabPage) = InitializeDesignerWithTabPage();
+        using (designer)
+        using (tabPage)
+        {
+            bool result = designer.CanBeParentedTo(mockDesigner.Object);
+            result.Should().BeTrue();
+        }
     }
 
     [Fact]
