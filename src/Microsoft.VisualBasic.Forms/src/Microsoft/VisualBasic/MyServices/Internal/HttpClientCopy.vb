@@ -63,7 +63,6 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                     If increment > 0 Then
                         m_ProgressDialog.BeginInvoke(New DoIncrement(AddressOf m_ProgressDialog.Increment), increment)
                     End If
-
                 End If
             End If
         End Sub
