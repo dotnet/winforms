@@ -165,7 +165,7 @@ public sealed partial class CodeDomComponentSerializationService
 
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
                     new BinaryFormatter().Serialize(_resourceStream, _resources.Data);
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
+#pragma warning restore SYSLIB0011
                 }
             }
 
@@ -229,7 +229,7 @@ public sealed partial class CodeDomComponentSerializationService
                 _resourceStream.Seek(0, SeekOrigin.Begin);
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
                 Hashtable? resources = new BinaryFormatter().Deserialize(_resourceStream) as Hashtable; // CodeQL[SM03722, SM04191] : The operation is essential for the design experience when users are running their own designers they have created. This cannot be achieved without BinaryFormatter
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
+#pragma warning restore SYSLIB0011
                 _resources = new LocalResourceManager(resources);
             }
 

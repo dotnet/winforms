@@ -113,7 +113,7 @@ public partial class PictureBox : Control, ISupportInitialize
 
 #pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning restore WFO5001
 
         TabStop = false;
         _savedSize = Size;
@@ -593,7 +593,7 @@ public partial class PictureBox : Control, ISupportInitialize
     {
 #pragma warning disable SYSLIB0014 // Type or member is obsolete
         WebRequest req = WebRequest.Create(CalculateUri(_imageLocation!));
-#pragma warning restore SYSLIB0014 // Type or member is obsolete
+#pragma warning restore SYSLIB0014
 
         Task.Run(() =>
         {

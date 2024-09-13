@@ -1791,7 +1791,7 @@ public class TableLayoutSettingsTests
 
         // cs/dangerous-binary-deserialization
         TableLayoutSettings result = Assert.IsType<TableLayoutSettings>(formatter.Deserialize(stream)); // CodeQL [SM03722] : Testing legacy feature. This is a safe use of BinaryFormatter because the data is trusted and the types are controlled and validated.
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
+#pragma warning restore SYSLIB0011
         Assert.Equal(columnStyle.SizeType, ((ColumnStyle)Assert.Single(result.ColumnStyles)).SizeType);
         Assert.Equal(columnStyle.Width, ((ColumnStyle)Assert.Single(result.ColumnStyles)).Width);
         Assert.Equal(rowStyle.SizeType, ((RowStyle)Assert.Single(result.RowStyles)).SizeType);
@@ -1822,7 +1822,7 @@ public class TableLayoutSettingsTests
         // cs/dangerous-binary-deserialization
         Assert.Throws<SerializationException>(() => formatter.Deserialize(stream)); // CodeQL [SM03722] : Testing legacy feature. This is a safe use of BinaryFormatter because the data is trusted and the types are controlled and validated.
 
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
+#pragma warning restore SYSLIB0011
     }
 
     [WinFormsTheory]
@@ -1844,7 +1844,7 @@ public class TableLayoutSettingsTests
 
         // cs/dangerous-binary-deserialization
         TableLayoutSettings result = Assert.IsType<TableLayoutSettings>(formatter.Deserialize(stream)); // CodeQL [SM03722] : Testing legacy feature. This is a safe use of BinaryFormatter because the data is trusted and the types are controlled and validated.
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
+#pragma warning restore SYSLIB0011
         Assert.NotNull(result.LayoutEngine);
         Assert.Same(result.LayoutEngine, result.LayoutEngine);
         Assert.Throws<NullReferenceException>(() => result.ColumnCount);

@@ -493,7 +493,7 @@ public partial class DateTimePicker : Control
             || Application.IsDarkModeEnabled
                 ? base.ForeColor
                 : SystemColors.WindowText;
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates.
+#pragma warning restore WFO5001
 
         set => base.ForeColor = value;
     }

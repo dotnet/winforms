@@ -19,7 +19,7 @@ internal static class Obsoletions
 
 #pragma warning disable WFDEV003 // Type or member is obsolete
     internal const string DomainItemAccessibleObjectMessage = $"{nameof(DomainUpDown.DomainItemAccessibleObject)} is no longer used to provide accessible support for {nameof(DomainUpDown)} items.";
-#pragma warning restore WFDEV003 // Type or member is obsolete
+#pragma warning restore WFDEV003
     internal const string DomainItemAccessibleObjectDiagnosticId = "WFDEV003";
 
     internal const string FormOnClosingClosedMessage = "Form.OnClosing, Form.OnClosed and the corresponding events are obsolete. Use Form.OnFormClosing, Form.OnFormClosed, Form.FormClosing and Form.FormClosed instead.";

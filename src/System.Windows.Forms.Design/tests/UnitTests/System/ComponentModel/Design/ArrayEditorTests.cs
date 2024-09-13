@@ -316,6 +316,6 @@ public class ArrayEditorTests
         public override string ToString() => nameof(ClassWithNoSuchDefaultProperty);
     }
 
-#pragma warning restore IDE0051 // Remove unused private members
+#pragma warning restore IDE0051
 
 }
