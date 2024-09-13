@@ -466,6 +466,9 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
     {
         Mock<DataGridViewCell> mockCell = new(MockBehavior.Strict);
         mockCell
+            .SetupSet(s => s.State = DataGridViewElementStates.None)
+            .Verifiable();
+        mockCell
             .SetupSet(s => s.State = DataGridViewElementStates.Visible)
             .Verifiable();
         mockCell
@@ -496,6 +499,9 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
 
         Mock<DataGridViewCell> mockCell = new(MockBehavior.Strict);
         mockCell
+            .SetupSet(s => s.State = DataGridViewElementStates.None)
+            .Verifiable();
+        mockCell
             .SetupSet(s => s.State = DataGridViewElementStates.Visible)
             .Verifiable();
         mockCell
@@ -525,6 +531,9 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         Assert.True(dataGridView.IsHandleCreated);
 
         Mock<DataGridViewCell> mockCell = new(MockBehavior.Strict);
+        mockCell
+            .SetupSet(s => s.State = DataGridViewElementStates.None)
+            .Verifiable();
         mockCell
             .SetupSet(s => s.State = DataGridViewElementStates.Visible)
             .Verifiable();
@@ -562,6 +571,9 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
 
         Mock<DataGridViewCell> mockCell = new(MockBehavior.Strict);
         mockCell
+            .SetupSet(s => s.State = DataGridViewElementStates.None)
+            .Verifiable();
+        mockCell
             .SetupSet(s => s.State = DataGridViewElementStates.Visible)
             .Verifiable();
         mockCell
@@ -594,6 +606,9 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         Mock<DataGridViewCell> mockCell = new(MockBehavior.Strict);
         mockCell
             .SetupSet(s => s.State = DataGridViewElementStates.Visible)
+            .Verifiable();
+        mockCell
+            .SetupSet(s => s.State = DataGridViewElementStates.None)
             .Verifiable();
         mockCell
             .SetupSet(s => s.Selected = It.IsAny<bool>())
