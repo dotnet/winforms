@@ -19,7 +19,11 @@ public class ControlDesignerDesignerControlCollectionTests : IDisposable
         _collection = new(_control);
     }
 
-    public void Dispose() => _collection.Clear();
+    public void Dispose()
+    {
+        _collection.Clear();
+        _control.Dispose();
+    }
 
     [Fact]
     public void Constructor_ShouldThrowArgumentNullException_WhenControlIsNull()
