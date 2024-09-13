@@ -21,10 +21,8 @@ internal enum BinaryType : byte
     Primitive,
 
     /// <summary>
-    ///  Type is
-    ///  <see href="https://learn.microsoft.com/openspecs/windows_protocols/ms-nrbf/10b218f5-9b2b-4947-b4b7-07725a2c8127">
-    ///   length prefixed string.
-    ///  </see>
+    ///  Type is <see href="https://learn.microsoft.com/openspecs/windows_protocols/ms-nrbf/10b218f5-9b2b-4947-b4b7-07725a2c8127">
+    ///  length prefixed string.</see>
     /// </summary>
     String,
 
