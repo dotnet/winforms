@@ -259,8 +259,11 @@ public class FileSystemProxyTests : FileCleanupTestBase
     }
 
     // Not tested:
-    //   public System.Collections.ObjectModel.ReadOnlyCollection<string> FindInFiles(string directory, string containsText, bool ignoreCase, FileIO.SearchOption searchType) { throw null; }
-    //   public System.Collections.ObjectModel.ReadOnlyCollection<string> FindInFiles(string directory, string containsText, bool ignoreCase, FileIO.SearchOption searchType, params string[] fileWildcards) { throw null; }
+    //   public System.Collections.ObjectModel.ReadOnlyCollection<string> FindInFiles(string directory,
+    //       string containsText, bool ignoreCase, FileIO.SearchOption searchType) { throw null; }
+    //   public System.Collections.ObjectModel.ReadOnlyCollection<string> FindInFiles(string directory,
+    //       string containsText, bool ignoreCase, FileIO.SearchOption searchType,
+    //       params string[] fileWildcards) { throw null; }
 
     [Fact]
     public void GetDirectories_Directory()
@@ -624,12 +627,15 @@ public class FileSystemProxyTests : FileCleanupTestBase
 
     // Not tested:
     //   public Microsoft.VisualBasic.FileIO.TextFieldParser OpenTextFieldParser(string file) { throw null; }
-    //   public Microsoft.VisualBasic.FileIO.TextFieldParser OpenTextFieldParser(string file, params int[] fieldWidths) { throw null; }
-    //   public Microsoft.VisualBasic.FileIO.TextFieldParser OpenTextFieldParser(string file, params string[] delimiters) { throw null; }
+    //   public Microsoft.VisualBasic.FileIO.TextFieldParser OpenTextFieldParser(string file,
+    //       params int[] fieldWidths) { throw null; }
+    //   public Microsoft.VisualBasic.FileIO.TextFieldParser OpenTextFieldParser(string file,
+    //       params string[] delimiters) { throw null; }
     //   public System.IO.StreamReader OpenTextFileReader(string file) { throw null; }
     //   public System.IO.StreamReader OpenTextFileReader(string file, System.Text.Encoding encoding) { throw null; }
     //   public System.IO.StreamWriter OpenTextFileWriter(string file, bool append) { throw null; }
-    //   public System.IO.StreamWriter OpenTextFileWriter(string file, bool append, System.Text.Encoding encoding) { throw null; }
+    //   public System.IO.StreamWriter OpenTextFileWriter(string file, bool append, System.Text.Encoding encoding)
+    //       { throw null; }
     //   public byte[] ReadAllBytes(string file) { throw null; }
     //   public string ReadAllText(string file) { throw null; }
     //   public string ReadAllText(string file, System.Text.Encoding encoding) { throw null; }
@@ -673,7 +679,9 @@ public class FileSystemProxyTests : FileCleanupTestBase
         string NewFileWithPath = Path.Combine(TestDirectory, "NewFile");
         Assert.True(File.Exists(NewFileWithPath));
         Assert.False(File.Exists(OrigFileWithPath));
-        // <exception cref="IO.IOException">If there's an existing directory or an existing file with the same name.</exception>
+        // <exception cref="IO.IOException">
+        //  If there's an existing directory or an existing file with the same name.
+        // </exception>
         Assert.Throws<IOException>(() => _fileSystem.RenameFile(NewFileWithPath, "NewFile"));
         Directory.CreateDirectory(Path.Combine(TestDirectory, "NewFDirectory"));
         Assert.Throws<IOException>(() => _fileSystem.RenameFile(NewFileWithPath, "NewFDirectory"));

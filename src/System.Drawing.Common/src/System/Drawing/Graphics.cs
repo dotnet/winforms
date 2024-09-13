@@ -777,8 +777,12 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     /// <summary>
     ///  Draws the outlines of a series of rectangles.
     /// </summary>
-    /// <param name="pen"><see cref="Pen"/> that determines the color, width, and style of the outlines of the rectangles.</param>
-    /// <param name="rects">An array of <see cref="Rectangle"/> structures that represents the rectangles to draw.</param>
+    /// <param name="pen">
+    ///  <see cref="Pen"/> that determines the color, width, and style of the outlines of the rectangles.
+    /// </param>
+    /// <param name="rects">
+    ///  An array of <see cref="Rectangle"/> structures that represents the rectangles to draw.
+    /// </param>
     public void DrawRectangles(Pen pen, params Rectangle[] rects) => DrawRectangles(pen, rects.OrThrowIfNull().AsSpan());
 
     /// <inheritdoc cref="DrawRectangles(Pen, Rectangle[])"/>
@@ -1482,8 +1486,12 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     /// </summary>
     /// <param name="brush">The <see cref="Brush"/> to fill the closed curve with.</param>
     /// <param name="points">An array of points that make up the closed curve.</param>
-    /// <param name="fillmode">A <see cref="FillMode"/> enumeration that specifies the fill mode of the closed curve.</param>
-    /// <param name="tension">A value greater than, or equal to zero that specifies the tension of the curve.</param>
+    /// <param name="fillmode">
+    ///  A <see cref="FillMode"/> enumeration that specifies the fill mode of the closed curve.
+    /// </param>
+    /// <param name="tension">
+    ///  A value greater than, or equal to zero that specifies the tension of the curve.
+    /// </param>
     public void FillClosedCurve(Brush brush, PointF[] points, FillMode fillmode, float tension) =>
         FillClosedCurve(brush, points.OrThrowIfNull().AsSpan(), fillmode, tension);
 
@@ -1670,7 +1678,9 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     /// <param name="s">The text to draw.</param>
     /// <param name="font"><see cref="Font"/> that defines the text format.</param>
     /// <param name="brush"><see cref="Brush"/> that determines the color and texture of the drawn text.</param>
-    /// <param name="layoutRectangle"><see cref="RectangleF"/>structure that specifies the location of the drawn text.</param>
+    /// <param name="layoutRectangle">
+    ///  <see cref="RectangleF"/>structure that specifies the location of the drawn text.
+    /// </param>
     /// <exception cref="ArgumentNullException">
     ///  <paramref name="brush"/> is <see langword="null"/>. -or- <paramref name="font"/> is <see langword="null"/>.
     /// </exception>
@@ -1708,7 +1718,9 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     /// <param name="s">The text to draw.</param>
     /// <param name="font"><see cref="Font"/> that defines the text format.</param>
     /// <param name="brush"><see cref="Brush"/> that determines the color and texture of the drawn text.</param>
-    /// <param name="layoutRectangle"><see cref="RectangleF"/>structure that specifies the location of the drawn text.</param>
+    /// <param name="layoutRectangle">
+    ///  <see cref="RectangleF"/>structure that specifies the location of the drawn text.
+    /// </param>
     /// <param name="format">
     ///  <see cref="StringFormat"/> that specifies formatting attributes, such as line spacing and alignment,
     ///  that are applied to the drawn text.
@@ -1914,12 +1926,14 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 #endif
 
     /// <summary>
-    ///  Gets an array of <see cref="Region"/> objects, each of which bounds a range of character positions within
-    ///  the specified text.
+    ///  Gets an array of <see cref="Region"/> objects, each of which bounds
+    ///  a range of character positions within the specified text.
     /// </summary>
     /// <param name="text">Text to measure.</param>
     /// <param name="font"><see cref="Font"/> that defines the text format.</param>
-    /// <param name="layoutRect"><see cref="RectangleF"/> structure that specifies the layout rectangle for the text.</param>
+    /// <param name="layoutRect">
+    ///  <see cref="RectangleF"/> structure that specifies the layout rectangle for the text.
+    ///  </param>
     /// <param name="stringFormat">
     ///  <see cref="StringFormat"/> that represents formatting information, such as line spacing, for the text.
     /// </param>
@@ -3195,15 +3209,23 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
     /// <summary>
     ///  Combines current Graphics context with all previous contexts.
-    ///  When BeginContainer() is called, a copy of the current context is pushed into the GDI+ context stack, it keeps track of the
-    ///  absolute clipping and transform but reset the public properties so it looks like a brand new context.
-    ///  When Save() is called, a copy of the current context is also pushed in the GDI+ stack but the public clipping and transform
-    ///  properties are not reset (cumulative). Consecutive Save context are ignored with the exception of the top one which contains
-    ///  all previous information.
-    ///  The return value is an object array where the first element contains the cumulative clip region and the second the cumulative
-    ///  translate transform matrix.
-    ///  WARNING: This method is for internal FX support only.
+    ///  When BeginContainer() is called, a copy of the current context is pushed into the GDI+ context stack,
+    ///  it keeps track of the absolute clipping and transform but reset the public properties so
+    ///  it looks like a brand new context. When Save() is called,
+    ///  a copy of the current context is also pushed in the GDI+ stack but
+    ///  the public clipping and transform properties are not reset (cumulative).
+    ///  Consecutive Save context are ignored with the exception of the top one
+    ///  which contains all previous information.
     /// </summary>
+    /// <returns>
+    ///  The return value is an object array where the first element contains the cumulative clip
+    ///  region and the second the cumulative translate transform matrix.
+    /// </returns>
+    /// <remarks>
+    ///  <para>
+    ///   WARNING: This method is for internal FX support only.
+    ///  </para>
+    /// </remarks>
     [EditorBrowsable(EditorBrowsableState.Never)]
     [Obsolete("Use the Graphics.GetContextInfo overloads that accept arguments for better performance and fewer allocations.", DiagnosticId = "SYSLIB0016", UrlFormat = "https://aka.ms/dotnet-warnings/{0}")]
     [SupportedOSPlatform("windows")]
@@ -3633,8 +3655,12 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     /// </summary>
     /// <param name="image"><see cref="Image"/> to be drawn.</param>
     /// <param name="effect">The effect to be applied when drawing.</param>
-    /// <param name="srcRect">The portion of the image to be drawn. <see cref="RectangleF.Empty"/> draws the full image.</param>
-    /// <param name="transform">The transform to apply to the <paramref name="srcRect"/> to determine the destination.</param>
+    /// <param name="srcRect">
+    ///  The portion of the image to be drawn. <see cref="RectangleF.Empty"/> draws the full image.
+    /// </param>
+    /// <param name="transform">
+    ///  The transform to apply to the <paramref name="srcRect"/> to determine the destination.
+    /// </param>
     /// <param name="srcUnit">Unit of measure of the <paramref name="srcRect"/>.</param>
     /// <param name="imageAttr">Additional adjustments to be applied, if any.</param>
     public void DrawImage(

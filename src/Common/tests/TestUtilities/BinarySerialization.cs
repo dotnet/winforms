@@ -69,16 +69,20 @@ public static class BinarySerialization
         {
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
             // cs/binary-formatter-without-binder
-            BinaryFormatter binaryFormatter = new() // CodeQL [SM04191] : Safe use because the deserialization process is performed on trusted data and the types are controlled and validated.
+            // CodeQL [SM04191] : Safe use because the deserialization process is
+            // performed on trusted data and the types are controlled and validated.
+            BinaryFormatter binaryFormatter = new()
             {
                 AssemblyFormat = assemblyStyle
             };
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
+#pragma warning restore SYSLIB0011
 
             using MemoryStream serializedStream = new(raw);
 
             // cs/dangerous-binary-deserialization
-            return binaryFormatter.Deserialize(serializedStream); // CodeQL[SM03722] : Testing legacy feature. This is a safe use of BinaryFormatter because the data is trusted and the types are controlled and validated.
+            // CodeQL[SM03722] : Testing legacy feature. This is a safe use of BinaryFormatter
+            // because the data is trusted and the types are controlled and validated.
+            return binaryFormatter.Deserialize(serializedStream);
         }
     }
 
@@ -93,11 +97,13 @@ public static class BinarySerialization
         {
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
             // cs/binary-formatter-without-binder
-            BinaryFormatter binaryFormatter = new() // CodeQL [SM04191]: Safe use because the deserialization process is performed on trusted data and the types are controlled and validated.
+            // CodeQL [SM04191]: Safe use because the deserialization process is performed on trusted data and
+            // the types are controlled and validated.
+            BinaryFormatter binaryFormatter = new()
             {
                 AssemblyFormat = assemblyStyle
             };
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
+#pragma warning restore SYSLIB0011
 
             using MemoryStream stream = new();
             binaryFormatter.Serialize(stream, obj);

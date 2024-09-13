@@ -6,7 +6,9 @@ using System.ComponentModel;
 
 namespace System.Drawing.Design;
 
-/// <summary>Represents a delegate to be added to <see cref="IPropertyValueUIService"/>.</summary>
+/// <summary>
+///  Represents a delegate to be added to <see cref="IPropertyValueUIService"/>.
+/// </summary>
 /// <param name="context">
 ///  An <see cref="ITypeDescriptorContext" /> that can be used to obtain context information.
 /// </param>

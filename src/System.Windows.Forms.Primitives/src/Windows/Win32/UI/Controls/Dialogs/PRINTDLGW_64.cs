@@ -119,7 +119,9 @@ internal partial struct PRINTDLGW_64
     /// </summary>
     public HDC hDC;
 
-    /// <summary>Type: <b>DWORD</b></summary>
+    /// <summary>
+    ///  Type: <b>DWORD</b>
+    /// </summary>
     public PRINTDLGEX_FLAGS Flags;
 
     /// <summary>

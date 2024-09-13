@@ -53,12 +53,14 @@ public sealed class MetafileHeader
     public bool IsWmf() => _header.Type is GdiPlus.MetafileType.MetafileTypeWmf or GdiPlus.MetafileType.MetafileTypeWmfPlaceable;
 
     /// <summary>
-    ///  Returns a value indicating whether the associated <see cref='Metafile'/> is in the Windows Placeable metafile format.
+    ///  Returns a value indicating whether the associated <see cref='Metafile'/>
+    ///  is in the Windows Placeable metafile format.
     /// </summary>
     public bool IsWmfPlaceable() => _header.Type is GdiPlus.MetafileType.MetafileTypeWmfPlaceable;
 
     /// <summary>
-    ///  Returns a value indicating whether the associated <see cref='Metafile'/> is in the Windows enhanced metafile format.
+    ///  Returns a value indicating whether the associated <see cref='Metafile'/>
+    ///  is in the Windows enhanced metafile format.
     /// </summary>
     public bool IsEmf() => _header.Type is GdiPlus.MetafileType.MetafileTypeEmf;
 

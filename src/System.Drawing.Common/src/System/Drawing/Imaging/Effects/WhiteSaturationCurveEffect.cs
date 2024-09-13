@@ -16,11 +16,15 @@ public class WhiteSaturationCurveEffect : ColorCurveEffect
     /// </summary>
     /// <param name="channel">The channel or channels that the effect is applied to.</param>
     /// <param name="whiteSaturation">
-    ///  A value of t specifies that the interval [0, t] is mapped linearly to the interval [0, 255]. For example, if
-    ///  <paramref name="whiteSaturation"/> is equal to 240, then color channel values in the interval [0, 240] are adjusted
-    ///  so that they spread out over the interval [0, 255]. Color channel values greater than 240 are set to 255.
+    ///  A value of t specifies that the interval [0, t] is mapped linearly to the interval [0, 255].
+    ///  For example, if <paramref name="whiteSaturation"/> is equal to 240,
+    ///  then color channel values in the interval [0, 240] are adjusted
+    ///  so that they spread out over the interval [0, 255].
+    ///  Color channel values greater than 240 are set to 255.
     /// </param>
-    /// <exception cref="ArgumentException"><paramref name="whiteSaturation"/> was less than 1 or greater than 255.</exception>
+    /// <exception cref="ArgumentException"><paramref name="whiteSaturation"/>
+    ///  was less than 1 or greater than 255.
+    /// </exception>
     public WhiteSaturationCurveEffect(CurveChannel channel, int whiteSaturation)
         : base(CurveAdjustments.AdjustWhiteSaturation, channel, whiteSaturation)
     {

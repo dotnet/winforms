@@ -8,10 +8,14 @@ using System.Windows.Forms;
 
 namespace System.Windows.Forms;
 
-/// <summary>Handle notifications of metadata updates being applied.</summary>
+/// <summary>
+///  Handle notifications of metadata updates being applied.
+/// </summary>
 internal static class WinFormsMetadataUpdateHandler
 {
-    /// <summary>Invoked after a metadata update is applied.</summary>
+    /// <summary>
+    ///  Invoked after a metadata update is applied.
+    /// </summary>
     internal static void UpdateApplication()
     {
         // Repaint all open forms.

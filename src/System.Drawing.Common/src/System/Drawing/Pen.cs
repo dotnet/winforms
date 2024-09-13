@@ -62,7 +62,8 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
     }
 
     /// <summary>
-    ///  Initializes a new instance of the <see cref='Pen'/> class with the specified <see cref='Drawing.Brush'/> and width.
+    ///  Initializes a new instance of the <see cref='Pen'/>
+    ///  class with the specified <see cref='Drawing.Brush'/> and width.
     /// </summary>
     public Pen(Brush brush, float width)
     {
@@ -459,7 +460,8 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
     public void MultiplyTransform(Matrix matrix) => MultiplyTransform(matrix, MatrixOrder.Prepend);
 
     /// <summary>
-    ///  Multiplies the transform matrix for this <see cref='Pen'/> by the specified <see cref='Matrix'/> in the specified order.
+    ///  Multiplies the transform matrix for this <see cref='Pen'/>
+    ///  by the specified <see cref='Matrix'/> in the specified order.
     /// </summary>
     public void MultiplyTransform(Matrix matrix, MatrixOrder order)
     {
@@ -492,7 +494,8 @@ public sealed unsafe class Pen : MarshalByRefObject, ICloneable, IDisposable, IS
     }
 
     /// <summary>
-    ///  Scales the local geometric transform by the specified amounts. This method prepends the scaling matrix to the transform.
+    ///  Scales the local geometric transform by the specified amounts.
+    ///  This method prepends the scaling matrix to the transform.
     /// </summary>
     public void ScaleTransform(float sx, float sy) => ScaleTransform(sx, sy, MatrixOrder.Prepend);
 

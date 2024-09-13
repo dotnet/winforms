@@ -9,7 +9,8 @@ using System.Globalization;
 namespace System.Drawing.Printing;
 
 /// <summary>
-///  Provides a type converter to convert <see cref='Margins'/> to and from various other representations, such as a string.
+///  Provides a type converter to convert <see cref='Margins'/> to and from various other representations,
+///  such as a string.
 /// </summary>
 public class MarginsConverter : ExpandableObjectConverter
 {

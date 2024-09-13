@@ -87,7 +87,9 @@ internal partial struct PAGESETUPDLGW
     /// </summary>
     public HGLOBAL hDevNames;
 
-    /// <summary>Type: <b>DWORD</b></summary>
+    /// <summary>
+    ///  Type: <b>DWORD</b>
+    /// </summary>
     public PAGESETUPDLG_FLAGS Flags;
 
     /// <summary>

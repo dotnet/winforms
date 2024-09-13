@@ -391,12 +391,13 @@ public sealed unsafe class Bitmap : Image, IPointer<GpBitmap>
     /// </param>
     /// <param name="ditherType">
     ///  <para>
-    ///   The dithering algorithm. Pass <see cref="DitherType.None"/> when the conversion does not reduce the bit depth
-    ///   of the pixel data.
+    ///   The dithering algorithm. Pass <see cref="DitherType.None"/>
+    ///   when the conversion does not reduce the bit depth of the pixel data.
     ///  </para>
     ///  <para>
-    ///   This must be <see cref="DitherType.Solid"/> or <see cref="DitherType.ErrorDiffusion"/> if the <paramref name="paletteType"/>
-    ///   is <see cref="PaletteType.Custom"/> or <see cref="PaletteType.FixedBlackAndWhite"/>.
+    ///   This must be <see cref="DitherType.Solid"/> or
+    ///   <see cref="DitherType.ErrorDiffusion"/> if the <paramref name="paletteType"/> is
+    ///   <see cref="PaletteType.Custom"/> or <see cref="PaletteType.FixedBlackAndWhite"/>.
     ///  </para>
     /// </param>
     /// <param name="paletteType">

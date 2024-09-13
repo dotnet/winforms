@@ -133,7 +133,9 @@ public static partial class ToolStripManager
     internal static WeakRefCollection<ToolStrip> ToolStrips
         => t_activeToolStrips ??= [];
 
-    /// <summary>Static events only!!!</summary>
+    /// <summary>
+    ///  Static events only!!!
+    /// </summary>
     private static void AddEventHandler(int key, Delegate? value)
     {
         lock (s_internalSyncObject)

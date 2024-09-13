@@ -24,7 +24,9 @@ public static class CustomConverter
     /// <summary>
     ///  Manages the registration lifetime of a TypeConverter to a type.
     ///  This is meant to be utilized in a <see langword="using"/> statement to ensure
-    ///  <see cref="TypeDescriptor.RemoveProvider(TypeDescriptionProvider, Type)"/> is called when going out of scope with the using.
+    ///  <see cref="TypeDescriptor.RemoveProvider(TypeDescriptionProvider, Type)">
+    ///   is called when going out of scope with the using.
+    ///  </see>
     /// </summary>
     public readonly ref struct RegistrationScope
     {

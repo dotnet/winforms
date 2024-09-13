@@ -6,7 +6,8 @@ using System.ComponentModel;
 namespace System.Drawing.Drawing2D;
 
 /// <summary>
-///  Encapsulates a <see cref="Brush"/> object that fills the interior of a <see cref="GraphicsPath"/> object with a gradient.
+///  Encapsulates a <see cref="Brush"/> object that fills the interior of a
+///  <see cref="GraphicsPath"/> object with a gradient.
 /// </summary>
 public sealed unsafe class PathGradientBrush : Brush
 {

@@ -13,8 +13,9 @@ namespace System.Drawing.Imaging;
 /// </summary>
 /// <remarks>
 ///  <para>
-///   <see cref="CachedBitmap"/> matches the current bit depth of the <see cref="Graphics"/>'s device. If the device bit
-///   depth changes, the <see cref="CachedBitmap"/> will no longer be usable and a new instance will need to be created
+///   <see cref="CachedBitmap"/> matches the current bit depth of the
+///   <see cref="Graphics"/>'s device. If the device bit depth changes,
+///   the <see cref="CachedBitmap"/> will no longer be usable and a new instance will need to be created
 ///   that matches. If the <see cref="CachedBitmap"/> was created against <see cref="PixelFormat.Format32bppRgb"/> it
 ///   will always work.
 ///  </para>

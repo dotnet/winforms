@@ -250,25 +250,29 @@ public enum PaperKind
 
     /// <summary>
     ///  Letter extra paper (9.275 in. by 12 in.).
-    ///  This value is specific to the PostScript driver and is used only by Linotronic printers in order to conserve paper.
+    ///  This value is specific to the PostScript driver and is used only
+    ///  by Linotronic printers in order to conserve paper.
     /// </summary>
     LetterExtra = (int)PInvoke.DMPAPER_LETTER_EXTRA,
 
     /// <summary>
     ///  Legal extra paper (9.275 in. by 15 in.).
-    ///  This value is specific to the PostScript driver and is used only by Linotronic printers in order to conserve paper.
+    ///  This value is specific to the PostScript driver and is used only
+    ///  by Linotronic printers in order to conserve paper.
     /// </summary>
     LegalExtra = (int)PInvoke.DMPAPER_LEGAL_EXTRA,
 
     /// <summary>
     ///  Tabloid extra paper (11.69 in. by 18 in.).
-    ///  This value is specific to the PostScript driver and is used only by Linotronic printers in order to conserve paper.
+    ///  This value is specific to the PostScript driver and is used only
+    ///  by Linotronic printers in order to conserve paper.
     /// </summary>
     TabloidExtra = (int)PInvoke.DMPAPER_TABLOID_EXTRA,
 
     /// <summary>
     ///  A4 extra paper (236 mm by 322 mm).
-    ///  This value is specific to the PostScript driver and is used only by Linotronic printers in order to conserve paper.
+    ///  This value is specific to the PostScript driver and is used only
+    ///  by Linotronic printers in order to conserve paper.
     /// </summary>
     A4Extra = (int)PInvoke.DMPAPER_A4_EXTRA,
 

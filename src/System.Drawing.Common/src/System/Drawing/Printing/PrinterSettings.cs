@@ -206,7 +206,8 @@ public unsafe partial class PrinterSettings : ICloneable
     public int MaximumCopies => DeviceCapabilities(PRINTER_DEVICE_CAPABILITIES.DC_COPIES, defaultValue: 1);
 
     /// <summary>
-    ///  Gets or sets the highest <see cref='FromPage'/> or <see cref='ToPage'/> which may be selected in a print dialog box.
+    ///  Gets or sets the highest <see cref='FromPage'/> or
+    ///  <see cref='ToPage'/> which may be selected in a print dialog box.
     /// </summary>
     public int MaximumPage
     {

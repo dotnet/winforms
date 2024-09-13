@@ -11,7 +11,9 @@ internal partial class PInvoke
     // Copies from CsWin32, which won't generate this as SHSTOCKICONINFO isn't technically safe for AnyCPU
     // (see SHSTOCKICONINFO.cs for more details).
 
-    /// <summary>Retrieves information about system-defined Shell icons.</summary>
+    /// <summary>
+    ///  Retrieves information about system-defined Shell icons.
+    /// </summary>
     ///  <param name="siid">
     ///   <para>Type: <b><a href="https://learn.microsoft.com/windows/desktop/api/shellapi/ne-shellapi-shstockiconid">
     ///   SHSTOCKICONID</a></b> One of the values from the
@@ -26,7 +28,8 @@ internal partial class PInvoke
     ///  </param>
     ///   <param name="uFlags">
     ///   <para>
-    ///    Type: <b>UINT</b> A combination of zero or more of the following flags that specify which information is requested.
+    ///    Type: <b>UINT</b> A combination of zero or more of the following flags
+    ///          that specify which information is requested.
     ///   </para>
     ///   <para>
     ///    <see href="https://learn.microsoft.com/windows/win32/api/shellapi/nf-shellapi-shgetstockiconinfo#parameters">

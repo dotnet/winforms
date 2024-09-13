@@ -405,7 +405,10 @@ public static class AssertExtensions
         }
     }
 
-    /// <summary>Validates that the two sets contains the same elements. XUnit doesn't display the full collections.</summary>
+    /// <summary>
+    ///  Validates that the two sets contains the same elements.
+    ///  XUnit doesn't display the full collections.
+    /// </summary>
     public static void Equal<T>(HashSet<T> expected, HashSet<T> actual)
     {
         if (!actual.SetEquals(expected))
@@ -415,9 +418,9 @@ public static class AssertExtensions
     }
 
     /// <summary>
-    /// Validates that the actual collection contains same items as expected collection. If the test fails, this will display:
-    /// 1. Count if two collection count are different;
-    /// 2. Missed expected collection item when found
+    ///  Validates that the actual collection contains same items as expected collection. If the test fails, this will display:
+    ///  1. Count if two collection count are different;
+    ///  2. Missed expected collection item when found
     /// </summary>
     /// <param name="expected">The collection that <paramref name="actual"/> should contain same items as</param>
     /// <param name="actual"></param>
@@ -569,7 +572,10 @@ public static class AssertExtensions
         }
     }
 
-    /// <summary>Verifies that two <typeparamref name="T"/> values are equal, within the <paramref name="variance"/>.</summary>
+    /// <summary>
+    ///  Verifies that two <typeparamref name="T"/> values are equal,
+    ///  within the <paramref name="variance"/>.
+    /// </summary>
     /// <param name="expected">The expected value</param>
     /// <param name="actual">The value to be compared against</param>
     /// <param name="variance">The total variance allowed between the expected and actual results.</param>

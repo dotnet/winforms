@@ -21,17 +21,23 @@ internal class ToolStripDesigner : ControlDesigner
 {
     private const int GLYPHBORDER = 2;
     internal static Point s_lastCursorPosition = Point.Empty; // remembers last cursorPosition;
-    internal static bool s_autoAddNewItems = true; // true to force newly created items to be added to the currently selected strip.
-    internal static ToolStripItem s_dragItem; // this is used in overflow to know current item selected while drag, so that we can get the drop-index.
-    internal static bool s_shiftState; // maintains the shift state used of invalidation. disable csharp compiler warning #0414: field assigned unused value
+    // true to force newly created items to be added to the currently selected strip.
+    internal static bool s_autoAddNewItems = true;
+    // this is used in overflow to know current item selected while drag, so that we can get the drop-index.
+    internal static ToolStripItem s_dragItem;
+    // maintains the shift state used of invalidation. disable C# compiler warning #0414: field assigned unused value
+    internal static bool s_shiftState;
 #pragma warning disable 0414
-    internal static bool s_editTemplateNode; // this is used in selection changed so that unnecessary redraw is not required.
-#pragma warning restore 0414
+    // this is used in selection changed so that unnecessary redraw is not required.
+    internal static bool s_editTemplateNode;
+#pragma warning restore
     private DesignerToolStripControlHost _editorNode; // new editorNode
     private ToolStripEditorManager _editManager; // newly added editor manager ...
     private ToolStrip _miniToolStrip; // the toolStrip that hosts the "New Template Node" button
-    private DesignerTransaction _insertMenuItemTransaction; // There Should be one and only one Pending insertTransaction.
-    private Rectangle _dragBoxFromMouseDown = Rectangle.Empty; // Needed to Store the DRAGDROP Rect from the ToolStripItemBehavior.
+    // There Should be one and only one Pending insertTransaction.
+    private DesignerTransaction _insertMenuItemTransaction;
+    // Needed to Store the DRAGDROP Rect from the ToolStripItemBehavior.
+    private Rectangle _dragBoxFromMouseDown = Rectangle.Empty;
     private int _indexOfItemUnderMouseToDrag = -1; // defaulted to invalid index and will be set by the behavior.
     private ToolStripTemplateNode _tn; // templateNode
     private ISelectionService _selectionService; // cached selection service.
@@ -41,7 +47,8 @@ internal class ToolStripDesigner : ControlDesigner
     private Rectangle _boundsToInvalidate = Rectangle.Empty; // Bounds to Invalidate if a DropDownItem is Deleted
     private bool _currentVisible = true; // Change Visibility
     private ToolStripActionList _actionLists; // Action List on Chrome...
-    private ToolStripAdornerWindowService _toolStripAdornerWindowService; // Add the Adorner Service for OverFlow DropDown...
+    // Add the Adorner Service for OverFlow DropDown...
+    private ToolStripAdornerWindowService _toolStripAdornerWindowService;
     private IDesignerHost _host; // get private copy of the DesignerHost
     private IComponentChangeService _componentChangeService;
     private bool _undoingCalled;
@@ -52,11 +59,16 @@ internal class ToolStripDesigner : ControlDesigner
     private ArrayList _items; // cached Items.
     private bool _disposed;
     private DesignerTransaction _newItemTransaction;
-    private bool _fireSyncSelection; // fires SyncSelection when we toggle the items visibility to add the glyphs after the item gets visible.
+    // fires SyncSelection when we toggle the items visibility to add the glyphs after the item gets visible.
+    private bool _fireSyncSelection;
     private ToolStripKeyboardHandlingService _keyboardHandlingService;
     private bool _parentNotVisible; // sync the parent visibility (used for ToolStripPanels)
-    private bool _dontCloseOverflow; // When an item is added to the ToolStrip through the templateNode which is on the Overflow; we should not close the overflow (to avoid flicker)
-    private bool _addingDummyItem; // When the dummyItem is added the toolStrip might resize (as in the Vertical Layouts). In this case we don't want the Resize to cause SyncSelection and Layouts.
+    // When an item is added to the ToolStrip through the templateNode which is on the Overflow;
+    // we should not close the overflow (to avoid flicker)
+    private bool _dontCloseOverflow;
+    // When the dummyItem is added the toolStrip might resize (as in the Vertical Layouts).
+    // In this case we don't want the Resize to cause SyncSelection and Layouts.
+    private bool _addingDummyItem;
 
     /// <summary>
     ///  Adds designer actions to the ActionLists collection.

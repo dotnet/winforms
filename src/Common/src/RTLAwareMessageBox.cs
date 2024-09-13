@@ -4,7 +4,8 @@
 namespace System.Windows.Forms;
 
 /// <summary>
-///  The Show method displays a message box that can contain text, buttons, and symbols that inform and instruct the user.
+///  The Show method displays a message box that can contain text, buttons,
+///  and symbols that inform and instruct the user.
 ///  This MessageBox will be RTL, if the resources for this dll have been localized to a RTL language.
 /// </summary>
 internal sealed class RTLAwareMessageBox
