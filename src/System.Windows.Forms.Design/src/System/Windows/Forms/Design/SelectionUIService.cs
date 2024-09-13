@@ -534,7 +534,8 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
                 else if (hitTest != SelectionUIItem.NOHIT && me.Button == MouseButtons.Left)
                 {
                     SelectionRules rules = SelectionRules.None;
-                    // If the CTRL key isn't down, select this component, otherwise, we wait until the mouse up. Make sure the component is selected
+                    // If the CTRL key isn't down, select this component, otherwise,
+                    // we wait until the mouse up. Make sure the component is selected.
                     _ctrlSelect = (ModifierKeys & Keys.Control) != Keys.None;
                     if (!_ctrlSelect)
                     {
@@ -837,7 +838,8 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
     }
 
     /// <summary>
-    ///  Override of our control's WNDPROC. We diddle with capture a bit, and it's important to turn this off if the capture changes.
+    ///  Override of our control's WNDPROC. We diddle with capture a bit,
+    ///  and it's important to turn this off if the capture changes.
     /// </summary>
     protected override void WndProc(ref Message m)
     {
@@ -991,7 +993,8 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
             return false; // no UI handler for selection
         }
 
-        // Now within the given selection, add those items that have the same UI handler and that have the proper rule constraints.
+        // Now within the given selection, add those items that have the same UI handler and
+        // that have the proper rule constraints.
         List<object> list = [];
         for (int i = 0; i < objects.Length; i++)
         {
@@ -1059,7 +1062,8 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
     }
 
     /// <summary>
-    ///  Called by an outside party to update drag information. This can only be called after a successful call to beginDrag.
+    ///  Called by an outside party to update drag information.
+    ///  This can only be called after a successful call to beginDrag.
     /// </summary>
     void ISelectionUIService.DragMoved(Rectangle offset)
     {
@@ -1098,7 +1102,8 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
     }
 
     /// <summary>
-    ///  Called by an outside party to finish a drag operation. This can only be called after a successful call to beginDrag.
+    ///  Called by an outside party to finish a drag operation.
+    ///  This can only be called after a successful call to beginDrag.
     /// </summary>
     // Standard 'catch all - rethrow critical' exception pattern
     void ISelectionUIService.EndDrag(bool cancel)
@@ -1161,7 +1166,8 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
     }
 
     /// <summary>
-    ///  Filters the set of selected components. The selection service will retrieve all components that are currently selected.
+    ///  Filters the set of selected components.
+    ///  The selection service will retrieve all components that are currently selected.
     ///  This method allows you to filter this set down to components that match your criteria.
     ///  The selectionRules parameter must contain one or more flags from the SelectionRules class.
     ///  These flags allow you to constrain the set of selected objects to visible, movable, sizeable or all objects.

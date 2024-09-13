@@ -302,7 +302,8 @@ internal class DataGridViewCellStyleBuilder : Form
         // The cell inside the sampleDataGridView should not be selected.
         _sampleDataGridView.ClearSelection();
 
-        // make sure that the cell inside the sampleDataGridView and sampleDataGridViewSelected fill their respective dataGridView's
+        // make sure that the cell inside the sampleDataGridView and
+        // sampleDataGridViewSelected fill their respective dataGridView's
         _sampleDataGridView.Rows[0].Height = _sampleDataGridView.Height;
         _sampleDataGridView.Columns[0].Width = _sampleDataGridView.Width;
 

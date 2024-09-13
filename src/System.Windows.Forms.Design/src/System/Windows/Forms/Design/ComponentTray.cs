@@ -2082,7 +2082,8 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
         }
 
         /// <summary>
-        ///  Called in response to a double-click of the left mouse button. The default behavior here calls onDoubleClick on IMouseHandler
+        ///  Called in response to a double-click of the left mouse button.
+        ///  The default behavior here calls onDoubleClick on IMouseHandler
         /// </summary>
         protected override void OnDoubleClick(EventArgs e)
         {
@@ -2095,7 +2096,8 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
                 {
                     _mouseDragLast = InvalidPoint;
                     Capture = false;
-                    // We try to get a designer for the component and let it view the event. If this fails, then we'll try to do it ourselves.
+                    // We try to get a designer for the component and let it view the event.
+                    // If this fails, then we'll try to do it ourselves.
                     IDesigner designer = host.GetDesigner(_component);
                     if (designer is null)
                     {

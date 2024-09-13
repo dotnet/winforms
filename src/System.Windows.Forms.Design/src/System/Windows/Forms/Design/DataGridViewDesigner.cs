@@ -36,8 +36,9 @@ internal class DataGridViewDesigner : ControlDesigner
         get => Control.AutoSizeColumnsMode;
         set
         {
-            // DANIELHE: this is a workaround for a bug in ComponentCache: if a component changed then its list of AssociatedComponents
-            // is not marked as changed to the serialization engine will not serialize them.
+            // DANIELHE: this is a workaround for a bug in ComponentCache:
+            // if a component changed then its list of AssociatedComponents is not marked as changed
+            // to the serialization engine will not serialize them.
             DataGridView dataGridView = Control;
             IComponentChangeService? componentChangeService = dataGridView.Site?.GetService<IComponentChangeService>();
             PropertyDescriptor? prop = TypeDescriptor.GetProperties(typeof(DataGridViewColumn))["Width"];
@@ -201,9 +202,10 @@ internal class DataGridViewDesigner : ControlDesigner
         // ChooseDataSource action list
         _actionLists.Add(new DataGridViewChooseDataSourceActionList(this)
         {
-            // if one actionList has AutoShow == true then the chrome panel will popup when the user DnD the DataGridView onto the form
+            // if one actionList has AutoShow == true then the chrome panel will popup
+            // when the user DnD the DataGridView onto the form.
             // It would make sense to promote AutoShow to DesignerActionListCollection.
-            // But we don't own the DesignerActionListCollection so we just set AutoShow on the first ActionList
+            // But we don't own the DesignerActionListCollection so we just set AutoShow on the first ActionList.
             //
             AutoShow = true
         });
@@ -532,16 +534,17 @@ internal class DataGridViewDesigner : ControlDesigner
         ISite? site = dataGridView.Site;
         IDesignerHost? host = site?.GetService<IDesignerHost>();
 
-        // if after changing the data source / data member the dataGridView has columns which are still databound
+        // If after changing the data source / data member the dataGridView has columns which are still databound
         // then keep them and don't change the column collection.
         // we do this because bound columns represent the dataSource schema
         // ALSO, we get Undo/Redo for free w/ this.
         //
         // For example: our data grid view is bound to a dataManager which in turns is bound to a web service
         // which returns different dataSets w/ the same schema.
-        // If the user wants to see only the first 2 columns and makes some changes to the first two columns ( width, cell style, etc )
-        // then we don't want to throw these columns away when the dataManager receives another dataSet from the web service.
-        // and we don't want to add another columns
+        // If the user wants to see only the first 2 columns and makes some
+        // changes to the first two columns ( width, cell style, etc )
+        // then we don't want to throw these columns away when the dataManager
+        // receives another dataSet from the web service and we don't want to add another columns.
 
         if (ProcessSimilarSchema(dataGridView))
         {

@@ -139,7 +139,10 @@ internal partial class OleDragDropHandler
             {
                 SerializationStream!.Seek(0, SeekOrigin.Begin);
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-                return new BinaryFormatter().Deserialize(SerializationStream); // CodeQL[SM03722, SM04191] : The operation is essential for the design experience when users are running their own designers they have created. This cannot be achieved without BinaryFormatter
+                // CodeQL[SM03722, SM04191] : The operation is essential for the design experience
+                // when users are running their own designers they have created.
+                // This cannot be achieved without BinaryFormatter
+                return new BinaryFormatter().Deserialize(SerializationStream);
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
             }
             else if (format.Equals(NestedToolboxItemFormat))
@@ -211,7 +214,10 @@ internal partial class OleDragDropHandler
             try
             {
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-                _serializationData ??= new BinaryFormatter().Deserialize(SerializationStream!); // CodeQL[SM03722, SM04191] : The operation is essential for the design experience when users are running their own designers they have created. This cannot be achieved without BinaryFormatter
+                // CodeQL[SM03722, SM04191] : The operation is essential for the design experience
+                // when users are running their own designers they have created.
+                // This cannot be achieved without BinaryFormatter
+                _serializationData ??= new BinaryFormatter().Deserialize(SerializationStream!);
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
 
                 if (removeCurrentComponents && _components is not null)

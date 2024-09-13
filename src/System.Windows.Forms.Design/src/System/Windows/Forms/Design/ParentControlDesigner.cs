@@ -1172,8 +1172,8 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
                 updatedRect.Width = ((dragRect.X + dragRect.Width) / gridSize.Width) * gridSize.Width - updatedRect.X;
                 updatedRect.Height = ((dragRect.Y + dragRect.Height) / gridSize.Height) * gridSize.Height - updatedRect.Y;
 
-                // ASURT 71552 <subhag> Added so that if the updated dimension is smaller than grid dimension then snap that dimension to
-                // the grid dimension
+                // ASURT 71552 <subhag> Added so that if the updated dimension is smaller than grid dimension
+                // then snap that dimension to the grid dimension.
                 if (updatedRect.Width < gridSize.Width)
                     updatedRect.Width = gridSize.Width;
                 if (updatedRect.Height < gridSize.Height)

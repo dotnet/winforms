@@ -1087,9 +1087,11 @@ namespace System.Windows.Forms.Design
             bool isListofLists = (dataSourceInstance is IListSource listSource) && listSource.ContainsListCollection;
 
             // Fix for VSWhidbey#223724:
-            // When offering choices for the DataSource of a BindingSource, we want to stop the user from being able to pick a table under
-            // a data set, since this implies a DS/DM combination, requiring us to create a new 'related' BindingSource. We'd rather the
-            // user just picked the data set as the DS, and then set the DM to the table, and avoid creating a redundant BindingSource.
+            // When offering choices for the DataSource of a BindingSource, we want to stop the user
+            // from being able to pick a table under a data set, since this implies a DS/DM combination,
+            // requiring us to create a new 'related' BindingSource.
+            // We'd rather the user just picked the data set as the DS, and then set the DM to the table,
+            // and avoid creating a redundant BindingSource.
             if (isListofLists && _context?.Instance is BindingSource)
             {
                 return;

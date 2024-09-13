@@ -113,7 +113,8 @@ internal sealed class ToolStripAdornerWindowService : IDisposable
     }
 
     /// <summary>
-    ///  Invalidates the BehaviorService's AdornerWindow. This will force a refresh of all Adorners and, in turn, all Glyphs.
+    ///  Invalidates the BehaviorService's AdornerWindow.
+    ///  This will force a refresh of all Adorners and, in turn, all Glyphs.
     /// </summary>
     public void Invalidate()
     {
@@ -121,7 +122,8 @@ internal sealed class ToolStripAdornerWindowService : IDisposable
     }
 
     /// <summary>
-    ///  Invalidates the BehaviorService's AdornerWindow. This will force a refresh of all Adorners and, in turn, all Glyphs.
+    ///  Invalidates the BehaviorService's AdornerWindow.
+    ///  This will force a refresh of all Adorners and, in turn, all Glyphs.
     /// </summary>
     public void Invalidate(Rectangle rect)
     {
@@ -129,7 +131,8 @@ internal sealed class ToolStripAdornerWindowService : IDisposable
     }
 
     /// <summary>
-    ///  Invalidates the BehaviorService's AdornerWindow. This will force a refresh of all Adorners and, in turn, all Glyphs.
+    ///  Invalidates the BehaviorService's AdornerWindow.
+    ///  This will force a refresh of all Adorners and, in turn, all Glyphs.
     /// </summary>
     public void Invalidate(Region r)
     {

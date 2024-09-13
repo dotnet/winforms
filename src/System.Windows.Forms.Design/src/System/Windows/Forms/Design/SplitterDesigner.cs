@@ -18,7 +18,8 @@ internal class SplitterDesigner : ControlDesigner
     }
 
     /// <summary>
-    ///  This draws a nice border around our panel. We need this because the panel can have no border and you can't tell where it is.
+    ///  This draws a nice border around our panel.
+    ///  We need this because the panel can have no border and you can't tell where it is.
     /// </summary>
     private void DrawBorder(Graphics graphics)
     {

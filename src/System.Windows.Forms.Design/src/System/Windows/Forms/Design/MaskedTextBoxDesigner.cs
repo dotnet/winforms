@@ -73,7 +73,8 @@ internal class MaskedTextBoxDesigner : TextBoxBaseDesigner
             designMaskedTextBox.RejectInputOnFirstFailure = maskedTextBox.RejectInputOnFirstFailure;
             designMaskedTextBox.CutCopyMaskFormat = maskedTextBox.CutCopyMaskFormat;
             designMaskedTextBox.Culture = maskedTextBox.Culture;
-            // designMaskedTextBox.TextMaskFormat = maskedTextBox.TextMaskFormat; - Not relevant since it is to be used programmatically only.
+            // designMaskedTextBox.TextMaskFormat = maskedTextBox.TextMaskFormat;
+            // - Not relevant since it is to be used programmatically only.
         }
 
         // Some constant properties at design time.
@@ -234,9 +235,10 @@ internal class MaskedTextBoxDesigner : TextBoxBaseDesigner
     /// <summary>
     ///  Shadow the Text property to do two things:
     ///  1. Always show the text without prompt or literals.
-    ///  2. The text from the UITypeEditor is assigned escaping literals, prompt and spaces, this is to allow for partial inputs.
-    ///  Observe that if the MTB is hooked to a PropertyBrowser at design time, shadowing of the property won't work unless the
-    ///  application is a well written control designer (implements corresponding interfaces).
+    ///  2. The text from the UITypeEditor is assigned escaping literals, prompt and spaces,
+    ///  this is to allow for partial inputs. Observe that if the MTB is hooked to a PropertyBrowser at design time,
+    ///  shadowing of the property won't work unless the application is a well
+    ///  written control designer (implements corresponding interfaces).
     /// </summary>
     private string? Text
     {
