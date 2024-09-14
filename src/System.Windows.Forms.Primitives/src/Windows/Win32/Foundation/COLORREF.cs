@@ -13,7 +13,7 @@ namespace Windows.Win32.Foundation;
 ///  </para>
 ///  <para>
 ///   <see href="https://learn.microsoft.com/windows/win32/gdi/colorref#">
-///    Read more on learn.microsoft.com.
+///    Read more on https://learn.microsoft.com.
 ///   </see>
 ///  </para>
 /// </remarks>

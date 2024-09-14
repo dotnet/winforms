@@ -23,7 +23,7 @@ internal class ToolStripDesigner : ControlDesigner
     internal static Point s_lastCursorPosition = Point.Empty; // remembers last cursorPosition;
     internal static bool s_autoAddNewItems = true; // true to force newly created items to be added to the currently selected strip.
     internal static ToolStripItem s_dragItem; // this is used in overflow to know current item selected while drag, so that we can get the drop-index.
-    internal static bool s_shiftState; // maintains the shift state used of invalidation. disable csharp compiler warning #0414: field assigned unused value
+    internal static bool s_shiftState; // maintains the shift state used of invalidation. Disable C# compiler warning #0414: field assigned unused value
 #pragma warning disable 0414
     internal static bool s_editTemplateNode; // this is used in selection changed so that unnecessary redraw is not required.
 #pragma warning restore 0414

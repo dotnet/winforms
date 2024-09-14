@@ -371,7 +371,7 @@ public partial class DataGridView : Control, ISupportInitialize
 #if DEBUG
     // set to false when the grid is not in sync with the underlying data store
     // in virtual mode, and OnCellValueNeeded cannot be called.
-    // disable csharp compiler warning #0414: field assigned unused value
+    // disable C# compiler warning #0414: field assigned unused value
 #pragma warning disable 0414
     internal bool _dataStoreAccessAllowed = true;
 #pragma warning restore 0414

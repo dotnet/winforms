@@ -20,7 +20,7 @@ internal partial class PInvoke
     ///   </para>
     ///   <para>
     ///    <see href="https://learn.microsoft.com/windows/win32/api/shellapi/nf-shellapi-shgetstockiconinfo#parameters">
-    ///     Read more on learn.microsoft.com.
+    ///     Read more on https://learn.microsoft.com.
     ///    </see>
     ///   </para>
     ///  </param>
@@ -30,7 +30,7 @@ internal partial class PInvoke
     ///   </para>
     ///   <para>
     ///    <see href="https://learn.microsoft.com/windows/win32/api/shellapi/nf-shellapi-shgetstockiconinfo#parameters">
-    ///     Read more on learn.microsoft.com.
+    ///     Read more on https://learn.microsoft.com.
     ///    </see>
     ///   </para>
     ///  </param>
@@ -44,7 +44,7 @@ internal partial class PInvoke
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/shellapi/nf-shellapi-shgetstockiconinfo#parameters">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on https://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </param>
