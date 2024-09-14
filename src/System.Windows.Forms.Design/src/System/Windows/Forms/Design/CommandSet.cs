@@ -1409,7 +1409,7 @@ internal partial class CommandSet : IDisposable
                 using MemoryStream stream = new();
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
                 new BinaryFormatter().Serialize(stream, serializationData);
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
+#pragma warning restore SYSLIB0011
                 stream.Seek(0, SeekOrigin.Begin);
                 byte[] bytes = stream.GetBuffer();
                 IDataObject dataObj = new DataObject(CF_DESIGNER, bytes);
@@ -1454,7 +1454,7 @@ internal partial class CommandSet : IDisposable
                 using MemoryStream stream = new();
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
                 new BinaryFormatter().Serialize(stream, serializationData);
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
+#pragma warning restore SYSLIB0011
                 stream.Seek(0, SeekOrigin.Begin);
                 byte[] bytes = stream.GetBuffer();
                 IDataObject dataObj = new DataObject(CF_DESIGNER, bytes);
@@ -1868,7 +1868,7 @@ internal partial class CommandSet : IDisposable
                         s.Seek(0, SeekOrigin.Begin);
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
                         object serializationData = new BinaryFormatter().Deserialize(s); // CodeQL[SM03722, SM04191] : The operation is essential for the design experience when users are running their own designers they have created. This cannot be achieved without BinaryFormatter
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
+#pragma warning restore SYSLIB0011
                         using (ScaleHelper.EnterDpiAwarenessScope(DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
                         {
                             components = ds.Deserialize(serializationData);

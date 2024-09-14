@@ -621,7 +621,7 @@ public sealed class ResXDataNode : ISerializable
             return _nodeInfo.MimeType == ResXResourceWriter.BinSerializedObjectMimeType
                 ? GenerateObjectFromBinaryDataNodeInfo(_nodeInfo, typeResolver)
                 : GenerateObjectFromDataNodeInfo(_nodeInfo, typeResolver);
-#pragma warning restore SYSLIB0051 // Type or member is obsolete
+#pragma warning restore SYSLIB0051
         }
 
         // Schema is wrong and says minOccur for Value is 0, but it's too late to change it.

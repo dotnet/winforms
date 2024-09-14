@@ -89,7 +89,7 @@ public class TaskDialogIcon : IDisposable
     ///   contains an icon consisting of white tick in a green shield and shows a green bar around the icon.
     /// </summary>
     public static readonly TaskDialogIcon ShieldSuccessGreenBar = new(TaskDialogStandardIcon.ShieldSuccessGreenBar);
-#pragma warning restore IDE1006 // Naming Styles
+#pragma warning restore IDE1006
 
     private readonly TaskDialogStandardIcon? _standardIcon;
     private readonly Icon? _ownedIcon;

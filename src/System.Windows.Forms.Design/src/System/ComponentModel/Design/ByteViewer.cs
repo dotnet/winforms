@@ -111,7 +111,7 @@ public class ByteViewer : TableLayoutPanel
           /*4c6f*/ { 1   ,1   ,1   ,1    ,1   ,1   ,1   ,1   ,1    ,1    ,1    ,1    ,12  },
           /*a794*/ { 1   ,1   ,1   ,1    ,1   ,1   ,1   ,1   ,1    ,1    ,1    ,1    ,1   }
         };
-#pragma warning restore SA1001 // Commas should be spaced correctly
+#pragma warning restore SA1001
 
         return encodings[c4, c5];
     }

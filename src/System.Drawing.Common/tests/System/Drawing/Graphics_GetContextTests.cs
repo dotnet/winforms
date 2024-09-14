@@ -135,5 +135,5 @@ public partial class Graphics_GetContextTests : DrawingTest
         Assert.Equal(initialTransform, matrix);
     }
 }
-#pragma warning restore SYSLIB0016 // Type or member is obsolete
+#pragma warning restore SYSLIB0016
 

@@ -374,7 +374,7 @@ public class BindingTests
 #pragma warning disable CA2201 // Do not raise reserved exception types
         yield return new object[] { null, new NullReferenceException() };
         yield return new object[] { new BindingCompleteEventArgs(null, BindingCompleteState.Success, BindingCompleteContext.ControlUpdate), new NullReferenceException() };
-#pragma warning restore CA2201 // Do not raise reserved exception types
+#pragma warning restore CA2201
     }
 
     [Theory]
