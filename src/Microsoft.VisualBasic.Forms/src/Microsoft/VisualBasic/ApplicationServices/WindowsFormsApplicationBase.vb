@@ -633,7 +633,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 _formLoadWaiter = New AutoResetEvent(False)
 
                 Task.Run(Async Function() As Task
-                             Await _splashScreenCompletionSource.Task.ConfigureAwait(False)
+                             Await _splashScreenCompletionSource.Task.ConfigureAwait(continueOnCapturedContext:=False)
                              _formLoadWaiter.Set()
                          End Function)
 
@@ -1077,7 +1077,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                         Dim awaitable As ConfiguredTaskAwaitable = SendSecondInstanceArgsAsync(
                             pipeName:=applicationInstanceID,
                             args:=commandLine,
-                            cancellationToken:=tokenSource.Token).ConfigureAwait(False)
+                            cancellationToken:=tokenSource.Token).ConfigureAwait(continueOnCapturedContext:=False)
 
                         awaitable.GetAwaiter().GetResult()
                     Catch ex As Exception
