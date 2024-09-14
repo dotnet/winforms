@@ -140,7 +140,9 @@ Namespace Microsoft.VisualBasic.CompilerServices
             resourceID As String,
             ParamArray placeHolders() As String) As ComponentModel.Win32Exception
 
-            Return New ComponentModel.Win32Exception(Marshal.GetLastWin32Error(), GetResourceString(resourceID, placeHolders))
+            Return New ComponentModel.Win32Exception(
+                [error]:=Marshal.GetLastWin32Error(),
+                message:=GetResourceString(resourceID, placeHolders))
         End Function
 
         Friend Function VbMakeException(resourceId As Integer) As Exception

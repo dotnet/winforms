@@ -9,7 +9,8 @@ Namespace My
     ' StartupNextInstance: Raised when launching a single-instance application and the application is already active.
     ' NetworkAvailabilityChanged: Raised when the network connection is connected or disconnected.
 
-    ' **NEW** ApplyApplicationDefaults: Raised when the application queries default values to be set for the application.
+    ' **NEW** ApplyApplicationDefaults:
+    ' Raised when the application queries default values to be set for the application.
 
     ' Example:
     ' Private Sub MyApplication_ApplyApplicationDefaults(sender As Object, e As ApplyApplicationDefaultsEventArgs) _

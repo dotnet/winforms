@@ -7,7 +7,8 @@ Imports Microsoft.VisualBasic.FileIO
 Namespace Microsoft.VisualBasic.MyServices
 
     ''' <summary>
-    '''  An extremely thin wrapper around Microsoft.VisualBasic.FileIO.SpecialDirectories to expose the type through My.
+    '''  An extremely thin wrapper around <see cref="Microsoft.VisualBasic.FileIO.SpecialDirectories"/>
+    '''  to expose the type through <see cref="My"/>.
     ''' </summary>
     <EditorBrowsable(EditorBrowsableState.Never)>
     Public Class SpecialDirectoriesProxy

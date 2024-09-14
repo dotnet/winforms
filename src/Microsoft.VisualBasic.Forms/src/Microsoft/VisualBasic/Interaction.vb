@@ -184,11 +184,22 @@ Namespace Microsoft.VisualBasic
                 windowHandle = NativeMethods.GetWindow(NativeMethods.GetDesktopWindow(), NativeTypes.GW_CHILD)
                 Do While IntPtr.op_Inequality(windowHandle, IntPtr.Zero)
                     ' Get the window caption and test for a left-aligned substring
-                    appTitleLength = NativeMethods.GetWindowText(windowHandle, appTitleBuilder, appTitleBuilder.Capacity)
+                    appTitleLength = NativeMethods.GetWindowText(
+                        hWnd:=windowHandle,
+                        lpString:=appTitleBuilder,
+                        nMaxCount:=appTitleBuilder.Capacity)
+
                     appTitle = appTitleBuilder.ToString()
 
                     If appTitleLength >= titleLength Then
-                        If String.Compare(appTitle, 0, Title, 0, titleLength, StringComparison.OrdinalIgnoreCase) = 0 Then
+                        If String.Compare(
+                            strA:=appTitle,
+                            indexA:=0,
+                            strB:=Title,
+                            indexB:=0,
+                            length:=titleLength,
+                            comparisonType:=StringComparison.OrdinalIgnoreCase) = 0 Then
+
                             Exit Do ' Found one
                         End If
                     End If

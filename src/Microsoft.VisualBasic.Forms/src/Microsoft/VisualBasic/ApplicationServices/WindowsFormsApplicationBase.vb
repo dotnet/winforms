@@ -383,7 +383,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
                 _unhandledExceptionHandlers.Add(value)
 
-                ' Only add the listener once so we don't fire the UnHandledException event over and over for the same exception
+                ' Only add the listener once so we don't fire the
+                ' UnHandledException event over and over for the same exception
                 If _unhandledExceptionHandlers.Count = 1 Then
                     AddHandler Application.ThreadException, AddressOf OnUnhandledExceptionEventAdaptor
                 End If
@@ -767,7 +768,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  variants was passed in.
         ''' </summary>
         ''' <param name="commandLineArgs"></param>
-        ''' <returns>Returning True indicates that we should continue on with the application Startup sequence.</returns>
+        ''' <returns>
+        '''  Returning <see langword="True"/> indicates that we should continue on with the application Startup sequence.
+        ''' </returns>
         ''' <remarks>
         '''  This extensibility point is exposed for people who want to override
         '''  the Startup sequence at the earliest possible point to
@@ -917,11 +920,12 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             ' The timing is important because the network object has an AsyncOperationsManager in it that marshals
             ' the network changed event to the main thread. The asyncOperationsManager does a CreateOperation()
             ' which makes a copy of the executionContext. That execution context shows up on your thread during
-            ' the callback so I delay creating the network object (and consequently the capturing of the execution context)
-            ' until the principal has been set on the thread. This avoids the problem where My.User isn't set
-            ' during the NetworkAvailabilityChanged event. This problem would just extend itself to any future
-            ' callback that involved the asyncOperationsManager so this is where we need to create objects that
-            ' have a asyncOperationsContext in them.
+            ' the callback so I delay creating the network object
+            ' (and consequently the capturing of the execution context) until the principal has been set on the thread.
+            ' This avoids the problem where My.User isn't set during the NetworkAvailabilityChanged event.
+            ' This problem would just extend itself to any future callback that involved
+            ' the asyncOperationsManager so this is where we need to create objects that have
+            ' a asyncOperationsContext in them.
             If _turnOnNetworkListener And _networkObject Is Nothing Then
 
                 ' The is-nothing-check is to avoid hooking the object more than once.

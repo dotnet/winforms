@@ -76,7 +76,8 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         '''  the actual file transfer cancel event comes through and do it there.
         ''' </remarks>
         Private Sub m_ProgressDialog_UserHitCancel()
-            ' Cancel the upload/download transfer. We'll close the ProgressDialog as soon as the HttpClient cancels the xfer.
+            ' Cancel the upload/download transfer. We'll close the ProgressDialog
+            ' as soon as the HttpClient cancels the xfer.
             _cancelTokenSourceGet.Cancel()
             _cancelTokenSourceRead.Cancel()
             _cancelTokenSourceReadStream.Cancel()
