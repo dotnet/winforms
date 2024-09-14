@@ -21,7 +21,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     If bytesRead = 0 Then
                         Exit While
                     End If
+#Disable Warning CA1849 ' Call async methods when in an async method
                     stream.Write(buffer, 0, bytesRead)
+#Enable Warning CA1849
                 End While
                 stream.Seek(0, SeekOrigin.Begin)
                 Dim serializer As New DataContractSerializer(GetType(String()))
