@@ -84,7 +84,7 @@ internal static partial class ScaleHelper
             {
                 throw new Win32Exception(Marshal.GetLastWin32Error(), string.Format(SR.Win32SetThreadsDpiContextFailed, _originalDpiAwarenessContext));
             }
-#pragma warning restore CA1416 // Validate platform compatibility
+#pragma warning restore CA1416
         }
     }
 }

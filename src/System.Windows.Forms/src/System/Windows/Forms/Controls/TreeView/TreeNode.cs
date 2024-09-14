@@ -1958,7 +1958,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
             _parent._children[_parent._childCount - 1] = null;
-#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
+#pragma warning restore CS8625
             _parent._childCount--;
 
             _parent = null;
@@ -2087,7 +2087,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         {
             si.AddValue("UserData", _userData, _userData.GetType());
         }
-#pragma warning restore SYSLIB0050 // Type or member is obsolete
+#pragma warning restore SYSLIB0050
     }
 
     /// <summary>

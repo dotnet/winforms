@@ -139,7 +139,7 @@ public partial class MonthCalendar : Control
         SetStyle(ControlStyles.StandardClick, false);
 #pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning restore WFO5001
 
         TabStop = true;
     }
@@ -206,7 +206,7 @@ public partial class MonthCalendar : Control
         }
         set => base.BackColor = value;
     }
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning restore WFO5001
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -422,7 +422,7 @@ public partial class MonthCalendar : Control
         }
         set => base.ForeColor = value;
     }
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning restore WFO5001
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]

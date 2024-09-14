@@ -371,7 +371,7 @@ public partial class DataGridView : Control, ISupportInitialize
 #if DEBUG
     // set to false when the grid is not in sync with the underlying data store
     // in virtual mode, and OnCellValueNeeded cannot be called.
-    // disable csharp compiler warning #0414: field assigned unused value
+    // disable C# compiler warning #0414: field assigned unused value
 #pragma warning disable 0414
     internal bool _dataStoreAccessAllowed = true;
 #pragma warning restore 0414
@@ -389,7 +389,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
 #pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning restore WFO5001
 
         // this class overrides GetPreferredSizeCore, let Control automatically cache the result
         SetExtendedState(ExtendedStates.UserPreferredSizeCache, true);

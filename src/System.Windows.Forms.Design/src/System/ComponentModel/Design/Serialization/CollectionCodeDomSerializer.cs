@@ -374,7 +374,7 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
             {
                 result = SerializeToResourceExpression(manager, originalCollection, false);
             }
-#pragma warning restore SYSLIB0050 // Type or member is obsolete
+#pragma warning restore SYSLIB0050
         }
 
         return result;

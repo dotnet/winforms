@@ -858,7 +858,7 @@ public class BindingSourceTests
     {
 #pragma warning disable IDE0060 // Remove unused parameter
         public NoDefaultConstructor(int i) { }
-#pragma warning restore IDE0060 // Remove unused parameter
+#pragma warning restore IDE0060
 
         public PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[] listAccessors)
         {

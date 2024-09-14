@@ -40,7 +40,7 @@ public class LVITEMWTests
             Assert.Equal(maxLength, lvi.cchTextMax);
         }
     }
-#pragma warning restore xUnit1026 // Theory methods should use all of their parameters
+#pragma warning restore xUnit1026
 
     public static IEnumerable<object[]> UpdateText_TestData()
     {
