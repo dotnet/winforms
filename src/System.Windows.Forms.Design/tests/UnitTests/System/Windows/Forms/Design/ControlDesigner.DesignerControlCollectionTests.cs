@@ -28,8 +28,8 @@ public class ControlDesignerDesignerControlCollectionTests : IDisposable
     [Fact]
     public void Constructor_ShouldThrowArgumentNullException_WhenControlIsNull()
     {
-        Action act = () => new ControlDesigner.DesignerControlCollection(null!);
-        act.Should().Throw<ArgumentNullException>();
+        Action action = () => new ControlDesigner.DesignerControlCollection(null!);
+        action.Should().Throw<ArgumentNullException>();
     }
 
     [Fact]
@@ -167,7 +167,7 @@ public class ControlDesignerDesignerControlCollectionTests : IDisposable
         _control.Controls.Contains(control).Should().BeFalse();
     }
 
-    private class MockSite : ISite
+    private class MockSite : ISite, IDisposable
     {
         public IComponent Component { get; set; }
         public IContainer Container { get; set; }
@@ -181,5 +181,18 @@ public class ControlDesignerDesignerControlCollectionTests : IDisposable
         }
 
         public object? GetService(Type serviceType) => null;
+
+        public void Dispose()
+        {
+            if (Component is IDisposable disposableComponent)
+            {
+                disposableComponent.Dispose();
+            }
+
+            if (Container is IDisposable disposableContainer)
+            {
+                disposableContainer.Dispose();
+            }
+        }
     }
 }
