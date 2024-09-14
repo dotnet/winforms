@@ -68,28 +68,24 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         ''' <summary>
         '''  If size >= 0 then create the file with size length.
         ''' </summary>
-        ''' <param name="tmpFilePath">Full path to working directory.</param>
-        ''' <param name="optionalFilename"></param>
+        ''' <param name="sourceDirectoryName">Full path to working directory.</param>
+        ''' <param name="filename"></param>
         ''' <param name="size">Size in bytes of the file to be created.</param>
         ''' <returns>
         '''  The full path and file name of the created file.
         '''  If size = -1 no file is create but the full path is returned.
         ''' </returns>
-        Friend Function CreateTempFile(
-            tmpFilePath As String,
-            Optional optionalFilename As String = "Testing.Txt",
-            Optional size As Integer = -1) As String
-
-            Dim filename As String = Path.Combine(tmpFilePath, optionalFilename)
+        Friend Function CreateTempFile(sourceDirectoryName As String, Optional filename As String = "Testing.Txt", Optional size As Integer = -1) As String
+            Dim filenameWithPath As String = Path.Combine(sourceDirectoryName, filename)
 
             If size >= 0 Then
-                Using destinationStream As FileStream = File.Create(filename)
+                Using destinationStream As FileStream = File.Create(filenameWithPath)
                     destinationStream.Write(New Byte(size - 1) {})
                     destinationStream.Flush()
                     destinationStream.Close()
                 End Using
             End If
-            Return filename
+            Return filenameWithPath
         End Function
 
         Friend Shared Function DirectoryIsAccessible(directoryPath As String) As Boolean

@@ -10,9 +10,7 @@ namespace System.Drawing.Imaging.Effects;
 /// </summary>
 /// <remarks>
 ///  <para>
-///   <see href="https://learn.microsoft.com/windows/win32/gdiplus/-gdiplus-recoloring-use">
-///    Recoloring
-///   </see>
+///   See <see href="https://learn.microsoft.com/windows/win32/gdiplus/-gdiplus-recoloring-use">Recoloring</see>
 ///   for examples of using a color matrix to adjust the colors of an image.
 ///  </para>
 /// </remarks>

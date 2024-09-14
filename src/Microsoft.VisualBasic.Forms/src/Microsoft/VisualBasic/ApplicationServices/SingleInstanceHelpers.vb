@@ -29,6 +29,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     Await stream.WriteAsync(
                         buffer.AsMemory(0, bytesRead),
                         cancellationToken).ConfigureAwait(False)
+                    buffer.AsMemory(0, bytesRead),
+                        cancellationToken).ConfigureAwait(False)
+#Enable Warning CA1849
                 End While
                 stream.Seek(0, SeekOrigin.Begin)
                 Dim serializer As New DataContractSerializer(GetType(String()))
