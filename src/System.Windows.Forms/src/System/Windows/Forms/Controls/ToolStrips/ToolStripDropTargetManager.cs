@@ -196,14 +196,14 @@ internal class ToolStripDropTargetManager : IDropTarget
             // tell the last drag target you've left
             if (_lastDropTarget is not null)
             {
-                OnDragLeave(EventArgs.Empty);
-
                 // tell the drag image manager you've left
                 if (e.DropImageType > DropImageType.Invalid)
                 {
                     DragDropHelper.ClearDropDescription(e.Data);
                     DragDropHelper.DragLeave();
                 }
+
+                OnDragLeave(EventArgs.Empty);
             }
 
             _lastDropTarget = newTarget;

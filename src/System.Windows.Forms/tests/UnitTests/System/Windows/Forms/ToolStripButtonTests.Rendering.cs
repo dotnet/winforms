@@ -162,8 +162,9 @@ public partial class ToolStripButtonTests
                 bounds: null,
                 points: null,
                 State.Brush(SystemColors.Highlight, BRUSH_STYLE.BS_SOLID)),
+           Validate.SkipType(ENHANCED_METAFILE_RECORD_TYPE.EMR_POLYGON16),
            Validate.Repeat(Validate.SkipType(ENHANCED_METAFILE_RECORD_TYPE.EMR_POLYPOLYGON16), 2),
-           Validate.Repeat(Validate.SkipType(ENHANCED_METAFILE_RECORD_TYPE.EMR_POLYGON16), 2));
+           Validate.SkipType(ENHANCED_METAFILE_RECORD_TYPE.EMR_POLYGON16));
     }
 
     private class ToolStripSystemHighContrastRenderer : ToolStripSystemRenderer

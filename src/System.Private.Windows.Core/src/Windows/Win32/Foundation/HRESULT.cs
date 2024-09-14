@@ -33,5 +33,5 @@ internal readonly partial struct HRESULT
     public static readonly HRESULT COR_E_OBJECTDISPOSED         = (HRESULT)unchecked((int)0x80131622);
 
 #pragma warning restore format
-#pragma warning restore IDE1006 // Naming Styles
+#pragma warning restore IDE1006
 }

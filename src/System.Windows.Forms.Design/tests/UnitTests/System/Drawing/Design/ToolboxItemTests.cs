@@ -1247,7 +1247,7 @@ public class ToolboxItemTests
             {
                 CodeBase = "ThrowIOException"
             };
-#pragma warning restore SYSLIB0044 // Type or member is obsolete
+#pragma warning restore SYSLIB0044
             yield return new object[] { null, ioFormatExceptionCodeBase, "System.Int32", false, typeof(int) };
         }
 

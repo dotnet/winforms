@@ -56,7 +56,7 @@ internal class DenyExecutionSynchronizationContext : SynchronizationContext
 
 #pragma warning disable VSTHRD001 // Avoid legacy thread switching APIs
         (_underlyingContext ?? new SynchronizationContext()).Post(d, state);
-#pragma warning restore VSTHRD001 // Avoid legacy thread switching APIs
+#pragma warning restore VSTHRD001
     }
 
     public override void Send(SendOrPostCallback d, object? state)
@@ -75,7 +75,7 @@ internal class DenyExecutionSynchronizationContext : SynchronizationContext
 
 #pragma warning disable VSTHRD001 // Avoid legacy thread switching APIs
         (_underlyingContext ?? new SynchronizationContext()).Send(d, state);
-#pragma warning restore VSTHRD001 // Avoid legacy thread switching APIs
+#pragma warning restore VSTHRD001
     }
 
     public override SynchronizationContext CreateCopy()

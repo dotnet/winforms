@@ -521,7 +521,7 @@ public class ToolboxItem : ISerializable
                     {
                     }
                 }
-#pragma warning restore SYSLIB0044 // Type or member is obsolete
+#pragma warning restore SYSLIB0044
 
                 if (a is not null)
                 {

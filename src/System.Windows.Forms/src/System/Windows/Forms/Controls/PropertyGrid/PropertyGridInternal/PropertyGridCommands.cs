@@ -27,5 +27,5 @@ public class PropertyGridCommands
     public static readonly CommandID Description = new(wfcMenuCommand, 0x3001);
     public static readonly CommandID Hide = new(wfcMenuCommand, 0x3002);
     public static readonly CommandID Commands = new(wfcMenuCommand, 0x3010);
-#pragma warning restore IDE1006 // Naming Styles
+#pragma warning restore IDE1006
 }

@@ -210,7 +210,7 @@ public partial class Form : ContainerControl
 
 #pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning restore WFO5001
     }
 
     /// <summary>
@@ -2397,7 +2397,7 @@ public partial class Form : ContainerControl
 
 #pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     private unsafe void SetFormCornerPreferenceInternal(FormCornerPreference cornerPreference)
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning restore WFO5001
     {
         DWM_WINDOW_CORNER_PREFERENCE dwmCornerPreference = cornerPreference switch
         {
@@ -4357,7 +4357,7 @@ public partial class Form : ContainerControl
         {
             SetFormCornerPreferenceInternal(cornerPreference.Value);
         }
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning restore WFO5001
 
         UpdateLayered();
     }
@@ -4477,7 +4477,7 @@ public partial class Form : ContainerControl
             {
                 PInvoke.SetWindowTheme(HWND, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null);
             }
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning restore WFO5001
 
             BeginInvoke(new MethodInvoker(CallShownEvent));
         }
