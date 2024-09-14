@@ -10,7 +10,7 @@ namespace Windows.Win32.UI.Controls.Dialogs;
 /// <remarks>
 ///  <para>
 ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgw#">
-///    Read more on learn.microsoft.com.
+///    Read more on https://learn.microsoft.com.
 ///   </see>
 ///  </para>
 /// </remarks>
@@ -27,7 +27,7 @@ internal partial struct PRINTDLGW_64
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on https://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -40,7 +40,7 @@ internal partial struct PRINTDLGW_64
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on https://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -72,7 +72,7 @@ internal partial struct PRINTDLGW_64
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on https://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -98,7 +98,7 @@ internal partial struct PRINTDLGW_64
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on https://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -113,7 +113,7 @@ internal partial struct PRINTDLGW_64
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on https://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -137,7 +137,7 @@ internal partial struct PRINTDLGW_64
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on https://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -154,7 +154,7 @@ internal partial struct PRINTDLGW_64
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on https://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -168,7 +168,7 @@ internal partial struct PRINTDLGW_64
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on https://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -178,8 +178,9 @@ internal partial struct PRINTDLGW_64
     ///  <para>
     ///   Type: <b>WORD</b> The maximum value for the page range specified in the <b>From</b> and <b>To</b> page edit controls.
     ///  </para>
-    ///  <para><see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgw#members">
-    ///    Read more on learn.microsoft.com.
+    ///  <para>
+    ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgw#members">
+    ///    Read more on https://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -201,7 +202,7 @@ internal partial struct PRINTDLGW_64
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on https://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -215,7 +216,7 @@ internal partial struct PRINTDLGW_64
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on https://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -232,7 +233,7 @@ internal partial struct PRINTDLGW_64
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on https://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -247,7 +248,7 @@ internal partial struct PRINTDLGW_64
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on https://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -262,7 +263,7 @@ internal partial struct PRINTDLGW_64
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on https://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -276,7 +277,7 @@ internal partial struct PRINTDLGW_64
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on https://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -290,7 +291,7 @@ internal partial struct PRINTDLGW_64
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on https://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -304,7 +305,7 @@ internal partial struct PRINTDLGW_64
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on https://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>
@@ -318,7 +319,7 @@ internal partial struct PRINTDLGW_64
     ///  </para>
     ///  <para>
     ///   <see href="https://learn.microsoft.com/windows/win32/api/commdlg/ns-commdlg-printdlgw#members">
-    ///    Read more on learn.microsoft.com.
+    ///    Read more on https://learn.microsoft.com.
     ///   </see>
     ///  </para>
     /// </summary>

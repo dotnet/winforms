@@ -447,7 +447,7 @@ public class ImageListTests
         stream.Position = 0;
         // cs/dangerous-binary-deserialization, cs/deserialization-unexpected-subtypes
         return (T)formatter.Deserialize(stream); // CodeQL [SM03722, SM02229] : Testing legacy feature. This is a safe use of BinaryFormatter because the data is trusted and the types are controlled and validated.
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
+#pragma warning restore SYSLIB0011
     }
 
     [WinFormsTheory]

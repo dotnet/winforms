@@ -654,7 +654,7 @@ public class TextRendererTests
                 new Size(),
                 TextFormatFlags.ModifyString),
         };
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore CS0618
 
     private class MockDC : IDeviceContext
     {

@@ -91,7 +91,7 @@ public class ToolStripDropDownMenu_ToolStripDropDownMenuAccessibleObjectTests
                 }
             }
         }
-#pragma warning restore CA1851 // Possible multiple enumerations of 'IEnumerable' collection
+#pragma warning restore CA1851
     }
 
     [WinFormsTheory]
@@ -180,7 +180,7 @@ public class ToolStripDropDownMenu_ToolStripDropDownMenuAccessibleObjectTests
                 }
             }
         }
-#pragma warning restore CA1851 // Possible multiple enumerations of 'IEnumerable' collection
+#pragma warning restore CA1851
     }
 
     [WinFormsTheory]

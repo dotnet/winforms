@@ -175,8 +175,8 @@ public class ApplicationTests
         Assert.Equal(SystemColorMode.System, Application.ColorMode);
         Assert.False(SystemColors.UseAlternativeColorSet ^ systemColorMode == SystemColorMode.Dark);
     }
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-#pragma warning restore SYSLIB5002 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning restore WFO5001
+#pragma warning restore SYSLIB5002
 
     [WinFormsFact]
     public void Application_DefaultFont_ReturnsNull_IfNoFontSet()

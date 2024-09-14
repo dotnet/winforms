@@ -173,8 +173,8 @@ public sealed class InputLanguage
     private const string UserProfileRegistryPath = @"Control Panel\International\User Profile";
 
     /// <summary>
-    ///  Returns the <see href="https://learn.microsoft.com/globalization/locale/standard-locale-names">BCP 47 language
-    ///  tag</see> of the current input language.
+    ///  Returns the <see href="https://learn.microsoft.com/globalization/locale/standard-locale-names">
+    ///  BCP 47 language tag</see> of the current input language.
     /// </summary>
     private string LanguageTag
     {
