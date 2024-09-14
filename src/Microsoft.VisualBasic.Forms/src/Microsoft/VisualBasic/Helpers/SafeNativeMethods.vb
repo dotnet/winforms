@@ -16,9 +16,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         Friend Declare Function IsWindowVisible Lib "user32" (hwnd As IntPtr) As <MarshalAs(UnmanagedType.Bool)> Boolean
 
         <PreserveSig()>
-        Friend Declare Function GetWindowThreadProcessId Lib "user32" (
-            hwnd As IntPtr,
-            ByRef lpdwProcessId As Integer) As Integer
+        Friend Declare Function GetWindowThreadProcessId Lib "user32" (hwnd As IntPtr, ByRef lpdwProcessId As Integer) As Integer
 
     End Module
 End Namespace
