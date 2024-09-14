@@ -91,7 +91,10 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' <param name="sourceDirectoryName">The path to the source directory, can be relative or absolute.</param>
         ''' <param name="destinationDirectoryName">The path to the target directory, can be relative or absolute.
         ''' Parent directory will always be created.</param>
-        ''' <param name="overwrite">True to overwrite existing files with the same name. Otherwise False.</param>
+        ''' <param name="overwrite">
+        '''  <see langword="True"/> to overwrite existing files with the same name.
+        '''  Otherwise <see langword="False"/>.
+        ''' </param>
         Public Sub CopyDirectory(sourceDirectoryName As String, destinationDirectoryName As String, overwrite As Boolean)
             FileIO.FileSystem.CopyDirectory(sourceDirectoryName, destinationDirectoryName, overwrite)
         End Sub
@@ -154,7 +157,10 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' <param name="destinationFileName">The path to the destination file, can be relative or absolute.
         '''  Parent directory will always be created.
         ''' </param>
-        ''' <param name="overwrite">True to overwrite existing file with the same name. Otherwise False.</param>
+        ''' <param name="overwrite">
+        '''   <see langword="True"/> to overwrite existing file with the same name.
+        '''   Otherwise <see langword="False"/>.
+        '''  </param>
         Public Sub CopyFile(sourceFileName As String, destinationFileName As String, overwrite As Boolean)
             FileIO.FileSystem.CopyFile(sourceFileName, destinationFileName, overwrite)
         End Sub
@@ -225,7 +231,10 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  send file to Recycle Bin; throwing exception if user cancels.
         ''' </summary>
         ''' <param name="directory">The path to the directory.</param>
-        ''' <param name="showUI">True to shows progress window. Otherwise, False.</param>
+        ''' <param name="showUI">
+        '''  <see langword="True"/> to shows progress window.
+        '''  Otherwise, <see langword="False"/>.
+        ''' </param>
         ''' <param name="recycle">SendToRecycleBin to delete to Recycle Bin. Otherwise DeletePermanently.</param>
         Public Sub DeleteDirectory(directory As String, showUI As UIOption, recycle As RecycleOption)
             FileIO.FileSystem.DeleteDirectory(directory, showUI, recycle)
@@ -291,7 +300,10 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  Determines whether the given path refers to an existing directory on disk.
         ''' </summary>
         ''' <param name="directory">The path to verify.</param>
-        ''' <returns>True if DirectoryPath refers to an existing directory. Otherwise, False.</returns>
+        ''' <returns>
+        '''  <see langword="True"/> if DirectoryPath refers to an existing directory.
+        '''  Otherwise, <see langword="False"/>.
+        ''' </returns>
         Public Function DirectoryExists(directory As String) As Boolean
             Return FileIO.FileSystem.DirectoryExists(directory)
         End Function
@@ -300,7 +312,10 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  Determines whether the given path refers to an existing file on disk.
         ''' </summary>
         ''' <param name="file">The path to verify.</param>
-        ''' <returns>True if FilePath refers to an existing file on disk. Otherwise, False.</returns>
+        ''' <returns>
+        '''  <see langword="True"/> if FilePath refers to an existing file on disk.
+        '''  Otherwise, <see langword="False"/>.
+        ''' </returns>
         Public Function FileExists(file As String) As Boolean
             Return FileIO.FileSystem.FileExists(file)
         End Function
@@ -310,7 +325,10 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' </summary>
         ''' <param name="directory">The folder path to start from.</param>
         ''' <param name="containsText">The text to be found in file.</param>
-        ''' <param name="ignoreCase">True to ignore case. Otherwise, False.</param>
+        ''' <param name="ignoreCase">
+        '''   <see langword="True"/> to ignore case.
+        '''   Otherwise, <see langword="False"/>.
+        '''  </param>
         ''' <param name="searchType">SearchAllSubDirectories to find recursively. Otherwise, SearchTopLevelOnly.</param>
         ''' <returns>A string array containing the files that match the search condition.</returns>
         Public Function FindInFiles(
@@ -327,7 +345,10 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' </summary>
         ''' <param name="directory">The folder path to start from.</param>
         ''' <param name="containsText">The text to be found in file.</param>
-        ''' <param name="ignoreCase">True to ignore case. Otherwise, False.</param>
+        ''' <param name="ignoreCase">
+        '''  <see langword="True"/> to ignore case.
+        '''  Otherwise, <see langword="False"/>.
+        ''' </param>
         ''' <param name="searchType">SearchAllSubDirectories to find recursively. Otherwise, SearchTopLevelOnly.</param>
         ''' <param name="fileWildcards">The search patterns to use for the file name ("*.*")</param>
         ''' <returns>A string array containing the files that match the search condition.</returns>
@@ -472,7 +493,12 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' <param name="sourceDirectoryName">The path to the source directory, can be relative or absolute.</param>
         ''' <param name="destinationDirectoryName">
         '''  The path to the target directory, can be relative or absolute.
-        '''  Parent directory will always be created.</param>        ''' <param name="overwrite">True to overwrite existing files with the same name. Otherwise False.</param>
+        '''  Parent directory will always be created.
+        ''' </param>
+        ''' <param name="overwrite">
+        '''  <see langword="True"/> to overwrite existing files with the same name.
+        '''  Otherwise <see langword="False"/>.
+        ''' </param>
         Public Sub MoveDirectory(sourceDirectoryName As String, destinationDirectoryName As String, overwrite As Boolean)
             FileIO.FileSystem.MoveDirectory(sourceDirectoryName, destinationDirectoryName, overwrite)
         End Sub
@@ -529,7 +555,11 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  The path to the destination file, can be relative or absolute.
         '''  Parent directory will always be created.
         ''' </param>
-        ''' <param name="overwrite">True to overwrite existing file with the same name. Otherwise False.</param>
+        ''' <param name="overwrite">
+        '''  <see langword="True"/>
+        '''   to overwrite existing file with the same name.
+        '''   Otherwise <see langword="False"/>.
+        ''' </param>
         Public Sub MoveFile(sourceFileName As String, destinationFileName As String, overwrite As Boolean)
             FileIO.FileSystem.MoveFile(sourceFileName, destinationFileName, overwrite)
         End Sub
@@ -628,7 +658,8 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' </summary>
         ''' <param name="file">The file to write to.</param>
         ''' <param name="Append">
-        '''  True to append to the content of the file. False to overwrite the content of the file.
+        '''  <see langword="True"/> to append to the content of the file.
+        '''  <see langword="False"/> to overwrite the content of the file.
         ''' </param>
         ''' <returns>An instance of StreamWriter opened on the file (with FileShare.Read).</returns>
         Public Function OpenTextFileWriter(file As String, append As Boolean) As IO.StreamWriter
