@@ -20,7 +20,7 @@ internal sealed class FormatterConverterStub : IFormatterConverter
     private FormatterConverterStub() { }
 
     public static IFormatterConverter Instance { get; } = new FormatterConverterStub();
-#pragma warning restore SYSLIB0050 // Type or member is obsolete
+#pragma warning restore SYSLIB0050
 
     public object Convert(object value, Type type) => default!;
     public object Convert(object value, TypeCode typeCode) => default!;

@@ -484,7 +484,7 @@ public sealed class FolderBrowserDialog : CommonDialog
     /// </summary>
 #pragma warning disable CS3016 // Arrays as attribute arguments is not CLS-compliant
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
-#pragma warning restore CS3016 // Arrays as attribute arguments is not CLS-compliant
+#pragma warning restore CS3016
     private static unsafe int FolderBrowserDialog_BrowseCallbackProc(HWND hwnd, uint msg, LPARAM lParam, LPARAM lpData)
     {
         switch (msg)

@@ -120,7 +120,7 @@ public class OwnerDrawPropertyBagTests
         stream.Position = 0;
         // cs/dangerous-binary-deserialization
         OwnerDrawPropertyBag bag = Assert.IsType<OwnerDrawPropertyBag>(formatter.Deserialize(stream)); // CodeQL[SM03722] : Testing legacy feature. This is a safe use of BinaryFormatter because the data is trusted and the types are controlled and validated.
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
+#pragma warning restore SYSLIB0011
         Assert.Equal(Color.Blue, bag.BackColor);
         Assert.Equal(SystemFonts.MenuFont.Name, bag.Font.Name);
         Assert.Equal(Color.Red, bag.ForeColor);

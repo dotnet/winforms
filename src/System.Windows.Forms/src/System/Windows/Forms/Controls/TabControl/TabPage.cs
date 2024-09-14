@@ -37,7 +37,7 @@ public partial class TabPage : Panel
         SetStyle(ControlStyles.CacheText, true);
 #pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning restore WFO5001
         Text = null;
     }
 
@@ -112,7 +112,7 @@ public partial class TabPage : Panel
             {
                 return Color.Transparent;
             }
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning restore WFO5001
 
             return color;
         }
@@ -606,7 +606,7 @@ public partial class TabPage : Panel
             Color bkColor = (UseVisualStyleBackColor && !Application.IsDarkModeEnabled)
                 ? Color.Transparent
                 : BackColor;
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning restore WFO5001
 
             Rectangle inflateRect = LayoutUtils.InflateRect(DisplayRectangle, Padding);
 

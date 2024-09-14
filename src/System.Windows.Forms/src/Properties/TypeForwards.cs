@@ -23,4 +23,4 @@ using System.Runtime.CompilerServices;
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.VisualStyles.TextMetricsPitchAndFamilyValues))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.VisualStyles.ThemeSizeType))]
 
-#pragma warning restore RS0016 // Add public types and members to the declared API
+#pragma warning restore RS0016

@@ -172,7 +172,7 @@ public partial class TreeView : Control
         SetStyle(ControlStyles.UseTextForAccessibility, false);
 #pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         SetStyle(ControlStyles.ApplyThemingImplicitly, true);
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning restore WFO5001
     }
 
     internal override void ReleaseUiaProvider(HWND handle)
@@ -1893,7 +1893,7 @@ public partial class TreeView : Control
         {
             PInvoke.SendMessage(this, PInvoke.TVM_SETTEXTCOLOR, 0, c.ToWin32());
         }
-#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+#pragma warning restore WFO5001
 
         // Put the LineColor into the native control only if set.
         if (_lineColor != Color.Empty)

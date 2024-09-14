@@ -168,8 +168,6 @@ public partial class RichTextBox
             }
             else
             {
-                _owner.OnDragDrop(e);
-
                 if (e.DropImageType > DropImageType.Invalid)
                 {
                     ClearDropDescription();
@@ -177,6 +175,7 @@ public partial class RichTextBox
                     DragDropHelper.DragLeave();
                 }
 
+                _owner.OnDragDrop(e);
                 _lastDataObject = null;
             }
 

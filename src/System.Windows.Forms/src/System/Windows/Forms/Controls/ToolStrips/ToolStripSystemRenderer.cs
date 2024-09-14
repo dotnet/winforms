@@ -576,6 +576,17 @@ public class ToolStripSystemRenderer : ToolStripRenderer
             {
                 DrawArrow(new ToolStripArrowRenderEventArgs(g, splitButton, splitButton.DropDownButtonBounds, arrowColor, ArrowDirection.Down));
             }
+
+            ToolBarState state = GetToolBarState(e.Item);
+            if (e.Item is ToolStripSplitButton item && !SystemInformation.HighContrast &&
+                (state == ToolBarState.Hot || state == ToolBarState.Pressed || state == ToolBarState.Checked))
+            {
+                var clientBounds = item.ClientBounds;
+                bounds.Height -= 1;
+                ControlPaint.DrawBorderSimple(g, clientBounds, SystemColors.Highlight);
+                using var brush = SystemColors.Highlight.GetCachedSolidBrushScope();
+                g.FillRectangle(brush, item.SplitterBounds);
+            }
         }
         else
         {
