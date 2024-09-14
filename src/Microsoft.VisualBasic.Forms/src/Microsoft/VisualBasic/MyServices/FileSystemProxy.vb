@@ -26,7 +26,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Sub
 
         ''' <summary>
-        ''' Get or set the current working directory.
+        '''  Get or set the current working directory.
         ''' </summary>
         ''' <value>A String containing the path to the directory.</value>
         Public Property CurrentDirectory() As String
@@ -49,9 +49,11 @@ Namespace Microsoft.VisualBasic.MyServices
         End Property
 
         ''' <summary>
-        '''
+        '''  Returns an instance of <see cref="SpecialDirectoriesProxy"/>
+        '''  specific to the current user (My Documents, My Music ...) and those specific
+        '''  to the current Application that a developer expects to be able to find quickly.
         ''' </summary>
-        ''' <values></values>
+        ''' <value>a cached instance of SpecialDirectoriesProxy</value>
         Public ReadOnly Property SpecialDirectories() As SpecialDirectoriesProxy
             Get
                 If _specialDirectoriesProxy Is Nothing Then
@@ -176,12 +178,12 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' <summary>
         '''  Copy an existing file to a new file,
         '''  displaying progress dialog and confirmation dialogs if specified,
-        ''' will throw exception if user cancels the operation if specified.
+        '''  will throw exception if user cancels the operation if specified.
         ''' </summary>
         ''' <param name="sourceFileName">The path to the source file, can be relative or absolute.</param>
         ''' <param name="destinationFileName">
         '''  The path to the destination file, can be relative or absolute. Parent directory will always be created.
-        '''  </param>
+        ''' </param>
         ''' <param name="showUI">
         '''  ShowDialogs to display progress and confirmation dialogs. Otherwise HideDialogs.
         ''' </param>
@@ -276,7 +278,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Sub
 
         ''' <summary>
-        ''' Delete the given file, with options to show progress UI, delete to recycle bin.
+        '''  Delete the given file, with options to show progress UI, delete to recycle bin.
         ''' </summary>
         ''' <param name="file">The path to the file.</param>
         ''' <param name="showUI">ShowDialogs to display progress and confirmation dialogs. Otherwise HideDialogs.</param>
@@ -508,7 +510,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Sub
 
         ''' <summary>
-        ''' Move an existing file to a new file. Overwriting a file of the same name is not allowed.
+        '''  Move an existing file to a new file. Overwriting a file of the same name is not allowed.
         ''' </summary>
         ''' <param name="sourceFileName">The path to the source file, can be relative or absolute.</param>
         ''' <param name="destinationFileName">
@@ -548,9 +550,9 @@ Namespace Microsoft.VisualBasic.MyServices
         End Sub
 
         ''' <summary>
-        ''' Move an existing file to a new file,
-        ''' displaying progress dialog and confirmation dialogs if specified,
-        ''' will throw exception if user cancels the operation if specified.
+        '''  Move an existing file to a new file,
+        '''  displaying progress dialog and confirmation dialogs if specified,
+        '''  will throw exception if user cancels the operation if specified.
         ''' </summary>
         ''' <param name="sourceFileName">The path to the source file, can be relative or absolute.</param>
         ''' <param name="destinationFileName">
