@@ -60,7 +60,7 @@ namespace SourceGenerated
                 {
                     return true;
                 }
-#pragma warning restore SA1513 // Closing brace should be followed by blank line
+#pragma warning restore SA1513
 
                 return false;
             },

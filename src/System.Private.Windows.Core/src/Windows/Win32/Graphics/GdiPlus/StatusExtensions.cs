@@ -75,5 +75,5 @@ internal static class StatusExtensions
 
         return new ExternalException($"{SR.GdiplusUnknown} [{status}]", (int)HRESULT.E_UNEXPECTED);
     }
-#pragma warning restore CA2201 // Do not raise reserved exception types
+#pragma warning restore CA2201
 }

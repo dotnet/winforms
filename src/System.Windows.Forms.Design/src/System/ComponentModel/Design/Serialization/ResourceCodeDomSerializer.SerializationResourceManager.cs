@@ -523,7 +523,7 @@ internal partial class ResourceCodeDomSerializer
                 Debug.Fail($"Cannot save a non-serializable value into resources.  Add serializable to {(value is null ? "(null)" : value.GetType().Name)}");
                 return;
             }
-#pragma warning restore SYSLIB0050 // Type or member is obsolete
+#pragma warning restore SYSLIB0050
 
             // If we are currently the invariant culture then we may be able to write directly.
             if (ReadCulture.Equals(CultureInfo.InvariantCulture))
@@ -608,7 +608,7 @@ internal partial class ResourceCodeDomSerializer
                 Debug.Fail($"Cannot save a non-serializable value into resources.  Add serializable to {(value is null ? "(null)" : value.GetType().Name)}");
                 return;
             }
-#pragma warning restore SYSLIB0050 // Type or member is obsolete
+#pragma warning restore SYSLIB0050
 
             if (forceInvariant)
             {

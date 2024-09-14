@@ -52,7 +52,7 @@ internal partial class OleDragDropHandler
                         _serializationStream = new MemoryStream();
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
                         new BinaryFormatter().Serialize(_serializationStream, sd);
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
+#pragma warning restore SYSLIB0011
                         _serializationStream.Seek(0, SeekOrigin.Begin);
                     }
                 }

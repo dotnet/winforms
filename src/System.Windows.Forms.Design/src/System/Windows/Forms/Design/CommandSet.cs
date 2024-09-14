@@ -1409,7 +1409,7 @@ internal partial class CommandSet : IDisposable
                 using MemoryStream stream = new();
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
                 new BinaryFormatter().Serialize(stream, serializationData);
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
+#pragma warning restore SYSLIB0011
                 stream.Seek(0, SeekOrigin.Begin);
                 byte[] bytes = stream.GetBuffer();
                 IDataObject dataObj = new DataObject(CF_DESIGNER, bytes);
@@ -1454,7 +1454,7 @@ internal partial class CommandSet : IDisposable
                 using MemoryStream stream = new();
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
                 new BinaryFormatter().Serialize(stream, serializationData);
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
+#pragma warning restore SYSLIB0011
                 stream.Seek(0, SeekOrigin.Begin);
                 byte[] bytes = stream.GetBuffer();
                 IDataObject dataObj = new DataObject(CF_DESIGNER, bytes);

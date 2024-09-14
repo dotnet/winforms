@@ -363,7 +363,7 @@ public class CollectionFormTests : CollectionEditor
             .Setup(c => c.OnComponentChanging())
             .Returns(() => throw new StackOverflowException())
             .Verifiable();
-#pragma warning restore CA2201 // Do not raise reserved exception types
+#pragma warning restore CA2201
         mockContext
             .Setup(c => c.OnComponentChanged())
             .Verifiable();

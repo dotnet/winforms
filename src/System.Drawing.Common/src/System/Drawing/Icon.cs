@@ -20,7 +20,7 @@ public sealed unsafe partial class Icon : MarshalByRefObject, ICloneable, IDispo
 {
     private static int s_bitDepth;
 
-    // The PNG signature is specified at http://www.w3.org/TR/PNG/#5PNG-file-signature
+    // The PNG signature is specified at https://www.w3.org/TR/PNG/#5PNG-file-signature
     private const int PNGSignature1 = 137 + ('P' << 8) + ('N' << 16) + ('G' << 24);
     private const int PNGSignature2 = 13 + (10 << 8) + (26 << 16) + (10 << 24);
 

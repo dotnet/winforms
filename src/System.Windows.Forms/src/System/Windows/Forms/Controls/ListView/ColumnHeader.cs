@@ -16,7 +16,7 @@ namespace System.Windows.Forms;
 [TypeConverter(typeof(ColumnHeaderConverter))]
 public partial class ColumnHeader : Component, ICloneable
 {
-    // disable csharp compiler warning #0414: field assigned unused value
+    // disable C# compiler warning #0414: field assigned unused value
 #pragma warning disable 0414
     internal int _index = -1;
 #pragma warning restore 0414

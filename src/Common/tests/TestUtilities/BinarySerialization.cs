@@ -110,5 +110,5 @@ public static class BinarySerialization
             return stream.ToArray();
         }
     }
-#pragma warning restore SYSLIB0050 // Type or member is obsolete
+#pragma warning restore SYSLIB0050
 }

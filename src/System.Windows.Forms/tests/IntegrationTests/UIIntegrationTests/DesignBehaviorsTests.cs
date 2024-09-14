@@ -326,5 +326,5 @@ public class DesignBehaviorsTests : ControlTestBase
         }
     }
 }
-#pragma warning restore CS8603 // Possible null reference return.
+#pragma warning restore CS8603
 

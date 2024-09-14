@@ -1926,7 +1926,7 @@ public abstract partial class CodeDomSerializerBase
                 return expression;
             }
         }
-#pragma warning restore SYSLIB0050 // Type or member is obsolete
+#pragma warning restore SYSLIB0050
 
         // No instance descriptor. See if we can get to a public constructor that takes no arguments
         ConstructorInfo? ctor = GetReflectionTypeHelper(manager, value).GetConstructor([]);
@@ -2576,7 +2576,7 @@ public abstract partial class CodeDomSerializerBase
                 }
             }
         }
-#pragma warning restore SYSLIB0050 // Type or member is obsolete
+#pragma warning restore SYSLIB0050
 
         return result;
     }
