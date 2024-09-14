@@ -20,18 +20,30 @@ public class ToolStripPanel_ToolStripPanelRowCollectionTests : IDisposable
 
     public void Dispose() => _toolStripPanel.Dispose();
 
+    private void DisposeRows(ToolStripPanelRow[]? rows)
+    {
+        if (rows is null)
+            return;
+
+        int length = rows.Length;
+        for (int i = 0; i < length; i++)
+        {
+            rows[i]?.Dispose();
+            rows[i] = null!;
+        }
+    }
+
     [WinFormsFact]
     public void ToolStripPanelRowCollection_ConstructorWithOwner_SetsOwner()
     {
-        ToolStripPanelRowCollection toolStripPanelRowCollection = new(_toolStripPanel);
-        ToolStripPanel toolStripPanel = toolStripPanelRowCollection.TestAccessor().Dynamic._owner;
+        using ToolStripPanel toolStripPanel = _toolStripPanelRowCollection.TestAccessor().Dynamic._owner;
         toolStripPanel.Should().BeSameAs(_toolStripPanel);
     }
 
     [WinFormsFact]
     public void ToolStripPanelRowCollection_ConstructorWithOwnerAndRows_SetsOwnerAndAddsRows()
     {
-        ToolStripPanelRow toolStripPanelRow1 = new(_toolStripPanel);
+        using ToolStripPanelRow toolStripPanelRow1 = new(_toolStripPanel);
         ToolStripPanelRow[] toolStripPanelRowArray = { toolStripPanelRow1 };
         ToolStripPanelRowCollection toolStripPanelRowCollection = new(_toolStripPanel, toolStripPanelRowArray);
         ToolStripPanel toolStripPanel = toolStripPanelRowCollection.TestAccessor().Dynamic._owner;
@@ -45,18 +57,33 @@ public class ToolStripPanel_ToolStripPanelRowCollectionTests : IDisposable
     {
         var rows = AddRowsToCollection(collection: _toolStripPanelRowCollection, panel: _toolStripPanel, count: 2);
 
-        _toolStripPanelRowCollection.Count.Should().Be(2);
-        _toolStripPanelRowCollection[0].Should().Be(rows[0]);
-        _toolStripPanelRowCollection[1].Should().Be(rows[1]);
+        try
+        {
+            _toolStripPanelRowCollection.Count.Should().Be(2);
+            _toolStripPanelRowCollection[0].Should().Be(rows[0]);
+            _toolStripPanelRowCollection[1].Should().Be(rows[1]);
+        }
+        finally
+        {
+            DisposeRows(rows);
+        }
     }
 
     [WinFormsFact]
     public void ToolStripPanelRowCollection_Add_AddsRow()
     {
-        var row = AddRowToCollection(collection: _toolStripPanelRowCollection, panel: _toolStripPanel);
+        ToolStripPanelRow row = AddRowToCollection(collection: _toolStripPanelRowCollection, panel: _toolStripPanel);
+        ToolStripPanelRow[] rows = { row };
 
-        _toolStripPanelRowCollection.Count.Should().Be(1);
-        _toolStripPanelRowCollection[0].Should().Be(row);
+        try
+        {
+            _toolStripPanelRowCollection.Count.Should().Be(1);
+            _toolStripPanelRowCollection[0].Should().Be(row);
+        }
+        finally
+        {
+            DisposeRows(rows);
+        }
     }
 
     [WinFormsFact]
@@ -82,11 +109,18 @@ public class ToolStripPanel_ToolStripPanelRowCollectionTests : IDisposable
     {
         var rows = AddRowsToCollection(collection: _toolStripPanelRowCollection, panel: _toolStripPanel, count: 2);
 
-        _toolStripPanelRowCollection.AddRange(new ToolStripPanelRowCollection(_toolStripPanel) { rows[0], rows[1] });
+        try
+        {
+            _toolStripPanelRowCollection.AddRange(new ToolStripPanelRowCollection(_toolStripPanel) { rows[0], rows[1] });
 
-        _toolStripPanelRowCollection.Count.Should().Be(4);
-        _toolStripPanelRowCollection[2].Should().Be(rows[0]);
-        _toolStripPanelRowCollection[3].Should().Be(rows[1]);
+            _toolStripPanelRowCollection.Count.Should().Be(4);
+            _toolStripPanelRowCollection[2].Should().Be(rows[0]);
+            _toolStripPanelRowCollection[3].Should().Be(rows[1]);
+        }
+        finally
+        {
+            DisposeRows(rows);
+        }
     }
 
     [WinFormsFact]
@@ -101,13 +135,20 @@ public class ToolStripPanel_ToolStripPanelRowCollectionTests : IDisposable
     [WinFormsFact]
     public void ToolStripPanelRowCollection_Clear_RemovesAllRows()
     {
-        AddRowsToCollection(collection: _toolStripPanelRowCollection, panel: _toolStripPanel, count: 2);
+        var rows = AddRowsToCollection(collection: _toolStripPanelRowCollection, panel: _toolStripPanel, count: 2);
 
-        _toolStripPanelRowCollection.Count.Should().Be(2);
+        try
+        {
+            _toolStripPanelRowCollection.Count.Should().Be(2);
 
-        _toolStripPanelRowCollection.Clear();
+            _toolStripPanelRowCollection.Clear();
 
-        _toolStripPanelRowCollection.Count.Should().Be(0);
+            _toolStripPanelRowCollection.Count.Should().Be(0);
+        }
+        finally
+        {
+            DisposeRows(rows);
+        }
     }
 
     [WinFormsFact]
@@ -122,10 +163,18 @@ public class ToolStripPanel_ToolStripPanelRowCollectionTests : IDisposable
     public void ToolStripPanelRowCollection_Remove_RemovesRow()
     {
         var row = AddRowToCollection(collection: _toolStripPanelRowCollection, panel: _toolStripPanel);
+        ToolStripPanelRow[] rows = { row };
 
-        _toolStripPanelRowCollection.Remove(row);
+        try
+        {
+            _toolStripPanelRowCollection.Remove(row);
 
-        _toolStripPanelRowCollection.Count.Should().Be(0);
+            _toolStripPanelRowCollection.Count.Should().Be(0);
+        }
+        finally
+        {
+            DisposeRows(rows);
+        }
     }
 
     [WinFormsFact]
@@ -133,34 +182,58 @@ public class ToolStripPanel_ToolStripPanelRowCollectionTests : IDisposable
     {
         var row1 = AddRowToCollection(collection: _toolStripPanelRowCollection, panel: _toolStripPanel);
         ToolStripPanelRow row2 = new(_toolStripPanel);
+        ToolStripPanelRow[] rows = { row1, row2 };
 
-        _toolStripPanelRowCollection.Remove(row2);
+        try
+        {
+            _toolStripPanelRowCollection.Remove(row2);
 
-        _toolStripPanelRowCollection.Count.Should().Be(1);
-        _toolStripPanelRowCollection[0].Should().Be(row1);
+            _toolStripPanelRowCollection.Count.Should().Be(1);
+            _toolStripPanelRowCollection[0].Should().Be(row1);
+        }
+        finally
+        {
+            DisposeRows(rows);
+        }
     }
 
     [WinFormsFact]
     public void ToolStripPanelRowCollection_RemoveAt_RemovesRowAtIndex()
     {
-        AddRowToCollection(collection: _toolStripPanelRowCollection, panel: _toolStripPanel);
+        var row1 = AddRowToCollection(collection: _toolStripPanelRowCollection, panel: _toolStripPanel);
         var row2 = AddRowToCollection(collection: _toolStripPanelRowCollection, panel: _toolStripPanel);
+        ToolStripPanelRow[] rows = { row1, row2 };
 
-        _toolStripPanelRowCollection.RemoveAt(0);
+        try
+        {
+            _toolStripPanelRowCollection.RemoveAt(0);
 
-        _toolStripPanelRowCollection.Count.Should().Be(1);
-        _toolStripPanelRowCollection[0].Should().Be(row2);
+            _toolStripPanelRowCollection.Count.Should().Be(1);
+            _toolStripPanelRowCollection[0].Should().Be(row2);
+        }
+        finally
+        {
+            DisposeRows(rows);
+        }
     }
 
     [WinFormsFact]
     public void ToolStripPanelRowCollection_RemoveAt_IndexOutOfRange_ThrowsArgumentOutOfRangeException()
     {
         var row = AddRowToCollection(collection: _toolStripPanelRowCollection, panel: _toolStripPanel);
+        ToolStripPanelRow[] rows = { row };
 
-        Action action = () => _toolStripPanelRowCollection.RemoveAt(1);
+        try
+        {
+            Action action = () => _toolStripPanelRowCollection.RemoveAt(1);
 
-        action.Should().Throw<ArgumentOutOfRangeException>()
-            .WithMessage("Index was out of range. Must be non-negative and less than the size of the collection. (Parameter 'index')");
+            action.Should().Throw<ArgumentOutOfRangeException>()
+                .WithMessage("Index was out of range. Must be non-negative and less than the size of the collection. (Parameter 'index')");
+        }
+        finally
+        {
+            DisposeRows(rows);
+        }
     }
 
     [WinFormsFact]
@@ -178,10 +251,17 @@ public class ToolStripPanel_ToolStripPanelRowCollectionTests : IDisposable
         var rows = AddRowsToCollection(collection: _toolStripPanelRowCollection, panel: _toolStripPanel, count: 2);
         var array = new ToolStripPanelRow[2];
 
-        _toolStripPanelRowCollection.CopyTo(array: array, index: 0);
+        try
+        {
+            _toolStripPanelRowCollection.CopyTo(array: array, index: 0);
 
-        array[0].Should().Be(rows[0]);
-        array[1].Should().Be(rows[1]);
+            array[0].Should().Be(rows[0]);
+            array[1].Should().Be(rows[1]);
+        }
+        finally
+        {
+            DisposeRows(rows);
+        }
     }
 
     [WinFormsFact]
@@ -197,12 +277,20 @@ public class ToolStripPanel_ToolStripPanelRowCollectionTests : IDisposable
     public void ToolStripPanelRowCollection_CopyTo_IndexOutOfRange_ThrowsArgumentException()
     {
         var row = AddRowToCollection(collection: _toolStripPanelRowCollection, panel: _toolStripPanel);
+        ToolStripPanelRow[] rows = { row };
         var array = new ToolStripPanelRow[1];
 
-        Action action = () => _toolStripPanelRowCollection.CopyTo(array: array, index: 1);
+        try
+        {
+            Action action = () => _toolStripPanelRowCollection.CopyTo(array: array, index: 1);
 
-        action.Should().Throw<ArgumentException>()
-            .WithMessage("Destination array was not long enough. Check the destination index, length, and the array's lower bounds. (Parameter 'destinationArray')");
+            action.Should().Throw<ArgumentException>()
+                .WithMessage("Destination array was not long enough. Check the destination index, length, and the array's lower bounds. (Parameter 'destinationArray')");
+        }
+        finally
+        {
+            DisposeRows(rows);
+        }
     }
 
     [WinFormsFact]
@@ -211,10 +299,17 @@ public class ToolStripPanel_ToolStripPanelRowCollectionTests : IDisposable
         var rows = AddRowsToCollection(collection: _toolStripPanelRowCollection, panel: _toolStripPanel, count: 2);
         var array = new ToolStripPanelRow[1];
 
-        Action action = () => _toolStripPanelRowCollection.CopyTo(array: array, index: 0);
+        try
+        {
+            Action action = () => _toolStripPanelRowCollection.CopyTo(array: array, index: 0);
 
-        action.Should().Throw<ArgumentException>()
-            .WithMessage("Destination array was not long enough. Check the destination index, length, and the array's lower bounds. (Parameter 'destinationArray')");
+            action.Should().Throw<ArgumentException>()
+                .WithMessage("Destination array was not long enough. Check the destination index, length, and the array's lower bounds. (Parameter 'destinationArray')");
+        }
+        finally
+        {
+            DisposeRows(rows);
+        }
     }
 
     private ToolStripPanelRow AddRowToCollection(ToolStripPanelRowCollection collection, ToolStripPanel panel)
