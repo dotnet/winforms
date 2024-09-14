@@ -548,7 +548,7 @@ public sealed partial class CodeDomComponentSerializationService
 
                                             resources[prop.Name] = prop.GetValue(data._value);
                                         }
-#pragma warning restore SYSLIB0050 // Type or member is obsolete
+#pragma warning restore SYSLIB0050
                                     }
                                     else
                                     {

@@ -3075,7 +3075,7 @@ public class ListControlTests
         {
 #pragma warning disable CA2201 // Do not raise reserved exception types
             throw new StackOverflowException();
-#pragma warning restore CA2201 // Do not raise reserved exception types
+#pragma warning restore CA2201
         }
     }
 }

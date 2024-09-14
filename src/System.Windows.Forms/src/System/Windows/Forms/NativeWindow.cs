@@ -599,7 +599,7 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
     /// </summary>
 #pragma warning disable SYSLIB0004 // Type or member is obsolete
     [PrePrepareMethod]
-#pragma warning restore SYSLIB0004 // Type or member is obsolete
+#pragma warning restore SYSLIB0004
     private static void OnShutdown(object? sender, EventArgs e)
     {
         // If we still have windows allocated, we must sling them to userDefWindowProc

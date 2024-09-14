@@ -67,7 +67,7 @@ internal class LocalizationCodeDomSerializer : CodeDomSerializer
         ExpressionContext? tree = (ExpressionContext?)manager.Context[typeof(ExpressionContext)];
 #pragma warning disable SYSLIB0050 // Type or member is obsolete
         bool isSerializable = value is null || GetReflectionTypeHelper(manager, value).IsSerializable;
-#pragma warning restore SYSLIB0050 // Type or member is obsolete
+#pragma warning restore SYSLIB0050
 
         // If value is not serializable, we have no option but to call the original serializer,
         // since we cannot push this into resources.

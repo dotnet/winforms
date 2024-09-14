@@ -4,4 +4,4 @@
 global using Xunit;
 #pragma warning disable IDE0005 // Using directive is unnecessary.
 global using FluentAssertions;
-#pragma warning restore IDE0005 // Using directive is unnecessary.
+#pragma warning restore IDE0005
