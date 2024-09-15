@@ -50,7 +50,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         '''  Gets the object representing the file system of the computer.
         ''' </summary>
-        ''' <value>A System.IO.FileSystem object.</value>
+        ''' <value>A <see cref="FileSystemProxy"/> object.</value>
         ''' <remarks>
         '''  The instance returned by this property is lazy initialized and cached.
         ''' </remarks>
@@ -83,7 +83,7 @@ Namespace Microsoft.VisualBasic.Devices
         '''  This property wraps the <see cref="Environment.MachineName"/> property
         '''  in the .NET framework to return the name of the computer.
         ''' </summary>
-        ''' <value>A string containing the name of the computer.</value>
+        ''' <value>A <see langword="String"/> containing the name of the computer.</value>
         Public ReadOnly Property Name() As String
             Get
                 Return Environment.MachineName
@@ -94,7 +94,7 @@ Namespace Microsoft.VisualBasic.Devices
         '''  This property returns the Network object containing information about
         '''  the network the machine is part of.
         ''' </summary>
-        ''' <value>An instance of the Network.Network class.</value>
+        ''' <value>An instance of the <see cref="Devices.Network"/> class.</value>
         Public ReadOnly Property Network() As Network
             Get
                 If _network IsNot Nothing Then Return _network
@@ -107,7 +107,7 @@ Namespace Microsoft.VisualBasic.Devices
         '''  Gets the Registry object, which can be used to read, set and
         '''  enumerate keys and values in the system registry.
         ''' </summary>
-        ''' <value>An instance of the RegistryProxy object</value>
+        ''' <value>An instance of the <see cref="RegistryProxy"/> object</value>
         Public ReadOnly Property Registry() As RegistryProxy
             Get
                 If _registryInstance IsNot Nothing Then Return _registryInstance

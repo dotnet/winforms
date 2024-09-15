@@ -51,7 +51,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         '''  Gets the name of the file containing the manifest (usually the .exe file).
         ''' </summary>
-        ''' <value>A String containing the file name.</value>
+        ''' <value>A <see langword="String"/> containing the file name.</value>
         Public ReadOnly Property AssemblyName() As String
             Get
                 Return _assembly.GetName.Name
@@ -192,7 +192,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  Returns the current stack trace information.
         ''' </summary>
         ''' <value>
-        '''  String containing stack trace information. Value can be <see cref="String.Empty"/>.
+        '''  <see langword="String"/> containing stack trace information. Value can be <see cref="String.Empty"/>.
         ''' </value>
         ''' <exception cref="ArgumentOutOfRangeException">
         '''  Thrown if the requested stack trace information is out of range.

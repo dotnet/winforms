@@ -32,8 +32,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Public Property BringToForeground() As Boolean
 
         ''' <summary>
-        '''  Returns the command line sent to this application
+        '''  Returns the command line sent to this application"/>
         ''' </summary>
+        ''' <value>A <see cref="ReadOnlyCollection(Of String)"/></value>
         ''' <remarks>
         '''  I'm using Me.CommandLine so that it is consistent with my.net and to assure they
         '''  always return the same values

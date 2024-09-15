@@ -63,7 +63,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         '''  Used to set or get the semaphore which signals when the dialog
         '''  is in a closable state.
         ''' </summary>
-        ''' <value>The ManualResetEvent.</value>
+        ''' <value>The <see cref="ManualResetEvent"/>.</value>
         Public ReadOnly Property FormClosableSemaphore() As ManualResetEvent
             Get
                 Return _formClosableSemaphore
@@ -73,7 +73,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' <summary>
         '''  Sets the text of the label (usually something like Copying x to y).
         ''' </summary>
-        ''' <value>The value to set the label to.</value>
+        ''' <value>A <see langword="string"/> to set the label to.</value>
         ''' <remarks>This should only be called on the main thread before showing the dialog.</remarks>
         Public Property LabelText() As String
             Get

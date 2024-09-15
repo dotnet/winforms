@@ -107,7 +107,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <summary>
         '''  Gets the stream to use for writing to the log.
         ''' </summary>
-        ''' <value>The stream.</value>
+        ''' <value>The <see cref="ReferencedStream"/>.</value>
         Private ReadOnly Property ListenerStream() As ReferencedStream
             Get
                 EnsureStreamIsOpen()
@@ -120,7 +120,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <summary>
         '''  Gets the log file name under the current configuration.
         ''' </summary>
-        ''' <value>The log file name.</value>
+        ''' <value><see langword="String"/> containing lhe log file name.</value>
         ''' <remarks>
         '''  Includes the full path and the DateStamp, but does not include the
         '''  file number or the extension.
@@ -173,7 +173,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <summary>
         '''  The full name and path of the actual log file including DateStamp and file number.
         ''' </summary>
-        ''' <value>The full name and path.</value>
+        ''' <value>A <see langword="String"/> containing the full name and path.</value>
         ''' <remarks>Calling this method will open the log file if it's not already open.</remarks>
         Public ReadOnly Property FullLogFileName() As String
             Get
@@ -191,7 +191,10 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <summary>
         '''  Indicates whether or not the file should be appended to or overwritten.
         ''' </summary>
-        ''' <value><see langword="True"/> if the file should be appended to, otherwise <see langword="False"/>.</value>
+        ''' <value>
+        '''  <see langword="True"/> if the file should be appended to,
+        '''  otherwise <see langword="False"/>.
+        ''' </value>
         Public Property Append() As Boolean
             Get
                 If Not _propertiesSet(APPEND_INDEX) Then
@@ -333,10 +336,12 @@ Namespace Microsoft.VisualBasic.Logging
         End Property
 
         ''' <summary>
-        '''  Indicates what to do when the size of the log trespasses on the MaxFileSize
-        '''  or the ReserveDiskSpace set by the user.
+        '''  Indicates what to do when the size of the log trespasses on the <see cref="MaxFileSize"/>
+        '''  or the <see cref="ReserveDiskSpace"/> set by the user.
         ''' </summary>
-        ''' <value>An enum indicating the desired behavior (do nothing, throw).</value>
+        ''' <value>
+        '''  An <see cref="DiskSpaceExhaustedOption"/> enum indicating the desired behavior (do nothing, throw).
+        ''' </value>
         Public Property DiskSpaceExhaustedBehavior() As DiskSpaceExhaustedOption
             Get
                 If Not _propertiesSet(DISKSPACEEXHAUSTEDBEHAVIOR_INDEX) Then
@@ -362,7 +367,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <summary>
         '''  The encoding to try when opening a file.
         ''' </summary>
-        ''' <value>The encoding.</value>
+        ''' <value>The <see cref="Encoding"/>.</value>
         ''' <remarks>
         '''  If Append is true then this value will be trumped by the actual
         '''  encoding value of the file.
@@ -389,7 +394,10 @@ Namespace Microsoft.VisualBasic.Logging
         '''  Indicates whether or not the host name of the logging machine should
         '''  be included in the output.
         ''' </summary>
-        ''' <value><see langword="True"/> if the HostId should be included, otherwise <see langword="False"/>.</value>
+        ''' <value>
+        '''  <see langword="True"/> if the HostId should be included,
+        '''  otherwise <see langword="False"/>.
+        ''' </value>
         Public Property IncludeHostName() As Boolean
             Get
                 If Not _propertiesSet(INCLUDEHOSTNAME_INDEX) Then
@@ -409,7 +417,9 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <summary>
         '''  Indicates the log's directory.
         ''' </summary>
-        ''' <value>An enum which can indicate one of several logical locations for the log.</value>
+        ''' <value>
+        '''  An <see cref="LogFileLocation"/> enum which can indicate one of several logical locations for the log.
+        ''' </value>
         Public Property Location() As LogFileLocation
             Get
                 If Not _propertiesSet(LOCATION_INDEX) Then
@@ -435,7 +445,9 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <summary>
         '''  Indicates what Date to stamp the log file with (none, first day of week, day).
         ''' </summary>
-        ''' <value>An enum indicating how to stamp the file.</value>
+        ''' <value>
+        '''  An <see cref="LogFileCreationScheduleOption"/> enum indicating how to stamp the file.
+        ''' </value>
         Public Property LogFileCreationSchedule() As LogFileCreationScheduleOption
             Get
                 If Not _propertiesSet(LOGFILECREATIONSCHEDULE_INDEX) Then
@@ -465,7 +477,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <summary>
         '''  The maximum size in bytes the log file is allowed to grow to.
         ''' </summary>
-        ''' <value>The maximum size.</value>
+        ''' <value>The maximum size as <see langword="Long"/>.</value>
         Public Property MaxFileSize() As Long
             Get
                 If Not _propertiesSet(MAXFILESIZE_INDEX) Then
@@ -488,7 +500,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <summary>
         '''  The amount of disk space, in bytes, that must be available after a write.
         ''' </summary>
-        ''' <value>The reserved disk space.</value>
+        ''' <value>The reserved disk space as <see langword="Long"/>.</value>
         Public Property ReserveDiskSpace() As Long
             Get
                 If Not _propertiesSet(RESERVEDISKSPACE_INDEX) Then

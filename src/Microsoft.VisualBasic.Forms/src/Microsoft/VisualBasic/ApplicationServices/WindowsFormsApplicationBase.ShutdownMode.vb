@@ -3,7 +3,10 @@
 
 Namespace Microsoft.VisualBasic.ApplicationServices
 
-    ' Any changes to this enum must be reflected in ValidateShutdownModeEnumValue().
+    ''' <summary>
+    ''' Indicates which condition should cause a Windows Forms application to shut down.
+    ''' </summary>
+    ''' <remarks>Any changes to this enum must be reflected in ValidateShutdownModeEnumValue().</remarks>
     Public Enum ShutdownMode
         AfterMainFormCloses
         AfterAllFormsClose

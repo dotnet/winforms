@@ -53,7 +53,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         '''  A thin wrapper for <see cref="System.Windows.Forms.Clipboard"/>.
         ''' </summary>
-        ''' <value>An object representing the <see cref="Computer.Clipboard"/>.</value>
+        ''' <value>An object representing the <see cref="MyServices"/>.Clipboard.</value>
         Public ReadOnly Property Clipboard() As ClipboardProxy
             Get
                 If s_clipboard Is Nothing Then
@@ -65,7 +65,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Property
 
         ''' <summary>
-        '''  This property returns the <see cref="Devices.Keyboard"/> object
+        '''  This property returns the computer keyboard object
         '''  representing some keyboard properties and a send keys method
         ''' </summary>
         ''' <value>An instance of the <see cref="Computer.Keyboard"/> class.</value>

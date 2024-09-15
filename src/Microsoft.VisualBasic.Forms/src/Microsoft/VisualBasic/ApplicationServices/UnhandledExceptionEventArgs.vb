@@ -14,6 +14,11 @@ Namespace Microsoft.VisualBasic.ApplicationServices
     Public Class UnhandledExceptionEventArgs
         Inherits ThreadExceptionEventArgs
 
+        ''' <summary>
+        '''  The unhandled exception object
+        ''' </summary>
+        ''' <param name="exitApplication"></param>
+        ''' <param name="exception"></param>
         Public Sub New(exitApplication As Boolean, exception As Exception)
             MyBase.New(exception)
             Me.ExitApplication = exitApplication

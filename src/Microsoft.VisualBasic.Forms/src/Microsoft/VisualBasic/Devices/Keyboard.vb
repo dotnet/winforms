@@ -15,7 +15,10 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         '''  Gets the state (up or down) of the Alt key.
         ''' </summary>
-        ''' <value><see langword="True"/> if the key is down otherwise <see langword="False"/>.</value>
+        ''' <value>
+        '''  <see langword="True"/> if the key is down,
+        '''  otherwise <see langword="False"/>.
+        ''' </value>
         Public ReadOnly Property AltKeyDown() As Boolean
             Get
                 Dim keys As Keys = Control.ModifierKeys
@@ -26,7 +29,10 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         '''  Gets the toggle state of the Caps Lock key.
         ''' </summary>
-        ''' <value><see langword="True"/> if the key is down otherwise <see langword="False"/>.</value>
+        ''' <value>
+        '''  <see langword="True"/> if the key is down,
+        '''  otherwise <see langword="False"/>.
+        ''' </value>
         Public ReadOnly Property CapsLock() As Boolean
             Get
                 ' Security Note: Only the state of the Caps Lock is returned
@@ -40,7 +46,10 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         '''  Gets the state (up or down) of the Ctrl key.
         ''' </summary>
-        ''' <value><see langword="True"/> if the key is down otherwise <see langword="False"/>.</value>
+        ''' <value>
+        '''  <see langword="True"/> if the key is down,
+        '''  otherwise <see langword="False"/>.
+        ''' </value>
         Public ReadOnly Property CtrlKeyDown() As Boolean
             Get
                 Dim keys As Keys = Control.ModifierKeys
@@ -51,7 +60,10 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         '''  Gets the toggle state of the Num Lock key.
         ''' </summary>
-        ''' <value><see langword="True"/> if the key is down otherwise <see langword="False"/>.</value>
+        ''' <value>
+        '''  <see langword="True"/> if the key is down,
+        '''  otherwise <see langword="False"/>.
+        ''' </value>
         Public ReadOnly Property NumLock() As Boolean
             Get
                 ' Security Note: Only the state of the Num Lock is returned
@@ -65,7 +77,10 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         '''  Gets the toggle state of the Scroll Lock key.
         ''' </summary>
-        ''' <value><see langword="True"/> if the key is down otherwise <see langword="False"/>.</value>
+        ''' <value>
+        '''  <see langword="True"/> if the key is down,
+        '''  otherwise <see langword="False"/>.
+        ''' </value>
         Public ReadOnly Property ScrollLock() As Boolean
             Get
                 ' Security Note: Only the state of the Scroll Lock is returned
@@ -79,7 +94,10 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         '''  Gets the state (up or down) of the Shift key.
         ''' </summary>
-        ''' <value><see langword="True"/> if the key is down otherwise <see langword="False"/>.</value>
+        ''' <value>
+        '''  <see langword="True"/> if the key is down.
+        '''  otherwise <see langword="False"/>.
+        ''' </value>
         Public ReadOnly Property ShiftKeyDown() As Boolean
             Get
                 Dim keys As Keys = Control.ModifierKeys

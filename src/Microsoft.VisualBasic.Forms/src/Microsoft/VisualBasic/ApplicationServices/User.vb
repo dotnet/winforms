@@ -36,9 +36,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
         ''' <summary>
-        '''  The current <see cref="IPrincipal"/> which represents the current user.
+        '''  The current IPrincipal which represents the current user.
         ''' </summary>
-        ''' <value>An IPrincipal representing the current user.</value>
+        ''' <value>An <see cref="IPrincipal"/> representing the current user.</value>
         <EditorBrowsable(EditorBrowsableState.Advanced)>
         Public Property CurrentPrincipal() As IPrincipal
             Get

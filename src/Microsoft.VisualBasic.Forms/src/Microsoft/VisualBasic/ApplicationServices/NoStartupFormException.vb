@@ -22,16 +22,25 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Sub
 
         ''' <summary>
-        '''  Creates a new exception.
+        '''  Creates a new <see cref="NoStartupFormException"/>.
         ''' </summary>
         Public Sub New()
             MyBase.New(VbUtils.GetResourceString(SR.AppModel_NoStartupForm))
         End Sub
 
+        ''' <summary>
+        '''  Creates a new <see cref="NoStartupFormException"/>.
+        ''' </summary>
+        ''' <param name="message"></param>
         Public Sub New(message As String)
             MyBase.New(message)
         End Sub
 
+        ''' <summary>
+        '''  Creates a new <see cref="NoStartupFormException"/>.
+        ''' </summary>
+        ''' <param name="message"></param>
+        ''' <param name="inner"></param>
         Public Sub New(message As String, inner As Exception)
             MyBase.New(message, inner)
         End Sub

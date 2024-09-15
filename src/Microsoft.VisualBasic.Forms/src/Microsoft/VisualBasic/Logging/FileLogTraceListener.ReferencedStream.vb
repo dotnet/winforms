@@ -42,7 +42,7 @@ Namespace Microsoft.VisualBasic.Logging
             ''' <summary>
             '''  The size of the log file.
             ''' </summary>
-            ''' <value>The size.</value>
+            ''' <value>Size as a <see langword="Long"/>.</value>
             Friend ReadOnly Property FileSize() As Long
                 Get
                     Return _stream.BaseStream.Length
@@ -52,7 +52,10 @@ Namespace Microsoft.VisualBasic.Logging
             ''' <summary>
             '''  Indicates whether or not the stream is still in use by a FileLogTraceListener.
             ''' </summary>
-            ''' <value><see langword="True"/> if the stream is being used, otherwise <see langword="False"/>.</value>
+            ''' <value>
+            '''  <see langword="True"/> if the stream is being used,
+            '''  otherwise <see langword="False"/>.
+            ''' </value>
             Friend ReadOnly Property IsInUse() As Boolean
                 Get
                     Return _stream IsNot Nothing

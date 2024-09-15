@@ -42,6 +42,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         '''  Returns the command line arguments for the current application.
         ''' </summary>
+        ''' <value>
+        '''  A <see cref="ObjectModel.ReadOnlyCollection(Of String)"/> containing the command line arguments
+        ''' </value>
         ''' <remarks>
         '''  This function differs from <see cref="System.Environment.GetCommandLineArgs"/>
         '''  in that the path of the executing file (the 0th entry) is omitted from

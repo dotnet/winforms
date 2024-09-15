@@ -21,7 +21,8 @@ Namespace Microsoft.VisualBasic.Devices
         '''  mouses buttons have been swapped.
         ''' </summary>
         ''' <value>
-        '''  true if the functions of the left and right mouse buttons are swapped. false otherwise.
+        '''  <see langword="True"/> if the functions of the left and right mouse buttons are swapped.
+        '''  <see langword="false"/> otherwise.
         ''' </value>
         ''' <exception cref="InvalidOperationException">If no mouse is installed.</exception>
         Public ReadOnly Property ButtonsSwapped() As Boolean
@@ -37,7 +38,10 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         '''  Gets a value indicating whether a mouse with a mouse wheel is installed
         ''' </summary>
-        ''' <value><see langword="True"/> if a mouse with a mouse wheel is installed, false otherwise.</value>
+        ''' <value>
+        '''  <see langword="True"/> if a mouse with a mouse wheel is installed,
+        '''  <see langword="False"/> otherwise.
+        ''' </value>
         ''' <exception cref="InvalidOperationException">If no mouse is installed.</exception>
         Public ReadOnly Property WheelExists() As Boolean
             Get

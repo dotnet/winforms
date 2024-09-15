@@ -55,7 +55,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <summary>
         '''  Returns the file log trace listener we create for the Log.
         ''' </summary>
-        ''' <value>The file log trace listener.</value>
+        ''' <value>The <see cref="FileLogTraceListener"/>.</value>
         Public ReadOnly Property DefaultFileLogWriter() As FileLogTraceListener
             Get
                 Return CType(TraceSource.Listeners(DEFAULT_FILE_LOG_TRACE_LISTENER_NAME), FileLogTraceListener)
@@ -65,7 +65,7 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <summary>
         '''  Gives access to the log's underlying TraceSource.
         ''' </summary>
-        ''' <value>The log's underlying TraceSource.</value>
+        ''' <value>The log's underlying <see cref="TraceSource"/>.</value>
         <EditorBrowsable(EditorBrowsableState.Advanced)>
         Public ReadOnly Property TraceSource() As TraceSource
             Get

@@ -20,7 +20,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         '''  A buffer for pinging. This imitates the buffer used by Ping.Exe.
         ''' </summary>
-        ''' <value>A buffer.</value>
+        ''' <value>A <see langword="Byte"/>() buffer.</value>
         Private ReadOnly Property PingBuffer() As Byte()
             Get
                 If _pingBuffer Is Nothing Then
