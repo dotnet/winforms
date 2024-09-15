@@ -31,23 +31,26 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 #Enable Warning WFO5001
 
         ''' <summary>
-        '''  Setting this property inside the event handler determines the <see cref="Application.ColorMode"/> for the application.
+        '''  Setting this property inside the event handler determines the
+        '''  <see cref="Application.ColorMode"/> for the <see cref="Application"/>.
         ''' </summary>
         <Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat:=WindowsFormsApplicationBase.WinFormsExperimentalUrl)>
         Public Property ColorMode As SystemColorMode
 
         ''' <summary>
-        '''  Setting this property inside the event handler causes a new default Font for Forms and UserControls to be set.
+        '''  Setting this property inside the event handler causes a
+        '''  new default <see cref="Font"/> for Forms and UserControls to be set.
         ''' </summary>
         ''' <remarks>
-        '''  When the <see cref="WindowsFormsApplicationBase.ApplyApplicationDefaults"/> event is raised, this property contains
-        '''  nothing. A new default Font for the application is applied by setting
-        '''  this property with a value different than nothing.
+        '''  When the <see cref="WindowsFormsApplicationBase.ApplyApplicationDefaults"/> event is raised,
+        '''  this property contains nothing. A new default <see cref="Font"/> for the application
+        '''  is applied by setting this property with a value different than nothing.
         ''' </remarks>
         Public Property Font As Font
 
         ''' <summary>
-        '''  Setting this Property inside the event handler determines the general HighDpiMode for the application.
+        '''  Setting this <see langword="Property"/> inside the <see langword="Event"/> handler determines the general
+        '''  <see cref="HighDpiMode"/> for the <see cref="Application"/>.
         ''' </summary>
         ''' <remarks>
         '''  The default value for this property is SystemAware.
@@ -55,7 +58,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Public Property HighDpiMode As HighDpiMode
 
         ''' <summary>
-        '''  Setting this property inside the event handler determines how long an application's Splash dialog is displayed at a minimum.
+        '''  Setting this <see langword="Property"/> inside the <see langword="Event"/> handler determines
+        '''  how long an <see cref="application"/>'s Splash dialog is displayed at a minimum.
         ''' </summary>
         Public Property MinimumSplashScreenDisplayTime As Integer =
             WindowsFormsApplicationBase.MinimumSplashExposureDefault
