@@ -29,10 +29,19 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             MyBase.New(VbUtils.GetResourceString(SR.AppModel_SingleInstanceCantConnect))
         End Sub
 
+        ''' <summary>
+        '''  Creates a new <see cref="Exception"/>.
+        ''' </summary>
+        ''' <param name="message"></param>
         Public Sub New(message As String)
             MyBase.New(message)
         End Sub
 
+        ''' <summary>
+        '''  Creates a new <see cref="Exception"/>.
+        ''' </summary>
+        ''' <param name="message"></param>
+        ''' <param name="inner"> Inner <see cref="Exception"/></param>
         Public Sub New(message As String, inner As Exception)
             MyBase.New(message, inner)
         End Sub
