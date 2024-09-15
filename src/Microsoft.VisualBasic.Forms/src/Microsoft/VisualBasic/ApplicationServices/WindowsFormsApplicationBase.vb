@@ -155,7 +155,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             If authenticationMode = AuthenticationMode.Windows Then
                 Try
                     ' Consider: Sadly, a call to:
-                    ' System.Security.SecurityManager.IsGranted(New SecurityPermission(SecurityPermissionFlag.ControlPrincipal))
+                    ' Security.SecurityManager.IsGranted(New SecurityPermission(SecurityPermissionFlag.ControlPrincipal))
                     ' Will only check the THIS caller so you'll always get TRUE.
                     ' What we need is a way to get to the value of this on a demand basis.
                     ' So I try/catch instead for now but would rather be able to IF my way around this block.
@@ -769,7 +769,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' </summary>
         ''' <param name="commandLineArgs"></param>
         ''' <returns>
-        '''  Returning <see langword="True"/> indicates that we should continue on with the application Startup sequence.
+        '''  Returning <see langword="True">
+        '''   Indicates that we should continue on with the application Startup sequence.
+        '''  </see>
         ''' </returns>
         ''' <remarks>
         '''  This extensibility point is exposed for people who want to override
@@ -887,8 +889,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 Application.Run(_appContext)
             Finally
 
-                ' When Run() returns, the context we pushed in our ctor (which was a WindowsFormsSynchronizationContext)
-                ' is restored. But we are going to dispose it so we need to disconnect the network listener so that it
+                ' When Run() returns, the context we pushed in our ctor
+                ' (which was a WindowsFormsSynchronizationContext) is restored.
+                ' But we are going to dispose it so we need to disconnect the network listener so that it
                 ' can't fire any events in response to changing network availability conditions through a dead context.
                 If _networkObject IsNot Nothing Then _networkObject.DisconnectListener()
 

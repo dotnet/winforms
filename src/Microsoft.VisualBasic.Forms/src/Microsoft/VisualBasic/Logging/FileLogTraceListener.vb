@@ -394,7 +394,8 @@ Namespace Microsoft.VisualBasic.Logging
             Get
                 If Not _propertiesSet(INCLUDEHOSTNAME_INDEX) Then
                     If Attributes.ContainsKey(KEY_INCLUDEHOSTNAME) Then
-                        Me.IncludeHostName = Convert.ToBoolean(Attributes(KEY_INCLUDEHOSTNAME), CultureInfo.InvariantCulture)
+                        Dim value As String = Attributes(KEY_INCLUDEHOSTNAME)
+                        Me.IncludeHostName = Convert.ToBoolean(value, CultureInfo.InvariantCulture)
                     End If
                 End If
                 Return _includeHostName

@@ -68,7 +68,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 options:=NamedPipeOptions)
 
                 Await pipeClient.ConnectAsync(cancellationToken).ConfigureAwait(continueOnCapturedContext:=False)
-                Await WriteArgsAsync(pipeClient, args, cancellationToken).ConfigureAwait(continueOnCapturedContext:=False)
+                Await WriteArgsAsync(pipeClient, args, cancellationToken).
+                    ConfigureAwait(continueOnCapturedContext:=False)
             End Using
         End Function
 
@@ -96,7 +97,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
             While True
                 cancellationToken.ThrowIfCancellationRequested()
-                Await pipeServer.WaitForConnectionAsync(cancellationToken).ConfigureAwait(continueOnCapturedContext:=False)
+                Await pipeServer.WaitForConnectionAsync(cancellationToken).
+                    ConfigureAwait(continueOnCapturedContext:=False)
                 Try
                     Dim args() As String = Await ReadArgsAsync(
                         pipeServer,

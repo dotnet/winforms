@@ -143,9 +143,9 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                                         totalBytesRead += bytesRead
 
                                         Await fileStream.WriteAsync(
-                                            buffer.AsMemory(0, bytesRead),
-                                            _cancelTokenSourceWrite.Token).
-                                                ConfigureAwait(False)
+                                            buffer:=buffer.AsMemory(0, bytesRead),
+                                            cancellationToken:=_cancelTokenSourceWrite.Token).
+                                                ConfigureAwait(continueOnCapturedContext:=False)
 
                                         If m_ProgressDialog IsNot Nothing Then
                                             Dim percentage As Integer = CInt(totalBytesRead / contentLength.Value * 100)
@@ -154,7 +154,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                                         bytesRead = Await responseStream.ReadAsync(
                                             buffer.AsMemory(0, buffer.Length),
                                             _cancelTokenSourceRead.Token).
-                                                ConfigureAwait(False)
+                                                ConfigureAwait(continueOnCapturedContext:=False)
                                     Loop
                                 Finally
                                     CloseProgressDialog(m_ProgressDialog)

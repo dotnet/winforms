@@ -75,7 +75,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         '''  The full path and file name of the created file.
         '''  If size = -1 no file is create but the full path is returned.
         ''' </returns>
-        Friend Function CreateTempFile(sourceDirectoryName As String, Optional filename As String = "Testing.Txt", Optional size As Integer = -1) As String
+        Friend Function CreateTempFile(
+            sourceDirectoryName As String,
+            Optional filename As String = "Testing.Txt",
+            Optional size As Integer = -1) As String
+
             Dim filenameWithPath As String = Path.Combine(sourceDirectoryName, filename)
 
             If size >= 0 Then

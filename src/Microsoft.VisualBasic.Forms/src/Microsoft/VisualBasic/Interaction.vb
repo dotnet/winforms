@@ -13,8 +13,9 @@ Imports VbUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic
 
-    ' Helper methods invoked through reflection from Microsoft.VisualBasic.Interaction in Microsoft.VisualBasic.Core.dll.
-    ' Do not change this API without also updating that dependent module.
+    ' Helper methods invoked through reflection from Microsoft.VisualBasic.Interaction
+    ' in Microsoft.VisualBasic.Core.dll. Do not change this API without also updating
+    ' that dependent module.
     Friend Module _Interaction
 
         Private Sub AppActivateHelper(hwndApp As IntPtr, processId As String)
@@ -106,7 +107,7 @@ Namespace Microsoft.VisualBasic
             yPos As Integer,
             parentWindow As IWin32Window) As String
 
-            Dim box As VBInputBox = New VBInputBox(prompt, title, defaultResponse, xPos, yPos)
+            Dim box As New VBInputBox(prompt, title, defaultResponse, xPos, yPos)
             box.ShowDialog(parentWindow)
 
             InternalInputBox = box.Output
@@ -114,8 +115,8 @@ Namespace Microsoft.VisualBasic
         End Function
 
         Public Sub AppActivateByProcessId(ProcessId As Integer)
-            ' As an optimization, we will only check the UI permission once we actually know we found the app to activate
-            '- we'll do that in AppActivateHelper
+            ' As an optimization, we will only check the UI permission once we actually
+            ' know we found the app to activate- we'll do that in AppActivateHelper
 
             Dim processIdOwningWindow As Integer
             ' Note, a process can have multiple windows. What we want to do is dig through to find one
@@ -165,8 +166,8 @@ Namespace Microsoft.VisualBasic
         End Sub
 
         Public Sub AppActivateByTitle(Title As String)
-            ' As an optimization, we will only check the UI permission once we actually know we found the app to activate
-            ' - we'll do that in AppActivateHelper
+            ' As an optimization, we will only check the UI permission once we actually know
+            ' we found the app to activate - we'll do that in AppActivateHelper
             ' See if we can find the window using an exact match on the title
             Dim windowHandle As IntPtr = NativeMethods.FindWindow(Nothing, Title)
             Const MAX_TITLE_LENGTH As Integer = 511
