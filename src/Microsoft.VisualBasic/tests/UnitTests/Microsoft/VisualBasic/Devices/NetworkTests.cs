@@ -38,7 +38,10 @@ public class NetworkTests
         Assert.Throws<ArgumentNullException>(() => network.Ping((string)null));
     }
 
+    [ActiveIssue("https://github.com/dotnet/winforms/issues/12140")]
     [Fact]
+    [SkipOnArchitecture(TestArchitectures.Any,
+        "Flaky tests, see: https://github.com/dotnet/winforms/issues/12140")]
     public void PingUri_ShortTimeout_Success()
     {
         Network network = new();
