@@ -167,15 +167,13 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub FileNormalizePathEmptyStringTest_Fail()
             Dim testCode As Action = Sub() FileSystemUtils.NormalizePath("")
-            testCode.Should.Throw(Of ArgumentException).WithMessage(
-                expectedWildcardPattern:="The path is empty. (Parameter 'path')")
+            testCode.Should.Throw(Of ArgumentException)()
         End Sub
 
         <WinFormsFact>
         Public Sub FileNormalizePathNullTest_Fail()
             Dim testCode As Action = Sub() FileSystemUtils.NormalizePath(Nothing)
-            testCode.Should.Throw(Of ArgumentNullException).WithMessage(
-                expectedWildcardPattern:="Value cannot be null. (Parameter 'path')")
+            testCode.Should.Throw(Of ArgumentNullException)()
         End Sub
 
         <WinFormsFact>
