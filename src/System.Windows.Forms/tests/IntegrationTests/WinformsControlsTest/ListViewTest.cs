@@ -2,9 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+namespace WinFormsControlsTest;
 
-namespace WinformsControlsTest;
-
+[DesignerCategory("Default")]
 public partial class ListViewTest : Form
 {
     public ListViewTest()
@@ -34,6 +34,19 @@ public partial class ListViewTest : Form
 
         AddCollapsibleGroupToListView();
         AddGroupTasks();
+
+        // Manual test for https://github.com/dotnet/winforms/issues/11658
+        string[] TestItems = { "Item 1", "Item 2", "Item 3" };
+        listView3.RetrieveVirtualItem += (s, e) =>
+        {
+            e.Item = e.ItemIndex switch
+            {
+                0 => new ListViewItem(TestItems[0]),
+                1 => new ListViewItem(TestItems[1]),
+                2 => new ListViewItem(TestItems[2]),
+                _ => throw new ArgumentOutOfRangeException(),
+            };
+        };
     }
 
     private void CreateMyListView()
@@ -189,16 +202,23 @@ public partial class ListViewTest : Form
         MessageBox.Show(this, $"Task at group index {e.GroupIndex} was clicked", "GroupClick Event");
     }
 
-    private void listView2_Click(object sender, System.EventArgs e)
+    private void listView2_Click(object sender, EventArgs e)
     {
         Debug.WriteLine(listView1.TileSize);
         MessageBox.Show(this, "listView2_Click", "event");
     }
 
-    private void listView2_SelectedIndexChanged(object sender, System.EventArgs e)
+    private void listView3_Click(object sender, EventArgs e)
     {
-        // MessageBox.Show(this, "listView2_SelectedIndexChanged", "event");
+        var item = ((ListView)sender).FocusedItem;
+        var clone = (ListViewItem)item.Clone();
+        clone.Checked = true;
+        listView3.InvokeOnItemChecked(new ItemCheckedEventArgs(clone));
+        MessageBox.Show(this, $"Click {clone.Text} in ListView3", "Click Event");
+    }
 
+    private void listView2_SelectedIndexChanged(object sender, EventArgs e)
+    {
         if (sender is not ListView listView2)
         {
             return;

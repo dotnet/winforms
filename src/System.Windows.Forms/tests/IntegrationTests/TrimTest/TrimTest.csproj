@@ -22,4 +22,38 @@
     <ProjectReference Include="..\..\..\src\System.Windows.Forms.csproj" />
   </ItemGroup>
 
+  <!-- feature switches for trimming-->
+  <ItemGroup>
+    <RuntimeHostConfigurationOption Include="System.ComponentModel.Design.IDesignerHost.IsSupported"
+                                    Value="false"
+                                    Trim="true" />
+    <RuntimeHostConfigurationOption Include="System.Windows.Forms.Binding.IsSupported"
+                                    Value="false"
+                                    Trim="true" />
+    <RuntimeHostConfigurationOption Include="System.ComponentModel.DefaultValueAttribute.IsSupported"
+                                    Value="false"
+                                    Trim="true" />
+    <RuntimeHostConfigurationOption Include="System.Drawing.Design.UITypeEditor.IsSupported"
+                                    Value="false"
+                                    Trim="true" />
+    <RuntimeHostConfigurationOption Include="System.Windows.Forms.ActiveXImpl.IsSupported"
+                                    Value="false"
+                                    Trim="true" />
+    <RuntimeHostConfigurationOption Include="System.Windows.Forms.Control.AreDesignTimeFeaturesSupported"
+                                    Value="false"
+                                    Trim="true" />
+    <RuntimeHostConfigurationOption Include="System.Windows.Forms.MdiWindowDialog.IsSupported"
+                                    Value="false"
+                                    Trim="true" />
+     <RuntimeHostConfigurationOption Include="System.Windows.Forms.ImageIndexConverter.IsSupported"
+                                    Value="false"
+                                    Trim="true" />
+    <RuntimeHostConfigurationOption Include="System.Windows.Forms.Primitives.TypeConverterHelper.UseComponentModelRegisteredTypes"
+                                    Value="true"
+                                    Trim="true" />
+    <RuntimeHostConfigurationOption Include="System.Windows.Forms.Control.UseComponentModelRegisteredTypes"
+                                    Value="true"
+                                    Trim="true" />
+  </ItemGroup>
+
 </Project>

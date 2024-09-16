@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing.Design;
@@ -15,7 +13,7 @@ namespace System.Windows.Forms.Design;
 /// </summary>
 internal partial class DesignBindingValueUIHandler : IDisposable
 {
-    private Bitmap _dataBitmap;
+    private Bitmap? _dataBitmap;
 
     internal Bitmap DataBitmap
     {
@@ -37,7 +35,7 @@ internal partial class DesignBindingValueUIHandler : IDisposable
         {
             foreach (Binding binding in control.DataBindings)
             {
-                // Only add the binding if it is one of the data source types we recognize.  Otherwise, our drop-down list won't show it as
+                // Only add the binding if it is one of the data source types we recognize. Otherwise, our drop-down list won't show it as
                 // an option, which is confusing.
                 if ((binding.DataSource is IListSource || binding.DataSource is IList || binding.DataSource is Array) && binding.PropertyName.Equals(propDesc.Name))
                 {

@@ -263,20 +263,11 @@ public abstract partial class ToolStripItem :
     [SRDescription(nameof(SR.ToolStripItemAccessibleRoleDescr))]
     public AccessibleRole AccessibleRole
     {
-        get
-        {
-            int role = Properties.GetInteger(s_accessibleRoleProperty, out bool found);
-            if (found)
-            {
-                return (AccessibleRole)role;
-            }
-
-            return AccessibleRole.Default;
-        }
+        get => Properties.GetValueOrDefault(s_accessibleRoleProperty, AccessibleRole.Default);
         set
         {
             SourceGenerated.EnumValidator.Validate(value);
-            Properties.SetInteger(s_accessibleRoleProperty, (int)value);
+            Properties.AddValue(s_accessibleRoleProperty, value);
             OnAccessibleRoleChanged(EventArgs.Empty);
         }
     }
@@ -538,13 +529,9 @@ public abstract partial class ToolStripItem :
         }
         set
         {
-            Color c = BackColor;
-            if (!value.IsEmpty || Properties.ContainsObject(s_backColorProperty))
-            {
-                Properties.SetColor(s_backColorProperty, value);
-            }
-
-            if (!c.Equals(BackColor))
+            Color previous = BackColor;
+            Properties.AddOrRemoveValue(s_backColorProperty, value);
+            if (!previous.Equals(BackColor))
             {
                 OnBackColorChanged(EventArgs.Empty);
             }
@@ -566,7 +553,7 @@ public abstract partial class ToolStripItem :
     public virtual Rectangle Bounds => _bounds;
 
     /// <summary>
-    /// Zero-based rectangle, same concept as ClientRect
+    ///  Zero-based rectangle, same concept as ClientRect
     /// </summary>
     internal Rectangle ClientBounds
     {
@@ -880,7 +867,7 @@ public abstract partial class ToolStripItem :
     {
         get
         {
-            Color foreColor = Properties.GetColor(s_foreColorProperty);
+            Color foreColor = Properties.GetValueOrDefault<Color>(s_foreColorProperty);
             if (!foreColor.IsEmpty)
             {
                 return foreColor;
@@ -896,13 +883,9 @@ public abstract partial class ToolStripItem :
         }
         set
         {
-            Color c = ForeColor;
-            if (!value.IsEmpty || Properties.ContainsObject(s_foreColorProperty))
-            {
-                Properties.SetColor(s_foreColorProperty, value);
-            }
-
-            if (!c.Equals(ForeColor))
+            Color previous = ForeColor;
+            Properties.AddOrRemoveValue(s_foreColorProperty, value);
+            if (!previous.Equals(ForeColor))
             {
                 OnForeColorChanged(EventArgs.Empty);
             }
@@ -1218,7 +1201,7 @@ public abstract partial class ToolStripItem :
     {
         get
         {
-            Color color = Properties.GetColor(s_foreColorProperty);
+            Color color = Properties.GetValueOrDefault<Color>(s_foreColorProperty);
             if (!color.IsEmpty)
             {
                 return true;
@@ -1306,21 +1289,11 @@ public abstract partial class ToolStripItem :
     [SRCategory(nameof(SR.CatLayout))]
     public MergeAction MergeAction
     {
-        get
-        {
-            int action = Properties.GetInteger(s_mergeActionProperty, out bool found);
-            if (found)
-            {
-                return (MergeAction)action;
-            }
-
-            return MergeAction.Append;
-        }
+        get => Properties.GetValueOrDefault(s_mergeActionProperty, MergeAction.Append);
         set
         {
             SourceGenerated.EnumValidator.Validate(value);
-
-            Properties.SetInteger(s_mergeActionProperty, (int)value);
+            Properties.AddValue(s_mergeActionProperty, value);
         }
     }
 
@@ -1332,17 +1305,8 @@ public abstract partial class ToolStripItem :
     [SRCategory(nameof(SR.CatLayout))]
     public int MergeIndex
     {
-        get
-        {
-            int index = Properties.GetInteger(s_mergeIndexProperty, out bool found);
-            if (found)
-            {
-                return index;
-            }
-
-            return -1;
-        }
-        set => Properties.SetInteger(s_mergeIndexProperty, value);
+        get => Properties.GetValueOrDefault(s_mergeIndexProperty, -1);
+        set => Properties.AddValue(s_mergeIndexProperty, value);
     }
 
     internal bool MouseDownAndUpMustBeInSameItem
@@ -1658,9 +1622,12 @@ public abstract partial class ToolStripItem :
     /// <summary>
     ///  Returns the value of the backColor field -- no asking the parent with its color is, etc.
     /// </summary>
-    internal Color RawBackColor => Properties.GetColor(s_backColorProperty);
+    internal Color RawBackColor => Properties.GetValueOrDefault<Color>(s_backColorProperty);
 
-    internal ToolStripRenderer? Renderer
+    /// <summary>
+    ///  Returns the parent <see cref="ToolStrip"/>'s renderer
+    /// </summary>
+    protected internal virtual ToolStripRenderer? Renderer
     {
         get
         {
@@ -1685,30 +1652,29 @@ public abstract partial class ToolStripItem :
     {
         get
         {
-            int rightToLeft = Properties.GetInteger(s_rightToLeftProperty, out bool found);
-            if (!found)
+            if (!Properties.TryGetValue(s_rightToLeftProperty, out RightToLeft rightToLeft))
             {
-                rightToLeft = (int)RightToLeft.Inherit;
+                rightToLeft = RightToLeft.Inherit;
             }
 
-            if (((RightToLeft)rightToLeft) == RightToLeft.Inherit)
+            if (rightToLeft == RightToLeft.Inherit)
             {
                 if (Owner is not null)
                 {
-                    rightToLeft = (int)Owner.RightToLeft;
+                    rightToLeft = Owner.RightToLeft;
                 }
                 else if (ParentInternal is not null)
                 {
                     // case for Overflow & Grip
-                    rightToLeft = (int)ParentInternal.RightToLeft;
+                    rightToLeft = ParentInternal.RightToLeft;
                 }
                 else
                 {
-                    rightToLeft = (int)DefaultRightToLeft;
+                    rightToLeft = DefaultRightToLeft;
                 }
             }
 
-            return (RightToLeft)rightToLeft;
+            return rightToLeft;
         }
 
         set
@@ -1717,9 +1683,9 @@ public abstract partial class ToolStripItem :
 
             RightToLeft oldValue = RightToLeft;
 
-            if (Properties.ContainsInteger(s_rightToLeftProperty) || value != RightToLeft.Inherit)
+            if (Properties.ContainsKey(s_rightToLeftProperty) || value != RightToLeft.Inherit)
             {
-                Properties.SetInteger(s_rightToLeftProperty, (int)value);
+                Properties.AddValue(s_rightToLeftProperty, value);
             }
 
             if (oldValue != RightToLeft)
@@ -1790,18 +1756,24 @@ public abstract partial class ToolStripItem :
     ///  if the item is selected we return true.
     ///
     ///  FAQ: Why don't we have a Hot or MouseIsOver property?
-    ///  After going through the scenarios, we've decided NOT to add a separate MouseIsOver or Hot flag to ToolStripItem. The thing to use is 'Selected'.
-    ///  Why?  While the selected thing can be different than the moused over item, the selected item is ALWAYS the one you want to paint differently
+    ///  After going through the scenarios, we've decided NOT to add a separate MouseIsOver or Hot flag to ToolStripItem.
+    ///  The thing to use is 'Selected'.
+    ///  Why?  While the selected thing can be different than the moused over item, the selected item is ALWAYS the
+    ///  one you want to paint differently
     ///
     ///  Scenario 1:  Keyboard select an item then select a different item with the mouse.
     ///  -          Do Alt+F to expand your File menu, keyboard down several items.
     ///  -          Mouse over a different item
-    ///  -          Notice how two things are never painted hot at the same time, and how the selection changes from the keyboard selected item to the one selected with the mouse. In  this case the selection should move with the mouse selection.
+    ///  -          Notice how two things are never painted hot at the same time, and how the selection changes
+    ///  -          from the keyboard selected item to the one selected with the mouse. In  this case the selection
+    ///  -          should move with the mouse selection.
     ///  -          Notice how if you hit enter when the mouse is over it, it executes the item. That's selection.
     ///  Scenario 2: Put focus into a combo box, then mouse over a different item
-    ///  -          Notice how all the other items you mouse over do not change the way they are painted, if you hit enter, that goes to the combobox, rather than executing the current item.
+    ///  -          Notice how all the other items you mouse over do not change the way they are painted, if you
+    ///  -          hit enter, that goes to the ComboBox, rather than executing the current item.
     ///
-    ///  At first look "MouseIsOver" or "Hot" seems to be the thing people want, but its almost never the desired behavior. A unified selection model is simpler and seems to meet the scenarios.
+    ///  At first look "MouseIsOver" or "Hot" seems to be the thing people want, but its almost never the desired
+    ///  behavior. A unified selection model is simpler and seems to meet the scenarios.
     /// </summary>
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -1828,8 +1800,9 @@ public abstract partial class ToolStripItem :
     }
 
     /// <summary>
-    ///  Raises the <see cref="SelectedChanged" /> event.  This method will be called when selected <see cref="ToolStripItem" /> changes.
-    ///  Call base.OnSelectedChanged to send this event to any registered event listeners.
+    ///  Raises the <see cref="SelectedChanged" /> event. This method will be called when selected
+    ///  <see cref="ToolStripItem" /> changes. Call base.OnSelectedChanged to send this event to any registered
+    ///  event listeners.
     /// </summary>
     protected virtual void OnSelectedChanged(EventArgs e) => RaiseEvent(s_selectedChangedEvent, e);
 
@@ -2091,11 +2064,11 @@ public abstract partial class ToolStripItem :
 
         if (animate)
         {
-            ImageAnimator.Animate(image, new EventHandler(OnAnimationFrameChanged));
+            ImageAnimator.Animate(image, OnAnimationFrameChanged);
         }
         else
         {
-            ImageAnimator.StopAnimate(image, new EventHandler(OnAnimationFrameChanged));
+            ImageAnimator.StopAnimate(image, OnAnimationFrameChanged);
         }
 
         _state[s_stateCurrentlyAnimatingImage] = animate;
@@ -2185,26 +2158,28 @@ public abstract partial class ToolStripItem :
     }
 
     /// <summary>
-    ///  Begins a drag operation. The <paramref name="allowedEffects"/> determine which drag operations can occur. If the drag operation
-    ///  needs to interop with applications in another process, <paramref name="data"/> should either be a base managed class
-    ///  (<see cref="string"/>, <see cref="Bitmap"/>, or <see cref="Metafile"/>) or some <see cref="object"/> that implements
-    ///  <see cref="Runtime.Serialization.ISerializable"/>. <paramref name="data"/> can also be any <see cref="object"/> that implements
-    ///  <see cref="IDataObject"/>. <paramref name="dragImage"/> is the bitmap that will be displayed during the  drag operation and
-    ///  <paramref name="cursorOffset"/> specifies the location of the cursor within <paramref name="dragImage"/>, which is an offset from the
-    ///  upper-left corner. Specify <see langword="true"/> for <paramref name="useDefaultDragImage"/> to use a layered window drag image with a
-    ///  size of 96x96; otherwise <see langword="false"/>. Note the outer edges of <paramref name="dragImage"/> are blended out if the image width
-    ///  or height exceeds 300 pixels.
+    ///  Begins a drag operation. The <paramref name="allowedEffects"/> determine which drag operations can occur.
+    ///  If the drag operation needs to interop with applications in another process, <paramref name="data"/> should
+    ///  either be a base managed class (<see cref="string"/>, <see cref="Bitmap"/>, or <see cref="Metafile"/>)
+    ///  or some <see cref="object"/> that implements <see cref="Runtime.Serialization.ISerializable"/>.
+    ///  <paramref name="data"/> can also be any <see cref="object"/> that implements <see cref="IDataObject"/>.
+    ///  <paramref name="dragImage"/> is the bitmap that will be displayed during the  drag operation and
+    ///  <paramref name="cursorOffset"/> specifies the location of the cursor within <paramref name="dragImage"/>,
+    ///  which is an offset from the upper-left corner. Specify <see langword="true"/> for
+    ///  <paramref name="useDefaultDragImage"/> to use a layered window drag image with a
+    ///  size of 96x96; otherwise <see langword="false"/>. Note the outer edges of <paramref name="dragImage"/>
+    ///  are blended out if the image width or height exceeds 300 pixels.
     /// </summary>
     /// <returns>
-    ///  A value from the <see cref="DragDropEffects"/> enumeration that represents the final effect that was performed during the drag-and-drop
-    ///  operation.
+    ///  A value from the <see cref="DragDropEffects"/> enumeration that represents the final effect that was performed
+    ///  during the drag-and-drop operation.
     /// </returns>
     /// <remarks>
     ///  <para>
-    ///   Because <see cref="DoDragDrop(object, DragDropEffects, Bitmap, Point, bool)"/> always performs the RGB multiplication step in calculating
-    ///   the alpha value, you should always pass a <see cref="Bitmap"/> without premultiplied alpha blending. Note that no error will result from
-    ///   passing a <see cref="Bitmap"/> with premultiplied alpha blending, but this method will multiply it again, doubling the resulting alpha
-    ///   value.
+    ///   Because <see cref="DoDragDrop(object, DragDropEffects, Bitmap, Point, bool)"/> always performs the
+    ///   RGB multiplication step in calculating the alpha value, you should always pass a <see cref="Bitmap"/>
+    ///   without pre-multiplied alpha blending. Note that no error will result from passing a <see cref="Bitmap"/>
+    ///   with pre-multiplied alpha blending, but this method will multiply it again, doubling the resulting alpha value.
     ///  </para>
     /// </remarks>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -2929,7 +2904,7 @@ public abstract partial class ToolStripItem :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnParentBackColorChanged(EventArgs e)
     {
-        Color backColor = Properties.GetColor(s_backColorProperty);
+        Color backColor = Properties.GetValueOrDefault<Color>(s_backColorProperty);
         if (backColor.IsEmpty)
         {
             OnBackColorChanged(e);
@@ -2977,7 +2952,7 @@ public abstract partial class ToolStripItem :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnParentForeColorChanged(EventArgs e)
     {
-        Color foreColor = Properties.GetColor(s_foreColorProperty);
+        Color foreColor = Properties.GetValueOrDefault<Color>(s_foreColorProperty);
         if (foreColor.IsEmpty)
         {
             OnForeColorChanged(e);
@@ -2987,7 +2962,7 @@ public abstract partial class ToolStripItem :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected internal virtual void OnParentRightToLeftChanged(EventArgs e)
     {
-        if (!Properties.ContainsInteger(s_rightToLeftProperty) || ((RightToLeft)Properties.GetInteger(s_rightToLeftProperty)) == RightToLeft.Inherit)
+        if (!Properties.TryGetValue(s_rightToLeftProperty, out RightToLeft rightToLeft) || rightToLeft == RightToLeft.Inherit)
         {
             OnRightToLeftChanged(e);
         }
@@ -3003,13 +2978,12 @@ public abstract partial class ToolStripItem :
         if (Owner is not null)
         {
             // check if we need to fire OnRightToLeftChanged
-            int rightToLeft = Properties.GetInteger(s_rightToLeftProperty, out bool found);
-            if (!found)
+            if (!Properties.TryGetValue(s_rightToLeftProperty, out RightToLeft rightToLeft))
             {
-                rightToLeft = (int)RightToLeft.Inherit;
+                rightToLeft = RightToLeft.Inherit;
             }
 
-            if ((rightToLeft == (int)RightToLeft.Inherit) && RightToLeft != DefaultRightToLeft)
+            if (rightToLeft == RightToLeft.Inherit && RightToLeft != DefaultRightToLeft)
             {
                 OnRightToLeftChanged(EventArgs.Empty);
             }
@@ -3351,7 +3325,7 @@ public abstract partial class ToolStripItem :
     [EditorBrowsable(EditorBrowsableState.Never)]
     internal virtual bool ShouldSerializeBackColor()
     {
-        Color backColor = Properties.GetColor(s_backColorProperty);
+        Color backColor = Properties.GetValueOrDefault<Color>(s_backColorProperty);
         return !backColor.IsEmpty;
     }
 
@@ -3365,7 +3339,7 @@ public abstract partial class ToolStripItem :
     [EditorBrowsable(EditorBrowsableState.Never)]
     internal virtual bool ShouldSerializeForeColor()
     {
-        Color foreColor = Properties.GetColor(s_foreColorProperty);
+        Color foreColor = Properties.GetValueOrDefault<Color>(s_foreColorProperty);
         return !foreColor.IsEmpty;
     }
 
@@ -3419,13 +3393,12 @@ public abstract partial class ToolStripItem :
     [EditorBrowsable(EditorBrowsableState.Never)]
     internal virtual bool ShouldSerializeRightToLeft()
     {
-        int rightToLeft = Properties.GetInteger(s_rightToLeftProperty, out bool found);
-        if (!found)
+        if (!Properties.TryGetValue(s_rightToLeftProperty, out RightToLeft rightToLeft))
         {
             return false;
         }
 
-        return rightToLeft != (int)DefaultRightToLeft;
+        return rightToLeft != DefaultRightToLeft;
     }
 
     private bool ShouldSerializeTextDirection()
@@ -3704,7 +3677,7 @@ public abstract partial class ToolStripItem :
     internal virtual bool IsBeingTabbedTo() => Control.AreCommonNavigationalKeysDown();
 
     /// <summary>
-    /// Query font from property bag.
+    ///  Query font from property bag.
     /// </summary>
     internal bool TryGetExplicitlySetFont([NotNullWhen(true)] out Font? local)
     {

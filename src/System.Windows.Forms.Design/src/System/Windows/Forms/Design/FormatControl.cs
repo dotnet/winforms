@@ -73,9 +73,9 @@ internal partial class FormatControl : UserControl
         }
         set
         {
-            nullValueTextBox.TextChanged -= new EventHandler(nullValueTextBox_TextChanged);
+            nullValueTextBox.TextChanged -= nullValueTextBox_TextChanged;
             nullValueTextBox.Text = value;
-            nullValueTextBox.TextChanged += new EventHandler(nullValueTextBox_TextChanged);
+            nullValueTextBox.TextChanged += nullValueTextBox_TextChanged;
         }
     }
 
@@ -224,10 +224,10 @@ internal partial class FormatControl : UserControl
 
     public void ResetFormattingInfo()
     {
-        decimalPlacesUpDown.ValueChanged -= new EventHandler(decimalPlacesUpDown_ValueChanged);
-        _customStringTextBox.TextChanged -= new EventHandler(customStringTextBox_TextChanged);
-        dateTimeFormatsListBox.SelectedIndexChanged -= new EventHandler(dateTimeFormatsListBox_SelectedIndexChanged);
-        formatTypeListBox.SelectedIndexChanged -= new EventHandler(formatTypeListBox_SelectedIndexChanged);
+        decimalPlacesUpDown.ValueChanged -= decimalPlacesUpDown_ValueChanged;
+        _customStringTextBox.TextChanged -= customStringTextBox_TextChanged;
+        dateTimeFormatsListBox.SelectedIndexChanged -= dateTimeFormatsListBox_SelectedIndexChanged;
+        formatTypeListBox.SelectedIndexChanged -= formatTypeListBox_SelectedIndexChanged;
 
         decimalPlacesUpDown.Value = 2;
         nullValueTextBox.Text = string.Empty;
@@ -235,10 +235,10 @@ internal partial class FormatControl : UserControl
         formatTypeListBox.SelectedIndex = -1;
         _customStringTextBox.Text = string.Empty;
 
-        decimalPlacesUpDown.ValueChanged += new EventHandler(decimalPlacesUpDown_ValueChanged);
-        _customStringTextBox.TextChanged += new EventHandler(customStringTextBox_TextChanged);
-        dateTimeFormatsListBox.SelectedIndexChanged += new EventHandler(dateTimeFormatsListBox_SelectedIndexChanged);
-        formatTypeListBox.SelectedIndexChanged += new EventHandler(formatTypeListBox_SelectedIndexChanged);
+        decimalPlacesUpDown.ValueChanged += decimalPlacesUpDown_ValueChanged;
+        _customStringTextBox.TextChanged += customStringTextBox_TextChanged;
+        dateTimeFormatsListBox.SelectedIndexChanged += dateTimeFormatsListBox_SelectedIndexChanged;
+        formatTypeListBox.SelectedIndexChanged += formatTypeListBox_SelectedIndexChanged;
     }
 
     private void UpdateControlVisibility(FormatTypeClass formatType)
@@ -312,7 +312,7 @@ internal partial class FormatControl : UserControl
             Anchor = AnchorStyles.Left | AnchorStyles.Right,
             TabIndex = 3
         };
-        _customStringTextBox.TextChanged += new EventHandler(customStringTextBox_TextChanged);
+        _customStringTextBox.TextChanged += customStringTextBox_TextChanged;
     }
 
     private void UpdateFormatTypeListBoxHeight()
@@ -324,7 +324,7 @@ internal partial class FormatControl : UserControl
 
     private void UpdateFormatTypeListBoxItems()
     {
-        dateTimeFormatsListBox.SelectedIndexChanged -= new EventHandler(dateTimeFormatsListBox_SelectedIndexChanged);
+        dateTimeFormatsListBox.SelectedIndexChanged -= dateTimeFormatsListBox_SelectedIndexChanged;
         dateTimeFormatsListBox.Items.Clear();
         dateTimeFormatsListBox.Items.Add(new DateTimeFormatsListBoxItem(s_dateTimeFormatValue, "d"));
         dateTimeFormatsListBox.Items.Add(new DateTimeFormatsListBoxItem(s_dateTimeFormatValue, "D"));
@@ -336,7 +336,7 @@ internal partial class FormatControl : UserControl
         dateTimeFormatsListBox.Items.Add(new DateTimeFormatsListBoxItem(s_dateTimeFormatValue, "T"));
         dateTimeFormatsListBox.Items.Add(new DateTimeFormatsListBoxItem(s_dateTimeFormatValue, "M"));
         dateTimeFormatsListBox.SelectedIndex = 0;
-        dateTimeFormatsListBox.SelectedIndexChanged += new EventHandler(dateTimeFormatsListBox_SelectedIndexChanged);
+        dateTimeFormatsListBox.SelectedIndexChanged += dateTimeFormatsListBox_SelectedIndexChanged;
     }
 
     private void UpdateTBLHeight()
@@ -355,7 +355,8 @@ internal partial class FormatControl : UserControl
         thirdRowLabel.AutoSize = true;
         tableLayoutPanel1.ResumeLayout(performLayout: true);
 
-        // Now that PerformLayout set the bounds for the tableLayoutPanel we can use these bounds to specify the tableLayoutPanel minimumSize.
+        // Now that PerformLayout set the bounds for the tableLayoutPanel we can use these bounds
+        // to specify the tableLayoutPanel minimumSize.
         tableLayoutPanel1.MinimumSize = new Drawing.Size(tableLayoutPanel1.Width, tableLayoutPanel1.Height);
     }
 
@@ -384,7 +385,7 @@ internal partial class FormatControl : UserControl
         secondRowLabel.MinimumSize = new Drawing.Size(minWidth, minHeight);
 
         // add items to the list box
-        formatTypeListBox.SelectedIndexChanged -= new EventHandler(formatTypeListBox_SelectedIndexChanged);
+        formatTypeListBox.SelectedIndexChanged -= formatTypeListBox_SelectedIndexChanged;
         formatTypeListBox.Items.Clear();
         formatTypeListBox.Items.Add(new NoFormattingFormatType());
         formatTypeListBox.Items.Add(new NumericFormatType(this));
@@ -393,7 +394,7 @@ internal partial class FormatControl : UserControl
         formatTypeListBox.Items.Add(new ScientificFormatType(this));
         formatTypeListBox.Items.Add(new CustomFormatType(this));
         formatTypeListBox.SelectedIndex = 0;
-        formatTypeListBox.SelectedIndexChanged += new EventHandler(formatTypeListBox_SelectedIndexChanged);
+        formatTypeListBox.SelectedIndexChanged += formatTypeListBox_SelectedIndexChanged;
 
         UpdateCustomStringTextBox();
         UpdateTBLHeight();

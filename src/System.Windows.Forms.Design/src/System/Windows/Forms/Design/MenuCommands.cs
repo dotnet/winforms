@@ -64,7 +64,7 @@ public sealed class MenuCommands : StandardCommands
     private static readonly Guid s_vsStandardCommandSet97 = new("{5efc7975-14bc-11cf-9b2b-00aa00573819}");
 
     /// <summary>
-    ///  This guid corresponds to the menu grouping Windows Forms will use for its menus.  This is
+    ///  This guid corresponds to the menu grouping Windows Forms will use for its menus. This is
     ///  defined in the Windows Forms menu CTC file, but we need it here so we can define what
     ///  context menus to use.
     /// </summary>

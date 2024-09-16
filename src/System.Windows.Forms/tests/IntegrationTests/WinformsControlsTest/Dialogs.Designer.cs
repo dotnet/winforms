@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-namespace WinformsControlsTest;
+namespace WinFormsControlsTest;
 
 partial class Dialogs
 {
@@ -56,7 +56,7 @@ partial class Dialogs
         this.propertyGrid1.Name = "propertyGrid1";
         this.propertyGrid1.Size = new System.Drawing.Size(332, 430);
         this.propertyGrid1.TabIndex = 0;
-        this.propertyGrid1.SelectedObjectsChanged += new System.EventHandler(this.propertyGrid1_SelectedObjectsChanged);
+        this.propertyGrid1.SelectedObjectsChanged += this.propertyGrid1_SelectedObjectsChanged;
         // 
         // btnOpenFileDialog
         // 
@@ -66,7 +66,7 @@ partial class Dialogs
         this.btnOpenFileDialog.TabIndex = 1;
         this.btnOpenFileDialog.Text = "Open &file dialog";
         this.btnOpenFileDialog.UseVisualStyleBackColor = true;
-        this.btnOpenFileDialog.Click += new System.EventHandler(this.btnOpenFileDialog_Click);
+        this.btnOpenFileDialog.Click += this.btnOpenFileDialog_Click;
         // 
         // btnColorDialog
         // 
@@ -76,7 +76,7 @@ partial class Dialogs
         this.btnColorDialog.TabIndex = 2;
         this.btnColorDialog.Text = "&Color dialog";
         this.btnColorDialog.UseVisualStyleBackColor = true;
-        this.btnColorDialog.Click += new System.EventHandler(this.btnColorDialog_Click);
+        this.btnColorDialog.Click += this.btnColorDialog_Click;
         // 
         // btnThreadExceptionDialog
         // 
@@ -86,7 +86,7 @@ partial class Dialogs
         this.btnThreadExceptionDialog.TabIndex = 2;
         this.btnThreadExceptionDialog.Text = "&Thread exception dialog";
         this.btnThreadExceptionDialog.UseVisualStyleBackColor = true;
-        this.btnThreadExceptionDialog.Click += new System.EventHandler(this.btnThreadExceptionDialog_Click);
+        this.btnThreadExceptionDialog.Click += this.btnThreadExceptionDialog_Click;
         // 
         // btnPrintDialog
         // 
@@ -96,7 +96,7 @@ partial class Dialogs
         this.btnPrintDialog.TabIndex = 3;
         this.btnPrintDialog.Text = "&Print dialog";
         this.btnPrintDialog.UseVisualStyleBackColor = true;
-        this.btnPrintDialog.Click += new System.EventHandler(this.btnPrintDialog_Click);
+        this.btnPrintDialog.Click += this.btnPrintDialog_Click;
         // 
         // btnFolderBrowserDialog
         // 
@@ -106,7 +106,7 @@ partial class Dialogs
         this.btnFolderBrowserDialog.TabIndex = 4;
         this.btnFolderBrowserDialog.Text = "Folder &browser dialog";
         this.btnFolderBrowserDialog.UseVisualStyleBackColor = true;
-        this.btnFolderBrowserDialog.Click += new System.EventHandler(this.btnFolderBrowserDialog_Click);
+        this.btnFolderBrowserDialog.Click += this.btnFolderBrowserDialog_Click;
         // 
         // btnSaveFileDialog
         // 
@@ -116,7 +116,7 @@ partial class Dialogs
         this.btnSaveFileDialog.TabIndex = 5;
         this.btnSaveFileDialog.Text = "&Save file dialog";
         this.btnSaveFileDialog.UseVisualStyleBackColor = true;
-        this.btnSaveFileDialog.Click += new System.EventHandler(this.btnSaveFileDialog_Click);
+        this.btnSaveFileDialog.Click += this.btnSaveFileDialog_Click;
         // 
         // flowLayoutPanel1
         // 

@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-namespace WinformsControlsTest;
+namespace WinFormsControlsTest;
 
 partial class MenuStripAndCheckedListBox
 {
@@ -76,6 +76,7 @@ partial class MenuStripAndCheckedListBox
         this.menuStrip1.Size = new System.Drawing.Size(736, 46);
         this.menuStrip1.TabIndex = 0;
         this.menuStrip1.Text = "menuStrip1";
+        this.menuStrip1.TabStop = true;
         //
         // fileToolStripMenuItem
         //
@@ -288,8 +289,8 @@ partial class MenuStripAndCheckedListBox
         this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
         this.Name = "MenuStripAndCheckedListBox";
         this.Text = "MenuStrip and CheckedListBox";
-        this.Load += new System.EventHandler(this.MenuStripScaling_Load);
-        this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.MenuStripAndCheckedListBox_DpiChanged);
+        this.Load += this.MenuStripScaling_Load;
+        this.DpiChanged += this.MenuStripAndCheckedListBox_DpiChanged;
         this.menuStrip1.ResumeLayout(false);
         this.menuStrip1.PerformLayout();
         this.ResumeLayout(false);

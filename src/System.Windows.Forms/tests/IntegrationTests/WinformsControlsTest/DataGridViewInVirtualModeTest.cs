@@ -1,12 +1,14 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-namespace WinformsControlsTest;
+namespace WinFormsControlsTest;
 
+[DesignerCategory("Default")]
 public partial class DataGridViewInVirtualModeTest : Form
 {
     // Declare fields for testing DGV in the Virtual mode
-    // The example was taken from: https://docs.microsoft.com/dotnet/desktop/winforms/controls/implementing-virtual-mode-wf-datagridview-control
+    // The example was taken from:
+    // https://docs.microsoft.com/dotnet/desktop/winforms/controls/implementing-virtual-mode-wf-datagridview-control
 
     // Declare a List to serve as the test data source
     private readonly List<TestCustomer> _customers = [];

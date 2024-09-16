@@ -4,7 +4,8 @@
 namespace System.Windows.Forms;
 
 /// <summary>
-///  Provides data for the <see cref="ListView.OnGroupCollapsedStateChanged"/> and <see cref="ListView.OnGroupTaskLinkClick"/> event.
+///  Provides data for the <see cref="ListView.OnGroupCollapsedStateChanged"/> and
+///  <see cref="ListView.OnGroupTaskLinkClick"/> event.
 /// </summary>
 public class ListViewGroupEventArgs : EventArgs
 {

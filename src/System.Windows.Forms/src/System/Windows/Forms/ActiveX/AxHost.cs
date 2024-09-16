@@ -201,7 +201,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         }
 
         _oleSite = new OleInterfaces(this);
-        _selectionChangeHandler = new EventHandler(OnNewSelection);
+        _selectionChangeHandler = OnNewSelection;
         _clsid = new Guid(clsid);
         _flags = flags;
 
@@ -210,7 +210,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         _axState[s_rejectSelection] = true;
 
         _isMaskEdit = _clsid.Equals(s_maskEdit_Clsid);
-        _onContainerVisibleChanged = new EventHandler(OnContainerVisibleChanged);
+        _onContainerVisibleChanged = OnContainerVisibleChanged;
     }
 
     private bool CanUIActivate => IsUserMode() || _editMode != EDITM_NONE;
@@ -245,7 +245,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     /// <summary>
     ///  AxHost will call this when it is ready to create the underlying ActiveX object.
     ///  Wrappers will override this and cast the pointer obtained by calling getOcx() to
-    ///  their own interfaces.  getOcx() should not usually be called before this function.
+    ///  their own interfaces. getOcx() should not usually be called before this function.
     ///  Note: calling begin will result in a call to this function.
     /// </summary>
     protected virtual void AttachInterfaces()
@@ -887,11 +887,11 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             {
                 if (hook)
                 {
-                    changeService.ComponentRename += new ComponentRenameEventHandler(OnComponentRename);
+                    changeService.ComponentRename += OnComponentRename;
                 }
                 else
                 {
-                    changeService.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
+                    changeService.ComponentRename -= OnComponentRename;
                 }
 
                 _axState[s_renameEventHooked] = hook;
@@ -1665,12 +1665,14 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     ///
     ///  The keyboard processing of input keys to AxHost controls go in 3 steps inside AxHost.PreProcessMessage()
     ///
-    ///  (1) Call the OCX's TranslateAccelerator. This may or may not call back into us using IOleControlSite::TranslateAccelerator()
+    ///  (1) Call the OCX's TranslateAccelerator. This may or may not call back into us
+    ///  using IOleControlSite::TranslateAccelerator()
     ///
     ///  (2) If the control completely processed this without calling us back:
     ///  -- If this returns S_OK, then it means that the control already processed this message and we return true,
     ///  forcing us to not do any more processing or dispatch the message.
-    ///  -- If this returns S_FALSE, then it means that the control wants us to dispatch the message without doing any processing on our side.
+    ///  -- If this returns S_FALSE, then it means that the control wants us to dispatch the message
+    ///  without doing any processing on our side.
     ///
     ///  (3) If the control completely processed this by calling us back:
     ///  -- If this returns S_OK, then it means that the control processed this message and we return true,
@@ -1969,7 +1971,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     ///  </para>
     ///  <para>
     ///   The logical container of this control determines the set of logical sibling controls. In general this
-    ///   property exists only to enable some specific behaviours of ActiveX controls and should not be set by
+    ///   property exists only to enable some specific behaviors of ActiveX controls and should not be set by
     ///   the user.
     ///  </para>
     /// </devdoc>
@@ -2341,7 +2343,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     }
 
     /// <summary>
-    ///  Called to create the ActiveX control.  Override this member to perform your own creation logic
+    ///  Called to create the ActiveX control. Override this member to perform your own creation logic
     ///  or call base to do the default creation logic.
     /// </summary>
     protected virtual object? CreateInstanceCore(Guid clsid)
@@ -2458,7 +2460,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     }
 
     /// <summary>
-    ///  Retrieves the class name for this object.  If null is returned,
+    ///  Retrieves the class name for this object. If null is returned,
     ///  the type name is used.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -2468,7 +2470,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     }
 
     /// <summary>
-    ///  Retrieves the name for this object.  If null is returned,
+    ///  Retrieves the name for this object. If null is returned,
     ///  the default is used.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -2554,12 +2556,12 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             _axState[s_refreshProperties] = value;
             if (value && !_axState[s_listeningToIdle])
             {
-                Application.Idle += new EventHandler(OnIdle);
+                Application.Idle += OnIdle;
                 _axState[s_listeningToIdle] = true;
             }
             else if (!value && _axState[s_listeningToIdle])
             {
-                Application.Idle -= new EventHandler(OnIdle);
+                Application.Idle -= OnIdle;
                 _axState[s_listeningToIdle] = false;
             }
         }

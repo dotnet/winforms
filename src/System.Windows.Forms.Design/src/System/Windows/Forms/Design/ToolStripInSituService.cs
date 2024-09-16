@@ -9,7 +9,8 @@ using System.ComponentModel.Design;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-///  This class implements the ISupportInSituService which enables some designers to  go into InSitu Editing when Keys are pressed while the Component is Selected.
+///  This class implements the ISupportInSituService which enables some designers to go into
+///  InSitu Editing when Keys are pressed while the Component is Selected.
 /// </summary>
 internal class ToolStripInSituService : ISupportInSituService, IDisposable
 {
@@ -21,7 +22,8 @@ internal class ToolStripInSituService : ISupportInSituService, IDisposable
     private ToolStripKeyboardHandlingService _toolStripKeyBoardService;
 
     /// <summary>
-    ///  The constructor for this class which takes the serviceprovider used to get the selectionservice. This ToolStripInSituService is ToolStrip specific.
+    ///  The constructor for this class which takes the serviceprovider used to get the selectionservice.
+    ///  This ToolStripInSituService is ToolStrip specific.
     /// </summary>
     public ToolStripInSituService(IServiceProvider provider)
     {
@@ -34,7 +36,7 @@ internal class ToolStripInSituService : ISupportInSituService, IDisposable
         Debug.Assert(_componentChangeService is not null, "ToolStripKeyboardHandlingService relies on the componentChange service, which is unavailable.");
         if (_componentChangeService is not null)
         {
-            _componentChangeService.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
+            _componentChangeService.ComponentRemoved += OnComponentRemoved;
         }
     }
 
@@ -57,7 +59,7 @@ internal class ToolStripInSituService : ISupportInSituService, IDisposable
 
         if (_componentChangeService is not null)
         {
-            _componentChangeService.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
+            _componentChangeService.ComponentRemoved -= OnComponentRemoved;
             _componentChangeService = null;
         }
     }

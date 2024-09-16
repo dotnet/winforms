@@ -6,7 +6,7 @@ using System.ComponentModel;
 namespace System.Windows.Forms.Tests;
 
 // NB: doesn't require thread affinity
-public class DataFormatsTests
+public partial class DataFormatsTests
 {
     public static IEnumerable<object[]> KnownFormats_TestData()
     {
@@ -143,11 +143,6 @@ public class DataFormatsTests
 
         yield return new object[] { -1, "Format65535" };
         yield return new object[] { 1234, "Format1234" };
-
-        uint manuallyRegisteredFormatId = PInvoke.RegisterClipboardFormat("ManuallyRegisteredFormat");
-        uint longManuallyRegisteredFormatId = PInvoke.RegisterClipboardFormat(new string('a', 255));
-        yield return new object[] { (int)manuallyRegisteredFormatId, "ManuallyRegisteredFormat" };
-        yield return new object[] { (int)longManuallyRegisteredFormatId, new string('a', 255) };
     }
 
     [Theory]

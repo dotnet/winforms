@@ -6,9 +6,10 @@ using System.Drawing;
 namespace System.Windows.Forms.Design.Behavior;
 
 /// <summary>
-///  This class is created by the ToolboxItemSnapLineBehavior when the user clicks, drags, and drops a control from the toolbox.
-///  This class adds value to the standard DragEventArgs by holding information about how the user snapped a control when it was dropped.
-///  We'll use this information in ParentControlDesigner when this new control is created to properly position and size the new control.
+///  This class is created by the ToolboxItemSnapLineBehavior when the user clicks, drags, and drops a control
+///  from the toolbox. This class adds value to the standard DragEventArgs by holding information about how the user
+///  snapped a control when it was dropped. We'll use this information in ParentControlDesigner when this new control
+///  is created to properly position and size the new control.
 /// </summary>
 internal sealed partial class ToolboxSnapDragDropEventArgs : DragEventArgs
 {

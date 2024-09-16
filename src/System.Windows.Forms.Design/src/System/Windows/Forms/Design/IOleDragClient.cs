@@ -10,7 +10,7 @@ internal interface IOleDragClient
     IComponent Component { get; }
 
     /// <summary>
-    ///  Checks if the client is read only.  That is, if components can
+    ///  Checks if the client is read only. That is, if components can
     ///  be added or removed from the designer.
     /// </summary>
     bool CanModifyComponents { get; }

@@ -8,8 +8,8 @@ namespace System.Windows.Forms.Design.Behavior;
 
 /// <summary>
 ///  This abstract class represents the Behavior objects that are managed
-///  by the BehaviorService.  This class can be extended to develop any
-///  type of UI 'behavior'.  Ex: selection, drag, and resize behaviors.
+///  by the BehaviorService. This class can be extended to develop any
+///  type of UI 'behavior'. Ex: selection, drag, and resize behaviors.
 /// </summary>
 public abstract class Behavior
 {
@@ -96,7 +96,7 @@ public abstract class Behavior
 
     /// <summary>
     ///  A behavior can request mouse capture through the behavior service by pushing itself with
-    ///  PushCaptureBehavior.  If it does so, it will be notified through OnLoseCapture when capture is lost.
+    ///  PushCaptureBehavior. If it does so, it will be notified through OnLoseCapture when capture is lost.
     ///  Generally the behavior pops itself at this time. Capture is lost when one of the following occurs:
     ///
     ///  1. Someone else requests capture.
@@ -183,7 +183,7 @@ public abstract class Behavior
 
     /// <summary>
     ///  When a MouseHover message enters the BehaviorService's AdornerWindow it is first passed here, to the
-    ///  top-most Behavior in the BehaviorStack.  Returning 'true' from this function signifies that the Message
+    ///  top-most Behavior in the BehaviorStack. Returning 'true' from this function signifies that the Message
     ///  was 'handled' by the Behavior and should not continue to be processed.
     /// </summary>
     public virtual bool OnMouseHover(Glyph? g, Point mouseLoc)
@@ -223,7 +223,7 @@ public abstract class Behavior
 
     /// <summary>
     ///  When any MouseMove message enters the BehaviorService's AdornerWindow (mousemove, ncmousemove) it is
-    ///  first passed here, to the top-most Behavior in the BehaviorStack.  Returning 'true' from this method
+    ///  first passed here, to the top-most Behavior in the BehaviorStack. Returning 'true' from this method
     ///  signifies that the Message was 'handled' by the Behavior and should not continue to be processed.
     /// </summary>
     public virtual bool OnMouseMove(Glyph? g, MouseButtons button, Point mouseLoc)
@@ -245,7 +245,7 @@ public abstract class Behavior
     /// <summary>
     ///  When any MouseUp message enters the BehaviorService's AdornerWindow
     ///  (nclbuttonupown, lbuttonup, rbuttonup, nclrbuttonup) it is first
-    ///  passed here, to the top-most Behavior in the BehaviorStack.  Returning
+    ///  passed here, to the top-most Behavior in the BehaviorStack. Returning
     ///  'true' from this function signifies that the Message was 'handled' by
     ///  the Behavior and should not continue to be processed.
     /// </summary>

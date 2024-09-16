@@ -298,7 +298,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
         }
 
         ValidateEndpoints();
-        ReadOnlySpan<char> rangeText = new(_provider.Text.ToCharArray(), Start, Length);
+        ReadOnlySpan<char> rangeText = _provider.Text.AsSpan().Slice(Start, Length);
         StringComparison comparisonType = ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
 
         // Do a case-sensitive search for the text inside the range.
@@ -675,7 +675,8 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
     private static bool IsApostrophe(char ch) => ch is '\'' or ((char)0x2019); // Unicode Right Single Quote Mark
 
     /// <devdoc>
-    ///  Attribute values and their types are defined here - https://learn.microsoft.com/windows/win32/winauto/uiauto-textattribute-ids
+    ///  Attribute values and their types are defined here -
+    ///  https://learn.microsoft.com/windows/win32/winauto/uiauto-textattribute-ids
     /// </devdoc>
     private VARIANT GetAttributeValue(UIA_TEXTATTRIBUTE_ID textAttributeIdentifier)
     {
@@ -1020,7 +1021,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
                     ValidateEndpoints();
 
                     // We'll move 1 format unit if we aren't already at the end of the
-                    // document.  Otherwise, we won't move at all.
+                    // document. Otherwise, we won't move at all.
                     moved = index < limit ? 1 : 0;
                     index = limit;
                 }
@@ -1092,7 +1093,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
 
                         // If a line other than the first consists of only "\r\n",
                         // you can move backwards past this line and the position changes,
-                        // hence this is counted.  The first line is special, though:
+                        // hence this is counted. The first line is special, though:
                         // if it is empty, and you move say from the second line back up
                         // to the first, you cannot move further; however if the first line
                         // is nonempty, you can move from the end of the first line to its
@@ -1150,7 +1151,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
                     // "pages" and document.
 
                     // We'll move 1 format unit if we aren't already at the beginning of the
-                    // document.  Otherwise, we won't move at all.
+                    // document. Otherwise, we won't move at all.
                     moved = index > 0 ? -1 : 0;
                     index = 0;
                 }

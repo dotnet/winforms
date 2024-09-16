@@ -9,7 +9,8 @@ using System.Drawing.Design;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-///  Provides an implementation of IWindowsFormsEditorService and ITypeDescriptorContext. Also provides a static method to invoke a UITypeEditor given a designer, an object  and a property name.
+///  Provides an implementation of IWindowsFormsEditorService and ITypeDescriptorContext.
+///  Also provides a static method to invoke a UITypeEditor given a designer, an object and a property name.
 /// </summary>
 internal class EditorServiceContext : IWindowsFormsEditorService, ITypeDescriptorContext
 {

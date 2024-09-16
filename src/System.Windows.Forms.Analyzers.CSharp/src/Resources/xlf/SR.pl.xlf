@@ -2,6 +2,11 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en" target-language="pl" original="../SR.resx">
     <body>
+      <trans-unit id="AddDesignerSerializationVisibilityCodeFixTitle">
+        <source>Add DesignerSerializationVisibilityAttribute to property</source>
+        <target state="translated">Dodaj element DesignerSerializationVisibilityAttribute do właściwości</target>
+        <note />
+      </trans-unit>
       <trans-unit id="GdiplusFontFamilyNotFound">
         <source>Font '{0}' cannot be found.</source>
         <target state="translated">Nie można odnaleźć czcionki „{0}”.</target>
@@ -22,29 +27,59 @@
         <target state="translated">Nie można dokonać analizy elementu Text „{0}”. Oczekiwano tekstu w formacie „{1}”.</target>
         <note />
       </trans-unit>
-      <trans-unit id="WFAC001Message">
+      <trans-unit id="WFO0001Message">
         <source>Only projects with 'OutputType={0}' supported</source>
         <target state="translated">Obsługiwane są tylko projekty z parametrem „OutputType={0}”</target>
         <note />
       </trans-unit>
-      <trans-unit id="WFAC001Title">
+      <trans-unit id="WFO0001Title">
         <source>Unsupported project type</source>
         <target state="translated">Nieobsługiwany typ projektu</target>
         <note />
       </trans-unit>
-      <trans-unit id="WFAC002Message">
+      <trans-unit id="WFO0002Message">
         <source>ArgumentException: Project property '{0}' cannot be set to '{1}'</source>
         <target state="translated">ArgumentException: Właściwość projektu „{0}” nie może mieć wartości „{1}”</target>
         <note />
       </trans-unit>
-      <trans-unit id="WFAC002MessageWithReason">
-        <source>ArgumentException: Project property '{0}' cannot be set to '{1}'. Reason: {2}</source>
-        <target state="translated">ArgumentException: Właściwość projektu „{0}” nie może mieć wartości „{1}”. Przyczyna: {2}</target>
+      <trans-unit id="WFO0002MessageWithReason">
+        <source>ArgumentException: Project property '{0}' cannot be set to '{1}'. Reason: {2}.</source>
+        <target state="translated">ArgumentException: właściwość projektu „{0}” nie może mieć wartości „{1}”. Przyczyna: {2}.</target>
         <note />
       </trans-unit>
-      <trans-unit id="WFAC002Title">
+      <trans-unit id="WFO0002Title">
         <source>Unsupported property value</source>
         <target state="translated">Nieobsługiwana wartość właściwości</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO1000AnalyzerDescription">
+        <source>A property should determine its property content serialization with the DesignerSerializationVisibilityAttribute, DefaultValueAttribute or the ShouldSerializeProperty method.</source>
+        <target state="translated">Właściwość powinna określać serializację zawartości właściwości za pomocą metody DesignerSerializationVisibilityAttribute, DefaultValueAttribute lub ShouldSerializeProperty.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO1000AnalyzerMessageFormat">
+        <source>Property '{0}' does not configure the code serialization for its property content</source>
+        <target state="translated">Właściwość „{0}” nie konfiguruje serializacji kodu dla jej zawartości właściwości</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO1000AnalyzerTitle">
+        <source>Missing code serialization configuration for property content</source>
+        <target state="translated">Brak konfiguracji serializacji kodu dla zawartości właściwości</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2001AnalyzerDescription">
+        <source>Avoid passing a `Func&lt;T&gt;` to `InvokeAsync` where `T` is a `Task` or `ValueTask`, unless your intention is for the delegate to simply be kicked off as an unsupervised task. Instead, use `Func&lt;CancellationToken, ValueTask&gt;` or `Func&lt;CancellationToken, ValueTask&lt;T&gt;&gt;`, so that the delegate passed to `InvokeAsync` can be awaited, allowing exceptions to be properly handled.</source>
+        <target state="translated">Unikaj przekazywania `Func&lt;T&gt;` do `InvokeAsync`, gdzie `T` jest `Task` lub `ValueTask`, chyba że twoim zamiarem jest, aby delegat został po prostu uruchomiony jako nienadzorowane zadanie. Zamiast tego należy użyć `Func&lt;CancellationToken, ValueTask&gt;` lub `Func&lt;CancellationToken, ValueTask&lt;T&gt;&gt;`, aby delegat przekazany do `InvokeAsync` mógł być oczekiwany, umożliwiając prawidłową obsługę wyjątków.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2001AnalyzerMessageFormat">
+        <source>Task is being passed to InvokeAsync without a cancellation token</source>
+        <target state="translated">Zadanie jest przekazywane do metody InvokeAsync bez tokenu anulowania</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2001AnalyzerTitle">
+        <source>Task is being passed to InvokeAsync without a cancellation token</source>
+        <target state="translated">Zadanie jest przekazywane do metody InvokeAsync bez tokenu anulowania</target>
         <note />
       </trans-unit>
     </body>

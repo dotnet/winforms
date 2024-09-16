@@ -55,7 +55,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
         _sortGlyphDirection = SortOrder.None;
     }
 
-    internal bool ContainsLocalValue => Properties.ContainsObject(s_propCellValue);
+    internal bool ContainsLocalValue => Properties.ContainsKey(s_propCellValue);
 
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public SortOrder SortGlyphDirection
@@ -63,7 +63,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
         get => _sortGlyphDirection;
         set
         {
-            // Sequential enum.  Valid values are 0x0 to 0x2
+            // Sequential enum. Valid values are 0x0 to 0x2
             SourceGenerated.EnumValidator.Validate(value);
             if (OwningColumn is null || DataGridView is null)
             {
@@ -517,7 +517,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
                                 MeasureTextWidth(
                                     graphics,
                                     valStr,
-                                    cellStyle.Font,
+                                    cellStyle.Font!,
                                     Math.Max(1, constraintSize.Height - borderAndPaddingHeights - 2 * VerticalMargin),
                                     flags),
                                 0);
@@ -528,7 +528,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
                                 MeasureTextSize(
                                     graphics,
                                     valStr,
-                                    cellStyle.Font,
+                                    cellStyle.Font!,
                                     flags).Width,
                                 0);
                         }
@@ -585,7 +585,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
                                     MeasureTextHeight(
                                         graphics,
                                         valStr,
-                                        cellStyle.Font,
+                                        cellStyle.Font!,
                                         allowedWidth -
                                         HorizontalTextMarginLeft -
                                         HorizontalTextMarginRight -
@@ -600,7 +600,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
                                     MeasureTextHeight(
                                         graphics,
                                         valStr,
-                                        cellStyle.Font,
+                                        cellStyle.Font!,
                                         allowedWidth -
                                         HorizontalTextMarginLeft -
                                         HorizontalTextMarginRight,
@@ -614,7 +614,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
                                 MeasureTextSize(
                                     graphics,
                                     valStr,
-                                    cellStyle.Font,
+                                    cellStyle.Font!,
                                     flags).Height);
                         }
                     }
@@ -633,7 +633,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
                             preferredSize = MeasureTextPreferredSize(
                                 graphics,
                                 valStr,
-                                cellStyle.Font,
+                                cellStyle.Font!,
                                 5.0F,
                                 flags);
                         }
@@ -642,7 +642,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
                             preferredSize = MeasureTextSize(
                                 graphics,
                                 valStr,
-                                cellStyle.Font,
+                                cellStyle.Font!,
                                 flags);
                         }
                     }

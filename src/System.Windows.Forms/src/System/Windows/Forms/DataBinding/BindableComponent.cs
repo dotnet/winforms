@@ -6,8 +6,8 @@ using System.ComponentModel;
 namespace System.Windows.Forms;
 
 /// <summary>
-/// Base class for components which provide properties which can be
-/// data bound with the WinForms Designer.
+///  Base class for components which provide properties which can be
+///  data bound with the WinForms Designer.
 /// </summary>
 public abstract class BindableComponent : Component, IBindableComponent
 {
@@ -17,7 +17,7 @@ public abstract class BindableComponent : Component, IBindableComponent
     private BindingContext? _bindingContext;
 
     /// <summary>
-    /// Gets or sets the <see cref="BindingContext"/> for this bindable <see cref="Component"/>.
+    ///  Gets or sets the <see cref="BindingContext"/> for this bindable <see cref="Component"/>.
     /// </summary>
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -28,7 +28,6 @@ public abstract class BindableComponent : Component, IBindableComponent
     {
         get => _bindingContext ??= [];
 
-        [RequiresUnreferencedCode(IBindableComponent.ComponentModelTrimIncompatibilityMessage)]
         set
         {
             if (!Equals(_bindingContext, value))
@@ -40,7 +39,7 @@ public abstract class BindableComponent : Component, IBindableComponent
     }
 
     /// <summary>
-    /// Occurs when the binding context has changed.
+    ///  Occurs when the binding context has changed.
     /// </summary>
     [SRCategory(nameof(SR.CatData))]
     [SRDescription(nameof(SR.BindableComponentBindingContextChangedDescr))]
@@ -69,7 +68,7 @@ public abstract class BindableComponent : Component, IBindableComponent
     }
 
     /// <summary>
-    /// Gets the <see cref="ControlBindingsCollection"/> for this bindable <see cref="Component"/>.
+    ///  Gets the <see cref="ControlBindingsCollection"/> for this bindable <see cref="Component"/>.
     /// </summary>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
     [RefreshProperties(RefreshProperties.All)]

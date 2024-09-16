@@ -81,8 +81,8 @@ public partial class ListBox
         public int IndexOf(int selectedIndex)
         {
             // Just what does this do?  The selectedIndex parameter above is the index into the
-            // main object collection.  We look at the state of that item, and if the state indicates
-            // that it is selected, we get back the virtualized index into this collection.  Indexes on
+            // main object collection. We look at the state of that item, and if the state indicates
+            // that it is selected, we get back the virtualized index into this collection. Indexes on
             // this collection match those on the SelectedObjectCollection.
             if (selectedIndex >= 0 &&
                 selectedIndex < InnerArray.Count &&
@@ -156,7 +156,7 @@ public partial class ListBox
         }
 
         /// <summary>
-        ///  This is the item array that stores our data.  We share this backing store
+        ///  This is the item array that stores our data. We share this backing store
         ///  with the main object collection.
         /// </summary>
         private ItemArray InnerArray

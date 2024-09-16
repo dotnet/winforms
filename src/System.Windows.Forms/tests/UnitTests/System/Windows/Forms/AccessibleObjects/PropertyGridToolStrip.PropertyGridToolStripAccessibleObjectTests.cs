@@ -47,4 +47,22 @@ public class PropertyGridToolStrip_PropertyGridToolStripAccessibleObjectTests
         Assert.False(propertyGrid.IsHandleCreated);
         Assert.False(propertyGridToolStrip.IsHandleCreated);
     }
+
+    [WinFormsTheory]
+    [InlineData("Test Name", null, "Test Name")]
+    [InlineData(null, "Parent Name", "Parent Name")]
+    public void PropertyGridToolStripAccessibleObject_Name_ReturnsExpected(string toolStripAccessibleName, string parentAccessibleName, string expectedName)
+    {
+        using PropertyGrid propertyGrid = new();
+        propertyGrid.AccessibleName = parentAccessibleName;
+        using PropertyGridToolStrip propertyGridToolStrip = new(propertyGrid);
+        propertyGridToolStrip.AccessibleName = toolStripAccessibleName;
+        PropertyGridToolStrip.PropertyGridToolStripAccessibleObject accessibleObject = new(propertyGridToolStrip, propertyGrid);
+
+        string name = accessibleObject.Name;
+
+        name.Should().Be(expectedName);
+        propertyGrid.IsHandleCreated.Should().BeFalse();
+        propertyGridToolStrip.IsHandleCreated.Should().BeFalse();
+    }
 }

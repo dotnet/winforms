@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Numerics;
@@ -59,8 +59,8 @@ internal sealed class GraphicsContext : IDisposable
     /// <summary>
     /// Flag that determines whether the context was created for a Graphics.Save() operation.
     /// This kind of contexts are cumulative across subsequent Save() calls so the top context
-    /// info is cumulative.  This is not the same for contexts created for a Graphics.BeginContainer()
-    /// operation, in this case the new context information is reset.  See Graphics.BeginContainer()
+    /// info is cumulative. This is not the same for contexts created for a Graphics.BeginContainer()
+    /// operation, in this case the new context information is reset. See Graphics.BeginContainer()
     /// and Graphics.Save() for more information.
     /// </summary>
     public bool IsCumulative { get; set; }

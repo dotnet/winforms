@@ -379,6 +379,11 @@
         <target state="translated">Editor della raccolta {0}</target>
         <note />
       </trans-unit>
+      <trans-unit id="CollectionEditorCreateInstanceError">
+        <source>Neither {0} nor {1} can create an instance of {2}.</source>
+        <target state="translated">Né {0} né {1} possono creare un'istanza di {2}.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CollectionEditorInheritedReadOnlySelection">
         <source>Read-only component(s) selected.</source>
         <target state="translated">Componenti in sola lettura selezionati.</target>

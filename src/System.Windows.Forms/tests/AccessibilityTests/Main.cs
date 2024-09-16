@@ -72,15 +72,6 @@ public partial class Main : Form
         taskDialogTesting.ShowEventsDemoTaskDialog();
     }
 
-    private void button11_Click(object sender, EventArgs e)
-    {
-        CustomAccessiblePropertiesForm cusAcccName = new()
-        {
-            StartPosition = FormStartPosition.CenterParent
-        };
-        cusAcccName.Show();
-    }
-
     private void button12_Click(object sender, EventArgs e)
     {
         DataBindingExample dataBindingExample = new();

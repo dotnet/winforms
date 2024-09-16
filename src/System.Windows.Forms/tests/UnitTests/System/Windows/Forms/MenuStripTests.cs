@@ -742,7 +742,10 @@ public class MenuStripTests
         Assert.False(control.IsHandleCreated);
     }
 
+    [ActiveIssue("https://github.com/dotnet/winforms/issues/11560")]
     [WinFormsFact]
+    [SkipOnArchitecture(TestArchitectures.X64,
+        "Flaky tests, see: https://github.com/dotnet/winforms/issues/11560")]
     public void MenuStrip_WndProc_InvokeMouseActivate_Success()
     {
         using SubMenuStrip control = new();
@@ -756,7 +759,10 @@ public class MenuStripTests
         Assert.True(control.IsHandleCreated);
     }
 
+    [ActiveIssue("https://github.com/dotnet/winforms/issues/11561")]
     [WinFormsFact]
+    [SkipOnArchitecture(TestArchitectures.X64,
+        "Flaky tests, see: https://github.com/dotnet/winforms/issues/11561")]
     public void MenuStrip_WndProc_InvokeMouseActivateWithHandle_Success()
     {
         using SubMenuStrip control = new();

@@ -48,7 +48,7 @@ public sealed unsafe class Matrix : MarshalByRefObject, IDisposable
         return nativeMatrix;
     }
 
-    public Matrix(RectangleF rect, PointF[] plgpts)
+    public Matrix(RectangleF rect, params PointF[] plgpts)
     {
         ArgumentNullException.ThrowIfNull(plgpts);
         if (plgpts.Length != 3)
@@ -62,7 +62,7 @@ public sealed unsafe class Matrix : MarshalByRefObject, IDisposable
         }
     }
 
-    public Matrix(Rectangle rect, Point[] plgpts)
+    public Matrix(Rectangle rect, params Point[] plgpts)
     {
         ArgumentNullException.ThrowIfNull(plgpts);
         if (plgpts.Length != 3)
@@ -254,10 +254,21 @@ public sealed unsafe class Matrix : MarshalByRefObject, IDisposable
         GC.KeepAlive(this);
     }
 
-    public void TransformPoints(PointF[] pts)
+    /// <inheritdoc cref="TransformPoints(Point[])"/>
+    public void TransformPoints(params PointF[] pts)
     {
         ArgumentNullException.ThrowIfNull(pts);
+        TransformPoints(pts.AsSpan());
+    }
 
+    /// <inheritdoc cref="TransformPoints(Point[])"/>
+#if NET9_0_OR_GREATER
+    public
+#else
+    private
+#endif
+    void TransformPoints(params ReadOnlySpan<PointF> pts)
+    {
         fixed (PointF* p = pts)
         {
             PInvoke.GdipTransformMatrixPoints(
@@ -269,10 +280,24 @@ public sealed unsafe class Matrix : MarshalByRefObject, IDisposable
         GC.KeepAlive(this);
     }
 
-    public void TransformPoints(Point[] pts)
+    /// <summary>
+    ///  Applies the geometric transform this <see cref="Matrix"/> represents to an array of points.
+    /// </summary>
+    /// <param name="pts">The points to transform.</param>
+    public void TransformPoints(params Point[] pts)
     {
         ArgumentNullException.ThrowIfNull(pts);
+        TransformPoints(pts.AsSpan());
+    }
 
+    /// <inheritdoc cref="TransformPoints(Point[])"/>
+#if NET9_0_OR_GREATER
+    public
+#else
+    private
+#endif
+    void TransformPoints(params ReadOnlySpan<Point> pts)
+    {
         fixed (Point* p = pts)
         {
             PInvoke.GdipTransformMatrixPointsI(
@@ -284,10 +309,24 @@ public sealed unsafe class Matrix : MarshalByRefObject, IDisposable
         GC.KeepAlive(this);
     }
 
-    public void TransformVectors(PointF[] pts)
+    /// <summary>
+    ///  Multiplies each vector in an array by the matrix. The translation elements of this matrix (third row) are ignored.
+    /// </summary>
+    /// <param name="pts">The points to transform.</param>
+    public void TransformVectors(params PointF[] pts)
     {
         ArgumentNullException.ThrowIfNull(pts);
+        TransformVectors(pts.AsSpan());
+    }
 
+    /// <inheritdoc cref="TransformVectors(PointF[])"/>
+#if NET9_0_OR_GREATER
+    public
+#else
+    private
+#endif
+    void TransformVectors(params ReadOnlySpan<PointF> pts)
+    {
         fixed (PointF* p = pts)
         {
             PInvoke.GdipVectorTransformMatrixPoints(
@@ -299,12 +338,29 @@ public sealed unsafe class Matrix : MarshalByRefObject, IDisposable
         GC.KeepAlive(this);
     }
 
-    public void VectorTransformPoints(Point[] pts) => TransformVectors(pts);
+    /// <inheritdoc cref="TransformVectors(PointF[])"/>
+    public void VectorTransformPoints(params Point[] pts) => TransformVectors(pts);
 
-    public void TransformVectors(Point[] pts)
+#if NET9_0_OR_GREATER
+    /// <inheritdoc cref="TransformVectors(PointF[])"/>
+    public void VectorTransformPoints(params ReadOnlySpan<Point> pts) => TransformVectors(pts);
+#endif
+
+    /// <inheritdoc cref="TransformVectors(PointF[])"/>
+    public void TransformVectors(params Point[] pts)
     {
         ArgumentNullException.ThrowIfNull(pts);
+        TransformVectors(pts.AsSpan());
+    }
 
+    /// <inheritdoc cref="TransformVectors(PointF[])"/>
+#if NET9_0_OR_GREATER
+    public
+#else
+    private
+#endif
+    void TransformVectors(params ReadOnlySpan<Point> pts)
+    {
         fixed (Point* p = pts)
         {
             PInvoke.GdipVectorTransformMatrixPointsI(

@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Reflection;
 using System.Text;
+using System.Windows.Forms.Analyzers.Diagnostics;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Office;
 using Microsoft.Win32;
@@ -14,8 +15,8 @@ using Directory = System.IO.Directory;
 namespace System.Windows.Forms;
 
 /// <summary>
-///  Provides <see langword="static"/> methods and properties to manage an application, such as methods to run and quit an application,
-///  to process Windows messages, and properties to get information about an application.
+///  Provides <see langword="static"/> methods and properties to manage an application, such as methods
+///  to run and quit an application, to process Windows messages, and properties to get information about an application.
 ///  This class cannot be inherited.
 /// </summary>
 public sealed partial class Application
@@ -25,6 +26,9 @@ public sealed partial class Application
     /// </summary>
     private static EventHandlerList? s_eventHandlers;
     private static Font? s_defaultFont;
+    /// <summary>
+    ///  Scaled version of non system <see cref="s_defaultFont"/>.
+    /// </summary>
     private static Font? s_defaultFontScaled;
     private static string? s_startupPath;
     private static string? s_executablePath;
@@ -37,8 +41,16 @@ public sealed partial class Application
     private static bool s_comCtlSupportsVisualStylesInitialized;
     private static bool s_comCtlSupportsVisualStyles;
     private static FormCollection? s_forms;
-    private static readonly object s_internalSyncObject = new();
+    private static readonly Lock s_internalSyncObject = new();
     private static bool s_useWaitCursor;
+
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+    private static SystemColorMode? s_colorMode;
+#pragma warning restore WFO5001
+
+    private const string DarkModeKeyPath = "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
+    private const string DarkModeKey = "AppsUseLightTheme";
+    private const int SystemDarkModeDisabled = 1;
 
     /// <summary>
     ///  Events the user can hook into
@@ -63,8 +75,8 @@ public sealed partial class Application
     }
 
     /// <summary>
-    ///  Determines if the caller should be allowed to quit the application.  This will return false,
-    ///  for example, if being called from a windows forms control being hosted within a web browser.  The
+    ///  Determines if the caller should be allowed to quit the application. This will return false,
+    ///  for example, if being called from a windows forms control being hosted within a web browser. The
     ///  windows forms control should not attempt to quit the application.
     /// </summary>
     public static bool AllowQuit => ThreadContext.GetAllowQuit();
@@ -234,7 +246,172 @@ public sealed partial class Application
     internal static bool CustomThreadExceptionHandlerAttached
         => ThreadContext.FromCurrent().CustomThreadExceptionHandlerAttached;
 
-    internal static Font? DefaultFont => s_defaultFontScaled ?? s_defaultFont;
+    /// <summary>
+    ///  Gets the default color mode (dark mode) for the application.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   This is the <see cref="SystemColorMode"/> which either has been set by <see cref="SetColorMode(SystemColorMode)"/>
+    ///   or its default value <see cref="SystemColorMode.Classic"/>. If it has been set to <see cref="SystemColorMode.System"/>,
+    ///   then the actual color mode is determined by the system settings (which can be retrieved by the
+    ///   static (shared in VB) <see cref="Application.SystemColorMode"/> property.
+    ///  </para>
+    /// </remarks>
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
+    public static SystemColorMode ColorMode => s_colorMode ?? SystemColorMode.Classic;
+
+    /// <summary>
+    ///  True if the <see cref="ColorMode"/> has been set at least once.
+    /// </summary>
+    internal static bool ColorModeSet => s_colorMode is not null;
+
+    /// <summary>
+    ///  Sets the default color mode (dark mode) for the application.
+    /// </summary>
+    /// <param name="systemColorMode">The application's default color mode (dark mode) to set.</param>
+    /// <remarks>
+    ///  <para>
+    ///   You should use this method to set the default color mode (dark mode) for the application. Set it,
+    ///   before creating any UI elements, to ensure that the correct color mode is used. You can set it to
+    ///   dark mode (<see cref="SystemColorMode.Dark"/>), light mode (<see cref="SystemColorMode.Classic"/>)
+    ///   or to the system setting (<see cref="SystemColorMode.System"/>).
+    ///  </para>
+    ///  <para>
+    ///   If you set it to <see cref="SystemColorMode.System"/>, the actual color mode is determined by the
+    ///   Windows system settings. If the system setting is changed, the application will not automatically
+    ///   adapt to the new setting.
+    ///  </para>
+    ///  <para>
+    ///   Note that the dark color mode is only available from Windows 11 on or later versions. If the system
+    ///   is set to a high contrast mode, the dark mode is not available.
+    ///  </para>
+    ///  <para>
+    ///   <b>Note for Visual Basic:</b> If you are using the Visual Basic Application Framework, you should set the
+    ///   color mode by handling the Application Events (see "WindowsFormsApplicationBase.ApplyApplicationDefaults").
+    ///  </para>
+    /// </remarks>
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
+    public static void SetColorMode(SystemColorMode systemColorMode)
+    {
+        try
+        {
+            // Can't use the Generator here, since it cannot deal with [Experimental].
+            _ = systemColorMode switch
+            {
+                SystemColorMode.Classic => systemColorMode,
+                SystemColorMode.System => systemColorMode,
+                SystemColorMode.Dark => systemColorMode,
+                _ => throw new ArgumentOutOfRangeException(nameof(systemColorMode))
+            };
+
+            if (systemColorMode == s_colorMode)
+            {
+                return;
+            }
+
+            s_colorMode = systemColorMode;
+        }
+        finally
+        {
+            bool useAlternateColorSet = SystemColors.UseAlternativeColorSet;
+            bool darkModeEnabled = IsDarkModeEnabled;
+
+            if (useAlternateColorSet != darkModeEnabled)
+            {
+                SystemColors.UseAlternativeColorSet = darkModeEnabled;
+                NotifySystemEventsOfColorChange();
+            }
+        }
+
+        static void NotifySystemEventsOfColorChange()
+        {
+            string s_systemTrackerWindow = $".NET-BroadcastEventWindow.{AppDomain.CurrentDomain.GetHashCode():x}.0";
+
+            HWND hwnd = PInvoke.FindWindow(s_systemTrackerWindow, s_systemTrackerWindow);
+            if (hwnd.IsNull)
+            {
+                // Haven't created the window yet, so no need to notify.
+                return;
+            }
+
+            bool complete = false;
+            bool success = PInvoke.SendMessageCallback(hwnd, PInvoke.WM_SYSCOLORCHANGE + MessageId.WM_REFLECT, () => complete = true);
+            Debug.Assert(success);
+
+            if (!success)
+            {
+                return;
+            }
+
+            while (!complete)
+            {
+                DoEvents();
+                Thread.Yield();
+            }
+        }
+    }
+
+    internal static Font DefaultFont => s_defaultFontScaled ?? s_defaultFont!;
+
+    /// <summary>
+    ///  Gets the system color mode setting of the OS system environment.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   The color setting is determined based on the operating system version and its system settings.
+    ///   It returns <see cref="SystemColorMode.Dark"/> if the dark mode is enabled in the system settings,
+    ///   <see cref="SystemColorMode.Classic"/> if the color mode equals the light, standard color setting.
+    ///  </para>
+    ///  <para>
+    ///   SystemColorMode is supported on Windows 11 or later versions.
+    ///  </para>
+    ///  <para>
+    ///   SystemColorModes is not supported, if the Windows OS <c>High Contrast Mode</c> has been enabled in the system settings.
+    ///  </para>
+    /// </remarks>
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
+    public static SystemColorMode SystemColorMode =>
+        GetSystemColorModeInternal() == 0
+            ? SystemColorMode.Dark
+            : SystemColorMode.Classic;
+
+    // Returns 0 if dark mode is enabled in the system, otherwise -1 (SystemDarkModeDisabled)
+    private static int GetSystemColorModeInternal()
+    {
+        if (!IsSystemDarkModeAvailable)
+        {
+            return SystemDarkModeDisabled;
+        }
+
+        int systemColorMode = SystemDarkModeDisabled;
+
+        try
+        {
+            // 0 for dark mode and |1| for light mode.
+            systemColorMode = Math.Abs((Registry.GetValue(
+                keyName: DarkModeKeyPath,
+                valueName: DarkModeKey,
+                defaultValue: SystemDarkModeDisabled) as int?) ?? systemColorMode);
+        }
+        catch (Exception ex) when (!ex.IsCriticalException())
+        {
+        }
+
+        return systemColorMode;
+    }
+
+    private static bool IsSystemDarkModeAvailable =>
+        !SystemInformation.HighContrast && OsVersion.IsWindows11_OrGreater();
+
+    /// <summary>
+    ///  Gets a value indicating whether the application is running in a dark system color context.
+    ///  Note: In a high contrast mode, this will always return <see langword="false"/>.
+    /// </summary>
+    [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
+    public static bool IsDarkModeEnabled =>
+        !SystemInformation.HighContrast
+        && (ColorMode == SystemColorMode.Dark
+            || (ColorMode == SystemColorMode.System && SystemColorMode == SystemColorMode.Dark));
 
     /// <summary>
     ///  Gets the path for the executable file that started the application.
@@ -723,7 +900,7 @@ public sealed partial class Application
     }
 
     /// <summary>
-    ///  Occurs when a thread is about to shut down.  When the main thread for an
+    ///  Occurs when a thread is about to shut down. When the main thread for an
     ///  application is about to be shut down, this event will be raised first,
     ///  followed by an <see cref="ApplicationExit"/> event.
     /// </summary>
@@ -1071,7 +1248,7 @@ public sealed partial class Application
         => ThreadContext.FromCurrent().OnThreadException(t);
 
     /// <summary>
-    ///  "Unparks" the given HWND to a temporary HWND.  This allows WS_CHILD windows to
+    ///  "Unparks" the given HWND to a temporary HWND. This allows WS_CHILD windows to
     ///  be parked.
     /// </summary>
     internal static void UnparkHandle(IHandle<HWND> handle, DPI_AWARENESS_CONTEXT context)
@@ -1157,8 +1334,8 @@ public sealed partial class Application
         => ThreadContext.FromCurrent().RunMessageLoop(msoloop.Main, context);
 
     /// <summary>
-    ///  Runs a modal dialog.  This starts a special type of message loop that runs until
-    ///  the dialog has a valid DialogResult.  This is called internally by a form
+    ///  Runs a modal dialog. This starts a special type of message loop that runs until
+    ///  the dialog has a valid DialogResult. This is called internally by a form
     ///  when an application calls System.Windows.Forms.Form.ShowDialog().
     /// </summary>
     internal static void RunDialog(Form form)
@@ -1204,23 +1381,52 @@ public sealed partial class Application
         if (NativeWindow.AnyHandleCreated)
             throw new InvalidOperationException(string.Format(SR.Win32WindowAlreadyCreated, nameof(SetDefaultFont)));
 
-        // If user made a prior call to this API with a different custom fonts, we want to clean it up.
-        if (s_defaultFont is not null && !ReferenceEquals(s_defaultFont, font))
-        {
-            s_defaultFont.Dispose();
-        }
-
         s_defaultFont = font;
         ScaleDefaultFont();
     }
 
+    /// <summary>
+    ///  Scale <see cref="s_defaultFont"/> or <see cref="s_defaultFontScaled"/> if needed.
+    /// </summary>
     internal static void ScaleDefaultFont()
     {
-        // It is possible the existing scaled font will be identical after scaling the default font again. Figuring
-        // that out requires additional complexity that doesn't appear to be strictly necessary.
-        s_defaultFontScaled?.Dispose();
-        s_defaultFontScaled = null;
-        s_defaultFontScaled = ScaleHelper.ScaleToSystemTextSize(s_defaultFont);
+        if (s_defaultFont is null)
+        {
+            return;
+        }
+
+        if (s_defaultFont.IsSystemFont)
+        {
+            s_defaultFontScaled?.Dispose();
+            s_defaultFontScaled = null;
+            // Recreating the SystemFont will have it scaled to the right size for the current setting. This could be
+            // done more efficiently by querying the OS to see if this is necessary for the specific font.
+            //
+            // This should never return null.
+            Font newSystemFont = SystemFonts.GetFontByName(s_defaultFont.SystemFontName)!;
+            if (s_defaultFont.Equals(newSystemFont))
+            {
+                // No point in keeping an identical one, free the resource.
+                newSystemFont.Dispose();
+            }
+            else
+            {
+                s_defaultFont = newSystemFont;
+            }
+        }
+        else // non system Font
+        {
+            Font? font = ScaleHelper.ScaleToSystemTextSize(s_defaultFont);
+            if (font is null || !font.Equals(s_defaultFontScaled)) // change s_defaultFontScaled only if needed
+            {
+                s_defaultFontScaled?.Dispose();
+                s_defaultFontScaled = font;
+            }
+            else
+            {
+                font.Dispose();
+            }
+        }
     }
 
     /// <summary>
@@ -1250,15 +1456,15 @@ public sealed partial class Application
 
     /// <summary>
     ///  This method can be used to modify the exception handling behavior of
-    ///  NativeWindow.  By default, NativeWindow will detect if an application
+    ///  NativeWindow. By default, NativeWindow will detect if an application
     ///  is running under a debugger, or is running on a machine with a debugger
-    ///  installed.  In this case, an unhandled exception in the NativeWindow's
-    ///  WndProc method will remain unhandled so the debugger can trap it.  If
+    ///  installed. In this case, an unhandled exception in the NativeWindow's
+    ///  WndProc method will remain unhandled so the debugger can trap it. If
     ///  there is no debugger installed NativeWindow will trap the exception
     ///  and route it to the Application class's unhandled exception filter.
     ///
     ///  You can control this behavior via a config file, or directly through
-    ///  code using this method.  Setting the unhandled exception mode does
+    ///  code using this method. Setting the unhandled exception mode does
     ///  not change the behavior of any NativeWindow objects that are currently
     ///  connected to window handles; it only affects new handle connections.
     ///

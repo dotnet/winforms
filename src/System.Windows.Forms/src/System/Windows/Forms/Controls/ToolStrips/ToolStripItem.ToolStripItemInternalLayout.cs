@@ -160,7 +160,7 @@ public partial class ToolStripItem
             // we would prefer not to be larger than the ToolStrip itself.
             // so we'll ask the ButtonAdapter layout guy what it thinks
             // its preferred size should be - and we'll tell it to be no
-            // bigger than the ToolStrip itself.  Note this is "Parent" not
+            // bigger than the ToolStrip itself. Note this is "Parent" not
             // "Owner" because we care in this instance what we're currently displayed on.
 
             if (_ownerItem is not null)

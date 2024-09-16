@@ -145,7 +145,8 @@ public sealed partial class ListViewGroup : ISerializable
     ///  The alignment of the group footer.
     /// </summary>
     /// <value>
-    ///  One of the <see cref="HorizontalAlignment"/> values that specifies the alignment of the footer text. The default is <see cref="HorizontalAlignment.Left"/>.
+    ///  One of the <see cref="HorizontalAlignment"/> values that specifies the alignment of the footer text.
+    ///  The default is <see cref="HorizontalAlignment.Left"/>.
     /// </value>
     /// <exception cref="InvalidEnumArgumentException">
     ///  The specified value when setting this property is not a valid <see cref="HorizontalAlignment"/> value.
@@ -424,7 +425,8 @@ public sealed partial class ListViewGroup : ISerializable
     }
 
     // Should be used for the cases when sending the message `PInvoke.LVM_SETGROUPINFO` isn't required
-    // (for example, collapsing/expanding groups with keyboard is performed inside the native control already, so this message isn't needed)
+    // (for example, collapsing/expanding groups with keyboard is performed inside the native control already,
+    // so this message isn't needed)
     internal void SetCollapsedStateInternal(ListViewGroupCollapsedState state)
     {
         SourceGenerated.EnumValidator.Validate(state);

@@ -98,7 +98,7 @@ public partial class ToolStripPanelRow
         protected internal override int FreeSpaceFromRow(int spaceToFree)
         {
             int requiredSpace = spaceToFree;
-            // take a look at the last guy.  if his right edge exceeds
+            // take a look at the last guy. if his right edge exceeds
             // the new bounds, then we should go ahead and push him into view.
 
             if (spaceToFree > 0)
@@ -113,7 +113,7 @@ public partial class ToolStripPanelRow
                 Padding cellMargin = lastCellOnRow.Margin;
 
                 // only check margin.left as we are only concerned with getting right edge of
-                // the toolstrip into view. (space after the fact doesnt count).
+                // the toolstrip into view. (space after the fact doesn't count).
                 if (cellMargin.Left >= spaceToFree)
                 {
                     cellMargin.Left -= spaceToFree;

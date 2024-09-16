@@ -4505,6 +4505,224 @@ public class MonthCalendarTests
         }
     }
 
+    [WinFormsFact]
+    public void MonthCalendar_ShouldSerializeProperties_ReturnsExpected()
+    {
+        using MonthCalendar calendar = new();
+        calendar.MaxDate = DateTime.MaxValue;
+
+        ShouldSerializeProperty(() => calendar.TestAccessor().Dynamic.ShouldSerializeTodayDate(), () => calendar.TodayDate = DateTime.Now);
+        ShouldSerializeProperty(() => calendar.TestAccessor().Dynamic.ShouldSerializeAnnuallyBoldedDates(), () => calendar.AddAnnuallyBoldedDate(DateTime.Now));
+        ShouldSerializeProperty(() => calendar.TestAccessor().Dynamic.ShouldSerializeBoldedDates(), () => calendar.AddBoldedDate(DateTime.Now));
+        ShouldSerializeProperty(() => calendar.TestAccessor().Dynamic.ShouldSerializeMonthlyBoldedDates(), () => calendar.AddMonthlyBoldedDate(DateTime.Now));
+        ShouldSerializeProperty(() => calendar.TestAccessor().Dynamic.ShouldSerializeMaxDate(), () => calendar.MaxDate = DateTime.Now.AddYears(2));
+        ShouldSerializeProperty(() => calendar.TestAccessor().Dynamic.ShouldSerializeMinDate(), () => calendar.MinDate = DateTime.Now);
+        ShouldSerializeProperty(() => calendar.TestAccessor().Dynamic.ShouldSerializeTrailingForeColor(), () => calendar.TrailingForeColor = Color.Red);
+        ShouldSerializeProperty(() => calendar.TestAccessor().Dynamic.ShouldSerializeTitleForeColor(), () => calendar.TitleForeColor = Color.Red);
+        ShouldSerializeProperty(() => calendar.TestAccessor().Dynamic.ShouldSerializeTitleBackColor(), () => calendar.TitleBackColor = Color.Red);
+    }
+
+    private void ShouldSerializeProperty(Func<bool> shouldSerializeFunc, Action setPropertyAction)
+    {
+        bool result1 = shouldSerializeFunc();
+        result1.Should().BeFalse();
+
+        setPropertyAction();
+
+        bool result2 = shouldSerializeFunc();
+        result2.Should().BeTrue();
+    }
+
+    [WinFormsTheory]
+    [BoolData]
+    public void MonthCalendar_ResetTodayDate_InvokeWithSetTodayDate_ReturnsExpected(bool createHandle)
+    {
+        using MonthCalendar calendar = new();
+        calendar.TodayDate = new DateTime(2000, 1, 1);
+
+        if (createHandle)
+        {
+            nint handle = calendar.Handle;
+        }
+
+        DateTime todayDateBeforeReset = calendar.TodayDate;
+        calendar.TestAccessor().Dynamic.ResetTodayDate();
+        DateTime todayDateAfterReset = calendar.TodayDate;
+
+        todayDateBeforeReset.Should().NotBe(todayDateAfterReset);
+        todayDateAfterReset.Should().Be(DateTime.Today);
+    }
+
+    [WinFormsTheory]
+    [BoolData]
+    public void MonthCalendar_ResetTodayDate_InvokeWithoutSetTodayDate_ReturnsExpected(bool createHandle)
+    {
+        using MonthCalendar calendar = new();
+
+        if (createHandle)
+        {
+            nint handle = calendar.Handle;
+        }
+
+        DateTime todayDateBeforeReset = calendar.TodayDate;
+        calendar.TestAccessor().Dynamic.ResetTodayDate();
+        DateTime todayDateAfterReset = calendar.TodayDate;
+
+        todayDateBeforeReset.Should().Be(todayDateAfterReset);
+    }
+
+    private void TestResetColorProperty(Func<MonthCalendar, Color> getColor, Action<MonthCalendar, Color> setColor, Action<dynamic> resetColor)
+    {
+        using MonthCalendar calendar = new();
+        var testAccessor = calendar.TestAccessor();
+
+        Color originalColor = getColor(calendar);
+
+        setColor(calendar, Color.Red);
+        getColor(calendar).Should().Be(Color.Red);
+
+        resetColor(testAccessor.Dynamic);
+        getColor(calendar).Should().Be(originalColor);
+
+        setColor(calendar, Color.Red);
+        calendar.CreateControl();
+        resetColor(testAccessor.Dynamic);
+        getColor(calendar).Should().Be(originalColor);
+    }
+
+    [WinFormsFact]
+    public void MonthCalendar_ResetTitleBackColor_Invoke_Success()
+    {
+        TestResetColorProperty(
+            getColor: calendar => calendar.TitleBackColor,
+            setColor: (calendar, color) => calendar.TitleBackColor = color,
+            resetColor: dynamicAccessor => dynamicAccessor.ResetTitleBackColor()
+        );
+    }
+
+    [WinFormsFact]
+    public void MonthCalendar_ResetTrailingForeColor_Invoke_Success()
+    {
+        TestResetColorProperty(
+            getColor: calendar => calendar.TrailingForeColor,
+            setColor: (calendar, color) => calendar.TrailingForeColor = color,
+            resetColor: dynamicAccessor => dynamicAccessor.ResetTrailingForeColor()
+        );
+    }
+
+    [WinFormsFact]
+    public void MonthCalendar_ResetTitleForeColor_Invoke_Success()
+    {
+        TestResetColorProperty(
+            getColor: calendar => calendar.TitleForeColor,
+            setColor: (calendar, color) => calendar.TitleForeColor = color,
+            resetColor: dynamicAccessor => dynamicAccessor.ResetTitleForeColor()
+        );
+    }
+
+    private void TestResetProperty<T>(MonthCalendar calendar, Action<MonthCalendar, T> setProperty, Func<MonthCalendar, T> getProperty, T testValue, T expectedValue, Action<dynamic> resetProperty)
+    {
+        setProperty(calendar, testValue);
+        getProperty(calendar).Should().Be(testValue);
+
+        resetProperty(calendar.TestAccessor().Dynamic);
+        getProperty(calendar).Should().Be(expectedValue);
+    }
+
+    [WinFormsFact]
+    public void MonthCalendar_ResetSelectionRange_Invoke_Success()
+    {
+        using MonthCalendar calendar = new();
+        DateTime originalDate = DateTime.Now.Date;
+        TestResetProperty(
+            calendar,
+            (cal, range) => cal.SetSelectionRange(range.Item1, range.Item2),
+            cal => (cal.SelectionStart, cal.SelectionEnd),
+            (originalDate.AddDays(-1), originalDate.AddDays(1)),
+            (originalDate, originalDate),
+            dynamicAccessor => dynamicAccessor.ResetSelectionRange()
+        );
+    }
+
+    [WinFormsFact]
+    public void MonthCalendar_ResetMonthlyBoldedDates_Invoke_Success()
+    {
+        using MonthCalendar calendar = new();
+        TestResetProperty(
+            calendar,
+            (cal, date) => cal.AddMonthlyBoldedDate(date),
+            cal => cal.MonthlyBoldedDates.FirstOrDefault(),
+            DateTime.Now,
+            DateTime.MinValue,
+            dynamicAccessor => dynamicAccessor.ResetMonthlyBoldedDates()
+        );
+    }
+
+    [WinFormsFact]
+    public void MonthCalendar_ResetMaxDate_Invoke_Success()
+    {
+        using MonthCalendar calendar = new();
+        calendar.MaxDate = new DateTime(2022, 12, 31);
+
+        calendar.TestAccessor().Dynamic.ResetMaxDate();
+
+        calendar.MaxDate.Should().Be(new DateTime(9998, 12, 31));
+    }
+
+    [WinFormsFact]
+    public void MonthCalendar_ResetCalendarDimensions_Invoke_Success()
+    {
+        using MonthCalendar calendar = new();
+        calendar.CalendarDimensions = new Size(2, 2);
+
+        calendar.TestAccessor().Dynamic.ResetCalendarDimensions();
+
+        calendar.CalendarDimensions.Should().Be(new Size(1, 1));
+    }
+
+    [WinFormsFact]
+    public void MonthCalendar_ResetAnnuallyBoldedDates_Invoke_Success()
+    {
+        using MonthCalendar calendar = new();
+        calendar.AddAnnuallyBoldedDate(DateTime.Now);
+
+        calendar.TestAccessor().Dynamic.ResetAnnuallyBoldedDates();
+
+        calendar.AnnuallyBoldedDates.Should().BeEmpty();
+    }
+
+    [WinFormsFact]
+    public void MonthCalendar_ResetBoldedDates_Invoke_Success()
+    {
+        using MonthCalendar calendar = new();
+        calendar.AddBoldedDate(DateTime.Now);
+
+        calendar.TestAccessor().Dynamic.ResetBoldedDates();
+
+        calendar.BoldedDates.Should().BeEmpty();
+    }
+
+    [WinFormsFact]
+    public void MonthCalendar_OnCalendarViewChanged_Invoke_Success()
+    {
+        using MonthCalendar calendar = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(calendar);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        calendar.TestAccessor().Dynamic._onCalendarViewChanged += handler;
+        calendar.TestAccessor().Dynamic.OnCalendarViewChanged(EventArgs.Empty);
+        callCount.Should().Be(1);
+
+        calendar.TestAccessor().Dynamic._onCalendarViewChanged -= handler;
+        calendar.TestAccessor().Dynamic.OnCalendarViewChanged(EventArgs.Empty);
+        callCount.Should().Be(1);
+    }
+
     private class SubMonthCalendar : MonthCalendar
     {
         public new bool CanEnableIme => base.CanEnableIme;

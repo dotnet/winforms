@@ -26,8 +26,8 @@ internal sealed partial class DesignerActionPanel
             : base(serviceProvider, actionPanel)
         {
             _button = new EditorButton();
-            _button.Click += new EventHandler(OnButtonClick);
-            _button.GotFocus += new EventHandler(OnButtonGotFocus);
+            _button.Click += OnButtonClick;
+            _button.GotFocus += OnButtonGotFocus;
 
             AddedControls.Add(_button);
         }
@@ -54,8 +54,9 @@ internal sealed partial class DesignerActionPanel
                     IntegralHeight = false,
                     Font = ActionPanel.Font
                 };
-                listBox.SelectedIndexChanged += new EventHandler(OnListBoxSelectedIndexChanged);
-                listBox.KeyDown += new KeyEventHandler(OnListBoxKeyDown);
+
+                listBox.SelectedIndexChanged += OnListBoxSelectedIndexChanged;
+                listBox.KeyDown += OnListBoxKeyDown;
 
                 TypeConverter.StandardValuesCollection? standardValues = GetStandardValues();
                 if (standardValues is not null)
@@ -75,7 +76,7 @@ internal sealed partial class DesignerActionPanel
                 // All measurement code borrowed from WinForms PropertyGridView.cs
                 int maxWidth = 0;
 
-                // The listbox draws with GDI, not GDI+.  So, we use a normal DC here.
+                // The listbox draws with GDI, not GDI+. So, we use a normal DC here.
                 using (GetDcScope hdc = new((HWND)listBox.Handle))
                 {
                     using ObjectScope hFont = new(listBox.Font.ToHFONT());
@@ -112,8 +113,8 @@ internal sealed partial class DesignerActionPanel
                 }
                 finally
                 {
-                    listBox.SelectedIndexChanged -= new EventHandler(OnListBoxSelectedIndexChanged);
-                    listBox.KeyDown -= new KeyEventHandler(OnListBoxKeyDown);
+                    listBox.SelectedIndexChanged -= OnListBoxSelectedIndexChanged;
+                    listBox.KeyDown -= OnListBoxKeyDown;
                 }
 
                 if (!_ignoreDropDownValue)
@@ -322,7 +323,7 @@ internal sealed partial class DesignerActionPanel
                     return true;
                 }
 
-                // Not passing Alt key event to base class to prevent  closing 'Combobox Tasks window'
+                // Not passing Alt key event to base class to prevent closing 'Combobox Tasks window'
                 else if ((keyData & Keys.Alt) == Keys.Alt)
                 {
                     return true;
@@ -450,9 +451,9 @@ internal sealed partial class DesignerActionPanel
                 _parent.ActionPanel.SetDropDownActive(true);
             }
 
-            protected override void OnClosed(EventArgs e)
+            protected override void OnFormClosed(FormClosedEventArgs e)
             {
-                base.OnClosed(e);
+                base.OnFormClosed(e);
                 _parent.ActionPanel.SetDropDownActive(false);
             }
 

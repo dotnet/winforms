@@ -16,7 +16,7 @@ public class InheritanceService : IInheritanceService, IDisposable
     private Dictionary<IComponent, InheritanceAttribute> _inheritedComponents;
 
     // While we're adding an inherited component, we must be wary of components that the inherited component adds as a
-    // result of being sited.  These are treated as inherited as well.  To track these, we keep track of the component
+    // result of being sited. These are treated as inherited as well. To track these, we keep track of the component
     // we're currently adding as well as it's inheritance attribute. During the add, we sync IComponentAdding events
     // and push in the component.
     private IComponent? _addingComponent;
@@ -60,7 +60,7 @@ public class InheritanceService : IInheritanceService, IDisposable
     /// </summary>
     protected virtual void AddInheritedComponents(Type? type, IComponent component, IContainer container)
     {
-        // We get out now if this component type is not assignable from IComponent.  We only walk down to the component level.
+        // We get out now if this component type is not assignable from IComponent. We only walk down to the component level.
         if (type is null || !typeof(IComponent).IsAssignableFrom(type))
         {
             return;
@@ -76,7 +76,7 @@ public class InheritanceService : IInheritanceService, IDisposable
             cs = site.GetService<IComponentChangeService>();
             if (cs is not null)
             {
-                cs.ComponentAdding += new ComponentEventHandler(OnComponentAdding);
+                cs.ComponentAdding += OnComponentAdding;
             }
         }
 
@@ -100,7 +100,7 @@ public class InheritanceService : IInheritanceService, IDisposable
                     // Now check the attributes of the field and get out if it isn't something that can be inherited.
                     Debug.Assert(!field.IsStatic, "Instance binding shouldn't have found this field");
 
-                    // If the value of the field is null, then don't mess with it.  If it wasn't assigned when our base
+                    // If the value of the field is null, then don't mess with it. If it wasn't assigned when our base
                     // class was created then we can't really use it.
                     object? value = field.GetValue(component);
                     if (value is null)
@@ -108,8 +108,8 @@ public class InheritanceService : IInheritanceService, IDisposable
                         continue;
                     }
 
-                    // We've been fine up to this point looking at the field.  Now, however, we must check to see if this
-                    // field has an AccessedThroughPropertyAttribute on it.  If it does, then we must look for the property
+                    // We've been fine up to this point looking at the field. Now, however, we must check to see if this
+                    // field has an AccessedThroughPropertyAttribute on it. If it does, then we must look for the property
                     // and use its name and visibility for the remainder of the scan. Should any of this bail we just use the field.
                     MemberInfo member = field;
 
@@ -139,11 +139,11 @@ public class InheritanceService : IInheritanceService, IDisposable
                         }
                     }
 
-                    // Add a user hook to add or remove members.  The default hook here ignores all inherited private members.
+                    // Add a user hook to add or remove members. The default hook here ignores all inherited private members.
                     bool ignoreMember = IgnoreInheritedMember(member, component);
 
-                    // We now have an inherited member.  Gather some information about it and then add it to our list.
-                    // We must always add to our list, but we may not want to  add it to the container. That is up to
+                    // We now have an inherited member. Gather some information about it and then add it to our list.
+                    // We must always add to our list, but we may not want to add it to the container. That is up to
                     // the IgnoreInheritedMember method. We add here because there are components in the world that,
                     // when sited, add their children to the container too. That's fine, but we want to make sure we
                     // account for them in the inheritance service too.
@@ -263,7 +263,7 @@ public class InheritanceService : IInheritanceService, IDisposable
         {
             _inheritedComponents[ce.Component!] = InheritanceAttribute.InheritedReadOnly;
 
-            // If this component is being added to a nested container of addingComponent, it should  get the same inheritance level.
+            // If this component is being added to a nested container of addingComponent, it should get the same inheritance level.
             if (sender is INestedContainer nested && nested.Owner == _addingComponent)
             {
                 _inheritedComponents[ce.Component!] = _addingAttribute!;

@@ -1347,7 +1347,7 @@ public class AxHostTests
     [WinFormsFact]
     public void AxHost_EndInit_InvokeWithParent_CreatesControl()
     {
-        Control parent = new();
+        using Control parent = new();
         using SubAxHost control = new(WebBrowserClsidString)
         {
             Parent = parent

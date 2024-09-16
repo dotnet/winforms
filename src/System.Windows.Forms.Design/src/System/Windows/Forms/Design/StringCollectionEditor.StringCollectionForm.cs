@@ -57,14 +57,14 @@ internal partial class StringCollectionEditor
 
         private void HookEvents()
         {
-            _textEntry.KeyDown += new KeyEventHandler(Edit1_keyDown);
-            _okButton.Click += new EventHandler(OKButton_click);
-            HelpButtonClicked += new CancelEventHandler(StringCollectionEditor_HelpButtonClicked);
+            _textEntry.KeyDown += Edit1_keyDown;
+            _okButton.Click += OKButton_click;
+            HelpButtonClicked += StringCollectionEditor_HelpButtonClicked;
         }
 
         /// <summary>
         ///  NOTE: The following code is required by the form designer.
-        ///  It can be modified using the form editor.  Do not modify it using the code editor.
+        ///  It can be modified using the form editor. Do not modify it using the code editor.
         /// </summary>
         [MemberNotNull(nameof(_instruction))]
         [MemberNotNull(nameof(_textEntry))]
@@ -129,7 +129,7 @@ internal partial class StringCollectionEditor
             ShowInTaskbar = false;
             _overarchingLayoutPanel.ResumeLayout(false);
             _overarchingLayoutPanel.PerformLayout();
-            HelpRequested += new HelpEventHandler(Form_HelpRequested);
+            HelpRequested += Form_HelpRequested;
             ResumeLayout(false);
             PerformLayout();
         }

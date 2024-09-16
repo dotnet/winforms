@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-namespace WinformsControlsTest;
+namespace WinFormsControlsTest;
 
 partial class MdiChild
 {
@@ -67,7 +67,7 @@ partial class MdiChild
         this.chkChildAlign.TabIndex = 3;
         this.chkChildAlign.Text = "Top align minimized child";
         this.chkChildAlign.UseVisualStyleBackColor = true;
-        this.chkChildAlign.CheckedChanged += new System.EventHandler(this.chkChildAlign_CheckedChanged);
+        this.chkChildAlign.CheckedChanged += this.chkChildAlign_CheckedChanged;
         // 
         // chkRightToLeft
         // 
@@ -78,7 +78,7 @@ partial class MdiChild
         this.chkRightToLeft.TabIndex = 4;
         this.chkRightToLeft.Text = "Right to left mode";
         this.chkRightToLeft.UseVisualStyleBackColor = true;
-        this.chkRightToLeft.CheckedChanged += new System.EventHandler(this.chkRightToLeft_CheckedChanged);
+        this.chkRightToLeft.CheckedChanged += this.chkRightToLeft_CheckedChanged;
         // 
         // btnOpenChild
         // 
@@ -89,7 +89,7 @@ partial class MdiChild
         this.btnOpenChild.TabIndex = 0;
         this.btnOpenChild.Text = "Open new child";
         this.btnOpenChild.UseVisualStyleBackColor = true;
-        this.btnOpenChild.Click += new System.EventHandler(this.btnOpenChild_Click);
+        this.btnOpenChild.Click += this.btnOpenChild_Click;
         // 
         // chkSetParentMenustrip
         // 
@@ -100,7 +100,7 @@ partial class MdiChild
         this.chkSetParentMenustrip.TabIndex = 1;
         this.chkSetParentMenustrip.Text = "Set parent menustrip";
         this.chkSetParentMenustrip.UseVisualStyleBackColor = true;
-        this.chkSetParentMenustrip.CheckedChanged += new System.EventHandler(this.chkSetParentMenustrip_CheckedChanged);
+        this.chkSetParentMenustrip.CheckedChanged += this.chkSetParentMenustrip_CheckedChanged;
         // 
         // chkSetMenustrip
         // 
@@ -111,7 +111,7 @@ partial class MdiChild
         this.chkSetMenustrip.TabIndex = 3;
         this.chkSetMenustrip.Text = "Set child menustrip";
         this.chkSetMenustrip.UseVisualStyleBackColor = true;
-        this.chkSetMenustrip.CheckedChanged += new System.EventHandler(this.chkSetMenustrip_CheckedChanged);
+        this.chkSetMenustrip.CheckedChanged += this.chkSetMenustrip_CheckedChanged;
         // 
         // chkAddParentMenustrip
         // 
@@ -122,7 +122,7 @@ partial class MdiChild
         this.chkAddParentMenustrip.TabIndex = 2;
         this.chkAddParentMenustrip.Text = "Add parent menustrip to Controls";
         this.chkAddParentMenustrip.UseVisualStyleBackColor = true;
-        this.chkAddParentMenustrip.CheckedChanged += new System.EventHandler(this.chkAddParentMenustrip_CheckedChanged);
+        this.chkAddParentMenustrip.CheckedChanged += this.chkAddParentMenustrip_CheckedChanged;
         // 
         // chkAddMenustrip
         // 
@@ -133,7 +133,7 @@ partial class MdiChild
         this.chkAddMenustrip.TabIndex = 4;
         this.chkAddMenustrip.Text = "Add menustrip to Controls";
         this.chkAddMenustrip.UseVisualStyleBackColor = true;
-        this.chkAddMenustrip.CheckedChanged += new System.EventHandler(this.chkAddMenustrip_CheckedChanged);
+        this.chkAddMenustrip.CheckedChanged += this.chkAddMenustrip_CheckedChanged;
         // 
         // ChildForm
         // 

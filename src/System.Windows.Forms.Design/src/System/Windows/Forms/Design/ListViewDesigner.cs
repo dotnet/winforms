@@ -11,7 +11,7 @@ using System.Drawing;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-///  This is the designer for the list view control.  It implements hit testing for
+///  This is the designer for the list view control. It implements hit testing for
 ///  the items in the list view.
 /// </summary>
 internal class ListViewDesigner : ControlDesigner
@@ -22,7 +22,8 @@ internal class ListViewDesigner : ControlDesigner
 
     /// <summary>
     ///  <para>
-    ///  Retrieves a list of associated components.  These are components that should be included in a cut or copy operation on this component.
+    ///  Retrieves a list of associated components.
+    ///  These are components that should be included in a cut or copy operation on this component.
     ///  </para>
     /// </summary>
     public override ICollection AssociatedComponents

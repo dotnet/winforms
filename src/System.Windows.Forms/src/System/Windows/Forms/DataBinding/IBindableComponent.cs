@@ -12,7 +12,6 @@ public interface IBindableComponent : IComponent
     BindingContext? BindingContext
     {
         get;
-        [RequiresUnreferencedCode(ComponentModelTrimIncompatibilityMessage)]
         set;
     }
 }

@@ -18,17 +18,18 @@ namespace System.Windows.Forms.Design;
 /// </summary>
 internal class ToolStripEditorManager
 {
-    // Local copy of BehaviorService so that we can add the Insitu Editor to the AdornerWindow.
+    // Local copy of BehaviorService so that we can add the InSitu Editor to the AdornerWindow.
     private readonly BehaviorService _behaviorService;
     // Component for this InSitu Editor... (this is a ToolStripItem) that wants to go into InSitu
     private readonly IDesignerHost _designerHost;
-    // The current Bounds of the Insitu Editor on Adorner Window.. These are required for invalidation.
+    // The current Bounds of the InSitu Editor on Adorner Window.. These are required for invalidation.
     private Rectangle _lastKnownEditorBounds = Rectangle.Empty;
     // The encapsulated Editor.
     private ToolStripEditorControl _editor;
     // Actual ToolStripEditor for the current ToolStripItem.
     private ToolStripTemplateNode _editorUI;
-    // The Current ToolStripItem that needs to go into the InSitu Mode. We keep a local copy so that when a new item comes in, we can "ROLLBACK" the existing edit.
+    // The Current ToolStripItem that needs to go into the InSitu Mode.
+    // We keep a local copy so that when a new item comes in, we can "ROLLBACK" the existing edit.
     private ToolStripItem _currentItem;
     // The designer for current ToolStripItem.
     private ToolStripItemDesigner _itemDesigner;
@@ -40,7 +41,7 @@ internal class ToolStripEditorManager
     }
 
     /// <summary>
-    ///  Activates the editor for the given item.If there's still an editor around  for the previous-edited item, it is
+    ///  Activates the editor for the given item.If there's still an editor around for the previous-edited item, it is
     ///  deactivated. Pass in 'null' to deactivate and remove the current editor, if any.
     /// </summary>
     internal void ActivateEditor(ToolStripItem item)
@@ -86,7 +87,7 @@ internal class ToolStripEditorManager
                 _behaviorService.AdornerWindowControl.Controls.Add(_editor);
                 _lastKnownEditorBounds = _editor.Bounds;
                 _editor.BringToFront();
-                // this is important since the ToolStripEditorControl listens    to textchanged messages from TextBox.
+                // this is important since the ToolStripEditorControl listens to textChanged messages from TextBox.
                 _editorUI._ignoreFirstKeyUp = true;
                 // Select the Editor... Put Text and Select it ...
                 _editorUI.FocusEditor(_currentItem);
@@ -102,7 +103,7 @@ internal class ToolStripEditorManager
     }
 
     /// <summary>
-    ///  This LISTENs to the Editor Resize for resizing the Insitu edit on  the Adorner Window ... CURRENTLY DISABLED.
+    ///  This LISTENs to the Editor Resize for resizing the InSitu edit on the Adorner Window ... CURRENTLY DISABLED.
     /// </summary>
     private void OnEditorResize(object sender, EventArgs e)
     {
@@ -114,7 +115,8 @@ internal class ToolStripEditorManager
         }
     }
 
-    // Private Class Implemented for InSitu Editor. This class just Wraps the ToolStripEditor from the TemplateNode and puts it in  a Panel.
+    // Private Class Implemented for InSitu Editor. This class just Wraps the ToolStripEditor from the TemplateNode
+    // and puts it in a Panel.
     private class ToolStripEditorControl : Panel
     {
         private readonly Control _wrappedEditor;
@@ -124,7 +126,7 @@ internal class ToolStripEditorManager
         {
             _wrappedEditor = editorToolStrip;
             Bounds1 = bounds;
-            _wrappedEditor.Resize += new EventHandler(OnWrappedEditorResize);
+            _wrappedEditor.Resize += OnWrappedEditorResize;
             Controls.Add(editorToolStrip);
             Location = new Point(bounds.X, bounds.Y);
             Text = "InSituEditorWrapper";

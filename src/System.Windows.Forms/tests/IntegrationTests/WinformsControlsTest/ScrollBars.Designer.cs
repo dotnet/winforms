@@ -3,7 +3,7 @@
 
 using System.Windows.Forms;
 
-namespace WinformsControlsTest;
+namespace WinFormsControlsTest;
 
 partial class ScrollBars
 {
@@ -52,7 +52,7 @@ partial class ScrollBars
         this.hScrollBar.Name = "hScrollBar";
         this.hScrollBar.Size = new System.Drawing.Size(200, 26);
         this.hScrollBar.TabIndex = 0;
-        this.hScrollBar.Scroll += new System.Windows.Forms.ScrollEventHandler(this.hScrollBar_Scroll);
+        this.hScrollBar.Scroll += this.hScrollBar_Scroll;
         // 
         // vScrollBar
         // 
@@ -60,7 +60,7 @@ partial class ScrollBars
         this.vScrollBar.Name = "vScrollBar";
         this.vScrollBar.Size = new System.Drawing.Size(26, 200);
         this.vScrollBar.TabIndex = 1;
-        this.vScrollBar.Scroll += new System.Windows.Forms.ScrollEventHandler(this.vScrollBar_Scroll);
+        this.vScrollBar.Scroll += this.vScrollBar_Scroll;
         // 
         // numericMinimum
         // 
@@ -68,7 +68,7 @@ partial class ScrollBars
         this.numericMinimum.Name = "numericMinimum";
         this.numericMinimum.Size = new System.Drawing.Size(150, 27);
         this.numericMinimum.TabIndex = 2;
-        this.numericMinimum.ValueChanged += new System.EventHandler(this.numericMinimum_ValueChanged);
+        this.numericMinimum.ValueChanged += this.numericMinimum_ValueChanged;
         // 
         // numericMaximum
         // 
@@ -81,7 +81,7 @@ partial class ScrollBars
         0,
         0,
         0});
-        this.numericMaximum.ValueChanged += new System.EventHandler(this.numericMaximum_ValueChanged);
+        this.numericMaximum.ValueChanged += this.numericMaximum_ValueChanged;
         // 
         // chbRightToLeft
         // 
@@ -92,7 +92,7 @@ partial class ScrollBars
         this.chbRightToLeft.TabIndex = 4;
         this.chbRightToLeft.Text = "Right to left";
         this.chbRightToLeft.UseVisualStyleBackColor = true;
-        this.chbRightToLeft.CheckedChanged += new System.EventHandler(this.chbRightToLeft_CheckedChanged);
+        this.chbRightToLeft.CheckedChanged += this.chbRightToLeft_CheckedChanged;
         // 
         // lblMinimum
         // 

@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Buffers;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -189,14 +190,14 @@ internal unsafe ref struct SpanReader<T>(ReadOnlySpan<T> span) where T : unmanag
     ///  Check to see if the given <paramref name="next"/> values are next.
     /// </summary>
     /// <param name="next">The span to compare the next items to.</param>
-    public readonly bool IsNext(ReadOnlySpan<T> next) => _unread.StartsWith(next);
+    public readonly bool IsNext(params ReadOnlySpan<T> next) => _unread.StartsWith(next);
 
     /// <summary>
     ///  Advance the reader if the given <paramref name="next"/> values are next.
     /// </summary>
     /// <param name="next">The span to compare the next items to.</param>
     /// <returns><see langword="true"/> if the values were found and the reader advanced.</returns>
-    public bool TryAdvancePast(ReadOnlySpan<T> next)
+    public bool TryAdvancePast(params ReadOnlySpan<T> next)
     {
         bool success = false;
         if (_unread.StartsWith(next))

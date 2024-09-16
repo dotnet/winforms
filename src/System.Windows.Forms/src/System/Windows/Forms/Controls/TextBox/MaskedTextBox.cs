@@ -27,10 +27,10 @@ public partial class MaskedTextBox : TextBoxBase
 {
     // Consider: The MaskedTextBox control, when initialized with a non-null/empty mask, processes all
     // WM_CHAR messages and always sets the text using the SetWindowText Windows function in the furthest base
-    // class.  This means that the underlying Edit control won't enable Undo operations and the context
+    // class. This means that the underlying Edit control won't enable Undo operations and the context
     // menu behavior will be a bit different (for instance Copy option is enabled when PasswordChar is set).
     // To provide Undo functionality and make the context menu behave like the Edit control, we would have
-    // to implement our own.  For more info about how to do this, see:
+    // to implement our own. For more info about how to do this, see:
     // https://docs.microsoft.com/en-us/archive/msdn-magazine/2000/november/c-q-a-filetype-icon-detector-app-custom-context-menus-unreferenced-variables-and-string-conversions
 
     private const bool Forward = true;
@@ -46,7 +46,7 @@ public partial class MaskedTextBox : TextBoxBase
     // The native edit control's default password char (per thread). See corresponding property for more info.
     private static char s_systemPwdChar;
 
-    // Values to track changes in IME composition string (if any).  Having const variables is a bit more efficient
+    // Values to track changes in IME composition string (if any). Having const variables is a bit more efficient
     // than having an enum (which creates a class).
     private const byte ImeConversionNone = 0;       // no conversion has been performed in the composition string.
     private const byte ImeConversionUpdate = 1;     // the char being composed has been updated but not converted yet.
@@ -69,14 +69,14 @@ public partial class MaskedTextBox : TextBoxBase
     // Used for handling characters that have a modifier (Ctrl-A, Shift-Del...).
     private static readonly int s_handleKeyPress = BitVector32.CreateMask(s_imeCompleting);
 
-    // Bit mask - Used to simulate a null mask.  Needed since a MaskedTextProvider object cannot be
+    // Bit mask - Used to simulate a null mask. Needed since a MaskedTextProvider object cannot be
     // initialized with a null mask but we need one even in this case as a backend for
-    // default properties.  This is to support creating a MaskedTextBox with the default
+    // default properties. This is to support creating a MaskedTextBox with the default
     // constructor, specially at design time.
     private static readonly int s_isNullMask = BitVector32.CreateMask(s_handleKeyPress);
 
-    // Bit mask - Used in conjuction with get_Text to return the text that is actually set in the native
-    // control.  This is required to be able to measure text correctly (GetPreferredSize) and
+    // Bit mask - Used in conjunction with get_Text to return the text that is actually set in the native
+    // control. This is required to be able to measure text correctly (GetPreferredSize) and
     // to compare against during set_Text (to bail if the same and not to raise TextChanged event).
     private static readonly int s_queryBaseText = BitVector32.CreateMask(s_isNullMask);
 
@@ -500,7 +500,7 @@ public partial class MaskedTextBox : TextBoxBase
     }
 
     /// <summary>
-    ///  Specifies the text insertion mode of the text box.  This can be used to simulated the Access masked text
+    ///  Specifies the text insertion mode of the text box. This can be used to simulated the Access masked text
     ///  control behavior where insertion is set to TextInsertionMode.AlwaysOverwrite
     ///  This property has no particular effect if no mask has been set.
     /// </summary>
@@ -581,7 +581,7 @@ public partial class MaskedTextBox : TextBoxBase
     }
 
     /// <summary>
-    ///  Event to notify when the insert mode has changed.  This is required for data binding.
+    ///  Event to notify when the insert mode has changed. This is required for data binding.
     /// </summary>
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.MaskedTextBoxIsOverwriteModeChangedDescr))]
@@ -620,7 +620,7 @@ public partial class MaskedTextBox : TextBoxBase
     }
 
     /// <summary>
-    ///  The mask applied to this control.  The setter resets the underlying MaskedTextProvider object and attempts
+    ///  The mask applied to this control. The setter resets the underlying MaskedTextProvider object and attempts
     ///  to add the existing input text (if any) using the new mask, failure is ignored.
     /// </summary>
     [SRCategory(nameof(SR.CatBehavior))]
@@ -641,8 +641,9 @@ public partial class MaskedTextBox : TextBoxBase
         {
             //
             // We don't do anything if:
-            // 1.  IsNullOrEmpty( value )->[Reset control] && _flagState[IS_NULL_MASK]==>Already Reset.
-            // 2. !IsNullOrEmpty( value )->[Set control] && !_flagState[IS_NULL_MASK][control is set] && [value is the same]==>No need to update.
+            // 1. IsNullOrEmpty( value )->[Reset control] && _flagState[IS_NULL_MASK]==>Already Reset.
+            // 2. !IsNullOrEmpty( value )->[Set control] && !_flagState[IS_NULL_MASK][control is set] &&
+            //    [value is the same]==>No need to update.
             //
             if (_flagState[s_isNullMask] == string.IsNullOrEmpty(value) && (_flagState[s_isNullMask] || value == _maskedTextProvider.Mask))
             {
@@ -757,7 +758,7 @@ public partial class MaskedTextBox : TextBoxBase
     }
 
     /// <summary>
-    ///  Returns a copy of the control's internal MaskedTextProvider.  This is useful for user's to provide
+    ///  Returns a copy of the control's internal MaskedTextProvider. This is useful for user's to provide
     ///  cloning semantics for the control (we don't want to do it) w/o incurring in any perf penalty since
     ///  some of the properties require recreating the underlying provider when they are changed.
     /// </summary>
@@ -912,7 +913,8 @@ public partial class MaskedTextBox : TextBoxBase
                     throw new InvalidOperationException(SR.MaskedTextBoxPasswordAndPromptCharError);
                 }
 
-                // Recreate masked text provider to be consistent with AllowPromptAsInput - current text may have chars with same value as new prompt.
+                // Recreate masked text provider to be consistent with AllowPromptAsInput
+                // - current text may have chars with same value as new prompt.
                 MaskedTextProvider newProvider = new(
                     _maskedTextProvider.Mask,
                     _maskedTextProvider.Culture,
@@ -970,7 +972,7 @@ public partial class MaskedTextBox : TextBoxBase
 
     /// <summary>
     ///  Specifies whether to reset and skip the current position if editable, when the input character
-    ///  has the same value as the prompt.  This property takes precedence over AllowPromptAsInput.
+    ///  has the same value as the prompt. This property takes precedence over AllowPromptAsInput.
     /// </summary>
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.MaskedTextBoxResetOnPrompt))]
@@ -1310,7 +1312,7 @@ public partial class MaskedTextBox : TextBoxBase
             // valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(value);
 
-            // Changing the TextMaskFormat will likely change the 'output' text (Text getter value).  Cache old value to
+            // Changing the TextMaskFormat will likely change the 'output' text (Text getter value). Cache old value to
             // verify it against the new value and raise OnTextChange if needed.
             string? oldText = _flagState[s_isNullMask] ? null : TextOutput;
 
@@ -1505,7 +1507,7 @@ public partial class MaskedTextBox : TextBoxBase
         Debug.Assert(keyCode is Keys.Delete or Keys.Back, $"Delete called with keyCode == {keyCode}");
         Debug.Assert(startPosition >= 0 && ((startPosition + selectionLen) <= _maskedTextProvider.Length), "Invalid position range.");
 
-        // On backspace, moving the start postion back by one has the same effect as delete.  If text is selected, there is no
+        // On backspace, moving the start position back by one has the same effect as delete. If text is selected, there is no
         // need for moving the position back.
 
         _caretTestPos = startPosition;
@@ -1603,7 +1605,7 @@ public partial class MaskedTextBox : TextBoxBase
             OnMaskInputRejected(new MaskInputRejectedEventArgs(tempPos, hint));
         }
 
-        // Reposition caret.  Call base.SelectInternal for perf reasons.
+        // Reposition caret. Call base.SelectInternal for perf reasons.
         // this.SelectionLength = 0;
         // this.SelectionStart  = _caretTestPos; // new caret position.
         base.SelectInternal(_caretTestPos, 0, _maskedTextProvider.Length);
@@ -1858,7 +1860,7 @@ public partial class MaskedTextBox : TextBoxBase
             _flagState[s_handleKeyPress] = false;
         }
 
-        // Insert is toggled when not modified with some other key (ctrl, shift...).  Note that shift-Insert is
+        // Insert is toggled when not modified with some other key (ctrl, shift...). Note that shift-Insert is
         // same as paste.
         if (keyCode == Keys.Insert && e.Modifiers == Keys.None && _insertMode == InsertKeyMode.Default)
         {
@@ -1969,7 +1971,7 @@ public partial class MaskedTextBox : TextBoxBase
 
             // When the combined key involves a letter, the final character is not a letter. There are some
             // Ctrl combined keys that generate a letter and can be confusing; we do not mean to pass those
-            // characters to the underlying Edit control.  These combinations are: Ctrl-F<#> and Ctrl-Atl-<someKey>
+            // characters to the underlying Edit control. These combinations are: Ctrl-F<#> and Ctrl-Atl-<someKey>
             if (!char.IsLetter(e.KeyChar))
             {
                 return;
@@ -2164,7 +2166,7 @@ public partial class MaskedTextBox : TextBoxBase
         Debug.Assert(text is not null, "text is null.");
 
         // Clone the MaskedTextProvider so text properties are not modified until the paste operation is
-        // completed.  This is needed in case one of these properties is retrieved in a MaskedInputRejected
+        // completed. This is needed in case one of these properties is retrieved in a MaskedInputRejected
         // event handler (clipboard text is attempted to be set into the input text char by char).
 
         MaskedTextProvider clonedProvider = (MaskedTextProvider)_maskedTextProvider.Clone();
@@ -2450,7 +2452,7 @@ public partial class MaskedTextBox : TextBoxBase
     }
 
     /// <summary>
-    ///  We need to override this method so we can handle input language changes properly.  Control
+    ///  We need to override this method so we can handle input language changes properly. Control
     ///  doesn't handle the WM_CHAR messages generated after WM_IME_CHAR messages, it passes them
     ///  to DefWndProc (the characters would be displayed in the text box always).
     /// </summary>
@@ -2493,7 +2495,7 @@ public partial class MaskedTextBox : TextBoxBase
     }
 
     /// <summary>
-    ///  Sets the underlying MaskedTextProvider object.  Used when the control is initialized
+    ///  Sets the underlying MaskedTextProvider object. Used when the control is initialized
     ///  and one of its properties, backed up by the MaskedTextProvider, changes; this requires
     ///  recreating the provider because it is immutable.
     /// </summary>
@@ -2700,7 +2702,7 @@ public partial class MaskedTextBox : TextBoxBase
     }
 
     /// <summary>
-    ///  Forces type validation.  Returns the validated text value.
+    ///  Forces type validation. Returns the validated text value.
     /// </summary>
     public object? ValidateText()
     {

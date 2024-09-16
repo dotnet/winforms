@@ -18,7 +18,7 @@ public abstract partial class CodeDomDesignerLoader
         private IDesignerHost? _host;
 
         /// <summary>
-        ///  Determines if ths extender provider can extend the given object.  We extend
+        ///  Determines if ths extender provider can extend the given object. We extend
         ///  all objects, so we always return true.
         /// </summary>
         public bool CanExtend(object o)
@@ -36,7 +36,7 @@ public abstract partial class CodeDomDesignerLoader
                 return false;
             }
 
-            // Now see if this object is inherited.  If so, then we don't want to
+            // Now see if this object is inherited. If so, then we don't want to
             // extend.
             if (!TypeDescriptor.GetAttributes(o)[typeof(InheritanceAttribute)]!.Equals(InheritanceAttribute.NotInherited))
             {
@@ -55,7 +55,7 @@ public abstract partial class CodeDomDesignerLoader
 
         /// <summary>
         ///  This is an extender property that we offer to all components
-        ///  on the form.  It implements the "GenerateMember" property, which
+        ///  on the form. It implements the "GenerateMember" property, which
         ///  is a boolean that, if true, causes a field member to be generated for
         ///  the object.
         /// </summary>
@@ -79,7 +79,7 @@ public abstract partial class CodeDomDesignerLoader
 
         /// <summary>
         ///  This is an extender property that we offer to all components
-        ///  on the form.  It implements the "Modifiers" property, which
+        ///  on the form. It implements the "Modifiers" property, which
         ///  is an enum representing the "public/protected/private" scope
         ///  of a component.
         /// </summary>
@@ -113,7 +113,7 @@ public abstract partial class CodeDomDesignerLoader
 
         /// <summary>
         ///  This is an extender property that we offer to all components
-        ///  on the form.  It implements the "GenerateMember" property, which
+        ///  on the form. It implements the "GenerateMember" property, which
         ///  is a boolean that, if true, causes a field member to be generated for
         ///  the object.
         /// </summary>
@@ -159,7 +159,7 @@ public abstract partial class CodeDomDesignerLoader
 
         /// <summary>
         ///  This is an extender property that we offer to all components
-        ///  on the form.  It implements the "Modifiers" property, which
+        ///  on the form. It implements the "Modifiers" property, which
         ///  is an enum representing the "public/protected/private" scope
         ///  of a component.
         /// </summary>

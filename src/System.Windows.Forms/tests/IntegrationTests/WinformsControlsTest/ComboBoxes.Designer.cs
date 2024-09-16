@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-namespace WinformsControlsTest;
+namespace WinFormsControlsTest;
 
 partial class ComboBoxes
 {
@@ -44,7 +44,7 @@ partial class ComboBoxes
         this.comboBox11 = new System.Windows.Forms.ComboBox();
         this.comboBox12 = new System.Windows.Forms.ComboBox();
         this.dataBoundComboBox = new System.Windows.Forms.ComboBox();
-        this.currentDPILabel1 = new WinformsControlsTest.CurrentDPILabel();
+        this.currentDPILabel1 = new WinFormsControlsTest.CurrentDPILabel();
         this.label1 = new System.Windows.Forms.Label();
         this.dataBoundLabel = new System.Windows.Forms.Label();
         this.SuspendLayout();
@@ -60,7 +60,7 @@ partial class ComboBoxes
         this.comboBox1.Name = "comboBox1";
         this.comboBox1.Size = new System.Drawing.Size(121, 21);
         this.comboBox1.TabIndex = 3;
-        this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.ComboBox1_SelectedIndexChanged);
+        this.comboBox1.SelectedIndexChanged += this.ComboBox1_SelectedIndexChanged;
         // 
         // comboBox2
         //

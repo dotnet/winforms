@@ -7,7 +7,7 @@ public partial class SplitContainer
 {
     /// <summary>
     ///  This control collection only allows a specific type of control
-    ///  into the controls collection.  It optionally supports readonlyness.
+    ///  into the controls collection. It optionally supports readonlyness.
     /// </summary>
     internal class SplitContainerTypedControlCollection : TypedControlCollection
     {

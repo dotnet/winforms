@@ -3304,7 +3304,7 @@ public class ListBoxTests
         int createdCallCount = 0;
         control.HandleCreated += (sender, e) => createdCallCount++;
 
-        // Set MakeCustom after the Handle is created to allow for default behaviour.
+        // Set MakeCustom after the Handle is created to allow for default behavior.
         control.MakeCustom = true;
 
         // Verify equal lengths.
@@ -6256,6 +6256,143 @@ public class ListBoxTests
             Assert.Equal(0, listBox.SelectedIndices.Count);
             Assert.Equal(0, listBox.SelectedItems.Count);
         }
+    }
+
+    [WinFormsTheory]
+    [InlineData(true, null, "")]
+    [InlineData(true, "TestItem", "TestItem")]
+    [InlineData(false, "TestItem", "TestItem")]
+    public void ListBox_GetItemText_ReturnsExpected(bool formattingEnabled, string selectedItem, string expected)
+    {
+        using ListBox listBox = new() { FormattingEnabled = formattingEnabled };
+        if (selectedItem is not null)
+        {
+            listBox.Items.Add(selectedItem);
+            listBox.SelectedItem = selectedItem;
+        }
+        else
+        {
+            listBox.SelectedItem = null;
+        }
+
+        string result = listBox.GetItemText(listBox.SelectedItem);
+        result.Should().Be(expected);
+    }
+
+    [WinFormsTheory]
+    [InlineData(DrawMode.OwnerDrawVariable, true)]
+    [InlineData(DrawMode.OwnerDrawFixed, false)]
+    [InlineData(DrawMode.Normal, false)]
+    public void ListBox_Refresh_CallsOnMeasureItemBasedOnDrawMode(DrawMode drawMode, bool expectedMeasureItemCalled)
+    {
+        using ListBox listBox = new()
+        {
+            DrawMode = drawMode,
+            Items = { "Item1", "Item2", "Item3" }
+        };
+
+        bool measureItemCalled = false;
+        listBox.MeasureItem += (sender, e) =>
+        {
+            measureItemCalled = true;
+        };
+
+        listBox.Refresh();
+
+        measureItemCalled.Should().Be(expectedMeasureItemCalled);
+    }
+
+    [WinFormsTheory]
+    [InlineData(new string[] { }, 0)]
+    [InlineData(new string[] { "Item1", "Item2" }, 2)]
+    public void ListBox_ItemsCollection_ReturnsExpectedCount(string[] items, int expectedCount)
+    {
+        using ListBox listBox = new();
+        foreach (string item in items)
+        {
+            listBox.Items.Add(item);
+        }
+
+        int itemCount = listBox.Items.Count;
+        itemCount.Should().Be(expectedCount);
+    }
+
+    [WinFormsFact]
+    public void ListBox_SelectionModeNone_ThrowsArgumentException()
+    {
+        using ListBox listBox = new();
+        listBox.SelectionMode = SelectionMode.None;
+
+        listBox.Items.Add("Item1");
+
+        Action action = () => listBox.SelectedIndex = 0;
+
+        action.Should().Throw<ArgumentException>()
+            .WithMessage("Cannot call this method when SelectionMode is SelectionMode.NONE.*");
+    }
+
+    [WinFormsTheory]
+    [InlineData(SelectionMode.One)]
+    [InlineData(SelectionMode.MultiSimple)]
+    [InlineData(SelectionMode.MultiExtended)]
+    public void ListBox_SelectionModeValid_DoesNotThrow(SelectionMode selectionMode)
+    {
+        using ListBox listBox = new();
+        listBox.SelectionMode = selectionMode;
+
+        listBox.Items.Add("Item1");
+
+        Action action = () => listBox.SelectedIndex = 0;
+
+        action.Should().NotThrow();
+    }
+
+    [WinFormsFact]
+    public void ListBox_PreferredHeight_RecreatingHandle_ReturnsCurrentHeight()
+    {
+        using ListBox listBox = new()
+        {
+            DrawMode = DrawMode.Normal,
+            BorderStyle = BorderStyle.None,
+            Items = { "Item 1", "Item 2", "Item 3" }
+        };
+
+        // Use TestAccessor to call the private RecreateHandle method
+        listBox.TestAccessor().Dynamic.RecreateHandle();
+
+        int totalItemHeight = 0;
+        for (int i = 0; i < listBox.Items.Count; i++)
+        {
+            totalItemHeight += listBox.GetItemHeight(i);
+        }
+
+        int expectedHeight = totalItemHeight + listBox.Padding.Vertical;
+
+        listBox.PreferredHeight.Should().Be(expectedHeight);
+    }
+
+    [WinFormsFact]
+    public void ListBox_PreferredHeight_CreatingHandle_ReturnsCurrentHeight()
+    {
+        using ListBox listBox = new()
+        {
+            DrawMode = DrawMode.Normal,
+            BorderStyle = BorderStyle.None,
+            Items = { "Item 1", "Item 2", "Item 3" }
+        };
+
+        // Use TestAccessor to call the private SetState method and set the state to 'true'
+        listBox.TestAccessor().Dynamic.SetState(1, true);
+
+        int totalItemHeight = 0;
+        for (int i = 0; i < listBox.Items.Count; i++)
+        {
+            totalItemHeight += listBox.GetItemHeight(i);
+        }
+
+        int expectedHeight = totalItemHeight + listBox.Padding.Vertical;
+
+        listBox.PreferredHeight.Should().Be(expectedHeight);
     }
 
     private class SubListBox : ListBox

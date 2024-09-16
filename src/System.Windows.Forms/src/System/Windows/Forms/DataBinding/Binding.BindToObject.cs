@@ -43,7 +43,7 @@ public partial class Binding
                 }
 
                 // Hook up the Initialized event.
-                ds.Initialized += new EventHandler(DataSource_Initialized);
+                ds.Initialized += DataSource_Initialized;
                 _waitingOnDataSource = true;
                 return false;
             }
@@ -65,7 +65,7 @@ public partial class Binding
             // Unhook the Initialized event.
             if (_owner.DataSource is ISupportInitializeNotification ds)
             {
-                ds.Initialized -= new EventHandler(DataSource_Initialized);
+                ds.Initialized -= DataSource_Initialized;
             }
 
             // The wait is over: DataSource is initialized.
@@ -89,7 +89,7 @@ public partial class Binding
                 && _bindingManager.IsBinding
                 && _bindingManager is not CurrencyManager)
             {
-                FieldInfo.RemoveValueChanged(_bindingManager.Current!, new EventHandler(PropValueChanged));
+                FieldInfo.RemoveValueChanged(_bindingManager.Current!, PropValueChanged);
                 FieldInfo = null;
             }
 
@@ -207,7 +207,7 @@ public partial class Binding
                 && _bindingManager.IsBinding
                 && _bindingManager is not CurrencyManager)
             {
-                FieldInfo.RemoveValueChanged(_bindingManager.Current!, new EventHandler(PropValueChanged));
+                FieldInfo.RemoveValueChanged(_bindingManager.Current!, PropValueChanged);
             }
 
             if (_bindingManager is not null
@@ -233,7 +233,7 @@ public partial class Binding
                     && _bindingManager.IsBinding
                     && _bindingManager is not CurrencyManager)
                 {
-                    FieldInfo.AddValueChanged(_bindingManager.Current!, new EventHandler(PropValueChanged));
+                    FieldInfo.AddValueChanged(_bindingManager.Current!, PropValueChanged);
                 }
             }
             else

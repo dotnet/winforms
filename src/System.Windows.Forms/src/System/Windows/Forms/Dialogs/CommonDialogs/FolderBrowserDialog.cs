@@ -231,8 +231,11 @@ public sealed class FolderBrowserDialog : CommonDialog
     ///  Gets or sets a value that indicates whether to use the value of the <see cref="Description" /> property
     ///  as the dialog title for Vista style dialogs. This property has no effect on old style dialogs.
     /// </summary>
-    /// <value><see langword="true" /> to indicate that the value of the <see cref="Description" /> property is used as dialog title; <see langword="false" />
-    ///  to indicate the value is added as additional text to the dialog. The default is <see langword="false" />.</value>
+    /// <value>
+    ///  <see langword="true" /> to indicate that the value of the <see cref="Description" /> property is used as dialog title;
+    ///  <see langword="false" /> to indicate the value is added as additional text to the dialog.
+    ///  The default is <see langword="false" />.
+    /// </value>
     [Browsable(true)]
     [DefaultValue(false)]
     [Localizable(true)]
@@ -481,7 +484,7 @@ public sealed class FolderBrowserDialog : CommonDialog
     /// </summary>
 #pragma warning disable CS3016 // Arrays as attribute arguments is not CLS-compliant
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
-#pragma warning restore CS3016 // Arrays as attribute arguments is not CLS-compliant
+#pragma warning restore CS3016
     private static unsafe int FolderBrowserDialog_BrowseCallbackProc(HWND hwnd, uint msg, LPARAM lParam, LPARAM lpData)
     {
         switch (msg)

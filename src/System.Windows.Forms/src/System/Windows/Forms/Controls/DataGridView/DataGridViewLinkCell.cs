@@ -114,23 +114,14 @@ public partial class DataGridViewLinkCell : DataGridViewCell
     [DefaultValue(LinkBehavior.SystemDefault)]
     public LinkBehavior LinkBehavior
     {
-        get
-        {
-            int linkBehavior = Properties.GetInteger(s_propLinkCellLinkBehavior, out bool found);
-            if (found)
-            {
-                return (LinkBehavior)linkBehavior;
-            }
-
-            return LinkBehavior.SystemDefault;
-        }
+        get => Properties.GetValueOrDefault(s_propLinkCellLinkBehavior, LinkBehavior.SystemDefault);
         set
         {
-            // Sequential enum.  Valid values are 0x0 to 0x3
+            // Sequential enum. Valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(value);
             if (value != LinkBehavior)
             {
-                Properties.SetInteger(s_propLinkCellLinkBehavior, (int)value);
+                Properties.AddValue(s_propLinkCellLinkBehavior, value);
                 if (DataGridView is not null)
                 {
                     if (RowIndex != -1)
@@ -153,7 +144,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
             Debug.Assert(value is >= LinkBehavior.SystemDefault and <= LinkBehavior.NeverUnderline);
             if (value != LinkBehavior)
             {
-                Properties.SetInteger(s_propLinkCellLinkBehavior, (int)value);
+                Properties.AddValue(s_propLinkCellLinkBehavior, value);
             }
         }
     }
@@ -219,21 +210,12 @@ public partial class DataGridViewLinkCell : DataGridViewCell
 
     private LinkState LinkState
     {
-        get
-        {
-            int linkState = Properties.GetInteger(s_propLinkCellLinkState, out bool found);
-            if (found)
-            {
-                return (LinkState)linkState;
-            }
-
-            return LinkState.Normal;
-        }
+        get => Properties.GetValueOrDefault(s_propLinkCellLinkState, LinkState.Normal);
         set
         {
             if (LinkState != value)
             {
-                Properties.SetInteger(s_propLinkCellLinkState, (int)value);
+                Properties.AddValue(s_propLinkCellLinkState, value);
             }
         }
     }
@@ -276,16 +258,12 @@ public partial class DataGridViewLinkCell : DataGridViewCell
     [DefaultValue(true)]
     public bool TrackVisitedState
     {
-        get
-        {
-            int trackVisitedState = Properties.GetInteger(s_propLinkCellTrackVisitedState, out bool found);
-            return !found || trackVisitedState != 0;
-        }
+        get => Properties.GetValueOrDefault(s_propLinkCellTrackVisitedState, true);
         set
         {
             if (value != TrackVisitedState)
             {
-                Properties.SetInteger(s_propLinkCellTrackVisitedState, value ? 1 : 0);
+                Properties.AddValue(s_propLinkCellTrackVisitedState, value);
                 if (DataGridView is not null)
                 {
                     if (RowIndex != -1)
@@ -307,7 +285,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
         {
             if (value != TrackVisitedState)
             {
-                Properties.SetInteger(s_propLinkCellTrackVisitedState, value ? 1 : 0);
+                Properties.AddValue(s_propLinkCellTrackVisitedState, value);
             }
         }
     }
@@ -315,16 +293,12 @@ public partial class DataGridViewLinkCell : DataGridViewCell
     [DefaultValue(false)]
     public bool UseColumnTextForLinkValue
     {
-        get
-        {
-            int useColumnTextForLinkValue = Properties.GetInteger(s_propLinkCellUseColumnTextForLinkValue, out bool found);
-            return found && useColumnTextForLinkValue != 0;
-        }
+        get => Properties.GetValueOrDefault<bool>(s_propLinkCellUseColumnTextForLinkValue);
         set
         {
             if (value != UseColumnTextForLinkValue)
             {
-                Properties.SetInteger(s_propLinkCellUseColumnTextForLinkValue, value ? 1 : 0);
+                Properties.AddValue(s_propLinkCellUseColumnTextForLinkValue, value);
                 OnCommonChange();
             }
         }
@@ -337,7 +311,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
             // Caller is responsible for invalidation
             if (value != UseColumnTextForLinkValue)
             {
-                Properties.SetInteger(s_propLinkCellUseColumnTextForLinkValue, value ? 1 : 0);
+                Properties.AddValue(s_propLinkCellUseColumnTextForLinkValue, value);
             }
         }
     }
@@ -442,32 +416,32 @@ public partial class DataGridViewLinkCell : DataGridViewCell
 
         CloneInternal(dataGridViewCell);
 
-        if (Properties.ContainsObject(s_propLinkCellActiveLinkColor))
+        if (Properties.ContainsKey(s_propLinkCellActiveLinkColor))
         {
             dataGridViewCell.ActiveLinkColorInternal = ActiveLinkColor;
         }
 
-        if (Properties.ContainsInteger(s_propLinkCellUseColumnTextForLinkValue))
+        if (Properties.ContainsKey(s_propLinkCellUseColumnTextForLinkValue))
         {
             dataGridViewCell.UseColumnTextForLinkValueInternal = UseColumnTextForLinkValue;
         }
 
-        if (Properties.ContainsInteger(s_propLinkCellLinkBehavior))
+        if (Properties.ContainsKey(s_propLinkCellLinkBehavior))
         {
             dataGridViewCell.LinkBehaviorInternal = LinkBehavior;
         }
 
-        if (Properties.ContainsObject(s_propLinkCellLinkColor))
+        if (Properties.ContainsKey(s_propLinkCellLinkColor))
         {
             dataGridViewCell.LinkColorInternal = LinkColor;
         }
 
-        if (Properties.ContainsInteger(s_propLinkCellTrackVisitedState))
+        if (Properties.ContainsKey(s_propLinkCellTrackVisitedState))
         {
             dataGridViewCell.TrackVisitedStateInternal = TrackVisitedState;
         }
 
-        if (Properties.ContainsObject(s_propLinkCellVisitedLinkColor))
+        if (Properties.ContainsKey(s_propLinkCellVisitedLinkColor))
         {
             dataGridViewCell.VisitedLinkColorInternal = VisitedLinkColor;
         }
@@ -650,7 +624,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
                             MeasureTextWidth(
                                 graphics,
                                 formattedString,
-                                cellStyle.Font,
+                                cellStyle.Font!,
                                 Math.Max(1, maxHeight),
                                 flags),
                             0);
@@ -664,7 +638,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
                             MeasureTextHeight(
                                 graphics,
                                 formattedString,
-                                cellStyle.Font,
+                                cellStyle.Font!,
                                 Math.Max(1, constraintSize.Width - borderAndPaddingWidths - HorizontalTextMarginLeft - HorizontalTextMarginRight),
                                 flags));
                         break;
@@ -675,7 +649,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
                         preferredSize = MeasureTextPreferredSize(
                             graphics,
                             formattedString,
-                            cellStyle.Font,
+                            cellStyle.Font!,
                             5.0F,
                             flags);
                         break;
@@ -689,7 +663,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
                 case DataGridViewFreeDimension.Width:
                     {
                         preferredSize = new Size(
-                            MeasureTextSize(graphics, formattedString, cellStyle.Font, flags).Width,
+                            MeasureTextSize(graphics, formattedString, cellStyle.Font!, flags).Width,
                             0);
                         break;
                     }
@@ -698,7 +672,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
                     {
                         preferredSize = new Size(
                             0,
-                            MeasureTextSize(graphics, formattedString, cellStyle.Font, flags).Height);
+                            MeasureTextSize(graphics, formattedString, cellStyle.Font!, flags).Height);
                         break;
                     }
 
@@ -707,7 +681,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
                         preferredSize = MeasureTextSize(
                             graphics,
                             formattedString,
-                            cellStyle.Font,
+                            cellStyle.Font!,
                             flags);
                         break;
                     }
@@ -1027,7 +1001,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
             Font? getHoverFont = null;
             bool isActive = (LinkState & LinkState.Active) == LinkState.Active;
 
-            LinkUtilities.EnsureLinkFonts(cellStyle.Font, LinkBehavior, ref getLinkFont, ref getHoverFont, isActive);
+            LinkUtilities.EnsureLinkFonts(cellStyle.Font!, LinkBehavior, ref getLinkFont, ref getHoverFont, isActive);
             using Font linkFont = getLinkFont;
             using Font hoverFont = getHoverFont;
 

@@ -21,7 +21,7 @@ public sealed unsafe class Metafile : Image, IPointer<GpMetafile>
     // GDI+ doesn't handle filenames over MAX_PATH very well
     private const int MaxPath = 260;
 
-    GpMetafile* IPointer<GpMetafile>.Pointer => this.Pointer();
+    nint IPointer<GpMetafile>.Pointer => (nint)this.Pointer();
 
     /// <summary>
     ///  Initializes a new instance of the <see cref='Metafile'/> class from the specified handle and
@@ -533,7 +533,7 @@ public sealed unsafe class Metafile : Image, IPointer<GpMetafile>
     public void PlayRecord(EmfPlusRecordType recordType, int flags, int dataSize, byte[] data)
     {
         // Used in conjunction with Graphics.EnumerateMetafile to play an EMF+
-        // The data must be DWORD aligned if it's an EMF or EMF+.  It must be
+        // The data must be DWORD aligned if it's an EMF or EMF+. It must be
         // WORD aligned if it's a WMF.
 
         fixed (byte* d = data)

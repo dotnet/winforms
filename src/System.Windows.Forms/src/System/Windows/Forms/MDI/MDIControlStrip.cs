@@ -37,8 +37,8 @@ internal partial class MdiControlStrip : MenuStrip
         // However in the event that the target handle changes we have to push the new handle into everyone.
         if (target is Control controlTarget)
         {
-            controlTarget.HandleCreated += new EventHandler(OnTargetWindowHandleRecreated);
-            controlTarget.Disposed += new EventHandler(OnTargetWindowDisposed);
+            controlTarget.HandleCreated += OnTargetWindowHandleRecreated;
+            controlTarget.Disposed += OnTargetWindowDisposed;
         }
 
         // add in opposite order to how you want it merged
@@ -62,10 +62,10 @@ internal partial class MdiControlStrip : MenuStrip
         _system.Image = GetTargetWindowIcon();
         _system.Visible = GetTargetWindowIconVisibility();
         _system.Alignment = ToolStripItemAlignment.Left;
-        _system.DropDownOpening += new EventHandler(OnSystemMenuDropDownOpening);
+        _system.DropDownOpening += OnSystemMenuDropDownOpening;
         _system.ImageScaling = ToolStripItemImageScaling.None;
         _system.DoubleClickEnabled = true;
-        _system.DoubleClick += new EventHandler(OnSystemMenuDoubleClick);
+        _system.DoubleClick += OnSystemMenuDoubleClick;
         _system.Padding = Padding.Empty;
         _system.ShortcutKeys = Keys.Alt | Keys.OemMinus;
         ResumeLayout(false);
@@ -165,8 +165,8 @@ internal partial class MdiControlStrip : MenuStrip
         {
             if (_target is Control controlTarget)
             {
-                controlTarget.HandleCreated -= new EventHandler(OnTargetWindowHandleRecreated);
-                controlTarget.Disposed -= new EventHandler(OnTargetWindowDisposed);
+                controlTarget.HandleCreated -= OnTargetWindowHandleRecreated;
+                controlTarget.Disposed -= OnTargetWindowDisposed;
             }
 
             _target = null!;

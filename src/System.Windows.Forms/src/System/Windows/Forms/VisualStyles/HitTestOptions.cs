@@ -22,17 +22,17 @@ public enum HitTestOptions
     //  HTTOP, HTLEFT, HTTOPLEFT, etc:  // hit test succeeded in the respective theme background segment.
     // #define HTTB_BACKGROUNDSEG          0x0000
 
-    // Fixed border hit test option.  possible return values are:
+    // Fixed border hit test option. possible return values are:
     //  HTCLIENT: hit test succeeded in the middle background segment
     //  HTBORDER: hit test succeeded in any other background segment
     // #define HTTB_FIXEDBORDER            0x0002  // Return code may be either HTCLIENT or HTBORDER.
 
-    // Caption hit test option.  Possible return values are:
+    // Caption hit test option. Possible return values are:
     //  HTCAPTION: hit test succeeded in the top, top left, or top right background segments
     //  HTNOWHERE or another return code, depending on absence or presence of accompanying flags, resp.
     // #define HTTB_CAPTION                0x0004
 
-    // Resizing border hit test flags.  Possible return values are:
+    // Resizing border hit test flags. Possible return values are:
     //  HTCLIENT: hit test succeeded in middle background segment
     //  HTTOP, HTTOPLEFT, HTLEFT, HTRIGHT, etc:    hit test succeeded in the respective system resizing zone
     //  HTBORDER: hit test failed in middle segment and resizing zones, but succeeded in a background border segment

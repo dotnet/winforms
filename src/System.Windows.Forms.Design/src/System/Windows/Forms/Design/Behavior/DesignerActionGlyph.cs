@@ -55,7 +55,7 @@ internal sealed class DesignerActionGlyph : Glyph
     }
 
     /// <summary>
-    ///  Returns the bounds of our glyph.  This is used by the related Behavior to determine where to show the
+    ///  Returns the bounds of our glyph. This is used by the related Behavior to determine where to show the
     ///  contextmenu (list of actions).
     /// </summary>
     public override Rectangle Bounds
@@ -120,8 +120,8 @@ internal sealed class DesignerActionGlyph : Glyph
     }
 
     /// <summary>
-    ///  Called when the state for this DesignerActionGlyph changes.  Or when the related component's size or
-    ///  location change.  Here, we re-calculate the Glyph's bounds and change our image.
+    ///  Called when the state for this DesignerActionGlyph changes. Or when the related component's size or
+    ///  location change. Here, we re-calculate the Glyph's bounds and change our image.
     /// </summary>
     internal void Invalidate()
     {
@@ -162,7 +162,7 @@ internal sealed class DesignerActionGlyph : Glyph
     }
 
     /// <summary>
-    ///  Used to manage the mouse-pointer-is-over-glyph state.  If this is true,  then we will shade our BoxImage
+    ///  Used to manage the mouse-pointer-is-over-glyph state. If this is true, then we will shade our BoxImage
     ///  in the Paint logic.
     /// </summary>
     private bool MouseOver
@@ -180,7 +180,7 @@ internal sealed class DesignerActionGlyph : Glyph
     }
 
     /// <summary>
-    ///  Responds to a paint event.  This Glyph will paint its current image and, if  MouseHover is true,
+    ///  Responds to a paint event. This Glyph will paint its current image and, if MouseHover is true,
     ///  we'll paint over the image with the 'hoverBrush'.
     /// </summary>
     public override void Paint(PaintEventArgs pe)

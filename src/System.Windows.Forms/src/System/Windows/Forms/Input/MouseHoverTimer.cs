@@ -11,7 +11,7 @@ internal class MouseHoverTimer : IDisposable
     public MouseHoverTimer()
     {
         _mouseHoverTimer.Interval = SystemInformation.MouseHoverTime;
-        _mouseHoverTimer.Tick += new EventHandler(OnTick);
+        _mouseHoverTimer.Tick += OnTick;
     }
 
     public void Start(ToolStripItem? item)

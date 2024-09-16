@@ -51,7 +51,10 @@ public class ButtonTests : ControlTestBase
         });
     }
 
+    [ActiveIssue("https://github.com/dotnet/winforms/issues/11324")]
     [WinFormsFact]
+    [SkipOnArchitecture(TestArchitectures.X64,
+        "Flaky tests, see: https://github.com/dotnet/winforms/issues/11324")]
     public async Task Button_DialogResult_SpaceToClickFocusedButtonAsync()
     {
         await RunTestAsync(async (form, button) =>
@@ -87,7 +90,10 @@ public class ButtonTests : ControlTestBase
         });
     }
 
+    [ActiveIssue("https://github.com/dotnet/winforms/issues/11326")]
     [WinFormsFact]
+    [SkipOnArchitecture(TestArchitectures.X64,
+        "Flaky tests, see: https://github.com/dotnet/winforms/issues/11326")]
     public async Task Button_CancelButton_EscapeClicksCancelButtonAsync()
     {
         await RunTestAsync(async (form, button) =>
@@ -321,7 +327,10 @@ public class ButtonTests : ControlTestBase
         });
     }
 
+    [ActiveIssue("https://github.com/dotnet/winforms/issues/11327")]
     [WinFormsFact]
+    [SkipOnArchitecture(TestArchitectures.X64,
+       "Flaky tests, see: https://github.com/dotnet/winforms/issues/11327")]
     public async Task Button_Press_Enter_Fires_OnClickAsync()
     {
         await RunTestAsync(async (form, button) =>
@@ -341,7 +350,10 @@ public class ButtonTests : ControlTestBase
         });
     }
 
+    [ActiveIssue("https://github.com/dotnet/winforms/issues/11325")]
     [WinFormsFact]
+    [SkipOnArchitecture(TestArchitectures.X64,
+       "Flaky tests, see: https://github.com/dotnet/winforms/issues/11325")]
     public async Task Button_Hotkey_Fires_OnClickAsync()
     {
         await RunTestAsync(async (form, button) =>

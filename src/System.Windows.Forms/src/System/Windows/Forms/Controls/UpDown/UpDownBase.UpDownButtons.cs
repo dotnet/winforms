@@ -35,6 +35,10 @@ public abstract partial class UpDownBase
             SetStyle(ControlStyles.Opaque | ControlStyles.FixedHeight | ControlStyles.FixedWidth, true);
             SetStyle(ControlStyles.Selectable, false);
 
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001
+
             _parent = parent;
         }
 
@@ -359,7 +363,7 @@ public abstract partial class UpDownBase
                 _timer = new Timer();
 
                 // Add the timer handler
-                _timer.Tick += new EventHandler(TimerHandler);
+                _timer.Tick += TimerHandler;
             }
 
             _timerInterval = DefaultTimerInterval;

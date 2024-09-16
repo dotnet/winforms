@@ -265,4 +265,23 @@ public class TreeViewAccessibleObjectTests
         Assert.Equal(node.AccessibilityObject, control.AccessibilityObject.HitTest(point.X, point.Y));
         Assert.True(control.IsHandleCreated);
     }
+
+    [WinFormsTheory]
+    [InlineData(new string[] { "Node 1", "Node 2", "Node 3" }, 3, false)] 
+    [InlineData(new string[] { }, 0, false)]
+    [InlineData(new string[] { "Node 1", "Node 2", "Node 3" }, 3, true)]
+    [InlineData(new string[] { }, 0, true)]
+    public void TreeViewAccessibleObject_GetChildCount_ReturnsExpected(string[] nodeNames, int expected, bool isHandleCreated)
+    {
+        using TreeView control = new();
+        control.Nodes.AddRange(nodeNames.Select(name => new TreeNode(name)).ToArray());
+
+        if (isHandleCreated)
+        {
+            control.CreateControl();
+        }
+
+        control.AccessibilityObject.GetChildCount().Should().Be(expected);
+        control.IsHandleCreated.Should().Be(isHandleCreated);
+    }
 }

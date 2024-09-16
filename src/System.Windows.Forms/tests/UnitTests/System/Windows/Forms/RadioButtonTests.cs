@@ -172,6 +172,32 @@ public class RadioButtonTests : AbstractButtonBaseTests
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.CheckAlign = value);
     }
 
+    public static TheoryData<ContentAlignment> CheckAlignData => new()
+    {
+        ContentAlignment.TopLeft,
+        ContentAlignment.TopRight,
+        ContentAlignment.BottomCenter,
+        ContentAlignment.BottomLeft,
+        ContentAlignment.BottomRight,
+        ContentAlignment.MiddleLeft,
+        ContentAlignment.MiddleRight,
+        ContentAlignment.TopCenter,
+        ContentAlignment.MiddleCenter
+    };
+
+    [WinFormsTheory]
+    [MemberData(nameof(CheckAlignData))]
+    public void RadioButton_CheckAlign_Set_GetReturnsExpected(ContentAlignment value)
+    {
+        using RadioButton control = new();
+        control.CheckAlign = value;
+        control.CheckAlign.Should().Be(value);
+
+        // Set same.
+        control.CheckAlign = value;
+        control.CheckAlign.Should().Be(value);
+    }
+
     [WinFormsTheory]
     [BoolData]
     public void RadioRadioButton_TabStop_Set_GetReturnsExpected(bool value)

@@ -189,7 +189,8 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
         if (horizontal)
         {
             rightToLeftShift = rightToLeft ? -2 : 0;
-            // width of the both lines is 1 pixel and lines are drawn next to each other, this the highlight line is 1 pixel below the black line
+            // width of the both lines is 1 pixel and lines are drawn next to each other,
+            // this the highlight line is 1 pixel below the black line.
             g.DrawLine(SystemPens.ControlText,
                 middle.X - Offset2X,
                 overflowArrowRect.Y - Offset2Y,
@@ -281,7 +282,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
             Rectangle buttonBounds = item.ButtonBounds;
             // We subtract 1 from each side except the right.
             // This is because we've already drawn the border, and we don't
-            // want to draw over it.  We don't do the right edge, because we
+            // want to draw over it. We don't do the right edge, because we
             // drew the border around the whole control, not the button.
             Padding deflatePadding = item.RightToLeft == RightToLeft.Yes ? new Padding(0, 1, 1, 1) : new Padding(1, 1, 0, 1);
             buttonBounds = LayoutUtils.DeflateRect(buttonBounds, deflatePadding);
@@ -296,7 +297,10 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
 
         if (buttonPressedOrSelected && !item.Pressed)
         {
-            using var brush = ColorTable.ButtonSelectedBorder.GetCachedSolidBrushScope();
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            using var brush = Application.IsDarkModeEnabled ?
+                Color.Silver.GetCachedSolidBrushScope() : ColorTable.ButtonSelectedBorder.GetCachedSolidBrushScope();
+#pragma warning restore WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             g.FillRectangle(brush, item.SplitterBounds);
         }
 
@@ -817,7 +821,11 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
 
         e.Graphics.Clear(ColorTable.ToolStripContentPanelGradientEnd);
 
-        // RenderBackgroundGradient(e.Graphics, toolStripContentPanel, ColorTable.ToolStripContentPanelGradientBegin, ColorTable.ToolStripContentPanelGradientEnd);
+        // RenderBackgroundGradient(
+        //     e.Graphics,
+        //     toolStripContentPanel,
+        //     ColorTable.ToolStripContentPanelGradientBegin,
+        //     ColorTable.ToolStripContentPanelGradientEnd);
     }
 
     #region PrivatePaintHelpers
@@ -887,8 +895,8 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
     }
 
     /// <summary>
-    /// We want to make sure the overflow button looks like it's the last thing on the toolbar.
-    /// This touches up the few pixels that get clobbered by painting the border.
+    ///  We want to make sure the overflow button looks like it's the last thing on the toolbar.
+    ///  This touches up the few pixels that get clobbered by painting the border.
     /// </summary>
     private void RenderOverflowButtonEffectsOverBorder(ToolStripRenderEventArgs e)
     {
@@ -1006,7 +1014,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
         }
         else
         {
-            // not big enough for a swath in the middle.  lets just do a single gradient.
+            // not big enough for a swath in the middle. lets just do a single gradient.
             using Brush b = new LinearGradientBrush(bounds, beginColor, endColor, mode);
             g.FillRectangle(b, bounds);
         }

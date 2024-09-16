@@ -32,7 +32,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
     // to modify it, in order to preserve compatibility.
     public delegate bool GetThumbnailImageAbort();
 
-    GpImage* IPointer<GpImage>.Pointer => _nativeImage;
+    nint IPointer<GpImage>.Pointer => (nint)_nativeImage;
 
     [NonSerialized]
     private GpImage* _nativeImage;
@@ -55,7 +55,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
 
 #pragma warning disable CA2229 // Implement serialization constructors
     private protected Image(SerializationInfo info, StreamingContext context)
-#pragma warning restore CA2229 // Implement serialization constructors
+#pragma warning restore CA2229
     {
         byte[] dat = (byte[])info.GetValue("Data", typeof(byte[]))!; // Do not rename (binary serialization)
 
@@ -331,7 +331,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
     }
 
     /// <summary>
-    ///  Adds an <see cref='Imagin.EncoderParameters'/> to this <see cref='Image'/>.
+    ///  Adds an <see cref='EncoderParameters'/> to this <see cref='Image'/>.
     /// </summary>
     public void SaveAdd(Imaging.EncoderParameters? encoderParams)
     {

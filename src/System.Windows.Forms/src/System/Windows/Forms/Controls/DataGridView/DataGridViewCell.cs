@@ -47,8 +47,8 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     private static Bitmap? s_errorBmp;
 
     /// <summary>
-    /// Contains non-empty neighboring cells around the current cell.
-    /// Used in <see cref="IKeyboardToolTip.GetNeighboringToolsRectangles"/> method.
+    ///  Contains non-empty neighboring cells around the current cell.
+    ///  Used in <see cref="IKeyboardToolTip.GetNeighboringToolsRectangles"/> method.
     /// </summary>
     private readonly List<Rectangle> _nonEmptyNeighbors;
 
@@ -77,7 +77,8 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     }
 
     // NOTE: currently this finalizer is unneeded (empty). See https://github.com/dotnet/winforms/issues/6858.
-    // All classes that are not need to be finalized must be checked in DataGridViewElement() constructor. Consider to modify it if needed.
+    // All classes that are not need to be finalized must be checked in DataGridViewElement() constructor.
+    // Consider to modify it if needed.
     ~DataGridViewCell() => Dispose(disposing: false);
 
     [Browsable(false)]
@@ -207,14 +208,11 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     [AllowNull]
     private string ErrorTextInternal
     {
-        get => (string?)Properties.GetObject(s_propCellErrorText) ?? string.Empty;
+        get => Properties.GetStringOrEmptyString(s_propCellErrorText);
         set
         {
             string errorText = ErrorTextInternal;
-            if (!string.IsNullOrEmpty(value) || Properties.ContainsObject(s_propCellErrorText))
-            {
-                Properties.SetObject(s_propCellErrorText, value);
-            }
+            Properties.AddOrRemoveString(s_propCellErrorText, value);
 
             if (DataGridView is not null && !errorText.Equals(ErrorTextInternal))
             {
@@ -652,12 +650,8 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
                 dataGridViewCellStyle.RemoveScope(DataGridViewCellStyleScopes.Cell);
             }
 
-            if (value is not null || Properties.ContainsObject(s_propCellStyle))
-            {
-                value?.AddScope(DataGridView, DataGridViewCellStyleScopes.Cell);
-
-                Properties.SetObject(s_propCellStyle, value);
-            }
+            value?.AddScope(DataGridView, DataGridViewCellStyleScopes.Cell);
+            Properties.AddOrRemoveValue(s_propCellStyle, value);
 
             if (((dataGridViewCellStyle is not null && value is null) ||
                 (dataGridViewCellStyle is null && value is not null) ||
@@ -676,14 +670,8 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     [TypeConverter(typeof(StringConverter))]
     public object? Tag
     {
-        get => Properties.GetObject(s_propCellTag);
-        set
-        {
-            if (value is not null || Properties.ContainsObject(s_propCellTag))
-            {
-                Properties.SetObject(s_propCellTag, value);
-            }
-        }
+        get => Properties.GetValueOrDefault<object?>(s_propCellTag);
+        set => Properties.AddOrRemoveValue(s_propCellTag, value);
     }
 
     [Browsable(false)]
@@ -702,15 +690,10 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     [AllowNull]
     private string ToolTipTextInternal
     {
-        get => (string?)Properties.GetObject(s_propCellToolTipText) ?? string.Empty;
+        get => Properties.GetStringOrEmptyString(s_propCellToolTipText);
         set
         {
-            string toolTipText = ToolTipTextInternal;
-            if (!string.IsNullOrEmpty(value) || Properties.ContainsObject(s_propCellToolTipText))
-            {
-                Properties.SetObject(s_propCellToolTipText, value);
-            }
-
+            string toolTipText = Properties.AddOrRemoveString(s_propCellToolTipText, value);
             if (DataGridView is not null && !toolTipText.Equals(ToolTipTextInternal))
             {
                 DataGridView.OnCellToolTipTextChanged(this);
@@ -738,21 +721,14 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     {
         get
         {
-            Type? cellValueType = (Type?)Properties.GetObject(s_propCellValueType);
-            if (cellValueType is null && OwningColumn is not null)
+            if (!Properties.TryGetValue(s_propCellValueType, out Type? cellValueType) && OwningColumn is not null)
             {
                 cellValueType = OwningColumn.ValueType;
             }
 
             return cellValueType;
         }
-        set
-        {
-            if (value is not null || Properties.ContainsObject(s_propCellValueType))
-            {
-                Properties.SetObject(s_propCellValueType, value);
-            }
-        }
+        set => Properties.AddOrRemoveValue(s_propCellValueType, value);
     }
 
     private TypeConverter? ValueTypeConverter
@@ -917,7 +893,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
         return rect;
     }
 
-    // Called when the row that owns the editing control gets unshared.
+    // Called when the row that owns the editing control gets un-shared.
     // Too late in the product cycle to make this a public method.
     internal virtual void CacheEditingControl()
     {
@@ -1141,12 +1117,14 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     }
 
     /// <summary>
-    /// Gets the value indicating whether DataGridView editing control should be processed in accessible
-    /// hierarchy restructuring. This check is necessary to not restructure the accessible hierarchy for
-    /// custom editing controls and for derived classes as inherited accessibility may differ or
-    /// may be not inherited at all.
+    ///  Gets the value indicating whether DataGridView editing control should be processed in accessible
+    ///  hierarchy restructuring. This check is necessary to not restructure the accessible hierarchy for
+    ///  custom editing controls and for derived classes as inherited accessibility may differ or
+    ///  may be not inherited at all.
     /// </summary>
-    /// <returns>True if accessible hierarchy should be manually recreated for the cell and editing control, otherwise False.</returns>
+    /// <returns>
+    ///  True if accessible hierarchy should be manually recreated for the cell and editing control, otherwise False.
+    /// </returns>
     private bool AccessibleRestructuringNeeded
     {
         get
@@ -1175,12 +1153,13 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             ContextMenuStrip? contextMenuStrip = ContextMenuStripInternal;
             if (contextMenuStrip is not null)
             {
-                contextMenuStrip.Disposed -= new EventHandler(DetachContextMenuStrip);
+                contextMenuStrip.Disposed -= DetachContextMenuStrip;
             }
         }
 
-        // If you are adding releasing unmanaged resources code here (disposing == false), you need to remove this class type
-        // (and all of its subclasses) from check in DataGridViewElement() constructor and DataGridViewElement_Subclasses_SuppressFinalizeCall test!
+        // If you are adding releasing unmanaged resources code here (disposing == false), you need to remove this
+        // class type(and all of its subclasses) from check in DataGridViewElement() constructor and
+        // DataGridViewElement_Subclasses_SuppressFinalizeCall test!
         // Also consider to modify ~DataGridViewCell() description.
     }
 
@@ -2356,11 +2335,11 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
         TextFormatFlags flags = DataGridViewUtilities.ComputeTextFormatFlagsForCellStyleAlignment(rightToLeft, cellStyle.Alignment, cellStyle.WrapMode);
         if (cellStyle.WrapMode == DataGridViewTriState.True)
         {
-            return MeasureTextHeight(g, text, cellStyle.Font, maxWidth, flags, out widthTruncated);
+            return MeasureTextHeight(g, text, cellStyle.Font!, maxWidth, flags, out widthTruncated);
         }
         else
         {
-            Size size = MeasureTextSize(g, text, cellStyle.Font, flags);
+            Size size = MeasureTextSize(g, text, cellStyle.Font!, flags);
             widthTruncated = size.Width > maxWidth;
             return size.Height;
         }
@@ -3923,10 +3902,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             }
             else if ((dataConnection.CurrencyManager?.Count ?? 0) <= rowIndex)
             {
-                if (value is not null || Properties.ContainsObject(s_propCellValue))
-                {
-                    Properties.SetObject(s_propCellValue, value);
-                }
+                Properties.AddOrRemoveValue(s_propCellValue, value);
             }
             else
             {
@@ -3963,10 +3939,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             rowIndex == -1 ||
             ColumnIndex == -1)
         {
-            if (value is not null || Properties.ContainsObject(s_propCellValue))
-            {
-                Properties.SetObject(s_propCellValue, value);
-            }
+            Properties.AddOrRemoveValue(s_propCellValue, value);
         }
         else
         {

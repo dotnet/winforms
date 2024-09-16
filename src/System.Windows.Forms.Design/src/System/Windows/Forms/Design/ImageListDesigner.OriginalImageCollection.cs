@@ -112,7 +112,7 @@ internal partial class ImageListDesigner
 
         int IList.Add(object? value) => value is ImageListImage image ? Add(image) : throw new ArgumentException();
 
-        // Called when reloading the form.  In this case, we have no "originals" list,
+        // Called when reloading the form. In this case, we have no "originals" list,
         // so we make one out of the image list.
         internal void ReloadFromImageList()
         {

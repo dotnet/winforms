@@ -10,7 +10,7 @@ public sealed partial class CodeDomLocalizationProvider
     /// <summary>
     ///  This is a culture info converter that knows how to provide
     ///  a restricted list of cultures based on the SupportedCultures
-    ///  property of the extender.  If the extender can't be found
+    ///  property of the extender. If the extender can't be found
     ///  or the SupportedCultures property returns null, this
     ///  defaults to the stock implementation.
     /// </summary>

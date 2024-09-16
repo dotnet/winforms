@@ -2,11 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections;
+using System.Formats.Nrbf;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Windows.Forms.BinaryFormat;
+using System.Private.Windows.Core.BinaryFormat;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Com.StructuredStorage;
 using Windows.Win32.System.Variant;
+using System.Windows.Forms.Nrbf;
 
 namespace System.Windows.Forms;
 
@@ -23,8 +25,8 @@ public abstract unsafe partial class AxHost
             long position = stream.Position;
             try
             {
-                BinaryFormattedObject format = new(stream);
-                if (format.TryGetPrimitiveHashtable(out _bag!))
+                SerializationRecord rootRecord = stream.Decode();
+                if (rootRecord.TryGetPrimitiveHashtable(out _bag!))
                 {
                     return;
                 }
@@ -34,14 +36,14 @@ public abstract unsafe partial class AxHost
                 // Don't usually expect to fall into this case as we should usually not have anything
                 // in the stream other than primitive VARIANTs, which are handled. If there are arrays or
                 // interface pointers we'd hit this.
-                Debug.WriteLine($"PropertyBagStream: {nameof(BinaryFormattedObject)} failed with {ex.Message}");
+                Debug.WriteLine($"PropertyBagStream: {nameof(NrbfDecoder)} failed with {ex.Message}");
             }
 
             try
             {
                 stream.Position = position;
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-                _bag = (Hashtable)new BinaryFormatter().Deserialize(stream);
+                _bag = (Hashtable)new BinaryFormatter().Deserialize(stream); // CodeQL[SM03722, SM04191] : BinaryFormatter is intended to be used as a fallback for unsupported types. Users must explicitly opt into this behavior"
             }
             catch (Exception inner) when (!inner.IsCriticalException())
             {
@@ -103,7 +105,7 @@ public abstract unsafe partial class AxHost
             }
             catch (Exception ex) when (!ex.IsCriticalException())
             {
-                Debug.WriteLine($"PropertyBagStream.Save: {nameof(BinaryFormattedObject)} failed with {ex.Message}");
+                Debug.WriteLine($"PropertyBagStream.Save: {nameof(NrbfDecoder)} failed with {ex.Message}");
 
                 stream.Position = position;
 #pragma warning disable SYSLIB0011 // Type or member is obsolete

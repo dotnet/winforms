@@ -97,7 +97,7 @@ public partial class PaintEventArgs : EventArgs, IDisposable, IDeviceContext, IG
 
     /// <summary>
     ///  If ControlStyles.AllPaintingInWmPaint, we call this method after OnPaintBackground so it appears to
-    ///  OnPaint that it's getting a fresh Graphics.  We want to make sure AllPaintingInWmPaint is purely an
+    ///  OnPaint that it's getting a fresh Graphics. We want to make sure AllPaintingInWmPaint is purely an
     ///  optimization, and doesn't change behavior, so we need to make sure any clipping regions established in
     ///  OnPaintBackground don't apply to OnPaint.
     /// </summary>

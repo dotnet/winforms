@@ -7,20 +7,20 @@ using System.Resources;
 namespace System.ComponentModel.Design.Serialization;
 
 /// <summary>
-///  Code model serializer for resource managers.  This is called
-///  in one of two ways.  On Deserialization, we are associated
-///  with a ResourceManager object.  Instead of creating a
+///  Code model serializer for resource managers. This is called
+///  in one of two ways. On Deserialization, we are associated
+///  with a ResourceManager object. Instead of creating a
 ///  ResourceManager, however, we create an object called a
-///  SerializationResourceManager.  This class inherits
+///  SerializationResourceManager. This class inherits
 ///  from ResourceManager, but overrides all of the methods.
 ///  Instead of letting resource manager maintain resource
 ///  sets, it uses the designer host's IResourceService
 ///  for this purpose.
 ///
 ///  During serialization, this class will also create
-///  a SerializationResourceManager.  This will be added
+///  a SerializationResourceManager. This will be added
 ///  to the serialization manager as a service so other
-///  resource serializers can get at it.  SerializationResourceManager
+///  resource serializers can get at it. SerializationResourceManager
 ///  has additional methods on it to support writing data
 ///  into the resource streams for various cultures.
 /// </summary>
@@ -58,7 +58,7 @@ internal class LocalizationCodeDomSerializer : CodeDomSerializer
     }
 
     /// <summary>
-    ///  Serializes the given object into a CodeDom object.  This uses the stock
+    ///  Serializes the given object into a CodeDom object. This uses the stock
     ///  resource serialization scheme and retains the expression it provides.
     /// </summary>
     public override object? Serialize(IDesignerSerializationManager manager, object value)
@@ -67,7 +67,7 @@ internal class LocalizationCodeDomSerializer : CodeDomSerializer
         ExpressionContext? tree = (ExpressionContext?)manager.Context[typeof(ExpressionContext)];
 #pragma warning disable SYSLIB0050 // Type or member is obsolete
         bool isSerializable = value is null || GetReflectionTypeHelper(manager, value).IsSerializable;
-#pragma warning restore SYSLIB0050 // Type or member is obsolete
+#pragma warning restore SYSLIB0050
 
         // If value is not serializable, we have no option but to call the original serializer,
         // since we cannot push this into resources.
@@ -86,14 +86,14 @@ internal class LocalizationCodeDomSerializer : CodeDomSerializer
 
         if (_model == CodeDomLocalizationModel.PropertyReflection && !serializingContent && !callExistingSerializer)
         {
-            // For a property reflecting model, we need to do more work.  Here we need to find
+            // For a property reflecting model, we need to do more work. Here we need to find
             // the object we are serializing against and inject an "ApplyResources" method
-            // against the object and its name.  If any of this machinery fails we will
+            // against the object and its name. If any of this machinery fails we will
             // just return the existing expression which will default to the original behavior.
             CodeStatementCollection? statements = (CodeStatementCollection?)manager.Context[typeof(CodeStatementCollection)];
 
             // In the case of extender properties, we don't want to serialize using the property
-            // reflecting model.  In this case we'll skip it and fall through to the
+            // reflecting model. In this case we'll skip it and fall through to the
             // property assignment model.
             bool skipPropertyReflect = false;
 

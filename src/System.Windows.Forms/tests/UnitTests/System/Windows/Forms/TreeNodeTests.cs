@@ -4632,6 +4632,226 @@ public class TreeNodeTests
         Assert.False((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(treeSubNode));
     }
 
+    [WinFormsTheory]
+    [InlineData(10, 10)]
+    [InlineData(-10, -10)]
+    [InlineData(0, 0)]
+    public void TreeNodeAccessibleObject_HitTest_ReturnsExpected(int x, int y)
+    {
+        using TreeView treeView = new();
+        TreeNode treeNode = new("Node 1");
+        treeView.Nodes.Add(treeNode);
+
+        TreeNode.TreeNodeAccessibleObject accessibleObject = new(treeNode, treeView);
+        AccessibleObject hitTestResult = accessibleObject.HitTest(x, y);
+
+        if (x < 0 || y < 0)
+        {
+            hitTestResult.Should().BeNull();
+        }
+        else
+        {
+            hitTestResult.Should().Be(treeView.AccessibilityObject.HitTest(x, y));
+        }
+    }
+
+    [WinFormsTheory]
+    [InlineData(null)]
+    [InlineData(typeof(ContextMenuStrip))]
+    public void TreeNode_ContextMenuStrip_Set_GetReturnsExpected(object value)
+    {
+        TreeNode treeNode = new()
+        {
+            ContextMenuStrip = value as ContextMenuStrip
+        };
+
+        treeNode.ContextMenuStrip.Should().Be(value as ContextMenuStrip);
+    }
+
+    [WinFormsTheory]
+    [InlineData("Node1", "Node2")]
+    public void TreeNode_FromHandle_Invoke_ReturnsExpected(string nodeName1, string nodeName2)
+    {
+        using TreeView treeView = new();
+
+        TreeNode node1 = new(nodeName1);
+        TreeNode node2 = new(nodeName2);
+        treeView.Nodes.Add(node1);
+        treeView.CreateControl();
+
+        TreeNode result1 = TreeNode.FromHandle(treeView, node1.Handle);
+        result1.Should().Be(node1);
+
+        TreeNode result2 = TreeNode.FromHandle(treeView, node2.Handle);
+        result2.Should().BeNull();
+    }
+
+    [WinFormsTheory]
+    [BoolData]
+    public void TreeNode_RowBounds_Get_ReturnsExpected(bool isNodeRemoved)
+    {
+        using TreeView treeView = new();
+        TreeNode treeNode = new();
+        treeView.Nodes.Add(treeNode);
+
+        if (isNodeRemoved)
+        {
+            treeNode.Remove();
+        }
+
+        if (isNodeRemoved)
+        {
+            treeNode.RowBounds.Should().Be(Rectangle.Empty);
+        }
+        else
+        {
+            treeNode.RowBounds.Should().NotBe(Rectangle.Empty);
+        }
+    }
+
+    [WinFormsTheory]
+    [InlineData("Node1", "ChildNode1", "ChildNode2", true)]
+    [InlineData("Node2", "ChildNode3", "ChildNode4", false)]
+    public void TreeNode_Clone_ReturnsExpected(string nodeName, string childNode1, string childNode2, bool isChecked)
+    {
+        TreeNode treeNode = new()
+        {
+            Text = nodeName,
+            Checked = isChecked
+        };
+
+        treeNode.Nodes.Add(new TreeNode(childNode1));
+        treeNode.Nodes.Add(new TreeNode(childNode2));
+        TreeNode clonedNode = (TreeNode)treeNode.Clone();
+
+        clonedNode.Text.Should().Be(treeNode.Text);
+        clonedNode.Checked.Should().Be(treeNode.Checked);
+        clonedNode.Nodes.Count.Should().Be(treeNode.Nodes.Count);
+        clonedNode.Nodes[0].Text.Should().Be(treeNode.Nodes[0].Text);
+        clonedNode.Nodes[1].Text.Should().Be(treeNode.Nodes[1].Text);
+    }
+
+    [WinFormsTheory]
+    [BoolData]
+    public void TreeNode_EnsureVisible_InvokeWithTreeView_CallsExpected(bool initiallyVisible)
+    {
+        using TreeView treeView = new();
+        TreeNode treeNode = new();
+        treeView.Nodes.Add(treeNode);
+
+        if (initiallyVisible)
+        {
+            treeNode.EnsureVisible();
+            treeNode.IsVisible.Should().BeTrue();
+        }
+
+        treeNode.EnsureVisible();
+        treeNode.IsVisible.Should().BeTrue();
+    }
+
+    [WinFormsFact]
+    public void TreeNode_EnsureVisible_InvokeWithoutTreeView_NoAction()
+    {
+        TreeNode treeNode = new();
+
+        treeNode.Invoking(tn => tn.EnsureVisible()).Should().NotThrow();
+    }
+
+    [WinFormsFact]
+    public void TreeNode_EnsureVisible_InvokeWithDisposedTreeView_NoAction()
+    {
+        using TreeView treeView = new();
+        TreeNode treeNode = new();
+        treeView.Nodes.Add(treeNode);
+        treeView.Dispose();
+
+        treeNode.Invoking(tn => tn.EnsureVisible()).Should().NotThrow();
+    }
+
+    private TreeNode CreateTreeNodeStructure(int depth, int breadth, bool initiallyExpanded)
+    {
+        TreeNode node = new();
+        if (depth > 0)
+        {
+            for (int i = 0; i < breadth; i++)
+            {
+                node.Nodes.Add(CreateTreeNodeStructure(depth - 1, breadth, initiallyExpanded));
+            }
+        }
+
+        if (initiallyExpanded)
+        {
+            node.Expand();
+        }
+
+        return node;
+    }
+
+    private void CheckExpandedState(TreeNode node, bool expectedState)
+    {
+        node.IsExpanded.Should().Be(expectedState);
+        foreach (TreeNode child in node.Nodes)
+        {
+            CheckExpandedState(child, expectedState);
+        }
+    }
+
+    [WinFormsTheory]
+    [InlineData(0, false, true)]
+    [InlineData(1, false, false)]
+    [InlineData(1, true, false)]
+    public void TreeNode_ExpandCollapse_Invoke_Success(int depth, bool initiallyExpanded, bool collapse)
+    {
+        var node = CreateTreeNodeStructure(depth, 2, initiallyExpanded);
+        CheckExpandedState(node, initiallyExpanded);
+
+        if (collapse)
+        {
+            node.ExpandAll();
+            CheckExpandedState(node, true);
+
+            node.Collapse();
+            CheckExpandedState(node, false);
+        }
+        else
+        {
+            node.ExpandAll();
+            CheckExpandedState(node, true);
+        }
+    }
+
+    [WinFormsTheory]
+    [InlineData(0, false, 0)]
+    [InlineData(2, true, 4)]
+    public void TreeNode_GetNodeCount_ReturnsExpected(int childrenCount, bool includeSubTrees, int expectedCount)
+    {
+        TreeNode node = new();
+        for (int i = 0; i < childrenCount; i++)
+        {
+            TreeNode child = new();
+            child.Nodes.Add(new TreeNode());
+            node.Nodes.Add(child);
+        }
+
+        int result = node.GetNodeCount(includeSubTrees);
+        result.Should().Be(expectedCount);
+    }
+
+    [WinFormsFact]
+    public void TreeNode_Toggle_WhenNodeIsExpanded_CollapsesNode()
+    {
+        using TreeView treeView = new();
+
+        TreeNode node = new();
+        treeView.Nodes.Add(node);
+
+        node.Toggle();
+        node.IsExpanded.Should().BeTrue();
+
+        node.Toggle();
+        node.IsExpanded.Should().BeFalse();
+    }
+
     private class InvalidSetItemTreeView : TreeView
     {
         public bool MakeInvalid { get; set; }

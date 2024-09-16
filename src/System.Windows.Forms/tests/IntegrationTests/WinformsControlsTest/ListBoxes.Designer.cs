@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-namespace WinformsControlsTest;
+namespace WinFormsControlsTest;
 
 partial class ListBoxes
 {
@@ -79,7 +79,7 @@ partial class ListBoxes
         this.addButton1.Location = new System.Drawing.Point(240, 80);
         this.addButton1.Text = "Add";
         this.addButton1.Tag = new object[]{ listBox1, textBox1 };
-        this.addButton1.Click += new System.EventHandler(this.addButton_Click);
+        this.addButton1.Click += this.addButton_Click;
         // 
         // deleteButton1
         // 
@@ -87,7 +87,7 @@ partial class ListBoxes
         this.deleteButton1.Location = new System.Drawing.Point(240, 110);
         this.deleteButton1.Text = "Delete";
         this.deleteButton1.Tag = listBox1;
-        this.deleteButton1.Click += new System.EventHandler(this.deleteButton_Click);
+        this.deleteButton1.Click += this.deleteButton_Click;
         // 
         // label2
         //
@@ -112,7 +112,7 @@ partial class ListBoxes
         this.addButton2.Location = new System.Drawing.Point(240, 300);
         this.addButton2.Text = "Add";
         this.addButton2.Tag = new object[] { listBox2, textBox2 };
-        this.addButton2.Click += new System.EventHandler(this.addButton_Click);
+        this.addButton2.Click += this.addButton_Click;
         // 
         // deleteButton2
         // 
@@ -120,7 +120,7 @@ partial class ListBoxes
         this.deleteButton2.Location = new System.Drawing.Point(240, 330);
         this.deleteButton2.Text = "Delete";
         this.deleteButton2.Tag = listBox2;
-        this.deleteButton2.Click += new System.EventHandler(this.deleteButton_Click);
+        this.deleteButton2.Click += this.deleteButton_Click;
         // 
         // label3
         //
@@ -134,7 +134,7 @@ partial class ListBoxes
         this.listBox3.Name = "listBox3";
         this.listBox3.Size = new System.Drawing.Size(200, 150);
         this.listBox3.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-        this.listBox3.DrawItem += new System.Windows.Forms.DrawItemEventHandler(ListBox_DrawItem);
+        this.listBox3.DrawItem += ListBox_DrawItem;
         // 
         // textBox3
         //
@@ -148,7 +148,7 @@ partial class ListBoxes
         this.addButton3.Location = new System.Drawing.Point(600, 80);
         this.addButton3.Text = "Add";
         this.addButton3.Tag = new object[] { listBox3, textBox3 };
-        this.addButton3.Click += new System.EventHandler(this.addButton_Click);
+        this.addButton3.Click += this.addButton_Click;
         // 
         // deleteButton3
         // 
@@ -156,7 +156,7 @@ partial class ListBoxes
         this.deleteButton3.Location = new System.Drawing.Point(600, 110);
         this.deleteButton3.Text = "Delete";
         this.deleteButton3.Tag = listBox3;
-        this.deleteButton3.Click += new System.EventHandler(this.deleteButton_Click);
+        this.deleteButton3.Click += this.deleteButton_Click;
         // 
         // label4
         //
@@ -170,8 +170,8 @@ partial class ListBoxes
         this.listBox4.Name = "listBox4";
         this.listBox4.Size = new System.Drawing.Size(200, 150);
         this.listBox4.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
-        this.listBox4.DrawItem += new System.Windows.Forms.DrawItemEventHandler(ListBox_DrawItem);
-        this.listBox4.MeasureItem += new System.Windows.Forms.MeasureItemEventHandler(ListBox_MeasureItem);
+        this.listBox4.DrawItem += ListBox_DrawItem;
+        this.listBox4.MeasureItem += ListBox_MeasureItem;
         // 
         // textBox4
         //
@@ -185,7 +185,7 @@ partial class ListBoxes
         this.addButton4.Location = new System.Drawing.Point(600, 300);
         this.addButton4.Text = "Add";
         this.addButton4.Tag = new object[] { listBox4, textBox4 };
-        this.addButton4.Click += new System.EventHandler(this.addButton_Click);
+        this.addButton4.Click += this.addButton_Click;
         // 
         // deleteButton4
         // 
@@ -193,7 +193,7 @@ partial class ListBoxes
         this.deleteButton4.Location = new System.Drawing.Point(600, 330);
         this.deleteButton4.Text = "Delete";
         this.deleteButton4.Tag = listBox4;
-        this.deleteButton4.Click += new System.EventHandler(this.deleteButton_Click);
+        this.deleteButton4.Click += this.deleteButton_Click;
         // 
         // Form
         // 

@@ -3975,6 +3975,153 @@ public partial class PropertyGridTests
         Assert.Equal("123", myClass.ParentGridEntry.NestedGridEntry);
     }
 
+    [WinFormsFact]
+    public void PropertyGrid_PropertyValueChanged_Invoke_CallsPropertyValueChanged()
+    {
+        using PropertyGrid propertyGrid = new();
+        int callCount = 0;
+        PropertyValueChangedEventHandler handler = (sender, e) =>
+        {
+            sender.Should().BeSameAs(propertyGrid);
+            e.Should().NotBeNull();
+            e.ChangedItem.Should().NotBeNull();
+            e.OldValue.Should().Be(0);
+            callCount++;
+        };
+
+        propertyGrid.PropertyValueChanged += handler;
+        var accessor = propertyGrid.TestAccessor();
+        var gridItem = new Mock<GridItem>().Object;
+        accessor.Dynamic.OnPropertyValueChanged(new PropertyValueChangedEventArgs(gridItem, 0));
+        callCount.Should().Be(1);
+
+        propertyGrid.PropertyValueChanged -= handler;
+        accessor.Dynamic.OnPropertyValueChanged(new PropertyValueChangedEventArgs(gridItem, 0));
+        callCount.Should().Be(1);
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_PropertySortChangedEventTriggered()
+    {
+        using PropertyGrid propertyGrid = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().BeSameAs(propertyGrid);
+            e.Should().BeSameAs(EventArgs.Empty);
+            callCount++;
+        };
+
+        propertyGrid.PropertySortChanged += handler;
+        propertyGrid.PropertySort = PropertySort.Alphabetical;
+        callCount.Should().Be(1);
+
+        propertyGrid.PropertySort = PropertySort.Categorized;
+        callCount.Should().Be(2);
+
+        propertyGrid.PropertySortChanged -= handler;
+        propertyGrid.PropertySort = PropertySort.Alphabetical;
+        callCount.Should().Be(2);
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_SelectedObjectsChanged_Invoke_CallsSelectedObjectsChanged()
+    {
+        using PropertyGrid propertyGrid = new();
+        int callCount = 0;
+        EventHandler handler = (sender, e) =>
+        {
+            sender.Should().Be(propertyGrid);
+            e.Should().Be(EventArgs.Empty);
+            callCount++;
+        };
+
+        propertyGrid.SelectedObjectsChanged += handler;
+        propertyGrid.SelectedObjects = [new object()];
+        callCount.Should().Be(1);
+
+        propertyGrid.SelectedObjects = [new object(), new object()];
+        callCount.Should().Be(2);
+
+        propertyGrid.SelectedObjectsChanged -= handler;
+        propertyGrid.SelectedObjects = [new object()];
+        callCount.Should().Be(2);
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_ResetSelectedProperty_Invoke_Success()
+    {
+        using PropertyGrid propertyGrid = new();
+        var testObject = new TestObject { Property1 = "ChangedValue1"};
+        propertyGrid.SelectedObject = testObject;
+
+        propertyGrid.ResetSelectedProperty();
+
+        var selectedGridItem = propertyGrid.SelectedGridItem;
+        selectedGridItem.Should().NotBeNull();
+        selectedGridItem.Value.Should().Be("Default1");
+    }
+
+    public class TestObject
+    {
+        [DefaultValue("Default1")]
+        public string Property1 { get; set; }
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_PropertyTabChangedEventTriggered()
+    {
+        using PropertyGrid propertyGrid = new();
+        int eventCallCount = 0;
+        PropertyTabChangedEventArgs eventArgs = null;
+
+        propertyGrid.PropertyTabChanged += (sender, e) =>
+        {
+            eventCallCount++;
+            eventArgs = e;
+        };
+
+        TestPropertyTab tab1 = new();
+        TestPropertyTab tab2 = new();
+
+        var oldTab = tab2;
+        var newTab = tab1;
+        var accessor = propertyGrid.TestAccessor();
+        accessor.Dynamic.OnPropertyTabChanged(new PropertyTabChangedEventArgs(oldTab, newTab));
+
+        eventCallCount.Should().Be(1);
+        eventArgs.Should().NotBeNull();
+        eventArgs.OldTab.Should().Be(oldTab);
+        eventArgs.NewTab.Should().Be(newTab);
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_SelectedGridItemChanged_TriggeredCorrectly()
+    {
+        using PropertyGrid propertyGrid = new();
+        int eventCallCount = 0;
+        SelectedGridItemChangedEventArgs eventArgs = null;
+        object actualSender = null;
+
+        propertyGrid.SelectedGridItemChanged += (sender, e) =>
+        {
+            eventCallCount++;
+            eventArgs = e;
+            actualSender = sender;
+        };
+
+        Mock<GridItem> gridItemMock = new();
+        var gridItem = gridItemMock.Object;
+
+        var accessor = propertyGrid.TestAccessor();
+        accessor.Dynamic.OnSelectedGridItemChanged(new SelectedGridItemChangedEventArgs(null, gridItem));
+
+        eventCallCount.Should().Be(1);
+        eventArgs.Should().NotBeNull();
+        actualSender.Should().Be(propertyGrid);
+        eventArgs.NewSelection.Should().Be(gridItem);
+    }
+
     private class SubToolStripRenderer : ToolStripRenderer
     {
     }

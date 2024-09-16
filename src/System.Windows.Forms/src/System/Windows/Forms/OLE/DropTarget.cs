@@ -150,13 +150,13 @@ internal unsafe class DropTarget : Ole.IDropTarget.Interface, IManagedWrapper<Ol
 
     HRESULT Ole.IDropTarget.Interface.DragLeave()
     {
-        _owner.OnDragLeave(EventArgs.Empty);
-
         if (_lastDragEventArgs?.DropImageType > DropImageType.Invalid)
         {
             ClearDropDescription();
             DragDropHelper.DragLeave();
         }
+
+        _owner.OnDragLeave(EventArgs.Empty);
 
         return HRESULT.S_OK;
     }
@@ -170,14 +170,14 @@ internal unsafe class DropTarget : Ole.IDropTarget.Interface, IManagedWrapper<Ol
 
         if (CreateDragEventArgs(pDataObj, grfKeyState, pt, *pdwEffect) is { } dragEvent)
         {
-            _owner.OnDragDrop(dragEvent);
-            *pdwEffect = (Ole.DROPEFFECT)dragEvent.Effect;
-
             if (_lastDragEventArgs?.DropImageType > DropImageType.Invalid)
             {
                 ClearDropDescription();
                 DragDropHelper.Drop(dragEvent);
             }
+
+            _owner.OnDragDrop(dragEvent);
+            *pdwEffect = (Ole.DROPEFFECT)dragEvent.Effect;
         }
         else
         {

@@ -17,7 +17,7 @@ namespace Windows.Win32.Foundation;
 ///  <para>
 ///   Fields should be nulled out before calling <see cref="Dispose()"/>. Releasing the COM pointer during disposal
 ///   can result in callbacks to containing classes. Rather than evaluate the risk of this for every class, always
-///   follow this pattern. <see cref="DisposeHelper.NullAndDispose"/> facilitates doing this safely.
+///   follow this pattern. <see cref="M:System.DisposeHelper.NullAndDispose``1(``0@)"/> facilitates doing this safely.
 ///  </para>
 /// </remarks>
 internal unsafe class AgileComPointer<TInterface> :

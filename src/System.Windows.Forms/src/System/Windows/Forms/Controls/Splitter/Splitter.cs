@@ -47,6 +47,10 @@ public partial class Splitter : Control
     public Splitter() : base()
     {
         SetStyle(ControlStyles.Selectable, false);
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001
+
         TabStop = false;
         _minSize = 25;
         _minExtra = 25;
@@ -167,7 +171,7 @@ public partial class Splitter : Control
     }
 
     /// <summary>
-    ///  Indicates what type of border the Splitter control has.  This value
+    ///  Indicates what type of border the Splitter control has. This value
     ///  comes from the System.Windows.Forms.BorderStyle enumeration.
     /// </summary>
     [DefaultValue(BorderStyle.None)]
@@ -193,8 +197,8 @@ public partial class Splitter : Control
         => new SplitterAccessibleObject(this);
 
     /// <summary>
-    ///  Returns the parameters needed to create the handle.  Inheriting classes
-    ///  can override this to provide extra functionality.  They should not,
+    ///  Returns the parameters needed to create the handle. Inheriting classes
+    ///  can override this to provide extra functionality. They should not,
     ///  however, forget to call base.getCreateParams() first to get the struct
     ///  filled up with the basic info.
     /// </summary>

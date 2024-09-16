@@ -21,12 +21,12 @@ namespace System.Drawing.Imaging;
 
 // Bitmaps, Brushes, Pens, and Text will all use any color adjustments
 // that have been set into the default ImageAttributes until their own
-// color adjustments have been set.  So as soon as any "Set" method is
+// color adjustments have been set. So as soon as any "Set" method is
 // called for Bitmaps, Brushes, Pens, or Text, then they start from
 // scratch with only the color adjustments that have been set for them.
 // Calling Reset removes any individual color adjustments for a type
 // and makes it revert back to using all the default color adjustments
-// (if any).  The SetToIdentity method is a way to force a type to
+// (if any). The SetToIdentity method is a way to force a type to
 // have no color adjustments at all, regardless of what previous adjustments
 // have been set for the defaults or for that type.
 
@@ -332,10 +332,10 @@ public sealed unsafe class ImageAttributes : ICloneable, IDisposable
 
 #if NET9_0_OR_GREATER
     /// <inheritdoc cref="SetRemapTable(ColorMap[], ColorAdjustType)"/>
-    public void SetRemapTable(ReadOnlySpan<ColorMap> map) => SetRemapTable(ColorAdjustType.Default, map);
+    public void SetRemapTable(params ReadOnlySpan<ColorMap> map) => SetRemapTable(ColorAdjustType.Default, map);
 
     /// <inheritdoc cref="SetRemapTable(ColorMap[], ColorAdjustType)"/>
-    public void SetRemapTable(ReadOnlySpan<(Color OldColor, Color NewColor)> map) => SetRemapTable(ColorAdjustType.Default, map);
+    public void SetRemapTable(params ReadOnlySpan<(Color OldColor, Color NewColor)> map) => SetRemapTable(ColorAdjustType.Default, map);
 #endif
 
     /// <summary>
@@ -352,7 +352,7 @@ public sealed unsafe class ImageAttributes : ICloneable, IDisposable
 #else
     private
 #endif
-    void SetRemapTable(ColorAdjustType type, ReadOnlySpan<ColorMap> map)
+    void SetRemapTable(ColorAdjustType type, params ReadOnlySpan<ColorMap> map)
     {
         // Color is being generated incorrectly so we can't use GdiPlus.ColorMap directly.
         // https://github.com/microsoft/CsWin32/issues/1121
@@ -380,7 +380,7 @@ public sealed unsafe class ImageAttributes : ICloneable, IDisposable
 
 #if NET9_0_OR_GREATER
     /// <inheritdoc cref="SetRemapTable(ColorAdjustType, ReadOnlySpan{ColorMap})"/>
-    public void SetRemapTable(ColorAdjustType type, ReadOnlySpan<(Color OldColor, Color NewColor)> map)
+    public void SetRemapTable(ColorAdjustType type, params ReadOnlySpan<(Color OldColor, Color NewColor)> map)
     {
         StackBuffer stackBuffer = default;
         using BufferScope<(ARGB, ARGB)> buffer = new(stackBuffer, map.Length);
@@ -427,9 +427,11 @@ public sealed unsafe class ImageAttributes : ICloneable, IDisposable
     public void SetBrushRemapTable(params ColorMap[] map) => SetRemapTable(map, ColorAdjustType.Brush);
 
 #if NET9_0_OR_GREATER
-    public void SetBrushRemapTable(ReadOnlySpan<ColorMap> map) => SetRemapTable(ColorAdjustType.Brush, map);
+    /// <inheritdoc cref="SetRemapTable(ColorAdjustType, ReadOnlySpan{ColorMap})"/>
+    public void SetBrushRemapTable(params ReadOnlySpan<ColorMap> map) => SetRemapTable(ColorAdjustType.Brush, map);
 
-    public void SetBrushRemapTable(ReadOnlySpan<(Color OldColor, Color NewColor)> map) => SetRemapTable(ColorAdjustType.Brush, map);
+    /// <inheritdoc cref="SetRemapTable(ColorAdjustType, ReadOnlySpan{ColorMap})"/>
+    public void SetBrushRemapTable(params ReadOnlySpan<(Color OldColor, Color NewColor)> map) => SetRemapTable(ColorAdjustType.Brush, map);
 #endif
 
     public void ClearBrushRemapTable() => ClearRemapTable(ColorAdjustType.Brush);

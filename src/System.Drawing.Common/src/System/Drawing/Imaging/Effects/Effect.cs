@@ -8,7 +8,7 @@ namespace System.Drawing.Imaging.Effects;
 /// <summary>
 ///  Base class for all effects.
 /// </summary>
-public unsafe abstract class Effect : IDisposable
+public abstract unsafe class Effect : IDisposable
 {
     private CGpEffect* _nativeEffect;
 
@@ -36,9 +36,12 @@ public unsafe abstract class Effect : IDisposable
         }
     }
 
+    /// <summary>
+    ///  Cleans up Windows resources for this <see cref="Effect"/>
+    /// </summary>
     ~Effect() => Dispose(disposing: false);
 
-    public virtual void Dispose(bool disposing)
+    protected virtual void Dispose(bool disposing)
     {
         if (_nativeEffect is not null)
         {

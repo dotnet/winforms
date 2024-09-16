@@ -12,7 +12,7 @@ public class MenuCommandsChangedEventArgs : EventArgs
 {
     /// <summary>
     ///  Constructor that requires the object in question, the type of change
-    ///  and the remaining commands left for the object.  "command" can be null
+    ///  and the remaining commands left for the object. "command" can be null
     ///  to signify multiple commands changed at once.
     /// </summary>
     public MenuCommandsChangedEventArgs(MenuCommandsChangedType changeType, MenuCommand? command)
@@ -28,7 +28,7 @@ public class MenuCommandsChangedEventArgs : EventArgs
     public MenuCommandsChangedType ChangeType { get; }
 
     /// <summary>
-    ///  The command that was added/removed/changed.  This can be null if more than one command changed at once.
+    ///  The command that was added/removed/changed. This can be null if more than one command changed at once.
     /// </summary>
     public MenuCommand? Command { get; }
 }

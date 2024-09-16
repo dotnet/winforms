@@ -4,6 +4,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Windows.Forms.Analyzers.Diagnostics;
 using TASKDIALOGCONFIG_FooterIcon = Windows.Win32.UI.Controls.TASKDIALOGCONFIG._Anonymous2_e__Union;
 using TASKDIALOGCONFIG_MainIcon = Windows.Win32.UI.Controls.TASKDIALOGCONFIG._Anonymous1_e__Union;
 namespace System.Windows.Forms;
@@ -15,8 +16,8 @@ namespace System.Windows.Forms;
 /// </summary>
 /// <remarks>
 /// <para>
-///   For more information, see
-/// <see href="https://docs.microsoft.com/windows/desktop/Controls/task-dialogs-overview">About Task Dialogs</see>.
+///  For more information, see
+///  <see href="https://docs.microsoft.com/windows/desktop/Controls/task-dialogs-overview">About Task Dialogs.</see>
 /// </para>
 /// <para>
 ///   Note: In order to use the dialog, you need ensure <see cref="Application.EnableVisualStyles"/>
@@ -298,28 +299,160 @@ public partial class TaskDialog : IWin32Window
     }
 
     /// <summary>
-    ///   Shows the task dialog.
+    ///  Shows the task dialog with the specified owner asynchronously.
     /// </summary>
     /// <param name="page">
-    ///   The page instance that contains the contents which this task dialog will display.
+    ///  The page instance that contains the contents which this task dialog will display.
     /// </param>
     /// <param name="startupLocation">
-    ///   Gets or sets the position of the task dialog when it is shown.
+    ///  Gets or sets the position of the task dialog when it is shown.
     /// </param>
     /// <remarks>
-    ///   <para>
-    ///     Showing the dialog will bind the <paramref name="page"/> and its controls until
-    ///     this method returns or the dialog is navigated to a different page.
-    ///   </para>
+    ///  <para>
+    ///   Showing the dialog will bind the <paramref name="page"/> and its controls until
+    ///   this method returns or the dialog is navigated to a different page.
+    ///  </para>
     /// </remarks>
     /// <returns>
-    ///   The <see cref="TaskDialogButton"/> which was clicked by the user to close the dialog.
+    ///  The <see cref="TaskDialogButton"/> which was clicked by the user to close the dialog.
     /// </returns>
     /// <exception cref="ArgumentNullException">
-    ///   <paramref name="page"/> is <see langword="null"/>.
+    ///  <paramref name="page"/> is <see langword="null"/>.
     /// </exception>
     /// <exception cref="InvalidOperationException">
-    /// The specified <paramref name="page"/> contains an invalid configuration.
+    ///  The specified <paramref name="page"/> contains an invalid configuration.
+    /// </exception>
+    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = DiagnosticIDs.UrlFormat)]
+    public static Task<TaskDialogButton> ShowDialogAsync(
+        TaskDialogPage page,
+        TaskDialogStartupLocation startupLocation = TaskDialogStartupLocation.CenterScreen)
+            => ShowDialogAsync(IntPtr.Zero, page.OrThrowIfNull(), startupLocation);
+
+    /// <summary>
+    ///  Shows the task dialog with the specified owner asynchronously.
+    /// </summary>
+    /// <param name="page">
+    ///  The page instance that contains the contents which this task dialog will display.
+    /// </param>
+    /// <param name="owner">
+    ///  The owner window.
+    /// </param>
+    /// <param name="startupLocation">
+    ///  Gets or sets the position of the task dialog when it is shown.
+    /// </param>
+    /// <remarks>
+    ///  <para>
+    ///   Showing the dialog will bind the <paramref name="page"/> and its controls until
+    ///   this method returns or the dialog is navigated to a different page.
+    ///  </para>
+    /// </remarks>
+    /// <returns>
+    ///  The <see cref="TaskDialogButton"/> which was clicked by the user to close the dialog.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///  <paramref name="page"/> is <see langword="null"/>.
+    /// </exception>
+    /// <exception cref="InvalidOperationException">
+    ///  The specified <paramref name="page"/> contains an invalid configuration.
+    /// </exception>
+    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = DiagnosticIDs.UrlFormat)]
+    public static Task<TaskDialogButton> ShowDialogAsync(
+        IWin32Window owner,
+        TaskDialogPage page,
+        TaskDialogStartupLocation startupLocation = TaskDialogStartupLocation.CenterOwner) =>
+            ShowDialogAsync(owner.Handle, page, startupLocation);
+
+    /// <summary>
+    ///  Shows the task dialog with the specified owner asynchronously.
+    /// </summary>
+    /// <param name="page">
+    ///  The page instance that contains the contents which this task dialog will display.
+    /// </param>
+    /// <param name="hwndOwner">
+    ///  The handle of the owner window, or <see cref="IntPtr.Zero"/> to show a modeless dialog.
+    /// </param>
+    /// <param name="startupLocation">
+    ///  Gets or sets the position of the task dialog when it is shown.
+    /// </param>
+    /// <remarks>
+    ///  <para>
+    ///   Showing the dialog will bind the <paramref name="page"/> and its controls until
+    ///   this method returns or the dialog is navigated to a different page.
+    ///  </para>
+    /// </remarks>
+    /// <returns>
+    ///  The <see cref="TaskDialogButton"/> which was clicked by the user to close the dialog.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///  <paramref name="page"/> is <see langword="null"/>.
+    /// </exception>
+    /// <exception cref="InvalidOperationException">
+    ///  The specified <paramref name="page"/> contains an invalid configuration.
+    /// </exception>
+    [Experimental(DiagnosticIDs.ExperimentalAsync, UrlFormat = DiagnosticIDs.UrlFormat)]
+    public static async Task<TaskDialogButton> ShowDialogAsync(
+        nint hwndOwner,
+        TaskDialogPage page,
+        TaskDialogStartupLocation startupLocation = TaskDialogStartupLocation.CenterOwner)
+    {
+        ArgumentNullException.ThrowIfNull(page);
+
+        var completion = new TaskCompletionSource<TaskDialogButton>();
+
+        TaskDialog? dialog = null;
+
+        if (SynchronizationContext.Current is null)
+        {
+            WindowsFormsSynchronizationContext.InstallIfNeeded();
+        }
+
+        var syncContext = SynchronizationContext.Current
+            ?? throw new InvalidOperationException(SR.FormOrTaskDialog_NoSyncContextForShowAsync);
+
+        syncContext.Post(_ => ShowDialogProc(), null);
+
+        TaskDialogButton result;
+
+        result = await completion.Task.ConfigureAwait(true);
+        return result;
+
+        void ShowDialogProc()
+        {
+            try
+            {
+                dialog = new();
+                completion.TrySetResult(dialog.ShowDialogInternal(hwndOwner, page, startupLocation));
+            }
+            catch (Exception ex)
+            {
+                completion.TrySetException(ex);
+            }
+        }
+    }
+
+    /// <summary>
+    ///  Shows the task dialog.
+    /// </summary>
+    /// <param name="page">
+    ///  The page instance that contains the contents which this task dialog will display.
+    /// </param>
+    /// <param name="startupLocation">
+    ///  Gets or sets the position of the task dialog when it is shown.
+    /// </param>
+    /// <remarks>
+    ///  <para>
+    ///   Showing the dialog will bind the <paramref name="page"/> and its controls until
+    ///   this method returns or the dialog is navigated to a different page.
+    ///  </para>
+    /// </remarks>
+    /// <returns>
+    ///  The <see cref="TaskDialogButton"/> which was clicked by the user to close the dialog.
+    /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///  <paramref name="page"/> is <see langword="null"/>.
+    /// </exception>
+    /// <exception cref="InvalidOperationException">
+    ///  The specified <paramref name="page"/> contains an invalid configuration.
     /// </exception>
     public static TaskDialogButton ShowDialog(
         TaskDialogPage page,
@@ -327,31 +460,31 @@ public partial class TaskDialog : IWin32Window
         => ShowDialog(IntPtr.Zero, page.OrThrowIfNull(), startupLocation);
 
     /// <summary>
-    ///   Shows the task dialog with the specified owner.
+    ///  Shows the task dialog with the specified owner.
     /// </summary>
     /// <param name="page">
-    ///   The page instance that contains the contents which this task dialog will display.
+    ///  The page instance that contains the contents which this task dialog will display.
     /// </param>
     /// <param name="owner">The owner window, or <see langword="null"/> to show a modeless dialog.</param>
     /// <param name="startupLocation">
-    ///   Gets or sets the position of the task dialog when it is shown.
+    ///  Gets or sets the position of the task dialog when it is shown.
     /// </param>
     /// <remarks>
-    ///   <para>
-    ///     Showing the dialog will bind the <paramref name="page"/> and its controls until
-    ///     this method returns or the dialog is navigated to a different page.
-    ///   </para>
+    ///  <para>
+    ///   Showing the dialog will bind the <paramref name="page"/> and its controls until
+    ///   this method returns or the dialog is navigated to a different page.
+    ///  </para>
     /// </remarks>
     /// <returns>
-    ///   The <see cref="TaskDialogButton"/> which was clicked by the user to close the dialog.
+    ///  The <see cref="TaskDialogButton"/> which was clicked by the user to close the dialog.
     /// </returns>
     /// <exception cref="ArgumentNullException">
-    ///   <paramref name="owner"/> is <see langword="null"/>
-    ///   - or -
-    ///   <paramref name="page"/> is <see langword="null"/>.
+    ///  <paramref name="owner"/> is <see langword="null"/>
+    ///  - or -
+    ///  <paramref name="page"/> is <see langword="null"/>.
     /// </exception>
     /// <exception cref="InvalidOperationException">
-    /// The specified <paramref name="page"/> contains an invalid configuration.
+    ///  The specified <paramref name="page"/> contains an invalid configuration.
     /// </exception>
     public static TaskDialogButton ShowDialog(
         IWin32Window owner,
@@ -385,7 +518,7 @@ public partial class TaskDialog : IWin32Window
     ///   <paramref name="page"/> is <see langword="null"/>.
     /// </exception>
     /// <exception cref="InvalidOperationException">
-    /// The specified <paramref name="page"/> contains an invalid configuration.
+    ///  The specified <paramref name="page"/> contains an invalid configuration.
     /// </exception>
     public static unsafe TaskDialogButton ShowDialog(
         IntPtr hwndOwner,

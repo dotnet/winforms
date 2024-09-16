@@ -333,8 +333,9 @@ public sealed class ColorMatrix
     /// <summary>
     ///  Initializes a new instance of the <see cref='ColorMatrix'/> class with the elements in the specified matrix.
     /// </summary>
+    /// <param name="newColorMatrix">The values of the elements of the new matrix.</param>
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="newColorMatrix"/> did not have 25 values.</exception>
-    public unsafe ColorMatrix(ReadOnlySpan<float> newColorMatrix)
+    public unsafe ColorMatrix(params ReadOnlySpan<float> newColorMatrix)
     {
         ArgumentOutOfRangeException.ThrowIfNotEqual(newColorMatrix.Length, 25, nameof(newColorMatrix));
 

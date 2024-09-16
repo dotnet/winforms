@@ -3,8 +3,9 @@
 
 using System.Windows.Forms.IntegrationTests.Common;
 
-namespace WinformsControlsTest;
+namespace WinFormsControlsTest;
 
+[DesignerCategory("Default")]
 public partial class ComboBoxes : Form
 {
     public ComboBoxes()

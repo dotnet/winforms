@@ -1,13 +1,13 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing.Design;
 using System.Globalization;
 
-namespace WinformsControlsTest.UserControls;
+namespace WinFormsControlsTest.UserControls;
 
+[DesignerCategory("Default")]
 internal class UserControlWithObjectCollectionEditor : UserControl
 {
     public UserControlWithObjectCollectionEditor()
@@ -20,6 +20,7 @@ internal class UserControlWithObjectCollectionEditor : UserControl
     [EditorBrowsable(EditorBrowsableState.Always)]
     [Category("Accessibility")]
     [TypeConverter(typeof(SomeCollectionTypeConverter))]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public IList<int> AAAAAFirstCollection
     {
         get { return new List<int>(new int[] { 1, 2, 3 }); }

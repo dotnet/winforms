@@ -12,7 +12,7 @@ public class PropertyGridCommands
 {
 #pragma warning disable IDE1006 // Naming Styles - Shipped public API
     /// <summary>
-    ///  This guid corresponds to the menu grouping windows forms will use for its menus.  This is
+    ///  This guid corresponds to the menu grouping windows forms will use for its menus. This is
     ///  defined in the windows forms menu CTC file, but we need it here so we can define what
     ///  context menus to use.
     /// </summary>
@@ -27,5 +27,5 @@ public class PropertyGridCommands
     public static readonly CommandID Description = new(wfcMenuCommand, 0x3001);
     public static readonly CommandID Hide = new(wfcMenuCommand, 0x3002);
     public static readonly CommandID Commands = new(wfcMenuCommand, 0x3010);
-#pragma warning restore IDE1006 // Naming Styles
+#pragma warning restore IDE1006
 }

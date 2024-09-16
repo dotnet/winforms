@@ -9,7 +9,7 @@ using System.Windows.Forms.Design;
 namespace System.ComponentModel.Design;
 
 /// <summary>
-///  Generic editor for editing binary data.  This presents a hex editing window to the user.
+///  Generic editor for editing binary data. This presents a hex editing window to the user.
 /// </summary>
 public sealed partial class BinaryEditor : UITypeEditor
 {

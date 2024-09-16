@@ -7,7 +7,8 @@ using System.Drawing.Drawing2D;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-///  This class draws a visible border on the splitter if it doesn't have a border so the user knows where the boundaries of the splitter lie.
+///  This class draws a visible border on the splitter if it doesn't have a border
+///  so the user knows where the boundaries of the splitter lie.
 /// </summary>
 internal class SplitterDesigner : ControlDesigner
 {
@@ -35,7 +36,8 @@ internal class SplitterDesigner : ControlDesigner
     }
 
     /// <summary>
-    ///  Here we check to see if there is no border on the panel. If not, we draw one so that the panel shape is visible at design time.
+    ///  Here we check to see if there is no border on the panel.
+    ///  If not, we draw one so that the panel shape is visible at design time.
     /// </summary>
     protected override void OnPaintAdornments(PaintEventArgs pe)
     {

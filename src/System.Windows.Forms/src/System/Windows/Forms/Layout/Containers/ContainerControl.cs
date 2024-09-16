@@ -40,8 +40,8 @@ public class ContainerControl : ScrollableControl, IContainerControl
     private AutoScaleMode _autoScaleMode = AutoScaleMode.Inherit;
 
     /// <summary>
-    /// Top-level window is scaled by suggested rectangle received from windows WM_DPICHANGED message event.
-    /// We use this flag to indicate it is top-level window and is already scaled.
+    ///  Top-level window is scaled by suggested rectangle received from windows WM_DPICHANGED message event.
+    ///  We use this flag to indicate it is top-level window and is already scaled.
     /// </summary>
     private bool _isScaledByDpiChangedEvent;
 
@@ -77,7 +77,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
     private const string FontMeasureString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     /// <summary>
-    /// Child Container control that inherit <see cref="AutoScaleMode"/> (and does not store their own) would need
+    ///  Child Container control that inherit <see cref="AutoScaleMode"/> (and does not store their own) would need
     /// <see cref="AutoScaleFactor"/> from parent to scale them during Dpi changed events. We can not use
     /// <see cref="AutoScaleFactor"/> property as it get computed with already updated Font and Dpi of their parent.
     /// </summary>
@@ -266,7 +266,6 @@ public class ContainerControl : ScrollableControl, IContainerControl
             return bm;
         }
 
-        [RequiresUnreferencedCode(IBindableComponent.ComponentModelTrimIncompatibilityMessage)]
         set => base.BindingContext = value;
     }
 
@@ -350,7 +349,8 @@ public class ContainerControl : ScrollableControl, IContainerControl
     }
 
     /// <summary>
-    /// Gets or sets whether the container needs to be scaled when <see cref="DpiChangedEventHandler" />, irrespective whether the font was inherited or set explicitly.
+    ///  Gets or sets whether the container needs to be scaled when <see cref="DpiChangedEventHandler" />,
+    ///  irrespective whether the font was inherited or set explicitly.
     /// </summary>
     internal bool IsDpiChangeScalingRequired { get; set; }
 
@@ -943,19 +943,23 @@ public class ContainerControl : ScrollableControl, IContainerControl
     public void PerformAutoScale() => PerformAutoScale(includedBounds: true, excludedBounds: true);
 
     /// <summary>
-    /// Performs scaling of this control. Scaling works by scaling all children of this control.
-    /// PerformAutoScale is automatically called during OnLayout. The parameters to
-    /// PerformAutoScale are passed as follows:
-    ///  1. If AutoScaleDimensions are set, includedBounds is set to true.
-    ///  2. If a font change occurred, excludedBounds is set to true.
+    ///  Performs scaling of this control. Scaling works by scaling all children of this control.
+    ///  PerformAutoScale is automatically called during OnLayout. The parameters to
+    ///  PerformAutoScale are passed as follows:
+    ///   1. If AutoScaleDimensions are set, includedBounds is set to true.
+    ///   2. If a font change occurred, excludedBounds is set to true.
     /// </summary>
     /// <param name="includedBounds">If includedBounds is true those controls whose bounds have changed since
     ///  they were last scaled will be auto scaled.</param>
-    /// <param name="excludedBounds">If excludedBounds is true those controls whose bounds have not changed
-    /// since they were last scaled will be auto scaled.</param>
-    /// <param name="causedByFontChanged">Helps to distinguish the scaling by ResumeLayout
-    /// or <see cref="OnFontChanged(EventArgs)"/> event. Scaling by <see cref="OnFontChanged(EventArgs)"/> event
-    /// does not need to scale child container control as they receive their own <see cref="OnFontChanged(EventArgs)"/> event.</param>
+    /// <param name="excludedBounds">
+    ///  If excludedBounds is true those controls whose bounds have not changed
+    ///  since they were last scaled will be auto scaled.
+    /// </param>
+    /// <param name="causedByFontChanged">
+    ///  Helps to distinguish the scaling by ResumeLayout or <see cref="OnFontChanged(EventArgs)"/> event.
+    ///  Scaling by <see cref="OnFontChanged(EventArgs)"/> event does not need to scale child container control as
+    ///  they receive their own <see cref="OnFontChanged(EventArgs)"/> event.
+    /// </param>
     private void PerformAutoScale(bool includedBounds, bool excludedBounds, bool causedByFontChanged = false)
     {
         bool suspended = false;
@@ -1146,11 +1150,14 @@ public class ContainerControl : ScrollableControl, IContainerControl
     }
 
     /// <summary>
-    /// Scales container's properties Min and Max size with the scale factor provided.
+    ///  Scales container's properties Min and Max size with the scale factor provided.
     /// </summary>
     /// <param name="xScaleFactor">The scale factor to be applied on width of the property being scaled.</param>
     /// <param name="yScaleFactor">The scale factor to be applied on height of the property being scaled.</param>
-    /// <param name="updateContainerSize"><see langword="true"/> to resize of the container control along with properties being scaled; otherwise, <see langword="false"/>.</param>
+    /// <param name="updateContainerSize">
+    ///  <see langword="true"/> to resize of the container control along with properties being scaled;
+    ///  otherwise, <see langword="false"/>.
+    /// </param>
     protected virtual void ScaleMinMaxSize(float xScaleFactor, float yScaleFactor, bool updateContainerSize = true)
     { }
 
@@ -1356,7 +1363,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
 
         base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
 
-        // Check if font is inherited from parent and is not being scaled by Parent (e.g. Winforms designer
+        // Check if font is inherited from parent and is not being scaled by Parent (e.g. WinForms designer
         // in Visual Studio). In this case we need to scale Control explicitly with respect to new scaled Font.
         if (TryGetExplicitlySetFont(out _))
         {
@@ -1678,7 +1685,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
     /// </summary>
     private void EnsureUnvalidatedControl(Control? candidate)
     {
-        // Don't change the unvalidated control while in the middle of validation (re-entrancy)
+        // Don't change the unvalidated control while in the middle of validation (reentrancy)
         if (_state[s_stateValidating])
         {
             return;
@@ -1933,7 +1940,9 @@ public class ContainerControl : ScrollableControl, IContainerControl
                         {
                             Cancel = true
                         };
-                        currentActiveControl.NotifyValidationResult(currentValidatingControl, ev);
+
+                        currentActiveControl.ValidationCancelled = ev.Cancel;
+
                         if (currentActiveControl is ContainerControl currentActiveContainerControl)
                         {
                             if (currentActiveContainerControl._focusedControl is not null)

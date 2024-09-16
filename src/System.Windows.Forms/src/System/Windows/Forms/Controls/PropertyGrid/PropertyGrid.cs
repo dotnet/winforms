@@ -176,7 +176,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             _toolStrip = new PropertyGridToolStrip(this);
 
             // SetupToolbar should perform the layout
-            using SuspendLayoutScope suspendToolStripLayout = new(_toolStrip, performLayout: false);
+            using (SuspendLayoutScope suspendToolStripLayout = new(_toolStrip, performLayout: false))
             {
                 _toolStrip.ShowItemToolTips = true;
 
@@ -1619,7 +1619,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     [Conditional("DEBUG")]
 #pragma warning disable CA1822 // Mark members as static
     internal void CheckInCreate()
-#pragma warning restore CA1822 // Mark members as static
+#pragma warning restore CA1822
     {
 #if DEBUG
         if (_inGridViewCreate)
@@ -1757,13 +1757,13 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             {
                 if (site.TryGetService(out IMenuCommandService? menuCommandService))
                 {
-                    // Got the menu command service.  Let it deal with the set of verbs for this component.
+                    // Got the menu command service. Let it deal with the set of verbs for this component.
                     verbs = new DesignerVerb[menuCommandService.Verbs.Count];
                     menuCommandService.Verbs.CopyTo(verbs, 0);
                 }
                 else
                 {
-                    // No menu command service.  Go straight to the component's designer.  We can only do this
+                    // No menu command service. Go straight to the component's designer. We can only do this
                     // if the object count is 1, because designers do not support verbs across a multi-selection.
                     if (_selectedObjects.Length == 1 && site.TryGetService(out IDesignerHost? designerHost))
                     {
@@ -2537,6 +2537,13 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     protected override void OnHandleCreated(EventArgs e)
     {
         base.OnHandleCreated(e);
+
+        // Making sure, the _toolBar BackColor gets updated when the
+        // default BackColor is not the typical light-theme one.
+#pragma warning disable CA2245 // Do not assign a property to itself
+        BackColor = BackColor;
+#pragma warning restore CA2245
+
         OnLayoutInternal(dividerOnly: false);
         TypeDescriptor.Refreshed += OnTypeDescriptorRefreshed;
         if (_selectedObjects is not null && _selectedObjects.Length > 0)
@@ -2941,20 +2948,16 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             return;
         }
 
-        // Announce the property value change like standalone combobox control do: "[something] selected".
+        // Announce the property value change like standalone combobox control does: "[something] selected".
         bool dropDown = false;
-        Type propertyType = changedItem.PropertyDescriptor!.PropertyType;
-        var editor = (UITypeEditor?)TypeDescriptor.GetEditor(propertyType, typeof(UITypeEditor));
-        if (editor is not null)
+        if (changedItem.PropertyDescriptor?.PropertyType is { } propertyType
+            && TypeDescriptor.GetEditor(propertyType, typeof(UITypeEditor)) is UITypeEditor editor)
         {
             dropDown = editor.GetEditStyle() == UITypeEditorEditStyle.DropDown;
         }
-        else
+        else if (changedItem is GridEntry gridEntry && gridEntry.Enumerable)
         {
-            if (changedItem is GridEntry gridEntry && gridEntry.Enumerable)
-            {
-                dropDown = true;
-            }
+            dropDown = true;
         }
 
         if (IsAccessibilityObjectCreated && dropDown && !_gridView.DropDownVisible)
@@ -3510,7 +3513,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             killTab = true;
         }
 
-        // We don't remove PropertyTabScope.Global tabs here.  Our owner has to do that.
+        // We don't remove PropertyTabScope.Global tabs here. Our owner has to do that.
         if (killTab && _tabs[tabIndex].Scope > PropertyTabScope.Global)
         {
             RemoveTab(tabIndex, false);

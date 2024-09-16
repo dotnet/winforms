@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-namespace WinformsControlsTest.UserControls;
+namespace WinFormsControlsTest.UserControls;
 
 partial class CollectionEditors
 {
@@ -47,7 +47,7 @@ partial class CollectionEditors
         this.comboBox1.Name = "comboBox1";
         this.comboBox1.Size = new System.Drawing.Size(121, 21);
         this.comboBox1.TabIndex = 2;
-        this.comboBox1.Enter += new System.EventHandler(this.control_Enter);
+        this.comboBox1.Enter += this.control_Enter;
         // 
         // maskedTextBox1
         // 
@@ -55,7 +55,7 @@ partial class CollectionEditors
         this.maskedTextBox1.Name = "maskedTextBox1";
         this.maskedTextBox1.Size = new System.Drawing.Size(121, 20);
         this.maskedTextBox1.TabIndex = 3;
-        this.maskedTextBox1.Enter += new System.EventHandler(this.control_Enter);
+        this.maskedTextBox1.Enter += this.control_Enter;
         // 
         // textBox1
         // 
@@ -63,7 +63,7 @@ partial class CollectionEditors
         this.textBox1.Name = "textBox1";
         this.textBox1.Size = new System.Drawing.Size(121, 20);
         this.textBox1.TabIndex = 0;
-        this.textBox1.Enter += new System.EventHandler(this.control_Enter);
+        this.textBox1.Enter += this.control_Enter;
         // 
         // listView1
         // 
@@ -73,7 +73,7 @@ partial class CollectionEditors
         this.listView1.Size = new System.Drawing.Size(121, 97);
         this.listView1.TabIndex = 4;
         this.listView1.UseCompatibleStateImageBehavior = false;
-        this.listView1.Enter += new System.EventHandler(this.control_Enter);
+        this.listView1.Enter += this.control_Enter;
         // 
         // propertyGrid1
         // 
@@ -101,7 +101,7 @@ partial class CollectionEditors
         this.domainUpDown1.Size = new System.Drawing.Size(120, 20);
         this.domainUpDown1.TabIndex = 1;
         this.domainUpDown1.Text = "domainUpDown1";
-        this.domainUpDown1.Enter += new System.EventHandler(this.control_Enter);
+        this.domainUpDown1.Enter += this.control_Enter;
         // 
         // CollectionEditors
         // 

@@ -163,18 +163,11 @@ public partial class DataGridViewRow : DataGridViewBand
 
     private string ErrorTextInternal
     {
-        get
-        {
-            object? errorText = Properties.GetObject(s_propRowErrorText);
-            return (string?)errorText ?? string.Empty;
-        }
+        get => Properties.GetStringOrEmptyString(s_propRowErrorText);
         set
         {
             string errorText = ErrorTextInternal;
-            if (!string.IsNullOrEmpty(value) || Properties.ContainsObject(s_propRowErrorText))
-            {
-                Properties.SetObject(s_propRowErrorText, value);
-            }
+            Properties.AddOrRemoveString(s_propRowErrorText, value);
 
             if (DataGridView is not null && !errorText.Equals(ErrorTextInternal))
             {
@@ -418,7 +411,7 @@ public partial class DataGridViewRow : DataGridViewBand
 
                     if (DataGridView.RightToLeftInternal)
                     {
-                        dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.Outset;
+                        dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.Single;
                     }
                     else
                     {
@@ -522,7 +515,7 @@ public partial class DataGridViewRow : DataGridViewBand
                 case DataGridViewAdvancedCellBorderStyle.OutsetPartial:
                     if (DataGridView is not null && DataGridView.RightToLeftInternal)
                     {
-                        dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.Outset;
+                        dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.Single;
                         dataGridViewAdvancedBorderStylePlaceholder.RightInternal = DataGridViewAdvancedCellBorderStyle.OutsetDouble;
                     }
                     else

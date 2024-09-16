@@ -13,7 +13,7 @@ public sealed partial class HtmlElement
     ///          and our CLR callbacks.
     ///
     ///  HTMLElementEvents2: we create an IConnectionPoint (via ConnectionPointCookie) between us and MSHTML and it calls back
-    ///              on our an instance of HTMLElementEvents2.  The HTMLElementEvents2 class then fires the event.
+    ///              on our an instance of HTMLElementEvents2. The HTMLElementEvents2 class then fires the event.
     ///
     /// </summary>
     internal unsafe class HtmlElementShim : HtmlShim

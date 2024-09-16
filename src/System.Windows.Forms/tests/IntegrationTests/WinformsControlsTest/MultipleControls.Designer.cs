@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-namespace WinformsControlsTest;
+namespace WinFormsControlsTest;
 
 partial class MultipleControls
 {
@@ -70,8 +70,8 @@ partial class MultipleControls
         // backgroundWorker1
         // 
         this.backgroundWorker1.WorkerReportsProgress = true;
-        this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
-        this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
+        this.backgroundWorker1.DoWork += this.backgroundWorker1_DoWork;
+        this.backgroundWorker1.ProgressChanged += this.backgroundWorker1_ProgressChanged;
         // 
         // button1
         // 
@@ -315,7 +315,7 @@ partial class MultipleControls
         this.Controls.Add(this.linkLabel2);
         this.Name = "MultipleControls";
         this.Text = "These look ok";
-        this.Load += new System.EventHandler(this.Test3_Load);
+        this.Load += this.Test3_Load;
         this.tabControl1.ResumeLayout(false);
         this.tabPage1.ResumeLayout(false);
         this.tabPage2.ResumeLayout(false);

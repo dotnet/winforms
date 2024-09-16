@@ -28,8 +28,8 @@ internal class ToolStripRendererSwitcher
     {
         _state[s_stateUseDefaultRenderer] = true;
         _state[s_stateAttachedRendererChanged] = false;
-        owner.Disposed += new EventHandler(OnControlDisposed);
-        owner.VisibleChanged += new EventHandler(OnControlVisibleChanged);
+        owner.Disposed += OnControlDisposed;
+        owner.VisibleChanged += OnControlVisibleChanged;
         if (owner.Visible)
         {
             OnControlVisibleChanged(owner, EventArgs.Empty);
@@ -143,7 +143,7 @@ internal class ToolStripRendererSwitcher
     {
         if (_state[s_stateAttachedRendererChanged])
         {
-            ToolStripManager.RendererChanged -= new EventHandler(OnDefaultRendererChanged);
+            ToolStripManager.RendererChanged -= OnDefaultRendererChanged;
             _state[s_stateAttachedRendererChanged] = false;
         }
     }
@@ -156,7 +156,7 @@ internal class ToolStripRendererSwitcher
             {
                 if (!_state[s_stateAttachedRendererChanged])
                 {
-                    ToolStripManager.RendererChanged += new EventHandler(OnDefaultRendererChanged);
+                    ToolStripManager.RendererChanged += OnDefaultRendererChanged;
                     _state[s_stateAttachedRendererChanged] = true;
                 }
             }
@@ -164,7 +164,7 @@ internal class ToolStripRendererSwitcher
             {
                 if (_state[s_stateAttachedRendererChanged])
                 {
-                    ToolStripManager.RendererChanged -= new EventHandler(OnDefaultRendererChanged);
+                    ToolStripManager.RendererChanged -= OnDefaultRendererChanged;
                     _state[s_stateAttachedRendererChanged] = false;
                 }
             }

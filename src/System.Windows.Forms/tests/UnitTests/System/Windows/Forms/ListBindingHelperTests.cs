@@ -248,7 +248,7 @@ public class ListBindingHelperTests
         yield return new object[] { typeof(IList<DataClass>), new string[] { "Property" } };
 
         yield return new object[] { new List<ICustomTypeDescriptor>(), Array.Empty<string>() };
-        yield return new object[] { typeof(IList<ICustomTypeDescriptor>), Array.Empty<string>() };
+        yield return new object[] { typeof(IList<ICustomTypeDescriptor>), new string[] { nameof(ICustomTypeDescriptor.RequireRegisteredTypes) } };
 
         // Array.
         yield return new object[] { Array.Empty<DataClass>(), new string[] { "Property" } };
@@ -612,7 +612,7 @@ public class ListBindingHelperTests
     {
 #pragma warning disable IDE0060 // Remove unused parameter
         public NoDefaultConstructor(int i) { }
-#pragma warning restore IDE0060 // Remove unused parameter
+#pragma warning restore IDE0060
 
         public bool ContainsListCollection => throw new NotImplementedException();
 

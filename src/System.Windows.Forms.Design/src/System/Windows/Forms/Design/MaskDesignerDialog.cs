@@ -88,16 +88,16 @@ internal class MaskDesignerDialog : Form
 
     private void HookEvents()
     {
-        _listViewCannedMasks.SelectedIndexChanged += new EventHandler(listViewCannedMasks_SelectedIndexChanged);
-        _listViewCannedMasks.ColumnClick += new ColumnClickEventHandler(listViewCannedMasks_ColumnClick);
-        _listViewCannedMasks.Enter += new EventHandler(listViewCannedMasks_Enter);
-        _btnOK.Click += new EventHandler(btnOK_Click);
-        _txtBoxMask.TextChanged += new EventHandler(txtBoxMask_TextChanged);
-        _txtBoxMask.Validating += new CancelEventHandler(txtBoxMask_Validating);
-        _maskedTextBox.KeyDown += new KeyEventHandler(maskedTextBox_KeyDown);
-        _maskedTextBox.MaskInputRejected += new MaskInputRejectedEventHandler(maskedTextBox_MaskInputRejected);
-        Load += new EventHandler(MaskDesignerDialog_Load);
-        HelpButtonClicked += new CancelEventHandler(MaskDesignerDialog_HelpButtonClicked);
+        _listViewCannedMasks.SelectedIndexChanged += listViewCannedMasks_SelectedIndexChanged;
+        _listViewCannedMasks.ColumnClick += listViewCannedMasks_ColumnClick;
+        _listViewCannedMasks.Enter += listViewCannedMasks_Enter;
+        _btnOK.Click += btnOK_Click;
+        _txtBoxMask.TextChanged += txtBoxMask_TextChanged;
+        _txtBoxMask.Validating += txtBoxMask_Validating;
+        _maskedTextBox.KeyDown += maskedTextBox_KeyDown;
+        _maskedTextBox.MaskInputRejected += maskedTextBox_MaskInputRejected;
+        Load += MaskDesignerDialog_Load;
+        HelpButtonClicked += MaskDesignerDialog_HelpButtonClicked;
     }
 
     [MemberNotNull(nameof(_components))]
@@ -496,7 +496,7 @@ internal class MaskDesignerDialog : Form
         _maskDescriptors.Sort(new MaskDescriptorComparer(sortType, _listViewSortOrder));
 
         // Since we need to pre-process each item before inserting it in the ListView, it is better to remove all items
-        // from it first and then add the sorted ones back (no replace).  Stop redrawing while we change the list.
+        // from it first and then add the sorted ones back (no replace). Stop redrawing while we change the list.
 
         PInvoke.SendMessage(_listViewCannedMasks, PInvoke.WM_SETREDRAW, (WPARAM)(BOOL)false);
 
@@ -559,7 +559,7 @@ internal class MaskDesignerDialog : Form
     }
 
     /// <summary>
-    /// Canned masks list view Column click event handler.  Sorts the items.
+    /// Canned masks list view Column click event handler. Sorts the items.
     /// </summary>
     private void listViewCannedMasks_ColumnClick(object? sender, ColumnClickEventArgs e)
     {
@@ -579,7 +579,7 @@ internal class MaskDesignerDialog : Form
     }
 
     /// <summary>
-    /// OK button Click event handler.  Updates the validating type.
+    /// OK button Click event handler. Updates the validating type.
     /// </summary>
     private void btnOK_Click(object? sender, EventArgs e)
     {
@@ -594,7 +594,7 @@ internal class MaskDesignerDialog : Form
     }
 
     /// <summary>
-    /// Canned masks list view Enter event handler.  Sets focus in the first item if none has it.
+    /// Canned masks list view Enter event handler. Sets focus in the first item if none has it.
     /// </summary>
     private void listViewCannedMasks_Enter(object? sender, EventArgs e)
     {
@@ -607,7 +607,7 @@ internal class MaskDesignerDialog : Form
     }
 
     /// <summary>
-    /// Canned masks list view SelectedIndexChanged event handler.  Gets the selected canned mask
+    /// Canned masks list view SelectedIndexChanged event handler. Gets the selected canned mask
     /// information.
     /// </summary>
     private void listViewCannedMasks_SelectedIndexChanged(object? sender, EventArgs e)

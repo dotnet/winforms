@@ -45,9 +45,9 @@ public class ToolboxBitmapAttribute : Attribute
             return true;
         }
 
-        if (value is ToolboxBitmapAttribute attr)
+        if (value is ToolboxBitmapAttribute attribute)
         {
-            return attr._smallImage == _smallImage && attr._largeImage == _largeImage;
+            return attribute._smallImage == _smallImage && attribute._largeImage == _largeImage;
         }
 
         return false;
@@ -57,15 +57,8 @@ public class ToolboxBitmapAttribute : Attribute
 
     public Image? GetImage(object? component) => GetImage(component, true);
 
-    public Image? GetImage(object? component, bool large)
-    {
-        if (component is not null)
-        {
-            return GetImage(component.GetType(), large);
-        }
-
-        return null;
-    }
+    public Image? GetImage(object? component, bool large) =>
+        component is not null ? GetImage(component.GetType(), large) : null;
 
     public Image? GetImage(Type type) => GetImage(type, false);
 
@@ -75,39 +68,39 @@ public class ToolboxBitmapAttribute : Attribute
     {
         if ((large && _largeImage is null) || (!large && _smallImage is null))
         {
-            Image? img = large ? _largeImage : _smallImage;
-            img ??= GetImageFromResource(type, imgName, large);
+            Image? image = large ? _largeImage : _smallImage;
+            image ??= GetImageFromResource(type, imgName, large);
 
             // last resort for large images.
             if (large && _largeImage is null && _smallImage is not null)
             {
-                img = new Bitmap((Bitmap)_smallImage, s_largeSize.Width, s_largeSize.Height);
+                image = new Bitmap((Bitmap)_smallImage, s_largeSize.Width, s_largeSize.Height);
             }
 
-            if (img is Bitmap b)
+            if (image is Bitmap b)
             {
                 MakeBackgroundAlphaZero(b);
             }
 
-            if (img is null)
+            if (image is null)
             {
-                img = s_defaultComponent.GetImage(type, large);
+                image = s_defaultComponent.GetImage(type, large);
 
                 // We don't want to hand out the static shared image
                 // because otherwise it might get disposed.
-                if (img is not null)
+                if (image is not null)
                 {
-                    img = (Image)img.Clone();
+                    image = (Image)image.Clone();
                 }
             }
 
             if (large)
             {
-                _largeImage = img;
+                _largeImage = image;
             }
             else
             {
-                _smallImage = img;
+                _smallImage = image;
             }
         }
 
@@ -130,15 +123,23 @@ public class ToolboxBitmapAttribute : Attribute
             return null;
         }
 
-        Icon ico = new(stream);
-        Icon sizedico = new(ico, large ? s_largeSize : s_smallSize);
-        Bitmap? b = sizedico.ToBitmap();
-        if (DpiHelper.IsScalingRequired && scaled)
+        Bitmap? bitmap = null;
+        try
         {
-            DpiHelper.ScaleBitmapLogicalToDevice(ref b);
+            using Icon ico = new(stream);
+            using Icon sizedIco = new(ico, large ? s_largeSize : s_smallSize);
+
+            bitmap = sizedIco.ToBitmap();
+            if (DpiHelper.IsScalingRequired && scaled)
+            {
+                DpiHelper.ScaleBitmapLogicalToDevice(ref bitmap);
+            }
+        }
+        catch (Exception e) when (!ClientUtils.IsCriticalException(e))
+        {
         }
 
-        return b;
+        return bitmap;
     }
 
     // Just forwards to Image.FromFile eating any non-critical exceptions that may result.
@@ -175,62 +176,58 @@ public class ToolboxBitmapAttribute : Attribute
         return image;
     }
 
-    private static Image? GetBitmapFromResource(Type t, string? bitmapname, bool large, bool scaled)
+    private static Image? GetBitmapFromResource(Type t, string? bitmapName, bool large, bool scaled)
     {
-        if (bitmapname is null)
+        if (bitmapName is null)
         {
             return null;
         }
 
-        Image? img = null;
-
-        // Load the image from the manifest resources.
-        Stream? stream = BitmapSelector.GetResourceStream(t, bitmapname);
-        if (stream is not null)
+        Image? image = null;
+        try
         {
-            Bitmap? b = new Bitmap(stream);
-            img = b;
-            MakeBackgroundAlphaZero(b);
-            if (large)
+            // Load the image from the manifest resources.
+            Stream? stream = BitmapSelector.GetResourceStream(t, bitmapName);
+            if (stream is not null)
             {
-                img = new Bitmap(b, s_largeSize.Width, s_largeSize.Height);
-            }
+                Bitmap? bitmap = new Bitmap(stream);
+                image = bitmap;
+                MakeBackgroundAlphaZero(bitmap);
+                if (large)
+                {
+                    image = new Bitmap(bitmap, s_largeSize.Width, s_largeSize.Height);
+                }
 
-            if (DpiHelper.IsScalingRequired && scaled)
-            {
-                b = (Bitmap)img;
-                DpiHelper.ScaleBitmapLogicalToDevice(ref b);
-                img = b;
+                if (DpiHelper.IsScalingRequired && scaled)
+                {
+                    bitmap = (Bitmap)image;
+                    DpiHelper.ScaleBitmapLogicalToDevice(ref bitmap);
+                    image = bitmap;
+                }
             }
         }
-
-        return img;
-    }
-
-    private static Bitmap? GetIconFromResource(Type t, string? bitmapname, bool large, bool scaled)
-    {
-        if (bitmapname is null)
+        catch (Exception e) when (!ClientUtils.IsCriticalException(e))
         {
-            return null;
         }
 
-        return GetIconFromStream(BitmapSelector.GetResourceStream(t, bitmapname), large, scaled);
+        return image;
     }
 
-    public static Image? GetImageFromResource(Type t, string? imageName, bool large)
-    {
-        return GetImageFromResource(t, imageName, large, scaled: true);
-    }
+    private static Bitmap? GetIconFromResource(Type t, string? bitmapName, bool large, bool scaled) =>
+        bitmapName is null ? null : GetIconFromStream(BitmapSelector.GetResourceStream(t, bitmapName), large, scaled);
+
+    public static Image? GetImageFromResource(Type t, string? imageName, bool large) =>
+        GetImageFromResource(t, imageName, large, scaled: true);
 
     internal static Image? GetImageFromResource(Type t, string? imageName, bool large, bool scaled)
     {
-        Image? img = null;
+        Image? image = null;
         try
         {
             string? name = imageName;
-            string? iconname = null;
-            string? bmpname = null;
-            string? rawbmpname = null;
+            string? iconName = null;
+            string? bmpName = null;
+            string? rawBmpName = null;
 
             // If we didn't get a name, use the class name
             if (name is null)
@@ -244,49 +241,54 @@ public class ToolboxBitmapAttribute : Attribute
 
                 // All bitmap images from winforms runtime are changed to Icons
                 // and logical names, now, does not contain any extension.
-                rawbmpname = name;
-                iconname = name + ".ico";
-                bmpname = name + ".bmp";
+                rawBmpName = name;
+                iconName = $"{name}.ico";
+                bmpName = $"{name}.bmp";
             }
             else
             {
                 if (string.Equals(Path.GetExtension(imageName), ".ico", StringComparison.CurrentCultureIgnoreCase))
                 {
-                    iconname = name;
+                    iconName = name;
                 }
                 else if (string.Equals(Path.GetExtension(imageName), ".bmp", StringComparison.CurrentCultureIgnoreCase))
                 {
-                    bmpname = name;
+                    bmpName = name;
                 }
                 else
                 {
                     // We don't recognize the name as either bmp or ico. we need to try three things.
-                    // 1.  the name as a bitmap (back compat)
-                    // 2.  name+.bmp
-                    // 3.  name+.ico
-                    rawbmpname = name;
-                    bmpname = name + ".bmp";
-                    iconname = name + ".ico";
+                    // 1. the name as a bitmap (back compat)
+                    // 2. name+.bmp
+                    // 3. name+.ico
+                    rawBmpName = name;
+                    bmpName = $"{name}.bmp";
+                    iconName = $"{name}.ico";
                 }
             }
 
-            if (rawbmpname is not null)
+            if (rawBmpName is not null)
             {
-                img = GetBitmapFromResource(t, rawbmpname, large, scaled);
+                image = GetBitmapFromResource(t, rawBmpName, large, scaled);
             }
 
-            if (img is null && bmpname is not null)
+            if (image is null && rawBmpName is not null)
             {
-                img = GetBitmapFromResource(t, bmpname, large, scaled);
+                image = GetIconFromResource(t, rawBmpName, large, scaled);
             }
 
-            if (img is null && iconname is not null)
+            if (image is null && bmpName is not null)
             {
-                img = GetIconFromResource(t, iconname, large, scaled);
+                image = GetBitmapFromResource(t, bmpName, large, scaled);
+            }
+
+            if (image is null && iconName is not null)
+            {
+                image = GetIconFromResource(t, iconName, large, scaled);
             }
         }
         catch (Exception) { }
-        return img;
+        return image;
     }
 
     private static void MakeBackgroundAlphaZero(Bitmap img)
@@ -309,9 +311,6 @@ public class ToolboxBitmapAttribute : Attribute
 #pragma warning disable CA1810 // DummyFunction apparently needs to be invoked prior to the rest of the initialization
     static ToolboxBitmapAttribute()
     {
-        // When we call Gdip.DummyFunction, JIT will make sure Gdip..cctor will be called.
-        Gdip.DummyFunction();
-
         Stream? stream = BitmapSelector.GetResourceStream(typeof(ToolboxBitmapAttribute), "DefaultComponent.bmp");
         Debug.Assert(stream is not null, "DefaultComponent.bmp must be present as an embedded resource.");
 

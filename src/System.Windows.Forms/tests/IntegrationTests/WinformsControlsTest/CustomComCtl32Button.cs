@@ -5,8 +5,9 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
-namespace WinformsControlsTest;
+namespace WinFormsControlsTest;
 
+[DesignerCategory("Default")]
 internal class CustomComCtl32Button : Form
 {
     public CustomComCtl32Button()

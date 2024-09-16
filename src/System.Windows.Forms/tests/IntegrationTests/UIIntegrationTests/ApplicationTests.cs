@@ -20,7 +20,9 @@ public class ApplicationTests : ControlTestBase
         {
             form.Show();
             using Form child = new() { RightToLeft = RightToLeft.No };
+#pragma warning disable VSTHRD103 // Call async methods when in an async method
             child.Show(form);
+#pragma warning restore VSTHRD103
 
             const int expectedFormCount = 2;
             Assert.Equal(expectedFormCount, Application.OpenForms.Count);

@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-namespace WinformsControlsTest;
+namespace WinFormsControlsTest;
 
 partial class ComboBoxesWithScrollBars
 {
@@ -76,7 +76,7 @@ partial class ComboBoxesWithScrollBars
         this.comboBox1.Name = "comboBox1";
         this.comboBox1.Size = new System.Drawing.Size(116, 23);
         this.comboBox1.TabIndex = 0;
-        this.comboBox1.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.comboBox_DrawItem);
+        this.comboBox1.DrawItem += this.comboBox_DrawItem;
         // 
         // comboBox2
         // 
@@ -88,7 +88,7 @@ partial class ComboBoxesWithScrollBars
         this.comboBox2.Name = "comboBox2";
         this.comboBox2.Size = new System.Drawing.Size(116, 155);
         this.comboBox2.TabIndex = 1;
-        this.comboBox2.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.comboBox_DrawItem);
+        this.comboBox2.DrawItem += this.comboBox_DrawItem;
         // 
         // comboBox3
         // 
@@ -100,7 +100,7 @@ partial class ComboBoxesWithScrollBars
         this.comboBox3.Name = "comboBox3";
         this.comboBox3.Size = new System.Drawing.Size(116, 23);
         this.comboBox3.TabIndex = 2;
-        this.comboBox3.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.comboBox_DrawItem);
+        this.comboBox3.DrawItem += this.comboBox_DrawItem;
         // 
         // changeHeightGroupBox1
         // 

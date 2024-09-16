@@ -16,7 +16,7 @@ internal sealed class PropertyMemberCodeDomSerializer : MemberCodeDomSerializer
     internal static PropertyMemberCodeDomSerializer Default => s_default ??= new PropertyMemberCodeDomSerializer();
 
     /// <summary>
-    ///  This retrieves the value of this property.  If the property returns false
+    ///  This retrieves the value of this property. If the property returns false
     ///  from ShouldSerializeValue (indicating the ambient value for this property)
     ///  This will look for an AmbientValueAttribute and use it if it can.
     /// </summary>
@@ -29,7 +29,7 @@ internal sealed class PropertyMemberCodeDomSerializer : MemberCodeDomSerializer
             if (!property.ShouldSerializeValue(value))
             {
                 // We aren't supposed to be serializing this property, but we decided to do
-                // it anyway.  Check the property for an AmbientValue attribute and if we
+                // it anyway. Check the property for an AmbientValue attribute and if we
                 // find one, use it's value to serialize.
                 if (property.TryGetAttribute(out AmbientValueAttribute? attr))
                 {
@@ -77,7 +77,7 @@ internal sealed class PropertyMemberCodeDomSerializer : MemberCodeDomSerializer
     }
 
     /// <summary>
-    ///  This method actually performs the serialization.  When the member is serialized
+    ///  This method actually performs the serialization. When the member is serialized
     ///  the necessary statements will be added to the statements collection.
     /// </summary>
     public override void Serialize(IDesignerSerializationManager manager, object value, MemberDescriptor descriptor, CodeStatementCollection statements)
@@ -235,7 +235,7 @@ internal sealed class PropertyMemberCodeDomSerializer : MemberCodeDomSerializer
             object? propValue = GetPropertyValue(manager, property, value, out bool validValue);
             CodeExpression? serializedPropertyValue = null;
 
-            // Serialize the value of this property into a code expression.  If we can't get one,
+            // Serialize the value of this property into a code expression. If we can't get one,
             // then we won't serialize the property.
             if (validValue)
             {
@@ -290,8 +290,8 @@ internal sealed class PropertyMemberCodeDomSerializer : MemberCodeDomSerializer
             CodeExpression? serializedPropertyValue = null;
 
             // First check for a member relationship service to see if this property
-            // is related to another member.  If it is, then we will use that
-            // relationship to construct the property assign statement.  if
+            // is related to another member. If it is, then we will use that
+            // relationship to construct the property assign statement. if
             // it isn't, then we're serialize ourselves.
 
             MemberRelationshipService? relationships = manager.GetService<MemberRelationshipService>();
@@ -313,7 +313,7 @@ internal sealed class PropertyMemberCodeDomSerializer : MemberCodeDomSerializer
 
             if (serializedPropertyValue is null)
             {
-                // Serialize the value of this property into a code expression.  If we can't get one,
+                // Serialize the value of this property into a code expression. If we can't get one,
                 // then we won't serialize the property.
                 //
                 object? propValue = GetPropertyValue(manager, property, value, out bool validValue);
@@ -398,7 +398,7 @@ internal sealed class PropertyMemberCodeDomSerializer : MemberCodeDomSerializer
         }
 
         // If we don't have to serialize, we need to make sure there isn't a member
-        // relationship with this property.  If there is, we still need to serialize.
+        // relationship with this property. If there is, we still need to serialize.
 
         MemberRelationshipService? relationships = manager.GetService<MemberRelationshipService>();
 

@@ -3,7 +3,7 @@
 
 using System.Windows.Forms;
 
-namespace WinformsControlsTest;
+namespace WinFormsControlsTest;
 
 partial class DockLayoutTests
 {

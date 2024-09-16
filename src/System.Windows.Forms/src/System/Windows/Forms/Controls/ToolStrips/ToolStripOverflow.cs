@@ -129,7 +129,7 @@ public partial class ToolStripOverflow : ToolStripDropDown, IArrangedElement
     protected override void SetDisplayedItems()
     {
         // do nothing here.... this is really for the setting the overflow/displayed items on the
-        // main ToolStrip.   Our working item collection is our displayed item collection... calling
+        // main ToolStrip. Our working item collection is our displayed item collection... calling
         // base would clear it out.
         Size biggestItemSize = Size.Empty;
         for (int j = 0; j < DisplayedItems.Count; j++)

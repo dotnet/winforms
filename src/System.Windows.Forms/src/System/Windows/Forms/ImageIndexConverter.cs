@@ -12,6 +12,15 @@ namespace System.Windows.Forms;
 /// </summary>
 public class ImageIndexConverter : Int32Converter
 {
+    // Feature switch, when set to false, ImageIndexConverter is not supported in trimmed applications.
+    [FeatureSwitchDefinition("System.Windows.Forms.ImageIndexConverter.IsSupported")]
+#pragma warning disable IDE0075 // Simplify conditional expression - the simpler expression is hard to read
+    private static bool IsSupported { get; } =
+        AppContext.TryGetSwitch("System.Windows.Forms.ImageIndexConverter.IsSupported", out bool isSupported)
+            ? isSupported
+            : true;
+#pragma warning restore IDE0075
+
     /// <summary>
     ///  Gets a value that indicates whether a <see langword="null" /> value is valid in
     ///  the <see cref="TypeConverter.StandardValuesCollection" /> collection.
@@ -30,8 +39,8 @@ public class ImageIndexConverter : Int32Converter
 
     /// <summary>
     ///  this is the property to look at when there is no ImageList property
-    ///  on the current object.  For example, in ToolBarButton - the ImageList is
-    ///  on the ToolBarButton.Parent property.  In ToolStripItem, the ImageList is on
+    ///  on the current object. For example, in ToolBarButton - the ImageList is
+    ///  on the ToolBarButton.Parent property. In ToolStripItem, the ImageList is on
     ///  the ToolStripItem.Owner property.
     /// </summary>
     internal string ParentImageListProperty { get; set; } = "Parent";
@@ -50,10 +59,10 @@ public class ImageIndexConverter : Int32Converter
     }
 
     /// <summary>
-    ///  Converts the given object to another type.  The most common types to convert
-    ///  are to and from a string object.  The default implementation will make a call
+    ///  Converts the given object to another type. The most common types to convert
+    ///  are to and from a string object. The default implementation will make a call
     ///  to ToString on the object if the object is valid and if the destination
-    ///  type is string.  If this cannot convert to the destination type, this will
+    ///  type is string. If this cannot convert to the destination type, this will
     ///  throw a NotSupportedException.
     /// </summary>
     public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
@@ -83,6 +92,11 @@ public class ImageIndexConverter : Int32Converter
     /// </returns>
     public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext? context)
     {
+        if (!IsSupported)
+        {
+            throw new NotSupportedException(string.Format(SR.ControlNotSupportedInTrimming, nameof(ImageIndexConverter)));
+        }
+
         if (context is not null && context.Instance is not null)
         {
             object? instance = context.Instance;
@@ -104,8 +118,8 @@ public class ImageIndexConverter : Int32Converter
 
                 if (imageListProp is null)
                 {
-                    // We didn't find the image list in this component.  See if the
-                    // component has a "parent" property.  If so, walk the tree...
+                    // We didn't find the image list in this component. See if the
+                    // component has a "parent" property. If so, walk the tree...
                     PropertyDescriptor? parentProp = props[ParentImageListProperty];
                     if (parentProp is not null)
                     {
@@ -161,9 +175,9 @@ public class ImageIndexConverter : Int32Converter
 
     /// <summary>
     ///  Determines if the list of standard values returned from
-    ///  GetStandardValues is an exclusive list.  If the list
+    ///  GetStandardValues is an exclusive list. If the list
     ///  is exclusive, then no other values are valid, such as
-    ///  in an enum data type.  If the list is not exclusive,
+    ///  in an enum data type. If the list is not exclusive,
     ///  then there are other valid values besides the list of
     ///  standard values GetStandardValues provides.
     /// </summary>

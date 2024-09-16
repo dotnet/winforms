@@ -10,12 +10,28 @@ using System.Drawing.Imaging;
 namespace System.Drawing.Design;
 
 /// <summary>
-///  Provides a base class for editors that may provide users with a user interface to visually edit the values of the supported type or types.
+///  Provides a base class for editors that may provide users with a user interface to visually edit the values
+///  of the supported type or types.
 /// </summary>
 public class UITypeEditor
 {
+    // Feature switch, when set to false, UITypeEditor is not supported in trimmed applications.
+    [FeatureSwitchDefinition("System.Drawing.Design.UITypeEditor.IsSupported")]
+#pragma warning disable IDE0075 // Simplify conditional expression - the simpler expression is hard to read
+    private static bool IsSupported { get; } =
+        AppContext.TryGetSwitch("System.Drawing.Design.UITypeEditor.IsSupported", out bool isSupported)
+            ? isSupported
+            : true;
+#pragma warning restore IDE0075
+
     static UITypeEditor()
     {
+        // Trimming doesn't support UITypeEditor
+        if (!IsSupported)
+        {
+            return;
+        }
+
         // Our set of intrinsic editors.
         Hashtable intrinsicEditors = new Hashtable
         {
@@ -47,6 +63,14 @@ public class UITypeEditor
         TypeDescriptor.AddEditorTable(typeof(UITypeEditor), intrinsicEditors);
     }
 
+    public UITypeEditor()
+    {
+        if (!IsSupported)
+        {
+            throw new NotSupportedException(string.Format(SR.ControlNotSupportedInTrimming, nameof(UITypeEditor)));
+        }
+    }
+
     /// <summary>
     ///  Determines if drop-down editors should be resizable by the user.
     /// </summary>
@@ -62,7 +86,9 @@ public class UITypeEditor
     /// <summary>
     ///  Edits the specified value using the editor style provided by <see cref="GetEditStyle()"/>.
     /// </summary>
-    /// <param name="context">The <see cref="ITypeDescriptorContext" /> that can be used to gain additional context information.</param>
+    /// <param name="context">
+    ///  The <see cref="ITypeDescriptorContext" /> that can be used to gain additional context information.
+    /// </param>
     /// <param name="provider">The <see cref="IServiceProvider" /> that this editor can use to obtain services.</param>
     /// <param name="value">The object to edit.</param>
     public virtual object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value) => value;
@@ -80,13 +106,17 @@ public class UITypeEditor
     /// <summary>
     ///  Gets a value indicating whether this editor supports painting a representation of an object's value.
     /// </summary>
-    /// <param name="context">The <see cref="ITypeDescriptorContext" /> that can be used to gain additional context information.</param>
+    /// <param name="context">
+    ///  The <see cref="ITypeDescriptorContext" /> that can be used to gain additional context information.
+    /// </param>
     public virtual bool GetPaintValueSupported(ITypeDescriptorContext? context) => false;
 
     /// <summary>
     ///  Gets the editing style of the Edit method.
     /// </summary>
-    /// <param name="context">The <see cref="ITypeDescriptorContext" /> that can be used to gain additional context information.</param>
+    /// <param name="context">
+    ///  The <see cref="ITypeDescriptorContext" /> that can be used to gain additional context information.
+    /// </param>
     public virtual UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context) => UITypeEditorEditStyle.None;
 
     /// <summary>

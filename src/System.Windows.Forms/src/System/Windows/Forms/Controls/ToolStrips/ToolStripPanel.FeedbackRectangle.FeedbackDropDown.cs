@@ -13,7 +13,7 @@ public partial class ToolStripPanel
         private class FeedbackDropDown : ToolStripDropDown
         {
             private const int MaxPaintsToService = 20;
-            private int _numPaintsServiced; // member variable to protect against re-entrancy
+            private int _numPaintsServiced; // member variable to protect against reentrancy
 
             public FeedbackDropDown(Rectangle bounds) : base()
             {
@@ -45,7 +45,7 @@ public partial class ToolStripPanel
                     return;
                 }
 
-                // Protect against re-entrancy.
+                // Protect against reentrancy.
                 try
                 {
                     MSG msg = default;

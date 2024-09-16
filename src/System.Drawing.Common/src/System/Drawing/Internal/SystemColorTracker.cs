@@ -19,7 +19,7 @@ internal static class SystemColorTracker
     private static WeakReference<ISystemColorTracker>?[] s_list = new WeakReference<ISystemColorTracker>?[INITIAL_SIZE];
     private static int s_count;
     private static bool s_addedTracker;
-    private static readonly object s_lockObject = new();
+    private static readonly Lock s_lockObject = new();
 
     internal static void Add(ISystemColorTracker obj)
     {
@@ -36,10 +36,10 @@ internal static class SystemColorTracker
             if (!s_addedTracker)
             {
                 s_addedTracker = true;
-                SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
+                SystemEvents.UserPreferenceChanged += OnUserPreferenceChanged;
             }
 
-            // Strictly speaking, we should grab a lock on this class.  But since the chances
+            // Strictly speaking, we should grab a lock on this class. But since the chances
             // of a problem are so low, the consequences so minimal (something will get accidentally dropped
             // from the list), and the performance of locking so lousy, we'll risk it.
             int index = s_count;

@@ -1024,7 +1024,7 @@ public partial class CollectionEditor
         {
             if (_suspendEnabledCount > 0)
             {
-                // We're in the midst of a suspend/resume block  Resume should call us back.
+                // We're in the midst of a suspend/resume block Resume should call us back.
                 return;
             }
 
@@ -1300,9 +1300,9 @@ public partial class CollectionEditor
 
             /// <summary>
             ///  Retrieves the object that directly depends on this value being edited.
-            ///  This is generally the object that is required for the PropertyDescriptor's GetValue and SetValue  methods.
-            ///  If 'null' is passed for the PropertyDescriptor, the ICustomComponent descriptor implementation should return the default object,
-            ///  that is the main object that exposes the properties and attributes
+            ///  This is generally the object that is required for the PropertyDescriptor's GetValue and SetValue methods.
+            ///  If 'null' is passed for the PropertyDescriptor, the ICustomComponent descriptor implementation should
+            ///  return the default object, that is the main object that exposes the properties and attributes.
             /// </summary>
             object ICustomTypeDescriptor.GetPropertyOwner(PropertyDescriptor? pd) => this;
         }

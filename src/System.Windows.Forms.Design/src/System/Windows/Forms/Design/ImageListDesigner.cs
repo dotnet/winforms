@@ -13,7 +13,7 @@ namespace System.Windows.Forms.Design;
 /// </summary>
 internal partial class ImageListDesigner : ComponentDesigner
 {
-    // The designer keeps a backup copy of all the images in the image list.  Unlike the image list,
+    // The designer keeps a backup copy of all the images in the image list. Unlike the image list,
     // we don't lose any information about size and color depth.
     private OriginalImageCollection? _originalImageCollection;
     private DesignerActionListCollection? _actionLists;
@@ -113,8 +113,7 @@ internal partial class ImageListDesigner : ComponentDesigner
 
         for (int i = 0; i < shadowProps.Length; i++)
         {
-            PropertyDescriptor? prop = (PropertyDescriptor?)properties[shadowProps[i]];
-            if (prop is not null)
+            if (properties[shadowProps[i]] is PropertyDescriptor prop)
             {
                 properties[shadowProps[i]] = TypeDescriptor.CreateProperty(typeof(ImageListDesigner), prop, []);
             }

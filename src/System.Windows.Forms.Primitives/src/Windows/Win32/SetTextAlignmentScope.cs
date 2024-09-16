@@ -23,7 +23,8 @@ internal readonly ref struct SetTextAlignmentScope
     private readonly HDC _hdc;
 
     /// <summary>
-    ///  Sets <paramref name="ta"/> in the given <paramref name="hdc"/> using <see cref="SetTextAlign(HDC, TEXT_ALIGN_OPTIONS)"/>.
+    ///  Sets <paramref name="ta"/> in the given <paramref name="hdc"/>
+    ///  using <see cref="PInvoke.SetTextAlign(HDC, TEXT_ALIGN_OPTIONS)"/>.
     /// </summary>
     public SetTextAlignmentScope(HDC hdc, TEXT_ALIGN_OPTIONS ta)
     {

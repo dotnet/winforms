@@ -10,7 +10,9 @@ using System.Drawing;
 namespace System.Windows.Forms.Design.Behavior;
 
 /// <summary>
-///  The ResizeBehavior is pushed onto the BehaviorStack in response to a positively hit tested SelectionGlyph.  The ResizeBehavior simply tracks the MouseMove messages and updates the bounds of the related control based on the new mouse location and the resize Rules.
+///  The ResizeBehavior is pushed onto the BehaviorStack in response to a positively hit tested SelectionGlyph.
+///  The ResizeBehavior simply tracks the MouseMove messages and updates the bounds of the related
+///  control based on the new mouse location and the resize Rules.
 /// </summary>
 internal class ResizeBehavior : Behavior
 {
@@ -82,7 +84,8 @@ internal class ResizeBehavior : Behavior
     }
 
     /// <summary>
-    ///  Called during the resize operation, we'll try to determine an offset so that the controls snap to the grid settings of the parent.
+    ///  Called during the resize operation, we'll try to determine an offset so that
+    ///  the controls snap to the grid settings of the parent.
     /// </summary>
     private Rectangle AdjustToGrid(Rectangle controlBounds, SelectionRules rules)
     {
@@ -194,7 +197,8 @@ internal class ResizeBehavior : Behavior
     }
 
     /// <summary>
-    ///  This is called in response to the mouse moving far enough away from its initial point.  Basically, we calculate the bounds for each control we're resizing and disable any adorners.
+    ///  This is called in response to the mouse moving far enough away from its initial point.
+    ///  Basically, we calculate the bounds for each control we're resizing and disable any adorners.
     /// </summary>
     private void InitiateResize()
     {
@@ -279,7 +283,9 @@ internal class ResizeBehavior : Behavior
     }
 
     /// <summary>
-    ///  In response to a MouseDown, the SelectionBehavior will push (initiate) a dragBehavior by alerting the SelectionMananger that a new control has been selected and the mouse is down. Note that this is only if we find the related control's Dock property == none.
+    ///  In response to a MouseDown, the SelectionBehavior will push (initiate) a dragBehavior by
+    ///  alerting the SelectionMananger that a new control has been selected and the mouse is down.
+    ///  Note that this is only if we find the related control's Dock property == none.
     /// </summary>
     public override bool OnMouseDown(Glyph g, MouseButtons button, Point mouseLoc)
     {
@@ -352,7 +358,9 @@ internal class ResizeBehavior : Behavior
     }
 
     /// <summary>
-    ///  This method is called when we lose capture, which can occur when another window requests capture or the user presses ESC during a drag.  We check to see if we are currently dragging, and if we are we abort the transaction.  We pop our behavior off the stack at this time.
+    ///  This method is called when we lose capture, which can occur when another window requests capture or
+    ///  the user presses ESC during a drag. We check to see if we are currently dragging,
+    ///  and if we are we abort the transaction. We pop our behavior off the stack at this time.
     /// </summary>
     public override void OnLoseCapture(Glyph g, EventArgs e)
     {
@@ -442,7 +450,9 @@ internal class ResizeBehavior : Behavior
     }
 
     /// <summary>
-    ///  This method will either initiate a new resize operation or continue with an existing one.  If we're currently dragging (i.e. resizing) then we look at the resize rules and set the bounds of each control to the new location of the mouse pointer.
+    ///  This method will either initiate a new resize operation or continue with an existing one.
+    ///  If we're currently dragging (i.e. resizing) then we look at the resize rules and set the
+    ///  bounds of each control to the new location of the mouse pointer.
     /// </summary>
     public override bool OnMouseMove(Glyph g, MouseButtons button, Point mouseLoc)
     {
@@ -463,7 +473,10 @@ internal class ResizeBehavior : Behavior
             return true;
         }
 
-        // When DesignerWindowPane has scrollbars and we resize, shrinking the DesignerWindowPane makes it look like the mouse has moved to the BS.  To compensate for that we keep track of the mouse's previous position in screen coordinates, and use that to compare if the mouse has really moved.
+        // When DesignerWindowPane has scrollbars and we resize, shrinking the DesignerWindowPane
+        // makes it look like the mouse has moved to the BS.
+        // To compensate for that we keep track of the mouse's previous position in screen coordinates,
+        // and use that to compare if the mouse has really moved.
         if (_lastMouseAbs != Point.Empty)
         {
             Point mouseLocAbs = new(mouseLoc.X, mouseLoc.Y);
@@ -492,7 +505,8 @@ internal class ResizeBehavior : Behavior
             return false;
         }
 
-        // we do these separately so as not to disturb the cached sizes for values we're not actually changing.  For example, if a control is docked top and we modify the height, the width shouldn't be modified.
+        // we do these separately so as not to disturb the cached sizes for values we're not actually changing.
+        // For example, if a control is docked top and we modify the height, the width shouldn't be modified.
         PropertyDescriptor propWidth = null;
         PropertyDescriptor propHeight = null;
         PropertyDescriptor propTop = null;
@@ -564,24 +578,43 @@ internal class ResizeBehavior : Behavior
             if (!altKeyPressed && shouldSnap)
             {
                 // here, ask the snapline engine to suggest an offset during our resize
-                // Remembering the last snapoffset allows us to correctly erase snaplines, if the user subsequently holds down the Alt-Key. Remember that we don't physically move the mouse, we move the control. So if we didn't remember the last snapoffset and the user then hit the Alt-Key, we would actually redraw the control at the actual mouse location, which would make the control "jump" which is not what the user would expect. Why does the control "jump"? Because when a control is snapped, we have offset the control relative to where the mouse is, but we have not update the physical mouse position.
-                // When the user hits the Alt-Key they expect the control to be where it was (whether snapped or not). we can't rely on lastSnapOffset to check whether we snapped. We used to check if it was empty, but it can be empty and we still snapped (say the control was snapped, as you continue to move the mouse, it will stay snapped for a while. During that while the snapoffset will got from x to -x (or vice versa) and a one point hit 0.
-                // Since we have to calculate the new size/location differently based on whether we snapped or not, we have to know for sure if we snapped. We do different math because of bug 264996:
+                // Remembering the last snapoffset allows us to correctly erase snaplines,
+                // if the user subsequently holds down the Alt-Key. Remember that we don't physically move the mouse,
+                // we move the control. So if we didn't remember the last snapoffset and the user then hit the Alt-Key,
+                // we would actually redraw the control at the actual mouse location,
+                // which would make the control "jump" which is not what the user would expect.
+                // Why does the control "jump"? Because when a control is snapped,
+                // we have offset the control relative to where the mouse is,
+                // but we have not update the physical mouse position.
+                // When the user hits the Alt-Key they expect the control to be where it was (whether snapped or not).
+                // we can't rely on lastSnapOffset to check whether we snapped. We used to check if it was empty,
+                // but it can be empty and we still snapped (say the control was snapped,
+                // as you continue to move the mouse, it will stay snapped for a while.
+                // During that while the snapoffset will got from x to -x (or vice versa) and a one point hit 0.
+                // Since we have to calculate the new size/location differently based on whether we snapped or not,
+                // we have to know for sure if we snapped. We do different math because of bug 264996:
                 //  - if you snap, we want to move the control edge.
                 //  - otherwise, we just want to change the size by the number of pixels moved.
                 _lastSnapOffset = _dragManager.OnMouseMove(targetControl, GenerateSnapLines(_targetResizeRules, mouseLoc), ref _didSnap, shouldSnapHorizontally);
             }
             else
             {
-                _dragManager.OnMouseMove(new Rectangle(-100, -100, 0, 0)); /*just an invalid rect - so we won't snap*/// );
+                /*just an invalid rect - so we won't snap*/// );
+                _dragManager.OnMouseMove(new Rectangle(-100, -100, 0, 0));
             }
 
-            // If there's a line to snap to, the offset will come back non-zero. In that case we should adjust the mouse position with the offset such that the size calculation below takes that offset into account. If there's no line, then the offset is 0, and there's no harm in adding the offset.
+            // If there's a line to snap to, the offset will come back non-zero.
+            // In that case we should adjust the mouse position with the offset such that
+            // the size calculation below takes that offset into account. If there's no line,
+            // then the offset is 0, and there's no harm in adding the offset.
             mouseLoc.X += _lastSnapOffset.X;
             mouseLoc.Y += _lastSnapOffset.Y;
         }
 
-        // IF WE ARE SNAPPING TO A CONTROL, then we also need to adjust for the offset between the initialPoint (where the MouseDown happened) and the edge of the control otherwise we would be those pixels off when resizing the control. Remember that snaplines are based on the targetControl, so we need to use the targetControl to figure out the offset.
+        // IF WE ARE SNAPPING TO A CONTROL, then we also need to adjust for the offset between the
+        // initialPoint (where the MouseDown happened) and the edge of the control otherwise we
+        // would be those pixels off when resizing the control. Remember that snaplines are based on the targetControl,
+        // so we need to use the targetControl to figure out the offset.
         Rectangle controlBounds = new(_resizeComponents[0].resizeBounds.X, _resizeComponents[0].resizeBounds.Y,
                                                   _resizeComponents[0].resizeBounds.Width, _resizeComponents[0].resizeBounds.Height);
         if ((_didSnap) && (targetControl.Parent is not null))
@@ -602,24 +635,33 @@ internal class ResizeBehavior : Behavior
             Control control = _resizeComponents[i].resizeControl;
             Rectangle bounds = control.Bounds;
             Rectangle oldBounds = bounds;
-            // We need to compute the offset based on the original cached Bounds ... ListBox doesnt allow drag on the top boundary if this is not done when it is "IntegralHeight"
+            // We need to compute the offset based on the original cached Bounds ...
+            // ListBox doesn't allow drag on the top boundary if this is not done when it is "IntegralHeight"
             Rectangle baseBounds = _resizeComponents[i].resizeBounds;
             Rectangle oldBorderRect = BehaviorService.ControlRectInAdornerWindow(control);
             bool needToUpdate = true;
-            // The ResizeBehavior can easily get into a situation where we are fighting with a layout engine. E.g., We resize control to 50px, LayoutEngine lays out and finds 50px was too small and resized back to 100px.  This is what should happen, but it looks bad in the designer.  To avoid the flicker we temporarily turn off painting while we do the resize.
+            // The ResizeBehavior can easily get into a situation where we are fighting with a layout engine.
+            // E.g., We resize control to 50px, LayoutEngine lays out and finds 50px was too small
+            // and resized back to 100px. This is what should happen, but it looks bad in the designer.
+            // To avoid the flicker we temporarily turn off painting while we do the resize.
             PInvoke.SendMessage(control, PInvoke.WM_SETREDRAW, (WPARAM)(BOOL)false);
             try
             {
                 bool fRTL = false;
-                // If the container is mirrored the control origin is in upper-right, so we need to adjust our math for that. Remember that mouse coords have origin in upper left.
+                // If the container is mirrored the control origin is in upper-right,
+                // so we need to adjust our math for that.
+                // Remember that mouse coords have origin in upper left.
                 if (control.Parent is not null && control.Parent.IsMirrored)
                 {
                     fRTL = true;
                 }
 
-                // figure out which ones we're actually changing so we don't blow away the controls cached sizing state.  This is important if things are docked we don't want to destroy their "pre-dock" size.
+                // figure out which ones we're actually changing so we don't blow away the controls cached sizing state.
+                // This is important if things are docked we don't want to destroy their "pre-dock" size.
                 BoundsSpecified specified = BoundsSpecified.None;
-                // When we check if we should change height, width, location,  we first have to check if the targetControl allows resizing, and then if the control we are currently resizing allows it as well.
+                // When we check if we should change height, width, location, we first have to check
+                // if the targetControl allows resizing, and then if the control we are currently resizin
+                // g allows it as well.
                 SelectionRules resizeRules = _resizeComponents[i].resizeRules;
                 if (((_targetResizeRules & SelectionRules.BottomSizeable) != 0) &&
                     ((resizeRules & SelectionRules.BottomSizeable) != 0))
@@ -657,7 +699,8 @@ internal class ResizeBehavior : Behavior
                          ((bounds.Height == minHeight) && (oldBounds.Height != minHeight)))
                     {
                         specified |= BoundsSpecified.Y;
-                        // if you do it fast enough, we actually could end up placing the control off the parent (say off the form), so enforce a "minimum" location
+                        // if you do it fast enough, we actually could end up placing the control off the parent
+                        // (say off the form), so enforce a "minimum" location
                         bounds.Y = Math.Min(baseBounds.Bottom - minHeight, baseBounds.Y - yOffset);
                     }
                 }
@@ -691,7 +734,8 @@ internal class ResizeBehavior : Behavior
                          ((bounds.Width == minWidth) && (oldBounds.Width != minWidth)))
                     {
                         specified |= BoundsSpecified.X;
-                        // if you do it fast enough, we actually could end up placing the control off the parent (say off the form), so enforce a "minimum" location
+                        // if you do it fast enough, we actually could end up placing the control off the parent
+                        // (say off the form), so enforce a "minimum" location
                         bounds.X = Math.Min(baseBounds.Right - minWidth, baseBounds.X - xOffset);
                     }
                 }
@@ -701,9 +745,22 @@ internal class ResizeBehavior : Behavior
                     bounds = AdjustToGrid(bounds, _targetResizeRules);
                 }
 
-                // Checking specified (check the diff) rather than bounds.<foo> != resizeBounds[i].<foo> also handles the following corner cases:
-                // 1. Create a form and add 2 buttons. Make sure that they are snapped to the left edge. Now grab the left edge of button 1, and start resizing to the left, past the snapline you will initially get, and then back to the right. What you would expect is to get the left edge snapline again. But without the specified check you wouldn't. This is because the bounds.<foo> != resizeBounds[i].<foo> checks would fail, since the new size would now be the original size. We could probably live with that, except that we draw the snapline below, since we correctly identified one. We could hack it so that we didn't draw the snapline, but that would confuse the user even more.
-                // 2. Create a form and add a single button. Place it at 100,100. Now start resizing it to the left and then back to the right. Note that with the original check (see diff), you would never be able to resize it back to position 100,100. You would get to 99,100 and then to 101,100.
+                // Checking specified (check the diff) rather than bounds.<foo> != resizeBounds[i].<foo>
+                // also handles the following corner cases:
+                // 1. Create a form and add 2 buttons. Make sure that they are snapped to the left edge.
+                //    Now grab the left edge of button 1, and start resizing to the left,
+                //    past the snapline you will initially get, and then back to the right.
+                //    What you would expect is to get the left edge snapline again.
+                //    But without the specified check you wouldn't.
+                //    This is because the bounds.<foo> != resizeBounds[i].<foo> checks would fail,
+                //    since the new size would now be the original size.
+                //    We could probably live with that, except that we draw the snapline below,
+                //    since we correctly identified one. We could hack it so that we didn't draw the snapline,
+                //    but that would confuse the user even more.
+                // 2. Create a form and add a single button. Place it at 100,100.
+                //     Now start resizing it to the left and then back to the right.
+                // Note that with the original check (see diff), you would never be able to
+                // resize it back to position 100,100. You would get to 99,100 and then to 101,100.
                 if (((specified & BoundsSpecified.Width) == BoundsSpecified.Width) &&
                     _dragging && _initialResize && propWidth is not null)
                 {
@@ -728,7 +785,9 @@ internal class ResizeBehavior : Behavior
                     propTop.SetValue(_resizeComponents[i].resizeControl, bounds.Y);
                 }
 
-                // We check the dragging bit here at every turn, because if there was a popup we may have lost capture and we are terminated.  At that point we shouldn't make any changes.
+                // We check the dragging bit here at every turn,
+                // because if there was a popup we may have lost capture and we are terminated.
+                // At that point we shouldn't make any changes.
                 if (_dragging)
                 {
                     control.SetBounds(bounds.X, bounds.Y, bounds.Width, bounds.Height, specified);
@@ -740,13 +799,22 @@ internal class ResizeBehavior : Behavior
                         targetBorderRect = newBorderRect;
                     }
 
-                    // Check that the control really did resize itself. Some controls (like ListBox, MonthCalendar) might adjust to a slightly different size than the one we pass in SetBounds. If if didn't size, then there's no need to invalidate anything
+                    // Check that the control really did resize itself.
+                    // Some controls (like ListBox, MonthCalendar)
+                    // might adjust to a slightly different size than the one we pass in SetBounds.
+                    // If if didn't size, then there's no need to invalidate anything
                     if (control.Bounds == oldBounds)
                     {
                         needToUpdate = false;
                     }
 
-                    // We would expect the bounds now to be what we set it to above, but this might not be the case. If the control is hosted with e.g. a FLP, then setting the bounds above actually might force a re-layout, and the control will get moved to another spot. In this case, we don't really want to draw a snapline. Even if we snapped to a snapline, if the control got moved, the snapline would be in the wrong place.
+                    // We would expect the bounds now to be what we set it to above,
+                    // but this might not be the case. If the control is hosted with e.g. a FLP,
+                    // then setting the bounds above actually might force a re-layout,
+                    // and the control will get moved to another spot. In this case,
+                    // we don't really want to draw a snapline.
+                    // Even if we snapped to a snapline, if the control got moved,
+                    // the snapline would be in the wrong place.
                     if (control.Bounds != bounds)
                     {
                         drawSnapline = false;
@@ -760,7 +828,8 @@ internal class ResizeBehavior : Behavior
             }
             finally
             {
-                // While we were resizing we discarded painting messages to reduce flicker.  We now turn painting back on and manually refresh the controls.
+                // While we were resizing we discarded painting messages to reduce flicker.
+                // We now turn painting back on and manually refresh the controls.
                 PInvoke.SendMessage(control, PInvoke.WM_SETREDRAW, (WPARAM)(BOOL)true);
                 // update the control
                 if (needToUpdate)
@@ -783,7 +852,11 @@ internal class ResizeBehavior : Behavior
                 {
                     using Region newRegion = new(newBorderRect);
                     newRegion.Exclude(Rectangle.Inflate(newBorderRect, -BorderSize, -BorderSize));
-                    // No reason to get smart about only invalidating part of the border. Thought we could be but no.The reason is the order: ... the new border is drawn (last resize) On next mousemove, the control is resized which redraws the control AND ERASES THE BORDER Then we draw the new border - flash baby.                            Thus this will always flicker.
+                    // No reason to get smart about only invalidating part of the border.
+                    // Thought we could be but no.The reason is the order: ...
+                    // the new border is drawn (last resize) On next mousemove,
+                    // the control is resized which redraws the control AND ERASES THE BORDER
+                    // Then we draw the new border - flash baby. Thus this will always flicker.
                     if (needToUpdate)
                     {
                         using Region oldRegion = new(oldBorderRect);
@@ -826,7 +899,8 @@ internal class ResizeBehavior : Behavior
     }
 
     /// <summary>
-    ///  This ends the Behavior by popping itself from the BehaviorStack.  Also, all Adorners are re-enabled at the end of a successful drag.
+    ///  This ends the Behavior by popping itself from the BehaviorStack.
+    ///  Also, all Adorners are re-enabled at the end of a successful drag.
     /// </summary>
     public override bool OnMouseUp(Glyph g, MouseButtons button)
     {
@@ -844,7 +918,9 @@ internal class ResizeBehavior : Behavior
 
                 if (_resizeComponents is not null && _resizeComponents.Length > 0)
                 {
-                    // we do these separately so as not to disturb the cached sizes for values we're not actually changing.  For example, if a control is docked top and we modify the height, the width shouldn't be modified.
+                    // we do these separately so as not to disturb the cached sizes for values
+                    // we're not actually changing. For example, if a control is docked top and
+                    // we modify the height, the width shouldn't be modified.
                     PropertyDescriptor propWidth = TypeDescriptor.GetProperties(_resizeComponents[0].resizeControl)["Width"];
                     PropertyDescriptor propHeight = TypeDescriptor.GetProperties(_resizeComponents[0].resizeControl)["Height"];
                     PropertyDescriptor propTop = TypeDescriptor.GetProperties(_resizeComponents[0].resizeControl)["Top"];

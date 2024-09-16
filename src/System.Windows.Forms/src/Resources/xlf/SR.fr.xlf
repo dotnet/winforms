@@ -288,8 +288,8 @@
         <note />
       </trans-unit>
       <trans-unit id="BinaryFormatterNotSupported">
-        <source>Using the BinaryFormatter is not supported.</source>
-        <target state="translated">L’utilisation de BinaryFormatter n’est pas prise en charge.</target>
+        <source>BinaryFormatter serialization and deserialization are disabled within this application. See https://aka.ms/binaryformatter for more information.</source>
+        <target state="translated">La sérialisation et la désérialisation binaryFormatter sont désactivées dans cette application. Pour plus d’informations, consultez https://aka.ms/binaryformatter.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
@@ -1527,6 +1527,11 @@
         <target state="translated">Le curseur qui s'affiche lorsque le pointeur passe sur le contrôle.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlDarkModeDescr">
+        <source>Determines the dark mode setting for the control. This ambient property inherits its value from its parent control or from the Application class.</source>
+        <target state="translated">Permet de déterminer le paramètre du mode sombre pour le contrôle. Cette propriété ambiante hérite de sa valeur à partir de son contrôle parent ou de la classe d’application.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ControlDataContextChangedDescr">
         <source>Occurs when the value of the DataContext property changes.</source>
         <target state="translated">Se produit lorsque la valeur de la propriété DataContext change.</target>
@@ -1660,6 +1665,11 @@
       <trans-unit id="ControlNotChild">
         <source>'child' is not a child control of this parent.</source>
         <target state="translated">'child' n'est pas un contrôle enfant de ce parent.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlNotSupportedInTrimming">
+        <source>'{0}' is not supported in trimmed applications.</source>
+        <target state="translated">« {0} » n’est pas pris en charge dans les applications tronquées.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlOnAutoSizeChangedDescr">
@@ -2175,6 +2185,11 @@
       <trans-unit id="CursorNonSerializableHandle">
         <source>Stock cursors cannot be serialized.</source>
         <target state="translated">Les curseurs de stock ne peuvent pas être sérialisés.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DarkModeNotSupported">
+        <source>Dark mode cannot be activated, either because of an activated High-Contrast mode or because the underlying OS does not support it.</source>
+        <target state="translated">Désolé... Nous n’avons pas pu activer le mode sombre, soit en raison d’un mode Contraste élevé activé, soit parce que le système d’exploitation sous-jacent ne le prend pas en charge.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataBindingAddNewNotSupportedOnPropertyManager">
@@ -4639,6 +4654,11 @@ Pour remplacer cette boîte de dialogue par défaut, traitez l'événement DataE
         <target state="translated">Permet à l'utilisateur de parcourir les pages web au sein de votre formulaire.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DesignTimeFeaturesNotSupported">
+        <source>Design time features are not supported.</source>
+        <target state="translated">Les fonctionnalités au moment du design ne sont pas prises en charge.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DispInvokeFailed">
         <source>Operation {0} on the component did not succeed, generating the error code 0x{1:X}.</source>
         <target state="translated">L'opération {0} sur le composant a échoué avec le code d'erreur 0x{1:X}.</target>
@@ -5295,6 +5315,16 @@ Voulez-vous le remplacer ?</target>
         <target state="translated">La position actuelle de la barre de défilement automatique.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormBorderColorChangedDescr">
+        <source>Occurs whenever the FormBorderColor property is changed.</source>
+        <target state="translated">Se produit lorsque la propriété FormBorderColor est modifiée.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormBorderColorDescr">
+        <source>The color of the Form's border.</source>
+        <target state="translated">Couleur de la bordure du formulaire.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormBorderStyleDescr">
         <source>Indicates the appearance and behavior of the border and title bar of the form.</source>
         <target state="translated">Indique l'apparence et le comportement de la bordure et de la barre de titre du formulaire.</target>
@@ -5305,9 +5335,39 @@ Voulez-vous le remplacer ?</target>
         <target state="translated">Le bouton d'annulation de ce formulaire. Si cette propriété est définie, le bouton est "cliqué" lorsque l'utilisateur appuie sur la touche "ÉCHAP".</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormCaptionBackColorChangedDescr">
+        <source>Occurs whenever the FormCaptionBackColor property is changed.</source>
+        <target state="translated">Se produit lorsque la propriété FormCaptionBackColor est modifiée.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCaptionBackColorDescr">
+        <source>The back color of the Form's caption (title bar).</source>
+        <target state="translated">Couleur d’arrière-plan de la légende du formulaire (barre de titre).</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCaptionTextColorChangedDescr">
+        <source>Occurs whenever the FormCaptionTextColor property is changed.</source>
+        <target state="translated">Se produit lorsque la propriété FormCaptionTextColor est modifiée.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCaptionTextColorDescr">
+        <source>The color of the Form's text caption (title bar text).</source>
+        <target state="translated">Couleur de légende de sous-titre du formulaire (texte de la barre de titre).</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormControlBoxDescr">
         <source>Determines whether a form has a Control/System menu box.</source>
         <target state="translated">Détermine si un formulaire a un menu Système.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCornerPreferenceChangedDescr">
+        <source>Occurs whenever the FormCornerPreference property is changed.</source>
+        <target state="translated">Se produit lorsque la propriété FormCornerPreference est modifiée.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCornerPreferenceDescr">
+        <source>The rounding style of the Form's border.</source>
+        <target state="translated">Style arrondi de la bordure du formulaire.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormDesktopBoundsDescr">
@@ -5510,6 +5570,11 @@ Voulez-vous le remplacer ?</target>
         <target state="translated">Le pourcentage d'opacité du contrôle. </target>
         <note />
       </trans-unit>
+      <trans-unit id="FormOrTaskDialog_NoSyncContextForShowAsync">
+        <source>Failed to retrieve the Synchronization Context for showing the Form asynchronously.</source>
+        <target state="translated">Désolé... Nous n’avons pas pu récupérer le contexte de synchronisation pour montrer le formulaire de manière asynchrone.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormOwnedFormsDescr">
         <source>Array of forms owned by this form.</source>
         <target state="translated">Tableau de formulaires dont ce formulaire est propriétaire.</target>
@@ -5553,6 +5618,11 @@ Voulez-vous le remplacer ?</target>
       <trans-unit id="FormWindowStateDescr">
         <source>Determines the initial visual state of the form.</source>
         <target state="translated">Détermine l'état visuel initial du formulaire.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Form_HasAlreadyBeenShownAsync">
+        <source>The form has already been shown asynchronously.</source>
+        <target state="translated">Le formulaire a déjà été affiché de manière asynchrone.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormatControlFormatDescr">
@@ -6845,8 +6915,8 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <note />
       </trans-unit>
       <trans-unit id="ListViewVirtualListSizeDescr">
-        <source>Sets the count of the item collection when the ListView is in virtual mode.</source>
-        <target state="translated">Définit le nombre de la collection d'éléments lorsque le ListView est en mode virtuel.</target>
+        <source>Sets the count of the item collection when the ListView is in virtual mode. If VirtualMode is set to true, and the VirtualListSize property is greater than 0, you must handle the RetrieveVirtualItem event providing valid items.</source>
+        <target state="translated">Définit le nombre de la collection d’éléments lorsque le ListView est en mode virtuel. Si VirtualMode a la valeur true et que la propriété VirtualListSize est supérieure à 0, vous devez gérer l’événement RetrieveVirtualItem en fournissant des éléments valides.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewVirtualListSizeInvalidArgument">
@@ -9692,6 +9762,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       <trans-unit id="TooManyResumeUpdateMenuHandles">
         <source>Too many calls to ResumeUpdateMenuHandles.</source>
         <target state="translated">Trop d'appels vers ResumeUpdateMenuHandles.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripAllowClickThrough">
+        <source>Allows the control to be interacted when window does not have focus.</source>
+        <target state="translated">Permet d’interagir avec le contrôle quand la fenêtre n’a pas le focus.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue">

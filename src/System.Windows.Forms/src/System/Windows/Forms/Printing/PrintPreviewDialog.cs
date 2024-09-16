@@ -797,13 +797,6 @@ public partial class PrintPreviewDialog : Form
 
         _toolStrip1.Name = "toolStrip1";
 
-        // In High Contrast mode the color scheme provided by ToolStripSystemRenderer
-        // is not sufficiently contrast; so disable it in High Contrast mode.
-        if (!SystemInformation.HighContrast)
-        {
-            _toolStrip1.RenderMode = ToolStripRenderMode.System;
-        }
-
         _toolStrip1.GripStyle = ToolStripGripStyle.Hidden;
 
         _printToolStripButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
@@ -986,9 +979,13 @@ public partial class PrintPreviewDialog : Form
     /// <summary>
     ///  Forces the preview to be regenerated every time the dialog comes up
     /// </summary>
+#pragma warning disable CS0672 // Member overrides obsolete member
     protected override void OnClosing(CancelEventArgs e)
+#pragma warning restore CS0672
     {
+#pragma warning disable WFDEV004 // Type or member is obsolete
         base.OnClosing(e);
+#pragma warning restore WFDEV004
         _previewControl.InvalidatePreview();
     }
 

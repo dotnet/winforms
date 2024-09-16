@@ -216,7 +216,7 @@ public abstract partial class FileDialog : CommonDialog
 
     /// <summary>
     ///  Extracts the file extensions specified by the current file filter into an
-    ///  array of strings.  None of the extensions contain .'s, and the  default
+    ///  array of strings. None of the extensions contain .'s, and the  default
     ///  extension is first.
     /// </summary>
     private string[] FilterExtensions

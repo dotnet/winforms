@@ -50,11 +50,11 @@ internal class RelatedCurrencyManager : CurrencyManager
     {
         if (bmb is not null)
         {
-            bmb.CurrentItemChanged -= new EventHandler(ParentManager_CurrentItemChanged);
+            bmb.CurrentItemChanged -= ParentManager_CurrentItemChanged;
 
             if (bmb is CurrencyManager currencyManager)
             {
-                currencyManager.MetaDataChanged -= new EventHandler(ParentManager_MetaDataChanged);
+                currencyManager.MetaDataChanged -= ParentManager_MetaDataChanged;
             }
         }
     }
@@ -63,11 +63,11 @@ internal class RelatedCurrencyManager : CurrencyManager
     {
         if (bmb is not null)
         {
-            bmb.CurrentItemChanged += new EventHandler(ParentManager_CurrentItemChanged);
+            bmb.CurrentItemChanged += ParentManager_CurrentItemChanged;
 
             if (bmb is CurrencyManager currencyManager)
             {
-                currencyManager.MetaDataChanged += new EventHandler(ParentManager_MetaDataChanged);
+                currencyManager.MetaDataChanged += ParentManager_MetaDataChanged;
             }
         }
     }

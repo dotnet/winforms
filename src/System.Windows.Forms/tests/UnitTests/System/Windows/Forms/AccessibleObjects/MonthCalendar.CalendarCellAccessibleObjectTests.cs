@@ -16,10 +16,18 @@ public class MonthCalendar_CalendarCellAccessibleObjectTests
         using MonthCalendar control = new();
         CalendarCellAccessibleObject cellAccessibleObject = CreateCalendarCellAccessibleObject(control);
 
-        Assert.Equal(0, cellAccessibleObject.TestAccessor().Dynamic._calendarIndex);
-        Assert.Equal(0, cellAccessibleObject.TestAccessor().Dynamic._rowIndex);
-        Assert.Equal(0, cellAccessibleObject.TestAccessor().Dynamic._columnIndex);
-        Assert.False(control.IsHandleCreated);
+        int columnIndexResult = cellAccessibleObject.TestAccessor().Dynamic._columnIndex;
+        columnIndexResult.Should().Be(0);
+
+        int rowIndexResult = cellAccessibleObject.TestAccessor().Dynamic._rowIndex;
+        rowIndexResult.Should().Be(0);
+
+        int calendarIndexResult = cellAccessibleObject.TestAccessor().Dynamic._calendarIndex;
+        calendarIndexResult.Should().Be(0);
+
+        cellAccessibleObject.CanGetDescriptionInternal.Should().BeFalse();
+        cellAccessibleObject.GetColumnHeaderItems().Should().BeNull();
+        control.IsHandleCreated.Should().BeFalse();
     }
 
     public static IEnumerable<object[]> CalendarCellAccessibleObject_Bounds_ReturnsExpected_TestData()
@@ -248,5 +256,30 @@ public class MonthCalendar_CalendarCellAccessibleObjectTests
         Assert.Null(cell.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
         Assert.Null(cell.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(control.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [InlineData(true, 1, typeof(CalendarWeekNumberCellAccessibleObject))]
+    [InlineData(false, 0, null)]
+    public void CalendarCellAccessibleObject_GetRowHeaderItems_ReturnsCorrectly(bool showWeekNumbers, int expectedCount, Type expectedType)
+    {
+        using MonthCalendar control = new() { ShowWeekNumbers = showWeekNumbers };
+        control.CreateControl();
+        CalendarCellAccessibleObject cellAccessibleObject = CreateCalendarCellAccessibleObject(control, 0, 2, 2);
+
+        var rowHeaderItems = cellAccessibleObject.GetRowHeaderItems();
+
+        if (expectedCount == 0)
+        {
+            rowHeaderItems.Should().BeNull("no week number cells should be present as row headers when week numbers are not visible");
+        }
+        else
+        {
+            rowHeaderItems.Should().NotBeNull();
+            rowHeaderItems.Should().HaveCount(expectedCount, $"expected {expectedCount} week number cell(s) as row header(s)");
+            rowHeaderItems[0].Should().BeAssignableTo(expectedType, "the row header should match the expected type");
+        }
+
+        control.IsHandleCreated.Should().BeTrue();
     }
 }

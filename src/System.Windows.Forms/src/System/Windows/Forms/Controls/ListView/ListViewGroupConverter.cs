@@ -130,8 +130,8 @@ internal class ListViewGroupConverter : TypeConverter
 
     /// <summary>
     ///  Determines if the list of standard values returned from GetStandardValues is an
-    ///  exclusive list.  If the list is exclusive, then no other values are valid, such as
-    ///  in an enum data type.  If the list is not exclusive, then there are other valid values
+    ///  exclusive list. If the list is exclusive, then no other values are valid, such as
+    ///  in an enum data type. If the list is not exclusive, then there are other valid values
     ///  besides the list of standard values GetStandardValues provides.
     /// </summary>
     public override bool GetStandardValuesExclusive(ITypeDescriptorContext? context)

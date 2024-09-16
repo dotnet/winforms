@@ -33,8 +33,7 @@ pr:
       - release/*
       - internal/release/*
       - internal/experimental/*
-      - feature/win32
-      - feature/9.0
+      - feature/*
   paths:
     include:
       - '*'
@@ -70,7 +69,6 @@ variables:
     - name: _InternalRuntimeDownloadArgs
       value: ''
   - ${{ if eq(variables['System.TeamProject'], 'internal') }}:
-    - group: DotNetBuilds storage account read tokens
     - group: AzureDevOps-Artifact-Feeds-Pats
     - name: _InternalRuntimeDownloadArgs
       value: /p:DotNetRuntimeSourceFeed=https://dotnetbuilds.blob.core.windows.net/internal

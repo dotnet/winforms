@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using System.Windows.Forms.Primitives;
 using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
@@ -2387,20 +2386,17 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
     }
 
     // Unit test for https://github.com/dotnet/winforms/issues/7154
-    [WinFormsFact]
-    public void DataGridView_SwitchConfigured_AdjustsRowStartIndices()
+    [WinFormsTheory]
+    [InlineData([false, 1])]
+    [InlineData([true, 0])]
+    public void DataGridView_SwitchConfigured_AdjustsRowStartIndices(bool switchValue, int expectedIndex)
     {
-        LocalAppContextSwitches.SetLocalAppContextSwitchValue(LocalAppContextSwitches.DataGridViewUIAStartRowCountAtZeroSwitchName, true); 
-
-        using DataGridView dataGridView = new();
+        using DataGridViewUIAStartRowCountAtZeroScope scope = new(switchValue);
+        using DataGridView dataGridView = new DataGridView();
         dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
         dataGridView.Rows.Add(new DataGridViewRow());
 
-        Assert.Equal(string.Format(SR.DataGridView_AccRowName, 0), dataGridView.Rows[0].AccessibilityObject.Name);
-
-        LocalAppContextSwitches.SetLocalAppContextSwitchValue(LocalAppContextSwitches.DataGridViewUIAStartRowCountAtZeroSwitchName, false);
-
-        Assert.Equal(string.Format(SR.DataGridView_AccRowName, 1), dataGridView.Rows[0].AccessibilityObject.Name);
+        Assert.Equal(string.Format(SR.DataGridView_AccRowName, expectedIndex), dataGridView.Rows[0].AccessibilityObject.Name);
     }
 
     private class SubDataGridViewCell : DataGridViewCell

@@ -818,8 +818,9 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         // 1. TabControl already relays all mouse events to its tooltip:
         // https://docs.microsoft.com/windows/win32/controls/tab-controls#default-tab-control-message-processing
         // 2. Hit-testing against TabControl detects only TabPages which are separate tools added by TabControl.
-        // This prevents a bug when a TabPage tool is placed before the TabControl tool after reordering caused by a tool deletion.
-        // Also prevents double handling of mouse messages which is caused by subclassing altogether with the message relaying from the TabControl internals.
+        // This prevents a bug when a TabPage tool is placed before the TabControl tool after reordering caused
+        // by a tool deletion.Also prevents double handling of mouse messages which is caused by subclassing
+        // altogether with the message relaying from the TabControl internals.
         if (control is TabControl)
         {
             return;
@@ -1115,7 +1116,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         ClearTopLevelControlEvents();
         _topLevelControl = null;
 
-        // We must re-acquire this control.  If the existing top level control's handle
+        // We must re-acquire this control. If the existing top level control's handle
         // was never created, but the new parent has a handle, if we don't re-get
         // the top level control here we won't ever create the tooltip handle.
         _topLevelControl = TopLevelControl;
@@ -1498,23 +1499,14 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
             pointY = optimalPoint.Y;
 
             // Update TipInfo for the tool with optimal position.
-            if (tool is Control toolAsControl)
+            if ((tool is Control toolAsControl && _tools.TryGetValue(toolAsControl, out TipInfo? tipInfo)) ||
+                (ownerWindow is Control ownerWindowAsControl && _tools.TryGetValue(ownerWindowAsControl, out tipInfo)))
             {
-                if (!_tools.TryGetValue(toolAsControl, out TipInfo? tipInfo))
-                {
-                    if (ownerWindow is Control ownerWindowAsControl
-                        && _tools.TryGetValue(ownerWindowAsControl, out tipInfo))
-                    {
-                        tipInfo.Position = new Point(pointX, pointY);
-                    }
-                }
-                else
-                {
-                    tipInfo.Position = new Point(pointX, pointY);
-                }
+                tipInfo.Position = new Point(pointX, pointY);
             }
 
-            // Ensure that the tooltip bubble is moved to the optimal position even when a mouse tooltip is being replaced with a keyboard tooltip.
+            // Ensure that the tooltip bubble is moved to the optimal position even when a mouse tooltip is being
+            // replaced with a keyboard tooltip.
             Reposition(optimalPoint, bubbleSize);
         }
 
@@ -1707,7 +1699,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
     }
 
     /// <summary>
-    ///  Private Function to encapsulate TTM_TRACKPOSITION so that this doesnt fire an extra POP event
+    ///  Private Function to encapsulate TTM_TRACKPOSITION so that this doesn't fire an extra POP event
     /// </summary>
     private void SetTrackPosition(int pointX, int pointY)
     {
@@ -1731,6 +1723,12 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
 
         if (_window is null)
         {
+            return;
+        }
+
+        if (win is Control control && control.IsDisposed)
+        {
+            Debug.Fail("The passed in control is disposed.");
             return;
         }
 

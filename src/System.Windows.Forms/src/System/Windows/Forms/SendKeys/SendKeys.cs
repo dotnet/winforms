@@ -85,7 +85,7 @@ public partial class SendKeys
     /// </summary>
     private static readonly Queue<SKEvent> s_events = new();
 
-    private static readonly object s_lock = new();
+    private static readonly Lock s_lock = new();
     private static bool s_startNewChar;
     private static readonly SKWindow s_messageWindow;
 
@@ -864,7 +864,7 @@ public partial class SendKeys
         keyboardInput[1].type = INPUT_TYPE.INPUT_KEYBOARD;
         keyboardInput[1].Anonymous.ki.dwFlags = KEYBD_EVENT_FLAGS.KEYEVENTF_KEYUP;
 
-        // SendInputs to turn on or off these keys.  Inputs are pairs because KeyUp is sent for each one.
+        // SendInputs to turn on or off these keys. Inputs are pairs because KeyUp is sent for each one.
         if (s_capslockChanged)
         {
             keyboardInput[0].Anonymous.ki.wVk = VIRTUAL_KEY.VK_CAPITAL;

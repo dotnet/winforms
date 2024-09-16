@@ -76,21 +76,21 @@ internal partial class TableLayout : LayoutEngine
 
     /// <summary>
     ///  LayoutCore: EntryPoint from LayoutEngine.
-    ///  Container: IArrangedElement to layout (could be table layout panel but doesnt have to be - eg. ToolStrip)
+    ///  Container: IArrangedElement to layout (could be table layout panel but doesn't have to be - eg. ToolStrip)
     ///  LayoutEventArgs: args created from PerformLayout.
     ///
     ///  Summary of algorithm:
-    ///  (1).  Determine the row and column assignments of all the children of the container. (This can be cached)
-    ///  (2).  Apply column styles, then row styles for all the rows:
-    ///  (a).  Create a list of column or row sizes (Strip[]) - initialize absolute columns/rows sizes.
-    ///  (b).  Determine the minimum size of all the controls
-    ///  (c).  Determine the maximum size of all the controls
-    ///  (d).  Distribute the minimum size of the control to the corresponding Strip for column or row
-    ///  (e).  Distribute the remaining size to the column or row as according to the Row/Column style.
-    ///  (3).  Expand the last row/column to fit the table
-    ///  (4).  Set the bounds of the child elements as according to the row/column heights specified in Strip[]
-    ///  (a)   Calculate bounds of item
-    ///  (b)   Align and stretch item to fill column/row as according to Dock and Anchor properties.
+    ///  (1). Determine the row and column assignments of all the children of the container. (This can be cached)
+    ///  (2). Apply column styles, then row styles for all the rows:
+    ///  (a). Create a list of column or row sizes (Strip[]) - initialize absolute columns/rows sizes.
+    ///  (b). Determine the minimum size of all the controls
+    ///  (c). Determine the maximum size of all the controls
+    ///  (d). Distribute the minimum size of the control to the corresponding Strip for column or row
+    ///  (e). Distribute the remaining size to the column or row as according to the Row/Column style.
+    ///  (3). Expand the last row/column to fit the table
+    ///  (4). Set the bounds of the child elements as according to the row/column heights specified in Strip[]
+    ///  (a)  Calculate bounds of item
+    ///  (b)  Align and stretch item to fill column/row as according to Dock and Anchor properties.
     /// </summary>
     private protected override bool LayoutCore(IArrangedElement container, LayoutEventArgs args)
     {
@@ -124,12 +124,12 @@ internal partial class TableLayout : LayoutEngine
 
     /// <summary>
     ///  GetPreferredSize:  Called on the container to determine the size that best fits its contents.
-    ///  Container: IArrangedElement to determine preferredSize (could be table layout panel but doesnt have to be - eg. ToolStrip)
-    ///  ProposedConstraints: the suggested size that the table layout should fit into.  If either argument is 0,
+    ///  Container: IArrangedElement to determine preferredSize (could be table layout panel but doesn't have to be - eg. ToolStrip)
+    ///  ProposedConstraints: the suggested size that the table layout should fit into. If either argument is 0,
     ///             TableLayout pretends it's unconstrained for performance reasons.
     ///
     ///  Summary of Algorithm:
-    ///  Similar to LayoutCore.  Row/Column assignments are NOT cached.  TableLayout uses AGGRESSIVE
+    ///  Similar to LayoutCore. Row/Column assignments are NOT cached. TableLayout uses AGGRESSIVE
     ///  caching for performance reasons.
     /// </summary>
     internal override Size GetPreferredSize(IArrangedElement container, Size proposedConstraints)
@@ -294,9 +294,9 @@ internal partial class TableLayout : LayoutEngine
             while (!xAssignRowsAndColumns(containerInfo, childrenInfo, estimatedCols, numRows, growStyle))
             {
                 // I am assuming that the division will put us pretty close to the right
-                // number of columns.  If this assumption is wrong, a binary search
-                // between the number we get by dividing and childrenInfos.Count
-                // could be more efficient.  It would certainly degenerate better.
+                // number of columns. If this assumption is wrong, a binary search
+                // between the number we get by dividing and `childrenInfo.Count`
+                // could be more efficient. It would certainly degenerate better.
                 estimatedCols++;
             }
         }
@@ -312,7 +312,7 @@ internal partial class TableLayout : LayoutEngine
     ///  def: fixed element: has a specific row/column assignment (assigned by SetRow,SetColumn, or Add(c,row,column)
     ///  def: flow element: does NOT have a specific row/column assignment.
     ///
-    ///  Determines the placement of fixed and flow elements.  Walks through the rows/columns - if there's a
+    ///  Determines the placement of fixed and flow elements. Walks through the rows/columns - if there's a
     ///  spot for the fixed element, place it, else place the next flow element.
     /// </summary>
     private static bool xAssignRowsAndColumns(ContainerInfo containerInfo, LayoutInfo[] childrenInfo, int maxColumns, int maxRows, TableLayoutPanelGrowStyle growStyle)
@@ -468,7 +468,7 @@ internal partial class TableLayout : LayoutEngine
             numColumns = Math.Max(containerInfo.MaxColumns, numColumns);
         }
 
-        // PERF: prevent overallocation of Strip[] arrays.  We're going to null these guys out
+        // PERF: prevent overallocation of Strip[] arrays. We're going to null these guys out
         // anyways... so only allocate when the number of rows and columns is different.
         if (containerInfo.Rows is null || containerInfo.Rows.Length != numRows)
         {
@@ -517,7 +517,8 @@ internal partial class TableLayout : LayoutEngine
             return true;
         }
 
-        // if the element is bumped to a column after its specified column position, it also means that the element overlaps with previous controls
+        // if the element is bumped to a column after its specified column position, it also means that the element
+        // overlaps with previous controls
         if (fixedLayoutInfo.RowPosition == insertionRow && fixedLayoutInfo.ColumnPosition < insertionCol)
         {
             return true;
@@ -532,7 +533,8 @@ internal partial class TableLayout : LayoutEngine
     /// </summary>
     private static bool IsOverlappingWithReservationGrid(LayoutInfo fixedLayoutInfo, ReservationGrid reservationGrid, int currentRow)
     {
-        // since we shall not put anything above our current row, this means that the fixedLayoutInfo overlaps with something already placed on the table
+        // since we shall not put anything above our current row, this means that the fixedLayoutInfo overlaps
+        // with something already placed on the table
         if (fixedLayoutInfo.RowPosition < currentRow)
         {
             return true;
@@ -555,7 +557,7 @@ internal partial class TableLayout : LayoutEngine
     /// <summary>
     ///  AdvanceUntilFits: part of xAssignRowsAndColumns.
     ///  Advances the position of layoutInfo until we have enough space and do not
-    ///  collide with a rowSpanned element.  ColStop will be the column on which the
+    ///  collide with a rowSpanned element. ColStop will be the column on which the
     ///  element ends (exclusive).
     /// </summary>
     private static void AdvanceUntilFits(int maxColumns, ReservationGrid reservationGrid, LayoutInfo layoutInfo, out int colStop)
@@ -596,8 +598,8 @@ internal partial class TableLayout : LayoutEngine
         {
             if (reservationGrid.IsReserved(i, rowOffset))
             {
-                // If we hit reserved space, advance startCol past it.  If we hit the end of the row,
-                // just stop.  AdvanceUntilFits will move to the next row and call us again.
+                // If we hit reserved space, advance startCol past it. If we hit the end of the row,
+                // just stop. AdvanceUntilFits will move to the next row and call us again.
                 for (layoutInfo.ColumnStart = i + 1;
                     layoutInfo.ColumnStart < maxColumns && reservationGrid.IsReserved(layoutInfo.ColumnStart, rowOffset);
                     layoutInfo.ColumnStart++)
@@ -1109,7 +1111,7 @@ internal partial class TableLayout : LayoutEngine
             else
             {
                 // the size of the item defines the size allocated to the percentage style columns.
-                // this supports [Ok][Cancel] in a 50% 50% column arrangement.  When one grows it pushes the whole table
+                // this supports [Ok][Cancel] in a 50% 50% column arrangement. When one grows it pushes the whole table
                 // larger.
                 int maxPercentWidth = 0;
                 for (int i = 0; i < strips.Length; i++)
@@ -1223,7 +1225,7 @@ internal partial class TableLayout : LayoutEngine
                 }
             }
 
-            // Sum the total width of the span.  We increment currentCol as we
+            // Sum the total width of the span. We increment currentCol as we
             // do this.
             int colStop = currentCol + layoutInfo.ColumnSpan;
             int width = 0;
@@ -1237,7 +1239,7 @@ internal partial class TableLayout : LayoutEngine
                 startX -= width;
             }
 
-            // Sum the total height of the span.  We do not increment RowSpan
+            // Sum the total height of the span. We do not increment RowSpan
             // as we do this because there may be more elements on this row.
             int rowStop = currentRow + layoutInfo.RowSpan;
             int height = 0;
@@ -1451,7 +1453,7 @@ internal partial class TableLayout : LayoutEngine
     [Conditional("DEBUG_LAYOUT")]
     private static void Debug_VerifyNoOverlapping(IArrangedElement container)
     {
-        // this code may be useful for debugging, but doesnt work well with
+        // this code may be useful for debugging, but doesn't work well with
         // row styles
 
         List<LayoutInfo> layoutInfos = new(container.Children.Count);

@@ -2,6 +2,11 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en" target-language="ko" original="../SR.resx">
     <body>
+      <trans-unit id="AddDesignerSerializationVisibilityCodeFixTitle">
+        <source>Add DesignerSerializationVisibilityAttribute to property</source>
+        <target state="translated">DesignerSerializationVisibilityAttribute를 속성에 추가</target>
+        <note />
+      </trans-unit>
       <trans-unit id="GdiplusFontFamilyNotFound">
         <source>Font '{0}' cannot be found.</source>
         <target state="translated">'{0}' 글꼴을 찾을 수 없습니다.</target>
@@ -22,29 +27,59 @@
         <target state="translated">텍스트 "{0}"을(를) 구문 분석할 수 없습니다. 필요한 텍스트 형식은 "{1}"입니다.</target>
         <note />
       </trans-unit>
-      <trans-unit id="WFAC001Message">
+      <trans-unit id="WFO0001Message">
         <source>Only projects with 'OutputType={0}' supported</source>
         <target state="translated">'OutputType={0}'인 프로젝트만 지원됨</target>
         <note />
       </trans-unit>
-      <trans-unit id="WFAC001Title">
+      <trans-unit id="WFO0001Title">
         <source>Unsupported project type</source>
         <target state="translated">지원되지 않는 프로젝트 유형</target>
         <note />
       </trans-unit>
-      <trans-unit id="WFAC002Message">
+      <trans-unit id="WFO0002Message">
         <source>ArgumentException: Project property '{0}' cannot be set to '{1}'</source>
         <target state="translated">ArgumentException: 프로젝트 속성 '{0}'을(를) '{1}'(으)로 설정할 수 없음</target>
         <note />
       </trans-unit>
-      <trans-unit id="WFAC002MessageWithReason">
-        <source>ArgumentException: Project property '{0}' cannot be set to '{1}'. Reason: {2}</source>
-        <target state="translated">ArgumentException: 프로젝트 속성 '{0}'을(를) '{1}'(으)로 설정할 수 없습니다. 이유: {2}</target>
+      <trans-unit id="WFO0002MessageWithReason">
+        <source>ArgumentException: Project property '{0}' cannot be set to '{1}'. Reason: {2}.</source>
+        <target state="translated">ArgumentException: 프로젝트 속성 '{0}'을(를) '{1}'(으)로 설정할 수 없습니다. 이유: {2}.</target>
         <note />
       </trans-unit>
-      <trans-unit id="WFAC002Title">
+      <trans-unit id="WFO0002Title">
         <source>Unsupported property value</source>
         <target state="translated">지원되지 않는 속성 값</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO1000AnalyzerDescription">
+        <source>A property should determine its property content serialization with the DesignerSerializationVisibilityAttribute, DefaultValueAttribute or the ShouldSerializeProperty method.</source>
+        <target state="translated">속성은 DesignerSerializationVisibilityAttribute, DefaultValueAttribute 또는 ShouldSerializeProperty 메서드를 사용하여 속성 콘텐츠 직렬화를 결정해야 합니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO1000AnalyzerMessageFormat">
+        <source>Property '{0}' does not configure the code serialization for its property content</source>
+        <target state="translated">'{0}'속성은 해당 속성 콘텐츠에 대한 코드 직렬화를 구성하지 않습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO1000AnalyzerTitle">
+        <source>Missing code serialization configuration for property content</source>
+        <target state="translated">속성 콘텐츠에 대한 코드 직렬화 구성이 없습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2001AnalyzerDescription">
+        <source>Avoid passing a `Func&lt;T&gt;` to `InvokeAsync` where `T` is a `Task` or `ValueTask`, unless your intention is for the delegate to simply be kicked off as an unsupervised task. Instead, use `Func&lt;CancellationToken, ValueTask&gt;` or `Func&lt;CancellationToken, ValueTask&lt;T&gt;&gt;`, so that the delegate passed to `InvokeAsync` can be awaited, allowing exceptions to be properly handled.</source>
+        <target state="translated">대리자가 감독되지 않은 작업으로 단순히 시작되도록 의도하지 않는 한 `Func&lt;T&gt;`를 `InvokeAsync`에 전달하지 마세요(`T`는 `Task` 또는 `ValueTask`임). 대신 `Func&lt;CancellationToken, ValueTask&gt;` 또는 `Func&lt;CancellationToken, ValueTask&lt;T&gt;&gt;`를 사용하면 `InvokeAsync`에 전달된 대리자가 대기되어 예외가 적절하게 처리될 수 있습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2001AnalyzerMessageFormat">
+        <source>Task is being passed to InvokeAsync without a cancellation token</source>
+        <target state="translated">작업이 취소 토큰 없이 InvokeAsync에 전달되고 있습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2001AnalyzerTitle">
+        <source>Task is being passed to InvokeAsync without a cancellation token</source>
+        <target state="translated">작업이 취소 토큰 없이 InvokeAsync에 전달되고 있습니다.</target>
         <note />
       </trans-unit>
     </body>

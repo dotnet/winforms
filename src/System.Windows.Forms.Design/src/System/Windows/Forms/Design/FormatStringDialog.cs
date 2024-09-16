@@ -185,7 +185,7 @@ internal class FormatStringDialog : Form
         _cancelButton.TabIndex = 2;
         _cancelButton.Text = SR.DataGridView_Cancel;
         _cancelButton.DialogResult = DialogResult.Cancel;
-        _cancelButton.Click += new EventHandler(cancelButton_Click);
+        _cancelButton.Click += cancelButton_Click;
         //
         // okButton
         //
@@ -195,7 +195,7 @@ internal class FormatStringDialog : Form
         _okButton.TabIndex = 1;
         _okButton.Text = SR.DataGridView_OK;
         _okButton.DialogResult = DialogResult.OK;
-        _okButton.Click += new EventHandler(okButton_Click);
+        _okButton.Click += okButton_Click;
         //
         // Form1
         //
@@ -216,9 +216,9 @@ internal class FormatStringDialog : Form
         Controls.Add(_cancelButton);
         Padding = new Padding(0);
         Text = SR.FormatStringDialogTitle;
-        HelpButtonClicked += new CancelEventHandler(FormatStringDialog_HelpButtonClicked);
-        HelpRequested += new HelpEventHandler(FormatStringDialog_HelpRequested);
-        Load += new EventHandler(FormatStringDialog_Load);
+        HelpButtonClicked += FormatStringDialog_HelpButtonClicked;
+        HelpRequested += FormatStringDialog_HelpRequested;
+        Load += FormatStringDialog_Load;
         ResumeLayout(false);
     }
 

@@ -13,13 +13,59 @@ public class NetworkTests
     }
 
     [Fact]
-    public void Ping()
+    public void Ping_ShortTimeout_Success()
     {
         Network network = new();
-        Assert.True(network.Ping("127.0.0.1"));
+        network.Ping("127.0.0.1", 1).Should().BeTrue();
+    }
+
+    [Fact]
+    public void Ping_Success()
+    {
+        Network network = new();
+        network.Ping("127.0.0.1").Should().BeTrue();
+    }
+
+    [Fact]
+    public void Ping_Throw()
+    {
+        Network network = new();
+        Assert.Throws<ArgumentNullException>(() => network.Ping((string)null));
+    }
+
+    [ActiveIssue("https://github.com/dotnet/winforms/issues/12140")]
+    [Fact]
+    [SkipOnArchitecture(TestArchitectures.Any,
+        "Flaky tests, see: https://github.com/dotnet/winforms/issues/12140")]
+    public void PingUri_ShortTimeout_Success()
+    {
+        Network network = new();
+        network.Ping(new Uri("http://127.0.0.1"), 1).Should().BeTrue();
+    }
+
+    [Fact]
+    public void PingUri_Success()
+    {
+        Network network = new();
+        network.Ping(new Uri("http://127.0.0.1")).Should().BeTrue();
+    }
+
+    [Fact]
+    public void PingUri_Throw()
+    {
+        Network network = new();
+        Action action = () => network.Ping((Uri)null);
+        action.Should().Throw<ArgumentNullException>();
+    }
+
+    [Fact]
+    public void PingUriTimeout_Throw()
+    {
+        Network network = new();
+        Action action = () => network.Ping((Uri)null, 1);
+        action.Should().Throw<ArgumentNullException>();
     }
 
     // Not tested:
-    //    Public Sub DownloadFile(...) [multiple overloads]
     //    Public Sub UploadFile(...) [multiple overloads]
 }

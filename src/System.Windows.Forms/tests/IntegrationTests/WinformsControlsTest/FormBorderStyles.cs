@@ -3,6 +3,7 @@
 
 namespace WindowsFormsApp1;
 
+[DesignerCategory("Default")]
 public partial class FormBorderStyles : Form
 {
     public FormBorderStyles()

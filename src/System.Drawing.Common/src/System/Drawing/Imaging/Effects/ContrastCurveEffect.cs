@@ -15,7 +15,7 @@ public class ContrastCurveEffect : ColorCurveEffect
     /// </summary>
     /// <param name="channel">The channel or channels that the effect is applied to.</param>
     /// <param name="contrast">
-    ///  A value in the range of -100 through 100.  A value of 0 specifies no change in contrast. Positive values
+    ///  A value in the range of -100 through 100. A value of 0 specifies no change in contrast. Positive values
     ///  specify increased contrast and negative values specify decreased contrast.
     /// </param>
     /// <exception cref="ArgumentException"><paramref name="contrast"/> is less than -100 or greater than 100.</exception>
@@ -25,7 +25,7 @@ public class ContrastCurveEffect : ColorCurveEffect
     }
 
     /// <summary>
-    ///  A value in the range of -100 through 100.  A value of 0 specifies no change in contrast. Positive values
+    ///  A value in the range of -100 through 100. A value of 0 specifies no change in contrast. Positive values
     ///  specify increased contrast and negative values specify decreased contrast.
     /// </summary>
     public int Contrast => AdjustValue;

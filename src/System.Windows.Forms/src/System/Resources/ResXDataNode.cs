@@ -4,13 +4,15 @@
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
+using System.Formats.Nrbf;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
-using System.Windows.Forms.BinaryFormat;
 using System.Xml;
+using System.Windows.Forms.Nrbf;
+using System.Windows.Forms.BinaryFormat;
 
 namespace System.Resources;
 
@@ -40,7 +42,8 @@ public sealed class ResXDataNode : ISerializable
 
     // Callback function to get type name for multitargeting.
     // No public property to force using constructors for the following reasons:
-    // 1. one of the constructors needs this field (if used) to initialize the object, make it consistent with the other constructors to avoid errors.
+    // 1. one of the constructors needs this field (if used) to initialize the object, make it consistent with the
+    //    other constructors to avoid errors.
     // 2. once the object is constructed the delegate should not be changed to avoid getting inconsistent results.
     private Func<Type?, string>? _typeNameConverter;
 
@@ -427,8 +430,8 @@ public sealed class ResXDataNode : ISerializable
 
         try
         {
-            BinaryFormattedObject format = new(stream);
-            if (format.TryGetObject(out object? value))
+            SerializationRecord rootRecord = stream.Decode();
+            if (rootRecord.TryGetResXObject(out object? value))
             {
                 return value;
             }
@@ -445,7 +448,8 @@ public sealed class ResXDataNode : ISerializable
             Binder = new ResXSerializationBinder(typeResolver)
         };
 
-        object? result = _binaryFormatter.Deserialize(stream);
+        // cs/dangerous-binary-deserialization
+        object? result = _binaryFormatter.Deserialize(stream); // CodeQL[SM03722] : BinaryFormatter is intended to be used as a fallback for unsupported types. Users must explicitly opt into this behavior
         if (result is ResXNullRef)
         {
             result = null;
@@ -617,7 +621,7 @@ public sealed class ResXDataNode : ISerializable
             return _nodeInfo.MimeType == ResXResourceWriter.BinSerializedObjectMimeType
                 ? GenerateObjectFromBinaryDataNodeInfo(_nodeInfo, typeResolver)
                 : GenerateObjectFromDataNodeInfo(_nodeInfo, typeResolver);
-#pragma warning restore SYSLIB0051 // Type or member is obsolete
+#pragma warning restore SYSLIB0051
         }
 
         // Schema is wrong and says minOccur for Value is 0, but it's too late to change it.

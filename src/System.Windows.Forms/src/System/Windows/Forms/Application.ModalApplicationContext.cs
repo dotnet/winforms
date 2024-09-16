@@ -22,7 +22,7 @@ public sealed partial class Application
             Control? parentControl = null;
 
             // Get ahold of the parent HWND -- if it's a different thread we need to do the disable
-            // over there too.  Note we only do this if we're parented by a Windows Forms parent.
+            // over there too. Note we only do this if we're parented by a Windows Forms parent.
 
             if (MainForm is not null && MainForm.IsHandleCreated)
             {

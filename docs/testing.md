@@ -15,8 +15,8 @@ This document describes our approach to testing.
             - [Naming](#naming)
             - [Decoration](#decoration)
             - [Disposal](#dispose-created-objects)
-            - [Theory tests](#theory-tests#theory-tests)
-        - [Throw unhandled exceptions](#throw-unhandled-exceptions)
+            - [Theory tests](#theory-tests)
+        - [Strategy](#strategy)
 * [Rendering Tests](#rendering-tests)
 * [Functional Tests](#functional-tests)
     * [Running functional tests](#running-functional-tests)
@@ -26,6 +26,7 @@ This document describes our approach to testing.
         - [Troubleshooting Visual Studio functional test errors](#troubleshooting-visual-studio-functional-test-errors)
     * [Adding new functional tests](#adding-new-functional-tests)
         - [Test placement](#therefore-you-just-need-to-put-your-tests-in-the-right-place-in-order-for-them-to-run-1)
+ * [Sequential collection](#sequential-collection)
  * [Testing for Accessibility](#testing-for-accessibility)
  * [Running and debugging crashed tests](#running-and-debugging-crashed-tests)
     
@@ -106,9 +107,6 @@ Tests are built and executed by file name convention
 * Test files names should match the class they are testing followed by a "**Tests**" suffix.
   * For example, tests for the `Button` class should be in ButtonTests.cs.
   * For example, tests for the `Button.ButtonAccessibleObject` class should be in **Button.ButtonAccessibleObjectTests.cs**.
-* Test class names should match the class they are testing, followed by a "**Tests**" suffix.
-  * For example, tests for the `Button` class should in the `ButtonTests` class.
-  * For example, tests for the `Button.ButtonAccessibleObject` class should in the `Button_ButtonAccessibleObjectTests` class.
 * Test names should start with the class they are testing.
   * For example, all tests for the `Button` class should start with "Button".
 * Test names should end with a description of what the test does - this is very useful when viewing test results, and when browsing in the test explorer. As far as naming conventions are concerned we don't mandate a specific one, as long as a test name clearly communicates its purpose.
@@ -191,7 +189,7 @@ When writing theories note the following:
     ```
 
 
-Also be beware and be mindful of VS-specific behaviours: https://xunit.net/faq/theory-data-stability-in-vs
+Also be mindful of VS-specific behaviours: https://xunit.net/faq/theory-data-stability-in-vs
 
 
 #### Strategy
@@ -260,7 +258,7 @@ public void MyControl_Rendering()
 
 > :warning: There is a very blurry line between unit and functional tests in Windows Forms realm. A lot of our implementations depend on ambient contexts (such as Win32, COM, etc.). We classify tests as "functional" or "integration" that require process-wide settings (such as visual styles) or require user-like interactions (e.g. mouse gestures).
 
-Currently, there is a single functional test suite in the repository: the **WinformsControlsTest**. There is an xUnit project that executes various commands against this binary.
+The general purpose functional test suite is the **WinFormsControlsTest**. There is an xUnit project that executes various commands against this binary.
 
 ## Running functional tests
 
@@ -311,7 +309,46 @@ Functional tests are built and executed by file name convention
   * For example, if I wanted to test the `Button` class in System.Windows.Forms.dll, I would look for a Button.cs under src\System.Windows.Forms\tests
 * If the file exists, add your tests there. If it doesn't exist, feel free to create it.
   * **Note that you don't have to modify the csproj at all.** Since the project is a Microsoft.NET.Sdk project, all source files next to it are automatically included
- 
+
+# Sequential Collection
+
+* A sequential collection is a grouping of unit tests that are executed in a specific order.
+  - All unit tests in the `Sequential` collection are executed sequentially.
+    
+* Unit tests that involve the following situations should be included in the `Sequential` collection:
+  - Clipboard operations is sensitive to the state of the system and interfere with each other if run in parallel.
+    - **Clipboard APIs**: Any test that interacts with the system Clipboard, such as setting or retrieving data.
+    - **Drag and Drop**: Tests that simulate drag-and-drop operations, which often involve the Clipboard.
+    - **Copy/Paste**: Tests that perform copy and paste actions, which rely on the Clipboard to transfer data.
+    - **Register Formats**: Tests that register custom Clipboard formats.
+      
+    E.g.
+    ```cs
+    [Collection("Sequential")]
+    public class ClipboardTests
+    {
+        [WinFormsFact]
+        public void RichTextBox_OleObject_IncompleteOleObject_DoNothing()
+        {
+            using RichTextBox control = new();
+            control.Handle.Should().NotBe(IntPtr.Zero);
+
+            using MemoryStream memoryStream = new();
+            using Bitmap bitmap = new(100, 100);
+            bitmap.Save(memoryStream, Drawing.Imaging.ImageFormat.Png);
+            Clipboard.SetData("Embed Source", memoryStream);
+
+            control.Text.Should().BeEmpty();
+        }
+     ```
+  - Other tests that rely on a global state, refer to existing tests
+    
+     - [Clipboard related tests](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms/tests/UnitTests/System/Windows/Forms/ClipboardTests.cs)
+     - [WebBrowser control related tests](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms/tests/UnitTests/System/Windows/Forms/HtmlElementTests.cs)
+     - [PropertyGridTests](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms/tests/InteropTests/PropertyGridTests.cs)
+     - [ITypeInfoTests](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms.Primitives/tests/UnitTests/Interop/Oleaut32/ITypeInfoTests.cs)
+     - [IPictureTests](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms.Primitives/tests/UnitTests/Interop/Ole32/IPictureTests.cs)
+     - [IDispatchTests](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms.Primitives/tests/UnitTests/Windows/Win32/System/Com/IDispatchTests.cs)  
   
 # Testing for Accessibility
 

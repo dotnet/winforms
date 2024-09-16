@@ -94,7 +94,7 @@ public class KeysConverter : TypeConverter, IComparer
     }
 
     /// <summary>
-    ///  Access to a lookup table of name/value pairs for keys.  These are localized
+    ///  Access to a lookup table of name/value pairs for keys. These are localized
     ///  names.
     /// </summary>
     private Dictionary<CultureInfo, Dictionary<string, Keys>> CultureToKeyName
@@ -170,14 +170,14 @@ public class KeysConverter : TypeConverter, IComparer
             {
                 if (!keyNames.TryGetValue(token, out Keys currentKey))
                 {
-                    // Key was not found in our dictionary.  See if it is a valid value in
+                    // Key was not found in our dictionary. See if it is a valid value in
                     // the Keys enum.
                     currentKey = (Keys)Enum.Parse(typeof(Keys), token);
                 }
 
                 if ((currentKey & Keys.KeyCode) != 0)
                 {
-                    // We found a match.  If we have previously found a
+                    // We found a match. If we have previously found a
                     // key code, then check to see that this guy
                     // isn't a key code (it is illegal to have, say,
                     // "A + B"
@@ -211,10 +211,10 @@ public class KeysConverter : TypeConverter, IComparer
     }
 
     /// <summary>
-    ///  Converts the given object to another type.  The most common types to convert
-    ///  are to and from a string object.  The default implementation will make a call
+    ///  Converts the given object to another type. The most common types to convert
+    ///  are to and from a string object. The default implementation will make a call
     ///  to ToString on the object if the object is valid and if the destination
-    ///  type is string.  If this cannot convert to the destination type, this will
+    ///  type is string. If this cannot convert to the destination type, this will
     ///  throw a NotSupportedException.
     /// </summary>
     public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
@@ -357,7 +357,7 @@ public class KeysConverter : TypeConverter, IComparer
 
     /// <summary>
     ///  Retrieves a collection containing a set of standard values
-    ///  for the data type this validator is designed for.  This
+    ///  for the data type this validator is designed for. This
     ///  will return null if the data type does not support a
     ///  standard set of values.
     /// </summary>
@@ -375,9 +375,9 @@ public class KeysConverter : TypeConverter, IComparer
 
     /// <summary>
     ///  Determines if the list of standard values returned from
-    ///  GetStandardValues is an exclusive list.  If the list
+    ///  GetStandardValues is an exclusive list. If the list
     ///  is exclusive, then no other values are valid, such as
-    ///  in an enum data type.  If the list is not exclusive,
+    ///  in an enum data type. If the list is not exclusive,
     ///  then there are other valid values besides the list of
     ///  standard values GetStandardValues provides.
     /// </summary>

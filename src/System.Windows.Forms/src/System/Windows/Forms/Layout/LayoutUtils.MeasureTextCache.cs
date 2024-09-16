@@ -33,7 +33,7 @@ internal static partial class LayoutUtils
                 // Text fits within proposed width
 
                 // IF we're here, this means we've got text that can fit into the proposedConstraints
-                // without wrapping.  We've determined this because our
+                // without wrapping. We've determined this because our
 
                 // as a side effect of calling TextRequiresWordBreak,
                 // unconstrainedPreferredSize is set.
@@ -44,9 +44,9 @@ internal static partial class LayoutUtils
                 // Text does NOT fit within proposed width - requires WordBreak
 
                 // IF we're here, this means that the wrapping width is smaller
-                // than our max width.  For example: we measure the text with infinite
+                // than our max width. For example: we measure the text with infinite
                 // bounding box and we determine the width to fit all the characters
-                // to be 200 px wide.  We would come here only for proposed widths less
+                // to be 200 px wide. We would come here only for proposed widths less
                 // than 200 px.
 
                 // Create our ring buffer if we don't have one
@@ -93,8 +93,8 @@ internal static partial class LayoutUtils
 
         ///  TextRequiresWordBreak
         ///  If you give the text all the space in the world it wants, then there should be no reason
-        ///  for it to break on a word.  So we find out what the unconstrained size is (Int32.MaxValue, Int32.MaxValue)
-        ///  for a string - eg. 35, 13.  If the size passed in has a larger width than 35, then we know that
+        ///  for it to break on a word. So we find out what the unconstrained size is (Int32.MaxValue, Int32.MaxValue)
+        ///  for a string - eg. 35, 13. If the size passed in has a larger width than 35, then we know that
         ///  the WordBreak flag is not necessary.
         public bool TextRequiresWordBreak(string? text, Font? font, Size size, TextFormatFlags flags)
         {

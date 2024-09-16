@@ -3021,17 +3021,24 @@ public class UpDownBaseTests
         string actualEditToolTipText = toolTip.GetToolTip(upDownBase._upDownEdit);
         string actualButtonsToolTipText = toolTip.GetToolTip(upDownBase._upDownButtons);
 
-        Assert.Empty(actualEditToolTipText);
-        Assert.Empty(actualButtonsToolTipText);
-        Assert.NotEqual(IntPtr.Zero, toolTip.Handle); // A workaround to create the toolTip native window Handle
+        actualEditToolTipText.Should().BeEmpty();
+        actualButtonsToolTipText.Should().BeEmpty();
+        toolTip.Handle.Should().NotBe(IntPtr.Zero); // A workaround to create the toolTip native window Handle
 
         string text = "Some test text";
         toolTip.SetToolTip(upDownBase, text); // Invokes UpDownBase's SetToolTip inside
         actualEditToolTipText = toolTip.GetToolTip(upDownBase._upDownEdit);
         actualButtonsToolTipText = toolTip.GetToolTip(upDownBase._upDownButtons);
 
-        Assert.Equal(text, actualEditToolTipText);
-        Assert.Equal(text, actualButtonsToolTipText);
+        actualEditToolTipText.Should().Be(text);
+        actualButtonsToolTipText.Should().Be(text);
+
+        toolTip.SetToolTip(upDownBase, null); // Invokes UpDownBase's SetToolTip inside
+        actualEditToolTipText = toolTip.GetToolTip(upDownBase._upDownEdit);
+        actualButtonsToolTipText = toolTip.GetToolTip(upDownBase._upDownButtons);
+
+        actualEditToolTipText.Should().BeEmpty();
+        actualButtonsToolTipText.Should().BeEmpty();
     }
 
     private class CustomValidateUpDownBase : UpDownBase

@@ -75,7 +75,7 @@ public class ByteViewer : TableLayoutPanel
         SetStyle(ControlStyles.ResizeRedraw, true);
     }
 
-    // Stole this code from  XmlScanner
+    // Stole this code from XmlScanner
     private static int AnalyzeByteOrderMark(byte[] buffer, int index)
     {
         int c1 = buffer[index + 0] << 8 | buffer[index + 1];
@@ -111,7 +111,7 @@ public class ByteViewer : TableLayoutPanel
           /*4c6f*/ { 1   ,1   ,1   ,1    ,1   ,1   ,1   ,1   ,1    ,1    ,1    ,1    ,12  },
           /*a794*/ { 1   ,1   ,1   ,1    ,1   ,1   ,1   ,1   ,1    ,1    ,1    ,1    ,1   }
         };
-#pragma warning restore SA1001 // Commas should be spaced correctly
+#pragma warning restore SA1001
 
         return encodings[c4, c5];
     }
@@ -166,7 +166,7 @@ public class ByteViewer : TableLayoutPanel
     }
 
     // Char.IsPrintable is going away because it's a mostly meaningless concept.
-    // Copied code here to preserve semantics.  -- BrianGru, 10/3/2000
+    // Copied code here to preserve semantics. -- BrianGru, 10/3/2000
     private static bool CharIsPrintable(char c)
     {
         UnicodeCategory uc = char.GetUnicodeCategory(c);
@@ -371,7 +371,7 @@ public class ByteViewer : TableLayoutPanel
     /// </summary>
     public virtual DisplayMode GetDisplayMode() => _displayMode;
 
-    // Stole this code from  XmlScanner
+    // Stole this code from XmlScanner
     private static int GetEncodingIndex(int c1) => c1 switch
     {
         0x0000 => 1,
@@ -437,12 +437,14 @@ public class ByteViewer : TableLayoutPanel
     {
         _scrollbarHeight = SystemInformation.HorizontalScrollBarHeight;
         _scrollbarWidth = SystemInformation.VerticalScrollBarWidth;
-        // For backwards compat
-        Size = new Size(SCROLLBAR_START_X + _scrollbarWidth + BORDER_GAP + INSET_GAP,
-                             2 * (BORDER_GAP + INSET_GAP) + _rowCount * (CELL_HEIGHT));
+
+        // For backwards compatibility
+        Size = new Size(
+            SCROLLBAR_START_X + _scrollbarWidth + BORDER_GAP + INSET_GAP,
+            2 * (BORDER_GAP + INSET_GAP) + _rowCount * (CELL_HEIGHT));
 
         _scrollBar = new VScrollBar();
-        _scrollBar.ValueChanged += new EventHandler(ScrollChanged);
+        _scrollBar.ValueChanged += ScrollChanged;
         _scrollBar.TabStop = true;
         _scrollBar.TabIndex = 0;
         _scrollBar.Dock = DockStyle.Right;
@@ -557,8 +559,9 @@ public class ByteViewer : TableLayoutPanel
         if (Dock == DockStyle.None)
         {
             // For backwards compatibility
-            Size = new Size(SCROLLBAR_START_X + _scrollbarWidth + BORDER_GAP + INSET_GAP,
-                            2 * (BORDER_GAP + INSET_GAP) + _rowCount * (CELL_HEIGHT));
+            Size = new Size(
+                SCROLLBAR_START_X + _scrollbarWidth + BORDER_GAP + INSET_GAP,
+                2 * (BORDER_GAP + INSET_GAP) + _rowCount * (CELL_HEIGHT));
         }
 
         if (_scrollBar is not null)

@@ -15,8 +15,6 @@ internal
 #endif
 unsafe struct LOGFONT
 {
-    private const int LF_FACESIZE = 32;
-
     public int lfHeight;
     public int lfWidth;
     public int lfEscapement;
@@ -30,14 +28,14 @@ unsafe struct LOGFONT
     public byte lfClipPrecision;
     public byte lfQuality;
     public byte lfPitchAndFamily;
-    private fixed char _lfFaceName[LF_FACESIZE];
+    private fixed char _lfFaceName[(int)PInvokeCore.LF_FACESIZE];
 
     internal readonly bool IsGdiVerticalFont => _lfFaceName[0] == '@';
 
 #if NET7_0_OR_GREATER
     [UnscopedRef]
 #endif
-    public Span<char> lfFaceName => MemoryMarshal.CreateSpan(ref _lfFaceName[0], LF_FACESIZE);
+    public Span<char> lfFaceName => MemoryMarshal.CreateSpan(ref _lfFaceName[0], (int)PInvokeCore.LF_FACESIZE);
 
     internal readonly string AsString()
 #pragma warning disable format

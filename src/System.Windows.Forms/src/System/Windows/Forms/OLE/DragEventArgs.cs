@@ -90,7 +90,8 @@ public class DragEventArgs : EventArgs
     /// </summary>
     /// <remarks>
     /// <para>
-    /// UI coloring is applied to the text in <see cref="MessageReplacementToken"/> if used by specifying %1 in <see cref="Message"/>.
+    ///  UI coloring is applied to the text in <see cref="MessageReplacementToken"/>
+    ///  if used by specifying %1 in <see cref="Message"/>.
     /// </para>
     /// </remarks>
     public string? Message { get; set; }
@@ -100,7 +101,8 @@ public class DragEventArgs : EventArgs
     /// </summary>
     /// <remarks>
     /// <para>
-    /// UI coloring is applied to the text in <see cref="MessageReplacementToken"/> if used by specifying %1 in <see cref="Message"/>.
+    ///  UI coloring is applied to the text in <see cref="MessageReplacementToken"/>
+    ///  if used by specifying %1 in <see cref="Message"/>.
     /// </para>
     /// </remarks>
     public string? MessageReplacementToken { get; set; }

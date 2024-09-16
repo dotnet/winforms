@@ -514,7 +514,7 @@ public partial class DomainUpDown : UpDownBase
     }
 
     // This is not a breaking change -- Even though this control previously autosized to height,
-    // it didn't actually have an AutoSize property.  The new AutoSize property enables the
+    // it didn't actually have an AutoSize property. The new AutoSize property enables the
     // smarter behavior.
     internal override Size GetPreferredSizeCore(Size proposedConstraints)
     {

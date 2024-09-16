@@ -63,6 +63,8 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
 
     private bool _lastPaintWithExplorerStyle;
 
+    private readonly Lock _lock = new();
+
     private static Color InvertColor(Color color)
         => Color.FromArgb(color.A, (byte)~color.R, (byte)~color.G, (byte)~color.B);
 
@@ -158,7 +160,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     }
 
     /// <summary>
-    ///  Retrieves the component that is invoking the method on the formatter object.  This may
+    ///  Retrieves the component that is invoking the method on the formatter object. This may
     ///  return null if there is no component responsible for the call.
     /// </summary>
     public virtual IComponent? Component
@@ -489,7 +491,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     }
 
     /// <summary>
-    ///  Returns the label including the object name, and properties.  For example, the value
+    ///  Returns the label including the object name, and properties. For example, the value
     ///  of the Font size property on a Button called Button1 would be "Button1.Font.Size"
     /// </summary>
     public string? FullLabel
@@ -717,8 +719,8 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     public virtual string PropertyCategory => CategoryAttribute.Default.Category;
 
     /// <summary>
-    ///  Returns "depth" of this property.  That is, how many parents between
-    ///  this property and the root property.  The root property has a depth of -1.
+    ///  Returns "depth" of this property. That is, how many parents between
+    ///  this property and the root property. The root property has a depth of -1.
     /// </summary>
     public virtual int PropertyDepth => _propertyDepth;
 
@@ -1491,7 +1493,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     }
 
     /// <summary>
-    ///  Retrieves the requested service.  This may return null if the requested service is not available.
+    ///  Retrieves the requested service. This may return null if the requested service is not available.
     /// </summary>
     public virtual object? GetService(Type serviceType)
         => serviceType == typeof(GridItem) ? this : (_parent?.GetService(serviceType));
@@ -2266,8 +2268,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
 
     protected virtual void AddEventHandler(object key, Delegate handler)
     {
-        // Locking 'this' here is ok since this is an internal class.
-        lock (this)
+        lock (_lock)
         {
             if (handler is null)
             {
@@ -2298,8 +2299,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
 
     protected virtual Delegate? GetEventHandler(object key)
     {
-        // Locking 'this' here is ok since this is an internal class.
-        lock (this)
+        lock (_lock)
         {
             for (EventEntry? e = _eventList; e is not null; e = e.Next)
             {
@@ -2315,8 +2315,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
 
     protected virtual void RemoveEventHandler(object key, Delegate handler)
     {
-        // Locking this here is ok since this is an internal class.
-        lock (this)
+        lock (_lock)
         {
             if (handler is null)
             {

@@ -53,7 +53,7 @@ public class ResXResourceReaderTests
     [Fact]
     public void ResXResourceReader_Constructor_FileName()
     {
-        // Create a temp file and write the resx to it.        
+        // Create a temp file and write the resx to it.
         using TempFile tempFile = TempFile.Create(ResxHelper.CreateResx());
         using ResXResourceReader resXReader = new(tempFile.Path);
         IDictionaryEnumerator enumerator = resXReader.GetEnumerator();

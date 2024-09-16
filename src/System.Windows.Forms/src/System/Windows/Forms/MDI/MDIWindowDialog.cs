@@ -11,6 +11,15 @@ internal sealed partial class MdiWindowDialog : Form
     private TableLayoutPanel _okCancelTableLayoutPanel;
     private Form? _active;
 
+    // Feature switch, when set to false, MdiWindowDialog is not supported in trimmed applications.
+    [FeatureSwitchDefinition("System.Windows.Forms.MdiWindowDialog.IsSupported")]
+#pragma warning disable IDE0075 // Simplify conditional expression - the simpler expression is hard to read
+    private static bool IsSupported { get; } =
+        AppContext.TryGetSwitch("System.Windows.Forms.MdiWindowDialog.IsSupported", out bool isSupported)
+            ? isSupported
+            : true;
+#pragma warning restore IDE0075
+
     public MdiWindowDialog()
         : base()
     {
@@ -65,7 +74,7 @@ internal sealed partial class MdiWindowDialog : Form
 
     /// <summary>
     ///  NOTE: The following code is required by the Windows Forms
-    ///  designer.  It can be modified using the form editor.  Do not
+    ///  designer. It can be modified using the form editor. Do not
     ///  modify it using the code editor.
     /// </summary>
     [MemberNotNull(nameof(_itemList))]
@@ -74,14 +83,19 @@ internal sealed partial class MdiWindowDialog : Form
     [MemberNotNull(nameof(_okCancelTableLayoutPanel))]
     private void InitializeComponent()
     {
+        if (!IsSupported)
+        {
+            throw new NotSupportedException(string.Format(SR.ControlNotSupportedInTrimming, nameof(MdiWindowDialog)));
+        }
+
         System.ComponentModel.ComponentResourceManager resources = new(typeof(MdiWindowDialog));
         _itemList = new ListBox();
         _okButton = new Button();
         _cancelButton = new Button();
         _okCancelTableLayoutPanel = new TableLayoutPanel();
         _okCancelTableLayoutPanel.SuspendLayout();
-        _itemList.DoubleClick += new EventHandler(ItemList_doubleClick);
-        _itemList.SelectedIndexChanged += new EventHandler(ItemList_selectedIndexChanged);
+        _itemList.DoubleClick += ItemList_doubleClick;
+        _itemList.SelectedIndexChanged += ItemList_selectedIndexChanged;
         SuspendLayout();
         //
         // _itemList

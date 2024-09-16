@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms.Tests;
 
@@ -349,6 +350,7 @@ public class TreeNode_TreeNodeIKeyboardToolTipTests
     }
 
     [WinFormsTheory]
+    [ActiveIssue("https://github.com/dotnet/winforms/issues/11752")]
     [InlineData(true, true, true)]
     [InlineData(true, false, false)]
     [InlineData(false, true, false)]
@@ -358,6 +360,12 @@ public class TreeNode_TreeNodeIKeyboardToolTipTests
         bool isHovered,
         bool expected)
     {
+        // Skip validation on X64 due to the active issue "https://github.com/dotnet/winforms/issues/11752"
+        if (insideTreeView && isHovered && expected && RuntimeInformation.ProcessArchitecture == Architecture.X64)
+        {
+            return;
+        }
+
         Point initialPosition = Cursor.Position;
         try
         {

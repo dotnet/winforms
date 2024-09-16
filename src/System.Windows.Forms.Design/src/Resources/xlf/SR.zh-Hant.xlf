@@ -379,6 +379,11 @@
         <target state="translated">{0} 集合編輯器</target>
         <note />
       </trans-unit>
+      <trans-unit id="CollectionEditorCreateInstanceError">
+        <source>Neither {0} nor {1} can create an instance of {2}.</source>
+        <target state="translated">{0} 或 {1} 都無法建立 {2} 的執行個體。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CollectionEditorInheritedReadOnlySelection">
         <source>Read-only component(s) selected.</source>
         <target state="translated">已經選擇唯讀元件。</target>

@@ -109,12 +109,12 @@ public sealed class InputLanguage
     }
 
     /// <summary>
-    /// Returns the <see href="https://learn.microsoft.com/windows/win32/api/winuser/nf-winuser-getkeyboardlayoutnamew">
-    /// keyboard layout identifier</see> of the current input language.
+    ///  Returns the <see href="https://learn.microsoft.com/windows/win32/api/winuser/nf-winuser-getkeyboardlayoutnamew">
+    ///  keyboard layout identifier</see> of the current input language.
     /// </summary>
-    /// <seealso
-    /// href="https://learn.microsoft.com/windows-hardware/manufacture/desktop/windows-language-pack-default-values">
-    /// Keyboard identifiers and input method editors for Windows</seealso>
+    /// <seealso href="https://learn.microsoft.com/windows-hardware/manufacture/desktop/windows-language-pack-default-values">
+    ///  Keyboard identifiers and input method editors for Windows
+    /// </seealso>
     internal string LayoutId
     {
         get
@@ -173,8 +173,8 @@ public sealed class InputLanguage
     private const string UserProfileRegistryPath = @"Control Panel\International\User Profile";
 
     /// <summary>
-    ///  Returns the <see href="https://learn.microsoft.com/globalization/locale/standard-locale-names">BCP 47 language
-    ///  tag</see> of the current input language.
+    ///  Returns the <see href="https://learn.microsoft.com/globalization/locale/standard-locale-names">
+    ///  BCP 47 language tag</see> of the current input language.
     /// </summary>
     private string LanguageTag
     {

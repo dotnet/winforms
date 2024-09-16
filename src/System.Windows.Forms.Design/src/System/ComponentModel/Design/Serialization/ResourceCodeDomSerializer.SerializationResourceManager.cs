@@ -12,7 +12,13 @@ namespace System.ComponentModel.Design.Serialization;
 internal partial class ResourceCodeDomSerializer
 {
     /// <summary>
-    ///  This is the meat of resource serialization.  This implements a resource manager through a host-provided IResourceService interface.  The resource service feeds us with resource readers and writers, and we simulate a runtime ResourceManager. There is one instance of this object for the entire serialization process, just like there is one resource manager in runtime code.  When an instance of this object is created, it adds itself to the serialization manager's service list, and listens for the SerializationComplete event.  When serialization is complete, this will close and flush any readers or writers it may have opened and will also remove itself from the service list.
+    ///  This is the meat of resource serialization. This implements a resource manager through a host-provided
+    ///  <see cref="IResourceService"/> interface. The resource service feeds us with resource readers and writers,
+    ///  and we simulate a runtime ResourceManager. There is one instance of this object for the entire
+    ///  serialization process, just like there is one resource manager in runtime code. When an instance
+    ///  of this object is created, it adds itself to the serialization manager's service list,
+    ///  and listens for the SerializationComplete event. When serialization is complete, this will close and
+    ///  flush any readers or writers it may have opened and will also remove itself from the service list.
     /// </summary>
     internal class SerializationResourceManager : ComponentResourceManager
     {
@@ -34,17 +40,21 @@ internal partial class ResourceCodeDomSerializer
         {
             _manager = manager;
             _nameTable = [];
+
             // We need to know when we're done so we can push the resource file out.
-            manager.SerializationComplete += new EventHandler(OnSerializationComplete);
+            manager.SerializationComplete += OnSerializationComplete;
         }
 
         /// <summary>
-        ///  State the serializers use to determine if the declaration of this resource manager has been performed.  This is just per-document state we keep; we do not actually care about this value.
+        ///  State the serializers use to determine if the declaration of this resource manager has been performed. This
+        ///  is just per-document state we keep; we do not actually care about this value.
         /// </summary>
         public bool DeclarationAdded { get; set; }
 
         /// <summary>
-        ///  When a declaration is added, we also setup an expression other serializers can use to reference our resource declaration.  This bit tracks if we have setup this expression yet.  Note that the expression and declaration may be added at different times, if the declaration was added by a cached component.
+        ///  When a declaration is added, we also setup an expression other serializers can use to reference our resource
+        ///  declaration. This bit tracks if we have setup this expression yet. Note that the expression and declaration
+        ///  may be added at different times, if the declaration was added by a cached component.
         /// </summary>
         public bool ExpressionAdded { get; set; }
 
@@ -76,7 +86,8 @@ internal partial class ResourceCodeDomSerializer
         }
 
         /// <summary>
-        ///  This is the culture info we should use to read and write resources. We always write using the same culture we read with so we don't stomp on data.
+        ///  This is the culture info we should use to read and write resources. We always write using the same
+        ///  culture we read with so we don't stomp on data.
         /// </summary>
         private CultureInfo ReadCulture => _readCulture ??= LocalizationLanguage ?? CultureInfo.InvariantCulture;
 
@@ -102,12 +113,15 @@ internal partial class ResourceCodeDomSerializer
                 {
                     if (_manager.TryGetService(out IResourceService? rs))
                     {
-                        // We always write with the culture we read with.  In the event of a language change during localization, we will write the new language to the source code and then perform a reload.
+                        // We always write with the culture we read with. In the event of a language change
+                        // during localization, we will write the new language to the source code
+                        // and then perform a reload.
                         _writer = rs.GetResourceWriter(ReadCulture);
                     }
                     else
                     {
-                        // No resource service, so there is no way to create a resource writer for the object.  In this case we just create an empty one so the resources go into the bit-bucket.
+                        // No resource service, so there is no way to create a resource writer for the object.
+                        // In this case we just create an empty one so the resources go into the bit-bucket.
                         Debug.Fail("We expected to get IResourceService -- no resource serialization will be available");
                         _writer = new ResourceWriter(new MemoryStream());
                     }
@@ -118,7 +132,10 @@ internal partial class ResourceCodeDomSerializer
         }
 
         /// <summary>
-        ///  The component serializer supports caching serialized outputs for speed.  It holds both a collection of statements as well as an opaque blob for resources.  This function adds data to that blob. The parameters to this function are the same as those to SetValue, or SetMetadata (when isMetadata is true).
+        ///  The component serializer supports caching serialized outputs for speed. It holds both a collection
+        ///  of statements as well as an opaque blob for resources. This function adds data to that blob.
+        ///  The parameters to this function are the same as those to SetValue,
+        ///  or SetMetadata (when isMetadata is <see langword="true"/>).
         /// </summary>
         private static void AddCacheEntry(IDesignerSerializationManager manager, string name, object? value, bool isMetadata, bool forceInvariant, bool shouldSerializeValue, bool ensureInvariant)
         {
@@ -155,7 +172,8 @@ internal partial class ResourceCodeDomSerializer
         }
 
         /// <summary>
-        ///  Returns true if the caller should add a property fill statement for the given object.  A property fill is required for the component only once, so this remembers the value.
+        ///  Returns true if the caller should add a property fill statement for the given object.
+        ///  A property fill is required for the component only once, so this remembers the value.
         /// </summary>
         public bool AddPropertyFill(object value)
         {
@@ -164,7 +182,9 @@ internal partial class ResourceCodeDomSerializer
         }
 
         /// <summary>
-        ///  This method examines all the resources for the provided culture. When it finds a resource with a key in the format of  "[objectName].[property name]"; it will apply that resources value to the corresponding property on the object.
+        ///  This method examines all the resources for the provided culture.
+        ///  When it finds a resource with a key in the format of "[objectName].[property name]";
+        ///  it will apply that resources value to the corresponding property on the object.
         /// </summary>
         [RequiresUnreferencedCode("The Type of value cannot be statically discovered.")]
         public override void ApplyResources(object value, string objectName, CultureInfo? culture)
@@ -218,7 +238,8 @@ internal partial class ResourceCodeDomSerializer
         {
             Dictionary<string, object?> result = [];
 
-            // We need to guard against bad or unloadable resources.  We warn the user in the task list here, but we will still load the designer.
+            // We need to guard against bad or unloadable resources. We warn the user in the task list here,
+            // but we will still load the designer.
             try
             {
                 IDictionaryEnumerator resEnum = reader.GetEnumerator();
@@ -261,7 +282,9 @@ internal partial class ResourceCodeDomSerializer
             Dictionary<string, object?>? metaData = GetMetadata();
             if (metaData is not null)
             {
-                // This is for backwards compatibility and also for the case when our reader/writer don't support metadata.  We must merge the original enumeration data in here or  else existing design time properties won't show up.  That would be really bad for things like Localizable.
+                // This is for backwards compatibility and also for the case when our reader/writer don't
+                // support metadata. We must merge the original enumeration data in here or else existing
+                // design time properties won't show up. That would be really bad for things like Localizable.
                 Dictionary<string, object?>? resourceSet = GetResourceSet(CultureInfo.InvariantCulture);
                 if (resourceSet is not null)
                 {
@@ -278,7 +301,8 @@ internal partial class ResourceCodeDomSerializer
         }
 
         /// <summary>
-        ///  This returns a dictionary enumerator for the given culture.  If no such resource file exists for the culture this  will return null.
+        ///  This returns a dictionary enumerator for the given culture.
+        ///  If no such resource file exists for the culture this will return null.
         /// </summary>
         public IDictionaryEnumerator? GetEnumerator(CultureInfo culture)
         {
@@ -322,7 +346,7 @@ internal partial class ResourceCodeDomSerializer
         }
 
         /// <summary>
-        ///  Overrides ResourceManager.GetObject to return the requested object.  Returns null if the object couldn't be found.
+        ///  Overrides ResourceManager.GetObject to return the requested object. Returns null if the object couldn't be found.
         /// </summary>
         public override object? GetObject(string resourceName)
         {
@@ -330,12 +354,16 @@ internal partial class ResourceCodeDomSerializer
         }
 
         /// <summary>
-        ///  Retrieves the object of the given name from our resource bundle. If forceInvariant is true, this will always use the invariant resource, rather than using the current language. Returns null if the object couldn't be found.
+        ///  Retrieves the object of the given name from our resource bundle.
+        ///  If forceInvariant is <see langword="true"/>, this will always use the invariant resource,
+        ///  rather than using the current language.
+        ///  Returns <see langword="null"/> if the object couldn't be found.
         /// </summary>
         public object? GetObject(string resourceName, bool forceInvariant)
         {
             Debug.Assert(_manager is not null, "This resource manager object has been destroyed.");
-            // We fetch the read culture if someone asks for a culture-sensitive string.  If forceInvariant is set, we always use the invariant culture.
+            // We fetch the read culture if someone asks for a culture-sensitive string.
+            // If forceInvariant is set, we always use the invariant culture.
             CultureInfo culture = forceInvariant ? CultureInfo.InvariantCulture : ReadCulture;
             CultureInfo lastCulture;
 
@@ -354,7 +382,8 @@ internal partial class ResourceCodeDomSerializer
         }
 
         /// <summary>
-        ///  Looks up the resource set in the resourceSets hash table, loading the set if it hasn't been loaded already. Returns null if no resource that exists for that culture.
+        ///  Looks up the resource set in the resourceSets hash table, loading the set if it hasn't been loaded already.
+        ///  Returns <see langword="null"/> if no resource that exists for that culture.
         /// </summary>
         private Dictionary<string, object?>? GetResourceSet(CultureInfo culture)
         {
@@ -416,7 +445,9 @@ internal partial class ResourceCodeDomSerializer
         }
 
         /// <summary>
-        ///  Event handler that gets called when serialization or deserialization is complete. Here we need to write any resources to disk.  Sine we open resources for write on demand, this code handles the case of reading resources as well.
+        ///  Event handler that gets called when serialization or deserialization is complete.
+        ///  Here we need to write any resources to disk. Since we open resources for write on demand,
+        ///  this code handles the case of reading resources as well.
         /// </summary>
         private void OnSerializationComplete(object? sender, EventArgs e)
         {
@@ -490,9 +521,9 @@ internal partial class ResourceCodeDomSerializer
                 Debug.Fail($"Cannot save a non-serializable value into resources.  Add serializable to {(value is null ? "(null)" : value.GetType().Name)}");
                 return;
             }
-#pragma warning restore SYSLIB0050 // Type or member is obsolete
+#pragma warning restore SYSLIB0050
 
-            // If we are currently the invariant culture then we may be able to  write directly.
+            // If we are currently the invariant culture then we may be able to write directly.
             if (ReadCulture.Equals(CultureInfo.InvariantCulture))
             {
                 if (shouldSerializeValue)
@@ -525,7 +556,9 @@ internal partial class ResourceCodeDomSerializer
                         metadata = _metadata;
                     }
 
-                    // Note that when we read metadata, for backwards compatibility, we also merge in regular data from the invariant resource. We need to clear that data here, since we are going to write out metadata separately.
+                    // Note that when we read metadata, for backwards compatibility,
+                    // we also merge in regular data from the invariant resource.
+                    // We need to clear that data here, since we are going to write out metadata separately.
                     invariant.Remove(resourceName);
                     _metadataResourcesDirty = true;
                 }
@@ -559,7 +592,10 @@ internal partial class ResourceCodeDomSerializer
         }
 
         /// <summary>
-        ///  Writes the given resource value under the given name. This checks the parent resource to see if the values are the same.  If they are, the resource is not written.  If not, then the resource is written. We always write using the resource language we read in with, so we don't stomp on the wrong resource data in the event that someone changes the language.
+        ///  Writes the given resource value under the given name. This checks the parent resource to see if the values
+        ///  are the same. If they are, the resource is not written. If not, then the resource is written.
+        ///  We always write using the resource language we read in with, so we don't stomp on the wrong resource data
+        ///  in the event that someone changes the language.
         /// </summary>
         public void SetValue(IDesignerSerializationManager manager, string resourceName, object? value, bool forceInvariant, bool shouldSerializeInvariant, bool ensureInvariant, bool applyingCachedResources)
         {
@@ -570,7 +606,7 @@ internal partial class ResourceCodeDomSerializer
                 Debug.Fail($"Cannot save a non-serializable value into resources.  Add serializable to {(value is null ? "(null)" : value.GetType().Name)}");
                 return;
             }
-#pragma warning restore SYSLIB0050 // Type or member is obsolete
+#pragma warning restore SYSLIB0050
 
             if (forceInvariant)
             {
@@ -621,8 +657,18 @@ internal partial class ResourceCodeDomSerializer
                         }
                         else
                         {
-                            // This is a new value.  We want to write it out, PROVIDED that the value is not associated with a property that is currently returning false from ShouldSerializeValue.  This allows us to skip writing out Font == NULL on all non-invariant cultures, but still allow us to write out the value if the user is resetting a font back to null. If we cannot associate the value with a property we will write it out just to be safe.
-                            // In addition, we need to handle the case of the user adding a new component to the non-invariant language.  This would be bad, because when he/she moved back to the invariant language the component's properties would all be defaults.  In order to minimize this problem, but still allow holes in the invariant resx, we also check to see if the property can be reset.  If it cannot be reset, that means that it has no meaningful default. Therefore, it should have appeared in the invariant resx and its absence indicates a new component.
+                            // This is a new value. We want to write it out, PROVIDED that the value is not associated
+                            // with a property that is currently returning false from ShouldSerializeValue.
+                            // This allows us to skip writing out Font == NULL on all non-invariant cultures,
+                            // but still allow us to write out the value if the user is resetting a font back to null.
+                            // If we cannot associate the value with a property we will write it out just to be safe.
+                            // In addition, we need to handle the case of the user adding a new component
+                            // to the non-invariant language. This would be bad, because when he/she moved back
+                            // to the invariant language the component's properties would all be defaults.
+                            // In order to minimize this problem, but still allow holes in the invariant resx,
+                            // we also check to see if the property can be reset. If it cannot be reset,
+                            // that means that it has no meaningful default. Therefore, it should have appeared
+                            // in the invariant resx and its absence indicates a new component.
                             bool writeValue = true;
                             bool writeInvariant = false;
                             if (manager.TryGetContext(out PropertyDescriptor? prop))
@@ -656,7 +702,9 @@ internal partial class ResourceCodeDomSerializer
                 }
             }
 
-            // Update the component cache, if we have one active.  We don't have to be fancy here because updating this cache just indicates that code in the component cache will later call us to re-apply the resources, and our logic above will be called again.
+            // Update the component cache, if we have one active. We don't have to be fancy here because updating
+            // this cache just indicates that code in the component cache will later call us to re-apply the resources,
+            // and our logic above will be called again.
             if (!applyingCachedResources)
             {
                 AddCacheEntry(manager, resourceName, value, false, forceInvariant, shouldSerializeInvariant, ensureInvariant);

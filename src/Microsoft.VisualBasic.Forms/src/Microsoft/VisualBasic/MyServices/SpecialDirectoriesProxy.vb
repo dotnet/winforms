@@ -7,10 +7,34 @@ Imports Microsoft.VisualBasic.FileIO
 Namespace Microsoft.VisualBasic.MyServices
 
     ''' <summary>
-    ''' An extremely thin wrapper around Microsoft.VisualBasic.FileIO.SpecialDirectories to expose the type through My.
+    '''  An extremely thin wrapper around Microsoft.VisualBasic.FileIO.SpecialDirectories to expose the type through My.
     ''' </summary>
     <EditorBrowsable(EditorBrowsableState.Never)>
     Public Class SpecialDirectoriesProxy
+
+        ''' <summary>
+        '''  Proxy class can only created by internal classes.
+        ''' </summary>
+        Friend Sub New()
+        End Sub
+
+        Public ReadOnly Property AllUsersApplicationData() As String
+            Get
+                Return SpecialDirectories.AllUsersApplicationData
+            End Get
+        End Property
+
+        Public ReadOnly Property CurrentUserApplicationData() As String
+            Get
+                Return SpecialDirectories.CurrentUserApplicationData
+            End Get
+        End Property
+
+        Public ReadOnly Property Desktop() As String
+            Get
+                Return SpecialDirectories.Desktop
+            End Get
+        End Property
 
         Public ReadOnly Property MyDocuments() As String
             Get
@@ -30,9 +54,9 @@ Namespace Microsoft.VisualBasic.MyServices
             End Get
         End Property
 
-        Public ReadOnly Property Desktop() As String
+        Public ReadOnly Property ProgramFiles() As String
             Get
-                Return SpecialDirectories.Desktop
+                Return SpecialDirectories.ProgramFiles
             End Get
         End Property
 
@@ -42,36 +66,11 @@ Namespace Microsoft.VisualBasic.MyServices
             End Get
         End Property
 
-        Public ReadOnly Property ProgramFiles() As String
-            Get
-                Return SpecialDirectories.ProgramFiles
-            End Get
-        End Property
-
         Public ReadOnly Property Temp() As String
             Get
                 Return SpecialDirectories.Temp
             End Get
         End Property
 
-        Public ReadOnly Property CurrentUserApplicationData() As String
-            Get
-                Return SpecialDirectories.CurrentUserApplicationData
-            End Get
-        End Property
-
-        Public ReadOnly Property AllUsersApplicationData() As String
-            Get
-                Return SpecialDirectories.AllUsersApplicationData
-            End Get
-        End Property
-
-        ''' <summary>
-        ''' Proxy class can only created by internal classes.
-        ''' </summary>
-        Friend Sub New()
-        End Sub
-
     End Class
-
 End Namespace

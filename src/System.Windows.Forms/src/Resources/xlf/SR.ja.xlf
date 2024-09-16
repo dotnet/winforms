@@ -288,8 +288,8 @@
         <note />
       </trans-unit>
       <trans-unit id="BinaryFormatterNotSupported">
-        <source>Using the BinaryFormatter is not supported.</source>
-        <target state="translated">BinaryFormatter の使用はサポートされていません。</target>
+        <source>BinaryFormatter serialization and deserialization are disabled within this application. See https://aka.ms/binaryformatter for more information.</source>
+        <target state="translated">BinaryFormatter のシリアル化と逆シリアル化は、このアプリケーションでは無効です。詳細については、https://aka.ms/binaryformatter を参照してください。</target>
         <note />
       </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
@@ -1527,6 +1527,11 @@
         <target state="translated">ポインターがコントロールに移動したときに表示されるカーソルです。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlDarkModeDescr">
+        <source>Determines the dark mode setting for the control. This ambient property inherits its value from its parent control or from the Application class.</source>
+        <target state="translated">コントロールのダーク モード設定を決定します。このアンビエント プロパティは、その値を親コントロールまたはアプリケーション クラスから継承します。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ControlDataContextChangedDescr">
         <source>Occurs when the value of the DataContext property changes.</source>
         <target state="translated">DataContext プロパティの値が変更されたときに発生します。</target>
@@ -1660,6 +1665,11 @@
       <trans-unit id="ControlNotChild">
         <source>'child' is not a child control of this parent.</source>
         <target state="translated">'子' はこの親の子コントロールではありません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlNotSupportedInTrimming">
+        <source>'{0}' is not supported in trimmed applications.</source>
+        <target state="translated">'{0}' は、トリミングされたアプリケーションではサポートされていません。</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlOnAutoSizeChangedDescr">
@@ -2175,6 +2185,11 @@
       <trans-unit id="CursorNonSerializableHandle">
         <source>Stock cursors cannot be serialized.</source>
         <target state="translated">ストック カーソルをシリアル化できません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DarkModeNotSupported">
+        <source>Dark mode cannot be activated, either because of an activated High-Contrast mode or because the underlying OS does not support it.</source>
+        <target state="translated">アクティブ化されたハイ コントラスト モードのため、または基になる OS がサポートしていないため、ダーク モードはアクティブ化できません。</target>
         <note />
       </trans-unit>
       <trans-unit id="DataBindingAddNewNotSupportedOnPropertyManager">
@@ -4639,6 +4654,11 @@ To replace this default dialog please handle the DataError event.</source>
         <target state="translated">フォーム内の Web ページをユーザーが参照できるようにします。</target>
         <note />
       </trans-unit>
+      <trans-unit id="DesignTimeFeaturesNotSupported">
+        <source>Design time features are not supported.</source>
+        <target state="translated">デザイン時間機能はサポートされていません。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DispInvokeFailed">
         <source>Operation {0} on the component did not succeed, generating the error code 0x{1:X}.</source>
         <target state="translated">コンポーネントの操作 {0} がエラー コード 0x{1:X} を生成して、成功しませんでした。</target>
@@ -5295,6 +5315,16 @@ Do you want to replace it?</source>
         <target state="translated">自動スクロール機能のスクロール バーの現在の位置です。</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormBorderColorChangedDescr">
+        <source>Occurs whenever the FormBorderColor property is changed.</source>
+        <target state="translated">FormBorderColor プロパティが変更されるたびに発生します。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormBorderColorDescr">
+        <source>The color of the Form's border.</source>
+        <target state="translated">フォームの境界線の色。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormBorderStyleDescr">
         <source>Indicates the appearance and behavior of the border and title bar of the form.</source>
         <target state="translated">フォームの境界線およびタイトル バーの、外観および動作を示します。</target>
@@ -5305,9 +5335,39 @@ Do you want to replace it?</source>
         <target state="translated">フォームの [キャンセル] ボタンです。このプロパティを設定すると、ユーザーが Esc キーを押すたびに、ボタンがクリックされます。</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormCaptionBackColorChangedDescr">
+        <source>Occurs whenever the FormCaptionBackColor property is changed.</source>
+        <target state="translated">FormCaptionBackColor プロパティが変更されるたびに発生します。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCaptionBackColorDescr">
+        <source>The back color of the Form's caption (title bar).</source>
+        <target state="translated">フォームのキャプション (タイトル バー) の背景色。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCaptionTextColorChangedDescr">
+        <source>Occurs whenever the FormCaptionTextColor property is changed.</source>
+        <target state="translated">FormCaptionTextColor プロパティが変更されるたびに発生します。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCaptionTextColorDescr">
+        <source>The color of the Form's text caption (title bar text).</source>
+        <target state="translated">フォームのテキスト キャプション (タイトル バーのテキスト) の色。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormControlBoxDescr">
         <source>Determines whether a form has a Control/System menu box.</source>
         <target state="translated">フォームにコントロール/システム メニュー ボックスを加えるかどうかを決定します。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCornerPreferenceChangedDescr">
+        <source>Occurs whenever the FormCornerPreference property is changed.</source>
+        <target state="translated">FormCornerPreference プロパティが変更されるたびに発生します。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCornerPreferenceDescr">
+        <source>The rounding style of the Form's border.</source>
+        <target state="translated">フォームの境界線の丸めスタイル。</target>
         <note />
       </trans-unit>
       <trans-unit id="FormDesktopBoundsDescr">
@@ -5510,6 +5570,11 @@ Do you want to replace it?</source>
         <target state="translated">コントロールの不透明度の割合です。</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormOrTaskDialog_NoSyncContextForShowAsync">
+        <source>Failed to retrieve the Synchronization Context for showing the Form asynchronously.</source>
+        <target state="translated">フォームを非同期的にに表示するための同期コンテキストを取得できませんでした。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormOwnedFormsDescr">
         <source>Array of forms owned by this form.</source>
         <target state="translated">このフォームが持つ配列のフォームです。</target>
@@ -5553,6 +5618,11 @@ Do you want to replace it?</source>
       <trans-unit id="FormWindowStateDescr">
         <source>Determines the initial visual state of the form.</source>
         <target state="translated">フォームの最初の表示状態を決定します。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Form_HasAlreadyBeenShownAsync">
+        <source>The form has already been shown asynchronously.</source>
+        <target state="translated">フォームは既に非同期的に表示されています。</target>
         <note />
       </trans-unit>
       <trans-unit id="FormatControlFormatDescr">
@@ -6845,8 +6915,8 @@ Stack trace where the illegal operation occurred was:
         <note />
       </trans-unit>
       <trans-unit id="ListViewVirtualListSizeDescr">
-        <source>Sets the count of the item collection when the ListView is in virtual mode.</source>
-        <target state="translated">ListView が仮想モードであるときに、項目コレクションの数を設定します。</target>
+        <source>Sets the count of the item collection when the ListView is in virtual mode. If VirtualMode is set to true, and the VirtualListSize property is greater than 0, you must handle the RetrieveVirtualItem event providing valid items.</source>
+        <target state="translated">ListView が仮想モードであるときに、項目コレクションの数を設定します。VirtualMode が true に設定されていて、VirtualListSize プロパティが 0 より大きい場合は、有効な項目を供給して RetrieveVirtualItem イベントを処理する必要があります。</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewVirtualListSizeInvalidArgument">
@@ -9692,6 +9762,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="TooManyResumeUpdateMenuHandles">
         <source>Too many calls to ResumeUpdateMenuHandles.</source>
         <target state="translated">ResumeUpdateMenuHandles への呼び出しが多すぎます。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripAllowClickThrough">
+        <source>Allows the control to be interacted when window does not have focus.</source>
+        <target state="translated">ウィンドウにフォーカスがない場合にコントロールを操作できるようにします。</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue">

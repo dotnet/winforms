@@ -33,30 +33,6 @@ public unsafe class Control_ActiveXImplTests
     }
 
     [WinFormsFact]
-    public void ActiveXImpl_SaveLoad_BinaryFormatterProperty_FormatterEnabled()
-    {
-        using BinaryFormatterScope formatterScope = new(enable: true);
-        using MyControl control = new();
-
-        // We need to have a type that doesn't have a TypeConverter that implements ISerializable to hit the
-        // BinaryFormatter code path.
-        SerializableStruct myValue = new() { Value = "HelloThere" };
-        control.SerializableValue = myValue;
-        IPersistStreamInit.Interface persistStream = control;
-
-        using MemoryStream memoryStream = new();
-        using var istream = memoryStream.ToIStream();
-        HRESULT hr = persistStream.Save(istream.Value, fClearDirty: BOOL.FALSE);
-        Assert.True(hr.Succeeded);
-        control.SerializableValue = default;
-
-        istream.Value->Seek(0, SeekOrigin.Begin);
-        hr = persistStream.Load(istream.Value);
-        Assert.True(hr.Succeeded);
-        Assert.Equal(myValue, control.SerializableValue);
-    }
-
-    [WinFormsFact]
     public void ActiveXImpl_SaveLoad_BinaryFormatterProperty_FormatterDisabled()
     {
         using BinaryFormatterScope formatterScope = new(enable: false);

@@ -137,8 +137,8 @@ internal partial class DesignerActionUI
 
             Debug.Assert(relatedGlyph is not null, "related glyph cannot be null");
             _relatedGlyph = relatedGlyph;
-            panel.SizeChanged += new EventHandler(PanelResized);
-            // hook up the event
+            panel.SizeChanged += PanelResized;
+
             if (_panel is not null)
             {
                 Items.Remove(_panel);
@@ -148,7 +148,7 @@ internal partial class DesignerActionUI
 
             _panel = new ToolStripControlHost(panel)
             {
-                // we don't want no margin
+                // We don't want a margin
                 Margin = Padding.Empty,
                 Size = panel.Size
             };
@@ -253,7 +253,9 @@ internal partial class DesignerActionUI
 
         protected override bool ProcessDialogKey(Keys keyData)
         {
-            // since we're not hosted in a form we need to do the same logic as Form.cs. If we get an enter key we need to find the current focused control. if it's a button, we click it and return that we handled the message
+            // since we're not hosted in a form we need to do the same logic as Form.cs.
+            // If we get an enter key we need to find the current focused control.
+            // if it's a button, we click it and return that we handled the message
             if (keyData == Keys.Enter)
             {
                 HWND focusedControlPtr = PInvoke.GetFocus();

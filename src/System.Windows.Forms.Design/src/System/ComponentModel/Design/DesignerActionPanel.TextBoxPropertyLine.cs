@@ -38,10 +38,11 @@ internal sealed partial class DesignerActionPanel
                 UseMnemonic = false,
                 Visible = false
             };
-            _readOnlyTextBoxLabel.MouseClick += new MouseEventHandler(OnReadOnlyTextBoxLabelClick);
-            _readOnlyTextBoxLabel.Enter += new EventHandler(OnReadOnlyTextBoxLabelEnter);
-            _readOnlyTextBoxLabel.Leave += new EventHandler(OnReadOnlyTextBoxLabelLeave);
-            _readOnlyTextBoxLabel.KeyDown += new KeyEventHandler(OnReadOnlyTextBoxLabelKeyDown);
+
+            _readOnlyTextBoxLabel.MouseClick += OnReadOnlyTextBoxLabelClick;
+            _readOnlyTextBoxLabel.Enter += OnReadOnlyTextBoxLabelEnter;
+            _readOnlyTextBoxLabel.Leave += OnReadOnlyTextBoxLabelLeave;
+            _readOnlyTextBoxLabel.KeyDown += OnReadOnlyTextBoxLabelKeyDown;
 
             _textBox = new TextBox
             {
@@ -49,9 +50,10 @@ internal sealed partial class DesignerActionPanel
                 TextAlign = HorizontalAlignment.Left,
                 Visible = false
             };
-            _textBox.TextChanged += new EventHandler(OnTextBoxTextChanged);
-            _textBox.KeyDown += new KeyEventHandler(OnTextBoxKeyDown);
-            _textBox.LostFocus += new EventHandler(OnTextBoxLostFocus);
+
+            _textBox.TextChanged += OnTextBoxTextChanged;
+            _textBox.KeyDown += OnTextBoxKeyDown;
+            _textBox.LostFocus += OnTextBoxLostFocus;
 
             AddedControls.Add(_readOnlyTextBoxLabel);
             AddedControls.Add(_textBox);
@@ -87,7 +89,8 @@ internal sealed partial class DesignerActionPanel
 
         public override Size LayoutControls(int top, int width, bool measureOnly)
         {
-            // Figure out our minimum width, Compare to proposed width, If we are smaller, widen the textbox to fit the line based on the bonus
+            // Figure out our minimum width, Compare to proposed width,
+            // If we are smaller, widen the textbox to fit the line based on the bonus
             int textBoxPreferredHeight = _textBox.GetPreferredSize(new Size(int.MaxValue, int.MaxValue)).Height;
             textBoxPreferredHeight += TextBoxHeightFixup;
             int height = textBoxPreferredHeight + LineVerticalPadding + TextBoxLineInnerPadding * 2 + 2; // 2 == border size
@@ -329,7 +332,7 @@ internal sealed partial class DesignerActionPanel
 
                 // Since we are not a standard focusable control, we have to raise our own accessibility events.
                 // objectID = OBJID_WINDOW, childID = CHILDID_SELF - 1 (the -1 is because WinForms always adds 1 to the value)
-                // (these consts are defined in winuser.h)
+                // (these constants are defined in winuser.h)
                 AccessibilityNotifyClients(AccessibleEvents.Focus, 0, -1);
             }
 

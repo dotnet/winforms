@@ -77,8 +77,8 @@ public partial class DataGridView
 
         if (createdByEditing)
         {
-            DataGridViewRowEventArgs dgvre = new(Rows[NewRowIndex]);
-            OnUserAddedRow(dgvre);
+            DataGridViewRowEventArgs dgvRowEvent = new(Rows[NewRowIndex]);
+            OnUserAddedRow(dgvRowEvent);
 
             if (IsAccessibilityObjectCreated)
             {
@@ -364,7 +364,7 @@ public partial class DataGridView
         Debug.Assert(autoSizeColumnCriteriaFilter != DataGridViewAutoSizeColumnCriteriaInternal.None);
         Debug.Assert((autoSizeColumnCriteriaFilter & DataGridViewAutoSizeColumnCriteriaInternal.Fill) == 0);
 
-        bool ret = false; // No column autosizes by default
+        bool ret = false; // No column auto size by default
         DataGridViewColumn? dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
         while (dataGridViewColumn is not null)
         {
@@ -392,8 +392,6 @@ public partial class DataGridView
             or DataGridViewAutoSizeRowsMode.DisplayedCellsExceptHeaders
             or DataGridViewAutoSizeRowsMode.DisplayedCells);
 
-        // Use of WindowsFormsUtils.CreateMeasurementGraphics() avoid use of this.Handle
-        // IntPtr handle = this.Handle; // Force creation of control's handle because for databound grids, handle creation wipes out and recreates the columns/rows.
         int width = 0;
         DataGridViewCell dataGridViewCell;
         if (columnIndex > -1 && (((DataGridViewAutoSizeRowsModeInternal)_autoSizeRowsMode) & DataGridViewAutoSizeRowsModeInternal.AllColumns) != 0)
@@ -442,7 +440,7 @@ public partial class DataGridView
         if (height != preferredThickness)
         {
             Debug.Assert(_autoSizeRowsMode != DataGridViewAutoSizeRowsMode.None);
-            Rows[rowIndex].Thickness = preferredThickness;   // unsharing the resized row
+            Rows[rowIndex].Thickness = preferredThickness;   // un-sharing the resized row
         }
 
         return preferredThickness;
@@ -509,7 +507,7 @@ public partial class DataGridView
 
                             if (Rows.SharedRow(rowIndex).Height < preferredHeight)
                             {
-                                Rows[rowIndex].Height = preferredHeight;  // unsharing the row to be resized
+                                Rows[rowIndex].Height = preferredHeight;  // un-sharing the row to be resized
                             }
                         }
                     }
@@ -984,7 +982,8 @@ public partial class DataGridView
 
                 if (availableWidth <= requiredWidthSum)
                 {
-                    // All auto filled columns need to take their minimum width. If (availableWidth < requiredWidthSum) a horizontal scrollbar appears.
+                    // All auto filled columns need to take their minimum width. If (availableWidth < requiredWidthSum)
+                    // a horizontal scrollbar appears.
                     availableWidth = 0;
                     for (columnEntry = 0; columnEntry < autoFillColumns!.Count; columnEntry++)
                     {
@@ -1441,7 +1440,7 @@ public partial class DataGridView
                              rowIndex != -1;
                              rowIndex = Rows.GetNextRow(rowIndex, DataGridViewElementStates.Visible))
                         {
-                            dataGridViewRow = Rows[rowIndex]; // unshares this row
+                            dataGridViewRow = Rows[rowIndex]; // un-shares this row
 
                             DataGridViewColumn? dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
                             while (dataGridViewColumn is not null)
@@ -1480,7 +1479,7 @@ public partial class DataGridView
                                     rowIndex != -1;
                                     rowIndex = Rows.GetNextRow(rowIndex, DataGridViewElementStates.Visible))
                                 {
-                                    dataGridViewRow = Rows[rowIndex]; // unshares this row
+                                    dataGridViewRow = Rows[rowIndex]; // un-shares this row
                                     if (!dataGridViewRow.Cells[dataGridViewColumn.Index].Selected)
                                     {
                                         return false;
@@ -1515,7 +1514,7 @@ public partial class DataGridView
                                          ((Rows.GetRowState(rowIndex) & DataGridViewElementStates.Selected) != 0));
                             if ((Rows.GetRowState(rowIndex) & DataGridViewElementStates.Selected) == 0)
                             {
-                                dataGridViewRow = Rows[rowIndex]; // unshares this row
+                                dataGridViewRow = Rows[rowIndex]; // un-shares this row
                                 DataGridViewColumn? dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
                                 while (dataGridViewColumn is not null)
                                 {
@@ -1691,7 +1690,7 @@ public partial class DataGridView
         Debug.Assert(autoSizeColumnCriteriaFilter != DataGridViewAutoSizeColumnCriteriaInternal.None);
         Debug.Assert((autoSizeColumnCriteriaFilter & DataGridViewAutoSizeColumnCriteriaInternal.Fill) == 0);
 
-        bool ret = false; // No column autosizes by default
+        bool ret = false; // No column auto sizing by default
         DataGridViewColumn? dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
         while (dataGridViewColumn is not null)
         {
@@ -1785,7 +1784,8 @@ public partial class DataGridView
         {
             _noAutoSizeCount++;
             // Use of WindowsFormsUtils.CreateMeasurementGraphics() avoid use of this.Handle
-            // IntPtr handle = this.Handle; // Force creation of control's handle because for databound grids, handle creation wipes out and recreates the columns/rows.
+            // IntPtr handle = this.Handle; // Force creation of control's handle because for databound grids,
+            // handle creation wipes out and recreates the columns/rows.
             int preferredHeight = 0;
             if (_layout.TopLeftHeader.Width > 0)
             {
@@ -1859,7 +1859,8 @@ public partial class DataGridView
         {
             _noAutoSizeCount++;
             // Use of WindowsFormsUtils.CreateMeasurementGraphics() avoid use of this.Handle
-            // IntPtr handle = this.Handle; // Force creation of control's handle because for databound grids, handle creation wipes out and recreates the columns/rows.
+            // IntPtr handle = this.Handle; // Force creation of control's handle because for databound grids,
+            // handle creation wipes out and recreates the columns/rows.
             int preferredHeight = 0;
             if (_layout.TopLeftHeader.Width > 0)
             {
@@ -1933,7 +1934,8 @@ public partial class DataGridView
         {
             _noAutoSizeCount++;
             // Use of WindowsFormsUtils.CreateMeasurementGraphics() avoid use of this.Handle
-            // IntPtr handle = this.Handle; // Force creation of control's handle because for databound grids, handle creation wipes out and recreates the columns.
+            // IntPtr handle = this.Handle; // Force creation of control's handle because for databound grids,
+            // handle creation wipes out and recreates the columns.
             // Note: Even none-resizable column can programmatically be resized.
             DataGridViewColumn dataGridViewColumn = Columns[columnIndex];
             int preferredColumnWidth = dataGridViewColumn.GetPreferredWidth((DataGridViewAutoSizeColumnMode)autoSizeColumnCriteriaInternal, fixedHeight);
@@ -2060,7 +2062,8 @@ public partial class DataGridView
         {
             _noAutoSizeCount++;
             // Use of WindowsFormsUtils.CreateMeasurementGraphics() avoid use of this.Handle
-            // IntPtr handle = this.Handle; // Force creation of control's handle because for databound grids, handle creation wipes out and recreates the columns/rows.
+            // IntPtr handle = this.Handle; // Force creation of control's handle because for databound grids,
+            // handle creation wipes out and recreates the columns/rows.
             int preferredWidth = 0, rowIndex;
             if (_layout.TopLeftHeader.Width > 0)
             {
@@ -2246,7 +2249,8 @@ public partial class DataGridView
         {
             _noAutoSizeCount++;
             // Use of WindowsFormsUtils.CreateMeasurementGraphics() avoid use of this.Handle
-            // IntPtr handle = this.Handle; // Force creation of control's handle because for databound grids, handle creation wipes out and recreates the columns/rows.
+            // IntPtr handle = this.Handle; // Force creation of control's handle because for databound grids,
+            // handle creation wipes out and recreates the columns/rows.
             int preferredWidth = 0, rowIndexTmp;
             if (_layout.TopLeftHeader.Width > 0)
             {
@@ -2386,7 +2390,8 @@ public partial class DataGridView
         {
             _noAutoSizeCount++;
             // Use of WindowsFormsUtils.CreateMeasurementGraphics() avoid use of this.Handle
-            // IntPtr handle = this.Handle; // Force creation of control's handle because for databound grids, handle creation wipes out and recreates the columns/rows.
+            // IntPtr handle = this.Handle; // Force creation of control's handle because for databound grids,
+            // handle creation wipes out and recreates the columns/rows.
             // Note: Even none-resizable row can programmatically be resized.
             DataGridViewRow dataGridViewRow = Rows.SharedRow(rowIndex);
             dataGridViewRow.GetHeightInfo(rowIndex, out int height, out int minimumHeight);
@@ -2407,18 +2412,18 @@ public partial class DataGridView
                 {
                     if (!OnRowHeightInfoPushed(rowIndex, preferredThickness, minimumHeight))
                     {
-                        Rows[rowIndex].ThicknessInternal = preferredThickness;   // unsharing the resized row
+                        Rows[rowIndex].ThicknessInternal = preferredThickness;   // un-sharing the resized row
                     }
                 }
                 else
                 {
                     if (internalAutosizing)
                     {
-                        Rows[rowIndex].ThicknessInternal = preferredThickness;   // unsharing the resized row
+                        Rows[rowIndex].ThicknessInternal = preferredThickness;   // un-sharing the resized row
                     }
                     else
                     {
-                        Rows[rowIndex].Thickness = preferredThickness;   // unsharing the resized row
+                        Rows[rowIndex].Thickness = preferredThickness;   // un-sharing the resized row
                     }
                 }
             }
@@ -3402,8 +3407,8 @@ public partial class DataGridView
         else
         {
             // This is an external tool tip control which wants to show a tool tip over the DataGridView.
-            // ToolTips from the data Grid view ( the error text, or the formatted text that does not fit in, or the tool tip text from the cell)
-            // and the ShowCellToolTips take precedence over the external tool tip.
+            // ToolTips from the data Grid view ( the error text, or the formatted text that does not fit in,
+            // or the tool tip text from the cell) and the ShowCellToolTips take precedence over the external tool tip.
             return string.IsNullOrEmpty(ToolTipPrivate) && ShowCellToolTips;
         }
     }
@@ -5727,6 +5732,12 @@ public partial class DataGridView
             _dataGridViewOper[OperationInDispose] = true;
             try
             {
+                if (Properties.TryGetObject(s_propToolTip, out ToolTip? keyboardToolTip))
+                {
+                    // null is never set for s_propToolTip
+                    keyboardToolTip!.Dispose();
+                }
+
                 // Remove any Columns contained in this control
                 for (int i = 0; i < Columns.Count; i++)
                 {
@@ -6500,7 +6511,7 @@ public partial class DataGridView
                 {
                     if (dataGridViewRow.Index == -1)
                     {
-                        dataGridViewRow = Rows[_trackRow];  // Unsharing row
+                        dataGridViewRow = Rows[_trackRow];  // Un-sharing row
                     }
 
                     Debug.Assert(_autoSizeRowsMode == DataGridViewAutoSizeRowsMode.None);
@@ -10082,7 +10093,7 @@ public partial class DataGridView
                 || (currentFormattedValue is not null && !_uneditedFormattedValue!.Equals(currentFormattedValue)))
             {
                 Debug.Assert(_ptCurrentCell.X == dataGridViewCell.ColumnIndex);
-                dataGridViewCell = Rows[_ptCurrentCell.Y].Cells[_ptCurrentCell.X]; // unshare the edited cell
+                dataGridViewCell = Rows[_ptCurrentCell.Y].Cells[_ptCurrentCell.X]; // un-share the edited cell
                 dataGridViewEditingCell = (IDataGridViewEditingCell)dataGridViewCell;
                 dataGridViewEditingCell.EditingCellFormattedValue = _uneditedFormattedValue;
                 dataGridViewEditingCell.EditingCellValueChanged = false;
@@ -10970,7 +10981,7 @@ public partial class DataGridView
 
         if (!fixedColumnWidth)
         {
-            // This is the first time the column autosizes. Save current column width for later reuse.
+            // This is the first time the column auto sizes. Save current column width for later reuse.
             dataGridViewColumn.CachedThickness = dataGridViewColumn.Thickness;
             AutoResizeColumnInternal(
                 dataGridViewColumn.Index,
@@ -11046,7 +11057,7 @@ public partial class DataGridView
             if (autoSizeRowsModeInternal != DataGridViewAutoSizeRowsModeInternal.None
                 && !((autoSizeRowsModeInternal & DataGridViewAutoSizeRowsModeInternal.DisplayedRows) != 0 && !rowDisplayed))
             {
-                // this call may unshare the row.
+                // this call may un-share the row.
                 int rowHeight = Rows.SharedRow(rowIndex).GetHeight(rowIndex);
                 Rows.SharedRow(rowIndex).CachedThickness = rowHeight;
                 AutoResizeRowInternal(
@@ -11205,7 +11216,7 @@ public partial class DataGridView
 
             if (dataGridViewColumn.CellTemplate!.DefaultNewRowValue is not null && NewRowIndex != -1)
             {
-                // New row needs to be unshared before addition of new cell with a Value is not null
+                // New row needs to be un-shared before addition of new cell with a Value is not null
                 DataGridViewRow newRow = Rows[NewRowIndex];
             }
 
@@ -11349,7 +11360,7 @@ public partial class DataGridView
                 Debug.Assert(dataGridViewColumn.CellType is not null);
                 if (dataGridViewColumn.CellTemplate!.DefaultNewRowValue is not null && NewRowIndex != -1)
                 {
-                    // New row needs to be unshared before addition of new cell with a Value is not null
+                    // New row needs to be un-shared before addition of new cell with a Value is not null
                     DataGridViewRow newRow = Rows[NewRowIndex];
                     break;
                 }
@@ -11741,7 +11752,7 @@ public partial class DataGridView
                     rowIndex != -1;
                     rowIndex = Rows.GetNextRow(rowIndex, DataGridViewElementStates.Visible))
                 {
-                    // this call may unshare the row.
+                    // this call may un-share the row.
                     int rowHeight = Rows.SharedRow(rowIndex).GetHeight(rowIndex);
                     Rows.SharedRow(rowIndex).CachedThickness = rowHeight;
                 }
@@ -14789,7 +14800,7 @@ public partial class DataGridView
                 if (autoSizeColumnMode is not DataGridViewAutoSizeColumnMode.None
                     and not DataGridViewAutoSizeColumnMode.Fill)
                 {
-                    // Column autosizes
+                    // Column auto size
                     int width = dataGridViewColumn.ThicknessInternal;
                     if (dataGridViewColumn.Visible)
                     {
@@ -15113,7 +15124,8 @@ public partial class DataGridView
                             && dataGridViewColumn.InheritedAutoSizeMode == DataGridViewAutoSizeColumnMode.Fill)
                         {
                             // alternative: throw new InvalidOperationException(SR.DataGridView_CannotMakeAutoFillColumnVisible);
-                            //              DataGridView_CannotMakeAutoFillColumnVisible=The column cannot be made visible because its autosizing mode is Fill and it is frozen.
+                            //              DataGridView_CannotMakeAutoFillColumnVisible=The column cannot be made visible
+                            //              because its autosizing mode is Fill and it is frozen.
                             // Removing the Fill auto size mode when frozen column becomes visible (instead of throwing an exception)
                             dataGridViewColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
                         }
@@ -15640,12 +15652,12 @@ public partial class DataGridView
             OnGlobalAutoSize();
         }
 
-        SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
+        SystemEvents.UserPreferenceChanged += OnUserPreferenceChanged;
     }
 
     protected override void OnHandleDestroyed(EventArgs e)
     {
-        SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
+        SystemEvents.UserPreferenceChanged -= OnUserPreferenceChanged;
         base.OnHandleDestroyed(e);
     }
 
@@ -15825,7 +15837,7 @@ public partial class DataGridView
 
             if (dataGridViewColumn.CellTemplate!.DefaultNewRowValue is not null && NewRowIndex != -1)
             {
-                // New row needs to be unshared before addition of new cell with a Value is not null
+                // New row needs to be un-shared before addition of new cell with a Value is not null
                 DataGridViewRow newRow = Rows[NewRowIndex];
             }
 
@@ -17255,7 +17267,7 @@ public partial class DataGridView
             && !IsCurrentCellInEditMode
             && (EditMode == DataGridViewEditMode.EditOnEnter
                 || (EditMode != DataGridViewEditMode.EditProgrammatically && CurrentCellInternal.EditType is null))
-            && !Rows[_ptCurrentCell.Y].Cells[_ptCurrentCell.X].ReadOnly) // Unshares the row
+            && !Rows[_ptCurrentCell.Y].Cells[_ptCurrentCell.X].ReadOnly) // Un-shares the row
         {
             // Current cell becomes read/write. Enter editing mode.
             BeginEditInternal(selectAll: true);
@@ -19060,7 +19072,7 @@ public partial class DataGridView
                         {
                             // Rows that are made invisible in the collection take their non-autosized height
                             // Not calling OnRowHeightInfoPushed(...) because rows are autosized
-                            // Make sure the affected row is unshared
+                            // Make sure the affected row is un-shared
                             if (dataGridViewRow.Index == -1)
                             {
                                 dataGridViewRow = Rows[rowIndex];
@@ -20001,14 +20013,14 @@ public partial class DataGridView
             rowBounds = boundingRect;
 
             // DataGridView AutoSizeRowsMode does not work properly after column sort
-            // Should unshared the row and set the thickness to a perfect value
+            // Should un-shared the row and set the thickness to a perfect value
             // every time user scroll to display the specific row.
 
             DataGridViewAutoSizeRowsModeInternal autoSizeRowsModeInternal = (DataGridViewAutoSizeRowsModeInternal)_autoSizeRowsMode;
             // Auto size row if needed
             if (autoSizeRowsModeInternal != DataGridViewAutoSizeRowsModeInternal.None)
             {
-                // this call may unshare the row.
+                // this call may un-share the row.
                 int rowHeight = Rows.SharedRow(indexTmp).GetHeight(indexTmp);
                 Rows.SharedRow(indexTmp).CachedThickness = rowHeight;
                 AutoResizeRowInternal(indexTmp, MapAutoSizeRowsModeToRowMode(_autoSizeRowsMode), fixedWidth: false, internalAutosizing: true);
@@ -20057,14 +20069,14 @@ public partial class DataGridView
                 rowBounds = boundingRect;
 
                 // DataGridView AutoSizeRowsMode does not work properly after column sort
-                // Should unshared the row and set the thickness to a perfect value
+                // Should un-shared the row and set the thickness to a perfect value
                 // every time user scroll to display the specific row.
 
                 DataGridViewAutoSizeRowsModeInternal autoSizeRowsModeInternal = (DataGridViewAutoSizeRowsModeInternal)_autoSizeRowsMode;
                 // Auto size row if needed
                 if (autoSizeRowsModeInternal != DataGridViewAutoSizeRowsModeInternal.None)
                 {
-                    // this call may unshare the row.
+                    // this call may un-share the row.
                     int rowHeight = Rows.SharedRow(indexTmp).GetHeight(indexTmp);
                     Rows.SharedRow(indexTmp).CachedThickness = rowHeight;
                     AutoResizeRowInternal(indexTmp, MapAutoSizeRowsModeToRowMode(_autoSizeRowsMode), fixedWidth: false, internalAutosizing: true);
@@ -20210,7 +20222,7 @@ public partial class DataGridView
             {
                 if (dataGridViewCell.DefaultNewRowValue is not null)
                 {
-                    newRow = Rows[NewRowIndex]; // unshare the 'new row'.
+                    newRow = Rows[NewRowIndex]; // un-share the 'new row'.
                     newRowCells = newRow.Cells;
                     break;
                 }
@@ -25824,7 +25836,8 @@ public partial class DataGridView
         {
             if (dataGridViewCurrentCell.RowIndex == -1)
             {
-                dataGridViewCurrentCell = Rows[_ptCurrentCell.Y].Cells[_ptCurrentCell.X]; // unsharing the row before pushing the new value
+                // un-sharing the row before pushing the new value
+                dataGridViewCurrentCell = Rows[_ptCurrentCell.Y].Cells[_ptCurrentCell.X];
             }
 
             return dataGridViewCurrentCell.SetValueInternal(_ptCurrentCell.Y, dgvcpe.Value);
@@ -25848,7 +25861,8 @@ public partial class DataGridView
 
         if (dataGridViewCurrentCell.RowIndex == -1)
         {
-            dataGridViewCurrentCell = Rows[_ptCurrentCell.Y].Cells[_ptCurrentCell.X]; // unsharing the row before pushing the new value
+            // un-sharing the row before pushing the new value
+            dataGridViewCurrentCell = Rows[_ptCurrentCell.Y].Cells[_ptCurrentCell.X];
         }
 
         return dataGridViewCurrentCell.SetValueInternal(_ptCurrentCell.Y, val);
@@ -26403,7 +26417,7 @@ public partial class DataGridView
         }
     }
 
-    // we need to access the GetRowState, otherwise we would unshare the row
+    // we need to access the GetRowState, otherwise we would un-share the row
     private bool RowIsResizable(int rowIndex)
     {
         DataGridViewElementStates rowState = Rows.GetRowState(rowIndex);
@@ -27022,7 +27036,8 @@ public partial class DataGridView
                         int rowIndex = 0, maxRowIndex = Rows.Count;
                         while (rowIndex < maxRowIndex)
                         {
-                            dataGridViewRow = Rows[rowIndex];  // unsharing each row!
+                            // un-sharing each row!
+                            dataGridViewRow = Rows[rowIndex];
                             int columnIndex = 0;
                             while (columnIndex < maxColumnIndex)
                             {
@@ -27293,7 +27308,8 @@ public partial class DataGridView
                             currentCell = Rows.SharedRow(oldCurrentCellY).Cells[oldCurrentCellX];
                             if (currentCell.LeaveUnsharesRowInternal(oldCurrentCellY, throughMouseClick))
                             {
-                                currentCell = Rows[oldCurrentCellY].Cells[oldCurrentCellX]; // unsharing the current row
+                                // un-sharing the current row
+                                currentCell = Rows[oldCurrentCellY].Cells[oldCurrentCellX];
                             }
 
                             currentCell.OnLeaveInternal(oldCurrentCellY, throughMouseClick);
@@ -27403,7 +27419,8 @@ public partial class DataGridView
                         currentCell = CurrentCellInternal;
                         if (currentCell.EnterUnsharesRowInternal(rowIndex, throughMouseClick))
                         {
-                            currentCell = Rows[rowIndex].Cells[columnIndex]; // unsharing the row
+                            // un-sharing the row
+                            currentCell = Rows[rowIndex].Cells[columnIndex];
                         }
 
                         currentCell.OnEnterInternal(rowIndex, throughMouseClick);
@@ -27503,7 +27520,8 @@ public partial class DataGridView
                         currentCell = Rows.SharedRow(oldCurrentCellY).Cells[oldCurrentCellX];
                         if (currentCell.LeaveUnsharesRowInternal(oldCurrentCellY, throughMouseClick))
                         {
-                            currentCell = Rows[oldCurrentCellY].Cells[oldCurrentCellX]; // unsharing the current row
+                            // un-sharing the current row
+                            currentCell = Rows[oldCurrentCellY].Cells[oldCurrentCellX];
                         }
 
                         currentCell.OnLeaveInternal(oldCurrentCellY, throughMouseClick);
@@ -27957,7 +27975,7 @@ public partial class DataGridView
                     if (Columns[columnIndex].ReadOnly)
                     {
                         Columns[columnIndex].ReadOnlyInternal = false;
-                        // Perf Issue: this unshares all rows!
+                        // Perf Issue: this un-shares all rows!
                         for (int row = 0; row < rowIndex; row++)
                         {
                             dataGridViewCellTmp = Rows[row].Cells[columnIndex];
@@ -28120,7 +28138,7 @@ public partial class DataGridView
                             Debug.Assert(_selectedBandIndexes.Contains(columnIndex));
                             _selectedBandIndexes.Remove(columnIndex);
                             Columns[columnIndex].SelectedInternal = false;
-                            // Perf Issue: this unshares all rows!
+                            // Perf Issue: this un-shares all rows!
                             for (int row = 0; row < rowIndex; row++)
                             {
                                 dataGridViewCellTmp = Rows[row].Cells[columnIndex];
@@ -29279,40 +29297,40 @@ public partial class DataGridView
     private void UnwireEditingControlEvents()
     {
         Debug.Assert(_editingPanel is not null);
-        _editingPanel.Click -= new EventHandler(EditingControls_Click);
-        _editingPanel.DoubleClick -= new EventHandler(EditingControls_DoubleClick);
-        _editingPanel.MouseClick -= new MouseEventHandler(EditingControls_MouseClick);
-        _editingPanel.MouseDoubleClick -= new MouseEventHandler(EditingControls_MouseDoubleClick);
-        _editingPanel.MouseDown -= new MouseEventHandler(EditingControls_MouseDown);
-        _editingPanel.MouseEnter -= new EventHandler(EditingControls_MouseEnter);
-        _editingPanel.MouseLeave -= new EventHandler(EditingControls_MouseLeave);
-        _editingPanel.MouseMove -= new MouseEventHandler(EditingControls_MouseMove);
-        _editingPanel.MouseUp -= new MouseEventHandler(EditingControls_MouseUp);
+        _editingPanel.Click -= EditingControls_Click;
+        _editingPanel.DoubleClick -= EditingControls_DoubleClick;
+        _editingPanel.MouseClick -= EditingControls_MouseClick;
+        _editingPanel.MouseDoubleClick -= EditingControls_MouseDoubleClick;
+        _editingPanel.MouseDown -= EditingControls_MouseDown;
+        _editingPanel.MouseEnter -= EditingControls_MouseEnter;
+        _editingPanel.MouseLeave -= EditingControls_MouseLeave;
+        _editingPanel.MouseMove -= EditingControls_MouseMove;
+        _editingPanel.MouseUp -= EditingControls_MouseUp;
 
         Debug.Assert(EditingControl is not null);
-        EditingControl.Click -= new EventHandler(EditingControls_Click);
-        EditingControl.DoubleClick -= new EventHandler(EditingControls_DoubleClick);
-        EditingControl.MouseClick -= new MouseEventHandler(EditingControls_MouseClick);
-        EditingControl.MouseDoubleClick -= new MouseEventHandler(EditingControls_MouseDoubleClick);
-        EditingControl.MouseDown -= new MouseEventHandler(EditingControls_MouseDown);
-        EditingControl.MouseEnter -= new EventHandler(EditingControls_MouseEnter);
-        EditingControl.MouseLeave -= new EventHandler(EditingControls_MouseLeave);
-        EditingControl.MouseMove -= new MouseEventHandler(EditingControls_MouseMove);
-        EditingControl.MouseUp -= new MouseEventHandler(EditingControls_MouseUp);
+        EditingControl.Click -= EditingControls_Click;
+        EditingControl.DoubleClick -= EditingControls_DoubleClick;
+        EditingControl.MouseClick -= EditingControls_MouseClick;
+        EditingControl.MouseDoubleClick -= EditingControls_MouseDoubleClick;
+        EditingControl.MouseDown -= EditingControls_MouseDown;
+        EditingControl.MouseEnter -= EditingControls_MouseEnter;
+        EditingControl.MouseLeave -= EditingControls_MouseLeave;
+        EditingControl.MouseMove -= EditingControls_MouseMove;
+        EditingControl.MouseUp -= EditingControls_MouseUp;
     }
 
     private void UnwireScrollBarsEvents()
     {
         if (_horizScrollBar is not null)
         {
-            _horizScrollBar.MouseEnter -= new EventHandler(ScrollBar_MouseEnter);
-            _horizScrollBar.MouseLeave -= new EventHandler(ScrollBar_MouseLeave);
+            _horizScrollBar.MouseEnter -= ScrollBar_MouseEnter;
+            _horizScrollBar.MouseLeave -= ScrollBar_MouseLeave;
         }
 
         if (_vertScrollBar is not null)
         {
-            _vertScrollBar.MouseEnter -= new EventHandler(ScrollBar_MouseEnter);
-            _vertScrollBar.MouseLeave -= new EventHandler(ScrollBar_MouseLeave);
+            _vertScrollBar.MouseEnter -= ScrollBar_MouseEnter;
+            _vertScrollBar.MouseLeave -= ScrollBar_MouseLeave;
         }
     }
 
@@ -30393,40 +30411,40 @@ public partial class DataGridView
     private void WireEditingControlEvents()
     {
         Debug.Assert(_editingPanel is not null);
-        _editingPanel.Click += new EventHandler(EditingControls_Click);
-        _editingPanel.DoubleClick += new EventHandler(EditingControls_DoubleClick);
-        _editingPanel.MouseClick += new MouseEventHandler(EditingControls_MouseClick);
-        _editingPanel.MouseDoubleClick += new MouseEventHandler(EditingControls_MouseDoubleClick);
-        _editingPanel.MouseDown += new MouseEventHandler(EditingControls_MouseDown);
-        _editingPanel.MouseEnter += new EventHandler(EditingControls_MouseEnter);
-        _editingPanel.MouseLeave += new EventHandler(EditingControls_MouseLeave);
-        _editingPanel.MouseMove += new MouseEventHandler(EditingControls_MouseMove);
-        _editingPanel.MouseUp += new MouseEventHandler(EditingControls_MouseUp);
+        _editingPanel.Click += EditingControls_Click;
+        _editingPanel.DoubleClick += EditingControls_DoubleClick;
+        _editingPanel.MouseClick += EditingControls_MouseClick;
+        _editingPanel.MouseDoubleClick += EditingControls_MouseDoubleClick;
+        _editingPanel.MouseDown += EditingControls_MouseDown;
+        _editingPanel.MouseEnter += EditingControls_MouseEnter;
+        _editingPanel.MouseLeave += EditingControls_MouseLeave;
+        _editingPanel.MouseMove += EditingControls_MouseMove;
+        _editingPanel.MouseUp += EditingControls_MouseUp;
 
         Debug.Assert(EditingControl is not null);
-        EditingControl.Click += new EventHandler(EditingControls_Click);
-        EditingControl.DoubleClick += new EventHandler(EditingControls_DoubleClick);
-        EditingControl.MouseClick += new MouseEventHandler(EditingControls_MouseClick);
-        EditingControl.MouseDoubleClick += new MouseEventHandler(EditingControls_MouseDoubleClick);
-        EditingControl.MouseDown += new MouseEventHandler(EditingControls_MouseDown);
-        EditingControl.MouseEnter += new EventHandler(EditingControls_MouseEnter);
-        EditingControl.MouseLeave += new EventHandler(EditingControls_MouseLeave);
-        EditingControl.MouseMove += new MouseEventHandler(EditingControls_MouseMove);
-        EditingControl.MouseUp += new MouseEventHandler(EditingControls_MouseUp);
+        EditingControl.Click += EditingControls_Click;
+        EditingControl.DoubleClick += EditingControls_DoubleClick;
+        EditingControl.MouseClick += EditingControls_MouseClick;
+        EditingControl.MouseDoubleClick += EditingControls_MouseDoubleClick;
+        EditingControl.MouseDown += EditingControls_MouseDown;
+        EditingControl.MouseEnter += EditingControls_MouseEnter;
+        EditingControl.MouseLeave += EditingControls_MouseLeave;
+        EditingControl.MouseMove += EditingControls_MouseMove;
+        EditingControl.MouseUp += EditingControls_MouseUp;
     }
 
     private void WireScrollBarsEvents()
     {
         if (_horizScrollBar is not null)
         {
-            _horizScrollBar.MouseEnter += new EventHandler(ScrollBar_MouseEnter);
-            _horizScrollBar.MouseLeave += new EventHandler(ScrollBar_MouseLeave);
+            _horizScrollBar.MouseEnter += ScrollBar_MouseEnter;
+            _horizScrollBar.MouseLeave += ScrollBar_MouseLeave;
         }
 
         if (_vertScrollBar is not null)
         {
-            _vertScrollBar.MouseEnter += new EventHandler(ScrollBar_MouseEnter);
-            _vertScrollBar.MouseLeave += new EventHandler(ScrollBar_MouseLeave);
+            _vertScrollBar.MouseEnter += ScrollBar_MouseEnter;
+            _vertScrollBar.MouseLeave += ScrollBar_MouseLeave;
         }
     }
 

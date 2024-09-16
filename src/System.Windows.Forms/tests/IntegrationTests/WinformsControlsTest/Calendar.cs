@@ -3,8 +3,9 @@
 
 using static System.Windows.Forms.DateTimePicker;
 
-namespace WinformsControlsTest;
+namespace WinFormsControlsTest;
 
+[DesignerCategory("Default")]
 public partial class Calendar : Form
 {
     public Calendar()

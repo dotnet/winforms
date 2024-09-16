@@ -98,10 +98,10 @@ public partial class ListView : Control
     private const int MAXTILECOLUMNS = 20;
 
     // PERF: take all the bools and put them into a state variable
-    private Collections.Specialized.BitVector32 _listViewState; // see LISTVIEWSTATE_ consts above
-    private Collections.Specialized.BitVector32 _listViewState1; // see LISTVIEWSTATE1_ consts above
+    private Collections.Specialized.BitVector32 _listViewState; // see LISTVIEWSTATE_ constants above
+    private Collections.Specialized.BitVector32 _listViewState1; // see LISTVIEWSTATE1_ constants above
 
-    // Ownerdraw data caches...  Only valid inside WM_PAINT.
+    // Ownerdraw data caches... Only valid inside WM_PAINT.
 
     private Color _odCacheForeColor = SystemColors.WindowText;
     private Color _odCacheBackColor = SystemColors.Window;
@@ -140,7 +140,7 @@ public partial class ListView : Control
 
     // when we are in delayed update mode (that is when BeginUpdate has been called, we want to cache the items to
     // add until EndUpdate is called. To do that, we push in an array list into our PropertyStore
-    // under this key.  When Endupdate is fired, we process the items all at once.
+    // under this key. When Endupdate is fired, we process the items all at once.
     private static readonly int s_propDelayedUpdateItems = PropertyStore.CreateKey();
 
     private int _updateCounter; // the counter we use to track how many BeginUpdate/EndUpdate calls there have been.
@@ -320,7 +320,7 @@ public partial class ListView : Control
 
     /// <summary>
     ///  If AutoArrange is true items are automatically arranged according to
-    ///  the alignment property.  Items are also kept snapped to grid.
+    ///  the alignment property. Items are also kept snapped to grid.
     ///  This property is only meaningful in Large Icon or Small Icon views.
     /// </summary>
     [SRCategory(nameof(SR.CatBehavior))]
@@ -447,7 +447,7 @@ public partial class ListView : Control
 
     /// <summary>
     ///  If CheckBoxes is true, every item will display a checkbox next
-    ///  to it.  The user can change the state of the item by clicking the checkbox.
+    ///  to it. The user can change the state of the item by clicking the checkbox.
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [DefaultValue(false)]
@@ -564,7 +564,7 @@ public partial class ListView : Control
                     }
 
                     // Setting the LVS_CHECKBOXES window style also causes the ListView to display the default checkbox
-                    // images rather than the user specified StateImageList.  We send a LVM_SETIMAGELIST to restore the
+                    // images rather than the user specified StateImageList. We send a LVM_SETIMAGELIST to restore the
                     // user's images.
                     if (IsHandleCreated && _imageListState is not null)
                     {
@@ -788,7 +788,7 @@ public partial class ListView : Control
     }
 
     /// <summary>
-    ///  Retrieves the group which currently has the user focus.  This is the
+    ///  Retrieves the group which currently has the user focus. This is the
     ///  group that's drawn with the dotted focus rectangle around it.
     ///  Returns null if no group is currently focused.
     /// </summary>
@@ -806,7 +806,7 @@ public partial class ListView : Control
     }
 
     /// <summary>
-    ///  Retrieves the item which currently has the user focus.  This is the
+    ///  Retrieves the item which currently has the user focus. This is the
     ///  item that's drawn with the dotted focus rectangle around it.
     ///  Returns null if no item is currently focused.
     /// </summary>
@@ -1791,9 +1791,9 @@ public partial class ListView : Control
 
             if ((topItem is null) && (_topIndex == Items.Count))
             {                                                   // There's a
-                topItem = value;                                // a single item.  Result of the
+                topItem = value;                                // a single item. Result of the
                 if (Scrollable)                                 // message is the number of items in the list rather than an index of an item in the list.
-                {                                               // This causes TopItem to return null.  A side issue is that EnsureVisible doesn't do too well
+                {                                               // This causes TopItem to return null. A side issue is that EnsureVisible doesn't do too well
                     EnsureVisible(0);                           // here either, because it causes the listview to go blank rather than displaying anything useful.
                     Scroll(0, value.Index);                     // To work around this, we force the listbox to display the first item, then scroll down to the item
                 }                                               // user is setting as the top item.
@@ -2240,10 +2240,10 @@ public partial class ListView : Control
     }
 
     /// <summary>
-    ///  Called to add any delayed update items we have to the list view.  We do this because
+    ///  Called to add any delayed update items we have to the list view. We do this because
     ///  we have optimized the case where a user is only adding items within a beginupdate/endupdate
-    ///  block.  If they do any other operations (get the count, remove, insert, etc.), we push in the
-    ///  cached up items first, then do the requested operation.  This keeps it simple so we don't have to
+    ///  block. If they do any other operations (get the count, remove, insert, etc.), we push in the
+    ///  cached up items first, then do the requested operation. This keeps it simple so we don't have to
     ///  try to maintain parallel state of the cache during a begin update end update.
     /// </summary>
     private void ApplyUpdateCachedItems()
@@ -2309,9 +2309,9 @@ public partial class ListView : Control
         }
 
         // NOTE: any handlers added here should be removed in DetachGroupImageListHandlers
-        _imageListGroup.RecreateHandle += new EventHandler(GroupImageListRecreateHandle);
-        _imageListGroup.Disposed += new EventHandler(DetachImageList);
-        _imageListGroup.ChangeHandle += new EventHandler(GroupImageListChangedHandle);
+        _imageListGroup.RecreateHandle += GroupImageListRecreateHandle;
+        _imageListGroup.Disposed += DetachImageList;
+        _imageListGroup.ChangeHandle += GroupImageListChangedHandle;
     }
 
     private void AttachLargeImageListHandlers()
@@ -2322,9 +2322,9 @@ public partial class ListView : Control
         }
 
         // NOTE: any handlers added here should be removed in DetachLargeImageListHandlers
-        _imageListLarge.RecreateHandle += new EventHandler(LargeImageListRecreateHandle);
-        _imageListLarge.Disposed += new EventHandler(DetachImageList);
-        _imageListLarge.ChangeHandle += new EventHandler(LargeImageListChangedHandle);
+        _imageListLarge.RecreateHandle += LargeImageListRecreateHandle;
+        _imageListLarge.Disposed += DetachImageList;
+        _imageListLarge.ChangeHandle += LargeImageListChangedHandle;
     }
 
     private void AttachSmallImageListListHandlers()
@@ -2335,8 +2335,8 @@ public partial class ListView : Control
         }
 
         // NOTE: any handlers added here should be removed in DetachSmallImageListListHandlers
-        _imageListSmall.RecreateHandle += new EventHandler(SmallImageListRecreateHandle);
-        _imageListSmall.Disposed += new EventHandler(DetachImageList);
+        _imageListSmall.RecreateHandle += SmallImageListRecreateHandle;
+        _imageListSmall.Disposed += DetachImageList;
     }
 
     private void AttachStateImageListHandlers()
@@ -2347,8 +2347,8 @@ public partial class ListView : Control
         }
 
         // NOTE: any handlers added here should be removed in DetachStateImageListHandlers
-        _imageListState.RecreateHandle += new EventHandler(StateImageListRecreateHandle);
-        _imageListState.Disposed += new EventHandler(DetachImageList);
+        _imageListState.RecreateHandle += StateImageListRecreateHandle;
+        _imageListState.Disposed += DetachImageList;
     }
 
     public void AutoResizeColumns(ColumnHeaderAutoResizeStyle headerAutoResize)
@@ -2375,7 +2375,7 @@ public partial class ListView : Control
     ///  Prevents the ListView from redrawing itself until EndUpdate is called.
     ///  Calling this method before individually adding or removing a large number of Items
     ///  will improve performance and reduce flicker on the ListView as items are
-    ///  being updated.  Always call EndUpdate immediately after the last item is updated.
+    ///  being updated. Always call EndUpdate immediately after the last item is updated.
     /// </summary>
     public void BeginUpdate()
     {
@@ -2998,7 +2998,7 @@ public partial class ListView : Control
     }
 
     /// <summary>
-    ///  Resets the imageList to null.  We wire this method up to the imageList's
+    ///  Resets the imageList to null. We wire this method up to the imageList's
     ///  Dispose event, so that we don't hang onto an imageList that's gone away.
     /// </summary>
     private void DetachImageList(object? sender, EventArgs e)
@@ -3048,9 +3048,9 @@ public partial class ListView : Control
             return;
         }
 
-        _imageListGroup.RecreateHandle -= new EventHandler(GroupImageListRecreateHandle);
-        _imageListGroup.Disposed -= new EventHandler(DetachImageList);
-        _imageListGroup.ChangeHandle -= new EventHandler(GroupImageListChangedHandle);
+        _imageListGroup.RecreateHandle -= GroupImageListRecreateHandle;
+        _imageListGroup.Disposed -= DetachImageList;
+        _imageListGroup.ChangeHandle -= GroupImageListChangedHandle;
     }
 
     private void DetachLargeImageListHandlers()
@@ -3060,9 +3060,9 @@ public partial class ListView : Control
             return;
         }
 
-        _imageListLarge.RecreateHandle -= new EventHandler(LargeImageListRecreateHandle);
-        _imageListLarge.Disposed -= new EventHandler(DetachImageList);
-        _imageListLarge.ChangeHandle -= new EventHandler(LargeImageListChangedHandle);
+        _imageListLarge.RecreateHandle -= LargeImageListRecreateHandle;
+        _imageListLarge.Disposed -= DetachImageList;
+        _imageListLarge.ChangeHandle -= LargeImageListChangedHandle;
     }
 
     private void DetachSmallImageListListHandlers()
@@ -3072,8 +3072,8 @@ public partial class ListView : Control
             return;
         }
 
-        _imageListSmall.RecreateHandle -= new EventHandler(SmallImageListRecreateHandle);
-        _imageListSmall.Disposed -= new EventHandler(DetachImageList);
+        _imageListSmall.RecreateHandle -= SmallImageListRecreateHandle;
+        _imageListSmall.Disposed -= DetachImageList;
     }
 
     private void DetachStateImageListHandlers()
@@ -3083,12 +3083,12 @@ public partial class ListView : Control
             return;
         }
 
-        _imageListState.RecreateHandle -= new EventHandler(StateImageListRecreateHandle);
-        _imageListState.Disposed -= new EventHandler(DetachImageList);
+        _imageListState.RecreateHandle -= StateImageListRecreateHandle;
+        _imageListState.Disposed -= DetachImageList;
     }
 
     /// <summary>
-    ///  Disposes of the component.  Call dispose when the component is no longer needed.
+    ///  Disposes of the component. Call dispose when the component is no longer needed.
     ///  This method removes the component from its container (if the component has a site)
     ///  and triggers the dispose event.
     /// </summary>
@@ -3291,7 +3291,8 @@ public partial class ListView : Control
             Rectangle itemBounds = lvi.Bounds;
             // LVM_FINDITEM is a nightmare
             // LVM_FINDITEM will use the top left corner of icon rectangle to determine the closest item
-            // What happens if there is no icon for this item? then the top left corner of the icon rectangle falls INSIDE the item label (???)
+            // What happens if there is no icon for this item? then the top left corner of the icon rectangle
+            // falls INSIDE the item label (???)
 
             Rectangle iconBounds = GetItemRect(lvi.Index, ItemBoundsPortion.Icon);
 
@@ -3440,7 +3441,7 @@ public partial class ListView : Control
     private int GenerateUniqueID()
     {
         // Okay, if someone adds several billion items to the list and doesn't remove all of them,
-        // we can reuse the same ID, but I'm willing to take that risk.  We are even tracking IDs
+        // we can reuse the same ID, but I'm willing to take that risk. We are even tracking IDs
         // on a per-list view basis to reduce the problem.
         int result = _nextID++;
         if (result == -1)
@@ -3454,8 +3455,8 @@ public partial class ListView : Control
     }
 
     /// <summary>
-    ///  Gets the real index for the given item.  lastIndex is the last return
-    ///  value from GetDisplayIndex, or -1 if you don't know.  If provided,
+    ///  Gets the real index for the given item. lastIndex is the last return
+    ///  value from GetDisplayIndex, or -1 if you don't know. If provided,
     ///  the search for the index can be greatly improved.
     /// </summary>
     internal int GetDisplayIndex(ListViewItem item, int lastIndex)
@@ -4068,7 +4069,7 @@ public partial class ListView : Control
     }
 
     /// <summary>
-    ///  Inserts a new ListViewItem into the ListView.  The item will be inserted
+    ///  Inserts a new ListViewItem into the ListView. The item will be inserted
     ///  either in the correct sorted position, or, if no sorting is set, at the
     ///  position indicated by the index parameter.
     /// </summary>
@@ -4177,7 +4178,7 @@ public partial class ListView : Control
 
         Debug.Assert(IsHandleCreated, "InsertItemsNative precondition: list-view handle must be created");
 
-        // Much more efficient to call the native insert with max + 1, than with max.  The + 1
+        // Much more efficient to call the native insert with max + 1, than with max. The + 1
         // for the display index accounts for itemCount++ above.
         if (index == _itemCount - 1)
         {
@@ -4451,8 +4452,9 @@ public partial class ListView : Control
         if (Items.Count > 0)
         {
             // APPCOMPAT
-            // V1.* users implement virtualization by communicating directly to the native ListView and by passing our virtualization implementation.
-            // In that case, the native list view may have an item under the mouse even if our wrapper thinks the item count is 0.
+            // V1.* users implement virtualization by communicating directly to the native ListView
+            // and by passing our virtualization implementation. In that case, the native list view may
+            // have an item under the mouse even if our wrapper thinks the item count is 0.
             // And that may cause GetItemAt to throw an out of bounds exception.
 
             Point pos = Cursor.Position;
@@ -4612,6 +4614,17 @@ public partial class ListView : Control
         {
             PInvoke.SendMessage(this, PInvoke.CCM_SETVERSION, (WPARAM)5);
         }
+
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        if (Application.IsDarkModeEnabled)
+        {
+            _ = PInvoke.SetWindowTheme(HWND, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null);
+
+            // Get the ListView's ColumnHeader handle:
+            HWND columnHeaderHandle = (HWND)PInvoke.SendMessage(this, PInvoke.LVM_GETHEADER, (WPARAM)0, (LPARAM)0);
+            PInvoke.SetWindowTheme(columnHeaderHandle, $"{DarkModeIdentifier}_{ItemsViewThemeIdentifier}", null);
+        }
+#pragma warning restore WFO5001
 
         UpdateExtendedStyles();
         RealizeProperties();
@@ -4806,7 +4819,7 @@ public partial class ListView : Control
     }
 
     /// <summary>
-    ///  This is the code that actually fires the KeyEventArgs.  Don't
+    ///  This is the code that actually fires the KeyEventArgs. Don't
     ///  forget to call base.onItemCheck() to ensure that itemCheck vents
     ///  are correctly fired for all other keys.
     /// </summary>
@@ -4824,7 +4837,7 @@ public partial class ListView : Control
             return;
         }
 
-        if (IsAccessibilityObjectCreated)
+        if (e.Item.ListView == this && IsAccessibilityObjectCreated)
         {
             ListViewItem item = e.Item;
             ToggleState oldValue = item.Checked ? ToggleState.ToggleState_Off : ToggleState.ToggleState_On;
@@ -4910,9 +4923,9 @@ public partial class ListView : Control
     }
 
     /// <summary>
-    ///  Actually goes and fires the selectedIndexChanged event.  Inheriting controls
+    ///  Actually goes and fires the selectedIndexChanged event. Inheriting controls
     ///  should use this to know when the event is fired [this is preferable to
-    ///  adding an event handler on yourself for this event].  They should,
+    ///  adding an event handler on yourself for this event]. They should,
     ///  however, remember to call base.onSelectedIndexChanged(e); to ensure the event is
     ///  still fired to external listeners
     /// </summary>
@@ -5008,16 +5021,19 @@ public partial class ListView : Control
         Color c;
 
         c = BackColor;
-        if (c != SystemColors.Window)
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        if (c != SystemColors.Window || Application.IsDarkModeEnabled)
         {
             PInvoke.SendMessage(this, PInvoke.LVM_SETBKCOLOR, (WPARAM)0, (LPARAM)c);
         }
 
         c = ForeColor;
-        if (c != SystemColors.WindowText)
+
+        if (c != SystemColors.WindowText || Application.IsDarkModeEnabled)
         {
             PInvoke.SendMessage(this, PInvoke.LVM_SETTEXTCOLOR, (WPARAM)0, (LPARAM)c);
         }
+#pragma warning restore WFO5001
 
         if (_imageListLarge is not null)
         {
@@ -5117,7 +5133,7 @@ public partial class ListView : Control
 
         for (int i = 0; i < Items.Count; i++)
         {
-            Items[i].ReleaseUiaProvider();
+            Items.GetItemByIndex(i)?.ReleaseUiaProvider();
         }
 
         if (_defaultGroup is not null)
@@ -5949,7 +5965,7 @@ public partial class ListView : Control
 
     private void WmMouseDown(ref Message m, MouseButtons button, int clicks)
     {
-        // Always Reset the MouseupFired....
+        // Always Reset the MouseUpFired....
         _listViewState[LISTVIEWSTATE_mouseUpFired] = false;
         _listViewState[LISTVIEWSTATE_expectingMouseUp] = true;
 
@@ -6006,6 +6022,33 @@ public partial class ListView : Control
     private unsafe bool WmNotify(ref Message m)
     {
         NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
+
+        // We need to set the text color when we are in dark mode,
+        // so that the themed headers are actually readable.
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        if (Application.IsDarkModeEnabled
+            && !OwnerDraw
+            && nmhdr->code == PInvoke.NM_CUSTOMDRAW)
+        {
+            NMLVCUSTOMDRAW* nmlvcd = (NMLVCUSTOMDRAW*)(nint)m.LParamInternal;
+
+            if (nmlvcd->nmcd.dwDrawStage == NMCUSTOMDRAW_DRAW_STAGE.CDDS_PREPAINT)
+            {
+                // We request the notification for the items to be drawn.
+                m.ResultInternal = (LRESULT)(nint)PInvoke.CDRF_NOTIFYITEMDRAW;
+                return true;
+            }
+            else if (nmlvcd->nmcd.dwDrawStage == NMCUSTOMDRAW_DRAW_STAGE.CDDS_ITEMPREPAINT)
+            {
+                // Setting the current ForeColor to the text color.
+                PInvoke.SetTextColor(nmlvcd->nmcd.hdc, ForeColor);
+
+                // and the rest remains the same.
+                m.ResultInternal = (LRESULT)(nint)PInvoke.CDRF_DODEFAULT;
+                return false;
+            }
+        }
+#pragma warning restore WFO5001
 
         if (nmhdr->code == PInvoke.NM_CUSTOMDRAW && PInvoke.UiaClientsAreListening())
         {
@@ -6168,24 +6211,20 @@ public partial class ListView : Control
 
             ISite? site = Site;
 
-            if (site is not null)
+            if (site?.TryGetService(out IComponentChangeService? service) == true)
             {
-                IComponentChangeService? cs = (IComponentChangeService?)site.GetService(typeof(IComponentChangeService));
-                if (cs is not null)
+                try
                 {
-                    try
+                    service.OnComponentChanging(this, null);
+                }
+                catch (CheckoutException coEx)
+                {
+                    if (coEx == CheckoutException.Canceled)
                     {
-                        cs.OnComponentChanging(this, null);
+                        return false;
                     }
-                    catch (CheckoutException coEx)
-                    {
-                        if (coEx == CheckoutException.Canceled)
-                        {
-                            return false;
-                        }
 
-                        throw;
-                    }
+                    throw;
                 }
             }
         }
@@ -6578,7 +6617,7 @@ public partial class ListView : Control
                     if ((nmlv->uChanged & LIST_VIEW_ITEM_FLAGS.LVIF_STATE) != 0)
                     {
                         // Because the state image mask is 1-based, a value of 1 means unchecked,
-                        // anything else means checked.  We convert this to the more standard 0 or 1
+                        // anything else means checked. We convert this to the more standard 0 or 1
                         CheckState oldState = (CheckState)(((int)((LIST_VIEW_ITEM_STATE_FLAGS)nmlv->uOldState & LIST_VIEW_ITEM_STATE_FLAGS.LVIS_STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
                         CheckState newState = (CheckState)(((int)((LIST_VIEW_ITEM_STATE_FLAGS)nmlv->uNewState & LIST_VIEW_ITEM_STATE_FLAGS.LVIS_STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
 
@@ -6600,7 +6639,7 @@ public partial class ListView : Control
                     if ((nmlv->uChanged & LIST_VIEW_ITEM_FLAGS.LVIF_STATE) != 0)
                     {
                         // Because the state image mask is 1-based, a value of 1 means unchecked,
-                        // anything else means checked.  We convert this to the more standard 0 or 1
+                        // anything else means checked. We convert this to the more standard 0 or 1
                         CheckState oldValue = (CheckState)(((int)((LIST_VIEW_ITEM_STATE_FLAGS)nmlv->uOldState & LIST_VIEW_ITEM_STATE_FLAGS.LVIS_STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
                         CheckState newValue = (CheckState)(((int)((LIST_VIEW_ITEM_STATE_FLAGS)nmlv->uNewState & LIST_VIEW_ITEM_STATE_FLAGS.LVIS_STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
 
@@ -6639,7 +6678,7 @@ public partial class ListView : Control
                         // Windows common control always fires
                         // this event twice, once with newState, oldState, and again with
                         // oldState, newState.
-                        // Changing this affects the behaviour as the control never
+                        // Changing this affects the behavior as the control never
                         // fires the event on a Deselect of an Items from multiple selections.
                         // So leave it as it is...
                         if (newState != oldState)

@@ -52,7 +52,7 @@ internal partial class OleDragDropHandler
                         _serializationStream = new MemoryStream();
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
                         new BinaryFormatter().Serialize(_serializationStream, sd);
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
+#pragma warning restore SYSLIB0011
                         _serializationStream.Seek(0, SeekOrigin.Begin);
                     }
                 }
@@ -80,7 +80,7 @@ internal partial class OleDragDropHandler
         private CfCodeToolboxItem NestedToolboxItem => _toolboxItemData ??= new CfCodeToolboxItem(GetData(DataFormat));
 
         /// <summary>
-        ///  Used to retrieve the selection for a copy.  The default implementation
+        ///  Used to retrieve the selection for a copy. The default implementation
         ///  retrieves the current selection.
         /// </summary>
         private object[] GetComponentList(object[] components)
@@ -139,8 +139,8 @@ internal partial class OleDragDropHandler
             {
                 SerializationStream!.Seek(0, SeekOrigin.Begin);
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-                return new BinaryFormatter().Deserialize(SerializationStream);
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
+                return new BinaryFormatter().Deserialize(SerializationStream); // CodeQL[SM03722, SM04191] : The operation is essential for the design experience when users are running their own designers they have created. This cannot be achieved without BinaryFormatter
+#pragma warning restore SYSLIB0011
             }
             else if (format.Equals(NestedToolboxItemFormat))
             {
@@ -211,8 +211,8 @@ internal partial class OleDragDropHandler
             try
             {
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-                _serializationData ??= new BinaryFormatter().Deserialize(SerializationStream!);
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
+                _serializationData ??= new BinaryFormatter().Deserialize(SerializationStream!); // CodeQL[SM03722, SM04191] : The operation is essential for the design experience when users are running their own designers they have created. This cannot be achieved without BinaryFormatter
+#pragma warning restore SYSLIB0011
 
                 if (removeCurrentComponents && _components is not null)
                 {

@@ -137,6 +137,9 @@ public partial class MonthCalendar : Control
         _focusedDate = _todaysDate;
         SetStyle(ControlStyles.UserPaint, false);
         SetStyle(ControlStyles.StandardClick, false);
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001
 
         TabStop = true;
     }
@@ -188,12 +191,13 @@ public partial class MonthCalendar : Control
         }
     }
 
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     [SRDescription(nameof(SR.MonthCalendarMonthBackColorDescr))]
     public override Color BackColor
     {
         get
         {
-            if (ShouldSerializeBackColor())
+            if (ShouldSerializeBackColor() || Application.IsDarkModeEnabled)
             {
                 return base.BackColor;
             }
@@ -202,6 +206,7 @@ public partial class MonthCalendar : Control
         }
         set => base.BackColor = value;
     }
+#pragma warning restore WFO5001
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -402,12 +407,13 @@ public partial class MonthCalendar : Control
         }
     }
 
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     [SRDescription(nameof(SR.MonthCalendarForeColorDescr))]
     public override Color ForeColor
     {
         get
         {
-            if (ShouldSerializeForeColor())
+            if (ShouldSerializeForeColor() || Application.IsDarkModeEnabled)
             {
                 return base.ForeColor;
             }
@@ -416,6 +422,7 @@ public partial class MonthCalendar : Control
         }
         set => base.ForeColor = value;
     }
+#pragma warning restore WFO5001
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -1182,7 +1189,7 @@ public partial class MonthCalendar : Control
         // Calculate calendar height
         Size textExtent;
 
-        using (var hfont = GdiCache.GetHFONT(Font))
+        using (var hfont = GdiCache.GetHFONTScope(Font))
         using (var screen = GdiCache.GetScreenHdc())
         {
             // this is the string that Windows uses to determine the extent of the today string
@@ -1646,7 +1653,8 @@ public partial class MonthCalendar : Control
         Rectangle oldBounds = Bounds;
         Size max = SystemInformation.MaxWindowTrackSize;
 
-        // Second argument to GetPreferredWidth and GetPreferredHeight is a boolean specifying if we should update the number of rows/columns.
+        // Second argument to GetPreferredWidth and GetPreferredHeight is a boolean specifying
+        // if we should update the number of rows/columns.
         // We only want to update the number of rows/columns if we are not currently being scaled.
         bool updateRowsAndColumns = !ScaleHelper.IsScalingRequirementMet || !ScalingInProgress;
 

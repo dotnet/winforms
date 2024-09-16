@@ -27,7 +27,7 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
 
     private const int DATAGRIDVIEWTEXTBOXCELL_maxInputLength = 32767;
 
-    private byte _flagsState;  // see DATAGRIDVIEWTEXTBOXCELL_ consts above
+    private byte _flagsState;  // see DATAGRIDVIEWTEXTBOXCELL_ constants above
 
     private static readonly Type s_defaultFormattedValueType = typeof(string);
     private static readonly Type s_defaultValueType = typeof(object);
@@ -48,14 +48,8 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
 
     private DataGridViewTextBoxEditingControl? EditingTextBox
     {
-        get => (DataGridViewTextBoxEditingControl?)Properties.GetObject(s_propTextBoxCellEditingTextBox);
-        set
-        {
-            if (value is not null || Properties.ContainsObject(s_propTextBoxCellEditingTextBox))
-            {
-                Properties.SetObject(s_propTextBoxCellEditingTextBox, value);
-            }
-        }
+        get => Properties.GetValueOrDefault<DataGridViewTextBoxEditingControl?>(s_propTextBoxCellEditingTextBox);
+        set => Properties.AddOrRemoveValue(s_propTextBoxCellEditingTextBox, value);
     }
 
     public override Type FormattedValueType
@@ -70,21 +64,12 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
     [DefaultValue(DATAGRIDVIEWTEXTBOXCELL_maxInputLength)]
     public virtual int MaxInputLength
     {
-        get
-        {
-            int maxInputLength = Properties.GetInteger(s_propTextBoxCellMaxInputLength, out bool found);
-            if (found)
-            {
-                return maxInputLength;
-            }
-
-            return DATAGRIDVIEWTEXTBOXCELL_maxInputLength;
-        }
+        get => Properties.GetValueOrDefault(s_propTextBoxCellMaxInputLength, DATAGRIDVIEWTEXTBOXCELL_maxInputLength);
         set
         {
             ArgumentOutOfRangeException.ThrowIfNegative(value);
 
-            Properties.SetInteger(s_propTextBoxCellMaxInputLength, value);
+            Properties.AddValue(s_propTextBoxCellMaxInputLength, value);
             if (OwnsEditingTextBox(RowIndex))
             {
                 EditingTextBox.MaxLength = value;
@@ -106,7 +91,7 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
         }
     }
 
-    // Called when the row that owns the editing control gets unshared.
+    // Called when the row that owns the editing control gets un-shared.
     internal override void CacheEditingControl()
     {
         EditingTextBox = DataGridView!.EditingControl as DataGridViewTextBoxEditingControl;
@@ -239,7 +224,7 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
                 TextFormatFlags flags = DataGridViewUtilities.ComputeTextFormatFlagsForCellStyleAlignment(DataGridView.RightToLeftInternal, cellStyle.Alignment, cellStyle.WrapMode);
 
                 using var screen = GdiCache.GetScreenDCGraphics();
-                preferredHeight = MeasureTextHeight(screen, editedFormattedValue, cellStyle.Font, originalWidth, flags);
+                preferredHeight = MeasureTextHeight(screen, editedFormattedValue, cellStyle.Font!, originalWidth, flags);
             }
 
             if (preferredHeight < editingControlBounds.Height)
@@ -436,7 +421,7 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
                             MeasureTextWidth(
                                 graphics,
                                 formattedString,
-                                cellStyle.Font,
+                                cellStyle.Font!,
                                 Math.Max(1, constraintSize.Height - borderAndPaddingHeights - DATAGRIDVIEWTEXTBOXCELL_verticalTextMarginTopWithWrapping - DATAGRIDVIEWTEXTBOXCELL_verticalTextMarginBottom),
                                 flags),
                             0);
@@ -450,7 +435,7 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
                             MeasureTextHeight(
                                 graphics,
                                 formattedString,
-                                cellStyle.Font,
+                                cellStyle.Font!,
                                 Math.Max(1, constraintSize.Width - borderAndPaddingWidths - DATAGRIDVIEWTEXTBOXCELL_horizontalTextMarginLeft - DATAGRIDVIEWTEXTBOXCELL_horizontalTextMarginRight),
                                 flags));
                         break;
@@ -461,7 +446,7 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
                         preferredSize = MeasureTextPreferredSize(
                             graphics,
                             formattedString,
-                            cellStyle.Font,
+                            cellStyle.Font!,
                             5.0F,
                             flags);
                         break;
@@ -475,7 +460,7 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
                 case DataGridViewFreeDimension.Width:
                     {
                         preferredSize = new Size(
-                            MeasureTextSize(graphics, formattedString, cellStyle.Font, flags).Width,
+                            MeasureTextSize(graphics, formattedString, cellStyle.Font!, flags).Width,
                             0);
                         break;
                     }
@@ -484,13 +469,13 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
                     {
                         preferredSize = new Size(
                             0,
-                            MeasureTextSize(graphics, formattedString, cellStyle.Font, flags).Height);
+                            MeasureTextSize(graphics, formattedString, cellStyle.Font!, flags).Height);
                         break;
                     }
 
                 default:
                     {
-                        preferredSize = MeasureTextSize(graphics, formattedString, cellStyle.Font, flags);
+                        preferredSize = MeasureTextSize(graphics, formattedString, cellStyle.Font!, flags);
                         break;
                     }
             }

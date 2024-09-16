@@ -28,7 +28,7 @@ public class PropertyManager : BindingManagerBase
     {
         if (_dataSource is not null && !string.IsNullOrEmpty(_propName))
         {
-            _propInfo?.RemoveValueChanged(_dataSource, new EventHandler(PropertyChanged));
+            _propInfo?.RemoveValueChanged(_dataSource, PropertyChanged);
             _propInfo = null;
         }
 
@@ -42,7 +42,7 @@ public class PropertyManager : BindingManagerBase
                 throw new ArgumentException(string.Format(SR.PropertyManagerPropDoesNotExist, _propName, dataSource));
             }
 
-            _propInfo.AddValueChanged(_dataSource, new EventHandler(PropertyChanged));
+            _propInfo.AddValueChanged(_dataSource, PropertyChanged);
         }
     }
 
@@ -197,7 +197,7 @@ public class PropertyManager : BindingManagerBase
     public override int Count => 1;
 
     /// <summary>
-    /// Throws a <see cref="NotSupportedException" /> in all cases.
+    ///  Throws a <see cref="NotSupportedException" /> in all cases.
     /// </summary>
     /// <exception cref="NotSupportedException">In all cases.</exception>
     public override void AddNew()

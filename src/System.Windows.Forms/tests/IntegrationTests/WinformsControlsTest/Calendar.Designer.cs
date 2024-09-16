@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-namespace WinformsControlsTest;
+namespace WinFormsControlsTest;
 
 partial class Calendar
 {
@@ -84,7 +84,7 @@ partial class Calendar
         this.setMinDateButton.TabIndex = 2;
         this.setMinDateButton.Text = "Set MinDate";
         this.setMinDateButton.UseVisualStyleBackColor = true;
-        this.setMinDateButton.Click += new System.EventHandler(this.setMinDateButton_Click);
+        this.setMinDateButton.Click += this.setMinDateButton_Click;
         // 
         // label1
         // 
@@ -115,7 +115,7 @@ partial class Calendar
         this.setMaxDateButton.TabIndex = 5;
         this.setMaxDateButton.Text = "Set MaxDate";
         this.setMaxDateButton.UseVisualStyleBackColor = true;
-        this.setMaxDateButton.Click += new System.EventHandler(this.setMaxDateButton_Click);
+        this.setMaxDateButton.Click += this.setMaxDateButton_Click;
         // 
         // maxDateDateTimePicker
         // 
@@ -152,7 +152,7 @@ partial class Calendar
         this.daysOfWeekComboBox.Name = "daysOfWeekComboBox";
         this.daysOfWeekComboBox.Size = new System.Drawing.Size(151, 28);
         this.daysOfWeekComboBox.TabIndex = 8;
-        this.daysOfWeekComboBox.SelectedIndexChanged += new System.EventHandler(this.daysOfWeekComboBox_SelectedIndexChanged);
+        this.daysOfWeekComboBox.SelectedIndexChanged += this.daysOfWeekComboBox_SelectedIndexChanged;
         // 
         // label4
         // 
@@ -172,7 +172,7 @@ partial class Calendar
         this.resetMinDateButton.TabIndex = 10;
         this.resetMinDateButton.Text = "Reset";
         this.resetMinDateButton.UseVisualStyleBackColor = true;
-        this.resetMinDateButton.Click += new System.EventHandler(this.resetMinDateButton_Click);
+        this.resetMinDateButton.Click += this.resetMinDateButton_Click;
         // 
         // resetMaxDateButton
         // 
@@ -183,7 +183,7 @@ partial class Calendar
         this.resetMaxDateButton.TabIndex = 11;
         this.resetMaxDateButton.Text = "Reset";
         this.resetMaxDateButton.UseVisualStyleBackColor = true;
-        this.resetMaxDateButton.Click += new System.EventHandler(this.resetMaxDateButton_Click);
+        this.resetMaxDateButton.Click += this.resetMaxDateButton_Click;
         // 
         // showWeekNumbersCheckBox
         //
@@ -195,7 +195,7 @@ partial class Calendar
         this.showWeekNumbersCheckBox.TabIndex = 12;
         this.showWeekNumbersCheckBox.Text = "showWeekNumbers";
         this.showWeekNumbersCheckBox.UseVisualStyleBackColor = true;
-        this.showWeekNumbersCheckBox.CheckedChanged += new System.EventHandler(this.showWeekNumbersCheckBox_CheckedChanged);
+        this.showWeekNumbersCheckBox.CheckedChanged += this.showWeekNumbersCheckBox_CheckedChanged;
         // 
         // showTodayCheckBox
         //
@@ -207,7 +207,7 @@ partial class Calendar
         this.showTodayCheckBox.TabIndex = 13;
         this.showTodayCheckBox.Text = "showToday";
         this.showTodayCheckBox.UseVisualStyleBackColor = true;
-        this.showTodayCheckBox.CheckedChanged += new System.EventHandler(this.showTodayCheckBox_CheckedChanged);
+        this.showTodayCheckBox.CheckedChanged += this.showTodayCheckBox_CheckedChanged;
         // 
         // label5
         // 

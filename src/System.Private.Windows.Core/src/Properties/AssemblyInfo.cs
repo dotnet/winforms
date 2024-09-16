@@ -15,6 +15,7 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("System.Windows.Forms.Primitives.Tests, PublicKey=00000000000000000400000000000000")]
 [assembly: InternalsVisibleTo("System.Windows.Forms.Primitives.TestUtilities, PublicKey=00000000000000000400000000000000")]
 [assembly: InternalsVisibleTo("System.Windows.Forms.Tests, PublicKey=00000000000000000400000000000000")]
+[assembly: InternalsVisibleTo("System.Private.Windows.Core.Tests, PublicKey=00000000000000000400000000000000")]
 [assembly: InternalsVisibleTo("BinaryFormatTests, PublicKey=00000000000000000400000000000000")]
 [assembly: InternalsVisibleTo("System.Windows.Forms.TestUtilities, PublicKey=00000000000000000400000000000000")]
 [assembly: InternalsVisibleTo("System.Windows.Forms.UI.IntegrationTests, PublicKey=00000000000000000400000000000000")]

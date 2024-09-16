@@ -153,7 +153,7 @@ public unsafe partial class WebBrowserBase : Control
     {
     }
 
-    // DrawToBitmap doesn't work for this control, so we should hide it.  We'll
+    // DrawToBitmap doesn't work for this control, so we should hide it. We'll
     // still call base so that this has a chance to work if it can.
     [EditorBrowsable(EditorBrowsableState.Never)]
     public new void DrawToBitmap(Bitmap bitmap, Rectangle targetBounds)
@@ -679,9 +679,9 @@ public unsafe partial class WebBrowserBase : Control
     // Returns this control's logically containing form.
     // At design time this is always the form being designed.
     // At runtime it is the parent form.
-    // By default, the parent form performs that function.  It is
+    // By default, the parent form performs that function. It is
     // however possible for another form higher in the parent chain
-    // to serve in that role.  The logical container of this
+    // to serve in that role. The logical container of this
     // control determines the set of logical sibling control.
     // This property exists only to enable some specific
     // behaviors of ActiveX controls.
@@ -1036,12 +1036,9 @@ public unsafe partial class WebBrowserBase : Control
         DetachInterfaces();
     }
 
-    //
     // We need to change the ActiveX control's state when selection changes.
-    private EventHandler SelectionChangeHandler =>
-        _selectionChangeHandler ??= new EventHandler(OnNewSelection);
+    private EventHandler SelectionChangeHandler => _selectionChangeHandler ??= OnNewSelection;
 
-    //
     // We need to do special stuff (convert window messages to interface calls)
     // during design time when selection changes.
     private void OnNewSelection(object? sender, EventArgs e)
@@ -1054,7 +1051,6 @@ public unsafe partial class WebBrowserBase : Control
                 // We are no longer selected.
                 if (!iss.GetComponentSelected(this))
                 {
-                    //
                     // We need to exit editmode if we were in one.
                     if (EditMode)
                     {

@@ -2,17 +2,17 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en" target-language="zh-Hans" original="../SR.resx">
     <body>
-      <trans-unit id="WFAC010Message_CS">
+      <trans-unit id="WFO0003Message_CS">
         <source>Remove high DPI settings from {0} and configure via Application.SetHighDpiMode API or '{1}' project property</source>
         <target state="translated">从 {0} 中删除高 DPI 设置，并通过 Application.SetHighDpiMode API 或“{1}”项目属性进行配置</target>
         <note />
       </trans-unit>
-      <trans-unit id="WFAC010Message_VB">
+      <trans-unit id="WFO0003Message_VB">
         <source>Remove high DPI settings from {0} and configure via '{1}' property in Application Framework</source>
         <target state="translated">从 {0} 中删除高 DPI 设置，并通过应用程序框架中的“{1}”属性进行配置</target>
         <note />
       </trans-unit>
-      <trans-unit id="WFAC010Title">
+      <trans-unit id="WFO0003Title">
         <source>Unsupported high DPI configuration</source>
         <target state="translated">不支持的高 DPI 配置</target>
         <note />

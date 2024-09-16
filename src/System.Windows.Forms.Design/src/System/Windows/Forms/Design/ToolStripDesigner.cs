@@ -23,7 +23,7 @@ internal class ToolStripDesigner : ControlDesigner
     internal static Point s_lastCursorPosition = Point.Empty; // remembers last cursorPosition;
     internal static bool s_autoAddNewItems = true; // true to force newly created items to be added to the currently selected strip.
     internal static ToolStripItem s_dragItem; // this is used in overflow to know current item selected while drag, so that we can get the drop-index.
-    internal static bool s_shiftState; // maintains the shift state used of invalidation. disable csharp compiler warning #0414: field assigned unused value
+    internal static bool s_shiftState; // maintains the shift state used of invalidation. Disable C# compiler warning #0414: field assigned unused value
 #pragma warning disable 0414
     internal static bool s_editTemplateNode; // this is used in selection changed so that unnecessary redraw is not required.
 #pragma warning restore 0414
@@ -32,7 +32,7 @@ internal class ToolStripDesigner : ControlDesigner
     private ToolStrip _miniToolStrip; // the toolStrip that hosts the "New Template Node" button
     private DesignerTransaction _insertMenuItemTransaction; // There Should be one and only one Pending insertTransaction.
     private Rectangle _dragBoxFromMouseDown = Rectangle.Empty; // Needed to Store the DRAGDROP Rect from the ToolStripItemBehavior.
-    private int _indexOfItemUnderMouseToDrag = -1; // defaulted to invalid index and will be set by the behaviour.
+    private int _indexOfItemUnderMouseToDrag = -1; // defaulted to invalid index and will be set by the behavior.
     private ToolStripTemplateNode _tn; // templateNode
     private ISelectionService _selectionService; // cached selection service.
     private uint _editingCollection; // non-zero if the collection editor is up for this ToolStrip or a child of it.
@@ -157,7 +157,9 @@ internal class ToolStripDesigner : ControlDesigner
     }
 
     /// <summary>
-    ///  CacheItems is set to TRUE by the ToolStripMenuItemDesigner, when the Transaction of setting the DropDown property is undone. In this case the Undo adds the original items to the Main MenustripDesigners Items collection and later are moved to to the appropriate ToolStripMenuItem
+    ///  CacheItems is set to TRUE by the ToolStripMenuItemDesigner, when the Transaction of setting
+    ///  the DropDown property is undone. In this case the Undo adds the original items to
+    ///  the Main MenuStripDesigners Items collection and later are moved to to the appropriate ToolStripMenuItem.
     /// </summary>
     public bool CacheItems
     {
@@ -184,7 +186,8 @@ internal class ToolStripDesigner : ControlDesigner
     }
 
     /// <summary>
-    /// This boolean indicates whether the Control will allow SnapLines to be shown when any other targetControl is dragged on the design surface. This is true by default.
+    /// This boolean indicates whether the Control will allow SnapLines to be shown when any other targetControl
+    /// is dragged on the design surface. This is true by default.
     /// </summary>
     internal override bool ControlSupportsSnaplines => ToolStrip.Parent is not ToolStripPanel;
 
@@ -205,7 +208,9 @@ internal class ToolStripDesigner : ControlDesigner
     }
 
     /// <summary>
-    ///  Used by ToolStripTemplateNode. When the ToolStrip gains selection the Overflow is closed. But when an item is added through the TemplateNode which itself is on the Overflow, we should not close the Overflow as this caused weird artifacts and flicker. Hence this boolean property.
+    ///  Used by ToolStripTemplateNode. When the ToolStrip gains selection the Overflow is closed.
+    ///  But when an item is added through the TemplateNode which itself is on the Overflow, we should not close
+    ///  the Overflow as this caused weird artifacts and flicker. Hence this boolean property.
     /// </summary>
     public bool DontCloseOverflow
     {
@@ -214,7 +219,8 @@ internal class ToolStripDesigner : ControlDesigner
     }
 
     /// <summary>
-    ///  Since the Itemglyphs are recreated on the SelectionChanged, we need to cache in the "MouseDown" while the item Drag-Drop operation.
+    ///  Since the Itemglyphs are recreated on the SelectionChanged, we need to cache in the "MouseDown"
+    ///  while the item Drag-Drop operation.
     /// </summary>
     public Rectangle DragBoxFromMouseDown
     {
@@ -223,7 +229,8 @@ internal class ToolStripDesigner : ControlDesigner
     }
 
     /// <summary>
-    ///  Set by the ToolStripItemCollectionEditor when it's launched for this ToolStrip so we won't pick up it's items when added.  We count this so that we can deal with nestings.
+    ///  Set by the ToolStripItemCollectionEditor when it's launched for this ToolStrip so we won't pick up
+    ///  it's items when added. We count this so that we can deal with nesting's.
     /// </summary>
     internal bool EditingCollection
     {
@@ -280,7 +287,9 @@ internal class ToolStripDesigner : ControlDesigner
     }
 
     /// <summary>
-    ///  This will be set through ToolStripItemDesigner.SetItemVisible( ) if we find there is atleast one time that toggled from Visible==false to Visible==true In such a case we need to call BehaviorService.SyncSelection( ) toupdate the glyphs.
+    ///  This will be set through ToolStripItemDesigner.SetItemVisible( ) if we find there is atleast one time
+    ///  that toggled from Visible==false to Visible==true In such a case we need to
+    ///  call BehaviorService.SyncSelection( ) to update the glyphs.
     /// </summary>
     public bool FireSyncSelection
     {
@@ -289,7 +298,8 @@ internal class ToolStripDesigner : ControlDesigner
     }
 
     /// <summary>
-    ///  Since the Itemglyphs are recreated on the SelectionChanged, we need to cache in the "index" of last MouseDown while the item Drag-Drop operation.
+    ///  Since the Itemglyphs are recreated on the SelectionChanged, we need to cache in the "index" of last MouseDown
+    ///  while the item Drag-Drop operation.
     /// </summary>
     public int IndexOfItemUnderMouseToDrag
     {
@@ -314,7 +324,8 @@ internal class ToolStripDesigner : ControlDesigner
     }
 
     /// <summary>
-    ///  This is the insert Transaction. Now insert can happen at Main Menu level or the DropDown Level. This transaction is used to keep both in sync.
+    ///  This is the insert Transaction. Now insert can happen at Main Menu level or the DropDown Level.
+    ///  This transaction is used to keep both in sync.
     /// </summary>
     public DesignerTransaction InsertTransaction
     {
@@ -331,7 +342,10 @@ internal class ToolStripDesigner : ControlDesigner
     }
 
     /// <summary>
-    ///  CacheItems is set to TRUE by the ToolStripMenuItemDesigner, when the Transaction of setting the DropDown property is undone. In this case the Undo adds the original items to the Main MenustripDesigners Items collection and later are moved to to the appropriate ToolStripMenuItem. This is the Items Collection.
+    ///  CacheItems is set to TRUE by the ToolStripMenuItemDesigner, when the Transaction of setting
+    ///  the DropDown property is undone. In this case the Undo adds the original items to the
+    ///  Main MenuStripDesigners Items collection and later are moved to to the appropriate ToolStripMenuItem.
+    ///  This is the Items Collection.
     /// </summary>
     public ArrayList Items
     {
@@ -344,7 +358,7 @@ internal class ToolStripDesigner : ControlDesigner
     }
 
     /// <summary>
-    ///  This is the new item Transaction. This is used when the Insitu editor adds new Item.
+    ///  This is the new item Transaction. This is used when the InSitu editor adds new Item.
     /// </summary>
     public DesignerTransaction NewItemTransaction
     {
@@ -443,7 +457,8 @@ internal class ToolStripDesigner : ControlDesigner
     private IComponentChangeService ComponentChangeService => _componentChangeService ??= GetRequiredService<IComponentChangeService>();
 
     /// <summary>
-    ///  This will add BodyGlyphs for the Items on the OverFlow. Since ToolStripItems are component we have to manage Adding and Deleting the glyphs ourSelves.
+    ///  This will add BodyGlyphs for the Items on the OverFlow. Since ToolStripItems
+    ///  are component we have to manage Adding and Deleting the glyphs ourSelves.
     /// </summary>
     private void AddBodyGlyphsForOverflow()
     {
@@ -464,7 +479,8 @@ internal class ToolStripDesigner : ControlDesigner
     }
 
     /// <summary>
-    ///  This will add BodyGlyphs for the Items on the OverFlow. Since ToolStripItems are component we have to manage Adding and Deleting the glyphs ourSelves. Called by AddBodyGlyphsForOverflow()
+    ///  This will add BodyGlyphs for the Items on the OverFlow. Since ToolStripItems are component we have
+    ///  to manage Adding and Deleting the glyphs ourSelves. Called by AddBodyGlyphsForOverflow().
     /// </summary>
     private void AddItemBodyGlyph(ToolStripItem item)
     {
@@ -501,7 +517,9 @@ internal class ToolStripDesigner : ControlDesigner
             ToolStripItemDesigner designer = null;
             try
             {
-                // The code in ComponentAdded will actually get the add done.  This should be inside the try finally because it could throw an exception and keep the toolstrip in SuspendLayout mode
+                // The code in ComponentAdded will actually get the add done.
+                // This should be inside the try finally because it could throw an exception and
+                // keep the toolstrip in SuspendLayout mode
                 component = _host.CreateComponent(t);
                 designer = _host.GetDesigner(component) as ToolStripItemDesigner;
                 designer.InternalCreate = true;
@@ -560,7 +578,9 @@ internal class ToolStripDesigner : ControlDesigner
             ToolStripItemDesigner designer = _host.GetDesigner(component) as ToolStripItemDesigner;
             try
             {
-                // ToolStripItem designer tries to set the TEXT for the item in the InitializeNewComponent(). But since we are create item thru InSitu .. we shouldn't do this. Also we shouldn't set the TEXT if we are creating a dummyItem.
+                // ToolStripItem designer tries to set the TEXT for the item in the InitializeNewComponent().
+                // But since we are create item thru InSitu .. we shouldn't do this.
+                // Also we shouldn't set the TEXT if we are creating a dummyItem.
                 if (!string.IsNullOrEmpty(text))
                 {
                     designer.InternalCreate = true;
@@ -864,11 +884,12 @@ internal class ToolStripDesigner : ControlDesigner
     }
 
     /// <summary>
-    ///  Fired after a component has been added.  Here, we add it to the ToolStrip and select it.
+    ///  Fired after a component has been added. Here, we add it to the ToolStrip and select it.
     /// </summary>
     private void ComponentChangeSvc_ComponentAdded(object sender, ComponentEventArgs e)
     {
-        // If another ToolStrip is getting added and we are currently selected then unselect us .. the newly added toolStrip should get selected.
+        // If another ToolStrip is getting added and we are currently selected then unselect us .. the newly added
+        // toolStrip should get selected.
         if (_toolStripSelected && e.Component is ToolStrip)
         {
             _toolStripSelected = false;
@@ -963,7 +984,8 @@ internal class ToolStripDesigner : ControlDesigner
             return;
         }
 
-        // we'll be adding a child item if the component is a ToolStrip item and we've currently got this ToolStrip or one of it's items selected. we do this so things like paste and undo automagically work.
+        // we'll be adding a child item if the component is a ToolStrip item and we've currently got this ToolStrip
+        // or one of it's items selected. we do this so things like paste and undo automagically work.
         ToolStripItem addingItem = e.Component as ToolStripItem;
         if (addingItem is not null && addingItem.Owner is not null)
         {
@@ -1203,7 +1225,8 @@ internal class ToolStripDesigner : ControlDesigner
     }
 
     /// <summary>
-    ///  Creates a method signature in the source code file for the default event on the component and navigates the user's cursor to that location in preparation to assign the default action.
+    ///  Creates a method signature in the source code file for the default event on the component and navigates
+    ///  the user's cursor to that location in preparation to assign the default action.
     /// </summary>
     public override void DoDefaultAction()
     {
@@ -1253,7 +1276,7 @@ internal class ToolStripDesigner : ControlDesigner
             object primarySelection = SelectionService.PrimarySelection;
             Behavior.Behavior toolStripBehavior = new ToolStripItemBehavior();
 
-            // Sometimes the Collection changes when the ToolStrip gets the Selection and we are in a dummy insitu
+            // Sometimes the Collection changes when the ToolStrip gets the Selection and we are in a dummy InSitu
             // edit so remove that before accessing the collection
             if (ToolStrip.Items.Count > 0)
             {
@@ -1295,7 +1318,7 @@ internal class ToolStripDesigner : ControlDesigner
                             ((ToolStripItemBehavior)toolStripBehavior)._dragBoxFromMouseDown = _dragBoxFromMouseDown;
                         }
 
-                        // Get Back the Current Bounds if current selection is not  a primary selection
+                        // Get Back the Current Bounds if current selection is not a primary selection
                         if (!isPrimary)
                         {
                             item.AutoSize = itemDesigner is null || itemDesigner.AutoSize;
@@ -1321,7 +1344,8 @@ internal class ToolStripDesigner : ControlDesigner
     }
 
     /// <summary>
-    ///  We add our SelectionGlyphs here. Since ToolStripItems are components we add the SelectionGlyphs for those in this call as well.
+    ///  We add our SelectionGlyphs here. Since ToolStripItems are components we add the SelectionGlyphs
+    ///  for those in this call as well.
     /// </summary>
     public override GlyphCollection GetGlyphs(GlyphSelectionType selType)
     {
@@ -1445,7 +1469,11 @@ internal class ToolStripDesigner : ControlDesigner
     }
 
     /// <summary>
-    ///  ControlDesigner overrides this method.  It will look at the default property for the control and, if it is of type string, it will set this property's value to the name of the component.  It only does this if the designer has been configured with this option in the options service.  This method also connects the control to its parent and positions it.  If you override this method, you should always call base.
+    ///  ControlDesigner overrides this method. It will look at the default property for the control and,
+    ///  if it is of type string, it will set this property's value to the name of the component.
+    ///  It only does this if the designer has been configured with this option in the options service.
+    ///  This method also connects the control to its parent and positions it. If you override this method,
+    ///  you should always call base.
     /// </summary>
     public override void InitializeNewComponent(IDictionary defaultValues)
     {
@@ -1534,7 +1562,8 @@ internal class ToolStripDesigner : ControlDesigner
                 int index = -1;
                 foreach (Control c in parent.Controls)
                 {
-                    // If we found an existing toolstrip (and not a menuStrip) then we can just return .. the base would have done correct parenting for us
+                    // If we found an existing toolstrip (and not a menuStrip) then we can just return ..
+                    // the base would have done correct parenting for us.
                     MenuStrip menu = c as MenuStrip;
                     if (c is ToolStrip && menu is null)
                     {
@@ -1724,14 +1753,16 @@ internal class ToolStripDesigner : ControlDesigner
         name.Append(nameSuffix);
         string baseName = name.ToString();
 
-        // verify we have a valid name.  If not, start appending numbers if it matches one in the container. see if this name matches another one in the container..
+        // verify we have a valid name. If not, start appending numbers if it matches one in the container.
+        // see if this name matches another one in the container..
         object existingComponent = container.Components[baseName];
 
         if (existingComponent is null)
         {
             if (!nameCreate.IsValidName(baseName))
             {
-                // we don't have a name collision but this still isn't a valid name...something is wrong and we can't make a valid identifier out of this so bail.
+                // we don't have a name collision but this still isn't a valid name...
+                // something is wrong and we can't make a valid identifier out of this so bail.
                 return defaultName;
             }
             else
@@ -1782,7 +1813,9 @@ internal class ToolStripDesigner : ControlDesigner
     protected override void OnDragDrop(DragEventArgs de)
     {
         base.OnDragDrop(de);
-        // There is a "drop region" before firstItem which is not included in the "ToolStrip Item glyphs" so if the drop point falls in this drop region we should insert the items at the head instead of the tail of the toolStrip.
+        // There is a "drop region" before firstItem which is not included in the "ToolStrip Item glyphs"
+        // so if the drop point falls in this drop region we should insert the items at the head instead
+        // of the tail of the toolStrip.
         bool dropAtHead = false;
         ToolStrip parentToolStrip = ToolStrip;
         Point offset = new(de.X, de.Y);
@@ -2179,7 +2212,10 @@ internal class ToolStripDesigner : ControlDesigner
     }
 
     /// <summary>
-    ///  Allows a designer to filter the set of properties the component it is designing will expose through the TypeDescriptor object.  This method is called immediately before its corresponding "Post" method. If you are overriding this method you should call the base implementation before you perform your own filtering.
+    ///  Allows a designer to filter the set of properties the component it is designing will expose through
+    ///  the TypeDescriptor object. This method is called immediately before its corresponding "Post" method.
+    ///  If you are overriding this method you should call the base implementation before
+    ///  you perform your own filtering.
     /// </summary>
     protected override void PreFilterProperties(IDictionary properties)
     {
@@ -2252,7 +2288,8 @@ internal class ToolStripDesigner : ControlDesigner
     }
 
     /// <summary>
-    ///  When the Drag Data does not contain ToolStripItem; change the dragEffect to None;  This will result current cursor to change into NO-SMOKING cursor
+    ///  When the Drag Data does not contain ToolStripItem; change the dragEffect to None;
+    ///  This will result current cursor to change into NO-SMOKING cursor.
     /// </summary>
     private void SetDragDropEffects(DragEventArgs de)
     {
@@ -2346,7 +2383,8 @@ internal class ToolStripDesigner : ControlDesigner
                         ToolStrip.Parent.Visible = true;
                     }
 
-                    // Since the GetBodyGlyphs is called before we come here  In this case where the ToolStrip is going from visible==false to visible==true we need to re-add the glyphs for the items.
+                    // Since the GetBodyGlyphs is called before we come here in this case where the ToolStrip
+                    // is going from visible==false to visible==true we need to re-add the glyphs for the items.
                     BehaviorService.SyncSelection();
                 }
 
@@ -2501,7 +2539,7 @@ internal class ToolStripDesigner : ControlDesigner
                 break;
             case PInvoke.WM_LBUTTONDOWN:
             case PInvoke.WM_RBUTTONDOWN:
-                // commit any insitu if any...
+                // commit any InSitu if any...
                 Commit();
                 base.WndProc(ref m);
                 break;

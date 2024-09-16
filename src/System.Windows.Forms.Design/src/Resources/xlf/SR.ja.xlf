@@ -379,6 +379,11 @@
         <target state="translated">{0} コレクション エディター</target>
         <note />
       </trans-unit>
+      <trans-unit id="CollectionEditorCreateInstanceError">
+        <source>Neither {0} nor {1} can create an instance of {2}.</source>
+        <target state="translated">{0} も {1} も、{2} のインスタンスを作成できません。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CollectionEditorInheritedReadOnlySelection">
         <source>Read-only component(s) selected.</source>
         <target state="translated">読み取り専用のコンポーネントが選択されました。</target>

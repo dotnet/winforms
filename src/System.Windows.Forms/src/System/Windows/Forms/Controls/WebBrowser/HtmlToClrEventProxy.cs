@@ -11,7 +11,7 @@ namespace System.Windows.Forms;
 /// <summary>
 ///  This class is here for IHTML*3.AttachHandler style eventing.
 ///  We need a way of routing requests for DISPID(0) to a particular CLR event without creating
-///  a public class.  In order to accomplish this we implement IReflect and handle InvokeMethod
+///  a public class. In order to accomplish this we implement IReflect and handle InvokeMethod
 ///  to call back on a CLR event handler.
 /// </summary>
 internal class HtmlToClrEventProxy : UnknownDispatch, IManagedWrapper<IDispatch, IDispatchEx>

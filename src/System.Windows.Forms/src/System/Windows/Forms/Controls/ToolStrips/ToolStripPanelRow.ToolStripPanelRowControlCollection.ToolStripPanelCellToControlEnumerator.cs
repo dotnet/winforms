@@ -10,7 +10,7 @@ public partial class ToolStripPanelRow
     internal partial class ToolStripPanelRowControlCollection
     {
         ///  We want to pretend like we're only holding controls... so everywhere we've returned controls.
-        ///  but the problem is if you do a foreach, you'll get the cells not the controls.  So we've got
+        ///  but the problem is if you do a foreach, you'll get the cells not the controls. So we've got
         ///  to sort of write a wrapper class around the ArrayList enumerator.
         private class ToolStripPanelCellToControlEnumerator : IEnumerator, ICloneable
         {

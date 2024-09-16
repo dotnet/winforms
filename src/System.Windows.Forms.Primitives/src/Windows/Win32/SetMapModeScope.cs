@@ -24,7 +24,7 @@ internal readonly ref struct SetMapModeScope
 
     /// <summary>
     ///  Sets the <paramref name="mapMode"/> in the given <paramref name="hdc"/> using
-    ///  <see cref="SetMapMode(HDC, HDC_MAP_MODE)"/>.
+    ///  <see cref="PInvoke.SetMapMode(HDC, HDC_MAP_MODE)"/>.
     /// </summary>
     public SetMapModeScope(HDC hdc, HDC_MAP_MODE mapMode)
     {

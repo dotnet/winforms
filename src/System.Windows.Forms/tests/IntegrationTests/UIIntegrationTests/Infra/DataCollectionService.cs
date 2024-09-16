@@ -46,12 +46,14 @@ internal static class DataCollectionService
     }
 
     /// <summary>
-    /// Register a custom logger to collect data in the event of a test failure.
+    ///  Register a custom logger to collect data in the event of a test failure.
     /// </summary>
     /// <remarks>
-    /// <para>The <paramref name="logId"/> and <paramref name="extension"/> should be chosen to avoid conflicts with
-    /// other loggers. Otherwise, it is possible for logs to be overwritten during data collection. Built-in logs
-    /// include:</para>
+    /// <para>
+    ///  The <paramref name="logId"/> and <paramref name="extension"/> should be chosen to avoid conflicts with
+    ///  other loggers. Otherwise, it is possible for logs to be overwritten during data collection. Built-in logs
+    ///  include:
+    /// </para>
     ///
     /// <list type="table">
     ///   <listheader>
@@ -71,7 +73,9 @@ internal static class DataCollectionService
     ///   </item>
     /// </list>
     /// </remarks>
-    /// <param name="callback">The callback to invoke to collect log information. The argument to the callback is the fully-qualified file path where the log data should be written.</param>
+    /// <param name="callback">The callback to invoke to collect log information. The argument to the callback is
+    ///  the fully-qualified file path where the log data should be written.
+    /// </param>
     /// <param name="logId">An optional log identifier to include in the resulting file name.</param>
     /// <param name="extension">The extension to give the resulting file.</param>
     public static void RegisterCustomLogger(Action<string> callback, string logId, string extension)
@@ -195,13 +199,16 @@ internal static class DataCollectionService
     }
 
     /// <summary>
-    /// Computes a full log file name.
+    ///  Computes a full log file name.
     /// </summary>
     /// <param name="logDirectory">The location where logs are saved.</param>
     /// <param name="timestamp">The timestamp of the failure.</param>
     /// <param name="testName">The current test name, or <c>Unknown</c> if the test is not known.</param>
     /// <param name="errorId">The error ID, e.g. the name of the exception instance.</param>
-    /// <param name="logId">The log ID (e.g. <c>DotNet</c> or <c>Watson</c>). This may be an empty string for one log output of a particular <paramref name="extension"/>.</param>
+    /// <param name="logId">
+    ///  The log ID (e.g. <c>DotNet</c> or <c>Watson</c>). This may be an empty string for one log output of a
+    ///  particular <paramref name="extension"/>.
+    /// </param>
     /// <param name="extension">The log file extension, without a dot (e.g. <c>log</c>).</param>
     /// <returns>The fully qualified log file name.</returns>
     private static string CreateLogFileName(string logDirectory, DateTimeOffset timestamp, string testName, string errorId, string logId, string extension)

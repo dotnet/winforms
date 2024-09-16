@@ -9,7 +9,7 @@ internal partial class CommandSet
 {
     /// <internalonly/>
     /// <summary>
-    ///  The immediate command set item is used for commands that cannot be cached.  Commands
+    ///  The immediate command set item is used for commands that cannot be cached. Commands
     ///  such as Paste that get outside stimulus cannot be cached by our menu system, so
     ///  they get an ImmediateCommandSetItem instead of a CommandSetItem.
     /// </summary>

@@ -1,7 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Windows.Forms.Primitives;
 using Windows.Win32.UI.HiDpi;
 using Xunit.Abstractions;
 
@@ -108,16 +107,10 @@ public class FormDpiTests : ControlTestBase
             form.Show();
 
             // Explicitly opt-in to resize min and max sizes with Dpi changed event.
-            dynamic testAccessor = typeof(LocalAppContextSwitches).TestAccessor().Dynamic;
-            testAccessor.s_scaleTopLevelFormMinMaxSizeForDpi = 1;
-
+            using ScaleTopLevelFormMinMaxSizeForDpiScope scope = new(enable: true);
             DpiMessageHelper.TriggerDpiMessage(PInvoke.WM_DPICHANGED, form, newDpi);
-
             Assert.NotEqual(form.MinimumSize, minSize);
             Assert.NotEqual(form.MaximumSize, maxSize);
-
-            // Reset switch.
-            testAccessor.s_scaleTopLevelFormMinMaxSizeForDpi = -1;
             form.Close();
         }
         finally

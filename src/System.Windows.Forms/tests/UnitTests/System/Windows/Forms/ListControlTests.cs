@@ -2379,7 +2379,7 @@ public class ListControlTests
     {
         Assert.Equal(expected, control.GetItemText(item));
 
-        // Test caching behaviour.
+        // Test caching behavior.
         Assert.Equal(expected, control.GetItemText(item));
     }
 
@@ -2480,7 +2480,7 @@ public class ListControlTests
         };
         Assert.Equal("custom", control.GetItemText(item));
 
-        // Test caching behaviour.
+        // Test caching behavior.
         Assert.Equal("custom", control.GetItemText(item));
     }
 
@@ -2497,7 +2497,7 @@ public class ListControlTests
         };
         Assert.Equal("10", control.GetItemText(item));
 
-        // Test caching behaviour.
+        // Test caching behavior.
         Assert.Equal("10", control.GetItemText(item));
     }
 
@@ -2513,7 +2513,7 @@ public class ListControlTests
         };
         Assert.Equal("10", control.GetItemText(item));
 
-        // Test caching behaviour.
+        // Test caching behavior.
         Assert.Equal("10", control.GetItemText(item));
     }
 
@@ -2530,7 +2530,7 @@ public class ListControlTests
         };
         Assert.Equal("NonCriticalThrowingTypeConverterDataClassToString", control.GetItemText(item));
 
-        // Test caching behaviour.
+        // Test caching behavior.
         Assert.Equal("NonCriticalThrowingTypeConverterDataClassToString", control.GetItemText(item));
     }
 
@@ -2547,7 +2547,7 @@ public class ListControlTests
         };
         Assert.Throws<StackOverflowException>(() => control.GetItemText(item));
 
-        // Test caching behaviour.
+        // Test caching behavior.
         Assert.Throws<StackOverflowException>(() => control.GetItemText(item));
     }
 
@@ -3075,7 +3075,7 @@ public class ListControlTests
         {
 #pragma warning disable CA2201 // Do not raise reserved exception types
             throw new StackOverflowException();
-#pragma warning restore CA2201 // Do not raise reserved exception types
+#pragma warning restore CA2201
         }
     }
 }

@@ -195,7 +195,7 @@ public partial class MenuStrip : ToolStrip
     }
 
     /// <summary>
-    ///  Called from ToolStripManager.ProcessMenuKey.  Fires MenuActivate event and sets focus.
+    ///  Called from ToolStripManager.ProcessMenuKey. Fires MenuActivate event and sets focus.
     /// </summary>
     internal bool OnMenuKey()
     {
@@ -211,7 +211,7 @@ public partial class MenuStrip : ToolStrip
                 }
                 else
                 {
-                    // first alt should select "File".  Future keydowns of alt should restore focus.
+                    // first alt should select "File". Future keydowns of alt should restore focus.
                     SelectNextToolStripItem(null, forward: RightToLeft == RightToLeft.No);
                 }
             }

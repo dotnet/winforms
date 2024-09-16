@@ -135,6 +135,8 @@ configuration:
       - not:
           isAction:
             action: Closed
+      - isActivitySender:
+          issueAuthor: True
       - hasLabel:
           label: ':zzz: no-recent-activity'
       then:
@@ -192,7 +194,7 @@ configuration:
               isRegex: False
       then:
       - addMilestone:
-          milestone: 9.0 Preview5
+          milestone: 10.0 Preview1
       description: Apply milestone to PRs on the main branch
       triggerOnOwnActions: true
     - if:
@@ -239,7 +241,9 @@ configuration:
       then:
       - removeLabel:
           label: ':mailbox_with_no_mail: waiting-author-feedback'
-      description: Remove needs author feedback label when the author comments on an issue
+      - addLabel:
+          label: 'untriaged'
+      description: Remove needs author feedback label when the author comments on an issue and adds untriaged label
     - if:
       - payloadType: Issue_Comment
       - hasLabel:

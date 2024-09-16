@@ -54,7 +54,8 @@ public sealed class DesignerActionUIService : IDisposable
             new DesignerActionUIStateChangeEventArgs(component, DesignerActionUIStateChangeType.Show));
 
     /// <summary>
-    ///  Refreshes the <see cref="DesignerActionGlyph">designer action glyph</see> as well as <see cref="DesignerActionPanel">designer action panels</see>.
+    ///  Refreshes the <see cref="DesignerActionGlyph">designer action glyph</see> as well as
+    ///  <see cref="DesignerActionPanel"> designer action panels.</see>
     /// </summary>
     public void Refresh(IComponent? component) =>
         OnDesignerActionUIStateChange(

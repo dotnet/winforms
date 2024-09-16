@@ -6,11 +6,12 @@ namespace System.Drawing.Text;
 /// <summary>
 ///  When inherited, enumerates the FontFamily objects in a collection of fonts.
 /// </summary>
-public abstract unsafe class FontCollection : IDisposable
+public abstract unsafe class FontCollection : IDisposable, IPointer<GpFontCollection>
 {
-    internal GpFontCollection* _nativeFontCollection;
+    private GpFontCollection* _nativeFontCollection;
+    nint IPointer<GpFontCollection>.Pointer => (nint)_nativeFontCollection;
 
-    internal FontCollection() => _nativeFontCollection = null;
+    private protected FontCollection(GpFontCollection* nativeFontCollection) => _nativeFontCollection = nativeFontCollection;
 
     /// <summary>
     ///  Disposes of this <see cref='FontCollection'/>
@@ -21,7 +22,7 @@ public abstract unsafe class FontCollection : IDisposable
         GC.SuppressFinalize(this);
     }
 
-    protected virtual void Dispose(bool disposing) { }
+    protected virtual void Dispose(bool disposing) => _nativeFontCollection = null;
 
     /// <summary>
     ///  Gets the array of <see cref='FontFamily'/> objects associated with this <see cref='FontCollection'/>.
@@ -38,6 +39,8 @@ public abstract unsafe class FontCollection : IDisposable
                 return [];
             }
 
+            bool installedFontCollection = GetType() == typeof(InstalledFontCollection);
+
             GpFontFamily*[] gpFamilies = new GpFontFamily*[numFound];
             fixed (GpFontFamily** f = gpFamilies)
             {
@@ -48,9 +51,9 @@ public abstract unsafe class FontCollection : IDisposable
             FontFamily[] families = new FontFamily[numFound];
             for (int f = 0; f < numFound; f++)
             {
-                GpFontFamily* native;
-                PInvoke.GdipCloneFontFamily(gpFamilies[f], &native).ThrowIfFailed();
-                families[f] = new FontFamily(native);
+                // GetFontCollectionFamilyList doesn't ref count the returned families. The internal constructor
+                // here will add a ref if the font collection is not the installed font collection.
+                families[f] = new FontFamily(gpFamilies[f], installedFontCollection);
             }
 
             GC.KeepAlive(this);

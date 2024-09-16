@@ -9,7 +9,7 @@ public partial class Control
 {
     /// <summary>
     ///  MetafileDCWrapper is used to wrap a metafile DC so that subsequent
-    ///  paint operations are rendered to a temporary bitmap.  When the
+    ///  paint operations are rendered to a temporary bitmap. When the
     ///  wrapper is disposed, it copies the bitmap back to the metafile DC.
     ///
     ///  Example:

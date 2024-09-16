@@ -16,7 +16,7 @@ internal static class RunLengthEncoder
     /// <summary>
     ///  Get the encoded length, in bytes, of the given data.
     /// </summary>
-    public static int GetEncodedLength(ReadOnlySpan<byte> data)
+    public static int GetEncodedLength(params ReadOnlySpan<byte> data)
     {
         SpanReader<byte> reader = new(data);
 
@@ -38,7 +38,7 @@ internal static class RunLengthEncoder
     /// <summary>
     ///  Get the decoded length, in bytes, of the given encoded data.
     /// </summary>
-    public static int GetDecodedLength(ReadOnlySpan<byte> encoded)
+    public static int GetDecodedLength(params ReadOnlySpan<byte> encoded)
     {
         int length = 0;
         for (int i = 0; i < encoded.Length; i += 2)
@@ -86,7 +86,7 @@ internal static class RunLengthEncoder
 
         while (reader.TryRead(out byte count))
         {
-            if (!reader.TryRead(out byte value) || !writer.TryWrite(count, value))
+            if (!reader.TryRead(out byte value) || !writer.TryWriteCount(count, value))
             {
                 written = writer.Position;
                 return false;

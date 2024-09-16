@@ -9,10 +9,10 @@ internal partial class CommandSet
 {
     /// <internalonly/>
     /// <summary>
-    ///  We extend MenuCommand for our command set items.  A command set item
+    ///  We extend MenuCommand for our command set items. A command set item
     ///  is a menu command with an added delegate that is used to determine the
-    ///  flags for the menu item.  We have different classes of delegates here.
-    ///  For example, many  menu items may be enabled when there is at least
+    ///  flags for the menu item. We have different classes of delegates here.
+    ///  For example, many menu items may be enabled when there is at least
     ///  one object selected, while others are only enabled if there is more than
     ///  one object or if there is a primary selection.
     /// </summary>
@@ -83,7 +83,7 @@ internal partial class CommandSet
 
             // when we optimize, it's because status is fully based on selection.
             // so what we do is only call the status handler once per selection change to prevent
-            // doing the same work over and over again.  we do this by hashing up the command statuses
+            // doing the same work over and over again. we do this by hashing up the command statuses
             // and then filling in the results we get, so we can easily retrieve them when
             // the selection hasn't changed.
             //
@@ -242,7 +242,7 @@ internal partial class CommandSet
             if (_statusHandler is not null)
             {
                 // if we need to update our status,
-                // call the status handler.  otherwise,
+                // call the status handler. otherwise,
                 // get the cached status and push it into this
                 // command.
                 //

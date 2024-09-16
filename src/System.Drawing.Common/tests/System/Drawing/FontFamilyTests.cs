@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing.Text;
+using Windows.Win32.Foundation;
 
 namespace System.Drawing.Tests;
 
@@ -41,13 +42,19 @@ public class FontFamilyTests
     }
 
     [Theory]
-    [InlineData(null)]
     [InlineData("NoSuchFont")]
     [InlineData("Serif")]
     public void Ctor_NoSuchFontName_ThrowsArgumentException(string? name)
     {
         AssertExtensions.Throws<ArgumentException>(null, () => new FontFamily(name));
         AssertExtensions.Throws<ArgumentException>(null, () => new FontFamily(name, null));
+    }
+
+    [Fact]
+    public void Ctor_NullFontName_ThrowsArgumentNullException()
+    {
+        AssertExtensions.Throws<ArgumentNullException>("name", () => new FontFamily(null!));
+        AssertExtensions.Throws<ArgumentNullException>("name", () => new FontFamily(null!, null));
     }
 
     [Fact]
@@ -83,9 +90,6 @@ public class FontFamilyTests
         }
     }
 
-    // This will fail on any platform we use libgdiplus, with any
-    // installed system fonts whose name is longer than 31 chars.
-    // macOS 10.15+ ships out of the box with a problem font
     [Fact]
     public void Families_Get_ReturnsExpected()
     {
@@ -183,19 +187,25 @@ public class FontFamilyTests
     [Fact]
     public void IsStyleAvailable_Disposed_ThrowsArgumentException()
     {
-        FontFamily fontFamily = FontFamily.GenericMonospace;
-        fontFamily.Dispose();
+        using PrivateFontCollection collection = new();
+        collection.AddFontFile(Helpers.GetTestFontPath("CodeNewRoman.otf"));
 
-        AssertExtensions.Throws<ArgumentException>(null, () => fontFamily.IsStyleAvailable(FontStyle.Italic));
+        FontFamily family = new("Code New Roman", collection);
+        family.Dispose();
+
+        AssertExtensions.Throws<ArgumentException>(null, () => family.IsStyleAvailable(FontStyle.Italic));
     }
 
     [Fact]
     public void GetEmHeight_Disposed_ThrowsArgumentException()
     {
-        FontFamily fontFamily = FontFamily.GenericMonospace;
-        fontFamily.Dispose();
+        using PrivateFontCollection collection = new();
+        collection.AddFontFile(Helpers.GetTestFontPath("CodeNewRoman.otf"));
 
-        AssertExtensions.Throws<ArgumentException>(null, () => fontFamily.GetEmHeight(FontStyle.Italic));
+        FontFamily family = new("Code New Roman", collection);
+        family.Dispose();
+
+        AssertExtensions.Throws<ArgumentException>(null, () => family.GetEmHeight(FontStyle.Italic));
     }
 
     private const int FrenchLCID = 1036;
@@ -218,37 +228,49 @@ public class FontFamilyTests
     [Fact]
     public void GetName_Disposed_ThrowsArgumentException()
     {
-        FontFamily fontFamily = FontFamily.GenericMonospace;
-        fontFamily.Dispose();
+        using PrivateFontCollection collection = new();
+        collection.AddFontFile(Helpers.GetTestFontPath("CodeNewRoman.otf"));
 
-        AssertExtensions.Throws<ArgumentException>(null, () => fontFamily.GetName(0));
+        FontFamily family = new("Code New Roman", collection);
+        family.Dispose();
+
+        AssertExtensions.Throws<ArgumentException>(null, () => family.GetName(0));
     }
 
     [Fact]
     public void GetCellAscent_Disposed_ThrowsArgumentException()
     {
-        FontFamily fontFamily = FontFamily.GenericMonospace;
-        fontFamily.Dispose();
+        using PrivateFontCollection collection = new();
+        collection.AddFontFile(Helpers.GetTestFontPath("CodeNewRoman.otf"));
 
-        AssertExtensions.Throws<ArgumentException>(null, () => fontFamily.GetCellAscent(FontStyle.Italic));
+        FontFamily family = new("Code New Roman", collection);
+        family.Dispose();
+
+        AssertExtensions.Throws<ArgumentException>(null, () => family.GetCellAscent(FontStyle.Italic));
     }
 
     [Fact]
     public void GetCellDescent_Disposed_ThrowsArgumentException()
     {
-        FontFamily fontFamily = FontFamily.GenericMonospace;
-        fontFamily.Dispose();
+        using PrivateFontCollection collection = new();
+        collection.AddFontFile(Helpers.GetTestFontPath("CodeNewRoman.otf"));
 
-        AssertExtensions.Throws<ArgumentException>(null, () => fontFamily.GetCellDescent(FontStyle.Italic));
+        FontFamily family = new("Code New Roman", collection);
+        family.Dispose();
+
+        AssertExtensions.Throws<ArgumentException>(null, () => family.GetCellDescent(FontStyle.Italic));
     }
 
     [Fact]
     public void GetLineSpacing_Disposed_ThrowsArgumentException()
     {
-        FontFamily fontFamily = FontFamily.GenericMonospace;
-        fontFamily.Dispose();
+        using PrivateFontCollection collection = new();
+        collection.AddFontFile(Helpers.GetTestFontPath("CodeNewRoman.otf"));
 
-        AssertExtensions.Throws<ArgumentException>(null, () => fontFamily.GetLineSpacing(FontStyle.Italic));
+        FontFamily family = new("Code New Roman", collection);
+        family.Dispose();
+
+        AssertExtensions.Throws<ArgumentException>(null, () => family.GetLineSpacing(FontStyle.Italic));
     }
 
     [Fact]
@@ -257,5 +279,15 @@ public class FontFamilyTests
         FontFamily fontFamily = FontFamily.GenericMonospace;
         fontFamily.Dispose();
         fontFamily.Dispose();
+    }
+
+    [Fact]
+    public unsafe void MultipleInstancesHaveSameHandle()
+    {
+        using FontFamily fontFamily1 = new("Calibri");
+        using FontFamily fontFamily2 = new("Calibri");
+        Assert.Equal(
+            (nint)fontFamily1.GetPointer(),
+            (nint)fontFamily2.GetPointer());
     }
 }

@@ -8,9 +8,9 @@ namespace Microsoft.Office;
 ///  tree of component managers. This tree is used to maintain multiple contexts with regard to
 ///  <see cref="msocstate"/> states. These contexts are referred to as 'state contexts'
 ///
-///  Each component manager in the tree defines a state context.  The components registered with a
+///  Each component manager in the tree defines a state context. The components registered with a
 ///  particular component manager or any of its descendents live within that component manager's
-///  state context.  Calls to <see cref="IMsoComponentManager.OnComponentEnterState"/>
+///  state context. Calls to <see cref="IMsoComponentManager.OnComponentEnterState"/>
 ///  and <see cref="IMsoComponentManager.FOnComponentExitState"/> can be used to affect all components,
 ///  only components within the component manager's state context, or only those components that are
 ///  outside of the component manager's state context. <see cref="IMsoComponentManager.FInState" />

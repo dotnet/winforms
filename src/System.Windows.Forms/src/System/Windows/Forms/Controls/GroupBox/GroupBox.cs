@@ -95,7 +95,7 @@ public partial class GroupBox : Control
             SetAutoSizeMode(value);
             if (ParentInternal is not null)
             {
-                // DefaultLayout does not keep anchor information until it needs to.  When
+                // DefaultLayout does not keep anchor information until it needs to. When
                 // AutoSize became a common property, we could no longer blindly call into
                 // DefaultLayout, so now we do a special InitLayout just for DefaultLayout.
                 if (ParentInternal.LayoutEngine == DefaultLayout.Instance)
@@ -424,15 +424,17 @@ public partial class GroupBox : Control
             // We only pass in the text color if it is explicitly set, else we let the renderer use the color
             // specified by the theme. This is a temporary workaround till we find a good solution for the
             // "default theme color" issue.
-            if (ShouldSerializeForeColor() || !Enabled)
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            if (ShouldSerializeForeColor() || Application.IsDarkModeEnabled || !Enabled)
             {
-                Color textcolor = Enabled ? ForeColor : TextRenderer.DisabledTextColor(BackColor);
+                Color textColor = Enabled ? ForeColor : TextRenderer.DisabledTextColor(BackColor);
+
                 GroupBoxRenderer.DrawGroupBox(
                     e,
                     new Rectangle(0, 0, Width, Height),
                     Text,
                     Font,
-                    textcolor,
+                    textColor,
                     textFlags,
                     gbState);
             }
@@ -446,6 +448,7 @@ public partial class GroupBox : Control
                     textFlags,
                     gbState);
             }
+#pragma warning restore WFO5001
         }
 
         base.OnPaint(e); // raise paint event
@@ -508,7 +511,7 @@ public partial class GroupBox : Control
                 flags |= DRAW_TEXT_FORMAT.DT_RIGHT;
             }
 
-            using var hfont = GdiCache.GetHFONT(Font);
+            using var hfont = GdiCache.GetHFONTScope(Font);
             textSize = hdc.HDC.MeasureText(Text, hfont, new Size(textRectangle.Width, int.MaxValue), (TextFormatFlags)flags);
 
             if (Enabled)

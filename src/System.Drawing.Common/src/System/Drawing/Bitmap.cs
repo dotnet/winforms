@@ -128,7 +128,7 @@ public sealed unsafe class Bitmap : Image, IPointer<GpBitmap>
     {
     }
 
-    GpBitmap* IPointer<GpBitmap>.Pointer => (GpBitmap*)((Image)this).Pointer();
+    nint IPointer<GpBitmap>.Pointer => (nint)((Image)this).Pointer();
 
     public static Bitmap FromHicon(IntPtr hicon)
     {
@@ -233,7 +233,7 @@ public sealed unsafe class Bitmap : Image, IPointer<GpBitmap>
         Size size = Size;
 
         // The new bitmap must be in 32bppARGB  format, because that's the only
-        // thing that supports alpha.  (And that's what the image is initialized to -- transparent)
+        // thing that supports alpha. (And that's what the image is initialized to -- transparent)
         using Bitmap result = new(size.Width, size.Height, PixelFormat.Format32bppArgb);
         using var graphics = Graphics.FromImage(result);
 
@@ -396,7 +396,7 @@ public sealed unsafe class Bitmap : Image, IPointer<GpBitmap>
     ///  </para>
     ///  <para>
     ///   This must be <see cref="DitherType.Solid"/> or <see cref="DitherType.ErrorDiffusion"/> if the <paramref name="paletteType"/>
-    ///   is <see cref="PaletteType.Custom"/> or <see cref="PaletteType.FixedBW"/>.
+    ///   is <see cref="PaletteType.Custom"/> or <see cref="PaletteType.FixedBlackAndWhite"/>.
     ///  </para>
     /// </param>
     /// <param name="paletteType">

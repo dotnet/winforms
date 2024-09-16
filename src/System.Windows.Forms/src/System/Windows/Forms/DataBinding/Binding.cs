@@ -12,10 +12,14 @@ namespace System.Windows.Forms;
 [TypeConverter(typeof(ListBindingConverter))]
 public partial class Binding
 {
+    // Feature switch, when set to false, binding is not supported in trimmed applications.
     [FeatureSwitchDefinition("System.Windows.Forms.Binding.IsSupported")]
 #pragma warning disable IDE0075 // Simplify conditional expression - the simpler expression is hard to read
-    internal static bool IsSupported => AppContext.TryGetSwitch("System.Windows.Forms.Binding.IsSupported", out bool isSupported) ? isSupported : true;
-#pragma warning restore IDE0075 //Simplify conditional expression
+    internal static bool IsSupported { get; } =
+        AppContext.TryGetSwitch("System.Windows.Forms.Binding.IsSupported", out bool isSupported)
+            ? isSupported
+            : true;
+#pragma warning restore IDE0075
 
     private BindingManagerBase? _bindingManagerBase;
 
@@ -218,7 +222,7 @@ public partial class Binding
             BindingContext.UpdateBinding((BindableComponent is not null && IsComponentCreated(BindableComponent) ? BindableComponent.BindingContext : null), this);
             if (value is Form form)
             {
-                form.Load += new EventHandler(FormLoaded);
+                form.Load += FormLoaded;
             }
         }
     }
@@ -241,14 +245,14 @@ public partial class Binding
             {
                 if (_bindingManagerBase is CurrencyManager oldCurrencyManager)
                 {
-                    oldCurrencyManager.MetaDataChanged -= new EventHandler(binding_MetaDataChanged);
+                    oldCurrencyManager.MetaDataChanged -= binding_MetaDataChanged;
                 }
 
                 _bindingManagerBase = value;
 
                 if (value is CurrencyManager newCurrencyManager)
                 {
-                    newCurrencyManager.MetaDataChanged += new EventHandler(binding_MetaDataChanged);
+                    newCurrencyManager.MetaDataChanged += binding_MetaDataChanged;
                 }
 
                 _bindToObject.SetBindingManagerBase(value);
@@ -483,9 +487,9 @@ public partial class Binding
             PropertyDescriptorCollection propInfos;
 
             // If the control is being inherited, then get the properties for
-            // the control's type rather than for the control itself.  Getting
+            // the control's type rather than for the control itself. Getting
             // properties for the control will merge the control's properties with
-            // those of its designer.  Normally we want that, but for
+            // those of its designer. Normally we want that, but for
             // inherited controls we don't because an inherited control should
             // "act" like a runtime control.
             InheritanceAttribute? attr = (InheritanceAttribute?)TypeDescriptor.GetAttributes(BindableComponent)[typeof(InheritanceAttribute)];

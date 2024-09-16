@@ -73,7 +73,7 @@ public static class BinarySerialization
             {
                 AssemblyFormat = assemblyStyle
             };
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
+#pragma warning restore SYSLIB0011
 
             using MemoryStream serializedStream = new(raw);
 
@@ -97,12 +97,12 @@ public static class BinarySerialization
             {
                 AssemblyFormat = assemblyStyle
             };
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
+#pragma warning restore SYSLIB0011
 
             using MemoryStream stream = new();
             binaryFormatter.Serialize(stream, obj);
             return stream.ToArray();
         }
     }
-#pragma warning restore SYSLIB0050 // Type or member is obsolete
+#pragma warning restore SYSLIB0050
 }

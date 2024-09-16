@@ -6,8 +6,8 @@ namespace System.Windows.Forms.Design;
 internal class HelpNamespaceEditor : FileNameEditor
 {
     /// <summary>
-    ///  Initializes the open file dialog when it is created.  This gives you
-    ///  an opportunity to configure the dialog as you please.  The default
+    ///  Initializes the open file dialog when it is created. This gives you
+    ///  an opportunity to configure the dialog as you please. The default
     ///  implementation provides a generic file filter and title.
     /// </summary>
     protected override void InitializeDialog(OpenFileDialog openFileDialog)

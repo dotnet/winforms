@@ -26,7 +26,7 @@ internal readonly ref struct SaveDcScope
     private readonly int _savedState;
 
     /// <summary>
-    ///  Saves the device context state using <see cref="SaveDC(HDC)"/>.
+    ///  Saves the device context state using <see cref="PInvokeCore.SaveDC(HDC)"/>.
     /// </summary>
     /// <param name="hdc"></param>
     public SaveDcScope(HDC hdc)

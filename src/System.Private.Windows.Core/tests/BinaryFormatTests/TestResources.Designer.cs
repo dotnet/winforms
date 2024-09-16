@@ -61,7 +61,12 @@ internal class TestResources {
     }
     
     /// <summary>
-    ///   Looks up a localized string similar to iVBORw0KGgoAAAANSUhEUgAAAG4AAABkCAIAAADoopLKAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAIABJREFUeJzcuQdUU+u67825Z++z99qrr2VvCCi9954EQkioCQRCEgiE3nvvvfeOgEhXQBCkiKJiAcSCUqSDNJGO9G7ug9nbs+65e5xx7rjfGHecb47/eMczZxKc+c3/U97IYpLxRD24go0UwE0Ldrn1vHhk/dbUVvWnXcuCO9d7p28NzmW0vLn+6E3ti/6WrtHXo4t3X3d/YjA+bO5UtDzaZDA2GV8Wt9d3GIe7DAZoj8HYP2LsHzAYX0BHoL2d3aODw6+n/6v+mx9f/reDxbWsK+jusHX+Y83QQu2IAmLcDfPcmujWbv/6tpqpjfrpjett/TVvx1/PbkxsMNYYjN6VrUUG49XUXErZrWUGY/XoaP3L [rest of string was truncated]&quot;;.
+    ///   Looks up a localized string similar to iVBORw0KGgoAAAANSUhEUgAAAG4AAABkCAIAAADoopLKAAAABGdBTUEAALGPC/xhBQ
+    ///   AAAAFzUkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAIABJREFUeJzcuQdUU+u67825Z++
+    ///   z99qrr2VvCCi9954EQkioCQRCEgiE3nvvvfeOgEhXQBCkiKJiAcSCUqSDNJGO9G7ug9nbs+65e5xx7rjfGHecb47/eMczZxKc+c3/U97I
+    ///   YpLxRD24go0UwE0Ldrn1vHhk/dbUVvWnXcuCO9d7p28NzmW0vLn+6E3ti/6WrtHXo4t3X3d/YjA+bO5UtDzaZDA2GV8Wt9d3GIe7DAZoj
+    ///   8HYP2LsHzAYX0BHoL2d3aODw6+n/6v+mx9f/reDxbWsK+jusHX+Y83QQu2IAmLcDfPcmujWbv/6tpqpjfrpjett/TVvx1/PbkxsMNYYjN
+    ///   6VrUUG49XUXErZrWUGY/XoaP3L [rest of string was truncated]&quot;;.
     /// </summary>
     internal static string TestPng {
         get {

@@ -11,8 +11,8 @@ namespace System.ComponentModel.Design.Serialization;
 /// <summary>
 ///  This is a class that derives from DesignerLoader but provides some default functionality.
 ///  This class tracks changes from the loader host and sets its "Modified" bit to true when a
-///  change occurs.  Also, this class implements IDesignerLoaderService to support multiple
-///  load dependencies.  To use BaseDesignerLoader, you need to implement the PerformLoad
+///  change occurs. Also, this class implements IDesignerLoaderService to support multiple
+///  load dependencies. To use BaseDesignerLoader, you need to implement the PerformLoad
 ///  and PerformFlush methods.
 /// </summary>
 public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoaderService
@@ -24,7 +24,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
     private static readonly int s_stateReloadSupported = BitVector32.CreateMask(s_stateModified);               // True if the serializer supports reload.
     private static readonly int s_stateActiveDocument = BitVector32.CreateMask(s_stateReloadSupported);         // Is this the currently active document?
     private static readonly int s_stateDeferredReload = BitVector32.CreateMask(s_stateActiveDocument);          // Set to true if a reload was requested but we aren't the active doc.
-    private static readonly int s_stateReloadAtIdle = BitVector32.CreateMask(s_stateDeferredReload);            // Set if we are waiting to reload at idle.  Prevents multiple idle event handlers.
+    private static readonly int s_stateReloadAtIdle = BitVector32.CreateMask(s_stateDeferredReload);            // Set if we are waiting to reload at idle. Prevents multiple idle event handlers.
     private static readonly int s_stateForceReload = BitVector32.CreateMask(s_stateReloadAtIdle);               // True if we should always reload, False if we should check the code dom for changes first.
     private static readonly int s_stateFlushReload = BitVector32.CreateMask(s_stateForceReload);                // True if we should flush before reloading.
     private static readonly int s_stateModifyIfErrors = BitVector32.CreateMask(s_stateFlushReload);             // True if we we should modify the buffer if we have fatal errors after load.
@@ -56,11 +56,11 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
 
     /// <summary>
     ///  This protected property indicates if there have been any
-    ///  changes made to the design surface.  The Flush method
+    ///  changes made to the design surface. The Flush method
     ///  gets the value of this property to determine if it needs
-    ///  to generate a code dom tree.  This property is set by
+    ///  to generate a code dom tree. This property is set by
     ///  the designer loader when it detects a change to the
-    ///  design surface.  You can override this to perform
+    ///  design surface. You can override this to perform
     ///  additional work, such as checking out a file from source
     ///  code control.
     /// </summary>
@@ -98,7 +98,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
 
     /// <summary>
     ///  Provides an object whose public properties will be made available to the designer serialization manager's
-    ///  Properties property.  The default value of this property is null.
+    ///  Properties property. The default value of this property is null.
     /// </summary>
     protected object? PropertyProvider
     {
@@ -131,7 +131,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
     /// <summary>
     ///  Called by the designer host to begin the loading process.
     ///  The designer host passes in an instance of a designer loader
-    ///  host.  This loader host allows the designer loader to reload
+    ///  host. This loader host allows the designer loader to reload
     ///  the design document and also allows the designer loader to indicate
     ///  that it has finished loading the design document.
     /// </summary>
@@ -168,7 +168,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
             _hostInitialized = true;
             _serializationManager = new DesignerSerializationManager(_host);
 
-            // Add our services.  We do IDesignerSerializationManager separate because
+            // Add our services. We do IDesignerSerializationManager separate because
             // it is not something the user can replace.
             if (TryGetService(out DesignSurfaceServiceContainer? dsc))
             {
@@ -181,13 +181,13 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
             }
 
             Initialize();
-            host.Activated += new EventHandler(OnDesignerActivate);
-            host.Deactivated += new EventHandler(OnDesignerDeactivate);
+            host.Activated += OnDesignerActivate;
+            host.Deactivated += OnDesignerDeactivate;
         }
 
-        // Now that we're initialized, let's begin the load.  We assume
+        // Now that we're initialized, let's begin the load. We assume
         // we support reload until the codeLoader tells us we
-        // can't.  That way, we will do the reload if we didn't get a
+        // can't. That way, we will do the reload if we didn't get a
         // valid loader to start with.
         //
         // StartTimingMark();
@@ -232,10 +232,10 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
     }
 
     /// <summary>
-    ///  Disposes this designer loader.  The designer host will call
+    ///  Disposes this designer loader. The designer host will call
     ///  this method when the design document itself is being destroyed.
     ///  Once called, the designer loader will never be called again.
-    ///  This implementation removes any previously added services.  It
+    ///  This implementation removes any previously added services. It
     ///  does not flush changes, which allows for fast teardown of a
     ///  designer that wasn't saved.
     /// </summary>
@@ -243,27 +243,27 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
     {
         if (_state[s_stateReloadAtIdle])
         {
-            Application.Idle -= new EventHandler(OnIdle);
+            Application.Idle -= OnIdle;
         }
 
         UnloadDocument();
 
         if (TryGetService(out IComponentChangeService? cs))
         {
-            cs.ComponentAdded -= new ComponentEventHandler(OnComponentAdded);
-            cs.ComponentAdding -= new ComponentEventHandler(OnComponentAdding);
-            cs.ComponentRemoving -= new ComponentEventHandler(OnComponentRemoving);
-            cs.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
-            cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
-            cs.ComponentChanging -= new ComponentChangingEventHandler(OnComponentChanging);
-            cs.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
+            cs.ComponentAdded -= OnComponentAdded;
+            cs.ComponentAdding -= OnComponentAdding;
+            cs.ComponentRemoving -= OnComponentRemoving;
+            cs.ComponentRemoved -= OnComponentRemoved;
+            cs.ComponentChanged -= OnComponentChanged;
+            cs.ComponentChanging -= OnComponentChanging;
+            cs.ComponentRename -= OnComponentRename;
         }
 
         if (_host is not null)
         {
             _host.RemoveService<IDesignerLoaderService>();
-            _host.Activated -= new EventHandler(OnDesignerActivate);
-            _host.Deactivated -= new EventHandler(OnDesignerDeactivate);
+            _host.Activated -= OnDesignerActivate;
+            _host.Deactivated -= OnDesignerDeactivate;
             _host = null;
         }
     }
@@ -271,11 +271,11 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
     /// <summary>
     ///  The designer host will call this periodically when it wants to
     ///  ensure that any changes that have been made to the document
-    ///  have been saved by the designer loader.  This method allows
+    ///  have been saved by the designer loader. This method allows
     ///  designer loaders to implement a lazy-write scheme to improve
-    ///  performance.  This designer loader implements lazy writes by
-    ///  listening to component change events.  If a component has
-    ///  changed it sets a "modified" bit.  When Flush is called the
+    ///  performance. This designer loader implements lazy writes by
+    ///  listening to component change events. If a component has
+    ///  changed it sets a "modified" bit. When Flush is called the
     ///  loader will write out a new code dom tree.
     /// </summary>
     public override void Flush()
@@ -295,7 +295,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
             Debug.Assert(host is not null, "designer loader was asked to flush after it has been disposed.");
 
             // If the host has a null root component, it probably failed
-            // its last load.  In that case, there is nothing to flush.
+            // its last load. In that case, there is nothing to flush.
             bool shouldChangeModified = true;
 
             if (host?.RootComponent is not null)
@@ -363,8 +363,8 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
 
     /// <summary>
     ///  Simple helper routine that will throw an exception if we need a service, but cannot get
-    ///  to it.  You should only throw for missing services that are absolutely essential for
-    ///  operation.  If there is a way to gracefully degrade, then you should do it.
+    ///  to it. You should only throw for missing services that are absolutely essential for
+    ///  operation. If there is a way to gracefully degrade, then you should do it.
     /// </summary>
     private protected T GetRequiredService<T>() where T : class
     {
@@ -377,8 +377,8 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
 
     /// <summary>
     ///  This method is called immediately after the first time
-    ///  BeginLoad is invoked.  This is an appropriate place to
-    ///  add custom services to the loader host.  Remember to
+    ///  BeginLoad is invoked. This is an appropriate place to
+    ///  add custom services to the loader host. Remember to
     ///  remove any custom services you add here by overriding
     ///  Dispose.
     /// </summary>
@@ -386,24 +386,24 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
 
     /// <summary>
     ///  This method an be overridden to provide some intelligent
-    ///  logic to determine if a reload is required.  This method is
+    ///  logic to determine if a reload is required. This method is
     ///  called when someone requests a reload but doesn't force
-    ///  the reload.  It gives the loader an opportunity to scan
+    ///  the reload. It gives the loader an opportunity to scan
     ///  the underlying storage to determine if a reload is actually
-    ///  needed.  The default implementation of this method always
+    ///  needed. The default implementation of this method always
     ///  returns true.
     /// </summary>
     protected virtual bool IsReloadNeeded() => true;
 
     /// <summary>
     ///  This method should be called by the designer loader service
-    ///  when the first dependent load has started.  This initializes
+    ///  when the first dependent load has started. This initializes
     ///  the state of the code dom loader and prepares it for loading.
     ///  By default, the designer loader provides
     ///  IDesignerLoaderService itself, so this is called automatically.
     ///  If you provide your own loader service, or if you choose not
     ///  to provide a loader service, you are responsible for calling
-    ///  this method.  BeginLoad will automatically call this, either
+    ///  this method. BeginLoad will automatically call this, either
     ///  indirectly by calling AddLoadDependency if IDesignerLoaderService
     ///  is available, or directly if it is not.
     /// </summary>
@@ -421,13 +421,13 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
             return;
         }
 
-        componentChangeService.ComponentAdded -= new ComponentEventHandler(OnComponentAdded);
-        componentChangeService.ComponentAdding -= new ComponentEventHandler(OnComponentAdding);
-        componentChangeService.ComponentRemoving -= new ComponentEventHandler(OnComponentRemoving);
-        componentChangeService.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
-        componentChangeService.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
-        componentChangeService.ComponentChanging -= new ComponentChangingEventHandler(OnComponentChanging);
-        componentChangeService.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
+        componentChangeService.ComponentAdded -= OnComponentAdded;
+        componentChangeService.ComponentAdding -= OnComponentAdding;
+        componentChangeService.ComponentRemoving -= OnComponentRemoving;
+        componentChangeService.ComponentRemoved -= OnComponentRemoved;
+        componentChangeService.ComponentChanged -= OnComponentChanged;
+        componentChangeService.ComponentChanging -= OnComponentChanging;
+        componentChangeService.ComponentRename -= OnComponentRename;
     }
 
     /// <summary>
@@ -452,7 +452,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
     /// <summary>
     ///  This method is called immediately before the document is unloaded.
     ///  The document may be unloaded in preparation for reload, or
-    ///  if the document failed the load.  If you added document-specific
+    ///  if the document failed the load. If you added document-specific
     ///  services in OnBeginLoad or OnEndLoad, you should remove them
     ///  here.
     /// </summary>
@@ -464,7 +464,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
     /// </summary>
     private void OnComponentAdded(object? sender, ComponentEventArgs e)
     {
-        // We check the loader host here.  We do not actually listen to
+        // We check the loader host here. We do not actually listen to
         // this event until the loader has finished loading but if we
         // succeeded the load and the loader then failed later, we might
         // be listening when asked to unload.
@@ -479,7 +479,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
     /// </summary>
     private void OnComponentAdding(object? sender, ComponentEventArgs e)
     {
-        // We check the loader host here.  We do not actually listen to
+        // We check the loader host here. We do not actually listen to
         // this event until the loader has finished loading but if we
         // succeeded the load and the loader then failed later, we might
         // be listening when asked to unload.
@@ -494,7 +494,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
     /// </summary>
     private void OnComponentChanged(object? sender, ComponentChangedEventArgs e)
     {
-        // We check the loader host here.  We do not actually listen to
+        // We check the loader host here. We do not actually listen to
         // this event until the loader has finished loading but if we
         // succeeded the load and the loader then failed later, we might
         // be listening when asked to unload.
@@ -509,7 +509,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
     /// </summary>
     private void OnComponentChanging(object? sender, ComponentChangingEventArgs e)
     {
-        // We check the loader host here.  We do not actually listen to
+        // We check the loader host here. We do not actually listen to
         // this event until the loader has finished loading but if we
         // succeeded the load and the loader then failed later, we might
         // be listening when asked to unload.
@@ -524,7 +524,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
     /// </summary>
     private void OnComponentRemoved(object? sender, ComponentEventArgs e)
     {
-        // We check the loader host here.  We do not actually listen to
+        // We check the loader host here. We do not actually listen to
         // this event until the loader has finished loading but if we
         // succeeded the load and the loader then failed later, we might
         // be listening when asked to unload.
@@ -539,7 +539,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
     /// </summary>
     private void OnComponentRemoving(object? sender, ComponentEventArgs e)
     {
-        // We check the loader host here.  We do not actually listen to
+        // We check the loader host here. We do not actually listen to
         // this event until the loader has finished loading but if we
         // succeeded the load and the loader then failed later, we might
         // be listening when asked to unload.
@@ -550,13 +550,13 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
     }
 
     /// <summary>
-    ///  Raised by the host when a component is renamed.  Here we modify ourselves
-    ///  and then whack the component declaration.  At the next code gen
+    ///  Raised by the host when a component is renamed. Here we modify ourselves
+    ///  and then whack the component declaration. At the next code gen
     ///  cycle we will recreate the declaration.
     /// </summary>
     private void OnComponentRename(object? sender, ComponentRenameEventArgs e)
     {
-        // We check the loader host here.  We do not actually listen to
+        // We check the loader host here. We do not actually listen to
         // this event until the loader has finished loading but if we
         // succeeded the load and the loader then failed later, we might
         // be listening when asked to unload.
@@ -568,8 +568,8 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
     }
 
     /// <summary>
-    ///  Called when this document becomes active.  here we check to see if
-    ///  someone else has modified the contents of our buffer.  If so, we
+    ///  Called when this document becomes active. here we check to see if
+    ///  someone else has modified the contents of our buffer. If so, we
     ///  ask the designer to reload.
     /// </summary>
     private void OnDesignerActivate(object? sender, EventArgs e)
@@ -603,20 +603,20 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
     }
 
     /// <summary>
-    ///  Called when this document loses activation.  We just remember this
+    ///  Called when this document loses activation. We just remember this
     ///  for later.
     /// </summary>
     private void OnDesignerDeactivate(object? sender, EventArgs e) => _state[s_stateActiveDocument] = false;
 
     /// <summary>
     ///  This method should be called by the designer loader service
-    ///  when all dependent loads have been completed.  This
+    ///  when all dependent loads have been completed. This
     ///  "shuts down" the loading process that was initiated by
-    ///  BeginLoad.  By default, the designer loader provides
+    ///  BeginLoad. By default, the designer loader provides
     ///  IDesignerLoaderService itself, so this is called automatically.
     ///  If you provide your own loader service, or if you choose not
     ///  to provide a loader service, you are responsible for calling
-    ///  this method.  BeginLoad will automatically call this, either
+    ///  this method. BeginLoad will automatically call this, either
     ///  indirectly by calling DependentLoadComplete if IDesignerLoaderService
     ///  is available, or directly if it is not.
     /// </summary>
@@ -647,7 +647,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
                 successful = true;
             }
 
-            // Inform the serialization manager that we are all done.  The serialization
+            // Inform the serialization manager that we are all done. The serialization
             // manager clears state at this point to help enforce a stateless serialization
             // mechanism.
             if (errors is not null)
@@ -673,13 +673,13 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
 
             if (TryGetService(out IComponentChangeService? componentChangeService))
             {
-                componentChangeService.ComponentAdded += new ComponentEventHandler(OnComponentAdded);
-                componentChangeService.ComponentAdding += new ComponentEventHandler(OnComponentAdding);
-                componentChangeService.ComponentRemoving += new ComponentEventHandler(OnComponentRemoving);
-                componentChangeService.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
-                componentChangeService.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
-                componentChangeService.ComponentChanging += new ComponentChangingEventHandler(OnComponentChanging);
-                componentChangeService.ComponentRename += new ComponentRenameEventHandler(OnComponentRename);
+                componentChangeService.ComponentAdded += OnComponentAdded;
+                componentChangeService.ComponentAdding += OnComponentAdding;
+                componentChangeService.ComponentRemoving += OnComponentRemoving;
+                componentChangeService.ComponentRemoved += OnComponentRemoved;
+                componentChangeService.ComponentChanged += OnComponentChanged;
+                componentChangeService.ComponentChanging += OnComponentChanging;
+                componentChangeService.ComponentRename += OnComponentRename;
             }
 
             EnableComponentNotification(true);
@@ -687,7 +687,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
 
         LoaderHost.EndLoad(_baseComponentClassName!, successful, errors);
 
-        // if we got errors in the load, set ourselves as modified so we'll regen code.  If this fails, we don't
+        // if we got errors in the load, set ourselves as modified so we'll regen code. If this fails, we don't
         // care; the Modified bit was only a hint.
         if (_state[s_stateModifyIfErrors] && errors is not null && errors.Count > 0)
         {
@@ -708,8 +708,8 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
 
     /// <summary>
     ///  This method is called in response to a component changing, adding or removing event to indicate
-    ///  that the designer is about to be modified.  Those interested in implementing source code
-    ///  control may do so by overriding this method.  A call to OnModifying does not mean that the
+    ///  that the designer is about to be modified. Those interested in implementing source code
+    ///  control may do so by overriding this method. A call to OnModifying does not mean that the
     ///  Modified property will later be set to true; it is merely an intention to do so.
     /// </summary>
     protected virtual void OnModifying()
@@ -717,12 +717,12 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
 
     /// <summary>
     ///  Invoked by the loader host when it actually performs the reload, but before
-    ///  the reload actually happens.  Here we unload our part of the loader
+    ///  the reload actually happens. Here we unload our part of the loader
     ///  and get us ready for the pending reload.
     /// </summary>
     private void OnIdle(object? sender, EventArgs e)
     {
-        Application.Idle -= new EventHandler(OnIdle);
+        Application.Idle -= OnIdle;
 
         if (!_state[s_stateReloadAtIdle])
         {
@@ -777,18 +777,18 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
 
     /// <summary>
     ///  This method is called when it is time to flush the
-    ///  contents of the loader.  You should save any state
+    ///  contents of the loader. You should save any state
     ///  at this time.
     /// </summary>
     protected abstract void PerformFlush(IDesignerSerializationManager serializationManager);
 
     /// <summary>
     ///  This method is called when it is time to load the
-    ///  design surface.  If you are loading asynchronously
+    ///  design surface. If you are loading asynchronously
     ///  you should ask for IDesignerLoaderService and call
-    ///  AddLoadDependency.  When loading asynchronously you
+    ///  AddLoadDependency. When loading asynchronously you
     ///  should at least create the root component during
-    ///  PerformLoad.  The DesignSurface is only able to provide
+    ///  PerformLoad. The DesignSurface is only able to provide
     ///  a view when there is a root component.
     /// </summary>
     protected abstract void PerformLoad(IDesignerSerializationManager serializationManager);
@@ -796,13 +796,13 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
     /// <summary>
     ///  This method schedules a reload of the designer.
     ///  Designer reloading happens asynchronously in order
-    ///  to unwind the stack before the reload begins.  If
-    ///  force is true, a reload is always performed.  If
+    ///  to unwind the stack before the reload begins. If
+    ///  force is true, a reload is always performed. If
     ///  it is false, a reload is only performed if the
     ///  underlying code dom tree has changed in a way that
     ///  would affect the form.
     ///  If flush is true, the designer is flushed before performing
-    ///  a reload.  If false, any designer changes are abandoned.
+    ///  a reload. If false, any designer changes are abandoned.
     ///  If ModifyOnError is true, the designer loader will be put
     ///  in the modified state if any errors happened during the
     ///  load.
@@ -814,8 +814,8 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
         _state[s_stateModifyIfErrors] = ((flags & ReloadOptions.ModifyOnError) != 0);
 
         // Our implementation of Reload only reloads if we are the
-        // active designer.  Otherwise, we wait until we become
-        // active and reload at that time.  We also never do a
+        // active designer. Otherwise, we wait until we become
+        // active and reload at that time. We also never do a
         // reload if we are flushing code.
         if (_state[s_stateFlushInProgress])
         {
@@ -833,14 +833,14 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
             return;
         }
 
-        Application.Idle += new EventHandler(OnIdle);
+        Application.Idle += OnIdle;
         _state[s_stateReloadAtIdle] = true;
     }
 
     /// <summary>
     ///  This method is called during flush if one or more errors occurred while
-    ///  flushing changes.  The values in the errors collection may either be
-    ///  exceptions or objects whose ToString value describes the error.  The default
+    ///  flushing changes. The values in the errors collection may either be
+    ///  exceptions or objects whose ToString value describes the error. The default
     ///  implementation of this method takes last exception in the collection and
     ///  raises it as an exception.
     /// </summary>
@@ -869,9 +869,9 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
 
     /// <summary>
     ///  This property provides the name the designer surface
-    ///  will use for the base class.  Normally this is a fully
-    ///  qualified name such as "Project1.Form1".  You should set
-    ///  this before finishing the load.  Generally this is set
+    ///  will use for the base class. Normally this is a fully
+    ///  qualified name such as "Project1.Form1". You should set
+    ///  this before finishing the load. Generally this is set
     ///  during PerformLoad.
     /// </summary>
     protected void SetBaseComponentClassName(string name)
@@ -882,7 +882,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
     }
 
     /// <summary>
-    ///  This method will be called when the document is to be unloaded.  It
+    ///  This method will be called when the document is to be unloaded. It
     ///  does not dispose us, but it gets us ready for a dispose or a reload.
     /// </summary>
     private void UnloadDocument()
@@ -893,7 +893,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
     }
 
     /// <summary>
-    ///  Adds a load dependency to this loader.  This indicates that some other
+    ///  Adds a load dependency to this loader. This indicates that some other
     ///  object is also participating in the load, and that the designer loader
     ///  should not call EndLoad on the loader host until all load dependencies
     ///  have called DependentLoadComplete on the designer loader.
@@ -925,8 +925,8 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
             throw new InvalidOperationException();
         }
 
-        // If the dependent load failed, remember it.  There may be multiple
-        // dependent loads.  If any one fails, we're sunk.
+        // If the dependent load failed, remember it. There may be multiple
+        // dependent loads. If any one fails, we're sunk.
         if (!successful)
         {
             _state[s_stateLoadFailed] = true;
@@ -934,7 +934,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
 
         if (--_loadDependencyCount == 0)
         {
-            // We have just completed the last dependent load.  Report this.
+            // We have just completed the last dependent load. Report this.
             OnEndLoad(!_state[s_stateLoadFailed], errorCollection);
             return;
         }
@@ -953,8 +953,8 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
 
     /// <summary>
     ///  This can be called by an outside object to request that the loader
-    ///  reload the design document.  If it supports reloading and wants to
-    ///  comply with the reload, the designer loader should return true.  Otherwise
+    ///  reload the design document. If it supports reloading and wants to
+    ///  comply with the reload, the designer loader should return true. Otherwise
     ///  it should return false, indicating that the reload will not occur.
     ///  Callers should not rely on the reload happening immediately; the
     ///  designer loader may schedule this for some other time, or it may

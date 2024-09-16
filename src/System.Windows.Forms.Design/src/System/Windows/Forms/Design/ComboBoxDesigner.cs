@@ -74,7 +74,7 @@ internal class ComboBoxDesigner : ControlDesigner
     /// <summary>
     ///  We override this so we can clear the text field set by controldesigner.
     /// </summary>
-    public override void InitializeNewComponent(IDictionary defaultValues)
+    public override void InitializeNewComponent(IDictionary? defaultValues)
     {
         base.InitializeNewComponent(defaultValues);
 
@@ -98,7 +98,7 @@ internal class ComboBoxDesigner : ControlDesigner
 
     /// <summary>
     ///  Retrieves a set of rules concerning the movement capabilities of a component.
-    ///  This should be one or more flags from the SelectionRules class.  If no designer
+    ///  This should be one or more flags from the SelectionRules class. If no designer
     ///  provides rules for a component, the component will not get any UI services.
     /// </summary>
     public override SelectionRules SelectionRules
@@ -110,7 +110,7 @@ internal class ComboBoxDesigner : ControlDesigner
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(Component);
             if (props.TryGetPropertyDescriptorValue("DropDownStyle", Component, ref style))
             {
-                // Height is not user-changable for these styles
+                // Height is not user-changeable for these styles
                 if (style is ComboBoxStyle.DropDown or ComboBoxStyle.DropDownList)
                 {
                     rules &= ~(SelectionRules.TopSizeable | SelectionRules.BottomSizeable);

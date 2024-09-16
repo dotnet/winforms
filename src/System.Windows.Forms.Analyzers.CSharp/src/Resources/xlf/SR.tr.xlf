@@ -2,6 +2,11 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en" target-language="tr" original="../SR.resx">
     <body>
+      <trans-unit id="AddDesignerSerializationVisibilityCodeFixTitle">
+        <source>Add DesignerSerializationVisibilityAttribute to property</source>
+        <target state="translated">Özelliğe DesignerSerializationVisibilityAttribute ekleyin</target>
+        <note />
+      </trans-unit>
       <trans-unit id="GdiplusFontFamilyNotFound">
         <source>Font '{0}' cannot be found.</source>
         <target state="translated">'{0}' yazı tipi bulunamıyor.</target>
@@ -22,29 +27,59 @@
         <target state="translated">{0} metni ayrıştırılamıyor. Beklenen metin biçimi: "{1}".</target>
         <note />
       </trans-unit>
-      <trans-unit id="WFAC001Message">
+      <trans-unit id="WFO0001Message">
         <source>Only projects with 'OutputType={0}' supported</source>
         <target state="translated">Yalnızca 'OutputType={0}' çıkış türüne sahip projeler destekleniyor</target>
         <note />
       </trans-unit>
-      <trans-unit id="WFAC001Title">
+      <trans-unit id="WFO0001Title">
         <source>Unsupported project type</source>
         <target state="translated">Desteklenmeyen proje türü</target>
         <note />
       </trans-unit>
-      <trans-unit id="WFAC002Message">
+      <trans-unit id="WFO0002Message">
         <source>ArgumentException: Project property '{0}' cannot be set to '{1}'</source>
         <target state="translated">ArgumentException: '{0}' proje özelliği '{1}' olarak ayarlanamıyor</target>
         <note />
       </trans-unit>
-      <trans-unit id="WFAC002MessageWithReason">
-        <source>ArgumentException: Project property '{0}' cannot be set to '{1}'. Reason: {2}</source>
-        <target state="translated">ArgumentException: '{0}' proje özelliği '{1}' olarak ayarlanamıyor. Neden: {2}</target>
+      <trans-unit id="WFO0002MessageWithReason">
+        <source>ArgumentException: Project property '{0}' cannot be set to '{1}'. Reason: {2}.</source>
+        <target state="translated">ArgumentException: '{0}' proje özelliği '{1}' olarak ayarlanamıyor. Neden: {2}.</target>
         <note />
       </trans-unit>
-      <trans-unit id="WFAC002Title">
+      <trans-unit id="WFO0002Title">
         <source>Unsupported property value</source>
         <target state="translated">Desteklenmeyen özellik değeri</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO1000AnalyzerDescription">
+        <source>A property should determine its property content serialization with the DesignerSerializationVisibilityAttribute, DefaultValueAttribute or the ShouldSerializeProperty method.</source>
+        <target state="translated">Bir özelliğin DesignerSerializationVisibilityAttribute, DefaultValueAttribute veya ShouldSerializeProperty yöntemiyle özellik içeriği serileştirme işlemini belirlemesi gerekir.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO1000AnalyzerMessageFormat">
+        <source>Property '{0}' does not configure the code serialization for its property content</source>
+        <target state="translated">'{0}' özelliği, özellik içeriği için kod serileştirme işlemini yapılandırmıyor.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO1000AnalyzerTitle">
+        <source>Missing code serialization configuration for property content</source>
+        <target state="translated">Özellik içeriği için kod serileştirme yapılandırması eksik</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2001AnalyzerDescription">
+        <source>Avoid passing a `Func&lt;T&gt;` to `InvokeAsync` where `T` is a `Task` or `ValueTask`, unless your intention is for the delegate to simply be kicked off as an unsupervised task. Instead, use `Func&lt;CancellationToken, ValueTask&gt;` or `Func&lt;CancellationToken, ValueTask&lt;T&gt;&gt;`, so that the delegate passed to `InvokeAsync` can be awaited, allowing exceptions to be properly handled.</source>
+        <target state="translated">Metot temsilcisinin basitçe denetlenmeyen bir görev olarak başlatılmasını amaçlamadığınız sürece, `T`'nin bir `Task` veya `ValueTask` olduğu `InvokeAsync`'e `Func&lt;T&gt;` geçirmekten kaçının. Bunun yerine, `Func&lt;CancellationToken, ValueTask&gt;` veya `Func&lt;CancellationToken, ValueTask&lt;T&gt;&gt;` kullanın, böylece `InvokeAsync`'e geçirilen metot temsilcisi beklenebilir ve özel durumların düzgün bir şekilde işlenmesine izin verilebilir.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2001AnalyzerMessageFormat">
+        <source>Task is being passed to InvokeAsync without a cancellation token</source>
+        <target state="translated">Görev, bir iptal belirteci olmadan InvokeAsync'e geçiriliyor</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFO2001AnalyzerTitle">
+        <source>Task is being passed to InvokeAsync without a cancellation token</source>
+        <target state="translated">Görev, bir iptal belirteci olmadan InvokeAsync'e geçiriliyor</target>
         <note />
       </trans-unit>
     </body>

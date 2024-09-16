@@ -279,23 +279,23 @@ internal partial class FlowLayout : LayoutEngine
     }
 
     public static bool GetWrapContents(IArrangedElement container) =>
-        container.Properties.GetInteger(s_wrapContentsProperty) == 0;
+        !container.Properties.TryGetValue(s_wrapContentsProperty, out bool wrap) || wrap;
 
     public static void SetWrapContents(IArrangedElement container, bool value)
     {
-        container.Properties.SetInteger(s_wrapContentsProperty, value ? 0 : 1);
+        container.Properties.AddValue(s_wrapContentsProperty, value);
         LayoutTransaction.DoLayout(container, container, PropertyNames.WrapContents);
         Debug.Assert(GetWrapContents(container) == value, "GetWrapContents should return the same value as we set");
     }
 
     public static FlowDirection GetFlowDirection(IArrangedElement container) =>
-        (FlowDirection)container.Properties.GetInteger(s_flowDirectionProperty);
+        container.Properties.GetValueOrDefault<FlowDirection>(s_flowDirectionProperty);
 
     public static void SetFlowDirection(IArrangedElement container, FlowDirection value)
     {
         SourceGenerated.EnumValidator.Validate(value);
 
-        container.Properties.SetInteger(s_flowDirectionProperty, (int)value);
+        container.Properties.AddValue(s_flowDirectionProperty, value);
         LayoutTransaction.DoLayout(container, container, PropertyNames.FlowDirection);
         Debug.Assert(GetFlowDirection(container) == value, "GetFlowDirection should return the same value as we set");
     }

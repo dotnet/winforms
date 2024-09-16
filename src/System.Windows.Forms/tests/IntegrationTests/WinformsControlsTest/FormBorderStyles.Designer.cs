@@ -40,7 +40,7 @@ partial class FormBorderStyles
         this.btnChangeFormBorderStyle.TabIndex = 0;
         this.btnChangeFormBorderStyle.Text = "Change FormBorderStyle";
         this.btnChangeFormBorderStyle.UseVisualStyleBackColor = true;
-        this.btnChangeFormBorderStyle.Click += new System.EventHandler(this.btnChangeFormBorderStyle_Click);
+        this.btnChangeFormBorderStyle.Click += this.btnChangeFormBorderStyle_Click;
         // 
         // lblFormBorderStyle
         // 

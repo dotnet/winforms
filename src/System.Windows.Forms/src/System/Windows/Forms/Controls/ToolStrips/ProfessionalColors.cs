@@ -22,7 +22,7 @@ public static class ProfessionalColors
 
     static ProfessionalColors()
     {
-        SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
+        SystemEvents.UserPreferenceChanged += OnUserPreferenceChanged;
         SetScheme();
     }
 

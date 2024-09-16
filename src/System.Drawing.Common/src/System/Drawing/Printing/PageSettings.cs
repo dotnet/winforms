@@ -253,7 +253,8 @@ public unsafe class PageSettings : ICloneable
             if (devmode->dmFields.HasFlag(DEVMODE_FIELD_FLAGS.DM_PAPERLENGTH))
             {
                 // dmPaperLength is always in tenths of millimeter but paperSizes are in hundredth of inch ..
-                // so we need to convert :: use PrinterUnitConvert.Convert(value, PrinterUnit.TenthsOfAMillimeter /*fromUnit*/, PrinterUnit.Display /*ToUnit*/)
+                // so we need to convert :: use PrinterUnitConvert.Convert(value, PrinterUnit.
+                // TenthsOfAMillimeter /*fromUnit*/, PrinterUnit.Display /*ToUnit*/)
                 int length = PrinterUnitConvert.Convert(_paperSize.Height, PrinterUnit.Display, PrinterUnit.TenthsOfAMillimeter);
                 devmode->dmPaperLength = (short)length;
                 setLength = true;

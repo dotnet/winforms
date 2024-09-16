@@ -288,8 +288,8 @@
         <note />
       </trans-unit>
       <trans-unit id="BinaryFormatterNotSupported">
-        <source>Using the BinaryFormatter is not supported.</source>
-        <target state="translated">BinaryFormatter kullanımı desteklenmiyor.</target>
+        <source>BinaryFormatter serialization and deserialization are disabled within this application. See https://aka.ms/binaryformatter for more information.</source>
+        <target state="translated">BinaryFormatter serileştirme ve seri durumdan çıkarma işlemleri bu uygulamada devre dışı. Daha fazla bilgi için https://aka.ms/binaryformatter sayfasına bakın.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
@@ -1527,6 +1527,11 @@
         <target state="translated">İşaretçi denetimin üzerine geldiğinde görünen imleç.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlDarkModeDescr">
+        <source>Determines the dark mode setting for the control. This ambient property inherits its value from its parent control or from the Application class.</source>
+        <target state="translated">Denetim için karanlık mod ayarını belirler. Bu ortam özelliği değerini üst denetiminden veya Uygulama sınıfından devralır.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ControlDataContextChangedDescr">
         <source>Occurs when the value of the DataContext property changes.</source>
         <target state="translated">DataContext özelliğinin değeri değiştiğinde gerçekleşir.</target>
@@ -1660,6 +1665,11 @@
       <trans-unit id="ControlNotChild">
         <source>'child' is not a child control of this parent.</source>
         <target state="translated">'alt' bu üstün alt denetimi değil.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlNotSupportedInTrimming">
+        <source>'{0}' is not supported in trimmed applications.</source>
+        <target state="translated">'{0}', kırpılmış uygulamalarda desteklenmiyor.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlOnAutoSizeChangedDescr">
@@ -2175,6 +2185,11 @@
       <trans-unit id="CursorNonSerializableHandle">
         <source>Stock cursors cannot be serialized.</source>
         <target state="translated">Hazır imleçler seri hale getirilemez.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DarkModeNotSupported">
+        <source>Dark mode cannot be activated, either because of an activated High-Contrast mode or because the underlying OS does not support it.</source>
+        <target state="translated">Yüksek Karşıtlık modunun etkin olması veya temel işletim sisteminin desteklememesi nedeniyle karanlık mod etkinleştirilemiyor.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataBindingAddNewNotSupportedOnPropertyManager">
@@ -4639,6 +4654,11 @@ Bu varsayılan iletişim kutusunu değiştirmek için, lütfen DataError olayın
         <target state="translated">Kullanıcıların formunuzdaki Web sayfalarına gitmesine olanak tanır.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DesignTimeFeaturesNotSupported">
+        <source>Design time features are not supported.</source>
+        <target state="translated">Tasarım zamanı özellikleri desteklenmiyor.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DispInvokeFailed">
         <source>Operation {0} on the component did not succeed, generating the error code 0x{1:X}.</source>
         <target state="translated">Bileşen üzerindeki {0} işlemi başarılı olmadı, oluşturulan hata kodu 0x{1:X}.</target>
@@ -5295,6 +5315,16 @@ Bunu değiştirmek istiyor musunuz?</target>
         <target state="translated">Otomatik kayan kaydırma çubuğunun geçerli konumu.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormBorderColorChangedDescr">
+        <source>Occurs whenever the FormBorderColor property is changed.</source>
+        <target state="translated">FormBorderColor özelliği her değiştiğinde gerçekleşir.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormBorderColorDescr">
+        <source>The color of the Form's border.</source>
+        <target state="translated">Form kenarlığının rengi.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormBorderStyleDescr">
         <source>Indicates the appearance and behavior of the border and title bar of the form.</source>
         <target state="translated">Formun kenarlığının ve başlık çubuğunun görünümünü ve davranışını gösterir.</target>
@@ -5305,9 +5335,39 @@ Bunu değiştirmek istiyor musunuz?</target>
         <target state="translated">Formun iptal düğmesi. Bu özellik ayarlıysa, kullanıcı 'ESC' tuşuna her bastığında düğme 'tıklatılır'.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormCaptionBackColorChangedDescr">
+        <source>Occurs whenever the FormCaptionBackColor property is changed.</source>
+        <target state="translated">FormCaptionBackColor özelliği her değiştiğinde gerçekleşir.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCaptionBackColorDescr">
+        <source>The back color of the Form's caption (title bar).</source>
+        <target state="translated">Form başlığının arka plan rengi (başlık çubuğu).</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCaptionTextColorChangedDescr">
+        <source>Occurs whenever the FormCaptionTextColor property is changed.</source>
+        <target state="translated">FormCaptionTextColor özelliği her değiştiğinde gerçekleşir.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCaptionTextColorDescr">
+        <source>The color of the Form's text caption (title bar text).</source>
+        <target state="translated">Form metin başlığının arka plan rengi (başlık çubuğu metni).</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormControlBoxDescr">
         <source>Determines whether a form has a Control/System menu box.</source>
         <target state="translated">Formun Denetim/Sistem menüsü kutusu olup olmadığını belirler.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCornerPreferenceChangedDescr">
+        <source>Occurs whenever the FormCornerPreference property is changed.</source>
+        <target state="translated">FormCornerPreference özelliği her değiştiğinde gerçekleşir.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormCornerPreferenceDescr">
+        <source>The rounding style of the Form's border.</source>
+        <target state="translated">Form kenarlığının yuvarlama stili.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormDesktopBoundsDescr">
@@ -5510,6 +5570,11 @@ Bunu değiştirmek istiyor musunuz?</target>
         <target state="translated">Formun donukluk yüzdesi. </target>
         <note />
       </trans-unit>
+      <trans-unit id="FormOrTaskDialog_NoSyncContextForShowAsync">
+        <source>Failed to retrieve the Synchronization Context for showing the Form asynchronously.</source>
+        <target state="translated">Formun zaman uyumsuz olarak gösterilmesi için Eşitleme Bağlamı yanıtlanamadı.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormOwnedFormsDescr">
         <source>Array of forms owned by this form.</source>
         <target state="translated">Bu formun sahibi olduğu formlar dizisi.</target>
@@ -5553,6 +5618,11 @@ Bunu değiştirmek istiyor musunuz?</target>
       <trans-unit id="FormWindowStateDescr">
         <source>Determines the initial visual state of the form.</source>
         <target state="translated">Formun başlangıçtaki görsel durumunu belirler.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Form_HasAlreadyBeenShownAsync">
+        <source>The form has already been shown asynchronously.</source>
+        <target state="translated">Form zaten zaman uyumsuz olarak gösterildi.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormatControlFormatDescr">
@@ -6845,8 +6915,8 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <note />
       </trans-unit>
       <trans-unit id="ListViewVirtualListSizeDescr">
-        <source>Sets the count of the item collection when the ListView is in virtual mode.</source>
-        <target state="translated">ListView sanal moddayken öğe koleksiyonu sayısını ayarlar.</target>
+        <source>Sets the count of the item collection when the ListView is in virtual mode. If VirtualMode is set to true, and the VirtualListSize property is greater than 0, you must handle the RetrieveVirtualItem event providing valid items.</source>
+        <target state="translated">ListView sanal moddayken öğe koleksiyonu sayısını ayarlar. VirtualMode true olarak ayarlanmışsa ve VirtualListSize özelliği 0'dan büyükse, RetrieveVirtualItem olayını geçerli öğeler sağlayarak işlemeniz gerekir.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewVirtualListSizeInvalidArgument">
@@ -9692,6 +9762,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="TooManyResumeUpdateMenuHandles">
         <source>Too many calls to ResumeUpdateMenuHandles.</source>
         <target state="translated">Çok fazla sayıda ResumeUpdateMenuHandles çağrısı.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripAllowClickThrough">
+        <source>Allows the control to be interacted when window does not have focus.</source>
+        <target state="translated">Pencerenin odağı olmadığında kontrolün etkileşime girmesine izin verir.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue">

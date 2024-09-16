@@ -3,8 +3,9 @@
 
 using System.Drawing;
 
-namespace WinformsControlsTest;
+namespace WinFormsControlsTest;
 
+[DesignerCategory("Default")]
 public class FormShowInTaskbar : Form
 {
     public FormShowInTaskbar()

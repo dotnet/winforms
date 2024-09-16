@@ -150,14 +150,14 @@ internal sealed class HtmlShimManager : IDisposable
         {
             // We need to add a window shim here for documents and elements
             // so we can sync Window.Unload. The window shim itself will trap
-            // the unload event and call back on us on OnWindowUnloaded.  When
+            // the unload event and call back on us on OnWindowUnloaded. When
             // that happens we know we can free all our ptrs to COM.
             AddWindowShim(new HtmlWindow(this, ComHelpers.GetComPointer<IHTMLWindow2>(addedShim.AssociatedWindow)));
         }
     }
 
     /// <summary>
-    ///  HtmlWindowShim calls back on us when it has unloaded the page.  At this point we need to
+    ///  HtmlWindowShim calls back on us when it has unloaded the page. At this point we need to
     ///  walk through our lists and make sure we've cleaned up
     /// </summary>
     internal void OnWindowUnloaded(HtmlWindow unloadedWindow)

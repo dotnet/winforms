@@ -379,6 +379,11 @@
         <target state="translated">{0} 컬렉션 편집기</target>
         <note />
       </trans-unit>
+      <trans-unit id="CollectionEditorCreateInstanceError">
+        <source>Neither {0} nor {1} can create an instance of {2}.</source>
+        <target state="translated">{0} 또는 {1} 모두 {2}인스턴스를 만들 수 없습니다.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CollectionEditorInheritedReadOnlySelection">
         <source>Read-only component(s) selected.</source>
         <target state="translated">읽기 전용 구성 요소가 선택되었습니다.</target>

@@ -27,8 +27,8 @@ public abstract partial class CodeDomSerializerBase
     }
 
     /// <summary>
-    ///  This method is invoked during deserialization to obtain an instance of an object.  When this is called, an instance
-    ///  of the requested type should be returned.  The default implementation invokes manager.CreateInstance.
+    ///  This method is invoked during deserialization to obtain an instance of an object. When this is called, an instance
+    ///  of the requested type should be returned. The default implementation invokes manager.CreateInstance.
     /// </summary>
     protected virtual object DeserializeInstance(IDesignerSerializationManager manager, Type type, object?[]? parameters, string? name, bool addToContainer)
     {
@@ -39,8 +39,8 @@ public abstract partial class CodeDomSerializerBase
     }
 
     /// <summary>
-    ///  This routine returns the correct typename given a CodeTypeReference.  It expands the child typenames
-    ///  and builds up the clr formatted generic name.  If its not a generic, it just returns BaseType.
+    ///  This routine returns the correct typename given a CodeTypeReference. It expands the child typenames
+    ///  and builds up the clr formatted generic name. If its not a generic, it just returns BaseType.
     /// </summary>
     internal static string GetTypeNameFromCodeTypeReference(IDesignerSerializationManager manager, CodeTypeReference typeref)
     {
@@ -324,13 +324,13 @@ public abstract partial class CodeDomSerializerBase
 
     /// <summary>
     ///  This method will inspect all of the properties on the given object fitting the filter, and check for that
-    ///  property in a resource blob.  This is useful for deserializing properties that cannot be represented
+    ///  property in a resource blob. This is useful for deserializing properties that cannot be represented
     ///  in code, such as design-time properties.
     /// </summary>
     protected void DeserializePropertiesFromResources(IDesignerSerializationManager manager, object value, Attribute[]? filter)
     {
         // It is much faster to dig through the resources first, and then map these resources to properties than it is
-        // to filter properties at each turn.  Why?  Because filtering properties requires a separate filter call for
+        // to filter properties at each turn. Why?  Because filtering properties requires a separate filter call for
         // each object (because designers get a chance to filter, the cache is per-component), while resources are loaded
         // once per document.
         IDictionaryEnumerator? de = ResourceCodeDomSerializer.GetMetadataEnumerator(manager);
@@ -397,12 +397,13 @@ public abstract partial class CodeDomSerializerBase
     }
 
     /// <summary>
-    ///  This is a helper method that will deserialize a given statement.  It deserializes
+    ///  This is a helper method that will deserialize a given statement. It deserializes
     ///  the statement by interpreting and executing the CodeDom statement.
     /// </summary>
     protected void DeserializeStatement(IDesignerSerializationManager manager, CodeStatement statement)
     {
-        // Push this statement onto the context stack.  This allows any serializers handling an expression to know what it was connected to.
+        // Push this statement onto the context stack.
+        // This allows any serializers handling an expression to know what it was connected to.
         manager.Context.Push(statement);
         try
         {
@@ -417,7 +418,7 @@ public abstract partial class CodeDomSerializerBase
             }
             else if (statement is CodeCommentStatement)
             {
-                // do nothing for comments.  This just suppresses the debug warning
+                // do nothing for comments. This just suppresses the debug warning
             }
             else if (statement is CodeExpressionStatement ces)
             {
@@ -446,7 +447,7 @@ public abstract partial class CodeDomSerializerBase
         }
         catch (Exception e)
         {
-            // Since we always go through reflection, don't  show what our engine does, show what caused  the problem.
+            // Since we always go through reflection, don't show what our engine does, show what caused the problem.
             if (e is TargetInvocationException)
             {
                 e = e.InnerException!;
@@ -512,7 +513,8 @@ public abstract partial class CodeDomSerializerBase
 
     private void DeserializeAssignStatement(IDesignerSerializationManager manager, CodeAssignStatement statement)
     {
-        // Since we're doing an assignment into something, we need to know what that something is.  It can be a property, a variable, or a member. Anything else is invalid.
+        // Since we're doing an assignment into something, we need to know what that something is.
+        // It can be a property, a variable, or a member. Anything else is invalid.
         // Perf: is -> as changes, change ordering based on possibility of occurrence
         CodeExpression expression = statement.Left;
 
@@ -559,7 +561,8 @@ public abstract partial class CodeDomSerializerBase
 
                         if (rhs is IConvertible ic)
                         {
-                            // f.FieldType is a type from the reflection (or project target) universe, while rhs is a runtime type (exists in the Visual Studio framework)
+                            // f.FieldType is a type from the reflection (or project target) universe,
+                            // while rhs is a runtime type (exists in the Visual Studio framework)
                             // they need to be converted to the same universe for comparison to work.
                             // If TargetFrameworkProvider is not available, then we are working with runtime types.
                             Type fieldType = f.FieldType;
@@ -602,7 +605,7 @@ public abstract partial class CodeDomSerializerBase
         }
         else if (expression is CodeVariableReferenceExpression variableReferenceEx)
         {
-            // This is the easiest.  Just relate the RHS object to the name of the variable.
+            // This is the easiest. Just relate the RHS object to the name of the variable.
             object rhs = DeserializeExpression(manager, variableReferenceEx.VariableName, statement.Right)!;
             if (rhs is CodeExpression)
             {
@@ -644,7 +647,7 @@ public abstract partial class CodeDomSerializerBase
     }
 
     /// <summary>
-    ///  This is a helper method that will deserialize a given expression.  It deserializes
+    ///  This is a helper method that will deserialize a given expression. It deserializes
     ///  the statement by interpreting and executing the CodeDom expression, returning
     ///  the results.
     /// </summary>
@@ -676,7 +679,8 @@ public abstract partial class CodeDomSerializerBase
                 }
                 else
                 {
-                    // Last ditch effort.  Some things have to code gen against "this", such as event wireups.  Those are always bound against the root component.
+                    // Last ditch effort. Some things have to code gen against "this", such as event wireups.
+                    // Those are always bound against the root component.
                     if (manager.GetService<IDesignerHost>() is { } host)
                     {
                         result = host.RootComponent;
@@ -708,7 +712,8 @@ public abstract partial class CodeDomSerializerBase
                         parameters[i] = DeserializeExpression(manager, null, objectCreateEx.Parameters[i]);
                         if (parameters[i] is CodeExpression)
                         {
-                            // Before we bail on this parameter, see if the type is a delegate.  If we are creating a delegate we may be able to bind to the method after all.
+                            // Before we bail on this parameter, see if the type is a delegate.
+                            // If we are creating a delegate we may be able to bind to the method after all.
                             if (typeof(Delegate).IsAssignableFrom(type) && parameters is [CodeMethodReferenceExpression methodRef])
                             {
                                 // Only do this if our target is not the root context.
@@ -717,7 +722,7 @@ public abstract partial class CodeDomSerializerBase
                                     object target = DeserializeExpression(manager, null, methodRef.TargetObject)!;
                                     if (target is not CodeExpression)
                                     {
-                                        // Search for a matching method sig.  Must be public since we don't own this object
+                                        // Search for a matching method sig. Must be public since we don't own this object
                                         MethodInfo? delegateInvoke = type.GetMethod("Invoke");
                                         if (delegateInvoke is not null)
                                         {
@@ -731,7 +736,10 @@ public abstract partial class CodeDomSerializerBase
                                             MethodInfo? mi = GetReflectionTypeHelper(manager, target).GetMethod(methodRef.MethodName, paramTypes);
                                             if (mi is not null)
                                             {
-                                                // MethodInfo from the reflection Universe might not implement MethodHandle property, once we know that the method is available, get it from the runtime type.
+                                                // MethodInfo from the reflection Universe might
+                                                // not implement MethodHandle property,
+                                                // once we know that the method is available,
+                                                // get it from the runtime type.
                                                 mi = target.GetType().GetMethod(methodRef.MethodName, paramTypes)!;
                                                 result = Activator.CreateInstance(type, [target, mi.MethodHandle.GetFunctionPointer()]);
                                             }
@@ -740,7 +748,7 @@ public abstract partial class CodeDomSerializerBase
                                 }
                             }
 
-                            // Technically, the parameters are not OK.  Our special case above, if successful, would have produced a "result" object for us.
+                            // Technically, the parameters are not OK. Our special case above, if successful, would have produced a "result" object for us.
                             paramsOk = false;
                             break;
                         }
@@ -748,7 +756,7 @@ public abstract partial class CodeDomSerializerBase
 
                     if (paramsOk)
                     {
-                        // Create an instance of the object.  If the caller provided a name, then ask the manager to add this object to the container.
+                        // Create an instance of the object. If the caller provided a name, then ask the manager to add this object to the container.
                         result = DeserializeInstance(manager, type, parameters, name, (name is not null));
                     }
                 }
@@ -774,7 +782,7 @@ public abstract partial class CodeDomSerializerBase
                 object? target = DeserializeExpression(manager, null, fieldReferenceEx.TargetObject);
                 if (target is not null and not CodeExpression)
                 {
-                    // If the target is the root object, then this won't be found through reflection.  Instead, ask the manager for the field by name.
+                    // If the target is the root object, then this won't be found through reflection. Instead, ask the manager for the field by name.
                     RootContext? rootExp = manager.GetContext<RootContext>();
                     if (rootExp is not null && rootExp.Value == target)
                     {
@@ -1020,7 +1028,7 @@ public abstract partial class CodeDomSerializerBase
 
                     bool indexesOK = true;
 
-                    // The indexes have to be of type int32.  If they're not, then we cannot assign to this array.
+                    // The indexes have to be of type int32. If they're not, then we cannot assign to this array.
                     for (int i = 0; i < indexes.Length; i++)
                     {
                         object? index = DeserializeExpression(manager, name, arrayIndexerEx.Indices[i]);
@@ -1091,7 +1099,7 @@ public abstract partial class CodeDomSerializerBase
             }
             else if (result is CodeIndexerExpression indexerEx)
             {
-                // For this, assume in any error we return a null.  The only errors here should come from a mal-formed expression.
+                // For this, assume in any error we return a null. The only errors here should come from a mal-formed expression.
                 result = null;
                 object? targetObject = DeserializeExpression(manager, null, indexerEx.TargetObject);
                 if (targetObject is not null)
@@ -1151,7 +1159,9 @@ public abstract partial class CodeDomSerializerBase
             }
             else
             {
-                // All expression evaluation happens above.  This codepath indicates that we got some sort of junk in the evaluator,  or that someone assigned result to a value without breaking out of the loop.
+                // All expression evaluation happens above.
+                // This codepath indicates that we got some sort of junk in the evaluator,
+                // or that someone assigned result to a value without breaking out of the loop.
                 Debug.Fail($"Unrecognized expression type: {result.GetType().Name}");
                 break;
             }
@@ -1177,7 +1187,7 @@ public abstract partial class CodeDomSerializerBase
 
         if (statement.Listener is CodeObjectCreateExpression objCreate)
         {
-            // now walk into the CodeObjectCreateExpression and get the parameters so we can  get the name of the method, e.g. button1_Click
+            // now walk into the CodeObjectCreateExpression and get the parameters so we can get the name of the method, e.g. button1_Click
             if (objCreate.Parameters.Count == 1)
             {
                 // if this is a delegate create (new EventHandler(this.button1_Click)), then the first parameter should be a method ref.
@@ -1236,7 +1246,8 @@ public abstract partial class CodeDomSerializerBase
 
     private static object ExecuteBinaryExpression(IConvertible left, IConvertible right, CodeBinaryOperatorType op)
     {
-        // "Binary" operator type is actually a combination of several types of operators: boolean, binary  and math.  Group them into categories here.
+        // "Binary" operator type is actually a combination of several types of operators:
+        // boolean, binary and math. Group them into categories here.
 
         // Figure out what kind of expression we have.
         switch (op)
@@ -1274,7 +1285,8 @@ public abstract partial class CodeDomSerializerBase
         TypeCode leftType = left.GetTypeCode();
         TypeCode rightType = right.GetTypeCode();
 
-        // The compatible types are listed in order from lowest bitness to highest.  We must operate on the highest bitness to keep fidelity.
+        // The compatible types are listed in order from lowest bitness to highest.
+        // We must operate on the highest bitness to keep fidelity.
         ReadOnlySpan<TypeCode> compatibleTypes =
         [
             TypeCode.Byte,
@@ -1491,7 +1503,9 @@ public abstract partial class CodeDomSerializerBase
                 }
                 else
                 {
-                    // This could be a protected property on the base class.  Make sure we're  actually accessing through the base class, and then get the property directly from reflection.
+                    // This could be a protected property on the base class.
+                    // Make sure we're actually accessing through the base class,
+                    // and then get the property directly from reflection.
                     if (GetExpression(manager, target) is CodeThisReferenceExpression)
                     {
                         PropertyInfo? propInfo = GetReflectionTypeHelper(manager, target).GetProperty(propertyReferenceEx.PropertyName, BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
@@ -1529,7 +1543,7 @@ public abstract partial class CodeDomSerializerBase
         if (lhs is not null and not CodeExpression)
         {
             // Property assignments must go through our type descriptor system. However, we do not support parameterized
-            // properties.  If there are any parameters on the property, we do not perform the assignment.
+            // properties. If there are any parameters on the property, we do not perform the assignment.
             PropertyDescriptorCollection properties = GetPropertiesHelper(manager, lhs, s_runTimeProperties);
             PropertyDescriptor? p = properties[propertyReferenceEx.PropertyName];
             if (p is not null)
@@ -1559,7 +1573,7 @@ public abstract partial class CodeDomSerializerBase
                     rhs = rhsType.UnderlyingSystemType; // unwrap this "type" that came because it was not actually a real bcl type.
                 }
 
-                // Next: see if the RHS of this expression was a property reference too.  If it was, then
+                // Next: see if the RHS of this expression was a property reference too. If it was, then
                 // we will look for a MemberRelationshipService to record the relationship between these
                 // two properties, if supported.
                 // We need to setup this MemberRelationship before we actually set the property value.
@@ -1623,18 +1637,18 @@ public abstract partial class CodeDomSerializerBase
     }
 
     /// <summary>
-    ///  This method returns an expression representing the given object.  It may return null, indicating that
-    ///  no expression has been set that describes the object.  Expressions are acquired in one of three ways:
-    ///  1.   The expression could be the result of a prior SetExpression call.
-    ///  2.   The expression could have been found in the RootContext.
-    ///  3.   The expression could be derived through IReferenceService.
-    ///  4.   The current expression on the context stack has a PresetValue == value.
+    ///  This method returns an expression representing the given object. It may return null, indicating that
+    ///  no expression has been set that describes the object. Expressions are acquired in one of three ways:
+    ///  1. The expression could be the result of a prior SetExpression call.
+    ///  2. The expression could have been found in the RootContext.
+    ///  3. The expression could be derived through IReferenceService.
+    ///  4. The current expression on the context stack has a PresetValue == value.
     ///  To derive expressions through IReferenceService, GetExpression asks the reference service if there
-    ///  is a name for the given object.  If the expression service returns a valid name, it checks to see if
-    ///  there is a '.' in the name.  This indicates that the expression service found this object as the return
-    ///  value of a read only property on another object.  If there is a '.', GetExpression will split the reference
-    ///  into sub-parts.  The leftmost part is a name that will be evaluated via manager.GetInstance.  For each
-    ///  subsequent part, a property reference expression will be built.  The final expression will then be returned.
+    ///  is a name for the given object. If the expression service returns a valid name, it checks to see if
+    ///  there is a '.' in the name. This indicates that the expression service found this object as the return
+    ///  value of a read only property on another object. If there is a '.', GetExpression will split the reference
+    ///  into sub-parts. The leftmost part is a name that will be evaluated via manager.GetInstance. For each
+    ///  subsequent part, a property reference expression will be built. The final expression will then be returned.
     ///  If the object did not have an expression set, or the object was not found in the reference service, null will
     ///  be returned from GetExpression, indicating there is no existing expression for the object.
     /// </summary>
@@ -1676,7 +1690,7 @@ public abstract partial class CodeDomSerializerBase
                     objectName = refSvc.GetName(value);
                     if (objectName is not null && objectName.Contains('.'))
                     {
-                        // This object name is built from sub objects.  Assemble the graph of sub objects.
+                        // This object name is built from sub objects. Assemble the graph of sub objects.
                         string[] nameParts = objectName.Split('.');
 
                         Debug.Assert(nameParts.Length > 0, "How can we fail to split when IndexOf succeeded?");
@@ -1731,9 +1745,9 @@ public abstract partial class CodeDomSerializerBase
     }
 
     /// <summary>
-    ///  Returns the serializer for the given value.  This is cognizant that instance
+    ///  Returns the serializer for the given value. This is cognizant that instance
     ///  attributes may be different from type attributes and will use a custom serializer
-    ///  on the instance if it is present.  If not, it will delegate to the serialization
+    ///  on the instance if it is present. If not, it will delegate to the serialization
     ///  manager.
     /// </summary>
     protected CodeDomSerializer? GetSerializer(IDesignerSerializationManager manager, object? value)
@@ -1747,7 +1761,9 @@ public abstract partial class CodeDomSerializerBase
 
             if (valueAttributes.Count != typeAttributes.Count)
             {
-                // Ok, someone has stuffed custom attributes on this instance.  Since the serialization manager only takes types, we've got to see if one of these custom attributes is a designer serializer attribute.
+                // Ok, someone has stuffed custom attributes on this instance.
+                // Since the serialization manager only takes types,
+                // we've got to see if one of these custom attributes is a designer serializer attribute.
                 string? valueSerializerTypeName = null;
                 Type desiredSerializerType = typeof(CodeDomSerializer);
                 DesignerSerializationManager? vsManager = manager as DesignerSerializationManager;
@@ -1767,7 +1783,8 @@ public abstract partial class CodeDomSerializerBase
                     }
                 }
 
-                // If we got a value serializer, we've got to do the same thing here for the type serializer.  We only care if the two are different
+                // If we got a value serializer, we've got to do the same thing here for the type serializer.
+                // We only care if the two are different
                 if (valueSerializerTypeName is not null)
                 {
                     foreach (Attribute a in typeAttributes)
@@ -1807,16 +1824,18 @@ public abstract partial class CodeDomSerializerBase
             }
         }
 
-        // for serializing null, we pass null to the serialization manager otherwise, external IDesignerSerializationProviders wouldn't be given a chance to  serialize null their own special way.
+        // for serializing null, we pass null to the serialization manager otherwise,
+        // external IDesignerSerializationProviders wouldn't be given a chance to
+        // serialize null their own special way.
         Type? t = value?.GetType();
 
         return manager.GetSerializer<CodeDomSerializer>(t);
     }
 
     /// <summary>
-    ///  Returns the serializer for the given value.  This is cognizant that instance
+    ///  Returns the serializer for the given value. This is cognizant that instance
     ///  attributes may be different from type attributes and will use a custom serializer
-    ///  on the instance if it is present.  If not, it will delegate to the serialization
+    ///  on the instance if it is present. If not, it will delegate to the serialization
     ///  manager.
     /// </summary>
     protected CodeDomSerializer? GetSerializer(IDesignerSerializationManager manager, Type valueType)
@@ -1830,7 +1849,7 @@ public abstract partial class CodeDomSerializerBase
     }
 
     /// <summary>
-    ///  This method returns true if the given value has been serialized before.  For an object to
+    ///  This method returns true if the given value has been serialized before. For an object to
     ///  be considered serialized either it or another serializer must have called SetExpression, creating
     ///  a relationship between that object and a referring expression.
     /// </summary>
@@ -1862,7 +1881,7 @@ public abstract partial class CodeDomSerializerBase
 
         TypeConverter converter = TypeDescriptor.GetConverter(value);
 
-        // See if there is an ExpressionContext with a preset value we're interested in.  If so, that will dictate our creation expression.
+        // See if there is an ExpressionContext with a preset value we're interested in. If so, that will dictate our creation expression.
         if (manager.TryGetContext(out ExpressionContext? ctx) && ReferenceEquals(ctx.PresetValue, value))
         {
             CodeExpression expression = ctx.Expression;
@@ -1899,7 +1918,7 @@ public abstract partial class CodeDomSerializerBase
                 return expression;
             }
         }
-#pragma warning restore SYSLIB0050 // Type or member is obsolete
+#pragma warning restore SYSLIB0050
 
         // No instance descriptor. See if we can get to a public constructor that takes no arguments
         ConstructorInfo? ctor = GetReflectionTypeHelper(manager, value).GetConstructor([]);
@@ -1938,7 +1957,8 @@ public abstract partial class CodeDomSerializerBase
             CodeExpression? exp = null;
             ExpressionContext? newCtx = null;
 
-            // If there is an ExpressionContext on the stack, we need to fix up its type to be the parameter type, so the argument objects get serialized correctly.
+            // If there is an ExpressionContext on the stack, we need to fix up its type to be the parameter type,
+            // so the argument objects get serialized correctly.
             if (manager.TryGetContext(out ExpressionContext? ctx))
             {
                 newCtx = new ExpressionContext(ctx.Expression, parameters[i].ParameterType, ctx.Owner);
@@ -1960,7 +1980,7 @@ public abstract partial class CodeDomSerializerBase
 
             if (exp is not null)
             {
-                // Assign over.  See if we need a cast first.
+                // Assign over. See if we need a cast first.
                 if (arg is not null && !parameters[i].ParameterType.IsAssignableFrom(arg.GetType()))
                 {
                     exp = new CodeCastExpression(parameters[i].ParameterType, exp);
@@ -2027,9 +2047,9 @@ public abstract partial class CodeDomSerializerBase
     }
 
     /// <summary>
-    ///  This method returns a unique name for the given object.  It first calls GetName from the serialization
-    ///  manager, and if this does not return a name if fabricates a name for the object.  To fabricate a name
-    ///  it uses the INameCreationService to create valid names.  If the service is not available instead the
+    ///  This method returns a unique name for the given object. It first calls GetName from the serialization
+    ///  manager, and if this does not return a name if fabricates a name for the object. To fabricate a name
+    ///  it uses the INameCreationService to create valid names. If the service is not available instead the
     ///  method will fabricate a name based on the short type name combined with an index number to make
     ///  it unique. The resulting name is associated with the serialization manager by calling SetName before
     ///  the new name is returned.
@@ -2057,7 +2077,7 @@ public abstract partial class CodeDomSerializerBase
             int suffixIndex = 1;
             ComponentCache? cache = manager.GetContext<ComponentCache>();
 
-            // Declare this name to the serializer.  If there is already a name defined, keep trying.
+            // Declare this name to the serializer. If there is already a name defined, keep trying.
             do
             {
                 name = $"{baseName}{suffixIndex++}";
@@ -2084,7 +2104,7 @@ public abstract partial class CodeDomSerializerBase
         ArgumentNullException.ThrowIfNull(value);
         ArgumentNullException.ThrowIfNull(descriptor);
 
-        // Now look for a MemberCodeDomSerializer for the property.  If we can't find one, then we can't serialize the property
+        // Now look for a MemberCodeDomSerializer for the property. If we can't find one, then we can't serialize the property
         manager.Context.Push(statements);
         manager.Context.Push(descriptor);
         try
@@ -2168,7 +2188,7 @@ public abstract partial class CodeDomSerializerBase
 
     /// <summary>
     ///  This method will inspect all of the properties on the given object fitting the filter, and check for that
-    ///  property in a resource blob.  This is useful for deserializing properties that cannot be represented
+    ///  property in a resource blob. This is useful for deserializing properties that cannot be represented
     ///  in code, such as design-time properties.
     /// </summary>
     protected void SerializePropertiesToResources(IDesignerSerializationManager manager, CodeStatementCollection statements, object value, Attribute[]? filter)
@@ -2230,7 +2250,7 @@ public abstract partial class CodeDomSerializerBase
         ArgumentNullException.ThrowIfNull(propertyToSerialize);
         ArgumentNullException.ThrowIfNull(statements);
 
-        // Now look for a MemberCodeDomSerializer for the property.  If we can't find one, then we can't serialize the property
+        // Now look for a MemberCodeDomSerializer for the property. If we can't find one, then we can't serialize the property
         manager.Context.Push(statements);
         manager.Context.Push(propertyToSerialize);
         try
@@ -2250,7 +2270,7 @@ public abstract partial class CodeDomSerializerBase
     }
 
     /// <summary>
-    ///  Writes the given resource value under the given name.  The resource is written to the
+    ///  Writes the given resource value under the given name. The resource is written to the
     ///  current CultureInfo the user is using to design with.
     /// </summary>
     protected void SerializeResource(IDesignerSerializationManager manager, string resourceName, object? value)
@@ -2259,7 +2279,7 @@ public abstract partial class CodeDomSerializerBase
     }
 
     /// <summary>
-    ///  Writes the given resource value under the given name.  The resource is written to the
+    ///  Writes the given resource value under the given name. The resource is written to the
     ///  invariant culture.
     /// </summary>
     protected void SerializeResourceInvariant(IDesignerSerializationManager manager, string resourceName, object? value)
@@ -2268,18 +2288,18 @@ public abstract partial class CodeDomSerializerBase
     }
 
     /// <summary>
-    ///  This is a helper method that serializes a value to an expression.  It will return a CodeExpression if the
-    ///  value can be serialized, or null if it can't.  SerializeToExpression uses the following rules for serializing
+    ///  This is a helper method that serializes a value to an expression. It will return a CodeExpression if the
+    ///  value can be serialized, or null if it can't. SerializeToExpression uses the following rules for serializing
     ///  types:
-    ///  1.   It first calls GetExpression to see if an expression has already been created for the object.  If so, it
+    ///  1. It first calls GetExpression to see if an expression has already been created for the object. If so, it
     ///  returns the existing expression.
-    ///  2.   It then locates the object's serializer, and asks it to serialize.
-    ///  3.   If the return value of the object's serializer is a CodeExpression, the expression is returned.
-    ///  4.   It finally makes one last call to GetExpression to see if the serializer added an expression.
-    ///  5.   Finally, it returns null.
+    ///  2. It then locates the object's serializer, and asks it to serialize.
+    ///  3. If the return value of the object's serializer is a CodeExpression, the expression is returned.
+    ///  4. It finally makes one last call to GetExpression to see if the serializer added an expression.
+    ///  5. Finally, it returns null.
     ///  If no expression could be created and no suitable serializer could be found, an error will be
-    ///  reported through the serialization manager.  No error will be reported if a serializer was found
-    ///  but it failed to produce an expression.  It is assumed that the serializer either already reported
+    ///  reported through the serialization manager. No error will be reported if a serializer was found
+    ///  but it failed to produce an expression. It is assumed that the serializer either already reported
     ///  the error, or does not wish to serialize the object.
     /// </summary>
     protected CodeExpression? SerializeToExpression(IDesignerSerializationManager manager, object? value)
@@ -2287,11 +2307,17 @@ public abstract partial class CodeDomSerializerBase
         CodeExpression? expression = null;
 
         // We do several things here:
-        // First, we check to see if there is already an expression for this object by calling IsSerialized / GetExpression.
+        // First, we check to see if there is already an expression for this object by
+        //     calling IsSerialized / GetExpression.
         // Failing that we check GetLegacyExpression to see if we are working with an old serializer.
-        // Failing that, we invoke the object's serializer.  If that serializer returned a CodeExpression, we will use it.
-        // If the serializer did not return a code expression, we call GetExpression one last time to see if the serializer added an expression.  If it did, we use it. Otherwise we return null.
-        // If the serializer was invoked and it created one or more statements those statements will be added to a statement collection.  Additionally, if there is a statement context that contains a statement table for this object we will push that statement table onto the context stack in  case someone else needs statements.
+        // Failing that, we invoke the object's serializer.
+        //     If that serializer returned a CodeExpression, we will use it.
+        //     If the serializer did not return a code expression, we call GetExpression one last time to see
+        //     if the serializer added an expression. If it did, we use it. Otherwise we return null.
+        // If the serializer was invoked and it created one or more statements those statements
+        //     will be added to a statement collection.
+        // Additionally, if there is a statement context that contains a statement table for this object we
+        //     will push that statement table onto the context stack in case someone else needs statements.
         if (value is not null)
         {
             if (IsSerialized(manager, value))
@@ -2317,11 +2343,11 @@ public abstract partial class CodeDomSerializerBase
                 if (value is not null)
                 {
                     // The Whidbey model for serializing a complex object is to call SetExpression with the object's reference
-                    // expression and then  call on the various Serialize Property / Event methods.  This is incompatible with
+                    // expression and then call on the various Serialize Property / Event methods. This is incompatible with
                     // legacy code, and if not handled legacy code may serialize incorrectly or even stack fault. To handle
-                    // this, we keep a private "Legacy Expression Table".  This is a table that we fill in here.  We don't fill
-                    // in the actual legacy expression here.  Rather,  we fill it with a marker value and obtain the legacy
-                    // expression  above in GetLegacyExpression.  If we hit this case, we then save the expression in GetExpression
+                    // this, we keep a private "Legacy Expression Table". This is a table that we fill in here. We don't fill
+                    // in the actual legacy expression here. Rather, we fill it with a marker value and obtain the legacy
+                    // expression above in GetLegacyExpression. If we hit this case, we then save the expression in GetExpression
                     // so that future calls to IsSerialized will succeed.
                     SetLegacyExpression(manager, value);
                     if (manager.TryGetContext(out StatementContext? statementCtx))
@@ -2355,7 +2381,8 @@ public abstract partial class CodeDomSerializerBase
                     expression = GetExpression(manager, value);
                 }
 
-                // If the result is a statement or a group of statements, we need to see if there is a code statement collection on the stack we can push the statements into.
+                // If the result is a statement or a group of statements,
+                // we need to see if there is a code statement collection on the stack we can push the statements into.
                 CodeStatementCollection? statements = result as CodeStatementCollection;
                 if (statements is null)
                 {
@@ -2370,7 +2397,7 @@ public abstract partial class CodeDomSerializerBase
 
                 if (statements is not null)
                 {
-                    // See if we have a place for these statements to be stored.  If not, then check the context.
+                    // See if we have a place for these statements to be stored. If not, then check the context.
                     saveStatements ??= manager.GetContext<CodeStatementCollection>();
 
                     if (saveStatements is not null)
@@ -2380,7 +2407,7 @@ public abstract partial class CodeDomSerializerBase
                     }
                     else
                     {
-                        // If we got here we will be losing data because we have no avenue to save these statements.  Inform the user.
+                        // If we got here we will be losing data because we have no avenue to save these statements. Inform the user.
                         string valueName = "(null)";
                         if (value is not null)
                         {
@@ -2408,7 +2435,7 @@ public abstract partial class CodeDomSerializerBase
             object? exp = table[value];
             if (exp == value)
             {
-                // Sentinel.  Compute an actual legacy expression to store.
+                // Sentinel. Compute an actual legacy expression to store.
                 string? name = manager.GetName(value);
                 bool referenceName = false;
                 if (name is null)
@@ -2419,7 +2446,7 @@ public abstract partial class CodeDomSerializerBase
 
                 if (name is not null)
                 {
-                    // Check to see if this is a reference to the root component.  If it is, then use "this".
+                    // Check to see if this is a reference to the root component. If it is, then use "this".
                     if (manager.TryGetContext(out RootContext? root))
                     {
                         if (root.Value == value)
@@ -2489,9 +2516,9 @@ public abstract partial class CodeDomSerializerBase
 
     /// <summary>
     ///  Serializes the given object to a resource and returns a code expression that represents the resource.
-    ///  This will return null if the value cannot be serialized.  If ensureInvariant is true, this will ensure that
-    ///  new values make their way into the invariant culture.  Normally, this is desirable. Otherwise a resource
-    ///  GetValue call could fail if reading from a culture that doesn't have a value.  You should only pass
+    ///  This will return null if the value cannot be serialized. If ensureInvariant is true, this will ensure that
+    ///  new values make their way into the invariant culture. Normally, this is desirable. Otherwise a resource
+    ///  GetValue call could fail if reading from a culture that doesn't have a value. You should only pass
     ///  false to ensureInvariant when you intend to read resources differently than directly asking for a value.
     ///  The default value of insureInvariant is true.
     /// </summary>
@@ -2502,9 +2529,9 @@ public abstract partial class CodeDomSerializerBase
 
     /// <summary>
     ///  Serializes the given object to a resource and returns a code expression that represents the resource.
-    ///  This will return null if the value cannot be serialized.  If ensureInvariant is true, this will ensure that
-    ///  new values make their way into the invariant culture.  Normally, this is desirable. Otherwise a resource
-    ///  GetValue call could fail if reading from a culture that doesn't have a value.  You should only pass
+    ///  This will return null if the value cannot be serialized. If ensureInvariant is true, this will ensure that
+    ///  new values make their way into the invariant culture. Normally, this is desirable. Otherwise a resource
+    ///  GetValue call could fail if reading from a culture that doesn't have a value. You should only pass
     ///  false to ensureInvariant when you intend to read resources differently than directly asking for a value.
     ///  The default value of insureInvariant is true.
     /// </summary>
@@ -2541,7 +2568,7 @@ public abstract partial class CodeDomSerializerBase
                 }
             }
         }
-#pragma warning restore SYSLIB0050 // Type or member is obsolete
+#pragma warning restore SYSLIB0050
 
         return result;
     }
@@ -2552,8 +2579,8 @@ public abstract partial class CodeDomSerializerBase
     }
 
     /// <summary>
-    ///  This is a helper method that associates a CodeExpression with an object.  Objects that have been associated
-    ///  with expressions in this way are accessible through the GetExpression method.  SetExpression stores its
+    ///  This is a helper method that associates a CodeExpression with an object. Objects that have been associated
+    ///  with expressions in this way are accessible through the GetExpression method. SetExpression stores its
     ///  expression table as an appended object on the context stack so it is accessible by any serializer's
     ///  GetExpression method.
     /// </summary>
@@ -2601,6 +2628,8 @@ public abstract partial class CodeDomSerializerBase
             }
             else if (statement is CodeVariableDeclarationStatement variableDecl)
             {
+                AddStatement(table, variableDecl.Name, variableDecl);
+
                 if (names is not null && variableDecl.Type is not null && !string.IsNullOrEmpty(variableDecl.Type.BaseType))
                 {
                     names[variableDecl.Name] = GetTypeNameFromCodeTypeReference(manager, variableDecl.Type);
@@ -2611,7 +2640,8 @@ public abstract partial class CodeDomSerializerBase
 
             if (expression is not null)
             {
-                // Simplify the expression as much as we can, looking for our target object in the process.  If we find an expression that refers to our target object, we're done and can move on to the next statement.
+                // Simplify the expression as much as we can, looking for our target object in the process. If we find an
+                // expression that refers to our target object, we're done and can move on to the next statement.
                 while (true)
                 {
                     if (expression is CodeCastExpression castEx)
@@ -2648,8 +2678,14 @@ public abstract partial class CodeDomSerializerBase
                     }
                     else if (expression is CodeFieldReferenceExpression fieldReferenceEx)
                     {
-                        // For fields we need to check to see if the field name is equal to the target object. If it is, then we have the expression we want.  We can add the statement here and then break out of our loop.
-                        // Note:  We cannot validate that this is a name in our nametable.  The nametable only contains names we have discovered through code parsing and will not include data from any inherited objects.  We accept the field now, and then fail later if we try to resolve it to an object and we can't find it.
+                        // For fields we need to check to see if the field name is equal to the target object.
+                        // If it is, then we have the expression we want. We can add the statement here
+                        // and then break out of our loop.
+                        // Note:  We cannot validate that this is a name in our nametable.
+                        // The nametable only contains names we have discovered through
+                        // code parsing and will not include data from any inherited objects.
+                        // We accept the field now, and then fail later if we try to resolve
+                        // it to an object and we can't find it.
                         bool addedStatement = false;
                         if (fieldReferenceEx.TargetObject is CodeThisReferenceExpression)
                         {
@@ -2682,7 +2718,9 @@ public abstract partial class CodeDomSerializerBase
                     }
                     else if (expression is CodePropertyReferenceExpression propertyReferenceEx)
                     {
-                        // For properties we need to check to see if the property name is equal to the target object. If it is, then we have the expression we want.  We can add the statement here and then break out of our loop.
+                        // For properties we need to check to see if the property name is equal to the target object.
+                        // If it is, then we have the expression we want. We can add the statement here and
+                        // then break out of our loop.
                         if (propertyReferenceEx.TargetObject is CodeThisReferenceExpression && (names is null || names.ContainsKey(propertyReferenceEx.PropertyName)))
                         {
                             AddStatement(table, propertyReferenceEx.PropertyName, statement);
@@ -2695,7 +2733,9 @@ public abstract partial class CodeDomSerializerBase
                     }
                     else if (expression is CodeVariableReferenceExpression variableReferenceEx)
                     {
-                        // For variables we need to check to see if the variable name is equal to the target object. If it is, then we have the expression we want.  We can add the statement here and then break out of our loop.
+                        // For variables we need to check to see if the variable name is equal to the target object.
+                        // If it is, then we have the expression we want. We can add the statement here and
+                        // then break out of our loop.
                         bool statementAdded = false;
                         if (names is not null)
                         {
@@ -2728,7 +2768,7 @@ public abstract partial class CodeDomSerializerBase
                     }
                     else if (expression is CodeThisReferenceExpression or CodeBaseReferenceExpression)
                     {
-                        // We cannot go any further than "this".  So, we break out of the loop.  We file this statement under the root object.
+                        // We cannot go any further than "this". So, we break out of the loop. We file this statement under the root object.
                         Debug.Assert(className is not null, "FillStatementTable expected a valid className but received null");
                         if (className is not null)
                         {

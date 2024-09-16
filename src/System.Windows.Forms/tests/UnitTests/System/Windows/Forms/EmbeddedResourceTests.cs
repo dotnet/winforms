@@ -195,8 +195,7 @@ public class EmbeddedResourceTests
             System.Windows.Forms.wfc
             """;
 
-    public static TheoryData ExpectedIconNames()
-        => ExpectedIconNamesString.Split(Environment.NewLine).ToTheoryData();
+    public static TheoryData<string> ExpectedIconNames() => new(ExpectedIconNamesString.Split(Environment.NewLine));
 
     [Theory]
     [MemberData(nameof(ExpectedIconNames))]
@@ -225,8 +224,7 @@ public class EmbeddedResourceTests
             System.Windows.Forms.west.cur
             """;
 
-    public static TheoryData ExpectedCursorNames()
-         => ExpectedCursorNamesString.Split(Environment.NewLine).ToTheoryData();
+    public static TheoryData<string> ExpectedCursorNames() => new(ExpectedCursorNamesString.Split(Environment.NewLine));
 
     [Theory]
     [MemberData(nameof(ExpectedCursorNames))]

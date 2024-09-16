@@ -10,7 +10,7 @@ public sealed partial class Application
     /// <summary>
     ///  Lighter weight <see cref="ThreadContext"/> that doesn't support <see cref="IMsoComponent"/>.
     /// </summary>
-    internal unsafe sealed class LightThreadContext : ThreadContext
+    internal sealed unsafe class LightThreadContext : ThreadContext
     {
         protected override bool? GetMessageLoopInternal(bool mustBeActive, int loopCount)
         {
@@ -47,7 +47,7 @@ public sealed partial class Application
                     case msoloop.ModalForm:
 
                         // For modal forms, check to see if the current active form has been
-                        // dismissed.  If there is no active form, then it is an error that
+                        // dismissed. If there is no active form, then it is an error that
                         // we got into here, so we terminate the loop.
 
                         if (CurrentForm is not { } form || form.CheckCloseDialog(closingOnly: false))

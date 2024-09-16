@@ -27,7 +27,7 @@ public sealed partial class Application
 
         private BOOL Callback(HWND hwnd)
         {
-            // We only do visible and enabled windows.  Also, we only do top level windows.
+            // We only do visible and enabled windows. Also, we only do top level windows.
             // Finally, we only include windows that are DNA windows, since other MSO components
             // will be responsible for disabling their own windows.
             if (PInvoke.IsWindowVisible(hwnd) && PInvoke.IsWindowEnabled(hwnd))
@@ -77,7 +77,7 @@ public sealed partial class Application
             //
             // edit mode forever with Excel application
             // But, DON'T change other people's state when we're simply
-            // responding to external MSOCM events about modality.  When we are,
+            // responding to external MSOCM events about modality. When we are,
             // we are created with a TRUE for onlyWinForms.
             if (!_onlyWinForms && enable)
             {

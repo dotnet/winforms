@@ -71,7 +71,7 @@ internal partial class DrawingEventArgs
     internal bool IsStateClean => !Flags.HasFlag(DrawingEventFlags.GraphicsStateUnclean);
 
     /// <summary>
-    ///  Gets the HDC this event is connected to.  If there is no associated HDC, or the GDI+ Graphics object has
+    ///  Gets the HDC this event is connected to. If there is no associated HDC, or the GDI+ Graphics object has
     ///  been externally accessed (where it may have gotten a transform or clip) a null handle is returned.
     /// </summary>
     internal HDC HDC => IsStateClean ? default : _hdc;

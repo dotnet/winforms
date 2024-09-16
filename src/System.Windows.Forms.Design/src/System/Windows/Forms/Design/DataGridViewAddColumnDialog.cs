@@ -464,7 +464,7 @@ internal class DataGridViewAddColumnDialog : Form
         ShowIcon = false;
         ShowInTaskbar = false;
         HelpButtonClicked += DataGridViewAddColumnDialog_HelpButtonClicked;
-        Closed += DataGridViewAddColumnDialog_Closed;
+        FormClosed += DataGridViewAddColumnDialog_Closed;
         VisibleChanged += DataGridViewAddColumnDialog_VisibleChanged;
         Load += DataGridViewAddColumnDialog_Load;
         HelpRequested += DataGridViewAddColumnDialog_HelpRequested;

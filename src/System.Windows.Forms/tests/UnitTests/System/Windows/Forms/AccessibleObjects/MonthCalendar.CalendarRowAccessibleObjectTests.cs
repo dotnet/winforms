@@ -14,9 +14,15 @@ public class MonthCalendar_CalendarRowAccessibleObjectTests
         using MonthCalendar control = new();
         CalendarRowAccessibleObject rowAccessibleObject = CreateCalendarRowAccessibleObject(control);
 
-        Assert.Equal(0, rowAccessibleObject.TestAccessor().Dynamic._calendarIndex);
-        Assert.Equal(0, rowAccessibleObject.TestAccessor().Dynamic._rowIndex);
-        Assert.False(control.IsHandleCreated);
+        int calendarIndexResult = rowAccessibleObject.TestAccessor().Dynamic._calendarIndex;
+        calendarIndexResult.Should().Be(0);
+
+        int rowIndexResult = rowAccessibleObject.TestAccessor().Dynamic._rowIndex;
+        rowIndexResult.Should().Be(0);
+
+        control.IsHandleCreated.Should().BeFalse();
+        rowAccessibleObject.CanGetDescriptionInternal.Should().BeFalse();
+        rowAccessibleObject.CanGetNameInternal.Should().BeFalse();
     }
 
     [WinFormsTheory]

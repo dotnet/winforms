@@ -43,15 +43,10 @@ jobs:
     - checkout: self
       clean: true
 
-    - ${{ if ne(variables['System.TeamProject'], 'public') }}:
-      - task: PowerShell@2
-        displayName: Setup Private Feeds Credentials
-        inputs:
-          filePath: $(Build.SourcesDirectory)/eng/common/SetupNugetSources.ps1
-          arguments: -ConfigFile $(Build.SourcesDirectory)/NuGet.config -Password $Env:Token
-        env:
-          Token: $(dn-bot-dnceng-artifact-feeds-rw)
+    - template: /eng/common/templates/steps/enable-internal-sources.yml
+    - template: /eng/common/templates/steps/enable-internal-runtimes.yml
 
+    - ${{ if ne(variables['System.TeamProject'], 'public') }}:
       - task: MicroBuildSigningPlugin@2
         displayName: Install MicroBuild plugin for Signing
         inputs:

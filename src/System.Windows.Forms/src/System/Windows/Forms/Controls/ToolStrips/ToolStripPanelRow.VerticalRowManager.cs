@@ -100,7 +100,7 @@ public partial class ToolStripPanelRow
         protected internal override int FreeSpaceFromRow(int spaceToFree)
         {
             int requiredSpace = spaceToFree;
-            // take a look at the last guy.  if his right edge exceeds
+            // take a look at the last guy. if his right edge exceeds
             // the new bounds, then we should go ahead and push him into view.
 
             if (spaceToFree > 0)
@@ -115,7 +115,7 @@ public partial class ToolStripPanelRow
                 Padding cellMargin = lastCellOnRow.Margin;
 
                 // only check margin.left as we are only concerned with getting right edge of
-                // the toolstrip into view. (space after the fact doesnt count).
+                // the toolstrip into view. (space after the fact doesn't count).
                 if (cellMargin.Top >= spaceToFree)
                 {
                     cellMargin.Top -= spaceToFree;
@@ -350,7 +350,7 @@ public partial class ToolStripPanelRow
             // if our bounds have changed - we should shove the toolbars up so they're in view.
             if (Row.Cells.Count > 0)
             {
-                // take a look at the last guy.  if his right edge exceeds
+                // Take a look at the last guy. If his right edge exceeds
                 // the new bounds, then we should go ahead and push him into view.
                 ToolStripPanelCell? lastCell = GetNextVisibleCell(Row.Cells.Count - 1, forward: false);
                 int spaceToFree = (lastCell is not null) ? lastCell.Bounds.Bottom - newBounds.Height : 0;
@@ -364,7 +364,7 @@ public partial class ToolStripPanelRow
                         Padding cellMargin = lastCellOnRow.Margin;
 
                         // only check margin.left as we are only concerned with getting bottom edge of
-                        // the toolstrip into view. (space after the fact doesnt count).
+                        // the toolstrip into view. (space after the fact doesn't count).
                         if (cellMargin.Top >= spaceToFree)
                         {
                             cellMargin.Top -= spaceToFree;

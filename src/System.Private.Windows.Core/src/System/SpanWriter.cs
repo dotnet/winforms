@@ -42,7 +42,7 @@ internal unsafe ref struct SpanWriter<T>(Span<T> span) where T : unmanaged, IEqu
     /// <summary>
     ///  Try to write the given value.
     /// </summary>
-    public bool TryWrite(ReadOnlySpan<T> values)
+    public bool TryWrite(params ReadOnlySpan<T> values)
     {
         bool success = false;
 
@@ -59,7 +59,7 @@ internal unsafe ref struct SpanWriter<T>(Span<T> span) where T : unmanaged, IEqu
     /// <summary>
     ///  Try to write the given value <paramref name="count"/> times.
     /// </summary>
-    public bool TryWrite(int count, T value)
+    public bool TryWriteCount(int count, T value)
     {
         bool success = false;
 

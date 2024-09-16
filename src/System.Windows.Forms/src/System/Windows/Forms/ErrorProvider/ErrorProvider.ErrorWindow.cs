@@ -281,7 +281,7 @@ public partial class ErrorProvider
             if (_timer is null)
             {
                 _timer = new Timer();
-                _timer.Tick += new EventHandler(OnTimer);
+                _timer.Tick += OnTimer;
             }
 
             _timer.Interval = _provider.BlinkRate;
@@ -333,7 +333,7 @@ public partial class ErrorProvider
                             showIcon = (item.BlinkPhase == 0) || (item.BlinkPhase > 0 && (item.BlinkPhase & 1) == (i & 1));
                             break;
                         case ErrorBlinkStyle.AlwaysBlink:
-                            showIcon = ((i & 1) == 0) == _provider._showIcon;
+                            showIcon = ((i & 1) == 0) == _provider.ShowIcon;
                             break;
                     }
                 }
@@ -365,7 +365,7 @@ public partial class ErrorProvider
 
             if (timerCaused)
             {
-                _provider._showIcon = !_provider._showIcon;
+                _provider.ShowIcon = !_provider.ShowIcon;
             }
 
             using GetDcScope hdc = new(HWND);

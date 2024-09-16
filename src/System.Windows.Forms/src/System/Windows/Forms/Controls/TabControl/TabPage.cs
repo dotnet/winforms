@@ -35,6 +35,9 @@ public partial class TabPage : Panel
     public TabPage() : base()
     {
         SetStyle(ControlStyles.CacheText, true);
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001
         Text = null;
     }
 
@@ -97,14 +100,19 @@ public partial class TabPage : Panel
         get
         {
             Color color = base.BackColor;
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             if (color != DefaultBackColor)
             {
                 return color;
             }
-            else if (Application.RenderWithVisualStyles && UseVisualStyleBackColor && (ParentInternal is TabControl parent && parent.Appearance == TabAppearance.Normal))
+            else if (!Application.IsDarkModeEnabled
+                && Application.RenderWithVisualStyles
+                && UseVisualStyleBackColor
+                && (ParentInternal is TabControl parent && parent.Appearance == TabAppearance.Normal))
             {
                 return Color.Transparent;
             }
+#pragma warning restore WFO5001
 
             return color;
         }
@@ -590,15 +598,26 @@ public partial class TabPage : Panel
 
         // Utilize the UseVisualStyleBackColor property to determine whether or not the themed
         // background should be utilized.
-        if (Application.RenderWithVisualStyles && UseVisualStyleBackColor && (ParentInternal is TabControl parent && parent.Appearance == TabAppearance.Normal))
+        if (Application.RenderWithVisualStyles
+            && UseVisualStyleBackColor
+            && (ParentInternal is TabControl parent && parent.Appearance == TabAppearance.Normal))
         {
-            Color bkcolor = UseVisualStyleBackColor ? Color.Transparent : BackColor;
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+            Color bkColor = (UseVisualStyleBackColor && !Application.IsDarkModeEnabled)
+                ? Color.Transparent
+                : BackColor;
+#pragma warning restore WFO5001
+
             Rectangle inflateRect = LayoutUtils.InflateRect(DisplayRectangle, Padding);
 
             // To ensure that the TabPage draws correctly (the border will get clipped and
             // and gradient fill will match correctly with the tabcontrol). Unfortunately,
             // there is no good way to determine the padding used on the TabPage.
-            Rectangle rectWithBorder = new(inflateRect.X - 4, inflateRect.Y - 2, inflateRect.Width + 8, inflateRect.Height + 6);
+            Rectangle rectWithBorder = new(
+                inflateRect.X - 4,
+                inflateRect.Y - 2,
+                inflateRect.Width + 8,
+                inflateRect.Height + 6);
 
             TabRenderer.DrawTabPage(e, rectWithBorder);
 
@@ -606,7 +625,14 @@ public partial class TabPage : Panel
             // draw it ourselves.
             if (BackgroundImage is not null)
             {
-                ControlPaint.DrawBackgroundImage(e.Graphics, BackgroundImage, bkcolor, BackgroundImageLayout, inflateRect, inflateRect, DisplayRectangle.Location);
+                ControlPaint.DrawBackgroundImage(
+                    e.Graphics,
+                    BackgroundImage,
+                    bkColor,
+                    BackgroundImageLayout,
+                    inflateRect,
+                    inflateRect,
+                    DisplayRectangle.Location);
             }
         }
         else

@@ -406,12 +406,12 @@ public partial class ToolStripComboBox : ToolStripControlHost
         if (control is ComboBox comboBox)
         {
             // Please keep this alphabetized and in sync with Unsubscribe.
-            comboBox.DropDown += new EventHandler(HandleDropDown);
-            comboBox.DropDownClosed += new EventHandler(HandleDropDownClosed);
-            comboBox.DropDownStyleChanged += new EventHandler(HandleDropDownStyleChanged);
-            comboBox.SelectedIndexChanged += new EventHandler(HandleSelectedIndexChanged);
-            comboBox.SelectionChangeCommitted += new EventHandler(HandleSelectionChangeCommitted);
-            comboBox.TextUpdate += new EventHandler(HandleTextUpdate);
+            comboBox.DropDown += HandleDropDown;
+            comboBox.DropDownClosed += HandleDropDownClosed;
+            comboBox.DropDownStyleChanged += HandleDropDownStyleChanged;
+            comboBox.SelectedIndexChanged += HandleSelectedIndexChanged;
+            comboBox.SelectionChangeCommitted += HandleSelectionChangeCommitted;
+            comboBox.TextUpdate += HandleTextUpdate;
         }
 
         base.OnSubscribeControlEvents(control);
@@ -422,12 +422,12 @@ public partial class ToolStripComboBox : ToolStripControlHost
         if (control is ComboBox comboBox)
         {
             // Please keep this alphabetized and in sync with Unsubscribe.
-            comboBox.DropDown -= new EventHandler(HandleDropDown);
-            comboBox.DropDownClosed -= new EventHandler(HandleDropDownClosed);
-            comboBox.DropDownStyleChanged -= new EventHandler(HandleDropDownStyleChanged);
-            comboBox.SelectedIndexChanged -= new EventHandler(HandleSelectedIndexChanged);
-            comboBox.SelectionChangeCommitted -= new EventHandler(HandleSelectionChangeCommitted);
-            comboBox.TextUpdate -= new EventHandler(HandleTextUpdate);
+            comboBox.DropDown -= HandleDropDown;
+            comboBox.DropDownClosed -= HandleDropDownClosed;
+            comboBox.DropDownStyleChanged -= HandleDropDownStyleChanged;
+            comboBox.SelectedIndexChanged -= HandleSelectedIndexChanged;
+            comboBox.SelectionChangeCommitted -= HandleSelectionChangeCommitted;
+            comboBox.TextUpdate -= HandleTextUpdate;
         }
 
         base.OnUnsubscribeControlEvents(control);

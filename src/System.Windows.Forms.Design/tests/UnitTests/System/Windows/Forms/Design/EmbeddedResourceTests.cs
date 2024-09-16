@@ -79,11 +79,11 @@ public class EmbeddedResourceTests
             System.Windows.Forms.Design.Behavior.TopOpen
             """;
 
-    public static TheoryData ExpectedIconNames()
-        => ExpectedIconNamesString.Split(Environment.NewLine).Where(item => !item.EndsWith(".bmp", StringComparison.Ordinal)).ToTheoryData();
+    public static TheoryData<string> ExpectedIconNames() =>
+        new(ExpectedIconNamesString.Split(Environment.NewLine).Where(item => !item.EndsWith(".bmp", StringComparison.Ordinal)));
 
-    public static TheoryData ExpectedBitmapNames()
-        => ExpectedBitmapNamesString.Split(Environment.NewLine).ToTheoryData();
+    public static TheoryData<string> ExpectedBitmapNames() =>
+        new(ExpectedBitmapNamesString.Split(Environment.NewLine));
 
     [Theory]
     [MemberData(nameof(ExpectedIconNames))]

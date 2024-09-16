@@ -26,7 +26,6 @@ internal static class Formatter
     ///  If the caller is expecting a nullable value back, we must also re-wrap the final result
     ///  inside a nullable value before returning.
     /// </summary>
-    [RequiresUnreferencedCode(ComponentModelTrimIncompatibilityMessage)]
     public static object? FormatObject(
         object? value,
         Type targetType,
@@ -84,7 +83,6 @@ internal static class Formatter
     ///  - Uses TypeConverters or IConvertible where appropriate
     ///  - Throws a FormatException is no suitable conversion can be found
     /// </summary>
-    [RequiresUnreferencedCode(ComponentModelTrimIncompatibilityMessage)]
     private static object? FormatObjectInternal(
         object? value,
         Type targetType,
@@ -134,16 +132,37 @@ internal static class Formatter
             }
         }
 
-        // The converters for properties should take precedence.  Unfortunately, we don't know whether we have one.  Check vs. the
-        // type's TypeConverter.  We're punting the case where the property-provided converter is the same as the type's converter.
+        // The converters for properties should take precedence. Unfortunately, we don't know whether we have one. Check vs. the
+        // type's TypeConverter. We're punting the case where the property-provided converter is the same as the type's converter.
         Type sourceType = value.GetType();
-        TypeConverter sourceTypeTypeConverter = TypeDescriptor.GetConverter(sourceType);
+
+        TypeConverter sourceTypeTypeConverter;
+        if (!Control.UseComponentModelRegisteredTypes)
+        {
+            sourceTypeTypeConverter = TypeDescriptor.GetConverter(sourceType);
+        }
+        else
+        {
+            // Call the trim safe API
+            sourceTypeTypeConverter = TypeDescriptor.GetConverterFromRegisteredType(sourceType);
+        }
+
         if (sourceConverter is not null && sourceConverter != sourceTypeTypeConverter && sourceConverter.CanConvertTo(targetType))
         {
             return sourceConverter.ConvertTo(context: null, GetFormatterCulture(formatInfo), value, targetType);
         }
 
-        TypeConverter targetTypeTypeConverter = TypeDescriptor.GetConverter(targetType);
+        TypeConverter targetTypeTypeConverter;
+        if (!Control.UseComponentModelRegisteredTypes)
+        {
+            targetTypeTypeConverter = TypeDescriptor.GetConverter(targetType);
+        }
+        else
+        {
+            // Call the trim safe API
+            targetTypeTypeConverter = TypeDescriptor.GetConverterFromRegisteredType(targetType);
+        }
+
         if (targetConverter is not null && targetConverter != targetTypeTypeConverter && targetConverter.CanConvertFrom(sourceType))
         {
             return targetConverter.ConvertFrom(context: null, GetFormatterCulture(formatInfo), value);

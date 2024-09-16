@@ -4,7 +4,7 @@
 namespace System.ComponentModel.Design;
 
 /// <summary>
-///  This service tracks individual designer events.  The class itself
+///  This service tracks individual designer events. The class itself
 ///  receives event information by direct calls from DesignerApplication.
 ///  Those wishing to replace this service may do so but need to override
 ///  the appropriate virtual methods on DesignerApplication.
@@ -18,8 +18,8 @@ internal sealed class DesignerEventService : IDesignerEventService
 
     private List<IDesignerHost>? _designerList;          // read write list used as data for the collection
     private DesignerCollection? _designerCollection;     // public read only view of the above list
-    private IDesignerHost? _activeDesigner;              // the currently active designer.  Can be null
-    private EventHandlerList? _events;                   // list of events.  Can be null
+    private IDesignerHost? _activeDesigner;              // the currently active designer. Can be null
+    private EventHandlerList? _events;                   // list of events. Can be null
     private bool _inTransaction;                        // true if we are in a transaction
     private bool _deferredSelChange;                    // true if we have a deferred selection change notification pending
 
@@ -32,7 +32,7 @@ internal sealed class DesignerEventService : IDesignerEventService
 
     /// <summary>
     ///  This is called by the DesignerApplication class when
-    ///  a designer is activated.  The passed in designer can
+    ///  a designer is activated. The passed in designer can
     ///  be null to signify no designer is currently active.
     /// </summary>
     internal void OnActivateDesigner(DesignSurface? surface)
@@ -93,7 +93,7 @@ internal sealed class DesignerEventService : IDesignerEventService
     /// <summary>
     ///  Called when a component has changed on the active designer. Here
     ///  we grab the active selection service and see if the component that
-    ///  has changed is also selected.  If it is, then we raise a global
+    ///  has changed is also selected. If it is, then we raise a global
     ///  selection changed event.
     /// </summary>
     private void OnComponentChanged(object? sender, ComponentChangedEventArgs ce)
@@ -111,7 +111,7 @@ internal sealed class DesignerEventService : IDesignerEventService
 
     /// <summary>
     ///  This is called by the DesignerApplication class when
-    ///  a designer is created.  Activation generally follows.
+    ///  a designer is created. Activation generally follows.
     /// </summary>
     [MemberNotNull(nameof(_designerList))]
     internal void OnCreateDesigner(DesignSurface surface)
@@ -124,7 +124,7 @@ internal sealed class DesignerEventService : IDesignerEventService
         _designerList.Add(host);
 
         // Hookup an object disposed handler on the design surface so we know when it's gone.
-        surface.Disposed += new EventHandler(OnDesignerDisposed);
+        surface.Disposed += OnDesignerDisposed;
 
         if (_events?[s_eventDesignerCreated] is DesignerEventHandler eh)
         {
@@ -138,7 +138,7 @@ internal sealed class DesignerEventService : IDesignerEventService
     private void OnDesignerDisposed(object? sender, EventArgs e)
     {
         DesignSurface surface = (DesignSurface)sender!;
-        surface.Disposed -= new EventHandler(OnDesignerDisposed);
+        surface.Disposed -= OnDesignerDisposed;
 
         // Detach the selection change and add/remove events, if we were monitoring such events
         SinkChangeEvents(surface, false);
@@ -194,7 +194,7 @@ internal sealed class DesignerEventService : IDesignerEventService
 
     /// <summary>
     ///  Called by the designer host when it is entering or leaving a batch
-    ///  operation.  Here we queue up selection notification and we turn off
+    ///  operation. Here we queue up selection notification and we turn off
     ///  our UI.
     /// </summary>
     private void OnTransactionClosed(object? sender, DesignerTransactionCloseEventArgs e)
@@ -216,7 +216,7 @@ internal sealed class DesignerEventService : IDesignerEventService
 
     /// <summary>
     ///  Called by the designer host when it is entering or leaving a batch
-    ///  operation.  Here we queue up selection notification and we turn off
+    ///  operation. Here we queue up selection notification and we turn off
     ///  our UI.
     /// </summary>
     private void OnTransactionOpened(object? sender, EventArgs e)
@@ -226,8 +226,8 @@ internal sealed class DesignerEventService : IDesignerEventService
 
     /// <summary>
     ///  Sinks or unsinks selection and component change events from the
-    ///  provided service provider.  We need to raise global selection change
-    ///  notifications.  A global selection change should be raised whenever
+    ///  provided service provider. We need to raise global selection change
+    ///  notifications. A global selection change should be raised whenever
     ///  the selection of the active designer changes, whenever a component
     ///  is added or removed from the active designer, or whenever the
     ///  active designer itself changes.
@@ -242,7 +242,7 @@ internal sealed class DesignerEventService : IDesignerEventService
         {
             if (ss is not null)
             {
-                ss.SelectionChanged += new EventHandler(OnSelectionChanged);
+                ss.SelectionChanged += OnSelectionChanged;
             }
 
             if (cs is not null)
@@ -250,14 +250,15 @@ internal sealed class DesignerEventService : IDesignerEventService
                 ComponentEventHandler ce = new(OnComponentAddedRemoved);
                 cs.ComponentAdded += ce;
                 cs.ComponentRemoved += ce;
-                cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
+                cs.ComponentChanged += OnComponentChanged;
             }
 
             if (host is not null)
             {
-                host.TransactionOpened += new EventHandler(OnTransactionOpened);
-                host.TransactionClosed += new DesignerTransactionCloseEventHandler(OnTransactionClosed);
-                host.LoadComplete += new EventHandler(OnLoadComplete);
+                host.TransactionOpened += OnTransactionOpened;
+                host.TransactionClosed += OnTransactionClosed;
+                host.LoadComplete += OnLoadComplete;
+
                 if (host.InTransaction)
                 {
                     OnTransactionOpened(host, EventArgs.Empty);
@@ -268,7 +269,7 @@ internal sealed class DesignerEventService : IDesignerEventService
         {
             if (ss is not null)
             {
-                ss.SelectionChanged -= new EventHandler(OnSelectionChanged);
+                ss.SelectionChanged -= OnSelectionChanged;
             }
 
             if (cs is not null)
@@ -276,17 +277,18 @@ internal sealed class DesignerEventService : IDesignerEventService
                 ComponentEventHandler ce = new(OnComponentAddedRemoved);
                 cs.ComponentAdded -= ce;
                 cs.ComponentRemoved -= ce;
-                cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
+                cs.ComponentChanged -= OnComponentChanged;
             }
 
             if (host is not null)
             {
-                host.TransactionOpened -= new EventHandler(OnTransactionOpened);
-                host.TransactionClosed -= new DesignerTransactionCloseEventHandler(OnTransactionClosed);
-                host.LoadComplete -= new EventHandler(OnLoadComplete);
+                host.TransactionOpened -= OnTransactionOpened;
+                host.TransactionClosed -= OnTransactionClosed;
+                host.LoadComplete -= OnLoadComplete;
+
                 if (host.InTransaction)
                 {
-                    OnTransactionClosed(host, new DesignerTransactionCloseEventArgs(false, true));
+                    OnTransactionClosed(host, new(commit: false, lastTransaction: true));
                 }
             }
         }

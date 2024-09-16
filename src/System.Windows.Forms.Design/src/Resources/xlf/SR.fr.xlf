@@ -379,6 +379,11 @@
         <target state="translated">Éditeur de collections {0}</target>
         <note />
       </trans-unit>
+      <trans-unit id="CollectionEditorCreateInstanceError">
+        <source>Neither {0} nor {1} can create an instance of {2}.</source>
+        <target state="translated">Ni {0} ni {1} ne peuvent créer une instance de {2}.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CollectionEditorInheritedReadOnlySelection">
         <source>Read-only component(s) selected.</source>
         <target state="translated">Composants en lecture seule sélectionnés.</target>

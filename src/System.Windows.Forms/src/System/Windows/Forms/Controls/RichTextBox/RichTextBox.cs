@@ -549,7 +549,7 @@ public partial class RichTextBox : TextBoxBase
     }
 
     /// <summary>
-    ///  The right margin of a RichTextBox control.  A nonzero margin implies WordWrap.
+    ///  The right margin of a RichTextBox control. A nonzero margin implies WordWrap.
     /// </summary>
     [SRCategory(nameof(SR.CatBehavior))]
     [DefaultValue(0)]
@@ -929,7 +929,7 @@ public partial class RichTextBox : TextBoxBase
     /// <summary>
     ///  The font used to display the currently selected text
     ///  or the characters(s) immediately following the insertion point in the
-    ///  RichTextBox control.  Null if the selection has more than one font.
+    ///  RichTextBox control. Null if the selection has more than one font.
     /// </summary>
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -1441,7 +1441,7 @@ public partial class RichTextBox : TextBoxBase
 
     /// <summary>
     ///  The current zoom level for the RichTextBox control. This may be between 1/64 and 64. 1.0 indicates
-    ///  no zoom (i.e. normal viewing).  Zoom works best with TrueType fonts;
+    ///  no zoom (i.e. normal viewing). Zoom works best with TrueType fonts;
     ///  for non-TrueType fonts, ZoomFactor will be treated as the nearest whole number.
     /// </summary>
     [SRCategory(nameof(SR.CatBehavior))]
@@ -1606,7 +1606,7 @@ public partial class RichTextBox : TextBoxBase
     public bool CanPaste(DataFormats.Format clipFormat)
         => PInvoke.SendMessage(this, PInvoke.EM_CANPASTE, (WPARAM)clipFormat.Id) != 0;
 
-    // DrawToBitmap doesn't work for this control, so we should hide it.  We'll
+    // DrawToBitmap doesn't work for this control, so we should hide it. We'll
     // still call base so that this has a chance to work if it can.
     [EditorBrowsable(EditorBrowsableState.Never)]
     public new void DrawToBitmap(Bitmap bitmap, Rectangle targetBounds)
@@ -2003,7 +2003,7 @@ public partial class RichTextBox : TextBoxBase
         {
             bool done = false;
 
-            // We want to loop as long as it takes.  This loop will grab a
+            // We want to loop as long as it takes. This loop will grab a
             // chunk of text out from the control as directed by txrg.chrg;
             while (!done)
             {
@@ -2358,18 +2358,18 @@ public partial class RichTextBox : TextBoxBase
         // When the RTL property is changed, here's what happens. Let's assume that we change from
         // RTL.No to RTL.Yes.
 
-        // 1.   RecreateHandle is called.
-        // 2.   In RTB.OnHandleDestroyed, we cache off any RTF that might have been set.
-        //      The RTB has been set to the empty string, so we do get RTF back. The RTF
-        //      contains formatting info, but doesn't contain any reading-order info,
-        //      so RichEdit defaults to LTR reading order.
-        // 3.   In RTB.OnHandleCreated, we check if we have any cached RTF, and if so,
-        //      we want to set the RTF to that value. This is to ensure that the original
-        //      text doesn't get lost.
-        // 4.   In the RTF setter, we get the current RTF, compare it to the old RTF, and
-        //      since those are not equal, we set the RichEdit content to the old RTF.
-        // 5.   But... since the original RTF had no reading-order info, the reading-order
-        //      will default to LTR.
+        // 1. RecreateHandle is called.
+        // 2. In RTB.OnHandleDestroyed, we cache off any RTF that might have been set.
+        //     The RTB has been set to the empty string, so we do get RTF back. The RTF
+        //     contains formatting info, but doesn't contain any reading-order info,
+        //     so RichEdit defaults to LTR reading order.
+        // 3. In RTB.OnHandleCreated, we check if we have any cached RTF, and if so,
+        //     we want to set the RTF to that value. This is to ensure that the original
+        //     text doesn't get lost.
+        // 4. In the RTF setter, we get the current RTF, compare it to the old RTF, and
+        //     since those are not equal, we set the RichEdit content to the old RTF.
+        // 5. But... since the original RTF had no reading-order info, the reading-order
+        //     will default to LTR.
 
         // That's why in Everett we set the text back since that clears the RTF, thus restoring
         // the reading order to that of the window style. The problem here is that when there's
@@ -2455,7 +2455,7 @@ public partial class RichTextBox : TextBoxBase
         PInvoke.SendMessage(this, PInvoke.EM_SETBKGNDCOLOR, (WPARAM)0, (LPARAM)BackColor);
         InternalSetForeColor(ForeColor);
 
-        // base sets the Text property.  It's important to do this *after* setting EM_AUTOUrlDETECT.
+        // base sets the Text property. It's important to do this *after* setting EM_AUTOUrlDETECT.
         base.OnHandleCreated(e);
 
         // For some reason, we need to set the OleCallback before setting the RTF property.
@@ -2492,7 +2492,7 @@ public partial class RichTextBox : TextBoxBase
         if (ShowSelectionMargin)
         {
             // If you call SendMessage instead of PostMessage, the control
-            // will resize itself to the size of the parent's client area.  Don't know why...
+            // will resize itself to the size of the parent's client area. Don't know why...
             PInvoke.PostMessage(
                 this,
                 PInvoke.EM_SETOPTIONS,
@@ -2509,7 +2509,7 @@ public partial class RichTextBox : TextBoxBase
 
         SendZoomFactor(_zoomMultiplier);
 
-        SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(UserPreferenceChangedHandler);
+        SystemEvents.UserPreferenceChanged += UserPreferenceChangedHandler;
     }
 
     protected override void OnHandleDestroyed(EventArgs e)
@@ -2526,12 +2526,11 @@ public partial class RichTextBox : TextBoxBase
         }
 
         _oleCallback = null;
-        SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(UserPreferenceChangedHandler);
+        SystemEvents.UserPreferenceChanged -= UserPreferenceChangedHandler;
     }
 
     /// <summary>
-    ///  Fires an event when the user clicks a RichTextBox control's horizontal
-    ///  scroll bar.
+    ///  Fires an event when the user clicks a RichTextBox control's horizontal scroll bar.
     /// </summary>
     protected virtual void OnHScroll(EventArgs e)
     {
@@ -2539,8 +2538,7 @@ public partial class RichTextBox : TextBoxBase
     }
 
     /// <summary>
-    ///  Fires an event when the user clicks on a link
-    ///  in a rich-edit control.
+    ///  Fires an event when the user clicks on a link in a rich-edit control.
     /// </summary>
     protected virtual void OnLinkClicked(LinkClickedEventArgs e)
     {
@@ -2854,7 +2852,7 @@ public partial class RichTextBox : TextBoxBase
             Debug.Assert(data is not null, "StreamIn passed a null stream");
 
             // If SF_RTF is requested then check for the RTF tag at the start
-            // of the file.  We don't load if the tag is not there.
+            // of the file. We don't load if the tag is not there.
 
             if ((flags & PInvoke.SF_RTF) != 0)
             {
@@ -3063,10 +3061,11 @@ public partial class RichTextBox : TextBoxBase
         {
             int actualLength = (int)PInvoke.SendMessage(this, PInvoke.EM_GETTEXTEX, (WPARAM)pGt, (LPARAM)b);
 
-            // The default behaviour of EM_GETTEXTEX is to normalise line endings to '\r'
+            // The default behavior of EM_GETTEXTEX is to normalize line endings to '\r'
             // (see: GT_DEFAULT, https://docs.microsoft.com/windows/win32/api/richedit/ns-richedit-gettextex#members),
-            // whereas previously we would normalise to '\n'. Unfortunately we can only ask for '\r\n' line endings via GT.USECRLF,
-            // but unable to ask for '\n'. Unless GT.USECRLF was set, convert '\r' with '\n' to retain the original behaviour.
+            // whereas previously we would normalize to '\n'. Unfortunately we can only ask for '\r\n' line endings
+            // via GT.USECRLF, but unable to ask for '\n'. Unless GT.USECRLF was set,
+            // convert '\r' with '\n' to retain the original behavior.
             if (!flags.HasFlag(GETTEXTEX_FLAGS.GT_USECRLF))
             {
                 int index = 0;
@@ -3482,7 +3481,7 @@ public partial class RichTextBox : TextBoxBase
             case PInvoke.WM_GETOBJECT:
                 base.WndProc(ref m);
 
-                // OLEACC.DLL uses window class names to identify standard control types. But WinForm controls use app-specific window
+                // OLEACC.DLL uses window class names to identify standard control types. But WinForms controls use app-specific window
                 // classes. Usually this doesn't matter, because system controls always identify their window class explicitly through
                 // the WM_GETOBJECT+OBJID_QUERYCLASSNAMEIDX message. But RICHEDIT20 doesn't do that - so we must do it ourselves.
                 // Otherwise OLEACC will treat rich edit controls as custom controls, so the accessible Role and Value will be wrong.

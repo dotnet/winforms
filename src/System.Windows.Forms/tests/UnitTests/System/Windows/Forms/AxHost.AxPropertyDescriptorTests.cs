@@ -171,7 +171,7 @@ public class AxHostPropertyDescriptorTests
         Assert.Equal(0, styleChangedCallCount);
         Assert.Equal(0, createdCallCount);
 
-        // Call again to test caching behaviour.
+        // Call again to test caching behavior.
         Assert.IsType<StringConverter>(property.Converter);
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);

@@ -157,8 +157,10 @@ public partial class ListViewItem
             return fakeAccessibleObject;
         }
 
-        // This method is required to get the accessibleChildIndex of the fake accessibility object. Since the fake accessibility object
-        // has no ListViewSubItem from which we could get an accessibleChildIndex, we have to get its accessibleChildIndex from the dictionary
+        // This method is required to get the accessibleChildIndex of the fake accessibility object.
+        // Since the fake accessibility object
+        // has no ListViewSubItem from which we could get an accessibleChildIndex,
+        // we have to get its accessibleChildIndex from the dictionary
         private int GetFakeSubItemIndex(ListViewSubItem.ListViewSubItemAccessibleObject fakeAccessibleObject)
         {
             foreach (KeyValuePair<int, AccessibleObject> keyValuePair in _listViewSubItemAccessibleObjects)

@@ -13,7 +13,7 @@ namespace System.Windows.Forms.Design;
 /// </summary>
 internal class RadioButtonDesigner : ButtonBaseDesigner
 {
-    public override void InitializeNewComponent(IDictionary defaultValues)
+    public override void InitializeNewComponent(IDictionary? defaultValues)
     {
         base.InitializeNewComponent(defaultValues);
 

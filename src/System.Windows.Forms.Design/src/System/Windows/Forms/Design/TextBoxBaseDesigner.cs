@@ -86,7 +86,7 @@ internal class TextBoxBaseDesigner : ControlDesigner
     /// We override this so we can clear the text field set by controldesigner.
     /// </summary>
     /// <param name="defaultValues">The default values.</param>
-    public override void InitializeNewComponent(IDictionary defaultValues)
+    public override void InitializeNewComponent(IDictionary? defaultValues)
     {
         base.InitializeNewComponent(defaultValues);
 
@@ -107,21 +107,18 @@ internal class TextBoxBaseDesigner : ControlDesigner
             "Text",
         ];
 
-        Attribute[] empty = [];
-
         for (int i = 0; i < shadowProps.Length; i++)
         {
-            PropertyDescriptor? prop = (PropertyDescriptor?)properties[shadowProps[i]];
-            if (prop is not null)
+            if (properties[shadowProps[i]] is PropertyDescriptor prop)
             {
-                properties[shadowProps[i]] = TypeDescriptor.CreateProperty(typeof(TextBoxBaseDesigner), prop, empty);
+                properties[shadowProps[i]] = TypeDescriptor.CreateProperty(typeof(TextBoxBaseDesigner), prop, []);
             }
         }
     }
 
     /// <summary>
     /// Retrieves a set of rules concerning the movement capabilities of a component.
-    /// This should be one or more flags from the SelectionRules class.  If no designer
+    /// This should be one or more flags from the SelectionRules class. If no designer
     /// provides rules for a component, the component will not get any UI services.
     /// </summary>
     public override SelectionRules SelectionRules

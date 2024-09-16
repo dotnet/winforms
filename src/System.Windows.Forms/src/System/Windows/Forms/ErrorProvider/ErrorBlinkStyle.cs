@@ -11,7 +11,7 @@ public enum ErrorBlinkStyle
 {
     /// <summary>
     ///  Blink only if the error icon is already displayed, but a new
-    ///  error string is set for the control.  If the icon did not blink
+    ///  error string is set for the control. If the icon did not blink
     ///  in this case, the user might not know that there is a new error.
     /// </summary>
     BlinkIfDifferentError,

@@ -28,7 +28,8 @@ internal static class TraceSwitchExtensions
     }
 
     /// <summary>
-    ///  Provides an interpolated string handler for <see cref="TraceVerbose(TraceSwitch?, ref TraceVerboseInterpolatedStringHandler)"/>
+    ///  Provides an interpolated string handler for
+    ///  <see cref="TraceVerbose(TraceSwitch?, ref TraceVerboseInterpolatedStringHandler)"/>
     ///  that only performs formatting if the condition applies.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -48,7 +49,9 @@ internal static class TraceSwitchExtensions
         /// <summary>
         ///  Creates an instance of the handler.
         /// </summary>
-        /// <param name="literalLength">The number of constant characters outside of interpolation expressions in the interpolated string.</param>
+        /// <param name="literalLength">
+        ///  The number of constant characters outside of interpolation expressions in the interpolated string.
+        /// </param>
         /// <param name="formattedCount">The number of interpolation expressions in the interpolated string.</param>
         /// <param name="traceSwitch">The TraceSwitch passed to the <see cref="TraceSwitchExtensions"/> method.</param>
         /// <param name="shouldAppend">A value indicating whether formatting should proceed.</param>
@@ -110,7 +113,7 @@ internal static class TraceSwitchExtensions
         ///  Writes the specified character span to the handler.
         /// </summary>
         /// <param name="value">The span to write.</param>
-        public void AppendFormatted(ReadOnlySpan<char> value) => _stringBuilderHandler.AppendFormatted(value);
+        public void AppendFormatted(params ReadOnlySpan<char> value) => _stringBuilderHandler.AppendFormatted(value);
 
         /// <summary>
         ///  Writes the specified character span to the handler.

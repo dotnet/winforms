@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-namespace WinformsControlsTest;
+namespace WinFormsControlsTest;
 
 partial class ToolStripTests
 {
@@ -61,10 +61,18 @@ partial class ToolStripTests
         this.toolStrip4_MenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
         this.toolStrip4_SubMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.uncheckedCheckOnClickToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+        this.thirdLevelItem = new System.Windows.Forms.ToolStripMenuItem();
+        this.thirdLevelButton = new System.Windows.Forms.ToolStripButton();
         this.checkCheckOnClickToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.checkedCheckOnClickFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.indeterminateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         this.indeterminateCheckOnClickFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+        this.toolStrip2_SplitButton2 = new System.Windows.Forms.ToolStripSplitButton();
+        this.toolStrip2_DropDownButton2 = new System.Windows.Forms.ToolStripDropDownButton();
+        this.toolStripTextBox2 = new System.Windows.Forms.ToolStripTextBox();
+        this.toolStripComboBox2 = new System.Windows.Forms.ToolStripComboBox();
+        this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+        this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
         this.toolStrip2.SuspendLayout();
         this.toolStrip1.SuspendLayout();
         this.statusStrip1.SuspendLayout();
@@ -240,6 +248,72 @@ partial class ToolStripTests
         this.checkCheckOnClickToolStripMenuItem.Name = "checkCheckOnClickToolStripMenuItem";
         this.checkCheckOnClickToolStripMenuItem.Size = new System.Drawing.Size(481, 44);
         this.checkCheckOnClickToolStripMenuItem.Text = "Checked_CheckOnClick(T)";
+        this.checkCheckOnClickToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { thirdLevelItem, thirdLevelButton, toolStripComboBox2, toolStripTextBox2, toolStrip2_SplitButton2, toolStrip2_DropDownButton2 });
+        // 
+        // thirdLevelItem
+        // 
+        this.thirdLevelItem.CheckOnClick = true;
+        this.thirdLevelItem.Name = "thirdLevelItem";
+        this.thirdLevelItem.Size = new System.Drawing.Size(481, 44);
+        this.thirdLevelItem.Text = "thirdLevelItem";
+        this.thirdLevelItem.CheckState = System.Windows.Forms.CheckState.Checked;
+        // 
+        // thirdLevelButton
+        // 
+        this.thirdLevelButton.CheckOnClick = true;
+        this.thirdLevelButton.Name = "thirdLevelButton";
+        this.thirdLevelButton.Size = new System.Drawing.Size(481, 44);
+        this.thirdLevelButton.Text = "thirdLevelButton";
+        this.thirdLevelButton.CheckState = System.Windows.Forms.CheckState.Checked;
+        // 
+        // toolStripComboBox2
+        // 
+        this.toolStripComboBox2.Name = "toolStripComboBox2";
+        this.toolStripComboBox2.Size = new System.Drawing.Size(481, 44);
+        this.toolStripComboBox2.Text = "toolStripComboBox2";
+        this.toolStripComboBox2.Items.AddRange(new object[] { "1", "2", "3", "4", "5" });
+        this.toolStripComboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+        // 
+        // toolStripTextBox2
+        // 
+        this.toolStripTextBox2.Name = "toolStripTextBox2";
+        this.toolStripTextBox2.Size = new System.Drawing.Size(481, 44);
+        this.toolStripTextBox2.Text = "toolStripTextBox2";
+        // 
+        // toolStrip2_SplitButton2
+        //
+        this.toolStrip2_SplitButton2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+        this.toolStripMenuItem1});
+        this.toolStrip2_SplitButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+        this.toolStrip2_SplitButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
+        this.toolStrip2_SplitButton2.Name = "toolStrip2_SplitButton2";
+        this.toolStrip2_SplitButton2.Size = new System.Drawing.Size(133, 22);
+        this.toolStrip2_SplitButton2.Text = "toolStrip2_SplitButton2";
+        // 
+        // toolStripMenuItem1
+        // 
+        this.toolStripMenuItem1.CheckOnClick = true;
+        this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+        this.toolStripMenuItem1.Size = new System.Drawing.Size(481, 44);
+        this.toolStripMenuItem1.Text = "toolStripMenuItem1";
+        this.toolStripMenuItem1.CheckState = System.Windows.Forms.CheckState.Checked;
+        // 
+        // toolStrip2_DropDownButton2
+        //
+        this.toolStrip2_DropDownButton2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+        this.toolStripMenuItem2});
+        this.toolStrip2_DropDownButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
+        this.toolStrip2_DropDownButton2.Name = "toolStrip2_DropDownButton2";
+        this.toolStrip2_DropDownButton2.Size = new System.Drawing.Size(180, 22);
+        this.toolStrip2_DropDownButton2.Text = "toolStrip2_DropDownButton2";
+        // 
+        // toolStripMenuItem2
+        // 
+        this.toolStripMenuItem2.CheckOnClick = true;
+        this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+        this.toolStripMenuItem2.Size = new System.Drawing.Size(481, 44);
+        this.toolStripMenuItem2.Text = "test2";
+        this.toolStripMenuItem2.CheckState = System.Windows.Forms.CheckState.Checked;
         // 
         // checkedCheckOnClickFToolStripMenuItem
         // 
@@ -405,6 +479,11 @@ partial class ToolStripTests
     private System.Windows.Forms.ToolStripButton toolStrip2_Button4;
     private System.Windows.Forms.ToolStripButton toolStrip2_Button5;
     private System.Windows.Forms.ToolStripButton toolStrip2_Button6;
+    private System.Windows.Forms.ToolStripButton thirdLevelButton;
+    private System.Windows.Forms.ToolStripTextBox toolStripTextBox2;
+    private System.Windows.Forms.ToolStripComboBox toolStripComboBox2;
+    private System.Windows.Forms.ToolStripDropDownButton toolStrip2_DropDownButton2;
+    private System.Windows.Forms.ToolStripSplitButton toolStrip2_SplitButton2;
     private System.Windows.Forms.ToolStripSplitButton toolStrip2_SplitButton1;
     private System.Windows.Forms.ToolStripDropDownButton toolStrip2_DropDownButton1;
     private System.Windows.Forms.ToolStripMenuItem toolStrip2_DropDownButton1_ChildButton1;
@@ -415,6 +494,9 @@ partial class ToolStripTests
     private System.Windows.Forms.ToolStripMenuItem toolStrip3_MenuItem2;
     private System.Windows.Forms.ToolStripMenuItem toolStrip4_MenuItem1;
     private System.Windows.Forms.ToolStripMenuItem toolStrip4_SubMenuItem;
+    private System.Windows.Forms.ToolStripMenuItem thirdLevelItem;
+    private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+    private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
     private System.Windows.Forms.ToolStripMenuItem uncheckedCheckOnClickToolStripMenuItem;
     private System.Windows.Forms.ToolStripMenuItem checkCheckOnClickToolStripMenuItem;
     private System.Windows.Forms.ToolStripMenuItem checkedCheckOnClickFToolStripMenuItem;

@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
 using Newtonsoft.Json.Linq;
+using Windows.Win32;
 
 namespace System.Windows.Forms.IntegrationTests.Common;
 
@@ -36,9 +37,9 @@ public static class TestHelpers
                 .GetCustomAttributes(typeof(Runtime.Versioning.TargetFrameworkAttribute), false)
                 .SingleOrDefault();
 
-            string[] etractedTokens = frameworkAttribute.FrameworkName.Split("=v"); // "NetcoreApp, Version=v7.0"
+            string[] extractedTokens = frameworkAttribute.FrameworkName.Split("=v"); // "NetCoreApp, Version=v7.0"
 
-            return $"net{etractedTokens[1]}";
+            return $"net{extractedTokens[1]}";
         }
     }
 
@@ -54,7 +55,9 @@ public static class TestHelpers
             throw new ArgumentNullException(nameof(projectName));
 
         string repoRoot = GetRepoRoot();
-        string exePath = Path.Combine(repoRoot, $"artifacts\\bin\\{projectName}\\{Config}\\{TargetFramework}\\{projectName}.exe");
+        string exePath = Path.Combine(
+            repoRoot,
+            $"artifacts\\bin\\{projectName}\\{Config}\\{TargetFramework}\\{projectName}.exe");
 
         if (!File.Exists(exePath))
             throw new FileNotFoundException("File does not exist", exePath);
@@ -170,7 +173,9 @@ public static class TestHelpers
     ///
     ///  All we care about is the dotnet entry under tools
     /// </summary>
-    /// <returns>The path to the globally installed dotnet that matches the version specified in the global.json.</returns>
+    /// <returns>
+    ///  The path to the globally installed dotnet that matches the version specified in the global.json.
+    /// </returns>
     private static string GetGlobalDotNetPath()
     {
         // find the repo root
@@ -220,10 +225,13 @@ public static class TestHelpers
     }
 
     /// <summary>
-    ///  Looks backwards form the current executing directory until it finds a sibling directory seek, then returns the full path of that sibling
+    ///  Looks backwards form the current executing directory until it finds a sibling directory seek,
+    ///  then returns the full path of that sibling.
     /// </summary>
     /// <param name="seek">The sibling directory to look for</param>
-    /// <returns>The full path of the first sibling directory by the current executing directory, away from the root</returns>
+    /// <returns>
+    ///  The full path of the first sibling directory by the current executing directory, away from the root.
+    /// </returns>
     private static string RelativePathBackwardsUntilFind(string seek)
     {
         if (string.IsNullOrEmpty(seek))
@@ -327,7 +335,7 @@ public static class TestHelpers
     }
 
     /// <summary>
-    ///  Presses Alt plus choosen letter on the given process if it can be made the foreground process
+    ///  Presses Alt plus chosen letter on the given process if it can be made the foreground process
     /// </summary>
     /// <param name="process">The process to send the Alt and key to</param>
     /// <param name="letter">Letter in addition to Alt to send to process.</param>
@@ -405,7 +413,7 @@ public static class TestHelpers
     /// <returns>Whether or not the key(s) were pressed on the process</returns>
     /// <seealso cref="Process.MainWindowHandle"/>
     /// <seealso cref="PInvoke.SetForegroundWindow{T}(T)"/>
-    /// <seealso cref="PInvoke.GetForegroundWindow()"/>
+    /// <seealso cref="PInvokeCore.GetForegroundWindow()"/>
     /// <seealso cref="SendKeys.SendWait(string)"/>
     /// <seealso cref="Thread.Sleep(int)"/>
     internal static bool SendKeysToProcess(Process process, string keys, bool switchToMainWindow = true)

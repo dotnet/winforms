@@ -24,6 +24,7 @@ internal static partial class LocalAppContextSwitches
     internal const string DataGridViewUIAStartRowCountAtZeroSwitchName = "System.Windows.Forms.DataGridViewUIAStartRowCountAtZero";
     internal const string NoClientNotificationsSwitchName = "Switch.System.Windows.Forms.AccessibleObject.NoClientNotifications";
     internal const string EnableMsoComponentManagerSwitchName = "Switch.System.Windows.Forms.EnableMsoComponentManager";
+    internal const string TreeNodeCollectionAddRangeRespectsSortOrderSwitchName = "System.Windows.Forms.TreeNodeCollectionAddRangeRespectsSortOrder";
 
     private static int s_scaleTopLevelFormMinMaxSizeForDpi;
     private static int s_anchorLayoutV2;
@@ -34,6 +35,7 @@ internal static partial class LocalAppContextSwitches
     private static int s_dataGridViewUIAStartRowCountAtZero;
     private static int s_noClientNotifications;
     private static int s_enableMsoComponentManager;
+    private static int s_treeNodeCollectionAddRangeRespectsSortOrder;
 
     private static FrameworkName? s_targetFrameworkName;
 
@@ -104,6 +106,11 @@ internal static partial class LocalAppContextSwitches
                 return false;
             }
 
+            if (switchName == TreeNodeCollectionAddRangeRespectsSortOrderSwitchName)
+            {
+                return true;
+            }
+
             if (framework.Version.Major >= 8)
             {
                 // Behavior changes added in .NET 8
@@ -143,7 +150,8 @@ internal static partial class LocalAppContextSwitches
     }
 
     /// <summary>
-    ///  Gets or sets a value indicating whether the parent font (as set by <see cref="Forms.Application.SetDefaultFont(Font)" />
+    ///  Gets or sets a value indicating whether the parent font (as set by
+    ///  <see cref="M:System.Windows.Forms.Application.SetDefaultFont(System.Drawing.Font)" />
     ///  or by the parent control or form's font) is applied to menus.
     /// </summary>
     public static bool ApplyParentFontToMenus
@@ -202,27 +210,13 @@ internal static partial class LocalAppContextSwitches
         get => GetCachedSwitchValue(EnableMsoComponentManagerSwitchName, ref s_enableMsoComponentManager);
     }
 
-    internal static void SetLocalAppContextSwitchValue(string switchName, bool value)
+    /// <summary>
+    ///  When set to (default), API will insert nodes in the sorted order.
+    ///  To get behavior compatible with the previous versions of .NET and .NET Framework, set this switch to.
+    /// </summary>
+    public static bool TreeNodeCollectionAddRangeRespectsSortOrder
     {
-        if (switchName == NoClientNotificationsSwitchName)
-        {
-            s_noClientNotifications = value ? 1 : 0;
-        }
-
-        if (switchName == DataGridViewUIAStartRowCountAtZeroSwitchName)
-        {
-            s_dataGridViewUIAStartRowCountAtZero = value ? 1 : 0;
-        }
-
-        if (switchName == ApplyParentFontToMenusSwitchName)
-        {
-            s_applyParentFontToMenus = value ? 1 : 0;
-        }
-    }
-
-    internal static bool GetCachedSwitchValue(string switchName)
-    {
-        int cachedSwitchValue = 0;
-        return GetCachedSwitchValue(switchName, ref cachedSwitchValue);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => GetCachedSwitchValue(TreeNodeCollectionAddRangeRespectsSortOrderSwitchName, ref s_treeNodeCollectionAddRangeRespectsSortOrder);
     }
 }

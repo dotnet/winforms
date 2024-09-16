@@ -1319,26 +1319,31 @@ public partial class ListViewItem : ICloneable, ISerializable
 
     internal void UpdateSubItems(int index, int oldCount)
     {
-        if (_listView is not null && _listView.IsHandleCreated)
+        if (_listView is null || !_listView.IsHandleCreated)
         {
-            int subItemCount = SubItemCount;
-            int itemIndex = Index;
-            if (index != -1)
-            {
-                _listView.SetItemText(itemIndex, index, _subItems[index].Text);
-            }
-            else
-            {
-                for (int i = 0; i < subItemCount; i++)
-                {
-                    _listView.SetItemText(itemIndex, i, _subItems[i].Text);
-                }
-            }
+            return;
+        }
 
-            for (int i = subItemCount; i < oldCount; i++)
+        int subItemCount = SubItemCount;
+        int itemIndex = Index;
+        if (index != -1)
+        {
+            // Update the specified subitem text.
+            _listView.SetItemText(itemIndex, index, _subItems[index].Text);
+        }
+        else
+        {
+            // Update all subitems text.
+            for (int i = 0; i < subItemCount; i++)
             {
-                _listView.SetItemText(itemIndex, i, string.Empty);
+                _listView.SetItemText(itemIndex, i, _subItems[i].Text);
             }
+        }
+
+        // Clear subitems beyond the current count.
+        for (int i = subItemCount; i < oldCount; i++)
+        {
+            _listView.SetItemText(itemIndex, i, string.Empty);
         }
     }
 

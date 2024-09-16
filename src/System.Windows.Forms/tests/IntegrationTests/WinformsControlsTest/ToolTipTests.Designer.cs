@@ -1,4 +1,4 @@
-﻿namespace WinformsControlsTest;
+﻿namespace WinFormsControlsTest;
 
 partial class ToolTipTests
 {

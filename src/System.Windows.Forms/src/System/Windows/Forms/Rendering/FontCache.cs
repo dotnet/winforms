@@ -21,7 +21,7 @@ namespace System.Windows.Forms;
 /// </remarks>
 internal sealed partial class FontCache : RefCountedCache<HFONT, FontCache.Data, (Font Font, FONT_QUALITY Quality)>
 {
-    private readonly object _lock = new();
+    private readonly Lock _lock = new();
 
     /// <summary>
     ///  Create a <see cref="FontCache"/> with the specified collection limits.
@@ -33,9 +33,9 @@ internal sealed partial class FontCache : RefCountedCache<HFONT, FontCache.Data,
     ///  <paramref name="font"/> and <paramref name="quality"/>. The scope MUST be disposed to release the ref
     ///  count accurately. Use the result in a using statement to avoid leaking fonts.
     /// </summary>
-    public Scope GetEntry(Font font, FONT_QUALITY quality = FONT_QUALITY.DEFAULT_QUALITY) => GetEntry((font, quality));
+    public CacheEntry GetEntry(Font font, FONT_QUALITY quality = FONT_QUALITY.DEFAULT_QUALITY) => GetEntry((font, quality));
 
-    public override Scope GetEntry((Font Font, FONT_QUALITY Quality) key)
+    public override CacheEntry GetEntry((Font Font, FONT_QUALITY Quality) key)
     {
         lock (_lock)
         {

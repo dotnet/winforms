@@ -37,7 +37,8 @@ public class ToolStripSystemRenderer : ToolStripRenderer
     {
         get
         {
-            // If system in high contrast mode 'false' flag should be passed to render filled selected button background. This is in consistence with ToolStripProfessionalRenderer.
+            // If system in high contrast mode 'false' flag should be passed to render filled selected button background.
+            // This is in consistence with ToolStripProfessionalRenderer.
             _toolStripHighContrastRenderer ??= new ToolStripHighContrastRenderer(systemRenderMode: false);
 
             return _toolStripHighContrastRenderer;
@@ -177,7 +178,7 @@ public class ToolStripSystemRenderer : ToolStripRenderer
     }
 
     /// <summary>
-    ///  Draw the ToolStrip background.  ToolStrip users should override this if they want to draw differently.
+    ///  Draw the ToolStrip background. ToolStrip users should override this if they want to draw differently.
     /// </summary>
     protected override void OnRenderToolStripBackground(ToolStripRenderEventArgs e)
     {
@@ -229,7 +230,7 @@ public class ToolStripSystemRenderer : ToolStripRenderer
     }
 
     /// <summary>
-    ///  Draw the border around the ToolStrip.  This should be done as the last step.
+    ///  Draw the border around the ToolStrip. This should be done as the last step.
     /// </summary>
     protected override void OnRenderToolStripBorder(ToolStripRenderEventArgs e)
     {
@@ -270,7 +271,7 @@ public class ToolStripSystemRenderer : ToolStripRenderer
     }
 
     /// <summary>
-    ///  Draw the grip.  ToolStrip users should override this if they want to draw differently.
+    ///  Draw the grip. ToolStrip users should override this if they want to draw differently.
     /// </summary>
     protected override void OnRenderGrip(ToolStripGripRenderEventArgs e)
     {
@@ -541,7 +542,7 @@ public class ToolStripSystemRenderer : ToolStripRenderer
             //  SplitButtonDropDown: [ v |
             //  Separator:                |
             //  SplitButton:               |  ]
-            // this is great except if you want to swap the button in RTL.  In this case we need
+            // this is great except if you want to swap the button in RTL. In this case we need
             // to use the DropDownButton instead of the SplitButtonDropDown and paint the arrow ourselves.
             Rectangle splitButtonBounds = splitButton.ButtonBounds;
             if (rightToLeft)
@@ -574,6 +575,17 @@ public class ToolStripSystemRenderer : ToolStripRenderer
             if (rightToLeft || splitButton.BackgroundImage is not null)
             {
                 DrawArrow(new ToolStripArrowRenderEventArgs(g, splitButton, splitButton.DropDownButtonBounds, arrowColor, ArrowDirection.Down));
+            }
+
+            ToolBarState state = GetToolBarState(e.Item);
+            if (e.Item is ToolStripSplitButton item && !SystemInformation.HighContrast &&
+                (state == ToolBarState.Hot || state == ToolBarState.Pressed || state == ToolBarState.Checked))
+            {
+                var clientBounds = item.ClientBounds;
+                bounds.Height -= 1;
+                ControlPaint.DrawBorderSimple(g, clientBounds, SystemColors.Highlight);
+                using var brush = SystemColors.Highlight.GetCachedSolidBrushScope();
+                g.FillRectangle(brush, item.SplitterBounds);
             }
         }
         else
@@ -624,8 +636,8 @@ public class ToolStripSystemRenderer : ToolStripRenderer
     ///  If OnRenderButton called OnRenderItem we would never be able to change the implementation
     ///  as it would be a breaking change. If in v1, the user overrode OnRenderItem to draw green triangles
     ///  and in v2 we decided to add a feature to button that would require us to no longer call OnRenderItem -
-    ///  the user's version of OnRenderItem would not get called when he upgraded his framework.  Hence
-    ///  everyone should just call this private shared method.  Users need to override each item they want
+    ///  the user's version of OnRenderItem would not get called when he upgraded his framework. Hence
+    ///  everyone should just call this private shared method. Users need to override each item they want
     ///  to change the look and feel of.
     ///  </summary>
     private static void RenderItemInternal(ToolStripItemRenderEventArgs e)

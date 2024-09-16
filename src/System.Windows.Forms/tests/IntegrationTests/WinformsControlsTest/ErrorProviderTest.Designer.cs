@@ -3,7 +3,7 @@
 
 using System.Drawing;
 
-namespace WinformsControlsTest;
+namespace WinFormsControlsTest;
 
 partial class ErrorProviderTest
 {
@@ -121,7 +121,7 @@ partial class ErrorProviderTest
         this.submitButton.TabIndex = 1;
         this.submitButton.Text = "Validate";
         this.submitButton.UseVisualStyleBackColor = true;
-        this.submitButton.Click += new System.EventHandler(this.submitButton_Click);
+        this.submitButton.Click += this.submitButton_Click;
         // 
         // Form1
         // 

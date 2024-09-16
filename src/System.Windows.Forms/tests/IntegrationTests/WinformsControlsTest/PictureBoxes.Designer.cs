@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-namespace WinformsControlsTest;
+namespace WinFormsControlsTest;
 
 partial class PictureBoxes
 {
@@ -49,8 +49,8 @@ partial class PictureBoxes
         this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
         this.pictureBox1.TabIndex = 0;
         this.pictureBox1.TabStop = false;
-        this.pictureBox1.LoadCompleted += new System.ComponentModel.AsyncCompletedEventHandler(this.pictureBox1_LoadCompleted);
-        this.pictureBox1.LoadProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.pictureBox1_LoadProgressChanged);
+        this.pictureBox1.LoadCompleted += this.pictureBox1_LoadCompleted;
+        this.pictureBox1.LoadProgressChanged += this.pictureBox1_LoadProgressChanged;
         // 
         // btnloadImage
         // 
@@ -62,7 +62,7 @@ partial class PictureBoxes
         this.btnloadImage.TabIndex = 1;
         this.btnloadImage.Text = "Load";
         this.btnloadImage.UseVisualStyleBackColor = true;
-        this.btnloadImage.Click += new System.EventHandler(this.btnloadImage_Click);
+        this.btnloadImage.Click += this.btnloadImage_Click;
         // 
         // imageUri
         // 

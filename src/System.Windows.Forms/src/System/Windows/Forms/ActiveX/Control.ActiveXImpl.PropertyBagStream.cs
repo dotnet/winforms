@@ -2,7 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections;
-using System.Windows.Forms.BinaryFormat;
+using System.Formats.Nrbf;
+using System.Private.Windows.Core.BinaryFormat;
+using System.Windows.Forms.Nrbf;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Com.StructuredStorage;
 using Windows.Win32.System.Variant;
@@ -27,8 +29,8 @@ public partial class Control
 
                 try
                 {
-                    BinaryFormattedObject format = new(stream);
-                    success = format.TryGetPrimitiveHashtable(out _bag!);
+                    SerializationRecord rootRecord = stream.Decode();
+                    success = rootRecord.TryGetPrimitiveHashtable(out _bag!);
                 }
                 catch (Exception e) when (!e.IsCriticalException())
                 {

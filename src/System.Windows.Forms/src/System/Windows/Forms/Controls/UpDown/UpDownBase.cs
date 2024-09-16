@@ -67,6 +67,10 @@ public abstract partial class UpDownBase : ContainerControl
         SetStyle(ControlStyles.Opaque | ControlStyles.FixedHeight | ControlStyles.ResizeRedraw, true);
         SetStyle(ControlStyles.StandardClick, false);
         SetStyle(ControlStyles.UseTextForAccessibility, false);
+
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001
     }
 
     [Browsable(false)]
@@ -492,7 +496,7 @@ public abstract partial class UpDownBase : ContainerControl
     {
         base.OnHandleCreated(e);
         PositionControls();
-        SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(UserPreferenceChanged);
+        SystemEvents.UserPreferenceChanged += UserPreferenceChanged;
     }
 
     /// <summary>
@@ -500,7 +504,7 @@ public abstract partial class UpDownBase : ContainerControl
     /// </summary>
     protected override void OnHandleDestroyed(EventArgs e)
     {
-        SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(UserPreferenceChanged);
+        SystemEvents.UserPreferenceChanged -= UserPreferenceChanged;
         base.OnHandleDestroyed(e);
     }
 
@@ -973,6 +977,18 @@ public abstract partial class UpDownBase : ContainerControl
     }
 
     internal override void SetToolTip(ToolTip toolTip)
+    {
+        if (toolTip is null)
+        {
+            return;
+        }
+
+        string? caption = toolTip.GetToolTip(this);
+        toolTip.SetToolTip(_upDownEdit, caption);
+        toolTip.SetToolTip(_upDownButtons, caption);
+    }
+
+    internal override void RemoveToolTip(ToolTip toolTip)
     {
         if (toolTip is null)
         {

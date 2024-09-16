@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-namespace WinformsControlsTest;
+namespace WinFormsControlsTest;
 
 partial class TrackBars
 {
@@ -62,8 +62,8 @@ partial class TrackBars
         this.trackBar1.Name = "trackBar1";
         this.trackBar1.Size = new System.Drawing.Size(457, 45);
         this.trackBar1.TabIndex = 0;
-        this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
-        this.trackBar1.SizeChanged += new System.EventHandler(this.trackBar1_SizeChanged);
+        this.trackBar1.Scroll += this.trackBar1_Scroll;
+        this.trackBar1.SizeChanged += this.trackBar1_SizeChanged;
         // 
         // rbHorizontal
         // 
@@ -77,7 +77,7 @@ partial class TrackBars
         this.rbHorizontal.TabStop = true;
         this.rbHorizontal.Text = "Horizontal";
         this.rbHorizontal.UseVisualStyleBackColor = true;
-        this.rbHorizontal.CheckedChanged += new System.EventHandler(this.rbHorizontal_CheckedChanged);
+        this.rbHorizontal.CheckedChanged += this.rbHorizontal_CheckedChanged;
         // 
         // rbVertical
         // 
@@ -89,7 +89,7 @@ partial class TrackBars
         this.rbVertical.TabIndex = 2;
         this.rbVertical.Text = "Vertical";
         this.rbVertical.UseVisualStyleBackColor = true;
-        this.rbVertical.CheckedChanged += new System.EventHandler(this.rbVertical_CheckedChanged);
+        this.rbVertical.CheckedChanged += this.rbVertical_CheckedChanged;
         // 
         // gbOrientation
         // 
@@ -114,7 +114,7 @@ partial class TrackBars
         this.chbRightToLeft.TabIndex = 4;
         this.chbRightToLeft.Text = "RightToLeft";
         this.chbRightToLeft.UseVisualStyleBackColor = true;
-        this.chbRightToLeft.CheckedChanged += new System.EventHandler(this.chbRightToLeft_CheckedChanged);
+        this.chbRightToLeft.CheckedChanged += this.chbRightToLeft_CheckedChanged;
         // 
         // chbRightToLeftLayout
         // 
@@ -126,7 +126,7 @@ partial class TrackBars
         this.chbRightToLeftLayout.TabIndex = 5;
         this.chbRightToLeftLayout.Text = "RightToLeftLayout";
         this.chbRightToLeftLayout.UseVisualStyleBackColor = true;
-        this.chbRightToLeftLayout.CheckedChanged += new System.EventHandler(this.chbRightToLeftLayout_CheckedChanged);
+        this.chbRightToLeftLayout.CheckedChanged += this.chbRightToLeftLayout_CheckedChanged;
         // 
         // tickstyleNone
         // 
@@ -138,7 +138,7 @@ partial class TrackBars
         this.tickstyleNone.TabIndex = 11;
         this.tickstyleNone.Text = "TickstyleNone";
         this.tickstyleNone.UseVisualStyleBackColor = true;
-        this.tickstyleNone.CheckedChanged += new System.EventHandler(this.tickstyleNone_CheckedChanged);
+        this.tickstyleNone.CheckedChanged += this.tickstyleNone_CheckedChanged;
         // 
         // numericMinimum
         // 
@@ -157,7 +157,7 @@ partial class TrackBars
         0,
         0,
         -2147483648});
-        this.numericMinimum.ValueChanged += new System.EventHandler(this.numericMinimum_ValueChanged);
+        this.numericMinimum.ValueChanged += this.numericMinimum_ValueChanged;
         // 
         // numericMaximum
         // 
@@ -176,7 +176,7 @@ partial class TrackBars
         0,
         0,
         0});
-        this.numericMaximum.ValueChanged += new System.EventHandler(this.numericMaximum_ValueChanged);
+        this.numericMaximum.ValueChanged += this.numericMaximum_ValueChanged;
         // 
         // numericFrequency
         // 
@@ -195,7 +195,7 @@ partial class TrackBars
         0,
         0,
         0});
-        this.numericFrequency.ValueChanged += new System.EventHandler(this.numericFrequency_ValueChanged);
+        this.numericFrequency.ValueChanged += this.numericFrequency_ValueChanged;
         // 
         // lblMinimum
         // 

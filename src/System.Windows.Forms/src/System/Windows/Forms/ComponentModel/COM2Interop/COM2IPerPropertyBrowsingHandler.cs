@@ -135,7 +135,7 @@ internal sealed unsafe partial class Com2IPerPropertyBrowsingHandler : Com2Exten
             //
             // This is a bit of a backwards-compat work around. Many older ActiveX controls will show a
             // property page for all properties since the old grid would only put up the [...] button for
-            // "(Custom)".  If we have a conversion editor, don't allow this to override it.
+            // "(Custom)". If we have a conversion editor, don't allow this to override it.
 
             if (sender.ConvertingNativeType)
             {

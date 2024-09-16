@@ -280,7 +280,7 @@ partial class DataBindingExample
         this.Controls.Add(this.listView1);
         this.Controls.Add(this.label4);
         this.Name = "DataBindingExample";
-        this.Text = "DataBindingExampleForControls";
+        this.Text = "DataBindingExampleForControls (Exclude this Form in Accessibility Test Pass)";
         ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
         this.panel1.ResumeLayout(false);
         this.panel1.PerformLayout();

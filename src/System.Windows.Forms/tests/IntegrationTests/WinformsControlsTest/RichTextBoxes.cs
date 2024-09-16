@@ -5,8 +5,9 @@ using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.UI.Controls.RichEdit;
 
-namespace WinformsControlsTest;
+namespace WinFormsControlsTest;
 
+[DesignerCategory("Default")]
 public partial class RichTextBoxes : Form
 {
     public RichTextBoxes()

@@ -42,6 +42,7 @@ public sealed unsafe class ColorPalette
     /// <summary>
     ///  Create a standard color palette.
     /// </summary>
+    /// <param name="fixedPaletteType">The palette type.</param>
     public ColorPalette(PaletteType fixedPaletteType)
     {
         ColorPalette palette = InitializePalette(fixedPaletteType, 0, useTransparentColor: false, bitmap: null);
@@ -107,7 +108,7 @@ public sealed unsafe class ColorPalette
                 (GdiPlus.PaletteType)fixedPaletteType,
                 colorCount,
                 useTransparentColor,
-                bitmap is null ? null : bitmap.Pointer).ThrowIfFailed();
+                bitmap is null ? null : bitmap.GetPointer()).ThrowIfFailed();
         }
 
         GC.KeepAlive(bitmap);

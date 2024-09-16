@@ -33,7 +33,7 @@ public partial class CheckedListBox
         }
 
         /// <summary>
-        ///  This is the item array that stores our data.  We share this backing store
+        ///  This is the item array that stores our data. We share this backing store
         ///  with the main object collection.
         /// </summary>
         private ItemArray InnerArray
@@ -143,7 +143,7 @@ public partial class CheckedListBox
         }
 
         /// <summary>
-        ///  This method returns if the actual item index is checked.  The index is the index to the MAIN
+        ///  This method returns if the actual item index is checked. The index is the index to the MAIN
         ///  collection, not this one.
         /// </summary>
         internal CheckState GetCheckedState(int index)

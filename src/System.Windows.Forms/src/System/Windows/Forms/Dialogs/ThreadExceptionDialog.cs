@@ -273,7 +273,7 @@ public class ThreadExceptionDialog : Form
 
         _detailsButton.Text = SR.ExDlgShowDetails;
         _detailsButton.FlatStyle = FlatStyle.Standard;
-        _detailsButton.Click += new EventHandler(DetailsClick);
+        _detailsButton.Click += DetailsClick;
 
         Button? button = null;
         int startIndex = 0;

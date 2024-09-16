@@ -18,6 +18,7 @@ public partial class BindingContext : ICollection
     /// <summary>
     ///  Initializes a new instance of the System.Windows.Forms.BindingContext class.
     /// </summary>
+    [RequiresUnreferencedCode(IBindableComponent.ComponentModelTrimIncompatibilityMessage)]
     public BindingContext()
     {
         _listManagers = [];

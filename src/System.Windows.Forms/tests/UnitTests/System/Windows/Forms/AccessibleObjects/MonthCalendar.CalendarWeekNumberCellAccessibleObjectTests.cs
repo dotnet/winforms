@@ -196,6 +196,22 @@ public class MonthCalendar_CalendarWeekNumberCellAccessibleObjectTests
         Assert.False(control.IsHandleCreated);
     }
 
+    [WinFormsTheory]
+    [InlineData((int)UIA_PATTERN_ID.UIA_InvokePatternId, false)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_GridItemPatternId, false)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_TableItemPatternId, false)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId, true)]
+    [InlineData(9999, false)]
+    public void CalendarWeekNumberCellAccessibleObject_IsPatternSupported_ReturnsExpected(int patternIdAsInt, bool expected)
+    {
+        using MonthCalendar control = new();
+
+        CalendarWeekNumberCellAccessibleObject cellAccessibleObject = CreateCalendarWeekNumberCellAccessibleObject(control);
+        bool isSupported = cellAccessibleObject.IsPatternSupported((UIA_PATTERN_ID)patternIdAsInt);
+
+        isSupported.Should().Be(expected, $"because pattern {(UIA_PATTERN_ID)patternIdAsInt} support should be {expected} for CalendarWeekNumberCellAccessibleObject.");
+    }
+
     private CalendarWeekNumberCellAccessibleObject CreateCalendarWeekNumberCellAccessibleObject(MonthCalendar control, int calendarIndex = 0, int rowIndex = 0, int columnIndex = 0)
     {
         MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;

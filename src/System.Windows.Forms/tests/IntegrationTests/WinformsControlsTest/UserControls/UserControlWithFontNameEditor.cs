@@ -1,11 +1,11 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.ComponentModel;
 using System.Drawing.Design;
 
-namespace WinformsControlsTest.UserControls;
+namespace WinFormsControlsTest.UserControls;
 
+[DesignerCategory("Default")]
 internal class UserControlWithFontNameEditor : UserControl
 {
     private const string Category = "!Fonts";
@@ -19,6 +19,7 @@ internal class UserControlWithFontNameEditor : UserControl
     [Browsable(true)]
     [EditorBrowsable(EditorBrowsableState.Always)]
     [Category(Category)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string FontNameBold
     {
         get { return "Arial Black"; }
@@ -29,6 +30,7 @@ internal class UserControlWithFontNameEditor : UserControl
     [Browsable(true)]
     [EditorBrowsable(EditorBrowsableState.Always)]
     [Category(Category)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string FontNameBoldItalic
     {
         get { return "Forte"; }
@@ -39,6 +41,7 @@ internal class UserControlWithFontNameEditor : UserControl
     [Browsable(true)]
     [EditorBrowsable(EditorBrowsableState.Always)]
     [Category(Category)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string FontNameEmpty
     {
         get { return ""; }
@@ -49,6 +52,7 @@ internal class UserControlWithFontNameEditor : UserControl
     [Browsable(true)]
     [EditorBrowsable(EditorBrowsableState.Always)]
     [Category(Category)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int FontNameInt
     {
         get { return -1345; }
@@ -59,6 +63,7 @@ internal class UserControlWithFontNameEditor : UserControl
     [Browsable(true)]
     [EditorBrowsable(EditorBrowsableState.Always)]
     [Category(Category)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string FontNameInvalid
     {
         get { return "some invalid font family"; }
@@ -69,6 +74,7 @@ internal class UserControlWithFontNameEditor : UserControl
     [Browsable(true)]
     [EditorBrowsable(EditorBrowsableState.Always)]
     [Category(Category)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string FontNameNull
     {
         get { return null; }
@@ -79,6 +85,7 @@ internal class UserControlWithFontNameEditor : UserControl
     [Browsable(true)]
     [EditorBrowsable(EditorBrowsableState.Always)]
     [Category(Category)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string FontNameItalics
     {
         get { return "Lucida Handwriting"; }
@@ -89,6 +96,7 @@ internal class UserControlWithFontNameEditor : UserControl
     [Browsable(true)]
     [EditorBrowsable(EditorBrowsableState.Always)]
     [Category(Category)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string FontNameRegular
     {
         get { return "Arial"; }

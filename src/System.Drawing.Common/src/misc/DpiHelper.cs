@@ -74,12 +74,14 @@ internal static class DpiHelper
             {
                 int dpiScalePercent = (int)Math.Round(LogicalToDeviceUnitsScalingFactorX * 100);
 
-                // We will prefer NearestNeighbor algorithm for 200, 300, 400, etc zoom factors, in which each pixel become a 2x2, 3x3, 4x4, etc rectangle.
+                // We will prefer NearestNeighbor algorithm for 200, 300, 400, etc zoom factors,
+                // in which each pixel become a 2x2, 3x3, 4x4, etc rectangle.
                 // This produces sharp edges in the scaled image and doesn't cause distortions of the original image.
-                // For any other scale factors we will prefer a high quality resizing algorithm. While that introduces fuzziness in the resulting image,
-                // it will not distort the original (which is extremely important for small zoom factors like 125%, 150%).
-                // We'll use Bicubic in those cases, except on reducing (zoom < 100, which we shouldn't have anyway), in which case Linear produces better
-                // results because it uses less neighboring pixels.
+                // For any other scale factors we will prefer a high quality resizing algorithm.
+                // While that introduces fuzziness in the resulting image, it will not distort the original
+                // (which is extremely important for small zoom factors like 125%, 150%).
+                // We'll use Bicubic in those cases, except on reducing (zoom < 100, which we shouldn't have anyway),
+                // in which case Linear produces better results because it uses less neighboring pixels.
                 if ((dpiScalePercent % 100) == 0)
                 {
                     s_interpolationMode = Drawing2D.InterpolationMode.NearestNeighbor;
@@ -109,11 +111,14 @@ internal static class DpiHelper
         RectangleF sourceRect = new(0, 0, logicalImage.Size.Width, logicalImage.Size.Height);
         RectangleF destRect = new(0, 0, deviceImageSize.Width, deviceImageSize.Height);
 
-        // Specify a source rectangle shifted by half of pixel to account for GDI+ considering the source origin the center of top-left pixel
-        // Failing to do so will result in the right and bottom of the bitmap lines being interpolated with the graphics' background color,
+        // Specify a source rectangle shifted by half of pixel to account for GDI+ considering
+        // the source origin the center of top-left pixel
+        // Failing to do so will result in the right and bottom of the bitmap lines being
+        // interpolated with the graphics' background color,
         // and will appear black even if we cleared the background with transparent color.
         // The apparition of these artifacts depends on the interpolation mode, on the dpi scaling factor, etc.
-        // E.g. at 150% DPI, Bicubic produces them and NearestNeighbor is fine, but at 200% DPI NearestNeighbor also shows them.
+        // E.g. at 150% DPI, Bicubic produces them and NearestNeighbor is fine,
+        // but at 200% DPI NearestNeighbor also shows them.
         sourceRect.Offset(-0.5f, -0.5f);
 
         graphics.DrawImage(logicalImage, destRect, sourceRect, GraphicsUnit.Pixel);

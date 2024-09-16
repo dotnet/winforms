@@ -216,18 +216,17 @@ internal partial class TableLayoutPanelDesigner : FlowPanelDesigner
                 _undoEngine = GetService(typeof(UndoEngine)) as UndoEngine;
                 if (_undoEngine is not null)
                 {
-                    _undoEngine.Undoing += new EventHandler(OnUndoing);
+                    _undoEngine.Undoing += OnUndoing;
                     if (_undoEngine.UndoInProgress)
                     {
                         _undoing = true;
-                        _undoEngine.Undone += new EventHandler(OnUndone);
+                        _undoEngine.Undone += OnUndone;
                     }
                 }
             }
 
             return _undoing;
         }
-
         set
         {
             _undoing = value;
@@ -240,16 +239,16 @@ internal partial class TableLayoutPanelDesigner : FlowPanelDesigner
         {
             if (_verbs is null)
             {
-                _removeColVerb = new DesignerVerb(SR.TableLayoutPanelDesignerRemoveColumn, new EventHandler(OnVerbRemove));
-                _removeRowVerb = new DesignerVerb(SR.TableLayoutPanelDesignerRemoveRow, new EventHandler(OnVerbRemove));
+                _removeColVerb = new DesignerVerb(SR.TableLayoutPanelDesignerRemoveColumn, OnVerbRemove);
+                _removeRowVerb = new DesignerVerb(SR.TableLayoutPanelDesignerRemoveRow, OnVerbRemove);
 
                 _verbs = new DesignerVerbCollection();
 
-                _verbs.Add(new DesignerVerb(SR.TableLayoutPanelDesignerAddColumn, new EventHandler(OnVerbAdd)));
-                _verbs.Add(new DesignerVerb(SR.TableLayoutPanelDesignerAddRow, new EventHandler(OnVerbAdd)));
+                _verbs.Add(new DesignerVerb(SR.TableLayoutPanelDesignerAddColumn, OnVerbAdd));
+                _verbs.Add(new DesignerVerb(SR.TableLayoutPanelDesignerAddRow, OnVerbAdd));
                 _verbs.Add(_removeColVerb);
                 _verbs.Add(_removeRowVerb);
-                _verbs.Add(new DesignerVerb(SR.TableLayoutPanelDesignerEditRowAndCol, new EventHandler(OnVerbEdit)));
+                _verbs.Add(new DesignerVerb(SR.TableLayoutPanelDesignerEditRowAndCol, OnVerbEdit));
 
                 CheckVerbStatus();
             }
@@ -340,22 +339,22 @@ internal partial class TableLayoutPanelDesigner : FlowPanelDesigner
         absolute.Text = SR.TableLayoutPanelDesignerAbsoluteMenu;
         absolute.Tag = isRow;
         absolute.Name = "absolute";
-        absolute.Click += new EventHandler(OnAbsoluteClick);
+        absolute.Click += OnAbsoluteClick;
 
         percent.Text = SR.TableLayoutPanelDesignerPercentageMenu;
         percent.Tag = isRow;
         percent.Name = "percent";
-        percent.Click += new EventHandler(OnPercentClick);
+        percent.Click += OnPercentClick;
 
         autosize.Text = SR.TableLayoutPanelDesignerAutoSizeMenu;
         autosize.Tag = isRow;
         autosize.Name = "autosize";
-        autosize.Click += new EventHandler(OnAutoSizeClick);
+        autosize.Click += OnAutoSizeClick;
 
         ToolStripDropDownMenu menu = new();
         menu.Items.AddRange((ToolStripItem[])[add, insert, delete, separator, label, absolute, percent, autosize]);
         menu.Tag = isRow;
-        menu.Opening += new CancelEventHandler(OnRowColMenuOpening);
+        menu.Opening += OnRowColMenuOpening;
 
         IUIService uis = GetService(typeof(IUIService)) as IUIService;
         if (uis is not null)
@@ -446,16 +445,16 @@ internal partial class TableLayoutPanelDesigner : FlowPanelDesigner
 
     private void RemoveControlInternal(Control c)
     {
-        Table.ControlRemoved -= new ControlEventHandler(OnControlRemoved);
+        Table.ControlRemoved -= OnControlRemoved;
         Table.Controls.Remove(c);
-        Table.ControlRemoved += new ControlEventHandler(OnControlRemoved);
+        Table.ControlRemoved += OnControlRemoved;
     }
 
     private void AddControlInternal(Control c, int col, int row)
     {
-        Table.ControlAdded -= new ControlEventHandler(OnControlAdded);
+        Table.ControlAdded -= OnControlAdded;
         Table.Controls.Add(c, col, row);
-        Table.ControlAdded += new ControlEventHandler(OnControlAdded);
+        Table.ControlAdded += OnControlAdded;
     }
 
     private void ControlAddedInternal(Control control, Point newControlPosition, bool localReposition, bool fullTable, DragEventArgs de)
@@ -567,7 +566,7 @@ internal partial class TableLayoutPanelDesigner : FlowPanelDesigner
             }
 
             // if we are locally repositioning this control - remove it (internally)
-            // from the table's child collection and add something in its place.  This
+            // from the table's child collection and add something in its place. This
             // will be a control to swap it with
             if (localReposition)
             {
@@ -800,29 +799,29 @@ internal partial class TableLayoutPanelDesigner : FlowPanelDesigner
             IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
             if (host is not null)
             {
-                host.TransactionClosing -= new DesignerTransactionCloseEventHandler(OnTransactionClosing);
+                host.TransactionClosing -= OnTransactionClosing;
             }
 
             if (_undoEngine is not null)
             {
                 if (Undoing)
                 {
-                    _undoEngine.Undone -= new EventHandler(OnUndone);
+                    _undoEngine.Undone -= OnUndone;
                 }
 
-                _undoEngine.Undoing -= new EventHandler(OnUndoing);
+                _undoEngine.Undoing -= OnUndoing;
             }
 
             if (_compSvc is not null)
             {
-                _compSvc.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
-                _compSvc.ComponentChanging -= new ComponentChangingEventHandler(OnComponentChanging);
+                _compSvc.ComponentChanged -= OnComponentChanged;
+                _compSvc.ComponentChanging -= OnComponentChanging;
             }
 
             if (Table is not null)
             {
-                Table.ControlAdded -= new ControlEventHandler(OnControlAdded);
-                Table.ControlRemoved -= new ControlEventHandler(OnControlRemoved);
+                Table.ControlAdded -= OnControlAdded;
+                Table.ControlRemoved -= OnControlRemoved;
             }
 
             _contextMenuRow?.Dispose();
@@ -1502,7 +1501,7 @@ internal partial class TableLayoutPanelDesigner : FlowPanelDesigner
         {
             if (_undoEngine is not null)
             {
-                _undoEngine.Undone += new EventHandler(OnUndone);
+                _undoEngine.Undone += OnUndone;
             }
 
             Undoing = true;
@@ -1515,7 +1514,7 @@ internal partial class TableLayoutPanelDesigner : FlowPanelDesigner
         {
             if (_undoEngine is not null)
             {
-                _undoEngine.Undone -= new EventHandler(OnUndone);
+                _undoEngine.Undone -= OnUndone;
             }
 
             Undoing = false;

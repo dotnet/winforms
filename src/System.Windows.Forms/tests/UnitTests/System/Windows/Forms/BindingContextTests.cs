@@ -664,7 +664,10 @@ public class BindingContextTests
         Assert.Same(manager, context[dataSource, "Property"]);
     }
 
+    [ActiveIssue("https://github.com/dotnet/winforms/issues/11795")]
     [Fact]
+    [SkipOnArchitecture(TestArchitectures.X86,
+        "Flaky tests, see: https://github.com/dotnet/winforms/issues/11795")]
     public void BindingContext_Item_GetIListSourceDataSourceWithDataMemberReturningIListNull_ThrowsArgumentNullException()
     {
         BindingContext context = [];

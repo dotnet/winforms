@@ -13,11 +13,11 @@ namespace System.Windows.Forms;
 ///  in the array.
 ///
 ///  The methods to enumerate, count and get data support
-///  virtualized indexes.  Indexes are virtualized according
-///  to the state mask passed in.  This allows ItemArray
+///  virtualized indexes. Indexes are virtualized according
+///  to the state mask passed in. This allows ItemArray
 ///  to be the backing store for one read-write "master"
 ///  collection and several read-only collections based
-///  on masks.  ItemArray supports up to 31 masks.
+///  on masks. ItemArray supports up to 31 masks.
 /// </summary>
 internal partial class ItemArray : IComparer<Entry>
 {
@@ -35,13 +35,13 @@ internal partial class ItemArray : IComparer<Entry>
     internal IReadOnlyList<Entry?> Entries => _entries;
 
     /// <summary>
-    ///  The version of this array.  This number changes with each
+    ///  The version of this array. This number changes with each
     ///  change to the item list.
     /// </summary>
     public int Version { get; private set; }
 
     /// <summary>
-    ///  Adds the given item to the array.  The state is initially
+    ///  Adds the given item to the array. The state is initially
     ///  zero.
     /// </summary>
     public object? Add(object item)
@@ -150,7 +150,7 @@ internal partial class ItemArray : IComparer<Entry>
     }
 
     /// <summary>
-    ///  Gets the item at the given index.  The index is
+    ///  Gets the item at the given index. The index is
     ///  virtualized against the given mask value.
     /// </summary>
     public object GetItem(int virtualIndex, int stateMask = 0)
@@ -165,7 +165,7 @@ internal partial class ItemArray : IComparer<Entry>
     }
 
     /// <summary>
-    ///  Gets the item at the given index.  The index is
+    ///  Gets the item at the given index. The index is
     ///  virtualized against the given mask value.
     /// </summary>
     internal Entry GetEntryObject(int virtualIndex, int stateMask = 0)
@@ -212,7 +212,7 @@ internal partial class ItemArray : IComparer<Entry>
     }
 
     /// <summary>
-    ///  Inserts item at the given index.  The index
+    ///  Inserts item at the given index. The index
     ///  is not virtualized.
     /// </summary>
     public void Insert(int index, object item)
@@ -229,7 +229,7 @@ internal partial class ItemArray : IComparer<Entry>
     }
 
     /// <summary>
-    ///  Removes the given item from the array.  If
+    ///  Removes the given item from the array. If
     ///  the item is not in the array, this does nothing.
     /// </summary>
     public void Remove(object item)

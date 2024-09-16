@@ -235,9 +235,9 @@ public partial class DataGridView : Control, ISupportInitialize
 
     private const int FocusRectOffset = 2;
 
-    private BitVector32 _dataGridViewState1;  // see State1_ consts above
-    private BitVector32 _dataGridViewState2;  // see State2_ consts above
-    private BitVector32 _dataGridViewOper;    // see Operation consts above
+    private BitVector32 _dataGridViewState1;  // see State1_ constants above
+    private BitVector32 _dataGridViewState2;  // see State2_ constants above
+    private BitVector32 _dataGridViewOper;    // see Operation constants above
 
     private const BorderStyle DefaultBorderStyle = BorderStyle.FixedSingle;
     private const DataGridViewAdvancedCellBorderStyle DefaultAdvancedCellBorderStyle
@@ -371,7 +371,7 @@ public partial class DataGridView : Control, ISupportInitialize
 #if DEBUG
     // set to false when the grid is not in sync with the underlying data store
     // in virtual mode, and OnCellValueNeeded cannot be called.
-    // disable csharp compiler warning #0414: field assigned unused value
+    // disable C# compiler warning #0414: field assigned unused value
 #pragma warning disable 0414
     internal bool _dataStoreAccessAllowed = true;
 #pragma warning restore 0414
@@ -386,6 +386,10 @@ public partial class DataGridView : Control, ISupportInitialize
                  ControlStyles.UserMouse, true);
 
         SetStyle(ControlStyles.SupportsTransparentBackColor, false);
+
+#pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+        SetStyle(ControlStyles.ApplyThemingImplicitly, true);
+#pragma warning restore WFO5001
 
         // this class overrides GetPreferredSizeCore, let Control automatically cache the result
         SetExtendedState(ExtendedStates.UserPreferredSizeCache, true);
@@ -458,14 +462,14 @@ public partial class DataGridView : Control, ISupportInitialize
         _horizScrollBar.Top = ClientRectangle.Height - _horizScrollBar.Height;
         _horizScrollBar.Left = 0;
         _horizScrollBar.Visible = false;
-        _horizScrollBar.Scroll += new ScrollEventHandler(DataGridViewHScrolled);
+        _horizScrollBar.Scroll += DataGridViewHScrolled;
         Controls.Add(_horizScrollBar);
 
         _vertScrollBar.Top = 0;
         _vertScrollBar.AccessibleName = SR.DataGridView_AccVerticalScrollBarAccName;
         _vertScrollBar.Left = ClientRectangle.Width - _vertScrollBar.Width;
         _vertScrollBar.Visible = false;
-        _vertScrollBar.Scroll += new ScrollEventHandler(DataGridViewVScrolled);
+        _vertScrollBar.Scroll += DataGridViewVScrolled;
         Controls.Add(_vertScrollBar);
 
         _ptCurrentCell = new Point(-1, -1);
@@ -505,7 +509,7 @@ public partial class DataGridView : Control, ISupportInitialize
                         dgvabs = new DataGridViewAdvancedBorderStyle();
                         if (RightToLeftInternal)
                         {
-                            dgvabs.LeftInternal = DataGridViewAdvancedCellBorderStyle.Outset;
+                            dgvabs.LeftInternal = DataGridViewAdvancedCellBorderStyle.Single;
                         }
                         else
                         {
@@ -1071,7 +1075,7 @@ public partial class DataGridView : Control, ISupportInitialize
         get => _borderStyle;
         set
         {
-            // Sequential enum.  Valid values are 0x0 to 0x2
+            // Sequential enum. Valid values are 0x0 to 0x2
             SourceGenerated.EnumValidator.Validate(value);
             if (_borderStyle != value)
             {
@@ -1230,7 +1234,7 @@ public partial class DataGridView : Control, ISupportInitialize
         }
         set
         {
-            // Sequential enum.  Valid values are 0x0 to 0xa
+            // Sequential enum. Valid values are 0x0 to 0xa
             SourceGenerated.EnumValidator.Validate(value);
 
             if (value != CellBorderStyle)
@@ -1250,7 +1254,7 @@ public partial class DataGridView : Control, ISupportInitialize
                             break;
 
                         case DataGridViewCellBorderStyle.Raised:
-                            AdvancedCellBorderStyle.All = DataGridViewAdvancedCellBorderStyle.Outset;
+                            AdvancedCellBorderStyle.All = DataGridViewAdvancedCellBorderStyle.Single;
                             break;
 
                         case DataGridViewCellBorderStyle.Sunken:
@@ -1370,7 +1374,7 @@ public partial class DataGridView : Control, ISupportInitialize
         get => _clipboardCopyMode;
         set
         {
-            // Sequential enum.  Valid values are 0x0 to 0x3
+            // Sequential enum. Valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(value);
             _clipboardCopyMode = value;
         }
@@ -1448,7 +1452,7 @@ public partial class DataGridView : Control, ISupportInitialize
         };
         set
         {
-            // Sequential enum.  Valid values are 0x0 to 0x4
+            // Sequential enum. Valid values are 0x0 to 0x4
             SourceGenerated.EnumValidator.Validate(value);
             if (value != ColumnHeadersBorderStyle)
             {
@@ -1604,7 +1608,7 @@ public partial class DataGridView : Control, ISupportInitialize
         get => _columnHeadersHeightSizeMode;
         set
         {
-            // Sequential enum.  Valid values are 0x0 to 0x2
+            // Sequential enum. Valid values are 0x0 to 0x2
             SourceGenerated.EnumValidator.Validate(value);
             if (_columnHeadersHeightSizeMode != value)
             {
@@ -1702,7 +1706,7 @@ public partial class DataGridView : Control, ISupportInitialize
             Debug.Assert(_ptCurrentCell.X >= 0 && _ptCurrentCell.Y >= 0);
             Debug.Assert(_ptCurrentCell.X < Columns.Count);
             Debug.Assert(_ptCurrentCell.Y < Rows.Count);
-            DataGridViewRow dataGridViewRow = Rows[_ptCurrentCell.Y]; // unsharing row
+            DataGridViewRow dataGridViewRow = Rows[_ptCurrentCell.Y]; // un-sharing row
             return dataGridViewRow.Cells[_ptCurrentCell.X];
         }
         set
@@ -2142,7 +2146,7 @@ public partial class DataGridView : Control, ISupportInitialize
         get => _editMode;
         set
         {
-            // Sequential enum.  Valid values are 0x0 to 0x4
+            // Sequential enum. Valid values are 0x0 to 0x4
             SourceGenerated.EnumValidator.Validate(value);
 
             if (_editMode != value)
@@ -2274,7 +2278,7 @@ public partial class DataGridView : Control, ISupportInitialize
             Point firstDisplayedCellAddress = FirstDisplayedCellAddress;
             if (firstDisplayedCellAddress.X >= 0)
             {
-                return Rows[firstDisplayedCellAddress.Y].Cells[firstDisplayedCellAddress.X]; // unshares the row of first displayed cell
+                return Rows[firstDisplayedCellAddress.Y].Cells[firstDisplayedCellAddress.X]; // un-shares the row of first displayed cell
             }
 
             return null;
@@ -2814,7 +2818,7 @@ public partial class DataGridView : Control, ISupportInitialize
             if (_horizScrollTimer is null)
             {
                 _horizScrollTimer = new Timer();
-                _horizScrollTimer.Tick += new EventHandler(HorizScrollTimer_Tick);
+                _horizScrollTimer.Tick += HorizScrollTimer_Tick;
             }
 
             return _horizScrollTimer;
@@ -3235,7 +3239,7 @@ public partial class DataGridView : Control, ISupportInitialize
         };
         set
         {
-            // Sequential enum.  Valid values are 0x0 to 0x4
+            // Sequential enum. Valid values are 0x0 to 0x4
             SourceGenerated.EnumValidator.Validate(value);
 
             if (value != RowHeadersBorderStyle)
@@ -3446,7 +3450,7 @@ public partial class DataGridView : Control, ISupportInitialize
         }
         set
         {
-            // Sequential enum.  Valid values are 0x0 to 0x4
+            // Sequential enum. Valid values are 0x0 to 0x4
             SourceGenerated.EnumValidator.Validate(value);
             if (_rowHeadersWidthSizeMode != value)
             {
@@ -3574,7 +3578,7 @@ public partial class DataGridView : Control, ISupportInitialize
         get => _scrollBars;
         set
         {
-            // Sequential enum.  Valid values are 0x0 to 0x3
+            // Sequential enum. Valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(value);
 
             if (_scrollBars != value)
@@ -3635,7 +3639,7 @@ public partial class DataGridView : Control, ISupportInitialize
                     {
                         foreach (int columnIndex in _selectedBandIndexes)
                         {
-                            foreach (DataGridViewRow dataGridViewRow in Rows)   // unshares all rows!
+                            foreach (DataGridViewRow dataGridViewRow in Rows)   // un-shares all rows!
                             {
                                 stcc.Add(dataGridViewRow.Cells[columnIndex]);
                             }
@@ -3654,7 +3658,7 @@ public partial class DataGridView : Control, ISupportInitialize
                     {
                         foreach (int rowIndex in _selectedBandIndexes)
                         {
-                            DataGridViewRow dataGridViewRow = Rows[rowIndex]; // unshares the selected row
+                            DataGridViewRow dataGridViewRow = Rows[rowIndex]; // un-shares the selected row
                             foreach (DataGridViewCell dataGridViewCell in dataGridViewRow.Cells)
                             {
                                 stcc.Add(dataGridViewCell);
@@ -3716,7 +3720,7 @@ public partial class DataGridView : Control, ISupportInitialize
                 case DataGridViewSelectionMode.RowHeaderSelect:
                     foreach (int rowIndex in _selectedBandIndexes)
                     {
-                        strc.Add(Rows[rowIndex]); // unshares the selected row
+                        strc.Add(Rows[rowIndex]); // un-shares the selected row
                     }
 
                     break;
@@ -3735,7 +3739,7 @@ public partial class DataGridView : Control, ISupportInitialize
         get => _selectionMode;
         set
         {
-            // Sequential enum.  Valid values are 0x0 to 0x4
+            // Sequential enum. Valid values are 0x0 to 0x4
             SourceGenerated.EnumValidator.Validate(value);
 
             if (SelectionMode != value)
@@ -4122,7 +4126,7 @@ public partial class DataGridView : Control, ISupportInitialize
             if (_vertScrollTimer is null)
             {
                 _vertScrollTimer = new Timer();
-                _vertScrollTimer.Tick += new EventHandler(VertScrollTimer_Tick);
+                _vertScrollTimer.Tick += VertScrollTimer_Tick;
             }
 
             return _vertScrollTimer;

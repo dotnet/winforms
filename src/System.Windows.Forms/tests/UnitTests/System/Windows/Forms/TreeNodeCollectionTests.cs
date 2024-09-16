@@ -214,6 +214,121 @@ public class TreeNodeCollectionTests
         Assert.Empty(collection.Find(key, searchAllChildren: false));
     }
 
+    [WinFormsFact]
+    public void TreeNodeCollection_Sort_ShouldAfterAddingItems()
+    {
+        using TreeView treeView = new();
+        string key = "7";
+        TreeNode child1 = new()
+        {
+            Name = "8",
+            Text = "8"
+        };
+        TreeNode child2 = new()
+        {
+            Name = "5",
+            Text = "5"
+        };
+        TreeNode child3 = new()
+        {
+            Name = "7",
+            Text = "7"
+        };
+
+        treeView.Nodes.Add(child1);
+        treeView.Nodes.Add(child2);
+        treeView.Nodes.Add(child3);
+
+        treeView.Sort();
+        treeView.CreateControl();
+
+        TreeNode[] treeNodeArray =
+        [
+            new()
+            {
+                Name = "2",
+                Text = "2"
+            },
+            new()
+            {
+                Name = "1",
+                Text = "1"
+            }
+        ];
+
+        treeView.Nodes.AddRange(treeNodeArray);
+
+        TreeNode treeNode = treeView.Nodes.Find(key, searchAllChildren: true)[0];
+        treeNode.Should().NotBeNull();
+        treeView.Nodes.IndexOf(treeNode).Should().Be(3);
+    }
+
+    [WinFormsFact]
+    public void TreeNodeCollection_TreeNodeCollectionAddRangeRespectsSortOrderSwitch()
+    {
+        TreeNode child1 = new()
+        {
+            Name = "8",
+            Text = "8"
+        };
+        TreeNode child2 = new()
+        {
+            Name = "5",
+            Text = "5"
+        };
+        TreeNode child3 = new()
+        {
+            Name = "7",
+            Text = "7"
+        };
+        TreeNode[] treeNodeArray =
+        [
+            new()
+            {
+                Name = "2",
+                Text = "2"
+            },
+            new()
+            {
+                Name = "1",
+                Text = "1"
+            }
+        ];
+
+        TreeNode treeNode;
+        using (TreeNodeCollectionAddRangeRespectsSortOrderScope scope = new(enable: true))
+        {
+            using TreeView treeView2 = new();
+
+            treeView2.Nodes.Add(child1);
+            treeView2.Nodes.Add(child2);
+            treeView2.Nodes.Add(child3);
+
+            treeView2.CreateControl();
+            treeView2.Sort();
+            treeView2.Nodes.AddRange(treeNodeArray);
+
+            treeNode = treeView2.Nodes.Find("2", searchAllChildren: true)[0];
+            treeNode.Should().NotBeNull();
+            treeView2.Nodes.IndexOf(treeNode).Should().Be(1);
+            treeView2.Nodes.Clear();
+        }
+
+        using TreeView treeView3 = new();
+
+        treeView3.Nodes.Add(child1);
+        treeView3.Nodes.Add(child2);
+        treeView3.Nodes.Add(child3);
+
+        treeView3.CreateControl();
+        treeView3.Sort();
+        treeView3.Nodes.AddRange(treeNodeArray);
+
+        treeNode = treeView3.Nodes.Find("2", searchAllChildren: true)[0];
+        treeNode.Should().NotBeNull();
+        treeView3.Nodes.IndexOf(treeNode).Should().Be(1);
+    }
+
     [WinFormsTheory]
     [NullAndEmptyStringData]
     public void TreeNodeCollection_Find_NullOrEmptyKey_ThrowsArgumentNullException(string key)
@@ -222,5 +337,202 @@ public class TreeNodeCollectionTests
         var collection = treeView.Nodes;
         Assert.Throws<ArgumentNullException>("key", () => collection.Find(key, searchAllChildren: true));
         Assert.Throws<ArgumentNullException>("key", () => collection.Find(key, searchAllChildren: false));
+    }
+
+    private TreeNodeCollection CreateCollectionWithNodes()
+    {
+        using TreeView treeView = new();
+
+        TreeNode child1 = new() { Name = "name1" };
+        TreeNode child2 = new() { Name = "name2" };
+        TreeNodeCollection collection = treeView.Nodes;
+        collection.Add(child1);
+        collection.Add(child2);
+
+        return collection;
+    }
+
+    public static TheoryData<string, string> KeyAndExpectedNodeNameData => new()
+    {
+        { "name1", "name1" },
+        { "NAME1", "name1" },
+        { "NoSuchName", null },
+        { null, null },
+        { string.Empty, null }
+    };
+
+    [WinFormsTheory]
+    [MemberData(nameof(KeyAndExpectedNodeNameData))]
+    public void TreeNodeCollection_Item_GetKey_ReturnsExpected(string key, string expectedNodeName)
+    {
+        TreeNodeCollection collection = CreateCollectionWithNodes();
+        collection[key]?.Name.Should().Be(expectedNodeName);
+    }
+
+    [WinFormsFact]
+    public void TreeNodeCollection_IsReadOnly_ReturnsExpected()
+    {
+        using TreeView treeView = new();
+
+        TreeNodeCollection collection = treeView.Nodes;
+        collection.IsReadOnly.Should().BeFalse();
+    }
+
+    [WinFormsTheory]
+    [InlineData("key1", "text1", 1, null)]
+    [InlineData("key1", "text1", 1, 2)]
+    public void TreeNodeCollection_Add_KeyTextImageIndexSelectedImageIndex_Success(string key, string text, int imageIndex, int? selectedImageIndex)
+    {
+        using TreeView treeView = new();
+
+        TreeNodeCollection collection = treeView.Nodes;
+        TreeNode treeNode;
+
+        if (selectedImageIndex.HasValue)
+        {
+            treeNode = collection.Add(key, text, imageIndex, selectedImageIndex.Value);
+            treeNode.SelectedImageIndex.Should().Be(selectedImageIndex.Value);
+        }
+        else
+        {
+            treeNode = collection.Add(key, text, imageIndex);
+        }
+
+        treeNode.Should().Be(collection[0]);
+        treeNode.Name.Should().Be(key);
+        treeNode.Text.Should().Be(text);
+        treeNode.ImageIndex.Should().Be(imageIndex);
+    }
+
+    [WinFormsTheory]
+    [InlineData("key1", "text1", "imageKey1")]
+    public void TreeNodeCollection_Add_KeyTextImageKey_Success(string key, string text, string imageKey)
+    {
+        using TreeView treeView = new();
+
+        TreeNodeCollection collection = treeView.Nodes;
+        TreeNode treeNode = collection.Add(key, text, imageKey);
+
+        treeNode.Should().Be(collection[0]);
+        treeNode.Name.Should().Be(key);
+        treeNode.Text.Should().Be(text);
+        treeNode.ImageKey.Should().Be(imageKey);
+    }
+
+    [WinFormsTheory]
+    [InlineData("key1", "text1", "imageKey1", "selectedImageKey1")]
+    public void TreeNodeCollection_Add_KeyTextImageKeySelectedImageKey_Success(string key, string text, string imageKey, string selectedImageKey)
+    {
+        using TreeView treeView = new();
+
+        TreeNodeCollection collection = treeView.Nodes;
+        TreeNode treeNode = collection.Add(key, text, imageKey, selectedImageKey);
+
+        treeNode.Should().Be(collection[0]);
+        treeNode.Name.Should().Be(key);
+        treeNode.Text.Should().Be(text);
+        treeNode.ImageKey.Should().Be(imageKey);
+        treeNode.SelectedImageKey.Should().Be(selectedImageKey);
+    }
+
+    [WinFormsTheory]
+    [InlineData("Node 0", null, null, null)]
+    [InlineData("Node 0", "key", null, null)]
+    [InlineData("Node 0", "key", "imageKey", null)]
+    [InlineData("Node 0", "key", "imageKey", "selectedImageKey")]
+    public void TreeNodeCollection_Insert_StringKeyImageKeySelectedImageKey_Success(string text, string key, string imageKey, string selectedImageKey)
+    {
+        using TreeView treeView = new();
+
+        TreeNodeCollection collection = treeView.Nodes;
+        TreeNode treeNode;
+
+        if (key is not null)
+        {
+            if (imageKey is not null)
+            {
+                if (selectedImageKey is not null)
+                {
+                    treeNode = collection.Insert(0, key, text, imageKey, selectedImageKey);
+                    treeNode.SelectedImageKey.Should().Be(selectedImageKey);
+                }
+                else
+                {
+                    treeNode = collection.Insert(0, key, text, imageKey);
+                }
+
+                treeNode.ImageKey.Should().Be(imageKey);
+            }
+            else
+            {
+                treeNode = collection.Insert(0, key, text);
+            }
+
+            treeNode.Name.Should().Be(key);
+        }
+        else
+        {
+            treeNode = collection.Insert(0, text);
+        }
+
+        treeNode.Should().Be(collection[0]);
+        treeNode.Text.Should().Be(text);
+    }
+
+    [WinFormsTheory]
+    [InlineData("key", "Node 0", 0, null)]
+    [InlineData("key", "Node 0", 0, 1)]
+    public void TreeNodeCollection_Insert_StringKeyImageIndexSelectedImageIndex_Success(string key, string text, int imageIndex, int? selectedImageIndex)
+    {
+        using TreeView treeView = new();
+
+        TreeNodeCollection collection = treeView.Nodes;
+        TreeNode treeNode;
+
+        if (selectedImageIndex.HasValue)
+        {
+            treeNode = collection.Insert(0, key, text, imageIndex, selectedImageIndex.Value);
+            treeNode.SelectedImageIndex.Should().Be(selectedImageIndex.Value);
+        }
+        else
+        {
+            treeNode = collection.Insert(0, key, text, imageIndex);
+        }
+
+        treeNode.Should().Be(collection[0]);
+        treeNode.ImageIndex.Should().Be(imageIndex);
+    }
+
+    [WinFormsTheory]
+    [InlineData("name1", true)]
+    [InlineData("name2", true)]
+    [InlineData("NonExistentNode", false)]
+    public void TreeNodeCollection_Contains_VariousScenarios_ReturnsExpected(string nodeName, bool expected)
+    {
+        var collection = CreateCollectionWithNodes();
+        TreeNode node = new(nodeName);
+        collection.Add(node);
+
+        bool result = collection.Contains(collection[nodeName]);
+
+        if (nodeName == "NonExistentNode")
+        {
+            collection.Remove(node);
+        }
+
+        result.Should().Be(expected);
+    }
+
+    [WinFormsFact]
+    public void TreeNodeCollection_Contains_SpecialCases_ReturnsFalse()
+    {
+        var collection = CreateCollectionWithNodes();
+        var nodeToRemove = collection[0];
+
+        collection.Remove(nodeToRemove);
+        collection.Contains(nodeToRemove).Should().BeFalse();
+
+        collection.Clear();
+        collection.Contains(nodeToRemove).Should().BeFalse();
     }
 }

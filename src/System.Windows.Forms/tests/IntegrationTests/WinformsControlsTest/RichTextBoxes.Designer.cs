@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-namespace WinformsControlsTest;
+namespace WinFormsControlsTest;
 
 partial class RichTextBoxes
 {
@@ -43,8 +43,8 @@ partial class RichTextBoxes
         this.richTextBox1.Size = new System.Drawing.Size(455, 104);
         this.richTextBox1.TabIndex = 0;
         this.richTextBox1.Text = "";
-        this.richTextBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.RichTextKeyDown);
-        this.richTextBox1.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.LinkClicked);
+        this.richTextBox1.KeyDown += this.RichTextKeyDown;
+        this.richTextBox1.LinkClicked += this.LinkClicked;
         // 
         // richTextBox2
         // 
@@ -54,8 +54,8 @@ partial class RichTextBoxes
         this.richTextBox2.Size = new System.Drawing.Size(455, 99);
         this.richTextBox2.TabIndex = 1;
         this.richTextBox2.Text = "";
-        this.richTextBox2.KeyDown += new System.Windows.Forms.KeyEventHandler(this.RichTextKeyDown);
-        this.richTextBox2.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.LinkClicked);
+        this.richTextBox2.KeyDown += this.RichTextKeyDown;
+        this.richTextBox2.LinkClicked += this.LinkClicked;
         // 
         // RichTextBoxes
         // 

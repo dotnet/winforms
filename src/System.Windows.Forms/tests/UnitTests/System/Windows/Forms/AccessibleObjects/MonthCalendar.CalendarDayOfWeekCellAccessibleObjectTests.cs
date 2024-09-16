@@ -14,11 +14,18 @@ public class MonthCalendar_CalendarDayOfWeekCellAccessibleObjectTests
         using MonthCalendar control = new();
         CalendarDayOfWeekCellAccessibleObject cellAccessibleObject = CreateCalendarDayOfWeekCellCellAccessibleObject(control);
 
-        Assert.Equal(0, cellAccessibleObject.TestAccessor().Dynamic._calendarIndex);
-        Assert.Equal(0, cellAccessibleObject.TestAccessor().Dynamic._rowIndex);
-        Assert.Equal(0, cellAccessibleObject.TestAccessor().Dynamic._columnIndex);
-        Assert.Equal("Test name", cellAccessibleObject.Name);
-        Assert.False(control.IsHandleCreated);
+        int columnIndexResult = cellAccessibleObject.TestAccessor().Dynamic._columnIndex;
+        columnIndexResult.Should().Be(0);
+
+        int rowIndexResult = cellAccessibleObject.TestAccessor().Dynamic._rowIndex;
+        rowIndexResult.Should().Be(0);
+
+        int calendarIndexResult = cellAccessibleObject.TestAccessor().Dynamic._calendarIndex;
+        calendarIndexResult.Should().Be(0);
+
+        cellAccessibleObject.Name.Should().Be("Test name");
+        cellAccessibleObject.IsPatternSupported(UIA_PATTERN_ID.UIA_ExpandCollapsePatternId).Should().BeFalse();
+        control.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsFact]
