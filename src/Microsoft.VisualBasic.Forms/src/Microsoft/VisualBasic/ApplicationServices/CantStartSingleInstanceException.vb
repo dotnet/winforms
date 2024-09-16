@@ -40,8 +40,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         '''  Creates a new <see cref="Exception"/>.
         ''' </summary>
-        ''' <param name="message"></param>
-        ''' <param name="inner"> Inner <see cref="Exception"/></param>
+        ''' <inheritdoc cref="Exception.New(String, Exception)"/>
         Public Sub New(message As String, inner As Exception)
             MyBase.New(message, inner)
         End Sub
