@@ -32,7 +32,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         '''  Creates a new <see cref="Exception"/>.
         ''' </summary>
-        ''' <param name="message"></param>
+        ''' <inheritdoc cref="Exception.New(String)"/>
         Public Sub New(message As String)
             MyBase.New(message)
         End Sub
