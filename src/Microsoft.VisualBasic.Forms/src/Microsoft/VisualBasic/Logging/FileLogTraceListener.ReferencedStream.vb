@@ -53,8 +53,7 @@ Namespace Microsoft.VisualBasic.Logging
             '''  Indicates whether or not the <see cref="Stream"/> is still in use by a FileLogTraceListener.
             ''' </summary>
             ''' <value>
-            '''  <see langword="True"/>
-            '''  If the stream is being used,
+            '''  <see langword="True"/> if the stream is being used,
             '''  otherwise <see langword="False"/>.
             ''' </value>
             Friend ReadOnly Property IsInUse() As Boolean
