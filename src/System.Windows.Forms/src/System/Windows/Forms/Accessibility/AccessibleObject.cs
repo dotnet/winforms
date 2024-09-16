@@ -601,9 +601,11 @@ public unsafe partial class AccessibleObject :
     internal virtual IRawElementProviderSimple* HostRawElementProvider => null;
 
     /// <summary>
-    ///  Returns the value of the specified <paramref name="propertyID"/> from the element in the form of a <see cref="VARIANT"/>.
-    ///  See <see href="https://learn.microsoft.com/windows/win32/winauto/uiauto-automation-element-propids"/>
-    ///  which outlines how the <see cref="VARIANT"/> should be defined for each <see cref="UIA_PROPERTY_ID"/>
+    ///  Returns the value of the specified <paramref name="propertyID"/> from the
+    ///  element in the form of a <see cref="VARIANT"/>. See
+    ///  <see href="https://learn.microsoft.com/windows/win32/winauto/uiauto-automation-element-propids">
+    ///   which outlines how the <see cref="VARIANT"/> should be defined for each <see cref="UIA_PROPERTY_ID"/>
+    ///  </see>
     /// </summary>
     /// <param name="propertyID">Identifier indicating the property to return.</param>
     /// <returns>The requested value if supported or <see cref="VARIANT.Empty"/> if it is not.</returns>
