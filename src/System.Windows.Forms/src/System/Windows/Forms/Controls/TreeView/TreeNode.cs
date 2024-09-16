@@ -203,7 +203,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                 return;
             }
 
-            // Not the default, so if necessary create a new propBag, and fill it with the backcolor
+            // Not the default, so if necessary create a new propBag, and fill it with the BackColor
 
             _propBag ??= new OwnerDrawPropertyBag();
 

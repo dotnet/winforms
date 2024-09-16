@@ -52,7 +52,7 @@ public enum AutoCompleteSource
     None = 0x00000080,
 
     /// <summary>
-    ///  The items of the combobox represent the source.
+    ///  The items of the ComboBox represent the source.
     /// </summary>
     ListItems = 0x00000100
 }

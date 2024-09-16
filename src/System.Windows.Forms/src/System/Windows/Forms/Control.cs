@@ -1400,7 +1400,7 @@ public unsafe partial class Control :
                 cp.Style |= (int)WINDOW_STYLE.WS_VISIBLE;
             }
 
-            // Unlike Visible, Windows doesn't correctly inherit disabledness from its parent -- an enabled child
+            // Unlike Visible, Windows doesn't correctly inherit disabled-ness from its parent -- an enabled child
             // of a disabled parent will look enabled but not get mouse events
             if (!Enabled)
             {
@@ -2450,7 +2450,7 @@ public unsafe partial class Control :
     // If the control on which GetContainerControl( ) is called is a ContainerControl, then we don't return the parent
     // but return the same control. This is Everett behavior so we cannot change this since this would be a breaking change.
     // Hence we have a new internal property IsContainerControl which returns false for all Everett control, but
-    // this property is overidden in SplitContainer to return true so that we skip the SplitContainer
+    // this property is overridden in SplitContainer to return true so that we skip the SplitContainer
     // and the correct Parent ContainerControl is returned by GetContainerControl().
     internal virtual bool IsContainerControl => false;
 
@@ -2689,7 +2689,7 @@ public unsafe partial class Control :
 
     /// <summary>
     ///  Name of this control. The designer will set this to the same
-    ///  as the programatic Id "(name)" of the control. The name can be
+    ///  as the programmatic Id "(name)" of the control. The name can be
     ///  used as a key into the ControlCollection.
     /// </summary>
     [Browsable(false)]
@@ -3342,7 +3342,7 @@ public unsafe partial class Control :
         }
     }
 
-    // This auto upgraded v1 client to per-process doublebuffering logic
+    // This auto upgraded v1 client to per-process double buffering logic
     private static BufferedGraphicsContext BufferContext => BufferedGraphicsManager.Current;
 
     /// <summary>
@@ -4400,8 +4400,8 @@ public unsafe partial class Control :
     ///  exist yet, this will follow up the control's parent chain until it finds a
     ///  control or form that does have a window handle. If no appropriate handle
     ///  can be found, BeginInvoke will throw an exception. Exceptions within the
-    ///  delegate method are considered untrapped and will be sent to the
-    ///  application's untrapped exception handler.
+    ///  delegate method are considered un-trapped and will be sent to the
+    ///  application's un-trapped exception handler.
     ///
     ///  There are five functions on a control that are safe to call from any
     ///  thread:  GetInvokeRequired, Invoke, BeginInvoke, EndInvoke and CreateGraphics.
@@ -4432,7 +4432,7 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Brings this control to the front of the zorder.
+    ///  Brings this control to the front of the zOrder.
     /// </summary>
     public void BringToFront()
     {
@@ -4452,7 +4452,7 @@ public unsafe partial class Control :
 
     /// <summary>
     ///  Specifies whether this control can process the mnemonic or not. A condition to process a mnemonic is that
-    ///  all controls in the parent chain can do it too, but since the semantics for this function can be overriden,
+    ///  all controls in the parent chain can do it too, but since the semantics for this function can be overridden,
     ///  we need to call the method on the parent 'recursively' (not exactly since it is not necessarily the same method).
     /// </summary>
     internal virtual bool CanProcessMnemonic()

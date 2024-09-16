@@ -124,7 +124,7 @@ public partial class Label : Control, IAutomationLiveRegion
     }
 
     /// <summary>
-    ///  This property controls the activation handling of bleedover for the text that
+    ///  This property controls the activation handling of bleed over for the text that
     ///  extends beyond the width of the label.
     /// </summary>
     [SRCategory(nameof(SR.CatBehavior))]
@@ -534,7 +534,7 @@ public partial class Label : Control, IAutomationLiveRegion
 
             Properties.SetObject(s_propImageList, value);
 
-            // Add the new imagelist handle recreate handler
+            // Add the new ImageList handle recreate handler
             if (value is not null)
             {
                 value.RecreateHandle += recreateHandler;
@@ -1308,8 +1308,8 @@ public partial class Label : Control, IAutomationLiveRegion
             }
             else
             {
-                // Theme specs -- if the backcolor is darker than Control, we use
-                // ControlPaint.Dark(backcolor). Otherwise we use ControlDark.
+                // Theme specs -- if the BackColor is darker than Control, we use
+                // ControlPaint.Dark(BackColor). Otherwise we use ControlDark.
 
                 Color disabledTextForeColor = TextRenderer.DisabledTextColor(BackColor);
                 TextRenderer.DrawTextInternal(e, Text, Font, face, disabledTextForeColor, flags: flags);
@@ -1320,7 +1320,7 @@ public partial class Label : Control, IAutomationLiveRegion
     }
 
     /// <summary>
-    ///  Overriden by LinkLabel.
+    ///  Overridden by LinkLabel.
     /// </summary>
     internal virtual void OnAutoEllipsisChanged()
     {

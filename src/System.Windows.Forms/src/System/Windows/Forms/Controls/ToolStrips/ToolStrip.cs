@@ -799,7 +799,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     }
 
     /// <summary>
-    ///  [ToolStrip ForeColorChanged event, overriden to turn browsing off.]
+    ///  [ToolStrip ForeColorChanged event, overridden to turn browsing off.]
     /// </summary>
     [Browsable(false)]
     public new event EventHandler? ForeColorChanged
@@ -4765,7 +4765,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         }
     }
 
-    // Overriden to return Items instead of Controls.
+    // Overridden to return Items instead of Controls.
     ArrangedElementCollection IArrangedElement.Children
     {
         get { return Items; }

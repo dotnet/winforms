@@ -27,7 +27,7 @@ public partial class ComboBox
 
         public FlatComboAdapter(ComboBox comboBox, bool shouldRedrawAsSmallButton)
         {
-            // adapter is re-created when combobox is resized, see IsValid method, thus we don't need to handle DPI changed explicitly
+            // adapter is re-created when comboBox is resized, see IsValid method, thus we don't need to handle DPI changed explicitly
             s_offsetPixels = comboBox.LogicalToDeviceUnits(OFFSET_2PIXELS);
 
             _clientRect = comboBox.ClientRectangle;
@@ -123,7 +123,7 @@ public partial class ComboBox
             // Draw the drop down
             DrawFlatComboDropDown(comboBox, g, _dropDownRect);
 
-            // When we are disabled there is one line of color that seems to eek through if backcolor is set
+            // When we are disabled there is one line of color that seems to eek through if BackColor is set
             // so let's erase it.
             if (!LayoutUtils.IsZeroWidthOrHeight(_whiteFillRect))
             {
