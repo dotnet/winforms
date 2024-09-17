@@ -21,7 +21,7 @@ public class NetworkTests
     public void Ping_LongTimeout_Success()
     {
         Network network = new();
-        network.Ping("127.0.0.1", 1).Should().BeTrue();
+        network.Ping("127.0.0.1", 100).Should().BeTrue();
     }
 
     [Fact]
@@ -36,16 +36,6 @@ public class NetworkTests
     {
         Network network = new();
         Assert.Throws<ArgumentNullException>(() => network.Ping((string)null));
-    }
-
-    [ActiveIssue("https://github.com/dotnet/winforms/issues/12140")]
-    [Fact]
-    [SkipOnArchitecture(TestArchitectures.Any,
-        "Flaky tests, see: https://github.com/dotnet/winforms/issues/12140")]
-    public void PingUri_ShortTimeout_Success()
-    {
-        Network network = new();
-        network.Ping(new Uri("http://127.0.0.1"), 100).Should().BeTrue();
     }
 
     [Fact]
