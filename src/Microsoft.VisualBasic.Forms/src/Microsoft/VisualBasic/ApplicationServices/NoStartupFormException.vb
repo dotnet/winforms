@@ -2,6 +2,7 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.ComponentModel
+Imports System.Runtime.Serialization
 
 Imports VbUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
@@ -17,7 +18,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ' De-serialization constructor must be defined since we are serializable
         <EditorBrowsable(EditorBrowsableState.Advanced)>
         <Obsolete("Type or member obsolete.", DiagnosticId:="SYSLIB0051")>
-        Protected Sub New(info As Runtime.Serialization.SerializationInfo, context As Runtime.Serialization.StreamingContext)
+        Protected Sub New(info As SerializationInfo, context As StreamingContext)
             MyBase.New(info, context)
         End Sub
 
@@ -31,7 +32,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         '''  Creates a new <see cref="NoStartupFormException"/>.
         ''' </summary>
-        ''' <param name="message"></param>
+        ''' <inheritdoc cref="Exception.New(String)"/>
         Public Sub New(message As String)
             MyBase.New(message)
         End Sub
@@ -39,8 +40,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         '''  Creates a new <see cref="NoStartupFormException"/>.
         ''' </summary>
-        ''' <param name="message"></param>
-        ''' <param name="inner"></param>
+        ''' <inheritdoc cref="Exception.New(String, Exception)"/>
         Public Sub New(message As String, inner As Exception)
             MyBase.New(message, inner)
         End Sub

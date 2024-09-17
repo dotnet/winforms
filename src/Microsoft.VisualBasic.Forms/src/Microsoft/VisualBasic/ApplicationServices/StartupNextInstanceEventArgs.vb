@@ -32,7 +32,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Public Property BringToForeground() As Boolean
 
         ''' <summary>
-        '''  Returns the command line sent to this application"/>
+        '''  Returns the command line sent to this application
         ''' </summary>
         ''' <value>A <see cref="ReadOnlyCollection(Of String)"/></value>
         ''' <remarks>

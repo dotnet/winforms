@@ -53,7 +53,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         '''  A thin wrapper for <see cref="System.Windows.Forms.Clipboard"/>.
         ''' </summary>
-        ''' <value>An object representing the <see cref="MyServices"/>.Clipboard.</value>
+        ''' <value>An object representing the <see cref="Computer.Clipboard"/>.</value>
         Public ReadOnly Property Clipboard() As ClipboardProxy
             Get
                 If s_clipboard Is Nothing Then
@@ -65,7 +65,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Property
 
         ''' <summary>
-        '''  This property returns the computer keyboard object
+        '''  This property returns the <see cref="Devices.Keyboard"/> object
         '''  representing some keyboard properties and a send keys method
         ''' </summary>
         ''' <value>An instance of the <see cref="Computer.Keyboard"/> class.</value>
@@ -96,9 +96,9 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <value>A <see cref="System.Windows.Forms.Screen"/> object as the primary screen.</value>
         Public ReadOnly Property Screen() As System.Windows.Forms.Screen
             Get
-                ' Don't cache this. The Screen class responds to display resolution changes by nulling out AllScreens, which
-                ' PrimaryScreen relies on to find the primary. So we always need to access the latest PrimaryScreen so we
-                ' will get the current resolution reported.
+                ' Don't cache this. The Screen class responds to display resolution changes by nulling out AllScreens,
+                ' which PrimaryScreen relies on to find the primary. So we always need to access the latest
+                ' PrimaryScreen so we will get the current resolution reported.
                 Return System.Windows.Forms.Screen.PrimaryScreen
             End Get
         End Property

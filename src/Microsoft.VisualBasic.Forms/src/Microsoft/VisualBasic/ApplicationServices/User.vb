@@ -71,7 +71,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  Indicates whether or not the current user is a member of the passed in role.
         ''' </summary>
         ''' <param name="role">The name of the role.</param>
-        ''' <returns><see langword="True"/> if the user is a member of the role otherwise <see langword="False"/>.</returns>
+        ''' <returns>
+        '''  <see langword="True"/> if the user is a member of the role otherwise <see langword="False"/>.
+        ''' </returns>
         Public Function IsInRole(role As String) As Boolean
             Return InternalPrincipal.IsInRole(role)
         End Function
