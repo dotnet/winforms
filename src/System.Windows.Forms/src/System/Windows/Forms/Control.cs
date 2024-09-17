@@ -4432,7 +4432,7 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Brings this control to the front of the zOrder.
+    ///  Brings this control to the front of the Z-order.
     /// </summary>
     public void BringToFront()
     {
@@ -11185,7 +11185,7 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Updates this control in it's parent's zorder.
+    ///  Updates this control in it's parent's Z-order.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected void UpdateZOrder()
@@ -11194,7 +11194,7 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Syncs the ZOrder of child control to the index we want it to be.
+    ///  Syncs the Z-order of child control to the index we want it to be.
     /// </summary>
     private void UpdateChildZOrder(Control control)
     {

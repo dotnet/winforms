@@ -432,7 +432,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     /// <summary> we can only shift selection when we're not focused (someone mousing over us)
     ///  or we are focused and one of our toolstripcontrolhosts do not have focus.
     ///  SCENARIO: put focus in combo box, move the mouse over another item... selection
-    ///  should not shift until the combobox relinquishes its focus.
+    ///  should not shift until the ComboBox relinquishes its focus.
     /// </summary>
     internal bool CanHotTrack
     {
@@ -4702,7 +4702,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         if (!AllowClickThrough && m.MsgInternal == PInvoke.WM_MOUSEACTIVATE)
         {
             // We want to prevent taking focus if someone clicks on the toolstrip dropdown itself. The mouse message
-            // will still go through, but focus won't be taken. If someone clicks on a child control (combobox,
+            // will still go through, but focus won't be taken. If someone clicks on a child control (ComboBox,
             // textbox, etc) focus will be taken - but we'll handle that in WM_NCACTIVATE handler.
             Point pt = PointToClient(WindowsFormsUtils.LastCursorPoint);
             HWND hwndClicked = PInvoke.ChildWindowFromPointEx(
