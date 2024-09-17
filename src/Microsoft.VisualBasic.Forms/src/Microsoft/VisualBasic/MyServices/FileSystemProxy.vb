@@ -39,7 +39,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Property
 
         ''' <summary>
-        ''' Return the names of all available drives on the computer.
+        '''  Returns the names of all available drives on the computer.
         ''' </summary>
         ''' <value>A ReadOnlyCollection(Of DriveInfo) containing all the current drives' names.</value>
         Public ReadOnly Property Drives() As ReadOnlyCollection(Of IO.DriveInfo)
