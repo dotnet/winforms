@@ -81,7 +81,7 @@ Namespace Microsoft.VisualBasic.Devices
         '''  This property returns the Mouse object containing information about
         '''  the physical mouse installed to the machine.
         ''' </summary>
-        ''' <value>An instance of the <see cref="Computer.Mouse"/>  class.</value>
+        ''' <value>An instance of the <see cref="Computer.Mouse"/> class.</value>
         Public ReadOnly Property Mouse() As Mouse
             Get
                 If s_mouse IsNot Nothing Then Return s_mouse
