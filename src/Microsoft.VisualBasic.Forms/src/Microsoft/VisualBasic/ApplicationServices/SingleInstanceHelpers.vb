@@ -23,14 +23,12 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     Dim bytesRead As Integer = Await pipeServer.ReadAsync(
                         buffer.AsMemory(0, bufferLength),
                         cancellationToken).ConfigureAwait(continueOnCapturedContext:=False)
-                    buffer.AsMemory(0, bufferLength),
-                        cancellationToken).ConfigureAwait(continueOnCapturedContext:=False)
                     If bytesRead = 0 Then
-                        Await stream.WriteAsync(
-                            buffer.AsMemory(0, bytesRead),
-                            cancellationToken).ConfigureAwait(continueOnCapturedContext:=False)
-                        stream.Write(buffer, 0, bytesRead)
-#Enable Warning CA1849
+                        Exit While
+                    End If
+                    Await stream.WriteAsync(
+                         buffer.AsMemory(0, bytesRead),
+                         cancellationToken).ConfigureAwait(continueOnCapturedContext:=False)
                 End While
                 stream.Seek(0, SeekOrigin.Begin)
                 Dim serializer As New DataContractSerializer(GetType(String()))

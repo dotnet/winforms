@@ -31,8 +31,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 #Enable Warning WFO5001
 
         ''' <summary>
-        '''  Setting this property inside the event handler determines
-        '''  the <see cref="Application.ColorMode"/> for the application.
+        '''  Setting this property inside the event handler determines the
+        '''  <see cref="Application.ColorMode"/> for the <see cref="Application"/>.
         ''' </summary>
         <Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat:=WindowsFormsApplicationBase.WinFormsExperimentalUrl)>
         Public Property ColorMode As SystemColorMode
@@ -40,12 +40,11 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         '''  Setting this property inside the event handler causes a
         '''  new default <see cref="Font"/> for Forms and UserControls to be set.
-        '''  new default <see cref="Font"/> for Forms and UserControls to be set.
         ''' </summary>
+        ''' <remarks>
         '''  When the <see cref="WindowsFormsApplicationBase.ApplyApplicationDefaults"/> event is raised,
         '''  this property contains nothing. A new default <see cref="Font"/> for the application
         '''  is applied by setting this property with a value different than nothing.
-        '''  this property with a value different than nothing.
         ''' </remarks>
         Public Property Font As Font
 
@@ -58,9 +57,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' </remarks>
         Public Property HighDpiMode As HighDpiMode
 
+        ''' <summary>
         '''  Setting this <see langword="Property"/> inside the <see langword="Event"/> handler determines
         '''  how long an <see cref="application"/>'s Splash dialog is displayed at a minimum.
-        '''  Setting this property inside the event handler determines how long an application's Splash dialog is displayed at a minimum.
         ''' </summary>
         Public Property MinimumSplashScreenDisplayTime As Integer =
             WindowsFormsApplicationBase.MinimumSplashExposureDefault
