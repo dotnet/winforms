@@ -115,7 +115,9 @@ Namespace Microsoft.VisualBasic.Devices
                 End If
             Catch ex As Exception
                 If ex.InnerException IsNot Nothing Then
-                    If TryCast(ex.InnerException, OperationCanceledException) IsNot Nothing AndAlso Environment.UserInteractive Then
+                    If TryCast(ex.InnerException, OperationCanceledException) IsNot Nothing AndAlso
+                        Environment.UserInteractive Then
+
                         If showUI AndAlso Environment.UserInteractive Then
                             Try
                                 IO.File.Delete(destinationFileName)
