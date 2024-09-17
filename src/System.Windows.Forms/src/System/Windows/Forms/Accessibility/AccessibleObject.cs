@@ -2677,7 +2677,7 @@ public unsafe partial class AccessibleObject :
     /// </summary>
     private static IDispatch* GetIDispatch(AccessibleObject? obj)
     {
-        // we are always wrapping systemIAccessible..
+        // We are always wrapping SystemIAccessible.
         if (obj is not null && obj._isSystemWrapper && obj.SystemIAccessible is { } accessible)
         {
             // We're just a simple system wrapper, return the pointer.
