@@ -41,7 +41,7 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' <summary>
         '''  Returns the names of all available drives on the computer.
         ''' </summary>
-        ''' <value>A ReadOnlyCollection(Of DriveInfo) containing all the current drives' names.</value>
+        ''' <value>A ReadOnlyCollection(Of DriveInfo) containing all the current drive names.</value>
         Public ReadOnly Property Drives() As ReadOnlyCollection(Of IO.DriveInfo)
             Get
                 Return FileIO.FileSystem.Drives
