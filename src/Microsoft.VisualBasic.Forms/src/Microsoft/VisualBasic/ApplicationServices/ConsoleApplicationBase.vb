@@ -54,7 +54,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     ' doesn't report the name of the app and neither will we
                     Dim envArgs As String() = Environment.GetCommandLineArgs
 
-                    '1 element means no args, just the executing program.
+                    ' 1 element means no args, just the executing program.
                     If envArgs.GetLength(0) >= 2 Then
                         ' >= 2 means executing program + one or more command line arguments
                         ' dimming z(0) gives a z() of 1 element.

@@ -155,7 +155,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             If authenticationMode = AuthenticationMode.Windows Then
                 Try
                     ' Consider: Sadly, a call to:
-                    ' System.Security.SecurityManager.IsGranted(New SecurityPermission(SecurityPermissionFlag.ControlPrincipal))
+                    ' Security.SecurityManager.IsGranted(New SecurityPermission(SecurityPermissionFlag.ControlPrincipal))
                     ' Will only check the THIS caller so you'll always get TRUE.
                     ' What we need is a way to get to the value of this on a demand basis.
                     ' So I try/catch instead for now but would rather be able to IF my way around this block.
@@ -383,7 +383,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
                 _unhandledExceptionHandlers.Add(value)
 
-                ' Only add the listener once so we don't fire the UnHandledException event over and over for the same exception
+                ' Only add the listener once so we don't fire the
+                ' UnHandledException event over and over for the same exception
                 If _unhandledExceptionHandlers.Count = 1 Then
                     AddHandler Application.ThreadException, AddressOf OnUnhandledExceptionEventAdaptor
                 End If
@@ -632,7 +633,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 _formLoadWaiter = New AutoResetEvent(False)
 
                 Task.Run(Async Function() As Task
-                             Await _splashScreenCompletionSource.Task.ConfigureAwait(False)
+                             Await _splashScreenCompletionSource.Task.ConfigureAwait(continueOnCapturedContext:=False)
                              _formLoadWaiter.Set()
                          End Function)
 
@@ -767,7 +768,11 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  variants was passed in.
         ''' </summary>
         ''' <param name="commandLineArgs"></param>
-        ''' <returns>Returning True indicates that we should continue on with the application Startup sequence.</returns>
+        ''' <returns>
+        '''  Returning <see langword="True">
+        '''   Indicates that we should continue on with the application Startup sequence.
+        '''  </see>
+        ''' </returns>
         ''' <remarks>
         '''  This extensibility point is exposed for people who want to override
         '''  the Startup sequence at the earliest possible point to
@@ -884,8 +889,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 Application.Run(_appContext)
             Finally
 
-                ' When Run() returns, the context we pushed in our ctor (which was a WindowsFormsSynchronizationContext)
-                ' is restored. But we are going to dispose it so we need to disconnect the network listener so that it
+                ' When Run() returns, the context we pushed in our ctor
+                ' (which was a WindowsFormsSynchronizationContext) is restored.
+                ' But we are going to dispose it so we need to disconnect the network listener so that it
                 ' can't fire any events in response to changing network availability conditions through a dead context.
                 If _networkObject IsNot Nothing Then _networkObject.DisconnectListener()
 
@@ -917,11 +923,12 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             ' The timing is important because the network object has an AsyncOperationsManager in it that marshals
             ' the network changed event to the main thread. The asyncOperationsManager does a CreateOperation()
             ' which makes a copy of the executionContext. That execution context shows up on your thread during
-            ' the callback so I delay creating the network object (and consequently the capturing of the execution context)
-            ' until the principal has been set on the thread. This avoids the problem where My.User isn't set
-            ' during the NetworkAvailabilityChanged event. This problem would just extend itself to any future
-            ' callback that involved the asyncOperationsManager so this is where we need to create objects that
-            ' have a asyncOperationsContext in them.
+            ' the callback so I delay creating the network object
+            ' (and consequently the capturing of the execution context) until the principal has been set on the thread.
+            ' This avoids the problem where My.User isn't set during the NetworkAvailabilityChanged event.
+            ' This problem would just extend itself to any future callback that involved
+            ' the asyncOperationsManager so this is where we need to create objects that have
+            ' a asyncOperationsContext in them.
             If _turnOnNetworkListener And _networkObject Is Nothing Then
 
                 ' The is-nothing-check is to avoid hooking the object more than once.
@@ -1073,7 +1080,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                         Dim awaitable As ConfiguredTaskAwaitable = SendSecondInstanceArgsAsync(
                             pipeName:=applicationInstanceID,
                             args:=commandLine,
-                            cancellationToken:=tokenSource.Token).ConfigureAwait(False)
+                            cancellationToken:=tokenSource.Token).ConfigureAwait(continueOnCapturedContext:=False)
 
                         awaitable.GetAwaiter().GetResult()
                     Catch ex As Exception

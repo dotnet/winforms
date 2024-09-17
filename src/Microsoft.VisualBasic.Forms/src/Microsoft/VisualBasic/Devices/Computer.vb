@@ -96,9 +96,9 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <value>A <see cref="System.Windows.Forms.Screen"/> object as the primary screen.</value>
         Public ReadOnly Property Screen() As System.Windows.Forms.Screen
             Get
-                ' Don't cache this. The Screen class responds to display resolution changes by nulling out AllScreens, which
-                ' PrimaryScreen relies on to find the primary. So we always need to access the latest PrimaryScreen so we
-                ' will get the current resolution reported.
+                ' Don't cache this. The Screen class responds to display resolution changes by nulling out AllScreens,
+                ' which PrimaryScreen relies on to find the primary. So we always need to access the latest
+                ' PrimaryScreen so we will get the current resolution reported.
                 Return System.Windows.Forms.Screen.PrimaryScreen
             End Get
         End Property
