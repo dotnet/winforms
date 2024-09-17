@@ -384,7 +384,7 @@ public class ToolStripItemCollection : ArrangedElementCollection, IList
 
             if (_owner is not null)
             {
-                _owner.OnItemRemovedInternal(item);
+                _owner.OnItemRemovedInternal(item, this);
 
                 if (!_owner.IsDisposingItems)
                 {
