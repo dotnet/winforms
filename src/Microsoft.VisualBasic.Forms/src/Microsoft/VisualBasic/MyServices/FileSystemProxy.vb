@@ -41,7 +41,7 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' <summary>
         '''  Returns the names of all available drives on the computer.
         ''' </summary>
-        ''' <value>A ReadOnlyCollection(Of DriveInfo) containing all the current drive names.</value>
+        ''' <value>A <see cref="ReadOnlyCollection(Of DriveInfo)"/> containing all the current drive names.</value>
         Public ReadOnly Property Drives() As ReadOnlyCollection(Of IO.DriveInfo)
             Get
                 Return FileIO.FileSystem.Drives
@@ -53,7 +53,7 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  specific to the current user (My Documents, My Music ...) and those specific
         '''  to the current Application that a developer expects to be able to find quickly.
         ''' </summary>
-        ''' <value>a cached instance of SpecialDirectoriesProxy</value>
+        ''' <value>a cached instance of <see cref="SpecialDirectoriesProxy"/></value>
         Public ReadOnly Property SpecialDirectories() As SpecialDirectoriesProxy
             Get
                 If _specialDirectoriesProxy Is Nothing Then
@@ -78,8 +78,10 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  throwing exception if there are existing files with the same name.
         ''' </summary>
         ''' <param name="sourceDirectoryName">The path to the source directory, can be relative or absolute.</param>
-        ''' <param name="destinationDirectoryName">The path to the target directory, can be relative or absolute.
-        ''' Parent directory will always be created.</param>
+        ''' <param name="destinationDirectoryName">
+        '''  The path to the target directory, can be relative or absolute.
+        '''  Parent directory will always be created.
+        ''' </param>
         Public Sub CopyDirectory(sourceDirectoryName As String, destinationDirectoryName As String)
             FileIO.FileSystem.CopyDirectory(sourceDirectoryName, destinationDirectoryName)
         End Sub
@@ -89,8 +91,10 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  overwriting existing files with the same name if specified.
         ''' </summary>
         ''' <param name="sourceDirectoryName">The path to the source directory, can be relative or absolute.</param>
-        ''' <param name="destinationDirectoryName">The path to the target directory, can be relative or absolute.
-        ''' Parent directory will always be created.</param>
+        ''' <param name="destinationDirectoryName">
+        '''  The path to the target directory, can be relative or absolute.
+        '''  Parent directory will always be created.
+        ''' </param>
         ''' <param name="overwrite">
         '''  <see langword="True"/> to overwrite existing files with the same name.
         '''  Otherwise <see langword="False"/>.
@@ -102,14 +106,17 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' <summary>
         '''  Copy an existing directory to a new directory,
         '''  displaying progress dialog and confirmation dialogs if specified,
-        '''  throwing exception if user cancels the operation (only applies if displaying progress dialog and
-        '''  confirmation dialogs).
+        '''  throwing <see cref="OperationCanceledException"/> if user cancels the operation
+        '''  (only applies if displaying progress dialog and confirmation dialogs).
         ''' </summary>
         ''' <param name="sourceDirectoryName">The path to the source directory, can be relative or absolute.</param>
-        ''' <param name="destinationDirectoryName">The path to the target directory, can be relative or absolute.
-        '''  Parent directory will always be created.</param>
+        ''' <param name="destinationDirectoryName">
+        '''  The path to the target directory, can be relative or absolute.
+        '''  Parent directory will always be created.
+        ''' </param>
         ''' <param name="showUI">
-        '''  ShowDialogs to display progress and confirmation dialogs. Otherwise HideDialogs.
+        '''  <see cref="UIOption.AllDialogs"/> to display progress and confirmation dialogs,
+        '''  otherwise <see cref="UIOption.OnlyErrorDialogs"/> are shown.
         ''' </param>
         Public Sub CopyDirectory(sourceDirectoryName As String, destinationDirectoryName As String, showUI As UIOption)
             FileIO.FileSystem.CopyDirectory(sourceDirectoryName, destinationDirectoryName, showUI)
@@ -122,13 +129,17 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  (only applies if displaying progress dialog and confirmation dialogs).
         ''' </summary>
         ''' <param name="sourceDirectoryName">The path to the source directory, can be relative or absolute.</param>
-        ''' <param name="destinationDirectoryName">The path to the target directory, can be relative or absolute.
-        ''' Parent directory will always be created.</param>
+        ''' <param name="destinationDirectoryName">
+        '''  The path to the target directory, can be relative or absolute.
+        '''  Parent directory will always be created.
+        ''' </param>
         ''' <param name="showUI">
-        '''  ShowDialogs to display progress and confirmation dialogs. Otherwise HideDialogs.
+        '''  <see cref="UIOption.AllDialogs"/> to display progress and confirmation dialogs,
+        '''  otherwise <see cref="UIOption.OnlyErrorDialogs"/> are shown.
         ''' </param>
         ''' <param name="onUserCancel">
-        '''  ThrowException to throw exception if user cancels the operation. Otherwise DoNothing.
+        '''  <see cref="UICancelOption.ThrowException"/> if user cancels the operation.
+        '''  Otherwise  <see cref="UICancelOption.DoNothing"/>.
         ''' </param>
         Public Sub CopyDirectory(
             sourceDirectoryName As String,
@@ -143,7 +154,8 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  Copy an existing file to a new file. Overwriting a file of the same name is not allowed.
         ''' </summary>
         ''' <param name="sourceFileName">The path to the source file, can be relative or absolute.</param>
-        ''' <param name="destinationFileName">The path to the destination file, can be relative or absolute.
+        ''' <param name="destinationFileName">
+        '''  The path to the destination file, can be relative or absolute.
         '''  Parent directory will always be created.
         ''' </param>
         Public Sub CopyFile(sourceFileName As String, destinationFileName As String)
@@ -154,7 +166,8 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  Copy an existing file to a new file. Overwriting a file of the same name if specified.
         ''' </summary>
         ''' <param name="sourceFileName">The path to the source file, can be relative or absolute.</param>
-        ''' <param name="destinationFileName">The path to the destination file, can be relative or absolute.
+        ''' <param name="destinationFileName">
+        '''  The path to the destination file, can be relative or absolute.
         '''  Parent directory will always be created.
         ''' </param>
         ''' <param name="overwrite">
@@ -172,10 +185,12 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' </summary>
         ''' <param name="sourceFileName">The path to the source file, can be relative or absolute.</param>
         ''' <param name="destinationFileName">
-        '''  The path to the destination file, can be relative or absolute. Parent directory will always be created.
+        '''  The path to the destination file, can be relative or absolute.
+        '''  Parent directory will always be created.
         ''' </param>
         ''' <param name="showUI">
-        '''  ShowDialogs to display progress and confirmation dialogs. Otherwise HideDialogs.
+        '''  <see cref="UIOption.AllDialogs"/> to display progress and confirmation dialogs,
+        '''  otherwise <see cref="UIOption.OnlyErrorDialogs"/> are shown.
         ''' </param>
         Public Sub CopyFile(sourceFileName As String, destinationFileName As String, showUI As UIOption)
             FileIO.FileSystem.CopyFile(sourceFileName, destinationFileName, showUI)
@@ -188,15 +203,17 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' </summary>
         ''' <param name="sourceFileName">The path to the source file, can be relative or absolute.</param>
         ''' <param name="destinationFileName">
-        '''  The path to the destination file, can be relative or absolute. Parent directory will always be created.
+        '''  The path to the destination file, can be relative or absolute.
+        '''  Parent directory will always be created.
         ''' </param>
         ''' <param name="showUI">
-        '''  ShowDialogs to display progress and confirmation dialogs. Otherwise HideDialogs.
+        '''  <see cref="UIOption.AllDialogs"/> to display progress and confirmation dialogs,
+        '''  otherwise <see cref="UIOption.OnlyErrorDialogs"/> are shown.
         ''' </param>
         ''' <param name="onUserCancel">
-        '''  ThrowException to throw exception if user cancels the operation. Otherwise DoNothing.
+        '''  <see cref="UICancelOption.ThrowException"/> if user cancels the operation.
+        '''  Otherwise  <see cref="UICancelOption.DoNothing"/>.
         ''' </param>
-        ''' <remarks>onUserCancel will be ignored if showUI = HideDialogs.</remarks>
         Public Sub CopyFile(
             sourceFileName As String,
             destinationFileName As String,
@@ -219,37 +236,53 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' </summary>
         ''' <param name="directory">The path to the directory.</param>
         ''' <param name="onDirectoryNotEmpty">
-        '''  DeleteAllContents to delete everything.
-        '''  ThrowIfDirectoryNonEmpty to throw exception if the directory is not empty.
+        '''  <see cref="DeleteDirectoryOption.DeleteAllContents"/> to delete everything.
+        '''  <see cref="DeleteDirectoryOption.ThrowIfDirectoryNonEmpty">
+        '''   to throw <see cref="IO.IOException"/> if the directory is not empty.
+        '''  </see>
         ''' </param>
         Public Sub DeleteDirectory(directory As String, onDirectoryNotEmpty As DeleteDirectoryOption)
             FileIO.FileSystem.DeleteDirectory(directory, onDirectoryNotEmpty)
         End Sub
 
         ''' <summary>
-        '''  Delete the given directory, with options to recursively delete, show progress UI,
-        '''  send file to Recycle Bin; throwing exception if user cancels.
+        '''  Deletes the given directory,
+        '''  with UI options to show <see cref="UIOption.AllDialogs"/>, <see cref="UIOption.OnlyErrorDialogs"/> and
+        '''  throwing <see cref="OperationCanceledException"/> if user cancels.
+        '''  recycle options to <see cref="RecycleOption.DeletePermanently"/> or <see cref="RecycleOption.SendToRecycleBin"/>,
         ''' </summary>
         ''' <param name="directory">The path to the directory.</param>
         ''' <param name="showUI">
-        '''  <see langword="True"/> to shows progress window.
-        '''  Otherwise, <see langword="False"/>.
+        '''  <see cref="UIOption.AllDialogs"/> to display progress and confirmation dialogs,
+        '''  otherwise <see cref="UIOption.OnlyErrorDialogs"/> are shown.
         ''' </param>
-        ''' <param name="recycle">SendToRecycleBin to delete to Recycle Bin. Otherwise DeletePermanently.</param>
+        ''' <param name="recycle">
+        '''  <see cref="RecycleOption.SendToRecycleBin"/> to delete to Recycle Bin,
+        '''  otherwise<see cref=" RecycleOption.DeletePermanently"/>.
+        ''' </param>
         Public Sub DeleteDirectory(directory As String, showUI As UIOption, recycle As RecycleOption)
             FileIO.FileSystem.DeleteDirectory(directory, showUI, recycle)
         End Sub
 
         ''' <summary>
-        '''  Delete the given directory, with options to recursively delete, show progress UI,
-        '''  send file to Recycle Bin, and whether to throw exception if user cancels.
+        '''  Deletes the given directory,
+        '''  with UI options to show <see cref="UIOption.AllDialogs"/>, <see cref="UIOption.OnlyErrorDialogs"/>
+        '''  recycle options <see cref="RecycleOption.DeletePermanently"/>, <see cref="RecycleOption.SendToRecycleBin"/>,
+        '''  and UI cancel options to <see cref="UICancelOption.DoNothing"/>, or <see cref="UICancelOption.ThrowException"/>.
         ''' </summary>
         ''' <param name="directory">The path to the directory.</param>
         ''' <param name="showUI">
-        '''  ShowDialogs to display progress and confirmation dialogs. Otherwise HideDialogs.
+        '''  <see cref="UIOption.AllDialogs"/> to display progress and confirmation dialogs,
+        '''  otherwise <see cref="UIOption.OnlyErrorDialogs"/> are shown.
         ''' </param>
-        ''' <param name="recycle">SendToRecycleBin to delete to Recycle Bin. Otherwise DeletePermanently.</param>
-        ''' <param name="onUserCancel">Throw exception when user cancel the UI operation or not.</param>
+        ''' <param name="recycle">
+        '''  <see cref="RecycleOption.SendToRecycleBin"/> to delete to Recycle Bin,
+        '''  otherwise<see cref=" RecycleOption.DeletePermanently"/>.
+        ''' </param>
+        ''' <param name="onUserCancel">
+        '''  <see cref="UICancelOption.ThrowException"/> if user cancels the operation.
+        '''  Otherwise  <see cref="UICancelOption.DoNothing"/>.
+        ''' </param>
         Public Sub DeleteDirectory(
             directory As String,
             showUI As UIOption,
@@ -272,9 +305,18 @@ Namespace Microsoft.VisualBasic.MyServices
         '''   and whether to throw exception if user cancels.
         ''' </summary>
         ''' <param name="file">The path to the file.</param>
-        ''' <param name="showUI">ShowDialogs to display progress and confirmation dialogs. Otherwise HideDialogs.</param>
-        ''' <param name="recycle">SendToRecycleBin to delete to Recycle Bin. Otherwise DeletePermanently.</param>
-        ''' <param name="onUserCancel">Throw exception when user cancel the UI operation or not.</param>
+        ''' <param name="showUI">
+        '''  <see cref="UIOption.AllDialogs"/> to display progress and confirmation dialogs,
+        '''  otherwise <see cref="UIOption.OnlyErrorDialogs"/> are shown.
+        ''' </param>
+        ''' <param name="recycle">
+        '''  <see cref="RecycleOption.SendToRecycleBin"/> to delete to Recycle Bin,
+        '''  otherwise<see cref=" RecycleOption.DeletePermanently"/>.
+        ''' </param>
+        ''' <param name="onUserCancel">
+        '''  <see cref="UICancelOption.ThrowException"/> if user cancels the operation.
+        '''  Otherwise  <see cref="UICancelOption.DoNothing"/>.
+        ''' </param>
         ''' <exception cref="IO.Path.GetFullPath">IO.Path.GetFullPath() exceptions: if FilePath is invalid.</exception>
         ''' <exception cref="IO.FileNotFoundException">if a file does not exist at FilePath</exception>
         Public Sub DeleteFile(
@@ -290,8 +332,14 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  Delete the given file, with options to show progress UI, delete to recycle bin.
         ''' </summary>
         ''' <param name="file">The path to the file.</param>
-        ''' <param name="showUI">ShowDialogs to display progress and confirmation dialogs. Otherwise HideDialogs.</param>
-        ''' <param name="recycle">SendToRecycleBin to delete to Recycle Bin. Otherwise DeletePermanently.</param>
+        ''' <param name="showUI">
+        '''  <see cref="UIOption.AllDialogs"/> to display progress and confirmation dialogs,
+        '''  otherwise <see cref="UIOption.OnlyErrorDialogs"/> are shown.
+        ''' </param>
+        ''' <param name="recycle">
+        '''  <see cref="RecycleOption.SendToRecycleBin"/> to delete to Recycle Bin,
+        '''  otherwise<see cref=" RecycleOption.DeletePermanently"/>.
+        ''' </param>
         Public Sub DeleteFile(file As String, showUI As UIOption, recycle As RecycleOption)
             FileIO.FileSystem.DeleteFile(file, showUI, recycle)
         End Sub
@@ -329,7 +377,10 @@ Namespace Microsoft.VisualBasic.MyServices
         '''   <see langword="True"/> to ignore case.
         '''   Otherwise, <see langword="False"/>.
         '''  </param>
-        ''' <param name="searchType">SearchAllSubDirectories to find recursively. Otherwise, SearchTopLevelOnly.</param>
+        ''' <param name="searchType">
+        '''  <see cref="SearchOption.SearchAllSubDirectories"/> to find recursively,
+        '''  otherwise, <see cref="SearchOption.SearchAllSubDirectories"/>.
+        ''' </param>
         ''' <returns>A string array containing the files that match the search condition.</returns>
         Public Function FindInFiles(
             directory As String,
@@ -349,7 +400,10 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  <see langword="True"/> to ignore case.
         '''  Otherwise, <see langword="False"/>.
         ''' </param>
-        ''' <param name="searchType">SearchAllSubDirectories to find recursively. Otherwise, SearchTopLevelOnly.</param>
+        ''' <param name="searchType">
+        '''  <see cref="SearchOption.SearchAllSubDirectories"/> to find recursively,
+        '''  otherwise, <see cref="SearchOption.SearchAllSubDirectories"/>.
+        ''' </param>
         ''' <param name="fileWildcards">The search patterns to use for the file name ("*.*")</param>
         ''' <returns>A string array containing the files that match the search condition.</returns>
         ''' <exception cref="System.ArgumentNullException">
@@ -378,7 +432,10 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  Return the paths of sub directories found under a directory with the specified name patterns.
         ''' </summary>
         ''' <param name="directory">The directory to find the sub directories inside.</param>
-        ''' <param name="searchType">SearchAllSubDirectories to find recursively. Otherwise, SearchTopLevelOnly.</param>
+        ''' <param name="searchType">
+        '''  <see cref="SearchOption.SearchAllSubDirectories"/> to find recursively,
+        '''  otherwise, <see cref="SearchOption.SearchAllSubDirectories"/>.
+        ''' </param>
         ''' <param name="wildcards">The wildcards for the file name, for example "*.bmp", "*.txt"</param>
         ''' <returns>A ReadOnlyCollection(Of String) containing the matched directories' paths.</returns>
         Public Function GetDirectories(
@@ -430,7 +487,10 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' with the specified name patterns and containing the specified text.
         ''' </summary>
         ''' <param name="directory">The directory to find the files inside.</param>
-        ''' <param name="searchType">SearchAllSubDirectories to find recursively. Otherwise, SearchTopLevelOnly.</param>
+        ''' <param name="searchType">
+        '''  <see cref="SearchOption.SearchAllSubDirectories"/> to find recursively,
+        '''  otherwise, <see cref="SearchOption.SearchAllSubDirectories"/>.
+        ''' </param>
         ''' <param name="wildcards">The wildcards for the file name, for example "*.bmp", "*.txt"</param>
         ''' <returns>A ReadOnlyCollection(Of String) containing the matched files' paths.</returns>
         Public Function GetFiles(
@@ -482,7 +542,10 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  throwing exception if there are existing files with the same name.
         ''' </summary>
         ''' <param name="sourceDirectoryName">The path to the source directory, can be relative or absolute.</param>
-        ''' <param name="destinationDirectoryName">The path to the target directory, can be relative or absolute. Parent directory will always be created.</param>
+        ''' <param name="destinationDirectoryName">
+        '''  The path to the target directory, can be relative or absolute.
+        '''  Parent directory will always be created.
+        ''' </param>
         Public Sub MoveDirectory(sourceDirectoryName As String, destinationDirectoryName As String)
             FileIO.FileSystem.MoveDirectory(sourceDirectoryName, destinationDirectoryName)
         End Sub
@@ -510,8 +573,14 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  (only applies if displaying progress dialog and confirmation dialogs).
         ''' </summary>
         ''' <param name="sourceDirectoryName">The path to the source directory, can be relative or absolute.</param>
-        ''' <param name="destinationDirectoryName">The path to the target directory, can be relative or absolute. Parent directory will always be created.</param>
-        ''' <param name="showUI">ShowDialogs to display progress and confirmation dialogs. Otherwise HideDialogs.</param>
+        ''' <param name="destinationDirectoryName">
+        '''  The path to the target directory, can be relative or absolute.
+        '''  Parent directory will always be created.
+        ''' </param>
+        ''' <param name="showUI">
+        '''  <see cref="UIOption.AllDialogs"/> to display progress and confirmation dialogs,
+        '''  otherwise <see cref="UIOption.OnlyErrorDialogs"/> are shown.
+        ''' </param>
         Public Sub MoveDirectory(sourceDirectoryName As String, destinationDirectoryName As String, showUI As UIOption)
             FileIO.FileSystem.MoveDirectory(sourceDirectoryName, destinationDirectoryName, showUI)
         End Sub
@@ -523,9 +592,18 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  (only applies if displaying progress dialog and confirmation dialogs).
         ''' </summary>
         ''' <param name="sourceDirectoryName">The path to the source directory, can be relative or absolute.</param>
-        ''' <param name="destinationDirectoryName">The path to the target directory, can be relative or absolute. Parent directory will always be created.</param>
-        ''' <param name="showUI">ShowDialogs to display progress and confirmation dialogs. Otherwise HideDialogs.</param>
-        ''' <param name="onUserCancel">ThrowException to throw exception if user cancels the operation. Otherwise DoNothing.</param>
+        ''' <param name="destinationDirectoryName">
+        '''  The path to the target directory, can be relative or absolute.
+        '''  Parent directory will always be created.
+        ''' </param>
+        ''' <param name="showUI">
+        '''  <see cref="UIOption.AllDialogs"/> to display progress and confirmation dialogs,
+        '''  otherwise <see cref="UIOption.OnlyErrorDialogs"/> are shown.
+        ''' </param>
+        ''' <param name="onUserCancel">
+        '''  <see cref="UICancelOption.ThrowException"/> if user cancels the operation.
+        '''  Otherwise  <see cref="UICancelOption.DoNothing"/>.
+        ''' </param>
         Public Sub MoveDirectory(
             sourceDirectoryName As String,
             destinationDirectoryName As String,
@@ -574,7 +652,10 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  The path to the destination file, can be relative or absolute.
         '''  Parent directory will always be created.
         ''' </param>
-        ''' <param name="showUI">ShowDialogs to display progress and confirmation dialogs. Otherwise HideDialogs.</param>
+        ''' <param name="showUI">
+        '''  <see cref="UIOption.AllDialogs"/> to display progress and confirmation dialogs,
+        '''  otherwise <see cref="UIOption.OnlyErrorDialogs"/> are shown.
+        ''' </param>
         Public Sub MoveFile(sourceFileName As String, destinationFileName As String, showUI As UIOption)
             FileIO.FileSystem.MoveFile(sourceFileName, destinationFileName, showUI)
         End Sub
@@ -589,11 +670,14 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  The path to the destination file, can be relative or absolute.
         '''  Parent directory will always be created.
         ''' </param>
-        ''' <param name="showUI">ShowDialogs to display progress and confirmation dialogs. Otherwise HideDialogs.</param>
-        ''' <param name="onUserCancel">
-        '''  ThrowException to throw exception if user cancels the operation. Otherwise DoNothing.
+        ''' <param name="showUI">
+        '''  <see cref="UIOption.AllDialogs"/> to display progress and confirmation dialogs,
+        '''  otherwise <see cref="UIOption.OnlyErrorDialogs"/> are shown.
         ''' </param>
-        ''' <remarks>onUserCancel will be ignored if showUI = HideDialogs.</remarks>
+        ''' <param name="onUserCancel">
+        '''  <see cref="UICancelOption.ThrowException"/> if user cancels the operation.
+        '''  Otherwise  <see cref="UICancelOption.DoNothing"/>.
+        ''' </param>
         Public Sub MoveFile(
             sourceFileName As String,
             destinationFileName As String,
