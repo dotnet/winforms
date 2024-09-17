@@ -16,8 +16,8 @@ Namespace Microsoft.VisualBasic.Logging
     '''  Class for logging to a text file.
     ''' </summary>
     ''' <remarks>
-    '''  TraceListener is ComVisible(False), Microsoft.VisualBasic.dll is ComVisible(True).
-    '''  Therefore, mark FileLogTraceListener as ComVisible(False).
+    '''  <see cref="TraceListener"/> is ComVisible(False), Microsoft.VisualBasic.dll is ComVisible(True).
+    '''  Therefore, mark <see cref="FileLogTraceListener"/> as ComVisible(False).
     ''' </remarks>
     <Runtime.InteropServices.ComVisible(False)>
     Partial Public Class FileLogTraceListener
@@ -105,7 +105,7 @@ Namespace Microsoft.VisualBasic.Logging
         End Property
 
         ''' <summary>
-        '''  Gets the stream to use for writing to the log.
+        '''  Gets the <see cref="Stream"/> to use for writing to the log.
         ''' </summary>
         ''' <value>The stream.</value>
         Private ReadOnly Property ListenerStream() As ReferencedStream
@@ -216,7 +216,7 @@ Namespace Microsoft.VisualBasic.Logging
         End Property
 
         ''' <summary>
-        '''  Indicates whether or not the stream should be flushed after every write.
+        '''  Indicates whether or not the <see cref="Stream"/> should be flushed after every write.
         ''' </summary>
         ''' <value>
         '''  <see langword="True"/> if the stream should be flushed after every write,
@@ -596,7 +596,7 @@ Namespace Microsoft.VisualBasic.Logging
         End Sub
 
         ''' <summary>
-        '''  Closes the stream.
+        '''  Closes the <see cref="Stream"/>.
         ''' </summary>
         ''' <remarks>This method should be safe to call whether or not there is a stream.</remarks>
         Private Sub CloseCurrentStream()
@@ -636,7 +636,7 @@ Namespace Microsoft.VisualBasic.Logging
         End Sub
 
         ''' <summary>
-        '''  Makes sure we have an open stream.
+        '''  Makes sure we have an open <see cref="Stream"/>.
         ''' </summary>
         Private Sub EnsureStreamIsOpen()
             If _stream Is Nothing Then
@@ -695,7 +695,7 @@ Namespace Microsoft.VisualBasic.Logging
         End Function
 
         ''' <summary>
-        '''  Gets or creates the stream used for writing to the log.
+        '''  Gets or creates the <see cref="Stream"/> used for writing to the log.
         ''' </summary>
         ''' <returns>The stream.</returns>
         Private Function GetStream() As ReferencedStream
@@ -828,7 +828,7 @@ Namespace Microsoft.VisualBasic.Logging
         End Function
 
         ''' <summary>
-        '''  Makes sure stream is flushed.
+        '''  Makes sure <see cref="Stream"/> is flushed.
         ''' </summary>
         ''' <param name="disposing"></param>
         Protected Overrides Sub Dispose(disposing As Boolean)
@@ -847,14 +847,14 @@ Namespace Microsoft.VisualBasic.Logging
         End Function
 
         ''' <summary>
-        '''  Closes the underlying stream.
+        '''  Closes the underlying <see cref="Stream"/>.
         ''' </summary>
         Public Overrides Sub Close()
             Dispose(True)
         End Sub
 
         ''' <summary>
-        '''  Flushes the underlying stream.
+        '''  Flushes the underlying <see cref="Stream"/>.
         ''' </summary>
         Public Overrides Sub Flush()
             _stream?.Flush()
