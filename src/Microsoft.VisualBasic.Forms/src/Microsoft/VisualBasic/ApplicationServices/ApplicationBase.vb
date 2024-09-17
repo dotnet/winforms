@@ -101,7 +101,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Sub
 
         ''' <summary>
-        '''  Returns the value of the specified environment variable.
+        '''  Returns the value of the specified <see cref="Environment"/> variable.
         ''' </summary>
         ''' <param name="Name">A String containing the name of the environment variable.</param>
         ''' <returns>A string containing the value of the environment variable.</returns>

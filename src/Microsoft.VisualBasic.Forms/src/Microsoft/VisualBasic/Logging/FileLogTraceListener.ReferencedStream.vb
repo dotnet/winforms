@@ -23,7 +23,7 @@ Namespace Microsoft.VisualBasic.Logging
             Private _stream As StreamWriter
 
             ''' <summary>
-            '''  Creates a new referenced stream.
+            '''  Creates a new referenced <paramref name="Stream"/>.
             ''' </summary>
             ''' <param name="stream">The stream that does the actual writing.</param>
             Friend Sub New(stream As StreamWriter)
@@ -31,7 +31,7 @@ Namespace Microsoft.VisualBasic.Logging
             End Sub
 
             ''' <summary>
-            '''  Ensures stream is closed at GC.
+            '''  Ensures <see cref="Stream"/> is closed at GC.
             ''' </summary>
             Protected Overrides Sub Finalize()
                 ' Do not change this code. Put cleanup code in Dispose(disposing As Boolean) above.
@@ -50,9 +50,12 @@ Namespace Microsoft.VisualBasic.Logging
             End Property
 
             ''' <summary>
-            '''  Indicates whether or not the stream is still in use by a FileLogTraceListener.
+            '''  Indicates whether or not the <see cref="Stream"/> is still in use by a FileLogTraceListener.
             ''' </summary>
-            ''' <value><see langword="True"/> if the stream is being used, otherwise <see langword="False"/>.</value>
+            ''' <value>
+            '''  <see langword="True"/> if the stream is being used,
+            '''  otherwise <see langword="False"/>.
+            ''' </value>
             Friend ReadOnly Property IsInUse() As Boolean
                 Get
                     Return _stream IsNot Nothing
@@ -60,7 +63,7 @@ Namespace Microsoft.VisualBasic.Logging
             End Property
 
             ''' <summary>
-            '''  Ensures the stream is closed (flushed) no matter how we are closed.
+            '''  Ensures the <see cref="Stream"/> is closed (flushed) no matter how we are closed.
             ''' </summary>
             ''' <param name="disposing">Indicates who called dispose.</param>
             Private Overloads Sub Dispose(disposing As Boolean)
@@ -73,7 +76,7 @@ Namespace Microsoft.VisualBasic.Logging
             End Sub
 
             ''' <summary>
-            '''  Increments the reference count for the stream.
+            '''  Increments the reference count for the <see cref="Stream"/>.
             ''' </summary>
             Friend Sub AddReference()
                 SyncLock _syncObject
@@ -82,8 +85,8 @@ Namespace Microsoft.VisualBasic.Logging
             End Sub
 
             ''' <summary>
-            '''  Decrements the reference count to the stream and closes
-            '''  the stream if the reference count is zero.
+            '''  Decrements the reference count to the <see cref="Stream"/> and
+            '''  closes the stream if the reference count is zero.
             ''' </summary>
             Friend Sub CloseStream()
                 SyncLock _syncObject
@@ -101,7 +104,7 @@ Namespace Microsoft.VisualBasic.Logging
             End Sub
 
             ''' <summary>
-            '''  Flushes the stream.
+            '''  Flushes the <see cref="Stream"/>.
             ''' </summary>
             Friend Sub Flush()
                 SyncLock _syncObject
@@ -110,7 +113,7 @@ Namespace Microsoft.VisualBasic.Logging
             End Sub
 
             ''' <summary>
-            '''  Writes a message to the stream.
+            '''  Writes a message to the <see cref="Stream"/>.
             ''' </summary>
             ''' <param name="message">The message to write.</param>
             Friend Sub Write(message As String)
@@ -120,7 +123,7 @@ Namespace Microsoft.VisualBasic.Logging
             End Sub
 
             ''' <summary>
-            '''  Writes a message to the stream as a line.
+            '''  Writes a message to the <see cref="Stream"/> as a line.
             ''' </summary>
             ''' <param name="message">The message to write.</param>
             Friend Sub WriteLine(message As String)
