@@ -215,7 +215,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Sub
 
         ''' <summary>
-        '''  Delete the given directory, with options to recursively delete.
+        '''  Deletes the given directory, with options to recursively delete.
         ''' </summary>
         ''' <param name="directory">The path to the directory.</param>
         ''' <param name="onDirectoryNotEmpty">
