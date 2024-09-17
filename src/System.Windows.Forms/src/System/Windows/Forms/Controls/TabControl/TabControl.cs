@@ -859,7 +859,7 @@ public partial class TabControl : Control
     }
 
     /// <summary>
-    ///  Occurs before a tabPage is selected as the top TabPage.
+    ///  Occurs before a TabPage is selected as the top TabPage.
     /// </summary>
     [SRCategory(nameof(SR.CatAction))]
     [SRDescription(nameof(SR.TabControlSelectingEventDescr))]
@@ -881,7 +881,7 @@ public partial class TabControl : Control
     }
 
     /// <summary>
-    ///  Occurs before the visible property of the top tabPage is set to false.
+    ///  Occurs before the visible property of the top TabPage is set to false.
     /// </summary>
     [SRCategory(nameof(SR.CatAction))]
     [SRDescription(nameof(SR.TabControlDeselectingEventDescr))]
@@ -892,7 +892,7 @@ public partial class TabControl : Control
     }
 
     /// <summary>
-    ///  Occurs after the visible property of the top tabPage is set to false.
+    ///  Occurs after the visible property of the top TabPage is set to false.
     /// </summary>
     [SRCategory(nameof(SR.CatAction))]
     [SRDescription(nameof(SR.TabControlDeselectedEventDescr))]
@@ -972,7 +972,7 @@ public partial class TabControl : Control
     private void DetachImageList(object? sender, EventArgs e) => ImageList = null;
 
     /// <summary>
-    ///  Allows the user to specify the index in TabControl.TabPageCollection of the tabPage to be hidden.
+    ///  Allows the user to specify the index in TabControl.TabPageCollection of the TabPage to be hidden.
     /// </summary>
     public void DeselectTab(int index)
     {
@@ -991,7 +991,7 @@ public partial class TabControl : Control
     }
 
     /// <summary>
-    ///  Allows the user to specify the tabPage in TabControl.TabPageCollection  to be hidden.
+    ///  Allows the user to specify the TabPage in TabControl.TabPageCollection to be hidden.
     /// </summary>
     public void DeselectTab(TabPage tabPage)
     {
@@ -1002,7 +1002,7 @@ public partial class TabControl : Control
     }
 
     /// <summary>
-    ///  Allows the user to specify the name of the tabPage in TabControl.TabPageCollection to be hidden.
+    ///  Allows the user to specify the name of the TabPage in TabControl.TabPageCollection to be hidden.
     /// </summary>
     public void DeselectTab(string tabPageName)
     {
@@ -1156,7 +1156,7 @@ public partial class TabControl : Control
     }
 
     /// <summary>
-    ///  This function is used by the Insert Logic to insert a tabPage in the current TabPage in the TabPageCollection.
+    ///  This function is used by the Insert Logic to insert a TabPage in the current TabPage in the TabPageCollection.
     /// </summary>
     private void InsertItem(int index, TabPage tabPage)
     {
@@ -1666,7 +1666,7 @@ public partial class TabControl : Control
     }
 
     /// <summary>
-    ///  Allows the user to specify the tabPage in TabControl.TabPageCollection  to be shown.
+    ///  Allows the user to specify the TabPage in TabControl.TabPageCollection to be shown.
     /// </summary>
     public void SelectTab(TabPage tabPage)
     {
@@ -1677,7 +1677,7 @@ public partial class TabControl : Control
     }
 
     /// <summary>
-    ///  Allows the user to specify the name of the tabPage in TabControl.TabPageCollection to be shown.
+    ///  Allows the user to specify the name of the TabPage in TabControl.TabPageCollection to be shown.
     /// </summary>
     public void SelectTab(string tabPageName)
     {
@@ -1690,10 +1690,10 @@ public partial class TabControl : Control
     /// <summary>
     ///  This is called by TabControl in response to the KeyDown event to override the selection of tabPages
     ///  for different key combinations.
-    ///  Control + Tab selects the next tabPage.
-    ///  Control + Shift + Tab selects the previous tabPage.
-    ///  Control + PageDown selects the next tabPage.
-    ///  Control + PageUp selects the previous tabPage.
+    ///  Control + Tab selects the next TabPage.
+    ///  Control + Shift + Tab selects the previous TabPage.
+    ///  Control + PageDown selects the next TabPage.
+    ///  Control + PageUp selects the previous TabPage.
     /// </summary>
     private void SelectNextTab(KeyEventArgs ke, bool forward)
     {
@@ -1810,9 +1810,9 @@ public partial class TabControl : Control
             TabPage[] tabPages = GetTabPages();
             if (index != -1)
             {
-                // Changing the bounds of the tabPage during scaling
+                // Changing the bounds of the TabPage during scaling
                 // will force a layout to occur. After this layout
-                // the tabPage will then be scaled again resulting
+                // the TabPage will then be scaled again resulting
                 // in incorrect sizes. Suspend Layout in this case.
                 if (_currentlyScaling)
                 {

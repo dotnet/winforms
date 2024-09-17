@@ -184,7 +184,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Sub
 
         ''' <summary>
-        '''  Saves the passed in <see cref="Image"/>  to the clipboard.
+        '''  Saves the passed in <see cref="Image"/> to the clipboard.
         ''' </summary>
         ''' <param name="image">The <see cref="Image"/> to be saved.</param>
         Public Sub SetImage(image As Image)
