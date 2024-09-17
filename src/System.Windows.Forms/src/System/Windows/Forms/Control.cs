@@ -1400,7 +1400,7 @@ public unsafe partial class Control :
                 cp.Style |= (int)WINDOW_STYLE.WS_VISIBLE;
             }
 
-            // Unlike Visible, Windows doesn't correctly inherit disabled-ness from its parent -- an enabled child
+            // Unlike Visible, Windows doesn't correctly inherit disabled state from its parent -- an enabled child
             // of a disabled parent will look enabled but not get mouse events
             if (!Enabled)
             {
