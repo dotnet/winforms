@@ -859,7 +859,7 @@ public partial class TabControl : Control
     }
 
     /// <summary>
-    ///  Occurs before a tabPage is selected as the top tabPage.
+    ///  Occurs before a tabPage is selected as the top TabPage.
     /// </summary>
     [SRCategory(nameof(SR.CatAction))]
     [SRDescription(nameof(SR.TabControlSelectingEventDescr))]
