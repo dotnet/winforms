@@ -26,7 +26,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Sub
 
         ''' <summary>
-        '''  Get or set the current working directory.
+        '''  Gets or sets the current working directory.
         ''' </summary>
         ''' <value>A String containing the path to the directory.</value>
         Public Property CurrentDirectory() As String
