@@ -13,9 +13,9 @@ public class NetworkTests
     }
 
     /// <summary>
-    /// The ping API exposed by <see cref="Network"/> is in units of Milliseconds, Pinging
-    /// local server takes approximately 1 Millisecond so there is no reliable way
-    /// to test a short timeout that for a timeout exception.
+    ///  The ping API exposed by <see cref="Network"/> is in units of Milliseconds, Pinging
+    ///  local server takes approximately 1 Millisecond so there is no reliable way
+    ///  to test a short timeout that for a timeout exception.
     /// </summary>
     [Fact]
     public void Ping_LongTimeout_Success()
