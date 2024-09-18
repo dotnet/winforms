@@ -5,6 +5,7 @@
 
 using System.Collections;
 using System.Drawing;
+using System.Runtime.Serialization;
 using Utilities = System.Windows.Forms.DataObject.Composition.BinaryFormatUtilities;
 
 namespace System.Windows.Forms.Tests;
@@ -23,13 +24,19 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
         return ReadObjectFromStream();
     }
 
-    private void WriteObjectToStream(object value) =>
-        Utilities.WriteObjectToStream(_stream, value, restrictSerialization: false);
+    private object? RoundTripObject_RestrictedFormat(object value)
+    {
+        Utilities.WriteObjectToStream(_stream, value, restrictSerialization: true);
+        return ReadObjectFromStream(restrictDeserialization: true);
+    }
 
-    private object? ReadObjectFromStream()
+    private void WriteObjectToStream(object value, bool restrictSerialization = false) =>
+        Utilities.WriteObjectToStream(_stream, value, restrictSerialization);
+
+    private object? ReadObjectFromStream(bool restrictDeserialization = false)
     {
         _stream.Position = 0;
-        return Utilities.ReadObjectFromStream(_stream, restrictDeserialization: false);
+        return Utilities.ReadObjectFromStream(_stream, restrictDeserialization);
     }
 
     // Primitive types as defined by the NRBF spec.
@@ -170,9 +177,20 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
         RoundTripObject(value).Should().Be(value);
 
     [Theory]
+    [MemberData(nameof(PrimitiveObjects_TheoryData))]
+    [MemberData(nameof(KnownObjects_TheoryData))]
+    public void BinaryFormatUtilities_RoundTripRestrictedFormat_Simple(object value) =>
+        RoundTripObject_RestrictedFormat(value).Should().Be(value);
+
+    [Theory]
     [MemberData(nameof(NotSupportedException_TestData))]
     public void BinaryFormatUtilities_RoundTrip_NotSupportedException(NotSupportedException value) =>
         RoundTripObject(value).Should().BeEquivalentTo(value);
+
+    [Theory]
+    [MemberData(nameof(NotSupportedException_TestData))]
+    public void BinaryFormatUtilities_RoundTripRestrictedFormat_NotSupportedException(NotSupportedException value) =>
+        RoundTripObject_RestrictedFormat(value).Should().BeEquivalentTo(value);
 
     [Fact]
     public void BinaryFormatUtilities_RoundTrip_NotSupportedException_DataLoss()
@@ -181,10 +199,22 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
         RoundTripObject(value).Should().BeEquivalentTo(new NotSupportedException("Error message", innerException: null));
     }
 
+    [Fact]
+    public void BinaryFormatUtilities_RoundTripRestrictedFormat_NotSupportedException_DataLoss()
+    {
+        NotSupportedException value = new("Error message", new ArgumentException());
+        RoundTripObject_RestrictedFormat(value).Should().BeEquivalentTo(new NotSupportedException("Error message", innerException: null));
+    }
+
     [Theory]
     [MemberData(nameof(PrimitiveListObjects_TheoryData))]
     public void BinaryFormatUtilities_RoundTrip_PrimitiveList(IList value) =>
         RoundTripObject(value).Should().BeEquivalentTo(value);
+
+    [Theory]
+    [MemberData(nameof(PrimitiveListObjects_TheoryData))]
+    public void BinaryFormatUtilities_RoundTripRestrictedFormat_PrimitiveList(IList value) =>
+        RoundTripObject_RestrictedFormat(value).Should().BeEquivalentTo(value);
 
     [Theory]
     [MemberData(nameof(PrimitiveArrayObjects_TheoryData))]
@@ -197,9 +227,19 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
         RoundTripObject(value).Should().BeEquivalentTo(value);
 
     [Theory]
+    [MemberData(nameof(PrimitiveArrayListObjects_TheoryData))]
+    public void BinaryFormatUtilities_RoundTripRestrictedFormat_PrimitiveArrayList(ArrayList value) =>
+        RoundTripObject_RestrictedFormat(value).Should().BeEquivalentTo(value);
+
+    [Theory]
     [MemberData(nameof(PrimitiveTypeHashtables_TheoryData))]
     public void BinaryFormatUtilities_RoundTrip_PrimitiveHashtable(Hashtable value) =>
         RoundTripObject(value).Should().BeEquivalentTo(value);
+
+    [Theory]
+    [MemberData(nameof(PrimitiveTypeHashtables_TheoryData))]
+    public void BinaryFormatUtilities_RoundTripRestrictedFormat_PrimitiveHashtable(Hashtable value) =>
+        RoundTripObject_RestrictedFormat(value).Should().BeEquivalentTo(value);
 
     [Fact]
     public void BinaryFormatUtilities_RoundTrip_ImageList()
@@ -217,10 +257,32 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
     }
 
     [Fact]
+    public void BinaryFormatUtilities_RoundTripRestrictedFormat_ImageList()
+    {
+        using ImageList sourceList = new();
+        using Bitmap image = new(10, 10);
+        sourceList.Images.Add(image);
+        using ImageListStreamer value = sourceList.ImageStream!;
+
+        var result = RoundTripObject_RestrictedFormat(value).Should().BeOfType<ImageListStreamer>().Which;
+
+        using ImageList newList = new();
+        newList.ImageStream = result;
+        newList.Images.Count.Should().Be(1);
+    }
+
+    [Fact]
     public void BinaryFormatUtilities_RoundTrip_Bitmap()
     {
         using Bitmap value = new(10, 10);
         RoundTripObject(value).Should().BeOfType<Bitmap>().Subject.Size.Should().Be(value.Size);
+    }
+
+    [Fact]
+    public void BinaryFormatUtilities_RoundTripRestrictedFormat_Bitmap()
+    {
+        using Bitmap value = new(10, 10);
+        RoundTripObject_RestrictedFormat(value).Should().BeOfType<Bitmap>().Subject.Size.Should().Be(value.Size);
     }
 
     [Theory]
@@ -236,5 +298,15 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
         }
 
         ((Action)(() => ReadObjectFromStream())).Should().Throw<NotSupportedException>();
+    }
+
+    [Theory]
+    [MemberData(nameof(Lists_UnsupportedTestData))]
+    public void BinaryFormatUtilities_RoundTripRestrictedFormat_Unsupported(IList value)
+    {
+        ((Action)(() => WriteObjectToStream(value, restrictSerialization: true))).Should().Throw<NotSupportedException>();
+
+        using BinaryFormatterScope scope = new(enable: true);
+        ((Action)(() => WriteObjectToStream(value, restrictSerialization: true))).Should().Throw<SerializationException>();
     }
 }
