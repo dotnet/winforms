@@ -63,7 +63,6 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                     If increment > 0 Then
                         m_ProgressDialog.BeginInvoke(New DoIncrement(AddressOf m_ProgressDialog.Increment), increment)
                     End If
-
                 End If
             End If
         End Sub
@@ -77,7 +76,8 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         '''  the actual file transfer cancel event comes through and do it there.
         ''' </remarks>
         Private Sub m_ProgressDialog_UserHitCancel()
-            ' Cancel the upload/download transfer. We'll close the ProgressDialog as soon as the HttpClient cancels the xfer.
+            ' Cancel the upload/download transfer. We'll close the ProgressDialog
+            ' as soon as the HttpClient cancels the xfer.
             _cancelTokenSourceGet.Cancel()
             _cancelTokenSourceRead.Cancel()
             _cancelTokenSourceReadStream.Cancel()
@@ -143,9 +143,9 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                                         totalBytesRead += bytesRead
 
                                         Await fileStream.WriteAsync(
-                                            buffer.AsMemory(0, bytesRead),
-                                            _cancelTokenSourceWrite.Token).
-                                                ConfigureAwait(False)
+                                            buffer:=buffer.AsMemory(0, bytesRead),
+                                            cancellationToken:=_cancelTokenSourceWrite.Token).
+                                                ConfigureAwait(continueOnCapturedContext:=False)
 
                                         If m_ProgressDialog IsNot Nothing Then
                                             Dim percentage As Integer = CInt(totalBytesRead / contentLength.Value * 100)
@@ -154,7 +154,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                                         bytesRead = Await responseStream.ReadAsync(
                                             buffer.AsMemory(0, buffer.Length),
                                             _cancelTokenSourceRead.Token).
-                                                ConfigureAwait(False)
+                                                ConfigureAwait(continueOnCapturedContext:=False)
                                     Loop
                                 Finally
                                     CloseProgressDialog(m_ProgressDialog)

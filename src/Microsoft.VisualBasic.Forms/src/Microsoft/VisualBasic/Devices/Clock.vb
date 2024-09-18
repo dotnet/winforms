@@ -9,7 +9,7 @@ Namespace Microsoft.VisualBasic.Devices
     ''' </summary>
     Public Class Clock
 
-#Disable Warning IDE0049 ' Use language keywords vs. framework type names for type references, Justification:=<Public API>
+#Disable Warning IDE0049 ' Use language keywords instead of framework type names for type references, Justification:=<Public API>
 
         ''' <summary>
         '''  Gets a Date that is the current local date and time on this computer.

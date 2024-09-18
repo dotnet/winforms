@@ -100,22 +100,23 @@ Namespace Microsoft.VisualBasic.CompilerServices
         End Function
 
         ''' <summary>
-        '''  Contains information about the current state of both physical and virtual memory, including extended memory.
+        '''  Contains information about the current state of both physical and virtual memory,
+        '''  including extended memory.
         ''' </summary>
         <StructLayout(LayoutKind.Sequential)>
         Friend Structure MEMORYSTATUSEX
             ' typedef struct _MEMORYSTATUSEX {
-            '   DWORD dwLength;                     Size of the structure. Must set before calling GlobalMemoryStatusEx.
-            '   DWORD dwMemoryLoad;                 Number between 0 and 100 on current memory utilization.
-            '   DWORDLONG ullTotalPhys;             Total size of physical memory.
-            '   DWORDLONG ullAvailPhys;             Total size of available physical memory.
-            '   DWORDLONG ullTotalPageFile;         Size of committed memory limit.
-            '   DWORDLONG ullAvailPageFile;         Size of available memory to committed (ullTotalPageFile max).
-            '   DWORDLONG ullTotalVirtual;          Total size of user potion of virtual address space of calling process.
-            '   DWORDLONG ullAvailVirtual;          Total size of unreserved and uncommitted memory in
-            '                                       virtual address space.
-            '   DWORDLONG ullAvailExtendedVirtual;  Total size of unreserved and uncommitted memory in
-            '                                       extended portion of virtual address.
+            '   DWORD dwLength;                    Size of the structure. Must set before calling GlobalMemoryStatusEx.
+            '   DWORD dwMemoryLoad;                Number between 0 and 100 on current memory utilization.
+            '   DWORDLONG ullTotalPhys;            Total size of physical memory.
+            '   DWORDLONG ullAvailPhys;            Total size of available physical memory.
+            '   DWORDLONG ullTotalPageFile;        Size of committed memory limit.
+            '   DWORDLONG ullAvailPageFile;        Size of available memory to committed (ullTotalPageFile max).
+            '   DWORDLONG ullTotalVirtual;         Total size of user potion of virtual address space of calling process.
+            '   DWORDLONG ullAvailVirtual;         Total size of unreserved and uncommitted memory in
+            '                                      virtual address space.
+            '   DWORDLONG ullAvailExtendedVirtual; Total size of unreserved and uncommitted memory in
+            '                                      extended portion of virtual address.
             ' } MEMORYSTATUSEX, *LPMEMORYSTATUSEX;
 
             Friend dwLength As UInt32

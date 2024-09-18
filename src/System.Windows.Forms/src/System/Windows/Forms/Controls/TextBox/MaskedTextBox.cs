@@ -2138,7 +2138,7 @@ public partial class MaskedTextBox : TextBoxBase
 
     /// <summary>
     ///  Raises the TextChanged event and related Input/Output text events when mask is null.
-    ///  Overriden here to be able to control order of text changed events.
+    ///  Overridden here to be able to control order of text changed events.
     /// </summary>
     protected override void OnTextChanged(EventArgs e)
     {

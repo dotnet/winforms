@@ -255,7 +255,9 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' <summary>
         '''  Displays the progress dialog modally
         ''' </summary>
-        ''' <remarks>This method should be called on the main thread after the worker thread has been started.</remarks>
+        ''' <remarks>
+        '''  This method should be called on the main thread after the worker thread has been started.
+        ''' </remarks>
         Public Sub ShowProgressDialog()
             Try
                 If Not _closing Then

@@ -2677,7 +2677,7 @@ public unsafe partial class AccessibleObject :
     /// </summary>
     private static IDispatch* GetIDispatch(AccessibleObject? obj)
     {
-        // we are always wrapping system iaccessible..
+        // We are always wrapping SystemIAccessible.
         if (obj is not null && obj._isSystemWrapper && obj.SystemIAccessible is { } accessible)
         {
             // We're just a simple system wrapper, return the pointer.
@@ -3292,7 +3292,7 @@ public unsafe partial class AccessibleObject :
         return HRESULT.S_OK;
     }
 
-    internal virtual void ScrollIntoView() => Debug.Fail($"{nameof(ScrollIntoView)}() is not overriden");
+    internal virtual void ScrollIntoView() => Debug.Fail($"{nameof(ScrollIntoView)}() is not overridden");
 
     private ComScope<IOleWindow> TryGetOleWindow(out HRESULT result)
     {
