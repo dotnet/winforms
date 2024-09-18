@@ -106,7 +106,7 @@ public class PrimitiveTypeTests : SerializationTest
     [Theory]
     [MemberData(nameof(Primitive_Data))]
     [MemberData(nameof(Primitive_ExtendedData))]
-    public void BinaryFormattedObject_ReadPrimitive(object value)
+    public void SerializationRecord_ReadPrimitive(object value)
     {
         SerializationRecord rootRecord = NrbfDecoder.Decode(Serialize(value));
         rootRecord.TryGetPrimitiveType(out object? deserialized).Should().BeTrue();
