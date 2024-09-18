@@ -6,6 +6,8 @@
 using System.ComponentModel;
 using System.Drawing;
 using FluentAssertions;
+using Moq;
+using static System.Windows.Forms.PropertyGrid;
 
 namespace System.Windows.Forms.UITests;
 public class PropertyGridTests : IDisposable
@@ -436,5 +438,42 @@ public class PropertyGridTests : IDisposable
 
         _propertyGrid.UseCompatibleTextRendering = true;
         _propertyGrid.UseCompatibleTextRendering.Should().BeTrue();
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_Site_GetSet_ReturnsExpected()
+    {
+        _propertyGrid.Site.Should().BeNull();
+
+        Mock<ISite> mockSite = new();
+        _propertyGrid.Site = mockSite.Object;
+        _propertyGrid.Site.Should().Be(mockSite.Object);
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_PropertyTabs_Get_ReturnsExpected()
+    {
+        _propertyGrid.PropertyTabs.Should().NotBeNull();
+
+        PropertyTabCollection propertyTabCollection = _propertyGrid.PropertyTabs;
+        PropertyGrid propertyGrid = propertyTabCollection.TestAccessor().Dynamic._ownerPropertyGrid;
+        propertyGrid.Should().Be(_propertyGrid);
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_RefreshTabsEvent_Raised_Success()
+    {
+        PropertyTabCollection initialTabs = _propertyGrid.PropertyTabs;
+        int initialTabCount = initialTabs.Count;
+
+        _propertyGrid.RefreshTabs(PropertyTabScope.Component);
+        PropertyTabCollection refreshedTabs = _propertyGrid.PropertyTabs;
+        int refreshedTabCount = refreshedTabs.Count;
+
+        refreshedTabCount.Should().Be(initialTabCount);
+        for (int i = 0; i < initialTabCount; i++)
+        {
+            refreshedTabs[i].Should().BeSameAs(initialTabs[i]);
+        }
     }
 }
