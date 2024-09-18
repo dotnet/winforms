@@ -24,14 +24,14 @@
 
   <ItemGroup Condition="'$(IsFacadeAssemblyNetFx)' == 'true'">  
     <!-- PrivateAssets="All": don't flow package references to callers -->
-    <PackageReference Include="Microsoft.TargetingPack.NETFramework.v4.7.2" Version="$(MicrosoftTargetingPackNETFrameworkv472PackageVersion)" PrivateAssets="All" GeneratePathProperty="true" ExcludeAssets="All" NoWarn="NU1701" />
-    <PackageReference Include="Microsoft.DotNet.GenFacades" Version="$(MicrosoftDotNetGenFacadesPackageVersion)" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.TargetingPack.NETFramework.v4.7.2" PrivateAssets="All" GeneratePathProperty="true" ExcludeAssets="All" NoWarn="NU1701" />
+    <PackageReference Include="Microsoft.DotNet.GenFacades" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(IsFacadeAssemblyNetCore3x)' == 'true'">  
     <!-- PrivateAssets="All": don't flow package references to callers -->
     <PackageReference Include="Microsoft.WindowsDesktop.App.Ref" Version="$(MicrosoftWindowsDesktopAppRefv30PackageVersion)" PrivateAssets="All" GeneratePathProperty="true" ExcludeAssets="All" NoWarn="NU1701" />
-    <PackageReference Include="Microsoft.DotNet.GenFacades" Version="$(MicrosoftDotNetGenFacadesPackageVersion)" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.DotNet.GenFacades" PrivateAssets="All" />
   </ItemGroup>
 
   <Target Name="ResolveMatchingContract" BeforeTargets="ResolveAssemblyReferences">
