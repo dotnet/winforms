@@ -1803,7 +1803,7 @@ public partial class RichTextBox : TextBoxBase
                 cpMin = position
             };
 
-            // Look for kashidas in the string. A kashida is an arabic visual justification character
+            // Look for kashidas in the string. A kashida is an Arabic visual justification character
             // that's not semantically meaningful. Searching for ABC might find AB_C (where A,B, and C
             // represent Arabic characters and _ represents a kashida). We should highlight the text
             // including the kashida.
@@ -2898,7 +2898,7 @@ public partial class RichTextBox : TextBoxBase
             EDITSTREAMCALLBACK callback = EditStreamProc;
             es.pfnCallback = Marshal.GetFunctionPointerForDelegate(callback);
 
-            // gives us TextBox compatible behavior, programatic text change shouldn't
+            // gives us TextBox compatible behavior, programmatic text change shouldn't
             // be limited...
             PInvoke.SendMessage(this, PInvoke.EM_EXLIMITTEXT, 0, int.MaxValue);
 

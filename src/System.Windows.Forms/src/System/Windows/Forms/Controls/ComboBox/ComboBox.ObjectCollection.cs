@@ -194,7 +194,7 @@ public partial class ComboBox
 
             foreach (object item in items)
             {
-                // adding items one-by-one for performance (especially for sorted combobox)
+                // adding items one-by-one for performance (especially for sorted ComboBox)
                 // we can not rely on ArrayList.Sort since its worst case complexity is n*n
                 // AddInternal is based on BinarySearch and ensures n*log(n) complexity
                 AddInternal(item);
