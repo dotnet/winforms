@@ -104,7 +104,7 @@ namespace System.Windows.Forms.Design.Tests
                 var removeVerb = verbs.Cast<DesignerVerb>().FirstOrDefault(v => v.Text == SR.TabControlRemove);
 
                 removeVerb.Should().NotBeNull();
-                removeVerb!.Enabled.Should().BeTrue();
+                removeVerb.Should().BeOfType<DesignerVerb>().Which.Enabled.Should().BeTrue();
             }
         }
 
@@ -120,7 +120,7 @@ namespace System.Windows.Forms.Design.Tests
                 var removeVerb = verbs.Cast<DesignerVerb>().FirstOrDefault(v => v.Text == SR.TabControlRemove);
 
                 removeVerb.Should().NotBeNull();
-                removeVerb!.Enabled.Should().BeFalse();
+                removeVerb.Should().BeOfType<DesignerVerb>().Which.Enabled.Should().BeFalse();
             }
         }
 
