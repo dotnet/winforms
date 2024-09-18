@@ -12,11 +12,16 @@ public class NetworkTests
         Assert.Equal(System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable(), network.IsAvailable);
     }
 
+    /// <summary>
+    ///  The ping API exposed by <see cref="Network"/> is in units of Milliseconds, Pinging
+    ///  local server takes approximately 1 Millisecond so there is no reliable way
+    ///  to test a short timeout that for a timeout exception.
+    /// </summary>
     [Fact]
-    public void Ping_ShortTimeout_Success()
+    public void Ping_LongTimeout_Success()
     {
         Network network = new();
-        network.Ping("127.0.0.1", 1).Should().BeTrue();
+        network.Ping("127.0.0.1", 100).Should().BeTrue();
     }
 
     [Fact]
@@ -31,16 +36,6 @@ public class NetworkTests
     {
         Network network = new();
         Assert.Throws<ArgumentNullException>(() => network.Ping((string)null));
-    }
-
-    [ActiveIssue("https://github.com/dotnet/winforms/issues/12140")]
-    [Fact]
-    [SkipOnArchitecture(TestArchitectures.Any,
-        "Flaky tests, see: https://github.com/dotnet/winforms/issues/12140")]
-    public void PingUri_ShortTimeout_Success()
-    {
-        Network network = new();
-        network.Ping(new Uri("http://127.0.0.1"), 1).Should().BeTrue();
     }
 
     [Fact]

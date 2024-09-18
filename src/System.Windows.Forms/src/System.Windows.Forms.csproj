@@ -11,6 +11,10 @@
       See https://github.com/dotnet/winforms/issues/4649
     -->
     <NoWarn>$(NoWarn);IL2026;IL2050;IL2057;IL2062;IL2067;IL2070;IL2072;IL2075;IL2077;IL2080;IL2092;IL2093;IL2094;IL2096;IL2111;IL2055</NoWarn>
+    <!--
+      SYSLIB5005: System.Formats.Nrbf is experimental
+    -->
+    <NoWarn>$(NoWarn);SYSLIB5005</NoWarn>
     <Win32Manifest>Resources\System\Windows\Forms\XPThemes.manifest</Win32Manifest>
     <Deterministic>true</Deterministic>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
