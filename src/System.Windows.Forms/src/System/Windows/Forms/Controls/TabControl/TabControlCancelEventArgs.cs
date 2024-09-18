@@ -24,12 +24,12 @@ public class TabControlCancelEventArgs : CancelEventArgs
     }
 
     /// <summary>
-    ///  Stores the reference to the tabpage that is undergoing the TabControl event.
+    ///  Stores the reference to the TabPage that is undergoing the TabControl event.
     /// </summary>
     public TabPage? TabPage { get; }
 
     /// <summary>
-    ///  Stores the index to the tabpage that is undergoing the TabControl event.
+    ///  Stores the index to the TabPage that is undergoing the TabControl event.
     /// </summary>
     public int TabPageIndex { get; }
 

@@ -19,12 +19,12 @@ public class TabControlEventArgs : EventArgs
     }
 
     /// <summary>
-    ///  Stores the reference to the tabpage that is undergoing the event.
+    ///  Stores the reference to the TabPage that is undergoing the event.
     /// </summary>
     public TabPage? TabPage { get; }
 
     /// <summary>
-    ///  Stores the index to the tabpage that is undergoing the event.
+    ///  Stores the index to the TabPage that is undergoing the event.
     /// </summary>
     public int TabPageIndex { get; }
 
