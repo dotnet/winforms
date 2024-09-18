@@ -164,7 +164,7 @@ internal static class SerializationRecordExtensions
         }
     }
 
-        /// <summary>
+    /// <summary>
     ///  Tries to get this object as a <see cref="SizeF"/>.
     /// </summary>
     public static bool TryGetSizeF(this SerializationRecord record, [NotNullWhen(true)] out object? value)
