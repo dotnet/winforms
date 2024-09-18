@@ -38,14 +38,16 @@ internal enum RecordType : byte
         /// <summary>
         ///  Used for remote method invocation.
         ///  <see href="https://learn.microsoft.com/openspecs/windows_protocols/ms-nrbf/4c727b2f-2c30-468d-b12e-b56406f14862">
-        ///  [MS-NRBF] 2.2</see>
+        ///   [MS-NRBF] 2.2
+        ///  </see>
         /// </summary>
         MethodCall,
 
         /// <summary>
         ///  Used for remote method invocation.
         ///  <see href="https://learn.microsoft.com/openspecs/windows_protocols/ms-nrbf/4c727b2f-2c30-468d-b12e-b56406f14862">
-        ///  [MS-NRBF] 2.2</see>
+        ///   [MS-NRBF] 2.2
+        ///  </see>
         /// </summary>
         MethodReturn
     */

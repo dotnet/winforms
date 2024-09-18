@@ -16,117 +16,17 @@ Namespace Microsoft.VisualBasic.Logging
     '''  Class for logging to a text file.
     ''' </summary>
     ''' <remarks>
-    '''  TraceListener is ComVisible(False), Microsoft.VisualBasic.dll is ComVisible(True).
-    '''  Therefore, mark FileLogTraceListener as ComVisible(False).
+    '''  <see cref="TraceListener"/> is ComVisible(False), Microsoft.VisualBasic.dll is ComVisible(True).
+    '''  Therefore, mark <see cref="FileLogTraceListener"/> as ComVisible(False).
     ''' </remarks>
     <Runtime.InteropServices.ComVisible(False)>
     Partial Public Class FileLogTraceListener
         Inherits TraceListener
 
-        Private Const APPEND_INDEX As Integer = 0
-
-        Private Const AUTOFLUSH_INDEX As Integer = 1
-
-        Private Const BASEFILENAME_INDEX As Integer = 2
-
-        Private Const CUSTOMLOCATION_INDEX As Integer = 3
-
-        Private Const DATE_FORMAT As String = "yyyy-MM-dd"
-
-        ' Name to be used when parameterless constructor is called
-        Private Const DEFAULT_NAME As String = "FileLogTraceListener"
-
-        Private Const DELIMITER_INDEX As Integer = 4
-
-        Private Const DISKSPACEEXHAUSTEDBEHAVIOR_INDEX As Integer = 5
-
-        Private Const ENCODING_INDEX As Integer = 6
-
-        Private Const FILE_EXTENSION As String = ".log"
-
-        Private Const INCLUDEHOSTNAME_INDEX As Integer = 7
-
-        ' Attribute keys used to access properties set in the config file
-        Private Const KEY_APPEND As String = "append"
-
-        Private Const KEY_APPEND_PASCAL As String = "Append"
-        Private Const KEY_AUTOFLUSH As String = "autoflush"
-        Private Const KEY_AUTOFLUSH_CAMEL As String = "autoFlush"
-        Private Const KEY_AUTOFLUSH_PASCAL As String = "AutoFlush"
-        Private Const KEY_BASEFILENAME As String = "basefilename"
-        Private Const KEY_BASEFILENAME_CAMEL As String = "baseFilename"
-        Private Const KEY_BASEFILENAME_CAMEL_ALT As String = "baseFileName"
-        Private Const KEY_BASEFILENAME_PASCAL As String = "BaseFilename"
-        Private Const KEY_BASEFILENAME_PASCAL_ALT As String = "BaseFileName"
-        Private Const KEY_CUSTOMLOCATION As String = "customlocation"
-        Private Const KEY_CUSTOMLOCATION_CAMEL As String = "customLocation"
-        Private Const KEY_CUSTOMLOCATION_PASCAL As String = "CustomLocation"
-        Private Const KEY_DELIMITER As String = "delimiter"
-        Private Const KEY_DELIMITER_PASCAL As String = "Delimiter"
-        Private Const KEY_DISKSPACEEXHAUSTEDBEHAVIOR As String = "diskspaceexhaustedbehavior"
-        Private Const KEY_DISKSPACEEXHAUSTEDBEHAVIOR_CAMEL As String = "diskSpaceExhaustedBehavior"
-        Private Const KEY_DISKSPACEEXHAUSTEDBEHAVIOR_PASCAL As String = "DiskSpaceExhaustedBehavior"
-        Private Const KEY_ENCODING As String = "encoding"
-        Private Const KEY_ENCODING_PASCAL As String = "Encoding"
-        Private Const KEY_INCLUDEHOSTNAME As String = "includehostname"
-        Private Const KEY_INCLUDEHOSTNAME_CAMEL As String = "includeHostName"
-        Private Const KEY_INCLUDEHOSTNAME_PASCAL As String = "IncludeHostName"
-        Private Const KEY_LOCATION As String = "location"
-        Private Const KEY_LOCATION_PASCAL As String = "Location"
-        Private Const KEY_LOGFILECREATIONSCHEDULE As String = "logfilecreationschedule"
-        Private Const KEY_LOGFILECREATIONSCHEDULE_CAMEL As String = "logFileCreationSchedule"
-        Private Const KEY_LOGFILECREATIONSCHEDULE_PASCAL As String = "LogFileCreationSchedule"
-        Private Const KEY_MAXFILESIZE As String = "maxfilesize"
-        Private Const KEY_MAXFILESIZE_CAMEL As String = "maxFileSize"
-        Private Const KEY_MAXFILESIZE_PASCAL As String = "MaxFileSize"
-        Private Const KEY_RESERVEDISKSPACE As String = "reservediskspace"
-        Private Const KEY_RESERVEDISKSPACE_CAMEL As String = "reserveDiskSpace"
-        Private Const KEY_RESERVEDISKSPACE_PASCAL As String = "ReserveDiskSpace"
-
-        Private Const LOCATION_INDEX As Integer = 8
-
-        Private Const LOGFILECREATIONSCHEDULE_INDEX As Integer = 9
-
-        Private Const MAX_OPEN_ATTEMPTS As Integer = Integer.MaxValue
-
-        Private Const MAXFILESIZE_INDEX As Integer = 10
-
-        ' The minimum setting allowed for maximum file size
-        Private Const MIN_FILE_SIZE As Integer = 1000
-
-        ' Identifies properties in the BitArray
-        Private Const PROPERTY_COUNT As Integer = 12
-
-        Private Const RESERVEDISKSPACE_INDEX As Integer = 11
-
-        ' Delimiter used when converting a stack to a string
-        Private Const STACK_DELIMITER As String = ", "
-
         ' Table of all of the files opened by any FileLogTraceListener in the current process
         Private Shared ReadOnly s_streams As New Dictionary(Of String, ReferencedStream)
 
         Private ReadOnly _day As Date = Now.Date
-
-        ' Indicates whether or not properties have been set
-        ' Note: Properties that use m_PropertiesSet to track whether or not
-        '       they've been set should always be set through the property setter and not
-        '       by directly changing the corresponding private field.
-        Private ReadOnly _propertiesSet As New BitArray(PROPERTY_COUNT, False)
-
-        ' A list of supported attributes
-        Private ReadOnly _supportedAttributes() As String = New String() {
-            KEY_APPEND, KEY_APPEND_PASCAL, KEY_AUTOFLUSH, KEY_AUTOFLUSH_PASCAL,
-            KEY_AUTOFLUSH_CAMEL, KEY_BASEFILENAME, KEY_BASEFILENAME_PASCAL,
-            KEY_BASEFILENAME_CAMEL, KEY_BASEFILENAME_PASCAL_ALT,
-            KEY_BASEFILENAME_CAMEL_ALT, KEY_CUSTOMLOCATION, KEY_CUSTOMLOCATION_PASCAL,
-            KEY_CUSTOMLOCATION_CAMEL, KEY_DELIMITER, KEY_DELIMITER_PASCAL,
-            KEY_DISKSPACEEXHAUSTEDBEHAVIOR, KEY_DISKSPACEEXHAUSTEDBEHAVIOR_PASCAL,
-            KEY_DISKSPACEEXHAUSTEDBEHAVIOR_CAMEL, KEY_ENCODING, KEY_ENCODING_PASCAL,
-            KEY_INCLUDEHOSTNAME, KEY_INCLUDEHOSTNAME_PASCAL, KEY_INCLUDEHOSTNAME_CAMEL,
-            KEY_LOCATION, KEY_LOCATION_PASCAL, KEY_LOGFILECREATIONSCHEDULE,
-            KEY_LOGFILECREATIONSCHEDULE_PASCAL, KEY_LOGFILECREATIONSCHEDULE_CAMEL,
-            KEY_MAXFILESIZE, KEY_MAXFILESIZE_PASCAL, KEY_MAXFILESIZE_CAMEL,
-            KEY_RESERVEDISKSPACE, KEY_RESERVEDISKSPACE_PASCAL, KEY_RESERVEDISKSPACE_CAMEL}
 
         ' Indicates whether to append to or overwrite the log file
         Private _append As Boolean = True
@@ -166,10 +66,10 @@ Namespace Microsoft.VisualBasic.Logging
         Private _logFileDateStamp As LogFileCreationScheduleOption = LogFileCreationScheduleOption.None
 
         ' The maximum size of the log file
-        Private _maxFileSize As Long = 5000000L
+        Private _maxFileSize As Long = 5_000_000L
 
         ' The amount of free disk space there needs to be on the drive of the log file
-        Private _reserveDiskSpace As Long = 10000000L
+        Private _reserveDiskSpace As Long = 10_000_000L
 
         ' Reference counted stream used for writing to the log file
         Private _stream As ReferencedStream
@@ -205,7 +105,7 @@ Namespace Microsoft.VisualBasic.Logging
         End Property
 
         ''' <summary>
-        '''  Gets the stream to use for writing to the log.
+        '''  Gets the <see cref="Stream"/> to use for writing to the log.
         ''' </summary>
         ''' <value>The stream.</value>
         Private ReadOnly Property ListenerStream() As ReferencedStream
@@ -256,11 +156,11 @@ Namespace Microsoft.VisualBasic.Logging
                 ' Add DateTime Stamp
                 Select Case LogFileCreationSchedule
                     Case LogFileCreationScheduleOption.Daily
-                        fileName += "-" & Now.Date.ToString(DATE_FORMAT, CultureInfo.InvariantCulture)
+                        fileName += $"-{Now.Date.ToString(DATE_FORMAT, CultureInfo.InvariantCulture)}"
                     Case LogFileCreationScheduleOption.Weekly
                         ' Get first day of week
                         _firstDayOfWeek = Now.AddDays(-Now.DayOfWeek)
-                        fileName += "-" & _firstDayOfWeek.Date.ToString(DATE_FORMAT, CultureInfo.InvariantCulture)
+                        fileName += $"-{_firstDayOfWeek.Date.ToString(DATE_FORMAT, CultureInfo.InvariantCulture)}"
                     Case LogFileCreationScheduleOption.None
                     Case Else
                         Debug.Fail("Unrecognized LogFileCreationSchedule")
@@ -316,7 +216,7 @@ Namespace Microsoft.VisualBasic.Logging
         End Property
 
         ''' <summary>
-        '''  Indicates whether or not the stream should be flushed after every write.
+        '''  Indicates whether or not the <see cref="Stream"/> should be flushed after every write.
         ''' </summary>
         ''' <value><see langword="True"/> if the stream should be flushed after every write, otherwise <see langword="False"/>.</value>
         Public Property AutoFlush() As Boolean
@@ -613,7 +513,7 @@ Namespace Microsoft.VisualBasic.Logging
             Dim sb As New StringBuilder()
 
             For Each obj As Object In stack
-                sb.Append(obj.ToString() & STACK_DELIMITER)
+                sb.Append($"{obj}{STACK_DELIMITER}")
             Next
 
             ' Escape the quotes
@@ -659,7 +559,7 @@ Namespace Microsoft.VisualBasic.Logging
         End Sub
 
         ''' <summary>
-        '''  Closes the stream.
+        '''  Closes the <see cref="Stream"/>.
         ''' </summary>
         ''' <remarks>This method should be safe to call whether or not there is a stream.</remarks>
         Private Sub CloseCurrentStream()
@@ -696,7 +596,7 @@ Namespace Microsoft.VisualBasic.Logging
         End Sub
 
         ''' <summary>
-        '''  Makes sure we have an open stream.
+        '''  Makes sure we have an open <see cref="Stream"/>.
         ''' </summary>
         Private Sub EnsureStreamIsOpen()
             If _stream Is Nothing Then
@@ -755,7 +655,7 @@ Namespace Microsoft.VisualBasic.Logging
         End Function
 
         ''' <summary>
-        '''  Gets or creates the stream used for writing to the log.
+        '''  Gets or creates the <see cref="Stream"/> used for writing to the log.
         ''' </summary>
         ''' <returns>The stream.</returns>
         Private Function GetStream() As ReferencedStream
@@ -764,7 +664,7 @@ Namespace Microsoft.VisualBasic.Logging
             ' FileLogTraceListener in the same process
             Dim i As Integer = 0
             Dim refStream As ReferencedStream = Nothing
-            Dim baseStreamName As String = Path.GetFullPath(LogFileName & FILE_EXTENSION)
+            Dim baseStreamName As String = Path.GetFullPath($"{LogFileName}{FILE_EXTENSION}")
 
             While refStream Is Nothing AndAlso i < MAX_OPEN_ATTEMPTS
                 ' This should only be true if processes outside our process have
@@ -772,9 +672,9 @@ Namespace Microsoft.VisualBasic.Logging
 
                 Dim fileName As String
                 If i = 0 Then
-                    fileName = Path.GetFullPath(LogFileName & FILE_EXTENSION)
+                    fileName = Path.GetFullPath($"{LogFileName}{FILE_EXTENSION}")
                 Else
-                    fileName = Path.GetFullPath(LogFileName & "-" & i.ToString(CultureInfo.InvariantCulture) & FILE_EXTENSION)
+                    fileName = Path.GetFullPath(FormattableString.Invariant($"{LogFileName}-{i}{FILE_EXTENSION}"))
                 End If
 
                 Dim caseInsensitiveKey As String = fileName.ToUpper(CultureInfo.InvariantCulture)
@@ -882,7 +782,7 @@ Namespace Microsoft.VisualBasic.Logging
         End Function
 
         ''' <summary>
-        '''  Makes sure stream is flushed.
+        '''  Makes sure <see cref="Stream"/> is flushed.
         ''' </summary>
         ''' <param name="disposing"></param>
         Protected Overrides Sub Dispose(disposing As Boolean)
@@ -901,14 +801,14 @@ Namespace Microsoft.VisualBasic.Logging
         End Function
 
         ''' <summary>
-        '''  Closes the underlying stream.
+        '''  Closes the underlying <see cref="Stream"/>.
         ''' </summary>
         Public Overrides Sub Close()
             Dispose(True)
         End Sub
 
         ''' <summary>
-        '''  Flushes the underlying stream.
+        '''  Flushes the underlying <see cref="Stream"/>.
         ''' </summary>
         Public Overrides Sub Flush()
             _stream?.Flush()
@@ -975,13 +875,13 @@ Namespace Microsoft.VisualBasic.Logging
 
             ' Add fields that always appear (source, eventType, id, message)
             ' source
-            outBuilder.Append(source & Delimiter)
+            outBuilder.Append($"{source}{Delimiter}")
 
             ' eventType
-            outBuilder.Append([Enum].GetName(GetType(TraceEventType), eventType) & Delimiter)
+            outBuilder.Append($"{[Enum].GetName(GetType(TraceEventType), eventType)}{Delimiter}")
 
             ' id
-            outBuilder.Append(id.ToString(CultureInfo.InvariantCulture) & Delimiter)
+            outBuilder.Append(FormattableString.Invariant($"{id}{Delimiter}"))
 
             ' message
             outBuilder.Append(message)
@@ -989,38 +889,38 @@ Namespace Microsoft.VisualBasic.Logging
             ' Add optional fields
             ' Callstack
             If (TraceOutputOptions And TraceOptions.Callstack) = TraceOptions.Callstack Then
-                outBuilder.Append(Delimiter & eventCache.Callstack)
+                outBuilder.Append($"{Delimiter}{eventCache.Callstack}")
             End If
 
             ' LogicalOperationStack
             If (TraceOutputOptions And TraceOptions.LogicalOperationStack) = TraceOptions.LogicalOperationStack Then
-                outBuilder.Append(Delimiter & StackToString(eventCache.LogicalOperationStack))
+                outBuilder.Append($"{Delimiter}{StackToString(eventCache.LogicalOperationStack)}")
             End If
 
             ' DateTime
             If (TraceOutputOptions And TraceOptions.DateTime) = TraceOptions.DateTime Then
                 ' Add DateTime. Time will be in GMT.
-                outBuilder.Append(Delimiter & eventCache.DateTime.ToString("u", CultureInfo.InvariantCulture))
+                outBuilder.Append(FormattableString.Invariant($"{Delimiter}{eventCache.DateTime:u}"))
             End If
 
             ' ProcessId
             If (TraceOutputOptions And TraceOptions.ProcessId) = TraceOptions.ProcessId Then
-                outBuilder.Append(Delimiter & eventCache.ProcessId.ToString(CultureInfo.InvariantCulture))
+                outBuilder.Append(FormattableString.Invariant($"{Delimiter}{eventCache.ProcessId}"))
             End If
 
             ' ThreadId
             If (TraceOutputOptions And TraceOptions.ThreadId) = TraceOptions.ThreadId Then
-                outBuilder.Append(Delimiter & eventCache.ThreadId)
+                outBuilder.Append($"{Delimiter}{eventCache.ThreadId}")
             End If
 
             ' Timestamp
             If (TraceOutputOptions And TraceOptions.Timestamp) = TraceOptions.Timestamp Then
-                outBuilder.Append(Delimiter & eventCache.Timestamp.ToString(CultureInfo.InvariantCulture))
+                outBuilder.Append(FormattableString.Invariant($"{Delimiter}{eventCache.Timestamp}"))
             End If
 
             ' HostName
             If IncludeHostName Then
-                outBuilder.Append(Delimiter & HostName)
+                outBuilder.Append($"{Delimiter}{HostName}")
             End If
 
             WriteLine(outBuilder.ToString())
@@ -1086,7 +986,7 @@ Namespace Microsoft.VisualBasic.Logging
                 HandleDateChange()
 
                 ' Check resources
-                Dim newEntrySize As Long = Encoding.GetByteCount(message & vbCrLf)
+                Dim newEntrySize As Long = Encoding.GetByteCount($"{message}{vbCrLf}")
 
                 If ResourcesAvailable(newEntrySize) Then
                     ListenerStream.WriteLine(message)

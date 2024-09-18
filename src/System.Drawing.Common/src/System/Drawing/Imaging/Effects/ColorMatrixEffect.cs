@@ -10,8 +10,8 @@ namespace System.Drawing.Imaging.Effects;
 /// </summary>
 /// <remarks>
 ///  <para>
-///   See <see href="https://learn.microsoft.com/windows/win32/gdiplus/-gdiplus-recoloring-use">Recoloring</see> for
-///   examples of using a color matrix to adjust the colors of an image.
+///   See <see href="https://learn.microsoft.com/windows/win32/gdiplus/-gdiplus-recoloring-use">Recoloring</see>
+///   for examples of using a color matrix to adjust the colors of an image.
 ///  </para>
 /// </remarks>
 public unsafe class ColorMatrixEffect : Effect
