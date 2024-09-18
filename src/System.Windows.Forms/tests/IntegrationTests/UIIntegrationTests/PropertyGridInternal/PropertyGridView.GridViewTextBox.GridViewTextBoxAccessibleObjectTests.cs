@@ -19,20 +19,12 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
     {
         await RunSingleControlTestAsync<SubPropertyGrid<Button>>((form, grid) =>
         {
-            if (grid.SelectedGridItem is not null && grid.SelectedGridItem.Parent is not null)
-            {
-                grid.SelectedEntry = grid[nameof(Button.Size)];
+            grid.SelectedEntry = grid[nameof(Button.Size)];
 
-                Assert.Equal(grid.SelectedEntry.AccessibilityObject,
-                    grid.GridView.EditAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
+            Assert.Equal(grid.SelectedEntry.AccessibilityObject,
+                grid.GridView.EditAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
 
-                return Task.CompletedTask;
-            }
-
-            else
-            {
-                throw new InvalidOperationException("SelectedGridItem or its Parent is null.");
-            }
+            return Task.CompletedTask;
         });
     }
 
@@ -41,19 +33,11 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
     {
         await RunSingleControlTestAsync<SubPropertyGrid<Button>>((form, grid) =>
         {
-            if (grid.SelectedGridItem is not null && grid.SelectedGridItem.Parent is not null)
-            {
-                grid.SelectedEntry = grid[nameof(Button.Size)];
+            grid.SelectedEntry = grid[nameof(Button.Size)];
 
-                Assert.Null(grid.GridView.EditAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+            Assert.Null(grid.GridView.EditAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
 
-                return Task.CompletedTask;
-            }
-
-            else
-            {
-                throw new InvalidOperationException("SelectedGridItem or its Parent is null.");
-            }
+            return Task.CompletedTask;
         });
     }
 
@@ -62,22 +46,14 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
     {
         await RunSingleControlTestAsync<SubPropertyGrid<Button>>((form, grid) =>
         {
-            if (grid.SelectedGridItem is not null && grid.SelectedGridItem.Parent is not null)
-            {
-                grid.SelectedEntry = grid[nameof(Button.FlatStyle)];
+            grid.SelectedEntry = grid[nameof(Button.FlatStyle)];
 
-                grid.PopupEditorAndClose(onClosingAction: () =>
-                    Assert.Equal(
-                        grid.GridView.DropDownControlHolder!.AccessibilityObject,
-                        grid.GridView.EditAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling)));
+            grid.PopupEditorAndClose(onClosingAction: () =>
+                Assert.Equal(
+                    grid.GridView.DropDownControlHolder!.AccessibilityObject,
+                    grid.GridView.EditAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling)));
 
-                return Task.CompletedTask;
-            }
-
-            else
-            {
-                throw new InvalidOperationException("SelectedGridItem or its Parent is null.");
-            }
+            return Task.CompletedTask;
         });
     }
 
@@ -86,19 +62,11 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
     {
         await RunSingleControlTestAsync<SubPropertyGrid<Button>>((form, grid) =>
         {
-            if (grid.SelectedGridItem is not null && grid.SelectedGridItem.Parent is not null)
-            {
-                grid.SelectedEntry = grid[nameof(Button.Size)];
+            grid.SelectedEntry = grid[nameof(Button.Size)];
 
-                Assert.Null(grid.GridView.EditAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+            Assert.Null(grid.GridView.EditAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-                return Task.CompletedTask;
-            }
-
-            else
-            {
-                throw new InvalidOperationException("SelectedGridItem or its Parent is null.");
-            }
+            return Task.CompletedTask;
         });
     }
 
@@ -107,22 +75,14 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
     {
         await RunSingleControlTestAsync<SubPropertyGrid<Button>>((form, grid) =>
         {
-            if (grid.SelectedGridItem is not null && grid.SelectedGridItem.Parent is not null)
-            {
-                grid.SelectedEntry = grid[nameof(Button.Size)];
-                grid.SelectedEntry.Expanded = true;
+            grid.SelectedEntry = grid[nameof(Button.Size)];
+            grid.SelectedEntry.Expanded = true;
 
-                Assert.Equal(
-                    grid.SelectedEntry.Children.First().AccessibilityObject,
-                    grid.GridView.EditAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+            Assert.Equal(
+                grid.SelectedEntry.Children.First().AccessibilityObject,
+                grid.GridView.EditAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-                return Task.CompletedTask;
-            }
-
-            else
-            {
-                throw new InvalidOperationException("SelectedGridItem or its Parent is null.");
-            }
+            return Task.CompletedTask;
         });
     }
 
@@ -131,20 +91,12 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
     {
         await RunSingleControlTestAsync<SubPropertyGrid<Button>>((form, grid) =>
         {
-            if (grid.SelectedGridItem is not null && grid.SelectedGridItem.Parent is not null)
-            {
-                grid.SelectedEntry = grid[nameof(Button.FlatStyle)];
+            grid.SelectedEntry = grid[nameof(Button.FlatStyle)];
 
-                Assert.Equal(grid.GridView.DropDownButton.AccessibilityObject,
-                    grid.GridView.EditAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+            Assert.Equal(grid.GridView.DropDownButton.AccessibilityObject,
+                grid.GridView.EditAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-                return Task.CompletedTask;
-            }
-
-            else
-            {
-                throw new InvalidOperationException("SelectedGridItem or its Parent is null.");
-            }
+            return Task.CompletedTask;
         });
     }
 
@@ -153,20 +105,12 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
     {
         await RunSingleControlTestAsync<SubPropertyGrid<Button>>((form, grid) =>
         {
-            if (grid.SelectedGridItem is not null && grid.SelectedGridItem.Parent is not null)
-            {
-                grid.SelectedEntry = grid[nameof(Button.Font)];
+            grid.SelectedEntry = grid[nameof(Button.Font)];
 
-                Assert.Equal(grid.GridView.DialogButton.AccessibilityObject,
-                    grid.GridView.EditAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+            Assert.Equal(grid.GridView.DialogButton.AccessibilityObject,
+                grid.GridView.EditAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-                return Task.CompletedTask;
-            }
-
-            else
-            {
-                throw new InvalidOperationException("SelectedGridItem or its Parent is null.");
-            }
+            return Task.CompletedTask;
         });
     }
 }
