@@ -646,7 +646,7 @@ end_of_line = crlf
 # Test specific
 [**/tests/**/*.cs]
 
-# CA1861: Avoid constant arrays as arguments - expected to be inline for test readability (4000 hits)
+# CA1861: Avoid constant arrays as arguments - expected to be in-line for test readability (4000 hits)
 dotnet_diagnostic.CA1861.severity = silent
 
 # This collides with TheoryData usage
@@ -656,7 +656,13 @@ dotnet_style_prefer_collection_expression = true:silent
 # xUnit1042: The member referenced by the MemberData attribute returns untyped data rows
 dotnet_diagnostic.xUnit1042.severity = none
 
-# CA1507: CA1507: Use nameof in place of string - many fasle positives
+# xUnit1044: Avoid using TheoryData type arguments that are not serializable
+dotnet_diagnostic.xUnit1044.severity = none
+
+# xUnit1045: Avoid using TheoryData type arguments that might not be serializable
+dotnet_diagnostic.xUnit1045.severity = none
+
+# CA1507: CA1507: Use nameof in place of string - many false positives
 dotnet_diagnostic.CA1507.severity = none
 
 # CA1822: Mark members as static
