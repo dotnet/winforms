@@ -205,11 +205,10 @@ Namespace Microsoft.VisualBasic.MyServices
         End Sub
 
         ''' <summary>
-        '''  Clears the Clipboard and then adds text data in the format indicated by the specified
-        '''  <see cref="TextDataFormat"/> value.
+        '''  Saves the passed in <see cref="String" />  to the clipboard in the passed in <paramref name="format"/>.
         ''' </summary>
-        ''' <param name="text">The <see cref="String"/> to save.</param>
-        ''' <param name="format">The format in which to save the String.</param>
+        ''' <param name="text">The <see cref="String" />  to save.</param>
+        ''' <param name="format">The format in which to save the <see cref="String" /> .</param>
         Public Sub SetText(text As String, format As TextDataFormat)
             Clipboard.SetText(text, format)
         End Sub
