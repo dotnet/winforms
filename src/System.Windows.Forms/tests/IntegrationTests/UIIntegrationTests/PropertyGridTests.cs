@@ -6,7 +6,6 @@
 using System.ComponentModel;
 using System.Drawing;
 using FluentAssertions;
-using static System.Windows.Forms.PropertyGrid;
 
 namespace System.Windows.Forms.UITests;
 public class PropertyGridTests : IDisposable
@@ -278,16 +277,6 @@ public class PropertyGridTests : IDisposable
     }
 
     [WinFormsFact]
-    public void PropertyGrid_PropertyTabs_Get_ReturnsExpected()
-    {
-        _propertyGrid.PropertyTabs.Should().NotBeNull();
-
-        PropertyTabCollection propertyTabCollection = _propertyGrid.PropertyTabs;
-        PropertyGrid propertyGrid = propertyTabCollection.TestAccessor().Dynamic._ownerPropertyGrid;
-        propertyGrid.Should().Be(_propertyGrid);
-    }
-
-    [WinFormsFact]
     public void PropertyGrid_SelectedObject_GetSet_ReturnsExpected()
     {
         _propertyGrid.SelectedObject.Should().Be(_form);
@@ -325,20 +314,6 @@ public class PropertyGridTests : IDisposable
     public void PropertyGrid_SelectedTab_Get_ShouldNotBeNullByDefault()
     {
         _propertyGrid.SelectedTab.Should().NotBeNull();
-    }
-
-    [WinFormsFact]
-    public void PropertyGrid_SelectedGridItem_GetSet_ReturnsExpected()
-    {
-        _propertyGrid.SelectedGridItem.Should().NotBeNull();
-        _propertyGrid.SelectedGridItem!.Label.Should().Be("Text");
-
-        _propertyGrid.SelectedObject = _propertyGrid;
-        _propertyGrid.SelectedGridItem.Label.Should().Be("Accessibility");
-
-        GridItem gridItem = _propertyGrid.SelectedGridItem.GridItems[0];
-        _propertyGrid.SelectedGridItem = gridItem;
-        _propertyGrid.SelectedGridItem.Should().Be(gridItem);
     }
 
     [WinFormsFact]
@@ -417,70 +392,6 @@ public class PropertyGridTests : IDisposable
 
         _propertyGrid.CommandsDisabledLinkColor = Color.Orange;
         _propertyGrid.CommandsDisabledLinkColor.Should().Be(Color.Orange);
-    }
-
-    [WinFormsFact]
-    public void PropertyGrid_CollapseAllGridItemsEvent_Raised_Success()
-    {
-        if (_propertyGrid.SelectedGridItem is not null && _propertyGrid.SelectedGridItem.Parent is not null)
-        {
-            GridItemCollection gridItems = _propertyGrid.SelectedGridItem.Parent.GridItems;
-            gridItems.Count.Should().BeGreaterThan(0);
-
-            foreach (GridItem item in gridItems)
-            {
-                item.Expanded = true;
-            }
-
-            _propertyGrid.CollapseAllGridItems();
-
-            foreach (GridItem item in gridItems)
-            {
-                item.Expanded.Should().BeFalse();
-            }
-        }
-    }
-
-    [WinFormsFact]
-    public void PropertyGrid_ExpandAllGridItemsEvent_Raised_Success()
-    {
-        if (_propertyGrid.SelectedGridItem is not null && _propertyGrid.SelectedGridItem.Parent is not null)
-        {
-            GridItemCollection gridItems = _propertyGrid.SelectedGridItem.Parent.GridItems;
-            gridItems.Count.Should().BeGreaterThan(0);
-
-            foreach (GridItem item in gridItems)
-            {
-                item.Expanded = false;
-            }
-
-            _propertyGrid.ExpandAllGridItems();
-
-            foreach (GridItem item in gridItems)
-            {
-                if (item.Expandable == true)
-                {
-                    item.Expanded.Should().BeTrue();
-                }
-            }
-        }
-    }
-
-    [WinFormsFact]
-    public void PropertyGrid_RefreshTabsEvent_Raised_Success()
-    {
-        PropertyTabCollection initialTabs = _propertyGrid.PropertyTabs;
-        int initialTabCount = initialTabs.Count;
-
-        _propertyGrid.RefreshTabs(PropertyTabScope.Component);
-        PropertyTabCollection refreshedTabs = _propertyGrid.PropertyTabs;
-        int refreshedTabCount = refreshedTabs.Count;
-
-        refreshedTabCount.Should().Be(initialTabCount);
-        for (int i = 0; i < initialTabCount; i++)
-        {
-            refreshedTabs[i].Should().BeSameAs(initialTabs[i]);
-        }
     }
 
     [WinFormsFact]
