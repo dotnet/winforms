@@ -124,8 +124,8 @@ public partial class Label : Control, IAutomationLiveRegion
     }
 
     /// <summary>
-    ///  This property controls the activation handling of bleed over for the text that
-    ///  extends beyond the width of the label.
+    ///  Gets or sets a value indicating whether the ellipsis character (...) appears at the right edge of the Label,
+    ///  denoting that the Label text extends beyond the specified length of the Label.
     /// </summary>
     [SRCategory(nameof(SR.CatBehavior))]
     [DefaultValue(false)]
