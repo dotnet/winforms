@@ -15,7 +15,7 @@
       SYSLIB0051: This API supports obsolete formatter-based serialization
       SYSLIB5005: System.Formats.Nrbf is experimental
     -->
-    <NoWarn>$(NoWarn),1573,1591,1712,WFDEV001,SYSLIB0050,SYSLIB0051,SYSLIB5005</NoWarn>
+    <NoWarn>$(NoWarn),1573,1591,1712,WFDEV001,SYSLIB0050,SYSLIB0051,SYSLIB5005,xUnit1045</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
