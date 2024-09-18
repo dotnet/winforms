@@ -22,7 +22,7 @@ We started the migration process by targeting .NET Core 3.0, when we've strived 
 WinForms is a technology which was originally introduced as a part of .NET Framework 1.0 on February 13th, 2002. It's primary focus was and is to be a Rapid Application Tool for Windows based Apps, and that principal sentiment has not changed over the years. WinForms at the time addressed developer's requests for
 
 * A framework for stable, monolithic Line of Business Apps, even with extremely complicated and complex domain-specific workflows
-* The ability to easily provide rich and accessibility-compliant UIs
+* The ability to easily provide rich user interfaces
 * A safe and - over the first 3 versions of .NET Framework - increasingly performant way to communicate across process boundaries via various Windows Communication Services, or access on-site databases via ADO.NET providers.
 * A very easy to use, visual what-you-see-is-what-you-get designer, which requires little ramp-up time, and was primarily focused to support 96 DPI resolution-based, pixel-coordinated drag & drop design strategies.
 * A flexible, .NET reflection-based Designer extensibility model, utilizing the .NET Component Model.
