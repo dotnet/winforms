@@ -267,7 +267,7 @@ public abstract partial class ToolStripItem :
         set
         {
             SourceGenerated.EnumValidator.Validate(value);
-            Properties.AddValue(s_accessibleRoleProperty, value);
+            Properties.AddOrRemoveValue(s_accessibleRoleProperty, value, AccessibleRole.Default);
             OnAccessibleRoleChanged(EventArgs.Empty);
         }
     }
@@ -1293,7 +1293,7 @@ public abstract partial class ToolStripItem :
         set
         {
             SourceGenerated.EnumValidator.Validate(value);
-            Properties.AddValue(s_mergeActionProperty, value);
+            Properties.AddOrRemoveValue(s_mergeActionProperty, value, MergeAction.Append);
         }
     }
 
@@ -1306,7 +1306,7 @@ public abstract partial class ToolStripItem :
     public int MergeIndex
     {
         get => Properties.GetValueOrDefault(s_mergeIndexProperty, -1);
-        set => Properties.AddValue(s_mergeIndexProperty, value);
+        set => Properties.AddOrRemoveValue(s_mergeIndexProperty, value, -1);
     }
 
     internal bool MouseDownAndUpMustBeInSameItem

@@ -561,7 +561,7 @@ public partial class Label : Control, IAutomationLiveRegion
 
             if (value != ImageAlign)
             {
-                Properties.AddValue(s_propImageAlign, value);
+                Properties.AddOrRemoveValue(s_propImageAlign, value, ContentAlignment.MiddleCenter);
                 LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.ImageAlign);
                 Invalidate();
             }
@@ -705,7 +705,7 @@ public partial class Label : Control, IAutomationLiveRegion
 
             if (TextAlign != value)
             {
-                Properties.AddValue(s_propTextAlign, value);
+                Properties.AddOrRemoveValue(s_propTextAlign, value, ContentAlignment.TopLeft);
                 Invalidate();
 
                 // Change the TextAlignment for SystemDrawn Labels

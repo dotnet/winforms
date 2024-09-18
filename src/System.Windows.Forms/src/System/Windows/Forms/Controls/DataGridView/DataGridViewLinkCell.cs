@@ -117,11 +117,10 @@ public partial class DataGridViewLinkCell : DataGridViewCell
         get => Properties.GetValueOrDefault(s_propLinkCellLinkBehavior, LinkBehavior.SystemDefault);
         set
         {
-            // Sequential enum. Valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(value);
             if (value != LinkBehavior)
             {
-                Properties.AddValue(s_propLinkCellLinkBehavior, value);
+                Properties.AddOrRemoveValue(s_propLinkCellLinkBehavior, value, LinkBehavior.SystemDefault);
                 if (DataGridView is not null)
                 {
                     if (RowIndex != -1)
@@ -144,7 +143,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
             Debug.Assert(value is >= LinkBehavior.SystemDefault and <= LinkBehavior.NeverUnderline);
             if (value != LinkBehavior)
             {
-                Properties.AddValue(s_propLinkCellLinkBehavior, value);
+                Properties.AddOrRemoveValue(s_propLinkCellLinkBehavior, value, LinkBehavior.SystemDefault);
             }
         }
     }
@@ -215,23 +214,14 @@ public partial class DataGridViewLinkCell : DataGridViewCell
         {
             if (LinkState != value)
             {
-                Properties.AddValue(s_propLinkCellLinkState, value);
+                Properties.AddOrRemoveValue(s_propLinkCellLinkState, value, LinkState.Normal);
             }
         }
     }
 
     public bool LinkVisited
     {
-        get
-        {
-            if (_linkVisitedSet)
-            {
-                return _linkVisited;
-            }
-
-            // the default is false
-            return false;
-        }
+        get => _linkVisitedSet && _linkVisited;
         set
         {
             _linkVisitedSet = true;
@@ -263,7 +253,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
         {
             if (value != TrackVisitedState)
             {
-                Properties.AddValue(s_propLinkCellTrackVisitedState, value);
+                Properties.AddOrRemoveValue(s_propLinkCellTrackVisitedState, value, true);
                 if (DataGridView is not null)
                 {
                     if (RowIndex != -1)
@@ -285,7 +275,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
         {
             if (value != TrackVisitedState)
             {
-                Properties.AddValue(s_propLinkCellTrackVisitedState, value);
+                Properties.AddOrRemoveValue(s_propLinkCellTrackVisitedState, value, true);
             }
         }
     }

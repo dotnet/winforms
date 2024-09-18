@@ -69,7 +69,7 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
         {
             ArgumentOutOfRangeException.ThrowIfNegative(value);
 
-            Properties.AddValue(s_propTextBoxCellMaxInputLength, value);
+            Properties.AddOrRemoveValue(s_propTextBoxCellMaxInputLength, value, DATAGRIDVIEWTEXTBOXCELL_maxInputLength);
             if (OwnsEditingTextBox(RowIndex))
             {
                 EditingTextBox.MaxLength = value;

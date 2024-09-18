@@ -307,7 +307,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
 
             if (value != CheckState)
             {
-                Properties.AddValue(s_propCheckState, value);
+                Properties.AddOrRemoveValue(s_propCheckState, value, CheckState.Unchecked);
                 OnCheckedChanged(EventArgs.Empty);
                 OnCheckStateChanged(EventArgs.Empty);
             }
@@ -315,9 +315,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
     }
 
     /// <summary>
-    ///  Occurs when the
-    ///  value of the <see cref="CheckBox.Checked"/>
-    ///  property changes.
+    ///  Occurs when the value of the <see cref="CheckBox.Checked"/> property changes.
     /// </summary>
     [SRDescription(nameof(SR.CheckBoxOnCheckedChangedDescr))]
     public event EventHandler? CheckedChanged
@@ -327,9 +325,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
     }
 
     /// <summary>
-    ///  Occurs when the
-    ///  value of the <see cref="CheckBox.CheckState"/>
-    ///  property changes.
+    ///  Occurs when the value of the <see cref="CheckBox.CheckState"/> property changes.
     /// </summary>
     [SRDescription(nameof(SR.CheckBoxOnCheckStateChangedDescr))]
     public event EventHandler? CheckStateChanged
@@ -370,38 +366,40 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
             }
 
             Keys originalShortcut = ShortcutKeys;
-            if (originalShortcut != value)
+            if (originalShortcut == value)
             {
-                ClearShortcutCache();
-                ToolStrip? owner = Owner;
-                if (owner is not null)
-                {
-                    // add to the shortcut caching system.
-                    if (originalShortcut != Keys.None)
-                    {
-                        owner.Shortcuts.Remove(originalShortcut);
-                    }
+                return;
+            }
 
-                    if (owner.Shortcuts.ContainsKey(value))
-                    {
-                        // last one in wins.
-                        owner.Shortcuts[value] = this;
-                    }
-                    else
-                    {
-                        owner.Shortcuts.Add(value, this);
-                    }
+            ClearShortcutCache();
+            ToolStrip? owner = Owner;
+            if (owner is not null)
+            {
+                // Add to the shortcut caching system.
+                if (originalShortcut != Keys.None)
+                {
+                    owner.Shortcuts.Remove(originalShortcut);
                 }
 
-                Properties.AddValue(s_propShortcutKeys, value);
-
-                if (ShowShortcutKeys && IsOnDropDown)
+                if (owner.Shortcuts.ContainsKey(value))
                 {
-                    if (GetCurrentParentDropDown() is ToolStripDropDownMenu parent)
-                    {
-                        LayoutTransaction.DoLayout(ParentInternal, this, "ShortcutKeys");
-                        parent.AdjustSize();
-                    }
+                    // Last one in wins.
+                    owner.Shortcuts[value] = this;
+                }
+                else
+                {
+                    owner.Shortcuts.Add(value, this);
+                }
+            }
+
+            Properties.AddOrRemoveValue(s_propShortcutKeys, value, Keys.None);
+
+            if (ShowShortcutKeys && IsOnDropDown)
+            {
+                if (GetCurrentParentDropDown() is ToolStripDropDownMenu parent)
+                {
+                    LayoutTransaction.DoLayout(ParentInternal, this, "ShortcutKeys");
+                    parent.AdjustSize();
                 }
             }
         }

@@ -187,7 +187,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
             Debug.Assert((value & ~(ButtonState.Normal | ButtonState.Pushed | ButtonState.Checked)) == 0);
             if (ButtonState != value)
             {
-                Properties.AddValue(s_propButtonCellState, value);
+                Properties.AddOrRemoveValue(s_propButtonCellState, value, ButtonState.Normal);
             }
         }
     }
@@ -235,9 +235,8 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
         get => Properties.GetValueOrDefault(s_propFlatStyle, FlatStyle.Standard);
         set
         {
-            // Sequential enum. Valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(value);
-            FlatStyle previous = Properties.AddOrRemoveValue(s_propFlatStyle, value);
+            FlatStyle previous = Properties.AddOrRemoveValue(s_propFlatStyle, value, FlatStyle.Standard);
             if (value != previous)
             {
                 OnCommonChange();
@@ -252,7 +251,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
             Debug.Assert(value is >= FlatStyle.Flat and <= FlatStyle.System);
             if (value != FlatStyle)
             {
-                Properties.AddValue(s_propFlatStyle, value);
+                Properties.AddOrRemoveValue(s_propFlatStyle, value, FlatStyle.Standard);
             }
         }
     }
