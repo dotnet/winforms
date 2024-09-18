@@ -1017,7 +1017,7 @@ public abstract class ToolStripRenderer
         }
     }
 
-    // Only paint background effects if no backcolor has been set or no background image has been set.
+    // Only paint background effects if no BackColor has been set or no background image has been set.
     internal static bool ShouldPaintBackground(Control control)
     {
         return (control.RawBackColor == Color.Empty && control.BackgroundImage is null);

@@ -667,7 +667,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
     }
 
     /// <summary>
-    ///  Overriden to always Initialise the ToolStripItem with Text property.
+    ///  Overridden to always initialize the ToolStripItem with Text property.
     /// </summary>
     public override void InitializeNewComponent(IDictionary defaultValues)
     {

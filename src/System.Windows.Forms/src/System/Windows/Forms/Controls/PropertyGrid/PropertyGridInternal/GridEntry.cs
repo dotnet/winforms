@@ -1672,7 +1672,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
 
             bool expanded = InternalExpanded;
 
-            // Invert color if it is not overriden by developer.
+            // Invert color if it is not overridden by developer.
             if (g is not null && ColorInversionNeededInHighContrast)
             {
                 Color textColor = InvertColor(OwnerGrid.LineColor);

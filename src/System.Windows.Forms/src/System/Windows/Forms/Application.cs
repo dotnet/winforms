@@ -877,7 +877,7 @@ public sealed partial class Application
     }
 
     /// <summary>
-    ///  Occurs when an untrapped thread exception is thrown.
+    ///  Occurs when an un-trapped thread exception is thrown.
     /// </summary>
     public static event ThreadExceptionEventHandler? ThreadException
     {

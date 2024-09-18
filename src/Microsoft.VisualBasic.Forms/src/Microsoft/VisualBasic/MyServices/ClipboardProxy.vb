@@ -189,7 +189,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Sub
 
         ''' <summary>
-        '''  Clears the Clipboard and then adds an <see cref="Image"/> in the <see cref="DataFormats.Bitmap"/> format.
+        '''  Saves the passed in <see cref="Image"/> to the clipboard.
         ''' </summary>
         ''' <param name="image">The <see cref="Image"/> to be saved.</param>
         Public Sub SetImage(image As Image)

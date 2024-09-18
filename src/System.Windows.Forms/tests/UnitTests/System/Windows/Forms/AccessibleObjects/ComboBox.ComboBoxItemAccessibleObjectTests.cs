@@ -267,7 +267,7 @@ public class ComboBox_ComboBoxItemAccessibleObjectTests
 
         int actual = (int)PInvoke.SendMessage(comboBox, PInvoke.CB_GETTOPINDEX);
 
-        Assert.Equal(0, actual); // ScrollIntoView didn't scroll to the tested item because the combobox is disabled
+        Assert.Equal(0, actual); // ScrollIntoView didn't scroll to the tested item because the ComboBox is disabled
     }
 
     public static IEnumerable<object[]> ComboBoxItemAccessibleObject_ScrollIntoView_EnsureVisible_TestData()
@@ -364,7 +364,7 @@ public class ComboBox_ComboBoxItemAccessibleObjectTests
     {
         foreach (ComboBoxStyle comboBoxStyle in Enum.GetValues(typeof(ComboBoxStyle)))
         {
-            // The tested combobox contains 11 items
+            // The tested ComboBox contains 11 items
             for (int index = 0; index < 11; index++)
             {
                 int y = index * 15;
@@ -406,7 +406,7 @@ public class ComboBox_ComboBoxItemAccessibleObjectTests
         Rectangle dropdownRect = comboBox.ChildListAccessibleObject.Bounds;
 
         // We get items rectangles from Windows
-        // It returns to us different expected widths values depending on a combobox drop-down style
+        // It returns to us different expected widths values depending on a ComboBox drop-down style
         int itemWidth = comboBoxStyle == ComboBoxStyle.Simple ? 79 : 81;
 
         Assert.Equal(expectedPosition.X, actual.X);
@@ -419,13 +419,13 @@ public class ComboBox_ComboBoxItemAccessibleObjectTests
     {
         foreach (ComboBoxStyle comboBoxStyle in Enum.GetValues(typeof(ComboBoxStyle)))
         {
-            // The tested combobox contains 11 items
+            // The tested ComboBox contains 11 items
             for (int index = 0; index < 11; index++)
             {
                 int height = DifferentHeightComboBox.GetCustomItemHeight(index);
 
                 // We get items rectangles from Windows
-                // It returns to us different expected bounds values depending on a combobox drop-down style
+                // It returns to us different expected bounds values depending on a ComboBox drop-down style
                 int width = comboBoxStyle == ComboBoxStyle.Simple ? 96 : 81;
                 int x = comboBoxStyle == ComboBoxStyle.Simple ? 10 : 9;
                 int y = comboBoxStyle == ComboBoxStyle.Simple ? 57 : 56;

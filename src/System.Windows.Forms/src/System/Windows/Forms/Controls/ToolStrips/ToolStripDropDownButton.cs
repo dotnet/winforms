@@ -124,7 +124,7 @@ public partial class ToolStripDropDownButton : ToolStripDropDownItem
     }
 
     /// <summary>
-    ///  Overriden to invoke displaying the popup.
+    ///  Overridden to invoke displaying the popup.
     /// </summary>
     protected override void OnMouseDown(MouseEventArgs e)
     {
