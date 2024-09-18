@@ -102,13 +102,13 @@ internal class TabControlDesigner : ParentControlDesigner
 
         TabControl tc = (TabControl)Component;
         if (tc is not null)
-        { // always Select the First Tab on Initialising the component...
+        { // always Select the First Tab on Initializing the component...
             tc.SelectedIndex = 0;
         }
     }
 
-    // If the tabcontrol already contains the control we are dropping then don't allow the drop.
-    // I.e. we don't want to allow local drag-drop for tabcontrols.
+    // If the TabControl already contains the control we are dropping then don't allow the drop.
+    // I.e. we don't want to allow local drag-drop for TabControls.
     public override bool CanParent(Control control) => (control is TabPage && !Control.Contains(control));
 
     private void CheckVerbStatus()
@@ -517,7 +517,7 @@ internal class TabControlDesigner : ParentControlDesigner
         }
         else
         {
-            // We must be dragging something off the toolbox, so forward the drag to the right tabpage.
+            // We must be dragging something off the toolbox, so forward the drag to the right TabPage.
             _forwardOnDrag = true;
         }
 
@@ -632,7 +632,7 @@ internal class TabControlDesigner : ParentControlDesigner
             case PInvoke.WM_HSCROLL:
             case PInvoke.WM_VSCROLL:
                 // We do this so that we can update the areas covered by glyphs correctly. VSWhidbey# 187405.
-                // We just invalidate the area corresponding to the ClientRectangle in the adornerwindow.
+                // We just invalidate the area corresponding to the ClientRectangle in the AdornerWindow.
                 BehaviorService.Invalidate(BehaviorService.ControlRectInAdornerWindow(Control));
                 base.WndProc(ref m);
                 break;

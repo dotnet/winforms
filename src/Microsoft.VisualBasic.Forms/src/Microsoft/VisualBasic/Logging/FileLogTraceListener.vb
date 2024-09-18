@@ -394,7 +394,8 @@ Namespace Microsoft.VisualBasic.Logging
             Get
                 If Not _propertiesSet(INCLUDEHOSTNAME_INDEX) Then
                     If Attributes.ContainsKey(KEY_INCLUDEHOSTNAME) Then
-                        Me.IncludeHostName = Convert.ToBoolean(Attributes(KEY_INCLUDEHOSTNAME), CultureInfo.InvariantCulture)
+                        Dim value As String = Attributes(KEY_INCLUDEHOSTNAME)
+                        Me.IncludeHostName = Convert.ToBoolean(value, CultureInfo.InvariantCulture)
                     End If
                 End If
                 Return _includeHostName
@@ -415,7 +416,8 @@ Namespace Microsoft.VisualBasic.Logging
                 If Not _propertiesSet(LOCATION_INDEX) Then
                     If Attributes.ContainsKey(KEY_LOCATION) Then
                         Dim converter As TypeConverter = TypeDescriptor.GetConverter(GetType(LogFileLocation))
-                        Me.Location = DirectCast(converter.ConvertFromInvariantString(Attributes(KEY_LOCATION)), LogFileLocation)
+                        Dim text As String = Attributes(KEY_LOCATION)
+                        Me.Location = DirectCast(converter.ConvertFromInvariantString(text), LogFileLocation)
                     End If
                 End If
                 Return _location
@@ -478,7 +480,10 @@ Namespace Microsoft.VisualBasic.Logging
             Set(value As Long)
                 DemandWritePermission()
                 If value < MIN_FILE_SIZE Then
-                    Throw VbUtils.GetArgumentExceptionWithArgName(NameOf(value), SR.ApplicationLogNumberTooSmall, "MaxFileSize")
+                    Throw VbUtils.GetArgumentExceptionWithArgName(
+                        argumentName:=NameOf(value),
+                        resourceID:=SR.ApplicationLogNumberTooSmall,
+                        "MaxFileSize")
                 End If
                 _maxFileSize = value
                 _propertiesSet(MAXFILESIZE_INDEX) = True
@@ -493,7 +498,9 @@ Namespace Microsoft.VisualBasic.Logging
             Get
                 If Not _propertiesSet(RESERVEDISKSPACE_INDEX) Then
                     If Attributes.ContainsKey(KEY_RESERVEDISKSPACE) Then
-                        Me.ReserveDiskSpace = Convert.ToInt64(Attributes(KEY_RESERVEDISKSPACE), CultureInfo.InvariantCulture)
+                        Me.ReserveDiskSpace = Convert.ToInt64(
+                            value:=Attributes(KEY_RESERVEDISKSPACE),
+                            provider:=CultureInfo.InvariantCulture)
                     End If
                 End If
                 Return _reserveDiskSpace
@@ -552,7 +559,10 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <param name="value"></param>
         Private Shared Sub ValidateDiskSpaceExhaustedOptionEnumValue(value As DiskSpaceExhaustedOption, paramName As String)
             If value < DiskSpaceExhaustedOption.ThrowException OrElse value > DiskSpaceExhaustedOption.DiscardMessages Then
-                Throw New InvalidEnumArgumentException(paramName, value, GetType(DiskSpaceExhaustedOption))
+                Throw New InvalidEnumArgumentException(
+                    argumentName:=paramName,
+                    invalidValue:=value,
+                    enumClass:=GetType(DiskSpaceExhaustedOption))
             End If
         End Sub
 
@@ -578,7 +588,10 @@ Namespace Microsoft.VisualBasic.Logging
         ''' <param name="value"></param>
         Private Shared Sub ValidateLogFileLocationEnumValue(value As LogFileLocation, paramName As String)
             If value < LogFileLocation.TempDirectory OrElse value > LogFileLocation.Custom Then
-                Throw New InvalidEnumArgumentException(paramName, value, GetType(LogFileLocation))
+                Throw New InvalidEnumArgumentException(
+                    argumentName:=paramName,
+                    invalidValue:=value,
+                    enumClass:=GetType(LogFileLocation))
             End If
         End Sub
 
@@ -695,7 +708,8 @@ Namespace Microsoft.VisualBasic.Logging
 
             While refStream Is Nothing AndAlso i < MAX_OPEN_ATTEMPTS
                 ' This should only be true if processes outside our process have
-                ' MAX_OPEN_ATTEMPTS files open using the naming schema (file-1.log, file-2.log ... file-MAX_OPEN_ATTEMPTS.log)
+                ' MAX_OPEN_ATTEMPTS files open using the naming schema
+                ' (file-1.log, file-2.log ... file-MAX_OPEN_ATTEMPTS.log)
 
                 Dim fileName As String
                 If i = 0 Then
@@ -780,20 +794,24 @@ Namespace Microsoft.VisualBasic.Logging
         '''  the free disk space against the user's limits.
         ''' </summary>
         ''' <param name="newEntrySize">The size of what's about to be written to the file.</param>
-        ''' <returns><see langword="True"/> if the limits aren't trespassed, otherwise <see langword="False"/>.</returns>
+        ''' <returns>
+        '''  <see langword="True"/> if the limits aren't trespassed, otherwise <see langword="False"/>.
+        ''' </returns>
         ''' <remarks>This method is not 100% accurate if AutoFlush is False.</remarks>
         Private Function ResourcesAvailable(newEntrySize As Long) As Boolean
 
             If ListenerStream.FileSize + newEntrySize > MaxFileSize Then
                 If DiskSpaceExhaustedBehavior = DiskSpaceExhaustedOption.ThrowException Then
-                    Throw New InvalidOperationException(Utils.GetResourceString(SR.ApplicationLog_FileExceedsMaximumSize))
+                    Throw New InvalidOperationException(
+                      message:=Utils.GetResourceString(SR.ApplicationLog_FileExceedsMaximumSize))
                 End If
                 Return False
             End If
 
             If GetFreeDiskSpace() - newEntrySize < ReserveDiskSpace Then
                 If DiskSpaceExhaustedBehavior = DiskSpaceExhaustedOption.ThrowException Then
-                    Throw New InvalidOperationException(Utils.GetResourceString(SR.ApplicationLog_ReservedSpaceEncroached))
+                    Throw New InvalidOperationException(
+                        message:=Utils.GetResourceString(SR.ApplicationLog_ReservedSpaceEncroached))
                 End If
                 Return False
             End If

@@ -69,7 +69,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <WinFormsFact>
         Public Sub GetInvalidOperationExceptionTest_Succeed()
-            VbUtils.GetInvalidOperationException(SR.Mouse_NoMouseIsPresent).Should.BeOfType(Of InvalidOperationException)()
+            VbUtils.GetInvalidOperationException(SR.Mouse_NoMouseIsPresent).
+                Should.BeOfType(Of InvalidOperationException)()
         End Sub
 
         <WinFormsFact>
@@ -91,7 +92,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <InlineData(0)>
         Public Sub VbMakeExceptionInvalidValuesTest_Succeed(BadResourceId As Integer)
             Dim id As String = $"ID{BadResourceId}"
-            VbUtils.VbMakeException(BadResourceId).Message.Should.Be($"{SR.GetResourceString(id, id)}")
+            Dim expected As String = $"{SR.GetResourceString(id, id)}"
+            VbUtils.VbMakeException(BadResourceId).Message.Should.Be(expected)
         End Sub
 
         <WinFormsTheory>

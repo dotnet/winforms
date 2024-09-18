@@ -468,7 +468,7 @@ internal class ToolStripItemBehavior : Behavior.Behavior
     }
 
     /// <summary>
-    ///  Overriden to paint the border on mouse enter.....
+    ///  Overridden to paint the border on mouse enter.....
     /// </summary>
     public override bool OnMouseEnter(Glyph g)
     {
@@ -494,7 +494,7 @@ internal class ToolStripItemBehavior : Behavior.Behavior
     }
 
     /// <summary>
-    ///  overriden to "clear" the boundary-paint when the mouse leave the item
+    ///  Overridden to "clear" the boundary-paint when the mouse leave the item
     /// </summary>
     public override bool OnMouseLeave(Glyph g)
     {

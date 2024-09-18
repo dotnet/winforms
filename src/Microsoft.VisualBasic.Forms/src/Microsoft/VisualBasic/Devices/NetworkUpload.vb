@@ -132,7 +132,8 @@ Namespace Microsoft.VisualBasic.Devices
             connectionTimeout As Integer,
             onUserCancel As UICancelOption)
 
-            ' We're safe from UploadFile(Nothing, ...) due to overload failure (UploadFile(String,...) vs. UploadFile(Uri,...)).
+            ' We're safe from UploadFile(Nothing, ...) due to overload failure
+            ' (UploadFile(String,...) vs. UploadFile(Uri,...)).
             ' However, it is good practice to verify address before calling address.Trim.
             If String.IsNullOrWhiteSpace(address) Then
                 Throw GetArgumentNullException(NameOf(address))
