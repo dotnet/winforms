@@ -3950,7 +3950,7 @@ public partial class Form : ContainerControl
     }
 
     /// <summary>
-    ///  Override since CanProcessMnemonic is overriden too (base.CanSelectCore calls CanProcessMnemonic).
+    ///  Override since CanProcessMnemonic is overridden too (base.CanSelectCore calls CanProcessMnemonic).
     /// </summary>
     internal override bool CanSelectCore()
     {
@@ -3979,7 +3979,7 @@ public partial class Form : ContainerControl
     }
 
     /// <summary>
-    ///  Overriden to handle MDI mnemonic processing properly.
+    ///  Overridden to handle MDI mnemonic processing properly.
     /// </summary>
     internal override bool CanProcessMnemonic()
     {
@@ -3996,7 +3996,7 @@ public partial class Form : ContainerControl
     }
 
     /// <summary>
-    ///  Overriden to handle MDI mnemonic processing properly.
+    ///  Overridden to handle MDI mnemonic processing properly.
     /// </summary>
     protected internal override bool ProcessMnemonic(char charCode)
     {

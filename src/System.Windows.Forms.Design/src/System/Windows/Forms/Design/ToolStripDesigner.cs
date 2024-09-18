@@ -1988,7 +1988,7 @@ internal class ToolStripDesigner : ControlDesigner
     }
 
     /// <summary>
-    ///  Overriden so that the ToolStrip honors dragging only through container selector glyph.
+    ///  Overridden so that the ToolStrip honors dragging only through container selector glyph.
     /// </summary>
     protected override void OnMouseDragMove(int x, int y)
     {
