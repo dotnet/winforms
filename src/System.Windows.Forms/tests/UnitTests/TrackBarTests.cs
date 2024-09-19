@@ -2014,7 +2014,7 @@ public class TrackBarTests
     [InlineData(9)]
     [InlineData(10)]
     [InlineData(11)]
-    public void TrackBar_Value_SetInitialising_GetReturnsExpected(int value)
+    public void TrackBar_Value_SetInitializing_GetReturnsExpected(int value)
     {
         using TrackBar control = new();
         control.BeginInit();

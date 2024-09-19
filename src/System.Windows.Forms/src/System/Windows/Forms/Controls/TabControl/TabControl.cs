@@ -126,7 +126,7 @@ public partial class TabControl : Control
     }
 
     /// <summary>
-    ///  Indicates whether the tabs in the tabstrip look like regular tabs, or if they look
+    ///  Indicates whether the tabs in the TabStrip look like regular tabs, or if they look
     ///  like buttons as seen in the Windows 95 taskbar.
     ///  If the alignment is anything other than top, TabAppearance.FlatButtons degenerates
     ///  to TabAppearance.Buttons.
@@ -172,7 +172,7 @@ public partial class TabControl : Control
         get
         {
             // The tab control can only be rendered in 1 color: System's Control color.
-            // So, always return this value... otherwise, we're inheriting the forms backcolor
+            // So, always return this value... otherwise, we're inheriting the forms BackColor
             // and passing it on to the pab pages.
             return SystemColors.Control;
         }
@@ -503,7 +503,7 @@ public partial class TabControl : Control
         {
             if (_itemSize.IsEmpty)
             {
-                // Obtain the current itemsize of the first tab from the winctl control
+                // Obtain the current ItemSize of the first tab from the winctl control
                 if (IsHandleCreated)
                 {
                     SetState(State.GetTabRectfromItemSize, true);
@@ -859,7 +859,7 @@ public partial class TabControl : Control
     }
 
     /// <summary>
-    ///  Occurs before a tabpage is selected as the top tabPage.
+    ///  Occurs before a TabPage is selected as the top TabPage.
     /// </summary>
     [SRCategory(nameof(SR.CatAction))]
     [SRDescription(nameof(SR.TabControlSelectingEventDescr))]
@@ -870,7 +870,7 @@ public partial class TabControl : Control
     }
 
     /// <summary>
-    ///  Occurs after a tabpage is selected as the top tabPage.
+    ///  Occurs after a TabPage is selected as the top TabPage.
     /// </summary>
     [SRCategory(nameof(SR.CatAction))]
     [SRDescription(nameof(SR.TabControlSelectedEventDescr))]
@@ -881,7 +881,7 @@ public partial class TabControl : Control
     }
 
     /// <summary>
-    ///  Occurs before the visible property of the top tabpage is set to false.
+    ///  Occurs before the visible property of the top TabPage is set to false.
     /// </summary>
     [SRCategory(nameof(SR.CatAction))]
     [SRDescription(nameof(SR.TabControlDeselectingEventDescr))]
@@ -892,7 +892,7 @@ public partial class TabControl : Control
     }
 
     /// <summary>
-    ///  Occurs after the visible property of the top tabpage is set to false.
+    ///  Occurs after the visible property of the top TabPage is set to false.
     /// </summary>
     [SRCategory(nameof(SR.CatAction))]
     [SRDescription(nameof(SR.TabControlDeselectedEventDescr))]
@@ -903,7 +903,7 @@ public partial class TabControl : Control
     }
 
     /// <summary>
-    ///  TabControl Onpaint.
+    ///  TabControl OnPaint.
     /// </summary>
     /// <hideinheritance/>
     [Browsable(false)]
@@ -972,7 +972,7 @@ public partial class TabControl : Control
     private void DetachImageList(object? sender, EventArgs e) => ImageList = null;
 
     /// <summary>
-    ///  Allows the user to specify the index in Tabcontrol.TabPageCollection of the tabpage to be hidden.
+    ///  Allows the user to specify the index in TabControl.TabPageCollection of the TabPage to be hidden.
     /// </summary>
     public void DeselectTab(int index)
     {
@@ -991,7 +991,7 @@ public partial class TabControl : Control
     }
 
     /// <summary>
-    ///  Allows the user to specify the tabpage in Tabcontrol.TabPageCollection  to be hidden.
+    ///  Allows the user to specify the TabPage in TabControl.TabPageCollection to be hidden.
     /// </summary>
     public void DeselectTab(TabPage tabPage)
     {
@@ -1002,7 +1002,7 @@ public partial class TabControl : Control
     }
 
     /// <summary>
-    ///  Allows the user to specify the name of the tabpage in Tabcontrol.TabPageCollection to be hidden.
+    ///  Allows the user to specify the name of the TabPage in TabControl.TabPageCollection to be hidden.
     /// </summary>
     public void DeselectTab(string tabPageName)
     {
@@ -1156,7 +1156,7 @@ public partial class TabControl : Control
     }
 
     /// <summary>
-    ///  This function is used by the Insert Logic to insert a tabPage in the current TabPage in the TabPageCollection.
+    ///  This function is used by the Insert Logic to insert a TabPage in the current TabPage in the TabPageCollection.
     /// </summary>
     private void InsertItem(int index, TabPage tabPage)
     {
@@ -1326,11 +1326,11 @@ public partial class TabControl : Control
     ///  adding an event handler on yourself for this event]. They should,
     ///  however, remember to call base.OnLeave(e); to ensure the event is
     ///  still fired to external listeners
-    ///  This listener is overidden so that we can fire SAME ENTER and LEAVE
+    ///  This listener is overridden so that we can fire SAME ENTER and LEAVE
     ///  events on the TabPage.
     ///  TabPage should fire enter when the focus is on the TABPAGE and not when the control
     ///  within the TabPage gets Focused.
-    ///  Similary the Leave event should fire when the TabControl (and hence the TabPage) looses
+    ///  Similarly the Leave event should fire when the TabControl (and hence the TabPage) looses
     ///  Focus. To be Backward compatible we have added new bool which can be set to true
     ///  to the get the NEW SANE ENTER-LEAVE EVENTS ON THE TABPAGE.
     /// </summary>
@@ -1536,7 +1536,7 @@ public partial class TabControl : Control
 
         int index = ((tabPages.Length > 0) && (SelectedIndex == -1)) ? 0 : SelectedIndex;
 
-        // We don't actually want to remove the windows forms Tabpages - we only
+        // We don't actually want to remove the windows forms TabPages - we only
         // want to remove the corresponding TCITEM structs.
         // So, no RemoveAll()
         if (IsHandleCreated)
@@ -1654,7 +1654,7 @@ public partial class TabControl : Control
     }
 
     /// <summary>
-    ///  Allows the user to specify the index in Tabcontrol.TabPageCollection of the tabpage to be shown.
+    ///  Allows the user to specify the index in TabControl.TabPageCollection of the tabPage to be shown.
     /// </summary>
     public void SelectTab(int index)
     {
@@ -1666,7 +1666,7 @@ public partial class TabControl : Control
     }
 
     /// <summary>
-    ///  Allows the user to specify the tabpage in Tabcontrol.TabPageCollection  to be shown.
+    ///  Allows the user to specify the TabPage in TabControl.TabPageCollection to be shown.
     /// </summary>
     public void SelectTab(TabPage tabPage)
     {
@@ -1677,7 +1677,7 @@ public partial class TabControl : Control
     }
 
     /// <summary>
-    ///  Allows the user to specify the name of the tabpage in Tabcontrol.TabPageCollection to be shown.
+    ///  Allows the user to specify the name of the TabPage in TabControl.TabPageCollection to be shown.
     /// </summary>
     public void SelectTab(string tabPageName)
     {
@@ -1688,12 +1688,12 @@ public partial class TabControl : Control
     }
 
     /// <summary>
-    ///  This is called by TabControl in response to the KeyDown event to override the selection of tabpages
+    ///  This is called by TabControl in response to the KeyDown event to override the selection of tabPages
     ///  for different key combinations.
-    ///  Control + Tab selects the next tabpage.
-    ///  Control + Shift + Tab selects the previous tabpage.
-    ///  Control + PageDown selects the next tabpage.
-    ///  Control + PageUp selects the previous tabpage.
+    ///  Control + Tab selects the next TabPage.
+    ///  Control + Shift + Tab selects the previous TabPage.
+    ///  Control + PageDown selects the next TabPage.
+    ///  Control + PageUp selects the previous TabPage.
     /// </summary>
     private void SelectNextTab(KeyEventArgs ke, bool forward)
     {
@@ -1746,7 +1746,7 @@ public partial class TabControl : Control
                 }
                 finally
                 {
-                    // tabControlState[State.SelectFirstControl] can be true if the TabControl is not focussed
+                    // tabControlState[State.SelectFirstControl] can be true if the TabControl is not focused
                     // But at the end of this function reset the state !!
                     SetState(State.SelectFirstControl, false);
                     ke.Handled = true;
@@ -1810,9 +1810,9 @@ public partial class TabControl : Control
             TabPage[] tabPages = GetTabPages();
             if (index != -1)
             {
-                // Changing the bounds of the tabPage during scaling
+                // Changing the bounds of the TabPage during scaling
                 // will force a layout to occur. After this layout
-                // the tabpage will then be scaled again resulting
+                // the TabPage will then be scaled again resulting
                 // in incorrect sizes. Suspend Layout in this case.
                 if (_currentlyScaling)
                 {
@@ -1824,7 +1824,7 @@ public partial class TabControl : Control
                 // After changing the Bounds of TabPages, we need to
                 // make TabPages Redraw.
                 // Use Invalidate directly here has no performance
-                // issue, since ReSize is calling low frequence.
+                // issue, since ReSize is calling low frequency.
                 tabPages[index].Invalidate();
 
                 if (_currentlyScaling)

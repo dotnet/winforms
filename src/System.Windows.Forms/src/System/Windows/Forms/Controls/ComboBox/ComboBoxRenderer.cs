@@ -27,7 +27,7 @@ public static class ComboBoxRenderer
     {
         t_visualStyleRenderer!.DrawBackground(g, bounds);
 
-        // for disabled comboboxes, comctl does not use the window backcolor, so
+        // for disabled ComboBoxes, comctl does not use the window BackColor, so
         // we don't refill here in that case.
         if (state != ComboBoxState.Disabled)
         {

@@ -452,7 +452,7 @@ public static unsafe partial class ControlPaint
                 imageRectangle.X += clipRect.Width - imageRectangle.Width;
             }
 
-            // We fill the entire cliprect with the backcolor in case the image is transparent.
+            // We fill the entire clipRect with the BackColor in case the image is transparent.
             // Also, if gdi+ can't quite fill the rect with the image, they will interpolate the remaining
             // pixels, and make them semi-transparent. This is another reason why we need to fill the entire rect.
             // If we didn't where ever the image was transparent, we would get garbage.

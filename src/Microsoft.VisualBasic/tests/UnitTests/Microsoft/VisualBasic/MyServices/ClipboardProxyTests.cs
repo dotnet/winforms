@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+#nullable enable
+
 using System.Drawing;
 using Microsoft.VisualBasic.Devices;
 using DataFormats = System.Windows.Forms.DataFormats;
@@ -11,7 +13,6 @@ namespace Microsoft.VisualBasic.MyServices.Tests;
 // Each registered Clipboard format is an OS singleton,
 // and we should not run this test at the same time as other tests using the same format.
 [Collection("Sequential")]
-[CollectionDefinition("Sequential", DisableParallelization = true)]
 public class ClipboardProxyTests
 {
     private static string GetUniqueText() => Guid.NewGuid().ToString("D");
@@ -55,7 +56,7 @@ public class ClipboardProxyTests
         var clipboard = new Computer().Clipboard;
         object data = GetUniqueText();
         clipboard.SetDataObject(new System.Windows.Forms.DataObject(data));
-        clipboard.GetDataObject().GetData(DataFormats.UnicodeText).Should().Be(System.Windows.Forms.Clipboard.GetDataObject().GetData(DataFormats.UnicodeText));
+        clipboard.GetDataObject().GetData(DataFormats.UnicodeText).Should().Be(System.Windows.Forms.Clipboard.GetDataObject()?.GetData(DataFormats.UnicodeText));
     }
 
     [WinFormsFact]
