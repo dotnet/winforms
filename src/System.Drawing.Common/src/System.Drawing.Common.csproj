@@ -63,7 +63,7 @@
       <PrivateAssets>all</PrivateAssets>
     </ProjectReference>
 
-    <PackageReference Include="Microsoft.Win32.SystemEvents"/>
+    <PackageReference Include="Microsoft.Win32.SystemEvents" />
     <PackageReference Include="Microsoft.Windows.CsWin32">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
