@@ -2,6 +2,8 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.ComponentModel
+Imports System.IO
+Imports System.Security.Permissions
 Imports Microsoft.VisualBasic.FileIO
 
 Namespace Microsoft.VisualBasic.MyServices
@@ -24,9 +26,10 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  Returns the directory that serves as a common repository for data files
         '''  from your application used by all users.
         ''' </summary>
-        ''' <value>
-        '''  A String containing the path to the directory your application can use to store data for all users.
-        ''' </value>
+        ''' <value><see cref="SpecialDirectories.AllUsersApplicationData"/></value>
+        ''' <exception cref="DirectoryNotFoundException">
+        '''  The path is empty, usually because the operating system does not support the directory.
+        ''' </exception>
         ''' <remarks>
         '''  If a path does not exist, one is created in the following format
         '''  C:\Documents and Settings\All Users\Application Data\[CompanyName]\[ProductName]\[ProductVersion]
@@ -40,12 +43,12 @@ Namespace Microsoft.VisualBasic.MyServices
         End Property
 
         ''' <summary>
-        '''  Returns the directory that serves as a common repository for data files
-        '''  from your application used only by the current user.
+        '''  The path to the Application Data directory for the current user.
         ''' </summary>
-        ''' <value>
-        '''  A String containing the path to the directory your application can use to store data for the current user.
-        ''' </value>
+        ''' <value><see cref="SpecialDirectories.CurrentUserApplicationData"/></value>
+        ''' <exception cref="DirectoryNotFoundException">
+        '''  The path is empty, usually because the operating system does not support the directory.
+        ''' </exception>
         ''' <remarks>
         '''  If a path does not exist, one is created in the following format
         '''  C:\Documents and Settings\[UserName]\Application Data\[CompanyName]\[ProductName]\[ProductVersion]
@@ -66,10 +69,13 @@ Namespace Microsoft.VisualBasic.MyServices
         End Property
 
         ''' <summary>
-        '''  Return the current user's Desktop directory.
+        '''  The path to the Desktop directory.
         ''' </summary>
-        ''' <value>A String containing the path to the current user's Desktop directory.</value>
+        ''' <value><see cref="SpecialDirectories.Desktop"/></value>
         ''' <remarks>This directory is C:\Document and Settings\[UserName]\Desktop.</remarks>
+        ''' <exception cref="DirectoryNotFoundException">
+        '''  The path is empty, usually because the operating system does not support the directory.
+        ''' </exception>
         Public ReadOnly Property Desktop() As String
             Get
                 Return SpecialDirectories.Desktop
@@ -77,13 +83,13 @@ Namespace Microsoft.VisualBasic.MyServices
         End Property
 
         ''' <summary>
-        '''  Return the directory that serves as a common repository for user's personal documents.
+        '''  The path to the My Documents directory
         ''' </summary>
-        ''' <value>A String containing the path to the user's personal documents.</value>
-        ''' <exception cref="IO.DirectoryNotFoundException">
-        '''  If the system does not have the notion of My Documents directory.
-        ''' </exception>
+        ''' <value><see cref="SpecialDirectories.MyDocuments"/></value>
         ''' <remarks>This directory is usually: C:\Documents and Settings\[UserName]\My Documents.</remarks>
+        ''' <exception cref="DirectoryNotFoundException">
+        '''  The path is empty, usually because the operating system does not support the directory.
+        ''' </exception>
         Public ReadOnly Property MyDocuments() As String
             Get
                 Return SpecialDirectories.MyDocuments
@@ -91,13 +97,13 @@ Namespace Microsoft.VisualBasic.MyServices
         End Property
 
         ''' <summary>
-        '''  Return the "My Music" directory.
+        '''  The path to the My Music directory.
         ''' </summary>
-        ''' <value>A String containing the path to the user's "My Music" directory.</value>
-        ''' <exception cref="IO.DirectoryNotFoundException">
-        '''  If the system does not have the notion of My Music directory.
-        ''' </exception>
+        ''' <value><see cref="SpecialDirectories.MyMusic"/></value>
         ''' <remarks>This directory is C:\Documents and Settings\[UserName]\My Music</remarks>
+        ''' <exception cref="DirectoryNotFoundException">
+        '''  The path is empty, usually because the operating system does not support the directory.
+        ''' </exception>
         Public ReadOnly Property MyMusic() As String
             Get
                 Return SpecialDirectories.MyMusic
@@ -105,13 +111,13 @@ Namespace Microsoft.VisualBasic.MyServices
         End Property
 
         ''' <summary>
-        '''  Return the "My Pictures" directory.
+        '''  The path to the My Pictures directory.
         ''' </summary>
-        ''' <value>A String containing the path to the user's "My Pictures" directory.</value>
-        ''' <exception cref="IO.DirectoryNotFoundException">
-        '''  If the system does not have the notion of My Pictures directory.
-        ''' </exception>
+        ''' <value><see cref="SpecialDirectories.MyPictures"/></value>
         ''' <remarks>This directory is C:\Documents and Settings\[UserName]\My Pictures.</remarks>
+        ''' <exception cref="DirectoryNotFoundException">
+        '''  The path is empty, usually because the operating system does not support the directory.
+        ''' </exception>
         Public ReadOnly Property MyPictures() As String
             Get
                 Return SpecialDirectories.MyPictures
@@ -119,10 +125,13 @@ Namespace Microsoft.VisualBasic.MyServices
         End Property
 
         ''' <summary>
-        '''  Return the program files directory.
+        '''
         ''' </summary>
-        ''' <value>A String containing the path to the default program directories.</value>
+        ''' <value><see cref="SpecialDirectories.ProgramFiles"/></value>
         ''' <remarks>This directory is C:\Program Files.</remarks>
+        ''' <exception cref="DirectoryNotFoundException">
+        '''  The path is empty, usually because the operating system does not support the directory.
+        ''' </exception>
         Public ReadOnly Property ProgramFiles() As String
             Get
                 Return SpecialDirectories.ProgramFiles
@@ -130,10 +139,13 @@ Namespace Microsoft.VisualBasic.MyServices
         End Property
 
         ''' <summary>
-        '''  Returns the directory used to store program shortcuts from Start Menu for current user.
+        '''  The path to the Programs directory.
         ''' </summary>
-        ''' <value>A String containing the path to the Start Menu \ Programs directory.</value>
+        ''' <value><see cref="SpecialDirectories.Programs"/></value>
         ''' <remarks>This directory is C:\Document and Settings\[UserName]\Start Menu\Programs.</remarks>
+        ''' <exception cref="DirectoryNotFoundException">
+        '''  The path is empty, usually because the operating system does not support the directory.
+        ''' </exception>
         Public ReadOnly Property Programs() As String
             Get
                 Return SpecialDirectories.Programs
@@ -141,14 +153,17 @@ Namespace Microsoft.VisualBasic.MyServices
         End Property
 
         ''' <summary>
-        '''  Return the directory that contain temporary files for the current user.
+        '''  The path to the Temp directory.
         ''' </summary>
-        ''' <value>A String containing the path to the temporary directory for the current user.</value>
+        ''' <value><see cref="SpecialDirectories.Temp"/></value>
         ''' <remarks>
         '''  According to Win32 API document, GetTempPath should always return a value even if TEMP and TMP = "".
         '''  Also, this is not updated if TEMP or TMP is changed in Windows. The reason is
         '''  each process has its own copy of the environment variables and this copy is not updated.
         ''' </remarks>
+        ''' <exception cref="DirectoryNotFoundException">
+        '''  The path is empty, usually because the operating system does not support the directory.
+        ''' </exception>
         Public ReadOnly Property Temp() As String
             Get
                 Return SpecialDirectories.Temp
