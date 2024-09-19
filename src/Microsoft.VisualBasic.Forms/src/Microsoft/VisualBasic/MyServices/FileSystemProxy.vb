@@ -390,7 +390,7 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' <exception cref="ArgumentNullException">
         '''  <paramref name="directory"/> is <see langword="Nothing"/> or an empty string.
         ''' </exception>
-        ''' <exception cref="DirectoryNotFoundException">The directory does not exist or is a file.</exception>
+        ''' <exception cref="IO.DirectoryNotFoundException">The directory does not exist or is a file.</exception>
         ''' <exception cref="IO.IOException">A file in the directory or subdirectory is in use.</exception>
         ''' <exception cref="NotSupportedException">
         '''  The directory name is only a colon (:).
@@ -464,7 +464,7 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' <exception cref="ArgumentNullException">
         '''  <paramref name="directory"/> is <see langword="Nothing"/> or an empty string.
         ''' </exception>
-        ''' <exception cref="Io.DirectoryNotFoundException">The directory does not exist or is a file.</exception>
+        ''' <exception cref="IO.DirectoryNotFoundException">The directory does not exist or is a file.</exception>
         ''' <exception cref="IO.IOException">A file in the directory or subdirectory is in use.</exception>
         ''' <exception cref="NotSupportedException">
         '''  The directory name is only a colon (:).
