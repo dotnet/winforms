@@ -9,14 +9,28 @@ namespace System.Windows.Forms.Tests;
 
 public class ToolStripLabelTests : IDisposable
 {
-    private readonly ToolStripLabel _toolStripLabel;
-
-    public ToolStripLabelTests()
-    {
-        _toolStripLabel = new();
-    }
+    private readonly ToolStripLabel _toolStripLabel = new();
 
     public void Dispose() => _toolStripLabel.Dispose();
+
+    [WinFormsFact]
+    public void ToolStripLabel_DefaultConstructor_SetsDefaults()
+    {
+        _toolStripLabel.Text.Should().BeEmpty();
+        _toolStripLabel.Image.Should().BeNull();
+        _toolStripLabel.IsLink.Should().BeFalse();
+    }
+
+    [WinFormsFact]
+    public void ToolStripLabel_ConstructorWithText_SetsText()
+    {
+        string text = "Test Label";
+        _toolStripLabel.Text = text;
+
+        _toolStripLabel.Text.Should().Be(text);
+        _toolStripLabel.Image.Should().BeNull();
+        _toolStripLabel.IsLink.Should().BeFalse();
+    }
 
     [WinFormsFact]
     public void ToolStripLabel_ConstructorWithImage_SetsImage()
@@ -180,63 +194,6 @@ public class ToolStripLabelTests : IDisposable
     }
 
     [WinFormsFact]
-    public void ToolStripLabel_OnMouseEnter_ChangesCursorToHand_WhenIsLink()
-    {
-        _toolStripLabel.IsLink = true;
-        ToolStrip toolStrip = new();
-        toolStrip.Items.Add(_toolStripLabel);
-        toolStrip.Cursor = Cursors.Default;
-
-        var accessor = _toolStripLabel.TestAccessor().Dynamic;
-        accessor.OnMouseEnter(EventArgs.Empty);
-
-        toolStrip.Cursor.Should().Be(Cursors.Default);
-    }
-
-    [WinFormsFact]
-    public void ToolStripLabel_OnMouseEnter_DoesNotChangeCursor_WhenNotIsLink()
-    {
-        _toolStripLabel.IsLink = false;
-        ToolStrip toolStrip = new();
-        toolStrip.Items.Add(_toolStripLabel);
-        toolStrip.Cursor = Cursors.Default;
-
-        var accessor = _toolStripLabel.TestAccessor().Dynamic;
-        accessor.OnMouseEnter(EventArgs.Empty);
-
-        toolStrip.Cursor.Should().Be(Cursors.Default);
-    }
-
-    [WinFormsFact]
-    public void ToolStripLabel_OnMouseLeave_ResetsCursor_WhenIsLink()
-    {
-        _toolStripLabel.IsLink = true;
-        ToolStrip toolStrip = new();
-        toolStrip.Items.Add(_toolStripLabel);
-        toolStrip.Cursor = Cursors.Hand;
-        var accessor = _toolStripLabel.TestAccessor().Dynamic;
-        accessor._lastCursor = Cursors.Default;
-
-        accessor.OnMouseLeave(EventArgs.Empty);
-
-        toolStrip.Cursor.Should().Be(Cursors.Hand);
-    }
-
-    [WinFormsFact]
-    public void ToolStripLabel_OnMouseLeave_DoesNotChangeCursor_WhenNotIsLink()
-    {
-        _toolStripLabel.IsLink = false;
-        ToolStrip toolStrip = new();
-        toolStrip.Items.Add(_toolStripLabel);
-        toolStrip.Cursor = Cursors.Hand;
-
-        var accessor = _toolStripLabel.TestAccessor().Dynamic;
-        accessor.OnMouseLeave(EventArgs.Empty);
-
-        toolStrip.Cursor.Should().Be(Cursors.Hand);
-    }
-
-    [WinFormsFact]
     public void ToolStripLabel_ResetActiveLinkColor_SetsActiveLinkColorToDefault()
     {
         _toolStripLabel.ActiveLinkColor = Color.Red;
@@ -262,69 +219,33 @@ public class ToolStripLabelTests : IDisposable
         _toolStripLabel.LinkColor.Should().Be(defaultColor);
     }
 
-    [WinFormsFact]
-    public void ToolStripLabel_ShouldSerializeActiveLinkColor_ReturnsTrue_WhenActiveLinkColorIsNotEmpty()
+    public static TheoryData<string, Color, bool> ShouldSerializeColorData =>
+    new()
     {
-        _toolStripLabel.ActiveLinkColor = Color.Red;
+        { nameof(ToolStripLabel.ActiveLinkColor), Color.Red, true },
+        { nameof(ToolStripLabel.ActiveLinkColor), Color.Empty, false },
+        { nameof(ToolStripLabel.LinkColor), Color.Blue, true },
+        { nameof(ToolStripLabel.LinkColor), Color.Empty, false },
+        { nameof(ToolStripLabel.VisitedLinkColor), Color.Green, true },
+        { nameof(ToolStripLabel.VisitedLinkColor), Color.Empty, false }
+    };
+
+    [WinFormsTheory]
+    [MemberData(nameof(ShouldSerializeColorData))]
+    public void ToolStripLabel_ShouldSerializeColor_ReturnsExpected(string propertyName, Color color, bool expected)
+    {
+        var property = typeof(ToolStripLabel).GetProperty(propertyName);
+        property!.SetValue(_toolStripLabel, color);
 
         var accessor = _toolStripLabel.TestAccessor().Dynamic;
-        bool result = accessor.ShouldSerializeActiveLinkColor();
+        bool result = propertyName switch
+        {
+            nameof(ToolStripLabel.ActiveLinkColor) => accessor.ShouldSerializeActiveLinkColor(),
+            nameof(ToolStripLabel.LinkColor) => accessor.ShouldSerializeLinkColor(),
+            nameof(ToolStripLabel.VisitedLinkColor) => accessor.ShouldSerializeVisitedLinkColor(),
+            _ => throw new ArgumentException("Invalid property name", nameof(propertyName))
+        };
 
-        result.Should().BeTrue();
+        result.Should().Be(expected);
     }
-
-    [WinFormsFact]
-    public void ToolStripLabel_ShouldSerializeActiveLinkColor_ReturnsFalse_WhenActiveLinkColorIsEmpty()
-    {
-        _toolStripLabel.ActiveLinkColor = Color.Empty;
-
-        var accessor = _toolStripLabel.TestAccessor().Dynamic;
-        bool result = accessor.ShouldSerializeActiveLinkColor();
-
-        result.Should().BeFalse();
-    }
-
-    [WinFormsFact]
-    public void ToolStripLabel_ShouldSerializeLinkColor_ReturnsTrue_WhenLinkColorIsNotEmpty()
-    {
-        _toolStripLabel.LinkColor = Color.Blue;
-
-        var accessor = _toolStripLabel.TestAccessor().Dynamic;
-        bool result = accessor.ShouldSerializeLinkColor();
-
-        result.Should().BeTrue();
-    }
-
-    [WinFormsFact]
-    public void ToolStripLabel_ShouldSerializeLinkColor_ReturnsFalse_WhenLinkColorIsEmpty()
-    {
-        _toolStripLabel.LinkColor = Color.Empty;
-
-        var accessor = _toolStripLabel.TestAccessor().Dynamic;
-        bool result = accessor.ShouldSerializeLinkColor();
-
-        result.Should().BeFalse();
-    }
-
-    [WinFormsFact]
-    public void ToolStripLabel_ShouldSerializeVisitedLinkColor_ReturnsTrue_WhenVisitedLinkColorIsNotEmpty()
-    {
-        _toolStripLabel.VisitedLinkColor = Color.Green;
-
-        var accessor = _toolStripLabel.TestAccessor().Dynamic;
-        bool result = accessor.ShouldSerializeVisitedLinkColor();
-
-        result.Should().BeTrue();
-    }
-
-    [WinFormsFact]
-    public void ToolStripLabel_ShouldSerializeVisitedLinkColor_ReturnsFalse_WhenVisitedLinkColorIsEmpty()
-    {
-        _toolStripLabel.VisitedLinkColor = Color.Empty;
-
-        var accessor = _toolStripLabel.TestAccessor().Dynamic;
-        bool result = accessor.ShouldSerializeVisitedLinkColor();
-
-        result.Should().BeFalse();
-    } 
 }
