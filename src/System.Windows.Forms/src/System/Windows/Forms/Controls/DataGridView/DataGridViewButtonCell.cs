@@ -45,7 +45,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
             Debug.Assert((value & ~(ButtonState.Normal | ButtonState.Pushed | ButtonState.Checked)) == 0);
             if (ButtonState != value)
             {
-                Properties.AddOrRemoveValue(s_propButtonCellState, value, ButtonState.Normal);
+                Properties.AddOrRemoveValue(s_propButtonCellState, value, defaultValue: ButtonState.Normal);
             }
         }
     }
@@ -63,7 +63,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
             SourceGenerated.EnumValidator.Validate(value);
             if (value != FlatStyle)
             {
-                Properties.AddOrRemoveValue(s_propButtonCellFlatStyle, value, FlatStyle.Standard);
+                Properties.AddOrRemoveValue(s_propButtonCellFlatStyle, value, defaultValue: FlatStyle.Standard);
                 OnCommonChange();
             }
         }

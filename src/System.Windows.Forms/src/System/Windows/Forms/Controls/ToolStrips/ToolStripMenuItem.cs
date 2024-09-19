@@ -307,7 +307,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
 
             if (value != CheckState)
             {
-                Properties.AddOrRemoveValue(s_propCheckState, value, CheckState.Unchecked);
+                Properties.AddOrRemoveValue(s_propCheckState, value, defaultValue: CheckState.Unchecked);
                 OnCheckedChanged(EventArgs.Empty);
                 OnCheckStateChanged(EventArgs.Empty);
             }
@@ -392,7 +392,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
                 }
             }
 
-            Properties.AddOrRemoveValue(s_propShortcutKeys, value, Keys.None);
+            Properties.AddOrRemoveValue(s_propShortcutKeys, value, defaultValue: Keys.None);
 
             if (ShowShortcutKeys && IsOnDropDown)
             {

@@ -2164,7 +2164,7 @@ public partial class Form : ContainerControl
         get => Properties.GetValueOrDefault(s_propTransparencyKey, Color.Empty);
         set
         {
-            Properties.AddOrRemoveValue(s_propTransparencyKey, value, Color.Empty);
+            Properties.AddOrRemoveValue(s_propTransparencyKey, value, defaultValue: Color.Empty);
             if (!IsMdiContainer)
             {
                 bool oldLayered = (_formState[s_formStateLayered] == 1);
@@ -2361,7 +2361,7 @@ public partial class Form : ContainerControl
                 _ => throw new ArgumentOutOfRangeException(nameof(value))
             };
 
-            Properties.AddOrRemoveValue(s_propFormCornerPreference, value, FormCornerPreference.Default);
+            Properties.AddOrRemoveValue(s_propFormCornerPreference, value, defaultValue: FormCornerPreference.Default);
 
             if (IsHandleCreated)
             {
@@ -2444,7 +2444,7 @@ public partial class Form : ContainerControl
                 return;
             }
 
-            Properties.AddOrRemoveValue(s_propFormBorderColor, value, Color.Empty);
+            Properties.AddOrRemoveValue(s_propFormBorderColor, value, defaultValue: Color.Empty);
 
             if (IsHandleCreated)
             {
@@ -2506,7 +2506,7 @@ public partial class Form : ContainerControl
                 return;
             }
 
-            Properties.AddOrRemoveValue(s_propFormCaptionBackColor, value, Color.Empty);
+            Properties.AddOrRemoveValue(s_propFormCaptionBackColor, value, defaultValue: Color.Empty);
 
             if (IsHandleCreated)
             {
@@ -2569,7 +2569,7 @@ public partial class Form : ContainerControl
                 return;
             }
 
-            Properties.AddOrRemoveValue(s_propFormCaptionTextColor, value, Color.Empty);
+            Properties.AddOrRemoveValue(s_propFormCaptionTextColor, value, defaultValue: Color.Empty);
 
             if (IsHandleCreated)
             {

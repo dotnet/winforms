@@ -232,19 +232,21 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         set
         {
             SourceGenerated.EnumValidator.Validate(value);
-            if (value != DisplayStyle)
+            if (value == DisplayStyle)
             {
-                Properties.AddOrRemoveValue(s_propComboBoxCellDisplayStyle, value, DataGridViewComboBoxDisplayStyle.DropDownButton);
-                if (DataGridView is not null)
+                return;
+            }
+
+            Properties.AddOrRemoveValue(s_propComboBoxCellDisplayStyle, value, defaultValue: DataGridViewComboBoxDisplayStyle.DropDownButton);
+            if (DataGridView is not null)
+            {
+                if (RowIndex != -1)
                 {
-                    if (RowIndex != -1)
-                    {
-                        DataGridView.InvalidateCell(this);
-                    }
-                    else
-                    {
-                        DataGridView.InvalidateColumnInternal(ColumnIndex);
-                    }
+                    DataGridView.InvalidateCell(this);
+                }
+                else
+                {
+                    DataGridView.InvalidateColumnInternal(ColumnIndex);
                 }
             }
         }
@@ -358,7 +360,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
             SourceGenerated.EnumValidator.Validate(value);
             if (value != FlatStyle)
             {
-                Properties.AddOrRemoveValue(s_propComboBoxCellFlatStyle, value, FlatStyle.Standard);
+                Properties.AddOrRemoveValue(s_propComboBoxCellFlatStyle, value, defaultValue: FlatStyle.Standard);
                 OnCommonChange();
             }
         }
@@ -391,10 +393,13 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         {
             if (value is < 1 or > 100)
             {
-                throw new ArgumentOutOfRangeException(nameof(MaxDropDownItems), value, string.Format(SR.DataGridViewComboBoxCell_MaxDropDownItemsOutOfRange, 1, 100));
+                throw new ArgumentOutOfRangeException(
+                    nameof(MaxDropDownItems),
+                    value,
+                    string.Format(SR.DataGridViewComboBoxCell_MaxDropDownItemsOutOfRange, 1, 100));
             }
 
-            Properties.AddOrRemoveValue(s_propComboBoxCellMaxDropDownItems, value, DefaultMaxDropDownItems);
+            Properties.AddOrRemoveValue(s_propComboBoxCellMaxDropDownItems, value, defaultValue: DefaultMaxDropDownItems);
             if (OwnsEditingComboBox(RowIndex))
             {
                 EditingComboBox.MaxDropDownItems = value;

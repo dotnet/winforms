@@ -120,7 +120,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
             SourceGenerated.EnumValidator.Validate(value);
             if (value != LinkBehavior)
             {
-                Properties.AddOrRemoveValue(s_propLinkCellLinkBehavior, value, LinkBehavior.SystemDefault);
+                Properties.AddOrRemoveValue(s_propLinkCellLinkBehavior, value, defaultValue: LinkBehavior.SystemDefault);
                 if (DataGridView is not null)
                 {
                     if (RowIndex != -1)
@@ -143,7 +143,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
             Debug.Assert(value is >= LinkBehavior.SystemDefault and <= LinkBehavior.NeverUnderline);
             if (value != LinkBehavior)
             {
-                Properties.AddOrRemoveValue(s_propLinkCellLinkBehavior, value, LinkBehavior.SystemDefault);
+                Properties.AddOrRemoveValue(s_propLinkCellLinkBehavior, value, defaultValue: LinkBehavior.SystemDefault);
             }
         }
     }
@@ -214,7 +214,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
         {
             if (LinkState != value)
             {
-                Properties.AddOrRemoveValue(s_propLinkCellLinkState, value, LinkState.Normal);
+                Properties.AddOrRemoveValue(s_propLinkCellLinkState, value, defaultValue: LinkState.Normal);
             }
         }
     }
@@ -253,7 +253,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
         {
             if (value != TrackVisitedState)
             {
-                Properties.AddOrRemoveValue(s_propLinkCellTrackVisitedState, value, true);
+                Properties.AddOrRemoveValue(s_propLinkCellTrackVisitedState, value, defaultValue: true);
                 if (DataGridView is not null)
                 {
                     if (RowIndex != -1)
@@ -275,7 +275,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
         {
             if (value != TrackVisitedState)
             {
-                Properties.AddOrRemoveValue(s_propLinkCellTrackVisitedState, value, true);
+                Properties.AddOrRemoveValue(s_propLinkCellTrackVisitedState, value, defaultValue: true);
             }
         }
     }

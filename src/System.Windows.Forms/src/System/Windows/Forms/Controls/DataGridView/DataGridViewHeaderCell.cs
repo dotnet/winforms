@@ -38,7 +38,7 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
             Debug.Assert(Enum.IsDefined(value));
             if (ButtonState != value)
             {
-                Properties.AddOrRemoveValue(s_propButtonState, value, ButtonState.Normal);
+                Properties.AddOrRemoveValue(s_propButtonState, value, defaultValue: ButtonState.Normal);
             }
         }
     }

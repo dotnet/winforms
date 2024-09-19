@@ -425,7 +425,7 @@ public partial class ComboBox : ListControl
                 // valid values are 0x0 to 0x2.
                 SourceGenerated.EnumValidator.Validate(value);
                 ResetHeightCache();
-                Properties.AddOrRemoveValue(s_propDrawMode, value, DrawMode.Normal);
+                Properties.AddOrRemoveValue(s_propDrawMode, value, defaultValue: DrawMode.Normal);
                 RecreateHandle();
             }
         }
@@ -1112,7 +1112,7 @@ public partial class ComboBox : ListControl
             // Reset preferred height.
             ResetHeightCache();
 
-            Properties.AddOrRemoveValue(s_propStyle, value, ComboBoxStyle.DropDown);
+            Properties.AddOrRemoveValue(s_propStyle, value, defaultValue: ComboBoxStyle.DropDown);
 
             if (IsHandleCreated)
             {

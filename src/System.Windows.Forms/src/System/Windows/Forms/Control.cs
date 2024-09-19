@@ -518,7 +518,7 @@ public unsafe partial class Control :
         {
             // valid values are -1 to 0x40
             SourceGenerated.EnumValidator.Validate(value);
-            Properties.AddOrRemoveValue(s_accessibleRoleProperty, value, AccessibleRole.Default);
+            Properties.AddOrRemoveValue(s_accessibleRoleProperty, value, defaultValue: AccessibleRole.Default);
         }
     }
 

@@ -267,7 +267,7 @@ public abstract partial class ToolStripItem :
         set
         {
             SourceGenerated.EnumValidator.Validate(value);
-            Properties.AddOrRemoveValue(s_accessibleRoleProperty, value, AccessibleRole.Default);
+            Properties.AddOrRemoveValue(s_accessibleRoleProperty, value, defaultValue: AccessibleRole.Default);
             OnAccessibleRoleChanged(EventArgs.Empty);
         }
     }
@@ -1293,7 +1293,7 @@ public abstract partial class ToolStripItem :
         set
         {
             SourceGenerated.EnumValidator.Validate(value);
-            Properties.AddOrRemoveValue(s_mergeActionProperty, value, MergeAction.Append);
+            Properties.AddOrRemoveValue(s_mergeActionProperty, value, defaultValue: MergeAction.Append);
         }
     }
 
