@@ -3,6 +3,7 @@
 
 Imports System.Collections.ObjectModel
 Imports System.ComponentModel
+Imports System.Security
 Imports System.Text
 Imports Microsoft.VisualBasic.FileIO
 
@@ -53,7 +54,7 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  specific to the current user (My Documents, My Music ...) and those specific
         '''  to the current Application that a developer expects to be able to find quickly.
         ''' </summary>
-        ''' <value>a cached instance of <see cref="SpecialDirectoriesProxy"/></value>
+        ''' <value>a cached instance of SpecialDirectoriesProxy</value>
         Public ReadOnly Property SpecialDirectories() As SpecialDirectoriesProxy
             Get
                 If _specialDirectoriesProxy Is Nothing Then
@@ -69,6 +70,9 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' <param name="baseDirectory">The first part of the path.</param>
         ''' <param name="relativePath">The second part of the path, must be a relative path.</param>
         ''' <returns>A String contains the combined path.</returns>
+        ''' <exception cref="ArgumentException">
+        '''  <paramref name="baseDirectory"/> or <paramref name="relativePath"/> are malformed paths.
+        ''' </exception>
         Public Function CombinePath(baseDirectory As String, relativePath As String) As String
             Return FileIO.FileSystem.CombinePath(baseDirectory, relativePath)
         End Function
@@ -82,6 +86,22 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  The path to the target directory, can be relative or absolute.
         '''  Parent directory will always be created.
         ''' </param>
+        ''' <exception cref="ArgumentException">
+        '''  The path is not valid for one of the following reasons: it is a zero-length string;
+        '''  it contains only white space; it contains invalid characters;
+        '''  or it is a device path (starts with \.\).
+        ''' </exception>
+        ''' <exception cref="ArgumentNullException">
+        '''  <paramref name="destinationDirectoryName"/> or <paramref name="sourceDirectoryName"/>
+        '''  is <see langword="Nothing"/> or an empty string.
+        ''' </exception>
+        ''' <exception cref="IO.DirectoryNotFoundException">The source directory does not exist.</exception>
+        ''' <exception cref="IO.IOException">The source path and target path are the same.</exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="InvalidOperationException">The operation is cyclic.</exception>
+        ''' <exception cref="NotSupportedException">A folder name in the path contains a colon (:) or is in an invalid format.</exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
+        ''' <exception cref="UnauthorizedAccessException">A destination file exists but cannot be accessed.</exception>
         Public Sub CopyDirectory(sourceDirectoryName As String, destinationDirectoryName As String)
             FileIO.FileSystem.CopyDirectory(sourceDirectoryName, destinationDirectoryName)
         End Sub
@@ -99,6 +119,22 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  <see langword="True"/> to overwrite existing files with the same name.
         '''  Otherwise <see langword="False"/>.
         ''' </param>
+        ''' <exception cref="ArgumentException">
+        '''  The path is not valid for one of the following reasons: it is a zero-length string;
+        '''  it contains only white space; it contains invalid characters;
+        '''  or it is a device path (starts with \.\).
+        ''' </exception>
+        ''' <exception cref="ArgumentNullException">
+        '''  <paramref name="destinationDirectoryName"/> or <paramref name="sourceDirectoryName"/>
+        '''  is <see langword="Nothing"/> or an empty string.
+        ''' </exception>
+        ''' <exception cref="IO.DirectoryNotFoundException">The source directory does not exist.</exception>
+        ''' <exception cref="IO.IOException">The source path and target path are the same.</exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="InvalidOperationException">The operation is cyclic.</exception>
+        ''' <exception cref="NotSupportedException">A folder name in the path contains a colon (:) or is in an invalid format.</exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
+        ''' <exception cref="UnauthorizedAccessException">A destination file exists but cannot be accessed.</exception>
         Public Sub CopyDirectory(sourceDirectoryName As String, destinationDirectoryName As String, overwrite As Boolean)
             FileIO.FileSystem.CopyDirectory(sourceDirectoryName, destinationDirectoryName, overwrite)
         End Sub
@@ -115,9 +151,26 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  Parent directory will always be created.
         ''' </param>
         ''' <param name="showUI">
-        '''  <see cref="UIOption.AllDialogs"/> to display progress and confirmation dialogs,
-        '''  otherwise <see cref="UIOption.OnlyErrorDialogs"/> are shown.
+        '''  Specifies whether To visually track the operation's progress.
+        '''  Default is <see cref="UIOption.OnlyErrorDialogs"/>.
         ''' </param>
+        ''' <exception cref="ArgumentException">
+        '''  The path is not valid for one of the following reasons: it is a zero-length string;
+        '''  it contains only white space; it contains invalid characters;
+        '''  or it is a device path (starts with \.\).
+        ''' </exception>
+        ''' <exception cref="ArgumentNullException">
+        '''  <paramref name="destinationDirectoryName"/> or <paramref name="sourceDirectoryName"/>
+        '''  is <see langword="Nothing"/> or an empty string.
+        ''' </exception>
+        ''' <exception cref="IO.DirectoryNotFoundException">The source directory does not exist.</exception>
+        ''' <exception cref="IO.IOException">The source path and target path are the same.</exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="InvalidOperationException">The operation is cyclic.</exception>
+        ''' <exception cref="NotSupportedException">A folder name in the path contains a colon (:) or is in an invalid format.</exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
+        ''' <exception cref="UnauthorizedAccessException">A destination file exists but cannot be accessed.</exception>
+        ''' <exception cref="OperationCanceledException">The user cancels the operation or the directory cannot be copied.</exception>
         Public Sub CopyDirectory(sourceDirectoryName As String, destinationDirectoryName As String, showUI As UIOption)
             FileIO.FileSystem.CopyDirectory(sourceDirectoryName, destinationDirectoryName, showUI)
         End Sub
@@ -134,13 +187,31 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  Parent directory will always be created.
         ''' </param>
         ''' <param name="showUI">
-        '''  <see cref="UIOption.AllDialogs"/> to display progress and confirmation dialogs,
-        '''  otherwise <see cref="UIOption.OnlyErrorDialogs"/> are shown.
+        '''  Specifies whether To visually track the operation's progress.
+        '''  Default is <see cref="UIOption.OnlyErrorDialogs"/>.
         ''' </param>
         ''' <param name="onUserCancel">
-        '''  <see cref="UICancelOption.ThrowException"/> if user cancels the operation.
-        '''  Otherwise  <see cref="UICancelOption.DoNothing"/>.
+        '''  Specifies whether to throw an <see cref="OperationCanceledException"/> if the user clicks Cancel.>.
         ''' </param>
+        ''' <exception cref="ArgumentException">
+        '''  The path is not valid for one of the following reasons: it is a zero-length string;
+        '''  it contains only white space; it contains invalid characters;
+        '''  or it is a device path (starts with \.\).
+        ''' </exception>
+        ''' <exception cref="ArgumentNullException">
+        '''  <paramref name="destinationDirectoryName"/> or <paramref name="sourceDirectoryName"/>
+        '''  is <see langword="Nothing"/> or an empty string.
+        ''' </exception>
+        ''' <exception cref="IO.DirectoryNotFoundException">The source directory does not exist.</exception>
+        ''' <exception cref="IO.IOException">The source path and target path are the same.</exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="InvalidOperationException">The operation is cyclic.</exception>
+        ''' <exception cref="NotSupportedException">A folder name in the path contains a colon (:) or is in an invalid format.</exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
+        ''' <exception cref="UnauthorizedAccessException">A destination file exists but cannot be accessed.</exception>
+        ''' <exception cref="OperationCanceledException">
+        '''  The user cancelled the operation and <paramref name="onUserCancel"/> is set to <see cref="UICancelOption.ThrowException"/>.
+        ''' </exception>
         Public Sub CopyDirectory(
             sourceDirectoryName As String,
             destinationDirectoryName As String,
@@ -158,6 +229,20 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  The path to the destination file, can be relative or absolute.
         '''  Parent directory will always be created.
         ''' </param>
+        ''' <exception cref="ArgumentException">
+        '''  <paramref name="destinationFileName"/> contains path information.
+        ''' </exception>
+        ''' <exception cref="ArgumentNullException">
+        '''  <paramref name="destinationFileName"/> or <paramref name="sourceFileName"/> is Nothing or an empty string.
+        ''' </exception>
+        ''' <exception cref="IO.FileNotFoundException">The source file is not valid or does not exist.</exception>
+        ''' <exception cref="IO.IOException">A file in the target directory with the same name is in use.</exception>
+        ''' <exception cref="NotSupportedException">
+        '''  A file or directory name in the path contains a colon (:) or is in an invalid format.
+        ''' </exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="UnauthorizedAccessException">The user does not have required permission.</exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
         Public Sub CopyFile(sourceFileName As String, destinationFileName As String)
             FileIO.FileSystem.CopyFile(sourceFileName, destinationFileName)
         End Sub
@@ -174,6 +259,20 @@ Namespace Microsoft.VisualBasic.MyServices
         '''   <see langword="True"/> to overwrite existing file with the same name.
         '''   Otherwise <see langword="False"/>.
         '''  </param>
+        ''' <exception cref="ArgumentException">
+        '''  <paramref name="destinationFileName"/> contains path information.
+        ''' </exception>
+        ''' <exception cref="ArgumentNullException">
+        '''  <paramref name="destinationFileName"/> or <paramref name="sourceFileName"/> is Nothing or an empty string.
+        ''' </exception>
+        ''' <exception cref="IO.FileNotFoundException">The source file is not valid or does not exist.</exception>
+        ''' <exception cref="IO.IOException">A file in the target directory with the same name is in use.</exception>
+        ''' <exception cref="NotSupportedException">
+        '''  A file or directory name in the path contains a colon (:) or is in an invalid format.
+        ''' </exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="UnauthorizedAccessException">The user does not have required permission.</exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
         Public Sub CopyFile(sourceFileName As String, destinationFileName As String, overwrite As Boolean)
             FileIO.FileSystem.CopyFile(sourceFileName, destinationFileName, overwrite)
         End Sub
@@ -189,9 +288,23 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  Parent directory will always be created.
         ''' </param>
         ''' <param name="showUI">
-        '''  <see cref="UIOption.AllDialogs"/> to display progress and confirmation dialogs,
-        '''  otherwise <see cref="UIOption.OnlyErrorDialogs"/> are shown.
+        '''  Specifies whether To visually track the operation's progress.
+        '''  Default is <see cref="UIOption.OnlyErrorDialogs"/>.
         ''' </param>
+        ''' <exception cref="ArgumentException">
+        '''  <paramref name="destinationFileName"/> contains path information.
+        ''' </exception>
+        ''' <exception cref="ArgumentNullException">
+        '''  <paramref name="destinationFileName"/> or <paramref name="sourceFileName"/> is Nothing or an empty string.
+        ''' </exception>
+        ''' <exception cref="IO.FileNotFoundException">The source file is not valid or does not exist.</exception>
+        ''' <exception cref="IO.IOException">A file in the target directory with the same name is in use.</exception>
+        ''' <exception cref="NotSupportedException">
+        '''  A file or directory name in the path contains a colon (:) or is in an invalid format.
+        ''' </exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="UnauthorizedAccessException">The user does not have required permission.</exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
         Public Sub CopyFile(sourceFileName As String, destinationFileName As String, showUI As UIOption)
             FileIO.FileSystem.CopyFile(sourceFileName, destinationFileName, showUI)
         End Sub
@@ -207,13 +320,29 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  Parent directory will always be created.
         ''' </param>
         ''' <param name="showUI">
-        '''  <see cref="UIOption.AllDialogs"/> to display progress and confirmation dialogs,
-        '''  otherwise <see cref="UIOption.OnlyErrorDialogs"/> are shown.
+        '''  Specifies whether To visually track the operation's progress.
+        '''  Default is <see cref="UIOption.OnlyErrorDialogs"/>.
         ''' </param>
         ''' <param name="onUserCancel">
-        '''  <see cref="UICancelOption.ThrowException"/> if user cancels the operation.
-        '''  Otherwise  <see cref="UICancelOption.DoNothing"/>.
+        '''  Specifies whether to throw an <see cref="OperationCanceledException"/> if the user clicks Cancel.>.
         ''' </param>
+        ''' <exception cref="ArgumentException">
+        '''  <paramref name="destinationFileName"/> contains path information.
+        ''' </exception>
+        ''' <exception cref="ArgumentNullException">
+        '''  <paramref name="destinationFileName"/> or <paramref name="sourceFileName"/> is Nothing or an empty string.
+        ''' </exception>
+        ''' <exception cref="IO.FileNotFoundException">The source file is not valid or does not exist.</exception>
+        ''' <exception cref="IO.IOException">A file in the target directory with the same name is in use.</exception>
+        ''' <exception cref="NotSupportedException">
+        '''  A file or directory name in the path contains a colon (:) or is in an invalid format.
+        ''' </exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="UnauthorizedAccessException">The user does not have required permission.</exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
+        ''' <exception cref="OperationCanceledException">
+        '''  The user cancelled the operation and <paramref name="onUserCancel"/> is set to <see cref="UICancelOption.ThrowException"/>.
+        ''' </exception>
         Public Sub CopyFile(
             sourceFileName As String,
             destinationFileName As String,
@@ -227,6 +356,18 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  Creates a directory from the given path (including all parent directories).
         ''' </summary>
         ''' <param name="directory">The path to create the directory at.</param>
+        ''' <exception cref="ArgumentException">
+        '''  The directory name is malformed. For example, it contains illegal characters or is only white space.
+        ''' </exception>
+        ''' <exception cref="ArgumentNullException">
+        '''  <paramref name="directory"/> is <see langword="Nothing"/> or an empty string.
+        ''' </exception>
+        ''' <exception cref="IO.PathTooLongException">The directory name is too long.</exception>
+        ''' <exception cref="NotSupportedException">
+        '''  The directory name is only a colon (:).
+        ''' </exception>
+        ''' <exception cref="IO.IOException">The parent directory of the directory to be created is read-only.</exception>
+        ''' <exception cref="UnauthorizedAccessException">The user does not have permission to create the directory.</exception>
         Public Sub CreateDirectory(directory As String)
             FileIO.FileSystem.CreateDirectory(directory)
         End Sub
@@ -241,6 +382,22 @@ Namespace Microsoft.VisualBasic.MyServices
         '''   to throw <see cref="IO.IOException"/> if the directory is not empty.
         '''  </see>
         ''' </param>
+        ''' <exception cref="ArgumentException">
+        '''  The path is a zero-length string, is malformed, contains only white space,
+        '''  or contains invalid characters (including wildcard characters).
+        '''  The path is a device path (starts with \.\).
+        ''' </exception>
+        ''' <exception cref="ArgumentNullException">
+        '''  <paramref name="directory"/> is <see langword="Nothing"/> or an empty string.
+        ''' </exception>
+        ''' <exception cref="DirectoryNotFoundException">The directory does not exist or is a file.</exception>
+        ''' <exception cref="IO.IOException">A file in the directory or subdirectory is in use.</exception>
+        ''' <exception cref="NotSupportedException">
+        '''  The directory name is only a colon (:).
+        ''' </exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="UnauthorizedAccessException">The user does not have permission to create the directory.</exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
         Public Sub DeleteDirectory(directory As String, onDirectoryNotEmpty As DeleteDirectoryOption)
             FileIO.FileSystem.DeleteDirectory(directory, onDirectoryNotEmpty)
         End Sub
@@ -253,13 +410,30 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' </summary>
         ''' <param name="directory">The path to the directory.</param>
         ''' <param name="showUI">
-        '''  <see cref="UIOption.AllDialogs"/> to display progress and confirmation dialogs,
-        '''  otherwise <see cref="UIOption.OnlyErrorDialogs"/> are shown.
+        '''  Specifies whether To visually track the operation's progress.
+        '''  Default is <see cref="UIOption.OnlyErrorDialogs"/>.
         ''' </param>
         ''' <param name="recycle">
-        '''  <see cref="RecycleOption.SendToRecycleBin"/> to delete to Recycle Bin,
-        '''  otherwise<see cref=" RecycleOption.DeletePermanently"/>.
+        '''  Specifies whether or not the deleted file should be sent to the Recycle Bin.
+        '''  Default is <see cref=" RecycleOption.DeletePermanently"/>
         ''' </param>
+        ''' <exception cref="ArgumentException">
+        '''  The path is a zero-length string, is malformed, contains only white space,
+        '''  or contains invalid characters (including wildcard characters).
+        '''  The path is a device path (starts with \.\).
+        ''' </exception>
+        ''' <exception cref="ArgumentNullException">
+        '''  <paramref name="directory"/> is <see langword="Nothing"/> or an empty string.
+        ''' </exception>
+        ''' <exception cref="IO.DirectoryNotFoundException">The directory does not exist or is a file.</exception>
+        ''' <exception cref="IO.IOException">The source is a root directory or The source path and the target path are the same.</exception>
+        ''' <exception cref="NotSupportedException">
+        '''  The directory name is only a colon (:).
+        ''' </exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="UnauthorizedAccessException">The user does not have permission to create the directory.</exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
+        ''' <exception cref="OperationCanceledException">The user cancels the operation or the directory cannot be deleted.</exception>
         Public Sub DeleteDirectory(directory As String, showUI As UIOption, recycle As RecycleOption)
             FileIO.FileSystem.DeleteDirectory(directory, showUI, recycle)
         End Sub
@@ -272,17 +446,35 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' </summary>
         ''' <param name="directory">The path to the directory.</param>
         ''' <param name="showUI">
-        '''  <see cref="UIOption.AllDialogs"/> to display progress and confirmation dialogs,
-        '''  otherwise <see cref="UIOption.OnlyErrorDialogs"/> are shown.
+        '''  Specifies whether To visually track the operation's progress.
+        '''  Default is <see cref="UIOption.OnlyErrorDialogs"/>.
         ''' </param>
         ''' <param name="recycle">
-        '''  <see cref="RecycleOption.SendToRecycleBin"/> to delete to Recycle Bin,
-        '''  otherwise<see cref=" RecycleOption.DeletePermanently"/>.
+        '''  Specifies whether or not the deleted file should be sent to the Recycle Bin.
+        '''  Default is <see cref=" RecycleOption.DeletePermanently"/>
         ''' </param>
         ''' <param name="onUserCancel">
-        '''  <see cref="UICancelOption.ThrowException"/> if user cancels the operation.
-        '''  Otherwise  <see cref="UICancelOption.DoNothing"/>.
+        '''  Specifies whether to throw an <see cref="OperationCanceledException"/> if the user clicks Cancel.>.
         ''' </param>
+        ''' <exception cref="ArgumentException">
+        '''  The path is a zero-length string, is malformed, contains only white space,
+        '''  or contains invalid characters (including wildcard characters).
+        '''  The path is a device path (starts with \.\).
+        ''' </exception>
+        ''' <exception cref="ArgumentNullException">
+        '''  <paramref name="directory"/> is <see langword="Nothing"/> or an empty string.
+        ''' </exception>
+        ''' <exception cref="Io.DirectoryNotFoundException">The directory does not exist or is a file.</exception>
+        ''' <exception cref="IO.IOException">A file in the directory or subdirectory is in use.</exception>
+        ''' <exception cref="NotSupportedException">
+        '''  The directory name is only a colon (:).
+        ''' </exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="UnauthorizedAccessException">The user does not have permission to create the directory.</exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
+        ''' <exception cref="OperationCanceledException">
+        '''  The user cancelled the operation and <paramref name="onUserCancel"/> is set to <see cref="UICancelOption.ThrowException"/>.
+        ''' </exception>
         Public Sub DeleteDirectory(
             directory As String,
             showUI As UIOption,
@@ -296,6 +488,21 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  Delete the given file.
         ''' </summary>
         ''' <param name="file">The path to the file.</param>
+        ''' <exception cref="ArgumentException">
+        '''  The path Is Not valid For one Of the following reasons:
+        '''   It Is a zero-length string;
+        '''   It contains only white space;
+        '''   It contains invalid characters;
+        '''   It has a trailing slash where a file must be specified;
+        '''   It Is a device path (starts with \.\).
+        ''' </exception>
+        ''' <exception cref="ArgumentNullException">File is <see langword="Nothing"/> or an empty string.</exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="NotSupportedException">A file or directory name in the path contains a colon (:) or is in an invalid format.</exception>
+        ''' <exception cref="IO.IOException">The file is in use.</exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
+        ''' <exception cref="IO.FileNotFoundException">The file does not exist.</exception>
+        ''' <exception cref="UnauthorizedAccessException">The user does not have permission to delete the file or the file is read-only.</exception>
         Public Sub DeleteFile(file As String)
             FileIO.FileSystem.DeleteFile(file)
         End Sub
@@ -306,19 +513,34 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' </summary>
         ''' <param name="file">The path to the file.</param>
         ''' <param name="showUI">
-        '''  <see cref="UIOption.AllDialogs"/> to display progress and confirmation dialogs,
-        '''  otherwise <see cref="UIOption.OnlyErrorDialogs"/> are shown.
+        '''  Specifies whether To visually track the operation's progress.
+        '''  Default is <see cref="UIOption.OnlyErrorDialogs"/>.
         ''' </param>
         ''' <param name="recycle">
-        '''  <see cref="RecycleOption.SendToRecycleBin"/> to delete to Recycle Bin,
-        '''  otherwise<see cref=" RecycleOption.DeletePermanently"/>.
+        '''  Specifies whether or not the deleted file should be sent to the Recycle Bin.
+        '''  Default is <see cref=" RecycleOption.DeletePermanently"/>
         ''' </param>
         ''' <param name="onUserCancel">
-        '''  <see cref="UICancelOption.ThrowException"/> if user cancels the operation.
-        '''  Otherwise  <see cref="UICancelOption.DoNothing"/>.
+        '''  Specifies whether to throw an <see cref="OperationCanceledException"/> if the user clicks Cancel.>.
         ''' </param>
-        ''' <exception cref="IO.Path.GetFullPath">IO.Path.GetFullPath() exceptions: if FilePath is invalid.</exception>
-        ''' <exception cref="IO.FileNotFoundException">if a file does not exist at FilePath</exception>
+        ''' <exception cref="ArgumentException">
+        '''  The path Is Not valid For one Of the following reasons:
+        '''   It Is a zero-length string;
+        '''   It contains only white space;
+        '''   It contains invalid characters;
+        '''   It has a trailing slash where a file must be specified;
+        '''   It Is a device path (starts with \.\).
+        ''' </exception>
+        ''' <exception cref="ArgumentNullException">File is <see langword="Nothing"/> or an empty string.</exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="NotSupportedException">A file or directory name in the path contains a colon (:) or is in an invalid format.</exception>
+        ''' <exception cref="IO.IOException">The file is in use.</exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
+        ''' <exception cref="IO.FileNotFoundException">The file does not exist.</exception>
+        ''' <exception cref="UnauthorizedAccessException">The user does not have permission to delete the file or the file is read-only.</exception>
+        ''' <exception cref="OperationCanceledException">
+        '''  The user cancelled the operation and <paramref name="onUserCancel"/> is set to <see cref="UICancelOption.ThrowException"/>.
+        ''' </exception>
         Public Sub DeleteFile(
             file As String,
             showUI As UIOption,
@@ -333,13 +555,28 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' </summary>
         ''' <param name="file">The path to the file.</param>
         ''' <param name="showUI">
-        '''  <see cref="UIOption.AllDialogs"/> to display progress and confirmation dialogs,
-        '''  otherwise <see cref="UIOption.OnlyErrorDialogs"/> are shown.
+        '''  Specifies whether To visually track the operation's progress.
+        '''  Default is <see cref="UIOption.OnlyErrorDialogs"/>.
         ''' </param>
         ''' <param name="recycle">
-        '''  <see cref="RecycleOption.SendToRecycleBin"/> to delete to Recycle Bin,
-        '''  otherwise<see cref=" RecycleOption.DeletePermanently"/>.
+        '''  Specifies whether or not the deleted file should be sent to the Recycle Bin.
+        '''  Default is <see cref=" RecycleOption.DeletePermanently"/>
         ''' </param>
+        ''' <exception cref="ArgumentException">
+        '''  The path Is Not valid For one Of the following reasons:
+        '''   It Is a zero-length string;
+        '''   It contains only white space;
+        '''   It contains invalid characters;
+        '''   It has a trailing slash where a file must be specified;
+        '''   It Is a device path (starts with \.\).
+        ''' </exception>
+        ''' <exception cref="ArgumentNullException">File is <see langword="Nothing"/> or an empty string.</exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="NotSupportedException">A file or directory name in the path contains a colon (:) or is in an invalid format.</exception>
+        ''' <exception cref="IO.IOException">The file is in use.</exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
+        ''' <exception cref="IO.FileNotFoundException">The file does not exist.</exception>
+        ''' <exception cref="UnauthorizedAccessException">The user does not have permission to delete the file or the file is read-only.</exception>
         Public Sub DeleteFile(file As String, showUI As UIOption, recycle As RecycleOption)
             FileIO.FileSystem.DeleteFile(file, showUI, recycle)
         End Sub
@@ -382,6 +619,16 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  otherwise, <see cref="SearchOption.SearchAllSubDirectories"/>.
         ''' </param>
         ''' <returns>A string array containing the files that match the search condition.</returns>
+        ''' <exception cref="ArgumentNullException">File is <see langword="Nothing"/> or an empty string.</exception>
+        ''' <exception cref="IO.DirectoryNotFoundException">The <paramref name="directory"/> does not exist.</exception>
+        ''' <exception cref="IO.IOException">The specified <paramref name="directory"/> points to an existing file.</exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="NotSupportedException">
+        '''  A file or directory name in the path contains a colon (:) or
+        '''  is in an invalid format.
+        ''' </exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
+        ''' <exception cref="UnauthorizedAccessException">The user lacks necessary permissions.</exception>
         Public Function FindInFiles(
             directory As String,
             containsText As String,
@@ -407,8 +654,22 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' <param name="fileWildcards">The search patterns to use for the file name ("*.*")</param>
         ''' <returns>A string array containing the files that match the search condition.</returns>
         ''' <exception cref="System.ArgumentNullException">
-        '''  If one of the pattern is Null, Empty or all-spaces string.
+        '''  <paramref name="directory"/> is Nothing or an empty string.
         ''' </exception>
+        ''' <exception cref="ArgumentException">
+        '''  The path is not valid for one of the following reasons: it is a zero-length string;
+        '''  it contains only white space; it contains invalid characters; or it is a device path.
+        ''' </exception>
+        ''' <exception cref="ArgumentNullException">File is <see langword="Nothing"/> or an empty string.</exception>
+        ''' <exception cref="IO.DirectoryNotFoundException">The <paramref name="directory"/> does not exist.</exception>
+        ''' <exception cref="IO.IOException">The specified <paramref name="directory"/> points to an existing file.</exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="NotSupportedException">
+        '''  A file or directory name in the path contains a colon (:) or
+        '''  is in an invalid format.
+        ''' </exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
+        ''' <exception cref="UnauthorizedAccessException">The user lacks necessary permissions.</exception>
         Public Function FindInFiles(
             directory As String,
             containsText As String,
@@ -424,6 +685,21 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' </summary>
         ''' <param name="directory">The directory to find the sub directories inside.</param>
         ''' <returns>A ReadOnlyCollection(Of String) containing the matched directories' paths.</returns>
+        ''' <exception cref="ArgumentException">
+        '''  The path is not valid for one of the following reasons: it is a zero-length string;
+        '''  it contains only white space; it contains invalid characters;
+        '''  or it is a device path (starts with \.\).
+        ''' </exception>
+        ''' <exception cref="ArgumentNullException">
+        '''  <paramref name="directory"/> is <see langword="Nothing"/> or an empty string.
+        ''' </exception>
+        ''' <exception cref="IO.DirectoryNotFoundException">The source directory does not exist.</exception>
+        ''' <exception cref="IO.IOException">The specified directory points to an existing file.</exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="InvalidOperationException">The operation is cyclic.</exception>
+        ''' <exception cref="NotSupportedException">A file or directory name in the path contains a colon (:) or is in an invalid format.</exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
+        ''' <exception cref="UnauthorizedAccessException">A destination file exists but cannot be accessed.</exception>
         Public Function GetDirectories(directory As String) As ReadOnlyCollection(Of String)
             Return FileIO.FileSystem.GetDirectories(directory)
         End Function
@@ -438,6 +714,17 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' </param>
         ''' <param name="wildcards">The wildcards for the file name, for example "*.bmp", "*.txt"</param>
         ''' <returns>A ReadOnlyCollection(Of String) containing the matched directories' paths.</returns>
+        ''' <exception cref="ArgumentException">
+        '''  The path is not valid for one of the following reasons: it is a zero-length string;
+        '''  it contains only white space; it contains invalid characters;
+        '''  or it is a device path (starts with \.\).
+        ''' </exception>
+        ''' <exception cref="ArgumentNullException">
+        '''  <paramref name="directory"/> is <see langword="Nothing"/> or an empty string.
+        ''' </exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="NotSupportedException">The directory path contains a colon (:) or is in an invalid format.</exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
         Public Function GetDirectories(
             directory As String,
             searchType As SearchOption,
@@ -451,6 +738,16 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' </summary>
         ''' <param name="directory">The path to the directory.</param>
         ''' <returns>A DirectoryInfo object containing the information about the specified directory.</returns>
+        ''' <exception cref="ArgumentException">
+        '''  The path is not valid for one of the following reasons: it is a zero-length string;
+        '''  it contains only white space; it contains invalid characters;
+        '''  or it is a device path (starts with \.\).
+        ''' </exception>
+        ''' <exception cref="ArgumentNullException">
+        '''  <paramref name="directory"/> is <see langword="Nothing"/> or an empty string.
+        ''' </exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
         Public Function GetDirectoryInfo(directory As String) As IO.DirectoryInfo
             Return FileIO.FileSystem.GetDirectoryInfo(directory)
         End Function
@@ -460,6 +757,16 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' </summary>
         ''' <param name="drive">The path to the drive.</param>
         ''' <returns>A DriveInfo object containing the information about the specified drive.</returns>
+        ''' <exception cref="ArgumentException">
+        '''  The path is not valid for one of the following reasons: it is a zero-length string;
+        '''  it contains only white space; it contains invalid characters;
+        '''  or it is a device path (starts with \.\).
+        ''' </exception>
+        ''' <exception cref="ArgumentNullException">
+        '''  <paramref name="drive"/> is <see langword="Nothing"/> or an empty string.
+        ''' </exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
         Public Function GetDriveInfo(drive As String) As IO.DriveInfo
             Return FileIO.FileSystem.GetDriveInfo(drive)
         End Function
@@ -469,6 +776,18 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' </summary>
         ''' <param name="file">The path to the file.</param>
         ''' <returns>A FileInfo object containing the information about the specified file.</returns>
+        ''' <exception cref="ArgumentException">
+        '''  The path name is malformed.
+        '''  For example, it contains invalid characters or is only white space.
+        '''  The file name has a trailing slash mark.
+        ''' </exception>
+        ''' <exception cref="ArgumentNullException">
+        '''  <paramref name="file"/> is <see langword="Nothing"/> or an empty string.
+        ''' </exception>
+        ''' <exception cref="NotSupportedException">The path contains a colon in the middle of the string.</exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
+        ''' <exception cref="UnauthorizedAccessException">The user lacks ACL (access control list) access to the file.</exception>
         Public Function GetFileInfo(file As String) As IO.FileInfo
             Return FileIO.FileSystem.GetFileInfo(file)
         End Function
@@ -477,7 +796,23 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  Return an unordered collection of file paths found directly under a directory.
         ''' </summary>
         ''' <param name="directory">The directory to find the files inside.</param>
-        ''' <returns>A ReadOnlyCollection(Of String) containing the matched files' paths.</returns>
+        ''' <returns>A <see cref="ReadOnlyCollection(Of String)"/> containing the matched files' paths.</returns>
+        ''' <exception cref="ArgumentException">
+        '''  The path is not valid for one of the following reasons: it is a zero-length string;
+        '''  it contains only white space; it contains invalid characters;
+        '''  or it is a device path (starts with \.\).
+        ''' </exception>
+        ''' <exception cref="ArgumentNullException">
+        '''  <paramref name="directory"/> is <see langword="Nothing"/> or an empty string.
+        ''' </exception>
+        ''' <exception cref="IO.DirectoryNotFoundException">The directory to search does not exist</exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="NotSupportedException">
+        '''  A file or directory name in the path contains a colon (:) or
+        '''  is in an invalid format.
+        ''' </exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
+        ''' <exception cref="UnauthorizedAccessException">The user lacks necessary permissions.</exception>
         Public Function GetFiles(directory As String) As ReadOnlyCollection(Of String)
             Return FileIO.FileSystem.GetFiles(directory)
         End Function
@@ -493,6 +828,22 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' </param>
         ''' <param name="wildcards">The wildcards for the file name, for example "*.bmp", "*.txt"</param>
         ''' <returns>A ReadOnlyCollection(Of String) containing the matched files' paths.</returns>
+        ''' <exception cref="ArgumentException">
+        '''  The path is not valid for one of the following reasons: it is a zero-length string;
+        '''  it contains only white space; it contains invalid characters;
+        '''  or it is a device path (starts with \.\).
+        ''' </exception>
+        ''' <exception cref="ArgumentNullException">
+        '''  <paramref name="directory"/> is <see langword="Nothing"/> or an empty string.
+        ''' </exception>
+        ''' <exception cref="IO.DirectoryNotFoundException">The directory to search does not exist</exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="NotSupportedException">
+        '''  A file or directory name in the path contains a colon (:) or
+        '''  is in an invalid format.
+        ''' </exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
+        ''' <exception cref="UnauthorizedAccessException">The user lacks necessary permissions.</exception>
         Public Function GetFiles(
             directory As String,
             searchType As SearchOption,
@@ -525,6 +876,16 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  The path will be normalized (for example: C:\Dir1////\\\Dir2 will become C:\Dir1\Dir2)
         '''  but will not be resolved (for example: C:\Dir1\Dir2\..\Dir3 WILL NOT become C:\Dir1\Dir3). Use CombinePath.
         ''' </remarks>
+        ''' <exception cref="ArgumentException">
+        '''  Path does not have a parent path because it is a root path.
+        ''' </exception>
+        ''' <exception cref="ArgumentNullException">
+        '''  <paramref name="path"/> is <see langword="Nothing"/> or an empty string.
+        ''' </exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="NotSupportedException">
+        '''  A file or directory name in the path contains a colon (:) or is in an invalid format.
+        ''' </exception>
         Public Function GetParentPath(path As String) As String
             Return FileIO.FileSystem.GetParentPath(path)
         End Function
@@ -546,6 +907,24 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  The path to the target directory, can be relative or absolute.
         '''  Parent directory will always be created.
         ''' </param>
+        ''' <exception cref="ArgumentException">
+        '''  The path is not valid for one of the following reasons: it is a zero-length string;
+        '''  it contains only white space; it contains invalid characters;
+        '''  or it is a device path (starts with \.\).
+        ''' </exception>
+        ''' <exception cref="ArgumentNullException">
+        '''  <paramref name="destinationDirectoryName"/> or <paramref name="sourceDirectoryName"/>
+        '''  is <see langword="Nothing"/> or an empty string.
+        ''' </exception>
+        ''' <exception cref="IO.DirectoryNotFoundException">The directory does not exist.</exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="InvalidOperationException">The operation is cyclic.</exception>
+        ''' <exception cref="NotSupportedException">
+        '''  A file or directory name in the path contains a colon (:) or
+        '''  is in an invalid format.
+        ''' </exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
+        ''' <exception cref="UnauthorizedAccessException">The user lacks necessary permissions.</exception>
         Public Sub MoveDirectory(sourceDirectoryName As String, destinationDirectoryName As String)
             FileIO.FileSystem.MoveDirectory(sourceDirectoryName, destinationDirectoryName)
         End Sub
@@ -562,6 +941,24 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  <see langword="True"/> to overwrite existing files with the same name.
         '''  Otherwise <see langword="False"/>.
         ''' </param>
+        ''' <exception cref="ArgumentException">
+        '''  The path is not valid for one of the following reasons: it is a zero-length string;
+        '''  it contains only white space; it contains invalid characters;
+        '''  or it is a device path (starts with \.\).
+        ''' </exception>
+        ''' <exception cref="ArgumentNullException">
+        '''  <paramref name="destinationDirectoryName"/> or <paramref name="sourceDirectoryName"/>
+        '''  is <see langword="Nothing"/> or an empty string.
+        ''' </exception>
+        ''' <exception cref="IO.DirectoryNotFoundException">The directory does not exist.</exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="InvalidOperationException">The operation is cyclic.</exception>
+        ''' <exception cref="NotSupportedException">
+        '''  A file or directory name in the path contains a colon (:) or
+        '''  is in an invalid format.
+        ''' </exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
+        ''' <exception cref="UnauthorizedAccessException">The user lacks necessary permissions.</exception>
         Public Sub MoveDirectory(sourceDirectoryName As String, destinationDirectoryName As String, overwrite As Boolean)
             FileIO.FileSystem.MoveDirectory(sourceDirectoryName, destinationDirectoryName, overwrite)
         End Sub
@@ -578,9 +975,27 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  Parent directory will always be created.
         ''' </param>
         ''' <param name="showUI">
-        '''  <see cref="UIOption.AllDialogs"/> to display progress and confirmation dialogs,
-        '''  otherwise <see cref="UIOption.OnlyErrorDialogs"/> are shown.
+        '''  Specifies whether To visually track the operation's progress.
+        '''  Default is <see cref="UIOption.OnlyErrorDialogs"/>.
         ''' </param>
+        ''' <exception cref="ArgumentException">
+        '''  The path is not valid for one of the following reasons: it is a zero-length string;
+        '''  it contains only white space; it contains invalid characters;
+        '''  or it is a device path (starts with \.\).
+        ''' </exception>
+        ''' <exception cref="ArgumentNullException">
+        '''  <paramref name="destinationDirectoryName"/> or <paramref name="sourceDirectoryName"/>
+        '''  is <see langword="Nothing"/> or an empty string.
+        ''' </exception>
+        ''' <exception cref="IO.DirectoryNotFoundException">The directory does not exist.</exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="InvalidOperationException">The operation is cyclic.</exception>
+        ''' <exception cref="NotSupportedException">
+        '''  A file or directory name in the path contains a colon (:) or
+        '''  is in an invalid format.
+        ''' </exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
+        ''' <exception cref="UnauthorizedAccessException">The user lacks necessary permissions.</exception>
         Public Sub MoveDirectory(sourceDirectoryName As String, destinationDirectoryName As String, showUI As UIOption)
             FileIO.FileSystem.MoveDirectory(sourceDirectoryName, destinationDirectoryName, showUI)
         End Sub
@@ -597,13 +1012,33 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  Parent directory will always be created.
         ''' </param>
         ''' <param name="showUI">
-        '''  <see cref="UIOption.AllDialogs"/> to display progress and confirmation dialogs,
-        '''  otherwise <see cref="UIOption.OnlyErrorDialogs"/> are shown.
+        '''  Specifies whether To visually track the operation's progress.
+        '''  Default is <see cref="UIOption.OnlyErrorDialogs"/>.
         ''' </param>
         ''' <param name="onUserCancel">
-        '''  <see cref="UICancelOption.ThrowException"/> if user cancels the operation.
-        '''  Otherwise  <see cref="UICancelOption.DoNothing"/>.
+        '''  Specifies whether to throw an <see cref="OperationCanceledException"/> if the user clicks Cancel.>.
         ''' </param>
+        ''' <exception cref="ArgumentException">
+        '''  The path is not valid for one of the following reasons: it is a zero-length string;
+        '''  it contains only white space; it contains invalid characters;
+        '''  or it is a device path (starts with \.\).
+        ''' </exception>
+        ''' <exception cref="ArgumentNullException">
+        '''  <paramref name="destinationDirectoryName"/> or <paramref name="sourceDirectoryName"/>
+        '''  is <see langword="Nothing"/> or an empty string.
+        ''' </exception>
+        ''' <exception cref="IO.DirectoryNotFoundException">The directory does not exist.</exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="InvalidOperationException">The operation is cyclic.</exception>
+        ''' <exception cref="NotSupportedException">
+        '''  A file or directory name in the path contains a colon (:) or
+        '''  is in an invalid format.
+        ''' </exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
+        ''' <exception cref="UnauthorizedAccessException">The user lacks necessary permissions.</exception>
+        ''' <exception cref="OperationCanceledException">
+        '''  The user cancelled the operation and <paramref name="onUserCancel"/> is set to <see cref="UICancelOption.ThrowException"/>.
+        ''' </exception>
         Public Sub MoveDirectory(
             sourceDirectoryName As String,
             destinationDirectoryName As String,
@@ -621,6 +1056,20 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  The path to the destination file, can be relative or absolute.
         '''  Parent directory will always be created.
         ''' </param>
+        ''' <exception cref="ArgumentException">
+        '''  <paramref name="destinationFileName"/> contains path information.
+        ''' </exception>
+        ''' <exception cref="ArgumentNullException">
+        '''  <paramref name="destinationFileName"/> or <paramref name="sourceFileName"/> is Nothing or an empty string.
+        ''' </exception>
+        ''' <exception cref="IO.FileNotFoundException">The source file is not valid or does not exist.</exception>
+        ''' <exception cref="IO.IOException">A file in the target directory with the same name is in use.</exception>
+        ''' <exception cref="NotSupportedException">
+        '''  A file or directory name in the path contains a colon (:) or is in an invalid format.
+        ''' </exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="UnauthorizedAccessException">The user does not have required permission.</exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
         Public Sub MoveFile(sourceFileName As String, destinationFileName As String)
             FileIO.FileSystem.MoveFile(sourceFileName, destinationFileName)
         End Sub
@@ -638,6 +1087,20 @@ Namespace Microsoft.VisualBasic.MyServices
         '''   to overwrite existing file with the same name.
         '''   Otherwise <see langword="False"/>.
         ''' </param>
+        ''' <exception cref="ArgumentException">
+        '''  <paramref name="destinationFileName"/> contains path information.
+        ''' </exception>
+        ''' <exception cref="ArgumentNullException">
+        '''  <paramref name="destinationFileName"/> or <paramref name="sourceFileName"/> is Nothing or an empty string.
+        ''' </exception>
+        ''' <exception cref="IO.FileNotFoundException">The source file is not valid or does not exist.</exception>
+        ''' <exception cref="IO.IOException">A file in the target directory with the same name is in use.</exception>
+        ''' <exception cref="NotSupportedException">
+        '''  A file or directory name in the path contains a colon (:) or is in an invalid format.
+        ''' </exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="UnauthorizedAccessException">The user does not have required permission.</exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
         Public Sub MoveFile(sourceFileName As String, destinationFileName As String, overwrite As Boolean)
             FileIO.FileSystem.MoveFile(sourceFileName, destinationFileName, overwrite)
         End Sub
@@ -653,9 +1116,23 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  Parent directory will always be created.
         ''' </param>
         ''' <param name="showUI">
-        '''  <see cref="UIOption.AllDialogs"/> to display progress and confirmation dialogs,
-        '''  otherwise <see cref="UIOption.OnlyErrorDialogs"/> are shown.
+        '''  Specifies whether To visually track the operation's progress.
+        '''  Default is <see cref="UIOption.OnlyErrorDialogs"/>.
         ''' </param>
+        ''' <exception cref="ArgumentException">
+        '''  <paramref name="destinationFileName"/> contains path information.
+        ''' </exception>
+        ''' <exception cref="ArgumentNullException">
+        '''  <paramref name="destinationFileName"/> or <paramref name="sourceFileName"/> is Nothing or an empty string.
+        ''' </exception>
+        ''' <exception cref="IO.FileNotFoundException">The source file is not valid or does not exist.</exception>
+        ''' <exception cref="IO.IOException">A file in the target directory with the same name is in use.</exception>
+        ''' <exception cref="NotSupportedException">
+        '''  A file or directory name in the path contains a colon (:) or is in an invalid format.
+        ''' </exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="UnauthorizedAccessException">The user does not have required permission.</exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
         Public Sub MoveFile(sourceFileName As String, destinationFileName As String, showUI As UIOption)
             FileIO.FileSystem.MoveFile(sourceFileName, destinationFileName, showUI)
         End Sub
@@ -671,13 +1148,29 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  Parent directory will always be created.
         ''' </param>
         ''' <param name="showUI">
-        '''  <see cref="UIOption.AllDialogs"/> to display progress and confirmation dialogs,
-        '''  otherwise <see cref="UIOption.OnlyErrorDialogs"/> are shown.
+        '''  Specifies whether To visually track the operation's progress.
+        '''  Default is <see cref="UIOption.OnlyErrorDialogs"/>.
         ''' </param>
         ''' <param name="onUserCancel">
-        '''  <see cref="UICancelOption.ThrowException"/> if user cancels the operation.
-        '''  Otherwise  <see cref="UICancelOption.DoNothing"/>.
+        '''  Specifies whether to throw an <see cref="OperationCanceledException"/> if the user clicks Cancel.>.
         ''' </param>
+        ''' <exception cref="ArgumentException">
+        '''  <paramref name="destinationFileName"/> contains path information.
+        ''' </exception>
+        ''' <exception cref="ArgumentNullException">
+        '''  <paramref name="destinationFileName"/> or <paramref name="sourceFileName"/> is Nothing or an empty string.
+        ''' </exception>
+        ''' <exception cref="IO.FileNotFoundException">The source file is not valid or does not exist.</exception>
+        ''' <exception cref="IO.IOException">A file in the target directory with the same name is in use.</exception>
+        ''' <exception cref="NotSupportedException">
+        '''  A file or directory name in the path contains a colon (:) or is in an invalid format.
+        ''' </exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="UnauthorizedAccessException">The user does not have required permission.</exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
+        ''' <exception cref="OperationCanceledException">
+        '''  The user cancelled the operation and <paramref name="onUserCancel"/> is set to <see cref="UICancelOption.ThrowException"/>.
+        ''' </exception>
         Public Sub MoveFile(
             sourceFileName As String,
             destinationFileName As String,
@@ -692,6 +1185,21 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' </summary>
         ''' <param name="file">The path to the file to parse.</param>
         ''' <returns>An instance of a TextFieldParser.</returns>
+        ''' <exception cref="ArgumentNullException">
+        '''  <paramref name="file"/> is Nothing or an empty string.
+        ''' </exception>
+        ''' <exception cref="IO.FileNotFoundException">The file does not exist.</exception>
+        ''' <exception cref="IO.IOException"> The file is in use by another process, or an I/O error occurs.</exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="NotSupportedException">
+        '''  A file or directory name in the path contains a colon (:) or is in an invalid format.
+        ''' </exception>
+        ''' <exception cref="MalformedLineException">
+        '''  A row cannot be parsed using the specified format. The exception message
+        '''  specifies the line causing the exception, while the ErrorLine property is assigned
+        '''  the text contained in the line.
+        ''' </exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
         Public Function OpenTextFieldParser(file As String) As TextFieldParser
             Return FileIO.FileSystem.OpenTextFieldParser(file)
         End Function
@@ -702,6 +1210,21 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' <param name="file">The path to the file to parse.</param>
         ''' <param name="delimiters">A list of delimiters.</param>
         ''' <returns>An instance of a TextFieldParser</returns>
+        ''' <exception cref="ArgumentNullException">
+        '''  <paramref name="file"/> is Nothing or an empty string.
+        ''' </exception>
+        ''' <exception cref="IO.FileNotFoundException">The file does not exist.</exception>
+        ''' <exception cref="IO.IOException"> The file is in use by another process, or an I/O error occurs.</exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="NotSupportedException">
+        '''  A file or directory name in the path contains a colon (:) or is in an invalid format.
+        ''' </exception>
+        ''' <exception cref="MalformedLineException">
+        '''  A row cannot be parsed using the specified format. The exception message
+        '''  specifies the line causing the exception, while the ErrorLine property is assigned
+        '''  the text contained in the line.
+        ''' </exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
         Public Function OpenTextFieldParser(file As String, ParamArray delimiters As String()) As TextFieldParser
             Return FileIO.FileSystem.OpenTextFieldParser(file, delimiters)
         End Function
@@ -712,6 +1235,21 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' <param name="file">The path to the file to parse.</param>
         ''' <param name="fieldWidths">A list of field widths.</param>
         ''' <returns>An instance of a TextFieldParser</returns>
+        ''' <exception cref="ArgumentNullException">
+        '''  <paramref name="file"/> is Nothing or an empty string.
+        ''' </exception>
+        ''' <exception cref="IO.FileNotFoundException">The file does not exist.</exception>
+        ''' <exception cref="IO.IOException"> The file is in use by another process, or an I/O error occurs.</exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="NotSupportedException">
+        '''  A file or directory name in the path contains a colon (:) or is in an invalid format.
+        ''' </exception>
+        ''' <exception cref="MalformedLineException">
+        '''  A row cannot be parsed using the specified format. The exception message
+        '''  specifies the line causing the exception, while the ErrorLine property is assigned
+        '''  the text contained in the line.
+        ''' </exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
         Public Function OpenTextFieldParser(file As String, ParamArray fieldWidths As Integer()) As TextFieldParser
             Return FileIO.FileSystem.OpenTextFieldParser(file, fieldWidths)
         End Function
@@ -721,6 +1259,11 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' </summary>
         ''' <param name="file">The file to open the StreamReader on.</param>
         ''' <returns>An instance of System.IO.StreamReader opened on the file (with FileShare.Read).</returns>
+        ''' <exception cref="ArgumentException">
+        '''  <paramref name="file"/> ends with a backslash (\).
+        ''' </exception>
+        ''' <exception cref="IO.FileNotFoundException">The file does not exist.</exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
         Public Function OpenTextFileReader(file As String) As IO.StreamReader
             Return FileIO.FileSystem.OpenTextFileReader(file)
         End Function
@@ -733,6 +1276,11 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  The preferred encoding that will be used if the encoding of the file could not be detected.
         ''' </param>
         ''' <returns>An instance of System.IO.StreamReader opened on the file (with FileShare.Read).</returns>
+        ''' <exception cref="ArgumentException">
+        '''  <paramref name="file"/> ends with a backslash (\).
+        ''' </exception>
+        ''' <exception cref="IO.FileNotFoundException">The file does not exist.</exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
         Public Function OpenTextFileReader(file As String, encoding As Encoding) As IO.StreamReader
             Return FileIO.FileSystem.OpenTextFileReader(file, encoding)
         End Function
@@ -746,6 +1294,12 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  <see langword="False"/> to overwrite the content of the file.
         ''' </param>
         ''' <returns>An instance of StreamWriter opened on the file (with FileShare.Read).</returns>
+        ''' <exception cref="ArgumentException">
+        '''  <paramref name="file"/> ends with a trailing slash.
+        ''' </exception>
+        ''' <exception cref="ArgumentNullException">
+        '''  <paramref name="file"/> is Nothing or an empty string.
+        ''' </exception>
         Public Function OpenTextFileWriter(file As String, append As Boolean) As IO.StreamWriter
             Return FileIO.FileSystem.OpenTextFileWriter(file, append)
         End Function
@@ -760,6 +1314,12 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' </param>
         ''' <param name="Encoding">The encoding to use to write to the file.</param>
         ''' <returns>An instance of StreamWriter opened on the file (with FileShare.Read).</returns>
+        ''' <exception cref="ArgumentException">
+        '''  <paramref name="file"/> ends with a trailing slash.
+        ''' </exception>
+        ''' <exception cref="ArgumentNullException">
+        '''  <paramref name="file"/> is Nothing or an empty string.
+        ''' </exception>
         Public Function OpenTextFileWriter(
             file As String,
             append As Boolean,
@@ -773,10 +1333,20 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' </summary>
         ''' <param name="file">The path to the file.</param>
         ''' <returns>A byte array contains the content of the file.</returns>
-        ''' <exception cref="IO.IOException">
-        '''  If the length of the file is larger than Integer.MaxValue (~2GB).
+        ''' <exception cref="ArgumentException">
+        '''  The path is not valid for one of the following reasons: it is a zero-length string;
+        '''  it contains only white space; it contains invalid characters;
+        '''  or it is a device path (starts with \.\).
         ''' </exception>
-        ''' <exception cref="IO.FileStream">See FileStream constructor and Read: for other exceptions.</exception>
+        ''' <exception cref="ArgumentNullException">
+        '''  <paramref name="file"/> is <see langword="Nothing"/> or an empty string.
+        ''' </exception>
+        ''' <exception cref="IO.FileNotFoundException">The file does not exist.</exception>
+        ''' <exception cref="IO.IOException">The file is in use by another process, or an I/O error occurs.</exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="NotSupportedException">A folder name in the path contains a colon (:) or is in an invalid format.</exception>
+        ''' <exception cref="OutOfMemoryException">There is not enough memory to write the string to buffer.</exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
         Public Function ReadAllBytes(file As String) As Byte()
             Return FileIO.FileSystem.ReadAllBytes(file)
         End Function
@@ -786,7 +1356,20 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' </summary>
         ''' <param name="file">The path to the text file.</param>
         ''' <returns>A String contains the content of the given file.</returns>
-        ''' <exception cref="IO.StreamReader">See StreamReader constructor and ReadToEnd.</exception>
+        ''' <exception cref="ArgumentException">
+        '''  The path is not valid for one of the following reasons: it is a zero-length string;
+        '''  it contains only white space; it contains invalid characters;
+        '''  or it is a device path (starts with \.\).
+        ''' </exception>
+        ''' <exception cref="ArgumentNullException">
+        '''  <paramref name="file"/> is <see langword="Nothing"/> or an empty string.
+        ''' </exception>
+        ''' <exception cref="IO.FileNotFoundException">The file does not exist.</exception>
+        ''' <exception cref="IO.IOException">The file is in use by another process, or an I/O error occurs.</exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="NotSupportedException">A folder name in the path contains a colon (:) or is in an invalid format.</exception>
+        ''' <exception cref="OutOfMemoryException">There is not enough memory to write the string to buffer.</exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
         Public Function ReadAllText(file As String) As String
             Return FileIO.FileSystem.ReadAllText(file)
         End Function
@@ -797,7 +1380,20 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' <param name="file">The path to the text file.</param>
         ''' <param name="encoding">The character encoding to use if the encoding was not detected.</param>
         ''' <returns>A String contains the content of the given file.</returns>
-        ''' <exception cref="IO.StreamReader">See StreamReader constructor and ReadToEnd.</exception>
+        ''' <exception cref="ArgumentException">
+        '''  The path is not valid for one of the following reasons: it is a zero-length string;
+        '''  it contains only white space; it contains invalid characters;
+        '''  or it is a device path (starts with \.\).
+        ''' </exception>
+        ''' <exception cref="ArgumentNullException">
+        '''  <paramref name="file"/> is <see langword="Nothing"/> or an empty string.
+        ''' </exception>
+        ''' <exception cref="IO.FileNotFoundException">The file does not exist.</exception>
+        ''' <exception cref="IO.IOException">The file is in use by another process, or an I/O error occurs.</exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="NotSupportedException">A folder name in the path contains a colon (:) or is in an invalid format.</exception>
+        ''' <exception cref="OutOfMemoryException">There is not enough memory to write the string to buffer.</exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
         Public Function ReadAllText(file As String, encoding As Encoding) As String
             Return FileIO.FileSystem.ReadAllText(file, encoding)
         End Function
@@ -807,11 +1403,23 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' </summary>
         ''' <param name="directory">The path of the directory to be renamed.</param>
         ''' <param name="newName">The new name to change to. This must not contain path information.</param>
-        ''' <exception cref="IO.Path.GetFullPath">IO.Path.GetFullPath exceptions: If directory is invalid.</exception>
-        ''' <exception cref="System.ArgumentException">If newName is Nothing or Empty String or contains path information.</exception>
-        ''' <exception cref="IO.FileNotFoundException">If directory does not point to an existing directory.</exception>
-        ''' <exception cref="IO.IOException">If directory points to a root directory.
-        '''     Or if there's an existing directory or an existing file with the same name.</exception>
+        ''' <exception cref="ArgumentException">
+        '''  <paramref name="newName"/> contains path information.
+        ''' </exception>
+        ''' <exception cref="ArgumentNullException">
+        '''  <paramref name="directory"/> or <paramref name="newName"/>
+        '''  is <see langword="Nothing"/> or an empty string.
+        ''' </exception>
+        ''' <exception cref="IO.DirectoryNotFoundException">The directory does not exist.</exception>
+        ''' <exception cref="IO.IOException">
+        '''  There is an existing file or directory with the name specified in <paramref name="newName"/>.
+        ''' </exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="NotSupportedException">
+        '''  A file or directory name in the path contains a colon (:) or is in an invalid format.
+        ''' </exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
+        ''' <exception cref="UnauthorizedAccessException">The user does not have required permission.</exception>
         Public Sub RenameDirectory(directory As String, newName As String)
             FileIO.FileSystem.RenameDirectory(directory, newName)
         End Sub
@@ -821,14 +1429,23 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' </summary>
         ''' <param name="file">The path to the file.</param>
         ''' <param name="newName">The new name to change to. This must not contain path information.</param>
-        ''' <exception cref="IO.Path.GetFullPath">IO.Path.GetFullPath exceptions: If file is invalid.</exception>
-        ''' <exception cref="System.ArgumentException">
-        '''  If newName is Nothing or Empty String or contains path information.
+        ''' <exception cref="ArgumentException">
+        '''  <paramref name="newName"/> contains path information or ends with a backslash (\).
         ''' </exception>
-        ''' <exception cref="IO.FileNotFoundException">If file does not point to an existing file.</exception>
+        ''' <exception cref="ArgumentNullException">
+        '''  <paramref name="file"/> or <paramref name="newName"/>
+        '''  is <see langword="Nothing"/> or an empty string.
+        ''' </exception>
+        ''' <exception cref="IO.FileNotFoundException">The directory does not exist.</exception>
         ''' <exception cref="IO.IOException">
-        '''  If there's an existing directory or an existing file with the same name.
+        '''  There is an existing file or directory with the name specified in <paramref name="newName"/>.
         ''' </exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="NotSupportedException">
+        '''  A file or directory name in the path contains a colon (:) or is in an invalid format.
+        ''' </exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
+        ''' <exception cref="UnauthorizedAccessException">The user does not have required permission.</exception>
         Public Sub RenameFile(file As String, newName As String)
             FileIO.FileSystem.RenameFile(file, newName)
         End Sub
@@ -843,7 +1460,15 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  <see langword="True"/> to append the text to the existing content.
         '''  <see langword="False"/> to overwrite the existing content.
         ''' </param>
-        ''' <exception cref="IO.FileStream">See FileStream constructor and Write: For other exceptions.</exception>
+        ''' <exception cref="ArgumentNullException">
+        '''  <paramref name="file"/> is <see langword="Nothing"/> or an empty string.
+        ''' </exception>
+        ''' <exception cref="IO.FileNotFoundException">The file does not exist.</exception>
+        ''' <exception cref="IO.IOException">The file is in use by another process, or an I/O error occurs.</exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="NotSupportedException">A folder name in the path contains a colon (:) or is in an invalid format.</exception>
+        ''' <exception cref="OutOfMemoryException">There is not enough memory to write the string to buffer.</exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
         Public Sub WriteAllBytes(file As String, data() As Byte, append As Boolean)
             FileIO.FileSystem.WriteAllBytes(file, data, append)
         End Sub
@@ -857,7 +1482,15 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' <param name="append">
         '''  <see langword="True"/> to append the text to the existing content.
         '''  <see langword="False"/> to overwrite the existing content.</param>
-        ''' <exception cref="IO.StreamWriter">See StreamWriter constructor and Write: For other exceptions.</exception>
+        ''' <exception cref="ArgumentNullException">
+        '''  <paramref name="file"/> is <see langword="Nothing"/> or an empty string.
+        ''' </exception>
+        ''' <exception cref="IO.FileNotFoundException">The file does not exist.</exception>
+        ''' <exception cref="IO.IOException">The file is in use by another process, or an I/O error occurs.</exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="NotSupportedException">A folder name in the path contains a colon (:) or is in an invalid format.</exception>
+        ''' <exception cref="OutOfMemoryException">There is not enough memory to write the string to buffer.</exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
         Public Sub WriteAllText(file As String, text As String, append As Boolean)
             FileIO.FileSystem.WriteAllText(file, text, append)
         End Sub
@@ -872,9 +1505,15 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  <see langword="True"/> to append the text to the existing content.
         '''  <see langword="False"/> to overwrite the existing content.</param>
         ''' <param name="encoding">The encoding to use.</param>
-        ''' <exception cref="IO.StreamWriter">
-        '''  See StreamWriter constructor and Write: For other exceptions.
+        ''' <exception cref="ArgumentNullException">
+        '''  <paramref name="file"/> is <see langword="Nothing"/> or an empty string.
         ''' </exception>
+        ''' <exception cref="IO.FileNotFoundException">The file does not exist.</exception>
+        ''' <exception cref="IO.IOException">The file is in use by another process, or an I/O error occurs.</exception>
+        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
+        ''' <exception cref="NotSupportedException">A folder name in the path contains a colon (:) or is in an invalid format.</exception>
+        ''' <exception cref="OutOfMemoryException">There is not enough memory to write the string to buffer.</exception>
+        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
         Public Sub WriteAllText(
             file As String,
             text As String,
