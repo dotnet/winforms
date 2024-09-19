@@ -476,4 +476,51 @@ public class PropertyGridTests : IDisposable
             refreshedTabs[i].Should().BeSameAs(initialTabs[i]);
         }
     }
+
+    [WinFormsFact]
+    public void PropertyGrid_CollapseAllGridItemsEvent_Raised_Success()
+    {
+        if (_propertyGrid.SelectedGridItem is not null && _propertyGrid.SelectedGridItem.Parent is not null)
+        {
+            GridItemCollection gridItems = _propertyGrid.SelectedGridItem.Parent.GridItems;
+            gridItems.Count.Should().BeGreaterThan(0);
+
+            foreach (GridItem item in gridItems)
+            {
+                item.Expanded = true;
+            }
+
+            _propertyGrid.CollapseAllGridItems();
+
+            foreach (GridItem item in gridItems)
+            {
+                item.Expanded.Should().BeFalse();
+            }
+        }
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_ExpandAllGridItemsEvent_Raised_Success()
+    {
+        if (_propertyGrid.SelectedGridItem is not null && _propertyGrid.SelectedGridItem.Parent is not null)
+        {
+            GridItemCollection gridItems = _propertyGrid.SelectedGridItem.Parent.GridItems;
+            gridItems.Count.Should().BeGreaterThan(0);
+
+            foreach (GridItem item in gridItems)
+            {
+                item.Expanded = false;
+            }
+
+            _propertyGrid.ExpandAllGridItems();
+
+            foreach (GridItem item in gridItems)
+            {
+                if (item.Expandable == true)
+                {
+                    item.Expanded.Should().BeTrue();
+                }
+            }
+        }
+    }
 }
