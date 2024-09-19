@@ -1,13 +1,13 @@
 <Project>
 
-  <Import Project="eng/Versions.props" />
+  <!-- <Import Project="$(RepositoryEngineeringDir)Versions.props" /> -->
 
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
-    <!-- <PackageVersion Include="CSharpIsNullAnalyzer" Version="$(CSharpIsNullAnalyzersVersion)" /> -->
-    <!-- <PackageVersion Include="DotNetAnalyzers.DocumentationAnalyzers" Version="$(DotNetAnalyzersDocumentationAnalyzersVersion)" /> -->
+    <PackageVersion Include="CSharpIsNullAnalyzer" Version="$(CSharpIsNullAnalyzersVersion)" />
+    <PackageVersion Include="DotNetAnalyzers.DocumentationAnalyzers" Version="$(DotNetAnalyzersDocumentationAnalyzersVersion)" />
     <PackageVersion Include="FluentAssertions" Version="$(FluentAssertionsVersion)" />
     <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="3.11.0-beta1.24219.2" />
     <PackageVersion Include="Microsoft.CodeAnalysis.Common" Version="4.10.0-3.final" />
@@ -18,7 +18,7 @@
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.SourceGenerators.Testing.XUnit" Version="$(MicrosoftCodeAnalysisPackagesVersion)" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="$(MicrosoftCodeAnalysisCSharpWorkspacesVersion)" />
     <PackageVersion Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="$(MicrosoftCodeAnalysisCSharpPackageVersion)" />
-    <!-- <PackageVersion Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="$(MicrosoftCodeAnalysisNetAnalyzersVersion)" /> -->
+    <PackageVersion Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="$(MicrosoftCodeAnalysisNetAnalyzersVersion)" />
     <PackageVersion Include="Microsoft.CodeAnalysis.VisualBasic" Version="4.10.0-3.final" />
     <PackageVersion Include="Microsoft.CodeAnalysis.VisualBasic.Analyzer.Testing.XUnit" Version="$(MicrosoftCodeAnalysisPackagesVersion)" />
     <PackageVersion Include="Microsoft.CodeAnalysis.VisualBasic.CodeFix.Testing.XUnit" Version="$(MicrosoftCodeAnalysisPackagesVersion)" />
@@ -47,6 +47,7 @@
     <PackageVersion Include="xunit.stafact" Version="$(XUnitStaFactPackageVersion)" />
     <!-- <PackageVersion Include="xunit.assert" Version="$(XUnitAssertVersion)" /> -->
 
+    <PackageVersion Include="coverlet.msbuild" Version="$(CoverletMSBuildPackageVersion)" />
 
     <PackageVersion Include="System.Drawing.Common.TestData" Version="$(SystemDrawingCommonTestDataVersion)" />
     <PackageVersion Include="System.ComponentModel.TypeConverter.TestData" Version="$(SystemComponentModelTypeConverterTestDataVersion)" />
@@ -57,13 +58,18 @@
     <PackageVersion Include="Microsoft.VisualStudio.Threading" Version="$(MicrosoftVisualStudioThreadingVersion)" />
     <PackageVersion Include="System.IO.Hashing" Version="$(SystemIOHashingPackageVersion)" />
 
-
-    <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="$(MicrosoftCodeAnalysisAnalyzersVersion)">
-
     <PackageVersion Include="System.Data.SqlClient" Version="5.0.0-alpha.1.19618.1" />
     <PackageVersion Include="System.Management" Version="4.5.0-preview1-25914-04" />
     <PackageVersion Include="System.Windows.Forms.DataVisualization" Version="1.0.0-prerelease.20110.1" />
 
+    <PackageVersion Include="Microsoft.ManifestTool.CrossPlatform" Version="$(MicrosoftManifestToolCrossPlatformVersion)" />
+    <PackageVersion Include="Microsoft.VisualStudioEng.MicroBuild.Core" Version="$(MicrosoftVisualStudioEngMicroBuildCoreVersion)" />
+    <PackageVersion Include="Microsoft.VisualStudioEng.MicroBuild.Plugins.SwixBuild" Version="$(MicrosoftVisualStudioEngMicroBuildPluginsSwixBuildVersion)" />
+    <PackageVersion Include="Microsoft.DotNet.IBCMerge" Version="$(MicrosoftDotNetIBCMergeVersion)" Condition="'$(UsingToolIbcOptimization)' == 'true'" />
+
+    <PackageVersion Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="$(MicrosoftCodeAnalysisPublicApiAnalyzersVersion)" />
+
+    <PackageVersion Include="Microsoft.WindowsDesktop.App.Ref" Version="$(MicrosoftWindowsDesktopAppRefv30PackageVersion)" />
 
   </ItemGroup>
 </Project>

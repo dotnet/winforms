@@ -6,8 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="xunit.stafact" Version="$(XUnitStaFactPackageVersion)" />
-    <PackageReference Include="coverlet.msbuild" Version="$(CoverletMSBuildPackageVersion)" />
-    <PackageReference Include="Moq" Version="$(MoqPackageVersion)" />
+    <PackageReference Include="xunit.stafact" />
+    <PackageReference Include="coverlet.msbuild" />
+    <PackageReference Include="Moq" />
   </ItemGroup>
 </Project>

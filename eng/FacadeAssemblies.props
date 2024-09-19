@@ -30,7 +30,7 @@
 
   <ItemGroup Condition="'$(IsFacadeAssemblyNetCore3x)' == 'true'">  
     <!-- PrivateAssets="All": don't flow package references to callers -->
-    <PackageReference Include="Microsoft.WindowsDesktop.App.Ref" Version="$(MicrosoftWindowsDesktopAppRefv30PackageVersion)" PrivateAssets="All" GeneratePathProperty="true" ExcludeAssets="All" NoWarn="NU1701" />
+    <PackageReference Include="Microsoft.WindowsDesktop.App.Ref" PrivateAssets="All" GeneratePathProperty="true" ExcludeAssets="All" NoWarn="NU1701" />
     <PackageReference Include="Microsoft.DotNet.GenFacades" PrivateAssets="All" />
   </ItemGroup>
 
