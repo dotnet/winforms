@@ -7,8 +7,8 @@ using System.Collections;
 using System.ComponentModel.Design;
 using Moq;
 
-namespace System.Windows.Forms.Design.Tests
-{
+namespace System.Windows.Forms.Design.Tests;
+
     public class TabControlDesignerTests
     {
         private (TabControlDesigner designer, TabControl tabControl) CreateInitializedDesignerWithServiceProvider(out Mock<IServiceProvider> serviceProvider, out Mock<IDesignerHost> designerHost)
@@ -178,4 +178,3 @@ namespace System.Windows.Forms.Design.Tests
             }
         }
     }
-}
