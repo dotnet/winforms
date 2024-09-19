@@ -490,4 +490,47 @@ public class PropertyGridTests : IDisposable
         _propertyGrid.SelectedGridItem = gridItem;
         _propertyGrid.SelectedGridItem.Should().Be(gridItem);
     }
+
+    [WinFormsFact]
+    public void PropertyGrid_CollapseAllGridItemsEvent_Raised_Success()
+    {
+        _propertyGrid.SelectedGridItem.Should().NotBeNull();
+        GridItemCollection gridItems = _propertyGrid.SelectedGridItem!.Parent!.GridItems;
+        gridItems.Count.Should().BeGreaterThan(0);
+
+        foreach (GridItem item in gridItems)
+        {
+            item.Expanded = true;
+        }
+
+        _propertyGrid.CollapseAllGridItems();
+
+        foreach (GridItem item in gridItems)
+        {
+            item.Expanded.Should().BeFalse();
+        }
+    }
+
+    [WinFormsFact]
+    public void PropertyGrid_ExpandAllGridItemsEvent_Raised_Success()
+    {
+        _propertyGrid.SelectedGridItem.Should().NotBeNull();
+        GridItemCollection gridItems = _propertyGrid.SelectedGridItem!.Parent!.GridItems;
+        gridItems.Count.Should().BeGreaterThan(0);
+
+        foreach (GridItem item in gridItems)
+        {
+            item.Expanded = false;
+        }
+
+        _propertyGrid.ExpandAllGridItems();
+
+        foreach (GridItem item in gridItems)
+        {
+            if (item.Expandable == true)
+            {
+                item.Expanded.Should().BeTrue();
+            }
+        }
+    }
 }
