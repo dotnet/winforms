@@ -1466,7 +1466,7 @@ public unsafe partial class Control :
     /// <summary>
     ///  Indicates whether or not this control has an accessible object associated with it.
     /// </summary>
-    internal bool IsAccessibilityObjectCreated => Properties.GetObject(s_accessibilityProperty) is ControlAccessibleObject;
+    internal bool IsAccessibilityObjectCreated => Properties.ContainsKey(s_accessibilityProperty);
 
     /// <summary>
     ///  Retrieves the Win32 thread ID of the thread that created the
@@ -4819,7 +4819,7 @@ public unsafe partial class Control :
             SuspendLayout();
             try
             {
-                Properties.SetObject(s_ncAccessibilityProperty, value: null);
+                Properties.RemoveValue(s_ncAccessibilityProperty);
 
                 DisposeAxControls();
                 ((ActiveXImpl?)Properties.GetObject(s_activeXImplProperty))?.Dispose();
@@ -7392,14 +7392,14 @@ public unsafe partial class Control :
             IntPtr handle = Handle;
 
             // The Accessibility Object for this Control
-            if (Properties.GetObject(s_accessibilityProperty) is ControlAccessibleObject clientAccessibleObject)
+            if (Properties.TryGetValue(s_accessibilityProperty, out ControlAccessibleObject? clientAccessibleObject))
             {
                 clientAccessibleObject.Handle = handle;
             }
 
             // Private accessibility object for control, used to wrap the object that
             // OLEACC.DLL creates to represent the control's non-client (NC) region.
-            if (Properties.GetObject(s_ncAccessibilityProperty) is ControlAccessibleObject nonClientAccessibleObject)
+            if (Properties.TryGetValue(s_ncAccessibilityProperty, out ControlAccessibleObject? nonClientAccessibleObject))
             {
                 nonClientAccessibleObject.Handle = handle;
             }
@@ -7539,32 +7539,26 @@ public unsafe partial class Control :
         ((EventHandler?)Events[s_handleDestroyedEvent])?.Invoke(this, e);
 
         // The Accessibility Object for this Control
-        if (Properties.GetObject(s_accessibilityProperty) is ControlAccessibleObject accObj)
+        if (Properties.TryGetValue(s_accessibilityProperty, out ControlAccessibleObject? accObj))
         {
             accObj.Handle = IntPtr.Zero;
         }
 
         // Private accessibility object for control, used to wrap the object that
         // OLEACC.DLL creates to represent the control's non-client (NC) region.
-        if (Properties.GetObject(s_ncAccessibilityProperty) is ControlAccessibleObject nonClientAccessibleObject)
+        if (Properties.TryGetValue(s_ncAccessibilityProperty, out ControlAccessibleObject? nonClientAccessibleObject))
         {
             nonClientAccessibleObject.Handle = IntPtr.Zero;
         }
 
         ReflectParent = null;
 
-        if (!RecreatingHandle)
+        if (!RecreatingHandle && GetState(States.OwnCtlBrush) && Properties.TryGetValue(s_backBrushProperty, out HBRUSH backBrush))
         {
-            if (GetState(States.OwnCtlBrush))
+            Properties.RemoveValue(s_backBrushProperty);
+            if (!backBrush.IsNull)
             {
-                if (Properties.TryGetValue(s_backBrushProperty, out HBRUSH backBrush))
-                {
-                    Properties.RemoveValue(s_backBrushProperty);
-                    if (!backBrush.IsNull)
-                    {
-                        PInvokeCore.DeleteObject(backBrush);
-                    }
-                }
+                PInvokeCore.DeleteObject(backBrush);
             }
         }
 
@@ -9486,14 +9480,11 @@ public unsafe partial class Control :
             PInvoke.UiaDisconnectProvider(accessibleObject, skipOSCheck: true);
         }
 
-        Properties.SetObject(s_accessibilityProperty, null);
+        Properties.RemoveValue(s_accessibilityProperty);
     }
 
-    private protected bool TryGetAccessibilityObject([NotNullWhen(true)] out AccessibleObject? accessibleObject)
-    {
-        accessibleObject = Properties.GetObject(s_accessibilityProperty) as AccessibleObject;
-        return accessibleObject is not null;
-    }
+    private protected bool TryGetAccessibilityObject([NotNullWhen(true)] out AccessibleObject? accessibleObject) =>
+        Properties.TryGetValue(s_accessibilityProperty, out accessibleObject);
 
     /// <summary>
     ///  Resets the mouse leave listeners.
