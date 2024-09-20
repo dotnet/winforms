@@ -430,7 +430,7 @@ public unsafe partial class Control :
         {
             if (!Properties.TryGetValue(s_accessibilityProperty, out AccessibleObject? accessibleObject))
             {
-                accessibleObject = CreateAccessibilityInstance();
+                accessibleObject = CreateAccessibilityInstance().OrThrowIfNull();
                 Properties.SetObject(s_accessibilityProperty, accessibleObject);
             }
 
