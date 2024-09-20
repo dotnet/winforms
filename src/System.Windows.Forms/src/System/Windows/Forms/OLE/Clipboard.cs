@@ -151,7 +151,27 @@ public static class Clipboard
     /// <summary>
     ///  Removes all data from the Clipboard.
     /// </summary>
-    public static void Clear() => SetDataObject(new DataObject());
+    public static unsafe void Clear()
+    {
+        if (Application.OleRequired() != ApartmentState.STA)
+        {
+            throw new ThreadStateException(SR.ThreadMustBeSTA);
+        }
+
+        HRESULT hr;
+        int retry = 10;
+        while ((hr = PInvoke.OleSetClipboard(null)).Failed)
+        {
+            if (--retry < 0)
+            {
+#pragma warning disable CA2201 // Do not raise reserved exception types
+                throw new ExternalException(SR.ClipboardOperationFailed, (int)hr);
+#pragma warning restore CA2201
+            }
+
+            Thread.Sleep(millisecondsTimeout: 100);
+        }
+    }
 
     /// <summary>
     ///  Indicates whether there is data on the Clipboard in the <see cref="DataFormats.WaveAudio"/> format.
