@@ -10,38 +10,40 @@ namespace System.Windows.Forms.Tests;
 public class ToolStripLabelTests : IDisposable
 {
     private readonly ToolStripLabel _toolStripLabel = new();
-
     public void Dispose() => _toolStripLabel.Dispose();
 
     [WinFormsFact]
     public void ToolStripLabel_DefaultConstructor_SetsDefaults()
     {
-        _toolStripLabel.Text.Should().BeEmpty();
-        _toolStripLabel.Image.Should().BeNull();
-        _toolStripLabel.IsLink.Should().BeFalse();
+        ToolStripLabel toolStripLabel = new();
+
+        toolStripLabel.Text.Should().BeEmpty();
+        toolStripLabel.Image.Should().BeNull();
+        toolStripLabel.IsLink.Should().BeFalse();
     }
 
     [WinFormsFact]
     public void ToolStripLabel_ConstructorWithText_SetsText()
     {
         string text = "Test Label";
-        _toolStripLabel.Text = text;
 
-        _toolStripLabel.Text.Should().Be(text);
-        _toolStripLabel.Image.Should().BeNull();
-        _toolStripLabel.IsLink.Should().BeFalse();
+        ToolStripLabel toolStripLabel = new(text);
+
+        toolStripLabel.Text.Should().Be(text);
+        toolStripLabel.Image.Should().BeNull();
+        toolStripLabel.IsLink.Should().BeFalse();
     }
 
     [WinFormsFact]
     public void ToolStripLabel_ConstructorWithImage_SetsImage()
     {
         using Bitmap image = new(10, 10);
-        _toolStripLabel.Image = image;
-        _toolStripLabel.Text = null;
 
-        _toolStripLabel.Image.Should().Be(image);
-        _toolStripLabel.Text.Should().BeNull();
-        _toolStripLabel.IsLink.Should().BeFalse();
+        ToolStripLabel toolStripLabel = new(image);
+
+        toolStripLabel.Image.Should().Be(image);
+        toolStripLabel.Text.Should().BeNull();
+        toolStripLabel.IsLink.Should().BeFalse();
     }
 
     [WinFormsFact]
@@ -49,12 +51,12 @@ public class ToolStripLabelTests : IDisposable
     {
         using Bitmap image = new(10, 10);
         string text = "Test Label";
-        _toolStripLabel.Text = text;
-        _toolStripLabel.Image = image;
 
-        _toolStripLabel.Text.Should().Be(text);
-        _toolStripLabel.Image.Should().Be(image);
-        _toolStripLabel.IsLink.Should().BeFalse();
+        ToolStripLabel toolStripLabel = new(text, image);
+
+        toolStripLabel.Text.Should().Be(text);
+        toolStripLabel.Image.Should().Be(image);
+        toolStripLabel.IsLink.Should().BeFalse();
     }
 
     [WinFormsFact]
@@ -63,13 +65,12 @@ public class ToolStripLabelTests : IDisposable
         using Bitmap image = new(10, 10);
         string text = "Test Label";
         bool isLink = true;
-        _toolStripLabel.Text = text;
-        _toolStripLabel.Image = image;
-        _toolStripLabel.IsLink = isLink;
 
-        _toolStripLabel.Text.Should().Be(text);
-        _toolStripLabel.Image.Should().Be(image);
-        _toolStripLabel.IsLink.Should().Be(isLink);
+        ToolStripLabel toolStripLabel = new(text, image, isLink);
+
+        toolStripLabel.Text.Should().Be(text);
+        toolStripLabel.Image.Should().Be(image);
+        toolStripLabel.IsLink.Should().Be(isLink);
     }
 
     [WinFormsFact]
@@ -81,16 +82,13 @@ public class ToolStripLabelTests : IDisposable
         bool eventHandlerCalled = false;
         EventHandler onClick = (sender, e) => eventHandlerCalled = true;
 
-        _toolStripLabel.Text = text;
-        _toolStripLabel.Image = image;
-        _toolStripLabel.IsLink = isLink;
-        _toolStripLabel.Click += onClick;
+        ToolStripLabel toolStripLabel = new(text, image, isLink, onClick);
 
-        _toolStripLabel.Text.Should().Be(text);
-        _toolStripLabel.Image.Should().Be(image);
-        _toolStripLabel.IsLink.Should().Be(isLink);
+        toolStripLabel.Text.Should().Be(text);
+        toolStripLabel.Image.Should().Be(image);
+        toolStripLabel.IsLink.Should().Be(isLink);
 
-        _toolStripLabel.PerformClick();
+        toolStripLabel.PerformClick();
         eventHandlerCalled.Should().BeTrue();
     }
 
