@@ -159,7 +159,7 @@ public class ControlDesignerDesignerControlCollectionTests : IDisposable
     public void Clear_ShouldRemoveAllControlsFromCollection()
     {
         using Control control = new();
-        control.Site = new MockSite { Component = control, DesignMode = true };
+        control.Site = new MockSite(control, designMode: true);
         _collection.Add(control);
         _control.Controls.Contains(control).Should().BeTrue();
 
@@ -169,30 +169,19 @@ public class ControlDesignerDesignerControlCollectionTests : IDisposable
 
     private class MockSite : ISite, IDisposable
     {
-        public IComponent Component { get; set; }
-        public IContainer Container { get; set; }
-        public bool DesignMode { get; set; }
+        public IComponent Component { get; }
+        public IContainer Container { get; init; } = new Container();
+        public bool DesignMode { get; }
         public string? Name { get; set; }
 
-        public MockSite()
+        public MockSite(IComponent component, bool designMode)
         {
-            Component = new Component();
-            Container = new Container();
+            Component = component;
+            DesignMode = designMode;
         }
 
         public object? GetService(Type serviceType) => null;
 
-        public void Dispose()
-        {
-            if (Component is IDisposable disposableComponent)
-            {
-                disposableComponent.Dispose();
-            }
-
-            if (Container is IDisposable disposableContainer)
-            {
-                disposableContainer.Dispose();
-            }
-        }
+        public void Dispose() => Container?.Dispose();
     }
 }
