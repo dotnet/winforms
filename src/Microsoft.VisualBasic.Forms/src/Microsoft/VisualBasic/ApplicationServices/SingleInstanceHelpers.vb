@@ -12,14 +12,16 @@ Namespace Microsoft.VisualBasic.ApplicationServices
     Friend Module SingleInstanceHelpers
         Private Const NamedPipeOptions As PipeOptions = PipeOptions.Asynchronous Or PipeOptions.CurrentUserOnly
 
-        Private Async Function ReadArgsAsync(pipeServer As NamedPipeServerStream, cancellationToken As CancellationToken) As Task(Of String())
+        Private Async Function ReadArgsAsync(
+                pipeServer As NamedPipeServerStream,
+                cancellationToken As CancellationToken) As Task(Of String())
             Const bufferLength As Integer = 1024
             Dim buffer As Byte() = New Byte(bufferLength - 1) {}
             Using stream As New MemoryStream
                 While True
                     Dim bytesRead As Integer = Await pipeServer.ReadAsync(
                         buffer:=buffer.AsMemory(start:=0, length:=bufferLength),
-                        cancellationToken:=cancellationToken) _
+                        cancellationToken) _
                         .ConfigureAwait(continueOnCapturedContext:=False)
                     If bytesRead = 0 Then
                         Exit While
@@ -39,7 +41,11 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             End Using
         End Function
 
-        Private Async Function WriteArgsAsync(pipeClient As NamedPipeClientStream, args As String(), cancellationToken As CancellationToken) As Task
+        Private Async Function WriteArgsAsync(
+            pipeClient As NamedPipeClientStream,
+            args As String(),
+            cancellationToken As CancellationToken) As Task
+
             Dim content As Byte()
             Using stream As New MemoryStream
                 Dim serializer As New DataContractSerializer(GetType(String()))
@@ -52,7 +58,11 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 .ConfigureAwait(continueOnCapturedContext:=False)
         End Function
 
-        Friend Async Function SendSecondInstanceArgsAsync(pipeName As String, args As String(), cancellationToken As CancellationToken) As Task
+        Friend Async Function SendSecondInstanceArgsAsync(
+            pipeName As String,
+            args As String(),
+            cancellationToken As CancellationToken) As Task
+
             Using pipeClient As New NamedPipeClientStream(
                 serverName:=".",
                 pipeName:=pipeName,
@@ -66,14 +76,17 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             End Using
         End Function
 
-        Friend Function TryCreatePipeServer(pipeName As String, <Out> ByRef pipeServer As NamedPipeServerStream) As Boolean
+        Friend Function TryCreatePipeServer(
+            pipeName As String,
+            <Out> ByRef pipeServer As NamedPipeServerStream) As Boolean
+
             Try
                 pipeServer = New NamedPipeServerStream(
-                        pipeName:=pipeName,
-                        direction:=PipeDirection.In,
-                        maxNumberOfServerInstances:=1,
-                        transmissionMode:=PipeTransmissionMode.Byte,
-                        options:=NamedPipeOptions)
+                    pipeName:=pipeName,
+                    direction:=PipeDirection.In,
+                    maxNumberOfServerInstances:=1,
+                    transmissionMode:=PipeTransmissionMode.Byte,
+                    options:=NamedPipeOptions)
                 Return True
             Catch ex As Exception
                 pipeServer = Nothing
@@ -81,7 +94,11 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             End Try
         End Function
 
-        Friend Async Function WaitForClientConnectionsAsync(pipeServer As NamedPipeServerStream, callback As Action(Of String()), cancellationToken As CancellationToken) As Task
+        Friend Async Function WaitForClientConnectionsAsync(
+            pipeServer As NamedPipeServerStream,
+            callback As Action(Of String()),
+            cancellationToken As CancellationToken) As Task
+
             While True
                 cancellationToken.ThrowIfCancellationRequested()
                 Await pipeServer.WaitForConnectionAsync(cancellationToken) _
