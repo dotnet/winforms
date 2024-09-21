@@ -24,7 +24,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 )
             ex.Should.BeOfType(Of ArgumentException)()
             CType(ex, ArgumentException).ParamName.Should.Be(ArgumentName)
-            ex.Message.Should.StartWith(VbUtils.GetResourceString(resourceID, ArgumentName), ArgumentName)
+            ex.Message.Should.StartWith(
+                VbUtils.GetResourceString(resourceID, ArgumentName), ArgumentName)
         End Sub
 
         <WinFormsFact>
@@ -33,7 +34,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim ex As Exception = VbUtils.GetArgumentNullException(ArgumentName)
             ex.Should.BeOfType(Of ArgumentNullException)()
             CType(ex, ArgumentNullException).ParamName.Should.Be(ArgumentName)
-            ex.Message.Should.StartWith($"{VbUtils.GetResourceString(SR.General_ArgumentNullException)}")
+            ex.Message.Should.StartWith(VbUtils.GetResourceString(SR.General_ArgumentNullException))
         End Sub
 
         <WinFormsFact>
@@ -77,8 +78,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub GetIOExceptionTest_Succeed()
             Dim ex As Exception = VbUtils.GetIOException(SR.IO_FileExists_Path, IO.Path.GetTempPath)
             ex.Should.BeOfType(Of IO.IOException)()
-            ex.Message.Should.Be(
-                $"Could not complete operation since a file already exists in this path '{IO.Path.GetTempPath}'.")
+            Dim expected As String = VbUtils.GetResourceString(resourceKey:=SR.IO_FileExists_Path, IO.Path.GetTempPath)
+            ex.Message.Should.Be(expected)
         End Sub
 
         <WinFormsFact>
@@ -92,7 +93,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <InlineData(0)>
         Public Sub VbMakeExceptionInvalidValuesTest_Succeed(BadResourceId As Integer)
             Dim id As String = $"ID{BadResourceId}"
-            Dim expected As String = $"{SR.GetResourceString(id, id)}"
+            Dim expected As String = SR.GetResourceString(id, id)
             VbUtils.VbMakeException(BadResourceId).Message.Should.Be(expected)
         End Sub
 

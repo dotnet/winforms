@@ -45,20 +45,14 @@ public partial class DataGridViewButtonCell : DataGridViewCell
             Debug.Assert((value & ~(ButtonState.Normal | ButtonState.Pushed | ButtonState.Checked)) == 0);
             if (ButtonState != value)
             {
-                Properties.AddValue(s_propButtonCellState, value);
+                Properties.AddOrRemoveValue(s_propButtonCellState, value, defaultValue: ButtonState.Normal);
             }
         }
     }
 
+    // Buttons can't switch to edit mode
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.Interfaces)]
-    public override Type? EditType
-    {
-        get
-        {
-            // Buttons can't switch to edit mode
-            return null;
-        }
-    }
+    public override Type? EditType => null;
 
     [DefaultValue(FlatStyle.Standard)]
     public FlatStyle FlatStyle
@@ -66,11 +60,10 @@ public partial class DataGridViewButtonCell : DataGridViewCell
         get => Properties.GetValueOrDefault(s_propButtonCellFlatStyle, FlatStyle.Standard);
         set
         {
-            // Sequential enum. Valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(value);
             if (value != FlatStyle)
             {
-                Properties.AddValue(s_propButtonCellFlatStyle, value);
+                Properties.AddOrRemoveValue(s_propButtonCellFlatStyle, value, defaultValue: FlatStyle.Standard);
                 OnCommonChange();
             }
         }

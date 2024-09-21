@@ -152,14 +152,15 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             ' before the Network object gets created because the network object will be doing a
             ' AsyncOperationsManager.CreateOperation() which captures the execution context. So we must
             ' have our principal on the thread before that happens.
-            If authenticationMode = AuthenticationMode.Windows Then
+            If authenticationMode = authenticationMode.Windows Then
                 Try
                     ' Consider: Sadly, a call to:
                     ' Security.SecurityManager.IsGranted(New SecurityPermission(SecurityPermissionFlag.ControlPrincipal))
                     ' Will only check the THIS caller so you'll always get TRUE.
                     ' What we need is a way to get to the value of this on a demand basis.
                     ' So I try/catch instead for now but would rather be able to IF my way around this block.
-                    Thread.CurrentPrincipal = New Principal.WindowsPrincipal(Principal.WindowsIdentity.GetCurrent)
+                    Dim ntIdentity As Principal.WindowsIdentity = Principal.WindowsIdentity.GetCurrent
+                    Thread.CurrentPrincipal = New Principal.WindowsPrincipal(ntIdentity)
                 Catch ex As SecurityException
                 End Try
             End If
@@ -310,7 +311,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
                 ' Allow for the case where they set splash screen = nothing and mainForm is currently nothing.
                 If value IsNot Nothing AndAlso value Is _appContext.MainForm Then
-                    Throw New ArgumentException(VbUtils.GetResourceString(SR.AppModel_SplashAndMainFormTheSame))
+                    Dim message As String = VbUtils.GetResourceString(SR.AppModel_SplashAndMainFormTheSame)
+                    Throw New ArgumentException(message)
                 End If
 
                 _splashScreen = value
@@ -326,10 +328,14 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             End Get
             Set(value As Form)
                 If value Is Nothing Then
-                    Throw VbUtils.GetArgumentNullException("MainForm", SR.General_PropertyNothing, "MainForm")
+                    Throw VbUtils.GetArgumentNullException(
+                        argumentName:="MainForm",
+                        resourceID:=SR.General_PropertyNothing,
+                        "MainForm")
                 End If
                 If value Is _splashScreen Then
-                    Throw New ArgumentException(VbUtils.GetResourceString(SR.AppModel_SplashAndMainFormTheSame))
+                    Dim message As String = VbUtils.GetResourceString(SR.AppModel_SplashAndMainFormTheSame)
+                    Throw New ArgumentException(message)
                 End If
                 _appContext.MainForm = value
             End Set
@@ -478,7 +484,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                         Try
                             If handler IsNot Nothing Then handler.Invoke(sender, e)
                         Catch ex As Exception
-                            If Not OnUnhandledException(New UnhandledExceptionEventArgs(True, ex)) Then
+                            Dim e1 As New UnhandledExceptionEventArgs(exitApplication:=True, exception:=ex)
+                            If Not OnUnhandledException(e1) Then
 
                                 ' The user didn't write a handler so throw the error up the chain.
                                 Throw
@@ -523,7 +530,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <param name="value"></param>
         Private Shared Sub ValidateAuthenticationModeEnumValue(value As AuthenticationMode, paramName As String)
             If value < AuthenticationMode.Windows OrElse value > AuthenticationMode.ApplicationDefined Then
-                Throw New InvalidEnumArgumentException(paramName, value, GetType(AuthenticationMode))
+                Throw New InvalidEnumArgumentException(
+                    argumentName:=paramName,
+                    invalidValue:=value,
+                    enumClass:=GetType(AuthenticationMode))
             End If
         End Sub
 
@@ -533,7 +543,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <param name="value"></param>
         Private Shared Sub ValidateShutdownModeEnumValue(value As ShutdownMode, paramName As String)
             If value < ShutdownMode.AfterMainFormCloses OrElse value > ShutdownMode.AfterAllFormsClose Then
-                Throw New InvalidEnumArgumentException(paramName, value, GetType(ShutdownMode))
+                Throw New InvalidEnumArgumentException(
+                    argumentName:=paramName,
+                    invalidValue:=value,
+                    enumClass:=GetType(ShutdownMode))
             End If
         End Sub
 
@@ -543,7 +556,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  it doesn't freeze up while the main form is getting it together.
         ''' </summary>
         Private Sub DisplaySplash()
-            Debug.Assert(_splashScreen IsNot Nothing, "We should have never get here if there is no splash screen")
+            Const Message As String = "We should have never get here if there is no splash screen"
+            Debug.Assert(_splashScreen IsNot Nothing, Message)
 
             If _splashTimer IsNot Nothing Then
 
@@ -584,13 +598,15 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     ' have already seen via our hook of System.Windows.Forms.Application.ThreadException).
                     If _processingUnhandledExceptionEvent Then
 
-                        ' If the UnhandledException handler threw for some reason, throw that error out to the system.
+                        ' If the UnhandledException handler threw for some reason,
+                        ' throw that error out to the system.
                         Throw
                     Else
 
                         ' We had an exception, but not during the OnUnhandledException handler so give the user
                         ' a chance to look at what happened in the UnhandledException event handler
-                        If Not OnUnhandledException(New UnhandledExceptionEventArgs(True, ex)) Then
+                        Dim e As New UnhandledExceptionEventArgs(exitApplication:=True, ex)
+                        If Not OnUnhandledException(e) Then
 
                             ' The user didn't write a handler so throw the error out to the system
                             Throw
@@ -714,7 +730,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  <see cref="UnhandledException"/> event so we do the translation here before raising our event.
         ''' </remarks>
         Private Sub OnUnhandledExceptionEventAdaptor(sender As Object, e As ThreadExceptionEventArgs)
-            OnUnhandledException(New UnhandledExceptionEventArgs(True, e.Exception))
+            OnUnhandledException(New UnhandledExceptionEventArgs(exitApplication:=True, e.Exception))
         End Sub
 
         ''' <summary>
@@ -842,7 +858,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 #Enable Warning WFO5001
 
             ' We'll handle "/nosplash" for you.
-            If Not (commandLineArgs.Contains("/nosplash") OrElse Me.CommandLineArgs.Contains("-nosplash")) Then
+            If Not (commandLineArgs.Contains("/nosplash") OrElse
+                Me.CommandLineArgs.Contains("-nosplash")) Then
+
                 ShowSplashScreen()
             End If
 
@@ -1080,7 +1098,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                         Dim awaitable As ConfiguredTaskAwaitable = SendSecondInstanceArgsAsync(
                             pipeName:=applicationInstanceID,
                             args:=commandLine,
-                            cancellationToken:=tokenSource.Token).ConfigureAwait(continueOnCapturedContext:=False)
+                            cancellationToken:=tokenSource.Token) _
+                            .ConfigureAwait(continueOnCapturedContext:=False)
 
                         awaitable.GetAwaiter().GetResult()
                     Catch ex As Exception
