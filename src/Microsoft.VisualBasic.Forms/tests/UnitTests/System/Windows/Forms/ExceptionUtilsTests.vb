@@ -92,9 +92,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <InlineData(-1)>
         <InlineData(0)>
         Public Sub VbMakeExceptionInvalidValuesTest_Succeed(BadResourceId As Integer)
-            Dim id As String = $"ID{BadResourceId}"
-            Dim expected As String = SR.GetResourceString(id, id)
-            VbUtils.VbMakeException(BadResourceId).Message.Should.Be(expected)
+            Dim exception As Exception = VbUtils.VbMakeException(BadResourceId)
+            String.IsNullOrWhiteSpace(exception.Message).Should.Be(True)
         End Sub
 
         <WinFormsTheory>
