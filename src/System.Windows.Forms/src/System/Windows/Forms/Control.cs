@@ -518,7 +518,7 @@ public unsafe partial class Control :
         {
             // valid values are -1 to 0x40
             SourceGenerated.EnumValidator.Validate(value);
-            Properties.AddValue(s_accessibleRoleProperty, value);
+            Properties.AddOrRemoveValue(s_accessibleRoleProperty, value, defaultValue: AccessibleRole.Default);
         }
     }
 
@@ -1178,7 +1178,7 @@ public unsafe partial class Control :
                 }
             }
 
-            Properties.AddValue(s_cacheTextCountProperty, cacheTextCounter);
+            Properties.AddOrRemoveValue(s_cacheTextCountProperty, cacheTextCounter);
         }
     }
 
@@ -7135,10 +7135,9 @@ public unsafe partial class Control :
     {
         if (Properties.ContainsKey(s_dataContextProperty))
         {
-            // If this DataContext was the same as the Parent's just became,
             if (Equals(Properties.GetValueOrDefault<object>(s_dataContextProperty), Parent?.DataContext))
             {
-                // we need to make it ambient again by removing it.
+                // Same as the parent context, make it ambient by removing it.
                 Properties.RemoveValue(s_dataContextProperty);
 
                 // Even though internally we don't store it any longer, and the

@@ -32,7 +32,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         ''' <summary>
         '''  Setting this property inside the event handler determines the
-        '''  <see cref="Application.ColorMode"/> for the <see cref="Application"/>.
+        '''  <see cref="Application.ColorMode"/> for the application.
         ''' </summary>
         <Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat:=WindowsFormsApplicationBase.WinFormsExperimentalUrl)>
         Public Property ColorMode As SystemColorMode
@@ -50,7 +50,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         ''' <summary>
         '''  Setting this <see langword="Property"/> inside the <see langword="Event"/> handler determines the general
-        '''  <see cref="HighDpiMode"/> for the <see cref="Application"/>.
+        '''  <see cref="HighDpiMode"/> for the application.
         ''' </summary>
         ''' <remarks>
         '''  The default value for this property is SystemAware.
@@ -59,7 +59,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         ''' <summary>
         '''  Setting this <see langword="Property"/> inside the <see langword="Event"/> handler determines
-        '''  how long an <see cref="application"/>'s Splash dialog is displayed at a minimum.
+        '''  how long an application's Splash dialog is displayed at a minimum.
         ''' </summary>
         Public Property MinimumSplashScreenDisplayTime As Integer =
             WindowsFormsApplicationBase.MinimumSplashExposureDefault

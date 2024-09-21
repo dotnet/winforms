@@ -6,7 +6,7 @@ using Accessibility;
 
 namespace System.Windows.Forms;
 
-internal static unsafe class AccessibiltyExtensions
+internal static unsafe class AccessibilityExtensions
 {
     /// <inheritdoc cref="PInvoke.LresultFromObject(Guid*, WPARAM, IUnknown*)"/>
     internal static LRESULT GetLRESULT(this IAccessible accessible, WPARAM wparam)
