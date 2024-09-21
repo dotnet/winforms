@@ -72,7 +72,7 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  The path to the Desktop directory.
         ''' </summary>
         ''' <value><see cref="SpecialDirectories.Desktop"/></value>
-        ''' <remarks>This directory is C:\Document and Settings\[UserName]\Desktop.</remarks>
+        ''' <remarks>This directory is C:\Users\[UserName]\Desktop.</remarks>
         ''' <exception cref="DirectoryNotFoundException">
         '''  The path is empty, usually because the operating system does not support the directory.
         ''' </exception>
