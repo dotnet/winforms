@@ -249,7 +249,7 @@ public partial class Control
     private bool LastCanEnableIme
     {
         get => Properties.GetValueOrDefault(s_lastCanEnableImeProperty, true);
-        set => Properties.AddValue(s_lastCanEnableImeProperty, value);
+        set => Properties.AddOrRemoveValue(s_lastCanEnableImeProperty, value, defaultValue: true);
     }
 
     /// <summary>

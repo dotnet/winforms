@@ -18,14 +18,14 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             Using stream As New MemoryStream
                 While True
                     Dim bytesRead As Integer = Await pipeServer.ReadAsync(
-                        buffer.AsMemory(0, bufferLength),
-                        cancellationToken).ConfigureAwait(False)
+                        buffer:=buffer.AsMemory(start:=0, length:=bufferLength), cancellationToken:=cancellationToken) _
+                        .ConfigureAwait(continueOnCapturedContext:=False)
                     If bytesRead = 0 Then
                         Exit While
                     End If
                     Await stream.WriteAsync(
-                        buffer.AsMemory(0, bytesRead),
-                        cancellationToken).ConfigureAwait(False)
+                        buffer:=buffer.AsMemory(start:=0, length:=bytesRead), cancellationToken) _
+                        .ConfigureAwait(continueOnCapturedContext:=False)
                 End While
                 stream.Seek(0, SeekOrigin.Begin)
                 Dim serializer As New DataContractSerializer(GetType(String()))
@@ -44,7 +44,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 serializer.WriteObject(stream, args)
                 content = stream.ToArray()
             End Using
-            Await pipeClient.WriteAsync(content.AsMemory(0, content.Length), cancellationToken).ConfigureAwait(False)
+            Await pipeClient.WriteAsync(
+                buffer:=content.AsMemory(start:=0, length:=content.Length), cancellationToken) _
+                .ConfigureAwait(continueOnCapturedContext:=False)
         End Function
 
         Friend Async Function SendSecondInstanceArgsAsync(pipeName As String, args As String(), cancellationToken As CancellationToken) As Task
@@ -53,8 +55,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                             pipeName:=pipeName,
                             direction:=PipeDirection.Out,
                             options:=NamedPipeOptions)
-                Await pipeClient.ConnectAsync(cancellationToken).ConfigureAwait(False)
-                Await WriteArgsAsync(pipeClient, args, cancellationToken).ConfigureAwait(False)
+                Await pipeClient.ConnectAsync(cancellationToken) _
+                    .ConfigureAwait(continueOnCapturedContext:=False)
+                Await WriteArgsAsync(pipeClient, args, cancellationToken) _
+                    .ConfigureAwait(continueOnCapturedContext:=False)
             End Using
         End Function
 
@@ -76,9 +80,11 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Friend Async Function WaitForClientConnectionsAsync(pipeServer As NamedPipeServerStream, callback As Action(Of String()), cancellationToken As CancellationToken) As Task
             While True
                 cancellationToken.ThrowIfCancellationRequested()
-                Await pipeServer.WaitForConnectionAsync(cancellationToken).ConfigureAwait(False)
+                Await pipeServer.WaitForConnectionAsync(cancellationToken) _
+                    .ConfigureAwait(continueOnCapturedContext:=False)
                 Try
-                    Dim args() As String = Await ReadArgsAsync(pipeServer, cancellationToken).ConfigureAwait(False)
+                    Dim args() As String = Await ReadArgsAsync(pipeServer, cancellationToken) _
+                        .ConfigureAwait(continueOnCapturedContext:=False)
                     If args IsNot Nothing Then
                         callback(args)
                     End If

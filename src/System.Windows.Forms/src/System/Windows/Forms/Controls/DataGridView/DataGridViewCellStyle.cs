@@ -97,7 +97,7 @@ public class DataGridViewCellStyle : ICloneable
             Debug.Assert(Enum.IsDefined(value));
             if (Alignment != value)
             {
-                Properties.AddValue(s_propAlignment, value);
+                Properties.AddOrRemoveValue(s_propAlignment, value, defaultValue: DataGridViewContentAlignment.NotSet);
                 OnPropertyChanged(DataGridViewCellStylePropertyInternal.Other);
             }
         }
@@ -402,7 +402,7 @@ public class DataGridViewCellStyle : ICloneable
             Debug.Assert(value is >= DataGridViewTriState.NotSet and <= DataGridViewTriState.False);
             if (WrapMode != value)
             {
-                Properties.AddValue(s_propWrapMode, value);
+                Properties.AddOrRemoveValue(s_propWrapMode, value, defaultValue: DataGridViewTriState.NotSet);
                 OnPropertyChanged(DataGridViewCellStylePropertyInternal.Other);
             }
         }

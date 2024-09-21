@@ -14,9 +14,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub SECURITY_ATTRIBUTES_New_Test_Success()
             Dim testCode As Action =
                     Sub()
-                        Dim att As New SECURITY_ATTRIBUTES
-                        att.nLength.Should.Be(Marshal.SizeOf(GetType(SECURITY_ATTRIBUTES)))
-                        att.Dispose()
+                        Using att As New SECURITY_ATTRIBUTES
+                            att.nLength.Should.Be(Marshal.SizeOf(GetType(SECURITY_ATTRIBUTES)))
+                        End Using
                     End Sub
             testCode.Should.NotThrow()
         End Sub
