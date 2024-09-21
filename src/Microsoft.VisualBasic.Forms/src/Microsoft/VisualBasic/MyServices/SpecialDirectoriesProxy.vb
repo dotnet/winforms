@@ -54,7 +54,7 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  C:\Documents and Settings\[UserName]\Application Data\[CompanyName]\[ProductName]\[ProductVersion]
         '''
         '''  We choose to use System.Windows.Forms.Application.* instead of System.Environment.GetFolderPath(*)
-        '''  since the second function will only return the C:\Documents and Settings\[UserName]\Application Data.\
+        '''  since the second function will only return the C:\Documents and Settings\[UserName]\Application Data\
         '''  The first function separates applications by CompanyName, ProductName, ProductVersion.
         '''  The only catch is that CompanyName, ProductName has to be specified in the AssemblyInfo.vb file,
         '''  otherwise the name of the assembly will be used instead (which still has a level of separation).
