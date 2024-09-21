@@ -425,7 +425,7 @@ public partial class ComboBox : ListControl
                 // valid values are 0x0 to 0x2.
                 SourceGenerated.EnumValidator.Validate(value);
                 ResetHeightCache();
-                Properties.AddValue(s_propDrawMode, value);
+                Properties.AddOrRemoveValue(s_propDrawMode, value, defaultValue: DrawMode.Normal);
                 RecreateHandle();
             }
         }
@@ -1100,8 +1100,6 @@ public partial class ComboBox : ListControl
                 return;
             }
 
-            // verify that 'value' is a valid enum type...
-            // valid values are 0x0 to 0x2
             SourceGenerated.EnumValidator.Validate(value);
 
             if (value == ComboBoxStyle.DropDownList
@@ -1111,10 +1109,10 @@ public partial class ComboBox : ListControl
                 AutoCompleteMode = AutoCompleteMode.None;
             }
 
-            // reset preferred height.
+            // Reset preferred height.
             ResetHeightCache();
 
-            Properties.AddValue(s_propStyle, value);
+            Properties.AddOrRemoveValue(s_propStyle, value, defaultValue: ComboBoxStyle.DropDown);
 
             if (IsHandleCreated)
             {

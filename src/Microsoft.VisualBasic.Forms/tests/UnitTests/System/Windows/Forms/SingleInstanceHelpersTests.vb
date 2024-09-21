@@ -25,12 +25,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim pipeName As String = GetUniqueText()
             Dim pipeServer As NamedPipeServerStream = Nothing
             TryCreatePipeServer(pipeName, pipeServer).Should.BeTrue()
-            pipeServer.CanRead.Should.BeTrue()
-            pipeServer.CanSeek.Should.BeFalse()
-            pipeServer.CanWrite.Should.BeFalse()
-            pipeServer.TransmissionMode.Should.Be(PipeTransmissionMode.Byte)
-            pipeServer.Close()
-            pipeServer.Dispose()
+            Using pipeServer
+                pipeServer.CanRead.Should.BeTrue()
+                pipeServer.CanSeek.Should.BeFalse()
+                pipeServer.CanWrite.Should.BeFalse()
+                pipeServer.TransmissionMode.Should.Be(PipeTransmissionMode.Byte)
+            End Using
         End Sub
 
         <WinFormsFact>
@@ -40,9 +40,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             TryCreatePipeServer(pipeName, pipeServer).Should.BeTrue()
             Dim pipeServer1 As NamedPipeServerStream = Nothing
             TryCreatePipeServer(pipeName, pipeServer1).Should.BeFalse()
-            pipeServer1.Should.BeNull()
-            pipeServer.Close()
-            pipeServer.Dispose()
+            Using pipeServer
+                pipeServer1.Should.BeNull()
+            End Using
         End Sub
 
         <WinFormsFact>
@@ -62,7 +62,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     Dim awaitable As ConfiguredTaskAwaitable = SendSecondInstanceArgsAsync(
                         pipeName,
                         args:=commandLine,
-                        cancellationToken:=tokenSource.Token).ConfigureAwait(False)
+                        cancellationToken:=tokenSource.Token) _
+                        .ConfigureAwait(continueOnCapturedContext:=False)
 
                     awaitable.GetAwaiter().GetResult()
                     Dim CancelToken As New CancellationToken

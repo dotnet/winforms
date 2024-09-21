@@ -91,7 +91,7 @@ internal class PropertyStore
     public void SetObject(int key, object? value) => _values[key] = new(value);
 
     /// <summary>
-    ///  Gets the current value for the given key, or the default value for the type if the key is not found.
+    ///  Gets the current value for the given key, or the <paramref name="defaultValue"/> if the key is not found.
     /// </summary>
     public T? GetValueOrDefault<T>(int key, T? defaultValue = default)
     {
@@ -117,9 +117,9 @@ internal class PropertyStore
     }
 
     /// <summary>
-    ///  Tries to get the value for the given key. Returns <see langword="true"/> if the value was found and was
-    ///  not <see langword="null"/>.
+    ///  Tries to get the value for the given key.
     /// </summary>
+    /// <inheritdoc cref="TryGetValueOrNull{T}(int, out T)"/>
     public bool TryGetValue<T>(int key, [NotNullWhen(true)] out T? value)
     {
         if (_values.TryGetValue(key, out Value foundValue))
@@ -136,8 +136,13 @@ internal class PropertyStore
 
     /// <summary>
     ///  Tries to get the value for the given key, allowing explicitly set <see langword="null"/> values.
-    ///  Returns <see langword="true"/> if the value was found.
     /// </summary>
+    /// <param name="value">
+    ///  <para>
+    ///   The value if found, or <see langword="default"/> if not found.
+    ///  </para>
+    /// </param>
+    /// <returns><see langword="true"/> if the value was found.</returns>
     public bool TryGetValueOrNull<T>(int key, out T? value) where T : class
     {
         if (_values.TryGetValue(key, out Value foundValue))
@@ -169,13 +174,15 @@ internal class PropertyStore
     }
 
     /// <summary>
-    ///  Sets the given value or clears it from the store if the value is <see langword="null"/>.
-    ///  Returns the previous value if it was set, or <see langword="null"/>.
+    ///  Sets the given value or clears it from the store if the value equals <paramref name="defaultValue"/>.
     /// </summary>
-    public T? AddOrRemoveValue<T>(int key, T? value)
+    /// <returns>The previous value if it was set, or <see langword="default"/>.</returns>
+    public T? AddOrRemoveValue<T>(int key, T? value, T? defaultValue = default)
     {
         TryGetValue(key, out T? previous);
-        if (value is null || EqualityComparer<T>.Default.Equals(value, default))
+
+        if ((value is null && defaultValue is null)
+            || (value is not null && value.Equals(defaultValue)))
         {
             _values.Remove(key);
         }

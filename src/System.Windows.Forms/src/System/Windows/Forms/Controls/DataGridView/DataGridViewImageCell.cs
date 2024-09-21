@@ -102,7 +102,7 @@ public partial class DataGridViewImageCell : DataGridViewCell
             SourceGenerated.EnumValidator.Validate(value);
             if (ImageLayout != value)
             {
-                Properties.AddValue(s_propImageCellLayout, value);
+                Properties.AddOrRemoveValue(s_propImageCellLayout, value, defaultValue: DataGridViewImageCellLayout.Normal);
                 OnCommonChange();
             }
         }
@@ -113,7 +113,7 @@ public partial class DataGridViewImageCell : DataGridViewCell
         set
         {
             Debug.Assert(value is >= DataGridViewImageCellLayout.NotSet and <= DataGridViewImageCellLayout.Zoom);
-            Properties.AddValue(s_propImageCellLayout, value);
+            Properties.AddOrRemoveValue(s_propImageCellLayout, value, defaultValue: DataGridViewImageCellLayout.Normal);
         }
     }
 
