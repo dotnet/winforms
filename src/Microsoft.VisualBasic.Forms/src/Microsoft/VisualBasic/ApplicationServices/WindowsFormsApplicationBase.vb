@@ -152,7 +152,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             ' before the Network object gets created because the network object will be doing a
             ' AsyncOperationsManager.CreateOperation() which captures the execution context. So we must
             ' have our principal on the thread before that happens.
-            If authenticationMode = AuthenticationMode.Windows Then
+            If authenticationMode = authenticationMode.Windows Then
                 Try
                     ' Consider: Sadly, a call to:
                     ' Security.SecurityManager.IsGranted(New SecurityPermission(SecurityPermissionFlag.ControlPrincipal))
@@ -1080,7 +1080,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                         Dim awaitable As ConfiguredTaskAwaitable = SendSecondInstanceArgsAsync(
                             pipeName:=applicationInstanceID,
                             args:=commandLine,
-                            cancellationToken:=tokenSource.Token).ConfigureAwait(continueOnCapturedContext:=False)
+                            cancellationToken:=tokenSource.Token) _
+                            .ConfigureAwait(continueOnCapturedContext:=False)
 
                         awaitable.GetAwaiter().GetResult()
                     Catch ex As Exception
