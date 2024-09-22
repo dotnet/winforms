@@ -2158,7 +2158,7 @@ public class ComboBoxTests
     }
 
     [WinFormsFact]
-    public void ComboBox_CustomAccessibleObject_DoesntCrashControl_WhenAddingItems()
+    public void ComboBox_CustomAccessibleObject_DoesNotCrashControl_WhenAddingItems()
     {
         using AutomationEventCountingComboBox control = new();
         control.Items.Add("item1");

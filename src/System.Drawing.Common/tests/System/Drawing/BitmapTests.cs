@@ -723,7 +723,7 @@ public class BitmapTests : FileCleanupTestBase
     }
 
     [Fact]
-    public void SaveWmfAsPngDoesntChangeImageBoundaries()
+    public void SaveWmfAsPngDoesNotChangeImageBoundaries()
     {
         if (PlatformDetection.IsWindows7)
         {
@@ -855,7 +855,7 @@ public class BitmapTests : FileCleanupTestBase
     }
 
     [Fact]
-    public void MakeTransparent_CustomColorDoesntExist_DoesNothing()
+    public void MakeTransparent_CustomColorDoesNotExist_DoesNothing()
     {
         using Bitmap bitmap = new(10, 10);
         for (int x = 0; x < bitmap.Width; x++)
