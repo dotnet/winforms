@@ -334,8 +334,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 End Sub
             Try
                 testCode.Should() _
-                        .Throw(Of ArgumentException)() _
-                        .Where(Function(e) e.Message.StartsWith(SR.Network_BadConnectionTimeout))
+                    .Throw(Of ArgumentException)() _
+                    .Where(Function(e) e.Message.StartsWith(SR.Network_BadConnectionTimeout))
                 File.Exists(destinationFileName).Should.BeFalse()
             Finally
                 CleanUp(listener, testDirectory)
@@ -389,7 +389,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 End Sub
             Try
                 testCode.Should() _
-                        .Throw(Of UriFormatException)()
+                   .Throw(Of UriFormatException)()
                 File.Exists(destinationFileName).Should.BeFalse()
             Finally
                 CleanUp(listener, testDirectory)
@@ -648,8 +648,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 End Sub
             Try
                 testCode.Should() _
-                        .Throw(Of InvalidOperationException)() _
-                        .Where(Function(e) e.Message.StartsWith(SR.Network_DownloadNeedsFilename))
+                    .Throw(Of InvalidOperationException)() _
+                    .Where(Function(e) e.Message.StartsWith(SR.Network_DownloadNeedsFilename))
                 File.Exists(destinationFileName).Should.BeFalse()
             Finally
                 CleanUp(listener, testDirectory)
@@ -1114,8 +1114,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 End Sub
             Try
                 testCode.Should() _
-                        .Throw(Of ArgumentException)() _
-                        .Where(Function(e) e.Message.StartsWith(SR.Network_BadConnectionTimeout))
+                    .Throw(Of ArgumentException)() _
+                    .Where(Function(e) e.Message.StartsWith(SR.Network_BadConnectionTimeout))
                 File.Exists(destinationFileName).Should.BeFalse()
             Finally
                 CleanUp(listener, testDirectory)
