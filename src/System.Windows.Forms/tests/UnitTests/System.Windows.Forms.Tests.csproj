@@ -10,7 +10,12 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <NoWarn>$(NoWarn),1573,1591,1712,WFDEV001,SYSLIB0050,SYSLIB0051;</NoWarn>
+    <!--
+      SYSLIB0050: Formatter-based serialization is obsolete and should not be used
+      SYSLIB0051: This API supports obsolete formatter-based serialization
+      SYSLIB5005: System.Formats.Nrbf is experimental
+    -->
+    <NoWarn>$(NoWarn),1573,1591,1712,WFDEV001,SYSLIB0050,SYSLIB0051,SYSLIB5005</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

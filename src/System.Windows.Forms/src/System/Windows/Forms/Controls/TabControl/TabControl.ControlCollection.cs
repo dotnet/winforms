@@ -41,7 +41,7 @@ public partial class TabControl
             base.Add(tabPage);
             tabPage.Visible = false;
 
-            // Without this check, we force handle creation on the tabcontrol
+            // Without this check, we force handle creation on the TabControl
             // which is not good at all of there are any OCXs on it.
             if (_owner.IsHandleCreated)
             {

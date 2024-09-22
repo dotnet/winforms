@@ -113,7 +113,7 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
             // - step.3
             // - try to modify the Size of the object just created
             IDesignerHost ihost = GetIDesignerHost();
-            // - Set the backcolor and the Size
+            // - Set the BackColor and the Size
             Control ctrl = null;
             Type hostType = host.RootComponent.GetType();
             if (hostType == typeof(Form))

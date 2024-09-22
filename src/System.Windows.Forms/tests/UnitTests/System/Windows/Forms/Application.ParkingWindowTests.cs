@@ -19,7 +19,7 @@ public class ParkingWindowTests
 
             try
             {
-                // Force garbage collecting to access combobox from another (GC) thread.
+                // Force garbage collecting to access ComboBox from another (GC) thread.
                 GC.Collect();
 
                 GC.WaitForPendingFinalizers();
@@ -45,13 +45,13 @@ public class ParkingWindowTests
         form.Controls.Add(comboBox);
         form.Show();
 
-        // Park combobox handle in ParkingWindow.
+        // Park ComboBox handle in ParkingWindow.
         comboBox.Parent = null;
 
-        // Recreate combobox handle to set parent to ParkingWindow.
+        // Recreate ComboBox handle to set parent to ParkingWindow.
         comboBox.DropDownStyle = ComboBoxStyle.DropDownList;
 
-        // Lose the reference to combobox to allow Garbage collecting combobox.
+        // Lose the reference to ComboBox to allow Garbage collecting ComboBox.
         comboBox = null;
 
         return form;

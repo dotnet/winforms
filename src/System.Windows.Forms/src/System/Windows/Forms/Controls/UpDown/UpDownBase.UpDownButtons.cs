@@ -317,7 +317,7 @@ public abstract partial class UpDownBase
 
             if (half_height != (ClientSize.Height + 1) / 2)
             {
-                // When control has odd height, a line needs to be drawn below the buttons with the backcolor.
+                // When control has odd height, a line needs to be drawn below the buttons with the BackColor.
                 Color color = _parent.BackColor;
 
                 Rectangle clientRect = ClientRectangle;

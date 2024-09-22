@@ -2164,7 +2164,7 @@ public partial class Form : ContainerControl
         get => Properties.GetValueOrDefault(s_propTransparencyKey, Color.Empty);
         set
         {
-            Properties.AddOrRemoveValue(s_propTransparencyKey, value);
+            Properties.AddOrRemoveValue(s_propTransparencyKey, value, defaultValue: Color.Empty);
             if (!IsMdiContainer)
             {
                 bool oldLayered = (_formState[s_formStateLayered] == 1);
@@ -2361,14 +2361,7 @@ public partial class Form : ContainerControl
                 _ => throw new ArgumentOutOfRangeException(nameof(value))
             };
 
-            if (value == FormCornerPreference.Default)
-            {
-                Properties.RemoveValue(s_propFormCornerPreference);
-            }
-            else
-            {
-                Properties.AddValue(s_propFormCornerPreference, value);
-            }
+            Properties.AddOrRemoveValue(s_propFormCornerPreference, value, defaultValue: FormCornerPreference.Default);
 
             if (IsHandleCreated)
             {
@@ -2451,7 +2444,7 @@ public partial class Form : ContainerControl
                 return;
             }
 
-            Properties.AddValue(s_propFormBorderColor, value);
+            Properties.AddOrRemoveValue(s_propFormBorderColor, value, defaultValue: Color.Empty);
 
             if (IsHandleCreated)
             {
@@ -2513,7 +2506,7 @@ public partial class Form : ContainerControl
                 return;
             }
 
-            Properties.AddValue(s_propFormCaptionBackColor, value);
+            Properties.AddOrRemoveValue(s_propFormCaptionBackColor, value, defaultValue: Color.Empty);
 
             if (IsHandleCreated)
             {
@@ -2576,7 +2569,7 @@ public partial class Form : ContainerControl
                 return;
             }
 
-            Properties.AddValue(s_propFormCaptionTextColor, value);
+            Properties.AddOrRemoveValue(s_propFormCaptionTextColor, value, defaultValue: Color.Empty);
 
             if (IsHandleCreated)
             {
@@ -3950,7 +3943,7 @@ public partial class Form : ContainerControl
     }
 
     /// <summary>
-    ///  Override since CanProcessMnemonic is overriden too (base.CanSelectCore calls CanProcessMnemonic).
+    ///  Override since CanProcessMnemonic is overridden too (base.CanSelectCore calls CanProcessMnemonic).
     /// </summary>
     internal override bool CanSelectCore()
     {
@@ -3979,7 +3972,7 @@ public partial class Form : ContainerControl
     }
 
     /// <summary>
-    ///  Overriden to handle MDI mnemonic processing properly.
+    ///  Overridden to handle MDI mnemonic processing properly.
     /// </summary>
     internal override bool CanProcessMnemonic()
     {
@@ -3996,7 +3989,7 @@ public partial class Form : ContainerControl
     }
 
     /// <summary>
-    ///  Overriden to handle MDI mnemonic processing properly.
+    ///  Overridden to handle MDI mnemonic processing properly.
     /// </summary>
     protected internal override bool ProcessMnemonic(char charCode)
     {

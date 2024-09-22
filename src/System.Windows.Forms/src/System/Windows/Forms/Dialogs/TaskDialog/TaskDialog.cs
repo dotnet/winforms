@@ -17,7 +17,9 @@ namespace System.Windows.Forms;
 /// <remarks>
 /// <para>
 ///  For more information, see
-///  <see href="https://docs.microsoft.com/windows/desktop/Controls/task-dialogs-overview">About Task Dialogs.</see>
+///  <see href="https://docs.microsoft.com/windows/desktop/Controls/task-dialogs-overview">
+///   About Task Dialogs.
+///  </see>
 /// </para>
 /// <para>
 ///   Note: In order to use the dialog, you need ensure <see cref="Application.EnableVisualStyles"/>
@@ -894,7 +896,7 @@ public partial class TaskDialog : IWin32Window
         // dialog message for setting the title), there is a small discrepancy
         // between specifying an empty title in the TASKDIALOGCONFIG structure
         // and setting an empty title with this method: An empty string (or null)
-        // in the TASKDIALOGCONFIG struture causes the dialog title to be the
+        // in the TASKDIALOGCONFIG structure causes the dialog title to be the
         // executable name (e.g. "MyApplication.exe"), but using an empty string
         // (or null) with SetWindowText() causes the window title to be empty.
         // Therefore, we replicate the task dialog behavior by also using the

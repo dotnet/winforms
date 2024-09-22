@@ -959,7 +959,7 @@ internal class ControlCommandSet : CommandSet
     }
 
     /// <summary>
-    ///  Called when the zorder->send to back menu item is selected.
+    ///  Called when the Z-order->send to back menu item is selected.
     /// </summary>
     private void OnMenuZOrderSelection(object sender, EventArgs e)
     {
@@ -1086,7 +1086,7 @@ internal class ControlCommandSet : CommandSet
                     {
                         if (cmdID == StandardCommands.BringToFront)
                         {
-                            // we do this backwards to maintain zorder
+                            // we do this backwards to maintain Z-order
                             Control otherControl = selectedComponents[len - i - 1] as Control;
 
                             otherControl?.BringToFront();

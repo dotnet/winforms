@@ -231,21 +231,22 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         get => Properties.GetValueOrDefault(s_propComboBoxCellDisplayStyle, DataGridViewComboBoxDisplayStyle.DropDownButton);
         set
         {
-            // Sequential enum. Valid values are 0x0 to 0x2
             SourceGenerated.EnumValidator.Validate(value);
-            if (value != DisplayStyle)
+            if (value == DisplayStyle)
             {
-                Properties.AddValue(s_propComboBoxCellDisplayStyle, value);
-                if (DataGridView is not null)
+                return;
+            }
+
+            Properties.AddOrRemoveValue(s_propComboBoxCellDisplayStyle, value, defaultValue: DataGridViewComboBoxDisplayStyle.DropDownButton);
+            if (DataGridView is not null)
+            {
+                if (RowIndex != -1)
                 {
-                    if (RowIndex != -1)
-                    {
-                        DataGridView.InvalidateCell(this);
-                    }
-                    else
-                    {
-                        DataGridView.InvalidateColumnInternal(ColumnIndex);
-                    }
+                    DataGridView.InvalidateCell(this);
+                }
+                else
+                {
+                    DataGridView.InvalidateColumnInternal(ColumnIndex);
                 }
             }
         }
@@ -359,7 +360,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
             SourceGenerated.EnumValidator.Validate(value);
             if (value != FlatStyle)
             {
-                Properties.AddValue(s_propComboBoxCellFlatStyle, value);
+                Properties.AddOrRemoveValue(s_propComboBoxCellFlatStyle, value, defaultValue: FlatStyle.Standard);
                 OnCommonChange();
             }
         }
@@ -392,10 +393,13 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         {
             if (value is < 1 or > 100)
             {
-                throw new ArgumentOutOfRangeException(nameof(MaxDropDownItems), value, string.Format(SR.DataGridViewComboBoxCell_MaxDropDownItemsOutOfRange, 1, 100));
+                throw new ArgumentOutOfRangeException(
+                    nameof(MaxDropDownItems),
+                    value,
+                    string.Format(SR.DataGridViewComboBoxCell_MaxDropDownItemsOutOfRange, 1, 100));
             }
 
-            Properties.AddValue(s_propComboBoxCellMaxDropDownItems, value);
+            Properties.AddOrRemoveValue(s_propComboBoxCellMaxDropDownItems, value, defaultValue: DefaultMaxDropDownItems);
             if (OwnsEditingComboBox(RowIndex))
             {
                 EditingComboBox.MaxDropDownItems = value;
@@ -598,7 +602,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
             {
                 if (DropDownWidth == 1)
                 {
-                    // Owning combobox column is autosized based on inner cells.
+                    // Owning ComboBox column is autosized based on inner cells.
                     // Resize the dropdown list based on the max width of the items.
                     if (s_cachedDropDownWidth == -1)
                     {
@@ -1273,7 +1277,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         base.InitializeEditingControl(rowIndex, initialFormattedValue, dataGridViewCellStyle);
         if (DataGridView.EditingControl is ComboBox comboBox)
         {
-            // Use the selection backcolor for the editing panel when the cell is selected
+            // Use the selection BackColor for the editing panel when the cell is selected
             if ((GetInheritedState(rowIndex) & DataGridViewElementStates.Selected) == DataGridViewElementStates.Selected)
             {
                 DataGridView.EditingPanel.BackColor = dataGridViewCellStyle.SelectionBackColor;
@@ -1555,7 +1559,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         object? item;
         if (DisplayMemberProperty is not null || ValueMemberProperty is not null)
         {
-            // Now look up the item in the Combobox datasource - this can be horribly inefficient
+            // Now look up the item in the ComboBox datasource - this can be horribly inefficient
             // and it uses reflection which makes it expensive - ripe for optimization
             item = ItemFromComboBoxDataSource((ValueMemberProperty ?? DisplayMemberProperty)!, value);
         }
@@ -1598,7 +1602,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         object? item = null;
         if (DisplayMemberProperty is not null || ValueMemberProperty is not null)
         {
-            // Now look up the item in the DataGridViewComboboxCell datasource - this can be horribly inefficient
+            // Now look up the item in the DataGridViewComboBoxCell datasource - this can be horribly inefficient
             // and it uses reflection which makes it expensive - ripe for optimization
             item = ItemFromComboBoxDataSource((DisplayMemberProperty ?? ValueMemberProperty)!, formattedValue);
         }
@@ -2113,7 +2117,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
                                     dropRect.X, dropRect.Y + dropRect.Height - 1);
                         }
 
-                        // the bounds around the combobox control
+                        // the bounds around the ComboBox control
                         if (drawComboBox)
                         {
                             g.DrawLine(pen, valBounds.X, valBounds.Y + valBounds.Height - 1,
@@ -2133,7 +2137,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
                                     dropRect.X + dropRect.Width - 1, dropRect.Y + dropRect.Height - 1);
                         }
 
-                        // the bounds around the combobox control
+                        // the bounds around the ComboBox control
                         if (drawComboBox)
                         {
                             g.DrawLine(pen, valBounds.X, valBounds.Y,

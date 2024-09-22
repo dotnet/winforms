@@ -601,9 +601,11 @@ public unsafe partial class AccessibleObject :
     internal virtual IRawElementProviderSimple* HostRawElementProvider => null;
 
     /// <summary>
-    ///  Returns the value of the specified <paramref name="propertyID"/> from the element in the form of a <see cref="VARIANT"/>.
-    ///  See <see href="https://learn.microsoft.com/windows/win32/winauto/uiauto-automation-element-propids"/>
-    ///  which outlines how the <see cref="VARIANT"/> should be defined for each <see cref="UIA_PROPERTY_ID"/>
+    ///  Returns the value of the specified <paramref name="propertyID"/> from the
+    ///  element in the form of a <see cref="VARIANT"/>. See
+    ///  <see href="https://learn.microsoft.com/windows/win32/winauto/uiauto-automation-element-propids">
+    ///   which outlines how the <see cref="VARIANT"/> should be defined for each <see cref="UIA_PROPERTY_ID"/>
+    ///  </see>
     /// </summary>
     /// <param name="propertyID">Identifier indicating the property to return.</param>
     /// <returns>The requested value if supported or <see cref="VARIANT.Empty"/> if it is not.</returns>
@@ -2677,7 +2679,7 @@ public unsafe partial class AccessibleObject :
     /// </summary>
     private static IDispatch* GetIDispatch(AccessibleObject? obj)
     {
-        // we are always wrapping system iaccessible..
+        // We are always wrapping SystemIAccessible.
         if (obj is not null && obj._isSystemWrapper && obj.SystemIAccessible is { } accessible)
         {
             // We're just a simple system wrapper, return the pointer.
@@ -3292,7 +3294,7 @@ public unsafe partial class AccessibleObject :
         return HRESULT.S_OK;
     }
 
-    internal virtual void ScrollIntoView() => Debug.Fail($"{nameof(ScrollIntoView)}() is not overriden");
+    internal virtual void ScrollIntoView() => Debug.Fail($"{nameof(ScrollIntoView)}() is not overridden");
 
     private ComScope<IOleWindow> TryGetOleWindow(out HRESULT result)
     {

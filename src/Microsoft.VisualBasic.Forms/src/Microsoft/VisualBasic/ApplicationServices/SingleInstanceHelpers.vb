@@ -17,11 +17,15 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             Dim buffer As Byte() = New Byte(bufferLength - 1) {}
             Using stream As New MemoryStream
                 While True
-                    Dim bytesRead As Integer = Await pipeServer.ReadAsync(buffer.AsMemory(0, bufferLength), cancellationToken).ConfigureAwait(False)
+                    Dim bytesRead As Integer = Await pipeServer.ReadAsync(
+                        buffer.AsMemory(0, bufferLength),
+                        cancellationToken).ConfigureAwait(False)
                     If bytesRead = 0 Then
                         Exit While
                     End If
-                    stream.Write(buffer, 0, bytesRead)
+                    Await stream.WriteAsync(
+                        buffer.AsMemory(0, bytesRead),
+                        cancellationToken).ConfigureAwait(False)
                 End While
                 stream.Seek(0, SeekOrigin.Begin)
                 Dim serializer As New DataContractSerializer(GetType(String()))

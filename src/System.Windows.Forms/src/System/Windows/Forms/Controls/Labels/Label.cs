@@ -124,8 +124,8 @@ public partial class Label : Control, IAutomationLiveRegion
     }
 
     /// <summary>
-    ///  This property controls the activation handling of bleedover for the text that
-    ///  extends beyond the width of the label.
+    ///  Gets or sets a value indicating whether the ellipsis character (...) appears at the right edge of the Label,
+    ///  denoting that the Label text extends beyond the specified length of the Label.
     /// </summary>
     [SRCategory(nameof(SR.CatBehavior))]
     [DefaultValue(false)]
@@ -534,7 +534,7 @@ public partial class Label : Control, IAutomationLiveRegion
 
             Properties.SetObject(s_propImageList, value);
 
-            // Add the new imagelist handle recreate handler
+            // Add the new ImageList handle recreate handler
             if (value is not null)
             {
                 value.RecreateHandle += recreateHandler;
@@ -561,7 +561,7 @@ public partial class Label : Control, IAutomationLiveRegion
 
             if (value != ImageAlign)
             {
-                Properties.AddValue(s_propImageAlign, value);
+                Properties.AddOrRemoveValue(s_propImageAlign, value, defaultValue: ContentAlignment.MiddleCenter);
                 LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.ImageAlign);
                 Invalidate();
             }
@@ -705,7 +705,7 @@ public partial class Label : Control, IAutomationLiveRegion
 
             if (TextAlign != value)
             {
-                Properties.AddValue(s_propTextAlign, value);
+                Properties.AddOrRemoveValue(s_propTextAlign, value, defaultValue: ContentAlignment.TopLeft);
                 Invalidate();
 
                 // Change the TextAlignment for SystemDrawn Labels
@@ -1308,8 +1308,8 @@ public partial class Label : Control, IAutomationLiveRegion
             }
             else
             {
-                // Theme specs -- if the backcolor is darker than Control, we use
-                // ControlPaint.Dark(backcolor). Otherwise we use ControlDark.
+                // Theme specs -- if the BackColor is darker than Control, we use
+                // ControlPaint.Dark(BackColor). Otherwise we use ControlDark.
 
                 Color disabledTextForeColor = TextRenderer.DisabledTextColor(BackColor);
                 TextRenderer.DrawTextInternal(e, Text, Font, face, disabledTextForeColor, flags: flags);
@@ -1320,7 +1320,7 @@ public partial class Label : Control, IAutomationLiveRegion
     }
 
     /// <summary>
-    ///  Overriden by LinkLabel.
+    ///  Overridden by LinkLabel.
     /// </summary>
     internal virtual void OnAutoEllipsisChanged()
     {

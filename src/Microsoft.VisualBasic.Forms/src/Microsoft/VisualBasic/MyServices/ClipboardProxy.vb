@@ -184,7 +184,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Sub
 
         ''' <summary>
-        '''  Saves the passed in <see cref="Image"/>  to the clipboard.
+        '''  Saves the passed in <see cref="Image"/> to the clipboard.
         ''' </summary>
         ''' <param name="image">The <see cref="Image"/> to be saved.</param>
         Public Sub SetImage(image As Image)
@@ -194,16 +194,16 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' <summary>
         '''  Saves the passed in String to the clipboard.
         ''' </summary>
-        ''' <param name="text">The String to save.</param>
+        ''' <param name="text">The <see cref="String"/> to save.</param>
         Public Sub SetText(text As String)
             Clipboard.SetText(text)
         End Sub
 
         ''' <summary>
-        '''  Saves the passed in String to the clipboard in the passed in format.
+        '''  Saves the passed in <see cref="String" />  to the clipboard in the passed in <paramref name="format"/>.
         ''' </summary>
-        ''' <param name="text">The String to save.</param>
-        ''' <param name="format">The format in which to save the String.</param>
+        ''' <param name="text">The <see cref="String" />  to save.</param>
+        ''' <param name="format">The format in which to save the <see cref="String" /> .</param>
         Public Sub SetText(text As String, format As TextDataFormat)
             Clipboard.SetText(text, format)
         End Sub
