@@ -7,8 +7,7 @@ Imports Microsoft.VisualBasic.CompilerServices
 Imports Xunit
 
 Namespace Microsoft.VisualBasic.Forms.Tests
-
-    Public Class HostServicesTests
+    Partial Public Class HostServicesTests
         Private Shared ReadOnly s_control As New Control()
         Private Shared ReadOnly s_title As String = GetUniqueText()
 
@@ -33,18 +32,5 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             CType(vbHost.GetParentWindow, Control).Should.Be(s_control)
             vbHost.GetWindowTitle.Should.Be(s_title)
         End Sub
-
-        Private NotInheritable Class TestVbHost
-            Implements IVbHost
-
-            Public Function GetParentWindow() As IWin32Window Implements IVbHost.GetParentWindow
-                Return s_control
-            End Function
-
-            Public Function GetWindowTitle() As String Implements IVbHost.GetWindowTitle
-                Return s_title
-            End Function
-
-        End Class
     End Class
 End Namespace

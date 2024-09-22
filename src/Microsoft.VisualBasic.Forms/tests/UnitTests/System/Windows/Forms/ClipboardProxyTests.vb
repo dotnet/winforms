@@ -3,6 +3,7 @@
 
 Imports System.Collections.Specialized
 Imports System.IO
+Imports System.Threading
 Imports System.Windows.Forms
 Imports FluentAssertions
 Imports Xunit
@@ -15,12 +16,16 @@ Namespace Microsoft.VisualBasic.Forms.Tests
     <Collection("Sequential")>
     <CollectionDefinition("Sequential", DisableParallelization:=True)>
     Public Class ClipboardProxyTests
+        Private Shared Sub Sleep()
+            Thread.Sleep(100)
+        End Sub
 
         <WinFormsFact>
         Public Sub ClipboardProxy_ContainsText()
             Dim clipboardProxy As New MyServices.ClipboardProxy
             Dim text As String = GetUniqueText()
             clipboardProxy.SetText(text)
+            Sleep()
             Clipboard.ContainsText.Should.Be(clipboardProxy.ContainsText)
             Clipboard.ContainsText.Should.Be(clipboardProxy.ContainsText(TextDataFormat.Text))
 
@@ -30,6 +35,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             clipboardProxy.GetText().Should.Be(text)
             text = GetUniqueText()
             clipboardProxy.SetText(text, TextDataFormat.Text)
+            Sleep()
             clipboardProxy.GetText(TextDataFormat.Text).Should.Be(text)
         End Sub
 
@@ -38,6 +44,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim clipboardProxy As New MyServices.ClipboardProxy
             Dim audioBytes As Byte() = {1, 2, 3}
             clipboardProxy.SetAudio(audioBytes)
+            Sleep()
             Dim result As Stream = clipboardProxy.GetAudioStream()
             clipboardProxy.GetAudioStream().Length.Should.Be(result.Length)
         End Sub
@@ -47,6 +54,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim clipboardProxy As New MyServices.ClipboardProxy
             Dim audioBytes As Byte() = {1, 2, 3}
             clipboardProxy.SetAudio(audioBytes)
+            Sleep()
             clipboardProxy.ContainsAudio().Should.BeTrue()
             clipboardProxy.ContainsData(DataFormats.WaveAudio).Should.BeTrue()
 
@@ -64,6 +72,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim audioBytes() As Byte = {1, 2, 3}
             Using audioStream As New MemoryStream(audioBytes)
                 clipboardProxy.SetAudio(audioStream)
+                Sleep()
                 audioStream.Should.BeOfType(Of MemoryStream)()
                 Dim length As Integer = DirectCast(clipboardProxy.GetAudioStream(), MemoryStream).ToArray().Length
                 audioBytes.Length.Should.Be(length)
@@ -77,9 +86,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub ClipboardProxy_SetFileDropList_Invoke_GetReturnsExpected()
             Dim clipboardProxy As New MyServices.ClipboardProxy
-            Dim filePaths As New StringCollection From
-            {"filePath", "filePath2"}
+            Dim filePaths As New StringCollection From {"filePath", "filePath2"}
             clipboardProxy.SetFileDropList(filePaths)
+            Sleep()
             clipboardProxy.ContainsFileDropList().Should.BeTrue()
             clipboardProxy.GetFileDropList().Equals(filePaths)
         End Sub

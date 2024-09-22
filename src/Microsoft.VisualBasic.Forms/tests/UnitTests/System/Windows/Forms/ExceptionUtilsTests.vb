@@ -78,7 +78,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub GetIOExceptionTest_Succeed()
             Dim ex As Exception = VbUtils.GetIOException(SR.IO_FileExists_Path, IO.Path.GetTempPath)
             ex.Should.BeOfType(Of IO.IOException)()
-            Dim expected As String = VbUtils.GetResourceString(resourceKey:=SR.IO_FileExists_Path, IO.Path.GetTempPath)
+            Dim expected As String = VbUtils.GetResourceString(
+                resourceKey:=SR.IO_FileExists_Path,
+                IO.Path.GetTempPath)
             ex.Message.Should.Be(expected)
         End Sub
 

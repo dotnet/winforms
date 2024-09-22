@@ -80,8 +80,7 @@ public partial class Control
     {
         get
         {
-            ActiveXImpl? activeXImpl = (ActiveXImpl?)Properties.GetObject(s_activeXImplProperty);
-            if (activeXImpl is null)
+            if (!Properties.TryGetValue(s_activeXImplProperty, out ActiveXImpl? activeXImpl))
             {
                 // Don't allow top level objects to be hosted as activeX controls.
                 if (GetState(States.TopLevel))
