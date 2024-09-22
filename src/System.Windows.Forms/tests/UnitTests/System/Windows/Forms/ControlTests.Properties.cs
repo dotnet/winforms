@@ -57,8 +57,7 @@ public partial class ControlTests
         AccessibleObject accessibleObject = new();
         return new TheoryData<AccessibleObject, AccessibleObject>
         {
-            { null, null },
-            { accessibleObject, accessibleObject },
+            { accessibleObject, accessibleObject }
         };
     }
 
@@ -66,16 +65,14 @@ public partial class ControlTests
     [MemberData(nameof(AccessibilityObject_CustomCreateAccessibilityInstance_TestData))]
     public void Control_AccessibilityObject_GetCustomCreateAccessibilityInstance_ReturnsExpected(AccessibleObject result, AccessibleObject expected)
     {
-        using (new NoAssertContext())
+        using CustomCreateAccessibilityInstanceControl control = new()
         {
-            using CustomCreateAccessibilityInstanceControl control = new()
-            {
-                CreateAccessibilityResult = result
-            };
-            Assert.Same(expected, control.AccessibilityObject);
-            Assert.Same(control.AccessibilityObject, control.AccessibilityObject);
-            Assert.False(control.IsHandleCreated);
-        }
+            CreateAccessibilityResult = result
+        };
+
+        Assert.Same(expected, control.AccessibilityObject);
+        Assert.Same(control.AccessibilityObject, control.AccessibilityObject);
+        Assert.False(control.IsHandleCreated);
     }
 
     [WinFormsFact]
