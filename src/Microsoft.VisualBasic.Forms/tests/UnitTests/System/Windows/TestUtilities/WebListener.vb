@@ -4,6 +4,7 @@
 Imports System.IO
 Imports System.Net
 Imports System.Runtime.CompilerServices
+Imports System.Threading
 
 Namespace Microsoft.VisualBasic.Forms.Tests
 
@@ -64,7 +65,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         Dim context As HttpListenerContext = listener.GetContext()
                         ' Create the response.
                         response = context.Response
-                        Dim identity As HttpListenerBasicIdentity = CType(context.User?.Identity, HttpListenerBasicIdentity)
+                        Dim identity As HttpListenerBasicIdentity =
+                            CType(context.User?.Identity, HttpListenerBasicIdentity)
                         If context.User?.Identity.IsAuthenticated Then
                             If String.IsNullOrWhiteSpace(identity.Name) _
                                 OrElse identity.Name <> _userName _
@@ -75,9 +77,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                                 Exit Try
                             End If
                         End If
-                        Dim responseString As String = Strings.StrDup(_fileSize, "A")
                         ' Simulate network traffic
-                        Threading.Thread.Sleep(20)
+                        Thread.Sleep(millisecondsTimeout:=20)
+                        Dim responseString As String = Strings.StrDup(_fileSize, "A")
                         Dim buffer() As Byte = Text.Encoding.UTF8.GetBytes(responseString)
                         response.ContentLength64 = buffer.Length
                         Dim output As Stream = response.OutputStream
