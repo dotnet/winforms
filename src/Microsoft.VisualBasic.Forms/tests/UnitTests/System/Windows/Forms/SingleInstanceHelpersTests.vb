@@ -68,9 +68,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     awaitable.GetAwaiter().GetResult()
                     Dim CancelToken As New CancellationToken
                     Dim buffer As Byte() = New Byte(commandLine.Length) {}
-
                     Dim count As Integer = Await pipeServer.ReadAsync(
-                        buffer:=buffer.AsMemory(0, commandLine.Length))
+                        buffer:=buffer.AsMemory(start:=0, length:=commandLine.Length))
 
                     ' Ensure the result is set
                     Do

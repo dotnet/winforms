@@ -299,7 +299,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
     [SRDescription(nameof(SR.CheckBoxCheckStateDescr))]
     public CheckState CheckState
     {
-        get => Properties.GetValueOrDefault<CheckState>(s_propCheckState, CheckState.Unchecked);
+        get => Properties.GetValueOrDefault(s_propCheckState, CheckState.Unchecked);
         set
         {
             // Valid values are 0x0 to 0x2
@@ -356,12 +356,12 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
     [SRDescription(nameof(SR.MenuItemShortCutDescr))]
     public Keys ShortcutKeys
     {
-        get => Properties.GetValueOrDefault<Keys>(s_propShortcutKeys, Keys.None);
+        get => Properties.GetValueOrDefault(s_propShortcutKeys, Keys.None);
         set
         {
             if ((value != Keys.None) && !ToolStripManager.IsValidShortcut(value))
             {
-                // prevent use of alt, ctrl, shift modifiers with no key code.
+                // Prevent use of alt, ctrl, shift modifiers with no key code.
                 throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Keys));
             }
 
