@@ -229,7 +229,7 @@ public partial class MainForm : Form
         },
         {
             MainFormControlsTabOrder.ObsoleteControlsButton,
-            new InitInfo("ObsoleteControl", (obj, e) => new ObsoleteControls().Show(this))
+            new InitInfo("ObsoleteControls", (obj, e) => new ObsoleteControls().Show(this))
         }
     };
 
@@ -295,9 +295,9 @@ public partial class MainForm : Form
         int padding = overarchingFlowLayoutPanel.Controls[0].Margin.All;
 
         ClientSize = new Size(
-            (biggestButton.Width + padding * 2) * 3 + padding * 2 + overarchingFlowLayoutPanel.Location.X * 2,
-            (int)Math.Ceiling((overarchingFlowLayoutPanel.Controls.Count + 1) / 3.0) * (biggestButton.Height + padding * 2)
-                + padding * 2 + overarchingFlowLayoutPanel.Location.Y * 2);
+            ((biggestButton.Width + (padding * 2)) * 3) + (padding * 2) + (overarchingFlowLayoutPanel.Location.X * 2),
+            ((int)Math.Ceiling((overarchingFlowLayoutPanel.Controls.Count + 1) / 3.0) * (biggestButton.Height + (padding * 2)))
+                + (padding * 2) + (overarchingFlowLayoutPanel.Location.Y * 2));
         MinimumSize = Size;
         Debug.WriteLine($"Minimum form size: {MinimumSize}", nameof(MainForm));
     }

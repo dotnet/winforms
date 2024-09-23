@@ -7,20 +7,24 @@ using System.Globalization;
 namespace System.Windows.Forms;
 
 #nullable disable
-#pragma warning disable RS0016
-// Add public types and members to the declared API to simplify porting of applications from .NET Framework to .NET.
-// These types will not work, but if they are not accessed, other features in the application will work.
 [Obsolete(
     Obsoletions.DataGridPreferredColumnWidthTypeConverterMessage,
     error: false,
     DiagnosticId = Obsoletions.DataGridPreferredColumnWidthTypeConverterDiagnosticId,
-    UrlFormat = Obsoletions.SharedUrlFormat)]
+    UrlFormat = Obsoletions.SharedUrlFormat),
+    EditorBrowsable(EditorBrowsableState.Never)]
 public class DataGridPreferredColumnWidthTypeConverter : TypeConverter
 {
-    public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType) => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    public bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-    public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) =>
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    public object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) =>
         throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-    public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value) => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    public object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 }

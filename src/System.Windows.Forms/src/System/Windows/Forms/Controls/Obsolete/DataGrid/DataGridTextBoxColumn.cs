@@ -7,14 +7,12 @@ using System.Drawing;
 namespace System.Windows.Forms;
 
 #nullable disable
-#pragma warning disable RS0016
-// Add public types and members to the declared API to simplify porting of applications from .NET Framework to .NET.
-// These types will not work, but if they are not accessed, other features in the application will work.
 [Obsolete(
     Obsoletions.DataGridTextBoxColumnMessage,
     error: false,
     DiagnosticId = Obsoletions.DataGridTextBoxColumnDiagnosticId,
-    UrlFormat = Obsoletions.SharedUrlFormat)]
+    UrlFormat = Obsoletions.SharedUrlFormat),
+    EditorBrowsable(EditorBrowsableState.Never)]
 public class DataGridTextBoxColumn : DataGridColumnStyle
 {
     public DataGridTextBoxColumn() => throw new PlatformNotSupportedException();
@@ -31,11 +29,15 @@ public class DataGridTextBoxColumn : DataGridColumnStyle
     [EditorBrowsable(EditorBrowsableState.Never)]
     public virtual TextBox TextBox => throw new PlatformNotSupportedException();
 
-    protected override void SetDataGridInColumn(DataGrid value) => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected void SetDataGridInColumn(DataGrid value) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public override PropertyDescriptor PropertyDescriptor => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    public PropertyDescriptor PropertyDescriptor => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -55,17 +57,23 @@ public class DataGridTextBoxColumn : DataGridColumnStyle
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public override bool ReadOnly
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    public bool ReadOnly
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
     }
 
-    protected internal override void ConcedeFocus() => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected internal void ConcedeFocus() => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
     protected void HideEditBox() => throw new PlatformNotSupportedException();
 
-    protected internal override void UpdateUI(CurrencyManager source, int rowNum, string displayText) => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected internal void UpdateUI(CurrencyManager source, int rowNum, string displayText) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
     protected void EndEdit() => throw new PlatformNotSupportedException();
 

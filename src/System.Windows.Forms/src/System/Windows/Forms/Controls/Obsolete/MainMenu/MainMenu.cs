@@ -5,21 +5,19 @@ using System.ComponentModel;
 
 namespace System.Windows.Forms;
 
-#pragma warning disable RS0016
-// Add public types and members to the declared API to simplify porting of applications from .NET Framework to .NET.
-// These types will not work, but if they are not accessed, other features in the application will work.
 [Obsolete(
     Obsoletions.MainMenuMessage,
     error: false,
     DiagnosticId = Obsoletions.MainMenuDiagnosticId,
-    UrlFormat = Obsoletions.SharedUrlFormat)]
+    UrlFormat = Obsoletions.SharedUrlFormat),
+    EditorBrowsable(EditorBrowsableState.Never)]
 public class MainMenu : Menu
 {
-    public MainMenu() : base(null) => throw new PlatformNotSupportedException();
+    public MainMenu() : base(items: null) => throw new PlatformNotSupportedException();
 
     public MainMenu(IContainer container) : this() => throw new PlatformNotSupportedException();
 
-    public MainMenu(MenuItem[] items) : base(items) => throw new PlatformNotSupportedException();
+    public MainMenu(MenuItem[] items) : base(items: items) => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -41,5 +39,7 @@ public class MainMenu : Menu
 
     public Form GetForm() => throw new PlatformNotSupportedException();
 
-    public override string ToString() => throw new PlatformNotSupportedException();
+#pragma warning disable CS0108 // Member hides inherited member; missing new keyword
+    public string ToString() => throw new PlatformNotSupportedException();
+#pragma warning restore CS0108 // Member hides inherited member; missing new keyword
 }
