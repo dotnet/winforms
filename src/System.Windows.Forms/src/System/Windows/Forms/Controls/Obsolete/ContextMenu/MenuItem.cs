@@ -6,28 +6,58 @@ using System.ComponentModel;
 namespace System.Windows.Forms;
 
 #nullable disable
-#pragma warning disable RS0016
-// Add public types and members to the declared API to simplify porting of applications from .NET Framework to .NET.
-// These types will not work, but if they are not accessed, other features in the application will work.
 [Obsolete(
     Obsoletions.MenuItemMessage,
     error: false,
     DiagnosticId = Obsoletions.MenuItemDiagnosticId,
-    UrlFormat = Obsoletions.SharedUrlFormat)]
+    UrlFormat = Obsoletions.SharedUrlFormat),
+    EditorBrowsable(EditorBrowsableState.Never)]
 public class MenuItem : Menu
 {
-    public MenuItem() : this(MenuMerge.Add, 0, 0, null, null, null, null, null) => throw new PlatformNotSupportedException();
+    public MenuItem() : this(mergeType: MenuMerge.Add,
+        mergeOrder: 0,
+        shortcut: 0,
+        text: null,
+        onClick: null,
+        onPopup: null,
+        onSelect: null,
+        items: null) => throw new PlatformNotSupportedException();
 
-    public MenuItem(string text) : this(MenuMerge.Add, 0, 0, text, null, null, null, null) => throw new PlatformNotSupportedException();
+    public MenuItem(string text) : this(mergeType: MenuMerge.Add,
+        mergeOrder: 0,
+        shortcut: 0,
+        text: text,
+        onClick: null,
+        onPopup: null,
+        onSelect: null,
+        items: null) => throw new PlatformNotSupportedException();
 
-    public MenuItem(string text, EventHandler onClick) : this(MenuMerge.Add, 0, 0, text, onClick, null, null, null) =>
-        throw new PlatformNotSupportedException();
+    public MenuItem(string text, EventHandler onClick) : this(mergeType: MenuMerge.Add,
+        mergeOrder: 0,
+        shortcut: 0,
+        text: text,
+        onClick: onClick,
+        onPopup: null,
+        onSelect: null,
+        items: null) => throw new PlatformNotSupportedException();
 
-    public MenuItem(string text, EventHandler onClick, Shortcut shortcut) : this(MenuMerge.Add, 0, shortcut, text, onClick, null, null, null) =>
-        throw new PlatformNotSupportedException();
+    public MenuItem(string text, EventHandler onClick, Shortcut shortcut) : this(mergeType: MenuMerge.Add,
+        mergeOrder: 0,
+        shortcut: shortcut,
+        text: text,
+        onClick: onClick,
+        onPopup: null,
+        onSelect: null,
+        items: null) => throw new PlatformNotSupportedException();
 
-    public MenuItem(string text, MenuItem[] items) : this(MenuMerge.Add, 0, 0, text, null, null, null, items) =>
-        throw new PlatformNotSupportedException();
+    public MenuItem(string text, MenuItem[] items) : this(mergeType: MenuMerge.Add,
+        mergeOrder: 0,
+        shortcut: 0,
+        text: text,
+        onClick: null,
+        onPopup: null,
+        onSelect: null,
+        items: items) => throw new PlatformNotSupportedException();
 
     public MenuItem(MenuMerge mergeType,
         int mergeOrder,
@@ -36,7 +66,7 @@ public class MenuItem : Menu
         EventHandler onClick,
         EventHandler onPopup,
         EventHandler onSelect,
-        MenuItem[] items) : base(items) => throw new PlatformNotSupportedException();
+        MenuItem[] items) : base(items: items) => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -96,7 +126,9 @@ public class MenuItem : Menu
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public override bool IsParent => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    public bool IsParent => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -166,7 +198,11 @@ public class MenuItem : Menu
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public bool Visible => throw new PlatformNotSupportedException();
+    public bool Visible
+    {
+        get => throw new PlatformNotSupportedException();
+        set => throw new PlatformNotSupportedException();
+    }
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -210,13 +246,29 @@ public class MenuItem : Menu
 
     public virtual MenuItem CloneMenu() => throw new PlatformNotSupportedException();
 
+    protected void CloneMenu(MenuItem itemSrc) => throw new PlatformNotSupportedException();
+
     public virtual MenuItem MergeMenu() => throw new PlatformNotSupportedException();
 
     public void MergeMenu(MenuItem itemSrc) => throw new PlatformNotSupportedException();
+
+    protected virtual void OnClick(EventArgs e) => throw new PlatformNotSupportedException();
+
+    protected virtual void OnDrawItem(DrawItemEventArgs e) => throw new PlatformNotSupportedException();
+
+    protected virtual void OnInitMenuPopup(EventArgs e) => throw new PlatformNotSupportedException();
+
+    protected virtual void OnMeasureItem(MeasureItemEventArgs e) => throw new PlatformNotSupportedException();
+
+    protected virtual void OnPopup(EventArgs e) => throw new PlatformNotSupportedException();
+
+    protected virtual void OnSelect(EventArgs e) => throw new PlatformNotSupportedException();
 
     public void PerformClick() => throw new PlatformNotSupportedException();
 
     public virtual void PerformSelect() => throw new PlatformNotSupportedException();
 
-    public override string ToString() => throw new PlatformNotSupportedException();
+#pragma warning disable CS0108 // Member hides inherited member; missing new keyword
+    public string ToString() => throw new PlatformNotSupportedException();
+#pragma warning restore CS0108 // Member hides inherited member; missing new keyword
 }

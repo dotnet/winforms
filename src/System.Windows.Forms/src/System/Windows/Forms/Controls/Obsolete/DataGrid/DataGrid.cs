@@ -7,15 +7,13 @@ using System.Drawing;
 namespace System.Windows.Forms;
 
 #nullable disable
-#pragma warning disable RS0016
-// Add public types and members to the declared API to simplify porting of applications from .NET Framework to .NET.
-// These types will not work, but if they are not accessed, other features in the application will work.
 [Obsolete(
     Obsoletions.DataGridMessage,
     error: false,
     DiagnosticId = Obsoletions.DataGridDiagnosticId,
-    UrlFormat = Obsoletions.SharedUrlFormat)]
-public class DataGrid : Control, ISupportInitialize, IDataGridEditingService
+    UrlFormat = Obsoletions.SharedUrlFormat),
+    EditorBrowsable(EditorBrowsableState.Never)]
+public partial class DataGrid : Control, ISupportInitialize, IDataGridEditingService
 {
     public DataGrid() => throw new PlatformNotSupportedException();
 
@@ -41,23 +39,31 @@ public class DataGrid : Control, ISupportInitialize, IDataGridEditingService
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public override Color BackColor
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    public Color BackColor
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
     }
 
-    public override void ResetBackColor() => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    public void ResetBackColor() => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public override Color ForeColor
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    public Color ForeColor
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
     }
 
-    public override void ResetForeColor() => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    public void ResetForeColor() => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -75,7 +81,9 @@ public class DataGrid : Control, ISupportInitialize, IDataGridEditingService
         remove => throw new PlatformNotSupportedException();
     }
 
-    protected override Size DefaultSize => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected Size DefaultSize => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -359,7 +367,9 @@ public class DataGrid : Control, ISupportInitialize, IDataGridEditingService
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public override Cursor Cursor
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    public Cursor Cursor
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
@@ -375,7 +385,9 @@ public class DataGrid : Control, ISupportInitialize, IDataGridEditingService
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public override Image BackgroundImage
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    public Image BackgroundImage
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
@@ -383,7 +395,9 @@ public class DataGrid : Control, ISupportInitialize, IDataGridEditingService
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public override ImageLayout BackgroundImageLayout
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    public ImageLayout BackgroundImageLayout
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
@@ -501,7 +515,9 @@ public class DataGrid : Control, ISupportInitialize, IDataGridEditingService
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public override string Text
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    public string Text
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
@@ -571,47 +587,85 @@ public class DataGrid : Control, ISupportInitialize, IDataGridEditingService
 
     protected void OnBackButtonClicked(object sender, EventArgs e) => throw new PlatformNotSupportedException();
 
-    protected override void OnBackColorChanged(EventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected void OnBackColorChanged(EventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-    protected override void OnBindingContextChanged(EventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected void OnBindingContextChanged(EventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
     protected virtual void OnDataSourceChanged(EventArgs e) => throw new PlatformNotSupportedException();
 
     protected void OnShowParentDetailsButtonClicked(object sender, EventArgs e) => throw new PlatformNotSupportedException();
 
-    protected override void OnForeColorChanged(EventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected void OnForeColorChanged(EventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-    protected override void OnFontChanged(EventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected void OnFontChanged(EventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-    protected override void OnPaintBackground(PaintEventArgs pevent) => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected void OnPaintBackground(PaintEventArgs pevent) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-    protected override void OnLayout(LayoutEventArgs levent) => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected void OnLayout(LayoutEventArgs levent) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-    protected override void OnHandleCreated(EventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected void OnHandleCreated(EventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-    protected override void OnHandleDestroyed(EventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected void OnHandleDestroyed(EventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-    protected internal override void OnEnter(EventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected internal void OnEnter(EventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-    protected internal override void OnLeave(EventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected internal void OnLeave(EventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-    protected override void OnKeyDown(KeyEventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected void OnKeyDown(KeyEventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-    protected override void OnKeyPress(KeyPressEventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected void OnKeyPress(KeyPressEventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-    protected override void OnMouseDown(MouseEventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected void OnMouseDown(MouseEventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-    protected override void OnMouseLeave(EventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected void OnMouseLeave(EventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-    protected override void OnMouseMove(MouseEventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected void OnMouseMove(MouseEventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-    protected override void OnMouseUp(MouseEventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected void OnMouseUp(MouseEventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-    protected override void OnMouseWheel(MouseEventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected void OnMouseWheel(MouseEventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-    protected override void OnPaint(PaintEventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected void OnPaint(PaintEventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-    protected override void OnResize(EventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected void OnResize(EventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -639,7 +693,9 @@ public class DataGrid : Control, ISupportInitialize, IDataGridEditingService
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public override ISite Site
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    public ISite Site
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
@@ -651,9 +707,13 @@ public class DataGrid : Control, ISupportInitialize, IDataGridEditingService
 
     public void Collapse(int row) => throw new PlatformNotSupportedException();
 
-    protected override AccessibleObject CreateAccessibilityInstance() => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected AccessibleObject CreateAccessibilityInstance() => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-    protected override void Dispose(bool disposing) => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected void Dispose(bool disposing) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
     public bool EndEdit(DataGridColumnStyle gridColumn, int rowNumber, bool shouldAbort) => throw new PlatformNotSupportedException();
 
@@ -683,11 +743,15 @@ public class DataGrid : Control, ISupportInitialize, IDataGridEditingService
 
     public void NavigateTo(int rowNumber, string relationName) => throw new PlatformNotSupportedException();
 
-    protected override bool ProcessDialogKey(Keys keyData) => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected bool ProcessDialogKey(Keys keyData) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
     protected bool ProcessGridKey(KeyEventArgs ke) => throw new PlatformNotSupportedException();
 
-    protected override bool ProcessKeyPreview(ref Message m) => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected bool ProcessKeyPreview(ref Message m) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
     protected bool ProcessTabKey(Keys keyData) => throw new PlatformNotSupportedException();
 
@@ -718,48 +782,4 @@ public class DataGrid : Control, ISupportInitialize, IDataGridEditingService
     public void UnSelect(int row) => throw new PlatformNotSupportedException();
 
     protected virtual string GetOutputTextDelimiter() => throw new PlatformNotSupportedException();
-
-    [Obsolete(
-        Obsoletions.DataGridHitTestInfoMessage,
-        error: false,
-        DiagnosticId = Obsoletions.DataGridHitTestInfoDiagnosticId,
-        UrlFormat = Obsoletions.SharedUrlFormat)]
-    public sealed class HitTestInfo
-    {
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public int Column => throw new PlatformNotSupportedException();
-
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public int Row => throw new PlatformNotSupportedException();
-
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public HitTestType Type => throw new PlatformNotSupportedException();
-
-        public override bool Equals(object obj) => throw new PlatformNotSupportedException();
-
-        public override int GetHashCode() => throw new PlatformNotSupportedException();
-
-        public override string ToString() => throw new PlatformNotSupportedException();
-    }
-
-    [Flags]
-    [Obsolete(
-        Obsoletions.DataGridHitTestTypeMessage,
-        error: false,
-        DiagnosticId = Obsoletions.DataGridHitTestTypeDiagnosticId,
-        UrlFormat = Obsoletions.SharedUrlFormat)]
-    public enum HitTestType
-    {
-        None = 0x00000000,
-        Cell = 0x00000001,
-        ColumnHeader = 0x00000002,
-        RowHeader = 0x00000004,
-        ColumnResize = 0x00000008,
-        RowResize = 0x00000010,
-        Caption = 0x00000020,
-        ParentRows = 0x00000040
-    }
 }

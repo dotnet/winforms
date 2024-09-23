@@ -6,14 +6,12 @@ using System.Drawing;
 
 namespace System.Windows.Forms;
 
-#pragma warning disable RS0016
-// Add public types and members to the declared API to simplify porting of applications from .NET Framework to .NET.
-// These types will not work, but if they are not accessed, other features in the application will work.
 [Obsolete(
     Obsoletions.DataGridTableStyleMessage,
     error: false,
     DiagnosticId = Obsoletions.DataGridTableStyleDiagnosticId,
-    UrlFormat = Obsoletions.SharedUrlFormat)]
+    UrlFormat = Obsoletions.SharedUrlFormat),
+    EditorBrowsable(EditorBrowsableState.Never)]
 public class DataGridTableStyle : Component, IDataGridEditingService
 {
     [Browsable(false)]
@@ -350,11 +348,11 @@ public class DataGridTableStyle : Component, IDataGridEditingService
 
     public void ResetSelectionForeColor() => throw new PlatformNotSupportedException();
 
-    public static readonly DataGridTableStyle s_defaultTableStyle = new DataGridTableStyle(true);
+    public static readonly DataGridTableStyle s_defaultTableStyle = new DataGridTableStyle(isDefaultTableStyle: true);
 
     public DataGridTableStyle(bool isDefaultTableStyle) => throw new PlatformNotSupportedException();
 
-    public DataGridTableStyle() : this(false) => throw new PlatformNotSupportedException();
+    public DataGridTableStyle() : this(isDefaultTableStyle: false) => throw new PlatformNotSupportedException();
 
     public DataGridTableStyle(CurrencyManager listManager) : this() => throw new PlatformNotSupportedException();
 
@@ -446,5 +444,7 @@ public class DataGridTableStyle : Component, IDataGridEditingService
 
     protected virtual void OnSelectionBackColorChanged(EventArgs e) => throw new PlatformNotSupportedException();
 
-    protected override void Dispose(bool disposing) => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected void Dispose(bool disposing) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 }

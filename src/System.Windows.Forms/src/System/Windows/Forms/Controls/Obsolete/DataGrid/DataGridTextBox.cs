@@ -5,27 +5,33 @@ using System.ComponentModel;
 
 namespace System.Windows.Forms;
 
-#pragma warning disable RS0016
-// Add public types and members to the declared API to simplify porting of applications from .NET Framework to .NET.
-// These types will not work, but if they are not accessed, other features in the application will work.
 [Obsolete(
     Obsoletions.DataGridTextBoxMessage,
     error: false,
     DiagnosticId = Obsoletions.DataGridTextBoxDiagnosticId,
-    UrlFormat = Obsoletions.SharedUrlFormat)]
+    UrlFormat = Obsoletions.SharedUrlFormat),
+    EditorBrowsable(EditorBrowsableState.Never)]
 public class DataGridTextBox : TextBox
 {
-    public DataGridTextBox() : base() => throw new PlatformNotSupportedException();
+    public DataGridTextBox() => throw new PlatformNotSupportedException();
 
     public void SetDataGrid(DataGrid parentGrid) => throw new PlatformNotSupportedException();
 
-    protected override void WndProc(ref Message m) => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected void WndProc(ref Message m) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-    protected override void OnMouseWheel(MouseEventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected void OnMouseWheel(MouseEventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-    protected override void OnKeyPress(KeyPressEventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected void OnKeyPress(KeyPressEventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-    protected internal override bool ProcessKeyMessage(ref Message m) => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected internal bool ProcessKeyMessage(ref Message m) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]

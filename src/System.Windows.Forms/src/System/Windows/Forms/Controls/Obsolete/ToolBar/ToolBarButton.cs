@@ -6,19 +6,17 @@ using System.Drawing;
 
 namespace System.Windows.Forms;
 
-#pragma warning disable RS0016
-// Add public types and members to the declared API to simplify porting of applications from .NET Framework to .NET.
-// These types will not work, but if they are not accessed, other features in the application will work.
 [Obsolete(
     Obsoletions.ToolBarButtonMessage,
     error: false,
     DiagnosticId = Obsoletions.ToolBarButtonDiagnosticId,
-    UrlFormat = Obsoletions.SharedUrlFormat)]
+    UrlFormat = Obsoletions.SharedUrlFormat),
+    EditorBrowsable(EditorBrowsableState.Never)]
 public class ToolBarButton : Component
 {
     public ToolBarButton() => throw new PlatformNotSupportedException();
 
-    public ToolBarButton(string text) : base() => throw new PlatformNotSupportedException();
+    public ToolBarButton(string text) => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -124,5 +122,7 @@ public class ToolBarButton : Component
         set => throw new PlatformNotSupportedException();
     }
 
-    public override string ToString() => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    public string ToString() => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 }

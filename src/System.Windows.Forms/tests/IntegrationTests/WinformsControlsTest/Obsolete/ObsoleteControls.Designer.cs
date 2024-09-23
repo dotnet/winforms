@@ -37,6 +37,7 @@ partial class ObsoleteControls
         components = new System.ComponentModel.Container();
         button1 = new System.Windows.Forms.Button();
         button2 = new System.Windows.Forms.Button();
+        labTitle = new System.Windows.Forms.Label();
         dataGrid1 = new System.Windows.Forms.DataGrid();
         contextMenu1 = new System.Windows.Forms.ContextMenu();
         menuItem1 = new System.Windows.Forms.MenuItem();
@@ -61,6 +62,15 @@ partial class ObsoleteControls
         button2.Size = new System.Drawing.Size(120, 24);
         button2.Text = "Get Binding Manager";
         button2.Click += new System.EventHandler(button2_Click);
+        // 
+        // labTitle
+        // 
+        labTitle.AutoSize = true;
+        labTitle.Location = new System.Drawing.Point(469, 33);
+        labTitle.Name = "label1";
+        labTitle.Size = new System.Drawing.Size(51, 20);
+        labTitle.TabIndex = 3;
+        labTitle.Text = "label1";
         // 
         // dataGrid1
         // 
@@ -104,6 +114,7 @@ partial class ObsoleteControls
         ClientSize = new System.Drawing.Size(800, 450);
         Controls.Add(button1);
         Controls.Add(button2);
+        Controls.Add(labTitle);
         Controls.Add(dataGrid1);
         Name = "Obsolete-DataGrid";
         Text = "Obsolete-DataGrid";
@@ -124,5 +135,6 @@ partial class ObsoleteControls
     private System.Windows.Forms.StatusBar statusBar1;
     private System.Windows.Forms.StatusBarPanel panel1;
     private System.Windows.Forms.StatusBarPanel panel2;
+    private System.Windows.Forms.Label labTitle;
 #pragma warning restore WFDEV005, WFDEV006, WFDEV025, WFDEV027, WFDEV031, WFDEV037, WFDEV040 // Type or member is obsolete
 }

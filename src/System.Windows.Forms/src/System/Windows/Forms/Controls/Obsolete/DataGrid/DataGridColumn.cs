@@ -3,18 +3,17 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms;
 
 #nullable disable
-#pragma warning disable RS0016
-// Add public types and members to the declared API to simplify porting of applications from .NET Framework to .NET.
-// These types will not work, but if they are not accessed, other features in the application will work.
 [Obsolete(
     Obsoletions.DataGridColumnStyleMessage,
     error: false,
     DiagnosticId = Obsoletions.DataGridColumnStyleDiagnosticId,
-    UrlFormat = Obsoletions.SharedUrlFormat)]
+    UrlFormat = Obsoletions.SharedUrlFormat),
+    EditorBrowsable(EditorBrowsableState.Never)]
 public abstract class DataGridColumnStyle : Component, IDataGridColumnStyleEditingNotificationService
 {
     public DataGridColumnStyle() => throw new PlatformNotSupportedException();
@@ -234,5 +233,37 @@ public abstract class DataGridColumnStyle : Component, IDataGridColumnStyleEditi
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static TraceSwitch DGEditColumnEditing => throw new PlatformNotSupportedException();
+    }
+
+    protected internal virtual void ColumnStartedEditing(Control editingControl) => throw new PlatformNotSupportedException();
+
+    [ComVisible(true)]
+    protected class DataGridColumnHeaderAccessibleObject : AccessibleObject
+    {
+        public DataGridColumnHeaderAccessibleObject(DataGridColumnStyle owner) => throw new PlatformNotSupportedException();
+
+        public DataGridColumnHeaderAccessibleObject() => throw new PlatformNotSupportedException();
+
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+        public Rectangle Bounds => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
+
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+        public string Name => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
+
+        protected DataGridColumnStyle Owner => throw new PlatformNotSupportedException();
+
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+        public AccessibleObject Parent => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
+
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+        public AccessibleRole Role => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
+
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+        public AccessibleObject Navigate(AccessibleNavigation navdir) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
     }
 }

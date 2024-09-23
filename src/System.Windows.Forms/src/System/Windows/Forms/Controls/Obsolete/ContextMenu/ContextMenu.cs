@@ -6,19 +6,17 @@ using System.Drawing;
 
 namespace System.Windows.Forms;
 
-#pragma warning disable RS0016
-// Add public types and members to the declared API to simplify porting of applications from .NET Framework to .NET.
-// These types will not work, but if they are not accessed, other features in the application will work.
 [Obsolete(
     Obsoletions.ContextMenuMessage,
     error: false,
     DiagnosticId = Obsoletions.ContextMenuDiagnosticId,
-    UrlFormat = Obsoletions.SharedUrlFormat)]
+    UrlFormat = Obsoletions.SharedUrlFormat),
+    EditorBrowsable(EditorBrowsableState.Never)]
 public class ContextMenu : Menu
 {
-    public ContextMenu() : base(null) => throw new PlatformNotSupportedException();
+    public ContextMenu() : base(items: null) => throw new PlatformNotSupportedException();
 
-    public ContextMenu(MenuItem[] menuItems) : base(menuItems) => throw new PlatformNotSupportedException();
+    public ContextMenu(MenuItem[] menuItems) : base(items: menuItems) => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]

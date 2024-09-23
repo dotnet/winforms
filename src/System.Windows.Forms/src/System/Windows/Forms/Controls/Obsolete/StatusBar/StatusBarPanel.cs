@@ -6,14 +6,12 @@ using System.Drawing;
 
 namespace System.Windows.Forms;
 
-#pragma warning disable RS0016
-// Add public types and members to the declared API to simplify porting of applications from .NET Framework to .NET.
-// These types will not work, but if they are not accessed, other features in the application will work.
 [Obsolete(
     Obsoletions.StatusBarPanelMessage,
     error: false,
     DiagnosticId = Obsoletions.StatusBarPanelDiagnosticId,
-    UrlFormat = Obsoletions.SharedUrlFormat)]
+    UrlFormat = Obsoletions.SharedUrlFormat),
+    EditorBrowsable(EditorBrowsableState.Never)]
 public class StatusBarPanel : Component, ISupportInitialize
 {
     public StatusBarPanel() => throw new PlatformNotSupportedException();
@@ -112,9 +110,13 @@ public class StatusBarPanel : Component, ISupportInitialize
 
     public void BeginInit() => throw new PlatformNotSupportedException();
 
-    protected override void Dispose(bool disposing) => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected void Dispose(bool disposing) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
     public void EndInit() => throw new PlatformNotSupportedException();
 
-    public override string ToString() => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    public string ToString() => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 }

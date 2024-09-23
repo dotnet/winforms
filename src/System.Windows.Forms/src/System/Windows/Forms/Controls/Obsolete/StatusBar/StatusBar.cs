@@ -1,28 +1,27 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
 
 namespace System.Windows.Forms;
 
 #nullable disable
-#pragma warning disable RS0016
-// Add public types and members to the declared API to simplify porting of applications from .NET Framework to .NET.
-// These types will not work, but if they are not accessed, other features in the application will work.
 [Obsolete(
     Obsoletions.StatusBarMessage,
     error: false,
     DiagnosticId = Obsoletions.StatusBarDiagnosticId,
-    UrlFormat = Obsoletions.SharedUrlFormat)]
-public class StatusBar : Control
+    UrlFormat = Obsoletions.SharedUrlFormat),
+    EditorBrowsable(EditorBrowsableState.Never)]
+public partial class StatusBar : Control
 {
-    public StatusBar() : base() => throw new PlatformNotSupportedException();
+    public StatusBar() => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public override Color BackColor
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    public Color BackColor
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
@@ -38,7 +37,9 @@ public class StatusBar : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public override Image BackgroundImage
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    public Image BackgroundImage
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
@@ -54,7 +55,9 @@ public class StatusBar : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public override ImageLayout BackgroundImageLayout
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    public ImageLayout BackgroundImageLayout
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
@@ -68,13 +71,21 @@ public class StatusBar : Control
         remove => throw new PlatformNotSupportedException();
     }
 
-    protected override CreateParams CreateParams => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected CreateParams CreateParams => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-    protected override ImeMode DefaultImeMode => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected ImeMode DefaultImeMode => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-    protected override Size DefaultSize => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected Size DefaultSize => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-    protected override bool DoubleBuffered
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected bool DoubleBuffered
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
@@ -82,7 +93,9 @@ public class StatusBar : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public override DockStyle Dock
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    public DockStyle Dock
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
@@ -90,7 +103,9 @@ public class StatusBar : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public override Font Font
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    public Font Font
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
@@ -98,7 +113,9 @@ public class StatusBar : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public override Color ForeColor
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    public Color ForeColor
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
@@ -134,7 +151,9 @@ public class StatusBar : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public override string Text
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    public string Text
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
@@ -188,105 +207,43 @@ public class StatusBar : Control
         remove => throw new PlatformNotSupportedException();
     }
 
-    protected override void CreateHandle() => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected void CreateHandle() => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-    protected override void Dispose(bool disposing) => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected void Dispose(bool disposing) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-    protected override void OnHandleCreated(EventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected void OnHandleCreated(EventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-    protected override void OnHandleDestroyed(EventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected void OnHandleDestroyed(EventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-    protected override void OnMouseDown(MouseEventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected void OnMouseDown(MouseEventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
     protected virtual void OnPanelClick(StatusBarPanelClickEventArgs e) => throw new PlatformNotSupportedException();
 
-    protected override void OnLayout(LayoutEventArgs levent) => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected void OnLayout(LayoutEventArgs levent) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-    protected virtual void OnDrawItem(StatusBarDrawItemEventArgs sbdievent) => throw new PlatformNotSupportedException();
+    protected virtual void OnDrawItem(StatusBarDrawItemEventArgs subevent) => throw new PlatformNotSupportedException();
 
-    protected override void OnResize(EventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected void OnResize(EventArgs e) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-    public override string ToString() => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    public string ToString() => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-    protected override void WndProc(ref Message m) => throw new PlatformNotSupportedException();
-
-    [Obsolete(
-        Obsoletions.StatusBarPanelCollectionMessage,
-        error: false,
-        DiagnosticId = Obsoletions.StatusBarPanelCollectionDiagnosticId,
-        UrlFormat = Obsoletions.SharedUrlFormat)]
-    public class StatusBarPanelCollection : IList
-    {
-        public StatusBarPanelCollection(StatusBar owner) => throw new PlatformNotSupportedException();
-
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public virtual StatusBarPanel this[int index]
-        {
-            get => throw new PlatformNotSupportedException();
-            set => throw new PlatformNotSupportedException();
-        }
-
-        object IList.this[int index]
-        {
-            get => throw new PlatformNotSupportedException();
-            set => throw new PlatformNotSupportedException();
-        }
-
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public virtual StatusBarPanel this[string key] => throw new PlatformNotSupportedException();
-
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public int Count => throw new PlatformNotSupportedException();
-
-        object ICollection.SyncRoot => throw new PlatformNotSupportedException();
-
-        bool ICollection.IsSynchronized => throw new PlatformNotSupportedException();
-
-        bool IList.IsFixedSize => throw new PlatformNotSupportedException();
-
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public bool IsReadOnly => throw new PlatformNotSupportedException();
-
-        public virtual StatusBarPanel Add(string text) => throw new PlatformNotSupportedException();
-
-        public virtual int Add(StatusBarPanel value) => throw new PlatformNotSupportedException();
-
-        int IList.Add(object value) => throw new PlatformNotSupportedException();
-
-        public virtual void AddRange(StatusBarPanel[] panels) => throw new PlatformNotSupportedException();
-
-        public bool Contains(StatusBarPanel panel) => throw new PlatformNotSupportedException();
-
-        bool IList.Contains(object panel) => throw new PlatformNotSupportedException();
-
-        public virtual bool ContainsKey(string key) => throw new PlatformNotSupportedException();
-
-        public int IndexOf(StatusBarPanel panel) => throw new PlatformNotSupportedException();
-
-        int IList.IndexOf(object panel) => throw new PlatformNotSupportedException();
-
-        public virtual int IndexOfKey(string key) => throw new PlatformNotSupportedException();
-
-        public virtual void Insert(int index, StatusBarPanel value) => throw new PlatformNotSupportedException();
-
-        void IList.Insert(int index, object value) => throw new PlatformNotSupportedException();
-
-        public virtual void Clear() => throw new PlatformNotSupportedException();
-
-        public virtual void Remove(StatusBarPanel value) => throw new PlatformNotSupportedException();
-
-        void IList.Remove(object value) => throw new PlatformNotSupportedException();
-
-        public virtual void RemoveAt(int index) => throw new PlatformNotSupportedException();
-
-        public virtual void RemoveByKey(string key) => throw new PlatformNotSupportedException();
-
-        void ICollection.CopyTo(Array dest, int index) => throw new PlatformNotSupportedException();
-
-        public IEnumerator GetEnumerator() => throw new PlatformNotSupportedException();
-    }
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected void WndProc(ref Message m) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 }
