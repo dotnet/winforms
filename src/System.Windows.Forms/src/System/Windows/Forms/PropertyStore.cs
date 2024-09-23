@@ -186,8 +186,9 @@ internal class PropertyStore
         {
             _values.Remove(key);
         }
-        else
+        else if (!ReferenceEquals(value, previous))
         {
+            // If it is the same instance we don't need to wrap it again.
             _values[key] = new(value);
         }
 

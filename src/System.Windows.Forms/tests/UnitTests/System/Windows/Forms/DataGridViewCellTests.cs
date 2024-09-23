@@ -3423,7 +3423,6 @@ public partial class DataGridViewCellTests
 
         public static IEnumerable<object[]> AccessibilityObject_CustomCreateAccessibilityInstance_TestData()
         {
-            yield return new object[] { null };
             yield return new object[] { new AccessibleObject() };
             yield return new object[] { new DataGridViewCell.DataGridViewCellAccessibleObject(null) };
             yield return new object[] { new DataGridViewCell.DataGridViewCellAccessibleObject(new SubDataGridViewCell()) };

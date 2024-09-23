@@ -127,13 +127,15 @@ public class DataGridViewCellStyle : ICloneable
             : DBNull.Value;
         set
         {
-            object? oldValue = Properties.AddOrRemoveValue(s_propDataSourceNullValue, value, DBNull.Value);
+            // Deliberately don't change the value if it is "Equal".
+            object? oldValue = Properties.GetValueOrDefault<object>(s_propDataSourceNullValue);
 
             if (Equals(oldValue, value))
             {
                 return;
             }
 
+            Properties.AddOrRemoveValue(s_propDataSourceNullValue, value, DBNull.Value);
             OnPropertyChanged(DataGridViewCellStylePropertyInternal.Other);
         }
     }
