@@ -185,16 +185,23 @@ internal class PropertyStore
     public T? AddOrRemoveValue<T>(int key, T? value, T? defaultValue = default)
     {
         bool found = _values.TryGetValue(key, out Value foundValue);
+
+        bool isDefault = (value is null && defaultValue is null)
+            || (value is not null && value.Equals(defaultValue));
+
         T? previous = found ? foundValue.GetValue<T>() : default;
 
-        if (found && ((value is null && defaultValue is null)
-            || (value is not null && value.Equals(defaultValue))))
+        if (isDefault)
         {
-            _values.Remove(key);
+            // Equivalent to default, remove if we found it.
+            if (found)
+            {
+                _values.Remove(key);
+            }
         }
         else if (!found || !ReferenceEquals(value, previous))
         {
-            // If it is the same instance we don't need to wrap it again.
+            // If it wasn't found or it is the same instance we don't need set it.
             _values[key] = new(value);
         }
 
