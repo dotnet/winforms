@@ -2801,7 +2801,7 @@ public unsafe partial class Control :
     {
         Region? oldRegion = Properties.AddOrRemoveValue(s_regionProperty, region);
 
-        if (!IsHandleCreated)
+        if (oldRegion == region || !IsHandleCreated)
         {
             // We'll get called when OnHandleCreated runs.
             return oldRegion;

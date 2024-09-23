@@ -128,9 +128,8 @@ public class DataGridViewCellStyle : ICloneable
         set
         {
             // Deliberately don't change the value if it is "Equal".
-            object? oldValue = Properties.GetValueOrDefault<object>(s_propDataSourceNullValue);
-
-            if (Equals(oldValue, value))
+            if (Properties.TryGetValueOrNull(s_propDataSourceNullValue, out object? oldValue)
+                && Equals(oldValue, value))
             {
                 return;
             }
@@ -209,7 +208,7 @@ public class DataGridViewCellStyle : ICloneable
     {
         get
         {
-            if (!Properties.TryGetObject(s_propDataSourceNullValue, out object? value))
+            if (!Properties.TryGetValueOrNull(s_propDataSourceNullValue, out object? value))
             {
                 return true;
             }
