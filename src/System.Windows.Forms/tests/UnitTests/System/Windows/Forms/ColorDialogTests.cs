@@ -33,7 +33,7 @@ public class ColorDialogTests
     }
 
     [WinFormsFact]
-    public void ColorDialog_Ctor_Default_OverridenReset()
+    public void ColorDialog_Ctor_Default_OverriddenReset()
     {
         using EmptyResetColorDialog dialog = new();
         Assert.True(dialog.AllowFullOpen);
