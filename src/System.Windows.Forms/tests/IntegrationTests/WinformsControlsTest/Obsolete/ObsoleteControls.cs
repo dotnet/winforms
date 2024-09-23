@@ -3,15 +3,17 @@
 
 using System.Data;
 using System.Drawing;
-#pragma warning disable WFDEV006, WFDEV007, WFDEV009, WFDEV011, WFDEV015, WFDEV017, WFDEV022, WFDEV025 // Type or member is obsolete
+
+#pragma warning disable WFDEV006, WFDEV007, WFDEV009, WFDEV011, WFDEV015, WFDEV017, WFDEV022, WFDEV025, CS0618 // Type or member is obsolete
 using static System.Windows.Forms.DataGrid;
 
 namespace WinFormsControlsTest;
 
 /// <summary>
-/// This is added to test compile time compatibility only. 
+/// This is added to test binary compatibility only, this compiles but does not run.
 /// </summary>
 // Obsolete controls test for https://github.com/dotnet/winforms/issues/3783
+[DesignerCategory("code")]
 public partial class ObsoleteControls : Form
 {
     private bool _tablesAlreadyAdded;
@@ -26,7 +28,7 @@ public partial class ObsoleteControls : Form
         }
         catch (PlatformNotSupportedException ex)
         {
-            MessageBox.Show(ex.Message);
+            labTitle.Text = ex.Message;
         }
     }
 
@@ -63,7 +65,7 @@ public partial class ObsoleteControls : Form
         }
         catch (PlatformNotSupportedException ex)
         {
-            MessageBox.Show(ex.Message);
+            labTitle.Text = ex.Message;
         }
     }
 
@@ -141,7 +143,7 @@ public partial class ObsoleteControls : Form
         }
         catch (PlatformNotSupportedException ex)
         {
-            MessageBox.Show(ex.Message);
+            labTitle.Text = ex.Message;
         }
     }
 

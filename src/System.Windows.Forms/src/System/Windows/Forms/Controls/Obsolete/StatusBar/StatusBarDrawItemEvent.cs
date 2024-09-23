@@ -6,14 +6,12 @@ using System.Drawing;
 
 namespace System.Windows.Forms;
 
-#pragma warning disable RS0016
-// Add public types and members to the declared API to simplify porting of applications from .NET Framework to .NET.
-// These types will not work, but if they are not accessed, other features in the application will work.
 [Obsolete(
     Obsoletions.StatusBarDrawItemEventArgsMessage,
     error: false,
     DiagnosticId = Obsoletions.StatusBarDrawItemEventArgsDiagnosticId,
-    UrlFormat = Obsoletions.SharedUrlFormat)]
+    UrlFormat = Obsoletions.SharedUrlFormat),
+    EditorBrowsable(EditorBrowsableState.Never)]
 public class StatusBarDrawItemEventArgs : DrawItemEventArgs
 {
     public StatusBarDrawItemEventArgs(Graphics g,
@@ -21,7 +19,11 @@ public class StatusBarDrawItemEventArgs : DrawItemEventArgs
         Rectangle r,
         int itemId,
         DrawItemState itemState,
-        StatusBarPanel panel) : base(g, font, r, itemId, itemState) => throw new PlatformNotSupportedException();
+        StatusBarPanel panel) : base(graphics: g,
+            font: font,
+            rect: r,
+            index: itemId,
+            state: itemState) => throw new PlatformNotSupportedException();
 
     public StatusBarDrawItemEventArgs(Graphics g,
         Font font,
@@ -30,7 +32,13 @@ public class StatusBarDrawItemEventArgs : DrawItemEventArgs
         DrawItemState itemState,
         StatusBarPanel panel,
         Color foreColor,
-        Color backColor) : base(g, font, r, itemId, itemState, foreColor, backColor) => throw new PlatformNotSupportedException();
+        Color backColor) : base(graphics: g,
+            font: font,
+            rect: r,
+            index: itemId,
+            state: itemState,
+            foreColor: foreColor,
+            backColor: backColor) => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]

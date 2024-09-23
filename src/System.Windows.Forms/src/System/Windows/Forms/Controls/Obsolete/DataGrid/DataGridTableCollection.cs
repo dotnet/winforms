@@ -7,14 +7,12 @@ using System.ComponentModel;
 namespace System.Windows.Forms;
 
 #nullable disable
-#pragma warning disable RS0016
-// Add public types and members to the declared API to simplify porting of applications from .NET Framework to .NET.
-// These types will not work, but if they are not accessed, other features in the application will work.
 [Obsolete(
     Obsoletions.GridTableStylesCollectionMessage,
     error: false,
     DiagnosticId = Obsoletions.GridTableStylesCollectionDiagnosticId,
-    UrlFormat = Obsoletions.SharedUrlFormat)]
+    UrlFormat = Obsoletions.SharedUrlFormat),
+    EditorBrowsable(EditorBrowsableState.Never)]
 public class GridTableStylesCollection : BaseCollection, IList
 {
     int IList.Add(object value) => throw new PlatformNotSupportedException();
@@ -51,7 +49,9 @@ public class GridTableStylesCollection : BaseCollection, IList
 
     IEnumerator IEnumerable.GetEnumerator() => throw new PlatformNotSupportedException();
 
-    protected override ArrayList List => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected ArrayList List => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
