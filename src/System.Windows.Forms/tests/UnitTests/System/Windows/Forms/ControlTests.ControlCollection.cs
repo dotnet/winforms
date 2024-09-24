@@ -538,7 +538,7 @@ public class ControlControlCollectionTests
     }
 
     [WinFormsFact]
-    public void ControlCollection_Add_InvokeWithNonOverridenProperties_DoesNotCallPropertyHandlers()
+    public void ControlCollection_Add_InvokeWithNonOverriddenProperties_DoesNotCallPropertyHandlers()
     {
         using Control owner = new();
         using Control control = new();
@@ -581,7 +581,7 @@ public class ControlControlCollectionTests
     }
 
     [WinFormsFact]
-    public void ControlCollection_Add_InvokeWithNonOverridenPropertiesWithHandle_DoesNotCallPropertyHandlers()
+    public void ControlCollection_Add_InvokeWithNonOverriddenPropertiesWithHandle_DoesNotCallPropertyHandlers()
     {
         using Control owner = new();
         using Control control = new();
@@ -624,7 +624,7 @@ public class ControlControlCollectionTests
         Assert.Equal(1, bindingContextChangedCallCount);
     }
 
-    public static IEnumerable<object[]> Add_OverridenProperties_TestData()
+    public static IEnumerable<object[]> Add_OverriddenProperties_TestData()
     {
         BindingContext parentContext = [];
         BindingContext childContext = [];
@@ -635,8 +635,8 @@ public class ControlControlCollectionTests
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(Add_OverridenProperties_TestData))]
-    public void ControlCollection_Add_InvokeWithOverridenProperties_CallsPropertyHandlers(BindingContext parentBindingContext, BindingContext bindingContext, BindingContext expectedBindingContext)
+    [MemberData(nameof(Add_OverriddenProperties_TestData))]
+    public void ControlCollection_Add_InvokeWithOverriddenProperties_CallsPropertyHandlers(BindingContext parentBindingContext, BindingContext bindingContext, BindingContext expectedBindingContext)
     {
         using Control owner = new();
         using Control control = new();
@@ -774,7 +774,7 @@ public class ControlControlCollectionTests
         }
     }
 
-    public static IEnumerable<object[]> Add_OverridenPropertiesWithHandle_TestData()
+    public static IEnumerable<object[]> Add_OverriddenPropertiesWithHandle_TestData()
     {
         BindingContext parentContext = [];
         BindingContext childContext = [];
@@ -785,8 +785,8 @@ public class ControlControlCollectionTests
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(Add_OverridenPropertiesWithHandle_TestData))]
-    public void ControlCollection_Add_InvokeWithOverridenPropertiesWithHandle_CallsPropertyHandlers(BindingContext parentBindingContext, BindingContext bindingContext, BindingContext expectedBindingContext, int expectedBindingContextChangedCallCount)
+    [MemberData(nameof(Add_OverriddenPropertiesWithHandle_TestData))]
+    public void ControlCollection_Add_InvokeWithOverriddenPropertiesWithHandle_CallsPropertyHandlers(BindingContext parentBindingContext, BindingContext bindingContext, BindingContext expectedBindingContext, int expectedBindingContextChangedCallCount)
     {
         using Control owner = new();
         using Control control = new();
@@ -938,8 +938,8 @@ public class ControlControlCollectionTests
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(Add_OverridenProperties_TestData))]
-    public void ControlCollection_Add_InvokeWithOverridenPropertiesAxHost_DoesNotCallPropertyHandlers(BindingContext parentBindingContext, BindingContext bindingContext, BindingContext expectedBindingContext)
+    [MemberData(nameof(Add_OverriddenProperties_TestData))]
+    public void ControlCollection_Add_InvokeWithOverriddenPropertiesAxHost_DoesNotCallPropertyHandlers(BindingContext parentBindingContext, BindingContext bindingContext, BindingContext expectedBindingContext)
     {
         using Control owner = new();
         using SubAxHost control = new("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -1011,8 +1011,8 @@ public class ControlControlCollectionTests
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(Add_OverridenPropertiesWithHandle_TestData))]
-    public void ControlCollection_Add_InvokeWithOverridenPropertiesAxHostWithHandle_CallSPropertyHandlers(BindingContext parentBindingContext, BindingContext bindingContext, BindingContext expectedBindingContext, int expectedBindingContextChangedCallCount)
+    [MemberData(nameof(Add_OverriddenPropertiesWithHandle_TestData))]
+    public void ControlCollection_Add_InvokeWithOverriddenPropertiesAxHostWithHandle_CallSPropertyHandlers(BindingContext parentBindingContext, BindingContext bindingContext, BindingContext expectedBindingContext, int expectedBindingContextChangedCallCount)
     {
         using Control owner = new();
         using SubAxHost control = new("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -2232,7 +2232,7 @@ public class ControlControlCollectionTests
     }
 
     [WinFormsFact]
-    public void ControlCollection_Remove_InvokeWithNonOverridenProperties_DoesNotCallPropertyHandlers()
+    public void ControlCollection_Remove_InvokeWithNonOverriddenProperties_DoesNotCallPropertyHandlers()
     {
         using Control owner = new();
         using Control control = new();
@@ -2278,7 +2278,7 @@ public class ControlControlCollectionTests
     }
 
     [WinFormsFact]
-    public void ControlCollection_Remove_InvokeWithNonOverridenPropertiesWithHandle_DoesNotCallPropertyHandlers()
+    public void ControlCollection_Remove_InvokeWithNonOverriddenPropertiesWithHandle_DoesNotCallPropertyHandlers()
     {
         using Control owner = new();
         using Control control = new();
@@ -2324,7 +2324,7 @@ public class ControlControlCollectionTests
         Assert.Equal(1, bindingContextChangedCallCount);
     }
 
-    public static IEnumerable<object[]> Remove_OverridenProperties_TestData()
+    public static IEnumerable<object[]> Remove_OverriddenProperties_TestData()
     {
         BindingContext parentContext = [];
         BindingContext childContext = [];
@@ -2335,8 +2335,8 @@ public class ControlControlCollectionTests
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(Remove_OverridenProperties_TestData))]
-    public void ControlCollection_Remove_InvokeWithOverridenProperties_CallsPropertyHandlers(BindingContext parentBindingContext, BindingContext bindingContext, BindingContext expectedBindingContext)
+    [MemberData(nameof(Remove_OverriddenProperties_TestData))]
+    public void ControlCollection_Remove_InvokeWithOverriddenProperties_CallsPropertyHandlers(BindingContext parentBindingContext, BindingContext bindingContext, BindingContext expectedBindingContext)
     {
         using Control owner = new();
         using Control control = new();
@@ -2468,7 +2468,7 @@ public class ControlControlCollectionTests
         Assert.Equal(0, bindingContextChangedCallCount);
     }
 
-    public static IEnumerable<object[]> Remove_OverridenPropertiesWithHandle_TestData()
+    public static IEnumerable<object[]> Remove_OverriddenPropertiesWithHandle_TestData()
     {
         BindingContext parentContext = [];
         BindingContext childContext = [];
@@ -2479,8 +2479,8 @@ public class ControlControlCollectionTests
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(Remove_OverridenPropertiesWithHandle_TestData))]
-    public void ControlCollection_Remove_InvokeWithOverridenPropertiesWithHandle_CallsPropertyHandlers(BindingContext parentBindingContext, BindingContext bindingContext, BindingContext expectedBindingContext, int expectedBindingContextChangedCallCount)
+    [MemberData(nameof(Remove_OverriddenPropertiesWithHandle_TestData))]
+    public void ControlCollection_Remove_InvokeWithOverriddenPropertiesWithHandle_CallsPropertyHandlers(BindingContext parentBindingContext, BindingContext bindingContext, BindingContext expectedBindingContext, int expectedBindingContextChangedCallCount)
     {
         using Control owner = new();
         using Control control = new();
@@ -2611,8 +2611,8 @@ public class ControlControlCollectionTests
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(Remove_OverridenProperties_TestData))]
-    public void ControlCollection_Remove_InvokeWithOverridenPropertiesAxHost_DoesNotCallPropertyHandlers(BindingContext parentBindingContext, BindingContext bindingContext, BindingContext expectedBindingContext)
+    [MemberData(nameof(Remove_OverriddenProperties_TestData))]
+    public void ControlCollection_Remove_InvokeWithOverriddenPropertiesAxHost_DoesNotCallPropertyHandlers(BindingContext parentBindingContext, BindingContext bindingContext, BindingContext expectedBindingContext)
     {
         using Control owner = new();
         using SubAxHost control = new("8856f961-340a-11d0-a96b-00c04fd705a2");
@@ -2675,8 +2675,8 @@ public class ControlControlCollectionTests
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(Remove_OverridenPropertiesWithHandle_TestData))]
-    public void ControlCollection_Remove_InvokeWithOverridenPropertiesAxHostWithHandle_CallSPropertyHandlers(BindingContext parentBindingContext, BindingContext bindingContext, BindingContext expectedBindingContext, int expectedBindingContextChangedCallCount)
+    [MemberData(nameof(Remove_OverriddenPropertiesWithHandle_TestData))]
+    public void ControlCollection_Remove_InvokeWithOverriddenPropertiesAxHostWithHandle_CallSPropertyHandlers(BindingContext parentBindingContext, BindingContext bindingContext, BindingContext expectedBindingContext, int expectedBindingContextChangedCallCount)
     {
         using Control owner = new();
         using SubAxHost control = new("8856f961-340a-11d0-a96b-00c04fd705a2");

@@ -707,7 +707,7 @@ public class ListControlTests
     }
 
     [WinFormsFact]
-    public void ListControl_DataSource_SetOverridenComponent_DisposeValue_DoesNotRemove()
+    public void ListControl_DataSource_SetOverriddenComponent_DisposeValue_DoesNotRemove()
     {
         ComponentList originalValue = new();
         List<int> value = [];
@@ -829,7 +829,7 @@ public class ListControlTests
 
     [WinFormsTheory]
     [BoolData]
-    public void ListControl_DataSource_SetOverridenSupportInitializeNotification_InitializeValue_Success(bool isInitialized)
+    public void ListControl_DataSource_SetOverriddenSupportInitializeNotification_InitializeValue_Success(bool isInitialized)
     {
         SupportInitializeNotificationList originalValue = new();
         List<int> value = [];
