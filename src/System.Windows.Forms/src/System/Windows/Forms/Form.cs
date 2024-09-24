@@ -373,10 +373,7 @@ public partial class Form : ContainerControl
 
             if (!value)
             {
-                if (Properties.ContainsKey(s_propOpacity))
-                {
-                    Properties.AddValue(s_propOpacity, 1.0f);
-                }
+                Properties.RemoveValue(s_propOpacity);
 
                 if (Properties.ContainsKey(s_propTransparencyKey))
                 {
