@@ -13,7 +13,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
     [WinFormsTheory]
     [InlineData(ComboBoxStyle.DropDown)]
     [InlineData(ComboBoxStyle.Simple)]
-    public void ComboBoxUiaTextProvider_Ctor_DoesntCreateControlHandle(ComboBoxStyle dropDownStyle)
+    public void ComboBoxUiaTextProvider_Ctor_DoesNotCreateControlHandle(ComboBoxStyle dropDownStyle)
     {
         using (new NoAssertContext())
         {
@@ -881,7 +881,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
     [WinFormsTheory]
     [InlineData(ComboBoxStyle.DropDown)]
     [InlineData(ComboBoxStyle.Simple)]
-    public void ComboBoxUiaTextProvider_RangeFromChild_DoesntThrowAnException(ComboBoxStyle dropDownStyle)
+    public void ComboBoxUiaTextProvider_RangeFromChild_DoesNotThrowAnException(ComboBoxStyle dropDownStyle)
     {
         using (new NoAssertContext())
         {
@@ -907,7 +907,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
 
     [WinFormsTheory]
     [MemberData(nameof(ComboBoxUiaTextProvider_RangeFromPoint_TestData))]
-    public void ComboBoxUiaTextProvider_RangeFromPoint_DoesntThrowAnException(ComboBoxStyle dropDownStyle, Point point)
+    public void ComboBoxUiaTextProvider_RangeFromPoint_DoesNotThrowAnException(ComboBoxStyle dropDownStyle, Point point)
     {
         using ComboBox comboBox = new() { DropDownStyle = dropDownStyle };
         comboBox.CreateControl();
@@ -1003,7 +1003,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
     [InlineData(ComboBoxStyle.DropDown, 5, 100)]
     [InlineData(ComboBoxStyle.Simple, -5, 10)]
     [InlineData(ComboBoxStyle.Simple, 5, 100)]
-    public void ComboBoxUiaTextProvider_SetSelection_DoesntSelectText_IfIncorrectArguments(ComboBoxStyle dropDownStyle, int start, int end)
+    public void ComboBoxUiaTextProvider_SetSelection_DoesNotSelectText_IfIncorrectArguments(ComboBoxStyle dropDownStyle, int start, int end)
     {
         using (new NoAssertContext())
         {
@@ -1055,7 +1055,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
     [InlineData(ComboBoxStyle.DropDown, 2)]
     [InlineData(ComboBoxStyle.Simple, 0)]
     [InlineData(ComboBoxStyle.Simple, 2)]
-    public void ComboBoxUiaTextProvider_LineScroll_DoesntWork_WithoutHandle(ComboBoxStyle dropDownStyle, int newLine)
+    public void ComboBoxUiaTextProvider_LineScroll_DoesNotWork_WithoutHandle(ComboBoxStyle dropDownStyle, int newLine)
     {
         using (new NoAssertContext())
         {

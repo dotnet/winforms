@@ -816,7 +816,7 @@ public partial class AccessibleObjectTests
     [InlineData(-1, 0)]
     [InlineData(0, 0)]
     [InlineData(1, 1)]
-    public void AccessibleObject_IAccessiblaccChildCount_InvokeDefault_ReturnsExpected(int childCount, int expectedChildCount)
+    public void AccessibleObject_IAccessibleAccChildCount_InvokeDefault_ReturnsExpected(int childCount, int expectedChildCount)
     {
         Mock<AccessibleObject> mockAccessibleObject = new(MockBehavior.Strict);
         mockAccessibleObject
@@ -838,7 +838,7 @@ public partial class AccessibleObjectTests
 
     [WinFormsTheory]
     [MemberData(nameof(SelfVarChild_TestData))]
-    public void AccessibleObject_IAccessibleaccDoDefaultAction_InvokeDefaultSelf_Success(object varChild)
+    public void AccessibleObject_IAccessibleAccDoDefaultAction_InvokeDefaultSelf_Success(object varChild)
     {
         Mock<AccessibleObject> mockAccessibleObject = new(MockBehavior.Strict);
         mockAccessibleObject
@@ -852,7 +852,7 @@ public partial class AccessibleObjectTests
     [WinFormsTheory]
     [InlineData(2, 1, 0)]
     [InlineData(3, 0, 1)]
-    public void AccessibleObject_IAccessibleaccDoDefaultAction_InvokeDefaultChild_Success(object varChild, int child1CallCount, int child2CallCount)
+    public void AccessibleObject_IAccessibleAccDoDefaultAction_InvokeDefaultChild_Success(object varChild, int child1CallCount, int child2CallCount)
     {
         Mock<AccessibleObject> mockAccessibleObjectChild1 = new(MockBehavior.Strict);
         mockAccessibleObjectChild1
@@ -886,7 +886,7 @@ public partial class AccessibleObjectTests
     [WinFormsTheory]
     [InlineData(-1)]
     [InlineData(4)]
-    public void AccessibleObject_IAccessibleaccDoDefaultAction_InvokeDefaultNoSuchChild_Success(object varChild)
+    public void AccessibleObject_IAccessibleAccDoDefaultAction_InvokeDefaultNoSuchChild_Success(object varChild)
     {
         Mock<AccessibleObject> mockAccessibleObjectChild1 = new(MockBehavior.Strict);
         Mock<AccessibleObject> mockAccessibleObjectChild2 = new(MockBehavior.Strict);
@@ -917,7 +917,7 @@ public partial class AccessibleObjectTests
 
     [WinFormsTheory]
     [MemberData(nameof(accFocus_TestData))]
-    public void AccessibleObject_IAccessibleget_accFocus_InvokeDefault_ReturnsExpected(AccessibleObject result)
+    public void AccessibleObject_IAccessibleGet_accFocus_InvokeDefault_ReturnsExpected(AccessibleObject result)
     {
         Mock<AccessibleObject> mockAccessibleObject = new(MockBehavior.Strict);
         mockAccessibleObject
@@ -930,7 +930,7 @@ public partial class AccessibleObjectTests
     }
 
     [WinFormsFact]
-    public void AccessibleObject_IAccessiblaccFocus_InvokeDefaultSelf_ReturnsExpected()
+    public void AccessibleObject_IAccessibleAccFocus_InvokeDefaultSelf_ReturnsExpected()
     {
         Mock<AccessibleObject> mockAccessibleObject = new(MockBehavior.Strict);
         mockAccessibleObject
@@ -946,7 +946,7 @@ public partial class AccessibleObjectTests
     [InlineData(-1, -2)]
     [InlineData(0, 0)]
     [InlineData(1, 2)]
-    public void AccessibleObject_IAccessibleaccHitTest_InvokeDefault_ReturnsNull(int x, int y)
+    public void AccessibleObject_IAccessibleAccHitTest_InvokeDefault_ReturnsNull(int x, int y)
     {
         AccessibleObject accessibleObject = new();
         IAccessible iAccessible = accessibleObject;
@@ -957,7 +957,7 @@ public partial class AccessibleObjectTests
     [InlineData(1, 2)]
     [InlineData(2, 3)]
     [InlineData(3, 5)]
-    public void AccessibleObject_IAccessibleaccHitTest_InvokeDefaultWithNoChildrenBoundsValid_ReturnsExpected(int x, int y)
+    public void AccessibleObject_IAccessibleAccHitTest_InvokeDefaultWithNoChildrenBoundsValid_ReturnsExpected(int x, int y)
     {
         Mock<AccessibleObject> mockAccessibleObject = new(MockBehavior.Strict);
         mockAccessibleObject
@@ -979,7 +979,7 @@ public partial class AccessibleObjectTests
     [InlineData(4, 2)]
     [InlineData(1, 6)]
     [InlineData(4, 5)]
-    public void AccessibleObject_IAccessibleaccHitTest_InvokeDefaultWithNoChildrenBoundsInvalid_ReturnsNull(int x, int y)
+    public void AccessibleObject_IAccessibleAccHitTest_InvokeDefaultWithNoChildrenBoundsInvalid_ReturnsNull(int x, int y)
     {
         Mock<AccessibleObject> mockAccessibleObject = new(MockBehavior.Strict);
         mockAccessibleObject
@@ -999,7 +999,7 @@ public partial class AccessibleObjectTests
     [InlineData(-1, -2)]
     [InlineData(0, 0)]
     [InlineData(1, 2)]
-    public void AccessibleObject_IAccessibleaccHitTest_InvokeDefaultWithNoBoundsChildren_ReturnsExpected(int x, int y)
+    public void AccessibleObject_IAccessibleAccHitTest_InvokeDefaultWithNoBoundsChildren_ReturnsExpected(int x, int y)
     {
         using (new NoAssertContext())
         {
@@ -1025,7 +1025,7 @@ public partial class AccessibleObjectTests
     [InlineData(1, 2)]
     [InlineData(2, 3)]
     [InlineData(3, 5)]
-    public void AccessibleObject_IAccessibleaccHitTest_InvokeDefaultWithBoundsChildren_ReturnsExpected(int x, int y)
+    public void AccessibleObject_IAccessibleAccHitTest_InvokeDefaultWithBoundsChildren_ReturnsExpected(int x, int y)
     {
         using (new NoAssertContext())
         {
@@ -1061,7 +1061,7 @@ public partial class AccessibleObjectTests
 
     [WinFormsTheory]
     [MemberData(nameof(SelfVarChild_TestData))]
-    public void AccessibleObject_IAccessibleaccLocation_InvokeDefaultSelf_Success(object varChild)
+    public void AccessibleObject_IAccessibleAccLocation_InvokeDefaultSelf_Success(object varChild)
     {
         Mock<AccessibleObject> mockAccessibleObject = new(MockBehavior.Strict);
         mockAccessibleObject
@@ -1080,7 +1080,7 @@ public partial class AccessibleObjectTests
     [WinFormsTheory]
     [InlineData(2, 1, 0)]
     [InlineData(3, 0, 1)]
-    public void AccessibleObject_IAccessibleaccLocation_InvokeDefaultChild_Success(object varChild, int child1CallCount, int child2CallCount)
+    public void AccessibleObject_IAccessibleAccLocation_InvokeDefaultChild_Success(object varChild, int child1CallCount, int child2CallCount)
     {
         Mock<AccessibleObject> mockAccessibleObjectChild1 = new(MockBehavior.Strict);
         mockAccessibleObjectChild1
@@ -1120,7 +1120,7 @@ public partial class AccessibleObjectTests
     [WinFormsTheory]
     [InlineData(-1)]
     [InlineData(4)]
-    public void AccessibleObject_IAccessibleaccLocation_InvokeDefaultNoSuchChild_Success(object varChild)
+    public void AccessibleObject_IAccessibleAccLocation_InvokeDefaultNoSuchChild_Success(object varChild)
     {
         Mock<AccessibleObject> mockAccessibleObjectChild1 = new(MockBehavior.Strict);
         Mock<AccessibleObject> mockAccessibleObjectChild2 = new(MockBehavior.Strict);
@@ -1152,7 +1152,7 @@ public partial class AccessibleObjectTests
     [InlineData((int)AccessibleNavigation.Right, unchecked((int)0x80020004))]
     [InlineData((int)AccessibleNavigation.Right, "abc")]
     [InlineData((int)AccessibleNavigation.Right, null)]
-    public void AccessibleObject_IAccessibleaccNavigate_InvokeDefaultSelf_Success(int navDir, object varChild)
+    public void AccessibleObject_IAccessibleAccNavigate_InvokeDefaultSelf_Success(int navDir, object varChild)
     {
         Mock<AccessibleObject> mockAccessibleObject = new(MockBehavior.Strict);
         mockAccessibleObject
@@ -1167,7 +1167,7 @@ public partial class AccessibleObjectTests
     [WinFormsTheory]
     [InlineData((int)AccessibleNavigation.Right, 2, 1, 0)]
     [InlineData((int)AccessibleNavigation.Right, 3, 0, 1)]
-    public void AccessibleObject_IAccessibleaccNavigate_InvokeDefaultChild_Success(int navDir, object varChild, int child1CallCount, int child2CallCount)
+    public void AccessibleObject_IAccessibleAccNavigate_InvokeDefaultChild_Success(int navDir, object varChild, int child1CallCount, int child2CallCount)
     {
         Mock<AccessibleObject> mockAccessibleObjectChild1 = new(MockBehavior.Strict);
         mockAccessibleObjectChild1
@@ -1203,7 +1203,7 @@ public partial class AccessibleObjectTests
     [WinFormsTheory]
     [InlineData((int)AccessibleNavigation.Right, 2, 1, 0)]
     [InlineData((int)AccessibleNavigation.Right, 3, 0, 1)]
-    public void AccessibleObject_IAccessibleaccNavigate_InvokeDefaultChildSelf_Success(int navDir, object varChild, int child1CallCount, int child2CallCount)
+    public void AccessibleObject_IAccessibleAccNavigate_InvokeDefaultChildSelf_Success(int navDir, object varChild, int child1CallCount, int child2CallCount)
     {
         Mock<AccessibleObject> mockAccessibleObject = new(MockBehavior.Strict);
         Mock<AccessibleObject> mockAccessibleObjectChild1 = new(MockBehavior.Strict);
@@ -1239,7 +1239,7 @@ public partial class AccessibleObjectTests
     [WinFormsTheory]
     [InlineData((int)AccessibleNavigation.Right, -1)]
     [InlineData((int)AccessibleNavigation.Right, 4)]
-    public void AccessibleObject_IAccessibleaccNavigate_InvokeDefaultNoSuchChild_Success(int navDir, object varChild)
+    public void AccessibleObject_IAccessibleAccNavigate_InvokeDefaultNoSuchChild_Success(int navDir, object varChild)
     {
         Mock<AccessibleObject> mockAccessibleObjectChild1 = new(MockBehavior.Strict);
         Mock<AccessibleObject> mockAccessibleObjectChild2 = new(MockBehavior.Strict);
@@ -1270,7 +1270,7 @@ public partial class AccessibleObjectTests
 
     [WinFormsTheory]
     [MemberData(nameof(accParent_TestData))]
-    public void AccessibleObject_IAccessiblaccParent_InvokeDefault_ReturnsExpected(AccessibleObject result)
+    public void AccessibleObject_IAccessibleAccParent_InvokeDefault_ReturnsExpected(AccessibleObject result)
     {
         Mock<AccessibleObject> mockAccessibleObject = new(MockBehavior.Strict);
         mockAccessibleObject
@@ -1283,7 +1283,7 @@ public partial class AccessibleObjectTests
     }
 
     [WinFormsFact]
-    public void AccessibleObject_IAccessiblaccParent_InvokeDefaultSelf_ReturnsExpected()
+    public void AccessibleObject_IAccessibleAccParent_InvokeDefaultSelf_ReturnsExpected()
     {
         using (new NoAssertContext())
         {
@@ -1303,7 +1303,7 @@ public partial class AccessibleObjectTests
     [InlineData((int)AccessibleSelection.AddSelection, unchecked((int)0x80020004))]
     [InlineData((int)AccessibleSelection.AddSelection, "abc")]
     [InlineData((int)AccessibleSelection.AddSelection, null)]
-    public void AccessibleObject_IAccessibleaccSelect_InvokeDefaultSelf_Success(int flagsSelect, object varChild)
+    public void AccessibleObject_IAccessibleAccSelect_InvokeDefaultSelf_Success(int flagsSelect, object varChild)
     {
         Mock<AccessibleObject> mockAccessibleObject = new(MockBehavior.Strict);
         mockAccessibleObject
@@ -1317,7 +1317,7 @@ public partial class AccessibleObjectTests
     [WinFormsTheory]
     [InlineData((int)AccessibleSelection.AddSelection, 2, 1, 0)]
     [InlineData((int)AccessibleSelection.AddSelection, 3, 0, 1)]
-    public void AccessibleObject_IAccessibleaccSelect_InvokeDefaultChild_Success(int flagsSelect, object varChild, int child1CallCount, int child2CallCount)
+    public void AccessibleObject_IAccessibleAccSelect_InvokeDefaultChild_Success(int flagsSelect, object varChild, int child1CallCount, int child2CallCount)
     {
         Mock<AccessibleObject> mockAccessibleObjectChild1 = new(MockBehavior.Strict);
         mockAccessibleObjectChild1
@@ -1351,7 +1351,7 @@ public partial class AccessibleObjectTests
     [WinFormsTheory]
     [InlineData((int)AccessibleSelection.AddSelection, -1)]
     [InlineData((int)AccessibleSelection.AddSelection, 4)]
-    public void AccessibleObject_IAccessibleaccSelect_InvokeDefaultNoSuchChild_Success(int flagsSelect, object varChild)
+    public void AccessibleObject_IAccessibleAccSelect_InvokeDefaultNoSuchChild_Success(int flagsSelect, object varChild)
     {
         Mock<AccessibleObject> mockAccessibleObjectChild1 = new(MockBehavior.Strict);
         Mock<AccessibleObject> mockAccessibleObjectChild2 = new(MockBehavior.Strict);
@@ -1382,7 +1382,7 @@ public partial class AccessibleObjectTests
 
     [WinFormsTheory]
     [MemberData(nameof(accSelection_TestData))]
-    public void AccessibleObject_IAccessibleget_accSelection_InvokeDefault_ReturnsExpected(AccessibleObject result)
+    public void AccessibleObject_IAccessibleGet_accSelection_InvokeDefault_ReturnsExpected(AccessibleObject result)
     {
         Mock<AccessibleObject> mockAccessibleObject = new(MockBehavior.Strict);
         mockAccessibleObject
@@ -1395,7 +1395,7 @@ public partial class AccessibleObjectTests
     }
 
     [WinFormsFact]
-    public void AccessibleObject_IAccessiblaccSelection_InvokeDefaultSelf_ReturnsExpected()
+    public void AccessibleObject_IAccessibleAccSelection_InvokeDefaultSelf_ReturnsExpected()
     {
         Mock<AccessibleObject> mockAccessibleObject = new(MockBehavior.Strict);
         mockAccessibleObject
@@ -1409,7 +1409,7 @@ public partial class AccessibleObjectTests
 
     [WinFormsTheory]
     [MemberData(nameof(SelfVarChild_TestData))]
-    public void AccessibleObject_IAccessibleget_AccChild_InvokeDefaultSelf_ReturnsExpected(object varChild)
+    public void AccessibleObject_IAccessibleGet_AccChild_InvokeDefaultSelf_ReturnsExpected(object varChild)
     {
         AccessibleObject accessibleObject = new();
         IAccessible iAccessible = accessibleObject;
@@ -1417,7 +1417,7 @@ public partial class AccessibleObjectTests
     }
 
     [WinFormsFact]
-    public void AccessibleObject_IAccessibleget_accChild_InvokeDefaultChild_Success()
+    public void AccessibleObject_IAccessibleGet_accChild_InvokeDefaultChild_Success()
     {
         Mock<AccessibleObject> mockAccessibleObjectChild1 = new(MockBehavior.Strict);
         Mock<AccessibleObject> mockAccessibleObjectChild2 = new(MockBehavior.Strict);
@@ -1445,7 +1445,7 @@ public partial class AccessibleObjectTests
     [WinFormsTheory]
     [InlineData(2)]
     [InlineData(3)]
-    public void AccessibleObject_IAccessibleget_accChild_InvokeDefaultChildSelf_ReturnsExpected(object varChild)
+    public void AccessibleObject_IAccessibleGet_accChild_InvokeDefaultChildSelf_ReturnsExpected(object varChild)
     {
         using (new NoAssertContext())
         {
@@ -1474,7 +1474,7 @@ public partial class AccessibleObjectTests
     [WinFormsTheory]
     [InlineData(-1)]
     [InlineData(4)]
-    public void AccessibleObject_IAccessibleget_accChild_InvokeDefaultNoSuchChild_ReturnsNull(object varChild)
+    public void AccessibleObject_IAccessibleGet_accChild_InvokeDefaultNoSuchChild_ReturnsNull(object varChild)
     {
         Mock<AccessibleObject> mockAccessibleObjectChild1 = new(MockBehavior.Strict);
         Mock<AccessibleObject> mockAccessibleObjectChild2 = new(MockBehavior.Strict);
@@ -1510,7 +1510,7 @@ public partial class AccessibleObjectTests
     [InlineData("value", unchecked((int)0x80020004))]
     [InlineData("value", "abc")]
     [InlineData("value", null)]
-    public void AccessibleObject_IAccessibleget_accDefaultAction_InvokeDefaultSelf_ReturnsExpected(string result, object varChild)
+    public void AccessibleObject_IAccessibleGet_accDefaultAction_InvokeDefaultSelf_ReturnsExpected(string result, object varChild)
     {
         Mock<AccessibleObject> mockAccessibleObject = new(MockBehavior.Strict);
         mockAccessibleObject
@@ -1532,7 +1532,7 @@ public partial class AccessibleObjectTests
     [InlineData(null, 3, 0, 1)]
     [InlineData("", 3, 0, 1)]
     [InlineData("value", 3, 0, 1)]
-    public void AccessibleObject_IAccessibleget_accDefaultAction_InvokeDefaultChild_ReturnsExpected(string result, object varChild, int child1CallCount, int child2CallCount)
+    public void AccessibleObject_IAccessibleGet_accDefaultAction_InvokeDefaultChild_ReturnsExpected(string result, object varChild, int child1CallCount, int child2CallCount)
     {
         Mock<AccessibleObject> mockAccessibleObjectChild1 = new(MockBehavior.Strict);
         mockAccessibleObjectChild1
@@ -1574,7 +1574,7 @@ public partial class AccessibleObjectTests
     [WinFormsTheory]
     [InlineData(-1)]
     [InlineData(4)]
-    public void AccessibleObject_IAccessibleget_accDefaultAction_InvokeDefaultNoSuchChild_ReturnsNull(object varChild)
+    public void AccessibleObject_IAccessibleGet_accDefaultAction_InvokeDefaultNoSuchChild_ReturnsNull(object varChild)
     {
         Mock<AccessibleObject> mockAccessibleObjectChild1 = new(MockBehavior.Strict);
         Mock<AccessibleObject> mockAccessibleObjectChild2 = new(MockBehavior.Strict);
@@ -1610,7 +1610,7 @@ public partial class AccessibleObjectTests
     [InlineData("value", unchecked((int)0x80020004))]
     [InlineData("value", "abc")]
     [InlineData("value", null)]
-    public void AccessibleObject_IAccessibleget_accDescription_InvokeDefaultSelf_ReturnsExpected(string result, object varChild)
+    public void AccessibleObject_IAccessibleGet_accDescription_InvokeDefaultSelf_ReturnsExpected(string result, object varChild)
     {
         Mock<AccessibleObject> mockAccessibleObject = new(MockBehavior.Strict);
         mockAccessibleObject
@@ -1632,7 +1632,7 @@ public partial class AccessibleObjectTests
     [InlineData(null, 3, 0, 1)]
     [InlineData("", 3, 0, 1)]
     [InlineData("value", 3, 0, 1)]
-    public void AccessibleObject_IAccessibleget_accDescription_InvokeDefaultChild_ReturnsExpected(string result, object varChild, int child1CallCount, int child2CallCount)
+    public void AccessibleObject_IAccessibleGet_accDescription_InvokeDefaultChild_ReturnsExpected(string result, object varChild, int child1CallCount, int child2CallCount)
     {
         Mock<AccessibleObject> mockAccessibleObjectChild1 = new(MockBehavior.Strict);
         mockAccessibleObjectChild1
@@ -1677,7 +1677,7 @@ public partial class AccessibleObjectTests
     [WinFormsTheory]
     [InlineData(-1)]
     [InlineData(4)]
-    public void AccessibleObject_IAccessibleget_accDescription_InvokeDefaultNoSuchChild_ReturnsNull(object varChild)
+    public void AccessibleObject_IAccessibleGet_accDescription_InvokeDefaultNoSuchChild_ReturnsNull(object varChild)
     {
         Mock<AccessibleObject> mockAccessibleObjectChild1 = new(MockBehavior.Strict);
         Mock<AccessibleObject> mockAccessibleObjectChild2 = new(MockBehavior.Strict);
@@ -1713,7 +1713,7 @@ public partial class AccessibleObjectTests
     [InlineData("value", unchecked((int)0x80020004))]
     [InlineData("value", "abc")]
     [InlineData("value", null)]
-    public void AccessibleObject_IAccessibleget_accHelp_InvokeDefaultSelf_ReturnsExpected(string result, object varChild)
+    public void AccessibleObject_IAccessibleGet_accHelp_InvokeDefaultSelf_ReturnsExpected(string result, object varChild)
     {
         Mock<AccessibleObject> mockAccessibleObject = new(MockBehavior.Strict);
         mockAccessibleObject
@@ -1735,7 +1735,7 @@ public partial class AccessibleObjectTests
     [InlineData(null, 3, 0, 1)]
     [InlineData("", 3, 0, 1)]
     [InlineData("value", 3, 0, 1)]
-    public void AccessibleObject_IAccessibleget_accHelp_InvokeDefaultChild_ReturnsExpected(string result, object varChild, int child1CallCount, int child2CallCount)
+    public void AccessibleObject_IAccessibleGet_accHelp_InvokeDefaultChild_ReturnsExpected(string result, object varChild, int child1CallCount, int child2CallCount)
     {
         Mock<AccessibleObject> mockAccessibleObjectChild1 = new(MockBehavior.Strict);
         mockAccessibleObjectChild1
@@ -1780,7 +1780,7 @@ public partial class AccessibleObjectTests
     [WinFormsTheory]
     [InlineData(-1)]
     [InlineData(4)]
-    public void AccessibleObject_IAccessibleget_accHelp_InvokeDefaultNoSuchChild_ReturnsNull(object varChild)
+    public void AccessibleObject_IAccessibleGet_accHelp_InvokeDefaultNoSuchChild_ReturnsNull(object varChild)
     {
         Mock<AccessibleObject> mockAccessibleObjectChild1 = new(MockBehavior.Strict);
         Mock<AccessibleObject> mockAccessibleObjectChild2 = new(MockBehavior.Strict);
@@ -1818,7 +1818,7 @@ public partial class AccessibleObjectTests
     [InlineData(0, "value", unchecked((int)0x80020004))]
     [InlineData(1, "value", "abc")]
     [InlineData(2, "value", null)]
-    public void AccessibleObject_IAccessibleget_accHelpTopic_InvokeDefaultSelf_ReturnsExpected(int result, string stringResult, object varChild)
+    public void AccessibleObject_IAccessibleGet_accHelpTopic_InvokeDefaultSelf_ReturnsExpected(int result, string stringResult, object varChild)
     {
         Mock<AccessibleObject> mockAccessibleObject = new(MockBehavior.Strict);
         string dummy;
@@ -1845,7 +1845,7 @@ public partial class AccessibleObjectTests
     [InlineData(-1, null, 3)]
     [InlineData(0, "", 3)]
     [InlineData(1, "value", 3)]
-    public void AccessibleObject_IAccessibleget_accHelpTopic_InvokeDefaultChild_ReturnsExpected(int result, string stringResult, object varChild)
+    public void AccessibleObject_IAccessibleGet_accHelpTopic_InvokeDefaultChild_ReturnsExpected(int result, string stringResult, object varChild)
     {
         string dummy;
         HelpTopicDelegate handler = (out string pszHelpFile) =>
@@ -1894,7 +1894,7 @@ public partial class AccessibleObjectTests
     [WinFormsTheory]
     [InlineData(-1)]
     [InlineData(4)]
-    public void AccessibleObject_IAccessibleget_accHelpTopic_InvokeDefaultNoSuchChild_ReturnsNull(object varChild)
+    public void AccessibleObject_IAccessibleGet_accHelpTopic_InvokeDefaultNoSuchChild_ReturnsNull(object varChild)
     {
         Mock<AccessibleObject> mockAccessibleObjectChild1 = new(MockBehavior.Strict);
         Mock<AccessibleObject> mockAccessibleObjectChild2 = new(MockBehavior.Strict);
@@ -1931,7 +1931,7 @@ public partial class AccessibleObjectTests
     [InlineData("value", unchecked((int)0x80020004))]
     [InlineData("value", "abc")]
     [InlineData("value", null)]
-    public void AccessibleObject_IAccessibleget_accKeyboardShortcut_InvokeDefaultSelf_ReturnsExpected(string result, object varChild)
+    public void AccessibleObject_IAccessibleGet_accKeyboardShortcut_InvokeDefaultSelf_ReturnsExpected(string result, object varChild)
     {
         Mock<AccessibleObject> mockAccessibleObject = new()
         {
@@ -1953,7 +1953,7 @@ public partial class AccessibleObjectTests
     [InlineData(null, 3, 0, 1)]
     [InlineData("", 3, 0, 1)]
     [InlineData("value", 3, 0, 1)]
-    public void AccessibleObject_IAccessibleget_accKeyboardShortcut_InvokeDefaultChild_ReturnsExpected(string result, object varChild, int child1CallCount, int child2CallCount)
+    public void AccessibleObject_IAccessibleGet_accKeyboardShortcut_InvokeDefaultChild_ReturnsExpected(string result, object varChild, int child1CallCount, int child2CallCount)
     {
         Mock<AccessibleObject> mockAccessibleObjectChild1 = new()
         {
@@ -1998,7 +1998,7 @@ public partial class AccessibleObjectTests
     [WinFormsTheory]
     [InlineData(-1)]
     [InlineData(4)]
-    public void AccessibleObject_IAccessibleget_accKeyboardShortcut_InvokeDefaultNoSuchChild_ReturnsNull(object varChild)
+    public void AccessibleObject_IAccessibleGet_accKeyboardShortcut_InvokeDefaultNoSuchChild_ReturnsNull(object varChild)
     {
         Mock<AccessibleObject> mockAccessibleObjectChild1 = new(MockBehavior.Strict);
         Mock<AccessibleObject> mockAccessibleObjectChild2 = new(MockBehavior.Strict);
@@ -2037,7 +2037,7 @@ public partial class AccessibleObjectTests
     [InlineData("value", unchecked((int)0x80020004))]
     [InlineData("value", "abc")]
     [InlineData("value", null)]
-    public void AccessibleObject_IAccessibleget_accName_InvokeDefaultSelf_ReturnsExpected(string result, object varChild)
+    public void AccessibleObject_IAccessibleGet_accName_InvokeDefaultSelf_ReturnsExpected(string result, object varChild)
     {
         Mock<AccessibleObject> mockAccessibleObject = new()
         {
@@ -2059,7 +2059,7 @@ public partial class AccessibleObjectTests
     [InlineData(null, 3, 0, 1)]
     [InlineData("", 3, 0, 1)]
     [InlineData("value", 3, 0, 1)]
-    public void AccessibleObject_IAccessibleget_accName_InvokeDefaultChild_ReturnsExpected(string result, object varChild, int child1CallCount, int child2CallCount)
+    public void AccessibleObject_IAccessibleGet_accName_InvokeDefaultChild_ReturnsExpected(string result, object varChild, int child1CallCount, int child2CallCount)
     {
         Mock<AccessibleObject> mockAccessibleObjectChild1 = new()
         {
@@ -2104,7 +2104,7 @@ public partial class AccessibleObjectTests
     [WinFormsTheory]
     [InlineData(-1)]
     [InlineData(4)]
-    public void AccessibleObject_IAccessibleget_accName_InvokeDefaultNoSuchChild_ReturnsNull(object varChild)
+    public void AccessibleObject_IAccessibleGet_accName_InvokeDefaultNoSuchChild_ReturnsNull(object varChild)
     {
         Mock<AccessibleObject> mockAccessibleObjectChild1 = new(MockBehavior.Strict);
         Mock<AccessibleObject> mockAccessibleObjectChild2 = new(MockBehavior.Strict);
@@ -2143,7 +2143,7 @@ public partial class AccessibleObjectTests
     [InlineData(AccessibleRole.Sound, unchecked((int)0x80020004))]
     [InlineData(AccessibleRole.Sound, "abc")]
     [InlineData(AccessibleRole.Sound, null)]
-    public void AccessibleObject_IAccessibleget_accRole_InvokeDefaultSelf_ReturnsExpected(AccessibleRole result, object varChild)
+    public void AccessibleObject_IAccessibleGet_accRole_InvokeDefaultSelf_ReturnsExpected(AccessibleRole result, object varChild)
     {
         Mock<AccessibleObject> mockAccessibleObject = new(MockBehavior.Strict);
         mockAccessibleObject
@@ -2156,7 +2156,7 @@ public partial class AccessibleObjectTests
     }
 
     [WinFormsFact]
-    public void AccessibleObject_IAccessibleget_accRole_InvokeDefaultSelfNotAClientObject_ReturnsExpected()
+    public void AccessibleObject_IAccessibleGet_accRole_InvokeDefaultSelfNotAClientObject_ReturnsExpected()
     {
         using Control control = new();
         control.CreateControl();
@@ -2175,7 +2175,7 @@ public partial class AccessibleObjectTests
     [InlineData(AccessibleRole.None, 3, 0, 1)]
     [InlineData(AccessibleRole.Default, 3, 0, 1)]
     [InlineData(AccessibleRole.Sound, 3, 0, 1)]
-    public void AccessibleObject_IAccessibleget_accRole_InvokeDefaultChild_ReturnsExpected(AccessibleRole result, object varChild, int child1CallCount, int child2CallCount)
+    public void AccessibleObject_IAccessibleGet_accRole_InvokeDefaultChild_ReturnsExpected(AccessibleRole result, object varChild, int child1CallCount, int child2CallCount)
     {
         Mock<AccessibleObject> mockAccessibleObjectChild1 = new(MockBehavior.Strict);
         mockAccessibleObjectChild1
@@ -2211,7 +2211,7 @@ public partial class AccessibleObjectTests
     [WinFormsTheory]
     [InlineData(-1)]
     [InlineData(4)]
-    public void AccessibleObject_IAccessibleget_accRole_InvokeDefaultNoSuchChild_ReturnsNull(object varChild)
+    public void AccessibleObject_IAccessibleGet_accRole_InvokeDefaultNoSuchChild_ReturnsNull(object varChild)
     {
         Mock<AccessibleObject> mockAccessibleObjectChild1 = new(MockBehavior.Strict);
         Mock<AccessibleObject> mockAccessibleObjectChild2 = new(MockBehavior.Strict);
@@ -2243,7 +2243,7 @@ public partial class AccessibleObjectTests
     [InlineData(AccessibleStates.Mixed, unchecked((int)0x80020004))]
     [InlineData(AccessibleStates.Mixed, "abc")]
     [InlineData(AccessibleStates.Mixed, null)]
-    public void AccessibleObject_IAccessibleget_accState_InvokeDefaultSelf_ReturnsExpected(AccessibleStates result, object varChild)
+    public void AccessibleObject_IAccessibleGet_accState_InvokeDefaultSelf_ReturnsExpected(AccessibleStates result, object varChild)
     {
         Mock<AccessibleObject> mockAccessibleObject = new(MockBehavior.Strict);
         mockAccessibleObject
@@ -2260,7 +2260,7 @@ public partial class AccessibleObjectTests
     [InlineData(AccessibleStates.Mixed, 2, 1, 0)]
     [InlineData(AccessibleStates.None, 3, 0, 1)]
     [InlineData(AccessibleStates.Mixed, 3, 0, 1)]
-    public void AccessibleObject_IAccessibleget_accState_InvokeDefaultChild_ReturnsExpected(AccessibleStates result, object varChild, int child1CallCount, int child2CallCount)
+    public void AccessibleObject_IAccessibleGet_accState_InvokeDefaultChild_ReturnsExpected(AccessibleStates result, object varChild, int child1CallCount, int child2CallCount)
     {
         Mock<AccessibleObject> mockAccessibleObjectChild1 = new(MockBehavior.Strict);
         mockAccessibleObjectChild1
@@ -2296,7 +2296,7 @@ public partial class AccessibleObjectTests
     [WinFormsTheory]
     [InlineData(-1)]
     [InlineData(4)]
-    public void AccessibleObject_IAccessibleget_accState_InvokeDefaultNoSuchChild_ReturnsNull(object varChild)
+    public void AccessibleObject_IAccessibleGet_accState_InvokeDefaultNoSuchChild_ReturnsNull(object varChild)
     {
         Mock<AccessibleObject> mockAccessibleObjectChild1 = new(MockBehavior.Strict);
         Mock<AccessibleObject> mockAccessibleObjectChild2 = new(MockBehavior.Strict);
@@ -2332,7 +2332,7 @@ public partial class AccessibleObjectTests
     [InlineData("value", unchecked((int)0x80020004))]
     [InlineData("value", "abc")]
     [InlineData("value", null)]
-    public void AccessibleObject_IAccessibleget_accValue_InvokeDefaultSelf_ReturnsExpected(string result, object varChild)
+    public void AccessibleObject_IAccessibleGet_accValue_InvokeDefaultSelf_ReturnsExpected(string result, object varChild)
     {
         Mock<AccessibleObject> mockAccessibleObject = new(MockBehavior.Strict);
         mockAccessibleObject
@@ -2354,7 +2354,7 @@ public partial class AccessibleObjectTests
     [InlineData(null, 3, 0, 1)]
     [InlineData("", 3, 0, 1)]
     [InlineData("value", 3, 0, 1)]
-    public void AccessibleObject_IAccessibleget_accValue_InvokeDefaultChild_ReturnsExpected(string result, object varChild, int child1CallCount, int child2CallCount)
+    public void AccessibleObject_IAccessibleGet_accValue_InvokeDefaultChild_ReturnsExpected(string result, object varChild, int child1CallCount, int child2CallCount)
     {
         Mock<AccessibleObject> mockAccessibleObjectChild1 = new(MockBehavior.Strict);
         mockAccessibleObjectChild1
@@ -2399,7 +2399,7 @@ public partial class AccessibleObjectTests
     [WinFormsTheory]
     [InlineData(-1)]
     [InlineData(4)]
-    public void AccessibleObject_IAccessibleget_accValue_InvokeDefaultNoSuchChild_ReturnsNull(object varChild)
+    public void AccessibleObject_IAccessibleGet_accValue_InvokeDefaultNoSuchChild_ReturnsNull(object varChild)
     {
         Mock<AccessibleObject> mockAccessibleObjectChild1 = new(MockBehavior.Strict);
         Mock<AccessibleObject> mockAccessibleObjectChild2 = new(MockBehavior.Strict);
@@ -2435,7 +2435,7 @@ public partial class AccessibleObjectTests
     [InlineData(unchecked((int)0x80020004), "value")]
     [InlineData("abc", "value")]
     [InlineData(null, "value")]
-    public void AccessibleObject_IAccessibleset_accName_InvokeDefaultSelf_ReturnsExpected(object varChild, string value)
+    public void AccessibleObject_IAccessibleSet_accName_InvokeDefaultSelf_ReturnsExpected(object varChild, string value)
     {
         AccessibleObject accessibleObject = new();
         IAccessible iAccessible = accessibleObject;
@@ -2451,7 +2451,7 @@ public partial class AccessibleObjectTests
     [InlineData(3, null)]
     [InlineData(3, "")]
     [InlineData(3, "value")]
-    public void AccessibleObject_IAccessibleset_accName_InvokeDefaultChild_ReturnsExpected(object varChild, string value)
+    public void AccessibleObject_IAccessibleSet_accName_InvokeDefaultChild_ReturnsExpected(object varChild, string value)
     {
         AccessibleObject childAccessibleObject1 = new();
         AccessibleObject childAccessibleObject2 = new();
@@ -2487,7 +2487,7 @@ public partial class AccessibleObjectTests
     [InlineData(4, null)]
     [InlineData(4, "")]
     [InlineData(4, "value")]
-    public void AccessibleObject_IAccessibleset_accName_InvokeDefaultNoSuchChild_ReturnsNull(object varChild, string value)
+    public void AccessibleObject_IAccessibleSet_accName_InvokeDefaultNoSuchChild_ReturnsNull(object varChild, string value)
     {
         AccessibleObject childAccessibleObject1 = new();
         AccessibleObject childAccessibleObject2 = new();
@@ -2529,7 +2529,7 @@ public partial class AccessibleObjectTests
     [InlineData(unchecked((int)0x80020004), "value")]
     [InlineData("abc", "value")]
     [InlineData(null, "value")]
-    public void AccessibleObject_IAccessibleset_accValue_InvokeDefaultSelf_ReturnsExpected(object varChild, string value)
+    public void AccessibleObject_IAccessibleSet_accValue_InvokeDefaultSelf_ReturnsExpected(object varChild, string value)
     {
         AccessibleObject accessibleObject = new();
         IAccessible iAccessible = accessibleObject;
@@ -2545,7 +2545,7 @@ public partial class AccessibleObjectTests
     [InlineData(3, null)]
     [InlineData(3, "")]
     [InlineData(3, "value")]
-    public void AccessibleObject_IAccessibleset_accValue_InvokeDefaultChild_ReturnsExpected(object varChild, string value)
+    public void AccessibleObject_IAccessibleSet_accValue_InvokeDefaultChild_ReturnsExpected(object varChild, string value)
     {
         AccessibleObject childAccessibleObject1 = new();
         AccessibleObject childAccessibleObject2 = new();
@@ -2578,7 +2578,7 @@ public partial class AccessibleObjectTests
     [InlineData(4, null)]
     [InlineData(4, "")]
     [InlineData(4, "value")]
-    public void AccessibleObject_IAccessibleset_accValue_InvokeDefaultNoSuchChild_ReturnsNull(object varChild, string value)
+    public void AccessibleObject_IAccessibleSet_accValue_InvokeDefaultNoSuchChild_ReturnsNull(object varChild, string value)
     {
         AccessibleObject childAccessibleObject1 = new();
         AccessibleObject childAccessibleObject2 = new();
@@ -2688,7 +2688,7 @@ public partial class AccessibleObjectTests
         Assert.Equal(VARIANT.Empty, accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId));
     }
 
-    public static IEnumerable<object[]> AccessibleObject_RuntimeId_IsOverriden_TestData()
+    public static IEnumerable<object[]> AccessibleObject_RuntimeId_IsOverridden_TestData()
     {
         Assembly assembly = typeof(AccessibleObject).Assembly;
         foreach (Type type in assembly.GetTypes())
@@ -2709,8 +2709,8 @@ public partial class AccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(AccessibleObject_RuntimeId_IsOverriden_TestData))]
-    public void AccessibleObject_RuntimeId_IsOverriden(Type type)
+    [MemberData(nameof(AccessibleObject_RuntimeId_IsOverridden_TestData))]
+    public void AccessibleObject_RuntimeId_IsOverridden(Type type)
     {
         PropertyInfo runtimeIdProperty = type.GetProperty(nameof(AccessibleObject.RuntimeId), BindingFlags.NonPublic | BindingFlags.Instance);
 

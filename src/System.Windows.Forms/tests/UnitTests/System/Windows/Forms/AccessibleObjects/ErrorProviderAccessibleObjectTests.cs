@@ -144,7 +144,7 @@ public class ErrorProviderAccessibleObjectTests : IDisposable
     }
 
     [WinFormsFact]
-    public void ErrorProvider_NameDoesntEqualControlTypeOrChildName()
+    public void ErrorProvider_NameDoesNotEqualControlTypeOrChildName()
     {
         // Mas requires us to have no same AccessibleName and LocalizedControlType or child AccessibleName.
         // So we need to check if these properties are not equal.

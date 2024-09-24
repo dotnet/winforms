@@ -723,7 +723,6 @@ public class DataGridViewRowTests
     }
 
     [WinFormsTheory]
-    [InlineData(null)]
     [InlineData(typeof(int))]
     public void DataGridViewRow_DefaultHeaderCellType_SetInvalidWithNonNullOldValue_GetReturnsExpected(Type value)
     {

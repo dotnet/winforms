@@ -122,33 +122,19 @@ public class DataGridViewCellStyle : ICloneable
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public object? DataSourceNullValue
     {
-        get => Properties.TryGetObject(s_propDataSourceNullValue, out object? value)
+        get => Properties.TryGetValueOrNull(s_propDataSourceNullValue, out object? value)
             ? value
             : DBNull.Value;
         set
         {
-            object? oldDataSourceNullValue = DataSourceNullValue;
-
-            if ((oldDataSourceNullValue == value) ||
-                (oldDataSourceNullValue is not null && oldDataSourceNullValue.Equals(value)))
+            // Deliberately don't change the value if it is "Equal".
+            if (Properties.TryGetValueOrNull(s_propDataSourceNullValue, out object? oldValue)
+                && Equals(oldValue, value))
             {
                 return;
             }
 
-            if (value == DBNull.Value &&
-                Properties.ContainsKey(s_propDataSourceNullValue))
-            {
-                Properties.RemoveValue(s_propDataSourceNullValue);
-            }
-            else
-            {
-                Properties.AddValue(s_propDataSourceNullValue, value);
-            }
-
-            Debug.Assert((oldDataSourceNullValue is null && DataSourceNullValue is not null) ||
-                         (oldDataSourceNullValue is not null && DataSourceNullValue is null) ||
-                         (oldDataSourceNullValue != DataSourceNullValue && !oldDataSourceNullValue!.Equals(DataSourceNullValue)));
-
+            Properties.AddOrRemoveValue(s_propDataSourceNullValue, value, DBNull.Value);
             OnPropertyChanged(DataGridViewCellStylePropertyInternal.Other);
         }
     }
@@ -205,23 +191,11 @@ public class DataGridViewCellStyle : ICloneable
     [AllowNull]
     public IFormatProvider FormatProvider
     {
-        get
-        {
-            object? formatProvider = Properties.GetObject(s_propFormatProvider);
-            if (formatProvider is null)
-            {
-                return Globalization.CultureInfo.CurrentCulture;
-            }
-            else
-            {
-                return (IFormatProvider)formatProvider;
-            }
-        }
+        get => Properties.GetValueOrDefault<IFormatProvider>(s_propFormatProvider) ?? Globalization.CultureInfo.CurrentCulture;
         set
         {
-            object? originalFormatProvider = Properties.GetObject(s_propFormatProvider);
-            Properties.SetObject(s_propFormatProvider, value);
-            if (value != originalFormatProvider)
+            IFormatProvider? originalValue = Properties.AddOrRemoveValue(s_propFormatProvider, value);
+            if (value != originalValue)
             {
                 OnPropertyChanged(DataGridViewCellStylePropertyInternal.Other);
             }
@@ -234,7 +208,7 @@ public class DataGridViewCellStyle : ICloneable
     {
         get
         {
-            if (!Properties.TryGetObject(s_propDataSourceNullValue, out object? value))
+            if (!Properties.TryGetValueOrNull(s_propDataSourceNullValue, out object? value))
             {
                 return true;
             }
@@ -245,10 +219,7 @@ public class DataGridViewCellStyle : ICloneable
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public bool IsFormatProviderDefault
-    {
-        get => !Properties.ContainsObjectThatIsNotNull(s_propFormatProvider);
-    }
+    public bool IsFormatProviderDefault => !Properties.ContainsKey(s_propFormatProvider);
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -565,8 +536,7 @@ public class DataGridViewCellStyle : ICloneable
 
     private bool ShouldSerializeForeColor() => Properties.ContainsKey(s_propForeColor);
 
-    private bool ShouldSerializeFormatProvider() =>
-        Properties.ContainsObjectThatIsNotNull(s_propFormatProvider);
+    private bool ShouldSerializeFormatProvider() => Properties.ContainsKey(s_propFormatProvider);
 
     private bool ShouldSerializePadding() => Padding != Padding.Empty;
 
