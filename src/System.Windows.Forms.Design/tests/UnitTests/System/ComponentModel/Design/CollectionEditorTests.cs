@@ -806,7 +806,7 @@ public class CollectionEditorTests
     }
 
     [Fact]
-    public void CollectionEditor_GetDisplayText_ValueDoesntMatchCollectionType_ThrowsTargetException()
+    public void CollectionEditor_GetDisplayText_ValueDoesNotMatchCollectionType_ThrowsTargetException()
     {
         SubCollectionEditor editor = new(typeof(ClassWithStringDefaultProperty));
         TargetInvocationException ex = Assert.Throws<TargetInvocationException>(() => editor.GetDisplayText(new ClassWithNonStringDefaultProperty()));

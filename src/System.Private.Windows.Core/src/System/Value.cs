@@ -76,9 +76,14 @@ internal readonly partial struct Value
     }
 
     [DoesNotReturn]
-    private static void ThrowInvalidCast() => throw new InvalidCastException();
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static void ThrowInvalidCast(Type? from, Type to)
+    {
+        throw new InvalidCastException($"{from?.Name ?? "<null>"} cannot be cast to {to.Name}");
+    }
 
     [DoesNotReturn]
+    [MethodImpl(MethodImplOptions.NoInlining)]
     private static void ThrowInvalidOperation() => throw new InvalidOperationException();
 
     #region Byte
@@ -1014,7 +1019,7 @@ internal readonly partial struct Value
     {
         if (!TryGetValue(out T value))
         {
-            ThrowInvalidCast();
+            ThrowInvalidCast(Type, typeof(T));
         }
 
         return value;

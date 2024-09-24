@@ -279,7 +279,7 @@ public partial class TextBoxTests
         if (value != AutoCompleteSource.ListItems)
         {
             control.AutoCompleteSource.Should().Be(value);
-        }         
+        }
     }
 
     [WinFormsTheory]
@@ -401,7 +401,7 @@ public partial class TextBoxTests
     }
 
     [WinFormsFact]
-    public void TextBox_PlaceholderText_Overriden()
+    public void TextBox_PlaceholderText_Overridden()
     {
         using SubTextBox tb = new();
 

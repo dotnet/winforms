@@ -29,18 +29,7 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
     protected ButtonState ButtonState
     {
         get => Properties.GetValueOrDefault(s_propButtonState, ButtonState.Normal);
-    }
-
-    private ButtonState ButtonStatePrivate
-    {
-        set
-        {
-            Debug.Assert(Enum.IsDefined(value));
-            if (ButtonState != value)
-            {
-                Properties.AddOrRemoveValue(s_propButtonState, value, defaultValue: ButtonState.Normal);
-            }
-        }
+        private set => Properties.AddOrRemoveValue(s_propButtonState, value, defaultValue: ButtonState.Normal);
     }
 
     protected override void Dispose(bool disposing)
@@ -122,10 +111,7 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
         }
     }
 
-    private protected override bool HasValueType
-    {
-        get => Properties.ContainsObjectThatIsNotNull(s_propValueType);
-    }
+    private protected override bool HasValueType => Properties.ContainsKey(s_propValueType);
 
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -436,8 +422,7 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
     protected override object? GetValue(int rowIndex)
     {
         ArgumentOutOfRangeException.ThrowIfNotEqual(rowIndex, -1);
-
-        return Properties.GetObject(s_propCellValue);
+        return Properties.GetValueOrDefault<object>(s_propCellValue);
     }
 
     protected override bool MouseDownUnsharesRow(DataGridViewCellMouseEventArgs e) =>
@@ -576,7 +561,8 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
     private void UpdateButtonState(ButtonState newButtonState, int rowIndex)
     {
         Debug.Assert(DataGridView is not null);
-        ButtonStatePrivate = newButtonState;
+        Debug.Assert(Enum.IsDefined(newButtonState));
+        ButtonState = newButtonState;
         DataGridView.InvalidateCell(ColumnIndex, rowIndex);
     }
 }

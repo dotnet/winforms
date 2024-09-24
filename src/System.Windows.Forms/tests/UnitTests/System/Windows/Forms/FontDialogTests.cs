@@ -38,7 +38,7 @@ public class FontDialogTests
     }
 
     [WinFormsFact]
-    public void FontDialog_Ctor_Default_OverridenReset()
+    public void FontDialog_Ctor_Default_OverriddenReset()
     {
         using EmptyResetFontDialog dialog = new();
         Assert.True(dialog.AllowScriptChange);
