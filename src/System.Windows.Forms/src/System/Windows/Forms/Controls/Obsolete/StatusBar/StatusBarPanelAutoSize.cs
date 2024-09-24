@@ -6,11 +6,11 @@ using System.ComponentModel;
 namespace System.Windows.Forms;
 
 [Obsolete(
-    Obsoletions.StatusBarPanelAutoSizeMessage,
+    Obsoletions.StatusBarMessage,
     error: false,
-    DiagnosticId = Obsoletions.StatusBarPanelAutoSizeDiagnosticId,
-    UrlFormat = Obsoletions.SharedUrlFormat),
-    EditorBrowsable(EditorBrowsableState.Never)]
+    DiagnosticId = Obsoletions.StatusBarDiagnosticId,
+    UrlFormat = Obsoletions.SharedUrlFormat)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 public enum StatusBarPanelAutoSize
 {
     None = 1,

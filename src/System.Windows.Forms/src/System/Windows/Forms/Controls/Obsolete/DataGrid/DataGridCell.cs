@@ -7,20 +7,20 @@ namespace System.Windows.Forms;
 
 #nullable disable
 [Obsolete(
-    Obsoletions.DataGridCellMessage,
+    Obsoletions.DataGridMessage,
     error: false,
-    DiagnosticId = Obsoletions.DataGridCellDiagnosticId,
-    UrlFormat = Obsoletions.SharedUrlFormat),
-    EditorBrowsable(EditorBrowsableState.Never)]
+    DiagnosticId = Obsoletions.DataGridDiagnosticId,
+    UrlFormat = Obsoletions.SharedUrlFormat)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 #pragma warning disable CA1067 // Override Object.Equals(object) when implementing IEquatable<T>
 #pragma warning disable CA1815 // Override equals and operator equals on value types
 #pragma warning disable CS0660 // Type defines operator == or operator != but does not override Object.Equals(object o)
 #pragma warning disable CS0661 // Type defines operator == or operator != but does not override Object.GetHashCode()
 public struct DataGridCell : IEquatable<DataGridCell>
-#pragma warning restore CS0661 // Type defines operator == or operator != but does not override Object.GetHashCode()
-#pragma warning restore CS0660 // Type defines operator == or operator != but does not override Object.Equals(object o)
-#pragma warning restore CA1815 // Override equals and operator equals on value types
-#pragma warning restore CA1067 // Override Object.Equals(object) when implementing IEquatable<T>
+#pragma warning restore CS0661
+#pragma warning restore CS0660
+#pragma warning restore CA1815
+#pragma warning restore CA1067
 {
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -42,15 +42,11 @@ public struct DataGridCell : IEquatable<DataGridCell>
 
 #pragma warning disable CS0114 // Member hides inherited member; missing override keyword
     public readonly bool Equals(object obj) => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
     public readonly int GetHashCode() => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
     public readonly string ToString() => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
+#pragma warning restore CS0114
 
     public readonly bool Equals(DataGridCell other) => throw new PlatformNotSupportedException();
 

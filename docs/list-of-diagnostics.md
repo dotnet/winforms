@@ -41,44 +41,10 @@ The acceptance criteria for adding an obsoletion includes:
 |  __`WFDEV004`__ | `Form.OnClosing`, `Form.OnClosed` and the corresponding events are obsolete. Use `Form.OnFormClosing`, `Form.OnFormClosed`, `Form.FormClosing` and `Form.FormClosed` instead. |
 |  __`WFDEV005`__ | `ContextMenu` has been deprecated. Use `ContextMenuStrip` instead. |
 |  __`WFDEV006`__ | `DataGrid` has been deprecated. Use `DataGridView` instead. |
-|  __`WFDEV007`__ | `DataGrid.HitTestInfo` has been deprecated. Use `DataGridView` control and related classes in your application. |
-|  __`WFDEV008`__ | `DataGrid.HitTestType` has been deprecated. Use `DataGridView` control and related classes in your application. |
-|  __`WFDEV009`__ | `DataGridBoolColumn` has been deprecated. Use `DataGridView` control and related classes in your application. |
-|  __`WFDEV010`__ | `DataGridCell` has been deprecated. Use `DataGridView` control and related classes in your application. |
-|  __`WFDEV011`__ | `DataGridColumnStyle` has been deprecated. Use `DataGridView` control and related classes in your application. |
-|  __`WFDEV012`__ | `DataGridLineStyle` has been deprecated. Use `DataGridView` control and related classes in your application. |
-|  __`WFDEV013`__ | `DataGridParentRowsLabelStyle` has been deprecated. Use `DataGridView` control and related classes in your application. |
-|  __`WFDEV014`__ | `DataGridPreferredColumnWidthTypeConverter` has been deprecated. Use `DataGridView` control and related classes in your application. |
-|  __`WFDEV015`__ | `DataGridTableStyle` has been deprecated. Use `DataGridView` control and related classes in your application. |
-|  __`WFDEV016`__ | `DataGridTextBox` has been deprecated. Use `DataGridView` control and related classes in your application. |
-|  __`WFDEV017`__ | `DataGridTextBoxColumn` has been deprecated. Use `DataGridView` control and related classes in your application. |
-|  __`WFDEV018`__ | `GridColumnStylesCollection` has been deprecated. Use `DataGridView` control and related classes in your application. |
-|  __`WFDEV019`__ | `GridTableStylesCollection` has been deprecated. Use `DataGridView` control and related classes in your application. |
-|  __`WFDEV020`__ | `GridTablesFactory` has been deprecated. Use `DataGridView` control and related classes in your application. |
-|  __`WFDEV021`__ | `IDataGridEditingService` has been deprecated. Use `DataGridView` control and related classes in your application. |
-|  __`WFDEV022`__ | `MainMenu` has been deprecated. Use `MenuStrip` instead. |
-|  __`WFDEV023`__ | `Menu` has been deprecated. Use `ToolStripDropDown` and `ToolStripDropDownMenu` instead. |
-|  __`WFDEV024`__ | `Menu.MenuItemCollection` has been deprecated. Use `ToolStripDropDown` and `ToolStripDropDownMenu` control and related classes in your application. |
-|  __`WFDEV025`__ | `MenuItem` has been deprecated. Use `ToolStripMenuItem` instead. |
-|  __`WFDEV026`__ | `MenuMerge` has been deprecated. Use `ToolStripDropDown` and `ToolStripDropDownMenu` control and related classes in your application. |
-|  __`WFDEV027`__ | `StatusBar` has been deprecated. Use `StatusStrip` instead. |
-|  __`WFDEV028`__ | `StatusBarPanelCollection` has been deprecated. Use `StatusStrip` control and related classes in your application. |
-|  __`WFDEV029`__ | `StatusBarDrawItemEventArgs` has been deprecated. Use `DrawItemEventArgs` instead. |
-|  __`WFDEV030`__ | `StatusBarDrawItemEventHandler` has been deprecated. Use `DrawItemEventHandler` instead. |
-|  __`WFDEV031`__ | `StatusBarPanel` has been deprecated. Use `StatusStrip` control and related classes in your application. |
-|  __`WFDEV032`__ | `StatusBarPanelAutoSize` has been deprecated. Use `StatusStrip` control and related classes in your application. |
-|  __`WFDEV033`__ | `StatusBarPanelBorderStyle` has been deprecated. Use `StatusStrip` control and related classes in your application. |
-|  __`WFDEV034`__ | `StatusBarPanelClickEventArgs` has been deprecated. Use `StatusStrip` control and related classes in your application. |
-|  __`WFDEV035`__ | `StatusBarPanelStyle` has been deprecated. Use `StatusStrip` control and related classes in your application. |
-|  __`WFDEV036`__ | `StatusBarPanelClickEventHandler` has been deprecated. Use `StatusStrip` control and related classes in your application. |
-|  __`WFDEV037`__ | `ToolBar` has been deprecated. Use `ToolStrip` instead. |
-|  __`WFDEV038`__ | `ToolBarButtonCollection` has been deprecated. Use `ToolStrip` control and related classes in your application. |
-|  __`WFDEV039`__ | `ToolBarAppearance` has been deprecated. Use `ToolStrip` control and related classes in your application. |
-|  __`WFDEV040`__ | `ToolBarButton` has been deprecated. Use `ToolStripButton` instead. |
-|  __`WFDEV041`__ | `ToolBarButtonClickEventArgs` has been deprecated. Use `ToolStrip` control and related classes in your application. |
-|  __`WFDEV042`__ | `ToolBarButtonClickEventHandler` has been deprecated. Use `ToolStrip` control and related classes in your application. |
-|  __`WFDEV043`__ | `ToolBarButtonStyle` has been deprecated. Use `ToolStrip` control and related classes in your application. |
-|  __`WFDEV044`__ | `ToolBarTextAlign` has been deprecated. Use `ToolStrip` control and related classes in your application. |
+|  __`WFDEV007`__ | `MainMenu` has been deprecated. Use `MenuStrip` instead. |
+|  __`WFDEV008`__ | `Menu` has been deprecated. Use `ToolStripDropDown` and `ToolStripDropDownMenu` instead. |
+|  __`WFDEV009`__ | `StatusBar` has been deprecated. Use `StatusStrip` instead. |
+|  __`WFDEV010`__ | `ToolBar` has been deprecated. Use `ToolStrip` instead. |
 
 
 ## Analyzer Warnings

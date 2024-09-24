@@ -41,5 +41,5 @@ public class MainMenu : Menu
 
 #pragma warning disable CS0108 // Member hides inherited member; missing new keyword
     public string ToString() => throw new PlatformNotSupportedException();
-#pragma warning restore CS0108 // Member hides inherited member; missing new keyword
+#pragma warning restore CS0108
 }

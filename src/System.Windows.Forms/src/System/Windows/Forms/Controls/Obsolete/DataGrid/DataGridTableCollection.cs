@@ -8,11 +8,11 @@ namespace System.Windows.Forms;
 
 #nullable disable
 [Obsolete(
-    Obsoletions.GridTableStylesCollectionMessage,
+    Obsoletions.DataGridMessage,
     error: false,
-    DiagnosticId = Obsoletions.GridTableStylesCollectionDiagnosticId,
-    UrlFormat = Obsoletions.SharedUrlFormat),
-    EditorBrowsable(EditorBrowsableState.Never)]
+    DiagnosticId = Obsoletions.DataGridDiagnosticId,
+    UrlFormat = Obsoletions.SharedUrlFormat)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 public class GridTableStylesCollection : BaseCollection, IList
 {
     int IList.Add(object value) => throw new PlatformNotSupportedException();
@@ -51,7 +51,7 @@ public class GridTableStylesCollection : BaseCollection, IList
 
 #pragma warning disable CS0114 // Member hides inherited member; missing override keyword
     protected ArrayList List => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
+#pragma warning restore CS0114
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]

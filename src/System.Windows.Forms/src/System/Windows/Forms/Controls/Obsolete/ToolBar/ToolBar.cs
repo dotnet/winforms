@@ -11,8 +11,8 @@ namespace System.Windows.Forms;
     Obsoletions.ToolBarMessage,
     error: false,
     DiagnosticId = Obsoletions.ToolBarDiagnosticId,
-    UrlFormat = Obsoletions.SharedUrlFormat),
-    EditorBrowsable(EditorBrowsableState.Never)]
+    UrlFormat = Obsoletions.SharedUrlFormat)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 public partial class ToolBar : Control
 {
     public ToolBar() => throw new PlatformNotSupportedException();
@@ -29,7 +29,7 @@ public partial class ToolBar : Control
     [EditorBrowsable(EditorBrowsableState.Never)]
 #pragma warning disable CS0114 // Member hides inherited member; missing override keyword
     public bool AutoSize
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
+#pragma warning restore CS0114
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
@@ -47,7 +47,7 @@ public partial class ToolBar : Control
     [EditorBrowsable(EditorBrowsableState.Never)]
 #pragma warning disable CS0114 // Member hides inherited member; missing override keyword
     public Color BackColor
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
+#pragma warning restore CS0114
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
@@ -65,7 +65,7 @@ public partial class ToolBar : Control
     [EditorBrowsable(EditorBrowsableState.Never)]
 #pragma warning disable CS0114 // Member hides inherited member; missing override keyword
     public Image BackgroundImage
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
+#pragma warning restore CS0114
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
@@ -83,7 +83,7 @@ public partial class ToolBar : Control
     [EditorBrowsable(EditorBrowsableState.Never)]
 #pragma warning disable CS0114 // Member hides inherited member; missing override keyword
     public ImageLayout BackgroundImageLayout
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
+#pragma warning restore CS0114
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
@@ -129,7 +129,7 @@ public partial class ToolBar : Control
     [EditorBrowsable(EditorBrowsableState.Never)]
 #pragma warning disable CS0114 // Member hides inherited member; missing override keyword
     public DockStyle Dock
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
+#pragma warning restore CS0114
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
@@ -147,7 +147,7 @@ public partial class ToolBar : Control
     [EditorBrowsable(EditorBrowsableState.Never)]
 #pragma warning disable CS0114 // Member hides inherited member; missing override keyword
     public Color ForeColor
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
+#pragma warning restore CS0114
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
@@ -193,7 +193,7 @@ public partial class ToolBar : Control
     [EditorBrowsable(EditorBrowsableState.Never)]
 #pragma warning disable CS0114 // Member hides inherited member; missing override keyword
     public RightToLeft RightToLeft
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
+#pragma warning restore CS0114
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
@@ -227,7 +227,7 @@ public partial class ToolBar : Control
     [EditorBrowsable(EditorBrowsableState.Never)]
 #pragma warning disable CS0114 // Member hides inherited member; missing override keyword
     public string Text
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
+#pragma warning restore CS0114
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
@@ -283,7 +283,7 @@ public partial class ToolBar : Control
 
 #pragma warning disable CS0114 // Member hides inherited member; missing override keyword
     public string ToString() => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
+#pragma warning restore CS0114
 
     protected virtual void OnButtonClick(ToolBarButtonClickEventArgs e) => throw new PlatformNotSupportedException();
 

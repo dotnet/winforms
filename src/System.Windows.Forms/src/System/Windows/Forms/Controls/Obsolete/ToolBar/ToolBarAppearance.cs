@@ -6,11 +6,11 @@ using System.ComponentModel;
 namespace System.Windows.Forms;
 
 [Obsolete(
-    Obsoletions.ToolBarAppearanceMessage,
+    Obsoletions.ToolBarMessage,
     error: false,
-    DiagnosticId = Obsoletions.ToolBarAppearanceDiagnosticId,
-    UrlFormat = Obsoletions.SharedUrlFormat),
-    EditorBrowsable(EditorBrowsableState.Never)]
+    DiagnosticId = Obsoletions.ToolBarDiagnosticId,
+    UrlFormat = Obsoletions.SharedUrlFormat)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 public enum ToolBarAppearance
 {
     Normal = 0,

@@ -2703,6 +2703,14 @@ public partial class AccessibleObjectTests
                 continue;
             }
 
+#pragma warning disable WFDEV006 // Type or member is obsolete
+            var dataGridColumnHeaderAccessibleObjectType = typeof(DataGridColumnStyle).GetNestedType("DataGridColumnHeaderAccessibleObject", BindingFlags.NonPublic);
+#pragma warning restore WFDEV006
+            if (type == dataGridColumnHeaderAccessibleObjectType)
+            {
+                continue;
+            }
+
             if (typesToIgnore.Contains(type))
             {
                 continue;

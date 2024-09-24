@@ -10,8 +10,8 @@ namespace System.Windows.Forms;
     Obsoletions.MenuMessage,
     error: false,
     DiagnosticId = Obsoletions.MenuDiagnosticId,
-    UrlFormat = Obsoletions.SharedUrlFormat),
-    EditorBrowsable(EditorBrowsableState.Never)]
+    UrlFormat = Obsoletions.SharedUrlFormat)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 public abstract partial class Menu : Component
 {
     public const int FindHandle = 0;
@@ -61,5 +61,5 @@ public abstract partial class Menu : Component
 
 #pragma warning disable CS0114 // Member hides inherited member; missing override keyword
     public string ToString() => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
+#pragma warning restore CS0114
 }

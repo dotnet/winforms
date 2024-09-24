@@ -6,9 +6,9 @@ using System.ComponentModel;
 namespace System.Windows.Forms;
 
 [Obsolete(
-    Obsoletions.StatusBarPanelClickEventHandlerMessage,
+    Obsoletions.StatusBarMessage,
     error: false,
-    DiagnosticId = Obsoletions.StatusBarPanelClickEventHandlerDiagnosticId,
-    UrlFormat = Obsoletions.SharedUrlFormat),
-    EditorBrowsable(EditorBrowsableState.Never)]
+    DiagnosticId = Obsoletions.StatusBarDiagnosticId,
+    UrlFormat = Obsoletions.SharedUrlFormat)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 public delegate void StatusBarPanelClickEventHandler(object sender, StatusBarPanelClickEventArgs e);

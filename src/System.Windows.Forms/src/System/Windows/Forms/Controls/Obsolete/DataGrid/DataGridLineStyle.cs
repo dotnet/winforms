@@ -6,11 +6,11 @@ using System.ComponentModel;
 namespace System.Windows.Forms;
 
 [Obsolete(
-    Obsoletions.DataGridLineStyleMessage,
+    Obsoletions.DataGridMessage,
     error: false,
-    DiagnosticId = Obsoletions.DataGridLineStyleDiagnosticId,
-    UrlFormat = Obsoletions.SharedUrlFormat),
-    EditorBrowsable(EditorBrowsableState.Never)]
+    DiagnosticId = Obsoletions.DataGridDiagnosticId,
+    UrlFormat = Obsoletions.SharedUrlFormat)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 public enum DataGridLineStyle
 {
     None,

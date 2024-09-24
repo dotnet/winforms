@@ -7,11 +7,11 @@ using System.Drawing;
 namespace System.Windows.Forms;
 
 [Obsolete(
-    Obsoletions.DataGridTableStyleMessage,
+    Obsoletions.DataGridMessage,
     error: false,
-    DiagnosticId = Obsoletions.DataGridTableStyleDiagnosticId,
-    UrlFormat = Obsoletions.SharedUrlFormat),
-    EditorBrowsable(EditorBrowsableState.Never)]
+    DiagnosticId = Obsoletions.DataGridDiagnosticId,
+    UrlFormat = Obsoletions.SharedUrlFormat)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 public class DataGridTableStyle : Component, IDataGridEditingService
 {
     [Browsable(false)]
@@ -446,5 +446,5 @@ public class DataGridTableStyle : Component, IDataGridEditingService
 
 #pragma warning disable CS0114 // Member hides inherited member; missing override keyword
     protected void Dispose(bool disposing) => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
+#pragma warning restore CS0114
 }

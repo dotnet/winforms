@@ -6,9 +6,9 @@ using System.ComponentModel;
 namespace System.Windows.Forms;
 
 [Obsolete(
-    Obsoletions.ToolBarButtonClickEventHandlerMessage,
+    Obsoletions.ToolBarMessage,
     error: false,
-    DiagnosticId = Obsoletions.ToolBarButtonClickEventHandlerDiagnosticId,
-    UrlFormat = Obsoletions.SharedUrlFormat),
-    EditorBrowsable(EditorBrowsableState.Never)]
+    DiagnosticId = Obsoletions.ToolBarDiagnosticId,
+    UrlFormat = Obsoletions.SharedUrlFormat)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 public delegate void ToolBarButtonClickEventHandler(object sender, ToolBarButtonClickEventArgs e);
