@@ -9,12 +9,12 @@ namespace System.Windows.Forms;
 public abstract partial class Menu
 {
     [Obsolete(
-        Obsoletions.MenuItemCollectionMessage,
+        Obsoletions.MenuMessage,
         error: false,
-        DiagnosticId = Obsoletions.MenuItemCollectionDiagnosticId,
-        UrlFormat = Obsoletions.SharedUrlFormat),
-        EditorBrowsable(EditorBrowsableState.Never),
-        ListBindable(false)]
+        DiagnosticId = Obsoletions.MenuDiagnosticId,
+        UrlFormat = Obsoletions.SharedUrlFormat)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [ListBindable(false)]
     public class MenuItemCollection : IList
     {
         public MenuItemCollection(Menu owner) => throw new PlatformNotSupportedException();
@@ -26,7 +26,7 @@ public abstract partial class Menu
             get => throw new PlatformNotSupportedException();
 #pragma warning disable CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
             set => throw new PlatformNotSupportedException();
-#pragma warning restore CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
+#pragma warning restore CS8769
         }
 
         public virtual MenuItem this[string key] => throw new PlatformNotSupportedException();
@@ -49,7 +49,7 @@ public abstract partial class Menu
 
 #pragma warning disable CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
         public virtual int Add(object value) => throw new PlatformNotSupportedException();
-#pragma warning restore CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
+#pragma warning restore CS8767
 
         public virtual int Add(int index, MenuItem item) => throw new PlatformNotSupportedException();
 
@@ -57,27 +57,25 @@ public abstract partial class Menu
 
 #pragma warning disable CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
         public bool Contains(object value) => throw new PlatformNotSupportedException();
-#pragma warning restore CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
+#pragma warning restore CS8767
 
         public virtual bool ContainsKey(string key) => throw new PlatformNotSupportedException();
+
+        public virtual void Clear() => throw new PlatformNotSupportedException();
+
+        public void CopyTo(Array array, int index) => throw new PlatformNotSupportedException();
 
         public MenuItem[] Find(string key, bool searchAllChildren) => throw new PlatformNotSupportedException();
 
         public int IndexOf(MenuItem value) => throw new PlatformNotSupportedException();
 
-#pragma warning disable CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
-        int IList.IndexOf(object value) => throw new PlatformNotSupportedException();
-#pragma warning restore CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
-
         public virtual int IndexOfKey(string key) => throw new PlatformNotSupportedException();
 
 #pragma warning disable CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
+        int IList.IndexOf(object value) => throw new PlatformNotSupportedException();
+
         void IList.Insert(int index, object value) => throw new PlatformNotSupportedException();
-#pragma warning restore CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
-
-        public virtual void Clear() => throw new PlatformNotSupportedException();
-
-        public void CopyTo(Array array, int index) => throw new PlatformNotSupportedException();
+#pragma warning restore CS8769
 
         public IEnumerator GetEnumerator() => throw new PlatformNotSupportedException();
 
@@ -89,6 +87,6 @@ public abstract partial class Menu
 
 #pragma warning disable CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
         void IList.Remove(object value) => throw new PlatformNotSupportedException();
-#pragma warning restore CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
+#pragma warning restore CS8769
     }
 }

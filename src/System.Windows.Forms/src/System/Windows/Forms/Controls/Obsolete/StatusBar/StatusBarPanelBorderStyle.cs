@@ -6,11 +6,11 @@ using System.ComponentModel;
 namespace System.Windows.Forms;
 
 [Obsolete(
-    Obsoletions.StatusBarPanelBorderStyleMessage,
+    Obsoletions.StatusBarMessage,
     error: false,
-    DiagnosticId = Obsoletions.StatusBarPanelBorderStyleDiagnosticId,
-    UrlFormat = Obsoletions.SharedUrlFormat),
-    EditorBrowsable(EditorBrowsableState.Never)]
+    DiagnosticId = Obsoletions.StatusBarDiagnosticId,
+    UrlFormat = Obsoletions.SharedUrlFormat)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 public enum StatusBarPanelBorderStyle
 {
     None = 1,

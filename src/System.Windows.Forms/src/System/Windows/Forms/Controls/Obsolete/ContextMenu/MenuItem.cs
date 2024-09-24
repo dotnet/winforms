@@ -7,11 +7,11 @@ namespace System.Windows.Forms;
 
 #nullable disable
 [Obsolete(
-    Obsoletions.MenuItemMessage,
+    Obsoletions.MenuMessage,
     error: false,
-    DiagnosticId = Obsoletions.MenuItemDiagnosticId,
-    UrlFormat = Obsoletions.SharedUrlFormat),
-    EditorBrowsable(EditorBrowsableState.Never)]
+    DiagnosticId = Obsoletions.MenuDiagnosticId,
+    UrlFormat = Obsoletions.SharedUrlFormat)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 public class MenuItem : Menu
 {
     public MenuItem() : this(mergeType: MenuMerge.Add,
@@ -128,7 +128,7 @@ public class MenuItem : Menu
     [EditorBrowsable(EditorBrowsableState.Never)]
 #pragma warning disable CS0114 // Member hides inherited member; missing override keyword
     public bool IsParent => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
+#pragma warning restore CS0114
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -270,5 +270,5 @@ public class MenuItem : Menu
 
 #pragma warning disable CS0108 // Member hides inherited member; missing new keyword
     public string ToString() => throw new PlatformNotSupportedException();
-#pragma warning restore CS0108 // Member hides inherited member; missing new keyword
+#pragma warning restore CS0108
 }

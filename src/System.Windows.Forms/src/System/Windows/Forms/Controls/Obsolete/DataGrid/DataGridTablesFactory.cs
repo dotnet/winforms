@@ -6,11 +6,11 @@ using System.ComponentModel;
 namespace System.Windows.Forms;
 
 [Obsolete(
-    Obsoletions.GridTablesFactoryMessage,
+    Obsoletions.DataGridMessage,
     error: false,
-    DiagnosticId = Obsoletions.GridTablesFactoryDiagnosticId,
-    UrlFormat = Obsoletions.SharedUrlFormat),
-    EditorBrowsable(EditorBrowsableState.Never)]
+    DiagnosticId = Obsoletions.DataGridDiagnosticId,
+    UrlFormat = Obsoletions.SharedUrlFormat)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 public sealed class GridTablesFactory
 {
     public static DataGridTableStyle[] CreateGridTables(DataGridTableStyle gridTable,

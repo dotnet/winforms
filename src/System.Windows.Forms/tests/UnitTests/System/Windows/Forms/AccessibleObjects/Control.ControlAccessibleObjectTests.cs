@@ -44,7 +44,7 @@ public class Control_ControlAccessibleObjectTests
         typeof(DateTimePicker), typeof(WebBrowser)
     ];
 
-#pragma warning disable WFDEV006, WFDEV016, WFDEV027, WFDEV037 // Type or member is obsolete
+#pragma warning disable WFDEV006, WFDEV009, WFDEV010 // Type or member is obsolete
     private static readonly Type[] s_obsoleteControls =
     [
         typeof(DataGrid),
@@ -52,7 +52,7 @@ public class Control_ControlAccessibleObjectTests
         typeof(ToolBar),
         typeof(DataGridTextBox)
     ];
-#pragma warning restore WFDEV006, WFDEV016, WFDEV027, WFDEV037 // Type or member is obsolete
+#pragma warning restore WFDEV006, WFDEV009, WFDEV010
 
     [WinFormsFact]
     public void ControlAccessibleObject_Ctor_ControlWithoutHandle()
