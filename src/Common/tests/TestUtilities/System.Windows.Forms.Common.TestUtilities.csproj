@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Moq" />
     <PackageReference Include="System.Collections.Concurrent" />
+    <PackageReference Include="xunit.assert" />
     <PackageReference Include="xunit.stafact" />
     <PackageReference Include="Microsoft.DotNet.RemoteExecutor" />
     <PackageReference Include="Microsoft.DotNet.XUnitExtensions" />

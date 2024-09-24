@@ -1,7 +1,5 @@
 <Project>
 
-  <!-- <Import Project="$(RepositoryEngineeringDir)Versions.props" /> -->
-
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
@@ -61,6 +59,7 @@
     <PackageVersion Include="System.Windows.Extensions.TestData" Version="$(SystemWindowsExtensionsTestDataVersion)" />
     <PackageVersion Include="System.Windows.Forms.DataVisualization" Version="1.0.0-prerelease.20110.1" />
     <PackageVersion Include="Verify.Xunit" Version="$(VerifyXunitVersion)" />
+    <PackageVersion Include="xunit.assert" Version="$(XUnitAssertVersion)" />
     <PackageVersion Include="xunit.stafact" Version="$(XUnitStaFactPackageVersion)" />
   </ItemGroup>
 </Project>
