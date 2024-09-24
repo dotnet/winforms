@@ -7,11 +7,11 @@ using System.Drawing;
 namespace System.Windows.Forms;
 
 [Obsolete(
-    Obsoletions.DataGridBoolColumnMessage,
+    Obsoletions.DataGridMessage,
     error: false,
-    DiagnosticId = Obsoletions.DataGridBoolColumnDiagnosticId,
-    UrlFormat = Obsoletions.SharedUrlFormat),
-    EditorBrowsable(EditorBrowsableState.Never)]
+    DiagnosticId = Obsoletions.DataGridDiagnosticId,
+    UrlFormat = Obsoletions.SharedUrlFormat)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 public class DataGridBoolColumn : DataGridColumnStyle
 {
     public DataGridBoolColumn() => throw new PlatformNotSupportedException();
@@ -19,6 +19,22 @@ public class DataGridBoolColumn : DataGridColumnStyle
     public DataGridBoolColumn(PropertyDescriptor prop) => throw new PlatformNotSupportedException();
 
     public DataGridBoolColumn(PropertyDescriptor prop, bool isDefault) => throw new PlatformNotSupportedException();
+
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public bool AllowNull
+    {
+        get => throw new PlatformNotSupportedException();
+        set => throw new PlatformNotSupportedException();
+    }
+
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public event EventHandler AllowNullChanged
+    {
+        add => throw new PlatformNotSupportedException();
+        remove => throw new PlatformNotSupportedException();
+    }
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -60,11 +76,13 @@ public class DataGridBoolColumn : DataGridColumnStyle
         set => throw new PlatformNotSupportedException();
     }
 
-    protected internal override void ConcedeFocus() => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected internal void ConcedeFocus() => throw new PlatformNotSupportedException();
 
-    protected internal override object GetColumnValueAtRow(CurrencyManager source, int rowNum) => throw new PlatformNotSupportedException();
+    protected internal object GetColumnValueAtRow(CurrencyManager source, int rowNum) => throw new PlatformNotSupportedException();
 
-    protected internal override void SetColumnValueAtRow(CurrencyManager source, int rowNum, object value) => throw new PlatformNotSupportedException();
+    protected internal void SetColumnValueAtRow(CurrencyManager source, int rowNum, object value) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114
 
     protected internal override Size GetPreferredSize(Graphics g, object value) => throw new PlatformNotSupportedException();
 
@@ -89,7 +107,14 @@ public class DataGridBoolColumn : DataGridColumnStyle
         int rowNum,
         bool alignToRight) => throw new PlatformNotSupportedException();
 
-    protected internal override void Paint(Graphics g,
+    protected internal override void Paint(Graphics g1,
+        Graphics g,
+        Rectangle bounds,
+        CurrencyManager source,
+        int rowNum) => throw new PlatformNotSupportedException();
+
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected internal void Paint(Graphics g,
         Rectangle bounds,
         CurrencyManager source,
         int rowNum,
@@ -97,29 +122,6 @@ public class DataGridBoolColumn : DataGridColumnStyle
         Brush foreBrush,
         bool alignToRight) => throw new PlatformNotSupportedException();
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public bool AllowNull
-    {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
-    }
-
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public event EventHandler AllowNullChanged
-    {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
-    }
-
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
     protected internal void EnterNullValue() => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
-
-    protected internal override void Paint(Graphics g1,
-        Graphics g,
-        Rectangle bounds,
-        CurrencyManager source,
-        int rowNum) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114
 }

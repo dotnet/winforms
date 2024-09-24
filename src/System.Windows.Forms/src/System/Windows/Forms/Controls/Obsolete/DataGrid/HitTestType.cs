@@ -8,12 +8,12 @@ namespace System.Windows.Forms;
 public partial class DataGrid
 {
     [Obsolete(
-        Obsoletions.DataGridHitTestTypeMessage,
+        Obsoletions.DataGridMessage,
         error: false,
-        DiagnosticId = Obsoletions.DataGridHitTestTypeDiagnosticId,
-        UrlFormat = Obsoletions.SharedUrlFormat),
-        EditorBrowsable(EditorBrowsableState.Never),
-        Flags]
+        DiagnosticId = Obsoletions.DataGridDiagnosticId,
+        UrlFormat = Obsoletions.SharedUrlFormat)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Flags]
     public enum HitTestType
     {
         None = 0x00000000,

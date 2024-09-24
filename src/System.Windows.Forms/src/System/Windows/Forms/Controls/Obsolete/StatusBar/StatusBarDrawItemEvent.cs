@@ -7,11 +7,11 @@ using System.Drawing;
 namespace System.Windows.Forms;
 
 [Obsolete(
-    Obsoletions.StatusBarDrawItemEventArgsMessage,
+    Obsoletions.StatusBarMessage,
     error: false,
-    DiagnosticId = Obsoletions.StatusBarDrawItemEventArgsDiagnosticId,
-    UrlFormat = Obsoletions.SharedUrlFormat),
-    EditorBrowsable(EditorBrowsableState.Never)]
+    DiagnosticId = Obsoletions.StatusBarDiagnosticId,
+    UrlFormat = Obsoletions.SharedUrlFormat)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 public class StatusBarDrawItemEventArgs : DrawItemEventArgs
 {
     public StatusBarDrawItemEventArgs(Graphics g,

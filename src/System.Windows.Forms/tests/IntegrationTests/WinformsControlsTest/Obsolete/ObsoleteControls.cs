@@ -4,7 +4,7 @@
 using System.Data;
 using System.Drawing;
 
-#pragma warning disable WFDEV006, WFDEV007, WFDEV009, WFDEV011, WFDEV015, WFDEV017, WFDEV022, WFDEV025, CS0618 // Type or member is obsolete
+#pragma warning disable WFDEV006, WFDEV007, WFDEV008, WFDEV009, WFDEV010, CS0618 // Type or member is obsolete
 using static System.Windows.Forms.DataGrid;
 
 namespace WinFormsControlsTest;

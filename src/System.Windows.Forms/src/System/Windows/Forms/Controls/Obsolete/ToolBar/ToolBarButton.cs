@@ -7,11 +7,11 @@ using System.Drawing;
 namespace System.Windows.Forms;
 
 [Obsolete(
-    Obsoletions.ToolBarButtonMessage,
+    Obsoletions.ToolBarMessage,
     error: false,
-    DiagnosticId = Obsoletions.ToolBarButtonDiagnosticId,
-    UrlFormat = Obsoletions.SharedUrlFormat),
-    EditorBrowsable(EditorBrowsableState.Never)]
+    DiagnosticId = Obsoletions.ToolBarDiagnosticId,
+    UrlFormat = Obsoletions.SharedUrlFormat)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 public class ToolBarButton : Component
 {
     public ToolBarButton() => throw new PlatformNotSupportedException();
@@ -124,5 +124,5 @@ public class ToolBarButton : Component
 
 #pragma warning disable CS0114 // Member hides inherited member; missing override keyword
     public string ToString() => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
+#pragma warning restore CS0114
 }

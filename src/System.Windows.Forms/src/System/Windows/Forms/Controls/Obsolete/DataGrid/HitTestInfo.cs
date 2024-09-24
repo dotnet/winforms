@@ -8,11 +8,11 @@ namespace System.Windows.Forms;
 public partial class DataGrid
 {
     [Obsolete(
-        Obsoletions.DataGridHitTestInfoMessage,
+        Obsoletions.DataGridMessage,
         error: false,
-        DiagnosticId = Obsoletions.DataGridHitTestInfoDiagnosticId,
-        UrlFormat = Obsoletions.SharedUrlFormat),
-        EditorBrowsable(EditorBrowsableState.Never)]
+        DiagnosticId = Obsoletions.DataGridDiagnosticId,
+        UrlFormat = Obsoletions.SharedUrlFormat)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public sealed class HitTestInfo
     {
         [Browsable(false)]
@@ -29,14 +29,10 @@ public partial class DataGrid
 
 #pragma warning disable CS0114 // Member hides inherited member; missing override keyword
         public bool Equals(object obj) => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
         public int GetHashCode() => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
         public string ToString() => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
+#pragma warning restore CS0114
     }
 }

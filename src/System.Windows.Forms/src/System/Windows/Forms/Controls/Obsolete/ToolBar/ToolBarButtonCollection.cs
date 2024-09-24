@@ -9,11 +9,11 @@ namespace System.Windows.Forms;
 public partial class ToolBar
 {
     [Obsolete(
-        Obsoletions.ToolBarButtonCollectionMessage,
+        Obsoletions.ToolBarMessage,
         error: false,
-        DiagnosticId = Obsoletions.ToolBarButtonCollectionDiagnosticId,
-        UrlFormat = Obsoletions.SharedUrlFormat),
-        EditorBrowsable(EditorBrowsableState.Never)]
+        DiagnosticId = Obsoletions.ToolBarDiagnosticId,
+        UrlFormat = Obsoletions.SharedUrlFormat)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public class ToolBarButtonCollection : IList
     {
         public ToolBarButtonCollection(ToolBar owner) => throw new PlatformNotSupportedException();
@@ -31,7 +31,7 @@ public partial class ToolBar
             get => throw new PlatformNotSupportedException();
 #pragma warning disable CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
             set => throw new PlatformNotSupportedException();
-#pragma warning restore CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
+#pragma warning restore CS8769
         }
 
         [Browsable(false)]
@@ -58,7 +58,7 @@ public partial class ToolBar
 
 #pragma warning disable CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
         int IList.Add(object button) => throw new PlatformNotSupportedException();
-#pragma warning restore CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
+#pragma warning restore CS8769
 
         public void AddRange(ToolBarButton[] buttons) => throw new PlatformNotSupportedException();
 
@@ -68,7 +68,7 @@ public partial class ToolBar
 
 #pragma warning disable CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
         bool IList.Contains(object button) => throw new PlatformNotSupportedException();
-#pragma warning restore CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
+#pragma warning restore CS8769
 
         public virtual bool ContainsKey(string key) => throw new PlatformNotSupportedException();
 
@@ -78,7 +78,7 @@ public partial class ToolBar
 
 #pragma warning disable CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
         int IList.IndexOf(object button) => throw new PlatformNotSupportedException();
-#pragma warning restore CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
+#pragma warning restore CS8769
 
         public virtual int IndexOfKey(string key) => throw new PlatformNotSupportedException();
 
@@ -86,7 +86,7 @@ public partial class ToolBar
 
 #pragma warning disable CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
         void IList.Insert(int index, object button) => throw new PlatformNotSupportedException();
-#pragma warning restore CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
+#pragma warning restore CS8769
 
         public void RemoveAt(int index) => throw new PlatformNotSupportedException();
 
@@ -96,7 +96,7 @@ public partial class ToolBar
 
 #pragma warning disable CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
         void IList.Remove(object button) => throw new PlatformNotSupportedException();
-#pragma warning restore CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
+#pragma warning restore CS8769
 
         public IEnumerator GetEnumerator() => throw new PlatformNotSupportedException();
     }

@@ -8,11 +8,11 @@ namespace System.Windows.Forms;
 
 #nullable disable
 [Obsolete(
-    Obsoletions.DataGridTextBoxColumnMessage,
+    Obsoletions.DataGridMessage,
     error: false,
-    DiagnosticId = Obsoletions.DataGridTextBoxColumnDiagnosticId,
-    UrlFormat = Obsoletions.SharedUrlFormat),
-    EditorBrowsable(EditorBrowsableState.Never)]
+    DiagnosticId = Obsoletions.DataGridDiagnosticId,
+    UrlFormat = Obsoletions.SharedUrlFormat)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 public class DataGridTextBoxColumn : DataGridColumnStyle
 {
     public DataGridTextBoxColumn() => throw new PlatformNotSupportedException();
@@ -31,13 +31,11 @@ public class DataGridTextBoxColumn : DataGridColumnStyle
 
 #pragma warning disable CS0114 // Member hides inherited member; missing override keyword
     protected void SetDataGridInColumn(DataGrid value) => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
     public PropertyDescriptor PropertyDescriptor => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
+#pragma warning restore CS0114
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -59,23 +57,31 @@ public class DataGridTextBoxColumn : DataGridColumnStyle
     [EditorBrowsable(EditorBrowsableState.Never)]
 #pragma warning disable CS0114 // Member hides inherited member; missing override keyword
     public bool ReadOnly
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
     }
 
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
     protected internal void ConcedeFocus() => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
+
+    protected internal void UpdateUI(CurrencyManager source, int rowNum, string displayText) => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114
 
     protected void HideEditBox() => throw new PlatformNotSupportedException();
 
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-    protected internal void UpdateUI(CurrencyManager source, int rowNum, string displayText) => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
-
     protected void EndEdit() => throw new PlatformNotSupportedException();
+
+    protected void PaintText(Graphics g,
+        Rectangle bounds,
+        string text,
+        bool alignToRight) => throw new PlatformNotSupportedException();
+
+    protected void PaintText(Graphics g,
+        Rectangle textBounds,
+        string text,
+        Brush backBrush,
+        Brush foreBrush,
+        bool alignToRight) => throw new PlatformNotSupportedException();
 
     protected internal override Size GetPreferredSize(Graphics g, object value) => throw new PlatformNotSupportedException();
 
@@ -85,7 +91,9 @@ public class DataGridTextBoxColumn : DataGridColumnStyle
 
     protected internal override void Abort(int rowNum) => throw new PlatformNotSupportedException();
 
-    protected internal override void EnterNullValue() => throw new PlatformNotSupportedException();
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected internal void EnterNullValue() => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114
 
     protected internal override bool Commit(CurrencyManager dataSource, int rowNum) => throw new PlatformNotSupportedException();
 
@@ -102,7 +110,14 @@ public class DataGridTextBoxColumn : DataGridColumnStyle
         int rowNum,
         bool alignToRight) => throw new PlatformNotSupportedException();
 
-    protected internal override void Paint(Graphics g,
+    protected internal override void Paint(Graphics g1,
+        Graphics g,
+        Rectangle bounds,
+        CurrencyManager source,
+        int rowNum) => throw new NotImplementedException();
+
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected internal void Paint(Graphics g,
         Rectangle bounds,
         CurrencyManager source,
         int rowNum,
@@ -110,23 +125,6 @@ public class DataGridTextBoxColumn : DataGridColumnStyle
         Brush foreBrush,
         bool alignToRight) => throw new PlatformNotSupportedException();
 
-    protected void PaintText(Graphics g,
-        Rectangle bounds,
-        string text,
-        bool alignToRight) => throw new PlatformNotSupportedException();
-
-    protected void PaintText(Graphics g,
-        Rectangle textBounds,
-        string text,
-        Brush backBrush,
-        Brush foreBrush,
-        bool alignToRight) => throw new PlatformNotSupportedException();
-
-    protected internal override void ReleaseHostedControl() => throw new PlatformNotSupportedException();
-
-    protected internal override void Paint(Graphics g1,
-        Graphics g,
-        Rectangle bounds,
-        CurrencyManager source,
-        int rowNum) => throw new NotImplementedException();
+    protected internal void ReleaseHostedControl() => throw new PlatformNotSupportedException();
+#pragma warning restore CS0114
 }

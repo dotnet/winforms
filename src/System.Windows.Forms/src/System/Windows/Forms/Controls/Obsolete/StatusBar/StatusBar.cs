@@ -11,8 +11,8 @@ namespace System.Windows.Forms;
     Obsoletions.StatusBarMessage,
     error: false,
     DiagnosticId = Obsoletions.StatusBarDiagnosticId,
-    UrlFormat = Obsoletions.SharedUrlFormat),
-    EditorBrowsable(EditorBrowsableState.Never)]
+    UrlFormat = Obsoletions.SharedUrlFormat)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 public partial class StatusBar : Control
 {
     public StatusBar() => throw new PlatformNotSupportedException();
@@ -21,7 +21,7 @@ public partial class StatusBar : Control
     [EditorBrowsable(EditorBrowsableState.Never)]
 #pragma warning disable CS0114 // Member hides inherited member; missing override keyword
     public Color BackColor
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
+#pragma warning restore CS0114
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
@@ -39,7 +39,7 @@ public partial class StatusBar : Control
     [EditorBrowsable(EditorBrowsableState.Never)]
 #pragma warning disable CS0114 // Member hides inherited member; missing override keyword
     public Image BackgroundImage
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
+#pragma warning restore CS0114
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
@@ -57,7 +57,7 @@ public partial class StatusBar : Control
     [EditorBrowsable(EditorBrowsableState.Never)]
 #pragma warning disable CS0114 // Member hides inherited member; missing override keyword
     public ImageLayout BackgroundImageLayout
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
+#pragma warning restore CS0114
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
@@ -73,19 +73,12 @@ public partial class StatusBar : Control
 
 #pragma warning disable CS0114 // Member hides inherited member; missing override keyword
     protected CreateParams CreateParams => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
     protected ImeMode DefaultImeMode => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
     protected Size DefaultSize => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
     protected bool DoubleBuffered
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
@@ -93,9 +86,7 @@ public partial class StatusBar : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
     public DockStyle Dock
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
@@ -103,9 +94,7 @@ public partial class StatusBar : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
     public Font Font
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
@@ -113,13 +102,12 @@ public partial class StatusBar : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
     public Color ForeColor
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
     }
+#pragma warning restore CS0114
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -153,7 +141,7 @@ public partial class StatusBar : Control
     [EditorBrowsable(EditorBrowsableState.Never)]
 #pragma warning disable CS0114 // Member hides inherited member; missing override keyword
     public string Text
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
+#pragma warning restore CS0114
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
@@ -207,43 +195,27 @@ public partial class StatusBar : Control
         remove => throw new PlatformNotSupportedException();
     }
 
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-    protected void CreateHandle() => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
-
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-    protected void Dispose(bool disposing) => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
-
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-    protected void OnHandleCreated(EventArgs e) => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
-
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-    protected void OnHandleDestroyed(EventArgs e) => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
-
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-    protected void OnMouseDown(MouseEventArgs e) => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
-
     protected virtual void OnPanelClick(StatusBarPanelClickEventArgs e) => throw new PlatformNotSupportedException();
-
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-    protected void OnLayout(LayoutEventArgs levent) => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
     protected virtual void OnDrawItem(StatusBarDrawItemEventArgs subevent) => throw new PlatformNotSupportedException();
 
 #pragma warning disable CS0114 // Member hides inherited member; missing override keyword
+    protected void CreateHandle() => throw new PlatformNotSupportedException();
+
+    protected void Dispose(bool disposing) => throw new PlatformNotSupportedException();
+
+    protected void OnHandleCreated(EventArgs e) => throw new PlatformNotSupportedException();
+
+    protected void OnHandleDestroyed(EventArgs e) => throw new PlatformNotSupportedException();
+
+    protected void OnMouseDown(MouseEventArgs e) => throw new PlatformNotSupportedException();
+
+    protected void OnLayout(LayoutEventArgs levent) => throw new PlatformNotSupportedException();
+
     protected void OnResize(EventArgs e) => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
     public string ToString() => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
     protected void WndProc(ref Message m) => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
+#pragma warning restore CS0114
 }
