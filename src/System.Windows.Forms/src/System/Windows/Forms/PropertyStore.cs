@@ -31,14 +31,6 @@ internal class PropertyStore
     ///  This will set value to null and return false if the
     ///  list does not contain the given key.
     /// </summary>
-    public object? GetObject(int key) => GetObject(key, out _);
-
-    // REMOVE
-    /// <summary>
-    ///  Retrieves an object value from our property list.
-    ///  This will set value to null and return false if the
-    ///  list does not contain the given key.
-    /// </summary>
     /// <typeparam name="T">The type of object to retrieve.</typeparam>
     /// <param name="key">The key corresponding to the object in the property list.</param>
     /// <param name="value">Output parameter where the object will be set if found.
@@ -211,7 +203,8 @@ internal class PropertyStore
     /// <summary>
     ///  Adds the given value to the store.
     /// </summary>
-    public void AddValue<T>(int key, T value)
+    [return: NotNullIfNotNull(nameof(value))]
+    public T AddValue<T>(int key, T value)
     {
         // For value types that are larger than 8 bytes, we attempt to update the existing value
         // to avoid another boxing allocation.
@@ -228,6 +221,8 @@ internal class PropertyStore
         {
             _values[key] = Value.Create(value);
         }
+
+        return value;
     }
 
     private unsafe void AddOrUpdate<T>(int key, T value) where T : unmanaged

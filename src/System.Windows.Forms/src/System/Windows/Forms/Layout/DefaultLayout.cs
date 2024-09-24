@@ -1002,10 +1002,9 @@ internal partial class DefaultLayout : LayoutEngine
 
     private static Rectangle GetCachedBounds(IArrangedElement element)
     {
-        if (element.Container is not null)
+        if (element.Container is { } container)
         {
-            IDictionary? dictionary = (IDictionary?)element.Container.Properties.GetObject(s_cachedBoundsProperty);
-            if (dictionary is not null)
+            if (container.Properties.TryGetValue(s_cachedBoundsProperty, out IDictionary? dictionary))
             {
                 object? bounds = dictionary[element];
                 if (bounds is not null)
@@ -1018,10 +1017,8 @@ internal partial class DefaultLayout : LayoutEngine
         return element.Bounds;
     }
 
-    private static bool HasCachedBounds(IArrangedElement? container)
-    {
-        return container is not null && container.Properties.ContainsObjectThatIsNotNull(s_cachedBoundsProperty);
-    }
+    private static bool HasCachedBounds(IArrangedElement? container) =>
+        container is not null && container.Properties.ContainsKey(s_cachedBoundsProperty);
 
     private static void ApplyCachedBounds(IArrangedElement container)
     {
@@ -1036,68 +1033,60 @@ internal partial class DefaultLayout : LayoutEngine
             }
         }
 
-        IDictionary? dictionary = (IDictionary?)container.Properties.GetObject(s_cachedBoundsProperty);
-        if (dictionary is not null)
+        if (!container.Properties.TryGetValue(s_cachedBoundsProperty, out IDictionary? dictionary))
         {
-#if DEBUG
-            // In debug builds, we need to modify the collection, so we add a break and an
-            // outer loop to prevent attempting to IEnumerator.MoveNext() on a modified
-            // collection.
-            while (dictionary.Count > 0)
-            {
-#endif
-                foreach (DictionaryEntry entry in dictionary)
-                {
-                    IArrangedElement element = (IArrangedElement)entry.Key;
-
-                    Debug.Assert(element.Container == container, "We have non-children in our containers cached bounds store.");
-#if DEBUG
-                    // We are about to set the bounds to the cached value. We clear the cached value
-                    // before SetBounds because some controls fiddle with the bounds on SetBounds
-                    // and will callback InitLayout with a different bounds and BoundsSpecified.
-                    dictionary.Remove(entry.Key);
-#endif
-                    Rectangle bounds = (Rectangle)entry.Value!;
-                    element.SetBounds(bounds, BoundsSpecified.None);
-#if DEBUG
-                    break;
-                }
-#endif
-            }
-
-            ClearCachedBounds(container);
+            return;
         }
+
+#if DEBUG
+        // In debug builds, we need to modify the collection, so we add a break and an
+        // outer loop to prevent attempting to IEnumerator.MoveNext() on a modified
+        // collection.
+        while (dictionary.Count > 0)
+        {
+#endif
+            foreach (DictionaryEntry entry in dictionary)
+            {
+                IArrangedElement element = (IArrangedElement)entry.Key;
+
+                Debug.Assert(element.Container == container, "We have non-children in our containers cached bounds store.");
+#if DEBUG
+                // We are about to set the bounds to the cached value. We clear the cached value
+                // before SetBounds because some controls fiddle with the bounds on SetBounds
+                // and will callback InitLayout with a different bounds and BoundsSpecified.
+                dictionary.Remove(entry.Key);
+#endif
+                Rectangle bounds = (Rectangle)entry.Value!;
+                element.SetBounds(bounds, BoundsSpecified.None);
+#if DEBUG
+                break;
+            }
+#endif
+        }
+
+        ClearCachedBounds(container);
     }
 
-    private static void ClearCachedBounds(IArrangedElement container)
-    {
-        container.Properties.SetObject(s_cachedBoundsProperty, null);
-    }
+    private static void ClearCachedBounds(IArrangedElement container) => container.Properties.RemoveValue(s_cachedBoundsProperty);
 
     private static void SetCachedBounds(IArrangedElement element, Rectangle bounds)
     {
-        if (bounds != GetCachedBounds(element))
+        if (element.Container is { } container && bounds != GetCachedBounds(element))
         {
-            IDictionary? dictionary = (IDictionary?)element.Container!.Properties.GetObject(s_cachedBoundsProperty);
-            if (dictionary is null)
+            if (!container.Properties.TryGetValue(s_cachedBoundsProperty, out IDictionary? dictionary))
             {
-                dictionary = new HybridDictionary();
-                element.Container.Properties.SetObject(s_cachedBoundsProperty, dictionary);
+                dictionary = container.Properties.AddValue(s_cachedBoundsProperty, new HybridDictionary());
             }
 
             dictionary[element] = bounds;
         }
     }
 
-    internal static AnchorInfo? GetAnchorInfo(IArrangedElement element)
-    {
-        return (AnchorInfo?)element.Properties.GetObject(s_layoutInfoProperty);
-    }
+    internal static AnchorInfo? GetAnchorInfo(IArrangedElement element) =>
+        element.Properties.GetValueOrDefault<AnchorInfo>(s_layoutInfoProperty);
 
-    internal static void SetAnchorInfo(IArrangedElement element, AnchorInfo? value)
-    {
-        element.Properties.SetObject(s_layoutInfoProperty, value);
-    }
+    internal static void SetAnchorInfo(IArrangedElement element, AnchorInfo? value) =>
+        element.Properties.AddOrRemoveValue(s_layoutInfoProperty, value);
 
     private protected override void InitLayoutCore(IArrangedElement element, BoundsSpecified specified)
     {

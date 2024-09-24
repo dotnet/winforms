@@ -575,10 +575,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
     ///  Used to notify the AxContainer that the form has been created. This should only be called
     ///  if there is an AX container.
     /// </summary>
-    private void AxContainerFormCreated()
-    {
-        ((AxHost.AxContainer?)Properties.GetObject(s_propAxContainer))?.FormCreated();
-    }
+    private void AxContainerFormCreated() => Properties.GetValueOrDefault<AxHost.AxContainer>(s_propAxContainer)?.FormCreated();
 
     /// <summary>
     ///  Specifies whether this control can process the mnemonic or not.
@@ -587,14 +584,12 @@ public class ContainerControl : ScrollableControl, IContainerControl
 
     internal AxHost.AxContainer CreateAxContainer()
     {
-        object? aXContainer = Properties.GetObject(s_propAxContainer);
-        if (aXContainer is null)
+        if (!Properties.TryGetValue(s_propAxContainer, out AxHost.AxContainer? container))
         {
-            aXContainer = new AxHost.AxContainer(this);
-            Properties.SetObject(s_propAxContainer, aXContainer);
+            container = Properties.AddValue(s_propAxContainer, new AxHost.AxContainer(this));
         }
 
-        return (AxHost.AxContainer)aXContainer;
+        return container;
     }
 
     /// <summary>

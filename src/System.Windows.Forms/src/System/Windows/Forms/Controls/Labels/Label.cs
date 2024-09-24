@@ -369,7 +369,7 @@ public partial class Label : Control, IAutomationLiveRegion
     {
         get
         {
-            Image? image = (Image?)Properties.GetObject(s_propImage);
+            Image? image = Properties.GetValueOrDefault<Image>(s_propImage);
 
             if (image is null && ImageList is not null && ImageIndexer.ActualIndex >= 0)
             {
@@ -382,28 +382,28 @@ public partial class Label : Control, IAutomationLiveRegion
         }
         set
         {
-            if (Image != value)
+            if (Image == value)
             {
-                StopAnimate();
-
-                Properties.SetObject(s_propImage, value);
-                if (value is not null)
-                {
-                    ImageIndex = -1;
-                    ImageList = null;
-                }
-
-                // Hook up the frame changed event
-                //
-                Animate();
-                Invalidate();
+                return;
             }
+
+            StopAnimate();
+
+            Properties.AddOrRemoveValue(s_propImage, value);
+            if (value is not null)
+            {
+                ImageIndex = -1;
+                ImageList = null;
+            }
+
+            // Hook up the frame changed event
+            Animate();
+            Invalidate();
         }
     }
 
     /// <summary>
-    ///  Gets or sets the index value of the images displayed on the
-    ///  <see cref="Label"/>.
+    ///  Gets or sets the index value of the images displayed on the <see cref="Label"/>.
     /// </summary>
     [TypeConverter(typeof(ImageIndexConverter))]
     [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
@@ -442,7 +442,7 @@ public partial class Label : Control, IAutomationLiveRegion
             if (value != ImageList.Indexer.DefaultIndex)
             {
                 // Image.set calls ImageIndex = -1
-                Properties.SetObject(s_propImage, null);
+                Properties.RemoveValue(s_propImage);
             }
 
             ImageIndexer.Index = value;
@@ -472,7 +472,7 @@ public partial class Label : Control, IAutomationLiveRegion
             }
 
             // Image.set calls ImageIndex = -1
-            Properties.SetObject(s_propImage, null);
+            Properties.RemoveValue(s_propImage);
 
             ImageIndexer.Key = value;
             Invalidate();
@@ -484,7 +484,7 @@ public partial class Label : Control, IAutomationLiveRegion
         get
         {
             // Demand create the ImageIndexer property
-            if ((!(Properties.GetObject(s_propImageIndex, out bool found) is LabelImageIndexer imageIndexer)) || (!found))
+            if (!Properties.TryGetValue(s_propImageIndex, out LabelImageIndexer? imageIndexer))
             {
                 imageIndexer = new LabelImageIndexer(this);
                 ImageIndexer = imageIndexer;
@@ -492,10 +492,7 @@ public partial class Label : Control, IAutomationLiveRegion
 
             return imageIndexer;
         }
-        set
-        {
-            Properties.SetObject(s_propImageIndex, value);
-        }
+        set => Properties.AddOrRemoveValue(s_propImageIndex, value);
     }
 
     /// <summary>
@@ -507,38 +504,36 @@ public partial class Label : Control, IAutomationLiveRegion
     [SRCategory(nameof(SR.CatAppearance))]
     public ImageList? ImageList
     {
-        get => (ImageList?)Properties.GetObject(s_propImageList);
+        get => Properties.GetValueOrDefault<ImageList>(s_propImageList);
         set
         {
-            if (ImageList == value)
+            ImageList? imageList = ImageList;
+
+            if (imageList == value)
             {
                 return;
             }
 
-            EventHandler recreateHandler = new(ImageListRecreateHandle);
-            EventHandler disposedHandler = new(DetachImageList);
-
             // Remove the previous imagelist handle recreate handler
-            ImageList? imageList = ImageList;
             if (imageList is not null)
             {
-                imageList.RecreateHandle -= recreateHandler;
-                imageList.Disposed -= disposedHandler;
+                imageList.RecreateHandle -= ImageListRecreateHandle;
+                imageList.Disposed -= DetachImageList;
             }
 
             // Make sure we don't have an Image as well as an ImageList
             if (value is not null)
             {
-                Properties.SetObject(s_propImage, null); // Image.set calls ImageList = null
+                Properties.RemoveValue(s_propImage);
             }
 
-            Properties.SetObject(s_propImageList, value);
+            Properties.AddOrRemoveValue(s_propImageList, value);
 
             // Add the new ImageList handle recreate handler
             if (value is not null)
             {
-                value.RecreateHandle += recreateHandler;
-                value.Disposed += disposedHandler;
+                value.RecreateHandle += ImageListRecreateHandle;
+                value.Disposed += DetachImageList;
             }
 
             Invalidate();
@@ -858,7 +853,7 @@ public partial class Label : Control, IAutomationLiveRegion
     private void Animate(bool animate)
     {
         bool currentlyAnimating = _labelState[s_stateAnimating] != 0;
-        if (animate == currentlyAnimating || Properties.GetObject(s_propImage) is not Image image)
+        if (animate == currentlyAnimating || !Properties.TryGetValue(s_propImage, out Image? image))
         {
             return;
         }
@@ -951,17 +946,14 @@ public partial class Label : Control, IAutomationLiveRegion
             StopAnimate();
 
             // Holding on to images and image list is a memory leak.
-            if (ImageList is not null)
+            if (ImageList is { } imageList)
             {
-                ImageList.Disposed -= DetachImageList;
-                ImageList.RecreateHandle -= ImageListRecreateHandle;
-                Properties.SetObject(s_propImageList, null);
+                imageList.Disposed -= DetachImageList;
+                imageList.RecreateHandle -= ImageListRecreateHandle;
+                Properties.RemoveValue(s_propImageList);
             }
 
-            if (Image is not null)
-            {
-                Properties.SetObject(s_propImage, null);
-            }
+            Properties.RemoveValue(s_propImage);
 
             _textToolTip?.Dispose();
             _textToolTip = null;
@@ -1411,7 +1403,7 @@ public partial class Label : Control, IAutomationLiveRegion
 
     private void ResetImage() => Image = null;
 
-    private bool ShouldSerializeImage() => Properties.ContainsObjectThatIsNotNull(s_propImage);
+    private bool ShouldSerializeImage() => Properties.ContainsKey(s_propImage);
 
     internal override void SetToolTip(ToolTip toolTip)
     {

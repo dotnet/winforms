@@ -179,7 +179,7 @@ public abstract partial class ToolStripItem :
     /// <summary>
     ///  Indicates whether or not this control has an accessible object associated with it.
     /// </summary>
-    internal bool IsAccessibilityObjectCreated => Properties.GetObject(s_accessibilityProperty) is AccessibleObject;
+    internal bool IsAccessibilityObjectCreated => Properties.ContainsKey(s_accessibilityProperty);
 
     /// <summary>
     ///  The Accessibility Object for this Control
@@ -192,11 +192,9 @@ public abstract partial class ToolStripItem :
     {
         get
         {
-            AccessibleObject? accessibleObject = (AccessibleObject?)Properties.GetObject(s_accessibilityProperty);
-            if (accessibleObject is null)
+            if (!Properties.TryGetValue(s_accessibilityProperty, out AccessibleObject? accessibleObject))
             {
-                accessibleObject = CreateAccessibilityInstance();
-                Properties.SetObject(s_accessibilityProperty, accessibleObject);
+                accessibleObject = Properties.AddValue(s_accessibilityProperty, CreateAccessibilityInstance());
             }
 
             return accessibleObject;
@@ -213,10 +211,10 @@ public abstract partial class ToolStripItem :
     [SRDescription(nameof(SR.ToolStripItemAccessibleDefaultActionDescr))]
     public string? AccessibleDefaultActionDescription
     {
-        get => (string?)Properties.GetObject(s_accessibleDefaultActionDescriptionProperty);
+        get => Properties.GetValueOrDefault<string>(s_accessibleDefaultActionDescriptionProperty);
         set
         {
-            Properties.SetObject(s_accessibleDefaultActionDescriptionProperty, value);
+            Properties.AddOrRemoveValue(s_accessibleDefaultActionDescriptionProperty, value);
             OnAccessibleDefaultActionDescriptionChanged(EventArgs.Empty);
         }
     }
@@ -230,10 +228,10 @@ public abstract partial class ToolStripItem :
     [SRDescription(nameof(SR.ToolStripItemAccessibleDescriptionDescr))]
     public string? AccessibleDescription
     {
-        get => (string?)Properties.GetObject(s_accessibleDescriptionProperty);
+        get => Properties.GetValueOrDefault<string>(s_accessibleDescriptionProperty);
         set
         {
-            Properties.SetObject(s_accessibleDescriptionProperty, value);
+            Properties.AddOrRemoveValue(s_accessibleDescriptionProperty, value);
             OnAccessibleDescriptionChanged(EventArgs.Empty);
         }
     }
@@ -247,10 +245,10 @@ public abstract partial class ToolStripItem :
     [SRDescription(nameof(SR.ToolStripItemAccessibleNameDescr))]
     public string? AccessibleName
     {
-        get => (string?)Properties.GetObject(s_accessibleNameProperty);
+        get => Properties.GetValueOrDefault<string>(s_accessibleNameProperty);
         set
         {
-            Properties.SetObject(s_accessibleNameProperty, value);
+            Properties.AddOrRemoveValue(s_accessibleNameProperty, value);
             OnAccessibleNameChanged(EventArgs.Empty);
         }
     }
@@ -389,12 +387,11 @@ public abstract partial class ToolStripItem :
     [DefaultValue(null)]
     public virtual Image? BackgroundImage
     {
-        get => Properties.GetObject(s_backgroundImageProperty) as Image;
+        get => Properties.GetValueOrDefault<Image>(s_backgroundImageProperty);
         set
         {
-            if (BackgroundImage != value)
+            if (Properties.AddOrRemoveValue(s_backgroundImageProperty, value) != value)
             {
-                Properties.SetObject(s_backgroundImageProperty, value);
                 Invalidate();
             }
         }
@@ -927,10 +924,8 @@ public abstract partial class ToolStripItem :
         }
         set
         {
-            var local = (Font?)Properties.GetObject(s_fontProperty);
-            if (local != value)
+            if (Properties.AddOrRemoveValue(s_fontProperty, value) != value)
             {
-                Properties.SetObject(s_fontProperty, value);
                 OnFontChanged(EventArgs.Empty);
             }
         }
@@ -947,7 +942,7 @@ public abstract partial class ToolStripItem :
     }
 
     /// <summary>
-    ///  The height of this control
+    ///  The height of this control.
     /// </summary>
     [SRCategory(nameof(SR.CatLayout))]
     [Browsable(false)]
@@ -1031,7 +1026,7 @@ public abstract partial class ToolStripItem :
     {
         get
         {
-            Image? image = (Image?)Properties.GetObject(s_imageProperty);
+            Image? image = Properties.GetValueOrDefault<Image>(s_imageProperty);
             if (image is null && Owner?.ImageList is not null && ImageIndexer.ActualIndex >= 0)
             {
                 bool disposing = _state[s_stateDisposing];
@@ -1040,7 +1035,7 @@ public abstract partial class ToolStripItem :
                     // CACHE (by design). If we fetched out of the image list every time it would dramatically hit perf.
                     image = Owner.ImageList.Images[ImageIndexer.ActualIndex];
                     _state[s_stateInvalidMirroredImage] = true;
-                    Properties.SetObject(s_imageProperty, image);
+                    Properties.AddValue(s_imageProperty, image);
                     return image;
                 }
 
@@ -1073,7 +1068,7 @@ public abstract partial class ToolStripItem :
                 ImageIndex = ImageList.Indexer.DefaultIndex;
             }
 
-            Properties.SetObject(s_imageProperty, value);
+            Properties.AddOrRemoveValue(s_imageProperty, value);
             _state[s_stateInvalidMirroredImage] = true;
 
             Animate();
@@ -1089,19 +1084,21 @@ public abstract partial class ToolStripItem :
         get => _imageTransparentColor;
         set
         {
-            if (_imageTransparentColor != value)
+            if (_imageTransparentColor == value)
             {
-                _imageTransparentColor = value;
-                if (Image is Bitmap currentImage && value != Color.Empty)
-                {
-                    if (currentImage.RawFormat.Guid != ImageFormat.Icon.Guid && !ImageAnimator.CanAnimate(currentImage))
-                    {
-                        currentImage.MakeTransparent(_imageTransparentColor);
-                    }
-                }
-
-                Invalidate();
+                return;
             }
+
+            _imageTransparentColor = value;
+            if (Image is Bitmap currentImage && value != Color.Empty)
+            {
+                if (currentImage.RawFormat.Guid != ImageFormat.Icon.Guid && !ImageAnimator.CanAnimate(currentImage))
+                {
+                    currentImage.MakeTransparent(_imageTransparentColor);
+                }
+            }
+
+            Invalidate();
         }
     }
 
@@ -1137,7 +1134,7 @@ public abstract partial class ToolStripItem :
             _state[s_stateInvalidMirroredImage] = true;
 
             // Set the Image Property to null
-            Properties.SetObject(s_imageProperty, null);
+            Properties.RemoveValue(s_imageProperty);
 
             InvalidateItemLayout(PropertyNames.ImageIndex);
         }
@@ -1166,8 +1163,7 @@ public abstract partial class ToolStripItem :
         {
             ImageIndexer.Key = value;
             _state[s_stateInvalidMirroredImage] = true;
-            Properties.SetObject(s_imageProperty, null);
-
+            Properties.RemoveValue(s_imageProperty);
             InvalidateItemLayout(PropertyNames.ImageKey);
         }
     }
@@ -1391,7 +1387,7 @@ public abstract partial class ToolStripItem :
     [DefaultValue(null)]
     public string? Name
     {
-        get => WindowsFormsUtils.GetComponentName(this, (string?)Properties.GetObject(s_nameProperty));
+        get => WindowsFormsUtils.GetComponentName(this, Properties.GetValueOrDefault<string>(s_nameProperty));
         set
         {
             if (DesignMode)
@@ -1399,7 +1395,7 @@ public abstract partial class ToolStripItem :
                 return;
             }
 
-            Properties.SetObject(s_nameProperty, value);
+            Properties.AddOrRemoveValue(s_nameProperty, value);
         }
     }
 
@@ -1561,7 +1557,7 @@ public abstract partial class ToolStripItem :
                 return Size.Empty;
             }
 
-            Image? image = (Image?)Properties.GetObject(s_imageProperty);
+            Image? image = Properties.GetValueOrDefault<Image>(s_imageProperty);
             bool usingImageList = ((Owner is not null) && (Owner.ImageList is not null) && (ImageIndexer.ActualIndex >= 0));
 
             if (ImageScaling == ToolStripItemImageScaling.SizeToFit)
@@ -1733,12 +1729,12 @@ public abstract partial class ToolStripItem :
                 Image mirroredImage = (Image)image.Clone();
                 mirroredImage.RotateFlip(RotateFlipType.RotateNoneFlipX);
 
-                Properties.SetObject(s_mirroredImageProperty, mirroredImage);
+                Properties.AddValue(s_mirroredImageProperty, mirroredImage);
                 _state[s_stateInvalidMirroredImage] = false;
                 return mirroredImage;
             }
 
-            return Properties.GetObject(s_mirroredImageProperty) as Image;
+            return Properties.GetValueOrDefault<Image>(s_mirroredImageProperty);
         }
     }
 
@@ -2095,15 +2091,13 @@ public abstract partial class ToolStripItem :
     ///  should not call base.CreateAccessibilityObject.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    protected virtual AccessibleObject CreateAccessibilityInstance()
-        => new ToolStripItemAccessibleObject(this);
+    protected virtual AccessibleObject CreateAccessibilityInstance() => new ToolStripItemAccessibleObject(this);
 
     /// <summary>
     ///  Creates an instance of the object that defines how image and text
     ///  gets laid out in the ToolStripItem
     /// </summary>
-    private protected virtual ToolStripItemInternalLayout CreateInternalLayout()
-        => new(this);
+    private protected virtual ToolStripItemInternalLayout CreateInternalLayout() => new(this);
 
     /// <summary>
     ///  Disposes this ToolStrip item.
@@ -2130,8 +2124,8 @@ public abstract partial class ToolStripItem :
         {
             // need to call base() first since the Component.Dispose(_) is listened to by the ComponentChangeService
             // which Serializes the object in Undo-Redo transactions.
-            Properties.SetObject(s_mirroredImageProperty, null);
-            Properties.SetObject(s_imageProperty, null);
+            Properties.RemoveValue(s_mirroredImageProperty);
+            Properties.RemoveValue(s_imageProperty);
             _state[s_stateDisposing] = false;
         }
     }
@@ -2414,10 +2408,10 @@ public abstract partial class ToolStripItem :
 
     internal void InvalidateImageListImage()
     {
-        // invalidate the cache.
+        // Invalidate the cache.
         if (ImageIndexer.ActualIndex >= 0)
         {
-            Properties.SetObject(s_imageProperty, null);
+            Properties.RemoveValue(s_imageProperty);
             InvalidateItemLayout(PropertyNames.Image);
         }
     }
@@ -3096,39 +3090,27 @@ public abstract partial class ToolStripItem :
         return true;
     }
 
-    internal void RaiseCancelEvent(object key, CancelEventArgs e)
-        => ((CancelEventHandler?)Events[key])?.Invoke(this, e);
+    internal void RaiseCancelEvent(object key, CancelEventArgs e) => ((CancelEventHandler?)Events[key])?.Invoke(this, e);
 
-    internal void RaiseDragEvent(object key, DragEventArgs e)
-        => ((DragEventHandler?)Events[key])?.Invoke(this, e);
+    internal void RaiseDragEvent(object key, DragEventArgs e) => ((DragEventHandler?)Events[key])?.Invoke(this, e);
 
-    internal void RaiseKeyEvent(object key, KeyEventArgs e)
-        => ((KeyEventHandler?)Events[key])?.Invoke(this, e);
+    internal void RaiseKeyEvent(object key, KeyEventArgs e) => ((KeyEventHandler?)Events[key])?.Invoke(this, e);
 
-    internal void RaiseKeyPressEvent(object key, KeyPressEventArgs e)
-        => ((KeyPressEventHandler?)Events[key])?.Invoke(this, e);
+    internal void RaiseKeyPressEvent(object key, KeyPressEventArgs e) => ((KeyPressEventHandler?)Events[key])?.Invoke(this, e);
 
-    internal void RaiseMouseEvent(object key, MouseEventArgs e)
-        => ((MouseEventHandler?)Events[key])?.Invoke(this, e);
+    internal void RaiseMouseEvent(object key, MouseEventArgs e) => ((MouseEventHandler?)Events[key])?.Invoke(this, e);
 
-    internal void RaisePaintEvent(object key, PaintEventArgs e)
-        => ((PaintEventHandler?)Events[key])?.Invoke(this, e);
+    internal void RaisePaintEvent(object key, PaintEventArgs e) => ((PaintEventHandler?)Events[key])?.Invoke(this, e);
 
-    internal void RaiseQueryContinueDragEvent(object key, QueryContinueDragEventArgs e)
-        => ((QueryContinueDragEventHandler?)Events[key])?.Invoke(this, e);
+    internal void RaiseQueryContinueDragEvent(object key, QueryContinueDragEventArgs e) =>
+        ((QueryContinueDragEventHandler?)Events[key])?.Invoke(this, e);
 
     internal virtual void ReleaseUiaProvider()
     {
-        if (TryGetAccessibilityObject(out AccessibleObject? accessibleObject))
+        if (Properties.TryGetValue(s_accessibilityProperty, out AccessibleObject? accessibleObject))
         {
             PInvoke.UiaDisconnectProvider(accessibleObject, skipOSCheck: true);
-            Properties.SetObject(s_accessibilityProperty, null);
-        }
-
-        bool TryGetAccessibilityObject(out AccessibleObject? accessibleObject)
-        {
-            accessibleObject = Properties.GetObject(s_accessibilityProperty) as AccessibleObject;
-            return accessibleObject is not null;
+            Properties.RemoveValue(s_accessibilityProperty);
         }
     }
 
@@ -3679,10 +3661,5 @@ public abstract partial class ToolStripItem :
     /// <summary>
     ///  Query font from property bag.
     /// </summary>
-    internal bool TryGetExplicitlySetFont([NotNullWhen(true)] out Font? local)
-    {
-        local = (Font?)Properties.GetObject(s_fontProperty);
-
-        return local is not null;
-    }
+    internal bool TryGetExplicitlySetFont([NotNullWhen(true)] out Font? local) => Properties.TryGetValue(s_fontProperty, out local);
 }
