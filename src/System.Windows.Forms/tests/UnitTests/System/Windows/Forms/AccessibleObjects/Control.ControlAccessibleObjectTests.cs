@@ -1097,7 +1097,7 @@ public class Control_ControlAccessibleObjectTests
     }
 
     [WinFormsFact]
-    public void ControlAccessibleObject_IAccessibleaccFocus_InvokeDefault_ReturnsNull()
+    public void ControlAccessibleObject_IAccessibleAccFocus_InvokeDefault_ReturnsNull()
     {
         using Control ownerControl = new();
         var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
@@ -1112,7 +1112,7 @@ public class Control_ControlAccessibleObjectTests
     [InlineData(false, -1, -2, null)]
     [InlineData(false, 0, 0, null)]
     [InlineData(false, 1, 2, null)]
-    public void AccessibleObject_IAccessibleaccHitTest_InvokeDefault_ReturnsExpectedValue(bool createControl, int x, int y, int? expectedValue)
+    public void AccessibleObject_IAccessibleAccHitTest_InvokeDefault_ReturnsExpectedValue(bool createControl, int x, int y, int? expectedValue)
     {
         using Control ownerControl = new();
         if (createControl)
@@ -1131,7 +1131,7 @@ public class Control_ControlAccessibleObjectTests
     [WinFormsTheory]
     [InlineData(true)]
     [InlineData(false)]
-    public void ControlAccessibleObject_IAccessibleaccParent_InvokeDefault_ReturnsExpectedValue(bool createControl)
+    public void ControlAccessibleObject_IAccessibleAccParent_InvokeDefault_ReturnsExpectedValue(bool createControl)
     {
         using Control ownerControl = new();
         if (createControl)
@@ -1148,7 +1148,7 @@ public class Control_ControlAccessibleObjectTests
     }
 
     [WinFormsFact]
-    public void ControlAccessibleObject_IAccessibleaccSelection_InvokeDefault_ReturnsNull()
+    public void ControlAccessibleObject_IAccessibleAccSelection_InvokeDefault_ReturnsNull()
     {
         using Control ownerControl = new();
         var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
@@ -1159,7 +1159,7 @@ public class Control_ControlAccessibleObjectTests
     [WinFormsTheory]
     [InlineData(-1)]
     [InlineData(1)]
-    public void ControlAccessibleObject_IAccessibleget_accChild_InvokeNoSuchChild_ReturnsNull(int childID)
+    public void ControlAccessibleObject_IAccessibleGet_accChild_InvokeNoSuchChild_ReturnsNull(int childID)
     {
         using Control ownerControl = new();
         var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
@@ -1168,7 +1168,7 @@ public class Control_ControlAccessibleObjectTests
     }
 
     [WinFormsFact]
-    public void ControlAccessibleObject_IAccessibleget_accChildCount_InvokeDefault_ReturnsExpected()
+    public void ControlAccessibleObject_IAccessibleGet_accChildCount_InvokeDefault_ReturnsExpected()
     {
         using Control ownerControl = new();
         var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
@@ -1179,7 +1179,7 @@ public class Control_ControlAccessibleObjectTests
     [WinFormsTheory]
     [InlineData(true, 1)]
     [InlineData(false, 0)]
-    public void ControlAccessibleObject_IAccessibleget_accChildCount_InvokeWithChildren_ReturnsExpected(bool createControl, int expectedCount)
+    public void ControlAccessibleObject_IAccessibleGet_accChildCount_InvokeWithChildren_ReturnsExpected(bool createControl, int expectedCount)
     {
         using Control child = new();
         using Control ownerControl = new();
@@ -1199,7 +1199,7 @@ public class Control_ControlAccessibleObjectTests
     [WinFormsTheory]
     [InlineData(-1)]
     [InlineData(1)]
-    public void ControlAccessibleObject_IAccessibleget_accRole_InvokeNoSuchChild_ReturnsNull(object varChild)
+    public void ControlAccessibleObject_IAccessibleGet_accRole_InvokeNoSuchChild_ReturnsNull(object varChild)
     {
         using Control ownerControl = new();
         var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
@@ -1208,7 +1208,7 @@ public class Control_ControlAccessibleObjectTests
     }
 
     [WinFormsFact]
-    public void ControlAccessibleObject_DoesntSupport_LegacyIAccessiblePattern()
+    public void ControlAccessibleObject_DoesNotSupport_LegacyIAccessiblePattern()
     {
         using Control control = new();
         var accessibleObject = control.AccessibilityObject;

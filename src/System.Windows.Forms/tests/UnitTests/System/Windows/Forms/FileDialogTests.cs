@@ -47,7 +47,7 @@ public class FileDialogTests
     }
 
     [WinFormsFact]
-    public void FileDialog_Ctor_Default_OverridenReset()
+    public void FileDialog_Ctor_Default_OverriddenReset()
     {
         using EmptyResetFileDialog dialog = new();
         Assert.False(dialog.AddExtension);

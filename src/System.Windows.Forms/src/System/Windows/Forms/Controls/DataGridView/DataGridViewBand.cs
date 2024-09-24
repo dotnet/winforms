@@ -55,22 +55,20 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
 
     internal ContextMenuStrip? ContextMenuStripInternal
     {
-        get => (ContextMenuStrip?)Properties.GetObject(s_propContextMenuStrip);
+        get => Properties.GetValueOrDefault<ContextMenuStrip>(s_propContextMenuStrip);
         set
         {
-            ContextMenuStrip? oldValue = (ContextMenuStrip?)Properties.GetObject(s_propContextMenuStrip);
+            ContextMenuStrip? oldValue = Properties.AddOrRemoveValue(s_propContextMenuStrip, value);
             if (oldValue != value)
             {
-                EventHandler disposedHandler = new(DetachContextMenuStrip);
                 if (oldValue is not null)
                 {
-                    oldValue.Disposed -= disposedHandler;
+                    oldValue.Disposed -= DetachContextMenuStrip;
                 }
 
-                Properties.SetObject(s_propContextMenuStrip, value);
                 if (value is not null)
                 {
-                    value.Disposed += disposedHandler;
+                    value.Disposed += DetachContextMenuStrip;
                 }
 
                 DataGridView?.OnBandContextMenuStripChanged(this);
@@ -119,8 +117,7 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
     {
         get
         {
-            Type? type = (Type?)Properties.GetObject(s_propDefaultHeaderCellType);
-            if (type is not null)
+            if (Properties.TryGetValue(s_propDefaultHeaderCellType, out Type? type))
             {
                 return type;
             }
@@ -129,15 +126,17 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
         }
         set
         {
-            if (value is not null || Properties.ContainsKey(s_propDefaultHeaderCellType))
+            if (value is not null && !typeof(DataGridViewHeaderCell).IsAssignableFrom(value))
             {
-                if (!typeof(DataGridViewHeaderCell).IsAssignableFrom(value))
-                {
-                    throw new ArgumentException(string.Format(SR.DataGridView_WrongType, nameof(DefaultHeaderCellType), "System.Windows.Forms.DataGridViewHeaderCell"), nameof(value));
-                }
-
-                Properties.AddOrRemoveValue(s_propDefaultHeaderCellType, value);
+                throw new ArgumentException(
+                    string.Format(
+                        SR.DataGridView_WrongType,
+                        nameof(DefaultHeaderCellType),
+                        "System.Windows.Forms.DataGridViewHeaderCell"),
+                    nameof(value));
             }
+
+            Properties.AddOrRemoveValue(s_propDefaultHeaderCellType, value);
         }
     }
 
@@ -223,10 +222,7 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
         get => Properties.ContainsObjectThatIsNotNull(s_propDefaultHeaderCellType);
     }
 
-    internal bool HasHeaderCell
-    {
-        get => Properties.ContainsObjectThatIsNotNull(s_propHeaderCell);
-    }
+    internal bool HasHeaderCell => Properties.ContainsKey(s_propHeaderCell);
 
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -235,30 +231,33 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
     {
         get
         {
-            DataGridViewHeaderCell? headerCell = (DataGridViewHeaderCell?)Properties.GetObject(s_propHeaderCell);
-            if (headerCell is null)
+            if (Properties.TryGetValue(s_propHeaderCell, out DataGridViewHeaderCell? headerCell))
             {
-                Type cellType = DefaultHeaderCellType;
+                return headerCell;
+            }
 
-                headerCell = (DataGridViewHeaderCell)Activator.CreateInstance(cellType)!;
-                headerCell.DataGridView = DataGridView;
-                if (IsRow)
+            Type cellType = DefaultHeaderCellType;
+
+            headerCell = (DataGridViewHeaderCell)Activator.CreateInstance(cellType)!;
+            headerCell.DataGridView = DataGridView;
+
+            if (IsRow)
+            {
+                headerCell.OwningRow = (DataGridViewRow)this;   // may be a shared row
+                Properties.AddValue(s_propHeaderCell, headerCell);
+            }
+            else
+            {
+                DataGridViewColumn? dataGridViewColumn = this as DataGridViewColumn;
+                headerCell.OwningColumn = dataGridViewColumn;
+
+                // Set the headerCell in the property store before setting the SortOrder.
+                Properties.AddValue(s_propHeaderCell, headerCell);
+                if (DataGridView is not null && DataGridView.SortedColumn == dataGridViewColumn)
                 {
-                    headerCell.OwningRow = (DataGridViewRow)this;   // may be a shared row
-                    Properties.SetObject(s_propHeaderCell, headerCell);
-                }
-                else
-                {
-                    DataGridViewColumn? dataGridViewColumn = this as DataGridViewColumn;
-                    headerCell.OwningColumn = dataGridViewColumn;
-                    // Set the headerCell in the property store before setting the SortOrder.
-                    Properties.SetObject(s_propHeaderCell, headerCell);
-                    if (DataGridView is not null && DataGridView.SortedColumn == dataGridViewColumn)
-                    {
-                        DataGridViewColumnHeaderCell? dataGridViewColumnHeaderCell = headerCell as DataGridViewColumnHeaderCell;
-                        Debug.Assert(dataGridViewColumnHeaderCell is not null);
-                        dataGridViewColumnHeaderCell.SortGlyphDirection = DataGridView.SortOrder;
-                    }
+                    DataGridViewColumnHeaderCell? dataGridViewColumnHeaderCell = headerCell as DataGridViewColumnHeaderCell;
+                    Debug.Assert(dataGridViewColumnHeaderCell is not null);
+                    dataGridViewColumnHeaderCell.SortGlyphDirection = DataGridView.SortOrder;
                 }
             }
 
@@ -266,67 +265,75 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
         }
         set
         {
-            DataGridViewHeaderCell? headerCell = Properties.GetValueOrDefault<DataGridViewHeaderCell?>(s_propHeaderCell);
-            if (value is not null || Properties.ContainsKey(s_propHeaderCell))
+            DataGridViewHeaderCell? priorValue = Properties.GetValueOrDefault<DataGridViewHeaderCell?>(s_propHeaderCell);
+
+            if (priorValue is not null)
             {
-                if (headerCell is not null)
+                priorValue.DataGridView = null;
+                if (IsRow)
                 {
-                    headerCell.DataGridView = null;
-                    if (IsRow)
-                    {
-                        headerCell.OwningRow = null;
-                    }
-                    else
-                    {
-                        headerCell.OwningColumn = null;
-                        ((DataGridViewColumnHeaderCell)headerCell).SortGlyphDirectionInternal = SortOrder.None;
-                    }
+                    priorValue.OwningRow = null;
                 }
-
-                if (value is not null)
+                else
                 {
-                    if (IsRow)
-                    {
-                        if (value is not DataGridViewRowHeaderCell)
-                        {
-                            throw new ArgumentException(string.Format(SR.DataGridView_WrongType, nameof(DataGridViewRow.HeaderCell), "System.Windows.Forms.DataGridViewRowHeaderCell"), nameof(value));
-                        }
-
-                        // A HeaderCell can only be used by one band.
-                        if (value.OwningRow is not null)
-                        {
-                            value.OwningRow.HeaderCell = null;
-                        }
-
-                        Debug.Assert(value.OwningRow is null);
-                        value.OwningRow = (DataGridViewRow)this;   // may be a shared row
-                    }
-                    else
-                    {
-                        if (value is not DataGridViewColumnHeaderCell dataGridViewColumnHeaderCell)
-                        {
-                            throw new ArgumentException(string.Format(SR.DataGridView_WrongType, nameof(DataGridViewColumn.HeaderCell), "System.Windows.Forms.DataGridViewColumnHeaderCell"), nameof(value));
-                        }
-
-                        // A HeaderCell can only be used by one band.
-                        if (value.OwningColumn is not null)
-                        {
-                            value.OwningColumn.HeaderCell = null;
-                        }
-
-                        Debug.Assert(dataGridViewColumnHeaderCell.SortGlyphDirection == SortOrder.None);
-                        Debug.Assert(value.OwningColumn is null);
-                        value.OwningColumn = (DataGridViewColumn)this;
-                    }
-
-                    Debug.Assert(value.DataGridView is null);
-                    value.DataGridView = DataGridView;
+                    priorValue.OwningColumn = null;
+                    ((DataGridViewColumnHeaderCell)priorValue).SortGlyphDirectionInternal = SortOrder.None;
                 }
-
-                Properties.AddOrRemoveValue(s_propHeaderCell, value);
             }
 
-            if (((value is null && headerCell is not null) || (value is not null && headerCell is null) || (value is not null && headerCell is not null && !headerCell.Equals(value))) && DataGridView is not null)
+            if (value is not null)
+            {
+                if (IsRow)
+                {
+                    if (value is not DataGridViewRowHeaderCell)
+                    {
+                        throw new ArgumentException(
+                            string.Format(
+                                SR.DataGridView_WrongType,
+                                nameof(DataGridViewRow.HeaderCell),
+                                "System.Windows.Forms.DataGridViewRowHeaderCell"),
+                            nameof(value));
+                    }
+
+                    // A HeaderCell can only be used by one band.
+                    if (value.OwningRow is not null)
+                    {
+                        value.OwningRow.HeaderCell = null;
+                    }
+
+                    Debug.Assert(value.OwningRow is null);
+                    value.OwningRow = (DataGridViewRow)this;   // may be a shared row
+                }
+                else
+                {
+                    if (value is not DataGridViewColumnHeaderCell dataGridViewColumnHeaderCell)
+                    {
+                        throw new ArgumentException(
+                            string.Format(
+                                SR.DataGridView_WrongType,
+                                nameof(DataGridViewColumn.HeaderCell),
+                                "System.Windows.Forms.DataGridViewColumnHeaderCell"),
+                            nameof(value));
+                    }
+
+                    // A HeaderCell can only be used by one band.
+                    if (value.OwningColumn is not null)
+                    {
+                        value.OwningColumn.HeaderCell = null;
+                    }
+
+                    Debug.Assert(dataGridViewColumnHeaderCell.SortGlyphDirection == SortOrder.None);
+                    Debug.Assert(value.OwningColumn is null);
+                    value.OwningColumn = (DataGridViewColumn)this;
+                }
+
+                Debug.Assert(value.DataGridView is null);
+                value.DataGridView = DataGridView;
+            }
+
+            Properties.AddOrRemoveValue(s_propHeaderCell, value);
+
+            if (DataGridView is not null && !Equals(priorValue, value))
             {
                 DataGridView.OnBandHeaderCellChanged(this);
             }

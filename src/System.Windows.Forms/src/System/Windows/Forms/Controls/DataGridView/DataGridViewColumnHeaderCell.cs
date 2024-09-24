@@ -705,10 +705,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
     protected override object? GetValue(int rowIndex)
     {
         ArgumentOutOfRangeException.ThrowIfNotEqual(rowIndex, -1);
-
-        return ContainsLocalValue
-            ? Properties.GetObject(s_propCellValue)
-            : (OwningColumn?.Name);
+        return Properties.TryGetValueOrNull(s_propCellValue, out object? value) ? value : OwningColumn?.Name;
     }
 
     protected override void Paint(
@@ -1193,7 +1190,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
         ArgumentOutOfRangeException.ThrowIfNotEqual(rowIndex, -1);
 
         object? originalValue = GetValue(rowIndex);
-        Properties.SetObject(s_propCellValue, value);
+        Properties.AddValue(s_propCellValue, value);
         if (DataGridView is not null && originalValue != value)
         {
             RaiseCellValueChanged(new DataGridViewCellEventArgs(ColumnIndex, -1));
@@ -1202,8 +1199,5 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
         return true;
     }
 
-    /// <summary>
-    /// </summary>
-    public override string ToString() =>
-        $"DataGridViewColumnHeaderCell {{ ColumnIndex={ColumnIndex} }}";
+    public override string ToString() => $"DataGridViewColumnHeaderCell {{ ColumnIndex={ColumnIndex} }}";
 }
