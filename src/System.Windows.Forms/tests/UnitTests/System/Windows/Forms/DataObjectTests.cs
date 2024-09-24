@@ -2485,4 +2485,21 @@ public partial class DataObjectTests
         IDataObject outData = dropTargetAccessor.CreateDelegate<CreateWinFormsDataObjectForOutgoingDropData>()(inDataPtr);
         outData.Should().BeSameAs(inData);
     }
+
+    [WinFormsFact]
+    public unsafe void DataObject_Native_GetFormats_ReturnsExpected()
+    {
+        DataObject native = new();
+        using Bitmap bitmap = new(10, 10);
+        native.SetImage(bitmap);
+        string customFormat = "customFormat";
+        native.SetData(customFormat, "custom");
+        // Simulate receiving DataObject from native.
+        DataObject data = new(ComHelpers.GetComPointer<Com.IDataObject>(native));
+
+        data.GetDataPresent(typeof(Bitmap)).Should().BeTrue();
+        data.GetDataPresent(customFormat).Should().BeTrue();
+        data.GetDataPresent("notExist").Should().BeFalse();
+        data.GetFormats().Should().BeEquivalentTo([typeof(Bitmap).FullName, typeof(Bitmap).Name, customFormat]);
+    }
 }
