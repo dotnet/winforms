@@ -15,7 +15,7 @@ public class ToolStripLabelTests : IDisposable
     [WinFormsFact]
     public void ToolStripLabel_DefaultConstructor_SetsDefaults()
     {
-        ToolStripLabel toolStripLabel = new();
+        using ToolStripLabel toolStripLabel = new();
 
         toolStripLabel.Text.Should().BeEmpty();
         toolStripLabel.Image.Should().BeNull();
@@ -27,7 +27,7 @@ public class ToolStripLabelTests : IDisposable
     {
         string text = "Test Label";
 
-        ToolStripLabel toolStripLabel = new(text);
+        using ToolStripLabel toolStripLabel = new(text);
 
         toolStripLabel.Text.Should().Be(text);
         toolStripLabel.Image.Should().BeNull();
@@ -39,7 +39,7 @@ public class ToolStripLabelTests : IDisposable
     {
         using Bitmap image = new(10, 10);
 
-        ToolStripLabel toolStripLabel = new(image);
+        using ToolStripLabel toolStripLabel = new(image);
 
         toolStripLabel.Image.Should().Be(image);
         toolStripLabel.Text.Should().BeNull();
@@ -52,7 +52,7 @@ public class ToolStripLabelTests : IDisposable
         using Bitmap image = new(10, 10);
         string text = "Test Label";
 
-        ToolStripLabel toolStripLabel = new(text, image);
+        using ToolStripLabel toolStripLabel = new(text, image);
 
         toolStripLabel.Text.Should().Be(text);
         toolStripLabel.Image.Should().Be(image);
@@ -66,7 +66,7 @@ public class ToolStripLabelTests : IDisposable
         string text = "Test Label";
         bool isLink = true;
 
-        ToolStripLabel toolStripLabel = new(text, image, isLink);
+        using ToolStripLabel toolStripLabel = new(text, image, isLink);
 
         toolStripLabel.Text.Should().Be(text);
         toolStripLabel.Image.Should().Be(image);
@@ -82,7 +82,7 @@ public class ToolStripLabelTests : IDisposable
         bool eventHandlerCalled = false;
         EventHandler onClick = (sender, e) => eventHandlerCalled = true;
 
-        ToolStripLabel toolStripLabel = new(text, image, isLink, onClick);
+        using ToolStripLabel toolStripLabel = new(text, image, isLink, onClick);
 
         toolStripLabel.Text.Should().Be(text);
         toolStripLabel.Image.Should().Be(image);
