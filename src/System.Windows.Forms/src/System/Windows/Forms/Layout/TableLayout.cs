@@ -1350,8 +1350,7 @@ internal partial class TableLayout : LayoutEngine
 
     internal static LayoutInfo GetLayoutInfo(IArrangedElement element)
     {
-        LayoutInfo? layoutInfo = (LayoutInfo?)element.Properties.GetObject(s_layoutInfoProperty);
-        if (layoutInfo is null)
+        if (!element.Properties.TryGetValue(s_layoutInfoProperty, out LayoutInfo? layoutInfo))
         {
             layoutInfo = new LayoutInfo(element);
             SetLayoutInfo(element, layoutInfo);
@@ -1362,7 +1361,7 @@ internal partial class TableLayout : LayoutEngine
 
     internal static void SetLayoutInfo(IArrangedElement element, LayoutInfo value)
     {
-        element.Properties.SetObject(s_layoutInfoProperty, value);
+        element.Properties.AddOrRemoveValue(s_layoutInfoProperty, value);
         Debug.Assert(GetLayoutInfo(element) == value, "GetLayoutInfo should return the same value as we set it to");
     }
 
@@ -1376,11 +1375,9 @@ internal partial class TableLayout : LayoutEngine
     // store.
     internal static ContainerInfo GetContainerInfo(IArrangedElement container)
     {
-        ContainerInfo? containerInfo = (ContainerInfo?)container.Properties.GetObject(s_containerInfoProperty);
-        if (containerInfo is null)
+        if (!container.Properties.TryGetValue(s_containerInfoProperty, out ContainerInfo? containerInfo))
         {
-            containerInfo = new ContainerInfo(container);
-            container.Properties.SetObject(s_containerInfoProperty, containerInfo);
+            containerInfo = container.Properties.AddValue(s_containerInfoProperty, new ContainerInfo(container));
         }
 
         return containerInfo;

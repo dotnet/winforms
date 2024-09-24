@@ -4,7 +4,6 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
-using System.Globalization;
 using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms;
@@ -82,11 +81,8 @@ public partial class ToolStripDropDown : ToolStrip
 
                 if (!value)
                 {
-                    if (Properties.ContainsKey(s_propOpacity))
-                    {
-                        Properties.AddValue(s_propOpacity, 1.0f);
-                    }
-
+                    // This sets it back to default, which is 1.0d.
+                    Properties.RemoveValue(s_propOpacity);
                     UpdateLayered();
                 }
             }
@@ -618,30 +614,14 @@ public partial class ToolStripDropDown : ToolStrip
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public double Opacity
     {
-        get
-        {
-            object? opacity = Properties.GetObject(s_propOpacity);
-            if (opacity is not null)
-            {
-                return Convert.ToDouble(opacity, CultureInfo.InvariantCulture);
-            }
-
-            return 1.0f;
-        }
+        get => Properties.GetValueOrDefault(s_propOpacity, 1.0d);
         set
         {
-            if (value > 1.0)
-            {
-                value = 1.0f;
-            }
-            else if (value < 0.0)
-            {
-                value = 0.0f;
-            }
+            value = Math.Clamp(value, 0.0d, 1.0d);
 
-            Properties.SetObject(s_propOpacity, value);
+            Properties.AddOrRemoveValue(s_propOpacity, value, 1.0d);
 
-            bool oldLayered = (_state[s_stateLayered]);
+            bool oldLayered = _state[s_stateLayered];
             if (OpacityAsByte < 255)
             {
                 AllowTransparency = true;
@@ -652,7 +632,7 @@ public partial class ToolStripDropDown : ToolStrip
                 _state[s_stateLayered] = false;
             }
 
-            if (oldLayered != (_state[s_stateLayered]))
+            if (oldLayered != _state[s_stateLayered])
             {
                 UpdateStyles();
             }
@@ -661,26 +641,17 @@ public partial class ToolStripDropDown : ToolStrip
         }
     }
 
-    private byte OpacityAsByte
-    {
-        get
-        {
-            return (byte)(Opacity * 255.0f);
-        }
-    }
+    private byte OpacityAsByte => (byte)(Opacity * 255.0f);
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new ToolStripOverflowButton OverflowButton
-    {
-        get => base.OverflowButton;
-    }
+    public new ToolStripOverflowButton OverflowButton => base.OverflowButton;
 
     [DefaultValue(null)]
     [Browsable(false)]
     public ToolStripItem? OwnerItem
     {
-        get { return _ownerItem; }
+        get => _ownerItem;
         set
         {
             if (_ownerItem != value)
@@ -828,14 +799,8 @@ public partial class ToolStripDropDown : ToolStrip
 
     internal Control? SourceControlInternal
     {
-        get
-        {
-            return Properties.GetObject(s_propSourceControl) as Control;
-        }
-        set
-        {
-            Properties.SetObject(s_propSourceControl, value);
-        }
+        get => Properties.GetValueOrDefault<Control>(s_propSourceControl);
+        set => Properties.AddOrRemoveValue(s_propSourceControl, value);
     }
 
     internal override SHOW_WINDOW_CMD ShowParams => SHOW_WINDOW_CMD.SW_SHOWNOACTIVATE;

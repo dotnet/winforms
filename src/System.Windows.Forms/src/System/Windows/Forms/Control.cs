@@ -1976,8 +1976,7 @@ public unsafe partial class Control :
             {
                 if (!Properties.TryGetValue(s_fontHandleWrapperProperty, out FontHandleWrapper? fontHandle))
                 {
-                    fontHandle = new FontHandleWrapper(font);
-                    Properties.AddValue(s_fontHandleWrapperProperty, fontHandle);
+                    fontHandle = Properties.AddValue(s_fontHandleWrapperProperty, new FontHandleWrapper(font));
                 }
 
                 return fontHandle.Handle;
@@ -2003,10 +2002,7 @@ public unsafe partial class Control :
 
                 if (fontHandle is null)
                 {
-                    font = ambientFont;
-                    fontHandle = new FontHandleWrapper(font);
-
-                    Properties.AddValue(s_fontHandleWrapperProperty, fontHandle);
+                    fontHandle = Properties.AddValue(s_fontHandleWrapperProperty, new FontHandleWrapper(ambientFont));
                 }
 
                 return fontHandle.Handle;
@@ -2028,9 +2024,7 @@ public unsafe partial class Control :
 
             if (TryGetExplicitlySetFont(out Font? font))
             {
-                fontHeight = font.Height;
-                Properties.AddValue(s_fontHeightProperty, fontHeight);
-                return fontHeight;
+                return Properties.AddValue(s_fontHeightProperty, font.Height);
             }
 
             // Ask the parent if it has the font height.
