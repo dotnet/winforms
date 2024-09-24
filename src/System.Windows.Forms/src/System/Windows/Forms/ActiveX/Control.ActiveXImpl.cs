@@ -93,7 +93,7 @@ public partial class Control
                 // PERF: IsActiveX is called quite a bit - checked everywhere from sizing to event raising. Using a
                 // state bit to track instead of fetching from the property store.
                 SetExtendedState(ExtendedStates.IsActiveX, true);
-                Properties.SetObject(s_activeXImplProperty, activeXImpl);
+                Properties.AddValue(s_activeXImplProperty, activeXImpl);
             }
 
             return activeXImpl;
@@ -1826,7 +1826,7 @@ public partial class Control
             // merge our region automatically.
             if (setRegion)
             {
-                _control.SetRegion(_control.Region);
+                _control.SetRegionInternal(_control.Region);
             }
 
             // Forms^3 uses transparent overlay windows that appear to cause painting artifacts.

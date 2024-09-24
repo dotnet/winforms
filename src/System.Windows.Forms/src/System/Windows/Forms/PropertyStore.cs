@@ -176,18 +176,32 @@ internal class PropertyStore
     /// <summary>
     ///  Sets the given value or clears it from the store if the value equals <paramref name="defaultValue"/>.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   Always explicitly set <paramref name="defaultValue"/> when using enums for clarity.
+    ///  </para>
+    /// </remarks>
     /// <returns>The previous value if it was set, or <see langword="default"/>.</returns>
     public T? AddOrRemoveValue<T>(int key, T? value, T? defaultValue = default)
     {
-        TryGetValue(key, out T? previous);
+        bool found = _values.TryGetValue(key, out Value foundValue);
 
-        if ((value is null && defaultValue is null)
-            || (value is not null && value.Equals(defaultValue)))
+        bool isDefault = (value is null && defaultValue is null)
+            || (value is not null && value.Equals(defaultValue));
+
+        T? previous = found ? foundValue.GetValue<T>() : default;
+
+        if (isDefault)
         {
-            _values.Remove(key);
+            // Equivalent to default, remove if we found it.
+            if (found)
+            {
+                _values.Remove(key);
+            }
         }
-        else
+        else if (!found || !ReferenceEquals(value, previous))
         {
+            // If it wasn't found or it is the same instance we don't need set it.
             _values[key] = new(value);
         }
 
