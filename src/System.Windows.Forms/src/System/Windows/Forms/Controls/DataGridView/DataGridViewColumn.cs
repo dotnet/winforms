@@ -414,8 +414,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
         }
     }
 
-    private bool ShouldSerializeHeaderText() =>
-        HasHeaderCell && HeaderCell.ContainsLocalValue;
+    private bool ShouldSerializeHeaderText() => HasHeaderCell && HeaderCell.ContainsLocalValue;
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -787,12 +786,8 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public Type? ValueType
     {
-        get => (Type?)Properties.GetObject(s_propDataGridViewColumnValueType);
-        set
-        {
-            // what should we do when we modify the ValueType in the dataGridView column???
-            Properties.SetObject(s_propDataGridViewColumnValueType, value);
-        }
+        get => Properties.GetValueOrDefault<Type>(s_propDataGridViewColumnValueType);
+        set => Properties.AddOrRemoveValue(s_propDataGridViewColumnValueType, value);
     }
 
     [DefaultValue(true)]
