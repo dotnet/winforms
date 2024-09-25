@@ -1727,11 +1727,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     {
         get
         {
-            ToolStripTextDirection textDirection = ToolStripTextDirection.Inherit;
-            if (Properties.TryGetObject(s_propTextDirection, out ToolStripTextDirection direction))
-            {
-                textDirection = direction;
-            }
+            ToolStripTextDirection textDirection = Properties.GetValueOrDefault(s_propTextDirection, ToolStripTextDirection.Horizontal);
 
             if (textDirection == ToolStripTextDirection.Inherit)
             {
@@ -1742,9 +1738,8 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         }
         set
         {
-            // valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(value);
-            Properties.SetObject(s_propTextDirection, value);
+            Properties.AddOrRemoveValue(s_propTextDirection, value, defaultValue: ToolStripTextDirection.Horizontal);
 
             using (new LayoutTransaction(this, this, "TextDirection"))
             {
@@ -1761,54 +1756,49 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     /// </summary>
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new VScrollProperties VerticalScroll
-    {
-        get => base.VerticalScroll;
-    }
+    public new VScrollProperties VerticalScroll => base.VerticalScroll;
 
-    void ISupportToolStripPanel.BeginDrag()
-    {
-        OnBeginDrag(EventArgs.Empty);
-    }
+    void ISupportToolStripPanel.BeginDrag() => OnBeginDrag(EventArgs.Empty);
 
-    // Internal so that it's not a public API.
     internal virtual void ChangeSelection(ToolStripItem? nextItem)
     {
-        if (nextItem is not null)
+        if (nextItem is null)
         {
-            ToolStripControlHost? controlHost = nextItem as ToolStripControlHost;
-            // if we contain focus, we should set focus to ourselves
-            // so we get the focus off the thing that's currently focused
-            // e.g. go from a text box to a toolstrip button
-            if (ContainsFocus && !Focused)
+            return;
+        }
+
+        ToolStripControlHost? controlHost = nextItem as ToolStripControlHost;
+        // if we contain focus, we should set focus to ourselves
+        // so we get the focus off the thing that's currently focused
+        // e.g. go from a text box to a toolstrip button
+        if (ContainsFocus && !Focused)
+        {
+            Focus();
+            if (controlHost is null)
             {
-                Focus();
-                if (controlHost is null)
-                {
-                    // if nextItem IS a toolstripcontrolhost, we're going to focus it anyways
-                    // we only fire KeyboardActive when "focusing" a non-hwnd backed item
-                    KeyboardActive = true;
-                }
+                // if nextItem IS a toolstripcontrolhost, we're going to focus it anyways
+                // we only fire KeyboardActive when "focusing" a non-hwnd backed item
+                KeyboardActive = true;
+            }
+        }
+
+        if (controlHost is not null)
+        {
+            if (_hwndThatLostFocus == IntPtr.Zero)
+            {
+                SnapFocus(PInvoke.GetFocus());
             }
 
-            if (controlHost is not null)
-            {
-                if (_hwndThatLostFocus == IntPtr.Zero)
-                {
-                    SnapFocus(PInvoke.GetFocus());
-                }
+            controlHost.Control.Select();
+            controlHost.Control.Focus();
+        }
 
-                controlHost.Control.Select();
-                controlHost.Control.Focus();
-            }
+        nextItem.Select();
 
-            nextItem.Select();
-
-            if (nextItem is ToolStripMenuItem tsNextItem && !IsDropDown)
-            {
-                // only toplevel menus auto expand when the selection changes.
-                tsNextItem.HandleAutoExpansion();
-            }
+        if (nextItem is ToolStripMenuItem tsNextItem && !IsDropDown)
+        {
+            // only toplevel menus auto expand when the selection changes.
+            tsNextItem.HandleAutoExpansion();
         }
     }
 
@@ -1960,7 +1950,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
 
                 if (Properties.TryGetValue(s_propToolTip, out ToolTip? toolTip))
                 {
-                    toolTip?.Dispose();
+                    toolTip.Dispose();
                     Properties.RemoveValue(s_propToolTip);
                 }
 

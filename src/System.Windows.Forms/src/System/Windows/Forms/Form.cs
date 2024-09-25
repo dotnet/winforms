@@ -251,12 +251,9 @@ public partial class Form : ContainerControl
                 return;
             }
 
-            if (value)
+            if (value && !CanRecreateHandle())
             {
-                if (!CanRecreateHandle())
-                {
-                    return;
-                }
+                return;
             }
 
             _formState[s_formStateIsActive] = value ? 1 : 0;
@@ -3545,7 +3542,7 @@ public partial class Form : ContainerControl
             base.Dispose(disposing);
             _ctlClient = null;
 
-            if (Properties.TryGetObject(s_propDummyMdiMenu, out HMENU dummyMenu) && !dummyMenu.IsNull)
+            if (Properties.TryGetValue(s_propDummyMdiMenu, out HMENU dummyMenu))
             {
                 Properties.RemoveValue(s_propDummyMdiMenu);
                 PInvoke.DestroyMenu(dummyMenu);
@@ -6129,10 +6126,13 @@ public partial class Form : ContainerControl
                 // (set to null) so that duplicate control buttons are not placed on the menu bar when
                 // an ole menu is being removed.
                 // Make MDI forget the mdi item position.
-                if (!Properties.TryGetObject(s_propDummyMdiMenu, out HMENU dummyMenu) || dummyMenu.IsNull || recreateMenu)
+                if (!Properties.TryGetValue(s_propDummyMdiMenu, out HMENU dummyMenu) || recreateMenu)
                 {
                     dummyMenu = PInvoke.CreateMenu();
-                    Properties.SetObject(s_propDummyMdiMenu, dummyMenu);
+                    if (!dummyMenu.IsNull)
+                    {
+                        Properties.AddValue(s_propDummyMdiMenu, dummyMenu);
+                    }
                 }
 
                 PInvoke.SendMessage(_ctlClient, PInvoke.WM_MDISETMENU, (WPARAM)dummyMenu.Value);
@@ -6143,7 +6143,7 @@ public partial class Form : ContainerControl
             {
                 // If MainMenuStrip, we need to remove any Win32 Menu to make room for it.
                 HMENU hMenu = PInvoke.GetMenu(this);
-                if (hMenu != HMENU.Null)
+                if (!hMenu.IsNull)
                 {
                     // Remove the current menu.
                     PInvoke.SetMenu(this, HMENU.Null);

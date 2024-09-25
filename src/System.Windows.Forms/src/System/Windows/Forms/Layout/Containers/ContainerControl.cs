@@ -842,7 +842,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
     {
         base.OnCreateControl();
 
-        if (Properties.ContainsObjectThatIsNotNull(s_propAxContainer))
+        if (Properties.ContainsKey(s_propAxContainer))
         {
             AxContainerFormCreated();
         }
