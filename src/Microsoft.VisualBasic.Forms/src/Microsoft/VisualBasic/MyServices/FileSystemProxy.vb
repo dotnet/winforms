@@ -141,9 +141,9 @@ Namespace Microsoft.VisualBasic.MyServices
 
         ''' <summary>
         '''  Copy an existing directory to a new directory,
-        '''  displaying progress dialog and confirmation dialogs if specified,
+        '''  displaying <see cref="Internal.ProgressDialog "/> and confirmation dialogs if specified,
         '''  throwing <see cref="OperationCanceledException"/> if user cancels the operation
-        '''  (only applies if displaying progress dialog and confirmation dialogs).
+        '''  (only applies if displaying ProgressDialog and confirmation dialogs).
         ''' </summary>
         ''' <param name="sourceDirectoryName">The path to the source directory, can be relative or absolute.</param>
         ''' <param name="destinationDirectoryName">
@@ -177,9 +177,9 @@ Namespace Microsoft.VisualBasic.MyServices
 
         ''' <summary>
         '''  Copy an existing directory to a new directory,
-        '''  displaying progress dialog and confirmation dialogs if specified,
+        '''  displaying <see cref="Internal.ProgressDialog"/> and confirmation messages if specified,
         '''  throwing exception if user cancels the operation if specified.
-        '''  (only applies if displaying progress dialog and confirmation dialogs).
+        '''  (only applies if displaying ProgressDialog and confirmation messages).
         ''' </summary>
         ''' <param name="sourceDirectoryName">The path to the source directory, can be relative or absolute.</param>
         ''' <param name="destinationDirectoryName">
@@ -279,7 +279,7 @@ Namespace Microsoft.VisualBasic.MyServices
 
         ''' <summary>
         '''  Copy an existing file to a new file,
-        '''  displaying progress dialog and confirmation dialogs if specified,
+        '''  displaying <see cref="Internal.ProgressDialog"/> and confirmation messages if specified,
         '''  will throw exception if user cancels the operation.
         ''' </summary>
         ''' <param name="sourceFileName">The path to the source file, can be relative or absolute.</param>
@@ -311,8 +311,8 @@ Namespace Microsoft.VisualBasic.MyServices
 
         ''' <summary>
         '''  Copy an existing file to a new file,
-        '''  displaying progress dialog and confirmation dialogs if specified,
-        '''  will throw exception if user cancels the operation if specified.
+        '''  displaying <see cref="Internal.ProgressDialog"/> and confirmation messages if specified,
+        '''  will throw <see cref="OperationCanceledException"/> if user cancels the operation if specified.
         ''' </summary>
         ''' <param name="sourceFileName">The path to the source file, can be relative or absolute.</param>
         ''' <param name="destinationFileName">
@@ -508,7 +508,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Sub
 
         ''' <summary>
-        '''   Delete the given file, with options to show progress UI, delete to recycle bin,
+        '''   Delete the given file, with options to show <see cref="Internal.ProgressDialog"/>, delete to recycle bin,
         '''   and whether to throw exception if user cancels.
         ''' </summary>
         ''' <param name="file">The path to the file.</param>
@@ -551,7 +551,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Sub
 
         ''' <summary>
-        '''  Delete the given file, with options to show progress UI, delete to recycle bin.
+        '''  Delete the given file, with options to show <see cref="Internal.ProgressDialog"/>, delete to recycle bin.
         ''' </summary>
         ''' <param name="file">The path to the file.</param>
         ''' <param name="showUI">
