@@ -13,7 +13,7 @@ Namespace Microsoft.VisualBasic.MyServices
     '''  This class represents the <see cref="FileIO.FileSystem"/> on a computer.
     '''  It allows browsing the existing drives, special directories;
     '''  and also contains some commonly use methods for IO tasks.
-    '''  It exposes them through the type <see cref="My"/>
+    '''  It exposes them through the <see langword="Namespace"/> <see cref="My"/>
     ''' </summary>
     <EditorBrowsable(EditorBrowsableState.Never)>
     Public Class FileSystemProxy
@@ -54,7 +54,7 @@ Namespace Microsoft.VisualBasic.MyServices
         '''  specific to the current user (My Documents, My Music ...) and those specific
         '''  to the current Application that a developer expects to be able to find quickly.
         ''' </summary>
-        ''' <value>a cached instance of SpecialDirectoriesProxy</value>
+        ''' <value>a cached instance of <see cref="SpecialDirectoriesProxy"/></value>
         Public ReadOnly Property SpecialDirectories() As SpecialDirectoriesProxy
             Get
                 If _specialDirectoriesProxy Is Nothing Then
