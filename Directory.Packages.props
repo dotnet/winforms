@@ -5,6 +5,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="coverlet.msbuild" Version="$(CoverletMSBuildPackageVersion)" />
+    <PackageVersion Include="Codecov" Version="$(CodecovVersion)" />
     <PackageVersion Include="CSharpIsNullAnalyzer" Version="$(CSharpIsNullAnalyzersVersion)" />
     <PackageVersion Include="DotNetAnalyzers.DocumentationAnalyzers" Version="$(DotNetAnalyzersDocumentationAnalyzersVersion)" />
     <PackageVersion Include="FluentAssertions" Version="$(FluentAssertionsVersion)" />
@@ -41,6 +42,7 @@
     <PackageVersion Include="Moq" Version="$(MoqPackageVersion)" />
     <PackageVersion Include="Newtonsoft.Json" Version="$(NewtonsoftJsonVersion)" />
     <PackageVersion Include="NuGet.Packaging" Version="$(NugetPackagingVersion)" />
+    <PackageVersion Include="ReportGenerator" Version="$(ReportGeneratorVersion)" />
     <PackageVersion Include="StyleCop.Analyzers" Version="$(StyleCopAnalyzersVersion)" />
     <PackageVersion Include="System.CodeDom" Version="$(SystemCodeDomPackageVersion)" />
     <PackageVersion Include="System.Collections.Concurrent" Version="4.3.0" />
