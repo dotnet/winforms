@@ -475,17 +475,11 @@ public unsafe partial class DataObject
 
                 enumFORMATETC.Value->Reset();
 
-                Com.FORMATETC[] formatEtc = [default];
-                HRESULT hr;
+                Com.FORMATETC formatEtc = default;
 
-                fixed (Com.FORMATETC* pFormatEtc = formatEtc)
+                while (enumFORMATETC.Value->Next(1, &formatEtc) == HRESULT.S_OK)
                 {
-                    hr = enumFORMATETC.Value->Next(1, pFormatEtc);
-                }
-
-                if (hr == HRESULT.S_OK)
-                {
-                    string name = DataFormats.GetFormat(formatEtc[0].cfFormat).Name;
+                    string name = DataFormats.GetFormat(formatEtc.cfFormat).Name;
                     if (autoConvert)
                     {
                         string[] mappedFormats = GetMappedFormats(name)!;
@@ -498,6 +492,8 @@ public unsafe partial class DataObject
                     {
                         distinctFormats.Add(name);
                     }
+
+                    formatEtc = default;
                 }
 
                 return [.. distinctFormats];
@@ -524,7 +520,9 @@ public unsafe partial class DataObject
 
                 using var nativeDataObject = _nativeDataObject.GetInterface();
                 HRESULT hr = nativeDataObject.Value->QueryGetData(formatEtc);
-                return hr.Succeeded;
+
+                // APIs will return S_FALSE, which is "success"
+                return hr == HRESULT.S_OK;
             }
         }
     }

@@ -88,12 +88,10 @@ public partial class Control
                     throw new NotSupportedException(SR.AXTopLevelSource);
                 }
 
-                activeXImpl = new ActiveXImpl(this);
-
                 // PERF: IsActiveX is called quite a bit - checked everywhere from sizing to event raising. Using a
                 // state bit to track instead of fetching from the property store.
                 SetExtendedState(ExtendedStates.IsActiveX, true);
-                Properties.AddValue(s_activeXImplProperty, activeXImpl);
+                activeXImpl = Properties.AddValue(s_activeXImplProperty, new ActiveXImpl(this));
             }
 
             return activeXImpl;
