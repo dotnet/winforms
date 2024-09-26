@@ -5151,7 +5151,7 @@ public class ListViewTests
         SubListViewAccessibleObject accessibleObject = new(listView);
 
         int accessibilityProperty = listView.TestAccessor().Dynamic.s_accessibilityProperty;
-        listView.Properties.SetObject(accessibilityProperty, accessibleObject);
+        listView.Properties.AddValue(accessibilityProperty, accessibleObject);
         listView.AnnounceColumnHeader(new Point(15, 40));
         Assert.Equal(0, accessibleObject.RaiseAutomationNotificationCallCount);
         Assert.False(listView.IsHandleCreated);
@@ -5176,7 +5176,7 @@ public class ListViewTests
         SubListViewAccessibleObject accessibleObject = new(listView);
 
         int accessibilityProperty = listView.TestAccessor().Dynamic.s_accessibilityProperty;
-        listView.Properties.SetObject(accessibilityProperty, accessibleObject);
+        listView.Properties.AddValue(accessibilityProperty, accessibleObject);
         listView.AnnounceColumnHeader(new Point(15, 40));
         Assert.Equal(0, accessibleObject.RaiseAutomationNotificationCallCount);
         Assert.True(listView.IsHandleCreated);
@@ -5201,7 +5201,7 @@ public class ListViewTests
         SubListViewAccessibleObject accessibleObject = new(listView);
 
         int accessibilityProperty = listView.TestAccessor().Dynamic.s_accessibilityProperty;
-        listView.Properties.SetObject(accessibilityProperty, accessibleObject);
+        listView.Properties.AddValue(accessibilityProperty, accessibleObject);
         listView.AnnounceColumnHeader(new Point(10, 20));
         Assert.Equal(0, accessibleObject.RaiseAutomationNotificationCallCount);
         Assert.True(listView.IsHandleCreated);
@@ -5228,7 +5228,7 @@ public class ListViewTests
         SubListViewAccessibleObject accessibleObject = new(listView);
 
         int accessibilityProperty = listView.TestAccessor().Dynamic.s_accessibilityProperty;
-        listView.Properties.SetObject(accessibilityProperty, accessibleObject);
+        listView.Properties.AddValue(accessibilityProperty, accessibleObject);
         listView.AnnounceColumnHeader(new Point(x, y));
 
         Assert.Equal(1, accessibleObject.RaiseAutomationNotificationCallCount);
@@ -5402,7 +5402,7 @@ public class ListViewTests
         using SubListView listView = GetSubListViewWithData(view, virtualMode, showGroups, withinGroup, createControl);
         SubListViewAccessibleObject accessibleObject = new(listView);
         int accessibilityProperty = listView.TestAccessor().Dynamic.s_accessibilityProperty;
-        listView.Properties.SetObject(accessibilityProperty, accessibleObject);
+        listView.Properties.AddValue(accessibilityProperty, accessibleObject);
 
         listView.OnGroupCollapsedStateChanged(new ListViewGroupEventArgs(groupId));
 

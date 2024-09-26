@@ -282,7 +282,6 @@ public class ToolStripItemTests
 
     public static IEnumerable<object[]> AccessibilityObject_Get_TestData()
     {
-        yield return new object[] { null };
         yield return new object[] { new AccessibleObject() };
         yield return new object[] { new SubToolStripItem.ToolStripItemAccessibleObject(new SubToolStripItem()) };
     }
@@ -15648,7 +15647,7 @@ public class ToolStripItemTests
         public bool IsAccessibleObjectCleared()
         {
             var key = this.TestAccessor().Dynamic.s_accessibilityProperty;
-            return Properties.GetObject(key) is not AccessibleObject;
+            return !Properties.ContainsKey(key);
         }
     }
 }

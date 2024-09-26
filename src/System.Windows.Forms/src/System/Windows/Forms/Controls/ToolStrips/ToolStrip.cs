@@ -381,30 +381,25 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     {
         get
         {
-            BindingContext? bc = (BindingContext?)Properties.GetObject(s_propBindingContext);
-            if (bc is not null)
+            if (Properties.TryGetValue(s_propBindingContext, out BindingContext? context))
             {
-                return bc;
+                return context;
             }
 
-            // try the parent
-            Control? parent = ParentInternal;
-            if (parent is not null && parent.CanAccessProperties)
+            // Try the parent.
+            if (ParentInternal is { } parent && parent.CanAccessProperties)
             {
                 return parent.BindingContext;
             }
 
-            // we don't have a binding context
+            // We don't have a binding context.
             return null;
         }
-
         set
         {
-            if (Properties.GetObject(s_propBindingContext) != value)
+            if (Properties.AddOrRemoveValue(s_propBindingContext, value) != value)
             {
-                Properties.SetObject(s_propBindingContext, value);
-
-                // re-wire the bindings
+                // Re-wire the bindings.
                 OnBindingContextChanged(EventArgs.Empty);
             }
         }
@@ -415,10 +410,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     [SRCategory(nameof(SR.CatLayout))]
     public bool CanOverflow
     {
-        get
-        {
-            return GetToolStripState(STATE_CANOVERFLOW);
-        }
+        get => GetToolStripState(STATE_CANOVERFLOW);
         set
         {
             if (GetToolStripState(STATE_CANOVERFLOW) != value)
@@ -1426,25 +1418,11 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         remove => Events.RemoveHandler(s_eventPaintGrip, value);
     }
 
-    internal RestoreFocusMessageFilter RestoreFocusFilter
-    {
-        get
-        {
-            _restoreFocusFilter ??= new RestoreFocusMessageFilter(this);
+    internal RestoreFocusMessageFilter RestoreFocusFilter => _restoreFocusFilter ??= new RestoreFocusMessageFilter(this);
 
-            return _restoreFocusFilter;
-        }
-    }
+    internal ToolStripPanelCell? ToolStripPanelCell => ((ISupportToolStripPanel)this).ToolStripPanelCell;
 
-    internal ToolStripPanelCell? ToolStripPanelCell
-    {
-        get { return ((ISupportToolStripPanel)this).ToolStripPanelCell; }
-    }
-
-    internal ToolStripPanelRow? ToolStripPanelRow
-    {
-        get { return ((ISupportToolStripPanel)this).ToolStripPanelRow; }
-    }
+    internal ToolStripPanelRow? ToolStripPanelRow => ((ISupportToolStripPanel)this).ToolStripPanelRow;
 
     // fetches the Cell associated with this toolstrip.
     ToolStripPanelCell? ISupportToolStripPanel.ToolStripPanelCell
@@ -1452,13 +1430,9 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         get
         {
             ToolStripPanelCell? toolStripPanelCell = null;
-            if (!IsDropDown && !IsDisposed)
+            if (!IsDropDown && !IsDisposed && !Properties.TryGetValue(s_propToolStripPanelCell, out toolStripPanelCell))
             {
-                if (!Properties.TryGetObject(s_propToolStripPanelCell, out toolStripPanelCell))
-                {
-                    toolStripPanelCell = new ToolStripPanelCell(this);
-                    Properties.SetObject(s_propToolStripPanelCell, toolStripPanelCell);
-                }
+                toolStripPanelCell = Properties.AddValue(s_propToolStripPanelCell, new ToolStripPanelCell(this));
             }
 
             return toolStripPanelCell;
@@ -1467,47 +1441,46 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
 
     ToolStripPanelRow? ISupportToolStripPanel.ToolStripPanelRow
     {
-        get
-        {
-            return ToolStripPanelCell?.ToolStripPanelRow;
-        }
+        get => ToolStripPanelCell?.ToolStripPanelRow;
         set
         {
             ToolStripPanelRow? oldToolStripPanelRow = ToolStripPanelRow;
 
-            if (oldToolStripPanelRow != value)
+            if (oldToolStripPanelRow == value)
             {
-                ToolStripPanelCell? cell = ToolStripPanelCell;
-                if (cell is null)
-                {
-                    return;
-                }
+                return;
+            }
 
-                cell.ToolStripPanelRow = value;
+            ToolStripPanelCell? cell = ToolStripPanelCell;
+            if (cell is null)
+            {
+                return;
+            }
 
-                if (value is not null)
+            cell.ToolStripPanelRow = value;
+
+            if (value is not null)
+            {
+                if (oldToolStripPanelRow is null || oldToolStripPanelRow.Orientation != value.Orientation)
                 {
-                    if (oldToolStripPanelRow is null || oldToolStripPanelRow.Orientation != value.Orientation)
+                    if (_layoutStyle == ToolStripLayoutStyle.StackWithOverflow)
                     {
-                        if (_layoutStyle == ToolStripLayoutStyle.StackWithOverflow)
-                        {
-                            UpdateLayoutStyle(value.Orientation);
-                        }
-                        else
-                        {
-                            UpdateOrientation(value.Orientation);
-                        }
+                        UpdateLayoutStyle(value.Orientation);
+                    }
+                    else
+                    {
+                        UpdateOrientation(value.Orientation);
                     }
                 }
-                else
+            }
+            else
+            {
+                if (oldToolStripPanelRow is not null && oldToolStripPanelRow.ControlsInternal.Contains(this))
                 {
-                    if (oldToolStripPanelRow is not null && oldToolStripPanelRow.ControlsInternal.Contains(this))
-                    {
-                        oldToolStripPanelRow.ControlsInternal.Remove(this);
-                    }
-
-                    UpdateLayoutStyle(Dock);
+                    oldToolStripPanelRow.ControlsInternal.Remove(this);
                 }
+
+                UpdateLayoutStyle(Dock);
             }
         }
     }
@@ -1738,10 +1711,9 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     {
         get
         {
-            if (!Properties.TryGetObject(s_propToolTip, out ToolTip? toolTip) || toolTip is null)
+            if (!Properties.TryGetValue(s_propToolTip, out ToolTip? toolTip))
             {
-                toolTip = new ToolTip();
-                Properties.SetObject(s_propToolTip, toolTip);
+                toolTip = Properties.AddValue(s_propToolTip, new ToolTip());
             }
 
             return toolTip;
@@ -1755,11 +1727,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     {
         get
         {
-            ToolStripTextDirection textDirection = ToolStripTextDirection.Inherit;
-            if (Properties.TryGetObject(s_propTextDirection, out ToolStripTextDirection direction))
-            {
-                textDirection = direction;
-            }
+            ToolStripTextDirection textDirection = Properties.GetValueOrDefault(s_propTextDirection, ToolStripTextDirection.Horizontal);
 
             if (textDirection == ToolStripTextDirection.Inherit)
             {
@@ -1770,9 +1738,8 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         }
         set
         {
-            // valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(value);
-            Properties.SetObject(s_propTextDirection, value);
+            Properties.AddOrRemoveValue(s_propTextDirection, value, defaultValue: ToolStripTextDirection.Horizontal);
 
             using (new LayoutTransaction(this, this, "TextDirection"))
             {
@@ -1789,54 +1756,49 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     /// </summary>
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new VScrollProperties VerticalScroll
-    {
-        get => base.VerticalScroll;
-    }
+    public new VScrollProperties VerticalScroll => base.VerticalScroll;
 
-    void ISupportToolStripPanel.BeginDrag()
-    {
-        OnBeginDrag(EventArgs.Empty);
-    }
+    void ISupportToolStripPanel.BeginDrag() => OnBeginDrag(EventArgs.Empty);
 
-    // Internal so that it's not a public API.
     internal virtual void ChangeSelection(ToolStripItem? nextItem)
     {
-        if (nextItem is not null)
+        if (nextItem is null)
         {
-            ToolStripControlHost? controlHost = nextItem as ToolStripControlHost;
-            // if we contain focus, we should set focus to ourselves
-            // so we get the focus off the thing that's currently focused
-            // e.g. go from a text box to a toolstrip button
-            if (ContainsFocus && !Focused)
+            return;
+        }
+
+        ToolStripControlHost? controlHost = nextItem as ToolStripControlHost;
+        // if we contain focus, we should set focus to ourselves
+        // so we get the focus off the thing that's currently focused
+        // e.g. go from a text box to a toolstrip button
+        if (ContainsFocus && !Focused)
+        {
+            Focus();
+            if (controlHost is null)
             {
-                Focus();
-                if (controlHost is null)
-                {
-                    // if nextItem IS a toolstripcontrolhost, we're going to focus it anyways
-                    // we only fire KeyboardActive when "focusing" a non-hwnd backed item
-                    KeyboardActive = true;
-                }
+                // if nextItem IS a toolstripcontrolhost, we're going to focus it anyways
+                // we only fire KeyboardActive when "focusing" a non-hwnd backed item
+                KeyboardActive = true;
+            }
+        }
+
+        if (controlHost is not null)
+        {
+            if (_hwndThatLostFocus == IntPtr.Zero)
+            {
+                SnapFocus(PInvoke.GetFocus());
             }
 
-            if (controlHost is not null)
-            {
-                if (_hwndThatLostFocus == IntPtr.Zero)
-                {
-                    SnapFocus(PInvoke.GetFocus());
-                }
+            controlHost.Control.Select();
+            controlHost.Control.Focus();
+        }
 
-                controlHost.Control.Select();
-                controlHost.Control.Focus();
-            }
+        nextItem.Select();
 
-            nextItem.Select();
-
-            if (nextItem is ToolStripMenuItem tsNextItem && !IsDropDown)
-            {
-                // only toplevel menus auto expand when the selection changes.
-                tsNextItem.HandleAutoExpansion();
-            }
+        if (nextItem is ToolStripMenuItem tsNextItem && !IsDropDown)
+        {
+            // only toplevel menus auto expand when the selection changes.
+            tsNextItem.HandleAutoExpansion();
         }
     }
 
@@ -1970,27 +1932,31 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
                 SuspendLayout();
                 overflow?.SuspendLayout();
 
-                // if there's a problem in config, don't be a leaker.
+                // If there's a problem in config, don't be a leaker.
                 SetToolStripState(STATE_DISPOSINGITEMS, true);
                 _lastMouseDownedItem = null;
 
-                HookStaticEvents(/*hook=*/false);
+                HookStaticEvents(hook: false);
 
-                if (Properties.GetObject(s_propToolStripPanelCell) is ToolStripPanelCell toolStripPanelCell)
+                if (Properties.TryGetValue(s_propToolStripPanelCell, out ToolStripPanelCell? toolStripPanelCell))
                 {
                     toolStripPanelCell.Dispose();
+                    Properties.RemoveValue(s_propToolStripPanelCell);
                 }
 
                 _cachedItemHdcInfo?.Dispose();
 
                 _mouseHoverTimer?.Dispose();
 
-                ToolTip? toolTip = (ToolTip?)Properties.GetObject(s_propToolTip);
-                toolTip?.Dispose();
+                if (Properties.TryGetValue(s_propToolTip, out ToolTip? toolTip))
+                {
+                    toolTip.Dispose();
+                    Properties.RemoveValue(s_propToolTip);
+                }
 
                 if (!Items.IsReadOnly)
                 {
-                    // only dispose the items we actually own.
+                    // Only dispose the items we actually own.
                     for (int i = Items.Count - 1; i >= 0; i--)
                     {
                         Items[i].Dispose();
@@ -1999,21 +1965,19 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
                     Items.Clear();
                 }
 
-                // clean up items not in the Items list
+                // Clean up items not in the Items list.
                 _toolStripGrip?.Dispose();
 
                 _toolStripOverflowButton?.Dispose();
 
-                // remove the restore focus filter
+                // Remove the restore focus filter.
                 if (_restoreFocusFilter is not null)
                 {
-                    // PERF,
-
                     Application.ThreadContext.FromCurrent().RemoveMessageFilter(_restoreFocusFilter);
                     _restoreFocusFilter = null;
                 }
 
-                // exit menu mode if necessary.
+                // Exit menu mode if necessary.
                 bool exitMenuMode = false;
                 if (ToolStripManager.ModalMenuFilter.GetActiveToolStrip() == this)
                 {

@@ -271,12 +271,9 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
     {
         get
         {
-            ToolStripPanelRowCollection? rowCollection = (ToolStripPanelRowCollection?)Properties.GetObject(s_propToolStripPanelRowCollection);
-
-            if (rowCollection is null)
+            if (!Properties.TryGetValue(s_propToolStripPanelRowCollection, out ToolStripPanelRowCollection? rowCollection))
             {
-                rowCollection = CreateToolStripPanelRowCollection();
-                Properties.SetObject(s_propToolStripPanelRowCollection, rowCollection);
+                rowCollection = Properties.AddValue(s_propToolStripPanelRowCollection, CreateToolStripPanelRowCollection());
             }
 
             return rowCollection;

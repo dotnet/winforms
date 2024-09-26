@@ -9,7 +9,12 @@ namespace System.Windows.Forms;
 /// <summary>
 ///  Efficient property store that avoids boxing for common value types.
 /// </summary>
-internal class PropertyStore
+/// <remarks>
+///  <para>
+///   This class discourages storing <see langword="null"/> values.
+///  </para>
+/// </remarks>
+internal sealed class PropertyStore
 {
     private static int s_currentKey;
 
@@ -25,79 +30,34 @@ internal class PropertyStore
     /// </summary>
     public static int CreateKey() => s_currentKey++;
 
-    // REMOVE
-    /// <summary>
-    ///  Retrieves an object value from our property list.
-    ///  This will set value to null and return false if the
-    ///  list does not contain the given key.
-    /// </summary>
-    public object? GetObject(int key) => GetObject(key, out _);
-
-    // REMOVE
-    /// <summary>
-    ///  Retrieves an object value from our property list.
-    ///  This will set value to null and return false if the
-    ///  list does not contain the given key.
-    /// </summary>
-    /// <typeparam name="T">The type of object to retrieve.</typeparam>
-    /// <param name="key">The key corresponding to the object in the property list.</param>
-    /// <param name="value">Output parameter where the object will be set if found.
-    ///  Will be set to null if the key is not present.</param>
-    /// <remarks><para>If a null value is set for a given key
-    ///  it will return true and a null value.</para></remarks>
-    /// <returns>True if an object (including null) is found for the given key; otherwise, false.</returns>
-    public bool TryGetObject<T>(int key, out T? value)
-    {
-        object? entry = GetObject(key, out bool found);
-        Debug.Assert(!found || entry is null || entry is T, $"Entry is not of type {typeof(T)}, but of type {entry?.GetType()}");
-        if (typeof(T).IsValueType || typeof(T).IsEnum || typeof(T).IsPrimitive)
-        {
-            value = found && entry is not null ? (T?)entry : default;
-            return found;
-        }
-
-        value = found ? (T?)entry : default;
-        return found;
-    }
-
-    // REMOVE
-    public bool ContainsObjectThatIsNotNull(int key)
-    {
-        object? entry = GetObject(key, out bool found);
-        return found && entry is not null;
-    }
-
-    // REMOVE
-    /// <summary>
-    ///  Retrieves an object value from our property list.
-    ///  This will set value to null and return false if the
-    ///  list does not contain the given key.
-    /// </summary>
-    public object? GetObject(int key, out bool found)
-    {
-        found = _values.TryGetValue(key, out Value value);
-        return found ? value.GetValue<object?>() : null;
-    }
-
     /// <summary>
     ///  Removes the given key from the store.
     /// </summary>
     public void RemoveValue(int key) => _values.Remove(key);
 
-    // REMOVE
-    /// <summary>
-    ///  Stores the given value in the key.
-    /// </summary>
-    public void SetObject(int key, object? value) => _values[key] = new(value);
-
     /// <summary>
     ///  Gets the current value for the given key, or the <paramref name="defaultValue"/> if the key is not found.
+    ///  Does not allow stored values of <see langword="null"/>.
     /// </summary>
     public T? GetValueOrDefault<T>(int key, T? defaultValue = default)
     {
         if (_values.TryGetValue(key, out Value foundValue))
         {
             return foundValue.GetValue<T>();
+        }
+
+        return defaultValue;
+    }
+
+    /// <summary>
+    ///  Gets the current value for the given key, or the <paramref name="defaultValue"/> if the key is not found.
+    ///  If the stored value is <see langword="null"/>, it will return <see langword="null"/>.
+    /// </summary>
+    public T? GetValueOrDefaultAllowNull<T>(int key, T? defaultValue = default) where T : class?
+    {
+        if (_values.TryGetValue(key, out Value foundValue))
+        {
+            return foundValue.Type is null ? null : foundValue.GetValue<T>();
         }
 
         return defaultValue;
@@ -117,7 +77,8 @@ internal class PropertyStore
     }
 
     /// <summary>
-    ///  Tries to get the value for the given key.
+    ///  Tries to get the value for the given key. Use <see cref="TryGetValueOrNull{T}(int, out T)"/> if
+    ///  <see langword="null"/> values are allowed.
     /// </summary>
     /// <inheritdoc cref="TryGetValueOrNull{T}(int, out T)"/>
     public bool TryGetValue<T>(int key, [NotNullWhen(true)] out T? value)
@@ -132,10 +93,9 @@ internal class PropertyStore
         return false;
     }
 
-    // Ideally we can get rid of this one and just clear values when they are null.
-
     /// <summary>
-    ///  Tries to get the value for the given key, allowing explicitly set <see langword="null"/> values.
+    ///  Tries to get the value for the given key, allowing explicitly set <see langword="null"/> values. Prefer
+    ///  <see cref="TryGetValue{T}(int, out T)"/> if <see langword="null"/> values are not allowed.
     /// </summary>
     /// <param name="value">
     ///  <para>
@@ -147,7 +107,7 @@ internal class PropertyStore
     {
         if (_values.TryGetValue(key, out Value foundValue))
         {
-            value = foundValue.GetValue<T>();
+            value = foundValue.Type is null ? null : foundValue.GetValue<T>();
             return true;
         }
 
@@ -156,21 +116,31 @@ internal class PropertyStore
     }
 
     /// <summary>
-    ///  Previous will be `string.Empty` if not set. Setting `string.Empty` will clear the value.
+    ///  Setting <see langword="null"/> or <see cref="string.Empty"/> will clear the value.
     /// </summary>
-    public string AddOrRemoveString(int key, string? value)
+    /// <returns>
+    ///  <see langword="true"/> if the stored value was changed.
+    /// </returns>
+    public bool AddOrRemoveString(int key, string? value)
     {
-        TryGetValue(key, out string? previous);
+        bool found = TryGetValue(key, out string? previous);
+        bool changed = false;
+
         if (string.IsNullOrEmpty(value))
         {
-            _values.Remove(key);
+            if (found)
+            {
+                _values.Remove(key);
+                changed = true;
+            }
         }
-        else
+        else if (previous != value)
         {
             _values[key] = new(value);
+            changed = true;
         }
 
-        return previous ?? string.Empty;
+        return changed;
     }
 
     /// <summary>
@@ -181,7 +151,7 @@ internal class PropertyStore
     ///   Always explicitly set <paramref name="defaultValue"/> when using enums for clarity.
     ///  </para>
     /// </remarks>
-    /// <returns>The previous value if it was set, or <see langword="default"/>.</returns>
+    /// <returns>The previous value if it was set, or <paramref name="defaultValue"/>.</returns>
     public T? AddOrRemoveValue<T>(int key, T? value, T? defaultValue = default)
     {
         bool found = _values.TryGetValue(key, out Value foundValue);
@@ -189,7 +159,10 @@ internal class PropertyStore
         bool isDefault = (value is null && defaultValue is null)
             || (value is not null && value.Equals(defaultValue));
 
-        T? previous = found ? foundValue.GetValue<T>() : default;
+        // The previous should be whatever we found or what was specified as the default.
+        T? previous = found
+            ? foundValue.Type is null ? default : foundValue.GetValue<T>()
+            : defaultValue;
 
         if (isDefault)
         {
@@ -211,7 +184,8 @@ internal class PropertyStore
     /// <summary>
     ///  Adds the given value to the store.
     /// </summary>
-    public void AddValue<T>(int key, T value)
+    [return: NotNullIfNotNull(nameof(value))]
+    public T AddValue<T>(int key, T value)
     {
         // For value types that are larger than 8 bytes, we attempt to update the existing value
         // to avoid another boxing allocation.
@@ -228,6 +202,8 @@ internal class PropertyStore
         {
             _values[key] = Value.Create(value);
         }
+
+        return value;
     }
 
     private unsafe void AddOrUpdate<T>(int key, T value) where T : unmanaged
