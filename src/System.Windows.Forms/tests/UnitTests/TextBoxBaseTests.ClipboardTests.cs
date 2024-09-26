@@ -6,10 +6,8 @@ namespace System.Windows.Forms.Tests;
 public partial class TextBoxBaseTests
 {
     [Collection("Sequential")]
-    public class ClipboardTests
+    public class ClipboardTests : ClipboardTestBase
     {
-        private static void Sleep() => Thread.Sleep(100);
-
         [WinFormsFact]
         public void TextBoxBase_ClearUndo_CanUndo_Success()
         {
