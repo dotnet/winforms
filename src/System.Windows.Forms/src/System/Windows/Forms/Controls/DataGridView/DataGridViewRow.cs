@@ -166,11 +166,9 @@ public partial class DataGridViewRow : DataGridViewBand
         get => Properties.GetStringOrEmptyString(s_propRowErrorText);
         set
         {
-            string priorValue = Properties.AddOrRemoveString(s_propRowErrorText, value);
-
-            if (DataGridView is not null && !priorValue.Equals(value ?? string.Empty))
+            if (Properties.AddOrRemoveString(s_propRowErrorText, value))
             {
-                DataGridView.OnRowErrorTextChanged(this);
+                DataGridView?.OnRowErrorTextChanged(this);
             }
         }
     }

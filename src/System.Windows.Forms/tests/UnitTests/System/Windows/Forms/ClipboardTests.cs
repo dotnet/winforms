@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Ole;
 using Com = Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
 
@@ -592,5 +593,28 @@ public class ClipboardTests
         void IDataObject.SetData(Type format, object? data) => throw new NotImplementedException();
         void IDataObject.SetData(object? data) => throw new NotImplementedException();
         void ComTypes.IDataObject.SetData(ref ComTypes.FORMATETC formatIn, ref ComTypes.STGMEDIUM medium, bool release) => throw new NotImplementedException();
+    }
+
+    [DllImport("user32.dll")]
+    private static extern bool CloseClipboard();
+
+    [DllImport("user32.dll")]
+    private static extern bool OpenClipboard(HWND hWndNewOwner);
+
+    [DllImport("user32.dll")]
+    private static extern bool SetClipboardData(uint uFormat, HANDLE data);
+
+    [WinFormsFact]
+    public unsafe void Clipboard_RawClipboard_SetClipboardData_ReturnsExpected()
+    {
+        Clipboard.Clear();
+
+        OpenClipboard(HWND.Null).Should().BeTrue();
+        string testString = "test";
+        SetClipboardData((uint)CLIPBOARD_FORMAT.CF_UNICODETEXT, (HANDLE)Marshal.StringToHGlobalUni(testString));
+        CloseClipboard().Should().BeTrue();
+
+        DataObject dataObject = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Which;
+        dataObject.GetData(DataFormats.Text).Should().Be(testString);
     }
 }
