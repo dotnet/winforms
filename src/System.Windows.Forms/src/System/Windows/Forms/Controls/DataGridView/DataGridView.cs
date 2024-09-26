@@ -2947,18 +2947,16 @@ public partial class DataGridView : Control, ISupportInitialize
     {
         get
         {
-            if (Properties.TryGetObject(s_propToolTip, out ToolTip? toolTip))
+            if (!Properties.TryGetValue(s_propToolTip, out ToolTip? toolTip))
             {
-                return toolTip!;
+                toolTip = Properties.AddValue(
+                    s_propToolTip,
+                    new ToolTip
+                    {
+                        ReshowDelay = 500,
+                        InitialDelay = 500
+                    });
             }
-
-            toolTip = new ToolTip
-            {
-                ReshowDelay = 500,
-                InitialDelay = 500
-            };
-
-            Properties.SetObject(s_propToolTip, toolTip);
 
             return toolTip;
         }
