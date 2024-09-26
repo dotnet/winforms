@@ -3593,17 +3593,15 @@ public unsafe partial class Control :
     /// <summary>
     ///  Wait for the wait handle to receive a signal: throw an exception if the thread is no longer with us.
     /// </summary>
-    private unsafe void WaitForWaitHandle(WaitHandle waitHandle)
+    private unsafe void WaitForWaitHandle(WaitHandle waitHandle, Application.ThreadContext? threadContext)
     {
-        uint threadId = CreateThreadId;
-        Application.ThreadContext? ctx = Application.ThreadContext.FromId(threadId);
-        if (ctx is null)
+        if (threadContext is null)
         {
             // Couldn't find the thread context, so we don't know the state. We shouldn't throw.
             return;
         }
 
-        HANDLE threadHandle = ctx.Handle;
+        HANDLE threadHandle = threadContext.Handle;
         bool processed = false;
 
         // setting default exitcode to 0, though it won't be accessed in current code below due to short-circuit logic
@@ -5078,7 +5076,7 @@ public unsafe partial class Control :
             else
             {
                 marshaler = entry._marshaler;
-                marshaler.WaitForWaitHandle(asyncResult.AsyncWaitHandle);
+                marshaler.WaitForWaitHandle(asyncResult.AsyncWaitHandle, Application.ThreadContext.FromId(CreateThreadId));
             }
         }
 
@@ -6618,11 +6616,14 @@ public unsafe partial class Control :
 
         if (synchronous)
         {
-            if (!tme.IsCompleted)
+            // If we are synchronous but no message loop is running, don't block the thread.
+            if (!tme.IsCompleted
+                && Application.ThreadContext.FromId(CreateThreadId) is { } threadContext
+                && threadContext.GetMessageLoop())
             {
-                // In synchronous call we not need waitHandle after wait.
+                // In synchronous call we don't need waitHandle after wait.
                 using WaitHandle waitHandle = tme.AsyncWaitHandle;
-                WaitForWaitHandle(waitHandle);
+                WaitForWaitHandle(waitHandle, threadContext);
             }
 
             if (tme._exception is not null)
