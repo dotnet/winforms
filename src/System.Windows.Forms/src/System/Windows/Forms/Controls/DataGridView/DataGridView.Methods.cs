@@ -5732,10 +5732,9 @@ public partial class DataGridView
             _dataGridViewOper[OperationInDispose] = true;
             try
             {
-                if (Properties.TryGetObject(s_propToolTip, out ToolTip? keyboardToolTip))
+                if (Properties.TryGetValue(s_propToolTip, out ToolTip? keyboardToolTip))
                 {
-                    // null is never set for s_propToolTip
-                    keyboardToolTip!.Dispose();
+                    keyboardToolTip.Dispose();
                 }
 
                 // Remove any Columns contained in this control
