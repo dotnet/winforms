@@ -108,7 +108,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
     internal ToolStripMenuItem(Form mdiForm)
     {
         Initialize();
-        Properties.SetObject(s_propMdiForm, mdiForm);
+        Properties.AddOrRemoveValue(s_propMdiForm, mdiForm);
     }
 
     /// <summary>
@@ -477,7 +477,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
     internal static MenuTimer MenuTimer => s_menuTimer;
 
     /// <summary> Tag property for internal use </summary>
-    internal Form? MdiForm => Properties.TryGetObject(s_propMdiForm, out Form? form) ? form : null;
+    internal Form? MdiForm => Properties.GetValueOrDefault<Form>(s_propMdiForm);
 
     internal ToolStripMenuItem Clone()
     {
@@ -573,10 +573,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
                 }
 
                 _lastOwner = null;
-                if (MdiForm is not null)
-                {
-                    Properties.SetObject(s_propMdiForm, null);
-                }
+                Properties.RemoveValue(s_propMdiForm);
             }
         }
 

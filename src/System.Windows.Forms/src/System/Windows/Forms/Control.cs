@@ -431,7 +431,7 @@ public unsafe partial class Control :
             if (!Properties.TryGetValue(s_accessibilityProperty, out AccessibleObject? accessibleObject))
             {
                 accessibleObject = CreateAccessibilityInstance().OrThrowIfNull();
-                Properties.SetObject(s_accessibilityProperty, accessibleObject);
+                Properties.AddValue(s_accessibilityProperty, accessibleObject);
             }
 
             Debug.Assert(accessibleObject is not null, "Failed to create accessibility object");
@@ -450,7 +450,7 @@ public unsafe partial class Control :
             if (!Properties.TryGetValue(s_ncAccessibilityProperty, out AccessibleObject? ncAccessibleObject))
             {
                 ncAccessibleObject = new ControlAccessibleObject(this, (int)OBJECT_IDENTIFIER.OBJID_WINDOW);
-                Properties.SetObject(s_ncAccessibilityProperty, ncAccessibleObject);
+                Properties.AddValue(s_ncAccessibilityProperty, ncAccessibleObject);
             }
 
             Debug.Assert(ncAccessibleObject is not null, "Failed to create NON-CLIENT accessibility object");
@@ -564,11 +564,7 @@ public unsafe partial class Control :
     {
         get
         {
-            AmbientProperties? ambientProperties = (AmbientProperties?)Properties.GetObject(
-                s_ambientPropertiesServiceProperty,
-                out bool found);
-
-            if (found)
+            if (Properties.TryGetValueOrNull(s_ambientPropertiesServiceProperty, out AmbientProperties? ambientProperties))
             {
                 return ambientProperties;
             }
@@ -584,7 +580,7 @@ public unsafe partial class Control :
 
             if (ambientProperties is not null)
             {
-                Properties.SetObject(s_ambientPropertiesServiceProperty, ambientProperties);
+                Properties.AddValue(s_ambientPropertiesServiceProperty, ambientProperties);
             }
 
             return ambientProperties;
@@ -661,16 +657,8 @@ public unsafe partial class Control :
     [DefaultValue(typeof(Point), "0, 0")]
     public virtual Point AutoScrollOffset
     {
-        get => Properties.TryGetObject(s_autoScrollOffsetProperty, out Point point)
-            ? point
-            : Point.Empty;
-        set
-        {
-            if (AutoScrollOffset != value)
-            {
-                Properties.SetObject(s_autoScrollOffsetProperty, value);
-            }
-        }
+        get => Properties.GetValueOrDefault(s_autoScrollOffsetProperty, Point.Empty);
+        set => Properties.AddOrRemoveValue(s_autoScrollOffsetProperty, value, defaultValue: Point.Empty);
     }
 
     protected void SetAutoSizeMode(AutoSizeMode mode) => CommonProperties.SetAutoSizeMode(this, mode);
@@ -750,7 +738,7 @@ public unsafe partial class Control :
     [Bindable(true)]
     public virtual object? DataContext
     {
-        get => Properties.TryGetObject(s_dataContextProperty, out object? value)
+        get => Properties.TryGetValue(s_dataContextProperty, out object? value)
             ? value
             : ParentInternal?.DataContext;
         set
@@ -893,9 +881,7 @@ public unsafe partial class Control :
     [SRDescription(nameof(SR.ControlBackgroundImageLayoutDescr))]
     public virtual ImageLayout BackgroundImageLayout
     {
-        get => Properties.TryGetObject(s_backgroundImageLayoutProperty, out ImageLayout imageLayout)
-            ? imageLayout
-            : ImageLayout.Tile;
+        get => Properties.GetValueOrDefault(s_backgroundImageLayoutProperty, ImageLayout.Tile);
         set
         {
             if (BackgroundImageLayout == value)
@@ -903,7 +889,6 @@ public unsafe partial class Control :
                 return;
             }
 
-            // Valid values are 0x0 to 0x4
             SourceGenerated.EnumValidator.Validate(value);
 
             // Check if the value is either center, stretch or zoom;
@@ -918,7 +903,7 @@ public unsafe partial class Control :
                 }
             }
 
-            Properties.SetObject(s_backgroundImageLayoutProperty, value);
+            Properties.AddOrRemoveValue(s_backgroundImageLayoutProperty, value, defaultValue: ImageLayout.Tile);
             OnBackgroundImageLayoutChanged(EventArgs.Empty);
         }
     }
@@ -939,7 +924,7 @@ public unsafe partial class Control :
         {
             if (value != BecomingActiveControl)
             {
-                Application.ThreadContext.FromCurrent().ActivatingControl = (value) ? this : null;
+                Application.ThreadContext.FromCurrent().ActivatingControl = value ? this : null;
                 SetExtendedState(ExtendedStates.BecomingActiveControl, value);
             }
         }
@@ -1576,8 +1561,7 @@ public unsafe partial class Control :
 
             if (!Properties.TryGetValue(s_bindingsProperty, out ControlBindingsCollection? bindings))
             {
-                bindings = new ControlBindingsCollection(this);
-                Properties.SetObject(s_bindingsProperty, bindings);
+                bindings = Properties.AddValue(s_bindingsProperty, new ControlBindingsCollection(this));
             }
 
             return bindings;
@@ -1976,8 +1960,7 @@ public unsafe partial class Control :
             {
                 if (!Properties.TryGetValue(s_fontHandleWrapperProperty, out FontHandleWrapper? fontHandle))
                 {
-                    fontHandle = new FontHandleWrapper(font);
-                    Properties.AddValue(s_fontHandleWrapperProperty, fontHandle);
+                    fontHandle = Properties.AddValue(s_fontHandleWrapperProperty, new FontHandleWrapper(font));
                 }
 
                 return fontHandle.Handle;
@@ -2003,10 +1986,7 @@ public unsafe partial class Control :
 
                 if (fontHandle is null)
                 {
-                    font = ambientFont;
-                    fontHandle = new FontHandleWrapper(font);
-
-                    Properties.AddValue(s_fontHandleWrapperProperty, fontHandle);
+                    fontHandle = Properties.AddValue(s_fontHandleWrapperProperty, new FontHandleWrapper(ambientFont));
                 }
 
                 return fontHandle.Handle;
@@ -2028,9 +2008,7 @@ public unsafe partial class Control :
 
             if (TryGetExplicitlySetFont(out Font? font))
             {
-                fontHeight = font.Height;
-                Properties.AddValue(s_fontHeightProperty, fontHeight);
-                return fontHeight;
+                return Properties.AddValue(s_fontHeightProperty, font.Height);
             }
 
             // Ask the parent if it has the font height.
@@ -3049,7 +3027,7 @@ public unsafe partial class Control :
                     oldCursor = Cursor;
                 }
 
-                Properties.SetObject(s_ambientPropertiesServiceProperty, newAmbients);
+                Properties.AddValue(s_ambientPropertiesServiceProperty, newAmbients);
                 base.Site = value;
 
                 if (checkFont && !oldFont!.Equals(Font))
