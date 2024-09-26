@@ -486,16 +486,12 @@ public abstract partial class ToolStripItem :
     [SRDescription(nameof(SR.ControlBackgroundImageLayoutDescr))]
     public virtual ImageLayout BackgroundImageLayout
     {
-        get => Properties.TryGetObject(s_backgroundImageLayoutProperty, out ImageLayout imageLayout)
-            ? imageLayout
-            : ImageLayout.Tile;
+        get => Properties.GetValueOrDefault(s_backgroundImageLayoutProperty, ImageLayout.Tile);
         set
         {
-            if (BackgroundImageLayout != value)
+            SourceGenerated.EnumValidator.Validate(value);
+            if (Properties.AddOrRemoveValue(s_backgroundImageLayoutProperty, value, defaultValue: ImageLayout.Tile) != value)
             {
-                SourceGenerated.EnumValidator.Validate(value);
-
-                Properties.SetObject(s_backgroundImageLayoutProperty, value);
                 Invalidate();
             }
         }
@@ -527,7 +523,7 @@ public abstract partial class ToolStripItem :
         set
         {
             Color previous = BackColor;
-            Properties.AddOrRemoveValue(s_backColorProperty, value);
+            Properties.AddOrRemoveValue(s_backColorProperty, value, defaultValue: Color.Empty);
             if (!previous.Equals(BackColor))
             {
                 OnBackColorChanged(EventArgs.Empty);
@@ -1618,7 +1614,7 @@ public abstract partial class ToolStripItem :
     /// <summary>
     ///  Returns the value of the backColor field -- no asking the parent with its color is, etc.
     /// </summary>
-    internal Color RawBackColor => Properties.GetValueOrDefault<Color>(s_backColorProperty);
+    internal Color RawBackColor => Properties.GetValueOrDefault<Color>(s_backColorProperty, Color.Empty);
 
     /// <summary>
     ///  Returns the parent <see cref="ToolStrip"/>'s renderer
@@ -1854,8 +1850,8 @@ public abstract partial class ToolStripItem :
     [TypeConverter(typeof(StringConverter))]
     public object? Tag
     {
-        get => Properties.TryGetObject(s_tagProperty, out object? tag) ? tag : null;
-        set => Properties.SetObject(s_tagProperty, value);
+        get => Properties.GetValueOrDefault<object>(s_tagProperty);
+        set => Properties.AddOrRemoveValue(s_tagProperty, value);
     }
 
     /// <summary>
@@ -1867,14 +1863,11 @@ public abstract partial class ToolStripItem :
     [SRDescription(nameof(SR.ToolStripItemTextDescr))]
     public virtual string? Text
     {
-        get => Properties.TryGetObject(s_textProperty, out string? text)
-            ? text
-            : string.Empty;
+        get => Properties.TryGetValueOrNull(s_textProperty, out string? value) ? value : string.Empty;
         set
         {
-            if (value != Text)
+            if (Properties.AddOrRemoveValue(s_textProperty, value, defaultValue: string.Empty) != value)
             {
-                Properties.SetObject(s_textProperty, value);
                 OnTextChanged(EventArgs.Empty);
             }
         }
@@ -1916,17 +1909,13 @@ public abstract partial class ToolStripItem :
     {
         get
         {
-            ToolStripTextDirection textDirection = ToolStripTextDirection.Inherit;
-            if (Properties.TryGetObject(s_textDirectionProperty, out ToolStripTextDirection direction))
-            {
-                textDirection = direction;
-            }
+            ToolStripTextDirection textDirection = Properties.GetValueOrDefault(s_textDirectionProperty, ToolStripTextDirection.Inherit);
 
             if (textDirection == ToolStripTextDirection.Inherit)
             {
                 if (ParentInternal is not null)
                 {
-                    // in the case we're on a ToolStripOverflow
+                    // In the case we're on a ToolStripOverflow
                     textDirection = ParentInternal.TextDirection;
                 }
                 else
@@ -1940,8 +1929,7 @@ public abstract partial class ToolStripItem :
         set
         {
             SourceGenerated.EnumValidator.Validate(value);
-
-            Properties.SetObject(s_textDirectionProperty, value);
+            Properties.AddOrRemoveValue(s_textDirectionProperty, value, defaultValue: ToolStripTextDirection.Inherit);
             InvalidateItemLayout("TextDirection");
         }
     }
@@ -2987,11 +2975,7 @@ public abstract partial class ToolStripItem :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     internal void OnOwnerTextDirectionChanged()
     {
-        ToolStripTextDirection textDirection = ToolStripTextDirection.Inherit;
-        if (Properties.TryGetObject(s_textDirectionProperty, out ToolStripTextDirection direction))
-        {
-            textDirection = direction;
-        }
+        ToolStripTextDirection textDirection = Properties.GetValueOrDefault(s_textDirectionProperty, ToolStripTextDirection.Inherit);
 
         if (textDirection == ToolStripTextDirection.Inherit)
         {
@@ -3383,16 +3367,7 @@ public abstract partial class ToolStripItem :
         return rightToLeft != DefaultRightToLeft;
     }
 
-    private bool ShouldSerializeTextDirection()
-    {
-        ToolStripTextDirection textDirection = ToolStripTextDirection.Inherit;
-        if (Properties.TryGetObject(s_textDirectionProperty, out ToolStripTextDirection direction))
-        {
-            textDirection = direction;
-        }
-
-        return textDirection != ToolStripTextDirection.Inherit;
-    }
+    private bool ShouldSerializeTextDirection() => Properties.ContainsKey(s_textDirectionProperty);
 
     /// <summary>
     ///  Resets the back color to be based on the parent's back color.

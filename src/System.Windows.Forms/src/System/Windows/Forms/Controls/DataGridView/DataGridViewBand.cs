@@ -212,15 +212,9 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
     }
 
     [Browsable(false)]
-    public bool HasDefaultCellStyle
-    {
-        get => Properties.ContainsObjectThatIsNotNull(s_propDefaultCellStyle);
-    }
+    public bool HasDefaultCellStyle => Properties.ContainsKey(s_propDefaultCellStyle);
 
-    internal bool HasDefaultHeaderCellType
-    {
-        get => Properties.ContainsObjectThatIsNotNull(s_propDefaultHeaderCellType);
-    }
+    internal bool HasDefaultHeaderCellType => Properties.ContainsKey(s_propDefaultHeaderCellType);
 
     internal bool HasHeaderCell => Properties.ContainsKey(s_propHeaderCell);
 
@@ -864,19 +858,10 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
         base.OnDataGridViewChanged();
     }
 
-    private bool ShouldSerializeDefaultHeaderCellType()
-    {
-        return Properties.ContainsObjectThatIsNotNull(s_propDefaultHeaderCellType);
-    }
+    private bool ShouldSerializeDefaultHeaderCellType() => Properties.ContainsKey(s_propDefaultHeaderCellType);
 
     // internal because DataGridViewColumn needs to access it
-    internal bool ShouldSerializeResizable()
-    {
-        return (State & DataGridViewElementStates.ResizableSet) != 0;
-    }
+    internal bool ShouldSerializeResizable() => (State & DataGridViewElementStates.ResizableSet) != 0;
 
-    public override string ToString()
-    {
-        return $"DataGridViewBand {{ Index={Index} }}";
-    }
+    public override string ToString() => $"DataGridViewBand {{ Index={Index} }}";
 }

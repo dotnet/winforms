@@ -936,7 +936,6 @@ internal readonly partial struct Value
         if (_object is null)
         {
             value = default!;
-            result = typeof(T) == typeof(object);
         }
         else if (typeof(T) == typeof(char[]))
         {

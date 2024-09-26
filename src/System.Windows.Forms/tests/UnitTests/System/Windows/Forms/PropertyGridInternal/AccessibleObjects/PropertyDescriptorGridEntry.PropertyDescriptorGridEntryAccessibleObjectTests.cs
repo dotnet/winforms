@@ -16,7 +16,7 @@ public class PropertyDescriptorGridEntryAccessibleObjectTests
         using PropertyGridView propertyGridView = new(serviceProvider: null, propertyGrid);
 
         TestPropertyGridViewAccessibleObject accessibleObject = new(propertyGridView, parentPropertyGrid: null);
-        propertyGridView.Properties.SetObject(propertyGrid.TestAccessor().Dynamic.s_accessibilityProperty, accessibleObject);
+        propertyGridView.Properties.AddValue(propertyGrid.TestAccessor().Dynamic.s_accessibilityProperty, accessibleObject);
 
         TestPropertyDescriptorGridEntry gridEntry = new(propertyGrid, null, false);
         propertyGridView.TestAccessor().Dynamic._selectedGridEntry = gridEntry;

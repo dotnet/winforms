@@ -208,12 +208,9 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
         get => Properties.GetStringOrEmptyString(s_propCellErrorText);
         set
         {
-            string errorText = ErrorTextInternal;
-            Properties.AddOrRemoveString(s_propCellErrorText, value);
-
-            if (DataGridView is not null && !errorText.Equals(ErrorTextInternal))
+            if (Properties.AddOrRemoveString(s_propCellErrorText, value))
             {
-                DataGridView.OnCellErrorTextChanged(this);
+                DataGridView?.OnCellErrorTextChanged(this);
             }
         }
     }
@@ -280,9 +277,9 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     private bool HasErrorText => Properties.ContainsKey(s_propCellErrorText);
 
     [Browsable(false)]
-    public bool HasStyle => Properties.ContainsObjectThatIsNotNull(s_propCellStyle);
+    public bool HasStyle => Properties.ContainsKey(s_propCellStyle);
 
-    internal bool HasToolTipText => Properties.ContainsObjectThatIsNotNull(s_propCellToolTipText);
+    internal bool HasToolTipText => Properties.ContainsKey(s_propCellToolTipText);
 
     internal bool HasValue => Properties.ContainsKey(s_propCellValue);
 
@@ -681,10 +678,9 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
         get => Properties.GetStringOrEmptyString(s_propCellToolTipText);
         set
         {
-            string toolTipText = Properties.AddOrRemoveString(s_propCellToolTipText, value);
-            if (DataGridView is not null && !toolTipText.Equals(ToolTipTextInternal))
+            if (Properties.AddOrRemoveString(s_propCellToolTipText, value))
             {
-                DataGridView.OnCellToolTipTextChanged(this);
+                DataGridView?.OnCellToolTipTextChanged(this);
             }
         }
     }
