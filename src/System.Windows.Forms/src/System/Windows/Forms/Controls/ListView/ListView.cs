@@ -2248,11 +2248,11 @@ public partial class ListView : Control
     /// </summary>
     private void ApplyUpdateCachedItems()
     {
-        // first check if there is a delayed update array
-        if (Properties.TryGetObject(s_propDelayedUpdateItems, out List<ListViewItem>? newItems) && newItems is not null)
+        // First check if there is a delayed update array.
+        if (Properties.TryGetValue(s_propDelayedUpdateItems, out List<ListViewItem>? newItems))
         {
-            // if there is, clear it and push the items in.
-            Properties.SetObject(s_propDelayedUpdateItems, null);
+            // If there is, clear it and push the items in.
+            Properties.RemoveValue(s_propDelayedUpdateItems);
             if (newItems.Count > 0)
             {
                 InsertItems(_itemCount, [.. newItems], checkHosting: false);
@@ -2381,11 +2381,11 @@ public partial class ListView : Control
     {
         BeginUpdateInternal();
 
-        // if this is the first BeginUpdate call, push an ArrayList into the PropertyStore so
+        // If this is the first BeginUpdate call, push an ArrayList into the PropertyStore so
         // we can cache up any items that have been added while this is active.
-        if (_updateCounter++ == 0 && !Properties.ContainsObjectThatIsNotNull(s_propDelayedUpdateItems))
+        if (_updateCounter++ == 0 && !Properties.ContainsKey(s_propDelayedUpdateItems))
         {
-            Properties.SetObject(s_propDelayedUpdateItems, new List<ListViewItem>());
+            Properties.AddValue(s_propDelayedUpdateItems, new List<ListViewItem>());
         }
     }
 
@@ -3205,7 +3205,7 @@ public partial class ListView : Control
     {
         // On the final EndUpdate, check to see if we've got any cached items.
         // If we do, insert them as normal, then turn off the painting freeze.
-        if (--_updateCounter == 0 && Properties.ContainsObjectThatIsNotNull(s_propDelayedUpdateItems))
+        if (--_updateCounter == 0 && Properties.ContainsKey(s_propDelayedUpdateItems))
         {
             ApplyUpdateCachedItems();
         }
@@ -4087,7 +4087,7 @@ public partial class ListView : Control
 
         // if we're in the middle of a Begin/EndUpdate, just push the items into our array list
         // as they'll get processed on EndUpdate.
-        if (_updateCounter > 0 && Properties.TryGetObject(s_propDelayedUpdateItems, out List<ListViewItem>? itemList) && itemList is not null)
+        if (_updateCounter > 0 && Properties.TryGetValue(s_propDelayedUpdateItems, out List<ListViewItem>? itemList))
         {
             // CheckHosting.
             if (checkHosting)

@@ -89,36 +89,21 @@ public partial class ToolStripPanelRow : Component, IArrangedElement
     {
         get
         {
-            ToolStripPanelRowControlCollection? controlsCollection = (ToolStripPanelRowControlCollection?)Properties.GetObject(s_propControlsCollection);
-
-            if (controlsCollection is null)
+            if (!Properties.TryGetValue(s_propControlsCollection, out ToolStripPanelRowControlCollection? controlsCollection))
             {
-                controlsCollection = CreateControlsInstance();
-                Properties.SetObject(s_propControlsCollection, controlsCollection);
+                controlsCollection = Properties.AddValue(s_propControlsCollection, CreateControlsInstance());
             }
 
             return controlsCollection;
         }
     }
 
-    internal ArrangedElementCollection Cells
-    {
-        get
-        {
-            return ControlsInternal.Cells;
-        }
-    }
+    internal ArrangedElementCollection Cells => ControlsInternal.Cells;
 
     internal bool CachedBoundsMode
     {
-        get
-        {
-            return _state[s_stateCachedBoundsMode];
-        }
-        set
-        {
-            _state[s_stateCachedBoundsMode] = value;
-        }
+        get => _state[s_stateCachedBoundsMode];
+        set => _state[s_stateCachedBoundsMode] = value;
     }
 
     private ToolStripPanelRowManager RowManager
