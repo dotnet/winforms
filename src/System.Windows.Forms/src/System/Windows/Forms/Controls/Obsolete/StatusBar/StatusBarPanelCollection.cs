@@ -16,7 +16,9 @@ public partial class StatusBar
     [EditorBrowsable(EditorBrowsableState.Never)]
     public class StatusBarPanelCollection : IList
     {
-        public StatusBarPanelCollection(StatusBar owner) => throw new PlatformNotSupportedException();
+        public StatusBarPanelCollection(StatusBar owner)
+        {
+        }
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]

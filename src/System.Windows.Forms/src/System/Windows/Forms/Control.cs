@@ -12845,4 +12845,26 @@ public unsafe partial class Control :
     internal HWND HWND => (HWND)Handle;
 
     internal virtual bool AllowsChildrenToShowToolTips() => true;
+
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+#pragma warning disable WFDEV005 // Type or member is obsolete
+    public virtual ContextMenu? ContextMenu
+#pragma warning restore WFDEV005 // Type or member is obsolete
+    {
+        get;
+        set;
+    }
+
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public event EventHandler ContextMenuChanged
+    {
+        add => throw new PlatformNotSupportedException();
+        remove => throw new PlatformNotSupportedException();
+    }
+
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    protected virtual void OnContextMenuChanged(EventArgs e) => throw new PlatformNotSupportedException();
 }

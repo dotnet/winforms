@@ -13,19 +13,11 @@ namespace System.Windows.Forms;
 [EditorBrowsable(EditorBrowsableState.Never)]
 public class DataGridTextBox : TextBox
 {
-    public DataGridTextBox() => throw new PlatformNotSupportedException();
+    public DataGridTextBox()
+    {
+    }
 
     public void SetDataGrid(DataGrid parentGrid) => throw new PlatformNotSupportedException();
-
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-    protected void WndProc(ref Message m) => throw new PlatformNotSupportedException();
-
-    protected void OnMouseWheel(MouseEventArgs e) => throw new PlatformNotSupportedException();
-
-    protected void OnKeyPress(KeyPressEventArgs e) => throw new PlatformNotSupportedException();
-
-    protected internal bool ProcessKeyMessage(ref Message m) => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]

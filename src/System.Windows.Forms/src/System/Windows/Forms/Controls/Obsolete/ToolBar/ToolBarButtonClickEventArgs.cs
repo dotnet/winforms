@@ -13,7 +13,9 @@ namespace System.Windows.Forms;
 [EditorBrowsable(EditorBrowsableState.Never)]
 public class ToolBarButtonClickEventArgs : EventArgs
 {
-    public ToolBarButtonClickEventArgs(ToolBarButton button) => throw new PlatformNotSupportedException();
+    public ToolBarButtonClickEventArgs(ToolBarButton button)
+    {
+    }
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]

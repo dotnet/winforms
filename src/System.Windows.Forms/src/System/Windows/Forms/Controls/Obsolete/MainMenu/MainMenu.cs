@@ -13,11 +13,17 @@ namespace System.Windows.Forms;
     EditorBrowsable(EditorBrowsableState.Never)]
 public class MainMenu : Menu
 {
-    public MainMenu() : base(items: null) => throw new PlatformNotSupportedException();
+    public MainMenu() : base(items: null)
+    {
+    }
 
-    public MainMenu(IContainer container) : this() => throw new PlatformNotSupportedException();
+    public MainMenu(IContainer container) : this()
+    {
+    }
 
-    public MainMenu(MenuItem[] items) : base(items: items) => throw new PlatformNotSupportedException();
+    public MainMenu(MenuItem[] items) : base(items: items)
+    {
+    }
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -38,8 +44,4 @@ public class MainMenu : Menu
     public virtual MainMenu CloneMenu() => throw new PlatformNotSupportedException();
 
     public Form GetForm() => throw new PlatformNotSupportedException();
-
-#pragma warning disable CS0108 // Member hides inherited member; missing new keyword
-    public string ToString() => throw new PlatformNotSupportedException();
-#pragma warning restore CS0108
 }

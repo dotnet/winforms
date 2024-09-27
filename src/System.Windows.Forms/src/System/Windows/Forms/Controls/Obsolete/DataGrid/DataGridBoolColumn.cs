@@ -14,11 +14,17 @@ namespace System.Windows.Forms;
 [EditorBrowsable(EditorBrowsableState.Never)]
 public class DataGridBoolColumn : DataGridColumnStyle
 {
-    public DataGridBoolColumn() => throw new PlatformNotSupportedException();
+    public DataGridBoolColumn()
+    {
+    }
 
-    public DataGridBoolColumn(PropertyDescriptor prop) => throw new PlatformNotSupportedException();
+    public DataGridBoolColumn(PropertyDescriptor prop)
+    {
+    }
 
-    public DataGridBoolColumn(PropertyDescriptor prop, bool isDefault) => throw new PlatformNotSupportedException();
+    public DataGridBoolColumn(PropertyDescriptor prop, bool isDefault)
+    {
+    }
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -76,14 +82,6 @@ public class DataGridBoolColumn : DataGridColumnStyle
         set => throw new PlatformNotSupportedException();
     }
 
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-    protected internal void ConcedeFocus() => throw new PlatformNotSupportedException();
-
-    protected internal object GetColumnValueAtRow(CurrencyManager source, int rowNum) => throw new PlatformNotSupportedException();
-
-    protected internal void SetColumnValueAtRow(CurrencyManager source, int rowNum, object value) => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114
-
     protected internal override Size GetPreferredSize(Graphics g, object value) => throw new PlatformNotSupportedException();
 
     protected internal override int GetMinimumHeight() => throw new PlatformNotSupportedException();
@@ -112,16 +110,4 @@ public class DataGridBoolColumn : DataGridColumnStyle
         Rectangle bounds,
         CurrencyManager source,
         int rowNum) => throw new PlatformNotSupportedException();
-
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-    protected internal void Paint(Graphics g,
-        Rectangle bounds,
-        CurrencyManager source,
-        int rowNum,
-        Brush backBrush,
-        Brush foreBrush,
-        bool alignToRight) => throw new PlatformNotSupportedException();
-
-    protected internal void EnterNullValue() => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114
 }

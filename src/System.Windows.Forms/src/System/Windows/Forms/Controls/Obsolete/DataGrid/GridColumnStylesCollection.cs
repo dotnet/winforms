@@ -49,10 +49,6 @@ public class GridColumnStylesCollection : BaseCollection, IList
 
     IEnumerator IEnumerable.GetEnumerator() => throw new PlatformNotSupportedException();
 
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-    protected ArrayList List => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114
-
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public DataGridColumnStyle this[int index] => throw new PlatformNotSupportedException();

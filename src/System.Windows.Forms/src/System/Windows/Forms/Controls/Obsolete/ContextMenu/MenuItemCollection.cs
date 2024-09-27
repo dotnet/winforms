@@ -17,7 +17,9 @@ public abstract partial class Menu
     [ListBindable(false)]
     public class MenuItemCollection : IList
     {
-        public MenuItemCollection(Menu owner) => throw new PlatformNotSupportedException();
+        public MenuItemCollection(Menu owner)
+        {
+        }
 
         public virtual MenuItem this[int index] => throw new PlatformNotSupportedException();
 

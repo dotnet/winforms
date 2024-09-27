@@ -16,9 +16,13 @@ namespace System.Windows.Forms;
 [EditorBrowsable(EditorBrowsableState.Never)]
 public abstract class DataGridColumnStyle : Component, IDataGridColumnStyleEditingNotificationService
 {
-    public DataGridColumnStyle() => throw new PlatformNotSupportedException();
+    public DataGridColumnStyle()
+    {
+    }
 
-    public DataGridColumnStyle(PropertyDescriptor prop) => throw new PlatformNotSupportedException();
+    public DataGridColumnStyle(PropertyDescriptor prop)
+    {
+    }
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -245,17 +249,5 @@ public abstract class DataGridColumnStyle : Component, IDataGridColumnStyleEditi
         public DataGridColumnHeaderAccessibleObject() => throw new PlatformNotSupportedException();
 
         protected DataGridColumnStyle Owner => throw new PlatformNotSupportedException();
-
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-        public Rectangle Bounds => throw new PlatformNotSupportedException();
-
-        public string Name => throw new PlatformNotSupportedException();
-
-        public AccessibleObject Parent => throw new PlatformNotSupportedException();
-
-        public AccessibleRole Role => throw new PlatformNotSupportedException();
-
-        public AccessibleObject Navigate(AccessibleNavigation navdir) => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114
     }
 }

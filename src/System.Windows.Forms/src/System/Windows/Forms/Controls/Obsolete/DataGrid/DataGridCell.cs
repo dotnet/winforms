@@ -40,14 +40,6 @@ public struct DataGridCell : IEquatable<DataGridCell>
 
     public DataGridCell(int r, int c) => throw new PlatformNotSupportedException();
 
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-    public readonly bool Equals(object obj) => throw new PlatformNotSupportedException();
-
-    public readonly int GetHashCode() => throw new PlatformNotSupportedException();
-
-    public readonly string ToString() => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114
-
     public readonly bool Equals(DataGridCell other) => throw new PlatformNotSupportedException();
 
     public static bool operator == (DataGridCell left, DataGridCell right) => throw new PlatformNotSupportedException();

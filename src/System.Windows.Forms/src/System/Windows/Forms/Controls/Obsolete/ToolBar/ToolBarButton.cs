@@ -14,9 +14,13 @@ namespace System.Windows.Forms;
 [EditorBrowsable(EditorBrowsableState.Never)]
 public class ToolBarButton : Component
 {
-    public ToolBarButton() => throw new PlatformNotSupportedException();
+    public ToolBarButton()
+    {
+    }
 
-    public ToolBarButton(string text) => throw new PlatformNotSupportedException();
+    public ToolBarButton(string text)
+    {
+    }
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -121,8 +125,4 @@ public class ToolBarButton : Component
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
     }
-
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-    public string ToString() => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114
 }

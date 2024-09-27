@@ -26,13 +26,5 @@ public partial class DataGrid
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public HitTestType Type => throw new PlatformNotSupportedException();
-
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-        public bool Equals(object obj) => throw new PlatformNotSupportedException();
-
-        public int GetHashCode() => throw new PlatformNotSupportedException();
-
-        public string ToString() => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114
     }
 }

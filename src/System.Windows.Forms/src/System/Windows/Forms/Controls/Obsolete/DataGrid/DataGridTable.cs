@@ -443,8 +443,4 @@ public class DataGridTableStyle : Component, IDataGridEditingService
     protected virtual void OnSelectionForeColorChanged(EventArgs e) => throw new PlatformNotSupportedException();
 
     protected virtual void OnSelectionBackColorChanged(EventArgs e) => throw new PlatformNotSupportedException();
-
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-    protected void Dispose(bool disposing) => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114
 }

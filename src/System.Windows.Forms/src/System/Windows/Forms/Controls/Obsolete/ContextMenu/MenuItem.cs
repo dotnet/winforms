@@ -21,7 +21,9 @@ public class MenuItem : Menu
         onClick: null,
         onPopup: null,
         onSelect: null,
-        items: null) => throw new PlatformNotSupportedException();
+        items: null)
+    {
+    }
 
     public MenuItem(string text) : this(mergeType: MenuMerge.Add,
         mergeOrder: 0,
@@ -30,7 +32,9 @@ public class MenuItem : Menu
         onClick: null,
         onPopup: null,
         onSelect: null,
-        items: null) => throw new PlatformNotSupportedException();
+        items: null)
+    {
+    }
 
     public MenuItem(string text, EventHandler onClick) : this(mergeType: MenuMerge.Add,
         mergeOrder: 0,
@@ -39,7 +43,9 @@ public class MenuItem : Menu
         onClick: onClick,
         onPopup: null,
         onSelect: null,
-        items: null) => throw new PlatformNotSupportedException();
+        items: null)
+    {
+    }
 
     public MenuItem(string text, EventHandler onClick, Shortcut shortcut) : this(mergeType: MenuMerge.Add,
         mergeOrder: 0,
@@ -48,7 +54,9 @@ public class MenuItem : Menu
         onClick: onClick,
         onPopup: null,
         onSelect: null,
-        items: null) => throw new PlatformNotSupportedException();
+        items: null)
+    {
+    }
 
     public MenuItem(string text, MenuItem[] items) : this(mergeType: MenuMerge.Add,
         mergeOrder: 0,
@@ -57,7 +65,9 @@ public class MenuItem : Menu
         onClick: null,
         onPopup: null,
         onSelect: null,
-        items: items) => throw new PlatformNotSupportedException();
+        items: items)
+    {
+    }
 
     public MenuItem(MenuMerge mergeType,
         int mergeOrder,
@@ -66,7 +76,9 @@ public class MenuItem : Menu
         EventHandler onClick,
         EventHandler onPopup,
         EventHandler onSelect,
-        MenuItem[] items) : base(items: items) => throw new PlatformNotSupportedException();
+        MenuItem[] items) : base(items: items)
+    {
+    }
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -123,12 +135,6 @@ public class MenuItem : Menu
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
     }
-
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-    public bool IsParent => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -267,8 +273,4 @@ public class MenuItem : Menu
     public void PerformClick() => throw new PlatformNotSupportedException();
 
     public virtual void PerformSelect() => throw new PlatformNotSupportedException();
-
-#pragma warning disable CS0108 // Member hides inherited member; missing new keyword
-    public string ToString() => throw new PlatformNotSupportedException();
-#pragma warning restore CS0108
 }

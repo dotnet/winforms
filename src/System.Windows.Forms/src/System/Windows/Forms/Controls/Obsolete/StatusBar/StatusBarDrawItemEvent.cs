@@ -23,7 +23,9 @@ public class StatusBarDrawItemEventArgs : DrawItemEventArgs
             font: font,
             rect: r,
             index: itemId,
-            state: itemState) => throw new PlatformNotSupportedException();
+            state: itemState)
+    {
+    }
 
     public StatusBarDrawItemEventArgs(Graphics g,
         Font font,
@@ -38,7 +40,9 @@ public class StatusBarDrawItemEventArgs : DrawItemEventArgs
             index: itemId,
             state: itemState,
             foreColor: foreColor,
-            backColor: backColor) => throw new PlatformNotSupportedException();
+            backColor: backColor)
+    {
+    }
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]

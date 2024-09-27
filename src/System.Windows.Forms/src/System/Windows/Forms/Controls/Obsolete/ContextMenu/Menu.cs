@@ -17,7 +17,9 @@ public abstract partial class Menu : Component
     public const int FindHandle = 0;
     public const int FindShortcut = 1;
 
-    protected Menu(MenuItem[] items) => throw new PlatformNotSupportedException();
+    protected Menu(MenuItem[] items)
+    {
+    }
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -58,8 +60,4 @@ public abstract partial class Menu : Component
     public MainMenu GetMainMenu() => throw new PlatformNotSupportedException();
 
     public virtual void MergeMenu(Menu menuSrc) => throw new PlatformNotSupportedException();
-
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-    public string ToString() => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114
 }

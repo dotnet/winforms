@@ -16,7 +16,9 @@ public partial class ToolBar
     [EditorBrowsable(EditorBrowsableState.Never)]
     public class ToolBarButtonCollection : IList
     {
-        public ToolBarButtonCollection(ToolBar owner) => throw new PlatformNotSupportedException();
+        public ToolBarButtonCollection(ToolBar owner)
+        {
+        }
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
