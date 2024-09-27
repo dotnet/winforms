@@ -10,13 +10,17 @@ namespace System.Windows.Forms;
     Obsoletions.ContextMenuMessage,
     error: false,
     DiagnosticId = Obsoletions.ContextMenuDiagnosticId,
-    UrlFormat = Obsoletions.SharedUrlFormat),
-    EditorBrowsable(EditorBrowsableState.Never)]
+    UrlFormat = Obsoletions.SharedUrlFormat)]
+[EditorBrowsable(EditorBrowsableState.Never)]
 public class ContextMenu : Menu
 {
-    public ContextMenu() : base(items: null) => throw new PlatformNotSupportedException();
+    public ContextMenu() : base(items: null)
+    {
+    }
 
-    public ContextMenu(MenuItem[] menuItems) : base(items: menuItems) => throw new PlatformNotSupportedException();
+    public ContextMenu(MenuItem[] menuItems) : base(items: menuItems)
+    {
+    }
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]

@@ -15,21 +15,13 @@ namespace System.Windows.Forms;
 [EditorBrowsable(EditorBrowsableState.Never)]
 public partial class ToolBar : Control
 {
-    public ToolBar() => throw new PlatformNotSupportedException();
-
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public ToolBarAppearance Appearance
+    public ToolBar()
     {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
     }
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-    public bool AutoSize
-#pragma warning restore CS0114
+    public ToolBarAppearance Appearance
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
@@ -45,16 +37,6 @@ public partial class ToolBar : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-    public Color BackColor
-#pragma warning restore CS0114
-    {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
-    }
-
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public new event EventHandler BackColorChanged
     {
         add => throw new PlatformNotSupportedException();
@@ -63,30 +45,10 @@ public partial class ToolBar : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-    public Image BackgroundImage
-#pragma warning restore CS0114
-    {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
-    }
-
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public new event EventHandler BackgroundImageChanged
     {
         add => throw new PlatformNotSupportedException();
         remove => throw new PlatformNotSupportedException();
-    }
-
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-    public ImageLayout BackgroundImageLayout
-#pragma warning restore CS0114
-    {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
     }
 
     [Browsable(false)]
@@ -127,27 +89,7 @@ public partial class ToolBar : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-    public DockStyle Dock
-#pragma warning restore CS0114
-    {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
-    }
-
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public bool DropDownArrows
-    {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
-    }
-
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-    public Color ForeColor
-#pragma warning restore CS0114
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
@@ -191,16 +133,6 @@ public partial class ToolBar : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-    public RightToLeft RightToLeft
-#pragma warning restore CS0114
-    {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
-    }
-
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public new event EventHandler RightToLeftChanged
     {
         add => throw new PlatformNotSupportedException();
@@ -218,16 +150,6 @@ public partial class ToolBar : Control
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public new bool TabStop
-    {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
-    }
-
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-    public string Text
-#pragma warning restore CS0114
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
@@ -280,10 +202,6 @@ public partial class ToolBar : Control
         add => throw new PlatformNotSupportedException();
         remove => throw new PlatformNotSupportedException();
     }
-
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-    public string ToString() => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114
 
     protected virtual void OnButtonClick(ToolBarButtonClickEventArgs e) => throw new PlatformNotSupportedException();
 
