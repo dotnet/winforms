@@ -15,7 +15,9 @@ namespace System.Windows.Forms;
 [EditorBrowsable(EditorBrowsableState.Never)]
 public partial class DataGrid : Control, ISupportInitialize, IDataGridEditingService
 {
-    public DataGrid() => throw new PlatformNotSupportedException();
+    public DataGrid()
+    {
+    }
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -43,24 +45,6 @@ public partial class DataGrid : Control, ISupportInitialize, IDataGridEditingSer
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-    public Color BackColor
-    {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
-    }
-
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public Color ForeColor
-    {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
-    }
-#pragma warning restore CS0114
-
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public BorderStyle BorderStyle
     {
         get => throw new PlatformNotSupportedException();
@@ -74,10 +58,6 @@ public partial class DataGrid : Control, ISupportInitialize, IDataGridEditingSer
         add => throw new PlatformNotSupportedException();
         remove => throw new PlatformNotSupportedException();
     }
-
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-    protected Size DefaultSize => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -281,12 +261,6 @@ public partial class DataGrid : Control, ISupportInitialize, IDataGridEditingSer
 
     public void ResetAlternatingBackColor() => throw new PlatformNotSupportedException();
 
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-    public void ResetBackColor() => throw new PlatformNotSupportedException();
-
-    public void ResetForeColor() => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114
-
     public void ResetGridLineColor() => throw new PlatformNotSupportedException();
 
     public void ResetHeaderBackColor() => throw new PlatformNotSupportedException();
@@ -363,38 +337,10 @@ public partial class DataGrid : Control, ISupportInitialize, IDataGridEditingSer
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-    public Cursor Cursor
-#pragma warning restore CS0114
-    {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
-    }
-
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public new event EventHandler CursorChanged
     {
         add => throw new PlatformNotSupportedException();
         remove => throw new PlatformNotSupportedException();
-    }
-
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-    public Image BackgroundImage
-    {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
-    }
-
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public ImageLayout BackgroundImageLayout
-#pragma warning restore CS0114
-    {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
     }
 
     [Browsable(false)]
@@ -509,16 +455,6 @@ public partial class DataGrid : Control, ISupportInitialize, IDataGridEditingSer
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-    public string Text
-#pragma warning restore CS0114
-    {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
-    }
-
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public new event EventHandler TextChanged
     {
         add => throw new PlatformNotSupportedException();
@@ -581,51 +517,9 @@ public partial class DataGrid : Control, ISupportInitialize, IDataGridEditingSer
 
     protected void OnBackButtonClicked(object sender, EventArgs e) => throw new PlatformNotSupportedException();
 
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-    protected void OnBackColorChanged(EventArgs e) => throw new PlatformNotSupportedException();
-
-    protected void OnBindingContextChanged(EventArgs e) => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114
-
     protected virtual void OnDataSourceChanged(EventArgs e) => throw new PlatformNotSupportedException();
 
     protected void OnShowParentDetailsButtonClicked(object sender, EventArgs e) => throw new PlatformNotSupportedException();
-
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-    protected void OnForeColorChanged(EventArgs e) => throw new PlatformNotSupportedException();
-
-    protected void OnFontChanged(EventArgs e) => throw new PlatformNotSupportedException();
-
-    protected void OnPaintBackground(PaintEventArgs pevent) => throw new PlatformNotSupportedException();
-
-    protected void OnLayout(LayoutEventArgs levent) => throw new PlatformNotSupportedException();
-
-    protected void OnHandleCreated(EventArgs e) => throw new PlatformNotSupportedException();
-
-    protected void OnHandleDestroyed(EventArgs e) => throw new PlatformNotSupportedException();
-
-    protected internal void OnEnter(EventArgs e) => throw new PlatformNotSupportedException();
-
-    protected internal void OnLeave(EventArgs e) => throw new PlatformNotSupportedException();
-
-    protected void OnKeyDown(KeyEventArgs e) => throw new PlatformNotSupportedException();
-
-    protected void OnKeyPress(KeyPressEventArgs e) => throw new PlatformNotSupportedException();
-
-    protected void OnMouseDown(MouseEventArgs e) => throw new PlatformNotSupportedException();
-
-    protected void OnMouseLeave(EventArgs e) => throw new PlatformNotSupportedException();
-
-    protected void OnMouseMove(MouseEventArgs e) => throw new PlatformNotSupportedException();
-
-    protected void OnMouseUp(MouseEventArgs e) => throw new PlatformNotSupportedException();
-
-    protected void OnMouseWheel(MouseEventArgs e) => throw new PlatformNotSupportedException();
-
-    protected void OnPaint(PaintEventArgs e) => throw new PlatformNotSupportedException();
-
-    protected void OnResize(EventArgs e) => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -651,27 +545,11 @@ public partial class DataGrid : Control, ISupportInitialize, IDataGridEditingSer
         remove => throw new PlatformNotSupportedException();
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-    public ISite Site
-#pragma warning restore CS0114
-    {
-        get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
-    }
-
     public bool BeginEdit(DataGridColumnStyle gridColumn, int rowNumber) => throw new PlatformNotSupportedException();
 
     public void BeginInit() => throw new PlatformNotSupportedException();
 
     public void Collapse(int row) => throw new PlatformNotSupportedException();
-
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-    protected AccessibleObject CreateAccessibilityInstance() => throw new PlatformNotSupportedException();
-
-    protected void Dispose(bool disposing) => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114
 
     public bool EndEdit(DataGridColumnStyle gridColumn, int rowNumber, bool shouldAbort) => throw new PlatformNotSupportedException();
 
@@ -702,12 +580,6 @@ public partial class DataGrid : Control, ISupportInitialize, IDataGridEditingSer
     public void NavigateTo(int rowNumber, string relationName) => throw new PlatformNotSupportedException();
 
     protected bool ProcessGridKey(KeyEventArgs ke) => throw new PlatformNotSupportedException();
-
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-    protected bool ProcessDialogKey(Keys keyData) => throw new PlatformNotSupportedException();
-
-    protected bool ProcessKeyPreview(ref Message m) => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114
 
     protected bool ProcessTabKey(Keys keyData) => throw new PlatformNotSupportedException();
 

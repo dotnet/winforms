@@ -14,7 +14,9 @@ namespace System.Windows.Forms;
 [EditorBrowsable(EditorBrowsableState.Never)]
 public class StatusBarPanel : Component, ISupportInitialize
 {
-    public StatusBarPanel() => throw new PlatformNotSupportedException();
+    public StatusBarPanel()
+    {
+    }
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -111,10 +113,4 @@ public class StatusBarPanel : Component, ISupportInitialize
     public void BeginInit() => throw new PlatformNotSupportedException();
 
     public void EndInit() => throw new PlatformNotSupportedException();
-
-#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
-    protected void Dispose(bool disposing) => throw new PlatformNotSupportedException();
-
-    public string ToString() => throw new PlatformNotSupportedException();
-#pragma warning restore CS0114
 }
