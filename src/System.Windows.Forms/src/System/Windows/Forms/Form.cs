@@ -7179,5 +7179,5 @@ public partial class Form : ContainerControl
     {
         get;
     }
-#pragma warning restore WFDEV007 // Type or member is obsolete
+#pragma warning restore WFDEV007
 }
