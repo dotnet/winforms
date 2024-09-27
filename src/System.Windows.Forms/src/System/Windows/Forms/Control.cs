@@ -12850,7 +12850,7 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Never)]
 #pragma warning disable WFDEV005 // Type or member is obsolete
     public virtual ContextMenu? ContextMenu
-#pragma warning restore WFDEV005 // Type or member is obsolete
+#pragma warning restore WFDEV005
     {
         get;
         set;
