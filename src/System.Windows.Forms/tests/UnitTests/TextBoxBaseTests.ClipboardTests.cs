@@ -6,10 +6,9 @@ namespace System.Windows.Forms.Tests;
 public partial class TextBoxBaseTests
 {
     [Collection("Sequential")]
+    [UISettings(MaxAttempts = 3)] // Try up to 3 times before failing.
     public class ClipboardTests
     {
-        private static void Sleep() => Thread.Sleep(100);
-
         [WinFormsFact]
         public void TextBoxBase_ClearUndo_CanUndo_Success()
         {
@@ -20,12 +19,10 @@ public partial class TextBoxBaseTests
                 SelectionLength = 2
             };
             control.Focus();
-            Sleep();
             control.Copy();
 
             control.Text = "text";
             control.SelectionLength = 2;
-            Sleep();
             control.Paste();
 
             control.Text.Should().Be("bcxt");
@@ -50,7 +47,6 @@ public partial class TextBoxBaseTests
 
             control.Text = "text";
             control.SelectionLength = 2;
-            Sleep();
             control.Paste();
 
             control.Text.Should().Be("bcxt");
@@ -85,7 +81,6 @@ public partial class TextBoxBaseTests
 
             control.Text = "text";
             control.SelectionLength = 2;
-            Sleep();
             control.Paste();
 
             control.Text.Should().Be("bcxt");
@@ -112,7 +107,6 @@ public partial class TextBoxBaseTests
 
             control.Text = "text";
             control.SelectionLength = 2;
-            Sleep();
             control.Paste();
 
             control.Text.Should().Be("bcxt");
@@ -138,7 +132,6 @@ public partial class TextBoxBaseTests
             int createdCallCount = 0;
             control.HandleCreated += (sender, e) => createdCallCount++;
 
-            Sleep();
             control.Cut();
             control.Text.Should().Be("a");
             control.IsHandleCreated.Should().BeTrue();
@@ -148,7 +141,6 @@ public partial class TextBoxBaseTests
 
             control.Text = "text";
             control.SelectionLength = 2;
-            Sleep();
             control.Paste();
 
             control.Text.Should().Be("bcxt");
@@ -165,7 +157,6 @@ public partial class TextBoxBaseTests
         {
             Clipboard.Clear();
             using SubTextBox control = new();
-            Sleep();
             control.Paste();
             control.Text.Should().BeEmpty();
             control.IsHandleCreated.Should().BeTrue();
@@ -181,7 +172,6 @@ public partial class TextBoxBaseTests
                 SelectionStart = 1,
                 SelectionLength = 2
             };
-            Sleep();
             control.Paste();
             control.Text.Should().Be("a");
             control.IsHandleCreated.Should().BeTrue();
@@ -200,7 +190,6 @@ public partial class TextBoxBaseTests
 
             control.Text = "text";
             control.SelectionLength = 2;
-            Sleep();
             control.Paste();
 
             control.Text.Should().Be("bcxt");
