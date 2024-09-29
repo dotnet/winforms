@@ -26,21 +26,18 @@ public class ToolStripContainerDesignerTests : IDisposable
 
         _designer = new();
         _designer.Initialize(_toolStripContainer);
-    }
 
-    private void InitializeMocks()
-    {
-        Mock<ISite> mockSite = new();
-        mockSite.Setup(s => s.GetService(typeof(IDesignerHost))).Returns(_mockDesignerHost.Object);
-        mockSite.Setup(s => s.GetService(typeof(ISelectionService))).Returns(_mockSelectionService.Object);
-        _toolStripContainer.Site = mockSite.Object;
+        void InitializeMocks()
+        {
+            Mock<ISite> mockSite = new();
+            mockSite.Setup(s => s.GetService(typeof(IDesignerHost))).Returns(_mockDesignerHost.Object);
+            mockSite.Setup(s => s.GetService(typeof(ISelectionService))).Returns(_mockSelectionService.Object);
+            _toolStripContainer.Site = mockSite.Object;
+        }
     }
 
     [Fact]
-    public void ActionLists_ShouldNotBeNull()
-    {
-        _designer.ActionLists.Should().NotBeNull();
-    }
+    public void ActionLists_ShouldNotBeNull() => _designer.ActionLists.Should().NotBeNull();
 
     [Fact]
     public void ActionLists_ShouldContainToolStripContainerActionList()
@@ -57,22 +54,13 @@ public class ToolStripContainerDesignerTests : IDisposable
     }
 
     [Fact]
-    public void SnapLines_ShouldReturnExpectedValue()
-    {
-        _designer.SnapLines.Should().NotBeNull();
-    }
+    public void SnapLines_ShouldReturnExpectedValue() => _designer.SnapLines.Should().NotBeNull();
 
     [Fact]
-    public void InternalControlDesigner_ShouldReturnExpectedValue()
-    {
-        _designer.InternalControlDesigner(0).Should().BeNull();
-    }
+    public void InternalControlDesigner_ShouldReturnExpectedValue() => _designer.InternalControlDesigner(0).Should().BeNull();
 
     [Fact]
-    public void AssociatedComponents_ShouldNotBeNull()
-    {
-        _designer.AssociatedComponents.Should().NotBeNull();
-    }
+    public void AssociatedComponents_ShouldNotBeNull() => _designer.AssociatedComponents.Should().NotBeNull();
 
     [Fact]
     public void CanParent_ShouldReturnFalse()
