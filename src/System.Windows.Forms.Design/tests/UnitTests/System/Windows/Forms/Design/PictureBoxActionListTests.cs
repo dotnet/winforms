@@ -5,8 +5,8 @@
 
 using System.ComponentModel.Design;
 
-namespace System.Windows.Forms.Design.Tests
-{
+namespace System.Windows.Forms.Design.Tests;
+
     public sealed class PictureBoxActionListTests
     {
         [Fact]
@@ -52,5 +52,4 @@ namespace System.Windows.Forms.Design.Tests
             items[1].Should().BeOfType<DesignerActionPropertyItem>();
         }
     }
-}
 
