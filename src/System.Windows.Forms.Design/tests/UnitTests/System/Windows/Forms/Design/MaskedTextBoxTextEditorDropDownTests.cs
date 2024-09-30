@@ -33,10 +33,11 @@ public class MaskedTextBoxTextEditorDropDownTests
     {
         using MaskedTextBox maskedTextBox = new();
         using MaskedTextBoxTextEditorDropDown dropDown = new(maskedTextBox);
-        var result = dropDown.TestAccessor().Dynamic.ProcessDialogKey(Keys.Escape);
+        bool processDialogKey = dropDown.TestAccessor().Dynamic.ProcessDialogKey(Keys.Escape);
+        bool cancel= dropDown.TestAccessor().Dynamic._cancel;
 
-        dropDown.TestAccessor().Dynamic._cancel.Should().BeTrue();
-        result.Should().BeFalse();
+        cancel.Should().BeTrue();
+        processDialogKey.Should().BeFalse();
     }
 
     [Fact]
