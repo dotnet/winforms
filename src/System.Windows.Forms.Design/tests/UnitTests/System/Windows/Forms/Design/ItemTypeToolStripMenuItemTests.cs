@@ -49,7 +49,7 @@ namespace System.Windows.Forms.Design.Tests
         [Fact]
         public void Dispose_SetsTbxItemToNull()
         {
-            ItemTypeToolStripMenuItem item = new(typeof(string));
+            using ItemTypeToolStripMenuItem item = new(typeof(string));
             item.Dispose();
             item.TbxItem.Should().BeNull();
         }
