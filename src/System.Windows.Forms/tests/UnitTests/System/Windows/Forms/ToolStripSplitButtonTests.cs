@@ -80,8 +80,7 @@ public class ToolStripSplitButtonTests : IDisposable
 
         toolStripSplitButton.Text.Should().BeEmpty();
         toolStripSplitButton.Image.Should().BeNull();
-        int defaultDropDownButtonWidth = toolStripSplitButton.TestAccessor().Dynamic.DefaultDropDownButtonWidth;
-        toolStripSplitButton.DropDownButtonWidth.Should().Be(defaultDropDownButtonWidth);
+        toolStripSplitButton.DropDownButtonWidth.Should().Be(toolStripSplitButton.TestAccessor().Dynamic.DefaultDropDownButtonWidth);
     }
 
     [WinFormsFact]
@@ -91,8 +90,7 @@ public class ToolStripSplitButtonTests : IDisposable
 
         toolStripSplitButton.Text.Should().Be("Test");
         toolStripSplitButton.Image.Should().BeNull();
-        int defaultDropDownButtonWidth = toolStripSplitButton.TestAccessor().Dynamic.DefaultDropDownButtonWidth;
-        toolStripSplitButton.DropDownButtonWidth.Should().Be(defaultDropDownButtonWidth);
+        toolStripSplitButton.DropDownButtonWidth.Should().Be(toolStripSplitButton.TestAccessor().Dynamic.DefaultDropDownButtonWidth);
     }
 
     [WinFormsFact]
@@ -103,8 +101,7 @@ public class ToolStripSplitButtonTests : IDisposable
 
         toolStripSplitButton.Text.Should().BeNull();
         toolStripSplitButton.Image.Should().Be(image);
-        int defaultDropDownButtonWidth = toolStripSplitButton.TestAccessor().Dynamic.DefaultDropDownButtonWidth;
-        toolStripSplitButton.DropDownButtonWidth.Should().Be(defaultDropDownButtonWidth);
+        toolStripSplitButton.DropDownButtonWidth.Should().Be(toolStripSplitButton.TestAccessor().Dynamic.DefaultDropDownButtonWidth);
     }
 
     [WinFormsFact]
@@ -115,8 +112,7 @@ public class ToolStripSplitButtonTests : IDisposable
 
         toolStripSplitButton.Text.Should().Be("Test");
         toolStripSplitButton.Image.Should().Be(image);
-        int defaultDropDownButtonWidth = toolStripSplitButton.TestAccessor().Dynamic.DefaultDropDownButtonWidth;
-        toolStripSplitButton.DropDownButtonWidth.Should().Be(defaultDropDownButtonWidth);
+        toolStripSplitButton.DropDownButtonWidth.Should().Be(toolStripSplitButton.TestAccessor().Dynamic.DefaultDropDownButtonWidth);
     }
 
     [WinFormsFact]
@@ -130,8 +126,7 @@ public class ToolStripSplitButtonTests : IDisposable
 
         toolStripSplitButton.Text.Should().Be("Test");
         toolStripSplitButton.Image.Should().Be(image);
-        int defaultDropDownButtonWidth = toolStripSplitButton.TestAccessor().Dynamic.DefaultDropDownButtonWidth;
-        toolStripSplitButton.DropDownButtonWidth.Should().Be(defaultDropDownButtonWidth);
+        toolStripSplitButton.DropDownButtonWidth.Should().Be(toolStripSplitButton.TestAccessor().Dynamic.DefaultDropDownButtonWidth);
 
         toolStripSplitButton.PerformClick();
         clickInvoked.Should().BeTrue();
@@ -149,8 +144,7 @@ public class ToolStripSplitButtonTests : IDisposable
         toolStripSplitButton.Text.Should().Be("Test");
         toolStripSplitButton.Image.Should().Be(image);
         toolStripSplitButton.Name.Should().Be("TestButton");
-        int defaultDropDownButtonWidth = toolStripSplitButton.TestAccessor().Dynamic.DefaultDropDownButtonWidth;
-        toolStripSplitButton.DropDownButtonWidth.Should().Be(defaultDropDownButtonWidth);
+        toolStripSplitButton.DropDownButtonWidth.Should().Be(toolStripSplitButton.TestAccessor().Dynamic.DefaultDropDownButtonWidth);
 
         toolStripSplitButton.PerformClick();
         clickInvoked.Should().BeTrue();
@@ -168,8 +162,7 @@ public class ToolStripSplitButtonTests : IDisposable
         toolStripSplitButton.Text.Should().Be("Test");
         toolStripSplitButton.Image.Should().Be(image);
         toolStripSplitButton.DropDownItems.Cast<ToolStripItem>().Should().ContainInOrder(new[] { item1, item2 });
-        int defaultDropDownButtonWidth = toolStripSplitButton.TestAccessor().Dynamic.DefaultDropDownButtonWidth;
-        toolStripSplitButton.DropDownButtonWidth.Should().Be(defaultDropDownButtonWidth);
+        toolStripSplitButton.DropDownButtonWidth.Should().Be(toolStripSplitButton.TestAccessor().Dynamic.DefaultDropDownButtonWidth);
     }
 
     [WinFormsFact]
@@ -194,22 +187,19 @@ public class ToolStripSplitButtonTests : IDisposable
     [WinFormsFact]
     public void ToolStripSplitButton_ButtonBounds_ReturnsExpected()
     {
-        Rectangle expectedBounds = _toolStripSplitButton.TestAccessor().Dynamic.SplitButtonButton.Bounds;
-        _toolStripSplitButton.ButtonBounds.Should().Be(expectedBounds);
+        _toolStripSplitButton.ButtonBounds.Should().Be(_toolStripSplitButton.TestAccessor().Dynamic.SplitButtonButton.Bounds);
     }
 
     [WinFormsFact]
     public void ToolStripSplitButton_ButtonPressed_ReturnsExpected()
     {
-        bool expectedPressed = _toolStripSplitButton.TestAccessor().Dynamic.SplitButtonButton.Pressed;
-        _toolStripSplitButton.ButtonPressed.Should().Be(expectedPressed);
+        _toolStripSplitButton.ButtonPressed.Should().Be(_toolStripSplitButton.TestAccessor().Dynamic.SplitButtonButton.Pressed);
     }
 
     [WinFormsFact]
     public void ToolStripSplitButton_ButtonSelected_ReturnsExpected()
     {
-        bool expectedSelected = _toolStripSplitButton.TestAccessor().Dynamic.SplitButtonButton.Selected;
-        _toolStripSplitButton.ButtonSelected.Should().Be(expectedSelected);
+        _toolStripSplitButton.ButtonSelected.Should().Be(_toolStripSplitButton.TestAccessor().Dynamic.SplitButtonButton.Selected);
     }
 
     [WinFormsFact]
@@ -304,9 +294,7 @@ public class ToolStripSplitButtonTests : IDisposable
     [WinFormsFact]
     public void ToolStripSplitButton_DropDownButtonArea_ReturnsExpected()
     {
-        Rectangle expectedBounds = _toolStripSplitButton.DropDownButtonBounds;
-
-        _toolStripSplitButton.DropDownButtonArea.Should().Be(expectedBounds);
+        _toolStripSplitButton.DropDownButtonArea.Should().Be( _toolStripSplitButton.DropDownButtonBounds);
     }
 
     [WinFormsFact]
@@ -417,24 +405,16 @@ public class ToolStripSplitButtonTests : IDisposable
         eventTriggered.Should().BeTrue();
     }
 
-    [WinFormsFact]
-    public void ToolStripSplitButton_ResetDropDownButtonWidth_SetsToDefault()
+    [WinFormsTheory]
+    [InlineData(20)]
+    [InlineData(11)]
+    public void ToolStripSplitButton_ResetDropDownButtonWidth_SetsToDefault(int initialWidth)
     {
-        _toolStripSplitButton.DropDownButtonWidth = 20;
+        _toolStripSplitButton.DropDownButtonWidth = initialWidth;
 
         _toolStripSplitButton.ResetDropDownButtonWidth();
 
-        _toolStripSplitButton.DropDownButtonWidth.Should().Be(11);
-    }
-
-    [WinFormsFact]
-    public void ToolStripSplitButton_ResetDropDownButtonWidth_AlreadyDefault_NoChange()
-    {
-        _toolStripSplitButton.DropDownButtonWidth = 11;
-
-        _toolStripSplitButton.ResetDropDownButtonWidth();
-
-        _toolStripSplitButton.DropDownButtonWidth.Should().Be(11);
+        _toolStripSplitButton.DropDownButtonWidth.Should().Be(_toolStripSplitButton.TestAccessor().Dynamic.DefaultDropDownWidth);
     }
 
     [WinFormsFact]
@@ -442,9 +422,7 @@ public class ToolStripSplitButtonTests : IDisposable
     {
         _toolStripSplitButton.DropDownButtonWidth = 20;
 
-        bool result = _toolStripSplitButton.ShouldSerializeDropDownButtonWidth();
-
-        result.Should().BeTrue();
+        _toolStripSplitButton.ShouldSerializeDropDownButtonWidth().Should().BeTrue();
     }
 
     [WinFormsFact]
@@ -452,9 +430,7 @@ public class ToolStripSplitButtonTests : IDisposable
     {
         _toolStripSplitButton.DropDownButtonWidth = 11;
 
-        bool result = _toolStripSplitButton.ShouldSerializeDropDownButtonWidth();
-
-        result.Should().BeFalse();
+        _toolStripSplitButton.ShouldSerializeDropDownButtonWidth().Should().BeFalse();
     }
 
     private class SubToolStripItem : ToolStripItem
