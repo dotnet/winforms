@@ -12860,11 +12860,10 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Never)]
     public event EventHandler ContextMenuChanged
     {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
+        add { }
+        remove { }
     }
 
-    [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    protected virtual void OnContextMenuChanged(EventArgs e) => throw new PlatformNotSupportedException();
+    protected virtual void OnContextMenuChanged(EventArgs e) { }
 }

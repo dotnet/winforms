@@ -15,6 +15,7 @@ namespace System.Windows.Forms;
 [EditorBrowsable(EditorBrowsableState.Never)]
 public partial class DataGrid : Control, ISupportInitialize, IDataGridEditingService
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public DataGrid()
     {
     }
