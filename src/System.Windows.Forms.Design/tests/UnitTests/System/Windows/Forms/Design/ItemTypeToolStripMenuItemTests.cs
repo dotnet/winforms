@@ -6,8 +6,8 @@
 using System.Drawing;
 using System.Drawing.Design;
 
-namespace System.Windows.Forms.Design.Tests
-{
+namespace System.Windows.Forms.Design.Tests;
+
     public class ItemTypeToolStripMenuItemTests
     {
         [Fact]
@@ -49,9 +49,8 @@ namespace System.Windows.Forms.Design.Tests
         [Fact]
         public void Dispose_SetsTbxItemToNull()
         {
-            using ItemTypeToolStripMenuItem item = new(typeof(string));
+            ItemTypeToolStripMenuItem item = new(typeof(string));
             item.Dispose();
             item.TbxItem.Should().BeNull();
         }
     }
-}
