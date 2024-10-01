@@ -3581,7 +3581,7 @@ public class DataGridViewRowTests
                 yield return new object[]
                 {
                     true, true, RightToLeft.Yes, DataGridViewAdvancedCellBorderStyle.OutsetPartial, true, true, isFirstDisplayedRow, isLastVisibleRow,
-                    true, DataGridViewAdvancedCellBorderStyle.Single, DataGridViewAdvancedCellBorderStyle.Outset, DataGridViewAdvancedCellBorderStyle.None, DataGridViewAdvancedCellBorderStyle.None
+                    true, DataGridViewAdvancedCellBorderStyle.Outset, DataGridViewAdvancedCellBorderStyle.Outset, DataGridViewAdvancedCellBorderStyle.None, DataGridViewAdvancedCellBorderStyle.None
                 };
             }
         }
@@ -3596,7 +3596,7 @@ public class DataGridViewRowTests
             yield return new object[]
             {
                 true, false, RightToLeft.Yes, DataGridViewAdvancedCellBorderStyle.OutsetPartial, true, true, true, isLastVisibleRow,
-                true, DataGridViewAdvancedCellBorderStyle.Single, DataGridViewAdvancedCellBorderStyle.Outset, DataGridViewAdvancedCellBorderStyle.OutsetDouble, DataGridViewAdvancedCellBorderStyle.None
+                true, DataGridViewAdvancedCellBorderStyle.Outset, DataGridViewAdvancedCellBorderStyle.Outset, DataGridViewAdvancedCellBorderStyle.OutsetDouble, DataGridViewAdvancedCellBorderStyle.None
             };
         }
 
@@ -3608,7 +3608,7 @@ public class DataGridViewRowTests
         yield return new object[]
         {
             false, true, RightToLeft.Yes, DataGridViewAdvancedCellBorderStyle.OutsetPartial, true, true, true, true,
-            true, DataGridViewAdvancedCellBorderStyle.Single, DataGridViewAdvancedCellBorderStyle.OutsetDouble, DataGridViewAdvancedCellBorderStyle.Outset, DataGridViewAdvancedCellBorderStyle.Outset
+            true, DataGridViewAdvancedCellBorderStyle.Outset, DataGridViewAdvancedCellBorderStyle.OutsetDouble, DataGridViewAdvancedCellBorderStyle.Outset, DataGridViewAdvancedCellBorderStyle.Outset
         };
         yield return new object[]
         {
@@ -3618,7 +3618,7 @@ public class DataGridViewRowTests
         yield return new object[]
         {
             false, true, RightToLeft.Yes, DataGridViewAdvancedCellBorderStyle.OutsetPartial, true, true, true, false,
-            true, DataGridViewAdvancedCellBorderStyle.Single, DataGridViewAdvancedCellBorderStyle.OutsetDouble, DataGridViewAdvancedCellBorderStyle.Outset, DataGridViewAdvancedCellBorderStyle.OutsetPartial
+            true, DataGridViewAdvancedCellBorderStyle.Outset, DataGridViewAdvancedCellBorderStyle.OutsetDouble, DataGridViewAdvancedCellBorderStyle.Outset, DataGridViewAdvancedCellBorderStyle.OutsetPartial
         };
         yield return new object[]
         {
@@ -3628,7 +3628,7 @@ public class DataGridViewRowTests
         yield return new object[]
         {
             false, true, RightToLeft.Yes, DataGridViewAdvancedCellBorderStyle.OutsetPartial, true, true, false, true,
-            true, DataGridViewAdvancedCellBorderStyle.Single, DataGridViewAdvancedCellBorderStyle.OutsetDouble, DataGridViewAdvancedCellBorderStyle.OutsetPartial, DataGridViewAdvancedCellBorderStyle.Outset
+            true, DataGridViewAdvancedCellBorderStyle.Outset, DataGridViewAdvancedCellBorderStyle.OutsetDouble, DataGridViewAdvancedCellBorderStyle.OutsetPartial, DataGridViewAdvancedCellBorderStyle.Outset
         };
         yield return new object[]
         {
@@ -3638,7 +3638,7 @@ public class DataGridViewRowTests
         yield return new object[]
         {
             false, true, RightToLeft.Yes, DataGridViewAdvancedCellBorderStyle.OutsetPartial, true, true, false, false,
-            true, DataGridViewAdvancedCellBorderStyle.Single, DataGridViewAdvancedCellBorderStyle.OutsetDouble, DataGridViewAdvancedCellBorderStyle.OutsetPartial, DataGridViewAdvancedCellBorderStyle.OutsetPartial
+            true, DataGridViewAdvancedCellBorderStyle.Outset, DataGridViewAdvancedCellBorderStyle.OutsetDouble, DataGridViewAdvancedCellBorderStyle.OutsetPartial, DataGridViewAdvancedCellBorderStyle.OutsetPartial
         };
         yield return new object[]
         {
@@ -3648,7 +3648,7 @@ public class DataGridViewRowTests
         yield return new object[]
         {
             false, false, RightToLeft.Yes, DataGridViewAdvancedCellBorderStyle.OutsetPartial, true, true, true, true,
-            true, DataGridViewAdvancedCellBorderStyle.Single, DataGridViewAdvancedCellBorderStyle.OutsetDouble, DataGridViewAdvancedCellBorderStyle.OutsetDouble, DataGridViewAdvancedCellBorderStyle.Outset
+            true, DataGridViewAdvancedCellBorderStyle.Outset, DataGridViewAdvancedCellBorderStyle.OutsetDouble, DataGridViewAdvancedCellBorderStyle.OutsetDouble, DataGridViewAdvancedCellBorderStyle.Outset
         };
         yield return new object[]
         {
@@ -3658,7 +3658,7 @@ public class DataGridViewRowTests
         yield return new object[]
         {
             false, false, RightToLeft.Yes, DataGridViewAdvancedCellBorderStyle.OutsetPartial, true, true, false, false,
-            true, DataGridViewAdvancedCellBorderStyle.Single, DataGridViewAdvancedCellBorderStyle.OutsetDouble, DataGridViewAdvancedCellBorderStyle.OutsetPartial, DataGridViewAdvancedCellBorderStyle.OutsetPartial
+            true, DataGridViewAdvancedCellBorderStyle.Outset, DataGridViewAdvancedCellBorderStyle.OutsetDouble, DataGridViewAdvancedCellBorderStyle.OutsetPartial, DataGridViewAdvancedCellBorderStyle.OutsetPartial
         };
 
         // Single.
