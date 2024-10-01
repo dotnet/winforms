@@ -7,49 +7,49 @@ using System.ComponentModel.Design;
 
 namespace System.Windows.Forms.Design.Tests;
 
-    public sealed class PictureBoxActionListTests
+public sealed class PictureBoxActionListTests
+{
+    [Fact]
+    public void SizeMode_ShouldReturnCorrectValue()
     {
-        [Fact]
-        public void SizeMode_ShouldReturnCorrectValue()
-        {
-            using PictureBox pictureBox = new() { SizeMode = PictureBoxSizeMode.StretchImage };
-            using PictureBoxDesigner designer = new();
-            designer.Initialize(pictureBox);
-            PictureBoxActionList actionList = new(designer);
+        using PictureBox pictureBox = new() { SizeMode = PictureBoxSizeMode.StretchImage };
+        using PictureBoxDesigner designer = new();
+        designer.Initialize(pictureBox);
+        PictureBoxActionList actionList = new(designer);
 
-            PictureBoxSizeMode sizeMode = actionList.SizeMode;
+        PictureBoxSizeMode sizeMode = actionList.SizeMode;
 
-            sizeMode.Should().Be(PictureBoxSizeMode.StretchImage);
-        }
-
-        [Fact]
-        public void SizeMode_ShouldUpdateCorrectly()
-        {
-            using PictureBox pictureBox = new();
-            using PictureBoxDesigner designer = new();
-            designer.Initialize(pictureBox);
-            PictureBoxActionList actionList = new(designer)
-            {
-                SizeMode = PictureBoxSizeMode.Zoom
-            };
-
-            pictureBox.SizeMode.Should().Be(PictureBoxSizeMode.Zoom);
-        }
-
-        [Fact]
-        public void GetSortedActionItems_ShouldReturnCorrectItems()
-        {
-            using PictureBox pictureBox = new();
-            using PictureBoxDesigner designer = new();
-            designer.Initialize(pictureBox);
-            PictureBoxActionList actionList = new(designer);
-
-            DesignerActionItemCollection items = actionList.GetSortedActionItems();
-
-            items.Should().NotBeNull();
-            items.Count.Should().Be(2);
-            items[0].Should().BeOfType<DesignerActionMethodItem>();
-            items[1].Should().BeOfType<DesignerActionPropertyItem>();
-        }
+        sizeMode.Should().Be(PictureBoxSizeMode.StretchImage);
     }
+
+    [Fact]
+    public void SizeMode_ShouldUpdateCorrectly()
+    {
+        using PictureBox pictureBox = new();
+        using PictureBoxDesigner designer = new();
+        designer.Initialize(pictureBox);
+        PictureBoxActionList actionList = new(designer)
+        {
+            SizeMode = PictureBoxSizeMode.Zoom
+        };
+
+        pictureBox.SizeMode.Should().Be(PictureBoxSizeMode.Zoom);
+    }
+
+    [Fact]
+    public void GetSortedActionItems_ShouldReturnCorrectItems()
+    {
+        using PictureBox pictureBox = new();
+        using PictureBoxDesigner designer = new();
+        designer.Initialize(pictureBox);
+        PictureBoxActionList actionList = new(designer);
+
+        DesignerActionItemCollection items = actionList.GetSortedActionItems();
+
+        items.Should().NotBeNull();
+        items.Count.Should().Be(2);
+        items[0].Should().BeOfType<DesignerActionMethodItem>();
+        items[1].Should().BeOfType<DesignerActionPropertyItem>();
+    }
+}
 
