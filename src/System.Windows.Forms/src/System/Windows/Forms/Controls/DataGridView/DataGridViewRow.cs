@@ -405,7 +405,7 @@ public partial class DataGridViewRow : DataGridViewBand
 
                     if (DataGridView.RightToLeftInternal)
                     {
-                        dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.Single;
+                        dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.Outset;
                     }
                     else
                     {
@@ -509,7 +509,7 @@ public partial class DataGridViewRow : DataGridViewBand
                 case DataGridViewAdvancedCellBorderStyle.OutsetPartial:
                     if (DataGridView is not null && DataGridView.RightToLeftInternal)
                     {
-                        dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.Single;
+                        dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.Outset;
                         dataGridViewAdvancedBorderStylePlaceholder.RightInternal = DataGridViewAdvancedCellBorderStyle.OutsetDouble;
                     }
                     else
