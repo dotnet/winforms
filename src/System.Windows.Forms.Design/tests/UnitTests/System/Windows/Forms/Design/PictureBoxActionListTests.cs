@@ -17,9 +17,7 @@ public sealed class PictureBoxActionListTests
         designer.Initialize(pictureBox);
         PictureBoxActionList actionList = new(designer);
 
-        PictureBoxSizeMode sizeMode = actionList.SizeMode;
-
-        sizeMode.Should().Be(PictureBoxSizeMode.StretchImage);
+        actionList.SizeMode.Should().Be(PictureBoxSizeMode.StretchImage);
     }
 
     [Fact]
