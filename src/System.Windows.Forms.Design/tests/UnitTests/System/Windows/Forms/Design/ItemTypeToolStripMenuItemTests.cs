@@ -39,18 +39,18 @@ public class ItemTypeToolStripMenuItemTests
     }
 
     [Fact]
-    public void TbxItem_SetAndGet()
+    public void ToolboxItem_SetAndGet()
     {
         ToolboxItem toolboxItem = new(typeof(string));
-        using ItemTypeToolStripMenuItem item = new(typeof(string)) { TbxItem = toolboxItem };
-        item.TbxItem.Should().Be(toolboxItem);
+        using ItemTypeToolStripMenuItem item = new(typeof(string)) { ToolboxItem = toolboxItem };
+        item.ToolboxItem.Should().Be(toolboxItem);
     }
 
     [Fact]
-    public void Dispose_SetsTbxItemToNull()
+    public void Dispose_SetsToolboxItemToNull()
     {
         ItemTypeToolStripMenuItem item = new(typeof(string));
         item.Dispose();
-        item.TbxItem.Should().BeNull();
+        item.ToolboxItem.Should().BeNull();
     }
 }
