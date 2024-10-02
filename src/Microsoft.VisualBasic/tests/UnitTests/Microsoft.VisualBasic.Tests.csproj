@@ -8,7 +8,7 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="Microsoft.DotNet.XUnitExtensions" Version="$(MicrosoftDotNetXUnitExtensionsPackageVersion)" />
+    <PackageReference Include="Microsoft.DotNet.XUnitExtensions" />
   </ItemGroup>
   
   <ItemGroup>
