@@ -7,6 +7,7 @@ using System.Drawing;
 namespace System.Windows.Forms;
 
 #nullable disable
+
 [Obsolete(
     Obsoletions.DataGridMessage,
     error: false,
@@ -15,25 +16,15 @@ namespace System.Windows.Forms;
 [EditorBrowsable(EditorBrowsableState.Never)]
 public class DataGridTextBoxColumn : DataGridColumnStyle
 {
-    public DataGridTextBoxColumn()
-    {
-    }
+    public DataGridTextBoxColumn() => throw new PlatformNotSupportedException();
 
-    public DataGridTextBoxColumn(PropertyDescriptor prop)
-    {
-    }
+    public DataGridTextBoxColumn(PropertyDescriptor prop) => throw new PlatformNotSupportedException();
 
-    public DataGridTextBoxColumn(PropertyDescriptor prop, string format)
-    {
-    }
+    public DataGridTextBoxColumn(PropertyDescriptor prop, string format) => throw new PlatformNotSupportedException();
 
-    public DataGridTextBoxColumn(PropertyDescriptor prop, string format, bool isDefault)
-    {
-    }
+    public DataGridTextBoxColumn(PropertyDescriptor prop, string format, bool isDefault) => throw new PlatformNotSupportedException();
 
-    public DataGridTextBoxColumn(PropertyDescriptor prop, bool isDefault)
-    {
-    }
+    public DataGridTextBoxColumn(PropertyDescriptor prop, bool isDefault) => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]

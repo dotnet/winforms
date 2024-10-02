@@ -5,6 +5,8 @@ using System.ComponentModel;
 
 namespace System.Windows.Forms;
 
+#nullable disable
+
 [Obsolete(
     Obsoletions.DataGridMessage,
     error: false,
@@ -13,9 +15,7 @@ namespace System.Windows.Forms;
 [EditorBrowsable(EditorBrowsableState.Never)]
 public class DataGridTextBox : TextBox
 {
-    public DataGridTextBox()
-    {
-    }
+    public DataGridTextBox() => throw new PlatformNotSupportedException();
 
     public void SetDataGrid(DataGrid parentGrid) => throw new PlatformNotSupportedException();
 

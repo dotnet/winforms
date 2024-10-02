@@ -6,6 +6,8 @@ using System.Drawing;
 
 namespace System.Windows.Forms;
 
+#nullable disable
+
 [Obsolete(
     Obsoletions.DataGridMessage,
     error: false,
@@ -14,17 +16,12 @@ namespace System.Windows.Forms;
 [EditorBrowsable(EditorBrowsableState.Never)]
 public class DataGridBoolColumn : DataGridColumnStyle
 {
-    public DataGridBoolColumn()
-    {
-    }
+    public DataGridBoolColumn() => throw new PlatformNotSupportedException();
 
-    public DataGridBoolColumn(PropertyDescriptor prop)
-    {
-    }
+    public DataGridBoolColumn(PropertyDescriptor prop) => throw new PlatformNotSupportedException();
 
-    public DataGridBoolColumn(PropertyDescriptor prop, bool isDefault)
-    {
-    }
+    public DataGridBoolColumn(PropertyDescriptor prop, bool isDefault) =>
+        throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]

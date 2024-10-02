@@ -6,6 +6,8 @@ using System.Drawing;
 
 namespace System.Windows.Forms;
 
+#nullable disable
+
 [Obsolete(
     Obsoletions.DataGridMessage,
     error: false,
@@ -14,6 +16,12 @@ namespace System.Windows.Forms;
 [EditorBrowsable(EditorBrowsableState.Never)]
 public class DataGridTableStyle : Component, IDataGridEditingService
 {
+    public DataGridTableStyle(bool isDefaultTableStyle) => throw new PlatformNotSupportedException();
+
+    public DataGridTableStyle() : this(isDefaultTableStyle: false) => throw new PlatformNotSupportedException();
+
+    public DataGridTableStyle(CurrencyManager listManager) : this() => throw new PlatformNotSupportedException();
+
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public bool AllowSorting
@@ -348,13 +356,7 @@ public class DataGridTableStyle : Component, IDataGridEditingService
 
     public void ResetSelectionForeColor() => throw new PlatformNotSupportedException();
 
-    public static readonly DataGridTableStyle s_defaultTableStyle = new DataGridTableStyle(isDefaultTableStyle: true);
-
-    public DataGridTableStyle(bool isDefaultTableStyle) => throw new PlatformNotSupportedException();
-
-    public DataGridTableStyle() : this(isDefaultTableStyle: false) => throw new PlatformNotSupportedException();
-
-    public DataGridTableStyle(CurrencyManager listManager) : this() => throw new PlatformNotSupportedException();
+    public static DataGridTableStyle s_defaultTableStyle  => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]

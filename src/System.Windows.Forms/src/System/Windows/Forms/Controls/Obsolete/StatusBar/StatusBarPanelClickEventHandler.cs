@@ -5,6 +5,8 @@ using System.ComponentModel;
 
 namespace System.Windows.Forms;
 
+#nullable disable
+
 [Obsolete(
     Obsoletions.StatusBarMessage,
     error: false,

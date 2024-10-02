@@ -6,6 +6,8 @@ using System.ComponentModel;
 
 namespace System.Windows.Forms;
 
+#nullable disable
+
 public partial class ToolBar
 {
     [Obsolete(
@@ -16,9 +18,7 @@ public partial class ToolBar
     [EditorBrowsable(EditorBrowsableState.Never)]
     public class ToolBarButtonCollection : IList
     {
-        public ToolBarButtonCollection(ToolBar owner)
-        {
-        }
+        public ToolBarButtonCollection(ToolBar owner) => throw new PlatformNotSupportedException();
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -31,9 +31,7 @@ public partial class ToolBar
         object IList.this[int index]
         {
             get => throw new PlatformNotSupportedException();
-#pragma warning disable CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
             set => throw new PlatformNotSupportedException();
-#pragma warning restore CS8769
         }
 
         [Browsable(false)]
@@ -58,9 +56,7 @@ public partial class ToolBar
 
         public int Add(string text) => throw new PlatformNotSupportedException();
 
-#pragma warning disable CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
         int IList.Add(object button) => throw new PlatformNotSupportedException();
-#pragma warning restore CS8769
 
         public void AddRange(ToolBarButton[] buttons) => throw new PlatformNotSupportedException();
 
@@ -68,9 +64,7 @@ public partial class ToolBar
 
         public bool Contains(ToolBarButton button) => throw new PlatformNotSupportedException();
 
-#pragma warning disable CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
         bool IList.Contains(object button) => throw new PlatformNotSupportedException();
-#pragma warning restore CS8769
 
         public virtual bool ContainsKey(string key) => throw new PlatformNotSupportedException();
 
@@ -78,17 +72,13 @@ public partial class ToolBar
 
         public int IndexOf(ToolBarButton button) => throw new PlatformNotSupportedException();
 
-#pragma warning disable CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
         int IList.IndexOf(object button) => throw new PlatformNotSupportedException();
-#pragma warning restore CS8769
 
         public virtual int IndexOfKey(string key) => throw new PlatformNotSupportedException();
 
         public void Insert(int index, ToolBarButton button) => throw new PlatformNotSupportedException();
 
-#pragma warning disable CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
         void IList.Insert(int index, object button) => throw new PlatformNotSupportedException();
-#pragma warning restore CS8769
 
         public void RemoveAt(int index) => throw new PlatformNotSupportedException();
 
@@ -96,9 +86,7 @@ public partial class ToolBar
 
         public void Remove(ToolBarButton button) => throw new PlatformNotSupportedException();
 
-#pragma warning disable CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
         void IList.Remove(object button) => throw new PlatformNotSupportedException();
-#pragma warning restore CS8769
 
         public IEnumerator GetEnumerator() => throw new PlatformNotSupportedException();
     }

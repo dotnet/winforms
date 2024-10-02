@@ -7,6 +7,7 @@ using System.ComponentModel;
 namespace System.Windows.Forms;
 
 #nullable disable
+
 [Obsolete(
     Obsoletions.DataGridMessage,
     error: false,
@@ -15,6 +16,8 @@ namespace System.Windows.Forms;
 [EditorBrowsable(EditorBrowsableState.Never)]
 public class GridTableStylesCollection : BaseCollection, IList
 {
+    public GridTableStylesCollection() => throw new PlatformNotSupportedException();
+
     int IList.Add(object value) => throw new PlatformNotSupportedException();
 
     void IList.Clear() => throw new PlatformNotSupportedException();

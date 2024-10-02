@@ -7,6 +7,7 @@ using System.Drawing;
 namespace System.Windows.Forms;
 
 #nullable disable
+
 [Obsolete(
     Obsoletions.DataGridMessage,
     error: false,
@@ -16,9 +17,7 @@ namespace System.Windows.Forms;
 public partial class DataGrid : Control, ISupportInitialize, IDataGridEditingService
 {
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public DataGrid()
-    {
-    }
+    public DataGrid() => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
