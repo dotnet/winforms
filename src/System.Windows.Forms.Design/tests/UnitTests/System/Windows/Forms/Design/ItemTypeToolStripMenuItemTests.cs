@@ -8,49 +8,57 @@ using System.Drawing.Design;
 
 namespace System.Windows.Forms.Design.Tests;
 
-public class ItemTypeToolStripMenuItemTests
+public class ItemTypeToolStripMenuItemTests : IDisposable
 {
+    private readonly ItemTypeToolStripMenuItem _item;
+
+    public ItemTypeToolStripMenuItemTests()
+    {
+        _item = new ItemTypeToolStripMenuItem(typeof(string));
+    }
+
     [Fact]
     public void Constructor_SetsItemType()
     {
-        using ItemTypeToolStripMenuItem item = new(typeof(string));
-        item.ItemType.Should().Be(typeof(string));
+        _item.ItemType.Should().Be(typeof(string));
     }
 
     [Fact]
     public void ConvertTo_SetAndGet()
     {
-        using ItemTypeToolStripMenuItem item = new(typeof(string)) { ConvertTo = true };
-        item.ConvertTo.Should().BeTrue();
+        _item.ConvertTo = true;
+        _item.ConvertTo.Should().BeTrue();
     }
 
     [Fact]
     public void Image_Get_ReturnsCorrectImage()
     {
-        using ItemTypeToolStripMenuItem item = new(typeof(string));
-        item.Image.Should().BeOfType<Bitmap>().Which.Should().Be(ToolStripDesignerUtils.GetToolboxBitmap(typeof(string)));
+        _item.Image.Should().BeOfType<Bitmap>().Which.Should().Be(ToolStripDesignerUtils.GetToolboxBitmap(typeof(string)));
     }
 
     [Fact]
     public void Text_ReturnsCorrectDescription()
     {
-        using ItemTypeToolStripMenuItem item = new(typeof(string));
-        item.Text.Should().BeOfType<string>().Which.Should().Be(ToolStripDesignerUtils.GetToolboxDescription(typeof(string)));
+        _item.Text.Should().BeOfType<string>().Which.Should().Be(ToolStripDesignerUtils.GetToolboxDescription(typeof(string)));
     }
 
     [Fact]
     public void ToolboxItem_SetAndGet()
     {
         ToolboxItem toolboxItem = new(typeof(string));
-        using ItemTypeToolStripMenuItem item = new(typeof(string)) { ToolboxItem = toolboxItem };
-        item.ToolboxItem.Should().Be(toolboxItem);
+        _item.ToolboxItem = toolboxItem;
+        _item.ToolboxItem.Should().Be(toolboxItem);
     }
 
     [Fact]
     public void Dispose_SetsToolboxItemToNull()
     {
-        ItemTypeToolStripMenuItem item = new(typeof(string));
-        item.Dispose();
-        item.ToolboxItem.Should().BeNull();
+        _item.Dispose();
+        _item.ToolboxItem.Should().BeNull();
+    }
+
+    public void Dispose()
+    {
+        _item.Dispose();
     }
 }
