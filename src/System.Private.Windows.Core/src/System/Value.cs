@@ -77,10 +77,8 @@ internal readonly partial struct Value
 
     [DoesNotReturn]
     [MethodImpl(MethodImplOptions.NoInlining)]
-    private static void ThrowInvalidCast(Type? from, Type to)
-    {
+    private static void ThrowInvalidCast(Type? from, Type to) =>
         throw new InvalidCastException($"{from?.Name ?? "<null>"} cannot be cast to {to.Name}");
-    }
 
     [DoesNotReturn]
     [MethodImpl(MethodImplOptions.NoInlining)]
@@ -424,6 +422,32 @@ internal readonly partial struct Value
     public static explicit operator Size?(in Value value) => value.GetValue<Size?>();
     #endregion
 
+    #region Point
+    public Value(Point value)
+    {
+        _object = TypeFlags.Point;
+        _union.Point = value;
+    }
+
+    public Value(Point? value)
+    {
+        if (value.HasValue)
+        {
+            _object = TypeFlags.Point;
+            _union.Point = value.Value;
+        }
+        else
+        {
+            _object = null;
+        }
+    }
+
+    public static implicit operator Value(Point value) => new(value);
+    public static explicit operator Point(in Value value) => value.GetValue<Point>();
+    public static implicit operator Value(Point? value) => new(value);
+    public static explicit operator Point?(in Value value) => value.GetValue<Point?>();
+    #endregion
+
     #region Color
     public Value(Color value)
     {
@@ -687,7 +711,8 @@ internal readonly partial struct Value
             || (typeof(T) == typeof(ushort) && _object == TypeFlags.UInt16)
             || (typeof(T) == typeof(uint) && _object == TypeFlags.UInt32)
             || (typeof(T) == typeof(ulong) && _object == TypeFlags.UInt64)
-            || (typeof(T) == typeof(Size) && _object == TypeFlags.Size)))
+            || (typeof(T) == typeof(Size) && _object == TypeFlags.Size)
+            || (typeof(T) == typeof(Point) && _object == TypeFlags.Point)))
         {
             value = Unsafe.As<Union, T>(ref Unsafe.AsRef(in _union));
             success = true;
