@@ -562,23 +562,23 @@ public class ListViewItem_ListViewItemAccessibleObjectTests
 
         listView.VirtualListSize = 1;
 
-        ListViewItem listItem1 = new(new string[]
-        {
+        ListViewItem listItem1 = new(
+        [
             "Test A",
             "Alpha"
-        }, -1);
+        ], -1);
 
-        ListViewItem listItem2 = new(new string[]
-        {
+        ListViewItem listItem2 = new(
+        [
             "Test B",
             "Beta"
-        }, -1);
+        ], -1);
 
-        ListViewItem listItem3 = new(new string[]
-        {
+        ListViewItem listItem3 = new(
+        [
             "Test C",
             "Gamma"
-        }, -1);
+        ], -1);
 
         listView.RetrieveVirtualItem += (s, e) =>
         {
@@ -652,7 +652,7 @@ public class ListViewItem_ListViewItemAccessibleObjectTests
             Assert.NotEqual(IntPtr.Zero, listView.Handle);
         }
 
-        ListViewItem listItem1 = new(new string[] { "Test A", "Alpha" }, -1);
+        ListViewItem listItem1 = new(["Test A", "Alpha"], -1);
         listView.Items.Add(listItem1);
         listView.Items[0].Selected = selected;
         AccessibleObject accessibleObject = listView.Items[0].AccessibilityObject;
@@ -696,7 +696,7 @@ public class ListViewItem_ListViewItemAccessibleObjectTests
             VirtualListSize = 1
         };
 
-        ListViewItem listItem1 = new(new string[] { "Test A", "Alpha" }, -1);
+        ListViewItem listItem1 = new(["Test A", "Alpha"], -1);
 
         listView.RetrieveVirtualItem += (s, e) =>
         {
@@ -1194,10 +1194,10 @@ public class ListViewItem_ListViewItemAccessibleObjectTests
             VirtualListSize = 4
         };
 
-        ListViewItem listItem1 = new(new string[] { "Test Item 1", "Item A" }, -1);
+        ListViewItem listItem1 = new(["Test Item 1", "Item A"], -1);
         ListViewItem listItem2 = new("Group item 2");
         ListViewItem listItem3 = new("Item 3");
-        ListViewItem listItem4 = new(new string[] { "Test Item 4", "Item B", "Item C", "Item D" }, -1);
+        ListViewItem listItem4 = new(["Test Item 4", "Item B", "Item C", "Item D"], -1);
 
         if (!virtualMode && groupsEnabled)
         {

@@ -396,13 +396,13 @@ internal partial class StyleCollectionEditor
 
             // absoluteNumericUpDown
             resources.ApplyResources(_absoluteNumericUpDown, "absoluteNumericUpDown");
-            _absoluteNumericUpDown.Maximum = new decimal(new int[]
-            {
+            _absoluteNumericUpDown.Maximum = new decimal(
+            [
                 99999,
                 0,
                 0,
                 0
-            });
+            ]);
             _absoluteNumericUpDown.Name = "absoluteNumericUpDown";
             _absoluteNumericUpDown.Margin = new Padding(_scaledUpDownLeftMargin, _scaledUpDownTopMargin, 0, 0);
             _absoluteNumericUpDown.AutoScaleMode = AutoScaleMode.Font;
@@ -435,13 +435,13 @@ internal partial class StyleCollectionEditor
             // percentNumericUpDown
             resources.ApplyResources(_percentNumericUpDown, "percentNumericUpDown");
             _percentNumericUpDown.DecimalPlaces = 2;
-            _percentNumericUpDown.Maximum = new decimal(new int[]
-            {
+            _percentNumericUpDown.Maximum = new decimal(
+            [
                 9999,
                 0,
                 0,
                 0
-            });
+            ]);
             _percentNumericUpDown.Name = "percentNumericUpDown";
             _percentNumericUpDown.Margin = new Padding(_scaledUpDownLeftMargin, _scaledUpDownTopMargin, 0, 0);
             _percentNumericUpDown.AutoScaleMode = AutoScaleMode.Font;
