@@ -26,5 +26,6 @@ internal readonly partial struct Value
         internal static PackedDateTimeOffsetFlag PackedDateTimeOffset { get; } = PackedDateTimeOffsetFlag.Instance;
         internal static PackedColorFlag PackedColor { get; } = PackedColorFlag.Instance;
         internal static StraightCastFlag<Size> Size { get; } = StraightCastFlag<Size>.Instance;
+        internal static StraightCastFlag<Point> Point { get; } = StraightCastFlag<Point>.Instance;
     }
 }

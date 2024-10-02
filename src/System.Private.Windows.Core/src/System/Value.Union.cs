@@ -37,6 +37,7 @@ internal readonly partial struct Value
         [FieldOffset(0)] public PackedDateTimeOffset PackedDateTimeOffset;
         [FieldOffset(0)] public PackedColor PackedColor;
         [FieldOffset(0)] public Size Size;
+        [FieldOffset(0)] public Point Point;
         [FieldOffset(0)] public (int Offset, int Count) Segment;
     }
 }

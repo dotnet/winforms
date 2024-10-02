@@ -211,7 +211,7 @@ internal sealed class PropertyStore
         // Should only call this from SetValue<T> for value types that are larger than 8 bytes.
         Debug.Assert(sizeof(T) > 8);
 
-        if (_values.TryGetValue(key, out Value foundValue))
+        if (_values.TryGetValue(key, out Value foundValue) && foundValue.Type == typeof(T))
         {
             object storedValue = foundValue.GetValue<object>();
             ref T unboxed = ref Unsafe.Unbox<T>(storedValue);
