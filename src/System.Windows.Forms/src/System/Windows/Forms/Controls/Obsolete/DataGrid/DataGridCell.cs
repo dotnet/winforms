@@ -6,6 +6,7 @@ using System.ComponentModel;
 namespace System.Windows.Forms;
 
 #nullable disable
+
 [Obsolete(
     Obsoletions.DataGridMessage,
     error: false,
@@ -22,6 +23,10 @@ public struct DataGridCell : IEquatable<DataGridCell>
 #pragma warning restore CA1815
 #pragma warning restore CA1067
 {
+    public DataGridCell() => throw new PlatformNotSupportedException();
+
+    public DataGridCell(int r, int c) => throw new PlatformNotSupportedException();
+
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public int ColumnNumber
@@ -38,11 +43,9 @@ public struct DataGridCell : IEquatable<DataGridCell>
         set => throw new PlatformNotSupportedException();
     }
 
-    public DataGridCell(int r, int c) => throw new PlatformNotSupportedException();
-
     public readonly bool Equals(DataGridCell other) => throw new PlatformNotSupportedException();
 
-    public static bool operator == (DataGridCell left, DataGridCell right) => throw new PlatformNotSupportedException();
+    public static bool operator ==(DataGridCell left, DataGridCell right) => throw new PlatformNotSupportedException();
 
-    public static bool operator != (DataGridCell left, DataGridCell right) => throw new PlatformNotSupportedException();
+    public static bool operator !=(DataGridCell left, DataGridCell right) => throw new PlatformNotSupportedException();
 }

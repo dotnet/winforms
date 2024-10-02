@@ -6,6 +6,8 @@ using System.Drawing;
 
 namespace System.Windows.Forms;
 
+#nullable disable
+
 [Obsolete(
     Obsoletions.ContextMenuMessage,
     error: false,
@@ -14,13 +16,10 @@ namespace System.Windows.Forms;
 [EditorBrowsable(EditorBrowsableState.Never)]
 public class ContextMenu : Menu
 {
-    public ContextMenu() : base(items: null)
-    {
-    }
+    public ContextMenu() : base(items: null) => throw new PlatformNotSupportedException();
 
     public ContextMenu(MenuItem[] menuItems) : base(items: menuItems)
-    {
-    }
+        => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
