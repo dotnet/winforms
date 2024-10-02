@@ -6,6 +6,8 @@ using System.Drawing;
 
 namespace System.Windows.Forms;
 
+#nullable disable
+
 [Obsolete(
     Obsoletions.StatusBarMessage,
     error: false,
@@ -23,9 +25,7 @@ public class StatusBarDrawItemEventArgs : DrawItemEventArgs
             font: font,
             rect: r,
             index: itemId,
-            state: itemState)
-    {
-    }
+            state: itemState) => throw new PlatformNotSupportedException();
 
     public StatusBarDrawItemEventArgs(Graphics g,
         Font font,
@@ -40,9 +40,7 @@ public class StatusBarDrawItemEventArgs : DrawItemEventArgs
             index: itemId,
             state: itemState,
             foreColor: foreColor,
-            backColor: backColor)
-    {
-    }
+            backColor: backColor) => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]

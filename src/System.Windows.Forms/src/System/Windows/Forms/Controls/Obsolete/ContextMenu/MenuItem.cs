@@ -6,6 +6,7 @@ using System.ComponentModel;
 namespace System.Windows.Forms;
 
 #nullable disable
+
 [Obsolete(
     Obsoletions.MenuMessage,
     error: false,
@@ -21,9 +22,7 @@ public class MenuItem : Menu
         onClick: null,
         onPopup: null,
         onSelect: null,
-        items: null)
-    {
-    }
+        items: null) => throw new PlatformNotSupportedException();
 
     public MenuItem(string text) : this(mergeType: MenuMerge.Add,
         mergeOrder: 0,
@@ -32,9 +31,7 @@ public class MenuItem : Menu
         onClick: null,
         onPopup: null,
         onSelect: null,
-        items: null)
-    {
-    }
+        items: null) => throw new PlatformNotSupportedException();
 
     public MenuItem(string text, EventHandler onClick) : this(mergeType: MenuMerge.Add,
         mergeOrder: 0,
@@ -43,9 +40,7 @@ public class MenuItem : Menu
         onClick: onClick,
         onPopup: null,
         onSelect: null,
-        items: null)
-    {
-    }
+        items: null) => throw new PlatformNotSupportedException();
 
     public MenuItem(string text, EventHandler onClick, Shortcut shortcut) : this(mergeType: MenuMerge.Add,
         mergeOrder: 0,
@@ -54,9 +49,7 @@ public class MenuItem : Menu
         onClick: onClick,
         onPopup: null,
         onSelect: null,
-        items: null)
-    {
-    }
+        items: null) => throw new PlatformNotSupportedException();
 
     public MenuItem(string text, MenuItem[] items) : this(mergeType: MenuMerge.Add,
         mergeOrder: 0,
@@ -65,9 +58,7 @@ public class MenuItem : Menu
         onClick: null,
         onPopup: null,
         onSelect: null,
-        items: items)
-    {
-    }
+        items: items) => throw new PlatformNotSupportedException();
 
     public MenuItem(MenuMerge mergeType,
         int mergeOrder,
@@ -76,9 +67,7 @@ public class MenuItem : Menu
         EventHandler onClick,
         EventHandler onPopup,
         EventHandler onSelect,
-        MenuItem[] items) : base(items: items)
-    {
-    }
+        MenuItem[] items) : base(items: items) => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]

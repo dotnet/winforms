@@ -5,6 +5,8 @@ using System.ComponentModel;
 
 namespace System.Windows.Forms;
 
+#nullable disable
+
 [Obsolete(
     Obsoletions.ToolBarMessage,
     error: false,
@@ -13,9 +15,7 @@ namespace System.Windows.Forms;
 [EditorBrowsable(EditorBrowsableState.Never)]
 public class ToolBarButtonClickEventArgs : EventArgs
 {
-    public ToolBarButtonClickEventArgs(ToolBarButton button)
-    {
-    }
+    public ToolBarButtonClickEventArgs(ToolBarButton button) => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]

@@ -6,6 +6,7 @@ using System.ComponentModel;
 namespace System.Windows.Forms;
 
 #nullable disable
+
 [Obsolete(
     Obsoletions.StatusBarMessage,
     error: false,
@@ -14,9 +15,7 @@ namespace System.Windows.Forms;
 [EditorBrowsable(EditorBrowsableState.Never)]
 public partial class StatusBar : Control
 {
-    public StatusBar()
-    {
-    }
+    public StatusBar() => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]

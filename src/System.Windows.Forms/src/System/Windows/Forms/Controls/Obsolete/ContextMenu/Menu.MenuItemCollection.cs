@@ -6,6 +6,8 @@ using System.ComponentModel;
 
 namespace System.Windows.Forms;
 
+#nullable disable
+
 public abstract partial class Menu
 {
     [Obsolete(
@@ -17,18 +19,14 @@ public abstract partial class Menu
     [ListBindable(false)]
     public class MenuItemCollection : IList
     {
-        public MenuItemCollection(Menu owner)
-        {
-        }
+        public MenuItemCollection(Menu owner) => throw new PlatformNotSupportedException();
 
         public virtual MenuItem this[int index] => throw new PlatformNotSupportedException();
 
         object IList.this[int index]
         {
             get => throw new PlatformNotSupportedException();
-#pragma warning disable CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
             set => throw new PlatformNotSupportedException();
-#pragma warning restore CS8769
         }
 
         public virtual MenuItem this[string key] => throw new PlatformNotSupportedException();
@@ -49,17 +47,13 @@ public abstract partial class Menu
 
         public virtual MenuItem Add(string caption, MenuItem[] items) => throw new PlatformNotSupportedException();
 
-#pragma warning disable CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
         public virtual int Add(object value) => throw new PlatformNotSupportedException();
-#pragma warning restore CS8767
 
         public virtual int Add(int index, MenuItem item) => throw new PlatformNotSupportedException();
 
         public virtual void AddRange(MenuItem[] items) => throw new PlatformNotSupportedException();
 
-#pragma warning disable CS8767 // Nullability of reference types in type of parameter doesn't match implicitly implemented member (possibly because of nullability attributes).
         public bool Contains(object value) => throw new PlatformNotSupportedException();
-#pragma warning restore CS8767
 
         public virtual bool ContainsKey(string key) => throw new PlatformNotSupportedException();
 
@@ -73,11 +67,9 @@ public abstract partial class Menu
 
         public virtual int IndexOfKey(string key) => throw new PlatformNotSupportedException();
 
-#pragma warning disable CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
         int IList.IndexOf(object value) => throw new PlatformNotSupportedException();
 
         void IList.Insert(int index, object value) => throw new PlatformNotSupportedException();
-#pragma warning restore CS8769
 
         public IEnumerator GetEnumerator() => throw new PlatformNotSupportedException();
 
@@ -87,8 +79,6 @@ public abstract partial class Menu
 
         public virtual void Remove(MenuItem item) => throw new PlatformNotSupportedException();
 
-#pragma warning disable CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
         void IList.Remove(object value) => throw new PlatformNotSupportedException();
-#pragma warning restore CS8769
     }
 }

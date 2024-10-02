@@ -6,6 +6,7 @@ using System.ComponentModel;
 namespace System.Windows.Forms;
 
 #nullable disable
+
 [Obsolete(
     Obsoletions.DataGridMessage,
     error: false,
@@ -14,4 +15,5 @@ namespace System.Windows.Forms;
 [EditorBrowsable(EditorBrowsableState.Never)]
 public class DataGridPreferredColumnWidthTypeConverter : TypeConverter
 {
+    public DataGridPreferredColumnWidthTypeConverter() => throw new PlatformNotSupportedException();
 }

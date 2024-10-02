@@ -5,6 +5,8 @@ using System.ComponentModel;
 
 namespace System.Windows.Forms;
 
+#nullable disable
+
 [Obsolete(
     Obsoletions.StatusBarMessage,
     error: false,
@@ -17,9 +19,8 @@ public class StatusBarPanelClickEventArgs : MouseEventArgs
         MouseButtons button,
         int clicks,
         int x,
-        int y) : base(button: button, clicks: clicks, x: x, y: y, delta: 0)
-    {
-    }
+        int y) : base(button: button, clicks: clicks, x: x, y: y, delta: 0) =>
+            throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]

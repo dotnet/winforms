@@ -5,6 +5,8 @@ using System.ComponentModel;
 
 namespace System.Windows.Forms;
 
+#nullable disable
+
 [Obsolete(
     Obsoletions.MainMenuMessage,
     error: false,
@@ -13,17 +15,11 @@ namespace System.Windows.Forms;
     EditorBrowsable(EditorBrowsableState.Never)]
 public class MainMenu : Menu
 {
-    public MainMenu() : base(items: null)
-    {
-    }
+    public MainMenu() : base(items: null) => throw new PlatformNotSupportedException();
 
-    public MainMenu(IContainer container) : this()
-    {
-    }
+    public MainMenu(IContainer container) : this() => throw new PlatformNotSupportedException();
 
-    public MainMenu(MenuItem[] items) : base(items: items)
-    {
-    }
+    public MainMenu(MenuItem[] items) : base(items: items) => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]

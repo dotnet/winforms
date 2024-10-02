@@ -6,6 +6,7 @@ using System.ComponentModel;
 namespace System.Windows.Forms;
 
 #nullable disable
+
 [Obsolete(
     Obsoletions.MenuMessage,
     error: false,
@@ -17,9 +18,7 @@ public abstract partial class Menu : Component
     public const int FindHandle = 0;
     public const int FindShortcut = 1;
 
-    protected Menu(MenuItem[] items)
-    {
-    }
+    protected Menu(MenuItem[] items) => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]

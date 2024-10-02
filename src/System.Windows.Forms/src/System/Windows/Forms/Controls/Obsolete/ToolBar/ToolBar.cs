@@ -7,6 +7,7 @@ using System.Drawing;
 namespace System.Windows.Forms;
 
 #nullable disable
+
 [Obsolete(
     Obsoletions.ToolBarMessage,
     error: false,
@@ -15,9 +16,7 @@ namespace System.Windows.Forms;
 [EditorBrowsable(EditorBrowsableState.Never)]
 public partial class ToolBar : Control
 {
-    public ToolBar()
-    {
-    }
+    public ToolBar() => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]

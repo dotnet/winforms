@@ -3,26 +3,22 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms;
 
 #nullable disable
+
 [Obsolete(
     Obsoletions.DataGridMessage,
     error: false,
     DiagnosticId = Obsoletions.DataGridDiagnosticId,
     UrlFormat = Obsoletions.SharedUrlFormat)]
 [EditorBrowsable(EditorBrowsableState.Never)]
-public abstract class DataGridColumnStyle : Component, IDataGridColumnStyleEditingNotificationService
+public abstract partial class DataGridColumnStyle : Component, IDataGridColumnStyleEditingNotificationService
 {
-    public DataGridColumnStyle()
-    {
-    }
+    public DataGridColumnStyle() => throw new PlatformNotSupportedException();
 
-    public DataGridColumnStyle(PropertyDescriptor prop)
-    {
-    }
+    public DataGridColumnStyle(PropertyDescriptor prop) => throw new PlatformNotSupportedException();
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -230,24 +226,7 @@ public abstract class DataGridColumnStyle : Component, IDataGridColumnStyleEditi
 
     void IDataGridColumnStyleEditingNotificationService.ColumnStartedEditing(Control editingControl) => throw new PlatformNotSupportedException();
 
-    protected class CompModSwitches
-    {
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public static TraceSwitch DGEditColumnEditing => throw new PlatformNotSupportedException();
-    }
-
     protected internal virtual void ColumnStartedEditing(Control editingControl) => throw new PlatformNotSupportedException();
 
     protected internal virtual void UpdateUI(CurrencyManager source, int rowNum, string displayText) => throw new PlatformNotSupportedException();
-
-    [ComVisible(true)]
-    protected class DataGridColumnHeaderAccessibleObject : AccessibleObject
-    {
-        public DataGridColumnHeaderAccessibleObject(DataGridColumnStyle owner) => throw new PlatformNotSupportedException();
-
-        public DataGridColumnHeaderAccessibleObject() => throw new PlatformNotSupportedException();
-
-        protected DataGridColumnStyle Owner => throw new PlatformNotSupportedException();
-    }
 }

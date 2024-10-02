@@ -5,7 +5,9 @@ using System.ComponentModel;
 
 namespace System.Windows.Forms;
 
-public partial class DataGrid
+#nullable disable
+
+public partial class DataGridColumnStyle
 {
     [Obsolete(
         Obsoletions.DataGridMessage,
@@ -13,18 +15,10 @@ public partial class DataGrid
         DiagnosticId = Obsoletions.DataGridDiagnosticId,
         UrlFormat = Obsoletions.SharedUrlFormat)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public sealed class HitTestInfo
+    protected class CompModSwitches
     {
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public int Column => throw new PlatformNotSupportedException();
-
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public int Row => throw new PlatformNotSupportedException();
-
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public HitTestType Type => throw new PlatformNotSupportedException();
+        public static TraceSwitch DGEditColumnEditing => throw new PlatformNotSupportedException();
     }
 }

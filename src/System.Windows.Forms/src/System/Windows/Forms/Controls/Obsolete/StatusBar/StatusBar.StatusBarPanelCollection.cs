@@ -6,6 +6,8 @@ using System.ComponentModel;
 
 namespace System.Windows.Forms;
 
+#nullable disable
+
 public partial class StatusBar
 {
     [Obsolete(
@@ -31,9 +33,7 @@ public partial class StatusBar
         object IList.this[int index]
         {
             get => throw new PlatformNotSupportedException();
-#pragma warning disable CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
             set => throw new PlatformNotSupportedException();
-#pragma warning restore CS8769
         }
 
         [Browsable(false)]
@@ -58,41 +58,31 @@ public partial class StatusBar
 
         public virtual int Add(StatusBarPanel value) => throw new PlatformNotSupportedException();
 
-#pragma warning disable CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
         int IList.Add(object value) => throw new PlatformNotSupportedException();
-#pragma warning restore CS8769
 
         public virtual void AddRange(StatusBarPanel[] panels) => throw new PlatformNotSupportedException();
 
         public bool Contains(StatusBarPanel panel) => throw new PlatformNotSupportedException();
 
-#pragma warning disable CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
         bool IList.Contains(object panel) => throw new PlatformNotSupportedException();
-#pragma warning restore CS8769
 
         public virtual bool ContainsKey(string key) => throw new PlatformNotSupportedException();
 
         public int IndexOf(StatusBarPanel panel) => throw new PlatformNotSupportedException();
 
-#pragma warning disable CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
         int IList.IndexOf(object panel) => throw new PlatformNotSupportedException();
-#pragma warning restore CS8769
 
         public virtual int IndexOfKey(string key) => throw new PlatformNotSupportedException();
 
         public virtual void Insert(int index, StatusBarPanel value) => throw new PlatformNotSupportedException();
 
-#pragma warning disable CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
         void IList.Insert(int index, object value) => throw new PlatformNotSupportedException();
-#pragma warning restore CS8769
 
         public virtual void Clear() => throw new PlatformNotSupportedException();
 
         public virtual void Remove(StatusBarPanel value) => throw new PlatformNotSupportedException();
 
-#pragma warning disable CS8769 // Nullability of reference types in type of parameter doesn't match implemented member (possibly because of nullability attributes).
         void IList.Remove(object value) => throw new PlatformNotSupportedException();
-#pragma warning restore CS8769
 
         public virtual void RemoveAt(int index) => throw new PlatformNotSupportedException();
 
