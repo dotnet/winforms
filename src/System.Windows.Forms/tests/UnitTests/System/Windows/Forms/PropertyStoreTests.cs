@@ -170,6 +170,25 @@ public class PropertyStoreTests
     }
 
     [Fact]
+    public void PropertyStore_Rectangle_WrongExistingType()
+    {
+        PropertyStore store = new();
+        Rectangle one = new(1, 2, 3, 4);
+
+        // Check stored null
+        store.AddValue<object?>(1, null);
+        store.AddValue(1, one);
+        store.TryGetValue(1, out Rectangle result).Should().BeTrue();
+        result.Should().Be(one);
+
+        // Check stored wrong type
+        store.AddValue(1, DateTime.Now);
+        store.AddValue(1, one);
+        store.TryGetValue(1, out result).Should().BeTrue();
+        result.Should().Be(one);
+    }
+
+    [Fact]
     public void PropertyStore_Padding_UpdateDoesNotAllocate()
     {
         PropertyStore store = new();
