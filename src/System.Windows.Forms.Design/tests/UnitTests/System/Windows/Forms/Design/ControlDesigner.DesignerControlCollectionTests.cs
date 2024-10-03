@@ -69,7 +69,7 @@ public class ControlDesignerDesignerControlCollectionTests : IDisposable
     {
         using Control control1 = new();
         using Control control2 = new();
-        Control[] controls = { control1, control2 };
+        Control[] controls = [control1, control2];
         _collection.AddRange(controls);
         _control.Controls.Cast<Control>().Should().Contain(controls);
     }
