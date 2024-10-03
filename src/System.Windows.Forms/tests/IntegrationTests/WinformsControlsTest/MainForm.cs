@@ -226,10 +226,6 @@ public partial class MainForm : Form
         {
             MainFormControlsTabOrder.ScrollableControlsButton,
             new InitInfo("ScrollableControlsButton", (obj, e) => new ScrollableControls().Show(this))
-        },
-        {
-            MainFormControlsTabOrder.ObsoleteControlsButton,
-            new InitInfo("ObsoleteControls", (obj, e) => new ObsoleteControls().Show(this))
         }
     };
 
