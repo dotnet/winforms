@@ -5,6 +5,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using UnsupportedTypes;
 
 namespace System.Windows.Forms.Tests;
 
@@ -123,6 +124,55 @@ public class UnsupportedTypesTests
     {
         using Form form = new();
         form.MergedMenu.Should().BeNull();
+    }
+
+    [Fact]
+    public void CreateMenus_Throws()
+    {
+        // This test binds to ContextMenu, Menu, Menu.MenuItemCollection, MenuItem, MenuMerge enum
+        using Button button = new();
+        using CreateFrameworkTypes createFrameworkTypes = new();
+        ((Action)(() => createFrameworkTypes.CreateMenus(button))).Should().Throw<PlatformNotSupportedException>();
+    }
+
+    [Fact]
+    public void CreateMainMenu_Throws()
+    {
+        // This test binds to MainMenu, MenuItem in order to initialize Form.Menu.
+        using Form form = new();
+        using CreateFrameworkTypes createFrameworkTypes = new();
+        ((Action)(() => form.Menu = createFrameworkTypes.CreateMainMenu())).Should().Throw<PlatformNotSupportedException>();
+    }
+
+    [Fact]
+    public void CreateDataGrid_Throws()
+    {
+        // This test binds to DataGrid, DataGridCell, DataGridLineStyle, DataGridParentRowsLabelStyle, DataGrid.HitTestInfo,
+        // DataGrid.HitTestType, DataGridTableStyle, DataGridColumnStyle, DataGridBoolColumn, DataGridTextBoxColumn,
+        // GridColumnStylesCollection, GridTableStylesCollection in order to add DataGrid to a form.
+        using Form form = new();
+        using CreateFrameworkTypes createFrameworkTypes = new();
+        ((Action)(() => createFrameworkTypes.CreateDataGrid(form))).Should().Throw<PlatformNotSupportedException>();
+    }
+
+    [Fact]
+    public void CreateToolBar_Throws()
+    {
+        // This test binds to ToolBar, ToolBarButton, ToolBar.ButtonCollection, ToolBarButtonClickEventArgs, ToolBarButtonClickEventHandler,
+        // ToolBarButtonCollection, ToolBarButtonStyle, ToolBarTextAlign, ToolBarAppearance.
+        using Form form = new();
+        using CreateFrameworkTypes createFrameworkTypes = new();
+        ((Action)(() => createFrameworkTypes.CreateToolBar(form))).Should().Throw<PlatformNotSupportedException>();
+    }
+
+    [Fact]
+    public void CreateStatusBar_Throws()
+    {
+        // This test binds to StatusBar, StatusBarPanel, StatusBarPanelAutoSize, StatusBarPanelBorderStyle, StatusBarPanelCollection,
+        // StatusBarPanelClickEventHandler, StatusBarPanelStyle, StatusBarDrawItemEventArgs, StatusBarPanelClickEventArgs.
+        using Form form = new();
+        using CreateFrameworkTypes createFrameworkTypes = new();
+        ((Action)(() => createFrameworkTypes.CreateStatusBar(form))).Should().Throw<PlatformNotSupportedException>();
     }
 
     internal class ControlWithContextMenu : Control

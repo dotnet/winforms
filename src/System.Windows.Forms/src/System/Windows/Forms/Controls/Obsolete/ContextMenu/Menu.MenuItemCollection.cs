@@ -47,13 +47,17 @@ public abstract partial class Menu
 
         public virtual MenuItem Add(string caption, MenuItem[] items) => throw new PlatformNotSupportedException();
 
-        public virtual int Add(object value) => throw new PlatformNotSupportedException();
+        public virtual int Add(MenuItem item)  => throw new PlatformNotSupportedException();
 
         public virtual int Add(int index, MenuItem item) => throw new PlatformNotSupportedException();
 
         public virtual void AddRange(MenuItem[] items) => throw new PlatformNotSupportedException();
 
-        public bool Contains(object value) => throw new PlatformNotSupportedException();
+        int IList.Add(object value) => throw new PlatformNotSupportedException();
+
+        public bool Contains(MenuItem value) => throw new PlatformNotSupportedException();
+
+        bool IList.Contains(object value) => throw new PlatformNotSupportedException();
 
         public virtual bool ContainsKey(string key) => throw new PlatformNotSupportedException();
 
