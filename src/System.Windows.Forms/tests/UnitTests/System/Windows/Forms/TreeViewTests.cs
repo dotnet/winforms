@@ -7534,7 +7534,7 @@ public class TreeViewTests
     [WinFormsFact]
     public void ArraySubsetEnumerator_Behavior_AfterMoveNextAndReset()
     {
-        object[] array = { "a", "b", "c" };
+        object[] array = ["a", "b", "c"];
         ArraySubsetEnumerator enumerator = new(array, 2);
 
         enumerator.MoveNext().Should().BeTrue();
