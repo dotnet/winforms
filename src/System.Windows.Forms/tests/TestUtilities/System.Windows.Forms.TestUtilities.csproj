@@ -6,9 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
-    <PackageReference Include="Microsoft.DotNet.RemoteExecutor" Version="$(MicrosoftDotNetRemoteExecutorVersion)" />
-    <PackageReference Include="Microsoft.DotNet.XUnitExtensions" Version="$(MicrosoftDotNetXUnitExtensionsPackageVersion)" />
+    <PackageReference Include="System.Collections.Concurrent" />
+    <PackageReference Include="Microsoft.DotNet.RemoteExecutor" />
+    <PackageReference Include="Microsoft.DotNet.XUnitExtensions" />
   </ItemGroup>
 
   <ItemGroup>

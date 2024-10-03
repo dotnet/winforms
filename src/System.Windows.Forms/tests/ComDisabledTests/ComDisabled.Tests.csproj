@@ -11,8 +11,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentAssertions" Version="$(FluentAssertionsVersion)" />
-    <PackageReference Include="System.Runtime.Serialization.Formatters" Version="$(SystemRuntimeSerializationFormattersPackageVersion)" />
+    <PackageReference Include="FluentAssertions" />
+    <PackageReference Include="System.Runtime.Serialization.Formatters" />
   </ItemGroup>
 
   <ItemGroup>

@@ -17,7 +17,7 @@
   
   <!-- to prevent using MS.NC.Platforms from SDK, which is lagging behind the version that WinForms gets from the CoreFx packages -->
   <ItemGroup>
-    <PackageReference Include="Microsoft.NETCore.Platforms" Version="$(MicrosoftNETCorePlatformsPackageVersion)" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.NETCore.Platforms" PrivateAssets="all" />
   </ItemGroup>
 
   <!-- Set code coverage properties that reference properties not available in Directory.Build.props -->

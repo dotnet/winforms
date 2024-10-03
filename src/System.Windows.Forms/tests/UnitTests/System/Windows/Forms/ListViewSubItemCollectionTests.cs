@@ -916,7 +916,7 @@ public class ListViewSubItemCollectionTests
         Assert.Null(subItem1._owner);
         Assert.Null(subItem2._owner);
 
-        listViewItem.SubItems.AddRange(new ListViewItem.ListViewSubItem[] { subItem1, subItem2 });
+        listViewItem.SubItems.AddRange([subItem1, subItem2]);
 
         Assert.Same(listViewItem, subItem1._owner);
         Assert.Same(listViewItem, subItem2._owner);
@@ -927,7 +927,7 @@ public class ListViewSubItemCollectionTests
     {
         ListViewItem listViewItem = new();
 
-        listViewItem.SubItems.AddRange(new string[] { "Test 1", "Test 2" });
+        listViewItem.SubItems.AddRange(["Test 1", "Test 2"]);
 
         Assert.Same(listViewItem, listViewItem.SubItems[1]._owner);
         Assert.Same(listViewItem, listViewItem.SubItems[2]._owner);
