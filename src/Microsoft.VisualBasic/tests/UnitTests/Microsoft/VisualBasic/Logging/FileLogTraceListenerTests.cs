@@ -24,14 +24,17 @@ public class FileLogTraceListenerTests : FileCleanupTestBase
         _ = listener.CustomLocation;
     }
 
-    [Fact]
-    public void Write()
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public void Write(bool includeHostName)
     {
         TraceEventCache cache = new();
         using FileLogTraceListener listener = new()
         {
             Location = LogFileLocation.Custom,
-            CustomLocation = GetTestFilePath()
+            CustomLocation = GetTestFilePath(),
+            IncludeHostName = includeHostName
         };
 
         listener.Write("Write");
