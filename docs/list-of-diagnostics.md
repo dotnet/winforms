@@ -39,12 +39,12 @@ The acceptance criteria for adding an obsoletion includes:
 |  __`WFDEV002`__ | `DomainUpDown.DomainUpDownAccessibleObject` is no longer used to provide accessible support for `DomainUpDown` controls. Use `ControlAccessibleObject` instead. |
 |  __`WFDEV003`__ | `DomainUpDown.DomainItemAccessibleObject` is no longer used to provide accessible support for `DomainUpDown` items. |
 |  __`WFDEV004`__ | `Form.OnClosing`, `Form.OnClosed` and the corresponding events are obsolete. Use `Form.OnFormClosing`, `Form.OnFormClosed`, `Form.FormClosing` and `Form.FormClosed` instead. |
-|  __`WFDEV005`__ | `ContextMenu` has been deprecated. Use `ContextMenuStrip` instead. |
-|  __`WFDEV006`__ | `DataGrid` has been deprecated. Use `DataGridView` instead. |
-|  __`WFDEV007`__ | `MainMenu` has been deprecated. Use `MenuStrip` instead. |
-|  __`WFDEV008`__ | `Menu` has been deprecated. Use `ToolStripDropDown` and `ToolStripDropDownMenu` instead. |
-|  __`WFDEV009`__ | `StatusBar` has been deprecated. Use `StatusStrip` instead. |
-|  __`WFDEV010`__ | `ToolBar` has been deprecated. Use `ToolStrip` instead. |
+|  __`WFDEV005`__ | `ContextMenu` is not supported. Use `ContextMenuStrip` instead. |
+|  __`WFDEV006`__ | `DataGrid` is not supported. Use `DataGridView` instead. |
+|  __`WFDEV007`__ | `MainMenu` is not supported. Use `MenuStrip` instead. |
+|  __`WFDEV008`__ | `Menu` is not supported. Use `ToolStripDropDown` and `ToolStripDropDownMenu` instead. |
+|  __`WFDEV009`__ | `StatusBar` is not supported. Use `StatusStrip` instead. |
+|  __`WFDEV010`__ | `ToolBar` is not supported. Use `ToolStrip` instead. |
 
 
 ## Analyzer Warnings
