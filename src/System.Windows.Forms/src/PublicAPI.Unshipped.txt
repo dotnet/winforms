@@ -600,7 +600,7 @@ virtual System.Windows.Forms.StatusBar.StatusBarPanelCollection.RemoveAt(int ind
 ~System.Windows.Forms.Menu.GetMainMenu() -> System.Windows.Forms.MainMenu
 ~System.Windows.Forms.Menu.MdiListItem.get -> System.Windows.Forms.MenuItem
 ~System.Windows.Forms.Menu.Menu(System.Windows.Forms.MenuItem[] items) -> void
-~System.Windows.Forms.Menu.MenuItemCollection.Contains(object value) -> bool
+~System.Windows.Forms.Menu.MenuItemCollection.Contains(System.Windows.Forms.MenuItem value) -> bool
 ~System.Windows.Forms.Menu.MenuItemCollection.CopyTo(System.Array array, int index) -> void
 ~System.Windows.Forms.Menu.MenuItemCollection.Find(string key, bool searchAllChildren) -> System.Windows.Forms.MenuItem[]
 ~System.Windows.Forms.Menu.MenuItemCollection.GetEnumerator() -> System.Collections.IEnumerator
@@ -736,10 +736,10 @@ virtual System.Windows.Forms.StatusBar.StatusBarPanelCollection.RemoveAt(int ind
 ~virtual System.Windows.Forms.GridTableStylesCollection.AddRange(System.Windows.Forms.DataGridTableStyle[] tables) -> void
 ~virtual System.Windows.Forms.MainMenu.CloneMenu() -> System.Windows.Forms.MainMenu
 ~virtual System.Windows.Forms.Menu.MenuItemCollection.Add(int index, System.Windows.Forms.MenuItem item) -> int
-~virtual System.Windows.Forms.Menu.MenuItemCollection.Add(object value) -> int
 ~virtual System.Windows.Forms.Menu.MenuItemCollection.Add(string caption) -> System.Windows.Forms.MenuItem
 ~virtual System.Windows.Forms.Menu.MenuItemCollection.Add(string caption, System.EventHandler onClick) -> System.Windows.Forms.MenuItem
 ~virtual System.Windows.Forms.Menu.MenuItemCollection.Add(string caption, System.Windows.Forms.MenuItem[] items) -> System.Windows.Forms.MenuItem
+~virtual System.Windows.Forms.Menu.MenuItemCollection.Add(System.Windows.Forms.MenuItem item) -> int
 ~virtual System.Windows.Forms.Menu.MenuItemCollection.AddRange(System.Windows.Forms.MenuItem[] items) -> void
 ~virtual System.Windows.Forms.Menu.MenuItemCollection.ContainsKey(string key) -> bool
 ~virtual System.Windows.Forms.Menu.MenuItemCollection.IndexOfKey(string key) -> int

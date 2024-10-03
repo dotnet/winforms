@@ -7,6 +7,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms", "src\System.Windows.Forms\src\System.Windows.Forms.csproj", "{0D23A41B-2626-4703-9E4A-87C07F69B0B2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Tests", "src\System.Windows.Forms\tests\UnitTests\System.Windows.Forms.Tests.csproj", "{AB38E262-F206-4820-8F29-23C5F72A4A16}"
+	ProjectSection(ProjectDependencies) = postProject
+		{607E02DD-4256-4E73-B9A4-4CE2673B3703} = {607E02DD-4256-4E73-B9A4-4CE2673B3703}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Design.Tests", "src\System.Windows.Forms.Design\tests\UnitTests\System.Windows.Forms.Design.Tests.csproj", "{F977CA8C-FBF9-4D82-80BA-FE5B2F33486E}"
 EndProject
@@ -187,6 +190,8 @@ EndProject
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "System.Windows.Forms.Analyzers.VisualBasic.Tests", "src\System.Windows.Forms.Analyzers.VisualBasic\tests\UnitTests\System.Windows.Forms.Analyzers.VisualBasic.Tests\System.Windows.Forms.Analyzers.VisualBasic.Tests.vbproj", "{0FD53580-3175-4F8F-8372-BE46C9122EE0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Private.Windows.Core.Tests", "src\System.Private.Windows.Core\tests\System.Private.Windows.Core.Tests\System.Private.Windows.Core.Tests.csproj", "{B653C860-9B52-4597-9921-24DA79A4E6B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnsupportedTypes", "src\System.Windows.Forms\tests\UnsupportedTypes\UnsupportedTypes.csproj", "{607E02DD-4256-4E73-B9A4-4CE2673B3703}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1072,6 +1077,22 @@ Global
 		{B653C860-9B52-4597-9921-24DA79A4E6B1}.Release|x64.Build.0 = Release|Any CPU
 		{B653C860-9B52-4597-9921-24DA79A4E6B1}.Release|x86.ActiveCfg = Release|Any CPU
 		{B653C860-9B52-4597-9921-24DA79A4E6B1}.Release|x86.Build.0 = Release|Any CPU
+		{607E02DD-4256-4E73-B9A4-4CE2673B3703}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{607E02DD-4256-4E73-B9A4-4CE2673B3703}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{607E02DD-4256-4E73-B9A4-4CE2673B3703}.Debug|arm64.ActiveCfg = Debug|Any CPU
+		{607E02DD-4256-4E73-B9A4-4CE2673B3703}.Debug|arm64.Build.0 = Debug|Any CPU
+		{607E02DD-4256-4E73-B9A4-4CE2673B3703}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{607E02DD-4256-4E73-B9A4-4CE2673B3703}.Debug|x64.Build.0 = Debug|Any CPU
+		{607E02DD-4256-4E73-B9A4-4CE2673B3703}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{607E02DD-4256-4E73-B9A4-4CE2673B3703}.Debug|x86.Build.0 = Debug|Any CPU
+		{607E02DD-4256-4E73-B9A4-4CE2673B3703}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{607E02DD-4256-4E73-B9A4-4CE2673B3703}.Release|Any CPU.Build.0 = Release|Any CPU
+		{607E02DD-4256-4E73-B9A4-4CE2673B3703}.Release|arm64.ActiveCfg = Release|Any CPU
+		{607E02DD-4256-4E73-B9A4-4CE2673B3703}.Release|arm64.Build.0 = Release|Any CPU
+		{607E02DD-4256-4E73-B9A4-4CE2673B3703}.Release|x64.ActiveCfg = Release|Any CPU
+		{607E02DD-4256-4E73-B9A4-4CE2673B3703}.Release|x64.Build.0 = Release|Any CPU
+		{607E02DD-4256-4E73-B9A4-4CE2673B3703}.Release|x86.ActiveCfg = Release|Any CPU
+		{607E02DD-4256-4E73-B9A4-4CE2673B3703}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1140,6 +1161,7 @@ Global
 		{C4C031D5-F79A-44B6-811E-0797E7D5C1C1} = {E4C6C5F5-46E9-4C63-9628-26752B4D9C11}
 		{0FD53580-3175-4F8F-8372-BE46C9122EE0} = {D3AD0BF9-F5E2-4913-9AE3-9C4998F95EA1}
 		{B653C860-9B52-4597-9921-24DA79A4E6B1} = {583F1292-AE8D-4511-B8D8-A81FE4642DDC}
+		{607E02DD-4256-4E73-B9A4-4CE2673B3703} = {583F1292-AE8D-4511-B8D8-A81FE4642DDC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B1B0433-F612-4E5A-BE7E-FCF5B9F6E136}
