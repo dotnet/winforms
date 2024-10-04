@@ -679,7 +679,7 @@ public class DomainUpDownTests : IDisposable
         // Set different.
         _sub.Sorted = !value;
         _sub.Sorted.Should().Be(!value);
-        _sub.Items.Cast<string>().Should().Equal(new string[] { "a", "a", "B", "c", "d" });
+        _sub.Items.Cast<string>().Should().Equal(["a", "a", "B", "c", "d"]);
         _sub.SelectedIndex.Should().Be(-1);
         _sub.UserEdit.Should().Be(userEdit);
         _sub.IsHandleCreated.Should().BeFalse();
@@ -722,7 +722,7 @@ public class DomainUpDownTests : IDisposable
         // Set different.
         _sub.Sorted = !value;
         _sub.Sorted.Should().Be(!value);
-        _sub.Items.Cast<string>().Should().Equal(new string[] { "a", "a", "B", "c", "d" });
+        _sub.Items.Cast<string>().Should().Equal(["a", "a", "B", "c", "d"]);
         _sub.SelectedIndex.Should().Be(expectedSelectedIndex);
         _sub.UserEdit.Should().Be(userEdit);
         _sub.IsHandleCreated.Should().BeFalse();
@@ -815,7 +815,7 @@ public class DomainUpDownTests : IDisposable
         // Set different.
         _sub.Sorted = !value;
         _sub.Sorted.Should().Be(!value);
-        _sub.Items.Cast<string>().Should().Equal(new string[] { "a", "a", "B", "c", "d" });
+        _sub.Items.Cast<string>().Should().Equal(["a", "a", "B", "c", "d"]);
         _sub.SelectedIndex.Should().Be(-1);
         _sub.UserEdit.Should().Be(userEdit);
         _sub.IsHandleCreated.Should().BeTrue();
@@ -866,7 +866,7 @@ public class DomainUpDownTests : IDisposable
         // Set different.
         _sub.Sorted = !value;
         _sub.Sorted.Should().Be(!value);
-        _sub.Items.Cast<string>().Should().Equal(new string[] { "a", "a", "B", "c", "d" });
+        _sub.Items.Cast<string>().Should().Equal(["a", "a", "B", "c", "d"]);
         _sub.SelectedIndex.Should().Be(expectedSelectedIndex);
         _sub.UserEdit.Should().Be(userEdit);
         _sub.IsHandleCreated.Should().BeTrue();

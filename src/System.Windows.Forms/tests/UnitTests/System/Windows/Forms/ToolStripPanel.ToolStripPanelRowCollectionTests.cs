@@ -44,7 +44,7 @@ public class ToolStripPanel_ToolStripPanelRowCollectionTests : IDisposable
     public void ToolStripPanelRowCollection_ConstructorWithOwnerAndRows_SetsOwnerAndAddsRows()
     {
         using ToolStripPanelRow toolStripPanelRow1 = new(_toolStripPanel);
-        ToolStripPanelRow[] toolStripPanelRowArray = { toolStripPanelRow1 };
+        ToolStripPanelRow[] toolStripPanelRowArray = [toolStripPanelRow1];
         ToolStripPanelRowCollection toolStripPanelRowCollection = new(_toolStripPanel, toolStripPanelRowArray);
         ToolStripPanel toolStripPanel = toolStripPanelRowCollection.TestAccessor().Dynamic._owner;
 
@@ -73,7 +73,7 @@ public class ToolStripPanel_ToolStripPanelRowCollectionTests : IDisposable
     public void ToolStripPanelRowCollection_Add_AddsRow()
     {
         ToolStripPanelRow row = AddRowToCollection(collection: _toolStripPanelRowCollection, panel: _toolStripPanel);
-        ToolStripPanelRow[] rows = { row };
+        ToolStripPanelRow[] rows = [row];
 
         try
         {
@@ -163,7 +163,7 @@ public class ToolStripPanel_ToolStripPanelRowCollectionTests : IDisposable
     public void ToolStripPanelRowCollection_Remove_RemovesRow()
     {
         var row = AddRowToCollection(collection: _toolStripPanelRowCollection, panel: _toolStripPanel);
-        ToolStripPanelRow[] rows = { row };
+        ToolStripPanelRow[] rows = [row];
 
         try
         {
@@ -182,7 +182,7 @@ public class ToolStripPanel_ToolStripPanelRowCollectionTests : IDisposable
     {
         var row1 = AddRowToCollection(collection: _toolStripPanelRowCollection, panel: _toolStripPanel);
         ToolStripPanelRow row2 = new(_toolStripPanel);
-        ToolStripPanelRow[] rows = { row1, row2 };
+        ToolStripPanelRow[] rows = [row1, row2];
 
         try
         {
@@ -202,7 +202,7 @@ public class ToolStripPanel_ToolStripPanelRowCollectionTests : IDisposable
     {
         var row1 = AddRowToCollection(collection: _toolStripPanelRowCollection, panel: _toolStripPanel);
         var row2 = AddRowToCollection(collection: _toolStripPanelRowCollection, panel: _toolStripPanel);
-        ToolStripPanelRow[] rows = { row1, row2 };
+        ToolStripPanelRow[] rows = [row1, row2];
 
         try
         {
@@ -221,7 +221,7 @@ public class ToolStripPanel_ToolStripPanelRowCollectionTests : IDisposable
     public void ToolStripPanelRowCollection_RemoveAt_IndexOutOfRange_ThrowsArgumentOutOfRangeException()
     {
         var row = AddRowToCollection(collection: _toolStripPanelRowCollection, panel: _toolStripPanel);
-        ToolStripPanelRow[] rows = { row };
+        ToolStripPanelRow[] rows = [row];
 
         try
         {
@@ -277,7 +277,7 @@ public class ToolStripPanel_ToolStripPanelRowCollectionTests : IDisposable
     public void ToolStripPanelRowCollection_CopyTo_IndexOutOfRange_ThrowsArgumentException()
     {
         var row = AddRowToCollection(collection: _toolStripPanelRowCollection, panel: _toolStripPanel);
-        ToolStripPanelRow[] rows = { row };
+        ToolStripPanelRow[] rows = [row];
         var array = new ToolStripPanelRow[1];
 
         try

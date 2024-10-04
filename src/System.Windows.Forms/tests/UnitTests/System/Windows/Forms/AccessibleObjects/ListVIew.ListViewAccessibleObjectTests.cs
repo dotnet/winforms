@@ -1010,10 +1010,10 @@ public class ListView_ListViewAccessibleObjectTests
             VirtualListSize = 4
         };
 
-        ListViewItem listItem1 = new(new string[] { "Item 1", "Item A" }, -1);
+        ListViewItem listItem1 = new(["Item 1", "Item A"], -1);
         ListViewItem listItem2 = new("Group item 2");
         ListViewItem listItem3 = new("Item 3");
-        ListViewItem listItem4 = new(new string[] { "Item 4", "Item B" }, -1);
+        ListViewItem listItem4 = new(["Item 4", "Item B"], -1);
 
         listView.RetrieveVirtualItem += (s, e) =>
         {
@@ -1389,10 +1389,10 @@ public class ListView_ListViewAccessibleObjectTests
         };
 
         ListViewGroup listViewGroup = new("Test");
-        ListViewItem listItem1 = new(new string[] { "Test Item 1", "Item A" }, -1, listViewGroup);
+        ListViewItem listItem1 = new(["Test Item 1", "Item A"], -1, listViewGroup);
         ListViewItem listItem2 = new("Group item 2", listViewGroup);
         ListViewItem listItem3 = new("Item 3");
-        ListViewItem listItem4 = new(new string[] { "Test Item 4", "Item B", "Item C", "Item D" }, -1);
+        ListViewItem listItem4 = new(["Test Item 4", "Item B", "Item C", "Item D"], -1);
 
         if (!virtualMode)
         {

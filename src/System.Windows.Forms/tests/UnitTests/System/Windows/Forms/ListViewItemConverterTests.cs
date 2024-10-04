@@ -117,109 +117,109 @@ public class ListViewItemConverterTests
         // Item.
         yield return new object[]
         {
-            new ListViewItem(new ListViewItem.ListViewSubItem[] { subItem1 }, "imageKey"),
+            new ListViewItem([subItem1], "imageKey"),
             new Type[] { typeof(string), typeof(string) },
             new object[] { "text1", "imageKey" }
         };
         yield return new object[]
         {
-            new ListViewItem(new ListViewItem.ListViewSubItem[] { subItem1 }, 1),
+            new ListViewItem([subItem1], 1),
             new Type[] { typeof(string), typeof(int) },
             new object[] { "text1", 1 }
         };
         yield return new object[]
         {
-            new ListViewItem(new ListViewItem.ListViewSubItem[] { subItem1 }, "imageKey", group),
+            new ListViewItem([subItem1], "imageKey", group),
             new Type[] { typeof(string), typeof(string) },
             new object[] { "text1", "imageKey" }
         };
         yield return new object[]
         {
-            new ListViewItem(new ListViewItem.ListViewSubItem[] { subItem1 }, 1, group),
+            new ListViewItem([subItem1], 1, group),
             new Type[] { typeof(string), typeof(int) },
             new object[] { "text1", 1 }
         };
         yield return new object[]
         {
-            new ListViewItem(new ListViewItem.ListViewSubItem[] { subItem1, subItem2 }, "imageKey"),
+            new ListViewItem([subItem1, subItem2], "imageKey"),
             new Type[] { typeof(string[]), typeof(string) },
             new object[] { new string[] { "text1", "text2" }, "imageKey" }
         };
         yield return new object[]
         {
-            new ListViewItem(new ListViewItem.ListViewSubItem[] { subItem1, subItem2 }, 1),
+            new ListViewItem([subItem1, subItem2], 1),
             new Type[] { typeof(string[]), typeof(int) },
             new object[] { new string[] { "text1", "text2" }, 1 }
         };
         yield return new object[]
         {
-            new ListViewItem(new ListViewItem.ListViewSubItem[] { subItem1, subItem2 }, "imageKey", group),
+            new ListViewItem([subItem1, subItem2], "imageKey", group),
             new Type[] { typeof(string[]), typeof(string) },
             new object[] { new string[] { "text1", "text2" }, "imageKey" }
         };
         yield return new object[]
         {
-            new ListViewItem(new ListViewItem.ListViewSubItem[] { subItem1, subItem2 }, 1, group),
+            new ListViewItem([subItem1, subItem2], 1, group),
             new Type[] { typeof(string[]), typeof(int) },
             new object[] { new string[] { "text1", "text2" }, 1 }
         };
         yield return new object[]
         {
-            new ListViewItem(new ListViewItem.ListViewSubItem[] { subItem1, subItem2, subItem3, subItem4, subItem5 }, "imageKey"),
+            new ListViewItem([subItem1, subItem2, subItem3, subItem4, subItem5], "imageKey"),
             new Type[] { typeof(ListViewItem.ListViewSubItem[]), typeof(string) },
             new object[] { new ListViewItem.ListViewSubItem[] { subItem1, subItem2, subItem3, subItem4, subItem5 }, "imageKey" }
         };
         yield return new object[]
         {
-            new ListViewItem(new ListViewItem.ListViewSubItem[] { subItem1, subItem2, subItem3, subItem4, subItem5 }, 1),
+            new ListViewItem([subItem1, subItem2, subItem3, subItem4, subItem5], 1),
             new Type[] { typeof(ListViewItem.ListViewSubItem[]), typeof(int) },
             new object[] { new ListViewItem.ListViewSubItem[] { subItem1, subItem2, subItem3, subItem4, subItem5 }, 1 }
         };
         yield return new object[]
         {
-            new ListViewItem(new ListViewItem.ListViewSubItem[] { subItem1, subItem2, subItem3, subItem4, subItem5 }, "imageKey", group),
+            new ListViewItem([subItem1, subItem2, subItem3, subItem4, subItem5], "imageKey", group),
             new Type[] { typeof(ListViewItem.ListViewSubItem[]), typeof(string) },
             new object[] { new ListViewItem.ListViewSubItem[] { subItem1, subItem2, subItem3, subItem4, subItem5 }, "imageKey" }
         };
         yield return new object[]
         {
-            new ListViewItem(new ListViewItem.ListViewSubItem[] { subItem1, subItem2, subItem3, subItem4, subItem5 }, 1, group),
+            new ListViewItem([subItem1, subItem2, subItem3, subItem4, subItem5], 1, group),
             new Type[] { typeof(ListViewItem.ListViewSubItem[]), typeof(int) },
             new object[] { new ListViewItem.ListViewSubItem[] { subItem1, subItem2, subItem3, subItem4, subItem5 }, 1 }
         };
         yield return new object[]
         {
-            new ListViewItem(new ListViewItem.ListViewSubItem[] { subItem3 }, 1),
+            new ListViewItem([subItem3], 1),
             new Type[] { typeof(string[]), typeof(int), typeof(Color), typeof(Color), typeof(Font) },
             new object[] { new string[] { "text3" }, 1, Color.Blue, Color.Empty, null }
         };
         yield return new object[]
         {
-            new ListViewItem(new ListViewItem.ListViewSubItem[] { subItem4 }, 1),
+            new ListViewItem([subItem4], 1),
             new Type[] { typeof(string[]), typeof(int), typeof(Color), typeof(Color), typeof(Font) },
             new object[] { new string[] { "text4" }, 1, Color.Empty, Color.Blue, null }
         };
         yield return new object[]
         {
-            new ListViewItem(new ListViewItem.ListViewSubItem[] { subItem5 }, 1),
+            new ListViewItem([subItem5], 1),
             new Type[] { typeof(string[]), typeof(int), typeof(Color), typeof(Color), typeof(Font) },
             new object[] { new string[] { "text5" }, 1, Color.Empty, Color.Empty, SystemFonts.MenuFont }
         };
         yield return new object[]
         {
-            new ListViewItem(new ListViewItem.ListViewSubItem[] { subItem3 }, "imageKey"),
+            new ListViewItem([subItem3], "imageKey"),
             new Type[] { typeof(string[]), typeof(string), typeof(Color), typeof(Color), typeof(Font) },
             new object[] { new string[] { "text3" }, "imageKey", Color.Blue, Color.Empty, null }
         };
         yield return new object[]
         {
-            new ListViewItem(new ListViewItem.ListViewSubItem[] { subItem4 }, "imageKey"),
+            new ListViewItem([subItem4], "imageKey"),
             new Type[] { typeof(string[]), typeof(string), typeof(Color), typeof(Color), typeof(Font) },
             new object[] { new string[] { "text4" }, "imageKey", Color.Empty, Color.Blue, null }
         };
         yield return new object[]
         {
-            new ListViewItem(new ListViewItem.ListViewSubItem[] { subItem5 }, "imageKey"),
+            new ListViewItem([subItem5], "imageKey"),
             new Type[] { typeof(string[]), typeof(string), typeof(Color), typeof(Color), typeof(Font) },
             new object[] { new string[] { "text5" }, "imageKey", Color.Empty, Color.Empty, SystemFonts.MenuFont }
         };

@@ -3149,7 +3149,7 @@ internal partial class CommandSet : IDisposable
     ///  collection with a string[] which contains the component names in order
     ///  for each component in the list.
     /// </summary>
-    private static ICollection PrependComponentNames(ICollection objects)
+    private static object[] PrependComponentNames(ICollection objects)
     {
         object[] newObjects = new object[objects.Count + 1];
         int idx = 1;

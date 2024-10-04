@@ -182,7 +182,7 @@ public class ToolStripComboBoxTests : IDisposable
     [WinFormsFact]
     public void ToolStripComboBox_Items_AddAndGet()
     {
-        string[] items = { "Item1", "Item2" };
+        string[] items = ["Item1", "Item2"];
         _toolStripComboBox.Items.AddRange(items);
         _toolStripComboBox.Items.Cast<string>().Should().Contain(items);
     }

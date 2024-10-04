@@ -14,12 +14,12 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
     public void ListViewSubItemAccessibleObject_GetChild_ReturnCorrectValue()
     {
         using ListView list = new();
-        ListViewItem listViewItem1 = new(new string[]
-        {
-        "Test 1",
-        "Item 1",
-        "Something 1"
-        }, -1);
+        ListViewItem listViewItem1 = new(
+        [
+            "Test 1",
+            "Item 1",
+            "Something 1"
+        ], -1);
 
         ColumnHeader columnHeader1 = new();
         ColumnHeader columnHeader2 = new();
@@ -51,12 +51,12 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
     public void ListViewSubItemAccessibleObject_GetPropertyValue_returns_correct_values(bool labelEdit, int childId)
     {
         using ListView list = new();
-        ListViewItem listViewItem1 = new(new string[]
-        {
+        ListViewItem listViewItem1 = new(
+        [
         "Test 1",
         "Test 2",
         "Something 1"
-        }, -1);
+        ], -1);
 
         ColumnHeader columnHeader1 = new();
         ColumnHeader columnHeader2 = new();
@@ -626,12 +626,12 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
     public void ListViewSubItemAccessibleObject_Bounds_ReturnCorrectValue()
     {
         using ListView list = new();
-        ListViewItem listViewItem1 = new(new string[]
-        {
+        ListViewItem listViewItem1 = new(
+        [
         "Test 1",
         "Item 1",
         "Something 1"
-        }, -1);
+        ], -1);
 
         ColumnHeader columnHeader1 = new();
         ColumnHeader columnHeader2 = new();
@@ -750,12 +750,12 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
     public void ListViewSubItemAccessibleObject_RowProperty_ReturnCorrectValue()
     {
         using ListView list = new();
-        ListViewItem listViewItem1 = new(new string[]
-        {
+        ListViewItem listViewItem1 = new(
+        [
         "Test 1",
         "Item 1",
         "Something 1"
-        }, -1);
+        ], -1);
 
         ColumnHeader columnHeader1 = new();
         ColumnHeader columnHeader2 = new();

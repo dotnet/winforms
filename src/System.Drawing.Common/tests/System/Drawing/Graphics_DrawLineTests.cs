@@ -12,7 +12,7 @@ public class Graphics_DrawLineTests : DrawingTest
         using Pen pen = new(Color.White);
         using Graphics graphics = Graphics.FromImage(bitmap);
 
-        graphics.DrawLines(pen, new Point[] { new(1, 1), new(1, 10), new(20, 5), new(25, 30) });
+        graphics.DrawLines(pen, [new(1, 1), new(1, 10), new(20, 5), new(25, 30)]);
 
         ValidateBitmapContent(
             bitmap,
