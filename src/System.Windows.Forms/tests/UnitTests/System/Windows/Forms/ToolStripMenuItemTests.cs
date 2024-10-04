@@ -241,7 +241,7 @@ public class ToolStripMenuItemTests
     {
         using Bitmap image = new(10, 10);
         string text = "Test Item";
-        ToolStripItem[] dropDownItems = { new ToolStripMenuItem("SubItem1"), new ToolStripMenuItem("SubItem2") };
+        ToolStripItem[] dropDownItems = [new ToolStripMenuItem("SubItem1"), new ToolStripMenuItem("SubItem2")];
 
         using ToolStripMenuItem item = new(text, image, dropDownItems);
 

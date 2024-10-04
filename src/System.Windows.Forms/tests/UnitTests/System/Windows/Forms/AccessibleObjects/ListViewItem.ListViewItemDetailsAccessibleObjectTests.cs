@@ -163,8 +163,8 @@ public class ListViewItem_ListViewItemDetailsAccessibleObjectTests
         ColumnHeader columnHeader2 = new();
         ColumnHeader columnHeader3 = new();
 
-        ListViewItem listViewItem1 = new(new string[] { "Item1", "sub1", "sub2" }, 0);
-        ListViewItem listViewItem2 = new(new string[] { "Item2", "sub1", "sub2" }, 0);
+        ListViewItem listViewItem1 = new(["Item1", "sub1", "sub2"], 0);
+        ListViewItem listViewItem2 = new(["Item2", "sub1", "sub2"], 0);
 
         listView1.Columns.AddRange((ColumnHeader[])[columnHeader1, columnHeader2, columnHeader3]);
         listView1.Items.AddRange((ListViewItem[])[listViewItem1, listViewItem2]);
