@@ -253,7 +253,7 @@ public class GraphicsPathTests
     {
         using GraphicsPath gpi = new();
         using GraphicsPath gpf = new();
-        gpi.AddLines(new Point[] { new(1, 1), new(2, 2) });
+        gpi.AddLines([new(1, 1), new(2, 2)]);
         AssertLine(gpi);
 
         gpf.AddLines(new PointF[] { new(1, 1), new(2, 2) });
@@ -604,7 +604,7 @@ public class GraphicsPathTests
             () => gp.AddCurve(new PointF[2] { new(1f, 1f), new(2f, 2f) }, 0, segment, 0.5f));
 
         AssertExtensions.ThrowsAny<ArgumentException, ArgumentOutOfRangeException>(
-            () => gp.AddCurve(new Point[2] { new(1, 1), new(2, 2) }, 0, segment, 0.5f));
+            () => gp.AddCurve([new(1, 1), new(2, 2)], 0, segment, 0.5f));
     }
 
     [Fact]
@@ -615,7 +615,7 @@ public class GraphicsPathTests
             () => gp.AddCurve(new PointF[3] { new(1f, 1f), new(0f, 20f), new(20f, 0f) }, 1, 2, 0.5f));
 
         AssertExtensions.ThrowsAny<ArgumentException, ArgumentOutOfRangeException>(
-            () => gp.AddCurve(new Point[3] { new(1, 1), new(0, 20), new(20, 0) }, 1, 2, 0.5f));
+            () => gp.AddCurve([new(1, 1), new(0, 20), new(20, 0)], 1, 2, 0.5f));
     }
 
     [Fact]
@@ -623,7 +623,7 @@ public class GraphicsPathTests
     {
         using GraphicsPath gpi = new();
         using GraphicsPath gpf = new();
-        gpi.AddClosedCurve(new Point[3] { new(1, 1), new(2, 2), new(3, 3) });
+        gpi.AddClosedCurve([new(1, 1), new(2, 2), new(3, 3)]);
         // AssertClosedCurve() method expects added ClosedCurve with points (1, 1), (2, 2), (3, 3), here and below.
         AssertClosedCurve(gpi);
 
@@ -636,9 +636,9 @@ public class GraphicsPathTests
     {
         using GraphicsPath gpi = new();
         using GraphicsPath gpf = new();
-        gpi.AddClosedCurve(new Point[3] { new(1, 1), new(1, 1), new(1, 1) });
+        gpi.AddClosedCurve([new(1, 1), new(1, 1), new(1, 1)]);
         Assert.Equal(10, gpi.PointCount);
-        gpi.AddClosedCurve(new Point[3] { new(1, 1), new(1, 1), new(1, 1) });
+        gpi.AddClosedCurve([new(1, 1), new(1, 1), new(1, 1)]);
         Assert.Equal(20, gpi.PointCount);
 
         gpf.AddClosedCurve(new PointF[3] { new(1, 1), new(1, 1), new(1, 1) });
@@ -652,7 +652,7 @@ public class GraphicsPathTests
     {
         using GraphicsPath gpi = new();
         using GraphicsPath gpf = new();
-        gpi.AddClosedCurve(new Point[3] { new(1, 1), new(2, 2), new(3, 3) }, 0.5f);
+        gpi.AddClosedCurve([new(1, 1), new(2, 2), new(3, 3)], 0.5f);
         AssertClosedCurve(gpi);
 
         gpf.AddClosedCurve(new PointF[3] { new(1, 1), new(2, 2), new(3, 3) }, 0.5f);
@@ -886,7 +886,7 @@ public class GraphicsPathTests
     {
         using GraphicsPath gpi = new();
         using GraphicsPath gpf = new();
-        gpi.AddPolygon(new Point[3] { new(1, 1), new(2, 2), new(3, 3) });
+        gpi.AddPolygon([new(1, 1), new(2, 2), new(3, 3)]);
         // AssertPolygon() method expects added Polygon with points (1, 1), (2, 2), (3, 3), here and below.
         AssertPolygon(gpi);
 
@@ -899,19 +899,19 @@ public class GraphicsPathTests
     {
         using GraphicsPath gpi = new();
         using GraphicsPath gpf = new();
-        gpi.AddPolygon(new Point[3] { new(1, 1), new(2, 2), new(3, 3) });
+        gpi.AddPolygon([new(1, 1), new(2, 2), new(3, 3)]);
         Assert.Equal(3, gpi.PointCount);
         Assert.Equal(new byte[] { 0, 1, 129 }, gpi.PathTypes);
 
-        gpi.AddPolygon(new Point[3] { new(1, 1), new(2, 2), new(3, 3) });
+        gpi.AddPolygon([new(1, 1), new(2, 2), new(3, 3)]);
         Assert.Equal(6, gpi.PointCount);
         Assert.Equal(new byte[] { 0, 1, 129, 0, 1, 129 }, gpi.PathTypes);
 
-        gpi.AddPolygon(new Point[3] { new(1, 1), new(2, 2), new(3, 3) });
+        gpi.AddPolygon([new(1, 1), new(2, 2), new(3, 3)]);
         Assert.Equal(9, gpi.PointCount);
         Assert.Equal(new byte[] { 0, 1, 129, 0, 1, 129, 0, 1, 129 }, gpi.PathTypes);
 
-        gpi.AddPolygon(new Point[3] { new(1, 1), new(2, 2), new(3, 3) });
+        gpi.AddPolygon([new(1, 1), new(2, 2), new(3, 3)]);
         Assert.Equal(12, gpi.PointCount);
         Assert.Equal(new byte[] { 0, 1, 129, 0, 1, 129, 0, 1, 129, 0, 1, 129 }, gpi.PathTypes);
 
@@ -1194,11 +1194,11 @@ public class GraphicsPathTests
     {
         using GraphicsPath gp = new();
         using GraphicsPath clone = Assert.IsType<GraphicsPath>(gp.Clone());
-        gp.AddClosedCurve(new Point[4]
-        {
-                new(0, 0), new(40, 20),
-                new(20, 40), new(40, 40)
-        });
+        gp.AddClosedCurve(
+        [
+            new(0, 0), new(40, 20),
+            new(20, 40), new(40, 40)
+        ]);
 
         gp.Flatten();
         AssertFlats(gp, clone);
@@ -1209,11 +1209,11 @@ public class GraphicsPathTests
     {
         using GraphicsPath gp = new();
         using GraphicsPath clone = Assert.IsType<GraphicsPath>(gp.Clone());
-        gp.AddCurve(new Point[4]
-        {
-                new(0, 0), new(40, 20),
-                new(20, 40), new(40, 40)
-        });
+        gp.AddCurve(
+        [
+            new(0, 0), new(40, 20),
+            new(20, 40), new(40, 40)
+        ]);
 
         gp.Flatten();
         AssertFlats(gp, clone);
@@ -1254,11 +1254,11 @@ public class GraphicsPathTests
     {
         using GraphicsPath gp = new();
         using GraphicsPath clone = Assert.IsType<GraphicsPath>(gp.Clone());
-        gp.AddPolygon(new Point[4]
-        {
-                new(0, 0), new(10, 10),
-                new(20, 20), new(40, 40)
-        });
+        gp.AddPolygon(
+        [
+            new(0, 0), new(10, 10),
+            new(20, 20), new(40, 40)
+        ]);
 
         gp.Flatten();
         AssertFlats(gp, clone);
@@ -1303,7 +1303,7 @@ public class GraphicsPathTests
     {
         using GraphicsPath gp = new();
         using Matrix matrix = new();
-        gp.AddPolygon(new Point[3] { new(5, 5), new(15, 5), new(10, 15) });
+        gp.AddPolygon([new(5, 5), new(15, 5), new(10, 15)]);
         gp.Warp([new(0, 0)], new RectangleF(10, 20, 30, 40), matrix, (WarpMode)int.MinValue);
         Assert.Equal(0, gp.PointCount);
     }
@@ -1312,7 +1312,7 @@ public class GraphicsPathTests
     public void Warp_RectangleEmpty_Success()
     {
         using GraphicsPath gp = new();
-        gp.AddPolygon(new Point[3] { new(5, 5), new(15, 5), new(10, 15) });
+        gp.AddPolygon([new(5, 5), new(15, 5), new(10, 15)]);
         gp.Warp([new(0, 0)], new Rectangle(), null);
         AssertWrapNaN(gp);
     }
@@ -1431,12 +1431,12 @@ public class GraphicsPathTests
     {
         using GraphicsPath gp = new();
         gp.AddLine(1, 1, 2, 2);
-        gp.AddBeziers(new Point[7]
-        {
-                new(10, 10), new(20, 10), new(20, 20),
-                new(30, 20), new(40, 40), new(50, 40),
-                new(50, 50)
-        });
+        gp.AddBeziers(
+        [
+            new(10, 10), new(20, 10), new(20, 20),
+            new(30, 20), new(40, 40), new(50, 40),
+            new(50, 50)
+        ]);
 
         gp.AddLine(10, 10, 20, 20);
         byte[] types = gp.PathTypes;
@@ -1452,7 +1452,7 @@ public class GraphicsPathTests
     {
         using GraphicsPath gp = new();
         gp.AddLine(1, 1, 2, 2);
-        gp.AddClosedCurve(new Point[3] { new(1, 1), new(2, 2), new(3, 3) });
+        gp.AddClosedCurve([new(1, 1), new(2, 2), new(3, 3)]);
         gp.AddLine(10, 10, 20, 20);
         byte[] types = gp.PathTypes;
 
@@ -1468,7 +1468,7 @@ public class GraphicsPathTests
     {
         using GraphicsPath path = new();
         path.AddLine(1, 1, 2, 2);
-        path.AddCurve(new Point[3] { new(1, 1), new(2, 2), new(3, 3) });
+        path.AddCurve([new(1, 1), new(2, 2), new(3, 3)]);
         path.AddLine(10, 10, 20, 20);
         byte[] types = path.PathTypes;
 
@@ -1514,7 +1514,7 @@ public class GraphicsPathTests
     {
         using GraphicsPath gp = new();
         gp.AddLine(1, 1, 2, 2);
-        gp.AddLines(new Point[4] { new(10, 10), new(20, 10), new(20, 20), new(30, 20) });
+        gp.AddLines([new(10, 10), new(20, 10), new(20, 20), new(30, 20)]);
         gp.AddLine(10, 10, 20, 20);
         byte[] types = gp.PathTypes;
 
@@ -1580,7 +1580,7 @@ public class GraphicsPathTests
     {
         using GraphicsPath gp = new();
         gp.AddLine(1, 1, 2, 2);
-        gp.AddPolygon(new Point[3] { new(1, 1), new(2, 2), new(3, 3) });
+        gp.AddPolygon([new(1, 1), new(2, 2), new(3, 3)]);
         gp.AddLine(10, 10, 20, 20);
         byte[] types = gp.PathTypes;
 
@@ -1691,7 +1691,7 @@ public class GraphicsPathTests
     {
         using GraphicsPath gp = new();
         using Pen pen = new(Color.Blue);
-        gp.AddPolygon(new Point[3] { new(5, 5), new(15, 5), new(10, 15) });
+        gp.AddPolygon([new(5, 5), new(15, 5), new(10, 15)]);
         gp.Widen(pen, null);
         Assert.Equal(9, gp.PointCount);
         AssertWiden3(gp);
@@ -1703,7 +1703,7 @@ public class GraphicsPathTests
         using GraphicsPath gp = new();
         using Pen pen = new(Color.Blue);
         using Matrix matrix = new();
-        gp.AddPolygon(new Point[3] { new(5, 5), new(15, 5), new(10, 15) });
+        gp.AddPolygon([new(5, 5), new(15, 5), new(10, 15)]);
         gp.Widen(pen, new Matrix());
         Assert.Equal(9, gp.PointCount);
         AssertWiden3(gp);

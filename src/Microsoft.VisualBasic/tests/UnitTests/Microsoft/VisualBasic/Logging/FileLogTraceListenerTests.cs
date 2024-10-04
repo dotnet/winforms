@@ -25,8 +25,7 @@ public class FileLogTraceListenerTests : FileCleanupTestBase
     }
 
     [Theory]
-    [InlineData(true)]
-    [InlineData(false)]
+    [BoolData]
     public void Write(bool includeHostName)
     {
         TraceEventCache cache = new();
