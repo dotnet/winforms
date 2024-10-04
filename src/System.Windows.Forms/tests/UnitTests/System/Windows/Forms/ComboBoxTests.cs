@@ -416,9 +416,9 @@ public class ComboBoxTests
             control.IsHandleCreated.Should().Be(isHandleCreated);
         }
 
-        AssertAutoCompleteCustomSource(new[] { "item1", "item2" }, false);
+        AssertAutoCompleteCustomSource(["item1", "item2"], false);
         AssertAutoCompleteCustomSource(null, false);
-        AssertAutoCompleteCustomSource(new[] { "item3", "item4" }, false);
+        AssertAutoCompleteCustomSource(["item3", "item4"], false);
     }
 
     [WinFormsFact]

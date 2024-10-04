@@ -138,8 +138,8 @@ public class CodeDomComponentSerializationServiceTests
         Dictionary<string, CodeDomComponentSerializationState> state = GetState(info);
         Assert.Equal(2, state.Count);
         CodeDomComponentSerializationState valueState1 = state["name1"];
-        CodeDomHelpers.AssertEqualCodeStatementCollection(new CodeStatementCollection(new CodeStatement[]
-        {
+        CodeDomHelpers.AssertEqualCodeStatementCollection(new CodeStatementCollection(
+        [
             new CodeVariableDeclarationStatement(typeof(DataClass), "name1"),
             new CodeAssignStatement(new CodeVariableReferenceExpression("name1"), new CodeObjectCreateExpression(typeof(DataClass))),
             new CodeCommentStatement(string.Empty),
@@ -148,12 +148,12 @@ public class CodeDomComponentSerializationServiceTests
             new CodeAssignStatement(new CodePropertyReferenceExpression(new CodeVariableReferenceExpression("name1"), "DefaultStringValue"), new CodePrimitiveExpression(null)),
             new CodeAssignStatement(new CodePropertyReferenceExpression(new CodeVariableReferenceExpression("name1"), "IntValue"), new CodePrimitiveExpression(1)),
             new CodeAssignStatement(new CodePropertyReferenceExpression(new CodeVariableReferenceExpression("name1"), "StringValue"), new CodePrimitiveExpression("Value"))
-        }), Assert.IsType<CodeStatementCollection>(valueState1.Code));
+        ]), Assert.IsType<CodeStatementCollection>(valueState1.Code));
         AssertAllNonCodeFieldsArNull(valueState1);
 
         CodeDomComponentSerializationState valueState2 = state["name2"];
-        CodeDomHelpers.AssertEqualCodeStatementCollection(new CodeStatementCollection(new CodeStatement[]
-        {
+        CodeDomHelpers.AssertEqualCodeStatementCollection(new CodeStatementCollection(
+        [
             new CodeVariableDeclarationStatement(typeof(DataClass), "name2"),
             new CodeAssignStatement(new CodeVariableReferenceExpression("name2"), new CodeObjectCreateExpression(typeof(DataClass))),
             new CodeCommentStatement(string.Empty),
@@ -162,7 +162,7 @@ public class CodeDomComponentSerializationServiceTests
             new CodeAssignStatement(new CodePropertyReferenceExpression(new CodeVariableReferenceExpression("name2"), "DefaultStringValue"), new CodePrimitiveExpression(null)),
             new CodeAssignStatement(new CodePropertyReferenceExpression(new CodeVariableReferenceExpression("name2"), "IntValue"), new CodePrimitiveExpression(2)),
             new CodeAssignStatement(new CodePropertyReferenceExpression(new CodeVariableReferenceExpression("name2"), "StringValue"), new CodePrimitiveExpression("OtherValue"))
-        }), Assert.IsType<CodeStatementCollection>(valueState2.Code));
+        ]), Assert.IsType<CodeStatementCollection>(valueState2.Code));
         AssertAllNonCodeFieldsArNull(valueState2);
 
         List<string> names = Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)));
@@ -240,8 +240,8 @@ public class CodeDomComponentSerializationServiceTests
 
         Dictionary<string, CodeDomComponentSerializationState> state = GetState(info);
         CodeDomComponentSerializationState valueState = state["name"];
-        CodeDomHelpers.AssertEqualCodeStatementCollection(new CodeStatementCollection(new CodeStatement[]
-        {
+        CodeDomHelpers.AssertEqualCodeStatementCollection(new CodeStatementCollection(
+        [
             new CodeVariableDeclarationStatement(typeof(DataClass), "name"),
             new CodeAssignStatement(new CodeVariableReferenceExpression("name"), new CodeObjectCreateExpression(typeof(DataClass))),
             new CodeCommentStatement(string.Empty),
@@ -250,7 +250,7 @@ public class CodeDomComponentSerializationServiceTests
             new CodeAssignStatement(new CodePropertyReferenceExpression(new CodeVariableReferenceExpression("name"), "DefaultStringValue"), new CodePrimitiveExpression(null)),
             new CodeAssignStatement(new CodePropertyReferenceExpression(new CodeVariableReferenceExpression("name"), "IntValue"), new CodePrimitiveExpression(1)),
             new CodeAssignStatement(new CodePropertyReferenceExpression(new CodeVariableReferenceExpression("name"), "StringValue"), new CodePrimitiveExpression("Value"))
-        }), Assert.IsType<CodeStatementCollection>(valueState.Code));
+        ]), Assert.IsType<CodeStatementCollection>(valueState.Code));
         AssertAllNonCodeFieldsArNull(valueState);
 
         List<string> names = Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)));
@@ -342,8 +342,8 @@ public class CodeDomComponentSerializationServiceTests
 
         Dictionary<string, CodeDomComponentSerializationState> state = GetState(info);
         CodeDomComponentSerializationState valueState = state["name"];
-        CodeDomHelpers.AssertEqualCodeStatementCollection(new CodeStatementCollection(new CodeStatement[]
-        {
+        CodeDomHelpers.AssertEqualCodeStatementCollection(new CodeStatementCollection(
+        [
             new CodeVariableDeclarationStatement(typeof(DataClass), "name"),
             new CodeAssignStatement(new CodeVariableReferenceExpression("name"), new CodeObjectCreateExpression(typeof(DataClass))),
             new CodeCommentStatement(string.Empty),
@@ -352,7 +352,7 @@ public class CodeDomComponentSerializationServiceTests
             new CodeAssignStatement(new CodePropertyReferenceExpression(new CodeVariableReferenceExpression("name"), "DefaultStringValue"), new CodePrimitiveExpression(null)),
             new CodeAssignStatement(new CodePropertyReferenceExpression(new CodeVariableReferenceExpression("name"), "IntValue"), new CodePrimitiveExpression(1)),
             new CodeAssignStatement(new CodePropertyReferenceExpression(new CodeVariableReferenceExpression("name"), "StringValue"), new CodePrimitiveExpression("Value"))
-        }), Assert.IsType<CodeStatementCollection>(valueState.Code));
+        ]), Assert.IsType<CodeStatementCollection>(valueState.Code));
         AssertAllNonCodeFieldsArNull(valueState);
 
         List<string> names = Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)));
@@ -387,8 +387,8 @@ public class CodeDomComponentSerializationServiceTests
 
         Dictionary<string, CodeDomComponentSerializationState> state = GetState(info);
         CodeDomComponentSerializationState valueState = state["name"];
-        CodeDomHelpers.AssertEqualCodeStatementCollection(new CodeStatementCollection(new CodeStatement[]
-        {
+        CodeDomHelpers.AssertEqualCodeStatementCollection(new CodeStatementCollection(
+        [
             new CodeVariableDeclarationStatement(typeof(DataClass), "name"),
             new CodeAssignStatement(new CodeVariableReferenceExpression("name"), new CodeObjectCreateExpression(typeof(DataClass))),
             new CodeCommentStatement(string.Empty),
@@ -397,7 +397,7 @@ public class CodeDomComponentSerializationServiceTests
             new CodeAssignStatement(new CodePropertyReferenceExpression(new CodeVariableReferenceExpression("name"), "DefaultStringValue"), new CodePrimitiveExpression(null)),
             new CodeAssignStatement(new CodePropertyReferenceExpression(new CodeVariableReferenceExpression("name"), "IntValue"), new CodePrimitiveExpression(1)),
             new CodeAssignStatement(new CodePropertyReferenceExpression(new CodeVariableReferenceExpression("name"), "StringValue"), new CodePrimitiveExpression("Value"))
-        }), Assert.IsType<CodeStatementCollection>(valueState.Code));
+        ]), Assert.IsType<CodeStatementCollection>(valueState.Code));
         AssertAllNonCodeFieldsArNull(valueState);
 
         List<string> names = Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)));
@@ -438,12 +438,12 @@ public class CodeDomComponentSerializationServiceTests
 
         Dictionary<string, CodeDomComponentSerializationState> state = GetState(info);
         CodeDomComponentSerializationState valueState = state["name"];
-        CodeDomHelpers.AssertEqualCodeStatementCollection(new CodeStatementCollection(new CodeStatement[]
-        {
+        CodeDomHelpers.AssertEqualCodeStatementCollection(new CodeStatementCollection(
+        [
             new CodeAssignStatement(new CodePropertyReferenceExpression(new CodeVariableReferenceExpression("name"), "IntValue"), new CodePrimitiveExpression(1)),
             new CodeAssignStatement(new CodePropertyReferenceExpression(new CodeVariableReferenceExpression("name"), "DefaultStringValue"), new CodePrimitiveExpression(null)),
             new CodeAssignStatement(new CodePropertyReferenceExpression(new CodeVariableReferenceExpression("name"), "IntValue"), new CodePrimitiveExpression(1)),
-        }), Assert.IsType<CodeStatementCollection>(valueState.Code));
+        ]), Assert.IsType<CodeStatementCollection>(valueState.Code));
         AssertAllNonCodeFieldsArNull(valueState);
 
         List<string> names = Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)));
@@ -484,12 +484,12 @@ public class CodeDomComponentSerializationServiceTests
 
         Dictionary<string, CodeDomComponentSerializationState> state = GetState(info);
         CodeDomComponentSerializationState valueState = state["name"];
-        CodeDomHelpers.AssertEqualCodeStatementCollection(new CodeStatementCollection(new CodeStatement[]
-        {
+        CodeDomHelpers.AssertEqualCodeStatementCollection(new CodeStatementCollection(
+        [
             new CodeAssignStatement(new CodePropertyReferenceExpression(new CodeVariableReferenceExpression("name"), "IntValue"), new CodePrimitiveExpression(1)),
             new CodeAssignStatement(new CodePropertyReferenceExpression(new CodeVariableReferenceExpression("name"), "DefaultStringValue"), new CodePrimitiveExpression(null)),
             new CodeAssignStatement(new CodePropertyReferenceExpression(new CodeVariableReferenceExpression("name"), "IntValue"), new CodePrimitiveExpression(1))
-        }), Assert.IsType<CodeStatementCollection>(valueState.Code));
+        ]), Assert.IsType<CodeStatementCollection>(valueState.Code));
         AssertAllNonCodeFieldsArNull(valueState);
 
         List<string> names = Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)));
@@ -528,8 +528,8 @@ public class CodeDomComponentSerializationServiceTests
 
         Dictionary<string, CodeDomComponentSerializationState> state = GetState(info);
         CodeDomComponentSerializationState valueState = state["name"];
-        CodeDomHelpers.AssertEqualCodeStatementCollection(new CodeStatementCollection(new CodeStatement[]
-        {
+        CodeDomHelpers.AssertEqualCodeStatementCollection(new CodeStatementCollection(
+        [
             new CodeVariableDeclarationStatement(typeof(DataClass), "name"),
             new CodeAssignStatement(new CodeVariableReferenceExpression("name"), new CodeObjectCreateExpression(typeof(DataClass))),
             new CodeCommentStatement(string.Empty),
@@ -538,7 +538,7 @@ public class CodeDomComponentSerializationServiceTests
             new CodeAssignStatement(new CodePropertyReferenceExpression(new CodeVariableReferenceExpression("name"), "DefaultStringValue"), new CodePrimitiveExpression(null)),
             new CodeAssignStatement(new CodePropertyReferenceExpression(new CodeVariableReferenceExpression("name"), "IntValue"), new CodePrimitiveExpression(1)),
             new CodeAssignStatement(new CodePropertyReferenceExpression(new CodeVariableReferenceExpression("name"), "StringValue"), new CodePrimitiveExpression("Value"))
-        }), Assert.IsType<CodeStatementCollection>(valueState.Code));
+        ]), Assert.IsType<CodeStatementCollection>(valueState.Code));
         AssertAllNonCodeFieldsArNull(valueState);
 
         List<string> names = Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)));
@@ -577,8 +577,8 @@ public class CodeDomComponentSerializationServiceTests
 
         Dictionary<string, CodeDomComponentSerializationState> state = GetState(info);
         CodeDomComponentSerializationState valueState = state["name"];
-        CodeDomHelpers.AssertEqualCodeStatementCollection(new CodeStatementCollection(new CodeStatement[]
-        {
+        CodeDomHelpers.AssertEqualCodeStatementCollection(new CodeStatementCollection(
+        [
             new CodeVariableDeclarationStatement(typeof(DataClass), "name"),
             new CodeAssignStatement(new CodeVariableReferenceExpression("name"), new CodeObjectCreateExpression(typeof(DataClass))),
             new CodeCommentStatement(string.Empty),
@@ -587,7 +587,7 @@ public class CodeDomComponentSerializationServiceTests
             new CodeAssignStatement(new CodePropertyReferenceExpression(new CodeVariableReferenceExpression("name"), "DefaultStringValue"), new CodePrimitiveExpression(null)),
             new CodeAssignStatement(new CodePropertyReferenceExpression(new CodeVariableReferenceExpression("name"), "IntValue"), new CodePrimitiveExpression(1)),
             new CodeAssignStatement(new CodePropertyReferenceExpression(new CodeVariableReferenceExpression("name"), "StringValue"), new CodePrimitiveExpression("Value"))
-        }), Assert.IsType<CodeStatementCollection>(valueState.Code));
+        ]), Assert.IsType<CodeStatementCollection>(valueState.Code));
         AssertAllNonCodeFieldsArNull(valueState);
 
         List<string> names = Assert.IsType<List<string>>(info.GetValue("Names", typeof(List<string>)));

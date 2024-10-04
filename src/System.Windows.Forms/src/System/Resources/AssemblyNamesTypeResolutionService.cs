@@ -81,7 +81,7 @@ internal class AssemblyNamesTypeResolutionService : ITypeResolutionService
         }
 
         // Missed in cache, try to resolve the type from the reference assemblies.
-        if (name.IndexOf(',') != -1)
+        if (name.Contains(','))
         {
             result = Type.GetType(name, false, ignoreCase);
         }
