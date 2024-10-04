@@ -36,7 +36,7 @@ public partial class ListViewTest : Form
         AddGroupTasks();
 
         // Manual test for https://github.com/dotnet/winforms/issues/11658
-        string[] TestItems = { "Item 1", "Item 2", "Item 3" };
+        string[] TestItems = ["Item 1", "Item 2", "Item 3"];
         listView3.RetrieveVirtualItem += (s, e) =>
         {
             e.Item = e.ItemIndex switch
