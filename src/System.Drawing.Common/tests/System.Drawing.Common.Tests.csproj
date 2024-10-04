@@ -44,12 +44,12 @@
     <ProjectReference Include="..\src\System.Drawing.Common.csproj" />
     <ProjectReference Include="..\..\..\src\System.Windows.Forms.Primitives\tests\TestUtilities\System.Windows.Forms.Primitives.TestUtilities.csproj" />
 
-    <PackageReference Include="System.Drawing.Common.TestData" Version="$(SystemDrawingCommonTestDataVersion)" GeneratePathProperty="true" />
-    <PackageReference Include="System.ComponentModel.TypeConverter.TestData" Version="$(SystemComponentModelTypeConverterTestDataVersion)" />
-    <PackageReference Include="System.Windows.Extensions.TestData" Version="$(SystemWindowsExtensionsTestDataVersion)" />
+    <PackageReference Include="System.Drawing.Common.TestData" GeneratePathProperty="true" />
+    <PackageReference Include="System.ComponentModel.TypeConverter.TestData" />
+    <PackageReference Include="System.Windows.Extensions.TestData" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentAssertions" Version="$(FluentAssertionsVersion)" />
+    <PackageReference Include="FluentAssertions" />
   </ItemGroup>
 </Project>

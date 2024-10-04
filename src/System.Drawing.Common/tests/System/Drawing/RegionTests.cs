@@ -205,15 +205,15 @@ public class RegionTests
         yield return new object[] { path3, false };
 
         GraphicsPath path4 = new();
-        path4.AddCurve(new Point[] { new(-4194304, -4194304), new(4194304, 4194304) });
+        path4.AddCurve([new(-4194304, -4194304), new(4194304, 4194304)]);
         yield return new object[] { path4, false };
 
         GraphicsPath path5 = new();
-        path5.AddPolygon(new Point[] { new(-4194304, -4194304), new(-4194304, 4194304), new(4194304, 4194304), new(4194304, -4194304) });
+        path5.AddPolygon([new(-4194304, -4194304), new(-4194304, 4194304), new(4194304, 4194304), new(4194304, -4194304)]);
         yield return new object[] { path5, true };
 
         GraphicsPath path6 = new();
-        path6.AddPolygon(new Point[] { new(-4194304, -4194304), new(-4194304, 4194304), new(4194304, 4194304), new(4194304, -4194304), new(-4194304, -4194304) });
+        path6.AddPolygon([new(-4194304, -4194304), new(-4194304, 4194304), new(4194304, 4194304), new(4194304, -4194304), new(-4194304, -4194304)]);
         yield return new object[] { path6, true };
     }
 
@@ -232,7 +232,7 @@ public class RegionTests
     public void Ctor_GraphicsPathTooLarge_SetsToEmpty()
     {
         using GraphicsPath path = new();
-        path.AddCurve(new Point[] { new(-4194304, -4194304), new(4194304, 4194304) });
+        path.AddCurve([new(-4194304, -4194304), new(4194304, 4194304)]);
 
         using Region region = new(path);
         using Matrix matrix = new();
