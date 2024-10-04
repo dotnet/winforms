@@ -227,7 +227,7 @@ dotnet_diagnostic.CA2241.severity = error
 # CA2245: Do not assign a property to itself
 dotnet_diagnostic.CA2245.severity = error
 
-# CA2248: Provide correct enumm argument to Enum.HasFlag
+# CA2248: Provide correct enum argument to Enum.HasFlag
 dotnet_diagnostic.CA2248.severity = error
 
 # CA2249: Consider using String.Contains instead of String.IndexOf

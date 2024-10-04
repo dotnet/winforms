@@ -34,23 +34,23 @@ public class ImageAttributesTests
     private readonly Color _actualGreen = Color.FromArgb(255, 0, 255, 0);
     private readonly Color _expectedRed = Color.FromArgb(255, 255, 0, 0);
     private readonly Color _expectedBlack = Color.FromArgb(255, 0, 0, 0);
-    private readonly ColorMatrix _greenComponentToZeroColorMatrix = new(new float[][]
-    {
+    private readonly ColorMatrix _greenComponentToZeroColorMatrix = new(
+    [
         [1, 0, 0, 0, 0],
         [0, 0, 0, 0, 0],
         [0, 0, 1, 0, 0],
         [0, 0, 0, 1, 0],
         [0, 0, 0, 0, 0],
-    });
+    ]);
 
-    private readonly ColorMatrix _grayMatrix = new(new float[][]
-    {
+    private readonly ColorMatrix _grayMatrix = new(
+    [
         [1, 0, 0, 0, 0],
         [0, 2, 0, 0, 0],
         [0, 0, 3, 0, 0],
         [0, 0, 0, 1, 0],
         [0, 0, 0, 0, 0],
-    });
+    ]);
 
     private readonly ColorMap[] _yellowToRedColorMap =
     [
@@ -114,14 +114,14 @@ public class ImageAttributesTests
     [MemberData(nameof(ColorMatrix_DropShadowRepaintWhenAreaIsSmallerThanTheFilteredElement_TestData))]
     public void SetColorMatrix_ColorMatrixI_Success(Color color)
     {
-        ColorMatrix colorMatrix = new(new float[][]
-        {
+        ColorMatrix colorMatrix = new(
+        [
             [1, 0, 0, 0, 0],
             [0, 1, 0, 0, 0],
             [0, 0, 1, 0, 0],
             [0, 0, 0, 0.5f, 0],
             [0, 0, 0, 0, 1],
-        });
+        ]);
 
         using SolidBrush brush = new(color);
         using Bitmap bitmapBig = new(200, 100);

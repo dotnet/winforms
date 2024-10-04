@@ -1515,7 +1515,7 @@ internal sealed partial class PropertyGridView :
             int index = GetCurrentValueIndex(gridEntry);
 
             object[] values = gridEntry.GetPropertyValueList();
-            string letter = new(new char[] { keyChar });
+            string letter = new([keyChar]);
             for (int i = 0; i < values.Length; i++)
             {
                 object currentValue = values[(i + index + 1) % values.Length];

@@ -2162,12 +2162,12 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
                             // if the height is odd - favor pushing it over one pixel down.
                             middle.Y += (dropRect.Height % 2);
 
-                            g.FillPolygon(SystemBrushes.ControlText, new Point[]
-                            {
+                            g.FillPolygon(SystemBrushes.ControlText,
+                            [
                                 new(middle.X - s_offset2X, middle.Y - 1),
                                 new(middle.X + s_offset2X + 1, middle.Y - 1),
                                 new(middle.X, middle.Y + s_offset2Y)
-                            });
+                            ]);
                         }
                         else if (!paintXPThemes)
                         {
@@ -2185,7 +2185,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
                             middle.Y += (dropRect.Height % 2);
                             Point pt1 = new(middle.X - (s_nonXPTriangleWidth - 1) / 2, middle.Y - s_nonXPTriangleHeight);
                             Point pt2 = new(middle.X + (s_nonXPTriangleWidth - 1) / 2, middle.Y - s_nonXPTriangleHeight);
-                            g.FillPolygon(SystemBrushes.ControlText, new Point[] { pt1, pt2, middle });
+                            g.FillPolygon(SystemBrushes.ControlText, [pt1, pt2, middle]);
                             // quirk in GDI+ : if we don't draw the line below then the top right most pixel of the DropDown triangle will not paint
                             // Would think that g.FillPolygon would have painted that...
                             g.DrawLine(SystemPens.ControlText, pt1.X, pt1.Y, pt2.X, pt2.Y);

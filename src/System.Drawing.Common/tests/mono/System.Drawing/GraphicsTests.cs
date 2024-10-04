@@ -728,7 +728,7 @@ public class GraphicsTest : IDisposable
     {
         using Bitmap bitmap = new(20, 20);
         using Graphics g = Graphics.FromImage(bitmap);
-        Assert.Throws<ArgumentException>(() => g.DrawCurve(Pens.Black, new Point[1] { new(10, 10) }, 0.5f));
+        Assert.Throws<ArgumentException>(() => g.DrawCurve(Pens.Black, [new(10, 10)], 0.5f));
 
         // a single point isn't enough
     }
@@ -2535,10 +2535,7 @@ public class GraphicsTest : IDisposable
     {
         using Bitmap bmp = new(40, 40);
         using Graphics g = Graphics.FromImage(bmp);
-        g.DrawImage(bmp, new Point[]
-        {
-                    new(0, 0), new(1, 1), new(2, 2)
-        });
+        g.DrawImage(bmp, [ new(0, 0), new(1, 1), new(2, 2)]);
     }
 
     [Fact]
