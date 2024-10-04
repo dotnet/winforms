@@ -13,13 +13,14 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Private Const NamedPipeOptions As PipeOptions = PipeOptions.Asynchronous Or PipeOptions.CurrentUserOnly
 
         Private Async Function ReadArgsAsync(
-                pipeServer As NamedPipeServerStream,
-                cancellationToken As CancellationToken) As Task(Of String())
+            pipeServer As NamedPipeServerStream,
+            cancellationToken As CancellationToken) As Task(Of String())
 
             Const bufferLength As Integer = 1024
-            Dim buffer As Byte() = New Byte(bufferLength - 1) {}
+
             Using stream As New MemoryStream
                 While True
+                    Dim buffer As Byte() = New Byte(bufferLength - 1) {}
                     Dim bytesRead As Integer = Await pipeServer.ReadAsync(
                         buffer:=buffer.AsMemory(start:=0, length:=bufferLength),
                         cancellationToken) _
