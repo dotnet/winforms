@@ -46,13 +46,10 @@ public sealed class PictureBoxActionListTests
 
         items.Should().NotBeNull();
         items.Count.Should().Be(2);
-        items[0].Should().BeOfType<DesignerActionMethodItem>();
-        items[1].Should().BeOfType<DesignerActionPropertyItem>();
+        DesignerActionMethodItem methodItem = items[0].Should().BeOfType<DesignerActionMethodItem>().Which;
+        DesignerActionPropertyItem propertyItem = items[1].Should().BeOfType<DesignerActionPropertyItem>().Which;
 
-        var methodItem = items[0].As<DesignerActionMethodItem>();
         methodItem.MemberName.Should().Be("ChooseImage");
-
-        var propertyItem = items[1].As<DesignerActionPropertyItem>();
         propertyItem.MemberName.Should().Be("SizeMode");
     }
 }
