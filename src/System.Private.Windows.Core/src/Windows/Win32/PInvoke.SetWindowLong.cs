@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 namespace Windows.Win32;
 
-internal static partial class PInvoke
+internal static partial class PInvokeCore
 {
     [DllImport(Libraries.User32, SetLastError = true)]
     private static extern nint SetWindowLongW(HWND hWnd, WINDOW_LONG_PTR_INDEX nIndex, nint dwNewLong);

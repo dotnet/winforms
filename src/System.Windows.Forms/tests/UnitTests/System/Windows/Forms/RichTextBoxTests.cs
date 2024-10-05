@@ -11015,7 +11015,7 @@ public partial class RichTextBoxTests
     private static unsafe string GetClassName(HWND hWnd)
     {
         int length = 0;
-        Span<char> buffer = stackalloc char[PInvoke.MaxClassName];
+        Span<char> buffer = stackalloc char[PInvokeCore.MaxClassName];
         fixed (char* lpClassName = buffer)
         {
             length = PInvoke.GetClassName(hWnd, lpClassName, buffer.Length);

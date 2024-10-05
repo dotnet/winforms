@@ -281,7 +281,7 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
         s_windowIds[id] = handle.Handle;
 
         // Set the Window ID
-        PInvoke.SetWindowLong(handle, WINDOW_LONG_PTR_INDEX.GWL_ID, id);
+        PInvokeCore.SetWindowLong(handle, WINDOW_LONG_PTR_INDEX.GWL_ID, id);
 
         return id;
     }
@@ -300,7 +300,7 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
 
             HWND = hwnd;
 
-            _priorWindowProcHandle = (void*)PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC);
+            _priorWindowProcHandle = (void*)PInvokeCore.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC);
             Debug.Assert(_priorWindowProcHandle is not null);
 
             _windowProc = new WNDPROC(Callback);
@@ -308,17 +308,17 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
             AddWindowToTable(hwnd, this);
 
             // Set the NativeWindow window procedure delegate and get back the native pointer for it.
-            PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC, _windowProc);
-            _windowProcHandle = (void*)PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC);
+            PInvokeCore.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC, _windowProc);
+            _windowProcHandle = (void*)PInvokeCore.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC);
 
             // This shouldn't be possible.
             Debug.Assert(_priorWindowProcHandle != _windowProcHandle, "Uh oh! Subclassed ourselves!!!");
 
             if (assignUniqueID
-                && ((WINDOW_STYLE)(uint)PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE)).HasFlag(WINDOW_STYLE.WS_CHILD)
-                && PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_ID) == 0)
+                && ((WINDOW_STYLE)(uint)PInvokeCore.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE)).HasFlag(WINDOW_STYLE.WS_CHILD)
+                && PInvokeCore.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_ID) == 0)
             {
-                PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_ID, hwnd);
+                PInvokeCore.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_ID, hwnd);
             }
 
             if (_suppressedGC)
@@ -337,12 +337,12 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
     ///  in a Message object and invokes the wndProc() method. A WM_NCDESTROY
     ///  message automatically causes the releaseHandle() method to be called.
     /// </summary>
-    private LRESULT Callback(HWND hWnd, MessageId msg, WPARAM wparam, LPARAM lparam)
+    private LRESULT Callback(HWND hWnd, uint msg, WPARAM wparam, LPARAM lparam)
     {
         // Note: if you change this code be sure to change the
         // corresponding code in DebuggableCallback below!
 
-        Message m = Message.Create(hWnd, (uint)msg, wparam, lparam);
+        Message m = Message.Create(hWnd, msg, wparam, lparam);
 
         try
         {
@@ -399,14 +399,14 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
         lock (_lock)
         {
             CheckReleased();
-            WindowClass windowClass = WindowClass.Create(cp.ClassName, (WNDCLASS_STYLES)cp.ClassStyle);
+            WindowClass windowClass = WindowClass.FindOrCreate(cp.ClassName, (WNDCLASS_STYLES)cp.ClassStyle);
             lock (s_createWindowSyncObject)
             {
                 // The CLR will sometimes pump messages while we're waiting on the lock.
                 // If a message comes through (say a WM_ACTIVATE for the parent) which
                 // causes the handle to be created, we can try to create the handle twice
                 // for NativeWindow. Check the handle again to avoid this.
-                if (Handle != IntPtr.Zero)
+                if (!HWND.IsNull)
                 {
                     return;
                 }
@@ -619,7 +619,7 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
                 {
                     if (!handle.IsNull && handle != (HWND)(-1))
                     {
-                        PInvoke.SetWindowLong(handle, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC, DefaultWindowProc);
+                        PInvokeCore.SetWindowLong(handle, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC, DefaultWindowProc);
                         PInvoke.SetClassLong(handle, GET_CLASS_LONG_INDEX.GCL_WNDPROC, DefaultWindowProc);
                         PInvoke.PostMessage(handle, PInvoke.WM_CLOSE);
 
@@ -849,7 +849,7 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
         bool finalizing = !_weakThisPtr.TryGetTarget(out _);
 
         // Don't touch if the current window proc is not ours.
-        void* currentWindowProc = (void*)PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC);
+        void* currentWindowProc = (void*)PInvokeCore.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC);
         if (_windowProcHandle == currentWindowProc)
         {
             // The current window proc is ours
@@ -857,7 +857,7 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
             if (PreviousWindow is null)
             {
                 // This is the first NativeWindow registered for this HWND, just put back the prior handle we stashed away.
-                PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC, (nint)_priorWindowProcHandle);
+                PInvokeCore.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC, (nint)_priorWindowProcHandle);
             }
             else
             {
@@ -868,14 +868,14 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
                     // holding a ref to it, and it is holding a ref to us. The only way this cycle will
                     // finalize is if no one else is hanging onto it. So, we re-assign the window proc to
                     // userDefWindowProc.
-                    PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC, DefaultWindowProc);
+                    PInvokeCore.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC, DefaultWindowProc);
                 }
                 else
                 {
                     // Here we are not finalizing so we use the windowProc for our previous window. This may
                     // DIFFER from the value we are currently storing in defWindowProc because someone may
                     // have re-subclassed.
-                    PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC, PreviousWindow._windowProc!);
+                    PInvokeCore.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC, PreviousWindow._windowProc!);
                 }
             }
         }
@@ -894,7 +894,7 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
             if (_nextWindow is null || _nextWindow._priorWindowProcHandle != _windowProcHandle)
             {
                 // we didn't find it... let's unhook anyway and cut the chain... this prevents crashes
-                PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC, DefaultWindowProc);
+                PInvokeCore.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC, DefaultWindowProc);
             }
         }
     }

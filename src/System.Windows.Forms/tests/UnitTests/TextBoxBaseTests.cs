@@ -2401,7 +2401,7 @@ public partial class TextBoxBaseTests
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         control.ReadOnly = value;
 
-        WINDOW_STYLE style = (WINDOW_STYLE)PInvoke.GetWindowLong(control, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
+        WINDOW_STYLE style = (WINDOW_STYLE)PInvokeCore.GetWindowLong(control, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
         Assert.Equal(value, ((int)style & PInvoke.ES_READONLY) != 0);
     }
 

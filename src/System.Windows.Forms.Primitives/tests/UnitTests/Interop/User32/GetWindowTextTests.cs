@@ -54,7 +54,7 @@ public class GetWindowTextTests
             set;
         }
 
-        protected override LRESULT WNDPROC(HWND hWnd, MessageId msg, WPARAM wParam, LPARAM lParam)
+        protected override LRESULT WNDPROC(HWND hWnd, uint msg, WPARAM wParam, LPARAM lParam)
         {
             switch (msg)
             {

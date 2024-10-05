@@ -649,7 +649,7 @@ public partial class ListView : Control
             // Keep the scrollbar if we are just updating styles.
             if (IsHandleCreated)
             {
-                int currentStyle = (int)PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
+                int currentStyle = (int)PInvokeCore.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
                 cp.Style |= currentStyle & (int)(WINDOW_STYLE.WS_HSCROLL | WINDOW_STYLE.WS_VSCROLL);
             }
 
@@ -4641,9 +4641,9 @@ public partial class ListView : Control
         // we have to set this style after the list view was created and before we position the native list view items.
         if (!Scrollable)
         {
-            int style = (int)PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
+            int style = (int)PInvokeCore.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
             style |= (int)PInvoke.LVS_NOSCROLL;
-            PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE, style);
+            PInvokeCore.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE, style);
         }
 
         // In VirtualMode we have to tell the list view to ask for the list view item's state image index.

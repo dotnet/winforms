@@ -1213,7 +1213,7 @@ public sealed partial class Application
     {
         Debug.Assert(PInvoke.IsWindow(handle), "Handle being parked is not a valid window handle");
         Debug.Assert(
-            ((WINDOW_STYLE)PInvoke.GetWindowLong(handle.Handle, WINDOW_LONG_PTR_INDEX.GWL_STYLE)).HasFlag(WINDOW_STYLE.WS_CHILD),
+            ((WINDOW_STYLE)PInvokeCore.GetWindowLong(handle.Handle, WINDOW_LONG_PTR_INDEX.GWL_STYLE)).HasFlag(WINDOW_STYLE.WS_CHILD),
             "Only WS_CHILD windows should be parked.");
 
         GetContextForHandle(handle)?.GetParkingWindow(dpiAwarenessContext).ParkHandle(handle);
