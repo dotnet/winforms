@@ -16,6 +16,7 @@ public sealed class CreateFrameworkTypes : IDisposable
     private ContextMenu _contextMenu;
     private MenuItem _menuItem1;
     private MenuItem _menuItem2;
+    private DataSet _dataSet;
     private int _count;
 
     public void Dispose()
@@ -39,13 +40,15 @@ public sealed class CreateFrameworkTypes : IDisposable
         _contextMenu.MenuItems.Add(_menuItem2);
 
         _contextMenu.Show(button, button.Location);
+
         void OnClick(object sender, EventArgs e) => MessageBox.Show("Clicked Item1", "CreateContextMenu");
         void OnSelect(object sender, EventArgs e) => MessageBox.Show("Selected Item2", "CreateContextMenu");
         void OnPopup(object sender, EventArgs e) => MessageBox.Show("Item2 popped up", "CreateContextMenu");
+        void ContextMenu_Popup(object sender, EventArgs e) => _contextMenu.MenuItems.Add(new MenuItem("Item3"));
     }
 
     // This test creates MainMenu, MenuItem.
-    public MainMenu CreateMainMenu()
+    public static MainMenu CreateMainMenu()
     {
         MainMenu mainMenu = new();
         MenuItem fileMenuItem = new("MainMenuItem", (s, e) => MessageBox.Show("New menu item clicked", "MainMenu"));
@@ -54,7 +57,7 @@ public sealed class CreateFrameworkTypes : IDisposable
         return mainMenu;
     }
 
-    // This test creates DataGrid, DataGridCell, DataGridLineStyle, DataGridParentRowsLabelStyle, DataGrid.HitTestInfo,
+    // This method creates DataGrid, DataGridCell, DataGridLineStyle, DataGridParentRowsLabelStyle, DataGrid.HitTestInfo,
     // DataGrid.HitTestType, DataGridTableStyle, DataGridColumnStyle, DataGridBoolColumn, DataGridTextBoxColumn,
     // GridColumnStylesCollection, GridTableStylesCollection
     public void CreateDataGrid(Form form)
@@ -71,13 +74,13 @@ public sealed class CreateFrameworkTypes : IDisposable
 
         form.Controls.Add(dataGrid);
 
-        DataSet dataSet = CreateDataSet();
+        _dataSet = CreateDataSet();
 
         // Bind the DataGrid to the DataSet. The dataMember
         // specifies that the Customers table should be displayed.
-        dataGrid.SetDataBinding(dataSet, "Customers");
+        dataGrid.SetDataBinding(_dataSet, "Customers");
 
-        AddCustomDataTableStyle(form, dataGrid, dataSet);
+        AddCustomDataTableStyle(form, dataGrid, _dataSet);
 
         if (dataGrid.CurrentCell is DataGridCell dataGridCell)
         {
@@ -168,21 +171,21 @@ public sealed class CreateFrameworkTypes : IDisposable
         DataSet dataSet = new("myDataSet");
 
         // Create two DataTables.
-        DataTable customerDataTable = new DataTable("Customers");
-        DataTable orderDataTable = new DataTable("Orders");
+        DataTable customerDataTable = new("Customers");
+        DataTable orderDataTable = new("Orders");
 
         // Create two columns, and add them to the first table.
-        DataColumn customerIdDataColumn = new DataColumn("CustID", typeof(int));
-        DataColumn customerNameDataColumn = new DataColumn("CustName");
-        DataColumn currentDataColumn = new DataColumn("Current", typeof(bool));
+        DataColumn customerIdDataColumn = new ("CustID", typeof(int));
+        DataColumn customerNameDataColumn = new ("CustName");
+        DataColumn currentDataColumn = new ("Current", typeof(bool));
         customerDataTable.Columns.Add(customerIdDataColumn);
         customerDataTable.Columns.Add(customerNameDataColumn);
         customerDataTable.Columns.Add(currentDataColumn);
 
         // Create three columns, and add them to the second table.
-        DataColumn idDataColumn = new DataColumn("CustID", typeof(int));
-        DataColumn orderDateDataColumn = new DataColumn("orderDate", typeof(DateTime));
-        DataColumn orderAmountDataColumn = new DataColumn("OrderAmount", typeof(decimal));
+        DataColumn idDataColumn = new ("CustID", typeof(int));
+        DataColumn orderDateDataColumn = new ("orderDate", typeof(DateTime));
+        DataColumn orderAmountDataColumn = new ("OrderAmount", typeof(decimal));
         orderDataTable.Columns.Add(orderAmountDataColumn);
         orderDataTable.Columns.Add(idDataColumn);
         orderDataTable.Columns.Add(orderDateDataColumn);
@@ -235,8 +238,14 @@ public sealed class CreateFrameworkTypes : IDisposable
         return dataSet;
     }
 
-    private void AddCustomDataTableStyle(Form form, DataGrid dataGrid, DataSet dataSet)
+    // This method creates DataGrid, DataGridTableStyle, DataGridColumnStyle, DataGridBoolColumn, DataGridTextBoxColumn,
+    // GridColumnStylesCollection, GridTableStylesCollection
+    public void AddCustomDataTableStyle(Form form, DataGrid dataGrid = null, DataSet dataSet = null)
     {
+        dataGrid ??= new DataGrid();
+
+        dataSet ??= CreateDataSet();
+
         DataGridTableStyle customerDGTableStyle = new()
         {
             MappingName = "Customers",
@@ -244,8 +253,7 @@ public sealed class CreateFrameworkTypes : IDisposable
             AlternatingBackColor = Color.LightGray
         };
 
-        customerDGTableStyle.GridColumnStyles.CollectionChanged
-            += (sender, e) => _count++;
+        customerDGTableStyle.GridColumnStyles.CollectionChanged += (sender, e) => _count++;
 
         // Add a GridColumnStyle and set its MappingName 
         // to the name of a DataColumn in the DataTable.
@@ -289,11 +297,12 @@ public sealed class CreateFrameworkTypes : IDisposable
         // Use a PropertyDescriptor to create a formatted
         // column. First get the PropertyDescriptorCollection
         // for the data source and data member.
-        PropertyDescriptorCollection propertyDescriptorCollection = form.BindingContext[dataSet, "Customers.customerToOrders"].GetItemProperties();
+        PropertyDescriptorCollection propertyDescriptorCollection =
+            form.BindingContext[dataSet, "Customers.customerToOrders"].GetItemProperties();
 
         // Create a formatted column using a PropertyDescriptor.
         // The formatting character "c" specifies a currency format.
-        DataGridColumnStyle csOrderAmount = new DataGridTextBoxColumn(propertyDescriptorCollection["OrderAmount"], "c", true)
+        DataGridColumnStyle csOrderAmount = new DataGridTextBoxColumn(propertyDescriptorCollection["OrderAmount"], "c", isDefault: true)
         {
             MappingName = "OrderAmount",
             HeaderText = "Total",
@@ -306,7 +315,7 @@ public sealed class CreateFrameworkTypes : IDisposable
         dataGrid.TableStyles.Add(OrderDGTableStyle);
     }
 
-    private void DataGrid_MouseUp(object sender, MouseEventArgs e)
+    public static void DataGrid_MouseUp(object sender, MouseEventArgs e)
     {
         DataGrid.HitTestInfo hitInfo = ((DataGrid)sender).HitTest(e.X, e.Y);
         if (hitInfo == DataGrid.HitTestInfo.Nowhere)
@@ -318,11 +327,6 @@ public sealed class CreateFrameworkTypes : IDisposable
         {
             MessageBox.Show($"Cell [{hitInfo.Column}, {hitInfo.Row}]  clicked", "DataGrid");
         }
-    }
-
-    private void ContextMenu_Popup(object sender, EventArgs e)
-    {
-        _contextMenu.MenuItems.Add(new MenuItem("Item3"));
     }
 
     private class TestToolBar : ToolBar
