@@ -717,7 +717,7 @@ internal partial class DesignerActionUI : IDisposable
         {
             if (_mainParentWindow is not null && _mainParentWindow.Handle != 0)
             {
-                PInvoke.SetWindowLong(
+                PInvokeCore.SetWindowLong(
                     _designerActionHost,
                     WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT,
                     new HandleRef<HWND>(_mainParentWindow, (HWND)_mainParentWindow.Handle));

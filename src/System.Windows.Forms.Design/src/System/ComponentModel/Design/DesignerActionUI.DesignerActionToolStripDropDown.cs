@@ -113,7 +113,7 @@ internal partial class DesignerActionUI
                 }
 
                 // What's the owner of the windows being activated?
-                HWND parent = (HWND)PInvoke.GetWindowLong(
+                HWND parent = (HWND)PInvokeCore.GetWindowLong(
                     new HandleRef<HWND>(this, hwndActivating),
                     WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT);
 
@@ -203,7 +203,7 @@ internal partial class DesignerActionUI
 
             while (!hWndDescendant.IsNull)
             {
-                hWndDescendant = (HWND)PInvoke.GetWindowLong(hWndDescendant, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT);
+                hWndDescendant = (HWND)PInvokeCore.GetWindowLong(hWndDescendant, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT);
                 if (hWndDescendant.IsNull)
                 {
                     return false;
@@ -220,7 +220,7 @@ internal partial class DesignerActionUI
 
         private bool IsWindowEnabled(IntPtr handle)
         {
-            int style = (int)PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
+            int style = (int)PInvokeCore.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
             return (style & (int)WINDOW_STYLE.WS_DISABLED) == 0;
         }
 
