@@ -38,9 +38,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim pipeName As String = GetUniqueText()
             Dim pipeServer As NamedPipeServerStream = Nothing
             TryCreatePipeServer(pipeName, pipeServer).Should.BeTrue()
-            Dim pipeServer1 As NamedPipeServerStream = Nothing
-            TryCreatePipeServer(pipeName, pipeServer1).Should.BeFalse()
             Using pipeServer
+                Dim pipeServer1 As NamedPipeServerStream = Nothing
+                TryCreatePipeServer(pipeName, pipeServer1).Should.BeFalse()
                 pipeServer1.Should.BeNull()
             End Using
         End Sub
