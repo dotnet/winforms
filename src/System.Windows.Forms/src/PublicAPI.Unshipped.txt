@@ -502,6 +502,7 @@ virtual System.Windows.Forms.StatusBar.StatusBarPanelCollection.RemoveAt(int ind
 ~override System.Windows.Forms.DataGridTextBoxColumn.GetPreferredSize(System.Drawing.Graphics g, object value) -> System.Drawing.Size
 ~override System.Windows.Forms.DataGridTextBoxColumn.Paint(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, System.Windows.Forms.CurrencyManager source, int rowNum, bool alignToRight) -> void
 ~override System.Windows.Forms.DataGridTextBoxColumn.Paint(System.Drawing.Graphics g1, System.Drawing.Graphics g, System.Drawing.Rectangle bounds, System.Windows.Forms.CurrencyManager source, int rowNum) -> void
+~static readonly System.Windows.Forms.DataGrid.HitTestInfo.Nowhere -> System.Windows.Forms.DataGrid.HitTestInfo
 ~static System.Windows.Forms.DataGridColumnStyle.CompModSwitches.DGEditColumnEditing.get -> System.Diagnostics.TraceSwitch
 ~static System.Windows.Forms.DataGridTableStyle.s_defaultTableStyle.get -> System.Windows.Forms.DataGridTableStyle
 ~static System.Windows.Forms.GridTablesFactory.CreateGridTables(System.Windows.Forms.DataGridTableStyle gridTable, object dataSource, string dataMember, System.Windows.Forms.BindingContext bindingManager) -> System.Windows.Forms.DataGridTableStyle[]
