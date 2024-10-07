@@ -14,7 +14,7 @@ public class UnsupportedTypesTests
 {
 #pragma warning disable WFDEV005, WFDEV006, WFDEV007, WFDEV008, WFDEV009, WFDEV010, CS0618 // Type or member is obsolete
 
-    public static TheoryData<Action> ObsoleteControlsConstructors => new()
+    public static TheoryData<Action> UnsupportedControlsConstructors => new()
     {
         () => new ContextMenu(),
         () => new ContextMenu(menuItems: null!),
@@ -61,8 +61,8 @@ public class UnsupportedTypesTests
     };
 
     [Theory]
-    [MemberData(nameof(ObsoleteControlsConstructors))]
-    public void ObsoleteControl_Constructor_Throws(Action action) =>
+    [MemberData(nameof(UnsupportedControlsConstructors))]
+    public void UnsupportedControl_Constructor_Throws(Action action) =>
         action.Should().Throw<PlatformNotSupportedException>();
 
     [Fact]
@@ -129,7 +129,6 @@ public class UnsupportedTypesTests
     [Fact]
     public void CreateMenus_Throws()
     {
-        // This test binds to ContextMenu, Menu, Menu.MenuItemCollection, MenuItem, MenuMerge enum
         using Button button = new();
         using CreateFrameworkTypes createFrameworkTypes = new();
         ((Action)(() => createFrameworkTypes.CreateMenus(button))).Should().Throw<PlatformNotSupportedException>();
@@ -138,28 +137,33 @@ public class UnsupportedTypesTests
     [Fact]
     public void CreateMainMenu_Throws()
     {
-        // This test binds to MainMenu, MenuItem in order to initialize Form.Menu.
         using Form form = new();
-        using CreateFrameworkTypes createFrameworkTypes = new();
-        ((Action)(() => form.Menu = createFrameworkTypes.CreateMainMenu())).Should().Throw<PlatformNotSupportedException>();
+        ((Action)(() => form.Menu = CreateFrameworkTypes.CreateMainMenu())).Should().Throw<PlatformNotSupportedException>();
     }
 
     [Fact]
     public void CreateDataGrid_Throws()
     {
-        // This test binds to DataGrid, DataGridCell, DataGridLineStyle, DataGridParentRowsLabelStyle, DataGrid.HitTestInfo,
-        // DataGrid.HitTestType, DataGridTableStyle, DataGridColumnStyle, DataGridBoolColumn, DataGridTextBoxColumn,
-        // GridColumnStylesCollection, GridTableStylesCollection in order to add DataGrid to a form.
         using Form form = new();
         using CreateFrameworkTypes createFrameworkTypes = new();
         ((Action)(() => createFrameworkTypes.CreateDataGrid(form))).Should().Throw<PlatformNotSupportedException>();
     }
 
     [Fact]
+    public void AddCustomDataTableStyle_Throws()
+    {
+        using Form form = new();
+        using CreateFrameworkTypes createFrameworkTypes = new();
+        ((Action)(() => createFrameworkTypes.AddCustomDataTableStyle(form))).Should().Throw<PlatformNotSupportedException>();
+    }
+
+    [Fact]
+    public void AccessHitTestInfo_DoesNotThrowMissingField() =>
+        ((Action)(() => CreateFrameworkTypes.DataGrid_MouseUp(null, null))).Should().Throw<NullReferenceException>();
+
+    [Fact]
     public void CreateToolBar_Throws()
     {
-        // This test binds to ToolBar, ToolBarButton, ToolBar.ButtonCollection, ToolBarButtonClickEventArgs, ToolBarButtonClickEventHandler,
-        // ToolBarButtonCollection, ToolBarButtonStyle, ToolBarTextAlign, ToolBarAppearance.
         using Form form = new();
         using CreateFrameworkTypes createFrameworkTypes = new();
         ((Action)(() => createFrameworkTypes.CreateToolBar(form))).Should().Throw<PlatformNotSupportedException>();
@@ -168,8 +172,6 @@ public class UnsupportedTypesTests
     [Fact]
     public void CreateStatusBar_Throws()
     {
-        // This test binds to StatusBar, StatusBarPanel, StatusBarPanelAutoSize, StatusBarPanelBorderStyle, StatusBarPanelCollection,
-        // StatusBarPanelClickEventHandler, StatusBarPanelStyle, StatusBarDrawItemEventArgs, StatusBarPanelClickEventArgs.
         using Form form = new();
         using CreateFrameworkTypes createFrameworkTypes = new();
         ((Action)(() => createFrameworkTypes.CreateStatusBar(form))).Should().Throw<PlatformNotSupportedException>();

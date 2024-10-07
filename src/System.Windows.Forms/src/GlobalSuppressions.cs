@@ -142,6 +142,7 @@
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Public API", Scope = "member", Target = "~F:System.Windows.Forms.DataFormats.CommaSeparatedValue")]
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Public API", Scope = "member", Target = "~F:System.Windows.Forms.DataFormats.StringFormat")]
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Public API", Scope = "member", Target = "~F:System.Windows.Forms.DataFormats.Serializable")]
+[assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Public API", Scope = "member", Target = "~F:System.Windows.Forms.DataGrid.HitTestInfo.Nowhere")]
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Public API", Scope = "member", Target = "~F:System.Windows.Forms.OSFeature.LayeredWindows")]
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Public API", Scope = "member", Target = "~F:System.Windows.Forms.OSFeature.Themes")]
 [assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Public API", Scope = "member", Target = "~F:System.Resources.ResXResourceWriter.BinSerializedObjectMimeType")]
