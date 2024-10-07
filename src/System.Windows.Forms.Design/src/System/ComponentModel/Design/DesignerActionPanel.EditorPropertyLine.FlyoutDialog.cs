@@ -107,7 +107,7 @@ internal sealed partial class DesignerActionPanel
             {
                 while (!hWnd.IsNull)
                 {
-                    hWnd = (HWND)PInvoke.GetWindowLong(hWnd, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT);
+                    hWnd = (HWND)PInvokeCore.GetWindowLong(hWnd, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT);
                     if (hWnd.IsNull)
                     {
                         return false;
@@ -138,9 +138,9 @@ internal sealed partial class DesignerActionPanel
             {
                 try
                 {
-                    PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, parent.Handle);
+                    PInvokeCore.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, parent.Handle);
 
-                    // Lifted directly from Form.ShowDialog()...
+                    // Lifted directly from Form.ShowDialog().
                     HWND hWndCapture = PInvoke.GetCapture();
                     if (!hWndCapture.IsNull)
                     {
@@ -154,7 +154,7 @@ internal sealed partial class DesignerActionPanel
                 }
                 finally
                 {
-                    PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, IntPtr.Zero);
+                    PInvokeCore.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, IntPtr.Zero);
 
                     // sometimes activation goes to LALA land - if our parent control is still around,
                     // remind it to take focus.

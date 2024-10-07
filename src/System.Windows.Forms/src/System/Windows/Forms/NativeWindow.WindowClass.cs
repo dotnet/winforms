@@ -30,7 +30,7 @@ public partial class NativeWindow
         // There is only ever one AppDomain
         private static readonly string s_currentAppDomainHash = Convert.ToString(AppDomain.CurrentDomain.GetHashCode(), 16);
 
-        private static readonly object s_wcInternalSyncObject = new();
+        private static readonly Lock s_wcInternalSyncObject = new();
 
         internal WindowClass(string? className, WNDCLASS_STYLES classStyle)
         {
@@ -39,14 +39,17 @@ public partial class NativeWindow
             RegisterClass();
         }
 
-        public LRESULT Callback(HWND hWnd, MessageId msg, WPARAM wparam, LPARAM lparam)
+        public LRESULT Callback(HWND hwnd, uint msg, WPARAM wparam, LPARAM lparam)
         {
-            Debug.Assert(hWnd != IntPtr.Zero, "Windows called us with an HWND of 0");
+            Debug.Assert(!hwnd.IsNull, "Windows called us with an HWND of 0");
 
             // Set the window procedure to the default window procedure
-            PInvoke.SetWindowLong(hWnd, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC, _defaultWindProc);
-            _targetWindow!.AssignHandle(hWnd);
-            return _targetWindow!.Callback(hWnd, msg, wparam, lparam);
+            PInvokeCore.SetWindowLong(hwnd, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC, _defaultWindProc);
+
+            Debug.Assert(_targetWindow is not null);
+
+            _targetWindow.AssignHandle(hwnd);
+            return _targetWindow.Callback(hwnd, msg, wparam, lparam);
         }
 
         /// <summary>
@@ -54,7 +57,7 @@ public partial class NativeWindow
         ///  object if there is no such class/style available, or return a
         ///  cached object if one exists.
         /// </summary>
-        internal static WindowClass Create(string? className, WNDCLASS_STYLES classStyle)
+        internal static WindowClass FindOrCreate(string? className, WNDCLASS_STYLES classStyle)
         {
             lock (s_wcInternalSyncObject)
             {
@@ -85,6 +88,7 @@ public partial class NativeWindow
                     {
                         _next = s_cache
                     };
+
                     s_cache = wc;
                 }
 
@@ -121,7 +125,7 @@ public partial class NativeWindow
 
             string? localClassName = _className;
 
-            if (localClassName is null)
+            if (_className is null)
             {
                 // If we don't use a hollow brush here, Windows will "pre paint" us with COLOR_WINDOW which
                 // creates a little bit if flicker. This happens even though we are overriding wm_erasebackgnd.
@@ -148,8 +152,8 @@ public partial class NativeWindow
                 _defaultWindProc = (nint)windowClass.lpfnWndProc;
             }
 
-            _windowClassName = GetFullClassName(localClassName!);
-            _windProc = new WNDPROC(Callback);
+            _windowClassName = GetFullClassName(localClassName);
+            _windProc = Callback;
             nint callback = Marshal.GetFunctionPointerForDelegate(_windProc);
             windowClass.lpfnWndProc = (delegate* unmanaged[Stdcall]<HWND, uint, WPARAM, LPARAM, LRESULT>)callback;
             windowClass.hInstance = PInvoke.GetModuleHandle((PCWSTR)null);

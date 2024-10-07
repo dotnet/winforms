@@ -546,14 +546,14 @@ public abstract partial class FileDialog : CommonDialog
                         {
                             // This is the second CDN_FILEOK, so we want to ignore it.
                             _ignoreSecondFileOkNotification = false;
-                            PInvoke.SetWindowLong((HWND)hWnd, 0, -1);
+                            PInvokeCore.SetWindowLong((HWND)hWnd, 0, -1);
                             return -1;
                         }
                     }
 
                     if (!DoFileOk(notify->lpOFN))
                     {
-                        PInvoke.SetWindowLong((HWND)hWnd, 0, -1);
+                        PInvokeCore.SetWindowLong((HWND)hWnd, 0, -1);
                         return -1;
                     }
 

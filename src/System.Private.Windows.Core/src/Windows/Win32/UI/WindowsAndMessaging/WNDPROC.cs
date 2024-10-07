@@ -3,4 +3,4 @@
 
 namespace Windows.Win32.UI.WindowsAndMessaging;
 
-internal delegate LRESULT WNDPROC(HWND hWnd, MessageId msg, WPARAM wParam, LPARAM lParam);
+internal delegate LRESULT WNDPROC(HWND hWnd, uint msg, WPARAM wParam, LPARAM lParam);

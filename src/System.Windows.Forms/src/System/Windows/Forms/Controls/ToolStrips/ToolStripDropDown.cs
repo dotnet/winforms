@@ -1529,14 +1529,14 @@ public partial class ToolStripDropDown : ToolStrip
     private void ReparentToActiveToolStripWindow()
     {
         ToolStripManager.ModalMenuFilter.SetActiveToolStrip(this);
-        PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, ToolStripManager.ModalMenuFilter.ActiveHwnd);
+        PInvokeCore.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, ToolStripManager.ModalMenuFilter.ActiveHwnd);
     }
 
     private void ReparentToDropDownOwnerWindow()
     {
         // when we're toplevel we need to parent ourselves to a hidden window
         // this prevents a taskbar entry.
-        PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, DropDownOwnerWindow);
+        PInvokeCore.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, DropDownOwnerWindow);
     }
 
     internal override void ResetScaling(int newDpi)
