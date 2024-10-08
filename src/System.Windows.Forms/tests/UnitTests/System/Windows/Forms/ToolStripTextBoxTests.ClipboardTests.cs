@@ -9,7 +9,6 @@ public partial class ToolStripTextBoxTests
     [UISettings(MaxAttempts = 3)] // Try up to 3 times before failing.
     public class ClipboardTests
     {
-
         [WinFormsFact]
         public void ToolStripTextBox_CopyPaste_Success()
         {
