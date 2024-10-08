@@ -99,7 +99,7 @@ public class ToolStripSplitButtonTests : IDisposable
         using Bitmap image = new(10, 10);
         using ToolStripSplitButton toolStripSplitButton = new(image);
 
-        _toolStripSplitButton.Text.Should().BeNull();
+        toolStripSplitButton.Text.Should().BeNull();
         toolStripSplitButton.Image.Should().Be(image);
         toolStripSplitButton.DropDownButtonWidth.Should().Be(toolStripSplitButton.TestAccessor().Dynamic.DefaultDropDownButtonWidth);
     }
