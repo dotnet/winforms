@@ -1125,10 +1125,10 @@ public partial class DateTimePicker : Control
             // border should be drawn disabled when theming (VisualStyles) is enabled. Setting the window
             // style to itself (which will have the proper WS_DISABLED setting after calling base) will
             // flush the cached value and render the border as one would expect.
-            PInvoke.SetWindowLong(
+            PInvokeCore.SetWindowLong(
                 this,
                 WINDOW_LONG_PTR_INDEX.GWL_STYLE,
-                PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE));
+                PInvokeCore.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE));
         }
     }
 
@@ -1505,10 +1505,10 @@ public partial class DateTimePicker : Control
             HWND handle = (HWND)PInvoke.SendMessage(this, PInvoke.DTM_GETMONTHCAL);
             if (handle != IntPtr.Zero)
             {
-                WINDOW_EX_STYLE style = (WINDOW_EX_STYLE)PInvoke.GetWindowLong(handle, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE);
+                WINDOW_EX_STYLE style = (WINDOW_EX_STYLE)PInvokeCore.GetWindowLong(handle, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE);
                 style |= WINDOW_EX_STYLE.WS_EX_LAYOUTRTL | WINDOW_EX_STYLE.WS_EX_NOINHERITLAYOUT;
                 style &= ~(WINDOW_EX_STYLE.WS_EX_RIGHT | WINDOW_EX_STYLE.WS_EX_RTLREADING);
-                PInvoke.SetWindowLong(handle, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE, (nint)style);
+                PInvokeCore.SetWindowLong(handle, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE, (nint)style);
                 GC.KeepAlive(this);
             }
         }
