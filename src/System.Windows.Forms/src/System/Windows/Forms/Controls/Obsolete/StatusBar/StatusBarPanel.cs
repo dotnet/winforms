@@ -15,6 +15,9 @@ namespace System.Windows.Forms;
     UrlFormat = Obsoletions.SharedUrlFormat)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 [Browsable(false)]
+[ToolboxItem(false)]
+[DesignTimeVisible(false)]
+[DefaultProperty(nameof(Text))]
 public class StatusBarPanel : Component, ISupportInitialize
 {
     public StatusBarPanel() => throw new PlatformNotSupportedException();

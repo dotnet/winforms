@@ -16,6 +16,7 @@ public partial class StatusBar
         DiagnosticId = Obsoletions.StatusBarDiagnosticId,
         UrlFormat = Obsoletions.SharedUrlFormat)]
     [EditorBrowsable(EditorBrowsableState.Never)]
+    [ListBindable(false)]
     public class StatusBarPanelCollection : IList
     {
         public StatusBarPanelCollection(StatusBar owner)
