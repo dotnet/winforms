@@ -1984,10 +1984,7 @@ public unsafe partial class Control :
                     Properties.AddValue(s_currentAmbientFontProperty, ambientFont);
                 }
 
-                if (fontHandle is null)
-                {
-                    fontHandle = Properties.AddValue(s_fontHandleWrapperProperty, new FontHandleWrapper(ambientFont));
-                }
+                fontHandle ??= Properties.AddValue(s_fontHandleWrapperProperty, new FontHandleWrapper(ambientFont));
 
                 return fontHandle.Handle;
             }
@@ -2216,7 +2213,7 @@ public unsafe partial class Control :
                     HWND parentHandle = PInvoke.GetParent(this);
                     HWND lastParentHandle = parentHandle;
                     SetState(States.HostedInDialog, false);
-                    Span<char> buffer = stackalloc char[PInvoke.MaxClassName];
+                    Span<char> buffer = stackalloc char[PInvokeCore.MaxClassName];
 
                     while (!parentHandle.IsNull)
                     {
@@ -3594,8 +3591,8 @@ public unsafe partial class Control :
     /// </summary>
     private protected WINDOW_EX_STYLE ExtendedWindowStyle
     {
-        get => (WINDOW_EX_STYLE)PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE);
-        set => PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE, (nint)value);
+        get => (WINDOW_EX_STYLE)PInvokeCore.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE);
+        set => PInvokeCore.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE, (nint)value);
     }
 
     /// <summary>
@@ -3603,8 +3600,8 @@ public unsafe partial class Control :
     /// </summary>
     internal WINDOW_STYLE WindowStyle
     {
-        get => (WINDOW_STYLE)PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
-        set => PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE, (nint)value);
+        get => (WINDOW_STYLE)PInvokeCore.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
+        set => PInvokeCore.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE, (nint)value);
     }
 
     /// <summary>
@@ -4732,7 +4729,7 @@ public unsafe partial class Control :
             }
         }
 
-        if (((WINDOW_EX_STYLE)PInvoke.GetWindowLong(_window, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE))
+        if (((WINDOW_EX_STYLE)PInvokeCore.GetWindowLong(_window, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE))
             .HasFlag(WINDOW_EX_STYLE.WS_EX_MDICHILD))
         {
             PInvoke.DefMDIChildProc(InternalHandle, PInvoke.WM_CLOSE, default, default);
@@ -10692,8 +10689,8 @@ public unsafe partial class Control :
 
     private void SetWindowStyle(int flag, bool value)
     {
-        int styleFlags = (int)PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
-        PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE, value ? styleFlags | flag : styleFlags & ~flag);
+        int styleFlags = (int)PInvokeCore.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
+        PInvokeCore.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE, value ? styleFlags | flag : styleFlags & ~flag);
     }
 
     /// <summary>
@@ -11121,7 +11118,7 @@ public unsafe partial class Control :
                 lastParentHandle = parentHandle;
                 parentHandle = PInvoke.GetParent(parentHandle);
 
-                if (((WINDOW_STYLE)PInvoke.GetWindowLong(lastParentHandle, WINDOW_LONG_PTR_INDEX.GWL_STYLE))
+                if (((WINDOW_STYLE)PInvokeCore.GetWindowLong(lastParentHandle, WINDOW_LONG_PTR_INDEX.GWL_STYLE))
                     .HasFlag(WINDOW_STYLE.WS_CHILD))
                 {
                     break;

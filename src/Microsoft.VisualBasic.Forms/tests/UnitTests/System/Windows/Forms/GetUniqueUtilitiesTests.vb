@@ -16,8 +16,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsTheory>
-        <InlineData(True)>
-        <InlineData(False)>
+        <BoolData>
         Public Sub GetUniqueIntegerTest(positiveOnly As Boolean)
             For i As Integer = 0 To 99
                 Dim unexpected As Integer = GetUniqueInteger(positiveOnly)
