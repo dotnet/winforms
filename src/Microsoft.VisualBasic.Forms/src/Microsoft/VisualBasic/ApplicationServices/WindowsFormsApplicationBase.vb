@@ -10,6 +10,8 @@ Imports System.Runtime.CompilerServices
 Imports System.Runtime.InteropServices
 Imports System.Security
 Imports System.Threading
+Imports System.Windows.Forms
+Imports System.Windows.Forms.Analyzers.Diagnostics
 
 Imports VbUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
