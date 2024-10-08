@@ -12,6 +12,7 @@ namespace System.Windows.Forms;
     error: false,
     DiagnosticId = Obsoletions.MenuDiagnosticId,
     UrlFormat = Obsoletions.SharedUrlFormat)]
+[Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 public class MenuItem : Menu
 {
@@ -69,80 +70,60 @@ public class MenuItem : Menu
         EventHandler onSelect,
         MenuItem[] items) : base(items: items) => throw new PlatformNotSupportedException();
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public bool BarBreak
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public bool Break
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public bool Checked
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public bool DefaultItem
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public bool OwnerDraw
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public bool Enabled
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public int Index
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public bool MdiList
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public MenuMerge MergeType
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public int MergeOrder
     {
         get => throw new PlatformNotSupportedException();
@@ -151,88 +132,66 @@ public class MenuItem : Menu
 
     public char Mnemonic => '\0';
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public Menu Parent
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public bool RadioCheck
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public string Text
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public Shortcut Shortcut
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public bool ShowShortcut
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public bool Visible
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public event EventHandler Click
     {
         add => throw new PlatformNotSupportedException();
         remove => throw new PlatformNotSupportedException();
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public event DrawItemEventHandler DrawItem
     {
         add => throw new PlatformNotSupportedException();
         remove => throw new PlatformNotSupportedException();
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public event MeasureItemEventHandler MeasureItem
     {
         add => throw new PlatformNotSupportedException();
         remove => throw new PlatformNotSupportedException();
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public event EventHandler Popup
     {
         add => throw new PlatformNotSupportedException();
         remove => throw new PlatformNotSupportedException();
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public event EventHandler Select
     {
         add => throw new PlatformNotSupportedException();

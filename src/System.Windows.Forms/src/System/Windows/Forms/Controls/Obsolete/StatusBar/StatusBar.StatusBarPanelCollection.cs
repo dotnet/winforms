@@ -22,8 +22,6 @@ public partial class StatusBar
         {
         }
 
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
         public virtual StatusBarPanel this[int index]
         {
             get => throw new PlatformNotSupportedException();
@@ -36,12 +34,8 @@ public partial class StatusBar
             set => throw new PlatformNotSupportedException();
         }
 
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
         public virtual StatusBarPanel this[string key] => throw new PlatformNotSupportedException();
 
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
         public int Count => throw new PlatformNotSupportedException();
 
         object ICollection.SyncRoot => throw new PlatformNotSupportedException();
@@ -50,8 +44,6 @@ public partial class StatusBar
 
         bool IList.IsFixedSize => throw new PlatformNotSupportedException();
 
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
         public bool IsReadOnly => throw new PlatformNotSupportedException();
 
         public virtual StatusBarPanel Add(string text) => throw new PlatformNotSupportedException();

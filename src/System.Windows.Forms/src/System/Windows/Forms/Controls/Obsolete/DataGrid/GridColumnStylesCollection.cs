@@ -52,24 +52,16 @@ public class GridColumnStylesCollection : BaseCollection, IList
 
     IEnumerator IEnumerable.GetEnumerator() => throw new PlatformNotSupportedException();
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public DataGridColumnStyle this[int index] => throw new PlatformNotSupportedException();
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public DataGridColumnStyle this[string columnName] => throw new PlatformNotSupportedException();
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public DataGridColumnStyle this[PropertyDescriptor propertyDesciptor] => throw new PlatformNotSupportedException();
 
     public virtual int Add(DataGridColumnStyle column) => throw new PlatformNotSupportedException();
 
     public void AddRange(DataGridColumnStyle[] columns) => throw new PlatformNotSupportedException();
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public event CollectionChangeEventHandler CollectionChanged
     {
         add => throw new PlatformNotSupportedException();
