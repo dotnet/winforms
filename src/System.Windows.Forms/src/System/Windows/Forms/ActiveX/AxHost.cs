@@ -2278,13 +2278,13 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     private void CreateWithoutLicense(Guid clsid)
     {
-        IUnknown* unknown;
+        using ComScope<IUnknown> unknown = new(null);
         HRESULT hr = PInvokeCore.CoCreateInstance(
             &clsid,
             (IUnknown*)null,
             CLSCTX.CLSCTX_INPROC_SERVER,
             IID.Get<IUnknown>(),
-            (void**)&unknown);
+            unknown);
         hr.ThrowOnFailure();
 
         _instance = ComHelpers.GetObjectForIUnknown(unknown);
@@ -2305,8 +2305,8 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
             if (hr.Succeeded)
             {
-                IUnknown* unknown;
-                hr = factory.Value->CreateInstanceLic(null, null, IID.Get<IUnknown>(), new BSTR(license), (void**)&unknown);
+                using ComScope<IUnknown> unknown = new(null);
+                hr = factory.Value->CreateInstanceLic(null, null, IID.Get<IUnknown>(), new BSTR(license), unknown);
                 hr.ThrowOnFailure();
 
                 _instance = ComHelpers.GetObjectForIUnknown(unknown);
@@ -3056,14 +3056,14 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             transaction = host?.CreateTransaction(SR.AXEditProperties);
 
             HWND handle = ContainingControl is null ? HWND.Null : ContainingControl.HWND;
-            IUnknown* unknown = ComHelpers.GetComPointer<IUnknown>(_instance);
+            using var unknown = ComHelpers.GetComScope<IUnknown>(_instance);
             PInvoke.OleCreatePropertyFrame(
                 handle,
                 0,
                 0,
                 (PCWSTR)null,
                 1,
-                &unknown,
+                unknown,
                 uuids.cElems,
                 uuids.pElems,
                 PInvokeCore.GetThreadLocale(),
