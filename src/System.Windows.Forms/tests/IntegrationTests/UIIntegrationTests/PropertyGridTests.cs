@@ -300,15 +300,14 @@ public class PropertyGridTests : IDisposable
         _propertyGrid.SelectedObjects = objects;
         _propertyGrid.SelectedObjects.Should().Contain(objects);
 
-        _propertyGrid.SelectedObjects = Array.Empty<object>();
+        _propertyGrid.SelectedObjects = [];
         _propertyGrid.SelectedObjects.Should().BeEmpty();
     }
 
     [WinFormsFact]
     public void PropertyGrid_SelectedObjects_Set_ThrowExpectedException()
     {
-        object[] objects = [null!];
-        Action act = () => _propertyGrid.SelectedObjects = objects;
+        Action act = () => _propertyGrid.SelectedObjects = [];
         act.Should().Throw<ArgumentException>();
     }
 
