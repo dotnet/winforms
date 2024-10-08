@@ -2,10 +2,30 @@ abstract System.Windows.Forms.DataGridColumnStyle.Abort(int rowNum) -> void
 abstract System.Windows.Forms.DataGridColumnStyle.GetMinimumHeight() -> int
 const System.Windows.Forms.Menu.FindHandle = 0 -> int
 const System.Windows.Forms.Menu.FindShortcut = 1 -> int
+override System.Windows.Forms.DataGrid.BackgroundImageLayout.get -> System.Windows.Forms.ImageLayout
+override System.Windows.Forms.DataGrid.BackgroundImageLayout.set -> void
 override System.Windows.Forms.DataGridBoolColumn.Abort(int rowNum) -> void
 override System.Windows.Forms.DataGridBoolColumn.GetMinimumHeight() -> int
 override System.Windows.Forms.DataGridTextBoxColumn.Abort(int rowNum) -> void
 override System.Windows.Forms.DataGridTextBoxColumn.GetMinimumHeight() -> int
+override System.Windows.Forms.StatusBar.BackColor.get -> System.Drawing.Color
+override System.Windows.Forms.StatusBar.BackColor.set -> void
+override System.Windows.Forms.StatusBar.BackgroundImageLayout.get -> System.Windows.Forms.ImageLayout
+override System.Windows.Forms.StatusBar.BackgroundImageLayout.set -> void
+override System.Windows.Forms.StatusBar.DoubleBuffered.get -> bool
+override System.Windows.Forms.StatusBar.DoubleBuffered.set -> void
+override System.Windows.Forms.StatusBar.ForeColor.get -> System.Drawing.Color
+override System.Windows.Forms.StatusBar.ForeColor.set -> void
+override System.Windows.Forms.ToolBar.BackColor.get -> System.Drawing.Color
+override System.Windows.Forms.ToolBar.BackColor.set -> void
+override System.Windows.Forms.ToolBar.BackgroundImageLayout.get -> System.Windows.Forms.ImageLayout
+override System.Windows.Forms.ToolBar.BackgroundImageLayout.set -> void
+override System.Windows.Forms.ToolBar.DoubleBuffered.get -> bool
+override System.Windows.Forms.ToolBar.DoubleBuffered.set -> void
+override System.Windows.Forms.ToolBar.ForeColor.get -> System.Drawing.Color
+override System.Windows.Forms.ToolBar.ForeColor.set -> void
+override System.Windows.Forms.ToolBar.RightToLeft.get -> System.Windows.Forms.RightToLeft
+override System.Windows.Forms.ToolBar.RightToLeft.set -> void
 static System.Windows.Forms.DataGridCell.operator !=(System.Windows.Forms.DataGridCell left, System.Windows.Forms.DataGridCell right) -> bool
 static System.Windows.Forms.DataGridCell.operator ==(System.Windows.Forms.DataGridCell left, System.Windows.Forms.DataGridCell right) -> bool
 System.Windows.Forms.ContextMenu
@@ -490,6 +510,12 @@ virtual System.Windows.Forms.StatusBar.StatusBarPanelCollection.RemoveAt(int ind
 ~abstract System.Windows.Forms.DataGridColumnStyle.GetPreferredSize(System.Drawing.Graphics g, object value) -> System.Drawing.Size
 ~abstract System.Windows.Forms.DataGridColumnStyle.Paint(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, System.Windows.Forms.CurrencyManager source, int rowNum, bool alignToRight) -> void
 ~abstract System.Windows.Forms.DataGridColumnStyle.Paint(System.Drawing.Graphics g1, System.Drawing.Graphics g, System.Drawing.Rectangle bounds, System.Windows.Forms.CurrencyManager source, int rowNum) -> void
+~override System.Windows.Forms.DataGrid.BackgroundImage.get -> System.Drawing.Image
+~override System.Windows.Forms.DataGrid.BackgroundImage.set -> void
+~override System.Windows.Forms.DataGrid.Cursor.get -> System.Windows.Forms.Cursor
+~override System.Windows.Forms.DataGrid.Cursor.set -> void
+~override System.Windows.Forms.DataGrid.Text.get -> string
+~override System.Windows.Forms.DataGrid.Text.set -> void
 ~override System.Windows.Forms.DataGridBoolColumn.Commit(System.Windows.Forms.CurrencyManager dataSource, int rowNum) -> bool
 ~override System.Windows.Forms.DataGridBoolColumn.Edit(System.Windows.Forms.CurrencyManager source, int rowNum, System.Drawing.Rectangle bounds, bool readOnly, string displayText, bool cellIsVisible) -> void
 ~override System.Windows.Forms.DataGridBoolColumn.GetPreferredHeight(System.Drawing.Graphics g, object value) -> int
@@ -502,6 +528,12 @@ virtual System.Windows.Forms.StatusBar.StatusBarPanelCollection.RemoveAt(int ind
 ~override System.Windows.Forms.DataGridTextBoxColumn.GetPreferredSize(System.Drawing.Graphics g, object value) -> System.Drawing.Size
 ~override System.Windows.Forms.DataGridTextBoxColumn.Paint(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, System.Windows.Forms.CurrencyManager source, int rowNum, bool alignToRight) -> void
 ~override System.Windows.Forms.DataGridTextBoxColumn.Paint(System.Drawing.Graphics g1, System.Drawing.Graphics g, System.Drawing.Rectangle bounds, System.Windows.Forms.CurrencyManager source, int rowNum) -> void
+~override System.Windows.Forms.StatusBar.BackgroundImage.get -> System.Drawing.Image
+~override System.Windows.Forms.StatusBar.BackgroundImage.set -> void
+~override System.Windows.Forms.ToolBar.BackgroundImage.get -> System.Drawing.Image
+~override System.Windows.Forms.ToolBar.BackgroundImage.set -> void
+~override System.Windows.Forms.ToolBar.Text.get -> string
+~override System.Windows.Forms.ToolBar.Text.set -> void
 ~static readonly System.Windows.Forms.DataGrid.HitTestInfo.Nowhere -> System.Windows.Forms.DataGrid.HitTestInfo
 ~static System.Windows.Forms.DataGridColumnStyle.CompModSwitches.DGEditColumnEditing.get -> System.Diagnostics.TraceSwitch
 ~static System.Windows.Forms.DataGridTableStyle.s_defaultTableStyle.get -> System.Windows.Forms.DataGridTableStyle

@@ -37,6 +37,7 @@ public partial class StatusBar
 
         public virtual StatusBarPanel this[string key] => throw new PlatformNotSupportedException();
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public int Count => throw new PlatformNotSupportedException();
 
         object ICollection.SyncRoot => throw new PlatformNotSupportedException();

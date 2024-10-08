@@ -35,6 +35,7 @@ public class DataGridTextBoxColumn : DataGridColumnStyle
         set => throw new PlatformNotSupportedException();
     }
 
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public IFormatProvider FormatInfo
     {
         get => throw new PlatformNotSupportedException();
