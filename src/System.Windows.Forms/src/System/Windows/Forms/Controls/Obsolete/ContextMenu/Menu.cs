@@ -23,6 +23,7 @@ public abstract partial class Menu : Component
 
     protected Menu(MenuItem[] items) => throw new PlatformNotSupportedException();
 
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public IntPtr Handle => throw new PlatformNotSupportedException();
 
     public virtual bool IsParent => throw new PlatformNotSupportedException();

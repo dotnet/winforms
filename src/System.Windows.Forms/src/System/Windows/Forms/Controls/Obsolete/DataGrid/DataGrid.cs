@@ -250,6 +250,7 @@ public partial class DataGrid : Control, ISupportInitialize, IDataGridEditingSer
 
     public void ResetLinkColor() => throw new PlatformNotSupportedException();
 
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public Color LinkHoverColor
     {
         get => throw new PlatformNotSupportedException();
@@ -272,19 +273,57 @@ public partial class DataGrid : Control, ISupportInitialize, IDataGridEditingSer
         remove => throw new PlatformNotSupportedException();
     }
 
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public override Cursor Cursor
+    {
+        get => throw new PlatformNotSupportedException();
+        set => throw new PlatformNotSupportedException();
+    }
+
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public new event EventHandler CursorChanged
     {
         add => throw new PlatformNotSupportedException();
         remove => throw new PlatformNotSupportedException();
     }
 
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public override Image BackgroundImage
+    {
+        get => throw new PlatformNotSupportedException();
+        set => throw new PlatformNotSupportedException();
+    }
+
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public new event EventHandler BackgroundImageChanged
     {
         add => throw new PlatformNotSupportedException();
         remove => throw new PlatformNotSupportedException();
     }
 
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public override ImageLayout BackgroundImageLayout
+    {
+        get => throw new PlatformNotSupportedException();
+        set => throw new PlatformNotSupportedException();
+    }
+
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public new event EventHandler BackgroundImageLayoutChanged
+    {
+        add => throw new PlatformNotSupportedException();
+        remove => throw new PlatformNotSupportedException();
+    }
+
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public override string Text
+    {
+        get => throw new PlatformNotSupportedException();
+        set => throw new PlatformNotSupportedException();
+    }
+
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public new event EventHandler TextChanged
     {
         add => throw new PlatformNotSupportedException();
         remove => throw new PlatformNotSupportedException();
@@ -362,12 +401,7 @@ public partial class DataGrid : Control, ISupportInitialize, IDataGridEditingSer
         set => throw new PlatformNotSupportedException();
     }
 
-    public new event EventHandler TextChanged
-    {
-        add => throw new PlatformNotSupportedException();
-        remove => throw new PlatformNotSupportedException();
-    }
-
+    [EditorBrowsable(EditorBrowsableState.Never)]
     protected ScrollBar VertScrollBar => throw new PlatformNotSupportedException();
 
     public int VisibleColumnCount => throw new PlatformNotSupportedException();
