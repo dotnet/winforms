@@ -98,13 +98,13 @@ public class ToolStripContainerDesignerTests : IDisposable
         AssertShadowProperties("LeftToolStripPanelVisible", _toolStripContainer.LeftToolStripPanelVisible);
         AssertShadowProperties("RightToolStripPanelVisible", _toolStripContainer.RightToolStripPanelVisible);
         AssertShadowProperties("BottomToolStripPanelVisible", _toolStripContainer.BottomToolStripPanelVisible);
-    }
 
-    private void AssertShadowProperties(string propertyName, object expectedValue)
-    {
-        var property = typeof(ToolStripContainerDesigner).GetProperty(propertyName, BindingFlags.NonPublic | BindingFlags.Instance);
-        var actualValue = property?.GetValue(_designer);
-        actualValue.Should().Be(expectedValue);
+        void AssertShadowProperties(string propertyName, object expectedValue)
+        {
+            var property = typeof(ToolStripContainerDesigner).GetProperty(propertyName, BindingFlags.NonPublic | BindingFlags.Instance);
+            var actualValue = property?.GetValue(_designer);
+            actualValue.Should().Be(expectedValue);
+        }
     }
 
     public void Dispose() => ((IDisposable)_toolStripContainer).Dispose();
