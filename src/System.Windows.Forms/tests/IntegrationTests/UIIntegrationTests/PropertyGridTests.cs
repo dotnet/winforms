@@ -307,7 +307,8 @@ public class PropertyGridTests : IDisposable
     [WinFormsFact]
     public void PropertyGrid_SelectedObjects_Set_ThrowExpectedException()
     {
-        Action act = () => _propertyGrid.SelectedObjects = [];
+        object[] objects = [null!];
+        Action act = () => _propertyGrid.SelectedObjects = objects;
         act.Should().Throw<ArgumentException>();
     }
 
