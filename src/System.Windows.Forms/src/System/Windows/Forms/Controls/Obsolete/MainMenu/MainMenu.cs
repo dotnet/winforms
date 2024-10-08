@@ -14,6 +14,7 @@ namespace System.Windows.Forms;
     UrlFormat = Obsoletions.SharedUrlFormat)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 [Browsable(false)]
+[ToolboxItemFilter("System.Windows.Forms.MainMenu")]
 public class MainMenu : Menu
 {
     public MainMenu() : base(items: null) => throw new PlatformNotSupportedException();

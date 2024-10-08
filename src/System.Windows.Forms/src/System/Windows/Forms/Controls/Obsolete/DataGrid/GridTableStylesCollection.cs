@@ -14,6 +14,7 @@ namespace System.Windows.Forms;
     DiagnosticId = Obsoletions.DataGridDiagnosticId,
     UrlFormat = Obsoletions.SharedUrlFormat)]
 [EditorBrowsable(EditorBrowsableState.Never)]
+[ListBindable(false)]
 public class GridTableStylesCollection : BaseCollection, IList
 {
     public GridTableStylesCollection() => throw new PlatformNotSupportedException();

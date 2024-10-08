@@ -3,6 +3,7 @@
 
 using System.Collections;
 using System.ComponentModel;
+using System.Drawing.Design;
 
 namespace System.Windows.Forms;
 
@@ -14,6 +15,8 @@ namespace System.Windows.Forms;
     DiagnosticId = Obsoletions.DataGridDiagnosticId,
     UrlFormat = Obsoletions.SharedUrlFormat)]
 [EditorBrowsable(EditorBrowsableState.Never)]
+[Editor($"System.Windows.Forms.Design.DataGridColumnCollectionEditor,  {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+[ListBindable(false)]
 public class GridColumnStylesCollection : BaseCollection, IList
 {
     public GridColumnStylesCollection() => throw new PlatformNotSupportedException();

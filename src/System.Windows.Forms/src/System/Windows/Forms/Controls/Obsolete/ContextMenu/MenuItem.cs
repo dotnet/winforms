@@ -14,6 +14,10 @@ namespace System.Windows.Forms;
     UrlFormat = Obsoletions.SharedUrlFormat)]
 [Browsable(false)]
 [EditorBrowsable(EditorBrowsableState.Never)]
+[ToolboxItem(false)]
+[DesignTimeVisible(false)]
+[DefaultEvent(nameof(Click))]
+[DefaultProperty(nameof(Text))]
 public class MenuItem : Menu
 {
     public MenuItem() : this(mergeType: MenuMerge.Add,

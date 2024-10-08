@@ -3,6 +3,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms;
 
@@ -15,6 +16,11 @@ namespace System.Windows.Forms;
     UrlFormat = Obsoletions.SharedUrlFormat)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 [Browsable(false)]
+[ComVisible(true)]
+[ClassInterface(ClassInterfaceType.AutoDispatch)]
+[DefaultEvent(nameof(ButtonClick))]
+[Designer($"System.Windows.Forms.Design.ToolBarDesigner, {AssemblyRef.SystemDesign}")]
+[DefaultProperty(nameof(Buttons))]
 public partial class ToolBar : Control
 {
     public ToolBar() => throw new PlatformNotSupportedException();

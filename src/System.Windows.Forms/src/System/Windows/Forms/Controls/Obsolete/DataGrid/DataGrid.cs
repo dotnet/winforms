@@ -3,6 +3,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms;
 
@@ -15,6 +16,12 @@ namespace System.Windows.Forms;
     UrlFormat = Obsoletions.SharedUrlFormat)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 [Browsable(false)]
+[ComVisible(true)]
+[ClassInterface(ClassInterfaceType.AutoDispatch)]
+[Designer($"System.Windows.Forms.Design.DataGridDesigner, {AssemblyRef.SystemDesign}")]
+[DefaultProperty(nameof(DataSource))]
+[DefaultEvent(nameof(Navigate))]
+[ComplexBindingProperties(nameof(DataSource), nameof(DataMember))]
 public partial class DataGrid : Control, ISupportInitialize, IDataGridEditingService
 {
     public DataGrid() => throw new PlatformNotSupportedException();

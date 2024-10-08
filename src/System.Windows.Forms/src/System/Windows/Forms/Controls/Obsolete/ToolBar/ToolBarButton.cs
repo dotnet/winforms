@@ -15,6 +15,10 @@ namespace System.Windows.Forms;
     UrlFormat = Obsoletions.SharedUrlFormat)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 [Browsable(false)]
+[Designer($"System.Windows.Forms.Design.ToolBarButtonDesigner, {AssemblyRef.SystemDesign}")]
+[DefaultProperty(nameof(Text))]
+[ToolboxItem(false)]
+[DesignTimeVisible(false)]
 public class ToolBarButton : Component
 {
     public ToolBarButton() => throw new PlatformNotSupportedException();

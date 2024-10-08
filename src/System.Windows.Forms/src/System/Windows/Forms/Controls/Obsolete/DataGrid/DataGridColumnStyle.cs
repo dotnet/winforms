@@ -15,6 +15,9 @@ namespace System.Windows.Forms;
     UrlFormat = Obsoletions.SharedUrlFormat)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 [Browsable(false)]
+[ToolboxItem(false)]
+[DesignTimeVisible(false)]
+[DefaultProperty("Header")]
 public abstract partial class DataGridColumnStyle : Component, IDataGridColumnStyleEditingNotificationService
 {
     public DataGridColumnStyle() => throw new PlatformNotSupportedException();

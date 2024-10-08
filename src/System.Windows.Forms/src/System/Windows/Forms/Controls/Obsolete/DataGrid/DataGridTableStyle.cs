@@ -15,6 +15,8 @@ namespace System.Windows.Forms;
     UrlFormat = Obsoletions.SharedUrlFormat)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 [Browsable(false)]
+[ToolboxItem(false)]
+[DesignTimeVisible(false)]
 public class DataGridTableStyle : Component, IDataGridEditingService
 {
     public DataGridTableStyle(bool isDefaultTableStyle) => throw new PlatformNotSupportedException();
