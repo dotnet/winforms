@@ -178,6 +178,7 @@ public partial class ComboBox
 
             g.FillPolygon(
                 brush,
+                (ReadOnlySpan<Point>)
                 [
                     new(middle.X - s_offsetPixels, middle.Y - 1),
                     new(middle.X + s_offsetPixels + 1, middle.Y - 1),
