@@ -20,8 +20,8 @@ public class ToolStripSplitButtonTests : IDisposable
 
     public static TheoryData<ToolStripItem?> ToolStripItem_Set_TestData() => new()
      {
-           null,
-           new SubToolStripItem()
+        null,
+        new SubToolStripItem()
      };
 
     [WinFormsTheory]
@@ -78,8 +78,8 @@ public class ToolStripSplitButtonTests : IDisposable
     {
         using ToolStripSplitButton toolStripSplitButton = new();
 
-        toolStripSplitButton.Text.Should().BeEmpty();
-        toolStripSplitButton.Image.Should().BeNull();
+        _toolStripSplitButton.Text.Should().BeEmpty();
+        _toolStripSplitButton.Image.Should().BeNull();
         toolStripSplitButton.DropDownButtonWidth.Should().Be(toolStripSplitButton.TestAccessor().Dynamic.DefaultDropDownButtonWidth);
     }
 
@@ -89,7 +89,7 @@ public class ToolStripSplitButtonTests : IDisposable
         using ToolStripSplitButton toolStripSplitButton = new("Test");
 
         toolStripSplitButton.Text.Should().Be("Test");
-        toolStripSplitButton.Image.Should().BeNull();
+        _toolStripSplitButton.Image.Should().BeNull();
         toolStripSplitButton.DropDownButtonWidth.Should().Be(toolStripSplitButton.TestAccessor().Dynamic.DefaultDropDownButtonWidth);
     }
 
@@ -99,7 +99,7 @@ public class ToolStripSplitButtonTests : IDisposable
         using Bitmap image = new(10, 10);
         using ToolStripSplitButton toolStripSplitButton = new(image);
 
-        toolStripSplitButton.Text.Should().BeNull();
+        _toolStripSplitButton.Text.Should().BeNull();
         toolStripSplitButton.Image.Should().Be(image);
         toolStripSplitButton.DropDownButtonWidth.Should().Be(toolStripSplitButton.TestAccessor().Dynamic.DefaultDropDownButtonWidth);
     }
