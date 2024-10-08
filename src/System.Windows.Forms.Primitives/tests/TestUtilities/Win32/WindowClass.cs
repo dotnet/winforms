@@ -214,7 +214,7 @@ internal class WindowClass
         }
     }
 
-    protected virtual LRESULT WNDPROC(HWND hWnd, MessageId msg, WPARAM wParam, LPARAM lParam)
+    protected virtual LRESULT WNDPROC(HWND hWnd, uint msg, WPARAM wParam, LPARAM lParam)
     {
         switch (msg)
         {
@@ -227,6 +227,6 @@ internal class WindowClass
                 return (LRESULT)0;
         }
 
-        return PInvoke.DefWindowProc(hWnd, (uint)msg, wParam, lParam);
+        return PInvoke.DefWindowProc(hWnd, msg, wParam, lParam);
     }
 }
