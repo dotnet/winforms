@@ -1631,7 +1631,7 @@ public partial class Form : ContainerControl
                     CreateParams cp = CreateParams;
                     if ((int)ExtendedWindowStyle != cp.ExStyle)
                     {
-                        PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE, cp.ExStyle);
+                        PInvokeCore.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE, cp.ExStyle);
                     }
                 }
             }
@@ -3380,7 +3380,7 @@ public partial class Form : ContainerControl
             // In order for a window not to have a taskbar entry, it must be owned.
             if (!ShowInTaskbar && OwnerInternal is null && TopLevel)
             {
-                PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, TaskbarOwner);
+                PInvokeCore.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, TaskbarOwner);
 
                 // Make sure the large icon is set so the ALT+TAB icon
                 // reflects the real icon of the application
@@ -3885,7 +3885,7 @@ public partial class Form : ContainerControl
 
         Point p = default;
         Size s = Size;
-        HWND ownerHandle = (HWND)PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT);
+        HWND ownerHandle = (HWND)PInvokeCore.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT);
 
         if (!ownerHandle.IsNull)
         {
@@ -3940,7 +3940,7 @@ public partial class Form : ContainerControl
             HWND hWndOwner = default;
             if (TopLevel)
             {
-                hWndOwner = (HWND)PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT);
+                hWndOwner = (HWND)PInvokeCore.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT);
             }
 
             desktop = !hWndOwner.IsNull ? Screen.FromHandle(hWndOwner) : Screen.FromPoint(MousePosition);
@@ -5451,13 +5451,13 @@ public partial class Form : ContainerControl
         if (!ownerHwnd.IsNull && ownerHwnd.Handle != HWND)
         {
             // Catch the case of a window trying to own its owner
-            if (PInvoke.GetWindowLong(ownerHwnd, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT) == HWND)
+            if (PInvokeCore.GetWindowLong(ownerHwnd, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT) == HWND)
             {
                 throw new ArgumentException(string.Format(SR.OwnsSelfOrOwner, nameof(Show)), nameof(owner));
             }
 
             // Set the new owner.
-            PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, ownerHwnd);
+            PInvokeCore.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, ownerHwnd);
         }
 
         Visible = true;
@@ -5678,7 +5678,7 @@ public partial class Form : ContainerControl
             if (!ownerHwnd.IsNull && ownerHwnd.Handle != HWND)
             {
                 // Catch the case of a window trying to own its owner
-                if (PInvoke.GetWindowLong(ownerHwnd.Handle, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT) == Handle)
+                if (PInvokeCore.GetWindowLong(ownerHwnd.Handle, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT) == Handle)
                 {
                     throw new ArgumentException(string.Format(SR.OwnsSelfOrOwner, nameof(ShowDialog)), nameof(owner));
                 }
@@ -5697,7 +5697,7 @@ public partial class Form : ContainerControl
                 else
                 {
                     // Set the new parent.
-                    PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, ownerHwnd);
+                    PInvokeCore.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, ownerHwnd);
                 }
             }
 
@@ -6062,7 +6062,7 @@ public partial class Form : ContainerControl
                 }
             }
 
-            PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, ownerHwnd);
+            PInvokeCore.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, ownerHwnd);
             GC.KeepAlive(ownerHwnd);
         }
     }

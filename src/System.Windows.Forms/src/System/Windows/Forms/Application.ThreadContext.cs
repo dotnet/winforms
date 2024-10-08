@@ -763,7 +763,7 @@ public sealed partial class Application
                 // process.
                 if (CurrentForm is not null)
                 {
-                    hwndOwner = (HWND)PInvoke.GetWindowLong(CurrentForm, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT);
+                    hwndOwner = (HWND)PInvokeCore.GetWindowLong(CurrentForm, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT);
                     if (!hwndOwner.IsNull)
                     {
                         if (PInvoke.IsWindowEnabled(hwndOwner))
