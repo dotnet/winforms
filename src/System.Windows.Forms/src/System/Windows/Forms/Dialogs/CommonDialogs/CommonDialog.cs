@@ -50,7 +50,7 @@ public abstract class CommonDialog : Component
         remove => Events.RemoveHandler(s_helpRequestEvent, value);
     }
 
-    internal LRESULT HookProcInternal(HWND hWnd, MessageId msg, WPARAM wparam, LPARAM lparam)
+    internal LRESULT HookProcInternal(HWND hWnd, uint msg, WPARAM wparam, LPARAM lparam)
         => (LRESULT)HookProc(hWnd, (int)msg, (nint)wparam, lparam);
 
     private protected unsafe delegate* unmanaged[Stdcall]<HWND, uint, WPARAM, LPARAM, nuint> HookProcFunctionPointer
@@ -113,7 +113,7 @@ public abstract class CommonDialog : Component
         handler?.Invoke(this, e);
     }
 
-    private LRESULT OwnerWndProcInternal(HWND hWnd, MessageId msg, WPARAM wparam, LPARAM lparam)
+    private LRESULT OwnerWndProcInternal(HWND hWnd, uint msg, WPARAM wparam, LPARAM lparam)
         => (LRESULT)OwnerWndProc(hWnd, (int)msg, (nint)wparam, lparam);
 
     /// <summary>
@@ -208,7 +208,7 @@ public abstract class CommonDialog : Component
 
             try
             {
-                _priorWindowProcedure = PInvoke.SetWindowLong(
+                _priorWindowProcedure = PInvokeCore.SetWindowLong(
                     ownerHwnd,
                     WINDOW_LONG_PTR_INDEX.GWL_WNDPROC,
                     hookedWndProc);
@@ -226,10 +226,10 @@ public abstract class CommonDialog : Component
             }
             finally
             {
-                nint currentSubClass = PInvoke.GetWindowLong(ownerHwnd.Handle, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC);
+                nint currentSubClass = PInvokeCore.GetWindowLong(ownerHwnd.Handle, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC);
                 if (_priorWindowProcedure != 0 || currentSubClass != hookedWndProc)
                 {
-                    PInvoke.SetWindowLong(ownerHwnd.Handle, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC, _priorWindowProcedure);
+                    PInvokeCore.SetWindowLong(ownerHwnd.Handle, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC, _priorWindowProcedure);
                 }
 
                 _priorWindowProcedure = 0;
