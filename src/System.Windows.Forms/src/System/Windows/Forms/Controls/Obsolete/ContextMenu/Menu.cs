@@ -14,6 +14,8 @@ namespace System.Windows.Forms;
     UrlFormat = Obsoletions.SharedUrlFormat)]
 [EditorBrowsable(EditorBrowsableState.Never)]
 [Browsable(false)]
+[ListBindable(false)]
+[ToolboxItemFilter("System.Windows.Forms")]
 public abstract partial class Menu : Component
 {
     public const int FindHandle = 0;

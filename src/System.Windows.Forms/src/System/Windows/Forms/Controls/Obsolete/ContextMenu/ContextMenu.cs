@@ -8,6 +8,7 @@ namespace System.Windows.Forms;
 
 #nullable disable
 
+[DefaultEvent(nameof(Popup))]
 [Obsolete(
     Obsoletions.ContextMenuMessage,
     error: false,
