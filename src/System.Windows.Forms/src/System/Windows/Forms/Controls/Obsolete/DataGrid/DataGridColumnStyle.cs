@@ -38,12 +38,14 @@ public abstract partial class DataGridColumnStyle : Component, IDataGridColumnSt
 
     public AccessibleObject HeaderAccessibleObject => throw new PlatformNotSupportedException();
 
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public virtual PropertyDescriptor PropertyDescriptor
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
     }
 
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public event EventHandler PropertyDescriptorChanged
     {
         add => throw new PlatformNotSupportedException();

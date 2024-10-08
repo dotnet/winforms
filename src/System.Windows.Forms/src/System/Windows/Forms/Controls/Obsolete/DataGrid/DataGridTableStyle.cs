@@ -175,12 +175,14 @@ public class DataGridTableStyle : Component, IDataGridEditingService
 
     public void ResetLinkColor() => throw new PlatformNotSupportedException();
 
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public Color LinkHoverColor
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
     }
 
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public event EventHandler LinkHoverColorChanged
     {
         add => throw new PlatformNotSupportedException();

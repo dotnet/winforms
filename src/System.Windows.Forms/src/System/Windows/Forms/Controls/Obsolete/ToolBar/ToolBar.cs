@@ -31,24 +31,49 @@ public partial class ToolBar : Control
         set => throw new PlatformNotSupportedException();
     }
 
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public new event EventHandler AutoSizeChanged
     {
         add => throw new PlatformNotSupportedException();
         remove => throw new PlatformNotSupportedException();
     }
 
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public override Color BackColor
+    {
+        get => throw new PlatformNotSupportedException();
+        set => throw new PlatformNotSupportedException();
+    }
+
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public new event EventHandler BackColorChanged
     {
         add => throw new PlatformNotSupportedException();
         remove => throw new PlatformNotSupportedException();
     }
 
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public override Image BackgroundImage
+    {
+        get => throw new PlatformNotSupportedException();
+        set => throw new PlatformNotSupportedException();
+    }
+
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public new event EventHandler BackgroundImageChanged
     {
         add => throw new PlatformNotSupportedException();
         remove => throw new PlatformNotSupportedException();
     }
 
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public override ImageLayout BackgroundImageLayout
+    {
+        get => throw new PlatformNotSupportedException();
+        set => throw new PlatformNotSupportedException();
+    }
+
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public new event EventHandler BackgroundImageLayoutChanged
     {
         add => throw new PlatformNotSupportedException();
@@ -75,12 +100,27 @@ public partial class ToolBar : Control
         set => throw new PlatformNotSupportedException();
     }
 
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    protected override bool DoubleBuffered
+    {
+        get => throw new PlatformNotSupportedException();
+        set => throw new PlatformNotSupportedException();
+    }
+
     public bool DropDownArrows
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
     }
 
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public override Color ForeColor
+    {
+        get => throw new PlatformNotSupportedException();
+        set => throw new PlatformNotSupportedException();
+    }
+
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public new event EventHandler ForeColorChanged
     {
         add => throw new PlatformNotSupportedException();
@@ -93,20 +133,31 @@ public partial class ToolBar : Control
         set => throw new PlatformNotSupportedException();
     }
 
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public Size ImageSize => throw new PlatformNotSupportedException();
 
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public new ImeMode ImeMode
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
     }
 
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public new event EventHandler ImeModeChanged
     {
         add => throw new PlatformNotSupportedException();
         remove => throw new PlatformNotSupportedException();
     }
 
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public override RightToLeft RightToLeft
+    {
+        get => throw new PlatformNotSupportedException();
+        set => throw new PlatformNotSupportedException();
+    }
+
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public new event EventHandler RightToLeftChanged
     {
         add => throw new PlatformNotSupportedException();
@@ -125,6 +176,14 @@ public partial class ToolBar : Control
         set => throw new PlatformNotSupportedException();
     }
 
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public override string Text
+    {
+        get => throw new PlatformNotSupportedException();
+        set => throw new PlatformNotSupportedException();
+    }
+
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public new event EventHandler TextChanged
     {
         add => throw new PlatformNotSupportedException();
@@ -155,6 +214,7 @@ public partial class ToolBar : Control
         remove => throw new PlatformNotSupportedException();
     }
 
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public new event PaintEventHandler Paint
     {
         add => throw new PlatformNotSupportedException();
