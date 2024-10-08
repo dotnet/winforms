@@ -14,136 +14,103 @@ namespace System.Windows.Forms;
     DiagnosticId = Obsoletions.DataGridDiagnosticId,
     UrlFormat = Obsoletions.SharedUrlFormat)]
 [EditorBrowsable(EditorBrowsableState.Never)]
+[Browsable(false)]
 public abstract partial class DataGridColumnStyle : Component, IDataGridColumnStyleEditingNotificationService
 {
     public DataGridColumnStyle() => throw new PlatformNotSupportedException();
 
     public DataGridColumnStyle(PropertyDescriptor prop) => throw new PlatformNotSupportedException();
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public virtual HorizontalAlignment Alignment
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public event EventHandler AlignmentChanged
     {
         add => throw new PlatformNotSupportedException();
         remove => throw new PlatformNotSupportedException();
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public AccessibleObject HeaderAccessibleObject => throw new PlatformNotSupportedException();
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public virtual PropertyDescriptor PropertyDescriptor
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public event EventHandler PropertyDescriptorChanged
     {
         add => throw new PlatformNotSupportedException();
         remove => throw new PlatformNotSupportedException();
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public virtual DataGridTableStyle DataGridTableStyle => throw new PlatformNotSupportedException();
 
     protected int FontHeight => throw new PlatformNotSupportedException();
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public event EventHandler FontChanged
     {
         add => throw new PlatformNotSupportedException();
         remove => throw new PlatformNotSupportedException();
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public virtual string HeaderText
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public event EventHandler HeaderTextChanged
     {
         add => throw new PlatformNotSupportedException();
         remove => throw new PlatformNotSupportedException();
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public string MappingName
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public event EventHandler MappingNameChanged
     {
         add => throw new PlatformNotSupportedException();
         remove => throw new PlatformNotSupportedException();
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public virtual string NullText
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public event EventHandler NullTextChanged
     {
         add => throw new PlatformNotSupportedException();
         remove => throw new PlatformNotSupportedException();
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public virtual bool ReadOnly
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public event EventHandler ReadOnlyChanged
     {
         add => throw new PlatformNotSupportedException();
         remove => throw new PlatformNotSupportedException();
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public virtual int Width
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public event EventHandler WidthChanged
     {
         add => throw new PlatformNotSupportedException();

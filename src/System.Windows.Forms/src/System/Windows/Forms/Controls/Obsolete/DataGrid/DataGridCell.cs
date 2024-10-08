@@ -27,16 +27,12 @@ public struct DataGridCell : IEquatable<DataGridCell>
 
     public DataGridCell(int r, int c) => throw new PlatformNotSupportedException();
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public int ColumnNumber
     {
         readonly get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public int RowNumber
     {
         readonly get => throw new PlatformNotSupportedException();

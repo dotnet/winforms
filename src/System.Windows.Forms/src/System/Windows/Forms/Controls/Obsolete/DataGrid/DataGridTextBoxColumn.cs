@@ -14,6 +14,7 @@ namespace System.Windows.Forms;
     DiagnosticId = Obsoletions.DataGridDiagnosticId,
     UrlFormat = Obsoletions.SharedUrlFormat)]
 [EditorBrowsable(EditorBrowsableState.Never)]
+[Browsable(false)]
 public class DataGridTextBoxColumn : DataGridColumnStyle
 {
     public DataGridTextBoxColumn() => throw new PlatformNotSupportedException();
@@ -26,20 +27,14 @@ public class DataGridTextBoxColumn : DataGridColumnStyle
 
     public DataGridTextBoxColumn(PropertyDescriptor prop, bool isDefault) => throw new PlatformNotSupportedException();
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public virtual TextBox TextBox => throw new PlatformNotSupportedException();
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public string Format
     {
         get => throw new PlatformNotSupportedException();
         set => throw new PlatformNotSupportedException();
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public IFormatProvider FormatInfo
     {
         get => throw new PlatformNotSupportedException();

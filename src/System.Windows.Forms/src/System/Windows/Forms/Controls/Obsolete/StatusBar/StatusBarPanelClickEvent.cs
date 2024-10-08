@@ -22,7 +22,5 @@ public class StatusBarPanelClickEventArgs : MouseEventArgs
         int y) : base(button: button, clicks: clicks, x: x, y: y, delta: 0) =>
             throw new PlatformNotSupportedException();
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public StatusBarPanel StatusBarPanel => throw new PlatformNotSupportedException();
 }

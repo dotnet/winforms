@@ -42,7 +42,5 @@ public class StatusBarDrawItemEventArgs : DrawItemEventArgs
             foreColor: foreColor,
             backColor: backColor) => throw new PlatformNotSupportedException();
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public StatusBarPanel Panel => throw new PlatformNotSupportedException();
 }

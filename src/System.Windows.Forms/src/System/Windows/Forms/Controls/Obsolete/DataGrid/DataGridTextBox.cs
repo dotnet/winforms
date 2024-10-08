@@ -13,14 +13,13 @@ namespace System.Windows.Forms;
     DiagnosticId = Obsoletions.DataGridDiagnosticId,
     UrlFormat = Obsoletions.SharedUrlFormat)]
 [EditorBrowsable(EditorBrowsableState.Never)]
+[Browsable(false)]
 public class DataGridTextBox : TextBox
 {
     public DataGridTextBox() => throw new PlatformNotSupportedException();
 
     public void SetDataGrid(DataGrid parentGrid) => throw new PlatformNotSupportedException();
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public bool IsInEditOrNavigateMode
     {
         get => throw new PlatformNotSupportedException();
