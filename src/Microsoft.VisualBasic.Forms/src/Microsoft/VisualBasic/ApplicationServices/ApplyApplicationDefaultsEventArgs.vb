@@ -5,8 +5,6 @@ Imports System.ComponentModel
 Imports System.Diagnostics.CodeAnalysis
 Imports System.Drawing
 Imports System.Runtime.InteropServices
-Imports System.Windows.Forms
-Imports System.Windows.Forms.Analyzers.Diagnostics
 
 Namespace Microsoft.VisualBasic.ApplicationServices
 

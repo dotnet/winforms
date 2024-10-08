@@ -4,7 +4,6 @@
 Imports System.Drawing
 Imports System.Globalization
 Imports System.Threading
-Imports System.Windows.Forms
 
 Namespace Microsoft.VisualBasic.MyServices.Internal
 

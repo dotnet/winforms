@@ -3,7 +3,6 @@
 
 Imports System.IO
 Imports System.Net
-Imports System.Windows.Forms
 
 Namespace Microsoft.VisualBasic.MyServices.Internal
 
