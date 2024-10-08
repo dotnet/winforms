@@ -265,7 +265,7 @@ internal partial class PropertyGridView
         {
             while (!hWnd.IsNull)
             {
-                hWnd = (HWND)PInvoke.GetWindowLong(hWnd, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT);
+                hWnd = (HWND)PInvokeCore.GetWindowLong(hWnd, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT);
                 if (hWnd.IsNull)
                 {
                     return false;

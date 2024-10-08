@@ -138,6 +138,7 @@ LF_FACESIZE
 LoadIcon
 LoadRegTypeLib
 LPARAM
+LRESULT
 MAX_PATH
 MonitorFromPoint
 MonitorFromRect
@@ -192,5 +193,6 @@ SystemParametersInfoForDpi
 TYPE_E_BADMODULEKIND
 VIEW_E_DRAW
 WIN32_ERROR
+WINDOW_LONG_PTR_INDEX
 WindowFromDC
 WPARAM
