@@ -723,9 +723,9 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         // If in OwnerDraw mode, we don't want the default border.
         if (OwnerDraw)
         {
-            int style = unchecked((int)((long)PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE)));
+            int style = unchecked((int)((long)PInvokeCore.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE)));
             style &= ~(int)WINDOW_STYLE.WS_BORDER;
-            PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE, style);
+            PInvokeCore.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_STYLE, style);
         }
 
         // Setting the max width has the added benefit of enabling multiline tool tips.

@@ -338,7 +338,7 @@ internal sealed partial class PropertyGridView :
     internal bool DrawValuesRightToLeft
         => _editTextBox is not null
             && _editTextBox.IsHandleCreated
-            && ((WINDOW_EX_STYLE)PInvoke.GetWindowLong(_editTextBox, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE)).HasFlag(WINDOW_EX_STYLE.WS_EX_RTLREADING);
+            && ((WINDOW_EX_STYLE)PInvokeCore.GetWindowLong(_editTextBox, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE)).HasFlag(WINDOW_EX_STYLE.WS_EX_RTLREADING);
 
     internal DropDownHolder? DropDownControlHolder => _dropDownHolder;
 
@@ -1450,7 +1450,7 @@ internal sealed partial class PropertyGridView :
         // It is unknown why this control was created as a top-level control. Windows does not recommend this way of setting parent.
         // We are not touching this for this release. We may revisit it in next release.
 
-        PInvoke.SetWindowLong(_dropDownHolder, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, this);
+        PInvokeCore.SetWindowLong(_dropDownHolder, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, this);
         _dropDownHolder.SetBounds(location.X, location.Y, size.Width, size.Height);
         PInvoke.ShowWindow(_dropDownHolder, SHOW_WINDOW_CMD.SW_SHOWNA);
         EditTextBox.Filter = true;

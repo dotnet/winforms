@@ -22,7 +22,7 @@ public partial class Form
 
         internal BOOL Callback(HWND hwnd)
         {
-            HWND parent = (HWND)PInvoke.GetWindowLong(hwnd, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT);
+            HWND parent = (HWND)PInvokeCore.GetWindowLong(hwnd, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT);
             if (parent == _formHandle)
             {
                 // Enumerated window is owned by this Form.
@@ -41,7 +41,7 @@ public partial class Form
             {
                 foreach (HWND hwnd in _ownedWindows)
                 {
-                    nint oldValue = PInvoke.SetWindowLong(hwnd, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, 0);
+                    nint oldValue = PInvokeCore.SetWindowLong(hwnd, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, 0);
                     Debug.Assert(oldValue == _formHandle.Value);
                 }
             }
@@ -54,7 +54,7 @@ public partial class Form
             {
                 foreach (HWND hwnd in _ownedWindows)
                 {
-                    PInvoke.SetWindowLong(hwnd, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, ownerHwnd);
+                    PInvokeCore.SetWindowLong(hwnd, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, ownerHwnd);
                 }
             }
         }

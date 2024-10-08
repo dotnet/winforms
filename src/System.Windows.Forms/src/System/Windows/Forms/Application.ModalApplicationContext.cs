@@ -27,7 +27,7 @@ public sealed partial class Application
             if (MainForm is not null && MainForm.IsHandleCreated)
             {
                 // Get ahold of the parenting control
-                HWND parentHandle = (HWND)PInvoke.GetWindowLong(MainForm, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT);
+                HWND parentHandle = (HWND)PInvokeCore.GetWindowLong(MainForm, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT);
 
                 parentControl = Control.FromHandle(parentHandle);
 

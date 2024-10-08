@@ -3,7 +3,7 @@
 
 namespace Windows.Win32;
 
-internal static partial class PInvoke
+internal static partial class PInvokeCore
 {
     /// <summary>
     ///  <para>
@@ -16,5 +16,11 @@ internal static partial class PInvoke
     ///   </see>
     ///  </para>
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   The maximum name for an ATOM is 255 characters, which is where this limitation comes from. There is no
+    ///   public define, internally it is RTL_ATOM_MAXIMUM_NAME_LENGTH.
+    ///  </para>
+    /// </remarks>
     public const int MaxClassName = 256;
 }
