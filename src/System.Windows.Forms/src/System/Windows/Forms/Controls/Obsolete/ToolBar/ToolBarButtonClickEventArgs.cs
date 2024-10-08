@@ -17,8 +17,6 @@ public class ToolBarButtonClickEventArgs : EventArgs
 {
     public ToolBarButtonClickEventArgs(ToolBarButton button) => throw new PlatformNotSupportedException();
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public ToolBarButton Button
     {
         get => throw new PlatformNotSupportedException();

@@ -11,8 +11,9 @@ namespace System.Windows.Forms;
     Obsoletions.MainMenuMessage,
     error: false,
     DiagnosticId = Obsoletions.MainMenuDiagnosticId,
-    UrlFormat = Obsoletions.SharedUrlFormat),
-    EditorBrowsable(EditorBrowsableState.Never)]
+    UrlFormat = Obsoletions.SharedUrlFormat)]
+[EditorBrowsable(EditorBrowsableState.Never)]
+[Browsable(false)]
 public class MainMenu : Menu
 {
     public MainMenu() : base(items: null) => throw new PlatformNotSupportedException();
@@ -21,16 +22,12 @@ public class MainMenu : Menu
 
     public MainMenu(MenuItem[] items) : base(items: items) => throw new PlatformNotSupportedException();
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public event EventHandler Collapse
     {
         add => throw new PlatformNotSupportedException();
         remove => throw new PlatformNotSupportedException();
     }
 
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     public virtual RightToLeft RightToLeft
     {
         get => throw new PlatformNotSupportedException();
