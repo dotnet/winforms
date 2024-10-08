@@ -48,7 +48,7 @@ public class MaskedTextBoxTextEditorDropDownTests
         using ErrorProvider errorProvider = dropDown.TestAccessor().Dynamic._errorProvider;
 
         // No error when setting a correct format value.
-        MaskedTextBox dropDownMaskedTextBox = dropDown.TestAccessor().Dynamic._cloneMtb;
+        using MaskedTextBox dropDownMaskedTextBox = dropDown.TestAccessor().Dynamic._cloneMtb;
         dropDownMaskedTextBox.Text = "12：20";
         errorProvider.GetError(dropDownMaskedTextBox).Should().Be(string.Empty);
 
