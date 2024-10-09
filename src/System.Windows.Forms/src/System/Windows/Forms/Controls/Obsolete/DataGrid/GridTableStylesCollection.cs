@@ -17,7 +17,7 @@ namespace System.Windows.Forms;
 [ListBindable(false)]
 public class GridTableStylesCollection : BaseCollection, IList
 {
-    public GridTableStylesCollection() => throw new PlatformNotSupportedException();
+    private GridTableStylesCollection() { }
 
     int IList.Add(object value) => throw new PlatformNotSupportedException();
 

@@ -287,7 +287,7 @@ public class DataGridTableStyle : Component, IDataGridEditingService
 
     public void ResetSelectionForeColor() => throw new PlatformNotSupportedException();
 
-    public static DataGridTableStyle s_defaultTableStyle => throw new PlatformNotSupportedException();
+    public static readonly DataGridTableStyle DefaultTableStyle;
 
     public string MappingName
     {
@@ -324,6 +324,12 @@ public class DataGridTableStyle : Component, IDataGridEditingService
     public bool BeginEdit(DataGridColumnStyle gridColumn, int rowNumber) => throw new PlatformNotSupportedException();
 
     public bool EndEdit(DataGridColumnStyle gridColumn, int rowNumber, bool shouldAbort) => throw new PlatformNotSupportedException();
+
+    protected internal virtual DataGridColumnStyle CreateGridColumn(System.ComponentModel.PropertyDescriptor prop, bool isDefault)
+         => throw new PlatformNotSupportedException();
+
+    protected internal virtual DataGridColumnStyle CreateGridColumn(System.ComponentModel.PropertyDescriptor prop)
+        => throw new PlatformNotSupportedException();
 
     protected virtual void OnReadOnlyChanged(EventArgs e) => throw new PlatformNotSupportedException();
 
