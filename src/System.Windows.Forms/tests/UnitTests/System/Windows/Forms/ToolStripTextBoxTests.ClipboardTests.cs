@@ -17,7 +17,7 @@ public partial class ToolStripTextBoxTests
             toolStripTextBox.SelectAll();
             toolStripTextBox.Copy();
 
-            ToolStripTextBox anotherToolStripTextBox = new();
+            using ToolStripTextBox anotherToolStripTextBox = new();
             anotherToolStripTextBox.Paste();
             anotherToolStripTextBox.Text.Should().Be("Hello");
         }
