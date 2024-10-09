@@ -12941,4 +12941,40 @@ public unsafe partial class Control :
     internal HWND HWND => (HWND)Handle;
 
     internal virtual bool AllowsChildrenToShowToolTips() => true;
+
+#nullable disable
+    [Obsolete(
+        Obsoletions.ContextMenuMessage,
+        error: false,
+        DiagnosticId = Obsoletions.ContextMenuDiagnosticId,
+        UrlFormat = Obsoletions.SharedUrlFormat)]
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public virtual ContextMenu ContextMenu
+    {
+        get;
+        set;
+    }
+
+    [Obsolete(
+        Obsoletions.ContextMenuMessage,
+        error: false,
+        DiagnosticId = Obsoletions.ContextMenuDiagnosticId,
+        UrlFormat = Obsoletions.SharedUrlFormat)]
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public event EventHandler ContextMenuChanged
+    {
+        add { }
+        remove { }
+    }
+
+    [Obsolete(
+        Obsoletions.ContextMenuMessage,
+        error: false,
+        DiagnosticId = Obsoletions.ContextMenuDiagnosticId,
+        UrlFormat = Obsoletions.SharedUrlFormat)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    protected virtual void OnContextMenuChanged(EventArgs e) { }
+#nullable enable
 }

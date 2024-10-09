@@ -7163,4 +7163,31 @@ public partial class Form : ContainerControl
                 break;
         }
     }
+
+#nullable disable
+    [Obsolete(
+        Obsoletions.MainMenuMessage,
+        error: false,
+        DiagnosticId = Obsoletions.MainMenuDiagnosticId,
+        UrlFormat = Obsoletions.SharedUrlFormat)]
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public MainMenu Menu
+    {
+        get;
+        set;
+    }
+
+    [Obsolete(
+        Obsoletions.MainMenuMessage,
+        error: false,
+        DiagnosticId = Obsoletions.MainMenuDiagnosticId,
+        UrlFormat = Obsoletions.SharedUrlFormat)]
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public MainMenu MergedMenu
+    {
+        get;
+    }
+#nullable enable
 }
