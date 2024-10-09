@@ -5,8 +5,9 @@
 
 namespace System.Windows.Forms.Tests;
 
-// These tests ensure that Clipboard works when built-in COM is disabled,
-// which is the case in trimming scenarios
+[Collection("Sequential")] // Each registered Clipboard format is an OS singleton,
+                           // and we should not run this test at the same time as other tests using the same format.
+[UISettings(MaxAttempts = 3)] // Try up to 3 times before failing.
 public class ClipboardComTests
 {
     [WinFormsFact]

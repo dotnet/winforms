@@ -7,6 +7,7 @@ public partial class DataFormatsTests
 {
     [Collection("Sequential")] // Each registered Clipboard format is an OS singleton,
                                // and we should not run this test at the same time as other tests using the same format.
+    [UISettings(MaxAttempts = 3)] // Try up to 3 times before failing.
     public class ClipboardTests
     {
         public static IEnumerable<object[]> GetFormat_Int_TestData()

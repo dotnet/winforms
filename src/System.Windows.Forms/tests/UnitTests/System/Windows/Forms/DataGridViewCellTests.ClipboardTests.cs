@@ -8,6 +8,7 @@ namespace System.Windows.Forms.Tests;
 public partial class DataGridViewCellTests
 {
     [Collection("Sequential")]
+    [UISettings(MaxAttempts = 3)] // Try up to 3 times before failing.
     public class ClipboardTests
     {
         public static TheoryData<int, bool, bool, bool, bool, string?, object?> GetClipboardContent_TheoryData() => new()
