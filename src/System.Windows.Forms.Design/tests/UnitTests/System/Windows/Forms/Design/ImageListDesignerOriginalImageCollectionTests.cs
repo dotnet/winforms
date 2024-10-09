@@ -85,7 +85,8 @@ public class ImageListDesignerOriginalImageCollectionTests : IDisposable
     [Fact]
     public void Add_AddsImage_OneAtATime()
     {
-        _originalImageCollection.AddRange([new(_img), new(_img)]);
+        _originalImageCollection.Add(new(_img));
+        _originalImageCollection.Add(new(_img));
         _originalImageCollection.Count.Should().Be(2);
     }
 
@@ -124,5 +125,29 @@ public class ImageListDesignerOriginalImageCollectionTests : IDisposable
         _originalImageCollection.RemoveAt(0);
 
         _originalImageCollection.Count.Should().Be(0);
+    }
+
+    [Fact]
+    public void Remove_RemovesImageListImage()
+    {
+        _originalImageCollection.AddRange([new(_img), new(_img), new(_img)]);
+        _originalImageCollection.Remove(_originalImageCollection[0]);
+        _originalImageCollection.Count.Should().Be(2);
+    }
+
+    [Theory]
+    [BoolData]
+    public void IndexOf_Returns_ProperIndex(bool isNull)
+    {
+        ImageListImage image = new ImageListImage(_img);
+        _originalImageCollection.Add(image);
+        if (isNull)
+        {
+            _originalImageCollection.IndexOf(null).Should().Be(-1);
+        }
+        else
+        {
+            _originalImageCollection.IndexOf(image).Should().Be(0);
+        }
     }
 }
