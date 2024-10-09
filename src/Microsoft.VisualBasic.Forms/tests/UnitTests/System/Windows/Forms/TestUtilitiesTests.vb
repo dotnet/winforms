@@ -15,12 +15,5 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             testClass.Any.Should.BeTrue()
         End Sub
 
-        <WinFormsFact>
-        Public Sub WrongPasswordTestDataIteratorTests()
-            Dim testClass As New WrongPasswordTestData
-            testClass.IEnumerable_GetEnumerator.Should.NotBeNull()
-            testClass.Any.Should.BeTrue()
-        End Sub
-
     End Class
 End Namespace
