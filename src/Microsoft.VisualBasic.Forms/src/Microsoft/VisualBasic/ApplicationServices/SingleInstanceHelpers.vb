@@ -56,7 +56,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             End Using
             Await pipeClient.WriteAsync(
                 buffer:=content.AsMemory(start:=0, length:=content.Length), cancellationToken) _
-                .ConfigureAwait(continueOnCapturedContext:=False)
+                    .ConfigureAwait(continueOnCapturedContext:=False)
         End Function
 
         Friend Async Function SendSecondInstanceArgsAsync(
