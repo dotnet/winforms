@@ -29,7 +29,7 @@ internal readonly unsafe struct EmfRecord
     }
 
     public ENHANCED_METAFILE_RECORD_TYPE Type => _lpmr->iType;
-    public ReadOnlySpan<uint> Params => _lpmr->dParm.AsReadOnlySpan();
+    public ReadOnlySpan<uint> Params => _lpmr->dParm.AsSpan((int)(_lpmr->nSize / sizeof(uint)) - 2);
     public ReadOnlySpan<HGDIOBJ> Handles => new(_lpht, _nHandles);
 
     public ENHMETAHEADER* HeaderRecord => Type == ENHANCED_METAFILE_RECORD_TYPE.EMR_HEADER ? (ENHMETAHEADER*)_lpmr : null;
