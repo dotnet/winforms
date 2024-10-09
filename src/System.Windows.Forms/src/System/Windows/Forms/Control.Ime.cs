@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
-using Windows.Win32.Globalization;
 using Windows.Win32.UI.Input.Ime;
 
 namespace System.Windows.Forms;
