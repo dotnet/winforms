@@ -12847,16 +12847,24 @@ public unsafe partial class Control :
     internal virtual bool AllowsChildrenToShowToolTips() => true;
 
 #nullable disable
+    [Obsolete(
+        Obsoletions.ContextMenuMessage,
+        error: false,
+        DiagnosticId = Obsoletions.ContextMenuDiagnosticId,
+        UrlFormat = Obsoletions.SharedUrlFormat)]
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-#pragma warning disable WFDEV005 // Type or member is obsolete
     public virtual ContextMenu ContextMenu
-#pragma warning restore WFDEV005
     {
         get;
         set;
     }
 
+    [Obsolete(
+        Obsoletions.ContextMenuMessage,
+        error: false,
+        DiagnosticId = Obsoletions.ContextMenuDiagnosticId,
+        UrlFormat = Obsoletions.SharedUrlFormat)]
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public event EventHandler ContextMenuChanged
@@ -12865,6 +12873,11 @@ public unsafe partial class Control :
         remove { }
     }
 
+    [Obsolete(
+        Obsoletions.ContextMenuMessage,
+        error: false,
+        DiagnosticId = Obsoletions.ContextMenuDiagnosticId,
+        UrlFormat = Obsoletions.SharedUrlFormat)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     protected virtual void OnContextMenuChanged(EventArgs e) { }
 #nullable enable

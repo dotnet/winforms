@@ -7129,7 +7129,11 @@ public partial class Form : ContainerControl
     }
 
 #nullable disable
-#pragma warning disable WFDEV007 // Type or member is obsolete
+    [Obsolete(
+        Obsoletions.MainMenuMessage,
+        error: false,
+        DiagnosticId = Obsoletions.MainMenuDiagnosticId,
+        UrlFormat = Obsoletions.SharedUrlFormat)]
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public MainMenu Menu
@@ -7138,12 +7142,16 @@ public partial class Form : ContainerControl
         set;
     }
 
+    [Obsolete(
+        Obsoletions.MainMenuMessage,
+        error: false,
+        DiagnosticId = Obsoletions.MainMenuDiagnosticId,
+        UrlFormat = Obsoletions.SharedUrlFormat)]
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public MainMenu MergedMenu
     {
         get;
     }
-#pragma warning restore WFDEV007
 #nullable enable
 }
