@@ -139,15 +139,15 @@ public class ImageListDesignerOriginalImageCollectionTests : IDisposable
     [BoolData]
     public void IndexOf_Returns_ProperIndex(bool isNull)
     {
-        ImageListImage image = new ImageListImage(_image);
-        _originalImageCollection.Add(image);
         if (isNull)
         {
             _originalImageCollection.IndexOf(null).Should().Be(-1);
+            return;
         }
-        else
-        {
-            _originalImageCollection.IndexOf(image).Should().Be(0);
-        }
+
+        ImageListImage image = new ImageListImage(_image);
+        _originalImageCollection.Add(image);
+
+        _originalImageCollection.IndexOf(image).Should().Be(0);
     }
 }
