@@ -38,4 +38,6 @@ public class MainMenu : Menu
     public virtual MainMenu CloneMenu() => throw new PlatformNotSupportedException();
 
     public Form GetForm() => throw new PlatformNotSupportedException();
+
+    protected internal virtual void OnCollapse(EventArgs e)  => throw new PlatformNotSupportedException();
 }

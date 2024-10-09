@@ -13,4 +13,4 @@ namespace System.Windows.Forms;
     DiagnosticId = Obsoletions.StatusBarDiagnosticId,
     UrlFormat = Obsoletions.SharedUrlFormat)]
 [EditorBrowsable(EditorBrowsableState.Never)]
-public delegate void StatusBarDrawItemEventHandler(object sender, StatusBarDrawItemEventArgs subevents);
+public delegate void StatusBarDrawItemEventHandler(object sender, StatusBarDrawItemEventArgs sbdevent);

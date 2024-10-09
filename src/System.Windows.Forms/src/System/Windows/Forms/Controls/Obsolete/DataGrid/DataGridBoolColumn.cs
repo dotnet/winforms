@@ -89,9 +89,6 @@ public class DataGridBoolColumn : DataGridColumnStyle
         int rowNum,
         bool alignToRight) => throw new PlatformNotSupportedException();
 
-    protected internal override void Paint(Graphics g1,
-        Graphics g,
-        Rectangle bounds,
-        CurrencyManager source,
-        int rowNum) => throw new PlatformNotSupportedException();
+    protected internal override void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum)
+        => throw new PlatformNotSupportedException();
 }

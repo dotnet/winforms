@@ -17,6 +17,8 @@ public partial class DataGrid
     [EditorBrowsable(EditorBrowsableState.Never)]
     public sealed class HitTestInfo
     {
+        private HitTestInfo() { }
+
         public static readonly HitTestInfo Nowhere;
 
         public int Column => throw new PlatformNotSupportedException();

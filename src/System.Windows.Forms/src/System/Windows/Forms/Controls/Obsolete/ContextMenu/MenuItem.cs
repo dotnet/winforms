@@ -122,6 +122,11 @@ public class MenuItem : Menu
         set => throw new PlatformNotSupportedException();
     }
 
+    protected int MenuID
+    {
+        get => throw new PlatformNotSupportedException();
+    }
+
     public MenuMerge MergeType
     {
         get => throw new PlatformNotSupportedException();
@@ -139,7 +144,6 @@ public class MenuItem : Menu
     public Menu Parent
     {
         get => throw new PlatformNotSupportedException();
-        set => throw new PlatformNotSupportedException();
     }
 
     public bool RadioCheck

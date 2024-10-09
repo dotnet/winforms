@@ -44,11 +44,20 @@ public abstract partial class Menu : Component
         set => throw new PlatformNotSupportedException();
     }
 
+    protected internal void CloneMenu(Menu menuSrc) => throw new PlatformNotSupportedException();
+
+    protected virtual IntPtr CreateMenuHandle() => throw new PlatformNotSupportedException();
+
     public MenuItem FindMenuItem(int type, IntPtr value) => throw new PlatformNotSupportedException();
+
+    protected int FindMergePosition(int mergeOrder) => throw new PlatformNotSupportedException();
 
     public ContextMenu GetContextMenu() => throw new PlatformNotSupportedException();
 
     public MainMenu GetMainMenu() => throw new PlatformNotSupportedException();
 
     public virtual void MergeMenu(Menu menuSrc) => throw new PlatformNotSupportedException();
+
+    protected internal virtual bool ProcessCmdKey(ref Message msg, Keys keyData)
+         => throw new PlatformNotSupportedException();
 }

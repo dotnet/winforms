@@ -63,7 +63,7 @@ public abstract partial class Menu
 
         public virtual void Clear() => throw new PlatformNotSupportedException();
 
-        public void CopyTo(Array array, int index) => throw new PlatformNotSupportedException();
+        public void CopyTo(Array dest, int index) => throw new PlatformNotSupportedException();
 
         public MenuItem[] Find(string key, bool searchAllChildren) => throw new PlatformNotSupportedException();
 
