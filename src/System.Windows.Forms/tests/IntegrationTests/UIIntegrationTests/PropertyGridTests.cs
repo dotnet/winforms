@@ -10,6 +10,7 @@ using Moq;
 using static System.Windows.Forms.PropertyGrid;
 
 namespace System.Windows.Forms.UITests;
+
 public class PropertyGridTests : IDisposable
 {
     private readonly PropertyGrid _propertyGrid;
@@ -296,7 +297,11 @@ public class PropertyGridTests : IDisposable
     {
         _propertyGrid.SelectedObjects.Should().Contain(_form);
 
-        object[] objects = [new Button(), new TextBox(), new ComboBox()];
+        using Button button1 = new();
+        using TextBox textBox1 = new();
+        using ComboBox comboBox1 = new();
+        object[] objects = { button1, textBox1, comboBox1 };
+
         _propertyGrid.SelectedObjects = objects;
         _propertyGrid.SelectedObjects.Should().Contain(objects);
 
