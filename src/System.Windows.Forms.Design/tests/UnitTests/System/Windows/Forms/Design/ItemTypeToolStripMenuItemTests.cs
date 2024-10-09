@@ -53,8 +53,9 @@ public class ItemTypeToolStripMenuItemTests : IDisposable
     [Fact]
     public void Dispose_SetsToolboxItemToNull()
     {
-        _item.Dispose();
-        _item.ToolboxItem.Should().BeNull();
+        ItemTypeToolStripMenuItem item = new(typeof(string));
+        item.Dispose();
+        item.ToolboxItem.Should().BeNull();
     }
 
     public void Dispose()
