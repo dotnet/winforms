@@ -13,7 +13,7 @@ public class ImageListDesignerOriginalImageCollectionTests : IDisposable
 
     private readonly ImageListDesigner.OriginalImageCollection _originalImageCollection;
 
-    private readonly Image _img = new Bitmap(10, 10);
+    private readonly Image _image = new Bitmap(10, 10);
 
     public ImageListDesignerOriginalImageCollectionTests()
     {
@@ -24,7 +24,7 @@ public class ImageListDesignerOriginalImageCollectionTests : IDisposable
     public void Dispose()
     {
         _owner.Dispose();
-        _img.Dispose();
+        _image.Dispose();
     }
 
     [Fact]
@@ -45,7 +45,7 @@ public class ImageListDesignerOriginalImageCollectionTests : IDisposable
     [Fact]
     public void Indexer_Get_ThrowsArgumentOutOfRangeException_ForInvalidIndex()
     {
-        _originalImageCollection.Add(new ImageListImage(_img));
+        _originalImageCollection.Add(new ImageListImage(_image));
 
         Action action = () => { var image = _originalImageCollection[1]; };
 
@@ -55,9 +55,9 @@ public class ImageListDesignerOriginalImageCollectionTests : IDisposable
     [Fact]
     public void Indexer_Set_ThrowsArgumentOutOfRangeException_ForInvalidIndex()
     {
-        _originalImageCollection.Add(new ImageListImage(_img));
+        _originalImageCollection.Add(new ImageListImage(_image));
 
-        Action action = () => _originalImageCollection[1] = new ImageListImage(_img);
+        Action action = () => _originalImageCollection[1] = new ImageListImage(_image);
 
         action.Should().Throw<ArgumentOutOfRangeException>();
     }
@@ -68,7 +68,7 @@ public class ImageListDesignerOriginalImageCollectionTests : IDisposable
     [InlineData("NewName", "NewName")]
     public void SetKeyName_ChangesKeyName_ToExpectedValue(string? input, string expected)
     {
-        _originalImageCollection.Add(new ImageListImage(_img, "OldName"));
+        _originalImageCollection.Add(new ImageListImage(_image, "OldName"));
 
         _originalImageCollection.SetKeyName(0, input!);
 
@@ -78,22 +78,22 @@ public class ImageListDesignerOriginalImageCollectionTests : IDisposable
     [Fact]
     public void AddRange_AddsImages_GivenAmountAtATime()
     {
-        _originalImageCollection.AddRange([new(_img), new(_img), new(_img)]);
+        _originalImageCollection.AddRange([new(_image), new(_image), new(_image)]);
         _originalImageCollection.Count.Should().Be(3);
     }
 
     [Fact]
     public void Add_AddsImage_OneAtATime()
     {
-        _originalImageCollection.Add(new(_img));
-        _originalImageCollection.Add(new(_img));
+        _originalImageCollection.Add(new(_image));
+        _originalImageCollection.Add(new(_image));
         _originalImageCollection.Count.Should().Be(2);
     }
 
     [Fact]
     public void Clear_RemovesAllImages()
     {
-        _originalImageCollection.AddRange([new(_img), new(_img)]);
+        _originalImageCollection.AddRange([new(_image), new(_image)]);
         _originalImageCollection.Clear();
         _originalImageCollection.Count.Should().Be(0);
     }
@@ -101,7 +101,7 @@ public class ImageListDesignerOriginalImageCollectionTests : IDisposable
     [Fact]
     public void Contains_ReturnsTrue_IfImageIsInCollection()
     {
-        ImageListImage image = new ImageListImage(_img);
+        ImageListImage image = new ImageListImage(_image);
         _originalImageCollection.Add(image);
         _originalImageCollection.Contains(image).Should().BeTrue();
     }
@@ -109,7 +109,7 @@ public class ImageListDesignerOriginalImageCollectionTests : IDisposable
     [Fact]
     public void GetEnumerator_ReturnsEnumerator()
     {
-        ImageListImage image = new ImageListImage(_img);
+        ImageListImage image = new ImageListImage(_image);
         _originalImageCollection.Add(image);
 
         using var enumerator = (IDisposable)_originalImageCollection.GetEnumerator();
@@ -120,7 +120,7 @@ public class ImageListDesignerOriginalImageCollectionTests : IDisposable
     [Fact]
     public void RemoveAt_RemovesImageAtSpecifiedIndex()
     {
-        _originalImageCollection.Add(new ImageListImage(_img));
+        _originalImageCollection.Add(new ImageListImage(_image));
 
         _originalImageCollection.RemoveAt(0);
 
@@ -130,7 +130,7 @@ public class ImageListDesignerOriginalImageCollectionTests : IDisposable
     [Fact]
     public void Remove_RemovesImageListImage()
     {
-        _originalImageCollection.AddRange([new(_img), new(_img), new(_img)]);
+        _originalImageCollection.AddRange([new(_image), new(_image), new(_image)]);
         _originalImageCollection.Remove(_originalImageCollection[0]);
         _originalImageCollection.Count.Should().Be(2);
     }
@@ -139,7 +139,7 @@ public class ImageListDesignerOriginalImageCollectionTests : IDisposable
     [BoolData]
     public void IndexOf_Returns_ProperIndex(bool isNull)
     {
-        ImageListImage image = new ImageListImage(_img);
+        ImageListImage image = new ImageListImage(_image);
         _originalImageCollection.Add(image);
         if (isNull)
         {
