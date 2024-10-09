@@ -178,6 +178,22 @@ public class UnsupportedTypesTests
         ((Action)(() => createFrameworkTypes.CreateStatusBar(form))).Should().Throw<PlatformNotSupportedException>();
     }
 
+    [Fact]
+    public void InteropWithUnsupportedEnums()
+    {
+        CreateFrameworkTypes.InteropWithUnsupportedEnums(
+            DataGrid.HitTestType.Caption,
+            DataGridLineStyle.Solid,
+            DataGridParentRowsLabelStyle.TableName,
+            MenuMerge.Remove,
+            StatusBarPanelAutoSize.Spring,
+            StatusBarPanelBorderStyle.Sunken,
+            StatusBarPanelStyle.OwnerDraw,
+            ToolBarAppearance.Flat,
+            ToolBarButtonStyle.DropDownButton,
+            ToolBarTextAlign.Underneath).Should().BeTrue();
+    }
+
     internal class ControlWithContextMenu : Control
     {
         public int OnContextMenuChangedCount;

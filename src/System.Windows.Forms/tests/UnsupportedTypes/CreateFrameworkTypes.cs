@@ -329,6 +329,71 @@ public sealed class CreateFrameworkTypes : IDisposable
         }
     }
 
+    public static bool InteropWithUnsupportedEnums(
+        DataGrid.HitTestType hitTestType,
+        DataGridLineStyle dataGridLineStyle,
+        DataGridParentRowsLabelStyle dataGridParentRowsLabelStyle,
+        MenuMerge menuMerge,
+        StatusBarPanelAutoSize statusBarPanelAutoSize,
+        StatusBarPanelBorderStyle statusBarPanelBorderStyle,
+        StatusBarPanelStyle statusBarPanelStyle,
+        ToolBarAppearance toolBarAppearance,
+        ToolBarButtonStyle toolBarButtonStyle,
+        ToolBarTextAlign toolBarTextAlign)
+    {
+        if (hitTestType != DataGrid.HitTestType.Caption)
+        {
+            return false;
+        }
+
+        if (dataGridLineStyle != DataGridLineStyle.Solid)
+        {
+            return false;
+        }
+
+        if (dataGridParentRowsLabelStyle != DataGridParentRowsLabelStyle.TableName)
+        {
+            return false;
+        }
+
+        if (menuMerge != MenuMerge.Remove)
+        {
+            return false;
+        }
+
+        if (statusBarPanelAutoSize != StatusBarPanelAutoSize.Spring)
+        {
+            return false;
+        }
+
+        if (statusBarPanelBorderStyle != StatusBarPanelBorderStyle.Sunken)
+        {
+            return false;
+        }
+
+        if (statusBarPanelStyle != StatusBarPanelStyle.OwnerDraw)
+        {
+            return false;
+        }
+
+        if (toolBarAppearance != ToolBarAppearance.Flat)
+        {
+            return false;
+        }
+
+        if (toolBarButtonStyle != ToolBarButtonStyle.DropDownButton)
+        {
+            return false;
+        }
+
+        if (toolBarTextAlign != ToolBarTextAlign.Underneath)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     private class TestToolBar : ToolBar
     {
         public void MyClick()
