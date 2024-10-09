@@ -110,7 +110,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsTheory>
-        <ClassData(GetType(NullOrEmptyPathTestData))>
+        <NullAndEmptyStringDataAttribute>
         Public Sub DownloadFile_UriOnlyWhereDestinationFileNameInvalidAddressOnly_Throws(destinationFileName As String)
             Dim testDirectory As String = CreateTempDirectory()
             Dim webListener As New WebListener(DownloadSmallFileSize)
@@ -161,7 +161,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsTheory>
-        <ClassData(GetType(NullOrEmptyPathTestData))>
+        <NullAndEmptyStringDataAttribute>
         Public Sub DownloadFile_UriWithAllOptions_ExceptOnUserCancelWhereDestinationFileNameInvalidOverwrite_Throws(
             destinationFileName As String)
 
@@ -513,7 +513,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsTheory>
-        <ClassData(GetType(NullOrEmptyPathTestData))>
+        <NullAndEmptyStringDataAttribute>
         Public Sub DownloadFile_UriWithAllOptionsWhereDestinationFileNameInvalid_Throws(destinationFileName As String)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
@@ -895,7 +895,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsTheory>
-        <ClassData(GetType(NullOrEmptyPathTestData))>
+        <NullAndEmptyStringDataAttribute>
         Public Sub DownloadFile_UrlOnlyWhereAddressInvalid_Throws(address As String)
             Dim testDirectory As String = CreateTempDirectory()
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
@@ -918,7 +918,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsTheory>
-        <ClassData(GetType(NullOrEmptyPathTestData))>
+        <NullAndEmptyStringDataAttribute>
         Public Sub DownloadFile_UrlOnlyWhereDestinationFileNameInvalidAddressOnly_Throws(destinationFileName As String)
             Dim testDirectory As String = CreateTempDirectory()
             Dim webListener As New WebListener(DownloadSmallFileSize)
@@ -940,7 +940,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsTheory>
-        <ClassData(GetType(NullOrEmptyPathTestData))>
+        <NullAndEmptyStringDataAttribute>
         Public Sub DownloadFile_UrlWithAllOptions_ExceptOnUserCancelWhereDestinationFileNameInvalidOverwrite_Throws(
             destinationFileName As String)
 
@@ -1242,7 +1242,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsTheory>
-        <ClassData(GetType(NullOrEmptyPathTestData))>
+        <NullAndEmptyStringDataAttribute>
         Public Sub DownloadFile_UrlWithAllOptionsWhereDestinationFileNameInvalid_Throws(destinationFileName As String)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
