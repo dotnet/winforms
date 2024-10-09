@@ -35,7 +35,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsTheory>
-        <ClassData(GetType(NullOrEmptyPathTestData))>
+        <NullAndEmptyStringDataAttribute>
         Public Sub DirectoryIsAccessibleWithNullOrEmptyPathTests(directoryPath As String)
             DirectoryIsAccessible(directoryPath).Should.BeFalse()
         End Sub
