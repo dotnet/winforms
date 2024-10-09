@@ -3,7 +3,7 @@
 
 using System.Globalization;
 using Microsoft.Win32;
-using Windows.Win32.UI.TextServices;
+using Windows.Win32.UI.Input.KeyboardAndMouse;
 
 namespace System.Windows.Forms;
 
@@ -80,7 +80,11 @@ public sealed class InputLanguage
             int size = PInvoke.GetKeyboardLayoutList(0, null);
 
             var handles = new HKL[size];
-            PInvoke.GetKeyboardLayoutList(handles);
+
+            fixed (HKL* h = handles)
+            {
+                PInvoke.GetKeyboardLayoutList(size, h);
+            }
 
             InputLanguage[] ils = new InputLanguage[size];
             for (int i = 0; i < size; i++)

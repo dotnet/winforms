@@ -22,7 +22,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         Friend Const STARTF_USESHOWWINDOW As Integer = 1
 
         ' Handle Values
-        Friend Shared ReadOnly s_invalidHandle As IntPtr = New IntPtr(-1)
+        Friend Shared ReadOnly s_invalidHandle As New IntPtr(-1)
 
         ''' <summary>
         '''  Inherits <see cref="SafeHandleZeroOrMinusOneIsInvalid"/>, with additional InitialSetHandle method.
