@@ -152,7 +152,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             ' before the Network object gets created because the network object will be doing a
             ' AsyncOperationsManager.CreateOperation() which captures the execution context. So we must
             ' have our principal on the thread before that happens.
-            If authenticationMode = authenticationMode.Windows Then
+            If authenticationMode = AuthenticationMode.Windows Then
                 Try
                     ' Consider: Sadly, a call to:
                     ' Security.SecurityManager.IsGranted(New SecurityPermission(SecurityPermissionFlag.ControlPrincipal))
@@ -330,7 +330,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 If value Is Nothing Then
                     Throw VbUtils.GetArgumentNullException(
                         argumentName:="MainForm",
-                        resourceID:=SR.General_PropertyNothing,
+                        resourceKey:=SR.General_PropertyNothing,
                         "MainForm")
                 End If
                 If value Is _splashScreen Then
