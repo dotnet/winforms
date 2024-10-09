@@ -22,7 +22,6 @@ public class UnsupportedTypesTests
         () => new DataGridBoolColumn(),
         () => new DataGridBoolColumn(prop: null!),
         () => new DataGridBoolColumn(prop: null!, isDefault: true),
-        () => new DataGridCell(),
         () => new DataGridCell(r:1, c: 2),
         () => new DataGridPreferredColumnWidthTypeConverter(),
         () => new DataGridTableStyle(),
@@ -34,12 +33,10 @@ public class UnsupportedTypesTests
         () => new DataGridTextBoxColumn(prop: null!, format: "format"),
         () => new DataGridTextBoxColumn(prop: null!, format: "format", isDefault: true),
         () => new DataGridTextBoxColumn(prop : null!, isDefault: false),
-        () => new GridColumnStylesCollection(),
         () => new TestDataGridColumnStyle(),
         () => new TestDataGridColumnStyle(prop: null!),
         TestDataGridColumnStyle.Create_DataGridColumnHeaderAccessibleObject,
         () => GridTablesFactory.CreateGridTables(gridTable: null!, dataSource: null!, dataMember: "data member", bindingManager: null!),
-        () => new GridTableStylesCollection(),
         () => new Menu.MenuItemCollection(owner: null!),
         () => new MainMenu(),
         () => new MainMenu(container: null!),
@@ -70,8 +67,12 @@ public class UnsupportedTypesTests
         ((Func<bool>)(() => TestDataGridColumnStyle.Call_DGEditColumnEditing())).Should().Throw<PlatformNotSupportedException>();
 
     [Fact]
-    public void DataGridTableStyle_static_Throws() =>
-        ((Func<object>)(() => DataGridTableStyle.s_defaultTableStyle)).Should().Throw<PlatformNotSupportedException>();
+    public void DataGridTableStyle_static_IsDefault() =>
+        DataGridTableStyle.DefaultTableStyle.Should().BeNull();
+
+    [Fact]
+    public void DataGrid_HitTestInfo_Nowhere_static_IsDefault() =>
+    DataGrid.HitTestInfo.Nowhere.Should().BeNull();
 
     [Fact]
     public void StatusBarDrawItemEventArgs_Constructor_Throws()
@@ -207,7 +208,7 @@ public class UnsupportedTypesTests
         protected internal override int GetMinimumHeight() => throw new NotImplementedException();
         protected internal override int GetPreferredHeight(Graphics g, object value) => throw new NotImplementedException();
         protected internal override Size GetPreferredSize(Graphics g, object value) => throw new NotImplementedException();
-        protected internal override void Paint(Graphics g1, Graphics g, Rectangle bounds, CurrencyManager source, int rowNum) => throw new NotImplementedException();
         protected internal override void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum, bool alignToRight) => throw new NotImplementedException();
+        protected internal override void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum) => throw new NotImplementedException();
     }
 }

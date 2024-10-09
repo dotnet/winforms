@@ -204,6 +204,13 @@ public partial class DataGrid : Control, ISupportInitialize, IDataGridEditingSer
         remove => throw new PlatformNotSupportedException();
     }
 
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    protected internal CurrencyManager ListManager
+    {
+        get => throw new PlatformNotSupportedException();
+        set => throw new PlatformNotSupportedException();
+    }
+
     public void ResetAlternatingBackColor() => throw new PlatformNotSupportedException();
 
     public void ResetGridLineColor() => throw new PlatformNotSupportedException();
@@ -477,6 +484,12 @@ public partial class DataGrid : Control, ISupportInitialize, IDataGridEditingSer
     public void BeginInit() => throw new PlatformNotSupportedException();
 
     public void Collapse(int row) => throw new PlatformNotSupportedException();
+
+    protected internal virtual void ColumnStartedEditing(Drawing.Rectangle bounds)
+         => throw new PlatformNotSupportedException();
+
+    protected internal virtual void ColumnStartedEditing(Control editingControl)
+         => throw new PlatformNotSupportedException();
 
     public bool EndEdit(DataGridColumnStyle gridColumn, int rowNumber, bool shouldAbort) => throw new PlatformNotSupportedException();
 

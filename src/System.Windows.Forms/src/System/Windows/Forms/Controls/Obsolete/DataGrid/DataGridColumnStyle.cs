@@ -170,12 +170,6 @@ public abstract partial class DataGridColumnStyle : Component, IDataGridColumnSt
 
     protected internal virtual void ConcedeFocus() => throw new PlatformNotSupportedException();
 
-    protected internal abstract void Paint(Graphics g1,
-        Graphics g,
-        Rectangle bounds,
-        CurrencyManager source,
-        int rowNum);
-
     protected internal abstract void Paint(Graphics g,
         Rectangle bounds,
         CurrencyManager source,
@@ -189,6 +183,8 @@ public abstract partial class DataGridColumnStyle : Component, IDataGridColumnSt
         Brush backBrush,
         Brush foreBrush,
         bool alignToRight) => throw new PlatformNotSupportedException();
+
+    protected internal abstract void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum);
 
     protected internal virtual void ReleaseHostedControl() => throw new PlatformNotSupportedException();
 

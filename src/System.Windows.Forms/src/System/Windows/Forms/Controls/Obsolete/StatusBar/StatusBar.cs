@@ -143,5 +143,5 @@ public partial class StatusBar : Control
 
     protected virtual void OnPanelClick(StatusBarPanelClickEventArgs e) => throw new PlatformNotSupportedException();
 
-    protected virtual void OnDrawItem(StatusBarDrawItemEventArgs subevent) => throw new PlatformNotSupportedException();
+    protected virtual void OnDrawItem(StatusBarDrawItemEventArgs sbdievent) => throw new PlatformNotSupportedException();
 }

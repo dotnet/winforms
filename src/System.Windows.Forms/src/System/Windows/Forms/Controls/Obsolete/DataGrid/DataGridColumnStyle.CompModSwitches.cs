@@ -17,6 +17,8 @@ public partial class DataGridColumnStyle
     [EditorBrowsable(EditorBrowsableState.Never)]
     protected class CompModSwitches
     {
+        private CompModSwitches() { }
+
         public static TraceSwitch DGEditColumnEditing => throw new PlatformNotSupportedException();
     }
 }

@@ -15,6 +15,8 @@ namespace System.Windows.Forms;
 [EditorBrowsable(EditorBrowsableState.Never)]
 public sealed class GridTablesFactory
 {
+    private GridTablesFactory() { }
+
     public static DataGridTableStyle[] CreateGridTables(DataGridTableStyle gridTable,
         object dataSource,
         string dataMember,
