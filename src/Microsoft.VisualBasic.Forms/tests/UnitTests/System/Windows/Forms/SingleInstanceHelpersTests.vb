@@ -14,12 +14,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
     Public Class SingleInstanceHelpersTests
         Private _resultArgs As String()
 
-        Private Sub OnStartupNextInstanceMarshallingAdaptor(args As String())
-            If args.Length = 1 Then
-                _resultArgs = {"Hello"}
-            End If
-        End Sub
-
         <WinFormsFact>
         Public Sub TryCreatePipeServerTests()
             Dim pipeName As String = GetUniqueText()
@@ -43,6 +37,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 TryCreatePipeServer(pipeName, pipeServer1).Should.BeFalse()
                 pipeServer1.Should.BeNull()
             End Using
+        End Sub
+
+        Private Sub OnStartupNextInstanceMarshallingAdaptor(args As String())
+            If args.Length = 1 Then
+                _resultArgs = {"Hello"}
+            End If
         End Sub
 
         <WinFormsFact>
