@@ -3218,7 +3218,8 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
                 break;
 
             case DataGridViewAdvancedCellBorderStyle.Outset:
-                graphics.DrawLine(penControlLightLight, bounds.X, bounds.Y, bounds.X, bounds.Bottom - 1);
+                graphics.DrawLine(DataGridView.RightToLeft == RightToLeft.Yes ? penControlDark : penControlLightLight,
+                    bounds.X, bounds.Y, bounds.X, bounds.Bottom - 1);
                 break;
 
             case DataGridViewAdvancedCellBorderStyle.OutsetPartial:
