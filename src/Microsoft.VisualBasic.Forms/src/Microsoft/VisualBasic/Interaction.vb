@@ -107,11 +107,10 @@ Namespace Microsoft.VisualBasic
             yPos As Integer,
             parentWindow As IWin32Window) As String
 
-            Dim box As New VBInputBox(prompt, title, defaultResponse, xPos, yPos)
-            box.ShowDialog(parentWindow)
-
-            InternalInputBox = box.Output
-            box.Dispose()
+            Using box As New VBInputBox(prompt, title, defaultResponse, xPos, yPos)
+                box.ShowDialog(parentWindow)
+                InternalInputBox = box.Output
+            End Using
         End Function
 
         Public Sub AppActivateByProcessId(ProcessId As Integer)
