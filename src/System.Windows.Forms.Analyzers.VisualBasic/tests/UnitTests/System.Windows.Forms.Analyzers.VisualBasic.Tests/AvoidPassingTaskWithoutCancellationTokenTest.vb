@@ -93,13 +93,13 @@ Namespace VisualBasicControls
             Dim okFunc As New Func(Of Integer)(Function() 42)
 
             ' Just a Task we will get in trouble since it's handled as a fire and forget.
-            Dim notOkAsyncFunc As New Func(Of Task)(Function() 
+            Dim notOkAsyncFunc As New Func(Of Task)(Function()
                 control.Text = ""Hello, World!""
                 Return Task.CompletedTask
             End Function)
 
             ' A Task returning a value will also get us in trouble since it's handled as a fire and forget.
-            Dim notOkAsyncFunc2 As New Func(Of Task(Of Integer))(Function() 
+            Dim notOkAsyncFunc2 As New Func(Of Task(Of Integer))(Function()
                 control.Text = ""Hello, World!""
                 Return Task.FromResult(42)
             End Function)
@@ -120,13 +120,13 @@ Namespace VisualBasicControls
             Dim task5 = control.InvokeAsync(notOkAsyncFunc2, System.Threading.CancellationToken.None)
 
             ' This is OK, since we're passing a cancellation token.
-            Dim okAsyncFunc = New Func(Of CancellationToken, ValueTask)(Function(cancellation) 
+            Dim okAsyncFunc = New Func(Of CancellationToken, ValueTask)(Function(cancellation)
                 control.Text = ""Hello, World!""
                 Return ValueTask.CompletedTask
             End Function)
 
             ' This is also OK, again, because we're passing a cancellation token.
-            Dim okAsyncFunc2 = New Func(Of CancellationToken, ValueTask(Of Integer))(Function(cancellation) 
+            Dim okAsyncFunc2 = New Func(Of CancellationToken, ValueTask(Of Integer))(Function(cancellation)
                 control.Text = ""Hello, World!""
                 Return ValueTask.FromResult(42)
             End Function)
@@ -151,25 +151,39 @@ End Namespace
 
     <Theory>
     <MemberData(NameOf(GetReferenceAssemblies))>
-    Public Async Function VB_AvoidPassingFuncReturningTaskWithoutCancellationAnalyzer(referenceAssemblies As ReferenceAssemblies) As Task
+    Public Async Function VB_AvoidPassingFuncReturningTaskWithoutCancellationAnalyzer(
+         referenceAssemblies As ReferenceAssemblies) As Task
         ' If the API does not exist, we need to add it to the test.
         Dim customControlSource As String = AsyncControl
         Dim diagnosticId As String = DiagnosticIDs.AvoidPassingFuncReturningTaskWithoutCancellationToken
 
-        Dim context As New VisualBasicAnalyzerTest(Of AvoidPassingTaskWithoutCancellationTokenAnalyzer, DefaultVerifier) With
-            {
-                .TestCode = TestCode,
-                .ReferenceAssemblies = referenceAssemblies
-            }
+        Dim context As New VisualBasicAnalyzerTest(Of AvoidPassingTaskWithoutCancellationTokenAnalyzer, DefaultVerifier) _
+            With
+                {
+                    .TestCode = TestCode,
+                    .ReferenceAssemblies = referenceAssemblies
+                }
 
         context.TestState.OutputKind = OutputKind.WindowsApplication
         context.TestState.Sources.Add(customControlSource)
         context.TestState.ExpectedDiagnostics.AddRange(
-                {
-                    DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(40, 25, 40, 101),
-                    DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(43, 25, 43, 101),
-                    DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(46, 25, 46, 102)
-                })
+            collection:={
+                DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(
+                    startLine:=40,
+                    startColumn:=25,
+                    endLine:=40,
+                    endColumn:=101),
+                DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(
+                    startLine:=43,
+                    startColumn:=25,
+                    endLine:=43,
+                    endColumn:=101),
+                DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(
+                    startLine:=46,
+                    startColumn:=25,
+                    endLine:=46,
+                    endColumn:=102)
+            })
 
         Await context.RunAsync()
     End Function

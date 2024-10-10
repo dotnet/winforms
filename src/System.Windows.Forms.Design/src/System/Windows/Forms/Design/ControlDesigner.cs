@@ -1293,7 +1293,8 @@ public partial class ControlDesigner : ComponentDesigner
     }
 
     /// <summary>
-    ///  Called in response to the left mouse button being pressed on a component. It ensures that the component is selected.
+    ///  Called in response to the left mouse button being pressed on a component.
+    ///  It ensures that the component is selected.
     /// </summary>
     protected virtual void OnMouseDragBegin(int x, int y)
     {
@@ -1306,7 +1307,8 @@ public partial class ControlDesigner : ComponentDesigner
         _mouseDragLast = new Point(x, y);
         _ctrlSelect = (Control.ModifierKeys & Keys.Control) != 0;
 
-        // If the CTRL key isn't down, select this component, otherwise, we wait until the mouse up. Make sure the component is selected
+        // If the CTRL key isn't down, select this component, otherwise, we wait until the mouse up.
+        // Make sure the component is selected.
         if (!_ctrlSelect && TryGetService<ISelectionService>(out ISelectionService? selectionService))
         {
             selectionService.SetSelectedComponents(new object[] { Component }, SelectionTypes.Primary);

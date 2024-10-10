@@ -41,7 +41,8 @@ internal class ChangeToolStripParentVerb
             Control root = _host.RootComponent as Control;
             if (_host.GetDesigner(root) is ParentControlDesigner rootDesigner)
             {
-                // close the DAP first - this is so that the autoshown panel on drag drop here is not conflicting with the currently opened panel
+                // close the DAP first - this is so that the autoshown panel on drag drop here
+                // is not conflicting with the currently opened panel
                 // if the verb was called from the panel
                 ToolStrip toolStrip = _designer.Component as ToolStrip;
                 if (toolStrip is not null && _designer is not null && _designer.Component is not null && _provider is not null)
