@@ -254,7 +254,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsTheory>
-        <ClassData(GetType(WrongPasswordTestData))>
+        <NullAndEmptyStringData>
+        <InlineData("WrongPassword")>
         Public Sub DownloadFile_UriWithAllOptions_ExceptOnUserCancelWherePasswordWrong_Throws(password As String)
             Dim testDirectory As String = CreateTempDirectory()
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
@@ -865,7 +866,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsTheory>
-        <ClassData(GetType(WrongPasswordTestData))>
+        <NullAndEmptyStringData>
+        <InlineData("WrongPassword")>
         Public Sub DownloadFile_UriWithUserNamePasswordWherePasswordWrong_Throw(password As String)
             Dim testDirectory As String = CreateTempDirectory()
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
@@ -890,7 +892,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsTheory>
-        <ClassData(GetType(WrongPasswordTestData))>
+        <NullAndEmptyStringData>
+        <InlineData("WrongPassword")>
         Public Sub DownloadFile_UriWithUserNamePasswordWherePasswordWrong_Throws(password As String)
             Dim testDirectory As String = CreateTempDirectory()
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
@@ -1588,7 +1591,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsTheory>
-        <ClassData(GetType(WrongPasswordTestData))>
+        <NullAndEmptyStringData>
+        <InlineData("WrongPassword")>
         Public Sub DownloadFile_UrlWithUserNamePasswordWherePasswordWrong_Throw(password As String)
             Dim testDirectory As String = CreateTempDirectory()
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
@@ -1613,7 +1617,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsTheory>
-        <ClassData(GetType(WrongPasswordTestData))>
+        <NullAndEmptyStringData>
+        <InlineData("WrongPassword")>
         Public Sub DownloadFile_UrlWithUserNamePasswordWherePasswordWrong_Throws(password As String)
             Dim testDirectory As String = CreateTempDirectory()
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
