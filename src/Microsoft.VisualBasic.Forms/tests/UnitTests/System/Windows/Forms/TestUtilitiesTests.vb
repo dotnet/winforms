@@ -9,22 +9,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
     Public Class TestUtilitiesTests
 
         <WinFormsFact>
-        Public Sub NullOrEmptyPathTestDataIteratorTests()
-            Dim testClass As New NullOrEmptyPathTestData
-            testClass.IEnumerable_GetEnumerator.Should.NotBeNull()
-            testClass.Any.Should.BeTrue()
-        End Sub
-
-        <WinFormsFact>
         Public Sub TimeTestDataIteratorTests()
             Dim testClass As New TimeTestData
-            testClass.IEnumerable_GetEnumerator.Should.NotBeNull()
-            testClass.Any.Should.BeTrue()
-        End Sub
-
-        <WinFormsFact>
-        Public Sub WrongPasswordTestDataIteratorTests()
-            Dim testClass As New WrongPasswordTestData
             testClass.IEnumerable_GetEnumerator.Should.NotBeNull()
             testClass.Any.Should.BeTrue()
         End Sub
