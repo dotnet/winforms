@@ -297,7 +297,7 @@ Namespace Microsoft.VisualBasic.Devices
             If connectionTimeout <= 0 Then
                 Throw VbUtils.GetArgumentExceptionWithArgName(
                     argumentName:=NameOf(connectionTimeout),
-                    resourceID:=SR.Network_BadConnectionTimeout)
+                    resourceKey:=SR.Network_BadConnectionTimeout)
             End If
 
             If address Is Nothing Then
