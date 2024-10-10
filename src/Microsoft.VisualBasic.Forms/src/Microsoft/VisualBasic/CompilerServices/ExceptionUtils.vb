@@ -116,6 +116,11 @@ Namespace Microsoft.VisualBasic.CompilerServices
             Return String.Format(Thread.CurrentThread.CurrentCulture, resourceKey, args)
         End Function
 
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="resourceId">A <see cref="VbErrors"/> value that will become the ResourceKey</param>
+        ''' <returns>A <see langword="String"/> localized version of the resource.</returns>
         Friend Function GetResourceString(resourceId As VbErrors) As String
             Dim resourceKey As String = $"ID{CStr(resourceId)}"
             Return SR.GetResourceString(resourceKey, resourceKey)

@@ -143,12 +143,14 @@ public partial class ToolStripComboBox
 
                 // If the width is odd - favor pushing it over one pixel right.
                 middle.X += (dropDownRect.Width % 2);
-                g.FillPolygon(brush,
-                [
-                    new(middle.X - s_offsetPixels, middle.Y - 1),
-                    new(middle.X + s_offsetPixels + 1, middle.Y - 1),
-                    new(middle.X, middle.Y + s_offsetPixels)
-                ]);
+                g.FillPolygon(
+                    brush,
+                    (ReadOnlySpan<Point>)
+                    [
+                        new(middle.X - s_offsetPixels, middle.Y - 1),
+                        new(middle.X + s_offsetPixels + 1, middle.Y - 1),
+                        new(middle.X, middle.Y + s_offsetPixels)
+                    ]);
             }
         }
     }
