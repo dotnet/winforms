@@ -89,29 +89,34 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' </summary>
         ''' <param name="addressUri">The source for the file.</param>
         ''' <param name="normalizedFilePath">The path and name where the file is to be saved.</param>
-        Friend Async Function DownloadFileWorkerAsync(addressUri As Uri, normalizedFilePath As String) As Task
+        Friend Async Function DownloadFileWorkerAsync(addressUri As Uri, normalizedFilePath As String, externalToken As CancellationToken) As Task
             Debug.Assert(_httpClient IsNot Nothing, "No HttpClient")
             Debug.Assert(addressUri IsNot Nothing, "No address")
             Debug.Assert((Not String.IsNullOrWhiteSpace(normalizedFilePath)) AndAlso Directory.Exists(Path.GetDirectoryName(Path.GetFullPath(normalizedFilePath))), "Invalid path")
 
-            _cancelTokenSourceGet = New CancellationTokenSource()
-            _cancelTokenSourceRead = New CancellationTokenSource()
-            _cancelTokenSourceReadStream = New CancellationTokenSource()
-            _cancelTokenSourceWrite = New CancellationTokenSource()
 
             Dim response As HttpResponseMessage = Nothing
-            Try
-                response = Await _httpClient.GetAsync(addressUri, HttpCompletionOption.ResponseHeadersRead, _cancelTokenSourceGet.Token).ConfigureAwait(False)
-            Catch ex As TaskCanceledException
-                If ex.CancellationToken = _cancelTokenSourceRead.Token Then
-                    ' a real cancellation, triggered by the caller
-                    Throw
-                Else
-                    Throw New WebException(SR.net_webstatus_Timeout, WebExceptionStatus.Timeout)
-                End If
-            End Try
+
+            _cancelTokenSourceGet = New CancellationTokenSource()
+            Using linkedCts As CancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(_cancelTokenSourceGet.Token, externalToken)
+                Try
+                    response = Await _httpClient.GetAsync(addressUri, HttpCompletionOption.ResponseHeadersRead, _cancelTokenSourceGet.Token).ConfigureAwait(False)
+                Catch ex As TaskCanceledException
+                    If ex.CancellationToken = externalToken Then
+                        externalToken.ThrowIfCancellationRequested()
+                    ElseIf ex.CancellationToken = _cancelTokenSourceGet.Token Then
+                        ' a real cancellation, triggered by the caller
+                        Throw
+                    Else
+                        Throw New WebException(SR.net_webstatus_Timeout, WebExceptionStatus.Timeout)
+                    End If
+                End Try
+            End Using
             Select Case response.StatusCode
                 Case HttpStatusCode.OK
+                    _cancelTokenSourceRead = CancellationTokenSource.CreateLinkedTokenSource(New CancellationTokenSource().Token, externalToken)
+                    _cancelTokenSourceReadStream = CancellationTokenSource.CreateLinkedTokenSource(New CancellationTokenSource().Token, externalToken)
+                    _cancelTokenSourceWrite = CancellationTokenSource.CreateLinkedTokenSource(New CancellationTokenSource().Token, externalToken)
                     Dim contentLength? As Long = response?.Content.Headers.ContentLength
                     If contentLength.HasValue Then
                         Using responseStream As Stream = Await response.Content.ReadAsStreamAsync(_cancelTokenSourceReadStream.Token).ConfigureAwait(False)
