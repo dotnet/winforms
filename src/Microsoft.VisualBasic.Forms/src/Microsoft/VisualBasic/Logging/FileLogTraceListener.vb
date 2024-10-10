@@ -494,7 +494,7 @@ Namespace Microsoft.VisualBasic.Logging
                 If value < MIN_FILE_SIZE Then
                     Throw VbUtils.GetArgumentExceptionWithArgName(
                         argumentName:=NameOf(value),
-                        resourceID:=SR.ApplicationLogNumberTooSmall,
+                        resourceKey:=SR.ApplicationLogNumberTooSmall,
                         "MaxFileSize")
                 End If
                 _maxFileSize = value

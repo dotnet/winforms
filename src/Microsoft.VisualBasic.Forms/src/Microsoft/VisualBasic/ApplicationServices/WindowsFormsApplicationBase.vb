@@ -1099,7 +1099,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                             pipeName:=applicationInstanceID,
                             args:=commandLine,
                             cancellationToken:=tokenSource.Token) _
-                            .ConfigureAwait(continueOnCapturedContext:=False)
+                                .ConfigureAwait(continueOnCapturedContext:=False)
 
                         awaitable.GetAwaiter().GetResult()
                     Catch ex As Exception
