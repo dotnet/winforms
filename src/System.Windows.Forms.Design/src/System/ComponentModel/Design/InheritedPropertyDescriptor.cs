@@ -262,7 +262,8 @@ internal sealed class InheritedPropertyDescriptor : PropertyDescriptor
     }
 
     /// <summary>
-    ///  Sets the value to be the new value of this property on the component by invoking the setXXX method on the component.
+    ///  Sets the value to be the new value of this property on the component
+    ///  by invoking the setXXX method on the component.
     /// </summary>
     public override void SetValue(object? component, object? value)
     {

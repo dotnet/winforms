@@ -372,7 +372,8 @@ internal class MaskDesignerDialog : Form
 
         ICollection descriptors = DesignerUtils.FilterGenericTypes(discoveryService.GetTypes(typeof(MaskDescriptor), false /* excludeGlobalTypes */));
 
-        // Note: This code assumes DesignerUtils.FilterGenericTypes return a valid ICollection (collection of MaskDescriptor types).
+        // Note: This code assumes DesignerUtils.FilterGenericTypes return a valid ICollection
+        // (collection of MaskDescriptor types).
         foreach (Type t in descriptors)
         {
             if (t.IsAbstract || !t.IsPublic)

@@ -1,7 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-// Copied from https://raw.githubusercontent.com/dotnet/runtime/main/src/libraries/Common/src/System/Text/ValueStringBuilder.cs
+// Copied from
+// https://raw.githubusercontent.com/dotnet/runtime/main/src/libraries/Common/src/System/Text/ValueStringBuilder.cs
 
 using System.Buffers;
 using System.Runtime.CompilerServices;
@@ -91,7 +92,9 @@ internal ref partial struct ValueStringBuilder
         return s;
     }
 
-    /// <summary>Returns the underlying storage of the builder.</summary>
+    /// <summary>
+    ///  Returns the underlying storage of the builder.
+    /// </summary>
     public readonly Span<char> RawChars => _chars;
 
     /// <summary>
@@ -186,7 +189,8 @@ internal ref partial struct ValueStringBuilder
         }
 
         int pos = _pos;
-        if (s.Length == 1 && (uint)pos < (uint)_chars.Length) // very common case, e.g. appending strings from NumberFormatInfo like separators, percent symbols, etc.
+        // very common case, e.g. appending strings from NumberFormatInfo like separators, percent symbols, etc.
+        if (s.Length == 1 && (uint)pos < (uint)_chars.Length)
         {
             _chars[pos] = s[0];
             _pos = pos + 1;

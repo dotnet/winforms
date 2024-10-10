@@ -35,8 +35,12 @@ public unsafe class TintEffect : Effect
     /// <param name="hue">
     ///  Integer in the range of 0 to 360 that specifies the hue to be strengthened or weakened.
     /// </param>
-    /// <exception cref="ArgumentOutOfRangeException"><paramref name="hue"/> is less than 0 or greater than 360.</exception>
-    /// <exception cref="ArgumentException"><paramref name="amount"/> is less than -100 or greater than 100.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    ///  <paramref name="hue"/> is less than 0 or greater than 360.
+    /// </exception>
+    /// <exception cref="ArgumentException">
+    ///  <paramref name="amount"/> is less than -100 or greater than 100.
+    /// </exception>
     public TintEffect(int hue, int amount) : base(PInvoke.TintEffectGuid)
     {
         if (hue is < 0 or > 360)
