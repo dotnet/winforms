@@ -5,7 +5,7 @@ using System.Drawing;
 
 namespace System.Windows.Forms.Tests;
 
-public class ToolStripTextBoxTests : IDisposable
+public partial class ToolStripTextBoxTests : IDisposable
 {
     private readonly ToolStripTextBox _toolStripTextBox;
 
@@ -709,27 +709,6 @@ public class ToolStripTextBoxTests : IDisposable
     }
 
     [WinFormsFact]
-    public void ToolStripTextBox_CopyPaste_Success()
-    {
-        _toolStripTextBox.Text = "Hello";
-        _toolStripTextBox.SelectAll();
-        _toolStripTextBox.Copy();
-
-        ToolStripTextBox anotherToolStripTextBox = new();
-        anotherToolStripTextBox.Paste();
-        anotherToolStripTextBox.Text.Should().Be("Hello");
-    }
-
-    [WinFormsFact]
-    public void ToolStripTextBox_Cut_Success()
-    {
-        _toolStripTextBox.Text = "Hello";
-        _toolStripTextBox.SelectAll();
-        _toolStripTextBox.Cut();
-        _toolStripTextBox.Text.Should().BeEmpty();
-    }
-
-    [WinFormsFact]
     public void ToolStripTextBox_DeselectAll_Success()
     {
         _toolStripTextBox.Text = "Hello";
@@ -799,15 +778,6 @@ public class ToolStripTextBoxTests : IDisposable
         _toolStripTextBox.GetPositionFromCharIndex(0).Should().Be(new Point(1, 0));
         _toolStripTextBox.GetPositionFromCharIndex(5).Should().Be(new Point(29, 0)); 
         _toolStripTextBox.GetPositionFromCharIndex(10).Should().Be(new Point(57, 0)); 
-    }
-
-    [WinFormsFact]
-    public void ToolStripTextBox_Paste_Success()
-    {
-        string textToPaste = "Hello";
-        Clipboard.SetText(textToPaste);
-        _toolStripTextBox.Paste();
-        _toolStripTextBox.Text.Should().Be(textToPaste);
     }
 
     [WinFormsFact]
