@@ -6,6 +6,8 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Formats.Nrbf;
+using System.Reflection.Metadata;
+using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.Json;
 using System.Windows.Forms.BinaryFormat;
@@ -46,6 +48,68 @@ public class WinFormsBinaryFormattedObjectTests
         binary.TryGetObjectFromJson(out object? result).Should().BeTrue();
         Point deserialized = result.Should().BeOfType<Point>().Which;
         deserialized.Should().BeEquivalentTo(point);
+    }
+
+    [Fact]
+    public void BinaryFormattedObject_JsonDataNonExist_Deserialize_FromStream()
+    {
+        Point point = new() { X = 1, Y = 1 };
+        JsonData<Point> data = new()
+        {
+            JsonBytes = JsonSerializer.SerializeToUtf8Bytes(point)
+        };
+
+        using MemoryStream stream = new();
+        WinFormsBinaryFormatWriter.WriteJsonData(stream, data);
+        stream.Position = 0;
+
+        BinaryFormattedObject binary = new(stream, new BinaryFormattedObject.Options() { Binder = new JsonDataPointBinder() });
+        Point deserialized = binary.Deserialize().Should().BeOfType<Point>().Which;
+        deserialized.Should().BeEquivalentTo(point);
+    }
+
+    [Fact]
+    public void BinaryFormattedObject_JsonDataNonExist_Deserialize_FromStream_Throws()
+    {
+        Size point = new() { Height = 1, Width = 1 };
+        JsonData<Size> data = new()
+        {
+            JsonBytes = JsonSerializer.SerializeToUtf8Bytes(point)
+        };
+
+        using MemoryStream stream = new();
+        WinFormsBinaryFormatWriter.WriteJsonData(stream, data);
+        stream.Position = 0;
+
+        BinaryFormattedObject binary = new(stream, new BinaryFormattedObject.Options() { Binder = new JsonDataPointBinder() });
+        Action action = () => binary.Deserialize();
+        action.Should().Throw<InvalidOperationException>();
+    }
+
+    [Serializable]
+    private struct ReplicatedJsonData<T> : IObjectReference
+    {
+        public byte[] JsonBytes { get; set; }
+
+        public readonly object GetRealObject(StreamingContext context) =>
+            JsonSerializer.Deserialize(JsonBytes, typeof(T)) ?? throw new InvalidOperationException();
+    }
+
+    private class JsonDataPointBinder : SerializationBinder
+    {
+        public override Type? BindToType(string assemblyName, string typeName)
+        {
+            if (assemblyName == "System.Private.Windows.VirtualJson" && TypeName.TryParse(typeName, out TypeName? name))
+            {
+                TypeName genericTypeName = name.GetGenericArguments()[0];
+                if (genericTypeName.AssemblyQualifiedName == typeof(Point).AssemblyQualifiedName)
+                {
+                    return typeof(ReplicatedJsonData<Point>);
+                }
+            }
+
+            throw new InvalidOperationException();
+        }
     }
 
     [Fact]

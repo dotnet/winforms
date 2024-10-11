@@ -519,10 +519,10 @@ public static class Clipboard
     ///  Saves the data onto the clipboard in the specified format using JSON serialization.
     /// </summary>
     /// <exception cref="ArgumentException">
-    ///  If null, empty, or whitespace is passed as the format.
+    ///  null, empty, or whitespace was passed as the format.
     /// </exception>
     /// <exception cref="InvalidOperationException">
-    ///  If <see cref="DataObject"/> is passed in as the data. <see cref="DataObject"/> cannot be JSON serialized meaningfully.
+    ///  <see cref="DataObject"/> was passed in as the data. <see cref="DataObject"/> cannot be JSON serialized meaningfully.
     ///  If <see cref="DataObject"/> needs to be placed on the clipboard, use <see cref="DataObject.SetDataAsJson{T}(string, T)"/>
     ///  to JSON serialize the data to be held in the <see cref="DataObject"/> then set the <see cref="DataObject"/>
     ///  onto the clipboard via <see cref="SetDataObject(object)"/>.
