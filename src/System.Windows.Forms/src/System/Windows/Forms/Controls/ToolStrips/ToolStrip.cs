@@ -3893,21 +3893,21 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
                 int verticalBeamStart = start + 2;
 
                 // Draw vertical lines.
-                g.DrawLines(SystemPens.ControlText, (ReadOnlySpan<Point>)
+                g.DrawLines(SystemPens.ControlText,
                     [
                         new(verticalBeamStart, _lastInsertionMarkRect.Y), new(verticalBeamStart, _lastInsertionMarkRect.Bottom - 1),
                         new(verticalBeamStart + 1, _lastInsertionMarkRect.Y), new(verticalBeamStart + 1, _lastInsertionMarkRect.Bottom - 1)
                     ]);
 
                 // Draw top horizontal lines.
-                g.DrawLines(SystemPens.ControlText, (ReadOnlySpan<Point>)
+                g.DrawLines(SystemPens.ControlText,
                     [
                         new(start, _lastInsertionMarkRect.Bottom - 1), new(start + widthOfBeam - 1, _lastInsertionMarkRect.Bottom - 1),
                         new(start + 1, _lastInsertionMarkRect.Bottom - 2), new(start + widthOfBeam - 2, _lastInsertionMarkRect.Bottom - 2)
                     ]);
 
                 // Draw bottom horizontal lines.
-                g.DrawLines(SystemPens.ControlText, (ReadOnlySpan<Point>)
+                g.DrawLines(SystemPens.ControlText,
                      [
                          new(start, _lastInsertionMarkRect.Y), new(start + widthOfBeam - 1, _lastInsertionMarkRect.Y),
                          new(start + 1, _lastInsertionMarkRect.Y + 1), new(start + widthOfBeam - 2, _lastInsertionMarkRect.Y + 1)
@@ -3920,21 +3920,21 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
                 int horizontalBeamStart = start + 2;
 
                 // Draw horizontal lines.
-                g.DrawLines(SystemPens.ControlText, (ReadOnlySpan<Point>)
+                g.DrawLines(SystemPens.ControlText,
                     [
                         new(_lastInsertionMarkRect.X, horizontalBeamStart), new(_lastInsertionMarkRect.Right - 1, horizontalBeamStart),
                         new(_lastInsertionMarkRect.X, horizontalBeamStart + 1), new(_lastInsertionMarkRect.Right - 1, horizontalBeamStart + 1)
                     ]);
 
                 // Draw left vertical lines.
-                g.DrawLines(SystemPens.ControlText, (ReadOnlySpan<Point>)
+                g.DrawLines(SystemPens.ControlText,
                     [
                         new(_lastInsertionMarkRect.X, start), new(_lastInsertionMarkRect.X, start + widthOfBeam - 1),
                         new(_lastInsertionMarkRect.X + 1, start + 1), new(_lastInsertionMarkRect.X + 1, start + widthOfBeam - 2)
                     ]);
 
                 // Draw right vertical lines.
-                g.DrawLines(SystemPens.ControlText, (ReadOnlySpan<Point>)
+                g.DrawLines(SystemPens.ControlText,
                      [
                          new(_lastInsertionMarkRect.Right - 1, start), new(_lastInsertionMarkRect.Right - 1, start + widthOfBeam - 1),
                          new(_lastInsertionMarkRect.Right - 2, start + 1), new(_lastInsertionMarkRect.Right - 2, start + widthOfBeam - 2)
