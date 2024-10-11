@@ -6059,11 +6059,6 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Informace o velikosti objektu MonthCalendar nelze načíst.</target>
         <note />
       </trans-unit>
-      <trans-unit id="InvalidTypeForSetDataAsJson">
-        <source>DataObject cannot be JSON serialized meaningfully. Set the data by using {0} instead.</source>
-        <target state="new">DataObject cannot be JSON serialized meaningfully. Set the data by using {0} instead.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="InvalidWndClsName">
         <source>Window class name is not valid.</source>
         <target state="translated">Název třídy okna je neplatný.</target>

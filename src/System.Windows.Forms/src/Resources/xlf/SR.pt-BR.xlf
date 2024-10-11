@@ -6059,11 +6059,6 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <target state="translated">As informações de tamanho de MonthCalendar não podem ser recuperadas.</target>
         <note />
       </trans-unit>
-      <trans-unit id="InvalidTypeForSetDataAsJson">
-        <source>DataObject cannot be JSON serialized meaningfully. Set the data by using {0} instead.</source>
-        <target state="new">DataObject cannot be JSON serialized meaningfully. Set the data by using {0} instead.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="InvalidWndClsName">
         <source>Window class name is not valid.</source>
         <target state="translated">O nome da classe de janela é inválido.</target>

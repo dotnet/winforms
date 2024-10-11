@@ -554,7 +554,8 @@ public static class Clipboard
 
         if (data is DataObject)
         {
-            throw new InvalidOperationException(string.Format(SR.InvalidTypeForSetDataAsJson, nameof(SetDataObject)));
+            // TODO: Localize string
+            throw new InvalidOperationException($"DataObject cannot be JSON serialized meaningfully. Set the data by using {nameof(SetData)} instead");
         }
 
         JsonData<T> jsonData = new()
