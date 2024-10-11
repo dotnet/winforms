@@ -24,7 +24,7 @@
     <MicrosoftNETCoreRuntimeCoreCLRPackageVersion>5.0.0-preview.7.20320.5</MicrosoftNETCoreRuntimeCoreCLRPackageVersion>
     <MicrosoftNETCoreILDAsmPackageVersion>10.0.0-alpha.1.24510.11</MicrosoftNETCoreILDAsmPackageVersion>
     <SystemDiagnosticsPerformanceCounterPackageVersion>10.0.0-alpha.1.24510.11</SystemDiagnosticsPerformanceCounterPackageVersion>
-    <SystemRuntimeCompilerServicesUnsafePackageVersion>6.0.0</SystemRuntimeCompilerServicesUnsafePackageVersion>
+    <SystemRuntimeCompilerServicesUnsafePackageVersion>6.1.0-preview.1.24511.1</SystemRuntimeCompilerServicesUnsafePackageVersion>
     <SystemRuntimeSerializationFormattersPackageVersion>10.0.0-alpha.1.24510.11</SystemRuntimeSerializationFormattersPackageVersion>
     <SystemSecurityCryptographyPkcsPackageVersion>10.0.0-alpha.1.24510.11</SystemSecurityCryptographyPkcsPackageVersion>
     <SystemSecurityCryptographyProtectedDataPackageVersion>10.0.0-alpha.1.24510.11</SystemSecurityCryptographyProtectedDataPackageVersion>
