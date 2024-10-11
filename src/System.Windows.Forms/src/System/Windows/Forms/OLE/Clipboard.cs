@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.Drawing;
 using System.Formats.Nrbf;
 using System.Reflection.Metadata;
+using System.Private.Windows;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.Json;

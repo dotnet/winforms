@@ -4,6 +4,7 @@
 using System.Collections.Specialized;
 using System.Drawing;
 using System.Reflection.Metadata;
+using System.Private.Windows;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.Serialization;
@@ -147,7 +148,7 @@ public unsafe partial class DataObject :
     {
         object? data = ((IDataObject)_innerData).GetData(format, autoConvert);
 #pragma warning disable SYSLIB0050 // Type or member is obsolete
-        return data is JsonData jsonData && jsonData is IObjectReference reference ? reference.GetRealObject(default) : data;
+        return data is IJsonData jsonData && jsonData is IObjectReference reference ? reference.GetRealObject(default) : data;
 #pragma warning restore SYSLIB0050
     }
 
