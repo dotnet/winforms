@@ -208,7 +208,8 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' <param name="image">The <see cref="Image"/> to be saved.</param>
         Public Sub SetImage(image As Image)
             Clipboard.SetImage(image)
-        End Sub?
+        End Sub
+
         ''' <inheritdoc cref="Clipboard.SetDataAsJson(Of T)(String, T)"/>
         Public Sub SetDataAsJson(Of T)(format As String, data As T)
             Clipboard.SetDataAsJson(format, data)

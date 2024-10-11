@@ -495,14 +495,6 @@ public class ClipboardTests
         action.Should().Throw<ArgumentNullException>().WithParameterName("image");
     }
 
-    [WinFormsFact]
-    public void Clipboard_SetText_InvokeString_GetReturnsExpected()
-    {
-        Clipboard.SetText("text");
-        Assert.Equal("text", Clipboard.GetText());
-        Assert.True(Clipboard.ContainsText());
-    }
-
     [WinFormsTheory]
     [EnumData<TextDataFormat>]
     public void Clipboard_SetText_InvokeStringTextDataFormat_GetReturnsExpected(TextDataFormat format)
