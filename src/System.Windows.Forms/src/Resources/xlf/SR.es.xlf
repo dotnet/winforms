@@ -6059,6 +6059,11 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <target state="translated">No se puede recuperar la información sobre el tamaño del elemento MonthCalendar.</target>
         <note />
       </trans-unit>
+      <trans-unit id="InvalidTypeForSetDataAsJson">
+        <source>DataObject cannot be JSON serialized meaningfully. Set the data by using {0} instead.</source>
+        <target state="new">DataObject cannot be JSON serialized meaningfully. Set the data by using {0} instead.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="InvalidWndClsName">
         <source>Window class name is not valid.</source>
         <target state="translated">Nombre de clase de ventana no válido.</target>

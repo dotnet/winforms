@@ -6059,6 +6059,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">无法检索 MonthCalendar 的大小信息。</target>
         <note />
       </trans-unit>
+      <trans-unit id="InvalidTypeForSetDataAsJson">
+        <source>DataObject cannot be JSON serialized meaningfully. Set the data by using {0} instead.</source>
+        <target state="new">DataObject cannot be JSON serialized meaningfully. Set the data by using {0} instead.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="InvalidWndClsName">
         <source>Window class name is not valid.</source>
         <target state="translated">窗口类名无效。</target>

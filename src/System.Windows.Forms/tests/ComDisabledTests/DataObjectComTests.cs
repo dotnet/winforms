@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Drawing;
 using System.Runtime.InteropServices.ComTypes;
 using Com = Windows.Win32.System.Com;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
@@ -10,6 +11,26 @@ namespace System.Windows.Forms.Tests;
 public unsafe partial class DataObjectTests
 {
     private delegate IDataObject CreateWinFormsDataObjectForOutgoingDropData(Com.IDataObject* dataObject);
+
+    [WinFormsFact]
+    public void DataObject_WithJson_MockRoundTrip()
+    {
+        dynamic controlAccessor = typeof(Control).TestAccessor().Dynamic;
+        var dropTargetAccessor = typeof(DropTarget).TestAccessor();
+
+        Point point = new() { X = 1, Y = 1 };
+        DataObject data = new();
+        data.SetDataAsJson("point", point);
+
+        DataObject inData = controlAccessor.CreateRuntimeDataObjectForDrag(data);
+        inData.Should().BeSameAs(data);
+
+        using var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
+        IDataObject outData = dropTargetAccessor.CreateDelegate<CreateWinFormsDataObjectForOutgoingDropData>()(inDataPtr);
+        outData.Should().BeSameAs(data);
+        outData.GetDataPresent("point").Should().BeTrue();
+        outData.GetData("point").Should().BeOfType<Point>().Which.Should().BeEquivalentTo(point);
+    }
 
     [WinFormsFact]
     public void DataObject_CustomIDataObject_MockRoundTrip()

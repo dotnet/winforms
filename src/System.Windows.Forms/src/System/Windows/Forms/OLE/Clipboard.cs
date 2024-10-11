@@ -7,6 +7,7 @@ using System.Formats.Nrbf;
 using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Text.Json;
 using Windows.Win32.System.Com;
 using Com = Windows.Win32.System.Com;
 
@@ -511,6 +512,53 @@ public static class Clipboard
 
         // Note: We delegate argument checking to IDataObject.SetData, if it wants to do so.
         SetDataObject(new DataObject(format, data), copy: true);
+    }
+
+    /// <summary>
+    ///  Saves the data onto the clipboard in the specified format using JSON serialization.
+    /// </summary>
+    /// <exception cref="ArgumentException">
+    ///  If null, empty, or whitespace is passed as the format.
+    /// </exception>
+    /// <exception cref="InvalidOperationException">
+    ///  If <see cref="DataObject"/> is passed in as the data. <see cref="DataObject"/> cannot be JSON serialized meaningfully.
+    ///  If <see cref="DataObject"/> needs to be placed on the clipboard, use <see cref="DataObject.SetDataAsJson{T}(string, T)"/>
+    ///  to JSON serialize the data to be held in the <see cref="DataObject"/> then set the <see cref="DataObject"/>
+    ///  onto the clipboard via <see cref="SetDataObject(object)"/>.
+    /// </exception>
+    /// <remarks>
+    ///  <para>
+    ///   The default behavior of <see cref="JsonSerializer"/> is used to serialize the data.
+    ///  </para>
+    ///  <para>
+    ///   See
+    ///   <see href="https://learn.microsoft.com/dotnet/standard/serialization/system-text-json/how-to#serialization-behavior"/>
+    ///   and <see href="https://learn.microsoft.com/dotnet/standard/serialization/system-text-json/reflection-vs-source-generation#metadata-collection"/>
+    ///   for more details on default <see cref="JsonSerializer"/> behavior.
+    ///  </para>
+    ///  <para>
+    ///   If custom behavior is needed, manually JSON serialize the data and then use <see cref="SetData"/>
+    ///   to save the data onto the clipboard.
+    ///  </para>
+    /// </remarks>
+    public static void SetDataAsJson<T>(string format, T data)
+    {
+        if (string.IsNullOrWhiteSpace(format.OrThrowIfNull()))
+        {
+            throw new ArgumentException(SR.DataObjectWhitespaceEmptyFormatNotAllowed, nameof(format));
+        }
+
+        if (data is DataObject)
+        {
+            throw new InvalidOperationException(string.Format(SR.InvalidTypeForSetDataAsJson, nameof(SetDataObject)));
+        }
+
+        JsonData<T> jsonData = new()
+        {
+            JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data)
+        };
+
+        SetDataObject(new DataObject(format, jsonData), copy: true);
     }
 
     /// <summary>

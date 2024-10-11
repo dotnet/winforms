@@ -6059,6 +6059,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">Les informations de taille de MonthCalendar ne peuvent pas être extraites.</target>
         <note />
       </trans-unit>
+      <trans-unit id="InvalidTypeForSetDataAsJson">
+        <source>DataObject cannot be JSON serialized meaningfully. Set the data by using {0} instead.</source>
+        <target state="new">DataObject cannot be JSON serialized meaningfully. Set the data by using {0} instead.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="InvalidWndClsName">
         <source>Window class name is not valid.</source>
         <target state="translated">Nom de classe de fenêtre non valide.</target>

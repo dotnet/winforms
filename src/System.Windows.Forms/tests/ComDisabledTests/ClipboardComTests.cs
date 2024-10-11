@@ -19,4 +19,33 @@ public class ClipboardComTests
         Clipboard.GetText().Should().Be("text");
         Clipboard.ContainsText().Should().BeTrue();
     }
+
+    [WinFormsFact]
+    public void Clipboard_SetDataAsJson_ReturnsExpected()
+    {
+        Point point = new() { X = 1, Y = 1 };
+
+        Clipboard.SetDataAsJson("point", point);
+        IDataObject? dataObject = Clipboard.GetDataObject();
+        dataObject.Should().NotBeNull();
+        dataObject!.GetDataPresent("point").Should().BeTrue();
+        Point deserialized = dataObject.GetData("point").Should().BeOfType<Point>().Which;
+        deserialized.Should().BeEquivalentTo(point);
+    }
+
+    [WinFormsTheory]
+    [BoolData]
+    public void Clipboard_SetDataObject_WithJson_ReturnsExpected(bool copy)
+    {
+        Point point = new() { X = 1, Y = 1 };
+
+        DataObject dataObject = new();
+        dataObject.SetDataAsJson("point", point);
+
+        Clipboard.SetDataObject(dataObject, copy);
+        IDataObject? returnedDataObject = Clipboard.GetDataObject();
+        returnedDataObject.Should().NotBeNull();
+        Point deserialized = returnedDataObject!.GetData("point").Should().BeOfType<Point>().Which;
+        deserialized.Should().BeEquivalentTo(point);
+    }
 }

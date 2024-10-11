@@ -9,12 +9,61 @@ using System.Formats.Nrbf;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms.BinaryFormat;
 using System.Windows.Forms.Nrbf;
+using System.Text.Json;
 
 namespace System.Private.Windows.Core.BinaryFormat.Tests;
 
 public class WinFormsBinaryFormattedObjectTests
 {
     private static readonly Attribute[] s_visible = [DesignerSerializationVisibilityAttribute.Visible];
+
+    [Fact]
+    public void BinaryFormattedObject_JsonData_FromBinaryFormatter()
+    {
+        Point point = new() { X = 1, Y = 1 };
+
+        JsonData<Point> json = new()
+        {
+            JsonBytes = JsonSerializer.SerializeToUtf8Bytes(point),
+        };
+
+        BinaryFormattedObject format = json.SerializeAndParse();
+        ClassWithMembersAndTypes root = format.RootRecord.Should().BeOfType<ClassWithMembersAndTypes>().Subject;
+        root.Name.Should().Be(typeof(JsonData<Point>).FullName);
+        root[$"<{nameof(json.JsonBytes)}>k__BackingField"].Should().BeOfType<MemberReference>();
+        format.TryGetObjectFromJson(out object? result).Should().BeTrue();
+        result.Should().BeOfType<Point>();
+        result.Should().BeEquivalentTo(point);
+    }
+
+    [Fact]
+    public void BinaryFormattedObject_NonJsonData_RemainsSerialized()
+    {
+        Point point = new() { X = 1, Y = 1 };
+        BinaryFormattedObject format = point.SerializeAndParse();
+        format.TryGetObjectFromJson(out _).Should().BeFalse();
+    }
+
+    [Fact]
+    public void BinaryFormattedObject_JsonData_RoundTrip()
+    {
+        Point point = new() { X = 1, Y = 1 };
+
+        JsonData<Point> json = new()
+        {
+            JsonBytes = JsonSerializer.SerializeToUtf8Bytes(point),
+        };
+
+        using MemoryStream stream = new();
+        WinFormsBinaryFormatWriter.WriteJsonData(stream, json);
+
+        stream.Position = 0;
+        BinaryFormattedObject binary = new(stream);
+
+        binary.TryGetObjectFromJson(out object? result).Should().BeTrue();
+        Point deserialized = result.Should().BeOfType<Point>().Which;
+        deserialized.Should().BeEquivalentTo(point);
+    }
 
     [Fact]
     public void BinaryFormattedObject_Bitmap_FromBinaryFormatter()

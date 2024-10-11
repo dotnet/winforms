@@ -4788,10 +4788,8 @@ public unsafe partial class Control :
     ///  that implements System.Runtime.Serialization.ISerializable. data can also be any Object that
     ///  implements System.Windows.Forms.IDataObject.
     /// </summary>
-    public DragDropEffects DoDragDrop(object data, DragDropEffects allowedEffects)
-    {
-        return DoDragDrop(data, allowedEffects, dragImage: null, cursorOffset: default, useDefaultDragImage: false);
-    }
+    public DragDropEffects DoDragDrop(object data, DragDropEffects allowedEffects) =>
+        DoDragDrop(data, allowedEffects, dragImage: null, cursorOffset: default, useDefaultDragImage: false);
 
     /// <summary>
     ///  Begins a drag operation. The <paramref name="allowedEffects"/> determine which drag operations can occur.
