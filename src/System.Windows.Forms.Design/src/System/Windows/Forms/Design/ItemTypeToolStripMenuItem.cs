@@ -50,13 +50,13 @@ internal class ItemTypeToolStripMenuItem : ToolStripMenuItem
         }
     }
 
-    public ToolboxItem TbxItem { get; set; } = s_invalidToolboxItem;
+    public ToolboxItem ToolboxItem { get; set; } = s_invalidToolboxItem;
 
     protected override void Dispose(bool disposing)
     {
         if (disposing)
         {
-            TbxItem = null!;
+            ToolboxItem = null!;
         }
 
         base.Dispose(disposing);
