@@ -69,6 +69,27 @@ public class WinFormsBinaryFormattedObjectTests
     }
 
     [Fact]
+    public void BinaryFormattedObject_JsonDataNonExist_Deserialize_FromStream_WithBinaryFormatter()
+    {
+        Point point = new() { X = 1, Y = 1 };
+        JsonData<Point> data = new()
+        {
+            JsonBytes = JsonSerializer.SerializeToUtf8Bytes(point)
+        };
+
+        using MemoryStream stream = new();
+        WinFormsBinaryFormatWriter.WriteJsonData(stream, data);
+        stream.Position = 0;
+
+        using BinaryFormatterScope scope = new(enable: true);
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
+        BinaryFormatter binaryFormatter = new() { Binder = new JsonDataPointBinder() };
+#pragma warning restore SYSLIB0011
+        Point deserialized = binaryFormatter.Deserialize(stream).Should().BeOfType<Point>().Which;
+        deserialized.Should().BeEquivalentTo(point);
+    }
+
+    [Fact]
     public void BinaryFormattedObject_JsonDataNonExist_Deserialize_FromStream_Throws()
     {
         Size point = new() { Height = 1, Width = 1 };
