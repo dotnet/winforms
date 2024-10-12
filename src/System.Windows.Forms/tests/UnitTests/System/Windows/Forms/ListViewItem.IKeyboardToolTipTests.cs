@@ -680,8 +680,10 @@ public class ListViewItem_IKeyboardToolTipTests
         Assert.Equal(expected, ((IKeyboardToolTip)listViewItem).HasRtlModeEnabled());
     }
 
+    [ActiveIssue("https://github.com/dotnet/winforms/issues/12319")]
     [WinFormsTheory]
-    [InlineData(true, true, true, true)]
+    // Comment the data out due to ActiveIssue "https://github.com/dotnet/winforms/issues/12319".
+    // [InlineData(true, true, true, true)]
     [InlineData(true, true, false, false)]
     [InlineData(true, false, true, true)]
     [InlineData(true, false, false, false)]
