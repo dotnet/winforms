@@ -140,9 +140,9 @@ internal partial class ImageListDesigner
 
         public IEnumerator GetEnumerator() => _items.GetEnumerator();
 
-        public int IndexOf(Image? value) => value is Image image ? _items.IndexOf(image) : -1;
+        public int IndexOf(ImageListImage? value) => value is ImageListImage imageListImage ? _items.IndexOf(imageListImage) : -1;
 
-        int IList.IndexOf(object? value) => value is Image image ? IndexOf(image) : -1;
+        int IList.IndexOf(object? value) => value is ImageListImage image ? IndexOf(image) : -1;
 
         void IList.Insert(int index, object? value) => throw new NotSupportedException();
 
@@ -161,7 +161,7 @@ internal partial class ImageListDesigner
             PopulateHandle();
         }
 
-        public void Remove(Image value)
+        public void Remove(ImageListImage value)
         {
             AssertInvariant();
             _items.Remove(value);
@@ -170,7 +170,7 @@ internal partial class ImageListDesigner
 
         void IList.Remove(object? value)
         {
-            if (value is Image image)
+            if (value is ImageListImage image)
             {
                 Remove(image);
             }
