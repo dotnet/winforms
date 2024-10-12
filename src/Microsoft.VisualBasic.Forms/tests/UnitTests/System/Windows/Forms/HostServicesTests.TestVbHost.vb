@@ -8,6 +8,8 @@ Imports Xunit
 
 Namespace Microsoft.VisualBasic.Forms.Tests
     Partial Public Class HostServicesTests
+        Private Shared ReadOnly s_control As New Control()
+        Private Shared ReadOnly s_title As String = GetUniqueText()
 
         Private NotInheritable Class TestVbHost
             Implements IVbHost
