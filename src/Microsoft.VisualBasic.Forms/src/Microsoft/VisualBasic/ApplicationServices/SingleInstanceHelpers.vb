@@ -13,23 +13,25 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Private Const NamedPipeOptions As PipeOptions = PipeOptions.Asynchronous Or PipeOptions.CurrentUserOnly
 
         Private Async Function ReadArgsAsync(
-                pipeServer As NamedPipeServerStream,
-                cancellationToken As CancellationToken) As Task(Of String())
+            pipeServer As NamedPipeServerStream,
+            cancellationToken As CancellationToken) As Task(Of String())
+
             Const bufferLength As Integer = 1024
-            Dim buffer As Byte() = New Byte(bufferLength - 1) {}
+
             Using stream As New MemoryStream
                 While True
+                    Dim buffer As Byte() = New Byte(bufferLength - 1) {}
                     Dim bytesRead As Integer = Await pipeServer.ReadAsync(
                         buffer:=buffer.AsMemory(start:=0, length:=bufferLength),
                         cancellationToken) _
-                        .ConfigureAwait(continueOnCapturedContext:=False)
+                            .ConfigureAwait(continueOnCapturedContext:=False)
                     If bytesRead = 0 Then
                         Exit While
                     End If
                     Await stream.WriteAsync(
                         buffer:=buffer.AsMemory(start:=0, length:=bytesRead),
                         cancellationToken) _
-                        .ConfigureAwait(continueOnCapturedContext:=False)
+                            .ConfigureAwait(continueOnCapturedContext:=False)
                 End While
                 stream.Seek(0, SeekOrigin.Begin)
                 Dim serializer As New DataContractSerializer(GetType(String()))
@@ -54,7 +56,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             End Using
             Await pipeClient.WriteAsync(
                 buffer:=content.AsMemory(start:=0, length:=content.Length), cancellationToken) _
-                .ConfigureAwait(continueOnCapturedContext:=False)
+                    .ConfigureAwait(continueOnCapturedContext:=False)
         End Function
 
         Friend Async Function SendSecondInstanceArgsAsync(
