@@ -38,24 +38,31 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim pipeName As String = GetUniqueText()
             Dim pipeServer As NamedPipeServerStream = Nothing
             TryCreatePipeServer(pipeName, pipeServer).Should.BeTrue()
-            Dim pipeServer1 As NamedPipeServerStream = Nothing
-            TryCreatePipeServer(pipeName, pipeServer1).Should.BeFalse()
             Using pipeServer
-                pipeServer1.Should.BeNull()
-            End Using
+                Dim pipeServer1 As NamedPipeServerStream = Nothing
+                TryCreatePipeServer(pipeName, pipeServer1).Should.BeFalse()
+                Using pipeServer
+                    pipeServer1.Should.BeNull()
+                End Using
         End Sub
 
         <WinFormsFact>
         Public Async Function WaitForClientConnectionsAsyncTests() As Task
             Dim pipeName As String = GetUniqueText()
             Dim pipeServer As NamedPipeServerStream = Nothing
+
             If TryCreatePipeServer(pipeName, pipeServer) Then
 
                 Using pipeServer
                     Dim tokenSource As New CancellationTokenSource()
+                    Dim commandLine As String() = {"Hello"}
                     Dim clientConnection As Task = WaitForClientConnectionsAsync(
                         pipeServer,
-                        callback:=AddressOf OnStartupNextInstanceMarshallingAdaptor,
+                        callback:=Sub(args As String())
+                                      If args.Length = 1 Then
+                                          _resultArgs = commandLine
+                                      End If
+                                  End Sub,
                         cancellationToken:=tokenSource.Token)
 
                     Dim commandLine As String() = {"Hello"}
@@ -63,7 +70,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         pipeName,
                         args:=commandLine,
                         cancellationToken:=tokenSource.Token) _
-                        .ConfigureAwait(continueOnCapturedContext:=False)
+                            .ConfigureAwait(continueOnCapturedContext:=False)
 
                     awaitable.GetAwaiter().GetResult()
                     Dim CancelToken As New CancellationToken
