@@ -22,7 +22,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         '''  Testing only that <see cref=" MyServices.ClipboardProxy"/> contains <see cref="TextDataFormat.Text"/>.
         ''' </summary>
         <WinFormsFact>
-        Public Sub ClipboardProxy_ContainsText()
+        Public Sub ClipboardProxy_ContainsTextOfSpecificFormat()
             Dim clipboardProxy As New MyServices.ClipboardProxy
             Dim text As String = GetUniqueText()
             clipboardProxy.SetText(text)
