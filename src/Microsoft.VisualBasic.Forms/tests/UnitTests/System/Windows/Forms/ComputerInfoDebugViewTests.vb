@@ -1,6 +1,7 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
+Imports System.Globalization
 Imports FluentAssertions
 Imports Microsoft.VisualBasic.Devices
 Imports Microsoft.VisualBasic.Devices.ComputerInfo
@@ -18,13 +19,18 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 info.AvailableVirtualMemory.Should.NotBe(0UI)
                 info.TotalPhysicalMemory.Should.NotBe(0UI)
                 info.TotalVirtualMemory.Should.NotBe(0UI)
+            Else
+                Assert.Throws(Of PlatformNotSupportedException)(Function() info.AvailablePhysicalMemory)
+                Assert.Throws(Of PlatformNotSupportedException)(Function() info.AvailableVirtualMemory)
+                Assert.Throws(Of PlatformNotSupportedException)(Function() info.TotalPhysicalMemory)
+                Assert.Throws(Of PlatformNotSupportedException)(Function() info.TotalVirtualMemory)
             End If
         End Sub
 
         <WinFormsFact>
         Public Sub ComputerInfoDebugView_Properties()
             Dim info As New ComputerInfoDebugView(New ComputerInfo)
-            info.InstalledUICulture.Should.Be(Globalization.CultureInfo.InstalledUICulture)
+            info.InstalledUICulture.Should.Be(CultureInfo.InstalledUICulture)
             info.OSPlatform.Should.Be(Environment.OSVersion.Platform.ToString())
             info.OSVersion.Should.Be(Environment.OSVersion.Version.ToString())
         End Sub
