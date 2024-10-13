@@ -26,7 +26,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim clipboardProxy As New MyServices.ClipboardProxy
             Dim text As String = GetUniqueText()
             clipboardProxy.SetText(text)
-            Clipboard.ContainsText.Should.Be(clipboardProxy.ContainsText(TextDataFormat.Text))
+            Dim expected As Boolean = clipboardProxy.ContainsText(format:=TextDataFormat.Text)
+            Clipboard.ContainsText(format:=TextDataFormat.Text).Should.Be(expected)
         End Sub
 
         <WinFormsFact>
@@ -35,9 +36,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim audioBytes As Byte() = {1, 2, 3}
             clipboardProxy.SetAudio(audioBytes)
             clipboardProxy.ContainsAudio().Should.Be(Clipboard.ContainsAudio)
-            Dim clipboardProxyAudio As MemoryStream = CType(clipboardProxy.GetAudioStream, MemoryStream)
-            Dim clipboardAudio As MemoryStream = CType(Clipboard.GetAudioStream, MemoryStream)
-            clipboardProxyAudio.ToArray.Should.BeEquivalentTo(clipboardAudio.ToArray)
+            Using clipboardProxyAudio As MemoryStream = CType(clipboardProxy.GetAudioStream, MemoryStream)
+                Using clipboardAudio As MemoryStream = CType(Clipboard.GetAudioStream, MemoryStream)
+                    clipboardProxyAudio.ToArray.Should.BeEquivalentTo(clipboardAudio.ToArray)
+                End Using
+            End Using
         End Sub
 
         <WinFormsFact>
