@@ -5,14 +5,14 @@ Option Strict Off
 
 Imports System.Windows.Forms
 Imports FluentAssertions
-Imports Microsoft.VisualBasic.CompilerServices
 Imports Xunit
 
 Namespace Microsoft.VisualBasic.Forms.Tests
-    Partial Public Class HostServicesTests
+
+    Partial Public Class InteractionTests
 
         <WinFormsFact>
-        Public Sub InputHandlerTests_Success()
+        Public Sub InputBoxHandler_New_Success()
             Dim prompt As String = GetUniqueText()
             Dim title As String = GetUniqueText()
             Dim defaultResponse As String = GetUniqueText()
@@ -29,11 +29,5 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             inputHandler.Result.Should.BeNull()
         End Sub
 
-        <WinFormsFact>
-        Public Sub VbHostTests_Success()
-            Dim vbHost As IVbHost = New TestVbHost
-            CType(vbHost.GetParentWindow, Control).Should.Be(s_control)
-            vbHost.GetWindowTitle.Should.Be(s_title)
-        End Sub
     End Class
 End Namespace
