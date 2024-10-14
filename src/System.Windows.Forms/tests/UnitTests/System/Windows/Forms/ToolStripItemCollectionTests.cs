@@ -125,16 +125,14 @@ public class ToolStripItemCollectionTests
         Assert.Equal("c", contextMenuStrip.Items[2].Text);
     }
 
-    private ToolStripItem[] CreateToolStripItems(params (string Name, string Key)[] items)
-    {
-        return items.Select(item => new ToolStripButton(item.Name) { Name = item.Key }).ToArray();
-    }
+    private ToolStripItem[] CreateToolStripItems(params (string Key, string Name)[] items) =>
+        items.Select(item => new ToolStripButton(item.Name) { Name = item.Key }).ToArray();
 
     [WinFormsFact]
     public void ToolStripItemCollection_Constructor_ToolStripOwnerAndItems_Success()
     {
         using ToolStrip toolStrip = new();
-        ToolStripItem[] items = CreateToolStripItems(("Item1", "key1"), ("Item2", "key2"));
+        ToolStripItem[] items = CreateToolStripItems(("key1", "Item1"), ("key2", "Item2"));
 
         ToolStripItemCollection collection = new(toolStrip, items);
 
@@ -143,7 +141,7 @@ public class ToolStripItemCollectionTests
         collection[1].Text.Should().Be("Item2");
     }
 
-    private ToolStripItemCollection CreateToolStripItemCollectionWithItems(params (string Name, string Key)[] items)
+    private ToolStripItemCollection CreateToolStripItemCollectionWithItems(params (string Key, string Name)[] items)
     {
         using ToolStrip toolStrip = new();
         ToolStripItem[] toolStripItems = items.Select(item => new ToolStripButton(item.Name) { Name = item.Key }).ToArray();
@@ -154,8 +152,8 @@ public class ToolStripItemCollectionTests
     public void ToolStripItemCollection_Indexer_ValidKey_ReturnsExpected()
     {
         ToolStripItemCollection collection = CreateToolStripItemCollectionWithItems(
-            ("Item1", "key1"),
-            ("Item2", "key2")
+            ("key1", "Item1"),
+            ("key2", "Item2")
         );
 
         collection["key1"].Should().Be(collection[0]);
@@ -166,8 +164,8 @@ public class ToolStripItemCollectionTests
     public void ToolStripItemCollection_Indexer_InvalidOrNullOrEmptyKey_ReturnsNull()
     {
         ToolStripItemCollection collection = CreateToolStripItemCollectionWithItems(
-            ("Item1", "key1"),
-            ("Item2", "key2")
+            ("key1", "Item1"),
+            ("key2", "Item2")
         );
 
         collection["invalidKey"].Should().BeNull();
@@ -179,8 +177,8 @@ public class ToolStripItemCollectionTests
     public void ToolStripItemCollection_ContainsKey_ValidKey_ReturnsTrue()
     {
         ToolStripItemCollection collection = CreateToolStripItemCollectionWithItems(
-            ("Item1", "key1"),
-            ("Item2", "key2")
+            ("key1", "Item1"),
+            ("key2", "Item2")
         );
 
         collection.ContainsKey("key1").Should().BeTrue();
@@ -191,8 +189,8 @@ public class ToolStripItemCollectionTests
     public void ToolStripItemCollection_ContainsKey_InvalidOrNullOrEmptyKey_ReturnsFalse()
     {
         ToolStripItemCollection collection = CreateToolStripItemCollectionWithItems(
-            ("Item1", "key1"),
-            ("Item2", "key2")
+            ("key1", "Item1"),
+            ("key2", "Item2")
         );
 
         collection.ContainsKey("invalidKey").Should().BeFalse();
@@ -207,9 +205,9 @@ public class ToolStripItemCollectionTests
     public void ToolStripItemCollection_IndexOfKey_ValidKey_ReturnsExpected(string key, int expectedIndex)
     {
         ToolStripItemCollection collection = CreateToolStripItemCollectionWithItems(
-            ("Item1", "key1"),
-            ("Item2", "key2"),
-            ("Item3", "key3")
+            ("key1", "Item1"),
+            ("key2", "Item2"),
+            ("key3", "Item3")
         );
 
         collection.IndexOfKey(key).Should().Be(expectedIndex);
@@ -222,9 +220,9 @@ public class ToolStripItemCollectionTests
     public void ToolStripItemCollection_IndexOfKey_InvalidOrEmptyKey_ReturnsMinusOne(string key, int expectedIndex)
     {
         ToolStripItemCollection collection = CreateToolStripItemCollectionWithItems(
-            ("Item1", "key1"),
-            ("Item2", "key2"),
-            ("Item3", "key3")
+            ("key1", "Item1"),
+            ("key2", "Item2"),
+            ("key3", "Item3")
         );
 
         collection.IndexOfKey(key).Should().Be(expectedIndex);
@@ -234,7 +232,7 @@ public class ToolStripItemCollectionTests
     public void ToolStripItemCollection_IsValidIndex_ValidIndex_ReturnsTrue()
     {
         using ToolStrip toolStrip = new();
-        ToolStripItem[] items = CreateToolStripItems(("Item1", "key1"), ("Item2", "key2"));
+        ToolStripItem[] items = CreateToolStripItems(("key1", "Item1"), ("key2", "Item2"));
         ToolStripItemCollection collection = new(toolStrip, items);
 
         dynamic accessor = collection.TestAccessor().Dynamic;
@@ -247,7 +245,7 @@ public class ToolStripItemCollectionTests
     public void ToolStripItemCollection_IsValidIndex_InvalidIndex_ReturnsFalse()
     {
         using ToolStrip toolStrip = new();
-        ToolStripItem[] items = CreateToolStripItems(("Item1", "key1"), ("Item2", "key2"));
+        ToolStripItem[] items = CreateToolStripItems(("key1", "Item1"), ("key2", "Item2"));
         ToolStripItemCollection collection = new(toolStrip, items);
 
         dynamic accessor = collection.TestAccessor().Dynamic;
@@ -260,7 +258,7 @@ public class ToolStripItemCollectionTests
     public void ToolStripItemCollection_RemoveByKey_ValidKey_RemovesItem()
     {
         using ToolStrip toolStrip = new();
-        ToolStripItem[] items = CreateToolStripItems(("Item1", "key1"), ("Item2", "key2"));
+        ToolStripItem[] items = CreateToolStripItems(("key1", "Item1"), ("key2", "Item2"));
         ToolStripItemCollection collection = new(toolStrip, items);
 
         collection.ContainsKey("key1").Should().BeTrue();
@@ -276,8 +274,8 @@ public class ToolStripItemCollectionTests
     public void ToolStripItemCollection_RemoveByKey_InvalidKey_DoesNothing()
     {
         ToolStripItemCollection collection = CreateToolStripItemCollectionWithItems(
-            ("Item1", "key1"),
-            ("Item2", "key2")
+            ("key1", "Item1"),
+            ("key2", "Item2")
         );
 
         collection.RemoveByKey("invalidKey");
@@ -291,7 +289,7 @@ public class ToolStripItemCollectionTests
     {
         using ToolStrip toolStrip1 = new();
         using ToolStrip toolStrip2 = new();
-        ToolStripItem[] items = CreateToolStripItems(("Item1", "key1"), ("Item2", "key2"));
+        ToolStripItem[] items = CreateToolStripItems(("key1", "Item1"), ("key2", "Item2"));
         toolStrip1.Items.AddRange(items);
 
         ToolStripItemCollection collection = new(toolStrip2, Array.Empty<ToolStripItem>());
@@ -306,10 +304,10 @@ public class ToolStripItemCollectionTests
     public void ToolStripItemCollection_MoveItem_Index_ValidItem_MovesItem()
     {
         using ToolStrip toolStrip = new();
-        ToolStripItem[] items = CreateToolStripItems(("Item1", "key1"), ("Item2", "key2"), ("Item3", "key3"));
+        ToolStripItem[] items = CreateToolStripItems(("key1", "Item1"), ("key2", "Item2"), ("key3", "Item3"));
         ToolStripItemCollection collection = new(toolStrip, items);
 
-        collection.MoveItem(1, items[2]);
+        collection.MoveItem(index: 1, items[2]);
 
         collection.IndexOf(items[2]).Should().Be(1);
         collection.IndexOf(items[0]).Should().Be(0);
@@ -317,15 +315,15 @@ public class ToolStripItemCollectionTests
     }
 
     [WinFormsFact]
-    public void ToolStripItemCollection_MoveItem_Index_ItemWithParent_MovesItem()
+    public void ToolStripItemCollection_MoveItem_MovesItemFromToolStripToCollection()
     {
         using ToolStrip toolStrip1 = new();
         using ToolStrip toolStrip2 = new();
-        ToolStripItem[] items = CreateToolStripItems(("Item1", "key1"), ("Item2", "key2"));
+        ToolStripItem[] items = CreateToolStripItems(("key1", "Item1"), ("key2", "Item2"));
         toolStrip1.Items.AddRange(items);
 
         ToolStripItemCollection collection = new(toolStrip2, Array.Empty<ToolStripItem>());
-        collection.MoveItem(0, items[0]);
+        collection.MoveItem(index: 0, items[0]);
 
         toolStrip1.Items.Contains(items[0]).Should().BeFalse();
         toolStrip1.Items.Contains(items[1]).Should().BeTrue();
