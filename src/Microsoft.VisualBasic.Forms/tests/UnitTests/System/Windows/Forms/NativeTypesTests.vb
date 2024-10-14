@@ -18,7 +18,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsFact>
-        Public Sub STARTUPINFO_New_Test_Success()
+        Public Sub STARTUPINFO_New_Success()
             Using startupInfo As New STARTUPINFO
                 With startupInfo
                     .dwY.Should.Be(0)
