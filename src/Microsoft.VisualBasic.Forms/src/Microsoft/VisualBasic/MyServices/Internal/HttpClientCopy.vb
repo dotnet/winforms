@@ -93,8 +93,8 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
             Debug.Assert(_httpClient IsNot Nothing, "No HttpClient")
             Debug.Assert(addressUri IsNot Nothing, "No address")
             Dim directoryPath As String = Path.GetDirectoryName(Path.GetFullPath(normalizedFilePath))
-            Debug.Assert((Not String.IsNullOrWhiteSpace(normalizedFilePath)) AndAlso
-                         Directory.Exists(directoryPath), "Invalid path")
+            Debug.Assert((Not String.IsNullOrWhiteSpace(normalizedFilePath)) _
+                         AndAlso Directory.Exists(directoryPath), "Invalid path")
 
             _cancelTokenSourceGet = New CancellationTokenSource()
             _cancelTokenSourceRead = New CancellationTokenSource()

@@ -200,9 +200,11 @@ Namespace Microsoft.VisualBasic.Devices
             Try
                 Await copier.DownloadFileWorkerAsync(
                     addressUri,
-                    normalizedFilePath).ConfigureAwait(continueOnCapturedContext:=False)
+                    normalizedFilePath) _
+                        .ConfigureAwait(continueOnCapturedContext:=False)
             Catch ex As Exception
-                If onUserCancel = UICancelOption.ThrowException OrElse Not dialog.UserCanceledTheDialog Then
+                If onUserCancel = UICancelOption.ThrowException _
+                   OrElse Not dialog.UserCanceledTheDialog Then
                     Throw
                 End If
             End Try
