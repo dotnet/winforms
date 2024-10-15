@@ -18,52 +18,60 @@ Namespace Microsoft.VisualBasic.MyServices
         Friend Sub New()
         End Sub
 
+        ''' <inheritdoc cref="Registry.ClassesRoot"/>
         Public ReadOnly Property ClassesRoot() As RegistryKey
             Get
                 Return Registry.ClassesRoot
             End Get
         End Property
 
+        ''' <inheritdoc cref="Registry.CurrentConfig"/>
         Public ReadOnly Property CurrentConfig() As RegistryKey
             Get
                 Return Registry.CurrentConfig
             End Get
         End Property
 
+        ''' <inheritdoc cref="Registry.CurrentUser"/>
         Public ReadOnly Property CurrentUser() As RegistryKey
             Get
                 Return Registry.CurrentUser
             End Get
         End Property
 
+        ''' <inheritdoc cref="Registry.LocalMachine"/>
         Public ReadOnly Property LocalMachine() As RegistryKey
             Get
                 Return Registry.LocalMachine
             End Get
         End Property
 
+        ''' <inheritdoc cref="Registry.PerformanceData"/>
         Public ReadOnly Property PerformanceData() As RegistryKey
             Get
                 Return Registry.PerformanceData
             End Get
         End Property
 
+        ''' <inheritdoc cref="Registry.Users"/>
         Public ReadOnly Property Users() As RegistryKey
             Get
                 Return Registry.Users
             End Get
         End Property
 
-        Public Function GetValue(keyName As String, valueName As String,
-            defaultValue As Object) As Object
+        ''' <inheritdoc cref="Registry.GetValue(String, String, Object)"/>
+        Public Function GetValue(keyName As String, valueName As String, defaultValue As Object) As Object
 
             Return Registry.GetValue(keyName, valueName, defaultValue)
         End Function
 
+        ''' <inheritdoc cref="Registry.SetValue(String, String, Object)"/>
         Public Sub SetValue(keyName As String, valueName As String, value As Object)
             Registry.SetValue(keyName, valueName, value)
         End Sub
 
+        ''' <inheritdoc cref="Registry.SetValue(String, String, Object, RegistryValueKind)"/>
         Public Sub SetValue(
             keyName As String,
             valueName As String,
