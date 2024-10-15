@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Formats.Nrbf;
+using System.Reflection.Metadata;
 using System.Text.Json;
 
 namespace System.Private.Windows;
@@ -12,9 +14,9 @@ namespace System.Private.Windows;
 /// <remarks>
 ///  <para>
 ///   There may be instances where this type is not available in different versions, e.g. .NET 8.
-///   If this type needs to be deserialized from stream in these instances, a workaround would be to replicate this type and implement
-///   <see cref="Runtime.Serialization.IObjectReference"/>. Then, use the deserializer to deserialize the JSON data with a binder that will
-///   reroute JsonData's custom assembly name to the replicated type.
+///   If this type needs to be deserialized from stream in these instances, a workaround would be to create an assembly with the name <see cref="IJsonData.CustomAssemblyName"/>
+///   and replicate this type. Then, use the <see cref="System.Formats.Nrbf.NrbfDecoder"/> to decode the stream and recreate the serialized type. Alternatively, but not recommended,
+///   BinaryFormatter can also be used to deserialize the stream if this type is not available.
 ///  </para>
 /// </remarks>
 /// <example>
@@ -24,10 +26,12 @@ namespace System.Private.Windows;
 ///  {
 ///     public byte[] JsonBytes { get; set; }
 ///
+///     // For deserializing with BinaryFormatter only. This interface is not needed if using NrbfDecoder to help deserialize.
 ///     public readonly object GetRealObject(StreamingContext context) =>
 ///         JsonSerializer.Deserialize(JsonBytes, typeof(T)) ?? throw new InvalidOperationException();
 ///  }
 ///
+///  // For deserializing with BinaryFormatter only.
 ///  class ReplicatedJsonDataBinder : SerializationBinder
 ///  {
 ///     public override Type? BindToType(string assemblyName, string typeName)
@@ -45,9 +49,25 @@ namespace System.Private.Windows;
 ///
 ///  void DeserializeJsonData(Stream stream)
 ///  {
-///      BinaryFormattedObject binary = new(stream, new BinaryFormattedObject.Options { Binder = new ReplicatedJsonDataBinder() });
-///      // This should return the original data that was JSON serialized.
-///      object? deserialized = binary.Deserialize();
+///     SerializationRecord record = NrbfDecoder.Decode(stream);
+///     if (record.TypeName.AssemblyName.FullName != "System.Private.Windows.VirtualJson")
+///     {
+///         // The data was not serialized as JSON.
+///         return false;
+///     }
+///
+///     if (record is not ClassRecord types
+///         || !types.HasMember("<JsonBytes>k__BackingField")
+///         || types.GetRawValue("<JsonBytes>k__BackingField") is not SZArrayRecord<byte> byteData
+///         || !TypeName.TryParse(types.TypeName.FullName, out TypeName? result)
+///         || Type.GetType(result.GetGenericArguments()[0].AssemblyQualifiedName) is not Type genericType)
+///     {
+///         // This is supposed to be JsonData, but somehow the data is corrupt.
+///         throw new InvalidOperationException();
+///     }
+///
+///     // This should return the original data that was JSON serialized.
+///     JsonSerializer.Deserialize(byteData.GetArray(), genericType);
 ///
 ///      // OR
 ///      BinaryFormatter binaryFormatter = new() { Binder = new ReplicatedJsonDataBinder() };

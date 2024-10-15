@@ -3,6 +3,9 @@
 
 using System.Drawing;
 using System.Formats.Nrbf;
+using System.Private.Windows;
+using System.Reflection.Metadata;
+using System.Text.Json;
 
 namespace System.Windows.Forms.Nrbf;
 
@@ -54,6 +57,35 @@ internal static class WinFormsSerializationRecordExtensions
     }
 
     /// <summary>
+    ///  Tries to deserialize this object if it was serialized as JSON.
+    /// </summary>
+    public static bool TryGetObjectFromJson(this SerializationRecord record, out object? @object)
+    {
+        @object = null;
+
+        if (record.TypeName.AssemblyName!.FullName != IJsonData.CustomAssemblyName)
+        {
+            // The data was not serialized as JSON.
+            return false;
+        }
+
+        if (record is not ClassRecord types
+            || !types.HasMember("<JsonBytes>k__BackingField")
+            || types.GetRawValue("<JsonBytes>k__BackingField") is not SZArrayRecord<byte> byteData
+            || !TypeName.TryParse(types.TypeName.FullName, out TypeName? result)
+            || Type.GetType(result.GetGenericArguments()[0].AssemblyQualifiedName) is not Type genericType)
+        {
+            // This is supposed to be JsonData, but somehow the binary formatted data is corrupt.
+            throw new InvalidOperationException();
+        }
+
+        // TODO: We should get the type from the Func<TypeName, Type> that will be passed down instead of using Type.GetType()
+        @object = JsonSerializer.Deserialize(byteData.GetArray(), genericType);
+
+        return true;
+    }
+
+    /// <summary>
     ///  Try to get a supported object. This supports common types used in WinForms that do not have type converters.
     /// </summary>
     public static bool TryGetResXObject(this SerializationRecord record, [NotNullWhen(true)] out object? value) =>
@@ -63,5 +95,6 @@ internal static class WinFormsSerializationRecordExtensions
 
     public static bool TryGetCommonObject(this SerializationRecord record, [NotNullWhen(true)] out object? value) =>
         record.TryGetResXObject(out value)
-        || record.TryGetDrawingPrimitivesObject(out value);
+        || record.TryGetDrawingPrimitivesObject(out value)
+        || record.TryGetObjectFromJson(out value);
 }

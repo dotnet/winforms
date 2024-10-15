@@ -12,7 +12,6 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.Json;
 using System.Windows.Forms.BinaryFormat;
 using System.Windows.Forms.Nrbf;
-using System.Text.Json;
 
 namespace System.Private.Windows.Core.BinaryFormat.Tests;
 
@@ -24,7 +23,7 @@ public class WinFormsBinaryFormattedObjectTests
     public void BinaryFormattedObject_NonJsonData_RemainsSerialized()
     {
         Point point = new() { X = 1, Y = 1 };
-        BinaryFormattedObject format = point.SerializeAndParse();
+        SerializationRecord format = point.SerializeAndDecode();
         format.TryGetObjectFromJson(out _).Should().BeFalse();
     }
 
@@ -42,34 +41,16 @@ public class WinFormsBinaryFormattedObjectTests
         WinFormsBinaryFormatWriter.WriteJsonData(stream, json);
 
         stream.Position = 0;
-        BinaryFormattedObject binary = new(stream);
-        binary[2].Should().BeOfType<BinaryLibrary>().Which
-            .LibraryName.Should().Be("System.Private.Windows.VirtualJson");
+        SerializationRecord binary = NrbfDecoder.Decode(stream);
+        binary.TypeName.AssemblyName!.FullName.Should().Be(IJsonData.CustomAssemblyName);
         binary.TryGetObjectFromJson(out object? result).Should().BeTrue();
         Point deserialized = result.Should().BeOfType<Point>().Which;
         deserialized.Should().BeEquivalentTo(point);
     }
 
-    [Fact]
-    public void BinaryFormattedObject_JsonDataNonExist_Deserialize_FromStream()
-    {
-        Point point = new() { X = 1, Y = 1 };
-        JsonData<Point> data = new()
-        {
-            JsonBytes = JsonSerializer.SerializeToUtf8Bytes(point)
-        };
-
-        using MemoryStream stream = new();
-        WinFormsBinaryFormatWriter.WriteJsonData(stream, data);
-        stream.Position = 0;
-
-        BinaryFormattedObject binary = new(stream, new BinaryFormattedObject.Options() { Binder = new JsonDataPointBinder() });
-        Point deserialized = binary.Deserialize().Should().BeOfType<Point>().Which;
-        deserialized.Should().BeEquivalentTo(point);
-    }
 
     [Fact]
-    public void BinaryFormattedObject_JsonDataNonExist_Deserialize_FromStream_WithBinaryFormatter()
+    public void BinaryFormattedObject_Deserialize_FromStream_WithBinaryFormatter()
     {
         Point point = new() { X = 1, Y = 1 };
         JsonData<Point> data = new()
@@ -87,24 +68,6 @@ public class WinFormsBinaryFormattedObjectTests
 #pragma warning restore SYSLIB0011
         Point deserialized = binaryFormatter.Deserialize(stream).Should().BeOfType<Point>().Which;
         deserialized.Should().BeEquivalentTo(point);
-    }
-
-    [Fact]
-    public void BinaryFormattedObject_JsonDataNonExist_Deserialize_FromStream_Throws()
-    {
-        Size point = new() { Height = 1, Width = 1 };
-        JsonData<Size> data = new()
-        {
-            JsonBytes = JsonSerializer.SerializeToUtf8Bytes(point)
-        };
-
-        using MemoryStream stream = new();
-        WinFormsBinaryFormatWriter.WriteJsonData(stream, data);
-        stream.Position = 0;
-
-        BinaryFormattedObject binary = new(stream, new BinaryFormattedObject.Options() { Binder = new JsonDataPointBinder() });
-        Action action = () => binary.Deserialize();
-        action.Should().Throw<InvalidOperationException>();
     }
 
     [Serializable]
