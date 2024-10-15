@@ -8,7 +8,7 @@ Imports Xunit
 
 Namespace Microsoft.VisualBasic.Forms.Tests
 
-    Partial Public Class NativeTypesTests
+    Public Class SecurityAttributesTests
 
         <WinFormsFact>
         Public Sub SECURITY_ATTRIBUTES_New_Success()

@@ -7,7 +7,7 @@ Imports Xunit
 
 Namespace Microsoft.VisualBasic.Forms.Tests
 
-    Partial Public Class NativeTypesTests
+    Public Class ProcessInformationTests
 
         <WinFormsFact>
         Public Sub PROCESS_INFORMATION_New_Success()

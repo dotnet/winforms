@@ -8,7 +8,7 @@ Imports Xunit
 
 Namespace Microsoft.VisualBasic.Forms.Tests
 
-    Partial Public Class NativeTypesTests
+    Public Class StartupInfoTests
 
         <WinFormsFact>
         Public Sub STARTUPINFO_New_Success()
