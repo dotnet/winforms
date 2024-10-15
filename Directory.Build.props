@@ -24,6 +24,9 @@
                                      or $(MSBuildProjectName.EndsWith('.Analyzers.VisualBasic'))
                                      or $(MSBuildProjectName.EndsWith('.Analyzers.CSharp')))"
                                   >true</IsAnalyzerProject>
+
+    <!-- Only upgrade NuGetAudit warnings to errors for official builds. -->
+    <WarningsNotAsErrors Condition="'$(OfficialBuild)' != 'true'">$(WarningsNotAsErrors);NU5104</WarningsNotAsErrors>
   </PropertyGroup>
 
   <!--
