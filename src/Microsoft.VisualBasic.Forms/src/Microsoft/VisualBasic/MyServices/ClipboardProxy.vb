@@ -22,222 +22,114 @@ Namespace Microsoft.VisualBasic.MyServices
         Friend Sub New()
         End Sub
 
-        ''' <summary>
-        '''  Removes all data from the <see cref="Clipboard"/>.
-        ''' </summary>
+        ''' <inheritdoc cref="Clipboard.Clear()"/>
         Public Sub Clear()
             Clipboard.Clear()
         End Sub
 
-        ''' <summary>
-        '''  Indicates whether there is data on the <see cref="Clipboard"/>
-        '''  in the <see cref="DataFormats.WaveAudio"/> format./>.
-        ''' </summary>
-        ''' <returns>
-        '''  <see langword="True"/> if an audio <see cref="Stream"/> is available,
-        '''  otherwise <see langword="False"/>.
-        ''' </returns>
+        ''' <inheritdoc cref="Clipboard.ContainsAudio()"/>
         Public Function ContainsAudio() As Boolean
             Return Clipboard.ContainsAudio()
         End Function
 
-        ''' <summary>
-        '''  Indicates whether or not there is data on the <see cref="Clipboard"/> in the passed in format
-        '''  or can be converted to that format.
-        ''' </summary>
-        ''' <param name="format"></param>
-        ''' <returns>
-        '''  <see langword="True"/> if there's data in the passed in format,
-        '''  otherwise <see langword="False"/>.
-        ''' </returns>
+        ''' <inheritdoc cref="Clipboard.ContainsData(String)"/>
         Public Function ContainsData(format As String) As Boolean
             Return Clipboard.ContainsData(format)
         End Function
 
-        ''' <summary>
-        '''  Indicates whether there is data on the <see cref="Clipboard"/>
-        '''  that is in the <see cref="DataFormats.FileDrop"/> format or can be converted to that format.
-        ''' </summary>
-        ''' <returns>
-        '''  <see langword="True"/> if a file drop list is available,
-        '''  otherwise <see langword="False"/>.
-        ''' </returns>
+        ''' <inheritdoc cref="Clipboard.ContainsFileDropList()"/>
         Public Function ContainsFileDropList() As Boolean
             Return Clipboard.ContainsFileDropList()
         End Function
 
-        ''' <summary>
-        '''  Indicates whether there Is data on the <see cref="Clipboard"/>
-        '''  that Is in the <see cref="DataFormats.Bitmap"/> format or can be converted to that format.
-        ''' </summary>
-        ''' <returns>
-        '''  <see langword="True"/> if an image is available,
-        '''  otherwise <see langword="False"/>.
-        ''' </returns>
+        ''' <inheritdoc cref="Clipboard.ContainsImage()"/>
         Public Function ContainsImage() As Boolean
             Return Clipboard.ContainsImage()
         End Function
 
-        ''' <summary>
-        '''  Indicates whether there is text data on the <see cref="Clipboard"/>
-        '''  in <see cref="TextDataFormat.UnicodeText"/> format.
-        ''' </summary>
-        ''' <returns>
-        '''  <see langword="True"/> if text is available,
-        '''  otherwise <see langword="False"/>.
-        ''' </returns>
+        ''' <inheritdoc cref="Clipboard.ContainsText()"/>
         Public Function ContainsText() As Boolean
             Return Clipboard.ContainsText
         End Function
 
-        ''' <summary>
-        '''  Indicates whether there is text data on the <see cref="Clipboard"/> in the format
-        '''  indicated by the specified <see cref="TextDataFormat"/> value.
-        ''' </summary>
-        ''' <param name="format">The type of text being checked for.</param>
-        ''' <returns>
-        '''  <see langword="True"/> if text is available,
-        '''  otherwise <see langword="False"/>.
-        ''' </returns>
+        ''' <inheritdoc cref="Clipboard.ContainsText()"/>
         Public Function ContainsText(format As TextDataFormat) As Boolean
             Return Clipboard.ContainsText(format)
         End Function
 
-        ''' <summary>
-        '''   Retrieves an audio stream from the <see cref="Clipboard"/>.
-        ''' </summary>
-        ''' <returns>The audio stream as a <see cref="Stream"/>.</returns>
+        ''' <inheritdoc cref="Clipboard.GetAudioStream()"/>
         Public Function GetAudioStream() As Stream
             Return Clipboard.GetAudioStream()
         End Function
 
-        ''' <summary>
-        '''  Gets data from the <see cref="Clipboard"/> that's been saved in the passed in format.
-        ''' </summary>
-        ''' <param name="format">The type of data being sought.</param>
-        ''' <returns>The data.</returns>
+        ''' <inheritdoc cref="Clipboard.GetData(String)"/>
         Public Function GetData(format As String) As Object
             Return Clipboard.GetData(format)
         End Function
 
-        ''' <summary>
-        '''  Retrieves the data that is currently on the system <see cref="Clipboard"/>.
-        ''' </summary>
-        ''' <returns>The <see cref="IDataObject"/>.</returns>
-        ''' <remarks>
-        '''  This gives the ability to save an object in multiple formats.
-        ''' </remarks>
+        ''' <inheritdoc cref="Clipboard.GetDataObject()"/>
         <EditorBrowsable(EditorBrowsableState.Advanced)>
         Public Function GetDataObject() As IDataObject
             Return Clipboard.GetDataObject()
         End Function
 
-        ''' <summary>
-        '''  Retrieves a collection of file names from the <see cref="Clipboard"/>.
-        ''' </summary>
-        ''' <returns>The list of file paths as a <see cref="StringCollection"/>.</returns>
+        ''' <inheritdoc cref="Clipboard.GetFileDropList()"/>
         Public Function GetFileDropList() As StringCollection
             Return Clipboard.GetFileDropList()
         End Function
 
-        ''' <summary>
-        '''  Retrieves an <see cref="Image"/> from the <see cref="Clipboard"/>.
-        ''' </summary>
-        ''' <returns><see cref="Image"/></returns>
+        ''' <inheritdoc cref="Clipboard.GetImage()"/>
         Public Function GetImage() As Image
             Return Clipboard.GetImage()
         End Function
 
-        ''' <summary>
-        '''  Retrieves text data from the <see cref="Clipboard"/>
-        '''  in the <see cref="TextDataFormat.UnicodeText"/> format.
-        ''' </summary>
-        ''' <returns>The text as a <see cref="String"/>.</returns>
+        ''' <inheritdoc cref="Clipboard.GetText()"/>
         Public Function GetText() As String
             Return Clipboard.GetText()
         End Function
 
-        ''' <summary>
-        '''  Retrieves text data from the <see cref="Clipboard"/>
-        '''  in the format indicated by the specified <see cref="TextDataFormat"/> value.
-        ''' </summary>
-        ''' <param name="format">The type of text to get.</param>
-        ''' <returns>The text as a <see cref="String"/>.</returns>
+        ''' <inheritdoc cref="Clipboard.GetText(TextDataFormat)"/>
         Public Function GetText(format As TextDataFormat) As String
             Return Clipboard.GetText(format)
         End Function
 
-        ''' <summary>
-        '''  Clears the <see cref="Clipboard"/> and
-        '''  then adds data in the <see cref="DataFormats.WaveAudio"/> format.
-        ''' </summary>
-        ''' <param name="audioBytes">The byte array to be saved.</param>
+        ''' <inheritdoc cref="Clipboard.SetAudio(Byte())"/>
         Public Sub SetAudio(audioBytes As Byte())
             Clipboard.SetAudio(audioBytes)
         End Sub
 
-        ''' <summary>
-        '''  Clears the <see cref="Clipboard"/> and
-        '''  then adds data in the <see cref="DataFormats.WaveAudio"/> format.
-        ''' </summary>
-        ''' <param name="audioStream">The <see cref="Stream"/> to be saved.</param>
+        ''' <inheritdoc cref="Clipboard.SetAudio(Stream)"/>
         Public Sub SetAudio(audioStream As Stream)
             Clipboard.SetAudio(audioStream)
         End Sub
 
-        ''' <summary>
-        '''  Clears the <see cref="Clipboard"/> and
-        '''  then adds data in the specified format.
-        ''' </summary>
-        ''' <param name="format">The format in which to save the data.</param>
-        ''' <param name="data">The data to be saved.</param>
+        ''' <inheritdoc cref="Clipboard.SetData(String, Object)"/>
         Public Sub SetData(format As String, data As Object)
             Clipboard.SetData(format, data)
         End Sub
 
-        ''' <summary>
-        '''  Places nonpersistent <see cref="DataObject"/> on the <see cref="Clipboard"/>.
-        ''' </summary>
-        ''' <param name="data">The <see cref="DataObject"/> to be saved.</param>
-        ''' <remarks>This gives the ability to save an object in multiple formats.</remarks>
+        ''' <inheritdoc cref="SetDataObject(DataObject)"/>
         <EditorBrowsable(EditorBrowsableState.Advanced)>
         Public Sub SetDataObject(data As DataObject)
             Clipboard.SetDataObject(data)
         End Sub
 
-        ''' <summary>
-        '''  Clears the <see cref="Clipboard"/>> and then adds a collection of file names
-        '''  in the <see cref="DataFormats.FileDrop"/> format.
-        ''' </summary>
-        ''' <param name="filePaths">
-        '''  The file drop list as a <see cref="StringCollection"/>.
-        ''' </param>
+        ''' <inheritdoc cref="SetFileDropList(StringCollection)"/>
         Public Sub SetFileDropList(filePaths As StringCollection)
             Clipboard.SetFileDropList(filePaths)
         End Sub
 
-        ''' <summary>
-        '''  Saves the passed in <see cref="Image"/> to the clipboard.
-        ''' </summary>
-        ''' <param name="image">The <see cref="Image"/> to be saved.</param>
+        ''' <inheritdoc cref="SetImage(Image)"/>
         Public Sub SetImage(image As Image)
             Clipboard.SetImage(image)
         End Sub
 
-        ''' <summary>
-        '''  Clears the Clipboard and then adds text data
-        '''  in the <see cref="TextDataFormat.UnicodeText"/> format.
-        ''' </summary>
-        ''' <param name="text">The <see cref="String"/> to save.</param>
+        ''' <inheritdoc cref="SetText(String)"/>
         Public Sub SetText(text As String)
             Clipboard.SetText(text)
         End Sub
 
-        ''' <summary>
-        '''  Saves the passed in <see cref="String" />  to the clipboard in the passed in <paramref name="format"/>.
-        ''' </summary>
-        ''' <param name="text">The <see cref="String" />  to save.</param>
-        ''' <param name="format">The format in which to save the <see cref="String" /> .</param>
+        ''' <inheritdoc cref="SetText(String, TextDataFormat)"/>
         Public Sub SetText(text As String, format As TextDataFormat)
             Clipboard.SetText(text, format)
         End Sub
