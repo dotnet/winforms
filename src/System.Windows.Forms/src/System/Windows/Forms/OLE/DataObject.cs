@@ -138,6 +138,20 @@ public unsafe partial class DataObject :
         SetData(format, new JsonData<T>() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data) });
     }
 
+    /// <inheritdoc cref="SetDataAsJson{T}(string, T)"/>
+    public void SetDataAsJson<T>(T data) => SetData(typeof(T), new JsonData<T>() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data) });
+
+    public void SetDataAsJson<T>(string format, bool autoConvert, T data)
+    {
+        if (data is DataObject)
+        {
+            // TODO: Localize string.
+            throw new InvalidOperationException($"DataObject cannot be JSON serialized meaningfully. Set the data by using {nameof(SetData)} instead");
+        }
+
+        SetData(format, autoConvert, new JsonData<T>() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data) });
+    }
+
     #region IDataObject
     [Obsolete(
         Obsoletions.DataObjectGetDataMessage,

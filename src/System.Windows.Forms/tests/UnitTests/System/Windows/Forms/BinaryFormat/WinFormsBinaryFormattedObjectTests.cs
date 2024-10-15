@@ -48,7 +48,6 @@ public class WinFormsBinaryFormattedObjectTests
         deserialized.Should().BeEquivalentTo(point);
     }
 
-
     [Fact]
     public void BinaryFormattedObject_Deserialize_FromStream_WithBinaryFormatter()
     {
