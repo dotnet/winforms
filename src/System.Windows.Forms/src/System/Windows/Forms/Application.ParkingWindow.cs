@@ -76,7 +76,7 @@ public sealed partial class Application
             // We only do this if the ThreadContext tells us that we are currently handling a window message.
             if (context is null || !ReferenceEquals(context, ThreadContext.FromCurrent()))
             {
-                PInvoke.PostMessage(HWNDInternal, WM_CHECKDESTROY);
+                PInvokeCore.PostMessage(HWNDInternal, WM_CHECKDESTROY);
             }
             else
             {
@@ -147,7 +147,7 @@ public sealed partial class Application
                 case PInvokeCore.WM_PARENTNOTIFY:
                     if (m.WParamInternal.LOWORD == PInvokeCore.WM_DESTROY)
                     {
-                        PInvoke.PostMessage(this, WM_CHECKDESTROY);
+                        PInvokeCore.PostMessage(this, WM_CHECKDESTROY);
                     }
 
                     break;

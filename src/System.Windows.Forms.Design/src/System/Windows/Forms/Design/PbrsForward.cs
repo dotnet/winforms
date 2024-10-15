@@ -176,7 +176,7 @@ internal partial class PbrsForward : IWindowTarget
                     //
                     // We can't use the wParam here because it may not be the actual window that needs to pick up
                     // the strokes.
-                    PInvoke.PostMessage(_target, (MessageId)WM_PRIVATE_POSTCHAR);
+                    PInvokeCore.PostMessage(_target, (MessageId)WM_PRIVATE_POSTCHAR);
                     _postCharMessage = false;
                 }
 

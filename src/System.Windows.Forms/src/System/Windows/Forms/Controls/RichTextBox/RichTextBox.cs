@@ -2493,7 +2493,7 @@ public partial class RichTextBox : TextBoxBase
         {
             // If you call SendMessage instead of PostMessage, the control
             // will resize itself to the size of the parent's client area. Don't know why...
-            PInvoke.PostMessage(
+            PInvokeCore.PostMessage(
                 this,
                 PInvokeCore.EM_SETOPTIONS,
                 (WPARAM)(int)PInvoke.ECOOP_OR,
@@ -3397,7 +3397,7 @@ public partial class RichTextBox : TextBoxBase
                 {
                     PInvokeCore.SendMessage(this, PInvokeCore.WM_KILLFOCUS);
                     PInvokeCore.SendMessage(this, PInvokeCore.WM_SETFOCUS);
-                    PInvoke.PostMessage(this, PInvokeCore.EM_SETSEL, (WPARAM)(selEnd - 1), (LPARAM)selEnd);
+                    PInvokeCore.PostMessage(this, PInvokeCore.EM_SETSEL, (WPARAM)(selEnd - 1), (LPARAM)selEnd);
                 }
             }
         }

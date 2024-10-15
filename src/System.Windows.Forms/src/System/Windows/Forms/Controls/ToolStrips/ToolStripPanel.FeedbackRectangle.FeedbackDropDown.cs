@@ -49,7 +49,7 @@ public partial class ToolStripPanel
                 try
                 {
                     MSG msg = default;
-                    while (PInvoke.PeekMessage(
+                    while (PInvokeCore.PeekMessage(
                         &msg,
                         HWND.Null,
                         PInvokeCore.WM_PAINT,

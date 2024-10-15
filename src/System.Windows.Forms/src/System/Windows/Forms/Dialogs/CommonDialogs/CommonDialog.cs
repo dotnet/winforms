@@ -73,7 +73,7 @@ public abstract class CommonDialog : Component
         }
         else if (msg == (int)PInvokeCore.WM_SETFOCUS)
         {
-            PInvoke.PostMessage((HWND)hWnd, CDM_SETDEFAULTFOCUS);
+            PInvokeCore.PostMessage((HWND)hWnd, CDM_SETDEFAULTFOCUS);
         }
         else if (msg == CDM_SETDEFAULTFOCUS)
         {

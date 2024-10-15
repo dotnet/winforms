@@ -488,7 +488,7 @@ internal partial class OleDragDropHandler
         // ensure that the drag can proceed without leaving artifacts lying around. We should be calling LockWindowUpdate,
         // but that causes a horrible flashing because GDI+ uses direct draw.
         MSG msg = default;
-        while (PInvoke.PeekMessage(&msg, HWND.Null, PInvokeCore.WM_PAINT, PInvokeCore.WM_PAINT, PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE))
+        while (PInvokeCore.PeekMessage(&msg, HWND.Null, PInvokeCore.WM_PAINT, PInvokeCore.WM_PAINT, PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE))
         {
             PInvoke.TranslateMessage(msg);
             PInvoke.DispatchMessage(&msg);

@@ -1601,7 +1601,7 @@ public partial class TreeView : Control
                 PInvokeCore.SendMessage(this, PInvokeCore.WM_SETREDRAW, (WPARAM)(BOOL)false);
                 if (delayed)
                 {
-                    PInvoke.PostMessage(this, PInvokeCore.WM_SETREDRAW, (WPARAM)(BOOL)true);
+                    PInvokeCore.PostMessage(this, PInvokeCore.WM_SETREDRAW, (WPARAM)(BOOL)true);
                 }
                 else
                 {
@@ -3113,7 +3113,7 @@ public partial class TreeView : Control
             ContextMenuStrip menu = treeNode.ContextMenuStrip;
 
             // Need to send TVM_SELECTITEM to highlight the node while the contextMenuStrip is being shown.
-            PInvoke.PostMessage(this, PInvoke.TVM_SELECTITEM, (WPARAM)PInvoke.TVGN_DROPHILITE, (LPARAM)treeNode.Handle);
+            PInvokeCore.PostMessage(this, PInvoke.TVM_SELECTITEM, (WPARAM)PInvoke.TVGN_DROPHILITE, (LPARAM)treeNode.Handle);
             menu.ShowInternal(this, PointToClient(MousePosition), isKeyboardActivated: false);
             menu.Closing += ContextMenuStripClosing;
         }

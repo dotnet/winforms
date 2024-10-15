@@ -198,7 +198,7 @@ public sealed partial class Application
         {
             // If we have a message in the queue, then don't continue idle processing.
             MSG msg = default;
-            return PInvoke.PeekMessage(&msg, HWND.Null, 0, 0, PEEK_MESSAGE_REMOVE_TYPE.PM_NOREMOVE);
+            return PInvokeCore.PeekMessage(&msg, HWND.Null, 0, 0, PEEK_MESSAGE_REMOVE_TYPE.PM_NOREMOVE);
         }
 
         BOOL IMsoComponentManager.Interface.FPushMessageLoop(
@@ -228,7 +228,7 @@ public sealed partial class Application
                     // Determine the component to route the message to
                     using var component = (_trackingComponent ?? _activeComponent ?? requestingComponent).GetInterface();
 
-                    if (PInvoke.PeekMessage(&msg, HWND.Null, 0, 0, PEEK_MESSAGE_REMOVE_TYPE.PM_NOREMOVE))
+                    if (PInvokeCore.PeekMessage(&msg, HWND.Null, 0, 0, PEEK_MESSAGE_REMOVE_TYPE.PM_NOREMOVE))
                     {
                         if (!component.Value->FContinueMessageLoop(uReason, pvLoopData, &msg))
                         {
@@ -306,7 +306,7 @@ public sealed partial class Application
                             // a bit of a problem, because WaitMessage waits for a NEW message to appear on the
                             // queue. If a message appeared between processing and now WaitMessage would wait for
                             // the next message. We minimize this here by calling PeekMessage.
-                            if (!PInvoke.PeekMessage(&msg, HWND.Null, 0, 0, PEEK_MESSAGE_REMOVE_TYPE.PM_NOREMOVE))
+                            if (!PInvokeCore.PeekMessage(&msg, HWND.Null, 0, 0, PEEK_MESSAGE_REMOVE_TYPE.PM_NOREMOVE))
                             {
                                 PInvoke.WaitMessage();
                             }

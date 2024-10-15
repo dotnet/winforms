@@ -403,7 +403,7 @@ public sealed partial class NotifyIcon : Component
             // it, change it there too.
             if (_window is not null && _window.Handle != 0)
             {
-                PInvoke.PostMessage(_window, PInvokeCore.WM_CLOSE);
+                PInvokeCore.PostMessage(_window, PInvokeCore.WM_CLOSE);
                 _window.ReleaseHandle();
             }
         }

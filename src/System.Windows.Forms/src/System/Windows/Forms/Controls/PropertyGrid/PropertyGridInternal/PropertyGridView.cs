@@ -4912,7 +4912,7 @@ internal sealed partial class PropertyGridView :
         // which usually discards the message by returning 1 to GetMessage(). But this won't occur until after the
         // error dialog gets closed, which is much too late.
         MSG mouseMessage = default;
-        while (PInvoke.PeekMessage(
+        while (PInvokeCore.PeekMessage(
             &mouseMessage,
             HWND.Null,
             PInvokeCore.WM_MOUSEFIRST,
@@ -4987,7 +4987,7 @@ internal sealed partial class PropertyGridView :
         // which usually discards the message by returning 1 to GetMessage(). But this won't occur until after the
         // error dialog gets closed, which is much too late.
         MSG mouseMsg = default;
-        while (PInvoke.PeekMessage(
+        while (PInvokeCore.PeekMessage(
             &mouseMsg,
             HWND.Null,
             PInvokeCore.WM_MOUSEFIRST,
@@ -5331,12 +5331,12 @@ internal sealed partial class PropertyGridView :
             case (int)PInvokeCore.WM_IME_STARTCOMPOSITION:
                 EditTextBox.Focus();
                 EditTextBox.Clear();
-                PInvoke.PostMessage(EditTextBox, PInvokeCore.WM_IME_STARTCOMPOSITION);
+                PInvokeCore.PostMessage(EditTextBox, PInvokeCore.WM_IME_STARTCOMPOSITION);
                 return;
 
             case (int)PInvokeCore.WM_IME_COMPOSITION:
                 EditTextBox.Focus();
-                PInvoke.PostMessage(EditTextBox, PInvokeCore.WM_IME_COMPOSITION, m.WParamInternal, m.LParamInternal);
+                PInvokeCore.PostMessage(EditTextBox, PInvokeCore.WM_IME_COMPOSITION, m.WParamInternal, m.LParamInternal);
                 return;
 
             case (int)PInvokeCore.WM_GETDLGCODE:

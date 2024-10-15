@@ -780,14 +780,14 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
             // use PostMessage instead of SendMessage so that the DefWndProc can appropriately handle
             // the system message... if we use SendMessage the dismissal of our window
             // breaks things like the modal sizing loop.
-            PInvoke.PostMessage(_targetWindowHandle, PInvokeCore.WM_SYSCOMMAND, (WPARAM)(uint)_nativeMenuCommandID);
+            PInvokeCore.PostMessage(_targetWindowHandle, PInvokeCore.WM_SYSCOMMAND, (WPARAM)(uint)_nativeMenuCommandID);
         }
         else
         {
             // These are user added items like ".Net Window..."
 
             // be consistent with sending a WM_SYSCOMMAND, use POST not SEND.
-            PInvoke.PostMessage(_targetWindowHandle, PInvokeCore.WM_COMMAND, (WPARAM)(uint)_nativeMenuCommandID);
+            PInvokeCore.PostMessage(_targetWindowHandle, PInvokeCore.WM_COMMAND, (WPARAM)(uint)_nativeMenuCommandID);
         }
 
         Invalidate();

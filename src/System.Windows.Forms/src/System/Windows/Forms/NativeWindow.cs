@@ -136,7 +136,7 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
         if (!handle.IsNull && ownedHandle)
         {
             // If we owned the handle, post a WM_CLOSE to get rid of it.
-            PInvoke.PostMessage(handle, PInvokeCore.WM_CLOSE);
+            PInvokeCore.PostMessage(handle, PInvokeCore.WM_CLOSE);
         }
     }
 
@@ -535,7 +535,7 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
                     UnSubclass();
 
                     // Now post a close and let it do whatever it needs to do on its own.
-                    PInvoke.PostMessage(this, PInvokeCore.WM_CLOSE);
+                    PInvokeCore.PostMessage(this, PInvokeCore.WM_CLOSE);
                 }
 
                 HWND = HWND.Null;
@@ -620,8 +620,8 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
                     if (!handle.IsNull && handle != (HWND)(-1))
                     {
                         PInvokeCore.SetWindowLong(handle, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC, DefaultWindowProc);
-                        PInvoke.SetClassLong(handle, GET_CLASS_LONG_INDEX.GCL_WNDPROC, DefaultWindowProc);
-                        PInvoke.PostMessage(handle, PInvokeCore.WM_CLOSE);
+                        PInvokeCore.SetClassLong(handle, GET_CLASS_LONG_INDEX.GCL_WNDPROC, DefaultWindowProc);
+                        PInvokeCore.PostMessage(handle, PInvokeCore.WM_CLOSE);
 
                         // Fish out the Window object, if it is valid, and NULL the handle pointer. This
                         // way the rest of WinForms won't think the handle is still valid here.

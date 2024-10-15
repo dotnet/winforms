@@ -928,7 +928,7 @@ public partial class TabControl : Control
     private int AddNativeTabPage(TabPage tabPage)
     {
         int index = SendMessage(PInvoke.TCM_INSERTITEMW, TabCount + 1, tabPage);
-        PInvoke.PostMessage(this, _tabBaseReLayoutMessage);
+        PInvokeCore.PostMessage(this, _tabBaseReLayoutMessage);
         return index;
     }
 
@@ -2010,7 +2010,7 @@ public partial class TabControl : Control
 
         // Remove other TabBaseReLayout messages from the message queue
         MSG msg = default;
-        while (PInvoke.PeekMessage(
+        while (PInvokeCore.PeekMessage(
             &msg,
             this,
             (uint)_tabBaseReLayoutMessage,

@@ -238,7 +238,7 @@ public partial class MenuStrip : ToolStrip
 
                     // Send a WM_SYSCOMMAND SC_KEYMENU + Space to activate the system menu.
                     HWND ancestor = PInvoke.GetAncestor(this, GET_ANCESTOR_FLAGS.GA_ROOT);
-                    PInvoke.PostMessage(ancestor, PInvokeCore.WM_SYSCOMMAND, (WPARAM)PInvoke.SC_KEYMENU, (LPARAM)(int)Keys.Space);
+                    PInvokeCore.PostMessage(ancestor, PInvokeCore.WM_SYSCOMMAND, (WPARAM)PInvoke.SC_KEYMENU, (LPARAM)(int)Keys.Space);
                     return true;
                 }
             }

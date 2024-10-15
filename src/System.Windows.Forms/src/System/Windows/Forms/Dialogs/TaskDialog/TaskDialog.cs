@@ -1043,7 +1043,7 @@ public partial class TaskDialog : IWin32Window
 
                         // Post the message, and then set the flag to ignore further
                         // notifications until we receive the posted message.
-                        if (PInvoke.PostMessage(hWnd, ContinueButtonClickHandlingMessage))
+                        if (PInvokeCore.PostMessage(hWnd, ContinueButtonClickHandlingMessage))
                         {
                             _ignoreButtonClickedNotifications = true;
                         }

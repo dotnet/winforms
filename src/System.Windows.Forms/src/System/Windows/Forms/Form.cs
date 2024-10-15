@@ -4667,7 +4667,7 @@ public partial class Form : ContainerControl
 
         // Process MDI accelerator keys.
         bool retValue = false;
-        MSG win32Message = msg;
+        MSG win32Message = msg.ToMSG();
         if (_ctlClient is not null && _ctlClient.Handle != IntPtr.Zero &&
             PInvoke.TranslateMDISysAccel(_ctlClient.HWND, win32Message))
         {

@@ -93,7 +93,7 @@ internal partial class PropertyGridView
             {
                 Focus();
                 SelectAll();
-                PInvoke.PostMessage(this, PInvokeCore.WM_CHAR, (WPARAM)keyChar);
+                PInvokeCore.PostMessage(this, PInvokeCore.WM_CHAR, (WPARAM)keyChar);
             }
         }
 

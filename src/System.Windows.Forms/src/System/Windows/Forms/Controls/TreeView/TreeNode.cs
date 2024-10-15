@@ -1891,7 +1891,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
             if (editing)
             {
-                PInvoke.PostMessage(tv, PInvoke.TVM_EDITLABELW, default, (LPARAM)HTREEITEMInternal);
+                PInvokeCore.PostMessage(tv, PInvoke.TVM_EDITLABELW, default, (LPARAM)HTREEITEMInternal);
             }
 
             PInvoke.InvalidateRect(tv, lpRect: null, bErase: false);

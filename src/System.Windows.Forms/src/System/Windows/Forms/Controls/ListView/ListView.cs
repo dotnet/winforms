@@ -2280,7 +2280,7 @@ public partial class ListView : Control
             case (ListViewAlignment)PInvoke.LVA_SNAPTOGRID:
                 if (IsHandleCreated)
                 {
-                    PInvoke.PostMessage(this, PInvoke.LVM_ARRANGE, (WPARAM)(int)value);
+                    PInvokeCore.PostMessage(this, PInvoke.LVM_ARRANGE, (WPARAM)(int)value);
                 }
 
                 break;

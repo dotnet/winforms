@@ -1698,7 +1698,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             return base.PreProcessMessage(ref msg);
         }
 
-        MSG win32Message = msg;
+        MSG win32Message = msg.ToMSG();
         _axState[s_siteProcessedInputKey] = false;
         try
         {

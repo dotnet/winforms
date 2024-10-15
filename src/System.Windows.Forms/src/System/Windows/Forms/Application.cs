@@ -772,7 +772,7 @@ public sealed partial class Application
     public static bool FilterMessage(ref Message message)
     {
         // Create copy of MSG structure
-        MSG msg = message;
+        MSG msg = message.ToMSG();
         bool processed = ThreadContext.FromCurrent().ProcessFilters(ref msg, out bool modified);
         if (modified)
         {

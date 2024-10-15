@@ -240,7 +240,7 @@ public unsafe partial class WebBrowserBase : Control
         }
 
         // Convert Message to MSG
-        MSG win32Message = msg;
+        MSG win32Message = msg.ToMSG();
         SetAXHostState(WebBrowserHelper.s_siteProcessedInputKey, false);
         try
         {

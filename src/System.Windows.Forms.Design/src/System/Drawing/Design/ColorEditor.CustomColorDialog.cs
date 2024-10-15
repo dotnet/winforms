@@ -128,7 +128,7 @@ public partial class ColorEditor
                         Debug.Assert(!success, "Couldn't find dialog member COLOR_BLUE");
 
                         Color = Color.FromArgb(red, green, blue);
-                        PInvoke.PostMessage(
+                        PInvokeCore.PostMessage(
                             (HWND)hwnd,
                             PInvokeCore.WM_COMMAND,
                             (WPARAM)PARAM.FromLowHigh((int)MESSAGEBOX_RESULT.IDOK, 0),

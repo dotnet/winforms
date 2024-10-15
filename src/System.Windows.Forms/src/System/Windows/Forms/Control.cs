@@ -4654,7 +4654,7 @@ public unsafe partial class Control :
                 if (s_threadCallbackMessage != 0)
                 {
                     MSG msg = default;
-                    BOOL result = PInvoke.PeekMessage(
+                    BOOL result = PInvokeCore.PeekMessage(
                         &msg,
                         this,
                         (uint)s_threadCallbackMessage,
@@ -6462,7 +6462,7 @@ public unsafe partial class Control :
         }
         else
         {
-            PInvoke.PostMessage(this, s_threadCallbackMessage);
+            PInvokeCore.PostMessage(this, s_threadCallbackMessage);
         }
 
         if (synchronous)
@@ -7345,7 +7345,7 @@ public unsafe partial class Control :
             // to the same state as when the message was placed.
             if (GetState(States.ThreadMarshalPending))
             {
-                PInvoke.PostMessage(this, s_threadCallbackMessage);
+                PInvokeCore.PostMessage(this, s_threadCallbackMessage);
                 SetState(States.ThreadMarshalPending, false);
             }
         }
@@ -9080,7 +9080,7 @@ public unsafe partial class Control :
         if (!IsDisposed)
         {
             MSG msg = default;
-            while (PInvoke.PeekMessage(&msg, this, (uint)msgMin, (uint)msgMax, PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE))
+            while (PInvokeCore.PeekMessage(&msg, this, (uint)msgMin, (uint)msgMax, PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE))
             {
                 // No-op.
             }
@@ -11081,7 +11081,7 @@ public unsafe partial class Control :
 
             if (!lastParentHandle.IsNull)
             {
-                PInvoke.PostMessage(lastParentHandle, PInvokeCore.WM_CLOSE);
+                PInvokeCore.PostMessage(lastParentHandle, PInvokeCore.WM_CLOSE);
             }
         }
 

@@ -26,7 +26,7 @@ internal class DialogHostForm : Form
 
     protected virtual void OnDialogIdle(HWND dialogHandle)
     {
-        PInvoke.PostMessage(dialogHandle, PInvokeCore.WM_CLOSE);
+        PInvokeCore.PostMessage(dialogHandle, PInvokeCore.WM_CLOSE);
     }
 
     protected static unsafe void Accept(HWND handle)

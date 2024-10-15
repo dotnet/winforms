@@ -551,8 +551,6 @@ PBM_*
 PBS_*
 PBST_*
 PD_RESULT_*
-PeekMessage
-PostMessage
 PostQuitMessage
 PostQuitMessage
 PostThreadMessage

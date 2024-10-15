@@ -5447,7 +5447,7 @@ public class ListViewTests
         Point subItemLocation = listView.Items[0].SubItems[subItemIndex].Bounds.Location + new Size(1, 1);
         // The mouse down handler will wait for mouse up event, so we need to put it on the message queue
         // before invoking mouse down.
-        PInvoke.PostMessage(listView, PInvokeCore.WM_LBUTTONUP, 0, PARAM.FromPoint(subItemLocation));
+        PInvokeCore.PostMessage(listView, PInvokeCore.WM_LBUTTONUP, 0, PARAM.FromPoint(subItemLocation));
         PInvokeCore.SendMessage(listView, PInvokeCore.WM_LBUTTONDOWN, 1, PARAM.FromPoint(subItemLocation));
 
         // Start editing immediately (if it was queued).

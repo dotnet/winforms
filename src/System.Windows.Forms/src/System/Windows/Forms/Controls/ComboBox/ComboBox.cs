@@ -3735,7 +3735,7 @@ public partial class ComboBox : ListControl
                         && DropDownStyle == ComboBoxStyle.DropDownList
                         && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup))
                     {
-                        PInvoke.PostMessage(this, PInvokeCore.WM_MOUSELEAVE);
+                        PInvokeCore.PostMessage(this, PInvokeCore.WM_MOUSELEAVE);
                     }
                 }
                 finally
