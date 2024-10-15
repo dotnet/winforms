@@ -14,7 +14,7 @@ namespace System.Windows.Forms;
 public abstract class CommonDialog : Component
 {
     private static readonly object s_helpRequestEvent = new();
-    private const int CDM_SETDEFAULTFOCUS = (int)PInvoke.WM_USER + 0x51;
+    private const int CDM_SETDEFAULTFOCUS = (int)PInvokeCore.WM_USER + 0x51;
     private static MessageId s_helpMessage;
 
     private nint _priorWindowProcedure;
@@ -62,7 +62,7 @@ public abstract class CommonDialog : Component
     /// </summary>
     protected virtual IntPtr HookProc(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam)
     {
-        if (msg == (int)PInvoke.WM_INITDIALOG)
+        if (msg == (int)PInvokeCore.WM_INITDIALOG)
         {
             MoveToScreenCenter((HWND)hWnd);
 
@@ -71,7 +71,7 @@ public abstract class CommonDialog : Component
             _defaultControlHwnd = (HWND)wparam;
             PInvoke.SetFocus((HWND)wparam);
         }
-        else if (msg == (int)PInvoke.WM_SETFOCUS)
+        else if (msg == (int)PInvokeCore.WM_SETFOCUS)
         {
             PInvoke.PostMessage((HWND)hWnd, CDM_SETDEFAULTFOCUS);
         }
@@ -197,7 +197,7 @@ public abstract class CommonDialog : Component
                 ownerHwnd = new(nativeWindow, nativeWindow.HWND);
             }
 
-            if (s_helpMessage == PInvoke.WM_NULL)
+            if (s_helpMessage == PInvokeCore.WM_NULL)
             {
                 s_helpMessage = PInvoke.RegisterWindowMessage("commdlg_help");
             }

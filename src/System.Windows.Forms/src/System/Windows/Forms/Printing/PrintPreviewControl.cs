@@ -1070,7 +1070,7 @@ public partial class PrintPreviewControl : Control
     {
         switch (m.MsgInternal)
         {
-            case PInvoke.WM_KEYDOWN:
+            case PInvokeCore.WM_KEYDOWN:
                 WmKeyDown(ref m);
                 break;
             default:

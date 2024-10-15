@@ -117,7 +117,7 @@ public partial class ErrorProvider
             _tipWindow = new NativeWindow();
             _tipWindow.CreateHandle(cparams);
 
-            PInvoke.SendMessage(
+            PInvokeCore.SendMessage(
                 _tipWindow,
                 PInvoke.TTM_SETMAXTIPWIDTH,
                 (WPARAM)0,
@@ -127,7 +127,7 @@ public partial class ErrorProvider
                 HWND.HWND_TOP,
                 0, 0, 0, 0,
                 SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOMOVE | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
-            PInvoke.SendMessage(_tipWindow, PInvoke.TTM_SETDELAYTIME, (WPARAM)PInvoke.TTDT_INITIAL);
+            PInvokeCore.SendMessage(_tipWindow, PInvoke.TTM_SETDELAYTIME, (WPARAM)PInvoke.TTDT_INITIAL);
 
             return true;
         }
@@ -397,7 +397,7 @@ public partial class ErrorProvider
         /// </summary>
         private void WmGetObject(ref Message m)
         {
-            if (m.Msg == (int)PInvoke.WM_GETOBJECT && m.LParamInternal == PInvoke.UiaRootObjectId)
+            if (m.Msg == (int)PInvokeCore.WM_GETOBJECT && m.LParamInternal == PInvoke.UiaRootObjectId)
             {
                 // If the requested object identifier is UiaRootObjectId,
                 // we should return an UI Automation provider using the UiaReturnRawElementProvider function.
@@ -421,10 +421,10 @@ public partial class ErrorProvider
         {
             switch (m.MsgInternal)
             {
-                case PInvoke.WM_GETOBJECT:
+                case PInvokeCore.WM_GETOBJECT:
                     WmGetObject(ref m);
                     break;
-                case PInvoke.WM_NOTIFY:
+                case PInvokeCore.WM_NOTIFY:
                     NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
                     if (nmhdr->code is PInvoke.TTN_SHOW or PInvoke.TTN_POP)
                     {
@@ -432,9 +432,9 @@ public partial class ErrorProvider
                     }
 
                     break;
-                case PInvoke.WM_ERASEBKGND:
+                case PInvokeCore.WM_ERASEBKGND:
                     break;
-                case PInvoke.WM_PAINT:
+                case PInvokeCore.WM_PAINT:
                     OnPaint();
                     break;
                 default:

@@ -56,10 +56,16 @@ E_NOTIMPL
 E_OUTOFMEMORY
 E_POINTER
 E_UNEXPECTED
+EM_*
 EncoderParameters
+EnumChildWindows
+EnumDisplayMonitors
+EnumThreadWindows
+EnumWindows
 fdex*
 FDEX_PROP_FLAGS
 FILETIME
+GetCurrentThreadId
 GdipBitmapLockBits
 GdipBitmapUnlockBits
 GdipCreateFromHWND
@@ -76,6 +82,7 @@ GdipIsInfiniteRegion
 GdiplusStartup
 GdiplusStartupInputEx
 GdipSaveImageToStream
+GET_CLASS_LONG_INDEX
 GetClientRect
 GetClipRgn
 GetDC
@@ -181,6 +188,7 @@ SafeArrayUnlock
 SaveDC
 SelectClipRgn
 SelectObject
+SendMessage
 START_PAGE_GENERAL
 STATFLAG
 STG_E_FILENOTFOUND
@@ -191,8 +199,10 @@ STGTY
 SystemParametersInfo
 SystemParametersInfoForDpi
 TYPE_E_BADMODULEKIND
+UNICODE_STRING_MAX_CHARS
 VIEW_E_DRAW
 WIN32_ERROR
 WINDOW_LONG_PTR_INDEX
 WindowFromDC
+WM_*
 WPARAM

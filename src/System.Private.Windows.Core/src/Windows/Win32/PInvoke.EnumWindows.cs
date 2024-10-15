@@ -6,14 +6,11 @@ using System.Runtime.InteropServices;
 
 namespace Windows.Win32;
 
-internal static partial class PInvoke
+internal static partial class PInvokeCore
 {
-    public delegate BOOL EnumThreadWindowsCallback(HWND hWnd);
+    public delegate BOOL EnumWindowsCallback(HWND hWnd);
 
-    /// <summary>
-    ///  Enumerates all nonchild windows in the current thread.
-    /// </summary>
-    public static unsafe BOOL EnumCurrentThreadWindows(EnumThreadWindowsCallback callback)
+    public static unsafe BOOL EnumWindows(EnumWindowsCallback callback)
     {
         // We pass a function pointer to the native function and supply the callback as
         // reference data, so that the CLR doesn't need to generate a native code block for
@@ -21,7 +18,7 @@ internal static partial class PInvoke
         GCHandle gcHandle = GCHandle.Alloc(callback);
         try
         {
-            return EnumThreadWindows(GetCurrentThreadId(), &HandleEnumThreadWindowsNativeCallback, (LPARAM)(nint)gcHandle);
+            return EnumWindows(&EnumWindowsNativeCallback, (LPARAM)(nint)gcHandle);
         }
         finally
         {
@@ -30,8 +27,8 @@ internal static partial class PInvoke
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
-    private static BOOL HandleEnumThreadWindowsNativeCallback(HWND hWnd, LPARAM lParam)
+    private static BOOL EnumWindowsNativeCallback(HWND hWnd, LPARAM lParam)
     {
-        return ((EnumThreadWindowsCallback)((GCHandle)(nint)lParam).Target!)(hWnd);
+        return ((EnumWindowsCallback)((GCHandle)(nint)lParam).Target!)(hWnd);
     }
 }

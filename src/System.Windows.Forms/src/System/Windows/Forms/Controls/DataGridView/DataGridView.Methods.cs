@@ -22324,7 +22324,7 @@ public partial class DataGridView
 
     protected override bool ProcessKeyEventArgs(ref Message m)
     {
-        if (m.Msg is ((int)PInvoke.WM_SYSKEYDOWN) or ((int)PInvoke.WM_KEYDOWN))
+        if (m.Msg is ((int)PInvokeCore.WM_SYSKEYDOWN) or ((int)PInvokeCore.WM_KEYDOWN))
         {
             if (_ptCurrentCell.X != -1)
             {
@@ -22357,7 +22357,7 @@ public partial class DataGridView
                                 // Forward the key message to the editing control if any
                                 if (EditingControl is not null)
                                 {
-                                    PInvoke.SendMessage(EditingControl, m.MsgInternal, m.WParamInternal, m.LParamInternal);
+                                    PInvokeCore.SendMessage(EditingControl, m.MsgInternal, m.WParamInternal, m.LParamInternal);
                                     _dataGridViewState1[State1_ForwardCharMessage] = true;
                                     return true;
                                 }
@@ -22368,12 +22368,12 @@ public partial class DataGridView
             }
         }
         else if (_dataGridViewState1[State1_ForwardCharMessage]
-            && (m.MsgInternal == PInvoke.WM_SYSCHAR || m.MsgInternal == PInvoke.WM_CHAR || m.MsgInternal == PInvoke.WM_IME_CHAR))
+            && (m.MsgInternal == PInvokeCore.WM_SYSCHAR || m.MsgInternal == PInvokeCore.WM_CHAR || m.MsgInternal == PInvokeCore.WM_IME_CHAR))
         {
             _dataGridViewState1[State1_ForwardCharMessage] = false;
             if (EditingControl is not null)
             {
-                PInvoke.SendMessage(EditingControl, m.MsgInternal, m.WParamInternal, m.LParamInternal);
+                PInvokeCore.SendMessage(EditingControl, m.MsgInternal, m.WParamInternal, m.LParamInternal);
                 return true;
             }
         }
@@ -22391,7 +22391,7 @@ public partial class DataGridView
         // 2. Other special keys do not exist in WM_CHAR message, and character code of WM_CHAR may have overlapped
         // w/ some of the key code. (Like character code of lowercase "q" is 0x71, it's overlapped w/ Keys.F2). This
         // may introduce problem when handling them.
-        if (m.MsgInternal == PInvoke.WM_CHAR)
+        if (m.MsgInternal == PInvokeCore.WM_CHAR)
         {
             dataGridViewWantsInputKey = ke.KeyCode switch
             {
@@ -22422,7 +22422,7 @@ public partial class DataGridView
             };
         }
 
-        if (EditingControl is not null && (m.MsgInternal == PInvoke.WM_KEYDOWN || m.MsgInternal == PInvoke.WM_SYSKEYDOWN))
+        if (EditingControl is not null && (m.MsgInternal == PInvokeCore.WM_KEYDOWN || m.MsgInternal == PInvokeCore.WM_SYSKEYDOWN))
         {
             _dataGridViewState2[State2_CurrentCellWantsInputKey] =
                 ((IDataGridViewEditingControl)EditingControl).EditingControlWantsInputKey(ke.KeyData, dataGridViewWantsInputKey);
@@ -22435,7 +22435,7 @@ public partial class DataGridView
 
         if (dataGridViewWantsInputKey)
         {
-            if (m.MsgInternal == PInvoke.WM_KEYDOWN || m.MsgInternal == PInvoke.WM_SYSKEYDOWN)
+            if (m.MsgInternal == PInvokeCore.WM_KEYDOWN || m.MsgInternal == PInvokeCore.WM_SYSKEYDOWN)
             {
                 if (ProcessDataGridViewKey(ke))
                 {
@@ -30538,7 +30538,7 @@ public partial class DataGridView
             if (!string.IsNullOrEmpty(toolTip))
             {
                 // Setting the max width has the added benefit of enabling multiline tool tips
-                PInvoke.SendMessage(nmhdr->hwndFrom, PInvoke.TTM_SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
+                PInvokeCore.SendMessage(nmhdr->hwndFrom, PInvoke.TTM_SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
 
                 NMTTDISPINFOW* ttt = (NMTTDISPINFOW*)(nint)m.LParamInternal;
                 _toolTipBuffer.SetText(toolTip);
@@ -30561,11 +30561,11 @@ public partial class DataGridView
     {
         switch (m.MsgInternal)
         {
-            case PInvoke.WM_GETDLGCODE:
+            case PInvokeCore.WM_GETDLGCODE:
                 WmGetDlgCode(ref m);
                 return;
-            case PInvoke.WM_LBUTTONDBLCLK:
-            case PInvoke.WM_LBUTTONDOWN:
+            case PInvokeCore.WM_LBUTTONDBLCLK:
+            case PInvokeCore.WM_LBUTTONDOWN:
                 // If the OnEnter procedure is called, it's because of a mouse down event, and not a TAB key.
                 _dataGridViewOper[OperationInMouseDown] = true;
                 try
@@ -30578,7 +30578,7 @@ public partial class DataGridView
                 }
 
                 return;
-            case PInvoke.WM_NOTIFY:
+            case PInvokeCore.WM_NOTIFY:
                 if (WmNotify(ref m))
                 {
                     // we are done - skip default handling
@@ -30587,12 +30587,12 @@ public partial class DataGridView
 
                 break;
 
-            case PInvoke.WM_IME_STARTCOMPOSITION:
-            case PInvoke.WM_IME_COMPOSITION:
+            case PInvokeCore.WM_IME_STARTCOMPOSITION:
+            case PInvokeCore.WM_IME_COMPOSITION:
                 if (EditingControl is not null)
                 {
                     // Make sure that the first character is forwarded to the editing control.
-                    PInvoke.SendMessage(EditingControl, m.MsgInternal, m.WParamInternal, m.LParamInternal);
+                    PInvokeCore.SendMessage(EditingControl, m.MsgInternal, m.WParamInternal, m.LParamInternal);
                 }
 
                 break;

@@ -65,7 +65,7 @@ public partial class TaskDialog : IWin32Window
     ///   that should be unlikely.
     /// </para>
     /// </remarks>
-    private const uint ContinueButtonClickHandlingMessage = PInvoke.WM_APP + 0x3FFF;
+    private const uint ContinueButtonClickHandlingMessage = PInvokeCore.WM_APP + 0x3FFF;
 
     private TaskDialogPage? _boundPage;
 
@@ -244,7 +244,7 @@ public partial class TaskDialog : IWin32Window
     internal bool IsHandleCreated => _handle != IntPtr.Zero;
 
     internal bool InvokeRequired => IsHandleCreated &&
-        PInvoke.GetWindowThreadProcessId(_handle, out _) != PInvoke.GetCurrentThreadId();
+        PInvoke.GetWindowThreadProcessId(_handle, out _) != PInvokeCore.GetCurrentThreadId();
 
     /// <summary>
     ///   Gets or sets the current count of stack frames that are in the
@@ -1668,7 +1668,7 @@ public partial class TaskDialog : IWin32Window
     {
         DenyIfDialogNotUpdatable(checkWaitingForNavigation);
 
-        PInvoke.SendMessage(
+        PInvokeCore.SendMessage(
             _handle,
             (uint)message,
             wParam,

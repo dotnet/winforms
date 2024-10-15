@@ -47,9 +47,9 @@ This is a custom link\v #data#\v0  with hidden text after the link.\par
             dwEffects = CFE_EFFECTS.CFE_LINK,
         };
 
-        PInvoke.SendMessage(
+        PInvokeCore.SendMessage(
             control,
-            PInvoke.EM_SETCHARFORMAT,
+            PInvokeCore.EM_SETCHARFORMAT,
             (WPARAM)PInvoke.SCF_SELECTION,
             ref format);
 

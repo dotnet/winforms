@@ -331,7 +331,7 @@ public unsafe partial class WebBrowserBase : Control
             MSG msg = new()
             {
                 hwnd = HWND.Null,
-                message = PInvoke.WM_SYSKEYDOWN,
+                message = PInvokeCore.WM_SYSKEYDOWN,
                 wParam = (WPARAM)char.ToUpper(charCode, CultureInfo.CurrentCulture),
                 lParam = 0x20180001,
                 time = PInvoke.GetTickCount()
@@ -365,25 +365,25 @@ public unsafe partial class WebBrowserBase : Control
         switch (m.MsgInternal)
         {
             // Things we explicitly ignore and pass to the ActiveX's windproc
-            case PInvoke.WM_ERASEBKGND:
+            case PInvokeCore.WM_ERASEBKGND:
             case MessageId.WM_REFLECT_NOTIFYFORMAT:
-            case PInvoke.WM_SETCURSOR:
-            case PInvoke.WM_SYSCOLORCHANGE:
-            case PInvoke.WM_LBUTTONDBLCLK:
-            case PInvoke.WM_LBUTTONUP:
-            case PInvoke.WM_MBUTTONDBLCLK:
-            case PInvoke.WM_MBUTTONUP:
-            case PInvoke.WM_RBUTTONDBLCLK:
-            case PInvoke.WM_RBUTTONUP:
-            case PInvoke.WM_CONTEXTMENU:
+            case PInvokeCore.WM_SETCURSOR:
+            case PInvokeCore.WM_SYSCOLORCHANGE:
+            case PInvokeCore.WM_LBUTTONDBLCLK:
+            case PInvokeCore.WM_LBUTTONUP:
+            case PInvokeCore.WM_MBUTTONDBLCLK:
+            case PInvokeCore.WM_MBUTTONUP:
+            case PInvokeCore.WM_RBUTTONDBLCLK:
+            case PInvokeCore.WM_RBUTTONUP:
+            case PInvokeCore.WM_CONTEXTMENU:
             //
             // Some of the MSComCtl controls respond to this message to do some
             // custom painting. So, we should just pass this message through.
-            case PInvoke.WM_DRAWITEM:
+            case PInvokeCore.WM_DRAWITEM:
                 DefWndProc(ref m);
                 break;
 
-            case PInvoke.WM_COMMAND:
+            case PInvokeCore.WM_COMMAND:
                 if (!ReflectMessage(m.LParamInternal, ref m))
                 {
                     DefWndProc(ref m);
@@ -391,16 +391,16 @@ public unsafe partial class WebBrowserBase : Control
 
                 break;
 
-            case PInvoke.WM_HELP:
+            case PInvokeCore.WM_HELP:
                 // We want to both fire the event, and let the ActiveX have the message...
                 base.WndProc(ref m);
                 DefWndProc(ref m);
                 break;
 
-            case PInvoke.WM_LBUTTONDOWN:
-            case PInvoke.WM_MBUTTONDOWN:
-            case PInvoke.WM_RBUTTONDOWN:
-            case PInvoke.WM_MOUSEACTIVATE:
+            case PInvokeCore.WM_LBUTTONDOWN:
+            case PInvokeCore.WM_MBUTTONDOWN:
+            case PInvokeCore.WM_RBUTTONDOWN:
+            case PInvokeCore.WM_MOUSEACTIVATE:
                 if (!DesignMode)
                 {
                     if (_containingControl is not null && _containingControl.ActiveControl != this)
@@ -412,7 +412,7 @@ public unsafe partial class WebBrowserBase : Control
                 DefWndProc(ref m);
                 break;
 
-            case PInvoke.WM_DESTROY:
+            case PInvokeCore.WM_DESTROY:
                 //
                 // If we are currently in a state of InPlaceActive or above,
                 // we should first reparent the ActiveX control to our parking

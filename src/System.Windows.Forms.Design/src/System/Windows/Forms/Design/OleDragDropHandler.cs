@@ -488,7 +488,7 @@ internal partial class OleDragDropHandler
         // ensure that the drag can proceed without leaving artifacts lying around. We should be calling LockWindowUpdate,
         // but that causes a horrible flashing because GDI+ uses direct draw.
         MSG msg = default;
-        while (PInvoke.PeekMessage(&msg, HWND.Null, PInvoke.WM_PAINT, PInvoke.WM_PAINT, PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE))
+        while (PInvoke.PeekMessage(&msg, HWND.Null, PInvokeCore.WM_PAINT, PInvokeCore.WM_PAINT, PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE))
         {
             PInvoke.TranslateMessage(msg);
             PInvoke.DispatchMessage(&msg);
@@ -752,7 +752,7 @@ internal partial class OleDragDropHandler
                                 if (updateLocation)
                                 {
                                     oldDesignerControl = Destination.GetDesignerControl();
-                                    PInvoke.SendMessage(oldDesignerControl, PInvoke.WM_SETREDRAW, (WPARAM)(BOOL)false);
+                                    PInvokeCore.SendMessage(oldDesignerControl, PInvokeCore.WM_SETREDRAW, (WPARAM)(BOOL)false);
                                 }
 
                                 Point dropPt = Destination.GetDesignerControl().PointToClient(new Point(de.X, de.Y));
@@ -800,7 +800,7 @@ internal partial class OleDragDropHandler
                                 if (oldDesignerControl is not null)
                                 {
                                     // ((ComponentDataObject)dataObj).ShowControls();
-                                    PInvoke.SendMessage(oldDesignerControl, PInvoke.WM_SETREDRAW, (WPARAM)(BOOL)true);
+                                    PInvokeCore.SendMessage(oldDesignerControl, PInvokeCore.WM_SETREDRAW, (WPARAM)(BOOL)true);
                                     oldDesignerControl.Invalidate(true);
                                 }
 

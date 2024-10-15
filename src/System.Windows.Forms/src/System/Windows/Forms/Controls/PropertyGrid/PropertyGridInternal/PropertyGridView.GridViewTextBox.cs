@@ -93,7 +93,7 @@ internal partial class PropertyGridView
             {
                 Focus();
                 SelectAll();
-                PInvoke.PostMessage(this, PInvoke.WM_CHAR, (WPARAM)keyChar);
+                PInvoke.PostMessage(this, PInvokeCore.WM_CHAR, (WPARAM)keyChar);
             }
         }
 
@@ -315,14 +315,14 @@ internal partial class PropertyGridView
 
             switch (m.MsgInternal)
             {
-                case PInvoke.WM_STYLECHANGED:
+                case PInvokeCore.WM_STYLECHANGED:
                     if ((WINDOW_LONG_PTR_INDEX)(int)m.WParamInternal == WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE)
                     {
                         PropertyGridView.Invalidate();
                     }
 
                     break;
-                case PInvoke.WM_MOUSEMOVE:
+                case PInvokeCore.WM_MOUSEMOVE:
                     if (m.LParamInternal == _lastMove)
                     {
                         return;
@@ -330,17 +330,17 @@ internal partial class PropertyGridView
 
                     _lastMove = (int)m.LParamInternal;
                     break;
-                case PInvoke.WM_DESTROY:
+                case PInvokeCore.WM_DESTROY:
                     _mouseHook.HookMouseDown = false;
                     break;
-                case PInvoke.WM_SHOWWINDOW:
+                case PInvokeCore.WM_SHOWWINDOW:
                     if (m.WParamInternal == 0u)
                     {
                         _mouseHook.HookMouseDown = false;
                     }
 
                     break;
-                case PInvoke.WM_PASTE:
+                case PInvokeCore.WM_PASTE:
                     if (ReadOnly)
                     {
                         return;
@@ -348,7 +348,7 @@ internal partial class PropertyGridView
 
                     break;
 
-                case PInvoke.WM_GETDLGCODE:
+                case PInvokeCore.WM_GETDLGCODE:
 
                     m.ResultInternal = (LRESULT)(m.ResultInternal | (nint)(PInvoke.DLGC_WANTARROWS | PInvoke.DLGC_WANTCHARS));
                     if (PropertyGridView.EditTextBoxNeedsCommit || PropertyGridView.WantsTab(forward: (ModifierKeys & Keys.Shift) == 0))
@@ -358,7 +358,7 @@ internal partial class PropertyGridView
 
                     return;
 
-                case PInvoke.WM_NOTIFY:
+                case PInvokeCore.WM_NOTIFY:
                     if (WmNotify(ref m))
                     {
                         return;

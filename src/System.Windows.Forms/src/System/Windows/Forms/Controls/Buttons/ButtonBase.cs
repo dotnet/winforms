@@ -1127,7 +1127,7 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
                 // not paint the button as "un-depressed".
                 if (!OwnerDraw)
                 {
-                    PInvoke.SendMessage(this, PInvoke.BM_SETSTATE, (WPARAM)(BOOL)true);
+                    PInvokeCore.SendMessage(this, PInvoke.BM_SETSTATE, (WPARAM)(BOOL)true);
                 }
 
                 Invalidate(DownChangeRectangle);
@@ -1155,7 +1155,7 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
             {
                 SetFlag(FlagMousePressed, false);
                 SetFlag(FlagMouseDown, false);
-                PInvoke.SendMessage(this, PInvoke.BM_SETSTATE, (WPARAM)(BOOL)false);
+                PInvokeCore.SendMessage(this, PInvoke.BM_SETSTATE, (WPARAM)(BOOL)false);
             }
 
             // Breaking change: specifically filter out Keys.Enter and Keys.Space as the only
@@ -1314,9 +1314,9 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
                     // even though we are owner draw.
                     break;
 
-                case PInvoke.WM_KILLFOCUS:
-                case PInvoke.WM_CANCELMODE:
-                case PInvoke.WM_CAPTURECHANGED:
+                case PInvokeCore.WM_KILLFOCUS:
+                case PInvokeCore.WM_CANCELMODE:
+                case PInvokeCore.WM_CAPTURECHANGED:
                     if (!GetFlag(FlagInButtonUp) && GetFlag(FlagMousePressed))
                     {
                         SetFlag(FlagMousePressed, false);
@@ -1331,9 +1331,9 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
                     base.WndProc(ref m);
                     break;
 
-                case PInvoke.WM_LBUTTONUP:
-                case PInvoke.WM_MBUTTONUP:
-                case PInvoke.WM_RBUTTONUP:
+                case PInvokeCore.WM_LBUTTONUP:
+                case PInvokeCore.WM_MBUTTONUP:
+                case PInvokeCore.WM_RBUTTONUP:
                     try
                     {
                         SetFlag(FlagInButtonUp, true);

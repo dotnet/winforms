@@ -25,12 +25,12 @@ public partial class ToolStrip
 
             switch (m.MsgInternal)
             {
-                case PInvoke.WM_LBUTTONDOWN:
-                case PInvoke.WM_RBUTTONDOWN:
-                case PInvoke.WM_MBUTTONDOWN:
-                case PInvoke.WM_NCLBUTTONDOWN:
-                case PInvoke.WM_NCRBUTTONDOWN:
-                case PInvoke.WM_NCMBUTTONDOWN:
+                case PInvokeCore.WM_LBUTTONDOWN:
+                case PInvokeCore.WM_RBUTTONDOWN:
+                case PInvokeCore.WM_MBUTTONDOWN:
+                case PInvokeCore.WM_NCLBUTTONDOWN:
+                case PInvokeCore.WM_NCRBUTTONDOWN:
+                case PInvokeCore.WM_NCMBUTTONDOWN:
                     if (_ownerToolStrip.ContainsFocus)
                     {
                         // If we've clicked on something that's not a child of the toolstrip and we currently have focus, restore it.

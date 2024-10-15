@@ -378,7 +378,7 @@ public partial class TabControl : Control
 
                 if (IsHandleCreated)
                 {
-                    PInvoke.SendMessage(this, PInvoke.TCM_ADJUSTRECT, 0, ref rect);
+                    PInvokeCore.SendMessage(this, PInvoke.TCM_ADJUSTRECT, 0, ref rect);
                 }
             }
 
@@ -472,7 +472,7 @@ public partial class TabControl : Control
                 IntPtr handle = (value is not null) ? value.Handle : IntPtr.Zero;
                 if (IsHandleCreated)
                 {
-                    PInvoke.SendMessage(this, PInvoke.TCM_SETIMAGELIST, 0, handle);
+                    PInvokeCore.SendMessage(this, PInvoke.TCM_SETIMAGELIST, 0, handle);
                 }
 
                 // Update the image list in the tab pages.
@@ -642,7 +642,7 @@ public partial class TabControl : Control
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [SRDescription(nameof(SR.TabBaseRowCountDescr))]
     public int RowCount
-        => (int)PInvoke.SendMessage(this, PInvoke.TCM_GETROWCOUNT);
+        => (int)PInvokeCore.SendMessage(this, PInvoke.TCM_GETROWCOUNT);
 
     /// <summary>
     ///  The index of the currently selected tab in the strip, if there
@@ -656,7 +656,7 @@ public partial class TabControl : Control
     [SRDescription(nameof(SR.selectedIndexDescr))]
     public int SelectedIndex
     {
-        get => IsHandleCreated ? (int)PInvoke.SendMessage(this, PInvoke.TCM_GETCURSEL) : _selectedIndex;
+        get => IsHandleCreated ? (int)PInvokeCore.SendMessage(this, PInvoke.TCM_GETCURSEL) : _selectedIndex;
         set
         {
             ArgumentOutOfRangeException.ThrowIfLessThan(value, -1);
@@ -684,7 +684,7 @@ public partial class TabControl : Control
                         }
                     }
 
-                    PInvoke.SendMessage(this, PInvoke.TCM_SETCURSEL, (WPARAM)value);
+                    PInvokeCore.SendMessage(this, PInvoke.TCM_SETCURSEL, (WPARAM)value);
 
                     if (!GetState(State.FromCreateHandles) && !GetState(State.SelectFirstControl))
                     {
@@ -936,7 +936,7 @@ public partial class TabControl : Control
     {
         if (IsHandleCreated && ShouldSerializeItemSize())
         {
-            PInvoke.SendMessage(this, PInvoke.TCM_SETITEMSIZE, 0, PARAM.FromLowHigh(_itemSize.Width, _itemSize.Height));
+            PInvokeCore.SendMessage(this, PInvoke.TCM_SETITEMSIZE, 0, PARAM.FromLowHigh(_itemSize.Width, _itemSize.Height));
         }
 
         _cachedDisplayRect = Rectangle.Empty;
@@ -1119,7 +1119,7 @@ public partial class TabControl : Control
             CreateHandle();
         }
 
-        PInvoke.SendMessage(this, PInvoke.TCM_GETITEMRECT, (WPARAM)index, ref rect);
+        PInvokeCore.SendMessage(this, PInvoke.TCM_GETITEMRECT, (WPARAM)index, ref rect);
         return rect;
     }
 
@@ -1139,7 +1139,7 @@ public partial class TabControl : Control
     {
         if (IsHandleCreated)
         {
-            PInvoke.SendMessage(this, PInvoke.TCM_SETIMAGELIST, 0, ImageList!.Handle);
+            PInvokeCore.SendMessage(this, PInvoke.TCM_SETIMAGELIST, 0, ImageList!.Handle);
         }
     }
 
@@ -1238,7 +1238,7 @@ public partial class TabControl : Control
         // horizontal and vertical dimensions of the padding rectangle.
         if (!_padding.IsEmpty)
         {
-            PInvoke.SendMessage(this, PInvoke.TCM_SETPADDING, 0, PARAM.FromPoint(_padding));
+            PInvokeCore.SendMessage(this, PInvoke.TCM_SETPADDING, 0, PARAM.FromPoint(_padding));
         }
 
         base.OnHandleCreated(e);
@@ -1246,12 +1246,12 @@ public partial class TabControl : Control
         ApplyItemSize();
         if (_imageList is not null)
         {
-            PInvoke.SendMessage(this, PInvoke.TCM_SETIMAGELIST, 0, _imageList.Handle);
+            PInvokeCore.SendMessage(this, PInvoke.TCM_SETIMAGELIST, 0, _imageList.Handle);
         }
 
         if (ShowToolTips)
         {
-            HWND tooltipHwnd = (HWND)PInvoke.SendMessage(this, PInvoke.TCM_GETTOOLTIPS);
+            HWND tooltipHwnd = (HWND)PInvokeCore.SendMessage(this, PInvoke.TCM_GETTOOLTIPS);
             if (!tooltipHwnd.IsNull)
             {
                 PInvoke.SetWindowPos(
@@ -1541,7 +1541,7 @@ public partial class TabControl : Control
         // So, no RemoveAll()
         if (IsHandleCreated)
         {
-            PInvoke.SendMessage(this, PInvoke.TCM_DELETEALLITEMS);
+            PInvokeCore.SendMessage(this, PInvoke.TCM_DELETEALLITEMS);
         }
 
         _tabPages.Clear();
@@ -1574,7 +1574,7 @@ public partial class TabControl : Control
 
         if (IsHandleCreated)
         {
-            PInvoke.SendMessage(this, (PInvoke.TCM_DELETEALLITEMS));
+            PInvokeCore.SendMessage(this, (PInvoke.TCM_DELETEALLITEMS));
         }
 
         _tabPages.Clear();
@@ -1592,7 +1592,7 @@ public partial class TabControl : Control
 
         if (IsHandleCreated)
         {
-            PInvoke.SendMessage(this, PInvoke.TCM_DELETEITEM, (WPARAM)index);
+            PInvokeCore.SendMessage(this, PInvoke.TCM_DELETEITEM, (WPARAM)index);
         }
 
         _cachedDisplayRect = Rectangle.Empty;
@@ -1628,7 +1628,7 @@ public partial class TabControl : Control
             return;
         }
 
-        PInvoke.SendMessage(this, PInvoke.TCM_SETTOOLTIPS, (WPARAM)toolTip.Handle);
+        PInvokeCore.SendMessage(this, PInvoke.TCM_SETTOOLTIPS, (WPARAM)toolTip.Handle);
         GC.KeepAlive(toolTip);
         _controlTipText = toolTip.GetToolTip(this);
     }
@@ -1647,7 +1647,7 @@ public partial class TabControl : Control
         // Make the Updated tab page the currently selected tab page
         if (DesignMode && IsHandleCreated)
         {
-            PInvoke.SendMessage(this, PInvoke.TCM_SETCURSEL, (WPARAM)index);
+            PInvokeCore.SendMessage(this, PInvoke.TCM_SETCURSEL, (WPARAM)index);
         }
 
         _tabPages[index] = value;
@@ -1963,7 +1963,7 @@ public partial class TabControl : Control
         else
         {
             // user Cancelled the Selection of the new Tab.
-            PInvoke.SendMessage(this, PInvoke.TCM_SETCURSEL, (WPARAM)_lastSelection);
+            PInvokeCore.SendMessage(this, PInvoke.TCM_SETCURSEL, (WPARAM)_lastSelection);
             UpdateTabSelection(true);
         }
 
@@ -2037,7 +2037,7 @@ public partial class TabControl : Control
                 // We use TCM_SETITEMSIZE instead
                 break;
 
-            case PInvoke.WM_NOTIFY:
+            case PInvokeCore.WM_NOTIFY:
             case MessageId.WM_REFLECT_NOTIFY:
                 NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
                 switch (nmhdr->code)
@@ -2083,7 +2083,7 @@ public partial class TabControl : Control
                         break;
                     case PInvoke.TTN_GETDISPINFOW:
                         // Setting the max width has the added benefit of enabling Multiline tool tips
-                        PInvoke.SendMessage(nmhdr->hwndFrom, PInvoke.TTM_SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
+                        PInvokeCore.SendMessage(nmhdr->hwndFrom, PInvoke.TTM_SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
                         WmNeedText(ref m);
                         m.ResultInternal = (LRESULT)1;
                         return;
@@ -2123,7 +2123,7 @@ public partial class TabControl : Control
         fixed (char* pText = text)
         {
             tcitem.pszText = pText;
-            return (int)PInvoke.SendMessage(this, msg, (WPARAM)wParam, ref tcitem);
+            return (int)PInvokeCore.SendMessage(this, msg, (WPARAM)wParam, ref tcitem);
         }
     }
 

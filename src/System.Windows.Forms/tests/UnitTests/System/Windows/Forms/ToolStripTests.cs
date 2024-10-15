@@ -7149,7 +7149,7 @@ public partial class ToolStripTests
         using SubToolStrip control = new();
         Message m = new()
         {
-            Msg = (int)PInvoke.WM_MOUSEACTIVATE,
+            Msg = (int)PInvokeCore.WM_MOUSEACTIVATE,
             Result = 250
         };
         control.WndProc(ref m);
@@ -7176,7 +7176,7 @@ public partial class ToolStripTests
 
         Message m = new()
         {
-            Msg = (int)PInvoke.WM_MOUSEACTIVATE,
+            Msg = (int)PInvokeCore.WM_MOUSEACTIVATE,
             Result = 250
         };
         control.WndProc(ref m);
@@ -7211,7 +7211,7 @@ public partial class ToolStripTests
 
         Message m = new()
         {
-            Msg = (int)PInvoke.WM_MOUSEHOVER,
+            Msg = (int)PInvokeCore.WM_MOUSEHOVER,
             Result = 250
         };
 

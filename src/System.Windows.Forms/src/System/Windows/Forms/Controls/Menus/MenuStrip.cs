@@ -238,7 +238,7 @@ public partial class MenuStrip : ToolStrip
 
                     // Send a WM_SYSCOMMAND SC_KEYMENU + Space to activate the system menu.
                     HWND ancestor = PInvoke.GetAncestor(this, GET_ANCESTOR_FLAGS.GA_ROOT);
-                    PInvoke.PostMessage(ancestor, PInvoke.WM_SYSCOMMAND, (WPARAM)PInvoke.SC_KEYMENU, (LPARAM)(int)Keys.Space);
+                    PInvoke.PostMessage(ancestor, PInvokeCore.WM_SYSCOMMAND, (WPARAM)PInvoke.SC_KEYMENU, (LPARAM)(int)Keys.Space);
                     return true;
                 }
             }
@@ -249,7 +249,7 @@ public partial class MenuStrip : ToolStrip
 
     protected override void WndProc(ref Message m)
     {
-        if (m.Msg == (int)PInvoke.WM_MOUSEACTIVATE && (ActiveDropDowns.Count == 0))
+        if (m.Msg == (int)PInvokeCore.WM_MOUSEACTIVATE && (ActiveDropDowns.Count == 0))
         {
             // call menu activate before we actually take focus.
             Point pt = PointToClient(WindowsFormsUtils.LastCursorPoint);

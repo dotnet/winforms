@@ -397,7 +397,7 @@ internal class FormDocumentDesigner : DocumentDesigner
         // Paint the form's title bar UI-active
         if (Control is { } control && control.IsHandleCreated)
         {
-            PInvoke.SendMessage(control, PInvoke.WM_NCACTIVATE, (WPARAM)(BOOL)true);
+            PInvokeCore.SendMessage(control, PInvokeCore.WM_NCACTIVATE, (WPARAM)(BOOL)true);
             PInvoke.RedrawWindow(control, lprcUpdate: null, HRGN.Null, REDRAW_WINDOW_FLAGS.RDW_FRAME);
         }
     }
@@ -409,7 +409,7 @@ internal class FormDocumentDesigner : DocumentDesigner
     {
         if (Control is { } control && control.IsHandleCreated)
         {
-            PInvoke.SendMessage(control, PInvoke.WM_NCACTIVATE, (WPARAM)(BOOL)false);
+            PInvokeCore.SendMessage(control, PInvokeCore.WM_NCACTIVATE, (WPARAM)(BOOL)false);
             PInvoke.RedrawWindow(control, lprcUpdate: null, HRGN.Null, REDRAW_WINDOW_FLAGS.RDW_FRAME);
         }
     }

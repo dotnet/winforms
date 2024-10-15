@@ -238,7 +238,7 @@ public sealed partial class Application
                         // If the component wants us to process the message, do it.
                         PInvoke.GetMessage(&msg, HWND.Null, 0, 0);
 
-                        if (msg.message == PInvoke.WM_QUIT)
+                        if (msg.message == PInvokeCore.WM_QUIT)
                         {
                             ThreadContext.FromCurrent().DisposeThreadWindows();
 

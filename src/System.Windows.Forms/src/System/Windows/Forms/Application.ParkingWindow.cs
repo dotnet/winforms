@@ -16,7 +16,7 @@ public sealed partial class Application
         // In .NET 2.0 we now aggressively tear down the parking window
         //   when the last control has been removed off of it.
 
-        private const int WM_CHECKDESTROY = (int)PInvoke.WM_USER + 0x01;
+        private const int WM_CHECKDESTROY = (int)PInvokeCore.WM_USER + 0x01;
 
         private int _childCount;
 
@@ -138,14 +138,14 @@ public sealed partial class Application
 
         protected override void WndProc(ref Message m)
         {
-            if (m.MsgInternal == PInvoke.WM_SHOWWINDOW)
+            if (m.MsgInternal == PInvokeCore.WM_SHOWWINDOW)
                 return;
 
             base.WndProc(ref m);
             switch (m.MsgInternal)
             {
-                case PInvoke.WM_PARENTNOTIFY:
-                    if (m.WParamInternal.LOWORD == PInvoke.WM_DESTROY)
+                case PInvokeCore.WM_PARENTNOTIFY:
+                    if (m.WParamInternal.LOWORD == PInvokeCore.WM_DESTROY)
                     {
                         PInvoke.PostMessage(this, WM_CHECKDESTROY);
                     }

@@ -166,9 +166,9 @@ public partial class RichTextBox : TextBoxBase
             _richTextBoxFlags[s_autoWordSelectionSection] = value ? 1 : 0;
             if (IsHandleCreated)
             {
-                PInvoke.SendMessage(
+                PInvokeCore.SendMessage(
                     this,
-                    PInvoke.EM_SETOPTIONS,
+                    PInvokeCore.EM_SETOPTIONS,
                     (WPARAM)(int)(value ? PInvoke.ECOOP_OR : PInvoke.ECOOP_XOR),
                     (LPARAM)(int)PInvoke.ECO_AUTOWORDSELECTION);
             }
@@ -247,7 +247,7 @@ public partial class RichTextBox : TextBoxBase
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [SRDescription(nameof(SR.RichTextBoxCanRedoDescr))]
-    public bool CanRedo => IsHandleCreated && (int)PInvoke.SendMessage(this, PInvoke.EM_CANREDO) != 0;
+    public bool CanRedo => IsHandleCreated && (int)PInvokeCore.SendMessage(this, PInvokeCore.EM_CANREDO) != 0;
 
     protected override CreateParams CreateParams
     {
@@ -340,7 +340,7 @@ public partial class RichTextBox : TextBoxBase
                 _richTextBoxFlags[s_autoUrlDetectSection] = value ? 1 : 0;
                 if (IsHandleCreated)
                 {
-                    PInvoke.SendMessage(this, PInvoke.EM_AUTOURLDETECT, (WPARAM)(BOOL)(value));
+                    PInvokeCore.SendMessage(this, PInvokeCore.EM_AUTOURLDETECT, (WPARAM)(BOOL)(value));
                     RecreateHandle();
                 }
             }
@@ -462,7 +462,7 @@ public partial class RichTextBox : TextBoxBase
     public RichTextBoxLanguageOptions LanguageOption
     {
         get => IsHandleCreated
-            ? (RichTextBoxLanguageOptions)(int)PInvoke.SendMessage(this, PInvoke.EM_GETLANGOPTIONS)
+            ? (RichTextBoxLanguageOptions)(int)PInvokeCore.SendMessage(this, PInvokeCore.EM_GETLANGOPTIONS)
             : _languageOption;
         set
         {
@@ -471,7 +471,7 @@ public partial class RichTextBox : TextBoxBase
                 _languageOption = value;
                 if (IsHandleCreated)
                 {
-                    PInvoke.SendMessage(this, PInvoke.EM_SETLANGOPTIONS, 0, (nint)value);
+                    PInvokeCore.SendMessage(this, PInvokeCore.EM_SETLANGOPTIONS, 0, (nint)value);
                 }
             }
         }
@@ -528,7 +528,7 @@ public partial class RichTextBox : TextBoxBase
                 return string.Empty;
             }
 
-            int n = (int)PInvoke.SendMessage(this, PInvoke.EM_GETREDONAME);
+            int n = (int)PInvokeCore.SendMessage(this, PInvokeCore.EM_GETREDONAME);
             return GetEditorActionName(n);
         }
     }
@@ -575,7 +575,7 @@ public partial class RichTextBox : TextBoxBase
                 else if (IsHandleCreated)
                 {
                     using CreateDcScope hdc = new("DISPLAY");
-                    PInvoke.SendMessage(this, PInvoke.EM_SETTARGETDEVICE, (WPARAM)hdc, Pixel2Twip(value, true));
+                    PInvokeCore.SendMessage(this, PInvokeCore.EM_SETTARGETDEVICE, (WPARAM)hdc, Pixel2Twip(value, true));
                 }
             }
         }
@@ -671,7 +671,7 @@ public partial class RichTextBox : TextBoxBase
             };
 
             // Get the format for our currently selected paragraph.
-            PInvoke.SendMessage(this, PInvoke.EM_GETPARAFORMAT, 0, ref pf);
+            PInvokeCore.SendMessage(this, PInvokeCore.EM_GETPARAFORMAT, 0, ref pf);
 
             // check if alignment has been set yet
             if ((PFM.ALIGNMENT & pf.dwMask) != 0)
@@ -722,7 +722,7 @@ public partial class RichTextBox : TextBoxBase
             }
 
             // Set the format for our current paragraph or selection.
-            PInvoke.SendMessage(this, PInvoke.EM_SETPARAFORMAT, 0, ref pf);
+            PInvokeCore.SendMessage(this, PInvokeCore.EM_SETPARAFORMAT, 0, ref pf);
         }
     }
 
@@ -747,7 +747,7 @@ public partial class RichTextBox : TextBoxBase
             };
 
             // Get the format for our currently selected paragraph.
-            PInvoke.SendMessage(this, PInvoke.EM_GETPARAFORMAT, 0, ref pf);
+            PInvokeCore.SendMessage(this, PInvokeCore.EM_GETPARAFORMAT, 0, ref pf);
 
             // check if alignment has been set yet
             if ((PFM.NUMBERING & pf.dwMask) != 0)
@@ -787,7 +787,7 @@ public partial class RichTextBox : TextBoxBase
             }
 
             // Set the format for our current paragraph or selection.
-            PInvoke.SendMessage(this, PInvoke.EM_SETPARAFORMAT, 0, ref pf);
+            PInvokeCore.SendMessage(this, PInvokeCore.EM_SETPARAFORMAT, 0, ref pf);
         }
     }
 
@@ -826,7 +826,7 @@ public partial class RichTextBox : TextBoxBase
             // SendMessage will force the handle to be created if it hasn't already. Normally,
             // we would cache property values until the handle is created - but for this property,
             // it's far more simple to just create the handle.
-            PInvoke.SendMessage(this, PInvoke.EM_SETCHARFORMAT, PInvoke.SCF_SELECTION, ref cf);
+            PInvokeCore.SendMessage(this, PInvokeCore.EM_SETCHARFORMAT, PInvoke.SCF_SELECTION, ref cf);
         }
     }
 
@@ -862,7 +862,7 @@ public partial class RichTextBox : TextBoxBase
             cf.crTextColor = ColorTranslator.ToWin32(value);
 
             // Set the format information.
-            PInvoke.SendMessage(this, PInvoke.EM_SETCHARFORMAT, (WPARAM)PInvoke.SCF_SELECTION, ref cf);
+            PInvokeCore.SendMessage(this, PInvokeCore.EM_SETCHARFORMAT, (WPARAM)PInvoke.SCF_SELECTION, ref cf);
         }
     }
 
@@ -921,7 +921,7 @@ public partial class RichTextBox : TextBoxBase
                     cf2.crBackColor = ColorTranslator.ToWin32(value);
                 }
 
-                PInvoke.SendMessage(this, PInvoke.EM_SETCHARFORMAT, (WPARAM)PInvoke.SCF_SELECTION, ref cf2);
+                PInvokeCore.SendMessage(this, PInvokeCore.EM_SETCHARFORMAT, (WPARAM)PInvoke.SCF_SELECTION, ref cf2);
             }
         }
     }
@@ -963,7 +963,7 @@ public partial class RichTextBox : TextBoxBase
             };
 
             // Get the format for our currently selected paragraph.
-            PInvoke.SendMessage(this, PInvoke.EM_GETPARAFORMAT, 0, ref pf);
+            PInvokeCore.SendMessage(this, PInvokeCore.EM_GETPARAFORMAT, 0, ref pf);
 
             // Check if alignment has been set yet.
             if ((PFM.OFFSET & pf.dwMask) != 0)
@@ -985,7 +985,7 @@ public partial class RichTextBox : TextBoxBase
             };
 
             // Set the format for our current paragraph or selection.
-            PInvoke.SendMessage(this, PInvoke.EM_SETPARAFORMAT, 0, ref pf);
+            PInvokeCore.SendMessage(this, PInvokeCore.EM_SETPARAFORMAT, 0, ref pf);
         }
     }
 
@@ -1011,7 +1011,7 @@ public partial class RichTextBox : TextBoxBase
             };
 
             // Get the format for our currently selected paragraph.
-            PInvoke.SendMessage(this, PInvoke.EM_GETPARAFORMAT, 0, ref pf);
+            PInvokeCore.SendMessage(this, PInvokeCore.EM_GETPARAFORMAT, 0, ref pf);
 
             // Check if alignment has been set yet.
             if ((PFM.STARTINDENT & pf.dwMask) != 0)
@@ -1033,7 +1033,7 @@ public partial class RichTextBox : TextBoxBase
             };
 
             // Set the format for our current paragraph or selection.
-            PInvoke.SendMessage(this, PInvoke.EM_SETPARAFORMAT, 0, ref pf);
+            PInvokeCore.SendMessage(this, PInvokeCore.EM_SETPARAFORMAT, 0, ref pf);
         }
     }
 
@@ -1133,7 +1133,7 @@ public partial class RichTextBox : TextBoxBase
             };
 
             // Get the format for our currently selected paragraph.
-            PInvoke.SendMessage(this, PInvoke.EM_GETPARAFORMAT, 0, ref pf);
+            PInvokeCore.SendMessage(this, PInvokeCore.EM_GETPARAFORMAT, 0, ref pf);
 
             // Check if alignment has been set yet.
             if ((PFM.RIGHTINDENT & pf.dwMask) != 0)
@@ -1156,7 +1156,7 @@ public partial class RichTextBox : TextBoxBase
             };
 
             // Set the format for our current paragraph or selection.
-            PInvoke.SendMessage(this, PInvoke.EM_SETPARAFORMAT, 0, ref pf);
+            PInvokeCore.SendMessage(this, PInvokeCore.EM_SETPARAFORMAT, 0, ref pf);
         }
     }
 
@@ -1180,7 +1180,7 @@ public partial class RichTextBox : TextBoxBase
             };
 
             // get the format for our currently selected paragraph
-            PInvoke.SendMessage(this, PInvoke.EM_GETPARAFORMAT, 0, ref pf);
+            PInvokeCore.SendMessage(this, PInvokeCore.EM_GETPARAFORMAT, 0, ref pf);
 
             // check if alignment has been set yet
             if ((PFM.TABSTOPS & pf.dwMask) != 0)
@@ -1210,7 +1210,7 @@ public partial class RichTextBox : TextBoxBase
 
             // get the format for our currently selected paragraph because
             // we need to get the number of tabstops to copy
-            PInvoke.SendMessage(this, PInvoke.EM_GETPARAFORMAT, 0, ref pf);
+            PInvokeCore.SendMessage(this, PInvokeCore.EM_GETPARAFORMAT, 0, ref pf);
 
             pf.cTabCount = (short)((value is null) ? 0 : value.Length);
             pf.dwMask = PFM.TABSTOPS;
@@ -1220,7 +1220,7 @@ public partial class RichTextBox : TextBoxBase
             }
 
             // Set the format for our current paragraph or selection.
-            PInvoke.SendMessage(this, PInvoke.EM_SETPARAFORMAT, 0, ref pf);
+            PInvokeCore.SendMessage(this, PInvokeCore.EM_SETPARAFORMAT, 0, ref pf);
         }
     }
 
@@ -1263,7 +1263,7 @@ public partial class RichTextBox : TextBoxBase
             ForceHandleCreate();
             if (SelectionLength > 0)
             {
-                int n = (int)PInvoke.SendMessage(this, PInvoke.EM_SELECTIONTYPE);
+                int n = (int)PInvokeCore.SendMessage(this, PInvokeCore.EM_SELECTIONTYPE);
                 return (RichTextBoxSelectionTypes)n;
             }
             else
@@ -1290,9 +1290,9 @@ public partial class RichTextBox : TextBoxBase
                 _richTextBoxFlags[s_showSelBarSection] = value ? 1 : 0;
                 if (IsHandleCreated)
                 {
-                    PInvoke.SendMessage(
+                    PInvokeCore.SendMessage(
                         this,
-                        PInvoke.EM_SETOPTIONS,
+                        PInvokeCore.EM_SETOPTIONS,
                         (WPARAM)(int)(value ? PInvoke.ECOOP_OR : PInvoke.ECOOP_XOR),
                         (LPARAM)(int)PInvoke.ECO_SELECTIONBAR);
                 }
@@ -1357,7 +1357,7 @@ public partial class RichTextBox : TextBoxBase
 
                     StreamIn(value, PInvoke.SF_TEXT | PInvoke.SF_UNICODE);
                     // reset Modified
-                    PInvoke.SendMessage(this, PInvoke.EM_SETMODIFY);
+                    PInvokeCore.SendMessage(this, PInvokeCore.EM_SETMODIFY);
                 }
             }
         }
@@ -1388,7 +1388,7 @@ public partial class RichTextBox : TextBoxBase
                 codepage = 1200u /* CP_UNICODE */
             };
 
-            return (int)PInvoke.SendMessage(this, PInvoke.EM_GETTEXTLENGTHEX, (WPARAM)(&gtl));
+            return (int)PInvokeCore.SendMessage(this, PInvokeCore.EM_GETTEXTLENGTHEX, (WPARAM)(&gtl));
         }
     }
 
@@ -1412,7 +1412,7 @@ public partial class RichTextBox : TextBoxBase
                 return string.Empty;
             }
 
-            int n = (int)PInvoke.SendMessage(this, PInvoke.EM_GETUNDONAME);
+            int n = (int)PInvokeCore.SendMessage(this, PInvokeCore.EM_GETUNDONAME);
             return GetEditorActionName(n);
         }
     }
@@ -1456,7 +1456,7 @@ public partial class RichTextBox : TextBoxBase
             {
                 int numerator = 0;
                 int denominator = 0;
-                PInvoke.SendMessage(this, PInvoke.EM_GETZOOM, (WPARAM)(&numerator), ref denominator);
+                PInvokeCore.SendMessage(this, PInvokeCore.EM_GETZOOM, (WPARAM)(&numerator), ref denominator);
                 if ((numerator != 0) && (denominator != 0))
                 {
                     _zoomMultiplier = numerator / ((float)denominator);
@@ -1604,7 +1604,7 @@ public partial class RichTextBox : TextBoxBase
     ///  given clipboard format.
     /// </summary>
     public bool CanPaste(DataFormats.Format clipFormat)
-        => PInvoke.SendMessage(this, PInvoke.EM_CANPASTE, (WPARAM)clipFormat.Id) != 0;
+        => PInvokeCore.SendMessage(this, PInvokeCore.EM_CANPASTE, (WPARAM)clipFormat.Id) != 0;
 
     // DrawToBitmap doesn't work for this control, so we should hide it. We'll
     // still call base so that this has a chance to work if it can.
@@ -1835,8 +1835,8 @@ public partial class RichTextBox : TextBoxBase
                 chrg.cpMax = foundCursor;
             }
 
-            PInvoke.SendMessage(this, PInvoke.EM_EXSETSEL, 0, ref chrg);
-            PInvoke.SendMessage(this, PInvoke.EM_SCROLLCARET);
+            PInvokeCore.SendMessage(this, PInvokeCore.EM_EXSETSEL, 0, ref chrg);
+            PInvokeCore.SendMessage(this, PInvokeCore.EM_SCROLLCARET);
         }
 
         return position;
@@ -1914,7 +1914,7 @@ public partial class RichTextBox : TextBoxBase
             fixed (char* pText = str)
             {
                 ft.lpstrText = pText;
-                position = (int)PInvoke.SendMessage(this, PInvoke.EM_FINDTEXT, (WPARAM)(uint)findOptions, ref ft);
+                position = (int)PInvokeCore.SendMessage(this, PInvokeCore.EM_FINDTEXT, (WPARAM)(uint)findOptions, ref ft);
             }
 
             return position;
@@ -2038,7 +2038,7 @@ public partial class RichTextBox : TextBoxBase
 
                 // go get the text in this range, if we didn't get any text then punt
                 int len;
-                len = (int)PInvoke.SendMessage(this, PInvoke.EM_GETTEXTRANGE, 0, ref txrg);
+                len = (int)PInvokeCore.SendMessage(this, PInvokeCore.EM_GETTEXTRANGE, 0, ref txrg);
                 if (len == 0)
                 {
                     chrg.cpMax = chrg.cpMin = -1; // Hit end of control without finding what we wanted
@@ -2132,7 +2132,7 @@ public partial class RichTextBox : TextBoxBase
             cbSize = (uint)sizeof(CHARFORMAT2W)
         };
 
-        PInvoke.SendMessage(this, PInvoke.EM_GETCHARFORMAT, (WPARAM)(fSelection ? PInvoke.SCF_SELECTION : PInvoke.SCF_DEFAULT), ref cf);
+        PInvokeCore.SendMessage(this, PInvokeCore.EM_GETCHARFORMAT, (WPARAM)(fSelection ? PInvoke.SCF_SELECTION : PInvoke.SCF_DEFAULT), ref cf);
         return cf;
     }
 
@@ -2216,7 +2216,7 @@ public partial class RichTextBox : TextBoxBase
     public override int GetCharIndexFromPosition(Point pt)
     {
         Point wpt = new(pt.X, pt.Y);
-        int index = (int)PInvoke.SendMessage(this, PInvoke.EM_CHARFROMPOS, 0, ref wpt);
+        int index = (int)PInvokeCore.SendMessage(this, PInvokeCore.EM_CHARFROMPOS, 0, ref wpt);
 
         string t = Text;
         // EM_CHARFROMPOS will return an invalid number if the last character in the RichEdit
@@ -2253,7 +2253,7 @@ public partial class RichTextBox : TextBoxBase
     ///  return 1 and not 0.
     /// </summary>
     public override int GetLineFromCharIndex(int index)
-        => (int)PInvoke.SendMessage(this, PInvoke.EM_EXLINEFROMCHAR, 0, index);
+        => (int)PInvokeCore.SendMessage(this, PInvokeCore.EM_EXLINEFROMCHAR, 0, index);
 
     /// <summary>
     ///  Returns the location of the character at the given index.
@@ -2271,7 +2271,7 @@ public partial class RichTextBox : TextBoxBase
         }
 
         Point position = default;
-        PInvoke.SendMessage(this, PInvoke.EM_POSFROMCHAR, (WPARAM)(&position), index);
+        PInvokeCore.SendMessage(this, PInvokeCore.EM_POSFROMCHAR, (WPARAM)(&position), index);
         return position;
     }
 
@@ -2346,7 +2346,7 @@ public partial class RichTextBox : TextBoxBase
     {
         if (IsHandleCreated)
         {
-            PInvoke.SendMessage(this, PInvoke.EM_SETBKGNDCOLOR, 0, BackColor.ToWin32());
+            PInvokeCore.SendMessage(this, PInvokeCore.EM_SETBKGNDCOLOR, 0, BackColor.ToWin32());
         }
 
         base.OnBackColorChanged(e);
@@ -2426,9 +2426,9 @@ public partial class RichTextBox : TextBoxBase
 
         // This is needed so that the control will fire change and update events
         // even if it is hidden
-        PInvoke.SendMessage(
+        PInvokeCore.SendMessage(
             this,
-            PInvoke.EM_SETEVENTMASK,
+            PInvokeCore.EM_SETEVENTMASK,
             0,
             (nint)(PInvoke.ENM_PROTECTED | PInvoke.ENM_SELCHANGE |
                      PInvoke.ENM_DROPFILES | PInvoke.ENM_REQUESTRESIZE |
@@ -2441,7 +2441,7 @@ public partial class RichTextBox : TextBoxBase
         _rightMargin = 0;
         RightMargin = rm;
 
-        PInvoke.SendMessage(this, PInvoke.EM_AUTOURLDETECT, (WPARAM)(DetectUrls ? 1 : 0));
+        PInvokeCore.SendMessage(this, PInvokeCore.EM_AUTOURLDETECT, (WPARAM)(DetectUrls ? 1 : 0));
         if (_selectionBackColorToSetOnHandleCreated != Color.Empty)
         {
             SelectionBackColor = _selectionBackColorToSetOnHandleCreated;
@@ -2452,7 +2452,7 @@ public partial class RichTextBox : TextBoxBase
         bool autoWordSelection = AutoWordSelection;
         AutoWordSelection = autoWordSelection;
 
-        PInvoke.SendMessage(this, PInvoke.EM_SETBKGNDCOLOR, (WPARAM)0, (LPARAM)BackColor);
+        PInvokeCore.SendMessage(this, PInvokeCore.EM_SETBKGNDCOLOR, (WPARAM)0, (LPARAM)BackColor);
         InternalSetForeColor(ForeColor);
 
         // base sets the Text property. It's important to do this *after* setting EM_AUTOUrlDETECT.
@@ -2495,7 +2495,7 @@ public partial class RichTextBox : TextBoxBase
             // will resize itself to the size of the parent's client area. Don't know why...
             PInvoke.PostMessage(
                 this,
-                PInvoke.EM_SETOPTIONS,
+                PInvokeCore.EM_SETOPTIONS,
                 (WPARAM)(int)PInvoke.ECOOP_OR,
                 (LPARAM)(int)PInvoke.ECO_SELECTIONBAR);
         }
@@ -2586,7 +2586,7 @@ public partial class RichTextBox : TextBoxBase
     /// </summary>
     public void Paste(DataFormats.Format clipFormat)
     {
-        PInvoke.SendMessage(this, PInvoke.EM_PASTESPECIAL, (WPARAM)clipFormat.Id);
+        PInvokeCore.SendMessage(this, PInvokeCore.EM_PASTESPECIAL, (WPARAM)clipFormat.Id);
     }
 
     protected override bool ProcessCmdKey(ref Message m, Keys keyData)
@@ -2608,7 +2608,7 @@ public partial class RichTextBox : TextBoxBase
     /// <summary>
     ///  Redoes the last undone editing operation.
     /// </summary>
-    public void Redo() => PInvoke.SendMessage(this, PInvoke.EM_REDO);
+    public void Redo() => PInvokeCore.SendMessage(this, PInvokeCore.EM_REDO);
 
     // NOTE: Undo is implemented on TextBox
 
@@ -2683,7 +2683,7 @@ public partial class RichTextBox : TextBoxBase
 
         if (IsHandleCreated)
         {
-            PInvoke.SendMessage(this, PInvoke.EM_SETZOOM, (WPARAM)numerator, (LPARAM)denominator);
+            PInvokeCore.SendMessage(this, PInvokeCore.EM_SETZOOM, (WPARAM)numerator, (LPARAM)denominator);
         }
 
         if (numerator != 0)
@@ -2714,7 +2714,7 @@ public partial class RichTextBox : TextBoxBase
             };
 
             // Set the format information.
-            return PInvoke.SendMessage(this, PInvoke.EM_SETCHARFORMAT, (WPARAM)PInvoke.SCF_SELECTION, ref cf) != 0;
+            return PInvokeCore.SendMessage(this, PInvokeCore.EM_SETCHARFORMAT, (WPARAM)PInvoke.SCF_SELECTION, ref cf) != 0;
         }
 
         return false;
@@ -2722,7 +2722,7 @@ public partial class RichTextBox : TextBoxBase
 
     private bool SetCharFormat(uint charRange, CHARFORMAT2W cf)
     {
-        return PInvoke.SendMessage(this, PInvoke.EM_SETCHARFORMAT, (WPARAM)charRange, ref cf) != 0;
+        return PInvokeCore.SendMessage(this, PInvokeCore.EM_SETCHARFORMAT, (WPARAM)charRange, ref cf) != 0;
     }
 
     private unsafe void SetCharFormatFont(bool selectionOnly, Font value)
@@ -2766,9 +2766,9 @@ public partial class RichTextBox : TextBoxBase
             FaceName = logFont.FaceName
         };
 
-        PInvoke.SendMessage(
+        PInvokeCore.SendMessage(
             this,
-            PInvoke.EM_SETCHARFORMAT,
+            PInvokeCore.EM_SETCHARFORMAT,
             (WPARAM)(selectionOnly ? PInvoke.SCF_SELECTION : PInvoke.SCF_ALL),
             ref charFormat);
     }
@@ -2801,13 +2801,13 @@ public partial class RichTextBox : TextBoxBase
             // Destroy the selection if callers was setting selection text
             if ((PInvoke.SFF_SELECTION & flags) != 0)
             {
-                PInvoke.SendMessage(this, PInvoke.WM_CLEAR);
+                PInvokeCore.SendMessage(this, PInvokeCore.WM_CLEAR);
                 ProtectedError = false;
                 return;
             }
 
             // WM_SETTEXT is allowed even if we have protected text
-            PInvoke.SendMessage(this, PInvoke.WM_SETTEXT, 0, string.Empty);
+            PInvokeCore.SendMessage(this, PInvokeCore.WM_SETTEXT, 0, string.Empty);
             return;
         }
 
@@ -2843,7 +2843,7 @@ public partial class RichTextBox : TextBoxBase
         if ((flags & PInvoke.SFF_SELECTION) == 0)
         {
             CHARRANGE range = default;
-            PInvoke.SendMessage(this, PInvoke.EM_EXSETSEL, 0, ref range);
+            PInvokeCore.SendMessage(this, PInvokeCore.EM_EXSETSEL, 0, ref range);
         }
 
         try
@@ -2900,10 +2900,10 @@ public partial class RichTextBox : TextBoxBase
 
             // gives us TextBox compatible behavior, programmatic text change shouldn't
             // be limited...
-            PInvoke.SendMessage(this, PInvoke.EM_EXLIMITTEXT, 0, int.MaxValue);
+            PInvokeCore.SendMessage(this, PInvokeCore.EM_EXLIMITTEXT, 0, int.MaxValue);
 
             // go get the text for the control
-            PInvoke.SendMessage(this, PInvoke.EM_STREAMIN, (WPARAM)flags, ref es);
+            PInvokeCore.SendMessage(this, PInvokeCore.EM_STREAMIN, (WPARAM)flags, ref es);
             GC.KeepAlive(callback);
 
             UpdateMaxLength();
@@ -2922,10 +2922,10 @@ public partial class RichTextBox : TextBoxBase
             }
 
             // set the modify tag on the control
-            PInvoke.SendMessage(this, PInvoke.EM_SETMODIFY, (WPARAM)(-1));
+            PInvokeCore.SendMessage(this, PInvokeCore.EM_SETMODIFY, (WPARAM)(-1));
 
             // EM_GETLINECOUNT will cause the RichTextBox to recalculate its line indexes
-            PInvoke.SendMessage(this, PInvoke.EM_GETLINECOUNT);
+            PInvokeCore.SendMessage(this, PInvokeCore.EM_GETLINECOUNT);
         }
         finally
         {
@@ -3003,7 +3003,7 @@ public partial class RichTextBox : TextBoxBase
             es.pfnCallback = Marshal.GetFunctionPointerForDelegate(callback);
 
             // Get Text
-            PInvoke.SendMessage(this, PInvoke.EM_STREAMOUT, (WPARAM)flags, ref es);
+            PInvokeCore.SendMessage(this, PInvokeCore.EM_STREAMOUT, (WPARAM)flags, ref es);
             GC.KeepAlive(callback);
 
             // check to make sure things went well
@@ -3039,7 +3039,7 @@ public partial class RichTextBox : TextBoxBase
         }
 
         GETTEXTLENGTHEX* pGtl = &gtl;
-        int expectedLength = (int)PInvoke.SendMessage(this, PInvoke.EM_GETTEXTLENGTHEX, (WPARAM)pGtl);
+        int expectedLength = (int)PInvokeCore.SendMessage(this, PInvokeCore.EM_GETTEXTLENGTHEX, (WPARAM)pGtl);
         if (expectedLength == (int)HRESULT.E_INVALIDARG)
             throw new Win32Exception(expectedLength);
 
@@ -3059,7 +3059,7 @@ public partial class RichTextBox : TextBoxBase
         GETTEXTEX* pGt = &gt;
         fixed (char* b = buffer)
         {
-            int actualLength = (int)PInvoke.SendMessage(this, PInvoke.EM_GETTEXTEX, (WPARAM)pGt, (LPARAM)b);
+            int actualLength = (int)PInvokeCore.SendMessage(this, PInvokeCore.EM_GETTEXTEX, (WPARAM)pGt, (LPARAM)b);
 
             // The default behavior of EM_GETTEXTEX is to normalize line endings to '\r'
             // (see: GT_DEFAULT, https://docs.microsoft.com/windows/win32/api/richedit/ns-richedit-gettextex#members),
@@ -3097,7 +3097,7 @@ public partial class RichTextBox : TextBoxBase
 
             _oleCallback = CreateRichEditOleCallback();
             using var oleCallback = ComHelpers.GetComScope<IRichEditOleCallback>(_oleCallback);
-            PInvoke.SendMessage(this, PInvoke.EM_SETOLECALLBACK, 0, (nint)oleCallback);
+            PInvokeCore.SendMessage(this, PInvokeCore.EM_SETOLECALLBACK, 0, (nint)oleCallback);
         }
 
         PInvoke.DragAcceptFiles(this, fAccept: false);
@@ -3111,7 +3111,7 @@ public partial class RichTextBox : TextBoxBase
         {
             if (BackColor.IsSystemColor)
             {
-                PInvoke.SendMessage(this, PInvoke.EM_SETBKGNDCOLOR, 0, BackColor.ToWin32());
+                PInvokeCore.SendMessage(this, PInvokeCore.EM_SETBKGNDCOLOR, 0, BackColor.ToWin32());
             }
 
             if (ForeColor.IsSystemColor)
@@ -3140,12 +3140,12 @@ public partial class RichTextBox : TextBoxBase
 
         switch ((uint)enlink.msg)
         {
-            case PInvoke.WM_SETCURSOR:
+            case PInvokeCore.WM_SETCURSOR:
                 LinkCursor = true;
                 m.ResultInternal = (LRESULT)1;
                 return;
             // Mouse-down triggers Url; this matches Outlook 2000's behavior.
-            case PInvoke.WM_LBUTTONDOWN:
+            case PInvokeCore.WM_LBUTTONDOWN:
                 string linktext = CharRangeToString(enlink.charrange);
                 if (!string.IsNullOrEmpty(linktext))
                 {
@@ -3192,7 +3192,7 @@ public partial class RichTextBox : TextBoxBase
         }
 
         txrg.lpstrText = unmanagedBuffer;
-        int len = (int)PInvoke.SendMessage(this, PInvoke.EM_GETTEXTRANGE, 0, ref txrg);
+        int len = (int)PInvokeCore.SendMessage(this, PInvokeCore.EM_GETTEXTRANGE, 0, ref txrg);
         Debug.Assert(len != 0, "CHARRANGE from RichTextBox was bad! - impossible?");
         charBuffer.PutCoTaskMem(unmanagedBuffer);
         if (txrg.lpstrText != 0)
@@ -3208,7 +3208,7 @@ public partial class RichTextBox : TextBoxBase
     {
         if (IsHandleCreated)
         {
-            PInvoke.SendMessage(this, PInvoke.EM_EXLIMITTEXT, 0, (IntPtr)MaxLength);
+            PInvokeCore.SendMessage(this, PInvokeCore.EM_EXLIMITTEXT, 0, (IntPtr)MaxLength);
         }
     }
 
@@ -3255,7 +3255,7 @@ public partial class RichTextBox : TextBoxBase
                 HDROP endropfiles = (HDROP)((ENDROPFILES*)m.LParamInternal)->hDrop;
 
                 // Only look at the first file.
-                using (BufferScope<char> buffer = new(PInvoke.MAX_PATH + 1))
+                using (BufferScope<char> buffer = new((int)PInvokeCore.MAX_PATH + 1))
                 {
                     fixed (char* b = buffer)
                     {
@@ -3315,7 +3315,7 @@ public partial class RichTextBox : TextBoxBase
 
                     switch ((uint)enprotected.msg)
                     {
-                        case PInvoke.EM_SETCHARFORMAT:
+                        case PInvokeCore.EM_SETCHARFORMAT:
                             // Allow change of protected style
                             CHARFORMAT2W* charFormat = (CHARFORMAT2W*)enprotected.lParam;
                             if ((charFormat->dwMask & CFM_MASK.CFM_PROTECTED) != 0)
@@ -3327,11 +3327,11 @@ public partial class RichTextBox : TextBoxBase
                             break;
 
                         // Throw an exception for the following
-                        case PInvoke.EM_SETPARAFORMAT:
-                        case PInvoke.EM_REPLACESEL:
+                        case PInvokeCore.EM_SETPARAFORMAT:
+                        case PInvokeCore.EM_REPLACESEL:
                             break;
 
-                        case PInvoke.EM_STREAMIN:
+                        case PInvokeCore.EM_STREAMIN:
                             // Don't allow STREAMIN to replace protected selection
                             if ((unchecked((uint)(long)enprotected.wParam) & PInvoke.SFF_SELECTION) != 0)
                             {
@@ -3342,9 +3342,9 @@ public partial class RichTextBox : TextBoxBase
                             return;
 
                         // Allow the following
-                        case PInvoke.WM_COPY:
-                        case PInvoke.WM_SETTEXT:
-                        case PInvoke.EM_EXLIMITTEXT:
+                        case PInvokeCore.WM_COPY:
+                        case PInvokeCore.WM_SETTEXT:
+                        case PInvokeCore.EM_EXLIMITTEXT:
                             m.ResultInternal = (LRESULT)0;
                             return;
 
@@ -3389,15 +3389,15 @@ public partial class RichTextBox : TextBoxBase
         if (ImeMode is ImeMode.Hangul or ImeMode.HangulFull)
         {
             // Is the IME CompositionWindow open?
-            LRESULT compMode = PInvoke.SendMessage(this, PInvoke.EM_GETIMECOMPMODE);
+            LRESULT compMode = PInvokeCore.SendMessage(this, PInvokeCore.EM_GETIMECOMPMODE);
             if (compMode != PInvoke.ICM_NOTOPEN)
             {
                 int textLength = PInvoke.GetWindowTextLength(this);
                 if (selStart == selEnd && textLength == MaxLength)
                 {
-                    PInvoke.SendMessage(this, PInvoke.WM_KILLFOCUS);
-                    PInvoke.SendMessage(this, PInvoke.WM_SETFOCUS);
-                    PInvoke.PostMessage(this, PInvoke.EM_SETSEL, (WPARAM)(selEnd - 1), (LPARAM)selEnd);
+                    PInvokeCore.SendMessage(this, PInvokeCore.WM_KILLFOCUS);
+                    PInvokeCore.SendMessage(this, PInvokeCore.WM_SETFOCUS);
+                    PInvoke.PostMessage(this, PInvokeCore.EM_SETSEL, (WPARAM)(selEnd - 1), (LPARAM)selEnd);
                 }
             }
         }
@@ -3442,7 +3442,7 @@ public partial class RichTextBox : TextBoxBase
                 WmReflectCommand(ref m);
                 break;
 
-            case PInvoke.WM_SETCURSOR:
+            case PInvokeCore.WM_SETCURSOR:
                 // NOTE: RichTextBox uses the WM_SETCURSOR message over links to allow us to
                 //      change the cursor to a hand. It does this through a synchronous notification
                 //      message. So we have to pass the message to the DefWndProc first, and
@@ -3464,21 +3464,21 @@ public partial class RichTextBox : TextBoxBase
 
                 break;
 
-            case PInvoke.WM_SETFONT:
+            case PInvokeCore.WM_SETFONT:
                 WmSetFont(ref m);
                 break;
 
-            case PInvoke.WM_IME_NOTIFY:
+            case PInvokeCore.WM_IME_NOTIFY:
                 OnImeChange(EventArgs.Empty);
                 base.WndProc(ref m);
                 break;
 
-            case PInvoke.WM_GETDLGCODE:
+            case PInvokeCore.WM_GETDLGCODE:
                 base.WndProc(ref m);
                 m.ResultInternal = (LRESULT)(AcceptsTab ? m.ResultInternal | (nint)PInvoke.DLGC_WANTTAB : m.ResultInternal & ~(nint)PInvoke.DLGC_WANTTAB);
                 break;
 
-            case PInvoke.WM_GETOBJECT:
+            case PInvokeCore.WM_GETOBJECT:
                 base.WndProc(ref m);
 
                 // OLEACC.DLL uses window class names to identify standard control types. But WinForms controls use app-specific window
@@ -3492,7 +3492,7 @@ public partial class RichTextBox : TextBoxBase
 
                 break;
 
-            case PInvoke.WM_RBUTTONUP:
+            case PInvokeCore.WM_RBUTTONUP:
                 // since RichEdit eats up the WM_CONTEXTMENU message, we need to force DefWndProc
                 // to spit out this message again on receiving WM_RBUTTONUP message. By setting UserMouse
                 // style to true, we effectively let the WmMouseUp method in Control.cs to generate
@@ -3503,7 +3503,7 @@ public partial class RichTextBox : TextBoxBase
                 SetStyle(ControlStyles.UserMouse, oldStyle);
                 break;
 
-            case PInvoke.WM_VSCROLL:
+            case PInvokeCore.WM_VSCROLL:
                 {
                     base.WndProc(ref m);
                     SCROLLBAR_COMMAND loWord = (SCROLLBAR_COMMAND)m.WParamInternal.LOWORD;
@@ -3519,7 +3519,7 @@ public partial class RichTextBox : TextBoxBase
                     break;
                 }
 
-            case PInvoke.WM_HSCROLL:
+            case PInvokeCore.WM_HSCROLL:
                 {
                     base.WndProc(ref m);
                     SCROLLBAR_COMMAND loWord = (SCROLLBAR_COMMAND)m.WParamInternal.LOWORD;

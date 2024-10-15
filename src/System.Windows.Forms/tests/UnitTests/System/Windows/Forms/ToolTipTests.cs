@@ -852,14 +852,14 @@ public class ToolTipTests
 
         // Post MOUSEMOVE to the tooltip queue and then just remove it from the queue without handling.
         // This will update the point returned by GetMessagePos which is used by PInvoke.TTM_POPUP to determine the tool to display.
-        Assert.True(PInvoke.PostMessage(toolTip, PInvoke.WM_MOUSEMOVE, lParam: PARAM.FromPoint(tabPage.GetToolNativeScreenRectangle().Location)));
+        Assert.True(PInvoke.PostMessage(toolTip, PInvokeCore.WM_MOUSEMOVE, lParam: PARAM.FromPoint(tabPage.GetToolNativeScreenRectangle().Location)));
         MSG msg = default;
-        Assert.True(PInvoke.PeekMessage(&msg, toolTip, PInvoke.WM_MOUSEMOVE, PInvoke.WM_MOUSEMOVE, PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE));
+        Assert.True(PInvoke.PeekMessage(&msg, toolTip, PInvokeCore.WM_MOUSEMOVE, PInvokeCore.WM_MOUSEMOVE, PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE));
 
         // Show the tooltip.
 
         // Comment out the validation here due to the active issue "https://github.com/dotnet/winforms/issues/11236"
-        // PInvoke.SendMessage(toolTip, PInvoke.TTM_POPUP);
+        // PInvokeCore.SendMessage(toolTip, PInvoke.TTM_POPUP);
 
         // mockAccessibleObject.Verify(a => a.InternalRaiseAutomationNotification(
         //     AutomationNotificationKind.ActionCompleted,
@@ -891,7 +891,7 @@ public class ToolTipTests
         Assert.True(toolTip.GetHandleCreated());
 
         // Only tools for TabPages were added.
-        Assert.Equal(tabControl.TabCount, (int)PInvoke.SendMessage(toolTip, PInvoke.TTM_GETTOOLCOUNT));
+        Assert.Equal(tabControl.TabCount, (int)PInvokeCore.SendMessage(toolTip, PInvoke.TTM_GETTOOLCOUNT));
     }
 
     [WinFormsFact]
