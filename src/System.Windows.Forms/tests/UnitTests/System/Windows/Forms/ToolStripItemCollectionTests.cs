@@ -125,8 +125,17 @@ public class ToolStripItemCollectionTests
         Assert.Equal("c", contextMenuStrip.Items[2].Text);
     }
 
-    private ToolStripItem[] CreateToolStripItems(params (string Key, string Name)[] items) =>
-        items.Select(item => new ToolStripButton(item.Name) { Name = item.Key }).ToArray();
+    private ToolStripItem[] CreateToolStripItems(params (string Key, string Name)[] items)
+    {
+        List<ToolStripItem> toolStripItems = new();
+        foreach (var item in items)
+        {
+            using ToolStripButton toolStripButton = new(item.Name) { Name = item.Key };
+            toolStripItems.Add(toolStripButton);
+        }
+
+        return toolStripItems.ToArray();
+    }
 
     [WinFormsFact]
     public void ToolStripItemCollection_Constructor_ToolStripOwnerAndItems_Success()
