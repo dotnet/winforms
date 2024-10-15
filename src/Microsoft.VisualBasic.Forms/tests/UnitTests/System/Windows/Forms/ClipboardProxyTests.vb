@@ -12,7 +12,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
     ''' <summary>
     '''  These are just checking the <see cref="MyServices.ClipboardProxy" /> functions,
-    '''  the underlying functions and additional tests are tested elsewhere.
+    '''  the underlying functions are tested elsewhere.
     ''' </summary>
     <Collection("Sequential")>
     <UISettings(MaxAttempts:=3)>
