@@ -17,9 +17,8 @@ public class DataGridViewCellStyleBuilderTests
         Mock<IServiceProvider> serviceProvider = new();
         Mock<IComponent> component = new();
         using DataGridViewCellStyleBuilder builder = new(serviceProvider.Object, component.Object);
-        var cellStyle = new DataGridViewCellStyle { BackColor = Color.Red };
 
-        builder.CellStyle = cellStyle;
+        builder.CellStyle = new DataGridViewCellStyle { BackColor = Color.Red };
         var result = builder.CellStyle;
 
         result.Should().NotBeNull();
@@ -35,9 +34,8 @@ public class DataGridViewCellStyleBuilderTests
         Mock<ITypeDescriptorContext> context = new();
 
         builder.Context = context.Object;
+        ITypeDescriptorContext result = builder.TestAccessor().Dynamic._context;
 
-        var field = typeof(DataGridViewCellStyleBuilder).GetField("_context", Reflection.BindingFlags.NonPublic | Reflection.BindingFlags.Instance);
-        var result = field?.GetValue(builder);
         result.Should().Be(context.Object);
     }
 }
