@@ -443,9 +443,9 @@ internal static class DesignerUtils
         using (Graphics g = Graphics.FromImage(image))
         {
             IntPtr hDc = g.GetHdc();
-            PInvoke.SendMessage(
+            PInvokeCore.SendMessage(
                 control,
-                PInvoke.WM_PRINT,
+                PInvokeCore.WM_PRINT,
                 (WPARAM)hDc,
                 (LPARAM)(uint)(PInvoke.PRF_CHILDREN | PInvoke.PRF_CLIENT | PInvoke.PRF_ERASEBKGND | PInvoke.PRF_NONCLIENT));
             g.ReleaseHdc(hDc);
@@ -836,7 +836,7 @@ internal static class DesignerUtils
     private static int ScaleLogicalToDeviceUnitsX(int unit) => ScaleHelper.ScaleToInitialSystemDpi(unit);
 
     private static uint TreeView_GetExtendedStyle(HWND handle)
-        => (uint)PInvoke.SendMessage(handle, PInvoke.TVM_GETEXTENDEDSTYLE);
+        => (uint)PInvokeCore.SendMessage(handle, PInvoke.TVM_GETEXTENDEDSTYLE);
 
     /// <summary>
     ///  Modify a WinForms TreeView control to use the new Explorer style theme
@@ -852,7 +852,7 @@ internal static class DesignerUtils
         PInvoke.SetWindowTheme(hwnd, "Explorer", pszSubIdList: null);
         uint exstyle = TreeView_GetExtendedStyle(hwnd);
         exstyle |= PInvoke.TVS_EX_DOUBLEBUFFER | PInvoke.TVS_EX_FADEINOUTEXPANDOS;
-        PInvoke.SendMessage(treeView, PInvoke.TVM_SETEXTENDEDSTYLE, 0, (nint)exstyle);
+        PInvokeCore.SendMessage(treeView, PInvoke.TVM_SETEXTENDEDSTYLE, 0, (nint)exstyle);
     }
 
     /// <summary>
@@ -865,7 +865,7 @@ internal static class DesignerUtils
 
         HWND hwnd = (HWND)listView.Handle;
         PInvoke.SetWindowTheme(hwnd, "Explorer", null);
-        PInvoke.SendMessage(
+        PInvokeCore.SendMessage(
             listView,
             PInvoke.LVM_SETEXTENDEDLISTVIEWSTYLE,
             (WPARAM)PInvoke.LVS_EX_DOUBLEBUFFER,

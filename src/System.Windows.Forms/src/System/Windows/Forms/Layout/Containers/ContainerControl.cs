@@ -2033,7 +2033,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
     {
         switch (m.MsgInternal)
         {
-            case PInvoke.WM_SETFOCUS:
+            case PInvokeCore.WM_SETFOCUS:
                 WmSetFocus(ref m);
                 break;
             default:

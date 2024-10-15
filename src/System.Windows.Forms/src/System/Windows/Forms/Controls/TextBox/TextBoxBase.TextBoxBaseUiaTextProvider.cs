@@ -42,7 +42,7 @@ public abstract partial class TextBoxBase
 
             // Returns info about the selected text range.
             // If there is no selection, start and end parameters are the position of the caret.
-            PInvoke.SendMessage(Owner, PInvoke.EM_GETSEL, ref start, ref end);
+            PInvokeCore.SendMessage(Owner, PInvokeCore.EM_GETSEL, ref start, ref end);
 
             ComSafeArrayScope<ITextRangeProvider> result = new(1);
             // Adding to the SAFEARRAY adds a reference
@@ -207,7 +207,7 @@ public abstract partial class TextBoxBase
 
         public override int FirstVisibleLine
             => Owner is not null && Owner.IsHandleCreated
-                ? (int)PInvoke.SendMessage(Owner, PInvoke.EM_GETFIRSTVISIBLELINE)
+                ? (int)PInvokeCore.SendMessage(Owner, PInvokeCore.EM_GETFIRSTVISIBLELINE)
                 : -1;
 
         public override bool IsMultiline => Owner is not null && Owner.Multiline;
@@ -232,7 +232,7 @@ public abstract partial class TextBoxBase
 
         public override int LinesCount
             => Owner is not null && Owner.IsHandleCreated
-                ? (int)PInvoke.SendMessage(Owner, PInvoke.EM_GETLINECOUNT)
+                ? (int)PInvokeCore.SendMessage(Owner, PInvokeCore.EM_GETLINECOUNT)
                 : -1;
 
         public override int LinesPerPage
@@ -298,7 +298,7 @@ public abstract partial class TextBoxBase
 
         public override int GetLineIndex(int line)
             => Owner is not null && Owner.IsHandleCreated
-                ? (int)PInvoke.SendMessage(Owner, PInvoke.EM_LINEINDEX, (WPARAM)line)
+                ? (int)PInvokeCore.SendMessage(Owner, PInvokeCore.EM_LINEINDEX, (WPARAM)line)
                 : -1;
 
         public override Point GetPositionFromChar(int charIndex)
@@ -399,9 +399,9 @@ public abstract partial class TextBoxBase
         public override bool LineScroll(int charactersHorizontal, int linesVertical)
             // Sends an EM_LINESCROLL message to scroll it horizontally and/or vertically.
             => Owner is not null && Owner.IsHandleCreated
-                && PInvoke.SendMessage(
+                && PInvokeCore.SendMessage(
                     Owner,
-                    PInvoke.EM_LINESCROLL,
+                    PInvokeCore.EM_LINESCROLL,
                     (WPARAM)charactersHorizontal,
                     (LPARAM)linesVertical) != 0;
 
@@ -424,7 +424,7 @@ public abstract partial class TextBoxBase
                 return;
             }
 
-            PInvoke.SendMessage(Owner, PInvoke.EM_SETSEL, (WPARAM)start, (LPARAM)end);
+            PInvokeCore.SendMessage(Owner, PInvokeCore.EM_SETSEL, (WPARAM)start, (LPARAM)end);
         }
 
         private RECT GetFormattingRectangle()
@@ -438,7 +438,7 @@ public abstract partial class TextBoxBase
 
             // Send an EM_GETRECT message to find out the bounding rectangle.
             RECT rectangle = default;
-            PInvoke.SendMessage(Owner, PInvoke.EM_GETRECT, (WPARAM)0, ref rectangle);
+            PInvokeCore.SendMessage(Owner, PInvokeCore.EM_GETRECT, (WPARAM)0, ref rectangle);
             return rectangle;
         }
 

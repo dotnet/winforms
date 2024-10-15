@@ -133,7 +133,7 @@ public partial class DateTimePicker
             if (this.IsOwnerHandleCreated(out DateTimePicker? owner)
                 && ExpandCollapseState == ExpandCollapseState.ExpandCollapseState_Collapsed)
             {
-                PInvoke.SendMessage(owner, PInvoke.WM_SYSKEYDOWN, (WPARAM)(int)Keys.Down);
+                PInvokeCore.SendMessage(owner, PInvokeCore.WM_SYSKEYDOWN, (WPARAM)(int)Keys.Down);
             }
         }
 
@@ -142,7 +142,7 @@ public partial class DateTimePicker
             if (this.IsOwnerHandleCreated(out DateTimePicker? owner)
                 && ExpandCollapseState == ExpandCollapseState.ExpandCollapseState_Expanded)
             {
-                PInvoke.SendMessage(owner, PInvoke.DTM_CLOSEMONTHCAL);
+                PInvokeCore.SendMessage(owner, PInvoke.DTM_CLOSEMONTHCAL);
             }
         }
 

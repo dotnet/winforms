@@ -16,13 +16,13 @@ public partial class SplitContainer
 
         bool IMessageFilter.PreFilterMessage(ref Message m)
         {
-            if (m.MsgInternal < PInvoke.WM_KEYFIRST || m.MsgInternal > PInvoke.WM_KEYLAST)
+            if (m.MsgInternal < PInvokeCore.WM_KEYFIRST || m.MsgInternal > PInvokeCore.WM_KEYLAST)
             {
                 return false;
             }
 
-            if ((m.MsgInternal == PInvoke.WM_KEYDOWN && (Keys)(nint)m.WParamInternal == Keys.Escape)
-                || (m.MsgInternal == PInvoke.WM_SYSKEYDOWN))
+            if ((m.MsgInternal == PInvokeCore.WM_KEYDOWN && (Keys)(nint)m.WParamInternal == Keys.Escape)
+                || (m.MsgInternal == PInvokeCore.WM_SYSKEYDOWN))
             {
                 // Notify that splitMOVE was reverted. This is used in ONKEYUP.
                 _owner._splitBegin = false;

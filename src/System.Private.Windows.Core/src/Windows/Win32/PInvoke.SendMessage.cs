@@ -3,7 +3,7 @@
 
 namespace Windows.Win32;
 
-internal static partial class PInvoke
+internal static partial class PInvokeCore
 {
     /// <inheritdoc cref="SendMessage(HWND, uint, WPARAM, LPARAM)"/>
     public static LRESULT SendMessage<T>(

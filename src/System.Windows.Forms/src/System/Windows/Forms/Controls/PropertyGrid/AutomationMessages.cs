@@ -5,16 +5,16 @@ namespace System.Windows.Forms;
 
 internal static class AutomationMessages
 {
-    internal const int PGM_GETBUTTONCOUNT = (int)PInvoke.WM_USER + 0x50;
-    internal const int PGM_GETBUTTONSTATE = (int)PInvoke.WM_USER + 0x52;
-    internal const int PGM_SETBUTTONSTATE = (int)PInvoke.WM_USER + 0x51;
-    internal const int PGM_GETBUTTONTEXT = (int)PInvoke.WM_USER + 0x53;
-    internal const int PGM_GETBUTTONTOOLTIPTEXT = (int)PInvoke.WM_USER + 0x54;
-    internal const int PGM_GETROWCOORDS = (int)PInvoke.WM_USER + 0x55;
-    internal const int PGM_GETVISIBLEROWCOUNT = (int)PInvoke.WM_USER + 0x56;
-    internal const int PGM_GETSELECTEDROW = (int)PInvoke.WM_USER + 0x57;
-    internal const int PGM_SETSELECTEDTAB = (int)PInvoke.WM_USER + 0x58; // DO NOT CHANGE THIS : VC uses it!
-    internal const int PGM_GETTESTINGINFO = (int)PInvoke.WM_USER + 0x59;
+    internal const int PGM_GETBUTTONCOUNT = (int)PInvokeCore.WM_USER + 0x50;
+    internal const int PGM_GETBUTTONSTATE = (int)PInvokeCore.WM_USER + 0x52;
+    internal const int PGM_SETBUTTONSTATE = (int)PInvokeCore.WM_USER + 0x51;
+    internal const int PGM_GETBUTTONTEXT = (int)PInvokeCore.WM_USER + 0x53;
+    internal const int PGM_GETBUTTONTOOLTIPTEXT = (int)PInvokeCore.WM_USER + 0x54;
+    internal const int PGM_GETROWCOORDS = (int)PInvokeCore.WM_USER + 0x55;
+    internal const int PGM_GETVISIBLEROWCOUNT = (int)PInvokeCore.WM_USER + 0x56;
+    internal const int PGM_GETSELECTEDROW = (int)PInvokeCore.WM_USER + 0x57;
+    internal const int PGM_SETSELECTEDTAB = (int)PInvokeCore.WM_USER + 0x58; // DO NOT CHANGE THIS : VC uses it!
+    internal const int PGM_GETTESTINGINFO = (int)PInvokeCore.WM_USER + 0x59;
 
     /// <summary>
     ///  Writes the specified text into a temporary file of the form %TEMP%\"Maui.[file id].log", where

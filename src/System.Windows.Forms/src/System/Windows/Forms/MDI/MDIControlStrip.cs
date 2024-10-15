@@ -77,7 +77,7 @@ internal partial class MdiControlStrip : MenuStrip
 
     private Bitmap GetTargetWindowIcon()
     {
-        HICON hIcon = (HICON)PInvoke.SendMessage(GetSafeHandle(_target), PInvoke.WM_GETICON, (WPARAM)PInvoke.ICON_SMALL);
+        HICON hIcon = (HICON)PInvokeCore.SendMessage(GetSafeHandle(_target), PInvokeCore.WM_GETICON, (WPARAM)PInvoke.ICON_SMALL);
         Icon icon = !hIcon.IsNull ? Icon.FromHandle(hIcon) : Form.DefaultIcon;
         using Icon smallIcon = new(icon, SystemInformation.SmallIconSize);
         return smallIcon.ToBitmap();

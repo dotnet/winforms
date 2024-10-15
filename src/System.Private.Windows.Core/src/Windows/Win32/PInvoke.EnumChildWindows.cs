@@ -6,11 +6,12 @@ using System.Runtime.InteropServices;
 
 namespace Windows.Win32;
 
-internal static partial class PInvoke
+internal static partial class PInvokeCore
 {
-    public delegate BOOL EnumWindowsCallback(HWND hWnd);
+    public delegate BOOL EnumChildWindowsCallback(HWND hWnd);
 
-    public static unsafe BOOL EnumWindows(EnumWindowsCallback callback)
+    public static unsafe BOOL EnumChildWindows<T>(T hwndParent, EnumChildWindowsCallback callback)
+        where T : IHandle<HWND>
     {
         // We pass a function pointer to the native function and supply the callback as
         // reference data, so that the CLR doesn't need to generate a native code block for
@@ -18,17 +19,18 @@ internal static partial class PInvoke
         GCHandle gcHandle = GCHandle.Alloc(callback);
         try
         {
-            return EnumWindows(&EnumWindowsNativeCallback, (LPARAM)(nint)gcHandle);
+            return EnumChildWindows(hwndParent.Handle, &EnumChildWindowsNativeCallback, (LPARAM)(nint)gcHandle);
         }
         finally
         {
             gcHandle.Free();
+            GC.KeepAlive(hwndParent.Wrapper);
         }
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
-    private static BOOL EnumWindowsNativeCallback(HWND hWnd, LPARAM lParam)
+    private static BOOL EnumChildWindowsNativeCallback(HWND hWnd, LPARAM lParam)
     {
-        return ((EnumWindowsCallback)((GCHandle)(nint)lParam).Target!)(hWnd);
+        return ((EnumChildWindowsCallback)((GCHandle)(nint)lParam).Target!)(hWnd);
     }
 }

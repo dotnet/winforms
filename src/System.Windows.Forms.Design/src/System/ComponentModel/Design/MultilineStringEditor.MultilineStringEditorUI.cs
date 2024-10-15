@@ -405,7 +405,7 @@ public sealed partial class MultilineStringEditor
             base.WndProc(ref m);
             switch (m.MsgInternal)
             {
-                case PInvoke.WM_PAINT:
+                case PInvokeCore.WM_PAINT:
                     {
                         if (ShouldShowWatermark)
                         {

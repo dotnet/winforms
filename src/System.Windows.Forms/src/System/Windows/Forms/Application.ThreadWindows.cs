@@ -22,7 +22,7 @@ public sealed partial class Application
         {
             _windows = new List<HWND>(16);
             _onlyWinForms = onlyWinForms;
-            PInvoke.EnumCurrentThreadWindows(Callback);
+            PInvokeCore.EnumCurrentThreadWindows(Callback);
         }
 
         private BOOL Callback(HWND hwnd)

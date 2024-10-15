@@ -144,7 +144,7 @@ internal sealed partial class DesignerActionPanel
                     HWND hWndCapture = PInvoke.GetCapture();
                     if (!hWndCapture.IsNull)
                     {
-                        PInvoke.SendMessage(hWndCapture, PInvoke.WM_CANCELMODE);
+                        PInvokeCore.SendMessage(hWndCapture, PInvokeCore.WM_CANCELMODE);
                         PInvoke.ReleaseCapture();
                     }
 
@@ -167,7 +167,7 @@ internal sealed partial class DesignerActionPanel
 
             protected override void WndProc(ref Message m)
             {
-                if (m.MsgInternal == PInvoke.WM_ACTIVATE
+                if (m.MsgInternal == PInvokeCore.WM_ACTIVATE
                     && Visible
                     && m.WParamInternal.LOWORD == PInvoke.WA_INACTIVE
                     && !OwnsWindow((HWND)m.LParamInternal))

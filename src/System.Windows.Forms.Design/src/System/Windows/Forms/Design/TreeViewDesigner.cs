@@ -51,7 +51,7 @@ internal class TreeViewDesigner : ControlDesigner
     {
         point = Control.PointToClient(point);
         _tvhit.pt = point;
-        PInvoke.SendMessage(Control, PInvoke.TVM_HITTEST, 0, ref _tvhit);
+        PInvokeCore.SendMessage(Control, PInvoke.TVM_HITTEST, 0, ref _tvhit);
         return _tvhit.flags == TVHITTESTINFO_FLAGS.TVHT_ONITEMBUTTON;
     }
 

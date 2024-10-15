@@ -409,12 +409,12 @@ internal static unsafe class DragDropHelper
         ArgumentNullException.ThrowIfNull(dataObject);
         SourceGenerated.EnumValidator.Validate(dropImageType, nameof(dropImageType));
 
-        if (message.Length >= PInvoke.MAX_PATH)
+        if (message.Length >= (int)PInvokeCore.MAX_PATH)
         {
             throw new ArgumentOutOfRangeException(nameof(message));
         }
 
-        if (messageReplacementToken.Length >= PInvoke.MAX_PATH)
+        if (messageReplacementToken.Length >= (int)PInvokeCore.MAX_PATH)
         {
             throw new ArgumentOutOfRangeException(nameof(messageReplacementToken));
         }

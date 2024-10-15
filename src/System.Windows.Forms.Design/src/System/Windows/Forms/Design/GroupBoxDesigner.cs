@@ -105,7 +105,7 @@ internal class GroupBoxDesigner : ParentControlDesigner
     {
         switch (m.Msg)
         {
-            case (int)PInvoke.WM_NCHITTEST:
+            case (int)PInvokeCore.WM_NCHITTEST:
                 // The group box always fires HTTRANSPARENT, which causes the message to go to our parent. We want
                 // the group box's designer to get these messages, however, so change this.
                 base.WndProc(ref m);

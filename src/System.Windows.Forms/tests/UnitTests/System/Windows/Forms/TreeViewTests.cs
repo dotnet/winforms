@@ -1676,7 +1676,7 @@ public class TreeViewTests
 
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int version = Application.UseVisualStyles ? 6 : 5;
-        Assert.Equal(version, (int)PInvoke.SendMessage(control, PInvoke.CCM_GETVERSION));
+        Assert.Equal(version, (int)PInvokeCore.SendMessage(control, PInvoke.CCM_GETVERSION));
     }
 
     public static IEnumerable<object[]> Handle_CustomGetVersion_TestData()
