@@ -24,8 +24,6 @@
                                      or $(MSBuildProjectName.EndsWith('.Analyzers.VisualBasic'))
                                      or $(MSBuildProjectName.EndsWith('.Analyzers.CSharp')))"
                                   >true</IsAnalyzerProject>
-
-    <WarningsNotAsErrors>$(WarningsNotAsErrors);NU5104</WarningsNotAsErrors>
   </PropertyGroup>
 
   <!--

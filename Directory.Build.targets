@@ -95,7 +95,7 @@
       </ItemGroup>
       <PropertyGroup>
         <!-- Suppress CS0436 to allow ObsoleteAttribute to be internally defined and used in .NET Standard. -->
-        <NoWarn>$(NoWarn);CS0436;NU5104</NoWarn>
+        <NoWarn>$(NoWarn);CS0436</NoWarn>
       </PropertyGroup>
     </When>
   </Choose>

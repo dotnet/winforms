@@ -6,6 +6,7 @@
     <TargetFramework />
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <WarningsNotAsErrors>$(WarningsNotAsErrors);CS0618</WarningsNotAsErrors>
+    <NoWarn>$(NoWarn);NU5104</NoWarn>
     <EnableAOTAnalyzer>false</EnableAOTAnalyzer>
     <Nullable>enable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
