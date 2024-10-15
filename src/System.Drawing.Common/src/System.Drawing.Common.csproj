@@ -5,7 +5,8 @@
     <!-- Unset TargetFramework as this property gets set in Directory.Build.props. This is necessary to avoid over-building. -->
     <TargetFramework />
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <WarningsNotAsErrors>CS0618</WarningsNotAsErrors>
+    <WarningsNotAsErrors>$(WarningsNotAsErrors);CS0618</WarningsNotAsErrors>
+    <NoWarn>$(NoWarn);NU5104</NoWarn>
     <EnableAOTAnalyzer>false</EnableAOTAnalyzer>
     <Nullable>enable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
