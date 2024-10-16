@@ -59,8 +59,8 @@ public class SplitContainerTests : ControlTestBase
             form.Controls.Add(splitContainer);
             form.Show();
 
-            DpiMessageHelper.TriggerDpiMessage(PInvoke.WM_DPICHANGED_BEFOREPARENT, splitContainer, newDpi);
-            DpiMessageHelper.TriggerDpiMessage(PInvoke.WM_DPICHANGED, form, newDpi);
+            DpiMessageHelper.TriggerDpiMessage(PInvokeCore.WM_DPICHANGED_BEFOREPARENT, splitContainer, newDpi);
+            DpiMessageHelper.TriggerDpiMessage(PInvokeCore.WM_DPICHANGED, form, newDpi);
 
             Assert.NotEqual(90, splitContainer.SplitterDistance);
             Assert.NotEqual(2, splitContainer.SplitterWidth);

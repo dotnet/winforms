@@ -877,7 +877,7 @@ public partial class ListViewItem : ICloneable, ISerializable
                 lv.Focus();
             }
 
-            PInvoke.SendMessage(lv, PInvoke.LVM_EDITLABELW, (WPARAM)Index);
+            PInvokeCore.SendMessage(lv, PInvoke.LVM_EDITLABELW, (WPARAM)Index);
         }
     }
 
@@ -1096,15 +1096,15 @@ public partial class ListViewItem : ICloneable, ISerializable
             lvItem.mask |= LIST_VIEW_ITEM_FLAGS.LVIF_GROUPID;
             lvItem.iGroupId = _listView.GetNativeGroupId(this);
 
-            nint result = PInvoke.SendMessage(_listView, PInvoke.LVM_ISGROUPVIEWENABLED);
+            nint result = PInvokeCore.SendMessage(_listView, PInvoke.LVM_ISGROUPVIEWENABLED);
             Debug.Assert(!updateOwner || result != 0, "Groups not enabled");
-            result = PInvoke.SendMessage(_listView, PInvoke.LVM_HASGROUP, (WPARAM)lvItem.iGroupId);
+            result = PInvokeCore.SendMessage(_listView, PInvoke.LVM_HASGROUP, (WPARAM)lvItem.iGroupId);
             Debug.Assert(!updateOwner || result != 0, $"Doesn't contain group id: {lvItem.iGroupId}");
         }
 
         if (updateOwner)
         {
-            PInvoke.SendMessage(_listView, PInvoke.LVM_SETITEMW, 0, ref lvItem);
+            PInvokeCore.SendMessage(_listView, PInvoke.LVM_SETITEMW, 0, ref lvItem);
         }
     }
 
@@ -1133,7 +1133,7 @@ public partial class ListViewItem : ICloneable, ISerializable
             }
 
             lvItem.iItem = displayIndex;
-            PInvoke.SendMessage(_listView, PInvoke.LVM_GETITEMW, 0, ref lvItem);
+            PInvokeCore.SendMessage(_listView, PInvoke.LVM_GETITEMW, 0, ref lvItem);
 
             // Update this class' information
             if (checkSelection)

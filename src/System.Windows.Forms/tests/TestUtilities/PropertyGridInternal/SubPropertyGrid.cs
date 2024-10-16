@@ -63,7 +63,7 @@ public class SubPropertyGrid<TSelected> : PropertyGrid where TSelected : new()
 
         try
         {
-            PInvoke.PostMessage(this, WM_DELAYEDEXECUTION, lParam: GCHandle.ToIntPtr(callbackHandle));
+            PInvokeCore.PostMessage(this, WM_DELAYEDEXECUTION, lParam: GCHandle.ToIntPtr(callbackHandle));
             GridView.PopupEditor(GridView.TestAccessor().Dynamic._selectedRow);
         }
         finally

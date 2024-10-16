@@ -400,7 +400,7 @@ public sealed partial class ListViewGroup : ISerializable
             return ListViewGroupCollapsedState.Default;
         }
 
-        LIST_VIEW_GROUP_STATE_FLAGS state = (LIST_VIEW_GROUP_STATE_FLAGS)(uint)PInvoke.SendMessage(
+        LIST_VIEW_GROUP_STATE_FLAGS state = (LIST_VIEW_GROUP_STATE_FLAGS)(uint)PInvokeCore.SendMessage(
             ListView,
             PInvoke.LVM_GETGROUPSTATE,
             (WPARAM)ID,

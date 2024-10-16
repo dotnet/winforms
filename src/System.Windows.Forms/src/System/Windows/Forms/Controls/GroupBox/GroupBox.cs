@@ -249,7 +249,7 @@ public partial class GroupBox : Control
             {
                 if (suspendRedraw && IsHandleCreated)
                 {
-                    PInvoke.SendMessage(this, PInvoke.WM_SETREDRAW, (WPARAM)(BOOL)false);
+                    PInvokeCore.SendMessage(this, PInvokeCore.WM_SETREDRAW, (WPARAM)(BOOL)false);
                 }
 
                 base.Text = value;
@@ -258,7 +258,7 @@ public partial class GroupBox : Control
             {
                 if (suspendRedraw && IsHandleCreated)
                 {
-                    PInvoke.SendMessage(this, PInvoke.WM_SETREDRAW, (WPARAM)(BOOL)true);
+                    PInvokeCore.SendMessage(this, PInvokeCore.WM_SETREDRAW, (WPARAM)(BOOL)true);
                 }
             }
 
@@ -688,11 +688,11 @@ public partial class GroupBox : Control
 
         switch (m.MsgInternal)
         {
-            case PInvoke.WM_ERASEBKGND:
-            case PInvoke.WM_PRINTCLIENT:
+            case PInvokeCore.WM_ERASEBKGND:
+            case PInvokeCore.WM_PRINTCLIENT:
                 WmEraseBkgnd(ref m);
                 break;
-            case PInvoke.WM_GETOBJECT:
+            case PInvokeCore.WM_GETOBJECT:
                 base.WndProc(ref m);
 
                 // Force MSAA to always treat a group box as a custom window. This ensures its child controls

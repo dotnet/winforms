@@ -630,11 +630,11 @@ public class FontDialogTests
     {
         foreach (bool showColor in new bool[] { true, false })
         {
-            yield return new object[] { showColor, (int)PInvoke.WM_INITDIALOG, IntPtr.Zero };
-            yield return new object[] { showColor, (int)PInvoke.WM_SETFOCUS, IntPtr.Zero };
-            yield return new object[] { showColor, (int)PInvoke.WM_COMMAND, IntPtr.Zero };
+            yield return new object[] { showColor, (int)PInvokeCore.WM_INITDIALOG, IntPtr.Zero };
+            yield return new object[] { showColor, (int)PInvokeCore.WM_SETFOCUS, IntPtr.Zero };
+            yield return new object[] { showColor, (int)PInvokeCore.WM_COMMAND, IntPtr.Zero };
 
-            const uint CDM_SETDEFAULTFOCUS = (int)PInvoke.WM_USER + 0x51;
+            const uint CDM_SETDEFAULTFOCUS = (int)PInvokeCore.WM_USER + 0x51;
             yield return new object[] { showColor, (int)CDM_SETDEFAULTFOCUS, IntPtr.Zero };
 
             yield return new object[] { showColor, 0, IntPtr.Zero };
@@ -660,12 +660,12 @@ public class FontDialogTests
     {
         foreach (bool showColor in new bool[] { true, false })
         {
-            yield return new object[] { showColor, (int)PInvoke.WM_INITDIALOG, IntPtr.Zero, 0 };
-            yield return new object[] { showColor, (int)PInvoke.WM_SETFOCUS, IntPtr.Zero, 0 };
-            yield return new object[] { showColor, (int)PInvoke.WM_COMMAND, IntPtr.Zero, 0 };
-            yield return new object[] { showColor, (int)PInvoke.WM_COMMAND, (IntPtr)0x402, 1 };
+            yield return new object[] { showColor, (int)PInvokeCore.WM_INITDIALOG, IntPtr.Zero, 0 };
+            yield return new object[] { showColor, (int)PInvokeCore.WM_SETFOCUS, IntPtr.Zero, 0 };
+            yield return new object[] { showColor, (int)PInvokeCore.WM_COMMAND, IntPtr.Zero, 0 };
+            yield return new object[] { showColor, (int)PInvokeCore.WM_COMMAND, (IntPtr)0x402, 1 };
 
-            const uint CDM_SETDEFAULTFOCUS = (int)PInvoke.WM_USER + 0x51;
+            const uint CDM_SETDEFAULTFOCUS = (int)PInvokeCore.WM_USER + 0x51;
             yield return new object[] { showColor, (int)CDM_SETDEFAULTFOCUS, IntPtr.Zero, 0 };
 
             yield return new object[] { showColor, 0, IntPtr.Zero, 0 };
@@ -692,7 +692,7 @@ public class FontDialogTests
     {
         protected override unsafe void WndProc(ref Message m)
         {
-            if (m.Msg == (int)PInvoke.WM_CHOOSEFONT_GETLOGFONT)
+            if (m.Msg == (int)PInvokeCore.WM_CHOOSEFONT_GETLOGFONT)
             {
                 using Font font = new("Arial", 8.25f);
                 LOGFONTW* pLogfont = (LOGFONTW*)m.LParam;
@@ -715,7 +715,7 @@ public class FontDialogTests
         };
         int applyCallCount = 0;
         dialog.Apply += (sender, e) => applyCallCount++;
-        Assert.Throws<ArgumentException>(() => dialog.HookProc(IntPtr.Zero, (int)PInvoke.WM_COMMAND, 0x402, IntPtr.Zero));
+        Assert.Throws<ArgumentException>(() => dialog.HookProc(IntPtr.Zero, (int)PInvokeCore.WM_COMMAND, 0x402, IntPtr.Zero));
     }
 
     [WinFormsTheory]

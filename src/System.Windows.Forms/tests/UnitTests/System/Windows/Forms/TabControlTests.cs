@@ -1011,7 +1011,7 @@ public class TabControlTests
     {
         using TabControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
-        Assert.Equal(0, (int)PInvoke.SendMessage(control, PInvoke.TCM_GETIMAGELIST));
+        Assert.Equal(0, (int)PInvokeCore.SendMessage(control, PInvoke.TCM_GETIMAGELIST));
     }
 
     [WinFormsFact]
@@ -1023,7 +1023,7 @@ public class TabControlTests
             ImageList = imageList
         };
         Assert.NotEqual(IntPtr.Zero, control.Handle);
-        Assert.Equal(imageList.Handle, (nint)PInvoke.SendMessage(control, PInvoke.TCM_GETIMAGELIST));
+        Assert.Equal(imageList.Handle, (nint)PInvokeCore.SendMessage(control, PInvoke.TCM_GETIMAGELIST));
     }
 
     [WinFormsFact]
@@ -1031,7 +1031,7 @@ public class TabControlTests
     {
         using TabControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
-        Assert.Equal(0, (int)PInvoke.SendMessage(control, PInvoke.TCM_GETITEMCOUNT));
+        Assert.Equal(0, (int)PInvokeCore.SendMessage(control, PInvoke.TCM_GETITEMCOUNT));
     }
 
     [WinFormsTheory]
@@ -1053,7 +1053,7 @@ public class TabControlTests
         control.TabPages.Add(page2);
         control.TabPages.Add(page3);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
-        Assert.Equal(3, (int)PInvoke.SendMessage(control, PInvoke.TCM_GETITEMCOUNT));
+        Assert.Equal(3, (int)PInvokeCore.SendMessage(control, PInvoke.TCM_GETITEMCOUNT));
 
         char* buffer = stackalloc char[256];
         TCITEMW item = default;
@@ -1063,7 +1063,7 @@ public class TabControlTests
         item.mask = (TCITEMHEADERA_MASK)uint.MaxValue;
 
         // Get item 0.
-        Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TCM_GETITEMW, 0, ref item));
+        Assert.Equal(1, (int)PInvokeCore.SendMessage(control, PInvoke.TCM_GETITEMW, 0, ref item));
         Assert.Equal(TAB_CONTROL_ITEM_STATE.TCIS_BUTTONPRESSED, item.dwState);
         Assert.Equal(IntPtr.Zero, (nint)item.lParam);
         Assert.Equal(int.MaxValue, item.cchTextMax);
@@ -1071,7 +1071,7 @@ public class TabControlTests
         Assert.Equal(-1, item.iImage);
 
         // Get item 1.
-        Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TCM_GETITEMW, 1, ref item));
+        Assert.Equal(1, (int)PInvokeCore.SendMessage(control, PInvoke.TCM_GETITEMW, 1, ref item));
         Assert.Equal((TAB_CONTROL_ITEM_STATE)0, item.dwState);
         Assert.Equal(IntPtr.Zero, (nint)item.lParam);
         Assert.Equal(int.MaxValue, item.cchTextMax);
@@ -1079,7 +1079,7 @@ public class TabControlTests
         Assert.Equal(1, item.iImage);
 
         // Get item 2.
-        Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TCM_GETITEMW, 2, ref item));
+        Assert.Equal(1, (int)PInvokeCore.SendMessage(control, PInvoke.TCM_GETITEMW, 2, ref item));
         Assert.Equal((TAB_CONTROL_ITEM_STATE)0, item.dwState);
         Assert.Equal(IntPtr.Zero, (nint)item.lParam);
         Assert.Equal(int.MaxValue, item.cchTextMax);
@@ -1298,11 +1298,11 @@ public class TabControlTests
         using ImageList imageList = new();
         control.ImageList = imageList;
         Assert.True(imageList.HandleCreated);
-        Assert.Equal(imageList.Handle, (nint)PInvoke.SendMessage(control, PInvoke.TCM_GETIMAGELIST));
+        Assert.Equal(imageList.Handle, (nint)PInvokeCore.SendMessage(control, PInvoke.TCM_GETIMAGELIST));
 
         // Set null.
         control.ImageList = null;
-        Assert.Equal(0, (int)PInvoke.SendMessage(control, PInvoke.TCM_GETIMAGELIST));
+        Assert.Equal(0, (int)PInvokeCore.SendMessage(control, PInvoke.TCM_GETIMAGELIST));
     }
 
     [WinFormsFact]
@@ -1419,7 +1419,7 @@ public class TabControlTests
         imageList1.ImageSize = new Size(1, 2);
         Assert.Equal(1, recreateCallCount1);
         Assert.Same(imageList1, control.ImageList);
-        Assert.Equal(imageList1.Handle, (nint)PInvoke.SendMessage(control, PInvoke.TCM_GETIMAGELIST));
+        Assert.Equal(imageList1.Handle, (nint)PInvokeCore.SendMessage(control, PInvoke.TCM_GETIMAGELIST));
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -1430,7 +1430,7 @@ public class TabControlTests
         imageList1.ImageSize = new Size(2, 3);
         Assert.Equal(2, recreateCallCount1);
         Assert.Same(imageList2, control.ImageList);
-        Assert.Equal(imageList2.Handle, (nint)PInvoke.SendMessage(control, PInvoke.TCM_GETIMAGELIST));
+        Assert.Equal(imageList2.Handle, (nint)PInvokeCore.SendMessage(control, PInvoke.TCM_GETIMAGELIST));
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -4928,7 +4928,7 @@ public class TabControlTests
         control.TabPages.Add(page3);
 
         control.RecreateHandle();
-        Assert.Equal(3, (int)PInvoke.SendMessage(control, PInvoke.TCM_GETITEMCOUNT));
+        Assert.Equal(3, (int)PInvokeCore.SendMessage(control, PInvoke.TCM_GETITEMCOUNT));
 
         char* buffer = stackalloc char[256];
         TCITEMW item = default;
@@ -4938,7 +4938,7 @@ public class TabControlTests
         item.mask = (TCITEMHEADERA_MASK)uint.MaxValue;
 
         // Get item 0.
-        Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TCM_GETITEMW, 0, ref item));
+        Assert.Equal(1, (int)PInvokeCore.SendMessage(control, PInvoke.TCM_GETITEMW, 0, ref item));
         Assert.Equal(TAB_CONTROL_ITEM_STATE.TCIS_BUTTONPRESSED, item.dwState);
         Assert.Equal(IntPtr.Zero, (nint)item.lParam);
         Assert.Equal(int.MaxValue, item.cchTextMax);
@@ -4946,7 +4946,7 @@ public class TabControlTests
         Assert.Equal(-1, item.iImage);
 
         // Get item 1.
-        Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TCM_GETITEMW, 1, ref item));
+        Assert.Equal(1, (int)PInvokeCore.SendMessage(control, PInvoke.TCM_GETITEMW, 1, ref item));
         Assert.Equal((TAB_CONTROL_ITEM_STATE)0, item.dwState);
         Assert.Equal(IntPtr.Zero, (nint)item.lParam);
         Assert.Equal(int.MaxValue, item.cchTextMax);
@@ -4954,7 +4954,7 @@ public class TabControlTests
         Assert.Equal(1, item.iImage);
 
         // Get item 2.
-        Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TCM_GETITEMW, 2, ref item));
+        Assert.Equal(1, (int)PInvokeCore.SendMessage(control, PInvoke.TCM_GETITEMW, 2, ref item));
         Assert.Equal((TAB_CONTROL_ITEM_STATE)0, item.dwState);
         Assert.Equal(IntPtr.Zero, (nint)item.lParam);
         Assert.Equal(int.MaxValue, item.cchTextMax);
@@ -5185,7 +5185,7 @@ public class TabControlTests
 
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         control.RemoveAll();
-        Assert.Equal(0, (int)PInvoke.SendMessage(control, PInvoke.TCM_GETITEMCOUNT));
+        Assert.Equal(0, (int)PInvokeCore.SendMessage(control, PInvoke.TCM_GETITEMCOUNT));
     }
 
     [WinFormsFact]

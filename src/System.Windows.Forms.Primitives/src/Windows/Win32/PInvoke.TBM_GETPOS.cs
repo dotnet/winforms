@@ -5,5 +5,5 @@ namespace Windows.Win32;
 
 internal static partial class PInvoke
 {
-    public const uint TBM_GETPOS = WM_USER;
+    public const uint TBM_GETPOS = PInvokeCore.WM_USER;
 }
