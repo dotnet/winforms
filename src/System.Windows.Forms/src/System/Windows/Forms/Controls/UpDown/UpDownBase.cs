@@ -944,7 +944,7 @@ public abstract partial class UpDownBase : ContainerControl
     {
         switch (m.MsgInternal)
         {
-            case PInvoke.WM_SETFOCUS:
+            case PInvokeCore.WM_SETFOCUS:
                 if (!HostedInWin32DialogManager)
                 {
                     if (ActiveControl is null)
@@ -967,7 +967,7 @@ public abstract partial class UpDownBase : ContainerControl
                 }
 
                 break;
-            case PInvoke.WM_KILLFOCUS:
+            case PInvokeCore.WM_KILLFOCUS:
                 DefWndProc(ref m);
                 break;
             default:

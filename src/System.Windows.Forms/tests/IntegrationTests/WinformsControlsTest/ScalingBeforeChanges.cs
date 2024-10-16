@@ -76,7 +76,7 @@ public partial class ScalingBeforeChanges : Form
         base.WndProc(ref m);
         switch (m.MsgInternal)
         {
-            case PInvoke.WM_DPICHANGED:
+            case PInvokeCore.WM_DPICHANGED:
                 int x = LOWORD(m.WParam);
                 int y = HIWORD(m.WParam);
                 if (x != _deviceDpiX || y != _deviceDpiY)
@@ -119,13 +119,13 @@ public class MyCheckBox : CheckBox
         uint dpi;
         switch (m.MsgInternal)
         {
-            case PInvoke.WM_DPICHANGED_BEFOREPARENT:
+            case PInvokeCore.WM_DPICHANGED_BEFOREPARENT:
                 dpi = PInvoke.GetDpiForWindow(this);
                 Debug.WriteLine($"WM_DPICHANGED_BEFOREPARENT  {dpi}");
 
                 m.Result = 1;
                 break;
-            case PInvoke.WM_DPICHANGED_AFTERPARENT:
+            case PInvokeCore.WM_DPICHANGED_AFTERPARENT:
                 dpi = PInvoke.GetDpiForWindow(this);
                 Debug.WriteLine($"WM_DPICHANGED_AFTERPARENT {dpi}");
                 m.Result = 1;

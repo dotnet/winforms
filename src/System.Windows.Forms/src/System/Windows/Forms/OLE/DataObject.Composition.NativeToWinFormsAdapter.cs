@@ -186,7 +186,7 @@ public unsafe partial class DataObject
                     return null;
                 }
 
-                Span<char> fileName = stackalloc char[PInvoke.MAX_PATH + 1];
+                Span<char> fileName = stackalloc char[(int)PInvokeCore.MAX_PATH + 1];
                 string[] files = new string[count];
 
                 fixed (char* buffer = fileName)

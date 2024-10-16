@@ -305,7 +305,7 @@ public partial class Button : ButtonBase, IButtonControl
                 }
 
                 break;
-            case PInvoke.WM_ERASEBKGND:
+            case PInvokeCore.WM_ERASEBKGND:
                 DefWndProc(ref m);
                 break;
             default:

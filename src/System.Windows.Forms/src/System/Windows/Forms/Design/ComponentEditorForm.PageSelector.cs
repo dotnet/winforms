@@ -186,9 +186,9 @@ public partial class ComponentEditorForm
         {
             base.OnHandleCreated(e);
 
-            int itemHeight = (int)PInvoke.SendMessage(this, PInvoke.TVM_GETITEMHEIGHT);
+            int itemHeight = (int)PInvokeCore.SendMessage(this, PInvoke.TVM_GETITEMHEIGHT);
             itemHeight += 2 * PADDING_VERT;
-            PInvoke.SendMessage(this, PInvoke.TVM_SETITEMHEIGHT, (WPARAM)itemHeight);
+            PInvokeCore.SendMessage(this, PInvoke.TVM_SETITEMHEIGHT, (WPARAM)itemHeight);
 
             if (_hbrushDither.IsNull)
             {

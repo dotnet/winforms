@@ -843,15 +843,15 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
     {
         switch (m.MsgInternal)
         {
-            case PInvoke.WM_LBUTTONUP:
-            case PInvoke.WM_RBUTTONUP:
+            case PInvokeCore.WM_LBUTTONUP:
+            case PInvokeCore.WM_RBUTTONUP:
                 if (_mouseDragAnchor != s_invalidPoint)
                 {
                     _ignoreCaptureChanged = true;
                 }
 
                 break;
-            case PInvoke.WM_CAPTURECHANGED:
+            case PInvokeCore.WM_CAPTURECHANGED:
                 if (!_ignoreCaptureChanged && _mouseDragAnchor != s_invalidPoint)
                 {
                     EndMouseDrag(MousePosition);

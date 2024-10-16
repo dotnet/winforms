@@ -202,7 +202,7 @@ internal class WindowClass
 
             if (!Atom.IsValid)
             {
-                Atom = PInvoke.GetClassLong(window, GET_CLASS_LONG_INDEX.GCW_ATOM);
+                Atom = PInvokeCore.GetClassLong(window, GET_CLASS_LONG_INDEX.GCW_ATOM);
             }
 
             if (isMainWindow)
@@ -218,7 +218,7 @@ internal class WindowClass
     {
         switch (msg)
         {
-            case PInvoke.WM_DESTROY:
+            case PInvokeCore.WM_DESTROY:
                 if (hWnd == MainWindow)
                 {
                     PInvoke.PostQuitMessage(0);

@@ -140,7 +140,7 @@ public unsafe class WebBrowserSiteBase :
         Debug.Assert(!Host.GetAXHostState(WebBrowserHelper.s_siteProcessedInputKey), "Re-entering IOleControlSite.TranslateAccelerator!!!");
         Host.SetAXHostState(WebBrowserHelper.s_siteProcessedInputKey, true);
 
-        Message msg = *pMsg;
+        Message msg = Message.Create(pMsg);
         try
         {
             bool f = Host.PreProcessControlMessage(ref msg) == PreProcessControlState.MessageProcessed;

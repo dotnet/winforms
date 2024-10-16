@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 namespace Windows.Win32;
 
-internal static partial class PInvoke
+internal static partial class PInvokeCore
 {
     // We only ever call this on 32 bit so IntPtr is correct
     // https://msdn.microsoft.com/library/windows/desktop/ms633580.aspx
