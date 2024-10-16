@@ -361,7 +361,7 @@ public partial class ListView : Control
             base.BackColor = value;
             if (IsHandleCreated)
             {
-                PInvoke.SendMessage(this, PInvoke.LVM_SETBKCOLOR, (WPARAM)0, (LPARAM)BackColor);
+                PInvokeCore.SendMessage(this, PInvoke.LVM_SETBKCOLOR, (WPARAM)0, (LPARAM)BackColor);
             }
         }
     }
@@ -416,7 +416,7 @@ public partial class ListView : Control
                         lvbkImage.pszImage = pBackgroundImageFileName;
                         lvbkImage.cchImageMax = (uint)(_backgroundImageFileName.Length + 1);
 
-                        PInvoke.SendMessage(this, PInvoke.LVM_SETBKIMAGEW, (WPARAM)0, ref lvbkImage);
+                        PInvokeCore.SendMessage(this, PInvoke.LVM_SETBKIMAGEW, (WPARAM)0, ref lvbkImage);
                     }
                 }
             }
@@ -571,11 +571,11 @@ public partial class ListView : Control
                         if (CheckBoxes)
                         {
                             // We want custom checkboxes.
-                            PInvoke.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_STATE, (LPARAM)_imageListState.Handle);
+                            PInvokeCore.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_STATE, (LPARAM)_imageListState.Handle);
                         }
                         else
                         {
-                            PInvoke.SendMessage(this, PInvoke.LVM_SETIMAGELIST, PInvoke.LVSIL_STATE);
+                            PInvokeCore.SendMessage(this, PInvoke.LVM_SETIMAGELIST, PInvoke.LVSIL_STATE);
                         }
                     }
 
@@ -820,7 +820,7 @@ public partial class ListView : Control
         {
             if (IsHandleCreated)
             {
-                int displayIndex = (int)PInvoke.SendMessage(
+                int displayIndex = (int)PInvokeCore.SendMessage(
                     this,
                     PInvoke.LVM_GETNEXTITEM,
                     (WPARAM)(-1),
@@ -861,7 +861,7 @@ public partial class ListView : Control
             base.ForeColor = value;
             if (IsHandleCreated)
             {
-                PInvoke.SendMessage(this, PInvoke.LVM_SETTEXTCOLOR, (WPARAM)0, (LPARAM)ForeColor);
+                PInvokeCore.SendMessage(this, PInvoke.LVM_SETTEXTCOLOR, (WPARAM)0, (LPARAM)ForeColor);
             }
         }
     }
@@ -974,7 +974,7 @@ public partial class ListView : Control
                 return;
             }
 
-            PInvoke.SendMessage(
+            PInvokeCore.SendMessage(
                 this,
                 PInvoke.LVM_SETIMAGELIST,
                 (WPARAM)PInvoke.LVSIL_GROUPHEADER,
@@ -1238,7 +1238,7 @@ public partial class ListView : Control
                 return;
             }
 
-            PInvoke.SendMessage(
+            PInvokeCore.SendMessage(
                 this,
                 PInvoke.LVM_SETIMAGELIST,
                 (WPARAM)PInvoke.LVSIL_NORMAL,
@@ -1477,7 +1477,7 @@ public partial class ListView : Control
                 return;
             }
 
-            PInvoke.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_SMALL, (LPARAM)(value?.Handle ?? 0));
+            PInvokeCore.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_SMALL, (LPARAM)(value?.Handle ?? 0));
 
             if (View == View.SmallIcon)
             {
@@ -1582,7 +1582,7 @@ public partial class ListView : Control
 
                 if (IsHandleCreated)
                 {
-                    PInvoke.SendMessage(this,
+                    PInvokeCore.SendMessage(this,
                         PInvoke.LVM_SETIMAGELIST,
                         (WPARAM)PInvoke.LVSIL_STATE,
                         (LPARAM)(value?.Handle ?? 0));
@@ -1600,7 +1600,7 @@ public partial class ListView : Control
                     // (Yes, it does exactly that even though our wrapper sets LVS_SHAREIMAGELISTS on the native listView.)
                     // So we make the native listView forget about its StateImageList just before we recreate the handle.
                     // Likely related to https://devblogs.microsoft.com/oldnewthing/20171128-00/?p=97475
-                    PInvoke.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_STATE);
+                    PInvokeCore.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_STATE);
                 }
 
                 _imageListState = value;
@@ -1618,7 +1618,7 @@ public partial class ListView : Control
                 }
                 else
                 {
-                    PInvoke.SendMessage(
+                    PInvokeCore.SendMessage(
                         this,
                         PInvoke.LVM_SETIMAGELIST,
                         (WPARAM)PInvoke.LVSIL_STATE,
@@ -1681,7 +1681,7 @@ public partial class ListView : Control
                 dwMask = LVTILEVIEWINFO_MASK.LVTVIM_TILESIZE
             };
 
-            PInvoke.SendMessage(this, PInvoke.LVM_GETTILEVIEWINFO, (WPARAM)0, ref tileViewInfo);
+            PInvokeCore.SendMessage(this, PInvoke.LVM_GETTILEVIEWINFO, (WPARAM)0, ref tileViewInfo);
 
             return tileViewInfo.sizeTile;
         }
@@ -1711,7 +1711,7 @@ public partial class ListView : Control
                 sizeTile = _tileSize
             };
 
-            nint result = PInvoke.SendMessage(this, PInvoke.LVM_SETTILEVIEWINFO, (WPARAM)0, ref tileViewInfo);
+            nint result = PInvokeCore.SendMessage(this, PInvoke.LVM_SETTILEVIEWINFO, (WPARAM)0, ref tileViewInfo);
             Debug.Assert(result != 0, "LVM_SETTILEVIEWINFO failed");
 
             if (AutoArrange)
@@ -1751,7 +1751,7 @@ public partial class ListView : Control
                 }
             }
 
-            _topIndex = (int)PInvoke.SendMessage(this, PInvoke.LVM_GETTOPINDEX);
+            _topIndex = (int)PInvokeCore.SendMessage(this, PInvoke.LVM_GETTOPINDEX);
             if (_topIndex >= 0 && _topIndex < Items.Count)
             {
                 return Items[_topIndex];
@@ -1859,7 +1859,7 @@ public partial class ListView : Control
                 _viewStyle = value;
                 if (IsHandleCreated && Application.ComCtlSupportsVisualStyles)
                 {
-                    PInvoke.SendMessage(this, PInvoke.LVM_SETVIEW, (WPARAM)(int)_viewStyle);
+                    PInvokeCore.SendMessage(this, PInvoke.LVM_SETVIEW, (WPARAM)(int)_viewStyle);
                     UpdateGroupView();
 
                     // if we switched to Tile view we should update the win32 list view tile view info
@@ -1904,14 +1904,14 @@ public partial class ListView : Control
             int topIndex = -1;
             if (keepTopItem)
             {
-                topIndex = (int)PInvoke.SendMessage(this, PInvoke.LVM_GETTOPINDEX);
+                topIndex = (int)PInvokeCore.SendMessage(this, PInvoke.LVM_GETTOPINDEX);
             }
 
             _virtualListSize = value;
 
             if (IsHandleCreated && VirtualMode && !DesignMode)
             {
-                PInvoke.SendMessage(this, PInvoke.LVM_SETITEMCOUNT, (WPARAM)_virtualListSize);
+                PInvokeCore.SendMessage(this, PInvoke.LVM_SETITEMCOUNT, (WPARAM)_virtualListSize);
             }
 
             if (keepTopItem)
@@ -2207,7 +2207,7 @@ public partial class ListView : Control
             return;
         }
 
-        HWND hwnd = (HWND)PInvoke.SendMessage(this, PInvoke.LVM_GETHEADER);
+        HWND hwnd = (HWND)PInvokeCore.SendMessage(this, PInvoke.LVM_GETHEADER);
         if (hwnd.IsNull)
         {
             return;
@@ -2230,7 +2230,7 @@ public partial class ListView : Control
         }
 
         if (IsAccessibilityObjectCreated
-            && PInvoke.SendMessage(hwnd, PInvoke.HDM_HITTEST, (WPARAM)0, ref lvhi) != -1 && lvhi.iItem > -1)
+            && PInvokeCore.SendMessage(hwnd, PInvoke.HDM_HITTEST, (WPARAM)0, ref lvhi) != -1 && lvhi.iItem > -1)
         {
             AccessibilityObject.InternalRaiseAutomationNotification(
                 Automation.AutomationNotificationKind.Other,
@@ -2280,7 +2280,7 @@ public partial class ListView : Control
             case (ListViewAlignment)PInvoke.LVA_SNAPTOGRID:
                 if (IsHandleCreated)
                 {
-                    PInvoke.PostMessage(this, PInvoke.LVM_ARRANGE, (WPARAM)(int)value);
+                    PInvokeCore.PostMessage(this, PInvoke.LVM_ARRANGE, (WPARAM)(int)value);
                 }
 
                 break;
@@ -2416,7 +2416,7 @@ public partial class ListView : Control
         _blockLabelEdit = true;
         try
         {
-            PInvoke.SendMessage(this, PInvoke.WM_TIMER, (WPARAM)LVLABELEDITTIMER);
+            PInvokeCore.SendMessage(this, PInvokeCore.WM_TIMER, (WPARAM)LVLABELEDITTIMER);
         }
         finally
         {
@@ -3217,7 +3217,7 @@ public partial class ListView : Control
     {
         if (IsHandleCreated && GroupsEnabled)
         {
-            if (PInvoke.SendMessage(this, PInvoke.LVM_HASGROUP, (WPARAM)DefaultGroup.ID) == 0)
+            if (PInvokeCore.SendMessage(this, PInvoke.LVM_HASGROUP, (WPARAM)DefaultGroup.ID) == 0)
             {
                 UpdateGroupView();
                 InsertGroupNative(0, DefaultGroup);
@@ -3236,7 +3236,7 @@ public partial class ListView : Control
 
         if (IsHandleCreated)
         {
-            PInvoke.SendMessage(this, PInvoke.LVM_ENSUREVISIBLE, (WPARAM)index);
+            PInvokeCore.SendMessage(this, PInvoke.LVM_ENSUREVISIBLE, (WPARAM)index);
         }
     }
 
@@ -3370,7 +3370,7 @@ public partial class ListView : Control
                 }
 
                 lvFindInfo.lParam = 0;
-                int index = (int)PInvoke.SendMessage(
+                int index = (int)PInvokeCore.SendMessage(
                     this,
                     PInvoke.LVM_FINDITEMW,
                     // decrement startIndex so that the search is 0-based
@@ -3422,8 +3422,8 @@ public partial class ListView : Control
         // Force ListView to update its checkbox bitmaps.
         if (CheckBoxes && IsHandleCreated)
         {
-            PInvoke.SendMessage(this, PInvoke.LVM_SETEXTENDEDLISTVIEWSTYLE, (WPARAM)PInvoke.LVS_EX_CHECKBOXES);
-            PInvoke.SendMessage(
+            PInvokeCore.SendMessage(this, PInvoke.LVM_SETEXTENDEDLISTVIEWSTYLE, (WPARAM)PInvoke.LVS_EX_CHECKBOXES);
+            PInvokeCore.SendMessage(
                 this,
                 PInvoke.LVM_SETEXTENDEDLISTVIEWSTYLE,
                 (WPARAM)PInvoke.LVS_EX_CHECKBOXES,
@@ -3477,12 +3477,12 @@ public partial class ListView : Control
 
             if (lastIndex != -1)
             {
-                displayIndex = (int)PInvoke.SendMessage(this, PInvoke.LVM_FINDITEMW, (WPARAM)(lastIndex - 1), ref info);
+                displayIndex = (int)PInvokeCore.SendMessage(this, PInvoke.LVM_FINDITEMW, (WPARAM)(lastIndex - 1), ref info);
             }
 
             if (displayIndex == -1)
             {
-                displayIndex = (int)PInvoke.SendMessage(this, PInvoke.LVM_FINDITEMW, (WPARAM)(-1) /* beginning */, ref info);
+                displayIndex = (int)PInvokeCore.SendMessage(this, PInvoke.LVM_FINDITEMW, (WPARAM)(-1) /* beginning */, ref info);
             }
 
             Debug.Assert(displayIndex != -1, "This item is in the list view -- why can't we find a display index for it?");
@@ -3542,7 +3542,7 @@ public partial class ListView : Control
             pt = new Point(x, y)
         };
 
-        int displayIndex = (int)PInvoke.SendMessage(this, PInvoke.LVM_HITTEST, (WPARAM)0, ref lvhi);
+        int displayIndex = (int)PInvokeCore.SendMessage(this, PInvoke.LVM_HITTEST, (WPARAM)0, ref lvhi);
 
         ListViewItem? li = null;
         if (displayIndex >= 0 &&
@@ -3591,7 +3591,7 @@ public partial class ListView : Control
             pt = new Point(x, y)
         };
 
-        int index = (int)PInvoke.SendMessage(this, PInvoke.LVM_SUBITEMHITTEST, (WPARAM)0, ref lvhi);
+        int index = (int)PInvokeCore.SendMessage(this, PInvoke.LVM_SUBITEMHITTEST, (WPARAM)0, ref lvhi);
         if (index > -1)
         {
             iItem = lvhi.iItem;
@@ -3607,7 +3607,7 @@ public partial class ListView : Control
     internal Point GetItemPosition(int index)
     {
         Point position = default;
-        PInvoke.SendMessage(this, PInvoke.LVM_GETITEMPOSITION, (WPARAM)index, ref position);
+        PInvokeCore.SendMessage(this, PInvoke.LVM_GETITEMPOSITION, (WPARAM)index, ref position);
         return position;
     }
 
@@ -3624,7 +3624,7 @@ public partial class ListView : Control
         ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, VirtualMode ? VirtualListSize : _itemCount);
 
         Debug.Assert(IsHandleCreated, "How did we add items without a handle?");
-        return (LIST_VIEW_ITEM_STATE_FLAGS)(uint)PInvoke.SendMessage(this, PInvoke.LVM_GETITEMSTATE, (WPARAM)index, (LPARAM)(uint)mask);
+        return (LIST_VIEW_ITEM_STATE_FLAGS)(uint)PInvokeCore.SendMessage(this, PInvoke.LVM_GETITEMSTATE, (WPARAM)index, (LPARAM)(uint)mask);
     }
 
     /// <summary>
@@ -3653,7 +3653,7 @@ public partial class ListView : Control
             left = (int)portion
         };
 
-        if (PInvoke.SendMessage(this, PInvoke.LVM_GETITEMRECT, (WPARAM)index, ref itemrect) == 0)
+        if (PInvokeCore.SendMessage(this, PInvoke.LVM_GETITEMRECT, (WPARAM)index, ref itemrect) == 0)
         {
             throw new ArgumentOutOfRangeException(
                 nameof(index),
@@ -3685,7 +3685,7 @@ public partial class ListView : Control
             left = 0
         };
 
-        if (PInvoke.SendMessage(this, PInvoke.LVM_GETITEMRECT, (WPARAM)index, ref itemrect) == 0)
+        if (PInvokeCore.SendMessage(this, PInvoke.LVM_GETITEMRECT, (WPARAM)index, ref itemrect) == 0)
         {
             return Rectangle.Empty;
         }
@@ -3736,7 +3736,7 @@ public partial class ListView : Control
             top = subItemIndex
         };
 
-        if (PInvoke.SendMessage(this, PInvoke.LVM_GETSUBITEMRECT, (WPARAM)itemIndex, ref itemrect) == 0)
+        if (PInvokeCore.SendMessage(this, PInvoke.LVM_GETSUBITEMRECT, (WPARAM)itemIndex, ref itemrect) == 0)
         {
             throw new ArgumentOutOfRangeException(nameof(itemIndex), itemIndex, string.Format(SR.InvalidArgument, nameof(itemIndex), itemIndex));
         }
@@ -3767,7 +3767,7 @@ public partial class ListView : Control
         }
 
         nint handle = (GroupImageList is null) ? 0 : GroupImageList.Handle;
-        PInvoke.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_GROUPHEADER, handle);
+        PInvokeCore.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_GROUPHEADER, handle);
     }
 
     public ListViewHitTestInfo HitTest(Point point) => HitTest(point.X, point.Y);
@@ -3787,11 +3787,11 @@ public partial class ListView : Control
         int iItem;
         if (SupportsListViewSubItems)
         {
-            iItem = (int)PInvoke.SendMessage(this, PInvoke.LVM_SUBITEMHITTEST, (WPARAM)0, ref lvhi);
+            iItem = (int)PInvokeCore.SendMessage(this, PInvoke.LVM_SUBITEMHITTEST, (WPARAM)0, ref lvhi);
         }
         else
         {
-            iItem = (int)PInvoke.SendMessage(this, PInvoke.LVM_HITTEST, (WPARAM)0, ref lvhi);
+            iItem = (int)PInvokeCore.SendMessage(this, PInvoke.LVM_HITTEST, (WPARAM)0, ref lvhi);
         }
 
         ListViewItem? item = (iItem == -1) ? null : Items[iItem];
@@ -3862,7 +3862,7 @@ public partial class ListView : Control
     {
         if (_viewStyle == View.Details && IsHandleCreated)
         {
-            HWND header = (HWND)PInvoke.SendMessage(this, PInvoke.LVM_GETHEADER);
+            HWND header = (HWND)PInvokeCore.SendMessage(this, PInvoke.LVM_GETHEADER);
             if (!header.IsNull)
             {
                 PInvoke.InvalidateRect(new HandleRef<HWND>(this, header), lpRect: null, bErase: true);
@@ -4006,7 +4006,7 @@ public partial class ListView : Control
         {
             lvColumn.pszText = columnHeaderText;
 
-            return (int)PInvoke.SendMessage(this, PInvoke.LVM_INSERTCOLUMNW, (WPARAM)index, ref lvColumn);
+            return (int)PInvokeCore.SendMessage(this, PInvoke.LVM_INSERTCOLUMNW, (WPARAM)index, ref lvColumn);
         }
     }
 
@@ -4051,7 +4051,7 @@ public partial class ListView : Control
                     mask = LIST_VIEW_ITEM_FLAGS.LVIF_GROUPID
                 };
 
-                PInvoke.SendMessage(this, PInvoke.LVM_GETITEMW, (WPARAM)0, ref lvItem);
+                PInvokeCore.SendMessage(this, PInvoke.LVM_GETITEMW, (WPARAM)0, ref lvItem);
                 Debug.Assert(lvItem.iGroupId != -1, "there is a list view item which is not parented");
             }
         }
@@ -4194,7 +4194,7 @@ public partial class ListView : Control
         try
         {
             // Set the count of items first.
-            PInvoke.SendMessage(this, PInvoke.LVM_SETITEMCOUNT, (WPARAM)_itemCount);
+            PInvokeCore.SendMessage(this, PInvoke.LVM_SETITEMCOUNT, (WPARAM)_itemCount);
 
             // Now add the items.
             for (int i = 0; i < items.Length; i++)
@@ -4221,9 +4221,9 @@ public partial class ListView : Control
                     lvItem.iGroupId = GetNativeGroupId(li);
 
 #if DEBUG
-                    IntPtr result = PInvoke.SendMessage(this, PInvoke.LVM_ISGROUPVIEWENABLED);
+                    IntPtr result = PInvokeCore.SendMessage(this, PInvoke.LVM_ISGROUPVIEWENABLED);
                     Debug.Assert(result != IntPtr.Zero, "Groups not enabled");
-                    result = PInvoke.SendMessage(this, PInvoke.LVM_HASGROUP, (WPARAM)lvItem.iGroupId);
+                    result = PInvokeCore.SendMessage(this, PInvoke.LVM_HASGROUP, (WPARAM)lvItem.iGroupId);
                     Debug.Assert(result != IntPtr.Zero, $"Doesn't contain group id: {lvItem.iGroupId}");
 #endif
                 }
@@ -4266,7 +4266,7 @@ public partial class ListView : Control
                     {
                         lvItem.pszText = pText;
 
-                        insertIndex = (int)PInvoke.SendMessage(
+                        insertIndex = (int)PInvokeCore.SendMessage(
                             this,
                             PInvoke.LVM_INSERTITEMW,
                             (WPARAM)0,
@@ -4381,7 +4381,7 @@ public partial class ListView : Control
         }
 
         nint handle = (LargeImageList is null) ? 0 : LargeImageList.Handle;
-        PInvoke.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_NORMAL, (LPARAM)handle);
+        PInvokeCore.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_NORMAL, (LPARAM)handle);
 
         ForceCheckBoxUpdate();
     }
@@ -4590,7 +4590,7 @@ public partial class ListView : Control
             BeginUpdate();
             try
             {
-                PInvoke.SendMessage(this, PInvoke.LVM_UPDATE, (WPARAM)(-1));
+                PInvokeCore.SendMessage(this, PInvoke.LVM_UPDATE, (WPARAM)(-1));
             }
             finally
             {
@@ -4609,10 +4609,10 @@ public partial class ListView : Control
 
         base.OnHandleCreated(e);
 
-        int version = (int)PInvoke.SendMessage(this, PInvoke.CCM_GETVERSION);
+        int version = (int)PInvokeCore.SendMessage(this, PInvoke.CCM_GETVERSION);
         if (version < 5)
         {
-            PInvoke.SendMessage(this, PInvoke.CCM_SETVERSION, (WPARAM)5);
+            PInvokeCore.SendMessage(this, PInvoke.CCM_SETVERSION, (WPARAM)5);
         }
 
 #pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
@@ -4621,21 +4621,21 @@ public partial class ListView : Control
             _ = PInvoke.SetWindowTheme(HWND, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null);
 
             // Get the ListView's ColumnHeader handle:
-            HWND columnHeaderHandle = (HWND)PInvoke.SendMessage(this, PInvoke.LVM_GETHEADER, (WPARAM)0, (LPARAM)0);
+            HWND columnHeaderHandle = (HWND)PInvokeCore.SendMessage(this, PInvoke.LVM_GETHEADER, (WPARAM)0, (LPARAM)0);
             PInvoke.SetWindowTheme(columnHeaderHandle, $"{DarkModeIdentifier}_{ItemsViewThemeIdentifier}", null);
         }
 #pragma warning restore WFO5001
 
         UpdateExtendedStyles();
         RealizeProperties();
-        PInvoke.SendMessage(this, PInvoke.LVM_SETBKCOLOR, (WPARAM)0, (LPARAM)BackColor);
-        PInvoke.SendMessage(this, PInvoke.LVM_SETTEXTCOLOR, (WPARAM)0, (LPARAM)ForeColor);
+        PInvokeCore.SendMessage(this, PInvoke.LVM_SETBKCOLOR, (WPARAM)0, (LPARAM)BackColor);
+        PInvokeCore.SendMessage(this, PInvoke.LVM_SETTEXTCOLOR, (WPARAM)0, (LPARAM)ForeColor);
 
         // The native list view will not invalidate the entire list view item area if the BkColor is not CLR_NONE.
         // This not noticeable if the customer paints the items w/ the same background color as the list view itself.
         // However, if the customer paints the items w/ a color different from the list view's back color
         // then when the user changes selection the native list view will not invalidate the entire list view item area.
-        PInvoke.SendMessage(this, PInvoke.LVM_SETTEXTBKCOLOR, (WPARAM)0, (LPARAM)PInvoke.CLR_NONE);
+        PInvokeCore.SendMessage(this, PInvoke.LVM_SETTEXTBKCOLOR, (WPARAM)0, (LPARAM)PInvoke.CLR_NONE);
 
         // LVS_NOSCROLL does not work well when the list view is in View.Details or in View.List modes.
         // we have to set this style after the list view was created and before we position the native list view items.
@@ -4649,14 +4649,14 @@ public partial class ListView : Control
         // In VirtualMode we have to tell the list view to ask for the list view item's state image index.
         if (VirtualMode)
         {
-            LIST_VIEW_ITEM_STATE_FLAGS callbackMask = (LIST_VIEW_ITEM_STATE_FLAGS)(int)PInvoke.SendMessage(this, PInvoke.LVM_GETCALLBACKMASK);
+            LIST_VIEW_ITEM_STATE_FLAGS callbackMask = (LIST_VIEW_ITEM_STATE_FLAGS)(int)PInvokeCore.SendMessage(this, PInvoke.LVM_GETCALLBACKMASK);
             callbackMask |= LIST_VIEW_ITEM_STATE_FLAGS.LVIS_STATEIMAGEMASK;
-            PInvoke.SendMessage(this, PInvoke.LVM_SETCALLBACKMASK, (WPARAM)(uint)callbackMask);
+            PInvokeCore.SendMessage(this, PInvoke.LVM_SETCALLBACKMASK, (WPARAM)(uint)callbackMask);
         }
 
         if (Application.ComCtlSupportsVisualStyles)
         {
-            PInvoke.SendMessage(this, PInvoke.LVM_SETVIEW, (WPARAM)(uint)_viewStyle);
+            PInvokeCore.SendMessage(this, PInvoke.LVM_SETVIEW, (WPARAM)(uint)_viewStyle);
             UpdateGroupView();
 
             // Add groups.
@@ -4707,7 +4707,7 @@ public partial class ListView : Control
 
         if (VirtualMode && VirtualListSize > -1 && !DesignMode)
         {
-            PInvoke.SendMessage(this, PInvoke.LVM_SETITEMCOUNT, (WPARAM)VirtualListSize);
+            PInvokeCore.SendMessage(this, PInvoke.LVM_SETITEMCOUNT, (WPARAM)VirtualListSize);
         }
 
         if (columnCount > 0)
@@ -4959,11 +4959,11 @@ public partial class ListView : Control
 
         if (IsHandleCreated)
         {
-            PInvoke.SendMessage(this, PInvoke.LVM_SETBKCOLOR, (WPARAM)0, (LPARAM)BackColor);
+            PInvokeCore.SendMessage(this, PInvoke.LVM_SETBKCOLOR, (WPARAM)0, (LPARAM)BackColor);
 
             // We should probably be OK if we don't set the TEXTBKCOLOR to CLR_NONE.
             // However, for the sake of being more robust, reset the TECTBKCOLOR to CLR_NONE when the system palette changes.
-            PInvoke.SendMessage(this, PInvoke.LVM_SETTEXTBKCOLOR, (WPARAM)0, (LPARAM)PInvoke.CLR_NONE);
+            PInvokeCore.SendMessage(this, PInvoke.LVM_SETTEXTBKCOLOR, (WPARAM)0, (LPARAM)PInvoke.CLR_NONE);
         }
     }
 
@@ -4986,7 +4986,7 @@ public partial class ListView : Control
             };
 
             // Get the layout information.
-            PInvoke.SendMessage(headerWindow, PInvoke.HDM_LAYOUT, (WPARAM)0, ref hd);
+            PInvokeCore.SendMessage(headerWindow, PInvoke.HDM_LAYOUT, (WPARAM)0, ref hd);
 
             // Position the header control.
             PInvoke.SetWindowPos(
@@ -5024,35 +5024,35 @@ public partial class ListView : Control
 #pragma warning disable WFO5001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
         if (c != SystemColors.Window || Application.IsDarkModeEnabled)
         {
-            PInvoke.SendMessage(this, PInvoke.LVM_SETBKCOLOR, (WPARAM)0, (LPARAM)c);
+            PInvokeCore.SendMessage(this, PInvoke.LVM_SETBKCOLOR, (WPARAM)0, (LPARAM)c);
         }
 
         c = ForeColor;
 
         if (c != SystemColors.WindowText || Application.IsDarkModeEnabled)
         {
-            PInvoke.SendMessage(this, PInvoke.LVM_SETTEXTCOLOR, (WPARAM)0, (LPARAM)c);
+            PInvokeCore.SendMessage(this, PInvoke.LVM_SETTEXTCOLOR, (WPARAM)0, (LPARAM)c);
         }
 #pragma warning restore WFO5001
 
         if (_imageListLarge is not null)
         {
-            PInvoke.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_NORMAL, (LPARAM)_imageListLarge.Handle);
+            PInvokeCore.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_NORMAL, (LPARAM)_imageListLarge.Handle);
         }
 
         if (_imageListSmall is not null)
         {
-            PInvoke.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_SMALL, (LPARAM)_imageListSmall.Handle);
+            PInvokeCore.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_SMALL, (LPARAM)_imageListSmall.Handle);
         }
 
         if (_imageListState is not null)
         {
-            PInvoke.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_STATE, (LPARAM)_imageListState.Handle);
+            PInvokeCore.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_STATE, (LPARAM)_imageListState.Handle);
         }
 
         if (_imageListGroup is not null)
         {
-            PInvoke.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_GROUPHEADER, (LPARAM)_imageListGroup.Handle);
+            PInvokeCore.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_GROUPHEADER, (LPARAM)_imageListGroup.Handle);
         }
     }
 
@@ -5076,7 +5076,7 @@ public partial class ListView : Control
 
         if (IsHandleCreated)
         {
-            int retval = (int)PInvoke.SendMessage(this, PInvoke.LVM_REDRAWITEMS, (WPARAM)startIndex, (LPARAM)endIndex);
+            int retval = (int)PInvokeCore.SendMessage(this, PInvoke.LVM_REDRAWITEMS, (WPARAM)startIndex, (LPARAM)endIndex);
             Debug.Assert(retval != 0);
 
             // ListView control seems to be bogus. Items affected need to be invalidated in LargeIcon and SmallIcons views.
@@ -5184,13 +5184,13 @@ public partial class ListView : Control
     private void RemoveGroupNative(ListViewGroup group)
     {
         Debug.Assert(IsHandleCreated, "RemoveGroupNative precondition: list-view handle must be created");
-        PInvoke.SendMessage(this, PInvoke.LVM_REMOVEGROUP, (WPARAM)group.ID);
+        PInvokeCore.SendMessage(this, PInvoke.LVM_REMOVEGROUP, (WPARAM)group.ID);
     }
 
     private void Scroll(int fromLVItem, int toLVItem)
     {
         int scrollY = GetItemPosition(toLVItem).Y - GetItemPosition(fromLVItem).Y;
-        PInvoke.SendMessage(this, PInvoke.LVM_SCROLL, (WPARAM)0, (LPARAM)scrollY);
+        PInvokeCore.SendMessage(this, PInvoke.LVM_SCROLL, (WPARAM)0, (LPARAM)scrollY);
     }
 
     private unsafe void SetBackgroundImage()
@@ -5231,7 +5231,7 @@ public partial class ListView : Control
         fixed (char* pBackgroundImageFileName = _backgroundImageFileName)
         {
             backgroundImage.pszImage = pBackgroundImageFileName;
-            PInvoke.SendMessage(this, PInvoke.LVM_SETBKIMAGEW, (WPARAM)0, ref backgroundImage);
+            PInvokeCore.SendMessage(this, PInvoke.LVM_SETBKIMAGEW, (WPARAM)0, ref backgroundImage);
         }
 
         if (string.IsNullOrEmpty(fileNameToDelete))
@@ -5312,7 +5312,7 @@ public partial class ListView : Control
                 lvColumn.pszText = columnHeaderText;
             }
 
-            result = PInvoke.SendMessage(this, PInvoke.LVM_SETCOLUMNW, (WPARAM)ch.Index, ref lvColumn);
+            result = PInvokeCore.SendMessage(this, PInvoke.LVM_SETCOLUMNW, (WPARAM)ch.Index, ref lvColumn);
         }
 
         if (result == IntPtr.Zero)
@@ -5377,7 +5377,7 @@ public partial class ListView : Control
 
         if (IsHandleCreated)
         {
-            PInvoke.SendMessage(this, PInvoke.LVM_SETCOLUMNWIDTH, (WPARAM)columnIndex, LPARAM.MAKELPARAM(width, 0));
+            PInvokeCore.SendMessage(this, PInvoke.LVM_SETCOLUMNWIDTH, (WPARAM)columnIndex, LPARAM.MAKELPARAM(width, 0));
         }
 
         if (IsHandleCreated &&
@@ -5387,7 +5387,7 @@ public partial class ListView : Control
             if (compensate != 0)
             {
                 int newWidth = columnHeader.Width + compensate;
-                PInvoke.SendMessage(
+                PInvokeCore.SendMessage(
                     this,
                     PInvoke.LVM_SETCOLUMNWIDTH,
                     (WPARAM)columnIndex,
@@ -5400,7 +5400,7 @@ public partial class ListView : Control
     {
         if (IsHandleCreated)
         {
-            PInvoke.SendMessage(this, PInvoke.LVM_SETCOLUMNWIDTH, (WPARAM)index, LPARAM.MAKELPARAM(width, 0));
+            PInvokeCore.SendMessage(this, PInvoke.LVM_SETCOLUMNWIDTH, (WPARAM)index, LPARAM.MAKELPARAM(width, 0));
         }
     }
 
@@ -5418,7 +5418,7 @@ public partial class ListView : Control
         {
             fixed (int* pOrderedColumns = orderedColumns)
             {
-                PInvoke.SendMessage(
+                PInvokeCore.SendMessage(
                     this,
                     PInvoke.LVM_SETCOLUMNORDERARRAY,
                     (WPARAM)orderedColumns.Length,
@@ -5459,7 +5459,7 @@ public partial class ListView : Control
         _toolTipCaption = toolTip.GetToolTip(this);
 
         // Native ListView expects tooltip HWND as a wParam and ignores lParam
-        HWND oldHandle = (HWND)PInvoke.SendMessage(this, PInvoke.LVM_SETTOOLTIPS, toolTip);
+        HWND oldHandle = (HWND)PInvokeCore.SendMessage(this, PInvoke.LVM_SETTOOLTIPS, toolTip);
         PInvoke.DestroyWindow(oldHandle);
     }
 
@@ -5480,7 +5480,7 @@ public partial class ListView : Control
             iImage = imageIndex
         };
 
-        PInvoke.SendMessage(this, PInvoke.LVM_SETITEMW, (WPARAM)0, ref lvItem);
+        PInvokeCore.SendMessage(this, PInvoke.LVM_SETITEMW, (WPARAM)0, ref lvItem);
     }
 
     internal void SetItemIndentCount(int index, int indentCount)
@@ -5500,7 +5500,7 @@ public partial class ListView : Control
             iIndent = indentCount
         };
 
-        PInvoke.SendMessage(this, PInvoke.LVM_SETITEMW, (WPARAM)0, ref lvItem);
+        PInvokeCore.SendMessage(this, PInvoke.LVM_SETITEMW, (WPARAM)0, ref lvItem);
     }
 
     internal void SetItemPosition(int index, int x, int y)
@@ -5516,7 +5516,7 @@ public partial class ListView : Control
         Debug.Assert(IsHandleCreated, "How did we add items without a handle?");
 
         Point pt = new(x, y);
-        PInvoke.SendMessage(this, PInvoke.LVM_SETITEMPOSITION32, (WPARAM)index, ref pt);
+        PInvokeCore.SendMessage(this, PInvoke.LVM_SETITEMPOSITION32, (WPARAM)index, ref pt);
     }
 
     internal void SetItemState(int index, LIST_VIEW_ITEM_STATE_FLAGS state, LIST_VIEW_ITEM_STATE_FLAGS mask)
@@ -5536,7 +5536,7 @@ public partial class ListView : Control
             stateMask = mask
         };
 
-        PInvoke.SendMessage(this, PInvoke.LVM_SETITEMSTATE, (WPARAM)index, ref lvItem);
+        PInvokeCore.SendMessage(this, PInvoke.LVM_SETITEMSTATE, (WPARAM)index, ref lvItem);
     }
 
     internal void SetItemText(int itemIndex, int subItemIndex, string text)
@@ -5554,7 +5554,7 @@ public partial class ListView : Control
 
         if (View == View.List && subItemIndex == 0)
         {
-            int colWidth = (int)PInvoke.SendMessage(this, PInvoke.LVM_GETCOLUMNWIDTH);
+            int colWidth = (int)PInvokeCore.SendMessage(this, PInvoke.LVM_GETCOLUMNWIDTH);
 
             using Graphics g = CreateGraphicsInternal();
 
@@ -5573,7 +5573,7 @@ public partial class ListView : Control
         {
             lvItem.pszText = pText;
 
-            PInvoke.SendMessage(this, PInvoke.LVM_SETITEMTEXTW, (WPARAM)itemIndex, ref lvItem);
+            PInvokeCore.SendMessage(this, PInvoke.LVM_SETITEMTEXTW, (WPARAM)itemIndex, ref lvItem);
         }
     }
 
@@ -5589,7 +5589,7 @@ public partial class ListView : Control
             return;
         }
 
-        PInvoke.SendMessage(this, PInvoke.LVM_SETSELECTIONMARK, (WPARAM)0, itemIndex);
+        PInvokeCore.SendMessage(this, PInvoke.LVM_SETSELECTIONMARK, (WPARAM)0, itemIndex);
     }
 
     private void SmallImageListRecreateHandle(object? sender, EventArgs e)
@@ -5600,7 +5600,7 @@ public partial class ListView : Control
         }
 
         nint handle = (SmallImageList is null) ? 0 : SmallImageList.Handle;
-        PInvoke.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_SMALL, (LPARAM)handle);
+        PInvokeCore.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_SMALL, (LPARAM)handle);
 
         ForceCheckBoxUpdate();
     }
@@ -5620,7 +5620,7 @@ public partial class ListView : Control
         {
             NativeMethods.ListViewCompareCallback callback = new(CompareFunc);
             IntPtr callbackPointer = Marshal.GetFunctionPointerForDelegate(callback);
-            PInvoke.SendMessage(this, PInvoke.LVM_SORTITEMS, (WPARAM)0, (LPARAM)callbackPointer);
+            PInvokeCore.SendMessage(this, PInvoke.LVM_SORTITEMS, (WPARAM)0, (LPARAM)callbackPointer);
             GC.KeepAlive(callback);
         }
     }
@@ -5633,7 +5633,7 @@ public partial class ListView : Control
         }
 
         nint handle = (StateImageList is null) ? 0 : StateImageList.Handle;
-        PInvoke.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_STATE, (LPARAM)handle);
+        PInvokeCore.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_STATE, (LPARAM)handle);
     }
 
     /// <summary>
@@ -5675,7 +5675,7 @@ public partial class ListView : Control
             try
             {
                 BeginUpdate();
-                PInvoke.SendMessage(this, PInvoke.LVM_UPDATE, (WPARAM)(-1));
+                PInvokeCore.SendMessage(this, PInvoke.LVM_UPDATE, (WPARAM)(-1));
             }
             finally
             {
@@ -5756,7 +5756,7 @@ public partial class ListView : Control
                 exStyle |= PInvoke.LVS_EX_INFOTIP;
             }
 
-            PInvoke.SendMessage(this, PInvoke.LVM_SETEXTENDEDLISTVIEWSTYLE, (WPARAM)exMask, (LPARAM)exStyle);
+            PInvokeCore.SendMessage(this, PInvoke.LVM_SETEXTENDEDLISTVIEWSTYLE, (WPARAM)exMask, (LPARAM)exStyle);
             Invalidate();
         }
     }
@@ -5862,7 +5862,7 @@ public partial class ListView : Control
             }
 
             lvgroup.pszHeader = pHeader;
-            return PInvoke.SendMessage(this, msg, (WPARAM)lParam, ref lvgroup);
+            return PInvokeCore.SendMessage(this, msg, (WPARAM)lParam, ref lvgroup);
         }
     }
 
@@ -5871,7 +5871,7 @@ public partial class ListView : Control
     {
         if (IsHandleCreated && Application.ComCtlSupportsVisualStyles && !VirtualMode)
         {
-            int retval = (int)PInvoke.SendMessage(this, PInvoke.LVM_ENABLEGROUPVIEW, (WPARAM)(BOOL)GroupsEnabled);
+            int retval = (int)PInvokeCore.SendMessage(this, PInvoke.LVM_ENABLEGROUPVIEW, (WPARAM)(BOOL)GroupsEnabled);
             Debug.Assert(retval != -1, "Error enabling group view");
         }
     }
@@ -5892,7 +5892,7 @@ public partial class ListView : Control
             sizeTile = TileSize,
         };
 
-        nint retval = PInvoke.SendMessage(this, PInvoke.LVM_SETTILEVIEWINFO, (WPARAM)0, ref tileViewInfo);
+        nint retval = PInvokeCore.SendMessage(this, PInvoke.LVM_SETTILEVIEWINFO, (WPARAM)0, ref tileViewInfo);
         Debug.Assert(retval != 0, "LVM_SETTILEVIEWINFO failed");
     }
 
@@ -5911,7 +5911,7 @@ public partial class ListView : Control
             pt = PointToClient(Cursor.Position)
         };
 
-        int displayIndex = (int)PInvoke.SendMessage(this, PInvoke.LVM_SUBITEMHITTEST, (WPARAM)0, ref lvhi);
+        int displayIndex = (int)PInvokeCore.SendMessage(this, PInvoke.LVM_SUBITEMHITTEST, (WPARAM)0, ref lvhi);
         if (displayIndex == -1 || lvhi.iSubItem != 0 || (lvhi.flags & LVHITTESTINFO_FLAGS.LVHT_ONITEMSTATEICON) == 0)
         {
             return;
@@ -5953,7 +5953,7 @@ public partial class ListView : Control
             pt = PointToClient(Cursor.Position)
         };
 
-        int displayIndex = (int)PInvoke.SendMessage(this, PInvoke.LVM_HITTEST, (WPARAM)0, ref lvhi);
+        int displayIndex = (int)PInvokeCore.SendMessage(this, PInvoke.LVM_HITTEST, (WPARAM)0, ref lvhi);
         if (displayIndex != -1 &&
             (lvhi.flags &
             (LVHITTESTINFO_FLAGS.LVHT_ONITEMICON | LVHITTESTINFO_FLAGS.LVHT_ONITEMLABEL | LVHITTESTINFO_FLAGS.LVHT_ABOVE)) != 0)
@@ -6396,15 +6396,15 @@ public partial class ListView : Control
 
     private Font GetListHeaderFont()
     {
-        HWND hwndHdr = (HWND)PInvoke.SendMessage(this, PInvoke.LVM_GETHEADER);
-        HFONT hFont = (HFONT)PInvoke.SendMessage(hwndHdr, PInvoke.WM_GETFONT);
+        HWND hwndHdr = (HWND)PInvokeCore.SendMessage(this, PInvoke.LVM_GETHEADER);
+        HFONT hFont = (HFONT)PInvokeCore.SendMessage(hwndHdr, PInvokeCore.WM_GETFONT);
         return Font.FromHfont(hFont);
     }
 
     private int GetIndexOfClickedItem()
     {
         var lvhi = SetupHitTestInfo();
-        return (int)PInvoke.SendMessage(this, PInvoke.LVM_HITTEST, (WPARAM)0, ref lvhi);
+        return (int)PInvokeCore.SendMessage(this, PInvoke.LVM_HITTEST, (WPARAM)0, ref lvhi);
     }
 
     private LVHITTESTINFO SetupHitTestInfo()
@@ -6429,16 +6429,16 @@ public partial class ListView : Control
     {
         // See if the mouse event occurred on a group.
         var lvhi = SetupHitTestInfo();
-        int groupID = (int)PInvoke.SendMessage(this, PInvoke.LVM_HITTEST, (WPARAM)(-1), ref lvhi);
+        int groupID = (int)PInvokeCore.SendMessage(this, PInvoke.LVM_HITTEST, (WPARAM)(-1), ref lvhi);
         if (groupID == -1)
         {
             return groupID;
         }
 
         // check if group header was double clicked
-        bool groupHeaderDblClicked = lvhi.flags == LVHITTESTINFO_FLAGS.LVHT_EX_GROUP_HEADER && clickType == PInvoke.WM_LBUTTONDBLCLK;
+        bool groupHeaderDblClicked = lvhi.flags == LVHITTESTINFO_FLAGS.LVHT_EX_GROUP_HEADER && clickType == PInvokeCore.WM_LBUTTONDBLCLK;
         // check if chevron was clicked
-        bool chevronClicked = (lvhi.flags & LVHITTESTINFO_FLAGS.LVHT_EX_GROUP_COLLAPSE) == LVHITTESTINFO_FLAGS.LVHT_EX_GROUP_COLLAPSE && clickType == PInvoke.WM_LBUTTONUP;
+        bool chevronClicked = (lvhi.flags & LVHITTESTINFO_FLAGS.LVHT_EX_GROUP_COLLAPSE) == LVHITTESTINFO_FLAGS.LVHT_EX_GROUP_COLLAPSE && clickType == PInvokeCore.WM_LBUTTONUP;
         if (!groupHeaderDblClicked && !chevronClicked)
         {
             return groupID;
@@ -6474,7 +6474,7 @@ public partial class ListView : Control
         // (Yes, it does exactly that even though our wrapper sets LVS_SHAREIMAGELISTS on the native listView.)
         if (IsHandleCreated && StateImageList is not null)
         {
-            PInvoke.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_STATE);
+            PInvokeCore.SendMessage(this, PInvoke.LVM_SETIMAGELIST, (WPARAM)PInvoke.LVSIL_STATE);
         }
 
         RecreateHandle();
@@ -6519,7 +6519,7 @@ public partial class ListView : Control
                     if (!cancelEdit)
                     {
                         _labelEdit = new ListViewLabelEditNativeWindow(this);
-                        _labelEdit.AssignHandle(PInvoke.SendMessage(this, PInvoke.LVM_GETEDITCONTROL));
+                        _labelEdit.AssignHandle(PInvokeCore.SendMessage(this, PInvoke.LVM_GETEDITCONTROL));
                     }
 
                     break;
@@ -6905,7 +6905,7 @@ public partial class ListView : Control
                         if (lvi is not null && !string.IsNullOrEmpty(lvi.ToolTipText))
                         {
                             // Setting the max width has the added benefit of enabling multiline tool tips
-                            PInvoke.SendMessage(nmhdr->hwndFrom, PInvoke.TTM_SETMAXTIPWIDTH, (WPARAM)0, (LPARAM)SystemInformation.MaxWindowTrackSize.Width);
+                            PInvokeCore.SendMessage(nmhdr->hwndFrom, PInvoke.TTM_SETMAXTIPWIDTH, (WPARAM)0, (LPARAM)SystemInformation.MaxWindowTrackSize.Width);
 
                             // UNICODE. Use char.
                             // we need to copy the null terminator character ourselves
@@ -7005,7 +7005,7 @@ public partial class ListView : Control
                 WmReflectNotify(ref m);
                 break;
 
-            case PInvoke.WM_KEYUP:
+            case PInvokeCore.WM_KEYUP:
                 var key = (VIRTUAL_KEY)(uint)m.WParamInternal;
 
                 // User can collapse/expand a group using the keyboard by focusing the group header and using left/right.
@@ -7033,17 +7033,17 @@ public partial class ListView : Control
                 base.WndProc(ref m);
                 break;
 
-            case PInvoke.WM_LBUTTONDBLCLK:
+            case PInvokeCore.WM_LBUTTONDBLCLK:
 
                 // Ensure that the itemCollectionChangedInMouseDown is not set
                 // before processing the mousedown event.
                 ItemCollectionChangedInMouseDown = false;
                 Capture = true;
                 WmMouseDown(ref m, MouseButtons.Left, 2);
-                UpdateGroupCollapse(PInvoke.WM_LBUTTONDBLCLK);
+                UpdateGroupCollapse(PInvokeCore.WM_LBUTTONDBLCLK);
                 break;
 
-            case PInvoke.WM_LBUTTONDOWN:
+            case PInvokeCore.WM_LBUTTONDOWN:
 
                 // Check that before click was handled by the ListView code
                 // because otherwise item will always be selected.
@@ -7065,12 +7065,12 @@ public partial class ListView : Control
                 _downButton = MouseButtons.Left;
                 break;
 
-            case PInvoke.WM_LBUTTONUP:
-            case PInvoke.WM_RBUTTONUP:
-            case PInvoke.WM_MBUTTONUP:
+            case PInvokeCore.WM_LBUTTONUP:
+            case PInvokeCore.WM_RBUTTONUP:
+            case PInvokeCore.WM_MBUTTONUP:
 
                 // See if the mouse is on the item.
-                int index = UpdateGroupCollapse(PInvoke.WM_LBUTTONUP);
+                int index = UpdateGroupCollapse(PInvokeCore.WM_LBUTTONUP);
 
                 if (!ValidationCancelled && _listViewState[LISTVIEWSTATE_doubleclickFired] && index != -1)
                 {
@@ -7090,21 +7090,21 @@ public partial class ListView : Control
                 _listViewState[LISTVIEWSTATE_mouseUpFired] = true;
                 Capture = false;
                 break;
-            case PInvoke.WM_MBUTTONDBLCLK:
+            case PInvokeCore.WM_MBUTTONDBLCLK:
                 WmMouseDown(ref m, MouseButtons.Middle, 2);
                 break;
-            case PInvoke.WM_MBUTTONDOWN:
+            case PInvokeCore.WM_MBUTTONDOWN:
                 WmMouseDown(ref m, MouseButtons.Middle, 1);
                 _downButton = MouseButtons.Middle;
                 break;
-            case PInvoke.WM_RBUTTONDBLCLK:
+            case PInvokeCore.WM_RBUTTONDBLCLK:
                 WmMouseDown(ref m, MouseButtons.Right, 2);
                 break;
-            case PInvoke.WM_RBUTTONDOWN:
+            case PInvokeCore.WM_RBUTTONDOWN:
                 WmMouseDown(ref m, MouseButtons.Right, 1);
                 _downButton = MouseButtons.Right;
                 break;
-            case PInvoke.WM_MOUSEMOVE:
+            case PInvokeCore.WM_MOUSEMOVE:
                 if (_listViewState[LISTVIEWSTATE_expectingMouseUp] && !_listViewState[LISTVIEWSTATE_mouseUpFired] && MouseButtons == MouseButtons.None)
                 {
                     OnMouseUp(new MouseEventArgs(_downButton, 1, PARAM.ToPoint(m.LParamInternal)));
@@ -7114,7 +7114,7 @@ public partial class ListView : Control
                 Capture = false;
                 base.WndProc(ref m);
                 break;
-            case PInvoke.WM_MOUSEHOVER:
+            case PInvokeCore.WM_MOUSEHOVER:
                 if (HoverSelection)
                 {
                     base.WndProc(ref m);
@@ -7125,7 +7125,7 @@ public partial class ListView : Control
                 }
 
                 break;
-            case PInvoke.WM_NOTIFY:
+            case PInvokeCore.WM_NOTIFY:
                 if (WmNotify(ref m))
                 {
                     break; // we are done - skip default handling
@@ -7135,7 +7135,7 @@ public partial class ListView : Control
                     goto default;  // default handling needed
                 }
 
-            case PInvoke.WM_SETFOCUS:
+            case PInvokeCore.WM_SETFOCUS:
                 base.WndProc(ref m);
 
                 if (!RecreatingHandle && !ListViewHandleDestroyed)
@@ -7153,23 +7153,23 @@ public partial class ListView : Control
                 }
 
                 break;
-            case PInvoke.WM_MOUSELEAVE:
+            case PInvokeCore.WM_MOUSELEAVE:
                 // if the mouse leaves and then re-enters the ListView
                 // ItemHovered events should be raised.
                 _prevHoveredItem = null;
                 base.WndProc(ref m);
                 break;
 
-            case PInvoke.WM_PAINT:
+            case PInvokeCore.WM_PAINT:
                 base.WndProc(ref m);
 
                 // win32 ListView
                 BeginInvoke(new MethodInvoker(CleanPreviousBackgroundImageFiles));
                 break;
-            case PInvoke.WM_PRINT:
+            case PInvokeCore.WM_PRINT:
                 WmPrint(ref m);
                 break;
-            case PInvoke.WM_TIMER:
+            case PInvokeCore.WM_TIMER:
                 if (m.WParamInternal != LVTOOLTIPTRACKING || !Application.ComCtlSupportsVisualStyles)
                 {
                     base.WndProc(ref m);

@@ -221,7 +221,7 @@ public static class Help
     private static unsafe string? FindExecutableInternal(string uri)
     {
         HINSTANCE result;
-        Span<char> buffer = stackalloc char[PInvoke.MAX_PATH + 1];
+        Span<char> buffer = stackalloc char[(int)PInvokeCore.MAX_PATH + 1];
         fixed (char* lpFileLocal = uri)
         {
             fixed (char* b = buffer)

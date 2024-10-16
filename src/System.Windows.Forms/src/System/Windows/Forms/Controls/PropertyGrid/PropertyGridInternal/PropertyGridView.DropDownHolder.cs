@@ -661,7 +661,7 @@ internal partial class PropertyGridView
 
         protected override void WndProc(ref Message m)
         {
-            if (m.MsgInternal == PInvoke.WM_ACTIVATE)
+            if (m.MsgInternal == PInvokeCore.WM_ACTIVATE)
             {
                 SetState(States.Modal, true);
                 HWND activatedWindow = (HWND)m.LParamInternal;
@@ -671,7 +671,7 @@ internal partial class PropertyGridView
                     return;
                 }
             }
-            else if (m.MsgInternal == PInvoke.WM_CLOSE)
+            else if (m.MsgInternal == PInvokeCore.WM_CLOSE)
             {
                 // Don't let an ALT-F4 get you down.
                 if (Visible)
@@ -681,7 +681,7 @@ internal partial class PropertyGridView
 
                 return;
             }
-            else if (m.MsgInternal == PInvoke.WM_DPICHANGED)
+            else if (m.MsgInternal == PInvokeCore.WM_DPICHANGED)
             {
                 // Dropdownholder in PropertyGridView is already scaled based on the parent font and other
                 // properties that were already set for the new DPI. This case is to avoid rescaling

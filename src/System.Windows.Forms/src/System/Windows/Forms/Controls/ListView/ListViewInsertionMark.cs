@@ -54,7 +54,7 @@ public sealed class ListViewInsertionMark
         get
         {
             RECT bounds = default;
-            PInvoke.SendMessage(_listView, PInvoke.LVM_GETINSERTMARKRECT, (WPARAM)0, ref bounds);
+            PInvokeCore.SendMessage(_listView, PInvoke.LVM_GETINSERTMARKRECT, (WPARAM)0, ref bounds);
             return bounds;
         }
     }
@@ -68,7 +68,7 @@ public sealed class ListViewInsertionMark
         {
             if (_color.IsEmpty)
             {
-                _color = new COLORREF((uint)PInvoke.SendMessage(_listView, PInvoke.LVM_GETINSERTMARKCOLOR));
+                _color = new COLORREF((uint)PInvokeCore.SendMessage(_listView, PInvoke.LVM_GETINSERTMARKCOLOR));
             }
 
             return _color;
@@ -80,7 +80,7 @@ public sealed class ListViewInsertionMark
                 _color = value;
                 if (_listView.IsHandleCreated)
                 {
-                    PInvoke.SendMessage(_listView, PInvoke.LVM_SETINSERTMARKCOLOR, 0, _color.ToWin32());
+                    PInvokeCore.SendMessage(_listView, PInvoke.LVM_SETINSERTMARKCOLOR, 0, _color.ToWin32());
                 }
             }
         }
@@ -118,7 +118,7 @@ public sealed class ListViewInsertionMark
             cbSize = (uint)sizeof(LVINSERTMARK)
         };
 
-        PInvoke.SendMessage(_listView, PInvoke.LVM_INSERTMARKHITTEST, (WPARAM)(&pt), ref lvInsertMark);
+        PInvokeCore.SendMessage(_listView, PInvoke.LVM_INSERTMARKHITTEST, (WPARAM)(&pt), ref lvInsertMark);
 
         return lvInsertMark.iItem;
     }
@@ -133,11 +133,11 @@ public sealed class ListViewInsertionMark
             iItem = _index
         };
 
-        PInvoke.SendMessage(_listView, PInvoke.LVM_SETINSERTMARK, 0, ref lvInsertMark);
+        PInvokeCore.SendMessage(_listView, PInvoke.LVM_SETINSERTMARK, 0, ref lvInsertMark);
 
         if (!_color.IsEmpty)
         {
-            PInvoke.SendMessage(_listView, PInvoke.LVM_SETINSERTMARKCOLOR, 0, _color.ToWin32());
+            PInvokeCore.SendMessage(_listView, PInvoke.LVM_SETINSERTMARKCOLOR, 0, _color.ToWin32());
         }
     }
 }

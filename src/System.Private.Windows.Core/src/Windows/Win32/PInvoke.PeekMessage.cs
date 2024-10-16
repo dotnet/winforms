@@ -3,7 +3,7 @@
 
 namespace Windows.Win32;
 
-internal static partial class PInvoke
+internal static partial class PInvokeCore
 {
     /// <inheritdoc cref="PeekMessage(MSG*, HWND, uint, uint, PEEK_MESSAGE_REMOVE_TYPE)"/>
     public static unsafe BOOL PeekMessage<T>(

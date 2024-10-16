@@ -1100,7 +1100,7 @@ public partial class MaskedTextBox : TextBoxBase
         if (IsHandleCreated)
         {
             // This message does not return a value.
-            PInvoke.SendMessage(this, PInvoke.EM_SETPASSWORDCHAR, (WPARAM)pwdChar);
+            PInvokeCore.SendMessage(this, PInvokeCore.EM_SETPASSWORDCHAR, (WPARAM)pwdChar);
             Invalidate();
         }
     }
@@ -2469,7 +2469,7 @@ public partial class MaskedTextBox : TextBoxBase
 
         // If this WM_CHAR message is sent after WM_IME_CHAR, we ignore it since we already processed
         // the corresponding WM_IME_CHAR message.
-        if (m.Msg == PInvoke.WM_CHAR && ImeWmCharsToIgnore > 0)
+        if (m.Msg == PInvokeCore.WM_CHAR && ImeWmCharsToIgnore > 0)
         {
             return true;    // meaning, we handled the message so it is not passed to the default WndProc.
         }
@@ -2924,19 +2924,19 @@ public partial class MaskedTextBox : TextBoxBase
         // Handle messages for special cases (unsupported operations or cases where mask doesn not matter).
         switch (m.MsgInternal)
         {
-            case PInvoke.WM_PRINT:
+            case PInvokeCore.WM_PRINT:
                 WmPrint(ref m);
                 return;
-            case PInvoke.WM_CONTEXTMENU:
-            case (int)PInvoke.EM_CANUNDO:
+            case PInvokeCore.WM_CONTEXTMENU:
+            case (int)PInvokeCore.EM_CANUNDO:
                 base.ClearUndo(); // resets undo buffer.
                 base.WndProc(ref m);
                 return;
 
-            case (int)PInvoke.EM_SCROLLCARET:  // No scroll for single-line control.
-            case (int)PInvoke.EM_LIMITTEXT:    // Max/Min text is defined by the mask.
-            case (int)PInvoke.EM_UNDO:
-            case PInvoke.WM_UNDO:
+            case (int)PInvokeCore.EM_SCROLLCARET:  // No scroll for single-line control.
+            case (int)PInvokeCore.EM_LIMITTEXT:    // Max/Min text is defined by the mask.
+            case (int)PInvokeCore.EM_UNDO:
+            case PInvokeCore.WM_UNDO:
                 return;
 
             default:
@@ -2951,7 +2951,7 @@ public partial class MaskedTextBox : TextBoxBase
 
         switch (m.MsgInternal)
         {
-            case PInvoke.WM_IME_STARTCOMPOSITION:
+            case PInvokeCore.WM_IME_STARTCOMPOSITION:
                 if (WmImeStartComposition())
                 {
                     break;
@@ -2959,11 +2959,11 @@ public partial class MaskedTextBox : TextBoxBase
 
                 goto default;
 
-            case PInvoke.WM_IME_ENDCOMPOSITION:
+            case PInvokeCore.WM_IME_ENDCOMPOSITION:
                 _flagState[s_imeEndingComposition] = true;
                 goto default;
 
-            case PInvoke.WM_IME_COMPOSITION:
+            case PInvokeCore.WM_IME_COMPOSITION:
                 if (WmImeComposition(ref m))
                 {
                     break;
@@ -2971,7 +2971,7 @@ public partial class MaskedTextBox : TextBoxBase
 
                 goto default;
 
-            case PInvoke.WM_CUT:
+            case PInvokeCore.WM_CUT:
                 if (!ReadOnly && WmCopy())
                 {
                     WmClear();
@@ -2979,24 +2979,24 @@ public partial class MaskedTextBox : TextBoxBase
 
                 break;
 
-            case PInvoke.WM_COPY:
+            case PInvokeCore.WM_COPY:
                 WmCopy();
                 break;
 
-            case PInvoke.WM_PASTE:
+            case PInvokeCore.WM_PASTE:
                 WmPaste();
                 break;
 
-            case PInvoke.WM_CLEAR:
+            case PInvokeCore.WM_CLEAR:
                 WmClear();
                 break;
 
-            case PInvoke.WM_KILLFOCUS:
+            case PInvokeCore.WM_KILLFOCUS:
                 base.WndProc(ref m);
                 WmKillFocus();
                 break;
 
-            case PInvoke.WM_SETFOCUS:
+            case PInvokeCore.WM_SETFOCUS:
                 WmSetFocus();
                 base.WndProc(ref m);
                 break;

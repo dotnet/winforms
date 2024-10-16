@@ -2718,9 +2718,9 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         using DeviceContextHdcScope imageHdc = new(g, applyGraphicsState: false);
 
         // Send the actual wm_print message
-        PInvoke.SendMessage(
+        PInvokeCore.SendMessage(
             this,
-            PInvoke.WM_PRINT,
+            PInvokeCore.WM_PRINT,
             (WPARAM)imageHdc,
             (LPARAM)(uint)(PInvoke.PRF_CHILDREN | PInvoke.PRF_CLIENT | PInvoke.PRF_ERASEBKGND | PInvoke.PRF_NONCLIENT));
 
@@ -4658,12 +4658,12 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
 
     protected override void WndProc(ref Message m)
     {
-        if (m.MsgInternal == PInvoke.WM_SETFOCUS)
+        if (m.MsgInternal == PInvokeCore.WM_SETFOCUS)
         {
             SnapFocus((HWND)(nint)m.WParamInternal);
         }
 
-        if (!AllowClickThrough && m.MsgInternal == PInvoke.WM_MOUSEACTIVATE)
+        if (!AllowClickThrough && m.MsgInternal == PInvokeCore.WM_MOUSEACTIVATE)
         {
             // We want to prevent taking focus if someone clicks on the toolstrip dropdown itself. The mouse message
             // will still go through, but focus won't be taken. If someone clicks on a child control (ComboBox,
@@ -4713,12 +4713,12 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
 
         base.WndProc(ref m);
 
-        if (AllowClickThrough && m.MsgInternal == PInvoke.WM_MOUSEACTIVATE && m.ResultInternal == PInvoke.MA_ACTIVATEANDEAT)
+        if (AllowClickThrough && m.MsgInternal == PInvokeCore.WM_MOUSEACTIVATE && m.ResultInternal == PInvoke.MA_ACTIVATEANDEAT)
         {
             m.ResultInternal = (LRESULT)(nint)PInvoke.MA_ACTIVATE;
         }
 
-        if (m.Msg == (int)PInvoke.WM_NCDESTROY)
+        if (m.Msg == (int)PInvokeCore.WM_NCDESTROY)
         {
             // Destroy the owner window, if we created one. We
             // cannot do this in OnHandleDestroyed, because at

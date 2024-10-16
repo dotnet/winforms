@@ -12,7 +12,7 @@ public class ExceptionHandlingTests
         control.CreateControl();
         Action action = () =>
         {
-            PInvoke.PostMessage(control, 9876);
+            PInvokeCore.PostMessage(control, 9876);
             Application.DoEvents();
         };
 

@@ -1112,7 +1112,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
         comboBox.CreateControl();
         ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
-        int actualValue = (int)PInvoke.SendMessage((IHandle<HWND>)comboBox.TestAccessor().Dynamic._childEdit, PInvoke.EM_GETFIRSTVISIBLELINE);
+        int actualValue = (int)PInvokeCore.SendMessage((IHandle<HWND>)comboBox.TestAccessor().Dynamic._childEdit, PInvokeCore.EM_GETFIRSTVISIBLELINE);
 
         Assert.Equal(actualValue, provider.FirstVisibleLine);
     }
@@ -1126,7 +1126,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
         comboBox.CreateControl();
         ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
-        int actualValue = (int)PInvoke.SendMessage((IHandle<HWND>)comboBox.TestAccessor().Dynamic._childEdit, PInvoke.EM_GETLINECOUNT);
+        int actualValue = (int)PInvokeCore.SendMessage((IHandle<HWND>)comboBox.TestAccessor().Dynamic._childEdit, PInvokeCore.EM_GETLINECOUNT);
 
         Assert.Equal(actualValue, provider.LinesCount);
     }
@@ -1152,7 +1152,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
         comboBox.SelectedIndex = 0;
         ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
-        int expectedLine = (int)PInvoke.SendMessage((IHandle<HWND>)comboBox.TestAccessor().Dynamic._childEdit, PInvoke.EM_LINEFROMCHAR, (WPARAM)charIndex);
+        int expectedLine = (int)PInvokeCore.SendMessage((IHandle<HWND>)comboBox.TestAccessor().Dynamic._childEdit, PInvokeCore.EM_LINEFROMCHAR, (WPARAM)charIndex);
         int actualLine = provider.GetLineFromCharIndex(charIndex);
 
         Assert.Equal(expectedLine, actualLine);
@@ -1173,7 +1173,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
         comboBox.SelectedIndex = 0;
         ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
 
-        bool expectedValue = PInvoke.SendMessage((IHandle<HWND>)comboBox.TestAccessor().Dynamic._childEdit, PInvoke.EM_LINESCROLL, 0, newLine) != 0;
+        bool expectedValue = PInvokeCore.SendMessage((IHandle<HWND>)comboBox.TestAccessor().Dynamic._childEdit, PInvokeCore.EM_LINESCROLL, 0, newLine) != 0;
 
         Assert.Equal(expectedValue, provider.LineScroll(0, newLine));
         Assert.True(comboBox.IsHandleCreated);

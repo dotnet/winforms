@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 
 namespace Windows.Win32;
 
-internal static unsafe partial class PInvoke
+internal static unsafe partial class PInvokeCore
 {
     public delegate bool EnumDisplayMonitorsCallback(HMONITOR monitor, HDC hdc);
 

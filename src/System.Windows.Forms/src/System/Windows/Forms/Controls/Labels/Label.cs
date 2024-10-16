@@ -1428,7 +1428,7 @@ public partial class Label : Control, IAutomationLiveRegion
     {
         switch (m.MsgInternal)
         {
-            case PInvoke.WM_NCHITTEST:
+            case PInvokeCore.WM_NCHITTEST:
                 // Label returns HT_TRANSPARENT for everything, so all messages get routed to the parent. Change
                 // this so we can tell what's going on.
 

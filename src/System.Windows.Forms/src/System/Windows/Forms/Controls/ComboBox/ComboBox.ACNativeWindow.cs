@@ -20,7 +20,7 @@ public partial class ComboBox
             Debug.Assert(!s_acWindows.ContainsKey(acHandle));
             AssignHandle(acHandle);
             s_acWindows.Add(acHandle, this);
-            PInvoke.EnumChildWindows(new HandleRef<HWND>(this, acHandle), RegisterACWindowRecursive);
+            PInvokeCore.EnumChildWindows(new HandleRef<HWND>(this, acHandle), RegisterACWindowRecursive);
         }
 
         private static BOOL RegisterACWindowRecursive(HWND handle)
@@ -68,7 +68,7 @@ public partial class ComboBox
                 s_inWndProcCnt--;
             }
 
-            if (m.MsgInternal == PInvoke.WM_NCDESTROY)
+            if (m.MsgInternal == PInvokeCore.WM_NCDESTROY)
             {
                 Debug.Assert(s_acWindows.ContainsKey(HWND));
                 s_acWindows.Remove(HWND);   // so we do not leak ac windows.

@@ -292,7 +292,7 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
             Assert.True(list.IsHandleCreated);
 
             RECT groupRect = new();
-            PInvoke.SendMessage(list, PInvoke.LVM_GETGROUPRECT, (WPARAM)listGroup.ID, ref groupRect);
+            PInvokeCore.SendMessage(list, PInvoke.LVM_GETGROUPRECT, (WPARAM)listGroup.ID, ref groupRect);
 
             int actualWidth = group1AccObj.Bounds.Width;
             int expectedWidth = groupRect.Width;
@@ -328,7 +328,7 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
         listView.Items.Add(new ListViewItem("a", group));
 
         RECT groupRect = new();
-        PInvoke.SendMessage(listView, PInvoke.LVM_GETGROUPRECT, (WPARAM)group.ID, ref groupRect);
+        PInvokeCore.SendMessage(listView, PInvoke.LVM_GETGROUPRECT, (WPARAM)group.ID, ref groupRect);
 
         AccessibleObject groupAccObj = group.AccessibilityObject;
 
