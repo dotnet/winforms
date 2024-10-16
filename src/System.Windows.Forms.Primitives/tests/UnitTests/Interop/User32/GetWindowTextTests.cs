@@ -58,7 +58,7 @@ public class GetWindowTextTests
         {
             switch (msg)
             {
-                case PInvoke.WM_GETTEXTLENGTH:
+                case PInvokeCore.WM_GETTEXTLENGTH:
                     string? text = BeforeGetTextLengthCallback?.Invoke();
                     if (text is not null)
                     {
@@ -66,7 +66,7 @@ public class GetWindowTextTests
                     }
 
                     break;
-                case PInvoke.WM_GETTEXT:
+                case PInvokeCore.WM_GETTEXT:
                     text = BeforeGetTextCallback?.Invoke();
                     if (text is not null)
                     {

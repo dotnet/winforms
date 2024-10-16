@@ -23,11 +23,6 @@ public class ClipboardProxyTests
     {
         var clipboard = new Computer().Clipboard;
         clipboard.ContainsAudio().Should().Be(System.Windows.Forms.Clipboard.ContainsAudio());
-
-        // Not tested:
-        //   Public Function GetAudioStream() As Stream
-        //   Public Sub SetAudio(audioBytes As Byte())
-        //   Public Sub SetAudio(audioStream As Stream)
     }
 
     [WinFormsFact]
@@ -65,9 +60,6 @@ public class ClipboardProxyTests
     {
         var clipboard = new Computer().Clipboard;
         System.Windows.Forms.Clipboard.ContainsFileDropList().Should().Be(clipboard.ContainsFileDropList());
-        // Not tested:
-        //   Public Function GetFileDropList() As StringCollection
-        //   Public Sub SetFileDropList(filePaths As StringCollection)
     }
 
     [WinFormsFact]

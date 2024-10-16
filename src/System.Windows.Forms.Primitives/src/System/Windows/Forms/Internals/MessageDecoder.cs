@@ -23,7 +23,7 @@ internal static class MessageDecoder
         string id = Parenthesize(messageId.MessageIdToString());
 
         string lDescription = string.Empty;
-        if (messageId == PInvoke.WM_PARENTNOTIFY)
+        if (messageId == PInvokeCore.WM_PARENTNOTIFY)
         {
             lDescription = Parenthesize(((MessageId)(uint)wparam.LOWORD).MessageIdToString());
         }

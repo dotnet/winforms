@@ -2541,7 +2541,7 @@ internal class ToolStripDesigner : ControlDesigner
     {
         switch (m.MsgInternal)
         {
-            case PInvoke.WM_CONTEXTMENU:
+            case PInvokeCore.WM_CONTEXTMENU:
                 if (GetHitTest(PARAM.ToPoint(m.LParamInternal)))
                 {
                     return;
@@ -2549,8 +2549,8 @@ internal class ToolStripDesigner : ControlDesigner
 
                 base.WndProc(ref m);
                 break;
-            case PInvoke.WM_LBUTTONDOWN:
-            case PInvoke.WM_RBUTTONDOWN:
+            case PInvokeCore.WM_LBUTTONDOWN:
+            case PInvokeCore.WM_RBUTTONDOWN:
                 // commit any InSitu if any...
                 Commit();
                 base.WndProc(ref m);

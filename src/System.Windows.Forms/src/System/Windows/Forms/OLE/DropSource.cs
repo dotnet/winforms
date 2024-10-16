@@ -116,5 +116,5 @@ internal class DropSource : IDropSource.Interface, IDropSourceNotify.Interface, 
         return HRESULT.S_OK;
     }
 
-    private bool IsDropTargetWindowInCurrentThread() => _lastHwndTargetThreadId == PInvoke.GetCurrentThreadId();
+    private bool IsDropTargetWindowInCurrentThread() => _lastHwndTargetThreadId == PInvokeCore.GetCurrentThreadId();
 }

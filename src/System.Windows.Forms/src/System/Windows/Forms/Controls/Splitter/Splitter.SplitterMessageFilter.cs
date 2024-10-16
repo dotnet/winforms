@@ -18,12 +18,12 @@ public partial class Splitter
         /// </summary>
         public bool PreFilterMessage(ref Message m)
         {
-            if (m.MsgInternal < PInvoke.WM_KEYFIRST || m.MsgInternal > PInvoke.WM_KEYLAST)
+            if (m.MsgInternal < PInvokeCore.WM_KEYFIRST || m.MsgInternal > PInvokeCore.WM_KEYLAST)
             {
                 return false;
             }
 
-            if (m.MsgInternal == PInvoke.WM_KEYDOWN && (Keys)(nint)m.WParamInternal == Keys.Escape)
+            if (m.MsgInternal == PInvokeCore.WM_KEYDOWN && (Keys)(nint)m.WParamInternal == Keys.Escape)
             {
                 _owner.SplitEnd(false);
             }

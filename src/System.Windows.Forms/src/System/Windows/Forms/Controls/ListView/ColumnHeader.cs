@@ -395,13 +395,13 @@ public partial class ColumnHeader : Component, ICloneable
             if (ListView is not null && ListView.IsHandleCreated && !ListView.Disposing && ListView.View == View.Details)
             {
                 // Make sure this column has already been added to the ListView, else just return width
-                HWND hwndHdr = (HWND)PInvoke.SendMessage(ListView, PInvoke.LVM_GETHEADER);
+                HWND hwndHdr = (HWND)PInvokeCore.SendMessage(ListView, PInvoke.LVM_GETHEADER);
                 if (!hwndHdr.IsNull)
                 {
-                    int nativeColumnCount = (int)PInvoke.SendMessage(hwndHdr, PInvoke.HDM_GETITEMCOUNT);
+                    int nativeColumnCount = (int)PInvokeCore.SendMessage(hwndHdr, PInvoke.HDM_GETITEMCOUNT);
                     if (Index < nativeColumnCount)
                     {
-                        _width = (int)PInvoke.SendMessage(ListView, PInvoke.LVM_GETCOLUMNWIDTH, (WPARAM)Index);
+                        _width = (int)PInvokeCore.SendMessage(ListView, PInvoke.LVM_GETCOLUMNWIDTH, (WPARAM)Index);
                     }
                 }
             }
@@ -483,7 +483,7 @@ public partial class ColumnHeader : Component, ICloneable
         {
             fixed (int* pCols = cols)
             {
-                PInvoke.SendMessage(ListView, PInvoke.LVM_SETCOLUMNORDERARRAY, (WPARAM)cols.Length, (LPARAM)pCols);
+                PInvokeCore.SendMessage(ListView, PInvoke.LVM_SETCOLUMNORDERARRAY, (WPARAM)cols.Length, (LPARAM)pCols);
             }
         }
     }

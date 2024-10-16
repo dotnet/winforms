@@ -31,7 +31,7 @@ internal static class FolderBrowserHelper
             }
         }
 
-        using BufferScope<char> buffer = new(PInvoke.MAX_PATH + 1);
+        using BufferScope<char> buffer = new((int)PInvokeCore.MAX_PATH + 1);
 
         fixed (char* b = buffer)
         fixed (char* t = title)

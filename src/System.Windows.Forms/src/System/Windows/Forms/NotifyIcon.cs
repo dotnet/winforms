@@ -28,7 +28,7 @@ public sealed partial class NotifyIcon : Component
     private static readonly object s_balloonTipClickedEvent = new();
     private static readonly object s_balloonTipClosedEvent = new();
 
-    private const int WM_TRAYMOUSEMESSAGE = (int)PInvoke.WM_USER + 1024;
+    private const int WM_TRAYMOUSEMESSAGE = (int)PInvokeCore.WM_USER + 1024;
     private static uint WM_TASKBARCREATED { get; } = PInvoke.RegisterWindowMessage("TaskbarCreated");
 
     private readonly Lock _lock = new();
@@ -403,7 +403,7 @@ public sealed partial class NotifyIcon : Component
             // it, change it there too.
             if (_window is not null && _window.Handle != 0)
             {
-                PInvoke.PostMessage(_window, PInvoke.WM_CLOSE);
+                PInvokeCore.PostMessage(_window, PInvokeCore.WM_CLOSE);
                 _window.ReleaseHandle();
             }
         }
@@ -731,34 +731,34 @@ public sealed partial class NotifyIcon : Component
             case WM_TRAYMOUSEMESSAGE:
                 switch ((uint)(nint)msg.LParamInternal)
                 {
-                    case PInvoke.WM_LBUTTONDBLCLK:
+                    case PInvokeCore.WM_LBUTTONDBLCLK:
                         WmMouseDown(MouseButtons.Left, 2);
                         break;
-                    case PInvoke.WM_LBUTTONDOWN:
+                    case PInvokeCore.WM_LBUTTONDOWN:
                         WmMouseDown(MouseButtons.Left, 1);
                         break;
-                    case PInvoke.WM_LBUTTONUP:
+                    case PInvokeCore.WM_LBUTTONUP:
                         WmMouseUp(MouseButtons.Left);
                         break;
-                    case PInvoke.WM_MBUTTONDBLCLK:
+                    case PInvokeCore.WM_MBUTTONDBLCLK:
                         WmMouseDown(MouseButtons.Middle, 2);
                         break;
-                    case PInvoke.WM_MBUTTONDOWN:
+                    case PInvokeCore.WM_MBUTTONDOWN:
                         WmMouseDown(MouseButtons.Middle, 1);
                         break;
-                    case PInvoke.WM_MBUTTONUP:
+                    case PInvokeCore.WM_MBUTTONUP:
                         WmMouseUp(MouseButtons.Middle);
                         break;
-                    case PInvoke.WM_MOUSEMOVE:
+                    case PInvokeCore.WM_MOUSEMOVE:
                         WmMouseMove();
                         break;
-                    case PInvoke.WM_RBUTTONDBLCLK:
+                    case PInvokeCore.WM_RBUTTONDBLCLK:
                         WmMouseDown(MouseButtons.Right, 2);
                         break;
-                    case PInvoke.WM_RBUTTONDOWN:
+                    case PInvokeCore.WM_RBUTTONDOWN:
                         WmMouseDown(MouseButtons.Right, 1);
                         break;
-                    case PInvoke.WM_RBUTTONUP:
+                    case PInvokeCore.WM_RBUTTONUP:
                         if (_contextMenuStrip is not null)
                         {
                             ShowContextMenu();
@@ -781,7 +781,7 @@ public sealed partial class NotifyIcon : Component
                 }
 
                 break;
-            case PInvoke.WM_COMMAND:
+            case PInvokeCore.WM_COMMAND:
                 if (msg.LParamInternal == 0)
                 {
                     if (Command.DispatchID((int)msg.WParamInternal & 0xFFFF))
@@ -796,12 +796,12 @@ public sealed partial class NotifyIcon : Component
 
                 break;
 
-            case PInvoke.WM_DESTROY:
+            case PInvokeCore.WM_DESTROY:
                 // Remove the icon from the taskbar
                 UpdateIcon(false);
                 break;
 
-            case PInvoke.WM_INITMENUPOPUP:
+            case PInvokeCore.WM_INITMENUPOPUP:
             default:
                 if (msg.Msg == (int)WM_TASKBARCREATED)
                 {

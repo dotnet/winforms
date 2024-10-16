@@ -96,7 +96,7 @@ internal partial class PropertyGridView
                     WINDOWS_HOOK_ID.WH_MOUSE,
                     (delegate* unmanaged[Stdcall]<int, WPARAM, LPARAM, LRESULT>)hook,
                     (HINSTANCE)0,
-                    PInvoke.GetCurrentThreadId());
+                    PInvokeCore.GetCurrentThreadId());
 
                 Debug.Assert(!_mouseHookHandle.IsNull, "Failed to install mouse hook");
             }
@@ -114,13 +114,13 @@ internal partial class PropertyGridView
                 {
                     switch ((uint)wparam)
                     {
-                        case PInvoke.WM_LBUTTONDOWN:
-                        case PInvoke.WM_MBUTTONDOWN:
-                        case PInvoke.WM_RBUTTONDOWN:
-                        case PInvoke.WM_NCLBUTTONDOWN:
-                        case PInvoke.WM_NCMBUTTONDOWN:
-                        case PInvoke.WM_NCRBUTTONDOWN:
-                        case PInvoke.WM_MOUSEACTIVATE:
+                        case PInvokeCore.WM_LBUTTONDOWN:
+                        case PInvokeCore.WM_MBUTTONDOWN:
+                        case PInvokeCore.WM_RBUTTONDOWN:
+                        case PInvokeCore.WM_NCLBUTTONDOWN:
+                        case PInvokeCore.WM_NCMBUTTONDOWN:
+                        case PInvokeCore.WM_NCRBUTTONDOWN:
+                        case PInvokeCore.WM_MOUSEACTIVATE:
                             if (ProcessMouseDown(mhs->hwnd))
                             {
                                 return (LRESULT)1;

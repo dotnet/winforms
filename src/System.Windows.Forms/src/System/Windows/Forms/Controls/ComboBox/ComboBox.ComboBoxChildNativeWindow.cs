@@ -22,10 +22,10 @@ public partial class ComboBox
         {
             switch ((uint)m.MsgInternal)
             {
-                case PInvoke.WM_GETOBJECT:
+                case PInvokeCore.WM_GETOBJECT:
                     WmGetObject(ref m);
                     return;
-                case PInvoke.WM_MOUSEMOVE:
+                case PInvokeCore.WM_MOUSEMOVE:
                     if (_childWindowType == ChildWindowType.DropDownList)
                     {
                         // Need to track the selection change via mouse over to
@@ -52,7 +52,7 @@ public partial class ComboBox
                     }
 
                     break;
-                case PInvoke.WM_DESTROY:
+                case PInvokeCore.WM_DESTROY:
                     AccessibleObject? accessibilityObject = GetChildAccessibleObjectIfCreated();
 
                     if (accessibilityObject is not null)

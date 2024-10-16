@@ -1273,7 +1273,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             return true;
         }
 
-        if ((int)PInvoke.SendMessage(this, _subclassCheckMessage) == REGMSG_RETVAL)
+        if ((int)PInvokeCore.SendMessage(this, _subclassCheckMessage) == REGMSG_RETVAL)
         {
             _wndprocAddr = currentWndproc;
             return true;
@@ -1702,7 +1702,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             return base.PreProcessMessage(ref msg);
         }
 
-        MSG win32Message = msg;
+        MSG win32Message = msg.ToMSG();
         _axState[s_siteProcessedInputKey] = false;
         try
         {
@@ -1778,7 +1778,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             // We don't have a message so we must create one ourselves.
             // The message we are creating is a WM_SYSKEYDOWN with the right alt key setting.
             hwnd = (ContainingControl is null) ? HWND.Null : ContainingControl.HWND,
-            message = PInvoke.WM_SYSKEYDOWN,
+            message = PInvokeCore.WM_SYSKEYDOWN,
             wParam = (WPARAM)char.ToUpper(charCode, CultureInfo.CurrentCulture),
             // 0x20180001
             lParam = LPARAM.MAKELPARAM(
@@ -3109,27 +3109,27 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         switch (m.MsgInternal)
         {
             // Things we explicitly ignore and pass to the ActiveX Control's windproc
-            case PInvoke.WM_ERASEBKGND:
+            case PInvokeCore.WM_ERASEBKGND:
             case MessageId.WM_REFLECT_NOTIFYFORMAT:
-            case PInvoke.WM_SETCURSOR:
-            case PInvoke.WM_SYSCOLORCHANGE:
+            case PInvokeCore.WM_SETCURSOR:
+            case PInvokeCore.WM_SYSCOLORCHANGE:
 
             // Some of the common controls respond to this message to do some custom painting.
             // So, we should just pass this message through.
-            case PInvoke.WM_DRAWITEM:
+            case PInvokeCore.WM_DRAWITEM:
 
-            case PInvoke.WM_LBUTTONDBLCLK:
-            case PInvoke.WM_LBUTTONUP:
-            case PInvoke.WM_MBUTTONDBLCLK:
-            case PInvoke.WM_MBUTTONUP:
-            case PInvoke.WM_RBUTTONDBLCLK:
-            case PInvoke.WM_RBUTTONUP:
+            case PInvokeCore.WM_LBUTTONDBLCLK:
+            case PInvokeCore.WM_LBUTTONUP:
+            case PInvokeCore.WM_MBUTTONDBLCLK:
+            case PInvokeCore.WM_MBUTTONUP:
+            case PInvokeCore.WM_RBUTTONDBLCLK:
+            case PInvokeCore.WM_RBUTTONUP:
                 DefWndProc(ref m);
                 break;
 
-            case PInvoke.WM_LBUTTONDOWN:
-            case PInvoke.WM_MBUTTONDOWN:
-            case PInvoke.WM_RBUTTONDOWN:
+            case PInvokeCore.WM_LBUTTONDOWN:
+            case PInvokeCore.WM_MBUTTONDOWN:
+            case PInvokeCore.WM_RBUTTONDOWN:
                 if (IsUserMode())
                 {
                     Focus();
@@ -3138,7 +3138,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                 DefWndProc(ref m);
                 break;
 
-            case PInvoke.WM_KILLFOCUS:
+            case PInvokeCore.WM_KILLFOCUS:
                 {
                     _hwndFocus = (HWND)(nint)m.WParamInternal;
                     try
@@ -3153,7 +3153,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                     break;
                 }
 
-            case PInvoke.WM_COMMAND:
+            case PInvokeCore.WM_COMMAND:
                 if (!ReflectMessage(m.LParamInternal, ref m))
                 {
                     DefWndProc(ref m);
@@ -3161,11 +3161,11 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
                 break;
 
-            case PInvoke.WM_CONTEXTMENU:
+            case PInvokeCore.WM_CONTEXTMENU:
                 DefWndProc(ref m);
                 break;
 
-            case PInvoke.WM_DESTROY:
+            case PInvokeCore.WM_DESTROY:
                 // If we are currently in a state of InPlaceActive or above, we should first reparent the ActiveX
                 // control to our parking window before we transition to a state below InPlaceActive. Otherwise we
                 // face all sorts of problems when we try to transition back to a state >= InPlaceActive.
@@ -3190,13 +3190,13 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                 }
 
                 break;
-            case PInvoke.WM_HELP:
+            case PInvokeCore.WM_HELP:
                 // We want to both fire the event, and let the ActiveX Control have the message.
                 base.WndProc(ref m);
                 DefWndProc(ref m);
                 break;
 
-            case PInvoke.WM_KEYUP:
+            case PInvokeCore.WM_KEYUP:
                 // Pass WM_KEYUP messages to PreProcessControlMessage, which comes back to our PreProcessMessage
                 // to give the ActiveX control a chance to handle accelerator keys (command shortcuts).
 
@@ -3220,7 +3220,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
                 break;
 
-            case PInvoke.WM_NCDESTROY:
+            case PInvokeCore.WM_NCDESTROY:
                 // Need to detach it now.
                 DetachAndForward(ref m);
                 break;

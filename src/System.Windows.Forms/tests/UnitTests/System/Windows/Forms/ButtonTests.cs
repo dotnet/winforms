@@ -3383,7 +3383,7 @@ public class ButtonTests : AbstractButtonBaseTests
 
             Message m = new()
             {
-                Msg = (int)PInvoke.WM_ERASEBKGND,
+                Msg = (int)PInvokeCore.WM_ERASEBKGND,
                 Result = 250
             };
             control.WndProc(ref m);
@@ -3427,7 +3427,7 @@ public class ButtonTests : AbstractButtonBaseTests
             {
                 Message m = new()
                 {
-                    Msg = (int)PInvoke.WM_ERASEBKGND,
+                    Msg = (int)PInvokeCore.WM_ERASEBKGND,
                     WParam = hdc,
                     Result = 250
                 };
@@ -3463,7 +3463,7 @@ public class ButtonTests : AbstractButtonBaseTests
 
         Message m = new()
         {
-            Msg = (int)PInvoke.WM_ERASEBKGND,
+            Msg = (int)PInvokeCore.WM_ERASEBKGND,
             Result = 250
         };
         control.WndProc(ref m);
@@ -3500,7 +3500,7 @@ public class ButtonTests : AbstractButtonBaseTests
         {
             Message m = new()
             {
-                Msg = (int)PInvoke.WM_ERASEBKGND,
+                Msg = (int)PInvokeCore.WM_ERASEBKGND,
                 WParam = hdc,
                 Result = 250
             };
@@ -3543,7 +3543,7 @@ public class ButtonTests : AbstractButtonBaseTests
         };
         Message m = new()
         {
-            Msg = (int)PInvoke.WM_MOUSEHOVER,
+            Msg = (int)PInvokeCore.WM_MOUSEHOVER,
             Result = 250
         };
         control.WndProc(ref m);
