@@ -117,7 +117,6 @@ ECO_*
 ECOOP_*
 ELEMDESC
 Ellipse
-EM_*
 EN_*
 EnableMenuItem
 EnableScrollBar
@@ -125,12 +124,8 @@ EnableWindow
 EndDialog
 EndPaint
 ENM_*
-EnumChildWindows
-EnumDisplayMonitors
 EnumDisplaySettings
 EnumEnhMetaFile
-EnumThreadWindows
-EnumWindows
 ES_*
 EVENTMSG
 ExpandCollapseState
@@ -148,7 +143,6 @@ FUNCFLAGS
 FUNCKIND
 GDI_ERROR
 GDTR_*
-GET_CLASS_LONG_INDEX
 GET_MODULE_HANDLE_EX_FLAG*
 GetActiveWindow
 GetAncestor
@@ -174,7 +168,6 @@ GetCurrentProcess
 GetCurrentProcessId
 GetCurrentThemeName
 GetCurrentThread
-GetCurrentThreadId
 GetCursor
 GetCursorPos
 GetDIBits
@@ -558,8 +551,6 @@ PBM_*
 PBS_*
 PBST_*
 PD_RESULT_*
-PeekMessage
-PostMessage
 PostQuitMessage
 PostQuitMessage
 PostThreadMessage
@@ -597,7 +588,6 @@ SelectObject
 SelectPalette
 SendDlgItemMessage
 SendInput
-SendMessage
 SendMessageCallback
 SendMessageTimeout
 SetActiveWindow
@@ -763,7 +753,6 @@ WideCharToMultiByte
 WindowFromPoint
 WINDOWPOS
 WINEVENT_INCONTEXT
-WM_*
 WSF_VISIBLE
 XBUTTON1
 XBUTTON2

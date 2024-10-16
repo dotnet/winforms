@@ -44,7 +44,7 @@ internal unsafe struct ToolInfoWrapper<T>
                 Info.lpszText = c;
             }
 
-            LRESULT result = PInvoke.SendMessage(sender, message, (WPARAM)(BOOL)state, (LPARAM)i);
+            LRESULT result = PInvokeCore.SendMessage(sender, message, (WPARAM)(BOOL)state, (LPARAM)i);
             GC.KeepAlive(_handle);
             return result;
         }

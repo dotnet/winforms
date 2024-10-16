@@ -204,7 +204,7 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
             dwEffects = CFE_EFFECTS.CFE_LINK,
         };
 
-        PInvoke.SendMessage(control, PInvoke.EM_SETCHARFORMAT, (WPARAM)PInvoke.SCF_SELECTION, ref format);
+        PInvokeCore.SendMessage(control, PInvokeCore.EM_SETCHARFORMAT, (WPARAM)PInvoke.SCF_SELECTION, ref format);
 
         control.Select(0, 0);
     }
@@ -213,7 +213,7 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
     {
         using ComScope<IRichEditOle> richEdit = new(null);
 
-        if (PInvoke.SendMessage(control, PInvoke.EM_GETOLEINTERFACE, 0, (void**)richEdit) != 0)
+        if (PInvokeCore.SendMessage(control, PInvokeCore.EM_GETOLEINTERFACE, 0, (void**)richEdit) != 0)
         {
             using var textDocument = richEdit.TryQuery<ITextDocument>(out HRESULT hr);
 

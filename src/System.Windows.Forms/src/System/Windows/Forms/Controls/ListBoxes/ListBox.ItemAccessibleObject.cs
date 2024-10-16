@@ -204,14 +204,14 @@ public partial class ListBox
 
             if (_owningListBox.SelectedIndex == -1) // no item selected
             {
-                PInvoke.SendMessage(_owningListBox, PInvoke.LB_SETCARETINDEX, (WPARAM)currentIndex);
+                PInvokeCore.SendMessage(_owningListBox, PInvoke.LB_SETCARETINDEX, (WPARAM)currentIndex);
                 return;
             }
 
-            int firstVisibleIndex = (int)PInvoke.SendMessage(_owningListBox, PInvoke.LB_GETTOPINDEX);
+            int firstVisibleIndex = (int)PInvokeCore.SendMessage(_owningListBox, PInvoke.LB_GETTOPINDEX);
             if (currentIndex < firstVisibleIndex)
             {
-                PInvoke.SendMessage(_owningListBox, PInvoke.LB_SETTOPINDEX, (WPARAM)currentIndex);
+                PInvokeCore.SendMessage(_owningListBox, PInvoke.LB_SETTOPINDEX, (WPARAM)currentIndex);
                 return;
             }
 
@@ -221,7 +221,7 @@ public partial class ListBox
 
             for (int i = firstVisibleIndex; i < itemsCount; i++)
             {
-                int itemHeight = (int)PInvoke.SendMessage(_owningListBox, PInvoke.LB_GETITEMHEIGHT, (WPARAM)i);
+                int itemHeight = (int)PInvokeCore.SendMessage(_owningListBox, PInvoke.LB_GETITEMHEIGHT, (WPARAM)i);
 
                 if ((itemsHeightSum += itemHeight) <= listBoxHeight)
                 {
@@ -233,7 +233,7 @@ public partial class ListBox
 
                 if (currentIndex > lastVisibleIndex)
                 {
-                    PInvoke.SendMessage(_owningListBox, PInvoke.LB_SETTOPINDEX, (WPARAM)(currentIndex - visibleItemsCount + 1));
+                    PInvokeCore.SendMessage(_owningListBox, PInvoke.LB_SETTOPINDEX, (WPARAM)(currentIndex - visibleItemsCount + 1));
                 }
 
                 break;

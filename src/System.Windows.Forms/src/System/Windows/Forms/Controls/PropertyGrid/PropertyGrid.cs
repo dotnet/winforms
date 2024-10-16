@@ -594,7 +594,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             {
                 if (_paintFrozen++ == 0)
                 {
-                    PInvoke.SendMessage(this, PInvoke.WM_SETREDRAW, (WPARAM)(BOOL)false);
+                    PInvokeCore.SendMessage(this, PInvokeCore.WM_SETREDRAW, (WPARAM)(BOOL)false);
                 }
             }
 
@@ -607,7 +607,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
                 if (--_paintFrozen == 0)
                 {
-                    PInvoke.SendMessage(this, PInvoke.WM_SETREDRAW, (WPARAM)(BOOL)true);
+                    PInvokeCore.SendMessage(this, PInvokeCore.WM_SETREDRAW, (WPARAM)(BOOL)true);
                     Invalidate(true);
                 }
             }
@@ -4264,7 +4264,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     {
         switch (m.MsgInternal)
         {
-            case PInvoke.WM_UNDO:
+            case PInvokeCore.WM_UNDO:
                 if (m.LParamInternal == 0)
                 {
                     _gridView.DoUndoCommand();
@@ -4275,7 +4275,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
                 }
 
                 return;
-            case PInvoke.WM_CUT:
+            case PInvokeCore.WM_CUT:
                 if (m.LParamInternal == 0)
                 {
                     _gridView.DoCutCommand();
@@ -4287,7 +4287,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
                 return;
 
-            case PInvoke.WM_COPY:
+            case PInvokeCore.WM_COPY:
                 if (m.LParamInternal == 0)
                 {
                     _gridView.DoCopyCommand();
@@ -4299,7 +4299,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
                 return;
 
-            case PInvoke.WM_PASTE:
+            case PInvokeCore.WM_PASTE:
                 if (m.LParamInternal == 0)
                 {
                     _gridView.DoPasteCommand();
@@ -4311,7 +4311,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
                 return;
 
-            case PInvoke.WM_COPYDATA:
+            case PInvokeCore.WM_COPYDATA:
                 var cds = (COPYDATASTRUCT*)(nint)m.LParamInternal;
 
                 if (cds is not null && cds->lpData is not null)
@@ -4430,7 +4430,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
                 break;
             case AutomationMessages.PGM_GETSELECTEDROW:
             case AutomationMessages.PGM_GETVISIBLEROWCOUNT:
-                m.ResultInternal = PInvoke.SendMessage(_gridView, m.MsgInternal, m.WParamInternal, m.LParamInternal);
+                m.ResultInternal = PInvokeCore.SendMessage(_gridView, m.MsgInternal, m.WParamInternal, m.LParamInternal);
                 return;
             case AutomationMessages.PGM_SETSELECTEDTAB:
                 if (m.LParamInternal != 0)

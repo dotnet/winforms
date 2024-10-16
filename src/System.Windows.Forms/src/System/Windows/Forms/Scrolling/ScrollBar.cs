@@ -731,16 +731,16 @@ public abstract partial class ScrollBar : Control
                 WmReflectScroll(ref m);
                 break;
 
-            case PInvoke.WM_ERASEBKGND:
+            case PInvokeCore.WM_ERASEBKGND:
                 break;
 
-            case PInvoke.WM_SIZE:
+            case PInvokeCore.WM_SIZE:
                 // Fixes the scrollbar focus rect
                 if (PInvoke.GetFocus() == HWND)
                 {
                     DefWndProc(ref m);
-                    PInvoke.SendMessage(this, PInvoke.WM_KILLFOCUS);
-                    PInvoke.SendMessage(this, PInvoke.WM_SETFOCUS);
+                    PInvokeCore.SendMessage(this, PInvokeCore.WM_KILLFOCUS);
+                    PInvokeCore.SendMessage(this, PInvokeCore.WM_SETFOCUS);
                 }
 
                 break;

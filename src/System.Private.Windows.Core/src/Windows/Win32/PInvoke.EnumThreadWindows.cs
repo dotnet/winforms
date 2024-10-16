@@ -6,12 +6,14 @@ using System.Runtime.InteropServices;
 
 namespace Windows.Win32;
 
-internal static partial class PInvoke
+internal static partial class PInvokeCore
 {
-    public delegate BOOL EnumChildWindowsCallback(HWND hWnd);
+    public delegate BOOL EnumThreadWindowsCallback(HWND hWnd);
 
-    public static unsafe BOOL EnumChildWindows<T>(T hwndParent, EnumChildWindowsCallback callback)
-        where T : IHandle<HWND>
+    /// <summary>
+    ///  Enumerates all nonchild windows in the current thread.
+    /// </summary>
+    public static unsafe BOOL EnumCurrentThreadWindows(EnumThreadWindowsCallback callback)
     {
         // We pass a function pointer to the native function and supply the callback as
         // reference data, so that the CLR doesn't need to generate a native code block for
@@ -19,18 +21,17 @@ internal static partial class PInvoke
         GCHandle gcHandle = GCHandle.Alloc(callback);
         try
         {
-            return EnumChildWindows(hwndParent.Handle, &EnumChildWindowsNativeCallback, (LPARAM)(nint)gcHandle);
+            return EnumThreadWindows(GetCurrentThreadId(), &HandleEnumThreadWindowsNativeCallback, (LPARAM)(nint)gcHandle);
         }
         finally
         {
             gcHandle.Free();
-            GC.KeepAlive(hwndParent.Wrapper);
         }
     }
 
     [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
-    private static BOOL EnumChildWindowsNativeCallback(HWND hWnd, LPARAM lParam)
+    private static BOOL HandleEnumThreadWindowsNativeCallback(HWND hWnd, LPARAM lParam)
     {
-        return ((EnumChildWindowsCallback)((GCHandle)(nint)lParam).Target!)(hWnd);
+        return ((EnumThreadWindowsCallback)((GCHandle)(nint)lParam).Target!)(hWnd);
     }
 }

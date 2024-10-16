@@ -263,7 +263,7 @@ public class NativeWindowTests
     [WinFormsTheory]
     [InlineData(0)]
     [InlineData(1234)]
-    [InlineData((int)PInvoke.WM_NCDESTROY)]
+    [InlineData((int)PInvokeCore.WM_NCDESTROY)]
     public void NativeWindow_DefWndProc_InvokeWithCreatedHandle_Nop(int msg)
     {
         WndProcTrackingNativeWindow window = new();
@@ -314,7 +314,7 @@ public class NativeWindowTests
     [WinFormsTheory]
     [InlineData(0)]
     [InlineData(1234)]
-    [InlineData((int)PInvoke.WM_NCDESTROY)]
+    [InlineData((int)PInvokeCore.WM_NCDESTROY)]
     public void NativeWindow_DefWndProc_InvokeWithInvalidHandle_Nop(int msg)
     {
         using (new NoAssertContext())
@@ -381,7 +381,7 @@ public class NativeWindowTests
     [WinFormsTheory]
     [InlineData(0)]
     [InlineData(1234)]
-    [InlineData((int)PInvoke.WM_NCDESTROY)]
+    [InlineData((int)PInvokeCore.WM_NCDESTROY)]
     public void NativeWindow_DefWndProc_InvokeWithoutHandle_Nop(int msg)
     {
         using (new NoAssertContext())
@@ -442,7 +442,7 @@ public class NativeWindowTests
     [WinFormsTheory]
     [InlineData(0)]
     [InlineData(1234)]
-    [InlineData((int)PInvoke.WM_NCDESTROY)]
+    [InlineData((int)PInvokeCore.WM_NCDESTROY)]
     public void NativeWindow_WndProc_InvokeWithCreatedHandle_Success(int msg)
     {
         SubNativeWindow window = new();
@@ -493,7 +493,7 @@ public class NativeWindowTests
     [WinFormsTheory]
     [InlineData(0)]
     [InlineData(1234)]
-    [InlineData((int)PInvoke.WM_NCDESTROY)]
+    [InlineData((int)PInvokeCore.WM_NCDESTROY)]
     public void NativeWindow_WndProc_InvokeWithInvalidAssignedHandle_Nop(int msg)
     {
         using (new NoAssertContext())
@@ -514,7 +514,7 @@ public class NativeWindowTests
     [WinFormsTheory]
     [InlineData(0)]
     [InlineData(1234)]
-    [InlineData((int)PInvoke.WM_NCDESTROY)]
+    [InlineData((int)PInvokeCore.WM_NCDESTROY)]
     public void NativeWindow_WndProc_InvokeWithoutHandle_Nop(int msg)
     {
         using (new NoAssertContext())

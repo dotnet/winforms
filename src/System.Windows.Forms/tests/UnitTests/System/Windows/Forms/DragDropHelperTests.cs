@@ -53,8 +53,8 @@ public class DragDropHelperTests
 
     public static IEnumerable<object[]> DropDescription_LengthExceedsMaxPath_TestData()
     {
-        yield return new object[] { new DataObject(), DropImageType.Copy, new string('*', PInvoke.MAX_PATH), string.Empty };
-        yield return new object[] { new DataObject(), DropImageType.Copy, string.Empty, new string('*', PInvoke.MAX_PATH) };
+        yield return new object[] { new DataObject(), DropImageType.Copy, new string('*', (int)PInvokeCore.MAX_PATH), string.Empty };
+        yield return new object[] { new DataObject(), DropImageType.Copy, string.Empty, new string('*', (int)PInvokeCore.MAX_PATH) };
     }
 
     public static IEnumerable<object[]> InDragLoop_TestData()

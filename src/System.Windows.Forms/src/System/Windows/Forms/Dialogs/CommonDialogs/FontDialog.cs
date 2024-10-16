@@ -303,14 +303,14 @@ public class FontDialog : CommonDialog
     {
         switch ((uint)msg)
         {
-            case PInvoke.WM_COMMAND:
+            case PInvokeCore.WM_COMMAND:
                 if (wparam != 0x402)
                 {
                     break;
                 }
 
                 LOGFONT logFont = default;
-                PInvoke.SendMessage((HWND)hWnd, PInvoke.WM_CHOOSEFONT_GETLOGFONT, (WPARAM)0, ref logFont);
+                PInvokeCore.SendMessage((HWND)hWnd, PInvokeCore.WM_CHOOSEFONT_GETLOGFONT, (WPARAM)0, ref logFont);
                 UpdateFont(ref logFont);
                 int index = (int)PInvoke.SendDlgItemMessage((HWND)hWnd, (int)PInvoke.cmb4, PInvoke.CB_GETCURSEL, 0, 0);
                 if (index != PInvoke.CB_ERR)
@@ -340,7 +340,7 @@ public class FontDialog : CommonDialog
                 }
 
                 break;
-            case PInvoke.WM_INITDIALOG:
+            case PInvokeCore.WM_INITDIALOG:
                 if (!ShowColor)
                 {
                     HWND hWndCtl = PInvoke.GetDlgItem((HWND)hWnd, (int)PInvoke.cmb4);
