@@ -270,7 +270,7 @@ public partial class ToolStripTextBox
 
         protected override void WndProc(ref Message m)
         {
-            if (m.MsgInternal == PInvoke.WM_NCPAINT)
+            if (m.MsgInternal == PInvokeCore.WM_NCPAINT)
             {
                 WmNCPaint(ref m);
                 return;

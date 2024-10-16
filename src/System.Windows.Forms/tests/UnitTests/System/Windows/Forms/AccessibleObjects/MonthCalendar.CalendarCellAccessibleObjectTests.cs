@@ -150,7 +150,7 @@ public class MonthCalendar_CalendarCellAccessibleObjectTests
         control.SelectionStart = new DateTime(2021, 6, 16); // Set a date to have a stable test case
 
         control.CreateControl();
-        PInvoke.SendMessage(control, PInvoke.MCM_SETCURRENTVIEW, 0, view);
+        PInvokeCore.SendMessage(control, PInvoke.MCM_SETCURRENTVIEW, 0, view);
 
         CalendarCellAccessibleObject cellAccessibleObject = CreateCalendarCellAccessibleObject(control, 0, 2, 2);
 

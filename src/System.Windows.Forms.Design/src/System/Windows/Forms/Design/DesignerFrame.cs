@@ -87,7 +87,7 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
     {
         if (_designer is not null && _designer.IsHandleCreated)
         {
-            PInvoke.SendMessage(_designer, PInvoke.WM_NCACTIVATE, (WPARAM)(BOOL)focus);
+            PInvokeCore.SendMessage(_designer, PInvokeCore.WM_NCACTIVATE, (WPARAM)(BOOL)focus);
             PInvoke.RedrawWindow(_designer, lprcUpdate: null, HRGN.Null, REDRAW_WINDOW_FLAGS.RDW_FRAME);
         }
     }
@@ -176,42 +176,42 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
         switch (m.MsgInternal)
         {
             // Provide MouseWheel access for scrolling
-            case PInvoke.WM_MOUSEWHEEL:
+            case PInvokeCore.WM_MOUSEWHEEL:
                 // Send a message to ourselves to scroll
                 if (!_designerRegion._messageMouseWheelProcessed)
                 {
                     _designerRegion._messageMouseWheelProcessed = true;
-                    PInvoke.SendMessage(_designerRegion, PInvoke.WM_MOUSEWHEEL, m.WParamInternal, m.LParamInternal);
+                    PInvokeCore.SendMessage(_designerRegion, PInvokeCore.WM_MOUSEWHEEL, m.WParamInternal, m.LParamInternal);
                     return;
                 }
 
                 break;
             // Provide keyboard access for scrolling
-            case PInvoke.WM_KEYDOWN:
+            case PInvokeCore.WM_KEYDOWN:
                 Keys keycode = (Keys)(m.WParamInternal & 0xFFFF);
                 (SCROLLBAR_COMMAND wScrollNotify, MessageId msg) = keycode switch
                 {
-                    Keys.Up => (SCROLLBAR_COMMAND.SB_LINEUP, (MessageId)PInvoke.WM_VSCROLL),
-                    Keys.Down => (SCROLLBAR_COMMAND.SB_LINEDOWN, (MessageId)PInvoke.WM_VSCROLL),
-                    Keys.PageUp => (SCROLLBAR_COMMAND.SB_PAGEUP, (MessageId)PInvoke.WM_VSCROLL),
-                    Keys.PageDown => (SCROLLBAR_COMMAND.SB_PAGEDOWN, (MessageId)PInvoke.WM_VSCROLL),
-                    Keys.Home => (SCROLLBAR_COMMAND.SB_TOP, (MessageId)PInvoke.WM_VSCROLL),
-                    Keys.End => (SCROLLBAR_COMMAND.SB_BOTTOM, (MessageId)PInvoke.WM_VSCROLL),
-                    Keys.Left => (SCROLLBAR_COMMAND.SB_LINEUP, (MessageId)PInvoke.WM_HSCROLL),
-                    Keys.Right => (SCROLLBAR_COMMAND.SB_LINEDOWN, (MessageId)PInvoke.WM_HSCROLL),
-                    _ => ((SCROLLBAR_COMMAND)0, (MessageId)PInvoke.WM_NULL)
+                    Keys.Up => (SCROLLBAR_COMMAND.SB_LINEUP, (MessageId)PInvokeCore.WM_VSCROLL),
+                    Keys.Down => (SCROLLBAR_COMMAND.SB_LINEDOWN, (MessageId)PInvokeCore.WM_VSCROLL),
+                    Keys.PageUp => (SCROLLBAR_COMMAND.SB_PAGEUP, (MessageId)PInvokeCore.WM_VSCROLL),
+                    Keys.PageDown => (SCROLLBAR_COMMAND.SB_PAGEDOWN, (MessageId)PInvokeCore.WM_VSCROLL),
+                    Keys.Home => (SCROLLBAR_COMMAND.SB_TOP, (MessageId)PInvokeCore.WM_VSCROLL),
+                    Keys.End => (SCROLLBAR_COMMAND.SB_BOTTOM, (MessageId)PInvokeCore.WM_VSCROLL),
+                    Keys.Left => (SCROLLBAR_COMMAND.SB_LINEUP, (MessageId)PInvokeCore.WM_HSCROLL),
+                    Keys.Right => (SCROLLBAR_COMMAND.SB_LINEDOWN, (MessageId)PInvokeCore.WM_HSCROLL),
+                    _ => ((SCROLLBAR_COMMAND)0, (MessageId)PInvokeCore.WM_NULL)
                 };
 
-                if (msg == PInvoke.WM_VSCROLL || msg == PInvoke.WM_HSCROLL)
+                if (msg == PInvokeCore.WM_VSCROLL || msg == PInvokeCore.WM_HSCROLL)
                 {
                     // Send a message to ourselves to scroll
-                    PInvoke.SendMessage(_designerRegion, msg, (WPARAM)(int)wScrollNotify);
+                    PInvokeCore.SendMessage(_designerRegion, msg, (WPARAM)(int)wScrollNotify);
                     return;
                 }
 
                 break;
-            case PInvoke.WM_CONTEXTMENU:
-                PInvoke.SendMessage(_designer!, m.MsgInternal, m.WParamInternal, m.LParamInternal);
+            case PInvokeCore.WM_CONTEXTMENU:
+                PInvokeCore.SendMessage(_designer!, m.MsgInternal, m.WParamInternal, m.LParamInternal);
                 return;
         }
 
@@ -497,7 +497,7 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
         protected override void WndProc(ref Message m)
         {
             base.WndProc(ref m);
-            if (m.MsgInternal == PInvoke.WM_PARENTNOTIFY && m.WParamInternal.LOWORD == PInvoke.WM_CREATE)
+            if (m.MsgInternal == PInvokeCore.WM_PARENTNOTIFY && m.WParamInternal.LOWORD == PInvokeCore.WM_CREATE)
             {
                 bool ourWindow = false;
                 foreach (Control c in _overlayList)
@@ -521,11 +521,11 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
                     }
                 }
             }
-            else if (m.Msg is (int)PInvoke.WM_VSCROLL or (int)PInvoke.WM_HSCROLL && BehaviorService is not null)
+            else if (m.Msg is (int)PInvokeCore.WM_VSCROLL or (int)PInvokeCore.WM_HSCROLL && BehaviorService is not null)
             {
                 BehaviorService.SyncSelection();
             }
-            else if ((m.Msg == (int)PInvoke.WM_MOUSEWHEEL))
+            else if ((m.Msg == (int)PInvokeCore.WM_MOUSEWHEEL))
             {
                 _messageMouseWheelProcessed = false;
                 BehaviorService?.SyncSelection();

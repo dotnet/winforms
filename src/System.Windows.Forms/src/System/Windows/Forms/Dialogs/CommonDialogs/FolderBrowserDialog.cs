@@ -495,13 +495,13 @@ public sealed class FolderBrowserDialog : CommonDialog
                 if (instance._initialDirectory.Length != 0)
                 {
                     // Try to expand the folder specified by initialDir
-                    PInvoke.SendMessage(hwnd, PInvoke.BFFM_SETEXPANDED, (WPARAM)(BOOL)true, instance._initialDirectory);
+                    PInvokeCore.SendMessage(hwnd, PInvoke.BFFM_SETEXPANDED, (WPARAM)(BOOL)true, instance._initialDirectory);
                 }
 
                 if (instance.SelectedPath.Length != 0)
                 {
                     // Try to select the folder specified by selectedPath
-                    PInvoke.SendMessage(hwnd, PInvoke.BFFM_SETSELECTIONW, (WPARAM)(BOOL)true, instance.SelectedPath);
+                    PInvokeCore.SendMessage(hwnd, PInvoke.BFFM_SETSELECTIONW, (WPARAM)(BOOL)true, instance.SelectedPath);
                 }
 
                 break;
@@ -511,11 +511,11 @@ public sealed class FolderBrowserDialog : CommonDialog
                 if (selectedPidl is not null)
                 {
                     // Try to retrieve the path from the IDList
-                    using BufferScope<char> buffer = new(stackalloc char[PInvoke.MAX_PATH + 1]);
+                    using BufferScope<char> buffer = new(stackalloc char[(int)PInvokeCore.MAX_PATH + 1]);
                     fixed (char* b = buffer)
                     {
                         bool isFileSystemFolder = PInvoke.SHGetPathFromIDListEx(selectedPidl, b, (uint)buffer.Length, GPFIDL_FLAGS.GPFIDL_UNCPRINTER);
-                        PInvoke.SendMessage(hwnd, PInvoke.BFFM_ENABLEOK, 0, (nint)(BOOL)isFileSystemFolder);
+                        PInvokeCore.SendMessage(hwnd, PInvoke.BFFM_ENABLEOK, 0, (nint)(BOOL)isFileSystemFolder);
                     }
                 }
 

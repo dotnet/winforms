@@ -1379,7 +1379,7 @@ public unsafe partial class WebBrowser : WebBrowserBase
     {
         switch (m.MsgInternal)
         {
-            case PInvoke.WM_CONTEXTMENU:
+            case PInvokeCore.WM_CONTEXTMENU:
                 if (!ShowContextMenu(PARAM.ToPoint(m.LParamInternal)))
                 {
                     DefWndProc(ref m);

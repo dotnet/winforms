@@ -731,7 +731,7 @@ public partial class TextBoxBaseTests
 
         protected override unsafe void WndProc(ref Message m)
         {
-            if (m.Msg == (int)PInvoke.EM_CANUNDO)
+            if (m.Msg == (int)PInvokeCore.EM_CANUNDO)
             {
                 m.Result = Result;
                 return;
@@ -1265,7 +1265,7 @@ public partial class TextBoxBaseTests
             Multiline = multiline
         };
         control.CreateControl();
-        IntPtr result = PInvoke.SendMessage(control, PInvoke.EM_GETMARGINS);
+        IntPtr result = PInvokeCore.SendMessage(control, PInvokeCore.EM_GETMARGINS);
         Assert.Equal(expected, PARAM.LOWORD(result));
         Assert.Equal(expected, PARAM.HIWORD(result));
     }
@@ -1283,7 +1283,7 @@ public partial class TextBoxBaseTests
         };
 
         Assert.NotEqual(IntPtr.Zero, control.Handle);
-        IntPtr result = PInvoke.SendMessage(control, PInvoke.EM_GETMARGINS);
+        IntPtr result = PInvokeCore.SendMessage(control, PInvokeCore.EM_GETMARGINS);
         Assert.Equal(expected, PARAM.LOWORD(result));
         Assert.Equal(expected, PARAM.HIWORD(result));
     }
@@ -1299,7 +1299,7 @@ public partial class TextBoxBaseTests
         };
 
         Assert.NotEqual(IntPtr.Zero, control.Handle);
-        Assert.Equal(expected, (int)PInvoke.SendMessage(control, PInvoke.EM_GETMODIFY));
+        Assert.Equal(expected, (int)PInvokeCore.SendMessage(control, PInvokeCore.EM_GETMODIFY));
     }
 
     [WinFormsTheory]
@@ -1669,7 +1669,7 @@ public partial class TextBoxBaseTests
         Assert.Equal(0, createdCallCount);
 
         // Call EM_LIMITTEXT.
-        PInvoke.SendMessage(control, PInvoke.EM_LIMITTEXT, 0, 1);
+        PInvokeCore.SendMessage(control, PInvokeCore.EM_LIMITTEXT, 0, 1);
         Assert.Equal(0x7FFF, control.MaxLength);
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
@@ -1778,7 +1778,7 @@ public partial class TextBoxBaseTests
 
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         control.MaxLength = value;
-        Assert.Equal(expected, (int)PInvoke.SendMessage(control, PInvoke.EM_GETLIMITTEXT));
+        Assert.Equal(expected, (int)PInvokeCore.SendMessage(control, PInvokeCore.EM_GETLIMITTEXT));
     }
 
     [WinFormsFact]
@@ -1816,7 +1816,7 @@ public partial class TextBoxBaseTests
         Assert.Equal(0, createdCallCount);
 
         // Call EM_SETMODIFY.
-        PInvoke.SendMessage(control, PInvoke.EM_SETMODIFY, (WPARAM)(BOOL)true);
+        PInvokeCore.SendMessage(control, PInvokeCore.EM_SETMODIFY, (WPARAM)(BOOL)true);
         Assert.Equal(0, modifiedChangedCallCount);
 
         Assert.True(control.Modified);
@@ -1894,7 +1894,7 @@ public partial class TextBoxBaseTests
 
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         control.Modified = value;
-        Assert.Equal(expected, (int)PInvoke.SendMessage(control, PInvoke.EM_GETMODIFY));
+        Assert.Equal(expected, (int)PInvokeCore.SendMessage(control, PInvokeCore.EM_GETMODIFY));
     }
 
     [WinFormsFact]
@@ -2318,7 +2318,7 @@ public partial class TextBoxBaseTests
         Assert.Equal(0, createdCallCount);
 
         // Call EM_SETREADONLY.
-        PInvoke.SendMessage(control, PInvoke.EM_SETREADONLY, (WPARAM)(BOOL)true);
+        PInvokeCore.SendMessage(control, PInvokeCore.EM_SETREADONLY, (WPARAM)(BOOL)true);
         Assert.Equal(0, readOnlyChangedCallCount);
 
         Assert.False(control.ReadOnly);
@@ -2911,9 +2911,9 @@ public partial class TextBoxBaseTests
         control.SelectionLength = value;
         int selectionStart = 0;
         int selectionEnd = 0;
-        LRESULT result = PInvoke.SendMessage(
+        LRESULT result = PInvokeCore.SendMessage(
             control,
-            PInvoke.EM_GETSEL,
+            PInvokeCore.EM_GETSEL,
             (WPARAM)(&selectionStart),
             (LPARAM)(&selectionEnd));
         Assert.Equal(1, result.LOWORD);
@@ -3088,9 +3088,9 @@ public partial class TextBoxBaseTests
         control.SelectionStart = value;
         int selectionStart = 0;
         int selectionEnd = 0;
-        LRESULT result = PInvoke.SendMessage(
+        LRESULT result = PInvokeCore.SendMessage(
             control,
-            PInvoke.EM_GETSEL,
+            PInvokeCore.EM_GETSEL,
             (WPARAM)(&selectionStart),
             (LPARAM)(&selectionEnd));
         Assert.Equal(expectedSelectionStart, result.LOWORD);
@@ -4154,9 +4154,9 @@ public partial class TextBoxBaseTests
         control.CreateHandle();
         int selectionStart = 0;
         int selectionEnd = 0;
-        LRESULT result = PInvoke.SendMessage(
+        LRESULT result = PInvokeCore.SendMessage(
             control,
-            PInvoke.EM_GETSEL,
+            PInvokeCore.EM_GETSEL,
             (WPARAM)(&selectionStart),
             (LPARAM)(&selectionEnd));
         Assert.Equal(1, PARAM.LOWORD(result));
@@ -4506,7 +4506,7 @@ public partial class TextBoxBaseTests
 
         protected override unsafe void WndProc(ref Message m)
         {
-            if (m.Msg == (int)PInvoke.EM_CHARFROMPOS)
+            if (m.Msg == (int)PInvokeCore.EM_CHARFROMPOS)
             {
                 Assert.Equal(IntPtr.Zero, m.WParam);
                 Assert.Equal(2, PARAM.SignedHIWORD(m.LParam));
@@ -4701,7 +4701,7 @@ public partial class TextBoxBaseTests
 
         protected override unsafe void WndProc(ref Message m)
         {
-            if (m.Msg == (int)PInvoke.EM_LINEINDEX)
+            if (m.Msg == (int)PInvokeCore.EM_LINEINDEX)
             {
                 Assert.Equal(ExpectedWParam, m.WParam);
                 Assert.Equal(IntPtr.Zero, m.LParam);
@@ -4818,7 +4818,7 @@ public partial class TextBoxBaseTests
 
         protected override unsafe void WndProc(ref Message m)
         {
-            if (m.Msg == (int)PInvoke.EM_LINEFROMCHAR)
+            if (m.Msg == (int)PInvokeCore.EM_LINEFROMCHAR)
             {
                 Assert.Equal(1, m.WParam);
                 Assert.Equal(IntPtr.Zero, m.LParam);
@@ -4975,7 +4975,7 @@ public partial class TextBoxBaseTests
 
         protected override unsafe void WndProc(ref Message m)
         {
-            if (m.Msg == (int)PInvoke.EM_POSFROMCHAR)
+            if (m.Msg == (int)PInvokeCore.EM_POSFROMCHAR)
             {
                 Assert.Equal(1, m.WParam);
                 Assert.Equal(IntPtr.Zero, m.LParam);
@@ -6189,7 +6189,7 @@ public partial class TextBoxBaseTests
 
         protected override unsafe void WndProc(ref Message m)
         {
-            if (m.Msg == (int)PInvoke.EM_GETOLEINTERFACE)
+            if (m.Msg == (int)PInvokeCore.EM_GETOLEINTERFACE)
             {
                 IntPtr* pParam = (IntPtr*)m.LParam;
                 *pParam = GetOleInterfaceLParam;
@@ -6296,9 +6296,9 @@ public partial class TextBoxBaseTests
         control.Select(start, length);
         int selectionStart = 0;
         int selectionEnd = 0;
-        LRESULT result = PInvoke.SendMessage(
+        LRESULT result = PInvokeCore.SendMessage(
             control,
-            PInvoke.EM_GETSEL,
+            PInvokeCore.EM_GETSEL,
             (WPARAM)(&selectionStart),
             (LPARAM)(&selectionEnd));
         Assert.Equal(expectedSelectionStart, result.LOWORD);
@@ -6432,9 +6432,9 @@ public partial class TextBoxBaseTests
         control.SelectAll();
         int selectionStart = 0;
         int selectionEnd = 0;
-        LRESULT result = PInvoke.SendMessage(
+        LRESULT result = PInvokeCore.SendMessage(
             control,
-            PInvoke.EM_GETSEL,
+            PInvokeCore.EM_GETSEL,
             (WPARAM)(&selectionStart),
             (LPARAM)(&selectionEnd));
         Assert.Equal(0, result.LOWORD);
@@ -6957,7 +6957,7 @@ public partial class TextBoxBaseTests
             };
             Message m = new()
             {
-                Msg = (int)PInvoke.WM_CONTEXTMENU,
+                Msg = (int)PInvokeCore.WM_CONTEXTMENU,
                 LParam = lParam,
                 Result = 250
             };
@@ -7005,7 +7005,7 @@ public partial class TextBoxBaseTests
             };
             Message m = new()
             {
-                Msg = (int)PInvoke.WM_CONTEXTMENU,
+                Msg = (int)PInvokeCore.WM_CONTEXTMENU,
                 LParam = lParam,
                 Result = 250
             };
@@ -7036,7 +7036,7 @@ public partial class TextBoxBaseTests
 
         Message m = new()
         {
-            Msg = (int)PInvoke.WM_CONTEXTMENU,
+            Msg = (int)PInvokeCore.WM_CONTEXTMENU,
             LParam = lParam,
             Result = 250
         };
@@ -7092,7 +7092,7 @@ public partial class TextBoxBaseTests
 
         Message m = new()
         {
-            Msg = (int)PInvoke.WM_CONTEXTMENU,
+            Msg = (int)PInvokeCore.WM_CONTEXTMENU,
             LParam = lParam,
             Result = 250
         };
@@ -7124,7 +7124,7 @@ public partial class TextBoxBaseTests
             };
             Message m = new()
             {
-                Msg = (int)PInvoke.WM_GETDLGCODE,
+                Msg = (int)PInvokeCore.WM_GETDLGCODE,
                 Result = 250
             };
             control.WndProc(ref m);
@@ -7151,7 +7151,7 @@ public partial class TextBoxBaseTests
 
         Message m = new()
         {
-            Msg = (int)PInvoke.WM_GETDLGCODE,
+            Msg = (int)PInvokeCore.WM_GETDLGCODE,
             Result = 250
         };
         control.WndProc(ref m);
@@ -7164,89 +7164,89 @@ public partial class TextBoxBaseTests
 
     public static IEnumerable<object[]> WndProc_MouseDown_TestData()
     {
-        yield return new object[] { true, (int)PInvoke.WM_LBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.Left, 1, 0, 0 };
-        yield return new object[] { true, (int)PInvoke.WM_LBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.Left, 1, 1, 2 };
-        yield return new object[] { true, (int)PInvoke.WM_LBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.Left, 1, -1, -2 };
-        yield return new object[] { false, (int)PInvoke.WM_LBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.Left, 1, 0, 0 };
-        yield return new object[] { false, (int)PInvoke.WM_LBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Left, 1, 1, 2 };
-        yield return new object[] { false, (int)PInvoke.WM_LBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Left, 1, -1, -2 };
+        yield return new object[] { true, (int)PInvokeCore.WM_LBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.Left, 1, 0, 0 };
+        yield return new object[] { true, (int)PInvokeCore.WM_LBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.Left, 1, 1, 2 };
+        yield return new object[] { true, (int)PInvokeCore.WM_LBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.Left, 1, -1, -2 };
+        yield return new object[] { false, (int)PInvokeCore.WM_LBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.Left, 1, 0, 0 };
+        yield return new object[] { false, (int)PInvokeCore.WM_LBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Left, 1, 1, 2 };
+        yield return new object[] { false, (int)PInvokeCore.WM_LBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Left, 1, -1, -2 };
 
-        yield return new object[] { true, (int)PInvoke.WM_LBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.Left, 2, 0, 0 };
-        yield return new object[] { true, (int)PInvoke.WM_LBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.Left, 2, 1, 2 };
-        yield return new object[] { true, (int)PInvoke.WM_LBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.Left, 2, -1, -2 };
-        yield return new object[] { false, (int)PInvoke.WM_LBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.Left, 2, 0, 0 };
-        yield return new object[] { false, (int)PInvoke.WM_LBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Left, 2, 1, 2 };
-        yield return new object[] { false, (int)PInvoke.WM_LBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Left, 2, -1, -2 };
+        yield return new object[] { true, (int)PInvokeCore.WM_LBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.Left, 2, 0, 0 };
+        yield return new object[] { true, (int)PInvokeCore.WM_LBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.Left, 2, 1, 2 };
+        yield return new object[] { true, (int)PInvokeCore.WM_LBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.Left, 2, -1, -2 };
+        yield return new object[] { false, (int)PInvokeCore.WM_LBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.Left, 2, 0, 0 };
+        yield return new object[] { false, (int)PInvokeCore.WM_LBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Left, 2, 1, 2 };
+        yield return new object[] { false, (int)PInvokeCore.WM_LBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Left, 2, -1, -2 };
 
-        yield return new object[] { true, (int)PInvoke.WM_MBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.Middle, 1, 0, 0 };
-        yield return new object[] { true, (int)PInvoke.WM_MBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.Middle, 1, 1, 2 };
-        yield return new object[] { true, (int)PInvoke.WM_MBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.Middle, 1, -1, -2 };
-        yield return new object[] { false, (int)PInvoke.WM_MBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.Middle, 1, 0, 0 };
-        yield return new object[] { false, (int)PInvoke.WM_MBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Middle, 1, 1, 2 };
-        yield return new object[] { false, (int)PInvoke.WM_MBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Middle, 1, -1, -2 };
+        yield return new object[] { true, (int)PInvokeCore.WM_MBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.Middle, 1, 0, 0 };
+        yield return new object[] { true, (int)PInvokeCore.WM_MBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.Middle, 1, 1, 2 };
+        yield return new object[] { true, (int)PInvokeCore.WM_MBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.Middle, 1, -1, -2 };
+        yield return new object[] { false, (int)PInvokeCore.WM_MBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.Middle, 1, 0, 0 };
+        yield return new object[] { false, (int)PInvokeCore.WM_MBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Middle, 1, 1, 2 };
+        yield return new object[] { false, (int)PInvokeCore.WM_MBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Middle, 1, -1, -2 };
 
-        yield return new object[] { true, (int)PInvoke.WM_MBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.Middle, 2, 0, 0 };
-        yield return new object[] { true, (int)PInvoke.WM_MBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.Middle, 2, 1, 2 };
-        yield return new object[] { true, (int)PInvoke.WM_MBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.Middle, 2, -1, -2 };
-        yield return new object[] { false, (int)PInvoke.WM_MBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.Middle, 2, 0, 0 };
-        yield return new object[] { false, (int)PInvoke.WM_MBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Middle, 2, 1, 2 };
-        yield return new object[] { false, (int)PInvoke.WM_MBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Middle, 2, -1, -2 };
+        yield return new object[] { true, (int)PInvokeCore.WM_MBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.Middle, 2, 0, 0 };
+        yield return new object[] { true, (int)PInvokeCore.WM_MBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.Middle, 2, 1, 2 };
+        yield return new object[] { true, (int)PInvokeCore.WM_MBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.Middle, 2, -1, -2 };
+        yield return new object[] { false, (int)PInvokeCore.WM_MBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.Middle, 2, 0, 0 };
+        yield return new object[] { false, (int)PInvokeCore.WM_MBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Middle, 2, 1, 2 };
+        yield return new object[] { false, (int)PInvokeCore.WM_MBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Middle, 2, -1, -2 };
 
-        yield return new object[] { true, (int)PInvoke.WM_RBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.Right, 1, 0, 0 };
-        yield return new object[] { true, (int)PInvoke.WM_RBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.Right, 1, 1, 2 };
-        yield return new object[] { true, (int)PInvoke.WM_RBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.Right, 1, -1, -2 };
-        yield return new object[] { false, (int)PInvoke.WM_RBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.Right, 1, 0, 0 };
-        yield return new object[] { false, (int)PInvoke.WM_RBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Right, 1, 1, 2 };
-        yield return new object[] { false, (int)PInvoke.WM_RBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Right, 1, -1, -2 };
+        yield return new object[] { true, (int)PInvokeCore.WM_RBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.Right, 1, 0, 0 };
+        yield return new object[] { true, (int)PInvokeCore.WM_RBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.Right, 1, 1, 2 };
+        yield return new object[] { true, (int)PInvokeCore.WM_RBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.Right, 1, -1, -2 };
+        yield return new object[] { false, (int)PInvokeCore.WM_RBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.Right, 1, 0, 0 };
+        yield return new object[] { false, (int)PInvokeCore.WM_RBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Right, 1, 1, 2 };
+        yield return new object[] { false, (int)PInvokeCore.WM_RBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Right, 1, -1, -2 };
 
-        yield return new object[] { true, (int)PInvoke.WM_RBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.Right, 2, 0, 0 };
-        yield return new object[] { true, (int)PInvoke.WM_RBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.Right, 2, 1, 2 };
-        yield return new object[] { true, (int)PInvoke.WM_RBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.Right, 2, -1, -2 };
-        yield return new object[] { false, (int)PInvoke.WM_RBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.Right, 2, 0, 0 };
-        yield return new object[] { false, (int)PInvoke.WM_RBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Right, 2, 1, 2 };
-        yield return new object[] { false, (int)PInvoke.WM_RBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Right, 2, -1, -2 };
+        yield return new object[] { true, (int)PInvokeCore.WM_RBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.Right, 2, 0, 0 };
+        yield return new object[] { true, (int)PInvokeCore.WM_RBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.Right, 2, 1, 2 };
+        yield return new object[] { true, (int)PInvokeCore.WM_RBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.Right, 2, -1, -2 };
+        yield return new object[] { false, (int)PInvokeCore.WM_RBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.Right, 2, 0, 0 };
+        yield return new object[] { false, (int)PInvokeCore.WM_RBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Right, 2, 1, 2 };
+        yield return new object[] { false, (int)PInvokeCore.WM_RBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.Right, 2, -1, -2 };
 
-        yield return new object[] { true, (int)PInvoke.WM_XBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.None, 1, 0, 0 };
-        yield return new object[] { true, (int)PInvoke.WM_XBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.None, 1, 1, 2 };
-        yield return new object[] { true, (int)PInvoke.WM_XBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.None, 1, -1, -2 };
-        yield return new object[] { false, (int)PInvoke.WM_XBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.None, 1, 0, 0 };
-        yield return new object[] { false, (int)PInvoke.WM_XBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.None, 1, 1, 2 };
-        yield return new object[] { false, (int)PInvoke.WM_XBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.None, 1, -1, -2 };
+        yield return new object[] { true, (int)PInvokeCore.WM_XBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.None, 1, 0, 0 };
+        yield return new object[] { true, (int)PInvokeCore.WM_XBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.None, 1, 1, 2 };
+        yield return new object[] { true, (int)PInvokeCore.WM_XBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.None, 1, -1, -2 };
+        yield return new object[] { false, (int)PInvokeCore.WM_XBUTTONDOWN, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.None, 1, 0, 0 };
+        yield return new object[] { false, (int)PInvokeCore.WM_XBUTTONDOWN, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.None, 1, 1, 2 };
+        yield return new object[] { false, (int)PInvokeCore.WM_XBUTTONDOWN, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.None, 1, -1, -2 };
 
-        yield return new object[] { true, (int)PInvoke.WM_XBUTTONDOWN, IntPtr.Zero, PARAM.FromLowHigh(2, 1), (IntPtr)250, MouseButtons.XButton1, 1, 0, 0 };
-        yield return new object[] { true, (int)PInvoke.WM_XBUTTONDOWN, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(2, 1), (IntPtr)250, MouseButtons.XButton1, 1, 1, 2 };
-        yield return new object[] { true, (int)PInvoke.WM_XBUTTONDOWN, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(2, 1), (IntPtr)250, MouseButtons.XButton1, 1, -1, -2 };
-        yield return new object[] { false, (int)PInvoke.WM_XBUTTONDOWN, IntPtr.Zero, PARAM.FromLowHigh(2, 1), IntPtr.Zero, MouseButtons.XButton1, 1, 0, 0 };
-        yield return new object[] { false, (int)PInvoke.WM_XBUTTONDOWN, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(2, 1), IntPtr.Zero, MouseButtons.XButton1, 1, 1, 2 };
-        yield return new object[] { false, (int)PInvoke.WM_XBUTTONDOWN, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(2, 1), IntPtr.Zero, MouseButtons.XButton1, 1, -1, -2 };
+        yield return new object[] { true, (int)PInvokeCore.WM_XBUTTONDOWN, IntPtr.Zero, PARAM.FromLowHigh(2, 1), (IntPtr)250, MouseButtons.XButton1, 1, 0, 0 };
+        yield return new object[] { true, (int)PInvokeCore.WM_XBUTTONDOWN, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(2, 1), (IntPtr)250, MouseButtons.XButton1, 1, 1, 2 };
+        yield return new object[] { true, (int)PInvokeCore.WM_XBUTTONDOWN, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(2, 1), (IntPtr)250, MouseButtons.XButton1, 1, -1, -2 };
+        yield return new object[] { false, (int)PInvokeCore.WM_XBUTTONDOWN, IntPtr.Zero, PARAM.FromLowHigh(2, 1), IntPtr.Zero, MouseButtons.XButton1, 1, 0, 0 };
+        yield return new object[] { false, (int)PInvokeCore.WM_XBUTTONDOWN, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(2, 1), IntPtr.Zero, MouseButtons.XButton1, 1, 1, 2 };
+        yield return new object[] { false, (int)PInvokeCore.WM_XBUTTONDOWN, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(2, 1), IntPtr.Zero, MouseButtons.XButton1, 1, -1, -2 };
 
-        yield return new object[] { true, (int)PInvoke.WM_XBUTTONDOWN, IntPtr.Zero, PARAM.FromLowHigh(1, 2), (IntPtr)250, MouseButtons.XButton2, 1, 0, 0 };
-        yield return new object[] { true, (int)PInvoke.WM_XBUTTONDOWN, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(1, 2), (IntPtr)250, MouseButtons.XButton2, 1, 1, 2 };
-        yield return new object[] { true, (int)PInvoke.WM_XBUTTONDOWN, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(1, 2), (IntPtr)250, MouseButtons.XButton2, 1, -1, -2 };
-        yield return new object[] { false, (int)PInvoke.WM_XBUTTONDOWN, IntPtr.Zero, PARAM.FromLowHigh(1, 2), IntPtr.Zero, MouseButtons.XButton2, 1, 0, 0 };
-        yield return new object[] { false, (int)PInvoke.WM_XBUTTONDOWN, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(1, 2), IntPtr.Zero, MouseButtons.XButton2, 1, 1, 2 };
-        yield return new object[] { false, (int)PInvoke.WM_XBUTTONDOWN, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(1, 2), IntPtr.Zero, MouseButtons.XButton2, 1, -1, -2 };
+        yield return new object[] { true, (int)PInvokeCore.WM_XBUTTONDOWN, IntPtr.Zero, PARAM.FromLowHigh(1, 2), (IntPtr)250, MouseButtons.XButton2, 1, 0, 0 };
+        yield return new object[] { true, (int)PInvokeCore.WM_XBUTTONDOWN, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(1, 2), (IntPtr)250, MouseButtons.XButton2, 1, 1, 2 };
+        yield return new object[] { true, (int)PInvokeCore.WM_XBUTTONDOWN, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(1, 2), (IntPtr)250, MouseButtons.XButton2, 1, -1, -2 };
+        yield return new object[] { false, (int)PInvokeCore.WM_XBUTTONDOWN, IntPtr.Zero, PARAM.FromLowHigh(1, 2), IntPtr.Zero, MouseButtons.XButton2, 1, 0, 0 };
+        yield return new object[] { false, (int)PInvokeCore.WM_XBUTTONDOWN, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(1, 2), IntPtr.Zero, MouseButtons.XButton2, 1, 1, 2 };
+        yield return new object[] { false, (int)PInvokeCore.WM_XBUTTONDOWN, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(1, 2), IntPtr.Zero, MouseButtons.XButton2, 1, -1, -2 };
 
-        yield return new object[] { true, (int)PInvoke.WM_XBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.None, 2, 0, 0 };
-        yield return new object[] { true, (int)PInvoke.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.None, 2, 1, 2 };
-        yield return new object[] { true, (int)PInvoke.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.None, 2, -1, -2 };
-        yield return new object[] { false, (int)PInvoke.WM_XBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.None, 2, 0, 0 };
-        yield return new object[] { false, (int)PInvoke.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.None, 2, 1, 2 };
-        yield return new object[] { false, (int)PInvoke.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.None, 2, -1, -2 };
+        yield return new object[] { true, (int)PInvokeCore.WM_XBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, (IntPtr)250, MouseButtons.None, 2, 0, 0 };
+        yield return new object[] { true, (int)PInvokeCore.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, (IntPtr)250, MouseButtons.None, 2, 1, 2 };
+        yield return new object[] { true, (int)PInvokeCore.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, (IntPtr)250, MouseButtons.None, 2, -1, -2 };
+        yield return new object[] { false, (int)PInvokeCore.WM_XBUTTONDBLCLK, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, MouseButtons.None, 2, 0, 0 };
+        yield return new object[] { false, (int)PInvokeCore.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), IntPtr.Zero, IntPtr.Zero, MouseButtons.None, 2, 1, 2 };
+        yield return new object[] { false, (int)PInvokeCore.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), IntPtr.Zero, IntPtr.Zero, MouseButtons.None, 2, -1, -2 };
 
-        yield return new object[] { true, (int)PInvoke.WM_XBUTTONDBLCLK, IntPtr.Zero, PARAM.FromLowHigh(2, 1), (IntPtr)250, MouseButtons.XButton1, 2, 0, 0 };
-        yield return new object[] { true, (int)PInvoke.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(2, 1), (IntPtr)250, MouseButtons.XButton1, 2, 1, 2 };
-        yield return new object[] { true, (int)PInvoke.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(2, 1), (IntPtr)250, MouseButtons.XButton1, 2, -1, -2 };
-        yield return new object[] { false, (int)PInvoke.WM_XBUTTONDBLCLK, IntPtr.Zero, PARAM.FromLowHigh(2, 1), IntPtr.Zero, MouseButtons.XButton1, 2, 0, 0 };
-        yield return new object[] { false, (int)PInvoke.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(2, 1), IntPtr.Zero, MouseButtons.XButton1, 2, 1, 2 };
-        yield return new object[] { false, (int)PInvoke.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(2, 1), IntPtr.Zero, MouseButtons.XButton1, 2, -1, -2 };
+        yield return new object[] { true, (int)PInvokeCore.WM_XBUTTONDBLCLK, IntPtr.Zero, PARAM.FromLowHigh(2, 1), (IntPtr)250, MouseButtons.XButton1, 2, 0, 0 };
+        yield return new object[] { true, (int)PInvokeCore.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(2, 1), (IntPtr)250, MouseButtons.XButton1, 2, 1, 2 };
+        yield return new object[] { true, (int)PInvokeCore.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(2, 1), (IntPtr)250, MouseButtons.XButton1, 2, -1, -2 };
+        yield return new object[] { false, (int)PInvokeCore.WM_XBUTTONDBLCLK, IntPtr.Zero, PARAM.FromLowHigh(2, 1), IntPtr.Zero, MouseButtons.XButton1, 2, 0, 0 };
+        yield return new object[] { false, (int)PInvokeCore.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(2, 1), IntPtr.Zero, MouseButtons.XButton1, 2, 1, 2 };
+        yield return new object[] { false, (int)PInvokeCore.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(2, 1), IntPtr.Zero, MouseButtons.XButton1, 2, -1, -2 };
 
-        yield return new object[] { true, (int)PInvoke.WM_XBUTTONDBLCLK, IntPtr.Zero, PARAM.FromLowHigh(1, 2), (IntPtr)250, MouseButtons.XButton2, 2, 0, 0 };
-        yield return new object[] { true, (int)PInvoke.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(1, 2), (IntPtr)250, MouseButtons.XButton2, 2, 1, 2 };
-        yield return new object[] { true, (int)PInvoke.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(1, 2), (IntPtr)250, MouseButtons.XButton2, 2, -1, -2 };
-        yield return new object[] { false, (int)PInvoke.WM_XBUTTONDBLCLK, IntPtr.Zero, PARAM.FromLowHigh(1, 2), IntPtr.Zero, MouseButtons.XButton2, 2, 0, 0 };
-        yield return new object[] { false, (int)PInvoke.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(1, 2), IntPtr.Zero, MouseButtons.XButton2, 2, 1, 2 };
-        yield return new object[] { false, (int)PInvoke.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(1, 2), IntPtr.Zero, MouseButtons.XButton2, 2, -1, -2 };
+        yield return new object[] { true, (int)PInvokeCore.WM_XBUTTONDBLCLK, IntPtr.Zero, PARAM.FromLowHigh(1, 2), (IntPtr)250, MouseButtons.XButton2, 2, 0, 0 };
+        yield return new object[] { true, (int)PInvokeCore.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(1, 2), (IntPtr)250, MouseButtons.XButton2, 2, 1, 2 };
+        yield return new object[] { true, (int)PInvokeCore.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(1, 2), (IntPtr)250, MouseButtons.XButton2, 2, -1, -2 };
+        yield return new object[] { false, (int)PInvokeCore.WM_XBUTTONDBLCLK, IntPtr.Zero, PARAM.FromLowHigh(1, 2), IntPtr.Zero, MouseButtons.XButton2, 2, 0, 0 };
+        yield return new object[] { false, (int)PInvokeCore.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(1, 2), PARAM.FromLowHigh(1, 2), IntPtr.Zero, MouseButtons.XButton2, 2, 1, 2 };
+        yield return new object[] { false, (int)PInvokeCore.WM_XBUTTONDBLCLK, PARAM.FromLowHigh(-1, -2), PARAM.FromLowHigh(1, 2), IntPtr.Zero, MouseButtons.XButton2, 2, -1, -2 };
     }
 
     [WinFormsTheory]
@@ -7321,14 +7321,14 @@ public partial class TextBoxBaseTests
     }
 
     [WinFormsTheory]
-    [InlineData((int)PInvoke.WM_LBUTTONDOWN)]
-    [InlineData((int)PInvoke.WM_LBUTTONDBLCLK)]
-    [InlineData((int)PInvoke.WM_MBUTTONDOWN)]
-    [InlineData((int)PInvoke.WM_MBUTTONDBLCLK)]
-    [InlineData((int)PInvoke.WM_RBUTTONDOWN)]
-    [InlineData((int)PInvoke.WM_RBUTTONDBLCLK)]
-    [InlineData((int)PInvoke.WM_XBUTTONDOWN)]
-    [InlineData((int)PInvoke.WM_XBUTTONDBLCLK)]
+    [InlineData((int)PInvokeCore.WM_LBUTTONDOWN)]
+    [InlineData((int)PInvokeCore.WM_LBUTTONDBLCLK)]
+    [InlineData((int)PInvokeCore.WM_MBUTTONDOWN)]
+    [InlineData((int)PInvokeCore.WM_MBUTTONDBLCLK)]
+    [InlineData((int)PInvokeCore.WM_RBUTTONDOWN)]
+    [InlineData((int)PInvokeCore.WM_RBUTTONDBLCLK)]
+    [InlineData((int)PInvokeCore.WM_XBUTTONDOWN)]
+    [InlineData((int)PInvokeCore.WM_XBUTTONDBLCLK)]
     public void TextBoxBase_WndProc_InvokeMouseDownWithoutHandleNotEnabled_DoesNotCallMouseDown(int msg)
     {
         using (new NoAssertContext())
@@ -7441,14 +7441,14 @@ public partial class TextBoxBaseTests
     }
 
     [WinFormsTheory]
-    [InlineData((int)PInvoke.WM_LBUTTONDOWN)]
-    [InlineData((int)PInvoke.WM_LBUTTONDBLCLK)]
-    [InlineData((int)PInvoke.WM_MBUTTONDOWN)]
-    [InlineData((int)PInvoke.WM_MBUTTONDBLCLK)]
-    [InlineData((int)PInvoke.WM_RBUTTONDOWN)]
-    [InlineData((int)PInvoke.WM_RBUTTONDBLCLK)]
-    [InlineData((int)PInvoke.WM_XBUTTONDOWN)]
-    [InlineData((int)PInvoke.WM_XBUTTONDBLCLK)]
+    [InlineData((int)PInvokeCore.WM_LBUTTONDOWN)]
+    [InlineData((int)PInvokeCore.WM_LBUTTONDBLCLK)]
+    [InlineData((int)PInvokeCore.WM_MBUTTONDOWN)]
+    [InlineData((int)PInvokeCore.WM_MBUTTONDBLCLK)]
+    [InlineData((int)PInvokeCore.WM_RBUTTONDOWN)]
+    [InlineData((int)PInvokeCore.WM_RBUTTONDBLCLK)]
+    [InlineData((int)PInvokeCore.WM_XBUTTONDOWN)]
+    [InlineData((int)PInvokeCore.WM_XBUTTONDBLCLK)]
     public void TextBoxBase_WndProc_InvokeMouseDownWithHandleNotEnabled_DoesNotCallMouseDown(int msg)
     {
         using SubTextBox control = new()
@@ -7502,7 +7502,7 @@ public partial class TextBoxBaseTests
         };
         Message m = new()
         {
-            Msg = (int)PInvoke.WM_MOUSEHOVER,
+            Msg = (int)PInvokeCore.WM_MOUSEHOVER,
             Result = 250
         };
         control.WndProc(ref m);
@@ -7545,7 +7545,7 @@ public partial class TextBoxBaseTests
         control.ModifiedChanged += (sender, e) => modifiedCallCount++;
         Message m = new()
         {
-            Msg = (int)(MessageId.WM_REFLECT | PInvoke.WM_COMMAND),
+            Msg = (int)(MessageId.WM_REFLECT | PInvokeCore.WM_COMMAND),
             WParam = wParam,
             LParam = lParam,
             Result = 250
@@ -7581,7 +7581,7 @@ public partial class TextBoxBaseTests
         control.ModifiedChanged += (sender, e) => modifiedCallCount++;
         Message m = new()
         {
-            Msg = (int)(MessageId.WM_REFLECT | PInvoke.WM_COMMAND),
+            Msg = (int)(MessageId.WM_REFLECT | PInvokeCore.WM_COMMAND),
             WParam = wParam,
             LParam = lParam,
             Result = 250
@@ -7610,7 +7610,7 @@ public partial class TextBoxBaseTests
 
             Message m = new()
             {
-                Msg = (int)PInvoke.WM_SETFONT,
+                Msg = (int)PInvokeCore.WM_SETFONT,
                 Result = 250
             };
 
@@ -7621,7 +7621,7 @@ public partial class TextBoxBaseTests
             Assert.Equal(!multiline, control.IsHandleCreated);
             Assert.Equal(0, textChangedCallCount);
             control.CreateControl();
-            nint result = PInvoke.SendMessage(control, PInvoke.EM_GETMARGINS);
+            nint result = PInvokeCore.SendMessage(control, PInvokeCore.EM_GETMARGINS);
             Assert.Equal(expectedMargin, PARAM.HIWORD(result));
             Assert.Equal(expectedMargin, PARAM.LOWORD(result));
         }
@@ -7644,9 +7644,9 @@ public partial class TextBoxBaseTests
         control.StyleChanged += (sender, e) => styleChangedCallCount++;
         int createdCallCount = 0;
         control.HandleCreated += (sender, e) => createdCallCount++;
-        PInvoke.SendMessage(
+        PInvokeCore.SendMessage(
             control,
-            PInvoke.EM_SETMARGINS,
+            PInvokeCore.EM_SETMARGINS,
             (WPARAM)(PInvoke.EC_LEFTMARGIN | PInvoke.EC_RIGHTMARGIN),
             LPARAM.MAKELPARAM(1, 2));
         int textChangedCallCount = 0;
@@ -7654,14 +7654,14 @@ public partial class TextBoxBaseTests
 
         Message m = new()
         {
-            Msg = (int)PInvoke.WM_SETFONT,
+            Msg = (int)PInvokeCore.WM_SETFONT,
             Result = 250
         };
 
         control.WndProc(ref m);
         Assert.Equal(IntPtr.Zero, m.Result);
         Assert.Equal(0, textChangedCallCount);
-        IntPtr result = PInvoke.SendMessage(control, PInvoke.EM_GETMARGINS);
+        IntPtr result = PInvokeCore.SendMessage(control, PInvokeCore.EM_GETMARGINS);
         Assert.Equal(expectedLeft, PARAM.LOWORD(result));
         Assert.Equal(expectedRight, PARAM.HIWORD(result));
         Assert.True(control.IsHandleCreated);

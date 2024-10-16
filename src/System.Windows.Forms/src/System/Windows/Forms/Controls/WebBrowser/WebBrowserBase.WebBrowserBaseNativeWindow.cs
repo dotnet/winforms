@@ -26,7 +26,7 @@ public partial class WebBrowserBase
         {
             switch (m.MsgInternal)
             {
-                case PInvoke.WM_WINDOWPOSCHANGING:
+                case PInvokeCore.WM_WINDOWPOSCHANGING:
                     WmWindowPosChanging(ref m);
                     break;
                 default:

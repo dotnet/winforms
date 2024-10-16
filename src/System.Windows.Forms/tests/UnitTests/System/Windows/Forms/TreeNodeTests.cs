@@ -670,7 +670,7 @@ public class TreeNodeTests
             stateMask = TREE_VIEW_ITEM_STATE_FLAGS.TVIS_STATEIMAGEMASK,
             hItem = node.HTREEITEM
         };
-        Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref item));
+        Assert.Equal(1, (int)PInvokeCore.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref item));
         Assert.Equal((TREE_VIEW_ITEM_STATE_FLAGS)expectedValue, item.state);
     }
 
@@ -938,7 +938,7 @@ public class TreeNodeTests
             stateMask = TREE_VIEW_ITEM_STATE_FLAGS.TVIS_STATEIMAGEMASK,
             hItem = node.HTREEITEM
         };
-        Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref item));
+        Assert.Equal(1, (int)PInvokeCore.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref item));
         Assert.Equal((TREE_VIEW_ITEM_STATE_FLAGS)expectedValue, item.state);
     }
 
@@ -1211,7 +1211,7 @@ public class TreeNodeTests
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_IMAGE,
             hItem = node.HTREEITEM
         };
-        Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref item));
+        Assert.Equal(1, (int)PInvokeCore.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref item));
         Assert.Equal(expected, item.iImage);
     }
 
@@ -1238,7 +1238,7 @@ public class TreeNodeTests
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_IMAGE,
             hItem = node.HTREEITEM
         };
-        Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref item));
+        Assert.Equal(1, (int)PInvokeCore.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref item));
         Assert.Equal(expected, item.iImage);
     }
 
@@ -1269,7 +1269,7 @@ public class TreeNodeTests
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_IMAGE,
             hItem = node.HTREEITEM
         };
-        Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref item));
+        Assert.Equal(1, (int)PInvokeCore.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref item));
         Assert.Equal(expected, item.iImage);
     }
 
@@ -1484,7 +1484,7 @@ public class TreeNodeTests
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_IMAGE,
             hItem = node.HTREEITEM
         };
-        Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref column));
+        Assert.Equal(1, (int)PInvokeCore.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref column));
         Assert.Equal(0, column.iImage);
     }
 
@@ -1514,7 +1514,7 @@ public class TreeNodeTests
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_IMAGE,
             hItem = node.HTREEITEM
         };
-        Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref column));
+        Assert.Equal(1, (int)PInvokeCore.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref column));
         Assert.Equal(expected, column.iImage);
     }
 
@@ -1546,7 +1546,7 @@ public class TreeNodeTests
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_IMAGE,
             hItem = node.HTREEITEM
         };
-        Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref column));
+        Assert.Equal(1, (int)PInvokeCore.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref column));
         Assert.Equal(expected, column.iImage);
     }
 
@@ -3193,7 +3193,7 @@ public class TreeNodeTests
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_IMAGE,
             hItem = node.HTREEITEM
         };
-        Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref item));
+        Assert.Equal(1, (int)PInvokeCore.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref item));
         Assert.Equal(expected, item.iSelectedImage);
     }
 
@@ -3222,7 +3222,7 @@ public class TreeNodeTests
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_SELECTEDIMAGE,
             hItem = node.HTREEITEM
         };
-        Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref item));
+        Assert.Equal(1, (int)PInvokeCore.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref item));
         Assert.Equal(expected, item.iSelectedImage);
     }
 
@@ -3253,7 +3253,7 @@ public class TreeNodeTests
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_SELECTEDIMAGE,
             hItem = node.HTREEITEM
         };
-        Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref item));
+        Assert.Equal(1, (int)PInvokeCore.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref item));
         Assert.Equal(expected, item.iSelectedImage);
     }
 
@@ -3468,7 +3468,7 @@ public class TreeNodeTests
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_SELECTEDIMAGE,
             hItem = node.HTREEITEM
         };
-        Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref column));
+        Assert.Equal(1, (int)PInvokeCore.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref column));
         Assert.Equal(0, column.iSelectedImage);
     }
 
@@ -3498,7 +3498,7 @@ public class TreeNodeTests
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_SELECTEDIMAGE,
             hItem = node.HTREEITEM
         };
-        Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref column));
+        Assert.Equal(1, (int)PInvokeCore.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref column));
         Assert.Equal(expected, column.iSelectedImage);
     }
 
@@ -3530,7 +3530,7 @@ public class TreeNodeTests
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_SELECTEDIMAGE,
             hItem = node.HTREEITEM
         };
-        Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref column));
+        Assert.Equal(1, (int)PInvokeCore.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref column));
         Assert.Equal(expected, column.iSelectedImage);
     }
 
@@ -3858,7 +3858,7 @@ public class TreeNodeTests
             stateMask = TREE_VIEW_ITEM_STATE_FLAGS.TVIS_STATEIMAGEMASK,
             hItem = node.HTREEITEM
         };
-        Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref item));
+        Assert.Equal(1, (int)PInvokeCore.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref item));
         Assert.Equal((TREE_VIEW_ITEM_STATE_FLAGS)expected, item.state);
     }
 
@@ -3888,7 +3888,7 @@ public class TreeNodeTests
             stateMask = TREE_VIEW_ITEM_STATE_FLAGS.TVIS_STATEIMAGEMASK,
             hItem = node.HTREEITEM
         };
-        Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref item));
+        Assert.Equal(1, (int)PInvokeCore.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref item));
         Assert.Equal((TREE_VIEW_ITEM_STATE_FLAGS)expected, item.state);
     }
 
@@ -3920,7 +3920,7 @@ public class TreeNodeTests
             stateMask = TREE_VIEW_ITEM_STATE_FLAGS.TVIS_STATEIMAGEMASK,
             hItem = node.HTREEITEM
         };
-        Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref item));
+        Assert.Equal(1, (int)PInvokeCore.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref item));
         Assert.Equal((TREE_VIEW_ITEM_STATE_FLAGS)expected, item.state);
     }
 
@@ -4221,7 +4221,7 @@ public class TreeNodeTests
             stateMask = TREE_VIEW_ITEM_STATE_FLAGS.TVIS_STATEIMAGEMASK,
             hItem = node.HTREEITEM
         };
-        Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref column));
+        Assert.Equal(1, (int)PInvokeCore.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref column));
         Assert.Equal((TREE_VIEW_ITEM_STATE_FLAGS)0, column.state);
     }
 
@@ -4259,7 +4259,7 @@ public class TreeNodeTests
             stateMask = TREE_VIEW_ITEM_STATE_FLAGS.TVIS_STATEIMAGEMASK,
             hItem = node.HTREEITEM
         };
-        Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref column));
+        Assert.Equal(1, (int)PInvokeCore.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref column));
         Assert.Equal((TREE_VIEW_ITEM_STATE_FLAGS)expected, column.state);
     }
 
@@ -4299,7 +4299,7 @@ public class TreeNodeTests
             stateMask = TREE_VIEW_ITEM_STATE_FLAGS.TVIS_STATEIMAGEMASK,
             hItem = node.HTREEITEM
         };
-        Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref column));
+        Assert.Equal(1, (int)PInvokeCore.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref column));
         Assert.Equal((TREE_VIEW_ITEM_STATE_FLAGS)expected, column.state);
     }
 
@@ -4457,7 +4457,7 @@ public class TreeNodeTests
             cchTextMax = 256,
             pszText = textBuffer
         };
-        Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref item));
+        Assert.Equal(1, (int)PInvokeCore.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref item));
         Assert.Equal(expected, new string((char*)item.pszText));
     }
 

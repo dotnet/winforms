@@ -6,16 +6,16 @@ using System.Windows.Forms;
 internal static class WMExtensions
 {
     public static bool IsMouseMessage(this ref Message message)
-        => message.IsBetween(PInvoke.WM_MOUSEFIRST, PInvoke.WM_MOUSELAST);
+        => message.IsBetween(PInvokeCore.WM_MOUSEFIRST, PInvokeCore.WM_MOUSELAST);
 
     public static bool IsMouseMessage(this ref MSG message)
-        => message.IsBetween(PInvoke.WM_MOUSEFIRST, PInvoke.WM_MOUSELAST);
+        => message.IsBetween(PInvokeCore.WM_MOUSEFIRST, PInvokeCore.WM_MOUSELAST);
 
     public static bool IsKeyMessage(this ref Message message)
-        => message.IsBetween(PInvoke.WM_KEYFIRST, PInvoke.WM_KEYLAST);
+        => message.IsBetween(PInvokeCore.WM_KEYFIRST, PInvokeCore.WM_KEYLAST);
 
     public static bool IsKeyMessage(this ref MSG message)
-        => message.IsBetween(PInvoke.WM_KEYFIRST, PInvoke.WM_KEYLAST);
+        => message.IsBetween(PInvokeCore.WM_KEYFIRST, PInvokeCore.WM_KEYLAST);
 
     /// <summary>
     /// Returns true if the message is between <paramref name="firstMessage"/> and

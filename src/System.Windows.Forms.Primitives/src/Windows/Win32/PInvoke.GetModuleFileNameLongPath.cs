@@ -10,7 +10,7 @@ internal static partial class PInvoke
     [SkipLocalsInit]
     public static unsafe string GetModuleFileNameLongPath(HINSTANCE hModule)
     {
-        using BufferScope<char> buffer = new(stackalloc char[MAX_PATH]);
+        using BufferScope<char> buffer = new(stackalloc char[(int)PInvokeCore.MAX_PATH]);
 
         // Allocate increasingly larger portions of memory until successful or we hit short.maxvalue.
         while (true)

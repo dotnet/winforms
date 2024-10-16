@@ -1702,7 +1702,7 @@ public class UserControlTests
         };
         Message m = new()
         {
-            Msg = (int)PInvoke.WM_MOUSEHOVER,
+            Msg = (int)PInvokeCore.WM_MOUSEHOVER,
             Result = 250
         };
         control.WndProc(ref m);
@@ -1732,7 +1732,7 @@ public class UserControlTests
 
         Message m = new()
         {
-            Msg = (int)PInvoke.WM_SETFOCUS,
+            Msg = (int)PInvokeCore.WM_SETFOCUS,
             Result = 250
         };
         control.WndProc(ref m);
@@ -1763,7 +1763,7 @@ public class UserControlTests
 
         Message m = new()
         {
-            Msg = (int)PInvoke.WM_SETFOCUS,
+            Msg = (int)PInvokeCore.WM_SETFOCUS,
             Result = 250
         };
         control.WndProc(ref m);

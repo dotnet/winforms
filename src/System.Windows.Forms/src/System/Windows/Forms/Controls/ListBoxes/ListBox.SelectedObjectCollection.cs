@@ -52,7 +52,7 @@ public partial class ListBox
 
                         case SelectionMode.MultiSimple:
                         case SelectionMode.MultiExtended:
-                            return (int)PInvoke.SendMessage(_owner, PInvoke.LB_GETSELCOUNT);
+                            return (int)PInvokeCore.SendMessage(_owner, PInvoke.LB_GETSELCOUNT);
                     }
 
                     return 0;
