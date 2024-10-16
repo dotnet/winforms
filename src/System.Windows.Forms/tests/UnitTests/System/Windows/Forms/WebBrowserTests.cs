@@ -4751,4 +4751,32 @@ public class WebBrowserTests
 
         public new void WndProc(ref Message m) => base.WndProc(ref m);
     }
+
+    [WinFormsFact]
+    public void WebBrowser_NavigateToFileFolder()
+    {
+        using Form form = new();
+        using WebBrowser browser = new()
+        {
+            Dock = DockStyle.Fill
+        };
+
+        string navigated = null;
+        browser.Navigated += (sender, e) =>
+        {
+            navigated = browser.Url.ToString();
+            form.Close();
+        };
+
+        form.Controls.Add(browser);
+
+        form.Load += (sender, e) =>
+        {
+            browser.Navigate(@"file://C:/");
+        };
+
+        form.Show();
+
+        navigated.Should().Be(@"file:///C:/");
+    }
 }
