@@ -14,11 +14,11 @@ public sealed class SplitterPanelDesignerTests
     [Fact]
     public void Initialize_CanBeParentedTo_ReturnsExpectedResults()
     {
-        ToolStripContainerDesigner toolStripContainerDesigner = new();
-        SplitContainerDesigner splitContainerDesigner = new();
-        SplitContainer splitContainer = new();
-        SplitterPanel splitterPanel = new(splitContainer);
-        SplitterPanelDesigner splitterPanelDesigner = new();
+        using ToolStripContainerDesigner toolStripContainerDesigner = new();
+        using SplitContainerDesigner splitContainerDesigner = new();
+        using SplitContainer splitContainer = new();
+        using SplitterPanel splitterPanel = new(splitContainer);
+        using SplitterPanelDesigner splitterPanelDesigner = new();
 
         Mock<IDesignerHost> mockDesignerHost = new();
         mockDesignerHost.Setup(dh => dh.GetDesigner(splitterPanel.Parent!)).Returns(splitContainerDesigner);
@@ -28,6 +28,14 @@ public sealed class SplitterPanelDesignerTests
 
         Mock<IComponentChangeService> mockChangeService = new();
         mockSite.Setup(s => s.GetService(typeof(IComponentChangeService))).Returns(mockChangeService.Object);
+        mockDesignerHost.Setup(dh => dh.GetService(typeof(IComponentChangeService))).Returns(mockChangeService.Object);
+
+        using ToolStripContainer toolStripContainer = new();
+        toolStripContainer.Site = mockSite.Object;
+        toolStripContainerDesigner.Initialize(toolStripContainer);
+
+        splitContainer.Site = mockSite.Object;
+        splitContainerDesigner.Initialize(splitContainer);
 
         splitterPanel.Site = mockSite.Object;
 
@@ -52,4 +60,5 @@ public sealed class SplitterPanelDesignerTests
         SelectionRules selectionRules = splitterPanelDesigner.SelectionRules;
         selectionRules.Should().Be(SelectionRules.None);
     }
+
 }
