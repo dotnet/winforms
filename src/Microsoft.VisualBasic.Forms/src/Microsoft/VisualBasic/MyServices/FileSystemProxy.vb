@@ -26,7 +26,7 @@ Namespace Microsoft.VisualBasic.MyServices
         Friend Sub New()
         End Sub
 
-        ''' <inheritdoc cref="IO.Directory.GetCurrentDirectory()"/>
+        ''' <inheritdoc cref="FileIO.FileSystem.CurrentDirectory"/>
         Public Property CurrentDirectory() As String
             Get
                 Return FileIO.FileSystem.CurrentDirectory
@@ -58,7 +58,7 @@ Namespace Microsoft.VisualBasic.MyServices
             End Get
         End Property
 
-        ''' <inheritdoc cref="IO.Path.Combine(String, String)"/>
+        ''' <inheritdoc cref="FileIO.FileSystem.CombinePath(String, String)"/>
         Public Function CombinePath(baseDirectory As String, relativePath As String) As String
             Return FileIO.FileSystem.CombinePath(baseDirectory, relativePath)
         End Function
@@ -113,7 +113,7 @@ Namespace Microsoft.VisualBasic.MyServices
             FileIO.FileSystem.CopyFile(sourceFileName, destinationFileName, showUI, onUserCancel)
         End Sub
 
-        ''' <inheritdoc cref="IO.Directory.CreateDirectory(String)"/>
+        ''' <inheritdoc cref="FileIO.FileSystem.CreateDirectory(String)"/>
         Public Sub CreateDirectory(directory As String)
             FileIO.FileSystem.CreateDirectory(directory)
         End Sub
@@ -137,7 +137,7 @@ Namespace Microsoft.VisualBasic.MyServices
             FileIO.FileSystem.DeleteDirectory(directory, showUI, recycle, onUserCancel)
         End Sub
 
-        ''' <inheritdoc cref="IO.File.Delete(String)"/>
+        ''' <inheritdoc cref="FileIO.FileSystem.DeleteFile(String)"/>
         Public Sub DeleteFile(file As String)
             FileIO.FileSystem.DeleteFile(file)
         End Sub
@@ -157,12 +157,12 @@ Namespace Microsoft.VisualBasic.MyServices
             FileIO.FileSystem.DeleteFile(file, showUI, recycle)
         End Sub
 
-        ''' <inheritdoc cref="IO.Directory.Exists(String)"/>
+        ''' <inheritdoc cref="FileIO.FileSystem.DirectoryExists(String)"/>
         Public Function DirectoryExists(directory As String) As Boolean
             Return FileIO.FileSystem.DirectoryExists(directory)
         End Function
 
-        ''' <inheritdoc cref="IO.File.Exists(String)"/>
+        ''' <inheritdoc cref="FileIO.FileSystem.FileExists(String)"/>
         Public Function FileExists(file As String) As Boolean
             Return FileIO.FileSystem.FileExists(file)
         End Function
@@ -188,7 +188,7 @@ Namespace Microsoft.VisualBasic.MyServices
             Return FileIO.FileSystem.FindInFiles(directory, containsText, ignoreCase, searchType, fileWildcards)
         End Function
 
-        ''' <inheritdoc cref="IO.Directory.EnumerateDirectories(String)"/>
+        ''' <inheritdoc cref="FileIO.FileSystem.GetDirectories(String)"/>
         Public Function GetDirectories(directory As String) As ReadOnlyCollection(Of String)
             Return FileIO.FileSystem.GetDirectories(directory)
         End Function
@@ -202,25 +202,12 @@ Namespace Microsoft.VisualBasic.MyServices
             Return FileIO.FileSystem.GetDirectories(directory, searchType, wildcards)
         End Function
 
+        ''' <inheritdoc cref="IO.DirectoryInfo.New(String)"/>
         Public Function GetDirectoryInfo(directory As String) As IO.DirectoryInfo
             Return FileIO.FileSystem.GetDirectoryInfo(directory)
         End Function
 
-        ''' <summary>
-        '''  Return the information about the specified drive.
-        ''' </summary>
-        ''' <param name="drive">The path to the drive.</param>
-        ''' <returns>A DriveInfo object containing the information about the specified drive.</returns>
-        ''' <exception cref="ArgumentException">
-        '''  The path is not valid for one of the following reasons: it is a zero-length string;
-        '''  it contains only white space; it contains invalid characters;
-        '''  or it is a device path (starts with \.\).
-        ''' </exception>
-        ''' <exception cref="ArgumentNullException">
-        '''  <paramref name="drive"/> is <see langword="Nothing"/> or an empty string.
-        ''' </exception>
-        ''' <exception cref="IO.PathTooLongException">The path exceeds the system-defined maximum length.</exception>
-        ''' <exception cref="SecurityException">The user lacks necessary permissions to view the path.</exception>
+        ''' <inheritdoc cref="IO.DriveInfo.New(String)"/>
         Public Function GetDriveInfo(drive As String) As IO.DriveInfo
             Return FileIO.FileSystem.GetDriveInfo(drive)
         End Function
@@ -230,7 +217,7 @@ Namespace Microsoft.VisualBasic.MyServices
             Return FileIO.FileSystem.GetFileInfo(file)
         End Function
 
-        ''' <inheritdoc cref="IO.Directory.GetDirectories(String)"/>
+        ''' <inheritdoc cref="FileIO.FileSystem.GetFiles(String)"/>
         Public Function GetFiles(directory As String) As ReadOnlyCollection(Of String)
             Return FileIO.FileSystem.GetFiles(directory)
         End Function
@@ -244,12 +231,12 @@ Namespace Microsoft.VisualBasic.MyServices
             Return FileIO.FileSystem.GetFiles(directory, searchType, wildcards)
         End Function
 
-        ''' <inheritdoc cref="IO.FileInfo.Name"/>
+        ''' <inheritdoc cref="IO.Path.GetFileName(String)"/>
         Public Function GetName(path As String) As String
             Return FileIO.FileSystem.GetName(path)
         End Function
 
-        ''' <inheritdoc cref="IO.Directory.GetParent(String)"/>
+        ''' <inheritdoc cref="IO.Path.GetDirectoryName(String)"/>
         Public Function GetParentPath(path As String) As String
             Return FileIO.FileSystem.GetParentPath(path)
         End Function
@@ -323,22 +310,22 @@ Namespace Microsoft.VisualBasic.MyServices
             Return FileIO.FileSystem.OpenTextFieldParser(file, fieldWidths)
         End Function
 
-        ''' <inheritdoc cref="FileIO.FileSystem.OpenTextFileReader(String)"/>
+        ''' <inheritdoc cref="IO.StreamReader.New(String)"/>
         Public Function OpenTextFileReader(file As String) As IO.StreamReader
             Return FileIO.FileSystem.OpenTextFileReader(file)
         End Function
 
-        ''' <inheritdoc cref="FileIO.FileSystem.OpenTextFileReader(String, Encoding)"/>
+        ''' <inheritdoc cref="IO.StreamReader.New(String, Encoding)"/>
         Public Function OpenTextFileReader(file As String, encoding As Encoding) As IO.StreamReader
             Return FileIO.FileSystem.OpenTextFileReader(file, encoding)
         End Function
 
-        ''' <inheritdoc cref="FileIO.FileSystem.OpenTextFileWriter(String, Boolean)"/>
+        ''' <inheritdoc cref="IO.StreamWriter.New(String, Boolean)"/>
         Public Function OpenTextFileWriter(file As String, append As Boolean) As IO.StreamWriter
             Return FileIO.FileSystem.OpenTextFileWriter(file, append)
         End Function
 
-        ''' <inheritdoc cref="FileIO.FileSystem.OpenTextFileWriter(String, Boolean, Encoding)"/>
+        ''' <inheritdoc cref="IO.StreamWriter.New(String, Boolean, Encoding)"/>
         Public Function OpenTextFileWriter(
             file As String,
             append As Boolean,
