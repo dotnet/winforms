@@ -344,7 +344,7 @@ public partial class TextBox : TextBoxBase
                 CreateHandle();
             }
 
-            return (char)PInvoke.SendMessage(this, PInvoke.EM_GETPASSWORDCHAR);
+            return (char)PInvokeCore.SendMessage(this, PInvokeCore.EM_GETPASSWORDCHAR);
         }
         set
         {
@@ -356,7 +356,7 @@ public partial class TextBox : TextBoxBase
                     if (PasswordChar != value)
                     {
                         // Set the password mode.
-                        PInvoke.SendMessage(this, PInvoke.EM_SETPASSWORDCHAR, (WPARAM)value);
+                        PInvokeCore.SendMessage(this, PInvokeCore.EM_SETPASSWORDCHAR, (WPARAM)value);
 
                         // Disable IME if setting the control to password mode.
                         VerifyImeRestrictedModeChanged();
@@ -616,7 +616,7 @@ public partial class TextBox : TextBoxBase
         {
             if (!_useSystemPasswordChar)
             {
-                PInvoke.SendMessage(this, PInvoke.EM_SETPASSWORDCHAR, (WPARAM)_passwordChar);
+                PInvokeCore.SendMessage(this, PInvokeCore.EM_SETPASSWORDCHAR, (WPARAM)_passwordChar);
             }
         }
 
@@ -915,7 +915,7 @@ public partial class TextBox : TextBoxBase
         switch (m.MsgInternal)
         {
             // Work around a very obscure Windows issue.
-            case PInvoke.WM_LBUTTONDOWN:
+            case PInvokeCore.WM_LBUTTONDOWN:
                 MouseButtons realState = MouseButtons;
                 bool wasValidationCancelled = ValidationCancelled;
                 Focus();
@@ -927,7 +927,7 @@ public partial class TextBox : TextBoxBase
 
                 break;
 
-            case PInvoke.WM_PAINT:
+            case PInvokeCore.WM_PAINT:
                 {
                     // The native control tracks its own state, so it is get into a state Where either the native control invalidates
                     // itself, and thus blastsover the placeholder text
@@ -964,7 +964,7 @@ public partial class TextBox : TextBoxBase
 
                 break;
 
-            case PInvoke.WM_PRINT:
+            case PInvokeCore.WM_PRINT:
                 WmPrint(ref m);
                 break;
 

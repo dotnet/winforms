@@ -5,16 +5,16 @@ using System.Runtime.InteropServices;
 
 namespace Windows.Win32;
 
-internal static partial class PInvoke
+internal static partial class PInvokeCore
 {
     // We only ever call this on 32 bit so IntPtr is correct
     [DllImport(Libraries.User32)]
-    private static extern nint SetClassLongW(IntPtr hwnd, GET_CLASS_LONG_INDEX nIndex, IntPtr dwNewLong);
+    private static extern nint SetClassLongW(HWND hwnd, GET_CLASS_LONG_INDEX nIndex, nint dwNewLong);
 
     [DllImport(Libraries.User32)]
-    private static extern nint SetClassLongPtrW(IntPtr hwnd, GET_CLASS_LONG_INDEX nIndex, IntPtr dwNewLong);
+    private static extern nint SetClassLongPtrW(HWND hwnd, GET_CLASS_LONG_INDEX nIndex, nint dwNewLong);
 
-    public static IntPtr SetClassLong(IntPtr hWnd, GET_CLASS_LONG_INDEX nIndex, IntPtr dwNewLong)
+    public static nint SetClassLong(HWND hWnd, GET_CLASS_LONG_INDEX nIndex, nint dwNewLong)
          => Environment.Is64BitProcess
            ? SetClassLongPtrW(hWnd, nIndex, dwNewLong)
            : SetClassLongW(hWnd, nIndex, dwNewLong);

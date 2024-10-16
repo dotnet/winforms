@@ -34,12 +34,12 @@ public static class SystemEventsHelper
         WPARAM wParam;
         if (category == UserPreferenceCategory.Color)
         {
-            msg = PInvoke.WM_SYSCOLORCHANGE;
+            msg = PInvokeCore.WM_SYSCOLORCHANGE;
             wParam = 0;
         }
         else
         {
-            msg = PInvoke.WM_SETTINGCHANGE;
+            msg = PInvokeCore.WM_SETTINGCHANGE;
 
             if (category == UserPreferenceCategory.Accessibility)
             {
@@ -84,6 +84,6 @@ public static class SystemEventsHelper
         }
 
         // Call with reflect to immediately send the message.
-        PInvoke.SendMessage(window, msg | MessageId.WM_REFLECT, wParam);
+        PInvokeCore.SendMessage(window, msg | MessageId.WM_REFLECT, wParam);
     }
 }

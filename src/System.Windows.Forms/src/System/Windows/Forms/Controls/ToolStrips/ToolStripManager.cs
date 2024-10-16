@@ -742,7 +742,7 @@ public static partial class ToolStripManager
             return ProcessShortcut(ref m, keyData);
         }
 
-        if (m.Msg == (int)PInvoke.WM_SYSKEYDOWN)
+        if (m.Msg == (int)PInvokeCore.WM_SYSKEYDOWN)
         {
             ModalMenuFilter.ProcessMenuKeyDown(ref m);
         }

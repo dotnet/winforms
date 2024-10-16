@@ -149,16 +149,16 @@ public sealed partial class MdiClient : Control
         switch (value)
         {
             case MdiLayout.Cascade:
-                PInvoke.SendMessage(this, PInvoke.WM_MDICASCADE);
+                PInvokeCore.SendMessage(this, PInvokeCore.WM_MDICASCADE);
                 break;
             case MdiLayout.TileVertical:
-                PInvoke.SendMessage(this, PInvoke.WM_MDITILE, (WPARAM)(uint)TILE_WINDOWS_HOW.MDITILE_VERTICAL);
+                PInvokeCore.SendMessage(this, PInvokeCore.WM_MDITILE, (WPARAM)(uint)TILE_WINDOWS_HOW.MDITILE_VERTICAL);
                 break;
             case MdiLayout.TileHorizontal:
-                PInvoke.SendMessage(this, PInvoke.WM_MDITILE, (WPARAM)(uint)TILE_WINDOWS_HOW.MDITILE_HORIZONTAL);
+                PInvokeCore.SendMessage(this, PInvokeCore.WM_MDITILE, (WPARAM)(uint)TILE_WINDOWS_HOW.MDITILE_HORIZONTAL);
                 break;
             case MdiLayout.ArrangeIcons:
-                PInvoke.SendMessage(this, PInvoke.WM_MDIICONARRANGE);
+                PInvokeCore.SendMessage(this, PInvokeCore.WM_MDIICONARRANGE);
                 break;
         }
     }
@@ -329,7 +329,7 @@ public sealed partial class MdiClient : Control
     {
         switch (m.MsgInternal)
         {
-            case PInvoke.WM_CREATE:
+            case PInvokeCore.WM_CREATE:
                 if (ParentInternal is not null && ParentInternal.Site is not null && ParentInternal.Site.DesignMode && Handle != IntPtr.Zero)
                 {
                     SetWindowRgn();
@@ -337,7 +337,7 @@ public sealed partial class MdiClient : Control
 
                 break;
 
-            case PInvoke.WM_SETFOCUS:
+            case PInvokeCore.WM_SETFOCUS:
                 InvokeGotFocus(ParentInternal, EventArgs.Empty);
                 Form? childForm = null;
                 if (ParentInternal is Form parentInternalAsForm)
@@ -361,7 +361,7 @@ public sealed partial class MdiClient : Control
                 DefWndProc(ref m);
                 InvokeGotFocus(this, EventArgs.Empty);
                 return;
-            case PInvoke.WM_KILLFOCUS:
+            case PInvokeCore.WM_KILLFOCUS:
                 InvokeLostFocus(ParentInternal, EventArgs.Empty);
                 break;
         }

@@ -690,7 +690,7 @@ internal partial class CommandSet : IDisposable
                 HWND hwnd = PInvoke.WindowFromPoint(p);
                 if (!hwnd.IsNull)
                 {
-                    PInvoke.SendMessage(hwnd, PInvoke.WM_SETCURSOR, hwnd, (nint)PInvoke.HTCLIENT);
+                    PInvokeCore.SendMessage(hwnd, PInvokeCore.WM_SETCURSOR, hwnd, (nint)PInvoke.HTCLIENT);
                 }
                 else
                 {

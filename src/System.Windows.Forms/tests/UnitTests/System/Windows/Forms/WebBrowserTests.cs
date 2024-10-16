@@ -4471,7 +4471,7 @@ public class WebBrowserTests
         };
         Message m = new()
         {
-            Msg = (int)PInvoke.WM_MOUSEHOVER,
+            Msg = (int)PInvokeCore.WM_MOUSEHOVER,
             Result = 250
         };
         control.WndProc(ref m);
@@ -4508,7 +4508,7 @@ public class WebBrowserTests
             };
             Message m = new()
             {
-                Msg = (int)PInvoke.WM_CONTEXTMENU,
+                Msg = (int)PInvokeCore.WM_CONTEXTMENU,
                 LParam = lParam,
                 Result = 250
             };
@@ -4550,7 +4550,7 @@ public class WebBrowserTests
             };
             Message m = new()
             {
-                Msg = (int)PInvoke.WM_CONTEXTMENU,
+                Msg = (int)PInvokeCore.WM_CONTEXTMENU,
                 LParam = lParam,
                 Result = 250
             };
@@ -4580,7 +4580,7 @@ public class WebBrowserTests
 
         Message m = new()
         {
-            Msg = (int)PInvoke.WM_CONTEXTMENU,
+            Msg = (int)PInvokeCore.WM_CONTEXTMENU,
             LParam = lParam,
             Result = 250
         };
@@ -4630,7 +4630,7 @@ public class WebBrowserTests
 
         Message m = new()
         {
-            Msg = (int)PInvoke.WM_CONTEXTMENU,
+            Msg = (int)PInvokeCore.WM_CONTEXTMENU,
             LParam = lParam,
             Result = 250
         };

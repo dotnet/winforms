@@ -913,9 +913,9 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
                 if (_designerHost is not null)
                 {
                     baseComponent = (Control)_designerHost.RootComponent;
-                    PInvoke.SendMessage(baseComponent, PInvoke.WM_SETREDRAW, (WPARAM)(BOOL)false);
+                    PInvokeCore.SendMessage(baseComponent, PInvokeCore.WM_SETREDRAW, (WPARAM)(BOOL)false);
                     tb.Focus();
-                    PInvoke.SendMessage(baseComponent, PInvoke.WM_SETREDRAW, (WPARAM)(BOOL)true);
+                    PInvokeCore.SendMessage(baseComponent, PInvokeCore.WM_SETREDRAW, (WPARAM)(BOOL)true);
                 }
             }
             finally
@@ -993,9 +993,9 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
             && _designerHost is not null)
         {
             Control baseComponent = (Control)_designerHost.RootComponent;
-            PInvoke.SendMessage(baseComponent, PInvoke.WM_SETREDRAW, (WPARAM)(BOOL)false);
+            PInvokeCore.SendMessage(baseComponent, PInvokeCore.WM_SETREDRAW, (WPARAM)(BOOL)false);
             designerFrame.Focus();
-            PInvoke.SendMessage(baseComponent, PInvoke.WM_SETREDRAW, (WPARAM)(BOOL)true);
+            PInvokeCore.SendMessage(baseComponent, PInvokeCore.WM_SETREDRAW, (WPARAM)(BOOL)true);
         }
     }
 
@@ -1594,7 +1594,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
         {
             switch (m.MsgInternal)
             {
-                case PInvoke.WM_KILLFOCUS:
+                case PInvokeCore.WM_KILLFOCUS:
                     base.WndProc(ref m);
                     HWND focusedWindow = (HWND)m.WParamInternal;
                     if (!IsParentWindow(focusedWindow))
@@ -1609,7 +1609,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
                 // 3.Left click 'Copy' or 'Cut' in the context menu IDE crashed because left click in step3 invoked glyph
                 //   behavior, which committed and destroyed the InSitu edit box and thus the 'copy' or 'cut' action has no
                 //   text to work with. Thus need to block glyph behaviors while the context menu is displayed.
-                case PInvoke.WM_CONTEXTMENU:
+                case PInvokeCore.WM_CONTEXTMENU:
                     _owner.IsSystemContextMenuDisplayed = true;
                     base.WndProc(ref m);
                     _owner.IsSystemContextMenuDisplayed = false;
@@ -1758,7 +1758,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
         {
             switch (m.MsgInternal)
             {
-                case PInvoke.WM_GETOBJECT:
+                case PInvokeCore.WM_GETOBJECT:
                     if (_owner._addItemButton is null)
                     {
                         // only adding patterns to _miniToolStrip associated with MenuStrip or ContextMenu
