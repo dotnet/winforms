@@ -7,9 +7,11 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Formats.Nrbf;
 using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Primitives;
+using System.Text.Json;
 using Windows.Win32.System.Ole;
 using static System.Windows.Forms.Tests.BinaryFormatUtilitiesTests;
 using Com = Windows.Win32.System.Com;
@@ -937,5 +939,54 @@ public class ClipboardTests
         Clipboard.GetData("point1").Should().BeOfType<Point>().Which.Should().BeEquivalentTo(point1);
         Clipboard.GetData("point2").Should().BeOfType<Point>().Which.Should().BeEquivalentTo(point2);
         Clipboard.GetData("Mystring").Should().Be("test");
+    }
+
+    [WinFormsFact]
+    public unsafe void Clipboard_Deserialize_FromStream_Manually()
+    {
+        // This test demonstrates how a user can manually deserialize JsonData<T> that has been serialized onto
+        // the clipboard from stream. This may need to be done if type JsonData<T> does not exist in the .NET version
+        // the user is utilizing.
+        Point point = new(1, 1);
+        Clipboard.SetDataAsJson("testFormat", point);
+
+        // Manually retrieve the serialized stream.
+        ComTypes.IDataObject dataObject = Clipboard.GetDataObject().Should().BeAssignableTo<ComTypes.IDataObject>().Which;
+        ComTypes.FORMATETC formatetc = new()
+        {
+            cfFormat = (short)DataFormats.GetFormat("testFormat").Id,
+            dwAspect = ComTypes.DVASPECT.DVASPECT_CONTENT,
+            lindex = -1,
+            tymed = ComTypes.TYMED.TYMED_HGLOBAL
+        };
+        dataObject.GetData(ref formatetc, out ComTypes.STGMEDIUM medium);
+        HGLOBAL hglobal = (HGLOBAL)medium.unionmember;
+        Stream stream;
+        try
+        {
+            void* buffer = PInvokeCore.GlobalLock(hglobal);
+            int size = (int)PInvokeCore.GlobalSize(hglobal);
+            byte[] bytes = new byte[size];
+            Marshal.Copy((nint)buffer, bytes, 0, size);
+            // this comes from DataObject.Composition.s_serializedObjectID
+            int index = 16;
+            stream = new MemoryStream(bytes, index, bytes.Length - index);
+        }
+        finally
+        {
+            PInvokeCore.GlobalUnlock(hglobal);
+        }
+
+        stream.Should().NotBeNull();
+        // Use NrbfDecoder to decode the stream and rehydrate the type.
+        SerializationRecord record = NrbfDecoder.Decode(stream, leaveOpen: true);
+        ClassRecord types = record.Should().BeAssignableTo<ClassRecord>().Which;
+        types.HasMember("<JsonBytes>k__BackingField").Should().BeTrue();
+        SZArrayRecord<byte> byteData = types.GetRawValue("<JsonBytes>k__BackingField").Should().BeAssignableTo<SZArrayRecord<byte>>().Which;
+        TypeName.TryParse(types.TypeName.FullName, out TypeName? result).Should().BeTrue();
+        TypeName checkedResult = result.Should().BeOfType<TypeName>().Which;
+        Type.GetType(checkedResult.GetGenericArguments()[0].AssemblyQualifiedName).Should().Be(typeof(Point));
+
+        JsonSerializer.Deserialize(byteData.GetArray(), typeof(Point)).Should().BeEquivalentTo(point);
     }
 }
