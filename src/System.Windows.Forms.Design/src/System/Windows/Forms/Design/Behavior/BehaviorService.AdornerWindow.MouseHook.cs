@@ -80,7 +80,7 @@ public sealed partial class BehaviorService
                         WINDOWS_HOOK_ID.WH_MOUSE,
                         (delegate* unmanaged[Stdcall]<int, WPARAM, LPARAM, LRESULT>)hook,
                         (HINSTANCE)0,
-                        PInvoke.GetCurrentThreadId());
+                        PInvokeCore.GetCurrentThreadId());
 
                     _isHooked = _mouseHookHandle != 0;
 
@@ -180,11 +180,11 @@ public sealed partial class BehaviorService
                             Message m = Message.Create(hwnd, msg, 0u, PARAM.FromLowHigh(pt.Y, pt.X));
 
                             // No one knows why we get an extra click here from VS. As a workaround, we check the TimeStamp and discard it.
-                            if (m.Msg == (int)PInvoke.WM_LBUTTONDOWN)
+                            if (m.Msg == (int)PInvokeCore.WM_LBUTTONDOWN)
                             {
                                 _lastLButtonDownTimeStamp = PInvoke.GetMessageTime();
                             }
-                            else if (m.Msg == (int)PInvoke.WM_LBUTTONDBLCLK)
+                            else if (m.Msg == (int)PInvokeCore.WM_LBUTTONDBLCLK)
                             {
                                 int lButtonDoubleClickTimeStamp = PInvoke.GetMessageTime();
                                 if (lButtonDoubleClickTimeStamp == _lastLButtonDownTimeStamp)

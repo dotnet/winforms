@@ -45,7 +45,7 @@ public class MonthCalendar_CalendarBodyAccessibleObjectTests
         using MonthCalendar control = new();
 
         control.CreateControl();
-        PInvoke.SendMessage(control, PInvoke.MCM_SETCURRENTVIEW, 0, view);
+        PInvokeCore.SendMessage(control, PInvoke.MCM_SETCURRENTVIEW, 0, view);
         CalendarBodyAccessibleObject accessibleObject = CreateCalendarBodyAccessibleObject(control);
 
         Assert.Equal(expected, accessibleObject.ColumnCount);
@@ -71,7 +71,7 @@ public class MonthCalendar_CalendarBodyAccessibleObjectTests
         using MonthCalendar control = new();
 
         control.CreateControl();
-        PInvoke.SendMessage(control, PInvoke.MCM_SETCURRENTVIEW, 0, view);
+        PInvokeCore.SendMessage(control, PInvoke.MCM_SETCURRENTVIEW, 0, view);
         CalendarBodyAccessibleObject accessibleObject = CreateCalendarBodyAccessibleObject(control);
 
         Assert.Null(accessibleObject.GetColumnHeaders());
@@ -137,7 +137,7 @@ public class MonthCalendar_CalendarBodyAccessibleObjectTests
         control.SelectionStart = new DateTime(2021, 1, 1);
 
         control.CreateControl();
-        PInvoke.SendMessage(control, PInvoke.MCM_SETCURRENTVIEW, 0, (nint)view);
+        PInvokeCore.SendMessage(control, PInvoke.MCM_SETCURRENTVIEW, 0, (nint)view);
         MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
         LinkedListNode<CalendarAccessibleObject> calendarNode = controlAccessibleObject.CalendarsAccessibleObjects.First;
 
@@ -280,7 +280,7 @@ public class MonthCalendar_CalendarBodyAccessibleObjectTests
         MONTH_CALDENDAR_MESSAGES_VIEW view = (MONTH_CALDENDAR_MESSAGES_VIEW)viewInt;
         using MonthCalendar control = new() { ShowWeekNumbers = showWeekNumbers };
         control.CreateControl();
-        PInvoke.SendMessage(control, PInvoke.MCM_SETCURRENTVIEW, 0, (nint)view);
+        PInvokeCore.SendMessage(control, PInvoke.MCM_SETCURRENTVIEW, 0, (nint)view);
         CalendarBodyAccessibleObject accessibleObject = CreateCalendarBodyAccessibleObject(control);
 
         var rowHeaders = accessibleObject.GetRowHeaders();

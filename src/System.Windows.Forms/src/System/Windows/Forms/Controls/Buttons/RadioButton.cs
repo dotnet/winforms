@@ -157,7 +157,7 @@ public partial class RadioButton : ButtonBase
 
                 if (IsHandleCreated)
                 {
-                    PInvoke.SendMessage(this, PInvoke.BM_SETCHECK, (WPARAM)(BOOL)value);
+                    PInvokeCore.SendMessage(this, PInvoke.BM_SETCHECK, (WPARAM)(BOOL)value);
                 }
 
                 Invalidate();
@@ -329,7 +329,7 @@ public partial class RadioButton : ButtonBase
 
         if (IsHandleCreated)
         {
-            PInvoke.SendMessage(this, PInvoke.BM_SETCHECK, (WPARAM)(BOOL)_isChecked);
+            PInvokeCore.SendMessage(this, PInvoke.BM_SETCHECK, (WPARAM)(BOOL)_isChecked);
         }
     }
 

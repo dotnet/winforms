@@ -137,21 +137,21 @@ public partial class SendKeys
         {
             if (haveKeys.HaveShift == 0 && (vk & ShiftKeyPressed) != 0)
             {
-                AddEvent(new SKEvent(PInvoke.WM_KEYDOWN, (uint)Keys.ShiftKey, startNewChar, hwnd));
+                AddEvent(new SKEvent(PInvokeCore.WM_KEYDOWN, (uint)Keys.ShiftKey, startNewChar, hwnd));
                 startNewChar = false;
                 haveKeys.HaveShift = UnknownGrouping;
             }
 
             if (haveKeys.HaveCtrl == 0 && (vk & CtrlKeyPressed) != 0)
             {
-                AddEvent(new SKEvent(PInvoke.WM_KEYDOWN, (uint)Keys.ControlKey, startNewChar, hwnd));
+                AddEvent(new SKEvent(PInvokeCore.WM_KEYDOWN, (uint)Keys.ControlKey, startNewChar, hwnd));
                 startNewChar = false;
                 haveKeys.HaveCtrl = UnknownGrouping;
             }
 
             if (haveKeys.HaveAlt == 0 && (vk & AltKeyPressed) != 0)
             {
-                AddEvent(new SKEvent(PInvoke.WM_KEYDOWN, (uint)Keys.Menu, startNewChar, hwnd));
+                AddEvent(new SKEvent(PInvokeCore.WM_KEYDOWN, (uint)Keys.Menu, startNewChar, hwnd));
                 startNewChar = false;
                 haveKeys.HaveAlt = UnknownGrouping;
             }
@@ -164,7 +164,7 @@ public partial class SendKeys
             uint oemVal = PInvoke.OemKeyScan((ushort)(0xFF & character));
             for (int i = 0; i < repeat; i++)
             {
-                AddEvent(new SKEvent(PInvoke.WM_CHAR, character, (oemVal & 0xFFFF), hwnd));
+                AddEvent(new SKEvent(PInvokeCore.WM_CHAR, character, (oemVal & 0xFFFF), hwnd));
             }
         }
 
@@ -183,8 +183,8 @@ public partial class SendKeys
     {
         for (int i = 0; i < repeat; i++)
         {
-            AddEvent(new SKEvent(altnoctrldown ? PInvoke.WM_SYSKEYDOWN : PInvoke.WM_KEYDOWN, (uint)vk, s_startNewChar, hwnd));
-            AddEvent(new SKEvent(altnoctrldown ? PInvoke.WM_SYSKEYUP : PInvoke.WM_KEYUP, (uint)vk, s_startNewChar, hwnd));
+            AddEvent(new SKEvent(altnoctrldown ? PInvokeCore.WM_SYSKEYDOWN : PInvokeCore.WM_KEYDOWN, (uint)vk, s_startNewChar, hwnd));
+            AddEvent(new SKEvent(altnoctrldown ? PInvokeCore.WM_SYSKEYUP : PInvokeCore.WM_KEYUP, (uint)vk, s_startNewChar, hwnd));
         }
     }
 
@@ -196,19 +196,19 @@ public partial class SendKeys
     {
         if (haveKeys.HaveShift == level)
         {
-            AddEvent(new SKEvent(PInvoke.WM_KEYUP, (int)Keys.ShiftKey, false, hwnd));
+            AddEvent(new SKEvent(PInvokeCore.WM_KEYUP, (int)Keys.ShiftKey, false, hwnd));
             haveKeys.HaveShift = 0;
         }
 
         if (haveKeys.HaveCtrl == level)
         {
-            AddEvent(new SKEvent(PInvoke.WM_KEYUP, (int)Keys.ControlKey, false, hwnd));
+            AddEvent(new SKEvent(PInvokeCore.WM_KEYUP, (int)Keys.ControlKey, false, hwnd));
             haveKeys.HaveCtrl = 0;
         }
 
         if (haveKeys.HaveAlt == level)
         {
-            AddEvent(new SKEvent(PInvoke.WM_SYSKEYUP, (int)Keys.Menu, false, hwnd));
+            AddEvent(new SKEvent(PInvokeCore.WM_SYSKEYUP, (int)Keys.Menu, false, hwnd));
             haveKeys.HaveAlt = 0;
         }
     }
@@ -485,21 +485,21 @@ public partial class SendKeys
                         // Unlike AddSimpleKey, the bit mask uses Keys, rather than scan keys
                         if (haveKeys.HaveShift == 0 && (vk & (int)Keys.Shift) != 0)
                         {
-                            AddEvent(new SKEvent(PInvoke.WM_KEYDOWN, (uint)Keys.ShiftKey, s_startNewChar, hwnd));
+                            AddEvent(new SKEvent(PInvokeCore.WM_KEYDOWN, (uint)Keys.ShiftKey, s_startNewChar, hwnd));
                             s_startNewChar = false;
                             haveKeys.HaveShift = UnknownGrouping;
                         }
 
                         if (haveKeys.HaveCtrl == 0 && (vk & (int)Keys.Control) != 0)
                         {
-                            AddEvent(new SKEvent(PInvoke.WM_KEYDOWN, (uint)Keys.ControlKey, s_startNewChar, hwnd));
+                            AddEvent(new SKEvent(PInvokeCore.WM_KEYDOWN, (uint)Keys.ControlKey, s_startNewChar, hwnd));
                             s_startNewChar = false;
                             haveKeys.HaveCtrl = UnknownGrouping;
                         }
 
                         if (haveKeys.HaveAlt == 0 && (vk & (int)Keys.Alt) != 0)
                         {
-                            AddEvent(new SKEvent(PInvoke.WM_KEYDOWN, (uint)Keys.Menu, s_startNewChar, hwnd));
+                            AddEvent(new SKEvent(PInvokeCore.WM_KEYDOWN, (uint)Keys.Menu, s_startNewChar, hwnd));
                             s_startNewChar = false;
                             haveKeys.HaveAlt = UnknownGrouping;
                         }
@@ -526,7 +526,7 @@ public partial class SendKeys
                         throw new ArgumentException(string.Format(SR.InvalidSendKeysString, keys));
                     }
 
-                    AddEvent(new SKEvent(PInvoke.WM_KEYDOWN, (uint)Keys.ShiftKey, s_startNewChar, hwnd));
+                    AddEvent(new SKEvent(PInvokeCore.WM_KEYDOWN, (uint)Keys.ShiftKey, s_startNewChar, hwnd));
                     s_startNewChar = false;
                     haveKeys.HaveShift = UnknownGrouping;
                     break;
@@ -537,7 +537,7 @@ public partial class SendKeys
                         throw new ArgumentException(string.Format(SR.InvalidSendKeysString, keys));
                     }
 
-                    AddEvent(new SKEvent(PInvoke.WM_KEYDOWN, (uint)Keys.ControlKey, s_startNewChar, hwnd));
+                    AddEvent(new SKEvent(PInvokeCore.WM_KEYDOWN, (uint)Keys.ControlKey, s_startNewChar, hwnd));
                     s_startNewChar = false;
                     haveKeys.HaveCtrl = UnknownGrouping;
                     break;
@@ -549,7 +549,7 @@ public partial class SendKeys
                     }
 
                     AddEvent(new SKEvent(
-                        haveKeys.HaveCtrl != 0 ? PInvoke.WM_KEYDOWN : PInvoke.WM_SYSKEYDOWN,
+                        haveKeys.HaveCtrl != 0 ? PInvokeCore.WM_KEYDOWN : PInvokeCore.WM_SYSKEYDOWN,
                         (int)Keys.Menu,
                         s_startNewChar,
                         hwnd));
@@ -676,7 +676,7 @@ public partial class SendKeys
 
                     currentInput[0].Anonymous.ki.dwFlags = 0;
 
-                    if (skEvent.WM == PInvoke.WM_CHAR)
+                    if (skEvent.WM == PInvokeCore.WM_CHAR)
                     {
                         // For WM_CHAR, send a KEYEVENTF_UNICODE instead of a Keyboard event to support extended
                         // ASCII characters with no keyboard equivalent. Send currentInput[1] in this case.
@@ -694,7 +694,7 @@ public partial class SendKeys
                         currentInput[0].Anonymous.ki.wScan = 0;
 
                         // Add KeyUp flag if we have a KeyUp.
-                        if (skEvent.WM == PInvoke.WM_KEYUP || skEvent.WM == PInvoke.WM_SYSKEYUP)
+                        if (skEvent.WM == PInvokeCore.WM_KEYUP || skEvent.WM == PInvokeCore.WM_SYSKEYUP)
                         {
                             currentInput[0].Anonymous.ki.dwFlags |= KEYBD_EVENT_FLAGS.KEYEVENTF_KEYUP;
                         }
@@ -762,11 +762,11 @@ public partial class SendKeys
         foreach (SKEvent skEvent in previousEvents)
         {
             bool isOn;
-            if ((skEvent.WM == PInvoke.WM_KEYUP) || (skEvent.WM == PInvoke.WM_SYSKEYUP))
+            if ((skEvent.WM == PInvokeCore.WM_KEYUP) || (skEvent.WM == PInvokeCore.WM_SYSKEYUP))
             {
                 isOn = false;
             }
-            else if ((skEvent.WM == PInvoke.WM_KEYDOWN) || (skEvent.WM == PInvoke.WM_SYSKEYDOWN))
+            else if ((skEvent.WM == PInvokeCore.WM_KEYDOWN) || (skEvent.WM == PInvokeCore.WM_SYSKEYDOWN))
             {
                 isOn = true;
             }
@@ -791,15 +791,15 @@ public partial class SendKeys
 
         if (shift)
         {
-            AddEvent(new SKEvent(PInvoke.WM_KEYUP, (int)Keys.ShiftKey, false, default));
+            AddEvent(new SKEvent(PInvokeCore.WM_KEYUP, (int)Keys.ShiftKey, false, default));
         }
         else if (ctrl)
         {
-            AddEvent(new SKEvent(PInvoke.WM_KEYUP, (int)Keys.ControlKey, false, default));
+            AddEvent(new SKEvent(PInvokeCore.WM_KEYUP, (int)Keys.ControlKey, false, default));
         }
         else if (alt)
         {
-            AddEvent(new SKEvent(PInvoke.WM_SYSKEYUP, (int)Keys.Menu, false, default));
+            AddEvent(new SKEvent(PInvokeCore.WM_SYSKEYUP, (int)Keys.Menu, false, default));
         }
     }
 
@@ -827,7 +827,7 @@ public partial class SendKeys
 
     private static void CheckGlobalKeys(SKEvent skEvent)
     {
-        if (skEvent.WM == PInvoke.WM_KEYDOWN)
+        if (skEvent.WM == PInvokeCore.WM_KEYDOWN)
         {
             switch (skEvent.ParamL)
             {

@@ -315,7 +315,7 @@ public partial class Form : ContainerControl
                 // If this.MdiClient is not null it means this.IsMdiContainer == true.
                 if (_ctlClient is not null && _ctlClient.IsHandleCreated)
                 {
-                    IntPtr hwnd = PInvoke.SendMessage(_ctlClient, PInvoke.WM_MDIGETACTIVE);
+                    IntPtr hwnd = PInvokeCore.SendMessage(_ctlClient, PInvokeCore.WM_MDIGETACTIVE);
                     mdiChild = FromHandle(hwnd) as Form;
                 }
             }
@@ -1383,7 +1383,6 @@ public partial class Form : ContainerControl
     public event EventHandler? MinimumSizeChanged
     {
         add => Events.AddHandler(s_minimumSizeChangedEvent, value);
-
         remove => Events.RemoveHandler(s_minimumSizeChangedEvent, value);
     }
 
@@ -1396,48 +1395,23 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.FormMaximizeBoxDescr))]
     public bool MaximizeBox
     {
-        get
-        {
-            return _formState[s_formStateMaximizeBox] != 0;
-        }
+        get => _formState[s_formStateMaximizeBox] != 0;
         set
         {
-            if (value)
-            {
-                _formState[s_formStateMaximizeBox] = 1;
-            }
-            else
-            {
-                _formState[s_formStateMaximizeBox] = 0;
-            }
-
+            _formState[s_formStateMaximizeBox] = value ? 1 : 0;
             UpdateFormStyles();
         }
     }
 
     /// <summary>
-    ///  Gets an array of forms that represent the
-    ///  multiple document interface (MDI) child forms that are parented to this
-    ///  form.
+    ///  Gets an array of forms that represent the multiple document interface (MDI) child forms
+    ///  that are parented to this form.
     /// </summary>
     [SRCategory(nameof(SR.CatWindowStyle))]
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [SRDescription(nameof(SR.FormMDIChildrenDescr))]
-    public Form[] MdiChildren
-    {
-        get
-        {
-            if (_ctlClient is not null)
-            {
-                return _ctlClient.MdiChildren;
-            }
-            else
-            {
-                return [];
-            }
-        }
-    }
+    public Form[] MdiChildren => _ctlClient is not null ? _ctlClient.MdiChildren : ([]);
 
     /// <summary>
     ///  Gets or sets the anchoring for minimized MDI children.
@@ -1461,13 +1435,7 @@ public partial class Form : ContainerControl
     ///  if this is an MDI container form.
     ///  Represents the client area of a Multiple Document Interface (MDI) Form window, also known as the MDI child window.
     /// </summary>
-    internal MdiClient? MdiClient
-    {
-        get
-        {
-            return _ctlClient;
-        }
-    }
+    internal MdiClient? MdiClient => _ctlClient;
 
     /// <summary>
     ///  Indicates the current multiple document
@@ -1727,11 +1695,7 @@ public partial class Form : ContainerControl
     [SRDescription(nameof(SR.ControlRightToLeftLayoutDescr))]
     public virtual bool RightToLeftLayout
     {
-        get
-        {
-            return _rightToLeftLayout;
-        }
-
+        get => _rightToLeftLayout;
         set
         {
             if (value != _rightToLeftLayout)
@@ -2140,7 +2104,7 @@ public partial class Form : ContainerControl
             //
             if (_formState[s_formStateSWCalled] == 0)
             {
-                PInvoke.SendMessage(this, PInvoke.WM_SHOWWINDOW, (WPARAM)(BOOL)value);
+                PInvokeCore.SendMessage(this, PInvokeCore.WM_SHOWWINDOW, (WPARAM)(BOOL)value);
             }
         }
         else
@@ -2798,7 +2762,7 @@ public partial class Form : ContainerControl
             {
                 if (MdiParentInternal.MdiClient is not null)
                 {
-                    PInvoke.SendMessage(MdiParentInternal.MdiClient, PInvoke.WM_MDIACTIVATE, (WPARAM)HWND);
+                    PInvokeCore.SendMessage(MdiParentInternal.MdiClient, PInvokeCore.WM_MDIACTIVATE, (WPARAM)HWND);
                 }
             }
             else
@@ -3224,7 +3188,7 @@ public partial class Form : ContainerControl
         if (IsHandleCreated)
         {
             _closeReason = CloseReason.UserClosing;
-            PInvoke.SendMessage(this, PInvoke.WM_CLOSE);
+            PInvokeCore.SendMessage(this, PInvokeCore.WM_CLOSE);
         }
         else
         {
@@ -3387,7 +3351,7 @@ public partial class Form : ContainerControl
                 Icon? icon = Icon;
                 if (icon is not null && !TaskbarOwner.Handle.IsNull)
                 {
-                    PInvoke.SendMessage(TaskbarOwner, PInvoke.WM_SETICON, (WPARAM)PInvoke.ICON_BIG, (LPARAM)icon.Handle);
+                    PInvokeCore.SendMessage(TaskbarOwner, PInvokeCore.WM_SETICON, (WPARAM)PInvoke.ICON_BIG, (LPARAM)icon.Handle);
                 }
             }
 
@@ -3747,7 +3711,7 @@ public partial class Form : ContainerControl
         {
             if (MdiParentInternal.MdiClient is not null)
             {
-                PInvoke.SendMessage(MdiParentInternal.MdiClient, PInvoke.WM_MDIACTIVATE, this);
+                PInvokeCore.SendMessage(MdiParentInternal.MdiClient, PInvokeCore.WM_MDIACTIVATE, this);
             }
 
             return Focused;
@@ -4703,7 +4667,7 @@ public partial class Form : ContainerControl
 
         // Process MDI accelerator keys.
         bool retValue = false;
-        MSG win32Message = msg;
+        MSG win32Message = msg.ToMSG();
         if (_ctlClient is not null && _ctlClient.Handle != IntPtr.Zero &&
             PInvoke.TranslateMDISysAccel(_ctlClient.HWND, win32Message))
         {
@@ -4916,7 +4880,7 @@ public partial class Form : ContainerControl
         {
             // First put all the owned windows into a list
             callback = new EnumThreadWindowsCallback(HWND);
-            PInvoke.EnumCurrentThreadWindows(callback.Callback);
+            PInvokeCore.EnumCurrentThreadWindows(callback.Callback);
 
             // Reset the owner of the windows in the list
             callback.ResetOwners();
@@ -5093,7 +5057,7 @@ public partial class Form : ContainerControl
             PInvoke.SetActiveWindow(MdiParentInternal);
             if (MdiParentInternal.MdiClient is not null)
             {
-                PInvoke.SendMessage(MdiParentInternal.MdiClient, PInvoke.WM_MDIACTIVATE, (WPARAM)HWND);
+                PInvokeCore.SendMessage(MdiParentInternal.MdiClient, PInvokeCore.WM_MDIACTIVATE, (WPARAM)HWND);
             }
         }
         else
@@ -5647,7 +5611,7 @@ public partial class Form : ContainerControl
         HWND captureHwnd = PInvoke.GetCapture();
         if (!captureHwnd.IsNull)
         {
-            PInvoke.SendMessage(captureHwnd, PInvoke.WM_CANCELMODE);
+            PInvokeCore.SendMessage(captureHwnd, PInvokeCore.WM_CANCELMODE);
             PInvoke.ReleaseCapture();
         }
 
@@ -6135,7 +6099,7 @@ public partial class Form : ContainerControl
                     }
                 }
 
-                PInvoke.SendMessage(_ctlClient, PInvoke.WM_MDISETMENU, (WPARAM)dummyMenu.Value);
+                PInvokeCore.SendMessage(_ctlClient, PInvokeCore.WM_MDISETMENU, (WPARAM)dummyMenu.Value);
             }
 
             // (New fix: Only destroy Win32 Menu if using a MenuStrip)
@@ -6398,15 +6362,15 @@ public partial class Form : ContainerControl
 
                 if (_smallIcon is not null)
                 {
-                    PInvoke.SendMessage(this, PInvoke.WM_SETICON, (WPARAM)PInvoke.ICON_SMALL, (LPARAM)_smallIcon.Handle);
+                    PInvokeCore.SendMessage(this, PInvokeCore.WM_SETICON, (WPARAM)PInvoke.ICON_SMALL, (LPARAM)_smallIcon.Handle);
                 }
 
-                PInvoke.SendMessage(this, PInvoke.WM_SETICON, (WPARAM)PInvoke.ICON_BIG, (LPARAM)icon.Handle);
+                PInvokeCore.SendMessage(this, PInvokeCore.WM_SETICON, (WPARAM)PInvoke.ICON_BIG, (LPARAM)icon.Handle);
             }
             else
             {
-                PInvoke.SendMessage(this, PInvoke.WM_SETICON, (WPARAM)PInvoke.ICON_SMALL);
-                PInvoke.SendMessage(this, PInvoke.WM_SETICON, (WPARAM)PInvoke.ICON_BIG);
+                PInvokeCore.SendMessage(this, PInvokeCore.WM_SETICON, (WPARAM)PInvoke.ICON_SMALL);
+                PInvokeCore.SendMessage(this, PInvokeCore.WM_SETICON, (WPARAM)PInvoke.ICON_BIG);
             }
 
             if (WindowState == FormWindowState.Maximized && MdiParent?.MdiControlStrip is not null)
@@ -6607,7 +6571,7 @@ public partial class Form : ContainerControl
         FormClosingEventArgs e = new(CloseReason, false);
 
         // Pass 1 (WM_CLOSE & WM_QUERYENDSESSION)... Closing
-        if (m.Msg != (int)PInvoke.WM_ENDSESSION)
+        if (m.Msg != (int)PInvokeCore.WM_ENDSESSION)
         {
             if (Modal)
             {
@@ -6686,7 +6650,7 @@ public partial class Form : ContainerControl
                 OnFormClosing(e);
             }
 
-            if (m.MsgInternal == PInvoke.WM_QUERYENDSESSION)
+            if (m.MsgInternal == PInvokeCore.WM_QUERYENDSESSION)
             {
                 m.ResultInternal = (LRESULT)(BOOL)!e.Cancel;
             }
@@ -6708,7 +6672,7 @@ public partial class Form : ContainerControl
 
         // Pass 2 (WM_CLOSE & WM_ENDSESSION)... Fire closed
         // event on all mdi children and ourselves
-        if (m.Msg != (int)PInvoke.WM_QUERYENDSESSION)
+        if (m.Msg != (int)PInvokeCore.WM_QUERYENDSESSION)
         {
             FormClosedEventArgs fc;
             if (!e.Cancel)
@@ -7065,22 +7029,22 @@ public partial class Form : ContainerControl
     {
         switch (m.MsgInternal)
         {
-            case PInvoke.WM_NCACTIVATE:
+            case PInvokeCore.WM_NCACTIVATE:
                 base.WndProc(ref m);
                 break;
-            case PInvoke.WM_NCLBUTTONDOWN:
-            case PInvoke.WM_NCRBUTTONDOWN:
-            case PInvoke.WM_NCMBUTTONDOWN:
-            case PInvoke.WM_NCXBUTTONDOWN:
+            case PInvokeCore.WM_NCLBUTTONDOWN:
+            case PInvokeCore.WM_NCRBUTTONDOWN:
+            case PInvokeCore.WM_NCMBUTTONDOWN:
+            case PInvokeCore.WM_NCXBUTTONDOWN:
                 WmNcButtonDown(ref m);
                 break;
-            case PInvoke.WM_ACTIVATE:
+            case PInvokeCore.WM_ACTIVATE:
                 WmActivate(ref m);
                 break;
-            case PInvoke.WM_MDIACTIVATE:
+            case PInvokeCore.WM_MDIACTIVATE:
                 WmMdiActivate(ref m);
                 break;
-            case PInvoke.WM_CLOSE:
+            case PInvokeCore.WM_CLOSE:
                 if (CloseReason == CloseReason.None)
                 {
                     CloseReason = CloseReason.TaskManagerClosing;
@@ -7089,57 +7053,57 @@ public partial class Form : ContainerControl
                 WmClose(ref m);
                 break;
 
-            case PInvoke.WM_QUERYENDSESSION:
-            case PInvoke.WM_ENDSESSION:
+            case PInvokeCore.WM_QUERYENDSESSION:
+            case PInvokeCore.WM_ENDSESSION:
                 CloseReason = CloseReason.WindowsShutDown;
                 WmClose(ref m);
                 break;
-            case PInvoke.WM_ENTERSIZEMOVE:
+            case PInvokeCore.WM_ENTERSIZEMOVE:
                 WmEnterSizeMove();
                 DefWndProc(ref m);
                 break;
-            case PInvoke.WM_EXITSIZEMOVE:
+            case PInvokeCore.WM_EXITSIZEMOVE:
                 WmExitSizeMove();
                 DefWndProc(ref m);
                 break;
-            case PInvoke.WM_CREATE:
+            case PInvokeCore.WM_CREATE:
                 WmCreate(ref m);
                 break;
-            case PInvoke.WM_ERASEBKGND:
+            case PInvokeCore.WM_ERASEBKGND:
                 WmEraseBkgnd(ref m);
                 break;
 
-            case PInvoke.WM_NCDESTROY:
+            case PInvokeCore.WM_NCDESTROY:
                 WmNCDestroy(ref m);
                 break;
-            case PInvoke.WM_NCHITTEST:
+            case PInvokeCore.WM_NCHITTEST:
                 WmNCHitTest(ref m);
                 break;
-            case PInvoke.WM_SHOWWINDOW:
+            case PInvokeCore.WM_SHOWWINDOW:
                 WmShowWindow(ref m);
                 break;
-            case PInvoke.WM_SIZE:
+            case PInvokeCore.WM_SIZE:
                 WmSize(ref m);
                 break;
-            case PInvoke.WM_SYSCOMMAND:
+            case PInvokeCore.WM_SYSCOMMAND:
                 WmSysCommand(ref m);
                 break;
-            case PInvoke.WM_GETMINMAXINFO:
+            case PInvokeCore.WM_GETMINMAXINFO:
                 WmGetMinMaxInfo(ref m);
                 break;
-            case PInvoke.WM_WINDOWPOSCHANGED:
+            case PInvokeCore.WM_WINDOWPOSCHANGED:
                 WmWindowPosChanged(ref m);
                 break;
-            // case PInvoke.WM_WINDOWPOSCHANGING:
+            // case PInvokeCore.WM_WINDOWPOSCHANGING:
             //    WmWindowPosChanging(ref m);
             //    break;
-            case PInvoke.WM_ENTERMENULOOP:
+            case PInvokeCore.WM_ENTERMENULOOP:
                 WmEnterMenuLoop(ref m);
                 break;
-            case PInvoke.WM_EXITMENULOOP:
+            case PInvokeCore.WM_EXITMENULOOP:
                 WmExitMenuLoop(ref m);
                 break;
-            case PInvoke.WM_CAPTURECHANGED:
+            case PInvokeCore.WM_CAPTURECHANGED:
                 base.WndProc(ref m);
 
                 // This is a work-around for the Win32 scroll bar; it doesn't release
@@ -7152,10 +7116,10 @@ public partial class Form : ContainerControl
                 }
 
                 break;
-            case PInvoke.WM_GETDPISCALEDSIZE:
+            case PInvokeCore.WM_GETDPISCALEDSIZE:
                 WmGetDpiScaledSize(ref m);
                 break;
-            case PInvoke.WM_DPICHANGED:
+            case PInvokeCore.WM_DPICHANGED:
                 WmDpiChanged(ref m);
                 break;
             default:

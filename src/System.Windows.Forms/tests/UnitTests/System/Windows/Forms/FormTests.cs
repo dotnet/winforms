@@ -193,10 +193,10 @@ public class FormTests
         using Form form = new();
         Assert.True(form.Handle != IntPtr.Zero);
 
-        HICON hSmallIcon = (HICON)PInvoke.SendMessage(form, PInvoke.WM_GETICON, (WPARAM)PInvoke.ICON_SMALL);
+        HICON hSmallIcon = (HICON)PInvokeCore.SendMessage(form, PInvokeCore.WM_GETICON, (WPARAM)PInvoke.ICON_SMALL);
         Assert.False(hSmallIcon.IsNull);
 
-        HICON hLargeIcon = (HICON)PInvoke.SendMessage(form, PInvoke.WM_GETICON, (WPARAM)PInvoke.ICON_BIG);
+        HICON hLargeIcon = (HICON)PInvokeCore.SendMessage(form, PInvokeCore.WM_GETICON, (WPARAM)PInvoke.ICON_BIG);
         Assert.False(hLargeIcon.IsNull);
 
         // normal form doesn't have WS_EX.DLGMODALFRAME set, and show icon
@@ -985,7 +985,7 @@ public class FormTests
         form.Location = new Point(10, 11);
         form.Size = new Size(200, 210);
 
-        PInvoke.SendMessage(form, PInvoke.WM_SYSCOMMAND, (WPARAM)PInvoke.SC_MAXIMIZE);
+        PInvokeCore.SendMessage(form, PInvokeCore.WM_SYSCOMMAND, (WPARAM)PInvoke.SC_MAXIMIZE);
 
         form.Location = new Point(20, 21);
         form.Size = new Size(300, 310);
@@ -994,7 +994,7 @@ public class FormTests
         Assert.NotEqual(new Point(20, 21), form.Location);
         Assert.NotEqual(new Size(300, 310), form.Size);
 
-        PInvoke.SendMessage(form, PInvoke.WM_SYSCOMMAND, (WPARAM)PInvoke.SC_RESTORE);
+        PInvokeCore.SendMessage(form, PInvokeCore.WM_SYSCOMMAND, (WPARAM)PInvoke.SC_RESTORE);
 
         Assert.Equal(new Point(20, 21), form.Location);
         Assert.Equal(new Size(300, 310), form.Size);
@@ -1039,8 +1039,8 @@ public class FormTests
 
         form.ShowIcon = showIcon;
 
-        HICON hSmallIcon = (HICON)PInvoke.SendMessage(form, PInvoke.WM_GETICON, (WPARAM)PInvoke.ICON_SMALL);
-        HICON hLargeIcon = (HICON)PInvoke.SendMessage(form, PInvoke.WM_GETICON, (WPARAM)PInvoke.ICON_BIG);
+        HICON hSmallIcon = (HICON)PInvokeCore.SendMessage(form, PInvokeCore.WM_GETICON, (WPARAM)PInvoke.ICON_SMALL);
+        HICON hLargeIcon = (HICON)PInvokeCore.SendMessage(form, PInvokeCore.WM_GETICON, (WPARAM)PInvoke.ICON_BIG);
         Assert.Equal(expectedIconNull, hSmallIcon.IsNull);
         Assert.Equal(expectedIconNull, hLargeIcon.IsNull);
     }
@@ -1240,23 +1240,23 @@ public class FormTests
         control.Show();
 
         control.ShowIcon = false;
-        HICON hSmallIcon = (HICON)PInvoke.SendMessage(control, PInvoke.WM_GETICON, (WPARAM)PInvoke.ICON_SMALL);
+        HICON hSmallIcon = (HICON)PInvokeCore.SendMessage(control, PInvokeCore.WM_GETICON, (WPARAM)PInvoke.ICON_SMALL);
         Assert.True(hSmallIcon.IsNull);
-        HICON hLargeIcon = (HICON)PInvoke.SendMessage(control, PInvoke.WM_GETICON, (WPARAM)PInvoke.ICON_BIG);
+        HICON hLargeIcon = (HICON)PInvokeCore.SendMessage(control, PInvokeCore.WM_GETICON, (WPARAM)PInvoke.ICON_BIG);
         Assert.True(hLargeIcon.IsNull);
 
         control.WindowState = FormWindowState.Maximized;
         control.ShowIcon = false;
-        hSmallIcon = (HICON)PInvoke.SendMessage(control, PInvoke.WM_GETICON, (WPARAM)PInvoke.ICON_SMALL);
+        hSmallIcon = (HICON)PInvokeCore.SendMessage(control, PInvokeCore.WM_GETICON, (WPARAM)PInvoke.ICON_SMALL);
         Assert.True(hSmallIcon.IsNull);
-        hLargeIcon = (HICON)PInvoke.SendMessage(control, PInvoke.WM_GETICON, (WPARAM)PInvoke.ICON_BIG);
+        hLargeIcon = (HICON)PInvokeCore.SendMessage(control, PInvokeCore.WM_GETICON, (WPARAM)PInvoke.ICON_BIG);
         Assert.True(hLargeIcon.IsNull);
         Assert.False(menuStrip.Items[0].Visible);
 
         control.ShowIcon = true;
-        hSmallIcon = (HICON)PInvoke.SendMessage(control, PInvoke.WM_GETICON, (WPARAM)PInvoke.ICON_SMALL);
+        hSmallIcon = (HICON)PInvokeCore.SendMessage(control, PInvokeCore.WM_GETICON, (WPARAM)PInvoke.ICON_SMALL);
         Assert.False(hSmallIcon.IsNull);
-        hLargeIcon = (HICON)PInvoke.SendMessage(control, PInvoke.WM_GETICON, (WPARAM)PInvoke.ICON_BIG);
+        hLargeIcon = (HICON)PInvokeCore.SendMessage(control, PInvokeCore.WM_GETICON, (WPARAM)PInvoke.ICON_BIG);
         Assert.False(hLargeIcon.IsNull);
         Assert.True(menuStrip.Items[0].Visible);
     }
@@ -2640,7 +2640,7 @@ public class FormTests
     public void Form_DoesNot_PreventShutDown()
     {
         using SubForm form = new();
-        var message = Message.Create(HWND.Null, PInvoke.WM_QUERYENDSESSION, wparam: default, lparam: default);
+        var message = Message.Create(HWND.Null, PInvokeCore.WM_QUERYENDSESSION, wparam: default, lparam: default);
         form.WndProc(ref message);
         Assert.True((BOOL)message.ResultInternal);
     }
