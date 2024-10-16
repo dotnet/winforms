@@ -85,17 +85,17 @@ public partial class Control
             // to occur within control.
             switch (m.MsgInternal)
             {
-                case PInvoke.WM_MOUSELEAVE:
+                case PInvokeCore.WM_MOUSELEAVE:
                     _control.UnhookMouseEvent();
                     break;
 
-                case PInvoke.WM_MOUSEMOVE:
+                case PInvokeCore.WM_MOUSEMOVE:
                     if (!_control.GetState(States.TrackingMouseEvent))
                     {
                         _control.HookMouseEvent();
                         if (!_control.GetState(States.MouseEnterPending))
                         {
-                            PInvoke.SendMessage(_control, RegisteredMessage.WM_MOUSEENTER);
+                            PInvokeCore.SendMessage(_control, RegisteredMessage.WM_MOUSEENTER);
                         }
                         else
                         {
@@ -105,7 +105,7 @@ public partial class Control
 
                     break;
 
-                case PInvoke.WM_MOUSEWHEEL:
+                case PInvokeCore.WM_MOUSEWHEEL:
                     // TrackMouseEvent's mousehover implementation doesn't watch the wheel
                     // correctly...
                     _control.ResetMouseEventArgs();

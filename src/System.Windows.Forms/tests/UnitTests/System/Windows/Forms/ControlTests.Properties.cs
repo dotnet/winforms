@@ -10525,7 +10525,7 @@ public partial class ControlTests
     {
         using SubControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
-        PInvoke.SendMessage(control, PInvoke.WM_UPDATEUISTATE, (WPARAM)wParam);
+        PInvokeCore.SendMessage(control, PInvokeCore.WM_UPDATEUISTATE, (WPARAM)wParam);
         Assert.Equal(expected, control.ShowFocusCues);
     }
 
@@ -10584,7 +10584,7 @@ public partial class ControlTests
     {
         using SubControl control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
-        PInvoke.SendMessage(control, PInvoke.WM_UPDATEUISTATE, (WPARAM)wParam);
+        PInvokeCore.SendMessage(control, PInvokeCore.WM_UPDATEUISTATE, (WPARAM)wParam);
         Assert.Equal(expected, control.ShowKeyboardCues);
     }
 

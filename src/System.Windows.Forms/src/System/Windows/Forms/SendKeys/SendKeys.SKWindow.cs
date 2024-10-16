@@ -20,7 +20,7 @@ public partial class SendKeys
 
         protected override void WndProc(ref Message m)
         {
-            if (m.Msg == (int)PInvoke.WM_CANCELJOURNAL)
+            if (m.Msg == (int)PInvokeCore.WM_CANCELJOURNAL)
             {
                 try
                 {

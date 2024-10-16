@@ -106,7 +106,7 @@ public partial class Screen
                 if (SystemInformation.MultiMonitorSupport)
                 {
                     List<Screen> screens = [];
-                    PInvoke.EnumDisplayMonitors((HMONITOR hmonitor, HDC hdc) =>
+                    PInvokeCore.EnumDisplayMonitors((HMONITOR hmonitor, HDC hdc) =>
                     {
                         screens.Add(new(hmonitor, hdc));
                         return true;

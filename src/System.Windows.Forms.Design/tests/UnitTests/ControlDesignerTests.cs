@@ -228,7 +228,7 @@ public class ControlDesignerTests
         designer.Initialize(button);
         Message m = new Message
         {
-            Msg = (int)PInvoke.WM_PAINT
+            Msg = (int)PInvokeCore.WM_PAINT
         };
         designer.TestAccessor().Dynamic.WndProc(ref m);
     }

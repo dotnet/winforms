@@ -1232,9 +1232,9 @@ public partial class ScrollableControl : Control, IArrangedElement
     {
         if (!IsMirrored)
         {
-            PInvoke.SendMessage(
+            PInvokeCore.SendMessage(
                 this,
-                PInvoke.WM_HSCROLL,
+                PInvokeCore.WM_HSCROLL,
                 (WPARAM)(RightToLeft == RightToLeft.Yes ? (int)SCROLLBAR_COMMAND.SB_RIGHT : (int)SCROLLBAR_COMMAND.SB_LEFT),
                 0);
         }
@@ -1466,13 +1466,13 @@ public partial class ScrollableControl : Control, IArrangedElement
     {
         switch (m.MsgInternal)
         {
-            case PInvoke.WM_VSCROLL:
+            case PInvokeCore.WM_VSCROLL:
                 WmVScroll(ref m);
                 break;
-            case PInvoke.WM_HSCROLL:
+            case PInvokeCore.WM_HSCROLL:
                 WmHScroll(ref m);
                 break;
-            case PInvoke.WM_SETTINGCHANGE:
+            case PInvokeCore.WM_SETTINGCHANGE:
                 WmSettingChange(ref m);
                 break;
             default:

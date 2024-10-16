@@ -84,7 +84,7 @@ public sealed partial class Application
 
             _handle = target;
 
-            _id = PInvoke.GetCurrentThreadId();
+            _id = PInvokeCore.GetCurrentThreadId();
             _messageLoopCount = 0;
             t_currentThreadContext = this;
 
@@ -277,7 +277,7 @@ public sealed partial class Application
             try
             {
                 // We can only clean up if we're being called on our own thread.
-                if (PInvoke.GetCurrentThreadId() != _id)
+                if (PInvokeCore.GetCurrentThreadId() != _id)
                 {
                     Debug.Assert(!disposing, "Shouldn't be getting dispose from another thread.");
                     return;
@@ -361,7 +361,7 @@ public sealed partial class Application
                 // and do not call Dispose. Otherwise we would destroy
                 // controls that are living on the parking window.
                 uint hwndThread = PInvoke.GetWindowThreadProcessId(_parkingWindows[0], out _);
-                uint currentThread = PInvoke.GetCurrentThreadId();
+                uint currentThread = PInvokeCore.GetCurrentThreadId();
 
                 for (int i = 0; i < _parkingWindows.Count; i++)
                 {
@@ -511,7 +511,7 @@ public sealed partial class Application
         /// </summary>
         internal static ThreadContext? FromId(uint id)
         {
-            if (!s_contextHash.TryGetValue(id, out ThreadContext? context) && id == PInvoke.GetCurrentThreadId())
+            if (!s_contextHash.TryGetValue(id, out ThreadContext? context) && id == PInvokeCore.GetCurrentThreadId())
             {
                 context = Create();
             }
@@ -664,7 +664,7 @@ public sealed partial class Application
             // idle, at which point we can tear down.
             //
             // We can't follow the KB article exactly, because we don't have an HWND to PostMessage to.
-            PInvoke.PostThreadMessage(_id, PInvoke.WM_QUIT, default, default);
+            PInvoke.PostThreadMessage(_id, PInvokeCore.WM_QUIT, default, default);
             PostedQuit = true;
         }
 
@@ -932,7 +932,7 @@ public sealed partial class Application
                 return false;
             }
 
-            if (msg.message == PInvoke.WM_CHAR)
+            if (msg.message == PInvokeCore.WM_CHAR)
             {
                 // 1 = extended keyboard, 46 = scan code
                 int breakLParamMask = 0x1460000;

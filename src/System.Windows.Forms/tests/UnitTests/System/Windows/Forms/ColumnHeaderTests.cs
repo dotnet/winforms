@@ -218,7 +218,7 @@ public class ColumnHeaderTests
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         listView.Columns[columnIndex].DisplayIndex = value;
         int[] result = new int[3];
-        Assert.Equal(1, (int)PInvoke.SendMessage(listView, PInvoke.LVM_GETCOLUMNORDERARRAY, 3, ref result[0]));
+        Assert.Equal(1, (int)PInvokeCore.SendMessage(listView, PInvoke.LVM_GETCOLUMNORDERARRAY, 3, ref result[0]));
         Assert.Equal(expectedDisplayIndices, result);
     }
 
@@ -444,7 +444,7 @@ public class ColumnHeaderTests
         {
             mask = LVCOLUMNW_MASK.LVCF_IMAGE
         };
-        Assert.Equal(1, (int)PInvoke.SendMessage(listView, PInvoke.LVM_GETCOLUMNW, 0, ref column));
+        Assert.Equal(1, (int)PInvokeCore.SendMessage(listView, PInvoke.LVM_GETCOLUMNW, 0, ref column));
         Assert.Equal(0, column.iImage);
     }
 
@@ -474,7 +474,7 @@ public class ColumnHeaderTests
             mask = LVCOLUMNW_MASK.LVCF_IMAGE | LVCOLUMNW_MASK.LVCF_FMT,
             fmt = LVCOLUMNW_FORMAT.LVCFMT_IMAGE
         };
-        Assert.Equal(1, (int)PInvoke.SendMessage(listView, PInvoke.LVM_GETCOLUMNW, 0, ref column));
+        Assert.Equal(1, (int)PInvokeCore.SendMessage(listView, PInvoke.LVM_GETCOLUMNW, 0, ref column));
         Assert.Equal(expected, column.iImage);
     }
 
@@ -664,7 +664,7 @@ public class ColumnHeaderTests
         {
             mask = LVCOLUMNW_MASK.LVCF_IMAGE
         };
-        Assert.Equal(1, (int)PInvoke.SendMessage(listView, PInvoke.LVM_GETCOLUMNW, 0, ref column));
+        Assert.Equal(1, (int)PInvokeCore.SendMessage(listView, PInvoke.LVM_GETCOLUMNW, 0, ref column));
         Assert.Equal(0, column.iImage);
     }
 
@@ -696,7 +696,7 @@ public class ColumnHeaderTests
             mask = LVCOLUMNW_MASK.LVCF_IMAGE | LVCOLUMNW_MASK.LVCF_FMT,
             fmt = LVCOLUMNW_FORMAT.LVCFMT_IMAGE
         };
-        Assert.Equal(1, (int)PInvoke.SendMessage(listView, PInvoke.LVM_GETCOLUMNW, 0, ref column));
+        Assert.Equal(1, (int)PInvokeCore.SendMessage(listView, PInvoke.LVM_GETCOLUMNW, 0, ref column));
         Assert.Equal(expected, column.iImage);
     }
 
@@ -1012,7 +1012,7 @@ public class ColumnHeaderTests
             pszText = buffer,
             cchTextMax = 256
         };
-        Assert.Equal(1, (int)PInvoke.SendMessage(listView, PInvoke.LVM_GETCOLUMNW, 0, ref column));
+        Assert.Equal(1, (int)PInvokeCore.SendMessage(listView, PInvoke.LVM_GETCOLUMNW, 0, ref column));
         Assert.Equal(expected, new string(column.pszText));
     }
 
@@ -1201,7 +1201,7 @@ public class ColumnHeaderTests
         {
             mask = LVCOLUMNW_MASK.LVCF_FMT
         };
-        Assert.Equal(1, (int)PInvoke.SendMessage(listView, PInvoke.LVM_GETCOLUMNW, (WPARAM)columnIndex, ref column));
+        Assert.Equal(1, (int)PInvokeCore.SendMessage(listView, PInvoke.LVM_GETCOLUMNW, (WPARAM)columnIndex, ref column));
         Assert.Equal(expected, (int)column.fmt);
     }
 
@@ -1359,7 +1359,7 @@ public class ColumnHeaderTests
 
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         header.Width = value;
-        Assert.Equal(value, (int)PInvoke.SendMessage(listView, PInvoke.LVM_GETCOLUMNWIDTH));
+        Assert.Equal(value, (int)PInvokeCore.SendMessage(listView, PInvoke.LVM_GETCOLUMNWIDTH));
     }
 
     [WinFormsTheory]
@@ -1377,7 +1377,7 @@ public class ColumnHeaderTests
 
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         header.Width = value;
-        Assert.True(PInvoke.SendMessage(listView, PInvoke.LVM_GETCOLUMNWIDTH) > 0);
+        Assert.True(PInvokeCore.SendMessage(listView, PInvoke.LVM_GETCOLUMNWIDTH) > 0);
     }
 
     [WinFormsTheory]

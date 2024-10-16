@@ -243,7 +243,7 @@ internal partial class DesignerActionUI
         {
             switch (m.MsgInternal)
             {
-                case PInvoke.WM_ACTIVATE:
+                case PInvokeCore.WM_ACTIVATE:
                     WmActivate(ref m);
                     return;
             }

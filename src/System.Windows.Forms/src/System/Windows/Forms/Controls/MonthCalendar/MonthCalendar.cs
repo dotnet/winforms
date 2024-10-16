@@ -396,7 +396,7 @@ public partial class MonthCalendar : Control
                 }
                 else
                 {
-                    PInvoke.SendMessage(this, PInvoke.MCM_SETFIRSTDAYOFWEEK, 0, (nint)value);
+                    PInvokeCore.SendMessage(this, PInvoke.MCM_SETFIRSTDAYOFWEEK, 0, (nint)value);
                 }
 
                 UpdateDisplayRange();
@@ -486,7 +486,7 @@ public partial class MonthCalendar : Control
 
             if (IsHandleCreated)
             {
-                if (PInvoke.SendMessage(this, PInvoke.MCM_SETMAXSELCOUNT, (WPARAM)value) == 0)
+                if (PInvokeCore.SendMessage(this, PInvoke.MCM_SETMAXSELCOUNT, (WPARAM)value) == 0)
                 {
                     throw new ArgumentException(string.Format(SR.MonthCalendarMaxSelCount, value.ToString("D")), nameof(value));
                 }
@@ -620,7 +620,7 @@ public partial class MonthCalendar : Control
 
             if (IsHandleCreated)
             {
-                PInvoke.SendMessage(this, PInvoke.MCM_SETMONTHDELTA, (WPARAM)value);
+                PInvokeCore.SendMessage(this, PInvoke.MCM_SETMONTHDELTA, (WPARAM)value);
             }
 
             _scrollChange = value;
@@ -800,7 +800,7 @@ public partial class MonthCalendar : Control
             if (IsHandleCreated)
             {
                 RECT rect = default;
-                if (PInvoke.SendMessage(this, PInvoke.MCM_GETMINREQRECT, 0, ref rect) == 0)
+                if (PInvokeCore.SendMessage(this, PInvoke.MCM_GETMINREQRECT, 0, ref rect) == 0)
                 {
                     throw new InvalidOperationException(SR.InvalidSingleMonthSize);
                 }
@@ -864,7 +864,7 @@ public partial class MonthCalendar : Control
             if (IsHandleCreated)
             {
                 SYSTEMTIME systemTime = default;
-                int result = (int)PInvoke.SendMessage(this, PInvoke.MCM_GETTODAY, 0, ref systemTime);
+                int result = (int)PInvokeCore.SendMessage(this, PInvoke.MCM_GETTODAY, 0, ref systemTime);
                 Debug.Assert(result != 0, "MCM_GETTODAY failed");
                 return ((DateTime)systemTime).Date;
             }
@@ -1237,7 +1237,7 @@ public partial class MonthCalendar : Control
         // If the width we've calculated is too small to fit the Today string, enlarge the width to fit
         if (IsHandleCreated)
         {
-            int maxTodayWidth = (int)PInvoke.SendMessage(this, PInvoke.MCM_GETMAXTODAYWIDTH);
+            int maxTodayWidth = (int)PInvokeCore.SendMessage(this, PInvoke.MCM_GETMAXTODAYWIDTH);
             if (maxTodayWidth > minSize.Width)
             {
                 minSize.Width = maxTodayWidth;
@@ -1253,7 +1253,7 @@ public partial class MonthCalendar : Control
     private SelectionRange GetMonthRange(uint flag)
     {
         Span<SYSTEMTIME> times = stackalloc SYSTEMTIME[2];
-        PInvoke.SendMessage(this, PInvoke.MCM_GETMONTHRANGE, (WPARAM)(int)flag, ref times[0]);
+        PInvokeCore.SendMessage(this, PInvoke.MCM_GETMONTHRANGE, (WPARAM)(int)flag, ref times[0]);
         return new SelectionRange
         {
             Start = (DateTime)times[0],
@@ -1301,7 +1301,7 @@ public partial class MonthCalendar : Control
             st = default
         };
 
-        PInvoke.SendMessage(this, PInvoke.MCM_HITTEST, 0, ref mchi);
+        PInvokeCore.SendMessage(this, PInvoke.MCM_HITTEST, 0, ref mchi);
 
         // If the hit area has an associated valid date, get it.
         HitArea hitArea = GetHitArea(mchi.uHit);
@@ -1359,7 +1359,7 @@ public partial class MonthCalendar : Control
         SetSelRange(_selectionStart, _selectionEnd);
         if (_maxSelectionCount != DefaultMaxSelectionCount)
         {
-            PInvoke.SendMessage(this, PInvoke.MCM_SETMAXSELCOUNT, (WPARAM)_maxSelectionCount);
+            PInvokeCore.SendMessage(this, PInvoke.MCM_SETMAXSELCOUNT, (WPARAM)_maxSelectionCount);
         }
 
         AdjustSize();
@@ -1367,7 +1367,7 @@ public partial class MonthCalendar : Control
         if (_todayDateSet)
         {
             SYSTEMTIME systemTime = (SYSTEMTIME)_todaysDate;
-            PInvoke.SendMessage(this, PInvoke.MCM_SETTODAY, (WPARAM)0, ref systemTime);
+            PInvokeCore.SendMessage(this, PInvoke.MCM_SETTODAY, (WPARAM)0, ref systemTime);
         }
 
         SetControlColor(PInvoke.MCSC_TEXT, ForeColor);
@@ -1386,12 +1386,12 @@ public partial class MonthCalendar : Control
             firstDay = (int)_firstDayOfWeek;
         }
 
-        PInvoke.SendMessage(this, PInvoke.MCM_SETFIRSTDAYOFWEEK, (WPARAM)0, (LPARAM)firstDay);
+        PInvokeCore.SendMessage(this, PInvoke.MCM_SETFIRSTDAYOFWEEK, (WPARAM)0, (LPARAM)firstDay);
 
         SetRange();
         if (_scrollChange != DefaultScrollChange)
         {
-            PInvoke.SendMessage(this, PInvoke.MCM_SETMONTHDELTA, (WPARAM)_scrollChange);
+            PInvokeCore.SendMessage(this, PInvoke.MCM_SETMONTHDELTA, (WPARAM)_scrollChange);
         }
 
         SystemEvents.UserPreferenceChanged += MarshaledUserPreferenceChanged;
@@ -1688,7 +1688,7 @@ public partial class MonthCalendar : Control
     {
         if (IsHandleCreated)
         {
-            PInvoke.SendMessage(this, PInvoke.MCM_SETCOLOR, (WPARAM)(int)colorIndex, (LPARAM)value);
+            PInvokeCore.SendMessage(this, PInvoke.MCM_SETCOLOR, (WPARAM)(int)colorIndex, (LPARAM)value);
         }
     }
 
@@ -1740,7 +1740,7 @@ public partial class MonthCalendar : Control
         {
             Span<SYSTEMTIME> times = [(SYSTEMTIME)minDate, (SYSTEMTIME)maxDate];
             uint flags = PInvoke.GDTR_MIN | PInvoke.GDTR_MAX;
-            if (PInvoke.SendMessage(this, PInvoke.MCM_SETRANGE, (WPARAM)flags, ref times[0]) == 0)
+            if (PInvokeCore.SendMessage(this, PInvoke.MCM_SETRANGE, (WPARAM)flags, ref times[0]) == 0)
             {
                 throw new InvalidOperationException(
                     string.Format(SR.MonthCalendarRange, minDate.ToShortDateString(), maxDate.ToShortDateString()));
@@ -1823,7 +1823,7 @@ public partial class MonthCalendar : Control
         {
             // Update display dates states.
             // For more info see docs: https://docs.microsoft.com/windows/win32/controls/mcm-setdaystate
-            PInvoke.SendMessage(HWND, PInvoke.MCM_SETDAYSTATE, (WPARAM)monthsCount, (LPARAM)arr);
+            PInvokeCore.SendMessage(HWND, PInvoke.MCM_SETDAYSTATE, (WPARAM)monthsCount, (LPARAM)arr);
         }
     }
 
@@ -1885,7 +1885,7 @@ public partial class MonthCalendar : Control
         if (IsHandleCreated)
         {
             Span<SYSTEMTIME> times = [(SYSTEMTIME)lower, (SYSTEMTIME)upper];
-            PInvoke.SendMessage(this, PInvoke.MCM_SETSELRANGE, 0, ref times[0]);
+            PInvokeCore.SendMessage(this, PInvoke.MCM_SETSELRANGE, 0, ref times[0]);
         }
 
         if (changed)
@@ -2003,11 +2003,11 @@ public partial class MonthCalendar : Control
             if (_todayDateSet)
             {
                 SYSTEMTIME systemTime = (SYSTEMTIME)_todaysDate;
-                PInvoke.SendMessage(this, PInvoke.MCM_SETTODAY, 0, ref systemTime);
+                PInvokeCore.SendMessage(this, PInvoke.MCM_SETTODAY, 0, ref systemTime);
             }
             else
             {
-                PInvoke.SendMessage(this, PInvoke.MCM_SETTODAY, 0, 0);
+                PInvokeCore.SendMessage(this, PInvoke.MCM_SETTODAY, 0, 0);
             }
         }
     }
@@ -2192,7 +2192,7 @@ public partial class MonthCalendar : Control
     {
         switch (m.MsgInternal)
         {
-            case PInvoke.WM_LBUTTONDOWN:
+            case PInvokeCore.WM_LBUTTONDOWN:
                 Focus();
                 if (!ValidationCancelled)
                 {
@@ -2200,21 +2200,21 @@ public partial class MonthCalendar : Control
                 }
 
                 break;
-            case PInvoke.WM_GETDLGCODE:
+            case PInvokeCore.WM_GETDLGCODE:
                 WmGetDlgCode(ref m);
                 break;
             case MessageId.WM_REFLECT_NOTIFY:
                 WmReflectCommand(ref m);
                 base.WndProc(ref m);
                 break;
-            case PInvoke.WM_PAINT:
+            case PInvokeCore.WM_PAINT:
                 base.WndProc(ref m);
 
                 if (_mcCurView != MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_MONTH)
                 {
                     // Check if the display range is changed and update it.
                     // Win32 doesn't provide a notification about the display range is changed,
-                    // so we have to use PInvoke.WM_PAINT and check it manually in the Year, Decade and Century views.
+                    // so we have to use PInvokeCore.WM_PAINT and check it manually in the Year, Decade and Century views.
                     // MCN.GETDAYSTATE handles the display range changes in the Month view.
                     UpdateDisplayRange();
                 }

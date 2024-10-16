@@ -234,7 +234,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             unsafe
             { *((IntPtr*)&rc.left) = Handle; }
             // wparam: 1=include only text, 0=include entire line
-            if (PInvoke.SendMessage(tv, PInvoke.TVM_GETITEMRECT, 1, ref rc) == 0)
+            if (PInvokeCore.SendMessage(tv, PInvoke.TVM_GETITEMRECT, 1, ref rc) == 0)
             {
                 // This means the node is not visible
                 return Rectangle.Empty;
@@ -263,7 +263,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                 return Rectangle.Empty;
             }
 
-            if (PInvoke.SendMessage(tv, PInvoke.TVM_GETITEMRECT, 0, ref rc) == 0)
+            if (PInvokeCore.SendMessage(tv, PInvoke.TVM_GETITEMRECT, 0, ref rc) == 0)
             {
                 // This means the node is not visible
                 return Rectangle.Empty;
@@ -306,7 +306,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             };
 
             item.state |= value ? CHECKED : UNCHECKED;
-            PInvoke.SendMessage(tv, PInvoke.TVM_SETITEMW, 0, ref item);
+            PInvokeCore.SendMessage(tv, PInvoke.TVM_SETITEMW, 0, ref item);
         }
     }
 
@@ -330,7 +330,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                     stateMask = TREE_VIEW_ITEM_STATE_FLAGS.TVIS_STATEIMAGEMASK
                 };
 
-                PInvoke.SendMessage(_treeView, PInvoke.TVM_GETITEMW, 0, ref item);
+                PInvokeCore.SendMessage(_treeView, PInvoke.TVM_GETITEMW, 0, ref item);
                 Debug.Assert(
                     !_treeView.CheckBoxes || (((int)item.state >> SHIFTVAL) > 1) == CheckedInternal,
                     $"isChecked on node '{Name}' did not match the state in TVM_GETITEM.");
@@ -621,7 +621,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             unsafe
             { *((IntPtr*)&rc.left) = Handle; }
 
-            bool visible = PInvoke.SendMessage(tv, PInvoke.TVM_GETITEMRECT, 1, ref rc) != 0;
+            bool visible = PInvokeCore.SendMessage(tv, PInvoke.TVM_GETITEMRECT, 1, ref rc) != 0;
             if (visible)
             {
                 Size size = tv.ClientSize;
@@ -695,7 +695,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
             if (node is not null)
             {
-                LRESULT next = PInvoke.SendMessage(
+                LRESULT next = PInvokeCore.SendMessage(
                     tv,
                     PInvoke.TVM_GETNEXTITEM,
                     (WPARAM)PInvoke.TVGN_NEXTVISIBLE,
@@ -853,7 +853,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                     return null;
                 }
 
-                LRESULT prev = PInvoke.SendMessage(
+                LRESULT prev = PInvokeCore.SendMessage(
                     tv,
                     PInvoke.TVM_GETNEXTITEM,
                     (WPARAM)PInvoke.TVGN_PREVIOUSVISIBLE,
@@ -965,7 +965,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                 stateMask = TREE_VIEW_ITEM_STATE_FLAGS.TVIS_SELECTED | TREE_VIEW_ITEM_STATE_FLAGS.TVIS_EXPANDED
             };
 
-            PInvoke.SendMessage(tv, PInvoke.TVM_GETITEMW, 0, ref item);
+            PInvokeCore.SendMessage(tv, PInvoke.TVM_GETITEMW, 0, ref item);
             return item.state;
         }
     }
@@ -1283,7 +1283,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                 tv.Focus();
             }
 
-            PInvoke.SendMessage(tv, PInvoke.TVM_EDITLABELW, 0, (LPARAM)HTREEITEMInternal);
+            PInvokeCore.SendMessage(tv, PInvoke.TVM_EDITLABELW, 0, (LPARAM)HTREEITEMInternal);
         }
     }
 
@@ -1469,7 +1469,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             tv.OnBeforeCollapse(e);
             if (!e.Cancel)
             {
-                PInvoke.SendMessage(tv, PInvoke.TVM_EXPAND, (WPARAM)(uint)NM_TREEVIEW_ACTION.TVE_COLLAPSE, (LPARAM)Handle);
+                PInvokeCore.SendMessage(tv, PInvoke.TVM_EXPAND, (WPARAM)(uint)NM_TREEVIEW_ACTION.TVE_COLLAPSE, (LPARAM)Handle);
                 tv.OnAfterCollapse(new TreeViewEventArgs(this));
             }
         }
@@ -1588,7 +1588,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             return;
         }
 
-        PInvoke.SendMessage(tv, PInvoke.TVM_ENDEDITLABELNOW, (WPARAM)(BOOL)cancel);
+        PInvokeCore.SendMessage(tv, PInvoke.TVM_ENDEDITLABELNOW, (WPARAM)(BOOL)cancel);
     }
 
     /// <summary>
@@ -1657,7 +1657,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             return;
         }
 
-        PInvoke.SendMessage(tv, PInvoke.TVM_ENSUREVISIBLE, 0, Handle);
+        PInvokeCore.SendMessage(tv, PInvoke.TVM_ENSUREVISIBLE, 0, Handle);
     }
 
     /// <summary>
@@ -1675,7 +1675,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         ResetExpandedState(tv);
         if (!IsExpanded)
         {
-            PInvoke.SendMessage(tv, PInvoke.TVM_EXPAND, (WPARAM)(uint)NM_TREEVIEW_ACTION.TVE_EXPAND, (LPARAM)Handle);
+            PInvokeCore.SendMessage(tv, PInvoke.TVM_EXPAND, (WPARAM)(uint)NM_TREEVIEW_ACTION.TVE_EXPAND, (LPARAM)Handle);
         }
 
         _expandOnRealization = false;
@@ -1873,15 +1873,15 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             // asynchronously (PostMessage) after the add is complete
             // to get the expected behavior.
             bool editing = false;
-            nint editHandle = PInvoke.SendMessage(tv, PInvoke.TVM_GETEDITCONTROL);
+            nint editHandle = PInvokeCore.SendMessage(tv, PInvoke.TVM_GETEDITCONTROL);
             if (editHandle != 0)
             {
                 // Currently editing.
                 editing = true;
-                PInvoke.SendMessage(tv, PInvoke.TVM_ENDEDITLABELNOW, (WPARAM)(BOOL)false);
+                PInvokeCore.SendMessage(tv, PInvoke.TVM_ENDEDITLABELNOW, (WPARAM)(BOOL)false);
             }
 
-            HTREEITEMInternal = (HTREEITEM)PInvoke.SendMessage(tv, PInvoke.TVM_INSERTITEMW, 0, ref tvis);
+            HTREEITEMInternal = (HTREEITEM)PInvokeCore.SendMessage(tv, PInvoke.TVM_INSERTITEMW, 0, ref tvis);
             tv._nodesByHandle[HTREEITEMInternal] = this;
 
             // Lets update the Lparam to the Handle.
@@ -1891,7 +1891,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
             if (editing)
             {
-                PInvoke.PostMessage(tv, PInvoke.TVM_EDITLABELW, default, (LPARAM)HTREEITEMInternal);
+                PInvokeCore.PostMessage(tv, PInvoke.TVM_EDITLABELW, default, (LPARAM)HTREEITEMInternal);
             }
 
             PInvoke.InvalidateRect(tv, lpRect: null, bErase: false);
@@ -1903,7 +1903,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                 // and this is the FIRST NODE to get added..
                 // This is Comctl quirk where it just doesn't draw
                 // the first node after a Clear( ) if Scrollable == false.
-                PInvoke.SendMessage(tv, PInvoke.WM_SETREDRAW, (WPARAM)(BOOL)true);
+                PInvokeCore.SendMessage(tv, PInvokeCore.WM_SETREDRAW, (WPARAM)(BOOL)true);
                 _nodesCleared = false;
             }
         }
@@ -1980,7 +1980,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         {
             if (notify && tv.IsHandleCreated)
             {
-                PInvoke.SendMessage(tv, PInvoke.TVM_DELETEITEM, 0, (LPARAM)HTREEITEMInternal);
+                PInvokeCore.SendMessage(tv, PInvoke.TVM_DELETEITEM, 0, (LPARAM)HTREEITEMInternal);
             }
 
             tv._nodesByHandle.Remove(HTREEITEMInternal);
@@ -2028,7 +2028,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             state = 0
         };
 
-        PInvoke.SendMessage(tv, PInvoke.TVM_SETITEMW, 0, ref item);
+        PInvokeCore.SendMessage(tv, PInvoke.TVM_SETITEMW, 0, ref item);
     }
 
     private bool ShouldSerializeBackColor()
@@ -2178,7 +2178,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             item.lParam = (LPARAM)HTREEITEMInternal;
         }
 
-        PInvoke.SendMessage(tv, PInvoke.TVM_SETITEMW, 0, ref item);
+        PInvokeCore.SendMessage(tv, PInvoke.TVM_SETITEMW, 0, ref item);
         if ((mask & TVITEM_MASK.TVIF_TEXT) != 0)
         {
             Marshal.FreeCoTaskMem((nint)item.pszText.Value);
@@ -2213,7 +2213,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                     : ImageIndexer.ActualIndex)
         };
 
-        PInvoke.SendMessage(tv, PInvoke.TVM_SETITEMW, 0, ref item);
+        PInvokeCore.SendMessage(tv, PInvoke.TVM_SETITEMW, 0, ref item);
     }
 
     /// <summary>
