@@ -4755,8 +4755,8 @@ public class WebBrowserTests
     [WinFormsFact]
     public void WebBrowser_NavigateToFileFolder()
     {
-        Form form = new();
-        WebBrowser browser = new()
+        using Form form = new();
+        using WebBrowser browser = new()
         {
             Dock = DockStyle.Fill
         };
