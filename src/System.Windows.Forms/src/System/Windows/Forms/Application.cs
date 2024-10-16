@@ -32,7 +32,7 @@ public sealed partial class Application
     private static Font? s_defaultFontScaled;
     private static string? s_startupPath;
     private static string? s_executablePath;
-    private static object? s_appFileVersion;
+    private static FileVersionInfo? s_appFileVersion;
     private static Type? s_mainType;
     private static string? s_companyName;
     private static string? s_productName;
@@ -202,14 +202,7 @@ public sealed partial class Application
                             if (!string.IsNullOrEmpty(ns))
                             {
                                 int firstDot = ns.IndexOf('.');
-                                if (firstDot != -1)
-                                {
-                                    s_companyName = ns[..firstDot];
-                                }
-                                else
-                                {
-                                    s_companyName = ns;
-                                }
+                                s_companyName = firstDot != -1 ? ns[..firstDot] : ns;
                             }
                             else
                             {
@@ -254,7 +247,7 @@ public sealed partial class Application
     ///   This is the <see cref="SystemColorMode"/> which either has been set by <see cref="SetColorMode(SystemColorMode)"/>
     ///   or its default value <see cref="SystemColorMode.Classic"/>. If it has been set to <see cref="SystemColorMode.System"/>,
     ///   then the actual color mode is determined by the system settings (which can be retrieved by the
-    ///   static (shared in VB) <see cref="Application.SystemColorMode"/> property.
+    ///   static (shared in VB) <see cref="SystemColorMode"/> property.
     ///  </para>
     /// </remarks>
     [Experimental(DiagnosticIDs.ExperimentalDarkMode, UrlFormat = DiagnosticIDs.UrlFormat)]
@@ -335,7 +328,7 @@ public sealed partial class Application
             }
 
             bool complete = false;
-            bool success = PInvoke.SendMessageCallback(hwnd, PInvoke.WM_SYSCOLORCHANGE + MessageId.WM_REFLECT, () => complete = true);
+            bool success = PInvoke.SendMessageCallback(hwnd, PInvokeCore.WM_SYSCOLORCHANGE + MessageId.WM_REFLECT, () => complete = true);
             Debug.Assert(success);
 
             if (!success)
@@ -454,64 +447,53 @@ public sealed partial class Application
     {
         get
         {
-            lock (s_internalSyncObject)
+            if (!string.IsNullOrEmpty(s_productName))
             {
-                if (s_productName is null)
-                {
-                    // Custom attribute
-                    Assembly? entryAssembly = Assembly.GetEntryAssembly();
-                    if (entryAssembly is not null)
-                    {
-                        object[] attrs = entryAssembly.GetCustomAttributes(typeof(AssemblyProductAttribute), false);
-                        if (attrs is not null && attrs.Length > 0)
-                        {
-                            s_productName = ((AssemblyProductAttribute)attrs[0]).Product;
-                        }
-                    }
-
-                    // Win32 version info
-                    if (s_productName is null || s_productName.Length == 0)
-                    {
-                        s_productName = GetAppFileVersionInfo().ProductName;
-                        if (s_productName is not null)
-                        {
-                            s_productName = s_productName.Trim();
-                        }
-                    }
-
-                    // fake it with namespace
-                    // won't work with MC++ see GetAppMainType.
-                    if (s_productName is null || s_productName.Length == 0)
-                    {
-                        Type? type = GetAppMainType();
-
-                        if (type is not null)
-                        {
-                            string? ns = type.Namespace;
-
-                            if (!string.IsNullOrEmpty(ns))
-                            {
-                                int lastDot = ns.LastIndexOf('.');
-                                if (lastDot != -1 && lastDot < ns.Length - 1)
-                                {
-                                    s_productName = ns[(lastDot + 1)..];
-                                }
-                                else
-                                {
-                                    s_productName = ns;
-                                }
-                            }
-                            else
-                            {
-                                // last ditch... use the main type
-                                s_productName = type.Name;
-                            }
-                        }
-                    }
-                }
+                return s_productName;
             }
 
-            return s_productName;
+            lock (s_internalSyncObject)
+            {
+                if (s_productName is not null)
+                {
+                    return s_productName;
+                }
+
+                // Custom attribute
+                if (Assembly.GetEntryAssembly() is { } entryAssembly)
+                {
+                    object[] attrs = entryAssembly.GetCustomAttributes(typeof(AssemblyProductAttribute), inherit: false);
+                    if (attrs is not null && attrs.Length > 0)
+                    {
+                        s_productName = ((AssemblyProductAttribute)attrs[0]).Product;
+                    }
+                }
+
+                // Win32 version info
+                if (string.IsNullOrEmpty(s_productName) && GetAppFileVersionInfo().ProductName is { } productName)
+                {
+                    s_productName = productName.Trim();
+                }
+
+                // Try using the namespace
+                if (string.IsNullOrEmpty(s_productName) && GetAppMainType() is { } type)
+                {
+                    string? ns = type.Namespace;
+
+                    if (!string.IsNullOrEmpty(ns))
+                    {
+                        int lastDot = ns.LastIndexOf('.');
+                        s_productName = lastDot != -1 && lastDot < ns.Length - 1 ? ns[(lastDot + 1)..] : ns;
+                    }
+                    else
+                    {
+                        // Final fallback, use the main type.
+                        s_productName = type.Name;
+                    }
+                }
+
+                return s_productName;
+            }
         }
     }
 
@@ -700,7 +682,7 @@ public sealed partial class Application
 
                 // 248887 we need to send a WM_THEMECHANGED to the top level windows of this application.
                 // We do it this way to ensure that we get all top level windows -- whether we created them or not.
-                PInvoke.EnumWindows(SendThemeChanged);
+                PInvokeCore.EnumWindows(SendThemeChanged);
             }
         }
     }
@@ -736,10 +718,10 @@ public sealed partial class Application
     private static BOOL SendThemeChangedRecursive(HWND handle)
     {
         // First send to all children.
-        PInvoke.EnumChildWindows(handle, SendThemeChangedRecursive);
+        PInvokeCore.EnumChildWindows(handle, SendThemeChangedRecursive);
 
         // Then send to ourself.
-        PInvoke.SendMessage(handle, PInvoke.WM_THEMECHANGED);
+        PInvokeCore.SendMessage(handle, PInvokeCore.WM_THEMECHANGED);
 
         return true;
     }
@@ -790,7 +772,7 @@ public sealed partial class Application
     public static bool FilterMessage(ref Message message)
     {
         // Create copy of MSG structure
-        MSG msg = message;
+        MSG msg = message.ToMSG();
         bool processed = ThreadContext.FromCurrent().ProcessFilters(ref msg, out bool modified);
         if (modified)
         {
@@ -1101,23 +1083,23 @@ public sealed partial class Application
     [UnconditionalSuppressMessage("SingleFile", "IL3002", Justification = "Single-file case is handled")]
     private static FileVersionInfo GetAppFileVersionInfo()
     {
+        if (s_appFileVersion is { } fileVersion)
+        {
+            return fileVersion;
+        }
+
         lock (s_internalSyncObject)
         {
             if (s_appFileVersion is null)
             {
                 Type? type = GetAppMainType();
-                if (type is not null && type.Assembly.Location.Length > 0)
-                {
-                    s_appFileVersion = FileVersionInfo.GetVersionInfo(type.Module.FullyQualifiedName);
-                }
-                else
-                {
-                    s_appFileVersion = FileVersionInfo.GetVersionInfo(ExecutablePath);
-                }
+                s_appFileVersion = type is not null && type.Assembly.Location.Length > 0
+                    ? FileVersionInfo.GetVersionInfo(type.Module.FullyQualifiedName)
+                    : FileVersionInfo.GetVersionInfo(ExecutablePath);
             }
         }
 
-        return (FileVersionInfo)s_appFileVersion;
+        return s_appFileVersion;
     }
 
     /// <summary>

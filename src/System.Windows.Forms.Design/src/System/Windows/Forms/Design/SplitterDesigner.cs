@@ -53,7 +53,7 @@ internal class SplitterDesigner : ControlDesigner
     {
         switch (m.MsgInternal)
         {
-            case PInvoke.WM_WINDOWPOSCHANGED:
+            case PInvokeCore.WM_WINDOWPOSCHANGED:
                 // Really only care about window size changing
                 Control.Invalidate();
                 break;

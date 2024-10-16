@@ -284,7 +284,7 @@ internal sealed class ToolStripAdornerWindowService : IDisposable
         {
             switch (m.MsgInternal)
             {
-                case PInvoke.WM_NCHITTEST:
+                case PInvokeCore.WM_NCHITTEST:
                     m.ResultInternal = (LRESULT)PInvoke.HTTRANSPARENT;
                     break;
                 default:

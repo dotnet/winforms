@@ -49,11 +49,11 @@ public partial class ToolStripPanel
                 try
                 {
                     MSG msg = default;
-                    while (PInvoke.PeekMessage(
+                    while (PInvokeCore.PeekMessage(
                         &msg,
                         HWND.Null,
-                        PInvoke.WM_PAINT,
-                        PInvoke.WM_PAINT,
+                        PInvokeCore.WM_PAINT,
+                        PInvokeCore.WM_PAINT,
                         PEEK_MESSAGE_REMOVE_TYPE.PM_REMOVE))
                     {
                         PInvoke.UpdateWindow(msg.hwnd);
@@ -100,7 +100,7 @@ public partial class ToolStripPanel
 
             protected override void WndProc(ref Message m)
             {
-                if (m.MsgInternal == PInvoke.WM_NCHITTEST)
+                if (m.MsgInternal == PInvokeCore.WM_NCHITTEST)
                 {
                     m.ResultInternal = (LRESULT)PInvoke.HTTRANSPARENT;
                 }

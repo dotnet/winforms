@@ -1997,14 +1997,14 @@ public partial class ToolStripDropDown : ToolStrip
     {
         switch (m.MsgInternal)
         {
-            case PInvoke.WM_NCACTIVATE:
+            case PInvokeCore.WM_NCACTIVATE:
                 // if someone clicks on a child control of the toolstrip dropdown, we want
                 // the title bar to continue appearing active. Normally we just show without
                 // taking window activation (ShowWindow(SHOWNOACTIVATE)) but we can't stop
                 // child controls from taking focus.
                 WmNCActivate(ref m);
                 return;
-            case PInvoke.WM_ACTIVATE:
+            case PInvokeCore.WM_ACTIVATE:
                 // This is the Chrome Panel collection editor scenario
                 // we had focus, then the Chrome panel was activated and we never went away
                 // when we get focus again, we should reactivate our message filter.
@@ -2089,7 +2089,7 @@ public partial class ToolStripDropDown : ToolStrip
                     // We're activating - notify the previous guy that we're activating.
                     HandleRef<HWND> activeWindow = ToolStripManager.ModalMenuFilter.ActiveHwnd;
 
-                    PInvoke.SendMessage(activeWindow, PInvoke.WM_NCACTIVATE, (WPARAM)(BOOL)true, (LPARAM)(-1));
+                    PInvokeCore.SendMessage(activeWindow, PInvokeCore.WM_NCACTIVATE, (WPARAM)(BOOL)true, (LPARAM)(-1));
                     PInvoke.RedrawWindow(
                         activeWindow,
                         lprcUpdate: null,

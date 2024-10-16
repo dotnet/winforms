@@ -51,7 +51,7 @@ internal class LabelEditNativeWindow : NativeWindow
             PInvoke.GetModuleHandle((PCWSTR)null),
             functionPointer,
             (uint)Environment.ProcessId,
-            PInvoke.GetCurrentThreadId(),
+            PInvokeCore.GetCurrentThreadId(),
             PInvoke.WINEVENT_INCONTEXT);
 
         _textSelectionChangedHook = PInvoke.SetWinEventHook(
@@ -60,7 +60,7 @@ internal class LabelEditNativeWindow : NativeWindow
             PInvoke.GetModuleHandle((PCWSTR)null),
             functionPointer,
             (uint)Environment.ProcessId,
-            PInvoke.GetCurrentThreadId(),
+            PInvokeCore.GetCurrentThreadId(),
             PInvoke.WINEVENT_INCONTEXT);
 
         _winEventHooksInstalled = true;
@@ -183,7 +183,7 @@ internal class LabelEditNativeWindow : NativeWindow
     {
         switch (m.MsgInternal)
         {
-            case PInvoke.WM_GETOBJECT:
+            case PInvokeCore.WM_GETOBJECT:
                 WmGetObject(ref m);
                 return;
             default:

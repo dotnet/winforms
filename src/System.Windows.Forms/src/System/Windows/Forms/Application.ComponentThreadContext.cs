@@ -306,7 +306,7 @@ public sealed partial class Application
                     {
                         break;
                     }
-                    else if (!PInvoke.PeekMessage(&msg, HWND.Null, 0, 0, PEEK_MESSAGE_REMOVE_TYPE.PM_NOREMOVE))
+                    else if (!PInvokeCore.PeekMessage(&msg, HWND.Null, 0, 0, PEEK_MESSAGE_REMOVE_TYPE.PM_NOREMOVE))
                     {
                         PInvoke.WaitMessage();
                     }
@@ -451,7 +451,7 @@ public sealed partial class Application
                     case msoloop.DoEventsModal:
                         // For DoEvents, just see if there are more messages on the queue.
                         MSG temp = default;
-                        if (!PInvoke.PeekMessage(&temp, HWND.Null, 0, 0, PEEK_MESSAGE_REMOVE_TYPE.PM_NOREMOVE))
+                        if (!PInvokeCore.PeekMessage(&temp, HWND.Null, 0, 0, PEEK_MESSAGE_REMOVE_TYPE.PM_NOREMOVE))
                         {
                             continueLoop = false;
                         }

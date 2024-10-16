@@ -374,13 +374,13 @@ public partial class Control
                         lpmsg->lParam = PARAM.FromPoint(pt);
                     }
 
-                    if (lpmsg->message == PInvoke.WM_KEYDOWN && lpmsg->wParam == (WPARAM)(nuint)VIRTUAL_KEY.VK_TAB)
+                    if (lpmsg->message == PInvokeCore.WM_KEYDOWN && lpmsg->wParam == (WPARAM)(nuint)VIRTUAL_KEY.VK_TAB)
                     {
                         target.SelectNextControl(null, ModifierKeys != Keys.Shift, tabStopOnly: true, nested: true, wrap: true);
                     }
                     else
                     {
-                        PInvoke.SendMessage(target, lpmsg->message, lpmsg->wParam, lpmsg->lParam);
+                        PInvokeCore.SendMessage(target, lpmsg->message, lpmsg->wParam, lpmsg->lParam);
                     }
 
                     break;
@@ -473,7 +473,7 @@ public partial class Control
                 nint flags = PInvoke.PRF_CHILDREN | PInvoke.PRF_CLIENT | PInvoke.PRF_ERASEBKGND | PInvoke.PRF_NONCLIENT;
                 if (hdcType != OBJ_TYPE.OBJ_ENHMETADC)
                 {
-                    PInvoke.SendMessage(_control, PInvoke.WM_PRINT, (WPARAM)hdcDraw, (LPARAM)flags);
+                    PInvokeCore.SendMessage(_control, PInvokeCore.WM_PRINT, (WPARAM)hdcDraw, (LPARAM)flags);
                 }
                 else
                 {
@@ -1850,10 +1850,10 @@ public partial class Control
             bool needPreProcess = false;
             switch (lpmsg->message)
             {
-                case PInvoke.WM_KEYDOWN:
-                case PInvoke.WM_SYSKEYDOWN:
-                case PInvoke.WM_CHAR:
-                case PInvoke.WM_SYSCHAR:
+                case PInvokeCore.WM_KEYDOWN:
+                case PInvokeCore.WM_SYSKEYDOWN:
+                case PInvokeCore.WM_CHAR:
+                case PInvokeCore.WM_SYSCHAR:
                     needPreProcess = true;
                     break;
             }
@@ -2112,7 +2112,7 @@ public partial class Control
                     return;
                 }
 
-                if (m.Msg is >= ((int)PInvoke.WM_NCLBUTTONDOWN) and <= ((int)PInvoke.WM_NCMBUTTONDBLCLK))
+                if (m.Msg is >= ((int)PInvokeCore.WM_NCLBUTTONDOWN) and <= ((int)PInvokeCore.WM_NCMBUTTONDBLCLK))
                 {
                     return;
                 }

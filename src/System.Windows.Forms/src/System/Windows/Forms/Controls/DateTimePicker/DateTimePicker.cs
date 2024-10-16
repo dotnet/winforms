@@ -338,7 +338,7 @@ public partial class DateTimePicker : Control
             if (ShowCheckBox && IsHandleCreated)
             {
                 SYSTEMTIME systemTime = default;
-                nint result = PInvoke.SendMessage(this, PInvoke.DTM_GETSYSTEMTIME, 0, ref systemTime);
+                nint result = PInvokeCore.SendMessage(this, PInvoke.DTM_GETSYSTEMTIME, 0, ref systemTime);
                 return result == (nint)NMDATETIMECHANGE_FLAGS.GDT_VALID;
             }
             else
@@ -356,11 +356,11 @@ public partial class DateTimePicker : Control
                     if (value)
                     {
                         SYSTEMTIME systemTime = (SYSTEMTIME)_value;
-                        PInvoke.SendMessage(this, PInvoke.DTM_SETSYSTEMTIME, (WPARAM)(uint)NMDATETIMECHANGE_FLAGS.GDT_VALID, ref systemTime);
+                        PInvokeCore.SendMessage(this, PInvoke.DTM_SETSYSTEMTIME, (WPARAM)(uint)NMDATETIMECHANGE_FLAGS.GDT_VALID, ref systemTime);
                     }
                     else
                     {
-                        PInvoke.SendMessage(this, PInvoke.DTM_SETSYSTEMTIME, (WPARAM)(uint)NMDATETIMECHANGE_FLAGS.GDT_NONE);
+                        PInvokeCore.SendMessage(this, PInvoke.DTM_SETSYSTEMTIME, (WPARAM)(uint)NMDATETIMECHANGE_FLAGS.GDT_NONE);
                     }
                 }
 
@@ -442,7 +442,7 @@ public partial class DateTimePicker : Control
                 {
                     if (_format == DateTimePickerFormat.Custom)
                     {
-                        PInvoke.SendMessage(this, PInvoke.DTM_SETFORMATW, 0, _customFormat);
+                        PInvokeCore.SendMessage(this, PInvoke.DTM_SETFORMATW, 0, _customFormat);
                     }
                 }
             }
@@ -893,7 +893,7 @@ public partial class DateTimePicker : Control
             {
                 // Make sure any changes to this code get propagated to createHandle
                 SYSTEMTIME systemTime = (SYSTEMTIME)value;
-                PInvoke.SendMessage(this, PInvoke.DTM_SETSYSTEMTIME, (WPARAM)(uint)NMDATETIMECHANGE_FLAGS.GDT_VALID, ref systemTime);
+                PInvokeCore.SendMessage(this, PInvoke.DTM_SETSYSTEMTIME, (WPARAM)(uint)NMDATETIMECHANGE_FLAGS.GDT_VALID, ref systemTime);
             }
 
             if (valueChanged)
@@ -974,16 +974,16 @@ public partial class DateTimePicker : Control
         {
             // Make sure any changes to this code get propagated to setValue
             SYSTEMTIME systemTime = (SYSTEMTIME)Value;
-            PInvoke.SendMessage(this, PInvoke.DTM_SETSYSTEMTIME, (uint)NMDATETIMECHANGE_FLAGS.GDT_VALID, ref systemTime);
+            PInvokeCore.SendMessage(this, PInvoke.DTM_SETSYSTEMTIME, (uint)NMDATETIMECHANGE_FLAGS.GDT_VALID, ref systemTime);
         }
         else if (!_validTime)
         {
-            PInvoke.SendMessage(this, PInvoke.DTM_SETSYSTEMTIME, (uint)NMDATETIMECHANGE_FLAGS.GDT_NONE);
+            PInvokeCore.SendMessage(this, PInvoke.DTM_SETSYSTEMTIME, (uint)NMDATETIMECHANGE_FLAGS.GDT_NONE);
         }
 
         if (_format == DateTimePickerFormat.Custom)
         {
-            PInvoke.SendMessage(this, PInvoke.DTM_SETFORMATW, 0, _customFormat);
+            PInvokeCore.SendMessage(this, PInvoke.DTM_SETFORMATW, 0, _customFormat);
         }
 
         UpdateUpDown();
@@ -1260,7 +1260,7 @@ public partial class DateTimePicker : Control
         if (IsHandleCreated)
         {
             SYSTEMTIME systemTime = (SYSTEMTIME)_value;
-            PInvoke.SendMessage(this, PInvoke.DTM_SETSYSTEMTIME, (uint)NMDATETIMECHANGE_FLAGS.GDT_VALID, ref systemTime);
+            PInvokeCore.SendMessage(this, PInvoke.DTM_SETSYSTEMTIME, (uint)NMDATETIMECHANGE_FLAGS.GDT_VALID, ref systemTime);
         }
 
         // Updating Checked to false will set the control to "no date" and clear its checkbox.
@@ -1277,7 +1277,7 @@ public partial class DateTimePicker : Control
     {
         if (IsHandleCreated)
         {
-            PInvoke.SendMessage(this, PInvoke.DTM_SETMCCOLOR, (WPARAM)(int)colorIndex, (LPARAM)value);
+            PInvokeCore.SendMessage(this, PInvoke.DTM_SETMCCOLOR, (WPARAM)(int)colorIndex, (LPARAM)value);
         }
     }
 
@@ -1288,7 +1288,7 @@ public partial class DateTimePicker : Control
     {
         if (IsHandleCreated)
         {
-            PInvoke.SendMessage(this, PInvoke.DTM_SETMCFONT, (WPARAM)CalendarFontHandle, (LPARAM)(-1));
+            PInvokeCore.SendMessage(this, PInvoke.DTM_SETMCFONT, (WPARAM)CalendarFontHandle, (LPARAM)(-1));
         }
     }
 
@@ -1318,7 +1318,7 @@ public partial class DateTimePicker : Control
         {
             Span<SYSTEMTIME> times = [(SYSTEMTIME)min, (SYSTEMTIME)max];
             uint flags = PInvoke.GDTR_MIN | PInvoke.GDTR_MAX;
-            PInvoke.SendMessage(this, PInvoke.DTM_SETRANGE, (WPARAM)flags, ref times[0]);
+            PInvokeCore.SendMessage(this, PInvoke.DTM_SETRANGE, (WPARAM)flags, ref times[0]);
         }
     }
 
@@ -1440,7 +1440,7 @@ public partial class DateTimePicker : Control
         if (ShowUpDown)
         {
             EnumChildren c = new();
-            PInvoke.EnumChildWindows(this, c.enumChildren);
+            PInvokeCore.EnumChildWindows(this, c.enumChildren);
             if (!c.hwndFound.IsNull)
             {
                 PInvoke.InvalidateRect(c.hwndFound, lpRect: (RECT*)null, bErase: true);
@@ -1502,7 +1502,7 @@ public partial class DateTimePicker : Control
     {
         if (RightToLeftLayout && RightToLeft == RightToLeft.Yes)
         {
-            HWND handle = (HWND)PInvoke.SendMessage(this, PInvoke.DTM_GETMONTHCAL);
+            HWND handle = (HWND)PInvokeCore.SendMessage(this, PInvoke.DTM_GETMONTHCAL);
             if (handle != IntPtr.Zero)
             {
                 WINDOW_EX_STYLE style = (WINDOW_EX_STYLE)PInvokeCore.GetWindowLong(handle, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE);
@@ -1552,7 +1552,7 @@ public partial class DateTimePicker : Control
     {
         switch (m.MsgInternal)
         {
-            case PInvoke.WM_LBUTTONDOWN:
+            case PInvokeCore.WM_LBUTTONDOWN:
                 Focus();
                 if (!ValidationCancelled)
                 {
@@ -1564,7 +1564,7 @@ public partial class DateTimePicker : Control
                 WmReflectCommand(ref m);
                 base.WndProc(ref m);
                 break;
-            case PInvoke.WM_WINDOWPOSCHANGED:
+            case PInvokeCore.WM_WINDOWPOSCHANGED:
                 base.WndProc(ref m);
                 UpdateUpDown();
                 break;

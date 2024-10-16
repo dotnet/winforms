@@ -1592,27 +1592,27 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
     {
         switch (m.MsgInternal)
         {
-            case PInvoke.WM_CANCELMODE:
+            case PInvokeCore.WM_CANCELMODE:
                 // When we get cancelmode (i.e. you tabbed away to another window) then we want to cancel
                 // any pending drag operation.
                 OnLostCapture();
                 break;
-            case PInvoke.WM_SETCURSOR:
+            case PInvokeCore.WM_SETCURSOR:
                 OnSetCursor();
                 return;
-            case PInvoke.WM_HSCROLL:
-            case PInvoke.WM_VSCROLL:
+            case PInvokeCore.WM_HSCROLL:
+            case PInvokeCore.WM_VSCROLL:
                 // When we scroll, we reposition a control without causing a property change event.
                 // Therefore, we must tell the selection UI service to sync itself.
                 base.WndProc(ref m);
                 _selectionUISvc?.SyncSelection();
 
                 return;
-            case PInvoke.WM_STYLECHANGED:
+            case PInvokeCore.WM_STYLECHANGED:
                 // When the scroll bars first appear, we need to invalidate so we properly paint our grid.
                 Invalidate();
                 break;
-            case PInvoke.WM_CONTEXTMENU:
+            case PInvokeCore.WM_CONTEXTMENU:
                 {
                     // Pop a context menu for the composition designer.
                     Point location = PARAM.ToPoint(m.LParamInternal);
@@ -1626,7 +1626,7 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
                     break;
                 }
 
-            case PInvoke.WM_NCHITTEST:
+            case PInvokeCore.WM_NCHITTEST:
                 {
                     if (_glyphManager is not null)
                     {
@@ -2524,11 +2524,11 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
         {
             switch (m.MsgInternal)
             {
-                case PInvoke.WM_SETCURSOR:
+                case PInvokeCore.WM_SETCURSOR:
                     // We always handle setting the cursor ourselves.
                     OnSetCursor();
                     break;
-                case PInvoke.WM_CONTEXTMENU:
+                case PInvokeCore.WM_CONTEXTMENU:
                     // We must handle this ourselves. Control only allows regular Windows Forms context menus, which
                     // doesn't do us much good. Also, control's button up processing calls DefwndProc first, which
                     // causes a right mouse up to be routed as a WM_CONTEXTMENU. If we don't respond to it here,
@@ -2544,7 +2544,7 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
 
                     OnContextMenu(location);
                     break;
-                case PInvoke.WM_NCHITTEST:
+                case PInvokeCore.WM_NCHITTEST:
                     if (_tray._glyphManager is not null)
                     {
                         // Make sure that we send our glyphs hit test messages over the TrayControls too.

@@ -602,7 +602,7 @@ internal class TabControlDesigner : ParentControlDesigner
     {
         switch (m.MsgInternal)
         {
-            case PInvoke.WM_NCHITTEST:
+            case PInvokeCore.WM_NCHITTEST:
                 // The tab control always fires HTTRANSPARENT in empty areas, which causes the message to go to our parent. We want
                 // the tab control's designer to get these messages, however, so change this.
                 base.WndProc(ref m);
@@ -612,7 +612,7 @@ internal class TabControlDesigner : ParentControlDesigner
                 }
 
                 break;
-            case PInvoke.WM_CONTEXTMENU:
+            case PInvokeCore.WM_CONTEXTMENU:
                 // We handle this in addition to a right mouse button.
                 // Why?  Because we often eat the right mouse button, so
                 // it may never generate a WM_CONTEXTMENU.  However, the
@@ -629,8 +629,8 @@ internal class TabControlDesigner : ParentControlDesigner
 
                 OnContextMenu(x, y);
                 break;
-            case PInvoke.WM_HSCROLL:
-            case PInvoke.WM_VSCROLL:
+            case PInvokeCore.WM_HSCROLL:
+            case PInvokeCore.WM_VSCROLL:
                 // We do this so that we can update the areas covered by glyphs correctly. VSWhidbey# 187405.
                 // We just invalidate the area corresponding to the ClientRectangle in the AdornerWindow.
                 BehaviorService.Invalidate(BehaviorService.ControlRectInAdornerWindow(Control));
