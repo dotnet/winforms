@@ -2,9 +2,7 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.Windows.Forms
-Imports FluentAssertions
 Imports Microsoft.VisualBasic.CompilerServices
-Imports Xunit
 
 Namespace Microsoft.VisualBasic.Forms.Tests
     Partial Public Class HostServicesTests
