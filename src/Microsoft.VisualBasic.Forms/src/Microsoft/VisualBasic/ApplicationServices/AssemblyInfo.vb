@@ -96,7 +96,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Public ReadOnly Property Copyright() As String
             Get
                 If _copyright Is Nothing Then
-                    Dim attribute As AssemblyCopyrightAttribute = CType(GetAttribute(GetType(AssemblyCopyrightAttribute)), AssemblyCopyrightAttribute)
+                    Dim attribute As AssemblyCopyrightAttribute =
+                        CType(GetAttribute(GetType(AssemblyCopyrightAttribute)), AssemblyCopyrightAttribute)
+
                     If attribute Is Nothing Then
                         _copyright = String.Empty
                     Else
@@ -173,7 +175,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Public ReadOnly Property ProductName() As String
             Get
                 If _productName Is Nothing Then
-                    Dim attribute As AssemblyProductAttribute = CType(GetAttribute(GetType(AssemblyProductAttribute)), AssemblyProductAttribute)
+                    Dim attribute As AssemblyProductAttribute =
+                        CType(GetAttribute(GetType(AssemblyProductAttribute)), AssemblyProductAttribute)
+
                     If attribute Is Nothing Then
                         _productName = String.Empty
                     Else
@@ -236,7 +240,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Public ReadOnly Property Trademark() As String
             Get
                 If _trademark Is Nothing Then
-                    Dim attribute As AssemblyTrademarkAttribute = CType(GetAttribute(GetType(AssemblyTrademarkAttribute)), AssemblyTrademarkAttribute)
+                    Dim attribute As AssemblyTrademarkAttribute =
+                        CType(GetAttribute(GetType(AssemblyTrademarkAttribute)), AssemblyTrademarkAttribute)
+
                     If attribute Is Nothing Then
                         _trademark = String.Empty
                     Else
