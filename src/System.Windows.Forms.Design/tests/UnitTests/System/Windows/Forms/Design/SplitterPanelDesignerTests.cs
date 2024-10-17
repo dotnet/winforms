@@ -60,5 +60,4 @@ public sealed class SplitterPanelDesignerTests
         SelectionRules selectionRules = splitterPanelDesigner.SelectionRules;
         selectionRules.Should().Be(SelectionRules.None);
     }
-
 }
