@@ -29,7 +29,7 @@ internal class DragDropFormat : IDisposable
     }
 
     /// <summary>
-    ///  Returns a copy of the storage mediumn in this instance.
+    ///  Returns a copy of the storage medium in this instance.
     /// </summary>
     public STGMEDIUM GetData() => CopyData(_format, _medium);
 

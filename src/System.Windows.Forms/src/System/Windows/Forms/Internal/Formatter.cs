@@ -538,9 +538,9 @@ internal static class Formatter
     }
 
     /// <summary>
-    ///  Extract the inner type from a nullable type
+    ///  Extract the inner type from a nullable type.
     /// </summary>
-    private static Type NullableUnwrap(Type type)
+    internal static Type NullableUnwrap(Type type)
     {
         if (type == s_stringType) // ...performance optimization for the most common case
         {
