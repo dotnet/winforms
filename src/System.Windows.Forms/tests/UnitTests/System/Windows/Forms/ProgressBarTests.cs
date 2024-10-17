@@ -2091,9 +2091,9 @@ public class ProgressBarTests
     {
         foreach (ProgressBarStyle style in Enum.GetValues(typeof(ProgressBarStyle)))
         {
-            foreach (object[] testData in CommonTestHelper.GetEventArgsTheoryData())
+            foreach (EventArgs testData in CommonTestHelper.GetEventArgsTheoryData())
             {
-                yield return new object[] { style, testData[0] };
+                yield return new object[] { style, testData };
             }
         }
     }
