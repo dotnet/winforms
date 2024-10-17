@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Reflection.Metadata;
 using System.Runtime.InteropServices.ComTypes;
 using Com = Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
@@ -107,6 +108,28 @@ public unsafe partial class DataObject
         object? IDataObject.GetData(string format, bool autoConvert) => _winFormsDataObject.GetData(format, autoConvert);
         object? IDataObject.GetData(string format) => _winFormsDataObject.GetData(format);
         object? IDataObject.GetData(Type format) => _winFormsDataObject.GetData(format);
+        bool IDataObject.TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
+            string format,
+            Func<TypeName, Type> resolver,
+            bool autoConvert,
+            [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
+            _winFormsDataObject.TryGetData(format, resolver, autoConvert, out data);
+
+        bool IDataObject.TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
+            string format,
+            bool autoConvert,
+            [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
+            _winFormsDataObject.TryGetData(format, NotSupportedResolver, autoConvert, out data);
+
+        bool IDataObject.TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
+            string format,
+            [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
+            _winFormsDataObject.TryGetData(format, NotSupportedResolver, autoConvert: false, out data);
+
+        bool IDataObject.TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
+            [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
+            _winFormsDataObject.TryGetData(typeof(T).FullName!, NotSupportedResolver, autoConvert: false, out data);
+
         bool IDataObject.GetDataPresent(string format, bool autoConvert) => _winFormsDataObject.GetDataPresent(format, autoConvert);
         bool IDataObject.GetDataPresent(string format) => _winFormsDataObject.GetDataPresent(format);
         bool IDataObject.GetDataPresent(Type format) => _winFormsDataObject.GetDataPresent(format);
