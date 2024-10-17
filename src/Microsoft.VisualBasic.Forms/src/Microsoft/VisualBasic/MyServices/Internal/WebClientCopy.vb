@@ -67,7 +67,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         '''  Note: that we don't want to close the progress dialog here. Wait until
         '''  the actual file transfer cancel event comes through and do it there.
         ''' </remarks>
-        Private Sub m_ProgressDialog_UserCancelledEvent() Handles _progressDialog.UserHitCancel
+        Private Sub progressDialogUserHitCancel() Handles _progressDialog.UserHitCancel
             'cancel the upload/download transfer. We'll close the ProgressDialog
             'as soon as the WebClient cancels the xfer.
             _webClient.CancelAsync()
@@ -78,7 +78,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' </summary>
         ''' <param name="sender"></param>
         ''' <param name="e"></param>
-        Private Sub m_WebClient_DownloadFileCompleted(sender As Object, e As System.ComponentModel.AsyncCompletedEventArgs) Handles _webClient.DownloadFileCompleted
+        Private Sub _webClientDownloadFileCompleted(sender As Object, e As ComponentModel.AsyncCompletedEventArgs) Handles _webClient.DownloadFileCompleted
             Try
                 ' If the download was interrupted by an exception, keep track of the exception, which we'll throw from the main thread
                 If e.Error IsNot Nothing Then
@@ -99,7 +99,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' </summary>
         ''' <param name="sender"></param>
         ''' <param name="e"></param>
-        Private Sub m_WebClient_DownloadProgressChanged(sender As Object, e As DownloadProgressChangedEventArgs) Handles _webClient.DownloadProgressChanged
+        Private Sub _webClientDownloadProgressChanged(sender As Object, e As DownloadProgressChangedEventArgs) Handles _webClient.DownloadProgressChanged
             InvokeIncrement(e.ProgressPercentage)
         End Sub
 
@@ -108,7 +108,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' </summary>
         ''' <param name="sender"></param>
         ''' <param name="e"></param>
-        Private Sub m_WebClient_UploadFileCompleted(sender As Object, e As UploadFileCompletedEventArgs) Handles _webClient.UploadFileCompleted
+        Private Sub _webClientUploadFileCompleted(sender As Object, e As UploadFileCompletedEventArgs) Handles _webClient.UploadFileCompleted
             ' If the upload was interrupted by an exception, keep track of the
             ' exception, which we'll throw from the main thread
             Try
@@ -130,7 +130,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' </summary>
         ''' <param name="sender"></param>
         ''' <param name="e"></param>
-        Private Sub m_WebClient_UploadProgressChanged(sender As Object, e As UploadProgressChangedEventArgs) Handles _webClient.UploadProgressChanged
+        Private Sub _webClientUploadProgressChanged(sender As Object, e As UploadProgressChangedEventArgs) Handles _webClient.UploadProgressChanged
             Dim increment As Long = (e.BytesSent * 100) \ e.TotalBytesToSend
             InvokeIncrement(CInt(increment))
         End Sub
