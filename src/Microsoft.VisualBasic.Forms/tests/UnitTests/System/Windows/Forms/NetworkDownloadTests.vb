@@ -360,7 +360,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         showUI:=True,
                         connectionTimeout:=TestingConnectionTimeout,
                         overwrite:=False)
-
                 End Sub
             Try
                 testCode.Should _
@@ -1200,10 +1199,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         overwrite:=False)
                 End Sub
             Try
-                testCode.Should() _
+                Dim value As String = SR.Network_InvalidUriString.Replace("{0}", "invalidURL")
+                CType(testCode, Action).Should() _
                     .Throw(Of ArgumentException)() _
-                    .Where(Function(e) e.Message.StartsWith(
-                        value:=SR.Network_InvalidUriString.Replace("{0}", "invalidURL")))
+                    .Where(Function(e) e.Message.StartsWith(value))
                 File.Exists(destinationFileName).Should.BeFalse()
             Finally
                 CleanUpListener(listener)
