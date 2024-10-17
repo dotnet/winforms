@@ -150,7 +150,6 @@ Namespace Microsoft.VisualBasic.Devices
             End If
 
             systemSound.Play()
-
         End Sub
 
     End Class
