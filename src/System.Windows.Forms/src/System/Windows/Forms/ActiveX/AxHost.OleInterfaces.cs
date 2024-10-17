@@ -56,7 +56,7 @@ public abstract partial class AxHost
             }
 
             object? nativeObject = _host.GetOcx();
-            _connectionPoint = new ConnectionPointCookie(nativeObject, this, typeof(IPropertyNotifySink), throwException: false);
+            _connectionPoint = new ConnectionPointCookie(nativeObject, this, typeof(IPropertyNotifySink.Interface), throwException: false);
         }
 
         internal void StopEvents()
