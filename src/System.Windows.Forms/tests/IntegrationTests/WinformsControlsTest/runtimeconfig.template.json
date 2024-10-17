@@ -1,6 +1,7 @@
 {
   "configProperties": {
     "System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization": false,
+    "System.Windows.Forms.ClipboardDragDrop.EnableUnsafeBinaryFormatterSerialization": false,
     "System.Windows.Forms.AnchorLayoutV2": false,
     "System.Windows.Forms.ApplyParentFontToMenus": true,
     "System.Windows.Forms.DataGridViewUIAStartRowCountAtZero": false,
