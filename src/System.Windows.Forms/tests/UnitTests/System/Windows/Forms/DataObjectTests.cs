@@ -2423,19 +2423,44 @@ public partial class DataObjectTests
         dynamic controlAccessor = typeof(Control).TestAccessor().Dynamic;
         var dropTargetAccessor = typeof(DropTarget).TestAccessor();
 
-        IComDataObject inData = controlAccessor.CreateRuntimeDataObjectForDrag(data);
-        if (data is DataObject)
+        DataObject inData = controlAccessor.CreateRuntimeDataObjectForDrag(data);
+        if (data is CustomDataObject)
         {
-            inData.Should().BeSameAs(data);
+            inData.Should().NotBeSameAs(data);
         }
         else
         {
-            inData.Should().NotBeSameAs(data);
+            inData.Should().BeSameAs(data);
         }
 
         using var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
         IDataObject outData = dropTargetAccessor.CreateDelegate<CreateWinFormsDataObjectForOutgoingDropData>()(inDataPtr);
         outData.Should().BeSameAs(data);
+    }
+
+    public static IEnumerable<object[]> DataObjectWithJsonMockRoundTripData()
+    {
+        yield return new object[] { new DataObject() };
+        yield return new object[] { new DerivedDataObject() };
+    }
+
+    [WinFormsTheory]
+    [MemberData(nameof(DataObjectWithJsonMockRoundTripData))]
+    public unsafe void DataObject_WithJson_MockRoundTrip_OutData_IsSame(DataObject data)
+    {
+        dynamic controlAccessor = typeof(Control).TestAccessor().Dynamic;
+        var dropTargetAccessor = typeof(DropTarget).TestAccessor();
+
+        Point point = new() { X = 1, Y = 1 };
+        data.SetDataAsJson("point", point);
+        DataObject inData = controlAccessor.CreateRuntimeDataObjectForDrag(data);
+        inData.Should().BeSameAs(data);
+
+        using var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
+        IDataObject outData = dropTargetAccessor.CreateDelegate<CreateWinFormsDataObjectForOutgoingDropData>()(inDataPtr);
+        outData.Should().BeSameAs(data);
+        outData.GetDataPresent("point").Should().BeTrue();
+        outData.GetData("point").Should().BeOfType<Point>().Which.Should().BeEquivalentTo(point);
     }
 
     [WinFormsFact]
@@ -2445,7 +2470,7 @@ public partial class DataObjectTests
         dynamic accessor = typeof(Control).TestAccessor().Dynamic;
         var dropTargetAccessor = typeof(DropTarget).TestAccessor();
 
-        IComDataObject inData = accessor.CreateRuntimeDataObjectForDrag(testString);
+        DataObject inData = accessor.CreateRuntimeDataObjectForDrag(testString);
         inData.Should().BeAssignableTo<DataObject>();
 
         using var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
@@ -2461,7 +2486,7 @@ public partial class DataObjectTests
         dynamic accessor = typeof(Control).TestAccessor().Dynamic;
         var dropTargetAccessor = typeof(DropTarget).TestAccessor();
 
-        IComDataObject inData = accessor.CreateRuntimeDataObjectForDrag(data);
+        DataObject inData = accessor.CreateRuntimeDataObjectForDrag(data);
         inData.Should().BeAssignableTo<DataObject>();
         inData.Should().NotBeSameAs(data);
 
@@ -2477,7 +2502,7 @@ public partial class DataObjectTests
         dynamic accessor = typeof(Control).TestAccessor().Dynamic;
         var dropTargetAccessor = typeof(DropTarget).TestAccessor();
 
-        IComDataObject inData = accessor.CreateRuntimeDataObjectForDrag(data);
+        DataObject inData = accessor.CreateRuntimeDataObjectForDrag(data);
         inData.Should().NotBeSameAs(data);
         inData.Should().BeAssignableTo<DataObject>();
 
@@ -2501,5 +2526,49 @@ public partial class DataObjectTests
         data.GetDataPresent(customFormat).Should().BeTrue();
         data.GetDataPresent("notExist").Should().BeFalse();
         data.GetFormats().Should().BeEquivalentTo([typeof(Bitmap).FullName, typeof(Bitmap).Name, customFormat]);
+    }
+
+    [WinFormsFact]
+    public void DataObject_SetDataAsJson_DataObject_Throws()
+    {
+        DataObject dataObject = new();
+        Action action = () => dataObject.SetDataAsJson("format", new DataObject());
+        action.Should().Throw<InvalidOperationException>();
+    }
+
+    [WinFormsFact]
+    public void DataObject_SetDataAsJson_ReturnsExpected()
+    {
+        Point point = new() { X = 1, Y = 1 };
+        DataObject dataObject = new();
+        dataObject.SetDataAsJson("point", point);
+        dataObject.GetDataPresent("point").Should().BeTrue();
+        dataObject.GetData("point").Should().BeOfType<Point>().Which.Should().BeEquivalentTo(point);
+    }
+
+    [WinFormsFact]
+    public void DataObject_SetDataAsJson_Wrapped_ReturnsExpected()
+    {
+        Point point = new() { X = 1, Y = 1 };
+        DataObject dataObject = new();
+        dataObject.SetDataAsJson("point", point);
+        DataObject wrapped = new(dataObject);
+        wrapped.GetDataPresent("point").Should().BeTrue();
+        wrapped.GetData("point").Should().BeOfType<Point>().Which.Should().BeEquivalentTo(point);
+    }
+
+    [WinFormsFact]
+    public void DataObject_SetDataAsJson_MultipleData_ReturnsExpected()
+    {
+        Point point1 = new() { X = 1, Y = 1 };
+        Point point2 = new() { Y = 2, X = 2 };
+        DataObject data = new();
+        data.SetDataAsJson("point1", point1);
+        data.SetDataAsJson("point2", point2);
+        data.SetData("Mystring", "test");
+
+        data.GetData("point1").Should().BeOfType<Point>().Which.Should().BeEquivalentTo(point1);
+        data.GetData("point2").Should().BeOfType<Point>().Which.Should().BeEquivalentTo(point2);
+        data.GetData("Mystring").Should().Be("test");
     }
 }
