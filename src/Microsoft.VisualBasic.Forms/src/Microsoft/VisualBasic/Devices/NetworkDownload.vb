@@ -2,6 +2,7 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.Net
+Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.MyServices.Internal
 
@@ -36,7 +37,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         '''  Downloads a file from the network to the specified path.
         ''' </summary>
-        ''' <param name="address">Uri to the remote file.</param>
+        ''' <param name="address"><see cref="Uri"/> to the remote file.</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved.</param>
         Public Sub DownloadFile(address As Uri, destinationFileName As String)
             DownloadFile(
@@ -75,7 +76,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         '''  Downloads a file from the network to the specified path.
         ''' </summary>
-        ''' <param name="address">Uri to the remote file.</param>
+        ''' <param name="address"><see cref="Uri"/> to the remote file.</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved.</param>
         ''' <param name="userName">The name of the user performing the download.</param>
         ''' <param name="password">The user's password.</param>
@@ -176,7 +177,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         '''  Downloads a file from the network to the specified path.
         ''' </summary>
-        ''' <param name="address">Uri to the remote file,</param>
+        ''' <param name="address"><see cref="Uri"/> to the remote file,</param>
         ''' <param name="destinationFileName">
         '''  Name and path of file where download is saved.
         ''' </param>
@@ -210,7 +211,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         '''  Downloads a file from the network to the specified path.
         ''' </summary>
-        ''' <param name="address">Uri to the remote file.</param>
+        ''' <param name="address"><see cref="Uri"/> to the remote file.</param>
         ''' <param name="destinationFileName">
         '''  Name and path of file where download is saved.
         ''' </param>
@@ -253,7 +254,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         '''  Downloads a file from the network to the specified path.
         ''' </summary>
-        ''' <param name="address">Uri to the remote file.</param>
+        ''' <param name="address"><see cref="Uri"/> to the remote file.</param>
         ''' <param name="destinationFileName">
         '''  Name and path of file where download is saved.
         ''' </param>
@@ -288,9 +289,9 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         '''  Downloads a file from the network to the specified path.
         ''' </summary>
-        ''' <param name="address">Uri to the remote file.</param>
+        ''' <param name="address"><see cref="Uri"/> to the remote file.</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved.</param>
-        ''' <param name="networkCredentials">The credentials of the user performing the download.</param>
+        ''' <param name="networkCredentials">The <see cref="ICredentials"/> of the user performing the download.</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar.</param>
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists.</param>
@@ -320,7 +321,7 @@ Namespace Microsoft.VisualBasic.Devices
                 client.UseNonPassiveFtp = showUI
 
                 'Construct the local file. This will validate the full name and path
-                Dim fullFilename As String = CompilerServices.FileSystemUtils.NormalizeFilePath(destinationFileName, NameOf(destinationFileName))
+                Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(destinationFileName, NameOf(destinationFileName))
 
                 ' Sometime a path that can't be parsed is normalized to the current directory. This makes sure we really
                 ' have a file and path
