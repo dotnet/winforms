@@ -527,7 +527,8 @@ internal static class DesignerUtils
     }
 
     /// <summary>
-    ///  Identifies where the text baseline for our control which should be based on bounds, padding, font, and textalignment.
+    ///  Identifies where the text baseline for our control which should be
+    ///  based on bounds, padding, font, and text alignment.
     /// </summary>
     public static unsafe int GetTextBaseline(Control ctrl, ContentAlignment alignment)
     {

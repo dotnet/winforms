@@ -11,7 +11,8 @@ using Windows.Win32.System.Com;
 namespace System.Drawing;
 
 /// <summary>
-///  An abstract base class that provides functionality for 'Bitmap', 'Icon', 'Cursor', and 'Metafile' descended classes.
+///  An abstract base class that provides functionality for
+///  'Bitmap', 'Icon', 'Cursor', and 'Metafile' descended classes.
 /// </summary>
 [Editor($"System.Drawing.Design.ImageEditor, {AssemblyRef.SystemDrawingDesign}",
         $"System.Drawing.Design.UITypeEditor, {AssemblyRef.SystemDrawing}")]
@@ -239,7 +240,8 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
     }
 
     /// <summary>
-    ///  Saves this <see cref='Image'/> to the specified file in the specified format and with the specified encoder parameters.
+    ///  Saves this <see cref='Image'/> to the specified file in the specified format and
+    ///  with the specified encoder parameters.
     /// </summary>
     public void Save(string filename, ImageCodecInfo encoder, Imaging.EncoderParameters? encoderParams)
         => Save(filename, encoder.Clsid, encoderParams);

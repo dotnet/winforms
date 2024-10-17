@@ -678,12 +678,18 @@ public sealed unsafe partial class Icon : MarshalByRefObject, ICloneable, IDispo
 
                             // In GDI+ the bits are there but the bitmap was created with no alpha channel
                             // so copy the bits by hand to a new bitmap
-                            // we also need to go around a limitation in the way the ICON is stored (ie if it's another bpp
-                            // but stored in 32bpp all pixels are transparent and not opaque)
+                            // we also need to go around a limitation in the way the ICON is stored
+                            // (ie if it's another bpp but stored in 32bpp all pixels are transparent and not opaque)
                             // (Here you mostly need to remain calm....)
-                            bmpData = tmpBitmap.LockBits(new Rectangle(0, 0, tmpBitmap.Width, tmpBitmap.Height), ImageLockMode.ReadOnly, tmpBitmap.PixelFormat);
+                            bmpData = tmpBitmap.LockBits(
+                                new Rectangle(
+                                    0,
+                                    0,
+                                    tmpBitmap.Width,
+                                    tmpBitmap.Height), ImageLockMode.ReadOnly, tmpBitmap.PixelFormat);
 
-                            // we need do the following if the image has alpha because otherwise the image is fully transparent even though it has data
+                            // we need do the following if the image has alpha because otherwise the image
+                            // is fully transparent even though it has data
                             if (BitmapHasAlpha(bmpData))
                             {
                                 bitmap = new Bitmap(bmpData.Width, bmpData.Height, PixelFormat.Format32bppArgb);

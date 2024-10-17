@@ -89,7 +89,8 @@ public abstract partial class UndoEngine : IDisposable
     }
 
     /// <summary>
-    ///  This event is raised immediately after an undo action is performed. It will always be raised even if an exception is thrown.
+    ///  This event is raised immediately after an undo action is performed.
+    ///  It will always be raised even if an exception is thrown.
     /// </summary>
     public event EventHandler? Undone
     {
@@ -137,7 +138,8 @@ public abstract partial class UndoEngine : IDisposable
         //        (meaning that nothing is performing an undo right now), and if the unit stack is empty,
         //        the change event will create a new undo unit and push it on the stack.
         // 3. The change event always runs through all undo units in the undo stack and calls the corresponding
-        //        change method. In the normal case of a single transaction or no transaction, this will operate on just one unit.
+        //        change method. In the normal case of a single transaction or no transaction,
+        //        this will operate on just one unit.
         // In the case of nested transactions there are two possibilities:
         //        a)  We are adding undo information to a nested transaction. We want to add the undo information
         //            to all levels of nested transactions. Why?  Because as a nested transaction is closed,
@@ -539,7 +541,8 @@ public abstract partial class UndoEngine : IDisposable
     }
 
     /// <summary>
-    ///  This event is raised immediately after an undo action is performed. It will always be raised even if an exception is thrown.
+    ///  This event is raised immediately after an undo action is performed.
+    ///  It will always be raised even if an exception is thrown.
     /// </summary>
     protected virtual void OnUndone(EventArgs e)
     {

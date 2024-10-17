@@ -51,7 +51,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         '''  Gets the name of the file containing the manifest (usually the .exe file).
         ''' </summary>
-        ''' <value>A String containing the file name.</value>
+        ''' <value>A <see langword="String"/> containing the file name.</value>
         Public ReadOnly Property AssemblyName() As String
             Get
                 Return _assembly.GetName.Name
@@ -96,7 +96,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Public ReadOnly Property Copyright() As String
             Get
                 If _copyright Is Nothing Then
-                    Dim attribute As AssemblyCopyrightAttribute = CType(GetAttribute(GetType(AssemblyCopyrightAttribute)), AssemblyCopyrightAttribute)
+                    Dim attribute As AssemblyCopyrightAttribute =
+                        CType(GetAttribute(GetType(AssemblyCopyrightAttribute)), AssemblyCopyrightAttribute)
+
                     If attribute Is Nothing Then
                         _copyright = String.Empty
                     Else
@@ -173,7 +175,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Public ReadOnly Property ProductName() As String
             Get
                 If _productName Is Nothing Then
-                    Dim attribute As AssemblyProductAttribute = CType(GetAttribute(GetType(AssemblyProductAttribute)), AssemblyProductAttribute)
+                    Dim attribute As AssemblyProductAttribute =
+                        CType(GetAttribute(GetType(AssemblyProductAttribute)), AssemblyProductAttribute)
+
                     If attribute Is Nothing Then
                         _productName = String.Empty
                     Else
@@ -188,7 +192,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  Returns the current stack trace information.
         ''' </summary>
         ''' <value>
-        '''  String containing stack trace information. Value can be <see cref="String.Empty"/>.
+        '''  <see langword="String"/> containing stack trace information. Value can be <see cref="String.Empty"/>.
         ''' </value>
         ''' <exception cref="ArgumentOutOfRangeException">
         '''  Thrown if the requested stack trace information is out of range.
@@ -236,7 +240,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Public ReadOnly Property Trademark() As String
             Get
                 If _trademark Is Nothing Then
-                    Dim attribute As AssemblyTrademarkAttribute = CType(GetAttribute(GetType(AssemblyTrademarkAttribute)), AssemblyTrademarkAttribute)
+                    Dim attribute As AssemblyTrademarkAttribute =
+                        CType(GetAttribute(GetType(AssemblyTrademarkAttribute)), AssemblyTrademarkAttribute)
+
                     If attribute Is Nothing Then
                         _trademark = String.Empty
                     Else
