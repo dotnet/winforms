@@ -174,7 +174,7 @@ public class BinaryFormatWriterTests
     }
 
     public static IEnumerable<object[]?> TryWriteFrameworkObject_SupportedObjects_TestData =>
-        HashtableTests.Hashtables_TestData.Concat(
+        ((IEnumerable<object[]?>)HashtableTests.Hashtables_TestData).Concat(
             ListTests.PrimitiveLists_TestData).Concat(
             ListTests.ArrayLists_TestData).Concat(
             PrimitiveTypeTests.Primitive_Data).Concat(
@@ -182,7 +182,7 @@ public class BinaryFormatWriterTests
             Array_TestData).Skip(9);
 
     public static IEnumerable<object[]?> TryWriteObject_UnsupportedObjects_TestData =>
-        HashtableTests.Hashtables_UnsupportedTestData.Concat(
+        ((IEnumerable<object[]?>)HashtableTests.Hashtables_UnsupportedTestData).Concat(
             ListTests.Lists_UnsupportedTestData).Concat(
             ListTests.ArrayLists_UnsupportedTestData).Concat(
             Array_UnsupportedTestData);
@@ -232,7 +232,7 @@ public class BinaryFormatWriterTests
         new DateTime[] { DateTime.MaxValue }
     };
 
-    public static IEnumerable<object[]> Array_TestData => StringArray_Parse_Data.Concat(PrimitiveArray_Parse_Data);
+    public static IEnumerable<object[]> Array_TestData => ((IEnumerable<object[]>)StringArray_Parse_Data).Concat(PrimitiveArray_Parse_Data);
 
     public static TheoryData<Array> Array_UnsupportedTestData => new()
     {
