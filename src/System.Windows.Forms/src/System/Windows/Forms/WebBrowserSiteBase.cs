@@ -384,11 +384,18 @@ public unsafe class WebBrowserSiteBase :
         {
             try
             {
-                connectionPoint = new AxHost.ConnectionPointCookie(nativeObject, this, typeof(IPropertyNotifySink));
+                connectionPoint = new AxHost.ConnectionPointCookie(nativeObject, this, typeof(IPropertyNotifySink.Interface));
             }
+#if DEBUG
+            catch (Exception)
+            {
+                throw;
+            }
+#else
             catch (Exception ex) when (!ex.IsCriticalException())
             {
             }
+#endif
         }
     }
 

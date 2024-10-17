@@ -3085,6 +3085,18 @@ public class AxHostTests
         Assert.Equal((uint)0, ocx.Value->Release() - 1);
     }
 
+    [WinFormsFact]
+    public unsafe void AxHost_Ocx_ConnectionPoint_Success()
+    {
+        using SubAxHost control = new(WebBrowserClsidString);
+        control.CreateControl();
+
+        object site = control.TestAccessor().Dynamic._oleSite;
+        AxHost.ConnectionPointCookie cookie = site.TestAccessor().Dynamic._connectionPoint;
+        Assert.NotNull(cookie);
+        Assert.True(cookie.Connected);
+    }
+
     private class SubComponentEditor : ComponentEditor
     {
         public override bool EditComponent(ITypeDescriptorContext context, object component)
