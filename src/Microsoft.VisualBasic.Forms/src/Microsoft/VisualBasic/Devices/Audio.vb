@@ -2,6 +2,7 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.IO
+Imports System.Media
 
 Imports VbUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
@@ -12,8 +13,9 @@ Namespace Microsoft.VisualBasic.Devices
     ''' </summary>
     Public Class Audio
 
-        ' Object that plays the sounds. We use a private member so we can ensure we have a reference for async plays
-        Private _sound As Media.SoundPlayer
+        ' Object that plays the sounds. We use a private member
+        ' so we can ensure we have a reference for async plays
+        Private _sound As SoundPlayer
 
         ''' <summary>
         '''  Creates a new <see cref="Audio"/> object.
@@ -27,7 +29,10 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="value"></param>
         Private Shared Sub ValidateAudioPlayModeEnum(value As AudioPlayMode, paramName As String)
             If value < AudioPlayMode.WaitToComplete OrElse value > AudioPlayMode.BackgroundLoop Then
-                Throw New ComponentModel.InvalidEnumArgumentException(paramName, value, GetType(AudioPlayMode))
+                Throw New ComponentModel.InvalidEnumArgumentException(
+                    argumentName:=paramName,
+                    invalidValue:=value,
+                    enumClass:=GetType(AudioPlayMode))
             End If
         End Sub
 
@@ -48,16 +53,17 @@ Namespace Microsoft.VisualBasic.Devices
         End Function
 
         ''' <summary>
-        '''  Plays the passed in <see cref="Media.SoundPlayer"/> in the passed in <see cref="AudioPlayMode"/>.
+        '''  Plays the passed in <see cref="SoundPlayer"/> in the passed in <see cref="AudioPlayMode"/>.
         ''' </summary>
-        ''' <param name="sound">The SoundPlayer to play.</param>
+        ''' <param name="sound">The sound to play.</param>
         ''' <param name="mode">The mode in which to play the sound.</param>
-        Private Sub Play(sound As Media.SoundPlayer, mode As AudioPlayMode)
+        Private Sub Play(sound As SoundPlayer, mode As AudioPlayMode)
+            Debug.Assert(condition:=sound IsNot Nothing, message:=$"There's no {NameOf(SoundPlayer)}")
+            Dim condition As Boolean = [Enum].IsDefined(enumType:=GetType(AudioPlayMode), value:=mode)
+            Debug.Assert(condition, message:="Enum value is out of range")
 
-            Debug.Assert(sound IsNot Nothing, "There's no SoundPlayer")
-            Debug.Assert([Enum].IsDefined(GetType(AudioPlayMode), mode), "Enum value is out of range")
-
-            ' Stopping the sound ensures it's safe to dispose it. This could happen when we change the value of m_Sound below
+            ' Stopping the sound ensures it's safe to dispose it.
+            ' This could happen when we change the value of _sound below
             _sound?.Stop()
 
             _sound = sound
@@ -75,11 +81,9 @@ Namespace Microsoft.VisualBasic.Devices
 
         End Sub
 
-        ''' <summary>
-        '''  Stops the play of any playing sound.
-        ''' </summary>
+        ''' <inheritdoc cref="SoundPlayer.Stop()"/>
         Public Sub [Stop]()
-            Dim sound As New Media.SoundPlayer()
+            Dim sound As New SoundPlayer()
             sound.Stop()
         End Sub
 
@@ -96,13 +100,15 @@ Namespace Microsoft.VisualBasic.Devices
         ''' </summary>
         ''' <param name="location">The name of the file.</param>
         ''' <param name="playMode">
-        '''  An enum value representing the <see cref="AudioPlayMode"/> Background (async),
-        '''  WaitToComplete (sync) or BackgroundLoop
+        '''  An enum value representing the <see cref="AudioPlayMode"/>
+        '''      0 - Background (async),
+        '''      1 - WaitToComplete (sync)
+        '''      2 - BackgroundLoop
         ''' </param>
         Public Sub Play(location As String, playMode As AudioPlayMode)
             ValidateAudioPlayModeEnum(playMode, NameOf(playMode))
             Dim safeFilename As String = ValidateFilename(location)
-            Dim sound As New Media.SoundPlayer(safeFilename)
+            Dim sound As New SoundPlayer(safeFilename)
             Play(sound, playMode)
         End Sub
 
@@ -127,7 +133,7 @@ Namespace Microsoft.VisualBasic.Devices
         '''  Plays a <see cref="Stream"/> representation of a .wav file in the passed in <see cref="AudioPlayMode"/>.
         ''' </summary>
         ''' <param name="stream">The stream representing the .wav file.</param>
-        ''' <param name="playMode">The mode in which the stream should be played.</param>
+        ''' <param name="playMode">The <see cref="AudioPlayMode"/>> in which the <see cref="stream"/> should be played.</param>
         ''' <exception cref="ArgumentNullException">if stream is <see langword="Nothing"/>.</exception>
         Public Sub Play(stream As Stream, playMode As AudioPlayMode)
             ValidateAudioPlayModeEnum(playMode, NameOf(playMode))
@@ -135,7 +141,7 @@ Namespace Microsoft.VisualBasic.Devices
                 Throw VbUtils.GetArgumentNullException(NameOf(stream))
             End If
 
-            Play(New Media.SoundPlayer(stream), playMode)
+            Play(New SoundPlayer(stream), playMode)
         End Sub
 
         ''' <summary>
@@ -143,8 +149,10 @@ Namespace Microsoft.VisualBasic.Devices
         ''' </summary>
         ''' <param name="systemSound">The sound to be played.</param>
         ''' <remarks>Plays the sound asynchronously.</remarks>
-        ''' <exception cref="ArgumentNullException">if systemSound is <see langword="Nothing"/>.</exception>
-        Public Sub PlaySystemSound(systemSound As Media.SystemSound)
+        ''' <exception cref="ArgumentNullException">
+        '''  If systemSound is <see langword="Nothing"/>.
+        ''' </exception>
+        Public Sub PlaySystemSound(systemSound As SystemSound)
             If systemSound Is Nothing Then
                 Throw VbUtils.GetArgumentNullException(NameOf(systemSound))
             End If

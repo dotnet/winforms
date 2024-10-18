@@ -16,7 +16,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ' The executing application (the EntryAssembly)
         Private _info As AssemblyInfo
 
-        'Lazy-initialized and cached log object.
+        ' Lazy-initialized and cached log object.
         Private _log As Logging.Log
 
         Public Sub New()
@@ -38,7 +38,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Public ReadOnly Property Info() As AssemblyInfo
             Get
                 If _info Is Nothing Then
-                    Dim assembly As Reflection.Assembly = If(Reflection.Assembly.GetEntryAssembly(), Reflection.Assembly.GetCallingAssembly())
+                    Dim assembly As Reflection.Assembly =
+                        If(Reflection.Assembly.GetEntryAssembly(), Reflection.Assembly.GetCallingAssembly())
+
                     _info = New AssemblyInfo(assembly)
                 End If
                 Return _info

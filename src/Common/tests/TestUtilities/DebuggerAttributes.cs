@@ -73,7 +73,8 @@ internal static class DebuggerAttributes
 
     public static IEnumerable<PropertyInfo> GetDebuggerVisibleProperties(Type debuggerAttributeType)
     {
-        // The debugger doesn't evaluate non-public members of type proxies. GetGetMethod returns null if the getter is non-public.
+        // The debugger doesn't evaluate non-public members of type proxies.
+        // GetGetMethod returns null if the getter is non-public.
         IEnumerable<PropertyInfo> visibleProperties = debuggerAttributeType.GetProperties()
             .Where(pi => pi.GetGetMethod() is object && GetDebuggerBrowsableState(pi) != DebuggerBrowsableState.Never);
         return visibleProperties;
