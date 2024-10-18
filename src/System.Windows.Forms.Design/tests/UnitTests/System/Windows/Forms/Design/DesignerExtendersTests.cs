@@ -29,18 +29,20 @@ public class DesignerExtendersTests : IDisposable
     [Fact]
     public void Dispose_RemovesExtenderProviders()
     {
-        _designerExtenders.Dispose();
-
-        _extenderServiceMock.Verify(s => s.RemoveExtenderProvider(It.IsAny<IExtenderProvider>()), Times.Exactly(2));
-        _designerExtenders.Invoking(d => d.Dispose()).Should().NotThrow();
-
-        var providersField = typeof(DesignerExtenders).GetField("_providers", BindingFlags.NonPublic | BindingFlags.Instance);
-        var extenderServiceField = typeof(DesignerExtenders).GetField("_extenderService", BindingFlags.NonPublic | BindingFlags.Instance);
+        IExtenderProvider[] providersField = _designerExtenders.TestAccessor().Dynamic._providers;
+        IExtenderProviderService extenderServiceField = _designerExtenders.TestAccessor().Dynamic._extenderService;
 
         providersField.Should().NotBeNull();
         extenderServiceField.Should().NotBeNull();
 
-        providersField!.GetValue(_designerExtenders).Should().BeNull();
-        extenderServiceField!.GetValue(_designerExtenders).Should().BeNull();
+        _designerExtenders.Dispose();
+        _extenderServiceMock.Verify(s => s.RemoveExtenderProvider(It.IsAny<IExtenderProvider>()), Times.Exactly(2));
+        _designerExtenders.Invoking(d => d.Dispose()).Should().NotThrow();
+
+        providersField = _designerExtenders.TestAccessor().Dynamic._providers;
+        extenderServiceField = _designerExtenders.TestAccessor().Dynamic._extenderService;
+
+        providersField.Should().BeNull();
+        extenderServiceField.Should().BeNull();
     }
 }
