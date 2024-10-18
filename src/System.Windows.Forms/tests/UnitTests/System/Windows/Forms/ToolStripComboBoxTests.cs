@@ -182,7 +182,7 @@ public class ToolStripComboBoxTests : IDisposable
     [WinFormsFact]
     public void ToolStripComboBox_Items_AddAndGet()
     {
-        var items = new[] { "Item1", "Item2" };
+        string[] items = ["Item1", "Item2"];
         _toolStripComboBox.Items.AddRange(items);
         _toolStripComboBox.Items.Cast<string>().Should().Contain(items);
     }
@@ -253,7 +253,7 @@ public class ToolStripComboBoxTests : IDisposable
     }
 
     [WinFormsFact]
-    public void ToolStripComboBox_DropDownStyleChanged_EventRaised()
+    public void ToolStripComboBox_DropDownClosed_EventRaised()
     {
         bool eventRaised = false;
         EventHandler handler = (sender, e) => eventRaised = true;
@@ -372,5 +372,47 @@ public class ToolStripComboBoxTests : IDisposable
         _toolStripComboBox.Items.Add("Item1");
         _toolStripComboBox.Items.Add("Item2");
         _toolStripComboBox.ToString().Should().Be($"{_toolStripComboBox.GetType().FullName}, Items.Count: 2");
+    }
+
+    [WinFormsFact]
+    public void ToolStripComboBox_GetPreferredSize_ReturnsExpected()
+    {
+        Size constrainingSize = new(50, 50);
+        Size preferredSize = _toolStripComboBox.GetPreferredSize(constrainingSize);
+
+        preferredSize.Width.Should().BeGreaterThanOrEqualTo(75);
+        preferredSize.Height.Should().BeGreaterThan(0);
+    }
+
+    [WinFormsFact]
+    public void ToolStripComboBox_GetPreferredSize_UsesBasePreferredSize()
+    {
+        Size constrainingSize = new(50, 50);
+        Size basePreferredSize = new(100, 23);
+        Size preferredSize = _toolStripComboBox.GetPreferredSize(constrainingSize);
+
+        preferredSize.Width.Should().BeGreaterThanOrEqualTo(basePreferredSize.Width);
+        preferredSize.Height.Should().Be(basePreferredSize.Height);
+    }
+
+    [WinFormsFact]
+    public void ToolStripComboBox_SelectedText_SetEmpty()
+    {
+        _toolStripComboBox.SelectedText = string.Empty;
+        _toolStripComboBox.SelectedText.Should().BeEmpty();
+    }
+
+    [WinFormsFact]
+    public void ToolStripComboBox_SelectedText_SetAndGetWithSelection()
+    {
+        _toolStripComboBox.Items.Add("Item1");
+        _toolStripComboBox.Items.Add("Item2");
+        _toolStripComboBox.SelectedIndex = 1;
+        _toolStripComboBox.SelectionStart = 0;
+        _toolStripComboBox.SelectionLength = 5;
+        _toolStripComboBox.SelectedText = "Item2";
+
+        _toolStripComboBox.ComboBox.Select(0, 5);
+        _toolStripComboBox.SelectedText.Should().Be("Item2");
     }
 }
