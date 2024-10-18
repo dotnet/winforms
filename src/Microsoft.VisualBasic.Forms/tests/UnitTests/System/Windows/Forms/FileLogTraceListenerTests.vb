@@ -1,6 +1,8 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
+Option Strict Off
+
 Imports System.IO
 Imports System.Text
 Imports System.Windows.Forms
@@ -14,16 +16,18 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Inherits VbFileCleanupTestBase
 
         <WinFormsFact>
-        Public Sub ListenerPropertiesTest()
+        Public Sub ListenerProperties()
             Dim testCode As Action =
                 Sub()
                     Dim testDirectory As String = CreateTempDirectory()
-                    Using listener As New FileLogTraceListener("FileLogTraceListenerTest") With {
+                    Using listener As New FileLogTraceListener(NameOf(FileLogTraceListenerTests)) With {
                         .Location = LogFileLocation.Custom,
                         .CustomLocation = testDirectory}
 
                         Dim expectedBaseFileName As String = Path.GetFileNameWithoutExtension(Application.ExecutablePath)
                         listener.BaseFileName.Should.BeEquivalentTo(expectedBaseFileName)
+
+                        listener.Name.Should.NotBeNull()
 
                         listener.AutoFlush.Should.BeFalse()
                         listener.AutoFlush = True
@@ -46,6 +50,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         listener.LogFileCreationSchedule.Should.Be(LogFileCreationScheduleOption.None)
                         listener.LogFileCreationSchedule = LogFileCreationScheduleOption.Daily
                         listener.LogFileCreationSchedule.Should.Be(LogFileCreationScheduleOption.Daily)
+                        listener.LogFileCreationSchedule = LogFileCreationScheduleOption.Weekly
+                        listener.LogFileCreationSchedule.Should.Be(LogFileCreationScheduleOption.Weekly)
 
                         listener.MaxFileSize.Should.Be(5_000_000L)
                         listener.MaxFileSize = 500_000L
@@ -66,6 +72,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         listener.TraceOutputOptions.Should.Be(TraceOptions.None)
                         listener.TraceOutputOptions = TraceOptions.Callstack
                         listener.TraceOutputOptions.Should.Be(TraceOptions.Callstack)
+
+                        CStr(listener.TestAccessor().Dynamic.HostName).Should.NotBeEmpty()
+
+                        Dim listenerStream As FileLogTraceListener.ReferencedStream = CType(listener.TestAccessor().Dynamic.ListenerStream, FileLogTraceListener.ReferencedStream)
+                        listenerStream.Should.NotBeNull()
+                        listenerStream.IsInUse.Should.BeTrue()
+                        listenerStream.FileSize.Should.Be(0)
+
                     End Using
                 End Sub
 
@@ -74,8 +88,60 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End If
         End Sub
 
+        <WinFormsTheory>
+        <InlineData(-1)>
+        <InlineData(0)>
+        <InlineData(999)>
+        Public Sub ListenerSetMaxFileSizePropertiesThrows(value As Long)
+            Dim testDirectory As String = CreateTempDirectory()
+            Using listener As New FileLogTraceListener(NameOf(FileLogTraceListenerTests)) _
+                With {.Location = LogFileLocation.Custom, .CustomLocation = testDirectory}
+
+                CType(Sub()
+                          listener.MaxFileSize = value
+                      End Sub, Action).Should.Throw(Of ArgumentException)()
+            End Using
+        End Sub
+
         <WinFormsFact>
-        Public Sub LocationPropertyWithCommonApplicationDirectoryLocationTest()
+        Public Sub ListenerSetReserveDiskSpacePropertiesThrows()
+            Dim testDirectory As String = CreateTempDirectory()
+            Using listener As New FileLogTraceListener(NameOf(FileLogTraceListenerTests)) _
+                With {.Location = LogFileLocation.Custom, .CustomLocation = testDirectory}
+
+                CType(Sub()
+                          listener.ReserveDiskSpace = -1
+                      End Sub, Action).Should.Throw(Of ArgumentException)()
+            End Using
+        End Sub
+
+        <WinFormsTheory>
+        <NullAndEmptyStringData>
+        Public Sub ListenerSetStringPropertiesThrows(value As String)
+            Dim testDirectory As String = CreateTempDirectory()
+            Using listener As New FileLogTraceListener(NameOf(FileLogTraceListenerTests)) _
+                With {.Location = LogFileLocation.Custom, .CustomLocation = testDirectory}
+
+                CType(Sub()
+                          listener.BaseFileName = value
+                      End Sub, Action).Should.Throw(Of ArgumentNullException)()
+            End Using
+        End Sub
+
+        <WinFormsFact>
+        Public Sub ListenerSetTraceOptionsPropertiesThrows()
+            Dim testDirectory As String = CreateTempDirectory()
+            Using listener As New FileLogTraceListener(NameOf(FileLogTraceListenerTests)) _
+                With {.Location = LogFileLocation.Custom, .CustomLocation = testDirectory}
+
+                CType(Sub()
+                          listener.TraceOutputOptions = DirectCast(-1, TraceOptions)
+                      End Sub, Action).Should.Throw(Of ArgumentException)()
+            End Using
+        End Sub
+
+        <WinFormsFact>
+        Public Sub LocationPropertyWithCommonApplicationDirectoryLocation()
             Dim testCode As Action =
                 Sub()
                     Dim fullLogFileName As String
@@ -96,7 +162,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsFact>
-        Public Sub LocationPropertyWithCustomLocationTest()
+        Public Sub LocationPropertyWithCustomLocation()
             Dim testCode As Action =
                 Sub()
                     Dim testDirectory As String = CreateTempDirectory()
@@ -113,7 +179,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsFact>
-        Public Sub LocationPropertyWithExecutableDirectoryLocationTest()
+        Public Sub LocationPropertyWithExecutableDirectoryLocation()
             Dim testCode As Action =
                 Sub()
                     Dim fullLogFileName As String
@@ -134,7 +200,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsFact>
-        Public Sub LocationPropertyWithLocalUserApplicationDirectoryLocationTest()
+        Public Sub LocationPropertyWithLocalUserApplicationDirectoryLocation()
             Dim testCode As Action =
                 Sub()
                     Dim fullLogFileName As String
@@ -155,7 +221,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsFact>
-        Public Sub LocationPropertyWithTempDirectoryLocationTest()
+        Public Sub LocationPropertyWithTempDirectoryLocation()
             Dim testCode As Action =
                 Sub()
                     Dim fullLogFileName As String
