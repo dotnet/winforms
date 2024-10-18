@@ -9,6 +9,8 @@ using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.Serialization;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Moq;
 using Windows.Win32.System.Ole;
 using Com = Windows.Win32.System.Com;
@@ -2869,5 +2871,84 @@ public partial class DataObjectTests
         data.GetData("point1").Should().BeOfType<Point>().Which.Should().BeEquivalentTo(point1);
         data.GetData("point2").Should().BeOfType<Point>().Which.Should().BeEquivalentTo(point2);
         data.GetData("Mystring").Should().Be("test");
+    }
+
+    [WinFormsFact]
+    public void DataObject_SetDataAsJson_CustomJsonConverter_ReturnsExpected()
+    {
+        // This test demonstrates one way users can achieve custom JSON serialization behavior if the
+        // default JSON serialization behavior that is used in SetDataAsJson APIs is not enough for their scenario.
+        WeatherForecast forecast = new()
+        {
+            Date = DateTimeOffset.Now,
+            TemperatureCelsius = 25,
+            Summary = "Hot"
+        };
+
+        DataObject dataObject = new();
+        dataObject.SetDataAsJson("custom", forecast);
+        WeatherForecast deserialized = dataObject.GetData("custom").Should().BeOfType<WeatherForecast>().Subject;
+        string offsetFormat = "MM/dd/yyyy";
+        deserialized.Date.ToString(offsetFormat).Should().Be(forecast.Date.ToString(offsetFormat));
+        deserialized.TemperatureCelsius.Should().Be(forecast.TemperatureCelsius);
+        deserialized.Summary.Should().Be($"{forecast.Summary} custom!");
+    }
+
+    [JsonConverter(typeof(WeatherForecastJsonConverter))]
+    private class WeatherForecast
+    {
+        public DateTimeOffset Date { get; set; }
+        public int TemperatureCelsius { get; set; }
+        public string Summary { get; set; }
+    }
+
+    private class WeatherForecastJsonConverter : JsonConverter<WeatherForecast>
+    {
+        public override WeatherForecast Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            WeatherForecast result = new();
+            while (reader.Read())
+            {
+                if (reader.TokenType == JsonTokenType.EndObject)
+                {
+                    return result;
+                }
+
+                if (reader.TokenType != JsonTokenType.PropertyName)
+                {
+                    throw new JsonException();
+                }
+
+                string propertyName = reader.GetString();
+
+                reader.Read();
+
+                switch (propertyName)
+                {
+                    case nameof(WeatherForecast.Date):
+                        result.Date = DateTimeOffset.ParseExact(reader.GetString(), "MM/dd/yyyy", null);
+                        break;
+                    case nameof(WeatherForecast.TemperatureCelsius):
+                        result.TemperatureCelsius = reader.GetInt32();
+                        break;
+                    case nameof(WeatherForecast.Summary):
+                        result.Summary = reader.GetString();
+                        break;
+                    default:
+                        throw new JsonException();
+                }
+            }
+
+            throw new JsonException();
+        }
+
+        public override void Write(Utf8JsonWriter writer, WeatherForecast value, JsonSerializerOptions options)
+        {
+            writer.WriteStartObject();
+            writer.WriteString(nameof(WeatherForecast.Date), value.Date.ToString("MM/dd/yyyy"));
+            writer.WriteNumber(nameof(WeatherForecast.TemperatureCelsius), value.TemperatureCelsius);
+            writer.WriteString(nameof(WeatherForecast.Summary), $"{value.Summary} custom!");
+            writer.WriteEndObject();
+        }
     }
 }
