@@ -8,6 +8,7 @@ using Moq;
 using System.Windows.Forms.TestUtilities;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 using Size = System.Drawing.Size;
+using System.Reflection.Metadata;
 
 namespace System.Windows.Forms.Tests;
 
@@ -10238,28 +10239,21 @@ public class ToolStripItemTests
     private class CustomDataObject : IDataObject
     {
         public object GetData(string format, bool autoConvert) => throw new NotImplementedException();
-
         public object GetData(string format) => throw new NotImplementedException();
-
         public object GetData(Type format) => throw new NotImplementedException();
-
-        public bool GetDataPresent(string format, bool autoConvert) => throw new NotImplementedException();
-
-        public bool GetDataPresent(string format) => throw new NotImplementedException();
-
-        public bool GetDataPresent(Type format) => throw new NotImplementedException();
-
-        public string[] GetFormats(bool autoConvert) => throw new NotImplementedException();
-
-        public string[] GetFormats() => throw new NotImplementedException();
-
+        public bool TryGetData<T>(string format, Func<TypeName, Type> resolver, bool autoConvert, out T data) => throw new NotImplementedException();
+        public bool TryGetData<T>(string format, bool autoConvert, out T data) => throw new NotImplementedException();
+        public bool TryGetData<T>(string format, out T data) => throw new NotImplementedException();
+        public bool TryGetData<T>(out T data) => throw new NotImplementedException();
         public void SetData(string format, bool autoConvert, object data) => throw new NotImplementedException();
-
         public void SetData(string format, object data) => throw new NotImplementedException();
-
         public void SetData(Type format, object data) => throw new NotImplementedException();
-
         public void SetData(object data) => throw new NotImplementedException();
+        public bool GetDataPresent(string format, bool autoConvert) => throw new NotImplementedException();
+        public bool GetDataPresent(string format) => throw new NotImplementedException();
+        public bool GetDataPresent(Type format) => throw new NotImplementedException();
+        public string[] GetFormats(bool autoConvert) => throw new NotImplementedException();
+        public string[] GetFormats() => throw new NotImplementedException();
     }
 
     private class CustomComDataObject : IComDataObject
