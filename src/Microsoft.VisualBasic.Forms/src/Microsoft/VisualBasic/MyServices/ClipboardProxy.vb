@@ -191,6 +191,11 @@ Namespace Microsoft.VisualBasic.MyServices
             Clipboard.SetImage(image)
         End Sub
 
+        ''' <inheritdoc cref="Clipboard.SetDataAsJson(String, Object)"/>
+        Public Sub SetDataAsJson(format As String, data As Object)
+            Clipboard.SetDataAsJson(format, data)
+        End Sub
+
         ''' <summary>
         '''  Saves the passed in String to the clipboard.
         ''' </summary>
