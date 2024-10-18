@@ -6,7 +6,6 @@
 using Moq;
 using System.ComponentModel;
 using System.ComponentModel.Design;
-using System.Reflection;
 
 namespace System.Windows.Forms.Design.Tests;
 
