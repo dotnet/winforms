@@ -4780,6 +4780,39 @@ public unsafe partial class Control :
         }
     }
 
+    /// <inheritdoc cref="DoDragDropAsJson(object, DragDropEffects, Bitmap?, Point, bool)"/>
+    public DragDropEffects DoDragDropAsJson(object data, DragDropEffects allowedEffects) =>
+        DoDragDropAsJson(data, allowedEffects, dragImage: null, cursorOffset: default, useDefaultDragImage: false);
+
+    /// <summary>
+    ///  Begins a drag operation, storing the data as Json.
+    /// </summary>
+    /// <param name="data">The data being dragged.</param>
+    /// <param name="allowedEffects">determine which drag operations can occur.</param>
+    /// <param name="dragImage">The drag image bitmap.</param>
+    /// <param name="cursorOffset">The drag image cursor offset.</param>
+    /// <param name="useDefaultDragImage">Indicating whether a layered window drag image is used.</param>
+    /// <returns>A value from the <see cref="DragDropEffects"/> enumeration that represents the final effect that was performed during the drag-and-drop operation.</returns>
+    /// <exception cref="InvalidOperationException">If <paramref name="data"/> is type <see cref="DataObject"/>.</exception>
+    public DragDropEffects DoDragDropAsJson(
+        object data,
+        DragDropEffects allowedEffects,
+        Bitmap? dragImage,
+        Point cursorOffset,
+        bool useDefaultDragImage)
+    {
+        if (data is DataObject)
+        {
+            // What should happen if ComTypes.IDataObject is received?
+            // TODO: Localize string
+            throw new InvalidOperationException($"DataObject cannot be JSON serialized meaningfully. Start drag/drop operation with the data by using {nameof(DoDragDrop)} instead");
+        }
+
+        DataObject dataObject = new();
+        dataObject.SetDataAsJson(data);
+        return DoDragDrop(dataObject, allowedEffects, dragImage, cursorOffset, useDefaultDragImage);
+    }
+
     /// <summary>
     ///  Begins a drag operation. The allowedEffects determine which
     ///  drag operations can occur. If the drag operation needs to interop
