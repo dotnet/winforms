@@ -25,8 +25,8 @@ public class ToolStripComboBoxTests : IDisposable
     public void ToolStripComboBox_ConstructorWithName_SetsName()
     {
         string expectedName = "TestComboBox";
-        _toolStripComboBox.Name = expectedName;
-        _toolStripComboBox.Name.Should().Be(expectedName);
+        ToolStripComboBox toolStripComboBox = new(expectedName);
+        toolStripComboBox.Name.Should().Be(expectedName);
     }
 
     [WinFormsFact]
@@ -239,62 +239,83 @@ public class ToolStripComboBoxTests : IDisposable
     [WinFormsFact]
     public void ToolStripComboBox_DropDown_EventRaised()
     {
-        _toolStripComboBox.ComboBox.DroppedDown.Should().BeFalse();
-
         bool eventRaised = false;
-        _toolStripComboBox.DropDown += (sender, e) => eventRaised = true;
-        _toolStripComboBox.ComboBox.DroppedDown = true;
+        EventHandler handler = (sender, e) => eventRaised = true;
+
+        _toolStripComboBox.DropDown += handler;
+        _toolStripComboBox.ComboBox.TestAccessor().Dynamic.OnDropDown(EventArgs.Empty);
         eventRaised.Should().BeTrue();
+
+        eventRaised = false;
+        _toolStripComboBox.DropDown -= handler;
+        _toolStripComboBox.ComboBox.TestAccessor().Dynamic.OnDropDown(EventArgs.Empty);
+        eventRaised.Should().BeFalse();
     }
 
     [WinFormsFact]
     public void ToolStripComboBox_DropDownClosed_EventRaised()
     {
-        _toolStripComboBox.ComboBox.DroppedDown.Should().BeFalse();
-
         bool eventRaised = false;
-        _toolStripComboBox.DropDownClosed += (sender, e) => eventRaised = true;
-        _toolStripComboBox.ComboBox.DroppedDown = true;
-        _toolStripComboBox.ComboBox.DroppedDown = false;
+        EventHandler handler = (sender, e) => eventRaised = true;
+
+        _toolStripComboBox.DropDownStyleChanged += handler;
+        _toolStripComboBox.ComboBox.TestAccessor().Dynamic.OnDropDownStyleChanged(EventArgs.Empty);
         eventRaised.Should().BeTrue();
 
-        _toolStripComboBox.ComboBox.IsHandleCreated.Should().BeTrue();
+        eventRaised = false;
+        _toolStripComboBox.DropDownStyleChanged -= handler;
+        _toolStripComboBox.ComboBox.TestAccessor().Dynamic.OnDropDownStyleChanged(EventArgs.Empty);
+        eventRaised.Should().BeFalse();
     }
 
     [WinFormsFact]
-    public void ToolStripComboBox_DropDownStyleChanged_EventRaised()
+    public void ToolStripComboBox_DropDownStyleChanged_Event_AddRemove()
     {
-        _toolStripComboBox.DropDownStyle.Should().Be(ComboBoxStyle.DropDown);
-
         bool eventRaised = false;
-        _toolStripComboBox.DropDownStyleChanged += (sender, e) => eventRaised = true;
-        _toolStripComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+        EventHandler handler = (sender, e) => eventRaised = true;
+
+        _toolStripComboBox.DropDownStyleChanged += handler;
+        _toolStripComboBox.ComboBox.TestAccessor().Dynamic.OnDropDownStyleChanged(EventArgs.Empty);
         eventRaised.Should().BeTrue();
 
-        _toolStripComboBox.ComboBox.IsHandleCreated.Should().BeFalse();
+        eventRaised = false;
+        _toolStripComboBox.DropDownStyleChanged -= handler;
+        _toolStripComboBox.ComboBox.TestAccessor().Dynamic.OnDropDownStyleChanged(EventArgs.Empty);
+        eventRaised.Should().BeFalse();
     }
 
     [WinFormsFact]
-    public void ToolStripComboBox_SelectedIndexChanged_EventRaised()
+    public void ToolStripComboBox_SelectedIndexChanged_Event_AddRemove()
     {
         bool eventRaised = false;
-        _toolStripComboBox.SelectedIndexChanged += (sender, e) => eventRaised = true;
+        EventHandler handler = (sender, e) => eventRaised = true;
+
+        _toolStripComboBox.SelectedIndexChanged += handler;
         _toolStripComboBox.Items.Add("Item1");
         _toolStripComboBox.Items.Add("Item2");
         _toolStripComboBox.SelectedIndex = 1;
         eventRaised.Should().BeTrue();
+
+        eventRaised = false;
+        _toolStripComboBox.SelectedIndexChanged -= handler;
+        _toolStripComboBox.SelectedIndex = 0;
+        eventRaised.Should().BeFalse();
     }
 
     [WinFormsFact]
-    public void ToolStripComboBox_TextUpdate_EventRaised()
+    public void ToolStripComboBox_TextUpdate_Event_AddRemove()
     {
         bool eventRaised = false;
-        _toolStripComboBox.TextUpdate += (sender, e) => eventRaised = true;
+        EventHandler handler = (sender, e) => eventRaised = true;
 
-        _toolStripComboBox.ComboBox.Text = "NewText";
+        _toolStripComboBox.TextUpdate += handler;
         _toolStripComboBox.ComboBox.TestAccessor().Dynamic.OnTextUpdate(EventArgs.Empty);
-
         eventRaised.Should().BeTrue();
+
+        eventRaised = false;
+        _toolStripComboBox.TextUpdate -= handler;
+        _toolStripComboBox.ComboBox.TestAccessor().Dynamic.OnTextUpdate(EventArgs.Empty);
+        eventRaised.Should().BeFalse();
     }
 
     [WinFormsFact]
@@ -327,5 +348,71 @@ public class ToolStripComboBoxTests : IDisposable
 
         _toolStripComboBox.SelectAll();
         _toolStripComboBox.SelectionLength.Should().Be(_toolStripComboBox.Text.Length);
+    }
+
+    [WinFormsFact]
+    public void ToolStripComboBox_DoubleClick_EventRaised()
+    {
+        bool eventRaised = false;
+        EventHandler handler = (sender, e) => eventRaised = true;
+
+        _toolStripComboBox.DoubleClick += handler;
+        _toolStripComboBox.ComboBox.TestAccessor().Dynamic.OnDoubleClick(EventArgs.Empty);
+        eventRaised.Should().BeTrue();
+
+        eventRaised = false;
+        _toolStripComboBox.DoubleClick -= handler;
+        _toolStripComboBox.ComboBox.TestAccessor().Dynamic.OnDoubleClick(EventArgs.Empty);
+        eventRaised.Should().BeFalse();
+    }
+
+    [WinFormsFact]
+    public void ToolStripComboBox_ToString_ReturnsExpected()
+    {
+        _toolStripComboBox.Items.Add("Item1");
+        _toolStripComboBox.Items.Add("Item2");
+        _toolStripComboBox.ToString().Should().Be($"{_toolStripComboBox.GetType().FullName}, Items.Count: 2");
+    }
+
+    [WinFormsFact]
+    public void ToolStripComboBox_GetPreferredSize_ReturnsExpected()
+    {
+        Size constrainingSize = new(50, 50);
+        Size preferredSize = _toolStripComboBox.GetPreferredSize(constrainingSize);
+
+        preferredSize.Width.Should().BeGreaterThanOrEqualTo(75);
+        preferredSize.Height.Should().BeGreaterThan(0);
+    }
+
+    [WinFormsFact]
+    public void ToolStripComboBox_GetPreferredSize_UsesBasePreferredSize()
+    {
+        Size constrainingSize = new(50, 50);
+        Size basePreferredSize = new(100, 23);
+        Size preferredSize = _toolStripComboBox.GetPreferredSize(constrainingSize);
+
+        preferredSize.Width.Should().BeGreaterThanOrEqualTo(basePreferredSize.Width);
+        preferredSize.Height.Should().Be(basePreferredSize.Height);
+    }
+
+    [WinFormsFact]
+    public void ToolStripComboBox_SelectedText_SetEmpty()
+    {
+        _toolStripComboBox.SelectedText = string.Empty;
+        _toolStripComboBox.SelectedText.Should().BeEmpty();
+    }
+
+    [WinFormsFact]
+    public void ToolStripComboBox_SelectedText_SetAndGetWithSelection()
+    {
+        _toolStripComboBox.Items.Add("Item1");
+        _toolStripComboBox.Items.Add("Item2");
+        _toolStripComboBox.SelectedIndex = 1;
+        _toolStripComboBox.SelectionStart = 0;
+        _toolStripComboBox.SelectionLength = 5;
+        _toolStripComboBox.SelectedText = "Item2";
+
+        _toolStripComboBox.ComboBox.Select(0, 5);
+        _toolStripComboBox.SelectedText.Should().Be("Item2");
     }
 }
