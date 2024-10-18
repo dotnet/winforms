@@ -57,10 +57,11 @@ internal static class WinFormsBinaryFormatWriter
         using BinaryFormatWriterScope writer = new(stream);
         new BinaryLibrary(libraryId: 2, IJsonData.CustomAssemblyName).Write(writer);
         new ClassWithMembersAndTypes(
-            new ClassInfo(1, jsonData.TypeFullName, [$"<{nameof(jsonData.JsonBytes)}>k__BackingField"]),
+            new ClassInfo(1, typeof(JsonData).FullName!, [$"<{nameof(jsonData.JsonBytes)}>k__BackingField", $"<{nameof(jsonData.OriginalAssemblyQualifiedTypeName)}>k__BackingField"]),
             libraryId: 2,
-            new MemberTypeInfo[] { new(BinaryType.PrimitiveArray, PrimitiveType.Byte) },
-            new MemberReference(idRef: 3)).Write(writer);
+            new MemberTypeInfo[] { new(BinaryType.PrimitiveArray, PrimitiveType.Byte), new(BinaryType.String, null) },
+            new MemberReference(idRef: 3),
+            new BinaryObjectString(objectId: 4, jsonData.OriginalAssemblyQualifiedTypeName)).Write(writer);
 
         new ArraySinglePrimitive<byte>(objectId: 3, jsonData.JsonBytes).Write(writer);
     }

@@ -20,28 +20,35 @@ namespace System.Private.Windows;
 /// <example>
 /// <![CDATA[
 ///  [Serializable]
-///  struct ReplicatedJsonData<T> : IObjectReference
+///  struct ReplicatedJsonData : IObjectReference
 ///  {
 ///     public byte[] JsonBytes { get; set; }
 ///
+///     public string OriginalAssemblyQualifiedTypeName { get; set; }
+///
 ///     // For deserializing with BinaryFormatter only. This interface is not needed if using NrbfDecoder to help deserialize.
-///     public readonly object GetRealObject(StreamingContext context) =>
-///         JsonSerializer.Deserialize(JsonBytes, typeof(T)) ?? throw new InvalidOperationException();
+///     public readonly object GetRealObject(StreamingContext context)
+///     {
+///         // TODO: Additional checking on OriginalAssemblyQualifiedTypeName to block unwanted types if needed.
+///         return JsonSerializer.Deserialize(JsonBytes, Type.GetType(OriginalAssemblyQualifiedTypeName)) ?? throw new InvalidOperationException();
+///     }
 ///  }
 ///
 ///  // For deserializing with BinaryFormatter only.
-///  public Type ResolveType(TypeName typeName)
+///  class ReplicatedJsonDataBinder : SerializationBinder
 ///  {
-///     // The assembly name for JsonData<T> should always be "System.Private.Windows.VirtualJson"
-///     if (name.AssemblyName == "System.Private.Windows.VirtualJson")
+///     public override Type? BindToType(string assemblyName, string typeName)
 ///     {
-///         // TODO: Additional checking for the generic type to block unwanted types if needed.
-///         return typeof(ReplicatedJsonData<T>);
+///         // The assembly name for JsonData should always be "System.Private.Windows.VirtualJson"
+///         if (assemblyName == "System.Private.Windows.VirtualJson"
+///             && TypeName.TryParse(typeName, out TypeName? name)
+///             && name.Name == "JsonData")
+///         {
+///             return typeof(ReplicatedJsonData);
+///         }
+///
+///         // TODO: Rejection behavior
 ///     }
-///
-///     // TODO: Rejection behavior
-///  }
-///
 ///
 ///  void DeserializeJsonData(DataObject dataObject)
 ///  {
@@ -72,7 +79,7 @@ namespace System.Private.Windows;
 ///         GlobalUnlock(hglobal);
 ///     }
 ///
-///     // Use Nrbf to decode stream and rehydrate data.
+///     // Use Nrbf to decode stream and rehydrate data. (recommended)
 ///     System.Formats.Nrbf.SerializationRecord record = NrbfDecoder.Decode(stream);
 ///     if (record.TypeName.AssemblyName.FullName != "System.Private.Windows.VirtualJson")
 ///     {
@@ -81,38 +88,40 @@ namespace System.Private.Windows;
 ///     }
 ///
 ///     if (record is not System.Formats.Nrbf.ClassRecord types
-///         || !types.HasMember("<JsonBytes>k__BackingField")
-///         || types.GetRawValue("<JsonBytes>k__BackingField") is not System.Formats.Nrbf.SZArrayRecord<byte> byteData
-///         || !TypeName.TryParse(types.TypeName.FullName, out TypeName? result)
-///         || Type.GetType(result.GetGenericArguments()[0].AssemblyQualifiedName) is not Type genericType)
+///         || types.GetRawValue("<JsonBytes>k__BackingField") is not SZArrayRecord<byte> byteData
+///         || types.GetRawValue("<OriginalAssemblyQualifiedTypeName>k__BackingField") is not string typeData
+///         || !TypeName.TryParse(typeData, out TypeName? result)
+///         || Type.GetType(result.AssemblyQualifiedName) is not Type originalType)
 ///     {
 ///         // This is supposed to be JsonData, but somehow the data is corrupt.
 ///         throw new InvalidOperationException();
 ///     }
 ///
 ///     // This should return the original data that was JSON serialized.
-///     System.Text.Json.JsonSerializer.Deserialize(byteData.GetArray(), genericType);
+///     System.Text.Json.JsonSerializer.Deserialize(byteData.GetArray(), originalType);
 ///
 ///      // OR
+///      // Use BinaryFormatter to rehydrate the data.
 ///
 ///      // This should return the original data that was JSON serialized.
-///      dataObject.TryGetData<T>(format, ResolveType, out T data);
+///      BinaryFormatter binaryFormatter = new() { Binder = new ReplicatedJsonDataBinder() };
+///      binaryFormatter.Deserialize(stream);
 ///  }
 ///  ]]>
 /// </example>
 [Serializable]
-internal struct JsonData<T> : IJsonData
+internal struct JsonData : IJsonData
 {
     public byte[] JsonBytes { get; set; }
 
-    public readonly string TypeFullName => $"{typeof(JsonData<T>).FullName}";
+    public string OriginalAssemblyQualifiedTypeName { get; set; }
 
-    public readonly object Deserialize() => JsonSerializer.Deserialize(JsonBytes, typeof(T)) ?? throw new InvalidOperationException();
+    public readonly object Deserialize() => JsonSerializer.Deserialize(JsonBytes, Type.GetType(OriginalAssemblyQualifiedTypeName)!) ?? throw new InvalidOperationException();
 }
 
 /// <summary>
 ///  Represents an object that contains JSON serialized data. This interface is used to
-///  identify a <see cref="JsonData{T}"/> without needing to have the generic type information.
+///  identify a <see cref="JsonData"/> without needing to have the generic type information.
 /// </summary>
 internal interface IJsonData
 {
@@ -121,7 +130,7 @@ internal interface IJsonData
 
     byte[] JsonBytes { get; set; }
 
-    string TypeFullName { get; }
+    public string OriginalAssemblyQualifiedTypeName { get; set; }
 
     object Deserialize();
 }

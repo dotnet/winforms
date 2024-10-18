@@ -127,7 +127,7 @@ public unsafe partial class DataObject :
     ///   on custom converters for JSON serialization.
     ///  </para>
     /// </remarks>
-    public void SetDataAsJson<T>(string format, T data)
+    public void SetDataAsJson(string format, object data)
     {
         if (data is DataObject)
         {
@@ -135,13 +135,11 @@ public unsafe partial class DataObject :
             throw new InvalidOperationException($"DataObject cannot be JSON serialized meaningfully. Set the data by using {nameof(SetData)} instead");
         }
 
-        SetData(format, new JsonData<T>() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data) });
+        SetData(format, new JsonData() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data), OriginalAssemblyQualifiedTypeName = data.GetType().AssemblyQualifiedName! });
     }
 
-    /// <inheritdoc cref="SetDataAsJson{T}(string, T)"/>
-    public void SetDataAsJson<T>(T data) => SetData(typeof(T), new JsonData<T>() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data) });
-
-    public void SetDataAsJson<T>(string format, bool autoConvert, T data)
+    /// <inheritdoc cref="SetDataAsJson(string, object)"/>
+    public void SetDataAsJson(object data)
     {
         if (data is DataObject)
         {
@@ -149,7 +147,19 @@ public unsafe partial class DataObject :
             throw new InvalidOperationException($"DataObject cannot be JSON serialized meaningfully. Set the data by using {nameof(SetData)} instead");
         }
 
-        SetData(format, autoConvert, new JsonData<T>() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data) });
+        Type type = data.GetType();
+        SetData(type, new JsonData() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data), OriginalAssemblyQualifiedTypeName = type.AssemblyQualifiedName! });
+    }
+
+    public void SetDataAsJson(string format, bool autoConvert, object data)
+    {
+        if (data is DataObject)
+        {
+            // TODO: Localize string.
+            throw new InvalidOperationException($"DataObject cannot be JSON serialized meaningfully. Set the data by using {nameof(SetData)} instead");
+        }
+
+        SetData(format, autoConvert, new JsonData() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data), OriginalAssemblyQualifiedTypeName = data.GetType().AssemblyQualifiedName! });
     }
 
     #region IDataObject

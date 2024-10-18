@@ -37,7 +37,7 @@ virtual System.Windows.Forms.DataObject.TryGetDataCore<T>(string! format, System
 [WFO5002]System.Windows.Forms.Form.ShowAsync(System.Windows.Forms.IWin32Window? owner = null) -> System.Threading.Tasks.Task!
 [WFO5002]System.Windows.Forms.Form.ShowDialogAsync() -> System.Threading.Tasks.Task<System.Windows.Forms.DialogResult>!
 [WFO5002]System.Windows.Forms.Form.ShowDialogAsync(System.Windows.Forms.IWin32Window! owner) -> System.Threading.Tasks.Task<System.Windows.Forms.DialogResult>!
-static System.Windows.Forms.Clipboard.SetDataAsJson<T>(string! format, T data) -> void
-System.Windows.Forms.DataObject.SetDataAsJson<T>(string! format, bool autoConvert, T data) -> void
-System.Windows.Forms.DataObject.SetDataAsJson<T>(string! format, T data) -> void
-System.Windows.Forms.DataObject.SetDataAsJson<T>(T data) -> void
+static System.Windows.Forms.Clipboard.SetDataAsJson(string! format, object! data) -> void
+System.Windows.Forms.DataObject.SetDataAsJson(object! data) -> void
+System.Windows.Forms.DataObject.SetDataAsJson(string! format, bool autoConvert, object! data) -> void
+System.Windows.Forms.DataObject.SetDataAsJson(string! format, object! data) -> void

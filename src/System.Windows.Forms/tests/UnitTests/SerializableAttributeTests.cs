@@ -16,7 +16,7 @@ public class SerializableAttributeTests
             new HashSet<string>
             {
                 // This is needed for OLE JSON serialization support
-                { typeof(JsonData<>).FullName },
+                { typeof(JsonData).FullName },
                 // This state is serialized to communicate to the native control
                 { typeof(AxHost.State).FullName },
                 // Following classes are participating in resx serialization scenarios.

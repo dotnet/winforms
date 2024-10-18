@@ -63,24 +63,26 @@ internal static class WinFormsSerializationRecordExtensions
     {
         @object = null;
 
-        if (record.TypeName.AssemblyName!.FullName != IJsonData.CustomAssemblyName)
+        if (record.TypeName.AssemblyName?.FullName != IJsonData.CustomAssemblyName)
         {
             // The data was not serialized as JSON.
             return false;
         }
 
         if (record is not ClassRecord types
-            || !types.HasMember("<JsonBytes>k__BackingField")
             || types.GetRawValue("<JsonBytes>k__BackingField") is not SZArrayRecord<byte> byteData
-            || !TypeName.TryParse(types.TypeName.FullName, out TypeName? result)
-            || Type.GetType(result.GetGenericArguments()[0].AssemblyQualifiedName) is not Type genericType)
+            || types.GetRawValue("<OriginalAssemblyQualifiedTypeName>k__BackingField") is not string typeData
+            || !TypeName.TryParse(typeData, out TypeName? result)
+            || Type.GetType(result.AssemblyQualifiedName) is not Type originalType)
         {
             // This is supposed to be JsonData, but somehow the binary formatted data is corrupt.
             throw new InvalidOperationException();
         }
 
+        // TODO: If the full name of the type user is asking for doesn't match the type that is saved, return false.
+
         // TODO: We should get the type from the Func<TypeName, Type> that will be passed down instead of using Type.GetType()
-        @object = JsonSerializer.Deserialize(byteData.GetArray(), genericType);
+        @object = JsonSerializer.Deserialize(byteData.GetArray(), originalType);
 
         return true;
     }
