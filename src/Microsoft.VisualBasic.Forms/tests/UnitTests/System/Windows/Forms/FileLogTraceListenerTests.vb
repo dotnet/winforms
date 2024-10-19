@@ -89,10 +89,23 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsTheory>
+        <NullAndEmptyStringData>
+        Public Sub ListenerSetInvalidBaseFileNamePropertyThrows(value As String)
+            Dim testDirectory As String = CreateTempDirectory()
+            Using listener As New FileLogTraceListener(NameOf(FileLogTraceListenerTests)) _
+                With {.Location = LogFileLocation.Custom, .CustomLocation = testDirectory}
+
+                CType(Sub()
+                          listener.BaseFileName = value
+                      End Sub, Action).Should.Throw(Of ArgumentNullException)()
+            End Using
+        End Sub
+
+        <WinFormsTheory>
         <InlineData(-1)>
         <InlineData(0)>
         <InlineData(999)>
-        Public Sub ListenerSetMaxFileSizePropertiesThrows(value As Long)
+        Public Sub ListenerSetInvalidMaxFileSizePropertiesThrows(value As Long)
             Dim testDirectory As String = CreateTempDirectory()
             Using listener As New FileLogTraceListener(NameOf(FileLogTraceListenerTests)) _
                 With {.Location = LogFileLocation.Custom, .CustomLocation = testDirectory}
@@ -104,7 +117,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsFact>
-        Public Sub ListenerSetReserveDiskSpacePropertiesThrows()
+        Public Sub ListenerSetInvalidReserveDiskSpacePropertiesThrows()
             Dim testDirectory As String = CreateTempDirectory()
             Using listener As New FileLogTraceListener(NameOf(FileLogTraceListenerTests)) _
                 With {.Location = LogFileLocation.Custom, .CustomLocation = testDirectory}
@@ -115,21 +128,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Using
         End Sub
 
-        <WinFormsTheory>
-        <NullAndEmptyStringData>
-        Public Sub ListenerSetStringPropertiesThrows(value As String)
-            Dim testDirectory As String = CreateTempDirectory()
-            Using listener As New FileLogTraceListener(NameOf(FileLogTraceListenerTests)) _
-                With {.Location = LogFileLocation.Custom, .CustomLocation = testDirectory}
-
-                CType(Sub()
-                          listener.BaseFileName = value
-                      End Sub, Action).Should.Throw(Of ArgumentNullException)()
-            End Using
-        End Sub
-
         <WinFormsFact>
-        Public Sub ListenerSetTraceOptionsPropertiesThrows()
+        Public Sub ListenerSetInvalidTraceOptionsPropertiesThrows()
             Dim testDirectory As String = CreateTempDirectory()
             Using listener As New FileLogTraceListener(NameOf(FileLogTraceListenerTests)) _
                 With {.Location = LogFileLocation.Custom, .CustomLocation = testDirectory}
@@ -176,6 +176,34 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 End Sub
 
             testCode.Should.NotThrow()
+        End Sub
+
+        <WinFormsFact>
+        Public Sub LocationPropertyWithCustomLocationEmptyThrows()
+            Dim testCode As Action =
+                Sub()
+                    Dim testDirectory As String = CreateTempDirectory()
+                    Using listener As New FileLogTraceListener() With {
+                        .Location = LogFileLocation.Custom,
+                        .CustomLocation = ""}
+                    End Using
+                End Sub
+
+            testCode.Should.Throw(Of ArgumentException)()
+        End Sub
+
+        <WinFormsFact>
+        Public Sub LocationPropertyWithCustomLocationNullThrows()
+            Dim testCode As Action =
+                Sub()
+                    Dim testDirectory As String = CreateTempDirectory()
+                    Using listener As New FileLogTraceListener() With {
+                        .Location = LogFileLocation.Custom,
+                        .CustomLocation = Nothing}
+                    End Using
+                End Sub
+
+            testCode.Should.Throw(Of ArgumentNullException)()
         End Sub
 
         <WinFormsFact>
