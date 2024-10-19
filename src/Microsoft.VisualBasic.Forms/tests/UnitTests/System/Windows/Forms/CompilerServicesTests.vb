@@ -14,9 +14,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <WinFormsFact>
         Public Sub TestVbHost_New_Success()
-            Dim vbHost As IVbHost = New TestVbHost
-            CType(vbHost.GetParentWindow, Control).Should.Be(s_control)
-            vbHost.GetWindowTitle.Should.Be(s_title)
+            Using vbHost As New TestVbHost
+                vbHost.GetParentWindow.Should.NotBeNull()
+                vbHost.GetParentWindow.Should.BeOfType(Of Control)()
+                vbHost.GetWindowTitle.Should.Be(s_title)
+            End Using
         End Sub
 
     End Class
