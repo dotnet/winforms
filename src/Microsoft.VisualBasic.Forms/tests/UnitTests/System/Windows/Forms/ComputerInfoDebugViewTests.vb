@@ -12,28 +12,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub ComputerInfoDebugView_Memory()
             Dim info As New ComputerInfo.ComputerInfoDebugView(New ComputerInfo)
-            If PlatformDetection.IsWindows Then
-                info.AvailablePhysicalMemory.Should.NotBe(0UI)
-                info.AvailableVirtualMemory.Should.NotBe(0UI)
-                info.TotalPhysicalMemory.Should.NotBe(0UI)
-                info.TotalVirtualMemory.Should.NotBe(0UI)
-            Else
-                CType(Function()
-                          Return info.AvailablePhysicalMemory
-                      End Function, Action).Should.Throw(Of PlatformNotSupportedException)()
-
-                CType(Function()
-                          Return info.AvailableVirtualMemory
-                      End Function, Action).Should.Throw(Of PlatformNotSupportedException)()
-
-                CType(Function()
-                          Return info.TotalPhysicalMemory
-                      End Function, Action).Should.Throw(Of PlatformNotSupportedException)()
-
-                CType(Function()
-                          Return info.TotalVirtualMemory
-                      End Function, Action).Should.Throw(Of PlatformNotSupportedException)()
-            End If
+            info.AvailablePhysicalMemory.Should.NotBe(0UI)
+            info.AvailableVirtualMemory.Should.NotBe(0UI)
+            info.TotalPhysicalMemory.Should.NotBe(0UI)
+            info.TotalVirtualMemory.Should.NotBe(0UI)
         End Sub
 
         <WinFormsFact>
