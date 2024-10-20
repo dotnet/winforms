@@ -332,7 +332,8 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
             }
         }
 
-        // We use this list when doing a Drag-Copy, so that we can correctly restore state when we are done. See Copy code below.
+        // We use this list when doing a Drag-Copy, so that we can correctly restore state when we are done.
+        // See Copy code below.
         List<IComponent> originalControls = null;
         bool performCopy = (_lastEffect == DragDropEffects.Copy);
 
@@ -660,7 +661,8 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
                 }
 
                 _statusCommandUITarget = new StatusCommandUI(_serviceProviderTarget);
-                // Spin up new stuff if the host changes, or if this is the first time through (lastDropTarget will be null in this case)
+                // Spin up new stuff if the host changes, or if this is the first time through
+                // (lastDropTarget will be null in this case)
                 if ((_lastDropTarget is null) || (newDestHost != _destHost))
                 {
                     if (_destHost is not null && _destHost != _srcHost)
@@ -677,7 +679,8 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
 
                     GetParentSnapInfo(target, _behaviorServiceTarget);
 
-                    // Disable the adorners in the new host, but only if this is not the source host, since that will already have been done
+                    // Disable the adorners in the new host, but only if this is not the source host,
+                    // since that will already have been done
                     if (newDestHost != _srcHost)
                     {
                         DisableAdorners(_serviceProviderTarget, _behaviorServiceTarget, true);
@@ -831,7 +834,8 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
                 _statusCommandUITarget?.SetStatusInformation(c, dropPoint);
             }
 
-            // allow any snaplines to be drawn above our drag images as long as the alt key is not pressed and the mouse is over the root comp
+            // allow any snaplines to be drawn above our drag images as long as the alt key is not pressed and
+            // the mouse is over the root comp
             if (_dragAssistanceManager is not null && !altKeyPressed && _targetAllowsSnapLines)
             {
                 _dragAssistanceManager.RenderSnapLinesInternal();

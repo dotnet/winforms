@@ -69,10 +69,14 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     private static readonly int s_listeningToIdle = BitVector32.CreateMask(s_editorRefresh);
     private static readonly int s_refreshProperties = BitVector32.CreateMask(s_listeningToIdle);
 
-    /// <summary>True if a window needs created when <see cref="CreateHandle"/> is called.</summary>
+    /// <summary>
+    ///  True if a window needs created when <see cref="CreateHandle"/> is called.
+    /// </summary>
     private static readonly int s_fNeedOwnWindow = BitVector32.CreateMask(s_refreshProperties);
 
-    /// <summary>True if the OCX is design time only and we're in user mode.</summary>
+    /// <summary>
+    ///  True if the OCX is design time only and we're in user mode.
+    /// </summary>
     private static readonly int s_fOwnWindow = BitVector32.CreateMask(s_fNeedOwnWindow);
 
     private static readonly int s_fSimpleFrame = BitVector32.CreateMask(s_fOwnWindow);
