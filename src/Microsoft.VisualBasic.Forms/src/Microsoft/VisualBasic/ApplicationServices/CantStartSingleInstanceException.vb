@@ -2,6 +2,7 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.ComponentModel
+Imports System.Runtime.Serialization
 
 Imports VbUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
@@ -18,19 +19,19 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ' Deserialization constructor must be defined since we are serializable
         <EditorBrowsable(EditorBrowsableState.Advanced)>
         <Obsolete("Type or member is obsolete", DiagnosticId:="SYSLIB0051")>
-        Protected Sub New(info As Runtime.Serialization.SerializationInfo, context As Runtime.Serialization.StreamingContext)
+        Protected Sub New(info As SerializationInfo, context As StreamingContext)
             MyBase.New(info, context)
         End Sub
 
         ''' <summary>
-        '''  Creates a new <see cref="Exception"/>.
+        '''  Creates a new <see cref="CantStartSingleInstanceException"/>.
         ''' </summary>
         Public Sub New()
             MyBase.New(VbUtils.GetResourceString(SR.AppModel_SingleInstanceCantConnect))
         End Sub
 
         ''' <summary>
-        '''  Creates a new <see cref="Exception"/>.
+        '''  Creates a new <see cref="CantStartSingleInstanceException"/>.
         ''' </summary>
         ''' <inheritdoc cref="Exception.New(String)"/>
         Public Sub New(message As String)
@@ -38,7 +39,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Sub
 
         ''' <summary>
-        '''  Creates a new <see cref="Exception"/>.
+        '''  Creates a new <see cref="CantStartSingleInstanceException"/>.
         ''' </summary>
         ''' <inheritdoc cref="Exception.New(String, Exception)"/>
         Public Sub New(message As String, inner As Exception)

@@ -36,9 +36,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
         ''' <summary>
-        '''  The current <see cref="IPrincipal"/> which represents the current user.
+        '''  The current IPrincipal which represents the current user.
         ''' </summary>
-        ''' <value>An IPrincipal representing the current user.</value>
+        ''' <value>An <see cref="IPrincipal"/> representing the current user.</value>
         <EditorBrowsable(EditorBrowsableState.Advanced)>
         Public Property CurrentPrincipal() As IPrincipal
             Get
@@ -71,7 +71,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  Indicates whether or not the current user is a member of the passed in role.
         ''' </summary>
         ''' <param name="role">The name of the role.</param>
-        ''' <returns><see langword="True"/> if the user is a member of the role otherwise <see langword="False"/>.</returns>
+        ''' <returns>
+        '''  <see langword="True"/> if the user is a member of the role otherwise <see langword="False"/>.
+        ''' </returns>
         Public Function IsInRole(role As String) As Boolean
             Return InternalPrincipal.IsInRole(role)
         End Function

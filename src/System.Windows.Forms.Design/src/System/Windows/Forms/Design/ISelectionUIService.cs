@@ -47,12 +47,14 @@ internal interface ISelectionUIService
     bool Dragging { get; }
 
     /// <summary>
-    ///  Called by an outside party to update drag information. This can only be called after a successful call to beginDrag.
+    ///  Called by an outside party to update drag information.
+    ///  This can only be called after a successful call to beginDrag.
     /// </summary>
     void DragMoved(Rectangle offset);
 
     /// <summary>
-    ///  Called by an outside party to finish a drag operation. This can only be called after a successful call to beginDrag.
+    ///  Called by an outside party to finish a drag operation.
+    ///  This can only be called after a successful call to beginDrag.
     /// </summary>
     void EndDrag(bool cancel);
 
