@@ -217,9 +217,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         fullLogFileName = listener.FullLogFileName
                         fullLogFileName.Should.StartWith(Path.GetDirectoryName(Application.ExecutablePath))
                     End Using
-                    If File.Exists(fullLogFileName) Then
-                        File.Delete(fullLogFileName)
-                    End If
                 End Sub
 
             If DirectoryIsAccessible(Path.GetDirectoryName(Application.ExecutablePath)) Then
