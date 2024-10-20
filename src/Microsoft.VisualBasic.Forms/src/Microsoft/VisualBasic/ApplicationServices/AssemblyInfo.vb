@@ -285,7 +285,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' </returns>
         Private Function GetAttribute(attributeType As Type) As Object
 
-            Debug.Assert(_assembly IsNot Nothing, "Null m_Assembly")
+            Debug.Assert(_assembly IsNot Nothing, $"Null {NameOf(_assembly)}")
 
             Dim attributes() As Object = _assembly.GetCustomAttributes(attributeType, inherit:=True)
 
