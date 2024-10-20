@@ -284,11 +284,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  The <see cref="Attribute"/> with the given type gotten from the assembly, or Nothing.
         ''' </returns>
         Private Function GetAttribute(attributeType As Type) As Object
-
-            Debug.Assert(_assembly IsNot Nothing, NameOf(_assembly))
+            Debug.Assert(_assembly IsNot Nothing, $"Null {NameOf(_assembly)}")
 
             Dim attributes() As Object = _assembly.GetCustomAttributes(attributeType, inherit:=True)
-
             If attributes.Length = 0 Then
                 Return Nothing
             Else
