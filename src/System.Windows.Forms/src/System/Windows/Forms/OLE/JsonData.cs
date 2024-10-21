@@ -20,18 +20,12 @@ namespace System.Private.Windows;
 /// <example>
 /// <![CDATA[
 ///  [Serializable]
-///  struct ReplicatedJsonData : IObjectReference
+///  struct ReplicatedJsonData<T> : IObjectReference
 ///  {
 ///     public byte[] JsonBytes { get; set; }
 ///
-///     public string OriginalAssemblyQualifiedTypeName { get; set; }
-///
 ///     // For deserializing with BinaryFormatter only. This interface is not needed if using NrbfDecoder to help deserialize.
-///     public readonly object GetRealObject(StreamingContext context)
-///     {
-///         // TODO: Additional checking on OriginalAssemblyQualifiedTypeName to block unwanted types if needed.
-///         return JsonSerializer.Deserialize(JsonBytes, Type.GetType(OriginalAssemblyQualifiedTypeName)) ?? throw new InvalidOperationException();
-///     }
+///     public readonly object GetRealObject(StreamingContext context) => JsonSerializer.Deserialize(JsonBytes, typeof(T)) ?? throw new InvalidOperationException();
 ///  }
 ///
 ///  // For deserializing with BinaryFormatter only.
@@ -41,10 +35,11 @@ namespace System.Private.Windows;
 ///     {
 ///         // The assembly name for JsonData should always be "System.Private.Windows.VirtualJson"
 ///         if (assemblyName == "System.Private.Windows.VirtualJson"
-///             && TypeName.TryParse(typeName, out TypeName? name)
-///             && name.Name == "JsonData")
+///             && TypeName.TryParse(typeName, out TypeName? name))
 ///         {
-///             return typeof(ReplicatedJsonData);
+///             TypeName genericTypeName = name.GetGenericArguments().FirstOrDefault()
+///             // TODO: Additional checking on generic type to block unwanted types if needed.
+///             return typeof(ReplicatedJsonData<T>);
 ///         }
 ///
 ///         // TODO: Rejection behavior
@@ -89,16 +84,17 @@ namespace System.Private.Windows;
 ///
 ///     if (record is not System.Formats.Nrbf.ClassRecord types
 ///         || types.GetRawValue("<JsonBytes>k__BackingField") is not SZArrayRecord<byte> byteData
-///         || types.GetRawValue("<OriginalAssemblyQualifiedTypeName>k__BackingField") is not string typeData
 ///         || !TypeName.TryParse(typeData, out TypeName? result)
-///         || Type.GetType(result.AssemblyQualifiedName) is not Type originalType)
+///         || result.GetGenericArguments().FirstOrDefault() is not { } genericTypeName)
 ///     {
 ///         // This is supposed to be JsonData, but somehow the data is corrupt.
 ///         throw new InvalidOperationException();
 ///     }
 ///
+///     // TODO: Additional checking on generic type to block unwanted types if needed.
+///
 ///     // This should return the original data that was JSON serialized.
-///     System.Text.Json.JsonSerializer.Deserialize(byteData.GetArray(), originalType);
+///     System.Text.Json.JsonSerializer.Deserialize(byteData.GetArray(), genericType);
 ///
 ///      // OR
 ///      // Use BinaryFormatter to rehydrate the data.
@@ -110,18 +106,18 @@ namespace System.Private.Windows;
 ///  ]]>
 /// </example>
 [Serializable]
-internal struct JsonData : IJsonData
+internal struct JsonData<T> : IJsonData
 {
     public byte[] JsonBytes { get; set; }
 
-    public string OriginalAssemblyQualifiedTypeName { get; set; }
+    public readonly string TypeFullName => $"{typeof(JsonData<T>).FullName}";
 
-    public readonly object Deserialize() => JsonSerializer.Deserialize(JsonBytes, Type.GetType(OriginalAssemblyQualifiedTypeName)!) ?? throw new InvalidOperationException();
+    public readonly object Deserialize() => JsonSerializer.Deserialize(JsonBytes, typeof(T)) ?? throw new InvalidOperationException();
 }
 
 /// <summary>
 ///  Represents an object that contains JSON serialized data. This interface is used to
-///  identify a <see cref="JsonData"/> without needing to have the generic type information.
+///  identify a <see cref="JsonData{T}"/> without needing to have the generic type information.
 /// </summary>
 internal interface IJsonData
 {
@@ -130,7 +126,7 @@ internal interface IJsonData
 
     byte[] JsonBytes { get; set; }
 
-    public string OriginalAssemblyQualifiedTypeName { get; set; }
+    string TypeFullName { get; }
 
     object Deserialize();
 }

@@ -127,7 +127,7 @@ public unsafe partial class DataObject :
     ///   on custom converters for JSON serialization.
     ///  </para>
     /// </remarks>
-    public void SetDataAsJson(string format, object data)
+    public void SetDataAsJson<T>(string format, T data)
     {
         if (data is DataObject)
         {
@@ -135,11 +135,11 @@ public unsafe partial class DataObject :
             throw new InvalidOperationException($"DataObject cannot be JSON serialized meaningfully. Set the data by using {nameof(SetData)} instead");
         }
 
-        SetData(format, new JsonData() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data), OriginalAssemblyQualifiedTypeName = data.GetType().AssemblyQualifiedName! });
+        SetData(format, new JsonData<T>() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data) });
     }
 
-    /// <inheritdoc cref="SetDataAsJson(string, object)"/>
-    public void SetDataAsJson(object data)
+    /// <inheritdoc cref="SetDataAsJson{T}(string, T)"/>
+    public void SetDataAsJson<T>(T data)
     {
         if (data is DataObject)
         {
@@ -147,11 +147,10 @@ public unsafe partial class DataObject :
             throw new InvalidOperationException($"DataObject cannot be JSON serialized meaningfully. Set the data by using {nameof(SetData)} instead");
         }
 
-        Type type = data.GetType();
-        SetData(type, new JsonData() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data), OriginalAssemblyQualifiedTypeName = type.AssemblyQualifiedName! });
+        SetData(typeof(T), new JsonData<T>() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data) });
     }
 
-    public void SetDataAsJson(string format, bool autoConvert, object data)
+    public void SetDataAsJson<T>(string format, bool autoConvert, T data)
     {
         if (data is DataObject)
         {
@@ -159,7 +158,7 @@ public unsafe partial class DataObject :
             throw new InvalidOperationException($"DataObject cannot be JSON serialized meaningfully. Set the data by using {nameof(SetData)} instead");
         }
 
-        SetData(format, autoConvert, new JsonData() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data), OriginalAssemblyQualifiedTypeName = data.GetType().AssemblyQualifiedName! });
+        SetData(format, autoConvert, new JsonData<T>() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data) });
     }
 
     #region IDataObject

@@ -4780,8 +4780,8 @@ public unsafe partial class Control :
         }
     }
 
-    /// <inheritdoc cref="DoDragDropAsJson(object, DragDropEffects, Bitmap?, Point, bool)"/>
-    public DragDropEffects DoDragDropAsJson(object data, DragDropEffects allowedEffects) =>
+    /// <inheritdoc cref="DoDragDropAsJson{T}(T, DragDropEffects, Bitmap?, Point, bool)"/>
+    public DragDropEffects DoDragDropAsJson<T>(T data, DragDropEffects allowedEffects) =>
         DoDragDropAsJson(data, allowedEffects, dragImage: null, cursorOffset: default, useDefaultDragImage: false);
 
     /// <summary>
@@ -4794,8 +4794,8 @@ public unsafe partial class Control :
     /// <param name="useDefaultDragImage">Indicating whether a layered window drag image is used.</param>
     /// <returns>A value from the <see cref="DragDropEffects"/> enumeration that represents the final effect that was performed during the drag-and-drop operation.</returns>
     /// <exception cref="InvalidOperationException">If <paramref name="data"/> is type <see cref="DataObject"/>.</exception>
-    public DragDropEffects DoDragDropAsJson(
-        object data,
+    public DragDropEffects DoDragDropAsJson<T>(
+        T data,
         DragDropEffects allowedEffects,
         Bitmap? dragImage,
         Point cursorOffset,

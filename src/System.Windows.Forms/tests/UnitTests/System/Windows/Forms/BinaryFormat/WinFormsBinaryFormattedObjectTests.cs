@@ -32,10 +32,9 @@ public class WinFormsBinaryFormattedObjectTests
     {
         Point point = new() { X = 1, Y = 1 };
 
-        JsonData json = new()
+        JsonData<Point> json = new()
         {
             JsonBytes = JsonSerializer.SerializeToUtf8Bytes(point),
-            OriginalAssemblyQualifiedTypeName = typeof(Point).AssemblyQualifiedName!
         };
 
         using MemoryStream stream = new();
@@ -53,10 +52,9 @@ public class WinFormsBinaryFormattedObjectTests
     public void BinaryFormattedObject_Deserialize_FromStream_WithBinaryFormatter()
     {
         Point point = new() { X = 1, Y = 1 };
-        JsonData data = new()
+        JsonData<Point> data = new()
         {
             JsonBytes = JsonSerializer.SerializeToUtf8Bytes(point),
-            OriginalAssemblyQualifiedTypeName = typeof(Point).AssemblyQualifiedName!
         };
 
         using MemoryStream stream = new();
@@ -72,21 +70,14 @@ public class WinFormsBinaryFormattedObjectTests
     }
 
     [Serializable]
-    private struct ReplicatedJsonData : IObjectReference
+    private struct ReplicatedJsonData<T> : IObjectReference
     {
         public byte[] JsonBytes { get; set; }
 
         public string OriginalAssemblyQualifiedTypeName { get; set; }
 
-        public readonly object GetRealObject(StreamingContext context)
-        {
-            if (OriginalAssemblyQualifiedTypeName == typeof(Point).AssemblyQualifiedName)
-            {
-                return JsonSerializer.Deserialize(JsonBytes, typeof(Point)) ?? throw new InvalidOperationException();
-            }
-
-            throw new InvalidOperationException();
-        }
+        public readonly object GetRealObject(StreamingContext context) =>
+            JsonSerializer.Deserialize(JsonBytes, typeof(T)) ?? throw new InvalidOperationException();
     }
 
     private class JsonDataPointBinder : SerializationBinder
@@ -95,9 +86,9 @@ public class WinFormsBinaryFormattedObjectTests
         {
             if (assemblyName == "System.Private.Windows.VirtualJson"
                 && TypeName.TryParse(typeName, out TypeName? name)
-                && name.Name == "JsonData")
+                && name.GetGenericArguments().FirstOrDefault()?.AssemblyQualifiedName == typeof(Point).AssemblyQualifiedName)
             {
-                return typeof(ReplicatedJsonData);
+                return typeof(ReplicatedJsonData<Point>);
             }
 
             throw new InvalidOperationException();

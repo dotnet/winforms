@@ -210,8 +210,8 @@ Namespace Microsoft.VisualBasic.MyServices
             Clipboard.SetImage(image)
         End Sub
 
-        ''' <inheritdoc cref="Clipboard.SetDataAsJson(String, Object)"/>
-        Public Sub SetDataAsJson(format As String, data As Object)
+        ''' <inheritdoc cref="Clipboard.SetDataAsJson(Of T)(String, T)"/>
+        Public Sub SetDataAsJson(Of T)(format As String, data As T)
             Clipboard.SetDataAsJson(format, data)
         End Sub
 

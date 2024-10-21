@@ -983,11 +983,10 @@ public class ClipboardTests
         ClassRecord types = record.Should().BeAssignableTo<ClassRecord>().Which;
         types.HasMember("<JsonBytes>k__BackingField").Should().BeTrue();
         SZArrayRecord<byte> byteData = types.GetRawValue("<JsonBytes>k__BackingField").Should().BeAssignableTo<SZArrayRecord<byte>>().Which;
-        types.HasMember("<OriginalAssemblyQualifiedTypeName>k__BackingField").Should().BeTrue();
-        string typeData = types.GetRawValue("<OriginalAssemblyQualifiedTypeName>k__BackingField").Should().BeOfType<string>().Which;
-        TypeName.TryParse(typeData, out TypeName? result).Should().BeTrue();
+        TypeName.TryParse(types.TypeName.FullName, out TypeName? result).Should().BeTrue();
         TypeName checkedResult = result.Should().BeOfType<TypeName>().Which;
-        Type.GetType(checkedResult.AssemblyQualifiedName).Should().Be(typeof(Point));
+        TypeName genericTypeName = checkedResult.GetGenericArguments().FirstOrDefault().Should().BeOfType<TypeName>().Subject;
+        Type.GetType(genericTypeName.AssemblyQualifiedName).Should().Be(typeof(Point));
 
         JsonSerializer.Deserialize(byteData.GetArray(), typeof(Point)).Should().BeEquivalentTo(point);
     }
