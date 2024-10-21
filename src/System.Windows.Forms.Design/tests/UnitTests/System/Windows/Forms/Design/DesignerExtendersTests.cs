@@ -9,39 +9,28 @@ using System.ComponentModel.Design;
 
 namespace System.Windows.Forms.Design.Tests;
 
-public class DesignerExtendersTests : IDisposable
+public class DesignerExtendersTests
 {
-    private readonly Mock<IExtenderProviderService> _extenderServiceMock;
-    private readonly DesignerExtenders _designerExtenders;
-
-    public DesignerExtendersTests()
-    {
-        _extenderServiceMock = new();
-        _designerExtenders = new(_extenderServiceMock.Object);
-    }
-
-    public void Dispose()
-    {
-        _designerExtenders.Dispose();
-    }
-
     [Fact]
     public void Dispose_RemovesExtenderProviders()
     {
-        IExtenderProvider[] providersField = _designerExtenders.TestAccessor().Dynamic._providers;
-        IExtenderProviderService extenderServiceField = _designerExtenders.TestAccessor().Dynamic._extenderService;
+        Mock<IExtenderProviderService> extenderServiceMock = new();
+        DesignerExtenders designerExtenders = new(extenderServiceMock.Object);
 
-        providersField.Should().NotBeNull();
-        extenderServiceField.Should().NotBeNull();
+        IExtenderProvider[] providers = designerExtenders.TestAccessor().Dynamic._providers;
+        IExtenderProviderService extenderService= designerExtenders.TestAccessor().Dynamic._extenderService;
 
-        _designerExtenders.Dispose();
-        _extenderServiceMock.Verify(s => s.RemoveExtenderProvider(It.IsAny<IExtenderProvider>()), Times.Exactly(2));
-        _designerExtenders.Invoking(d => d.Dispose()).Should().NotThrow();
+        providers.Should().NotBeNull();
+        extenderService.Should().NotBeNull();
 
-        providersField = _designerExtenders.TestAccessor().Dynamic._providers;
-        extenderServiceField = _designerExtenders.TestAccessor().Dynamic._extenderService;
+        designerExtenders.Dispose();
+        extenderServiceMock.Verify(s => s.RemoveExtenderProvider(It.IsAny<IExtenderProvider>()), Times.Exactly(2));
+        designerExtenders.Invoking(d => d.Dispose()).Should().NotThrow();
 
-        providersField.Should().BeNull();
-        extenderServiceField.Should().BeNull();
+        providers = designerExtenders.TestAccessor().Dynamic._providers;
+        extenderService = designerExtenders.TestAccessor().Dynamic._extenderService;
+
+        providers.Should().BeNull();
+        extenderService.Should().BeNull();
     }
 }
