@@ -283,7 +283,6 @@ public partial class ToolStripTextBox : ToolStripControlHost
     [DefaultValue(false)]
     [Localizable(true)]
     [SRDescription(nameof(SR.TextBoxMultilineDescr))]
-    [RefreshProperties(RefreshProperties.All)]
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     public bool Multiline

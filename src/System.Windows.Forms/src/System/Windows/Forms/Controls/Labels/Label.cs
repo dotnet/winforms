@@ -94,7 +94,6 @@ public partial class Label : Control, IAutomationLiveRegion
     /// </summary>
     [SRCategory(nameof(SR.CatLayout))]
     [DefaultValue(false)]
-    [RefreshProperties(RefreshProperties.All)]
     [Localizable(true)]
     [SRDescription(nameof(SR.LabelAutoSizeDescr))]
     [Browsable(true)]
