@@ -2,8 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Drawing;
+using System.Formats.Nrbf;
+using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization.Formatters.Binary;
 using Windows.Win32.System.Com;
 using Com = Windows.Win32.System.Com;
 
@@ -81,7 +85,7 @@ public static class Clipboard
         if (Application.OleRequired() != ApartmentState.STA)
         {
             // Only throw if a message loop was started. This makes the case of trying to query the clipboard from the
-            // finalizer or non-ui MTA thread silently fail, instead of making the application die.
+            // finalizer or non-UI MTA thread silently fail, instead of making the application die.
             return Application.MessageLoop ? throw new ThreadStateException(SR.ThreadMustBeSTA) : null;
         }
 
@@ -218,7 +222,8 @@ public static class Clipboard
     /// <summary>
     ///  Retrieves an audio stream from the <see cref="Clipboard"/>.
     /// </summary>
-    public static Stream? GetAudioStream() => GetData(DataFormats.WaveAudioConstant) as Stream;
+    public static Stream? GetAudioStream() =>
+        TryGetData(DataFormats.WaveAudioConstant, out Stream? stream) ? stream : null;
 
     /// <summary>
     ///  Retrieves data from the <see cref="Clipboard"/> in the specified format.
@@ -226,11 +231,99 @@ public static class Clipboard
     /// <exception cref="ThreadStateException">
     ///  The current thread is not in single-threaded apartment (STA) mode.
     /// </exception>
+    [Obsolete(
+        Obsoletions.ClipboardGetDataMessage,
+        error: false,
+        DiagnosticId = Obsoletions.ClipboardGetDataDiagnosticId,
+        UrlFormat = Obsoletions.SharedUrlFormat)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static object? GetData(string format) =>
         string.IsNullOrWhiteSpace(format) ? null : GetData(format, autoConvert: false);
 
     private static object? GetData(string format, bool autoConvert) =>
         GetDataObject() is IDataObject dataObject ? dataObject.GetData(format, autoConvert) : null;
+
+    /// <summary>
+    ///  Retrieves data from the <see cref="Clipboard"/> in the specified format if that data is of type <typeparamref name="T"/>.
+    ///  This is a safer alternative to <see cref="GetData(string)"/> that does not use <see cref="BinaryFormatter"/> to deserialize the payload.
+    /// </summary>
+    /// <exception cref="ThreadStateException">The current thread is not in single-threaded apartment (STA) mode.</exception>
+    /// <exception cref="NotSupportedException">This value requires <see cref="BinaryFormatter"/> deserialization.</exception>
+    public static bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
+        string format,
+        [NotNullWhen(true), MaybeNullWhen(false)] out T data)
+    {
+        data = default;
+        if (GetDataObject() is IDataObject dataObject)
+        {
+            // Custom IDataObjects should handle their own validation.
+            if (dataObject is DataObject && !DataObject.ValidateTryGetDataArguments<T>(format))
+            {
+                return false;
+            }
+
+            return dataObject.TryGetData(format, DataObject.NotSupportedResolver, autoConvert: false, out data);
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    ///  Retrieves data from the <see cref="Clipboard"/> in the specified format if that data is of type <typeparamref name="T"/>.
+    ///  This is a safer alternative to <see cref="GetData(string)"/> that uses <see cref="BinaryFormatter"/> within constrains
+    ///  defined by <paramref name="resolver"/>.
+    ///  <paramref name="resolver">
+    ///  Resolver is used only when deserializing non-OLE formats. It returns the type if <see cref="TypeName"/> is allowed or
+    ///  throws a <see cref="NotSupportedException"/> if type is not expected. It should not return a <see langword="null"/>.
+    ///  </paramref>
+    /// </summary>
+    /// <exception cref="ThreadStateException">The current thread is not in single-threaded apartment (STA) mode.</exception>
+    /// <exception cref="NotSupportedException">
+    ///  If application does not support <see cref="BinaryFormatter"/> and the object can't be deserialized otherwise, or
+    ///  application supports <see cref="BinaryFormatter"/> but <typeparamref name="T"/> is an <see cref="object"/> or not a concrete type,
+    ///  or if <paramref name="resolver"/> does not resolve the actual payload type.
+    /// </exception>
+    /// <example>
+    /// <![CDATA[
+    ///  using System.Reflection.Metadata;
+    ///
+    ///  internal static Type MyResolver(TypeName typeName)
+    ///  {
+    ///      Type[] allowedTypes =
+    ///      [
+    ///          typeof(MyClass),
+    ///          typeof(MyClass1)
+    ///      ];
+    ///
+    ///      string fullName = typeName.FullName;
+    ///      foreach (Type type in allowedTypes)
+    ///      {
+    ///          // Namespace-qualified type name.
+    ///          if (fullName == type.FullName!)
+    ///          {
+    ///              return type;
+    ///          }
+    ///      }
+    ///
+    ///      throw new NotSupportedException($"Unexpected type in the payload {fullName}");
+    ///  }
+    ///  ]]>
+    /// </example>
+    public static bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
+        string format,
+#pragma warning disable CS3001 // Argument type is not CLS-compliant
+        Func<TypeName, Type> resolver,
+#pragma warning restore CS3001
+        [NotNullWhen(true), MaybeNullWhen(false)] out T data)
+    {
+        data = default;
+        if (GetDataObject() is IDataObject dataObject)
+        {
+            return dataObject.TryGetData(format, resolver, autoConvert: false, out data);
+        }
+
+        return false;
+    }
 
     /// <summary>
     ///  Retrieves a collection of file names from the <see cref="Clipboard"/>.
@@ -239,7 +332,12 @@ public static class Clipboard
     {
         StringCollection result = [];
 
-        if (GetData(DataFormats.FileDropConstant, autoConvert: true) is string[] strings)
+        if (GetDataObject() is IDataObject dataObject
+            && dataObject.TryGetData(
+                DataFormats.FileDropConstant,
+                DataObject.NotSupportedResolver,
+                autoConvert: true,
+                out string[]? strings))
         {
             result.AddRange(strings);
         }
@@ -248,9 +346,26 @@ public static class Clipboard
     }
 
     /// <summary>
-    ///  Retrieves an image from the <see cref="Clipboard"/>.
+    ///  Retrieves a <see cref="Bitmap"/> from the <see cref="Clipboard"/>.
     /// </summary>
-    public static Image? GetImage() => GetData(DataFormats.Bitmap, autoConvert: true) as Image;
+    /// <devdoc>
+    ///  <see cref="Bitmap"/>s are re-hydrated from a <see cref="SerializationRecord"/> by reading a byte array
+    ///  but if that fails, <see cref="BinaryFormatter"/> is restricted by the <see cref="DataObject.BitmapBinder"/>.
+    /// </devdoc>
+    public static Image? GetImage()
+    {
+        if (GetDataObject() is IDataObject dataObject
+            && dataObject.TryGetData(
+                DataFormats.Bitmap,
+                DataObject.NotSupportedResolver,
+                autoConvert: true,
+                out Bitmap? image))
+        {
+            return image;
+        }
+
+        return null;
+    }
 
     /// <summary>
     ///  Retrieves text data from the <see cref="Clipboard"/> in the <see cref="TextDataFormat.UnicodeText"/> format.
@@ -264,7 +379,7 @@ public static class Clipboard
     public static string GetText(TextDataFormat format)
     {
         SourceGenerated.EnumValidator.Validate(format, nameof(format));
-        return GetData(ConvertToDataFormats(format)) as string ?? string.Empty;
+        return TryGetData(ConvertToDataFormats(format), out string? text) ? text : string.Empty;
     }
 
     /// <summary>

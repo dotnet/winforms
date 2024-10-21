@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Versioning;
 
 namespace System.Windows.Forms.Primitives;
@@ -25,6 +26,7 @@ internal static partial class LocalAppContextSwitches
     internal const string NoClientNotificationsSwitchName = "Switch.System.Windows.Forms.AccessibleObject.NoClientNotifications";
     internal const string EnableMsoComponentManagerSwitchName = "Switch.System.Windows.Forms.EnableMsoComponentManager";
     internal const string TreeNodeCollectionAddRangeRespectsSortOrderSwitchName = "System.Windows.Forms.TreeNodeCollectionAddRangeRespectsSortOrder";
+    internal const string ClipboardDragDropEnableUnsafeBinaryFormatterSerializationSwitchName = "ClipboardDragDrop.EnableUnsafeBinaryFormatterSerialization";
 
     private static int s_scaleTopLevelFormMinMaxSizeForDpi;
     private static int s_anchorLayoutV2;
@@ -36,11 +38,12 @@ internal static partial class LocalAppContextSwitches
     private static int s_noClientNotifications;
     private static int s_enableMsoComponentManager;
     private static int s_treeNodeCollectionAddRangeRespectsSortOrder;
+    private static int s_clipboardDragDropEnableUnsafeBinaryFormatterSerialization;
 
     private static FrameworkName? s_targetFrameworkName;
 
     /// <summary>
-    ///  When there is no exception handler registered for a thread, rethrows the exception. The exception will
+    ///  When there is no exception handler registered for a thread, re-throws the exception. The exception will
     ///  not be presented in a dialog or swallowed when not in interactive mode. This is always opt-in and is
     ///  intended for scenarios where setting handlers for threads isn't practical.
     /// </summary>
@@ -109,6 +112,11 @@ internal static partial class LocalAppContextSwitches
             if (switchName == TreeNodeCollectionAddRangeRespectsSortOrderSwitchName)
             {
                 return true;
+            }
+
+            if (switchName == ClipboardDragDropEnableUnsafeBinaryFormatterSerializationSwitchName)
+            {
+                return false;
             }
 
             if (framework.Version.Major >= 8)
@@ -218,5 +226,17 @@ internal static partial class LocalAppContextSwitches
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get => GetCachedSwitchValue(TreeNodeCollectionAddRangeRespectsSortOrderSwitchName, ref s_treeNodeCollectionAddRangeRespectsSortOrder);
+    }
+
+    /// <summary>
+    ///  If <see langword="true"/>, then Clipboard Get methods will use <see cref="BinaryFormatter"/>
+    ///  to deserialize the payload if needed.  To use this switch, application should also opt in into the
+    ///  System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization option and reference the out-of-band
+    ///  System.Runtime.Serialization.Formatters NuGet package.
+    /// </summary>
+    public static bool ClipboardDragDropEnableUnsafeBinaryFormatterSerialization
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => GetCachedSwitchValue(ClipboardDragDropEnableUnsafeBinaryFormatterSerializationSwitchName, ref s_clipboardDragDropEnableUnsafeBinaryFormatterSerialization);
     }
 }

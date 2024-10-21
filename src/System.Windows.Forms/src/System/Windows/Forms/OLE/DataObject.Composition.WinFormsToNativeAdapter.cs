@@ -29,7 +29,7 @@ public unsafe partial class DataObject
             }
 
             /// <summary>
-            ///  Returns true if the tymed is useable.
+            ///  Returns true if the tymed is usable.
             /// </summary>
             private static bool GetTymedUseable(TYMED tymed) => (tymed & AllowedTymeds) != 0;
 
