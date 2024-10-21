@@ -596,7 +596,6 @@ public unsafe partial class Control :
     }
 
     [SRCategory(nameof(SR.CatLayout))]
-    [RefreshProperties(RefreshProperties.All)]
     [Localizable(true)]
     [DefaultValue(CommonProperties.DefaultAutoSize)]
     [SRDescription(nameof(SR.ControlAutoSizeDescr))]
