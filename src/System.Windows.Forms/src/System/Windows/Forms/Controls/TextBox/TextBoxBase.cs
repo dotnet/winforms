@@ -712,7 +712,6 @@ public abstract partial class TextBoxBase : Control
     [DefaultValue(false)]
     [Localizable(true)]
     [SRDescription(nameof(SR.TextBoxMultilineDescr))]
-    [RefreshProperties(RefreshProperties.All)]
     public virtual bool Multiline
     {
         get

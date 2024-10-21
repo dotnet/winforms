@@ -98,7 +98,6 @@ public partial class TabControl : Control
     [SRCategory(nameof(SR.CatBehavior))]
     [Localizable(true)]
     [DefaultValue(TabAlignment.Top)]
-    [RefreshProperties(RefreshProperties.All)]
     [SRDescription(nameof(SR.TabBaseAlignmentDescr))]
     public TabAlignment Alignment
     {

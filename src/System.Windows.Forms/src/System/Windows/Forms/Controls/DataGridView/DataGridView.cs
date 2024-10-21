@@ -1600,7 +1600,6 @@ public partial class DataGridView : Control, ISupportInitialize
     ///  Gets or sets a value that determines the behavior for adjusting the column headers height.
     /// </summary>
     [DefaultValue(DataGridViewColumnHeadersHeightSizeMode.EnableResizing)]
-    [RefreshProperties(RefreshProperties.All)]
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.DataGridView_ColumnHeadersHeightSizeModeDescr))]
     public DataGridViewColumnHeadersHeightSizeMode ColumnHeadersHeightSizeMode
@@ -3437,7 +3436,6 @@ public partial class DataGridView : Control, ISupportInitialize
     ///  Gets or sets a value that determines the behavior for adjusting the row headers width.
     /// </summary>
     [DefaultValue(DataGridViewRowHeadersWidthSizeMode.EnableResizing)]
-    [RefreshProperties(RefreshProperties.All)]
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.DataGridView_RowHeadersWidthSizeModeDescr))]
     public DataGridViewRowHeadersWidthSizeMode RowHeadersWidthSizeMode
