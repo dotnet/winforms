@@ -400,12 +400,9 @@ internal static class BinaryFormatWriter
     public static bool TryWritePrimitiveList(Stream stream, IList list)
     {
         Type type = list.GetType();
-        if (!type.IsGenericType || type.GetGenericTypeDefinition() != typeof(List<>))
-        {
-            return false;
-        }
-
-        return TryWrite(Write, stream, list);
+        return type.IsGenericType
+            && type.GetGenericTypeDefinition() == typeof(List<>)
+            && TryWrite(Write, stream, list);
 
         static bool Write(Stream stream, IList list)
         {
