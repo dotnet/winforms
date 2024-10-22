@@ -6,7 +6,6 @@
 using Moq;
 using System.ComponentModel.Design;
 using System.ComponentModel;
-using System.Windows.Forms.Design.Behavior;
 
 namespace System.Windows.Forms.Design.Tests;
 
@@ -15,23 +14,25 @@ public class DataGridViewColumnDesignerTests
     [Fact]
     public void Initialize_SetsUpServices()
     {
-        Mock<IComponent> componentMock = new();
+        using DataGridViewColumn dataGridViewColumn = new();
         Mock<ISite> siteMock = new();
         Mock<ISelectionService> selectionServiceMock = new();
-        Mock<IBehaviorService> behaviorServiceMock = new();
         Mock<IDesignerHost> designerHostMock = new();
 
-        siteMock.Setup(s => s.GetService(typeof(ISelectionService))).Returns(selectionServiceMock.Object);
-        siteMock.Setup(s => s.GetService(typeof(IBehaviorService))).Returns(behaviorServiceMock.Object);
-        siteMock.Setup(s => s.GetService(typeof(IDesignerHost))).Returns(designerHostMock.Object);
-        componentMock.Setup(c => c.Site).Returns(siteMock.Object);
+        siteMock
+            .Setup(s => s.GetService(typeof(ISelectionService)))
+            .Returns(selectionServiceMock.Object);
+        siteMock
+            .Setup(s => s.GetService(typeof(IDesignerHost)))
+            .Returns(designerHostMock.Object);
+
+        dataGridViewColumn.Site = siteMock.Object;
 
         using DataGridViewColumnDesigner designer = new();
 
-        designer.Initialize(componentMock.Object);
+        designer.Initialize(dataGridViewColumn);
 
-        designer.Should().NotBeNull()
-            .And.BeOfType<DataGridViewColumnDesigner>();
+        designer.Should().NotBeNull().And.BeOfType<DataGridViewColumnDesigner>();
     }
 
     [Fact]
@@ -70,11 +71,4 @@ public class DataGridViewColumnDesignerTests
 
         ((DataGridView)designer.TestAccessor().Dynamic._liveDataGridView).Should().Be(dataGridView);
     }
-}
-
-public interface IBehaviorService { }
-
-public class BehaviorServiceWrapper : IBehaviorService
-{
-    public BehaviorServiceWrapper(BehaviorService behaviorService) { }
 }
