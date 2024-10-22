@@ -23,11 +23,15 @@ public class DesignerAttributeTests
         "System.Windows.Forms.Design.AxHostDesigner, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
         "System.Windows.Forms.Design.StatusBarDesigner, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
         "System.Windows.Forms.Design.WebBrowserDesigner, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+        "System.Windows.Forms.Design.DataGridColumnCollectionEditor, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+        "System.Windows.Forms.Design.DataGridDesigner, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
         "System.Windows.Forms.Design.DataGridViewColumnCollectionEditor, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
         "System.Windows.Forms.Design.DataGridViewColumnDataPropertyNameEditor, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
         "System.Windows.Forms.Design.DataGridViewComponentEditor, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
         "System.Windows.Forms.Design.DataMemberFieldEditor, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
         "System.Windows.Forms.Design.DataMemberListEditor, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+        "System.Windows.Forms.Design.ToolBarDesigner, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+        "System.Windows.Forms.Design.ToolBarButtonDesigner, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
         "System.Windows.Forms.Design.ToolStripCollectionEditor, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
         "System.Windows.Forms.Design.ToolStripImageIndexEditor, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
     ];
@@ -76,7 +80,7 @@ public class DesignerAttributeTests
     [MemberData(nameof(GetAttributeOfType_TestData), AssemblyRef_SystemWinforms, typeof(DesignerAttribute))]
     public void DesignerAttributes_DesignerAttribute_TypeExists(Type annotatedType, DesignerAttribute attribute)
     {
-        var type = Type.GetType(attribute.DesignerTypeName, false);
+        var type = Type.GetType(attribute.DesignerTypeName, throwOnError: false);
         _output.WriteLine($"{annotatedType.FullName}: {attribute.DesignerTypeName} --> {type?.FullName}");
 
         if (SkipList.Contains(attribute.DesignerTypeName))
@@ -113,7 +117,16 @@ public class DesignerAttributeTests
         var propertyInfo = type.GetProperty(attribute.Name);
         _output.WriteLine($"{type.FullName}: {attribute.Name} --> {propertyInfo?.Name}");
 
-        Assert.NotNull(propertyInfo);
+#pragma warning disable WFDEV006 // Type or member is obsolete
+        if (type == typeof(DataGridColumnStyle) || type == typeof(DataGridTextBox))
+        {
+            Assert.Null(propertyInfo);
+        }
+        else
+        {
+            Assert.NotNull(propertyInfo);
+        }
+#pragma warning restore WFDEV006
     }
 
     [Theory]
