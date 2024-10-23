@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Private.Windows.Core.BinaryFormat.Serializer;
 using System.Reflection;
 
 namespace System.Private.Windows.Core.BinaryFormat;
@@ -106,13 +107,9 @@ internal static class TypeInfo
         }
         else
         {
-            PrimitiveType primitiveType = GetPrimitiveType(type);
-            if (primitiveType == default)
-            {
-                return type.Assembly == MscorlibAssembly ? BinaryType.SystemClass : BinaryType.Class;
-            }
-
-            return BinaryType.Primitive;
+            return GetPrimitiveType(type) == default
+                ? type.Assembly == MscorlibAssembly ? BinaryType.SystemClass : BinaryType.Class
+                : BinaryType.Primitive;
         }
     }
 }

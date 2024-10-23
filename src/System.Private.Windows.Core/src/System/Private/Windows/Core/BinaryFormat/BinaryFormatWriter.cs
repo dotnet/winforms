@@ -3,6 +3,7 @@
 
 using System.Collections;
 using System.Drawing;
+using System.Private.Windows.Core.BinaryFormat.Serializer;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
@@ -400,12 +401,9 @@ internal static class BinaryFormatWriter
     public static bool TryWritePrimitiveList(Stream stream, IList list)
     {
         Type type = list.GetType();
-        if (!type.IsGenericType || type.GetGenericTypeDefinition() != typeof(List<>))
-        {
-            return false;
-        }
-
-        return TryWrite(Write, stream, list);
+        return type.IsGenericType
+            && type.GetGenericTypeDefinition() == typeof(List<>)
+            && TryWrite(Write, stream, list);
 
         static bool Write(Stream stream, IList list)
         {
