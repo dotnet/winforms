@@ -78,9 +78,9 @@
     <MicrosoftWindowsCompatibilityVersion>7.0.0</MicrosoftWindowsCompatibilityVersion>
     <MoqPackageVersion>4.20.70</MoqPackageVersion>
     <FluentAssertionsVersion>6.11.0</FluentAssertionsVersion>
-    <SystemComponentModelTypeConverterTestDataVersion>8.0.0-beta.23107.1</SystemComponentModelTypeConverterTestDataVersion>
-    <SystemDrawingCommonTestDataVersion>8.0.0-beta.23107.1</SystemDrawingCommonTestDataVersion>
-    <SystemWindowsExtensionsTestDataVersion>8.0.0-beta.23107.1</SystemWindowsExtensionsTestDataVersion>
+    <SystemComponentModelTypeConverterTestDataVersion>10.0.0-beta.24480.2</SystemComponentModelTypeConverterTestDataVersion>
+    <SystemDrawingCommonTestDataVersion>10.0.0-beta.24480.2</SystemDrawingCommonTestDataVersion>
+    <SystemWindowsExtensionsTestDataVersion>10.0.0-beta.24480.2</SystemWindowsExtensionsTestDataVersion>
     <VerifyXunitVersion>25.0.1</VerifyXunitVersion>
   </PropertyGroup>
   <!-- Code Coverage -->
