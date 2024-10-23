@@ -592,7 +592,7 @@ public partial class PrintPreviewControl : Control
 
     private void DrawMessage(Graphics g, Rectangle rect, bool isExceptionPrinting)
     {
-        using var brush = Color.Black.GetCachedSolidBrushScope();
+        using var brush = SystemColors.ControlText.GetCachedSolidBrushScope();
 
         using StringFormat format = new()
         {
