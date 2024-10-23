@@ -3,6 +3,7 @@
 
 using System.Drawing;
 using System.Private.Windows.Core.BinaryFormat;
+using System.Private.Windows.Core.BinaryFormat.Serializer;
 
 namespace System.Windows.Forms.BinaryFormat;
 

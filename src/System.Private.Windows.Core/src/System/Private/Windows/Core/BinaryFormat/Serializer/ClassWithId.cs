@@ -3,7 +3,7 @@
 
 using System.Runtime.Serialization;
 
-namespace System.Private.Windows.Core.BinaryFormat;
+namespace System.Private.Windows.Core.BinaryFormat.Serializer;
 
 /// <summary>
 ///  Class information that references another class record's metadata.
