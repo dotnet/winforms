@@ -6,7 +6,9 @@
 namespace System.Drawing.Imaging.Effects;
 
 /// <summary>
-///  The <see cref="CurveChannel"/> enumeration specifies which color channels are affected by a <see cref="ColorCurveEffect"/>.
+///  The <see cref="CurveChannel">
+///   enumeration specifies which color channels are affected by a <see cref="ColorCurveEffect"/>.
+///  </see>
 /// </summary>
 public enum CurveChannel
 {

@@ -412,8 +412,8 @@ internal class DataGridViewColumnCollectionDialog : Form
             destColumn.DefaultCellStyle.WrapMode = srcColumn.DefaultCellStyle.WrapMode;
         }
 
-        // 2.c We need to special case the DataGridViewCellStyle::NullValue property. This property will be copied only if the NullValue
-        // has the same type in destColumn and in srcColumn.
+        // 2.c We need to special case the DataGridViewCellStyle::NullValue property.
+        // This property will be copied only if the NullValue has the same type in destColumn and in srcColumn.
         if (!srcColumn.DefaultCellStyle.IsNullValueDefault)
         {
             object? srcNullValue = srcColumn.DefaultCellStyle.NullValue;
