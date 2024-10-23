@@ -79,7 +79,7 @@ namespace System.Private.Windows;
 ///     if (record.TypeName.AssemblyName.FullName != "System.Private.Windows.VirtualJson")
 ///     {
 ///         // The data was not serialized as JSON.
-///         return false;
+///         return;
 ///     }
 ///
 ///     if (record is not System.Formats.Nrbf.ClassRecord types

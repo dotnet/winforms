@@ -4793,7 +4793,11 @@ public unsafe partial class Control :
     /// <param name="cursorOffset">The drag image cursor offset.</param>
     /// <param name="useDefaultDragImage">Indicating whether a layered window drag image is used.</param>
     /// <returns>A value from the <see cref="DragDropEffects"/> enumeration that represents the final effect that was performed during the drag-and-drop operation.</returns>
-    /// <exception cref="InvalidOperationException">If <paramref name="data"/> is type <see cref="DataObject"/>.</exception>
+    /// <exception cref="InvalidOperationException">
+    ///  If <paramref name="data"/> is a non derived <see cref="DataObject"/>. This is for better error reporting as <see cref="DataObject"/> will serialize empty. If <see cref="DataObject"/>
+    ///  needs to used to start a drag operation, use <see cref="DataObject.SetDataAsJson{T}(T)"/> to JSON serialize the data being held within the <paramref name="data"/>,
+    ///  then pass the <paramref name="data"/> to <see cref="DoDragDrop(object, DragDropEffects)"/>.
+    /// </exception>
     public DragDropEffects DoDragDropAsJson<T>(
         T data,
         DragDropEffects allowedEffects,
@@ -4801,11 +4805,10 @@ public unsafe partial class Control :
         Point cursorOffset,
         bool useDefaultDragImage)
     {
-        if (data is DataObject)
+        if (typeof(T) == typeof(DataObject))
         {
-            // What should happen if ComTypes.IDataObject is received?
             // TODO: Localize string
-            throw new InvalidOperationException($"DataObject cannot be JSON serialized meaningfully. Start drag/drop operation with the data by using {nameof(DoDragDrop)} instead");
+            throw new InvalidOperationException($"DataObject will serialize as empty. JSON serialize the data within {nameof(data)} then start drag/drop operation by using {nameof(DoDragDrop)} instead.");
         }
 
         DataObject dataObject = new();

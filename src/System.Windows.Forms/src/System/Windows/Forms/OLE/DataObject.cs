@@ -106,8 +106,9 @@ public unsafe partial class DataObject :
     ///  Stores the specified data and its associated format in this instance as JSON.
     /// </summary>
     /// <exception cref="InvalidOperationException">
-    ///  <see cref="DataObject"/> was passed in as the data. <see cref="DataObject"/> cannot be JSON serialized meaningfully.
-    ///  If <see cref="DataObject"/> needs to be set, use <see cref="SetData(object?)"/>
+    ///  If <paramref name="data"/> is a non derived <see cref="DataObject"/>. This is for better error reporting as <see cref="DataObject"/> will serialize as empty.
+    ///  If <see cref="DataObject"/> needs to be set, JSON serialize the data held in <paramref name="data"/> using this method, then use <see cref="SetData(object?)"/>
+    ///  passing in <paramref name="data"/>.
     /// </exception>
     /// <remarks>
     ///  <para>
@@ -129,10 +130,9 @@ public unsafe partial class DataObject :
     /// </remarks>
     public void SetDataAsJson<T>(string format, T data)
     {
-        if (data is DataObject)
+        if (typeof(T) == typeof(DataObject))
         {
-            // TODO: Localize string.
-            throw new InvalidOperationException($"DataObject cannot be JSON serialized meaningfully. Set the data by using {nameof(SetData)} instead");
+            throw new InvalidOperationException($"DataObject will serialize as empty. JSON serialize the data within {nameof(data)}, then use {nameof(SetData)} instead.");
         }
 
         SetData(format, new JsonData<T>() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data) });
@@ -141,10 +141,10 @@ public unsafe partial class DataObject :
     /// <inheritdoc cref="SetDataAsJson{T}(string, T)"/>
     public void SetDataAsJson<T>(T data)
     {
-        if (data is DataObject)
+        if (typeof(T) == typeof(DataObject))
         {
             // TODO: Localize string.
-            throw new InvalidOperationException($"DataObject cannot be JSON serialized meaningfully. Set the data by using {nameof(SetData)} instead");
+            throw new InvalidOperationException($"DataObject will serialize as empty. JSON serialize the data within  {nameof(data)}, then use {nameof(SetData)}  instead.");
         }
 
         SetData(typeof(T), new JsonData<T>() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data) });
@@ -152,10 +152,10 @@ public unsafe partial class DataObject :
 
     public void SetDataAsJson<T>(string format, bool autoConvert, T data)
     {
-        if (data is DataObject)
+        if (typeof(T) == typeof(DataObject))
         {
             // TODO: Localize string.
-            throw new InvalidOperationException($"DataObject cannot be JSON serialized meaningfully. Set the data by using {nameof(SetData)} instead");
+            throw new InvalidOperationException($"DataObject will serialize as empty. JSON serialize the data within {nameof(data)}, then use {nameof(SetData)} instead.");
         }
 
         SetData(format, autoConvert, new JsonData<T>() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data) });

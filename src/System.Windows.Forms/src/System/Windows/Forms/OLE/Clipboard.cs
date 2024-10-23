@@ -522,9 +522,9 @@ public static class Clipboard
     ///  null, empty, or whitespace was passed as the format.
     /// </exception>
     /// <exception cref="InvalidOperationException">
-    ///  <see cref="DataObject"/> was passed in as the data. <see cref="DataObject"/> cannot be JSON serialized meaningfully.
+    ///  If <paramref name="data"/> is a non derived <see cref="DataObject"/>. This is for better error reporting as <see cref="DataObject"/> will serialize as empty.
     ///  If <see cref="DataObject"/> needs to be placed on the clipboard, use <see cref="DataObject.SetDataAsJson{T}(string, T)"/>
-    ///  to JSON serialize the data to be held in the <see cref="DataObject"/> then set the <see cref="DataObject"/>
+    ///  to JSON serialize the data to be held in the <paramref name="data"/>, then set the <paramref name="data"/>
     ///  onto the clipboard via <see cref="SetDataObject(object)"/>.
     /// </exception>
     /// <remarks>
@@ -552,10 +552,10 @@ public static class Clipboard
             throw new ArgumentException(SR.DataObjectWhitespaceEmptyFormatNotAllowed, nameof(format));
         }
 
-        if (data is DataObject)
+        if (typeof(T) == typeof(DataObject))
         {
             // TODO: Localize string
-            throw new InvalidOperationException($"DataObject cannot be JSON serialized meaningfully. Set the data by using {nameof(SetData)} instead");
+            throw new InvalidOperationException($"DataObject will serialize as empty. JSON serialize the data within {nameof(data)}, then use {nameof(SetDataObject)} instead.");
         }
 
         JsonData<T> jsonData = new()
