@@ -72,8 +72,7 @@ internal static class WinFormsSerializationRecordExtensions
         if (record is not ClassRecord types
             || types.GetRawValue("<JsonBytes>k__BackingField") is not SZArrayRecord<byte> byteData
             || !TypeName.TryParse(types.TypeName.FullName, out TypeName? result)
-            || result.GetGenericArguments().FirstOrDefault() is not { } genericTypeName
-            || Type.GetType(genericTypeName.AssemblyQualifiedName) is not Type genericType)
+            || Type.GetType(result.GetGenericArguments().Single().AssemblyQualifiedName) is not Type genericType)
         {
             // This is supposed to be JsonData, but somehow the binary formatted data is corrupt.
             throw new InvalidOperationException();

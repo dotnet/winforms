@@ -86,7 +86,7 @@ public class WinFormsBinaryFormattedObjectTests
         {
             if (assemblyName == "System.Private.Windows.VirtualJson"
                 && TypeName.TryParse(typeName, out TypeName? name)
-                && name.GetGenericArguments().FirstOrDefault()?.AssemblyQualifiedName == typeof(Point).AssemblyQualifiedName)
+                && name.GetGenericArguments().Single().AssemblyQualifiedName == typeof(Point).AssemblyQualifiedName)
             {
                 return typeof(ReplicatedJsonData<Point>);
             }

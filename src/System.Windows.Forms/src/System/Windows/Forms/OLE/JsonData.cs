@@ -37,7 +37,7 @@ namespace System.Private.Windows;
 ///         if (assemblyName == "System.Private.Windows.VirtualJson"
 ///             && TypeName.TryParse(typeName, out TypeName? name))
 ///         {
-///             TypeName genericTypeName = name.GetGenericArguments().FirstOrDefault()
+///             TypeName genericTypeName = name.GetGenericArguments().Single()
 ///             // TODO: Additional checking on generic type to block unwanted types if needed.
 ///             return typeof(ReplicatedJsonData<T>);
 ///         }
@@ -84,13 +84,13 @@ namespace System.Private.Windows;
 ///
 ///     if (record is not System.Formats.Nrbf.ClassRecord types
 ///         || types.GetRawValue("<JsonBytes>k__BackingField") is not SZArrayRecord<byte> byteData
-///         || !TypeName.TryParse(typeData, out TypeName? result)
-///         || result.GetGenericArguments().FirstOrDefault() is not { } genericTypeName)
+///         || !TypeName.TryParse(typeData, out TypeName? result))
 ///     {
 ///         // This is supposed to be JsonData, but somehow the data is corrupt.
 ///         throw new InvalidOperationException();
 ///     }
 ///
+///     TypeName genericTypeName = result.GetGenericArguments().Single();
 ///     // TODO: Additional checking on generic type to block unwanted types if needed.
 ///
 ///     // This should return the original data that was JSON serialized.
