@@ -17,7 +17,9 @@ namespace System.IO;
 /// </remarks>
 public sealed class TempFile : IDisposable
 {
-    /// <summary>Gets the created file's path.</summary>
+    /// <summary>
+    ///  Gets the created file's path.
+    /// </summary>
     public string Path { get; }
 
     public TempFile(string path, long length = 0) : this(path, length > -1 ? new byte[length] : null)

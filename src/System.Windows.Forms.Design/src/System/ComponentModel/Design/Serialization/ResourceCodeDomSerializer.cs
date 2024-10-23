@@ -14,11 +14,11 @@ namespace System.ComponentModel.Design.Serialization;
 /// On Deserialization, we are associated with a ResourceManager object.
 /// Instead of creating a ResourceManager, however, we create an object called a SerializationResourceManager.
 /// This class inherits from ResourceManager, but overrides all of the methods.
-/// Instead of letting resource manager maintain resource sets, it uses the designer host's IResourceService for this purpose.
-/// During serialization, this class will also create a SerializationResourceManager.
-/// This will be added to the serialization manager as a service so other resource serializers can get at it.
-/// SerializationResourceManager has additional methods on it to support writing data into
-/// the resource streams for various cultures.
+/// Instead of letting resource manager maintain resource sets, it uses the designer host's
+/// IResourceService for this purpose. During serialization, this class will also create a
+/// SerializationResourceManager. This will be added to the serialization manager as a service
+/// so other resource serializers can get at it. SerializationResourceManager has additional
+/// methods on it to support writing data into the resource streams for various cultures.
 /// </summary>
 internal partial class ResourceCodeDomSerializer : CodeDomSerializer
 {
@@ -399,7 +399,8 @@ internal partial class ResourceCodeDomSerializer : CodeDomSerializer
     }
 
     /// <summary>
-    ///  This is called by the component code dom serializer's caching logic to save cached resource data back into the resx files.
+    ///  This is called by the component code dom serializer's caching logic
+    ///  to save cached resource data back into the resx files.
     /// </summary>
     internal static void ApplyCacheEntry(IDesignerSerializationManager manager, ComponentCache.Entry entry)
     {
@@ -416,7 +417,8 @@ internal partial class ResourceCodeDomSerializer : CodeDomSerializer
         {
             foreach (ComponentCache.ResourceEntry re in entry.Resources)
             {
-                // All ResourceEntry objects added to the Resources collection should have a PropertyDescriptor and an ExpressionContext
+                // All ResourceEntry objects added to the Resources collection should have a
+                // PropertyDescriptor and an ExpressionContext
                 manager.Context.Push(re.PropertyDescriptor!);
                 manager.Context.Push(re.ExpressionContext!);
                 try

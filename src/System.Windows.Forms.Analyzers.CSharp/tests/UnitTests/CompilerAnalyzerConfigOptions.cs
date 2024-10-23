@@ -9,7 +9,8 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace System.Windows.Forms.Analyzers.Tests;
 
-// Borrowed from https://github.com/dotnet/roslyn/blob/main/src/Compilers/Core/Portable/DiagnosticAnalyzer/AnalyzerConfigOptions.cs
+// Borrowed from
+// https://github.com/dotnet/roslyn/blob/main/src/Compilers/Core/Portable/DiagnosticAnalyzer/AnalyzerConfigOptions.cs
 
 [ExcludeFromCodeCoverage]
 internal sealed class CompilerAnalyzerConfigOptions : AnalyzerConfigOptions

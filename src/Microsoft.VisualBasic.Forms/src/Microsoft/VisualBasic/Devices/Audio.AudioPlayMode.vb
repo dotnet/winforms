@@ -8,9 +8,9 @@ Namespace Microsoft.VisualBasic
     ''' </summary>
     Public Enum AudioPlayMode
         ' Any changes to this enum must be reflected in ValidateAudioPlayModeEnum()
-        WaitToComplete = 0 'Synchronous
-        Background = 1     'Asynchronous
-        BackgroundLoop = 2 'Asynchronous and looping
+        WaitToComplete = 0 ' Synchronous
+        Background = 1     ' Asynchronous
+        BackgroundLoop = 2 ' Asynchronous and looping
     End Enum
 
 End Namespace

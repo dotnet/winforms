@@ -127,8 +127,9 @@ internal partial class FormatControl : UserControl
         Dirty = true;
     }
 
-    // given a formatString/formatInfo combination, this method suggest the most appropriate user control
-    // the result of the function is one of the strings "Numeric", "Currency", "DateTime", "Percentage", "Scientific", "Custom"
+    // Given a formatString/formatInfo combination, this method suggest the most
+    // appropriate user control the result of the function is one of the strings
+    // "Numeric", "Currency", "DateTime", "Percentage", "Scientific", "Custom"
     public static string FormatTypeStringFromFormatString(string formatString)
     {
         if (string.IsNullOrEmpty(formatString))

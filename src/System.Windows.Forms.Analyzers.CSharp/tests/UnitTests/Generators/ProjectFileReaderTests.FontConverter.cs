@@ -47,10 +47,12 @@ public partial class ProjectFileReaderTests
                 testData.Add(culture, $"Arial{s_separator} 10{s_separator}", "Arial", 10f, (int)GraphicsUnit.Point,(int)FontStyle.Regular);
                 testData.Add(culture, $"Arial{s_separator}", "Arial", PropertyDefaultValue.FontSize, (int)GraphicsUnit.Point,(int)FontStyle.Regular);
                 testData.Add(culture, $"Arial{s_separator} 10{s_separator} style=12", "Arial", 10f, (int)GraphicsUnit.Point, (int)(FontStyle.Underline |FontStyle.Strikeout));
-                testData.Add(culture, $"Courier New{s_separator} Style=Bold", "Courier New", PropertyDefaultValue.FontSize, (int)GraphicsUnit.Point,(int)FontStyle.Bold); // FullFramework style keyword is case sensitive.
+                // FullFramework style keyword is case sensitive.
+                testData.Add(culture, $"Courier New{s_separator} Style=Bold", "Courier New", PropertyDefaultValue.FontSize, (int)GraphicsUnit.Point,(int)FontStyle.Bold);
                 testData.Add(culture, $"{s_separator} 10{s_separator} style=bold", "", 10f, (int)GraphicsUnit.Point,(int)FontStyle.Bold);
 
-                // NOTE: in .NET runtime these tests will result in FontName='', but the implementation relies on GDI+, which we don't have...
+                // NOTE: in .NET runtime these tests will result in FontName='',
+                // but the implementation relies on GDI+, which we don't have...
                 testData.Add(culture, $"11px{s_separator} Style=Bold", $"11px", PropertyDefaultValue.FontSize, (int)GraphicsUnit.Point,(int)FontStyle.Bold);
                 testData.Add(culture, $"11px", "11px", PropertyDefaultValue.FontSize, (int)GraphicsUnit.Point,(int)FontStyle.Regular);
                 testData.Add(culture, $"Style=Bold", "Style=Bold", PropertyDefaultValue.FontSize, (int)GraphicsUnit.Point,(int)FontStyle.Regular);
