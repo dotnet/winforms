@@ -185,7 +185,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     Dim testDirectory As String = CreateTempDirectory()
                     Using listener As New FileLogTraceListener() With {
                         .Location = LogFileLocation.Custom,
-                        .CustomLocation = ""}
+                        .CustomLocation = String.Empty}
                     End Using
                 End Sub
 
@@ -217,6 +217,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         fullLogFileName = listener.FullLogFileName
                         fullLogFileName.Should.StartWith(Path.GetDirectoryName(Application.ExecutablePath))
                     End Using
+                    If File.Exists(fullLogFileName) Then
+                        File.Delete(fullLogFileName)
+                    End If
                 End Sub
 
             If DirectoryIsAccessible(Path.GetDirectoryName(Application.ExecutablePath)) Then
