@@ -3,7 +3,7 @@
 
 using System.Globalization;
 
-namespace System.Private.Windows.Core.BinaryFormat;
+namespace System.Private.Windows.Core.BinaryFormat.Serializer;
 
 /// <summary>
 ///  Base record class.

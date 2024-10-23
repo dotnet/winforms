@@ -3,6 +3,7 @@
 
 using System.Collections;
 using System.Drawing;
+using System.Private.Windows.Core.BinaryFormat.Serializer;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;

@@ -18,14 +18,14 @@ namespace System.Private.Windows.Core.BinaryFormat;
 /// </remarks>
 internal sealed class ClassRecordSerializationInfoDeserializer : ClassRecordDeserializer
 {
-    private readonly System.Formats.Nrbf.ClassRecord _classRecord;
+    private readonly ClassRecord _classRecord;
     private readonly SerializationInfo _serializationInfo;
     private readonly ISerializationSurrogate? _surrogate;
     private readonly IEnumerator<string> _memberNamesIterator;
     private bool _canIterate;
 
     internal ClassRecordSerializationInfoDeserializer(
-        System.Formats.Nrbf.ClassRecord classRecord,
+        ClassRecord classRecord,
         object @object,
         Type type,
         ISerializationSurrogate? surrogate,

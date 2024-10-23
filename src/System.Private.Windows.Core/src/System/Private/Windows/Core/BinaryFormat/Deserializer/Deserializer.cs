@@ -227,7 +227,7 @@ internal sealed partial class Deserializer : IDeserializer
                 SerializationRecordType.MemberPrimitiveTyped => ((PrimitiveTypeRecord)record).Value,
                 SerializationRecordType.ArraySingleString => ((SZArrayRecord<string>)record).GetArray(),
                 SerializationRecordType.ArraySinglePrimitive => ArrayRecordDeserializer.GetArraySinglePrimitive(record),
-                SerializationRecordType.BinaryArray => ArrayRecordDeserializer.GetSimpleBinaryArray((System.Formats.Nrbf.ArrayRecord)record, _typeResolver),
+                SerializationRecordType.BinaryArray => ArrayRecordDeserializer.GetSimpleBinaryArray((ArrayRecord)record, _typeResolver),
                 _ => null
             };
 
@@ -331,7 +331,7 @@ internal sealed partial class Deserializer : IDeserializer
                 completed = default;
             }
 
-            if (_recordMap[completedId] is System.Formats.Nrbf.ClassRecord classRecord
+            if (_recordMap[completedId] is ClassRecord classRecord
                 && (_incompleteDependencies is null || !_incompleteDependencies.ContainsKey(completedId)))
             {
                 // There are no remaining dependencies. Hook any finished events for this object.

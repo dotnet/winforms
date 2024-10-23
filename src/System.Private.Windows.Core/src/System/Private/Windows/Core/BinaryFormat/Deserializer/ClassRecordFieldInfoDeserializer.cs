@@ -16,14 +16,14 @@ namespace System.Private.Windows.Core.BinaryFormat;
 /// </summary>
 internal sealed class ClassRecordFieldInfoDeserializer : ClassRecordDeserializer
 {
-    private readonly System.Formats.Nrbf.ClassRecord _classRecord;
+    private readonly ClassRecord _classRecord;
     private readonly MemberInfo[] _fieldInfo;
     private int _currentFieldIndex;
     private readonly bool _isValueType;
     private bool _hasFixups;
 
     internal ClassRecordFieldInfoDeserializer(
-        System.Formats.Nrbf.ClassRecord classRecord,
+        ClassRecord classRecord,
         object @object,
         [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
         Type type,

@@ -7,7 +7,7 @@ namespace System.Private.Windows.Core.BinaryFormat;
 
 internal sealed class ArrayRecordDeserializer : ObjectRecordDeserializer
 {
-    private readonly System.Formats.Nrbf.ArrayRecord _arrayRecord;
+    private readonly ArrayRecord _arrayRecord;
     private readonly Type _elementType;
     private readonly Array _arrayOfClassRecords;
     private readonly Array _arrayOfT;
@@ -15,7 +15,7 @@ internal sealed class ArrayRecordDeserializer : ObjectRecordDeserializer
     private bool _hasFixups, _canIterate;
 
     [RequiresUnreferencedCode("Calls System.Windows.Forms.BinaryFormat.BinaryFormattedObject.TypeResolver.GetType(TypeName)")]
-    internal ArrayRecordDeserializer(System.Formats.Nrbf.ArrayRecord arrayRecord, IDeserializer deserializer)
+    internal ArrayRecordDeserializer(ArrayRecord arrayRecord, IDeserializer deserializer)
         : base(arrayRecord, deserializer)
     {
         // Other array types are handled directly (ArraySinglePrimitive and ArraySingleString).
@@ -118,7 +118,7 @@ internal sealed class ArrayRecordDeserializer : ObjectRecordDeserializer
     };
 
     [RequiresUnreferencedCode("Calls System.Windows.Forms.BinaryFormat.BinaryFormattedObject.TypeResolver.GetType(TypeName)")]
-    internal static Array? GetSimpleBinaryArray(System.Formats.Nrbf.ArrayRecord arrayRecord, ITypeResolver typeResolver)
+    internal static Array? GetSimpleBinaryArray(ArrayRecord arrayRecord, ITypeResolver typeResolver)
     {
         Type arrayRecordElementType = typeResolver.GetType(arrayRecord.TypeName.GetElementType());
         Type elementType = arrayRecordElementType;

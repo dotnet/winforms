@@ -17,7 +17,7 @@ internal abstract class ClassRecordDeserializer : ObjectRecordDeserializer
 {
     private readonly bool _onlyAllowPrimitives;
 
-    private protected ClassRecordDeserializer(System.Formats.Nrbf.ClassRecord classRecord, object @object, IDeserializer deserializer)
+    private protected ClassRecordDeserializer(ClassRecord classRecord, object @object, IDeserializer deserializer)
         : base(classRecord, deserializer)
     {
         Object = @object;
@@ -28,7 +28,7 @@ internal abstract class ClassRecordDeserializer : ObjectRecordDeserializer
     }
 
     [RequiresUnreferencedCode("Calls System.Windows.Forms.BinaryFormat.BinaryFormattedObject.TypeResolver.GetType(TypeName)")]
-    internal static ObjectRecordDeserializer Create(System.Formats.Nrbf.ClassRecord classRecord, IDeserializer deserializer)
+    internal static ObjectRecordDeserializer Create(ClassRecord classRecord, IDeserializer deserializer)
     {
         Type type = deserializer.TypeResolver.GetType(classRecord.TypeName);
         SerializationRecordId id = classRecord.Id;

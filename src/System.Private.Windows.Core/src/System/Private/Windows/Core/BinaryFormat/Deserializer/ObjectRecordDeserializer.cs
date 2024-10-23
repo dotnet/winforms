@@ -96,8 +96,8 @@ internal abstract partial class ObjectRecordDeserializer
     [RequiresUnreferencedCode("Calls System.Windows.Forms.BinaryFormat.Deserializer.ClassRecordParser.Create(ClassRecord, IDeserializer)")]
     internal static ObjectRecordDeserializer Create(SerializationRecord record, IDeserializer deserializer) => record switch
     {
-        System.Formats.Nrbf.ClassRecord classRecord => ClassRecordDeserializer.Create(classRecord, deserializer),
-        _ => new ArrayRecordDeserializer((System.Formats.Nrbf.ArrayRecord)record, deserializer),
+        ClassRecord classRecord => ClassRecordDeserializer.Create(classRecord, deserializer),
+        _ => new ArrayRecordDeserializer((ArrayRecord)record, deserializer),
     };
 }
 
