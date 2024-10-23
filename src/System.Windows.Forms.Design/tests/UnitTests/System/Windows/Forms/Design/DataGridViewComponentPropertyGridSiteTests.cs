@@ -13,18 +13,18 @@ public class DataGridViewComponentPropertyGridSiteTests
     [Fact]
     public void Constructor_ShouldInitializeComponent()
     {
-        Mock<IComponent> componentMock = new();
+        using Component component = new();
 
-        DataGridViewComponentPropertyGridSite site = new(null, componentMock.Object);
+        DataGridViewComponentPropertyGridSite site = new(null, component);
 
-        site.Component.Should().Be(componentMock.Object);
+        site.Component.Should().Be(component);
     }
 
     [Fact]
     public void GetService_ShouldReturnNull_WhenServiceProviderIsNull()
     {
-        Mock<IComponent> componentMock = new();
-        DataGridViewComponentPropertyGridSite site = new(null, componentMock.Object);
+        using Component component = new();
+        DataGridViewComponentPropertyGridSite site = new(null, component);
 
         var service = site.GetService(typeof(object));
 
@@ -34,9 +34,9 @@ public class DataGridViewComponentPropertyGridSiteTests
     [Fact]
     public void GetService_ShouldReturnNull_WhenInGetServiceIsTrue()
     {
-        Mock<IComponent> componentMock = new();
+        using Component component = new();
         Mock<IServiceProvider> serviceProviderMock = new();
-        DataGridViewComponentPropertyGridSite site = new(serviceProviderMock.Object, componentMock.Object);
+        DataGridViewComponentPropertyGridSite site = new(serviceProviderMock.Object, component);
 
         site.TestAccessor().Dynamic._inGetService = true;
 
@@ -48,11 +48,11 @@ public class DataGridViewComponentPropertyGridSiteTests
     [Fact]
     public void GetService_ShouldReturnService_WhenServiceProviderIsNotNullAndInGetServiceIsFalse()
     {
-        Mock<IComponent> componentMock = new();
+        using Component component = new();
         Mock<IServiceProvider> serviceProviderMock = new();
         object expectedService = new();
         serviceProviderMock.Setup(sp => sp.GetService(typeof(object))).Returns(expectedService);
-        DataGridViewComponentPropertyGridSite site = new(serviceProviderMock.Object, componentMock.Object);
+        DataGridViewComponentPropertyGridSite site = new(serviceProviderMock.Object, component);
 
         var service = site.GetService(typeof(object));
 
