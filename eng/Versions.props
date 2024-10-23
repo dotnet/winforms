@@ -14,7 +14,7 @@
   </PropertyGroup>
   <!-- Below have corresponding entries in Versions.Details.XML because they are updated via Maestro -->
   <PropertyGroup>
-    <VSRedistCommonNetCoreSharedFrameworkx6490PackageVersion>9.0.0-rtm.24518.14</VSRedistCommonNetCoreSharedFrameworkx6490PackageVersion>
+    <VSRedistCommonNetCoreSharedFrameworkx6490PackageVersion>9.0.0-rtm.24522.12</VSRedistCommonNetCoreSharedFrameworkx6490PackageVersion>
     <SystemDiagnosticsEventLogPackageVersion>9.0.0</SystemDiagnosticsEventLogPackageVersion>
     <SystemDirectoryServicesPackageVersion>9.0.0</SystemDirectoryServicesPackageVersion>
     <SystemFormatsNrbfPackageVersion>9.0.0</SystemFormatsNrbfPackageVersion>
@@ -35,7 +35,7 @@
     <MicrosoftWin32RegistryAccessControlPackageVersion>9.0.0</MicrosoftWin32RegistryAccessControlPackageVersion>
     <MicrosoftNETCoreAppRefPackageVersion>9.0.0</MicrosoftNETCoreAppRefPackageVersion>
     <MicrosoftNETCoreAppRuntimewinx64PackageVersion>9.0.0</MicrosoftNETCoreAppRuntimewinx64PackageVersion>
-    <MicrosoftNETCorePlatformsPackageVersion>9.0.0-rtm.24518.14</MicrosoftNETCorePlatformsPackageVersion>
+    <MicrosoftNETCorePlatformsPackageVersion>9.0.0-rtm.24522.12</MicrosoftNETCorePlatformsPackageVersion>
     <MicrosoftWin32SystemEventsPackageVersion>9.0.0</MicrosoftWin32SystemEventsPackageVersion>
     <SystemCodeDomPackageVersion>9.0.0</SystemCodeDomPackageVersion>
     <SystemConfigurationConfigurationManagerPackageVersion>9.0.0</SystemConfigurationConfigurationManagerPackageVersion>
