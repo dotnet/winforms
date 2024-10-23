@@ -5,11 +5,12 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Private.Windows.Core.BinaryFormat;
 using FormatTests.Common;
-using Record = System.Private.Windows.Core.BinaryFormat.Record;
+using Record = System.Private.Windows.Core.BinaryFormat.Serializer.Record;
 using System.Formats.Nrbf;
 using System.Windows.Forms.Nrbf;
 using System.Globalization;
 using System.Runtime.Serialization;
+using System.Private.Windows.Core.BinaryFormat.Serializer;
 
 namespace FormatTests.FormattedObject;
 
