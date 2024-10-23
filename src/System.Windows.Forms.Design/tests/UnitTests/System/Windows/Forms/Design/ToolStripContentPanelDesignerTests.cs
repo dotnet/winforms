@@ -14,15 +14,21 @@ public sealed class ToolStripContentPanelDesignerTests : IDisposable
 
     public ToolStripContentPanelDesignerTests()
     {
-        _toolStripContentPanelDesigner = new ToolStripContentPanelDesigner();
-        _toolStripContentPanel = new ToolStripContentPanel();
+        _toolStripContentPanelDesigner = new();
+        _toolStripContentPanel = new();
         _toolStripContentPanelDesigner.Initialize(_toolStripContentPanel);
+    }
+
+    public void Dispose()
+    {
+        _toolStripContentPanelDesigner.Dispose();
+        _toolStripContentPanel.Dispose();
     }
 
     [Fact]
     public void SnapLines_ShouldReturnNonNullList()
     {
-        var snapLines = _toolStripContentPanelDesigner.SnapLines;
+        IList<SnapLine> snapLines = _toolStripContentPanelDesigner.SnapLines.Cast<SnapLine>().ToList();
 
         snapLines.Should().NotBeNull();
     }
@@ -30,9 +36,9 @@ public sealed class ToolStripContentPanelDesignerTests : IDisposable
     [Fact]
     public void SnapLines_ShouldCallAddPaddingSnapLines()
     {
-        var paddingFilters = new[] { SnapLine.PaddingLeft, SnapLine.PaddingRight, SnapLine.PaddingTop, SnapLine.PaddingBottom };
+        string[] paddingFilters = [SnapLine.PaddingLeft, SnapLine.PaddingRight, SnapLine.PaddingTop, SnapLine.PaddingBottom];
 
-        var snapLines = _toolStripContentPanelDesigner.SnapLines.Cast<SnapLine>().ToList();
+        List<SnapLine> snapLines = _toolStripContentPanelDesigner.SnapLines.Cast<SnapLine>().ToList();
 
         bool containsPaddingSnapLines = snapLines.Any(snapLine => paddingFilters.Contains(snapLine.Filter));
 
@@ -50,16 +56,12 @@ public sealed class ToolStripContentPanelDesignerTests : IDisposable
     [Fact]
     public void CanBeParentedTo_ShouldReturnFalse_WhenParentDesignerIsNotNull()
     {
-        PanelDesigner parentDesigner = new();
+        using PanelDesigner parentDesigner = new();
+        using Panel panel = new();
+        parentDesigner.Initialize(panel);
 
         bool result = _toolStripContentPanelDesigner.CanBeParentedTo(parentDesigner);
 
         result.Should().BeFalse();
-    }
-
-    public void Dispose()
-    {
-        _toolStripContentPanelDesigner.Dispose();
-        _toolStripContentPanel.Dispose();
     }
 }
