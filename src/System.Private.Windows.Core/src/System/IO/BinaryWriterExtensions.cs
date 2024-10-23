@@ -3,7 +3,7 @@
 
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
-using System.Private.Windows.Core.BinaryFormat;
+using System.Private.Windows.Core.BinaryFormat.Serializer;
 
 namespace System.IO;
 
