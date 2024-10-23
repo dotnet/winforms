@@ -990,4 +990,16 @@ public class ClipboardTests
 
         JsonSerializer.Deserialize(byteData.GetArray(), typeof(Point)).Should().BeEquivalentTo(point);
     }
+
+    [WinFormsFact]
+    public void Clipboard_SurfaceJsonError()
+    {
+        using Font font = new("Microsoft Sans Serif", emSize: 10);
+        byte[] serialized = JsonSerializer.SerializeToUtf8Bytes(font);
+        string format = "font";
+        Clipboard.SetDataAsJson(format, font);
+        Clipboard.GetData(format).Should().BeOfType<NotSupportedException>();
+        DataObject dataObject = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
+        dataObject.GetData(format).Should().BeOfType<NotSupportedException>();
+    }
 }

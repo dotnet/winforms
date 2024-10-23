@@ -112,7 +112,20 @@ internal struct JsonData<T> : IJsonData
 
     public readonly string TypeFullName => $"{typeof(JsonData<T>).FullName}";
 
-    public readonly object Deserialize() => JsonSerializer.Deserialize(JsonBytes, typeof(T)) ?? throw new InvalidOperationException();
+    public readonly object Deserialize()
+    {
+        object? result = null;
+        try
+        {
+            result = JsonSerializer.Deserialize(JsonBytes, typeof(T));
+        }
+        catch (Exception ex)
+        {
+            result = new NotSupportedException(ex.Message);
+        }
+
+        return result ?? throw new InvalidOperationException();
+    }
 }
 
 /// <summary>

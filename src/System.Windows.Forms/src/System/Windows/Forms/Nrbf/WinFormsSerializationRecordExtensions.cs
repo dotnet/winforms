@@ -79,7 +79,14 @@ internal static class WinFormsSerializationRecordExtensions
         }
 
         // TODO: We should get the type from the Func<TypeName, Type> that will be passed down instead of using Type.GetType()
-        @object = JsonSerializer.Deserialize(byteData.GetArray(), genericType);
+        try
+        {
+            @object = JsonSerializer.Deserialize(byteData.GetArray(), genericType);
+        }
+        catch (Exception ex)
+        {
+            @object = new NotSupportedException(ex.Message);
+        }
 
         return true;
     }
