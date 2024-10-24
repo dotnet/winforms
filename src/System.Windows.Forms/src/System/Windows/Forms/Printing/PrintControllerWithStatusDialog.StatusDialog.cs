@@ -36,13 +36,13 @@ public partial class PrintControllerWithStatusDialog
 
             _cancellingTextBox = new TextBox()
             {
-                Location = new Point(8, 16),
                 BorderStyle = BorderStyle.None,
                 ReadOnly = true,
                 TextAlign = HorizontalAlignment.Center,
-                Size = new Size(240, 64),
                 TabIndex = 1,
-                Anchor = AnchorStyles.None
+                Dock = DockStyle.Fill,
+                Multiline = true,
+                Margin = new Padding(3, 30, 3, 3)
             };
 
             _cancellingTextBox.TextChanged += OnCancellingTextBoxTextChanged;
@@ -81,7 +81,6 @@ public partial class PrintControllerWithStatusDialog
             ControlBox = false;
             MinimizeBox = false;
             ClientSize = ScaleHelper.ScaleToDpi(new Size(256, 122), ScaleHelper.InitialSystemDpi);
-            _cancellingTextBox.Width = ClientSize.Width;
 
             CancelButton = _cancelButton;
             SizeGripStyle = SizeGripStyle.Hide;
