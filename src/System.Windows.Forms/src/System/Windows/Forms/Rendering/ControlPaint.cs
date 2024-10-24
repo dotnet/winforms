@@ -213,7 +213,7 @@ public static unsafe partial class ControlPaint
             // Put our new bitmap handle (with the halftone palette) into the dc and use Graphics to
             // copy the Bitmap into it.
 
-            HGDIOBJ previousBitmap = PInvoke.SelectObject(dc, hbitmap);
+            HGDIOBJ previousBitmap = PInvokeCore.SelectObject(dc, hbitmap);
             if (previousBitmap.IsNull)
             {
                 throw new Win32Exception();
@@ -318,8 +318,8 @@ public static unsafe partial class ControlPaint
         // with the inverse of the mask (ROP DSna). When going from monochrome to color, Windows sets all 1 bits
         // to the background color, and all 0 bits to the foreground color.
 
-        PInvoke.SetBkColor(targetDC, (COLORREF)0x00ffffff);    // white
-        PInvoke.SetTextColor(targetDC, (COLORREF)0x00000000);  // black
+        PInvokeCore.SetBkColor(targetDC, (COLORREF)0x00ffffff);    // white
+        PInvokeCore.SetTextColor(targetDC, (COLORREF)0x00000000);  // black
         PInvokeCore.BitBlt(targetDC, x: 0, y: 0, size.Width, size.Height, sourceDC, x1: 0, y1: 0, (ROP_CODE)0x220326);
         // RasterOp.SOURCE.Invert().AndWith(RasterOp.TARGET).GetRop());
 
@@ -1805,8 +1805,8 @@ public static unsafe partial class ControlPaint
 
         using ObjectScope pen = new(style switch
         {
-            FrameStyle.Dashed => (HGDIOBJ)PInvoke.CreatePen(PEN_STYLE.PS_DOT, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(backColor)).Value,
-            FrameStyle.Thick => (HGDIOBJ)PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 2, (COLORREF)(uint)ColorTranslator.ToWin32(backColor)).Value,
+            FrameStyle.Dashed => (HGDIOBJ)PInvokeCore.CreatePen(PEN_STYLE.PS_DOT, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(backColor)).Value,
+            FrameStyle.Thick => (HGDIOBJ)PInvokeCore.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 2, (COLORREF)(uint)ColorTranslator.ToWin32(backColor)).Value,
             _ => default
         });
 
@@ -1814,7 +1814,7 @@ public static unsafe partial class ControlPaint
         using SelectObjectScope brushSelection = new(desktopDC, PInvokeCore.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH));
         using SelectObjectScope penSelection = new(desktopDC, pen);
 
-        PInvoke.SetBkColor(desktopDC, (COLORREF)(uint)ColorTranslator.ToWin32(graphicsColor));
+        PInvokeCore.SetBkColor(desktopDC, (COLORREF)(uint)ColorTranslator.ToWin32(graphicsColor));
         PInvoke.Rectangle(desktopDC, rectangle.X, rectangle.Y, rectangle.Right, rectangle.Bottom);
     }
 
@@ -1830,7 +1830,7 @@ public static unsafe partial class ControlPaint
             HRGN.Null,
             GET_DCX_FLAGS.DCX_WINDOW | GET_DCX_FLAGS.DCX_LOCKWINDOWUPDATE | GET_DCX_FLAGS.DCX_CACHE);
 
-        using ObjectScope pen = new(PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(backColor)));
+        using ObjectScope pen = new(PInvokeCore.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(backColor)));
         using SetRop2Scope ropScope = new(desktopDC, rop2);
         using SelectObjectScope brushSelection = new(desktopDC, PInvokeCore.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH));
         using SelectObjectScope penSelection = new(desktopDC, pen);
@@ -2045,7 +2045,7 @@ public static unsafe partial class ControlPaint
             HRGN.Null,
             GET_DCX_FLAGS.DCX_WINDOW | GET_DCX_FLAGS.DCX_LOCKWINDOWUPDATE | GET_DCX_FLAGS.DCX_CACHE);
 
-        using ObjectScope brush = new(PInvoke.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(backColor)));
+        using ObjectScope brush = new(PInvokeCore.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(backColor)));
         using SetRop2Scope ropScope = new(desktopDC, rop2);
         using SelectObjectScope brushSelection = new(desktopDC, brush);
 

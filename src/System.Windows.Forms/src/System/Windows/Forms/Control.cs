@@ -696,12 +696,12 @@ public unsafe partial class Control :
 
             if (color.IsSystemColor)
             {
-                backBrush = PInvoke.GetSysColorBrush(color);
+                backBrush = PInvokeCore.GetSysColorBrush(color);
                 SetState(States.OwnCtlBrush, false);
             }
             else
             {
-                backBrush = PInvoke.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(color));
+                backBrush = PInvokeCore.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(color));
                 SetState(States.OwnCtlBrush, true);
             }
 
@@ -1499,7 +1499,7 @@ public unsafe partial class Control :
                 // We want to instantly change the cursor if the mouse is within our bounds.
                 // This includes the case where the mouse is over one of our children.
                 PInvoke.GetCursorPos(out Point p);
-                PInvoke.GetWindowRect(this, out RECT r);
+                PInvokeCore.GetWindowRect(this, out RECT r);
                 if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || PInvoke.GetCapture() == HWND)
                 {
                     PInvokeCore.SendMessage(this, PInvokeCore.WM_SETCURSOR, (WPARAM)HWND, (LPARAM)(int)PInvoke.HTCLIENT);
@@ -2246,7 +2246,7 @@ public unsafe partial class Control :
                 }
             }
 
-            PInvoke.GetWindowRect(this, out var temp);
+            PInvokeCore.GetWindowRect(this, out var temp);
             using Region working = new(temp);
 
             HWND prev;
@@ -2257,7 +2257,7 @@ public unsafe partial class Control :
                 !(next = PInvoke.GetWindow(prev, GET_WINDOW_CMD.GW_HWNDPREV)).IsNull;
                 prev = next)
             {
-                PInvoke.GetWindowRect(next, out temp);
+                PInvokeCore.GetWindowRect(next, out temp);
                 if (PInvoke.IsWindowVisible(next))
                 {
                     working.Exclude(temp);
@@ -5783,8 +5783,8 @@ public unsafe partial class Control :
         // NOTE: this message may not have originally been sent to this HWND.
         if (!GetStyle(ControlStyles.UserPaint))
         {
-            PInvoke.SetTextColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(ForeColor));
-            PInvoke.SetBkColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(BackColor));
+            PInvokeCore.SetTextColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(ForeColor));
+            PInvokeCore.SetBkColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(BackColor));
             return BackColorBrush;
         }
 
@@ -8764,7 +8764,7 @@ public unsafe partial class Control :
         PrintToMetaFile_SendPrintMessage(hDC, (nint)(lParam & (long)~PInvoke.PRF_CLIENT));
 
         // Figure out mapping for the client area.
-        bool success = PInvoke.GetWindowRect(this, out var windowRect);
+        bool success = PInvokeCore.GetWindowRect(this, out var windowRect);
         Debug.Assert(success, "GetWindowRect() failed.");
         Point clientOffset = PointToScreen(Point.Empty);
         clientOffset = new(clientOffset.X - windowRect.left, clientOffset.Y - windowRect.top);
@@ -10788,7 +10788,7 @@ public unsafe partial class Control :
             PInvokeCore.GetClientRect(this, out rect);
             clientWidth = rect.right;
             clientHeight = rect.bottom;
-            PInvoke.GetWindowRect(this, out rect);
+            PInvokeCore.GetWindowRect(this, out rect);
             if (!GetTopLevel())
             {
                 PInvoke.MapWindowPoints(HWND.Null, PInvoke.GetParent(this), ref rect);
@@ -12834,7 +12834,7 @@ public unsafe partial class Control :
 
     internal virtual Rectangle GetToolNativeScreenRectangle()
     {
-        PInvoke.GetWindowRect(this, out var rect);
+        PInvokeCore.GetWindowRect(this, out var rect);
         return rect;
     }
 

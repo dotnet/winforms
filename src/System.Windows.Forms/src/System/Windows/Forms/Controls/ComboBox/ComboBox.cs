@@ -1421,10 +1421,10 @@ public partial class ComboBox : ListControl
         }
 
         // Get the Combobox Rect
-        PInvoke.GetWindowRect(this, out var comboRectMid);
+        PInvokeCore.GetWindowRect(this, out var comboRectMid);
 
         // Get the Edit Rectangle.
-        PInvoke.GetWindowRect(_childEdit, out var editRectMid);
+        PInvokeCore.GetWindowRect(_childEdit, out var editRectMid);
 
         // Get the delta.
         int comboXMid = PARAM.SignedLOWORD(m.LParamInternal) + (editRectMid.left - comboRectMid.left);
@@ -1699,7 +1699,7 @@ public partial class ComboBox : ListControl
                     _mouseEvents = false;
                     if (_mousePressed)
                     {
-                        PInvoke.GetWindowRect(this, out var rect);
+                        PInvokeCore.GetWindowRect(this, out var rect);
                         Rectangle clientRect = rect;
 
                         if (clientRect.Contains(PointToScreen(PARAM.ToPoint(m.LParamInternal))))
@@ -1847,7 +1847,7 @@ public partial class ComboBox : ListControl
     /// </summary>
     private void OnMouseLeaveInternal(EventArgs args)
     {
-        PInvoke.GetWindowRect(this, out var rect);
+        PInvokeCore.GetWindowRect(this, out var rect);
         Rectangle rectangle = rect;
         Point p = MousePosition;
         if (!rectangle.Contains(p))
@@ -2056,8 +2056,8 @@ public partial class ComboBox : ListControl
             // Base class returns hollow brush when UserPaint style is set, to avoid flicker in
             // main control. But when returning colors for child dropdown list, return normal ForeColor/BackColor,
             // since hollow brush leaves the list background unpainted.
-            PInvoke.SetTextColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(ForeColor));
-            PInvoke.SetBkColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(BackColor));
+            PInvokeCore.SetTextColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(ForeColor));
+            PInvokeCore.SetBkColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(BackColor));
             return BackColorBrush;
         }
         else
@@ -3768,7 +3768,7 @@ public partial class ComboBox : ListControl
                 base.WndProc(ref m);
                 break;
             case PInvokeCore.WM_LBUTTONUP:
-                PInvoke.GetWindowRect(this, out var rect);
+                PInvokeCore.GetWindowRect(this, out var rect);
                 Rectangle clientRect = rect;
 
                 Point point = PointToScreen(PARAM.ToPoint(m.LParamInternal));

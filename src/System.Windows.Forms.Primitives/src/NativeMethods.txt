@@ -7,7 +7,6 @@ ADVF
 AreDpiAwarenessContextsEqual
 ARW_*
 AUTOCOMPLETEOPTIONS
-BeginPaint
 BFFM_*
 BIF_*
 BITMAP
@@ -17,7 +16,6 @@ BN_*
 BROWSEINFOW
 BS_*
 CallNextHookEx
-CallWindowProc
 CB_*
 CBN_*
 CBS_*
@@ -41,7 +39,6 @@ CloseDesktop
 CloseEnhMetaFile
 CloseHandle
 CloseThemeData
-CLR_*
 CLSCTX
 cmb4
 CoGetClassObject
@@ -61,9 +58,7 @@ CreateILockBytesOnHGlobal
 CreateMenu
 CreateOleAdviseHolder
 CreatePatternBrush
-CreatePen
 CreateRectRgn
-CreateSolidBrush
 CreateStdAccessibleObject
 CreateWindowEx
 CSIDL_*
@@ -72,7 +67,6 @@ DATETIMEPICK_CLASS
 DeactivateActCtx
 DefFrameProc
 DefMDIChildProc
-DefWindowProc
 DeleteEnhMetaFile
 DESKTOP_ACCESS_FLAGS
 DestroyAcceleratorTable
@@ -122,7 +116,6 @@ EnableMenuItem
 EnableScrollBar
 EnableWindow
 EndDialog
-EndPaint
 ENM_*
 EnumDisplaySettings
 EnumEnhMetaFile
@@ -207,7 +200,6 @@ GetScrollInfo
 GetShortPathName
 GetStartupInfo
 GetSysColor
-GetSysColorBrush
 GetSystemMenu
 GetSystemMetricsForDpi
 GetSystemPaletteEntries
@@ -247,7 +239,6 @@ GetViewportExtEx
 GetWindow
 GetWindowDpiAwarenessContext
 GetWindowPlacement
-GetWindowRect
 GetWindowText
 GetWindowTextLength
 GetWindowThreadProcessId
@@ -560,7 +551,6 @@ PROPERTYKEY
 ProviderOptions
 ReadClassStg
 READYSTATE
-RealizePalette
 Rectangle
 RedrawWindow
 REGDB_E_CLASSNOTREG
@@ -584,15 +574,11 @@ ScreenToClient
 SCROLLBAR_COMMAND
 ScrollWindow
 ScrollWindowEx
-SelectObject
-SelectPalette
 SendDlgItemMessage
 SendInput
 SendMessageCallback
 SendMessageTimeout
 SetActiveWindow
-SetBkColor
-SetBkMode
 SetCapture
 SetCursor
 SetCursorPos
@@ -600,18 +586,14 @@ SetFocus
 SetForegroundWindow
 SetKeyboardState
 SetLayeredWindowAttributes
-SetMapMode
 SetMenu
 SetParent
 SetProcessDPIAware
 SetProcessDpiAwareness
 SetProcessDpiAwarenessContext
-SetROP2
 SetScrollInfo
 SetScrollPos
 SetSuspendState
-SetTextAlign
-SetTextColor
 SetThemeAppProperties
 SetThreadDpiAwarenessContext
 SetThreadDpiHostingBehavior

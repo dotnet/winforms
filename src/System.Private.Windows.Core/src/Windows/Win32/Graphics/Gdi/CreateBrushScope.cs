@@ -24,13 +24,14 @@ internal readonly ref struct CreateBrushScope
     public HBRUSH HBRUSH { get; }
 
     /// <summary>
-    ///  Creates a solid brush based on the <paramref name="color"/> using <see cref="PInvoke.CreateSolidBrush(COLORREF)"/>.
+    ///  Creates a solid brush based on the <paramref name="color"/> using <see cref="PInvokeCore.CreateSolidBrush(COLORREF)"/>.
     /// </summary>
     public CreateBrushScope(Color color)
     {
         HBRUSH = color.IsSystemColor
-            ? PInvoke.GetSysColorBrush(color)
-            : PInvoke.CreateSolidBrush(color);
+            ? PInvokeCore.GetSysColorBrush(color)
+            : PInvokeCore.CreateSolidBrush(color);
+
         ValidateBrushHandle();
     }
 

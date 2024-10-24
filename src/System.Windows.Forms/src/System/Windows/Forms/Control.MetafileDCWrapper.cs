@@ -42,7 +42,7 @@ public partial class Control
             int planes = PInvokeCore.GetDeviceCaps(HDC, GET_DEVICE_CAPS_INDEX.PLANES);
             int bitsPixel = PInvokeCore.GetDeviceCaps(HDC, GET_DEVICE_CAPS_INDEX.BITSPIXEL);
             _hBitmap = PInvokeCore.CreateBitmap(size.Width, size.Height, (uint)planes, (uint)bitsPixel, lpBits: null);
-            _hOriginalBmp = (HBITMAP)PInvoke.SelectObject(HDC, _hBitmap);
+            _hOriginalBmp = (HBITMAP)PInvokeCore.SelectObject(HDC, _hBitmap);
         }
 
         ~MetafileDCWrapper()
@@ -63,7 +63,7 @@ public partial class Control
             {
                 success = DICopy(_hMetafileDC, HDC, _destRect, bStretch: true);
                 Debug.Assert(success, "DICopy() failed.");
-                PInvoke.SelectObject(HDC, _hOriginalBmp);
+                PInvokeCore.SelectObject(HDC, _hOriginalBmp);
                 success = PInvokeCore.DeleteObject(_hBitmap);
                 Debug.Assert(success, "DeleteObject() failed.");
                 success = PInvokeCore.DeleteDC(HDC);
@@ -96,14 +96,14 @@ public partial class Control
 
             try
             {
-                HBITMAP hBitmap = (HBITMAP)PInvoke.SelectObject(hdcSrc, hNullBitmap);
+                HBITMAP hBitmap = (HBITMAP)PInvokeCore.SelectObject(hdcSrc, hNullBitmap);
                 if (hBitmap.IsNull)
                 {
                     return false;
                 }
 
                 // Restore original bitmap
-                PInvoke.SelectObject(hdcSrc, hBitmap);
+                PInvokeCore.SelectObject(hdcSrc, hBitmap);
 
                 if (!PInvokeCore.GetObject(hBitmap, out BITMAP bmp))
                 {

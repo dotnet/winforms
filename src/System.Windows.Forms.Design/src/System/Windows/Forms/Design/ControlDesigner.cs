@@ -396,7 +396,7 @@ public partial class ControlDesigner : ComponentDesigner
     ///  want to block it from getting to Windows itself because it causes other messages to be generated.
     /// </summary>
     protected void BaseWndProc(ref Message m)
-        => m.ResultInternal = PInvoke.DefWindowProc(m.HWND, (uint)m.MsgInternal, m.WParamInternal, m.LParamInternal);
+        => m.ResultInternal = PInvokeCore.DefWindowProc(m.HWND, (uint)m.MsgInternal, m.WParamInternal, m.LParamInternal);
 
     internal override bool CanBeAssociatedWith(IDesigner parentDesigner) => CanBeParentedTo(parentDesigner);
 

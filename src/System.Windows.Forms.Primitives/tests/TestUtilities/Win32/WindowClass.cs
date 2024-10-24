@@ -50,7 +50,7 @@ internal class WindowClass
 
         if (backgroundBrush.IsNull)
         {
-            backgroundBrush = PInvoke.GetSysColorBrush(SYS_COLOR_INDEX.COLOR_WINDOW);
+            backgroundBrush = PInvokeCore.GetSysColorBrush(SYS_COLOR_INDEX.COLOR_WINDOW);
         }
         else if (backgroundBrush == (HBRUSH)(-1))
         {
@@ -227,6 +227,6 @@ internal class WindowClass
                 return (LRESULT)0;
         }
 
-        return PInvoke.DefWindowProc(hWnd, msg, wParam, lParam);
+        return PInvokeCore.DefWindowProc(hWnd, msg, wParam, lParam);
     }
 }

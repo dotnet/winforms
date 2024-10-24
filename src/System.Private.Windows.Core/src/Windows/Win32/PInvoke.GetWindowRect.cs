@@ -3,7 +3,7 @@
 
 namespace Windows.Win32;
 
-internal static partial class PInvoke
+internal static partial class PInvokeCore
 {
     /// <inheritdoc cref="GetWindowRect(HWND, out RECT)"/>
     public static BOOL GetWindowRect<T>(T hWnd, out RECT lpRect) where T : IHandle<HWND>

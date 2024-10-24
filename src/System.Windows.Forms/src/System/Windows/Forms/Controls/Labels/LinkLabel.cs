@@ -298,7 +298,7 @@ public partial class LinkLabel : Label, IButtonControl
                 // We want to instantly change the cursor if the mouse is within our bounds.
                 // This includes the case where the mouse is over one of our children
                 PInvoke.GetCursorPos(out Point p);
-                PInvoke.GetWindowRect(this, out var r);
+                PInvokeCore.GetWindowRect(this, out var r);
                 if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || PInvoke.GetCapture() == HWND)
                 {
                     PInvokeCore.SendMessage(this, PInvokeCore.WM_SETCURSOR, (WPARAM)HWND, (LPARAM)(int)PInvoke.HTCLIENT);

@@ -25,13 +25,13 @@ internal static class DesignerUtils
         new(HatchStyle.Percent50, SystemColors.ControlDarkDark, SystemColors.ControlDarkDark);
     // Pens and Brushes used via GDI to render our grabhandles
     private static HBRUSH s_grabHandleFillBrushPrimary =
-        PInvoke.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Window));
+        PInvokeCore.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Window));
     private static HBRUSH s_grabHandleFillBrush =
-        PInvoke.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlText));
+        PInvokeCore.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlText));
     private static HPEN s_grabHandlePenPrimary =
-        PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlText));
+        PInvokeCore.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlText));
     private static HPEN s_grabHandlePen =
-        PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Window));
+        PInvokeCore.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Window));
 
     // The box-like image used as the user is dragging comps from the toolbox
     private static Bitmap? s_boxImage;
@@ -170,16 +170,16 @@ internal static class DesignerUtils
         s_selectionBorderBrush = new HatchBrush(HatchStyle.Percent50, SystemColors.ControlDarkDark, SystemColors.ControlDarkDark);
 
         PInvokeCore.DeleteObject(s_grabHandleFillBrushPrimary);
-        s_grabHandleFillBrushPrimary = PInvoke.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Window));
+        s_grabHandleFillBrushPrimary = PInvokeCore.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Window));
 
         PInvokeCore.DeleteObject(s_grabHandleFillBrush);
-        s_grabHandleFillBrush = PInvoke.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlText));
+        s_grabHandleFillBrush = PInvokeCore.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlText));
 
         PInvokeCore.DeleteObject(s_grabHandlePenPrimary);
-        s_grabHandlePenPrimary = PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlText));
+        s_grabHandlePenPrimary = PInvokeCore.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlText));
 
         PInvokeCore.DeleteObject(s_grabHandlePen);
-        s_grabHandlePen = PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Window));
+        s_grabHandlePen = PInvokeCore.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Window));
     }
 
     /// <summary>
@@ -290,7 +290,7 @@ internal static class DesignerUtils
             height: 2);
 
         // Lower rect - its fillbrush depends on the primary selection
-        PInvoke.SelectObject(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
+        PInvokeCore.SelectObject(hDC, isPrimary ? s_grabHandleFillBrushPrimary : s_grabHandleFillBrush);
         PInvoke.Rectangle(hDC, bounds.Left, bounds.Top + s_lockedHandleLowerOffset, bounds.Right, bounds.Bottom);
     }
 

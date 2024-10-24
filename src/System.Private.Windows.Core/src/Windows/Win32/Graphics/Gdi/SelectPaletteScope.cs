@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.Graphics.GdiPlus;
+
 namespace Windows.Win32.Graphics.Gdi;
 
 /// <summary>
@@ -21,16 +23,21 @@ internal readonly ref struct SelectPaletteScope
     public HDC HDC { get; }
     public HPALETTE HPALETTE { get; }
 
+    private static HPALETTE s_halftonePalette;
+
     public SelectPaletteScope(HDC hdc, HPALETTE hpalette, bool forceBackground, bool realizePalette)
     {
         HDC = hdc;
-        HPALETTE = PInvoke.SelectPalette(hdc, hpalette, forceBackground);
+        HPALETTE = PInvokeCore.SelectPalette(hdc, hpalette, forceBackground);
         if (!HPALETTE.IsNull && realizePalette)
         {
-            PInvoke.RealizePalette(hdc);
+            PInvokeCore.RealizePalette(hdc);
         }
     }
 
+    /// <summary>
+    ///  Uses the GDI+ halftone palette for the given <paramref name="hdc"/> if the color depth is 8 bpp or less.
+    /// </summary>
     public static SelectPaletteScope HalftonePalette(HDC hdc, bool forceBackground, bool realizePalette)
     {
         if (PInvokeCore.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.BITSPIXEL) > 8)
@@ -49,9 +56,15 @@ internal readonly ref struct SelectPaletteScope
 #endif
         }
 
+        if (s_halftonePalette.IsNull)
+        {
+            GdiPlusInitialization.EnsureInitialized();
+            s_halftonePalette = PInvokeCore.GdipCreateHalftonePalette();
+        }
+
         return new SelectPaletteScope(
             hdc,
-            (HPALETTE)global::System.Drawing.Graphics.GetHalftonePalette(),
+            s_halftonePalette,
             forceBackground,
             realizePalette);
     }
@@ -62,7 +75,7 @@ internal readonly ref struct SelectPaletteScope
     {
         if (!HPALETTE.IsNull)
         {
-            PInvoke.SelectPalette(HDC, HPALETTE, bForceBkgd: false);
+            PInvokeCore.SelectPalette(HDC, HPALETTE, bForceBkgd: false);
         }
 
         DisposalTracking.SuppressFinalize(this);

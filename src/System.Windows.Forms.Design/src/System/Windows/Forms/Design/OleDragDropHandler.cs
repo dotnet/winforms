@@ -441,7 +441,7 @@ internal partial class OleDragDropHandler
         using SelectObjectScope brushSelection = new(dc, PInvokeCore.GetStockObject(GET_STOCK_OBJECT_FLAGS.NULL_BRUSH));
         using SelectObjectScope penSelection = new(dc, pen);
 
-        PInvoke.SetBkColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(graphicsColor));
+        PInvokeCore.SetBkColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(graphicsColor));
         PInvoke.Rectangle(dc, rectangle.X, rectangle.Y, rectangle.Right, rectangle.Bottom);
         // ------ Duplicate code----------------------------------------------------------
     }

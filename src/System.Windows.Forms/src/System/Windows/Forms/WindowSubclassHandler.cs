@@ -225,7 +225,7 @@ internal class WindowSubclassHandler : IDisposable
         // Call the original window procedure to process the message.
         if (_originalWindowProc is not null)
         {
-            m.ResultInternal = PInvoke.CallWindowProc(
+            m.ResultInternal = PInvokeCore.CallWindowProc(
                 _originalWindowProc,
                 m.HWND,
                 (uint)m.Msg,

@@ -5872,14 +5872,14 @@ public partial class DataGridView
 
         using GetDcScope dc = new(HWND, HRGN.Null, GET_DCX_FLAGS.DCX_CACHE | GET_DCX_FLAGS.DCX_LOCKWINDOWUPDATE);
         HBRUSH halftone = ControlPaint.CreateHalftoneHBRUSH();
-        HGDIOBJ saveBrush = PInvoke.SelectObject(dc, halftone);
+        HGDIOBJ saveBrush = PInvokeCore.SelectObject(dc, halftone);
 
         PInvoke.PatBlt(dc, r.X, r.Y, r.Width, DATAGRIDVIEW_shadowEdgeThickness, ROP_CODE.PATINVERT);
         PInvoke.PatBlt(dc, r.X, r.Y + r.Height - DATAGRIDVIEW_shadowEdgeThickness, r.Width, DATAGRIDVIEW_shadowEdgeThickness, ROP_CODE.PATINVERT);
         PInvoke.PatBlt(dc, r.X, r.Y + DATAGRIDVIEW_shadowEdgeThickness, DATAGRIDVIEW_shadowEdgeThickness, r.Height - 2 * DATAGRIDVIEW_shadowEdgeThickness, ROP_CODE.PATINVERT);
         PInvoke.PatBlt(dc, r.X + r.Width - DATAGRIDVIEW_shadowEdgeThickness, r.Y + DATAGRIDVIEW_shadowEdgeThickness, DATAGRIDVIEW_shadowEdgeThickness, r.Height - 2 * DATAGRIDVIEW_shadowEdgeThickness, ROP_CODE.PATINVERT);
 
-        PInvoke.SelectObject(dc, saveBrush);
+        PInvokeCore.SelectObject(dc, saveBrush);
         PInvokeCore.DeleteObject(halftone);
     }
 
@@ -5891,9 +5891,9 @@ public partial class DataGridView
     {
         using GetDcScope dc = new(HWND, HRGN.Null, GET_DCX_FLAGS.DCX_CACHE | GET_DCX_FLAGS.DCX_LOCKWINDOWUPDATE);
         HBRUSH halftone = ControlPaint.CreateHalftoneHBRUSH();
-        HGDIOBJ saveBrush = PInvoke.SelectObject(dc, halftone);
+        HGDIOBJ saveBrush = PInvokeCore.SelectObject(dc, halftone);
         PInvoke.PatBlt(dc, r.X, r.Y, r.Width, r.Height, ROP_CODE.PATINVERT);
-        PInvoke.SelectObject(dc, saveBrush);
+        PInvokeCore.SelectObject(dc, saveBrush);
         PInvokeCore.DeleteObject(halftone);
         GC.KeepAlive(this);
     }

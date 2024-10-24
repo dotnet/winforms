@@ -109,11 +109,11 @@ public partial class ComponentEditorForm
             if (((state & STATE_SELECTED) != 0) && !_hbrushDither.IsNull)
             {
                 FillRectDither(dc, rcIn);
-                PInvoke.SetBkMode(dc, BACKGROUND_MODE.TRANSPARENT);
+                PInvokeCore.SetBkMode(dc, BACKGROUND_MODE.TRANSPARENT);
             }
             else
             {
-                PInvoke.SetBkColor(dc, backColor);
+                PInvokeCore.SetBkColor(dc, backColor);
                 PInvoke.ExtTextOut(dc, 0, 0, ETO_OPTIONS.ETO_CLIPPED | ETO_OPTIONS.ETO_OPAQUE, &rc, lpString: null, 0, lpDx: null);
             }
 
@@ -128,7 +128,7 @@ public partial class ComponentEditorForm
             rc2.top = rc.top + (((rc.bottom - rc.top) - size.Height) >> 1);
             rc2.bottom = rc2.top + size.Height;
             rc2.right = rc.right;
-            PInvoke.SetTextColor(dc, textColor);
+            PInvokeCore.SetTextColor(dc, textColor);
 
             fixed (char* t = itemText)
             {
@@ -157,7 +157,7 @@ public partial class ComponentEditorForm
                 COLORREF savedColor;
 
                 // top left
-                savedColor = PInvoke.SetBkColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlLightLight));
+                savedColor = PInvokeCore.SetBkColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlLightLight));
                 rc2.left = rc.left;
                 rc2.top = rc.top;
                 rc2.bottom = rc.top + 1;
@@ -168,7 +168,7 @@ public partial class ComponentEditorForm
                 PInvoke.ExtTextOut(dc, 0, 0, ETO_OPTIONS.ETO_OPAQUE, &rc2, lpString: null, 0, lpDx: null);
 
                 // bottom right
-                PInvoke.SetBkColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlDark));
+                PInvokeCore.SetBkColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlDark));
                 rc2.left = rc.left;
                 rc2.right = rc.right;
                 rc2.top = rc.bottom - 1;
@@ -178,7 +178,7 @@ public partial class ComponentEditorForm
                 rc2.top = rc.top;
                 PInvoke.ExtTextOut(dc, 0, 0, ETO_OPTIONS.ETO_OPAQUE, &rc2, lpString: null, 0, lpDx: null);
 
-                PInvoke.SetBkColor(dc, savedColor);
+                PInvokeCore.SetBkColor(dc, savedColor);
             }
         }
 
@@ -259,16 +259,16 @@ public partial class ComponentEditorForm
 
         private void FillRectDither(HDC dc, RECT rc)
         {
-            HGDIOBJ hbrushOld = PInvoke.SelectObject(dc, _hbrushDither);
+            HGDIOBJ hbrushOld = PInvokeCore.SelectObject(dc, _hbrushDither);
 
             if (!hbrushOld.IsNull)
             {
-                COLORREF oldTextColor = PInvoke.SetTextColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlLightLight));
-                COLORREF oldBackColor = PInvoke.SetBkColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Control));
+                COLORREF oldTextColor = PInvokeCore.SetTextColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.ControlLightLight));
+                COLORREF oldBackColor = PInvokeCore.SetBkColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Control));
 
                 PInvoke.PatBlt(dc, rc.left, rc.top, rc.Width, rc.Height, ROP_CODE.PATCOPY);
-                PInvoke.SetTextColor(dc, oldTextColor);
-                PInvoke.SetBkColor(dc, oldBackColor);
+                PInvokeCore.SetTextColor(dc, oldTextColor);
+                PInvokeCore.SetBkColor(dc, oldBackColor);
             }
         }
 

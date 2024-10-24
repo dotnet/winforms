@@ -17,7 +17,7 @@ public class RegionTests
         using CreateBitmapScope hbitmap = new(hdc, 20, 20);
         Assert.False(hdc.IsNull);
 
-        PInvoke.SelectObject(hdc, hbitmap);
+        PInvokeCore.SelectObject(hdc, hbitmap);
         using RegionScope hregion = new(0, 0, 0, 0);
 
         Assert.False(hregion.IsNull);

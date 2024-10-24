@@ -96,7 +96,6 @@ GdipCreateFontFromDC
 GdipCreateFontFromLogfont
 GdipCreateFromHDC
 GdipCreateFromHDC2
-GdipCreateHalftonePalette
 GdipCreateHatchBrush
 GdipCreateHICONFromBitmap
 GdipCreateImageAttributes

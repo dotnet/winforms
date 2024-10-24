@@ -3240,7 +3240,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         if (IsHandleCreated)
         {
             void* wndProc = (void*)PInvokeCore.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC);
-            m.ResultInternal = PInvoke.CallWindowProc(
+            m.ResultInternal = PInvokeCore.CallWindowProc(
                 (delegate* unmanaged[Stdcall]<HWND, uint, WPARAM, LPARAM, LRESULT>)wndProc,
                 HWND,
                 (uint)m.Msg,

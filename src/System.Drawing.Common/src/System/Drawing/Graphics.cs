@@ -3522,31 +3522,18 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
     public static IntPtr GetHalftonePalette()
     {
-        if (s_halftonePalette == IntPtr.Zero)
+        if (s_halftonePalette.IsNull)
         {
             lock (s_syncObject)
             {
-                if (s_halftonePalette == IntPtr.Zero)
+                if (s_halftonePalette.IsNull)
                 {
-                    AppDomain.CurrentDomain.DomainUnload += OnDomainUnload;
-                    AppDomain.CurrentDomain.ProcessExit += OnDomainUnload;
-
-                    s_halftonePalette = PInvoke.GdipCreateHalftonePalette();
+                    s_halftonePalette = PInvokeCore.GdipCreateHalftonePalette();
                 }
             }
         }
 
         return s_halftonePalette;
-    }
-
-    // This is called from AppDomain.ProcessExit and AppDomain.DomainUnload.
-    private static void OnDomainUnload(object? sender, EventArgs e)
-    {
-        if (!s_halftonePalette.IsNull)
-        {
-            PInvokeCore.DeleteObject(s_halftonePalette);
-            s_halftonePalette = HPALETTE.Null;
-        }
     }
 
     /// <summary>
