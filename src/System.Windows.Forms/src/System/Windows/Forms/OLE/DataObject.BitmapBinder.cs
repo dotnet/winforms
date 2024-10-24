@@ -55,7 +55,7 @@ public partial class DataObject
 
         public override void BindToName(Type serializedType, out string? assemblyName, out string? typeName)
         {
-            // Null values will follow the default codepath in BinaryFormatter.
+            // Null values will follow the default code path in BinaryFormatter.
             assemblyName = null;
             typeName = null;
 
