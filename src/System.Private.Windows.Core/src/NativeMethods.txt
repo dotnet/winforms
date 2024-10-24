@@ -1,7 +1,9 @@
+BeginPaint
 BI_COMPRESSION
 BitBlt
 BOOL
 CLIPBRD_E_BAD_DATA
+CLR_*
 CoCreateInstance
 CombineRgn
 CopyImage
@@ -12,7 +14,9 @@ CreateDC
 CreateDIBSection
 CreateFontIndirect
 CreateICW
+CreatePen
 CreateRectRgn
+CreateSolidBrush
 DeleteDC
 DeleteObject
 DestroyIcon
@@ -58,6 +62,7 @@ E_POINTER
 E_UNEXPECTED
 EM_*
 EncoderParameters
+EndPaint
 EnumChildWindows
 EnumDisplayMonitors
 EnumThreadWindows
@@ -66,9 +71,11 @@ fdex*
 FDEX_PROP_FLAGS
 FILETIME
 GetCurrentThreadId
+GetSysColorBrush
 GdipBitmapLockBits
 GdipBitmapUnlockBits
 GdipCreateFromHWND
+GdipCreateHalftonePalette
 GdipDeleteGraphics
 GdipCreateHBITMAPFromBitmap
 GdipGetHemfFromMetafile
@@ -103,6 +110,7 @@ GetSystemMetrics
 GetThreadLocale
 GetViewportExtEx
 GetViewportOrgEx
+GetWindowRect
 GlobalAlloc
 GlobalFree
 GlobalLock
@@ -167,6 +175,7 @@ POINTS
 PRINTDLGEX_FLAGS
 PropVariantClear
 PWSTR
+RealizePalette
 Rect
 RECT
 RectF
@@ -190,7 +199,14 @@ SafeArrayUnlock
 SaveDC
 SelectClipRgn
 SelectObject
+SelectPalette
 SendMessage
+SetBkColor
+SetBkMode
+SetMapMode
+SetROP2
+SetTextAlign
+SetTextColor
 START_PAGE_GENERAL
 STATFLAG
 STG_E_FILENOTFOUND

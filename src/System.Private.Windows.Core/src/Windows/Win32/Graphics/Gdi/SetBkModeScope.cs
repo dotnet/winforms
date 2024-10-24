@@ -27,7 +27,7 @@ internal readonly ref struct SetBkModeScope
     /// </summary>
     public SetBkModeScope(HDC hdc, BACKGROUND_MODE bkmode)
     {
-        _previousMode = (BACKGROUND_MODE)PInvoke.SetBkMode(hdc, bkmode);
+        _previousMode = (BACKGROUND_MODE)PInvokeCore.SetBkMode(hdc, bkmode);
 
         // If we didn't actually change the mode, don't keep the HDC so we skip putting back the same state.
         _hdc = _previousMode == bkmode ? default : hdc;
@@ -37,7 +37,7 @@ internal readonly ref struct SetBkModeScope
     {
         if (!_hdc.IsNull)
         {
-            PInvoke.SetBkMode(_hdc, _previousMode);
+            PInvokeCore.SetBkMode(_hdc, _previousMode);
         }
 
 #if DEBUG
