@@ -4,7 +4,6 @@
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Formats.Nrbf;
-using System.Runtime.Serialization.Formatters;
 using System.Private.Windows.Core.Resources;
 
 namespace System.Private.Windows.Core.BinaryFormat;
@@ -52,7 +51,7 @@ internal sealed class ClassRecordFieldInfoDeserializer : ClassRecordDeserializer
             FieldInfo field = (FieldInfo)_fieldInfo[_currentFieldIndex];
             if (!_classRecord.HasMember(field.Name))
             {
-                if (Deserializer.Options.AssemblyMatching == FormatterAssemblyStyle.Simple
+                if (Deserializer.Options.SimpleAssemblyMatching
                     || field.GetCustomAttribute<OptionalFieldAttribute>() is not null)
                 {
                     _currentFieldIndex++;
