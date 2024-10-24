@@ -3,8 +3,10 @@
 
 using System.Collections.Specialized;
 using System.Drawing;
+using System.Private.Windows;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
+using System.Text.Json;
 using Com = Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
 
@@ -91,9 +93,71 @@ public unsafe partial class DataObject :
     /// <inheritdoc cref="Composition.OriginalIDataObject"/>
     internal IDataObject? OriginalIDataObject => _innerData.OriginalIDataObject;
 
+    /// <summary>
+    ///  Stores the specified data and its associated format in this instance as JSON.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">
+    ///  If <paramref name="data"/> is a non derived <see cref="DataObject"/>. This is for better error reporting as <see cref="DataObject"/> will serialize as empty.
+    ///  If <see cref="DataObject"/> needs to be set, JSON serialize the data held in <paramref name="data"/> using this method, then use <see cref="SetData(object?)"/>
+    ///  passing in <paramref name="data"/>.
+    /// </exception>
+    /// <remarks>
+    ///  <para>
+    ///   The default behavior of <see cref="JsonSerializer"/> is used to serialize the data.
+    ///  </para>
+    ///  <para>
+    ///   See
+    ///   <see href="https://learn.microsoft.com/dotnet/standard/serialization/system-text-json/how-to#serialization-behavior"/>
+    ///   and <see href="https://learn.microsoft.com/dotnet/standard/serialization/system-text-json/reflection-vs-source-generation#metadata-collection"/>
+    ///   for more details on default <see cref="JsonSerializer"/> behavior.
+    ///  </para>
+    ///  <para>
+    ///   If custom JSON serialization behavior is needed, manually JSON serialize the data and then use <see cref="SetData(object?)"/>,
+    ///   or create a custom <see cref="Text.Json.Serialization.JsonConverter"/>, attach the
+    ///   <see cref="Text.Json.Serialization.JsonConverterAttribute"/>, and then recall this method.
+    ///   See <see href="https://learn.microsoft.com/dotnet/standard/serialization/system-text-json/converters-how-to"/> for more details
+    ///   on custom converters for JSON serialization.
+    ///  </para>
+    /// </remarks>
+    public void SetDataAsJson<T>(string format, T data)
+    {
+        if (typeof(T) == typeof(DataObject))
+        {
+            throw new InvalidOperationException($"DataObject will serialize as empty. JSON serialize the data within {nameof(data)}, then use {nameof(SetData)} instead.");
+        }
+
+        SetData(format, new JsonData<T>() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data) });
+    }
+
+    /// <inheritdoc cref="SetDataAsJson{T}(string, T)"/>
+    public void SetDataAsJson<T>(T data)
+    {
+        if (typeof(T) == typeof(DataObject))
+        {
+            // TODO: Localize string.
+            throw new InvalidOperationException($"DataObject will serialize as empty. JSON serialize the data within  {nameof(data)}, then use {nameof(SetData)}  instead.");
+        }
+
+        SetData(typeof(T), new JsonData<T>() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data) });
+    }
+
+    public void SetDataAsJson<T>(string format, bool autoConvert, T data)
+    {
+        if (typeof(T) == typeof(DataObject))
+        {
+            // TODO: Localize string.
+            throw new InvalidOperationException($"DataObject will serialize as empty. JSON serialize the data within {nameof(data)}, then use {nameof(SetData)} instead.");
+        }
+
+        SetData(format, autoConvert, new JsonData<T>() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data) });
+    }
+
     #region IDataObject
-    public virtual object? GetData(string format, bool autoConvert) =>
-        ((IDataObject)_innerData).GetData(format, autoConvert);
+    public virtual object? GetData(string format, bool autoConvert)
+    {
+        object? data = ((IDataObject)_innerData).GetData(format, autoConvert);
+        return data is IJsonData jsonData ? jsonData.Deserialize() : data;
+    }
 
     public virtual object? GetData(string format) => GetData(format, autoConvert: true);
 
