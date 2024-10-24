@@ -87,6 +87,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         End Using
                     Finally
                         response?.Close()
+                        response = Nothing
                     End Try
                 End Sub
 
