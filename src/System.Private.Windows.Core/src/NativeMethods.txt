@@ -4,6 +4,7 @@ BitBlt
 BOOL
 CLIPBRD_E_BAD_DATA
 CLR_*
+CallWindowProc
 CoCreateInstance
 CombineRgn
 CopyImage
@@ -17,6 +18,7 @@ CreateICW
 CreatePen
 CreateRectRgn
 CreateSolidBrush
+DefWindowProc
 DeleteDC
 DeleteObject
 DestroyIcon

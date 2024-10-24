@@ -67,7 +67,6 @@ DATETIMEPICK_CLASS
 DeactivateActCtx
 DefFrameProc
 DefMDIChildProc
-DefWindowProc
 DeleteEnhMetaFile
 DESKTOP_ACCESS_FLAGS
 DestroyAcceleratorTable

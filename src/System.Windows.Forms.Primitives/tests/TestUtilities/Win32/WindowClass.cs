@@ -227,6 +227,6 @@ internal class WindowClass
                 return (LRESULT)0;
         }
 
-        return PInvoke.DefWindowProc(hWnd, msg, wParam, lParam);
+        return PInvokeCore.DefWindowProc(hWnd, msg, wParam, lParam);
     }
 }
