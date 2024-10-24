@@ -36,6 +36,7 @@ public partial class PrintControllerWithStatusDialog
 
             _cancellingTextBox = new TextBox()
             {
+                AutoSize = true,
                 Location = new Point(8, 16),
                 BorderStyle = BorderStyle.None,
                 ReadOnly = true,
@@ -81,7 +82,6 @@ public partial class PrintControllerWithStatusDialog
             ControlBox = false;
             MinimizeBox = false;
             ClientSize = ScaleHelper.ScaleToDpi(new Size(256, 122), ScaleHelper.InitialSystemDpi);
-            _cancellingTextBox.Width = ClientSize.Width;
 
             CancelButton = _cancelButton;
             SizeGripStyle = SizeGripStyle.Hide;
