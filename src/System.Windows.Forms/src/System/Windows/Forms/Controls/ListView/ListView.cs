@@ -345,17 +345,7 @@ public partial class ListView : Control
 
     public override Color BackColor
     {
-        get
-        {
-            if (ShouldSerializeBackColor())
-            {
-                return base.BackColor;
-            }
-            else
-            {
-                return SystemColors.Window;
-            }
-        }
+        get => ShouldSerializeBackColor() ? base.BackColor : SystemColors.Window;
         set
         {
             base.BackColor = value;
@@ -403,14 +393,9 @@ public partial class ListView : Control
                     fixed (char* pBackgroundImageFileName = _backgroundImageFileName)
                     {
                         LVBKIMAGEW lvbkImage = default;
-                        if (BackgroundImageTiled)
-                        {
-                            lvbkImage.ulFlags = LIST_VIEW_BACKGROUND_IMAGE_FLAGS.LVBKIF_STYLE_TILE;
-                        }
-                        else
-                        {
-                            lvbkImage.ulFlags = LIST_VIEW_BACKGROUND_IMAGE_FLAGS.LVBKIF_STYLE_NORMAL;
-                        }
+                        lvbkImage.ulFlags = BackgroundImageTiled
+                            ? LIST_VIEW_BACKGROUND_IMAGE_FLAGS.LVBKIF_STYLE_TILE
+                            : LIST_VIEW_BACKGROUND_IMAGE_FLAGS.LVBKIF_STYLE_NORMAL;
 
                         lvbkImage.ulFlags |= LIST_VIEW_BACKGROUND_IMAGE_FLAGS.LVBKIF_SOURCE_URL;
                         lvbkImage.pszImage = pBackgroundImageFileName;
@@ -845,17 +830,7 @@ public partial class ListView : Control
 
     public override Color ForeColor
     {
-        get
-        {
-            if (ShouldSerializeForeColor())
-            {
-                return base.ForeColor;
-            }
-            else
-            {
-                return SystemColors.WindowText;
-            }
-        }
+        get => ShouldSerializeForeColor() ? base.ForeColor : SystemColors.WindowText;
         set
         {
             base.ForeColor = value;
@@ -1741,23 +1716,11 @@ public partial class ListView : Control
 
             if (!IsHandleCreated)
             {
-                if (Items.Count > 0)
-                {
-                    return Items[0];
-                }
-                else
-                {
-                    return null;
-                }
+                return Items.Count > 0 ? Items[0] : null;
             }
 
             _topIndex = (int)PInvokeCore.SendMessage(this, PInvoke.LVM_GETTOPINDEX);
-            if (_topIndex >= 0 && _topIndex < Items.Count)
-            {
-                return Items[_topIndex];
-            }
-
-            return null;
+            return _topIndex >= 0 && _topIndex < Items.Count ? Items[_topIndex] : null;
         }
         set
         {
@@ -2872,14 +2835,9 @@ public partial class ListView : Control
 
                     if (changeColor)
                     {
-                        if (!haveRenderInfo || riFore.IsEmpty)
-                        {
-                            nmcd->clrText = ColorTranslator.ToWin32(_odCacheForeColor);
-                        }
-                        else
-                        {
-                            nmcd->clrText = ColorTranslator.ToWin32(riFore);
-                        }
+                        nmcd->clrText = !haveRenderInfo || riFore.IsEmpty
+                            ? (COLORREF)ColorTranslator.ToWin32(_odCacheForeColor)
+                            : (COLORREF)ColorTranslator.ToWin32(riFore);
 
                         // Work-around for a comctl quirk where,
                         // if clrText is the same as SystemColors.HotTrack,
@@ -2902,14 +2860,7 @@ public partial class ListView : Control
                                 {
                                     int n = 16 - totalshift;
                                     // Make sure the value doesn't overflow
-                                    if (color == mask)
-                                    {
-                                        color = ((color >> n) - 1) << n;
-                                    }
-                                    else
-                                    {
-                                        color = ((color >> n) + 1) << n;
-                                    }
+                                    color = color == mask ? ((color >> n) - 1) << n : ((color >> n) + 1) << n;
 
                                     // Copy the adjustment into nmcd->clrText
                                     nmcd->clrText = (COLORREF)((int)(nmcd->clrText & (~mask)) | color);
@@ -2927,14 +2878,9 @@ public partial class ListView : Control
                             while (!clrAdjusted);
                         }
 
-                        if (!haveRenderInfo || riBack.IsEmpty)
-                        {
-                            nmcd->clrTextBk = ColorTranslator.ToWin32(_odCacheBackColor);
-                        }
-                        else
-                        {
-                            nmcd->clrTextBk = ColorTranslator.ToWin32(riBack);
-                        }
+                        nmcd->clrTextBk = !haveRenderInfo || riBack.IsEmpty
+                            ? (COLORREF)ColorTranslator.ToWin32(_odCacheBackColor)
+                            : (COLORREF)ColorTranslator.ToWin32(riBack);
                     }
 
                     if (!haveRenderInfo || subItemFont is null)
@@ -3240,21 +3186,12 @@ public partial class ListView : Control
         }
     }
 
-    public ListViewItem? FindItemWithText(string text)
-    {
-        // if the user does not use the FindItemWithText overloads that specify a StartIndex and the listView is empty then return null
-        if (Items.Count == 0)
-        {
-            return null;
-        }
+    public ListViewItem? FindItemWithText(string text) => Items.Count == 0
+        ? null
+        : FindItemWithText(text, includeSubItemsInSearch: true, startIndex: 0, isPrefixSearch: true);
 
-        return FindItemWithText(text, true, 0, true);
-    }
-
-    public ListViewItem? FindItemWithText(string text, bool includeSubItemsInSearch, int startIndex)
-    {
-        return FindItemWithText(text, includeSubItemsInSearch, startIndex, true);
-    }
+    public ListViewItem? FindItemWithText(string text, bool includeSubItemsInSearch, int startIndex) =>
+        FindItemWithText(text, includeSubItemsInSearch, startIndex, isPrefixSearch: true);
 
     public ListViewItem? FindItemWithText(string text, bool includeSubItemsInSearch, int startIndex, bool isPrefixSearch)
     {
@@ -3341,14 +3278,7 @@ public partial class ListView : Control
 
             OnSearchForVirtualItem(sviEvent);
             // NOTE: this will cause a RetrieveVirtualItem event w/o a corresponding cache hint event.
-            if (sviEvent.Index != -1)
-            {
-                return Items[sviEvent.Index];
-            }
-            else
-            {
-                return null;
-            }
+            return sviEvent.Index != -1 ? Items[sviEvent.Index] : null;
         }
         else
         {
@@ -3653,15 +3583,12 @@ public partial class ListView : Control
             left = (int)portion
         };
 
-        if (PInvokeCore.SendMessage(this, PInvoke.LVM_GETITEMRECT, (WPARAM)index, ref itemrect) == 0)
-        {
-            throw new ArgumentOutOfRangeException(
+        return PInvokeCore.SendMessage(this, PInvoke.LVM_GETITEMRECT, (WPARAM)index, ref itemrect) == 0
+            ? throw new ArgumentOutOfRangeException(
                 nameof(index),
                 index,
-                string.Format(SR.InvalidArgument, nameof(index), index));
-        }
-
-        return itemrect;
+                string.Format(SR.InvalidArgument, nameof(index), index))
+            : (Rectangle)itemrect;
     }
 
     /// <summary>
@@ -3685,12 +3612,9 @@ public partial class ListView : Control
             left = 0
         };
 
-        if (PInvokeCore.SendMessage(this, PInvoke.LVM_GETITEMRECT, (WPARAM)index, ref itemrect) == 0)
-        {
-            return Rectangle.Empty;
-        }
-
-        return itemrect;
+        return PInvokeCore.SendMessage(this, PInvoke.LVM_GETITEMRECT, (WPARAM)index, ref itemrect) == 0
+            ? Rectangle.Empty
+            : (Rectangle)itemrect;
     }
 
     /// <summary>
@@ -3736,12 +3660,12 @@ public partial class ListView : Control
             top = subItemIndex
         };
 
-        if (PInvokeCore.SendMessage(this, PInvoke.LVM_GETSUBITEMRECT, (WPARAM)itemIndex, ref itemrect) == 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(itemIndex), itemIndex, string.Format(SR.InvalidArgument, nameof(itemIndex), itemIndex));
-        }
-
-        return itemrect;
+        return PInvokeCore.SendMessage(this, PInvoke.LVM_GETSUBITEMRECT, (WPARAM)itemIndex, ref itemrect) == 0
+            ? throw new ArgumentOutOfRangeException(
+                nameof(itemIndex),
+                itemIndex,
+                string.Format(SR.InvalidArgument, nameof(itemIndex), itemIndex))
+            : (Rectangle)itemrect;
     }
 
     private void GroupImageListChangedHandle(object? sender, EventArgs e)
@@ -3784,15 +3708,9 @@ public partial class ListView : Control
             pt = new Point(x, y)
         };
 
-        int iItem;
-        if (SupportsListViewSubItems)
-        {
-            iItem = (int)PInvokeCore.SendMessage(this, PInvoke.LVM_SUBITEMHITTEST, (WPARAM)0, ref lvhi);
-        }
-        else
-        {
-            iItem = (int)PInvokeCore.SendMessage(this, PInvoke.LVM_HITTEST, (WPARAM)0, ref lvhi);
-        }
+        int iItem = SupportsListViewSubItems
+            ? (int)PInvokeCore.SendMessage(this, PInvoke.LVM_SUBITEMHITTEST, (WPARAM)0, ref lvhi)
+            : (int)PInvokeCore.SendMessage(this, PInvoke.LVM_HITTEST, (WPARAM)0, ref lvhi);
 
         ListViewItem? item = (iItem == -1) ? null : Items[iItem];
         ListViewHitTestLocations location;
@@ -3895,17 +3813,9 @@ public partial class ListView : Control
             throw new ArgumentException(string.Format(SR.OnlyOneControl, ch.Text), nameof(ch));
         }
 
-        int idx;
-        // in Tile view the ColumnHeaders collection is used for the Tile Information
+        // In Tile view the ColumnHeaders collection is used for the Tile Information
         // recreate the handle in that case
-        if (IsHandleCreated && View != View.Tile)
-        {
-            idx = InsertColumnNative(index, ch);
-        }
-        else
-        {
-            idx = index;
-        }
+        int idx = IsHandleCreated && View != View.Tile ? InsertColumnNative(index, ch) : index;
 
         // First column must be left aligned
 
@@ -6968,14 +6878,7 @@ public partial class ListView : Control
                             nmlvif->iStart);
 
                         OnSearchForVirtualItem(sviEvent);
-                        if (sviEvent.Index != -1)
-                        {
-                            m.ResultInternal = (LRESULT)sviEvent.Index;
-                        }
-                        else
-                        {
-                            m.ResultInternal = (LRESULT)(-1);
-                        }
+                        m.ResultInternal = sviEvent.Index != -1 ? (LRESULT)sviEvent.Index : (LRESULT)(-1);
                     }
                 }
 

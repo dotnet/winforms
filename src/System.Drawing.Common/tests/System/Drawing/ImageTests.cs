@@ -21,7 +21,7 @@ public class ImageTests
     public void PropertyIdList_GetBitmapJpg_Success()
     {
         using Bitmap bitmap = new(Helpers.GetTestBitmapPath("nature24bits.jpg"));
-        Assert.Equal(new int[] { PropertyTagExifUserComment, PropertyTagChrominanceTable, PropertyTagLuminanceTable }, bitmap.PropertyIdList);
+        Assert.Equal([PropertyTagExifUserComment, PropertyTagChrominanceTable, PropertyTagLuminanceTable], bitmap.PropertyIdList);
         Assert.NotSame(bitmap.PropertyIdList, bitmap.PropertyIdList);
     }
 
@@ -135,12 +135,12 @@ public class ImageTests
         bitmap.SetPropertyItem(item3);
 
         bitmap.RemovePropertyItem(PropertyTagExifUserComment);
-        Assert.Equal(new int[] { PropertyTagChrominanceTable, PropertyTagLuminanceTable }, bitmap.PropertyIdList);
+        Assert.Equal([PropertyTagChrominanceTable, PropertyTagLuminanceTable], bitmap.PropertyIdList);
         AssertExtensions.Throws<ArgumentException>(null, () => bitmap.GetPropertyItem(PropertyTagExifUserComment));
         AssertExtensions.Throws<ArgumentException>(null, () => bitmap.RemovePropertyItem(PropertyTagExifUserComment));
 
         bitmap.RemovePropertyItem(PropertyTagLuminanceTable);
-        Assert.Equal(new int[] { PropertyTagChrominanceTable }, bitmap.PropertyIdList);
+        Assert.Equal([PropertyTagChrominanceTable], bitmap.PropertyIdList);
         AssertExtensions.Throws<ArgumentException>(null, () => bitmap.GetPropertyItem(PropertyTagLuminanceTable));
         AssertExtensions.Throws<ArgumentException>(null, () => bitmap.RemovePropertyItem(PropertyTagLuminanceTable));
 
@@ -155,12 +155,12 @@ public class ImageTests
     {
         using Bitmap bitmap = new(Helpers.GetTestBitmapPath("nature24bits.jpg"));
         bitmap.RemovePropertyItem(PropertyTagExifUserComment);
-        Assert.Equal(new int[] { PropertyTagChrominanceTable, PropertyTagLuminanceTable }, bitmap.PropertyIdList);
+        Assert.Equal([PropertyTagChrominanceTable, PropertyTagLuminanceTable], bitmap.PropertyIdList);
         AssertExtensions.Throws<ArgumentException>(null, () => bitmap.GetPropertyItem(PropertyTagExifUserComment));
         AssertExtensions.Throws<ArgumentException>(null, () => bitmap.RemovePropertyItem(PropertyTagExifUserComment));
 
         bitmap.RemovePropertyItem(PropertyTagLuminanceTable);
-        Assert.Equal(new int[] { PropertyTagChrominanceTable }, bitmap.PropertyIdList);
+        Assert.Equal([PropertyTagChrominanceTable], bitmap.PropertyIdList);
         AssertExtensions.Throws<ArgumentException>(null, () => bitmap.GetPropertyItem(PropertyTagLuminanceTable));
         AssertExtensions.Throws<ArgumentException>(null, () => bitmap.RemovePropertyItem(PropertyTagLuminanceTable));
 
@@ -234,7 +234,7 @@ public class ImageTests
 
         bitmap.SetPropertyItem(item);
 
-        Assert.Equal(new int[] { PropertyTagExifUserComment }, bitmap.PropertyIdList);
+        Assert.Equal([PropertyTagExifUserComment], bitmap.PropertyIdList);
         PropertyItem[] items = bitmap.PropertyItems;
         Assert.Single(items);
         Assert.Equal(PropertyTagExifUserComment, items[0].Id);
@@ -249,7 +249,7 @@ public class ImageTests
 
         bitmap.SetPropertyItem(item);
 
-        Assert.Equal(new int[] { PropertyTagExifUserComment, propid }, bitmap.PropertyIdList);
+        Assert.Equal([PropertyTagExifUserComment, propid], bitmap.PropertyIdList);
         items = bitmap.PropertyItems;
         Assert.Equal(2, items.Length);
         Assert.Equal(PropertyTagExifUserComment, items[0].Id);
@@ -264,7 +264,7 @@ public class ImageTests
         // Set same.
         bitmap.SetPropertyItem(item);
 
-        Assert.Equal(new int[] { PropertyTagExifUserComment, propid }, bitmap.PropertyIdList);
+        Assert.Equal([PropertyTagExifUserComment, propid], bitmap.PropertyIdList);
         items = bitmap.PropertyItems;
         Assert.Equal(2, items.Length);
         Assert.Equal(PropertyTagExifUserComment, items[0].Id);
@@ -292,7 +292,7 @@ public class ImageTests
 
         bitmap.SetPropertyItem(item);
 
-        Assert.Equal(new int[] { PropertyTagExifUserComment, PropertyTagChrominanceTable, PropertyTagLuminanceTable }, bitmap.PropertyIdList);
+        Assert.Equal([PropertyTagExifUserComment, PropertyTagChrominanceTable, PropertyTagLuminanceTable], bitmap.PropertyIdList);
         PropertyItem[] items = bitmap.PropertyItems;
         Assert.Equal(3, items.Length);
         Assert.Equal(PropertyTagExifUserComment, items[0].Id);
@@ -335,7 +335,7 @@ public class ImageTests
 
         bitmap.SetPropertyItem(item);
 
-        Assert.Equal(new int[] { PropertyTagExifUserComment, PropertyTagChrominanceTable, PropertyTagLuminanceTable, propid }, bitmap.PropertyIdList);
+        Assert.Equal([PropertyTagExifUserComment, PropertyTagChrominanceTable, PropertyTagLuminanceTable, propid], bitmap.PropertyIdList);
         items = bitmap.PropertyItems;
         Assert.Equal(4, items.Length);
         Assert.Equal(PropertyTagExifUserComment, items[0].Id);
@@ -378,7 +378,7 @@ public class ImageTests
         // Set same.
         bitmap.SetPropertyItem(item);
 
-        Assert.Equal(new int[] { PropertyTagExifUserComment, PropertyTagChrominanceTable, PropertyTagLuminanceTable, propid }, bitmap.PropertyIdList);
+        Assert.Equal([PropertyTagExifUserComment, PropertyTagChrominanceTable, PropertyTagLuminanceTable, propid], bitmap.PropertyIdList);
         items = bitmap.PropertyItems;
         Assert.Equal(4, items.Length);
         Assert.Equal(PropertyTagExifUserComment, items[0].Id);
@@ -435,7 +435,7 @@ public class ImageTests
 
         bitmap.SetPropertyItem(item);
 
-        Assert.Equal(new int[] { PropertyTagExifUserComment }, bitmap.PropertyIdList);
+        Assert.Equal([PropertyTagExifUserComment], bitmap.PropertyIdList);
         PropertyItem[] items = bitmap.PropertyItems;
         Assert.Single(items);
         Assert.Equal(PropertyTagExifUserComment, items[0].Id);
@@ -450,7 +450,7 @@ public class ImageTests
 
         bitmap.SetPropertyItem(item);
 
-        Assert.Equal(new int[] { PropertyTagExifUserComment, propid }, bitmap.PropertyIdList);
+        Assert.Equal([PropertyTagExifUserComment, propid], bitmap.PropertyIdList);
         items = bitmap.PropertyItems;
         Assert.Equal(2, items.Length);
         Assert.Equal(PropertyTagExifUserComment, items[0].Id);
@@ -465,7 +465,7 @@ public class ImageTests
         // Set same.
         bitmap.SetPropertyItem(item);
 
-        Assert.Equal(new int[] { PropertyTagExifUserComment, propid }, bitmap.PropertyIdList);
+        Assert.Equal([PropertyTagExifUserComment, propid], bitmap.PropertyIdList);
         items = bitmap.PropertyItems;
         Assert.Equal(2, items.Length);
         Assert.Equal(PropertyTagExifUserComment, items[0].Id);
@@ -660,7 +660,7 @@ public class ImageTests
     public void Save_InvalidDirectory_ThrowsDirectoryNotFoundException()
     {
         using Bitmap bitmap = new(1, 1);
-        string badTarget = System.IO.Path.Combine("NoSuchDirectory", "NoSuchFile");
+        string badTarget = Path.Join("NoSuchDirectory", "NoSuchFile");
         AssertExtensions.Throws<DirectoryNotFoundException>(() => bitmap.Save(badTarget), $"The directory NoSuchDirectory of the filename {badTarget} does not exist.");
     }
 }
