@@ -54,8 +54,7 @@ public class UpDownBaseDesignerTests : IDisposable
         List<SnapLine> snapLines = (List<SnapLine>)_designer.SnapLines;
 
         snapLines.Should().NotBeNull();
-        SnapLine? baselineSnapLine = snapLines.Cast<SnapLine>().FirstOrDefault(sl => sl.SnapLineType == SnapLineType.Baseline);
-        baselineSnapLine.Should().NotBeNull();
+        SnapLine? baselineSnapLine = snapLines.FirstOrDefault(sl => sl.SnapLineType == SnapLineType.Baseline);
         baselineSnapLine.Should().BeOfType<SnapLine>().Which.Priority.Should().Be(SnapLinePriority.Medium);
 
         int expectedBaseline = DesignerUtils.GetTextBaseline(_numericUpDown, Drawing.ContentAlignment.TopLeft) + expectedBaselineOffset;
