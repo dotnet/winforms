@@ -557,15 +557,10 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
     /// <summary>
     ///  Returns the native window for the given handle, or null if the handle is not in our hash table.
     /// </summary>
-    private static NativeWindow? GetWindowFromTable(HWND handle)
-    {
-        if (s_windowHandles.TryGetValue(handle, out GCHandle value) && value.IsAllocated)
-        {
-            return (NativeWindow?)value.Target;
-        }
-
-        return null;
-    }
+    private static NativeWindow? GetWindowFromTable(HWND handle) =>
+        s_windowHandles.TryGetValue(handle, out GCHandle value) && value.IsAllocated
+            ? (NativeWindow?)value.Target
+            : null;
 
     /// <summary>
     ///  Returns the handle from the given <paramref name="id"/> if found, otherwise returns

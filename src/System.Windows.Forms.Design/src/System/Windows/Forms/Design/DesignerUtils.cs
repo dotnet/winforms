@@ -374,12 +374,9 @@ internal static class DesignerUtils
             return prop?.GetValue(null);
         }
 
-        if (provider.TryGetService(out IDesignerOptionService? optionService))
-        {
-            return optionService.GetOptionValue("WindowsFormsDesigner\\General", name);
-        }
-
-        return null;
+        return provider.TryGetService(out IDesignerOptionService? optionService)
+            ? optionService.GetOptionValue("WindowsFormsDesigner\\General", name)
+            : null;
     }
 
     /// <summary>
@@ -452,12 +449,7 @@ internal static class DesignerUtils
         }
 
         // Now check to see if our center pixel was cleared, if not then our WM_PRINT failed
-        if (image.GetPixel(image.Width / 2, image.Height / 2).Equals(testColor))
-        {
-            return false;
-        }
-
-        return true;
+        return !image.GetPixel(image.Width / 2, image.Height / 2).Equals(testColor);
     }
 
     /// <summary>
@@ -730,17 +722,8 @@ internal static class DesignerUtils
     ///  Ensures that a SplitterPanel in a SplitContainer returns the same container as other form components,
     ///  since SplitContainer sites its two SplitterPanels inside a nested container.
     /// </summary>
-    public static IContainer? CheckForNestedContainer(IContainer? container)
-    {
-        if (container is NestedContainer nestedContainer)
-        {
-            return nestedContainer.Owner.Site?.Container;
-        }
-        else
-        {
-            return container;
-        }
-    }
+    public static IContainer? CheckForNestedContainer(IContainer? container) =>
+        container is NestedContainer nestedContainer ? (nestedContainer.Owner.Site?.Container) : container;
 
     /// <summary>
     ///  Used to create copies of the objects that we are dragging in a drag operation

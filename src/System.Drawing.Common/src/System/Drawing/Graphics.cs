@@ -79,10 +79,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public static Graphics FromHdc(IntPtr hdc)
     {
-        if (hdc == IntPtr.Zero)
-            throw new ArgumentNullException(nameof(hdc));
-
-        return FromHdcInternal(hdc);
+        return hdc == 0 ? throw new ArgumentNullException(nameof(hdc)) : FromHdcInternal(hdc);
     }
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
