@@ -248,7 +248,6 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
     [Bindable(true)]
     [DefaultValue(false)]
     [SRCategory(nameof(SR.CatAppearance))]
-    [RefreshProperties(RefreshProperties.All)]
     [SRDescription(nameof(SR.CheckBoxCheckedDescr))]
     public bool Checked
     {
@@ -295,7 +294,6 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
     [Bindable(true)]
     [SRCategory(nameof(SR.CatAppearance))]
     [DefaultValue(CheckState.Unchecked)]
-    [RefreshProperties(RefreshProperties.All)]
     [SRDescription(nameof(SR.CheckBoxCheckStateDescr))]
     public CheckState CheckState
     {

@@ -361,7 +361,6 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
     }
 
     [DefaultValue(false)]
-    [RefreshProperties(RefreshProperties.All)]
     [SRCategory(nameof(SR.CatLayout))]
     [SRDescription(nameof(SR.DataGridView_ColumnFrozenDescr))]
     public override bool Frozen

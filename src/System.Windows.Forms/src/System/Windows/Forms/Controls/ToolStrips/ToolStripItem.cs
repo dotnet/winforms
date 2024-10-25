@@ -325,7 +325,6 @@ public abstract partial class ToolStripItem :
     /// </summary>
     [DefaultValue(true)]
     [SRCategory(nameof(SR.CatBehavior))]
-    [RefreshProperties(RefreshProperties.All)]
     [Localizable(true)]
     [SRDescription(nameof(SR.ToolStripItemAutoSizeDescr))]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]

@@ -144,7 +144,6 @@ public partial class CheckBox : ButtonBase
     SettingsBindable(true)]
     [DefaultValue(false)]
     [SRCategory(nameof(SR.CatAppearance))]
-    [RefreshProperties(RefreshProperties.All)]
     [SRDescription(nameof(SR.CheckBoxCheckedDescr))]
     public bool Checked
     {
@@ -164,7 +163,6 @@ public partial class CheckBox : ButtonBase
     [Bindable(true)]
     [SRCategory(nameof(SR.CatAppearance))]
     [DefaultValue(CheckState.Unchecked)]
-    [RefreshProperties(RefreshProperties.All)]
     [SRDescription(nameof(SR.CheckBoxCheckStateDescr))]
     public CheckState CheckState
     {
