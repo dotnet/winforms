@@ -1002,4 +1002,89 @@ public class ClipboardTests
         DataObject dataObject = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
         dataObject.GetData(format).Should().BeOfType<NotSupportedException>();
     }
+
+    [WinFormsTheory]
+    [BoolData]
+    public void Clipboard_CustomDataObject_AvoidBinaryFormatter(bool copy)
+    {
+        string format = "custom";
+        TestData data = new() { X = 1, Y = 1 };
+        Clipboard.SetData(format, data);
+        // BinaryFormatter not enabled.
+        Clipboard.GetData(format).Should().BeOfType<NotSupportedException>();
+
+        Clipboard.Clear();
+        JsonDataObject jsonDataObject = new();
+        jsonDataObject.SetData(format, data);
+
+        Clipboard.SetDataObject(jsonDataObject, copy);
+
+        if (copy)
+        {
+            // Pasting in different process has been simulated. Manual Json deserialization will need to occur.
+            IDataObject received = Clipboard.GetDataObject().Should().BeAssignableTo<IDataObject>().Subject;
+            received.Should().NotBe(jsonDataObject);
+            byte[] jsonBytes = Clipboard.GetData(format).Should().BeOfType<byte[]>().Subject;
+            JsonSerializer.Deserialize(jsonBytes, typeof(TestData)).Should().BeEquivalentTo(data);
+        }
+        else
+        {
+            JsonDataObject received = Clipboard.GetDataObject().Should().BeOfType<JsonDataObject>().Subject;
+            received.Should().Be(jsonDataObject);
+            received.Deserialize<TestData>(format).Should().BeEquivalentTo(data);
+        }
+    }
+
+    [Serializable]
+    private struct TestData
+    {
+        public int X { get; set; }
+        public int Y { get; set; }
+    }
+
+    // Test class to demonstrate one way to write IDataObject to totally control serialization/deserialization
+    // and have it avoid BinaryFormatter.
+    private class JsonDataObject : IDataObject, ComTypes.IDataObject
+    {
+        private readonly Dictionary<string, byte[]> _formatToJson = [];
+        private readonly Dictionary<string, string> _formatToTypeName = [];
+
+        public T? Deserialize<T>(string format)
+        {
+            if (typeof(T).AssemblyQualifiedName != _formatToTypeName[format])
+            {
+                return default;
+            }
+
+            return JsonSerializer.Deserialize<T>(_formatToJson[format]);
+        }
+
+        public object GetData(string format, bool autoConvert) => GetData(format);
+        public object GetData(string format) => _formatToJson[format];
+        public object GetData(Type format) => throw new NotImplementedException();
+        public bool GetDataPresent(string format, bool autoConvert) => throw new NotImplementedException();
+        public bool GetDataPresent(string format) => _formatToJson.ContainsKey(format);
+        public bool GetDataPresent(Type format) => throw new NotImplementedException();
+        public string[] GetFormats(bool autoConvert) => throw new NotImplementedException();
+        public string[] GetFormats() => _formatToJson.Keys.ToArray();
+        public void SetData(string format, bool autoConvert, object? data) => throw new NotImplementedException();
+        public void SetData(string format, object? data)
+        {
+            _formatToTypeName.Add(format, data!.GetType().AssemblyQualifiedName!);
+            _formatToJson.Add(format, JsonSerializer.SerializeToUtf8Bytes(data));
+        }
+
+        public void SetData(Type format, object? data) => throw new NotImplementedException();
+        public void SetData(object? data) => throw new NotImplementedException();
+
+        public int DAdvise(ref ComTypes.FORMATETC pFormatetc, ComTypes.ADVF advf, ComTypes.IAdviseSink adviseSink, out int connection) => throw new NotImplementedException();
+        public void DUnadvise(int connection) => throw new NotImplementedException();
+        public int EnumDAdvise(out ComTypes.IEnumSTATDATA? enumAdvise) => throw new NotImplementedException();
+        public ComTypes.IEnumFORMATETC EnumFormatEtc(ComTypes.DATADIR direction) => throw new NotImplementedException();
+        public int GetCanonicalFormatEtc(ref ComTypes.FORMATETC formatIn, out ComTypes.FORMATETC formatOut) => throw new NotImplementedException();
+        public void SetData(ref ComTypes.FORMATETC formatIn, ref ComTypes.STGMEDIUM medium, bool release) => throw new NotImplementedException();
+        public void GetData(ref ComTypes.FORMATETC format, out ComTypes.STGMEDIUM medium) => throw new NotImplementedException();
+        public void GetDataHere(ref ComTypes.FORMATETC format, ref ComTypes.STGMEDIUM medium) => throw new NotImplementedException();
+        public int QueryGetData(ref ComTypes.FORMATETC format) => throw new NotImplementedException();
+    }
 }
