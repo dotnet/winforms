@@ -25,7 +25,7 @@ public partial class ListView
             {
                 if (this.IsOwnerHandleCreated(out ListView? owningListView))
                 {
-                    PInvoke.GetWindowRect(owningListView, out var rect);
+                    PInvokeCore.GetWindowRect(owningListView, out var rect);
                     return rect;
                 }
 

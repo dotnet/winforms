@@ -2640,7 +2640,7 @@ public partial class ListView : Control
                         _odCacheFont = new Font(_odCacheFont, FontStyle.Bold);
                         _odCacheFontHandleWrapper = new FontHandleWrapper(_odCacheFont);
                         _odCacheFontHandle = _odCacheFontHandleWrapper.Handle;
-                        PInvoke.SelectObject(nmcd->nmcd.hdc, _odCacheFontHandleWrapper.Handle);
+                        PInvokeCore.SelectObject(nmcd->nmcd.hdc, _odCacheFontHandleWrapper.Handle);
                         m.ResultInternal = (LRESULT)(nint)PInvoke.CDRF_NEWFONT;
                     }
 
@@ -2942,7 +2942,7 @@ public partial class ListView : Control
                         // safety net code just in case
                         if (_odCacheFont is not null)
                         {
-                            PInvoke.SelectObject(nmcd->nmcd.hdc, _odCacheFontHandle);
+                            PInvokeCore.SelectObject(nmcd->nmcd.hdc, _odCacheFontHandle);
                         }
                     }
                     else
@@ -2950,7 +2950,7 @@ public partial class ListView : Control
                         _odCacheFontHandleWrapper?.Dispose();
 
                         _odCacheFontHandleWrapper = new FontHandleWrapper(subItemFont);
-                        PInvoke.SelectObject(nmcd->nmcd.hdc, _odCacheFontHandleWrapper.Handle);
+                        PInvokeCore.SelectObject(nmcd->nmcd.hdc, _odCacheFontHandleWrapper.Handle);
                     }
 
                     if (!dontmess)
@@ -4635,7 +4635,7 @@ public partial class ListView : Control
         // This not noticeable if the customer paints the items w/ the same background color as the list view itself.
         // However, if the customer paints the items w/ a color different from the list view's back color
         // then when the user changes selection the native list view will not invalidate the entire list view item area.
-        PInvokeCore.SendMessage(this, PInvoke.LVM_SETTEXTBKCOLOR, (WPARAM)0, (LPARAM)PInvoke.CLR_NONE);
+        PInvokeCore.SendMessage(this, PInvoke.LVM_SETTEXTBKCOLOR, (WPARAM)0, (LPARAM)PInvokeCore.CLR_NONE);
 
         // LVS_NOSCROLL does not work well when the list view is in View.Details or in View.List modes.
         // we have to set this style after the list view was created and before we position the native list view items.
@@ -4963,7 +4963,7 @@ public partial class ListView : Control
 
             // We should probably be OK if we don't set the TEXTBKCOLOR to CLR_NONE.
             // However, for the sake of being more robust, reset the TECTBKCOLOR to CLR_NONE when the system palette changes.
-            PInvokeCore.SendMessage(this, PInvoke.LVM_SETTEXTBKCOLOR, (WPARAM)0, (LPARAM)PInvoke.CLR_NONE);
+            PInvokeCore.SendMessage(this, PInvoke.LVM_SETTEXTBKCOLOR, (WPARAM)0, (LPARAM)PInvokeCore.CLR_NONE);
         }
     }
 
@@ -6041,7 +6041,7 @@ public partial class ListView : Control
             else if (nmlvcd->nmcd.dwDrawStage == NMCUSTOMDRAW_DRAW_STAGE.CDDS_ITEMPREPAINT)
             {
                 // Setting the current ForeColor to the text color.
-                PInvoke.SetTextColor(nmlvcd->nmcd.hdc, ForeColor);
+                PInvokeCore.SetTextColor(nmlvcd->nmcd.hdc, ForeColor);
 
                 // and the rest remains the same.
                 m.ResultInternal = (LRESULT)(nint)PInvoke.CDRF_DODEFAULT;

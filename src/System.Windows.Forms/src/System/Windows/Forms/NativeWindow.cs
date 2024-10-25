@@ -504,11 +504,11 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
 
                 // At this point, there isn't much we can do. There's a small chance the following
                 // line will allow the rest of the program to run, but don't get your hopes up.
-                m.ResultInternal = PInvoke.DefWindowProc(m.HWND, (uint)m.Msg, m.WParamInternal, m.LParamInternal);
+                m.ResultInternal = PInvokeCore.DefWindowProc(m.HWND, (uint)m.Msg, m.WParamInternal, m.LParamInternal);
                 return;
             }
 
-            m.ResultInternal = PInvoke.CallWindowProc(
+            m.ResultInternal = PInvokeCore.CallWindowProc(
                 _priorWindowProcHandle,
                 m.HWND,
                 (uint)m.Msg,
