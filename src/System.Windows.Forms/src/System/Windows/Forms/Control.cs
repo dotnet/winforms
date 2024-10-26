@@ -696,12 +696,12 @@ public unsafe partial class Control :
 
             if (color.IsSystemColor)
             {
-                backBrush = PInvoke.GetSysColorBrush(color);
+                backBrush = PInvokeCore.GetSysColorBrush(color);
                 SetState(States.OwnCtlBrush, false);
             }
             else
             {
-                backBrush = PInvoke.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(color));
+                backBrush = PInvokeCore.CreateSolidBrush((COLORREF)(uint)ColorTranslator.ToWin32(color));
                 SetState(States.OwnCtlBrush, true);
             }
 
@@ -1472,17 +1472,9 @@ public unsafe partial class Control :
 
             // We only do ambients for things with "Cursors.Default" as their default.
             Cursor localDefault = DefaultCursor;
-            if (localDefault != Cursors.Default)
-            {
-                return localDefault;
-            }
-
-            if (ParentInternal is { } parent)
-            {
-                return parent.Cursor;
-            }
-
-            return AmbientPropertiesService?.Cursor ?? localDefault;
+            return localDefault != Cursors.Default
+                ? localDefault
+                : ParentInternal is { } parent ? parent.Cursor : AmbientPropertiesService?.Cursor ?? localDefault;
         }
         set
         {
@@ -1499,7 +1491,7 @@ public unsafe partial class Control :
                 // We want to instantly change the cursor if the mouse is within our bounds.
                 // This includes the case where the mouse is over one of our children.
                 PInvoke.GetCursorPos(out Point p);
-                PInvoke.GetWindowRect(this, out RECT r);
+                PInvokeCore.GetWindowRect(this, out RECT r);
                 if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || PInvoke.GetCapture() == HWND)
                 {
                     PInvokeCore.SendMessage(this, PInvokeCore.WM_SETCURSOR, (WPARAM)HWND, (LPARAM)(int)PInvoke.HTCLIENT);
@@ -2246,7 +2238,7 @@ public unsafe partial class Control :
                 }
             }
 
-            PInvoke.GetWindowRect(this, out var temp);
+            PInvokeCore.GetWindowRect(this, out var temp);
             using Region working = new(temp);
 
             HWND prev;
@@ -2257,7 +2249,7 @@ public unsafe partial class Control :
                 !(next = PInvoke.GetWindow(prev, GET_WINDOW_CMD.GW_HWNDPREV)).IsNull;
                 prev = next)
             {
-                PInvoke.GetWindowRect(next, out temp);
+                PInvokeCore.GetWindowRect(next, out temp);
                 if (PInvoke.IsWindowVisible(next))
                 {
                     working.Exclude(temp);
@@ -2799,15 +2791,9 @@ public unsafe partial class Control :
     /// </summary>
     internal BoundsSpecified RequiredScaling
     {
-        get
-        {
-            if ((_requiredScaling & RequiredScalingEnabledMask) != 0)
-            {
-                return (BoundsSpecified)(_requiredScaling & RequiredScalingMask);
-            }
-
-            return BoundsSpecified.None;
-        }
+        get => (_requiredScaling & RequiredScalingEnabledMask) != 0
+            ? (BoundsSpecified)(_requiredScaling & RequiredScalingMask)
+            : BoundsSpecified.None;
         set
         {
             byte enableBit = (byte)(_requiredScaling & RequiredScalingEnabledMask);
@@ -4337,20 +4323,8 @@ public unsafe partial class Control :
     ///  all controls in the parent chain can do it too, but since the semantics for this function can be overridden,
     ///  we need to call the method on the parent 'recursively' (not exactly since it is not necessarily the same method).
     /// </summary>
-    internal virtual bool CanProcessMnemonic()
-    {
-        if (!Enabled || !Visible)
-        {
-            return false;
-        }
-
-        if (_parent is not null)
-        {
-            return _parent.CanProcessMnemonic();
-        }
-
-        return true;
-    }
+    internal virtual bool CanProcessMnemonic() =>
+        Enabled && Visible && (_parent is null || _parent.CanProcessMnemonic());
 
     // Package scope to allow AxHost to override
     internal virtual bool CanSelectCore()
@@ -4955,18 +4929,10 @@ public unsafe partial class Control :
         }
 
         Debug.Assert(asyncResult.IsCompleted, "Why isn't this asyncResult done yet?");
-        if (entry._exception is not null)
-        {
-            throw entry._exception;
-        }
-
-        return entry._retVal;
+        return entry._exception is not null ? throw entry._exception : entry._retVal;
     }
 
-    internal bool EndUpdateInternal()
-    {
-        return EndUpdateInternal(true);
-    }
+    internal bool EndUpdateInternal() => EndUpdateInternal(invalidate: true);
 
     internal bool EndUpdateInternal(bool invalidate)
     {
@@ -5654,15 +5620,10 @@ public unsafe partial class Control :
                     }
                     else
                     {
-                        // If we don't found any siblings, and the control is a ToolStripItem that hosts a control itself,
+                        // If we haven't found any siblings, and the control is a ToolStripItem that hosts a control itself,
                         // then we shouldn't return its parent, because it would be the same ToolStrip we're currently at.
-                        // Instead, we should return the control that is previous to the current ToolStrip
-                        if (ctl.ToolStripControlHost is not null)
-                        {
-                            return GetNextControl(ctl._parent, forward: false);
-                        }
-
-                        return parent;
+                        // Instead, we should return the control that is previous to the current ToolStrip.
+                        return ctl.ToolStripControlHost is not null ? GetNextControl(ctl._parent, forward: false) : parent;
                     }
                 }
             }
@@ -5702,14 +5663,9 @@ public unsafe partial class Control :
         else
         {
             HWND hwnd = (HWND)window.Handle;
-            if (hwnd.IsNull || PInvoke.IsWindow(hwnd))
-            {
-                return new(window, hwnd);
-            }
-            else
-            {
-                throw new Win32Exception((int)WIN32_ERROR.ERROR_INVALID_HANDLE);
-            }
+            return hwnd.IsNull || PInvoke.IsWindow(hwnd)
+                ? new(window, hwnd)
+                : throw new Win32Exception((int)WIN32_ERROR.ERROR_INVALID_HANDLE);
         }
     }
 
@@ -5783,8 +5739,8 @@ public unsafe partial class Control :
         // NOTE: this message may not have originally been sent to this HWND.
         if (!GetStyle(ControlStyles.UserPaint))
         {
-            PInvoke.SetTextColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(ForeColor));
-            PInvoke.SetBkColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(BackColor));
+            PInvokeCore.SetTextColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(ForeColor));
+            PInvokeCore.SetBkColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(BackColor));
             return BackColorBrush;
         }
 
@@ -6160,14 +6116,7 @@ public unsafe partial class Control :
             {
                 lock (_threadCallbackList)
                 {
-                    if (_threadCallbackList.Count > 0)
-                    {
-                        current = _threadCallbackList.Dequeue();
-                    }
-                    else
-                    {
-                        current = null;
-                    }
+                    current = _threadCallbackList.Count > 0 ? _threadCallbackList.Dequeue() : null;
                 }
             }
         }
@@ -6223,12 +6172,7 @@ public unsafe partial class Control :
             // and off when the key is untoggled.
 
             // Toggle keys (only low bit is of interest).
-            if (keyVal is Keys.Insert or Keys.CapsLock)
-            {
-                return (result & 0x1) != 0x0;
-            }
-
-            return (result & 0x8001) != 0x0;
+            return keyVal is Keys.Insert or Keys.CapsLock ? (result & 0x1) != 0x0 : (result & 0x8001) != 0x0;
         }
 
         // else - it's an un-lockable key.
@@ -8764,7 +8708,7 @@ public unsafe partial class Control :
         PrintToMetaFile_SendPrintMessage(hDC, (nint)(lParam & (long)~PInvoke.PRF_CLIENT));
 
         // Figure out mapping for the client area.
-        bool success = PInvoke.GetWindowRect(this, out var windowRect);
+        bool success = PInvokeCore.GetWindowRect(this, out var windowRect);
         Debug.Assert(success, "GetWindowRect() failed.");
         Point clientOffset = PointToScreen(Point.Empty);
         clientOffset = new(clientOffset.X - windowRect.left, clientOffset.Y - windowRect.top);
@@ -8889,14 +8833,7 @@ public unsafe partial class Control :
             OnKeyPress(kpe);
 
             // If the character wasn't changed, just use the original value rather than round tripping.
-            if (kpe.KeyChar == preEventCharacter)
-            {
-                newWParam = m.WParamInternal;
-            }
-            else
-            {
-                newWParam = (WPARAM)kpe.KeyChar;
-            }
+            newWParam = kpe.KeyChar == preEventCharacter ? m.WParamInternal : (WPARAM)kpe.KeyChar;
         }
         else
         {
@@ -8942,15 +8879,8 @@ public unsafe partial class Control :
     ///   <see cref="Message.Msg"/> property are WM_CHAR, WM_KEYDOWN, WM_SYSKEYDOWN, WM_KEYUP, and WM_SYSKEYUP.
     ///  </para>
     /// </remarks>
-    protected internal virtual bool ProcessKeyMessage(ref Message m)
-    {
-        if (_parent is not null && _parent.ProcessKeyPreview(ref m))
-        {
-            return true;
-        }
-
-        return ProcessKeyEventArgs(ref m);
-    }
+    protected internal virtual bool ProcessKeyMessage(ref Message m) =>
+        (_parent is not null && _parent.ProcessKeyPreview(ref m)) || ProcessKeyEventArgs(ref m);
 
     /// <summary>
     ///  Previews a keyboard message.
@@ -10788,7 +10718,7 @@ public unsafe partial class Control :
             PInvokeCore.GetClientRect(this, out rect);
             clientWidth = rect.right;
             clientHeight = rect.bottom;
-            PInvoke.GetWindowRect(this, out rect);
+            PInvokeCore.GetWindowRect(this, out rect);
             if (!GetTopLevel())
             {
                 PInvoke.MapWindowPoints(HWND.Null, PInvoke.GetParent(this), ref rect);
@@ -11226,20 +11156,7 @@ public unsafe partial class Control :
     /// </summary>
     private void WmGetControlName(ref Message m)
     {
-        string? name;
-
-        if (Site is not null)
-        {
-            name = Site.Name;
-        }
-        else
-        {
-            name = Name;
-        }
-
-        name ??= string.Empty;
-
-        MarshalStringToMessage(name, ref m);
+        MarshalStringToMessage(Site?.Name ?? Name ?? string.Empty, ref m);
     }
 
     /// <summary>
@@ -12834,7 +12751,7 @@ public unsafe partial class Control :
 
     internal virtual Rectangle GetToolNativeScreenRectangle()
     {
-        PInvoke.GetWindowRect(this, out var rect);
+        PInvokeCore.GetWindowRect(this, out var rect);
         return rect;
     }
 

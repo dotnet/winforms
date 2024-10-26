@@ -1089,7 +1089,7 @@ public class GraphicsPathTests
         gp.AddRectangle(new Rectangle(1, 1, 2, 2));
         AssertRectangle(gp);
         gp.Transform(matrix);
-        Assert.Equal(new float[] { 1f, 1f, 2f, 2f, 3f, 3f }, matrix.Elements);
+        Assert.Equal([1f, 1f, 2f, 2f, 3f, 3f], matrix.Elements);
         Assert.Equal(new RectangleF(6f, 6f, 6f, 6f), gp.GetBounds());
         Assert.Equal([new(6f, 6f), new(8f, 8f), new(12f, 12f), new(10f, 10f)], gp.PathPoints);
         Assert.Equal(new byte[] { 0, 1, 1, 129 }, gp.PathTypes);
@@ -1101,7 +1101,7 @@ public class GraphicsPathTests
         using GraphicsPath gp = new();
         using Matrix matrix = new(1f, 1f, 2f, 2f, 3f, 3f);
         gp.Transform(matrix);
-        Assert.Equal(new float[] { 1f, 1f, 2f, 2f, 3f, 3f }, matrix.Elements);
+        Assert.Equal([1f, 1f, 2f, 2f, 3f, 3f], matrix.Elements);
         AssertEmptyGraphicsPath(gp);
     }
 

@@ -64,7 +64,7 @@ Namespace Microsoft.VisualBasic.Devices
                 mode), "Enum value is out of range")
 
             ' Stopping the sound ensures it's safe to dispose it.
-            ' This could happen when we change the value of m_Sound below
+            ' This could happen when we change the value of _sound below
             _sound?.Stop()
 
             _sound = sound
@@ -161,7 +161,6 @@ Namespace Microsoft.VisualBasic.Devices
             End If
 
             systemSound.Play()
-
         End Sub
 
     End Class

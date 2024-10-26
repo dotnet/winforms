@@ -54,9 +54,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
 
     private protected Image() { }
 
-#pragma warning disable CA2229 // Implement serialization constructors
     private protected Image(SerializationInfo info, StreamingContext context)
-#pragma warning restore CA2229
     {
         byte[] dat = (byte[])info.GetValue("Data", typeof(byte[]))!; // Do not rename (binary serialization)
 
