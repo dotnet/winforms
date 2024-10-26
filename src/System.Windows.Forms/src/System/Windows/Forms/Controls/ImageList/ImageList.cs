@@ -351,12 +351,7 @@ public sealed partial class ImageList : Component, IHandle<HIMAGELIST>
         {
             Debug.Assert(HandleCreated, "Calling AddIconToHandle when there is no handle");
             int index = PInvoke.ImageList.ReplaceIcon(this, -1, new HandleRef<HICON>(icon, (HICON)icon.Handle));
-            if (index == -1)
-            {
-                throw new InvalidOperationException(SR.ImageListAddFailed);
-            }
-
-            return index;
+            return index == -1 ? throw new InvalidOperationException(SR.ImageListAddFailed) : index;
         }
         finally
         {
@@ -392,12 +387,7 @@ public sealed partial class ImageList : Component, IHandle<HIMAGELIST>
             PInvokeCore.DeleteObject(hMask);
         }
 
-        if (index == -1)
-        {
-            throw new InvalidOperationException(SR.ImageListAddFailed);
-        }
-
-        return index;
+        return index == -1 ? throw new InvalidOperationException(SR.ImageListAddFailed) : index;
     }
 
     /// <summary>
@@ -441,7 +431,7 @@ public sealed partial class ImageList : Component, IHandle<HIMAGELIST>
             _nativeImageList = new NativeImageList(_imageSize, flags);
         }
 
-        PInvoke.ImageList.SetBkColor(this, (COLORREF)PInvoke.CLR_NONE);
+        PInvoke.ImageList.SetBkColor(this, (COLORREF)PInvokeCore.CLR_NONE);
 
         Debug.Assert(_originals is not null, "Handle not yet created, yet original images are gone");
         for (int i = 0; i < _originals.Count; i++)
@@ -546,8 +536,8 @@ public sealed partial class ImageList : Component, IHandle<HIMAGELIST>
                 y,
                 width,
                 height,
-                (COLORREF)PInvoke.CLR_NONE,
-                (COLORREF)PInvoke.CLR_NONE,
+                (COLORREF)PInvokeCore.CLR_NONE,
+                (COLORREF)PInvokeCore.CLR_NONE,
                 IMAGE_LIST_DRAW_STYLE.ILD_TRANSPARENT);
         }
         finally
@@ -682,8 +672,8 @@ public sealed partial class ImageList : Component, IHandle<HIMAGELIST>
                         0,
                         _imageSize.Width,
                         _imageSize.Height,
-                        (COLORREF)PInvoke.CLR_NONE,
-                        (COLORREF)PInvoke.CLR_NONE,
+                        (COLORREF)PInvokeCore.CLR_NONE,
+                        (COLORREF)PInvokeCore.CLR_NONE,
                         IMAGE_LIST_DRAW_STYLE.ILD_TRANSPARENT);
                 }
                 finally

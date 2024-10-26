@@ -10,7 +10,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
     ''' <summary>
     '''  A class that contains the information about an Application. This information
-    '''  can be specified using the assembly attributes (contained in AssemblyInfo.vb
+    '''  can be specified using the <see langword="Assembly"/> attributes (contained in AssemblyInfo.vb
     '''  file in case of a VB project in Visual Studio .NET).
     ''' </summary>
     ''' <remarks>
@@ -24,23 +24,23 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         ' Since these properties will not change during runtime, they're cached.
         ' String.Empty is not Nothing so use Nothing to mark an un-accessed property.
-        ' Cache the assembly's company name.
+        ' Cache the Assembly's company name.
         Private _companyName As String
-        ' Cache the assembly's copyright.
+        ' Cache the Assembly's copyright.
         Private _copyright As String
-        ' Cache the assembly's description.
+        ' Cache the Assembly's description.
         Private _description As String
-        ' Cache the assembly's product name.
+        ' Cache the Assembly's product name.
         Private _productName As String
-        ' Cache the assembly's title.
+        ' Cache the Assembly's title.
         Private _title As String
-        ' Cache the assembly's trademark.
+        ' Cache the Assembly's trademark.
         Private _trademark As String
 
         ''' <summary>
-        '''  Creates an AssemblyInfo from an assembly.
+        '''  Creates an <see cref="AssemblyInfo"/> from an <see langword="Assembly"/>.
         ''' </summary>
-        ''' <param name="currentAssembly">The assembly for which we want to obtain the information.</param>
+        ''' <param name="currentAssembly">The <see langword="Assembly"/> for which we want to obtain the information.</param>
         Public Sub New(currentAssembly As Assembly)
             If currentAssembly Is Nothing Then
                 Throw VbUtils.GetArgumentNullException(NameOf(currentAssembly))
@@ -49,9 +49,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Sub
 
         ''' <summary>
-        '''  Gets the name of the file containing the manifest (usually the .exe file).
+        '''  Gets a <see langword="string"/> containing the name of the file
+        '''  containing the manifest (usually the .exe file).
         ''' </summary>
-        ''' <value>A String containing the file name.</value>
+        ''' <value>A <see langword="String"/> containing the file name.</value>
         Public ReadOnly Property AssemblyName() As String
             Get
                 Return _assembly.GetName.Name
@@ -59,11 +60,11 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
         ''' <summary>
-        '''  Gets the company name associated with the assembly.
+        '''  Gets the company name associated with the <see langword="Assembly"/>.
         ''' </summary>
         ''' <value>
-        '''  A String containing the <see cref="AssemblyCompanyAttribute"/>
-        '''  associated with the assembly.
+        '''  A <see langword="String"/> containing the <see cref="AssemblyCompanyAttribute"/>
+        '''  associated with the <see langword="assembly"/>.
         ''' </value>
         ''' <exception cref="InvalidOperationException">
         '''  Thrown if <see cref="AssemblyCompanyAttribute"/> is not defined.
@@ -71,11 +72,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Public ReadOnly Property CompanyName() As String
             Get
                 If _companyName Is Nothing Then
+                    _companyName = String.Empty
                     Dim attribute As AssemblyCompanyAttribute =
                         CType(GetAttribute(GetType(AssemblyCompanyAttribute)), AssemblyCompanyAttribute)
-                    If attribute Is Nothing Then
-                        _companyName = String.Empty
-                    Else
+                    If attribute IsNot Nothing Then
                         _companyName = attribute.Company
                     End If
                 End If
@@ -84,56 +84,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
         ''' <summary>
-        '''  Gets the copyright notices associated with the assembly.
-        ''' </summary>
-        ''' <value>
-        '''  A String containing the <see cref="AssemblyCopyrightAttribute"/>
-        '''  associated with the assembly.
-        ''' </value>
-        ''' <exception cref="InvalidOperationException">
-        '''  Thrown if <see cref="AssemblyCopyrightAttribute"/> is not defined.
-        ''' </exception>
-        Public ReadOnly Property Copyright() As String
-            Get
-                If _copyright Is Nothing Then
-                    Dim attribute As AssemblyCopyrightAttribute = CType(GetAttribute(GetType(AssemblyCopyrightAttribute)), AssemblyCopyrightAttribute)
-                    If attribute Is Nothing Then
-                        _copyright = String.Empty
-                    Else
-                        _copyright = attribute.Copyright
-                    End If
-                End If
-                Return _copyright
-            End Get
-        End Property
-
-        ''' <summary>
-        '''  Gets the description associated with the assembly.
-        ''' </summary>
-        ''' <value>
-        '''  String containing the <see cref="AssemblyDescriptionAttribute"/>
-        '''  associated with the assembly.
-        ''' </value>
-        ''' <exception cref="InvalidOperationException">
-        '''  Thrown if <see cref="AssemblyDescriptionAttribute"/> is not defined.
-        ''' </exception>
-        Public ReadOnly Property Description() As String
-            Get
-                If _description Is Nothing Then
-                    Dim attribute As AssemblyDescriptionAttribute =
-                        CType(GetAttribute(GetType(AssemblyDescriptionAttribute)), AssemblyDescriptionAttribute)
-                    If attribute Is Nothing Then
-                        _description = String.Empty
-                    Else
-                        _description = attribute.Description
-                    End If
-                End If
-                Return _description
-            End Get
-        End Property
-
-        ''' <summary>
-        '''  Gets the directory where the assembly lives.
+        '''  Gets a <see langword="String"/> containing the directory where the <see langword="Assembly"/> lives.
         ''' </summary>
         Public ReadOnly Property DirectoryPath() As String
             Get
@@ -161,11 +112,11 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
         ''' <summary>
-        '''  Gets the product name associated with the assembly.
+        '''  Gets the product name associated with the <see langword="Assembly"/>.
         ''' </summary>
         ''' <value>
-        '''  String containing the <see cref="AssemblyProductAttribute"/> associated
-        '''  with the assembly.
+        '''  <see langword="String"/> containing the <see cref="AssemblyProductAttribute"/>
+        '''  associated with the <see langword="Assembly"/>.
         ''' </value>
         ''' <exception cref="InvalidOperationException">
         '''  Thrown if <see cref="AssemblyProductAttribute"/> is not defined.
@@ -174,9 +125,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             Get
                 If _productName Is Nothing Then
                     Dim attribute As AssemblyProductAttribute = CType(GetAttribute(GetType(AssemblyProductAttribute)), AssemblyProductAttribute)
-                    If attribute Is Nothing Then
-                        _productName = String.Empty
-                    Else
+                    _productName = String.Empty
+                    If attribute IsNot Nothing Then
                         _productName = attribute.Product
                     End If
                 End If
@@ -185,10 +135,59 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
         ''' <summary>
+        '''  Gets the copyright notices associated with the <see langword="Assembly"/>.
+        ''' </summary>
+        ''' <value>
+        '''  A <see langword="String"/> containing the <see cref="AssemblyCopyrightAttribute"/>
+        '''  associated with the <see langword="Assembly"/>.
+        ''' </value>
+        ''' <exception cref="InvalidOperationException">
+        '''  Thrown if <see cref="AssemblyCopyrightAttribute"/> is not defined.
+        ''' </exception>
+        Public ReadOnly Property Copyright() As String
+            Get
+                If _copyright Is Nothing Then
+                    _copyright = String.Empty
+                    Dim attribute As AssemblyCopyrightAttribute =
+                        CType(GetAttribute(GetType(AssemblyCopyrightAttribute)), AssemblyCopyrightAttribute)
+                    If attribute IsNot Nothing Then
+                        _copyright = attribute.Copyright
+                    End If
+                End If
+                Return _copyright
+            End Get
+        End Property
+
+        ''' <summary>
+        '''  Gets the description associated with the <see langword="Assembly"/>.
+        ''' </summary>
+        ''' <value>
+        '''  <see langword="String"/> containing the <see cref="AssemblyDescriptionAttribute"/>
+        '''  associated with the <see langword="Assembly"/>.
+        ''' </value>
+        ''' <exception cref="InvalidOperationException">
+        '''  Thrown if <see cref="AssemblyDescriptionAttribute"/> is not defined.
+        ''' </exception>
+        Public ReadOnly Property Description() As String
+            Get
+                If _description Is Nothing Then
+                    _description = String.Empty
+                    Dim attribute As AssemblyDescriptionAttribute =
+                        CType(GetAttribute(GetType(AssemblyDescriptionAttribute)), AssemblyDescriptionAttribute)
+                    If attribute IsNot Nothing Then
+                        _description = attribute.Description
+                    End If
+                End If
+                Return _description
+            End Get
+        End Property
+
+        ''' <summary>
         '''  Returns the current stack trace information.
         ''' </summary>
         ''' <value>
-        '''  String containing stack trace information. Value can be <see cref="String.Empty"/>.
+        '''  A <see langword="String"/> containing stack trace information.
+        '''  Value can be <see cref="String.Empty"/>.
         ''' </value>
         ''' <exception cref="ArgumentOutOfRangeException">
         '''  Thrown if the requested stack trace information is out of range.
@@ -200,22 +199,21 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
         ''' <summary>
-        '''  Gets the company name associated with the assembly.
+        '''  Gets the company name associated with the <see langword="Assembly"/>.
         ''' </summary>
         ''' <value>
-        '''  String containing the <see cref="AssemblyTitleAttribute"/>
-        '''  associated with the assembly.
+        '''  A <see langword="String"/> containing the <see cref="AssemblyTitleAttribute"/>
+        '''  associated with the <see langword="Assembly"/>.
         ''' </value>
         ''' <exception cref="InvalidOperationException">
         ''' Thrown if <see cref="AssemblyTitleAttribute"/> is not defined.</exception>
         Public ReadOnly Property Title() As String
             Get
                 If _title Is Nothing Then
+                    _title = String.Empty
                     Dim attribute As AssemblyTitleAttribute =
                         CType(GetAttribute(GetType(AssemblyTitleAttribute)), AssemblyTitleAttribute)
-                    If attribute Is Nothing Then
-                        _title = String.Empty
-                    Else
+                    If attribute IsNot Nothing Then
                         _title = attribute.Title
                     End If
                 End If
@@ -224,11 +222,11 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
         ''' <summary>
-        '''  Gets the trademark notices associated with the assembly.
+        '''  Gets the trademark notices associated with the <see langword="Assembly"/>.
         ''' </summary>
         ''' <value>
-        '''  String containing the <see cref="AssemblyTrademarkAttribute"/> associated
-        '''  with the assembly.
+        '''  A <see langword="String"/> containing the <see cref="AssemblyTrademarkAttribute"/> associated
+        '''  with the <see langword="Assembly"/>.
         ''' </value>
         ''' <exception cref="InvalidOperationException">
         '''  Thrown if the <see cref="AssemblyTrademarkAttribute"/> is not defined.
@@ -236,10 +234,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Public ReadOnly Property Trademark() As String
             Get
                 If _trademark Is Nothing Then
+                    _trademark = String.Empty
                     Dim attribute As AssemblyTrademarkAttribute = CType(GetAttribute(GetType(AssemblyTrademarkAttribute)), AssemblyTrademarkAttribute)
-                    If attribute Is Nothing Then
-                        _trademark = String.Empty
-                    Else
+                    If attribute IsNot Nothing Then
                         _trademark = attribute.Trademark
                     End If
                 End If
@@ -248,10 +245,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
         ''' <summary>
-        '''  Gets the version number of the assembly.
+        '''  Gets the version number of the <see langword="Assembly"/>.
         ''' </summary>
         ''' <value>
-        '''  A <see cref="System.Version"/> class containing the version number of the assembly.
+        '''  A <see cref="System.Version"/> class containing the version number of the <see langword="Assembly"/>.
         ''' </value>
         ''' <remarks>
         '''  Cannot use <see cref="AssemblyVersionAttribute"/> since it always return Nothing.
@@ -266,7 +263,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  Gets the amount of physical memory mapped to the process context.
         ''' </summary>
         ''' <value>
-        '''  A 64-bit signed integer containing the size of physical memory mapped
+        '''  A <see langword="Long"/> containing the size of physical memory mapped
         '''  to the process context, in bytes.
         ''' </value>>
         Public ReadOnly Property WorkingSet() As Long
@@ -276,22 +273,23 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
         ''' <summary>
-        '''  Gets an <see cref="Attribute"/> from the assembly and throws exception
-        '''  if the attribute does not exist.
+        '''  Gets an <see cref="Attribute"/> from the <see langword="Assembly"/> and
+        '''  throws <see cref="Exception"/> if the <see cref="Attribute"/> does not exist.
         ''' </summary>
-        ''' <param name="attributeType">The type of the required attribute.</param>
+        ''' <param name="attributeType">The type of the required <see cref="Attribute"/>.</param>
         ''' <returns>
-        '''  The <see cref="Attribute"/> with the given type gotten from the assembly, or Nothing.
+        '''  The <see cref="Attribute"/> with the given type gotten from the <see langword="Assembly"/>,
+        '''  or <see langword="Nothing"/>.
         ''' </returns>
         Private Function GetAttribute(attributeType As Type) As Object
             Debug.Assert(_assembly IsNot Nothing, $"Null {NameOf(_assembly)}")
 
+            Dim firstAttribute As Object = Nothing
             Dim attributes() As Object = _assembly.GetCustomAttributes(attributeType, inherit:=True)
-            If attributes.Length = 0 Then
-                Return Nothing
-            Else
-                Return attributes(0)
+            If attributes.Length > 0 Then
+                firstAttribute = attributes(0)
             End If
+            Return firstAttribute
         End Function
 
     End Class

@@ -23,71 +23,63 @@ public class ToolStripStatusLabelTests : IDisposable
     }
 
     [WinFormsFact]
-    public void ToolStripStatusLabel_ConstructorWithText_SetsTextProperty()
+    public void ToolStripStatusLabel_ConstructorWithText_InitializesCorrectly()
     {
         string sampleText = "Sample Text";
-        _toolStripStatusLabel.Text = sampleText;
-        _toolStripStatusLabel.Text.Should().Be(sampleText);
+        using ToolStripStatusLabel label = new(sampleText);
+        label.Text.Should().Be(sampleText);
     }
 
     [WinFormsFact]
-    public void ToolStripStatusLabel_ConstructorWithImage_SetsImageProperty()
+    public void ToolStripStatusLabel_ConstructorWithImage_InitializesCorrectly()
     {
         using Bitmap sampleImage = new(10, 10);
-        _toolStripStatusLabel.Image = sampleImage;
-        _toolStripStatusLabel.Image.Should().Be(sampleImage);
+        using ToolStripStatusLabel label = new(sampleImage);
+        label.Text.Should().BeNull();
+        label.Image.Should().Be(sampleImage);
     }
 
     [WinFormsFact]
-    public void ToolStripStatusLabel_ConstructorWithTextAndImage_SetsTextAndImageProperties()
+    public void ToolStripStatusLabel_ConstructorWithTextAndImage_InitializesCorrectly()
     {
         string sampleText = "Sample Text";
         using Bitmap sampleImage = new(10, 10);
-        _toolStripStatusLabel.Text = sampleText;
-        _toolStripStatusLabel.Image = sampleImage;
-        _toolStripStatusLabel.Text.Should().Be(sampleText);
-        _toolStripStatusLabel.Image.Should().Be(sampleImage);
+        using ToolStripStatusLabel label = new(sampleText, sampleImage);
+        label.Text.Should().Be(sampleText);
+        label.Image.Should().Be(sampleImage);
     }
 
     [WinFormsFact]
-    public void ToolStripStatusLabel_ConstructorWithTextImageAndOnClick_SetsTextImageAndOnClickProperties()
+    public void ToolStripStatusLabel_ConstructorWithTextImageAndOnClick_InitializesCorrectly()
     {
         string sampleText = "Sample Text";
         using Bitmap sampleImage = new(10, 10);
-        bool wasClicked = false;
-        EventHandler sampleClickHandler = (sender, e) => wasClicked = true;
+        bool clickInvoked = false;
+        EventHandler sampleClickHandler = (sender, e) => clickInvoked = true;
 
-        _toolStripStatusLabel.Text = sampleText;
-        _toolStripStatusLabel.Image = sampleImage;
-        _toolStripStatusLabel.Click += sampleClickHandler;
+        using ToolStripStatusLabel label = new(sampleText, sampleImage, sampleClickHandler);
+        label.Text.Should().Be(sampleText);
+        label.Image.Should().Be(sampleImage);
 
-        _toolStripStatusLabel.Text.Should().Be(sampleText);
-        _toolStripStatusLabel.Image.Should().Be(sampleImage);
-
-        _toolStripStatusLabel.TestAccessor().Dynamic.OnClick(null);
-        wasClicked.Should().BeTrue();
+        label.TestAccessor().Dynamic.OnClick(null);
+        clickInvoked.Should().BeTrue();
     }
 
     [WinFormsFact]
-    public void ToolStripStatusLabel_ConstructorWithTextImageOnClickAndName_SetsTextImageOnClickAndNameProperties()
+    public void ToolStripStatusLabel_ConstructorWithTextImageOnClickAndName_InitializesCorrectly()
     {
-        string sampleText = "Sample Text";
-        using Bitmap sampleImage = new(10, 10);
-        bool wasClicked = false;
-        EventHandler sampleClickHandler = (sender, e) => wasClicked = true;
-        string sampleName = "SampleName";
+        bool clickInvoked = false;
+        EventHandler onClick = (sender, e) => clickInvoked = true;
 
-        _toolStripStatusLabel.Text = sampleText;
-        _toolStripStatusLabel.Image = sampleImage;
-        _toolStripStatusLabel.Click += sampleClickHandler;
-        _toolStripStatusLabel.Name = sampleName;
+        using Bitmap image = new(10, 10);
+        using ToolStripStatusLabel toolStripStatusLabel = new("Sample Text", image, onClick, "SampleName");
 
-        _toolStripStatusLabel.Text.Should().Be(sampleText);
-        _toolStripStatusLabel.Image.Should().Be(sampleImage);
-        _toolStripStatusLabel.Name.Should().Be(sampleName);
+        toolStripStatusLabel.Text.Should().Be("Sample Text");
+        toolStripStatusLabel.Image.Should().Be(image);
+        toolStripStatusLabel.Name.Should().Be("SampleName");
 
-        _toolStripStatusLabel.TestAccessor().Dynamic.OnClick(null);
-        wasClicked.Should().BeTrue();
+        toolStripStatusLabel.PerformClick();
+        clickInvoked.Should().BeTrue();
     }
 
     [WinFormsTheory]
