@@ -3855,7 +3855,7 @@ public partial class Form : ContainerControl
         {
             Screen desktop = Screen.FromHandle(ownerHandle);
             Rectangle screenRect = desktop.WorkingArea;
-            PInvoke.GetWindowRect(ownerHandle, out var ownerRect);
+            PInvokeCore.GetWindowRect(ownerHandle, out var ownerRect);
 
             p.X = (ownerRect.left + ownerRect.right - s.Width) / 2;
             if (p.X < screenRect.X)

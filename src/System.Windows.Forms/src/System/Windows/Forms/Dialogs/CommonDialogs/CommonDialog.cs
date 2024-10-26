@@ -93,7 +93,7 @@ public abstract class CommonDialog : Component
     /// </summary>
     private protected static void MoveToScreenCenter(HWND hwnd)
     {
-        PInvoke.GetWindowRect(hwnd, out var r);
+        PInvokeCore.GetWindowRect(hwnd, out var r);
         Rectangle screen = Screen.GetWorkingArea(Control.MousePosition);
         int x = screen.X + (screen.Width - r.right + r.left) / 2;
         int y = screen.Y + (screen.Height - r.bottom + r.top) / 3;
@@ -142,7 +142,7 @@ public abstract class CommonDialog : Component
             return IntPtr.Zero;
         }
 
-        return PInvoke.CallWindowProc((void*)_priorWindowProcedure, (HWND)hWnd, (uint)msg, (nuint)wparam, lparam);
+        return PInvokeCore.CallWindowProc((void*)_priorWindowProcedure, (HWND)hWnd, (uint)msg, (nuint)wparam, lparam);
     }
 
     /// <summary>

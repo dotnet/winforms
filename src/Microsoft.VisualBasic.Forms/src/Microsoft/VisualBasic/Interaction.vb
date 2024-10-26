@@ -23,8 +23,8 @@ Namespace Microsoft.VisualBasic
             '  if the window is not enabled or not visible, get the first window owned
             '  by it that is not enabled or not visible
             Dim hwndOwned As IntPtr
-            If Not SafeNativeMethods.IsWindowEnabled(hwndApp) OrElse
-                Not SafeNativeMethods.IsWindowVisible(hwndApp) Then
+            If Not SafeNativeMethods.IsWindowEnabled(hwndApp) _
+               OrElse Not SafeNativeMethods.IsWindowVisible(hwndApp) Then
 
                 '  scan to the next window until failure
                 hwndOwned = NativeMethods.GetWindow(hwndApp, NativeTypes.GW_HWNDFIRST)
@@ -32,8 +32,8 @@ Namespace Microsoft.VisualBasic
 
                     Dim value1 As IntPtr = NativeMethods.GetWindow(hwndOwned, NativeTypes.GW_OWNER)
                     If IntPtr.op_Equality(value1, hwndApp) Then
-                        If Not SafeNativeMethods.IsWindowEnabled(hwndOwned) OrElse
-                            Not SafeNativeMethods.IsWindowVisible(hwndOwned) Then
+                        If Not SafeNativeMethods.IsWindowEnabled(hwndOwned) _
+                           OrElse Not SafeNativeMethods.IsWindowVisible(hwndOwned) Then
 
                             hwndApp = hwndOwned
                             hwndOwned = NativeMethods.GetWindow(hwndApp, NativeTypes.GW_HWNDFIRST)
@@ -46,7 +46,8 @@ Namespace Microsoft.VisualBasic
 
                 '  if scan failed, return an error
                 If IntPtr.op_Equality(hwndOwned, IntPtr.Zero) Then
-                    Throw New ArgumentException(Utils.GetResourceString(SR.ProcessNotFound, processId))
+                    Dim message As String = Utils.GetResourceString(SR.ProcessNotFound, processId)
+                    Throw New ArgumentException(message)
                 End If
 
                 '  set active window to the owned one
@@ -62,13 +63,20 @@ Namespace Microsoft.VisualBasic
             Dim dwDummy As Integer ' dummy arg for SafeNativeMethods.GetWindowThreadProcessId
 
             ' Attach ourselves to the window we want to set focus to
-            NativeMethods.AttachThreadInput(0, SafeNativeMethods.GetWindowThreadProcessId(hwndApp, dwDummy), 1)
+            NativeMethods.AttachThreadInput(
+                idAttach:=0,
+                idAttachTo:=SafeNativeMethods.GetWindowThreadProcessId(hwndApp, dwDummy),
+                fAttach:=1)
+
             ' Make it foreground and give it focus, this will occur
             ' synchronously because we are attached.
             NativeMethods.SetForegroundWindow(hwndApp)
             NativeMethods.SetFocus(hwndApp)
             ' Unattached ourselves from the window
-            NativeMethods.AttachThreadInput(0, SafeNativeMethods.GetWindowThreadProcessId(hwndApp, dwDummy), 0)
+            NativeMethods.AttachThreadInput(
+                idAttach:=0,
+                idAttachTo:=SafeNativeMethods.GetWindowThreadProcessId(hwndApp, dwDummy),
+                fAttach:=0)
         End Sub
 
         Private Function GetTitleFromAssembly(callingAssembly As Reflection.Assembly) As String
@@ -127,9 +135,9 @@ Namespace Microsoft.VisualBasic
 
             Do While IntPtr.op_Inequality(windowHandle, IntPtr.Zero)
                 SafeNativeMethods.GetWindowThreadProcessId(windowHandle, processIdOwningWindow)
-                If (processIdOwningWindow = ProcessId) AndAlso
-                    SafeNativeMethods.IsWindowEnabled(windowHandle) AndAlso
-                    SafeNativeMethods.IsWindowVisible(windowHandle) Then
+                If (processIdOwningWindow = ProcessId) _
+                   AndAlso SafeNativeMethods.IsWindowEnabled(windowHandle) _
+                   AndAlso SafeNativeMethods.IsWindowVisible(windowHandle) Then
 
                     ' We found a window belonging to the desired process that we can actually
                     ' activate and will support user input
@@ -158,7 +166,8 @@ Namespace Microsoft.VisualBasic
 
             If IntPtr.op_Equality(windowHandle, IntPtr.Zero) Then
                 ' We never found a window belonging to the desired process
-                Throw New ArgumentException(Utils.GetResourceString(SR.ProcessNotFound, CStr(ProcessId)))
+                Dim message As String = Utils.GetResourceString(SR.ProcessNotFound, CStr(ProcessId))
+                Throw New ArgumentException(message)
             Else
                 AppActivateHelper(windowHandle, CStr(ProcessId))
             End If
@@ -168,7 +177,7 @@ Namespace Microsoft.VisualBasic
             ' As an optimization, we will only check the UI permission once we actually know
             ' we found the app to activate - we'll do that in AppActivateHelper
             ' See if we can find the window using an exact match on the title
-            Dim windowHandle As IntPtr = NativeMethods.FindWindow(Nothing, Title)
+            Dim windowHandle As IntPtr = NativeMethods.FindWindow(lpClassName:=Nothing, lpWindowName:=Title)
             Const MAX_TITLE_LENGTH As Integer = 511
 
             '  if no match, search through all parent windows
@@ -210,7 +219,9 @@ Namespace Microsoft.VisualBasic
 
                 If IntPtr.op_Equality(windowHandle, IntPtr.Zero) Then
                     ' We didn't find it so try right aligned
-                    windowHandle = NativeMethods.GetWindow(NativeMethods.GetDesktopWindow(), NativeTypes.GW_CHILD)
+                    windowHandle = NativeMethods.GetWindow(
+                        hwnd:=NativeMethods.GetDesktopWindow(),
+                        wFlag:=NativeTypes.GW_CHILD)
 
                     Do While IntPtr.op_Inequality(windowHandle, IntPtr.Zero)
                         '  get the window caption and test for a right-aligned substring
@@ -308,8 +319,10 @@ Namespace Microsoft.VisualBasic
             ' Low-order 4 bits (0x000f), legal values: 0, 1, 2, 3, 4, 5
             '     next 4 bits (0x00f0), legal values: 0, &H10, &H20, &H30, &H40
             '     next 4 bits (0x0f00), legal values: 0, &H100, &H200
-            If ((Buttons And &HFI) > MsgBoxStyle.RetryCancel) OrElse ((Buttons And &HF0I) > MsgBoxStyle.Information) _
-                OrElse ((Buttons And &HF00I) > MsgBoxStyle.DefaultButton3) Then
+            If ((Buttons And &HFI) > MsgBoxStyle.RetryCancel) _
+               OrElse ((Buttons And &HF0I) > MsgBoxStyle.Information) _
+               OrElse ((Buttons And &HF00I) > MsgBoxStyle.DefaultButton3) Then
+
                 Buttons = MsgBoxStyle.OkOnly
             End If
 
@@ -350,13 +363,15 @@ Namespace Microsoft.VisualBasic
                 Throw New ArgumentException(
                     Utils.GetResourceString(SR.Argument_InvalidValueType2, "Title", "String"))
             End Try
-
-            Return CType(MessageBox.Show(parentWindow, sPrompt, sTitle,
-                 CType(Buttons And &HF, MessageBoxButtons),
-                 CType(Buttons And &HF0, MessageBoxIcon),
-                 CType(Buttons And &HF00, MessageBoxDefaultButton),
-                 CType(Buttons And &HFFFFF000, MessageBoxOptions)),
-                 MsgBoxResult)
+            Dim result As DialogResult = MessageBox.Show(
+                owner:=parentWindow,
+                text:=sPrompt,
+                caption:=sTitle,
+                buttons:=CType(Buttons And &HF, MessageBoxButtons),
+                icon:=CType(Buttons And &HF0, MessageBoxIcon),
+                defaultButton:=CType(Buttons And &HF00, MessageBoxDefaultButton),
+                options:=CType(Buttons And &HFFFFF000, MessageBoxOptions))
+            Return CType(result, MsgBoxResult)
         End Function
 
         Public Function Shell(PathName As String, Style As AppWinStyle, Wait As Boolean, Timeout As Integer) As Integer
@@ -423,14 +438,14 @@ Namespace Microsoft.VisualBasic
                             If ok = 0 Then
                                 ' Succeeded
                                 ' Process ran to completion
-                                Shell = 0
+                                Return 0
                             Else
                                 ' Wait timed out
-                                Shell = processInfo.dwProcessId
+                                Return processInfo.dwProcessId
                             End If
                         Else
-                            NativeMethods.WaitForInputIdle(safeProcessHandle, 10000)
-                            Shell = processInfo.dwProcessId
+                            NativeMethods.WaitForInputIdle(safeProcessHandle, Milliseconds:=10000)
+                            Return processInfo.dwProcessId
                         End If
                     Else
                         ' Check for a win32 error access denied. If it is, make and throw the exception.

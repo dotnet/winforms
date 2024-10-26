@@ -3,7 +3,7 @@
 
 namespace Windows.Win32;
 
-internal static partial class PInvoke
+internal static partial class PInvokeCore
 {
     internal static unsafe LRESULT CallWindowProc<T>(void* lpPrevWndFunc, T hWnd, uint Msg, WPARAM wParam, LPARAM lParam)
         where T : IHandle<HWND>

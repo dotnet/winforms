@@ -117,9 +117,9 @@ Namespace Microsoft.VisualBasic.CompilerServices
         End Function
 
         ''' <summary>
-        ''' 
+        '''  Gets a string from resource file based on "ID" appended to <see cref="VbErrors"/> <see langword="String"/> value.
         ''' </summary>
-        ''' <param name="resourceId">A <see cref="VbErrors"/> value that will become the ResourceKey</param>
+        ''' <param name="resourceId">A <see cref="VbErrors"/> value that will become the resourceKey</param>
         ''' <returns>A <see langword="String"/> localized version of the resource.</returns>
         Friend Function GetResourceString(resourceId As VbErrors) As String
             Dim resourceKey As String = $"ID{CStr(resourceId)}"

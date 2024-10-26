@@ -33,7 +33,7 @@ public partial class ComboBox
         {
             get
             {
-                PInvoke.GetWindowRect(_owningComboBox.GetListNativeWindow(), out var rect);
+                PInvokeCore.GetWindowRect(_owningComboBox.GetListNativeWindow(), out var rect);
                 return rect;
             }
         }
