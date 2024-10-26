@@ -99,12 +99,11 @@ internal sealed partial class Deserializer : IDeserializer
     private Deserializer(
         SerializationRecordId rootId,
         IReadOnlyDictionary<SerializationRecordId, SerializationRecord> recordMap,
-        ITypeResolver typeResolver,
         DeserializationOptions options)
     {
         _rootId = rootId;
         _recordMap = recordMap;
-        _typeResolver = typeResolver;
+        _typeResolver = options.TypeResolver ?? new DefaultTypeResolver(options);
         Options = options;
 
         if (Options.SurrogateSelector is not null)
@@ -120,10 +119,9 @@ internal sealed partial class Deserializer : IDeserializer
     internal static object Deserialize(
         SerializationRecordId rootId,
         IReadOnlyDictionary<SerializationRecordId, SerializationRecord> recordMap,
-        ITypeResolver typeResolver,
         DeserializationOptions options)
     {
-        var deserializer = new Deserializer(rootId, recordMap, typeResolver, options);
+        var deserializer = new Deserializer(rootId, recordMap, options);
         return deserializer.Deserialize();
     }
 

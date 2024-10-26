@@ -168,7 +168,7 @@ public partial class ErrorProvider
             if (_parent.IsMirrored)
             {
                 // Mirror the DC
-                PInvoke.SetMapMode(hdc, HDC_MAP_MODE.MM_ANISOTROPIC);
+                PInvokeCore.SetMapMode(hdc, HDC_MAP_MODE.MM_ANISOTROPIC);
                 SIZE originalExtents = default;
                 PInvoke.GetViewportExtEx(hdc, &originalExtents);
                 PInvoke.SetViewportExtEx(hdc, -originalExtents.Width, originalExtents.Height, lpsz: null);
