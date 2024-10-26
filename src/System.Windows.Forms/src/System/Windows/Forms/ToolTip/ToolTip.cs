@@ -1308,7 +1308,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
 
         if (window is Control associatedControl)
         {
-            PInvoke.GetWindowRect(associatedControl, out var rect);
+            PInvokeCore.GetWindowRect(associatedControl, out var rect);
 
             _ = Cursor.Current;
             Point cursorLocation = Cursor.Position;
@@ -1406,7 +1406,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         if (IsWindowActive(window))
         {
             // Set the ToolTips.
-            PInvoke.GetWindowRect(Control.GetSafeHandle(window), out var r);
+            PInvokeCore.GetWindowRect(Control.GetSafeHandle(window), out var r);
             int pointX = r.left + point.X;
             int pointY = r.top + point.Y;
 
@@ -1426,7 +1426,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         if (IsWindowActive(window))
         {
             // Set the ToolTips.
-            PInvoke.GetWindowRect(Control.GetSafeHandle(window), out var r);
+            PInvokeCore.GetWindowRect(Control.GetSafeHandle(window), out var r);
             int pointX = r.left + point.X;
             int pointY = r.top + point.Y;
             SetTrackPosition(pointX, pointY);
@@ -1444,7 +1444,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
 
         if (IsWindowActive(window))
         {
-            PInvoke.GetWindowRect(Control.GetSafeHandle(window), out var r);
+            PInvokeCore.GetWindowRect(Control.GetSafeHandle(window), out var r);
             int pointX = r.left + x;
             int pointY = r.top + y;
             SetTrackPosition(pointX, pointY);
@@ -1462,7 +1462,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
 
         if (IsWindowActive(window))
         {
-            PInvoke.GetWindowRect(Control.GetSafeHandle(window), out var r);
+            PInvokeCore.GetWindowRect(Control.GetSafeHandle(window), out var r);
             int pointX = r.left + x;
             int pointY = r.top + y;
             SetTrackPosition(pointX, pointY);
@@ -1981,7 +1981,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
 
         // Reposition the tooltip when its about to be shown since the tooltip can go out of screen
         // working area bounds Reposition would check the bounds for us.
-        PInvoke.GetWindowRect(this, out var rectangle);
+        PInvokeCore.GetWindowRect(this, out var rectangle);
         if (tipInfo.Position != Point.Empty)
         {
             Reposition(tipInfo.Position, rectangle.Size);
@@ -1999,7 +1999,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
             return;
         }
 
-        PInvoke.GetWindowRect(Control.GetSafeHandle(window), out var r);
+        PInvokeCore.GetWindowRect(Control.GetSafeHandle(window), out var r);
         Point cursorLocation = Cursor.Position;
 
         // Do not activate the mouse if its within the bounds of the
@@ -2033,7 +2033,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         }
 
         // Get the bounds.
-        PInvoke.GetWindowRect(this, out var rect);
+        PInvokeCore.GetWindowRect(this, out var rect);
 
         Control? toolControl = window as Control;
 
@@ -2059,7 +2059,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         // any of the tooltip attributes/properties could have been updated
         // during the popup event; in which case the size of the tooltip is
         // affected. e.ToolTipSize is respected over rect.Size
-        PInvoke.GetWindowRect(this, out rect);
+        PInvokeCore.GetWindowRect(this, out rect);
         currentTooltipSize = (e.ToolTipSize == currentTooltipSize) ? rect.Size : e.ToolTipSize;
 
         if (IsBalloon)

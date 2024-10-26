@@ -407,6 +407,9 @@ dotnet_diagnostic.DOC107.severity = warning
 # DOC108: Avoid empty paragraphs
 dotnet_diagnostic.DOC108.severity = warning
 
+# IDE0001: Simplify Names
+dotnet_diagnostic.IDE0001.severity = warning
+
 # IDE0002: Simplify Member Access
 dotnet_diagnostic.IDE0002.severity = error
 
@@ -417,6 +420,9 @@ dotnet_diagnostic.IDE0003.severity = error
 # Should be able to change back to a warning once VS releases with .NET 9.
 # IDE0004: Remove unnecessary cast
 dotnet_diagnostic.IDE0004.severity = silent
+
+# IDE0008: Use explicit type instead of 'var'
+dotnet_diagnostic.IDE0008.severity = silent
 
 # IDE0017: Simplify object initialization
 dotnet_diagnostic.IDE0017.severity = warning
