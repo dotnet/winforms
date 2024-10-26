@@ -6,7 +6,7 @@ using System.Drawing;
 namespace Windows.Win32.Graphics.Gdi;
 
 /// <summary>
-///  Helper to scope lifetime of an HDC retrieved via <see cref="PInvoke.BeginPaint(HWND, out PAINTSTRUCT)"/>
+///  Helper to scope lifetime of an HDC retrieved via <see cref="PInvokeCore.BeginPaint(HWND, out PAINTSTRUCT)"/>
 /// </summary>
 /// <remarks>
 ///  <para>
@@ -28,7 +28,7 @@ internal readonly ref struct BeginPaintScope
 
     public BeginPaintScope(HWND hwnd)
     {
-        HDC = PInvoke.BeginPaint(hwnd, out _paintStruct);
+        HDC = PInvokeCore.BeginPaint(hwnd, out _paintStruct);
         HWND = hwnd;
     }
 
@@ -38,7 +38,7 @@ internal readonly ref struct BeginPaintScope
     {
         if (!HDC.IsNull)
         {
-            PInvoke.EndPaint(HWND, _paintStruct);
+            PInvokeCore.EndPaint(HWND, _paintStruct);
         }
 
 #if DEBUG

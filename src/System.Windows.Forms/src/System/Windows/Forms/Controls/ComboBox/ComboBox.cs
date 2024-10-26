@@ -255,17 +255,7 @@ public partial class ComboBox : ListControl
     /// </summary>
     public override Color BackColor
     {
-        get
-        {
-            if (ShouldSerializeBackColor())
-            {
-                return base.BackColor;
-            }
-            else
-            {
-                return SystemColors.Window;
-            }
-        }
+        get => ShouldSerializeBackColor() ? base.BackColor : SystemColors.Window;
         set => base.BackColor = value;
     }
 
@@ -488,15 +478,7 @@ public partial class ComboBox : ListControl
     [SRDescription(nameof(SR.ComboBoxDroppedDownDescr))]
     public bool DroppedDown
     {
-        get
-        {
-            if (IsHandleCreated)
-            {
-                return (int)PInvokeCore.SendMessage(this, PInvoke.CB_GETDROPPEDSTATE) != 0;
-            }
-
-            return false;
-        }
+        get => IsHandleCreated && (int)PInvokeCore.SendMessage(this, PInvoke.CB_GETDROPPEDSTATE) != 0;
         set
         {
             if (!IsHandleCreated)
@@ -553,17 +535,7 @@ public partial class ComboBox : ListControl
     /// </summary>
     public override Color ForeColor
     {
-        get
-        {
-            if (ShouldSerializeForeColor())
-            {
-                return base.ForeColor;
-            }
-            else
-            {
-                return SystemColors.WindowText;
-            }
-        }
+        get => ShouldSerializeForeColor() ? base.ForeColor : SystemColors.WindowText;
         set => base.ForeColor = value;
     }
 
@@ -579,10 +551,7 @@ public partial class ComboBox : ListControl
     [SRDescription(nameof(SR.ComboBoxIntegralHeightDescr))]
     public bool IntegralHeight
     {
-        get
-        {
-            return _integralHeight;
-        }
+        get => _integralHeight;
         set
         {
             if (_integralHeight != value)
@@ -619,12 +588,7 @@ public partial class ComboBox : ListControl
             Debug.Assert(IsHandleCreated, "Handle should be created at this point");
 
             int height = (int)PInvokeCore.SendMessage(this, PInvoke.CB_GETITEMHEIGHT);
-            if (height == -1)
-            {
-                throw new Win32Exception();
-            }
-
-            return height;
+            return height == -1 ? throw new Win32Exception() : height;
         }
         set
         {
@@ -899,15 +863,7 @@ public partial class ComboBox : ListControl
     [SRDescription(nameof(SR.ComboBoxSelectedIndexDescr))]
     public override int SelectedIndex
     {
-        get
-        {
-            if (IsHandleCreated)
-            {
-                return (int)PInvokeCore.SendMessage(this, PInvoke.CB_GETCURSEL);
-            }
-
-            return _selectedIndex;
-        }
+        get => IsHandleCreated ? (int)PInvokeCore.SendMessage(this, PInvoke.CB_GETCURSEL) : _selectedIndex;
         set
         {
             if (SelectedIndex == value)
@@ -988,15 +944,7 @@ public partial class ComboBox : ListControl
     [SRDescription(nameof(SR.ComboBoxSelectedTextDescr))]
     public string SelectedText
     {
-        get
-        {
-            if (DropDownStyle == ComboBoxStyle.DropDownList)
-            {
-                return string.Empty;
-            }
-
-            return Text.Substring(SelectionStart, SelectionLength);
-        }
+        get => DropDownStyle == ComboBoxStyle.DropDownList ? string.Empty : Text.Substring(SelectionStart, SelectionLength);
         set
         {
             if (DropDownStyle != ComboBoxStyle.DropDownList)
@@ -1421,10 +1369,10 @@ public partial class ComboBox : ListControl
         }
 
         // Get the Combobox Rect
-        PInvoke.GetWindowRect(this, out var comboRectMid);
+        PInvokeCore.GetWindowRect(this, out var comboRectMid);
 
         // Get the Edit Rectangle.
-        PInvoke.GetWindowRect(_childEdit, out var editRectMid);
+        PInvokeCore.GetWindowRect(_childEdit, out var editRectMid);
 
         // Get the delta.
         int comboXMid = PARAM.SignedLOWORD(m.LParamInternal) + (editRectMid.left - comboRectMid.left);
@@ -1699,7 +1647,7 @@ public partial class ComboBox : ListControl
                     _mouseEvents = false;
                     if (_mousePressed)
                     {
-                        PInvoke.GetWindowRect(this, out var rect);
+                        PInvokeCore.GetWindowRect(this, out var rect);
                         Rectangle clientRect = rect;
 
                         if (clientRect.Contains(PointToScreen(PARAM.ToPoint(m.LParamInternal))))
@@ -1847,7 +1795,7 @@ public partial class ComboBox : ListControl
     /// </summary>
     private void OnMouseLeaveInternal(EventArgs args)
     {
-        PInvoke.GetWindowRect(this, out var rect);
+        PInvokeCore.GetWindowRect(this, out var rect);
         Rectangle rectangle = rect;
         Point p = MousePosition;
         if (!rectangle.Contains(p))
@@ -2015,12 +1963,7 @@ public partial class ComboBox : ListControl
         if (IsHandleCreated)
         {
             int h = (int)PInvokeCore.SendMessage(this, PInvoke.CB_GETITEMHEIGHT, (WPARAM)index);
-            if (h == -1)
-            {
-                throw new Win32Exception();
-            }
-
-            return h;
+            return h == -1 ? throw new Win32Exception() : h;
         }
 
         return ItemHeight;
@@ -2056,8 +1999,8 @@ public partial class ComboBox : ListControl
             // Base class returns hollow brush when UserPaint style is set, to avoid flicker in
             // main control. But when returning colors for child dropdown list, return normal ForeColor/BackColor,
             // since hollow brush leaves the list background unpainted.
-            PInvoke.SetTextColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(ForeColor));
-            PInvoke.SetBkColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(BackColor));
+            PInvokeCore.SetTextColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(ForeColor));
+            PInvokeCore.SetBkColor(dc, (COLORREF)(uint)ColorTranslator.ToWin32(BackColor));
             return BackColorBrush;
         }
         else
@@ -2213,12 +2156,7 @@ public partial class ComboBox : ListControl
     {
         Debug.Assert(IsHandleCreated, "Shouldn't be calling Native methods before the handle is created.");
         int insertIndex = (int)PInvokeCore.SendMessage(this, PInvoke.CB_ADDSTRING, (WPARAM)0, GetItemText(item));
-        if (insertIndex < 0)
-        {
-            throw new OutOfMemoryException(SR.ComboBoxItemOverflow);
-        }
-
-        return insertIndex;
+        return insertIndex < 0 ? throw new OutOfMemoryException(SR.ComboBoxItemOverflow) : insertIndex;
     }
 
     /// <summary>
@@ -3020,25 +2958,13 @@ public partial class ComboBox : ListControl
         return returnedValue;
     }
 
-    protected override bool ProcessKeyEventArgs(ref Message m)
-    {
-        if (AutoCompleteMode != AutoCompleteMode.None
-            && AutoCompleteSource == AutoCompleteSource.ListItems
-            && DropDownStyle == ComboBoxStyle.DropDownList
-            && InterceptAutoCompleteKeystroke(m))
-        {
-            return true;
-        }
-        else
-        {
-            return base.ProcessKeyEventArgs(ref m);
-        }
-    }
+    protected override bool ProcessKeyEventArgs(ref Message m) => (AutoCompleteMode != AutoCompleteMode.None
+        && AutoCompleteSource == AutoCompleteSource.ListItems
+        && DropDownStyle == ComboBoxStyle.DropDownList
+        && InterceptAutoCompleteKeystroke(m))
+            || base.ProcessKeyEventArgs(ref m);
 
-    private void ResetHeightCache()
-    {
-        _prefHeightCache = -1;
-    }
+    private void ResetHeightCache() => _prefHeightCache = -1;
 
     /// <summary>
     ///  Reparses the objects, getting new text strings for them.
@@ -3768,7 +3694,7 @@ public partial class ComboBox : ListControl
                 base.WndProc(ref m);
                 break;
             case PInvokeCore.WM_LBUTTONUP:
-                PInvoke.GetWindowRect(this, out var rect);
+                PInvokeCore.GetWindowRect(this, out var rect);
                 Rectangle clientRect = rect;
 
                 Point point = PointToScreen(PARAM.ToPoint(m.LParamInternal));

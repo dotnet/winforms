@@ -553,41 +553,14 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         }
     }
 
-    protected override Padding DefaultMargin
-    {
-        get { return Padding.Empty; }
-    }
+    protected override Padding DefaultMargin => Padding.Empty;
 
-    protected virtual DockStyle DefaultDock
-    {
-        get
-        {
-            return DockStyle.Top;
-        }
-    }
+    protected virtual DockStyle DefaultDock => DockStyle.Top;
 
-    protected virtual Padding DefaultGripMargin
-    {
-        get
-        {
-            if (_toolStripGrip is not null)
-            {
-                return _toolStripGrip.DefaultMargin;
-            }
-            else
-            {
-                return _defaultGripMargin;
-            }
-        }
-    }
+    protected virtual Padding DefaultGripMargin =>
+        _toolStripGrip is not null ? _toolStripGrip.DefaultMargin : _defaultGripMargin;
 
-    protected virtual bool DefaultShowItemToolTips
-    {
-        get
-        {
-            return true;
-        }
-    }
+    protected virtual bool DefaultShowItemToolTips => true;
 
     [Browsable(false)]
     [SRDescription(nameof(SR.ToolStripDefaultDropDownDirectionDescr))]
@@ -692,8 +665,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     }
 
     /// <summary>
-    ///  Returns an owner window that can be used to
-    ///  own a drop down.
+    ///  Returns an owner window that can be used to own a drop down.
     /// </summary>
     internal virtual NativeWindow DropDownOwnerWindow
     {
@@ -1587,17 +1559,11 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
 
             // check the type of the currently set renderer.
             // types are cached as this may be called frequently.
-            if (_currentRendererType == ToolStripManager.s_professionalRendererType)
-            {
-                return ToolStripRenderMode.Professional;
-            }
-
-            if (_currentRendererType == ToolStripManager.s_systemRendererType)
-            {
-                return ToolStripRenderMode.System;
-            }
-
-            return ToolStripRenderMode.Custom;
+            return _currentRendererType == ToolStripManager.s_professionalRendererType
+                ? ToolStripRenderMode.Professional
+                : _currentRendererType == ToolStripManager.s_systemRendererType
+                    ? ToolStripRenderMode.System
+                    : ToolStripRenderMode.Custom;
         }
         set
         {
@@ -1809,22 +1775,10 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         _ => null,
     };
 
-    protected internal virtual ToolStripItem CreateDefaultItem(string? text, Image? image, EventHandler? onClick)
-    {
-        if (text == "-")
-        {
-            return new ToolStripSeparator();
-        }
-        else
-        {
-            return new ToolStripButton(text, image, onClick);
-        }
-    }
+    protected internal virtual ToolStripItem CreateDefaultItem(string? text, Image? image, EventHandler? onClick) =>
+        text == "-" ? new ToolStripSeparator() : new ToolStripButton(text, image, onClick);
 
-    private void ClearAllSelections()
-    {
-        ClearAllSelectionsExcept(null);
-    }
+    private void ClearAllSelections() => ClearAllSelectionsExcept(null);
 
     private void ClearAllSelectionsExcept(ToolStripItem? item)
     {
@@ -2597,27 +2551,11 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         }
     }
 
-    protected override bool IsInputKey(Keys keyData)
-    {
-        ToolStripItem? item = GetSelectedItem();
-        if (item is not null && item.IsInputKey(keyData))
-        {
-            return true;
-        }
+    protected override bool IsInputKey(Keys keyData) =>
+        (GetSelectedItem() is { } item && item.IsInputKey(keyData)) || base.IsInputKey(keyData);
 
-        return base.IsInputKey(keyData);
-    }
-
-    protected override bool IsInputChar(char charCode)
-    {
-        ToolStripItem? item = GetSelectedItem();
-        if (item is not null && item.IsInputChar(charCode))
-        {
-            return true;
-        }
-
-        return base.IsInputChar(charCode);
-    }
+    protected override bool IsInputChar(char charCode) =>
+        (GetSelectedItem() is { } item && item.IsInputChar(charCode)) || base.IsInputChar(charCode);
 
     private static bool IsPseudoMnemonic(char charCode, string text)
     {
@@ -2778,22 +2716,13 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
             bool isControlTab =
                 (keyData & Keys.Control) == Keys.Control && (keyData & Keys.KeyCode) == Keys.Tab;
 
-            if (isControlTab && !TabStop && HasKeyboardInput)
+            if (isControlTab
+                && !TabStop
+                && HasKeyboardInput
+                && ToolStripManager.SelectNextToolStrip(this, forward: (keyData & Keys.Shift) == Keys.None))
             {
-                bool handled = false;
-                if ((keyData & Keys.Shift) == Keys.None)
-                {
-                    handled = ToolStripManager.SelectNextToolStrip(this, forward: true);
-                }
-                else
-                {
-                    handled = ToolStripManager.SelectNextToolStrip(this, forward: false);
-                }
-
-                if (handled)
-                {
-                    return true;
-                }
+                // Handled
+                return true;
             }
         }
 
@@ -2875,12 +2804,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
                 break;
         }
 
-        if (retVal)
-        {
-            return retVal;
-        }
-
-        return base.ProcessDialogKey(keyData);
+        return retVal ? retVal : base.ProcessDialogKey(keyData);
     }
 
     internal virtual void ProcessDuplicateMnemonic(ToolStripItem item, char charCode)
@@ -4563,35 +4487,32 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     /// </param>
     internal void UpdateToolTip(ToolStripItem? item, bool refresh = false)
     {
-        if (ShowItemToolTips)
+        if (!ShowItemToolTips || (item == _currentlyActiveTooltipItem && !refresh) || ToolTip is null)
         {
-            if ((item != _currentlyActiveTooltipItem || refresh) && ToolTip is not null)
+            return;
+        }
+
+        if (item != _currentlyActiveTooltipItem)
+        {
+            ToolTip.Hide(this);
+            if (!refresh)
             {
-                if (item != _currentlyActiveTooltipItem)
-                {
-                    ToolTip.Hide(this);
-                    if(!refresh)
-                        _currentlyActiveTooltipItem = item;
-                }
-
-                if (_currentlyActiveTooltipItem is not null && !GetToolStripState(STATE_DRAGGING))
-                {
-                    Cursor? currentCursor = Cursor.Current;
-
-                    if (currentCursor is not null)
-                    {
-                        Point cursorLocation = Cursor.Position;
-                        cursorLocation.Y += Cursor.Size.Height - currentCursor.HotSpot.Y;
-
-                        cursorLocation = WindowsFormsUtils.ConstrainToScreenBounds(new Rectangle(cursorLocation, s_onePixel)).Location;
-
-                        ToolTip.Show(_currentlyActiveTooltipItem.ToolTipText,
-                                    this,
-                                    PointToClient(cursorLocation),
-                                    ToolTip.AutoPopDelay);
-                    }
-                }
+                _currentlyActiveTooltipItem = item;
             }
+        }
+
+        if (_currentlyActiveTooltipItem is not null && !GetToolStripState(STATE_DRAGGING) && Cursor.Current is { } currentCursor)
+        {
+            Point cursorLocation = Cursor.Position;
+            cursorLocation.Y += Cursor.Size.Height - currentCursor.HotSpot.Y;
+
+            cursorLocation = WindowsFormsUtils.ConstrainToScreenBounds(new Rectangle(cursorLocation, s_onePixel)).Location;
+
+            ToolTip.Show(
+                _currentlyActiveTooltipItem.ToolTipText,
+                this,
+                PointToClient(cursorLocation),
+                ToolTip.AutoPopDelay);
         }
     }
 

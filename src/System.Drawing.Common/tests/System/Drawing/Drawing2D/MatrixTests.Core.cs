@@ -13,7 +13,7 @@ public partial class MatrixTests
     {
         Matrix3x2 matrix3X2 = new(m11, m12, m21, m22, dx, dy);
         using Matrix matrix = new(matrix3X2);
-        Assert.Equal(new float[] { m11, m12, m21, m22, dx, dy }, matrix.Elements);
+        Assert.Equal([m11, m12, m21, m22, dx, dy], matrix.Elements);
         Assert.Equal(matrix3X2, matrix.MatrixElements);
         Assert.Equal(isIdentity, matrix.IsIdentity);
         Assert.Equal(isInvertible, matrix.IsInvertible);
@@ -28,7 +28,7 @@ public partial class MatrixTests
         Matrix3x2 matrix3X2 = new(m11, m12, m21, m22, dx, dy);
         using Matrix matrix = new();
         matrix.MatrixElements = matrix3X2;
-        Assert.Equal(new float[] { m11, m12, m21, m22, dx, dy }, matrix.Elements);
+        Assert.Equal([m11, m12, m21, m22, dx, dy], matrix.Elements);
         Assert.Equal(matrix3X2, matrix.MatrixElements);
         Assert.Equal(isIdentity, matrix.IsIdentity);
         Assert.Equal(isInvertible, matrix.IsInvertible);

@@ -66,7 +66,7 @@ public partial class MatrixTests
     public void Ctor_Elements(float m11, float m12, float m21, float m22, float dx, float dy, bool isIdentity, bool isInvertible)
     {
         using Matrix matrix = new(m11, m12, m21, m22, dx, dy);
-        Assert.Equal(new float[] { m11, m12, m21, m22, dx, dy }, matrix.Elements);
+        Assert.Equal([m11, m12, m21, m22, dx, dy], matrix.Elements);
         Assert.Equal(isIdentity, matrix.IsIdentity);
         Assert.Equal(isInvertible, matrix.IsInvertible);
         Assert.Equal(dx, matrix.OffsetX);

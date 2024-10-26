@@ -12,12 +12,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
     Public Class NetworkTests
         Inherits VbFileCleanupTestBase
 
-        Private Const DefaultPassword As String = "TBD"
-        Private Const DefaultUserName As String = "TBD"
-        Private Const DownloadLargeFileSize As Integer = 104857600
-        Private Const DownloadSmallFileSize As Integer = 18135
+        Private Const DefaultPassword As String = NameOf(DefaultPassword)
+        Private Const DefaultUserName As String = NameOf(DefaultUserName)
+        Private Const DownloadLargeFileSize As Integer = 104_857_600
+        Private Const DownloadSmallFileSize As Integer = 18_135
         Private Const InvalidUrlAddress As String = "invalidURL"
-        Private Const TestingConnectionTimeout As Integer = 100000
+        Private Const TestingConnectionTimeout As Integer = 100_000
 
         Private Shared Sub CleanUpListener(listener As HttpListener)
             listener.Stop()
@@ -1201,10 +1201,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Try
                 Dim value As String = SR.Network_InvalidUriString.Replace("{0}", "invalidURL")
                 CType(testCode, Action).Should() _
-                    .Throw(Of ArgumentException)() _
-                    .Where(Function(e) e.Message.StartsWith(value))
-                File.Exists(destinationFileName).Should.BeFalse()
-            Finally
+                        .Throw(Of ArgumentException)() _
+                        .Where(Function(e) e.Message.StartsWith(value))
+                    File.Exists(destinationFileName).Should.BeFalse()
+                    Finally
                 CleanUpListener(listener)
             End Try
         End Sub
