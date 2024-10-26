@@ -396,7 +396,7 @@ public partial class ControlDesigner : ComponentDesigner
     ///  want to block it from getting to Windows itself because it causes other messages to be generated.
     /// </summary>
     protected void BaseWndProc(ref Message m)
-        => m.ResultInternal = PInvoke.DefWindowProc(m.HWND, (uint)m.MsgInternal, m.WParamInternal, m.LParamInternal);
+        => m.ResultInternal = PInvokeCore.DefWindowProc(m.HWND, (uint)m.MsgInternal, m.WParamInternal, m.LParamInternal);
 
     internal override bool CanBeAssociatedWith(IDesigner parentDesigner) => CanBeParentedTo(parentDesigner);
 
@@ -1307,7 +1307,7 @@ public partial class ControlDesigner : ComponentDesigner
         _ctrlSelect = (Control.ModifierKeys & Keys.Control) != 0;
 
         // If the CTRL key isn't down, select this component, otherwise, we wait until the mouse up. Make sure the component is selected
-        if (!_ctrlSelect && TryGetService<ISelectionService>(out ISelectionService? selectionService))
+        if (!_ctrlSelect && TryGetService(out ISelectionService? selectionService))
         {
             selectionService.SetSelectedComponents(new object[] { Component }, SelectionTypes.Primary);
         }
@@ -1398,7 +1398,7 @@ public partial class ControlDesigner : ComponentDesigner
 
         // Make sure the component is selected
         // But only select it if it is not already the primary selection, and we want to toggle the current primary selection.
-        if (TryGetService<ISelectionService>(out ISelectionService? selectionService) && !Component.Equals(selectionService.PrimarySelection))
+        if (TryGetService(out ISelectionService? selectionService) && !Component.Equals(selectionService.PrimarySelection))
         {
             selectionService.SetSelectedComponents(new object[] { Component }, SelectionTypes.Primary | SelectionTypes.Toggle);
         }
@@ -1845,14 +1845,9 @@ public partial class ControlDesigner : ComponentDesigner
             case PInvokeCore.WM_LBUTTONDBLCLK:
             case PInvokeCore.WM_NCRBUTTONDBLCLK:
             case PInvokeCore.WM_RBUTTONDBLCLK:
-                if (m.MsgInternal == PInvokeCore.WM_NCRBUTTONDBLCLK || m.MsgInternal == PInvokeCore.WM_RBUTTONDBLCLK)
-                {
-                    button = MouseButtons.Right;
-                }
-                else
-                {
-                    button = MouseButtons.Left;
-                }
+                button = m.MsgInternal == PInvokeCore.WM_NCRBUTTONDBLCLK || m.MsgInternal == PInvokeCore.WM_RBUTTONDBLCLK
+                    ? MouseButtons.Right
+                    : MouseButtons.Left;
 
                 if (button == MouseButtons.Left)
                 {
@@ -1873,14 +1868,9 @@ public partial class ControlDesigner : ComponentDesigner
             case PInvokeCore.WM_LBUTTONDOWN:
             case PInvokeCore.WM_NCRBUTTONDOWN:
             case PInvokeCore.WM_RBUTTONDOWN:
-                if (m.MsgInternal == PInvokeCore.WM_NCRBUTTONDOWN || m.MsgInternal == PInvokeCore.WM_RBUTTONDOWN)
-                {
-                    button = MouseButtons.Right;
-                }
-                else
-                {
-                    button = MouseButtons.Left;
-                }
+                button = m.MsgInternal == PInvokeCore.WM_NCRBUTTONDOWN || m.MsgInternal == PInvokeCore.WM_RBUTTONDOWN
+                    ? MouseButtons.Right
+                    : MouseButtons.Left;
 
                 // We don't really want the focus, but we want to focus the designer. Below we handle WM_SETFOCUS
                 // and do the right thing.
@@ -2314,36 +2304,30 @@ public partial class ControlDesigner : ComponentDesigner
 
     private IOverlayService? OverlayService => _overlayService ??= GetService<IOverlayService>();
 
-    private static bool IsMouseMessage(MessageId msg)
-    {
-        if (msg >= PInvokeCore.WM_MOUSEFIRST && msg <= PInvokeCore.WM_MOUSELAST)
-        {
-            return true;
-        }
-
-        return (uint)msg switch
-        {
-            // WM messages not covered by the above block
-            PInvokeCore.WM_MOUSEHOVER
-                or PInvokeCore.WM_MOUSELEAVE
-                or PInvokeCore.WM_NCMOUSEMOVE
-                or PInvokeCore.WM_NCLBUTTONDOWN
-                or PInvokeCore.WM_NCLBUTTONUP
-                or PInvokeCore.WM_NCLBUTTONDBLCLK
-                or PInvokeCore.WM_NCRBUTTONDOWN
-                or PInvokeCore.WM_NCRBUTTONUP
-                or PInvokeCore.WM_NCRBUTTONDBLCLK
-                or PInvokeCore.WM_NCMBUTTONDOWN
-                or PInvokeCore.WM_NCMBUTTONUP
-                or PInvokeCore.WM_NCMBUTTONDBLCLK
-                or PInvokeCore.WM_NCMOUSEHOVER
-                or PInvokeCore.WM_NCMOUSELEAVE
-                or PInvokeCore.WM_NCXBUTTONDOWN
-                or PInvokeCore.WM_NCXBUTTONUP
-                or PInvokeCore.WM_NCXBUTTONDBLCLK => true,
-            _ => false,
-        };
-    }
+    private static bool IsMouseMessage(MessageId msg) =>
+        (msg >= PInvokeCore.WM_MOUSEFIRST && msg <= PInvokeCore.WM_MOUSELAST)
+            || (uint)msg switch
+            {
+                // WM messages not covered by the above block
+                PInvokeCore.WM_MOUSEHOVER
+                    or PInvokeCore.WM_MOUSELEAVE
+                    or PInvokeCore.WM_NCMOUSEMOVE
+                    or PInvokeCore.WM_NCLBUTTONDOWN
+                    or PInvokeCore.WM_NCLBUTTONUP
+                    or PInvokeCore.WM_NCLBUTTONDBLCLK
+                    or PInvokeCore.WM_NCRBUTTONDOWN
+                    or PInvokeCore.WM_NCRBUTTONUP
+                    or PInvokeCore.WM_NCRBUTTONDBLCLK
+                    or PInvokeCore.WM_NCMBUTTONDOWN
+                    or PInvokeCore.WM_NCMBUTTONUP
+                    or PInvokeCore.WM_NCMBUTTONDBLCLK
+                    or PInvokeCore.WM_NCMOUSEHOVER
+                    or PInvokeCore.WM_NCMOUSELEAVE
+                    or PInvokeCore.WM_NCXBUTTONDOWN
+                    or PInvokeCore.WM_NCXBUTTONUP
+                    or PInvokeCore.WM_NCXBUTTONDBLCLK => true,
+                _ => false,
+            };
 
     private bool IsDoubleClick(int x, int y)
     {

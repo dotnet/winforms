@@ -451,18 +451,18 @@ public class PathGradientBrushTests
         Assert.True(brush.Transform.IsIdentity);
         if (focus == 0f)
         {
-            Assert.Equal(new float[2] { defaultScale, 0f }, brush.Blend.Factors);
-            Assert.Equal(new float[2] { focus, 1f }, brush.Blend.Positions);
+            Assert.Equal([defaultScale, 0f], brush.Blend.Factors);
+            Assert.Equal([focus, 1f], brush.Blend.Positions);
         }
         else if (focus == 1f)
         {
-            Assert.Equal(new float[2] { 0f, defaultScale }, brush.Blend.Factors);
-            Assert.Equal(new float[2] { 0f, focus }, brush.Blend.Positions);
+            Assert.Equal([0f, defaultScale], brush.Blend.Factors);
+            Assert.Equal([0f, focus], brush.Blend.Positions);
         }
         else
         {
-            Assert.Equal(new float[3] { 0f, defaultScale, 0f }, brush.Blend.Factors);
-            Assert.Equal(new float[3] { 0f, focus, 1f }, brush.Blend.Positions);
+            Assert.Equal([0f, defaultScale, 0f], brush.Blend.Factors);
+            Assert.Equal([0f, focus, 1f], brush.Blend.Positions);
         }
     }
 
@@ -478,18 +478,18 @@ public class PathGradientBrushTests
         Assert.True(brush.Transform.IsIdentity);
         if (focus == 0f)
         {
-            Assert.Equal(new float[2] { 1f, 0f }, brush.Blend.Factors);
-            Assert.Equal(new float[2] { focus, 1f }, brush.Blend.Positions);
+            Assert.Equal([1f, 0f], brush.Blend.Factors);
+            Assert.Equal([focus, 1f], brush.Blend.Positions);
         }
         else if (focus == 1f)
         {
-            Assert.Equal(new float[2] { 0f, 1f }, brush.Blend.Factors);
-            Assert.Equal(new float[2] { 0f, focus }, brush.Blend.Positions);
+            Assert.Equal([0f, 1f], brush.Blend.Factors);
+            Assert.Equal([0f, focus], brush.Blend.Positions);
         }
         else
         {
-            Assert.Equal(new float[3] { 0f, 1f, 0f }, brush.Blend.Factors);
-            Assert.Equal(new float[3] { 0f, focus, 1f }, brush.Blend.Positions);
+            Assert.Equal([0f, 1f, 0f], brush.Blend.Factors);
+            Assert.Equal([0f, focus, 1f], brush.Blend.Positions);
         }
     }
 

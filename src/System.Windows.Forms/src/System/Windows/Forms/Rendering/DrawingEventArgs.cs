@@ -139,7 +139,7 @@ internal partial class DrawingEventArgs
 
         if (!_oldPalette.IsNull && !_hdc.IsNull)
         {
-            PInvoke.SelectPalette(_hdc, _oldPalette, bForceBkgd: false);
+            PInvokeCore.SelectPalette(_hdc, _oldPalette, bForceBkgd: false);
             _oldPalette = default;
         }
     }

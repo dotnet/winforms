@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
+using System.Media;
 
 namespace Microsoft.VisualBasic.Devices.Tests;
 
@@ -12,40 +13,68 @@ public class AudioTests
     [Fact]
     public void Play()
     {
-        string location = Path.Combine(Path.GetTempPath(), GetUniqueName());
         Audio audio = new();
-        Action testCode = () => audio.Play(location);
-        testCode.Should().Throw<FileNotFoundException>();
+        Action testCode = () => audio.Play(null);
+        testCode.Should().Throw<ArgumentNullException>();
     }
 
     [Fact]
-    public void PlayInvalidMode_Throws()
+    public void PlayBytes_Throws()
+    {
+        Audio audio = new();
+        Action testCode = () => audio.Play((byte[])null, AudioPlayMode.Background);
+        testCode.Should().Throw<ArgumentNullException>();
+    }
+
+    [Theory]
+    [NullAndEmptyStringData]
+    public void PlayEmptyFileName_Throws(string fileName)
+    {
+        Audio audio = new();
+        Action testCode = () => audio.Play(fileName);
+        testCode.Should().Throw<ArgumentNullException>();
+    }
+
+    [Theory]
+    [InvalidEnumData<AudioPlayMode>]
+    public void PlayModeInvalid_Throws(AudioPlayMode audioPlayMode)
     {
         string location = Path.Combine(Path.GetTempPath(), GetUniqueName());
         Audio audio = new();
-        Action testCode = () => audio.Play(location, (AudioPlayMode)(-1));
+        Action testCode = () => audio.Play(location, audioPlayMode);
         testCode.Should().Throw<InvalidEnumArgumentException>();
     }
 
     [Theory]
-    [InlineData(AudioPlayMode.Background)]
-    [InlineData(AudioPlayMode.BackgroundLoop)]
-    [InlineData(AudioPlayMode.WaitToComplete)]
-    public void PlayAllModes_Throws(AudioPlayMode mode)
+    [EnumData<AudioPlayMode>]
+    public void PlayModesAll_Throws(AudioPlayMode mode)
     {
-        string location = Path.Combine(Path.GetTempPath(), GetUniqueName());
         Audio audio = new();
-        Action testCode = () => audio.Play(location, mode);
-        testCode.Should().Throw<FileNotFoundException>();
+        Action testCode = () => audio.Play((string)null, mode);
+        testCode.Should().Throw<ArgumentNullException>();
     }
 
-    // Not tested:
-    //    Public Sub PlaySystemSound(systemSound As System.Media.SystemSound)
+    [Fact]
+    public void PlayStream_Throws()
+    {
+        Audio audio = new();
+        Action testCode = () => audio.Play((MemoryStream)null, AudioPlayMode.Background);
+        testCode.Should().Throw<ArgumentNullException>();
+    }
+
+    [Fact]
+    public void PlaySystemSound_Throws()
+    {
+        Audio audio = new();
+        Action testCode = () => audio.PlaySystemSound((SystemSound)null);
+        testCode.Should().Throw<ArgumentNullException>();
+    }
 
     [Fact]
     public void Stop()
     {
         Audio audio = new();
-        audio.Stop();
+        Action testCode = () => audio.Stop();
+        testCode.Should().NotThrow();
     }
 }

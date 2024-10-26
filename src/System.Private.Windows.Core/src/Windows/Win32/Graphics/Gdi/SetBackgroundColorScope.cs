@@ -20,11 +20,11 @@ internal readonly ref struct SetBackgroundColorScope
 
     /// <summary>
     ///  Sets text color <paramref name="color"/> in the given <paramref name="hdc"/> using
-    ///  <see cref="PInvoke.SetBkColor(HDC, COLORREF)"/>.
+    ///  <see cref="PInvokeCore.SetBkColor(HDC, COLORREF)"/>.
     /// </summary>
     public SetBackgroundColorScope(HDC hdc, COLORREF color)
     {
-        _previousColor = PInvoke.SetBkColor(hdc, color);
+        _previousColor = PInvokeCore.SetBkColor(hdc, color);
 
         // If we didn't actually change the color, don't keep the HDC so we skip putting back the same state.
         _hdc = color == _previousColor ? default : hdc;
@@ -34,7 +34,7 @@ internal readonly ref struct SetBackgroundColorScope
     {
         if (!_hdc.IsNull)
         {
-            PInvoke.SetBkColor(_hdc, _previousColor);
+            PInvokeCore.SetBkColor(_hdc, _previousColor);
         }
     }
 }
