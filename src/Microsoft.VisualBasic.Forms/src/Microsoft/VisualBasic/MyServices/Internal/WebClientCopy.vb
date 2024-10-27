@@ -42,44 +42,6 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Sub
 
         ''' <summary>
-        '''  Posts a message to close the progress dialog.
-        ''' </summary>
-        Private Sub CloseProgressDialog()
-            ' Don't invoke unless dialog is up and running
-            If _progressDialog IsNot Nothing Then
-                _progressDialog.IndicateClosing()
-
-                If _progressDialog.IsHandleCreated Then
-                    _progressDialog.BeginInvoke(New MethodInvoker(AddressOf _progressDialog.CloseDialog))
-                Else
-                    ' Ensure dialog is closed. If we get here it means the file was copied before the handle for
-                    ' the progress dialog was created.
-                    _progressDialog.Close()
-                End If
-            End If
-        End Sub
-
-        ''' <summary>
-        '''  Notifies the progress dialog to increment the progress bar.
-        ''' </summary>
-        ''' <param name="progressPercentage">The percentage of bytes read.</param>
-        Private Sub InvokeIncrement(progressPercentage As Integer)
-            ' Don't invoke unless dialog is up and running
-            If _progressDialog IsNot Nothing Then
-                If _progressDialog.IsHandleCreated Then
-
-                    ' For performance, don't invoke if increment is 0
-                    Dim increment As Integer = progressPercentage - _percentage
-                    _percentage = progressPercentage
-                    If increment > 0 Then
-                        _progressDialog.BeginInvoke(New DoIncrement(AddressOf _progressDialog.Increment), increment)
-                    End If
-
-                End If
-            End If
-        End Sub
-
-        ''' <summary>
         '''  If the user clicks cancel on the Progress dialog, we need to cancel
         '''  the current async file transfer operation.
         ''' </summary>
@@ -154,6 +116,44 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         Private Sub _webClient_UploadProgressChanged(sender As Object, e As UploadProgressChangedEventArgs) Handles _webClient.UploadProgressChanged
             Dim increment As Long = (e.BytesSent * 100) \ e.TotalBytesToSend
             InvokeIncrement(CInt(increment))
+        End Sub
+
+        ''' <summary>
+        '''  Posts a message to close the progress dialog.
+        ''' </summary>
+        Private Sub CloseProgressDialog()
+            ' Don't invoke unless dialog is up and running
+            If _progressDialog IsNot Nothing Then
+                _progressDialog.IndicateClosing()
+
+                If _progressDialog.IsHandleCreated Then
+                    _progressDialog.BeginInvoke(New MethodInvoker(AddressOf _progressDialog.CloseDialog))
+                Else
+                    ' Ensure dialog is closed. If we get here it means the file was copied before the handle for
+                    ' the progress dialog was created.
+                    _progressDialog.Close()
+                End If
+            End If
+        End Sub
+
+        ''' <summary>
+        '''  Notifies the progress dialog to increment the progress bar.
+        ''' </summary>
+        ''' <param name="progressPercentage">The percentage of bytes read.</param>
+        Private Sub InvokeIncrement(progressPercentage As Integer)
+            ' Don't invoke unless dialog is up and running
+            If _progressDialog IsNot Nothing Then
+                If _progressDialog.IsHandleCreated Then
+
+                    ' For performance, don't invoke if increment is 0
+                    Dim increment As Integer = progressPercentage - _percentage
+                    _percentage = progressPercentage
+                    If increment > 0 Then
+                        _progressDialog.BeginInvoke(New DoIncrement(AddressOf _progressDialog.Increment), increment)
+                    End If
+
+                End If
+            End If
         End Sub
 
         ''' <summary>
