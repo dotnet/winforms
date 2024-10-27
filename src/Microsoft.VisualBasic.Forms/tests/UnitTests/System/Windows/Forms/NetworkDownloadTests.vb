@@ -12,14 +12,15 @@ Namespace Microsoft.VisualBasic.Forms.Tests
     Public Class NetworkTests
         Inherits VbFileCleanupTestBase
 
-        Private Const DefaultPassword As String = "TBD"
-        Private Const DefaultUserName As String = "TBD"
-        Private Const DownloadLargeFileSize As Integer = 104857600
-        Private Const DownloadSmallFileSize As Integer = 18135
+        Private Const DefaultPassword As String = NameOf(DefaultPassword)
+        Private Const DefaultUserName As String = NameOf(DefaultUserName)
+        Private Const DownloadLargeFileSize As Integer = 104_857_600
+        Private Const DownloadSmallFileSize As Integer = 18_135
         Private Const InvalidUrlAddress As String = "invalidURL"
-        Private Const TestingConnectionTimeout As Integer = 100000
+        Private Const TestingConnectionTimeout As Integer = 100_000
 
-        ' REVIEWER NOTE: The next 2 Constants need to be SR Resources, they are not accessible in this project
+        ' REVIEWER NOTE: The next 2 Constants need to be SR Resources,
+        '                they are not accessible in this project they come from WebClient.
         Private Const SR_net_webstatus_Timeout As String = "The operation has timed out."
         Private Const SR_net_webstatus_Unauthorized As String = "The remote server returned an error: (401) Unauthorized."
 
