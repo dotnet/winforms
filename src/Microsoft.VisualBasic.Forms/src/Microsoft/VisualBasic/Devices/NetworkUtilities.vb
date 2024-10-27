@@ -18,7 +18,7 @@ Namespace Microsoft.VisualBasic.Devices
         Friend Const DEFAULT_USERNAME As String = ""
 
         ''' <summary>
-        '''  Posts a message to close the progress dialog.
+        '''  Posts a message to close the <see cref="ProgressDialog"/>.
         ''' </summary>
         Friend Sub CloseProgressDialog(dialog As ProgressDialog)
             ' Don't invoke unless dialog is up and running
@@ -40,7 +40,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' </summary>
         ''' <param name="userName">The name of the user.</param>
         ''' <param name="password">The password of the user.</param>
-        ''' <returns>A new NetworkCredentials or Nothing.</returns>
+        ''' <returns>A <see langword="New"/> <see cref="NetworkCredential"/> or <see langword="Nothing"/>.</returns>
         Friend Function GetNetworkCredentials(userName As String, password As String) As ICredentials
 
             Return If(String.IsNullOrWhiteSpace(userName) OrElse String.IsNullOrWhiteSpace(password),
@@ -50,12 +50,12 @@ Namespace Microsoft.VisualBasic.Devices
         End Function
 
         ''' <summary>
-        '''  Centralize setup a ProgressDialog to be used with FileDownload and FileUpload.
+        '''  Centralize setup a <see cref="ProgressDialog"/> to be used with FileDownload and FileUpload.
         ''' </summary>
         ''' <param name="address">Address to the remote file, http, ftp etc...</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved.</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar.</param>
-        ''' <returns>New ProgressDialog.</returns>
+        ''' <returns><see langword="New"/> <see cref="ProgressDialog"/>.</returns>
         Friend Function GetProgressDialog(
             address As String,
             destinationFileName As String,
@@ -63,26 +63,35 @@ Namespace Microsoft.VisualBasic.Devices
 
             If showUI AndAlso Environment.UserInteractive Then
                 'Construct the local file. This will validate the full name and path
-                Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(path:=destinationFileName, paramName:=NameOf(destinationFileName))
+                Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(
+                    path:=destinationFileName,
+                    paramName:=NameOf(destinationFileName))
                 Return New ProgressDialog With {
                             .Text = Utils.GetResourceString(SR.ProgressDialogDownloadingTitle, address),
-                            .LabelText = Utils.GetResourceString(SR.ProgressDialogDownloadingLabel, address, fullFilename)
+                            .LabelText = Utils.GetResourceString(
+                                ResourceKey:=SR.ProgressDialogDownloadingLabel,
+                                address,
+                                fullFilename)
                             }
             End If
             Return Nothing
         End Function
 
         ''' <summary>
-        '''  Gets a Uri from a uri string. We also use this function to validate the UriString (remote file address).
+        '''  Gets a <see cref="Uri"/> from a uri string.
+        '''  We also use this function to validate the UriString (remote file address).
         ''' </summary>
         ''' <param name="address">The remote file address.</param>
-        ''' <returns>A Uri if successful, otherwise it throws an exception.</returns>
+        ''' <returns>A <see cref="Uri"/> if successful, otherwise it throws an <see cref="UriFormatException"/>.</returns>
         Friend Function GetUri(address As String) As Uri
             Try
                 Return New Uri(address)
             Catch ex As UriFormatException
                 'Throw an exception with an error message more appropriate to our API
-                Throw GetArgumentExceptionWithArgName(NameOf(address), SR.Network_InvalidUriString, address)
+                Throw GetArgumentExceptionWithArgName(
+                    argumentName:=NameOf(address),
+                    resourceKey:=SR.Network_InvalidUriString,
+                    address)
             End Try
         End Function
 

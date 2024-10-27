@@ -23,7 +23,7 @@ Namespace Microsoft.VisualBasic.Logging
         Private Const PROPERTY_COUNT As Integer = 12
 
         ' Indicates whether or not properties have been set
-        ' Note: Properties that use _PropertiesSet to track whether or not
+        ' Note: Properties that use _propertiesSet to track whether or not
         '       they've been set should always be set through the property setter and not
         '       by directly changing the corresponding private field.
         Private ReadOnly _propertiesSet As New BitArray(PROPERTY_COUNT, False)

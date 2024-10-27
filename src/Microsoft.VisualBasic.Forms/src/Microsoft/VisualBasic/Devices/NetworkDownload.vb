@@ -137,11 +137,12 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="password">The user's password.</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar.</param>
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
-        ''' <param name="overwrite">Indicates whether or not the file should be
-        '''   overwritten if local file already exists.
+        ''' <param name="overwrite">
+        '''  Indicates whether or not the file should be overwritten
+        '''  if local file already exists.
         ''' </param>
         ''' <param name="onUserCancel">
-        '''  Indicates what to do if user cancels dialog (either throw or do nothing).
+        '''  Indicates what to do if user cancels dialog (either <see langword="Throw"/> or do nothing).
         ''' </param>
         Public Sub DownloadFile(
             address As String,
@@ -153,7 +154,8 @@ Namespace Microsoft.VisualBasic.Devices
             overwrite As Boolean,
             onUserCancel As UICancelOption)
 
-            ' We're safe from DownloadFile(Nothing, ...) due to overload failure (DownloadFile(String,...) vs. DownloadFile(Uri,...)).
+            ' We're safe from DownloadFile(Nothing, ...) due to overload failure (DownloadFile(String,...)
+            ' vs. DownloadFile(Uri,...)).
             ' However, it is good practice to verify address before calling Trim.
             If String.IsNullOrWhiteSpace(address) Then
                 Throw VbUtils.GetArgumentNullException(NameOf(address))
@@ -222,11 +224,11 @@ Namespace Microsoft.VisualBasic.Devices
         '''  Time allotted before giving up on a connection.
         ''' </param>
         ''' <param name="overwrite">
-        '''  Indicates whether or not the file should be overwritten if local file
-        '''  already exists.
+        '''  Indicates whether or not the file should be overwritten
+        '''  if local file already exists.
         ''' </param>
-        ''' <param name="onUserCancel">Indicates what to do if user cancels dialog
-        '''  (either throw or do nothing).
+        ''' <param name="onUserCancel">
+        '''  Indicates what to do if user cancels dialog (either <see langword="Throw"/> or do nothing).
         ''' </param>
         Public Sub DownloadFile(
             address As Uri,
@@ -264,7 +266,8 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="showUI">Indicates whether or not to show a progress bar.</param>
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
         ''' <param name="overwrite">
-        '''  Indicates whether or not the file should be overwritten if local file already exists
+        '''  Indicates whether or not the file should be overwritten
+        '''  if local file already exists.
         ''' </param>
         ''' <remarks>Calls to all the other overloads will come through here.</remarks>
         Public Sub DownloadFile(
@@ -294,8 +297,13 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="networkCredentials">The <see cref="ICredentials"/> of the user performing the download.</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar.</param>
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
-        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists.</param>
-        ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing).</param>
+        ''' <param name="overwrite">
+        '''  Indicates whether or not the file should be overwritten
+        '''  if local file already exists.
+        ''' </param>
+        ''' <param name="onUserCancel">
+        '''  Indicates what to do if user cancels dialog (either <see langword="Throw"/> or do nothing).
+        ''' </param>
         ''' <remarks>Calls to all the other overloads will come through here.</remarks>
         Public Sub DownloadFile(
             address As Uri,

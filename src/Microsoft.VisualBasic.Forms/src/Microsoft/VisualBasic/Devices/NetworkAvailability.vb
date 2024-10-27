@@ -31,7 +31,10 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         '''  Indicates whether or not the local machine is connected to an IP network.
         ''' </summary>
-        ''' <value>True if connected, otherwise False.</value>
+        ''' <value>
+        '''  <see langword="True"/> if connected,
+        '''  otherwise <see langword="False"/>.
+        ''' </value>
         Public ReadOnly Property IsAvailable() As Boolean
             Get
                 Return NetInfoAlias.NetworkInterface.GetIsNetworkAvailable()
@@ -39,7 +42,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Property
 
         ''' <summary>
-        '''  Event fired when connected to the network.
+        '''  <see langword="Event"/> fired when connected to the network.
         ''' </summary>
         ''' <param name="Sender">Has no meaning for this event.</param>
         ''' <param name="e">Has no meaning for this event.</param>
