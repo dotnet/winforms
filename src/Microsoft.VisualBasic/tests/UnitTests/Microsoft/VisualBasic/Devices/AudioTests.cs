@@ -18,31 +18,6 @@ public class AudioTests
         testCode.Should().Throw<ArgumentNullException>();
     }
 
-    [Theory]
-    [InlineData(AudioPlayMode.Background)]
-    [InlineData(AudioPlayMode.BackgroundLoop)]
-    [InlineData(AudioPlayMode.WaitToComplete)]
-    public void PlayAllModes_Throws(AudioPlayMode mode)
-    {
-        string location = Path.Combine(Path.GetTempPath(), GetUniqueName());
-        Audio audio = new();
-        Action testCode = () => audio.Play(location, mode);
-        testCode.Should().Throw<FileNotFoundException>();
-    }
-
-    [Fact]
-    public void PlayBytes_Throws()
-    {
-        byte[] data = Array.Empty<byte>();
-        Audio audio = new();
-        Action testCode = () => audio.Play(data, AudioPlayMode.Background);
-        testCode.Should().Throw<InvalidOperationException>();
-
-        data = null;
-        testCode = () => audio.Play(data, AudioPlayMode.Background);
-        testCode.Should().Throw<ArgumentNullException>();
-    }
-
     [Fact]
     public void PlayBytes_Throws()
     {
