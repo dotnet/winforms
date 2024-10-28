@@ -1,9 +1,7 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Imports System.IO
 Imports System.Net
-Imports System.Windows.Forms
 
 Namespace Microsoft.VisualBasic.MyServices.Internal
 
@@ -33,12 +31,10 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' <param name="client">The <see cref="WebClient"/> used to do the downloading or uploading.</param>
         ''' <param name="dialog">UI for indicating progress.</param>
         Public Sub New(client As WebClient, dialog As ProgressDialog)
-
-            Debug.Assert(client IsNot Nothing, "No WebClient")
+            Debug.Assert(client IsNot Nothing, $"No {client}")
 
             _webClient = client
             _progressDialog = dialog
-
         End Sub
 
         ''' <summary>
@@ -49,7 +45,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         '''  Note: that we don't want to close the progress dialog here. Wait until
         '''  the actual file transfer cancel event comes through and do it there.
         ''' </remarks>
-        Private Sub _progressDialog_UserCancelledEvent() Handles _progressDialog.UserHitCancel
+        Private Sub _progressDialog_UserHitCancel() Handles _progressDialog.UserHitCancel
             'cancel the upload/download transfer. We'll close the ProgressDialog
             'as soon as the WebClient cancels the xfer.
             _webClient.CancelAsync()
@@ -60,9 +56,12 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' </summary>
         ''' <param name="sender"></param>
         ''' <param name="e"></param>
-        Private Sub _webClient_DownloadFileCompleted(sender As Object, e As System.ComponentModel.AsyncCompletedEventArgs) Handles _webClient.DownloadFileCompleted
+        Private Sub _webClient_DownloadFileCompleted(sender As Object, e As ComponentModel.AsyncCompletedEventArgs) _
+            Handles _webClient.DownloadFileCompleted
+
             Try
-                ' If the download was interrupted by an exception, keep track of the exception, which we'll throw from the main thread
+                ' If the download was interrupted by an exception, keep track of the exception,
+                ' which we'll throw from the main thread
                 If e.Error IsNot Nothing Then
                     _exceptionEncounteredDuringFileTransfer = e.Error
                 End If
@@ -72,7 +71,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                 End If
             Finally
                 'We don't close the dialog until we receive the WebClient.DownloadFileCompleted event
-                CloseProgressDialog()
+                CloseProgressDialog(_progressDialog)
             End Try
         End Sub
 
@@ -81,7 +80,9 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' </summary>
         ''' <param name="sender"></param>
         ''' <param name="e"></param>
-        Private Sub _webClient_DownloadProgressChanged(sender As Object, e As DownloadProgressChangedEventArgs) Handles _webClient.DownloadProgressChanged
+        Private Sub _webClient_DownloadProgressChanged(sender As Object, e As DownloadProgressChangedEventArgs) _
+            Handles _webClient.DownloadProgressChanged
+
             InvokeIncrement(e.ProgressPercentage)
         End Sub
 
@@ -90,7 +91,8 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' </summary>
         ''' <param name="sender"></param>
         ''' <param name="e"></param>
-        Private Sub _webClient_UploadFileCompleted(sender As Object, e As UploadFileCompletedEventArgs) Handles _webClient.UploadFileCompleted
+        Private Sub _webClient_UploadFileCompleted(sender As Object, e As UploadFileCompletedEventArgs) _
+            Handles _webClient.UploadFileCompleted
 
             ' If the upload was interrupted by an exception, keep track of the
             ' exception, which we'll throw from the main thread
@@ -104,7 +106,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
             Finally
                 'We don't close the dialog until we receive the
                 'WebClient.DownloadFileCompleted event
-                CloseProgressDialog()
+                CloseProgressDialog(_progressDialog)
             End Try
         End Sub
 
@@ -113,25 +115,27 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' </summary>
         ''' <param name="sender"></param>
         ''' <param name="e"></param>
-        Private Sub _webClient_UploadProgressChanged(sender As Object, e As UploadProgressChangedEventArgs) Handles _webClient.UploadProgressChanged
+        Private Sub _webClient_UploadProgressChanged(sender As Object, e As UploadProgressChangedEventArgs) _
+            Handles _webClient.UploadProgressChanged
+
             Dim increment As Long = (e.BytesSent * 100) \ e.TotalBytesToSend
             InvokeIncrement(CInt(increment))
         End Sub
 
         ''' <summary>
-        '''  Posts a message to close the progress dialog.
+        '''  Posts a message to close the <see cref="ProgressDialog"/>.
         ''' </summary>
-        Private Sub CloseProgressDialog()
+        Friend Shared Sub CloseProgressDialog(dialog As ProgressDialog)
             ' Don't invoke unless dialog is up and running
-            If _progressDialog IsNot Nothing Then
-                _progressDialog.IndicateClosing()
+            If dialog IsNot Nothing Then
+                dialog.IndicateClosing()
 
-                If _progressDialog.IsHandleCreated Then
-                    _progressDialog.BeginInvoke(New MethodInvoker(AddressOf _progressDialog.CloseDialog))
+                If dialog.IsHandleCreated Then
+                    dialog.BeginInvoke(New System.Windows.Forms.MethodInvoker(AddressOf dialog.CloseDialog))
                 Else
                     ' Ensure dialog is closed. If we get here it means the file was copied before the handle for
                     ' the progress dialog was created.
-                    _progressDialog.Close()
+                    dialog.Close()
                 End If
             End If
         End Sub
@@ -149,7 +153,9 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                     Dim increment As Integer = progressPercentage - _percentage
                     _percentage = progressPercentage
                     If increment > 0 Then
-                        _progressDialog.BeginInvoke(New DoIncrement(AddressOf _progressDialog.Increment), increment)
+                        _progressDialog.BeginInvoke(
+                            New DoIncrement(AddressOf _progressDialog.Increment),
+                            increment)
                     End If
 
                 End If
@@ -162,14 +168,17 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' <param name="address">The source for the file.</param>
         ''' <param name="destinationFileName">The path and name where the file is saved.</param>
         Public Sub DownloadFile(address As Uri, destinationFileName As String)
-            Debug.Assert(_webClient IsNot Nothing, "No WebClient")
-            Debug.Assert(address IsNot Nothing, "No address")
-            Debug.Assert((Not String.IsNullOrWhiteSpace(destinationFileName)) AndAlso Directory.Exists(Path.GetDirectoryName(Path.GetFullPath(destinationFileName))), "Invalid path")
+            Debug.Assert(_webClient IsNot Nothing, $"No {NameOf(_webClient)}")
+            Debug.Assert(address IsNot Nothing, $"No {NameOf(address)}")
+            Dim path As String = IO.Path.GetDirectoryName(IO.Path.GetFullPath(destinationFileName))
+            Debug.Assert((Not String.IsNullOrWhiteSpace(destinationFileName)) _
+                AndAlso IO.Directory.Exists(path), $"Invalid {NameOf(path)}")
 
             ' If we have a dialog we need to set up an async download
             If _progressDialog IsNot Nothing Then
                 _webClient.DownloadFileAsync(address, destinationFileName)
-                _progressDialog.ShowProgressDialog() 'returns when the download sequence is over, whether due to success, error, or being canceled
+                'returns when the download sequence is over, whether due to success, error, or being canceled
+                _progressDialog.ShowProgressDialog()
             Else
                 _webClient.DownloadFile(address, destinationFileName)
             End If
@@ -189,14 +198,16 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' <param name="sourceFileName">The name and path of the source file.</param>
         ''' <param name="address">The address to which the file is uploaded.</param>
         Public Sub UploadFile(sourceFileName As String, address As Uri)
-            Debug.Assert(_webClient IsNot Nothing, "No WebClient")
-            Debug.Assert(address IsNot Nothing, "No address")
-            Debug.Assert((Not String.IsNullOrWhiteSpace(sourceFileName)) AndAlso File.Exists(sourceFileName), "Invalid file")
+            Debug.Assert(_webClient IsNot Nothing, $"No {NameOf(_webClient)}")
+            Debug.Assert(address IsNot Nothing, $"No {NameOf(address)}")
+            Debug.Assert((Not String.IsNullOrWhiteSpace(sourceFileName)) _
+                AndAlso IO.File.Exists(sourceFileName), "Invalid file")
 
             ' If we have a dialog we need to set up an async download
             If _progressDialog IsNot Nothing Then
                 _webClient.UploadFileAsync(address, sourceFileName)
-                _progressDialog.ShowProgressDialog() 'returns when the download sequence is over, whether due to success, error, or being canceled
+                'returns when the download sequence is over, whether due to success, error, or being canceled
+                _progressDialog.ShowProgressDialog()
             Else
                 _webClient.UploadFile(address, sourceFileName)
             End If
