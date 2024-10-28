@@ -15,7 +15,7 @@ public readonly ref struct TreeNodeCollectionAddRangeRespectsSortOrderScope
         // Prevent multiple TreeNodeCollectionAddRangeRespectsSortOrderScopes from running simultaneously.
         // Using Monitor to allow recursion on the same thread.
         Monitor.Enter(typeof(TreeNodeCollectionAddRangeRespectsSortOrderScope));
-        _switchScope = new(AppContextSwitchNames.TreeNodeCollectionAddRangeRespectsSortOrder, enable);
+        _switchScope = new(WinFormsAppContextSwitchNames.TreeNodeCollectionAddRangeRespectsSortOrder, enable);
     }
 
     public void Dispose()
