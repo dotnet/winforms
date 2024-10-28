@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 
 namespace Windows.Win32;
 
-internal static partial class PInvoke
+internal static partial class PInvokeCore
 {
     [SkipLocalsInit]
     public static unsafe string GetWindowText<T>(T hWnd) where T : IHandle<HWND>

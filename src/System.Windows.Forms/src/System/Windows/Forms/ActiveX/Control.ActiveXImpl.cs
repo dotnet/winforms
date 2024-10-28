@@ -360,7 +360,7 @@ public partial class Control
                         HWND hwndMap = hwnd.IsNull ? hwndParent : hwnd;
                         Point pt = new(PARAM.LOWORD(lpmsg->lParam), PARAM.HIWORD(lpmsg->lParam));
 
-                        PInvoke.MapWindowPoints(hwndMap, _control, ref pt);
+                        PInvokeCore.MapWindowPoints(hwndMap, _control, ref pt);
 
                         // Check to see if this message should really go to a child control, and if so, map the
                         // point into that child's window coordinates.
@@ -1812,7 +1812,7 @@ public partial class Control
                     RECT rcIntersect = intersect;
                     HWND hWndParent = PInvoke.GetParent(_control);
 
-                    PInvoke.MapWindowPoints(hWndParent, _control, ref rcIntersect);
+                    PInvokeCore.MapWindowPoints(hWndParent, _control, ref rcIntersect);
 
                     _lastClipRect = rcIntersect;
                     setRegion = true;
