@@ -6,7 +6,7 @@ using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Globalization;
 using Moq;
-using System.Windows.Forms.TestUtilities;
+using System.Private.Windows.Core.TestUtilities;
 
 namespace System.Windows.Forms.Tests;
 

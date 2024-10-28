@@ -3,6 +3,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using System.Private.Windows.Core.TestUtilities;
 using System.Windows.Forms.TestUtilities;
 
 namespace System.Windows.Forms.Tests;

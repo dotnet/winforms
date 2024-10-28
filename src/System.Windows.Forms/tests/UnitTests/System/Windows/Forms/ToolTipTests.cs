@@ -6,7 +6,7 @@ using System.Drawing;
 using Moq;
 using Moq.Protected;
 using System.Windows.Forms.Automation;
-using System.Windows.Forms.TestUtilities;
+using System.Private.Windows.Core.TestUtilities;
 
 namespace System.Windows.Forms.Tests;
 

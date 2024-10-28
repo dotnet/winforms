@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms.Layout;
 using Moq;
+using System.Private.Windows.Core.TestUtilities;
 using System.Windows.Forms.TestUtilities;
 using Windows.Win32.System.Ole;
 
