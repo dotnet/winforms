@@ -144,6 +144,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                 End If
             End If
         End Sub
+
         ''' <summary>
         ''' Downloads a file.
         ''' </summary>
