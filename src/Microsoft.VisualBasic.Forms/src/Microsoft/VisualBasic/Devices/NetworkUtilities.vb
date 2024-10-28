@@ -2,6 +2,7 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.Net
+Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.MyServices.Internal
 
@@ -26,7 +27,7 @@ Namespace Microsoft.VisualBasic.Devices
                 dialog.IndicateClosing()
 
                 If dialog.IsHandleCreated Then
-                    dialog.BeginInvoke(New System.Windows.Forms.MethodInvoker(AddressOf dialog.CloseDialog))
+                    dialog.BeginInvoke(New MethodInvoker(AddressOf dialog.CloseDialog))
                 Else
                     ' Ensure dialog is closed. If we get here it means the file was copied before the handle for
                     ' the progress dialog was created.
