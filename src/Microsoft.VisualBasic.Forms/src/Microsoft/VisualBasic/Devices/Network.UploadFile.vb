@@ -8,7 +8,7 @@ Imports Microsoft.VisualBasic.MyServices.Internal
 
 Namespace Microsoft.VisualBasic.Devices
 
-    Public Class Network
+    Partial Public Class Network
 
         ''' <summary>
         '''  Uploads a file from the local machine to the specified host.
