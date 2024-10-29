@@ -80,6 +80,8 @@ public partial class PrintControllerWithStatusDialog
             Controls.Add(_tableLayoutPanel);
         }
 
+        protected override AccessibleObject CreateAccessibilityInstance() => new StatusDialogAccessibility(this);
+
         private void CancelClick(object? sender, EventArgs e)
         {
             _cancelButton.Enabled = false;
