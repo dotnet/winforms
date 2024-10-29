@@ -2,6 +2,7 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.Net
+Imports Microsoft.VisualBasic.Devices
 
 Namespace Microsoft.VisualBasic.MyServices.Internal
 
@@ -140,24 +141,6 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                             increment)
                     End If
 
-                End If
-            End If
-        End Sub
-
-        ''' <summary>
-        '''  Posts a message to close the <see cref="ProgressDialog"/>.
-        ''' </summary>
-        Friend Shared Sub CloseProgressDialog(dialog As ProgressDialog)
-            ' Don't invoke unless dialog is up and running
-            If dialog IsNot Nothing Then
-                dialog.IndicateClosing()
-
-                If dialog.IsHandleCreated Then
-                    dialog.BeginInvoke(New System.Windows.Forms.MethodInvoker(AddressOf dialog.CloseDialog))
-                Else
-                    ' Ensure dialog is closed. If we get here it means the file was copied before the handle for
-                    ' the progress dialog was created.
-                    dialog.Close()
                 End If
             End If
         End Sub
