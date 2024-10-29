@@ -79,7 +79,9 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="password">The user's password.</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar.</param>
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
-        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists.</param>
+        ''' <param name="overwrite">
+        '''  Indicates whether or not the file should be overwritten if local file already exists.
+        ''' </param>
         Public Sub DownloadFile(
             address As String,
             destinationFileName As String,
@@ -399,6 +401,12 @@ Namespace Microsoft.VisualBasic.Devices
             connectionTimeout As Integer,
             overwrite As Boolean,
             onUserCancel As UICancelOption)
+
+            If connectionTimeout <= 0 Then
+                Throw VbUtils.GetArgumentExceptionWithArgName(
+                    argumentName:=NameOf(connectionTimeout),
+                    resourceKey:=SR.Network_BadConnectionTimeout)
+            End If
 
             If address Is Nothing Then
                 Throw VbUtils.GetArgumentNullException(NameOf(address))

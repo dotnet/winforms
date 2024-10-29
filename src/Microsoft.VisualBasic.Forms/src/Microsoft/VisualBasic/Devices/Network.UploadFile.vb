@@ -8,7 +8,7 @@ Imports Microsoft.VisualBasic.MyServices.Internal
 
 Namespace Microsoft.VisualBasic.Devices
 
-    Public Class Network
+    Partial Public Class Network
 
         ''' <summary>
         '''  Uploads a file from the local machine to the specified host.
@@ -132,7 +132,8 @@ Namespace Microsoft.VisualBasic.Devices
             connectionTimeout As Integer,
             onUserCancel As UICancelOption)
 
-            ' We're safe from UploadFile(Nothing, ...) due to overload failure (UploadFile(String,...) vs. UploadFile(Uri,...)).
+            ' We're safe from UploadFile(Nothing, ...) due to overload failure (UploadFile(String,...)
+            ' vs. UploadFile(Uri,...)).
             ' However, it is good practice to verify address before calling address.Trim.
             If String.IsNullOrWhiteSpace(address) Then
                 Throw GetArgumentNullException(NameOf(address))
@@ -265,11 +266,14 @@ Namespace Microsoft.VisualBasic.Devices
 
             'Make sure the file exists
             If Not IO.File.Exists(sourceFileName) Then
-                Throw New IO.FileNotFoundException(GetResourceString(SR.IO_FileNotFound_Path, sourceFileName))
+                Dim message As String = GetResourceString(SR.IO_FileNotFound_Path, sourceFileName)
+                Throw New IO.FileNotFoundException(message)
             End If
 
             If connectionTimeout <= 0 Then
-                Throw GetArgumentExceptionWithArgName(NameOf(connectionTimeout), SR.Network_BadConnectionTimeout)
+                Throw GetArgumentExceptionWithArgName(
+                    argumentName:=NameOf(connectionTimeout),
+                    resourceKey:=SR.Network_BadConnectionTimeout)
             End If
 
             If address Is Nothing Then
