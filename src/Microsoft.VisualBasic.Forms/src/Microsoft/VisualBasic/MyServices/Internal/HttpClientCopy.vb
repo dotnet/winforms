@@ -15,7 +15,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
     Friend NotInheritable Class HttpClientCopy
 
         ' Dialog shown if user wants to see progress UI. Allows the user to cancel the file transfer.
-        Private WithEvents m_ProgressDialog As ProgressDialog
+        Private WithEvents _progressDialog As ProgressDialog
 
         ' The WebClient performs the downloading or uploading operations for us
         Private ReadOnly _httpClient As HttpClient
@@ -41,9 +41,9 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
             Debug.Assert(client IsNot Nothing, "No HttpClient")
 
             _httpClient = client
-            m_ProgressDialog = dialog
-            If m_ProgressDialog IsNot Nothing Then
-                AddHandler m_ProgressDialog.UserHitCancel, AddressOf m_ProgressDialog_UserHitCancel
+            _progressDialog = dialog
+            If _progressDialog IsNot Nothing Then
+                AddHandler _progressDialog.UserHitCancel, AddressOf _progressDialog_UserHitCancel
             End If
 
         End Sub
@@ -54,14 +54,14 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' <param name="progressPercentage">The percentage of bytes read.</param>
         Private Sub InvokeIncrement(progressPercentage As Integer)
             ' Don't invoke unless dialog is up and running
-            If m_ProgressDialog IsNot Nothing Then
-                If m_ProgressDialog.IsHandleCreated Then
+            If _progressDialog IsNot Nothing Then
+                If _progressDialog.IsHandleCreated Then
 
                     ' For performance, don't invoke if increment is 0
                     Dim increment As Integer = progressPercentage - _percentage
                     _percentage = progressPercentage
                     If increment > 0 Then
-                        m_ProgressDialog.BeginInvoke(New DoIncrement(AddressOf m_ProgressDialog.Increment), increment)
+                        _progressDialog.BeginInvoke(New DoIncrement(AddressOf _progressDialog.Increment), increment)
                     End If
 
                 End If
@@ -76,7 +76,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         '''  Note that we don't want to close the progress dialog here. Wait until
         '''  the actual file transfer cancel event comes through and do it there.
         ''' </remarks>
-        Private Sub m_ProgressDialog_UserHitCancel()
+        Private Sub _progressDialog_UserHitCancel()
             'cancel the upload/download transfer. We'll close the ProgressDialog as soon as the HttpClient cancels the xfer.
             _cancelTokenSourceGet.Cancel()
             _cancelTokenSourceRead.Cancel()
@@ -131,22 +131,22 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                                         totalBytesRead += bytesRead
 
                                         Await fileStream.WriteAsync(buffer.AsMemory(0, bytesRead), _cancelTokenSourceWrite.Token).ConfigureAwait(False)
-                                        If m_ProgressDialog IsNot Nothing Then
+                                        If _progressDialog IsNot Nothing Then
                                             Dim percentage As Integer = CInt(totalBytesRead / contentLength.Value * 100)
                                             InvokeIncrement(percentage)
                                         End If
                                         bytesRead = Await responseStream.ReadAsync(buffer.AsMemory(0, buffer.Length), _cancelTokenSourceRead.Token).ConfigureAwait(False)
                                     Loop
                                 Finally
-                                    CloseProgressDialog(m_ProgressDialog)
+                                    CloseProgressDialog(_progressDialog)
                                 End Try
                             End Using
                         End Using
                         If response.StatusCode = HttpStatusCode.OK Then
                         End If
 
-                        If m_ProgressDialog IsNot Nothing Then
-                            RemoveHandler m_ProgressDialog.UserHitCancel, AddressOf m_ProgressDialog_UserHitCancel
+                        If _progressDialog IsNot Nothing Then
+                            RemoveHandler _progressDialog.UserHitCancel, AddressOf _progressDialog_UserHitCancel
                         End If
                     End If
 
@@ -170,16 +170,16 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
             Debug.Assert((Not String.IsNullOrWhiteSpace(sourceFileName)) AndAlso File.Exists(sourceFileName), "Invalid file")
 
             ' If we have a dialog we need to set up an async download
-            If m_ProgressDialog IsNot Nothing Then
+            If _progressDialog IsNot Nothing Then
                 _httpClient.UploadFileAsync(address, sourceFileName)
-                m_ProgressDialog.ShowProgressDialog() 'returns when the download sequence is over, whether due to success, error, or being canceled
+                _progressDialog.ShowProgressDialog() 'returns when the download sequence is over, whether due to success, error, or being canceled
             Else
                 _httpClient.UploadFile(address, sourceFileName)
             End If
 
             'Now that we are back on the main thread, throw the exception we encountered if the user didn't cancel.
             If _exceptionEncounteredDuringFileTransfer IsNot Nothing Then
-                If m_ProgressDialog Is Nothing OrElse Not m_ProgressDialog.UserCanceledTheDialog Then
+                If _progressDialog Is Nothing OrElse Not _progressDialog.UserCanceledTheDialog Then
                     Throw _exceptionEncounteredDuringFileTransfer
                 End If
             End If
