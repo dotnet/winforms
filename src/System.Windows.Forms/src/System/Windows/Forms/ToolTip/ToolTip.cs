@@ -2052,7 +2052,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
             // Use GetWindowText instead of GetCaptionForTool to retrieve the actual caption.
             // GetCaptionForTool doesn't work correctly when the text for a tool is retrieved
             // by TTN_NEEDTEXT notification (e.g. TabPages of TabControl).
-            AnnounceText(toolControl, PInvoke.GetWindowText(this));
+            AnnounceText(toolControl, PInvokeCore.GetWindowText(this));
         }
 
         // We need to re-get the rectangle of the tooltip here because

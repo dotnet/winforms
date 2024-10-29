@@ -334,7 +334,7 @@ public sealed partial class MultilineStringEditor
                     return string.Empty;
                 }
 
-                string windowText = PInvoke.GetWindowText(this);
+                string windowText = PInvokeCore.GetWindowText(this);
                 if (!_ctrlEnterPressed)
                 {
                     return windowText;

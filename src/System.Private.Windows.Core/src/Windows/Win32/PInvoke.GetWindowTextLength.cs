@@ -3,7 +3,7 @@
 
 namespace Windows.Win32;
 
-internal static partial class PInvoke
+internal static partial class PInvokeCore
 {
     /// <inheritdoc cref="GetWindowTextLength(HWND)"/>
     public static int GetWindowTextLength<T>(T hWnd) where T : IHandle<HWND>
