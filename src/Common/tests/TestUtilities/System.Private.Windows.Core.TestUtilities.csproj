@@ -4,6 +4,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <RootNamespace>System</RootNamespace>
     <Nullable>enable</Nullable>
+    <HasNoPublicIntellisense>true</HasNoPublicIntellisense>
   </PropertyGroup>
 
   <ItemGroup>
