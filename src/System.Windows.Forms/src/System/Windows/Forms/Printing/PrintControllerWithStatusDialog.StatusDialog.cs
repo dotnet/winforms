@@ -42,7 +42,8 @@ public partial class PrintControllerWithStatusDialog
                 TabIndex = 1,
                 Dock = DockStyle.Fill,
                 Multiline = true,
-                Margin = new Padding(3, 30, 3, 3)
+                Margin = new Padding(3, 25, 3, 3),
+                AccessibleName = "Text",
             };
 
             _cancellingTextBox.TextChanged += OnCancellingTextBoxTextChanged;
