@@ -17,12 +17,15 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Private Const DownloadLargeFileSize As Integer = 104_857_600
         Private Const DownloadSmallFileSize As Integer = 18_135
         Private Const InvalidUrlAddress As String = "invalidURL"
-        Private Const TestingConnectionTimeout As Integer = 100_000
 
         ' REVIEWER NOTE: The next 2 Constants need to be SR Resources,
         '                they are not accessible in this project they come from WebClient.
         Private Const SR_net_webstatus_Timeout As String = "The operation has timed out."
-        Private Const SR_net_webstatus_Unauthorized As String = "The remote server returned an error: (401) Unauthorized."
+
+        Private Const SR_net_webstatus_Unauthorized As String =
+            "The remote server returned an error: (401) Unauthorized."
+
+        Private Const TestingConnectionTimeout As Integer = 100_000
 
         Private Shared Sub CleanUpListener(listener As HttpListener)
             listener.Stop()
@@ -32,18 +35,45 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         ''' <summary>
         '''  Verify that testDirectory exists, that destinationFileName exist and what its length is.
         ''' </summary>
+        ''' <param name="testDirectory">A Unique directory under the systems Temp directory.</param>
         ''' <param name="destinationFileName">The full path and filename of the new file.</param>
+        ''' <param name="listener"></param>
+        Private Shared Sub VerifyAndCleanupFailedDownload(
+            testDirectory As String,
+            destinationFileName As String,
+            listener As HttpListener)
+
+            If Not String.IsNullOrWhiteSpace(testDirectory) Then
+                Directory.Exists(testDirectory).Should.BeTrue()
+            End If
+            If Not String.IsNullOrWhiteSpace(destinationFileName) Then
+                Call New FileInfo(destinationFileName).Exists.Should.BeFalse()
+            End If
+            CleanUpListener(listener)
+        End Sub
+
+        ''' <summary>
+        '''  Verify that testDirectory exists, that destinationFileName exist and what its length is.
+        ''' </summary>
+        ''' <param name="testDirectory">A Unique directory under the systems Temp directory.</param>
         ''' <returns>
         '''  The size in bytes of the destination file, this saves the caller from having to
         '''  do another FileInfo call.
         ''' </returns>
-        Private Shared Function ValidateDownload(destinationFileName As String) As Long
+        ''' <param name="destinationFileName">The full path and filename of the new file.</param>
+        ''' <param name="listener"></param>
+        Private Shared Function VerifyAndCleanupSuccessfulDownload(
+            testDirectory As String,
+            destinationFileName As String,
+            listener As HttpListener) As Long
+
+            Directory.Exists(testDirectory).Should.BeTrue()
             Dim fileInfo As New FileInfo(destinationFileName)
             fileInfo.Exists.Should.BeTrue()
             Directory.Exists(fileInfo.DirectoryName).Should.BeTrue()
             ' This directory should not be systems Temp Directory because it must be created
             Path.GetTempPath.Should.NotBe(fileInfo.DirectoryName)
-
+            CleanUpListener(listener)
             Return fileInfo.Length
         End Function
 
@@ -61,10 +91,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 End Sub
 
             testCode.Should.NotThrow()
-            Directory.Exists(testDirectory).Should.BeTrue()
-            ValidateDownload(destinationFileName).Should.Be(DownloadSmallFileSize)
-
-            CleanUpListener(listener)
+            VerifyAndCleanupSuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
+                .Be(DownloadSmallFileSize)
         End Sub
 
         <WinFormsFact>
@@ -79,13 +107,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         address:=New Uri(String.Empty),
                         destinationFileName)
                 End Sub
-            Try
-                testCode.Should _
-                    .Throw(Of UriFormatException)()
-                File.Exists(destinationFileName).Should.BeFalse()
-            Finally
-                CleanUpListener(listener)
-            End Try
+
+            testCode.Should.Throw(Of UriFormatException)()
+            VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
         <WinFormsFact>
@@ -100,13 +124,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         address:=New Uri(Nothing),
                         destinationFileName)
                 End Sub
-            Try
-                testCode.Should _
-                    .Throw(Of ArgumentNullException)()
-                File.Exists(destinationFileName).Should.BeFalse()
-            Finally
-                CleanUpListener(listener)
-            End Try
+
+            testCode.Should.Throw(Of ArgumentNullException)()
+            VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
         <WinFormsTheory>
@@ -121,14 +141,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         address:=New Uri(webListener.Address),
                         destinationFileName)
                 End Sub
-            Try
-                testCode.Should _
-                    .Throw(Of ArgumentNullException)() _
-                    .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
-                File.Exists(destinationFileName).Should.BeFalse()
-            Finally
-                CleanUpListener(listener)
-            End Try
+
+            testCode.Should() _
+                .Throw(Of ArgumentNullException)() _
+                .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
+            VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
         <WinFormsFact>
@@ -139,7 +156,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 fileSize:=DownloadSmallFileSize,
                 userName:=DefaultUserName,
                 password:=DefaultPassword)
-
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim networkCredentials As New NetworkCredential(DefaultUserName, DefaultPassword)
             Dim testCode As Action =
@@ -154,38 +170,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 End Sub
 
             testCode.Should.NotThrow()
-            Directory.Exists(testDirectory).Should.BeTrue()
-            ValidateDownload(destinationFileName).Should.Be(DownloadSmallFileSize)
-
-            CleanUpListener(listener)
-        End Sub
-
-        <WinFormsTheory>
-        <NullAndEmptyStringData>
-        Public Sub DownloadFile_UriWithAllOptions_ExceptOnUserCancelWhereDestinationFileNameInvalidOverwrite_Throws(
-            destinationFileName As String)
-
-            Dim webListener As New WebListener(DownloadSmallFileSize)
-            Dim listener As HttpListener = webListener.ProcessRequests()
-            Dim testCode As Action =
-                Sub()
-                    My.Computer.Network.DownloadFile(
-                        address:=New Uri(webListener.Address),
-                        destinationFileName:=Nothing,
-                        userName:=String.Empty,
-                        password:=String.Empty,
-                        showUI:=True,
-                        connectionTimeout:=TestingConnectionTimeout,
-                        overwrite:=False)
-                End Sub
-            Try
-                testCode.Should _
-                    .Throw(Of ArgumentNullException)() _
-                    .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
-                File.Exists(destinationFileName).Should.BeFalse()
-            Finally
-                CleanUpListener(listener)
-            End Try
+            VerifyAndCleanupSuccessfulDownload(testDirectory, destinationFileName, listener).Should _
+                .Be(DownloadSmallFileSize)
         End Sub
 
         <WinFormsFact>
@@ -207,13 +193,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 End Sub
 
             Dim value As String = SR.IO_FileExists_Path.Replace("{0}", destinationFileName)
-            testCode.Should _
+            testCode.Should() _
                 .Throw(Of IOException)() _
                 .Where(Function(e) e.Message.Equals(value))
-            Directory.Exists(testDirectory).Should.BeTrue()
-            ValidateDownload(destinationFileName).Should.Be(1)
-
-            CleanUpListener(listener)
+            VerifyAndCleanupSuccessfulDownload(testDirectory, destinationFileName, listener).Should.Be(1)
         End Sub
 
         <WinFormsFact>
@@ -235,10 +218,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 End Sub
 
             testCode.Should.NotThrow()
-            Directory.Exists(testDirectory).Should.BeTrue()
-            ValidateDownload(destinationFileName).Should.Be(DownloadLargeFileSize)
-
-            CleanUpListener(listener)
+            VerifyAndCleanupSuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
+                .Be(DownloadLargeFileSize)
         End Sub
 
         <WinFormsFact>
@@ -260,10 +241,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 End Sub
 
             testCode.Should.NotThrow()
-            Directory.Exists(testDirectory).Should.BeTrue()
-            ValidateDownload(destinationFileName).Should.Be(DownloadSmallFileSize)
-
-            CleanUpListener(listener)
+            VerifyAndCleanupSuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
+                .Be(DownloadSmallFileSize)
         End Sub
 
         <WinFormsTheory>
@@ -272,7 +251,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub DownloadFile_UriWithAllOptions_ExceptOnUserCancelWherePasswordWrong_Throws(password As String)
             Dim testDirectory As String = CreateTempDirectory()
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
-            Dim webListener As New WebListener(DownloadSmallFileSize, DefaultUserName, DefaultPassword)
+            Dim webListener As New WebListener(
+                fileSize:=DownloadSmallFileSize,
+                userName:=DefaultUserName,
+                password:=DefaultPassword)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
                 Sub()
@@ -285,14 +267,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         connectionTimeout:=TestingConnectionTimeout,
                         overwrite:=True)
                 End Sub
-            Try
-                testCode.Should _
-                    .Throw(Of WebException)() _
-                    .WithMessage(SR_net_webstatus_Unauthorized)
-                File.Exists(destinationFileName).Should.BeFalse()
-            Finally
-                CleanUpListener(listener)
-            End Try
+
+            testCode.Should() _
+                .Throw(Of WebException)() _
+                .WithMessage(SR_net_webstatus_Unauthorized)
+            VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
         <WinFormsFact>
@@ -312,14 +291,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         connectionTimeout:=1,
                         overwrite:=True)
                 End Sub
-            Try
-                testCode.Should _
-                    .Throw(Of WebException)() _
-                    .WithMessage(SR_net_webstatus_Timeout)
-                File.Exists(destinationFileName).Should.BeFalse()
-            Finally
-                CleanUpListener(listener)
-            End Try
+
+            testCode.Should() _
+               .Throw(Of WebException)() _
+               .WithMessage(SR_net_webstatus_Timeout)
+            VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
         <WinFormsFact>
@@ -339,14 +315,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         connectionTimeout:=-1,
                         overwrite:=False)
                 End Sub
-            Try
-                testCode.Should() _
-                    .Throw(Of ArgumentException)() _
-                    .Where(Function(e) e.Message.StartsWith(SR.Network_BadConnectionTimeout))
-                File.Exists(destinationFileName).Should.BeFalse()
-            Finally
-                CleanUpListener(listener)
-            End Try
+
+            testCode.Should() _
+                .Throw(Of ArgumentException)() _
+                .Where(Function(e) e.Message.StartsWith(SR.Network_BadConnectionTimeout))
+            VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
         <WinFormsFact>
@@ -366,14 +339,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         connectionTimeout:=TestingConnectionTimeout,
                         overwrite:=False)
                 End Sub
-            Try
-                testCode.Should _
-                    .Throw(Of ArgumentNullException)() _
-                    .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
-                File.Exists(destinationFileName).Should.BeFalse()
-            Finally
-                CleanUpListener(listener)
-            End Try
+
+            testCode.Should() _
+                .Throw(Of ArgumentNullException)() _
+                .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
+            VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
         <WinFormsFact>
@@ -393,13 +363,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         connectionTimeout:=TestingConnectionTimeout,
                         overwrite:=False)
                 End Sub
-            Try
-                testCode.Should() _
-                   .Throw(Of UriFormatException)()
-                File.Exists(destinationFileName).Should.BeFalse()
-            Finally
-                CleanUpListener(listener)
-            End Try
+
+            testCode.Should().Throw(Of UriFormatException)()
+            VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
         <WinFormsFact>
@@ -421,16 +387,18 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 End Sub
 
             testCode.Should.NotThrow()
-            ValidateDownload(destinationFileName).Should.Be(DownloadSmallFileSize)
-
-            CleanUpListener(listener)
+            VerifyAndCleanupSuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
+                .Be(DownloadSmallFileSize)
         End Sub
 
         <WinFormsFact>
         Public Sub DownloadFile_UriWithAllOptionsAndNetworkCredentials_Fail()
             Dim testDirectory As String = CreateTempDirectory()
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
-            Dim webListener As New WebListener(DownloadSmallFileSize, DefaultUserName, DefaultPassword)
+            Dim webListener As New WebListener(
+                fileSize:=DownloadSmallFileSize,
+                userName:=DefaultUserName,
+                password:=DefaultPassword)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim networkCredentials As New NetworkCredential(DefaultUserName, DefaultPassword)
             Dim testCode As Action =
@@ -444,19 +412,19 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         overwrite:=True,
                         onUserCancel:=UICancelOption.ThrowException)
                 End Sub
-            Try
-                testCode.Should.Throw(Of ArgumentNullException)()
-                File.Exists(destinationFileName).Should.BeFalse()
-            Finally
-                CleanUpListener(listener)
-            End Try
+
+            testCode.Should.Throw(Of ArgumentNullException)()
+            VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
         <WinFormsFact>
         Public Sub DownloadFile_UriWithAllOptionsAndNetworkCredentials_Success()
             Dim testDirectory As String = CreateTempDirectory()
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
-            Dim webListener As New WebListener(DownloadSmallFileSize, DefaultUserName, DefaultPassword)
+            Dim webListener As New WebListener(
+                fileSize:=DownloadSmallFileSize,
+                userName:=DefaultUserName,
+                password:=DefaultPassword)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim networkCredentials As New NetworkCredential(DefaultUserName, DefaultPassword)
             Dim testCode As Action =
@@ -472,17 +440,18 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 End Sub
 
             testCode.Should.NotThrow()
-            Directory.Exists(testDirectory).Should.BeTrue()
-            ValidateDownload(destinationFileName).Should.Be(DownloadSmallFileSize)
-
-            CleanUpListener(listener)
+            VerifyAndCleanupSuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
+                .Be(DownloadSmallFileSize)
         End Sub
 
         <WinFormsFact>
         Public Sub DownloadFile_UriWithAllOptionsAndNetworkCredentialsTimeout0_Fail()
             Dim testDirectory As String = CreateTempDirectory()
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
-            Dim webListener As New WebListener(DownloadSmallFileSize, DefaultUserName, DefaultPassword)
+            Dim webListener As New WebListener(
+                fileSize:=DownloadSmallFileSize,
+                userName:=DefaultUserName,
+                password:=DefaultPassword)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim networkCredentials As New NetworkCredential(DefaultUserName, DefaultPassword)
             Dim testCode As Action =
@@ -497,13 +466,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         onUserCancel:=UICancelOption.ThrowException)
                 End Sub
 
-            Try
-                testCode.Should.Throw(Of ArgumentException)()
-                File.Exists(destinationFileName).Should.BeFalse()
-            Finally
-                CleanUpListener(listener)
-            End Try
-
+            testCode.Should.Throw(Of ArgumentException)()
+            VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
         <WinFormsFact>
@@ -523,15 +487,33 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         connectionTimeout:=TestingConnectionTimeout,
                         overwrite:=False)
                 End Sub
-            Try
-                testCode.Should _
-                    .Throw(Of UriFormatException)()
+            testCode.Should.Throw(Of UriFormatException)()
+            VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
+        End Sub
 
-                Directory.Exists(testDirectory).Should.BeTrue()
-                File.Exists(destinationFileName).Should.BeFalse()
-            Finally
-                CleanUpListener(listener)
-            End Try
+        <WinFormsTheory>
+        <NullAndEmptyStringData>
+        Public Sub DownloadFile_UriWithAllOptionsExceptOnUserCancelWhereDestinationFileNameInvalidOverwriteThrows(
+            destinationFileName As String)
+
+            Dim webListener As New WebListener(DownloadSmallFileSize)
+            Dim listener As HttpListener = webListener.ProcessRequests()
+            Dim testCode As Action =
+                Sub()
+                    My.Computer.Network.DownloadFile(
+                        address:=New Uri(webListener.Address),
+                        destinationFileName:=Nothing,
+                        userName:=String.Empty,
+                        password:=String.Empty,
+                        showUI:=True,
+                        connectionTimeout:=TestingConnectionTimeout,
+                        overwrite:=False)
+                End Sub
+
+            testCode.Should() _
+                .Throw(Of ArgumentNullException)() _
+                .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
+            VerifyAndCleanupFailedDownload(testDirectory:=Nothing, destinationFileName, listener)
         End Sub
 
         <WinFormsTheory>
@@ -554,17 +536,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         overwrite:=True,
                         onUserCancel:=UICancelOption.DoNothing)
                 End Sub
+
             Dim exceptionExpression As Expressions.Expression(Of Func(Of ArgumentException, Boolean)) =
                 Function(e) e.Message.StartsWith(SR.IO_FilePathException) _
                     AndAlso e.Message.Contains(NameOf(destinationFileName))
-            Try
-                testCode.Should _
-                    .Throw(Of ArgumentException)() _
-                    .Where(exceptionExpression)
-                File.Exists(destinationFileName).Should.BeFalse()
-            Finally
-                CleanUpListener(listener)
-            End Try
+            testCode.Should() _
+                .Throw(Of ArgumentException)() _
+                .Where(exceptionExpression)
+            VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
         <WinFormsTheory>
@@ -584,14 +563,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         overwrite:=False,
                         onUserCancel:=UICancelOption.DoNothing)
                 End Sub
-            Try
-                testCode.Should _
-                    .Throw(Of ArgumentNullException)() _
-                    .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
-                File.Exists(destinationFileName).Should.BeFalse()
-            Finally
-                CleanUpListener(listener)
-            End Try
+
+            testCode.Should.Throw(Of ArgumentNullException)()
+            VerifyAndCleanupFailedDownload(testDirectory:=Nothing, destinationFileName, listener)
         End Sub
 
         <WinFormsTheory>
@@ -614,17 +588,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         overwrite:=True,
                         onUserCancel:=UICancelOption.DoNothing)
                 End Sub
+
             Dim exceptionExpression As Expressions.Expression(Of Func(Of ArgumentException, Boolean)) =
                 Function(e) e.Message.StartsWith(SR.IO_FilePathException) _
                     AndAlso e.Message.Contains(NameOf(destinationFileName))
-            Try
-                testCode.Should _
-                    .Throw(Of ArgumentException)() _
-                    .Where(exceptionExpression)
-                File.Exists(destinationFileName).Should.BeFalse()
-            Finally
-                CleanUpListener(listener)
-            End Try
+            testCode.Should.Throw(Of ArgumentException)().Where(exceptionExpression)
+            VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
         <WinFormsTheory>
@@ -647,17 +616,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         overwrite:=True,
                         onUserCancel:=UICancelOption.DoNothing)
                 End Sub
+
             Dim exceptionExpression As Expressions.Expression(Of Func(Of ArgumentException, Boolean)) =
                 Function(e) e.Message.StartsWith(SR.IO_FilePathException) _
                     AndAlso e.Message.Contains(NameOf(destinationFileName))
-            Try
-                testCode.Should() _
-                    .Throw(Of ArgumentException)() _
-                    .Where(exceptionExpression)
-                File.Exists(destinationFileName).Should.BeFalse()
-            Finally
-                CleanUpListener(listener)
-            End Try
+            testCode.Should() _
+                .Throw(Of ArgumentException)() _
+                .Where(exceptionExpression)
+            VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
         <WinFormsFact>
@@ -680,10 +646,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 End Sub
 
             testCode.Should.NotThrow()
-            Directory.Exists(testDirectory).Should.BeTrue()
-            ValidateDownload(destinationFileName).Should.Be(DownloadSmallFileSize)
-
-            CleanUpListener(listener)
+            VerifyAndCleanupSuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
+                .Be(DownloadSmallFileSize)
         End Sub
 
         <WinFormsTheory>
@@ -706,14 +670,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         overwrite:=True,
                         onUserCancel:=UICancelOption.DoNothing)
                 End Sub
-            Try
-                testCode.Should() _
-                    .Throw(Of InvalidOperationException)() _
-                    .Where(Function(e) e.Message.StartsWith(SR.Network_DownloadNeedsFilename))
-                File.Exists(destinationFileName).Should.BeFalse()
-            Finally
-                CleanUpListener(listener)
-            End Try
+            testCode.Should() _
+                .Throw(Of InvalidOperationException)() _
+                .Where(Function(e) e.Message.StartsWith(SR.Network_DownloadNeedsFilename))
+            VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
         <WinFormsTheory>
@@ -736,17 +696,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         overwrite:=True,
                         onUserCancel:=UICancelOption.DoNothing)
                 End Sub
+
             Dim exceptionExpression As Expressions.Expression(Of Func(Of ArgumentException, Boolean)) =
                 Function(e) e.Message.StartsWith(SR.IO_FilePathException) _
                     AndAlso e.Message.Contains(NameOf(destinationFileName))
-            Try
-                testCode.Should() _
-                    .Throw(Of ArgumentException)() _
-                    .Where(exceptionExpression)
-                File.Exists(destinationFileName).Should.BeFalse()
-            Finally
-                CleanUpListener(listener)
-            End Try
+            testCode.Should() _
+                .Throw(Of ArgumentException)() _
+                .Where(exceptionExpression)
+            VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
         <WinFormsFact>
@@ -770,10 +727,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
               End Sub
 
             testCode.Should.NotThrow()
-            Directory.Exists(testDirectory).Should.BeTrue()
-            ValidateDownload(destinationFileName).Should.Be(DownloadSmallFileSize)
-
-            CleanUpListener(listener)
+            VerifyAndCleanupSuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
+                .Be(DownloadSmallFileSize)
         End Sub
 
         <WinFormsFact>
@@ -794,14 +749,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         overwrite:=False,
                         onUserCancel:=UICancelOption.DoNothing)
                 End Sub
-            Try
-                testCode.Should _
-                    .Throw(Of ArgumentNullException)() _
-                    .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
-                File.Exists(destinationFileName).Should.BeFalse()
-            Finally
-                CleanUpListener(listener)
-            End Try
+
+            testCode.Should() _
+                .Throw(Of ArgumentNullException)() _
+                .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
+            VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
         <WinFormsFact>
@@ -824,9 +776,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 End Sub
 
             testCode.Should.NotThrow()
-            Directory.Exists(testDirectory).Should.BeTrue()
-            ValidateDownload(destinationFileName).Should.Be(DownloadSmallFileSize)
-            CleanUpListener(listener)
+            VerifyAndCleanupSuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
+                .Be(DownloadSmallFileSize)
         End Sub
 
         <WinFormsFact>
@@ -847,21 +798,21 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         overwrite:=True,
                         onUserCancel:=UICancelOption.DoNothing)
                 End Sub
-            Try
-                testCode.Should _
-                    .Throw(Of InvalidOperationException)() _
-                    .WithMessage(SR.Network_DownloadNeedsFilename)
-                File.Exists(destinationFileName).Should.BeFalse()
-            Finally
-                CleanUpListener(listener)
-            End Try
+
+            testCode.Should() _
+                .Throw(Of InvalidOperationException)() _
+                .WithMessage(SR.Network_DownloadNeedsFilename)
+            VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
         <WinFormsFact>
         Public Sub DownloadFile_UriWithUserNamePassword_Success()
             Dim testDirectory As String = CreateTempDirectory()
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
-            Dim webListener As New WebListener(DownloadSmallFileSize, DefaultUserName, DefaultPassword)
+            Dim webListener As New WebListener(
+                fileSize:=DownloadSmallFileSize,
+                userName:=DefaultUserName,
+                password:=DefaultPassword)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
                 Sub()
@@ -873,10 +824,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 End Sub
 
             testCode.Should.NotThrow()
-            Directory.Exists(testDirectory).Should.BeTrue()
-            ValidateDownload(destinationFileName).Should.Be(DownloadSmallFileSize)
-
-            CleanUpListener(listener)
+            VerifyAndCleanupSuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
+                .Be(DownloadSmallFileSize)
         End Sub
 
         <WinFormsTheory>
@@ -885,7 +834,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub DownloadFile_UriWithUserNamePasswordWherePasswordWrong_Throw(password As String)
             Dim testDirectory As String = CreateTempDirectory()
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
-            Dim webListener As New WebListener(DownloadSmallFileSize, DefaultUserName, String.Empty)
+            Dim webListener As New WebListener(
+                fileSize:=DownloadSmallFileSize,
+                userName:=DefaultUserName,
+                password:=String.Empty)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
                 Sub()
@@ -895,14 +847,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         userName:=DefaultUserName,
                         password)
                 End Sub
-            Try
-                testCode.Should _
-                    .Throw(Of WebException)() _
-                    .WithMessage(SR_net_webstatus_Unauthorized)
-                File.Exists(destinationFileName).Should.BeFalse()
-            Finally
-                CleanUpListener(listener)
-            End Try
+
+            testCode.Should() _
+                .Throw(Of WebException)() _
+                .WithMessage(SR_net_webstatus_Unauthorized)
+            VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
         <WinFormsTheory>
@@ -911,7 +860,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub DownloadFile_UriWithUserNamePasswordWherePasswordWrong_Throws(password As String)
             Dim testDirectory As String = CreateTempDirectory()
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
-            Dim webListener As New WebListener(DownloadSmallFileSize, DefaultUserName, DefaultPassword)
+            Dim webListener As New WebListener(
+                fileSize:=DownloadSmallFileSize,
+                userName:=DefaultUserName,
+                password:=DefaultPassword)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
                 Sub()
@@ -921,14 +873,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         userName:=DefaultUserName,
                         password)
                 End Sub
-            Try
-                testCode.Should _
-                    .Throw(Of WebException)() _
-                    .WithMessage(SR_net_webstatus_Unauthorized)
-                File.Exists(destinationFileName).Should.BeFalse()
-            Finally
-                CleanUpListener(listener)
-            End Try
+
+            testCode.Should() _
+                .Throw(Of WebException)() _
+                .WithMessage(SR_net_webstatus_Unauthorized)
+            VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
         <WinFormsFact>
@@ -945,10 +894,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 End Sub
 
             testCode.Should.NotThrow()
-            Directory.Exists(testDirectory).Should.BeTrue()
-            ValidateDownload(destinationFileName).Should.Be(DownloadSmallFileSize)
-
-            CleanUpListener(listener)
+            VerifyAndCleanupSuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
+                .Be(DownloadSmallFileSize)
         End Sub
 
         <WinFormsTheory>
@@ -964,14 +911,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         address,
                         destinationFileName)
                 End Sub
-            Try
-                testCode.Should _
-                    .Throw(Of ArgumentNullException)() _
-                    .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
-                File.Exists(destinationFileName).Should.BeFalse()
-            Finally
-                CleanUpListener(listener)
-            End Try
+
+            testCode.Should() _
+                .Throw(Of ArgumentNullException)() _
+                .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
+            VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
         <WinFormsTheory>
@@ -986,14 +930,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         address:=webListener.Address,
                         destinationFileName)
                 End Sub
-            Try
-                testCode.Should _
-                    .Throw(Of ArgumentNullException)() _
-                    .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
-                File.Exists(destinationFileName).Should.BeFalse()
-            Finally
-                CleanUpListener(listener)
-            End Try
+
+            testCode.Should() _
+                .Throw(Of ArgumentNullException)() _
+                .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
+            VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
         <WinFormsTheory>
@@ -1014,14 +955,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         connectionTimeout:=TestingConnectionTimeout,
                         overwrite:=False)
                 End Sub
-            Try
-                testCode.Should _
-                    .Throw(Of ArgumentNullException)() _
-                    .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
-                File.Exists(destinationFileName).Should.BeFalse()
-            Finally
-                CleanUpListener(listener)
-            End Try
+
+            testCode.Should() _
+                .Throw(Of ArgumentNullException)() _
+                .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
+            VerifyAndCleanupFailedDownload(testDirectory:=Nothing, destinationFileName, listener)
         End Sub
 
         <WinFormsFact>
@@ -1043,13 +981,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 End Sub
 
             Dim value As String = SR.IO_FileExists_Path.Replace("{0}", destinationFileName)
-            testCode.Should _
+            testCode.Should() _
                 .Throw(Of IOException)() _
                 .Where(Function(e) e.Message.Equals(value))
-            Directory.Exists(testDirectory).Should.BeTrue()
-            ValidateDownload(destinationFileName).Should.Be(1)
-
-            CleanUpListener(listener)
+            VerifyAndCleanupSuccessfulDownload(testDirectory, destinationFileName, listener).Should.Be(1)
         End Sub
 
         <WinFormsFact>
@@ -1069,17 +1004,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         connectionTimeout:=TestingConnectionTimeout,
                         overwrite:=False)
                 End Sub
-            Try
-                Dim value As String = SR.Network_InvalidUriString.Replace("{0}", "invalidURL")
-                testCode.Should _
-                    .Throw(Of ArgumentException)() _
-                    .Where(Function(e) e.Message.StartsWith(value))
 
-                Directory.Exists(testDirectory).Should.BeTrue()
-                File.Exists(destinationFileName).Should.BeFalse()
-            Finally
-                CleanUpListener(listener)
-            End Try
+            Dim value As String = SR.Network_InvalidUriString.Replace("{0}", "invalidURL")
+            testCode.Should() _
+                .Throw(Of ArgumentException)() _
+                .Where(Function(e) e.Message.StartsWith(value))
+            VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
         <WinFormsFact>
@@ -1101,10 +1031,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 End Sub
 
             testCode.Should.NotThrow()
-            Directory.Exists(testDirectory).Should.BeTrue()
-            ValidateDownload(destinationFileName).Should.Be(DownloadLargeFileSize)
-
-            CleanUpListener(listener)
+            VerifyAndCleanupSuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
+                .Be(DownloadLargeFileSize)
         End Sub
 
         <WinFormsFact>
@@ -1126,10 +1054,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 End Sub
 
             testCode.Should.NotThrow()
-            Directory.Exists(testDirectory).Should.BeTrue()
-            ValidateDownload(destinationFileName).Should.Be(DownloadSmallFileSize)
-
-            CleanUpListener(listener)
+            VerifyAndCleanupSuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
+                .Be(DownloadSmallFileSize)
         End Sub
 
         <WinFormsFact>
@@ -1149,14 +1075,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         connectionTimeout:=1,
                         overwrite:=True)
                 End Sub
-            Try
-                testCode.Should _
-                    .Throw(Of WebException)() _
-                    .WithMessage(SR_net_webstatus_Timeout)
-                File.Exists(destinationFileName).Should.BeFalse()
-            Finally
-                CleanUpListener(listener)
-            End Try
+
+            testCode.Should() _
+                .Throw(Of WebException)() _
+                .WithMessage(SR_net_webstatus_Timeout)
+            VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
         <WinFormsFact>
@@ -1176,14 +1099,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         connectionTimeout:=-1,
                         overwrite:=False)
                 End Sub
-            Try
-                testCode.Should() _
-                    .Throw(Of ArgumentException)() _
-                    .Where(Function(e) e.Message.StartsWith(SR.Network_BadConnectionTimeout))
-                File.Exists(destinationFileName).Should.BeFalse()
-            Finally
-                CleanUpListener(listener)
-            End Try
+
+            testCode.Should() _
+                .Throw(Of ArgumentException)() _
+                .Where(Function(e) e.Message.StartsWith(SR.Network_BadConnectionTimeout))
+            VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
         <WinFormsFact>
@@ -1203,15 +1123,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         connectionTimeout:=TestingConnectionTimeout,
                         overwrite:=False)
                 End Sub
-            Try
-                testCode.Should() _
-                    .Throw(Of ArgumentException)() _
-                    .Where(Function(e) e.Message.StartsWith(
-                        value:=SR.Network_InvalidUriString.Replace("{0}", "invalidURL")))
-                File.Exists(destinationFileName).Should.BeFalse()
-            Finally
-                CleanUpListener(listener)
-            End Try
+
+            testCode.Should() _
+                .Throw(Of ArgumentException)() _
+                .Where(Function(e) e.Message.StartsWith(
+                    value:=SR.Network_InvalidUriString.Replace("{0}", "invalidURL")))
+            VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
         <WinFormsFact>
@@ -1233,9 +1150,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 End Sub
 
             testCode.Should.NotThrow()
-            ValidateDownload(destinationFileName).Should.Be(DownloadSmallFileSize)
-
-            CleanUpListener(listener)
+            VerifyAndCleanupSuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
+                .Be(DownloadSmallFileSize)
         End Sub
 
         <WinFormsFact>
@@ -1246,7 +1162,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 fileSize:=DownloadSmallFileSize,
                 userName:=DefaultUserName,
                 password:=DefaultPassword)
-
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim networkCredentials As New NetworkCredential(DefaultUserName, DefaultPassword)
             Dim testCode As Action =
@@ -1262,10 +1177,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 End Sub
 
             testCode.Should.NotThrow()
-            Directory.Exists(testDirectory).Should.BeTrue()
-            ValidateDownload(destinationFileName).Should.Be(DownloadSmallFileSize)
-
-            CleanUpListener(listener)
+            VerifyAndCleanupSuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
+                .Be(DownloadSmallFileSize)
         End Sub
 
         <WinFormsFact>
@@ -1285,17 +1198,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         connectionTimeout:=TestingConnectionTimeout,
                         overwrite:=False)
                 End Sub
-            Try
-                Dim value As String = SR.Network_InvalidUriString.Replace("{0}", "invalidURL")
-                testCode.Should _
+
+            Dim value As String = SR.Network_InvalidUriString.Replace("{0}", "invalidURL")
+            testCode.Should() _
                     .Throw(Of ArgumentException)() _
                     .Where(Function(e) e.Message.StartsWith(value))
-
-                Directory.Exists(testDirectory).Should.BeTrue()
-                File.Exists(destinationFileName).Should.BeFalse()
-            Finally
-                CleanUpListener(listener)
-            End Try
+            VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
         <WinFormsTheory>
@@ -1315,14 +1223,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         overwrite:=False,
                         onUserCancel:=UICancelOption.DoNothing)
                 End Sub
-            Try
-                testCode.Should _
-                    .Throw(Of ArgumentNullException)() _
-                    .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
-                File.Exists(destinationFileName).Should.BeFalse()
-            Finally
-                CleanUpListener(listener)
-            End Try
+
+            testCode.Should() _
+                .Throw(Of ArgumentNullException)() _
+                .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
+            VerifyAndCleanupFailedDownload(testDirectory:=Nothing, destinationFileName, listener)
         End Sub
 
         <WinFormsTheory>
@@ -1345,17 +1250,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         overwrite:=True,
                         onUserCancel:=UICancelOption.DoNothing)
                 End Sub
+
             Dim exceptionExpression As Expressions.Expression(Of Func(Of ArgumentException, Boolean)) =
                 Function(e) e.Message.StartsWith(SR.IO_FilePathException) _
                     AndAlso e.Message.Contains(NameOf(destinationFileName))
-            Try
-                testCode.Should _
-                    .Throw(Of ArgumentException)() _
-                    .Where(exceptionExpression)
-                File.Exists(destinationFileName).Should.BeFalse()
-            Finally
-                CleanUpListener(listener)
-            End Try
+            testCode.Should() _
+                .Throw(Of ArgumentException)() _
+                .Where(exceptionExpression)
+            VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
         <WinFormsTheory>
@@ -1378,17 +1280,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         overwrite:=True,
                         onUserCancel:=UICancelOption.DoNothing)
                 End Sub
+
             Dim exceptionExpression As Expressions.Expression(Of Func(Of ArgumentException, Boolean)) =
                 Function(e) e.Message.StartsWith(SR.IO_FilePathException) _
                     AndAlso e.Message.Contains(NameOf(destinationFileName))
-            Try
-                testCode.Should() _
-                    .Throw(Of ArgumentException)() _
-                    .Where(exceptionExpression)
-                File.Exists(destinationFileName).Should.BeFalse()
-            Finally
-                CleanUpListener(listener)
-            End Try
+            testCode.Should() _
+                .Throw(Of ArgumentException)() _
+                .Where(exceptionExpression)
+            VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
         <WinFormsFact>
@@ -1411,10 +1310,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 End Sub
 
             testCode.Should.NotThrow()
-            Directory.Exists(testDirectory).Should.BeTrue()
-            ValidateDownload(destinationFileName).Should.Be(DownloadSmallFileSize)
-
-            CleanUpListener(listener)
+            VerifyAndCleanupSuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
+                .Be(DownloadSmallFileSize)
         End Sub
 
         <WinFormsTheory>
@@ -1437,14 +1334,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         overwrite:=True,
                         onUserCancel:=UICancelOption.DoNothing)
                 End Sub
-            Try
-                testCode.Should _
-                    .Throw(Of InvalidOperationException)() _
-                    .Where(Function(e) e.Message.StartsWith(SR.Network_DownloadNeedsFilename))
-                File.Exists(destinationFileName).Should.BeFalse()
-            Finally
-                CleanUpListener(listener)
-            End Try
+
+            testCode.Should() _
+                .Throw(Of InvalidOperationException)() _
+                .Where(Function(e) e.Message.StartsWith(SR.Network_DownloadNeedsFilename))
+            VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
         <WinFormsTheory>
@@ -1467,17 +1361,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         overwrite:=True,
                         onUserCancel:=UICancelOption.DoNothing)
                 End Sub
+
             Dim exceptionExpression As Expressions.Expression(Of Func(Of ArgumentException, Boolean)) =
                 Function(e) e.Message.StartsWith(SR.IO_FilePathException) _
                     AndAlso e.Message.Contains(NameOf(destinationFileName))
-            Try
-                testCode.Should() _
-                    .Throw(Of ArgumentException)() _
-                    .Where(exceptionExpression)
-                File.Exists(destinationFileName).Should.BeFalse()
-            Finally
-                CleanUpListener(listener)
-            End Try
+            testCode.Should() _
+                .Throw(Of ArgumentException)() _
+                .Where(exceptionExpression)
+            VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
         <WinFormsFact>
@@ -1501,10 +1392,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
               End Sub
 
             testCode.Should.NotThrow()
-            Directory.Exists(testDirectory).Should.BeTrue()
-            ValidateDownload(destinationFileName).Should.Be(DownloadSmallFileSize)
-
-            CleanUpListener(listener)
+            VerifyAndCleanupSuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
+                .Be(DownloadSmallFileSize)
         End Sub
 
         <WinFormsFact>
@@ -1525,14 +1414,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         overwrite:=False,
                         onUserCancel:=UICancelOption.DoNothing)
                 End Sub
-            Try
-                testCode.Should _
-                    .Throw(Of ArgumentNullException)() _
-                    .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
-                File.Exists(destinationFileName).Should.BeFalse()
-            Finally
-                CleanUpListener(listener)
-            End Try
+
+            testCode.Should() _
+                .Throw(Of ArgumentNullException)() _
+                .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
+            VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
         <WinFormsFact>
@@ -1555,9 +1441,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 End Sub
 
             testCode.Should.NotThrow()
-            Directory.Exists(testDirectory).Should.BeTrue()
-            ValidateDownload(destinationFileName).Should.Be(DownloadSmallFileSize)
-            CleanUpListener(listener)
+            VerifyAndCleanupSuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
+                .Be(DownloadSmallFileSize)
         End Sub
 
         <WinFormsFact>
@@ -1578,14 +1463,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         overwrite:=True,
                         onUserCancel:=UICancelOption.DoNothing)
                 End Sub
-            Try
-                testCode.Should _
-                    .Throw(Of InvalidOperationException)() _
-                    .WithMessage(SR.Network_DownloadNeedsFilename)
-                File.Exists(destinationFileName).Should.BeFalse()
-            Finally
-                CleanUpListener(listener)
-            End Try
+
+            testCode.Should() _
+                .Throw(Of InvalidOperationException)() _
+                .WithMessage(SR.Network_DownloadNeedsFilename)
+            VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
         <WinFormsFact>
@@ -1596,7 +1478,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 fileSize:=DownloadSmallFileSize,
                 userName:=DefaultUserName,
                 password:=DefaultPassword)
-
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
                 Sub()
@@ -1606,13 +1487,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         userName:=DefaultUserName,
                         password:=DefaultPassword)
                 End Sub
-            Try
-                testCode.Should.NotThrow()
-                Directory.Exists(testDirectory).Should.BeTrue()
-                ValidateDownload(destinationFileName).Should.Be(DownloadSmallFileSize)
-            Finally
-                CleanUpListener(listener)
-            End Try
+
+            testCode.Should.NotThrow()
+            VerifyAndCleanupSuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
+                .Be(DownloadSmallFileSize)
         End Sub
 
         <WinFormsTheory>
@@ -1625,7 +1503,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 fileSize:=DownloadSmallFileSize,
                 userName:=DefaultUserName,
                 password:=String.Empty)
-
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
                 Sub()
@@ -1635,14 +1512,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         userName:=DefaultUserName,
                         password)
                 End Sub
-            Try
-                testCode.Should _
-                    .Throw(Of WebException)() _
-                    .WithMessage(SR_net_webstatus_Unauthorized)
-                File.Exists(destinationFileName).Should.BeFalse()
-            Finally
-                CleanUpListener(listener)
-            End Try
+
+            testCode.Should() _
+                .Throw(Of WebException)() _
+                .WithMessage(SR_net_webstatus_Unauthorized)
+            VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
         <WinFormsTheory>
@@ -1655,7 +1529,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 fileSize:=DownloadSmallFileSize,
                 userName:=DefaultUserName,
                 password:=DefaultPassword)
-
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
                 Sub()
@@ -1665,14 +1538,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         userName:=DefaultUserName,
                         password)
                 End Sub
-            Try
-                testCode.Should _
-                    .Throw(Of WebException)() _
-                    .WithMessage(SR_net_webstatus_Unauthorized)
-                File.Exists(destinationFileName).Should.BeFalse()
-            Finally
-                CleanUpListener(listener)
-            End Try
+
+            testCode.Should() _
+                .Throw(Of WebException)() _
+                .WithMessage(SR_net_webstatus_Unauthorized)
+            VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
     End Class
