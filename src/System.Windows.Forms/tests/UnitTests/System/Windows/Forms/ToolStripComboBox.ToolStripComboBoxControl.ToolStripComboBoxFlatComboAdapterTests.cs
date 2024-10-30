@@ -10,15 +10,10 @@ namespace System.Windows.Forms.Tests;
 
 public class ToolStripComboBox_ToolStripComboBoxFlatComboAdapterTests : IDisposable
 {
-    private ToolStripComboBox.ToolStripComboBoxControl? _comboBox;
-    private ToolStripComboBox.ToolStripComboBoxControl.ToolStripComboBoxFlatComboAdapter? _adapter;
+    private readonly ToolStripComboBox.ToolStripComboBoxControl _comboBox;
+    private readonly ToolStripComboBox.ToolStripComboBoxControl.ToolStripComboBoxFlatComboAdapter _adapter;
 
-    public void Dispose()
-    {
-        _adapter = null;
-        _comboBox?.Dispose();
-        _comboBox = null;
-    }
+    public void Dispose() => _comboBox.Dispose();
 
     public ToolStripComboBox_ToolStripComboBoxFlatComboAdapterTests()
     {
@@ -34,34 +29,42 @@ public class ToolStripComboBox_ToolStripComboBoxFlatComboAdapterTests : IDisposa
 
     [WinFormsTheory]
     [BoolData]
-    public void UseBaseAdapter_ReturnsExpected(bool isToolStripComboBoxControl)
+    public void UseBaseAdapter_ReturnsTrue_ForToolStripComboBoxControl(bool isToolStripComboBoxControl)
     {
-        ComboBox comboBox = isToolStripComboBoxControl
-            ? new ToolStripComboBox.ToolStripComboBoxControl()
-            : new ComboBox();
+        if (!isToolStripComboBoxControl)
+        {
+            return;
+        }
 
+        using ToolStripComboBox.ToolStripComboBoxControl comboBox = new();
+        bool result = (bool)typeof(ToolStripComboBox.ToolStripComboBoxControl.ToolStripComboBoxFlatComboAdapter)
+            .TestAccessor().Dynamic.UseBaseAdapter(comboBox);
+
+        result.Should().BeTrue();
+    }
+
+    [WinFormsTheory]
+    [BoolData]
+    public void UseBaseAdapter_ThrowsException_ForNonToolStripComboBoxControl(bool isToolStripComboBoxControl)
+    {
         if (isToolStripComboBoxControl)
         {
-            bool result = (bool)typeof(ToolStripComboBox.ToolStripComboBoxControl.ToolStripComboBoxFlatComboAdapter)
-                .TestAccessor().Dynamic.UseBaseAdapter(comboBox);
-
-            result.Should().BeTrue();
+            return;
         }
-        else
-        {
-            Action action = () => typeof(ToolStripComboBox.ToolStripComboBoxControl.ToolStripComboBoxFlatComboAdapter)
-                .TestAccessor().Dynamic.UseBaseAdapter(comboBox);
 
-            action.Should().Throw<TargetInvocationException>()
-                .WithInnerException<InvalidOperationException>()
-                .WithMessage("Why are we here and not a toolstrip combo?");
-        }
+        using ComboBox comboBox = new();
+        Action action = () => typeof(ToolStripComboBox.ToolStripComboBoxControl.ToolStripComboBoxFlatComboAdapter)
+            .TestAccessor().Dynamic.UseBaseAdapter(comboBox);
+
+        action.Should().Throw<TargetInvocationException>()
+            .WithInnerException<InvalidOperationException>()
+            .WithMessage("Why are we here and not a toolstrip combo?");
     }
 
     [WinFormsFact]
     public void GetColorTable_ReturnsExpected()
     {
-        ProfessionalColorTable colorTable = (ProfessionalColorTable)_adapter!.TestAccessor().Dynamic.GetColorTable(_comboBox!);
+        var colorTable = (ProfessionalColorTable)_adapter.TestAccessor().Dynamic.GetColorTable(_comboBox);
 
         colorTable.Should().NotBeNull();
         colorTable.Should().BeOfType<ProfessionalColorTable>();
@@ -72,9 +75,9 @@ public class ToolStripComboBox_ToolStripComboBoxFlatComboAdapterTests : IDisposa
     [InlineData(false, KnownColor.ControlDark)]
     public void GetOuterBorderColor_ReturnsExpected(bool enabled, KnownColor expectedColor)
     {
-        _comboBox!.Enabled = enabled;
+        _comboBox.Enabled = enabled;
 
-        Color result = (Color)_adapter!.TestAccessor().Dynamic.GetOuterBorderColor(_comboBox);
+        Color result = (Color)_adapter.TestAccessor().Dynamic.GetOuterBorderColor(_comboBox);
 
         result.Should().Be(Color.FromKnownColor(expectedColor));
     }
@@ -86,9 +89,9 @@ public class ToolStripComboBox_ToolStripComboBoxFlatComboAdapterTests : IDisposa
     [InlineData(false, false, KnownColor.ControlDark)]
     public void GetPopupOuterBorderColor_ReturnsExpected(bool enabled, bool focused, KnownColor expectedColor)
     {
-        _comboBox!.Enabled = enabled;
+        _comboBox.Enabled = enabled;
 
-        Color result = (Color)_adapter!.TestAccessor().Dynamic.GetPopupOuterBorderColor(_comboBox, focused);
+        Color result = (Color)_adapter.TestAccessor().Dynamic.GetPopupOuterBorderColor(_comboBox, focused);
 
         result.Should().Be(Color.FromKnownColor(expectedColor));
     }
@@ -100,7 +103,7 @@ public class ToolStripComboBox_ToolStripComboBoxFlatComboAdapterTests : IDisposa
         using Graphics graphics = Graphics.FromImage(bitmap);
         Rectangle dropDownRect = new(0, 0, 100, 100);
 
-        _adapter!.TestAccessor().Dynamic.DrawFlatComboDropDown(_comboBox!, graphics, dropDownRect);
+        _adapter.TestAccessor().Dynamic.DrawFlatComboDropDown(_comboBox, graphics, dropDownRect);
 
         bitmap.GetPixel(50, 50).Should().NotBe(Color.Empty);
     }
