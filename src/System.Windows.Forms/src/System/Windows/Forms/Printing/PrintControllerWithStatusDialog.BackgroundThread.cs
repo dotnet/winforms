@@ -87,7 +87,7 @@ public partial class PrintControllerWithStatusDialog
         private void ThreadUnsafeUpdateLabel()
         {
             // "page {0} of {1}"
-            _dialog!._cancellingLabel.Text = string.Format(
+            _dialog!._cancellingTextBox.Text = string.Format(
                 SR.PrintControllerWithStatusDialog_NowPrinting,
                 _parent._pageNumber,
                 _parent._document?.DocumentName);
