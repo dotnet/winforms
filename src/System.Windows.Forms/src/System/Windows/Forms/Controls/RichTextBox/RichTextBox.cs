@@ -391,7 +391,7 @@ public partial class RichTextBox : TextBoxBase
         get => base.Font;
         set
         {
-            if (!IsHandleCreated || PInvoke.GetWindowTextLength(this) <= 0)
+            if (!IsHandleCreated || PInvokeCore.GetWindowTextLength(this) <= 0)
             {
                 base.Font = value;
                 return;
@@ -1965,7 +1965,7 @@ public partial class RichTextBox : TextBoxBase
             return -1;
         }
 
-        textLength = PInvoke.GetWindowTextLength(this);
+        textLength = PInvokeCore.GetWindowTextLength(this);
         if (start == end)
         {
             start = 0;
@@ -3392,7 +3392,7 @@ public partial class RichTextBox : TextBoxBase
             LRESULT compMode = PInvokeCore.SendMessage(this, PInvokeCore.EM_GETIMECOMPMODE);
             if (compMode != PInvoke.ICM_NOTOPEN)
             {
-                int textLength = PInvoke.GetWindowTextLength(this);
+                int textLength = PInvokeCore.GetWindowTextLength(this);
                 if (selStart == selEnd && textLength == MaxLength)
                 {
                     PInvokeCore.SendMessage(this, PInvokeCore.WM_KILLFOCUS);

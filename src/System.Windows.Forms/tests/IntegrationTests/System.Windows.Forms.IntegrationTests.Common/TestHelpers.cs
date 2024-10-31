@@ -442,7 +442,7 @@ public static class TestHelpers
 
         HWND foregroundWindow = PInvokeCore.GetForegroundWindow();
 
-        string windowTitle = PInvoke.GetWindowText(foregroundWindow);
+        string windowTitle = PInvokeCore.GetWindowText(foregroundWindow);
 
         if (PInvoke.GetWindowThreadProcessId(foregroundWindow, out uint processId) == 0 ||
             processId != process.Id)

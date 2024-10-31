@@ -270,7 +270,7 @@ public sealed partial class BehaviorService : IDisposable
         }
 
         Point pt = new(c.Left, c.Top);
-        PInvoke.MapWindowPoints(c.Parent, _adornerWindow, ref pt);
+        PInvokeCore.MapWindowPoints(c.Parent, _adornerWindow, ref pt);
         if (c.Parent.IsMirrored)
         {
             pt.X -= c.Width;
@@ -284,7 +284,7 @@ public sealed partial class BehaviorService : IDisposable
     /// </summary>
     public Point MapAdornerWindowPoint(IntPtr handle, Point pt)
     {
-        PInvoke.MapWindowPoints((HWND)handle, _adornerWindow, ref pt);
+        PInvokeCore.MapWindowPoints((HWND)handle, _adornerWindow, ref pt);
         return pt;
     }
 

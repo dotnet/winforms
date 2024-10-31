@@ -116,7 +116,6 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                         externalToken.ThrowIfCancellationRequested()
                     ElseIf ex.CancellationToken = _cancelTokenSourceGet.Token Then
                         ' a real cancellation, triggered by the caller
-                        ' a real cancellation, triggered by the caller
                         Throw
                     Else
                         Throw New WebException(SR.net_webstatus_Timeout, WebExceptionStatus.Timeout)

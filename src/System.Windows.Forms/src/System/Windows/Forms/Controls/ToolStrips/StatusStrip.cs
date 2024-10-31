@@ -586,7 +586,7 @@ public partial class StatusStrip : ToolStrip
                         gripLocation = new Point(SizeGripBounds.Right, SizeGripBounds.Bottom);
                     }
 
-                    PInvoke.MapWindowPoints(this, rootHwnd, ref gripLocation);
+                    PInvokeCore.MapWindowPoints(this, rootHwnd, ref gripLocation);
 
                     int deltaBottomEdge = Math.Abs(rootHwndClientArea.bottom - gripLocation.Y);
                     int deltaRightEdge = Math.Abs(rootHwndClientArea.right - gripLocation.X);
