@@ -3,6 +3,7 @@
 
 Imports System.Net
 Imports System.Net.Http
+Imports System.Threading
 Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.MyServices.Internal
@@ -26,6 +27,7 @@ Namespace Microsoft.VisualBasic.Devices
         '''  Indicates whether or not the file should be overwritten if local file already exists.
         ''' </param>
         ''' <param name="onUserCancel"></param>
+        ''' <param name="cancelToken"><see cref="CancellationToken"/></param>
         Friend Shared Function DownloadFileAsync(
             addressUri As Uri,
             destinationFileName As String,
@@ -33,19 +35,21 @@ Namespace Microsoft.VisualBasic.Devices
             dialog As ProgressDialog,
             connectionTimeout As Integer,
             overwrite As Boolean,
-            onUserCancel As UICancelOption) As Task
+            onUserCancel As UICancelOption,
+            Optional cancelToken As CancellationToken = Nothing) As Task
 
             Dim clientHandler As HttpClientHandler = If(networkCredentials Is Nothing,
                                                         New HttpClientHandler,
                                                         New HttpClientHandler With {.Credentials = networkCredentials}
                                                        )
             Return DownloadFileAsync(addressUri,
-                    destinationFileName,
-                    clientHandler,
-                    dialog,
-                    connectionTimeout,
-                    overwrite,
-                    onUserCancel)
+                destinationFileName,
+                clientHandler,
+                dialog,
+                connectionTimeout,
+                overwrite,
+                onUserCancel,
+                cancelToken)
         End Function
 
         ''' <summary>
@@ -60,6 +64,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="overwrite">
         '''  Indicates whether or not the file should be overwritten if local file already exists.
         ''' </param>
+        ''' <param name="cancelToken"><see cref="CancellationToken"/></param>
         Friend Shared Async Function DownloadFileAsync(
             addressUri As Uri,
             destinationFileName As String,
@@ -67,7 +72,8 @@ Namespace Microsoft.VisualBasic.Devices
             password As String,
             dialog As ProgressDialog,
             connectionTimeout As Integer,
-            overwrite As Boolean) As Task
+            overwrite As Boolean,
+            Optional cancelToken As CancellationToken = Nothing) As Task
 
             Dim networkCredentials As ICredentials = GetNetworkCredentials(userName, password)
 
@@ -78,7 +84,8 @@ Namespace Microsoft.VisualBasic.Devices
                 dialog,
                 connectionTimeout,
                 overwrite,
-                onUserCancel:=UICancelOption.ThrowException).ConfigureAwait(continueOnCapturedContext:=False)
+                onUserCancel:=UICancelOption.ThrowException,
+                cancelToken).ConfigureAwait(continueOnCapturedContext:=False)
         End Function
 
 #If False Then ' This is here of API review determains its needed
@@ -98,7 +105,8 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="onUserCancel">
         '''  Indicates what to do if user cancels dialog (either throw or do nothing).
         ''' </param>
-        Friend Shared Async Function DownloadFileAsync(
+         ''' <param name="cancelToken"><see cref="CancellationToken"/></param>
+       Friend Shared Async Function DownloadFileAsync(
             addressUri As Uri,
             destinationFileName As String,
             userName As String,
@@ -106,7 +114,8 @@ Namespace Microsoft.VisualBasic.Devices
             dialog As ProgressDialog,
             connectionTimeout As Integer,
             overwrite As Boolean,
-            onUserCancel As UICancelOption) As Task
+            onUserCancel As UICancelOption,
+            Optional cancelToken As CancellationToken = Nothing) As Task
 
             ' Get network credentials
             Dim networkCredentials As ICredentials = GetNetworkCredentials(userName, password)
@@ -118,7 +127,8 @@ Namespace Microsoft.VisualBasic.Devices
                 dialog,
                 connectionTimeout,
                 overwrite,
-                onUserCancel).ConfigureAwait(continueOnCapturedContext:=False)
+                onUserCancel
+                cancelToken).ConfigureAwait(continueOnCapturedContext:=False)
         End Function
 #End If
 
@@ -136,6 +146,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="onUserCancel">
         '''  Indicates what to do if user cancels dialog (either throw or do nothing).
         ''' </param>
+        ''' <param name="cancelToken"><see cref="CancellationToken"/></param>
         ''' <remarks>Calls to all the other overloads will come through here.</remarks>
         Friend Shared Async Function DownloadFileAsync(
             addressUri As Uri,
@@ -144,7 +155,12 @@ Namespace Microsoft.VisualBasic.Devices
             dialog As ProgressDialog,
             connectionTimeout As Integer,
             overwrite As Boolean,
-            onUserCancel As UICancelOption) As Task
+            onUserCancel As UICancelOption,
+            cancelToken As CancellationToken) As Task
+
+            If cancelToken = Nothing Then
+                cancelToken = New CancellationTokenSource().Token
+            End If
 
             If connectionTimeout <= 0 Then
                 Throw VbUtils.GetArgumentExceptionWithArgName(
@@ -200,8 +216,8 @@ Namespace Microsoft.VisualBasic.Devices
             Try
                 Await copier.DownloadFileWorkerAsync(
                     addressUri,
-                    normalizedFilePath) _
-                        .ConfigureAwait(continueOnCapturedContext:=False)
+                    normalizedFilePath,
+                    externalToken:=cancelToken).ConfigureAwait(continueOnCapturedContext:=False)
             Catch ex As Exception
                 If onUserCancel = UICancelOption.ThrowException _
                    OrElse Not dialog.UserCanceledTheDialog Then
@@ -223,6 +239,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="overwrite">
         '''  Indicates whether or not the file should be overwritten if local file already exists.
         ''' </param>
+        ''' <param name="cancelToken"><see cref="CancellationToken"/></param>
         Friend Shared Async Function DownloadFileAsync(
             address As String,
             destinationFileName As String,
@@ -230,7 +247,8 @@ Namespace Microsoft.VisualBasic.Devices
             password As String,
             dialog As ProgressDialog,
             connectionTimeout As Integer,
-            overwrite As Boolean) As Task
+            overwrite As Boolean,
+            Optional cancelToken As CancellationToken = Nothing) As Task
 
             Await DownloadFileAsync(
                 address,
@@ -240,7 +258,8 @@ Namespace Microsoft.VisualBasic.Devices
                 dialog,
                 connectionTimeout,
                 overwrite,
-                onUserCancel:=UICancelOption.ThrowException).ConfigureAwait(continueOnCapturedContext:=False)
+                onUserCancel:=UICancelOption.ThrowException,
+                cancelToken).ConfigureAwait(continueOnCapturedContext:=False)
         End Function
 
         ''' <summary>
@@ -258,6 +277,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="onUserCancel">
         '''  Indicates what to do if user cancels dialog (either throw or do nothing).
         ''' </param>
+        ''' <param name="cancelToken"><see cref="CancellationToken"/></param>
         Friend Shared Async Function DownloadFileAsync(
             address As String,
             destinationFileName As String,
@@ -266,7 +286,8 @@ Namespace Microsoft.VisualBasic.Devices
             dialog As ProgressDialog,
             connectionTimeout As Integer,
             overwrite As Boolean,
-            onUserCancel As UICancelOption) As Task
+            onUserCancel As UICancelOption,
+            Optional cancelToken As CancellationToken = Nothing) As Task
 
             If String.IsNullOrWhiteSpace(address) Then
                 Throw VbUtils.GetArgumentNullException(NameOf(address))
@@ -284,7 +305,8 @@ Namespace Microsoft.VisualBasic.Devices
                 dialog,
                 connectionTimeout,
                 overwrite,
-                onUserCancel).ConfigureAwait(continueOnCapturedContext:=False)
+                onUserCancel,
+                cancelToken).ConfigureAwait(continueOnCapturedContext:=False)
         End Function
 
         ''' <summary>
@@ -298,6 +320,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="overwrite">
         '''  Indicates whether or not the file should be overwritten if local file already exists.
         ''' </param>
+        ''' <param name="cancelToken"><see cref="CancellationToken"/></param>
         ''' <remarks>
         '''  Function will Throw on unhandled exceptions.
         ''' </remarks>
@@ -307,7 +330,8 @@ Namespace Microsoft.VisualBasic.Devices
             networkCredentials As ICredentials,
             dialog As ProgressDialog,
             connectionTimeout As Integer,
-            overwrite As Boolean) As Task
+            overwrite As Boolean,
+            Optional cancelToken As CancellationToken = Nothing) As Task
 
             Await DownloadFileAsync(
                 addressUri,
@@ -316,7 +340,8 @@ Namespace Microsoft.VisualBasic.Devices
                 dialog,
                 connectionTimeout,
                 overwrite,
-                onUserCancel:=UICancelOption.ThrowException).ConfigureAwait(continueOnCapturedContext:=False)
+                onUserCancel:=UICancelOption.ThrowException,
+                cancelToken).ConfigureAwait(continueOnCapturedContext:=False)
         End Function
 
     End Class

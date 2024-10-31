@@ -74,6 +74,8 @@ FDEX_PROP_FLAGS
 FILETIME
 GetCurrentThreadId
 GetSysColorBrush
+GetWindowText
+GetWindowTextLength
 GdipBitmapLockBits
 GdipBitmapUnlockBits
 GdipCreateFromHWND
@@ -156,6 +158,7 @@ LoadIcon
 LoadRegTypeLib
 LPARAM
 LRESULT
+MapWindowPoints
 MAX_PATH
 MonitorFromPoint
 MonitorFromRect

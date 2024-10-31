@@ -51,7 +51,7 @@ public partial class ComboBox
 
                 // Translate the item rect to screen coordinates
                 RECT translated = itemRect;
-                PInvoke.MapWindowPoints(listHandle, HWND.Null, ref translated);
+                PInvokeCore.MapWindowPoints(listHandle, HWND.Null, ref translated);
                 return translated;
             }
         }

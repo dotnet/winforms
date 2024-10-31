@@ -158,7 +158,7 @@ internal sealed partial class WindowsFormsUtils
         }
 
 #if DEBUG
-        string windowText = PInvoke.GetWindowText(hwnd);
+        string windowText = PInvokeCore.GetWindowText(hwnd);
         string typeOfControl = "Unknown";
         string nameOfControl = "";
         Control? c = Control.FromHandle(hwnd);
@@ -283,7 +283,7 @@ internal sealed partial class WindowsFormsUtils
     /// </remarks>
     public static Point TranslatePoint(Point point, Control fromControl, Control toControl)
     {
-        PInvoke.MapWindowPoints(fromControl, toControl, ref point);
+        PInvokeCore.MapWindowPoints(fromControl, toControl, ref point);
         return point;
     }
 
