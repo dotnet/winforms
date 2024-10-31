@@ -3581,7 +3581,7 @@ public unsafe partial class Control :
             }
 
             using var scope = MultithreadSafeCallScope.Create();
-            return PInvoke.GetWindowText(this);
+            return PInvokeCore.GetWindowText(this);
         }
         set
         {
@@ -8462,7 +8462,7 @@ public unsafe partial class Control :
     /// </summary>
     public Point PointToClient(Point p)
     {
-        PInvoke.MapWindowPoints((HWND)default, this, ref p);
+        PInvokeCore.MapWindowPoints((HWND)default, this, ref p);
         return p;
     }
 
@@ -8471,7 +8471,7 @@ public unsafe partial class Control :
     /// </summary>
     public Point PointToScreen(Point p)
     {
-        PInvoke.MapWindowPoints(this, (HWND)default, ref p);
+        PInvokeCore.MapWindowPoints(this, (HWND)default, ref p);
         return p;
     }
 
@@ -9250,7 +9250,7 @@ public unsafe partial class Control :
     public Rectangle RectangleToClient(Rectangle r)
     {
         RECT rect = r;
-        PInvoke.MapWindowPoints(HWND.Null, this, ref rect);
+        PInvokeCore.MapWindowPoints(HWND.Null, this, ref rect);
         return rect;
     }
 
@@ -9260,7 +9260,7 @@ public unsafe partial class Control :
     public Rectangle RectangleToScreen(Rectangle r)
     {
         RECT rect = r;
-        PInvoke.MapWindowPoints(this, HWND.Null, ref rect);
+        PInvokeCore.MapWindowPoints(this, HWND.Null, ref rect);
         return rect;
     }
 
@@ -10721,7 +10721,7 @@ public unsafe partial class Control :
             PInvokeCore.GetWindowRect(this, out rect);
             if (!GetTopLevel())
             {
-                PInvoke.MapWindowPoints(HWND.Null, PInvoke.GetParent(this), ref rect);
+                PInvokeCore.MapWindowPoints(HWND.Null, PInvoke.GetParent(this), ref rect);
             }
         }
 

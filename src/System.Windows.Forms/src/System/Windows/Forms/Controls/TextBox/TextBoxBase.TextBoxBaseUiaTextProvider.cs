@@ -107,7 +107,7 @@ public abstract partial class TextBoxBase
 
             // Convert screen to client coordinates.
             // (Essentially ScreenToClient but MapWindowPoints accounts for window mirroring using WS_EX_LAYOUTRTL.)
-            if (PInvoke.MapWindowPoints((HWND)default, Owner, ref clientLocation) == 0)
+            if (PInvokeCore.MapWindowPoints((HWND)default, Owner, ref clientLocation) == 0)
             {
                 *pRetVal = ComHelpers.GetComPointer<ITextRangeProvider>(
                     new UiaTextRange(
