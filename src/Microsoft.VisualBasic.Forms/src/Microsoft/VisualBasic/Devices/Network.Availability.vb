@@ -31,7 +31,10 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         '''  Indicates whether or not the local machine is connected to an IP network.
         ''' </summary>
-        ''' <value>True if connected, otherwise False.</value>
+        ''' <value>
+        '''  <see langword="True"/> if connected,
+        '''  otherwise <see langword="False"/>.
+        ''' </value>
         Public ReadOnly Property IsAvailable() As Boolean
             Get
                 Return NetInfoAlias.NetworkInterface.GetIsNetworkAvailable()
@@ -39,7 +42,7 @@ Namespace Microsoft.VisualBasic.Devices
         End Property
 
         ''' <summary>
-        '''  Event fired when connected to the network.
+        '''  <see langword="Event"/> fired when connected to the network.
         ''' </summary>
         ''' <param name="Sender">Has no meaning for this event.</param>
         ''' <param name="e">Has no meaning for this event.</param>
@@ -133,11 +136,11 @@ Namespace Microsoft.VisualBasic.Devices
             SyncLock _syncObject
                 ' Ensure we don't handle events until after we've finished setting up the event
                 ' marshalling infrastructure. Don't call AsyncOperationManager.OperationSynchronizationContext.Post.
-                ' The reason we want to go through m_SynchronizationContext is that the
+                ' The reason we want to go through _synchronizationContext is that the
                 ' OperationSynchronizationContext is thread static. Since we are getting called on some random thread,
                 ' the context that was in place when the Network object was created won't be available
                 ' (it is on the original thread). To hang on to the original context associated with the thread
-                ' that the network object is created on, I use m_SynchronizationContext.
+                ' that the network object is created on, I use _synchronizationContext.
                 _synchronizationContext.Post(_networkAvailabilityChangedCallback, Nothing)
             End SyncLock
         End Sub

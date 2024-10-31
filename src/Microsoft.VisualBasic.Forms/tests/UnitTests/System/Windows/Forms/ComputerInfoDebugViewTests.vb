@@ -3,7 +3,6 @@
 
 Imports FluentAssertions
 Imports Microsoft.VisualBasic.Devices
-Imports Microsoft.VisualBasic.Devices.ComputerInfo
 Imports Xunit
 
 Namespace Microsoft.VisualBasic.Forms.Tests

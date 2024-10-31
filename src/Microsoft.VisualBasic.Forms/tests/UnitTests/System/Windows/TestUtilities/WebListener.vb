@@ -55,19 +55,19 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 listener.AuthenticationSchemes = AuthenticationSchemes.Basic
             End If
             listener.Start()
-            Task.Run(
+            Dim action As Action =
                 Sub()
                     ' Start the listener to begin listening for requests.
                     Dim response As HttpListenerResponse = Nothing
-
                     Try
                         ' Note: GetContext blocks while waiting for a request.
                         Dim context As HttpListenerContext = listener.GetContext()
                         ' Create the response.
                         response = context.Response
-                        Dim identity As HttpListenerBasicIdentity =
-                            CType(context.User?.Identity, HttpListenerBasicIdentity)
+
                         If context.User?.Identity.IsAuthenticated Then
+                            Dim identity As HttpListenerBasicIdentity =
+                                              CType(context.User?.Identity, HttpListenerBasicIdentity)
                             If String.IsNullOrWhiteSpace(identity.Name) _
                                 OrElse identity.Name <> _userName _
                                 OrElse String.IsNullOrWhiteSpace(identity.Password) _
@@ -82,12 +82,16 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         Dim responseString As String = Strings.StrDup(_fileSize, "A")
                         Dim buffer() As Byte = Text.Encoding.UTF8.GetBytes(responseString)
                         response.ContentLength64 = buffer.Length
-                        Dim output As Stream = response.OutputStream
-                        output.Write(buffer, 0, buffer.Length)
+                        Using output As Stream = response.OutputStream
+                            output.Write(buffer, offset:=0, count:=buffer.Length)
+                        End Using
                     Finally
                         response?.Close()
+                        response = Nothing
                     End Try
-                End Sub)
+                End Sub
+
+            Task.Run(action)
             Return listener
         End Function
 
