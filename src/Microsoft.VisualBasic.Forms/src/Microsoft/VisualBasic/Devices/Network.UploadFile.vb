@@ -264,7 +264,7 @@ Namespace Microsoft.VisualBasic.Devices
 
             sourceFileName = FileSystemUtils.NormalizeFilePath(sourceFileName, NameOf(sourceFileName))
 
-            'Make sure the file exists
+            ' Make sure the file exists
             If Not IO.File.Exists(sourceFileName) Then
                 Dim message As String = GetResourceString(SR.IO_FileNotFound_Path, sourceFileName)
                 Throw New IO.FileNotFoundException(message)
@@ -290,13 +290,13 @@ Namespace Microsoft.VisualBasic.Devices
 
                 Dim dialog As ProgressDialog = GetProgressDialog(address.AbsolutePath, sourceFileName, showUI)
 
-                'Create the copier
+                ' Create the copier
                 Dim copier As New WebClientCopy(client, dialog)
 
-                'Download the file
+                ' Download the file
                 copier.UploadFile(sourceFileName, address)
 
-                'Handle a dialog cancel
+                ' Handle a dialog cancel
                 If showUI AndAlso Environment.UserInteractive Then
                     If onUserCancel = UICancelOption.ThrowException And dialog.UserCanceledTheDialog Then
                         Throw New OperationCanceledException()
