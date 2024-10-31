@@ -163,7 +163,8 @@ Namespace Microsoft.VisualBasic.Devices
             overwrite As Boolean,
             onUserCancel As UICancelOption)
 
-            ' We're safe from DownloadFile(Nothing, ...) due to overload failure (DownloadFile(String,...) vs. DownloadFile(Uri,...)).
+            ' We're safe from DownloadFile(Nothing, ...) due to overload failure (DownloadFile(String,...) vs.
+            ' DownloadFile(Uri,...)).
             ' However, it is good practice to verify address before calling Trim.
             If String.IsNullOrWhiteSpace(address) Then
                 Throw VbUtils.GetArgumentNullException(NameOf(address))
@@ -177,8 +178,11 @@ Namespace Microsoft.VisualBasic.Devices
             Dim dialog As ProgressDialog = Nothing
             Try
                 If showUI AndAlso Environment.UserInteractive Then
-                    'Construct the local file. This will validate the full name and path
-                    Dim fullFilename As String = CompilerServices.FileSystemUtils.NormalizeFilePath(destinationFileName, NameOf(destinationFileName))
+                    ' Construct the local file. This will validate the full name and path
+                    Dim fullFilename As String = CompilerServices.FileSystemUtils.NormalizeFilePath(
+                        path:=destinationFileName,
+                        paramName:=NameOf(destinationFileName))
+
                     dialog = GetProgressDialog(address, destinationFileName, showUI)
                 End If
 
@@ -219,7 +223,9 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="networkCredentials">The credentials of the user performing the download.</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar.</param>
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
-        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists.</param>
+        ''' <param name="overwrite">
+        '''  Indicates whether or not the file should be overwritten if local file already exists.
+        ''' </param>
         ''' <remarks>Calls to all the other overloads will come through here.</remarks>
         Public Sub DownloadFile(
             address As Uri,
@@ -272,8 +278,12 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="networkCredentials">The credentials of the user performing the download.</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar.</param>
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
-        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists.</param>
-        ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing).</param>
+        ''' <param name="overwrite">
+        '''  Indicates whether or not the file should be overwritten if local file already exists.
+        ''' </param>
+        ''' <param name="onUserCancel">
+        '''  Indicates what to do if user cancels dialog (either throw or do nothing).
+        ''' </param>
         ''' <remarks>Calls to all the other overloads will come through here.</remarks>
         Public Sub DownloadFile(
             address As Uri,
@@ -285,7 +295,9 @@ Namespace Microsoft.VisualBasic.Devices
             onUserCancel As UICancelOption)
 
             If connectionTimeout <= 0 Then
-                Throw VbUtils.GetArgumentExceptionWithArgName(NameOf(connectionTimeout), SR.Network_BadConnectionTimeout)
+                Throw VbUtils.GetArgumentExceptionWithArgName(
+                    argumentName:=NameOf(connectionTimeout),
+                    resourceKey:=SR.Network_BadConnectionTimeout)
             End If
 
             If address Is Nothing Then
@@ -333,7 +345,9 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="password">The user's password.</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar.</param>
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
-        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists.</param>
+        ''' <param name="overwrite">
+        '''  Indicates whether or not the file should be overwritten if local file already exists.
+        ''' </param>
         Public Sub DownloadFile(
             address As Uri,
             destinationFileName As String,
@@ -390,8 +404,12 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="password">The user's password.</param>
         ''' <param name="showUI">Indicates whether or not to show a progress bar.</param>
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection.</param>
-        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists.</param>
-        ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing).</param>
+        ''' <param name="overwrite">
+        '''  Indicates whether or not the file should be overwritten if local file already exists.
+        ''' </param>
+        ''' <param name="onUserCancel">
+        '''  Indicates what to do if user cancels dialog (either throw or do nothing).
+        ''' </param>
         Public Sub DownloadFile(
             address As Uri,
             destinationFileName As String,
