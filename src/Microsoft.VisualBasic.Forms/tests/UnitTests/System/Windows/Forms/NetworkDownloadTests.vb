@@ -170,8 +170,33 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 End Sub
 
             testCode.Should.NotThrow()
-            VerifyAndCleanupSuccessfulDownload(testDirectory, destinationFileName, listener).Should _
+            VerifyAndCleanupSuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
                 .Be(DownloadSmallFileSize)
+        End Sub
+
+        <WinFormsTheory>
+        <NullAndEmptyStringData>
+        Public Sub DownloadFile_UriWithAllOptions_ExceptOnUserCancelWhereDestinationFileNameInvalidOverwrite_Throws(
+            destinationFileName As String)
+
+            Dim webListener As New WebListener(DownloadSmallFileSize)
+            Dim listener As HttpListener = webListener.ProcessRequests()
+            Dim testCode As Action =
+                Sub()
+                    My.Computer.Network.DownloadFile(
+                        address:=New Uri(webListener.Address),
+                        destinationFileName:=Nothing,
+                        userName:=String.Empty,
+                        password:=String.Empty,
+                        showUI:=True,
+                        connectionTimeout:=TestingConnectionTimeout,
+                        overwrite:=False)
+                End Sub
+
+            testCode.Should() _
+                .Throw(Of ArgumentNullException)() _
+                .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
+            VerifyAndCleanupFailedDownload(testDirectory:=Nothing, destinationFileName, listener)
         End Sub
 
         <WinFormsFact>
@@ -487,6 +512,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         connectionTimeout:=TestingConnectionTimeout,
                         overwrite:=False)
                 End Sub
+
             testCode.Should.Throw(Of UriFormatException)()
             VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
@@ -670,6 +696,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         overwrite:=True,
                         onUserCancel:=UICancelOption.DoNothing)
                 End Sub
+
             testCode.Should() _
                 .Throw(Of InvalidOperationException)() _
                 .Where(Function(e) e.Message.StartsWith(SR.Network_DownloadNeedsFilename))
@@ -1124,10 +1151,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         overwrite:=False)
                 End Sub
 
+            Dim value As String = SR.Network_InvalidUriString.Replace("{0}", "invalidURL")
             testCode.Should() _
                 .Throw(Of ArgumentException)() _
-                .Where(Function(e) e.Message.StartsWith(
-                    value:=SR.Network_InvalidUriString.Replace("{0}", "invalidURL")))
+                    .Where(Function(e) e.Message.StartsWith(value))
             VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
