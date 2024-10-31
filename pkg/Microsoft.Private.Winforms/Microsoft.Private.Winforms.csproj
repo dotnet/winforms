@@ -85,9 +85,6 @@
     <!-- Reference and Source System.Private.Windows.Core -->
     <ProjectReference Include="..\..\src\System.Private.Windows.Core\src\System.Private.Windows.Core.csproj" />
 
-    <!-- Reference and Source System.Private.Windows.Core.TestUtilities -->
-    <ProjectReference Include="..\..\src\Common\tests\TestUtilities\System.Private.Windows.Core.TestUtilities.csproj" />
-
     <!-- Reference and Source System.Windows.Forms.Primitives -->
     <ProjectReference Include="..\..\src\System.Windows.Forms.Primitives\src\System.Windows.Forms.Primitives.csproj" />
 

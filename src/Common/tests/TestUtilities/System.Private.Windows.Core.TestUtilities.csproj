@@ -5,6 +5,8 @@
     <RootNamespace>System</RootNamespace>
     <Nullable>enable</Nullable>
     <HasNoPublicIntellisense>true</HasNoPublicIntellisense>
+    <IsPackable>true</IsPackable>
+    <IsShipping>false</IsShipping>
   </PropertyGroup>
 
   <ItemGroup>
