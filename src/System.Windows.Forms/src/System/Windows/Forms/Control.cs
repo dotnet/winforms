@@ -4694,6 +4694,7 @@ public unsafe partial class Control :
             }
         }
 
+        ContextMenuStrip = null;
         ReflectParent = null;
         ContextMenuStrip = null;
 
