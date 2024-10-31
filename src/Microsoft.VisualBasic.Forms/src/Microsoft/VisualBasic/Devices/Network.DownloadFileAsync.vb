@@ -162,7 +162,6 @@ Namespace Microsoft.VisualBasic.Devices
                 cancelToken = New CancellationTokenSource().Token
             End If
 
-
             If connectionTimeout <= 0 Then
                 Throw VbUtils.GetArgumentExceptionWithArgName(
                     argumentName:=NameOf(connectionTimeout),
