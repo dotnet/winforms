@@ -61,7 +61,7 @@ internal sealed unsafe class LabelEditUiaTextProvider : UiaTextProvider
 
     public override SupportedTextSelection SupportedTextSelection => SupportedTextSelection.SupportedTextSelection_Single;
 
-    public override string Text => PInvoke.GetWindowText(_owningChildEdit);
+    public override string Text => PInvokeCore.GetWindowText(_owningChildEdit);
 
     public override int TextLength => (int)PInvokeCore.SendMessage(_owningChildEdit, PInvokeCore.WM_GETTEXTLENGTH);
 
@@ -225,7 +225,7 @@ internal sealed unsafe class LabelEditUiaTextProvider : UiaTextProvider
 
     public override Point PointToScreen(Point pt)
     {
-        PInvoke.MapWindowPoints(_owningChildEdit.Handle, HWND.Null, ref pt);
+        PInvokeCore.MapWindowPoints(_owningChildEdit.Handle, HWND.Null, ref pt);
         return pt;
     }
 
@@ -269,7 +269,7 @@ internal sealed unsafe class LabelEditUiaTextProvider : UiaTextProvider
 
         // Convert screen to client coordinates.
         // (Essentially ScreenToClient but MapWindowPoints accounts for window mirroring using WS_EX_LAYOUTRTL.)
-        if (PInvoke.MapWindowPoints(HWND.Null, _owningChildEdit.Handle, ref clientLocation) == 0)
+        if (PInvokeCore.MapWindowPoints(HWND.Null, _owningChildEdit.Handle, ref clientLocation) == 0)
         {
             *pRetVal = ComHelpers.GetComPointer<ITextRangeProvider>(
                 new UiaTextRange(
@@ -305,7 +305,7 @@ internal sealed unsafe class LabelEditUiaTextProvider : UiaTextProvider
     public override Rectangle RectangleToScreen(Rectangle rect)
     {
         RECT r = rect;
-        PInvoke.MapWindowPoints(_owningChildEdit.Handle, HWND.Null, ref r);
+        PInvokeCore.MapWindowPoints(_owningChildEdit.Handle, HWND.Null, ref r);
         return r;
     }
 

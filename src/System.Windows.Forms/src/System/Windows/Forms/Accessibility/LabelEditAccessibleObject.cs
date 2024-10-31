@@ -66,7 +66,7 @@ internal unsafe class LabelEditAccessibleObject : AccessibleObject
     };
 
     public override string? Name => _labelEdit.TryGetTarget(out var target)
-        ? PInvoke.GetWindowText(target)
+        ? PInvokeCore.GetWindowText(target)
         : null;
 
     private protected override bool IsInternal => true;

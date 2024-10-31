@@ -5,7 +5,7 @@ using System.Drawing;
 
 namespace Windows.Win32;
 
-internal static partial class PInvoke
+internal static partial class PInvokeCore
 {
     /// <inheritdoc cref="MapWindowPoints(HWND, HWND, Point*, uint)"/>
     public static unsafe int MapWindowPoints<TFrom, TTo>(TFrom hWndFrom, TTo hWndTo, ref RECT lpRect)

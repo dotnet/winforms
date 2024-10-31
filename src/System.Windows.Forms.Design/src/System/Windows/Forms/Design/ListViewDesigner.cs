@@ -83,7 +83,7 @@ internal class ListViewDesigner : ControlDesigner
                 HWND headerHwnd = (HWND)PInvokeCore.SendMessage(listView, PInvoke.LVM_GETHEADER);
                 if (hwndHit == headerHwnd)
                 {
-                    PInvoke.MapWindowPoints(HWND.Null, headerHwnd, ref point);
+                    PInvokeCore.MapWindowPoints(HWND.Null, headerHwnd, ref point);
                     _hdrhit.pt = point;
                     PInvokeCore.SendMessage(headerHwnd, PInvoke.HDM_HITTEST, 0, ref _hdrhit);
                     if (_hdrhit.flags == HEADER_HITTEST_INFO_FLAGS.HHT_ONDIVIDER)

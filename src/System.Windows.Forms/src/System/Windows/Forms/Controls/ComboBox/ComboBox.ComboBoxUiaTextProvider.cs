@@ -97,7 +97,7 @@ public partial class ComboBox
 
         public override string Text
             => _owningComboBox.IsHandleCreated
-                ? PInvoke.GetWindowText(_owningChildEdit)
+                ? PInvokeCore.GetWindowText(_owningChildEdit)
                 : string.Empty;
 
         public override int TextLength
@@ -292,7 +292,7 @@ public partial class ComboBox
 
         public override Point PointToScreen(Point pt)
         {
-            PInvoke.MapWindowPoints(_owningChildEdit, (HWND)default, ref pt);
+            PInvokeCore.MapWindowPoints(_owningChildEdit, (HWND)default, ref pt);
             return pt;
         }
 
@@ -342,7 +342,7 @@ public partial class ComboBox
 
             // Convert screen to client coordinates.
             // (Essentially ScreenToClient but MapWindowPoints accounts for window mirroring using WS_EX_LAYOUTRTL.)
-            if (PInvoke.MapWindowPoints((HWND)default, _owningChildEdit, ref clientLocation) == 0)
+            if (PInvokeCore.MapWindowPoints((HWND)default, _owningChildEdit, ref clientLocation) == 0)
             {
                 *pRetVal = ComHelpers.GetComPointer<ITextRangeProvider>(
                     new UiaTextRange(

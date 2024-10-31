@@ -34,7 +34,7 @@ public class GetWindowTextTests
             windowClass.BeforeGetTextLengthCallback = () => shortText;
         }
 
-        string result = PInvoke.GetWindowText(windowHandle);
+        string result = PInvokeCore.GetWindowText(windowHandle);
         PInvoke.DestroyWindow(windowHandle);
 
         Assert.Equal(longText, result);

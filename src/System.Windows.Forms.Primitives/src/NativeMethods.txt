@@ -239,8 +239,6 @@ GetViewportExtEx
 GetWindow
 GetWindowDpiAwarenessContext
 GetWindowPlacement
-GetWindowText
-GetWindowTextLength
 GetWindowThreadProcessId
 GetWorldTransform
 GMR_*
@@ -456,7 +454,6 @@ LVTILEVIEWINFO_FLAGS
 LVTILEVIEWINFO_MASK
 MA_*
 MapVirtualKey
-MapWindowPoints
 MAX_TAB_STOPS
 MCGRIDINFO
 MCGRIDINFO_FLAGS

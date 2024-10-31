@@ -333,7 +333,7 @@ public static partial class ToolStripManager
                 if (activeToolStrip is not null)
                 {
                     Point translatedLocation = location;
-                    PInvoke.MapWindowPoints(hwndMouseMessageIsFrom, activeToolStrip, ref translatedLocation);
+                    PInvokeCore.MapWindowPoints(hwndMouseMessageIsFrom, activeToolStrip, ref translatedLocation);
                     if (!activeToolStrip.ClientRectangle.Contains(translatedLocation))
                     {
                         if (activeToolStrip is ToolStripDropDown activeToolStripDropDown)
