@@ -17,6 +17,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Private Const DownloadLargeFileSize As Integer = 104_857_600
         Private Const DownloadSmallFileSize As Integer = 18_135
         Private Const InvalidUrlAddress As String = "invalidURL"
+        Private Const TestingConnectionTimeout As Integer = 100_000
 
         ' REVIEWER NOTE: The next 2 Constants need to be SR Resources,
         '                they are not accessible in this project they come from WebClient.
@@ -25,7 +26,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Private Const SR_net_webstatus_Unauthorized As String =
             "The remote server returned an error: (401) Unauthorized."
 
-        Private Const TestingConnectionTimeout As Integer = 100_000
 
         Private Shared Sub CleanUpListener(listener As HttpListener)
             listener.Stop()
