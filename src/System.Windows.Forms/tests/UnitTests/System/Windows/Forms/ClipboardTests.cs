@@ -979,7 +979,7 @@ public class ClipboardTests
 
         stream.Should().NotBeNull();
         // Use NrbfDecoder to decode the stream and rehydrate the type.
-        SerializationRecord record = NrbfDecoder.Decode(stream, leaveOpen: true);
+        SerializationRecord record = NrbfDecoder.Decode(stream);
         ClassRecord types = record.Should().BeAssignableTo<ClassRecord>().Which;
         types.HasMember("<JsonBytes>k__BackingField").Should().BeTrue();
         SZArrayRecord<byte> byteData = types.GetRawValue("<JsonBytes>k__BackingField").Should().BeAssignableTo<SZArrayRecord<byte>>().Which;
