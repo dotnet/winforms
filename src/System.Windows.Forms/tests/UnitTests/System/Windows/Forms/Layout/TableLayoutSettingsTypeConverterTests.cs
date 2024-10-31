@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Xml;
 using Moq;
-using System.Private.Windows.Core.TestUtilities;
 
 namespace System.Windows.Forms.Layout.Tests;
 

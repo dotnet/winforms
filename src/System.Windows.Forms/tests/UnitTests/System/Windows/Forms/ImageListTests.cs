@@ -4,7 +4,6 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Private.Windows.Core.TestUtilities;
 
 namespace System.Windows.Forms.Tests;
 
