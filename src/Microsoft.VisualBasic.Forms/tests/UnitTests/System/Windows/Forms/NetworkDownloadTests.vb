@@ -315,8 +315,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 End Sub
 
             testCode.Should() _
-               .Throw(Of WebException)() _
-               .WithMessage(SR_net_webstatus_Timeout)
+                .Throw(Of WebException)() _
+                .WithMessage(SR_net_webstatus_Timeout)
             VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
@@ -1151,7 +1151,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim value As String = SR.Network_InvalidUriString.Replace("{0}", "invalidURL")
             testCode.Should() _
                 .Throw(Of ArgumentException)() _
-                    .Where(Function(e) e.Message.StartsWith(value))
+                .Where(Function(e) e.Message.StartsWith(value))
             VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
@@ -1225,8 +1225,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
             Dim value As String = SR.Network_InvalidUriString.Replace("{0}", "invalidURL")
             testCode.Should() _
-                    .Throw(Of ArgumentException)() _
-                    .Where(Function(e) e.Message.StartsWith(value))
+                .Throw(Of ArgumentException)() _
+                .Where(Function(e) e.Message.StartsWith(value))
             VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
