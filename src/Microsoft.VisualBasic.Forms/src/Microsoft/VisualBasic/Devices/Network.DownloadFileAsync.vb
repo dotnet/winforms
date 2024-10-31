@@ -43,11 +43,11 @@ Namespace Microsoft.VisualBasic.Devices
                                                         New HttpClientHandler With {.Credentials = networkCredentials}
                                                        )
             Return DownloadFileAsync(addressUri,
-                    destinationFileName,
-                    clientHandler,
-                    dialog,
-                    connectionTimeout,
-                    overwrite,
+                destinationFileName,
+                clientHandler,
+                dialog,
+                connectionTimeout,
+                overwrite,
                 onUserCancel,
                 cancelToken)
         End Function
