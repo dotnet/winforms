@@ -1089,7 +1089,7 @@ public abstract partial class TextBoxBase : Control
         // Note: Currently WinForms does not fully support surrogates. If
         // the text contains surrogate characters this property may return incorrect values.
 
-        => IsHandleCreated ? PInvoke.GetWindowTextLength(this) : Text.Length;
+        => IsHandleCreated ? PInvokeCore.GetWindowTextLength(this) : Text.Length;
 
     internal override string WindowText
     {

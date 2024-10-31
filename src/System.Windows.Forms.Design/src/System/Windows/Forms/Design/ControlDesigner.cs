@@ -287,7 +287,7 @@ public partial class ControlDesigner : ComponentDesigner
         Point nativeOffset = default;
         if (Control.Parent is { } parent)
         {
-            PInvoke.MapWindowPoints(Control, parent, ref nativeOffset);
+            PInvokeCore.MapWindowPoints(Control, parent, ref nativeOffset);
         }
 
         Point offset = Control.Location;
@@ -1778,7 +1778,7 @@ public partial class ControlDesigner : ComponentDesigner
         if (m.MsgInternal >= PInvokeCore.WM_MOUSEFIRST && m.MsgInternal <= PInvokeCore.WM_MOUSELAST)
         {
             location = PARAM.ToPoint(m.LParamInternal);
-            PInvoke.MapWindowPoints(m, (HWND)default, ref location);
+            PInvokeCore.MapWindowPoints(m, (HWND)default, ref location);
         }
         else if (m.MsgInternal >= PInvokeCore.WM_NCMOUSEMOVE && m.MsgInternal <= PInvokeCore.WM_NCMBUTTONDBLCLK)
         {
@@ -2068,9 +2068,9 @@ public partial class ControlDesigner : ComponentDesigner
                     {
                         // Re-map the clip rect we pass to the paint event args to our child coordinates.
                         Point point = default;
-                        PInvoke.MapWindowPoints(m.HWND, Control, ref point);
+                        PInvokeCore.MapWindowPoints(m.HWND, Control, ref point);
                         graphics.TranslateTransform(-point.X, -point.Y);
-                        PInvoke.MapWindowPoints(m.HWND, Control, ref clip);
+                        PInvokeCore.MapWindowPoints(m.HWND, Control, ref clip);
                     }
 
                     Rectangle paintRect = clip;

@@ -85,7 +85,7 @@ public class SendInput
         // Move the window into the foreground as it may not have been achieved by the 'SetWindowPos' call
         if (!PInvoke.SetForegroundWindow(window))
         {
-            string windowTitle = PInvoke.GetWindowText(window);
+            string windowTitle = PInvokeCore.GetWindowText(window);
             if (PInvoke.GetWindowThreadProcessId(window, out uint processId) == 0 || processId != Environment.ProcessId)
             {
                 string message = $"ForegroundWindow doesn't belong the test process! The current window HWND: {window}, title:{windowTitle}.";
