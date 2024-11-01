@@ -4695,8 +4695,7 @@ public unsafe partial class Control :
         }
 
         // Unsubscribes from the Disposed event of the ContextMenuStrip.
-        ContextMenuStrip? menu = ContextMenuStrip;
-        if (menu is not null)
+        if (ContextMenuStrip is ContextMenuStrip menu)
         {
             menu.Disposed -= DetachContextMenuStrip;
         }
