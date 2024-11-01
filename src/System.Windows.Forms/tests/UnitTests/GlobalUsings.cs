@@ -4,6 +4,7 @@
 global using System.Diagnostics;
 global using System.Windows.Forms;
 global using System.Private.Windows.Core;
+global using System.Private.Windows.Core.TestUtilities;
 global using Windows.Win32;
 global using Windows.Win32.Foundation;
 global using Windows.Win32.Graphics.Gdi;

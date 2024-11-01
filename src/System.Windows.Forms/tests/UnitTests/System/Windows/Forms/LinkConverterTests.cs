@@ -3,7 +3,6 @@
 
 using System.ComponentModel.Design.Serialization;
 using System.Globalization;
-using System.Windows.Forms.TestUtilities;
 
 namespace System.Windows.Forms.Tests;
 

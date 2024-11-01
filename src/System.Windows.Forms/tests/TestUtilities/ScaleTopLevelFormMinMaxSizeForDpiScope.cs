@@ -16,7 +16,7 @@ public readonly ref struct ScaleTopLevelFormMinMaxSizeForDpiScope
         // Prevent multiple ScaleTopLevelFormMinMaxSizeForDpi from running simultaneously.
         // Using Monitor to allow recursion on the same thread.
         Monitor.Enter(typeof(ScaleTopLevelFormMinMaxSizeForDpiScope));
-        _switchScope = new(AppContextSwitchNames.ScaleTopLevelFormMinMaxSizeForDpi, enable);
+        _switchScope = new(WinFormsAppContextSwitchNames.ScaleTopLevelFormMinMaxSizeForDpi, enable);
     }
 
     public void Dispose()

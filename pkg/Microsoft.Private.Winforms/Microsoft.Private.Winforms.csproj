@@ -82,7 +82,7 @@
     <!-- Reference and Source System.Windows.Forms -->
     <ProjectReference Include="..\..\src\System.Windows.Forms\src\System.Windows.Forms.csproj" />
 
-    <!-- Reference and Source System.Windows.Forms.Primitives -->
+    <!-- Reference and Source System.Private.Windows.Core -->
     <ProjectReference Include="..\..\src\System.Private.Windows.Core\src\System.Private.Windows.Core.csproj" />
 
     <!-- Reference and Source System.Windows.Forms.Primitives -->

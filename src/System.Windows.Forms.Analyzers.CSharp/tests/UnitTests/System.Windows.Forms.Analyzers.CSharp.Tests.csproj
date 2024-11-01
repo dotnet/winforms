@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Common\tests\TestUtilities\System.Windows.Forms.Common.TestUtilities.csproj" />
+    <ProjectReference Include="..\..\..\Common\tests\TestUtilities\System.Private.Windows.Core.TestUtilities.csproj" />
     <ProjectReference Include="..\..\..\System.Windows.Forms.Analyzers.CodeFixes.CSharp\System.Windows.Forms.Analyzers.CodeFixes.CSharp.csproj" />
     <ProjectReference Include="..\..\..\System.Windows.Forms.Analyzers\src\System.Windows.Forms.Analyzers.csproj" />
     <ProjectReference Include="..\..\..\System.Windows.Forms.Analyzers\tests\UnitTests\System.Windows.Forms.Analyzers.Tests.csproj" />

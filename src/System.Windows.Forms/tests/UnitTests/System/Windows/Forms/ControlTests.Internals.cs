@@ -3,7 +3,6 @@
 
 using System.Drawing;
 using System.Runtime.CompilerServices;
-using System.Windows.Forms.TestUtilities;
 
 namespace System.Windows.Forms.Tests;
 

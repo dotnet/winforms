@@ -4,8 +4,8 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using Moq;
 using System.Windows.Forms.TestUtilities;
+using Moq;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
