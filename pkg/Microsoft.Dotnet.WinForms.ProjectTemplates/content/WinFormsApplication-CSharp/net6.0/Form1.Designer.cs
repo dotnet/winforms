@@ -30,8 +30,8 @@ partial class Form1
     private void InitializeComponent()
     {
         components = new System.ComponentModel.Container();
-        AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-        ClientSize = new System.Drawing.Size(800, 450);
+        AutoScaleMode = AutoScaleMode.Font;
+        ClientSize = new Size(800, 450);
         Text = "Form1";
     }
 
@@ -69,8 +69,8 @@ namespace Company.WinFormsApplication1
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(800, 450);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(800, 450);
             Text = "Form1";
         }
 

@@ -23,8 +23,8 @@ Partial Class UserControl1
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         components = New System.ComponentModel.Container()
-        AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        ClientSize = New System.Drawing.Size(800, 450)
+        AutoScaleMode = AutoScaleMode.Font
+        ClientSize = New Size(800, 450)
     End Sub
 
 End Class
