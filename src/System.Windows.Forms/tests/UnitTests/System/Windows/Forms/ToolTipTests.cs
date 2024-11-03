@@ -3,10 +3,9 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using System.Windows.Forms.Automation;
 using Moq;
 using Moq.Protected;
-using System.Windows.Forms.Automation;
-using System.Windows.Forms.TestUtilities;
 
 namespace System.Windows.Forms.Tests;
 

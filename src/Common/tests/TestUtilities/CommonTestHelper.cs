@@ -4,7 +4,7 @@
 using System.ComponentModel.Design.Serialization;
 using System.Drawing;
 
-namespace System.Windows.Forms.TestUtilities;
+namespace System.Private.Windows.Core.TestUtilities;
 
 public static class CommonTestHelper
 {

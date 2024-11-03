@@ -16,7 +16,7 @@ public readonly ref struct NoClientNotificationsScope
         // Prevent multiple NoClientNotificationsScopes from running simultaneously. Using Monitor to allow recursion on
         // the same thread.
         Monitor.Enter(typeof(NoClientNotificationsScope));
-        _switchScope = new(AppContextSwitchNames.NoClientNotifications, enable);
+        _switchScope = new(WinFormsAppContextSwitchNames.NoClientNotifications, enable);
     }
 
     public void Dispose()

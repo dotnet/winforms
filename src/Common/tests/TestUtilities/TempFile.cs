@@ -6,8 +6,8 @@ using System.Runtime.CompilerServices;
 namespace System.IO;
 
 /// <summary>
-/// Represents a temporary file. Creating an instance creates a file at the specified path,
-/// and disposing the instance deletes the file.
+///  Represents a temporary file. Creating an instance creates a file at the specified path,
+///  and disposing the instance deletes the file.
 /// </summary>
 /// <remarks>
 ///  <para>
