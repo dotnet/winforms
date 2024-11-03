@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using System.Windows.Forms.TestUtilities;
 using Microsoft.DotNet.RemoteExecutor;
 using Point = System.Drawing.Point;
 

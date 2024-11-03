@@ -3,8 +3,8 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using Moq;
 using System.Windows.Forms.TestUtilities;
+using Moq;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 

@@ -16,7 +16,7 @@ public readonly ref struct AnchorLayoutV2Scope
         // Prevent multiple AnchorLayoutV2Scope instances from running simultaneously.
         // Using Monitor to allow recursion on the same thread.
         Monitor.Enter(typeof(AnchorLayoutV2Scope));
-        _switchScope = new(AppContextSwitchNames.AnchorLayoutV2, enable);
+        _switchScope = new(WinFormsAppContextSwitchNames.AnchorLayoutV2, enable);
     }
 
     public void Dispose()

@@ -3,6 +3,9 @@
 
 namespace System;
 
+/// <summary>
+///  Creates a test directory path and cleans it up when test class finishes execution.
+/// </summary>
 public abstract class FileCleanupTestBase : IDisposable
 {
     private string? _testDirectory;

@@ -10,6 +10,10 @@ namespace System;
 
 public static class BinarySerialization
 {
+    /// <summary>
+    ///  Ensures the list of types marked as serializable under <paramref name="assemblyUnderTest"/> matches <paramref name="serializableTypes"/>.
+    ///  If not, <see cref="NotSupportedException"/> is thrown.
+    /// </summary>
     public static void EnsureSerializableAttribute(Assembly assemblyUnderTest, HashSet<string> serializableTypes)
     {
         foreach (Type type in assemblyUnderTest.GetTypes())
@@ -50,22 +54,24 @@ public static class BinarySerialization
         }
     }
 
+    /// <summary>
+    ///  Binary deserializes a base 64 string to <typeparamref name="T"/>. <paramref name="blob"/> is binary
+    ///  deserialized with <see cref="BinaryFormatter"/> with <paramref name="assemblyStyle"/> taken into account.
+    /// </summary>
 #pragma warning disable SYSLIB0050 // Type or member is obsolete
-    public static T EnsureDeserialize<T>(string blob)
+    public static T EnsureDeserialize<T>(string blob, FormatterAssemblyStyle assemblyStyle = FormatterAssemblyStyle.Simple)
     {
-        object @object = FromBase64String(blob);
+        object @object = FromBase64String(blob, assemblyStyle);
         Assert.NotNull(@object);
         return Assert.IsType<T>(@object);
 
-        static object FromBase64String(string base64String,
-            FormatterAssemblyStyle assemblyStyle = FormatterAssemblyStyle.Simple)
+        static object FromBase64String(string base64String, FormatterAssemblyStyle assemblyStyle)
         {
             byte[] raw = Convert.FromBase64String(base64String);
             return FromByteArray(raw, assemblyStyle);
         }
 
-        static object FromByteArray(byte[] raw,
-            FormatterAssemblyStyle assemblyStyle = FormatterAssemblyStyle.Simple)
+        static object FromByteArray(byte[] raw, FormatterAssemblyStyle assemblyStyle)
         {
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
             // cs/binary-formatter-without-binder
@@ -86,14 +92,18 @@ public static class BinarySerialization
         }
     }
 
+    /// <summary>
+    ///  Returns a base 64 string of the binary serialized <paramref name="object"/>.
+    ///  <paramref name="object"/> is binary serialized using <see cref="BinaryFormatter"/>
+    ///  with <paramref name="assemblyStyle"/> taken into account.
+    /// </summary>
     public static string ToBase64String(object @object,
         FormatterAssemblyStyle assemblyStyle = FormatterAssemblyStyle.Simple)
     {
         byte[] raw = ToByteArray(@object, assemblyStyle);
         return Convert.ToBase64String(raw);
 
-        static byte[] ToByteArray(object obj,
-            FormatterAssemblyStyle assemblyStyle = FormatterAssemblyStyle.Simple)
+        static byte[] ToByteArray(object obj, FormatterAssemblyStyle assemblyStyle)
         {
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
             // cs/binary-formatter-without-binder

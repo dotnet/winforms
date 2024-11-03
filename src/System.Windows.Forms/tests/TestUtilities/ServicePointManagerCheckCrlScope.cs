@@ -16,7 +16,7 @@ public readonly ref struct ServicePointManagerCheckCrlScope
         // Prevent multiple ServicePointManagerCheckCrlScope instances from running simultaneously.
         // Using Monitor to allow recursion on the same thread.
         Monitor.Enter(typeof(ServicePointManagerCheckCrlScope));
-        _switchScope = new(AppContextSwitchNames.ServicePointManagerCheckCrl, enable);
+        _switchScope = new(WinFormsAppContextSwitchNames.ServicePointManagerCheckCrl, enable);
     }
 
     public void Dispose()
