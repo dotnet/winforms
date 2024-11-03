@@ -5,6 +5,9 @@ using System.Globalization;
 
 namespace System;
 
+/// <summary>
+///  Facilitates temporarily changing the <see cref="CultureInfo.CurrentCulture"/> and <see cref="CultureInfo.CurrentUICulture"/>.
+/// </summary>
 public sealed class ThreadCultureChange : IDisposable
 {
     private readonly CultureInfo _origCulture = CultureInfo.CurrentCulture;
