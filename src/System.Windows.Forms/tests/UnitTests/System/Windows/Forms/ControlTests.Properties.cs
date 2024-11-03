@@ -5,8 +5,8 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms.Layout;
-using Moq;
 using System.Windows.Forms.TestUtilities;
+using Moq;
 using Windows.Win32.System.Ole;
 
 namespace System.Windows.Forms.Tests;

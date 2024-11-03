@@ -4,7 +4,6 @@
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
-using System.Windows.Forms.TestUtilities;
 
 namespace System.Windows.Forms.Tests;
 
