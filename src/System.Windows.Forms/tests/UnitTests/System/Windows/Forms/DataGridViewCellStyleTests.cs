@@ -4,7 +4,6 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
-using System.Windows.Forms.TestUtilities;
 
 namespace System.Windows.Forms.Tests;
 

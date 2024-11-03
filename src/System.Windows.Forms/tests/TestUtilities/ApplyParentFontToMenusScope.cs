@@ -16,7 +16,7 @@ public readonly ref struct ApplyParentFontToMenusScope
         // Prevent multiple ApplyParentFontToMenusScopes from running simultaneously. Using Monitor to allow recursion on
         // the same thread.
         Monitor.Enter(typeof(ApplyParentFontToMenusScope));
-        _switchScope = new(AppContextSwitchNames.ApplyParentFontToMenus, enable);
+        _switchScope = new(WinFormsAppContextSwitchNames.ApplyParentFontToMenus, enable);
     }
 
     public void Dispose()
