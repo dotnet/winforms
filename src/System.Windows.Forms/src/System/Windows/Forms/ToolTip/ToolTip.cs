@@ -718,6 +718,13 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
             {
                 PInvoke.SetWindowTheme(HWND, string.Empty, string.Empty);
             }
+
+#pragma warning disable WFO5001
+            if (Application.IsDarkModeEnabled)
+            {
+                PInvoke.SetWindowTheme(HWND, string.Empty, string.Empty);
+            }
+#pragma warning restore WFO5001
         }
 
         // If in OwnerDraw mode, we don't want the default border.
@@ -770,15 +777,11 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         // Set active status.
         PInvokeCore.SendMessage(this, PInvoke.TTM_ACTIVATE, (WPARAM)(BOOL)_active);
 
-        if (BackColor != SystemColors.Info)
-        {
-            PInvokeCore.SendMessage(this, PInvoke.TTM_SETTIPBKCOLOR, (WPARAM)BackColor);
-        }
+        // Set background color.
+        PInvokeCore.SendMessage(this, PInvoke.TTM_SETTIPBKCOLOR, (WPARAM)_backColor);
 
-        if (ForeColor != SystemColors.InfoText)
-        {
-            PInvokeCore.SendMessage(this, PInvoke.TTM_SETTIPTEXTCOLOR, (WPARAM)ForeColor);
-        }
+        // Set text color.
+        PInvokeCore.SendMessage(this, PInvoke.TTM_SETTIPTEXTCOLOR, (WPARAM)_foreColor);
 
         if (_toolTipIcon > 0 || !string.IsNullOrEmpty(_toolTipTitle))
         {

@@ -782,6 +782,36 @@ public class ToolTipTests
         Assert.Equal("System.Windows.Forms.ToolTip InitialDelay: 500, ShowAlways: False", toolTip.ToString());
     }
 
+#pragma warning disable WFO5001
+    [WinFormsFact]
+    public void ToolTip_DarkMode_GetColors_ReturnsExpected()
+    {
+        if (SystemInformation.HighContrast)
+        {
+            // We don't run this test in HighContrast mode.
+            return;
+        }
+
+        SystemColorMode colorMode = Application.ColorMode;
+        Application.SetColorMode(SystemColorMode.Dark);
+
+        using SubToolTip toolTip = new();
+
+        Assert.NotEqual(IntPtr.Zero, toolTip.Handle); // A workaround to create the toolTip native window Handle
+
+        var backgroundColor = PInvokeCore.SendMessage(toolTip, PInvoke.TTM_GETTIPBKCOLOR);
+        Color backColor = ColorTranslator.FromWin32((int)backgroundColor);
+
+        var textColor = PInvokeCore.SendMessage(toolTip, PInvoke.TTM_GETTIPTEXTCOLOR);
+        Color foreColor = ColorTranslator.FromWin32((int)textColor);
+
+        Assert.Equal(SystemColors.Info.ToArgb(), backColor.ToArgb());
+        Assert.Equal(SystemColors.InfoText.ToArgb(), foreColor.ToArgb());
+
+        Application.SetColorMode(colorMode);
+    }
+#pragma warning restore WFO5001
+
     [WinFormsFact]
     public void ToolTip_SetToolTipToControl_Invokes_SetToolTip_OfControl()
     {
