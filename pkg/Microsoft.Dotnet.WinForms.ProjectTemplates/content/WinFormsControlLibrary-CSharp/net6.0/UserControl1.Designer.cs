@@ -30,8 +30,8 @@ partial class UserControl1
     private void InitializeComponent()
     {
         components = new System.ComponentModel.Container();
-        this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-        this.ClientSize = new System.Drawing.Size(800, 450);
+        AutoScaleMode = AutoScaleMode.Font;
+        ClientSize = new Size(800, 450);
     }
 
     #endregion
@@ -68,8 +68,8 @@ namespace Company.ControlLibrary1
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(800, 450);
         }
 
         #endregion
