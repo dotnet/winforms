@@ -44,6 +44,18 @@ public class ToolStripComboBox_ToolStripComboBoxFlatComboAdapterTests : IDisposa
         Action action = () => typeof(ToolStripComboBox.ToolStripComboBoxControl.ToolStripComboBoxFlatComboAdapter)
             .TestAccessor().Dynamic.UseBaseAdapter(comboBox);
 
+        bool isCalled = false;
+        try
+        {
+            action();
+        }
+        catch (TargetInvocationException ex) when (ex.InnerException is InvalidOperationException)
+        {
+            isCalled = true;
+        }
+
+        isCalled.Should().BeTrue("the UseBaseAdapter method should be called and throw an InvalidOperationException");
+
         action.Should().Throw<TargetInvocationException>()
             .WithInnerException<InvalidOperationException>()
             .WithMessage("Why are we here and not a toolstrip combo?");
