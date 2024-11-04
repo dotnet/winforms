@@ -4,6 +4,7 @@
 #nullable enable
 
 using System.Drawing;
+using System.Reflection;
 
 namespace System.Windows.Forms.Tests;
 
@@ -34,6 +35,18 @@ public class ToolStripComboBox_ToolStripComboBoxFlatComboAdapterTests : IDisposa
             .TestAccessor().Dynamic.UseBaseAdapter(comboBox);
 
         result.Should().BeTrue();
+    }
+
+    [WinFormsFact]
+    public void UseBaseAdapter_ThrowsException_ForNonToolStripComboBoxControl()
+    {
+        using ComboBox comboBox = new();
+        Action action = () => typeof(ToolStripComboBox.ToolStripComboBoxControl.ToolStripComboBoxFlatComboAdapter)
+            .TestAccessor().Dynamic.UseBaseAdapter(comboBox);
+
+        action.Should().Throw<TargetInvocationException>()
+            .WithInnerException<InvalidOperationException>()
+            .WithMessage("Why are we here and not a toolstrip combo?");
     }
 
     [WinFormsFact]
