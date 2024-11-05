@@ -10,19 +10,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Class UserIdentity
             Implements IIdentity
 
-            Private ReadOnly _authenticationType As String
-            Private ReadOnly _name As String
-
             Public Sub New(authenticationType As String, name As String, isAuthenticated As Boolean)
-                _authenticationType = authenticationType
-                _name = name
+                Me.AuthenticationType = authenticationType
+                Me.Name = name
             End Sub
 
             Public ReadOnly Property AuthenticationType As String Implements IIdentity.AuthenticationType
-                Get
-                    Return _authenticationType
-                End Get
-            End Property
 
             Public ReadOnly Property IsAuthenticated As Boolean Implements IIdentity.IsAuthenticated
                 Get
@@ -31,10 +24,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Property
 
             Public ReadOnly Property Name As String Implements IIdentity.Name
-                Get
-                    Return _name
-                End Get
-            End Property
 
         End Class
 
