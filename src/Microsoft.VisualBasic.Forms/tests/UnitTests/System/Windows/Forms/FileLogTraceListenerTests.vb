@@ -24,7 +24,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         .Location = LogFileLocation.Custom,
                         .CustomLocation = testDirectory}
 
-                        Dim expectedBaseFileName As String = Path.GetFileNameWithoutExtension(Application.ExecutablePath)
+                        Dim expectedBaseFileName As String =
+                            Path.GetFileNameWithoutExtension(Application.ExecutablePath)
                         listener.BaseFileName.Should.BeEquivalentTo(expectedBaseFileName)
 
                         listener.Name.Should.NotBeNull()
@@ -76,7 +77,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                         CStr(listener.TestAccessor().Dynamic.HostName).Should.NotBeEmpty()
 
-                        Dim listenerStream As FileLogTraceListener.ReferencedStream = CType(listener.TestAccessor().Dynamic.ListenerStream, FileLogTraceListener.ReferencedStream)
+                        Dim listenerStream As FileLogTraceListener.ReferencedStream =
+                            CType(listener.TestAccessor().Dynamic.ListenerStream, FileLogTraceListener.ReferencedStream)
                         listenerStream.Should.NotBeNull()
                         listenerStream.IsInUse.Should.BeTrue()
                         listenerStream.FileSize.Should.Be(0)
@@ -109,11 +111,17 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub ListenerSetInvalidMaxFileSizePropertiesThrows(value As Long)
             Dim testDirectory As String = CreateTempDirectory()
             Using listener As New FileLogTraceListener(NameOf(FileLogTraceListenerTests)) _
-                With {.Location = LogFileLocation.Custom, .CustomLocation = testDirectory}
+                With {
+                    .Location = LogFileLocation.Custom,
+                    .CustomLocation = testDirectory
+                }
 
-                CType(Sub()
-                          listener.MaxFileSize = value
-                      End Sub, Action).Should.Throw(Of ArgumentException)()
+                Dim testCode As Action =
+                    Sub()
+                        listener.MaxFileSize = value
+                    End Sub
+
+                testCode.Should.Throw(Of ArgumentException)()
             End Using
         End Sub
 
