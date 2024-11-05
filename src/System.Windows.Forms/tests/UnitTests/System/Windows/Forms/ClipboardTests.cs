@@ -1007,7 +1007,7 @@ public class ClipboardTests
     [BoolData]
     public void Clipboard_CustomDataObject_AvoidBinaryFormatter(bool copy)
     {
-        string format = "custom";
+        string format = "customFormat";
         TestData data = new() { X = 1, Y = 1 };
         Clipboard.SetData(format, data);
         // BinaryFormatter not enabled.
