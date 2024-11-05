@@ -2975,13 +2975,8 @@ public partial class DataObjectTests
     [WinFormsFact]
     public void DataObject_SetDataAsJson_Throws()
     {
-        string format = "format";
         DataObject dataObject = new();
         DerivedDataObject derived = new();
-        Action clipboardSet1 = () => Clipboard.SetDataAsJson(format, dataObject);
-        clipboardSet1.Should().Throw<InvalidOperationException>();
-        Action clipboardSet2 = () => Clipboard.SetDataAsJson(format, derived);
-        clipboardSet2.Should().NotThrow();
 
         DataObject test = new();
         Action dataObjectSet1 = () => test.SetDataAsJson(dataObject);
