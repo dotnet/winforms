@@ -16,6 +16,10 @@ For the news on the designer please refer to [the series of blogs](https://devbl
 
 For more information about creating custom control libraries, including sample code and templates refer to the [WinForms Designer Extensibility Repo](https://github.com/microsoft/winforms-designer-extensibility/). Details about how to use the WinForms Designer Extensibility SDK and structure a control library nuget package can be found there as well. Download the Extensibility SDK from [NuGet](https://www.nuget.org/packages/Microsoft.WinForms.Designer.SDK).
 
+### Reporting bugs in the WinForms Designer
+
+To make bug reports visible to the large number of users and let them comment and vote on bugs, please use the [Visual Studio bug reporting feature](https://learn.microsoft.com/visualstudio/ide/how-to-report-a-problem-with-visual-studio?view=vs-2022). This tooling provides secure dump and screenshot upload options.
+
 ## Table of Content
 
 * [How to use .NET Framework designer for .NET applications](net-inproc-designer.md)
