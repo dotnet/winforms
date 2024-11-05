@@ -11,59 +11,43 @@ Imports VbUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 Namespace Microsoft.VisualBasic.Forms.Tests
 
     Public Class ApplicationServicesExceptionsTests
+        Private Const TestMessage As String = "Test"
+        Private Const Test1Message As String = "Test1"
+        Private _innerException As New DirectoryNotFoundException
 
         <WinFormsFact>
         Public Sub NewCantStartSingleInstanceException()
-            Dim testCode As Action =
-                Sub()
-                    Throw New CantStartSingleInstanceException()
-                End Sub
 
-            Dim expectedWildcardPattern As String =
+            Dim ex As Exception = New CantStartSingleInstanceException()
+            Dim expected As String =
                 VbUtils.GetResourceString(SR.AppModel_SingleInstanceCantConnect)
-            testCode.Should.Throw(Of CantStartSingleInstanceException)() _
-                .WithMessage(expectedWildcardPattern)
+            ex.Message.Should.Be(expected)
+            ex.InnerException.Should.Be(Nothing)
 
-            testCode =
-                Sub()
-                    Throw New CantStartSingleInstanceException("Test")
-                End Sub
-            testCode.Should.Throw(Of CantStartSingleInstanceException)().WithMessage("Test")
+            ex = New CantStartSingleInstanceException(TestMessage)
+            ex.Message.Should.Be(TestMessage)
+            ex.InnerException.Should.Be(Nothing)
 
-            testCode =
-                Sub()
-                    Throw New CantStartSingleInstanceException("Test1", New DirectoryNotFoundException)
-                End Sub
-            testCode.Should.Throw(Of CantStartSingleInstanceException)() _
-                .WithMessage("Test1") _
-                .WithInnerException(Of DirectoryNotFoundException)()
+            ex = New CantStartSingleInstanceException(Test1Message, _innerException)
+            ex.Message.Should.Be(Test1Message)
+            ex.InnerException.Should.BeOfType(Of DirectoryNotFoundException)()
         End Sub
 
         <WinFormsFact>
         Public Sub NewNoStartupFormException()
-            Dim testCode As Action =
-                Sub()
-                    Throw New NoStartupFormException()
-                End Sub
-
-            Dim expectedWildcardPattern As String =
+            Dim ex As Exception = New NoStartupFormException()
+            Dim expected As String =
                 VbUtils.GetResourceString(SR.AppModel_NoStartupForm)
-            testCode.Should.Throw(Of NoStartupFormException)() _
-                .WithMessage(expectedWildcardPattern)
+            ex.Message.Should.Be(expected)
+            ex.InnerException.Should.Be(Nothing)
 
-            testCode =
-                Sub()
-                    Throw New NoStartupFormException("Test")
-                End Sub
-            testCode.Should.Throw(Of NoStartupFormException)().WithMessage("Test")
+            ex = New NoStartupFormException(TestMessage)
+            ex.Message.Should.Be(TestMessage)
+            ex.InnerException.Should.Be(Nothing)
 
-            testCode =
-                Sub()
-                    Throw New NoStartupFormException("Test1", New DirectoryNotFoundException)
-                End Sub
-            testCode.Should.Throw(Of NoStartupFormException)() _
-                .WithMessage("Test1") _
-                .WithInnerException(Of DirectoryNotFoundException)()
+            ex = New NoStartupFormException(Test1Message, _innerException)
+            ex.Message.Should.Be(Test1Message)
+            ex.InnerException.Should.BeOfType(Of DirectoryNotFoundException)()
         End Sub
 
     End Class
