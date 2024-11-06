@@ -177,6 +177,14 @@ public class ControlDesignerTests : IDisposable
     }
 
     [Fact]
+    public void InitializeTest()
+    {
+        using TestControlDesigner controlDesigner = new();
+        using Button button = new();
+        controlDesigner.Initialize(button);
+    }
+
+    [Fact]
     public void UninitializedTest()
     {
         using TestControlDesigner _designer = new();
