@@ -1,6 +1,6 @@
 <Project>
 
-  <Import Project="$(RepositoryEngineeringDir)CodeStyle.targets" />
+  <Import Project="$(RepositoryEngineeringDir)Analyzer.targets" />
   <Import Project="Sdk.targets" Sdk="Microsoft.DotNet.Arcade.Sdk" />
   <Import Project="$(RepositoryEngineeringDir)packageContent.targets" />
   <Import Project="$(RepositoryEngineeringDir)versioning.targets" />
