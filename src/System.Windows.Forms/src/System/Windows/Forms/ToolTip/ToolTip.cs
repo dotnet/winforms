@@ -714,13 +714,8 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
 
             _window.CreateHandle(cp);
 
-            if (SystemInformation.HighContrast)
-            {
-                PInvoke.SetWindowTheme(HWND, string.Empty, string.Empty);
-            }
-
 #pragma warning disable WFO5001
-            if (Application.IsDarkModeEnabled)
+            if (SystemInformation.HighContrast || Application.IsDarkModeEnabled)
             {
                 PInvoke.SetWindowTheme(HWND, string.Empty, string.Empty);
             }
