@@ -9,7 +9,7 @@ using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests;
 
-public class DateTimePickerTests: IDisposable
+public class DateTimePickerTests : IDisposable
 {
     private readonly DateTimePicker _dateTimePicker;
 
@@ -543,7 +543,7 @@ public class DateTimePickerTests: IDisposable
         control.Paint += handler;
         using (Bitmap bmp = new(1, 1))
         {
-            control.OnPaint(new(Graphics.FromImage(bmp), new()));
+            control.OnPaint(new(Graphics.FromImage(bmp), default));
         }
 
         callCount.Should().Be(1);
@@ -551,7 +551,7 @@ public class DateTimePickerTests: IDisposable
         control.Paint -= handler;
         using (Bitmap bmp = new(1, 1))
         {
-            control.OnPaint(new(Graphics.FromImage(bmp), new()));
+            control.OnPaint(new(Graphics.FromImage(bmp), default));
         }
 
         callCount.Should().Be(1);
@@ -903,7 +903,7 @@ public class DateTimePickerTests: IDisposable
         {
             // An empty SYSTEMTIME has year, month and day as 0, but DateTime can't have these parameters.
             // So an empty SYSTEMTIME is incorrect in this case.
-            SYSTEMTIME systemTime = new();
+            SYSTEMTIME systemTime = default;
             DateTime dateTime = (DateTime)systemTime;
             Assert.Equal(DateTime.MinValue, dateTime);
         }

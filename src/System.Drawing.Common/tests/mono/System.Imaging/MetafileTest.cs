@@ -1,6 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-//
+
 // Metafile class unit tests
 //
 // Authors:
@@ -218,7 +218,7 @@ public class MetafileFulltrustTest
         IntPtr hdc = g.GetHdc();
         try
         {
-            Metafile mf = new(hdc, new Rectangle());
+            Metafile mf = new(hdc, default(Rectangle));
             CheckEmptyHeader(mf, EmfType.EmfPlusDual);
         }
         finally
@@ -235,7 +235,7 @@ public class MetafileFulltrustTest
         IntPtr hdc = g.GetHdc();
         try
         {
-            Metafile mf = new(hdc, new RectangleF());
+            Metafile mf = new(hdc, default(RectangleF));
             CheckEmptyHeader(mf, EmfType.EmfPlusDual);
         }
         finally

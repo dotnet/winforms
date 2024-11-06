@@ -1,6 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-//
+
 // Graphics class testing unit
 //
 // Authors:
@@ -154,7 +154,7 @@ public class GraphicsTest : IDisposable
         g.Clip = new Region(new Rectangle(50, 40, 210, 220));
         rects = g.Clip.GetRegionScans(new Matrix());
 
-        Assert.Equal(1, rects.Length);
+        Assert.Single(rects);
         Assert.Equal(50, rects[0].X);
         Assert.Equal(40, rects[0].Y);
         Assert.Equal(210, rects[0].Width);
@@ -208,7 +208,7 @@ public class GraphicsTest : IDisposable
         g.IntersectClip(new Rectangle(290, 40, 60, 80));
         _rects = g.Clip.GetRegionScans(new Matrix());
 
-        Assert.Equal(1, _rects.Length);
+        Assert.Single(_rects);
 
         Assert.Equal(290, _rects[0].X);
         Assert.Equal(40, _rects[0].Y);
@@ -226,7 +226,7 @@ public class GraphicsTest : IDisposable
         g.ResetClip();
         _rects = g.Clip.GetRegionScans(new Matrix());
 
-        Assert.Equal(1, _rects.Length);
+        Assert.Single(_rects);
 
         Assert.Equal(-4194304, _rects[0].X);
         Assert.Equal(-4194304, _rects[0].Y);
@@ -244,7 +244,7 @@ public class GraphicsTest : IDisposable
             // Region
             g.SetClip(new Region(new Rectangle(50, 40, 210, 220)), CombineMode.Replace);
             rects = g.Clip.GetRegionScans(new Matrix());
-            Assert.Equal(1, rects.Length);
+            Assert.Single(rects);
             Assert.Equal(50, rects[0].X);
             Assert.Equal(40, rects[0].Y);
             Assert.Equal(210, rects[0].Width);
@@ -256,7 +256,7 @@ public class GraphicsTest : IDisposable
         {
             g.SetClip(new RectangleF(50, 40, 210, 220));
             rects = g.Clip.GetRegionScans(new Matrix());
-            Assert.Equal(1, rects.Length);
+            Assert.Single(rects);
             Assert.Equal(50, rects[0].X);
             Assert.Equal(40, rects[0].Y);
             Assert.Equal(210, rects[0].Width);
@@ -268,7 +268,7 @@ public class GraphicsTest : IDisposable
         {
             g.SetClip(new Rectangle(50, 40, 210, 220));
             rects = g.Clip.GetRegionScans(new Matrix());
-            Assert.Equal(1, rects.Length);
+            Assert.Single(rects);
             Assert.Equal(50, rects[0].X);
             Assert.Equal(40, rects[0].Y);
             Assert.Equal(210, rects[0].Width);
@@ -1848,22 +1848,22 @@ public class GraphicsTest : IDisposable
     {
         using Bitmap bitmap = new(20, 20);
         using Graphics g = Graphics.FromImage(bitmap);
-        Region[] regions = g.MeasureCharacterRanges(null, _font, new RectangleF(), null);
-        Assert.Equal(0, regions.Length);
+        Region[] regions = g.MeasureCharacterRanges(null, _font, default, null);
+        Assert.Empty(regions);
 
-        regions = g.MeasureCharacterRanges(string.Empty, _font, new RectangleF(), null);
-        Assert.Equal(0, regions.Length);
-        regions = g.MeasureCharacterRanges(string.Empty.AsSpan(), _font, new RectangleF(), null);
-        Assert.Equal(0, regions.Length);
+        regions = g.MeasureCharacterRanges(string.Empty, _font, default, null);
+        Assert.Empty(regions);
+        regions = g.MeasureCharacterRanges(string.Empty.AsSpan(), _font, default, null);
+        Assert.Empty(regions);
 
         // null font is ok with null or empty string
-        regions = g.MeasureCharacterRanges(null, null, new RectangleF(), null);
-        Assert.Equal(0, regions.Length);
+        regions = g.MeasureCharacterRanges(null, null, default, null);
+        Assert.Empty(regions);
 
-        regions = g.MeasureCharacterRanges(string.Empty, null, new RectangleF(), null);
-        Assert.Equal(0, regions.Length);
-        regions = g.MeasureCharacterRanges(string.Empty.AsSpan(), null, new RectangleF(), null);
-        Assert.Equal(0, regions.Length);
+        regions = g.MeasureCharacterRanges(string.Empty, null, default, null);
+        Assert.Empty(regions);
+        regions = g.MeasureCharacterRanges(string.Empty.AsSpan(), null, default, null);
+        Assert.Empty(regions);
     }
 
     [Fact]
@@ -1872,11 +1872,11 @@ public class GraphicsTest : IDisposable
         using Bitmap bitmap = new(20, 20);
         using Graphics g = Graphics.FromImage(bitmap);
         // string format without character ranges
-        Region[] regions = g.MeasureCharacterRanges("Mono", _font, new RectangleF(), new StringFormat());
-        Assert.Equal(0, regions.Length);
+        Region[] regions = g.MeasureCharacterRanges("Mono", _font, default, new StringFormat());
+        Assert.Empty(regions);
 
-        g.MeasureCharacterRanges("Mono".AsSpan(), _font, new RectangleF(), new StringFormat());
-        Assert.Equal(0, regions.Length);
+        g.MeasureCharacterRanges("Mono".AsSpan(), _font, default, new StringFormat());
+        Assert.Empty(regions);
     }
 
     [Fact]
@@ -1884,8 +1884,8 @@ public class GraphicsTest : IDisposable
     {
         using Bitmap bitmap = new(20, 20);
         using Graphics g = Graphics.FromImage(bitmap);
-        Assert.Throws<ArgumentNullException>(() => g.MeasureCharacterRanges("a", null, new RectangleF(), null));
-        Assert.Throws<ArgumentNullException>(() => g.MeasureCharacterRanges("a".AsSpan(), null, new RectangleF(), null));
+        Assert.Throws<ArgumentNullException>(() => g.MeasureCharacterRanges("a", null, default, null));
+        Assert.Throws<ArgumentNullException>(() => g.MeasureCharacterRanges("a".AsSpan(), null, default, null));
     }
 
     [Fact]
@@ -2000,8 +2000,8 @@ public class GraphicsTest : IDisposable
     {
         using Bitmap bitmap = new(20, 20);
         using Graphics g = Graphics.FromImage(bitmap);
-        Assert.Throws<ArgumentException>(() => g.MeasureCharacterRanges("Mono", _font, new RectangleF(), null));
-        Assert.Throws<ArgumentException>(() => g.MeasureCharacterRanges("Mono".AsSpan(), _font, new RectangleF(), null));
+        Assert.Throws<ArgumentException>(() => g.MeasureCharacterRanges("Mono", _font, default, null));
+        Assert.Throws<ArgumentException>(() => g.MeasureCharacterRanges("Mono".AsSpan(), _font, default, null));
     }
 
     private static readonly CharacterRange[] s_ranges = [new(0, 1), new(1, 1), new(2, 1)];
@@ -2177,7 +2177,7 @@ public class GraphicsTest : IDisposable
     {
         using Bitmap b = new(10, 10);
         using Graphics g = Graphics.FromImage(b);
-        Assert.Throws<ArgumentException>(() => g.ReleaseHdc());
+        Assert.Throws<ArgumentException>(g.ReleaseHdc);
     }
 
     [Fact]
@@ -2187,7 +2187,7 @@ public class GraphicsTest : IDisposable
         using Graphics g = Graphics.FromImage(b);
         g.GetHdc();
         g.ReleaseHdc();
-        Assert.Throws<ArgumentException>(() => g.ReleaseHdc());
+        Assert.Throws<ArgumentException>(g.ReleaseHdc);
     }
 
     [ConditionalFact]
@@ -2535,7 +2535,7 @@ public class GraphicsTest : IDisposable
     {
         using Bitmap bmp = new(40, 40);
         using Graphics g = Graphics.FromImage(bmp);
-        g.DrawImage(bmp, [ new(0, 0), new(1, 1), new(2, 2)]);
+        g.DrawImage(bmp, [new(0, 0), new(1, 1), new(2, 2)]);
     }
 
     [Fact]
@@ -2591,7 +2591,7 @@ public class GraphicsTest : IDisposable
     {
         using Bitmap bmp = new(40, 40);
         using Graphics g = Graphics.FromImage(bmp);
-        Assert.Throws<ArgumentNullException>(() => g.DrawImage(null, new Rectangle(), new Rectangle(), GraphicsUnit.Display));
+        Assert.Throws<ArgumentNullException>(() => g.DrawImage(null, default(Rectangle), default, GraphicsUnit.Display));
     }
 
     private void DrawImage_ImageRectangleRectangleGraphicsUnit(GraphicsUnit unit)

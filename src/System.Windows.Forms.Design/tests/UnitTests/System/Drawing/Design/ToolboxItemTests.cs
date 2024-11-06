@@ -973,7 +973,7 @@ public class ToolboxItemTests
     {
         SubToolboxItem item = new();
         item.Lock();
-        Assert.Throws<InvalidOperationException>(() => item.CheckUnlocked());
+        Assert.Throws<InvalidOperationException>(item.CheckUnlocked);
     }
 
     public static IEnumerable<object[]> Equals_TestData()

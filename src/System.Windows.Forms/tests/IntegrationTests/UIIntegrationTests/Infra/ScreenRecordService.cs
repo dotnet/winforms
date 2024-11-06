@@ -451,7 +451,7 @@ internal class ScreenRecordService : IDisposable
         }
 
         Assert.False(ihdr.IsEmpty);
-        Assert.NotEqual(0, idat.Count);
+        Assert.NotEmpty(idat);
         Assert.False(iend.IsEmpty);
 
         return (signature, ihdr, idat.ToImmutableArray(), iend);

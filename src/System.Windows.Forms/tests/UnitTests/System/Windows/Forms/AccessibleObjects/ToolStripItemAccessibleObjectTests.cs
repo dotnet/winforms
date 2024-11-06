@@ -309,7 +309,7 @@ public class ToolStripItemAccessibleObjectTests
     {
         using ToolStrip toolStrip = new() { AutoSize = false, Size = new(300, 30) };
 
-        ToolStripItem CreateSkippedItem()
+        static ToolStripItem CreateSkippedItem()
         {
             return new ToolStripControlHost(new Label());
         }

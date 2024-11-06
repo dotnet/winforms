@@ -1652,7 +1652,7 @@ public class TableLayoutPanelTests
     public void TableLayoutPanel_SetCellPosition_NullControl_ThrowsArgumentNullException()
     {
         using TableLayoutPanel control = new();
-        Assert.Throws<ArgumentNullException>("control", () => control.SetCellPosition(null, new TableLayoutPanelCellPosition()));
+        Assert.Throws<ArgumentNullException>("control", () => control.SetCellPosition(null, default));
     }
 
     [WinFormsTheory]

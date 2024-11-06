@@ -76,7 +76,7 @@ public static class CommonTestHelperEx
     {
         TheoryData<Padding> data = new()
         {
-            new(),
+            default,
             new(1, 2, 3, 4),
             new(1),
             new(-1, -2, -3, -4)
@@ -88,7 +88,7 @@ public static class CommonTestHelperEx
     {
         var data = new TheoryData<Padding, Padding>
         {
-            { new Padding(), new Padding() },
+            { default, default },
             { new Padding(1, 2, 3, 4), new Padding(1, 2, 3, 4) },
             { new Padding(1), new Padding(1) },
             { new Padding(-1, -2, -3, -4), Padding.Empty }

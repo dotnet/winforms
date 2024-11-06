@@ -10,7 +10,7 @@ using Xunit.Sdk;
 
 namespace System.Drawing;
 
-public unsafe static class Helpers
+public static unsafe class Helpers
 {
     // This MUST come before s_anyInstalledPrinters. Caching for performance in tests.
     public static PrinterSettings.StringCollection InstalledPrinters { get; } = PrinterSettings.InstalledPrinters;

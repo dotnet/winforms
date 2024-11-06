@@ -313,11 +313,11 @@ public class TextRendererTests
         Mock<IDeviceContext> mockDeviceContext = new(MockBehavior.Strict);
         mockDeviceContext
             .Setup(c => c.GetHdc())
-            .Returns(() => graphics.GetHdc())
+            .Returns(graphics.GetHdc)
             .Verifiable();
         mockDeviceContext
             .Setup(c => c.ReleaseHdc())
-            .Callback(() => graphics.ReleaseHdc())
+            .Callback(graphics.ReleaseHdc)
             .Verifiable();
 
         TextRenderer.DrawText(mockDeviceContext.Object, "text", SystemFonts.MenuFont, Point.Empty, Color.Red);
@@ -538,11 +538,11 @@ public class TextRendererTests
         Mock<IDeviceContext> mockDeviceContext = new(MockBehavior.Strict);
         mockDeviceContext
             .Setup(c => c.GetHdc())
-            .Returns(() => graphics.GetHdc())
+            .Returns(graphics.GetHdc)
             .Verifiable();
         mockDeviceContext
             .Setup(c => c.ReleaseHdc())
-            .Callback(() => graphics.ReleaseHdc())
+            .Callback(graphics.ReleaseHdc)
             .Verifiable();
 
         TextRenderer.MeasureText(mockDeviceContext.Object, "text", SystemFonts.MenuFont);
@@ -585,8 +585,8 @@ public class TextRendererTests
     }
 
     public static TheoryData<Func<IDeviceContext, Action>> TextRenderer_DrawText_DefaultBackground_RendersTransparent_TestData
-        => new()
-        {
+        =>
+        [
                 (IDeviceContext context) => () =>
                     TextRenderer.DrawText(context, "Acrylic", SystemFonts.DefaultFont,
                         pt: default, Color.Blue),
@@ -599,7 +599,7 @@ public class TextRendererTests
                 (IDeviceContext context) => () =>
                     TextRenderer.DrawText(context, "Acrylic", SystemFonts.DefaultFont,
                         bounds: new Rectangle(0, 0, int.MaxValue, int.MaxValue), Color.Blue, flags: default),
-            };
+            ];
 
     [Theory]
     [MemberData(nameof(TextRenderer_Span_ModifyString_ThrowsArgumentOutOfRange_TestData))]
@@ -610,20 +610,20 @@ public class TextRendererTests
 
 #pragma warning disable CS0618 // Type or member is obsolete
     public static TheoryData<Action> TextRenderer_Span_ModifyString_ThrowsArgumentOutOfRange_TestData()
-        => new()
-        {
+        =>
+        [
             () => TextRenderer.DrawText(
                 MockDC.Instance,
                 string.Empty.AsSpan(),
                 null,
-                new Point(),
+                default(Point),
                 Color.Empty,
                 TextFormatFlags.ModifyString),
             () => TextRenderer.DrawText(
                 MockDC.Instance,
                 string.Empty.AsSpan(),
                 null,
-                new Point(),
+                default(Point),
                 Color.Empty,
                 Color.Empty,
                 TextFormatFlags.ModifyString),
@@ -631,14 +631,14 @@ public class TextRendererTests
                 MockDC.Instance,
                 string.Empty.AsSpan(),
                 null,
-                new Rectangle(),
+                default(Rectangle),
                 Color.Empty,
                 TextFormatFlags.ModifyString),
             () => TextRenderer.DrawText(
                 MockDC.Instance,
                 string.Empty.AsSpan(),
                 null,
-                new Rectangle(),
+                default(Rectangle),
                 Color.Empty,
                 Color.Empty,
                 TextFormatFlags.ModifyString),
@@ -646,14 +646,14 @@ public class TextRendererTests
                 MockDC.Instance,
                 string.Empty.AsSpan(),
                 null,
-                new Size(),
+                default,
                 TextFormatFlags.ModifyString),
             () => TextRenderer.MeasureText(
                 string.Empty.AsSpan(),
                 null,
-                new Size(),
+                default,
                 TextFormatFlags.ModifyString),
-        };
+        ];
 #pragma warning restore CS0618
 
     private class MockDC : IDeviceContext

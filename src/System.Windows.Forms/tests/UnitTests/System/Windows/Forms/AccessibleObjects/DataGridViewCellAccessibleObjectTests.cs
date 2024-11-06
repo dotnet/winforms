@@ -369,7 +369,7 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
     [MemberData(nameof(NoOwner_TestData))]
     public void DataGridViewCellAccessibleObject_DoDefaultAction_NoOwner_ThrowsInvalidOperationException(AccessibleObject accessibleObject)
     {
-        Assert.Throws<InvalidOperationException>(() => accessibleObject.DoDefaultAction());
+        Assert.Throws<InvalidOperationException>(accessibleObject.DoDefaultAction);
     }
 
     [WinFormsTheory]

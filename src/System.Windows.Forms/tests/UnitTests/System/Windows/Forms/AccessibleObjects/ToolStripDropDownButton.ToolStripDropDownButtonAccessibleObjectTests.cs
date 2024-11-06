@@ -104,7 +104,7 @@ public class ToolStripDropDownButton_ToolStripDropDownButtonAccessibleObjectTest
         string name = "Test name";
         ToolStripItem[] dropDownItems = [new ToolStripMenuItem("Test item")];
 
-        ToolStripDropDownButton CreateToolStripDropDownButton(string text = null, Bitmap image = null, EventHandler onClick = null, string name = null, ToolStripItem[] dropDownItems = null)
+        static ToolStripDropDownButton CreateToolStripDropDownButton(string text = null, Bitmap image = null, EventHandler onClick = null, string name = null, ToolStripItem[] dropDownItems = null)
         {
             ToolStripDropDownButton toolStripDropDownButton = new(text, image, dropDownItems);
             toolStripDropDownButton.Click += onClick;

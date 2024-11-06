@@ -9,13 +9,13 @@ namespace System.Windows.Forms.Tests;
 
 public class TextBoxRendererTests
 {
-    public static TheoryData<TextBoxState> DrawTextBox_State_TheoryData() => new()
-    {
+    public static TheoryData<TextBoxState> DrawTextBox_State_TheoryData() =>
+    [
             TextBoxState.Normal,
             TextBoxState.Hot,
             TextBoxState.Selected,
             TextBoxState.Disabled
-    };
+    ];
 
     [WinFormsTheory]
     [MemberData(nameof(DrawTextBox_State_TheoryData))]

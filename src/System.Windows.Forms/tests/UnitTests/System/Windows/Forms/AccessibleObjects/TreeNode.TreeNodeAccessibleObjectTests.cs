@@ -15,7 +15,7 @@ public class TreeNodeAccessibleObjectTests
         using TreeView control = new();
         TreeNode node = new(control);
 
-        node.AccessibilityObject.Should().NotBeNull();      
+        node.AccessibilityObject.Should().NotBeNull();
         node.AccessibilityObject.CanGetDefaultActionInternal.Should().BeFalse();
         node.AccessibilityObject.CanGetNameInternal.Should().BeFalse();
         node.AccessibilityObject.IsItemSelected.Should().BeFalse();

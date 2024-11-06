@@ -104,7 +104,7 @@ public class ToolStripContainerTests : IDisposable
         _toolStripContainer.BackgroundImageLayoutChanged -= handler;
 
         _toolStripContainer.BackgroundImageLayout = ImageLayout.Stretch;
-        callCount.Should().BeGreaterThan(1); 
+        callCount.Should().BeGreaterThan(1);
     }
 
     [WinFormsTheory]

@@ -176,7 +176,7 @@ public class CheckedListBoxTests
 
     public static IEnumerable<object[]> Padding_SetWithHandle_TestData()
     {
-        yield return new object[] { new Padding(), new Padding(), 0, 0 };
+        yield return new object[] { default(Padding), default(Padding), 0, 0 };
         yield return new object[] { new Padding(1, 2, 3, 4), new Padding(1, 2, 3, 4), 1, 1 };
         yield return new object[] { new Padding(1), new Padding(1), 1, 1 };
         yield return new object[] { new Padding(-1, -2, -3, -4), Padding.Empty, 1, 2 };
@@ -508,24 +508,24 @@ public class CheckedListBoxTests
         Assert.Equal(3, checkedListBox.Items.Count);
         Assert.Equal(checkedListBox.Items[0], checkedListBox.SelectedItem);
         Assert.Equal(0, checkedListBox.SelectedIndex);
-        Assert.Equal(1, checkedListBox.SelectedIndices.Count);
-        Assert.Equal(1, checkedListBox.SelectedItems.Count);
+        Assert.Single(checkedListBox.SelectedIndices);
+        Assert.Single(checkedListBox.SelectedItems);
 
         checkedListBox.Items.Remove(checkedListBox.Items[2]);
 
         Assert.Equal(2, checkedListBox.Items.Count);
         Assert.Equal(checkedListBox.Items[0], checkedListBox.SelectedItem);
         Assert.Equal(0, checkedListBox.SelectedIndex);
-        Assert.Equal(1, checkedListBox.SelectedIndices.Count);
-        Assert.Equal(1, checkedListBox.SelectedItems.Count);
+        Assert.Single(checkedListBox.SelectedIndices);
+        Assert.Single(checkedListBox.SelectedItems);
 
         checkedListBox.Items.Remove(checkedListBox.Items[1]);
 
-        Assert.Equal(1, checkedListBox.Items.Count);
+        Assert.Single(checkedListBox.Items);
         Assert.Equal(checkedListBox.Items[0], checkedListBox.SelectedItem);
         Assert.Equal(0, checkedListBox.SelectedIndex);
-        Assert.Equal(1, checkedListBox.SelectedIndices.Count);
-        Assert.Equal(1, checkedListBox.SelectedItems.Count);
+        Assert.Single(checkedListBox.SelectedIndices);
+        Assert.Single(checkedListBox.SelectedItems);
         Assert.Equal(createControl, checkedListBox.IsHandleCreated);
     }
 
@@ -549,8 +549,8 @@ public class CheckedListBoxTests
 
             Assert.Equal(checkedListBox.Items[0], checkedListBox.SelectedItem);
             Assert.Equal(0, checkedListBox.SelectedIndex);
-            Assert.Equal(1, checkedListBox.SelectedIndices.Count);
-            Assert.Equal(1, checkedListBox.SelectedItems.Count);
+            Assert.Single(checkedListBox.SelectedIndices);
+            Assert.Single(checkedListBox.SelectedItems);
 
             checkedListBox.Items.Remove(checkedListBox.Items[0]);
             count -= 1;
@@ -558,8 +558,8 @@ public class CheckedListBoxTests
             Assert.Equal(count, checkedListBox.Items.Count);
             Assert.Null(checkedListBox.SelectedItem);
             Assert.Equal(-1, checkedListBox.SelectedIndex);
-            Assert.Equal(0, checkedListBox.SelectedIndices.Count);
-            Assert.Equal(0, checkedListBox.SelectedItems.Count);
+            Assert.Empty(checkedListBox.SelectedIndices);
+            Assert.Empty(checkedListBox.SelectedItems);
         }
     }
 
@@ -581,16 +581,16 @@ public class CheckedListBoxTests
 
         for (int count = checkedListBox.Items.Count; count > 1; count -= 1)
         {
-            Assert.Equal(1, checkedListBox.CheckedIndices.Count);
-            Assert.Equal(1, checkedListBox.CheckedItems.Count);
+            Assert.Single(checkedListBox.CheckedIndices);
+            Assert.Single(checkedListBox.CheckedItems);
 
             checkedListBox.Items.Remove(checkedListBox.Items[2]);
 
             count -= 1;
 
             Assert.Equal(count, checkedListBox.Items.Count);
-            Assert.Equal(1, checkedListBox.CheckedIndices.Count);
-            Assert.Equal(1, checkedListBox.CheckedItems.Count);
+            Assert.Single(checkedListBox.CheckedIndices);
+            Assert.Single(checkedListBox.CheckedItems);
         }
     }
 
@@ -612,16 +612,16 @@ public class CheckedListBoxTests
         {
             checkedListBox.SetItemChecked(0, true);
 
-            Assert.Equal(1, checkedListBox.CheckedIndices.Count);
-            Assert.Equal(1, checkedListBox.CheckedItems.Count);
+            Assert.Single(checkedListBox.CheckedIndices);
+            Assert.Single(checkedListBox.CheckedItems);
 
             checkedListBox.Items.Remove(checkedListBox.Items[0]);
 
             count -= 1;
 
             Assert.Equal(count, checkedListBox.Items.Count);
-            Assert.Equal(0, checkedListBox.CheckedIndices.Count);
-            Assert.Equal(0, checkedListBox.CheckedItems.Count);
+            Assert.Empty(checkedListBox.CheckedIndices);
+            Assert.Empty(checkedListBox.CheckedItems);
         }
     }
 

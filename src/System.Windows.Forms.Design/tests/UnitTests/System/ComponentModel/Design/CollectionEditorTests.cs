@@ -110,7 +110,7 @@ public class CollectionEditorTests
     public void CollectionEditor_CreateCollectionForm_NullCollectionType_ThrowsArgumentNullException()
     {
         SubCollectionEditor editor = new(null);
-        Assert.Throws<ArgumentNullException>("type", () => editor.CreateCollectionForm());
+        Assert.Throws<ArgumentNullException>("type", editor.CreateCollectionForm);
     }
 
     [Theory]
@@ -135,7 +135,7 @@ public class CollectionEditorTests
     public void CollectionEditor_CreateCollectionItemType_NullType_ThrowsArgumentNullException()
     {
         SubCollectionEditor editor = new(null);
-        Assert.Throws<ArgumentNullException>("type", () => editor.CreateCollectionItemType());
+        Assert.Throws<ArgumentNullException>("type", editor.CreateCollectionItemType);
     }
 
     public static IEnumerable<object[]> InvalidDesignerHost_TestData()
@@ -383,7 +383,7 @@ public class CollectionEditorTests
     public void CollectionEditor_CreateNewItemTypes_NullType_ThrowsArgumentNullException()
     {
         SubCollectionEditor editor = new(null);
-        Assert.Throws<ArgumentNullException>("type", () => editor.CreateNewItemTypes());
+        Assert.Throws<ArgumentNullException>("type", editor.CreateNewItemTypes);
     }
 
     public static IEnumerable<object[]> DestroyInstance_NormalObject_TestData()
@@ -1072,7 +1072,9 @@ public class CollectionEditorTests
 #pragma warning restore IDE0051
     }
 
+#pragma warning disable CA1052 // Static holder types should be Static or NotInheritable
     private class ClassWithStaticItem
+#pragma warning restore CA1052 // Static holder types should be Static or NotInheritable
     {
         public static int Item { get; set; }
     }
@@ -1089,7 +1091,9 @@ public class CollectionEditorTests
 #pragma warning restore IDE0051
     }
 
+#pragma warning disable CA1052 // Static holder types should be Static or NotInheritable
     private class ClassWithStaticItems
+#pragma warning restore CA1052 // Static holder types should be Static or NotInheritable
     {
         public static int Items { get; set; }
     }

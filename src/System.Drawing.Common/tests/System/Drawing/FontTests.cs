@@ -411,7 +411,7 @@ public class FontTests
         Font font = new(family, 10);
         font.Dispose();
 
-        AssertExtensions.Throws<ArgumentException>(null, () => font.Clone());
+        AssertExtensions.Throws<ArgumentException>(null, font.Clone);
     }
 
     public static IEnumerable<object[]> Equals_TestData()
@@ -652,7 +652,7 @@ public class FontTests
         }
     }
 
-    [Serializable()]
+    [Serializable]
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
     public struct UnblittableLOGFONT
     {

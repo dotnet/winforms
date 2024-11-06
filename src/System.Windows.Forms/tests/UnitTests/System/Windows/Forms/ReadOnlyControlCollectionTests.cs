@@ -8,7 +8,7 @@ public class ReadOnlyControlCollectionTests
     [WinFormsFact]
     public void ReadOnlyControlCollection_Ctor_Control()
     {
-        using Control owner = new ();
+        using Control owner = new();
         ReadOnlyControlCollection collection = new(owner, false);
 
         Assert.Empty(collection);

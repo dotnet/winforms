@@ -5,7 +5,7 @@ using System.Collections;
 
 namespace System.Windows.Forms.Tests;
 
-public class CheckedListBox_CheckedIndexCollectionTests: IDisposable
+public class CheckedListBox_CheckedIndexCollectionTests : IDisposable
 {
     private readonly CheckedListBox _checkedListBox;
     private readonly CheckedListBox.CheckedIndexCollection _collection;

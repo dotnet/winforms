@@ -147,4 +147,3 @@ public class PictureBox_PictureBoxAccessibleObjectTests
         Assert.False(pictureBox.IsHandleCreated);
     }
 }
-

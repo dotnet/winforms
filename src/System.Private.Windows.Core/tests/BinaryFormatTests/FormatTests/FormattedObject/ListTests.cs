@@ -47,7 +47,7 @@ public class ListTests : SerializationTest
         new ArrayList()
         {
             int.MaxValue,
-            new Point()
+            default(Point)
         }
     };
 

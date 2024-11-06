@@ -12,7 +12,7 @@ public class PaddingTests
     [Fact]
     public void Padding_Ctor_Default()
     {
-        Padding padding = new();
+        Padding padding = default;
         Assert.Equal(-1, padding.All);
         Assert.Equal(0, padding.Left);
         Assert.Equal(0, padding.Top);

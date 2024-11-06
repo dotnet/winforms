@@ -9,7 +9,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
     Public Class TimeTests
         Friend Const PrecisionTickLimit As Integer = 1_000_000
 
-        Private Function TimesEqual(
+        Private Shared Function TimesEqual(
             vbTime As Date,
             systemTime As Date,
             acceptableDifferenceInTicks As Long) As Boolean

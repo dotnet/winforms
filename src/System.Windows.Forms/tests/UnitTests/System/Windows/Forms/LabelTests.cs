@@ -343,7 +343,7 @@ public class LabelTests
             Assert.Equal(0, layoutCallCount);
             Assert.Equal(autoSize, control.AutoSize);
             Assert.False(control.IsHandleCreated);
-        }   
+        }
     }
 
     [WinFormsTheory]
@@ -373,7 +373,7 @@ public class LabelTests
             label.FlatStyle = FlatStyle.Flat;
             label.CreateControl();
             Assert.True(label.IsHandleCreated);
-            Assert.Equal(FlatStyle.Flat, label.FlatStyle); 
+            Assert.Equal(FlatStyle.Flat, label.FlatStyle);
         }
     }
 

@@ -57,7 +57,7 @@ internal struct EMRPOLYPOLY16
     {
         get
         {
-            fixed(uint* c = &_aPolyCounts)
+            fixed (uint* c = &_aPolyCounts)
             {
                 return new(c, checked((int)nPolys));
             }

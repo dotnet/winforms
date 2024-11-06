@@ -13,7 +13,7 @@ public class TableLayoutPanelCellPositionTests
     [Fact]
     public void TableLayoutPanelCellPosition_Ctor_Default()
     {
-        TableLayoutPanelCellPosition style = new();
+        TableLayoutPanelCellPosition style = default;
         Assert.Equal(0, style.Column);
         Assert.Equal(0, style.Row);
     }
@@ -198,7 +198,7 @@ public class TableLayoutPanelCellPositionTests
     public void TableLayoutPanelCellPosition_ConverterConvertTo_InvalidDestinationType_ThrowsNotSupportedException(Type destinationType)
     {
         TypeConverter converter = TypeDescriptor.GetConverter(typeof(TableLayoutPanelCellPosition));
-        Assert.Throws<NotSupportedException>(() => converter.ConvertTo(new TableLayoutPanelCellPosition(), destinationType));
+        Assert.Throws<NotSupportedException>(() => converter.ConvertTo(default(TableLayoutPanelCellPosition), destinationType));
     }
 
     [Fact]

@@ -9,7 +9,7 @@ public static class ReflectionHelper
 {
     public static IEnumerable<Type> GetPublicNotAbstractClasses<T>()
     {
-        var types = typeof(T).Assembly.GetTypes().Where(type => IsPublicNonAbstract<T>(type));
+        var types = typeof(T).Assembly.GetTypes().Where(IsPublicNonAbstract<T>);
         foreach (var type in types)
         {
             if (type.GetConstructor(

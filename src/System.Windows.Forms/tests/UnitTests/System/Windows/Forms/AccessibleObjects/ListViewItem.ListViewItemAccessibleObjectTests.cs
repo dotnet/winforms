@@ -486,8 +486,8 @@ public class ListViewItem_ListViewItemAccessibleObjectTests
 
         Assert.NotNull(lastChild1);
         Assert.NotNull(lastChild2);
-        Assert.Equal(1, listView.Items[0].SubItems.Count);
-        Assert.Equal(1, listView.Items[1].SubItems.Count);
+        Assert.Single(listView.Items[0].SubItems);
+        Assert.Single(listView.Items[1].SubItems);
 
         listView.Items[0].SubItems.Add(new ListViewSubItem() { Text = $"SubItem 0" });
         listView.Items[1].SubItems.Add(new ListViewSubItem() { Text = $"SubItem 0" });
@@ -526,8 +526,8 @@ public class ListViewItem_ListViewItemAccessibleObjectTests
 
         Assert.NotNull(lastChild1);
         Assert.NotNull(lastChild2);
-        Assert.Equal(1, listView.Items[0].SubItems.Count);
-        Assert.Equal(1, listView.Items[1].SubItems.Count);
+        Assert.Single(listView.Items[0].SubItems);
+        Assert.Single(listView.Items[1].SubItems);
         Assert.Equal(createControl, listView.IsHandleCreated);
     }
 
@@ -1624,7 +1624,7 @@ public class ListViewItem_ListViewItemAccessibleObjectTests
         ListViewItem listViewItem = new("Item 1", imageIndex: hasImage ? 0 : -1);
         listView.Items.Add(listViewItem);
         var accessibleObject = (ListViewItemDetailsAccessibleObject)listView.Items[0].AccessibilityObject;
-        
+
         Assert.Equal(expectedFirstSubItemIndex, accessibleObject.GetChildIndex(listView.Items[0].SubItems[0].AccessibilityObject));
         Assert.False(listView.IsHandleCreated);
     }

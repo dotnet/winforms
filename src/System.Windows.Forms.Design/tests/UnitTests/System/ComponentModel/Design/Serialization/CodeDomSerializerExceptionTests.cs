@@ -106,6 +106,6 @@ public class CodeDomSerializerExceptionTests
     public void CodeDomSerializerException_GetObjectData_ThrowsPlatformNotSupportedException()
     {
         CodeDomSerializerException exception = new("message", new CodeLinePragma("fileName.cs", 11));
-        Assert.Throws<PlatformNotSupportedException>(() => exception.GetObjectData(null, new StreamingContext()));
+        Assert.Throws<PlatformNotSupportedException>(() => exception.GetObjectData(null, default));
     }
 }

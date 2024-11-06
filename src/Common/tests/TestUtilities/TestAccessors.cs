@@ -33,14 +33,14 @@ public static partial class TestAccessors
     ///   <![CDATA[
     ///   Version version = new Version(4, 1);
     ///    Assert.Equal(4, version.TestAccessor().Dynamic._Major));
-    ///   
+    ///
     ///    // Or
-    ///   
+    ///
     ///    dynamic accessor = version.TestAccessor().Dynamic;
     ///    Assert.Equal(4, accessor._Major));
-    ///   
+    ///
     ///    // Or
-    ///   
+    ///
     ///    Version version2 = new Version("4.1");
     ///    dynamic accessor = typeof(Version).TestAccessor().Dynamic;
     ///    Assert.Equal(version2, accessor.Parse("4.1")));

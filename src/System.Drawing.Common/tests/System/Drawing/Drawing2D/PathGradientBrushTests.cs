@@ -1,6 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-//
+
 // Copyright (C) 2005-2006 Novell, Inc (http://www.novell.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -131,7 +131,7 @@ public class PathGradientBrushTests
         PathGradientBrush brush = new(_defaultFloatPoints);
         brush.Dispose();
 
-        AssertExtensions.Throws<ArgumentException>(null, () => brush.Clone());
+        AssertExtensions.Throws<ArgumentException>(null, brush.Clone);
     }
 
     [Fact]
@@ -265,7 +265,7 @@ public class PathGradientBrushTests
         else
         {
             Assert.Equal(factors, brush.Blend.Factors);
-            Assert.Equal(1, brush.Blend.Positions.Length);
+            Assert.Single(brush.Blend.Positions);
         }
     }
 
@@ -274,13 +274,13 @@ public class PathGradientBrushTests
     {
         using PathGradientBrush brush = new(_defaultFloatPoints, WrapMode.TileFlipXY);
         brush.Blend.Factors = [];
-        Assert.Equal(1, brush.Blend.Factors.Length);
+        Assert.Single(brush.Blend.Factors);
         brush.Blend.Factors = new float[2];
-        Assert.Equal(1, brush.Blend.Factors.Length);
+        Assert.Single(brush.Blend.Factors);
         brush.Blend.Positions = [];
-        Assert.Equal(1, brush.Blend.Positions.Length);
+        Assert.Single(brush.Blend.Positions);
         brush.Blend.Positions = new float[2];
-        Assert.Equal(1, brush.Blend.Positions.Length);
+        Assert.Single(brush.Blend.Positions);
     }
 
     [Fact]
@@ -312,7 +312,7 @@ public class PathGradientBrushTests
     [Fact]
     public void Blend_InvalidFactorPositionsLengthMismatch_ThrowsArgumentException()
     {
-        Blend invalidBlend = new () { Factors = new float[2], Positions = new float[1] };
+        Blend invalidBlend = new() { Factors = new float[2], Positions = new float[1] };
 
         using PathGradientBrush brush = new(_defaultFloatPoints);
         AssertExtensions.Throws<ArgumentException>("value", null, () => brush.Blend = invalidBlend);
@@ -554,9 +554,9 @@ public class PathGradientBrushTests
         Assert.NotEqual(Color.Pink, brush.InterpolationColors.Colors[0]);
         Assert.Equal(defaultColors, brush.InterpolationColors.Colors);
         brush.InterpolationColors.Positions = [];
-        Assert.Equal(1, brush.InterpolationColors.Positions.Length);
+        Assert.Single(brush.InterpolationColors.Positions);
         brush.InterpolationColors.Positions = new float[2];
-        Assert.Equal(1, brush.InterpolationColors.Positions.Length);
+        Assert.Single(brush.InterpolationColors.Positions);
     }
 
     [Fact]
@@ -688,7 +688,7 @@ public class PathGradientBrushTests
         PathGradientBrush brush = new(_defaultFloatPoints);
         brush.Dispose();
 
-        AssertExtensions.Throws<ArgumentException>(null, () => brush.ResetTransform());
+        AssertExtensions.Throws<ArgumentException>(null, brush.ResetTransform);
     }
 
     [Fact]
@@ -941,7 +941,7 @@ public class PathGradientBrushTests
     {
         Assert.Equal(_defaultRectangle, brush.Rectangle);
         Assert.Equal([1], brush.Blend.Factors);
-        Assert.Equal(1, brush.Blend.Positions.Length);
+        Assert.Single(brush.Blend.Positions);
         Assert.Equal(new PointF(10.5f, 16f), brush.CenterPoint);
         Assert.Equal(new Color[] { Color.Empty }, brush.InterpolationColors.Colors);
         Assert.Equal(new Color[] { Color.FromArgb(255, 255, 255, 255) }, brush.SurroundColors);

@@ -1018,7 +1018,7 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
             AccessibleObject columnHeaderAccessibleObject = columns[i].AccessibilityObject;
             IRawElementProviderSimple.Interface[] columnHeaderItems = subItemAccessibleObject.GetColumnHeaderItems();
 
-            Assert.Equal(1, columnHeaderItems.Length);
+            Assert.Single(columnHeaderItems);
             Assert.Same(columnHeaderAccessibleObject, columnHeaderItems[0]);
         }
     }
