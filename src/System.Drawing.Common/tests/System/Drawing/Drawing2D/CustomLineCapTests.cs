@@ -214,7 +214,7 @@ public class CustomLineCapTests
         AssertExtensions.Throws<ArgumentException>(null, () => customLineCap.BaseCap);
         AssertExtensions.Throws<ArgumentException>(null, () => customLineCap.BaseInset);
         AssertExtensions.Throws<ArgumentException>(null, () => customLineCap.WidthScale);
-        AssertExtensions.Throws<ArgumentException>(null, () => customLineCap.Clone());
+        AssertExtensions.Throws<ArgumentException>(null, customLineCap.Clone);
         AssertExtensions.Throws<ArgumentException>(null, () => customLineCap.SetStrokeCaps(LineCap.Flat, LineCap.Flat));
         AssertExtensions.Throws<ArgumentException>(null, () => customLineCap.GetStrokeCaps(out LineCap startCap, out LineCap endCap));
     }

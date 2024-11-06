@@ -64,7 +64,7 @@ public class BindingSourceTests
         yield return new object[] { new DataClass { List = null }, nameof(DataClass.List), typeof(BindingList<int>) };
 
         yield return new object[] { new ObjectDataClass { List = null }, nameof(ObjectDataClass.List), typeof(BindingList<object>) };
-        yield return new object[] { new ObjectDataClass { List = null }, nameof(ObjectDataClass.List).ToLower(), typeof(BindingList<object>) };
+        yield return new object[] { new ObjectDataClass { List = null }, nameof(ObjectDataClass.List).ToLowerInvariant(), typeof(BindingList<object>) };
     }
 
     [WinFormsTheory]
@@ -207,7 +207,7 @@ public class BindingSourceTests
         List<int> list = [1, 2, 3];
         DataClass listDataClass = new() { List = list };
         yield return new object[] { listDataClass, nameof(DataClass.List), true, false, true, false, false, false, list };
-        yield return new object[] { listDataClass, nameof(DataClass.List).ToLower(), true, false, true, false, false, false, list };
+        yield return new object[] { listDataClass, nameof(DataClass.List).ToLowerInvariant(), true, false, true, false, false, false, list };
 
         Mock<IListSource> mockListSource = new(MockBehavior.Strict);
         mockListSource
@@ -215,7 +215,7 @@ public class BindingSourceTests
             .Returns(list);
         ListSourceDataClass listSourceDataClass = new() { ListSource = mockListSource.Object };
         yield return new object[] { listSourceDataClass, nameof(ListSourceDataClass.ListSource), true, false, true, false, false, false, list };
-        yield return new object[] { listSourceDataClass, nameof(ListSourceDataClass.ListSource).ToLower(), true, false, true, false, false, false, list };
+        yield return new object[] { listSourceDataClass, nameof(ListSourceDataClass.ListSource).ToLowerInvariant(), true, false, true, false, false, false, list };
     }
 
     [WinFormsTheory]
@@ -282,10 +282,10 @@ public class BindingSourceTests
         yield return new object[] { new ObjectDataClass { List = o1 }, nameof(ObjectDataClass.List), true, true, true, false, false, false, new BindingList<object> { o1 }, typeof(BindingList<object>) };
 
         object o2 = new();
-        yield return new object[] { new ObjectDataClass { List = o2 }, nameof(ObjectDataClass.List).ToLower(), true, true, true, false, false, false, new BindingList<object> { o2 }, typeof(BindingList<object>) };
+        yield return new object[] { new ObjectDataClass { List = o2 }, nameof(ObjectDataClass.List).ToLowerInvariant(), true, true, true, false, false, false, new BindingList<object> { o2 }, typeof(BindingList<object>) };
 
         yield return new object[] { new ObjectDataClass { List = 1 }, nameof(ObjectDataClass.List), true, true, true, false, false, false, new BindingList<int> { 1 }, typeof(BindingList<int>) };
-        yield return new object[] { new ObjectDataClass { List = 1 }, nameof(ObjectDataClass.List).ToLower(), true, true, true, false, false, false, new BindingList<int> { 1 }, typeof(BindingList<int>) };
+        yield return new object[] { new ObjectDataClass { List = 1 }, nameof(ObjectDataClass.List).ToLowerInvariant(), true, true, true, false, false, false, new BindingList<int> { 1 }, typeof(BindingList<int>) };
     }
 
     [WinFormsTheory]

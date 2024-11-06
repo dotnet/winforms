@@ -12,7 +12,7 @@ public class ListBoxObjectCollectionTests
     {
         using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.False(collection.IsReadOnly);
@@ -63,7 +63,7 @@ public class ListBoxObjectCollectionTests
 
         var emptyCollection = new ListBox.ObjectCollection(owner);
         Assert.Empty(emptyCollection);
-        Assert.Equal(0, emptyCollection.Count);
+        Assert.Empty(emptyCollection);
         Assert.Empty(emptyCollection);
         Assert.Empty(owner.Items);
         Assert.False(emptyCollection.IsReadOnly);
@@ -84,7 +84,7 @@ public class ListBoxObjectCollectionTests
     {
         using ListBox owner = new();
         ICollection collection = new ListBox.ObjectCollection(owner);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.False(collection.IsSynchronized);
         Assert.Same(collection, collection.SyncRoot);
     }
@@ -94,7 +94,7 @@ public class ListBoxObjectCollectionTests
     {
         using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.False(collection.IsFixedSize);
         Assert.False(collection.IsReadOnly);
         Assert.False(collection.IsSynchronized);
@@ -1303,7 +1303,7 @@ public class ListBoxObjectCollectionTests
 
         // Add one.
         Assert.Equal(0, collection.Add(2));
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new object[] { 2 }, collection.Cast<object>());
         Assert.Empty(owner.Items);
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -1344,7 +1344,7 @@ public class ListBoxObjectCollectionTests
 
         // Add one.
         Assert.Equal(0, collection.Add(2));
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new object[] { 2 }, collection.Cast<object>());
         Assert.Equal(new object[] { 2 }, owner.Items.Cast<object>());
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -1388,7 +1388,7 @@ public class ListBoxObjectCollectionTests
 
         // Add one.
         Assert.Equal(0, collection.Add(2));
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new object[] { 2 }, collection.Cast<object>());
         Assert.Empty(owner.Items);
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -1432,7 +1432,7 @@ public class ListBoxObjectCollectionTests
 
         // Add one.
         Assert.Equal(0, collection.Add(2));
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new object[] { 2 }, collection.Cast<object>());
         Assert.Equal(new object[] { 2 }, owner.Items.Cast<object>());
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -1479,7 +1479,7 @@ public class ListBoxObjectCollectionTests
 
         // Add one.
         Assert.Equal(0, collection.Add(2));
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new object[] { 2 }, collection.Cast<object>());
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -1558,7 +1558,7 @@ public class ListBoxObjectCollectionTests
 
         // Add one.
         Assert.Equal(0, collection.Add(2));
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new object[] { 2 }, collection.Cast<object>());
         Assert.Equal(new object[] { 2 }, owner.Items.Cast<object>());
         Assert.True(owner.IsHandleCreated);
@@ -1640,7 +1640,7 @@ public class ListBoxObjectCollectionTests
 
         // Add one.
         Assert.Equal(0, collection.Add(2));
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new object[] { 2 }, collection.Cast<object>());
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -1722,7 +1722,7 @@ public class ListBoxObjectCollectionTests
 
         // Add one.
         Assert.Equal(0, collection.Add(2));
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new object[] { 2 }, collection.Cast<object>());
         Assert.Equal(new object[] { 2 }, owner.Items.Cast<object>());
         Assert.True(owner.IsHandleCreated);
@@ -3701,16 +3701,16 @@ public class ListBoxObjectCollectionTests
         using ListBox owner = new();
         var collection = new ListBox.ObjectCollection(owner);
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.Items.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.Items);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.False(owner.IsHandleCreated);
 
         // Call again.
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.Items.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.Items);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.False(owner.IsHandleCreated);
@@ -3722,16 +3722,16 @@ public class ListBoxObjectCollectionTests
         using ListBox owner = new();
         ListBox.ObjectCollection collection = owner.Items;
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.Items.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.Items);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.False(owner.IsHandleCreated);
 
         // Call again.
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.Items.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.Items);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.False(owner.IsHandleCreated);
@@ -3747,16 +3747,16 @@ public class ListBoxObjectCollectionTests
         };
 
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.Items.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.Items);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.False(owner.IsHandleCreated);
 
         // Call again.
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.Items.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.Items);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.False(owner.IsHandleCreated);
@@ -3770,16 +3770,16 @@ public class ListBoxObjectCollectionTests
         collection.Add(1);
 
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.Items.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.Items);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.False(owner.IsHandleCreated);
 
         // Call again.
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.Items.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.Items);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.False(owner.IsHandleCreated);
@@ -3799,8 +3799,8 @@ public class ListBoxObjectCollectionTests
         owner.HandleCreated += (sender, e) => createdCallCount++;
 
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.Items.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.Items);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -3811,8 +3811,8 @@ public class ListBoxObjectCollectionTests
 
         // Call again.
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.Items.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.Items);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -3836,8 +3836,8 @@ public class ListBoxObjectCollectionTests
         owner.HandleCreated += (sender, e) => createdCallCount++;
 
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.Items.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.Items);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -3848,8 +3848,8 @@ public class ListBoxObjectCollectionTests
 
         // Call again.
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.Items.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.Items);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -3874,8 +3874,8 @@ public class ListBoxObjectCollectionTests
         collection.Add(1);
 
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.Items.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.Items);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -3886,8 +3886,8 @@ public class ListBoxObjectCollectionTests
 
         // Call again.
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.Items.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.Items);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -3912,8 +3912,8 @@ public class ListBoxObjectCollectionTests
         collection.Add(1);
 
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.Items.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.Items);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -3924,8 +3924,8 @@ public class ListBoxObjectCollectionTests
 
         // Call again.
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.Items.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.Items);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -4126,7 +4126,7 @@ public class ListBoxObjectCollectionTests
 
         // Insert first.
         collection.Insert(0, 1);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new object[] { 1 }, collection.Cast<object>());
         Assert.Empty(owner.Items);
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -4167,7 +4167,7 @@ public class ListBoxObjectCollectionTests
 
         // Insert first.
         collection.Insert(0, 1);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new object[] { 1 }, collection.Cast<object>());
         Assert.Equal(new object[] { 1 }, owner.Items.Cast<object>());
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -4211,7 +4211,7 @@ public class ListBoxObjectCollectionTests
 
         // Insert first.
         collection.Insert(0, 1);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new object[] { 1 }, collection.Cast<object>());
         Assert.Empty(owner.Items);
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -4255,7 +4255,7 @@ public class ListBoxObjectCollectionTests
 
         // Insert first.
         collection.Insert(0, 1);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new object[] { 1 }, collection.Cast<object>());
         Assert.Equal(new object[] { 1 }, owner.Items.Cast<object>());
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -4302,7 +4302,7 @@ public class ListBoxObjectCollectionTests
 
         // Insert first.
         collection.Insert(0, 1);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new object[] { 1 }, collection.Cast<object>());
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -4381,7 +4381,7 @@ public class ListBoxObjectCollectionTests
 
         // Insert first.
         collection.Insert(0, 1);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new object[] { 1 }, collection.Cast<object>());
         Assert.Equal(new object[] { 1 }, owner.Items.Cast<object>());
         Assert.True(owner.IsHandleCreated);
@@ -4463,7 +4463,7 @@ public class ListBoxObjectCollectionTests
 
         // Insert first.
         collection.Insert(0, 1);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new object[] { 1 }, collection.Cast<object>());
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -4545,7 +4545,7 @@ public class ListBoxObjectCollectionTests
 
         // Insert first.
         collection.Insert(0, 1);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new object[] { 1 }, collection.Cast<object>());
         Assert.Equal(new object[] { 1 }, owner.Items.Cast<object>());
         Assert.True(owner.IsHandleCreated);
@@ -5081,7 +5081,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove last.
         collection.Remove(3);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 2 }, collection.Cast<int>());
         Assert.Empty(owner.Items);
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -5089,7 +5089,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove first.
         collection.Remove(2);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -5123,14 +5123,14 @@ public class ListBoxObjectCollectionTests
 
         // Remove last.
         collection.Remove(3);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 2 }, collection.Cast<int>());
         Assert.Equal(new int[] { 2 }, owner.Items.Cast<int>());
         Assert.False(owner.IsHandleCreated);
 
         // Remove first.
         collection.Remove(2);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -5171,7 +5171,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove last.
         collection.Remove(3);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 1 }, collection.Cast<int>());
         Assert.Empty(owner.Items);
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -5179,7 +5179,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove first.
         collection.Remove(1);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -5216,14 +5216,14 @@ public class ListBoxObjectCollectionTests
 
         // Remove last.
         collection.Remove(3);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 1 }, collection.Cast<int>());
         Assert.Equal(new int[] { 1 }, owner.Items.Cast<int>());
         Assert.False(owner.IsHandleCreated);
 
         // Remove first.
         collection.Remove(1);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -5279,7 +5279,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove last.
         collection.Remove(3);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 2 }, collection.Cast<int>());
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -5292,7 +5292,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove first.
         collection.Remove(2);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -5355,7 +5355,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove last.
         collection.Remove(3);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 2 }, collection.Cast<int>());
         Assert.Equal(new int[] { 2 }, owner.Items.Cast<int>());
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -5369,7 +5369,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove first.
         collection.Remove(2);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -5431,7 +5431,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove last.
         collection.Remove(3);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 1 }, collection.Cast<int>());
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -5444,7 +5444,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove first.
         collection.Remove(1);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -5510,7 +5510,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove last.
         collection.Remove(3);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 1 }, collection.Cast<int>());
         Assert.Equal(new int[] { 1 }, owner.Items.Cast<int>());
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -5524,7 +5524,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove first.
         collection.Remove(1);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -6020,7 +6020,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove last.
         collection.RemoveAt(1);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 2 }, collection.Cast<int>());
         Assert.Empty(owner.Items);
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -6028,7 +6028,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove first.
         collection.RemoveAt(0);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -6055,14 +6055,14 @@ public class ListBoxObjectCollectionTests
 
         // Remove last.
         collection.RemoveAt(1);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 2 }, collection.Cast<int>());
         Assert.Equal(new int[] { 2 }, owner.Items.Cast<int>());
         Assert.False(owner.IsHandleCreated);
 
         // Remove first.
         collection.RemoveAt(0);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -6095,7 +6095,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove last.
         collection.RemoveAt(1);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 1 }, collection.Cast<int>());
         Assert.Empty(owner.Items);
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -6103,7 +6103,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove first.
         collection.RemoveAt(0);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -6133,14 +6133,14 @@ public class ListBoxObjectCollectionTests
 
         // Remove last.
         collection.RemoveAt(1);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 1 }, collection.Cast<int>());
         Assert.Equal(new int[] { 1 }, owner.Items.Cast<int>());
         Assert.False(owner.IsHandleCreated);
 
         // Remove first.
         collection.RemoveAt(0);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -6181,7 +6181,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove last.
         collection.RemoveAt(1);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 2 }, collection.Cast<int>());
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -6194,7 +6194,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove first.
         collection.RemoveAt(0);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -6241,7 +6241,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove last.
         collection.RemoveAt(1);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 2 }, collection.Cast<int>());
         Assert.Equal(new int[] { 2 }, owner.Items.Cast<int>());
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -6255,7 +6255,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove first.
         collection.RemoveAt(0);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -6302,7 +6302,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove last.
         collection.RemoveAt(1);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 1 }, collection.Cast<int>());
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -6315,7 +6315,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove first.
         collection.RemoveAt(0);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -6365,7 +6365,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove last.
         collection.RemoveAt(1);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 1 }, collection.Cast<int>());
         Assert.Equal(new int[] { 1 }, owner.Items.Cast<int>());
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -6379,7 +6379,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove first.
         collection.RemoveAt(0);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -8108,7 +8108,7 @@ public class ListBoxObjectCollectionTests
 
         // Add one.
         Assert.Equal(0, collection.Add(2));
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new object[] { 2 }, collection.Cast<object>());
         Assert.Empty(owner.Items);
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -8149,7 +8149,7 @@ public class ListBoxObjectCollectionTests
 
         // Add one.
         Assert.Equal(0, collection.Add(2));
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new object[] { 2 }, collection.Cast<object>());
         Assert.Equal(new object[] { 2 }, owner.Items.Cast<object>());
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -8193,7 +8193,7 @@ public class ListBoxObjectCollectionTests
 
         // Add one.
         Assert.Equal(0, collection.Add(2));
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new object[] { 2 }, collection.Cast<object>());
         Assert.Empty(owner.Items);
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -8237,7 +8237,7 @@ public class ListBoxObjectCollectionTests
 
         // Add one.
         Assert.Equal(0, collection.Add(2));
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new object[] { 2 }, collection.Cast<object>());
         Assert.Equal(new object[] { 2 }, owner.Items.Cast<object>());
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -8284,7 +8284,7 @@ public class ListBoxObjectCollectionTests
 
         // Add one.
         Assert.Equal(0, collection.Add(2));
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new object[] { 2 }, collection.Cast<object>());
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -8363,7 +8363,7 @@ public class ListBoxObjectCollectionTests
 
         // Add one.
         Assert.Equal(0, collection.Add(2));
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new object[] { 2 }, collection.Cast<object>());
         Assert.Equal(new object[] { 2 }, owner.Items.Cast<object>());
         Assert.True(owner.IsHandleCreated);
@@ -8445,7 +8445,7 @@ public class ListBoxObjectCollectionTests
 
         // Add one.
         Assert.Equal(0, collection.Add(2));
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new object[] { 2 }, collection.Cast<object>());
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -8527,7 +8527,7 @@ public class ListBoxObjectCollectionTests
 
         // Add one.
         Assert.Equal(0, collection.Add(2));
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new object[] { 2 }, collection.Cast<object>());
         Assert.Equal(new object[] { 2 }, owner.Items.Cast<object>());
         Assert.True(owner.IsHandleCreated);
@@ -9023,16 +9023,16 @@ public class ListBoxObjectCollectionTests
         using ListBox owner = new();
         IList collection = new ListBox.ObjectCollection(owner);
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.Items.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.Items);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.False(owner.IsHandleCreated);
 
         // Call again.
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.Items.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.Items);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.False(owner.IsHandleCreated);
@@ -9044,16 +9044,16 @@ public class ListBoxObjectCollectionTests
         using ListBox owner = new();
         IList collection = owner.Items;
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.Items.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.Items);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.False(owner.IsHandleCreated);
 
         // Call again.
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.Items.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.Items);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.False(owner.IsHandleCreated);
@@ -9069,16 +9069,16 @@ public class ListBoxObjectCollectionTests
         };
 
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.Items.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.Items);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.False(owner.IsHandleCreated);
 
         // Call again.
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.Items.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.Items);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.False(owner.IsHandleCreated);
@@ -9092,16 +9092,16 @@ public class ListBoxObjectCollectionTests
         collection.Add(1);
 
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.Items.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.Items);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.False(owner.IsHandleCreated);
 
         // Call again.
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.Items.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.Items);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.False(owner.IsHandleCreated);
@@ -9121,8 +9121,8 @@ public class ListBoxObjectCollectionTests
         owner.HandleCreated += (sender, e) => createdCallCount++;
 
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.Items.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.Items);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -9133,8 +9133,8 @@ public class ListBoxObjectCollectionTests
 
         // Call again.
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.Items.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.Items);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -9158,8 +9158,8 @@ public class ListBoxObjectCollectionTests
         owner.HandleCreated += (sender, e) => createdCallCount++;
 
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.Items.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.Items);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -9170,8 +9170,8 @@ public class ListBoxObjectCollectionTests
 
         // Call again.
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.Items.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.Items);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -9196,8 +9196,8 @@ public class ListBoxObjectCollectionTests
         collection.Add(1);
 
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.Items.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.Items);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -9208,8 +9208,8 @@ public class ListBoxObjectCollectionTests
 
         // Call again.
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.Items.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.Items);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -9234,8 +9234,8 @@ public class ListBoxObjectCollectionTests
         collection.Add(1);
 
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.Items.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.Items);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -9246,8 +9246,8 @@ public class ListBoxObjectCollectionTests
 
         // Call again.
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.Items.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.Items);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -9448,7 +9448,7 @@ public class ListBoxObjectCollectionTests
 
         // Insert first.
         collection.Insert(0, 1);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new object[] { 1 }, collection.Cast<object>());
         Assert.Empty(owner.Items);
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -9489,7 +9489,7 @@ public class ListBoxObjectCollectionTests
 
         // Insert first.
         collection.Insert(0, 1);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new object[] { 1 }, collection.Cast<object>());
         Assert.Equal(new object[] { 1 }, owner.Items.Cast<object>());
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -9533,7 +9533,7 @@ public class ListBoxObjectCollectionTests
 
         // Insert first.
         collection.Insert(0, 1);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new object[] { 1 }, collection.Cast<object>());
         Assert.Empty(owner.Items);
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -9577,7 +9577,7 @@ public class ListBoxObjectCollectionTests
 
         // Insert first.
         collection.Insert(0, 1);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new object[] { 1 }, collection.Cast<object>());
         Assert.Equal(new object[] { 1 }, owner.Items.Cast<object>());
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -9624,7 +9624,7 @@ public class ListBoxObjectCollectionTests
 
         // Insert first.
         collection.Insert(0, 1);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new object[] { 1 }, collection.Cast<object>());
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -9703,7 +9703,7 @@ public class ListBoxObjectCollectionTests
 
         // Insert first.
         collection.Insert(0, 1);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new object[] { 1 }, collection.Cast<object>());
         Assert.Equal(new object[] { 1 }, owner.Items.Cast<object>());
         Assert.True(owner.IsHandleCreated);
@@ -9785,7 +9785,7 @@ public class ListBoxObjectCollectionTests
 
         // Insert first.
         collection.Insert(0, 1);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new object[] { 1 }, collection.Cast<object>());
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -9867,7 +9867,7 @@ public class ListBoxObjectCollectionTests
 
         // Insert first.
         collection.Insert(0, 1);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new object[] { 1 }, collection.Cast<object>());
         Assert.Equal(new object[] { 1 }, owner.Items.Cast<object>());
         Assert.True(owner.IsHandleCreated);
@@ -10403,7 +10403,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove last.
         collection.Remove(3);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 2 }, collection.Cast<int>());
         Assert.Empty(owner.Items);
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -10411,7 +10411,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove first.
         collection.Remove(2);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -10445,14 +10445,14 @@ public class ListBoxObjectCollectionTests
 
         // Remove last.
         collection.Remove(3);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 2 }, collection.Cast<int>());
         Assert.Equal(new int[] { 2 }, owner.Items.Cast<int>());
         Assert.False(owner.IsHandleCreated);
 
         // Remove first.
         collection.Remove(2);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -10493,7 +10493,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove last.
         collection.Remove(3);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 1 }, collection.Cast<int>());
         Assert.Empty(owner.Items);
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -10501,7 +10501,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove first.
         collection.Remove(1);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -10538,14 +10538,14 @@ public class ListBoxObjectCollectionTests
 
         // Remove last.
         collection.Remove(3);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 1 }, collection.Cast<int>());
         Assert.Equal(new int[] { 1 }, owner.Items.Cast<int>());
         Assert.False(owner.IsHandleCreated);
 
         // Remove first.
         collection.Remove(1);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -10601,7 +10601,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove last.
         collection.Remove(3);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 2 }, collection.Cast<int>());
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -10614,7 +10614,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove first.
         collection.Remove(2);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -10677,7 +10677,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove last.
         collection.Remove(3);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 2 }, collection.Cast<int>());
         Assert.Equal(new int[] { 2 }, owner.Items.Cast<int>());
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -10691,7 +10691,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove first.
         collection.Remove(2);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -10753,7 +10753,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove last.
         collection.Remove(3);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 1 }, collection.Cast<int>());
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -10766,7 +10766,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove first.
         collection.Remove(1);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -10832,7 +10832,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove last.
         collection.Remove(3);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 1 }, collection.Cast<int>());
         Assert.Equal(new int[] { 1 }, owner.Items.Cast<int>());
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -10846,7 +10846,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove first.
         collection.Remove(1);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -11342,7 +11342,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove last.
         collection.RemoveAt(1);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 2 }, collection.Cast<int>());
         Assert.Empty(owner.Items);
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -11350,7 +11350,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove first.
         collection.RemoveAt(0);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -11377,14 +11377,14 @@ public class ListBoxObjectCollectionTests
 
         // Remove last.
         collection.RemoveAt(1);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 2 }, collection.Cast<int>());
         Assert.Equal(new int[] { 2 }, owner.Items.Cast<int>());
         Assert.False(owner.IsHandleCreated);
 
         // Remove first.
         collection.RemoveAt(0);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -11417,7 +11417,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove last.
         collection.RemoveAt(1);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 1 }, collection.Cast<int>());
         Assert.Empty(owner.Items);
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -11425,7 +11425,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove first.
         collection.RemoveAt(0);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -11455,14 +11455,14 @@ public class ListBoxObjectCollectionTests
 
         // Remove last.
         collection.RemoveAt(1);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 1 }, collection.Cast<int>());
         Assert.Equal(new int[] { 1 }, owner.Items.Cast<int>());
         Assert.False(owner.IsHandleCreated);
 
         // Remove first.
         collection.RemoveAt(0);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -11503,7 +11503,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove last.
         collection.RemoveAt(1);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 2 }, collection.Cast<int>());
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -11516,7 +11516,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove first.
         collection.RemoveAt(0);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -11563,7 +11563,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove last.
         collection.RemoveAt(1);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 2 }, collection.Cast<int>());
         Assert.Equal(new int[] { 2 }, owner.Items.Cast<int>());
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -11577,7 +11577,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove first.
         collection.RemoveAt(0);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -11624,7 +11624,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove last.
         collection.RemoveAt(1);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 1 }, collection.Cast<int>());
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -11637,7 +11637,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove first.
         collection.RemoveAt(0);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);
@@ -11687,7 +11687,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove last.
         collection.RemoveAt(1);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 1 }, collection.Cast<int>());
         Assert.Equal(new int[] { 1 }, owner.Items.Cast<int>());
         Assert.Equal(0, selectedIndexChangedCallCount);
@@ -11701,7 +11701,7 @@ public class ListBoxObjectCollectionTests
 
         // Remove first.
         collection.RemoveAt(0);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.Items);
         Assert.True(owner.IsHandleCreated);

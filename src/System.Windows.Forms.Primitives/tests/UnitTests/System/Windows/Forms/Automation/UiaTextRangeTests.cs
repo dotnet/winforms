@@ -481,7 +481,7 @@ this is the third line.";
         yield return new object[] { UIA_TEXTATTRIBUTE_ID.UIA_FontNameAttributeId, "Segoe UI" };
         yield return new object[] { UIA_TEXTATTRIBUTE_ID.UIA_FontSizeAttributeId, 9.0 };
         yield return new object[] { UIA_TEXTATTRIBUTE_ID.UIA_FontWeightAttributeId, (int)FW.NORMAL };
-        yield return new object[] { UIA_TEXTATTRIBUTE_ID.UIA_ForegroundColorAttributeId, (int)(uint)new COLORREF() };
+        yield return new object[] { UIA_TEXTATTRIBUTE_ID.UIA_ForegroundColorAttributeId, (int)(uint)default(COLORREF) };
         yield return new object[] { UIA_TEXTATTRIBUTE_ID.UIA_HorizontalTextAlignmentAttributeId, (int)HorizontalTextAlignment.Left };
         yield return new object[] { UIA_TEXTATTRIBUTE_ID.UIA_IsItalicAttributeId, false };
         yield return new object[] { UIA_TEXTATTRIBUTE_ID.UIA_IsReadOnlyAttributeId, false };
@@ -564,7 +564,7 @@ this is the third line.";
         using SafeArrayScope<double> actual = new((SAFEARRAY*)null);
         Assert.True(((ITextRangeProvider.Interface)textRange).GetBoundingRectangles(actual).Succeeded);
         using SafeArrayScope<double> expectedRectArray = UiaTextProvider.BoundingRectangleAsArray(expected);
-        for(int i = 0; i < actual.Length; i++)
+        for (int i = 0; i < actual.Length; i++)
         {
             Assert.Equal(expectedRectArray[i], actual[i]);
         }
@@ -1229,7 +1229,7 @@ This is the line 3";
     public void UiaTextRange_private_GetForegroundColor_ReturnsCorrectValue()
     {
         COLORREF actual = StaticNullTextRange.TestAccessor().GetForegroundColor();
-        Assert.Equal(new COLORREF(), actual);
+        Assert.Equal(default, actual);
     }
 
     [StaTheory]

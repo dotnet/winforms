@@ -101,7 +101,7 @@ public class DragDropHelperTests
         Assert.Equal(expectedIsInDragLoopFormat, DragDropHelper.IsInDragLoopFormat(Unsafe.As<FORMATETC, Com.FORMATETC>(ref formatEtc)));
     }
 
-    [WinFormsTheory(Skip ="Causing issues with other tests on x86 from the command line")]
+    [WinFormsTheory(Skip = "Causing issues with other tests on x86 from the command line")]
     [MemberData(nameof(DragImage_DataObject_Bitmap_Point_bool_TestData))]
     public unsafe void SetDragImage_DataObject_Bitmap_Point_bool_ReturnsExpected(DataObject dataObject, Bitmap dragImage, Point cursorOffset, bool useDefaultDragImage)
     {

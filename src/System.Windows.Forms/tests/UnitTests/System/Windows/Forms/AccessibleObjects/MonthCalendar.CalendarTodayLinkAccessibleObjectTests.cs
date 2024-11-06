@@ -14,7 +14,7 @@ public class MonthCalendar_CalendarTodayLinkAccessibleObjectTests
         using MonthCalendar control = new();
         var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
         CalendarTodayLinkAccessibleObject todayLinkAccessibleObject = new(controlAccessibleObject);
-     
+
         controlAccessibleObject.Should().BeEquivalentTo(todayLinkAccessibleObject.TestAccessor().Dynamic._monthCalendarAccessibleObject);
         control.IsHandleCreated.Should().BeFalse();
 

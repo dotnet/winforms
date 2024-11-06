@@ -101,7 +101,7 @@ public class MonthCalendar_SelectionRangeConverterTests
 
     [WinFormsFact]
     public void ConvertTo_InstanceDescriptor_ReturnsCorrectInstanceDescriptor()
-    {     
+    {
         InstanceDescriptor descriptor = (InstanceDescriptor)_converter.ConvertTo(null, CultureInfo.InvariantCulture, _range, typeof(InstanceDescriptor));
         SelectionRange result = (SelectionRange)descriptor.Invoke();
 

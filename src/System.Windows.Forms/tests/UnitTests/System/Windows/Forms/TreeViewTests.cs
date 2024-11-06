@@ -6847,7 +6847,7 @@ public class TreeViewTests
         treeView.Nodes.Remove(treeView.Nodes[1]);
 
         Assert.True(treeView.Nodes[0].IsSelected);
-        Assert.Equal(1, treeView.Nodes.Count);
+        Assert.Single(treeView.Nodes);
         Assert.Equal(treeView.Nodes[0], treeView.SelectedNode);
     }
 
@@ -6910,7 +6910,7 @@ public class TreeViewTests
         treeNode.Nodes.Remove(treeNode.Nodes[1]);
 
         Assert.True(treeNode.Nodes[0].IsSelected);
-        Assert.Equal(1, treeNode.Nodes.Count);
+        Assert.Single(treeNode.Nodes);
         Assert.Equal(treeNode.Nodes[0], treeView.SelectedNode);
     }
 
@@ -6965,14 +6965,14 @@ public class TreeViewTests
 
         Assert.True(treeNode.Nodes[0].IsSelected);
         Assert.Equal(treeNode.Nodes[0], treeView.SelectedNode);
-        Assert.Equal(1, treeNode.Nodes.Count);
-        Assert.Equal(1, treeView.Nodes.Count);
+        Assert.Single(treeNode.Nodes);
+        Assert.Single(treeView.Nodes);
 
         treeView.Nodes.Remove(treeNode);
 
         Assert.False(treeNode.Nodes[0].IsSelected);
         Assert.Null(treeView.SelectedNode);
-        Assert.Equal(0, treeView.Nodes.Count);
+        Assert.Empty(treeView.Nodes);
     }
 
     [WinFormsTheory]
@@ -6997,7 +6997,7 @@ public class TreeViewTests
         treeView.Nodes.Remove(treeView.Nodes[1]);
 
         Assert.True(treeView.Nodes[0].Checked);
-        Assert.Equal(1, treeView.Nodes.Count);
+        Assert.Single(treeView.Nodes);
     }
 
     [WinFormsTheory]
@@ -7050,7 +7050,7 @@ public class TreeViewTests
         treeNode.Nodes.Remove(treeNode.Nodes[1]);
 
         Assert.True(treeNode.Nodes[0].Checked);
-        Assert.Equal(1, treeNode.Nodes.Count);
+        Assert.Single(treeNode.Nodes);
     }
 
     [WinFormsTheory]
@@ -7098,15 +7098,15 @@ public class TreeViewTests
 
         Assert.True(treeNode.Checked);
         Assert.True(treeNode.Nodes[0].Checked);
-        Assert.Equal(1, treeNode.Nodes.Count);
-        Assert.Equal(1, treeView.Nodes.Count);
+        Assert.Single(treeNode.Nodes);
+        Assert.Single(treeView.Nodes);
 
         treeView.Nodes.Remove(treeNode);
 
         Assert.True(treeNode.Checked);
         Assert.True(treeNode.Nodes[0].Checked);
-        Assert.Equal(1, treeNode.Nodes.Count);
-        Assert.Equal(0, treeView.Nodes.Count);
+        Assert.Single(treeNode.Nodes);
+        Assert.Empty(treeView.Nodes);
     }
 
     [WinFormsFact]
@@ -7152,7 +7152,7 @@ public class TreeViewTests
 
         treeView.Sort();
 
-        Action action = () => parent.Nodes.Clear();
+        Action action = parent.Nodes.Clear;
 
         action.ExecutionTime().Should().BeLessThanOrEqualTo(TimeSpan.FromMilliseconds(500));
         action.Should().NotThrow();
@@ -7201,10 +7201,10 @@ public class TreeViewTests
 
         treeView.Sort();
 
-        Assert.Equal(1, treeNode5.Nodes.Count);
+        Assert.Single(treeNode5.Nodes);
 
         parent.Nodes.Remove(treeNode4);
-        Assert.Equal(0, treeNode5.Nodes.Count);
+        Assert.Empty(treeNode5.Nodes);
 
         Action action = () =>
         {
@@ -7241,7 +7241,7 @@ public class TreeViewTests
         // Make sure all nodes have been added as expected.
         Assert.Equal(3, fifthSubNode1.Nodes.Count);
         Assert.Equal(2, parent.Nodes[0].Nodes.Count);
-        Assert.Equal(1, parent.Nodes.Count);
+        Assert.Single(parent.Nodes);
         Assert.Equal(fourthSubNode2, thirdSubNode1.Nodes[0]);
         Assert.Equal(lastSubNode3, fifthSubNode1.Nodes[1]);
 
@@ -7253,16 +7253,16 @@ public class TreeViewTests
 
         // Clear the last non-leaf nodes.
         fifthSubNode1.Nodes.Clear();
-        Assert.Equal(0, fifthSubNode1.Nodes.Count);
+        Assert.Empty(fifthSubNode1.Nodes);
 
         // Clear the first-level child nodes.
         firstSubNode.Nodes.Clear();
-        Assert.Equal(0, firstSubNode.Nodes.Count);
+        Assert.Empty(firstSubNode.Nodes);
 
         // Clear top-level nodes.
         Action action = parent.Nodes.Clear;
         action.Should().NotThrow();
-        Assert.Equal(0, parent.Nodes.Count);
+        Assert.Empty(parent.Nodes);
     }
 
     [WinFormsFact]
@@ -7301,7 +7301,7 @@ public class TreeViewTests
 
         // Remove the last child node.
         parent.Nodes.Remove(parent.Nodes[1]);
-        Assert.Equal(1, parent.Nodes.Count);
+        Assert.Single(parent.Nodes);
         Assert.Equal(treeNode2, parent.Nodes[0]);
     }
 
@@ -7563,8 +7563,8 @@ public class TreeViewTests
         }
 
         treeView.CreateControl();
-        treeView.Height = 100; 
-        treeView.VisibleCount.Should().Be(5); 
+        treeView.Height = 100;
+        treeView.VisibleCount.Should().Be(5);
     }
 
     private class SubTreeView : TreeView

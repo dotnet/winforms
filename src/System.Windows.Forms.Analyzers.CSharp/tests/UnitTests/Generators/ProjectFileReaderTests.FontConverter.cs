@@ -33,27 +33,27 @@ public partial class ProjectFileReaderTests
             {
                 CultureInfo culture = new(cultureName);
 
-                testData.Add(culture, $"Courier New", "Courier New", PropertyDefaultValue.FontSize, (int)GraphicsUnit.Point,(int)FontStyle.Regular);
-                testData.Add(culture, $"Courier New{s_separator} 11", "Courier New", 11f, (int)GraphicsUnit.Point,(int)FontStyle.Regular);
-                testData.Add(culture, $"Arial{s_separator} 11px", "Arial", 11f, (int)GraphicsUnit.Pixel,(int)FontStyle.Regular);
-                testData.Add(culture, $"Courier New{s_separator} 11 px", "Courier New", 11f, (int)GraphicsUnit.Pixel,(int)FontStyle.Regular);
-                testData.Add(culture, $"Courier New{s_separator} 11 px{s_separator} style=Regular", "Courier New", 11f, (int)GraphicsUnit.Pixel,(int)FontStyle.Regular);
-                testData.Add(culture, $"Courier New{s_separator} style=Bold", "Courier New", PropertyDefaultValue.FontSize, (int)GraphicsUnit.Point,(int)FontStyle.Bold);
-                testData.Add(culture, $"Courier New{s_separator} 11 px{s_separator} style=Bold{s_separator} Italic", "Courier New", 11f, (int)GraphicsUnit.Pixel, (int)(FontStyle.Bold |FontStyle.Italic));
-                testData.Add(culture, $"Courier New{s_separator} 11 px{s_separator} style=Regular, Italic", "Courier New", 11f, (int)GraphicsUnit.Pixel, (int)(FontStyle.Regular |FontStyle.Italic));
-                testData.Add(culture, $"Courier New{s_separator} 11 px{s_separator} style=Bold{s_separator} Italic{s_separator} Strikeout", "Courier New", 11f, (int)GraphicsUnit.Pixel, (int)(FontStyle.Bold |FontStyle.Italic |FontStyle.Strikeout));
-                testData.Add(culture, $"Arial{s_separator} 11 px{s_separator} style=Bold, Italic, Strikeout", "Arial", 11f, (int)GraphicsUnit.Pixel, (int)(FontStyle.Bold |FontStyle.Italic |FontStyle.Strikeout));
-                testData.Add(culture, $"arIAL{s_separator} 10{s_separator} style=bold", "arIAL", 10f, (int)GraphicsUnit.Point,(int)FontStyle.Bold);
-                testData.Add(culture, $"Arial{s_separator} 10{s_separator}", "Arial", 10f, (int)GraphicsUnit.Point,(int)FontStyle.Regular);
-                testData.Add(culture, $"Arial{s_separator}", "Arial", PropertyDefaultValue.FontSize, (int)GraphicsUnit.Point,(int)FontStyle.Regular);
-                testData.Add(culture, $"Arial{s_separator} 10{s_separator} style=12", "Arial", 10f, (int)GraphicsUnit.Point, (int)(FontStyle.Underline |FontStyle.Strikeout));
-                testData.Add(culture, $"Courier New{s_separator} Style=Bold", "Courier New", PropertyDefaultValue.FontSize, (int)GraphicsUnit.Point,(int)FontStyle.Bold); // FullFramework style keyword is case sensitive.
-                testData.Add(culture, $"{s_separator} 10{s_separator} style=bold", "", 10f, (int)GraphicsUnit.Point,(int)FontStyle.Bold);
+                testData.Add(culture, $"Courier New", "Courier New", PropertyDefaultValue.FontSize, (int)GraphicsUnit.Point, (int)FontStyle.Regular);
+                testData.Add(culture, $"Courier New{s_separator} 11", "Courier New", 11f, (int)GraphicsUnit.Point, (int)FontStyle.Regular);
+                testData.Add(culture, $"Arial{s_separator} 11px", "Arial", 11f, (int)GraphicsUnit.Pixel, (int)FontStyle.Regular);
+                testData.Add(culture, $"Courier New{s_separator} 11 px", "Courier New", 11f, (int)GraphicsUnit.Pixel, (int)FontStyle.Regular);
+                testData.Add(culture, $"Courier New{s_separator} 11 px{s_separator} style=Regular", "Courier New", 11f, (int)GraphicsUnit.Pixel, (int)FontStyle.Regular);
+                testData.Add(culture, $"Courier New{s_separator} style=Bold", "Courier New", PropertyDefaultValue.FontSize, (int)GraphicsUnit.Point, (int)FontStyle.Bold);
+                testData.Add(culture, $"Courier New{s_separator} 11 px{s_separator} style=Bold{s_separator} Italic", "Courier New", 11f, (int)GraphicsUnit.Pixel, (int)(FontStyle.Bold | FontStyle.Italic));
+                testData.Add(culture, $"Courier New{s_separator} 11 px{s_separator} style=Regular, Italic", "Courier New", 11f, (int)GraphicsUnit.Pixel, (int)(FontStyle.Regular | FontStyle.Italic));
+                testData.Add(culture, $"Courier New{s_separator} 11 px{s_separator} style=Bold{s_separator} Italic{s_separator} Strikeout", "Courier New", 11f, (int)GraphicsUnit.Pixel, (int)(FontStyle.Bold | FontStyle.Italic | FontStyle.Strikeout));
+                testData.Add(culture, $"Arial{s_separator} 11 px{s_separator} style=Bold, Italic, Strikeout", "Arial", 11f, (int)GraphicsUnit.Pixel, (int)(FontStyle.Bold | FontStyle.Italic | FontStyle.Strikeout));
+                testData.Add(culture, $"arIAL{s_separator} 10{s_separator} style=bold", "arIAL", 10f, (int)GraphicsUnit.Point, (int)FontStyle.Bold);
+                testData.Add(culture, $"Arial{s_separator} 10{s_separator}", "Arial", 10f, (int)GraphicsUnit.Point, (int)FontStyle.Regular);
+                testData.Add(culture, $"Arial{s_separator}", "Arial", PropertyDefaultValue.FontSize, (int)GraphicsUnit.Point, (int)FontStyle.Regular);
+                testData.Add(culture, $"Arial{s_separator} 10{s_separator} style=12", "Arial", 10f, (int)GraphicsUnit.Point, (int)(FontStyle.Underline | FontStyle.Strikeout));
+                testData.Add(culture, $"Courier New{s_separator} Style=Bold", "Courier New", PropertyDefaultValue.FontSize, (int)GraphicsUnit.Point, (int)FontStyle.Bold); // FullFramework style keyword is case sensitive.
+                testData.Add(culture, $"{s_separator} 10{s_separator} style=bold", "", 10f, (int)GraphicsUnit.Point, (int)FontStyle.Bold);
 
                 // NOTE: in .NET runtime these tests will result in FontName='', but the implementation relies on GDI+, which we don't have...
-                testData.Add(culture, $"11px{s_separator} Style=Bold", $"11px", PropertyDefaultValue.FontSize, (int)GraphicsUnit.Point,(int)FontStyle.Bold);
-                testData.Add(culture, $"11px", "11px", PropertyDefaultValue.FontSize, (int)GraphicsUnit.Point,(int)FontStyle.Regular);
-                testData.Add(culture, $"Style=Bold", "Style=Bold", PropertyDefaultValue.FontSize, (int)GraphicsUnit.Point,(int)FontStyle.Regular);
+                testData.Add(culture, $"11px{s_separator} Style=Bold", $"11px", PropertyDefaultValue.FontSize, (int)GraphicsUnit.Point, (int)FontStyle.Bold);
+                testData.Add(culture, $"11px", "11px", PropertyDefaultValue.FontSize, (int)GraphicsUnit.Point, (int)FontStyle.Regular);
+                testData.Add(culture, $"Style=Bold", "Style=Bold", PropertyDefaultValue.FontSize, (int)GraphicsUnit.Point, (int)FontStyle.Regular);
             }
 
             return testData;

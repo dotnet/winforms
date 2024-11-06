@@ -7694,7 +7694,7 @@ public partial class ControlTests
 
     public static IEnumerable<object[]> Margin_Set_TestData()
     {
-        yield return new object[] { new Padding(), new Padding() };
+        yield return new object[] { default(Padding), default(Padding) };
         yield return new object[] { new Padding(1, 2, 3, 4), new Padding(1, 2, 3, 4) };
         yield return new object[] { new Padding(1), new Padding(1) };
         yield return new object[] { new Padding(-1, -2, -3, -4), Padding.Empty };
@@ -9400,7 +9400,7 @@ public partial class ControlTests
 
     public static IEnumerable<object[]> Padding_Set_TestData()
     {
-        yield return new object[] { new Padding(), new Padding(), 0, 0 };
+        yield return new object[] { default(Padding), default(Padding), 0, 0 };
         yield return new object[] { new Padding(1, 2, 3, 4), new Padding(1, 2, 3, 4), 1, 1 };
         yield return new object[] { new Padding(1), new Padding(1), 1, 1 };
         yield return new object[] { new Padding(-1, -2, -3, -4), Padding.Empty, 1, 2 };
@@ -9480,11 +9480,11 @@ public partial class ControlTests
 
     public static IEnumerable<object[]> Padding_SetWithHandle_TestData()
     {
-        yield return new object[] { false, new Padding(), new Padding(), 0, 0, 0, 0 };
+        yield return new object[] { false, default(Padding), default(Padding), 0, 0, 0, 0 };
         yield return new object[] { false, new Padding(1, 2, 3, 4), new Padding(1, 2, 3, 4), 1, 0, 1, 0 };
         yield return new object[] { false, new Padding(1), new Padding(1), 1, 0, 1, 0 };
         yield return new object[] { false, new Padding(-1, -2, -3, -4), Padding.Empty, 1, 0, 2, 0 };
-        yield return new object[] { true, new Padding(), new Padding(), 0, 0, 0, 0 };
+        yield return new object[] { true, default(Padding), default(Padding), 0, 0, 0, 0 };
         yield return new object[] { true, new Padding(1, 2, 3, 4), new Padding(1, 2, 3, 4), 1, 1, 1, 1 };
         yield return new object[] { true, new Padding(1), new Padding(1), 1, 1, 1, 1 };
         yield return new object[] { true, new Padding(-1, -2, -3, -4), Padding.Empty, 1, 1, 2, 2 };
@@ -9901,13 +9901,13 @@ public partial class ControlTests
 
         control.Region = value;
         Assert.Same(value, control.Region);
-        Assert.Throws<ArgumentException>(() => oldValue.MakeEmpty());
+        Assert.Throws<ArgumentException>(oldValue.MakeEmpty);
         Assert.False(control.IsHandleCreated);
 
         // Set same.
         control.Region = value;
         Assert.Same(value, control.Region);
-        Assert.Throws<ArgumentException>(() => oldValue.MakeEmpty());
+        Assert.Throws<ArgumentException>(oldValue.MakeEmpty);
         Assert.False(control.IsHandleCreated);
     }
 
@@ -9960,7 +9960,7 @@ public partial class ControlTests
 
         control.Region = value;
         Assert.Same(value, control.Region);
-        Assert.Throws<ArgumentException>(() => oldValue.MakeEmpty());
+        Assert.Throws<ArgumentException>(oldValue.MakeEmpty);
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);
@@ -9969,7 +9969,7 @@ public partial class ControlTests
         // Set same.
         control.Region = value;
         Assert.Same(value, control.Region);
-        Assert.Throws<ArgumentException>(() => oldValue.MakeEmpty());
+        Assert.Throws<ArgumentException>(oldValue.MakeEmpty);
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
         Assert.Equal(0, styleChangedCallCount);

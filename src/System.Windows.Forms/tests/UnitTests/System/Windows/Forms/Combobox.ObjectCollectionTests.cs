@@ -416,8 +416,8 @@ public class ComboBox_ComboBoxObjectCollectionTests
 
         comboBoxObjectCollection.Clear();
 
-        Assert.Equal(0, comboBoxObjectCollection.Count);
-        Assert.Equal(0, comboBoxObjectCollection.InnerList.Count);
+        Assert.Empty(comboBoxObjectCollection);
+        Assert.Empty(comboBoxObjectCollection.InnerList);
         Assert.Equal(createControl, comboBox.IsHandleCreated);
     }
 
@@ -428,7 +428,7 @@ public class ComboBox_ComboBoxObjectCollectionTests
         comboBox.CreateControl();
         ObjectCollection comboBoxObjectCollection = comboBox.Items;
         comboBoxObjectCollection.AddRange(new string[] { "a", "b" });
-        ComboBox.ComboBoxAccessibleObject accessibleObject = GetComboBoxAccessibleObject(comboBox);
+        ComboBoxAccessibleObject accessibleObject = GetComboBoxAccessibleObject(comboBox);
 
         // Adding ComboBoxItemAccessibleObject to the "ItemAccessibleObjects" list
         ComboBoxItemAccessibleObject firstAccessibleObjectItem = accessibleObject.ItemAccessibleObjects.GetComboBoxItemAccessibleObject(comboBoxObjectCollection.InnerList[0]);
@@ -439,8 +439,8 @@ public class ComboBox_ComboBoxObjectCollectionTests
 
         comboBoxObjectCollection.Clear();
 
-        Assert.Equal(0, comboBoxObjectCollection.Count);
-        Assert.Equal(0, accessibleObject.ItemAccessibleObjects.Count);
+        Assert.Empty(comboBoxObjectCollection);
+        Assert.Empty(accessibleObject.ItemAccessibleObjects);
         Assert.True(comboBox.IsHandleCreated);
     }
 
@@ -461,7 +461,7 @@ public class ComboBox_ComboBoxObjectCollectionTests
 
         ObjectCollection comboBoxObjectCollection = new(comboBox);
 
-        Assert.Throws<ArgumentException>(() => comboBoxObjectCollection.Clear());
+        Assert.Throws<ArgumentException>(comboBoxObjectCollection.Clear);
         Assert.Equal(createControl, comboBox.IsHandleCreated);
     }
 
@@ -846,7 +846,7 @@ public class ComboBox_ComboBoxObjectCollectionTests
 
         comboBoxObjectCollection.RemoveAt(0);
 
-        Assert.Equal(1, comboBoxObjectCollection.Count);
+        Assert.Single(comboBoxObjectCollection);
         Assert.Equal("b", comboBoxObjectCollection[0]);
         Assert.Equal(createControl, comboBox.IsHandleCreated);
     }
@@ -860,16 +860,16 @@ public class ComboBox_ComboBoxObjectCollectionTests
         comboBox.CreateControl();
         ObjectCollection comboBoxObjectCollection = comboBox.Items;
         comboBoxObjectCollection.Add("a");
-        ComboBox.ComboBoxAccessibleObject accessibleObject = GetComboBoxAccessibleObject(comboBox);
+        ComboBoxAccessibleObject accessibleObject = GetComboBoxAccessibleObject(comboBox);
 
         // Adding ComboBoxItemAccessibleObject to the "ItemAccessibleObjects" list
         ComboBoxItemAccessibleObject firstAccessibleObjectItem = accessibleObject.ItemAccessibleObjects.GetComboBoxItemAccessibleObject(comboBoxObjectCollection.InnerList[0]);
-        Assert.Equal(1, accessibleObject.ItemAccessibleObjects.Count);
+        Assert.Single(accessibleObject.ItemAccessibleObjects);
 
         comboBoxObjectCollection.RemoveAt(0);
 
-        Assert.Equal(0, comboBoxObjectCollection.Count);
-        Assert.Equal(0, accessibleObject.ItemAccessibleObjects.Count);
+        Assert.Empty(comboBoxObjectCollection);
+        Assert.Empty(accessibleObject.ItemAccessibleObjects);
         Assert.True(comboBox.IsHandleCreated);
     }
 
@@ -947,7 +947,7 @@ public class ComboBox_ComboBoxObjectCollectionTests
 
         comboBoxObjectCollection.Remove("a");
 
-        Assert.Equal(1, comboBoxObjectCollection.Count);
+        Assert.Single(comboBoxObjectCollection);
         Assert.Equal("b", comboBoxObjectCollection[0]);
         Assert.Equal(createControl, comboBox.IsHandleCreated);
     }
@@ -1001,7 +1001,7 @@ public class ComboBox_ComboBoxObjectCollectionTests
         // Remove existing object
         comboBoxObjectCollection.Remove(person1);
 
-        Assert.Equal(1, comboBoxObjectCollection.Count);
+        Assert.Single(comboBoxObjectCollection);
         Assert.Equal(person2, comboBoxObjectCollection[0]);
         Assert.Equal(createControl, comboBox.IsHandleCreated);
     }
@@ -1025,7 +1025,7 @@ public class ComboBox_ComboBoxObjectCollectionTests
 
         comboBoxObjectCollection.Remove(comboBoxObjectCollection[0]);
 
-        Assert.Equal(1, comboBoxObjectCollection.Count);
+        Assert.Single(comboBoxObjectCollection);
         Assert.Equal("b", comboBoxObjectCollection[0]);
         Assert.Equal(createControl, comboBox.IsHandleCreated);
     }
@@ -1039,16 +1039,16 @@ public class ComboBox_ComboBoxObjectCollectionTests
         comboBox.CreateControl();
         ObjectCollection comboBoxObjectCollection = comboBox.Items;
         comboBoxObjectCollection.Add("a");
-        ComboBox.ComboBoxAccessibleObject accessibleObject = GetComboBoxAccessibleObject(comboBox);
+        ComboBoxAccessibleObject accessibleObject = GetComboBoxAccessibleObject(comboBox);
 
         // Adding ComboBoxItemAccessibleObject to the "ItemAccessibleObjects" list
         ComboBoxItemAccessibleObject firstAccessibleObjectItem = accessibleObject.ItemAccessibleObjects.GetComboBoxItemAccessibleObject(comboBoxObjectCollection.InnerList[0]);
-        Assert.Equal(1, accessibleObject.ItemAccessibleObjects.Count);
+        Assert.Single(accessibleObject.ItemAccessibleObjects);
 
         comboBoxObjectCollection.Remove("a");
 
-        Assert.Equal(0, comboBoxObjectCollection.Count);
-        Assert.Equal(0, accessibleObject.ItemAccessibleObjects.Count);
+        Assert.Empty(comboBoxObjectCollection);
+        Assert.Empty(accessibleObject.ItemAccessibleObjects);
         Assert.True(comboBox.IsHandleCreated);
     }
 
@@ -1286,11 +1286,12 @@ public class ComboBox_ComboBoxObjectCollectionTests
     {
         using ComboBox comboBox = new();
         comboBox.CreateControl();
-        ComboBox.ComboBoxAccessibleObject accessibleObject = GetComboBoxAccessibleObject(comboBox);
+        ComboBoxAccessibleObject accessibleObject = GetComboBoxAccessibleObject(comboBox);
         ObjectCollection comboBoxObjectCollection = new(comboBox)
         {
             "a"
         };
+
         ComboBoxItemAccessibleObject oldAccessibleObjectItem = accessibleObject.ItemAccessibleObjects.GetComboBoxItemAccessibleObject(comboBoxObjectCollection.InnerList[0]);
         comboBoxObjectCollection[0] = "b";
         ComboBoxItemAccessibleObject newAccessibleObjectItem = accessibleObject.ItemAccessibleObjects.GetComboBoxItemAccessibleObject(comboBoxObjectCollection.InnerList[0]);
@@ -1483,8 +1484,8 @@ public class ComboBox_ComboBoxObjectCollectionTests
         Assert.False(comboBox.IsHandleCreated);
     }
 
-    private ComboBox.ComboBoxAccessibleObject GetComboBoxAccessibleObject(ComboBox comboBox)
+    private static ComboBoxAccessibleObject GetComboBoxAccessibleObject(ComboBox comboBox)
     {
-        return (ComboBox.ComboBoxAccessibleObject)comboBox.AccessibilityObject;
+        return (ComboBoxAccessibleObject)comboBox.AccessibilityObject;
     }
 }

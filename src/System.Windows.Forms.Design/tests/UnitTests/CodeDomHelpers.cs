@@ -67,7 +67,7 @@ public static class CodeDomHelpers
                         return $"new CodeObjectCreateExpression({GetType(coce.CreateType)})";
                     }
 
-                    string parameters = string.Join(", ", coce.Parameters.Cast<CodeObject>().Select(o => GetConstructionString(o)));
+                    string parameters = string.Join(", ", coce.Parameters.Cast<CodeObject>().Select(GetConstructionString));
                     return $"new CodeObjectCreateExpression({GetType(coce.CreateType)}, {parameters})";
                 }
 

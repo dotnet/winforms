@@ -24,7 +24,7 @@ public class SplitContainerDesignerTests
             .Setup(s => s.GetService(typeof(IComponentChangeService)))
             .Returns(mockComponentChangeService.Object);
 
-        return  MockSite.CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
+        return MockSite.CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
     }
 
     [WinFormsFact]
@@ -43,7 +43,7 @@ public class SplitContainerDesignerTests
         using Control control = new();
         control.Parent = splitContainer.Panel1;
 
-        Assert.Equal(1, splitContainerDesigner.AssociatedComponents.Count);
+        Assert.Single(splitContainerDesigner.AssociatedComponents);
     }
 
     // Regression test for https://github.com/dotnet/winforms/issues/11793

@@ -23,7 +23,7 @@ public class FormatStringDialogTests : IDisposable
     {
         Action action = () =>
         {
-            FormatStringDialog dialog = new (_context.Object);
+            FormatStringDialog dialog = new(_context.Object);
             dialog.Dispose();
         };
 
@@ -85,7 +85,7 @@ public class FormatStringDialogTests : IDisposable
         int okButtonLeftOriginalState = okButtonField.Left;
         int cancelButtonLeftOriginalState = cancelButtonField.Left;
 
-        int GetRightSideOffset(Control ctl)
+        static int GetRightSideOffset(Control ctl)
         {
             int result = ctl.Width;
             Control? control = ctl;

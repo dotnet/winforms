@@ -1380,7 +1380,7 @@ public class AxHostTests
     public void AxHost_CreateControl_InvalidClsid_ThrowsCOMException()
     {
         using SubAxHost control = new(EmptyClsidString);
-        Assert.Throws<COMException>(() => control.CreateControl());
+        Assert.Throws<COMException>(control.CreateControl);
     }
 
     [WinFormsFact]

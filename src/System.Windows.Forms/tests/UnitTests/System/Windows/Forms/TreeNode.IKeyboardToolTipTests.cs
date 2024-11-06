@@ -123,7 +123,7 @@ public class TreeNode_TreeNodeIKeyboardToolTipTests
 
         IList<Rectangle> neighboringRectangles = ((IKeyboardToolTip)firstTreeNode).GetNeighboringToolsRectangles();
 
-        Assert.Equal(1, neighboringRectangles.Count);
+        Assert.Single(neighboringRectangles);
         Assert.Contains(GetRectangle(treeView, treeView.Nodes[1]), neighboringRectangles);
     }
 
@@ -156,7 +156,7 @@ public class TreeNode_TreeNodeIKeyboardToolTipTests
 
         IList<Rectangle> neighboringRectangles = ((IKeyboardToolTip)lastTreeNode).GetNeighboringToolsRectangles();
 
-        Assert.Equal(1, neighboringRectangles.Count);
+        Assert.Single(neighboringRectangles);
         Assert.Contains(GetRectangle(treeView, treeView.Nodes[1]), neighboringRectangles);
     }
 
@@ -303,9 +303,9 @@ public class TreeNode_TreeNodeIKeyboardToolTipTests
     {
         List<TreeNode> treeNodesList = GetHierarchyNodes();
 
-        Assert.Equal(0, ((IKeyboardToolTip)treeNodesList[0]).GetNeighboringToolsRectangles().Count);
-        Assert.Equal(0, ((IKeyboardToolTip)treeNodesList[1]).GetNeighboringToolsRectangles().Count);
-        Assert.Equal(0, ((IKeyboardToolTip)treeNodesList[2]).GetNeighboringToolsRectangles().Count);
+        Assert.Empty(((IKeyboardToolTip)treeNodesList[0]).GetNeighboringToolsRectangles());
+        Assert.Empty(((IKeyboardToolTip)treeNodesList[1]).GetNeighboringToolsRectangles());
+        Assert.Empty(((IKeyboardToolTip)treeNodesList[2]).GetNeighboringToolsRectangles());
     }
 
     [WinFormsTheory]

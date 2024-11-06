@@ -5381,7 +5381,7 @@ public class ListBoxTests
 
     public static IEnumerable<object[]> GetItemRectangle_CustomGetItemRect_TestData()
     {
-        yield return new object[] { new RECT(), Rectangle.Empty };
+        yield return new object[] { default(RECT), Rectangle.Empty };
         yield return new object[] { new RECT(1, 2, 3, 4), new Rectangle(1, 2, 2, 2) };
     }
 
@@ -6124,24 +6124,24 @@ public class ListBoxTests
         Assert.Equal(3, listBox.Items.Count);
         Assert.Equal(listBox.Items[0], listBox.SelectedItem);
         Assert.Equal(0, listBox.SelectedIndex);
-        Assert.Equal(1, listBox.SelectedIndices.Count);
-        Assert.Equal(1, listBox.SelectedItems.Count);
+        Assert.Single(listBox.SelectedIndices);
+        Assert.Single(listBox.SelectedItems);
 
         listBox.Items.Remove(listBox.Items[2]);
 
         Assert.Equal(2, listBox.Items.Count);
         Assert.Equal(listBox.Items[0], listBox.SelectedItem);
         Assert.Equal(0, listBox.SelectedIndex);
-        Assert.Equal(1, listBox.SelectedIndices.Count);
-        Assert.Equal(1, listBox.SelectedItems.Count);
+        Assert.Single(listBox.SelectedIndices);
+        Assert.Single(listBox.SelectedItems);
 
         listBox.Items.Remove(listBox.Items[1]);
 
-        Assert.Equal(1, listBox.Items.Count);
+        Assert.Single(listBox.Items);
         Assert.Equal(listBox.Items[0], listBox.SelectedItem);
         Assert.Equal(0, listBox.SelectedIndex);
-        Assert.Equal(1, listBox.SelectedIndices.Count);
-        Assert.Equal(1, listBox.SelectedItems.Count);
+        Assert.Single(listBox.SelectedIndices);
+        Assert.Single(listBox.SelectedItems);
         Assert.Equal(createControl, listBox.IsHandleCreated);
     }
 
@@ -6207,8 +6207,8 @@ public class ListBoxTests
 
             Assert.Equal(listBox.Items[0], listBox.SelectedItem);
             Assert.Equal(0, listBox.SelectedIndex);
-            Assert.Equal(1, listBox.SelectedIndices.Count);
-            Assert.Equal(1, listBox.SelectedItems.Count);
+            Assert.Single(listBox.SelectedIndices);
+            Assert.Single(listBox.SelectedItems);
 
             listBox.Items.Remove(listBox.Items[0]);
             count -= 1;
@@ -6216,8 +6216,8 @@ public class ListBoxTests
             Assert.Equal(count, listBox.Items.Count);
             Assert.Null(listBox.SelectedItem);
             Assert.Equal(-1, listBox.SelectedIndex);
-            Assert.Equal(0, listBox.SelectedIndices.Count);
-            Assert.Equal(0, listBox.SelectedItems.Count);
+            Assert.Empty(listBox.SelectedIndices);
+            Assert.Empty(listBox.SelectedItems);
         }
     }
 
@@ -6243,8 +6243,8 @@ public class ListBoxTests
 
             Assert.Equal(listBox.Items[0], listBox.SelectedItem);
             Assert.Equal(0, listBox.SelectedIndex);
-            Assert.Equal(1, listBox.SelectedIndices.Count);
-            Assert.Equal(1, listBox.SelectedItems.Count);
+            Assert.Single(listBox.SelectedIndices);
+            Assert.Single(listBox.SelectedItems);
 
             listBox.Items.Remove(listBox.Items[0]);
 
@@ -6253,8 +6253,8 @@ public class ListBoxTests
             Assert.Equal(count, listBox.Items.Count);
             Assert.Null(listBox.SelectedItem);
             Assert.Equal(-1, listBox.SelectedIndex);
-            Assert.Equal(0, listBox.SelectedIndices.Count);
-            Assert.Equal(0, listBox.SelectedItems.Count);
+            Assert.Empty(listBox.SelectedIndices);
+            Assert.Empty(listBox.SelectedItems);
         }
     }
 

@@ -176,7 +176,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
         {
             using ComboBox comboBox = new() { DropDownStyle = dropDownStyle };
             ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
-            Assert.Throws<NullReferenceException>(() =>  _ = provider.DocumentRange);
+            Assert.Throws<NullReferenceException>(() => _ = provider.DocumentRange);
         }
     }
 
@@ -728,9 +728,9 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
 
         WINDOW_STYLE actual = provider.WindowStyle;
 
-        Assert.False(((int)actual & PInvoke.ES_RIGHT) != 0);
-        Assert.True(((int)actual & PInvoke.ES_NOHIDESEL) != 0);
-        Assert.True(((int)actual & PInvoke.ES_AUTOHSCROLL) != 0);
+        Assert.Equal(0, ((int)actual & PInvoke.ES_RIGHT));
+        Assert.NotEqual(0, ((int)actual & PInvoke.ES_NOHIDESEL));
+        Assert.NotEqual(0, ((int)actual & PInvoke.ES_AUTOHSCROLL));
         Assert.True(comboBox.IsHandleCreated);
         Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
     }
@@ -1099,7 +1099,7 @@ public unsafe class ComboBox_ComboBoxUiaTextProviderTests
             ComboBox.ComboBoxUiaTextProvider provider = new(comboBox);
             Assert.False(comboBox.IsHandleCreated);
             Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
-            Assert.Equal(new LOGFONTW(), provider.Logfont);
+            Assert.Equal(default, provider.Logfont);
         }
     }
 

@@ -312,8 +312,8 @@ public class MonthCalendar_CalendarBodyAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData(null, false)] 
-    [InlineData("CustomName", false)] 
+    [InlineData(null, false)]
+    [InlineData("CustomName", false)]
     [InlineData("AccessibleName", false, true)]
     public void CalendarBodyAccessibleObject_CanGetNameInternal_ShouldBeConsistentlyFalse(string name, bool expected, bool isAccessibleName = false)
     {

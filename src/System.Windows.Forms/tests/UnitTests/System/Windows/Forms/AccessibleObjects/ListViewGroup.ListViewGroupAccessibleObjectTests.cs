@@ -291,7 +291,7 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
             AccessibleObject group1AccObj = listGroup.AccessibilityObject;
             Assert.True(list.IsHandleCreated);
 
-            RECT groupRect = new();
+            RECT groupRect = default;
             PInvokeCore.SendMessage(list, PInvoke.LVM_GETGROUPRECT, (WPARAM)listGroup.ID, ref groupRect);
 
             int actualWidth = group1AccObj.Bounds.Width;
@@ -327,7 +327,7 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
         listView.Groups.Add(group);
         listView.Items.Add(new ListViewItem("a", group));
 
-        RECT groupRect = new();
+        RECT groupRect = default;
         PInvokeCore.SendMessage(listView, PInvoke.LVM_GETGROUPRECT, (WPARAM)group.ID, ref groupRect);
 
         AccessibleObject groupAccObj = group.AccessibilityObject;
@@ -833,8 +833,8 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
 
         // GroupCollapsedStateChanged event should be raised
         // for the second group only in this specific case.
-        Assert.Equal(1, eventGroupIndices.Count);
-        Assert.Equal(1, eventGroupIndices[0]); 
+        Assert.Single(eventGroupIndices);
+        Assert.Equal(1, eventGroupIndices[0]);
 
         // Make sure that we really cheched multiple selection case and the items
         // are still selected after keyboard navigation simulations.

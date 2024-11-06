@@ -13,7 +13,7 @@ public class RepeatValidatorTests
         Mock<IEmfValidator> emfValidator = new();
         RepeatValidator repeatValidator = new(emfValidator.Object, 2);
 
-        EmfRecord emfRecord = new();
+        EmfRecord emfRecord = default;
 
         repeatValidator.Validate(ref emfRecord, state: null!, out bool complete);
         Assert.False(complete);
@@ -31,7 +31,7 @@ public class RepeatValidatorTests
         Mock<IEmfValidator> emfValidator = new();
         RepeatValidator repeatValidator = new(emfValidator.Object, count);
 
-        EmfRecord emfRecord = new();
+        EmfRecord emfRecord = default;
 
         Assert.Throws<InvalidOperationException>(() => repeatValidator.Validate(ref emfRecord, state: null!, out bool complete));
     }

@@ -94,7 +94,7 @@ public class TreeNodeCollectionTests
         TreeNode node = new("Node 0");
         collection.Add(node);
         collection[0] = node;
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
     }
 
     [WinFormsFact]
@@ -129,8 +129,8 @@ public class TreeNodeCollectionTests
         TreeNodeCollection collection = treeView.Nodes;
         collection.Add("Node 1");
         collection[0] = new TreeNode("New node 1");
-        Assert.Equal(1, treeView._nodesByHandle.Count);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(treeView._nodesByHandle);
+        Assert.Single(collection);
     }
 
     [WinFormsTheory]

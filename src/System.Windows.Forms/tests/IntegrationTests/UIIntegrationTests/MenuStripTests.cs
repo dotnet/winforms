@@ -21,7 +21,7 @@ public class MenuStripTests
         form.Controls.Add(menuStrip);
         form.Show();
 
-        Message message = new();
+        Message message = default;
         menuStrip.Focused.Should().Be(value);
 
         toolStripMenuItem1.ProcessCmdKey(ref message, keyData: Keys.Enter);

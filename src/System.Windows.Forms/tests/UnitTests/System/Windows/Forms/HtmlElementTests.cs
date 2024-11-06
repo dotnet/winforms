@@ -1288,7 +1288,7 @@ public class HtmlElementTests
             using BSTR bstrStyle = new(style);
             Assert.True(htmlStyle.Value->put_cssText(bstrStyle).Succeeded);
             Assert.Equal(expected, element.Style);
-        } 
+        }
     }
 
     [WinFormsTheory]
@@ -1326,7 +1326,7 @@ public class HtmlElementTests
             using BSTR cssText = default;
             Assert.True(htmlStyle.Value->get_cssText(&cssText).Succeeded);
             return cssText.ToString();
-        } 
+        }
     }
 
     [WinFormsFact]
@@ -2352,7 +2352,7 @@ public class HtmlElementTests
         Assert.Equal("value", element.InvokeMember("getAttribute", "attribute", 1));
         Assert.Equal(Convert.DBNull, element.InvokeMember("getAttribute", "ATTRIBUTE", 1));
         Assert.Equal(Convert.DBNull, element.InvokeMember("getAttribute", "NoSuchAttribute"));
-        Assert.Null(element.InvokeMember("getAttribute", new TimeSpan()));
+        Assert.Null(element.InvokeMember("getAttribute", default(TimeSpan)));
     }
 
     [WinFormsFact]
@@ -2507,9 +2507,9 @@ public class HtmlElementTests
         Assert.True(element1 == element1);
         Assert.True(element1 == element2);
         Assert.False(element1 == element3);
-        Assert.False(element1 == null);
-        Assert.False(element1 == null);
-        Assert.True(null == (HtmlElement)null);
+        Assert.NotNull(element1);
+        Assert.NotNull(element1);
+        Assert.Null((HtmlElement)null);
     }
 
     [WinFormsFact]
@@ -2530,9 +2530,9 @@ public class HtmlElementTests
         Assert.False(element1 != element1);
         Assert.False(element1 != element2);
         Assert.True(element1 != element3);
-        Assert.True(element1 != null);
-        Assert.True(element1 != null);
-        Assert.False(null != (HtmlElement)null);
+        Assert.NotNull(element1);
+        Assert.NotNull(element1);
+        Assert.Null((HtmlElement)null);
     }
 #pragma warning restore CS1718, CSIsNull001, CSIsNull002
 
@@ -2618,7 +2618,7 @@ public class HtmlElementTests
         }
     }
 
-        [WinFormsFact]
+    [WinFormsFact]
     public async Task HtmlElement_Drag_InvokeEvent_Success()
     {
         using Control parent = new();

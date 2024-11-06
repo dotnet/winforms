@@ -14,7 +14,7 @@ public class CALPOLESTRTests
         CALPOLESTR ca = CreateStringVector("Swizzle");
 
         string?[] values = ca.ConvertAndFree();
-        Assert.Equal(1, values.Length);
+        Assert.Single(values);
         Assert.Equal("Swizzle", values[0]);
     }
 

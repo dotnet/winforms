@@ -3709,7 +3709,7 @@ public class TabControlTests
 
     public static IEnumerable<object[]> GetTabRect_InvokeCustomGetItemRect_TestData()
     {
-        yield return new object[] { new RECT(), Rectangle.Empty };
+        yield return new object[] { default(RECT), Rectangle.Empty };
         yield return new object[] { new RECT(1, 2, 3, 4), new Rectangle(1, 2, 2, 2) };
     }
 

@@ -2638,7 +2638,7 @@ public partial class AccessibleObjectTests
         IAccessible accessible = ppacc as IAccessible;
         Assert.NotNull(accessible);
         Assert.Equal("MSAA Button", accessible.accName);
-        Assert.True(((int)accessible.accState & 0x100000) != 0);    // STATE_SYSTEM_FOCUSABLE
+        Assert.NotEqual(0, ((int)accessible.accState & 0x100000));    // STATE_SYSTEM_FOCUSABLE
         Assert.Equal(0x2b, accessible.accRole);                     // ROLE_SYSTEM_PUSHBUTTON
         Assert.Equal("Press", accessible.accDefaultAction);
     }
@@ -2669,7 +2669,7 @@ public partial class AccessibleObjectTests
         IAccessible accessible = ppacc as IAccessible;
         Assert.NotNull(accessible);
         Assert.Null(accessible.accName);
-        Assert.True(((int)accessible.accState & 0x100000) != 0);    // STATE_SYSTEM_FOCUSABLE
+        Assert.NotEqual(0, ((int)accessible.accState & 0x100000));    // STATE_SYSTEM_FOCUSABLE
         Assert.Equal(0x2a, accessible.accRole);                     // ROLE_SYSTEM_TEXT
         Assert.Null(accessible.accDefaultAction);
 

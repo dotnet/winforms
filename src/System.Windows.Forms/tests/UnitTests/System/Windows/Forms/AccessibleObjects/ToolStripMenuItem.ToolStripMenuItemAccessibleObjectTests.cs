@@ -133,7 +133,7 @@ public class ToolStripMenuItem_ToolStripMenuItemAccessibleObjectTests
         menuStrip.Items.Add(item1);
         menuStrip.PerformLayout();
 
-        Assert.Equal(1, menuStrip.Items.Count);
+        Assert.Single(menuStrip.Items);
         Assert.Equal(1, (int)item1.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_PositionInSetPropertyId));
 
         using ToolStripSeparator separator = new();
@@ -173,7 +173,7 @@ public class ToolStripMenuItem_ToolStripMenuItemAccessibleObjectTests
         menuStrip.Items.Add(item1);
         menuStrip.PerformLayout();
 
-        Assert.Equal(1, menuStrip.Items.Count);
+        Assert.Single(menuStrip.Items);
         Assert.Equal(1, (int)item1.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_SizeOfSetPropertyId));
 
         using ToolStripSeparator separator = new();

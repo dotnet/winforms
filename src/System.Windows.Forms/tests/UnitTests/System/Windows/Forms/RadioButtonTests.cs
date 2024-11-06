@@ -172,8 +172,8 @@ public class RadioButtonTests : AbstractButtonBaseTests
         Assert.Throws<InvalidEnumArgumentException>("value", () => control.CheckAlign = value);
     }
 
-    public static TheoryData<ContentAlignment> CheckAlignData => new()
-    {
+    public static TheoryData<ContentAlignment> CheckAlignData =>
+    [
         ContentAlignment.TopLeft,
         ContentAlignment.TopRight,
         ContentAlignment.BottomCenter,
@@ -183,7 +183,7 @@ public class RadioButtonTests : AbstractButtonBaseTests
         ContentAlignment.MiddleRight,
         ContentAlignment.TopCenter,
         ContentAlignment.MiddleCenter
-    };
+    ];
 
     [WinFormsTheory]
     [MemberData(nameof(CheckAlignData))]

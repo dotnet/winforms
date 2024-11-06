@@ -119,7 +119,7 @@ public class StringFormatTests
         StringFormat format = new();
         format.Dispose();
 
-        AssertExtensions.Throws<ArgumentException>(null, () => format.Clone());
+        AssertExtensions.Throws<ArgumentException>(null, format.Clone);
     }
 
     [Theory]
@@ -429,6 +429,6 @@ public class StringFormatTests
         StringFormat format = new(StringFormatFlags.DirectionVertical);
         format.Dispose();
 
-        AssertExtensions.Throws<ArgumentException>(null, () => format.ToString());
+        AssertExtensions.Throws<ArgumentException>(null, format.ToString);
     }
 }

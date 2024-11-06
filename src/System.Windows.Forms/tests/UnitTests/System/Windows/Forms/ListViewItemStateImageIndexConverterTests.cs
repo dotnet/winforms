@@ -21,6 +21,6 @@ public class ListViewItemStateImageIndexConverterTests
 
         StandardValuesCollection result = converter.GetStandardValues(context: null);
 
-        Assert.Equal(0, result.Count);
+        Assert.Empty(result);
     }
 }

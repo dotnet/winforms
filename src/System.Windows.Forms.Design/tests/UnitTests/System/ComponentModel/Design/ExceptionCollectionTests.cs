@@ -13,7 +13,7 @@ public class ExceptionCollectionTests
     {
         yield return new object[] { null };
         yield return new object[] { new ArrayList() };
-        yield return new object[] { new ArrayList { new InvalidOperationException(), new InvalidOperationException(), new InvalidOperationException()} };
+        yield return new object[] { new ArrayList { new InvalidOperationException(), new InvalidOperationException(), new InvalidOperationException() } };
     }
 
     [Theory]
@@ -63,6 +63,6 @@ public class ExceptionCollectionTests
     public void ExceptionCollection_GetObjectData_ThrowsPlatformNotSupportedException()
     {
         ExceptionCollection collection = new(new ArrayList());
-        Assert.Throws<PlatformNotSupportedException>(() => collection.GetObjectData(null, new StreamingContext()));
+        Assert.Throws<PlatformNotSupportedException>(() => collection.GetObjectData(null, default));
     }
 }

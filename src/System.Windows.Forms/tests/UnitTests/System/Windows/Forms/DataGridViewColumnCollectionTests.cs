@@ -14,7 +14,7 @@ public class DataGridViewColumnCollectionTests
         using DataGridView control = new();
         SubDataGridViewColumnCollection collection = new(control);
         Assert.Empty(collection);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Same(control, collection.DataGridView);
         Assert.False(collection.IsReadOnly);
         Assert.False(collection.IsSynchronized);
@@ -420,7 +420,7 @@ public class DataGridViewColumnCollectionTests
         collection.Add(column);
 
         // End init.
-        Assert.Throws<InvalidOperationException>(() => iSupportInitialize.EndInit());
+        Assert.Throws<InvalidOperationException>(iSupportInitialize.EndInit);
         Assert.Equal(DataGridViewSelectionMode.RowHeaderSelect, control.SelectionMode);
     }
 

@@ -613,7 +613,7 @@ public class HtmlDocumentTests
         validate();
         unsafe void validate()
         {
-            using var iHTMLDocument2 = ComHelpers.GetComScope <IHTMLDocument2>(document.DomDocument);
+            using var iHTMLDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(document.DomDocument);
             using BSTR charSet = new("UTF-8");
             Assert.True(iHTMLDocument2.Value->put_charset(charSet).Succeeded);
             Assert.Equal("utf-8", document.Encoding);
@@ -1963,9 +1963,9 @@ public class HtmlDocumentTests
 
         Assert.True(document == document);
         Assert.False(document == newDocument);
-        Assert.False(document == null);
-        Assert.False(document == null);
-        Assert.True(null == (HtmlDocument)null);
+        Assert.NotNull(document);
+        Assert.NotNull(document);
+        Assert.Null((HtmlDocument)null);
     }
 
     [WinFormsFact]
@@ -1983,9 +1983,9 @@ public class HtmlDocumentTests
 
         Assert.False(document != document);
         Assert.True(document != newDocument);
-        Assert.True(document != null);
-        Assert.True(document != null);
-        Assert.False(null != (HtmlDocument)null);
+        Assert.NotNull(document);
+        Assert.NotNull(document);
+        Assert.Null((HtmlDocument)null);
     }
 #pragma warning restore CS1718, CSIsNull001, CSIsNull002
 

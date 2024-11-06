@@ -315,7 +315,7 @@ public class TextureBrushTests
         TextureBrush brush = new(image);
         brush.Dispose();
 
-        AssertExtensions.Throws<ArgumentException>(null, () => brush.Clone());
+        AssertExtensions.Throws<ArgumentException>(null, brush.Clone);
     }
 
     [Fact]
@@ -450,7 +450,7 @@ public class TextureBrushTests
         TextureBrush brush = new(image);
         brush.Dispose();
 
-        AssertExtensions.Throws<ArgumentException>(null, () => brush.ResetTransform());
+        AssertExtensions.Throws<ArgumentException>(null, brush.ResetTransform);
     }
 
     public static IEnumerable<object[]> RotateTransform_TestData()

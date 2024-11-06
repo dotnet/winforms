@@ -30,6 +30,6 @@ public sealed class BaseContextMenuStripTests
         foreach (var item in contextMenuStrip.Items.OfType<ToolStripMenuItem>())
         {
             item.Font.Should().Be(expectedFont);
-        }     
+        }
     }
 }

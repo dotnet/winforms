@@ -18,11 +18,11 @@ public class ToolStripSplitButtonTests : IDisposable
 
     public void Dispose() => _toolStripSplitButton.Dispose();
 
-    public static TheoryData<ToolStripItem?> ToolStripItem_Set_TestData() => new()
-     {
+    public static TheoryData<ToolStripItem?> ToolStripItem_Set_TestData() =>
+     [
         null,
         new SubToolStripItem()
-     };
+     ];
 
     [WinFormsTheory]
     [MemberData(nameof(ToolStripItem_Set_TestData))]
@@ -294,7 +294,7 @@ public class ToolStripSplitButtonTests : IDisposable
     [WinFormsFact]
     public void ToolStripSplitButton_DropDownButtonArea_ReturnsExpected()
     {
-        _toolStripSplitButton.DropDownButtonArea.Should().Be( _toolStripSplitButton.DropDownButtonBounds);
+        _toolStripSplitButton.DropDownButtonArea.Should().Be(_toolStripSplitButton.DropDownButtonBounds);
     }
 
     [WinFormsFact]

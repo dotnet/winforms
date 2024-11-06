@@ -65,7 +65,7 @@ public partial class DataFormatsTests
     public void DataFormats_GetFormat_InvokeKnownString_ReturnsExpected(string format, string expectedName, int expectedId)
     {
         DataFormats.Format result = DataFormats.GetFormat(format);
-        Assert.Same(result, DataFormats.GetFormat(format.ToLower()));
+        Assert.Same(result, DataFormats.GetFormat(format.ToLowerInvariant()));
         Assert.Equal(expectedName, result.Name);
         Assert.Equal(expectedId, result.Id);
 
@@ -89,7 +89,7 @@ public partial class DataFormatsTests
     {
         DataFormats.Format result = DataFormats.GetFormat(format);
         Assert.Same(result, DataFormats.GetFormat(format));
-        Assert.Same(result, DataFormats.GetFormat(format.ToLower()));
+        Assert.Same(result, DataFormats.GetFormat(format.ToLowerInvariant()));
         Assert.Equal(expectedName, result.Name);
 
         // Internally the format is registered with RegisterClipboardFormat.

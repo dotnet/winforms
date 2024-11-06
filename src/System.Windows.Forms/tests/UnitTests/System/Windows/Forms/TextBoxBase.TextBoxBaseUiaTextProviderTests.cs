@@ -590,9 +590,9 @@ public unsafe class TextBoxBase_TextBoxBaseUiaTextProviderTests
         textBoxBase.CreateControl();
         TextBoxBaseUiaTextProvider provider = new(textBoxBase);
         WINDOW_STYLE actual = provider.WindowStyle;
-        Assert.False(((int)actual & PInvoke.ES_RIGHT) != 0);
-        Assert.True(((int)actual & PInvoke.ES_AUTOVSCROLL) != 0);
-        Assert.True(((int)actual & PInvoke.ES_AUTOHSCROLL) != 0);
+        Assert.Equal(0, ((int)actual & PInvoke.ES_RIGHT));
+        Assert.NotEqual(0, ((int)actual & PInvoke.ES_AUTOVSCROLL));
+        Assert.NotEqual(0, ((int)actual & PInvoke.ES_AUTOHSCROLL));
         Assert.True(textBoxBase.IsHandleCreated);
     }
 
@@ -935,7 +935,7 @@ public unsafe class TextBoxBase_TextBoxBaseUiaTextProviderTests
         TextBoxBaseUiaTextProvider provider = new(textBoxBase);
         Assert.False(textBoxBase.IsHandleCreated);
 
-        Assert.Equal(new LOGFONTW(), provider.Logfont);
+        Assert.Equal(default, provider.Logfont);
     }
 
     private class SubTextBoxBase : TextBoxBase

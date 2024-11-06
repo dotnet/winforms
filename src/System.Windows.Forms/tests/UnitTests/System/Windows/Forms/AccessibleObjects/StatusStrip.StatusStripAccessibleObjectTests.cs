@@ -926,7 +926,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
 
         return statusStrip;
 
-        ToolStripItem CreateStatusStripItem()
+        static ToolStripItem CreateStatusStripItem()
         {
             return new ToolStripStatusLabel()
             {

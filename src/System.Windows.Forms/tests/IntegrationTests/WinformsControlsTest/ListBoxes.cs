@@ -16,8 +16,8 @@ public partial class ListBoxes : Form
     private void addButton_Click(object sender, EventArgs e)
     {
         var control = (Control)sender;
-        var listBox = (ListBox)((Object[])control.Tag)[0];
-        var textBox = (TextBox)((Object[])control.Tag)[1];
+        var listBox = (ListBox)((object[])control.Tag)[0];
+        var textBox = (TextBox)((object[])control.Tag)[1];
         listBox.Items.Add(textBox.Text);
     }
 

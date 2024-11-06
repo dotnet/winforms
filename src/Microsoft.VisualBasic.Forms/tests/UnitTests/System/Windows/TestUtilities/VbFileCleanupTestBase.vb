@@ -75,7 +75,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         '''  The full path and file name of the created file.
         '''  If size = -1 no file is create but the full path is returned.
         ''' </returns>
-        Friend Function CreateTempFile(
+        Friend Shared Function CreateTempFile(
             sourceDirectoryName As String,
             Optional filename As String = "Testing.Txt",
             Optional size As Integer = -1) As String
@@ -120,7 +120,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             GC.SuppressFinalize(Me)
         End Sub
 
-        Friend Function GetUniqueFileNameWithPath(testDirectory As String) As String
+        Friend Shared Function GetUniqueFileNameWithPath(testDirectory As String) As String
             Return Path.Combine(testDirectory, GetUniqueFileName())
         End Function
 

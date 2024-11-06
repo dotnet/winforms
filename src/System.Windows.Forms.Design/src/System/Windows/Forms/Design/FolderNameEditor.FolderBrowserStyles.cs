@@ -8,12 +8,12 @@ public partial class FolderNameEditor
     [Flags]
     protected enum FolderBrowserStyles
     {
-        BrowseForComputer        = (int)PInvoke.BIF_BROWSEFORCOMPUTER,
-        BrowseForEverything      = (int)PInvoke.BIF_BROWSEINCLUDEFILES,
-        BrowseForPrinter         = (int)PInvoke.BIF_BROWSEFORPRINTER,
-        RestrictToDomain         = (int)PInvoke.BIF_DONTGOBELOWDOMAIN,
-        RestrictToFilesystem     = (int)PInvoke.BIF_RETURNONLYFSDIRS,
-        RestrictToSubfolders     = (int)PInvoke.BIF_RETURNFSANCESTORS,
-        ShowTextBox              = (int)PInvoke.BIF_EDITBOX
+        BrowseForComputer = (int)PInvoke.BIF_BROWSEFORCOMPUTER,
+        BrowseForEverything = (int)PInvoke.BIF_BROWSEINCLUDEFILES,
+        BrowseForPrinter = (int)PInvoke.BIF_BROWSEFORPRINTER,
+        RestrictToDomain = (int)PInvoke.BIF_DONTGOBELOWDOMAIN,
+        RestrictToFilesystem = (int)PInvoke.BIF_RETURNONLYFSDIRS,
+        RestrictToSubfolders = (int)PInvoke.BIF_RETURNFSANCESTORS,
+        ShowTextBox = (int)PInvoke.BIF_EDITBOX
     }
 }
