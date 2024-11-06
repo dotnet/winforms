@@ -6732,7 +6732,7 @@ public class ToolStripItemTests
 
     public static IEnumerable<object[]> Padding_SetWithOwner_TestData()
     {
-        yield return new object[] { new Padding(), new Padding(), 0, 0 };
+        yield return new object[] { default(Padding), default(Padding), 0, 0 };
         yield return new object[] { new Padding(1, 2, 3, 4), new Padding(1, 2, 3, 4), 1, 1 };
         yield return new object[] { new Padding(1), new Padding(1), 1, 1 };
         yield return new object[] { new Padding(-1, -2, -3, -4), Padding.Empty, 1, 2 };
@@ -13969,7 +13969,7 @@ public class ToolStripItemTests
     public void ToolStripItem_ProcessCmdKey_Invoke_ReturnsFalse(Keys keyData)
     {
         using SubToolStripItem item = new();
-        Message message = new();
+        Message message = default;
         Assert.False(item.ProcessCmdKey(ref message, keyData));
     }
 

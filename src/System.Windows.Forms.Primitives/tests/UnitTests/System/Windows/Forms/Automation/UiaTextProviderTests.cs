@@ -21,7 +21,7 @@ public unsafe class UiaTextProviderTests
         Mock<UiaTextProvider> providerMock = new(MockBehavior.Strict);
 
         WINDOW_STYLE actual = UiaTextProvider.GetWindowStyle(textBox);
-        Assert.True(((int)actual & PInvoke.ES_MULTILINE) != 0);
+        Assert.NotEqual(0, ((int)actual & PInvoke.ES_MULTILINE));
     }
 
     [StaFact]
@@ -35,7 +35,7 @@ public unsafe class UiaTextProviderTests
         Mock<UiaTextProvider> providerMock = new(MockBehavior.Strict);
 
         WINDOW_STYLE actual = UiaTextProvider.GetWindowStyle(textBox);
-        Assert.False(((int)actual & PInvoke.ES_MULTILINE) != 0);
+        Assert.Equal(0, ((int)actual & PInvoke.ES_MULTILINE));
     }
 
     [StaFact]
@@ -105,7 +105,7 @@ public unsafe class UiaTextProviderTests
     [StaFact]
     public unsafe void UiaTextProvider_SendInput_SendsOneInput()
     {
-        INPUT keyboardInput = new();
+        INPUT keyboardInput = default;
         int actual = UiaTextProvider.SendInput(ref keyboardInput);
         Assert.Equal(1, actual);
     }

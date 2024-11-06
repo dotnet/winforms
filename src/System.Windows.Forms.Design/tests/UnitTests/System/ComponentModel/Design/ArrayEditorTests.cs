@@ -246,6 +246,7 @@ public class ArrayEditorTests
     }
 
 #pragma warning disable IDE0051 // Remove unused private members
+#pragma warning disable CA1052 // Static holder types should be Static or NotInheritable
     private class ClassWithPrivateItem
     {
         private int Item { get; set; }
@@ -317,5 +318,5 @@ public class ArrayEditorTests
     }
 
 #pragma warning restore IDE0051
-
+#pragma warning restore CA1052
 }

@@ -83,12 +83,12 @@ public class ListViewItem_ListViewItemBaseAccessibleObjectTests
 
         AccessibleObject accessibleObject = item.AccessibilityObject;
 
-        Assert.False((accessibleObject.State & AccessibleStates.Selected) != 0);
+        accessibleObject.State.Should().NotHaveFlag(AccessibleStates.Selected);
 
         accessibleObject.DoDefaultAction();
 
-        Assert.False((accessibleObject.State & AccessibleStates.Selected) != 0);
-        Assert.False(control.IsHandleCreated);
+        accessibleObject.State.Should().NotHaveFlag(AccessibleStates.Selected);
+        control.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsFact]
@@ -118,12 +118,12 @@ public class ListViewItem_ListViewItemBaseAccessibleObjectTests
 
         AccessibleObject accessibleObject = item.AccessibilityObject;
 
-        Assert.False((accessibleObject.State & AccessibleStates.Selected) != 0);
+        accessibleObject.State.Should().NotHaveFlag(AccessibleStates.Selected);
 
         accessibleObject.DoDefaultAction();
 
-        Assert.False((accessibleObject.State & AccessibleStates.Selected) != 0);
-        Assert.False(control.IsHandleCreated);
+        accessibleObject.State.Should().NotHaveFlag(AccessibleStates.Selected);
+        control.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsFact]
@@ -136,12 +136,12 @@ public class ListViewItem_ListViewItemBaseAccessibleObjectTests
 
         AccessibleObject accessibleObject = item.AccessibilityObject;
 
-        Assert.False((accessibleObject.State & AccessibleStates.Selected) != 0);
+        accessibleObject.State.Should().NotHaveFlag(AccessibleStates.Selected);
 
         accessibleObject.DoDefaultAction();
 
-        Assert.True((accessibleObject.State & AccessibleStates.Selected) != 0);
-        Assert.True(control.IsHandleCreated);
+        accessibleObject.State.Should().HaveFlag(AccessibleStates.Selected);
+        control.IsHandleCreated.Should().BeTrue();
     }
 
     [WinFormsFact]

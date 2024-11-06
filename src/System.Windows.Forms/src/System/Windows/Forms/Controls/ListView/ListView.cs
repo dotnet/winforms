@@ -4006,7 +4006,7 @@ public partial class ListView : Control
                 {
                     if (items[i]._listView is not null)
                     {
-                        throw new ArgumentException(string.Format(SR.OnlyOneControl, items[i].Text), "item");
+                        throw new ArgumentException(string.Format(SR.OnlyOneControl, items[i].Text), nameof(items));
                     }
                 }
             }
@@ -4033,7 +4033,7 @@ public partial class ListView : Control
 
             if (checkHosting && item._listView is not null)
             {
-                throw new ArgumentException(string.Format(SR.OnlyOneControl, item.Text), "item");
+                throw new ArgumentException(string.Format(SR.OnlyOneControl, item.Text), nameof(items));
             }
 
             // create an ID..

@@ -1,6 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-//
+
 // Copyright (C) 2005-2006 Novell, Inc (http://www.novell.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -513,7 +513,7 @@ public class MetafileTests
         using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
         using (Metafile metafile = new(
-            fileName, g.GetHdc(), new RectangleF(), MetafileFrameUnit.GdiCompatible, EmfType.EmfOnly, description))
+            fileName, g.GetHdc(), default(RectangleF), MetafileFrameUnit.GdiCompatible, EmfType.EmfOnly, description))
         {
             AssertMetafileIsBlank(metafile);
             AssertEmfType(metafile.GetMetafileHeader(), EmfType.EmfOnly);
@@ -597,7 +597,7 @@ public class MetafileTests
         using (Bitmap bmp = new(10, 10, PixelFormat.Format32bppArgb))
         using (Graphics g = Graphics.FromImage(bmp))
         using (Metafile metafile = new(
-            fileName, g.GetHdc(), new Rectangle(), MetafileFrameUnit.GdiCompatible, EmfType.EmfOnly, description))
+            fileName, g.GetHdc(), default, MetafileFrameUnit.GdiCompatible, EmfType.EmfOnly, description))
         {
             AssertMetafileIsBlank(metafile);
             AssertEmfType(metafile.GetMetafileHeader(), EmfType.EmfOnly);
@@ -772,7 +772,7 @@ public class MetafileTests
         using Graphics g = Graphics.FromImage(bmp);
         using MemoryStream stream = new();
         using Metafile metafile = new(
-            stream, g.GetHdc(), new Rectangle(), MetafileFrameUnit.GdiCompatible, EmfType.EmfOnly, description);
+            stream, g.GetHdc(), default, MetafileFrameUnit.GdiCompatible, EmfType.EmfOnly, description);
         AssertMetafileIsBlank(metafile);
         AssertEmfType(metafile.GetMetafileHeader(), EmfType.EmfOnly);
     }
@@ -898,7 +898,7 @@ public class MetafileTests
         Metafile metafile = new(GetPath(WmfFile));
         metafile.Dispose();
 
-        AssertExtensions.Throws<ArgumentException>(null, () => metafile.GetMetafileHeader());
+        AssertExtensions.Throws<ArgumentException>(null, metafile.GetMetafileHeader);
     }
 
     [Fact]

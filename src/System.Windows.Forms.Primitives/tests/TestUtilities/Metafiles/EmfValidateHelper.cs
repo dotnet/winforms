@@ -32,4 +32,3 @@ public class EmfValidateHelper
         File.AppendAllText(@$"c:\temp\{methodName}.md", sb.ToString());
     }
 }
-

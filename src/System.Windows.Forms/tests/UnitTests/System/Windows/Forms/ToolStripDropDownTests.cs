@@ -4992,7 +4992,7 @@ public class ToolStripDropDownTests
         toolStripDropDown.Show(control, new Point(x, y), direction);
 
         toolStripDropDown.Location.Should().Be(new Point(x + 6, y + 27));
-    }  
+    }
 
     [WinFormsTheory]
     [InlineData(10, 20, ToolStripDropDownDirection.AboveLeft)]
@@ -5003,7 +5003,7 @@ public class ToolStripDropDownTests
         toolStripDropDown.Show(new Point(x, y), direction);
         Point expectedLocation = new(x, y);
         var nonClientSize = SystemInformation.BorderSize;
-        expectedLocation.Offset(nonClientSize.Width-3, nonClientSize.Height -1);
+        expectedLocation.Offset(nonClientSize.Width - 3, nonClientSize.Height - 1);
 
         if (direction is ToolStripDropDownDirection.AboveLeft or ToolStripDropDownDirection.AboveRight)
         {

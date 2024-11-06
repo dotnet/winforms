@@ -205,7 +205,7 @@ public class DesignerActionMethodItemTests
     public void Invoke_NullActionList_ThrowsInvalidOperationException()
     {
         DesignerActionMethodItem item = new(null, "memberName", "displayName", "category", "description");
-        Assert.Throws<InvalidOperationException>(() => item.Invoke());
+        Assert.Throws<InvalidOperationException>(item.Invoke);
     }
 
     [Theory]
@@ -216,7 +216,7 @@ public class DesignerActionMethodItemTests
     {
         SubDesignerActionList list = new();
         DesignerActionMethodItem item = new(list, memberName, "displayName", "category", "description");
-        Assert.Throws<InvalidOperationException>(() => item.Invoke());
+        Assert.Throws<InvalidOperationException>(item.Invoke);
     }
 
     [Fact]
@@ -224,7 +224,7 @@ public class DesignerActionMethodItemTests
     {
         SubDesignerActionList list = new();
         DesignerActionMethodItem item = new(list, null, "displayName", "category", "description");
-        Assert.Throws<ArgumentNullException>("name", () => item.Invoke());
+        Assert.Throws<ArgumentNullException>("name", item.Invoke);
     }
 
     [Fact]
@@ -232,7 +232,7 @@ public class DesignerActionMethodItemTests
     {
         SubDesignerActionList list = new();
         DesignerActionMethodItem item = new(list, nameof(SubDesignerActionList.MethodWithParameters), "displayName", "category", "description");
-        Assert.Throws<TargetParameterCountException>(() => item.Invoke());
+        Assert.Throws<TargetParameterCountException>(item.Invoke);
     }
 
     private class SubDesignerActionList : DesignerActionList

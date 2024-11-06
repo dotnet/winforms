@@ -97,7 +97,7 @@ public class PropertyGridTests : IDisposable
     [WinFormsFact]
     public void PropertyGrid_RefreshEvent_Raised_ShouldNotThrowException()
     {
-        Action act = () => _propertyGrid.Refresh();
+        Action act = _propertyGrid.Refresh;
         act.Should().NotThrow();
     }
 
@@ -300,7 +300,7 @@ public class PropertyGridTests : IDisposable
         using Button button1 = new();
         using TextBox textBox1 = new();
         using ComboBox comboBox1 = new();
-        object[] objects = { button1, textBox1, comboBox1 };
+        object[] objects = [button1, textBox1, comboBox1];
 
         _propertyGrid.SelectedObjects = objects;
         _propertyGrid.SelectedObjects.Should().Contain(objects);
@@ -494,5 +494,5 @@ public class PropertyGridTests : IDisposable
         GridItem gridItem = _propertyGrid.SelectedGridItem.GridItems[0];
         _propertyGrid.SelectedGridItem = gridItem;
         _propertyGrid.SelectedGridItem.Should().Be(gridItem);
-    }    
+    }
 }

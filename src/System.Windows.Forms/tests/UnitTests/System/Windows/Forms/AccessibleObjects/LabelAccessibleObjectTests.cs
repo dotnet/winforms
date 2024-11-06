@@ -168,7 +168,7 @@ public class LabelAccessibleObjectTests
     [InlineData("Test Accessible Name", "Test Accessible Name", true)]
     [InlineData("", null, false)]
     [InlineData("", null, true)]
-    [InlineData(null, null, false)] 
+    [InlineData(null, null, false)]
     [InlineData(null, null, true)]
     public void LabelAccessibleObject_Name_ReturnsExpected_WithVariousText(string labelText, string expectedName, bool useMnemonic)
     {

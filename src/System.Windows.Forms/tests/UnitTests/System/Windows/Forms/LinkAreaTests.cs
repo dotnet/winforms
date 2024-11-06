@@ -11,7 +11,7 @@ public class LinkAreaTests
     [Fact]
     public void LinkArea_Ctor_Default()
     {
-        LinkArea area = new();
+        LinkArea area = default;
         Assert.Equal(0, area.Start);
         Assert.Equal(0, area.Length);
         Assert.True(area.IsEmpty);

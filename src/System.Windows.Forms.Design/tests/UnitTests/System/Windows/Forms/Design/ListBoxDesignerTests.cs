@@ -42,7 +42,7 @@ public sealed class ListBoxDesignerTests
 
         designer.IntegralHeight.Should().BeTrue();
 
-        DockStyle dockStyle= (DockStyle)value[0];
+        DockStyle dockStyle = (DockStyle)value[0];
         bool integralHeight = (bool)value[1];
         listBox.Dock = dockStyle;
         designer.IntegralHeight = integralHeight;

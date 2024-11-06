@@ -35,4 +35,3 @@ public class CollectionEditVerbManagerTests
         editor.EditItemsVerb.CommandID.Should().Be(new CommandID(new Guid("74d21313-2aee-11d1-8bfb-00a0c90f26f7"), 8192));
     }
 }
-

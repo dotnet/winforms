@@ -74,7 +74,7 @@ public class AudioTests
     public void Stop()
     {
         Audio audio = new();
-        Action testCode = () => audio.Stop();
+        Action testCode = audio.Stop;
         testCode.Should().NotThrow();
     }
 }

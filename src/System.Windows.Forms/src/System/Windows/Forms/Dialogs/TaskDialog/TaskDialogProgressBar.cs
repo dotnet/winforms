@@ -313,7 +313,7 @@ public sealed class TaskDialogProgressBar : TaskDialogControl
         TaskDialogProgressBarState.Normal => PInvoke.PBST_NORMAL,
         TaskDialogProgressBarState.Paused => PInvoke.PBST_PAUSED,
         TaskDialogProgressBarState.Error => PInvoke.PBST_ERROR,
-        _ => throw new ArgumentException()
+        _ => throw new ArgumentException(null, nameof(state))
     };
 
     private protected override TASKDIALOG_FLAGS BindCore()

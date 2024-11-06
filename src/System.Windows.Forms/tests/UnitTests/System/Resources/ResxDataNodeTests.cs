@@ -86,8 +86,8 @@ public class ResxDataNodeTests
         Assert.Equal(value, deserializedDataNode.GetValue(typeResolver: null));
     }
 
-    public static TheoryData<object?> RoundTrip_BinaryFormatted_TestData => new()
-    {
+    public static TheoryData<object?> RoundTrip_BinaryFormatted_TestData =>
+    [
         new RectangleF(10.0f, 20.0f, 30.0f, 40.0f),
         new PointF(1.0f, 2.0f),
         new List<string> { "Jack", "Queen", "King" },
@@ -137,5 +137,5 @@ public class ResxDataNodeTests
             { DateTime.MinValue, DateTime.MaxValue },
             { TimeSpan.MinValue, TimeSpan.MaxValue }
         },
-    };
+    ];
 }

@@ -152,11 +152,11 @@ public class ErrorProviderAccessibleObjectTests : IDisposable
         // ToLower method used to be case insensitive.
 
         string errorWindowControlType = "group";
-        string actualWindowAccessibleName = _errorWindow.AccessibilityObject.Name.ToLower();
+        string actualWindowAccessibleName = _errorWindow.AccessibilityObject.Name.ToLowerInvariant();
         Assert.NotEqual(errorWindowControlType, actualWindowAccessibleName);
 
         string controlItemControlType = "image";
-        string actualItemAccessibleName = _controlItem1.AccessibilityObject.Name.ToLower();
+        string actualItemAccessibleName = _controlItem1.AccessibilityObject.Name.ToLowerInvariant();
         Assert.NotEqual(controlItemControlType, actualItemAccessibleName);
 
         Assert.NotEqual(actualWindowAccessibleName, actualItemAccessibleName);

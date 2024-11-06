@@ -7,7 +7,7 @@ public class HatchBrushTests
 {
     public static IEnumerable<object[]> Ctor_HatchStyle_ForeColor_TestData()
     {
-        yield return new object[] { HatchStyle.Horizontal, new Color() };
+        yield return new object[] { HatchStyle.Horizontal, default(Color) };
         yield return new object[] { HatchStyle.SolidDiamond, Color.PapayaWhip };
     }
 
@@ -26,7 +26,7 @@ public class HatchBrushTests
 
     public static IEnumerable<object[]> Ctor_HatchStyle_ForeColor_BackColor_TestData()
     {
-        yield return new object[] { HatchStyle.Horizontal, new Color(), new Color() };
+        yield return new object[] { HatchStyle.Horizontal, default(Color), default(Color) };
         yield return new object[] { HatchStyle.SolidDiamond, Color.PapayaWhip, Color.Plum };
     }
 
@@ -45,7 +45,7 @@ public class HatchBrushTests
     }
 
     [Theory]
-    [InlineData(HatchStyle.Horizontal -1 )]
+    [InlineData(HatchStyle.Horizontal - 1)]
     [InlineData(HatchStyle.SolidDiamond + 1)]
     public void Ctor_InvalidHatchStyle_ThrowsArgumentException(HatchStyle hatchStyle)
     {
@@ -82,7 +82,7 @@ public class HatchBrushTests
         HatchBrush brush = new(HatchStyle.DarkHorizontal, Color.PeachPuff, Color.Purple);
         brush.Dispose();
 
-        AssertExtensions.Throws<ArgumentException>(null, () => brush.Clone());
+        AssertExtensions.Throws<ArgumentException>(null, brush.Clone);
     }
 
     [Fact]

@@ -36,7 +36,7 @@ public partial class TabControl
             {
                 if (value is not TabPage tabPage)
                 {
-                    throw new ArgumentException(nameof(value));
+                    throw new ArgumentException(null, nameof(value));
                 }
 
                 this[index] = tabPage;
@@ -89,7 +89,7 @@ public partial class TabControl
         {
             if (value is not TabPage tabPage)
             {
-                throw new ArgumentException(nameof(value));
+                throw new ArgumentException(null, nameof(value));
             }
 
             Add(tabPage);
@@ -239,7 +239,7 @@ public partial class TabControl
         {
             if (tabPage is not TabPage actualTabPage)
             {
-                throw new ArgumentException(nameof(tabPage));
+                throw new ArgumentException(null, nameof(tabPage));
             }
 
             Insert(index, actualTabPage);

@@ -73,10 +73,10 @@ public class SerializableTypesTests
         string netBlob;
 
         using (ImageList imageList = new()
-            {
-                ImageSize = new Size(16, 16),
-                TransparentColor = Color.White
-            })
+        {
+            ImageSize = new Size(16, 16),
+            TransparentColor = Color.White
+        })
         {
             imageList.Images.Add(new Bitmap(16, 16));
             netBlob = BinarySerialization.ToBase64String(imageList.ImageStream);

@@ -1,6 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-//
+
 // Copyright (C) 2005-2006 Novell, Inc (http://www.novell.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -127,8 +127,8 @@ public partial class MatrixTests
     [Fact]
     public void Ctor_NullPoints_ThrowsArgumentNullException()
     {
-        AssertExtensions.Throws<ArgumentNullException>("plgpts", () => new Matrix(new RectangleF(), null));
-        AssertExtensions.Throws<ArgumentNullException>("plgpts", () => new Matrix(new Rectangle(), null));
+        AssertExtensions.Throws<ArgumentNullException>("plgpts", () => new Matrix(default(RectangleF), null));
+        AssertExtensions.Throws<ArgumentNullException>("plgpts", () => new Matrix(default, null));
     }
 
     [Theory]
@@ -137,8 +137,8 @@ public partial class MatrixTests
     [InlineData(4)]
     public void Ctor_PointsLengthNotThree_ThrowsArgumentNullException(int length)
     {
-        AssertExtensions.Throws<ArgumentException>(null, () => new Matrix(new RectangleF(), new PointF[length]));
-        AssertExtensions.Throws<ArgumentException>(null, () => new Matrix(new Rectangle(), new Point[length]));
+        AssertExtensions.Throws<ArgumentException>(null, () => new Matrix(default, new PointF[length]));
+        AssertExtensions.Throws<ArgumentException>(null, () => new Matrix(default, new Point[length]));
     }
 
     [Fact]
@@ -258,12 +258,12 @@ public partial class MatrixTests
         using Matrix matrix4 = new(1, 2, 3, f, 5, 6);
         using Matrix matrix5 = new(1, 2, 3, 4, f, 6);
         using Matrix matrix6 = new(1, 2, 3, 4, 5, f);
-        AssertExtensions.Throws<ArgumentException>(null, () => matrix1.Invert());
-        AssertExtensions.Throws<ArgumentException>(null, () => matrix2.Invert());
-        AssertExtensions.Throws<ArgumentException>(null, () => matrix3.Invert());
-        AssertExtensions.Throws<ArgumentException>(null, () => matrix4.Invert());
-        AssertExtensions.Throws<ArgumentException>(null, () => matrix5.Invert());
-        AssertExtensions.Throws<ArgumentException>(null, () => matrix6.Invert());
+        AssertExtensions.Throws<ArgumentException>(null, matrix1.Invert);
+        AssertExtensions.Throws<ArgumentException>(null, matrix2.Invert);
+        AssertExtensions.Throws<ArgumentException>(null, matrix3.Invert);
+        AssertExtensions.Throws<ArgumentException>(null, matrix4.Invert);
+        AssertExtensions.Throws<ArgumentException>(null, matrix5.Invert);
+        AssertExtensions.Throws<ArgumentException>(null, matrix6.Invert);
     }
 
     [Fact]

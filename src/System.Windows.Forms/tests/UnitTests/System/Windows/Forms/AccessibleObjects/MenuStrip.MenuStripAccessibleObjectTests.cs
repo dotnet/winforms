@@ -945,7 +945,7 @@ public class MenuStrip_MenuStripAccessibleObjectTests
 
         return menuStrip;
 
-        ToolStripItem CreateMenuItem()
+        static ToolStripItem CreateMenuItem()
         {
             return new ToolStripMenuItem()
             {

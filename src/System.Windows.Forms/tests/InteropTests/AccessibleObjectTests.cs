@@ -168,7 +168,7 @@ public unsafe class AccessibleObjectTests : InteropTestBase
     public void AccessibleObject_IRawElementProviderFragmentBoundingRectangle_Get_ReturnsExpected()
     {
         AccessibleObject o = new();
-        AssertSuccess(Test_IRawElementProviderFragmentGetBoundingRectangle(o, new UiaRect()));
+        AssertSuccess(Test_IRawElementProviderFragmentGetBoundingRectangle(o, default));
     }
 
     [WinFormsFact]
@@ -448,13 +448,13 @@ public unsafe class AccessibleObjectTests : InteropTestBase
         control.CreateControl();
         ComboBox.ComboBoxAccessibleObject accessibleObject = new(control);
 
-            var enumVariant = (IEnumVARIANT.Interface)accessibleObject;
-            Assert.Equal(HRESULT.S_OK, enumVariant.Reset());
+        var enumVariant = (IEnumVARIANT.Interface)accessibleObject;
+        Assert.Equal(HRESULT.S_OK, enumVariant.Reset());
 
-            VARIANT variantObject;
-            uint retreivedCount;
-            var result = enumVariant.Next(1, &variantObject, &retreivedCount);
-            Assert.Equal(HRESULT.S_OK, result);
+        VARIANT variantObject;
+        uint retreivedCount;
+        var result = enumVariant.Next(1, &variantObject, &retreivedCount);
+        Assert.Equal(HRESULT.S_OK, result);
 
         object retreivedItem = variantObject.ToObject();
 

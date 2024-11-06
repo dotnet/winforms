@@ -119,7 +119,7 @@ public class PaddingConverterTests
     public void PaddingConverter_ConvertTo_InvalidDestinationType_ThrowsNotSupportedException(Type destinationType)
     {
         PaddingConverter converter = new();
-        Assert.Throws<NotSupportedException>(() => converter.ConvertTo(new Padding(), destinationType));
+        Assert.Throws<NotSupportedException>(() => converter.ConvertTo(default(Padding), destinationType));
     }
 
     public static IEnumerable<object[]> CreateInstance_TestData()

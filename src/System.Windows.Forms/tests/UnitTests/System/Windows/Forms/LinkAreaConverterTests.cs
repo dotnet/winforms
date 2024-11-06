@@ -107,7 +107,7 @@ public class LinkAreaConverterTests
     public void LinkAreaConverter_ConvertTo_InvalidDestinationType_ThrowsNotSupportedException(Type destinationType)
     {
         var converter = new LinkArea.LinkAreaConverter();
-        Assert.Throws<NotSupportedException>(() => converter.ConvertTo(new LinkArea(), destinationType));
+        Assert.Throws<NotSupportedException>(() => converter.ConvertTo(default(LinkArea), destinationType));
     }
 
     [Fact]

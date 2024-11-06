@@ -55,7 +55,7 @@ public class CheckBox_CheckBoxAccessibleObjectTests
         using CheckBox checkBox = new();
 
         checkBox.IsHandleCreated.Should().BeFalse();
-        checkBox.AccessibilityObject.DefaultAction.Should().Be("Check");       
+        checkBox.AccessibilityObject.DefaultAction.Should().Be("Check");
 
         checkBox.Checked = true;
 

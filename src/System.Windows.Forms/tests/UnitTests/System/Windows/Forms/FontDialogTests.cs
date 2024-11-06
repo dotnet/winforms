@@ -696,7 +696,7 @@ public class FontDialogTests
             {
                 using Font font = new("Arial", 8.25f);
                 LOGFONTW* pLogfont = (LOGFONTW*)m.LParam;
-                object lf = new LOGFONTW();
+                object lf = default(LOGFONTW);
                 font.ToLogFont(lf);
                 *pLogfont = (LOGFONTW)lf;
             }

@@ -2594,7 +2594,7 @@ public class ScrollBarTests
 
         control.TestAccessor().Dynamic._scrollOrientation = orientation;
 
-        SizeF factor = new (((float)deviceDpiNew) / deviceDpiOld, ((float)deviceDpiNew) / deviceDpiOld);
+        SizeF factor = new(((float)deviceDpiNew) / deviceDpiOld, ((float)deviceDpiNew) / deviceDpiOld);
         control.ScaleControl(factor, factor);
 
         Assert.Equal(expected, control.Size);
@@ -3162,7 +3162,7 @@ public class ScrollBarTests
         public new bool CanRaiseEvents => base.CanRaiseEvents;
 
         public new CreateParams CreateParams => base.CreateParams;
-        
+
         public new Cursor DefaultCursor => base.DefaultCursor;
 
         public new ImeMode DefaultImeMode => base.DefaultImeMode;

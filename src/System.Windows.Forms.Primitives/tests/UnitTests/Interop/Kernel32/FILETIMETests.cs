@@ -18,7 +18,7 @@ public class FILETIMETests
     [Fact]
     public void FILETIME_Ctor_Default()
     {
-        FILETIME ft = new();
+        FILETIME ft = default;
         Assert.Equal(0u, ft.dwLowDateTime);
         Assert.Equal(0u, ft.dwHighDateTime);
     }

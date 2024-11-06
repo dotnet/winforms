@@ -49,7 +49,7 @@ public class DragDropTests : ControlTestBase
                     .MoveMouseTo(targetMousePosition.X + 4, targetMousePosition.Y + 4)
                     .LeftButtonUp());
 
-            Assert.Equal(1, form.ListDragTarget.Items.Count);
+            Assert.Single(form.ListDragTarget.Items);
         });
     }
 

@@ -1,6 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 namespace WinFormsControlsTest;
 
@@ -29,17 +28,17 @@ internal class ToolStripSeparatorPreferredSize : Form
 
     private void InitializeComponent()
     {
-        _toolStrip1 = new System.Windows.Forms.ToolStrip();
-        _toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
-        _toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
-        _toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-        _buttonChangeOrientation = new System.Windows.Forms.Button();
-        _label1 = new System.Windows.Forms.Label();
+        _toolStrip1 = new ToolStrip();
+        _toolStripLabel1 = new ToolStripLabel();
+        _toolStripLabel2 = new ToolStripLabel();
+        _toolStripSeparator1 = new ToolStripSeparator();
+        _buttonChangeOrientation = new Button();
+        _label1 = new Label();
         _toolStrip1.SuspendLayout();
         SuspendLayout();
-        // 
+        //
         // toolStrip1
-        // 
+        //
         _toolStrip1.Items.AddRange((ToolStripItem[])
         [
             _toolStripLabel1,
@@ -52,21 +51,21 @@ internal class ToolStripSeparatorPreferredSize : Form
         _toolStrip1.TabIndex = 0;
         _toolStrip1.Text = "toolStrip1";
         _toolStrip1.TabStop = true;
-        // 
+        //
         // toolStripLabel1
-        // 
+        //
         _toolStripLabel1.Name = "toolStripLabel1";
         _toolStripLabel1.Size = new System.Drawing.Size(86, 22);
         _toolStripLabel1.Text = "ToolStripLabel";
-        // 
+        //
         // toolStripLabel2
-        // 
+        //
         _toolStripLabel2.Name = "toolStripLabel2";
         _toolStripLabel2.Size = new System.Drawing.Size(86, 22);
         _toolStripLabel2.Text = "ToolStripLabel";
-        // 
+        //
         // buttonChangeOrientation
-        // 
+        //
         _buttonChangeOrientation.AutoSizeMode = AutoSizeMode.GrowAndShrink;
         _buttonChangeOrientation.Name = "buttonChangeOrientation";
         _buttonChangeOrientation.Location = new System.Drawing.Point(10, 75);
@@ -74,15 +73,15 @@ internal class ToolStripSeparatorPreferredSize : Form
         _buttonChangeOrientation.TabIndex = 0;
         _buttonChangeOrientation.Text = "Change Orientation";
         _buttonChangeOrientation.UseVisualStyleBackColor = true;
-        // 
+        //
         // label1
         //
         _label1.Name = "label1";
         _label1.Location = new System.Drawing.Point(10, 50);
         _label1.AutoSize = true;
-        // 
+        //
         // Form1
-        // 
+        //
         AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
         AutoScaleMode = AutoScaleMode.Font;
         Size = new System.Drawing.Size(881, 150);

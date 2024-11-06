@@ -1,6 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-//
+
 // Copyright (C) 2004,2006-2008 Novell, Inc (http://www.novell.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -551,7 +551,7 @@ public class IconTests
     [Fact]
     public void ToBitmap_PngIconSupportedInSwitches_Success()
     {
-        void VerifyPng()
+        static void VerifyPng()
         {
             using Icon icon = GetPngIcon();
             using Bitmap bitmap = icon.ToBitmap();
@@ -586,10 +586,10 @@ public class IconTests
     [Fact]
     public void ToBitmap_PngIconNotSupportedInSwitches_ThrowsArgumentOutOfRangeException()
     {
-        void VerifyPngNotSupported()
+        static void VerifyPngNotSupported()
         {
             using Icon icon = GetPngIcon();
-            AssertExtensions.Throws<ArgumentOutOfRangeException>(null, () => icon.ToBitmap());
+            AssertExtensions.Throws<ArgumentOutOfRangeException>(null, icon.ToBitmap);
         }
 
         if (RemoteExecutor.IsSupported && (!AppContext.TryGetSwitch(DontSupportPngFramesInIcons, out bool isEnabled) || !isEnabled))

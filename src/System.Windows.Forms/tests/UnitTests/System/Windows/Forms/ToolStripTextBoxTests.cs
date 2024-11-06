@@ -191,7 +191,7 @@ public partial class ToolStripTextBoxTests : IDisposable
     }
 
     [WinFormsTheory]
-    [BoolData]  
+    [BoolData]
     public void ToolStripTextBox_AcceptsReturn_GetSet_ReturnsExpected(bool acceptsReturn)
     {
         _toolStripTextBox.AcceptsReturn = acceptsReturn;
@@ -201,11 +201,11 @@ public partial class ToolStripTextBoxTests : IDisposable
     [WinFormsFact]
     public void ToolStripTextBox_AutoCompleteCustomSource_GetSet_ReturnsExpected()
     {
-        AutoCompleteStringCollection collection = new();
+        AutoCompleteStringCollection collection = [];
         _toolStripTextBox.AutoCompleteCustomSource = collection;
         _toolStripTextBox.AutoCompleteCustomSource.Should().BeEquivalentTo(collection);
 
-        AutoCompleteStringCollection newCollection = new();
+        AutoCompleteStringCollection newCollection = [];
         _toolStripTextBox.AutoCompleteCustomSource = newCollection;
         _toolStripTextBox.AutoCompleteCustomSource.Should().BeEquivalentTo(newCollection);
     }
@@ -745,7 +745,7 @@ public partial class ToolStripTextBoxTests : IDisposable
         _toolStripTextBox.Text = "Hello\r\nWorld\r\nTest";
 
         _toolStripTextBox.GetFirstCharIndexFromLine(0).Should().Be(0);
-        _toolStripTextBox.GetFirstCharIndexFromLine(1).Should().Be(7); 
+        _toolStripTextBox.GetFirstCharIndexFromLine(1).Should().Be(7);
         _toolStripTextBox.GetFirstCharIndexFromLine(2).Should().Be(14);
     }
 
@@ -754,7 +754,7 @@ public partial class ToolStripTextBoxTests : IDisposable
     {
         _toolStripTextBox.Multiline = true;
         _toolStripTextBox.Text = "Hello\r\nWorld\r\nTest";
-        _toolStripTextBox.SelectionStart = 7; 
+        _toolStripTextBox.SelectionStart = 7;
 
         _toolStripTextBox.GetFirstCharIndexOfCurrentLine().Should().Be(7);
     }
@@ -765,7 +765,7 @@ public partial class ToolStripTextBoxTests : IDisposable
         _toolStripTextBox.Multiline = true;
         _toolStripTextBox.Text = "Hello\r\nWorld\r\nTest";
 
-        _toolStripTextBox.GetLineFromCharIndex(0).Should().Be(0); 
+        _toolStripTextBox.GetLineFromCharIndex(0).Should().Be(0);
         _toolStripTextBox.GetLineFromCharIndex(7).Should().Be(1);
         _toolStripTextBox.GetLineFromCharIndex(14).Should().Be(2);
     }
@@ -776,8 +776,8 @@ public partial class ToolStripTextBoxTests : IDisposable
         _toolStripTextBox.Text = "Hello World";
 
         _toolStripTextBox.GetPositionFromCharIndex(0).Should().Be(new Point(1, 0));
-        _toolStripTextBox.GetPositionFromCharIndex(5).Should().Be(new Point(29, 0)); 
-        _toolStripTextBox.GetPositionFromCharIndex(10).Should().Be(new Point(57, 0)); 
+        _toolStripTextBox.GetPositionFromCharIndex(5).Should().Be(new Point(29, 0));
+        _toolStripTextBox.GetPositionFromCharIndex(10).Should().Be(new Point(57, 0));
     }
 
     [WinFormsFact]

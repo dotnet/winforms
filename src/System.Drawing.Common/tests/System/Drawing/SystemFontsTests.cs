@@ -65,7 +65,7 @@ public class SystemFontsTests
             // am-ET
             0x5E => new SystemFontList("Ebrima"),
             // For now we assume everything else uses Segoe UI
-            _ => new SystemFontList("Segoe UI"),// If there's other failure reported we can add it
+            _ => new SystemFontList("Segoe UI"), // If there's other failure reported we can add it
         };
         return fonts.ToTestData();
     }
@@ -125,7 +125,7 @@ public class SystemFontsTests
 
         public IEnumerable<object[]> ToTestData()
         {
-            return new []
+            return new[]
             {
             new object[] { () => SystemFonts.CaptionFont, nameof(CaptionFont), CaptionFont},
             [(() => SystemFonts.IconTitleFont), nameof(IconTitleFont), IconTitleFont],
