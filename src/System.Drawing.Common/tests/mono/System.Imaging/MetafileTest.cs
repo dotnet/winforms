@@ -185,7 +185,7 @@ public class MetafileTest
 
 public class MetafileFulltrustTest
 {
-    private void CheckEmptyHeader(Metafile mf, EmfType type)
+    private static void CheckEmptyHeader(Metafile mf, EmfType type)
     {
         MetafileHeader mh = mf.GetMetafileHeader();
         Assert.Equal(0, mh.Bounds.X);

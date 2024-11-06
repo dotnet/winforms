@@ -3,9 +3,6 @@
   <PropertyGroup>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Nullable>annotations</Nullable>
-    <!-- Code warnings that weren't enabled in dotnet/runtime but are raised in winforms.
-         TODO: Clean the code up and remove the NoWarns. -->
-    <NoWarn>$(NoWarn);CA1825;CA5351;CA1850</NoWarn>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <EnablePreviewFeatures>true</EnablePreviewFeatures>
   </PropertyGroup>

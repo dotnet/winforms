@@ -1255,6 +1255,9 @@ dotnet_diagnostic.CA5404.severity = none
 # CA5405: Do not always skip token validation in delegates
 dotnet_diagnostic.CA5405.severity = none
 
+# CS1573: Parameter has no matching param tag in the XML comment (but other parameters do)
+dotnet_diagnostic.CS1573.severity = none
+
 # IL3000: Avoid using accessing Assembly file path when publishing as a single-file
 dotnet_diagnostic.IL3000.severity = none # TODO: warning
 

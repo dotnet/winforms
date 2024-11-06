@@ -1,29 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
-
   <PropertyGroup>
+    <IsAnalyzerProject Condition="'$(IsAnalyzerProject)' == ''">false</IsAnalyzerProject>
+
+    <!-- Only upgrade NuGetAudit warnings to errors for official builds. -->
+    <WarningsNotAsErrors Condition="'$(OfficialBuild)' != 'true'">$(WarningsNotAsErrors);NU1901;NU1902;NU1903;NU1904</WarningsNotAsErrors>
+
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+
     <!--
-      Make sure any documentation comments which are included in code get checked for syntax during the build, but do
-      not report warnings for missing comments.
-
-      CS1573: Parameter 'parameter' has no matching param tag in the XML comment for 'parameter' (but other parameters do)
-      CS1591: Missing XML comment for publicly visible type or member 'Type_or_Member'
-      CS1712: Type parameter 'type_parameter' has no matching typeparam tag in the XML comment on 'type_or_member' (but other type parameters do)
+      Don't let Microsoft.CodeAnalysis.NetAnalyzers complain about the version being older than what is in the SDK.
     -->
-    <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <NoWarn>$(NoWarn),1573,1591,1712</NoWarn>
-
-    <!-- Do not warn about the version of analyzers being used in this project -->
     <_SkipUpgradeNetAnalyzersNuGetWarning>true</_SkipUpgradeNetAnalyzersNuGetWarning>
-
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(Language)' == 'C#'">
-    <Compile Include="$(MSBuildThisFileDirectory)CodeAnalysisSource.cs" Visible="false" />
-  </ItemGroup>
+  <PropertyGroup Condition="'$(IsAnalyzerProject)' == 'true'">
+    <IsRoslynComponent>true</IsRoslynComponent>
 
-  <ItemGroup Condition="'$(Language)' == 'VB'">
-    <Compile Include="$(MSBuildThisFileDirectory)CodeAnalysisSource.vb" Visible="false" />
-  </ItemGroup>
-
+    <!-- Mark it so eng/packageContent.targets knows how to correctly package it -->
+    <DefineConstants>WINFORMS_ANALYZERS</DefineConstants>
+  </PropertyGroup>
 </Project>

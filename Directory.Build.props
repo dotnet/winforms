@@ -14,19 +14,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <LangVersion Condition="'$(LangVersion)' == ''">preview</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
-    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-
-    <IsAnalyzerProject>false</IsAnalyzerProject>
-    <IsAnalyzerProject Condition="!$(IsTestProject) and
-                                  ($(MSBuildProjectName.EndsWith('.Analyzers')) 
-                                     or $(MSBuildProjectName.EndsWith('.CodeFixes.VisualBasic'))
-                                     or $(MSBuildProjectName.EndsWith('.CodeFixes.CSharp'))
-                                     or $(MSBuildProjectName.EndsWith('.Analyzers.VisualBasic'))
-                                     or $(MSBuildProjectName.EndsWith('.Analyzers.CSharp')))"
-                                  >true</IsAnalyzerProject>
-
-    <!-- Only upgrade NuGetAudit warnings to errors for official builds. -->
-    <WarningsNotAsErrors Condition="'$(OfficialBuild)' != 'true'">$(WarningsNotAsErrors);NU1901;NU1902;NU1903;NU1904</WarningsNotAsErrors>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <!--
@@ -38,13 +26,6 @@
     -->
   <PropertyGroup Condition="'$(IsAnalyzerProject)' != 'true'">
     <AssemblyVersion>$(MajorVersion).$(MinorVersion).0.0</AssemblyVersion>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(IsAnalyzerProject)' == 'true'">
-    <IsRoslynComponent>true</IsRoslynComponent>
-
-    <!-- Mark it so eng/packageContent.targets knows how to correctly package it -->
-    <DefineConstants>WINFORMS_ANALYZERS</DefineConstants>
   </PropertyGroup>
 
   <!-- SDK flipped to 'true' by default https://github.com/dotnet/sdk/pull/12720 -->
