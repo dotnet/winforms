@@ -782,7 +782,7 @@ public class ToolTipTests
         Assert.Equal("System.Windows.Forms.ToolTip InitialDelay: 500, ShowAlways: False", toolTip.ToString());
     }
 
- #pragma warning disable WFO5001
+#pragma warning disable WFO5001
     [WinFormsFact]
     public void ToolTip_DarkMode_GetColors_ReturnsExpected()
     {
