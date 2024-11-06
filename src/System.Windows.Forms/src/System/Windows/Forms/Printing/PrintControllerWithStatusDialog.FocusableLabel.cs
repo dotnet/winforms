@@ -2,12 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
+using static System.Windows.Forms.LinkLabel;
 
 namespace System.Windows.Forms;
 
 public partial class PrintControllerWithStatusDialog
 {
-    private partial class FocusableLabel : LinkLabel
+    private class FocusableLabel : LinkLabel
     {
         public FocusableLabel()
         {
@@ -28,5 +30,24 @@ public partial class PrintControllerWithStatusDialog
                     break;
             }
         }
+
+        protected override AccessibleObject CreateAccessibilityInstance() => new FocusableLabelAccessibleObject(this);
+    }
+
+    private class FocusableLabelAccessibleObject : LinkLabelAccessibleObject
+    {
+        public FocusableLabelAccessibleObject(LinkLabel owner) : base(owner) { }
+
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
+        => direction switch
+        {
+            NavigateDirection.NavigateDirection_FirstChild
+                => null,
+            NavigateDirection.NavigateDirection_LastChild
+                => null,
+            _ => base.FragmentNavigate(direction),
+        };
+
+        public override int GetChildCount() => 0;
     }
 }

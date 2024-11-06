@@ -9,7 +9,7 @@ public partial class PrintControllerWithStatusDialog
 {
     private partial class StatusDialog : Form
     {
-        internal Label _messageLabel;
+        internal FocusableLabel _messageLabel;
         private Button _cancelButton;
         private TableLayoutPanel? _tableLayoutPanel;
         private readonly BackgroundThread _backgroundThread;
@@ -39,7 +39,8 @@ public partial class PrintControllerWithStatusDialog
                 TextAlign = ContentAlignment.MiddleCenter,
                 Size = new Size(240, 64),
                 TabIndex = 1,
-                Anchor = AnchorStyles.None
+                Anchor = AnchorStyles.None,
+                Name = "label",
             };
 
             _cancelButton = new Button()
