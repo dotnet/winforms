@@ -52,7 +52,7 @@ public unsafe class IPictureTests
         using Bitmap bitmap = icon.ToBitmap();
         using var picture = IPictureDisp.CreateFromImage(bitmap);
         Assert.False(picture.IsNull);
-        using VARIANT variant = new();
+        using VARIANT variant = default;
 
         IDispatch* dispatch = (IDispatch*)picture.Value;
         dispatch->TryGetProperty(PInvokeCore.DISPID_PICT_TYPE, &variant).ThrowOnFailure();

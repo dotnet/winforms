@@ -7,7 +7,7 @@ public class SolidBrushTests
 {
     public static IEnumerable<object[]> Colors_TestData()
     {
-        yield return new object[] { new Color(), Color.FromArgb(0) };
+        yield return new object[] { default(Color), Color.FromArgb(0) };
         yield return new object[] { Color.PapayaWhip, Color.PapayaWhip };
     }
 
@@ -53,13 +53,13 @@ public class SolidBrushTests
         SolidBrush brush = new(Color.LavenderBlush);
         brush.Dispose();
 
-        AssertExtensions.Throws<ArgumentException>(null, () => brush.Clone());
+        AssertExtensions.Throws<ArgumentException>(null, brush.Clone);
     }
 
     [Fact]
     public void Color_EmptyAndGetDisposed_ThrowsArgumentException()
     {
-        SolidBrush brush = new(new Color());
+        SolidBrush brush = new(default(Color));
         brush.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => brush.Color);
@@ -84,7 +84,7 @@ public class SolidBrushTests
     [Fact]
     public void Color_SetDisposed_ThrowsArgumentException()
     {
-        SolidBrush brush = new(new Color());
+        SolidBrush brush = new(default(Color));
         brush.Dispose();
 
         AssertExtensions.Throws<ArgumentException>(null, () => brush.Color = Color.WhiteSmoke);
@@ -109,6 +109,6 @@ public class SolidBrushTests
     public void Dispose_SetImmutable_ThrowsArgumentException()
     {
         SolidBrush brush = Assert.IsType<SolidBrush>(SystemBrushes.ActiveBorder);
-        AssertExtensions.Throws<ArgumentException>(null, () => brush.Dispose());
+        AssertExtensions.Throws<ArgumentException>(null, brush.Dispose);
     }
 }

@@ -2702,7 +2702,7 @@ public class ToolStripControlHostTests
         using ToolStripControlHost item = new(c);
         item.Dispose();
 
-        Assert.Throws<ObjectDisposedException>(() => item.Focus());
+        Assert.Throws<ObjectDisposedException>(item.Focus);
     }
 
     public static IEnumerable<object[]> GetPreferredSize_TestData()
@@ -4198,7 +4198,7 @@ public class ToolStripControlHostTests
     {
         using Control c = new();
         using SubToolStripControlHost item = new(c);
-        Message m = new();
+        Message m = default;
         Assert.False(item.ProcessCmdKey(ref m, keyData));
         Assert.False(c.IsHandleCreated);
     }
@@ -4241,7 +4241,7 @@ public class ToolStripControlHostTests
         using SubToolStripControlHost item = new(c);
         item.Dispose();
 
-        Message m = new();
+        Message m = default;
         Assert.False(item.ProcessCmdKey(ref m, keyData));
     }
 
@@ -4412,7 +4412,7 @@ public class ToolStripControlHostTests
         using SubToolStripControlHost item = new(c);
         item.Dispose();
 
-        Assert.Throws<ObjectDisposedException>(() => item.ResetBackColor());
+        Assert.Throws<ObjectDisposedException>(item.ResetBackColor);
     }
 
     [WinFormsFact]
@@ -4445,7 +4445,7 @@ public class ToolStripControlHostTests
         using SubToolStripControlHost item = new(c);
         item.Dispose();
 
-        Assert.Throws<ObjectDisposedException>(() => item.ResetForeColor());
+        Assert.Throws<ObjectDisposedException>(item.ResetForeColor);
     }
 
     [WinFormsTheory]

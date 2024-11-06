@@ -16,7 +16,7 @@ public class EffectsTests
 
         // We don't really need to check all effect results, just seeing that something changed for one is probably
         // enough until we look at providing alternative implementations.
-        bitmap.GetPixel(0,0).Should().Be(Color.FromArgb(255, 255, 255, 239));
+        bitmap.GetPixel(0, 0).Should().Be(Color.FromArgb(255, 255, 255, 239));
     }
 
     [Theory]

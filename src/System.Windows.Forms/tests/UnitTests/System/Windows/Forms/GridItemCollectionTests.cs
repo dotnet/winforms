@@ -21,7 +21,7 @@ public class GridItemCollectionTests
     public void GridItemCollection_ICollection_GetProperties_ReturnsExpected()
     {
         ICollection collection = GridItemCollection.Empty;
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.False(collection.IsSynchronized);
         Assert.Same(collection, collection.SyncRoot);
     }

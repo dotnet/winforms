@@ -9,7 +9,7 @@ public class TextMetricsTests
     [Fact]
     public void TextMetrics_Ctor_Default()
     {
-        TextMetrics metric = new();
+        TextMetrics metric = default;
         Assert.Equal(0, metric.Ascent);
         Assert.Equal(0, metric.AverageCharWidth);
         Assert.Equal('\0', metric.BreakChar);

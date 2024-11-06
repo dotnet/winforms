@@ -1,4 +1,7 @@
-﻿using System.ComponentModel;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+
+using System.ComponentModel;
 using System.Reflection;
 
 namespace System.Windows.Forms.Tests;
@@ -34,7 +37,7 @@ public class AxSystemMonitorTests : IDisposable
         string assemblyNameFromType = assembly.GetName().Name;
 
         List<string> testingControlProps = [];
-        foreach(PropertyDescriptor prop in properties)
+        foreach (PropertyDescriptor prop in properties)
         {
             string assemblyFromTestingControl = prop.ComponentType.Assembly.GetName().Name;
             if (!string.IsNullOrEmpty(assemblyFromTestingControl)
@@ -45,7 +48,7 @@ public class AxSystemMonitorTests : IDisposable
         }
 
         List<string> testingControlEvents = [];
-        foreach(EventDescriptor singleEvent in events)
+        foreach (EventDescriptor singleEvent in events)
         {
             string assemblyFromTestingControl = singleEvent.ComponentType.Assembly.GetName().Name;
             if (!string.IsNullOrEmpty(assemblyFromTestingControl)
@@ -59,7 +62,7 @@ public class AxSystemMonitorTests : IDisposable
         TypeInfo assemblyTypeInfo = assembly.GetType(assemblyType.FullName).GetTypeInfo();
         Assert.True(testingControlProps.All(p => assemblyTypeInfo.DeclaredProperties.Any(ap => ap.Name == p)));
         Assert.True(testingControlEvents.All(e => assemblyTypeInfo.DeclaredEvents.Any(ae => ae.Name == e)));
-   }
+    }
 
     public void Dispose()
     {

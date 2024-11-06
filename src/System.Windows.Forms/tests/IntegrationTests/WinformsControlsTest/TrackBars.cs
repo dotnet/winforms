@@ -71,7 +71,7 @@ public partial class TrackBars : Form
     private void numericMinimum_ValueChanged(object sender, EventArgs e)
     {
         trackBar1.Minimum = (int)Math.Max(numericMinimum.Value, int.MinValue);
-        numericMaximum.Minimum = numericMinimum.Value;        
+        numericMaximum.Minimum = numericMinimum.Value;
         numericFrequency.Maximum = (int)Math.Min(numericMaximum.Value - numericMaximum.Minimum, int.MaxValue);
         if (numericFrequency.Maximum == 0)
         {

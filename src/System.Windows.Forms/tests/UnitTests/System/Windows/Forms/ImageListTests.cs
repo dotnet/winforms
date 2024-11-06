@@ -835,8 +835,8 @@ public class ImageListTests
 
         list.Dispose();
         Assert.False(list.HandleCreated);
-        Assert.Throws<ObjectDisposedException>(() => list.Images.GetEnumerator());
-        Assert.Equal(0, list.Images.Count);
+        Assert.Throws<ObjectDisposedException>(list.Images.GetEnumerator);
+        list.Images.Count.Should().Be(0);
         Assert.True(list.HandleCreated);
 
         // Call again.

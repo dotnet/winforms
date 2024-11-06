@@ -1797,7 +1797,7 @@ public class DesignerHostTests
         SubDesignSurface surface = new();
         IDesignerLoaderHost2 host = surface.Host;
         IDisposable disposable = Assert.IsAssignableFrom<IDisposable>(host);
-        Assert.Throws<InvalidOperationException>(() => disposable.Dispose());
+        Assert.Throws<InvalidOperationException>(disposable.Dispose);
     }
 
     [WinFormsFact(Skip = "Unstable test, see: https://github.com/dotnet/winforms/issues/1460")]
@@ -1809,7 +1809,7 @@ public class DesignerHostTests
 
         using ThrowingDesignerDisposeComponent component = new();
         host.Container.Add(component);
-        Assert.Throws<InvalidOperationException>(() => surface.Dispose());
+        Assert.Throws<InvalidOperationException>(surface.Dispose);
         Assert.False(surface.IsLoaded);
         Assert.Empty(surface.LoadErrors);
         Assert.False(host.Loading);
@@ -1824,7 +1824,7 @@ public class DesignerHostTests
 
         using ThrowingDisposeDesignerComponent component = new();
         host.Container.Add(component);
-        Assert.Throws<InvalidOperationException>(() => surface.Dispose());
+        Assert.Throws<InvalidOperationException>(surface.Dispose);
         Assert.False(surface.IsLoaded);
         Assert.Empty(surface.LoadErrors);
         Assert.False(host.Loading);
@@ -1837,7 +1837,7 @@ public class DesignerHostTests
         IDesignerLoaderHost2 host = surface.Host;
         surface.BeginLoad(typeof(ThrowingRootDesignerDisposeComponent));
 
-        Assert.Throws<InvalidOperationException>(() => surface.Dispose());
+        Assert.Throws<InvalidOperationException>(surface.Dispose);
         Assert.False(surface.IsLoaded);
         Assert.Empty(surface.LoadErrors);
         Assert.False(host.Loading);
@@ -1849,7 +1849,7 @@ public class DesignerHostTests
         SubDesignSurface surface = new();
         IDesignerLoaderHost2 host = surface.Host;
         surface.BeginLoad(typeof(ThrowingDisposeRootDesignerComponent));
-        Assert.Throws<InvalidOperationException>(() => surface.Dispose());
+        Assert.Throws<InvalidOperationException>(surface.Dispose);
         Assert.False(surface.IsLoaded);
         Assert.Empty(surface.LoadErrors);
         Assert.False(host.Loading);
@@ -2066,7 +2066,7 @@ public class DesignerHostTests
         IDesignerLoaderHost2 host = surface.Host;
         DesignerTransaction transaction1 = host.CreateTransaction("Description1");
         DesignerTransaction transaction2 = host.CreateTransaction("Description2");
-        Assert.Throws<InvalidOperationException>(() => transaction1.Cancel());
+        Assert.Throws<InvalidOperationException>(transaction1.Cancel);
     }
 
     [WinFormsFact]
@@ -2179,7 +2179,7 @@ public class DesignerHostTests
         IDesignerLoaderHost2 host = surface.Host;
         DesignerTransaction transaction1 = host.CreateTransaction("Description1");
         DesignerTransaction transaction2 = host.CreateTransaction("Description2");
-        Assert.Throws<InvalidOperationException>(() => transaction1.Commit());
+        Assert.Throws<InvalidOperationException>(transaction1.Commit);
     }
 
     public static IEnumerable<object[]> DesignerHost_EndLoad_TestData()

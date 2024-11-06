@@ -13,7 +13,7 @@ public class TableLayoutStyleCollectionTests
         using ToolStrip toolStrip = new() { LayoutStyle = ToolStripLayoutStyle.Table };
         TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
         IList collection = settings.RowStyles;
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.False(collection.IsFixedSize);
         Assert.False(collection.IsReadOnly);
         Assert.False(collection.IsSynchronized);

@@ -1,6 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-//
+
 // JpegCodec class testing unit
 //
 // Authors:
@@ -192,7 +192,7 @@ public class JpegCodecTest
         /* note: under MS flags aren't constant between executions in this case (no palette) */
         // Assert.Equal(77960, bmp.Flags);
 
-        Assert.Equal(0, bmp.Palette.Entries.Length);
+        Assert.Empty(bmp.Palette.Entries);
     }
 
     [Fact]

@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 
 namespace System;
 
-internal class ModuleInitializer
+internal static class ModuleInitializer
 {
     [ModuleInitializer]
     [SuppressMessage("Usage", "CA2255:The 'ModuleInitializer' attribute should not be used in libraries", Justification = "Intentional use of module initializer to register trace listener.")]

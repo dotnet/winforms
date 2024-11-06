@@ -705,7 +705,7 @@ public class DesignerSerializationManagerTests
     {
         DesignerSerializationManager manager = new();
         manager.CreateSession();
-        Assert.Throws<InvalidOperationException>(() => manager.CreateSession());
+        Assert.Throws<InvalidOperationException>(manager.CreateSession);
     }
 
     public static IEnumerable<object[]> GetInstance_NoSuchInstance_TestData()

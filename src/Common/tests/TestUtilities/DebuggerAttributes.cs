@@ -176,7 +176,7 @@ internal static class DebuggerAttributes
         {
             null => "null",
             byte or sbyte or short or ushort or int or uint or long or ulong or float or double => member.ToString(),
-            string _ when noQuotes => member.ToString(),
+            string when noQuotes => member.ToString(),
             string => $"\"{member}\"",
             _ => $"{{{member}}}"
         };

@@ -110,7 +110,7 @@ public class ToolStripItemCollectionTests
 
         // Add 0 items.
         contextMenuStrip.Items.AddRange(toolStripDropDownButton.DropDownItems);
-        Assert.Equal(0, contextMenuStrip.Items.Count);
+        Assert.Empty(contextMenuStrip.Items);
 
         // Add 3 items.
         toolStripDropDownButton.DropDownItems.Add("a");

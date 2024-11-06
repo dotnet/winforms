@@ -631,7 +631,7 @@ public class ComponentEditorPageTests
     public void ComponentEditorPage_IsPageMessage_Invoke_ReturnsExpected()
     {
         using SubComponentEditorPage control = new();
-        Message message = new();
+        Message message = default;
         Assert.True(control.IsPageMessage(ref message));
         Assert.Equal(1, control.PreProcessMessageCallCount);
     }

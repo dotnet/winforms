@@ -34,7 +34,7 @@ public class MaskedTextBoxTextEditorDropDownTests
         using MaskedTextBox maskedTextBox = new();
         using MaskedTextBoxTextEditorDropDown dropDown = new(maskedTextBox);
         bool processDialogKey = dropDown.TestAccessor().Dynamic.ProcessDialogKey(Keys.Escape);
-        bool cancel= dropDown.TestAccessor().Dynamic._cancel;
+        bool cancel = dropDown.TestAccessor().Dynamic._cancel;
 
         cancel.Should().BeTrue();
         processDialogKey.Should().BeFalse();

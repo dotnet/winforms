@@ -420,7 +420,7 @@ public class ComboBox_ComboBoxAccessibleObjectTests
 
         comboBox.ReleaseUiaProvider(comboBox.HWND);
 
-        Assert.Equal(0, accessibleObject.ItemAccessibleObjects.Count);
+        Assert.Empty(accessibleObject.ItemAccessibleObjects);
         Assert.True(comboBox.IsHandleCreated);
     }
 
@@ -436,7 +436,7 @@ public class ComboBox_ComboBoxAccessibleObjectTests
 
         comboBox.Items.Clear();
 
-        Assert.Equal(0, accessibleObject.ItemAccessibleObjects.Count);
+        Assert.Empty(accessibleObject.ItemAccessibleObjects);
         Assert.True(comboBox.IsHandleCreated);
     }
 

@@ -30,14 +30,14 @@ public sealed class DesignBindingTests
     [Fact]
     public void IsNull_ReturnsTrueWhenDataSourceIsNull()
     {
-        DesignBinding binding = new (null, "TestMember");
+        DesignBinding binding = new(null, "TestMember");
         binding.IsNull.Should().BeTrue();
     }
 
     [Fact]
     public void IsNull_ReturnsFalseWhenDataSourceIsNotNull()
     {
-        DesignBinding binding = new (new object(), "TestMember");
+        DesignBinding binding = new(new object(), "TestMember");
         binding.IsNull.Should().BeFalse();
     }
 
@@ -54,7 +54,7 @@ public sealed class DesignBindingTests
     [MemberData(nameof(DataFieldTestData))]
     public void DataField_ReturnsExpected(string dataMember, string expectedField)
     {
-        DesignBinding binding = new (new object(), dataMember);
+        DesignBinding binding = new(new object(), dataMember);
         binding.DataField.Should().Be(expectedField);
     }
 
@@ -63,7 +63,7 @@ public sealed class DesignBindingTests
     {
         object dataSource = new();
         string dataMember = "TestMember";
-        DesignBinding binding = new (dataSource, dataMember);
+        DesignBinding binding = new(dataSource, dataMember);
         binding.Equals(dataSource, dataMember).Should().BeTrue();
     }
 
@@ -72,7 +72,7 @@ public sealed class DesignBindingTests
     {
         object dataSource = new();
         string dataMember = "TestMember";
-        DesignBinding binding = new (dataSource, dataMember);
+        DesignBinding binding = new(dataSource, dataMember);
         binding.Equals(new object(), dataMember).Should().BeFalse();
     }
 
@@ -81,7 +81,7 @@ public sealed class DesignBindingTests
     {
         object dataSource = new();
         string dataMember = "TestMember";
-        DesignBinding binding = new (dataSource, dataMember);
+        DesignBinding binding = new(dataSource, dataMember);
         binding.Equals(dataSource, "DifferentMember").Should().BeFalse();
     }
 }

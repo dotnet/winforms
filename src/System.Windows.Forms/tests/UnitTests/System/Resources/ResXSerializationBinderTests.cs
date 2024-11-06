@@ -10,7 +10,7 @@ using System.Reflection.Metadata;
 
 namespace System.Resources.Tests;
 
-public  class ResXSerializationBinderTests
+public class ResXSerializationBinderTests
 {
     [Fact]
     public void ResXSerializationBinder_BindToType_FullyQualifiedName()

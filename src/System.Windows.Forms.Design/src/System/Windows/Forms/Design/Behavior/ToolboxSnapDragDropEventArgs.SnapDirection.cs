@@ -11,10 +11,10 @@ internal sealed partial class ToolboxSnapDragDropEventArgs
     [Flags]
     public enum SnapDirection
     {
-        None    = 0x00,
-        Top     = 0x01,
-        Bottom  = 0x02,
-        Right   = 0x04,
-        Left    = 0x08
+        None = 0x00,
+        Top = 0x01,
+        Bottom = 0x02,
+        Right = 0x04,
+        Left = 0x08
     }
 }

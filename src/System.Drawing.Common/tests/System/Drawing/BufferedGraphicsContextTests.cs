@@ -230,7 +230,7 @@ public class BufferedGraphicsContextTests
         using Graphics graphics = Graphics.FromImage(image);
         using (context.Allocate(graphics, Rectangle.Empty))
         {
-            Assert.Throws<InvalidOperationException>(() => context.Dispose());
+            Assert.Throws<InvalidOperationException>(context.Dispose);
         }
     }
 
@@ -243,7 +243,7 @@ public class BufferedGraphicsContextTests
         using (context.Allocate(graphics, Rectangle.Empty))
         {
             context.Invalidate();
-            Assert.Throws<InvalidOperationException>(() => context.Dispose());
+            Assert.Throws<InvalidOperationException>(context.Dispose);
         }
     }
 }

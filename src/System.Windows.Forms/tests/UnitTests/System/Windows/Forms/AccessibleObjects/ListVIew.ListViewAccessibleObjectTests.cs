@@ -958,7 +958,7 @@ public class ListView_ListViewAccessibleObjectTests
         listView.Items.Add(listItem1);
 
         var listSelection = listView.AccessibilityObject.GetSelection();
-        Assert.Equal(0, listSelection.Length);
+        Assert.Empty(listSelection);
         Assert.True(listView.IsHandleCreated);
     }
 
@@ -976,7 +976,7 @@ public class ListView_ListViewAccessibleObjectTests
         listView.Items.Add(listItem1);
 
         var listSelection = listView.AccessibilityObject.GetSelection();
-        Assert.Equal(0, listSelection.Length);
+        Assert.Empty(listSelection);
 
         Assert.False(listView.IsHandleCreated);
     }
@@ -1071,7 +1071,7 @@ public class ListView_ListViewAccessibleObjectTests
         listItem1.SetItemIndex(listView, 0);
 
         var listSelection = listView.AccessibilityObject.GetSelection();
-        Assert.Equal(0, listSelection.Length);
+        Assert.Empty(listSelection);
         Assert.True(listView.IsHandleCreated);
     }
 
@@ -1101,7 +1101,7 @@ public class ListView_ListViewAccessibleObjectTests
         listItem1.SetItemIndex(listView, 0);
 
         var listSelection = listView.AccessibilityObject.GetSelection();
-        Assert.Equal(0, listSelection.Length);
+        Assert.Empty(listSelection);
 
         Assert.False(listView.IsHandleCreated);
     }
@@ -1304,7 +1304,7 @@ public class ListView_ListViewAccessibleObjectTests
 
     [WinFormsTheory]
     [MemberData(nameof(ListViewAccessibleObject_GetChild_TestData))]
-    public void ListViewAccessibleObject_GetChild_ReturnsExpected_DetailsView(View view,  bool showGroups, bool virtualMode)
+    public void ListViewAccessibleObject_GetChild_ReturnsExpected_DetailsView(View view, bool showGroups, bool virtualMode)
     {
         using ListView listView = GetListViewWithData(view, createControl: true, virtualMode, showGroups);
         List<AccessibleObject> expectedValues = [];
@@ -1773,4 +1773,3 @@ public class ListView_ListViewAccessibleObjectTests
         Assert.True(result);
     }
 }
-

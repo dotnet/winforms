@@ -32,4 +32,3 @@ public sealed class TestAdditionalText : AdditionalText
 
     public override SourceText GetText(CancellationToken cancellationToken = default) => _text;
 }
-

@@ -210,7 +210,7 @@ public sealed partial class AnchorEditor
 
             public SpringControl(AnchorUI picker)
             {
-                _picker = picker ?? throw new ArgumentException();
+                _picker = picker ?? throw new ArgumentNullException(nameof(picker));
                 TabStop = true;
             }
 

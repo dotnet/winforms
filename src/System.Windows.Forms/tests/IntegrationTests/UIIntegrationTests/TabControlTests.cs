@@ -106,7 +106,7 @@ public class TabControlTests : ControlTestBase
                 tabControl.SelectedIndex--;
                 await Task.Yield();
 
-                // The changes we made to SelectedIndex will result in a WM_WINDOWPOSCHANGED message which will 
+                // The changes we made to SelectedIndex will result in a WM_WINDOWPOSCHANGED message which will
                 // fire TabPage.WmWindowPosChanged, which will call TabControl.UpdateChildControlIndex.
 
                 // This test ensures that the latter method short-circuits and does not call Controls.SetChildIndex

@@ -1840,7 +1840,7 @@ public class TabControlTabPageCollectionTests
     {
         using InvalidGetItemsTabControl owner = new();
         var collection = new TabControl.TabPageCollection(owner);
-        Assert.Throws<InvalidCastException>(() => collection.GetEnumerator());
+        Assert.Throws<InvalidCastException>(collection.GetEnumerator);
     }
 
     [WinFormsFact]
@@ -5025,7 +5025,7 @@ public class TabControlTabPageCollectionTests
     [WinFormsFact]
     public void TabPageCollection_Insert_First_item()
     {
-        using TabControl TabControl = new ();
+        using TabControl TabControl = new();
 
         using TabPage page1 = new();
         using TabPage page2 = new();
@@ -5033,7 +5033,7 @@ public class TabControlTabPageCollectionTests
 
         page1.Text = "First works";
         TabControl.TabPages.Insert(0, page1);
-        Assert.Equal(1, TabControl.TabPages.Count);
+        Assert.Single(TabControl.TabPages);
         Assert.Equal(page1, TabControl.TabPages[0]);
         Assert.Equal(page1, TabControl.Controls[0]);
 

@@ -9072,7 +9072,7 @@ public partial class RichTextBoxTests
     public static IEnumerable<object[]> OnContentsResized_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new ContentsResizedEventArgs(new Rectangle()) };
+        yield return new object[] { new ContentsResizedEventArgs(default) };
     }
 
     [WinFormsTheory]
@@ -10673,7 +10673,7 @@ public partial class RichTextBoxTests
         {
             Rtf = @"{\rtf1\ansi{Sample for {\v HIDDEN }text}}"
         };
-         using RichTextBox richTextBox2 = new();
+        using RichTextBox richTextBox2 = new();
 
         string fileName = "SaveRichTextBox.rtf";
         string projectDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", "..");

@@ -237,11 +237,11 @@ public class HashtableTests : SerializationTest
         },
         new Hashtable()
         {
-            { "Foo", new Point() }
+            { "Foo", default(Point) }
         },
         new Hashtable()
         {
-            { "Foo", new PointF() }
+            { "Foo", default(PointF) }
         },
         new Hashtable()
         {

@@ -53,14 +53,14 @@ public partial class ResXFileRef
                 int lastIndexOfQuote = stringValue.LastIndexOf('"');
                 if (lastIndexOfQuote - 1 < 0)
                 {
-                    throw new ArgumentException(nameof(stringValue));
+                    throw new ArgumentException(null, nameof(stringValue));
                 }
 
                 // Remove the quotes in " ..... "
                 fileName = stringValue[1..lastIndexOfQuote];
                 if (lastIndexOfQuote + 2 > stringValue.Length)
                 {
-                    throw new ArgumentException(nameof(stringValue));
+                    throw new ArgumentException(null, nameof(stringValue));
                 }
 
                 remainingString = stringValue[(lastIndexOfQuote + 2)..];
@@ -70,13 +70,13 @@ public partial class ResXFileRef
                 int nextSemiColumn = stringValue.IndexOf(';');
                 if (nextSemiColumn == -1)
                 {
-                    throw new ArgumentException(nameof(stringValue));
+                    throw new ArgumentException(null, nameof(stringValue));
                 }
 
                 fileName = stringValue[..nextSemiColumn];
                 if (nextSemiColumn + 1 > stringValue.Length)
                 {
-                    throw new ArgumentException(nameof(stringValue));
+                    throw new ArgumentException(null, nameof(stringValue));
                 }
 
                 remainingString = stringValue[(nextSemiColumn + 1)..];

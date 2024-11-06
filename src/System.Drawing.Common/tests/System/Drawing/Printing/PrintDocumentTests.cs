@@ -1,6 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-//
+
 // Copyright (C) 2005-2006 Novell, Inc (http://www.novell.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -203,7 +203,7 @@ public class PrintDocumentTests : FileCleanupTestBase
         Assert.False(flag);
     }
 
-    [ConditionalFact(Helpers.AnyInstalledPrinters)] 
+    [ConditionalFact(Helpers.AnyInstalledPrinters)]
     public void QueryPageSettings_SetValue_ReturnsExpected()
     {
         bool flag = false;
