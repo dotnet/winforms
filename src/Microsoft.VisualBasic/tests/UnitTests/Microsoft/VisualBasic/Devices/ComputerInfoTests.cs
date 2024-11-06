@@ -13,7 +13,7 @@ public class ComputerInfoTests
     {
         ComputerInfo info = new();
         CultureInfo.InstalledUICulture.Should().Be(info.InstalledUICulture);
-        Environment.OSVersion.Platform.ToString().Should().Be( info.OSPlatform);
+        Environment.OSVersion.Platform.ToString().Should().Be(info.OSPlatform);
         Environment.OSVersion.Version.ToString().Should().Be(info.OSVersion);
     }
 

@@ -594,7 +594,7 @@ public partial class ControlTests
     public void Control_CreateControl_InvokeCantCreate_ThrowsWin32Exception()
     {
         using NoCreateControl control = new();
-        Assert.Throws<Win32Exception>(() => control.CreateControl());
+        Assert.Throws<Win32Exception>(control.CreateControl);
     }
 
     [WinFormsFact]
@@ -602,7 +602,7 @@ public partial class ControlTests
     {
         using SubControl control = new();
         control.Dispose();
-        Assert.Throws<ObjectDisposedException>(() => control.CreateControl());
+        Assert.Throws<ObjectDisposedException>(control.CreateControl);
     }
 
     [WinFormsFact]
@@ -754,7 +754,7 @@ public partial class ControlTests
     public void Control_CreateHandle_InvokeCantCreate_ThrowsWin32Exception()
     {
         using NoCreateControl control = new();
-        Assert.Throws<Win32Exception>(() => control.CreateHandle());
+        Assert.Throws<Win32Exception>(control.CreateHandle);
     }
 
     [WinFormsFact]
@@ -762,7 +762,7 @@ public partial class ControlTests
     {
         using SubControl control = new();
         control.Dispose();
-        Assert.Throws<ObjectDisposedException>(() => control.CreateHandle());
+        Assert.Throws<ObjectDisposedException>(control.CreateHandle);
     }
 
     [WinFormsFact]
@@ -770,7 +770,7 @@ public partial class ControlTests
     {
         using SubControl control = new();
         control.CreateHandle();
-        Assert.Throws<InvalidOperationException>(() => control.CreateHandle());
+        Assert.Throws<InvalidOperationException>(control.CreateHandle);
     }
 
     [WinFormsFact]
@@ -2976,7 +2976,7 @@ public partial class ControlTests
     {
         using CustomLayoutEngineControl control = new();
         control.SetLayoutEngine(null);
-        Assert.Throws<NullReferenceException>(() => control.InitLayout());
+        Assert.Throws<NullReferenceException>(control.InitLayout);
     }
 
     private class CustomLayoutEngineControl : Control
@@ -5281,7 +5281,7 @@ public partial class ControlTests
     {
         using CustomLayoutEngineControl control = new();
         control.SetLayoutEngine(null);
-        Assert.Throws<NullReferenceException>(() => control.PerformLayout());
+        Assert.Throws<NullReferenceException>(control.PerformLayout);
         Assert.Throws<NullReferenceException>(() => control.PerformLayout(new Control(), "AffectedProperty"));
     }
 
@@ -5528,7 +5528,7 @@ public partial class ControlTests
     public void Control_ProcessCmdKey_InvokeWithoutParent_ReturnsFalse(Keys keyData)
     {
         using SubControl control = new();
-        Message m = new();
+        Message m = default;
         Assert.False(control.ProcessCmdKey(ref m, keyData));
         Assert.False(control.IsHandleCreated);
     }
@@ -5542,7 +5542,7 @@ public partial class ControlTests
         {
             Parent = parent
         };
-        Message msg = new();
+        Message msg = default;
         Assert.False(control.ProcessCmdKey(ref msg, keyData));
         Assert.False(control.IsHandleCreated);
     }
@@ -6230,7 +6230,7 @@ public partial class ControlTests
     public void Control_ProcessKeyPreview_InvokeWithoutParent_ReturnsFalse()
     {
         using SubControl control = new();
-        Message m = new();
+        Message m = default;
         Assert.False(control.ProcessKeyPreview(ref m));
     }
 
@@ -6242,7 +6242,7 @@ public partial class ControlTests
         {
             Parent = parent
         };
-        Message m = new();
+        Message m = default;
         Assert.False(control.ProcessKeyPreview(ref m));
         Assert.False(control.IsHandleCreated);
     }

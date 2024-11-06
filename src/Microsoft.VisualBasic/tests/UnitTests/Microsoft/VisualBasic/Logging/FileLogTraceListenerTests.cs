@@ -40,7 +40,7 @@ public class FileLogTraceListenerTests : FileCleanupTestBase
         listener.WriteLine("WriteLine");
         listener.TraceOutputOptions = TraceOptions.LogicalOperationStack | TraceOptions.DateTime | TraceOptions.Timestamp | TraceOptions.ProcessId | TraceOptions.ThreadId;
         listener.TraceEvent(eventCache: cache, source: "Source", eventType: TraceEventType.Warning, id: 3, message: "TraceEvent");
-        listener.AutoFlush=true;
+        listener.AutoFlush = true;
         listener.TraceData(eventCache: cache, source: "Source", eventType: TraceEventType.Error, id: 4, data: "TraceData");
         listener.Flush();
         listener.Close();

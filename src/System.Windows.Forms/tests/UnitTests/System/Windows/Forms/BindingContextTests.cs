@@ -25,7 +25,7 @@ public class BindingContextTests
         ICollection context = new BindingContext();
         Assert.False(context.IsSynchronized);
         Assert.Same(context, context.SyncRoot);
-        Assert.Equal(0, context.Count);
+        Assert.Empty(context);
         Assert.Empty(context);
     }
 
@@ -525,7 +525,7 @@ public class BindingContextTests
         Assert.Equal(0, manager.Position);
         Assert.Equal(expectedCount, ((ICollection)context).Count);
         Assert.Same(manager, context[dataSource, dataMember]);
-        Assert.Same(manager, context[dataSource, dataMember.ToLower()]);
+        Assert.Same(manager, context[dataSource, dataMember.ToLowerInvariant()]);
     }
 
     [Fact]

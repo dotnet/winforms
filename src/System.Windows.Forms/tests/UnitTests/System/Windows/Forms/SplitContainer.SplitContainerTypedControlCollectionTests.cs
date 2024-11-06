@@ -8,7 +8,7 @@ public class SplitContainer_SplitContainerTypedControlCollectionTests
     [WinFormsFact]
     public void SplitContainerTypedControlCollection_Ctor_Control()
     {
-        using SplitContainer owner = new ();
+        using SplitContainer owner = new();
         SplitContainer.SplitContainerTypedControlCollection collection = new(owner, typeof(SplitterPanel), false);
 
         Assert.Empty(collection);

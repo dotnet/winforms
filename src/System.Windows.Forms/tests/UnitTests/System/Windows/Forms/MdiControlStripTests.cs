@@ -306,7 +306,7 @@ public class MdiControlStripTests
         IntPtr menuHandle = PInvoke.GetMenu((HWND)mdiParent.Handle);
         int menuItemCount = PInvoke.GetMenuItemCount((HMENU)menuHandle);
         // Four buttons: System, Minimize, Maximize, Close
-        Assert.True(menuItemCount == 4);
+        Assert.Equal(4, menuItemCount);
     }
 
     [WinFormsFact]

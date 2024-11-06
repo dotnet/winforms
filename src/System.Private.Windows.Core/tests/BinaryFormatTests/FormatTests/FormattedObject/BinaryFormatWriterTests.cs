@@ -189,8 +189,8 @@ public class BinaryFormatWriterTests
 
     public static TheoryData<object> SystemDrawing_TestData => new()
     {
-        new PointF(),
-        new RectangleF()
+        default(PointF),
+        default(RectangleF)
     };
 
     public static TheoryData<object> DrawingPrimitives_TestData => new()
@@ -236,7 +236,7 @@ public class BinaryFormatWriterTests
 
     public static TheoryData<Array> Array_UnsupportedTestData => new()
     {
-        new Point[] { new() },
+        new Point[] { default },
         new object[] { new() },
     };
 }

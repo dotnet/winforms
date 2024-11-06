@@ -789,8 +789,8 @@ public class SystemInformationTests
     public void SystemInformation_VirtualScreen_Get_ReturnsExpected()
     {
         Rectangle screen = SystemInformation.VirtualScreen;
-        Assert.True(screen.Width != 0);
-        Assert.True(screen.Height != 0);
+        Assert.NotEqual(0, screen.Width);
+        Assert.NotEqual(0, screen.Height);
         Assert.Equal(screen, SystemInformation.VirtualScreen);
     }
 

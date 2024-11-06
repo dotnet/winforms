@@ -38,7 +38,7 @@ public class OpenFileDialogTests : ControlTestBase
         using var tempFile = TempFile.Create(0);
         using AcceptDialogForm dialogOwnerForm = new();
         using OpenFileDialog dialog = new();
-        dialog.Multiselect= true;
+        dialog.Multiselect = true;
         dialog.InitialDirectory = Path.GetDirectoryName(tempFile.Path);
         dialog.FileName = tempFile.Path;
         Assert.Equal(DialogResult.OK, dialog.ShowDialog(dialogOwnerForm));

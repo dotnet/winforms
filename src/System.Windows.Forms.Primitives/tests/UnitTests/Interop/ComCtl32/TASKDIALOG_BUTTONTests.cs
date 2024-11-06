@@ -26,7 +26,7 @@ public class TASKDIALOG_BUTTONTests
             return;
         }
 
-        TASKDIALOG_BUTTON sut = new();
+        TASKDIALOG_BUTTON sut = default;
         byte* addr = (byte*)&sut;
 
         Assert.Equal(0, (byte*)&sut.nButtonID - addr);                // 4, int
@@ -52,7 +52,7 @@ public class TASKDIALOG_BUTTONTests
             return;
         }
 
-        TASKDIALOG_BUTTON sut = new();
+        TASKDIALOG_BUTTON sut = default;
         byte* addr = (byte*)&sut;
 
         Assert.Equal(0, (byte*)&sut.nButtonID - addr);                // 4, int

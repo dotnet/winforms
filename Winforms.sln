@@ -45,12 +45,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Accessibility", "Accessibil
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.IntegrationTests.Common", "src\System.Windows.Forms\tests\IntegrationTests\System.Windows.Forms.IntegrationTests.Common\System.Windows.Forms.IntegrationTests.Common.csproj", "{48979B4E-EAEC-4B41-BB49-44CA230BECAB}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{462AD69A-9395-4E98-882D-569CDE562559}"
-	ProjectSection(SolutionItems) = preProject
-		azure-pipelines.yml = azure-pipelines.yml
-		eng\pipelines\build.yml = eng\pipelines\build.yml
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "documentation", "documentation", "{C029199F-7D5C-417C-AA52-913A214E3285}"
 	ProjectSection(SolutionItems) = preProject
 		docs\building.md = docs\building.md
@@ -154,11 +148,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Private.Windows.Core
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "eng", "eng", "{8B4B1E09-B3C7-4044-B223-94EDEC1CAA20}"
 	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
-		eng\CodeAnalysis.src.globalconfig = eng\CodeAnalysis.src.globalconfig
-		eng\CodeAnalysis.test.globalconfig = eng\CodeAnalysis.test.globalconfig
 		Directory.Build.props = Directory.Build.props
 		Directory.Build.targets = Directory.Build.targets
 		global.json = global.json
@@ -186,6 +177,29 @@ EndProject
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "System.Windows.Forms.Analyzers.VisualBasic.Tests", "src\System.Windows.Forms.Analyzers.VisualBasic\tests\UnitTests\System.Windows.Forms.Analyzers.VisualBasic.Tests\System.Windows.Forms.Analyzers.VisualBasic.Tests.vbproj", "{0FD53580-3175-4F8F-8372-BE46C9122EE0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Private.Windows.Core.Tests", "src\System.Private.Windows.Core\tests\System.Private.Windows.Core.Tests\System.Private.Windows.Core.Tests.csproj", "{B653C860-9B52-4597-9921-24DA79A4E6B1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pipelines", "Pipelines", "{656C66A4-59CD-4E14-8AE4-1F5BCEECB553}"
+	ProjectSection(SolutionItems) = preProject
+		eng\pipelines\azure-pipelines-codeql.yml = eng\pipelines\azure-pipelines-codeql.yml
+		azure-pipelines-PR.yml = azure-pipelines-PR.yml
+		azure-pipelines-richnav.yml = azure-pipelines-richnav.yml
+		azure-pipelines.yml = azure-pipelines.yml
+		eng\pipelines\build-PR.yml = eng\pipelines\build-PR.yml
+		eng\pipelines\build.yml = eng\pipelines\build.yml
+		eng\CIBuild.cmd = eng\CIBuild.cmd
+		eng\custom-cibuild.ps1 = eng\custom-cibuild.ps1
+		eng\pipelines\post-build-PR.yml = eng\pipelines\post-build-PR.yml
+		eng\pipelines\post-build.yml = eng\pipelines\post-build.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Analyzers", "Analyzers", "{D4D97D78-D213-45DF-B003-9C4C9F2E5E1C}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		eng\CodeAnalysisSource.cs = eng\CodeAnalysisSource.cs
+		eng\CodeAnalysisSource.vb = eng\CodeAnalysisSource.vb
+		eng\CodeStyle.props = eng\CodeStyle.props
+		eng\CodeStyle.targets = eng\CodeStyle.targets
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1092,7 +1106,6 @@ Global
 		{6103E743-057D-41C6-946C-23A751A08748} = {088DD24C-DF6B-45F3-A8BC-592580A4B2A9}
 		{088DD24C-DF6B-45F3-A8BC-592580A4B2A9} = {77FEDB47-F7F6-490D-AF7C-ABB4A9E0B9D7}
 		{48979B4E-EAEC-4B41-BB49-44CA230BECAB} = {680FB14C-7B0C-4D63-9F1A-18ACCDB0F52A}
-		{462AD69A-9395-4E98-882D-569CDE562559} = {8B4B1E09-B3C7-4044-B223-94EDEC1CAA20}
 		{D390F7D2-1E11-4DEE-B7F1-4FD0681A81F0} = {DF68A171-D27B-4E6A-8A7E-63A651622355}
 		{55E34830-B375-41FF-AFCA-F53B80A4D152} = {77FEDB47-F7F6-490D-AF7C-ABB4A9E0B9D7}
 		{D8598EC8-D64B-4BE7-A4DC-5D5CED6A3938} = {583F1292-AE8D-4511-B8D8-A81FE4642DDC}
@@ -1139,6 +1152,8 @@ Global
 		{C4C031D5-F79A-44B6-811E-0797E7D5C1C1} = {E4C6C5F5-46E9-4C63-9628-26752B4D9C11}
 		{0FD53580-3175-4F8F-8372-BE46C9122EE0} = {D3AD0BF9-F5E2-4913-9AE3-9C4998F95EA1}
 		{B653C860-9B52-4597-9921-24DA79A4E6B1} = {583F1292-AE8D-4511-B8D8-A81FE4642DDC}
+		{656C66A4-59CD-4E14-8AE4-1F5BCEECB553} = {8B4B1E09-B3C7-4044-B223-94EDEC1CAA20}
+		{D4D97D78-D213-45DF-B003-9C4C9F2E5E1C} = {8B4B1E09-B3C7-4044-B223-94EDEC1CAA20}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B1B0433-F612-4E5A-BE7E-FCF5B9F6E136}

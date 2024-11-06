@@ -19,7 +19,7 @@ public class ControlDesignerTests
         Assert.True(controlDesigner.ControlSupportsSnaplines);
         Assert.Throws<InvalidOperationException>(() => controlDesigner.Component);
         Assert.True(controlDesigner.ForceVisible);
-        Assert.Throws<InvalidOperationException>(() => controlDesigner.GetParentComponentProperty());
+        Assert.Throws<InvalidOperationException>(controlDesigner.GetParentComponentProperty);
         Assert.False(controlDesigner.SerializePerformLayout);
     }
 
@@ -164,7 +164,7 @@ public class ControlDesignerTests
         using TestControlDesigner controlDesigner = new();
         using Button button = new();
         controlDesigner.Initialize(button);
-        Assert.False(controlDesigner.GetHitTestMethod(new Drawing.Point()));
+        Assert.False(controlDesigner.GetHitTestMethod(default));
     }
 
     [Fact]
@@ -273,6 +273,6 @@ public class ControlDesignerTests
         childControl.Site = mockSite.Object;
         control.Controls.Add(childControl);
 
-        Assert.Equal(1, controlDesigner.AssociatedComponents.Count);
+        Assert.Single(controlDesigner.AssociatedComponents);
     }
 }

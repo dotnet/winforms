@@ -34,8 +34,10 @@ public class ImageFormatTests
             yield return new object[] { JpegImageFormat.Guid, ImageFormat.Jpeg };
             yield return new object[] { WmfImageFormat.Guid, ImageFormat.Wmf };
 #if NET
+#pragma warning disable CA1416 // Validate platform compatibility
             yield return new object[] { HeifImageFormat.Guid, ImageFormat.Heif };
             yield return new object[] { WebpImageFormat.Guid, ImageFormat.Webp };
+#pragma warning restore CA1416
 #endif
             yield return new object[] { new Guid("48749428-316f-496a-ab30-c819a92b3137"), CustomImageFormat };
         }
@@ -56,8 +58,10 @@ public class ImageFormatTests
             yield return new object[] { "Jpeg", ImageFormat.Jpeg };
             yield return new object[] { "Wmf", ImageFormat.Wmf };
 #if NET
+#pragma warning disable CA1416 // Validate platform compatibility
             yield return new object[] { "Heif", ImageFormat.Heif };
             yield return new object[] { "Webp", ImageFormat.Webp };
+#pragma warning restore CA1416
 #endif
             yield return new object[] { "[ImageFormat: 48749428-316f-496a-ab30-c819a92b3137]", CustomImageFormat };
         }
@@ -69,7 +73,7 @@ public class ImageFormatTests
         {
             yield return new object[] { Path.Combine("bitmaps", "nature24bits.gif"), "Gif" };
             yield return new object[] { Path.Combine("bitmaps", "nature24bits.jpg"), "Jpeg" };
-            yield return new object[] { Path.Combine("bitmaps", "VisualPng.ico"), "Icon"};
+            yield return new object[] { Path.Combine("bitmaps", "VisualPng.ico"), "Icon" };
             yield return new object[] { Path.Combine("bitmaps", "almogaver32bits.tif"), "Tiff" };
         }
     }

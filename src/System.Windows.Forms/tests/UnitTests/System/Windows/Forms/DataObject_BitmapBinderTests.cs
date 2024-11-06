@@ -56,7 +56,7 @@ public class DataObject_BitmapBinderTests
             };
 
             // cs/dangerous-binary-deserialization
-            object deserialized = formatter.Deserialize(stream); // CodeQL [SM03722] : Testing legacy feature. Safe use because input stream is controlled contains strings and Bitmap which is instantiated by a binder. 
+            object deserialized = formatter.Deserialize(stream); // CodeQL [SM03722] : Testing legacy feature. Safe use because input stream is controlled contains strings and Bitmap which is instantiated by a binder.
             deserialized.Should().NotBeNull();
 
             if (value is not Bitmap bitmap)
@@ -83,12 +83,12 @@ public class DataObject_BitmapBinderTests
         }
     }
 
-    public static TheoryData<object> AllowedSerializationTypes => new()
-    {
+    public static TheoryData<object> AllowedSerializationTypes =>
+    [
         "Information At your Fingertips",
         new string[] { "Hello" },
         new Bitmap(5, 5)
-    };
+    ];
 
     [WinFormsTheory]
     [MemberData(nameof(DisallowedSerializationTypes))]
@@ -130,9 +130,9 @@ public class DataObject_BitmapBinderTests
         action.Should().Throw<SerializationException>();
     }
 
-    public static TheoryData<object> DisallowedSerializationTypes => new()
-    {
+    public static TheoryData<object> DisallowedSerializationTypes =>
+    [
         new List<string>() { "Hello" },
         new Hashtable() { { "Silver", "Hammer" } }
-    };
+    ];
 }

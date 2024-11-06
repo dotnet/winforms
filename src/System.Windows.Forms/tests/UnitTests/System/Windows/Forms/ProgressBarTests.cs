@@ -2550,7 +2550,7 @@ public class ProgressBarTests
             Style = ProgressBarStyle.Marquee,
             Step = step
         };
-        Assert.Throws<InvalidOperationException>(() => control.PerformStep());
+        Assert.Throws<InvalidOperationException>(control.PerformStep);
     }
 
     [WinFormsFact]

@@ -20,10 +20,10 @@ public class DomainUpDownTests : IDisposable
 
     public void Dispose()
     {
-       _control.Items.Clear();
-       _control.Dispose();
-       _sub.Items.Clear();
-       _sub.Dispose();
+        _control.Items.Clear();
+        _control.Dispose();
+        _sub.Items.Clear();
+        _sub.Dispose();
     }
 
     [WinFormsFact]
@@ -323,7 +323,7 @@ public class DomainUpDownTests : IDisposable
     [InlineData(-1, null, "", false)]
     public void DomainUpDown_SelectedIndex_SetUserEdit_GetReturnsExpected(int value, object expected, string expectedText, bool expectedUserEdit)
     {
-        _sub.UserEdit=true;
+        _sub.UserEdit = true;
         _sub.Items.Add("Item1");
         _sub.Items.Add("Item2");
 
@@ -354,7 +354,7 @@ public class DomainUpDownTests : IDisposable
         _sub.IsHandleCreated.Should().BeFalse();
     }
 
-   [WinFormsFact]
+    [WinFormsFact]
     public void DomainUpDown_SelectedIndex_SetWithHandler_CallsSelectedItemChanged()
     {
         _control.Items.Add("Item1");
@@ -947,7 +947,7 @@ public class DomainUpDownTests : IDisposable
     {
         _sub.AccessibleRole = AccessibleRole.HelpBalloon;
         var instance = _sub.CreateAccessibilityInstance() as UpDownBase.UpDownBaseAccessibleObject;
-    
+
         instance.Should().NotBeNull().And.BeOfType<UpDownBase.UpDownBaseAccessibleObject>();
         instance.Owner.Should().Be(_sub);
         instance.Role.Should().Be(AccessibleRole.HelpBalloon);
@@ -1346,8 +1346,8 @@ public class DomainUpDownTests : IDisposable
     [WinFormsTheory]
     [InlineData(0, 1, false)]
     [InlineData(1, 2, false)]
-    [InlineData(2, 2, false)] 
-    [InlineData(2, 0, true)] 
+    [InlineData(2, 2, false)]
+    [InlineData(2, 0, true)]
     public void DomainUpDown_DownButton_InvokeWithItems_ChangesSelectedIndex(int initialIndex, int expectedIndex, bool wrap)
     {
         _control.Items.AddRange(new string[] { "Item1", "Item2", "Item3" });
@@ -1363,8 +1363,8 @@ public class DomainUpDownTests : IDisposable
     [WinFormsTheory]
     [InlineData(0, 2, false)]
     [InlineData(1, 2, false)]
-    [InlineData(2, 2, false)] 
-    [InlineData(2, 1, true)] 
+    [InlineData(2, 2, false)]
+    [InlineData(2, 1, true)]
     public void DomainUpDown_DownButton_InvokeMultipleTimes_ChangesSelectedIndex(int initialIndex, int expectedIndex, bool wrap)
     {
         _control.Items.AddRange(new string[] { "Item1", "Item2", "Item3" });
@@ -1373,7 +1373,7 @@ public class DomainUpDownTests : IDisposable
         _control.Wrap = wrap;
 
         _control.DownButton();
-        _control.DownButton(); 
+        _control.DownButton();
 
         _control.SelectedIndex.Should().Be(expectedIndex);
     }

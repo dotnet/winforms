@@ -63,6 +63,6 @@ public class DataGridViewLinkCellAccessibleObjectTests : DataGridViewLinkCell
         using DataGridViewLinkCell cell = new();
 
         Assert.Equal(-1, cell.RowIndex);
-        Assert.Throws<InvalidOperationException>(() => cell.AccessibilityObject.DoDefaultAction());
+        Assert.Throws<InvalidOperationException>(cell.AccessibilityObject.DoDefaultAction);
     }
 }

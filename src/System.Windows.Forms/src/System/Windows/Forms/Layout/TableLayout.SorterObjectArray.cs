@@ -32,7 +32,7 @@ internal partial class TableLayout
                 }
                 catch (IndexOutOfRangeException)
                 {
-                    throw new ArgumentException();
+                    throw new ArgumentException(null);
                 }
                 catch (Exception)
                 {
@@ -76,7 +76,7 @@ internal partial class TableLayout
                     }
                     catch (IndexOutOfRangeException)
                     {
-                        throw new ArgumentException();
+                        throw new ArgumentException(null);
                     }
                     catch (Exception)
                     {

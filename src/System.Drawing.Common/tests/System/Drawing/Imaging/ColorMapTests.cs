@@ -9,8 +9,8 @@ public class ColorMapTests
     public void Ctor_Default()
     {
         ColorMap cm = new();
-        Assert.Equal(new Color(), cm.OldColor);
-        Assert.Equal(new Color(), cm.NewColor);
+        Assert.Equal(default, cm.OldColor);
+        Assert.Equal(default, cm.NewColor);
     }
 
     [Fact]

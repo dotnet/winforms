@@ -155,7 +155,7 @@ public partial class DataObjectTests
 
     public static TheoryData<TextDataFormat, string, bool> ContainsText_TextDataFormat_TheoryData()
     {
-        TheoryData<TextDataFormat, string, bool> theoryData = new();
+        TheoryData<TextDataFormat, string, bool> theoryData = [];
         foreach (bool result in new bool[] { true, false })
         {
             theoryData.Add(TextDataFormat.Text, DataFormats.UnicodeText, result);
@@ -252,7 +252,7 @@ public partial class DataObjectTests
 
     public static TheoryData<string, object> GetData_InvokeStringMocked_TheoryData()
     {
-        TheoryData<string, object> theoryData = new();
+        TheoryData<string, object> theoryData = [];
         foreach (object result in new object[] { new(), null })
         {
             theoryData.Add("format", result);
@@ -296,7 +296,7 @@ public partial class DataObjectTests
 
     public static TheoryData<string, bool, object> GetData_StringBoolIDataObject_TheoryData()
     {
-        TheoryData<string, bool, object> theoryData = new();
+        TheoryData<string, bool, object> theoryData = [];
         foreach (bool autoConvert in new bool[] { true, false })
         {
             foreach (object result in new object[] { new(), null })
@@ -374,7 +374,7 @@ public partial class DataObjectTests
 
     public static TheoryData<string, bool> GetDataPresent_StringMocked_TheoryData()
     {
-        TheoryData<string, bool> theoryData = new();
+        TheoryData<string, bool> theoryData = [];
         foreach (bool result in new bool[] { true, false })
         {
             theoryData.Add("format", result);
@@ -418,7 +418,7 @@ public partial class DataObjectTests
 
     public static TheoryData<string, bool, bool> GetDataPresent_StringBoolIDataObject_TheoryData()
     {
-        TheoryData<string, bool, bool> theoryData = new();
+        TheoryData<string, bool, bool> theoryData = [];
         foreach (bool autoConvert in new bool[] { true, false })
         {
             foreach (bool result in new bool[] { true, false })
@@ -458,7 +458,7 @@ public partial class DataObjectTests
 
     public static TheoryData<Type, bool, int, bool, string> GetDataPresent_InvokeTypeMocked_TheoryData()
     {
-        TheoryData<Type, bool, int, bool, string> theoryData = new();
+        TheoryData<Type, bool, int, bool, string> theoryData = [];
         foreach (bool result in new bool[] { true, false })
         {
             theoryData.Add(typeof(int), result, 1, result, typeof(int).FullName);
@@ -1066,7 +1066,7 @@ public partial class DataObjectTests
 
     public static TheoryData<string, object> SetData_StringObjectIDataObject_TheoryData()
     {
-        TheoryData<string, object> theoryData = new();
+        TheoryData<string, object> theoryData = [];
         foreach (string format in new string[] { "format", "  ", string.Empty, null })
         {
             theoryData.Add(format, null);
@@ -1146,7 +1146,7 @@ public partial class DataObjectTests
 
     public static TheoryData<string, bool, object> SetData_StringBoolObjectIDataObject_TheoryData()
     {
-        TheoryData<string, bool, object> theoryData = new();
+        TheoryData<string, bool, object> theoryData = [];
         foreach (string format in new string[] { "format", "  ", string.Empty, null })
         {
             foreach (bool autoConvert in new bool[] { true, false })
@@ -1174,7 +1174,7 @@ public partial class DataObjectTests
 
     public static TheoryData<Type, object> SetData_TypeObjectIDataObject_TheoryData()
     {
-        TheoryData<Type, object> theoryData = new();
+        TheoryData<Type, object> theoryData = [];
         foreach (Type format in new Type[] { typeof(int), null })
         {
             theoryData.Add(format, null);
@@ -1435,7 +1435,7 @@ public partial class DataObjectTests
 
     public static TheoryData<string, TextDataFormat, string, string, string, string> SetText_StringTextDataFormat_TheoryData()
     {
-        TheoryData<string, TextDataFormat, string, string, string, string> theoryData = new();
+        TheoryData<string, TextDataFormat, string, string, string, string> theoryData = [];
         foreach (string textData in new string[] { "textData", "  " })
         {
             theoryData.Add(textData, TextDataFormat.Text, textData, null, null, null);
@@ -1486,7 +1486,7 @@ public partial class DataObjectTests
 
     public static TheoryData<string, TextDataFormat, string> SetText_StringTextDataFormatMocked_TheoryData()
     {
-        TheoryData<string, TextDataFormat, string> theoryData = new();
+        TheoryData<string, TextDataFormat, string> theoryData = [];
         foreach (string textData in new string[] { "textData", "  " })
         {
             theoryData.Add(textData, TextDataFormat.Text, DataFormats.UnicodeText);
@@ -1610,7 +1610,7 @@ public partial class DataObjectTests
     {
         DataObject dataObject = new();
         IComDataObject comDataObject = dataObject;
-        FORMATETC formatetc = new();
+        FORMATETC formatetc = default;
         ((HRESULT)comDataObject.DAdvise(ref formatetc, advf, adviseSink, out int connection)).Should().Be(HRESULT.E_NOTIMPL);
         connection.Should().Be(0);
     }
@@ -1632,7 +1632,7 @@ public partial class DataObjectTests
             .Returns(1);
         DataObject dataObject = new(mockComDataObject.Object);
         IComDataObject comDataObject = dataObject;
-        FORMATETC formatetc = new();
+        FORMATETC formatetc = default;
         comDataObject.DAdvise(ref formatetc, advf, adviseSink, out int connection).Should().Be(1);
         connection.Should().Be(2);
         formatetc.cfFormat.Should().Be(3);
@@ -1678,7 +1678,7 @@ public partial class DataObjectTests
 
     public static TheoryData<IEnumSTATDATA> EnumDAdvise_CustomComDataObject_TheoryData()
     {
-        TheoryData<IEnumSTATDATA> theoryData = new() { null };
+        TheoryData<IEnumSTATDATA> theoryData = [null];
 
         Mock<IEnumSTATDATA> mockEnumStatData = new(MockBehavior.Strict);
         theoryData.Add(mockEnumStatData.Object);
@@ -2058,7 +2058,7 @@ public partial class DataObjectTests
 
     public static TheoryData<DATADIR, IEnumFORMATETC> EnumFormatEtc_CustomComDataObject_TheoryData()
     {
-        TheoryData<DATADIR, IEnumFORMATETC> theoryData = new();
+        TheoryData<DATADIR, IEnumFORMATETC> theoryData = [];
         Mock<IEnumFORMATETC> mockEnumFormatEtc = new(MockBehavior.Strict);
 
         theoryData.Add(DATADIR.DATADIR_GET, mockEnumFormatEtc.Object);
@@ -2500,6 +2500,6 @@ public partial class DataObjectTests
         data.GetDataPresent(typeof(Bitmap)).Should().BeTrue();
         data.GetDataPresent(customFormat).Should().BeTrue();
         data.GetDataPresent("notExist").Should().BeFalse();
-        data.GetFormats().Should().BeEquivalentTo([typeof(Bitmap).FullName, typeof(Bitmap).Name, customFormat]);
+        data.GetFormats().Should().BeEquivalentTo([typeof(Bitmap).FullName, nameof(Bitmap), customFormat]);
     }
 }

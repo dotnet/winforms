@@ -986,7 +986,7 @@ public class ToolStripAccessibleObjectTests
 
         return toolStrip;
 
-        ToolStripItem CreateToolStripItem()
+        static ToolStripItem CreateToolStripItem()
         {
             return new ToolStripButton()
             {

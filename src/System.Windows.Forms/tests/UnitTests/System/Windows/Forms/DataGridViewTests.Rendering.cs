@@ -177,24 +177,24 @@ public partial class DataGridViewTests
             Validate.SkipTo(
                 Validate.TextOut(column2.HeaderText, stateValidators: State.FontFace(customColumnHeaderFont.Name))),
 
-           // Row1
-           Validate.SkipTo(
+            // Row1
+            Validate.SkipTo(
                 Validate.TextOut("Row 1", stateValidators: State.FontFace(customRowHeaderFont.Name))),
             Validate.SkipTo(
                 Validate.TextOut(nameof(DataGridView.DefaultCellStyle), stateValidators: State.FontFace(customCellStyleFont.Name))),
             Validate.SkipTo(
                 Validate.TextOut(customCellStyleFont.ToString(), stateValidators: State.FontFace(customCellStyleFont.Name))),
 
-           // Row2
-           Validate.SkipTo(
+            // Row2
+            Validate.SkipTo(
                 Validate.TextOut("Row 2", stateValidators: State.FontFace(customRowHeaderFont.Name))),
             Validate.SkipTo(
                 Validate.TextOut(nameof(DataGridView.ColumnHeadersDefaultCellStyle), stateValidators: State.FontFace(customCellStyleFont.Name))),
             Validate.SkipTo(
                 Validate.TextOut(customColumnHeaderFont.ToString(), stateValidators: State.FontFace(customCellStyleFont.Name))),
 
-           // Row3
-           Validate.SkipTo(
+            // Row3
+            Validate.SkipTo(
                 Validate.TextOut("Row 3", stateValidators: State.FontFace(customRowHeaderFont.Name))),
             Validate.SkipTo(
                 Validate.TextOut(nameof(DataGridView.RowHeadersDefaultCellStyle), stateValidators: State.FontFace(customCellStyleFont.Name))),

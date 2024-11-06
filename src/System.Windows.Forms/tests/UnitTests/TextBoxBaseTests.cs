@@ -778,7 +778,7 @@ public partial class TextBoxBaseTests
         provider = control.AccessibilityObject.TestAccessor().Dynamic._textProvider;
 
         // The control's accessible object and its providers shouldn't be cleaned when recreating of the control
-        // because this object and all its providers will continue to be used. 
+        // because this object and all its providers will continue to be used.
         Assert.IsType<TextBoxBase.TextBoxBaseUiaTextProvider>(provider);
     }
 
@@ -5849,7 +5849,7 @@ public partial class TextBoxBaseTests
             ShortcutsEnabled = shortcutsEnabled,
             ReadOnly = readOnly
         };
-        Message m = new();
+        Message m = default;
         Assert.Equal(expected, control.ProcessCmdKey(ref m, keyData));
         Assert.False(control.IsHandleCreated);
     }
@@ -5865,7 +5865,7 @@ public partial class TextBoxBaseTests
             ShortcutsEnabled = shortcutsEnabled,
             ReadOnly = readOnly
         };
-        Message msg = new();
+        Message msg = default;
         Assert.Equal(expected, control.ProcessCmdKey(ref msg, keyData));
         Assert.False(control.IsHandleCreated);
     }
@@ -5875,7 +5875,7 @@ public partial class TextBoxBaseTests
     public void TextBoxBase_ProcessCmdKey_InvokeWithoutParent_ReturnsFalse(Keys keyData)
     {
         using SubTextBox control = new();
-        Message m = new();
+        Message m = default;
         Assert.False(control.ProcessCmdKey(ref m, keyData));
         Assert.False(control.IsHandleCreated);
     }
@@ -5938,7 +5938,7 @@ public partial class TextBoxBaseTests
     {
         using SubTextBox control = new();
 
-        Message message = new();
+        Message message = default;
         Assert.True(control.ProcessCmdKey(ref message, Keys.Control | Keys.Back));
         Assert.Empty(control.Text);
     }
@@ -5952,7 +5952,7 @@ public partial class TextBoxBaseTests
             ReadOnly = true
         };
 
-        Message message = new();
+        Message message = default;
         Assert.False(control.ProcessCmdKey(ref message, Keys.Control | Keys.Back));
         Assert.Equal("text", control.Text);
     }
@@ -5967,7 +5967,7 @@ public partial class TextBoxBaseTests
             SelectionStart = text.Length + cursorRelativeToEnd
         };
 
-        Message message = new();
+        Message message = default;
         Assert.True(control.ProcessCmdKey(ref message, Keys.Control | Keys.Back));
         Assert.Equal(expected, control.Text);
     }
@@ -5985,7 +5985,7 @@ public partial class TextBoxBaseTests
 
         for (int i = 0; i < repeats; i++)
         {
-            Message message = new();
+            Message message = default;
             Assert.True(control.ProcessCmdKey(ref message, Keys.Control | Keys.Back));
         }
 
@@ -6002,7 +6002,7 @@ public partial class TextBoxBaseTests
             SelectionLength = 5
         };
 
-        Message message = new();
+        Message message = default;
         Assert.True(control.ProcessCmdKey(ref message, Keys.Control | Keys.Back));
         Assert.Equal("12-9", control.Text);
     }

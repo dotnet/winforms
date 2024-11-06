@@ -225,14 +225,14 @@ public class Control_ControlAccessibleObjectTests
 
     public static TheoryData<object> Handle_Set_DataTestData()
     {
-        return new TheoryData<object>
-        {
+        return
+        [
             null,
             IntPtr.Zero,
             new IntPtr(-1),
             new IntPtr(1),
             new IntPtr(250)
-        };
+        ];
     }
 
     [WinFormsTheory]

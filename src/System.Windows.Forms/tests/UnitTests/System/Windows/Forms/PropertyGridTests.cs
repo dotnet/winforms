@@ -2362,13 +2362,13 @@ public partial class PropertyGridTests
     public void PropertyGrid_PropertyTabCollection_AddAndRemoveTabType_Success()
     {
         using PropertyGrid grid = new();
-        Assert.Equal(1, grid.PropertyTabs.Count);
+        Assert.Single(grid.PropertyTabs);
 
         grid.PropertyTabs.AddTabType(typeof(TestPropertyTab));
         Assert.Equal(2, grid.PropertyTabs.Count);
 
         grid.PropertyTabs.RemoveTabType(typeof(TestPropertyTab));
-        Assert.Equal(1, grid.PropertyTabs.Count);
+        Assert.Single(grid.PropertyTabs);
     }
 
     private class TestPropertyTab : PropertyTab
@@ -3916,7 +3916,7 @@ public partial class PropertyGridTests
         propertyGrid.Enabled = enable;
         var entry = (GridEntry)propertyGrid.SelectedGridItem;
 
-        Assert.True(entry.EntryFlags != 0);
+        Assert.NotEqual(0, (int)entry.EntryFlags);
         Assert.False(propertyGrid.IsHandleCreated);
         Assert.False(button.IsHandleCreated);
     }
@@ -4052,7 +4052,7 @@ public partial class PropertyGridTests
     public void PropertyGrid_ResetSelectedProperty_Invoke_Success()
     {
         using PropertyGrid propertyGrid = new();
-        var testObject = new TestObject { Property1 = "ChangedValue1"};
+        var testObject = new TestObject { Property1 = "ChangedValue1" };
         propertyGrid.SelectedObject = testObject;
 
         propertyGrid.ResetSelectedProperty();

@@ -12,7 +12,7 @@ public class ListBoxSelectedIndexCollectionTests
     {
         using ListBox owner = new();
         var collection = new ListBox.SelectedIndexCollection(owner);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.True(collection.IsReadOnly);
     }
 
@@ -28,7 +28,7 @@ public class ListBoxSelectedIndexCollectionTests
     {
         using ListBox owner = new();
         ICollection collection = new ListBox.SelectedIndexCollection(owner);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.True(collection.IsSynchronized);
         Assert.Same(collection, collection.SyncRoot);
     }
@@ -38,7 +38,7 @@ public class ListBoxSelectedIndexCollectionTests
     {
         using ListBox owner = new();
         IList collection = new ListBox.SelectedIndexCollection(owner);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.True(collection.IsFixedSize);
         Assert.True(collection.IsReadOnly);
         Assert.True(collection.IsSynchronized);
@@ -78,7 +78,7 @@ public class ListBoxSelectedIndexCollectionTests
     {
         using ListBox owner = new();
         IList collection = new ListBox.SelectedIndexCollection(owner);
-        Assert.Throws<NotSupportedException>(() => collection.Clear());
+        Assert.Throws<NotSupportedException>(collection.Clear);
     }
 
     [WinFormsTheory]

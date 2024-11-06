@@ -28,6 +28,6 @@ public static class KeyboardSimulator
         int scanCode = (int)key;
         const int repeatCount = 1;
         nint lParam = PARAM.FromLowHighUnsigned(repeatCount, scanCode);
-        return (keyCode , lParam);
+        return (keyCode, lParam);
     }
 }

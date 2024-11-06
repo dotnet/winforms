@@ -2117,7 +2117,7 @@ public class PictureBoxTests
         {
             ImageLocation = imageLocation
         };
-        Assert.Throws<InvalidOperationException>(() => pictureBox.Load());
+        Assert.Throws<InvalidOperationException>(pictureBox.Load);
         Assert.Throws<InvalidOperationException>(() => pictureBox.Load(imageLocation));
     }
 
@@ -2129,7 +2129,7 @@ public class PictureBoxTests
         {
             ImageLocation = imageLocation
         };
-        Assert.Throws<InvalidOperationException>(() => pictureBox.LoadAsync());
+        Assert.Throws<InvalidOperationException>(pictureBox.LoadAsync);
         Assert.Throws<InvalidOperationException>(() => pictureBox.LoadAsync(imageLocation));
     }
 

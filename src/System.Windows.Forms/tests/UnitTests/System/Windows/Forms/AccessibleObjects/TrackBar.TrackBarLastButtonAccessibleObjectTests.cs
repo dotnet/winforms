@@ -70,7 +70,7 @@ public class TrackBar_TrackBarLastButtonAccessibleObjectTests
         {
             foreach (bool rightToLeftLayout in new[] { true, false })
             {
-                if (rightToLeft == RightToLeft.Yes && rightToLeftLayout == false)
+                if (rightToLeft == RightToLeft.Yes && !rightToLeftLayout)
                 {
                     continue;
                 }
@@ -105,7 +105,7 @@ public class TrackBar_TrackBarLastButtonAccessibleObjectTests
             {
                 foreach (bool rightToLeftLayout in new[] { true, false })
                 {
-                    if (orientation == Orientation.Vertical || (rightToLeft == RightToLeft.Yes && rightToLeftLayout == false))
+                    if (orientation == Orientation.Vertical || (rightToLeft == RightToLeft.Yes && !rightToLeftLayout))
                     {
                         foreach (bool createControl in new[] { true, false })
                         {

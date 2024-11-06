@@ -123,11 +123,11 @@ public class WinFormsBinaryFormattedObjectTests
         }
     }
 
-    public static TheoryData<object> BinaryFormattedObjects_TestData => new()
-    {
-        new PointF(),
+    public static TheoryData<object> BinaryFormattedObjects_TestData =>
+    [
+        default(PointF),
         new PointF[] { default },
-        new RectangleF(),
+        default(RectangleF),
         new RectangleF[] { default },
         new DateTime[] { default },
         new ImageListStreamer(new ImageList()),
@@ -136,7 +136,7 @@ public class WinFormsBinaryFormattedObjectTests
         new OwnerDrawPropertyBag(),
         new TreeNode(),
         new ListViewItem.ListViewSubItem()
-    };
+    ];
 
     [WinFormsTheory]
     [MemberData(nameof(Control_DesignerVisibleProperties_TestData))]
@@ -148,7 +148,7 @@ public class WinFormsBinaryFormattedObjectTests
         {
             var propertyDescriptors = TypeDescriptor.GetProperties(value, s_visible);
 
-            List<string> binaryFormattedProperties = new();
+            List<string> binaryFormattedProperties = [];
             foreach (PropertyDescriptor property in propertyDescriptors)
             {
                 Type propertyType = property.PropertyType;

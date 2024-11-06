@@ -64,6 +64,6 @@ public class DataGridViewButtonCellAccessibleObjectTests : DataGridViewButtonCel
         AccessibleObject accessibleObject = cell.AccessibilityObject;
 
         Assert.Equal(-1, cell.RowIndex);
-        Assert.Throws<InvalidOperationException>(() => accessibleObject.DoDefaultAction());
+        Assert.Throws<InvalidOperationException>(accessibleObject.DoDefaultAction);
     }
 }

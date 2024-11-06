@@ -209,7 +209,7 @@ public class ToolStripOverflow_ToolStripOverflowAccessibleObjectTests
 
         return toolStrip;
 
-        ToolStripItem CreateItem(ToolStripItemAlignment align)
+        static ToolStripItem CreateItem(ToolStripItemAlignment align)
         {
             return new ToolStripButton
             {

@@ -152,7 +152,7 @@ public partial class ListBox
         {
             if (item is not int)
             {
-                throw new ArgumentException(nameof(item));
+                throw new ArgumentException(null, nameof(item));
             }
 
             return Add((int)item);
@@ -232,7 +232,7 @@ public partial class ListBox
         {
             if (value is not int)
             {
-                throw new ArgumentException(nameof(value));
+                throw new ArgumentException(null, nameof(value));
             }
 
             Remove((int)value);
@@ -305,7 +305,7 @@ public partial class ListBox
             {
                 if (value is not int)
                 {
-                    throw new ArgumentException(nameof(value));
+                    throw new ArgumentException(null, nameof(value));
                 }
                 else
                 {

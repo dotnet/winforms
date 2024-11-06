@@ -1196,7 +1196,7 @@ public class DataGridViewAccessibleObjectTests
         var columnHeaders = dataGridView.AccessibilityObject.GetColumnHeaders();
 
         Assert.NotNull(columnHeaders);
-        Assert.Equal(0, columnHeaders.Length);
+        Assert.Empty(columnHeaders);
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -1291,7 +1291,7 @@ public class DataGridViewAccessibleObjectTests
         var rowHeaders = dataGridView.AccessibilityObject.GetRowHeaders();
 
         Assert.NotNull(rowHeaders);
-        Assert.Equal(0, rowHeaders.Length);
+        Assert.Empty(rowHeaders);
         Assert.False(dataGridView.IsHandleCreated);
     }
 

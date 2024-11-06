@@ -17,7 +17,7 @@ public class SYSTEMTIMETests
     [Fact]
     public void SYSTEMTIME_Ctor_Default()
     {
-        SYSTEMTIME st = new();
+        SYSTEMTIME st = default;
 
         Assert.Equal(0, st.wYear);
         Assert.Equal(0, st.wMonth);
@@ -76,7 +76,7 @@ public class SYSTEMTIMETests
     [Fact]
     public void SYSTEMTIME_CastToDateTime_ReturnsMinValue_IfValueIsDefault()
     {
-        SYSTEMTIME st = new();
+        SYSTEMTIME st = default;
         DateTime dt;
 
         using (new NoAssertContext())

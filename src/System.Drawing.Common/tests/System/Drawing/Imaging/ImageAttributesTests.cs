@@ -1,6 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-//
+
 // Copyright (C) 2005-2006 Novell, Inc (http://www.novell.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -84,7 +84,7 @@ public class ImageAttributesTests
         ImageAttributes imageAttr = new();
         imageAttr.Dispose();
 
-        AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.Clone());
+        AssertExtensions.Throws<ArgumentException>(null, imageAttr.Clone);
     }
 
     [Fact]
@@ -323,7 +323,7 @@ public class ImageAttributesTests
         ImageAttributes imageAttr = new();
         imageAttr.Dispose();
 
-        AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.ClearColorMatrix());
+        AssertExtensions.Throws<ArgumentException>(null, imageAttr.ClearColorMatrix);
         AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.ClearColorMatrix(ColorAdjustType.Default));
     }
 
@@ -699,7 +699,7 @@ public class ImageAttributesTests
         ImageAttributes imageAttr = new();
         imageAttr.Dispose();
 
-        AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.SetNoOp());
+        AssertExtensions.Throws<ArgumentException>(null, imageAttr.SetNoOp);
         AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.SetNoOp(ColorAdjustType.Default));
     }
 
@@ -767,7 +767,7 @@ public class ImageAttributesTests
         ImageAttributes imageAttr = new();
         imageAttr.Dispose();
 
-        AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.ClearNoOp());
+        AssertExtensions.Throws<ArgumentException>(null, imageAttr.ClearNoOp);
         AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.ClearNoOp(ColorAdjustType.Default));
     }
 
@@ -877,7 +877,7 @@ public class ImageAttributesTests
         ImageAttributes imageAttr = new();
         imageAttr.Dispose();
 
-        AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.ClearColorKey());
+        AssertExtensions.Throws<ArgumentException>(null, imageAttr.ClearColorKey);
         AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.ClearColorKey(ColorAdjustType.Default));
     }
 
@@ -1038,7 +1038,7 @@ public class ImageAttributesTests
         ImageAttributes imageAttr = new();
         imageAttr.Dispose();
 
-        AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.ClearOutputChannel());
+        AssertExtensions.Throws<ArgumentException>(null, imageAttr.ClearOutputChannel);
         AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.ClearOutputChannel(ColorAdjustType.Default));
     }
 
@@ -1153,7 +1153,7 @@ public class ImageAttributesTests
         ImageAttributes imageAttr = new();
         imageAttr.Dispose();
 
-        AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.ClearOutputChannelColorProfile());
+        AssertExtensions.Throws<ArgumentException>(null, imageAttr.ClearOutputChannelColorProfile);
         AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.ClearOutputChannelColorProfile(ColorAdjustType.Default));
     }
 
@@ -1275,7 +1275,7 @@ public class ImageAttributesTests
         ImageAttributes imageAttr = new();
         imageAttr.Dispose();
 
-        AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.ClearRemapTable());
+        AssertExtensions.Throws<ArgumentException>(null, imageAttr.ClearRemapTable);
         AssertExtensions.Throws<ArgumentException>(null, () => imageAttr.ClearRemapTable(ColorAdjustType.Default));
     }
 
