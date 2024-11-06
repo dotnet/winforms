@@ -104,5 +104,5 @@ namespace System.Windows.Forms.Design.Tests;
             public override Bitmap Image => new(1, 1);
             public override DataSourceDescriptorCollection DataSources { get; } = new();
             public override bool IsDefault => false;
-        }   
+        }
     }
