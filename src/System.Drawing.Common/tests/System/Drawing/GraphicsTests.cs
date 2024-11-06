@@ -1879,8 +1879,8 @@ public partial class GraphicsTests
     {
         using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        AssertExtensions.Throws<ArgumentException>(null, () => graphics.TransformPoints(CoordinateSpace.Page, CoordinateSpace.Page, new Point[0]));
-        AssertExtensions.Throws<ArgumentException>(null, () => graphics.TransformPoints(CoordinateSpace.Page, CoordinateSpace.Page, new PointF[0]));
+        AssertExtensions.Throws<ArgumentException>(null, () => graphics.TransformPoints(CoordinateSpace.Page, CoordinateSpace.Page, Array.Empty<Point>()));
+        AssertExtensions.Throws<ArgumentException>(null, () => graphics.TransformPoints(CoordinateSpace.Page, CoordinateSpace.Page, Array.Empty<PointF>()));
     }
 
     [Fact]
@@ -2127,8 +2127,8 @@ public partial class GraphicsTests
         using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         using Pen pen = new(Color.Red);
-        AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawRectangles(pen, new Rectangle[0]));
-        AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawRectangles(pen, new RectangleF[0]));
+        AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawRectangles(pen, Array.Empty<Rectangle>()));
+        AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawRectangles(pen, Array.Empty<RectangleF>()));
     }
 
     [Fact]

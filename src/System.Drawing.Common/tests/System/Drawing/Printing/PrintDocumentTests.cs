@@ -229,7 +229,7 @@ public class PrintDocumentTests : FileCleanupTestBase
         Assert.Equal(expected, document.ToString());
     }
 
-    private void AssertDefaultPageSettings(PageSettings pageSettings)
+    private static void AssertDefaultPageSettings(PageSettings pageSettings)
     {
         // A4 and Letter are both common default sizes for systems to have.
         switch (pageSettings.PaperSize.Kind)

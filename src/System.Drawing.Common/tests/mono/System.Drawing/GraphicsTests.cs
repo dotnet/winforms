@@ -57,7 +57,7 @@ public class GraphicsTest : IDisposable
         _font?.Dispose();
     }
 
-    private bool IsEmptyBitmap(Bitmap bitmap, out int x, out int y)
+    private static bool IsEmptyBitmap(Bitmap bitmap, out int x, out int y)
     {
         bool result = true;
         int empty = Color.Empty.ToArgb();
@@ -75,26 +75,24 @@ public class GraphicsTest : IDisposable
         return result;
     }
 
-    private void CheckForEmptyBitmap(Bitmap bitmap)
+    private static void CheckForEmptyBitmap(Bitmap bitmap)
     {
-        int x, y;
-        if (!IsEmptyBitmap(bitmap, out x, out y))
+        if (!IsEmptyBitmap(bitmap, out int x, out int y))
             Assert.Fail($"Position {x},{y}");
     }
 
-    private void CheckForNonEmptyBitmap(Bitmap bitmap)
+    private static void CheckForNonEmptyBitmap(Bitmap bitmap)
     {
-        int x, y;
-        if (IsEmptyBitmap(bitmap, out x, out y))
+        if (IsEmptyBitmap(bitmap, out int x, out int y))
             Assert.True(false);
     }
 
-    private void AssertEquals(string msg, object expected, object actual)
+    private static void AssertEquals(string msg, object expected, object actual)
     {
         actual.Should().Be(expected, msg);
     }
 
-    private void AssertEquals(string msg, double expected, double actual, int precision)
+    private static void AssertEquals(string msg, double expected, double actual, int precision)
     {
         actual.Should().BeApproximately(expected, precision, msg);
     }
@@ -366,7 +364,7 @@ public class GraphicsTest : IDisposable
         public void Dispose() { Graphics.Dispose(); _bitmap.Dispose(); }
     }
 
-    private void Compare(string msg, RectangleF b1, RectangleF b2)
+    private static void Compare(string msg, RectangleF b1, RectangleF b2)
     {
         AssertEquals(msg + ".compare.X", b1.X, b2.X);
         AssertEquals(msg + ".compare.Y", b1.Y, b2.Y);
@@ -439,7 +437,7 @@ public class GraphicsTest : IDisposable
         Assert.Throws<ArgumentException>(() => g.MultiplyTransform(matrix));
     }
 
-    private void CheckBounds(string msg, RectangleF bounds, float x, float y, float w, float h)
+    private static void CheckBounds(string msg, RectangleF bounds, float x, float y, float w, float h)
     {
         AssertEquals(msg + ".X", x, bounds.X, 1);
         AssertEquals(msg + ".Y", y, bounds.Y, 1);
@@ -904,7 +902,7 @@ public class GraphicsTest : IDisposable
         bitmap.Dispose();
     }
 
-    private void CheckDefaultProperties(string message, Graphics g)
+    private static void CheckDefaultProperties(string message, Graphics g)
     {
         Assert.True(g.Clip.IsInfinite(g), message + ".Clip.IsInfinite");
         AssertEquals(message + ".CompositingMode", CompositingMode.SourceOver, g.CompositingMode);
@@ -919,7 +917,7 @@ public class GraphicsTest : IDisposable
         Assert.True(g.Transform.IsIdentity, message + ".Transform.IsIdentity");
     }
 
-    private void CheckCustomProperties(string message, Graphics g)
+    private static void CheckCustomProperties(string message, Graphics g)
     {
         Assert.False(g.Clip.IsInfinite(g), message + ".Clip.IsInfinite");
         AssertEquals(message + ".CompositingMode", CompositingMode.SourceCopy, g.CompositingMode);
@@ -935,7 +933,7 @@ public class GraphicsTest : IDisposable
         Assert.False(g.Transform.IsIdentity, message + ".Transform.IsIdentity");
     }
 
-    private void CheckMatrix(string message, Matrix m, float xx, float yx, float xy, float yy, float x0, float y0)
+    private static void CheckMatrix(string message, Matrix m, float xx, float yx, float xy, float yy, float x0, float y0)
     {
         float[] elements = m.Elements;
         AssertEquals(message + ".Matrix.xx", xx, elements[0], 2);
@@ -1046,7 +1044,7 @@ public class GraphicsTest : IDisposable
         CheckCustomProperties("EndContainer", g);
     }
 
-    private void BeginContainer_GraphicsUnit(GraphicsUnit unit)
+    private static void BeginContainer_GraphicsUnit(GraphicsUnit unit)
     {
         using Bitmap bitmap = new(20, 20);
         using Graphics g = Graphics.FromImage(bitmap);
@@ -1158,7 +1156,7 @@ public class GraphicsTest : IDisposable
     {
         using Bitmap bitmap = new(20, 20);
         using Graphics g = Graphics.FromImage(bitmap);
-        Assert.Throws<ArgumentException>(() => g.FillRectangles(Brushes.Red, new Rectangle[0]));
+        Assert.Throws<ArgumentException>(() => g.FillRectangles(Brushes.Red, Array.Empty<Rectangle>()));
     }
 
     [Fact]
@@ -1182,7 +1180,7 @@ public class GraphicsTest : IDisposable
     {
         using Bitmap bitmap = new(20, 20);
         using Graphics g = Graphics.FromImage(bitmap);
-        Assert.Throws<ArgumentException>(() => g.FillRectangles(Brushes.Red, new RectangleF[0]));
+        Assert.Throws<ArgumentException>(() => g.FillRectangles(Brushes.Red, Array.Empty<RectangleF>()));
     }
 
     [Fact]
@@ -1207,7 +1205,7 @@ public class GraphicsTest : IDisposable
         Assert.Equal(Color.Fuchsia.ToArgb(), bitmap.GetPixel(15, 15).ToArgb());
     }
 
-    private Bitmap FillDrawRectangle(float width)
+    private static Bitmap FillDrawRectangle(float width)
     {
         Bitmap bitmap = new(20, 20);
         using (Graphics g = Graphics.FromImage(bitmap))
@@ -1371,7 +1369,7 @@ public class GraphicsTest : IDisposable
     }
 
     // reverse, draw the fill over
-    private Bitmap DrawFillRectangle(float width)
+    private static Bitmap DrawFillRectangle(float width)
     {
         Bitmap bitmap = new(20, 20);
         using (Graphics g = Graphics.FromImage(bitmap))
@@ -1517,7 +1515,7 @@ public class GraphicsTest : IDisposable
         Assert.Equal(0xFF008000, (uint)bitmap.GetPixel(5, 9).ToArgb());
     }
 
-    private Bitmap DrawLines(float width)
+    private static Bitmap DrawLines(float width)
     {
         Bitmap bitmap = new(20, 20);
         using (Graphics g = Graphics.FromImage(bitmap))
@@ -1783,9 +1781,8 @@ public class GraphicsTest : IDisposable
         string s = "aaa aa aaaa a aaa";
         SizeF size = useSpan ? g.MeasureString(s.AsSpan(), _font) : g.MeasureString(s, _font);
 
-        int chars, lines;
         SizeF size2 = useSpan
-            ? g.MeasureString(s.AsSpan(), _font, new SizeF(80, size.Height), null, out chars, out lines)
+            ? g.MeasureString(s.AsSpan(), _font, new SizeF(80, size.Height), null, out int chars, out int lines)
             : g.MeasureString(s, _font, new SizeF(80, size.Height), null, out chars, out lines);
 
         // in pixels
@@ -2006,7 +2003,7 @@ public class GraphicsTest : IDisposable
 
     private static readonly CharacterRange[] s_ranges = [new(0, 1), new(1, 1), new(2, 1)];
 
-    private Region[] Measure_Helper(Graphics gfx, RectangleF rect, bool useSpan)
+    private static Region[] Measure_Helper(Graphics gfx, RectangleF rect, bool useSpan)
     {
         using StringFormat format = StringFormat.GenericTypographic;
         format.SetMeasurableCharacterRanges(s_ranges);
@@ -2437,7 +2434,7 @@ public class GraphicsTest : IDisposable
     {
         using Bitmap bmp = new(40, 40);
         using Graphics g = Graphics.FromImage(bmp);
-        Assert.Throws<ArgumentNullException>(() => g.DrawImage(null, new PointF[0]));
+        Assert.Throws<ArgumentNullException>(() => g.DrawImage(null, Array.Empty<PointF>()));
     }
 
     [Fact]
@@ -2453,7 +2450,7 @@ public class GraphicsTest : IDisposable
     {
         using Bitmap bmp = new(40, 40);
         using Graphics g = Graphics.FromImage(bmp);
-        Assert.Throws<ArgumentException>(() => g.DrawImage(bmp, new PointF[0]));
+        Assert.Throws<ArgumentException>(() => g.DrawImage(bmp, Array.Empty<PointF>()));
     }
 
     [Fact]
@@ -2511,7 +2508,7 @@ public class GraphicsTest : IDisposable
     {
         using Bitmap bmp = new(40, 40);
         using Graphics g = Graphics.FromImage(bmp);
-        Assert.Throws<ArgumentNullException>(() => g.DrawImage(null, new Point[0]));
+        Assert.Throws<ArgumentNullException>(() => g.DrawImage(null, Array.Empty<Point>()));
     }
 
     [Fact]
@@ -2527,7 +2524,7 @@ public class GraphicsTest : IDisposable
     {
         using Bitmap bmp = new(40, 40);
         using Graphics g = Graphics.FromImage(bmp);
-        Assert.Throws<ArgumentException>(() => g.DrawImage(bmp, new Point[0]));
+        Assert.Throws<ArgumentException>(() => g.DrawImage(bmp, Array.Empty<Point>()));
     }
 
     [Fact]
@@ -2594,7 +2591,7 @@ public class GraphicsTest : IDisposable
         Assert.Throws<ArgumentNullException>(() => g.DrawImage(null, default(Rectangle), default, GraphicsUnit.Display));
     }
 
-    private void DrawImage_ImageRectangleRectangleGraphicsUnit(GraphicsUnit unit)
+    private static void DrawImage_ImageRectangleRectangleGraphicsUnit(GraphicsUnit unit)
     {
         using Bitmap bmp = new(40, 40);
         using Graphics g = Graphics.FromImage(bmp);
@@ -2631,7 +2628,7 @@ public class GraphicsTest : IDisposable
         Assert.Throws<ArgumentNullException>(() => g.DrawImage(null, pts, r, GraphicsUnit.Pixel));
     }
 
-    private void DrawImage_ImagePointRectangleGraphicsUnit(Point[] pts)
+    private static void DrawImage_ImagePointRectangleGraphicsUnit(Point[] pts)
     {
         Rectangle r = new(1, 2, 3, 4);
         using Bitmap bmp = new(40, 40);
@@ -2689,7 +2686,7 @@ public class GraphicsTest : IDisposable
         Assert.Throws<ArgumentNullException>(() => g.DrawImage(null, pts, r, GraphicsUnit.Pixel));
     }
 
-    private void DrawImage_ImagePointFRectangleGraphicsUnit(PointF[] pts)
+    private static void DrawImage_ImagePointFRectangleGraphicsUnit(PointF[] pts)
     {
         Rectangle r = new(1, 2, 3, 4);
         using Bitmap bmp = new(40, 40);

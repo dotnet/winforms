@@ -292,16 +292,13 @@ public class BitmapTests
     {
         string sSub, sRslt;
 
-        if (Environment.GetEnvironmentVariable("MSNet") is null)
-            sSub = "mono/";
-        else
-            sSub = "MSNet/";
+        sSub = Environment.GetEnvironmentVariable("MSNet") is null ? "mono/" : "MSNet/";
 
         sRslt = Path.GetFullPath(sSub);
 
         if (!Directory.Exists(sRslt))
         {
-            sRslt = "Test/System.Drawing/" + sSub;
+            sRslt = $"Test/System.Drawing/{sSub}";
         }
 
         if (sRslt.Length > 0)
@@ -389,7 +386,7 @@ public class BitmapTests
             }
         }
 
-        hash = SHA256.Create().ComputeHash(pixels);
+        hash = SHA256.HashData(pixels);
         return ByteArrayToString(hash);
     }
 
@@ -437,7 +434,7 @@ public class BitmapTests
         if (pixel_data is null)
             return "--ERROR--";
 
-        byte[] hash = SHA256.Create().ComputeHash(pixel_data);
+        byte[] hash = SHA256.HashData(pixel_data);
         return ByteArrayToString(hash);
     }
 
@@ -500,7 +497,7 @@ public class BitmapTests
             }
         }
 
-        return SHA256.Create().ComputeHash(pixels);
+        return SHA256.HashData(pixels);
     }
 
     private static byte[] HashLock(Bitmap bmp, int width, int height, PixelFormat fmt, ImageLockMode mode)
@@ -546,7 +543,7 @@ public class BitmapTests
             bmp.UnlockBits(bd);
         }
 
-        return SHA256.Create().ComputeHash(pixels);
+        return SHA256.HashData(pixels);
     }
 
     // Tests the LockBitmap functions. Makes a hash of the block of pixels that it returns

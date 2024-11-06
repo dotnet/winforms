@@ -64,7 +64,7 @@ public class PropertyItemTests
     {
         yield return new object[] { int.MaxValue, int.MaxValue, short.MaxValue, new byte[1] { 0 } };
         yield return new object[] { int.MinValue, int.MinValue, short.MinValue, new byte[2] { 1, 1 } };
-        yield return new object[] { 0, 0, 0, new byte[0] };
+        yield return new object[] { 0, 0, 0, Array.Empty<byte>() };
     }
 
     [Theory]

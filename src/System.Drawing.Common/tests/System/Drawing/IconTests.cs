@@ -150,7 +150,7 @@ public class IconTests
     public static IEnumerable<object[]> Ctor_InvalidBytesInStream_TestData()
     {
         // No start entry.
-        yield return new object[] { new byte[0], typeof(ArgumentException) };
+        yield return new object[] { Array.Empty<byte>(), typeof(ArgumentException) };
         yield return new object[] { new byte[6], typeof(ArgumentException) };
         yield return new object[] { new byte[21], typeof(ArgumentException) };
 
@@ -374,7 +374,7 @@ public class IconTests
         ExtractAssociatedIcon_FilePath_Success_Helper(bitmapUncPath);
     }
 
-    private void ExtractAssociatedIcon_FilePath_Success_Helper(string filePath)
+    private static void ExtractAssociatedIcon_FilePath_Success_Helper(string filePath)
     {
         using Icon icon = Icon.ExtractAssociatedIcon(filePath);
         Assert.Equal(32, icon.Width);

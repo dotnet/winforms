@@ -150,8 +150,8 @@ public class Graphics_DrawBezierTests : DrawingTest
         using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
         using Pen pen = new(Color.Red);
-        AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawBeziers(pen, new Point[0]));
-        AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawBeziers(pen, new PointF[0]));
+        AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawBeziers(pen, Array.Empty<Point>()));
+        AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawBeziers(pen, Array.Empty<PointF>()));
     }
 
     [Fact]

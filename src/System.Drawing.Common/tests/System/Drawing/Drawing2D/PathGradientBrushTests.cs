@@ -194,7 +194,7 @@ public class PathGradientBrushTests
 
     public static IEnumerable<object[]> SurroundColors_InvalidColorsLength_TestData()
     {
-        yield return new object[] { new Point[2] { new(1, 1), new(2, 2) }, new Color[0] };
+        yield return new object[] { new Point[2] { new(1, 1), new(2, 2) }, Array.Empty<Color>() };
         yield return new object[] { new Point[2] { new(1, 1), new(2, 2) }, new Color[3] };
     }
 
