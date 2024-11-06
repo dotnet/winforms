@@ -803,8 +803,8 @@ public class ToolTipTests
         var textColor = PInvokeCore.SendMessage(toolTip, PInvoke.TTM_GETTIPTEXTCOLOR);
         Color foreColor = ColorTranslator.FromWin32((int)textColor);
 
-        Assert.Equal(SystemColors.Info.ToArgb(), backColor.ToArgb());
-        Assert.Equal(SystemColors.InfoText.ToArgb(), foreColor.ToArgb());
+        backColor.ToArgb().Should().Be(SystemColors.Info.ToArgb());
+        foreColor.ToArgb().Should().Be(SystemColors.InfoText.ToArgb());
     }
 #pragma warning restore WFO5001
 
