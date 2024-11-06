@@ -46,7 +46,6 @@ public static class TestData
             T.NegativeInfinity,
             T.Epsilon,
             T.Epsilon * T.NegativeOne
-,
         ];
     }
 

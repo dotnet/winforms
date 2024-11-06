@@ -12,7 +12,7 @@ public class DataGridViewSelectedRowCollectionTests
     {
         using DataGridView control = new();
         DataGridViewSelectedRowCollection collection = control.SelectedRows;
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.False(collection.IsReadOnly);
         Assert.False(collection.IsSynchronized);
         Assert.Same(collection, collection.SyncRoot);
@@ -88,7 +88,7 @@ public class DataGridViewSelectedRowCollectionTests
     {
         using DataGridView control = new();
         DataGridViewSelectedRowCollection collection = control.SelectedRows;
-        Assert.Throws<NotSupportedException>(() => collection.Clear());
+        Assert.Throws<NotSupportedException>(collection.Clear);
     }
 
     [WinFormsFact]
@@ -178,7 +178,7 @@ public class DataGridViewSelectedRowCollectionTests
         using DataGridView control = new();
         DataGridViewSelectedRowCollection collection = control.SelectedRows;
         IList iList = collection;
-        Assert.Equal(0, iList.Count);
+        Assert.Empty(iList);
         Assert.True(iList.IsFixedSize);
         Assert.True(iList.IsReadOnly);
         Assert.False(iList.IsSynchronized);
@@ -295,7 +295,7 @@ public class DataGridViewSelectedRowCollectionTests
         using DataGridView control = new();
         DataGridViewSelectedRowCollection collection = control.SelectedRows;
         IList iList = collection;
-        Assert.Throws<NotSupportedException>(() => iList.Clear());
+        Assert.Throws<NotSupportedException>(iList.Clear);
     }
 
     [WinFormsFact]

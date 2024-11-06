@@ -23,7 +23,7 @@ public class ToolStripMenuItemDesignerTest
 
         toolStripDropDown.DropDownItems.Add("123");
 
-        Assert.Equal(1, toolStripMenuItemDesigner.AssociatedComponents.Count);
+        Assert.Single(toolStripMenuItemDesigner.AssociatedComponents);
         Assert.Null(toolStripMenuItemDesigner.Editor);
         Assert.Null(toolStripMenuItemDesigner.GetParentComponentProperty());
     }

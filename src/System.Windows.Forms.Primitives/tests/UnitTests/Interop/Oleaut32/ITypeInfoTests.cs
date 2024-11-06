@@ -70,8 +70,8 @@ public class ITypeInfoTests
 
         HRESULT hr = typeInfo.Value->GetDllEntry(6, INVOKEKIND.INVOKE_FUNC, &dllName, &name, &wOrdinal);
         Assert.Equal(HRESULT.TYPE_E_BADMODULEKIND, hr);
-        Assert.True(dllName.Length == 0);
-        Assert.True(name.Length == 0);
+        Assert.Equal(0, dllName.Length);
+        Assert.Equal(0, name.Length);
         Assert.Equal(0u, wOrdinal);
     }
 
@@ -90,9 +90,9 @@ public class ITypeInfoTests
         using BSTR helpFile = new("HelpFile");
         typeInfo.Value->GetDocumentation(4, &name, &docString, &dwHelpContext, &helpFile);
         Assert.Equal("Width", name.ToString());
-        Assert.True(docString.Length == 0);
+        Assert.Equal(0, docString.Length);
         Assert.Equal(0u, dwHelpContext);
-        Assert.True(helpFile.Length == 0);
+        Assert.Equal(0, helpFile.Length);
     }
 
     [StaFact]
@@ -178,7 +178,7 @@ public class ITypeInfoTests
 
         using BSTR mops = new("Mops");
         typeInfo.Value->GetMops(4, &mops);
-        Assert.True(mops.Length == 0);
+        Assert.Equal(0, mops.Length);
     }
 
     [StaFact]
@@ -301,7 +301,7 @@ public class ITypeInfoTests
             typeInfo.Value->GetVarDesc(3, &pVarDesc);
             Assert.Equal(4, pVarDesc->memid);
             Assert.True(pVarDesc->lpstrSchema.IsNull);
-            Assert.True(pVarDesc->Anonymous.lpvarValue  is null);
+            Assert.True(pVarDesc->Anonymous.lpvarValue is null);
             Assert.Equal(VARENUM.VT_USERDEFINED, pVarDesc->elemdescVar.tdesc.vt);
             Assert.False(pVarDesc->elemdescVar.tdesc.Anonymous.lpadesc is null);
             Assert.True(pVarDesc->elemdescVar.Anonymous.paramdesc.pparamdescex is null);

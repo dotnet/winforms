@@ -18,7 +18,7 @@ internal static partial class PInvoke
         {
             if (dpiContext == DPI_AWARENESS_CONTEXT.UNSPECIFIED_DPI_AWARENESS_CONTEXT)
             {
-                throw new ArgumentException(nameof(dpiContext), dpiContext.ToString());
+                throw new ArgumentException(dpiContext.ToString(), nameof(dpiContext));
             }
 
             return SetThreadDpiAwarenessContext(dpiContext);

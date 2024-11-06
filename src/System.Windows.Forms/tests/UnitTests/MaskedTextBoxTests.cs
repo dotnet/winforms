@@ -89,7 +89,8 @@ public class MaskedTextBoxTests : IDisposable
 
         // Set different.
         control.BeepOnError = !value;
-        control.BeepOnError.Should().Be(!value);;
+        control.BeepOnError.Should().Be(!value);
+        ;
         control.IsHandleCreated.Should().BeFalse();
     }
 
@@ -642,7 +643,7 @@ public class MaskedTextBoxTests : IDisposable
         {
             Mask = mask,
         };
-        
+
         control.CreateControl();
         control.Text = value;
         control.SelectionStart = 0;

@@ -104,7 +104,7 @@ public class ToolStripComboBoxTests : IDisposable
     [WinFormsFact]
     public void ToolStripComboBox_AutoCompleteCustomSource_SetAndGet()
     {
-        AutoCompleteStringCollection source = new(){ "Item1", "Item2" };
+        AutoCompleteStringCollection source = ["Item1", "Item2"];
         _toolStripComboBox.AutoCompleteCustomSource = source;
         _toolStripComboBox.AutoCompleteCustomSource.Should().BeEquivalentTo(source);
     }

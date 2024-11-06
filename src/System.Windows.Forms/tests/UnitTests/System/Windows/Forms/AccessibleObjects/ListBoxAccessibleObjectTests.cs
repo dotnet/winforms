@@ -212,7 +212,7 @@ public class ListBoxAccessibleObjectTests
         provider.RemoveFromSelection();
 
         var indices = listBox.SelectedIndices;
-        Assert.Equal(1, indices.Count);
+        Assert.Single(indices);
         Assert.True(indices.Contains(2));
     }
 
@@ -353,5 +353,5 @@ public class ListBoxAccessibleObjectTests
         listBox.IsHandleCreated.Should().BeFalse();
     }
 
-    #nullable disable
+#nullable disable
 }

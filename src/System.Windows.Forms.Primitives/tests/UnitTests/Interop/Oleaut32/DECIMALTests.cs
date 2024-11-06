@@ -18,7 +18,7 @@ public class DECIMALTests
     [Fact]
     public void DECIMAL_ToDecimal_InvokeEmpty_ReturnsExpected()
     {
-        DECIMAL dec = new();
+        DECIMAL dec = default;
         Assert.Equal(0m, dec.ToDecimal());
     }
 

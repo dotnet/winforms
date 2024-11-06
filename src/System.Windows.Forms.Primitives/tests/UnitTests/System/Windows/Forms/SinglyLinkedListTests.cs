@@ -107,10 +107,10 @@ public class SinglyLinkedListTests
         list.AddFirst(1);
 
         var enumerator = list.GetEnumerator();
-        Assert.Throws<InvalidOperationException>(() => enumerator.MoveCurrentToFront());
+        Assert.Throws<InvalidOperationException>(enumerator.MoveCurrentToFront);
         Assert.True(enumerator.MoveNext());
         enumerator.MoveCurrentToFront();
-        Assert.Throws<InvalidOperationException>(() => enumerator.MoveCurrentToFront());
+        Assert.Throws<InvalidOperationException>(enumerator.MoveCurrentToFront);
     }
 
     [Fact]
@@ -155,10 +155,10 @@ public class SinglyLinkedListTests
         list.AddLast(2);
 
         var enumerator = list.GetEnumerator();
-        Assert.Throws<InvalidOperationException>(() => enumerator.RemoveCurrent());
+        Assert.Throws<InvalidOperationException>(enumerator.RemoveCurrent);
         Assert.True(enumerator.MoveNext());
         enumerator.RemoveCurrent();
-        Assert.Throws<InvalidOperationException>(() => enumerator.RemoveCurrent());
+        Assert.Throws<InvalidOperationException>(enumerator.RemoveCurrent);
     }
 }
 

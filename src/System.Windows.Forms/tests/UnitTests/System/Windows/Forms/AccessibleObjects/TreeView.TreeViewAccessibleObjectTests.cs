@@ -267,7 +267,7 @@ public class TreeViewAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData(new string[] { "Node 1", "Node 2", "Node 3" }, 3, false)] 
+    [InlineData(new string[] { "Node 1", "Node 2", "Node 3" }, 3, false)]
     [InlineData(new string[] { }, 0, false)]
     [InlineData(new string[] { "Node 1", "Node 2", "Node 3" }, 3, true)]
     [InlineData(new string[] { }, 0, true)]

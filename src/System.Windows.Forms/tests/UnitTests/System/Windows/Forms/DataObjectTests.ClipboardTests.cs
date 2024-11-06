@@ -16,7 +16,7 @@ public partial class DataObjectTests
     {
         public static TheoryData<string, bool> GetData_StringBool_TheoryData()
         {
-            TheoryData<string, bool> theoryData = new();
+            TheoryData<string, bool> theoryData = [];
             foreach (string format in s_restrictedClipboardFormats)
             {
                 theoryData.Add(format, false);
@@ -28,7 +28,7 @@ public partial class DataObjectTests
 
         public static TheoryData<string, bool> GetData_StringBool_Unbounded_TheoryData()
         {
-            TheoryData<string, bool> theoryData = new();
+            TheoryData<string, bool> theoryData = [];
             foreach (string format in s_unboundedClipboardFormats)
             {
                 theoryData.Add(format, false);
@@ -49,7 +49,7 @@ public partial class DataObjectTests
 
         public static TheoryData<string, bool> GetDataPresent_StringBool_TheoryData()
         {
-            TheoryData<string, bool> theoryData = new();
+            TheoryData<string, bool> theoryData = [];
             foreach (bool autoConvert in new bool[] { true, false })
             {
                 foreach (string format in s_restrictedClipboardFormats)
@@ -76,7 +76,7 @@ public partial class DataObjectTests
 
         public static TheoryData<string, string?, bool, bool> SetData_StringObject_TheoryData()
         {
-            TheoryData<string, string?, bool, bool> theoryData = new();
+            TheoryData<string, string?, bool, bool> theoryData = [];
             foreach (string format in s_restrictedClipboardFormats)
             {
                 if (string.IsNullOrWhiteSpace(format) || format == typeof(Bitmap).FullName || format.StartsWith("FileName", StringComparison.Ordinal))
@@ -128,7 +128,7 @@ public partial class DataObjectTests
 
         public static TheoryData<string, bool, string?, bool, bool> SetData_StringBoolObject_TheoryData()
         {
-            TheoryData<string, bool, string?, bool, bool> theoryData = new();
+            TheoryData<string, bool, string?, bool, bool> theoryData = [];
 
             foreach (string format in s_restrictedClipboardFormats)
             {

@@ -78,7 +78,7 @@ public class PropertyGridTests
 
     private unsafe void ExecuteWithActivationContext(string applicationManifest, Action action)
     {
-        ACTCTXW context = new();
+        ACTCTXW context = default;
         HANDLE handle;
         fixed (char* p = applicationManifest)
         {

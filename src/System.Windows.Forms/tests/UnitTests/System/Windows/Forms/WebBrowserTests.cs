@@ -3120,7 +3120,7 @@ public class WebBrowserTests
             Parent = parent
         };
         control.Dispose();
-        Assert.Throws<ObjectDisposedException>(() => control.GoHome());
+        Assert.Throws<ObjectDisposedException>(control.GoHome);
     }
 
     [WinFormsFact]
@@ -3132,7 +3132,7 @@ public class WebBrowserTests
             Parent = parent
         };
         control.DetachInterfaces();
-        Assert.Throws<InvalidOperationException>(() => control.GoHome());
+        Assert.Throws<InvalidOperationException>(control.GoHome);
     }
 
     [WinFormsFact]
@@ -3169,7 +3169,7 @@ public class WebBrowserTests
             Parent = parent
         };
         control.Dispose();
-        Assert.Throws<ObjectDisposedException>(() => control.GoSearch());
+        Assert.Throws<ObjectDisposedException>(control.GoSearch);
     }
 
     [WinFormsFact]
@@ -3181,7 +3181,7 @@ public class WebBrowserTests
             Parent = parent
         };
         control.DetachInterfaces();
-        Assert.Throws<InvalidOperationException>(() => control.GoSearch());
+        Assert.Throws<InvalidOperationException>(control.GoSearch);
     }
 
     [WinFormsFact]

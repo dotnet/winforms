@@ -46,13 +46,13 @@ public class ClipboardTests
         Clipboard.ContainsText().Should().BeFalse();
     }
 
-    public static TheoryData<Func<bool>> ContainsMethodsTheoryData => new()
-    {
+    public static TheoryData<Func<bool>> ContainsMethodsTheoryData =>
+    [
         Clipboard.ContainsAudio,
         Clipboard.ContainsFileDropList,
         Clipboard.ContainsImage,
         Clipboard.ContainsText
-    };
+    ];
 
     [WinFormsTheory]
     [MemberData(nameof(ContainsMethodsTheoryData))]
@@ -314,12 +314,12 @@ public class ClipboardTests
         Clipboard.ContainsData(data.GetType().FullName).Should().BeTrue();
     }
 
-    public static TheoryData<Action> Clipboard_SetDataObject_Null_TheoryData => new()
-    {
+    public static TheoryData<Action> Clipboard_SetDataObject_Null_TheoryData =>
+    [
         () => Clipboard.SetDataObject(null!),
         () => Clipboard.SetDataObject(null!, copy: true),
         () => Clipboard.SetDataObject(null!, copy: true, retryTimes: 10, retryDelay: 0)
-    };
+    ];
 
     [WinFormsTheory]
     [MemberData(nameof(Clipboard_SetDataObject_Null_TheoryData))]
@@ -342,8 +342,8 @@ public class ClipboardTests
         action.Should().Throw<ArgumentOutOfRangeException>().WithParameterName("retryDelay");
     }
 
-    public static TheoryData<Action> NotAnStaTheoryData => new()
-    {
+    public static TheoryData<Action> NotAnStaTheoryData =>
+    [
         Clipboard.Clear,
         () => Clipboard.SetAudio(Array.Empty<byte>()),
         () => Clipboard.SetAudio(new MemoryStream()),
@@ -351,10 +351,10 @@ public class ClipboardTests
         () => Clipboard.SetDataObject(null!),
         () => Clipboard.SetDataObject(null!, copy: true),
         () => Clipboard.SetDataObject(null!, copy: true, retryTimes: 10, retryDelay: 0),
-        () => Clipboard.SetFileDropList(new StringCollection { "filePath" }),
+        () => Clipboard.SetFileDropList(["filePath"]),
         () => Clipboard.SetText("text"),
         () => Clipboard.SetText("text", TextDataFormat.Text)
-    };
+    ];
 
     [Theory] // x-thread
     [MemberData(nameof(NotAnStaTheoryData))]

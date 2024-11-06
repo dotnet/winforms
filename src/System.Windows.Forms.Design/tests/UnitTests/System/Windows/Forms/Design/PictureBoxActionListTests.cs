@@ -53,4 +53,3 @@ public sealed class PictureBoxActionListTests
         propertyItem.MemberName.Should().Be("SizeMode");
     }
 }
-

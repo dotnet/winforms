@@ -69,7 +69,7 @@ internal partial class ImageListDesigner
         object? IList.this[int index]
         {
             get => this[index];
-            set => this[index] = value is ImageListImage image ? image : throw new ArgumentException();
+            set => this[index] = value is ImageListImage image ? image : throw new ArgumentException(null, nameof(index));
         }
 
         public void SetKeyName(int index, string name)
@@ -110,7 +110,7 @@ internal partial class ImageListDesigner
             }
         }
 
-        int IList.Add(object? value) => value is ImageListImage image ? Add(image) : throw new ArgumentException();
+        int IList.Add(object? value) => value is ImageListImage image ? Add(image) : throw new ArgumentException(null, nameof(value));
 
         // Called when reloading the form. In this case, we have no "originals" list,
         // so we make one out of the image list.

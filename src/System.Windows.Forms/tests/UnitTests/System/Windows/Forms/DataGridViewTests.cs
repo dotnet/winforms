@@ -1912,8 +1912,7 @@ public partial class DataGridViewTests : IDisposable
                 // Skip verification of DataGridViewColumnHeadersHeightSizeMode = DisableResizing and columnHeadersVisible = true
                 // in X86 due to the active issue "https://github.com/dotnet/winforms/issues/11322"
                 if (columnHeadersWidthSizeMode == DataGridViewColumnHeadersHeightSizeMode.DisableResizing
-                    && columnHeadersVisible is true
-                    && RuntimeInformation.ProcessArchitecture == Architecture.X86)
+                    && columnHeadersVisible && RuntimeInformation.ProcessArchitecture == Architecture.X86)
                     continue;
 
                 yield return new object[] { columnHeadersWidthSizeMode, columnHeadersVisible, null };
@@ -4059,7 +4058,7 @@ public partial class DataGridViewTests : IDisposable
 
         _dataGridView.Columns.Add("Column1", "Column 1");
         _dataGridView.Columns.Add("Column2", "Column 2");
-        _dataGridView.AllowUserToAddRows = true; 
+        _dataGridView.AllowUserToAddRows = true;
 
         _dataGridView.DefaultValuesNeeded += handler;
         _dataGridView.CurrentCell = _dataGridView.Rows[_dataGridView.NewRowIndex].Cells[0];

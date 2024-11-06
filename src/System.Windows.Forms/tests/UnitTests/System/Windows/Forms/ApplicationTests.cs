@@ -387,7 +387,7 @@ public class ApplicationTests
 
             Application.EnableVisualStyles();
             using Form mainForm = new Form();
-            Assert.Equal(0, Application.OpenForms.Count);
+            Assert.Empty(Application.OpenForms);
             Dictionary<object, int> formClosingProcessed = new(mainMDIFormCount);
             Dictionary<object, int> formClosedProcessed = new(mainMDIFormCount);
             bool exitCalled = false;
@@ -525,7 +525,7 @@ public class ApplicationTests
 
             Application.EnableVisualStyles();
             using Form mainForm = new Form();
-            Assert.Equal(0, Application.OpenForms.Count);
+            Assert.Empty(Application.OpenForms);
             int formClosingProcessed = 0;
             Form lastChild = null;
             bool exitCalled = false;
@@ -611,7 +611,7 @@ public class ApplicationTests
 
             if (!cancel)
             {
-                Assert.Equal(0, Application.OpenForms.Count);
+                Assert.Empty(Application.OpenForms);
                 Assert.Equal(1 + childFormCount + addFormCount, formClosingProcessed);
             }
             else

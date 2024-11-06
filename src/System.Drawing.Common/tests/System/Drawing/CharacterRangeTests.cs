@@ -8,7 +8,7 @@ public class CharacterRangeTests
     [Fact]
     public void Ctor_Default()
     {
-        CharacterRange range = new();
+        CharacterRange range = default;
         Assert.Equal(0, range.First);
         Assert.Equal(0, range.Length);
     }

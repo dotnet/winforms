@@ -38,7 +38,7 @@ public partial class Control
 
         TaskCompletionSource completion = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
-        using (cancellationToken.Register(() => completion.SetCanceled(), useSynchronizationContext: false))
+        using (cancellationToken.Register(completion.SetCanceled, useSynchronizationContext: false))
         {
             BeginInvoke(WrappedAction);
             await completion.Task.ConfigureAwait(false);
@@ -104,7 +104,7 @@ public partial class Control
 
         TaskCompletionSource<T> completion = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
-        using (cancellationToken.Register(() => completion.SetCanceled(), useSynchronizationContext: false))
+        using (cancellationToken.Register(completion.SetCanceled, useSynchronizationContext: false))
         {
             BeginInvoke(WrappedCallback);
             return await completion.Task.ConfigureAwait(false);
@@ -169,7 +169,7 @@ public partial class Control
 
         TaskCompletionSource completion = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
-        using (cancellationToken.Register(() => completion.SetCanceled(), useSynchronizationContext: false))
+        using (cancellationToken.Register(completion.SetCanceled, useSynchronizationContext: false))
         {
             BeginInvoke(async () => await WrappedCallbackAsync().ConfigureAwait(false));
             await completion.Task.ConfigureAwait(false);
@@ -233,7 +233,7 @@ public partial class Control
 
         TaskCompletionSource<T> completion = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
-        using (cancellationToken.Register(() => completion.SetCanceled(), useSynchronizationContext: false))
+        using (cancellationToken.Register(completion.SetCanceled, useSynchronizationContext: false))
         {
             BeginInvoke(async () => await WrappedCallbackAsync().ConfigureAwait(false));
             return await completion.Task.ConfigureAwait(false);

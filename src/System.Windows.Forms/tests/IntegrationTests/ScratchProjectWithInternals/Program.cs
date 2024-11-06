@@ -9,7 +9,7 @@ namespace ScratchProjectWithInternals;
 internal static class Program
 {
     [STAThread]
-    public unsafe static void Main()
+    public static unsafe void Main()
     {
         Application.EnableVisualStyles();
         Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);

@@ -108,7 +108,7 @@ public class CheckedListBox_CheckedItemCollectionTests : IDisposable
         AddItemsToCheckedListBox(items, checkedStates);
 
         IEnumerator enumerator = _collection.GetEnumerator();
-        List<object> result = new List<object>();
+        List<object> result = [];
         while (enumerator.MoveNext())
         {
             result.Add(enumerator.Current);

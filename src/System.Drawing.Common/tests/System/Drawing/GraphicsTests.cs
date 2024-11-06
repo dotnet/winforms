@@ -141,12 +141,12 @@ public partial class GraphicsTests
 
         hdc = graphics.GetHdc();
         graphics.ReleaseHdc(hdc);
-        AssertExtensions.Throws<ArgumentException>(null, () => graphics.ReleaseHdc());
+        AssertExtensions.Throws<ArgumentException>(null, graphics.ReleaseHdc);
         AssertExtensions.Throws<ArgumentException>(null, () => graphics.ReleaseHdcInternal(hdc));
 
         hdc = graphics.GetHdc();
         graphics.ReleaseHdcInternal(hdc);
-        AssertExtensions.Throws<ArgumentException>(null, () => graphics.ReleaseHdc());
+        AssertExtensions.Throws<ArgumentException>(null, graphics.ReleaseHdc);
         AssertExtensions.Throws<ArgumentException>(null, () => graphics.ReleaseHdcInternal(hdc));
     }
 
@@ -187,7 +187,7 @@ public partial class GraphicsTests
     {
         using Bitmap bitmap = new(10, 10);
         using Graphics graphics = Graphics.FromImage(bitmap);
-        AssertExtensions.Throws<ArgumentException>(null, () => graphics.ReleaseHdc());
+        AssertExtensions.Throws<ArgumentException>(null, graphics.ReleaseHdc);
         AssertExtensions.Throws<ArgumentException>(null, () => graphics.ReleaseHdc(IntPtr.Zero));
         AssertExtensions.Throws<ArgumentException>(null, () => graphics.ReleaseHdcInternal(IntPtr.Zero));
     }
@@ -199,7 +199,7 @@ public partial class GraphicsTests
         Graphics graphics = Graphics.FromImage(bitmap);
         graphics.Dispose();
 
-        AssertExtensions.Throws<ArgumentException>(null, () => graphics.ReleaseHdc());
+        AssertExtensions.Throws<ArgumentException>(null, graphics.ReleaseHdc);
         AssertExtensions.Throws<ArgumentException>(null, () => graphics.ReleaseHdc(IntPtr.Zero));
         AssertExtensions.Throws<ArgumentException>(null, () => graphics.ReleaseHdcInternal(IntPtr.Zero));
     }
@@ -556,7 +556,7 @@ public partial class GraphicsTests
         graphics.GetHdc();
         try
         {
-            Assert.Throws<InvalidOperationException>(() => graphics.Flush());
+            Assert.Throws<InvalidOperationException>(graphics.Flush);
             Assert.Throws<InvalidOperationException>(() => graphics.Flush(FlushIntention.Sync));
         }
         finally
@@ -572,7 +572,7 @@ public partial class GraphicsTests
         Graphics graphics = Graphics.FromImage(image);
         graphics.Dispose();
 
-        AssertExtensions.Throws<ArgumentException>(null, () => graphics.Flush());
+        AssertExtensions.Throws<ArgumentException>(null, graphics.Flush);
         AssertExtensions.Throws<ArgumentException>(null, () => graphics.Flush(FlushIntention.Flush));
     }
 
@@ -1163,7 +1163,7 @@ public partial class GraphicsTests
         graphics.GetHdc();
         try
         {
-            Assert.Throws<InvalidOperationException>(() => graphics.ResetTransform());
+            Assert.Throws<InvalidOperationException>(graphics.ResetTransform);
         }
         finally
         {
@@ -1178,7 +1178,7 @@ public partial class GraphicsTests
         Graphics graphics = Graphics.FromImage(image);
         graphics.Dispose();
 
-        AssertExtensions.Throws<ArgumentException>(null, () => graphics.ResetTransform());
+        AssertExtensions.Throws<ArgumentException>(null, graphics.ResetTransform);
     }
 
     [Fact]
@@ -2781,7 +2781,7 @@ public partial class GraphicsTests
     {
         using Bitmap image = new(50, 50);
         using Graphics graphics = Graphics.FromImage(image);
-        graphics.DrawString("Test text", SystemFonts.DefaultFont, Brushes.White, new Point());
+        graphics.DrawString("Test text", SystemFonts.DefaultFont, Brushes.White, default(Point));
         Helpers.VerifyBitmapNotBlank(image);
     }
 
@@ -2793,7 +2793,7 @@ public partial class GraphicsTests
         graphics.CompositingMode = CompositingMode.SourceCopy;
         AssertExtensions.Throws<ArgumentException>(
             null,
-            () => graphics.DrawString("Test text", SystemFonts.DefaultFont, Brushes.White, new Point()));
+            () => graphics.DrawString("Test text", SystemFonts.DefaultFont, Brushes.White, default(Point)));
     }
 
     private static void VerifyGraphics(Graphics graphics, RectangleF expectedVisibleClipBounds)
@@ -2898,7 +2898,7 @@ public partial class GraphicsTests
     }
 #endif
 
-    internal unsafe static void VerifyBitmapEmpty(Bitmap bitmap)
+    internal static unsafe void VerifyBitmapEmpty(Bitmap bitmap)
     {
         BitmapData data = bitmap.LockBits(default, ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
         try
@@ -2912,7 +2912,7 @@ public partial class GraphicsTests
         }
     }
 
-    internal unsafe static void VerifyBitmapNotEmpty(Bitmap bitmap)
+    internal static unsafe void VerifyBitmapNotEmpty(Bitmap bitmap)
     {
         BitmapData data = bitmap.LockBits(default, ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
         try

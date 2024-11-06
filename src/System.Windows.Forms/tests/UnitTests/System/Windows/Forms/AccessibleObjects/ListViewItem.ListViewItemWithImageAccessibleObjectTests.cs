@@ -37,7 +37,7 @@ public class ListViewItem_ListViewItemWithImageAccessibleObjectTests
             SmallImageList = imageCollection,
             LargeImageList = imageCollection
         };
-        if(!control.IsHandleCreated)
+        if (!control.IsHandleCreated)
         {
             Assert.NotEqual(IntPtr.Zero, control.Handle);
         }
@@ -130,10 +130,10 @@ public class ListViewItem_ListViewItemWithImageAccessibleObjectTests
 
     public static TheoryData<View> GetViewTheoryData()
     {
-        return new TheoryData<View>
-        {
+        return
+        [
             View.LargeIcon,
             View.SmallIcon
-        };
+        ];
     }
 }

@@ -1262,7 +1262,7 @@ public class ComponentDesignerTests
         designer.Initialize(rootComponent);
         component.StringPropertySetCount = 0;
 
-        Assert.Throws(exception.GetType(), () => designer.DoDefaultAction());
+        Assert.Throws(exception.GetType(), designer.DoDefaultAction);
         mockSite.Verify(s => s.GetService(typeof(IEventBindingService)), Times.Once());
         mockSite.Verify(s => s.GetService(typeof(ISelectionService)), Times.Once());
         mockSite.Verify(s => s.GetService(typeof(IDesignerHost)), Times.Exactly(2));
@@ -1273,7 +1273,7 @@ public class ComponentDesignerTests
         Assert.Equal(0, component.StringPropertySetCount);
 
         // Call again.
-        Assert.Throws(exception.GetType(), () => designer.DoDefaultAction());
+        Assert.Throws(exception.GetType(), designer.DoDefaultAction);
         mockSite.Verify(s => s.GetService(typeof(IEventBindingService)), Times.Exactly(2));
         mockSite.Verify(s => s.GetService(typeof(ISelectionService)), Times.Exactly(2));
         mockSite.Verify(s => s.GetService(typeof(IDesignerHost)), Times.Exactly(3));
@@ -1554,7 +1554,7 @@ public class ComponentDesignerTests
         designer.Initialize(rootComponent);
         component.StringPropertySetCount = 0;
 
-        Assert.Throws(exception.GetType(), () => designer.DoDefaultAction());
+        Assert.Throws(exception.GetType(), designer.DoDefaultAction);
         mockSite.Verify(s => s.GetService(typeof(IEventBindingService)), Times.Once());
         mockSite.Verify(s => s.GetService(typeof(ISelectionService)), Times.Once());
         mockSite.Verify(s => s.GetService(typeof(IDesignerHost)), Times.Exactly(2));
@@ -1567,7 +1567,7 @@ public class ComponentDesignerTests
         Assert.Equal(0, component.StringPropertySetCount);
 
         // Call again.
-        Assert.Throws(exception.GetType(), () => designer.DoDefaultAction());
+        Assert.Throws(exception.GetType(), designer.DoDefaultAction);
         mockSite.Verify(s => s.GetService(typeof(IEventBindingService)), Times.Exactly(2));
         mockSite.Verify(s => s.GetService(typeof(ISelectionService)), Times.Exactly(2));
         mockSite.Verify(s => s.GetService(typeof(IDesignerHost)), Times.Exactly(3));

@@ -17,6 +17,6 @@ public class StoringNull
         bool success = nullFastValue.TryGetValue(out int result);
         Assert.False(success);
 
-        Assert.Equal(default(int), result);
+        Assert.Equal(default, result);
     }
 }

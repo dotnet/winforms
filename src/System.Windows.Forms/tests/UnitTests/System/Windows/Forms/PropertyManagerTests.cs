@@ -44,7 +44,7 @@ public class PropertyManagerTests
     public void PropertyManager_GetListName_NoDataSource_ThrowsArgumentException()
     {
         PropertyManager manager = new();
-        Assert.Throws<ArgumentException>(() => manager.GetListName());
+        Assert.Throws<ArgumentException>(manager.GetListName);
     }
 
     /*
@@ -393,7 +393,7 @@ public class PropertyManagerTests
         BindingContext context = [];
         BindingSource source = [];
         PropertyManager manager = Assert.IsType<PropertyManager>(context[new DataSource()]);
-        Assert.Throws<NotSupportedException>(() => manager.AddNew());
+        Assert.Throws<NotSupportedException>(manager.AddNew);
     }
 
     [Theory]
