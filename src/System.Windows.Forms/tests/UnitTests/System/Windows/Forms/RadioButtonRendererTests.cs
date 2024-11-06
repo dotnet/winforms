@@ -100,7 +100,7 @@ public class RadioButtonRendererTests : AbstractButtonBaseTests
     }
 
     [WinFormsTheory]
-    [BoolData()]
+    [BoolData]
     public void RadioButtonRenderer_DrawRadioButton_OverloadWithHandle(bool focus)
     {
         using Form form = new Form();

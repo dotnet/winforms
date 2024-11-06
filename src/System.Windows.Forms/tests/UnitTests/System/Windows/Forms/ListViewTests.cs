@@ -4140,7 +4140,7 @@ public class ListViewTests
 
     public static IEnumerable<object[]> GetItemRect_InvokeCustomGetItemRect_TestData()
     {
-        yield return new object[] { new RECT(), Rectangle.Empty };
+        yield return new object[] { default(RECT), Rectangle.Empty };
         yield return new object[] { new RECT(1, 2, 3, 4), new Rectangle(1, 2, 2, 2) };
     }
 
@@ -4482,7 +4482,7 @@ public class ListViewTests
         control.Items.Add(new ListViewItem());
         control.CreateControl();
         PInvokeCore.SendMessage(control, PInvokeCore.WM_KEYDOWN);
-        Assert.Equal(0, control.SelectedItems.Count);
+        Assert.Empty(control.SelectedItems);
     }
 
     [WinFormsTheory]
@@ -5531,23 +5531,23 @@ public class ListViewTests
 
         Assert.True(listView.Items[0].Selected);
         Assert.Equal(3, listView.Items.Count);
-        Assert.Equal(1, listView.SelectedItems.Count);
-        Assert.Equal(1, listView.SelectedIndices.Count);
+        Assert.Single(listView.SelectedItems);
+        Assert.Single(listView.SelectedIndices);
 
         listView.Items.Remove(listView.Items[1]);
 
         Assert.True(listView.Items[0].Selected);
         Assert.Equal(2, listView.Items.Count);
-        Assert.Equal(1, listView.SelectedItems.Count);
-        Assert.Equal(1, listView.SelectedIndices.Count);
+        Assert.Single(listView.SelectedItems);
+        Assert.Single(listView.SelectedIndices);
         Assert.True(listView.Items[0].Selected);
 
         listView.Items.Remove(listView.Items[1]);
 
         Assert.True(listView.Items[0].Selected);
-        Assert.Equal(1, listView.Items.Count);
-        Assert.Equal(1, listView.SelectedItems.Count);
-        Assert.Equal(1, listView.SelectedIndices.Count);
+        Assert.Single(listView.Items);
+        Assert.Single(listView.SelectedItems);
+        Assert.Single(listView.SelectedIndices);
         Assert.True(listView.Items[0].Selected);
     }
 
@@ -5567,8 +5567,8 @@ public class ListViewTests
             Assert.True(item.Selected);
             Assert.Equal(count, listView.Items.Count);
             Assert.Equal(listView, item.ListView);
-            Assert.Equal(1, listView.SelectedItems.Count);
-            Assert.Equal(1, listView.SelectedIndices.Count);
+            Assert.Single(listView.SelectedItems);
+            Assert.Single(listView.SelectedIndices);
 
             listView.Items.Remove(item);
             count -= 1;
@@ -5576,8 +5576,8 @@ public class ListViewTests
             Assert.True(item.Selected);
             Assert.Equal(count, listView.Items.Count);
             Assert.Null(item.ListView);
-            Assert.Equal(0, listView.SelectedItems.Count);
-            Assert.Equal(0, listView.SelectedIndices.Count);
+            Assert.Empty(listView.SelectedItems);
+            Assert.Empty(listView.SelectedIndices);
         }
     }
 
@@ -5593,22 +5593,22 @@ public class ListViewTests
 
         Assert.True(listView.Items[0].Checked);
         Assert.Equal(3, listView.Items.Count);
-        Assert.Equal(1, listView.CheckedItems.Count);
-        Assert.Equal(1, listView.CheckedIndices.Count);
+        Assert.Single(listView.CheckedItems);
+        Assert.Single(listView.CheckedIndices);
 
         listView.Items.Remove(listView.Items[1]);
 
         Assert.True(listView.Items[0].Checked);
         Assert.Equal(2, listView.Items.Count);
-        Assert.Equal(1, listView.CheckedItems.Count);
-        Assert.Equal(1, listView.CheckedIndices.Count);
+        Assert.Single(listView.CheckedItems);
+        Assert.Single(listView.CheckedIndices);
 
         listView.Items.Remove(listView.Items[1]);
 
         Assert.True(listView.Items[0].Checked);
-        Assert.Equal(1, listView.Items.Count);
-        Assert.Equal(1, listView.CheckedItems.Count);
-        Assert.Equal(1, listView.CheckedIndices.Count);
+        Assert.Single(listView.Items);
+        Assert.Single(listView.CheckedItems);
+        Assert.Single(listView.CheckedIndices);
     }
 
     [WinFormsTheory]
@@ -5627,8 +5627,8 @@ public class ListViewTests
             Assert.True(item.Checked);
             Assert.Equal(count, listView.Items.Count);
             Assert.Equal(listView, item.ListView);
-            Assert.Equal(1, listView.CheckedItems.Count);
-            Assert.Equal(1, listView.CheckedIndices.Count);
+            Assert.Single(listView.CheckedItems);
+            Assert.Single(listView.CheckedIndices);
 
             listView.Items.Remove(item);
             count -= 1;
@@ -5636,8 +5636,8 @@ public class ListViewTests
             Assert.True(item.Checked);
             Assert.Equal(count, listView.Items.Count);
             Assert.Null(item.ListView);
-            Assert.Equal(0, listView.CheckedItems.Count);
-            Assert.Equal(0, listView.CheckedIndices.Count);
+            Assert.Empty(listView.CheckedItems);
+            Assert.Empty(listView.CheckedIndices);
         }
     }
 
@@ -5657,25 +5657,25 @@ public class ListViewTests
         Assert.True(listView.Items[0].Selected);
         Assert.Equal(3, listView.Items.Count);
         Assert.Equal(3, listView.Groups.Count);
-        Assert.Equal(1, listView.SelectedItems.Count);
-        Assert.Equal(1, listView.SelectedIndices.Count);
+        Assert.Single(listView.SelectedItems);
+        Assert.Single(listView.SelectedIndices);
 
         listView.Groups.Remove(listView.Groups[2]);
 
         Assert.True(listView.Items[0].Selected);
         Assert.Equal(3, listView.Items.Count);
         Assert.Equal(2, listView.Groups.Count);
-        Assert.Equal(1, listView.SelectedItems.Count);
-        Assert.Equal(1, listView.SelectedIndices.Count);
+        Assert.Single(listView.SelectedItems);
+        Assert.Single(listView.SelectedIndices);
         Assert.True(listView.Items[0].Selected);
 
         listView.Groups.Remove(listView.Groups[1]);
 
         Assert.True(listView.Items[0].Selected);
         Assert.Equal(3, listView.Items.Count);
-        Assert.Equal(1, listView.Groups.Count);
-        Assert.Equal(1, listView.SelectedItems.Count);
-        Assert.Equal(1, listView.SelectedIndices.Count);
+        Assert.Single(listView.Groups);
+        Assert.Single(listView.SelectedItems);
+        Assert.Single(listView.SelectedIndices);
         Assert.True(listView.Items[0].Selected);
     }
 
@@ -5732,24 +5732,24 @@ public class ListViewTests
         Assert.True(listView.Items[0].Checked);
         Assert.Equal(3, listView.Items.Count);
         Assert.Equal(3, listView.Items.Count);
-        Assert.Equal(1, listView.CheckedItems.Count);
-        Assert.Equal(1, listView.CheckedIndices.Count);
+        Assert.Single(listView.CheckedItems);
+        Assert.Single(listView.CheckedIndices);
 
         listView.Groups.Remove(listView.Groups[2]);
 
         Assert.True(listView.Items[0].Checked);
         Assert.Equal(3, listView.Items.Count);
         Assert.Equal(2, listView.Groups.Count);
-        Assert.Equal(1, listView.CheckedItems.Count);
-        Assert.Equal(1, listView.CheckedIndices.Count);
+        Assert.Single(listView.CheckedItems);
+        Assert.Single(listView.CheckedIndices);
 
         listView.Groups.Remove(listView.Groups[1]);
 
         Assert.True(listView.Items[0].Checked);
         Assert.Equal(3, listView.Items.Count);
-        Assert.Equal(1, listView.Groups.Count);
-        Assert.Equal(1, listView.CheckedItems.Count);
-        Assert.Equal(1, listView.CheckedIndices.Count);
+        Assert.Single(listView.Groups);
+        Assert.Single(listView.CheckedItems);
+        Assert.Single(listView.CheckedIndices);
     }
 
     [WinFormsTheory]

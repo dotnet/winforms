@@ -19,7 +19,7 @@ public class ThreadContextTests
     {
         // Test that no filters at all does not throw, and that returns false from translation
         Application.ThreadContext threadContext = new Application.LightThreadContext();
-        MSG msg = new();
+        MSG msg = default;
         Assert.False(threadContext.PreTranslateMessage(ref msg));
     }
 

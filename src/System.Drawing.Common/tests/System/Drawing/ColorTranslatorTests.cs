@@ -43,7 +43,7 @@ public class ColorTranslatorTests
 
     public static IEnumerable<object[]> ToWin32Color_TestData()
     {
-        yield return new object[] { new Color(), 0 };
+        yield return new object[] { default(Color), 0 };
         yield return new object[] { Color.Red, 255 };
         yield return new object[] { Color.White, 16777215 };
         yield return new object[] { Color.FromArgb(1, 2, 3), 197121 };
@@ -83,7 +83,7 @@ public class ColorTranslatorTests
 
     public static IEnumerable<object[]> ToOle_TestData()
     {
-        yield return new object[] { new Color(), 0 };
+        yield return new object[] { default(Color), 0 };
         yield return new object[] { Color.Red, 255 };
         yield return new object[] { Color.White, 16777215 };
         yield return new object[] { Color.FromArgb(1, 2, 3), 197121 };

@@ -14,16 +14,16 @@ public partial class ScrollBars : Form
 
     private void numericMaximum_ValueChanged(object sender, EventArgs e)
     {
-        hScrollBar.Maximum = Decimal.ToInt32(numericMaximum.Value);
-        vScrollBar.Maximum = Decimal.ToInt32(numericMaximum.Value);
+        hScrollBar.Maximum = decimal.ToInt32(numericMaximum.Value);
+        vScrollBar.Maximum = decimal.ToInt32(numericMaximum.Value);
         numericMinimum.Maximum = numericMaximum.Value;
         SetValueLabels();
     }
 
     private void numericMinimum_ValueChanged(object sender, EventArgs e)
     {
-        hScrollBar.Minimum = Decimal.ToInt32(numericMinimum.Value);
-        vScrollBar.Minimum = Decimal.ToInt32(numericMinimum.Value);
+        hScrollBar.Minimum = decimal.ToInt32(numericMinimum.Value);
+        vScrollBar.Minimum = decimal.ToInt32(numericMinimum.Value);
         numericMaximum.Minimum = numericMinimum.Value;
         SetValueLabels();
     }

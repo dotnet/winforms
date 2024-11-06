@@ -349,7 +349,7 @@ public class DateTimePicker_DateTimePickerAccessibleObjectTests
     {
         using Form form = new();
         using DateTimePicker dateTimePicker1 = new();
-        using Label label1 = new ();
+        using Label label1 = new();
         using DateTimePicker dateTimePicker2 = new();
 
         dateTimePicker1.CustomFormat = "'Date&Time' hh:mm dd/MM";

@@ -41,8 +41,8 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
 
     // Primitive types as defined by the NRBF spec.
     // https://learn.microsoft.com/dotnet/api/system.formats.nrbf.primitivetyperecord
-    public static TheoryData<object> PrimitiveObjects_TheoryData => new()
-    {
+    public static TheoryData<object> PrimitiveObjects_TheoryData =>
+    [
         (byte)1,
         (sbyte)2,
         (short)3,
@@ -55,10 +55,10 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
         10.0,
         'a',
         true
-    };
+    ];
 
-    public static TheoryData<object> KnownObjects_TheoryData => new()
-    {
+    public static TheoryData<object> KnownObjects_TheoryData =>
+    [
         "string",
         DateTime.Now,
         TimeSpan.FromHours(1),
@@ -72,10 +72,10 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
         new Size(int.MaxValue, int.MinValue),
         new SizeF(float.MaxValue, float.MinValue),
         Color.Red
-    };
+    ];
 
-    public static TheoryData<IList> PrimitiveListObjects_TheoryData => new()
-    {
+    public static TheoryData<IList> PrimitiveListObjects_TheoryData =>
+    [
         new List<bool> { false, true },
         new List<char> { char.MinValue, char.MaxValue },
         new List<byte> { byte.MinValue, byte.MaxValue },
@@ -92,10 +92,10 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
         new List<DateTime> { DateTime.MinValue, DateTime.MaxValue },
         new List<TimeSpan> { TimeSpan.MinValue, TimeSpan.MaxValue },
         new List<string> { "a", "b", "c" }
-    };
+    ];
 
-    public static TheoryData<Array> PrimitiveArrayObjects_TheoryData => new()
-    {
+    public static TheoryData<Array> PrimitiveArrayObjects_TheoryData =>
+    [
         new bool[] { false, true },
         new char[] { char.MinValue, char.MaxValue },
         new byte[] { byte.MinValue, byte.MaxValue },
@@ -112,10 +112,10 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
         new DateTime[] { DateTime.MinValue, DateTime.MaxValue },
         new TimeSpan[] { TimeSpan.MinValue, TimeSpan.MaxValue },
         new string[] { "a", "b", "c" }
-    };
+    ];
 
-    public static TheoryData<ArrayList> PrimitiveArrayListObjects_TheoryData => new()
-    {
+    public static TheoryData<ArrayList> PrimitiveArrayListObjects_TheoryData =>
+    [
         new ArrayList { null },
         new ArrayList { null, "something" },
         new ArrayList { false, true },
@@ -134,10 +134,10 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
         new ArrayList { DateTime.MinValue, DateTime.MaxValue },
         new ArrayList { TimeSpan.MinValue, TimeSpan.MaxValue },
         new ArrayList { "a", "b", "c" }
-    };
+    ];
 
-    public static TheoryData<Hashtable> PrimitiveTypeHashtables_TheoryData => new()
-    {
+    public static TheoryData<Hashtable> PrimitiveTypeHashtables_TheoryData =>
+    [
         new Hashtable { { "bool", true } },
         new Hashtable { { "char", 'a' } },
         new Hashtable { { "byte", (byte)1 } },
@@ -154,21 +154,21 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
         new Hashtable { { "DateTime", DateTime.Now } },
         new Hashtable { { "TimeSpan", TimeSpan.FromHours(1) } },
         new Hashtable { { "string", "test" } }
-    };
+    ];
 
-    public static TheoryData<NotSupportedException> NotSupportedException_TestData => new()
-    {
+    public static TheoryData<NotSupportedException> NotSupportedException_TestData =>
+    [
         new NotSupportedException(),
         new NotSupportedException("Error message"),
         new NotSupportedException(null)
-    };
+    ];
 
-    public static TheoryData<IList> Lists_UnsupportedTestData => new()
-    {
+    public static TheoryData<IList> Lists_UnsupportedTestData =>
+    [
         new List<object>(),
         new List<nint>(),
         new List<(int, int)>()
-    };
+    ];
 
     [Theory]
     [MemberData(nameof(PrimitiveObjects_TheoryData))]

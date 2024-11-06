@@ -375,7 +375,7 @@ public class ListBindingHelperTests
         yield return new object[] { new IEnumerableWrapper(new object[] { new NonEnumerableITypedListImplementor() }), TypeDescriptor.GetProperties(typeof(NonEnumerableITypedListImplementor)).Cast<PropertyDescriptor>().ToArray(), Array.Empty<string>() };
         yield return new object[] { typeof(NonEnumerableITypedListImplementor[]), descriptors, new string[] { "Property" } };
 
-        ITypedListDataClass typedListDataClass = new () { ListProperty = [new()] };
+        ITypedListDataClass typedListDataClass = new() { ListProperty = [new()] };
         yield return new object[] { new ITypedListDataClass(), TypeDescriptor.GetProperties(typeof(ITypedListDataClass)).Cast<PropertyDescriptor>().ToArray(), new string[] { "OtherProperty" } };
         yield return new object[] { typedListDataClass, TypeDescriptor.GetProperties(typeof(ITypedListDataClass)).Cast<PropertyDescriptor>().ToArray(), new string[] { "OtherProperty" } };
         yield return new object[] { typeof(ITypedListDataClass), TypeDescriptor.GetProperties(typeof(ITypedListDataClass)).Cast<PropertyDescriptor>().ToArray(), new string[] { "OtherProperty" } };

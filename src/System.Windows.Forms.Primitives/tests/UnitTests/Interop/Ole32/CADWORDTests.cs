@@ -14,7 +14,7 @@ public class CADWORDTests
         CADWORD ca = CreateIntVector(2020);
 
         uint[] values = ca.ConvertAndFree();
-        Assert.Equal(1, values.Length);
+        Assert.Single(values);
         Assert.Equal(2020u, values[0]);
     }
 

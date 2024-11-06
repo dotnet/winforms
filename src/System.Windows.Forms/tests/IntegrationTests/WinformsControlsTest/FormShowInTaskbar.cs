@@ -48,7 +48,7 @@ public class FormShowInTaskbar : Form
             IntPtr formHandle = form.Handle;
             form.ShowInTaskbar = !form.ShowInTaskbar;
 
-            if (form.IsHandleCreated == false)
+            if (!form.IsHandleCreated)
                 throw new InvalidOperationException();
 
             if (formHandle == form.Handle)

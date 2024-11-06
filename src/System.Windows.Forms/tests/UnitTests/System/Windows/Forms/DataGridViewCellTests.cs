@@ -1687,7 +1687,7 @@ public partial class DataGridViewCellTests
         cell.ReadOnly = !value;
         Assert.True(cell.ReadOnly);
         Assert.False(row.ReadOnly);
-        Assert.True((cell.State & DataGridViewElementStates.ReadOnly) != 0);
+        cell.State.Should().HaveFlag(DataGridViewElementStates.ReadOnly);
     }
 
     [WinFormsTheory]
@@ -3416,7 +3416,7 @@ public partial class DataGridViewCellTests
         public void DataGridViewCell_AccessibilityObject_Get_ReturnsExpected()
         {
             using SubDataGridViewCell cell = new();
-            DataGridViewCell.DataGridViewCellAccessibleObject accessibleObject = Assert.IsType<DataGridViewCell.DataGridViewCellAccessibleObject>(cell.AccessibilityObject);
+            DataGridViewCellAccessibleObject accessibleObject = Assert.IsType<DataGridViewCellAccessibleObject>(cell.AccessibilityObject);
             Assert.Same(accessibleObject, cell.AccessibilityObject);
             Assert.Same(cell, accessibleObject.Owner);
         }
@@ -3424,8 +3424,8 @@ public partial class DataGridViewCellTests
         public static IEnumerable<object[]> AccessibilityObject_CustomCreateAccessibilityInstance_TestData()
         {
             yield return new object[] { new AccessibleObject() };
-            yield return new object[] { new DataGridViewCell.DataGridViewCellAccessibleObject(null) };
-            yield return new object[] { new DataGridViewCell.DataGridViewCellAccessibleObject(new SubDataGridViewCell()) };
+            yield return new object[] { new DataGridViewCellAccessibleObject(null) };
+            yield return new object[] { new DataGridViewCellAccessibleObject(new SubDataGridViewCell()) };
         }
 
         [WinFormsTheory]
@@ -3444,7 +3444,7 @@ public partial class DataGridViewCellTests
         public void DataGridViewCell_CreateAccessibilityInstance_Invoke_ReturnsExpected()
         {
             using SubDataGridViewCell cell = new();
-            DataGridViewCell.DataGridViewCellAccessibleObject instance = Assert.IsAssignableFrom<DataGridViewCell.DataGridViewCellAccessibleObject>(cell.CreateAccessibilityInstance());
+            DataGridViewCellAccessibleObject instance = Assert.IsAssignableFrom<DataGridViewCellAccessibleObject>(cell.CreateAccessibilityInstance());
             Assert.NotNull(instance);
             Assert.Same(cell, instance.Owner);
             Assert.Equal(AccessibleRole.Cell, instance.Role);
@@ -3464,7 +3464,7 @@ public partial class DataGridViewCellTests
     public void DataGridViewCell_DetachEditingDataGridViewCell_InvokeNoDataGridView_ThrowsInvalidOperationException()
     {
         using SubDataGridViewCell cell = new();
-        Assert.Throws<InvalidOperationException>(() => cell.DetachEditingControl());
+        Assert.Throws<InvalidOperationException>(cell.DetachEditingControl);
     }
 
     [WinFormsFact]
@@ -3478,7 +3478,7 @@ public partial class DataGridViewCellTests
         using DataGridView control = new();
         control.Columns.Add(column);
         SubDataGridViewCell cell = (SubDataGridViewCell)control.Rows[0].Cells[0];
-        Assert.Throws<InvalidOperationException>(() => cell.DetachEditingControl());
+        Assert.Throws<InvalidOperationException>(cell.DetachEditingControl);
     }
 
     [WinFormsFact]

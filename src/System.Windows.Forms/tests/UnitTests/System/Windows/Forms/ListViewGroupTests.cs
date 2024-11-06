@@ -599,6 +599,8 @@ public class ListViewGroupTests
         // Run this from another thread as we call Application.EnableVisualStyles.
         using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
         {
+            char* buffer = stackalloc char[256];
+
             foreach (object[] data in Property_TypeString_GetGroupInfo_TestData())
             {
                 string value = (string)data[0];
@@ -614,7 +616,6 @@ public class ListViewGroupTests
                 group.Footer = value;
 
                 Assert.Equal(1, (int)PInvokeCore.SendMessage(listView, PInvoke.LVM_GETGROUPCOUNT));
-                char* buffer = stackalloc char[256];
                 LVGROUP lvgroup = new()
                 {
                     cbSize = (uint)sizeof(LVGROUP),
@@ -859,6 +860,8 @@ public class ListViewGroupTests
         // Run this from another thread as we call Application.EnableVisualStyles.
         using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
         {
+            char* buffer = stackalloc char[256];
+
             foreach (object[] data in Property_TypeString_GetGroupInfo_TestData())
             {
                 string value = (string)data[0];
@@ -874,7 +877,7 @@ public class ListViewGroupTests
                 group.Header = value;
 
                 Assert.Equal(1, (int)PInvokeCore.SendMessage(listView, PInvoke.LVM_GETGROUPCOUNT));
-                char* buffer = stackalloc char[256];
+
                 LVGROUP lvgroup = new()
                 {
                     cbSize = (uint)sizeof(LVGROUP),
@@ -1363,7 +1366,7 @@ public class ListViewGroupTests
         ListViewGroup group = new();
         ISerializable iSerializable = group;
         SerializationInfo info = new(typeof(ListViewGroup), new FormatterConverter());
-        StreamingContext context = new();
+        StreamingContext context = default;
 
         iSerializable.GetObjectData(info, context);
         Assert.Equal("ListViewGroup", info.GetString("Header"));
@@ -1381,7 +1384,7 @@ public class ListViewGroupTests
 
         ISerializable iSerializable = group;
         SerializationInfo info = new(typeof(ListViewGroup), new FormatterConverter());
-        StreamingContext context = new();
+        StreamingContext context = default;
 
         iSerializable.GetObjectData(info, context);
         Assert.Equal("ListViewGroup", info.GetString("Header"));
@@ -1399,7 +1402,7 @@ public class ListViewGroupTests
 
         ISerializable iSerializable = group;
         SerializationInfo info = new(typeof(ListViewGroup), new FormatterConverter());
-        StreamingContext context = new();
+        StreamingContext context = default;
 
         iSerializable.GetObjectData(info, context);
         Assert.Equal("ListViewGroup", info.GetString("Header"));
@@ -1415,7 +1418,7 @@ public class ListViewGroupTests
     {
         ListViewGroup group = new();
         ISerializable iSerializable = group;
-        StreamingContext context = new();
+        StreamingContext context = default;
         Assert.Throws<ArgumentNullException>("info", () => iSerializable.GetObjectData(null, context));
     }
 

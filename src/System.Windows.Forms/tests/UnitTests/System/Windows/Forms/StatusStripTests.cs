@@ -393,7 +393,7 @@ public partial class StatusStripTests
 
     public static IEnumerable<object[]> Padding_Set_TestData()
     {
-        yield return new object[] { new Padding(), new Padding(), 1, 1 };
+        yield return new object[] { default(Padding), default(Padding), 1, 1 };
         yield return new object[] { new Padding(1, 0, 14, 0), new Padding(1, 0, 14, 0), 0, 0 };
         yield return new object[] { new Padding(1, 2, 3, 4), new Padding(1, 2, 3, 4), 1, 1 };
         yield return new object[] { new Padding(1), new Padding(1), 1, 1 };

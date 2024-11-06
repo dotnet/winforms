@@ -18,7 +18,7 @@ public class DesignerExtendersTests
         DesignerExtenders designerExtenders = new(extenderServiceMock.Object);
 
         IExtenderProvider[] providers = designerExtenders.TestAccessor().Dynamic._providers;
-        IExtenderProviderService extenderService= designerExtenders.TestAccessor().Dynamic._extenderService;
+        IExtenderProviderService extenderService = designerExtenders.TestAccessor().Dynamic._extenderService;
 
         providers.Should().NotBeNull();
         extenderService.Should().NotBeNull();

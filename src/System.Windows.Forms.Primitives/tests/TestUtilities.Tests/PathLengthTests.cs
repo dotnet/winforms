@@ -32,11 +32,11 @@ public class PathLengthTests
             currentPath,
             (ref FileSystemEntry entry) => entry.ToFullPath(),
             new EnumerationOptions() { RecurseSubdirectories = true })
-            {
-                ShouldIncludePredicate = (ref FileSystemEntry entry) =>
-                    // Directory doesn't contain a trailing slash
-                    entry.Directory.Length + entry.FileName.Length > maxLength
-            };
+        {
+            ShouldIncludePredicate = (ref FileSystemEntry entry) =>
+                // Directory doesn't contain a trailing slash
+                entry.Directory.Length + entry.FileName.Length > maxLength
+        };
 
         enumerable.Should().BeEmpty();
     }

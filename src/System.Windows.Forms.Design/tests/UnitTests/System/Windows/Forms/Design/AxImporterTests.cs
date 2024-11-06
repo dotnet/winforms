@@ -20,4 +20,3 @@ public class AxImporterTests
             .WithMessage(SR.NotImplementedByDesign);
     }
 }
-

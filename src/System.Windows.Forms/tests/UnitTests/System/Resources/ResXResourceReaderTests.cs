@@ -47,7 +47,7 @@ public class ResXResourceReaderTests
         using MemoryStream resourceStream = new();
 
         using ResXResourceReader resxReader = new(resxPath);
-        Assert.Throws<ArgumentException>(() => resxReader.GetEnumerator());
+        Assert.Throws<ArgumentException>(resxReader.GetEnumerator);
     }
 
     [Fact]

@@ -48,7 +48,7 @@ public class MaskDescriptorComparerTests
 
     [WinFormsTheory]
     [InlineData("Name", "Sample", typeof(int), "NameA", "SampleA", typeof(int), true)]
-    [InlineData("NameA", "SampleA", typeof(int), "NameB", "SampleB", typeof(string), false)] 
+    [InlineData("NameA", "SampleA", typeof(int), "NameB", "SampleB", typeof(string), false)]
     public void GetHashCode_TestCases(string nameA, string sampleA, Type typeA, string nameB, string sampleB, Type typeB, bool expectSameHashCode)
     {
         TestMaskDescriptor maskDescriptorA = new(nameA, sampleA, typeA);

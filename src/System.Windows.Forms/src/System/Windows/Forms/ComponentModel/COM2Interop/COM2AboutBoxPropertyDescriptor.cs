@@ -59,7 +59,7 @@ internal sealed partial class Com2AboutBoxPropertyDescriptor : Com2PropertyDescr
     {
     }
 
-    public override void SetValue(object? component, object? value) => throw new ArgumentException();
+    public override void SetValue(object? component, object? value) => throw new ArgumentException(null);
 
     public override bool ShouldSerializeValue(object component) => false;
 }

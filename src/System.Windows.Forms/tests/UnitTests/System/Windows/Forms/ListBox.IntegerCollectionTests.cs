@@ -12,7 +12,7 @@ public class ListBoxIntegerCollectionTests
     {
         using ListBox owner = new();
         var collection = new ListBox.IntegerCollection(owner);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
     }
 
     [WinFormsFact]
@@ -27,7 +27,7 @@ public class ListBoxIntegerCollectionTests
     {
         using ListBox owner = new();
         ICollection collection = new ListBox.IntegerCollection(owner);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.True(collection.IsSynchronized);
         Assert.Same(collection, collection.SyncRoot);
     }
@@ -37,7 +37,7 @@ public class ListBoxIntegerCollectionTests
     {
         using ListBox owner = new();
         IList collection = new ListBox.IntegerCollection(owner);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.False(collection.IsFixedSize);
         Assert.False(collection.IsReadOnly);
         Assert.True(collection.IsSynchronized);
@@ -258,7 +258,7 @@ public class ListBoxIntegerCollectionTests
 
         // Add one.
         Assert.Equal(0, collection.Add(2));
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 2 }, collection.Cast<int>());
         Assert.Empty(owner.CustomTabOffsets);
         Assert.False(owner.IsHandleCreated);
@@ -301,7 +301,7 @@ public class ListBoxIntegerCollectionTests
 
         // Add one.
         Assert.Equal(0, collection.Add(2));
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 2 }, collection.Cast<int>());
         Assert.Equal(new int[] { 2 }, owner.CustomTabOffsets.Cast<int>());
         Assert.False(owner.IsHandleCreated);
@@ -351,7 +351,7 @@ public class ListBoxIntegerCollectionTests
 
         // Add one.
         Assert.Equal(0, collection.Add(2));
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 2 }, collection.Cast<int>());
         Assert.Empty(owner.CustomTabOffsets);
         Assert.True(owner.IsHandleCreated);
@@ -413,7 +413,7 @@ public class ListBoxIntegerCollectionTests
 
         // Add one.
         Assert.Equal(0, collection.Add(2));
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 2 }, collection.Cast<int>());
         Assert.Equal(new int[] { 2 }, owner.CustomTabOffsets.Cast<int>());
         Assert.True(owner.IsHandleCreated);
@@ -787,16 +787,16 @@ public class ListBoxIntegerCollectionTests
         using ListBox owner = new();
         var collection = new ListBox.IntegerCollection(owner);
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.CustomTabOffsets.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.CustomTabOffsets);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.False(owner.IsHandleCreated);
 
         // Call again.
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.CustomTabOffsets.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.CustomTabOffsets);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.False(owner.IsHandleCreated);
@@ -808,16 +808,16 @@ public class ListBoxIntegerCollectionTests
         using ListBox owner = new();
         ListBox.IntegerCollection collection = owner.CustomTabOffsets;
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.CustomTabOffsets.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.CustomTabOffsets);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.False(owner.IsHandleCreated);
 
         // Call again.
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.CustomTabOffsets.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.CustomTabOffsets);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.False(owner.IsHandleCreated);
@@ -833,16 +833,16 @@ public class ListBoxIntegerCollectionTests
         };
 
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.CustomTabOffsets.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.CustomTabOffsets);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.False(owner.IsHandleCreated);
 
         // Call again.
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.CustomTabOffsets.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.CustomTabOffsets);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.False(owner.IsHandleCreated);
@@ -856,16 +856,16 @@ public class ListBoxIntegerCollectionTests
         collection.Add(1);
 
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.CustomTabOffsets.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.CustomTabOffsets);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.False(owner.IsHandleCreated);
 
         // Call again.
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.CustomTabOffsets.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.CustomTabOffsets);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.False(owner.IsHandleCreated);
@@ -885,8 +885,8 @@ public class ListBoxIntegerCollectionTests
         owner.HandleCreated += (sender, e) => createdCallCount++;
 
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.CustomTabOffsets.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.CustomTabOffsets);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.True(owner.IsHandleCreated);
@@ -896,8 +896,8 @@ public class ListBoxIntegerCollectionTests
 
         // Call again.
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.CustomTabOffsets.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.CustomTabOffsets);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.True(owner.IsHandleCreated);
@@ -920,8 +920,8 @@ public class ListBoxIntegerCollectionTests
         owner.HandleCreated += (sender, e) => createdCallCount++;
 
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.CustomTabOffsets.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.CustomTabOffsets);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.True(owner.IsHandleCreated);
@@ -931,8 +931,8 @@ public class ListBoxIntegerCollectionTests
 
         // Call again.
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.CustomTabOffsets.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.CustomTabOffsets);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.True(owner.IsHandleCreated);
@@ -956,8 +956,8 @@ public class ListBoxIntegerCollectionTests
         collection.Add(1);
 
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.CustomTabOffsets.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.CustomTabOffsets);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.True(owner.IsHandleCreated);
@@ -967,8 +967,8 @@ public class ListBoxIntegerCollectionTests
 
         // Call again.
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.CustomTabOffsets.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.CustomTabOffsets);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.True(owner.IsHandleCreated);
@@ -992,8 +992,8 @@ public class ListBoxIntegerCollectionTests
         collection.Add(1);
 
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.CustomTabOffsets.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.CustomTabOffsets);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.True(owner.IsHandleCreated);
@@ -1003,8 +1003,8 @@ public class ListBoxIntegerCollectionTests
 
         // Call again.
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.CustomTabOffsets.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.CustomTabOffsets);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.True(owner.IsHandleCreated);
@@ -1112,21 +1112,21 @@ public class ListBoxIntegerCollectionTests
 
         // Remove last.
         collection.Remove(3);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 1 }, collection.Cast<int>());
         Assert.Empty(owner.CustomTabOffsets);
         Assert.False(owner.IsHandleCreated);
 
         // Remove first.
         collection.Remove(1);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.False(owner.IsHandleCreated);
 
         // Remove no such.
         collection.Remove(0);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.False(owner.IsHandleCreated);
@@ -1156,21 +1156,21 @@ public class ListBoxIntegerCollectionTests
 
         // Remove last.
         collection.Remove(3);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 1 }, collection.Cast<int>());
         Assert.Equal(new int[] { 1 }, owner.CustomTabOffsets.Cast<int>());
         Assert.False(owner.IsHandleCreated);
 
         // Remove first.
         collection.Remove(1);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.False(owner.IsHandleCreated);
 
         // Remove no such.
         collection.Remove(0);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.False(owner.IsHandleCreated);
@@ -1210,7 +1210,7 @@ public class ListBoxIntegerCollectionTests
 
         // Remove last.
         collection.Remove(3);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 1 }, collection.Cast<int>());
         Assert.Empty(owner.CustomTabOffsets);
         Assert.True(owner.IsHandleCreated);
@@ -1220,7 +1220,7 @@ public class ListBoxIntegerCollectionTests
 
         // Remove first.
         collection.Remove(1);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.True(owner.IsHandleCreated);
@@ -1230,7 +1230,7 @@ public class ListBoxIntegerCollectionTests
 
         // Remove no such.
         collection.Remove(0);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.True(owner.IsHandleCreated);
@@ -1273,7 +1273,7 @@ public class ListBoxIntegerCollectionTests
 
         // Remove last.
         collection.Remove(3);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 1 }, collection.Cast<int>());
         Assert.Equal(new int[] { 1 }, owner.CustomTabOffsets.Cast<int>());
         Assert.True(owner.IsHandleCreated);
@@ -1283,7 +1283,7 @@ public class ListBoxIntegerCollectionTests
 
         // Remove first.
         collection.Remove(1);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.True(owner.IsHandleCreated);
@@ -1293,7 +1293,7 @@ public class ListBoxIntegerCollectionTests
 
         // Remove no such.
         collection.Remove(0);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.True(owner.IsHandleCreated);
@@ -1326,14 +1326,14 @@ public class ListBoxIntegerCollectionTests
 
         // Remove last.
         collection.RemoveAt(1);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 1 }, collection.Cast<int>());
         Assert.Empty(owner.CustomTabOffsets);
         Assert.False(owner.IsHandleCreated);
 
         // Remove first.
         collection.RemoveAt(0);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.False(owner.IsHandleCreated);
@@ -1363,14 +1363,14 @@ public class ListBoxIntegerCollectionTests
 
         // Remove last.
         collection.RemoveAt(1);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 1 }, collection.Cast<int>());
         Assert.Equal(new int[] { 1 }, owner.CustomTabOffsets.Cast<int>());
         Assert.False(owner.IsHandleCreated);
 
         // Remove first.
         collection.RemoveAt(0);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.False(owner.IsHandleCreated);
@@ -1410,7 +1410,7 @@ public class ListBoxIntegerCollectionTests
 
         // Remove last.
         collection.RemoveAt(1);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 1 }, collection.Cast<int>());
         Assert.Empty(owner.CustomTabOffsets);
         Assert.True(owner.IsHandleCreated);
@@ -1420,7 +1420,7 @@ public class ListBoxIntegerCollectionTests
 
         // Remove first.
         collection.RemoveAt(0);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.True(owner.IsHandleCreated);
@@ -1463,7 +1463,7 @@ public class ListBoxIntegerCollectionTests
 
         // Remove last.
         collection.RemoveAt(1);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 1 }, collection.Cast<int>());
         Assert.Equal(new int[] { 1 }, owner.CustomTabOffsets.Cast<int>());
         Assert.True(owner.IsHandleCreated);
@@ -1473,7 +1473,7 @@ public class ListBoxIntegerCollectionTests
 
         // Remove first.
         collection.RemoveAt(0);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.True(owner.IsHandleCreated);
@@ -1756,7 +1756,7 @@ public class ListBoxIntegerCollectionTests
 
         // Add one.
         Assert.Equal(0, collection.Add(2));
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 2 }, collection.Cast<int>());
         Assert.Empty(owner.CustomTabOffsets);
         Assert.False(owner.IsHandleCreated);
@@ -1799,7 +1799,7 @@ public class ListBoxIntegerCollectionTests
 
         // Add one.
         Assert.Equal(0, collection.Add(2));
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 2 }, collection.Cast<int>());
         Assert.Equal(new int[] { 2 }, owner.CustomTabOffsets.Cast<int>());
         Assert.False(owner.IsHandleCreated);
@@ -1849,7 +1849,7 @@ public class ListBoxIntegerCollectionTests
 
         // Add one.
         Assert.Equal(0, collection.Add(2));
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 2 }, collection.Cast<int>());
         Assert.Empty(owner.CustomTabOffsets);
         Assert.True(owner.IsHandleCreated);
@@ -1911,7 +1911,7 @@ public class ListBoxIntegerCollectionTests
 
         // Add one.
         Assert.Equal(0, collection.Add(2));
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 2 }, collection.Cast<int>());
         Assert.Equal(new int[] { 2 }, owner.CustomTabOffsets.Cast<int>());
         Assert.True(owner.IsHandleCreated);
@@ -2004,16 +2004,16 @@ public class ListBoxIntegerCollectionTests
         using ListBox owner = new();
         IList collection = new ListBox.IntegerCollection(owner);
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.CustomTabOffsets.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.CustomTabOffsets);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.False(owner.IsHandleCreated);
 
         // Call again.
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.CustomTabOffsets.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.CustomTabOffsets);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.False(owner.IsHandleCreated);
@@ -2025,16 +2025,16 @@ public class ListBoxIntegerCollectionTests
         using ListBox owner = new();
         IList collection = owner.CustomTabOffsets;
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.CustomTabOffsets.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.CustomTabOffsets);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.False(owner.IsHandleCreated);
 
         // Call again.
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.CustomTabOffsets.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.CustomTabOffsets);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.False(owner.IsHandleCreated);
@@ -2050,16 +2050,16 @@ public class ListBoxIntegerCollectionTests
         };
 
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.CustomTabOffsets.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.CustomTabOffsets);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.False(owner.IsHandleCreated);
 
         // Call again.
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.CustomTabOffsets.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.CustomTabOffsets);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.False(owner.IsHandleCreated);
@@ -2073,16 +2073,16 @@ public class ListBoxIntegerCollectionTests
         collection.Add(1);
 
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.CustomTabOffsets.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.CustomTabOffsets);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.False(owner.IsHandleCreated);
 
         // Call again.
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.CustomTabOffsets.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.CustomTabOffsets);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.False(owner.IsHandleCreated);
@@ -2102,8 +2102,8 @@ public class ListBoxIntegerCollectionTests
         owner.HandleCreated += (sender, e) => createdCallCount++;
 
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.CustomTabOffsets.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.CustomTabOffsets);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.True(owner.IsHandleCreated);
@@ -2113,8 +2113,8 @@ public class ListBoxIntegerCollectionTests
 
         // Call again.
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.CustomTabOffsets.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.CustomTabOffsets);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.True(owner.IsHandleCreated);
@@ -2137,8 +2137,8 @@ public class ListBoxIntegerCollectionTests
         owner.HandleCreated += (sender, e) => createdCallCount++;
 
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.CustomTabOffsets.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.CustomTabOffsets);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.True(owner.IsHandleCreated);
@@ -2148,8 +2148,8 @@ public class ListBoxIntegerCollectionTests
 
         // Call again.
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.CustomTabOffsets.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.CustomTabOffsets);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.True(owner.IsHandleCreated);
@@ -2173,8 +2173,8 @@ public class ListBoxIntegerCollectionTests
         collection.Add(1);
 
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.CustomTabOffsets.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.CustomTabOffsets);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.True(owner.IsHandleCreated);
@@ -2184,8 +2184,8 @@ public class ListBoxIntegerCollectionTests
 
         // Call again.
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.CustomTabOffsets.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.CustomTabOffsets);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.True(owner.IsHandleCreated);
@@ -2209,8 +2209,8 @@ public class ListBoxIntegerCollectionTests
         collection.Add(1);
 
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.CustomTabOffsets.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.CustomTabOffsets);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.True(owner.IsHandleCreated);
@@ -2220,8 +2220,8 @@ public class ListBoxIntegerCollectionTests
 
         // Call again.
         collection.Clear();
-        Assert.Equal(0, collection.Count);
-        Assert.Equal(0, owner.CustomTabOffsets.Count);
+        Assert.Empty(collection);
+        Assert.Empty(owner.CustomTabOffsets);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.True(owner.IsHandleCreated);
@@ -2349,21 +2349,21 @@ public class ListBoxIntegerCollectionTests
 
         // Remove last.
         collection.Remove(3);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 1 }, collection.Cast<int>());
         Assert.Empty(owner.CustomTabOffsets);
         Assert.False(owner.IsHandleCreated);
 
         // Remove first.
         collection.Remove(1);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.False(owner.IsHandleCreated);
 
         // Remove no such.
         collection.Remove(0);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.False(owner.IsHandleCreated);
@@ -2396,21 +2396,21 @@ public class ListBoxIntegerCollectionTests
 
         // Remove last.
         collection.Remove(3);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 1 }, collection.Cast<int>());
         Assert.Equal(new int[] { 1 }, owner.CustomTabOffsets.Cast<int>());
         Assert.False(owner.IsHandleCreated);
 
         // Remove first.
         collection.Remove(1);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.False(owner.IsHandleCreated);
 
         // Remove no such.
         collection.Remove(0);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.False(owner.IsHandleCreated);
@@ -2455,7 +2455,7 @@ public class ListBoxIntegerCollectionTests
 
         // Remove last.
         collection.Remove(3);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 1 }, collection.Cast<int>());
         Assert.Empty(owner.CustomTabOffsets);
         Assert.True(owner.IsHandleCreated);
@@ -2465,7 +2465,7 @@ public class ListBoxIntegerCollectionTests
 
         // Remove first.
         collection.Remove(1);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.True(owner.IsHandleCreated);
@@ -2475,7 +2475,7 @@ public class ListBoxIntegerCollectionTests
 
         // Remove no such.
         collection.Remove(0);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.True(owner.IsHandleCreated);
@@ -2521,7 +2521,7 @@ public class ListBoxIntegerCollectionTests
 
         // Remove last.
         collection.Remove(3);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 1 }, collection.Cast<int>());
         Assert.Equal(new int[] { 1 }, owner.CustomTabOffsets.Cast<int>());
         Assert.True(owner.IsHandleCreated);
@@ -2531,7 +2531,7 @@ public class ListBoxIntegerCollectionTests
 
         // Remove first.
         collection.Remove(1);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.True(owner.IsHandleCreated);
@@ -2541,7 +2541,7 @@ public class ListBoxIntegerCollectionTests
 
         // Remove no such.
         collection.Remove(0);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.True(owner.IsHandleCreated);
@@ -2589,14 +2589,14 @@ public class ListBoxIntegerCollectionTests
 
         // Remove last.
         collection.RemoveAt(1);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 1 }, collection.Cast<int>());
         Assert.Empty(owner.CustomTabOffsets);
         Assert.False(owner.IsHandleCreated);
 
         // Remove first.
         collection.RemoveAt(0);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.False(owner.IsHandleCreated);
@@ -2629,14 +2629,14 @@ public class ListBoxIntegerCollectionTests
 
         // Remove last.
         collection.RemoveAt(1);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 1 }, collection.Cast<int>());
         Assert.Equal(new int[] { 1 }, owner.CustomTabOffsets.Cast<int>());
         Assert.False(owner.IsHandleCreated);
 
         // Remove first.
         collection.RemoveAt(0);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.False(owner.IsHandleCreated);
@@ -2681,7 +2681,7 @@ public class ListBoxIntegerCollectionTests
 
         // Remove last.
         collection.RemoveAt(1);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 1 }, collection.Cast<int>());
         Assert.Empty(owner.CustomTabOffsets);
         Assert.True(owner.IsHandleCreated);
@@ -2691,7 +2691,7 @@ public class ListBoxIntegerCollectionTests
 
         // Remove first.
         collection.RemoveAt(0);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.True(owner.IsHandleCreated);
@@ -2737,7 +2737,7 @@ public class ListBoxIntegerCollectionTests
 
         // Remove last.
         collection.RemoveAt(1);
-        Assert.Equal(1, collection.Count);
+        Assert.Single(collection);
         Assert.Equal(new int[] { 1 }, collection.Cast<int>());
         Assert.Equal(new int[] { 1 }, owner.CustomTabOffsets.Cast<int>());
         Assert.True(owner.IsHandleCreated);
@@ -2747,7 +2747,7 @@ public class ListBoxIntegerCollectionTests
 
         // Remove first.
         collection.RemoveAt(0);
-        Assert.Equal(0, collection.Count);
+        Assert.Empty(collection);
         Assert.Empty(collection);
         Assert.Empty(owner.CustomTabOffsets);
         Assert.True(owner.IsHandleCreated);

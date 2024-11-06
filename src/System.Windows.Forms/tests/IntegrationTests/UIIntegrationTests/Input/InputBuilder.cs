@@ -54,7 +54,7 @@ internal static class InputBuilder
 
         // Handle extended keys:
         // If the scan code is preceded by a prefix byte that has the value 0xE0 (224),
-        // we need to include the KEYEVENTF_EXTENDEDKEY flag in the Flags property. 
+        // we need to include the KEYEVENTF_EXTENDEDKEY flag in the Flags property.
         if ((scanCode & 0xFF00) == 0xE000)
         {
             input.Anonymous.ki.dwFlags |= KEYBD_EVENT_FLAGS.KEYEVENTF_EXTENDEDKEY;

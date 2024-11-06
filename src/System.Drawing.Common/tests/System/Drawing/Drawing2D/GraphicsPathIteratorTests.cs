@@ -1,6 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-//
+
 // Copyright (C) 2006-2007 Novell, Inc (http://www.novell.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -229,8 +229,8 @@ public class GraphicsPathIteratorTests
         using GraphicsPath gp = new();
         using GraphicsPathIterator gpi = new(gp);
         Assert.Equal(0, gpi.Enumerate(ref points, ref types));
-        Assert.Equal(0, points.Length);
-        Assert.Equal(0, types.Length);
+        Assert.Empty(points);
+        Assert.Empty(types);
     }
 
     [Fact]

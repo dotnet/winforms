@@ -1,6 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-//
+
 // Copyright (C) 2004-2008 Novell, Inc (http://www.novell.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -517,8 +517,8 @@ public class RegionTests
         using GraphicsPath graphicPath = new();
         using Region other = new();
         AssertExtensions.Throws<ArgumentException>(null, () => disposedRegion.Complement(graphicPath));
-        AssertExtensions.Throws<ArgumentException>(null, () => disposedRegion.Complement(new Rectangle()));
-        AssertExtensions.Throws<ArgumentException>(null, () => disposedRegion.Complement(new RectangleF()));
+        AssertExtensions.Throws<ArgumentException>(null, () => disposedRegion.Complement(default(Rectangle)));
+        AssertExtensions.Throws<ArgumentException>(null, () => disposedRegion.Complement(default(RectangleF)));
         AssertExtensions.Throws<ArgumentException>(null, () => disposedRegion.Complement(disposedRegion));
     }
 
@@ -581,7 +581,7 @@ public class RegionTests
         using (region)
         using (other)
         {
-                Assert.Equal(expected, region.Equals(other, s_graphic));
+            Assert.Equal(expected, region.Equals(other, s_graphic));
         }
     }
 
@@ -900,8 +900,8 @@ public class RegionTests
         using GraphicsPath graphicsPath = new();
         using Region other = new();
         AssertExtensions.Throws<ArgumentException>(null, () => disposedRegion.Exclude(graphicsPath));
-        AssertExtensions.Throws<ArgumentException>(null, () => disposedRegion.Exclude(new Rectangle()));
-        AssertExtensions.Throws<ArgumentException>(null, () => disposedRegion.Exclude(new RectangleF()));
+        AssertExtensions.Throws<ArgumentException>(null, () => disposedRegion.Exclude(default(Rectangle)));
+        AssertExtensions.Throws<ArgumentException>(null, () => disposedRegion.Exclude(default(RectangleF)));
         AssertExtensions.Throws<ArgumentException>(null, () => disposedRegion.Exclude(other));
     }
 
@@ -1051,7 +1051,7 @@ public class RegionTests
         Assert.False(clipRegion.IsInfinite(s_graphic));
 
         RectangleF[] rects = clipRegion.GetRegionScans(matrix);
-        Assert.Equal(1, rects.Length);
+        Assert.Single(rects);
         Assert.Equal(new RectangleF(-5, -5, 10, 10), rects[0]);
     }
 
@@ -1257,8 +1257,8 @@ public class RegionTests
         using GraphicsPath graphicsPath = new();
         using Region other = new();
         AssertExtensions.Throws<ArgumentException>(null, () => disposedRegion.Intersect(graphicsPath));
-        AssertExtensions.Throws<ArgumentException>(null, () => disposedRegion.Intersect(new Rectangle()));
-        AssertExtensions.Throws<ArgumentException>(null, () => disposedRegion.Intersect(new RectangleF()));
+        AssertExtensions.Throws<ArgumentException>(null, () => disposedRegion.Intersect(default(Rectangle)));
+        AssertExtensions.Throws<ArgumentException>(null, () => disposedRegion.Intersect(default(RectangleF)));
         AssertExtensions.Throws<ArgumentException>(null, () => disposedRegion.Intersect(other));
     }
 
@@ -1796,8 +1796,8 @@ public class RegionTests
         using GraphicsPath graphicsPath = new();
         using Region other = new();
         AssertExtensions.Throws<ArgumentException>(null, () => disposedRegion.Union(graphicsPath));
-        AssertExtensions.Throws<ArgumentException>(null, () => disposedRegion.Union(new Rectangle()));
-        AssertExtensions.Throws<ArgumentException>(null, () => disposedRegion.Union(new RectangleF()));
+        AssertExtensions.Throws<ArgumentException>(null, () => disposedRegion.Union(default(Rectangle)));
+        AssertExtensions.Throws<ArgumentException>(null, () => disposedRegion.Union(default(RectangleF)));
         AssertExtensions.Throws<ArgumentException>(null, () => disposedRegion.Union(disposedRegion));
     }
 
@@ -2154,8 +2154,8 @@ public class RegionTests
         using GraphicsPath graphicsPath = new();
         using Region other = new();
         AssertExtensions.Throws<ArgumentException>(null, () => disposedRegion.Xor(graphicsPath));
-        AssertExtensions.Throws<ArgumentException>(null, () => disposedRegion.Xor(new Rectangle()));
-        AssertExtensions.Throws<ArgumentException>(null, () => disposedRegion.Xor(new RectangleF()));
+        AssertExtensions.Throws<ArgumentException>(null, () => disposedRegion.Xor(default(Rectangle)));
+        AssertExtensions.Throws<ArgumentException>(null, () => disposedRegion.Xor(default(RectangleF)));
         AssertExtensions.Throws<ArgumentException>(null, () => disposedRegion.Xor(other));
     }
 }

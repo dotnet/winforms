@@ -672,7 +672,7 @@ public class NumericUpDownTests
         using NumericUpDown upDown = new()
         {
             Minimum = 10,
-            Value = 10 
+            Value = 10
         };
 
         upDown.DownButton();

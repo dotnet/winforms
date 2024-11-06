@@ -295,7 +295,7 @@ public class ButtonBase_ButtonBaseAccessibleObjectTests
         {
             _checkRaisedEvent = checkRaisedEvent;
         }
-        
+
         internal int RaiseAutomationNotificationCallCount { get; private set; }
 
         internal override bool RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID propertyId, VARIANT oldValue, VARIANT newValue)

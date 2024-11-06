@@ -1433,15 +1433,10 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
     ///  The view for this document. The designer should assume that the view will be shown shortly
     ///  after this call is made and make any necessary preparations.
     /// </summary>
-    object IRootDesigner.GetView(ViewTechnology technology)
-    {
-        if (technology is not ViewTechnology.Default and not ((ViewTechnology)1))
-        {
-            throw new ArgumentException();
-        }
-
-        return _frame;
-    }
+    object IRootDesigner.GetView(ViewTechnology technology) =>
+        technology is not ViewTechnology.Default and not (ViewTechnology)1
+            ? throw new ArgumentException(null, nameof(technology))
+            : (object)_frame;
 
     /// <summary>
     ///  Determines if the given tool is supported by this designer.

@@ -26,7 +26,7 @@ public class PRINTDLGWTests
             return;
         }
 
-        PRINTDLGW_32 sut = new();
+        PRINTDLGW_32 sut = default;
         byte* addr = (byte*)&sut;
 
         Assert.Equal(0, (byte*)&sut.lStructSize - addr);           // 4, DWORD
@@ -69,7 +69,7 @@ public class PRINTDLGWTests
             return;
         }
 
-        PRINTDLGW_64 sut = new();
+        PRINTDLGW_64 sut = default;
         byte* addr = (byte*)&sut;
 
         Assert.Equal(0, (byte*)&sut.lStructSize - addr);           // 8, DWORD

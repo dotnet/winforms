@@ -85,7 +85,7 @@ public class PrinterResolutionTests
     public static IEnumerable<object[]> ToString_TestData()
     {
         yield return new object[] { new PrinterResolution(), "[PrinterResolution X=0 Y=0]" };
-        yield return new object[] { new PrinterResolution { X = -1, Y = -2}, "[PrinterResolution X=-1 Y=-2]" };
+        yield return new object[] { new PrinterResolution { X = -1, Y = -2 }, "[PrinterResolution X=-1 Y=-2]" };
         yield return new object[] { new PrinterResolution { Kind = PrinterResolutionKind.High }, "[PrinterResolution High]" };
         yield return new object[] { new PrinterResolution { X = 1, Y = 2, Kind = PrinterResolutionKind.High }, "[PrinterResolution High]" };
     }

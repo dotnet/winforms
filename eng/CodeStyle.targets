@@ -2,28 +2,22 @@
 <Project>
 
   <ItemGroup>
-    <EditorConfigFiles Include="$(MSBuildThisFileDirectory)CodeAnalysis.src.globalconfig" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(IsShipping)' == 'false'">
-    <!-- Include CodeAnalysis.test.globalconfig to override (relax) some rules from the primary configuration. -->
-    <EditorConfigFiles Include="$(MSBuildThisFileDirectory)CodeAnalysis.test.globalconfig" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <!-- https://github.com/DotNetAnalyzers/StyleCopAnalyzers -->
     <PackageReference Include="StyleCop.Analyzers" PrivateAssets="all" />
-    <AdditionalFiles Include="$(MSBuildThisFileDirectory)stylecop.json" Link="stylecop.json" Visible="false" />
   </ItemGroup>
 
   <ItemGroup>
+    <!-- https://github.com/dotnet/roslyn-analyzers -->
     <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>
+    <!-- https://github.com/DotNetAnalyzers/DocumentationAnalyzers -->
     <PackageReference Include="DotNetAnalyzers.DocumentationAnalyzers" PrivateAssets="all" />
   </ItemGroup>
-  
+
   <ItemGroup>
+    <!-- https://github.com/AArnott/CSharpIsNull -->
     <PackageReference Include="CSharpIsNullAnalyzer" PrivateAssets="all" />
   </ItemGroup>
 

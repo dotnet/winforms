@@ -291,7 +291,7 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
     [MemberData(nameof(NoOwner_TestData))]
     public void DataGridViewRowAccessibleObject_GetFocused_NoOwner_ThrowsInvalidOperationException(AccessibleObject accessibleObject)
     {
-        Assert.Throws<InvalidOperationException>(() => accessibleObject.GetFocused());
+        Assert.Throws<InvalidOperationException>(accessibleObject.GetFocused);
     }
 
     [Fact]
@@ -322,7 +322,7 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
     [MemberData(nameof(NoOwner_TestData))]
     public void DataGridViewRowAccessibleObject_GetSelected_NoOwner_ThrowsInvalidOperationException(AccessibleObject accessibleObject)
     {
-        Assert.Throws<InvalidOperationException>(() => accessibleObject.GetSelected());
+        Assert.Throws<InvalidOperationException>(accessibleObject.GetSelected);
     }
 
     public static IEnumerable<object[]> Navigate_TestData()
