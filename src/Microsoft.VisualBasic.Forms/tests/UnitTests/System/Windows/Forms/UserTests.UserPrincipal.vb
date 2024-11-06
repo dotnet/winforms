@@ -10,8 +10,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Private NotInheritable Class UserPrincipal
             Implements IPrincipal
 
-            Private _role As String
-            Private _userIdentity As IIdentity
+            Private ReadOnly _role As String
+            Private ReadOnly _userIdentity As IIdentity
 
             Public Sub New(authenticationType As String, name As String, isAuthenticated As Boolean, role As String)
                 _userIdentity = New UserIdentity(authenticationType, name, isAuthenticated)

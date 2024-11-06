@@ -11,9 +11,9 @@ Imports VbUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 Namespace Microsoft.VisualBasic.Forms.Tests
 
     Public Class ApplicationServicesExceptionsTests
-        Private Const TestMessage As String = "Test"
         Private Const Test1Message As String = "Test1"
-        Private _innerException As New DirectoryNotFoundException
+        Private Const TestMessage As String = "Test"
+        Private ReadOnly _innerException As New DirectoryNotFoundException
 
         <WinFormsFact>
         Public Sub NewCantStartSingleInstanceException()
