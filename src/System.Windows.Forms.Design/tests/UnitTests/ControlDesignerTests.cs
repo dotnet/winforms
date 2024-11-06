@@ -15,12 +15,14 @@ namespace System.Windows.Forms.Design.Tests;
 
 public class ControlDesignerTests : IDisposable
 {
-    private readonly ControlDesigner _designer = new();
+    private readonly TestControlDesigner _designer = new();
     private readonly Control _control = new();
     private readonly Mock<IDesignerHost> _mockDesignerHost = new();
+    private readonly Mock<ISite> _mockSite;
 
     public ControlDesignerTests()
     {
+        Mock<IDesignerHost> _mockDesignerHost = new();
         _mockDesignerHost
             .Setup(h => h.RootComponent)
             .Returns(_control);
@@ -31,8 +33,9 @@ public class ControlDesignerTests : IDisposable
         _mockDesignerHost
             .Setup(s => s.GetService(typeof(IComponentChangeService)))
             .Returns(mockComponentChangeService.Object);
-        Mock<ISite> mockSite = CreateMockSiteWithDesignerHost(_mockDesignerHost.Object);
-        _control.Site = mockSite.Object;
+        _mockSite = CreateMockSiteWithDesignerHost(_mockDesignerHost.Object);
+        _control.Site = _mockSite.Object;
+
         _designer.Initialize(_control);
     }
 
@@ -72,56 +75,38 @@ public class ControlDesignerTests : IDisposable
     [Fact]
     public void AccessibleObjectField()
     {
-        using TestControlDesigner controlDesigner = new();
-        using Button button = new();
-        controlDesigner.Initialize(button);
-        Assert.Null(controlDesigner.GetAccessibleObjectField());
+        Assert.Null(_designer.GetAccessibleObjectField());
     }
 
     [Fact]
     public void BehaviorServiceProperty()
     {
-        using TestControlDesigner controlDesigner = new();
-        using Button button = new();
-        controlDesigner.Initialize(button);
-        Assert.Null(controlDesigner.GetBehaviorServiceProperty());
+        Assert.Null(_designer.GetBehaviorServiceProperty());
     }
 
     [Fact]
     public void AccessibilityObjectField()
     {
-        using TestControlDesigner controlDesigner = new();
-        using Button button = new();
-        controlDesigner.Initialize(button);
-        Assert.NotNull(controlDesigner.AccessibilityObject);
+        Assert.NotNull(_designer.AccessibilityObject);
     }
 
     [Fact]
     public void EnableDragRectProperty()
     {
-        using TestControlDesigner controlDesigner = new();
-        using Button button = new();
-        controlDesigner.Initialize(button);
-        Assert.False(controlDesigner.GetEnableDragRectProperty());
+        Assert.False(_designer.GetEnableDragRectProperty());
     }
 
     [Fact]
     public void ParticipatesWithSnapLinesProperty()
     {
-        using TestControlDesigner controlDesigner = new();
-        using Button button = new();
-        controlDesigner.Initialize(button);
-        Assert.True(controlDesigner.ParticipatesWithSnapLines);
+        Assert.True(_designer.ParticipatesWithSnapLines);
     }
 
     [Fact]
     public void AutoResizeHandlesProperty()
     {
-        using TestControlDesigner controlDesigner = new();
-        using Button button = new();
-        controlDesigner.Initialize(button);
-        Assert.True(controlDesigner.AutoResizeHandles = true);
-        Assert.True(controlDesigner.AutoResizeHandles);
+        Assert.True(_designer.AutoResizeHandles = true);
+        Assert.True(_designer.AutoResizeHandles);
     }
 
     [Theory]
@@ -147,123 +132,82 @@ public class ControlDesignerTests : IDisposable
     [Fact]
     public void InheritanceAttributeProperty()
     {
-        using TestControlDesigner controlDesigner = new();
-        using Button button = new();
-        controlDesigner.Initialize(button);
-        Assert.NotNull(controlDesigner.GetInheritanceAttributeProperty());
+        Assert.NotNull(_designer.GetInheritanceAttributeProperty());
     }
 
     [Fact]
     public void NumberOfInternalControlDesignersTest()
     {
-        using TestControlDesigner controlDesigner = new();
-        using Button button = new();
-        controlDesigner.Initialize(button);
-        Assert.Equal(0, controlDesigner.NumberOfInternalControlDesigners());
+        Assert.Equal(0, _designer.NumberOfInternalControlDesigners());
     }
 
     [Fact]
     public void BaseWndProcTest()
     {
-        using TestControlDesigner controlDesigner = new();
-        using Button button = new();
-        controlDesigner.Initialize(button);
         Message m = default;
-        controlDesigner.BaseWndProcMethod(ref m);
+        _designer.BaseWndProcMethod(ref m);
     }
 
     [Fact]
     public void CanBeParentedToTest()
     {
-        using TestControlDesigner controlDesigner = new();
-        using Button button = new();
-        controlDesigner.Initialize(button);
         using ParentControlDesigner parentDesigner = new();
         using Button parentButton = new();
         parentDesigner.Initialize(parentButton);
-        Assert.True(controlDesigner.CanBeParentedTo(parentDesigner));
+        Assert.True(_designer.CanBeParentedTo(parentDesigner));
     }
 
     [Theory]
     [BoolData]
     public void EnableDragDropTest(bool val)
     {
-        using TestControlDesigner controlDesigner = new();
-        using Button button = new();
-        controlDesigner.Initialize(button);
-        controlDesigner.EnableDragDropMethod(val);
+        _designer.EnableDragDropMethod(val);
     }
 
     [Fact]
     public void GetHitTest()
     {
-        using TestControlDesigner controlDesigner = new();
-        using Button button = new();
-        controlDesigner.Initialize(button);
-        Assert.False(controlDesigner.GetHitTestMethod(default));
+        Assert.False(_designer.GetHitTestMethod(default));
     }
 
     [Fact]
     public void HookChildControlsTest()
     {
-        using TestControlDesigner controlDesigner = new();
-        using Button button = new();
-        controlDesigner.Initialize(button);
-        controlDesigner.HookChildControlsMethod(new Control());
-    }
-
-    [Fact]
-    public void InitializeTest()
-    {
-        using TestControlDesigner controlDesigner = new();
-        using Button button = new();
-        controlDesigner.Initialize(button);
+        _designer.HookChildControlsMethod(new Control());
     }
 
     [Fact]
     public void UninitializedTest()
     {
-        using TestControlDesigner controlDesigner = new();
-        Assert.Throws<InvalidOperationException>(() => controlDesigner.Control);
+        using TestControlDesigner _designer = new();
+        Assert.Throws<InvalidOperationException>(() => _designer.Control);
     }
 
     [Fact]
     public void OnSetComponentDefaultsTest()
     {
-        using TestControlDesigner controlDesigner = new();
-        using Button button = new();
-        controlDesigner.Initialize(button);
 #pragma warning disable CS0618 // Type or member is obsolete
-        controlDesigner.OnSetComponentDefaults();
+        _designer.OnSetComponentDefaults();
 #pragma warning restore CS0618
     }
 
     [Fact]
     public void OnContextMenuTest()
     {
-        using TestControlDesigner controlDesigner = new();
-        using Button button = new();
-        controlDesigner.Initialize(button);
-        controlDesigner.OnContextMenuMethod(0, 0);
+        _designer.OnContextMenuMethod(0, 0);
     }
 
     [Fact]
     public void OnCreateHandleTest()
     {
-        using TestControlDesigner controlDesigner = new();
-        using Button button = new();
-        controlDesigner.Initialize(button);
-        controlDesigner.OnCreateHandleMethod();
+        _designer.OnCreateHandleMethod();
     }
 
     [WinFormsFact]
     public void ControlDesigner_WndProc_InvokePaint_Success()
     {
-        using ControlDesigner designer = new();
-        using Button button = new();
-        designer.Initialize(button);
         Message m = new Message { Msg = (int)PInvokeCore.WM_PAINT };
-        designer.TestAccessor().Dynamic.WndProc(ref m);
+        _designer.TestAccessor().Dynamic.WndProc(ref m);
     }
 
     [Fact]
@@ -281,14 +225,7 @@ public class ControlDesignerTests : IDisposable
     [WinFormsFact]
     public void ControlDesigner_AssociatedComponentsTest()
     {
-        Mock<IDesignerHost> mockDesignerHost = new(MockBehavior.Strict);
-        mockDesignerHost
-            .Setup(h => h.RootComponent)
-            .Returns(_control);
-        mockDesignerHost
-            .Setup(s => s.GetDesigner(It.IsAny<Control>()))
-            .Returns(() => null);
-        var mockSite = MockSite.CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
+        var mockSite = MockSite.CreateMockSiteWithDesignerHost(_mockDesignerHost.Object);
         _control.Site = mockSite.Object;
 
         Assert.Empty(_designer.AssociatedComponents);
@@ -339,43 +276,20 @@ public class ControlDesignerTests : IDisposable
     [Fact]
     public void GetGlyphs_NonSizeableControl_ReturnsNoResizeHandleGlyphs()
     {
-        using Control control = new();
-        control.Dock = DockStyle.Fill;
-        control.AutoSize = false;
-        using ControlDesigner designer = new();
-        Mock<IDesignerHost> mockDesignerHost = new();
-        mockDesignerHost
-            .Setup(h => h.RootComponent)
-            .Returns(control);
-        mockDesignerHost
-            .Setup(s => s.GetDesigner(It.IsAny<Control>()))
-            .Returns(designer);
-        Mock<IComponentChangeService> mockComponentChangeService = new();
-        mockDesignerHost
-            .Setup(s => s.GetService(typeof(IComponentChangeService)))
-            .Returns(mockComponentChangeService.Object);
+        _control.Dock = DockStyle.Fill;
+        _control.AutoSize = false;
 
-        Mock<ISite> mockSite = CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
-        control.Site = mockSite.Object;
-
-        using Component component = new()
-        {
-            Site = mockSite.Object
-        };
-
-        designer.Initialize(control);
-
-        Mock<DesignerFrame> mockDesignerFrame = new(mockSite.Object) { CallBase = true };
+        Mock<DesignerFrame> mockDesignerFrame = new(_mockSite.Object) { CallBase = true };
         Mock<IServiceProvider> mockServiceProvider = new();
         mockServiceProvider.Setup(s => s.GetService(It.IsAny<Type>())).Returns(mockServiceProvider);
-        mockSite.Setup(s => s.GetService(typeof(IServiceProvider))).Returns(mockServiceProvider.Object);
+        _mockSite.Setup(s => s.GetService(typeof(IServiceProvider))).Returns(mockServiceProvider.Object);
         BehaviorService behaviorService = new(mockServiceProvider.Object, mockDesignerFrame.Object);
 
         FieldInfo? behaviorServiceField = typeof(ControlDesigner).GetField("_behaviorService", BindingFlags.NonPublic | BindingFlags.Instance);
-        behaviorServiceField?.SetValue(designer, behaviorService);
-        mockSite.Setup(s => s.GetService(typeof(BehaviorService))).Returns(behaviorService);
+        behaviorServiceField?.SetValue(_designer, behaviorService);
+        _mockSite.Setup(s => s.GetService(typeof(BehaviorService))).Returns(behaviorService);
 
-        GlyphCollection glyphs = designer.GetGlyphs(GlyphSelectionType.SelectedPrimary);
+        GlyphCollection glyphs = _designer.GetGlyphs(GlyphSelectionType.SelectedPrimary);
 
         glyphs[0].Should().BeOfType<NoResizeHandleGlyph>();
         ((SelectionRules)glyphs[0].TestAccessor().Dynamic.rules).Should().Be(SelectionRules.None);
@@ -396,16 +310,14 @@ public class ControlDesignerTests : IDisposable
         _control.AutoSize = false;
 
         Mock<IServiceProvider> mockServiceProvider = new();
-        Mock<ISite> mockSite = new();
         mockServiceProvider.Setup(s => s.GetService(It.IsAny<Type>())).Returns((object?)null);
-        mockSite.Setup(s => s.GetService(typeof(IServiceProvider))).Returns(mockServiceProvider.Object);
+        _mockSite.Setup(s => s.GetService(typeof(IServiceProvider))).Returns(mockServiceProvider.Object);
 
-        Mock<DesignerFrame> mockDesignerFrame = new(mockSite.Object) { CallBase = true };
+        Mock<DesignerFrame> mockDesignerFrame = new(_mockSite.Object) { CallBase = true };
         BehaviorService behaviorService = new(mockServiceProvider.Object, mockDesignerFrame.Object);
 
         FieldInfo? behaviorServiceField = typeof(ControlDesigner).GetField("_behaviorService", BindingFlags.NonPublic | BindingFlags.Instance);
         behaviorServiceField?.SetValue(_designer, behaviorService);
-        _designer.TestAccessor().Dynamic._host = new Mock<IDesignerHost>().Object;
 
         GlyphCollection glyphs = _designer.GetGlyphs(GlyphSelectionType.SelectedPrimary);
 
@@ -442,11 +354,6 @@ public class ControlDesignerTests : IDisposable
     {
         TypeDescriptor.AddAttributes(_control, new DockingAttribute(dockingBehavior));
 
-        using Component component = new()
-        {
-            Site = _control.Site
-        };
-
         Mock<ParentControlDesigner> mockParentDesigner = new();
         _mockDesignerHost.Setup(h => h.GetDesigner(It.IsAny<IComponent>())).Returns(mockParentDesigner.Object);
 
@@ -466,35 +373,15 @@ public class ControlDesignerTests : IDisposable
     [Fact]
     public void InitializeExistingComponent_DockingBehavior_DefinesDockStyle()
     {
-        using Control control = new();
-        using ControlDesigner designer = new();
-        Mock<IDesignerHost> mockDesignerHost = new();
-        mockDesignerHost
-            .Setup(h => h.RootComponent)
-            .Returns(control);
-        mockDesignerHost
-            .Setup(s => s.GetDesigner(It.IsAny<Control>()))
-            .Returns(designer);
-        Mock<IComponentChangeService> mockComponentChangeService = new();
-        mockDesignerHost
-            .Setup(s => s.GetService(typeof(IComponentChangeService)))
-            .Returns(mockComponentChangeService.Object);
+        TypeDescriptor.AddAttributes(_control, new DockingAttribute(DockingBehavior.AutoDock));
 
-        TypeDescriptor.AddAttributes(control, new DockingAttribute(DockingBehavior.AutoDock));
-
-        using Component component = new()
-        {
-            Site = MockSite.CreateMockSiteWithDesignerHost(mockDesignerHost.Object).Object
-        };
-        control.Site = component.Site;
-        designer.Initialize(control);
         Mock<ParentControlDesigner> mockParentDesigner = new();
-        mockDesignerHost.Setup(h => h.GetDesigner(It.IsAny<IComponent>())).Returns(mockParentDesigner.Object);
+        _mockDesignerHost.Setup(h => h.GetDesigner(It.IsAny<IComponent>())).Returns(mockParentDesigner.Object);
         Dictionary<string, object> defaultValues = new()
     {
         { "Parent", new Control() }
     };
-        Action action = () => designer.InitializeExistingComponent(defaultValues);
+        Action action = () => _designer.InitializeExistingComponent(defaultValues);
         action.Should().Throw<NotImplementedException>(SR.NotImplementedByDesign);
     }
 
