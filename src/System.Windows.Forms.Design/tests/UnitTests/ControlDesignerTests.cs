@@ -111,20 +111,43 @@ public class ControlDesignerTests : IDisposable
         Assert.True(controlDesigner.AutoResizeHandles);
     }
 
-    [Fact]
-    public void SelectionRulesProperty()
+    [Theory]
+    [InlineData(DockStyle.Top, SelectionRules.Moveable | SelectionRules.TopSizeable | SelectionRules.LeftSizeable | SelectionRules.RightSizeable)]
+    [InlineData(DockStyle.Left, SelectionRules.Moveable | SelectionRules.TopSizeable | SelectionRules.LeftSizeable | SelectionRules.BottomSizeable)]
+    [InlineData(DockStyle.Right, SelectionRules.Moveable | SelectionRules.TopSizeable | SelectionRules.BottomSizeable | SelectionRules.RightSizeable)]
+    [InlineData(DockStyle.Bottom, SelectionRules.Moveable | SelectionRules.LeftSizeable | SelectionRules.BottomSizeable | SelectionRules.RightSizeable)]
+    [InlineData(DockStyle.Fill, SelectionRules.Moveable | SelectionRules.TopSizeable | SelectionRules.LeftSizeable | SelectionRules.RightSizeable | SelectionRules.BottomSizeable)]
+    public void SelectionRulesProperty(DockStyle dockStyle, SelectionRules selectionRulesParam)
     {
-        using TestControlDesigner controlDesigner = new();
-        using Button button = new();
-        controlDesigner.Initialize(button);
+        using Control control = new();
+        control.AutoSize = false;
+        using ControlDesigner designer = new();
+        Mock<IDesignerHost> mockDesignerHost = new();
+        mockDesignerHost
+            .Setup(h => h.RootComponent)
+            .Returns(control);
+        mockDesignerHost
+            .Setup(s => s.GetDesigner(It.IsAny<Control>()))
+            .Returns(designer);
+        Mock<IComponentChangeService> mockComponentChangeService = new();
+        mockDesignerHost
+            .Setup(s => s.GetService(typeof(IComponentChangeService)))
+            .Returns(mockComponentChangeService.Object);
+        Mock<ISite> mockSite = MockSite.CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
+        control.Site = mockSite.Object;
 
-        SelectionRules selectionRules;
+        designer.Initialize(control);
+
+        SelectionRules defaultSelectionRules = designer.SelectionRules;
+        control.Dock = dockStyle;
+        SelectionRules finalSelectionRules = designer.SelectionRules;
+
         using (new NoAssertContext())
         {
-            selectionRules = controlDesigner.SelectionRules;
+            finalSelectionRules &= ~selectionRulesParam;
         }
 
-        Assert.Equal(SelectionRules.Visible | SelectionRules.AllSizeable | SelectionRules.Moveable, selectionRules);
+        designer.SelectionRules.Should().Be(finalSelectionRules);
     }
 
     [Fact]
@@ -288,7 +311,7 @@ public class ControlDesignerTests : IDisposable
     {
         Mock<IServiceProvider> mockServiceProvider = new();
         Mock<ISite> mockSite = new();
-        mockServiceProvider.Setup(s => s.GetService(It.IsAny<Type>())).Returns(null);
+        mockServiceProvider.Setup(s => s.GetService(It.IsAny<Type>())).Returns((object?)null);
         mockSite.Setup(s => s.GetService(typeof(IServiceProvider))).Returns(mockServiceProvider.Object);
 
         Mock<DesignerFrame> mockDesignerFrame = new(mockSite.Object) { CallBase = true };
@@ -384,7 +407,7 @@ public class ControlDesignerTests : IDisposable
 
         Mock<IServiceProvider> mockServiceProvider = new();
         Mock<ISite> mockSite = new();
-        mockServiceProvider.Setup(s => s.GetService(It.IsAny<Type>())).Returns(null);
+        mockServiceProvider.Setup(s => s.GetService(It.IsAny<Type>())).Returns((object?)null);
         mockSite.Setup(s => s.GetService(typeof(IServiceProvider))).Returns(mockServiceProvider.Object);
 
         Mock<DesignerFrame> mockDesignerFrame = new(mockSite.Object) { CallBase = true };
@@ -511,37 +534,37 @@ public class ControlDesignerTests : IDisposable
             .Returns(designerHost);
         mockSite
             .Setup(s => s.GetService(typeof(IInheritanceService)))
-            .Returns(null);
+            .Returns((object?)null);
         mockSite
             .Setup(s => s.GetService(typeof(IDictionaryService)))
-            .Returns(null);
+            .Returns((object?)null);
         mockSite
             .Setup(s => s.GetService(typeof(IExtenderListService)))
-            .Returns(null);
+            .Returns((object?)null);
         mockSite
             .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
-            .Returns(null);
+            .Returns((object?)null);
         mockSite
             .Setup(s => s.GetService(typeof(AmbientProperties)))
-            .Returns(null);
+            .Returns((object?)null);
         mockSite
             .Setup(s => s.GetService(typeof(DesignerActionService)))
-            .Returns(null);
+            .Returns((object?)null);
         mockSite
             .Setup(s => s.GetService(typeof(IComponentChangeService)))
-            .Returns(null);
+            .Returns((object?)null);
         mockSite
             .Setup(s => s.GetService(typeof(ToolStripKeyboardHandlingService)))
-            .Returns(null);
+            .Returns((object?)null);
         mockSite
             .Setup(s => s.GetService(typeof(ISupportInSituService)))
-            .Returns(null);
+            .Returns((object?)null);
         mockSite
             .Setup(s => s.GetService(typeof(INestedContainer)))
-            .Returns(null);
+            .Returns((object?)null);
         mockSite
             .Setup(s => s.GetService(typeof(ToolStripMenuItem)))
-            .Returns(null);
+            .Returns((object?)null);
 
         Mock<IServiceProvider> mockServiceProvider = new();
 
@@ -550,7 +573,7 @@ public class ControlDesignerTests : IDisposable
             .Returns(mockServiceProvider.Object);
         mockSite
             .Setup(s => s.GetService(typeof(ToolStripAdornerWindowService)))
-            .Returns(null);
+            .Returns((object?)null);
         mockSite
             .Setup(s => s.GetService(typeof(DesignerOptionService)))
             .Returns(mockServiceProvider.Object);
@@ -562,7 +585,7 @@ public class ControlDesignerTests : IDisposable
             .Returns(mockSelectionService.Object);
         mockSite
             .Setup(s => s.Container)
-            .Returns((IContainer)null);
+            .Returns((IContainer?)null);
         mockSite
             .Setup(s => s.Name)
             .Returns("Site");
@@ -571,7 +594,7 @@ public class ControlDesignerTests : IDisposable
             .Returns(true);
         mockSite
             .Setup(s => s.GetService(typeof(UndoEngine)))
-            .Returns(null);
+            .Returns((object?)null);
 
         return mockSite;
     }
