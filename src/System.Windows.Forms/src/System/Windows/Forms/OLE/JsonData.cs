@@ -11,7 +11,7 @@ namespace System.Private.Windows;
 /// </summary>
 /// <remarks>
 ///  <para>
-///   There may be instances where this type is not available in different versions, e.g. .NET 8.
+///   There may be instances where this type is not available in different versions, e.g. .NET 8, .NET Framework.
 ///   If this type needs to be deserialized from stream in these instances, a workaround would be to create an assembly with the name <see cref="IJsonData.CustomAssemblyName"/>
 ///   and replicate this type. Then, manually retrieve the serialized stream and use the <see cref="Formats.Nrbf.NrbfDecoder"/> to decode the stream and rehydrate the serialized type.
 ///   Alternatively, but not recommended, BinaryFormatter can also be used to deserialize the stream if this type is not available.
@@ -19,52 +19,28 @@ namespace System.Private.Windows;
 /// </remarks>
 /// <example>
 /// <![CDATA[
-///  [Serializable]
-///  struct ReplicatedJsonData<T> : IObjectReference
-///  {
-///     public byte[] JsonBytes { get; set; }
-///
-///     // For deserializing with BinaryFormatter only. This interface is not needed if using NrbfDecoder to help deserialize.
-///     public readonly object GetRealObject(StreamingContext context) => JsonSerializer.Deserialize(JsonBytes, typeof(T)) ?? throw new InvalidOperationException();
-///  }
-///
-///  // For deserializing with BinaryFormatter only.
-///  class ReplicatedJsonDataBinder : SerializationBinder
-///  {
-///     public override Type? BindToType(string assemblyName, string typeName)
-///     {
-///         // The assembly name for JsonData should always be "System.Private.Windows.VirtualJson"
-///         if (assemblyName == "System.Private.Windows.VirtualJson"
-///             && TypeName.TryParse(typeName, out TypeName? name))
-///         {
-///             TypeName genericTypeName = name.GetGenericArguments().Single()
-///             // TODO: Additional checking on generic type to block unwanted types if needed.
-///             return typeof(ReplicatedJsonData<T>);
-///         }
-///
-///         // TODO: Rejection behavior
-///     }
-///
+///  // Recommended: deserialize using NrbfDecoder.
 ///  void DeserializeJsonData(DataObject dataObject)
 ///  {
 ///     // Manually retrieve serialized stream.
 ///     System.Runtime.InteropServices.ComTypes.FORMATETC formatetc = new()
 ///     {
-///         cfFormat = (short) DataFormats.GetFormat("testFormat").Id,
+///         cfFormat = (short) DataFormats.GetFormat("yourDataFormat").Id,
 ///         dwAspect = System.Runtime.InteropServices.ComTypes.DVASPECT.DVASPECT_CONTENT,
 ///         lindex = -1,
 ///         tymed = System.Runtime.InteropServices.ComTypes.TYMED.TYMED_HGLOBAL
 ///     };
 ///
-///     dataObject.GetData(ref formatetc, out System.Runtime.InteropServices.ComTypes.STGMEDIUM medium);
-///     HGLOBAL hglobal = (HGLOBAL)medium.unionmember;
+///     System.Runtime.InteropServices.ComTypes.IDataObject castedDataObject = (System.Runtime.InteropServices.ComTypes.IDataObject)dataObject;
+///     castedDataObject.GetData(ref formatetc, out System.Runtime.InteropServices.ComTypes.STGMEDIUM medium);
+///     IntPtr hglobal = medium.unionmember;
 ///     Stream stream;
 ///     try
 ///     {
-///         void* buffer = GlobalLock(hglobal);
+///         IntPtr buffer = GlobalLock(hglobal);
 ///         int size = GlobalSize(hglobal);
 ///         byte[] bytes = new byte[size];
-///         Marshal.Copy((nint)buffer, bytes, 0, size);
+///         Marshal.Copy(buffer, bytes, 0, size);
 ///         // this comes from DataObject.Composition.s_serializedObjectID
 ///         int index = 16;
 ///         stream = new MemoryStream(bytes, index, bytes.Length - index);
@@ -74,8 +50,8 @@ namespace System.Private.Windows;
 ///         GlobalUnlock(hglobal);
 ///     }
 ///
-///     // Use Nrbf to decode stream and rehydrate data. (recommended)
-///     System.Formats.Nrbf.SerializationRecord record = NrbfDecoder.Decode(stream);
+///     // Use Nrbf to decode stream and rehydrate data.
+///     System.Formats.Nrbf.SerializationRecord record = System.Formats.Nrbf.NrbfDecoder.Decode(stream);
 ///     if (record.TypeName.AssemblyName.FullName != "System.Private.Windows.VirtualJson")
 ///     {
 ///         // The data was not serialized as JSON.
@@ -83,25 +59,44 @@ namespace System.Private.Windows;
 ///     }
 ///
 ///     if (record is not System.Formats.Nrbf.ClassRecord types
-///         || types.GetRawValue("<JsonBytes>k__BackingField") is not SZArrayRecord<byte> byteData
-///         || !TypeName.TryParse(typeData, out TypeName? result))
+///         || types.GetRawValue("<JsonBytes>k__BackingField") is not System.Formats.Nrbf.SZArrayRecord<byte> byteData
+///         || !System.Reflection.Metadata.TypeName.TryParse(types.TypeName.FullName.ToCharArray(), out System.Reflection.Metadata.TypeName? result))
 ///     {
 ///         // This is supposed to be JsonData, but somehow the data is corrupt.
 ///         throw new InvalidOperationException();
 ///     }
 ///
-///     TypeName genericTypeName = result.GetGenericArguments().Single();
+///     System.Reflection.Metadata.TypeName genericTypeName = result.GetGenericArguments().Single();
 ///     // TODO: Additional checking on generic type to block unwanted types if needed.
 ///
 ///     // This should return the original data that was JSON serialized.
 ///     System.Text.Json.JsonSerializer.Deserialize(byteData.GetArray(), genericType);
+///  }
 ///
-///      // OR
-///      // Use BinaryFormatter to rehydrate the data.
+///  [DllImport("kernel32.dll")]
+///  static extern int GlobalSize(IntPtr hMem);
 ///
-///      // This should return the original data that was JSON serialized.
-///      BinaryFormatter binaryFormatter = new() { Binder = new ReplicatedJsonDataBinder() };
-///      binaryFormatter.Deserialize(stream);
+///  [DllImport("kernel32.dll")]
+///  static extern IntPtr GlobalLock(IntPtr hMem);
+///
+///  [DllImport("kernel32.dll")]
+///  static extern int GlobalUnlock(IntPtr hMem);
+///
+///  // OR
+///  // Not recommended: deserialize using BinaryFormatter.
+///
+///  // This definition must live in an assembly named System.Private.Windows.VirtualJson in order to work as expected.
+///  namespace System.Private.Windows;
+///  [Serializable]
+///  struct JsonData<T> : IObjectReference
+///  {
+///     public byte[] JsonBytes { get; set; }
+///
+///     public object GetRealObject(StreamingContext context)
+///     {
+///         // TODO: Additional checking on generic type to block unwanted types if needed.
+///         return JsonSerializer.Deserialize(JsonBytes, typeof(T)) ?? throw new InvalidOperationException();
+///     }
 ///  }
 ///  ]]>
 /// </example>
