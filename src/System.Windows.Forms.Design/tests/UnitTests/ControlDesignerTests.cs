@@ -17,9 +17,22 @@ public class ControlDesignerTests : IDisposable
 {
     private readonly ControlDesigner _designer = new();
     private readonly Control _control = new();
+    private readonly Mock<IDesignerHost> _mockDesignerHost = new();
 
     public ControlDesignerTests()
     {
+        _mockDesignerHost
+            .Setup(h => h.RootComponent)
+            .Returns(_control);
+        _mockDesignerHost
+            .Setup(s => s.GetDesigner(It.IsAny<Control>()))
+            .Returns(_designer);
+        Mock<IComponentChangeService> mockComponentChangeService = new();
+        _mockDesignerHost
+            .Setup(s => s.GetService(typeof(IComponentChangeService)))
+            .Returns(mockComponentChangeService.Object);
+        Mock<ISite> mockSite = CreateMockSiteWithDesignerHost(_mockDesignerHost.Object);
+        _control.Site = mockSite.Object;
         _designer.Initialize(_control);
     }
 
@@ -119,35 +132,16 @@ public class ControlDesignerTests : IDisposable
     [InlineData(DockStyle.Fill, SelectionRules.Moveable | SelectionRules.TopSizeable | SelectionRules.LeftSizeable | SelectionRules.RightSizeable | SelectionRules.BottomSizeable)]
     public void SelectionRulesProperty(DockStyle dockStyle, SelectionRules selectionRulesParam)
     {
-        using Control control = new();
-        control.AutoSize = false;
-        using ControlDesigner designer = new();
-        Mock<IDesignerHost> mockDesignerHost = new();
-        mockDesignerHost
-            .Setup(h => h.RootComponent)
-            .Returns(control);
-        mockDesignerHost
-            .Setup(s => s.GetDesigner(It.IsAny<Control>()))
-            .Returns(designer);
-        Mock<IComponentChangeService> mockComponentChangeService = new();
-        mockDesignerHost
-            .Setup(s => s.GetService(typeof(IComponentChangeService)))
-            .Returns(mockComponentChangeService.Object);
-        Mock<ISite> mockSite = MockSite.CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
-        control.Site = mockSite.Object;
-
-        designer.Initialize(control);
-
-        SelectionRules defaultSelectionRules = designer.SelectionRules;
-        control.Dock = dockStyle;
-        SelectionRules finalSelectionRules = designer.SelectionRules;
+        SelectionRules defaultSelectionRules = _designer.SelectionRules;
+        _control.Dock = dockStyle;
+        SelectionRules finalSelectionRules = _designer.SelectionRules;
 
         using (new NoAssertContext())
         {
             finalSelectionRules &= ~selectionRulesParam;
         }
 
-        designer.SelectionRules.Should().Be(finalSelectionRules);
+        _designer.SelectionRules.Should().Be(finalSelectionRules);
     }
 
     [Fact]
@@ -310,17 +304,13 @@ public class ControlDesignerTests : IDisposable
     public void GetGlyphs_Locked_ReturnsLockedGlyphs()
     {
         Mock<IServiceProvider> mockServiceProvider = new();
-        Mock<ISite> mockSite = new();
         mockServiceProvider.Setup(s => s.GetService(It.IsAny<Type>())).Returns((object?)null);
-        mockSite.Setup(s => s.GetService(typeof(IServiceProvider))).Returns(mockServiceProvider.Object);
 
-        Mock<DesignerFrame> mockDesignerFrame = new(mockSite.Object) { CallBase = true };
+        Mock<DesignerFrame> mockDesignerFrame = new(_control.Site!) { CallBase = true };
         BehaviorService behaviorService = new(mockServiceProvider.Object, mockDesignerFrame.Object);
 
-        FieldInfo? behaviorServiceField = typeof(ControlDesigner).GetField("_behaviorService", BindingFlags.NonPublic | BindingFlags.Instance);
-        behaviorServiceField?.SetValue(_designer, behaviorService);
+        _designer.TestAccessor().Dynamic._behaviorService = behaviorService;
         _designer.TestAccessor().Dynamic.Locked = true;
-        _designer.TestAccessor().Dynamic._host = new Mock<IDesignerHost>().Object;
 
         GlyphCollection glyphs = _designer.GetGlyphs(GlyphSelectionType.SelectedPrimary);
 
@@ -450,45 +440,27 @@ public class ControlDesignerTests : IDisposable
     [InlineData(DockingBehavior.AutoDock, DockStyle.Fill)]
     public void InitializeNewComponent_DockingBehavior_DefinesDockStyle(DockingBehavior dockingBehavior, DockStyle dockStyle)
     {
-        using Control control = new();
-        using ControlDesigner designer = new();
-
-        Mock<IDesignerHost> mockDesignerHost = new();
-        mockDesignerHost
-            .Setup(h => h.RootComponent)
-            .Returns(control);
-        mockDesignerHost
-            .Setup(s => s.GetDesigner(It.IsAny<Control>()))
-            .Returns(designer);
-        Mock<IComponentChangeService> mockComponentChangeService = new();
-        mockDesignerHost
-            .Setup(s => s.GetService(typeof(IComponentChangeService)))
-            .Returns(mockComponentChangeService.Object);
-
-        TypeDescriptor.AddAttributes(control, new DockingAttribute(dockingBehavior));
+        TypeDescriptor.AddAttributes(_control, new DockingAttribute(dockingBehavior));
 
         using Component component = new()
         {
-            Site = MockSite.CreateMockSiteWithDesignerHost(mockDesignerHost.Object).Object
+            Site = _control.Site
         };
-        control.Site = component.Site;
-
-        designer.Initialize(control);
 
         Mock<ParentControlDesigner> mockParentDesigner = new();
-        mockDesignerHost.Setup(h => h.GetDesigner(It.IsAny<IComponent>())).Returns(mockParentDesigner.Object);
+        _mockDesignerHost.Setup(h => h.GetDesigner(It.IsAny<IComponent>())).Returns(mockParentDesigner.Object);
 
         Dictionary<string, object> defaultValues = new()
     {
         { "Parent", new Control() }
     };
 
-        designer.InitializeNewComponent(defaultValues);
+        _designer.InitializeNewComponent(defaultValues);
 
-        PropertyDescriptor? dockPropDescriptor = TypeDescriptor.GetProperties(control)["Dock"];
+        PropertyDescriptor? dockPropDescriptor = TypeDescriptor.GetProperties(_control)["Dock"];
         dockPropDescriptor.Should().NotBeNull();
         dockPropDescriptor.Should().BeAssignableTo<PropertyDescriptor>();
-        dockPropDescriptor?.GetValue(control).Should().Be(dockStyle);
+        dockPropDescriptor?.GetValue(_control).Should().Be(dockStyle);
     }
 
     [Fact]
