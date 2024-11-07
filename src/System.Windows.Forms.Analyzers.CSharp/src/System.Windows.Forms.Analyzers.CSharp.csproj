@@ -6,6 +6,7 @@
     <LangVersion>Preview</LangVersion>
     <Nullable>enable</Nullable>
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+    <IsAnalyzerProject>true</IsAnalyzerProject>
   </PropertyGroup>
 
   <ItemGroup>

@@ -561,7 +561,7 @@ public class PngCodecTest
         }
     }
 
-    private void Save(PixelFormat original, PixelFormat expected, bool colorCheck)
+    private static void Save(PixelFormat original, PixelFormat expected, bool colorCheck)
     {
         string sOutFile = $"linerect-{expected}.png";
 

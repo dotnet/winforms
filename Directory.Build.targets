@@ -1,10 +1,9 @@
 <Project>
 
-  <Import Project="$(RepositoryEngineeringDir)CodeStyle.targets" />
+  <Import Project="$(RepositoryEngineeringDir)Analyzer.targets" />
   <Import Project="Sdk.targets" Sdk="Microsoft.DotNet.Arcade.Sdk" />
   <Import Project="$(RepositoryEngineeringDir)packageContent.targets" />
   <Import Project="$(RepositoryEngineeringDir)versioning.targets" />
-  <Import Project="$(RepositoryEngineeringDir)ApiCompatibility\PublicApiAnalyzer.targets" />
   <Import Project="$(RepositoryEngineeringDir)Test.targets" Condition="'$(IsTestProject)' == 'true' "/>
 
   <!-- CA1416 Validate platform compatibility. Do not apply to netstandard as it does not have the attribute. -->

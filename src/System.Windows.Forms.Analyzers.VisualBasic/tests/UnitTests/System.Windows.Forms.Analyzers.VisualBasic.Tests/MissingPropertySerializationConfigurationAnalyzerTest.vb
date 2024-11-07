@@ -175,7 +175,7 @@ End Namespace
 
         context.TestState.OutputKind = OutputKind.WindowsApplication
 
-        Await context.RunAsync()
+        Await context.RunAsync().ConfigureAwait(continueOnCapturedContext:=True)
     End Function
 
     <Theory>
@@ -193,7 +193,7 @@ End Namespace
 
         context.TestState.OutputKind = OutputKind.WindowsApplication
 
-        Await context.RunAsync()
+        Await context.RunAsync().ConfigureAwait(continueOnCapturedContext:=True)
     End Function
 
     <Theory>
@@ -212,6 +212,6 @@ End Namespace
 
         context.TestState.OutputKind = OutputKind.WindowsApplication
 
-        Await context.RunAsync()
+        Await context.RunAsync().ConfigureAwait(continueOnCapturedContext:=True)
     End Function
 End Class
