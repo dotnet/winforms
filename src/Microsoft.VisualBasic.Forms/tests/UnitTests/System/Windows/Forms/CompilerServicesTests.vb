@@ -5,7 +5,6 @@ Option Strict Off
 
 Imports System.Windows.Forms
 Imports FluentAssertions
-Imports Microsoft.VisualBasic.CompilerServices
 Imports Xunit
 
 Namespace Microsoft.VisualBasic.Forms.Tests

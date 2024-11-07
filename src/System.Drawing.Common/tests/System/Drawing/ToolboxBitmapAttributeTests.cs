@@ -15,7 +15,7 @@ namespace System.Drawing.Tests
     {
         private static Size s_defaultSize = new(16, 16);
 
-        private void AssertDefaultSize(Image image)
+        private static void AssertDefaultSize(Image image)
         {
             Assert.Equal(s_defaultSize, image.Size);
         }
