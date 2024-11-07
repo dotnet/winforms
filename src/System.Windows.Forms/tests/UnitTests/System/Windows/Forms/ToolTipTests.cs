@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Windows.Forms.Automation;
 using Moq;
 using Moq.Protected;
+using Windows.Win32.Graphics.Dwm;
 
 namespace System.Windows.Forms.Tests;
 
@@ -784,7 +785,7 @@ public class ToolTipTests
 
 #pragma warning disable WFO5001
     [WinFormsFact]
-    public void ToolTip_DarkMode_GetColors_ReturnsExpected()
+    public unsafe void ToolTip_DarkMode_GetColors_ReturnsExpected()
     {
         if (SystemInformation.HighContrast)
         {
@@ -803,8 +804,17 @@ public class ToolTipTests
         var textColor = PInvokeCore.SendMessage(toolTip, PInvoke.TTM_GETTIPTEXTCOLOR);
         Color foreColor = ColorTranslator.FromWin32((int)textColor);
 
+        DWMWINDOWATTRIBUTE dmwWindowAttribute = DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE;
+        DWM_WINDOW_CORNER_PREFERENCE cornerPreference;
+        PInvoke.DwmGetWindowAttribute(
+            toolTip.HWND,
+            dmwWindowAttribute,
+            &cornerPreference,
+            sizeof(DWM_WINDOW_CORNER_PREFERENCE));
+
         backColor.ToArgb().Should().Be(SystemColors.Info.ToArgb());
         foreColor.ToArgb().Should().Be(SystemColors.InfoText.ToArgb());
+        cornerPreference.Should().Be(DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUNDSMALL);
     }
 #pragma warning restore WFO5001
 
