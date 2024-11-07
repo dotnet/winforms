@@ -3997,7 +3997,7 @@ internal sealed partial class PropertyGridView :
             startRow = 0;
         }
 
-        if (OwnerGrid.HavePropertyEntriesChanged())
+        if (fullRefresh || OwnerGrid.HavePropertyEntriesChanged())
         {
             if (HasEntries && !InPropertySet && !CommitEditTextBox())
             {
