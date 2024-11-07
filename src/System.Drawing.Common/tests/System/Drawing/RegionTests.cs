@@ -321,14 +321,14 @@ public class RegionTests
         {
             new Region(),
             new RectangleF[] { RectangleF.Empty },
-            new RectangleF[0]
+            Array.Empty<RectangleF>()
         };
 
         yield return new object[]
         {
             new Region(),
             new RectangleF[] { new(1, 2, 3, 4) },
-            new RectangleF[0]
+            Array.Empty<RectangleF>()
         };
     }
 
@@ -625,7 +625,7 @@ public class RegionTests
         {
             new Region(new Rectangle(500, 30, 60, 80)),
             new RectangleF[] { new(500, 30, 60, 80) },
-            new RectangleF[0]
+            Array.Empty<RectangleF>()
         };
 
         yield return new object[]
@@ -1067,14 +1067,14 @@ public class RegionTests
         {
             new Region(new Rectangle(0, 0, 0, 0)),
             new RectangleF[] { new(500, 30, 60, 80) },
-            new RectangleF[0]
+            Array.Empty<RectangleF>()
         };
 
         yield return new object[]
         {
             new Region(new Rectangle(500, 30, 60, 80)),
             new RectangleF[] { RectangleF.Empty },
-            new RectangleF[0]
+            Array.Empty<RectangleF>()
         };
 
         yield return new object[]
@@ -1088,7 +1088,7 @@ public class RegionTests
         {
             new Region(),
             new RectangleF[] { RectangleF.Empty },
-            new RectangleF[0]
+            Array.Empty<RectangleF>()
         };
 
         yield return new object[]
@@ -1107,7 +1107,7 @@ public class RegionTests
                 new(70, 360, 30, 50),
                 new(80, 400, 30, 10)
             },
-            new RectangleF[0]
+            Array.Empty<RectangleF>()
         };
     }
 
@@ -1597,9 +1597,9 @@ public class RegionTests
             },
             new RectangleF[]
             {
-                new (10, 20, 50, 50),
-                new (100, 100, 60, 60),
-                new (200, 200, 80, 80)
+                new(10, 20, 50, 50),
+                new(100, 100, 60, 60),
+                new(200, 200, 80, 80)
             }
         };
 
@@ -1974,7 +1974,7 @@ public class RegionTests
         {
             new Region(new RectangleF(500, 30, 60, 80)),
             new RectangleF[] { new(500, 30, 60, 80) },
-            new RectangleF[0]
+            Array.Empty<RectangleF>()
         };
 
         yield return new object[]

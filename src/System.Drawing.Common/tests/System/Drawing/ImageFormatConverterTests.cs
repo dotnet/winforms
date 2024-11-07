@@ -161,7 +161,7 @@ public class ImageFormatConverterTest
         Assert.True(_imgFmtConv.GetStandardValuesSupported(null), "GetStandardValuesSupported(null)");
     }
 
-    private void CheckStandardValues(ICollection values)
+    private static void CheckStandardValues(ICollection values)
     {
         bool memorybmp = false;
         bool bmp = false;

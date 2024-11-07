@@ -340,7 +340,7 @@ public class JpegCodecTest
         }
     }
 
-    private void Save(PixelFormat original, PixelFormat expected)
+    private static void Save(PixelFormat original, PixelFormat expected)
     {
         string sOutFile = $"linerect-{expected}.jpeg";
 

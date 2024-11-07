@@ -171,7 +171,7 @@ End Namespace
                     DiagnosticResult.CompilerWarning(diagnosticId).WithSpan(46, 25, 46, 102)
                 })
 
-        Await context.RunAsync()
+        Await context.RunAsync().ConfigureAwait(continueOnCapturedContext:=True)
     End Function
 
 End Class

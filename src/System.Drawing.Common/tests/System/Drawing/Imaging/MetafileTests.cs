@@ -927,7 +927,7 @@ public class MetafileTests
             metafile.PlayRecord(EmfPlusRecordType.BeginContainer, 0, 1, new byte[1]));
     }
 
-    private void DeleteFile(string path)
+    private static void DeleteFile(string path)
     {
         if (File.Exists(path))
         {
@@ -935,12 +935,12 @@ public class MetafileTests
         }
     }
 
-    private string GetPath(string fileName)
+    private static string GetPath(string fileName)
     {
         return Helpers.GetTestBitmapPath(fileName);
     }
 
-    private void AssertEmfType(MetafileHeader metafileHeader, EmfType emfType)
+    private static void AssertEmfType(MetafileHeader metafileHeader, EmfType emfType)
     {
         switch (emfType)
         {
@@ -970,7 +970,7 @@ public class MetafileTests
         }
     }
 
-    private void AssertMetafileHeaderIsBlank(MetafileHeader metafileHeader)
+    private static void AssertMetafileHeaderIsBlank(MetafileHeader metafileHeader)
     {
         Assert.Equal(new Rectangle(0, 0, 0, 0), metafileHeader.Bounds);
         Assert.Equal(0, metafileHeader.MetafileSize);
@@ -985,7 +985,7 @@ public class MetafileTests
         Assert.Equal(GraphicsUnit.Pixel, graphicsUnit);
     }
 
-    private void AssertMetafileHeader(MetafileHeader header)
+    private static void AssertMetafileHeader(MetafileHeader header)
     {
         Assert.Equal(MetafileType.WmfPlaceable, header.Type);
         Assert.Equal(0x300, header.Version);

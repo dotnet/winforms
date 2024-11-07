@@ -320,8 +320,8 @@ public class GraphicsPathTests
     [Fact]
     public void AddLines_ZeroPoints_ThrowsArgumentException()
     {
-        AssertExtensions.Throws<ArgumentException>("points", null, () => new GraphicsPath().AddLines(new Point[0]));
-        AssertExtensions.Throws<ArgumentException>("points", null, () => new GraphicsPath().AddLines(new PointF[0]));
+        AssertExtensions.Throws<ArgumentException>("points", null, () => new GraphicsPath().AddLines(Array.Empty<Point>()));
+        AssertExtensions.Throws<ArgumentException>("points", null, () => new GraphicsPath().AddLines(Array.Empty<PointF>()));
     }
 
     [Fact]
@@ -430,7 +430,7 @@ public class GraphicsPathTests
 
     public static IEnumerable<object[]> AddBeziers_InvalidFloatPointsLength_TestData()
     {
-        yield return new object[] { new PointF[0] };
+        yield return new object[] { Array.Empty<PointF>() };
         yield return new object[] { new PointF[1] { new(1f, 1f) } };
         yield return new object[] { new PointF[2] { new(1f, 1f), new(2f, 2f) } };
         yield return new object[] { new PointF[3] { new(1f, 1f), new(2f, 2f), new(3f, 3f) } };
@@ -561,7 +561,7 @@ public class GraphicsPathTests
 
     public static IEnumerable<object[]> AddCurve_InvalidFloatPointsLength_TestData()
     {
-        yield return new object[] { new PointF[0] };
+        yield return new object[] { Array.Empty<PointF>() };
         yield return new object[] { new PointF[1] { new(1f, 1f) } };
     }
 
@@ -576,7 +576,7 @@ public class GraphicsPathTests
 
     public static IEnumerable<object[]> AddCurve_InvalidPointsLength_TestData()
     {
-        yield return new object[] { new Point[0] };
+        yield return new object[] { Array.Empty<Point>() };
         yield return new object[] { new Point[1] { new(1, 1) } };
     }
 
@@ -669,7 +669,7 @@ public class GraphicsPathTests
 
     public static IEnumerable<object[]> AddClosedCurve_InvalidPointsLength_TestData()
     {
-        yield return new object[] { new Point[0] };
+        yield return new object[] { Array.Empty<Point>() };
         yield return new object[] { new Point[1] { new(1, 1) } };
         yield return new object[] { new Point[2] { new(1, 1), new(2, 2) } };
     }
@@ -684,7 +684,7 @@ public class GraphicsPathTests
 
     public static IEnumerable<object[]> AddClosedCurve_InvalidFloatPointsLength_TestData()
     {
-        yield return new object[] { new PointF[0] };
+        yield return new object[] { Array.Empty<PointF>() };
         yield return new object[] { new PointF[1] { new(1f, 1f) } };
         yield return new object[] { new PointF[2] { new(1f, 1f), new(2f, 2f) } };
     }
@@ -942,7 +942,7 @@ public class GraphicsPathTests
 
     public static IEnumerable<object[]> AddPolygon_InvalidFloadPointsLength_TestData()
     {
-        yield return new object[] { new PointF[0] };
+        yield return new object[] { Array.Empty<PointF>() };
         yield return new object[] { new PointF[1] { new(1f, 1f) } };
         yield return new object[] { new PointF[2] { new(1f, 1f), new(2f, 2f) } };
     }
@@ -957,7 +957,7 @@ public class GraphicsPathTests
 
     public static IEnumerable<object[]> AddPolygon_InvalidPointsLength_TestData()
     {
-        yield return new object[] { new Point[0] };
+        yield return new object[] { Array.Empty<Point>() };
         yield return new object[] { new Point[1] { new(1, 1) } };
         yield return new object[] { new Point[2] { new(1, 1), new(2, 2) } };
     }
@@ -2059,19 +2059,19 @@ public class GraphicsPathTests
         Assert.Equal(expectedTypes, actualTypes);
     }
 
-    private void AssertEmptyGraphicsPath(GraphicsPath gp)
+    private static void AssertEmptyGraphicsPath(GraphicsPath gp)
     {
         Assert.Empty(gp.PathData.Points);
         Assert.Empty(gp.PathData.Types);
         Assert.Equal(0, gp.PointCount);
     }
 
-    private void AssertEqual(float expexted, float actual, float tollerance)
+    private static void AssertEqual(float expexted, float actual, float tollerance)
     {
         AssertExtensions.LessThanOrEqualTo(Math.Abs(expexted - actual), tollerance);
     }
 
-    private void AssertLine(GraphicsPath path)
+    private static void AssertLine(GraphicsPath path)
     {
         PointF[] expectedPoints =
         [
@@ -2086,7 +2086,7 @@ public class GraphicsPathTests
         path.PathTypes.Should().BeEquivalentTo(new byte[] { 0, 1 });
     }
 
-    private void AssertArc(GraphicsPath path)
+    private static void AssertArc(GraphicsPath path)
     {
         PointF[] expectedPoints =
         [
@@ -2102,7 +2102,7 @@ public class GraphicsPathTests
         path.PathTypes.Should().BeEquivalentTo(new byte[] { 0, 3, 3, 3 });
     }
 
-    private void AssertBezier(GraphicsPath path)
+    private static void AssertBezier(GraphicsPath path)
     {
         PointF[] expectedPoints =
         [
@@ -2119,7 +2119,7 @@ public class GraphicsPathTests
         path.PathTypes.Should().BeEquivalentTo(new byte[] { 0, 3, 3, 3 });
     }
 
-    private void AssertCurve(GraphicsPath path)
+    private static void AssertCurve(GraphicsPath path)
     {
         PointF[] expectedPoints =
         [
@@ -2135,7 +2135,7 @@ public class GraphicsPathTests
         path.PathTypes.Should().BeEquivalentTo(new byte[] { 0, 3, 3, 3 });
     }
 
-    private void AssertClosedCurve(GraphicsPath path)
+    private static void AssertClosedCurve(GraphicsPath path)
     {
         path.PathPoints.Should().HaveCount(10);
         path.PathTypes.Should().HaveCount(10);
@@ -2144,7 +2144,7 @@ public class GraphicsPathTests
         path.PathTypes.Should().BeEquivalentTo(new byte[] { 0, 3, 3, 3, 3, 3, 3, 3, 3, 131 });
     }
 
-    private void AssertRectangle(GraphicsPath path)
+    private static void AssertRectangle(GraphicsPath path)
     {
         PointF[] expectedPoints =
         [
@@ -2161,7 +2161,7 @@ public class GraphicsPathTests
         path.PathTypes.Should().BeEquivalentTo(new byte[] { 0, 1, 1, 129 });
     }
 
-    private void AssertEllipse(GraphicsPath path)
+    private static void AssertEllipse(GraphicsPath path)
     {
         path.PathPoints.Should().HaveCount(13);
         path.PathTypes.Should().HaveCount(13);
@@ -2170,7 +2170,7 @@ public class GraphicsPathTests
         path.PathTypes.Should().BeEquivalentTo(new byte[] { 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 131 });
     }
 
-    private void AssertPie(GraphicsPath path)
+    private static void AssertPie(GraphicsPath path)
     {
         PointF[] expectedPoints =
         [
@@ -2187,7 +2187,7 @@ public class GraphicsPathTests
         path.PathTypes.Should().BeEquivalentTo(new byte[] { 0, 1, 3, 3, 131 });
     }
 
-    private void AssertPolygon(GraphicsPath path)
+    private static void AssertPolygon(GraphicsPath path)
     {
         PointF[] expectedPoints =
         [
@@ -2204,7 +2204,7 @@ public class GraphicsPathTests
         path.PathTypes.Should().BeEquivalentTo(new byte[] { 0, 1, 129 });
     }
 
-    private void AssertFlats(GraphicsPath flat, GraphicsPath original)
+    private static void AssertFlats(GraphicsPath flat, GraphicsPath original)
     {
         flat.PointCount.Should().BeGreaterThanOrEqualTo(original.PointCount);
         for (int i = 0; i < flat.PointCount; i++)
@@ -2213,7 +2213,7 @@ public class GraphicsPathTests
         }
     }
 
-    private void AssertWrapNaN(GraphicsPath path)
+    private static void AssertWrapNaN(GraphicsPath path)
     {
         byte[] expectedTypes = [0, 1, 129];
 
@@ -2227,7 +2227,7 @@ public class GraphicsPathTests
         Assert.Equal(expectedTypes, path.PathTypes);
     }
 
-    private void AssertWiden3(GraphicsPath path)
+    private static void AssertWiden3(GraphicsPath path)
     {
         PointF[] expectedPoints =
         [
@@ -2242,7 +2242,7 @@ public class GraphicsPathTests
         path.PathTypes.Should().BeEquivalentTo(new byte[] { 0, 1, 129, 0, 1, 1, 1, 1, 129 });
     }
 
-    private void AssertIsOutlineVisibleLine(Graphics graphics)
+    private static void AssertIsOutlineVisibleLine(Graphics graphics)
     {
         using GraphicsPath gp = new();
         using Pen pen = new(Color.Red, 3.0f);
@@ -2270,7 +2270,7 @@ public class GraphicsPathTests
         Assert.True(gp.IsOutlineVisible(fPoint, Pens.Red, graphics));
     }
 
-    private void AssertIsOutlineVisibleRectangle(Graphics graphics)
+    private static void AssertIsOutlineVisibleRectangle(Graphics graphics)
     {
         using Pen pen = new(Color.Red, 3.0f);
         using GraphicsPath gp = new();
@@ -2298,7 +2298,7 @@ public class GraphicsPathTests
         Assert.True(gp.IsOutlineVisible(fPoint, pen, graphics));
     }
 
-    private void AssertIsVisibleRectangle(Graphics graphics)
+    private static void AssertIsVisibleRectangle(Graphics graphics)
     {
         using GraphicsPath gp = new();
         gp.AddRectangle(new Rectangle(10, 10, 20, 20));
@@ -2319,7 +2319,7 @@ public class GraphicsPathTests
         Assert.False(gp.IsVisible(29.4f, 29.5f, graphics));
     }
 
-    private void AssertIsVisibleEllipse(Graphics graphics)
+    private static void AssertIsVisibleEllipse(Graphics graphics)
     {
         using GraphicsPath gp = new();
         gp.AddEllipse(new Rectangle(10, 10, 20, 20));
@@ -2331,7 +2331,7 @@ public class GraphicsPathTests
         Assert.False(gp.IsVisible(29.4f, 29.4f, graphics));
     }
 
-    private void AssertReverse(GraphicsPath gp, PointF[] expectedPoints, byte[] expectedTypes)
+    private static void AssertReverse(GraphicsPath gp, PointF[] expectedPoints, byte[] expectedTypes)
     {
         gp.Reverse();
         PointF[] reversedPoints = gp.PathPoints;
