@@ -421,7 +421,7 @@ public class BmpCodecTest
         Assert.Equal(-9211799, bmp.GetPixel(160, 160).ToArgb());
     }
 
-    private void Save(PixelFormat original, PixelFormat expected, bool colorCheck)
+    private static void Save(PixelFormat original, PixelFormat expected, bool colorCheck)
     {
         string sOutFile = $"linerect-{expected}.bmp";
 

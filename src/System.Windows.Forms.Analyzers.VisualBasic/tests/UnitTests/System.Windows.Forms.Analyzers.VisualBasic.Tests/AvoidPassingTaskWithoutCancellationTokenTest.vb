@@ -185,7 +185,7 @@ End Namespace
                     endColumn:=102)
             })
 
-        Await context.RunAsync()
+        Await context.RunAsync().ConfigureAwait(continueOnCapturedContext:=True)
     End Function
 
 End Class

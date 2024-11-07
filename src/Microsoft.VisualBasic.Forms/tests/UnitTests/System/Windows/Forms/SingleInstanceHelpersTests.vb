@@ -67,15 +67,16 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     awaitable.GetAwaiter().GetResult()
                     Dim CancelToken As New CancellationToken
                     Dim buffer As Byte() = New Byte(commandLine.Length) {}
-                    Dim count As Integer = Await pipeServer.ReadAsync(
-                        buffer:=buffer.AsMemory(start:=0, length:=commandLine.Length))
+                    Dim count As Integer =
+                        Await pipeServer.ReadAsync(buffer:=buffer.AsMemory(start:=0, length:=commandLine.Length)) _
+                            .ConfigureAwait(continueOnCapturedContext:=True)
 
                     ' Ensure the result is set
                     Do
-                        Await Task.Delay(5)
+                        Await Task.Delay(5).ConfigureAwait(continueOnCapturedContext:=True)
                     Loop Until _resultArgs IsNot Nothing
                     _resultArgs(0).Should.Be("Hello")
-                    Await tokenSource.CancelAsync()
+                    Await tokenSource.CancelAsync().ConfigureAwait(continueOnCapturedContext:=True)
                 End Using
             End If
         End Function
