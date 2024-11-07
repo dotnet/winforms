@@ -12,8 +12,8 @@ public class DataSourceDescriptorCollectionTests
     [Fact]
     public void Add_ShouldAddItem()
     {
+        using MockDataSourceDescriptor descriptor = new();
         DataSourceDescriptorCollection collection = new();
-        DataSourceDescriptor descriptor = new MockDataSourceDescriptor();
 
         int index = collection.Add(descriptor);
 
@@ -25,8 +25,8 @@ public class DataSourceDescriptorCollectionTests
     [Fact]
     public void IndexOf_ShouldReturnCorrectIndex()
     {
+        using MockDataSourceDescriptor descriptor = new();
         DataSourceDescriptorCollection collection = new();
-        DataSourceDescriptor descriptor = new MockDataSourceDescriptor();
 
         collection.Add(descriptor);
         int index = collection.IndexOf(descriptor);
@@ -37,9 +37,9 @@ public class DataSourceDescriptorCollectionTests
     [Fact]
     public void Insert_ShouldInsertItemAtIndex()
     {
+        using MockDataSourceDescriptor descriptor1 = new();
+        using MockDataSourceDescriptor descriptor2 = new();
         DataSourceDescriptorCollection collection = new();
-        DataSourceDescriptor descriptor1 = new MockDataSourceDescriptor();
-        DataSourceDescriptor descriptor2 = new MockDataSourceDescriptor();
 
         collection.Add(descriptor1);
         collection.Insert(0, descriptor2);
@@ -51,8 +51,8 @@ public class DataSourceDescriptorCollectionTests
     [Fact]
     public void Contains_ShouldReturnTrueIfItemExists()
     {
+        using MockDataSourceDescriptor descriptor = new();
         DataSourceDescriptorCollection collection = new();
-        DataSourceDescriptor descriptor = new MockDataSourceDescriptor();
 
         collection.Add(descriptor);
         bool contains = collection.Contains(descriptor);
@@ -63,9 +63,9 @@ public class DataSourceDescriptorCollectionTests
     [Fact]
     public void CopyTo_ShouldCopyItemsToArray()
     {
+        using MockDataSourceDescriptor descriptor1 = new();
+        using MockDataSourceDescriptor descriptor2 = new();
         DataSourceDescriptorCollection collection = new();
-        DataSourceDescriptor descriptor1 = new MockDataSourceDescriptor();
-        DataSourceDescriptor descriptor2 = new MockDataSourceDescriptor();
 
         collection.Add(descriptor1);
         collection.Add(descriptor2);
@@ -80,8 +80,8 @@ public class DataSourceDescriptorCollectionTests
     [Fact]
     public void Remove_ShouldRemoveItem()
     {
+        using MockDataSourceDescriptor descriptor = new();
         DataSourceDescriptorCollection collection = new();
-        DataSourceDescriptor descriptor = new MockDataSourceDescriptor();
 
         collection.Add(descriptor);
         collection.Remove(descriptor);
@@ -93,9 +93,9 @@ public class DataSourceDescriptorCollectionTests
     [Fact]
     public void Indexer_ShouldGetAndSetItem()
     {
+        using MockDataSourceDescriptor descriptor1 = new();
+        using MockDataSourceDescriptor descriptor2 = new();
         DataSourceDescriptorCollection collection = new();
-        DataSourceDescriptor descriptor1 = new MockDataSourceDescriptor();
-        DataSourceDescriptor descriptor2 = new MockDataSourceDescriptor();
 
         collection.Add(descriptor1);
         collection[0] = descriptor2;
@@ -103,11 +103,12 @@ public class DataSourceDescriptorCollectionTests
         collection[0].Should().Be(descriptor2);
     }
 
-    private class MockDataSourceDescriptor : DataSourceDescriptor
+    private class MockDataSourceDescriptor : DataSourceDescriptor, IDisposable
     {
         public override string Name => "Mock";
         public override Bitmap Image => new(1, 1);
         public override string TypeName => "MockType";
         public override bool IsDesignable => true;
+        public void Dispose() => Image.Dispose();
     }
 }
