@@ -18,7 +18,7 @@ public class DataGridViewColumnCollectionTests
         Assert.Same(control, collection.DataGridView);
         Assert.False(collection.IsReadOnly);
         Assert.False(collection.IsSynchronized);
-        Assert.True(collection.List is ArrayList);
+        Assert.NotNull(collection.List);
         Assert.Empty(collection.List);
         Assert.Same(collection, collection.SyncRoot);
     }

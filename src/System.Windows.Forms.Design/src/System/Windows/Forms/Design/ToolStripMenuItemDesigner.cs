@@ -814,10 +814,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                 // ToolStripItem designer tries to set the TEXT for the item in the InitializeNewComponent().
                 // But since we are create item thru InSitu .. we shouldn't do this.
                 designer.InternalCreate = true;
-                if (designer is ComponentDesigner)
-                {
-                    designer.InitializeNewComponent(null);
-                }
+                designer.InitializeNewComponent(null);
             }
             finally
             {
@@ -893,10 +890,7 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                     designer.InternalCreate = true;
                 }
 
-                if (designer is ComponentDesigner)
-                {
-                    designer.InitializeNewComponent(null);
-                }
+                designer?.InitializeNewComponent(null);
             }
             finally
             {
