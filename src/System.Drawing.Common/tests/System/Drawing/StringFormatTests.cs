@@ -197,7 +197,7 @@ public class StringFormatTests
 
     public static IEnumerable<object[]> SetMeasurableCharacterRanges_TestData()
     {
-        yield return new object[] { new CharacterRange[0] };
+        yield return new object[] { Array.Empty<CharacterRange>() };
         yield return new object[] { new CharacterRange[] { new(1, 2) } };
         yield return new object[] { new CharacterRange[] { new(-1, -1) } };
         yield return new object[] { new CharacterRange[32] };

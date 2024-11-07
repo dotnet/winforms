@@ -735,8 +735,8 @@ public partial class MatrixTests
     public void TransformPoints_EmptyPoints_ThrowsArgumentException()
     {
         using Matrix matrix = new();
-        AssertExtensions.Throws<ArgumentException>(null, () => matrix.TransformPoints(new Point[0]));
-        AssertExtensions.Throws<ArgumentException>(null, () => matrix.TransformPoints(new PointF[0]));
+        AssertExtensions.Throws<ArgumentException>(null, () => matrix.TransformPoints(Array.Empty<Point>()));
+        AssertExtensions.Throws<ArgumentException>(null, () => matrix.TransformPoints(Array.Empty<PointF>()));
     }
 
     [Fact]
@@ -803,8 +803,8 @@ public partial class MatrixTests
     {
         using Matrix matrix = new();
         AssertExtensions.Throws<ArgumentException>(null, () => matrix.VectorTransformPoints([]));
-        AssertExtensions.Throws<ArgumentException>(null, () => matrix.TransformVectors(new Point[0]));
-        AssertExtensions.Throws<ArgumentException>(null, () => matrix.TransformVectors(new PointF[0]));
+        AssertExtensions.Throws<ArgumentException>(null, () => matrix.TransformVectors(Array.Empty<Point>()));
+        AssertExtensions.Throws<ArgumentException>(null, () => matrix.TransformVectors(Array.Empty<PointF>()));
     }
 
     [Fact]

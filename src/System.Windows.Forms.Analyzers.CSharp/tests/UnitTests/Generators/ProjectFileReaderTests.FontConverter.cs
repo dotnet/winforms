@@ -27,7 +27,7 @@ public partial class ProjectFileReaderTests
 
         public static TheoryData<CultureInfo, string, string, float, int, int> TestConvertFormData()
         {
-            TheoryData<CultureInfo, string, string, float, int, int> testData = new();
+            TheoryData<CultureInfo, string, string, float, int, int> testData = [];
 
             foreach (string cultureName in s_locales)
             {
