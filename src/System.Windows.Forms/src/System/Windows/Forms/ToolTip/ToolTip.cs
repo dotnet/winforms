@@ -725,12 +725,15 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
             }
             else if (Application.IsDarkModeEnabled)
             {
-                DWM_WINDOW_CORNER_PREFERENCE roundSmall = DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUNDSMALL;
-                PInvoke.DwmSetWindowAttribute(
-                    HWND,
-                    DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE,
-                    &roundSmall,
-                    sizeof(DWM_WINDOW_CORNER_PREFERENCE));
+                if (OsVersion.IsWindows11_OrGreater())
+                {
+                    DWM_WINDOW_CORNER_PREFERENCE roundSmall = DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUNDSMALL;
+                    PInvoke.DwmSetWindowAttribute(
+                        HWND,
+                        DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE,
+                        &roundSmall,
+                        sizeof(DWM_WINDOW_CORNER_PREFERENCE));
+                }
 
                 PInvokeCore.SendMessage(HWND, PInvoke.TTM_SETWINDOWTHEME, default, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}");
             }

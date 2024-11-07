@@ -785,7 +785,7 @@ public class ToolTipTests
 
 #pragma warning disable WFO5001
     [WinFormsFact]
-    public unsafe void ToolTip_DarkMode_GetColors_ReturnsExpected()
+    public void ToolTip_DarkMode_GetColors_ReturnsExpected()
     {
         if (SystemInformation.HighContrast)
         {
@@ -804,6 +804,29 @@ public class ToolTipTests
         var textColor = PInvokeCore.SendMessage(toolTip, PInvoke.TTM_GETTIPTEXTCOLOR);
         Color foreColor = ColorTranslator.FromWin32((int)textColor);
 
+        backColor.ToArgb().Should().Be(SystemColors.Info.ToArgb());
+        foreColor.ToArgb().Should().Be(SystemColors.InfoText.ToArgb());
+    }
+
+    [WinFormsFact]
+    public unsafe void ToolTip_DarkMode_GetCornerPreference_ReturnsExpected()
+    {
+        if (!OsVersion.IsWindows11_OrGreater())
+        {
+            return;
+        }
+
+        if (SystemInformation.HighContrast)
+        {
+            // We don't run this test in HighContrast mode.
+            return;
+        }
+
+        using ApplicationColorModeScope colorModeScope = new(colorMode: SystemColorMode.Dark);
+        using SubToolTip toolTip = new();
+
+        toolTip.Handle.Should().NotBe(IntPtr.Zero); // A workaround to create the toolTip native window Handle
+
         DWMWINDOWATTRIBUTE dmwWindowAttribute = DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE;
         DWM_WINDOW_CORNER_PREFERENCE cornerPreference;
         PInvoke.DwmGetWindowAttribute(
@@ -812,8 +835,6 @@ public class ToolTipTests
             &cornerPreference,
             sizeof(DWM_WINDOW_CORNER_PREFERENCE));
 
-        backColor.ToArgb().Should().Be(SystemColors.Info.ToArgb());
-        foreColor.ToArgb().Should().Be(SystemColors.InfoText.ToArgb());
         cornerPreference.Should().Be(DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUNDSMALL);
     }
 #pragma warning restore WFO5001
