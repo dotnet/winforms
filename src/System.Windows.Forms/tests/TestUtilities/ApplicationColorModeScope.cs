@@ -15,9 +15,6 @@ public readonly ref struct ApplicationColorModeScope
 
     public ApplicationColorModeScope(SystemColorMode colorMode)
     {
-        // Prevent multiple ApplicationColorModeScopes from running simultaneously.
-        // Using Monitor to allow recursion on the same thread.
-        Monitor.Enter(typeof(ApplicationColorModeScope));
         _originalColorMode = Application.ColorMode;
 
         if (_originalColorMode != colorMode)
@@ -28,16 +25,9 @@ public readonly ref struct ApplicationColorModeScope
 
     public void Dispose()
     {
-        try
+        if (Application.ColorMode != _originalColorMode)
         {
-            if (Application.ColorMode != _originalColorMode)
-            {
-                Application.SetColorMode(_originalColorMode);
-            }
-        }
-        finally
-        {
-            Monitor.Exit(typeof(ApplicationColorModeScope));
+            Application.SetColorMode(_originalColorMode);
         }
     }
 }
