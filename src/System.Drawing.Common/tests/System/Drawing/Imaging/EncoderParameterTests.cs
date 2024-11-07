@@ -7,7 +7,7 @@ public class EncoderParameterTests
 {
     private static readonly Encoder s_anyEncoder = Encoder.ChrominanceTable;
 
-    private void CheckEncoderParameter(EncoderParameter encoderParameter, Encoder expectedEncoder, EncoderParameterValueType expectedType, int expectedNumberOfValues)
+    private static void CheckEncoderParameter(EncoderParameter encoderParameter, Encoder expectedEncoder, EncoderParameterValueType expectedType, int expectedNumberOfValues)
     {
         Assert.Equal(expectedEncoder.Guid, encoderParameter.Encoder.Guid);
         Assert.Equal(expectedType, encoderParameter.ValueType);
@@ -272,12 +272,12 @@ public class EncoderParameterTests
             yield return new object[] { new Action(() => new EncoderParameter(null, rangebegin: 0, rangeend: 0)) };
             yield return new object[] { new Action(() => new EncoderParameter(null, 0, 0, 0, 0)) };
             yield return new object[] { new Action(() => new EncoderParameter(null, "anyString")) };
-            yield return new object[] { new Action(() => new EncoderParameter(null, new byte[] { })) };
+            yield return new object[] { new Action(() => new EncoderParameter(null, Array.Empty<byte>())) };
             yield return new object[] { new Action(() => new EncoderParameter(null, [], false)) };
-            yield return new object[] { new Action(() => new EncoderParameter(null, new short[] { })) };
-            yield return new object[] { new Action(() => new EncoderParameter(null, new long[] { })) };
-            yield return new object[] { new Action(() => new EncoderParameter(null, new int[] { }, [])) };
-            yield return new object[] { new Action(() => new EncoderParameter(null, new long[] { }, [])) };
+            yield return new object[] { new Action(() => new EncoderParameter(null, Array.Empty<short>())) };
+            yield return new object[] { new Action(() => new EncoderParameter(null, Array.Empty<long>())) };
+            yield return new object[] { new Action(() => new EncoderParameter(null, Array.Empty<int>(), [])) };
+            yield return new object[] { new Action(() => new EncoderParameter(null, Array.Empty<long>(), [])) };
         }
     }
 
@@ -291,12 +291,12 @@ public class EncoderParameterTests
         Assert.Throws<NullReferenceException>(() => new EncoderParameter(null, rangebegin: 0, rangeend: 0));
         Assert.Throws<NullReferenceException>(() => new EncoderParameter(null, 0, 0, 0, 0));
         Assert.Throws<NullReferenceException>(() => new EncoderParameter(null, "anyString"));
-        Assert.Throws<NullReferenceException>(() => new EncoderParameter(null, new byte[] { }));
+        Assert.Throws<NullReferenceException>(() => new EncoderParameter(null, Array.Empty<byte>()));
         Assert.Throws<NullReferenceException>(() => new EncoderParameter(null, [], false));
-        Assert.Throws<NullReferenceException>(() => new EncoderParameter(null, new short[] { }));
-        Assert.Throws<NullReferenceException>(() => new EncoderParameter(null, new long[] { }));
-        Assert.Throws<NullReferenceException>(() => new EncoderParameter(null, new int[] { }, []));
-        Assert.Throws<NullReferenceException>(() => new EncoderParameter(null, new long[] { }, []));
+        Assert.Throws<NullReferenceException>(() => new EncoderParameter(null, Array.Empty<short>()));
+        Assert.Throws<NullReferenceException>(() => new EncoderParameter(null, Array.Empty<long>()));
+        Assert.Throws<NullReferenceException>(() => new EncoderParameter(null, Array.Empty<int>(), []));
+        Assert.Throws<NullReferenceException>(() => new EncoderParameter(null, Array.Empty<long>(), []));
     }
 
     [Theory]
