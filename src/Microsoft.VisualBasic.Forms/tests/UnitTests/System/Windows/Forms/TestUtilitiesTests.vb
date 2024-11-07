@@ -9,6 +9,13 @@ Namespace Microsoft.VisualBasic.Forms.Tests
     Public Class TestUtilitiesTests
 
         <WinFormsFact>
+        Public Sub AuthenticationModeDataIteratorTests()
+            Dim testClass As New AuthenticationModeData
+            testClass.IEnumerable_GetEnumerator.Should.NotBeNull()
+            testClass.Any.Should.BeTrue()
+        End Sub
+
+        <WinFormsFact>
         Public Sub TimeTestDataIteratorTests()
             Dim testClass As New TimeTestData
             testClass.IEnumerable_GetEnumerator.Should.NotBeNull()

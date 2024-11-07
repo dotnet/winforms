@@ -4,7 +4,6 @@
 Option Strict Off
 
 Imports System.Reflection
-Imports System.Windows.Forms
 Imports FluentAssertions
 Imports Microsoft.VisualBasic.ApplicationServices
 Imports Xunit
@@ -23,10 +22,15 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsTheory>
+        <ClassData(GetType(AuthenticationModeData))>
         Public Sub ValidateAuthenticationModeEnumValues(mode As AuthenticationMode)
             Dim testAccessor As ITestAccessor = GetType(WindowsFormsApplicationBase).TestAccessor()
-            testAccessor.Dynamic.ValidateAuthenticationModeEnumValue(mode, NameOf(AuthenticationMode))
+            Dim testCode As Action =
+                Sub()
+                    testAccessor.Dynamic.ValidateAuthenticationModeEnumValue(mode, NameOf(AuthenticationMode))
+                End Sub
 
+            testCode.Should.NotThrow()
         End Sub
 
     End Class
