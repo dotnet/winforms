@@ -3,6 +3,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using Windows.Win32.Graphics.Dwm;
 
 namespace System.Windows.Forms;
 
@@ -19,6 +20,9 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
     // The actual delay values are based on the user-set double click time.
     // These values are initialized using the default double-click time value.
     internal const int DefaultDelay = 500;
+
+    internal const string DarkModeIdentifier = "DarkMode";
+    internal const string ExplorerThemeIdentifier = "Explorer";
 
     // These values are copied from the ComCtl32's tooltip.
     private const int ReshowRatio = 5;
@@ -715,9 +719,20 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
             _window.CreateHandle(cp);
 
 #pragma warning disable WFO5001
-            if (SystemInformation.HighContrast || Application.IsDarkModeEnabled)
+            if (SystemInformation.HighContrast)
             {
                 PInvoke.SetWindowTheme(HWND, string.Empty, string.Empty);
+            }
+            else if (Application.IsDarkModeEnabled)
+            {
+                DWM_WINDOW_CORNER_PREFERENCE roundSmall = DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUNDSMALL;
+                PInvoke.DwmSetWindowAttribute(
+                    HWND,
+                    DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE,
+                    &roundSmall,
+                    sizeof(DWM_WINDOW_CORNER_PREFERENCE));
+
+                PInvokeCore.SendMessage(HWND, PInvoke.TTM_SETWINDOWTHEME, default, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}");
             }
 #pragma warning restore WFO5001
         }
