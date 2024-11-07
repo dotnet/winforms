@@ -123,13 +123,13 @@ public class TrackBarRendererTests : IDisposable
     {
         void TestDrawTicksWithInvalidParameters(Action<Graphics, Rectangle, int, EdgeStyle> drawTicks, Rectangle bounds, int[] invalidTickCounts, Rectangle[] invalidBounds)
         {
-            foreach (var count in invalidTickCounts)
+            foreach (int count in invalidTickCounts)
             {
                 Exception? exception = Record.Exception(() => drawTicks(_graphics, bounds, count, EdgeStyle.Raised));
                 exception.Should().BeNull();
             }
 
-            foreach (var invalidBound in invalidBounds)
+            foreach (Rectangle invalidBound in invalidBounds)
             {
                 Exception? exception = Record.Exception(() => drawTicks(_graphics, invalidBound, 5, EdgeStyle.Raised));
                 exception.Should().BeNull();
@@ -137,12 +137,12 @@ public class TrackBarRendererTests : IDisposable
         }
 
         Rectangle Bounds = new(0, 0, 100, 10);
-        var invalidTickCounts = new[] { 0, -1 };
-        var invalidBounds = new[]
-        {
-            new Rectangle(0, 0, 0, 10),
-            new Rectangle(0, 0, 100, 0)
-        };
+        int[] invalidTickCounts = [0, -1];
+        Rectangle[] invalidBounds =
+        [
+            new(0, 0, 0, 10),
+            new(0, 0, 100, 0)
+        ];
 
         TestDrawTicksWithInvalidParameters(TrackBarRenderer.DrawHorizontalTicks, Bounds, invalidTickCounts, invalidBounds);
         TestDrawTicksWithInvalidParameters(TrackBarRenderer.DrawVerticalTicks, Bounds, invalidTickCounts, invalidBounds);
@@ -154,10 +154,10 @@ public class TrackBarRendererTests : IDisposable
         Rectangle bounds = new(0, 0, 10, 10);
         var drawThumbActions = new Action<Graphics, Rectangle, TrackBarThumbState>[]
         {
-        TrackBarRenderer.DrawLeftPointingThumb,
-        TrackBarRenderer.DrawRightPointingThumb,
-        TrackBarRenderer.DrawTopPointingThumb,
-        TrackBarRenderer.DrawBottomPointingThumb
+            TrackBarRenderer.DrawLeftPointingThumb,
+            TrackBarRenderer.DrawRightPointingThumb,
+            TrackBarRenderer.DrawTopPointingThumb,
+            TrackBarRenderer.DrawBottomPointingThumb
         };
 
         foreach (var drawThumb in drawThumbActions)
