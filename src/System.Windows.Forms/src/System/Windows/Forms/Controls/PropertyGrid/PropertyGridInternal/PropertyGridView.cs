@@ -5371,12 +5371,6 @@ internal sealed partial class PropertyGridView :
                 }
 
                 break;
-            case AutomationMessages.PGM_GETSELECTEDROW:
-                m.ResultInternal = (LRESULT)GetRowFromGridEntry(_selectedGridEntry);
-                return;
-            case AutomationMessages.PGM_GETVISIBLEROWCOUNT:
-                m.ResultInternal = (LRESULT)Math.Min(_visibleRows, TotalProperties);
-                return;
         }
 
         base.WndProc(ref m);
