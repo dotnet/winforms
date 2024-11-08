@@ -37,8 +37,8 @@ public class TrackBarRendererTests : IDisposable
     {
         void TestDrawTrack(Action<Graphics, Rectangle> drawTrack, Rectangle bounds)
         {
-            Exception? exception = Record.Exception(() => drawTrack(_graphics, bounds));
-            exception.Should().BeNull();
+            Action a = () => drawTrack(_graphics, bounds);
+            a.Should().NotThrow();
         }
 
         TestDrawTrack(TrackBarRenderer.DrawHorizontalTrack, new Rectangle(0, 0, 100, 10));
