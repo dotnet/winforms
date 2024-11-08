@@ -121,6 +121,7 @@ public unsafe partial class DataObject :
     /// </remarks>
     public void SetDataAsJson<T>(string format, T data)
     {
+        data.OrThrowIfNull(nameof(data));
         if (typeof(T) == typeof(DataObject))
         {
             throw new InvalidOperationException($"DataObject will serialize as empty. JSON serialize the data within {nameof(data)}, then use {nameof(SetData)} instead.");
@@ -132,6 +133,7 @@ public unsafe partial class DataObject :
     /// <inheritdoc cref="SetDataAsJson{T}(string, T)"/>
     public void SetDataAsJson<T>(T data)
     {
+        data.OrThrowIfNull(nameof(data));
         if (typeof(T) == typeof(DataObject))
         {
             // TODO: Localize string.
@@ -143,6 +145,7 @@ public unsafe partial class DataObject :
 
     public void SetDataAsJson<T>(string format, bool autoConvert, T data)
     {
+        data.OrThrowIfNull(nameof(data));
         if (typeof(T) == typeof(DataObject))
         {
             // TODO: Localize string.
