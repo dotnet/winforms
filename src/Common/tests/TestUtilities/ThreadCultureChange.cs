@@ -10,11 +10,11 @@ namespace System;
 /// </summary>
 public sealed class ThreadCultureChange : IDisposable
 {
-    private readonly CultureInfo _origCulture = CultureInfo.CurrentCulture;
-    private readonly CultureInfo _origUICulture = CultureInfo.CurrentUICulture;
+    private readonly CultureInfo _originalCulture = CultureInfo.CurrentCulture;
+    private readonly CultureInfo _originalUICulture = CultureInfo.CurrentUICulture;
 
     public ThreadCultureChange(string? cultureName) :
-        this(cultureName is object ? new CultureInfo(cultureName) : null)
+        this(cultureName is not null ? new CultureInfo(cultureName) : null)
     {
     }
 
@@ -25,22 +25,22 @@ public sealed class ThreadCultureChange : IDisposable
 
     public ThreadCultureChange(CultureInfo? newCulture, CultureInfo? newUICulture)
     {
-        if (newCulture is object)
+        if (newCulture is not null)
         {
-            _origCulture = CultureInfo.CurrentCulture;
+            _originalCulture = CultureInfo.CurrentCulture;
             CultureInfo.CurrentCulture = newCulture;
         }
 
-        if (newUICulture is object)
+        if (newUICulture is not null)
         {
-            _origUICulture = CultureInfo.CurrentUICulture;
+            _originalUICulture = CultureInfo.CurrentUICulture;
             CultureInfo.CurrentUICulture = newUICulture;
         }
     }
 
     public void Dispose()
     {
-        CultureInfo.CurrentCulture = _origCulture;
-        CultureInfo.CurrentUICulture = _origUICulture;
+        CultureInfo.CurrentCulture = _originalCulture;
+        CultureInfo.CurrentUICulture = _originalUICulture;
     }
 }

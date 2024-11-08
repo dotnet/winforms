@@ -89,9 +89,13 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
     internal int _index;                  // our index into our parents child array
     internal int _childCount;
+
     // this array should not be optimized as a list because we are inserting into the middle of it, not appending.
+#pragma warning disable CA5362 // Potential reference cycle in deserialized object graph
     internal TreeNode[] _children = [];
     internal TreeNode? _parent;
+#pragma warning restore CA5362
+
     internal TreeView? _treeView;
     private bool _expandOnRealization;
     private bool _collapseOnRealization;
