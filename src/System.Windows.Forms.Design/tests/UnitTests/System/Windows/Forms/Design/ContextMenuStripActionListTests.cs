@@ -8,6 +8,7 @@ using System.ComponentModel;
 using Moq;
 
 namespace System.Windows.Forms.Design.Tests;
+
 public sealed class ContextMenuStripActionListTests : IDisposable
 {
     private readonly Mock<IDesignerHost> _mockDesignerHost;
