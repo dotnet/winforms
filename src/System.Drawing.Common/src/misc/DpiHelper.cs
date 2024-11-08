@@ -206,10 +206,7 @@ internal static class DpiHelper
         }
 
         Bitmap deviceBitmap = CreateScaledBitmap(logicalBitmap);
-        if (deviceBitmap is not null)
-        {
-            logicalBitmap.Dispose();
-            logicalBitmap = deviceBitmap;
-        }
+        logicalBitmap.Dispose();
+        logicalBitmap = deviceBitmap;
     }
 }

@@ -37,19 +37,7 @@ public static class SystemIcons
 
     public static Icon WinLogo => GetIcon(ref s_winlogo, PInvokeCore.IDI_WINLOGO);
 
-    public static Icon Shield
-    {
-        get
-        {
-            if (s_shield is null)
-            {
-                s_shield = new Icon(typeof(SystemIcons), "ShieldIcon.ico");
-                Debug.Assert(s_shield is not null, "ShieldIcon.ico must be present as an embedded resource in System.Drawing.Common.");
-            }
-
-            return s_shield;
-        }
-    }
+    public static Icon Shield => s_shield ??= new Icon(typeof(SystemIcons), "ShieldIcon.ico");
 
     private static Icon GetIcon(ref Icon? icon, PCWSTR iconId) =>
         icon ??= new Icon(PInvokeCore.LoadIcon(HINSTANCE.Null, iconId));

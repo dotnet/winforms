@@ -440,20 +440,16 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                 // This means we have a valid node and we just changed some properties.
                 index = MenuItem.DropDownItems.IndexOf(_commitedEditorNode);
                 ToolStripItem editedItem = MenuItem.DropDownItems[index + 1];
+
                 // Remove TemplateNode
                 MenuItem.DropDown.Items.Remove(_commitedEditorNode);
-                // Get rid of the templateNode...
-                if (_commitedTemplateNode is not null)
-                {
-                    _commitedTemplateNode.CloseEditor();
-                    _commitedTemplateNode = null;
-                }
 
-                if (_commitedEditorNode is not null)
-                {
-                    _commitedEditorNode.Dispose();
-                    _commitedEditorNode = null;
-                }
+                // Get rid of the templateNode.
+                _commitedTemplateNode?.CloseEditor();
+                _commitedTemplateNode = null;
+
+                _commitedEditorNode.Dispose();
+                _commitedEditorNode = null;
 
                 // If we have type "-" this means the user wants to add a Separator.
                 if (text == "-")
@@ -594,16 +590,10 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
             {
                 if (enterKeyPressed)
                 {
-                    ToolStripItem nextItem;
-                    if ((MenuItem.DropDownDirection == ToolStripDropDownDirection.AboveLeft ||
-                        MenuItem.DropDownDirection == ToolStripDropDownDirection.AboveRight) && index >= 1)
-                    {
-                        nextItem = MenuItem.DropDownItems[index - 1];
-                    }
-                    else
-                    {
-                        nextItem = MenuItem.DropDownItems[index + 1];
-                    }
+                    ToolStripItem nextItem = (MenuItem.DropDownDirection == ToolStripDropDownDirection.AboveLeft ||
+                        MenuItem.DropDownDirection == ToolStripDropDownDirection.AboveRight) && index >= 1
+                        ? MenuItem.DropDownItems[index - 1]
+                        : MenuItem.DropDownItems[index + 1];
 
                     if (KeyboardHandlingService is not null)
                     {
