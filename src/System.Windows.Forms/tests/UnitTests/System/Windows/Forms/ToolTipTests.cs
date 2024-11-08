@@ -785,7 +785,7 @@ public class ToolTipTests
 
 #pragma warning disable WFO5001
     [WinFormsFact]
-    public void ToolTip_DarkMode_GetColors_ReturnsExpected()
+    public unsafe void ToolTip_DarkMode_GetColors_ReturnsExpected()
     {
         if (SystemInformation.HighContrast)
         {
@@ -798,18 +798,13 @@ public class ToolTipTests
 
         toolTip.Handle.Should().NotBe(IntPtr.Zero); // A workaround to create the toolTip native window Handle
 
-        var backgroundColor = PInvokeCore.SendMessage(toolTip, PInvoke.TTM_GETTIPBKCOLOR);
-        Color backColor = ColorTranslator.FromWin32((int)backgroundColor);
-
-        var textColor = PInvokeCore.SendMessage(toolTip, PInvoke.TTM_GETTIPTEXTCOLOR);
-        Color foreColor = ColorTranslator.FromWin32((int)textColor);
-
-        backColor.ToArgb().Should().Be(SystemColors.Info.ToArgb());
-        foreColor.ToArgb().Should().Be(SystemColors.InfoText.ToArgb());
+        toolTip.BackColor.Should().Be(SystemColors.Info);
+        toolTip.ForeColor.Should().Be(SystemColors.InfoText);
     }
 
-    [WinFormsFact]
-    public unsafe void ToolTip_DarkMode_GetCornerPreference_ReturnsExpected()
+    [WinFormsTheory]
+    [BoolData]
+    public unsafe void ToolTip_DarkMode_GetCornerPreference_ReturnsExpected(bool value)
     {
         if (!OsVersion.IsWindows11_OrGreater())
         {
@@ -823,19 +818,24 @@ public class ToolTipTests
         }
 
         using ApplicationColorModeScope colorModeScope = new(colorMode: SystemColorMode.Dark);
-        using SubToolTip toolTip = new();
+        using SubToolTip toolTip = new()
+        {
+            IsBalloon = value,
+        };
 
         toolTip.Handle.Should().NotBe(IntPtr.Zero); // A workaround to create the toolTip native window Handle
 
-        DWMWINDOWATTRIBUTE dmwWindowAttribute = DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE;
         DWM_WINDOW_CORNER_PREFERENCE cornerPreference;
         PInvoke.DwmGetWindowAttribute(
             toolTip.HWND,
-            dmwWindowAttribute,
+            DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE,
             &cornerPreference,
             sizeof(DWM_WINDOW_CORNER_PREFERENCE));
 
-        cornerPreference.Should().Be(DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUNDSMALL);
+        cornerPreference.Should().Be(
+            toolTip.IsBalloon
+                ? DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_DEFAULT
+                : DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUNDSMALL);
     }
 #pragma warning restore WFO5001
 

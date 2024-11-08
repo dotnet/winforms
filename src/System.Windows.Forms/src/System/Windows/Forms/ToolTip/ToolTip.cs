@@ -725,7 +725,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
             }
             else if (Application.IsDarkModeEnabled)
             {
-                if (OsVersion.IsWindows11_OrGreater())
+                if (!_isBalloon && OsVersion.IsWindows11_OrGreater())
                 {
                     DWM_WINDOW_CORNER_PREFERENCE roundSmall = DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUNDSMALL;
                     PInvoke.DwmSetWindowAttribute(
@@ -790,11 +790,15 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         // Set active status.
         PInvokeCore.SendMessage(this, PInvoke.TTM_ACTIVATE, (WPARAM)(BOOL)_active);
 
-        // Set background color.
-        PInvokeCore.SendMessage(this, PInvoke.TTM_SETTIPBKCOLOR, (WPARAM)_backColor);
+        if (BackColor != SystemColors.Info)
+        {
+            PInvokeCore.SendMessage(this, PInvoke.TTM_SETTIPBKCOLOR, (WPARAM)BackColor);
+        }
 
-        // Set text color.
-        PInvokeCore.SendMessage(this, PInvoke.TTM_SETTIPTEXTCOLOR, (WPARAM)_foreColor);
+        if (ForeColor != SystemColors.InfoText)
+        {
+            PInvokeCore.SendMessage(this, PInvoke.TTM_SETTIPTEXTCOLOR, (WPARAM)ForeColor);
+        }
 
         if (_toolTipIcon > 0 || !string.IsNullOrEmpty(_toolTipTitle))
         {
