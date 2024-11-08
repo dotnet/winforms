@@ -24,19 +24,6 @@ public class TextBoxBaseDesignerTests : IDisposable
         _textbox.Site = site.Object;
     }
 
-    private void InitializeDesigner(BorderStyle borderStyle)
-    {
-        _textbox.BorderStyle = borderStyle;
-        _designer.Initialize(_textbox);
-    }
-
-    private void InitializeDesigner(bool multiline,bool autoSize)
-    {
-        _textbox.Multiline = multiline;
-        _textbox.AutoSize = autoSize;
-        _designer.Initialize(_textbox);
-    }
-
     public void Dispose()
     {
         _designer.Dispose();
@@ -60,7 +47,8 @@ public class TextBoxBaseDesignerTests : IDisposable
     [InlineData(BorderStyle.Fixed3D, 3)]
     public void SnapLines_ReturnsCorrectSnapLines(BorderStyle borderStyle, int expectedBaselineOffset)
     {
-        InitializeDesigner(borderStyle);
+        _textbox.BorderStyle = borderStyle;
+        _designer.Initialize(_textbox);
 
         List<SnapLine> snapLines = (List<SnapLine>)_designer.SnapLines;
 
@@ -73,14 +61,15 @@ public class TextBoxBaseDesignerTests : IDisposable
         baselineSnapLine.Offset.Should().Be(expectedBaseline);
     }
 
-
     [WinFormsTheory]
     [InlineData(false, true, SelectionRules.LeftSizeable | SelectionRules.RightSizeable)]
     [InlineData(true, true, SelectionRules.AllSizeable)]
     [InlineData(false, false, SelectionRules.AllSizeable)]
     public void SelectionRules_ReturnsCorrectRules(bool multiline, bool autoSize, SelectionRules expectedRules)
     {
-        InitializeDesigner(multiline, autoSize);
+        _textbox.Multiline = multiline;
+        _textbox.AutoSize = autoSize;
+        _designer.Initialize(_textbox);
         SelectionRules rules = _designer.SelectionRules;
 
         rules.Should().HaveFlag(expectedRules);
