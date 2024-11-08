@@ -7,9 +7,9 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
 -->
 <Dependencies>
   <ProductDependencies>
-    <Dependency Name="VS.Redist.Common.NetCore.SharedFramework.x64.6.0" Version="6.0.36-servicing.24557.6">
+    <Dependency Name="VS.Redist.Common.NetCore.SharedFramework.x64.6.0" Version="6.0.37-servicing.24557.11">
       <Uri>https://dev.azure.com/dnceng/internal/_git/dotnet-runtime</Uri>
-      <Sha>eee54a47351cea9fb6d1c3b22fbf376e89a49e5e</Sha>
+      <Sha>97e5bb7679654ebcbc93f7b0fab3c6591c8ef6bd</Sha>
     </Dependency>
     <Dependency Name="Microsoft.NETCore.Platforms" Version="6.0.13">
       <Uri>https://dev.azure.com/dnceng/internal/_git/dotnet-runtime</Uri>
@@ -25,7 +25,7 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
     </Dependency>
     <Dependency Name="System.Configuration.ConfigurationManager" Version="6.0.2">
       <Uri>https://dev.azure.com/dnceng/internal/_git/dotnet-runtime</Uri>
-      <Sha>eee54a47351cea9fb6d1c3b22fbf376e89a49e5e</Sha>
+      <Sha>97e5bb7679654ebcbc93f7b0fab3c6591c8ef6bd</Sha>
     </Dependency>
     <Dependency Name="System.Drawing.Common" Version="6.0.0">
       <Uri>https://github.com/dotnet/runtime</Uri>
@@ -37,27 +37,27 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
     </Dependency>
     <Dependency Name="System.Security.Permissions" Version="6.0.1">
       <Uri>https://dev.azure.com/dnceng/internal/_git/dotnet-runtime</Uri>
-      <Sha>eee54a47351cea9fb6d1c3b22fbf376e89a49e5e</Sha>
+      <Sha>97e5bb7679654ebcbc93f7b0fab3c6591c8ef6bd</Sha>
     </Dependency>
     <Dependency Name="System.Windows.Extensions" Version="6.0.0">
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>4822e3c3aa77eb82b2fb33c9321f923cf11ddde6</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.NET.Sdk.IL" Version="6.0.36-servicing.24557.6">
+    <Dependency Name="Microsoft.NET.Sdk.IL" Version="6.0.37-servicing.24557.11">
       <Uri>https://dev.azure.com/dnceng/internal/_git/dotnet-runtime</Uri>
-      <Sha>eee54a47351cea9fb6d1c3b22fbf376e89a49e5e</Sha>
+      <Sha>97e5bb7679654ebcbc93f7b0fab3c6591c8ef6bd</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.NETCore.ILAsm" Version="6.0.36-servicing.24557.6">
+    <Dependency Name="Microsoft.NETCore.ILAsm" Version="6.0.37-servicing.24557.11">
       <Uri>https://dev.azure.com/dnceng/internal/_git/dotnet-runtime</Uri>
-      <Sha>eee54a47351cea9fb6d1c3b22fbf376e89a49e5e</Sha>
+      <Sha>97e5bb7679654ebcbc93f7b0fab3c6591c8ef6bd</Sha>
     </Dependency>
-    <Dependency Name="runtime.win-x64.Microsoft.NETCore.ILAsm" Version="6.0.36-servicing.24557.6">
+    <Dependency Name="runtime.win-x64.Microsoft.NETCore.ILAsm" Version="6.0.37-servicing.24557.11">
       <Uri>https://dev.azure.com/dnceng/internal/_git/dotnet-runtime</Uri>
-      <Sha>eee54a47351cea9fb6d1c3b22fbf376e89a49e5e</Sha>
+      <Sha>97e5bb7679654ebcbc93f7b0fab3c6591c8ef6bd</Sha>
     </Dependency>
-    <Dependency Name="runtime.win-x86.Microsoft.NETCore.ILAsm" Version="6.0.36-servicing.24557.6">
+    <Dependency Name="runtime.win-x86.Microsoft.NETCore.ILAsm" Version="6.0.37-servicing.24557.11">
       <Uri>https://dev.azure.com/dnceng/internal/_git/dotnet-runtime</Uri>
-      <Sha>eee54a47351cea9fb6d1c3b22fbf376e89a49e5e</Sha>
+      <Sha>97e5bb7679654ebcbc93f7b0fab3c6591c8ef6bd</Sha>
     </Dependency>
     <Dependency Name="System.Diagnostics.EventLog" Version="6.0.0">
       <Uri>https://github.com/dotnet/runtime</Uri>
@@ -65,31 +65,31 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
     </Dependency>
     <Dependency Name="System.DirectoryServices" Version="6.0.2">
       <Uri>https://dev.azure.com/dnceng/internal/_git/dotnet-runtime</Uri>
-      <Sha>eee54a47351cea9fb6d1c3b22fbf376e89a49e5e</Sha>
+      <Sha>97e5bb7679654ebcbc93f7b0fab3c6591c8ef6bd</Sha>
     </Dependency>
     <Dependency Name="System.Reflection.MetadataLoadContext" Version="6.0.1">
       <Uri>https://dev.azure.com/dnceng/internal/_git/dotnet-runtime</Uri>
-      <Sha>eee54a47351cea9fb6d1c3b22fbf376e89a49e5e</Sha>
+      <Sha>97e5bb7679654ebcbc93f7b0fab3c6591c8ef6bd</Sha>
     </Dependency>
     <Dependency Name="System.Security.Cryptography.Xml" Version="6.0.2">
       <Uri>https://dev.azure.com/dnceng/internal/_git/dotnet-runtime</Uri>
-      <Sha>eee54a47351cea9fb6d1c3b22fbf376e89a49e5e</Sha>
+      <Sha>97e5bb7679654ebcbc93f7b0fab3c6591c8ef6bd</Sha>
     </Dependency>
     <Dependency Name="System.IO.Packaging" Version="6.0.2">
       <Uri>https://dev.azure.com/dnceng/internal/_git/dotnet-runtime</Uri>
-      <Sha>eee54a47351cea9fb6d1c3b22fbf376e89a49e5e</Sha>
+      <Sha>97e5bb7679654ebcbc93f7b0fab3c6591c8ef6bd</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.NETCore.ILDAsm" Version="6.0.36-servicing.24557.6">
+    <Dependency Name="Microsoft.NETCore.ILDAsm" Version="6.0.37-servicing.24557.11">
       <Uri>https://dev.azure.com/dnceng/internal/_git/dotnet-runtime</Uri>
-      <Sha>eee54a47351cea9fb6d1c3b22fbf376e89a49e5e</Sha>
+      <Sha>97e5bb7679654ebcbc93f7b0fab3c6591c8ef6bd</Sha>
     </Dependency>
     <Dependency Name="System.Diagnostics.PerformanceCounter" Version="6.0.2">
       <Uri>https://dev.azure.com/dnceng/internal/_git/dotnet-runtime</Uri>
-      <Sha>eee54a47351cea9fb6d1c3b22fbf376e89a49e5e</Sha>
+      <Sha>97e5bb7679654ebcbc93f7b0fab3c6591c8ef6bd</Sha>
     </Dependency>
     <Dependency Name="System.Security.Cryptography.Pkcs" Version="6.0.5">
       <Uri>https://dev.azure.com/dnceng/internal/_git/dotnet-runtime</Uri>
-      <Sha>eee54a47351cea9fb6d1c3b22fbf376e89a49e5e</Sha>
+      <Sha>97e5bb7679654ebcbc93f7b0fab3c6591c8ef6bd</Sha>
     </Dependency>
     <Dependency Name="System.Security.Cryptography.ProtectedData" Version="6.0.0">
       <Uri>https://github.com/dotnet/runtime</Uri>
@@ -97,31 +97,31 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
     </Dependency>
     <Dependency Name="System.Text.Encodings.Web" Version="6.0.1">
       <Uri>https://dev.azure.com/dnceng/internal/_git/dotnet-runtime</Uri>
-      <Sha>eee54a47351cea9fb6d1c3b22fbf376e89a49e5e</Sha>
+      <Sha>97e5bb7679654ebcbc93f7b0fab3c6591c8ef6bd</Sha>
     </Dependency>
     <Dependency Name="System.Text.Json" Version="6.0.11">
       <Uri>https://dev.azure.com/dnceng/internal/_git/dotnet-runtime</Uri>
-      <Sha>eee54a47351cea9fb6d1c3b22fbf376e89a49e5e</Sha>
+      <Sha>97e5bb7679654ebcbc93f7b0fab3c6591c8ef6bd</Sha>
     </Dependency>
     <Dependency Name="System.Threading.AccessControl" Version="6.0.1">
       <Uri>https://dev.azure.com/dnceng/internal/_git/dotnet-runtime</Uri>
-      <Sha>eee54a47351cea9fb6d1c3b22fbf376e89a49e5e</Sha>
+      <Sha>97e5bb7679654ebcbc93f7b0fab3c6591c8ef6bd</Sha>
     </Dependency>
     <Dependency Name="Microsoft.Win32.Registry.AccessControl" Version="6.0.1">
       <Uri>https://dev.azure.com/dnceng/internal/_git/dotnet-runtime</Uri>
-      <Sha>eee54a47351cea9fb6d1c3b22fbf376e89a49e5e</Sha>
+      <Sha>97e5bb7679654ebcbc93f7b0fab3c6591c8ef6bd</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.NETCore.App.Ref" Version="6.0.36">
+    <Dependency Name="Microsoft.NETCore.App.Ref" Version="6.0.37">
       <Uri>https://dev.azure.com/dnceng/internal/_git/dotnet-runtime</Uri>
-      <Sha>eee54a47351cea9fb6d1c3b22fbf376e89a49e5e</Sha>
+      <Sha>97e5bb7679654ebcbc93f7b0fab3c6591c8ef6bd</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.NETCore.App.Runtime.win-x64" Version="6.0.36">
+    <Dependency Name="Microsoft.NETCore.App.Runtime.win-x64" Version="6.0.37">
       <Uri>https://dev.azure.com/dnceng/internal/_git/dotnet-runtime</Uri>
-      <Sha>eee54a47351cea9fb6d1c3b22fbf376e89a49e5e</Sha>
+      <Sha>97e5bb7679654ebcbc93f7b0fab3c6591c8ef6bd</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.Internal.Runtime.WindowsDesktop.Transport" Version="6.0.36-servicing.24557.6">
+    <Dependency Name="Microsoft.Internal.Runtime.WindowsDesktop.Transport" Version="6.0.37-servicing.24557.11">
       <Uri>https://dev.azure.com/dnceng/internal/_git/dotnet-runtime</Uri>
-      <Sha>eee54a47351cea9fb6d1c3b22fbf376e89a49e5e</Sha>
+      <Sha>97e5bb7679654ebcbc93f7b0fab3c6591c8ef6bd</Sha>
     </Dependency>
   </ProductDependencies>
   <ToolsetDependencies>
