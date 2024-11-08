@@ -523,10 +523,7 @@ internal class ToolStripDesigner : ControlDesigner
                 component = _host.CreateComponent(t);
                 designer = _host.GetDesigner(component) as ToolStripItemDesigner;
                 designer.InternalCreate = true;
-                if (designer is ComponentDesigner)
-                {
-                    designer.InitializeNewComponent(null);
-                }
+                designer?.InitializeNewComponent(null);
             }
             finally
             {
@@ -586,10 +583,7 @@ internal class ToolStripDesigner : ControlDesigner
                     designer.InternalCreate = true;
                 }
 
-                if (designer is ComponentDesigner)
-                {
-                    designer.InitializeNewComponent(null);
-                }
+                designer?.InitializeNewComponent(null);
             }
             finally
             {
@@ -1623,14 +1617,7 @@ internal class ToolStripDesigner : ControlDesigner
             // walk back up the chain of windows to get the topmost
             while (topmost is not null and not ToolStripOverflow)
             {
-                if (topmost.OwnerItem is not null)
-                {
-                    topmost = topmost.OwnerItem.GetCurrentParent() as ToolStripDropDown;
-                }
-                else
-                {
-                    topmost = null;
-                }
+                topmost = topmost?.OwnerItem.GetCurrentParent() as ToolStripDropDown;
             }
         }
 
@@ -1723,14 +1710,9 @@ internal class ToolStripDesigner : ControlDesigner
                     if (char.IsLower(c) != char.IsLower(defaultName[0]))
                     {
                         // match up the first char of the generated identifier with the case of the default.
-                        if (char.IsLower(c))
-                        {
-                            c = char.ToUpper(c, CultureInfo.CurrentCulture);
-                        }
-                        else
-                        {
-                            c = char.ToLower(c, CultureInfo.CurrentCulture);
-                        }
+                        c = char.IsLower(c)
+                            ? char.ToUpper(c, CultureInfo.CurrentCulture)
+                            : char.ToLower(c, CultureInfo.CurrentCulture);
                     }
                 }
 
