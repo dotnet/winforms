@@ -1856,7 +1856,16 @@ public partial class ControlTests
     public void Control_DoDragDrop_NullData_ThrowsArgumentNullException()
     {
         using Control control = new();
-        Assert.Throws<ArgumentNullException>("data", () => control.DoDragDrop(null, DragDropEffects.All));
+        Action dragDrop = () => control.DoDragDrop(null, DragDropEffects.All);
+        dragDrop.Should().Throw<ArgumentNullException>("data");
+    }
+
+    [WinFormsFact]
+    public void Control_DoDragDropAsJson_NullData_ThrowsArgumentNullException()
+    {
+        using Control control = new();
+        Action dragDrop = () => control.DoDragDropAsJson<string>(null, DragDropEffects.Copy);
+        dragDrop.Should().Throw<ArgumentNullException>("data");
     }
 
     public static IEnumerable<object[]> DrawToBitmap_TestData()

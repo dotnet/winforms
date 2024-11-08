@@ -547,6 +547,7 @@ public static class Clipboard
     /// </remarks>
     public static void SetDataAsJson<T>(string format, T data)
     {
+        data.OrThrowIfNull(nameof(data));
         if (string.IsNullOrWhiteSpace(format.OrThrowIfNull()))
         {
             throw new ArgumentException(SR.DataObjectWhitespaceEmptyFormatNotAllowed, nameof(format));

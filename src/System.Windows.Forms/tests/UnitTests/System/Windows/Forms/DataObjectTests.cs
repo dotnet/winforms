@@ -2832,9 +2832,13 @@ public partial class DataObjectTests
     [WinFormsFact]
     public void DataObject_SetDataAsJson_DataObject_Throws()
     {
+        string format = "format";
         DataObject dataObject = new();
-        Action action = () => dataObject.SetDataAsJson("format", new DataObject());
+        Action action = () => dataObject.SetDataAsJson(format, new DataObject());
         action.Should().Throw<InvalidOperationException>();
+
+        Action dataObjectSet2 = () => dataObject.SetDataAsJson(format, new DerivedDataObject());
+        dataObjectSet2.Should().NotThrow();
     }
 
     [WinFormsFact]
@@ -2973,15 +2977,10 @@ public partial class DataObjectTests
     }
 
     [WinFormsFact]
-    public void DataObject_SetDataAsJson_Throws()
+    public void DataObject_SetDataAsJson_NullData_Throws()
     {
         DataObject dataObject = new();
-        DerivedDataObject derived = new();
-
-        DataObject test = new();
-        Action dataObjectSet1 = () => test.SetDataAsJson(dataObject);
-        dataObjectSet1.Should().Throw<InvalidOperationException>();
-        Action dataObjectSet2 = () => test.SetDataAsJson(derived);
-        dataObjectSet2.Should().NotThrow();
+        Action dataObjectSet = () => dataObject.SetDataAsJson<string>(null);
+        dataObjectSet.Should().Throw<ArgumentNullException>();
     }
 }
