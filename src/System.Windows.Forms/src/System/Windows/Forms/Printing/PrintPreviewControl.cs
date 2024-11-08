@@ -592,7 +592,13 @@ public partial class PrintPreviewControl : Control
 
     private void DrawMessage(Graphics g, Rectangle rect, bool isExceptionPrinting)
     {
-        using var brush = SystemColors.ControlText.GetCachedSolidBrushScope();
+        Color brushColor = SystemColors.ControlText;
+        if (SystemInformation.HighContrast && Parent is not null)
+        {
+            brushColor = Parent.BackColor;
+        }
+
+        using var brush = brushColor.GetCachedSolidBrushScope();
 
         using StringFormat format = new()
         {
@@ -737,7 +743,7 @@ public partial class PrintPreviewControl : Control
     /// </returns>
     private Color GetBackColor(bool isHighContract)
     {
-        return (isHighContract && !ShouldSerializeBackColor()) ? SystemColors.ControlDark : BackColor;
+        return (isHighContract && !ShouldSerializeBackColor()) ? SystemColors.ControlDarkDark : BackColor;
     }
 
     private static int PixelsToPhysical(int pixels, int dpi) => (int)(pixels * 100.0 / dpi);
