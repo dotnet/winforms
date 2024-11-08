@@ -1,8 +1,7 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Option Strict Off
-
+Imports System.ComponentModel
 Imports System.Windows.Forms
 Imports FluentAssertions
 Imports Microsoft.VisualBasic.ApplicationServices
@@ -21,7 +20,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             ColorMode.Should.Be(SystemColorMode.Classic)
             ColorMode = SystemColorMode.Dark
             ColorMode.Should.Be(SystemColorMode.Dark)
-#Enable Warning WFO5001 ' Type is for evaluation purposes only and is subject to change or removal in future updates.
+#Enable Warning WFO5001
 
             EnableVisualStyles.Should.Be(False)
             EnableVisualStyles = True
@@ -84,6 +83,52 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 End Using
             End Using
 
+        End Sub
+
+        <WinFormsFact>
+        Public Sub ValidateAuthenticationModeEnumInvalidValue()
+            Dim testAccessor As ITestAccessor = GetType(WindowsFormsApplicationBase).TestAccessor()
+            Dim testCode As Action =
+                Sub()
+                    Dim mode As AuthenticationMode = CType(-1, AuthenticationMode)
+                    ValidateAuthenticationModeEnumValue(mode, NameOf(AuthenticationMode))
+                End Sub
+
+            testCode.Should.Throw(Of InvalidEnumArgumentException)()
+        End Sub
+
+        <WinFormsTheory>
+        <ClassData(GetType(AuthenticationModeData))>
+        Public Sub ValidateAuthenticationModeEnumValues(mode As AuthenticationMode)
+            Dim testAccessor As ITestAccessor = GetType(WindowsFormsApplicationBase).TestAccessor()
+            Dim testCode As Action =
+                Sub()
+                    ValidateAuthenticationModeEnumValue(mode, NameOf(AuthenticationMode))
+                End Sub
+
+            testCode.Should.NotThrow()
+        End Sub
+
+        <WinFormsFact>
+        Public Sub ValidateShutdownModeEnumInvalidValue()
+            Dim testCode As Action =
+                Sub()
+                    Dim mode As ShutdownMode = CType(-1, ShutdownMode)
+                    ValidateShutdownModeEnumValue(mode, NameOf(ShutdownMode))
+                End Sub
+
+            testCode.Should.Throw(Of InvalidEnumArgumentException)()
+        End Sub
+
+        <WinFormsTheory>
+        <ClassData(GetType(ShutdownModeData))>
+        Public Sub ValidateShutdownModeEnumValues(mode As ShutdownMode)
+            Dim testCode As Action =
+                Sub()
+                    ValidateShutdownModeEnumValue(mode, NameOf(ShutdownMode))
+                End Sub
+
+            testCode.Should.NotThrow()
         End Sub
 
     End Class

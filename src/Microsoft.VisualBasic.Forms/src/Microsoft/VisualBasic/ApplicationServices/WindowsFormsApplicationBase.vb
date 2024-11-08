@@ -516,26 +516,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Function
 
         ''' <summary>
-        '''  Validates that the value being passed as an AuthenticationMode enum is a legal value
-        ''' </summary>
-        ''' <param name="value"></param>
-        Private Shared Sub ValidateAuthenticationModeEnumValue(value As AuthenticationMode, paramName As String)
-            If value < AuthenticationMode.Windows OrElse value > AuthenticationMode.ApplicationDefined Then
-                Throw New InvalidEnumArgumentException(paramName, value, GetType(AuthenticationMode))
-            End If
-        End Sub
-
-        ''' <summary>
-        '''  Validates that the value being passed as an ShutdownMode enum is a legal value
-        ''' </summary>
-        ''' <param name="value"></param>
-        Private Shared Sub ValidateShutdownModeEnumValue(value As ShutdownMode, paramName As String)
-            If value < ShutdownMode.AfterMainFormCloses OrElse value > ShutdownMode.AfterAllFormsClose Then
-                Throw New InvalidEnumArgumentException(paramName, value, GetType(ShutdownMode))
-            End If
-        End Sub
-
-        ''' <summary>
         '''  Displays the splash screen. We get called here from a different thread than what the
         '''  main form is starting up on. This allows us to process events for the Splash screen so
         '''  it doesn't freeze up while the main form is getting it together.
@@ -1012,6 +992,26 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     ' while the main form gets its act together.
                     Task.Run(AddressOf DisplaySplash)
                 End If
+            End If
+        End Sub
+
+        ''' <summary>
+        '''  Validates that the value being passed as an AuthenticationMode enum is a legal value
+        ''' </summary>
+        ''' <param name="value"></param>
+        Friend Shared Sub ValidateAuthenticationModeEnumValue(value As AuthenticationMode, paramName As String)
+            If value < AuthenticationMode.Windows OrElse value > AuthenticationMode.ApplicationDefined Then
+                Throw New InvalidEnumArgumentException(paramName, value, GetType(AuthenticationMode))
+            End If
+        End Sub
+
+        ''' <summary>
+        '''  Validates that the value being passed as an ShutdownMode enum is a legal value
+        ''' </summary>
+        ''' <param name="value"></param>
+        Friend Shared Sub ValidateShutdownModeEnumValue(value As ShutdownMode, paramName As String)
+            If value < ShutdownMode.AfterMainFormCloses OrElse value > ShutdownMode.AfterAllFormsClose Then
+                Throw New InvalidEnumArgumentException(paramName, value, GetType(ShutdownMode))
             End If
         End Sub
 

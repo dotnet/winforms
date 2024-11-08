@@ -5,11 +5,11 @@ Imports Microsoft.VisualBasic.ApplicationServices
 
 Namespace Microsoft.VisualBasic.Forms.Tests
 
-    Public Class AuthenticationModeData
+    Public Class ShutdownModeData
         Implements IEnumerable(Of Object())
 
         Public Iterator Function GetEnumerator() As IEnumerator(Of Object()) Implements IEnumerable(Of Object()).GetEnumerator
-            For Each mode As AuthenticationMode In [Enum].GetValues(Of AuthenticationMode)
+            For Each mode As AuthenticationMode In [Enum].GetValues(Of ShutdownMode)
                 Yield {mode}
             Next
         End Function

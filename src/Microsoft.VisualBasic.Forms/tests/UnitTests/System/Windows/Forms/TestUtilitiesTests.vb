@@ -16,6 +16,13 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Sub
 
         <WinFormsFact>
+        Public Sub ShutdownModeDataIteratorTests()
+            Dim testClass As New ShutdownModeData
+            testClass.IEnumerable_GetEnumerator.Should.NotBeNull()
+            testClass.Any.Should.BeTrue()
+        End Sub
+
+        <WinFormsFact>
         Public Sub TimeTestDataIteratorTests()
             Dim testClass As New TimeTestData
             testClass.IEnumerable_GetEnumerator.Should.NotBeNull()
