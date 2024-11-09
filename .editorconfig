@@ -3,6 +3,17 @@
 # top-most EditorConfig file
 root = true
 
+# General guidelines
+# ------------------
+#
+# Prefer errors over warnings. If an error will make iteration in VS difficult, then use a warning. Warnings
+# only fail the command line build.
+#
+# When disabling a rule, add a comment explaining why.
+#
+# When common settings differ between languages, use C# rules as the default in the C#/VB and override in the VB
+# section. This seems to work better with the editor tooling.
+
 # Default settings:
 # A newline ending every file
 # Use 4 spaces as indentation
@@ -89,6 +100,9 @@ end_of_line = crlf
 dotnet_style_allow_multiple_blank_lines_experimental = true:silent
 dotnet_style_allow_statement_immediately_after_block_experimental = true:silent
 dotnet_style_prefer_collection_expression = when_types_exactly_match:warning
+dotnet_style_coalesce_expression = true:warning
+dotnet_style_prefer_conditional_expression_over_assignment = true:silent
+dotnet_style_prefer_conditional_expression_over_return = true:silent
 
 # AD0001: Analyzer threw an exception
 dotnet_diagnostic.AD0001.severity = suggestion
@@ -127,13 +141,13 @@ dotnet_diagnostic.IDE0011.severity = silent
 dotnet_diagnostic.IDE0016.severity = silent
 
 # IDE0017: Simplify object initialization
-dotnet_diagnostic.IDE0017.severity = suggestion
+dotnet_diagnostic.IDE0017.severity = warning
 
 # IDE0018: Inline variable declaration
 dotnet_diagnostic.IDE0018.severity = suggestion
 
 # IDE0019: Use pattern matching to avoid as followed by a null check
-dotnet_diagnostic.IDE0019.severity = suggestion
+dotnet_diagnostic.IDE0019.severity = warning
 
 # IDE0020: Use pattern matching to avoid is check followed by a cast (with variable)
 dotnet_diagnostic.IDE0020.severity = warning
@@ -178,7 +192,7 @@ dotnet_diagnostic.IDE0032.severity = silent
 dotnet_diagnostic.IDE0033.severity = suggestion
 
 # IDE0034: Simplify 'default' expression
-dotnet_diagnostic.IDE0034.severity = suggestion
+dotnet_diagnostic.IDE0034.severity = warning
 
 # IDE0035: Remove unreachable code
 dotnet_diagnostic.IDE0035.severity = suggestion
@@ -190,7 +204,7 @@ dotnet_diagnostic.IDE0036.severity = warning
 dotnet_diagnostic.IDE0037.severity = silent
 
 # IDE0038: Use pattern matching to avoid is check followed by a cast (without variable)
-dotnet_diagnostic.IDE0038.severity = suggestion
+dotnet_diagnostic.IDE0038.severity = warning
 
 # IDE0039: Use local function
 dotnet_diagnostic.IDE0039.severity = suggestion
@@ -339,7 +353,7 @@ dotnet_diagnostic.IDE0130.severity = silent
 dotnet_diagnostic.IDE0140.severity = none
 
 # IDE0150: Prefer 'null' check over type check
-dotnet_diagnostic.IDE0150.severity = silent
+dotnet_diagnostic.IDE0150.severity = error
 
 # IDE0160: Convert to block scoped namespace
 dotnet_diagnostic.IDE0160.severity = silent
@@ -983,112 +997,112 @@ dotnet_diagnostic.CA2201.severity = error
 dotnet_diagnostic.CA2219.severity = error
 
 # CA2300: Do not use insecure deserializer BinaryFormatter
-dotnet_diagnostic.CA2300.severity = none
+dotnet_diagnostic.CA2300.severity = error
 
 # CA2301: Do not call BinaryFormatter.Deserialize without first setting BinaryFormatter.Binder
-dotnet_diagnostic.CA2301.severity = none
+dotnet_diagnostic.CA2301.severity = error
 
 # CA2302: Ensure BinaryFormatter.Binder is set before calling BinaryFormatter.Deserialize
-dotnet_diagnostic.CA2302.severity = none
+dotnet_diagnostic.CA2302.severity = error
 
 # CA2305: Do not use insecure deserializer LosFormatter
-dotnet_diagnostic.CA2305.severity = none
+dotnet_diagnostic.CA2305.severity = error
 
 # CA2310: Do not use insecure deserializer NetDataContractSerializer
-dotnet_diagnostic.CA2310.severity = none
+dotnet_diagnostic.CA2310.severity = error
 
 # CA2311: Do not deserialize without first setting NetDataContractSerializer.Binder
-dotnet_diagnostic.CA2311.severity = none
+dotnet_diagnostic.CA2311.severity = error
 
 # CA2312: Ensure NetDataContractSerializer.Binder is set before deserializing
-dotnet_diagnostic.CA2312.severity = none
+dotnet_diagnostic.CA2312.severity = error
 
 # CA2315: Do not use insecure deserializer ObjectStateFormatter
-dotnet_diagnostic.CA2315.severity = none
+dotnet_diagnostic.CA2315.severity = error
 
 # CA2321: Do not deserialize with JavaScriptSerializer using a SimpleTypeResolver
-dotnet_diagnostic.CA2321.severity = none
+dotnet_diagnostic.CA2321.severity = error
 
 # CA2322: Ensure JavaScriptSerializer is not initialized with SimpleTypeResolver before deserializing
-dotnet_diagnostic.CA2322.severity = none
+dotnet_diagnostic.CA2322.severity = error
 
 # CA2326: Do not use TypeNameHandling values other than None
-dotnet_diagnostic.CA2326.severity = none
+dotnet_diagnostic.CA2326.severity = error
 
 # CA2327: Do not use insecure JsonSerializerSettings
-dotnet_diagnostic.CA2327.severity = none
+dotnet_diagnostic.CA2327.severity = error
 
 # CA2328: Ensure that JsonSerializerSettings are secure
-dotnet_diagnostic.CA2328.severity = none
+dotnet_diagnostic.CA2328.severity = error
 
 # CA2329: Do not deserialize with JsonSerializer using an insecure configuration
-dotnet_diagnostic.CA2329.severity = none
+dotnet_diagnostic.CA2329.severity = error
 
 # CA2330: Ensure that JsonSerializer has a secure configuration when deserializing
-dotnet_diagnostic.CA2330.severity = none
+dotnet_diagnostic.CA2330.severity = error
 
 # CA2350: Do not use DataTable.ReadXml() with untrusted data
-dotnet_diagnostic.CA2350.severity = none
+dotnet_diagnostic.CA2350.severity = error
 
 # CA2351: Do not use DataSet.ReadXml() with untrusted data
-dotnet_diagnostic.CA2351.severity = none
+dotnet_diagnostic.CA2351.severity = error
 
 # CA2352: Unsafe DataSet or DataTable in serializable type can be vulnerable to remote code execution attacks
-dotnet_diagnostic.CA2352.severity = none
+dotnet_diagnostic.CA2352.severity = error
 
 # CA2353: Unsafe DataSet or DataTable in serializable type
-dotnet_diagnostic.CA2353.severity = none
+dotnet_diagnostic.CA2353.severity = error
 
 # CA2354: Unsafe DataSet or DataTable in deserialized object graph can be vulnerable to remote code execution attacks
-dotnet_diagnostic.CA2354.severity = none
+dotnet_diagnostic.CA2354.severity = error
 
 # CA2355: Unsafe DataSet or DataTable type found in deserializable object graph
-dotnet_diagnostic.CA2355.severity = none
+dotnet_diagnostic.CA2355.severity = error
 
 # CA2356: Unsafe DataSet or DataTable type in web deserializable object graph
-dotnet_diagnostic.CA2356.severity = none
+dotnet_diagnostic.CA2356.severity = error
 
 # CA2361: Ensure auto-generated class containing DataSet.ReadXml() is not used with untrusted data
-dotnet_diagnostic.CA2361.severity = none
+dotnet_diagnostic.CA2361.severity = error
 
 # CA2362: Unsafe DataSet or DataTable in auto-generated serializable type can be vulnerable to remote code execution attacks
-dotnet_diagnostic.CA2362.severity = none
+dotnet_diagnostic.CA2362.severity = error
 
 # CA3001: Review code for SQL injection vulnerabilities
-dotnet_diagnostic.CA3001.severity = none
+dotnet_diagnostic.CA3001.severity = error
 
 # CA3002: Review code for XSS vulnerabilities
-dotnet_diagnostic.CA3002.severity = none
+dotnet_diagnostic.CA3002.severity = error
 
 # CA3003: Review code for file path injection vulnerabilities
-dotnet_diagnostic.CA3003.severity = none
+dotnet_diagnostic.CA3003.severity = error
 
 # CA3004: Review code for information disclosure vulnerabilities
-dotnet_diagnostic.CA3004.severity = none
+dotnet_diagnostic.CA3004.severity = error
 
 # CA3005: Review code for LDAP injection vulnerabilities
-dotnet_diagnostic.CA3005.severity = none
+dotnet_diagnostic.CA3005.severity = error
 
 # CA3006: Review code for process command injection vulnerabilities
-dotnet_diagnostic.CA3006.severity = none
+dotnet_diagnostic.CA3006.severity = error
 
 # CA3007: Review code for open redirect vulnerabilities
-dotnet_diagnostic.CA3007.severity = none
+dotnet_diagnostic.CA3007.severity = error
 
 # CA3008: Review code for XPath injection vulnerabilities
-dotnet_diagnostic.CA3008.severity = none
+dotnet_diagnostic.CA3008.severity = error
 
 # CA3009: Review code for XML injection vulnerabilities
-dotnet_diagnostic.CA3009.severity = none
+dotnet_diagnostic.CA3009.severity = error
 
 # CA3010: Review code for XAML injection vulnerabilities
-dotnet_diagnostic.CA3010.severity = none
+dotnet_diagnostic.CA3010.severity = error
 
 # CA3011: Review code for DLL injection vulnerabilities
-dotnet_diagnostic.CA3011.severity = none
+dotnet_diagnostic.CA3011.severity = error
 
 # CA3012: Review code for regex injection vulnerabilities
-dotnet_diagnostic.CA3012.severity = none
+dotnet_diagnostic.CA3012.severity = error
 
 # CA3061: Do not add schema by URL
 dotnet_diagnostic.CA3061.severity = warning
@@ -1112,7 +1126,7 @@ dotnet_diagnostic.CA5350.severity = warning
 dotnet_diagnostic.CA5351.severity = warning
 
 # CA5358: Review cipher mode usage with cryptography experts
-dotnet_diagnostic.CA5358.severity = none
+dotnet_diagnostic.CA5358.severity = warning
 
 # CA5359: Do not disable certificate validation
 dotnet_diagnostic.CA5359.severity = warning
@@ -1124,7 +1138,7 @@ dotnet_diagnostic.CA5360.severity = warning
 dotnet_diagnostic.CA5361.severity = warning
 
 # CA5362: Potential reference cycle in deserialized object graph
-dotnet_diagnostic.CA5362.severity = none
+dotnet_diagnostic.CA5362.severity = error
 
 # CA5363: Do not disable request validation
 dotnet_diagnostic.CA5363.severity = warning
@@ -1139,7 +1153,7 @@ dotnet_diagnostic.CA5365.severity = warning
 dotnet_diagnostic.CA5366.severity = warning
 
 # CA5367: Do Not Serialize Types With Pointer Fields
-dotnet_diagnostic.CA5367.severity = none
+dotnet_diagnostic.CA5367.severity = error
 
 # CA5368: Set ViewStateUserKey For Classes Derived From Page
 dotnet_diagnostic.CA5368.severity = warning
@@ -1184,10 +1198,10 @@ dotnet_diagnostic.CA5380.severity = warning
 dotnet_diagnostic.CA5381.severity = warning
 
 # CA5382: Use Secure Cookies In ASP.NET Core
-dotnet_diagnostic.CA5382.severity = none
+dotnet_diagnostic.CA5382.severity = error
 
 # CA5383: Ensure Use Secure Cookies In ASP.NET Core
-dotnet_diagnostic.CA5383.severity = none
+dotnet_diagnostic.CA5383.severity = error
 
 # CA5384: Do not use digital signature algorithm (DSA)
 dotnet_diagnostic.CA5384.severity = warning
@@ -1196,22 +1210,22 @@ dotnet_diagnostic.CA5384.severity = warning
 dotnet_diagnostic.CA5385.severity = warning
 
 # CA5386: Avoid hardcoding SecurityProtocolType value
-dotnet_diagnostic.CA5386.severity = none
+dotnet_diagnostic.CA5386.severity = error
 
 # CA5387: Do not use weak key derivation function with insufficient iteration count
 dotnet_diagnostic.CA5397.severity = warning
 
 # CA5388: Ensure Sufficient Iteration Count When Using Weak Key Derivation Function
-dotnet_diagnostic.CA5388.severity = none
+dotnet_diagnostic.CA5388.severity = error
 
 # CA5389: Do Not Add Archive Item's Path To The Target File System Path
-dotnet_diagnostic.CA5389.severity = none
+dotnet_diagnostic.CA5389.severity = error
 
 # CA5390: Do not hard-code encryption key
-dotnet_diagnostic.CA5390.severity = none
+dotnet_diagnostic.CA5390.severity = error
 
 # CA5391: Use antiforgery tokens in ASP.NET Core MVC controllers
-dotnet_diagnostic.CA5391.severity = none
+dotnet_diagnostic.CA5391.severity = error
 
 # CA5392: Use DefaultDllImportSearchPaths attribute for P/Invokes
 dotnet_diagnostic.CA5392.severity = none
@@ -1220,40 +1234,40 @@ dotnet_diagnostic.CA5392.severity = none
 dotnet_diagnostic.CA5393.severity = none
 
 # CA5394: Do not use insecure randomness
-dotnet_diagnostic.CA5394.severity = none
+dotnet_diagnostic.CA5394.severity = error
 
 # CA5395: Miss HttpVerb attribute for action methods
-dotnet_diagnostic.CA5395.severity = none
+dotnet_diagnostic.CA5395.severity = error
 
 # CA5396: Set HttpOnly to true for HttpCookie
-dotnet_diagnostic.CA5396.severity = none
+dotnet_diagnostic.CA5396.severity = error
 
 # CA5397: Do not use deprecated SslProtocols values
-dotnet_diagnostic.CA5397.severity = none
+dotnet_diagnostic.CA5397.severity = error
 
 # CA5398: Avoid hardcoded SslProtocols values
-dotnet_diagnostic.CA5398.severity = none
+dotnet_diagnostic.CA5398.severity = error
 
 # CA5399: HttpClients should enable certificate revocation list checks
-dotnet_diagnostic.CA5399.severity = none
+dotnet_diagnostic.CA5399.severity = error
 
 # CA5400: Ensure HttpClient certificate revocation list check is not disabled
-dotnet_diagnostic.CA5400.severity = none
+dotnet_diagnostic.CA5400.severity = error
 
 # CA5401: Do not use CreateEncryptor with non-default IV
-dotnet_diagnostic.CA5401.severity = none
+dotnet_diagnostic.CA5401.severity = error
 
 # CA5402: Use CreateEncryptor with the default IV
-dotnet_diagnostic.CA5402.severity = none
+dotnet_diagnostic.CA5402.severity = error
 
 # CA5403: Do not hard-code certificate
-dotnet_diagnostic.CA5403.severity = none
+dotnet_diagnostic.CA5403.severity = error
 
 # CA5404: Do not disable token validation checks
-dotnet_diagnostic.CA5404.severity = none
+dotnet_diagnostic.CA5404.severity = error
 
 # CA5405: Do not always skip token validation in delegates
-dotnet_diagnostic.CA5405.severity = none
+dotnet_diagnostic.CA5405.severity = error
 
 # CS1573: Parameter has no matching param tag in the XML comment (but other parameters do)
 dotnet_diagnostic.CS1573.severity = none
@@ -1440,7 +1454,7 @@ dotnet_diagnostic.SA1123.severity = none
 dotnet_diagnostic.SA1124.severity = none
 
 # SA1125: Use shorthand for nullable types
-dotnet_diagnostic.SA1125.severity = none
+dotnet_diagnostic.SA1125.severity = error
 
 # SA1126: Prefix calls correctly
 dotnet_diagnostic.SA1126.severity = none
@@ -1968,18 +1982,6 @@ dotnet_diagnostic.IDE0004.severity = silent
 # IDE0008: Use explicit type instead of 'var'
 dotnet_diagnostic.IDE0008.severity = silent
 
-# IDE0017: Simplify object initialization
-dotnet_diagnostic.IDE0017.severity = warning
-
-# IDE0019: Use pattern matching
-dotnet_diagnostic.IDE0019.severity = warning
-
-# IDE0031: Use null propagation
-dotnet_diagnostic.IDE0031.severity = warning
-
-# IDE0038: Use pattern matching
-dotnet_diagnostic.IDE0038.severity = warning
-
 # IDE0043: Invalid format string
 dotnet_diagnostic.IDE0043.severity = warning
 
@@ -2050,11 +2052,6 @@ dotnet_diagnostic.CA2020.severity = warning
 dotnet_diagnostic.RS0041.severity = none
 dotnet_diagnostic.IDE0005.severity = error
 
-# Expression-level preferences
-dotnet_style_coalesce_expression = true:warning
-dotnet_style_prefer_conditional_expression_over_assignment = true:silent
-dotnet_style_prefer_conditional_expression_over_return = true:silent
-
 # New line preferences
 csharp_new_line_before_open_brace = all
 csharp_new_line_before_else = true
@@ -2091,7 +2088,7 @@ csharp_style_expression_bodied_accessors = true:silent
 # Pattern matching
 csharp_style_pattern_matching_over_is_with_cast_check = true:warning
 csharp_style_pattern_matching_over_as_with_null_check = true:warning
-csharp_style_inlined_variable_declaration = true:suggestion
+csharp_style_inlined_variable_declaration = true:warning
 
 # Null checking preferences
 csharp_style_throw_expression = true:suggestion
@@ -2120,6 +2117,7 @@ csharp_space_between_method_declaration_name_and_open_parenthesis = false
 csharp_space_between_method_declaration_parameter_list_parentheses = false
 csharp_space_between_parentheses = false
 csharp_space_between_square_brackets = false
+
 csharp_using_directive_placement = outside_namespace:silent
 csharp_prefer_simple_using_statement = true:warning
 csharp_prefer_braces = true:silent
@@ -2135,6 +2133,7 @@ csharp_style_allow_blank_line_after_colon_in_constructor_initializer_experimenta
 csharp_style_allow_blank_line_after_token_in_conditional_expression_experimental = true:silent
 csharp_style_allow_blank_line_after_token_in_arrow_expression_clause_experimental = true:silent
 csharp_style_deconstructed_variable_declaration = true:suggestion
+csharp_prefer_system_threading_lock = true:warning
 
 # ------------------
 # Visual Basic files
@@ -2198,7 +2197,7 @@ end_of_line = crlf
 # Test specific
 # -------------
 
-[**/tests/**/*.cs]
+[**/tests/**/*.{cs,vb}]
 
 # This collides with TheoryData usage
 dotnet_style_prefer_collection_expression = true:silent
@@ -2237,9 +2236,20 @@ dotnet_diagnostic.CA1861.severity = silent
 # CA2007: Consider calling ConfigureAwait on the awaited task
 dotnet_diagnostic.CA2007.severity = suggestion
 
+# CA2300: Do not use insecure deserializer BinaryFormatter
+dotnet_diagnostic.CA2300.severity = none
+
+# CA2301: Do not call BinaryFormatter.Deserialize without first setting BinaryFormatter.Binder
+dotnet_diagnostic.CA2301.severity = none
+
+# CA2302: Ensure BinaryFormatter.Binder is set before calling BinaryFormatter.Deserialize
+dotnet_diagnostic.CA2302.severity = none
+
+# CA5394: Do not use insecure randomness
+dotnet_diagnostic.CA5394.severity = none
+
 # SA1115: Parameter should begin on the line after the previous parameter
 dotnet_diagnostic.SA1115.severity = none
-
 
 # Verify settings
 [*.{received,verified}.{txt,xml,json}]

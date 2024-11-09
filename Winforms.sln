@@ -195,10 +195,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Analyzers", "Analyzers", "{D4D97D78-D213-45DF-B003-9C4C9F2E5E1C}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
-		eng\CodeAnalysisSource.cs = eng\CodeAnalysisSource.cs
-		eng\Analyzer.targets = eng\Analyzer.targets
 		eng\Analyzer.props = eng\Analyzer.props
-		eng\CodeAnalysisSource.vb = eng\CodeAnalysisSource.vb
+		eng\Analyzer.targets = eng\Analyzer.targets
 	EndProjectSection
 EndProject
 Global

@@ -449,7 +449,11 @@ public sealed class ResXDataNode : ISerializable
         };
 
         // cs/dangerous-binary-deserialization
+#pragma warning disable CA2300 // Do not use insecure deserializer BinaryFormatter
+#pragma warning disable CA2302 // Ensure BinaryFormatter.Binder is set before calling BinaryFormatter.Deserialize
         object? result = _binaryFormatter.Deserialize(stream); // CodeQL[SM03722] : BinaryFormatter is intended to be used as a fallback for unsupported types. Users must explicitly opt into this behavior
+#pragma warning restore CA2302
+#pragma warning restore CA2300
         if (result is ResXNullRef)
         {
             result = null;
