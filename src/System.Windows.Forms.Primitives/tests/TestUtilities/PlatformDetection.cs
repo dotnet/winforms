@@ -34,7 +34,7 @@ public static partial class PlatformDetection
         try
         {
             byte[] tmp = new byte[int.MaxValue];
-            return true;
+            return false;
         }
         catch (OutOfMemoryException)
         {

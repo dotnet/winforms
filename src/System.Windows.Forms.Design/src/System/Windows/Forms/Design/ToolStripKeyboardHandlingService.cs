@@ -1199,7 +1199,7 @@ internal class ToolStripKeyboardHandlingService
 
         currentSelection ??= SelectedDesignerControl;
 
-        if (currentSelection is not Control)
+        if (currentSelection is Control)
         {
             return false;
         }
@@ -1326,7 +1326,7 @@ internal class ToolStripKeyboardHandlingService
 
         currentSelection ??= SelectedDesignerControl;
 
-        if (currentSelection is not Control)
+        if (currentSelection is Control)
         {
             return;
         }
