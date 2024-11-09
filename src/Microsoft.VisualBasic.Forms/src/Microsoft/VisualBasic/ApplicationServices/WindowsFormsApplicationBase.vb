@@ -488,34 +488,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Event
 
         ''' <summary>
-        '''  Generates the name for the remote singleton that we use to channel multiple instances
-        '''  to the same application model thread.
-        ''' </summary>
-        ''' <param name="entry"></param>
-        ''' <returns>
-        '''  A string unique to the application that should be the same for versions of
-        '''  the application that have the same Major and Minor Version Number.
-        ''' </returns>
-        ''' <remarks>If GUID Attribute does not exist fall back to unique ModuleVersionId.</remarks>
-        Private Shared Function GetApplicationInstanceID(entry As Assembly) As String
-
-            Dim guidAttrib As GuidAttribute = entry.GetCustomAttribute(Of GuidAttribute)()
-
-            If guidAttrib IsNot Nothing Then
-
-                Dim version As Version = entry.GetName.Version
-
-                If version IsNot Nothing Then
-                    Return $"{guidAttrib.Value}{version.Major}.{version.Minor}"
-                Else
-                    Return guidAttrib.Value
-                End If
-            End If
-
-            Return entry.ManifestModule.ModuleVersionId.ToString()
-        End Function
-
-        ''' <summary>
         '''  Displays the splash screen. We get called here from a different thread than what the
         '''  main form is starting up on. This allows us to process events for the Splash screen so
         '''  it doesn't freeze up while the main form is getting it together.
@@ -994,6 +966,34 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 End If
             End If
         End Sub
+
+        ''' <summary>
+        '''  Generates the name for the remote singleton that we use to channel multiple instances
+        '''  to the same application model thread.
+        ''' </summary>
+        ''' <param name="entry"></param>
+        ''' <returns>
+        '''  A string unique to the application that should be the same for versions of
+        '''  the application that have the same Major and Minor Version Number.
+        ''' </returns>
+        ''' <remarks>If GUID Attribute does not exist fall back to unique ModuleVersionId.</remarks>
+        Friend Shared Function GetApplicationInstanceID(entry As Assembly) As String
+
+            Dim guidAttrib As GuidAttribute = entry.GetCustomAttribute(Of GuidAttribute)()
+
+            If guidAttrib IsNot Nothing Then
+
+                Dim version As Version = entry.GetName.Version
+
+                If version IsNot Nothing Then
+                    Return $"{guidAttrib.Value}{version.Major}.{version.Minor}"
+                Else
+                    Return guidAttrib.Value
+                End If
+            End If
+
+            Return entry.ManifestModule.ModuleVersionId.ToString()
+        End Function
 
         ''' <summary>
         '''  Validates that the value being passed as an AuthenticationMode enum is a legal value

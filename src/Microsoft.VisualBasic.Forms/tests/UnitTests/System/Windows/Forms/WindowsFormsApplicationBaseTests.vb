@@ -85,9 +85,28 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         End Sub
 
+        <Fact>
+        Public Sub Run_DoEvents()
+            Dim testCode As Action =
+                Sub()
+                    DoEvents()
+                End Sub
+            testCode.Should.NotThrow()
+        End Sub
+
+        <Fact>
+        Public Sub Run_SingleInstanceNoStartupFormException()
+            IsSingleInstance = True
+            Dim testCode As Action =
+                Sub()
+                    Dim commandLine As String() = {"1"}
+                    Run(commandLine)
+                End Sub
+            testCode.Should.Throw(Of NoStartupFormException)()
+        End Sub
+
         <WinFormsFact>
         Public Sub ValidateAuthenticationModeEnumInvalidValue()
-            Dim testAccessor As ITestAccessor = GetType(WindowsFormsApplicationBase).TestAccessor()
             Dim testCode As Action =
                 Sub()
                     Dim mode As AuthenticationMode = CType(-1, AuthenticationMode)
@@ -100,7 +119,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsTheory>
         <ClassData(GetType(AuthenticationModeData))>
         Public Sub ValidateAuthenticationModeEnumValues(mode As AuthenticationMode)
-            Dim testAccessor As ITestAccessor = GetType(WindowsFormsApplicationBase).TestAccessor()
             Dim testCode As Action =
                 Sub()
                     ValidateAuthenticationModeEnumValue(mode, NameOf(AuthenticationMode))
