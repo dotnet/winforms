@@ -162,23 +162,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     private Dictionary<PROPCAT, CategoryAttribute>? _objectDefinedCategoryNames;
 
-#if DEBUG
-    static AxHost()
-    {
-        Debug.Assert(DockStyle.None == NativeMethods.ActiveX.ALIGN_NO_CHANGE, "align value mismatch");
-        Debug.Assert((int)DockStyle.Top == NativeMethods.ActiveX.ALIGN_TOP, "align value mismatch");
-        Debug.Assert((int)DockStyle.Bottom == NativeMethods.ActiveX.ALIGN_BOTTOM, "align value mismatch");
-        Debug.Assert((int)DockStyle.Left == NativeMethods.ActiveX.ALIGN_LEFT, "align value mismatch");
-        Debug.Assert((int)DockStyle.Right == NativeMethods.ActiveX.ALIGN_RIGHT, "align value mismatch");
-        Debug.Assert((int)MouseButtons.Left == 0x00100000, "mb.left mismatch");
-        Debug.Assert((int)MouseButtons.Right == 0x00200000, "mb.right mismatch");
-        Debug.Assert((int)MouseButtons.Middle == 0x00400000, "mb.middle mismatch");
-        Debug.Assert((int)Keys.Shift == 0x00010000, "key.shift mismatch");
-        Debug.Assert((int)Keys.Control == 0x00020000, "key.control mismatch");
-        Debug.Assert((int)Keys.Alt == 0x00040000, "key.alt mismatch");
-    }
-#endif
-
     /// <summary>
     ///  Creates a new instance of a control which wraps an activeX control given by the
     ///  clsid parameter and flags of 0.
@@ -1865,19 +1848,10 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             }
 
             _ocxState = value;
+            _axState[s_manualUpdate] = _ocxState.ManualUpdate;
+            _licenseKey = _ocxState.LicenseKey;
 
-            if (_ocxState is not null)
-            {
-                _axState[s_manualUpdate] = _ocxState.ManualUpdate;
-                _licenseKey = _ocxState.LicenseKey;
-            }
-            else
-            {
-                _axState[s_manualUpdate] = false;
-                _licenseKey = null;
-            }
-
-            if (_ocxState is not null && GetOcState() >= OC_RUNNING)
+            if (GetOcState() >= OC_RUNNING)
             {
                 DepersistControl();
             }
@@ -1918,8 +1892,11 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
                     return new State(ms, _storageType, this);
                 case StorageType.Storage:
-                    Debug.Assert(oldOcxState is not null, "we got to have an old state which holds out scribble storage...");
-                    if (oldOcxState is not null)
+                    if (oldOcxState is null)
+                    {
+                        Debug.Fail("we got to have an old state which holds out scribble storage...");
+                    }
+                    else
                     {
                         using var persistStorage = ComHelpers.GetComScope<IPersistStorage>(_instance);
                         return oldOcxState.RefreshStorage(persistStorage);
@@ -2368,7 +2345,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             return null;
         }
 
-        PROPCAT propcat = 0;
+        PROPCAT propcat;
         hr = categorizeProperties.Value->MapPropertyToCategory(dispid, &propcat);
         if (!hr.Succeeded || propcat == 0)
         {
@@ -2515,17 +2492,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             return null;
         }
 
-        if (_editor is not null)
-        {
-            return _editor;
-        }
-
-        if (_editor is null && HasPropertyPages())
-        {
-            _editor = new AxComponentEditor();
-        }
-
-        return _editor;
+        return _editor ??= HasPropertyPages() ? new AxComponentEditor() : null;
     }
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]

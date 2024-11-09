@@ -1110,24 +1110,25 @@ public partial class ComboBox : ListControl
             base.Text = value;
             object? selectedItem = SelectedItem;
 
-            if (!DesignMode)
+            if (DesignMode)
             {
-                if (value is null)
-                {
-                    SelectedIndex = -1;
-                }
-                else if (value is not null
-                    && (selectedItem is null
-                        || string.Compare(value, GetItemText(selectedItem), ignoreCase: false, CultureInfo.CurrentCulture) != 0))
-                {
-                    int index = FindStringIgnoreCase(value);
+                return;
+            }
 
-                    // we cannot set the index to -1 unless we want to do something unusual and save/restore text
-                    // because the native control will erase the text when we change the index to -1
-                    if (index != -1)
-                    {
-                        SelectedIndex = index;
-                    }
+            if (value is null)
+            {
+                SelectedIndex = -1;
+            }
+            else if (selectedItem is null
+                || string.Compare(value, GetItemText(selectedItem), ignoreCase: false, CultureInfo.CurrentCulture) != 0)
+            {
+                int index = FindStringIgnoreCase(value);
+
+                // we cannot set the index to -1 unless we want to do something unusual and save/restore text
+                // because the native control will erase the text when we change the index to -1
+                if (index != -1)
+                {
+                    SelectedIndex = index;
                 }
             }
         }

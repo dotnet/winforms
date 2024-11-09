@@ -19,7 +19,7 @@ internal sealed class Com2ICategorizePropertiesHandler : Com2ExtendedBrowsingHan
             return null;
         }
 
-        PROPCAT categoryId = 0;
+        PROPCAT categoryId;
         if (categorizeProperties.Value->MapPropertyToCategory(dispid, &categoryId).Failed)
         {
             return null;

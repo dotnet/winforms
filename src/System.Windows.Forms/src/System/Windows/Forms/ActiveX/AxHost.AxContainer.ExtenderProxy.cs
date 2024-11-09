@@ -109,13 +109,13 @@ public abstract partial class AxHost
             {
                 get
                 {
-                    int result = (int)(GetControl()?.Dock ?? NativeMethods.ActiveX.ALIGN_NO_CHANGE);
-                    if (result is < NativeMethods.ActiveX.ALIGN_MIN or > NativeMethods.ActiveX.ALIGN_MAX)
+                    DockStyle result = GetControl()?.Dock ?? DockStyle.None;
+                    if (result is < DockStyle.None or > DockStyle.Right)
                     {
-                        result = NativeMethods.ActiveX.ALIGN_NO_CHANGE;
+                        result = DockStyle.None;
                     }
 
-                    return result;
+                    return (int)result;
                 }
                 set
                 {

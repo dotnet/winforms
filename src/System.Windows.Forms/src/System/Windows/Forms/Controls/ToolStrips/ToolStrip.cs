@@ -3532,6 +3532,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
                             // the cached HDC isn't big enough for this item. make it bigger.
                             _largestDisplayedItemSize = itemSize;
                             bitmapSize = itemSize;
+
                             // dispose the old graphics - create a new, bigger one.
                             itemGraphics.Dispose();
 
@@ -3584,7 +3585,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
             }
             finally
             {
-                itemGraphics?.Dispose();
+                itemGraphics.Dispose();
             }
         }
 

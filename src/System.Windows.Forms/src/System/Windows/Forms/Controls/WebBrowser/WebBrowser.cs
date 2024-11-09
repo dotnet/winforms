@@ -1341,33 +1341,29 @@ public unsafe partial class WebBrowser : WebBrowserBase
     private bool ShowContextMenu(Point location)
     {
         ContextMenuStrip? contextMenuStrip = ContextMenuStrip;
-        if (contextMenuStrip is not null)
+        if (contextMenuStrip is null)
         {
-            Point client;
+            return false;
+        }
 
-            bool keyboardActivated = false;
+        Point client;
+        bool keyboardActivated = false;
 
-            // X will be -1 when the user invokes the context menu from the keyboard
-            if (location.X == -1)
-            {
-                keyboardActivated = true;
-                client = new Point(Width / 2, Height / 2);
-            }
-            else
-            {
-                client = PointToClient(location);
-            }
+        // X will be -1 when the user invokes the context menu from the keyboard
+        if (location.X == -1)
+        {
+            keyboardActivated = true;
+            client = new Point(Width / 2, Height / 2);
+        }
+        else
+        {
+            client = PointToClient(location);
+        }
 
-            if (ClientRectangle.Contains(client))
-            {
-                contextMenuStrip?.ShowInternal(this, client, keyboardActivated);
-
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+        if (ClientRectangle.Contains(client))
+        {
+            contextMenuStrip.ShowInternal(this, client, keyboardActivated);
+            return true;
         }
         else
         {

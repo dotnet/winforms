@@ -600,6 +600,8 @@ dotnet_diagnostic.CA1421.severity = suggestion
 # CA1501: Avoid excessive inheritance
 dotnet_diagnostic.CA1501.severity = none
 
+# We fail 1502/05 in a number of places. Some are unavoidable, some could be fixed.
+
 # CA1502: Avoid excessive complexity
 dotnet_diagnostic.CA1502.severity = none
 
@@ -612,6 +614,8 @@ dotnet_diagnostic.CA1506.severity = none
 # CA1507: Use nameof in place of string
 dotnet_diagnostic.CA1507.severity = error
 
+# This does not understand Debug.Assert or native code, but often finds mistakes.
+# This also is very costly to run. Should turn on and occasionally and investigate.
 # CA1508: Avoid dead conditional code
 dotnet_diagnostic.CA1508.severity = none
 

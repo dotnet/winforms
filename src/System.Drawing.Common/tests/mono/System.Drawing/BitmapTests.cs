@@ -431,9 +431,6 @@ public class BitmapTests
             }
         }
 
-        if (pixel_data is null)
-            return "--ERROR--";
-
         byte[] hash = SHA256.HashData(pixel_data);
         return ByteArrayToString(hash);
     }
