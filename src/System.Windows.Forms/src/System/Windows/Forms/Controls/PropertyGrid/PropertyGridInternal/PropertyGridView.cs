@@ -2845,14 +2845,7 @@ internal sealed partial class PropertyGridView :
                         if (GetScrollOffset() != (start + offset))
                         {
                             // We didn't make a full page.
-                            if (next)
-                            {
-                                row = _visibleRows - 1;
-                            }
-                            else
-                            {
-                                row = 0;
-                            }
+                            row = next ? _visibleRows - 1 : 0;
                         }
                     }
 
@@ -2917,17 +2910,19 @@ internal sealed partial class PropertyGridView :
             }
         }
 
-        if (entry is not null && e.KeyData == (Keys.C | Keys.Alt | Keys.Shift | Keys.Control))
+        if (e.KeyData == (Keys.C | Keys.Alt | Keys.Shift | Keys.Control))
         {
             Clipboard.SetDataObject(entry.GetTestingInfo());
             return;
         }
 
-        if (_selectedGridEntry is not null && _selectedGridEntry.Enumerable &&
-            _dropDownHolder is not null && _dropDownHolder.Visible &&
-            (keyCode == Keys.Up || keyCode == Keys.Down))
+        if (_selectedGridEntry is not null
+            && _selectedGridEntry.Enumerable
+            && _dropDownHolder is not null
+            && _dropDownHolder.Visible
+            && (keyCode == Keys.Up || keyCode == Keys.Down))
         {
-            ProcessEnumUpAndDown(_selectedGridEntry, keyCode, false);
+            ProcessEnumUpAndDown(_selectedGridEntry, keyCode, closeDropDown: false);
         }
 
         e.Handled = false;

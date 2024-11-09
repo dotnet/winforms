@@ -4859,9 +4859,9 @@ public partial class RichTextBoxTests
         control.SelectionFont = value;
         Font result1 = control.SelectionFont;
         Assert.NotSame(result1, value);
-        Assert.Equal(value?.Name, result1.Name);
-        Assert.Equal(value?.Size, result1.Size);
-        Assert.Equal(value?.Style, result1.Style);
+        Assert.Equal(value.Name, result1.Name);
+        Assert.Equal(value.Size, result1.Size);
+        Assert.Equal(value.Style, result1.Style);
         Assert.Equal(expectedGdiCharset, result1.GdiCharSet);
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
@@ -4871,9 +4871,9 @@ public partial class RichTextBoxTests
         // Set same.
         control.SelectionFont = value;
         Font result2 = control.SelectionFont;
-        Assert.Equal(value?.Name, result2.Name);
-        Assert.Equal(value?.Size, result2.Size);
-        Assert.Equal(value?.Style, result2.Style);
+        Assert.Equal(value.Name, result2.Name);
+        Assert.Equal(value.Size, result2.Size);
+        Assert.Equal(value.Style, result2.Style);
         Assert.Equal(expectedGdiCharset, result2.GdiCharSet);
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);

@@ -4340,7 +4340,7 @@ public class ListViewTests
         listView.Items[0].Focused = focused;
         listView.Items[0].Selected = selected;
 
-        Assert.Equal(expectedCallCount, customAccessibleObject?.RaiseAutomationEventCalls);
+        Assert.Equal(expectedCallCount, customAccessibleObject.RaiseAutomationEventCalls);
     }
 
     public static IEnumerable<object[]> ListView_InvokeOnSelectedIndexChanged_VirtualMode_TestData()
@@ -4403,7 +4403,7 @@ public class ListViewTests
         listView.Items[0].Focused = focused;
         listView.Items[0].Selected = selected;
 
-        Assert.Equal(expectedCallCount, customAccessibleObject?.RaiseAutomationEventCalls);
+        Assert.Equal(expectedCallCount, customAccessibleObject.RaiseAutomationEventCalls);
     }
 
     [WinFormsFact]

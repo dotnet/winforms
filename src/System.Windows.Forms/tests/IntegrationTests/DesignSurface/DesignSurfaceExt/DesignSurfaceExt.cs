@@ -306,29 +306,18 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
         // - troubles when we try to use the UndoEngine
         // - 1. NameCreationService
         _nameCreationService = new NameCreationServiceImp();
-        if (_nameCreationService is not null)
-        {
-            ServiceContainer.RemoveService(typeof(INameCreationService), false);
-            ServiceContainer.AddService(typeof(INameCreationService), _nameCreationService);
-        }
+        ServiceContainer.RemoveService(typeof(INameCreationService), false);
+        ServiceContainer.AddService(typeof(INameCreationService), _nameCreationService);
 
         // - 2. CodeDomComponentSerializationService
         _codeDomComponentSerializationService = new CodeDomComponentSerializationService(ServiceContainer);
-        if (_codeDomComponentSerializationService is not null)
-        {
-            // - the CodeDomComponentSerializationService is ready to be replaced
-            ServiceContainer.RemoveService(typeof(ComponentSerializationService), false);
-            ServiceContainer.AddService(typeof(ComponentSerializationService), _codeDomComponentSerializationService);
-        }
+        ServiceContainer.RemoveService(typeof(ComponentSerializationService), false);
+        ServiceContainer.AddService(typeof(ComponentSerializationService), _codeDomComponentSerializationService);
 
         // - 3. IDesignerSerializationService
         _designerSerializationService = new DesignerSerializationServiceImpl(ServiceContainer);
-        if (_designerSerializationService is not null)
-        {
-            // - the IDesignerSerializationService is ready to be replaced
-            ServiceContainer.RemoveService(typeof(IDesignerSerializationService), false);
-            ServiceContainer.AddService(typeof(IDesignerSerializationService), _designerSerializationService);
-        }
+        ServiceContainer.RemoveService(typeof(IDesignerSerializationService), false);
+        ServiceContainer.AddService(typeof(IDesignerSerializationService), _designerSerializationService);
 
         // - 4. UndoEngine
         _undoEngine = new UndoEngineExt(ServiceContainer)
@@ -337,12 +326,8 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
             Enabled = false
         };
 
-        if (_undoEngine is not null)
-        {
-            // - the UndoEngine is ready to be replaced
-            ServiceContainer.RemoveService(typeof(UndoEngine), false);
-            ServiceContainer.AddService(typeof(UndoEngine), _undoEngine);
-        }
+        ServiceContainer.RemoveService(typeof(UndoEngine), false);
+        ServiceContainer.AddService(typeof(UndoEngine), _undoEngine);
 
         // - 5. IMenuCommandService
         ServiceContainer.AddService(typeof(IMenuCommandService), new MenuCommandService(this));

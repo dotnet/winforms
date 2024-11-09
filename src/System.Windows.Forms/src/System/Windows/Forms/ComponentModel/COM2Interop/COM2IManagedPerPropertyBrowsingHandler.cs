@@ -46,9 +46,9 @@ internal sealed unsafe class Com2IManagedPerPropertyBrowsingHandler : Com2Extend
 
     internal static Attribute[] GetComponentAttributes(IVSMDPerPropertyBrowsing* propertyBrowsing, int dispid)
     {
-        uint attributeCount = 0;
-        BSTR* nativeTypeNames = null;
-        VARIANT* nativeValues = null;
+        uint attributeCount;
+        BSTR* nativeTypeNames;
+        VARIANT* nativeValues;
 
         HRESULT hr = propertyBrowsing->GetPropertyAttributes(dispid, &attributeCount, &nativeTypeNames, &nativeValues);
         if (hr != HRESULT.S_OK || attributeCount == 0 || nativeValues is null)
