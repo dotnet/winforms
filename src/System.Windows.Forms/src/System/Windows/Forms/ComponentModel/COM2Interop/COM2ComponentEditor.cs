@@ -135,13 +135,9 @@ internal sealed class Com2ComponentEditor : WindowsFormsComponentEditor
                         MessageBoxDefaultButton.Button1,
                         0);
                 }
-                else if (ex is not null)
-                {
-                    uiService.ShowError(ex, SR.ErrorPropertyPageFailed);
-                }
                 else
                 {
-                    uiService.ShowError(SR.ErrorPropertyPageFailed);
+                    uiService.ShowError(ex, SR.ErrorPropertyPageFailed);
                 }
             }
         }

@@ -55,7 +55,6 @@ public class PreviewPrintController : PrintController
         // instead of the GDI+ standard hundredth of an inch.
         Size metafileSize = PrinterUnitConvert.Convert(size, PrinterUnit.Display, PrinterUnit.HundredthsOfAMillimeter);
 
-        Debug.Assert(_hdc is not null);
         HDC hdc = _hdc ?? HDC.Null;
 
         // Create a Metafile which accepts only GDI+ commands since we are the ones creating and using this.
