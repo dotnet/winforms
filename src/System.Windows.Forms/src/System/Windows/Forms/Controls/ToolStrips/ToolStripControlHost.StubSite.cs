@@ -116,7 +116,7 @@ public partial class ToolStripControlHost
             _dictionary ??= [];
             ArgumentNullException.ThrowIfNull(key);
 
-            if (value is not object)
+            if (value is null)
             {
                 _dictionary.Remove(key);
             }

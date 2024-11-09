@@ -76,7 +76,7 @@ internal static class DebuggerAttributes
         // The debugger doesn't evaluate non-public members of type proxies.
         // GetGetMethod returns null if the getter is non-public.
         IEnumerable<PropertyInfo> visibleProperties = debuggerAttributeType.GetProperties()
-            .Where(pi => pi.GetGetMethod() is object && GetDebuggerBrowsableState(pi) != DebuggerBrowsableState.Never);
+            .Where(pi => pi.GetGetMethod() is not null && GetDebuggerBrowsableState(pi) != DebuggerBrowsableState.Never);
         return visibleProperties;
     }
 
@@ -184,17 +184,15 @@ internal static class DebuggerAttributes
 
     private static bool TryEvaluateReference(object obj, string reference, out object member)
     {
-        PropertyInfo pi = GetProperty(obj, reference);
-        if (pi is object)
+        if (GetProperty(obj, reference) is { } property)
         {
-            member = pi.GetValue(obj);
+            member = property.GetValue(obj);
             return true;
         }
 
-        FieldInfo fi = GetField(obj, reference);
-        if (fi is object)
+        if (GetField(obj, reference) is { } field)
         {
-            member = fi.GetValue(obj);
+            member = field.GetValue(obj);
             return true;
         }
 
@@ -204,12 +202,11 @@ internal static class DebuggerAttributes
 
     private static FieldInfo GetField(object obj, string fieldName)
     {
-        for (Type t = obj.GetType(); t is object; t = t.GetTypeInfo().BaseType)
+        for (Type t = obj.GetType(); t is not null; t = t.GetTypeInfo().BaseType)
         {
-            FieldInfo fi = t.GetTypeInfo().GetDeclaredField(fieldName);
-            if (fi is object)
+            if (t.GetTypeInfo().GetDeclaredField(fieldName) is { } field)
             {
-                return fi;
+                return field;
             }
         }
 
@@ -218,12 +215,11 @@ internal static class DebuggerAttributes
 
     private static PropertyInfo GetProperty(object obj, string propertyName)
     {
-        for (Type t = obj.GetType(); t is object; t = t.GetTypeInfo().BaseType)
+        for (Type t = obj.GetType(); t is not null; t = t.GetTypeInfo().BaseType)
         {
-            PropertyInfo pi = t.GetTypeInfo().GetDeclaredProperty(propertyName);
-            if (pi is object)
+            if (t.GetTypeInfo().GetDeclaredProperty(propertyName) is { } property)
             {
-                return pi;
+                return property;
             }
         }
 
