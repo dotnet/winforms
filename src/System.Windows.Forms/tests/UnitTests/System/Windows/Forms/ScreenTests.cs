@@ -96,17 +96,10 @@ public class ScreenTests
     [WinFormsFact]
     public void Screen_FromHandle_RealHandle_ReturnsExpected()
     {
-        Control control = new();
-        try
-        {
-            Screen screen = Screen.FromHandle(control.Handle);
-            Assert.NotNull(screen);
-            VerifyScreen(screen);
-        }
-        finally
-        {
-            control?.Dispose();
-        }
+        using Control control = new();
+        Screen screen = Screen.FromHandle(control.Handle);
+        Assert.NotNull(screen);
+        VerifyScreen(screen);
     }
 
     public static IEnumerable<object[]> FromPoint_TestData()

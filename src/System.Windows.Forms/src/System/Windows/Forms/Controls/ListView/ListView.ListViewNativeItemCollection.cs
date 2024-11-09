@@ -233,25 +233,27 @@ public partial class ListView
                 {
                     ListViewItem item = _owner.Items[i];
                     Debug.Assert(item is not null, $"Failed to get item at index {i}");
-                    if (item is not null)
+                    if (item is null)
                     {
-                        // If it's the one we're looking for, ask for the next one.
-                        if (i == nextSelected)
-                        {
-                            item.StateSelected = true;
-                            nextSelected = (int)PInvokeCore.SendMessage(
-                                _owner,
-                                PInvoke.LVM_GETNEXTITEM,
-                                (WPARAM)nextSelected, (LPARAM)PInvoke.LVNI_SELECTED);
-                        }
-                        else
-                        {
-                            // Otherwise it's false.
-                            item.StateSelected = false;
-                        }
-
-                        item.UnHost(i, false);
+                        continue;
                     }
+
+                    // If it's the one we're looking for, ask for the next one.
+                    if (i == nextSelected)
+                    {
+                        item.StateSelected = true;
+                        nextSelected = (int)PInvokeCore.SendMessage(
+                            _owner,
+                            PInvoke.LVM_GETNEXTITEM,
+                            (WPARAM)nextSelected, (LPARAM)PInvoke.LVNI_SELECTED);
+                    }
+                    else
+                    {
+                        // Otherwise it's false.
+                        item.StateSelected = false;
+                    }
+
+                    item.UnHost(i, false);
                 }
 
                 Debug.Assert(_owner._listViewItems is null, "listItemsArray not null, even though handle created");

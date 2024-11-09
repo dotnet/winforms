@@ -26,7 +26,7 @@ internal class Com2ExtendedUITypeEditor : UITypeEditor
 
     public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
         => _innerEditor is not null
-            ? _innerEditor?.EditValue(context, provider, value)
+            ? _innerEditor.EditValue(context, provider, value)
             : base.EditValue(context, provider, value);
 
     public override bool GetPaintValueSupported(ITypeDescriptorContext? context)

@@ -1536,7 +1536,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             _tabsDirty = true;
         }
 
-        if (tab is not null && @object is not null)
+        if (@object is not null)
         {
             try
             {

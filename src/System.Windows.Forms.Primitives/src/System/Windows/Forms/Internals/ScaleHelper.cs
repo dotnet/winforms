@@ -465,7 +465,6 @@ internal static partial class ScaleHelper
         else
         {
             // Vista or higher has SetProcessDPIAware
-            PROCESS_DPI_AWARENESS dpiAwareness = (PROCESS_DPI_AWARENESS)(-1);
             switch (highDpiMode)
             {
                 case HighDpiMode.DpiUnaware:
@@ -475,13 +474,8 @@ internal static partial class ScaleHelper
                 case HighDpiMode.SystemAware:
                 case HighDpiMode.PerMonitor:
                 case HighDpiMode.PerMonitorV2:
-                    dpiAwareness = PROCESS_DPI_AWARENESS.PROCESS_SYSTEM_DPI_AWARE;
+                    success = PInvoke.SetProcessDPIAware();
                     break;
-            }
-
-            if (dpiAwareness == PROCESS_DPI_AWARENESS.PROCESS_SYSTEM_DPI_AWARE)
-            {
-                success = PInvoke.SetProcessDPIAware();
             }
         }
 

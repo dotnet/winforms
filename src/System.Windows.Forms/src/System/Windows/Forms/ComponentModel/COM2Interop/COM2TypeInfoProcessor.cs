@@ -603,7 +603,7 @@ internal static unsafe partial class Com2TypeInfoProcessor
         int nameDispID,
         ref bool addAboutBox)
     {
-        TYPEATTR* typeAttributes = null;
+        TYPEATTR* typeAttributes;
         HRESULT hr = typeInfo->GetTypeAttr(&typeAttributes);
         if (!hr.Succeeded || typeAttributes is null)
         {
@@ -617,7 +617,7 @@ internal static unsafe partial class Com2TypeInfoProcessor
 
             for (uint i = 0; i < typeAttributes->cFuncs; i++)
             {
-                FUNCDESC* functionDescription = null;
+                FUNCDESC* functionDescription;
                 hr = typeInfo->GetFuncDesc(i, &functionDescription);
                 if (!hr.Succeeded || functionDescription is null)
                 {
@@ -700,7 +700,7 @@ internal static unsafe partial class Com2TypeInfoProcessor
 
         try
         {
-            TYPEATTR* pTypeAttr = null;
+            TYPEATTR* pTypeAttr;
             HRESULT hr = enumTypeInfo->GetTypeAttr(&pTypeAttr);
             if (!hr.Succeeded || pTypeAttr is null)
             {
@@ -724,7 +724,7 @@ internal static unsafe partial class Com2TypeInfoProcessor
                 // helpstring if it's there.
                 for (uint i = 0; i < nItems; i++)
                 {
-                    VARDESC* pVarDesc = null;
+                    VARDESC* pVarDesc;
                     hr = enumTypeInfo->GetVarDesc(i, &pVarDesc);
                     if (!hr.Succeeded || pVarDesc is null)
                     {
@@ -829,7 +829,7 @@ internal static unsafe partial class Com2TypeInfoProcessor
         int dispidToGet,
         int nameDispID)
     {
-        TYPEATTR* pTypeAttr = null;
+        TYPEATTR* pTypeAttr;
         HRESULT hr = typeInfo->GetTypeAttr(&pTypeAttr);
         if (!hr.Succeeded || pTypeAttr is null)
         {
@@ -840,7 +840,7 @@ internal static unsafe partial class Com2TypeInfoProcessor
         {
             for (uint i = 0; i < pTypeAttr->cVars; i++)
             {
-                VARDESC* pVarDesc = null;
+                VARDESC* pVarDesc;
                 hr = typeInfo->GetVarDesc(i, &pVarDesc);
                 if (!hr.Succeeded || pVarDesc is null)
                 {
