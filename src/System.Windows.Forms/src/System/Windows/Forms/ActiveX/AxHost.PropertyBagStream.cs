@@ -43,11 +43,17 @@ public abstract unsafe partial class AxHost
             {
                 stream.Position = position;
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
+#pragma warning disable CA2300 // Do not use insecure deserializer BinaryFormatter
+#pragma warning disable CA2301 // Do not call BinaryFormatter.Deserialize without first setting BinaryFormatter.Binder
+#pragma warning disable CA2302 // Ensure BinaryFormatter.Binder is set before calling BinaryFormatter.Deserialize
                 _bag = (Hashtable)new BinaryFormatter().Deserialize(stream); // CodeQL[SM03722, SM04191] : BinaryFormatter is intended to be used as a fallback for unsupported types. Users must explicitly opt into this behavior"
             }
             catch (Exception inner) when (!inner.IsCriticalException())
             {
                 Debug.Fail($"PropertyBagStream: {nameof(BinaryFormatter)} failed with {inner.Message}");
+#pragma warning restore CA2300
+#pragma warning restore CA2301
+#pragma warning restore CA2302
 #pragma warning restore SYSLIB0011
 
                 // Error reading. Just init an empty hashtable.

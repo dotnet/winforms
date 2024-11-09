@@ -1145,7 +1145,6 @@ public partial class Control
                     {
                     }
 
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
                     if (!success)
                     {
                         if (!DataObject.Composition.EnableUnsafeBinaryFormatterInNativeObjectSerialization)
@@ -1154,9 +1153,15 @@ public partial class Control
                         }
 
                         stream.Position = 0;
+
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
+#pragma warning disable CA2300 // Do not use insecure deserializer BinaryFormatter
+#pragma warning disable CA2301 // Do not call BinaryFormatter.Deserialize without first setting BinaryFormatter.Binder
                         deserialized = new BinaryFormatter().Deserialize(stream); // CodeQL[SM03722, SM04191] : BinaryFormatter is intended to be used as a fallback for unsupported types. Users must explicitly opt into this behavior
+#pragma warning restore CA2301
+#pragma warning restore CA2300
+#pragma warning restore SYSLIB0011
                     }
-#pragma warning restore
 
                     currentProperty.SetValue(_control, deserialized);
                     return true;
