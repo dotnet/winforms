@@ -49,13 +49,27 @@ public class ControlDesignerTests : IDisposable
     public void ControlDesigner_Ctor_Default()
     {
         using TestControlDesigner controlDesigner = new();
-        Assert.False(controlDesigner.AutoResizeHandles);
-        Assert.Throws<InvalidOperationException>(() => controlDesigner.Control);
-        Assert.True(controlDesigner.ControlSupportsSnaplines);
-        Assert.Throws<InvalidOperationException>(() => controlDesigner.Component);
-        Assert.True(controlDesigner.ForceVisible);
-        Assert.Throws<InvalidOperationException>(controlDesigner.GetParentComponentProperty);
-        Assert.False(controlDesigner.SerializePerformLayout);
+
+        controlDesigner.AutoResizeHandles.Should().BeFalse();
+        controlDesigner.ControlSupportsSnaplines.Should().BeTrue();
+        controlDesigner.ForceVisible.Should().BeTrue();
+        controlDesigner.SerializePerformLayout.Should().BeFalse();
+
+        Action action1 = () =>
+        {
+            using Control _ = controlDesigner.Control;
+        };
+
+        Action action2 = () =>
+        {
+            using IComponent component = controlDesigner.Component;
+        };
+
+        Action action3 = () => controlDesigner.GetParentComponentProperty();
+
+        action1.Should().Throw<InvalidOperationException>();
+        action2.Should().Throw<InvalidOperationException>();
+        action3.Should().Throw<InvalidOperationException>();
     }
 
     [WinFormsFact]
@@ -63,50 +77,31 @@ public class ControlDesignerTests : IDisposable
     {
         using TestControlDesigner controlDesigner = new();
         using Button button = new();
+
         controlDesigner.Initialize(button);
-        Assert.Empty(controlDesigner.AssociatedComponents);
-        Assert.False(controlDesigner.IsRootDesigner);
-        Assert.NotNull(controlDesigner.SnapLines);
-        Assert.Equal(8, controlDesigner.SnapLines.Count);
-        Assert.NotNull(controlDesigner.StandardBehavior);
-        Assert.Equal(Cursors.Default, controlDesigner.StandardBehavior.Cursor);
+
+        controlDesigner.AssociatedComponents.Count.Should().Be(0);
+        controlDesigner.IsRootDesigner.Should().BeFalse();
+        controlDesigner.SnapLines.Should().NotBeNull();
+        controlDesigner.SnapLines.Count.Should().Be(8);
+        controlDesigner.StandardBehavior.Should().NotBeNull();
+        controlDesigner.StandardBehavior.Cursor.Should().Be(Cursors.Default);
     }
 
     [Fact]
-    public void AccessibleObjectField()
+    public void InitializeControlDefaults()
     {
-        Assert.Null(_designer.GetAccessibleObjectField());
-    }
-
-    [Fact]
-    public void BehaviorServiceProperty()
-    {
-        Assert.Null(_designer.GetBehaviorServiceProperty());
-    }
-
-    [Fact]
-    public void AccessibilityObjectField()
-    {
-        Assert.NotNull(_designer.AccessibilityObject);
-    }
-
-    [Fact]
-    public void EnableDragRectProperty()
-    {
-        Assert.False(_designer.GetEnableDragRectProperty());
-    }
-
-    [Fact]
-    public void ParticipatesWithSnapLinesProperty()
-    {
-        Assert.True(_designer.ParticipatesWithSnapLines);
-    }
-
-    [Fact]
-    public void AutoResizeHandlesProperty()
-    {
-        Assert.True(_designer.AutoResizeHandles = true);
-        Assert.True(_designer.AutoResizeHandles);
+        _designer.GetAccessibleObjectField().Should().BeNull();
+        _designer.GetBehaviorServiceProperty().Should().BeNull();
+        _designer.AccessibilityObject.Should().NotBeNull();
+        _designer.GetEnableDragRectProperty().Should().BeFalse();
+        _designer.ParticipatesWithSnapLines.Should().BeTrue();
+        (_designer.AutoResizeHandles = true).Should().BeTrue();
+        _designer.AutoResizeHandles.Should().BeTrue();
+        _designer.GetInheritanceAttributeProperty().Should().NotBeNull();
+        _designer.NumberOfInternalControlDesigners().Should().Be(0);
+        _designer.GetHitTestMethod(default).Should().BeFalse();
+        _designer.HookChildControlsMethod(new Control());
     }
 
     [Theory]
@@ -115,7 +110,7 @@ public class ControlDesignerTests : IDisposable
     [InlineData(DockStyle.Right, SelectionRules.Moveable | SelectionRules.TopSizeable | SelectionRules.BottomSizeable | SelectionRules.RightSizeable)]
     [InlineData(DockStyle.Bottom, SelectionRules.Moveable | SelectionRules.LeftSizeable | SelectionRules.BottomSizeable | SelectionRules.RightSizeable)]
     [InlineData(DockStyle.Fill, SelectionRules.Moveable | SelectionRules.TopSizeable | SelectionRules.LeftSizeable | SelectionRules.RightSizeable | SelectionRules.BottomSizeable)]
-    public void SelectionRulesProperty(DockStyle dockStyle, SelectionRules selectionRulesParam)
+    public void DockStyle_DefinesProperSelectionRules(DockStyle dockStyle, SelectionRules selectionRulesParam)
     {
         SelectionRules defaultSelectionRules = _designer.SelectionRules;
         _control.Dock = dockStyle;
@@ -130,119 +125,120 @@ public class ControlDesignerTests : IDisposable
     }
 
     [Fact]
-    public void InheritanceAttributeProperty()
+    public void BaseWndProc_Call_DoesNotThrow()
     {
-        Assert.NotNull(_designer.GetInheritanceAttributeProperty());
+        Action action = () =>
+        {
+            Message m = default;
+            _designer.BaseWndProcMethod(ref m);
+        };
+
+        action.Should().NotThrow();
     }
 
     [Fact]
-    public void NumberOfInternalControlDesignersTest()
-    {
-        Assert.Equal(0, _designer.NumberOfInternalControlDesigners());
-    }
-
-    [Fact]
-    public void BaseWndProcTest()
-    {
-        Message m = default;
-        _designer.BaseWndProcMethod(ref m);
-    }
-
-    [Fact]
-    public void CanBeParentedToTest()
+    public void CanBeParentedTo_WithValidParentControl_ReturnsTrue()
     {
         using ParentControlDesigner parentDesigner = new();
         using Button parentButton = new();
         parentDesigner.Initialize(parentButton);
-        Assert.True(_designer.CanBeParentedTo(parentDesigner));
+
+        _designer.CanBeParentedTo(parentDesigner).Should().BeTrue();
     }
 
     [Theory]
     [BoolData]
-    public void EnableDragDropTest(bool val)
+    public void EnableDragDrop_DoesNotThrow(bool val)
     {
-        _designer.EnableDragDropMethod(val);
+        Action action = () => _designer.EnableDragDropMethod(val);
+        action.Should().NotThrow();
     }
 
     [Fact]
-    public void GetHitTest()
+    public void Initialize_DoesNotThrow()
     {
-        Assert.False(_designer.GetHitTestMethod(default));
+        Action action = () =>
+        {
+            using TestControlDesigner controlDesigner = new();
+            using Button button = new();
+
+            controlDesigner.Initialize(button);
+        };
+
+        action.Should().NotThrow();
     }
 
     [Fact]
-    public void HookChildControlsTest()
+    public void Uninitialized_ShouldThrowInvalidOperationException()
     {
-        _designer.HookChildControlsMethod(new Control());
-    }
+        Action action = () =>
+        {
+            using TestControlDesigner _designer = new();
+            using Control control = _designer.Control;
+        };
 
-    [Fact]
-    public void InitializeTest()
-    {
-        using TestControlDesigner controlDesigner = new();
-        using Button button = new();
-        controlDesigner.Initialize(button);
-    }
-
-    [Fact]
-    public void UninitializedTest()
-    {
-        using TestControlDesigner _designer = new();
-        Assert.Throws<InvalidOperationException>(() => _designer.Control);
+        action.Should().Throw<InvalidOperationException>();
     }
 
     [Fact]
     public void OnSetComponentDefaultsTest()
     {
 #pragma warning disable CS0618 // Type or member is obsolete
-        _designer.OnSetComponentDefaults();
+        Action action = _designer.OnSetComponentDefaults;
+        action.Should().NotThrow();
 #pragma warning restore CS0618
     }
 
     [Fact]
-    public void OnContextMenuTest()
+    public void OnContextMenu_DoesNotThrow()
     {
-        _designer.OnContextMenuMethod(0, 0);
+        Action action = () => _designer.OnContextMenuMethod(0, 0);
     }
 
     [Fact]
-    public void OnCreateHandleTest()
+    public void OnCreateHandle_DoesNotThrow()
     {
-        _designer.OnCreateHandleMethod();
+        Action action = _designer.OnCreateHandleMethod;
+        action.Should().NotThrow();
     }
 
     [WinFormsFact]
-    public void ControlDesigner_WndProc_InvokePaint_Success()
+    public void ControlDesigner_WndProc_InvokePaint_DoesNotThrow()
     {
-        Message m = new Message { Msg = (int)PInvokeCore.WM_PAINT };
-        _designer.TestAccessor().Dynamic.WndProc(ref m);
+        Action action = () =>
+        {
+            Message m = new Message { Msg = (int)PInvokeCore.WM_PAINT };
+            _designer.TestAccessor().Dynamic.WndProc(ref m);
+        };
+
+        action.Should().NotThrow();
     }
 
     [Fact]
-    public void ControlDesigner_AssociatedComponents_NullSite_Test()
+    public void ControlDesigner_AssociatedComponents_NullSite_ShouldBeEmpty()
     {
         using Control childControl = new();
 
-        Assert.Empty(_designer.AssociatedComponents);
+        _designer.AssociatedComponents.Count.Should().Be(0);
 
         _control.Controls.Add(childControl);
 
-        Assert.Empty(_designer.AssociatedComponents);
+        _designer.AssociatedComponents.Count.Should().Be(0);
     }
 
     [WinFormsFact]
-    public void ControlDesigner_AssociatedComponentsTest()
+    public void ControlDesigner_AssociatedComponentsCount_ShouldBeCorrectAmount()
     {
         var mockSite = MockSite.CreateMockSiteWithDesignerHost(_mockDesignerHost.Object);
         _control.Site = mockSite.Object;
 
-        Assert.Empty(_designer.AssociatedComponents);
+        _designer.AssociatedComponents.Count.Should().Be(0);
 
         using Control childControl = new();
         childControl.Site = mockSite.Object;
         _control.Controls.Add(childControl);
 
-        Assert.Single(_designer.AssociatedComponents);
+        _designer.AssociatedComponents.Count.Should().Be(1);
     }
 
     [Fact]
@@ -386,10 +382,12 @@ public class ControlDesignerTests : IDisposable
         Mock<ParentControlDesigner> mockParentDesigner = new();
         _mockDesignerHost.Setup(h => h.GetDesigner(It.IsAny<IComponent>())).Returns(mockParentDesigner.Object);
         Dictionary<string, object> defaultValues = new()
-    {
-        { "Parent", new Control() }
-    };
+        {
+            { "Parent", new Control() }
+        };
+
         Action action = () => _designer.InitializeExistingComponent(defaultValues);
+
         action.Should().Throw<NotImplementedException>(SR.NotImplementedByDesign);
     }
 
