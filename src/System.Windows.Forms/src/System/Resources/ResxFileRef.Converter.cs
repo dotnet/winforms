@@ -119,7 +119,6 @@ public partial class ResXFileRef
 
             using (FileStream fileStream = new(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-                Debug.Assert(fileStream is not null, $"Couldn't open {fileName}");
                 temp = new byte[fileStream.Length];
                 fileStream.Read(temp, 0, (int)fileStream.Length);
             }

@@ -138,7 +138,7 @@ Namespace Global.System.Windows.Forms.VisualBasic.CodeFixes.AddDesignerSerializa
                 ' We need to add a new line before the namespace/file-scoped-namespace declaration:
                 Dim firstNodesLeadingTrivia As SyntaxTriviaList? = compilationUnit.
                     DescendantNodes().
-                    FirstOrDefault().
+                    FirstOrDefault()?.
                     GetLeadingTrivia()
 
                 compilationUnit = If(

@@ -406,7 +406,6 @@ public sealed partial class Application
             if (_threadWindows is not null)
             {
                 _threadWindows.Enable(true);
-                Debug.Assert(_threadWindows is not null, "OnEnterState recursed, but it's not supposed to be reentrant");
                 _threadWindows = _threadWindows._previousThreadWindows;
             }
 
