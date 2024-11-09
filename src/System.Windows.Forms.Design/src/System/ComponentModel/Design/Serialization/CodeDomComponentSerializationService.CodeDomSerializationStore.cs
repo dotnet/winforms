@@ -228,7 +228,11 @@ public sealed partial class CodeDomComponentSerializationService
             {
                 _resourceStream.Seek(0, SeekOrigin.Begin);
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
+#pragma warning disable CA2300 // Do not use insecure deserializer BinaryFormatter
+#pragma warning disable CA2301 // Ensure BinaryFormatter.Binder is set before calling BinaryFormatter.Deserialize
                 Hashtable? resources = new BinaryFormatter().Deserialize(_resourceStream) as Hashtable; // CodeQL[SM03722, SM04191] : The operation is essential for the design experience when users are running their own designers they have created. This cannot be achieved without BinaryFormatter
+#pragma warning restore CA2301
+#pragma warning restore CA2300
 #pragma warning restore SYSLIB0011
                 _resources = new LocalResourceManager(resources);
             }
