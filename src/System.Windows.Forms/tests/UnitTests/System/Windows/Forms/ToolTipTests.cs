@@ -4,6 +4,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Automation;
+using System.Windows.Forms.VisualStyles;
 using Moq;
 using Moq.Protected;
 using Windows.Win32.Graphics.Dwm;
@@ -793,13 +794,24 @@ public class ToolTipTests
             return;
         }
 
+        var renderer = new VisualStyleRenderer(
+            $"{Control.DarkModeIdentifier}_{Control.ExplorerThemeIdentifier}::{ToolTip.TooltipThemeSubclassIdentifier}",
+            0,
+            0);
+        var fillColor = renderer.GetColor(ColorProperty.FillColor);
+        var textColor = renderer.GetColor(ColorProperty.TextColor);
         using ApplicationColorModeScope colorModeScope = new(colorMode: SystemColorMode.Dark);
         using SubToolTip toolTip = new();
 
         toolTip.Handle.Should().NotBe(IntPtr.Zero); // A workaround to create the toolTip native window Handle
 
-        toolTip.BackColor.Should().Be(SystemColors.Info);
-        toolTip.ForeColor.Should().Be(SystemColors.InfoText);
+        Color backColor = ColorTranslator.FromWin32((int)PInvokeCore.SendMessage(toolTip.HWND, PInvoke.TTM_GETTIPBKCOLOR));
+        Color foreColor = ColorTranslator.FromWin32((int)PInvokeCore.SendMessage(toolTip.HWND, PInvoke.TTM_GETTIPTEXTCOLOR));
+
+        backColor.Should().Be(fillColor);
+        foreColor.Should().Be(textColor);
+        toolTip.BackColor.Should().Be(fillColor);
+        toolTip.ForeColor.Should().Be(textColor);
     }
 
     [WinFormsTheory]

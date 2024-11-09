@@ -3,6 +3,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using System.Windows.Forms.VisualStyles;
 using Windows.Win32.Graphics.Dwm;
 
 namespace System.Windows.Forms;
@@ -21,8 +22,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
     // These values are initialized using the default double-click time value.
     internal const int DefaultDelay = 500;
 
-    internal const string DarkModeIdentifier = "DarkMode";
-    internal const string ExplorerThemeIdentifier = "Explorer";
+    internal const string TooltipThemeSubclassIdentifier = "Tooltip";
 
     // These values are copied from the ComCtl32's tooltip.
     private const int ReshowRatio = 5;
@@ -735,7 +735,22 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
                         sizeof(DWM_WINDOW_CORNER_PREFERENCE));
                 }
 
-                PInvokeCore.SendMessage(HWND, PInvoke.TTM_SETWINDOWTHEME, default, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}");
+                PInvokeCore.SendMessage(
+                    HWND,
+                    PInvoke.TTM_SETWINDOWTHEME,
+                    default,
+                    $"{Control.DarkModeIdentifier}_{Control.ExplorerThemeIdentifier}");
+
+                var renderer = new VisualStyleRenderer(
+                    $"{Control.DarkModeIdentifier}_{Control.ExplorerThemeIdentifier}::{TooltipThemeSubclassIdentifier}",
+                    0,
+                    0);
+
+                _backColor = renderer.GetColor(ColorProperty.FillColor);
+                _foreColor = renderer.GetColor(ColorProperty.TextColor);
+
+                PInvokeCore.SendMessage(this, PInvoke.TTM_SETTIPBKCOLOR, (WPARAM)_backColor);
+                PInvokeCore.SendMessage(this, PInvoke.TTM_SETTIPTEXTCOLOR, (WPARAM)_foreColor);
             }
 #pragma warning restore WFO5001
         }
