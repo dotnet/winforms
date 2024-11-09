@@ -65,7 +65,6 @@ public sealed unsafe partial class Icon : MarshalByRefObject, ICloneable, IDispo
     {
         using (FileStream f = new(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
         {
-            Debug.Assert(f is not null, "File.OpenRead returned null instead of throwing an exception");
             _iconData = new byte[(int)f.Length];
             f.Read(_iconData, 0, _iconData.Length);
         }
@@ -764,7 +763,6 @@ public sealed unsafe partial class Icon : MarshalByRefObject, ICloneable, IDispo
             bitmap.MakeTransparent(fakeTransparencyColor);
         }
 
-        Debug.Assert(bitmap is not null, "Bitmap cannot be null");
         return bitmap;
     }
 

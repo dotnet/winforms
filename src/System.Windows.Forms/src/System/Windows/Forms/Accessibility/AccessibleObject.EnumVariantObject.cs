@@ -166,7 +166,7 @@ public partial class AccessibleObject
             uint i;
             for (i = 0; i < celt && _currentChild < newOrder.Length; ++i)
             {
-                uint fetched = 0;
+                uint fetched;
 
                 enumVariant.Value->Reset();
                 enumVariant.Value->Skip(i);

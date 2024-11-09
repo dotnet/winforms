@@ -195,7 +195,7 @@ internal sealed class Com2Properties
         var versions = new (ushort, ushort, ushort, ushort)[pTypeInfos.Length];
         for (int i = 0; i < pTypeInfos.Length; i++)
         {
-            TYPEATTR* pTypeAttr = null;
+            TYPEATTR* pTypeAttr;
             HRESULT hr = pTypeInfos[i]->GetTypeAttr(&pTypeAttr);
             if (!hr.Succeeded || pTypeAttr is null)
             {
