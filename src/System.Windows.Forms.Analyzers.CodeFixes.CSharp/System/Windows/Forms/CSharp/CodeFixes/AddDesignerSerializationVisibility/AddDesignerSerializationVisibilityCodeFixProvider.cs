@@ -125,7 +125,7 @@ internal sealed class AddDesignerSerializationVisibilityCodeFixProvider : CodeFi
             SyntaxTriviaList? firstNodesLeadingTrivia = compilationUnit
                 .DescendantNodes()
                 .FirstOrDefault()
-                .GetLeadingTrivia();
+                ?.GetLeadingTrivia();
 
             compilationUnit = firstNodesLeadingTrivia is null
                 ? compilationUnit

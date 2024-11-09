@@ -201,8 +201,10 @@ internal unsafe partial class Com2PropertyDescriptor : PropertyDescriptor, IClon
             // If we are forcing a hide.
             if (_typeHide && CanShow)
             {
-                newAttributes ??= new(AttributeArray);
-                newAttributes.Add(new BrowsableAttribute(false));
+                newAttributes = new(AttributeArray)
+                {
+                    new BrowsableAttribute(false)
+                };
             }
             else if (_hrHidden)
             {
@@ -216,8 +218,11 @@ internal unsafe partial class Com2PropertyDescriptor : PropertyDescriptor, IClon
                     if (hr.Succeeded)
                     {
                         // Make it browsable.
-                        newAttributes ??= new(AttributeArray);
-                        newAttributes.Add(new BrowsableAttribute(true));
+                        newAttributes = new(AttributeArray)
+                        {
+                            new BrowsableAttribute(true)
+                        };
+
                         _hrHidden = false;
                     }
                 }

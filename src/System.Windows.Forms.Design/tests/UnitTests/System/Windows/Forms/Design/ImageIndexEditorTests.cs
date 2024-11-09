@@ -8,7 +8,7 @@ using System.Drawing;
 using System.Drawing.Design;
 using Moq;
 
-namespace System.Windows.Forms.Design;
+namespace System.Windows.Forms.Design.Tests;
 
 public class ImageIndexEditorTests
 {
