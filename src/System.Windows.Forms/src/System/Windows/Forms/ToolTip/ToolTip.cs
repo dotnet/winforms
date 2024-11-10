@@ -748,9 +748,6 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
 
                 _backColor = renderer.GetColor(ColorProperty.FillColor);
                 _foreColor = renderer.GetColor(ColorProperty.TextColor);
-
-                PInvokeCore.SendMessage(this, PInvoke.TTM_SETTIPBKCOLOR, (WPARAM)_backColor);
-                PInvokeCore.SendMessage(this, PInvoke.TTM_SETTIPTEXTCOLOR, (WPARAM)_foreColor);
             }
 #pragma warning restore WFO5001
         }
@@ -805,15 +802,17 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         // Set active status.
         PInvokeCore.SendMessage(this, PInvoke.TTM_ACTIVATE, (WPARAM)(BOOL)_active);
 
-        if (BackColor != SystemColors.Info)
+#pragma warning disable WFO5001
+        if (BackColor != SystemColors.Info || Application.IsDarkModeEnabled)
         {
             PInvokeCore.SendMessage(this, PInvoke.TTM_SETTIPBKCOLOR, (WPARAM)BackColor);
         }
 
-        if (ForeColor != SystemColors.InfoText)
+        if (ForeColor != SystemColors.InfoText || Application.IsDarkModeEnabled)
         {
             PInvokeCore.SendMessage(this, PInvoke.TTM_SETTIPTEXTCOLOR, (WPARAM)ForeColor);
         }
+#pragma warning restore WFO5001
 
         if (_toolTipIcon > 0 || !string.IsNullOrEmpty(_toolTipTitle))
         {

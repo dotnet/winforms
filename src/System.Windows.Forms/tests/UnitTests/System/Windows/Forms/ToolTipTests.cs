@@ -800,6 +800,7 @@ public class ToolTipTests
             0);
         var fillColor = renderer.GetColor(ColorProperty.FillColor);
         var textColor = renderer.GetColor(ColorProperty.TextColor);
+
         using ApplicationColorModeScope colorModeScope = new(colorMode: SystemColorMode.Dark);
         using SubToolTip toolTip = new();
 
