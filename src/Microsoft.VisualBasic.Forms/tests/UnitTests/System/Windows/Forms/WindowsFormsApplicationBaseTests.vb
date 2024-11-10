@@ -69,9 +69,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Using form1 As New Form
                 Using form2 As New Form
                     SplashScreen = form2
+                    form1.Name = "Test"
                     MainForm = form1
                     MainForm.Should.Be(form1)
                     SplashScreen.Should.Be(form2)
+                    ApplicationContext.Should.NotBeNull()
+                    ApplicationContext.MainForm.Name.Should.Be("Test")
                     testCode =
                         Sub()
                             SplashScreen = form1
@@ -103,6 +106,20 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     Run(commandLine)
                 End Sub
             testCode.Should.Throw(Of NoStartupFormException)()
+        End Sub
+
+        <Fact>
+        Public Sub ShowSplashScreenSuccess()
+            Using form1 As New Form
+                SplashScreen = form1
+
+                Dim testCode As Action =
+                    Sub()
+                        ShowSplashScreen()
+                    End Sub
+                testCode.Should.NotThrow()
+            End Using
+
         End Sub
 
         <WinFormsFact>
