@@ -112,7 +112,6 @@ public class ControlDesignerTests : IDisposable
     [InlineData(DockStyle.Fill, SelectionRules.Moveable | SelectionRules.TopSizeable | SelectionRules.LeftSizeable | SelectionRules.RightSizeable | SelectionRules.BottomSizeable)]
     public void DockStyle_DefinesProperSelectionRules(DockStyle dockStyle, SelectionRules selectionRulesParam)
     {
-        SelectionRules defaultSelectionRules = _designer.SelectionRules;
         _control.Dock = dockStyle;
         SelectionRules finalSelectionRules = _designer.SelectionRules;
 
@@ -193,6 +192,7 @@ public class ControlDesignerTests : IDisposable
     public void OnContextMenu_DoesNotThrow()
     {
         Action action = () => _designer.OnContextMenuMethod(0, 0);
+        action.Should().NotThrow();
     }
 
     [Fact]
@@ -285,8 +285,6 @@ public class ControlDesignerTests : IDisposable
 
         Mock<DesignerFrame> mockDesignerFrame = new(_mockSite.Object) { CallBase = true };
         Mock<IServiceProvider> mockServiceProvider = new();
-        mockServiceProvider.Setup(s => s.GetService(It.IsAny<Type>())).Returns(mockServiceProvider);
-        _mockSite.Setup(s => s.GetService(typeof(IServiceProvider))).Returns(mockServiceProvider.Object);
         BehaviorService behaviorService = new(mockServiceProvider.Object, mockDesignerFrame.Object);
 
         FieldInfo? behaviorServiceField = typeof(ControlDesigner).GetField("_behaviorService", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -320,35 +318,31 @@ public class ControlDesignerTests : IDisposable
         Mock<DesignerFrame> mockDesignerFrame = new(_mockSite.Object) { CallBase = true };
         BehaviorService behaviorService = new(mockServiceProvider.Object, mockDesignerFrame.Object);
 
-        FieldInfo? behaviorServiceField = typeof(ControlDesigner).GetField("_behaviorService", BindingFlags.NonPublic | BindingFlags.Instance);
-        behaviorServiceField?.SetValue(_designer, behaviorService);
+        _designer.TestAccessor().Dynamic._behaviorService = behaviorService;
 
         GlyphCollection glyphs = _designer.GetGlyphs(GlyphSelectionType.SelectedPrimary);
 
-        glyphs[0].Should().BeOfType<GrabHandleGlyph>();
-        ((SelectionRules)glyphs[0].TestAccessor().Dynamic.rules).Should().Be(SelectionRules.None);
-        glyphs[1].Should().BeOfType<GrabHandleGlyph>();
-        ((SelectionRules)glyphs[1].TestAccessor().Dynamic.rules).Should().Be(SelectionRules.TopSizeable | SelectionRules.LeftSizeable);
-        glyphs[2].Should().BeOfType<GrabHandleGlyph>();
-        ((SelectionRules)glyphs[2].TestAccessor().Dynamic.rules).Should().Be(SelectionRules.TopSizeable | SelectionRules.RightSizeable);
-        glyphs[3].Should().BeOfType<GrabHandleGlyph>();
-        ((SelectionRules)glyphs[3].TestAccessor().Dynamic.rules).Should().Be(SelectionRules.None);
-        glyphs[4].Should().BeOfType<GrabHandleGlyph>();
-        ((SelectionRules)glyphs[4].TestAccessor().Dynamic.rules).Should().Be(SelectionRules.BottomSizeable | SelectionRules.LeftSizeable);
-        glyphs[5].Should().BeOfType<GrabHandleGlyph>();
-        ((SelectionRules)glyphs[5].TestAccessor().Dynamic.rules).Should().Be(SelectionRules.BottomSizeable | SelectionRules.RightSizeable);
-        glyphs[6].Should().BeOfType<GrabHandleGlyph>();
-        ((SelectionRules)glyphs[6].TestAccessor().Dynamic.rules).Should().Be(SelectionRules.None);
-        glyphs[7].Should().BeOfType<GrabHandleGlyph>();
-        ((SelectionRules)glyphs[7].TestAccessor().Dynamic.rules).Should().Be(SelectionRules.None);
-        glyphs[8].Should().BeOfType<SelectionBorderGlyph>();
-        ((SelectionRules)glyphs[8].TestAccessor().Dynamic.rules).Should().Be(SelectionRules.TopSizeable);
-        glyphs[9].Should().BeOfType<SelectionBorderGlyph>();
-        ((SelectionRules)glyphs[9].TestAccessor().Dynamic.rules).Should().Be(SelectionRules.BottomSizeable);
-        glyphs[10].Should().BeOfType<SelectionBorderGlyph>();
-        ((SelectionRules)glyphs[10].TestAccessor().Dynamic.rules).Should().Be(SelectionRules.LeftSizeable);
-        glyphs[11].Should().BeOfType<SelectionBorderGlyph>();
-        ((SelectionRules)glyphs[11].TestAccessor().Dynamic.rules).Should().Be(SelectionRules.RightSizeable);
+        var expectedGlyphs = new (Type glyphType, SelectionRules rules)[]
+        {
+            (typeof(GrabHandleGlyph), SelectionRules.None),
+            (typeof(GrabHandleGlyph), SelectionRules.TopSizeable | SelectionRules.LeftSizeable),
+            (typeof(GrabHandleGlyph), SelectionRules.TopSizeable | SelectionRules.RightSizeable),
+            (typeof(GrabHandleGlyph), SelectionRules.None),
+            (typeof(GrabHandleGlyph), SelectionRules.BottomSizeable | SelectionRules.LeftSizeable),
+            (typeof(GrabHandleGlyph), SelectionRules.BottomSizeable | SelectionRules.RightSizeable),
+            (typeof(GrabHandleGlyph), SelectionRules.None),
+            (typeof(GrabHandleGlyph), SelectionRules.None),
+            (typeof(SelectionBorderGlyph), SelectionRules.TopSizeable),
+            (typeof(SelectionBorderGlyph), SelectionRules.BottomSizeable),
+            (typeof(SelectionBorderGlyph), SelectionRules.LeftSizeable),
+            (typeof(SelectionBorderGlyph), SelectionRules.RightSizeable),
+        };
+
+        for (int i = 0; i < expectedGlyphs.Length; i++)
+        {
+            glyphs[i].Should().BeOfType(expectedGlyphs[i].glyphType);
+            ((SelectionRules)glyphs[i].TestAccessor().Dynamic.rules).Should().Be(expectedGlyphs[i].rules);
+        }
     }
 
     [Theory]
