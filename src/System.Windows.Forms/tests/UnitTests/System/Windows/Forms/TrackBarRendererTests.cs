@@ -52,8 +52,8 @@ public class TrackBarRendererTests : IDisposable
         {
             foreach (Rectangle bounds in invalidBounds)
             {
-                var exception = Record.Exception(() => drawTrack(_graphics, bounds));
-                exception.Should().BeNull();
+                Action a = () => drawTrack(_graphics, bounds);
+                a.Should().NotThrow();
             }
         }
 
@@ -74,8 +74,8 @@ public class TrackBarRendererTests : IDisposable
     {
         void TestDrawThumb(Action<Graphics, Rectangle, TrackBarThumbState> drawThumb, Rectangle bounds, TrackBarThumbState state)
         {
-            Exception? exception = Record.Exception(() => drawThumb(_graphics, bounds, state));
-            exception.Should().BeNull();
+            Action a = () => drawThumb(_graphics, bounds, state);
+            a.Should().NotThrow();
         }
 
         Rectangle bounds = new(0, 0, 10, 10);
@@ -105,8 +105,8 @@ public class TrackBarRendererTests : IDisposable
     {
         void TestDrawTicks(Action<Graphics, Rectangle, int, EdgeStyle> drawTicks, Rectangle bounds, int tickCount, EdgeStyle edgeStyle)
         {
-            Exception? exception = Record.Exception(() => drawTicks(_graphics, bounds, tickCount, edgeStyle));
-            exception.Should().BeNull();
+            Action a = () => drawTicks(_graphics, bounds, tickCount, edgeStyle);
+            a.Should().NotThrow();
         }
 
         Rectangle horizontalBounds = new(0, 0, 100, 10);
@@ -125,14 +125,14 @@ public class TrackBarRendererTests : IDisposable
         {
             foreach (int count in invalidTickCounts)
             {
-                Exception? exception = Record.Exception(() => drawTicks(_graphics, bounds, count, EdgeStyle.Raised));
-                exception.Should().BeNull();
+                Action a = () => drawTicks(_graphics, bounds, count, EdgeStyle.Raised);
+                a.Should().NotThrow();
             }
 
             foreach (Rectangle invalidBound in invalidBounds)
             {
-                Exception? exception = Record.Exception(() => drawTicks(_graphics, invalidBound, 5, EdgeStyle.Raised));
-                exception.Should().BeNull();
+                Action a = () => drawTicks(_graphics, invalidBound, 5, EdgeStyle.Raised);
+                a.Should().NotThrow();
             }
         }
 
@@ -160,10 +160,10 @@ public class TrackBarRendererTests : IDisposable
             TrackBarRenderer.DrawBottomPointingThumb
         };
 
-        foreach (var drawThumb in drawThumbActions)
+        foreach (Action<Graphics, Rectangle, TrackBarThumbState> drawThumb in drawThumbActions)
         {
-            Exception? exception = Record.Exception(() => drawThumb(_graphics, bounds, TrackBarThumbState.Normal));
-            exception.Should().BeNull();
+            Action a = () => drawThumb(_graphics, bounds, TrackBarThumbState.Normal);
+            a.Should().NotThrow();
         }
     }
 }
