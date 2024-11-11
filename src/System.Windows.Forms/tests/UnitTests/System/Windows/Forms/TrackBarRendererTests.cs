@@ -50,7 +50,7 @@ public class TrackBarRendererTests : IDisposable
     {
         void TestDrawTrackWithInvalidBounds(Action<Graphics, Rectangle> drawTrack, Rectangle[] invalidBounds)
         {
-            foreach (var bounds in invalidBounds)
+            foreach (Rectangle bounds in invalidBounds)
             {
                 var exception = Record.Exception(() => drawTrack(_graphics, bounds));
                 exception.Should().BeNull();
