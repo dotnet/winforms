@@ -48,21 +48,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
             SplashScreen.Should.BeNull()
 
-            Dim testCode As Action =
-                Sub()
-                    MainForm = Nothing
-                End Sub
-
+            Dim testCode As Action = Sub() MainForm = Nothing
             testCode.Should.Throw(Of ArgumentNullException)()
 
             Using form1 As New Form
                 SplashScreen = form1
                 SplashScreen.Should.Be(form1)
 
-                testCode =
-                    Sub()
-                        MainForm = form1
-                    End Sub
+                testCode = Sub() MainForm = form1
                 testCode.Should.Throw(Of ArgumentException)()
             End Using
 
@@ -75,11 +68,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     SplashScreen.Should.Be(form2)
                     ApplicationContext.Should.NotBeNull()
                     ApplicationContext.MainForm.Name.Should.Be("Test")
-                    testCode =
-                        Sub()
-                            SplashScreen = form1
-                        End Sub
+
+                    testCode = Sub() SplashScreen = form1
                     testCode.Should.Throw(Of ArgumentException)()
+
                     OpenForms.Count.Should.Be(0)
                     SplashScreen.Show()
                     OpenForms.Count.Should.Be(1)
@@ -90,79 +82,57 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <Fact>
         Public Sub Run_DoEvents()
-            Dim testCode As Action =
-                Sub()
-                    DoEvents()
-                End Sub
+            Dim testCode As Action = Sub() DoEvents()
             testCode.Should.NotThrow()
         End Sub
 
         <Fact>
         Public Sub Run_SingleInstanceNoStartupFormException()
             IsSingleInstance = True
-            Dim testCode As Action =
-                Sub()
-                    Dim commandLine As String() = {"1"}
-                    Run(commandLine)
-                End Sub
+            Dim testCode As Action = Sub() Run(commandLine:={"1"})
             testCode.Should.Throw(Of NoStartupFormException)()
         End Sub
 
         <Fact>
-        Public Sub ShowSplashScreenSuccess()
+        Public Sub ShowHideSplashScreenSuccess()
+            Dim testCode As Action
             Using form1 As New Form
                 SplashScreen = form1
-
-                Dim testCode As Action =
-                    Sub()
-                        ShowSplashScreen()
-                    End Sub
+                testCode = Sub() ShowSplashScreen()
                 testCode.Should.NotThrow()
             End Using
+            testCode = Sub() HideSplashScreen()
+            testCode.Should.NotThrow()
 
         End Sub
 
         <WinFormsFact>
         Public Sub ValidateAuthenticationModeEnumInvalidValue()
-            Dim testCode As Action =
-                Sub()
-                    Dim mode As AuthenticationMode = CType(-1, AuthenticationMode)
-                    ValidateAuthenticationModeEnumValue(mode, NameOf(AuthenticationMode))
-                End Sub
-
+            Const value As AuthenticationMode = CType(-1, AuthenticationMode)
+            Const paramName As String = NameOf(AuthenticationMode)
+            Dim testCode As Action = Sub() ValidateAuthenticationModeEnumValue(value, paramName)
             testCode.Should.Throw(Of InvalidEnumArgumentException)()
         End Sub
 
         <WinFormsTheory>
         <ClassData(GetType(AuthenticationModeData))>
-        Public Sub ValidateAuthenticationModeEnumValues(mode As AuthenticationMode)
-            Dim testCode As Action =
-                Sub()
-                    ValidateAuthenticationModeEnumValue(mode, NameOf(AuthenticationMode))
-                End Sub
-
-            testCode.Should.NotThrow()
+        Public Sub ValidateAuthenticationModeEnumValues(value As AuthenticationMode)
+            Const paramName As String = NameOf(AuthenticationMode)
+            CType(Sub() ValidateAuthenticationModeEnumValue(value, paramName), Action).Should.NotThrow()
         End Sub
 
         <WinFormsFact>
         Public Sub ValidateShutdownModeEnumInvalidValue()
-            Dim testCode As Action =
-                Sub()
-                    Dim mode As ShutdownMode = CType(-1, ShutdownMode)
-                    ValidateShutdownModeEnumValue(mode, NameOf(ShutdownMode))
-                End Sub
-
+            Const value As ShutdownMode = CType(-1, ShutdownMode)
+            Const paramName As String = NameOf(ShutdownMode)
+            Dim testCode As Action = Sub() ValidateShutdownModeEnumValue(value, paramName)
             testCode.Should.Throw(Of InvalidEnumArgumentException)()
         End Sub
 
         <WinFormsTheory>
         <ClassData(GetType(ShutdownModeData))>
-        Public Sub ValidateShutdownModeEnumValues(mode As ShutdownMode)
-            Dim testCode As Action =
-                Sub()
-                    ValidateShutdownModeEnumValue(mode, NameOf(ShutdownMode))
-                End Sub
-
+        Public Sub ValidateShutdownModeEnumValues(value As ShutdownMode)
+            Dim testCode As Action = Sub() ValidateShutdownModeEnumValue(value, paramName:=NameOf(ShutdownMode))
             testCode.Should.NotThrow()
         End Sub
 
