@@ -21,8 +21,6 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
     // These values are initialized using the default double-click time value.
     internal const int DefaultDelay = 500;
 
-    internal const string TooltipThemeSubclassIdentifier = "Tooltip";
-
     // These values are copied from the ComCtl32's tooltip.
     private const int ReshowRatio = 5;
     private const int AutoPopRatio = 10;
