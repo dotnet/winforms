@@ -3,7 +3,6 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using System.Windows.Forms.VisualStyles;
 using Windows.Win32.Graphics.Dwm;
 
 namespace System.Windows.Forms;
@@ -736,18 +735,10 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
                 }
 
                 PInvokeCore.SendMessage(
-                    HWND,
-                    PInvoke.TTM_SETWINDOWTHEME,
-                    default,
-                    $"{Control.DarkModeIdentifier}_{Control.ExplorerThemeIdentifier}");
-
-                var renderer = new VisualStyleRenderer(
-                    $"{Control.DarkModeIdentifier}_{Control.ExplorerThemeIdentifier}::{TooltipThemeSubclassIdentifier}",
-                    0,
-                    0);
-
-                _backColor = renderer.GetColor(ColorProperty.FillColor);
-                _foreColor = renderer.GetColor(ColorProperty.TextColor);
+                   HWND,
+                   PInvoke.TTM_SETWINDOWTHEME,
+                   default,
+                   $"{Control.DarkModeIdentifier}_{Control.ExplorerThemeIdentifier}");
             }
 #pragma warning restore WFO5001
         }
@@ -802,17 +793,15 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         // Set active status.
         PInvokeCore.SendMessage(this, PInvoke.TTM_ACTIVATE, (WPARAM)(BOOL)_active);
 
-#pragma warning disable WFO5001
-        if (BackColor != SystemColors.Info || Application.IsDarkModeEnabled)
+        if (BackColor != SystemColors.Info)
         {
             PInvokeCore.SendMessage(this, PInvoke.TTM_SETTIPBKCOLOR, (WPARAM)BackColor);
         }
 
-        if (ForeColor != SystemColors.InfoText || Application.IsDarkModeEnabled)
+        if (ForeColor != SystemColors.InfoText)
         {
             PInvokeCore.SendMessage(this, PInvoke.TTM_SETTIPTEXTCOLOR, (WPARAM)ForeColor);
         }
-#pragma warning restore WFO5001
 
         if (_toolTipIcon > 0 || !string.IsNullOrEmpty(_toolTipTitle))
         {

@@ -4,7 +4,6 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Automation;
-using System.Windows.Forms.VisualStyles;
 using Moq;
 using Moq.Protected;
 using Windows.Win32.Graphics.Dwm;
@@ -785,36 +784,6 @@ public class ToolTipTests
     }
 
 #pragma warning disable WFO5001
-    [WinFormsFact]
-    public unsafe void ToolTip_DarkMode_GetColors_ReturnsExpected()
-    {
-        if (SystemInformation.HighContrast)
-        {
-            // We don't run this test in HighContrast mode.
-            return;
-        }
-
-        var renderer = new VisualStyleRenderer(
-            $"{Control.DarkModeIdentifier}_{Control.ExplorerThemeIdentifier}::{ToolTip.TooltipThemeSubclassIdentifier}",
-            0,
-            0);
-        var fillColor = renderer.GetColor(ColorProperty.FillColor);
-        var textColor = renderer.GetColor(ColorProperty.TextColor);
-
-        using ApplicationColorModeScope colorModeScope = new(colorMode: SystemColorMode.Dark);
-        using SubToolTip toolTip = new();
-
-        toolTip.Handle.Should().NotBe(IntPtr.Zero); // A workaround to create the toolTip native window Handle
-
-        Color backColor = ColorTranslator.FromWin32((int)PInvokeCore.SendMessage(toolTip.HWND, PInvoke.TTM_GETTIPBKCOLOR));
-        Color foreColor = ColorTranslator.FromWin32((int)PInvokeCore.SendMessage(toolTip.HWND, PInvoke.TTM_GETTIPTEXTCOLOR));
-
-        backColor.Should().Be(fillColor);
-        foreColor.Should().Be(textColor);
-        toolTip.BackColor.Should().Be(fillColor);
-        toolTip.ForeColor.Should().Be(textColor);
-    }
-
     [WinFormsTheory]
     [BoolData]
     public unsafe void ToolTip_DarkMode_GetCornerPreference_ReturnsExpected(bool value)
