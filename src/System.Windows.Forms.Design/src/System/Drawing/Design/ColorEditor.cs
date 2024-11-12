@@ -10,7 +10,6 @@ namespace System.Drawing.Design;
 /// <summary>
 ///  Provides an editor for visually picking a color.
 /// </summary>
-[CLSCompliant(false)]
 public partial class ColorEditor : UITypeEditor
 {
     /// <summary>

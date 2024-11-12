@@ -9,7 +9,6 @@ namespace System.Windows.Forms.Design;
 /// <summary>
 ///  Implements the design time editor for specifying the <see cref="Control.Dock"/> property.
 /// </summary>
-[CLSCompliant(false)]
 public sealed partial class DockEditor : UITypeEditor
 {
     private DockUI? _dockUI;
