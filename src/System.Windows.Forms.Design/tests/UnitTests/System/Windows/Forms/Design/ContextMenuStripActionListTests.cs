@@ -48,6 +48,7 @@ public sealed class ContextMenuStripActionListTests : IDisposable
     {
         _toolStripDropDownMenu.Dispose();
         _toolStripDropDown.Dispose();
+        _designer.Dispose();
     }
 
     [Fact]
@@ -56,47 +57,57 @@ public sealed class ContextMenuStripActionListTests : IDisposable
         _actionList.Should().NotBeNull();
         _actionList.Should().BeOfType<ContextMenuStripActionList>();
 
-        var toolStripDropDownValue = _actionList.TestAccessor().Dynamic._toolStripDropDown;
+        ToolStripDropDown toolStripDropDownValue = (ToolStripDropDown)_actionList.TestAccessor().Dynamic._toolStripDropDown;
         ((ToolStripDropDownMenu)toolStripDropDownValue).Should().Be(_toolStripDropDownMenu);
     }
 
-    [Fact]
-    public void AutoShow_GetSet_ReturnsExpected()
+    [Theory]
+    [BoolData]
+    public void AutoShow_GetSet_ReturnsExpected(bool value)
     {
         _actionList.AutoShow.Should().BeFalse();
 
-        _actionList.AutoShow = true;
-        _actionList.AutoShow.Should().BeTrue();
+        _actionList.AutoShow = value;
+        _actionList.AutoShow.Should().Be(value);
     }
 
-    [Fact]
-    public void ShowImageMargin_GetSet_ReturnsExpected()
+    [Theory]
+    [BoolData]
+    public void ShowImageMargin_GetSet_ReturnsExpected(bool value)
     {
-        _actionList.ShowImageMargin = true;
         _actionList.ShowImageMargin.Should().BeTrue();
 
-        _actionList.ShowImageMargin = false;
-        _actionList.ShowImageMargin.Should().BeFalse();
+        _actionList.ShowImageMargin = value;
+        _actionList.ShowImageMargin.Should().Be(value);
     }
 
-    [Fact]
-    public void ShowCheckMargin_GetSet_ReturnsExpected()
+    [Theory]
+    [BoolData]
+    public void ShowCheckMargin_GetSet_ReturnsExpected(bool value)
     {
-        _actionList.ShowCheckMargin = true;
-        _actionList.ShowCheckMargin.Should().BeTrue();
-
-        _actionList.ShowCheckMargin = false;
         _actionList.ShowCheckMargin.Should().BeFalse();
+
+        _actionList.ShowCheckMargin = value;
+        _actionList.ShowCheckMargin.Should().Be(value);
     }
 
-    [Fact]
-    public void RenderMode_GetSet_ReturnsExpected()
+    [Theory]
+    [InlineData(ToolStripRenderMode.System)]
+    [InlineData(ToolStripRenderMode.Professional)]
+    [InlineData(ToolStripRenderMode.ManagerRenderMode)]
+    [InlineData(ToolStripRenderMode.Custom)]
+    public void RenderMode_GetSet_ReturnsExpected(ToolStripRenderMode renderMode)
     {
-        _actionList.RenderMode = ToolStripRenderMode.System;
-        _actionList.RenderMode.Should().Be(ToolStripRenderMode.System);
-
-        _actionList.RenderMode = ToolStripRenderMode.Professional;
-        _actionList.RenderMode.Should().Be(ToolStripRenderMode.Professional);
+        if (renderMode == ToolStripRenderMode.Custom)
+        {
+            _actionList.Invoking(a => a.RenderMode = renderMode)
+             .Should().Throw<NotSupportedException>();
+        }
+        else
+        {
+            _actionList.RenderMode = renderMode;
+            _actionList.RenderMode.Should().Be(renderMode);
+        }
     }
 
     [Fact]
@@ -104,9 +115,14 @@ public sealed class ContextMenuStripActionListTests : IDisposable
     {
         var items = _actionList.GetSortedActionItems().Cast<DesignerActionPropertyItem>().ToList();
 
-        items.Should().Contain(item => item.MemberName == "RenderMode");
-        items.Should().Contain(item => item.DisplayName == SR.ToolStripActionList_RenderMode);
-        items.Should().Contain(item => item.Description == SR.ToolStripActionList_RenderModeDesc);
+        items.Select(item => item.MemberName)
+           .Should().Contain(nameof(ContextMenuStripActionList.RenderMode));
+
+        items.Select(item => item.DisplayName)
+            .Should().Contain(SR.ToolStripActionList_RenderMode);
+
+        items.Select(item => item.Description)
+            .Should().Contain(SR.ToolStripActionList_RenderModeDesc);
     }
 
     [Fact]
@@ -114,12 +130,14 @@ public sealed class ContextMenuStripActionListTests : IDisposable
     {
         var items = _actionList.GetSortedActionItems().Cast<DesignerActionPropertyItem>().ToList();
 
-        items.Should().Contain(item => item.MemberName == "RenderMode");
-        items.Should().Contain(item => item.MemberName == "ShowImageMargin");
-        items.Should().Contain(item => item.MemberName == "ShowCheckMargin");
+        items.Select(item => item.MemberName)
+            .Should().Contain(nameof(ContextMenuStripActionList.RenderMode))
+            .And.Contain(nameof(ContextMenuStripActionList.ShowImageMargin))
+            .And.Contain(nameof(ContextMenuStripActionList.ShowCheckMargin));
 
-        items.Should().Contain(item => item.DisplayName == SR.ContextMenuStripActionList_ShowImageMargin);
-        items.Should().Contain(item => item.DisplayName == SR.ContextMenuStripActionList_ShowCheckMargin);
+        items.Select(item => item.DisplayName)
+            .Should().Contain(SR.ContextMenuStripActionList_ShowImageMargin)
+            .And.Contain(SR.ContextMenuStripActionList_ShowCheckMargin);
     }
 
     [Fact]
@@ -131,8 +149,9 @@ public sealed class ContextMenuStripActionListTests : IDisposable
 
         var items = _actionList.GetSortedActionItems().Cast<DesignerActionPropertyItem>().ToList();
 
-        items.Should().Contain(item => item.MemberName == "RenderMode");
-        items.Should().NotContain(item => item.MemberName == "ShowImageMargin");
-        items.Should().NotContain(item => item.MemberName == "ShowCheckMargin");
+        items.Select(item => item.MemberName)
+            .Should().Contain(nameof(ContextMenuStripActionList.RenderMode))
+            .And.NotContain(nameof(ContextMenuStripActionList.ShowImageMargin))
+            .And.NotContain(nameof(ContextMenuStripActionList.ShowCheckMargin));
     }
 }
