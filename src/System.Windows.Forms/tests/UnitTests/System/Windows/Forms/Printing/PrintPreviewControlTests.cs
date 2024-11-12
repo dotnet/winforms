@@ -38,7 +38,6 @@ public class PrintPreviewControlTests
         actualBackColorArgb = control.TestAccessor().Dynamic.GetBackColor(true).ToArgb();
 
         Assert.Equal(Color.Green.ToArgb(), actualBackColorArgb);
-        // Default AppWorkSpace color in HC theme does not allow to follow HC standards.
         Assert.False(SystemColors.AppWorkspace.ToArgb().Equals(actualBackColorArgb));
     }
 }

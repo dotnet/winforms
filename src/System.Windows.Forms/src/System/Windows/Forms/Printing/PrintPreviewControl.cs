@@ -593,9 +593,9 @@ public partial class PrintPreviewControl : Control
     private void DrawMessage(Graphics g, Rectangle rect, bool isExceptionPrinting)
     {
         Color brushColor = SystemColors.ControlText;
-        if (SystemInformation.HighContrast && Parent is not null)
+        if (SystemInformation.HighContrast && Parent is Control parent)
         {
-            brushColor = Parent.BackColor;
+            brushColor = parent.BackColor;
         }
 
         using var brush = brushColor.GetCachedSolidBrushScope();
