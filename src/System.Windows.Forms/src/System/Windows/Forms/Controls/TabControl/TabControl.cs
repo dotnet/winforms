@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Text;
 using System.Windows.Forms.Layout;
+using Windows.Win32.Graphics.Dwm;
 using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
@@ -967,6 +968,26 @@ public partial class TabControl : Control
         }
 
         base.CreateHandle();
+
+#pragma warning disable WFO5001
+        if (Application.IsDarkModeEnabled)
+        {
+            // Get the TabControl's ToolTip handle:
+            HWND toolTipHandle = (HWND)PInvokeCore.SendMessage(HWND, PInvoke.TCM_GETTOOLTIPS, (WPARAM)0, (LPARAM)0);
+            PInvoke.SetWindowTheme(toolTipHandle, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null);
+
+            // Round the corners of the ToolTip window.
+            if (OsVersion.IsWindows11_OrGreater())
+            {
+                DWM_WINDOW_CORNER_PREFERENCE roundSmall = DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUNDSMALL;
+                PInvoke.DwmSetWindowAttribute(
+                    toolTipHandle,
+                    DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE,
+                    &roundSmall,
+                    sizeof(DWM_WINDOW_CORNER_PREFERENCE));
+            }
+        }
+#pragma warning restore WFO5001
     }
 
     private void DetachImageList(object? sender, EventArgs e) => ImageList = null;
