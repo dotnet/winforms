@@ -57,12 +57,12 @@ public class ControlDesignerTests : IDisposable
 
         Action action1 = () =>
         {
-            using Control _ = controlDesigner.Control;
+            Control _ = controlDesigner.Control;
         };
 
         Action action2 = () =>
         {
-            using IComponent component = controlDesigner.Component;
+            IComponent component = controlDesigner.Component;
         };
 
         Action action3 = () => controlDesigner.GetParentComponentProperty();
@@ -96,12 +96,18 @@ public class ControlDesignerTests : IDisposable
         _designer.AccessibilityObject.Should().NotBeNull();
         _designer.GetEnableDragRectProperty().Should().BeFalse();
         _designer.ParticipatesWithSnapLines.Should().BeTrue();
-        (_designer.AutoResizeHandles = true).Should().BeTrue();
-        _designer.AutoResizeHandles.Should().BeTrue();
+        _designer.AutoResizeHandles.Should().BeFalse();
         _designer.GetInheritanceAttributeProperty().Should().NotBeNull();
         _designer.NumberOfInternalControlDesigners().Should().Be(0);
         _designer.GetHitTestMethod(default).Should().BeFalse();
-        _designer.HookChildControlsMethod(new Control());
+        _designer.HookChildControlsMethod(_control);
+    }
+
+    [Fact]
+    public void AutoResizeHandles_Set_GetReturnsExpected()
+    {
+        _designer.AutoResizeHandles = true;
+        _designer.AutoResizeHandles.Should().BeTrue();
     }
 
     [Theory]
@@ -356,13 +362,13 @@ public class ControlDesignerTests : IDisposable
         _mockDesignerHost.Setup(h => h.GetDesigner(It.IsAny<IComponent>())).Returns(mockParentDesigner.Object);
 
         Dictionary<string, object> defaultValues = new()
-    {
-        { "Parent", new Control() }
-    };
+        {
+            { "Parent", new Control() }
+        };
 
         _designer.InitializeNewComponent(defaultValues);
 
-        PropertyDescriptor? dockPropDescriptor = TypeDescriptor.GetProperties(_control)["Dock"];
+        PropertyDescriptor? dockPropDescriptor = TypeDescriptor.GetProperties(_control)[nameof(Control.Dock)];
         dockPropDescriptor.Should().NotBeNull();
         dockPropDescriptor.Should().BeAssignableTo<PropertyDescriptor>();
         dockPropDescriptor?.GetValue(_control).Should().Be(dockStyle);
@@ -377,7 +383,7 @@ public class ControlDesignerTests : IDisposable
         _mockDesignerHost.Setup(h => h.GetDesigner(It.IsAny<IComponent>())).Returns(mockParentDesigner.Object);
         Dictionary<string, object> defaultValues = new()
         {
-            { "Parent", new Control() }
+            { nameof(mockParentDesigner.Object.Component), new Control() }
         };
 
         Action action = () => _designer.InitializeExistingComponent(defaultValues);
