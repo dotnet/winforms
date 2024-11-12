@@ -8,6 +8,7 @@ using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
+using Windows.Win32.Graphics.Dwm;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.TreeNode;
@@ -1524,6 +1525,26 @@ public partial class TreeView : Control
         }
 
         base.CreateHandle();
+
+#pragma warning disable WFO5001
+        if (Application.IsDarkModeEnabled)
+        {
+            // Get the TreeView's ToolTip handle:
+            HWND toolTipHandle = (HWND)PInvokeCore.SendMessage(HWND, PInvoke.TVM_GETTOOLTIPS, (WPARAM)0, (LPARAM)0);
+            PInvoke.SetWindowTheme(toolTipHandle, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null);
+
+            // Round the corners of the ToolTip window.
+            if (OsVersion.IsWindows11_OrGreater())
+            {
+                DWM_WINDOW_CORNER_PREFERENCE roundSmall = DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUNDSMALL;
+                PInvoke.DwmSetWindowAttribute(
+                    toolTipHandle,
+                    DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE,
+                    &roundSmall,
+                    sizeof(DWM_WINDOW_CORNER_PREFERENCE));
+            }
+        }
+#pragma warning restore WFO5001
     }
 
     /// <summary>
@@ -1614,7 +1635,7 @@ public partial class TreeView : Control
     /// <summary>
     ///  Called by ToolTip to poke in that Tooltip into this ComCtl so that the Native ChildToolTip is not exposed.
     /// </summary>
-    internal override void SetToolTip(ToolTip toolTip)
+    internal override unsafe void SetToolTip(ToolTip toolTip)
     {
         if (toolTip is null || !ShowNodeToolTips)
         {
