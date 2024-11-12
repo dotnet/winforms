@@ -32,7 +32,7 @@ public class TextBoxBaseDesignerTests : IDisposable
 
     [Fact]
     public void Constructor_SetsAutoResizeHandlesToTrue_AND_SelectionRules_ReturnsCorrectRules()
-    {       
+    {
         _designer.AutoResizeHandles.Should().BeTrue();
         _designer.Initialize(_textbox);
 
@@ -53,11 +53,14 @@ public class TextBoxBaseDesignerTests : IDisposable
         List<SnapLine> snapLines = (List<SnapLine>)_designer.SnapLines;
 
         snapLines.Should().NotBeNull();
+
         SnapLine? baselineSnapLine = snapLines.Cast<SnapLine>().FirstOrDefault(sl => sl.SnapLineType == SnapLineType.Baseline);
+
         baselineSnapLine.Should().NotBeNull();
         baselineSnapLine!.Priority.Should().Be(SnapLinePriority.Medium);
         
         int expectedBaseline = DesignerUtils.GetTextBaseline(_textbox, Drawing.ContentAlignment.TopLeft) + expectedBaselineOffset;
+
         baselineSnapLine.Offset.Should().Be(expectedBaseline);
     }
 
@@ -78,10 +81,15 @@ public class TextBoxBaseDesignerTests : IDisposable
     [Fact]
     public void InitializeNewComponent_ClearsTextProperty_And_NotClearIfReadOnly()
     {
+        _textbox.Text.Should().BeEmpty();
+
         _textbox.Text = "Test Text";
         _designer.Initialize(_textbox);
+
         _textbox.Text.Should().Be("Test Text");
+
         _designer.InitializeNewComponent(null);
-        _textbox.Text.Should().BeEmpty();   
+
+        _textbox.Text.Should().BeEmpty();
     }
 }
