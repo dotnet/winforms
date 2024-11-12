@@ -1635,7 +1635,7 @@ public partial class TreeView : Control
     /// <summary>
     ///  Called by ToolTip to poke in that Tooltip into this ComCtl so that the Native ChildToolTip is not exposed.
     /// </summary>
-    internal override unsafe void SetToolTip(ToolTip toolTip)
+    internal override void SetToolTip(ToolTip toolTip)
     {
         if (toolTip is null || !ShowNodeToolTips)
         {
