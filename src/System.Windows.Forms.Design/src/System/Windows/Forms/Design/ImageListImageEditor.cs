@@ -11,7 +11,6 @@ namespace System.Windows.Forms.Design;
 /// <summary>
 ///  Provides an editor that can perform default file searching for bitmap (.bmp) files.
 /// </summary>
-[CLSCompliant(false)]
 public class ImageListImageEditor : ImageEditor
 {
     // Metafile types are not supported in the ImageListImageEditor and should not be displayed as an option.
