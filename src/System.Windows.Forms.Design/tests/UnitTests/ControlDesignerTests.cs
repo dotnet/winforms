@@ -364,4 +364,17 @@ public class ControlDesignerTests : IDisposable
 
         action.Should().Throw<NotImplementedException>(SR.NotImplementedByDesign);
     }
+
+    [Fact]
+    public void WndProc_CallsOnMouseDragEnd_WhenLeftMouseButtonReleased()
+    {
+        var msg = Message.Create(_designer._control.Handle, 0x0202, IntPtr.Zero, IntPtr.Zero);
+
+        _designer.WndProc(ref msg);
+
+        _designer.OnMouseDragEndCalled.Should().BeTrue();
+
+        bool _ctrlSelect = (bool)_designer.TestAccessor().Dynamic._ctrlSelect;
+        _ctrlSelect.Should().BeFalse();
+    }
 }
