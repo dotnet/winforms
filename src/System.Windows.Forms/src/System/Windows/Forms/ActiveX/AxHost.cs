@@ -3626,7 +3626,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     /// <summary>
     ///  Maps from an OLE COLOR to a System.Drawing.Color
     /// </summary>
-    [CLSCompliant(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected static Color GetColorFromOleColor(uint color)
     {
@@ -3636,7 +3635,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     /// <summary>
     ///  Maps from an System.Drawing.Color to an OLE COLOR
     /// </summary>
-    [CLSCompliant(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected static uint GetOleColorFromColor(Color color)
     {
