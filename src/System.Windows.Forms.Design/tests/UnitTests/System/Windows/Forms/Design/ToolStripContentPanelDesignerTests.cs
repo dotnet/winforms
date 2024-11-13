@@ -40,7 +40,7 @@ public sealed class ToolStripContentPanelDesignerTests : IDisposable
 
         List<SnapLine> snapLines = _toolStripContentPanelDesigner.SnapLines.Cast<SnapLine>().ToList();
 
-        bool containsPaddingSnapLines = snapLines.Any(snapLine => paddingFilters.Contains(snapLine.Filter));
+        bool containsPaddingSnapLines = snapLines.Any(snapLine => paddingFilters.Contains(snapLine.Filter ?? string.Empty));
 
         containsPaddingSnapLines.Should().BeTrue();
     }
