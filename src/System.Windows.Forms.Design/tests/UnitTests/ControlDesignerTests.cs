@@ -4,7 +4,6 @@
 #nullable enable
 
 using System.ComponentModel;
-using System.Reflection;
 using System.Windows.Forms.Design.Behavior;
 using System.Windows.Forms.Design.Tests.Mocks;
 using Moq;
@@ -268,10 +267,9 @@ public class ControlDesignerTests : IDisposable
         Mock<DesignerFrame> mockDesignerFrame = new(_designer._mockSite.Object) { CallBase = true };
         Mock<IServiceProvider> mockServiceProvider = new();
         BehaviorService behaviorService = new(mockServiceProvider.Object, mockDesignerFrame.Object);
-
-        FieldInfo? behaviorServiceField = typeof(ControlDesigner).GetField("_behaviorService", BindingFlags.NonPublic | BindingFlags.Instance);
-        behaviorServiceField?.SetValue(_designer, behaviorService);
         _designer._mockSite.Setup(s => s.GetService(typeof(BehaviorService))).Returns(behaviorService);
+
+        _designer.TestAccessor().Dynamic._behaviorService = behaviorService;
 
         GlyphCollection glyphs = _designer.GetGlyphs(GlyphSelectionType.SelectedPrimary);
 
