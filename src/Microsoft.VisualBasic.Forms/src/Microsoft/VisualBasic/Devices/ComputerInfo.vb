@@ -47,7 +47,6 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <exception cref="ComponentModel.Win32Exception">
         '''  Throw if we are unable to obtain the memory status.
         ''' </exception>
-        <CLSCompliant(False)>
         Public ReadOnly Property AvailablePhysicalMemory() As UInt64
             Get
                 Return MemoryStatus.AvailablePhysicalMemory
@@ -64,7 +63,6 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <exception cref="ComponentModel.Win32Exception">
         '''  Throw if we are unable to obtain the memory status.
         ''' </exception>
-        <CLSCompliant(False)>
         Public ReadOnly Property AvailableVirtualMemory() As UInt64
             Get
                 Return MemoryStatus.AvailableVirtualMemory
@@ -131,7 +129,6 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <exception cref="ComponentModel.Win32Exception">
         '''  Throw if we are unable to obtain the memory status.
         ''' </exception>
-        <CLSCompliant(False)>
         Public ReadOnly Property TotalPhysicalMemory() As UInt64
             Get
                 Return MemoryStatus.TotalPhysicalMemory
@@ -148,7 +145,6 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <exception cref="ComponentModel.Win32Exception">
         '''  Throw if we are unable to obtain the memory status.
         ''' </exception>
-        <CLSCompliant(False)>
         Public ReadOnly Property TotalVirtualMemory() As UInt64
             Get
                 Return MemoryStatus.TotalVirtualMemory

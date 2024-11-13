@@ -745,7 +745,6 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
         }
     }
 
-    [CLSCompliant(false)]
     protected virtual bool CanCreateComponentFromTool(ToolboxItem tool)
     {
         IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
@@ -813,7 +812,6 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
         return TypeDescriptor.GetAttributes(component).Contains(DesignTimeVisibleAttribute.Yes);
     }
 
-    [CLSCompliant(false)]
     public void CreateComponentFromTool(ToolboxItem tool)
     {
         if (!CanCreateComponentFromTool(tool))

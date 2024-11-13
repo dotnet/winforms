@@ -3,7 +3,6 @@
   <PropertyGroup>
     <AssemblyName>System.Windows.Forms</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <CLSCompliant>true</CLSCompliant>
     <Nullable>enable</Nullable>
 
     <!--
