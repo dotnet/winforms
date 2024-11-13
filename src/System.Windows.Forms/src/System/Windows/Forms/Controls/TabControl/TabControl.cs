@@ -968,26 +968,6 @@ public partial class TabControl : Control
         }
 
         base.CreateHandle();
-
-#pragma warning disable WFO5001
-        if (Application.IsDarkModeEnabled)
-        {
-            // Get the TabControl's ToolTip handle:
-            HWND toolTipHandle = (HWND)PInvokeCore.SendMessage(HWND, PInvoke.TCM_GETTOOLTIPS, (WPARAM)0, (LPARAM)0);
-            PInvoke.SetWindowTheme(toolTipHandle, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null);
-
-            // Round the corners of the ToolTip window.
-            if (OsVersion.IsWindows11_OrGreater())
-            {
-                DWM_WINDOW_CORNER_PREFERENCE roundSmall = DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUNDSMALL;
-                PInvoke.DwmSetWindowAttribute(
-                    toolTipHandle,
-                    DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE,
-                    &roundSmall,
-                    sizeof(DWM_WINDOW_CORNER_PREFERENCE));
-            }
-        }
-#pragma warning restore WFO5001
     }
 
     private void DetachImageList(object? sender, EventArgs e) => ImageList = null;
@@ -1242,7 +1222,7 @@ public partial class TabControl : Control
     ///  We do some work here to configure the handle.
     ///  Overriders should call base.OnHandleCreated()
     /// </summary>
-    protected override void OnHandleCreated(EventArgs e)
+    protected override unsafe void OnHandleCreated(EventArgs e)
     {
         if (!IsHandleCreated)
         {
@@ -1280,6 +1260,24 @@ public partial class TabControl : Control
                     HWND.HWND_TOPMOST,
                     0, 0, 0, 0,
                     SET_WINDOW_POS_FLAGS.SWP_NOMOVE | SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
+
+#pragma warning disable WFO5001
+                if (Application.IsDarkModeEnabled)
+                {
+                    PInvoke.SetWindowTheme(tooltipHwnd, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null);
+
+                    // Round the corners of the ToolTip window.
+                    if (OsVersion.IsWindows11_OrGreater())
+                    {
+                        DWM_WINDOW_CORNER_PREFERENCE roundSmall = DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUNDSMALL;
+                        PInvoke.DwmSetWindowAttribute(
+                            tooltipHwnd,
+                            DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE,
+                            &roundSmall,
+                            sizeof(DWM_WINDOW_CORNER_PREFERENCE));
+                    }
+                }
+#pragma warning restore WFO5001
             }
         }
 

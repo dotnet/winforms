@@ -1525,26 +1525,6 @@ public partial class TreeView : Control
         }
 
         base.CreateHandle();
-
-#pragma warning disable WFO5001
-        if (Application.IsDarkModeEnabled)
-        {
-            // Get the TreeView's ToolTip handle:
-            HWND toolTipHandle = (HWND)PInvokeCore.SendMessage(HWND, PInvoke.TVM_GETTOOLTIPS, (WPARAM)0, (LPARAM)0);
-            PInvoke.SetWindowTheme(toolTipHandle, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null);
-
-            // Round the corners of the ToolTip window.
-            if (OsVersion.IsWindows11_OrGreater())
-            {
-                DWM_WINDOW_CORNER_PREFERENCE roundSmall = DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUNDSMALL;
-                PInvoke.DwmSetWindowAttribute(
-                    toolTipHandle,
-                    DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE,
-                    &roundSmall,
-                    sizeof(DWM_WINDOW_CORNER_PREFERENCE));
-            }
-        }
-#pragma warning restore WFO5001
     }
 
     /// <summary>
@@ -1860,7 +1840,7 @@ public partial class TreeView : Control
     protected virtual void OnDrawNode(DrawTreeNodeEventArgs e) =>
         _onDrawNode?.Invoke(this, e);
 
-    protected override void OnHandleCreated(EventArgs e)
+    protected override unsafe void OnHandleCreated(EventArgs e)
     {
         if (!IsHandleCreated)
         {
@@ -1913,6 +1893,24 @@ public partial class TreeView : Control
         if (c != SystemColors.WindowText || Application.IsDarkModeEnabled)
         {
             PInvokeCore.SendMessage(this, PInvoke.TVM_SETTEXTCOLOR, 0, c.ToWin32());
+        }
+
+        if (Application.IsDarkModeEnabled)
+        {
+            // Get the TreeView's ToolTip handle:
+            HWND toolTipHandle = (HWND)PInvokeCore.SendMessage(HWND, PInvoke.TVM_GETTOOLTIPS, (WPARAM)0, (LPARAM)0);
+            PInvoke.SetWindowTheme(toolTipHandle, $"{DarkModeIdentifier}_{ExplorerThemeIdentifier}", null);
+
+            // Round the corners of the ToolTip window.
+            if (OsVersion.IsWindows11_OrGreater())
+            {
+                DWM_WINDOW_CORNER_PREFERENCE roundSmall = DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUNDSMALL;
+                PInvoke.DwmSetWindowAttribute(
+                    toolTipHandle,
+                    DWMWINDOWATTRIBUTE.DWMWA_WINDOW_CORNER_PREFERENCE,
+                    &roundSmall,
+                    sizeof(DWM_WINDOW_CORNER_PREFERENCE));
+            }
         }
 #pragma warning restore WFO5001
 
