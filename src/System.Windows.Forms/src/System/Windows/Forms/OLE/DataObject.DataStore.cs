@@ -9,7 +9,7 @@ namespace System.Windows.Forms;
 
 public partial class DataObject
 {
-    private class DataStore : IDataObject
+    private sealed class DataStore : IDataObject
     {
         private class DataStoreEntry
         {
@@ -29,7 +29,7 @@ public partial class DataObject
         {
         }
 
-        public virtual object? GetData(string format, bool autoConvert)
+        public object? GetData(string format, bool autoConvert)
         {
             if (string.IsNullOrWhiteSpace(format))
             {
@@ -73,11 +73,11 @@ public partial class DataObject
             return original ?? baseVar;
         }
 
-        public virtual object? GetData(string format) => GetData(format, autoConvert: true);
+        public object? GetData(string format) => GetData(format, autoConvert: true);
 
-        public virtual object? GetData(Type format) => GetData(format.FullName!);
+        public object? GetData(Type format) => GetData(format.FullName!);
 
-        public virtual void SetData(string format, bool autoConvert, object? data)
+        public void SetData(string format, bool autoConvert, object? data)
         {
             if (string.IsNullOrWhiteSpace(format))
             {
@@ -103,15 +103,15 @@ public partial class DataObject
             _data[format] = new DataStoreEntry(data, autoConvert);
         }
 
-        public virtual void SetData(string format, object? data) => SetData(format, autoConvert: true, data);
+        public void SetData(string format, object? data) => SetData(format, autoConvert: true, data);
 
-        public virtual void SetData(Type format, object? data)
+        public void SetData(Type format, object? data)
         {
             ArgumentNullException.ThrowIfNull(format);
             SetData(format.FullName!, data);
         }
 
-        public virtual void SetData(object? data)
+        public void SetData(object? data)
         {
             ArgumentNullException.ThrowIfNull(data);
 
@@ -124,12 +124,12 @@ public partial class DataObject
             SetData(data.GetType(), data);
         }
 
-        public virtual bool GetDataPresent(Type format)
+        public bool GetDataPresent(Type format)
         {
             return GetDataPresent(format.FullName!);
         }
 
-        public virtual bool GetDataPresent(string format, bool autoConvert)
+        public bool GetDataPresent(string format, bool autoConvert)
         {
             if (string.IsNullOrWhiteSpace(format))
             {
@@ -159,9 +159,9 @@ public partial class DataObject
             }
         }
 
-        public virtual bool GetDataPresent(string format) => GetDataPresent(format, autoConvert: true);
+        public bool GetDataPresent(string format) => GetDataPresent(format, autoConvert: true);
 
-        public virtual string[] GetFormats(bool autoConvert)
+        public string[] GetFormats(bool autoConvert)
         {
             Debug.Assert(_data is not null, "data collection can't be null");
             Debug.Assert(_data.Keys is not null, "data Keys collection can't be null");
@@ -199,6 +199,6 @@ public partial class DataObject
             return baseVar;
         }
 
-        public virtual string[] GetFormats() => GetFormats(autoConvert: true);
+        public string[] GetFormats() => GetFormats(autoConvert: true);
     }
 }

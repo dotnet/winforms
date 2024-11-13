@@ -9,7 +9,6 @@ namespace System.Windows.Forms.Design;
 /// <summary>
 ///  Provides an editor for filenames.
 /// </summary>
-[CLSCompliant(false)]
 public class FileNameEditor : UITypeEditor
 {
     private OpenFileDialog? _openFileDialog;

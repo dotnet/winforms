@@ -280,7 +280,6 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
     ///  This property is used by deriving classes to determine if the designer is
     ///  in a state where it has a valid MouseDragTool.
     /// </summary>
-    [CLSCompliant(false)]
     protected ToolboxItem MouseDragTool => _mouseDragTool;
 
     /// <summary>
@@ -796,7 +795,6 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
     ///  Creates the given tool in the currently selected control at the
     ///  given position. The default size for the tool is used.
     /// </summary>
-    [CLSCompliant(false)]
     protected void CreateTool(ToolboxItem tool, Point location)
     {
         CreateToolCore(tool, location.X, location.Y, 0, 0, true, false);
@@ -806,7 +804,6 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
     ///  Creates the given tool in the currently selected control. The
     ///  tool is created with the provided shape.
     /// </summary>
-    [CLSCompliant(false)]
     protected void CreateTool(ToolboxItem tool, Rectangle bounds)
     {
         CreateToolCore(tool, bounds.X, bounds.Y, bounds.Width, bounds.Height, true, true);
@@ -816,7 +813,6 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
     ///  This is the worker method of all CreateTool methods. It is the only one
     ///  that can be overridden.
     /// </summary>
-    [CLSCompliant(false)]
     protected virtual IComponent[] CreateToolCore(ToolboxItem tool, int x, int y, int width, int height, bool hasLocation, bool hasSize)
     {
         IComponent[] comp = null;
