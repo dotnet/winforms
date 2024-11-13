@@ -7,7 +7,7 @@ using System.Windows.Forms.Design.Behavior;
 
 namespace System.Windows.Forms.Design.Tests;
 
-internal class TestControlDesigner : ControlDesigner
+internal partial class TestControlDesigner : ControlDesigner
 {
     internal AccessibleObject GetAccessibleObjectField()
     {

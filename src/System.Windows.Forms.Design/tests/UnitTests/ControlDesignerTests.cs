@@ -4,7 +4,6 @@
 #nullable enable
 
 using System.ComponentModel;
-using System.ComponentModel.Design;
 using System.Reflection;
 using System.Windows.Forms.Design.Behavior;
 using System.Windows.Forms.Design.Tests.Mocks;
@@ -16,39 +15,16 @@ namespace System.Windows.Forms.Design.Tests;
 public class ControlDesignerTests : IDisposable
 {
     private readonly TestControlDesigner _designer = new();
-    private readonly Control _control = new();
-    private readonly Mock<IDesignerHost> _mockDesignerHost = new();
-    private readonly Mock<ISite> _mockSite;
-
-    public ControlDesignerTests()
-    {
-        Mock<IDesignerHost> _mockDesignerHost = new();
-        _mockDesignerHost
-            .Setup(h => h.RootComponent)
-            .Returns(_control);
-        _mockDesignerHost
-            .Setup(s => s.GetDesigner(It.IsAny<Control>()))
-            .Returns(_designer);
-        Mock<IComponentChangeService> mockComponentChangeService = new();
-        _mockDesignerHost
-            .Setup(s => s.GetService(typeof(IComponentChangeService)))
-            .Returns(mockComponentChangeService.Object);
-        _mockSite = CreateMockSiteWithDesignerHost(_mockDesignerHost.Object);
-        _control.Site = _mockSite.Object;
-
-        _designer.Initialize(_control);
-    }
 
     public void Dispose()
     {
         _designer.Dispose();
-        _control.Dispose();
     }
 
     [WinFormsFact]
     public void ControlDesigner_Ctor_Default()
     {
-        using TestControlDesigner controlDesigner = new();
+        using TestControlDesigner controlDesigner = new(isInitialized: false);
 
         controlDesigner.AutoResizeHandles.Should().BeFalse();
         controlDesigner.ControlSupportsSnaplines.Should().BeTrue();
@@ -100,7 +76,7 @@ public class ControlDesignerTests : IDisposable
         _designer.GetInheritanceAttributeProperty().Should().NotBeNull();
         _designer.NumberOfInternalControlDesigners().Should().Be(0);
         _designer.GetHitTestMethod(default).Should().BeFalse();
-        _designer.HookChildControlsMethod(_control);
+        _designer.HookChildControlsMethod(_designer._control);
     }
 
     [Fact]
@@ -118,7 +94,7 @@ public class ControlDesignerTests : IDisposable
     [InlineData(DockStyle.Fill, SelectionRules.Moveable | SelectionRules.TopSizeable | SelectionRules.LeftSizeable | SelectionRules.RightSizeable | SelectionRules.BottomSizeable)]
     public void DockStyle_DefinesProperSelectionRules(DockStyle dockStyle, SelectionRules selectionRulesParam)
     {
-        _control.Dock = dockStyle;
+        _designer._control.Dock = dockStyle;
         SelectionRules finalSelectionRules = _designer.SelectionRules;
 
         using (new NoAssertContext())
@@ -178,7 +154,7 @@ public class ControlDesignerTests : IDisposable
     {
         Action action = () =>
         {
-            using TestControlDesigner _designer = new();
+            using TestControlDesigner _designer = new(isInitialized: false);
             using Control control = _designer.Control;
         };
 
@@ -227,7 +203,7 @@ public class ControlDesignerTests : IDisposable
 
         _designer.AssociatedComponents.Count.Should().Be(0);
 
-        _control.Controls.Add(childControl);
+        _designer._control.Controls.Add(childControl);
 
         _designer.AssociatedComponents.Count.Should().Be(0);
     }
@@ -235,14 +211,14 @@ public class ControlDesignerTests : IDisposable
     [WinFormsFact]
     public void ControlDesigner_AssociatedComponentsCount_ShouldBeCorrectAmount()
     {
-        var mockSite = MockSite.CreateMockSiteWithDesignerHost(_mockDesignerHost.Object);
-        _control.Site = mockSite.Object;
+        var mockSite = MockSite.CreateMockSiteWithDesignerHost(_designer._mockDesignerHost.Object);
+        _designer._control.Site = mockSite.Object;
 
         _designer.AssociatedComponents.Count.Should().Be(0);
 
         using Control childControl = new();
         childControl.Site = mockSite.Object;
-        _control.Controls.Add(childControl);
+        _designer._control.Controls.Add(childControl);
 
         _designer.AssociatedComponents.Count.Should().Be(1);
     }
@@ -253,7 +229,7 @@ public class ControlDesignerTests : IDisposable
         Mock<IServiceProvider> mockServiceProvider = new();
         mockServiceProvider.Setup(s => s.GetService(It.IsAny<Type>())).Returns((object?)null);
 
-        Mock<DesignerFrame> mockDesignerFrame = new(_control.Site!) { CallBase = true };
+        Mock<DesignerFrame> mockDesignerFrame = new(_designer._control.Site!) { CallBase = true };
         BehaviorService behaviorService = new(mockServiceProvider.Object, mockDesignerFrame.Object);
 
         _designer.TestAccessor().Dynamic._behaviorService = behaviorService;
@@ -286,16 +262,16 @@ public class ControlDesignerTests : IDisposable
     [Fact]
     public void GetGlyphs_NonSizeableControl_ReturnsNoResizeHandleGlyphs()
     {
-        _control.Dock = DockStyle.Fill;
-        _control.AutoSize = false;
+        _designer._control.Dock = DockStyle.Fill;
+        _designer._control.AutoSize = false;
 
-        Mock<DesignerFrame> mockDesignerFrame = new(_mockSite.Object) { CallBase = true };
+        Mock<DesignerFrame> mockDesignerFrame = new(_designer._mockSite.Object) { CallBase = true };
         Mock<IServiceProvider> mockServiceProvider = new();
         BehaviorService behaviorService = new(mockServiceProvider.Object, mockDesignerFrame.Object);
 
         FieldInfo? behaviorServiceField = typeof(ControlDesigner).GetField("_behaviorService", BindingFlags.NonPublic | BindingFlags.Instance);
         behaviorServiceField?.SetValue(_designer, behaviorService);
-        _mockSite.Setup(s => s.GetService(typeof(BehaviorService))).Returns(behaviorService);
+        _designer._mockSite.Setup(s => s.GetService(typeof(BehaviorService))).Returns(behaviorService);
 
         GlyphCollection glyphs = _designer.GetGlyphs(GlyphSelectionType.SelectedPrimary);
 
@@ -314,14 +290,14 @@ public class ControlDesignerTests : IDisposable
     [Fact]
     public void GetGlyphs_ResizableGlyphs_ReturnsExpected()
     {
-        _control.Dock = DockStyle.None;
-        _control.AutoSize = false;
+        _designer._control.Dock = DockStyle.None;
+        _designer._control.AutoSize = false;
 
         Mock<IServiceProvider> mockServiceProvider = new();
         mockServiceProvider.Setup(s => s.GetService(It.IsAny<Type>())).Returns((object?)null);
-        _mockSite.Setup(s => s.GetService(typeof(IServiceProvider))).Returns(mockServiceProvider.Object);
+        _designer._mockSite.Setup(s => s.GetService(typeof(IServiceProvider))).Returns(mockServiceProvider.Object);
 
-        Mock<DesignerFrame> mockDesignerFrame = new(_mockSite.Object) { CallBase = true };
+        Mock<DesignerFrame> mockDesignerFrame = new(_designer._mockSite.Object) { CallBase = true };
         BehaviorService behaviorService = new(mockServiceProvider.Object, mockDesignerFrame.Object);
 
         _designer.TestAccessor().Dynamic._behaviorService = behaviorService;
@@ -356,10 +332,10 @@ public class ControlDesignerTests : IDisposable
     [InlineData(DockingBehavior.AutoDock, DockStyle.Fill)]
     public void InitializeNewComponent_DockingBehavior_DefinesDockStyle(DockingBehavior dockingBehavior, DockStyle dockStyle)
     {
-        TypeDescriptor.AddAttributes(_control, new DockingAttribute(dockingBehavior));
+        TypeDescriptor.AddAttributes(_designer._control, new DockingAttribute(dockingBehavior));
 
         Mock<ParentControlDesigner> mockParentDesigner = new();
-        _mockDesignerHost.Setup(h => h.GetDesigner(It.IsAny<IComponent>())).Returns(mockParentDesigner.Object);
+        _designer._mockDesignerHost.Setup(h => h.GetDesigner(It.IsAny<IComponent>())).Returns(mockParentDesigner.Object);
 
         Dictionary<string, object> defaultValues = new()
         {
@@ -368,19 +344,19 @@ public class ControlDesignerTests : IDisposable
 
         _designer.InitializeNewComponent(defaultValues);
 
-        PropertyDescriptor? dockPropDescriptor = TypeDescriptor.GetProperties(_control)[nameof(Control.Dock)];
+        PropertyDescriptor? dockPropDescriptor = TypeDescriptor.GetProperties(_designer._control)[nameof(Control.Dock)];
         dockPropDescriptor.Should().NotBeNull();
         dockPropDescriptor.Should().BeAssignableTo<PropertyDescriptor>();
-        dockPropDescriptor?.GetValue(_control).Should().Be(dockStyle);
+        dockPropDescriptor?.GetValue(_designer._control).Should().Be(dockStyle);
     }
 
     [Fact]
     public void InitializeExistingComponent_DockingBehavior_DefinesDockStyle()
     {
-        TypeDescriptor.AddAttributes(_control, new DockingAttribute(DockingBehavior.AutoDock));
+        TypeDescriptor.AddAttributes(_designer._control, new DockingAttribute(DockingBehavior.AutoDock));
 
         Mock<ParentControlDesigner> mockParentDesigner = new();
-        _mockDesignerHost.Setup(h => h.GetDesigner(It.IsAny<IComponent>())).Returns(mockParentDesigner.Object);
+        _designer._mockDesignerHost.Setup(h => h.GetDesigner(It.IsAny<IComponent>())).Returns(mockParentDesigner.Object);
         Dictionary<string, object> defaultValues = new()
         {
             { nameof(mockParentDesigner.Object.Component), new Control() }
@@ -389,78 +365,5 @@ public class ControlDesignerTests : IDisposable
         Action action = () => _designer.InitializeExistingComponent(defaultValues);
 
         action.Should().Throw<NotImplementedException>(SR.NotImplementedByDesign);
-    }
-
-    public static Mock<ISite> CreateMockSiteWithDesignerHost(object designerHost)
-    {
-        Mock<ISite> mockSite = new();
-        mockSite
-            .Setup(s => s.GetService(typeof(IDesignerHost)))
-            .Returns(designerHost);
-        mockSite
-            .Setup(s => s.GetService(typeof(IInheritanceService)))
-            .Returns((object?)null);
-        mockSite
-            .Setup(s => s.GetService(typeof(IDictionaryService)))
-            .Returns((object?)null);
-        mockSite
-            .Setup(s => s.GetService(typeof(IExtenderListService)))
-            .Returns((object?)null);
-        mockSite
-            .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
-            .Returns((object?)null);
-        mockSite
-            .Setup(s => s.GetService(typeof(AmbientProperties)))
-            .Returns((object?)null);
-        mockSite
-            .Setup(s => s.GetService(typeof(DesignerActionService)))
-            .Returns((object?)null);
-        mockSite
-            .Setup(s => s.GetService(typeof(IComponentChangeService)))
-            .Returns((object?)null);
-        mockSite
-            .Setup(s => s.GetService(typeof(ToolStripKeyboardHandlingService)))
-            .Returns((object?)null);
-        mockSite
-            .Setup(s => s.GetService(typeof(ISupportInSituService)))
-            .Returns((object?)null);
-        mockSite
-            .Setup(s => s.GetService(typeof(INestedContainer)))
-            .Returns((object?)null);
-        mockSite
-            .Setup(s => s.GetService(typeof(ToolStripMenuItem)))
-            .Returns((object?)null);
-
-        Mock<IServiceProvider> mockServiceProvider = new();
-
-        mockSite
-            .Setup(s => s.GetService(typeof(IServiceProvider)))
-            .Returns(mockServiceProvider.Object);
-        mockSite
-            .Setup(s => s.GetService(typeof(ToolStripAdornerWindowService)))
-            .Returns((object?)null);
-        mockSite
-            .Setup(s => s.GetService(typeof(DesignerOptionService)))
-            .Returns(mockServiceProvider.Object);
-
-        Mock<ISelectionService> mockSelectionService = new();
-
-        mockSite
-            .Setup(s => s.GetService(typeof(ISelectionService)))
-            .Returns(mockSelectionService.Object);
-        mockSite
-            .Setup(s => s.Container)
-            .Returns((IContainer?)null);
-        mockSite
-            .Setup(s => s.Name)
-            .Returns("Site");
-        mockSite
-            .Setup(s => s.DesignMode)
-            .Returns(true);
-        mockSite
-            .Setup(s => s.GetService(typeof(UndoEngine)))
-            .Returns((object?)null);
-
-        return mockSite;
     }
 }
