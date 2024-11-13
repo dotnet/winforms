@@ -92,10 +92,7 @@ public sealed class ContextMenuStripActionListTests : IDisposable
     }
 
     [Theory]
-    [InlineData(ToolStripRenderMode.System)]
-    [InlineData(ToolStripRenderMode.Professional)]
-    [InlineData(ToolStripRenderMode.ManagerRenderMode)]
-    [InlineData(ToolStripRenderMode.Custom)]
+    [EnumData<ToolStripRenderMode>]
     public void RenderMode_GetSet_ReturnsExpected(ToolStripRenderMode renderMode)
     {
         if (renderMode == ToolStripRenderMode.Custom)
