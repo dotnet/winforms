@@ -2,6 +2,7 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports FluentAssertions
+Imports Microsoft.VisualBasic.ApplicationServices
 Imports Xunit
 
 Namespace Microsoft.VisualBasic.Forms.Tests
@@ -9,15 +10,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
     Public Class TestUtilitiesTests
 
         <WinFormsFact>
-        Public Sub AuthenticationModeDataIteratorTests()
-            Dim testClass As New AuthenticationModeData
-            testClass.IEnumerable_GetEnumerator.Should.NotBeNull()
-            testClass.Any.Should.BeTrue()
-        End Sub
-
-        <WinFormsFact>
-        Public Sub ShutdownModeDataIteratorTests()
-            Dim testClass As New ShutdownModeData
+        Public Sub EnumDataIteratorTests()
+            Dim testClass As New EnumTestData(GetType(AuthenticationMode))
             testClass.IEnumerable_GetEnumerator.Should.NotBeNull()
             testClass.Any.Should.BeTrue()
         End Sub

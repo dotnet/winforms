@@ -1,15 +1,19 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Imports Microsoft.VisualBasic.ApplicationServices
-
 Namespace Microsoft.VisualBasic.Forms.Tests
 
-    Public Class AuthenticationModeData
+    Public Class EnumTestData
         Implements IEnumerable(Of Object())
 
+        Private ReadOnly _enumType As Type
+
+        Public Sub New(TEnum As Type)
+            _enumType = TEnum
+        End Sub
+
         Public Iterator Function GetEnumerator() As IEnumerator(Of Object()) Implements IEnumerable(Of Object()).GetEnumerator
-            For Each mode As AuthenticationMode In [Enum].GetValues(Of AuthenticationMode)
+            For Each mode As [Enum] In [Enum].GetValues(_enumType)
                 Yield {mode}
             Next
         End Function
@@ -19,4 +23,5 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Function
 
     End Class
+
 End Namespace
