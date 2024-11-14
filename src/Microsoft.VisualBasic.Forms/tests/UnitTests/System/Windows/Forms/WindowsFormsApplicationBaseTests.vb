@@ -119,6 +119,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub ValidateAuthenticationModeEnumInvalidValue()
             Const value As AuthenticationMode = CType(-1, AuthenticationMode)
             Const paramName As String = NameOf(AuthenticationMode)
+
             Dim testCode As Action = Sub() ValidateAuthenticationModeEnumValue(value, paramName)
             testCode.Should.Throw(Of InvalidEnumArgumentException)()
         End Sub
@@ -128,19 +129,17 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Const paramName As String = NameOf(AuthenticationMode)
             Dim enumType As Type = GetType(AuthenticationMode)
 
-            Using AuthenticationModeEnumerator As IEnumerator(Of Object) = New EnumTestData(enumType).GetEnumerator()
-                Do While AuthenticationModeEnumerator.MoveNext()
-                    Dim current As Object() = CType(AuthenticationModeEnumerator.Current, Object())
-                    Dim mode As AuthenticationMode = CType(current(0), AuthenticationMode)
-                    CType(Sub() ValidateAuthenticationModeEnumValue(mode, paramName), Action).Should.NotThrow()
-                Loop
-            End Using
+            For Each data As Object() In New EnumTestData(enumType)
+                Dim mode As AuthenticationMode = CType(data(0), AuthenticationMode)
+                CType(Sub() ValidateAuthenticationModeEnumValue(mode, paramName), Action).Should.NotThrow()
+            Next
         End Sub
 
         <WinFormsFact>
         Public Sub ValidateShutdownModeEnumInvalidValue()
             Const value As ShutdownMode = CType(-1, ShutdownMode)
             Const paramName As String = NameOf(ShutdownMode)
+
             Dim testCode As Action = Sub() ValidateShutdownModeEnumValue(value, paramName)
             testCode.Should.Throw(Of InvalidEnumArgumentException)()
         End Sub
@@ -148,16 +147,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub ValidateShutdownModeEnumValues()
             Const paramName As String = NameOf(ShutdownMode)
+            Dim enumType As Type = GetType(ShutdownMode)
 
-            Using ShutdownModeEnumerator As IEnumerator(Of Object) =
-                New EnumTestData(GetType(ShutdownMode)).GetEnumerator()
-
-                Do While ShutdownModeEnumerator.MoveNext()
-                    Dim current As Object() = CType(ShutdownModeEnumerator.Current, Object())
-                    Dim mode As ShutdownMode = CType(current(0), ShutdownMode)
-                    CType(Sub() ValidateShutdownModeEnumValue(mode, paramName), Action).Should.NotThrow()
-                Loop
-            End Using
+            For Each data As Object() In New EnumTestData(enumType)
+                Dim mode As ShutdownMode = CType(data(0), ShutdownMode)
+                CType(Sub() ValidateShutdownModeEnumValue(mode, paramName), Action).Should.NotThrow()
+            Next
         End Sub
 
     End Class
