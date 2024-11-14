@@ -3,11 +3,8 @@
   <Import Project="$(RepositoryEngineeringDir)Analyzer.targets" />
   <Import Project="Sdk.targets" Sdk="Microsoft.DotNet.Arcade.Sdk" />
   <Import Project="$(RepositoryEngineeringDir)packageContent.targets" />
+  <Import Project="$(RepositoryEngineeringDir)versioning.targets" />
   <Import Project="$(RepositoryEngineeringDir)Test.targets" Condition="'$(IsTestProject)' == 'true' "/>
-
-  <PropertyGroup>
-    <Description Condition="'$(Description)' == ''">$(AssemblyName)</Description>
-  </PropertyGroup>
 
   <!-- CA1416 Validate platform compatibility. Do not apply to netstandard as it does not have the attribute. -->
   <ItemGroup>

@@ -10,6 +10,7 @@ namespace System.Windows.Forms.Design;
 /// <summary>
 ///  Provides an editor for picking shortcut keys.
 /// </summary>
+[CLSCompliant(false)]
 public partial class ShortcutKeysEditor : UITypeEditor
 {
     private ShortcutKeysUI? _shortcutKeysUI;
