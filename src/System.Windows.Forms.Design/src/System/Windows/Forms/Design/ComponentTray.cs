@@ -745,6 +745,7 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
         }
     }
 
+    [CLSCompliant(false)]
     protected virtual bool CanCreateComponentFromTool(ToolboxItem tool)
     {
         IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));

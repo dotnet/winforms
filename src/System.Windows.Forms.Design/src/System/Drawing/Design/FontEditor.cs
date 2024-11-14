@@ -10,6 +10,7 @@ namespace System.Drawing.Design;
 /// <summary>
 ///  Provides a font editor that is used to visually select and configure a Font object.
 /// </summary>
+[CLSCompliant(false)]
 public class FontEditor : UITypeEditor
 {
     private FontDialog? _fontDialog;

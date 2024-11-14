@@ -280,6 +280,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
     ///  This property is used by deriving classes to determine if the designer is
     ///  in a state where it has a valid MouseDragTool.
     /// </summary>
+    [CLSCompliant(false)]
     protected ToolboxItem MouseDragTool => _mouseDragTool;
 
     /// <summary>
