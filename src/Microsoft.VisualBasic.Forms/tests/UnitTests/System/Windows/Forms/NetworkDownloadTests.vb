@@ -18,11 +18,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Private Const DownloadSmallFileSize As Integer = 18_135
         Private Const InvalidUrlAddress As String = "invalidURL"
         Private Const TestingConnectionTimeout As Integer = 100_000
-        ' REVIEWER NOTE: The next 2 Constants need to be SR Resources,
-        '                they are not accessible in this project they come from WebClient.
-        Private Const SR_net_webstatus_Timeout As String = "The operation has timed out."
-        Private Const SR_net_webstatus_Unauthorized As String =
-            "The remote server returned an error: (401) Unauthorized."
 
         Private Shared Sub CleanUpListener(listener As HttpListener)
             listener.Stop()
@@ -292,7 +287,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
             testCode.Should() _
                 .Throw(Of WebException)() _
-                .WithMessage(SR_net_webstatus_Unauthorized)
+                .WithMessage(SR.net_webstatus_Unauthorized)
             VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
@@ -315,8 +310,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 End Sub
 
             testCode.Should() _
-               .Throw(Of WebException)() _
-               .WithMessage(SR_net_webstatus_Timeout)
+                .Throw(Of WebException)() _
+                .WithMessage(SR.net_webstatus_Timeout)
             VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
@@ -874,7 +869,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
             testCode.Should() _
                 .Throw(Of WebException)() _
-                .WithMessage(SR_net_webstatus_Unauthorized)
+                .WithMessage(SR.net_webstatus_Unauthorized)
             VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
@@ -900,7 +895,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
             testCode.Should() _
                 .Throw(Of WebException)() _
-                .WithMessage(SR_net_webstatus_Unauthorized)
+                .WithMessage(SR.net_webstatus_Unauthorized)
             VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
@@ -1102,7 +1097,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
             testCode.Should() _
                 .Throw(Of WebException)() _
-                .WithMessage(SR_net_webstatus_Timeout)
+                .WithMessage(SR.net_webstatus_Timeout)
             VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
@@ -1151,7 +1146,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim value As String = SR.Network_InvalidUriString.Replace("{0}", "invalidURL")
             testCode.Should() _
                 .Throw(Of ArgumentException)() _
-                    .Where(Function(e) e.Message.StartsWith(value))
+                .Where(Function(e) e.Message.StartsWith(value))
             VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
@@ -1225,8 +1220,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
             Dim value As String = SR.Network_InvalidUriString.Replace("{0}", "invalidURL")
             testCode.Should() _
-                    .Throw(Of ArgumentException)() _
-                    .Where(Function(e) e.Message.StartsWith(value))
+                .Throw(Of ArgumentException)() _
+                .Where(Function(e) e.Message.StartsWith(value))
             VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
@@ -1539,7 +1534,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
             testCode.Should() _
                 .Throw(Of WebException)() _
-                .WithMessage(SR_net_webstatus_Unauthorized)
+                .WithMessage(SR.net_webstatus_Unauthorized)
             VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 
@@ -1565,7 +1560,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
             testCode.Should() _
                 .Throw(Of WebException)() _
-                .WithMessage(SR_net_webstatus_Unauthorized)
+                .WithMessage(SR.net_webstatus_Unauthorized)
             VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
         End Sub
 

@@ -83,7 +83,9 @@ Namespace Microsoft.VisualBasic.Devices
         '''  We also use this function to validate the UriString (remote file address).
         ''' </summary>
         ''' <param name="address">The remote file address.</param>
-        ''' <returns>A <see cref="Uri"/> if successful, otherwise it throws an <see cref="UriFormatException"/>.</returns>
+        ''' <returns>
+        '''  A <see cref="Uri"/> if successful, otherwise it throws an <see cref="UriFormatException"/>.
+        ''' </returns>
         Friend Function GetUri(address As String) As Uri
             Try
                 Return New Uri(address)
