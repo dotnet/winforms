@@ -11,9 +11,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
     Public Class WebListener
         Private ReadOnly _downloadFileUrlPrefix As String
         Private ReadOnly _fileSize As Integer
-
-        Private _password As String
-        Private _userName As String
+        Private ReadOnly _password As String
+        Private ReadOnly _userName As String
 
         ''' <summary>
         '''  The name of the function that creates the server is uses to establish the file to be downloaded.
