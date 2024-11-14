@@ -12,6 +12,7 @@ namespace System.Drawing.Design;
 /// <summary>
 ///  Provides an editor for visually picking an image.
 /// </summary>
+[CLSCompliant(false)]
 public class ImageEditor : UITypeEditor
 {
     private static readonly Type[] s_imageExtenders = [typeof(BitmapEditor), typeof(MetafileEditor)];

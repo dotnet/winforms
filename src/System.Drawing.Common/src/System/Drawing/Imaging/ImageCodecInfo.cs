@@ -28,8 +28,10 @@ public sealed unsafe class ImageCodecInfo
 
     public int Version { get; set; }
 
+    [CLSCompliant(false)]
     public byte[][]? SignaturePatterns { get; set; }
 
+    [CLSCompliant(false)]
     public byte[][]? SignatureMasks { get; set; }
 
     // Encoder/Decoder selection APIs

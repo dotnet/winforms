@@ -299,6 +299,7 @@ public sealed class ColorMatrix
     /// <summary>
     ///  Initializes a new instance of the <see cref='ColorMatrix'/> class with the elements in the specified matrix.
     /// </summary>
+    [CLSCompliant(false)]
     public ColorMatrix(float[][] newColorMatrix)
     {
         _matrix00 = newColorMatrix[0][0];
