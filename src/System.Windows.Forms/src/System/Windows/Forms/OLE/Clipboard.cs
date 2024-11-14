@@ -545,6 +545,7 @@ public static class Clipboard
     ///   on custom converters for JSON serialization.
     ///  </para>
     /// </remarks>
+    [RequiresUnreferencedCode("Uses default System.Text.Json behavior which is not trim-compatible.")]
     public static void SetDataAsJson<T>(string format, T data)
     {
         data.OrThrowIfNull(nameof(data));

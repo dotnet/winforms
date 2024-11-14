@@ -102,9 +102,39 @@ public unsafe partial class DataObject :
     /// <inheritdoc cref="Composition.OriginalIDataObject"/>
     internal IDataObject? OriginalIDataObject => _innerData.OriginalIDataObject;
 
+    /// <inheritdoc cref="SetDataAsJson{T}(string, bool, T)"/>
+    [RequiresUnreferencedCode("Uses default System.Text.Json behavior which is not trim-compatible.")]
+    public void SetDataAsJson<T>(string format, T data)
+    {
+        data.OrThrowIfNull(nameof(data));
+        if (typeof(T) == typeof(DataObject))
+        {
+            throw new InvalidOperationException($"DataObject will serialize as empty. JSON serialize the data within {nameof(data)}, then use {nameof(SetData)} instead.");
+        }
+
+        SetData(format, new JsonData<T>() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data) });
+    }
+
+    /// <inheritdoc cref="SetDataAsJson{T}(string, bool, T)"/>
+    [RequiresUnreferencedCode("Uses default System.Text.Json behavior which is not trim-compatible.")]
+    public void SetDataAsJson<T>(T data)
+    {
+        data.OrThrowIfNull(nameof(data));
+        if (typeof(T) == typeof(DataObject))
+        {
+            // TODO: Localize string.
+            throw new InvalidOperationException($"DataObject will serialize as empty. JSON serialize the data within  {nameof(data)}, then use {nameof(SetData)}  instead.");
+        }
+
+        SetData(typeof(T), new JsonData<T>() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data) });
+    }
+
     /// <summary>
     ///  Stores the specified data and its associated format in this instance as JSON.
     /// </summary>
+    /// <param name="format">The format associated with the data. See <see cref="DataFormats"/> for predefined formats.</param>
+    /// <param name="autoConvert"><see langword="true"/> to allow the data to be converted to another format; otherwise, <see langword="false"/>.</param>
+    /// <param name="data">The data to store.</param>
     /// <exception cref="InvalidOperationException">
     ///  If <paramref name="data"/> is a non derived <see cref="DataObject"/>. This is for better error reporting as <see cref="DataObject"/> will serialize as empty.
     ///  If <see cref="DataObject"/> needs to be set, JSON serialize the data held in <paramref name="data"/> using this method, then use <see cref="SetData(object?)"/>
@@ -128,30 +158,7 @@ public unsafe partial class DataObject :
     ///   on custom converters for JSON serialization.
     ///  </para>
     /// </remarks>
-    public void SetDataAsJson<T>(string format, T data)
-    {
-        data.OrThrowIfNull(nameof(data));
-        if (typeof(T) == typeof(DataObject))
-        {
-            throw new InvalidOperationException($"DataObject will serialize as empty. JSON serialize the data within {nameof(data)}, then use {nameof(SetData)} instead.");
-        }
-
-        SetData(format, new JsonData<T>() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data) });
-    }
-
-    /// <inheritdoc cref="SetDataAsJson{T}(string, T)"/>
-    public void SetDataAsJson<T>(T data)
-    {
-        data.OrThrowIfNull(nameof(data));
-        if (typeof(T) == typeof(DataObject))
-        {
-            // TODO: Localize string.
-            throw new InvalidOperationException($"DataObject will serialize as empty. JSON serialize the data within  {nameof(data)}, then use {nameof(SetData)}  instead.");
-        }
-
-        SetData(typeof(T), new JsonData<T>() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data) });
-    }
-
+    [RequiresUnreferencedCode("Uses default System.Text.Json behavior which is not trim-compatible.")]
     public void SetDataAsJson<T>(string format, bool autoConvert, T data)
     {
         data.OrThrowIfNull(nameof(data));
