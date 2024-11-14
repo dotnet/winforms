@@ -8,10 +8,10 @@ using System.Globalization;
 
 namespace System.Windows.Forms.Tests;
 
-public class DataGridViewCellStyleConverterTests : IDisposable
+public class DataGridViewCellStyleConverterTests
 {
-    private DataGridViewCellStyleConverter _converter;
-    private DataGridViewCellStyle _style;
+    private readonly DataGridViewCellStyleConverter _converter;
+    private readonly DataGridViewCellStyle _style;
 
     public DataGridViewCellStyleConverterTests()
     {
@@ -19,29 +19,26 @@ public class DataGridViewCellStyleConverterTests : IDisposable
         _style = new();
     }
 
-    public void Dispose()
-    {
-        _converter = null!;
-        _style = null!;
-    }
-
     [WinFormsFact]
     public void CanConvertTo_InstanceDescriptor_ReturnsTrue()
     {
-        _converter.CanConvertTo(null, typeof(InstanceDescriptor)).Should().BeTrue();
+        bool canConvertTo = _converter.CanConvertTo(null, typeof(InstanceDescriptor));
+        canConvertTo.Should().BeTrue();
     }
 
     [WinFormsFact]
     public void CanConvertTo_OtherType_ReturnsFalse()
     {
-        _converter.CanConvertTo(null, typeof(int)).Should().BeFalse();
+        bool canConvertTo = _converter.CanConvertTo(null, typeof(int));
+        canConvertTo.Should().BeFalse();
     }
 
     [WinFormsFact]
     public void ConvertTo_InstanceDescriptor_ReturnsInstanceDescriptor()
     {
-        _converter.ConvertTo(null, CultureInfo.InvariantCulture, _style, typeof(InstanceDescriptor)).Should().NotBeNull();
-        _converter.ConvertTo(null, CultureInfo.InvariantCulture, _style, typeof(InstanceDescriptor)).Should().BeOfType<InstanceDescriptor>();
+        object? convertTo = _converter.ConvertTo(null, CultureInfo.InvariantCulture, _style, typeof(InstanceDescriptor));
+        convertTo.Should().NotBeNull();
+        convertTo.Should().BeOfType<InstanceDescriptor>();
     }
 
     [WinFormsFact]
