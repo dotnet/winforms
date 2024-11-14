@@ -306,6 +306,15 @@ internal partial class PropertyGridView
             return false;
         }
 
+        private protected override void SelectInternal(int start, int length, int textLen)
+        {
+            base.SelectInternal(start, length, textLen);
+            if (IsAccessibilityObjectCreated)
+            {
+                AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
+            }
+        }
+
         protected override void WndProc(ref Message m)
         {
             if (_filter && PropertyGridView.FilterEditWndProc(ref m))
