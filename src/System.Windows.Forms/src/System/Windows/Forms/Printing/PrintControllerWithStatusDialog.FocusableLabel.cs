@@ -29,6 +29,8 @@ public partial class PrintControllerWithStatusDialog
             }
         }
 
+        internal override AccessibleRole LinkAccessibleRole => AccessibleRole.StaticText;
+
         protected override AccessibleObject CreateAccessibilityInstance() => new FocusableLabelAccessibleObject(this);
     }
 }

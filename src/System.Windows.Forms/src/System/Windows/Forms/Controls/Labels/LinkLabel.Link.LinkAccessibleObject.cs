@@ -89,7 +89,7 @@ public partial class LinkLabel
             internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
                 => propertyID switch
                 {
-                    UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_HyperlinkControlTypeId,
+                    UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)AccessibleRoleControlTypeMap.GetControlType(Role),
                     UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)(_owningLinkLabel.FocusLink == _owningLink),
                     UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => (VARIANT)_owningLinkLabel.Enabled,
                     UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focusable),
@@ -127,7 +127,7 @@ public partial class LinkLabel
 
             private protected override bool IsInternal => true;
 
-            public override AccessibleRole Role => AccessibleRole.Link;
+            public override AccessibleRole Role => _owningLinkLabel.LinkAccessibleRole;
 
             internal override int[] RuntimeId =>
             [
