@@ -305,7 +305,7 @@ public sealed class FolderBrowserDialog : CommonDialog
             HRESULT hr = dialog->Show(owner);
             if (!hr.Succeeded)
             {
-                if (hr == HRESULT.HRESULT_FROM_WIN32(WIN32_ERROR.ERROR_CANCELLED))
+                if (hr == HRESULT.FromWin32(WIN32_ERROR.ERROR_CANCELLED))
                 {
                     returnValue = false;
                     return true;
