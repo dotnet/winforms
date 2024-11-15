@@ -10,8 +10,18 @@ Namespace Microsoft.VisualBasic.Forms.Tests
     Public Class TestUtilitiesTests
 
         <WinFormsFact>
-        Public Sub EnumDataIteratorTests()
-            Dim testClass As New EnumTestData(GetType(AuthenticationMode))
+        Public Sub EnumTestDataInvalidType()
+            Dim testClass As New EnumTestData(Of Integer)
+            Dim testCode As Action =
+                Sub()
+                    testClass.Any()
+                End Sub
+            testCode.Should.Throw(Of ArgumentException)()
+        End Sub
+
+        <WinFormsFact>
+        Public Sub EnumTestDataIteratorTests()
+            Dim testClass As New EnumTestData(Of AuthenticationMode)
             testClass.IEnumerable_GetEnumerator.Should.NotBeNull()
             testClass.Any.Should.BeTrue()
         End Sub

@@ -124,35 +124,32 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             testCode.Should.Throw(Of InvalidEnumArgumentException)()
         End Sub
 
-        <WinFormsFact>
-        Public Sub ValidateAuthenticationModeEnumValues()
-            Const paramName As String = NameOf(AuthenticationMode)
-            Dim enumType As Type = GetType(AuthenticationMode)
+        <WinFormsTheory>
+        <ClassData(GetType(EnumTestData(Of AuthenticationMode)))>
+        Public Sub ValidateAuthenticationModeEnumValues(value As AuthenticationMode)
+            Dim testCode As Action =
+                Sub() ValidateAuthenticationModeEnumValue(value, NameOf(AuthenticationMode))
 
-            For Each data As Object() In New EnumTestData(enumType)
-                Dim mode As AuthenticationMode = CType(data(0), AuthenticationMode)
-                CType(Sub() ValidateAuthenticationModeEnumValue(mode, paramName), Action).Should.NotThrow()
-            Next
+            testCode.Should.NotThrow()
         End Sub
 
         <WinFormsFact>
         Public Sub ValidateShutdownModeEnumInvalidValue()
             Const value As ShutdownMode = CType(-1, ShutdownMode)
             Const paramName As String = NameOf(ShutdownMode)
-
             Dim testCode As Action = Sub() ValidateShutdownModeEnumValue(value, paramName)
             testCode.Should.Throw(Of InvalidEnumArgumentException)()
         End Sub
 
-        <WinFormsFact>
-        Public Sub ValidateShutdownModeEnumValues()
-            Const paramName As String = NameOf(ShutdownMode)
-            Dim enumType As Type = GetType(ShutdownMode)
+        <WinFormsTheory>
+        <ClassData(GetType(EnumTestData(Of ShutdownMode)))>
+        Public Sub ValidateShutdownModeEnumValues(value As ShutdownMode)
+            Dim testCode As Action =
+                Sub()
+                    ValidateShutdownModeEnumValue(value, NameOf(ShutdownMode))
+                End Sub
 
-            For Each data As Object() In New EnumTestData(enumType)
-                Dim mode As ShutdownMode = CType(data(0), ShutdownMode)
-                CType(Sub() ValidateShutdownModeEnumValue(mode, paramName), Action).Should.NotThrow()
-            Next
+            testCode.Should.NotThrow()
         End Sub
 
     End Class

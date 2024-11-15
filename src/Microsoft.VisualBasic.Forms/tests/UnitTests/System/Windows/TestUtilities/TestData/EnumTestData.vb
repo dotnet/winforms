@@ -3,17 +3,11 @@
 
 Namespace Microsoft.VisualBasic.Forms.Tests
 
-    Public Class EnumTestData
+    Public Class EnumTestData(Of T)
         Implements IEnumerable(Of Object())
 
-        Private ReadOnly _enumType As Type
-
-        Public Sub New(TEnum As Type)
-            _enumType = TEnum
-        End Sub
-
         Public Iterator Function GetEnumerator() As IEnumerator(Of Object()) Implements IEnumerable(Of Object()).GetEnumerator
-            For Each mode As [Enum] In [Enum].GetValues(_enumType)
+            For Each mode As [Enum] In [Enum].GetValues(GetType(T))
                 Yield {mode}
             Next
         End Function
