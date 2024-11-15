@@ -264,29 +264,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
         ''' <summary>
-        '''  The splash screen timeout specifies whether there is a minimum time that the splash
-        '''  screen should be displayed for. When not set then the splash screen is hidden
-        '''  as soon as the main form becomes active.
-        ''' </summary>
-        ''' <value>The minimum amount of time, in milliseconds, to display the splash screen.</value>
-        ''' <remarks>
-        '''  This property, although public, used to be set in an `Overrides Function OnInitialize` _before_
-        '''  calling `MyBase.OnInitialize`. We want to phase this out, and with the introduction of the
-        '''  ApplyApplicationDefaults events have it handled in that event, rather than as awkwardly
-        '''  as it is currently suggested to be used in the docs.
-        '''  First step for that is to make it hidden in IntelliSense.
-        ''' </remarks>
-        <EditorBrowsable(EditorBrowsableState.Never)>
-        Public Property MinimumSplashScreenDisplayTime() As Integer
-            Get
-                Return _minimumSplashExposure
-            End Get
-            Set(value As Integer)
-                _minimumSplashExposure = value
-            End Set
-        End Property
-
-        ''' <summary>
         '''  Informs My.Settings whether to save the settings on exit or not
         ''' </summary>
         Public Property SaveMySettingsOnExit() As Boolean
@@ -331,6 +308,29 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     Throw New ArgumentException(VbUtils.GetResourceString(SR.AppModel_SplashAndMainFormTheSame))
                 End If
                 _appContext.MainForm = value
+            End Set
+        End Property
+
+        ''' <summary>
+        '''  The splash screen timeout specifies whether there is a minimum time that the splash
+        '''  screen should be displayed for. When not set then the splash screen is hidden
+        '''  as soon as the main form becomes active.
+        ''' </summary>
+        ''' <value>The minimum amount of time, in milliseconds, to display the splash screen.</value>
+        ''' <remarks>
+        '''  This property, although public, used to be set in an `Overrides Function OnInitialize` _before_
+        '''  calling `MyBase.OnInitialize`. We want to phase this out, and with the introduction of the
+        '''  ApplyApplicationDefaults events have it handled in that event, rather than as awkwardly
+        '''  as it is currently suggested to be used in the docs.
+        '''  First step for that is to make it hidden in IntelliSense.
+        ''' </remarks>
+        <EditorBrowsable(EditorBrowsableState.Never)>
+        Public Property MinimumSplashScreenDisplayTime() As Integer
+            Get
+                Return _minimumSplashExposure
+            End Get
+            Set(value As Integer)
+                _minimumSplashExposure = value
             End Set
         End Property
 
