@@ -77,7 +77,8 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         '''  the actual file transfer cancel event comes through and do it there.
         ''' </remarks>
         Private Sub _progressDialog_UserHitCancel()
-            'cancel the upload/download transfer. We'll close the ProgressDialog as soon as the HttpClient cancels the xfer.
+            ' Cancel the upload/download transfer. We'll close the ProgressDialog
+            ' as soon as the HttpClient cancels the xfer.
             _cancelTokenSourceGet.Cancel()
             _cancelTokenSourceRead.Cancel()
             _cancelTokenSourceReadStream.Cancel()
@@ -92,15 +93,25 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         Friend Async Function DownloadFileWorkerAsync(addressUri As Uri, normalizedFilePath As String, externalToken As CancellationToken) As Task
             Debug.Assert(_httpClient IsNot Nothing, "No HttpClient")
             Debug.Assert(addressUri IsNot Nothing, "No address")
-            Debug.Assert((Not String.IsNullOrWhiteSpace(normalizedFilePath)) AndAlso Directory.Exists(Path.GetDirectoryName(Path.GetFullPath(normalizedFilePath))), "Invalid path")
+            Dim directoryPath As String = Path.GetDirectoryName(Path.GetFullPath(normalizedFilePath))
+            Debug.Assert((Not String.IsNullOrWhiteSpace(normalizedFilePath)) AndAlso
+                         Directory.Exists(directoryPath), "Invalid path")
 
+            _cancelTokenSourceGet = New CancellationTokenSource()
+            _cancelTokenSourceRead = New CancellationTokenSource()
+            _cancelTokenSourceReadStream = New CancellationTokenSource()
+            _cancelTokenSourceWrite = New CancellationTokenSource()
 
             Dim response As HttpResponseMessage = Nothing
 
             _cancelTokenSourceGet = New CancellationTokenSource()
             Using linkedCts As CancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(_cancelTokenSourceGet.Token, externalToken)
                 Try
-                    response = Await _httpClient.GetAsync(addressUri, HttpCompletionOption.ResponseHeadersRead, _cancelTokenSourceGet.Token).ConfigureAwait(False)
+                    response = Await _httpClient.GetAsync(
+                        requestUri:=addressUri,
+                        completionOption:=HttpCompletionOption.ResponseHeadersRead,
+                        cancellationToken:=_cancelTokenSourceGet.Token).ConfigureAwait(continueOnCapturedContext:=False)
+
                 Catch ex As TaskCanceledException
                     If ex.CancellationToken = externalToken Then
                         externalToken.ThrowIfCancellationRequested()
@@ -119,23 +130,41 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                     _cancelTokenSourceWrite = CancellationTokenSource.CreateLinkedTokenSource(New CancellationTokenSource().Token, externalToken)
                     Dim contentLength? As Long = response?.Content.Headers.ContentLength
                     If contentLength.HasValue Then
-                        Using responseStream As Stream = Await response.Content.ReadAsStreamAsync(_cancelTokenSourceReadStream.Token).ConfigureAwait(False)
-                            Using fileStream As New FileStream(normalizedFilePath, FileMode.Create, FileAccess.Write, FileShare.None)
+                        Using responseStream As Stream = Await response.Content.ReadAsStreamAsync(
+                            cancellationToken:=_cancelTokenSourceReadStream.Token).
+                                ConfigureAwait(continueOnCapturedContext:=False)
+
+                            Using fileStream As New FileStream(
+                                path:=normalizedFilePath,
+                                mode:=FileMode.Create,
+                                access:=FileAccess.Write,
+                                share:=FileShare.None)
 
                                 Dim buffer(8191) As Byte
                                 Dim totalBytesRead As Long = 0
                                 Dim bytesRead As Integer
                                 Try
-                                    bytesRead = Await responseStream.ReadAsync(buffer.AsMemory(0, buffer.Length), _cancelTokenSourceRead.Token).ConfigureAwait(False)
+                                    bytesRead = Await responseStream.ReadAsync(
+                                        buffer:=buffer.AsMemory(start:=0, buffer.Length),
+                                        cancellationToken:=_cancelTokenSourceRead.Token).
+                                            ConfigureAwait(continueOnCapturedContext:=False)
+
                                     Do While bytesRead > 0
                                         totalBytesRead += bytesRead
 
-                                        Await fileStream.WriteAsync(buffer.AsMemory(0, bytesRead), _cancelTokenSourceWrite.Token).ConfigureAwait(False)
+                                        Await fileStream.WriteAsync(
+                                            buffer:=buffer.AsMemory(0, bytesRead),
+                                            cancellationToken:=_cancelTokenSourceWrite.Token).
+                                                ConfigureAwait(continueOnCapturedContext:=False)
+
                                         If _progressDialog IsNot Nothing Then
                                             Dim percentage As Integer = CInt(totalBytesRead / contentLength.Value * 100)
                                             InvokeIncrement(percentage)
                                         End If
-                                        bytesRead = Await responseStream.ReadAsync(buffer.AsMemory(0, buffer.Length), _cancelTokenSourceRead.Token).ConfigureAwait(False)
+                                        bytesRead = Await responseStream.ReadAsync(
+                                            buffer:=buffer.AsMemory(start:=0, buffer.Length),
+                                            cancellationToken:=_cancelTokenSourceRead.Token).
+                                                ConfigureAwait(continueOnCapturedContext:=False)
                                     Loop
                                 Finally
                                     CloseProgressDialog(_progressDialog)
@@ -158,7 +187,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
             response?.Dispose()
         End Function
 
-#If False Then
+#If False Then ' Future code to implement upload using Http
         ''' <summary>
         '''  Uploads a file
         ''' </summary>
@@ -167,17 +196,19 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         Public Sub UploadFile(sourceFileName As String, address As Uri)
             Debug.Assert(_httpClient IsNot Nothing, "No WebClient")
             Debug.Assert(address IsNot Nothing, "No address")
-            Debug.Assert((Not String.IsNullOrWhiteSpace(sourceFileName)) AndAlso File.Exists(sourceFileName), "Invalid file")
+            Debug.Assert((Not String.IsNullOrWhiteSpace(sourceFileName)) AndAlso
+                File.Exists(sourceFileName), "Invalid file")
 
             ' If we have a dialog we need to set up an async download
             If _progressDialog IsNot Nothing Then
                 _httpClient.UploadFileAsync(address, sourceFileName)
-                _progressDialog.ShowProgressDialog() 'returns when the download sequence is over, whether due to success, error, or being canceled
+                 ' returns when the download sequence is over, whether due to success, error, or being canceled
+                _progressDialog.ShowProgressDialog()
             Else
                 _httpClient.UploadFile(address, sourceFileName)
             End If
 
-            'Now that we are back on the main thread, throw the exception we encountered if the user didn't cancel.
+            ' Now that we are back on the main thread, throw the exception we encountered if the user didn't cancel.
             If _exceptionEncounteredDuringFileTransfer IsNot Nothing Then
                 If _progressDialog Is Nothing OrElse Not _progressDialog.UserCanceledTheDialog Then
                     Throw _exceptionEncounteredDuringFileTransfer
