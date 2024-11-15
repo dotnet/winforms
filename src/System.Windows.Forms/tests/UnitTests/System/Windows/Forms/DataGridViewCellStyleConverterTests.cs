@@ -22,15 +22,13 @@ public class DataGridViewCellStyleConverterTests
     [WinFormsFact]
     public void CanConvertTo_InstanceDescriptor_ReturnsTrue()
     {
-        bool canConvertTo = _converter.CanConvertTo(null, typeof(InstanceDescriptor));
-        canConvertTo.Should().BeTrue();
+        _converter.CanConvertTo(null, typeof(InstanceDescriptor)).Should().BeTrue();
     }
 
     [WinFormsFact]
     public void CanConvertTo_OtherType_ReturnsFalse()
     {
-        bool canConvertTo = _converter.CanConvertTo(null, typeof(int));
-        canConvertTo.Should().BeFalse();
+        _converter.CanConvertTo(null, typeof(int)).Should().BeFalse();
     }
 
     [WinFormsFact]
