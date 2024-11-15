@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Windows.Forms.Primitives;
+
 namespace System;
 /// <summary>
 ///  Scope for enabling / disabling the DataGridViewUIAStartRowCountAtZero Switch.
@@ -15,7 +17,7 @@ public readonly ref struct DataGridViewUIAStartRowCountAtZeroScope
         // Prevent multiple BinaryFormatterScopes from running simultaneously. Using Monitor to allow recursion on
         // the same thread.
         Monitor.Enter(typeof(DataGridViewUIAStartRowCountAtZeroScope));
-        _switchScope = new(WinFormsAppContextSwitchNames.DataGridViewUIAStartRowCountAtZero, enable);
+        _switchScope = new(WinFormsAppContextSwitchNames.DataGridViewUIAStartRowCountAtZero, GetDefaultValue, enable);
     }
 
     public void Dispose()
@@ -29,4 +31,8 @@ public readonly ref struct DataGridViewUIAStartRowCountAtZeroScope
             Monitor.Exit(typeof(DataGridViewUIAStartRowCountAtZeroScope));
         }
     }
+
+    public static bool GetDefaultValue() =>
+        typeof(LocalAppContextSwitches).TestAccessor()
+            .CreateDelegate<Func<string, bool>>("GetSwitchDefaultValue")(WinFormsAppContextSwitchNames.DataGridViewUIAStartRowCountAtZero);
 }
