@@ -3,13 +3,12 @@
 
 Namespace Microsoft.VisualBasic.Forms.Tests
 
-    Public Class EnumTestData(Of T)
+    Public Class EnumTestInvalidData(Of T)
         Implements IEnumerable(Of Object())
 
         Public Iterator Function GetEnumerator() As IEnumerator(Of Object()) Implements IEnumerable(Of Object()).GetEnumerator
-            For Each mode As [Enum] In [Enum].GetValues(GetType(T))
-                Yield {mode}
-            Next
+            Yield {New EnumValueAndThrowIndicatorData(Of T)(CType(CObj(-1), T), True)}
+            Yield {New EnumValueAndThrowIndicatorData(Of T)(CType(CObj(Integer.MaxValue), T), True)}
         End Function
 
         Public Function IEnumerable_GetEnumerator() As IEnumerator Implements IEnumerable.GetEnumerator

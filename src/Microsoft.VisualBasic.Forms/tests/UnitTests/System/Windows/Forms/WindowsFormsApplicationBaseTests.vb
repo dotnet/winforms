@@ -115,41 +115,34 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             SplashScreen = Nothing
         End Sub
 
-        <WinFormsFact>
-        Public Sub ValidateAuthenticationModeEnumInvalidValue()
-            Const value As AuthenticationMode = CType(-1, AuthenticationMode)
-            Const paramName As String = NameOf(AuthenticationMode)
-
-            Dim testCode As Action = Sub() ValidateAuthenticationModeEnumValue(value, paramName)
-            testCode.Should.Throw(Of InvalidEnumArgumentException)()
-        End Sub
-
         <WinFormsTheory>
-        <ClassData(GetType(EnumTestData(Of AuthenticationMode)))>
-        Public Sub ValidateAuthenticationModeEnumValues(value As AuthenticationMode)
+        <ClassData(GetType(EnumTestValidData(Of AuthenticationMode)))>
+        <ClassData(GetType(EnumTestInvalidData(Of AuthenticationMode)))>
+        Public Sub ValidateAuthenticationModeEnumValues(testData As EnumValueAndThrowIndicatorData(Of AuthenticationMode))
             Dim testCode As Action =
-                Sub() ValidateAuthenticationModeEnumValue(value, NameOf(AuthenticationMode))
+                Sub() ValidateAuthenticationModeEnumValue(testData.Value, NameOf(AuthenticationMode))
 
-            testCode.Should.NotThrow()
-        End Sub
-
-        <WinFormsFact>
-        Public Sub ValidateShutdownModeEnumInvalidValue()
-            Const value As ShutdownMode = CType(-1, ShutdownMode)
-            Const paramName As String = NameOf(ShutdownMode)
-            Dim testCode As Action = Sub() ValidateShutdownModeEnumValue(value, paramName)
-            testCode.Should.Throw(Of InvalidEnumArgumentException)()
+            If testData.Throws Then
+                testCode.Should.Throw(Of InvalidEnumArgumentException)()
+            Else
+                testCode.Should.NotThrow()
+            End If
         End Sub
 
         <WinFormsTheory>
-        <ClassData(GetType(EnumTestData(Of ShutdownMode)))>
-        Public Sub ValidateShutdownModeEnumValues(value As ShutdownMode)
+        <ClassData(GetType(EnumTestValidData(Of ShutdownMode)))>
+        <ClassData(GetType(EnumTestInvalidData(Of ShutdownMode)))>
+        Public Sub ValidateShutdownModeEnumValues(testData As EnumValueAndThrowIndicatorData(Of ShutdownMode))
             Dim testCode As Action =
                 Sub()
-                    ValidateShutdownModeEnumValue(value, NameOf(ShutdownMode))
+                    ValidateShutdownModeEnumValue(testData.Value, NameOf(ShutdownMode))
                 End Sub
 
-            testCode.Should.NotThrow()
+            If testData.Throws Then
+                testCode.Should.Throw(Of InvalidEnumArgumentException)()
+            Else
+                testCode.Should.NotThrow()
+            End If
         End Sub
 
     End Class
