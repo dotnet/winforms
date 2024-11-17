@@ -57,6 +57,8 @@ public sealed unsafe class ImageCodecInfo
 
     public static ImageCodecInfo[] GetImageEncoders()
     {
+        GdiPlusInitialization.EnsureInitialized();
+
         ImageCodecInfo[] imageCodecs;
         uint numEncoders;
         uint size;
