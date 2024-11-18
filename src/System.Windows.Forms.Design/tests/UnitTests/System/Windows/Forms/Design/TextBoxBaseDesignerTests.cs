@@ -59,7 +59,7 @@ public class TextBoxBaseDesignerTests : IDisposable
         baselineSnapLine.Should().NotBeNull();
         baselineSnapLine!.Priority.Should().Be(SnapLinePriority.Medium);
         int expectedBaseline = DesignerUtils.GetTextBaseline(_textbox, Drawing.ContentAlignment.TopLeft) + expectedBaselineOffset;
-        
+
         baselineSnapLine.Offset.Should().Be(expectedBaseline);
     }
 
