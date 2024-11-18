@@ -3,10 +3,11 @@
 
 namespace Microsoft.VisualBasic.Devices.Tests;
 
-// This class does not access system singletons, it is safe to run in parallel.
 public class ComputerTests
 {
     [Fact]
+    // This test does not modify the system clipboard state, do not move it into the
+    // sequential collection, it is safe to run in parallel with other tests in this assembly.
     public void Properties()
     {
         Computer computer = new();
