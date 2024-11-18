@@ -776,7 +776,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             If dpiSetResult Then
                 _highDpiMode = Application.HighDpiMode
             End If
-            Debug.Assert(dpiSetResult, "We could net set the HighDpiMode.")
+            Debug.Assert(dpiSetResult, "We could not set the HighDpiMode.")
 
             ' Now, let's set VisualStyles and ColorMode:
             If _enableVisualStyles Then
