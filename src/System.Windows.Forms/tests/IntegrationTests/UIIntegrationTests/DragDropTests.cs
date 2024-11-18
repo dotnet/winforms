@@ -60,7 +60,7 @@ public class DragDropTests : ControlTestBase
         // non-serialized object.
 
         Button? button = null;
-        object? data = null;
+        Button? data = null;
         await RunFormWithoutControlAsync(() => new Form(), async (form) =>
         {
             form.AllowDrop = true;
@@ -77,7 +77,7 @@ public class DragDropTests : ControlTestBase
                 if (e.Data?.GetDataPresent(typeof(Button)) ?? false)
                 {
                     // Get the non-serialized Button.
-                    data = e.Data?.GetData(typeof(Button));
+                    data = (Button?)e.Data?.GetData(typeof(Button));
                     e.Effect = DragDropEffects.Copy;
                 }
             };
@@ -116,9 +116,8 @@ public class DragDropTests : ControlTestBase
         });
 
         Assert.NotNull(data);
-        Assert.True(data is Button);
-        Assert.Equal(button?.Name, ((Button)data).Name);
-        Assert.Equal(button?.Text, ((Button)data).Text);
+        Assert.Equal(button?.Name, data.Name);
+        Assert.Equal(button?.Text, data.Text);
     }
 
     [WinFormsFact(Skip = "Crashes dotnet.exe, see: https://github.com/dotnet/winforms/issues/8598")]
@@ -275,7 +274,7 @@ public class DragDropTests : ControlTestBase
         // Verifies that we can successfully drag and drop a serialized object.
 
         ListViewItem? listViewItem = null;
-        object? data = null;
+        ListViewItem? data = null;
         await RunFormWithoutControlAsync(() => new Form(), async (form) =>
         {
             form.AllowDrop = true;
@@ -292,7 +291,7 @@ public class DragDropTests : ControlTestBase
                 if (e.Data?.GetDataPresent(DataFormats.Serializable) ?? false)
                 {
                     // Get the serialized ListViewItem.
-                    data = e.Data?.GetData(DataFormats.Serializable);
+                    data = (ListViewItem?)e.Data?.GetData(DataFormats.Serializable);
                     e.Effect = DragDropEffects.Copy;
                 }
             };
@@ -330,9 +329,8 @@ public class DragDropTests : ControlTestBase
         });
 
         Assert.NotNull(data);
-        Assert.True(data is ListViewItem);
-        Assert.Equal(listViewItem?.Name, ((ListViewItem)data).Name);
-        Assert.Equal(listViewItem?.Text, ((ListViewItem)data).Text);
+        Assert.Equal(listViewItem?.Name, data.Name);
+        Assert.Equal(listViewItem?.Text, data.Text);
     }
 
     [WinFormsFact]
@@ -861,7 +859,7 @@ public class DragDropTests : ControlTestBase
                     ((MousePosition.Y - _screenOffset.Y) < form.DesktopBounds.Top) ||
                     ((MousePosition.Y - _screenOffset.Y) > form.DesktopBounds.Bottom))
                 {
-                    _testOutputHelper.WriteLine($"Cancelling drag.");
+                    _testOutputHelper.WriteLine($"Canceling drag.");
                     e.Action = DragAction.Cancel;
                 }
             }

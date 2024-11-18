@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Nrbf.Tests;
 
 public class SerializationRecordExtensionsTests
 {
-    public static IEnumerable<object[]?> TryGetFrameworkObject_SupportedObjects_TestData =>
+    public static IEnumerable<object[]> TryGetFrameworkObject_SupportedObjects_TestData =>
         BinaryFormatWriterTests.TryWriteFrameworkObject_SupportedObjects_TestData;
 
     [Theory]

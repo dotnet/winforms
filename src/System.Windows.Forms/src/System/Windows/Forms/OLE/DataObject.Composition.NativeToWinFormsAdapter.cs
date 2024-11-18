@@ -111,8 +111,10 @@ public unsafe partial class DataObject
 
                 static object ReadObjectFromHGLOBAL(HGLOBAL hglobal, bool restrictDeserialization)
                 {
-                    MemoryStream stream = ReadByteStreamFromHGLOBAL(hglobal, out bool isSerializedObject);
-                    return !isSerializedObject ? stream : BinaryFormatUtilities.ReadObjectFromStream(stream, restrictDeserialization);
+                     MemoryStream stream = ReadByteStreamFromHGLOBAL(hglobal, out bool isSerializedObject);
+                     return !isSerializedObject
+                         ? stream
+                         : BinaryFormatUtilities.ReadObjectFromStream(stream, restrictDeserialization);
                 }
             }
 
@@ -132,7 +134,7 @@ public unsafe partial class DataObject
                     int index = 0;
 
                     // The object here can either be a stream or a serialized object. We identify a serialized object
-                    // by writing the bytes for the guid serializedObjectID at the front of the stream.
+                    // by writing the bytes for the GUID serializedObjectID at the front of the stream.
 
                     if (isSerializedObject = bytes.AsSpan().StartsWith(s_serializedObjectID))
                     {

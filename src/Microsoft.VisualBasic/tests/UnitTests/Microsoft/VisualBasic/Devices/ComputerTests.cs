@@ -3,9 +3,7 @@
 
 namespace Microsoft.VisualBasic.Devices.Tests;
 
-[Collection("Sequential")]
-[CollectionDefinition("Sequential", DisableParallelization = true)]
-[UISettings(MaxAttempts = 3)] // Try up to 3 times before failing.
+// This class does not access system singletons, it is safe to run in parallel.
 public class ComputerTests
 {
     [Fact]
