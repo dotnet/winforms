@@ -4,6 +4,7 @@
 Imports System.ComponentModel
 Imports System.Windows.Forms
 Imports FluentAssertions
+Imports Microsoft.DotNet.RemoteExecutor
 Imports Microsoft.VisualBasic.ApplicationServices
 Imports Xunit
 
@@ -89,17 +90,27 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Using
         End Sub
 
-        <Fact>
-        Public Sub Run_DoEvents()
+        Public Sub DoEvents_DoesNotThrow()
             Dim testCode As Action = Sub() DoEvents()
             testCode.Should.NotThrow()
         End Sub
 
         <Fact>
-        Public Sub Run_SingleInstanceNoStartupFormException()
-            IsSingleInstance = True
-            Dim testCode As Action = Sub() Run(commandLine:={"1"})
-            testCode.Should.Throw(Of NoStartupFormException)()
+        Public Sub Run_SingleInstance_ThrowsNoStartupFormException()
+            ' WindowsFormsApplicationBase.Run method can change process-wide settings, such as HighDpiMode,
+            ' it should run in a dedicated process.
+            If (RemoteExecutor.IsSupported) Then
+                Dim test As Action =
+                    Sub()
+                        IsSingleInstance = True
+                        Dim testCode As Action = Sub() Run(commandLine:={"1"})
+                        testCode.Should.Throw(Of NoStartupFormException)()
+                    End Sub
+
+                Using handle As RemoteInvokeHandle = RemoteExecutor.Invoke(test)
+                    handle.ExitCode.Should.Be(RemoteExecutor.SuccessExitCode)
+                End Using
+            End If
         End Sub
 
         <Fact>

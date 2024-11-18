@@ -173,34 +173,34 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
     [Theory]
     [MemberData(nameof(PrimitiveObjects_TheoryData))]
     [MemberData(nameof(KnownObjects_TheoryData))]
-    public void BinaryFormatUtilities_RoundTrip_Simple(object value) =>
+    public void RoundTrip_Simple(object value) =>
         RoundTripObject(value).Should().Be(value);
 
     [Theory]
     [MemberData(nameof(PrimitiveObjects_TheoryData))]
     [MemberData(nameof(KnownObjects_TheoryData))]
-    public void BinaryFormatUtilities_RoundTripRestrictedFormat_Simple(object value) =>
+    public void RoundTrip_RestrictedFormat_Simple(object value) =>
         RoundTripObject_RestrictedFormat(value).Should().Be(value);
 
     [Theory]
     [MemberData(nameof(NotSupportedException_TestData))]
-    public void BinaryFormatUtilities_RoundTrip_NotSupportedException(NotSupportedException value) =>
+    public void RoundTrip_NotSupportedException(NotSupportedException value) =>
         RoundTripObject(value).Should().BeEquivalentTo(value);
 
     [Theory]
     [MemberData(nameof(NotSupportedException_TestData))]
-    public void BinaryFormatUtilities_RoundTripRestrictedFormat_NotSupportedException(NotSupportedException value) =>
+    public void RoundTrip_RestrictedFormat_NotSupportedException(NotSupportedException value) =>
         RoundTripObject_RestrictedFormat(value).Should().BeEquivalentTo(value);
 
     [Fact]
-    public void BinaryFormatUtilities_RoundTrip_NotSupportedException_DataLoss()
+    public void RoundTrip_NotSupportedException_DataLoss()
     {
         NotSupportedException value = new("Error message", new ArgumentException());
         RoundTripObject(value).Should().BeEquivalentTo(new NotSupportedException("Error message", innerException: null));
     }
 
     [Fact]
-    public void BinaryFormatUtilities_RoundTripRestrictedFormat_NotSupportedException_DataLoss()
+    public void RoundTrip_RestrictedFormat_NotSupportedException_DataLoss()
     {
         NotSupportedException value = new("Error message", new ArgumentException());
         RoundTripObject_RestrictedFormat(value).Should().BeEquivalentTo(new NotSupportedException("Error message", innerException: null));
@@ -208,41 +208,41 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
 
     [Theory]
     [MemberData(nameof(PrimitiveListObjects_TheoryData))]
-    public void BinaryFormatUtilities_RoundTrip_PrimitiveList(IList value) =>
+    public void RoundTrip_PrimitiveList(IList value) =>
         RoundTripObject(value).Should().BeEquivalentTo(value);
 
     [Theory]
     [MemberData(nameof(PrimitiveListObjects_TheoryData))]
-    public void BinaryFormatUtilities_RoundTripRestrictedFormat_PrimitiveList(IList value) =>
+    public void RoundTrip_RestrictedFormat_PrimitiveList(IList value) =>
         RoundTripObject_RestrictedFormat(value).Should().BeEquivalentTo(value);
 
     [Theory]
     [MemberData(nameof(PrimitiveArrayObjects_TheoryData))]
-    public void BinaryFormatUtilities_RoundTrip_PrimitiveArray(Array value) =>
+    public void RoundTrip_PrimitiveArray(Array value) =>
         RoundTripObject(value).Should().BeEquivalentTo(value);
 
     [Theory]
     [MemberData(nameof(PrimitiveArrayListObjects_TheoryData))]
-    public void BinaryFormatUtilities_RoundTrip_PrimitiveArrayList(ArrayList value) =>
+    public void RoundTrip_PrimitiveArrayList(ArrayList value) =>
         RoundTripObject(value).Should().BeEquivalentTo(value);
 
     [Theory]
     [MemberData(nameof(PrimitiveArrayListObjects_TheoryData))]
-    public void BinaryFormatUtilities_RoundTripRestrictedFormat_PrimitiveArrayList(ArrayList value) =>
+    public void RoundTrip_RestrictedFormat_PrimitiveArrayList(ArrayList value) =>
         RoundTripObject_RestrictedFormat(value).Should().BeEquivalentTo(value);
 
     [Theory]
     [MemberData(nameof(PrimitiveTypeHashtables_TheoryData))]
-    public void BinaryFormatUtilities_RoundTrip_PrimitiveHashtable(Hashtable value) =>
+    public void RoundTrip_PrimitiveHashtable(Hashtable value) =>
         RoundTripObject(value).Should().BeEquivalentTo(value);
 
     [Theory]
     [MemberData(nameof(PrimitiveTypeHashtables_TheoryData))]
-    public void BinaryFormatUtilities_RoundTripRestrictedFormat_PrimitiveHashtable(Hashtable value) =>
+    public void RoundTrip_RestrictedFormat_PrimitiveHashtable(Hashtable value) =>
         RoundTripObject_RestrictedFormat(value).Should().BeEquivalentTo(value);
 
     [Fact]
-    public void BinaryFormatUtilities_RoundTrip_ImageList()
+    public void RoundTrip_ImageList()
     {
         using ImageList sourceList = new();
         using Bitmap image = new(10, 10);
@@ -257,7 +257,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
     }
 
     [Fact]
-    public void BinaryFormatUtilities_RoundTripRestrictedFormat_ImageList()
+    public void RoundTrip_RestrictedFormat_ImageList()
     {
         using ImageList sourceList = new();
         using Bitmap image = new(10, 10);
@@ -272,14 +272,14 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
     }
 
     [Fact]
-    public void BinaryFormatUtilities_RoundTrip_Bitmap()
+    public void RoundTrip_Bitmap()
     {
         using Bitmap value = new(10, 10);
         RoundTripObject(value).Should().BeOfType<Bitmap>().Subject.Size.Should().Be(value.Size);
     }
 
     [Fact]
-    public void BinaryFormatUtilities_RoundTripRestrictedFormat_Bitmap()
+    public void RoundTrip_RestrictedFormat_Bitmap()
     {
         using Bitmap value = new(10, 10);
         RoundTripObject_RestrictedFormat(value).Should().BeOfType<Bitmap>().Subject.Size.Should().Be(value.Size);
@@ -287,7 +287,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
 
     [Theory]
     [MemberData(nameof(Lists_UnsupportedTestData))]
-    public void BinaryFormatUtilities_RoundTrip_Unsupported(IList value)
+    public void RoundTrip_Unsupported(IList value)
     {
         ((Action)(() => WriteObjectToStream(value))).Should().Throw<NotSupportedException>();
 
@@ -302,7 +302,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
 
     [Theory]
     [MemberData(nameof(Lists_UnsupportedTestData))]
-    public void BinaryFormatUtilities_RoundTripRestrictedFormat_Unsupported(IList value)
+    public void RoundTrip_RestrictedFormat_Unsupported(IList value)
     {
         ((Action)(() => WriteObjectToStream(value, restrictSerialization: true))).Should().Throw<NotSupportedException>();
 

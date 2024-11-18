@@ -29,9 +29,9 @@ public unsafe partial class DataObject
             }
 
             /// <summary>
-            ///  Returns true if the tymed is useable.
+            ///  Returns true if the tymed is usable.
             /// </summary>
-            private static bool GetTymedUseable(TYMED tymed) => (tymed & AllowedTymeds) != 0;
+            private static bool GetTymedUsable(TYMED tymed) => (tymed & AllowedTymeds) != 0;
 
             HRESULT Com.IDataObject.Interface.GetData(FORMATETC* pformatetcIn, STGMEDIUM* pmedium)
             {
@@ -63,7 +63,7 @@ public unsafe partial class DataObject
 
                 *pmedium = default;
 
-                if (!GetTymedUseable((TYMED)pformatetcIn->tymed))
+                if (!GetTymedUsable((TYMED)pformatetcIn->tymed))
                 {
                     return HRESULT.DV_E_TYMED;
                 }
@@ -104,7 +104,7 @@ public unsafe partial class DataObject
                     return HRESULT.E_POINTER;
                 }
 
-                if (!GetTymedUseable((TYMED)pformatetc->tymed) || !GetTymedUseable(pmedium->tymed))
+                if (!GetTymedUsable((TYMED)pformatetc->tymed) || !GetTymedUsable(pmedium->tymed))
                 {
                     return HRESULT.DV_E_TYMED;
                 }
@@ -191,7 +191,7 @@ public unsafe partial class DataObject
                     return HRESULT.DV_E_DVASPECT;
                 }
 
-                if (!GetTymedUseable((TYMED)pformatetc->tymed))
+                if (!GetTymedUsable((TYMED)pformatetc->tymed))
                 {
                     return HRESULT.DV_E_TYMED;
                 }
