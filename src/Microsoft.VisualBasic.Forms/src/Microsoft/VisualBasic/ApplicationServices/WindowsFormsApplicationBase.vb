@@ -264,29 +264,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
         ''' <summary>
-        '''  The splash screen timeout specifies whether there is a minimum time that the splash
-        '''  screen should be displayed for. When not set then the splash screen is hidden
-        '''  as soon as the main form becomes active.
-        ''' </summary>
-        ''' <value>The minimum amount of time, in milliseconds, to display the splash screen.</value>
-        ''' <remarks>
-        '''  This property, although public, used to be set in an `Overrides Function OnInitialize` _before_
-        '''  calling `MyBase.OnInitialize`. We want to phase this out, and with the introduction of the
-        '''  ApplyApplicationDefaults events have it handled in that event, rather than as awkwardly
-        '''  as it is currently suggested to be used in the docs.
-        '''  First step for that is to make it hidden in IntelliSense.
-        ''' </remarks>
-        <EditorBrowsable(EditorBrowsableState.Never)>
-        Public Property MinimumSplashScreenDisplayTime() As Integer
-            Get
-                Return _minimumSplashExposure
-            End Get
-            Set(value As Integer)
-                _minimumSplashExposure = value
-            End Set
-        End Property
-
-        ''' <summary>
         '''  Informs My.Settings whether to save the settings on exit or not
         ''' </summary>
         Public Property SaveMySettingsOnExit() As Boolean
@@ -331,6 +308,29 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     Throw New ArgumentException(VbUtils.GetResourceString(SR.AppModel_SplashAndMainFormTheSame))
                 End If
                 _appContext.MainForm = value
+            End Set
+        End Property
+
+        ''' <summary>
+        '''  The splash screen timeout specifies whether there is a minimum time that the splash
+        '''  screen should be displayed for. When not set then the splash screen is hidden
+        '''  as soon as the main form becomes active.
+        ''' </summary>
+        ''' <value>The minimum amount of time, in milliseconds, to display the splash screen.</value>
+        ''' <remarks>
+        '''  This property, although public, used to be set in an `Overrides Function OnInitialize` _before_
+        '''  calling `MyBase.OnInitialize`. We want to phase this out, and with the introduction of the
+        '''  ApplyApplicationDefaults events have it handled in that event, rather than as awkwardly
+        '''  as it is currently suggested to be used in the docs.
+        '''  First step for that is to make it hidden in IntelliSense.
+        ''' </remarks>
+        <EditorBrowsable(EditorBrowsableState.Never)>
+        Public Property MinimumSplashScreenDisplayTime() As Integer
+            Get
+                Return _minimumSplashExposure
+            End Get
+            Set(value As Integer)
+                _minimumSplashExposure = value
             End Set
         End Property
 
@@ -486,54 +486,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 End If
             End RaiseEvent
         End Event
-
-        ''' <summary>
-        '''  Generates the name for the remote singleton that we use to channel multiple instances
-        '''  to the same application model thread.
-        ''' </summary>
-        ''' <param name="entry"></param>
-        ''' <returns>
-        '''  A string unique to the application that should be the same for versions of
-        '''  the application that have the same Major and Minor Version Number.
-        ''' </returns>
-        ''' <remarks>If GUID Attribute does not exist fall back to unique ModuleVersionId.</remarks>
-        Private Shared Function GetApplicationInstanceID(entry As Assembly) As String
-
-            Dim guidAttrib As GuidAttribute = entry.GetCustomAttribute(Of GuidAttribute)()
-
-            If guidAttrib IsNot Nothing Then
-
-                Dim version As Version = entry.GetName.Version
-
-                If version IsNot Nothing Then
-                    Return $"{guidAttrib.Value}{version.Major}.{version.Minor}"
-                Else
-                    Return guidAttrib.Value
-                End If
-            End If
-
-            Return entry.ManifestModule.ModuleVersionId.ToString()
-        End Function
-
-        ''' <summary>
-        '''  Validates that the value being passed as an AuthenticationMode enum is a legal value
-        ''' </summary>
-        ''' <param name="value"></param>
-        Private Shared Sub ValidateAuthenticationModeEnumValue(value As AuthenticationMode, paramName As String)
-            If value < AuthenticationMode.Windows OrElse value > AuthenticationMode.ApplicationDefined Then
-                Throw New InvalidEnumArgumentException(paramName, value, GetType(AuthenticationMode))
-            End If
-        End Sub
-
-        ''' <summary>
-        '''  Validates that the value being passed as an ShutdownMode enum is a legal value
-        ''' </summary>
-        ''' <param name="value"></param>
-        Private Shared Sub ValidateShutdownModeEnumValue(value As ShutdownMode, paramName As String)
-            If value < ShutdownMode.AfterMainFormCloses OrElse value > ShutdownMode.AfterAllFormsClose Then
-                Throw New InvalidEnumArgumentException(paramName, value, GetType(ShutdownMode))
-            End If
-        End Sub
 
         ''' <summary>
         '''  Displays the splash screen. We get called here from a different thread than what the
@@ -1012,6 +964,54 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     ' while the main form gets its act together.
                     Task.Run(AddressOf DisplaySplash)
                 End If
+            End If
+        End Sub
+
+        ''' <summary>
+        '''  Generates the name for the remote singleton that we use to channel multiple instances
+        '''  to the same application model thread.
+        ''' </summary>
+        ''' <param name="entry"></param>
+        ''' <returns>
+        '''  A string unique to the application that should be the same for versions of
+        '''  the application that have the same Major and Minor Version Number.
+        ''' </returns>
+        ''' <remarks>If GUID Attribute does not exist fall back to unique ModuleVersionId.</remarks>
+        Friend Shared Function GetApplicationInstanceID(entry As Assembly) As String
+
+            Dim guidAttrib As GuidAttribute = entry.GetCustomAttribute(Of GuidAttribute)()
+
+            If guidAttrib IsNot Nothing Then
+
+                Dim version As Version = entry.GetName.Version
+
+                If version IsNot Nothing Then
+                    Return $"{guidAttrib.Value}{version.Major}.{version.Minor}"
+                Else
+                    Return guidAttrib.Value
+                End If
+            End If
+
+            Return entry.ManifestModule.ModuleVersionId.ToString()
+        End Function
+
+        ''' <summary>
+        '''  Validates that the value being passed as an AuthenticationMode enum is a legal value
+        ''' </summary>
+        ''' <param name="value"></param>
+        Friend Shared Sub ValidateAuthenticationModeEnumValue(value As AuthenticationMode, paramName As String)
+            If value < AuthenticationMode.Windows OrElse value > AuthenticationMode.ApplicationDefined Then
+                Throw New InvalidEnumArgumentException(paramName, value, GetType(AuthenticationMode))
+            End If
+        End Sub
+
+        ''' <summary>
+        '''  Validates that the value being passed as an ShutdownMode enum is a legal value
+        ''' </summary>
+        ''' <param name="value"></param>
+        Friend Shared Sub ValidateShutdownModeEnumValue(value As ShutdownMode, paramName As String)
+            If value < ShutdownMode.AfterMainFormCloses OrElse value > ShutdownMode.AfterAllFormsClose Then
+                Throw New InvalidEnumArgumentException(paramName, value, GetType(ShutdownMode))
             End If
         End Sub
 
