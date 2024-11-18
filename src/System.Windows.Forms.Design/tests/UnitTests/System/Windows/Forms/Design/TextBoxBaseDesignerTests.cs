@@ -58,9 +58,8 @@ public class TextBoxBaseDesignerTests : IDisposable
 
         baselineSnapLine.Should().NotBeNull();
         baselineSnapLine!.Priority.Should().Be(SnapLinePriority.Medium);
-        
         int expectedBaseline = DesignerUtils.GetTextBaseline(_textbox, Drawing.ContentAlignment.TopLeft) + expectedBaselineOffset;
-
+        
         baselineSnapLine.Offset.Should().Be(expectedBaseline);
     }
 
@@ -73,13 +72,12 @@ public class TextBoxBaseDesignerTests : IDisposable
         _textbox.Multiline = multiline;
         _textbox.AutoSize = autoSize;
         _designer.Initialize(_textbox);
-        SelectionRules rules = _designer.SelectionRules;
 
-        rules.Should().HaveFlag(expectedRules);
+        _designer.SelectionRules.Should().HaveFlag(expectedRules);
     }
 
     [Fact]
-    public void InitializeNewComponent_ClearsTextProperty_And_NotClearIfReadOnly()
+    public void InitializeNewComponent_ClearsTextProperty()
     {
         _textbox.Text.Should().BeEmpty();
 
