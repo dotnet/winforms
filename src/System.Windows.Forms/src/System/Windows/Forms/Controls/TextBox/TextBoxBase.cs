@@ -1741,7 +1741,9 @@ public abstract partial class TextBoxBase : Control
 
             if (IsAccessibilityObjectCreated)
             {
-                AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_Text_TextSelectionChangedEventId);
+                AccessibilityObject.RaiseAutomationEvent(e == 0
+                    ? UIA_EVENT_ID.UIA_AutomationFocusChangedEventId
+                    : UIA_EVENT_ID.UIA_Text_TextSelectionChangedEventId);
             }
         }
         else
