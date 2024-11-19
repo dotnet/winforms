@@ -9,6 +9,9 @@ using System.Runtime.InteropServices;
 
 namespace System.Text;
 
+/// <summary>
+///  String builder struct that allows using stack space for small strings.
+/// </summary>
 internal ref partial struct ValueStringBuilder
 {
     private char[]? _arrayToReturnToPool;
@@ -53,11 +56,14 @@ internal ref partial struct ValueStringBuilder
     }
 
     /// <summary>
-    ///  Get a pinnable reference to the builder.
-    ///  Does not ensure there is a null char after <see cref="Length"/>
-    ///  This overload is pattern matched in the C# 7.3+ compiler so you can omit
-    ///  the explicit method call, and write eg "fixed (char* c = builder)"
+    ///  Get a pinnable reference to the builder. Does not ensure there is a null char after <see cref="Length"/>
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   This overload is pattern matched in the C# 7.3+ compiler so you can omit
+    ///   the explicit method call, and write eg "fixed (char* c = builder)"
+    ///  </para>
+    /// </remarks>
     public readonly ref char GetPinnableReference() => ref MemoryMarshal.GetReference(_chars);
 
     /// <summary>
@@ -91,11 +97,13 @@ internal ref partial struct ValueStringBuilder
         return s;
     }
 
-    /// <summary>Returns the underlying storage of the builder.</summary>
+    /// <summary>
+    ///  Returns the underlying storage of the builder.
+    /// </summary>
     public readonly Span<char> RawChars => _chars;
 
     /// <summary>
-    /// Returns a span around the contents of the builder.
+    ///  Returns a span around the contents of the builder.
     /// </summary>
     /// <param name="terminate">Ensures that the builder has a null char after <see cref="Length"/></param>
     public ReadOnlySpan<char> AsSpan(bool terminate)
@@ -186,8 +194,9 @@ internal ref partial struct ValueStringBuilder
         }
 
         int pos = _pos;
-        if (s.Length == 1 && (uint)pos < (uint)_chars.Length) // very common case, e.g. appending strings from NumberFormatInfo like separators, percent symbols, etc.
+        if (s.Length == 1 && (uint)pos < (uint)_chars.Length)
         {
+            // Very common case, e.g. appending strings from NumberFormatInfo like separators, percent symbols, etc.
             _chars[pos] = s[0];
             _pos = pos + 1;
         }
@@ -275,12 +284,12 @@ internal ref partial struct ValueStringBuilder
     }
 
     /// <summary>
-    /// Resize the internal buffer either by doubling current buffer size or
-    /// by adding <paramref name="additionalCapacityBeyondPos"/> to
+    ///  Resize the internal buffer either by doubling current buffer size or
+    ///  by adding <paramref name="additionalCapacityBeyondPos"/> to
     /// <see cref="_pos"/> whichever is greater.
     /// </summary>
     /// <param name="additionalCapacityBeyondPos">
-    /// Number of chars requested beyond current position.
+    ///  Number of chars requested beyond current position.
     /// </param>
     [MethodImpl(MethodImplOptions.NoInlining)]
     private void Grow(int additionalCapacityBeyondPos)

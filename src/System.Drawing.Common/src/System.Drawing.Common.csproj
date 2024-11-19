@@ -40,15 +40,8 @@
     <None Include="resources.targets" />
   </ItemGroup>
 
-  <!-- DesignTimeBuild requires all the TargetFramework Derived Properties to not be present in the first property group. -->
-  <PropertyGroup Condition="$([MSBuild]::GetTargetFrameworkIdentifier('$(TargetFramework)')) == '.NETStandard'">
-    <IncludeInternalObsoleteAttribute>true</IncludeInternalObsoleteAttribute>
-  </PropertyGroup>
-
   <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp'">
     <Compile Include="**\*.cs" Exclude="Special\**\*.cs" />
-    <Compile Include="..\..\Common\src\LocalAppContextSwitches.Common.cs" Link="System\LocalAppContextSwitches.Common.cs" />
-    <Compile Include="..\..\Common\src\ValueStringBuilder.cs" Link="System\Text\ValueStringBuilder.cs" />
 
     <Content Include="NativeMethods.json" />
     <Content Include="NativeMethods.txt" />
@@ -70,29 +63,30 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net7.0'))">
-    <Compile Include="..\..\Common\src\DisableRuntimeMarshalling.cs" Link="Common\DisableRuntimeMarshalling.cs" />
-  </ItemGroup>
-
   <ItemGroup Condition="'$(TargetFrameworkIdentifier)' != '.NETStandard'">
     <Compile Include="Special\Forwards.cs" />
   </ItemGroup>
 
+  <!-- DesignTimeBuild requires all the TargetFramework Derived Properties to not be present in the first property group. -->
+  <PropertyGroup Condition="$([MSBuild]::GetTargetFrameworkIdentifier('$(TargetFramework)')) == '.NETStandard'">
+    <!-- Suppress CS0436 to allow ObsoleteAttribute to be internally defined and used in .NET Standard. -->
+    <NoWarn>$(NoWarn);CS0436</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard'">
     <Compile Include="Special\NotSupported.cs" />
-    <Compile Include="$(RepoRoot)src\Common\src\NullableAttributes.cs" />
+    <Compile Include="Special\NullableAttributes.cs" />
+    <Compile Include="Special\ObsoleteAttribute.cs" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFrameworkIdentifier)' != '.NETCoreApp'">
-    <Compile Include="..\..\Common\src\RequiresUnreferencedCodeAttribute.cs" Link="Common\RequiresUnreferencedCodeAttribute.cs" />
-    <Compile Include="..\..\Common\src\UnconditionalSuppressMessageAttribute.cs" Link="Common\UnconditionalSuppressMessageAttribute.cs" />
+    <Compile Include="Special\RequiresUnreferencedCodeAttribute.cs" />
+    <Compile Include="Special\UnconditionalSuppressMessageAttribute.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Include="Special\AssemblyRef.cs" />
   </ItemGroup>
-
-  <Import Project="..\..\Shared\DrawingInterop\DrawingInterop.projitems" Label="Shared" Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp'" />
 
   <Import Project="packaging.targets" />
   <Import Project="resources.targets" />
