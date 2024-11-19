@@ -18,6 +18,11 @@ public readonly ref struct AppContextSwitchScope
     private readonly bool _originalState;
 
     public AppContextSwitchScope(string switchName, bool enable)
+        : this (switchName, getDefaultValue: null, enable)
+    {
+    }
+
+    public AppContextSwitchScope(string switchName, Func<bool>? getDefaultValue, bool enable)
     {
         if (!AppContext.TryGetSwitch(AppContextSwitchNames.LocalAppContext_DisableCaching, out bool isEnabled)
             || !isEnabled)
@@ -26,7 +31,10 @@ public readonly ref struct AppContextSwitchScope
             throw new InvalidOperationException("LocalAppContext switch caching is not disabled.");
         }
 
-        AppContext.TryGetSwitch(switchName, out _originalState);
+        if (!AppContext.TryGetSwitch(switchName, out _originalState))
+        {
+            _originalState = getDefaultValue is not null && getDefaultValue();
+        }
 
         AppContext.SetSwitch(switchName, enable);
         if (!AppContext.TryGetSwitch(switchName, out isEnabled) || isEnabled != enable)

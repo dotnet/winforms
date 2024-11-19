@@ -91,48 +91,47 @@ internal static partial class LocalAppContextSwitches
         {
             cachedSwitchValue = isSwitchEnabled ? 1 /*true*/ : -1 /*false*/;
         }
+        else if (!hasSwitch)
+        {
+            AppContext.SetSwitch(switchName, isSwitchEnabled);
+        }
 
         return isSwitchEnabled;
+    }
 
-        static bool GetSwitchDefaultValue(string switchName)
+    private static bool GetSwitchDefaultValue(string switchName)
+    {
+        if (switchName == TreeNodeCollectionAddRangeRespectsSortOrderSwitchName)
         {
-            if (TargetFrameworkName is not { } framework)
-            {
-                return false;
-            }
+            return true;
+        }
 
-            if (switchName == NoClientNotificationsSwitchName)
-            {
-                return false;
-            }
+        if (TargetFrameworkName is not { } framework)
+        {
+            return false;
+        }
 
-            if (switchName == TreeNodeCollectionAddRangeRespectsSortOrderSwitchName)
+        if (framework.Version.Major >= 8)
+        {
+            // Behavior changes added in .NET 8
+
+            if (switchName == ScaleTopLevelFormMinMaxSizeForDpiSwitchName)
             {
                 return true;
             }
 
-            if (framework.Version.Major >= 8)
+            if (switchName == TrackBarModernRenderingSwitchName)
             {
-                // Behavior changes added in .NET 8
-
-                if (switchName == ScaleTopLevelFormMinMaxSizeForDpiSwitchName)
-                {
-                    return true;
-                }
-
-                if (switchName == TrackBarModernRenderingSwitchName)
-                {
-                    return true;
-                }
-
-                if (switchName == ServicePointManagerCheckCrlSwitchName)
-                {
-                    return true;
-                }
+                return true;
             }
 
-            return false;
+            if (switchName == ServicePointManagerCheckCrlSwitchName)
+            {
+                return true;
+            }
         }
+
+        return false;
     }
 
     /// <summary>

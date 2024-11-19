@@ -2,11 +2,26 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports FluentAssertions
+Imports Microsoft.VisualBasic.ApplicationServices
 Imports Xunit
 
 Namespace Microsoft.VisualBasic.Forms.Tests
 
     Public Class TestUtilitiesTests
+
+        <WinFormsFact>
+        Public Sub EnumTestInvalidDataIteratorTests()
+            Dim testClass As New EnumTestValidData(Of AuthenticationMode)
+            testClass.IEnumerable_GetEnumerator.Should.NotBeNull()
+            testClass.Any.Should.BeTrue()
+        End Sub
+
+        <WinFormsFact>
+        Public Sub EnumTestValidDataIteratorTests()
+            Dim testClass As New EnumTestValidData(Of AuthenticationMode)
+            testClass.IEnumerable_GetEnumerator.Should.NotBeNull()
+            testClass.Any.Should.BeTrue()
+        End Sub
 
         <WinFormsFact>
         Public Sub TimeTestDataIteratorTests()

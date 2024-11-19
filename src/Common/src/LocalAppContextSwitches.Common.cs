@@ -30,7 +30,7 @@ internal static partial class LocalAppContextSwitches
         bool hasSwitch = AppContext.TryGetSwitch(switchName, out bool isSwitchEnabled);
         if (!hasSwitch)
         {
-            isSwitchEnabled = GetSwitchDefaultValue(switchName);
+            isSwitchEnabled = false;
         }
 
         AppContext.TryGetSwitch("TestSwitch.LocalAppContext.DisableCaching", out bool disableCaching);
@@ -38,23 +38,11 @@ internal static partial class LocalAppContextSwitches
         {
             cachedSwitchValue = isSwitchEnabled ? 1 /*true*/ : -1 /*false*/;
         }
+        else if (!hasSwitch)
+        {
+            AppContext.SetSwitch(switchName, isSwitchEnabled);
+        }
 
         return isSwitchEnabled;
-    }
-
-    // Provides default values for switches if they're not always false by default
-    private static bool GetSwitchDefaultValue(string switchName)
-    {
-        if (switchName == "Switch.System.Runtime.Serialization.SerializationGuard")
-        {
-            return true;
-        }
-
-        if (switchName == "System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization")
-        {
-            return true;
-        }
-
-        return false;
     }
 }

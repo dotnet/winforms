@@ -99,27 +99,16 @@ public class DragEventArgsTests
     private class CustomDataObject : IDataObject
     {
         public object GetData(string format, bool autoConvert) => throw new NotImplementedException();
-
         public object GetData(string format) => throw new NotImplementedException();
-
         public object GetData(Type format) => throw new NotImplementedException();
-
         public void SetData(string format, bool autoConvert, object data) => throw new NotImplementedException();
-
         public void SetData(string format, object data) => throw new NotImplementedException();
-
         public void SetData(Type format, object data) => throw new NotImplementedException();
-
         public void SetData(object data) => throw new NotImplementedException();
-
         public bool GetDataPresent(string format, bool autoConvert) => throw new NotImplementedException();
-
         public bool GetDataPresent(string format) => throw new NotImplementedException();
-
         public bool GetDataPresent(Type format) => throw new NotImplementedException();
-
         public string[] GetFormats(bool autoConvert) => throw new NotImplementedException();
-
         public string[] GetFormats() => throw new NotImplementedException();
     }
 }
