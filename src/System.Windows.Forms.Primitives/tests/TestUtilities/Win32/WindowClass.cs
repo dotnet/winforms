@@ -59,7 +59,7 @@ internal class WindowClass
 
         if (icon.IsNull)
         {
-            icon = PInvokeCore.LoadIcon((HINSTANCE)0, (PCWSTR)(char*)PInvokeCore.IDI_APPLICATION);
+            icon = PInvokeCore.LoadIcon((HINSTANCE)(nint)0, (PCWSTR)(char*)PInvokeCore.IDI_APPLICATION);
         }
         else if (icon == (-1))
         {
@@ -68,7 +68,7 @@ internal class WindowClass
 
         if (cursor == default)
         {
-            cursor = PInvoke.LoadCursor((HINSTANCE)0, (PCWSTR)(char*)PInvoke.IDC_ARROW);
+            cursor = PInvoke.LoadCursor((HINSTANCE)(nint)0, (PCWSTR)(char*)PInvoke.IDC_ARROW);
         }
         else if (cursor == (-1))
         {
@@ -172,7 +172,7 @@ internal class WindowClass
                     nHeight: bounds.Height,
                     hWndParent: parentWindow,
                     hMenu: menuHandle,
-                    hInstance: (HINSTANCE)0,
+                    hInstance: (HINSTANCE)(nint)0,
                     lpParam: (void*)parameters);
             }
             else
@@ -190,7 +190,7 @@ internal class WindowClass
                         nHeight: bounds.Height,
                         hWndParent: parentWindow,
                         hMenu: menuHandle,
-                        hInstance: (HINSTANCE)0,
+                        hInstance: (HINSTANCE)(nint)0,
                         lpParam: (void*)parameters);
                 }
             }

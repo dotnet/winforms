@@ -1,1 +1,22 @@
 System.Windows.Forms.DataGridViewCellStyle.Font.get -> System.Drawing.Font?
+[WFO5001]static System.Windows.Forms.Application.SetColorMode(System.Windows.Forms.SystemColorMode systemColorMode) -> void
+[WFO5001]System.Windows.Forms.Form.FormBorderColorChanged -> System.EventHandler?
+[WFO5001]System.Windows.Forms.Form.FormCaptionBackColorChanged -> System.EventHandler?
+[WFO5001]System.Windows.Forms.Form.FormCaptionTextColorChanged -> System.EventHandler?
+[WFO5001]System.Windows.Forms.Form.FormCornerPreferenceChanged -> System.EventHandler?
+[WFO5001]System.Windows.Forms.FormCornerPreference
+[WFO5001]System.Windows.Forms.FormCornerPreference.Default = 0 -> System.Windows.Forms.FormCornerPreference
+[WFO5001]System.Windows.Forms.FormCornerPreference.DoNotRound = 1 -> System.Windows.Forms.FormCornerPreference
+[WFO5001]System.Windows.Forms.FormCornerPreference.Round = 2 -> System.Windows.Forms.FormCornerPreference
+[WFO5001]System.Windows.Forms.FormCornerPreference.RoundSmall = 3 -> System.Windows.Forms.FormCornerPreference
+[WFO5001]System.Windows.Forms.SystemColorMode
+[WFO5001]System.Windows.Forms.SystemColorMode.Classic = 0 -> System.Windows.Forms.SystemColorMode
+[WFO5001]System.Windows.Forms.SystemColorMode.Dark = 2 -> System.Windows.Forms.SystemColorMode
+[WFO5001]System.Windows.Forms.SystemColorMode.System = 1 -> System.Windows.Forms.SystemColorMode
+[WFO5001]virtual System.Windows.Forms.Form.OnFormBorderColorChanged(System.EventArgs! e) -> void
+[WFO5001]virtual System.Windows.Forms.Form.OnFormCaptionBackColorChanged(System.EventArgs! e) -> void
+[WFO5001]virtual System.Windows.Forms.Form.OnFormCaptionTextColorChanged(System.EventArgs! e) -> void
+[WFO5001]virtual System.Windows.Forms.Form.OnFormCornerPreferenceChanged(System.EventArgs! e) -> void
+[WFO5002]System.Windows.Forms.Form.ShowAsync(System.Windows.Forms.IWin32Window? owner = null) -> System.Threading.Tasks.Task!
+[WFO5002]System.Windows.Forms.Form.ShowDialogAsync() -> System.Threading.Tasks.Task<System.Windows.Forms.DialogResult>!
+[WFO5002]System.Windows.Forms.Form.ShowDialogAsync(System.Windows.Forms.IWin32Window! owner) -> System.Threading.Tasks.Task<System.Windows.Forms.DialogResult>!

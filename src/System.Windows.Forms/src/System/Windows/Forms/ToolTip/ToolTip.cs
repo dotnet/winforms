@@ -2323,7 +2323,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
 
                     using Graphics graphics = paintScope.HDC.CreateGraphics();
 
-                    IWin32Window? window = GetCurrentToolWindow();
+                    Control? window = GetCurrentToolWindow();
                     if (window is not null)
                     {
                         Font font;

@@ -142,7 +142,7 @@ public partial class NativeWindow
                 // A system defined Window class was specified, get its info.
                 fixed (char* n = localClassName)
                 {
-                    if (!PInvoke.GetClassInfo((HINSTANCE)0, n, &windowClass))
+                    if (!PInvoke.GetClassInfo((HINSTANCE)(nint)0, n, &windowClass))
                     {
                         throw new Win32Exception(Marshal.GetLastWin32Error(), SR.InvalidWndClsName);
                     }

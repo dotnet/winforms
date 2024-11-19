@@ -357,7 +357,7 @@ public unsafe partial class DataObject
                 {
                     Span<byte> span = new(buffer, size);
                     stream.Position = 0;
-                    stream.Read(span);
+                    stream.ReadExactly(span);
                 }
                 finally
                 {

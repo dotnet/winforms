@@ -2858,7 +2858,7 @@ public partial class RichTextBox : TextBoxBase
             {
                 long streamStart = _editStream.Position;
                 byte[] bytes = new byte[SZ_RTF_TAG.Length];
-                _editStream.Read(bytes, (int)streamStart, SZ_RTF_TAG.Length);
+                _editStream.ReadExactly(bytes, (int)streamStart, SZ_RTF_TAG.Length);
 
                 // Encode using the default encoding.
                 string str = (CodePagesEncodingProvider.Instance.GetEncoding(0) ?? Encoding.UTF8).GetString(bytes);

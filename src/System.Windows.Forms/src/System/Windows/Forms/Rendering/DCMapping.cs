@@ -28,7 +28,10 @@ internal readonly struct DCMapping : IDisposable
 
     public unsafe DCMapping(HDC hdc, Rectangle bounds)
     {
-        ArgumentNullException.ThrowIfNull(hdc);
+        if (hdc.IsNull)
+        {
+            throw new ArgumentNullException(nameof(hdc));
+        }
 
         _hdc = hdc;
         _savedState = PInvokeCore.SaveDC(hdc);

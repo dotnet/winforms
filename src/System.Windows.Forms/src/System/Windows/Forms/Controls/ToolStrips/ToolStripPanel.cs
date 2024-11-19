@@ -993,7 +993,7 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
 
             toolStripToDrag.PerformLayout();
 #if DEBUG
-            ISupportToolStripPanel draggedControl = toolStripToDrag;
+            ToolStrip draggedControl = toolStripToDrag;
             if (draggedControl.IsCurrentlyDragging)
             {
                 Debug_VerifyNoOverlaps();

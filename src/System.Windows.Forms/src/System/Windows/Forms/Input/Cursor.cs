@@ -35,7 +35,7 @@ public sealed class Cursor : IDisposable, ISerializable, IHandle<HICON>, IHandle
         GC.SuppressFinalize(this);
         _freeHandle = false;
         CursorsProperty = cursorsProperty;
-        _handle = PInvoke.LoadCursor((HINSTANCE)0, nResourceId);
+        _handle = PInvoke.LoadCursor((HINSTANCE)(nint)0, nResourceId);
         if (_handle.IsNull)
         {
             throw new Win32Exception(string.Format(SR.FailedToLoadCursor, Marshal.GetLastWin32Error()));
@@ -474,7 +474,7 @@ public sealed class Cursor : IDisposable, ISerializable, IHandle<HICON>, IHandle
 
     public static bool operator !=(Cursor? left, Cursor? right) => !(left == right);
 
-    public override int GetHashCode() => (int)_handle.Value;
+    public override unsafe int GetHashCode() => (int)_handle.Value;
 
     public override bool Equals(object? obj) => obj is Cursor cursor && this == cursor;
 }
