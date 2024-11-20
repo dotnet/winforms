@@ -35,7 +35,7 @@ public sealed class Cursor : IDisposable, ISerializable, IHandle<HICON>, IHandle
         GC.SuppressFinalize(this);
         _freeHandle = false;
         CursorsProperty = cursorsProperty;
-        _handle = PInvoke.LoadCursor((HINSTANCE)(nint)0, nResourceId);
+        _handle = PInvoke.LoadCursor(HINSTANCE.Null, nResourceId);
         if (_handle.IsNull)
         {
             throw new Win32Exception(string.Format(SR.FailedToLoadCursor, Marshal.GetLastWin32Error()));

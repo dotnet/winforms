@@ -95,7 +95,7 @@ internal partial class PropertyGridView
                 _mouseHookHandle = PInvoke.SetWindowsHookEx(
                     WINDOWS_HOOK_ID.WH_MOUSE,
                     (delegate* unmanaged[Stdcall]<int, WPARAM, LPARAM, LRESULT>)hook,
-                    (HINSTANCE)(nint)0,
+                    HINSTANCE.Null,
                     PInvokeCore.GetCurrentThreadId());
 
                 Debug.Assert(!_mouseHookHandle.IsNull, "Failed to install mouse hook");

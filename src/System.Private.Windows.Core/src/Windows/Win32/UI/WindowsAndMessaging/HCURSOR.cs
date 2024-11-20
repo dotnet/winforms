@@ -3,11 +3,11 @@
 
 namespace Windows.Win32.UI.WindowsAndMessaging;
 
-internal partial struct HCURSOR : IHandle<HCURSOR>
+internal unsafe partial struct HCURSOR : IHandle<HCURSOR>
 {
     HCURSOR IHandle<HCURSOR>.Handle => this;
     object? IHandle<HCURSOR>.Wrapper => null;
 
-    public static unsafe explicit operator HCURSOR(HANDLE handle) => new((nint)handle);
-    public static unsafe implicit operator HANDLE(HCURSOR handle) => new((nint)handle);
+    public static explicit operator HCURSOR(HANDLE handle) => new((nint)handle);
+    public static implicit operator HANDLE(HCURSOR handle) => new((nint)handle);
 }
