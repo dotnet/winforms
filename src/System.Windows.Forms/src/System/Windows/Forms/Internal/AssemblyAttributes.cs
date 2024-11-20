@@ -8,7 +8,7 @@ using System.Runtime.CompilerServices;
 [assembly: Dependency("System,", LoadHint.Always)]
 [assembly: Dependency("System.Drawing,", LoadHint.Always)]
 [assembly: Dependency("System.Core", LoadHint.Sometimes)]
-// This is now trun on by default, use source file NO_RUNTIMECOMPATIBILITY_ATTRIBUTE flag to control this
+// This is now on by default, use source file NO_RUNTIMECOMPATIBILITY_ATTRIBUTE flag to control this
 // [assembly:RuntimeCompatibility(WrapNonExceptionThrows = true)]
 [assembly: StringFreezing]
 [assembly: System.Runtime.InteropServices.TypeLibVersion(2, 4)]
