@@ -126,19 +126,22 @@ public class ToolStripItemCollectionTests
     }
 
     [WinFormsFact]
-    public void ToolStripItemCollection_AddRange_ToolStripItemCollection_WithItems_Success()
+    public void ToolStripItemCollection_AddRange_ToolStripItemCollection_SameOwner_Success()
     {
         using ToolStrip toolStrip = new();
 
         // Create a ToolStripItemCollection with 2 items
-        ToolStripItemCollection itemCollection = new(toolStrip, new[]
-         {
+        ToolStripItemCollection itemCollection = new(toolStrip,
+            [
             new ToolStripButton("Button 1"),
             new ToolStripButton("Button 2")
-        });
+            ]);
+
+        toolStrip.Items.Count.Should().Be(0);
 
         toolStrip.Items.AddRange(itemCollection);
 
+        itemCollection.Count.Should().Be(2);
         toolStrip.Items.Count.Should().Be(2);
 
         toolStrip.Items[0].Text.Should().Be("Button 1");
