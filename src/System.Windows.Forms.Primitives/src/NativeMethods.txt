@@ -259,6 +259,7 @@ HideCaret
 HitTestThemeBackground
 HT*
 HTML_HELP_COMMAND
+HtmlHelp
 HTREEITEM
 IAccessible
 IAccessibleEx
