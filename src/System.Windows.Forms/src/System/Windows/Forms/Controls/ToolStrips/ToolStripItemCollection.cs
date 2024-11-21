@@ -154,7 +154,7 @@ public class ToolStripItemCollection : ArrangedElementCollection, IList
             // Create a temporary list to avoid modifying the original collection during iteration.
             // This ensures that the collection is not altered while it is being iterated over,
             // preventing issues such as InvalidOperationException.
-            var itemsToAdd = toolStripItems.Cast<ToolStripItem>().ToList();
+            var itemsToAdd = toolStripItems.InnerList.ToArray();
             foreach (ToolStripItem item in itemsToAdd)
             {
                 Add(item);
