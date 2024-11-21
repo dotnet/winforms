@@ -264,7 +264,7 @@ dotnet_diagnostic.IDE0057.severity = suggestion
 dotnet_diagnostic.IDE0058.severity = silent
 
 # IDE0059: Unnecessary assignment of a value
-dotnet_diagnostic.IDE0059.severity = none # TODO: warning
+dotnet_diagnostic.IDE0059.severity = suggestion # TODO: warning
 
 # IDE0060: Remove unused parameter
 dotnet_diagnostic.IDE0060.severity = silent
@@ -1277,7 +1277,7 @@ dotnet_diagnostic.CA5405.severity = error
 dotnet_diagnostic.CS1573.severity = none
 
 # IL3000: Avoid using accessing Assembly file path when publishing as a single-file
-dotnet_diagnostic.IL3000.severity = none # TODO: warning
+dotnet_diagnostic.IL3000.severity = warning
 
 # IL3001: Avoid using accessing Assembly file path when publishing as a single-file
 dotnet_diagnostic.IL3001.severity = warning
@@ -1563,7 +1563,7 @@ dotnet_diagnostic.SA1300.severity = none
 dotnet_diagnostic.SA1301.severity = none
 
 # SA1302: Interface names should begin with I
-dotnet_diagnostic.SA1302.severity = none # TODO: warning
+dotnet_diagnostic.SA1302.severity = warning
 
 # SA1303: Const field names should begin with upper-case letter
 dotnet_diagnostic.SA1303.severity = none
@@ -1617,7 +1617,7 @@ dotnet_diagnostic.SA1402.severity = none
 dotnet_diagnostic.SA1403.severity = none
 
 # SA1404: Code analysis suppression should have justification
-dotnet_diagnostic.SA1404.severity = none # TODO: warning
+dotnet_diagnostic.SA1404.severity = warning
 
 # SA1405: Debug.Assert should provide message text
 dotnet_diagnostic.SA1405.severity = none
@@ -2251,6 +2251,9 @@ dotnet_diagnostic.CA2302.severity = none
 
 # CA5394: Do not use insecure randomness
 dotnet_diagnostic.CA5394.severity = none
+
+# IL3000: Avoid using accessing Assembly file path when publishing as a single-file
+dotnet_diagnostic.IL3000.severity = none
 
 # SA1115: Parameter should begin on the line after the previous parameter
 dotnet_diagnostic.SA1115.severity = none

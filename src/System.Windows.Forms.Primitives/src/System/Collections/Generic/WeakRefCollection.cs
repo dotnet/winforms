@@ -37,7 +37,7 @@ internal sealed class WeakRefCollection<T>() : IEnumerable<T> where T : class
     {
         for (int i = Count - 1; i >= 0; i--)
         {
-            if (!_list[i].TryGetTarget(out T? target))
+            if (!_list[i].TryGetTarget(out T? _))
             {
                 _list.RemoveAt(i);
             }

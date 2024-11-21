@@ -1390,7 +1390,10 @@ namespace System.Windows.Forms.Design
         ///  use that in preference to using the Type class (since this service can more
         ///  reliably instantiate project level types).
         /// </devdoc>
-        [SuppressMessage("Trimming", "IL2096:Call to 'Type.GetType' method can perform case insensitive lookup of the type, currently trimming can not guarantee presence of all the matching types.", Justification = "<Pending>")]
+        [SuppressMessage(
+            "Trimming",
+            "IL2096:Call to 'Type.GetType' method can perform case insensitive lookup of the type, currently trimming can not guarantee presence of all the matching types.",
+            Justification = "No known workaround.")]
         private Type? GetType(string name, bool throwOnError, bool ignoreCase)
         {
             if (_typeResolutionService is not null)

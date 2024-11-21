@@ -499,22 +499,14 @@ public partial class Control
         /// <inheritdoc cref="IOleObject.EnumVerbs(IEnumOLEVERB**)"/>
         internal static IEnumOLEVERB* EnumVerbs()
         {
-            if (s_axVerbs is null)
-            {
-                OLEVERB verbShow = new()
-                {
-                    lVerb = OLEIVERB.OLEIVERB_SHOW
-                };
-
-                s_axVerbs =
-                [
-                    new() { lVerb = OLEIVERB.OLEIVERB_SHOW },
-                    new() { lVerb = OLEIVERB.OLEIVERB_INPLACEACTIVATE },
-                    new() { lVerb = OLEIVERB.OLEIVERB_UIACTIVATE },
-                    new() { lVerb = OLEIVERB.OLEIVERB_HIDE },
-                    new() { lVerb = OLEIVERB.OLEIVERB_PRIMARY },
-                ];
-            }
+            s_axVerbs ??=
+            [
+                new() { lVerb = OLEIVERB.OLEIVERB_SHOW },
+                new() { lVerb = OLEIVERB.OLEIVERB_INPLACEACTIVATE },
+                new() { lVerb = OLEIVERB.OLEIVERB_UIACTIVATE },
+                new() { lVerb = OLEIVERB.OLEIVERB_HIDE },
+                new() { lVerb = OLEIVERB.OLEIVERB_PRIMARY },
+            ];
 
             return ComHelpers.GetComPointer<IEnumOLEVERB>(new ActiveXVerbEnum(s_axVerbs));
         }

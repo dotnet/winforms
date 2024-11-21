@@ -198,7 +198,7 @@ public unsafe partial class Control :
             return HRESULT.E_POINTER;
         }
 
-        ppDataObject = null;
+        *ppDataObject = null;
         return HRESULT.E_NOTIMPL;
     }
 
@@ -534,6 +534,8 @@ public unsafe partial class Control :
             (RECT*)lprcWBounds,
             pfnContinue,
             dwContinue);
+
+        Debug.Assert(hr.Succeeded);
 
         return HRESULT.S_OK;
     }
