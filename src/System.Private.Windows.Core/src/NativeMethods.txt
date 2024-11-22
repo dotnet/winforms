@@ -69,6 +69,7 @@ EnumChildWindows
 EnumDisplayMonitors
 EnumThreadWindows
 EnumWindows
+FACILITY_CODE
 fdex*
 FDEX_PROP_FLAGS
 FILETIME
@@ -76,6 +77,9 @@ GetCurrentThreadId
 GetSysColorBrush
 GetWindowText
 GetWindowTextLength
+// All callers of these APIs MUST call GdiPlusInitialization.EnsureInitialized() before use.
+// There is no easy way to do this in Core as we want to make sure it is only done when needed.
+// (If using another GDI+ handle or wrapped object you can assume GDI+ is initialized.)
 GdipBitmapLockBits
 GdipBitmapUnlockBits
 GdipCreateFromHWND
@@ -166,7 +170,9 @@ MonitorFromWindow
 MONITORINFOEXW
 MONITORINFOF_*
 NONCLIENTMETRICSW
+NTSTATUS
 OBJ_TYPE
+OBJECT_IDENTIFIER
 OffsetViewportOrgEx
 OLE_E_ADVISENOTSUPPORTED
 OLE_E_INVALIDRECT
@@ -214,11 +220,15 @@ SetTextAlign
 SetTextColor
 START_PAGE_GENERAL
 STATFLAG
+STATUS_NO_MEMORY
+STATUS_PENDING
+STATUS_SUCCESS
 STG_E_FILENOTFOUND
 STG_E_INVALIDFLAG
 STG_E_INVALIDFUNCTION
 STG_E_INVALIDPOINTER
 STGTY
+STILL_ACTIVE
 SystemParametersInfo
 SystemParametersInfoForDpi
 TYPE_E_BADMODULEKIND

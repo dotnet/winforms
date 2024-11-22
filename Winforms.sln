@@ -55,6 +55,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "documentation", "documentat
 		docs\developer-guide.md = docs\developer-guide.md
 		docs\getting-started.md = docs\getting-started.md
 		docs\issue-guide.md = docs\issue-guide.md
+		docs\list-of-diagnostics.md = docs\list-of-diagnostics.md
 		docs\porting-guidelines.md = docs\porting-guidelines.md
 		README.md = README.md
 		docs\roadmap.md = docs\roadmap.md

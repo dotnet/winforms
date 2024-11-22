@@ -146,7 +146,7 @@ public static class Help
             }
             else if (htmlParam is int intParam)
             {
-                PInvoke.HtmlHelp(handle, pathAndFileName, htmlCommand, in intParam);
+                PInvoke.HtmlHelp(handle, pathAndFileName, htmlCommand, (nuint)intParam);
             }
             else if (htmlParam is HH_FTS_QUERY query)
             {

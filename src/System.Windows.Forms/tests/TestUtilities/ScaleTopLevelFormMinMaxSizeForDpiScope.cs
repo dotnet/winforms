@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Windows.Forms.Primitives;
+
 namespace System;
 
 /// <summary>
@@ -16,7 +18,7 @@ public readonly ref struct ScaleTopLevelFormMinMaxSizeForDpiScope
         // Prevent multiple ScaleTopLevelFormMinMaxSizeForDpi from running simultaneously.
         // Using Monitor to allow recursion on the same thread.
         Monitor.Enter(typeof(ScaleTopLevelFormMinMaxSizeForDpiScope));
-        _switchScope = new(WinFormsAppContextSwitchNames.ScaleTopLevelFormMinMaxSizeForDpi, enable);
+        _switchScope = new(WinFormsAppContextSwitchNames.ScaleTopLevelFormMinMaxSizeForDpi, GetDefaultValue, enable);
     }
 
     public void Dispose()
@@ -30,4 +32,8 @@ public readonly ref struct ScaleTopLevelFormMinMaxSizeForDpiScope
             Monitor.Exit(typeof(ScaleTopLevelFormMinMaxSizeForDpiScope));
         }
     }
+
+    public static bool GetDefaultValue() =>
+        typeof(LocalAppContextSwitches).TestAccessor()
+            .CreateDelegate<Func<string, bool>>("GetSwitchDefaultValue")(WinFormsAppContextSwitchNames.ScaleTopLevelFormMinMaxSizeForDpi);
 }

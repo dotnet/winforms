@@ -29,9 +29,9 @@ public unsafe partial class DataObject
             }
 
             /// <summary>
-            ///  Returns true if the tymed is useable.
+            ///  Returns true if the tymed is usable.
             /// </summary>
-            private static bool GetTymedUseable(TYMED tymed) => (tymed & AllowedTymeds) != 0;
+            private static bool GetTymedUsable(TYMED tymed) => (tymed & AllowedTymeds) != 0;
 
             HRESULT Com.IDataObject.Interface.GetData(FORMATETC* pformatetcIn, STGMEDIUM* pmedium)
             {
@@ -63,7 +63,7 @@ public unsafe partial class DataObject
 
                 *pmedium = default;
 
-                if (!GetTymedUseable((TYMED)pformatetcIn->tymed))
+                if (!GetTymedUsable((TYMED)pformatetcIn->tymed))
                 {
                     return HRESULT.DV_E_TYMED;
                 }
@@ -104,7 +104,7 @@ public unsafe partial class DataObject
                     return HRESULT.E_POINTER;
                 }
 
-                if (!GetTymedUseable((TYMED)pformatetc->tymed) || !GetTymedUseable(pmedium->tymed))
+                if (!GetTymedUsable((TYMED)pformatetc->tymed) || !GetTymedUsable(pmedium->tymed))
                 {
                     return HRESULT.DV_E_TYMED;
                 }
@@ -116,13 +116,16 @@ public unsafe partial class DataObject
                     return HRESULT.DV_E_FORMATETC;
                 }
 
-                object? data = _dataObject.GetData(format);
+                if (_dataObject.GetData(format) is not object data)
+                {
+                    return HRESULT.E_UNEXPECTED;
+                }
 
                 if (((TYMED)pformatetc->tymed).HasFlag(TYMED.TYMED_HGLOBAL))
                 {
                     try
                     {
-                        return SaveDataToHGLOBAL(data!, format, ref *pmedium);
+                        return SaveDataToHGLOBAL(data, format, ref *pmedium);
                     }
                     catch (NotSupportedException ex)
                     {
@@ -191,7 +194,7 @@ public unsafe partial class DataObject
                     return HRESULT.DV_E_DVASPECT;
                 }
 
-                if (!GetTymedUseable((TYMED)pformatetc->tymed))
+                if (!GetTymedUsable((TYMED)pformatetc->tymed))
                 {
                     return HRESULT.DV_E_TYMED;
                 }
@@ -314,7 +317,7 @@ public unsafe partial class DataObject
                 _ when format == DataFormats.SerializableConstant || data is ISerializable || data.GetType().IsSerializable
 #pragma warning restore
                     => SaveObjectToHGLOBAL(ref medium.hGlobal, data, RestrictDeserializationToSafeTypes(format)),
-                _ => HRESULT.E_FAIL
+                _ => HRESULT.E_UNEXPECTED
             };
 
             private static HRESULT SaveObjectToHGLOBAL(ref HGLOBAL hglobal, object data, bool restrictSerialization)
