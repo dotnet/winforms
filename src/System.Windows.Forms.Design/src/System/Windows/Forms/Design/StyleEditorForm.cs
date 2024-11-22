@@ -818,33 +818,30 @@ internal partial class StyleCollectionEditor
         /// </summary>
         private void AddItem(int index)
         {
-            string member = null;
             _tableLayoutPanelDesigner.InsertRowCol(_isRowCollection, index);
 
-            member = _isRowCollection
-                ? "Row" + _tableLayoutPanel.RowStyles.Count.ToString(CultureInfo.InvariantCulture)
-                : "Column" + _tableLayoutPanel.RowStyles.Count.ToString(CultureInfo.InvariantCulture);
+            string member = _isRowCollection
+                ? $"Row{_tableLayoutPanel.RowStyles.Count}"
+                : $"Column{_tableLayoutPanel.RowStyles.Count}";
 
-            if (member is not null)
-            {
-                _columnsAndRowsListView.Items.Insert(
-                    index,
-                    new ListViewItem(
-                    [
-                        member, SizeType.Absolute.ToString(),
-                        DesignerUtils.s_minimumStyleSize.ToString(CultureInfo.InvariantCulture)
-                     ]));
+            _columnsAndRowsListView.Items.Insert(
+                index,
+                new ListViewItem(
+                [
+                    member, SizeType.Absolute.ToString(),
+                    DesignerUtils.s_minimumStyleSize.ToString(CultureInfo.InvariantCulture)
+                ]));
 
-                // If we inserted at the beginning, then we have to change the Member of string of all the existing listView items,
-                // so we might as well just update the entire listView.
-                UpdateListViewMember();
-                ClearAndSetSelectionAndFocus(index);
-            }
+            // If we inserted at the beginning, then we have to change the Member of string of all the existing listView items,
+            // so we might as well just update the entire listView.
+            UpdateListViewMember();
+            ClearAndSetSelectionAndFocus(index);
         }
 
         private void OnAddButtonClick(object sender, EventArgs e)
         {
             _isDialogDirty = true;
+
             // Add an item to the end of the listView
             AddItem(_columnsAndRowsListView.Items.Count);
         }

@@ -43,14 +43,14 @@ public class PrinterSettingsTests
     public void CanDuplex_ReturnsExpected()
     {
         PrinterSettings printerSettings = new();
-        bool canDuplex = printerSettings.CanDuplex;
+        _ = printerSettings.CanDuplex;
     }
 
     [Fact]
     public void Copies_Default_ReturnsExpected()
     {
         PrinterSettings printerSettings = new();
-        int copies = printerSettings.Copies;
+        _ = printerSettings.Copies;
     }
 
     [Theory]
@@ -79,7 +79,7 @@ public class PrinterSettingsTests
     public void Collate_Default_ReturnsExpected()
     {
         PrinterSettings printerSettings = new();
-        bool collate = printerSettings.Collate;
+        _ = printerSettings.Collate;
     }
 
     [Fact]
@@ -380,7 +380,7 @@ public class PrinterSettingsTests
     public void IsDirectPrintingSupported_ImageFormatSupported_ReturnsExpected(ImageFormat imageFormat)
     {
         PrinterSettings printerSettings = new();
-        bool supported = printerSettings.IsDirectPrintingSupported(imageFormat);
+        _ = printerSettings.IsDirectPrintingSupported(imageFormat);
     }
 
     public static IEnumerable<object[]> IsDirectPrintingSupported_ImageFormatNotSupported_TestData()
@@ -508,10 +508,8 @@ public class PrinterSettingsTests
     public void GetHdevmode_ReturnsExpected()
     {
         PrinterSettings printerSettings = new();
-        IntPtr handle = IntPtr.Zero;
-
-        handle = printerSettings.GetHdevmode();
-        Assert.NotEqual(IntPtr.Zero, handle);
+        nint handle = printerSettings.GetHdevmode();
+        Assert.NotEqual(0, handle);
     }
 
     [Fact]
@@ -519,10 +517,8 @@ public class PrinterSettingsTests
     {
         PrinterSettings printerSettings = new();
         PageSettings pageSettings = new();
-        IntPtr handle = IntPtr.Zero;
-
-        handle = printerSettings.GetHdevmode(pageSettings);
-        Assert.NotEqual(IntPtr.Zero, handle);
+        nint handle = printerSettings.GetHdevmode(pageSettings);
+        Assert.NotEqual(0, handle);
     }
 
     [Fact]
@@ -536,10 +532,8 @@ public class PrinterSettingsTests
     public void GetHdevnames_ReturnsExpected()
     {
         PrinterSettings printerSettings = new();
-        IntPtr handle = IntPtr.Zero;
-
-        handle = printerSettings.GetHdevnames();
-        Assert.NotEqual(IntPtr.Zero, handle);
+        nint handle = printerSettings.GetHdevnames();
+        Assert.NotEqual(0, handle);
     }
 
     [ConditionalFact(typeof(PrinterSettingsTests), nameof(CanTestSetHdevmode_IntPtr_Success))]

@@ -425,15 +425,9 @@ public class ToolStripItemCollection : ArrangedElementCollection, IList
             throw new NotSupportedException(SR.ToolStripItemCollectionIsReadOnly);
         }
 
-        ToolStripItem? item = null;
-        if (index < Count && index >= 0)
-        {
-            item = (ToolStripItem)(InnerList[index]);
-        }
-        else
-        {
-            throw new IndexOutOfRangeException();
-        }
+        ToolStripItem item = index >= Count || index < 0
+            ? throw new IndexOutOfRangeException()
+            : (ToolStripItem)InnerList[index];
 
         InnerList.RemoveAt(index);
         OnAfterRemove(item);

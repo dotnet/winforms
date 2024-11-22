@@ -440,7 +440,6 @@ namespace System.Windows.Forms.Design
             _windowsFormsEditorService = null;
             _dataSourceProviderService = null;
             _designerHost = null;
-            context = null;
 
             // Return final selection to caller
             return finalSelectedItem;

@@ -227,7 +227,6 @@ public class ListViewSubItemCollectionTests
         ListViewItem item = new();
         var collection = new ListViewItem.ListViewSubItemCollection(item);
 
-        ListViewItem otherItem = new();
         var otherCollection = new ListViewItem.ListViewSubItemCollection(item);
 
         var subItem = new ListViewItem.ListViewSubItem();

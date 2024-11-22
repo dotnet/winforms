@@ -148,7 +148,6 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
         Dock = DefaultDock;
         AutoSize = true;
         CausesValidation = false;
-        Size defaultSize = DefaultSize;
         SetAutoSizeMode(AutoSizeMode.GrowAndShrink);
         ShowItemToolTips = DefaultShowItemToolTips;
         ResumeLayout(true);
@@ -538,10 +537,9 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     ///  Deriving classes can override this to configure a default size for their control.
     ///  This is more efficient than setting the size in the control's constructor.
     /// </summary>
-    protected override Size DefaultSize
-        => ScaleHelper.IsThreadPerMonitorV2Aware ?
-           ScaleHelper.ScaleToDpi(new Size(100, 25), DeviceDpi) :
-           new Size(100, 25);
+    protected override Size DefaultSize => ScaleHelper.IsThreadPerMonitorV2Aware
+        ? ScaleHelper.ScaleToDpi(new Size(100, 25), DeviceDpi)
+        : new Size(100, 25);
 
     protected override Padding DefaultPadding
     {
@@ -4250,7 +4248,9 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
 
             // For splitstack layout we re-arrange the items in the displayed items
             // collection so that we can easily tab through them in natural order
-            Rectangle displayRect = DisplayRectangle;
+
+            // We've historically called this virtual, still need to for compat.
+            _ = DisplayRectangle;
             int lastRightAlignedItem = -1;
 
             for (int pass = 0; pass < 2; pass++)
@@ -4568,12 +4568,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     {
         if (newOrientation != Orientation)
         {
-            // snap our last dimensions before switching over.
-            // use specifed bounds so that if something is docked or anchored we don't take the extra stretching
-            // effects into account.
-            Size size = CommonProperties.GetSpecifiedBounds(this).Size;
             Orientation = newOrientation;
-            // since the Grip affects the DisplayRectangle, we need to re-adjust the size
             SetupGrip();
         }
     }

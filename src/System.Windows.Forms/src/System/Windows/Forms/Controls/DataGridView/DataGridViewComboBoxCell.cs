@@ -1580,7 +1580,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         Debug.Assert(DisplayMemberProperty is not null || ValueMemberProperty is not null ||
                      !string.IsNullOrEmpty(DisplayMember) || !string.IsNullOrEmpty(ValueMember));
 
-        object? item = null;
+        object? item;
         if (DisplayMemberProperty is not null || ValueMemberProperty is not null)
         {
             // Now look up the item in the DataGridViewComboBoxCell datasource - this can be horribly inefficient
