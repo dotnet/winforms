@@ -36,7 +36,7 @@ public sealed class ToolStripContentPanelDesignerTests : IDisposable
     [Fact]
     public void SnapLines_ShouldCallAddPaddingSnapLines()
     {
-        string[] paddingFilters = [SnapLine.PaddingLeft, SnapLine.PaddingRight, SnapLine.PaddingTop, SnapLine.PaddingBottom];
+        string?[] paddingFilters = [SnapLine.PaddingLeft, SnapLine.PaddingRight, SnapLine.PaddingTop, SnapLine.PaddingBottom];
 
         List<SnapLine> snapLines = _toolStripContentPanelDesigner.SnapLines.Cast<SnapLine>().ToList();
 

@@ -42,7 +42,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\Common\src\IComparerHelpers.cs" Link="Common\IComparerHelpers.cs" />
     <Compile Include="..\..\Common\src\Obsoletions.cs" Link="Common\Obsoletions.cs" />
     <Compile Include="..\..\Common\src\RTLAwareMessageBox.cs" Link="Common\RTLAwareMessageBox.cs" />
   </ItemGroup>

@@ -90,18 +90,6 @@
     <RuntimeFrameworkVersion Condition="!$(TargetFramework.StartsWith('$(RedistTargetFrameworkName)'))" />
   </PropertyGroup>
 
-  <Choose>
-    <When Condition="'$(IncludeInternalObsoleteAttribute)' == 'true' and '$(TargetFrameworkIdentifier)' != '.NETCoreApp'">
-      <ItemGroup>
-        <Compile Include="$(RepoRoot)src\Common\src\ObsoleteAttribute.cs" />
-      </ItemGroup>
-      <PropertyGroup>
-        <!-- Suppress CS0436 to allow ObsoleteAttribute to be internally defined and used in .NET Standard. -->
-        <NoWarn>$(NoWarn);CS0436</NoWarn>
-      </PropertyGroup>
-    </When>
-  </Choose>
-
   <!-- If a tfm doesn't target .NETCoreApp but uses the platform support attributes, then we include the
        System.Runtime.Versioning*Platform* annotation attribute classes in the project as internal.
 

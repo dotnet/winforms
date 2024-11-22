@@ -154,13 +154,11 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             ' have our principal on the thread before that happens.
             If authenticationMode = AuthenticationMode.Windows Then
                 Try
-                    ' Consider: Sadly, a call to:
-                    ' Security.SecurityManager.IsGranted(New SecurityPermission(SecurityPermissionFlag.ControlPrincipal))
+                    ' Consider: Sadly, a call to: System.Security.SecurityManager.IsGranted(New SecurityPermission(SecurityPermissionFlag.ControlPrincipal))
                     ' Will only check the THIS caller so you'll always get TRUE.
                     ' What we need is a way to get to the value of this on a demand basis.
                     ' So I try/catch instead for now but would rather be able to IF my way around this block.
-                    Dim ntIdentity As Principal.WindowsIdentity = Principal.WindowsIdentity.GetCurrent
-                    Thread.CurrentPrincipal = New Principal.WindowsPrincipal(ntIdentity)
+                    Thread.CurrentPrincipal = New Principal.WindowsPrincipal(Principal.WindowsIdentity.GetCurrent)
                 Catch ex As SecurityException
                 End Try
             End If
@@ -288,8 +286,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
                 ' Allow for the case where they set splash screen = nothing and mainForm is currently nothing.
                 If value IsNot Nothing AndAlso value Is _appContext.MainForm Then
-                    Dim message As String = VbUtils.GetResourceString(SR.AppModel_SplashAndMainFormTheSame)
-                    Throw New ArgumentException(message)
+                    Throw New ArgumentException(VbUtils.GetResourceString(SR.AppModel_SplashAndMainFormTheSame))
                 End If
 
                 _splashScreen = value
@@ -305,14 +302,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             End Get
             Set(value As Form)
                 If value Is Nothing Then
-                    Throw VbUtils.GetArgumentNullException(
-                        argumentName:="MainForm",
-                        resourceKey:=SR.General_PropertyNothing,
-                        "MainForm")
+                    Throw VbUtils.GetArgumentNullException("MainForm", SR.General_PropertyNothing, "MainForm")
                 End If
                 If value Is _splashScreen Then
-                    Dim message As String = VbUtils.GetResourceString(SR.AppModel_SplashAndMainFormTheSame)
-                    Throw New ArgumentException(message)
+                    Throw New ArgumentException(VbUtils.GetResourceString(SR.AppModel_SplashAndMainFormTheSame))
                 End If
                 _appContext.MainForm = value
             End Set
@@ -389,8 +382,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
                 _unhandledExceptionHandlers.Add(value)
 
-                ' Only add the listener once so we don't fire the
-                ' UnHandledException event over and over for the same exception
+                ' Only add the listener once so we don't fire the UnHandledException event over and over for the same exception
                 If _unhandledExceptionHandlers.Count = 1 Then
                     AddHandler Application.ThreadException, AddressOf OnUnhandledExceptionEventAdaptor
                 End If
@@ -484,8 +476,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                         Try
                             If handler IsNot Nothing Then handler.Invoke(sender, e)
                         Catch ex As Exception
-                            Dim e1 As New UnhandledExceptionEventArgs(exitApplication:=True, exception:=ex)
-                            If Not OnUnhandledException(e1) Then
+                            If Not OnUnhandledException(New UnhandledExceptionEventArgs(True, ex)) Then
 
                                 ' The user didn't write a handler so throw the error up the chain.
                                 Throw
@@ -502,8 +493,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  it doesn't freeze up while the main form is getting it together.
         ''' </summary>
         Private Sub DisplaySplash()
-            Const Message As String = "We should have never get here if there is no splash screen"
-            Debug.Assert(_splashScreen IsNot Nothing, Message)
+            Debug.Assert(_splashScreen IsNot Nothing, "We should have never get here if there is no splash screen")
 
             If _splashTimer IsNot Nothing Then
 
@@ -544,15 +534,13 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     ' have already seen via our hook of System.Windows.Forms.Application.ThreadException).
                     If _processingUnhandledExceptionEvent Then
 
-                        ' If the UnhandledException handler threw for some reason,
-                        ' throw that error out to the system.
+                        ' If the UnhandledException handler threw for some reason, throw that error out to the system.
                         Throw
                     Else
 
                         ' We had an exception, but not during the OnUnhandledException handler so give the user
                         ' a chance to look at what happened in the UnhandledException event handler
-                        Dim e As New UnhandledExceptionEventArgs(exitApplication:=True, ex)
-                        If Not OnUnhandledException(e) Then
+                        If Not OnUnhandledException(New UnhandledExceptionEventArgs(True, ex)) Then
 
                             ' The user didn't write a handler so throw the error out to the system
                             Throw
@@ -595,7 +583,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 _formLoadWaiter = New AutoResetEvent(False)
 
                 Task.Run(Async Function() As Task
-                             Await _splashScreenCompletionSource.Task.ConfigureAwait(continueOnCapturedContext:=False)
+                             Await _splashScreenCompletionSource.Task.ConfigureAwait(False)
                              _formLoadWaiter.Set()
                          End Function)
 
@@ -617,7 +605,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
             If _splashTimer IsNot Nothing Then
 
-                ' We only have a timer if there was a minimum timeout on the splash screen.
+                'We only have a timer if there was a minimum timeout on the splash screen.
                 _splashTimer.Dispose()
                 _splashTimer = Nothing
             End If
@@ -676,7 +664,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  <see cref="UnhandledException"/> event so we do the translation here before raising our event.
         ''' </remarks>
         Private Sub OnUnhandledExceptionEventAdaptor(sender As Object, e As ThreadExceptionEventArgs)
-            OnUnhandledException(New UnhandledExceptionEventArgs(exitApplication:=True, e.Exception))
+            OnUnhandledException(New UnhandledExceptionEventArgs(True, e.Exception))
         End Sub
 
         ''' <summary>
@@ -689,7 +677,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         <SecuritySafeCritical()>
         Protected Sub HideSplashScreen()
 
-            ' This ultimately wasn't necessary. I suppose we better keep it for backwards compatibility.
+            'This ultimately wasn't necessary. I suppose we better keep it for backwards compatibility.
             SyncLock _splashLock
 
                 ' .NET Framework 4.0 (Dev10 #590587) - we now activate the main form before calling
@@ -730,11 +718,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  variants was passed in.
         ''' </summary>
         ''' <param name="commandLineArgs"></param>
-        ''' <returns>
-        '''  Returning <see langword="True">
-        '''   Indicates that we should continue on with the application Startup sequence.
-        '''  </see>
-        ''' </returns>
+        ''' <returns>Returning True indicates that we should continue on with the application Startup sequence.</returns>
         ''' <remarks>
         '''  This extensibility point is exposed for people who want to override
         '''  the Startup sequence at the earliest possible point to
@@ -804,9 +788,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 #Enable Warning WFO5001
 
             ' We'll handle "/nosplash" for you.
-            If Not (commandLineArgs.Contains("/nosplash") OrElse
-                Me.CommandLineArgs.Contains("-nosplash")) Then
-
+            If Not (commandLineArgs.Contains("/nosplash") OrElse Me.CommandLineArgs.Contains("-nosplash")) Then
                 ShowSplashScreen()
             End If
 
@@ -837,29 +819,26 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 End If
 
                 ' When we have a splash screen that hasn't timed out before the main form is ready to paint, we want to
-                ' block the main form from painting. To do that I let the form get past the Load() event and
-                ' hold it until the splash screen goes down. Then I let the main form continue it's startup sequence.
-                ' The ordering of Form startup events for reference is:
-                ' Ctor(), Load Event, Layout event, Shown event, Activated event, Paint event.
+                ' block the main form from painting. To do that I let the form get past the Load() event and hold it until
+                ' the splash screen goes down. Then I let the main form continue it's startup sequence. The ordering of
+                ' Form startup events for reference is: Ctor(), Load Event, Layout event, Shown event, Activated event, Paint event.
                 AddHandler MainForm.Load, AddressOf MainFormLoadingDone
             End If
 
             ' Run() eats all exceptions (unless running under the debugger). If the user wrote an
             ' UnhandledException handler we will hook the System.Windows.Forms.Application.ThreadException event
             ' (see Public Custom Event UnhandledException) which will raise our UnhandledException Event.
-            ' If our user didn't write an UnhandledException event, then we land in the try/catch handler
-            ' for Forms.Application.Run().
+            ' If our user didn't write an UnhandledException event, then we land in the try/catch handler for Forms.Application.Run().
             Try
                 Application.Run(_appContext)
             Finally
 
-                ' When Run() returns, the context we pushed in our ctor
-                ' (which was a WindowsFormsSynchronizationContext) is restored.
-                ' But we are going to dispose it so we need to disconnect the network listener so that it
+                ' When Run() returns, the context we pushed in our ctor (which was a WindowsFormsSynchronizationContext)
+                ' is restored. But we are going to dispose it so we need to disconnect the network listener so that it
                 ' can't fire any events in response to changing network availability conditions through a dead context.
                 If _networkObject IsNot Nothing Then _networkObject.DisconnectListener()
 
-                ' Restore the prior sync context.
+                'Restore the prior sync context.
                 AsyncOperationManager.SynchronizationContext = _appSynchronizationContext
                 _appSynchronizationContext = Nothing
             End Try
@@ -887,12 +866,11 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             ' The timing is important because the network object has an AsyncOperationsManager in it that marshals
             ' the network changed event to the main thread. The asyncOperationsManager does a CreateOperation()
             ' which makes a copy of the executionContext. That execution context shows up on your thread during
-            ' the callback so I delay creating the network object
-            ' (and consequently the capturing of the execution context) until the principal has been set on the thread.
-            ' This avoids the problem where My.User isn't set during the NetworkAvailabilityChanged event.
-            ' This problem would just extend itself to any future callback that involved
-            ' the asyncOperationsManager so this is where we need to create objects that have
-            ' a asyncOperationsContext in them.
+            ' the callback so I delay creating the network object (and consequently the capturing of the execution context)
+            ' until the principal has been set on the thread. This avoids the problem where My.User isn't set
+            ' during the NetworkAvailabilityChanged event. This problem would just extend itself to any future
+            ' callback that involved the asyncOperationsManager so this is where we need to create objects that
+            ' have a asyncOperationsContext in them.
             If _turnOnNetworkListener And _networkObject Is Nothing Then
 
                 ' The is-nothing-check is to avoid hooking the object more than once.
@@ -930,10 +908,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  that execution shouldn't continue.
         ''' </summary>
         ''' <param name="e"></param>
-        ''' <returns>
-        '''  <see langword="True"/> indicates the exception event was raised
-        '''  <see langword="False"/> it was not.
-        ''' </returns>
+        ''' <returns><see langword="True"/> indicates the exception event was raised / <see langword="False"/> it was not.</returns>
         <EditorBrowsable(EditorBrowsableState.Advanced)>
         Protected Overridable Function OnUnhandledException(e As UnhandledExceptionEventArgs) As Boolean
 
@@ -1026,10 +1001,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <param name="value"></param>
         Friend Shared Sub ValidateAuthenticationModeEnumValue(value As AuthenticationMode, paramName As String)
             If value < AuthenticationMode.Windows OrElse value > AuthenticationMode.ApplicationDefined Then
-                Throw New InvalidEnumArgumentException(
-                    argumentName:=paramName,
-                    invalidValue:=value,
-                    enumClass:=GetType(AuthenticationMode))
+                Throw New InvalidEnumArgumentException(paramName, value, GetType(AuthenticationMode))
             End If
         End Sub
 
@@ -1039,10 +1011,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <param name="value"></param>
         Friend Shared Sub ValidateShutdownModeEnumValue(value As ShutdownMode, paramName As String)
             If value < ShutdownMode.AfterMainFormCloses OrElse value > ShutdownMode.AfterAllFormsClose Then
-                Throw New InvalidEnumArgumentException(
-                    argumentName:=paramName,
-                    invalidValue:=value,
-                    enumClass:=GetType(ShutdownMode))
+                Throw New InvalidEnumArgumentException(paramName, value, GetType(ShutdownMode))
             End If
         End Sub
 
@@ -1081,10 +1050,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     Using pipeServer
                         Dim tokenSource As New CancellationTokenSource()
 #Disable Warning BC42358 ' Call is not awaited.
-                        WaitForClientConnectionsAsync(
-                            pipeServer,
-                            AddressOf OnStartupNextInstanceMarshallingAdaptor,
-                            cancellationToken:=tokenSource.Token)
+                        WaitForClientConnectionsAsync(pipeServer, AddressOf OnStartupNextInstanceMarshallingAdaptor, cancellationToken:=tokenSource.Token)
 #Enable Warning BC42358
                         DoApplicationModel()
                         tokenSource.Cancel()
@@ -1106,7 +1072,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                         Throw New CantStartSingleInstanceException()
                     End Try
                 End If
-            End If ' Single-Instance application
+            End If 'Single-Instance application
         End Sub
 
     End Class
