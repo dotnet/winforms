@@ -299,7 +299,7 @@ internal static unsafe class AccessibleObjectExtensions
     }
 
     /// <summary>
-    ///  Gets the accessible object's owner control's accesssible role.
+    ///  Gets the accessible object's owner control's accessible role.
     /// </summary>
     public static AccessibleRole GetOwnerAccessibleRole<TAccessible>(
         this TAccessible accessibleObject,
@@ -311,7 +311,7 @@ internal static unsafe class AccessibleObjectExtensions
     }
 
     /// <summary>
-    ///  Gets the accessible object's owner control's accesssible name.
+    ///  Gets the accessible object's owner control's accessible name.
     /// </summary>
     [return: NotNullIfNotNull(nameof(defaultName))]
     public static string? GetOwnerAccessibleName<TAccessible>(
@@ -320,7 +320,7 @@ internal static unsafe class AccessibleObjectExtensions
         => accessibleObject.Owner?.AccessibleName ?? defaultName;
 
     /// <summary>
-    ///  Gets the accessible object's owner control's accesssible text.
+    ///  Gets the accessible object's owner control's accessible text.
     /// </summary>
     public static string GetOwnerText<TAccessible>(this TAccessible accessibleObject, string defaultText = "")
         where TAccessible : AccessibleObject, IOwnedObject<Control>
