@@ -12,11 +12,13 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <WinFormsFact>
         Public Sub CreateTempDirectoryTest()
-            Dim tempDirectory As String = CreateTempDirectory()
-            tempDirectory.Should.StartWith(Path.GetTempPath)
-            tempDirectory = CreateTempDirectory()
+            CreateTempDirectory().Should.StartWith(Path.GetTempPath)
+            CreateTempDirectory()
+            ' Calling CreateTempDirectory multiple times must
+            ' return the one already created
             _testDirectories.Count.Should.Be(1)
-            tempDirectory = CreateTempDirectory(lineNumber:=1)
+            ' If multiple sub directories are need the line number needs to be provided
+            CreateTempDirectory(lineNumber:=1)
             _testDirectories.Count.Should.Be(2)
         End Sub
 
