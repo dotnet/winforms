@@ -117,6 +117,8 @@ public class ToolStripItemCollectionTests
         toolStripDropDownButton.DropDownItems.Add("b");
         toolStripDropDownButton.DropDownItems.Add("c");
         contextMenuStrip.Items.AddRange(toolStripDropDownButton.DropDownItems);
+
+        Assert.Empty(toolStripDropDownButton.DropDownItems);
         Assert.Equal(3, contextMenuStrip.Items.Count);
 
         // Validate order.
@@ -133,8 +135,8 @@ public class ToolStripItemCollectionTests
         // Create a ToolStripItemCollection with 2 items
         ToolStripItemCollection itemCollection = new(toolStrip,
             [
-            new ToolStripButton("Button 1"),
-            new ToolStripButton("Button 2")
+                new ToolStripButton("Button 1"),
+                new ToolStripButton("Button 2")
             ]);
 
         toolStrip.Items.Count.Should().Be(0);

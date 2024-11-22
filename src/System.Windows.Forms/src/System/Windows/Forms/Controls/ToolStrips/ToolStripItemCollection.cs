@@ -151,9 +151,9 @@ public class ToolStripItemCollection : ArrangedElementCollection, IList
         // to resize itself.
         using (new LayoutTransaction(_owner, _owner!, PropertyNames.Items))
         {
-            // Create a temporary list to avoid modifying the original collection during iteration.
-            // This ensures that the collection is not altered while it is being iterated over,
-            // preventing issues such as InvalidOperationException.
+            // Create a temporary array to avoid modifying the original collection during iteration.
+            // Items will be removed from toolStripsItems collection when they are added to this collection
+            // if they had a different owner control.
             var itemsToAdd = toolStripItems.InnerList.ToArray();
             foreach (ToolStripItem item in itemsToAdd)
             {
