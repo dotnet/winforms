@@ -115,9 +115,9 @@ public class DragDropHelperTests
             Size dragImageSize = pDragImage->sizeDragImage;
             Point offset = pDragImage->ptOffset;
             PInvokeCore.GlobalUnlock(dragDropFormat.Medium.hGlobal);
-            Assert.Equal(dragImage is null, isDragImageNull);
-            Assert.Equal(dragImage is null ? new Size(0, 0) : dragImage.Size, dragImageSize);
-            Assert.Equal(cursorOffset, offset);
+            (dragImage is null).Should().Be(isDragImageNull);
+            (dragImage is null ? new Size(0, 0) : dragImage.Size).Should().Be(dragImageSize);
+            cursorOffset.Should().Be(offset);
         }
         finally
         {
@@ -139,9 +139,9 @@ public class DragDropHelperTests
             Size dragImageSize = pDragImage->sizeDragImage;
             Point offset = pDragImage->ptOffset;
             PInvokeCore.GlobalUnlock(dragDropFormat.Medium.hGlobal);
-            Assert.Equal(e.DragImage is null, isDragImageNull);
-            Assert.Equal(e.DragImage is null ? new Size(0, 0) : e.DragImage.Size, dragImageSize);
-            Assert.Equal(e.CursorOffset, offset);
+            (e.DragImage is null).Should().Be(isDragImageNull);
+            (e.DragImage is null ? new Size(0, 0) : e.DragImage.Size).Should().Be(dragImageSize);
+            e.CursorOffset.Should().Be(offset);
         }
         finally
         {
@@ -153,15 +153,17 @@ public class DragDropHelperTests
     public void SetDragImage_NonSTAThread_ThrowsInvalidOperationException()
     {
         Control.CheckForIllegalCrossThreadCalls = true;
-        Assert.Throws<InvalidOperationException>(() => DragDropHelper.SetDragImage(new DataObject(), new Bitmap(1, 1), new Point(0, 0), false));
+        using Bitmap bitmap = new(1, 1);
+        Assert.Throws<InvalidOperationException>(() => DragDropHelper.SetDragImage(new DataObject(), bitmap, new Point(0, 0), false));
     }
 
     [Fact]
     public void SetDragImage_NullDataObject_ThrowsArgumentNullException()
     {
         DataObject dataObject = null;
+        using Bitmap bitmap = new(1, 1);
         Assert.Throws<ArgumentNullException>(nameof(dataObject),
-            () => DragDropHelper.SetDragImage(dataObject, new Bitmap(1, 1), new Point(0, 0), false));
+            () => DragDropHelper.SetDragImage(dataObject, bitmap, new Point(0, 0), false));
     }
 
     [Fact]
@@ -186,9 +188,9 @@ public class DragDropHelperTests
             string szMessage = pDropDescription->szMessage.ToString();
             string szInsert = pDropDescription->szInsert.ToString();
             PInvokeCore.GlobalUnlock(dragDropFormat.Medium.hGlobal);
-            Assert.Equal(DROPIMAGETYPE.DROPIMAGE_INVALID, type);
-            Assert.Equal(string.Empty, szMessage);
-            Assert.Equal(string.Empty, szInsert);
+            type.Should().Be(DROPIMAGETYPE.DROPIMAGE_INVALID);
+            szMessage.Should().Be(string.Empty);
+            szInsert.Should().Be(string.Empty);
         }
         finally
         {
@@ -247,7 +249,6 @@ public class DragDropHelperTests
         {
             if (dataObject.GetData(format) is DragDropFormat dragDropFormat)
             {
-                Assert.Equal(0, (int)PInvokeCore.GlobalSize(dragDropFormat.Medium.hGlobal));
                 Assert.Equal(nint.Zero, (nint)dragDropFormat.Medium.pUnkForRelease);
                 Assert.Equal(Com.TYMED.TYMED_NULL, dragDropFormat.Medium.tymed);
                 Assert.Equal(nint.Zero, (nint)dragDropFormat.Medium.hGlobal);

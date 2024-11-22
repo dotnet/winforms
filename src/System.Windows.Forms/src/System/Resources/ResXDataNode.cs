@@ -160,7 +160,7 @@ public sealed class ResXDataNode : ISerializable
         }
         set
         {
-            ArgumentException.ThrowIfNullOrEmpty(value, nameof(Name));
+            ArgumentException.ThrowIfNullOrEmpty(value);
             _name = value;
         }
     }

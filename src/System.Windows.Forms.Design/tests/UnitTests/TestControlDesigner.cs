@@ -7,8 +7,10 @@ using System.Windows.Forms.Design.Behavior;
 
 namespace System.Windows.Forms.Design.Tests;
 
-internal class TestControlDesigner : ControlDesigner
+internal partial class TestControlDesigner : ControlDesigner
 {
+    internal bool OnMouseDragEndCalled { get; private set; }
+
     internal AccessibleObject GetAccessibleObjectField()
     {
         return accessibilityObj;
@@ -87,5 +89,17 @@ internal class TestControlDesigner : ControlDesigner
     internal void OnCreateHandleMethod()
     {
         OnCreateHandle();
+    }
+
+    internal new void WndProc(ref Message m)
+    {
+        base.WndProc(ref m);
+    }
+
+    protected override void OnMouseDragEnd(bool cancel)
+    {
+        OnMouseDragEndCalled = true;
+
+        base.OnMouseDragEnd(cancel);
     }
 }

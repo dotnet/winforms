@@ -3547,6 +3547,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
             {
                 if (s_halftonePalette.IsNull)
                 {
+                    GdiPlusInitialization.EnsureInitialized();
                     s_halftonePalette = PInvokeCore.GdipCreateHalftonePalette();
                 }
             }

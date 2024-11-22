@@ -10238,48 +10238,29 @@ public class ToolStripItemTests
     private class CustomDataObject : IDataObject
     {
         public object GetData(string format, bool autoConvert) => throw new NotImplementedException();
-
         public object GetData(string format) => throw new NotImplementedException();
-
         public object GetData(Type format) => throw new NotImplementedException();
-
         public bool GetDataPresent(string format, bool autoConvert) => throw new NotImplementedException();
-
         public bool GetDataPresent(string format) => throw new NotImplementedException();
-
         public bool GetDataPresent(Type format) => throw new NotImplementedException();
-
         public string[] GetFormats(bool autoConvert) => throw new NotImplementedException();
-
         public string[] GetFormats() => throw new NotImplementedException();
-
         public void SetData(string format, bool autoConvert, object data) => throw new NotImplementedException();
-
         public void SetData(string format, object data) => throw new NotImplementedException();
-
         public void SetData(Type format, object data) => throw new NotImplementedException();
-
         public void SetData(object data) => throw new NotImplementedException();
     }
 
     private class CustomComDataObject : IComDataObject
     {
         public void GetData(ref FORMATETC format, out STGMEDIUM medium) => throw new NotImplementedException();
-
         public void GetDataHere(ref FORMATETC format, ref STGMEDIUM medium) => throw new NotImplementedException();
-
         public int QueryGetData(ref FORMATETC format) => throw new NotImplementedException();
-
         public int GetCanonicalFormatEtc(ref FORMATETC formatIn, out FORMATETC formatOut) => throw new NotImplementedException();
-
         public void SetData(ref FORMATETC formatIn, ref STGMEDIUM medium, bool release) => throw new NotImplementedException();
-
         public IEnumFORMATETC EnumFormatEtc(DATADIR direction) => throw new NotImplementedException();
-
         public int DAdvise(ref FORMATETC pFormatetc, ADVF advf, IAdviseSink adviseSink, out int connection) => throw new NotImplementedException();
-
         public void DUnadvise(int connection) => throw new NotImplementedException();
-
         public int EnumDAdvise(out IEnumSTATDATA enumAdvise) => throw new NotImplementedException();
     }
 
