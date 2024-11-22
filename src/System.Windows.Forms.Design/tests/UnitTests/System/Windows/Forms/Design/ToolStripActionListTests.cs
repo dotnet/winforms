@@ -106,8 +106,8 @@ public sealed class ToolStripActionListTests : IDisposable
     [Fact]
     public void GetSortedActionItems_ShouldIncludeExpectedItems_WhenConditionsAreMet()
     {
-        var items = _actionList.GetSortedActionItems();
-        var itemList = items.Cast<DesignerActionItem>().ToList();
+        DesignerActionItemCollection items = _actionList.GetSortedActionItems();
+        List<DesignerActionItem> itemList = items.Cast<DesignerActionItem>().ToList();
 
         itemList.Should().ContainSingle(i => i is DesignerActionMethodItem && ((DesignerActionMethodItem)i).MemberName == "InvokeEmbedVerb");
         itemList.Should().ContainSingle(i => i is DesignerActionMethodItem && ((DesignerActionMethodItem)i).MemberName == "InvokeInsertStandardItemsVerb");
@@ -122,8 +122,8 @@ public sealed class ToolStripActionListTests : IDisposable
         TypeDescriptor.AddAttributes(_toolStrip, new InheritanceAttribute(InheritanceLevel.InheritedReadOnly));
         TypeDescriptor.Refresh(_toolStrip);
 
-        var items = _actionList.GetSortedActionItems();
-        var itemList = items.Cast<DesignerActionItem>().ToList();
+        DesignerActionItemCollection items = _actionList.GetSortedActionItems();
+        List<DesignerActionItem> itemList = items.Cast<DesignerActionItem>().ToList();
 
         itemList.Should().NotContain(i =>
             i is DesignerActionMethodItem &&
@@ -133,8 +133,8 @@ public sealed class ToolStripActionListTests : IDisposable
     [Fact]
     public void GetSortedActionItems_ShouldIncludeRenderModeAndInsertStandardItemsVerb_WhenCanAddItems()
     {
-        var items = _actionList.GetSortedActionItems();
-        var itemList = items.Cast<DesignerActionItem>().ToList();
+        DesignerActionItemCollection items = _actionList.GetSortedActionItems();
+        List<DesignerActionItem> itemList = items.Cast<DesignerActionItem>().ToList();
 
         itemList.Should().ContainSingle(i =>
             i is DesignerActionMethodItem &&
@@ -149,8 +149,8 @@ public sealed class ToolStripActionListTests : IDisposable
     {
         _toolStrip.Parent = new Form();
 
-        var items = _actionList.GetSortedActionItems();
-        var itemList = items.Cast<DesignerActionItem>().ToList();
+        DesignerActionItemCollection items = _actionList.GetSortedActionItems();
+        List<DesignerActionItem> itemList = items.Cast<DesignerActionItem>().ToList();
 
         itemList.Should().ContainSingle(i =>
             i is DesignerActionPropertyItem &&
@@ -167,8 +167,8 @@ public sealed class ToolStripActionListTests : IDisposable
         _designer.Initialize(statusStrip);
         _actionList.TestAccessor().Dynamic._toolStrip = statusStrip;
 
-        var items = _actionList.GetSortedActionItems();
-        var itemList = items.Cast<DesignerActionItem>().ToList();
+        DesignerActionItemCollection items = _actionList.GetSortedActionItems();
+        List<DesignerActionItem> itemList = items.Cast<DesignerActionItem>().ToList();
 
         itemList.Should().NotContain(i =>
             i is DesignerActionPropertyItem &&
