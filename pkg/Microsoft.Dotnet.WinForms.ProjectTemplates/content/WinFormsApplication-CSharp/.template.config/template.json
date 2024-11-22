@@ -6,8 +6,8 @@
   "generatorVersions": "[1.0.0.0-*)",
   "description": "A project template for creating a .NET Windows Forms (WinForms) App.",
   "groupIdentity": "Microsoft.Common.WinForms",
-  "precedence": "9000",
-  "identity": "Microsoft.Common.WinForms.CSharp.9.0",
+  "precedence": "10000",
+  "identity": "Microsoft.Common.WinForms.CSharp.10.0",
   "shortName": "winforms",
   "tags": {
     "language": "C#",
@@ -48,10 +48,15 @@
           "choice": "net9.0",
           "description": "Target net9.0",
           "displayName": ".NET 9.0"
+        },
+        {
+          "choice": "net10.0",
+          "description": "Target net10.0",
+          "displayName": ".NET 10.0"
         }
       ],
       "replaces": "FrameworkParameter",
-      "defaultValue": "net9.0",
+      "defaultValue": "net10.0",
       "displayName": "Framework"
     },
     "langVersion": {
@@ -95,11 +100,11 @@
     },
     "csharpFeature_ImplicitUsings": {
       "type": "computed",
-      "value": "(Framework == \"net9.0\" || Framework == \"net8.0\" || Framework == \"net7.0\" || Framework == \"net6.0\") && csharp10orLater == \"true\""
+      "value": "(Framework == \"net10.0\" || Framework == \"net9.0\" || Framework == \"net8.0\" || Framework == \"net7.0\" || Framework == \"net6.0\") && csharp10orLater == \"true\""
     },
     "csharpFeature_FileScopedNamespaces": {
       "type": "computed",
-      "value": "(Framework == \"net9.0\" || Framework == \"net8.0\" || Framework == \"net7.0\" || Framework == \"net6.0\" || langVersion != \"\") && csharp10orLater == \"true\""
+      "value": "(Framework == \"net10.0\" || Framework == \"net9.0\" || Framework == \"net8.0\" || Framework == \"net7.0\" || Framework == \"net6.0\" || langVersion != \"\") && csharp10orLater == \"true\""
     }
   },
   "primaryOutputs": [
@@ -112,7 +117,7 @@
   "sources": [
     {
       "exclude": [ "**/[Bb]in/**", "**/[Oo]bj/**", ".template.config/**/*", "**/*.filelist", "**/*.lock.json" ],
-      "condition": "(Framework == \"net9.0\" || Framework == \"net8.0\" || Framework == \"net7.0\" || Framework == \"net6.0\")",
+      "condition": "(Framework == \"net10.0\" || Framework == \"net9.0\" || Framework == \"net8.0\" || Framework == \"net7.0\" || Framework == \"net6.0\")",
       "source": "./net6.0",
       "target": "./"
     }
