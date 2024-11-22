@@ -1574,7 +1574,7 @@ public partial class DataObjectTests
 
         public int QueryGetData(ref FORMATETC format)
         {
-            // do not check the requested storage medium, we always return a metafile handle, thats what Office does
+            // do not check the requested storage medium, we always return a metafile handle, that's what Office does
 
             if (format.cfFormat != (short)CLIPBOARD_FORMAT.CF_ENHMETAFILE || format.dwAspect != DVASPECT.DVASPECT_CONTENT || format.lindex != -1)
                 return (int)HRESULT.DV_E_FORMATETC;

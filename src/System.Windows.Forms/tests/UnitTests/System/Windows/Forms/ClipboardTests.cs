@@ -111,8 +111,9 @@ public class ClipboardTests
     [WinFormsFact]
     public void Clipboard_GetDataObject_InvokeMultipleTimes_Success()
     {
-        IDataObject? result = Clipboard.GetDataObject();
-        (result == Clipboard.GetDataObject()).Should().BeFalse();
+        DataObject result1 = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
+        DataObject result2 = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
+        result1.GetFormats().Should().BeEquivalentTo(result2.GetFormats());
     }
 
     [WinFormsFact]
@@ -261,8 +262,7 @@ public class ClipboardTests
     {
         Clipboard.SetDataObject(data);
 
-        var dataObject = Clipboard.GetDataObject();
-        Assert.NotNull(dataObject);
+        DataObject dataObject = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
         dataObject.GetData(data.GetType()).Should().Be(data);
         Clipboard.ContainsData(data.GetType().FullName).Should().BeTrue();
     }
@@ -433,7 +433,8 @@ public class ClipboardTests
         using Bitmap bitmap = new(10, 10);
         bitmap.SetPixel(1, 2, Color.FromArgb(0x01, 0x02, 0x03, 0x04));
         Clipboard.SetImage(bitmap);
-        Bitmap result = Assert.IsType<Bitmap>(Clipboard.GetImage());
+
+        var result = Clipboard.GetImage().Should().BeOfType<Bitmap>().Subject;
         result.Size.Should().Be(bitmap.Size);
         result.GetPixel(1, 2).Should().Be(Color.FromArgb(0xFF, 0xD2, 0xD2, 0xD2));
         Clipboard.ContainsImage().Should().BeTrue();
@@ -445,6 +446,7 @@ public class ClipboardTests
         try
         {
             using Metafile metafile = new("bitmaps/telescope_01.wmf");
+            // SetImage fails silently and corrupts the clipboard state for anything other than a bitmap.
             Clipboard.SetImage(metafile);
 
             Clipboard.GetImage().Should().BeNull();
@@ -462,6 +464,7 @@ public class ClipboardTests
         try
         {
             using Metafile metafile = new("bitmaps/milkmateya01.emf");
+            // SetImage fails silently and corrupts the clipboard for everything other than a bitmap.
             Clipboard.SetImage(metafile);
 
             Clipboard.GetImage().Should().BeNull();

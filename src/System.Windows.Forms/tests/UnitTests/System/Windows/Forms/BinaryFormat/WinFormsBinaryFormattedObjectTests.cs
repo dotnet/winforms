@@ -21,11 +21,11 @@ public class WinFormsBinaryFormattedObjectTests
     {
         using Bitmap bitmap = new(10, 10);
         SerializationRecord rootRecord = bitmap.SerializeAndDecode();
-        Formats.Nrbf.ClassRecord root = rootRecord.Should().BeAssignableTo<Formats.Nrbf.ClassRecord>().Subject;
+        ClassRecord root = rootRecord.Should().BeAssignableTo<ClassRecord>().Subject;
         root.TypeNameMatches(typeof(Bitmap)).Should().BeTrue();
         root.TypeName.FullName.Should().Be(typeof(Bitmap).FullName);
         root.TypeName.AssemblyName!.FullName.Should().Be(AssemblyRef.SystemDrawing);
-        Formats.Nrbf.ArrayRecord arrayRecord = root.GetArrayRecord("Data")!;
+        ArrayRecord arrayRecord = root.GetArrayRecord("Data")!;
         arrayRecord.Should().BeAssignableTo<SZArrayRecord<byte>>();
         rootRecord.TryGetBitmap(out object? result).Should().BeTrue();
         using Bitmap deserialized = result.Should().BeOfType<Bitmap>().Which;
