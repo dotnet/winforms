@@ -227,7 +227,10 @@ public abstract partial class AxHost
                 // For compatibility, always translate by adding 1 to match our new internal
                 // storage values (unknown = 0, stream = 1, etc.).
                 Type = (StorageType)(binaryReader.ReadInt32() + 1);
-                int version = binaryReader.ReadInt32();
+
+                // Version
+                _ = binaryReader.ReadInt32();
+
                 ManualUpdate = binaryReader.ReadBoolean();
                 int cc = binaryReader.ReadInt32();
                 if (cc != 0)

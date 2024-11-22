@@ -1390,7 +1390,7 @@ public partial class DataGridView
             return true;
         }
 
-        DataGridViewRow? dataGridViewRow = null;
+        DataGridViewRow? dataGridViewRow;
         bool allCellsSelected;
         switch (SelectionMode)
         {
@@ -4566,7 +4566,7 @@ public partial class DataGridView
 
     private void ComputeVisibleColumns()
     {
-        DataGridViewColumn? dataGridViewColumn = null;
+        DataGridViewColumn? dataGridViewColumn;
         int numVisibleScrollingCols = 0, visibleScrollingColumnsTmp = 0;
         int displayWidth = _layout.Data.Width, cx = 0;
         int numDisplayedFrozenCols = 0, firstDisplayedFrozenCol = -1, lastDisplayedFrozenCol = -1;
@@ -7140,13 +7140,14 @@ public partial class DataGridView
         ];
 
         DataObject dataObject = new();
-        bool includeColumnHeaders = false, includeRowHeaders = false;
-        string? cellContent = null;
+        bool includeColumnHeaders;
+        bool includeRowHeaders;
         StringBuilder? sbContent = null;
         DataGridViewColumn? dataGridViewColumn;
         DataGridViewColumn? prevDataGridViewColumn;
         DataGridViewColumn? nextDataGridViewColumn;
 
+        string? cellContent;
         switch (SelectionMode)
         {
             case DataGridViewSelectionMode.FullRowSelect:
