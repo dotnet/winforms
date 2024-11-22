@@ -421,7 +421,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim testCode As Action =
                 Sub()
                     My.Computer.Network.DownloadFile(
-                        address:=CType(Nothing, Uri),
+                        address:=Nothing,
                         destinationFileName,
                         networkCredentials,
                         showUI:=False,
