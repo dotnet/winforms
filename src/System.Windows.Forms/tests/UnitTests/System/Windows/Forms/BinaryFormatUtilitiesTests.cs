@@ -120,24 +120,24 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
 
     public static TheoryData<ArrayList> PrimitiveArrayListObjects_TheoryData =>
     [
-        new ArrayList { null },
-        new ArrayList { null, "something" },
-        new ArrayList { false, true },
-        new ArrayList { char.MinValue, char.MaxValue },
-        new ArrayList { byte.MinValue, byte.MaxValue },
-        new ArrayList { sbyte.MinValue, sbyte.MaxValue },
-        new ArrayList { short.MinValue, short.MaxValue },
-        new ArrayList { ushort.MinValue, ushort.MaxValue },
-        new ArrayList { int.MinValue, int.MaxValue },
-        new ArrayList { uint.MinValue, uint.MaxValue },
-        new ArrayList { long.MinValue, long.MaxValue },
-        new ArrayList { ulong.MinValue, ulong.MaxValue },
-        new ArrayList { float.MinValue, float.MaxValue },
-        new ArrayList { double.MinValue, double.MaxValue },
-        new ArrayList { decimal.MinValue, decimal.MaxValue },
-        new ArrayList { DateTime.MinValue, DateTime.MaxValue },
-        new ArrayList { TimeSpan.MinValue, TimeSpan.MaxValue },
-        new ArrayList { "a", "b", "c" }
+        [null],
+        [null, "something"],
+        [false, true],
+        [char.MinValue, char.MaxValue],
+        [byte.MinValue, byte.MaxValue],
+        [sbyte.MinValue, sbyte.MaxValue],
+        [short.MinValue, short.MaxValue],
+        [ushort.MinValue, ushort.MaxValue],
+        [int.MinValue, int.MaxValue],
+        [uint.MinValue, uint.MaxValue],
+        [long.MinValue, long.MaxValue],
+        [ulong.MinValue, ulong.MaxValue],
+        [float.MinValue, float.MaxValue],
+        [double.MinValue, double.MaxValue],
+        [decimal.MinValue, decimal.MaxValue],
+        [DateTime.MinValue, DateTime.MaxValue],
+        [TimeSpan.MinValue, TimeSpan.MaxValue],
+        ["a", "b", "c"]
     ];
 
     public static TheoryData<Hashtable> PrimitiveTypeHashtables_TheoryData =>
@@ -162,9 +162,9 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
 
     public static TheoryData<NotSupportedException> NotSupportedException_TestData =>
     [
-        new NotSupportedException(),
-        new NotSupportedException("Error message"),
-        new NotSupportedException(null)
+        new(),
+        new("Error message"),
+        new(null)
     ];
 
     public static TheoryData<IList> Lists_UnsupportedTestData =>
