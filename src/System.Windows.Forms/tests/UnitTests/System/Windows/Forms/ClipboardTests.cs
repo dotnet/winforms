@@ -232,15 +232,26 @@ public class ClipboardTests
     [InlineData(null)]
     public void Clipboard_SetData_EmptyOrWhitespaceFormat_ThrowsArgumentException(string? format)
     {
-        Action action = () => Clipboard.SetData(format!, data: null!);
+        Action action = () => Clipboard.SetData(format!, "data");
         action.Should().Throw<ArgumentException>().WithParameterName("format");
     }
 
     [WinFormsFact]
-    public void Clipboard_SetData_null_Success()
+    public void Clipboard_SetData_null_NotThrow()
     {
-        Action action = () => Clipboard.SetData("MyData", data: null!);
-        action.Should().NotThrow();
+        try
+        {
+            Action action = () => Clipboard.SetData("MyData", data: null!);
+            action.Should().NotThrow();
+            // Clipboard flushes format only, content is not stored.
+            // GetData will hit "Data on clipboard is invalid (0x800401D3 (CLIPBRD_E_BAD_DATA))"
+            Clipboard.ContainsData("MyData").Should().BeTrue();
+            Clipboard.GetData("MyData").Should().BeNull();
+        }
+        finally
+        {
+            Clipboard.Clear();
+        }
     }
 
     [WinFormsTheory]
@@ -264,8 +275,7 @@ public class ClipboardTests
         DataObject dataObject = new(data);
         Clipboard.SetDataObject(dataObject);
 
-        var actual = Clipboard.GetDataObject();
-        Assert.NotNull(actual);
+        DataObject actual = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
         actual.GetData(data.GetType()).Should().Be(data);
         Clipboard.ContainsData(data.GetType().FullName).Should().BeTrue();
     }
@@ -279,8 +289,7 @@ public class ClipboardTests
     {
         Clipboard.SetDataObject(data, copy);
 
-        var dataObject = Clipboard.GetDataObject();
-        Assert.NotNull(dataObject);
+        DataObject dataObject = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
         dataObject.GetData(data.GetType()).Should().Be(data);
         Clipboard.ContainsData(data.GetType().FullName).Should().BeTrue();
     }

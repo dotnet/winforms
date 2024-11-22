@@ -15,8 +15,6 @@ namespace System.Windows.Forms.Design;
 /// </summary>
 internal class ButtonBaseDesigner : ControlDesigner
 {
-    // private DesignerActionListCollection _actionlists;
-
     public ButtonBaseDesigner()
     {
         AutoResizeHandles = true;
@@ -31,7 +29,6 @@ internal class ButtonBaseDesigner : ControlDesigner
         {
             // Dev10 Bug 685319: We should set the UseVisualStyleBackColor to trun only
             // when this property has not been set/changed by user
-            //
             if (!prop.ShouldSerializeValue(Component))
             {
                 prop.SetValue(Component, true);
