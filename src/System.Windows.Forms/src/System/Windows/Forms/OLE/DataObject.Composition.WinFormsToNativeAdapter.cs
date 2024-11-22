@@ -116,13 +116,16 @@ public unsafe partial class DataObject
                     return HRESULT.DV_E_FORMATETC;
                 }
 
-                object? data = _dataObject.GetData(format);
+                if (_dataObject.GetData(format) is not object data)
+                {
+                    return HRESULT.E_UNEXPECTED;
+                }
 
                 if (((TYMED)pformatetc->tymed).HasFlag(TYMED.TYMED_HGLOBAL))
                 {
                     try
                     {
-                        return SaveDataToHGLOBAL(data!, format, ref *pmedium);
+                        return SaveDataToHGLOBAL(data, format, ref *pmedium);
                     }
                     catch (NotSupportedException ex)
                     {
@@ -314,7 +317,7 @@ public unsafe partial class DataObject
                 _ when format == DataFormats.SerializableConstant || data is ISerializable || data.GetType().IsSerializable
 #pragma warning restore
                     => SaveObjectToHGLOBAL(ref medium.hGlobal, data, RestrictDeserializationToSafeTypes(format)),
-                _ => HRESULT.E_FAIL
+                _ => HRESULT.E_UNEXPECTED
             };
 
             private static HRESULT SaveObjectToHGLOBAL(ref HGLOBAL hglobal, object data, bool restrictSerialization)
