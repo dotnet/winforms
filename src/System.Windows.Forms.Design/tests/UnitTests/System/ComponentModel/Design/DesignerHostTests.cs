@@ -2318,7 +2318,6 @@ public class DesignerHostTests
     [WinFormsFact]
     public void DesignerHost_GetServiceIMultitargetHelperServiceWithoutLoader_ReturnsNull()
     {
-        object service = new();
         Mock<IServiceProvider> mockServiceProvider = new(MockBehavior.Strict);
         SubDesignSurface surface = new(mockServiceProvider.Object);
         IDesignerLoaderHost2 host = surface.Host;

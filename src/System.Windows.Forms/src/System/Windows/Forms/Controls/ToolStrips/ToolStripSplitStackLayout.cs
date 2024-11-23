@@ -213,7 +213,7 @@ internal class ToolStripSplitStackLayout : LayoutEngine
         int lastRight = _displayRectangle.Right;
         int lastLeft = _displayRectangle.Left;
         bool needsMoreSpace = false;
-        Size itemSize = Size.Empty;
+        Size itemSize;
         Rectangle alignedLeftItems = Rectangle.Empty;
         Rectangle alignedRightItems = Rectangle.Empty;
 
@@ -238,7 +238,7 @@ internal class ToolStripSplitStackLayout : LayoutEngine
 
         for (int j = -1; j < toolStrip.Items.Count; j++)
         {
-            ToolStripItem? item = null;
+            ToolStripItem? item;
 
             if (j == -1)
             {
@@ -284,7 +284,7 @@ internal class ToolStripSplitStackLayout : LayoutEngine
             //      In RTL.No,  Head is to the Left,  Tail is to the Right
             if (item.Placement == ToolStripItemPlacement.Main)
             {
-                int x = _displayRectangle.Left;
+                int x;
                 int y = _displayRectangle.Top;
                 Padding itemMargin = item.Margin;
 
@@ -358,7 +358,7 @@ internal class ToolStripSplitStackLayout : LayoutEngine
         int lastBottom = _displayRectangle.Bottom;
         int lastTop = _displayRectangle.Top;
         bool needsMoreSpace = false;
-        Size itemSize = Size.Empty;
+        Size itemSize;
         Rectangle alignedLeftItems = Rectangle.Empty;
         Rectangle alignedRightItems = Rectangle.Empty;
 
@@ -380,7 +380,7 @@ internal class ToolStripSplitStackLayout : LayoutEngine
 
         for (int j = -1; j < ToolStrip.Items.Count; j++)
         {
-            ToolStripItem? item = null;
+            ToolStripItem? item;
 
             if (j == -1)
             {
@@ -428,7 +428,7 @@ internal class ToolStripSplitStackLayout : LayoutEngine
             {
                 Padding itemMargin = item.Margin;
                 int x = _displayRectangle.Left + itemMargin.Left;
-                int y = _displayRectangle.Top;
+                int y;
 
                 switch (item.Alignment)
                 {
@@ -491,7 +491,7 @@ internal class ToolStripSplitStackLayout : LayoutEngine
         {
             // overflow buttons can be placed outside the display rect.
             bool horizontal = (ToolStrip.LayoutStyle == ToolStripLayoutStyle.HorizontalStackWithOverflow);
-            Rectangle displayRect = _displayRectangle;
+
             Rectangle itemBounds = new(itemLocation, itemSize);
 
             // in horizontal if something bleeds over the top/bottom that's ok - its left/right we care about

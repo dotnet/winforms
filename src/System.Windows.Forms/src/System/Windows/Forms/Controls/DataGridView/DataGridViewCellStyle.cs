@@ -659,7 +659,6 @@ public class DataGridViewCellStyle : ICloneable
             }
 
             sb.Append($" Tag={Tag}");
-            firstPropAdded = false;
         }
 
         sb.Append(" }");

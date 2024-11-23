@@ -1015,11 +1015,8 @@ public class DataGridViewHeaderCellTests
         {
             foreach (DataGridViewRowHeadersWidthSizeMode rowHeadersWidthSizeMode in Enum.GetValues(typeof(DataGridViewRowHeadersWidthSizeMode)))
             {
-                foreach (DataGridViewTriState rowResizable in Enum.GetValues(typeof(DataGridViewTriState)))
-                {
-                    bool expected = columnHeadersHeightSizeMode == DataGridViewColumnHeadersHeightSizeMode.EnableResizing || rowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.EnableResizing;
-                    yield return new object[] { columnHeadersHeightSizeMode, rowHeadersWidthSizeMode, expected };
-                }
+                bool expected = columnHeadersHeightSizeMode == DataGridViewColumnHeadersHeightSizeMode.EnableResizing || rowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.EnableResizing;
+                yield return new object[] { columnHeadersHeightSizeMode, rowHeadersWidthSizeMode, expected };
             }
         }
     }

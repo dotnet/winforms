@@ -1703,7 +1703,7 @@ public class AxHostTests
         iPicture.get_Width(out int width).ThrowOnFailure();
         iPicture.get_Height(out int height).ThrowOnFailure();
         iPicture.get_Attributes(out uint attributes).ThrowOnFailure();
-        iPicture.get_CurDC(out HDC hdc).Should().Be(HRESULT.E_FAIL);
+        iPicture.get_CurDC(out HDC _).Should().Be(HRESULT.E_FAIL);
 
         Assert.NotEqual(0u, handle);
         Assert.True(iPicture.get_hPal(out _).Failed);
@@ -3115,17 +3115,17 @@ public class AxHostTests
     {
     }
 
-    [CustomAttribute]
+    [Custom]
     private class CustomAxHost : AxHost
     {
         public CustomAxHost(string clsid) : base(clsid)
         {
         }
 
-        [CustomAttribute]
+        [Custom]
         public event EventHandler CustomEvent;
 
-        [CustomAttribute]
+        [Custom]
         public string CustomProperty { get; set; }
     }
 

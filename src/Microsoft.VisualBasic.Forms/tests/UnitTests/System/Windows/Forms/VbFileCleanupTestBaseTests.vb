@@ -14,9 +14,9 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub CreateTempDirectoryTest()
             Dim tempDirectory As String = CreateTempDirectory()
             tempDirectory.Should.StartWith(Path.GetTempPath)
-            tempDirectory = CreateTempDirectory()
+            CreateTempDirectory()
             _testDirectories.Count.Should.Be(1)
-            tempDirectory = CreateTempDirectory(lineNumber:=1)
+            CreateTempDirectory(lineNumber:=1)
             _testDirectories.Count.Should.Be(2)
         End Sub
 

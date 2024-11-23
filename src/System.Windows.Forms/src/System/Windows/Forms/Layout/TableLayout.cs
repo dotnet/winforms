@@ -416,7 +416,7 @@ internal partial class TableLayout : LayoutEngine
 
                 // try to layout the absolutely positioned element as if it were non-absolutely positioned.
                 // In this way we can tell whether this element overlaps with others or fits on the table.
-                AdvanceUntilFits(maxColumns, reservationGrid, fixedElement, out colStop);
+                AdvanceUntilFits(maxColumns, reservationGrid, fixedElement, out _);
 
                 // we have exceeded the row limit. just return
                 if (fixedElement.RowStart >= maxRows)
@@ -715,7 +715,9 @@ internal partial class TableLayout : LayoutEngine
             // since InitializeStrips already allocated absolutely sized columns, we can skip over them
             if (columnSpan > 1 || !IsAbsolutelySized(layoutInfo.ColumnStart, containerInfo.ColumnStyles))
             {
-                int minWidth = 0, maxWidth = 0;
+                int minWidth;
+                int maxWidth;
+
                 // optimize for the case where one of the parameters is known.
                 if ((columnSpan == 1 && layoutInfo.RowSpan == 1) &&
                     (IsAbsolutelySized(layoutInfo.RowStart, containerInfo.RowStyles)))
@@ -1080,13 +1082,11 @@ internal partial class TableLayout : LayoutEngine
                     // If there's space left over, then give it to the percentage columns/rows
                     totalPercentAllocatedSpace += remainingSpace;
                 }
-
                 else if (remainingSpace < 0)
                 {
                     // If there's not enough space, then remove space from the percentage columns.
                     // We do this by recalculating the space available.
                     totalPercentAllocatedSpace = maxSize - totalAbsoluteAndAutoSizeAllocatedSpace - (strips.Length * cellBorderWidth);
-                    remainingSpace = 0;
                 }
 
                 // in this case the strips fill up the remaining space.
@@ -1178,7 +1178,6 @@ internal partial class TableLayout : LayoutEngine
         int currentCol = 0;
         int currentRow = 0;
         bool isContainerRTL = false;
-        Rectangle displayRect = Rectangle.Truncate(displayRectF);
 
         if (containerInfo.Container is Control containerAsControl)
         {

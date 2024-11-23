@@ -179,7 +179,15 @@ public class ThreadExceptionDialog : Form
         foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
         {
             AssemblyName name = assembly.GetName();
-            detailsTextBuilder.AppendFormat(SR.ExDlgMsgLoadedAssembliesEntry, name.Name, name.Version, assembly.Location);
+#pragma warning disable IL3000 // Avoid accessing Assembly file path when publishing as a single file
+            string location = assembly.Location;
+#pragma warning restore IL3000
+
+            detailsTextBuilder.AppendFormat(
+                SR.ExDlgMsgLoadedAssembliesEntry,
+                name.Name,
+                name.Version,
+                string.IsNullOrEmpty(location) ? AppContext.BaseDirectory : location);
             detailsTextBuilder.Append(separator);
         }
 

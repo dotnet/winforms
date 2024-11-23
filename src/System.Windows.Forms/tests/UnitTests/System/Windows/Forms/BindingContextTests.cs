@@ -756,7 +756,6 @@ public class BindingContextTests
     public void BindingContext_OnCollectionChanged_Invoke_Nop()
     {
         SubBindingContext context = new();
-        CollectionChangeEventHandler handler = (sender, e) => { };
         context.OnCollectionChanged(null);
     }
 

@@ -2195,8 +2195,6 @@ public partial class MaskedTextBox : TextBoxBase
         }
         else
         {
-            // temp hint used to preserve the 'primary' operation hint (no side effects).
-            MaskedTextResultHint tempHint = hint;
             int testPos;
 
             foreach (char ch in text)
@@ -2222,7 +2220,7 @@ public partial class MaskedTextBox : TextBoxBase
                 // if length > 0 we are (re)placing the input char in the current startPosition, otherwise we are inserting the input.
                 bool replace = length > 0;
 
-                if (PlaceChar(clonedProvider, ch, startPosition, length, replace, out tempHint))
+                if (PlaceChar(clonedProvider, ch, startPosition, length, replace, out MaskedTextResultHint tempHint))
                 {
                     // caretTestPos is updated in PlaceChar call.
                     startPosition = _caretTestPos + 1;
@@ -2245,19 +2243,10 @@ public partial class MaskedTextBox : TextBoxBase
                 // At this point we have processed all characters from the input text (if any) but still need to
                 // remove remaining characters from the selected text (if editable and valid chars).
 
-                if (startPosition <= endPos)
+                if (startPosition <= endPos
+                    && !clonedProvider.RemoveAt(startPosition, endPos, out _caretTestPos, out MaskedTextResultHint tempHint))
                 {
-                    if (!clonedProvider.RemoveAt(startPosition, endPos, out _caretTestPos, out tempHint))
-                    {
-                        OnMaskInputRejected(new MaskInputRejectedEventArgs(_caretTestPos, tempHint));
-                    }
-
-                    // If 'replace' is not actually performed (maybe the input is empty which means 'remove', hint will be whatever
-                    // the 'remove' operation result hint is.
-                    if (hint == MaskedTextResultHint.NoEffect && hint != tempHint)
-                    {
-                        hint = tempHint;
-                    }
+                    OnMaskInputRejected(new MaskInputRejectedEventArgs(_caretTestPos, tempHint));
                 }
             }
         }
@@ -2527,7 +2516,7 @@ public partial class MaskedTextBox : TextBoxBase
         }
 
         int testPos = 0;
-        bool raiseOnMaskInputRejected = false; // Raise if new provider rejects old text.
+        bool raiseOnMaskInputRejected;
         MaskedTextResultHint hint = MaskedTextResultHint.NoEffect;
         MaskedTextProvider oldProvider = _maskedTextProvider;
 

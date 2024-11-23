@@ -633,7 +633,7 @@ internal partial class DefaultLayout : LayoutEngine
         }
 
         Size preferredSizeForDocking = Size.Empty;
-        Size preferredSizeForAnchoring = Size.Empty;
+        Size preferredSizeForAnchoring;
 
         if (dock)
         {

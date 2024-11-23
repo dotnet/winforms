@@ -80,7 +80,6 @@ public partial class PropertyGrid
 
                     return null;
                 case NavigateDirection.NavigateDirection_PreviousSibling:
-                    fragmentCount = GetChildFragmentCount();
                     childFragmentIndex = GetChildFragmentIndex(childFragment);
                     if (childFragmentIndex > 0)
                     {
