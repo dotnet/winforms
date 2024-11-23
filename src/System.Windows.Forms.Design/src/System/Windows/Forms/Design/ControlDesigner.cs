@@ -1667,7 +1667,7 @@ public partial class ControlDesigner : ComponentDesigner
     }
 
     /// <summary>
-    ///  Hooks the children of the given control. We need to do this for child controls that are not in design
+    ///  Unhooks the children of the given control. We need to do this for child controls that are not in design
     ///  mode, which is the case for composite controls.
     /// </summary>
     protected void UnhookChildControls(Control firstChild)
@@ -1676,11 +1676,9 @@ public partial class ControlDesigner : ComponentDesigner
 
         foreach (Control child in firstChild.Controls)
         {
-            IWindowTarget? oldTarget = null;
             if (child is not null)
             {
-                // No, no designer means we must replace the window target in this control.
-                oldTarget = child.WindowTarget;
+                IWindowTarget? oldTarget = child.WindowTarget;
                 if (oldTarget is ChildWindowTarget target)
                 {
                     child.WindowTarget = target.OldWindowTarget;

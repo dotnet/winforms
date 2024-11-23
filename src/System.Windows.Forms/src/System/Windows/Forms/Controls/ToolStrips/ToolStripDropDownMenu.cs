@@ -346,7 +346,7 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
         maxTextSize.Width = Math.Max(maxTextSize.Width, maxNonMenuItemSize.Width);
 
         Point nextPoint = Point.Empty;
-        int checkAndImageMarginWidth = 0;
+        int checkAndImageMarginWidth;
 
         int extraImageWidth = Math.Max(0, maxImageSize.Width - _defaultImageSize.Width);
 
@@ -531,10 +531,6 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
     {
         base.Initialize();
         Padding = DefaultPadding;
-        FlowLayoutSettings settings = new(this)
-        {
-            FlowDirection = FlowDirection.TopDown
-        };
         _state[s_stateShowImageMargin] = true;
     }
 
@@ -760,7 +756,6 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
                 if (_indexOfFirstDisplayedItem == Items.Count - 1)
                 {
                     Debug.Fail("We're trying to scroll down, but the top item is displayed!!!");
-                    delta = 0;
                 }
 
                 ToolStripItem itemTop = Items[_indexOfFirstDisplayedItem];

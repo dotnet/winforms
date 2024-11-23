@@ -71,7 +71,7 @@ public partial class DataGridViewRowCollection
                 return -1;
             }
 
-            int result = 0;
+            int result;
             if (_customComparer is null)
             {
                 if (_dataGridViewSortedColumn is null)

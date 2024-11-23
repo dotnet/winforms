@@ -217,7 +217,7 @@ public partial class TypeCodeDomSerializer : CodeDomSerializerBase
     /// </summary>
     private object? DeserializeName(IDesignerSerializationManager manager, string name, CodeStatementCollection? statements)
     {
-        object? value = null;
+        object? value;
 
         // If the name we're looking for isn't in our dictionary, we return null.
         // It is up to the caller to decide if this is an error or not.

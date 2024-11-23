@@ -9,7 +9,6 @@ namespace System.ComponentModel.Design.Serialization
             this IDesignerSerializationManager manager,
             [NotNullWhen(true)] out T? context)
         {
-            object? contextObject = manager.Context[typeof(T)];
             if (manager.Context[typeof(T)] is T contextTemp)
             {
                 context = contextTemp;

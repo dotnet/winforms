@@ -453,7 +453,7 @@ public partial class Control
         internal override bool CanGetHelpTopicInternal =>
             IsInternal
             && (!this.TryGetOwnerAs(out Control? owner)
-                || owner.Events[s_queryAccessibilityHelpEvent] is not QueryAccessibilityHelpEventHandler handler);
+                || owner.Events[s_queryAccessibilityHelpEvent] is not QueryAccessibilityHelpEventHandler);
 
         public void NotifyClients(AccessibleEvents accEvent)
             => NotifyClients(accEvent, (int)OBJECT_IDENTIFIER.OBJID_CLIENT, 0);

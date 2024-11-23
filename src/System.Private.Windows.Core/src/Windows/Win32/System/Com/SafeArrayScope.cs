@@ -89,7 +89,8 @@ internal readonly unsafe ref struct SafeArrayScope<T>
 
     public SafeArrayScope(uint size)
     {
-        VARENUM vt = VARENUM.VT_EMPTY;
+        VARENUM vt;
+
         if (typeof(T) == typeof(string))
         {
             vt = VARENUM.VT_BSTR;

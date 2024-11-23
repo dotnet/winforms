@@ -684,7 +684,7 @@ public sealed class ResXDataNode : ISerializable
             }
         }
 
-        return resolvedType ??= Type.GetType(typeName, throwOnError: false);
+        return resolvedType ?? Type.GetType(typeName, throwOnError: false);
     }
 
     void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context)

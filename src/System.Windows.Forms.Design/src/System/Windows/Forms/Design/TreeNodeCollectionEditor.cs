@@ -151,7 +151,7 @@ internal class TreeNodeCollectionEditor : CollectionEditor
 
         private void Add(TreeNode parent)
         {
-            TreeNode newNode = null;
+            TreeNode newNode;
             string baseNodeName = SR.BaseNodeName;
 
             if (parent is null)

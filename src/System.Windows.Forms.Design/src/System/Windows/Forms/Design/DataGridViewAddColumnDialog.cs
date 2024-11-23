@@ -52,8 +52,7 @@ internal class DataGridViewAddColumnDialog : Form
         _liveDataGridView = liveDataGridView;
 
         // PERF: set the Dialog Font before InitializeComponent.
-        //
-        Font uiFont = Control.DefaultFont;
+        Font uiFont = DefaultFont;
         if (_liveDataGridView.Site.TryGetService(out IUIService? uiService))
         {
             uiFont = (Font)uiService.Styles["DialogFont"]!;
@@ -639,14 +638,14 @@ internal class DataGridViewAddColumnDialog : Form
             nameCreationService = _liveDataGridView.Site.GetService<INameCreationService>();
         }
 
-        string errorString = string.Empty;
-        if (!ValidName(_nameTextBox.Text,
-                       _dataGridViewColumns,
-                       container,
-                       nameCreationService,
-                       _liveDataGridView.Columns,
-                       !_persistChangesToDesigner,
-                       out errorString))
+        if (!ValidName(
+            _nameTextBox.Text,
+            _dataGridViewColumns,
+            container,
+            nameCreationService,
+            _liveDataGridView.Columns,
+            !_persistChangesToDesigner,
+            out string errorString))
         {
             IUIService? uiService = _liveDataGridView.Site?.GetService<IUIService>();
             DataGridViewDesigner.ShowErrorDialog(uiService, errorString, _liveDataGridView);
@@ -717,7 +716,6 @@ internal class DataGridViewAddColumnDialog : Form
             }
             catch (ArgumentException)
             {
-                currencyManager = null;
             }
 
             PropertyDescriptorCollection? propertyDescriptorCollection = currencyManager?.GetItemProperties();
@@ -742,14 +740,9 @@ internal class DataGridViewAddColumnDialog : Form
             }
         }
 
-        if (selectedIndex != -1 && selectedIndex < _dataColumns.Items.Count)
-        {
-            _dataColumns.SelectedIndex = selectedIndex;
-        }
-        else
-        {
-            _dataColumns.SelectedIndex = _dataColumns.Items.Count > 0 ? 0 : -1;
-        }
+        _dataColumns.SelectedIndex = selectedIndex != -1 && selectedIndex < _dataColumns.Items.Count
+            ? selectedIndex
+            : _dataColumns.Items.Count > 0 ? 0 : -1;
     }
 
     private void addButton_Click(object? sender, EventArgs e)
@@ -778,14 +771,14 @@ internal class DataGridViewAddColumnDialog : Form
                     IContainer? container = host?.Container;
                     INameCreationService? nameCreationService = _liveDataGridView.Site?.GetService<INameCreationService>();
 
-                    string errorString = string.Empty;
-                    if (ValidName(_nameTextBox.Text,
-                                  _dataGridViewColumns,
-                                  container,
-                                  nameCreationService,
-                                  _liveDataGridView.Columns,
-                                  !_persistChangesToDesigner,
-                                  out errorString))
+                    if (ValidName(
+                        _nameTextBox.Text,
+                        _dataGridViewColumns,
+                        container,
+                        nameCreationService,
+                        _liveDataGridView.Columns,
+                        !_persistChangesToDesigner,
+                        out string errorString))
                     {
                         AddColumn();
                         Close();

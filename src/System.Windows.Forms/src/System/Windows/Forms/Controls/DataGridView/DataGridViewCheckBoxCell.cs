@@ -728,8 +728,9 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
         ComputeBorderStyleCellStateAndCellBounds(
             rowIndex,
             out DataGridViewAdvancedBorderStyle dgvabsEffective,
-            out DataGridViewElementStates cellState,
-            out Rectangle cellBounds);
+            out _,
+            out _);
+
         Rectangle borderWidths = BorderWidths(dgvabsEffective);
         preferredSize.Width += borderWidths.X;
         preferredSize.Height += borderWidths.Y;

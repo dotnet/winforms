@@ -160,7 +160,7 @@ public abstract partial class AxHost
             GetComponents();
             _lockCount++;
 
-            Control? additionalControl = control;
+            Control? additionalControl;
 
             try
             {

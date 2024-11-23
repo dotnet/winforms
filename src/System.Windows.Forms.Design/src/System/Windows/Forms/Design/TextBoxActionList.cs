@@ -18,22 +18,14 @@ internal class TextBoxActionList : DesignerActionList
 
     public bool Multiline
     {
-        get
-        {
-            return _textBox.Multiline;
-        }
-        set
-        {
-            TypeDescriptor.GetProperties(_textBox)["Multiline"]!.SetValue(Component, value);
-        }
+        get => _textBox.Multiline;
+        set => TypeDescriptor.GetProperties(_textBox)[nameof(Multiline)]!.SetValue(Component, value);
     }
 
-    public override DesignerActionItemCollection GetSortedActionItems()
-    {
-        DesignerActionItemCollection items =
-        [
-            new DesignerActionPropertyItem("Multiline", string.Format(SR.MultiLineDisplayName, SR.PropertiesCategoryName, SR.MultiLineDescription)),
-        ];
-        return items;
-    }
+    public override DesignerActionItemCollection GetSortedActionItems() =>
+    [
+        new DesignerActionPropertyItem(
+            nameof(Multiline),
+            string.Format(SR.MultiLineDisplayName, SR.PropertiesCategoryName, SR.MultiLineDescription)),
+    ];
 }

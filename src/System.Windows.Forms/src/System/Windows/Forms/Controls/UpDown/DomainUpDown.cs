@@ -285,7 +285,7 @@ public partial class DomainUpDown : UpDownBase
         // otherwise returns -1.
         int index = startPosition;
         int matchIndex = -1;
-        bool found = false;
+        bool found;
 
         if (!complete)
         {
@@ -295,14 +295,10 @@ public partial class DomainUpDown : UpDownBase
         // Attempt to match the string with Items[index]
         do
         {
-            if (complete)
-            {
-                found = Items[index]!.ToString()!.Equals(text);
-            }
-            else
-            {
-                found = Items[index]!.ToString()!.ToUpper(CultureInfo.InvariantCulture).StartsWith(text, StringComparison.Ordinal);
-            }
+            found = complete
+                ? Items[index]!.ToString()!.Equals(text)
+                : Items[index]!.ToString()!.ToUpper(CultureInfo.InvariantCulture)
+                    .StartsWith(text, StringComparison.Ordinal);
 
             if (found)
             {
@@ -386,8 +382,6 @@ public partial class DomainUpDown : UpDownBase
         Debug.Assert(index < _domainItems.Count && index >= -1, "SelectValue: index out of range");
         if (_domainItems is null || index < -1 || index >= _domainItems.Count)
         {
-            // Defensive programming
-            index = -1;
             return;
         }
 

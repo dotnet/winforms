@@ -875,7 +875,7 @@ public partial class Label : Control, IAutomationLiveRegion
         Size pointImageSize = image.Size;
 
         int xLoc = r.X + 2;
-        int yLoc = r.Y + 2;
+        int yLoc;
 
         if ((align & WindowsFormsUtils.AnyRightAlign) != 0)
         {

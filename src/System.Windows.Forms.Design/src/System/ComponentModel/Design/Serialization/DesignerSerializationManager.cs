@@ -485,7 +485,7 @@ public class DesignerSerializationManager : IDesignerSerializationManager
         // Check for a default serialization provider
         if (_defaultProviderTable is null || !_defaultProviderTable.Contains(serializerType))
         {
-            Type? defaultSerializerType = null;
+            Type? defaultSerializerType;
             DefaultSerializationProviderAttribute? attribute = (DefaultSerializationProviderAttribute?)TypeDescriptor.GetAttributes(serializerType)[typeof(DefaultSerializationProviderAttribute)];
             if (attribute is not null)
             {
