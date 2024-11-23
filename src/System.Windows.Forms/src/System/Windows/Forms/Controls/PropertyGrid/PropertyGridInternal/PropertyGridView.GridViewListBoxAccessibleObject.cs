@@ -19,7 +19,7 @@ internal partial class PropertyGridView
         /// <param name="owningGridViewListBox">The owning GridViewListBox.</param>
         public GridViewListBoxAccessibleObject(GridViewListBox owningGridViewListBox) : base(owningGridViewListBox)
         {
-            if (owningGridViewListBox.OwningPropertyGridView is not PropertyGridView owningPropertyGridView)
+            if (owningGridViewListBox.OwningPropertyGridView is null)
             {
                 throw new ArgumentException(null, nameof(owningGridViewListBox));
             }

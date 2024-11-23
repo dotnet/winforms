@@ -8,7 +8,7 @@ namespace System.Windows.Forms;
 
 public partial class CheckBox
 {
-    public class CheckBoxAccessibleObject(Control owner) : ButtonBaseAccessibleObject((owner is CheckBox owningCheckBox)
+    public class CheckBoxAccessibleObject(Control owner) : ButtonBaseAccessibleObject((owner is CheckBox)
         ? owner
         : throw new ArgumentException(string.Format(SR.ConstructorArgumentInvalidValueType, nameof(owner), typeof(CheckBox))))
     {

@@ -18,7 +18,7 @@ public partial class LinkLabel
         }
 
         internal override IRawElementProviderFragment.Interface? ElementProviderFromPoint(double x, double y)
-            => !this.IsOwnerHandleCreated(out LinkLabel? owner)
+            => !this.IsOwnerHandleCreated(out LinkLabel? _)
                 ? base.ElementProviderFromPoint(x, y)
                 : HitTest((int)x, (int)y) ?? base.ElementProviderFromPoint(x, y);
 

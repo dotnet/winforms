@@ -680,7 +680,7 @@ internal partial class TableLayoutPanelDesigner : FlowPanelDesigner
     private static bool SubsetExists(bool[,] cells, int columns, int rows, int subsetColumns, int subsetRows)
     {
         bool exists = false;
-        int column = 0;
+        int column;
         int row;
 
         for (row = 0; row < rows - subsetRows + 1; row++)
@@ -1947,17 +1947,10 @@ internal partial class TableLayoutPanelDesigner : FlowPanelDesigner
 
     private void ChangeSizeType(bool isRow, SizeType newType)
     {
-        TableLayoutStyleCollection styles = null;
+        TableLayoutStyleCollection styles;
         try
         {
-            if (isRow)
-            {
-                styles = Table.RowStyles;
-            }
-            else
-            {
-                styles = Table.ColumnStyles;
-            }
+            styles = isRow ? Table.RowStyles : Table.ColumnStyles;
 
             int index = isRow ? _curRow : _curCol;
 

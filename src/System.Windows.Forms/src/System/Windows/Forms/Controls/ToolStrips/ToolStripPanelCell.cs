@@ -263,7 +263,7 @@ internal sealed class ToolStripPanelCell : ArrangedElement
     public override Size GetPreferredSize(Size constrainingSize)
     {
         ISupportToolStripPanel draggedControl = DraggedControl;
-        Size preferredSize = Size.Empty;
+        Size preferredSize;
 
         if (draggedControl.Stretch && ToolStripPanelRow is not null)
         {

@@ -361,8 +361,6 @@ internal class DataGridViewColumnCollectionDialog : Form
             {
                 throw;
             }
-
-            defaultSrcColumn = null;
         }
 
         // 2.b Go thru the public properties in the DataGridViewCellStyle and copy only the property
@@ -1269,7 +1267,7 @@ internal class DataGridViewColumnCollectionDialog : Form
         {
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(DataGridViewColumn);
 
-            PropertyDescriptor[]? propArray = null;
+            PropertyDescriptor[]? propArray;
             if (DataGridViewColumnDesigner is not null)
             {
                 // PropertyDescriptorCollection does not let us change properties.
@@ -1302,17 +1300,8 @@ internal class DataGridViewColumnCollectionDialog : Form
             return new PropertyDescriptorCollection(propArray);
         }
 
-        object ICustomTypeDescriptor.GetPropertyOwner(PropertyDescriptor? pd)
-        {
-            if (pd is ColumnTypePropertyDescriptor)
-            {
-                return this;
-            }
-            else
-            {
-                return DataGridViewColumn;
-            }
-        }
+        object ICustomTypeDescriptor.GetPropertyOwner(PropertyDescriptor? pd) =>
+            pd is ColumnTypePropertyDescriptor ? this : DataGridViewColumn;
 
         ISite? IComponent.Site
         {

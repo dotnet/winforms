@@ -244,9 +244,7 @@ internal static class Formatter
         object? formattedNullValue,
         object? dataSourceNullValue)
     {
-        //
         // Strip away any use of nullable types (eg. Nullable<int>), leaving just the 'real' types
-        //
 
         Type oldTargetType = targetType;
 
@@ -255,25 +253,14 @@ internal static class Formatter
         sourceConverter = NullableUnwrap(sourceConverter);
         targetConverter = NullableUnwrap(targetConverter);
 
-        bool isNullableTargetType = (targetType != oldTargetType);
-
-        //
         // Call the 'real' method to perform the conversion
-        //
 
         object? result = ParseObjectInternal(value, targetType, sourceType, targetConverter, sourceConverter, formatInfo, formattedNullValue);
 
-        //
         // On the way out, substitute DBNull with the appropriate representation of 'null' for the final target type.
         // For most types, this is just DBNull. But for a nullable type, its an instance of that type with no value.
-        //
 
-        if (result == DBNull.Value)
-        {
-            return NullData(oldTargetType, dataSourceNullValue);
-        }
-
-        return result;
+        return result == DBNull.Value ? NullData(oldTargetType, dataSourceNullValue) : result;
     }
 
     /// <summary>

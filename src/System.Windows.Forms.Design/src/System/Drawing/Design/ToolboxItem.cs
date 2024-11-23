@@ -505,6 +505,10 @@ public class ToolboxItem : ISerializable
                 }
 
 #pragma warning disable SYSLIB0044 // Type or member is obsolete. Ref https://github.com/dotnet/winforms/issues/7308
+#pragma warning disable IL3000 // Avoid accessing Assembly file path when publishing as a single file
+
+                // If we're single file, CodeBase will be empty, that is expected. We can't load from a path
+                // that doesn't exist, so falling through to the next case is the right thing to do.
                 if (a is null && !string.IsNullOrEmpty(assemblyName.CodeBase))
                 {
                     try
@@ -521,6 +525,7 @@ public class ToolboxItem : ISerializable
                     {
                     }
                 }
+#pragma warning restore IL3000
 #pragma warning restore SYSLIB0044
 
                 if (a is not null)

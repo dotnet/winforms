@@ -1565,17 +1565,9 @@ public abstract partial class ToolStripItem :
                 }
             }
 
-            Size imageSize = Size.Empty;
-            if (usingImageList)
-            {
-                imageSize = Owner?.ImageList?.ImageSize ?? Size.Empty;
-            }
-            else
-            {
-                imageSize = (image is null) ? Size.Empty : image.Size;
-            }
-
-            return imageSize;
+            return usingImageList
+                ? Owner?.ImageList?.ImageSize ?? Size.Empty
+                : (image is null) ? Size.Empty : image.Size;
         }
     }
 
@@ -2169,7 +2161,7 @@ public abstract partial class ToolStripItem :
     {
         if (data is not IComDataObject dataObject)
         {
-            DataObject? iwdata = null;
+            DataObject? iwdata;
             if (data is IDataObject idataObject)
             {
                 iwdata = new DataObject(idataObject);
@@ -3444,7 +3436,7 @@ public abstract partial class ToolStripItem :
             return fromPoint;
         }
 
-        Point toPoint = Point.Empty;
+        Point toPoint;
         Point currentToolStripItemLocation = Bounds.Location;
 
         // From: Screen

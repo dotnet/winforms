@@ -884,7 +884,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
                     transaction?.Cancel();
                     transaction = null;
 
-                    OwnerGridView?.ShowInvalidMessage(newHandler, ex);
+                    OwnerGridView?.ShowInvalidMessage(ex);
 
                     return false;
                 }

@@ -794,7 +794,6 @@ internal class ToolStripDesigner : ControlDesigner
                         if (dropDown is not null)
                         {
                             ToolStripItem ownerItem = dropDown.OwnerItem;
-                            ToolStripMenuItemDesigner itemDesigner = (ToolStripMenuItemDesigner)_host.GetDesigner(ownerItem);
                             ToolStripDropDown topmost = ToolStripItemDesigner.GetFirstDropDown((ToolStripDropDownItem)(ownerItem));
                             ToolStripItem topMostItem = (topmost is null) ? ownerItem : topmost.OwnerItem;
 
@@ -2397,12 +2396,12 @@ internal class ToolStripDesigner : ControlDesigner
                     }
                 }
 
-                // REQUIRED FOR THE REFRESH OF GLYPHS BUT TRY TO BE SMART ABOUT THE REGION TO INVALIDATE....
-                if (SelectionService.PrimarySelection is not ToolStripItem selectedItem)
+                // Required for the refresh of glyphs.
+                if (SelectionService.PrimarySelection is not ToolStripItem)
                 {
                     if (KeyboardHandlingService is not null)
                     {
-                        selectedItem = KeyboardHandlingService.SelectedDesignerControl as ToolStripItem;
+                        _ = KeyboardHandlingService.SelectedDesignerControl;
                     }
                 }
 

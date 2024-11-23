@@ -963,7 +963,7 @@ public partial class Binding
 
     internal bool PushData(bool force)
     {
-        object? dataSourceValue = null;
+        object? dataSourceValue;
         Exception? lastException = null;
 
         // Don't push if update mode is 'Never' (unless caller is FORCING us to push)

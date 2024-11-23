@@ -77,7 +77,6 @@ public class DataGridViewCellStyleTests
     [Fact]
     public void DataGridViewCellStyle_Ctor_EmptyDataGridViewCellStyle_Success()
     {
-        NumberFormatInfo formatProvider = new();
         DataGridViewCellStyle source = new();
         DataGridViewCellStyle style = new(source);
 
@@ -746,7 +745,6 @@ public class DataGridViewCellStyleTests
     [Fact]
     public void DataGridViewCellStyle_Clone_EmptyDataGridViewCellStyle_Success()
     {
-        NumberFormatInfo formatProvider = new();
         DataGridViewCellStyle source = new();
         DataGridViewCellStyle style = source.Clone();
 
@@ -813,7 +811,6 @@ public class DataGridViewCellStyleTests
     [Fact]
     public void DataGridViewCellStyle_ICloneableClone_EmptyDataGridViewCellStyle_Success()
     {
-        NumberFormatInfo formatProvider = new();
         ICloneable source = new DataGridViewCellStyle();
         DataGridViewCellStyle style = Assert.IsType<DataGridViewCellStyle>(source.Clone());
 

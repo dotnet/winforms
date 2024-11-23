@@ -1026,7 +1026,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <param name="value"></param>
         Friend Shared Sub ValidateAuthenticationModeEnumValue(value As AuthenticationMode, paramName As String)
             If value < AuthenticationMode.Windows OrElse value > AuthenticationMode.ApplicationDefined Then
-                Throw New InvalidEnumArgumentException(paramName, value, GetType(AuthenticationMode))
+                Throw New InvalidEnumArgumentException(
+                    argumentName:=paramName,
+                    invalidValue:=value,
+                    enumClass:=GetType(AuthenticationMode))
             End If
         End Sub
 
@@ -1036,7 +1039,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <param name="value"></param>
         Friend Shared Sub ValidateShutdownModeEnumValue(value As ShutdownMode, paramName As String)
             If value < ShutdownMode.AfterMainFormCloses OrElse value > ShutdownMode.AfterAllFormsClose Then
-                Throw New InvalidEnumArgumentException(paramName, value, GetType(ShutdownMode))
+                Throw New InvalidEnumArgumentException(
+                    argumentName:=paramName,
+                    invalidValue:=value,
+                    enumClass:=GetType(ShutdownMode))
             End If
         End Sub
 

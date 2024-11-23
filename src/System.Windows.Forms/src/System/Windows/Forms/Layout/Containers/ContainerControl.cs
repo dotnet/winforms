@@ -319,7 +319,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
 
     internal SizeF GetCurrentAutoScaleDimensions(HFONT fontHandle)
     {
-        var currentAutoScaleDimensions = SizeF.Empty;
+        SizeF currentAutoScaleDimensions;
         switch (AutoScaleMode)
         {
             case AutoScaleMode.Font:
