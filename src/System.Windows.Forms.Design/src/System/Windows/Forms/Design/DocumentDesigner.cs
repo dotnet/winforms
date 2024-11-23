@@ -890,26 +890,24 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
 
         IDesigner designer = host.GetDesigner(component);
         bool addControl = designer is ToolStripDesigner
-            || (designer is ControlDesigner cd && cd.Control is Form form && form.TopLevel);
+            || designer is not ControlDesigner cd
+            || (cd.Control is Form form && form.TopLevel);
 
         if (!addControl || !TypeDescriptor.GetAttributes(component).Contains(DesignTimeVisibleAttribute.Yes))
         {
             return;
         }
 
-        if (_componentTray is null)
+        if (_componentTray is null && TryGetService(out ISplitWindowService sws))
         {
-            if (TryGetService(out ISplitWindowService sws))
-            {
-                _componentTray = new ComponentTray(this, Component.Site);
-                sws.AddSplitWindow(_componentTray);
+            _componentTray = new ComponentTray(this, Component.Site);
+            sws.AddSplitWindow(_componentTray);
 
-                _componentTray.Height = _trayHeight;
-                _componentTray.ShowLargeIcons = _trayLargeIcon;
-                _componentTray.AutoArrange = _trayAutoArrange;
+            _componentTray.Height = _trayHeight;
+            _componentTray.ShowLargeIcons = _trayLargeIcon;
+            _componentTray.AutoArrange = _trayAutoArrange;
 
-                host.AddService(_componentTray);
-            }
+            host.AddService(_componentTray);
         }
 
         if (_componentTray is not null)
