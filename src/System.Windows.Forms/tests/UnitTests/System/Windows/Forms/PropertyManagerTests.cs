@@ -24,7 +24,6 @@ public class PropertyManagerTests
     public void PropertyManager_Position_Set_Nop(int value)
     {
         BindingContext context = [];
-        BindingSource source = [];
         PropertyManager manager = Assert.IsType<PropertyManager>(context[new DataSource()]);
         manager.Position = value;
         Assert.Equal(0, manager.Position);
@@ -34,7 +33,6 @@ public class PropertyManagerTests
     public void PropertyManager_GetListName_Invoke_ReturnsEmpty()
     {
         BindingContext context = [];
-        BindingSource source = [];
         PropertyManager manager = Assert.IsType<PropertyManager>(context[new DataSource()]);
         Assert.Equal("System.Windows.Forms.Tests.PropertyManagerTests+DataSource.", manager.GetListName());
         Assert.Empty(manager.GetListName(null));

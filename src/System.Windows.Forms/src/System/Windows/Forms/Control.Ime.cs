@@ -746,7 +746,7 @@ public static class ImeContext
     public static unsafe ImeMode GetImeMode(IntPtr handle)
     {
         HIMC inputContext = (HIMC)IntPtr.Zero;
-        ImeMode retval = ImeMode.NoControl;
+        ImeMode retval;
 
         // Get the right table for the current keyboard layout
         ImeMode[] countryTable = ImeModeConversion.InputLanguageTable;

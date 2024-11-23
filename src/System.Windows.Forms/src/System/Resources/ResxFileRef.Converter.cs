@@ -43,7 +43,7 @@ public partial class ResXFileRef
                 return null;
             }
 
-            string[]? result = null;
+            string[]? result;
 
             stringValue = stringValue.Trim();
             string fileName;

@@ -808,7 +808,8 @@ public partial class ComboBox : ListControl
     // of the combo box, we need to use the same calculation they do.
     private int GetComboHeight()
     {
-        int cyCombo = 0;
+        int cyCombo;
+
         // Add on CYEDGE just for some extra space in the edit field/static item.
         // It's really only for static text items, but we want static & editable
         // controls to be the same height.

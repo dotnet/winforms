@@ -34,7 +34,7 @@ public class ParkingWindowTests
         Assert.Equal(RemoteExecutor.SuccessExitCode, invokerHandle.ExitCode);
     }
 
-    private Form InitFormWithControlToGarbageCollect()
+    private static Form InitFormWithControlToGarbageCollect()
     {
         Form form = new();
         ComboBox comboBox = new()
@@ -50,9 +50,6 @@ public class ParkingWindowTests
 
         // Recreate ComboBox handle to set parent to ParkingWindow.
         comboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-
-        // Lose the reference to ComboBox to allow Garbage collecting ComboBox.
-        comboBox = null;
 
         return form;
     }

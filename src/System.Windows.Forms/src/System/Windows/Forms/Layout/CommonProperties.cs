@@ -148,16 +148,11 @@ internal partial class CommonProperties
     ///   See <see cref="UpdateSpecifiedBounds(IArrangedElement, int, int, int, int)"/>.
     ///  </para>
     /// </remarks>
-    internal static Rectangle GetSpecifiedBounds(IArrangedElement element)
-    {
-        if (element.Properties.TryGetValue(s_specifiedBoundsProperty, out Rectangle rectangle)
-            && rectangle != LayoutUtils.s_maxRectangle)
-        {
-            return rectangle;
-        }
-
-        return element.Bounds;
-    }
+    internal static Rectangle GetSpecifiedBounds(IArrangedElement element) =>
+        element.Properties.TryGetValue(s_specifiedBoundsProperty, out Rectangle rectangle)
+            && rectangle != LayoutUtils.s_maxRectangle
+                ? rectangle
+                : element.Bounds;
 
     /// <summary>
     ///  Clears out the padding from the property store.

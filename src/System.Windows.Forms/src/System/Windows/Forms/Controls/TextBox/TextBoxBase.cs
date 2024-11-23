@@ -1006,8 +1006,7 @@ public abstract partial class TextBoxBase : Control
     }
 
     /// <summary>
-    ///  Gets or sets the number of characters selected in the text
-    ///  box.
+    ///  Gets or sets the number of characters selected in the text box.
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [Browsable(false)]
@@ -1017,28 +1016,24 @@ public abstract partial class TextBoxBase : Control
     {
         get
         {
-            GetSelectionStartAndLength(out int start, out int length);
-
+            GetSelectionStartAndLength(out int _, out int length);
             return length;
         }
-
         set
         {
             ArgumentOutOfRangeException.ThrowIfNegative(value);
 
-            GetSelectionStartAndLength(out int selStart, out int selLength);
+            GetSelectionStartAndLength(out int start, out int length);
 
-            if (value != selLength)
+            if (value != length)
             {
-                Select(selStart, value);
+                Select(start, value);
             }
         }
     }
 
     /// <summary>
-    ///  Gets or sets the starting
-    ///  point of text selected in the text
-    ///  box.
+    ///  Gets or sets the starting point of text selected in the text box.
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [Browsable(false)]
@@ -1048,21 +1043,18 @@ public abstract partial class TextBoxBase : Control
     {
         get
         {
-            GetSelectionStartAndLength(out int selStart, out _);
-
-            return selStart;
+            GetSelectionStartAndLength(out int start, out _);
+            return start;
         }
         set
         {
             ArgumentOutOfRangeException.ThrowIfNegative(value);
-
             Select(value, SelectionLength);
         }
     }
 
     /// <summary>
-    ///  Gets or sets
-    ///  the current text in the text box.
+    ///  Gets or sets the current text in the text box.
     /// </summary>
     [Localizable(true)]
     [AllowNull]

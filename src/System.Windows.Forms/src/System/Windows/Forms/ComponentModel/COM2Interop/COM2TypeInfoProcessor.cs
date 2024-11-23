@@ -218,7 +218,6 @@ internal static unsafe partial class Com2TypeInfoProcessor
     {
         int defaultProperty = -1;
         List<Com2PropertyDescriptor> propList = [];
-        Guid[] typeGuids = new Guid[typeInfos.Length];
 
         for (int i = 0; i < typeInfos.Length; i++)
         {
@@ -436,10 +435,8 @@ internal static unsafe partial class Com2TypeInfoProcessor
         }
 
         Com2PropertyDescriptor[] properties = new Com2PropertyDescriptor[propertyCount];
-        int defaultProperty = -1;
 
-        HRESULT hr = HRESULT.S_OK;
-        object? pvar = null;
+        HRESULT hr;
 
         // For each item in our list, create the descriptor an check if it's the default one.
         foreach (PropertyInfo info in propertyInfo.Values)
@@ -449,7 +446,7 @@ internal static unsafe partial class Com2TypeInfoProcessor
                 // Finally, for each property, make sure we can get the value
                 // if we can't then we should mark it non-browsable.
 
-                hr = ComNativeDescriptor.GetPropertyValue(dispatch, info.DispId, out pvar);
+                hr = ComNativeDescriptor.GetPropertyValue(dispatch, info.DispId, out object? pvar);
 
                 if (!hr.Succeeded)
                 {
@@ -471,11 +468,6 @@ internal static unsafe partial class Com2TypeInfoProcessor
                 info.ValueType,
                 info.TypeData,
                 !hr.Succeeded);
-
-            if (info.IsDefault)
-            {
-                defaultProperty = info.Index;
-            }
         }
 
         if (addAboutBox)

@@ -116,7 +116,7 @@ internal partial class FlowLayout : LayoutEngine
         int endIndex,
         Rectangle rowBounds)
     {
-        Size outSize = TryCalculatePreferredSizeRow(
+        TryCalculatePreferredSizeRow(
             containerProxy,
             elementProxy,
             startIndex,
@@ -124,6 +124,7 @@ internal partial class FlowLayout : LayoutEngine
             rowBounds,
             breakIndex: out int dummy,
             measureOnly: false);
+
         Debug.Assert(dummy == endIndex, "EndIndex / BreakIndex mismatch.");
     }
 
