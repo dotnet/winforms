@@ -1093,9 +1093,14 @@ public sealed partial class Application
             if (s_appFileVersion is null)
             {
                 Type? type = GetAppMainType();
+
+                // In a single-file, "Location" will be empty and it will fall back to ExecutablePath,
+                // which gives the desired result.
+#pragma warning disable IL3000 // Avoid accessing Assembly file path when publishing as a single file
                 s_appFileVersion = type is not null && type.Assembly.Location.Length > 0
                     ? FileVersionInfo.GetVersionInfo(type.Module.FullyQualifiedName)
                     : FileVersionInfo.GetVersionInfo(ExecutablePath);
+#pragma warning restore IL3000
             }
         }
 

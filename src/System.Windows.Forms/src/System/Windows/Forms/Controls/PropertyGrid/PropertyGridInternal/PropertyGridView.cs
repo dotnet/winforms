@@ -1254,7 +1254,7 @@ internal sealed partial class PropertyGridView :
             catch (Exception ex)
             {
                 SetCommitError(ErrorState.Thrown);
-                ShowInvalidMessage(gridEntry.PropertyLabel, ex);
+                ShowInvalidMessage(ex);
                 return;
             }
         }
@@ -2309,7 +2309,7 @@ internal sealed partial class PropertyGridView :
         }
         catch (FormatException ex)
         {
-            ShowFormatExceptionMessage(gridEntry.PropertyLabel, ex);
+            ShowFormatExceptionMessage(ex);
             if (DropDownListBox.IsHandleCreated)
             {
                 DropDownListBox.Visible = false;
@@ -3072,7 +3072,6 @@ internal sealed partial class PropertyGridView :
 
             // Ensure that tooltips don't display when host application is not foreground app.
             // Assume that we don't want to display the tooltips
-            HWND foregroundWindow = PInvokeCore.GetForegroundWindow();
             if (PInvoke.IsChild(PInvokeCore.GetForegroundWindow(), this))
             {
                 // Don't show the tips if a dropdown is showing
@@ -4666,7 +4665,7 @@ internal sealed partial class PropertyGridView :
             catch (Exception ex)
             {
                 SetCommitError(ErrorState.Thrown);
-                ShowInvalidMessage(entry.PropertyLabel, ex);
+                ShowInvalidMessage(ex);
                 return false;
             }
         }
@@ -4739,7 +4738,7 @@ internal sealed partial class PropertyGridView :
         catch (Exception ex)
         {
             SetCommitError(ErrorState.Thrown);
-            ShowInvalidMessage(currentEntry.PropertyLabel, ex);
+            ShowInvalidMessage(ex);
             return false;
         }
 
@@ -4888,10 +4887,8 @@ internal sealed partial class PropertyGridView :
         return result;
     }
 
-    private unsafe void ShowFormatExceptionMessage(string? propertyName, Exception? ex)
+    private unsafe void ShowFormatExceptionMessage(Exception? ex)
     {
-        propertyName ??= "(unknown)";
-
         // We have to uninstall our hook so the user can push the button!
         bool hooked = EditTextBox.HookMouseDown;
         EditTextBox.DisableMouseHook = true;
@@ -4962,10 +4959,8 @@ internal sealed partial class PropertyGridView :
         }
     }
 
-    internal unsafe void ShowInvalidMessage(string? propertyName, Exception? ex)
+    internal unsafe void ShowInvalidMessage(Exception? ex)
     {
-        propertyName ??= "(unknown)";
-
         // We have to uninstall our hook so the user can push the button.
         bool hooked = EditTextBox.HookMouseDown;
         EditTextBox.DisableMouseHook = true;

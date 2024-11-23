@@ -818,11 +818,13 @@ internal class DataGridViewDesigner : ControlDesigner
         public override DesignerActionItemCollection GetSortedActionItems()
         {
             DesignerActionItemCollection items = [];
-            DesignerActionPropertyItem chooseDataSource = new("DataSource", // property name
-                                                               SR.DataGridViewChooseDataSource)
+            DesignerActionPropertyItem chooseDataSource = new(
+                nameof(DataSource),
+                SR.DataGridViewChooseDataSource)
             {
                 RelatedComponent = _owner.Component
-            };// displayName
+            };
+
             items.Add(chooseDataSource);
             return items;
         }
@@ -831,11 +833,8 @@ internal class DataGridViewDesigner : ControlDesigner
         [Editor($"System.Windows.Forms.Design.DataSourceListEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         public object? DataSource
         {
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")] // DAP calls this method thru Reflection.
             // Use the shadow property which is defined on the designer.
             get => _owner.DataSource;
-
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")] // DAP calls this method thru Reflection.
             set
             {
                 // left to do: transaction stuff
@@ -900,28 +899,17 @@ internal class DataGridViewDesigner : ControlDesigner
             _owner = owner;
         }
 
-        public override DesignerActionItemCollection GetSortedActionItems()
-        {
-            DesignerActionItemCollection items =
-            [
-                new DesignerActionPropertyItem("AllowUserToAddRows",
-                                                            SR.DataGridViewEnableAdding),
-                new DesignerActionPropertyItem("ReadOnly",
-                                                            SR.DataGridViewEnableEditing),
-                new DesignerActionPropertyItem("AllowUserToDeleteRows",
-                                                            SR.DataGridViewEnableDeleting),
-                new DesignerActionPropertyItem("AllowUserToOrderColumns",
-                                                            SR.DataGridViewEnableColumnReordering),
-            ];
-            return items;
-        }
+        public override DesignerActionItemCollection GetSortedActionItems() =>
+        [
+            new DesignerActionPropertyItem(nameof(AllowUserToAddRows), SR.DataGridViewEnableAdding),
+            new DesignerActionPropertyItem(nameof(ReadOnly), SR.DataGridViewEnableEditing),
+            new DesignerActionPropertyItem(nameof(AllowUserToDeleteRows), SR.DataGridViewEnableDeleting),
+            new DesignerActionPropertyItem(nameof(AllowUserToOrderColumns), SR.DataGridViewEnableColumnReordering)
+        ];
 
         public bool AllowUserToAddRows
         {
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")] // DAP calls this method thru Reflection.
             get => _owner.Control.AllowUserToAddRows;
-
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")] // DAP calls this method thru Reflection.
             set
             {
                 if (value == AllowUserToAddRows)
@@ -964,10 +952,7 @@ internal class DataGridViewDesigner : ControlDesigner
 
         public bool AllowUserToDeleteRows
         {
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")] // DAP calls this method thru Reflection.
             get => _owner.Control.AllowUserToDeleteRows;
-
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")] // DAP calls this method thru Reflection.
             set
             {
                 if (value == AllowUserToDeleteRows)
@@ -1010,10 +995,7 @@ internal class DataGridViewDesigner : ControlDesigner
 
         public bool AllowUserToOrderColumns
         {
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")] // DAP calls this method thru Reflection.
             get => _owner.Control.AllowUserToOrderColumns;
-
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")] // DAP calls this method thru Reflection.
             set
             {
                 if (value == AllowUserToOrderColumns)
@@ -1056,10 +1038,7 @@ internal class DataGridViewDesigner : ControlDesigner
 
         public bool ReadOnly
         {
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")] // DAP calls this method thru Reflection.
             get => !_owner.Control.ReadOnly;
-
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")] // DAP calls this method thru Reflection.
             set
             {
                 if (value == ReadOnly)

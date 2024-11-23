@@ -136,27 +136,51 @@ internal class ToolStripActionList : DesignerActionList
         DesignerActionItemCollection items = [];
         if (!IsReadOnly)
         {
-            items.Add(new DesignerActionMethodItem(this, "InvokeEmbedVerb", SR.ToolStripDesignerEmbedVerb, "", SR.ToolStripDesignerEmbedVerbDesc, true));
+            items.Add(new DesignerActionMethodItem(
+                this,
+                nameof(InvokeEmbedVerb),
+                SR.ToolStripDesignerEmbedVerb,
+                "",
+                SR.ToolStripDesignerEmbedVerbDesc,
+                includeAsDesignerVerb: true));
         }
 
         if (CanAddItems)
         {
             if (_toolStrip is not StatusStrip)
             {
-                items.Add(new DesignerActionMethodItem(this, "InvokeInsertStandardItemsVerb", SR.ToolStripDesignerStandardItemsVerb, "", SR.ToolStripDesignerStandardItemsVerbDesc, true));
+                items.Add(new DesignerActionMethodItem(
+                    this,
+                    nameof(InvokeInsertStandardItemsVerb),
+                    SR.ToolStripDesignerStandardItemsVerb,
+                    "",
+                    SR.ToolStripDesignerStandardItemsVerbDesc,
+                    true));
             }
 
-            items.Add(new DesignerActionPropertyItem("RenderMode", SR.ToolStripActionList_RenderMode, SR.ToolStripActionList_Layout, SR.ToolStripActionList_RenderModeDesc));
+            items.Add(new DesignerActionPropertyItem(
+                nameof(RenderMode),
+                SR.ToolStripActionList_RenderMode,
+                SR.ToolStripActionList_Layout,
+                SR.ToolStripActionList_RenderModeDesc));
         }
 
         if (_toolStrip.Parent is not ToolStripPanel)
         {
-            items.Add(new DesignerActionPropertyItem("Dock", SR.ToolStripActionList_Dock, SR.ToolStripActionList_Layout, SR.ToolStripActionList_DockDesc));
+            items.Add(new DesignerActionPropertyItem(
+                nameof(Dock),
+                SR.ToolStripActionList_Dock,
+                SR.ToolStripActionList_Layout,
+                SR.ToolStripActionList_DockDesc));
         }
 
         if (_toolStrip is not StatusStrip)
         {
-            items.Add(new DesignerActionPropertyItem("GripStyle", SR.ToolStripActionList_GripStyle, SR.ToolStripActionList_Layout, SR.ToolStripActionList_GripStyleDesc));
+            items.Add(new DesignerActionPropertyItem(
+                nameof(GripStyle),
+                SR.ToolStripActionList_GripStyle,
+                SR.ToolStripActionList_Layout,
+                SR.ToolStripActionList_GripStyleDesc));
         }
 
         return items;

@@ -49,7 +49,6 @@ public partial class ToolTipBufferTests
     {
         ToolTipBuffer buffer = default;
         buffer.SetText("text");
-        IntPtr memory1 = buffer.Buffer;
         Assert.Equal("text", Marshal.PtrToStringUni(buffer.Buffer));
 
         // Set longer.

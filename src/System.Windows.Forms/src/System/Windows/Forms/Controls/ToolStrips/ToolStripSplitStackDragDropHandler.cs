@@ -206,31 +206,24 @@ internal sealed partial class ToolStripSplitStackDragDropHandler : IDropTarget, 
         if (_owner.Orientation == Orientation.Horizontal)
         {
             int widthUnit = orig.Width / 2;
-            RelativeLocation relativeLocation = RelativeLocation.Left;
 
             // we can return here if we are checking abovebelowleftright, because
             // the left right calculation is more picky than the above/below calculation
             // and the above below calculation will just override this one.
             if ((orig.Left + widthUnit) >= check.X)
             {
-                relativeLocation = RelativeLocation.Left;
-                return relativeLocation;
+                return RelativeLocation.Left;
             }
             else if ((orig.Right - widthUnit) <= check.X)
             {
-                relativeLocation = RelativeLocation.Right;
-                return relativeLocation;
+                return RelativeLocation.Right;
             }
         }
 
         if (_owner.Orientation == Orientation.Vertical)
         {
             int heightUnit = orig.Height / 2;
-            RelativeLocation relativeLocation = (check.Y <= (orig.Top + heightUnit)) ?
-                RelativeLocation.Above
-                : RelativeLocation.Below;
-
-            return relativeLocation;
+            return (check.Y <= (orig.Top + heightUnit)) ? RelativeLocation.Above : RelativeLocation.Below;
         }
 
         Debug.Fail("Could not calculate the relative position for AllowItemReorder");

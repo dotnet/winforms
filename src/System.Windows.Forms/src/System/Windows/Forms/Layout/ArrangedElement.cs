@@ -161,10 +161,7 @@ internal abstract class ArrangedElement : Component, IArrangedElement
         OnLayout(new LayoutEventArgs(container, propertyName));
     }
 
-    protected virtual void OnLayout(LayoutEventArgs e)
-    {
-        bool parentNeedsLayout = LayoutEngine.Layout(this, e);
-    }
+    protected virtual void OnLayout(LayoutEventArgs e) => LayoutEngine.Layout(this, e);
 
     protected virtual void OnBoundsChanged(Rectangle oldBounds, Rectangle newBounds)
     {

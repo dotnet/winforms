@@ -98,7 +98,7 @@ internal class ToolStripDropTargetManager : IDropTarget
 
     public void OnDragOver(DragEventArgs e)
     {
-        IDropTarget? newDropTarget = null;
+        IDropTarget? newDropTarget;
 
         // If we are supporting Item Reordering
         // and this is a ToolStripItem - snitch it.

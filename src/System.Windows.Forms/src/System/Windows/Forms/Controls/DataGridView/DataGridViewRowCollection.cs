@@ -100,7 +100,8 @@ public partial class DataGridViewRowCollection : ICollection, IList
             int rowCount = Count;
             for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
             {
-                DataGridViewRow dataGridViewRow = this[rowIndex];
+                // Accessing this[rowIndex] will un-share the row.
+                _ = this[rowIndex];
             }
 
             return ArrayList.Adapter(_items);
@@ -2213,20 +2214,20 @@ public partial class DataGridViewRowCollection : ICollection, IList
         Debug.Assert(!DataGridView.NoDimensionChangeAllowed);
 
         DataGridViewRow dataGridViewRow = SharedRow(index);
-        Point newCurrentCell = new(-1, -1);
 
         if (IsCollectionChangedListenedTo || dataGridViewRow.GetDisplayed(index))
         {
-            dataGridViewRow = this[index]; // need to un-share row because dev is listening to OnCollectionChanged event or the row is displayed
+            _ = this[index]; // need to un-share row because dev is listening to OnCollectionChanged event or the row is displayed
         }
 
         dataGridViewRow = SharedRow(index);
         Debug.Assert(DataGridView is not null);
-        DataGridView.OnRemovingRow(index, out newCurrentCell, force);
+        DataGridView.OnRemovingRow(index, out _, force);
         UpdateRowCaches(index, ref dataGridViewRow, adding: false);
         if (dataGridViewRow.Index != -1)
         {
             _rowStates[index] = dataGridViewRow.State;
+
             // Only detach un-shared rows, since a shared row has never been accessed by the user
             dataGridViewRow.DetachFromDataGridView();
         }
@@ -2234,7 +2235,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
         // Note: cannot set dataGridViewRow.DataGridView to null because this row may be shared and still be used.
         // Note that OnCollectionChanged takes care of calling _items.RemoveAt(index) &
         // _rowStates.RemoveAt(index). Can't do it here since OnCollectionChanged uses the arrays.
-        OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Remove, dataGridViewRow), index, 1, true, false, false, newCurrentCell);
+        OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Remove, dataGridViewRow), index, 1, true, false, false, new Point(-1, -1));
     }
 
     private static bool RowHasValueOrToolTipText(DataGridViewRow dataGridViewRow)

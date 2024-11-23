@@ -167,3 +167,4 @@
 [assembly: SuppressMessage("Design", "CA1051:Do not declare visible instance fields", Justification = "Public API", Scope = "member", Target = "~F:System.Windows.Forms.Design.ControlDesigner.accessibilityObj")]
 [assembly: SuppressMessage("Design", "CA1051:Do not declare visible instance fields", Justification = "Public API", Scope = "member", Target = "~F:System.Windows.Forms.Design.ThemedScrollbarWindow.Handle")]
 [assembly: SuppressMessage("Design", "CA1051:Do not declare visible instance fields", Justification = "Public API", Scope = "member", Target = "~F:System.Windows.Forms.Design.ThemedScrollbarWindow.Mode")]
+[assembly: SuppressMessage("StyleCop.CSharp.NamingRules", "SA1302:Interface names should begin with I", Justification = "External name", Scope = "type", Target = "~T:System.Runtime.InteropServices.UCOMITypeLib")]

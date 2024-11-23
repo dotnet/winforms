@@ -952,7 +952,6 @@ public unsafe class VARIANTTests
     public void VARIANT_ToObject_UNKNOWN_ReturnsExpected()
     {
         object o = new();
-        nint pUnk = Marshal.GetIUnknownForObject(o);
         using VARIANT variant = Create(VT_UNKNOWN, (void*)Marshal.GetIUnknownForObject(o));
         AssertToObjectEqual(o, variant);
     }
@@ -5274,7 +5273,6 @@ public unsafe class VARIANTTests
     [InlineData((ushort)VT_BLOB_OBJECT)]
     public void VARIANT_ToObject_ARRAYNoData_ReturnsExpected(ushort vt)
     {
-        SAFEARRAY* psa = CreateSafeArray(VT_I1, Array.Empty<byte>());
         using VARIANT variant = new()
         {
             vt = VT_ARRAY | (VARENUM)vt
@@ -5289,7 +5287,6 @@ public unsafe class VARIANTTests
     [InlineData((ushort)VT_BSTR_BLOB)]
     public void VARIANT_ToObject_ARRAYInvalidTypeNoData_ThrowsInvalidOleVariantTypeException(ushort vt)
     {
-        SAFEARRAY* psa = CreateSafeArray(VT_I1, Array.Empty<byte>());
         using VARIANT variant = new()
         {
             vt = VT_ARRAY | (VARENUM)vt
@@ -5301,11 +5298,11 @@ public unsafe class VARIANTTests
     [StaFact]
     public void VARIANT_ToObject_ARRAYVECTOR_ThrowsInvalidOleVariantTypeException()
     {
-        SAFEARRAY* psa = CreateSafeArray(VT_I1, Array.Empty<byte>());
         using VARIANT variant = new()
         {
             vt = VT_ARRAY | VT_VECTOR | VT_I4
         };
+
         Assert.Throws<ArgumentException>(variant.ToObject);
     }
 

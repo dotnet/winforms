@@ -1753,13 +1753,17 @@ public partial class ListView : Control
             ListViewItem? topItem = TopItem;
 
             if ((topItem is null) && (_topIndex == Items.Count))
-            {                                                   // There's a
-                topItem = value;                                // a single item. Result of the
-                if (Scrollable)                                 // message is the number of items in the list rather than an index of an item in the list.
-                {                                               // This causes TopItem to return null. A side issue is that EnsureVisible doesn't do too well
-                    EnsureVisible(0);                           // here either, because it causes the listview to go blank rather than displaying anything useful.
-                    Scroll(0, value.Index);                     // To work around this, we force the listbox to display the first item, then scroll down to the item
-                }                                               // user is setting as the top item.
+            {
+                // Result of the message is the number of items in the list rather than an index of an item in the list.
+                // This causes TopItem to return null. A side issue is that EnsureVisible doesn't do too well
+                // here either, because it causes the listview to go blank rather than displaying anything useful.
+                // To work around this, we force the listbox to display the first item, then scroll down to the item
+                // user is setting as the top item.
+                if (Scrollable)
+                {
+                    EnsureVisible(0);
+                    Scroll(0, value.Index);
+                }
 
                 return;
             }

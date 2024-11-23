@@ -83,7 +83,7 @@ public class GraphicsTest : IDisposable
 
     private static void CheckForNonEmptyBitmap(Bitmap bitmap)
     {
-        if (IsEmptyBitmap(bitmap, out int x, out int y))
+        if (IsEmptyBitmap(bitmap, out int _, out int _))
             Assert.True(false);
     }
 

@@ -18,7 +18,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub NewCantStartSingleInstanceException()
 
-            Dim ex As Exception = New CantStartSingleInstanceException()
+            Dim ex As New CantStartSingleInstanceException()
             Dim expected As String =
                 VbUtils.GetResourceString(SR.AppModel_SingleInstanceCantConnect)
             ex.Message.Should.Be(expected)
@@ -35,7 +35,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <WinFormsFact>
         Public Sub NewNoStartupFormException()
-            Dim ex As Exception = New NoStartupFormException()
+            Dim ex As New NoStartupFormException()
             Dim expected As String =
                 VbUtils.GetResourceString(SR.AppModel_NoStartupForm)
             ex.Message.Should.Be(expected)

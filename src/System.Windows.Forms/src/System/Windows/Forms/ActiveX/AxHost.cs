@@ -2597,7 +2597,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                 }
 
                 string propName = baseProps[i].Name;
-                PropertyDescriptor? prop = null;
 
                 _propertyInfos.TryGetValue(propName, out PropertyInfo? propInfo);
 
@@ -2609,6 +2608,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
                 if (!_properties.TryGetValue(propName, out PropertyDescriptor? propDesc))
                 {
+                    PropertyDescriptor? prop;
                     if (propInfo is not null)
                     {
                         prop = new AxPropertyDescriptor(baseProps[i], this);

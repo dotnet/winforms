@@ -1477,7 +1477,8 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
         }
         else
         {
-            OleDragDropHandler ddh = GetOleDragHandler();
+            // Keep GetOleDragHandler() for compat.
+            _ = GetOleDragHandler();
             dragComps = OleDragDropHandler.GetDraggingObjects(de);
         }
 

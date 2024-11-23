@@ -613,7 +613,11 @@ public sealed unsafe partial class Icon : MarshalByRefObject, ICloneable, IDispo
         // <AppContextSwitchOverrides value="Switch.System.Drawing.DontSupportPngFramesInIcons=false" />
         if (HasPngSignature() && !LocalAppContextSwitches.DontSupportPngFramesInIcons)
         {
-            return PngFrame();
+            // Return the PNG frame.
+            Debug.Assert(_iconData is not null);
+            using MemoryStream stream = new();
+            stream.Write(_iconData, (int)_bestImageOffset, (int)_bestBytesInRes);
+            return new Bitmap(stream);
         }
 
         return BmpFrame();
@@ -758,14 +762,6 @@ public sealed unsafe partial class Icon : MarshalByRefObject, ICloneable, IDispo
         }
 
         return bitmap;
-    }
-
-    private Bitmap PngFrame()
-    {
-        Debug.Assert(_iconData is not null);
-        using MemoryStream stream = new();
-        stream.Write(_iconData, (int)_bestImageOffset, (int)_bestBytesInRes);
-        return new Bitmap(stream);
     }
 
     private bool HasPngSignature()
