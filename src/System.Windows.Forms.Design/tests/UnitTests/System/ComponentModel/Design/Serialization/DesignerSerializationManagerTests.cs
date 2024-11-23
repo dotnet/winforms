@@ -22,7 +22,6 @@ public class DesignerSerializationManagerTests
         Assert.Null(manager.PropertyProvider);
         Assert.False(manager.RecycleInstances);
         Assert.True(manager.ValidateRecycledTypes);
-        ;
     }
 
     public static IEnumerable<object[]> Ctor_IServiceProvider_TestData()
@@ -110,7 +109,7 @@ public class DesignerSerializationManagerTests
     {
         DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
-        IDisposable session = manager.CreateSession();
+        _ = manager.CreateSession();
         ContextStack context = iManager.Context;
         Assert.Null(context.Current);
         Assert.Same(context, iManager.Context);
@@ -141,7 +140,7 @@ public class DesignerSerializationManagerTests
     public void DesignerSerializationManager_Errors_GetWithSession_ReturnsExpected()
     {
         DesignerSerializationManager manager = new();
-        IDisposable session = manager.CreateSession();
+        _ = manager.CreateSession();
         IList errors = manager.Errors;
         Assert.Empty(errors);
         Assert.Same(errors, manager.Errors);
@@ -480,7 +479,7 @@ public class DesignerSerializationManagerTests
             .Protected()
             .Setup("OnSessionCreated", EventArgs.Empty)
             .Verifiable();
-        IDisposable session = mockManager.Object.CreateSession();
+        _ = mockManager.Object.CreateSession();
         mockManager.Protected().Verify("OnSessionCreated", Times.Once(), EventArgs.Empty);
     }
 
@@ -545,7 +544,7 @@ public class DesignerSerializationManagerTests
 
         // Dispose, get another and ensure cleared.
         session1.Dispose();
-        IDisposable session2 = manager.CreateSession();
+        _ = manager.CreateSession();
         IList errors2 = manager.Errors;
         Assert.Empty(errors2);
         Assert.Same(errors2, manager.Errors);
@@ -565,7 +564,7 @@ public class DesignerSerializationManagerTests
 
         // Dispose, get another and ensure cleared.
         session1.Dispose();
-        IDisposable session2 = manager.CreateSession();
+        _ = manager.CreateSession();
         ContextStack stack2 = iManager.Context;
         Assert.NotNull(stack2);
         Assert.Same(stack2, iManager.Context);
@@ -1716,7 +1715,7 @@ public class DesignerSerializationManagerTests
         SubDesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
 
-        IDisposable session1 = manager.CreateSession();
+        _ = manager.CreateSession();
         IList errors1 = manager.Errors;
         Assert.Empty(errors1);
         Assert.Same(errors1, manager.Errors);
@@ -1726,7 +1725,7 @@ public class DesignerSerializationManagerTests
 
         // Dispose, get another and ensure cleared.
         manager.OnSessionDisposed(EventArgs.Empty);
-        IDisposable session2 = manager.CreateSession();
+        _ = manager.CreateSession();
         IList errors2 = manager.Errors;
         Assert.Empty(errors2);
         Assert.Same(errors2, manager.Errors);
@@ -1739,14 +1738,14 @@ public class DesignerSerializationManagerTests
         SubDesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
 
-        IDisposable session1 = manager.CreateSession();
+        _ = manager.CreateSession();
         ContextStack stack1 = iManager.Context;
         Assert.NotNull(stack1);
         Assert.Same(stack1, iManager.Context);
 
         // Dispose, get another and ensure cleared.
         manager.OnSessionDisposed(EventArgs.Empty);
-        IDisposable session2 = manager.CreateSession();
+        _ = manager.CreateSession();
         ContextStack stack2 = iManager.Context;
         Assert.NotNull(stack2);
         Assert.Same(stack2, iManager.Context);
@@ -1758,7 +1757,7 @@ public class DesignerSerializationManagerTests
     {
         SubDesignerSerializationManager manager = new();
 
-        IDisposable session1 = manager.CreateSession();
+        _ = manager.CreateSession();
         object serializer1 = manager.GetSerializer(typeof(ClassWithPublicDesignerSerializer), typeof(BaseClass));
         Assert.IsType<PublicDesignerSerializationProvider>(serializer1);
         Assert.Same(serializer1, manager.GetSerializer(typeof(ClassWithPublicDesignerSerializer), typeof(PublicDesignerSerializationProvider)));
@@ -2027,32 +2026,32 @@ public class DesignerSerializationManagerTests
     {
     }
 
-    [DesignerSerializerAttribute("System.Int32", (string)null)]
+    [DesignerSerializer("System.Int32", (string)null)]
     private class ClassWithNullBaseDesignerSerializer
     {
     }
 
-    [DesignerSerializerAttribute("System.Int32", "")]
+    [DesignerSerializer("System.Int32", "")]
     private class ClassWithEmptyBaseDesignerSerializer
     {
     }
 
-    [DesignerSerializerAttribute("System.Int32", "NoSuchType")]
+    [DesignerSerializer("System.Int32", "NoSuchType")]
     private class ClassWithNoSuchBaseDesignerSerializer
     {
     }
 
-    [DesignerSerializerAttribute((string)null, typeof(int))]
+    [DesignerSerializer((string)null, typeof(int))]
     private class ClassWithNullSubDesignerSerializer
     {
     }
 
-    [DesignerSerializerAttribute("", typeof(int))]
+    [DesignerSerializer("", typeof(int))]
     private class ClassWithEmptySubDesignerSerializer
     {
     }
 
-    [DesignerSerializerAttribute("NoSuchType", typeof(int))]
+    [DesignerSerializer("NoSuchType", typeof(int))]
     private class ClassWithNoSuchSubDesignerSerializer
     {
     }
@@ -2065,12 +2064,12 @@ public class DesignerSerializationManagerTests
     {
     }
 
-    [DesignerSerializerAttribute(typeof(PublicDesignerSerializationProvider), typeof(BaseClass))]
+    [DesignerSerializer(typeof(PublicDesignerSerializationProvider), typeof(BaseClass))]
     private class ClassWithPublicDesignerSerializer
     {
     }
 
-    [DesignerSerializerAttribute(typeof(PrivateDesignerSerializationProvider), typeof(BaseClass))]
+    [DesignerSerializer(typeof(PrivateDesignerSerializationProvider), typeof(BaseClass))]
     private class ClassWithPrivateDesignerSerializer
     {
     }

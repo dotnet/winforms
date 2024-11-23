@@ -988,9 +988,7 @@ public partial class ToolStripDropDown : ToolStrip
         Rectangle dropDownBounds;
         if (TopLevel)
         {
-            Point screenPoint = Point.Empty;
-
-            screenPoint = _ownerItem is ToolStripDropDownItem dropDownItem
+            Point screenPoint = _ownerItem is ToolStripDropDownItem dropDownItem
                 ? dropDownItem.DropDownLocation
                 : suggestedBounds.Location;
 
@@ -1001,8 +999,7 @@ public partial class ToolStripDropDown : ToolStrip
         }
         else
         {
-            Point parentClientPoint = Point.Empty;
-            parentClientPoint = (_ownerItem is ToolStripDropDownItem dropDownItem) && (ParentInternal is not null)
+            Point parentClientPoint = (_ownerItem is ToolStripDropDownItem dropDownItem) && (ParentInternal is not null)
                 ? ParentInternal.PointToClient(dropDownItem.DropDownLocation)
                 : suggestedBounds.Location;
 

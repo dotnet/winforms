@@ -29,7 +29,7 @@ public class ImageListImageEditor : ImageEditor
         }
 
         ArrayList images = [];
-        if (!provider.TryGetService(out IWindowsFormsEditorService? editorService))
+        if (!provider.TryGetService(out IWindowsFormsEditorService? _))
         {
             return images;
         }

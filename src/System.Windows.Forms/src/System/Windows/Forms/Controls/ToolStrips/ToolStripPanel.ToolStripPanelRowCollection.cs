@@ -145,25 +145,10 @@ public partial class ToolStripPanel
             }
         }
 
-        public void Remove(ToolStripPanelRow value)
-        {
-            InnerList.Remove(value);
-        }
+        public void Remove(ToolStripPanelRow value) => InnerList.Remove(value);
 
-        public void RemoveAt(int index)
-        {
-            ToolStripPanelRow? item = null;
-            if (index < Count && index >= 0)
-            {
-                item = (ToolStripPanelRow)(InnerList[index]);
-            }
+        public void RemoveAt(int index) => InnerList.RemoveAt(index);
 
-            InnerList.RemoveAt(index);
-        }
-
-        public void CopyTo(ToolStripPanelRow[] array, int index)
-        {
-            InnerList.CopyTo(array, index);
-        }
+        public void CopyTo(ToolStripPanelRow[] array, int index) => InnerList.CopyTo(array, index);
     }
 }

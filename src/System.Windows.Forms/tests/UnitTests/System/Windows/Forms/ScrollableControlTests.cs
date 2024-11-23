@@ -1385,7 +1385,7 @@ public class ScrollableControlTests
     public static IEnumerable<object[]> OnLayout_TestData()
     {
         // The control must be passed along as separate variable in order to be disposed properly.
-        Control affectedControl = null;
+        Control affectedControl;
 
         yield return new object[] { true, null, 1, null };
         yield return new object[] { true, new LayoutEventArgs(null, null), 1, null };

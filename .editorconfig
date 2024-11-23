@@ -264,7 +264,7 @@ dotnet_diagnostic.IDE0057.severity = suggestion
 dotnet_diagnostic.IDE0058.severity = silent
 
 # IDE0059: Unnecessary assignment of a value
-dotnet_diagnostic.IDE0059.severity = suggestion # TODO: warning
+dotnet_diagnostic.IDE0059.severity = warning
 
 # IDE0060: Remove unused parameter
 dotnet_diagnostic.IDE0060.severity = silent
@@ -708,7 +708,7 @@ dotnet_diagnostic.CA1819.severity = none
 dotnet_diagnostic.CA1820.severity = none
 
 # CA1821: Remove empty Finalizers
-dotnet_diagnostic.CA1821.severity = none # TODO: warning
+dotnet_diagnostic.CA1821.severity = warning
 
 # CA1822: Mark members as static
 dotnet_diagnostic.CA1822.severity = warning
@@ -1523,8 +1523,8 @@ dotnet_diagnostic.SA1204.severity = none
 # SA1205: Partial elements should declare an access modifier
 dotnet_diagnostic.SA1205.severity = warning
 
-# SA1206: Keyword ordering - TODO Re-enable as warning after https://github.com/DotNetAnalyzers/StyleCopAnalyzers/issues/3527
-dotnet_diagnostic.SA1206.severity = suggestion
+# SA1206: Keyword ordering
+dotnet_diagnostic.SA1206.severity = warning
 
 # SA1207: Protected should come before internal
 dotnet_diagnostic.SA1207.severity = none

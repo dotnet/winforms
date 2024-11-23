@@ -152,7 +152,7 @@ public static class ListBindingHelper
         {
             return GetListItemProperties(list);
         }
-        else if (list is Type type)
+        else if (list is Type)
         {
             return GetListItemPropertiesByType(listAccessors, 0);
         }
@@ -344,7 +344,7 @@ public static class ListBindingHelper
 
     private static PropertyDescriptorCollection GetListItemPropertiesByType(PropertyDescriptor[] listAccessors, int startIndex)
     {
-        PropertyDescriptorCollection? pdc = null;
+        PropertyDescriptorCollection? pdc;
         if (listAccessors[startIndex] is null)
         {
             return new PropertyDescriptorCollection(null);
@@ -380,8 +380,9 @@ public static class ListBindingHelper
 
     private static PropertyDescriptorCollection GetListItemPropertiesByEnumerable(IEnumerable iEnumerable, PropertyDescriptor[] listAccessors, int startIndex)
     {
-        PropertyDescriptorCollection? pdc = null;
+        PropertyDescriptorCollection? pdc;
         object? subList = null;
+
         // Walk down the tree - first try and get the value
         // This is tricky, because we can't do a standard GetValue - we need an instance of one of the
         // items in the list.

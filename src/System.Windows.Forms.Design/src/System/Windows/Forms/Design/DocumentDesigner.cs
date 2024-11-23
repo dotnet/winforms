@@ -249,12 +249,16 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
     {
         // If there is no tray we bail.
         if (_componentTray is null)
+        {
             return true;
+        }
 
         // Figure out if any of the components in the drag-drop are children
         // of our own tray. If so, we should prevent this drag-drop from proceeding.
-        //
-        OleDragDropHandler ddh = GetOleDragHandler();
+
+        // Keeping GetOleDragHandler() for compat.
+        _ = GetOleDragHandler();
+
         object[] dragComps = OleDragDropHandler.GetDraggingObjects(de);
 
         if (dragComps is not null)
@@ -275,12 +279,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
         }
 
         // ToolStripItems cannot be dropped on any ParentControlDesigners since they have custom DataObject Format.
-        if (de.Data is ToolStripItemDataObject)
-        {
-            return false;
-        }
-
-        return true;
+        return de.Data is not ToolStripItemDataObject;
     }
 
     private AxToolboxItem CreateAxToolboxItem(IDataObject dataObject)
@@ -877,69 +876,55 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
     /// </summary>
     private void OnComponentAdded(object source, ComponentEventArgs ce)
     {
-        IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-        if (host is not null)
+        if (!TryGetService(out IDesignerHost host))
         {
-            IComponent component = ce.Component;
+            return;
+        }
 
-            bool addControl = true;
+        IComponent component = ce.Component;
 
-            // This is the mirror to logic in ParentControlDesigner. The component should be
-            // added somewhere, and this logic decides where.
+        // This is the mirror to logic in ParentControlDesigner. The component should be
+        // added somewhere, and this logic decides where.
 
-            // LETS SEE IF WE ARE TOOLSTRIP in which case we want to get added
-            // to the componentTray even though this is a control..
-            // We should think of implementing an interface so that we can have many more
-            // controls behaving like this.
+        // If the component is a toolstrip or a top level form, we should add to the tray.
 
-            if (host.GetDesigner(component) is not ToolStripDesigner td)
+        IDesigner designer = host.GetDesigner(component);
+        bool addControl = designer is ToolStripDesigner
+            || designer is not ControlDesigner cd
+            || (cd.Control is Form form && form.TopLevel);
+
+        if (!addControl || !TypeDescriptor.GetAttributes(component).Contains(DesignTimeVisibleAttribute.Yes))
+        {
+            return;
+        }
+
+        if (_componentTray is null && TryGetService(out ISplitWindowService sws))
+        {
+            _componentTray = new ComponentTray(this, Component.Site);
+            sws.AddSplitWindow(_componentTray);
+
+            _componentTray.Height = _trayHeight;
+            _componentTray.ShowLargeIcons = _trayLargeIcon;
+            _componentTray.AutoArrange = _trayAutoArrange;
+
+            host.AddService(_componentTray);
+        }
+
+        if (_componentTray is not null)
+        {
+            // Suspend the layout of the tray through the loading
+            // process. This way, we won't continuously try to layout
+            // components in auto arrange mode. We will instead let
+            // the controls restore themselves to their persisted state
+            // and then let auto-arrange kick in once.
+
+            if (host is not null && host.Loading && !_trayLayoutSuspended)
             {
-                ControlDesigner cd = host.GetDesigner(component) as ControlDesigner;
-                if (cd is not null)
-                {
-                    if (cd.Control is not Form form || !form.TopLevel)
-                    {
-                        addControl = false;
-                    }
-                }
+                _trayLayoutSuspended = true;
+                _componentTray.SuspendLayout();
             }
 
-            if (addControl &&
-                TypeDescriptor.GetAttributes(component).Contains(DesignTimeVisibleAttribute.Yes))
-            {
-                if (_componentTray is null)
-                {
-                    ISplitWindowService sws = (ISplitWindowService)GetService(typeof(ISplitWindowService));
-                    if (sws is not null)
-                    {
-                        _componentTray = new ComponentTray(this, Component.Site);
-                        sws.AddSplitWindow(_componentTray);
-
-                        _componentTray.Height = _trayHeight;
-                        _componentTray.ShowLargeIcons = _trayLargeIcon;
-                        _componentTray.AutoArrange = _trayAutoArrange;
-
-                        host.AddService(_componentTray);
-                    }
-                }
-
-                if (_componentTray is not null)
-                {
-                    // Suspend the layout of the tray through the loading
-                    // process. This way, we won't continuously try to layout
-                    // components in auto arrange mode. We will instead let
-                    // the controls restore themselves to their persisted state
-                    // and then let auto-arrange kick in once.
-                    //
-                    if (host is not null && host.Loading && !_trayLayoutSuspended)
-                    {
-                        _trayLayoutSuspended = true;
-                        _componentTray.SuspendLayout();
-                    }
-
-                    _componentTray.AddComponent(component);
-                }
-            }
+            _componentTray.AddComponent(component);
         }
     }
 

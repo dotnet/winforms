@@ -10799,7 +10799,8 @@ public partial class DataGridView
             if (dataGridViewColumn.CellTemplate!.DefaultNewRowValue is not null && NewRowIndex != -1)
             {
                 // New row needs to be un-shared before addition of new cell with a Value is not null
-                DataGridViewRow newRow = Rows[NewRowIndex];
+                // (Accessing the indexer has this side-effect)
+                _ = Rows[NewRowIndex];
             }
 
             int newColumnCount = Columns.Count + 1;
@@ -10943,7 +10944,8 @@ public partial class DataGridView
                 if (dataGridViewColumn.CellTemplate!.DefaultNewRowValue is not null && NewRowIndex != -1)
                 {
                     // New row needs to be un-shared before addition of new cell with a Value is not null
-                    DataGridViewRow newRow = Rows[NewRowIndex];
+                    // (Accessing the indexer has this side-effect)
+                    _ = Rows[NewRowIndex];
                     break;
                 }
             }
@@ -11550,7 +11552,8 @@ public partial class DataGridView
         ThrowInvalidOperationExceptionIfNull(dataGridViewCell);
         if (e.RowIndex >= 0 && dataGridViewCell.ClickUnsharesRowInternal(e))
         {
-            DataGridViewRow dataGridViewRow = Rows[e.RowIndex];
+            // Accessing the indexer unshares the row
+            _ = Rows[e.RowIndex];
             GetCellInternal(e.ColumnIndex, e.RowIndex).OnClickInternal(e);
         }
         else
@@ -11633,7 +11636,8 @@ public partial class DataGridView
         ThrowInvalidOperationExceptionIfNull(dataGridViewCell);
         if (e.RowIndex >= 0 && dataGridViewCell.ContentClickUnsharesRowInternal(e))
         {
-            DataGridViewRow dataGridViewRow = Rows[e.RowIndex];
+            // Accessing the indexer unshares the row
+            _ = Rows[e.RowIndex];
             GetCellInternal(e.ColumnIndex, e.RowIndex).OnContentClickInternal(e);
         }
         else
@@ -11657,7 +11661,8 @@ public partial class DataGridView
         ThrowInvalidOperationExceptionIfNull(dataGridViewCell);
         if (e.RowIndex >= 0 && dataGridViewCell.ContentDoubleClickUnsharesRowInternal(e))
         {
-            DataGridViewRow dataGridViewRow = Rows[e.RowIndex];
+            // Accessing the indexer unshares the row
+            _ = Rows[e.RowIndex];
             GetCellInternal(e.ColumnIndex, e.RowIndex).OnContentDoubleClickInternal(e);
         }
         else
@@ -11701,7 +11706,8 @@ public partial class DataGridView
         ThrowInvalidOperationExceptionIfNull(dataGridViewCell);
         if (e.RowIndex >= 0 && dataGridViewCell.DoubleClickUnsharesRowInternal(e))
         {
-            DataGridViewRow dataGridViewRow = Rows[e.RowIndex];
+            // Accessing the indexer unshares the row
+            _ = Rows[e.RowIndex];
             GetCellInternal(e.ColumnIndex, e.RowIndex).OnDoubleClickInternal(e);
         }
         else
@@ -11847,7 +11853,8 @@ public partial class DataGridView
         ThrowInvalidOperationExceptionIfNull(dataGridViewCell);
         if (e.RowIndex >= 0 && dataGridViewCell.MouseClickUnsharesRowInternal(e))
         {
-            DataGridViewRow dataGridViewRow = Rows[e.RowIndex];
+            // Accessing the indexer unshares the row
+            _ = Rows[e.RowIndex];
             GetCellInternal(e.ColumnIndex, e.RowIndex).OnMouseClickInternal(e);
         }
         else
@@ -11867,7 +11874,8 @@ public partial class DataGridView
         ThrowInvalidOperationExceptionIfNull(dataGridViewCell);
         if (e.RowIndex >= 0 && dataGridViewCell.MouseDoubleClickUnsharesRowInternal(e))
         {
-            DataGridViewRow dataGridViewRow = Rows[e.RowIndex];
+            // Accessing the indexer unshares the row
+            _ = Rows[e.RowIndex];
             GetCellInternal(e.ColumnIndex, e.RowIndex).OnMouseDoubleClickInternal(e);
         }
         else
@@ -11930,7 +11938,8 @@ public partial class DataGridView
         {
             if (e.RowIndex >= 0 && dataGridViewCell.MouseDownUnsharesRowInternal(e))
             {
-                DataGridViewRow dataGridViewRow = Rows[e.RowIndex];
+                // Accessing the indexer unshares the row
+                _ = Rows[e.RowIndex];
                 GetCellInternal(e.ColumnIndex, e.RowIndex).OnMouseDownInternal(e);
             }
             else
@@ -12610,7 +12619,8 @@ public partial class DataGridView
         ThrowInvalidOperationExceptionIfNull(dataGridViewCell);
         if (e.RowIndex >= 0 && dataGridViewCell.MouseEnterUnsharesRowInternal(e.RowIndex))
         {
-            DataGridViewRow dataGridViewRow = Rows[e.RowIndex];
+            // Accessing the indexer unshares the row
+            _ = Rows[e.RowIndex];
             GetCellInternal(e.ColumnIndex, e.RowIndex).OnMouseEnterInternal(e.RowIndex);
         }
         else
@@ -12632,7 +12642,8 @@ public partial class DataGridView
         ThrowInvalidOperationExceptionIfNull(dataGridViewCell);
         if (e.RowIndex >= 0 && dataGridViewCell.MouseLeaveUnsharesRowInternal(e.RowIndex))
         {
-            DataGridViewRow dataGridViewRow = Rows[e.RowIndex];
+            // Accessing the indexer unshares the row
+            _ = Rows[e.RowIndex];
             GetCellInternal(e.ColumnIndex, e.RowIndex).OnMouseLeaveInternal(e.RowIndex);
         }
         else
@@ -12651,7 +12662,8 @@ public partial class DataGridView
         ThrowInvalidOperationExceptionIfNull(dataGridViewCell);
         if (e.RowIndex >= 0 && dataGridViewCell.MouseMoveUnsharesRowInternal(e))
         {
-            DataGridViewRow dataGridViewRow = Rows[e.RowIndex];
+            // Accessing the indexer unshares the row
+            _ = Rows[e.RowIndex];
             GetCellInternal(e.ColumnIndex, e.RowIndex).OnMouseMoveInternal(e);
         }
         else
@@ -12708,7 +12720,8 @@ public partial class DataGridView
         ThrowInvalidOperationExceptionIfNull(dataGridViewCell);
         if (e.RowIndex >= 0 && dataGridViewCell.MouseUpUnsharesRowInternal(e))
         {
-            DataGridViewRow dataGridViewRow = Rows[e.RowIndex];
+            // Accessing the indexer unshares the row
+            _ = Rows[e.RowIndex];
             GetCellInternal(e.ColumnIndex, e.RowIndex).OnMouseUpInternal(e);
         }
         else
@@ -14651,7 +14664,8 @@ public partial class DataGridView
         {
             if (element is DataGridViewRow dataGridViewRow)
             {
-                if (Events[s_rowStateChangedEvent] is DataGridViewRowStateChangedEventHandler eh && dataGridViewRow.DataGridView is not null && dataGridViewRow.Index == -1)
+                if (Events[s_rowStateChangedEvent] is DataGridViewRowStateChangedEventHandler
+                    && dataGridViewRow.DataGridView is not null && dataGridViewRow.Index == -1)
                 {
                     dataGridViewRow = Rows[index];
                 }
@@ -15420,7 +15434,8 @@ public partial class DataGridView
             if (dataGridViewColumn.CellTemplate!.DefaultNewRowValue is not null && NewRowIndex != -1)
             {
                 // New row needs to be un-shared before addition of new cell with a Value is not null
-                DataGridViewRow newRow = Rows[NewRowIndex];
+                // (Accessing the indexer has this side effect)
+                _ = Rows[NewRowIndex];
             }
 
             int newColumnCount = Columns.Count + 1;
@@ -15670,7 +15685,8 @@ public partial class DataGridView
             ThrowInvalidOperationExceptionIfNull(dataGridViewCell);
             if (dataGridViewCell.KeyDownUnsharesRowInternal(e, _ptCurrentCell.Y))
             {
-                DataGridViewRow dataGridViewRow = Rows[_ptCurrentCell.Y];
+                // Accessing the indexer unshares the row
+                _ = Rows[_ptCurrentCell.Y];
                 CurrentCellInternal.OnKeyDownInternal(e, _ptCurrentCell.Y);
             }
             else
@@ -15728,7 +15744,8 @@ public partial class DataGridView
             ThrowInvalidOperationExceptionIfNull(dataGridViewCell);
             if (dataGridViewCell.KeyPressUnsharesRowInternal(e, _ptCurrentCell.Y))
             {
-                DataGridViewRow dataGridViewRow = Rows[_ptCurrentCell.Y];
+                // Accessing the indexer unshares the row
+                _ = Rows[_ptCurrentCell.Y];
                 CurrentCellInternal.OnKeyPressInternal(e, _ptCurrentCell.Y);
             }
             else
@@ -15761,7 +15778,8 @@ public partial class DataGridView
             ThrowInvalidOperationExceptionIfNull(dataGridViewCell);
             if (dataGridViewCell.KeyUpUnsharesRowInternal(e, _ptCurrentCell.Y))
             {
-                DataGridViewRow dataGridViewRow = Rows[_ptCurrentCell.Y];
+                // Accessing the indexer unshares the row
+                _ = Rows[_ptCurrentCell.Y];
                 CurrentCellInternal.OnKeyUpInternal(e, _ptCurrentCell.Y);
             }
             else
@@ -19269,11 +19287,11 @@ public partial class DataGridView
             return;
         }
 
-        bool paintingNeeded = false;
         int borderWidth = BorderWidth;
+
         // Does the clipRect intersect with the top edge?
         Rectangle edge = new(0, 0, bounds.Width, borderWidth);
-        paintingNeeded = clipRect.IntersectsWith(edge);
+        bool paintingNeeded = clipRect.IntersectsWith(edge);
         if (!paintingNeeded)
         {
             // Does the clipRect intersect with the bottom edge?
@@ -19334,10 +19352,11 @@ public partial class DataGridView
             DataGridViewCell cell;
             DataGridViewCellStyle inheritedCellStyle = new();
             DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder = new(), dgvabsEffective;
-            DataGridViewColumn? dataGridViewColumnNext = null;
 
             // first paint the visible frozen columns
             DataGridViewColumn? dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
+            DataGridViewColumn? dataGridViewColumnNext;
+
             while (dataGridViewColumn is not null)
             {
                 cell = dataGridViewColumn.HeaderCell;
@@ -20116,9 +20135,7 @@ public partial class DataGridView
                 }
 
                 keyData &= ~Keys.Control;
-                bool ret = false;
-
-                ret = base.ProcessDialogKey(keyData);
+                bool result = base.ProcessDialogKey(keyData);
 
                 if (_dataGridViewState1[State1_LeavingWithTabKey] && Focused)
                 {
@@ -20127,17 +20144,14 @@ public partial class DataGridView
                     OnEnter(EventArgs.Empty);
                 }
 
-                return ret;
+                return result;
             }
         }
 
         return base.ProcessDialogKey(keyData);
     }
 
-    protected bool ProcessDownKey(Keys keyData)
-    {
-        return ProcessDownKeyInternal(keyData, out bool moved);
-    }
+    protected bool ProcessDownKey(Keys keyData) => ProcessDownKeyInternal(keyData, out bool _);
 
     private bool ProcessDownKeyInternal(Keys keyData, out bool moved)
     {
@@ -22919,7 +22933,10 @@ public partial class DataGridView
             return false;
         }
 
-        int nextScreenVisibleRowIndexTmp, nextScreenVisibleRowIndex = -1, jumpRows = 0;
+        int nextScreenVisibleRowIndexTmp;
+        int nextScreenVisibleRowIndex;
+        int jumpRows = 0;
+
         if (_ptCurrentCell.Y == -1)
         {
             nextScreenVisibleRowIndex = Rows.GetFirstRow(DataGridViewElementStates.Visible);
@@ -23178,7 +23195,9 @@ public partial class DataGridView
             return false;
         }
 
-        int previousScreenVisibleRowIndexTmp, previousScreenVisibleRowIndex = -1;
+        int previousScreenVisibleRowIndexTmp;
+        int previousScreenVisibleRowIndex;
+
         if (_ptCurrentCell.Y == -1)
         {
             previousScreenVisibleRowIndex = Rows.GetFirstRow(DataGridViewElementStates.Visible);
@@ -26537,7 +26556,6 @@ public partial class DataGridView
         _noSelectionChangeCount++;
         try
         {
-            DataGridViewRow? dataGridViewRow = null;
             switch (SelectionMode)
             {
                 case DataGridViewSelectionMode.CellSelect:
@@ -26547,8 +26565,8 @@ public partial class DataGridView
                         int rowIndex = 0, maxRowIndex = Rows.Count;
                         while (rowIndex < maxRowIndex)
                         {
-                            // un-sharing each row!
-                            dataGridViewRow = Rows[rowIndex];
+                            // Accessing the indexer unshares the row.
+                            _ = Rows[rowIndex];
                             int columnIndex = 0;
                             while (columnIndex < maxColumnIndex)
                             {
