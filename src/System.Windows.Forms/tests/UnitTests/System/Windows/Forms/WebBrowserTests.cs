@@ -2300,7 +2300,7 @@ public class WebBrowserTests
     [WinFormsFact]
     public void WebBrowser_AttachInterfaces_Invoke_Success()
     {
-        object nativeActiveXObject = null;
+        object nativeActiveXObject;
 
         try
         {
@@ -2334,7 +2334,7 @@ public class WebBrowserTests
     [WinFormsFact]
     public void WebBrowser_AttachInterfaces_InvokeWithInstance_Success()
     {
-        object nativeActiveXObject = null;
+        object nativeActiveXObject;
 
         try
         {

@@ -388,7 +388,8 @@ internal class TabControlDesigner : ParentControlDesigner
     {
         if (e.Control is not null && !e.Control.IsHandleCreated)
         {
-            IntPtr hwnd = e.Control.Handle;
+            // Force handle creation.
+            _ = e.Control.Handle;
         }
     }
 

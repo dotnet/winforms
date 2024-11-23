@@ -348,7 +348,7 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
         {
             if (IsRow && Index > -1)
             {
-                GetHeightInfo(Index, out int height, out int minimumHeight);
+                GetHeightInfo(Index, out _, out int minimumHeight);
                 return minimumHeight;
             }
 
@@ -609,7 +609,7 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
         {
             if (IsRow && Index > -1)
             {
-                GetHeightInfo(Index, out int height, out int minimumHeight);
+                GetHeightInfo(Index, out int height, out _);
                 return height;
             }
 
@@ -649,7 +649,7 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
                 {
                     if (dataGridViewColumn.Visible)
                     {
-                        IntPtr handle = DataGridView.Handle;
+                        _ = DataGridView.Handle;
                         DataGridView.AdjustFillingColumn(dataGridViewColumn, value);
                         setThickness = false;
                     }

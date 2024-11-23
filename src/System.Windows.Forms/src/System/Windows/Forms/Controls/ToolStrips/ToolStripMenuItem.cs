@@ -675,7 +675,7 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
         }
 
         // Its a system defined bitmap.
-        int buttonToUse = -1;
+        int buttonToUse;
 
         if (info.hbmpItem == HBITMAP.HBMMENU_MBAR_CLOSE
             || info.hbmpItem == HBITMAP.HBMMENU_MBAR_CLOSE_D

@@ -1172,7 +1172,6 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
 
         ArgumentNullException.ThrowIfNull(cellStyle);
 
-        Size preferredSize = Size.Empty;
         DataGridViewFreeDimension freeDimension = GetFreeDimensionFromConstraint(constraintSize);
         Rectangle borderWidthsRect = StdBorderWidths;
         int borderAndPaddingWidths = borderWidthsRect.Left + borderWidthsRect.Width + cellStyle.Padding.Horizontal;
@@ -1180,14 +1179,9 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         TextFormatFlags flags = DataGridViewUtilities.ComputeTextFormatFlagsForCellStyleAlignment(DataGridView.RightToLeftInternal, cellStyle.Alignment, cellStyle.WrapMode);
 
         string? formattedValue = GetFormattedValue(rowIndex, ref cellStyle, DataGridViewDataErrorContexts.Formatting | DataGridViewDataErrorContexts.PreferredSize) as string;
-        if (!string.IsNullOrEmpty(formattedValue))
-        {
-            preferredSize = MeasureTextSize(graphics, formattedValue, cellStyle.Font!, flags);
-        }
-        else
-        {
-            preferredSize = MeasureTextSize(graphics, " ", cellStyle.Font!, flags);
-        }
+
+        Size preferredSize =
+            MeasureTextSize(graphics, string.IsNullOrEmpty(formattedValue) ? " " : formattedValue, cellStyle.Font!, flags);
 
         if (freeDimension == DataGridViewFreeDimension.Height)
         {
@@ -1200,11 +1194,13 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
 
         if (freeDimension != DataGridViewFreeDimension.Height)
         {
-            preferredSize.Width += SystemInformation.HorizontalScrollBarThumbWidth + 1 + 2 * Margin + borderAndPaddingWidths;
+            preferredSize.Width += SystemInformation.HorizontalScrollBarThumbWidth + 1 + (2 * Margin) + borderAndPaddingWidths;
             if (DataGridView.ShowCellErrors)
             {
                 // Making sure that there is enough room for the potential error icon
-                preferredSize.Width = Math.Max(preferredSize.Width, borderAndPaddingWidths + SystemInformation.HorizontalScrollBarThumbWidth + 1 + IconMarginWidth * 2 + s_iconsWidth);
+                preferredSize.Width = Math.Max(
+                    preferredSize.Width,
+                    borderAndPaddingWidths + SystemInformation.HorizontalScrollBarThumbWidth + 1 + (IconMarginWidth * 2) + s_iconsWidth);
             }
         }
 
@@ -1584,7 +1580,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         Debug.Assert(DisplayMemberProperty is not null || ValueMemberProperty is not null ||
                      !string.IsNullOrEmpty(DisplayMember) || !string.IsNullOrEmpty(ValueMember));
 
-        object? item = null;
+        object? item;
         if (DisplayMemberProperty is not null || ValueMemberProperty is not null)
         {
             // Now look up the item in the DataGridViewComboBoxCell datasource - this can be horribly inefficient

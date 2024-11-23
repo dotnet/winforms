@@ -30,7 +30,6 @@ public class ListViewSubItemTests
         yield return new object[] { new ListViewItem(), "reasonable", "reasonable" };
         yield return new object[] { new ListViewItem() { BackColor = Color.Yellow, ForeColor = Color.Yellow, Font = SystemFonts.StatusFont }, "reasonable", "reasonable" };
 
-        ListView listView = new();
         ListViewItem item = new();
         Assert.Null(item.ListView);
         yield return new object[] { item, "reasonable", "reasonable" };

@@ -14,7 +14,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub CreateTempDirectoryTest()
             CreateTempDirectory().Should.StartWith(Path.GetTempPath)
             CreateTempDirectory()
-            ' Calling CreateTempDirectory multiple times must
+            ' Calling CreateTempDirectory() multiple times must
             ' return the one already created
             _testDirectories.Count.Should.Be(1)
             ' If multiple sub directories are need the line number needs to be provided

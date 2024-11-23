@@ -30,13 +30,13 @@ internal class EnumCodeDomSerializer : CodeDomSerializer
             return null!;
         }
 
-        bool needCast = false;
+        bool needCast;
         Enum[] values;
         TypeConverter? converter = TypeDescriptor.GetConverter(enumValue);
         if (converter is not null && converter.CanConvertTo(typeof(Enum[])))
         {
             values = (Enum[])converter.ConvertTo(enumValue, typeof(Enum[]))!;
-            needCast = (values.Length > 1);
+            needCast = values.Length > 1;
         }
         else
         {

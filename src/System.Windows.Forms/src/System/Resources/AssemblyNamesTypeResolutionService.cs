@@ -63,7 +63,9 @@ internal class AssemblyNamesTypeResolutionService : ITypeResolutionService
     public string GetPathOfAssembly(AssemblyName name)
     {
 #pragma warning disable SYSLIB0044 // Type or member is obsolete. Ref https://github.com/dotnet/winforms/issues/7308
+#pragma warning disable IL3000 // Avoid accessing Assembly file path when publishing as a single file
         return name.CodeBase ?? string.Empty;
+#pragma warning restore IL3000
 #pragma warning restore SYSLIB0044
     }
 
@@ -155,12 +157,14 @@ internal class AssemblyNamesTypeResolutionService : ITypeResolutionService
 
         if (result is not null)
         {
-            // Only cache types from the shared framework  because they don't need to update.
+            // Only cache types from the shared framework because they don't need to update.
             // For simplicity, don't cache custom types
+#pragma warning disable IL3000 // Avoid accessing Assembly file path when publishing as a single file
             if (IsDotNetAssembly(result.Assembly.Location))
             {
                 _cachedTypes[name] = result;
             }
+#pragma warning restore IL3000
         }
 
         return result;
