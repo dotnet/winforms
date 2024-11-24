@@ -9,7 +9,7 @@ Imports Xunit
 
 Namespace Microsoft.VisualBasic.Forms.Tests
 
-    Public Class NetworkTests
+    Public Class DownloadFileTests
         Inherits VbFileCleanupTestBase
 
         Private Const DefaultPassword As String = NameOf(DefaultPassword)
