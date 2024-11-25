@@ -826,8 +826,8 @@ public class NumericUpDownTests
         {
             get
             {
-                var field = typeof(NumericUpDown).GetField("_initializing", BindingFlags.NonPublic | BindingFlags.Instance);
-                return (bool)field.GetValue(this);
+                var @field = typeof(NumericUpDown).GetField("_initializing", BindingFlags.NonPublic | BindingFlags.Instance);
+                return (bool)@field.GetValue(this);
             }
         }
 
