@@ -8,13 +8,13 @@ Namespace Microsoft.VisualBasic.Devices
 
     Partial Public Class Network
 
-        'Size of Ping.exe buffer
+        ' Size of Ping.exe buffer
         Private Const BUFFER_SIZE As Integer = 32
 
         ' Default timeout for Ping
         Private Const DEFAULT_PING_TIMEOUT As Integer = 1000
 
-        'Holds the buffer for pinging. We lazy initialize on first use
+        ' Holds the buffer for pinging. We lazy initialize on first use
         Private _pingBuffer() As Byte
 
         ''' <summary>
@@ -26,9 +26,10 @@ Namespace Microsoft.VisualBasic.Devices
                 If _pingBuffer Is Nothing Then
                     ReDim _pingBuffer(BUFFER_SIZE - 1)
                     For i As Integer = 0 To BUFFER_SIZE - 1
-                        'This is the same logic Ping.exe uses to fill it's buffer
-                        Dim provider As Globalization.CultureInfo = Globalization.CultureInfo.InvariantCulture
-                        _pingBuffer(i) = Convert.ToByte(Asc("a"c) + (i Mod 23), provider)
+                        ' This is the same logic Ping.exe uses to fill it's buffer
+                        _pingBuffer(i) = Convert.ToByte(
+                            value:=Asc("a"c) + (i Mod 23),
+                            provider:=Globalization.CultureInfo.InvariantCulture)
                     Next
                 End If
 

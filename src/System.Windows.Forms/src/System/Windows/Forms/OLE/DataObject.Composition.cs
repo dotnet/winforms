@@ -119,27 +119,27 @@ public unsafe partial class DataObject
         #endregion
 
         #region Com.IDataObject.Interface
-        HRESULT Com.IDataObject.Interface.DAdvise(Com.FORMATETC* pformatetc, uint advf, Com.IAdviseSink* pAdvSink, uint* pdwConnection) => _nativeDataObject.DAdvise(pformatetc, advf, pAdvSink, pdwConnection);
-        HRESULT Com.IDataObject.Interface.DUnadvise(uint dwConnection) => _nativeDataObject.DUnadvise(dwConnection);
-        HRESULT Com.IDataObject.Interface.EnumDAdvise(Com.IEnumSTATDATA** ppenumAdvise) => _nativeDataObject.EnumDAdvise(ppenumAdvise);
-        HRESULT Com.IDataObject.Interface.EnumFormatEtc(uint dwDirection, Com.IEnumFORMATETC** ppenumFormatEtc) => _nativeDataObject.EnumFormatEtc(dwDirection, ppenumFormatEtc);
-        HRESULT Com.IDataObject.Interface.GetCanonicalFormatEtc(Com.FORMATETC* pformatectIn, Com.FORMATETC* pformatetcOut) => _nativeDataObject.GetCanonicalFormatEtc(pformatectIn, pformatetcOut);
-        HRESULT Com.IDataObject.Interface.GetData(Com.FORMATETC* pformatetcIn, Com.STGMEDIUM* pmedium) => _nativeDataObject.GetData(pformatetcIn, pmedium);
-        HRESULT Com.IDataObject.Interface.GetDataHere(Com.FORMATETC* pformatetc, Com.STGMEDIUM* pmedium) => _nativeDataObject.GetDataHere(pformatetc, pmedium);
-        HRESULT Com.IDataObject.Interface.QueryGetData(Com.FORMATETC* pformatetc) => _nativeDataObject.QueryGetData(pformatetc);
-        HRESULT Com.IDataObject.Interface.SetData(Com.FORMATETC* pformatetc, Com.STGMEDIUM* pmedium, BOOL fRelease) => _nativeDataObject.SetData(pformatetc, pmedium, fRelease);
+        public HRESULT DAdvise(Com.FORMATETC* pformatetc, uint advf, Com.IAdviseSink* pAdvSink, uint* pdwConnection) => _nativeDataObject.DAdvise(pformatetc, advf, pAdvSink, pdwConnection);
+        public HRESULT DUnadvise(uint dwConnection) => _nativeDataObject.DUnadvise(dwConnection);
+        public HRESULT EnumDAdvise(Com.IEnumSTATDATA** ppenumAdvise) => _nativeDataObject.EnumDAdvise(ppenumAdvise);
+        public HRESULT EnumFormatEtc(uint dwDirection, Com.IEnumFORMATETC** ppenumFormatEtc) => _nativeDataObject.EnumFormatEtc(dwDirection, ppenumFormatEtc);
+        public HRESULT GetCanonicalFormatEtc(Com.FORMATETC* pformatectIn, Com.FORMATETC* pformatetcOut) => _nativeDataObject.GetCanonicalFormatEtc(pformatectIn, pformatetcOut);
+        public HRESULT GetData(Com.FORMATETC* pformatetcIn, Com.STGMEDIUM* pmedium) => _nativeDataObject.GetData(pformatetcIn, pmedium);
+        public HRESULT GetDataHere(Com.FORMATETC* pformatetc, Com.STGMEDIUM* pmedium) => _nativeDataObject.GetDataHere(pformatetc, pmedium);
+        public HRESULT QueryGetData(Com.FORMATETC* pformatetc) => _nativeDataObject.QueryGetData(pformatetc);
+        public HRESULT SetData(Com.FORMATETC* pformatetc, Com.STGMEDIUM* pmedium, BOOL fRelease) => _nativeDataObject.SetData(pformatetc, pmedium, fRelease);
         #endregion
 
-        #region ComTypes.IDataObject
-        int ComTypes.IDataObject.DAdvise(ref FORMATETC pFormatetc, ADVF advf, IAdviseSink adviseSink, out int connection) => _runtimeDataObject.DAdvise(ref pFormatetc, advf, adviseSink, out connection);
-        void ComTypes.IDataObject.DUnadvise(int connection) => _runtimeDataObject.DUnadvise(connection);
-        int ComTypes.IDataObject.EnumDAdvise(out IEnumSTATDATA? enumAdvise) => _runtimeDataObject.EnumDAdvise(out enumAdvise);
-        IEnumFORMATETC ComTypes.IDataObject.EnumFormatEtc(DATADIR direction) => _runtimeDataObject.EnumFormatEtc(direction);
-        int ComTypes.IDataObject.GetCanonicalFormatEtc(ref FORMATETC formatIn, out FORMATETC formatOut) => _runtimeDataObject.GetCanonicalFormatEtc(ref formatIn, out formatOut);
-        void ComTypes.IDataObject.GetData(ref FORMATETC format, out STGMEDIUM medium) => _runtimeDataObject.GetData(ref format, out medium);
-        void ComTypes.IDataObject.GetDataHere(ref FORMATETC format, ref STGMEDIUM medium) => _runtimeDataObject.GetDataHere(ref format, ref medium);
-        int ComTypes.IDataObject.QueryGetData(ref FORMATETC format) => _runtimeDataObject.QueryGetData(ref format);
-        void ComTypes.IDataObject.SetData(ref FORMATETC formatIn, ref STGMEDIUM medium, bool release) => _runtimeDataObject.SetData(ref formatIn, ref medium, release);
+        #region ComTypes.IDataObject.Interface
+        public int DAdvise(ref FORMATETC pFormatetc, ADVF advf, IAdviseSink adviseSink, out int connection) => _runtimeDataObject.DAdvise(ref pFormatetc, advf, adviseSink, out connection);
+        public void DUnadvise(int connection) => _runtimeDataObject.DUnadvise(connection);
+        public int EnumDAdvise(out IEnumSTATDATA? enumAdvise) => _runtimeDataObject.EnumDAdvise(out enumAdvise);
+        public IEnumFORMATETC EnumFormatEtc(DATADIR direction) => _runtimeDataObject.EnumFormatEtc(direction);
+        public int GetCanonicalFormatEtc(ref FORMATETC formatIn, out FORMATETC formatOut) => _runtimeDataObject.GetCanonicalFormatEtc(ref formatIn, out formatOut);
+        public void GetData(ref FORMATETC format, out STGMEDIUM medium) => _runtimeDataObject.GetData(ref format, out medium);
+        public void GetDataHere(ref FORMATETC format, ref STGMEDIUM medium) => _runtimeDataObject.GetDataHere(ref format, ref medium);
+        public int QueryGetData(ref FORMATETC format) => _runtimeDataObject.QueryGetData(ref format);
+        public void SetData(ref FORMATETC formatIn, ref STGMEDIUM medium, bool release) => _runtimeDataObject.SetData(ref formatIn, ref medium, release);
         #endregion
     }
 }

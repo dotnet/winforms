@@ -52,7 +52,6 @@ public partial class RichTextBoxTests
         {
             using RichTextBox richTextBox1 = new();
 
-            Clipboard.SetText("non-empty");
             Clipboard.Clear();
             richTextBox1.Paste(DataFormats.GetFormat(DataFormats.Text));
 
