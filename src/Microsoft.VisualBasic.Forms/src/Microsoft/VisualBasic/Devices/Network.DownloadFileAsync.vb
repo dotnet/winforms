@@ -84,8 +84,6 @@ Namespace Microsoft.VisualBasic.Devices
                 cancelToken).ConfigureAwait(continueOnCapturedContext:=False)
         End Function
 
-#If False Then ' This is here of API review determains its needed
-
         ''' <summary>
         '''  Downloads a file from the network to the specified path.
         ''' </summary>
@@ -118,10 +116,9 @@ Namespace Microsoft.VisualBasic.Devices
                 dialog,
                 connectionTimeout,
                 overwrite,
-                onUserCancel
+                onUserCancel,
                 cancelToken).ConfigureAwait(continueOnCapturedContext:=False)
         End Function
-#End If
 
         ''' <summary>
         '''  Downloads a file from the network to the specified path.
@@ -148,7 +145,6 @@ Namespace Microsoft.VisualBasic.Devices
             If cancelToken = Nothing Then
                 cancelToken = New CancellationTokenSource().Token
             End If
-
 
             If connectionTimeout <= 0 Then
                 Throw VbUtils.GetArgumentExceptionWithArgName(NameOf(connectionTimeout), SR.Network_BadConnectionTimeout)
