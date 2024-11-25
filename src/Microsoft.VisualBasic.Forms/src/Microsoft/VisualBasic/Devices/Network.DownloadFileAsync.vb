@@ -88,8 +88,6 @@ Namespace Microsoft.VisualBasic.Devices
                 cancelToken).ConfigureAwait(continueOnCapturedContext:=False)
         End Function
 
-#If False Then ' This is here of API review determains its needed
-
         ''' <summary>
         '''  Downloads a file from the network to the specified path.
         ''' </summary>
@@ -127,10 +125,9 @@ Namespace Microsoft.VisualBasic.Devices
                 dialog,
                 connectionTimeout,
                 overwrite,
-                onUserCancel
+                onUserCancel,
                 cancelToken).ConfigureAwait(continueOnCapturedContext:=False)
         End Function
-#End If
 
         ''' <summary>
         '''  Downloads a file from the network to the specified path.
