@@ -159,7 +159,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     ' Will only check the THIS caller so you'll always get TRUE.
                     ' What we need is a way to get to the value of this on a demand basis.
                     ' So I try/catch instead for now but would rather be able to IF my way around this block.
-                    Thread.CurrentPrincipal = New Principal.WindowsPrincipal(Principal.WindowsIdentity.GetCurrent)
+                    Dim ntIdentity As Principal.WindowsIdentity = Principal.WindowsIdentity.GetCurrent
+                    Thread.CurrentPrincipal = New Principal.WindowsPrincipal(ntIdentity)
                 Catch ex As SecurityException
                 End Try
             End If
@@ -287,7 +288,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
                 ' Allow for the case where they set splash screen = nothing and mainForm is currently nothing.
                 If value IsNot Nothing AndAlso value Is _appContext.MainForm Then
-                    Throw New ArgumentException(VbUtils.GetResourceString(SR.AppModel_SplashAndMainFormTheSame))
+                    Dim message As String = VbUtils.GetResourceString(SR.AppModel_SplashAndMainFormTheSame)
+                    Throw New ArgumentException(message)
                 End If
 
                 _splashScreen = value
