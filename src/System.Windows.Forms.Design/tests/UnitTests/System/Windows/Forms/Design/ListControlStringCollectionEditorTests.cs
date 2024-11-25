@@ -13,8 +13,8 @@ public class ListControlStringCollectionEditorTests
     [Fact]
     public void EditValue_WithNullContext_ReturnsBaseEditValue()
     {
-        var editor = new ListControlStringCollectionEditor(typeof(string));
-        var provider = new Mock<IServiceProvider>().Object;
+        ListControlStringCollectionEditor editor = new(typeof(string));
+        IServiceProvider provider = new Mock<IServiceProvider>().Object;
         object? value = new();
 
         object? result = editor.EditValue(null, provider, value);
@@ -25,10 +25,10 @@ public class ListControlStringCollectionEditorTests
     [Fact]
     public void EditValue_WithContextInstanceNotListControl_ReturnsBaseEditValue()
     {
-        var editor = new ListControlStringCollectionEditor(typeof(string));
+        ListControlStringCollectionEditor editor = new(typeof(string));
         Mock<ITypeDescriptorContext> context = new();
         context.Setup(c => c.Instance).Returns(new object());
-        var provider = new Mock<IServiceProvider>().Object;
+        IServiceProvider provider = new Mock<IServiceProvider>().Object;
         object? value = new();
 
         object? result = editor.EditValue(context.Object, provider, value);
@@ -39,11 +39,11 @@ public class ListControlStringCollectionEditorTests
     [Fact]
     public void EditValue_WithListControlAndNullDataSource_ReturnsBaseEditValue()
     {
-        var editor = new ListControlStringCollectionEditor(typeof(string));
-        ListBox listControl = new();
+        ListControlStringCollectionEditor editor = new(typeof(string));
+        using ListBox listControl = new();
         Mock<ITypeDescriptorContext> context = new();
         context.Setup(c => c.Instance).Returns(listControl);
-        var provider = new Mock<IServiceProvider>().Object;
+        IServiceProvider provider = new Mock<IServiceProvider>().Object;
         object? value = new();
 
         object? result = editor.EditValue(context.Object, provider, value);
@@ -54,17 +54,17 @@ public class ListControlStringCollectionEditorTests
     [Fact]
     public void EditValue_WithListControlAndNonNullDataSource_ThrowsArgumentException()
     {
-        var editor = new ListControlStringCollectionEditor(typeof(string));
+        ListControlStringCollectionEditor editor = new(typeof(string));
 
-        ListBox listControl = new() { DataSource = new List<string> { "item1", "item2", "item3" } };
+        using ListBox listControl = new() { DataSource = new List<string> { "item1", "item2", "item3" } };
 
         Mock<ITypeDescriptorContext> context = new();
         context.Setup(c => c.Instance).Returns(listControl);
 
-        var provider = new Mock<IServiceProvider>().Object;
+        IServiceProvider provider = new Mock<IServiceProvider>().Object;
         object? value = new();
 
-        ArgumentException exception = Assert.Throws<ArgumentException>(() => editor.EditValue(context.Object, provider, value));
+        ArgumentException exception = ((Action)(() => editor.EditValue(context.Object, provider, value))).Should().Throw<ArgumentException>().Which;
         exception.Message.Should().Be(SR.DataSourceLocksItems);
     }
 }
