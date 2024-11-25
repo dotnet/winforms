@@ -117,7 +117,7 @@ Namespace Microsoft.VisualBasic
 
             Using box As New VBInputBox(prompt, title, defaultResponse, xPos, yPos)
                 box.ShowDialog(parentWindow)
-                InternalInputBox = box.Output
+                Return box.Output
             End Using
         End Function
 
