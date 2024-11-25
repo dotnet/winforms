@@ -45,7 +45,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         '''  Even if directory exists this call will success and just return it.
         ''' </summary>
         ''' <param name="memberName"></param>
-        ''' <param name="lineNumber">If >1 use line number as part of name.</param>
+        ''' <param name="lineNumber">If >0 use line number as part of name.</param>
         ''' <returns>The name of a directory that is safe to write to and is verified to exist.</returns>
         Friend Function CreateTempDirectory(
                 <CallerMemberName> Optional memberName As String = Nothing,
