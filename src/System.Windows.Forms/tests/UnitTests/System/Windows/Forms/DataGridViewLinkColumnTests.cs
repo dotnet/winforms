@@ -42,28 +42,39 @@ public class DataGridViewLinkColumnTests : IDisposable
     [WinFormsFact]
     public void ActiveLinkColor_GetSet()
     {
-        TestPropertySetAndGet(
-            color => _column.ActiveLinkColor = color,
-            () => _column.ActiveLinkColor,
-            Color.Red);
+        var color = Color.Red;
+        _column.ActiveLinkColor = color;
+        _column.ActiveLinkColor.Should().Be(color);
     }
 
     [WinFormsFact]
     public void ActiveLinkColor_SetWithDataGridView_GetReturnsExpected()
     {
-        TestPropertySetWithDataGridView(
-            color => _column.ActiveLinkColor = color,
-            () => _column.ActiveLinkColor,
-            () => ((DataGridViewLinkCell)_dataGridView.Rows[0].Cells[_column.Index]).ActiveLinkColor,
-            Color.Red);
+        _dataGridView.Columns.Add(_column);
+        _dataGridView.Rows.Add(2);
+
+        var color = Color.Red;
+        _column.ActiveLinkColor = color;
+        _column.ActiveLinkColor.Should().Be(color);
+        foreach (DataGridViewRow row in _dataGridView.Rows)
+        {
+            ((DataGridViewLinkCell)row.Cells[_column.Index]).ActiveLinkColor.Should().Be(color);
+        }
     }
 
     [WinFormsFact]
     public void ActiveLinkColor_SetSameValue_DoesNotInvalidate()
     {
-        TestPropertySetSameValueDoesNotInvalidate(
-            () => _column.ActiveLinkColor,
-            color => _column.ActiveLinkColor = color);
+        _dataGridView.Columns.Add(_column);
+        _dataGridView.Rows.Add(2);
+
+        var color = _column.ActiveLinkColor;
+        int invalidatedCallCount = 0;
+        _dataGridView.Invalidated += (sender, e) => invalidatedCallCount++;
+
+        _column.ActiveLinkColor = color;
+        _column.ActiveLinkColor.Should().Be(color);
+        invalidatedCallCount.Should().Be(0);
     }
 
     [WinFormsFact]
@@ -85,153 +96,214 @@ public class DataGridViewLinkColumnTests : IDisposable
     [WinFormsFact]
     public void LinkBehavior_GetSet()
     {
-        TestPropertySetAndGet(
-            behavior => _column.LinkBehavior = behavior,
-            () => _column.LinkBehavior,
-            LinkBehavior.AlwaysUnderline);
+        var behavior = LinkBehavior.AlwaysUnderline;
+        _column.LinkBehavior = behavior;
+        _column.LinkBehavior.Should().Be(behavior);
     }
 
     [WinFormsFact]
     public void LinkBehavior_SetWithDataGridView_GetReturnsExpected()
     {
-        TestPropertySetWithDataGridView(
-            behavior => _column.LinkBehavior = behavior,
-            () => _column.LinkBehavior,
-            () => ((DataGridViewLinkCell)_dataGridView.Rows[0].Cells[_column.Index]).LinkBehavior,
-            LinkBehavior.NeverUnderline);
+        _dataGridView.Columns.Add(_column);
+        _dataGridView.Rows.Add(2);
+
+        var behavior = LinkBehavior.NeverUnderline;
+        _column.LinkBehavior = behavior;
+        _column.LinkBehavior.Should().Be(behavior);
+        foreach (DataGridViewRow row in _dataGridView.Rows)
+        {
+            ((DataGridViewLinkCell)row.Cells[_column.Index]).LinkBehavior.Should().Be(behavior);
+        }
     }
 
     [WinFormsFact]
     public void LinkBehavior_SetSameValue_DoesNotInvalidate()
     {
-        TestPropertySetSameValueDoesNotInvalidate(
-            () => _column.LinkBehavior,
-            behavior => _column.LinkBehavior = behavior);
+        _dataGridView.Columns.Add(_column);
+        _dataGridView.Rows.Add(2);
+
+        var behavior = _column.LinkBehavior;
+        int invalidatedCallCount = 0;
+        _dataGridView.Invalidated += (sender, e) => invalidatedCallCount++;
+
+        _column.LinkBehavior = behavior;
+        _column.LinkBehavior.Should().Be(behavior);
+        invalidatedCallCount.Should().Be(0);
     }
 
     [WinFormsFact]
     public void LinkColor_GetSet()
     {
-        TestPropertySetAndGet(
-            color => _column.LinkColor = color,
-            () => _column.LinkColor,
-            Color.Blue);
+        var color = Color.Blue;
+        _column.LinkColor = color;
+        _column.LinkColor.Should().Be(color);
     }
 
     [WinFormsFact]
     public void LinkColor_SetWithDataGridView_GetReturnsExpected()
     {
-        TestPropertySetWithDataGridView(
-            color => _column.LinkColor = color,
-            () => _column.LinkColor,
-            () => ((DataGridViewLinkCell)_dataGridView.Rows[0].Cells[_column.Index]).LinkColor,
-            Color.Blue);
+        _dataGridView.Columns.Add(_column);
+        _dataGridView.Rows.Add(2);
+
+        var color = Color.Blue;
+        _column.LinkColor = color;
+        _column.LinkColor.Should().Be(color);
+        foreach (DataGridViewRow row in _dataGridView.Rows)
+        {
+            ((DataGridViewLinkCell)row.Cells[_column.Index]).LinkColor.Should().Be(color);
+        }
     }
 
     [WinFormsFact]
     public void LinkColor_SetSameValue_DoesNotInvalidate()
     {
-        TestPropertySetSameValueDoesNotInvalidate(
-            () => _column.LinkColor,
-            color => _column.LinkColor = color);
+        _dataGridView.Columns.Add(_column);
+        _dataGridView.Rows.Add(2);
+
+        var color = _column.LinkColor;
+        int invalidatedCallCount = 0;
+        _dataGridView.Invalidated += (sender, e) => invalidatedCallCount++;
+
+        _column.LinkColor = color;
+        _column.LinkColor.Should().Be(color);
+        invalidatedCallCount.Should().Be(0);
     }
 
     [WinFormsFact]
     public void Text_GetSet()
     {
-        TestPropertySetAndGet(
-            text => _column.Text = text,
-            () => _column.Text,
-            "Test");
+        var text = "Test";
+        _column.Text = text;
+        _column.Text.Should().Be(text);
     }
 
     [WinFormsFact]
     public void Text_SetSameValue_DoesNotInvalidate()
     {
-        TestPropertySetSameValueDoesNotInvalidate(
-            () => _column.Text,
-            text => _column.Text = text);
+        _dataGridView.Columns.Add(_column);
+        _dataGridView.Rows.Add(2);
+
+        var text = _column.Text;
+        int invalidatedCallCount = 0;
+        _dataGridView.Invalidated += (sender, e) => invalidatedCallCount++;
+
+        _column.Text = text;
+        _column.Text.Should().Be(text);
+        invalidatedCallCount.Should().Be(0);
     }
 
     [WinFormsFact]
     public void TrackVisitedState_GetSet()
     {
-        TestPropertySetAndGet(
-            trackVisitedState => _column.TrackVisitedState = trackVisitedState,
-            () => _column.TrackVisitedState,
-            false);
+        var trackVisitedState = false;
+        _column.TrackVisitedState = trackVisitedState;
+        _column.TrackVisitedState.Should().Be(trackVisitedState);
     }
 
     [WinFormsFact]
     public void TrackVisitedState_SetWithDataGridView_GetReturnsExpected()
     {
-        TestPropertySetWithDataGridView(
-            trackVisitedState => _column.TrackVisitedState = trackVisitedState,
-            () => _column.TrackVisitedState,
-            () => ((DataGridViewLinkCell)_dataGridView.Rows[0].Cells[_column.Index]).TrackVisitedState,
-            false);
+        _dataGridView.Columns.Add(_column);
+        _dataGridView.Rows.Add(2);
+
+        var trackVisitedState = false;
+        _column.TrackVisitedState = trackVisitedState;
+        _column.TrackVisitedState.Should().Be(trackVisitedState);
+        foreach (DataGridViewRow row in _dataGridView.Rows)
+        {
+            ((DataGridViewLinkCell)row.Cells[_column.Index]).TrackVisitedState.Should().Be(trackVisitedState);
+        }
     }
 
     [WinFormsFact]
     public void TrackVisitedState_SetSameValue_DoesNotInvalidate()
     {
-        TestPropertySetSameValueDoesNotInvalidate(
-            () => _column.TrackVisitedState,
-            trackVisitedState => _column.TrackVisitedState = trackVisitedState);
+        _dataGridView.Columns.Add(_column);
+        _dataGridView.Rows.Add(2);
+
+        var trackVisitedState = _column.TrackVisitedState;
+        int invalidatedCallCount = 0;
+        _dataGridView.Invalidated += (sender, e) => invalidatedCallCount++;
+
+        _column.TrackVisitedState = trackVisitedState;
+        _column.TrackVisitedState.Should().Be(trackVisitedState);
+        invalidatedCallCount.Should().Be(0);
     }
 
     [WinFormsFact]
     public void UseColumnTextForLinkValue_GetSet()
     {
-        TestPropertySetAndGet(
-            useColumnTextForLinkValue => _column.UseColumnTextForLinkValue = useColumnTextForLinkValue,
-            () => _column.UseColumnTextForLinkValue,
-            true);
+        var useColumnTextForLinkValue = true;
+        _column.UseColumnTextForLinkValue = useColumnTextForLinkValue;
+        _column.UseColumnTextForLinkValue.Should().Be(useColumnTextForLinkValue);
     }
 
     [WinFormsFact]
     public void UseColumnTextForLinkValue_SetWithDataGridView_GetReturnsExpected()
     {
-        TestPropertySetWithDataGridView(
-            useColumnTextForLinkValue => _column.UseColumnTextForLinkValue = useColumnTextForLinkValue,
-            () => _column.UseColumnTextForLinkValue,
-            () => ((DataGridViewLinkCell)_dataGridView.Rows[0].Cells[_column.Index]).UseColumnTextForLinkValue,
-            true);
+        _dataGridView.Columns.Add(_column);
+        _dataGridView.Rows.Add(2);
+
+        var useColumnTextForLinkValue = true;
+        _column.UseColumnTextForLinkValue = useColumnTextForLinkValue;
+        _column.UseColumnTextForLinkValue.Should().Be(useColumnTextForLinkValue);
+        foreach (DataGridViewRow row in _dataGridView.Rows)
+        {
+            ((DataGridViewLinkCell)row.Cells[_column.Index]).UseColumnTextForLinkValue.Should().Be(useColumnTextForLinkValue);
+        }
     }
 
     [WinFormsFact]
     public void UseColumnTextForLinkValue_SetSameValue_DoesNotInvalidate()
     {
-        TestPropertySetSameValueDoesNotInvalidate(
-            () => _column.UseColumnTextForLinkValue,
-            useColumnTextForLinkValue => _column.UseColumnTextForLinkValue = useColumnTextForLinkValue);
+        _dataGridView.Columns.Add(_column);
+        _dataGridView.Rows.Add(2);
+
+        var useColumnTextForLinkValue = _column.UseColumnTextForLinkValue;
+        int invalidatedCallCount = 0;
+        _dataGridView.Invalidated += (sender, e) => invalidatedCallCount++;
+
+        _column.UseColumnTextForLinkValue = useColumnTextForLinkValue;
+        _column.UseColumnTextForLinkValue.Should().Be(useColumnTextForLinkValue);
+        invalidatedCallCount.Should().Be(0);
     }
 
     [WinFormsFact]
     public void VisitedLinkColor_GetSet()
     {
-        TestPropertySetAndGet(
-            color => _column.VisitedLinkColor = color,
-            () => _column.VisitedLinkColor,
-            Color.Green);
+        var color = Color.Green;
+        _column.VisitedLinkColor = color;
+        _column.VisitedLinkColor.Should().Be(color);
     }
 
     [WinFormsFact]
     public void VisitedLinkColor_SetWithDataGridView_GetReturnsExpected()
     {
-        TestPropertySetWithDataGridView(
-            color => _column.VisitedLinkColor = color,
-            () => _column.VisitedLinkColor,
-            () => ((DataGridViewLinkCell)_dataGridView.Rows[0].Cells[_column.Index]).VisitedLinkColor,
-            Color.Green);
+        _dataGridView.Columns.Add(_column);
+        _dataGridView.Rows.Add(2);
+
+        var color = Color.Green;
+        _column.VisitedLinkColor = color;
+        _column.VisitedLinkColor.Should().Be(color);
+        foreach (DataGridViewRow row in _dataGridView.Rows)
+        {
+            ((DataGridViewLinkCell)row.Cells[_column.Index]).VisitedLinkColor.Should().Be(color);
+        }
     }
 
     [WinFormsFact]
     public void VisitedLinkColor_SetSameValue_DoesNotInvalidate()
     {
-        TestPropertySetSameValueDoesNotInvalidate(
-            () => _column.VisitedLinkColor,
-            color => _column.VisitedLinkColor = color);
+        _dataGridView.Columns.Add(_column);
+        _dataGridView.Rows.Add(2);
+
+        var color = _column.VisitedLinkColor;
+        int invalidatedCallCount = 0;
+        _dataGridView.Invalidated += (sender, e) => invalidatedCallCount++;
+
+        _column.VisitedLinkColor = color;
+        _column.VisitedLinkColor.Should().Be(color);
+        invalidatedCallCount.Should().Be(0);
     }
 
     [WinFormsFact]
@@ -245,7 +317,7 @@ public class DataGridViewLinkColumnTests : IDisposable
         _column.UseColumnTextForLinkValue = true;
         _column.VisitedLinkColor = Color.Green;
 
-        var clone = (DataGridViewLinkColumn)_column.Clone();
+        using DataGridViewLinkColumn clone = (DataGridViewLinkColumn)_column.Clone();
         clone.ActiveLinkColor.Should().Be(_column.ActiveLinkColor);
         clone.LinkBehavior.Should().Be(_column.LinkBehavior);
         clone.LinkColor.Should().Be(_column.LinkColor);
@@ -266,7 +338,7 @@ public class DataGridViewLinkColumnTests : IDisposable
         _column.UseColumnTextForLinkValue = true;
         _column.VisitedLinkColor = Color.Green;
 
-        var clone = (DataGridViewLinkColumn)_column.Clone();
+        using DataGridViewLinkColumn clone = (DataGridViewLinkColumn)_column.Clone();
         clone.Should().NotBeSameAs(_column);
         clone.ActiveLinkColor.Should().Be(_column.ActiveLinkColor);
         clone.LinkBehavior.Should().Be(_column.LinkBehavior);
@@ -293,38 +365,5 @@ public class DataGridViewLinkColumnTests : IDisposable
         }
 
         _column.ToString().Should().Be(expected);
-    }
-
-    private void TestPropertySetAndGet<T>(Action<T> setProperty, Func<T> getProperty, T value)
-    {
-        setProperty(value);
-        getProperty().Should().Be(value);
-    }
-
-    private void TestPropertySetWithDataGridView<T>(Action<T> setProperty, Func<T> getProperty, Func<T> getCellProperty, T value)
-    {
-        _dataGridView.Columns.Add(_column);
-        _dataGridView.Rows.Add(2);
-
-        setProperty(value);
-        getProperty().Should().Be(value);
-        foreach (DataGridViewRow row in _dataGridView.Rows)
-        {
-            getCellProperty().Should().Be(value);
-        }
-    }
-
-    private void TestPropertySetSameValueDoesNotInvalidate<T>(Func<T> getProperty, Action<T> setProperty)
-    {
-        _dataGridView.Columns.Add(_column);
-        _dataGridView.Rows.Add(2);
-
-        var value = getProperty();
-        int invalidatedCallCount = 0;
-        _dataGridView.Invalidated += (sender, e) => invalidatedCallCount++;
-
-        setProperty(value);
-        getProperty().Should().Be(value);
-        invalidatedCallCount.Should().Be(0);
     }
 }
