@@ -106,14 +106,13 @@ public sealed class ToolStripActionListTests : IDisposable
     [Fact]
     public void GetSortedActionItems_ShouldIncludeExpectedItems_WhenConditionsAreMet()
     {
-        DesignerActionItemCollection items = _actionList.GetSortedActionItems();
-        List<DesignerActionItem> itemList = items.Cast<DesignerActionItem>().ToList();
+        var (methodItems, propertyItems) = GetSortedActionItems();
 
-        itemList.Should().ContainSingle(i => i is DesignerActionMethodItem && ((DesignerActionMethodItem)i).MemberName == "InvokeEmbedVerb");
-        itemList.Should().ContainSingle(i => i is DesignerActionMethodItem && ((DesignerActionMethodItem)i).MemberName == "InvokeInsertStandardItemsVerb");
-        itemList.Should().ContainSingle(i => i is DesignerActionPropertyItem && ((DesignerActionPropertyItem)i).MemberName == "RenderMode");
-        itemList.Should().ContainSingle(i => i is DesignerActionPropertyItem && ((DesignerActionPropertyItem)i).MemberName == "Dock");
-        itemList.Should().ContainSingle(i => i is DesignerActionPropertyItem && ((DesignerActionPropertyItem)i).MemberName == "GripStyle");
+        methodItems.Should().ContainSingle(action => action.MemberName == "InvokeEmbedVerb");
+        methodItems.Should().ContainSingle(action => action.MemberName == "InvokeInsertStandardItemsVerb");
+        propertyItems.Should().ContainSingle(property => property.MemberName == "RenderMode");
+        propertyItems.Should().ContainSingle(property => property.MemberName == "Dock");
+        propertyItems.Should().ContainSingle(property => property.MemberName == "GripStyle");
     }
 
     [Fact]
@@ -122,26 +121,18 @@ public sealed class ToolStripActionListTests : IDisposable
         TypeDescriptor.AddAttributes(_toolStrip, new InheritanceAttribute(InheritanceLevel.InheritedReadOnly));
         TypeDescriptor.Refresh(_toolStrip);
 
-        DesignerActionItemCollection items = _actionList.GetSortedActionItems();
-        List<DesignerActionItem> itemList = items.Cast<DesignerActionItem>().ToList();
+        var (methodItems, _) = GetSortedActionItems();
 
-        itemList.Should().NotContain(i =>
-            i is DesignerActionMethodItem &&
-            ((DesignerActionMethodItem)i).MemberName == "InvokeEmbedVerb");
+        methodItems.Should().NotContain(action => action.MemberName == "InvokeEmbedVerb");
     }
 
     [Fact]
     public void GetSortedActionItems_ShouldIncludeRenderModeAndInsertStandardItemsVerb_WhenCanAddItems()
     {
-        DesignerActionItemCollection items = _actionList.GetSortedActionItems();
-        List<DesignerActionItem> itemList = items.Cast<DesignerActionItem>().ToList();
+        var (methodItems, propertyItems) = GetSortedActionItems();
 
-        itemList.Should().ContainSingle(i =>
-            i is DesignerActionMethodItem &&
-            ((DesignerActionMethodItem)i).MemberName == "InvokeInsertStandardItemsVerb");
-        itemList.Should().ContainSingle(i =>
-            i is DesignerActionPropertyItem &&
-            ((DesignerActionPropertyItem)i).MemberName == "RenderMode");
+        methodItems.Should().ContainSingle(action => action.MemberName == "InvokeInsertStandardItemsVerb");
+        propertyItems.Should().ContainSingle(property => property.MemberName == "RenderMode");
     }
 
     [Fact]
@@ -149,12 +140,9 @@ public sealed class ToolStripActionListTests : IDisposable
     {
         _toolStrip.Parent = new Form();
 
-        DesignerActionItemCollection items = _actionList.GetSortedActionItems();
-        List<DesignerActionItem> itemList = items.Cast<DesignerActionItem>().ToList();
+        var (_, propertyItems) = GetSortedActionItems();
 
-        itemList.Should().ContainSingle(i =>
-            i is DesignerActionPropertyItem &&
-            ((DesignerActionPropertyItem)i).MemberName == "Dock");
+        propertyItems.Should().ContainSingle(property => property.MemberName == "Dock");
     }
 
     [Fact]
@@ -167,11 +155,17 @@ public sealed class ToolStripActionListTests : IDisposable
         _designer.Initialize(statusStrip);
         _actionList.TestAccessor().Dynamic._toolStrip = statusStrip;
 
+        var (_, propertyItems) = GetSortedActionItems();
+
+        propertyItems.Should().NotContain(property => property.MemberName == "GripStyle");
+    }
+
+    private (List<DesignerActionMethodItem> methodItems, List<DesignerActionPropertyItem> propertyItems) GetSortedActionItems()
+    {
         DesignerActionItemCollection items = _actionList.GetSortedActionItems();
         List<DesignerActionItem> itemList = items.Cast<DesignerActionItem>().ToList();
-
-        itemList.Should().NotContain(i =>
-            i is DesignerActionPropertyItem &&
-            ((DesignerActionPropertyItem)i).MemberName == "GripStyle");
+        List<DesignerActionMethodItem> methodItems = itemList.OfType<DesignerActionMethodItem>().ToList();
+        List<DesignerActionPropertyItem> propertyItems = itemList.OfType<DesignerActionPropertyItem>().ToList();
+        return (methodItems, propertyItems);
     }
 }
