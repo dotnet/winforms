@@ -125,7 +125,7 @@ Namespace Microsoft.VisualBasic.Devices
                 showUI,
                 connectionTimeout,
                 overwrite,
-                UICancelOption.ThrowException)
+                onUserCancel:=UICancelOption.ThrowException)
         End Sub
 
         ''' <summary>
@@ -286,7 +286,6 @@ Namespace Microsoft.VisualBasic.Devices
                 connectionTimeout,
                 overwrite,
                 UICancelOption.ThrowException)
-
         End Sub
 
         ''' <summary>
@@ -368,14 +367,13 @@ Namespace Microsoft.VisualBasic.Devices
                 copier.DownloadFile(address, fullFilename)
 
                 'Handle a dialog cancel
-                If showUI AndAlso Environment.UserInteractive Then
-                    If onUserCancel = UICancelOption.ThrowException And dialog.UserCanceledTheDialog Then
-                        Throw New OperationCanceledException()
-                    End If
+                If showUI _
+                   AndAlso Environment.UserInteractive _
+                   AndAlso onUserCancel = UICancelOption.ThrowException _
+                   AndAlso dialog.UserCanceledTheDialog Then
+                    Throw New OperationCanceledException()
                 End If
-
             End Using
-
         End Sub
 
     End Class
