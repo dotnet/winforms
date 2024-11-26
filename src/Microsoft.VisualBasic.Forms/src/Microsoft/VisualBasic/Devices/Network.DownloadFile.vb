@@ -424,16 +424,14 @@ Namespace Microsoft.VisualBasic.Devices
                 Throw VbUtils.GetArgumentNullException(NameOf(address))
             End If
 
-            ' Get network credentials
-            Dim networkCredentials As ICredentials = GetNetworkCredentials(userName, password)
-
             Dim dialog As ProgressDialog = Nothing
             Try
                 dialog = GetProgressDialog(address.AbsolutePath, destinationFileName, showUI)
                 Dim t As Task = DownloadFileAsync(
                     addressUri:=address,
                     destinationFileName,
-                    networkCredentials,
+                    userName,
+                    password,
                     dialog,
                     connectionTimeout,
                     overwrite,
