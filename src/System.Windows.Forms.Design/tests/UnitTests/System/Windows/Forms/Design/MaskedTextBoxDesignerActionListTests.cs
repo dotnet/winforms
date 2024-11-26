@@ -20,16 +20,16 @@ public class MaskedTextBoxDesignerActionListTests : IDisposable
 
     public MaskedTextBoxDesignerActionListTests()
     {
-        _mockTypeDiscoveryService = new Mock<ITypeDiscoveryService>();
-        _mockUIService = new Mock<IUIService>();
-        _mockHelpService = new Mock<IHelpService>();
-        _maskedTextBox = new MaskedTextBox();
+        _mockTypeDiscoveryService = new();
+        _mockUIService = new();
+        _mockHelpService = new();
+        _maskedTextBox = new();
 
         InitializeMocks();
 
-        _designer = new MaskedTextBoxDesigner();
+        _designer = new();
         _designer.Initialize(_maskedTextBox);
-        _actionList = new MaskedTextBoxDesignerActionList(_designer);
+        _actionList = new(_designer);
 
         void InitializeMocks()
         {
@@ -63,14 +63,10 @@ public class MaskedTextBoxDesignerActionListTests : IDisposable
         _mockTypeDiscoveryService.Setup(s => s.GetTypes(It.IsAny<Type>(), It.IsAny<bool>())).Returns(new[] { typeof(string) });
         _mockUIService.Setup(s => s.ShowDialog(It.IsAny<Form>())).Returns(DialogResult.OK);
 
-        string? resultMask = MaskPropertyEditor.EditMask(
-            _mockTypeDiscoveryService.Object,
-            _mockUIService.Object,
-            _maskedTextBox,
-            _mockHelpService.Object);
-
-        resultMask.Should().NotBeNull();
-        expectedMask = resultMask ?? expectedMask;
+        _actionList.TestAccessor().Dynamic._discoverySvc = _mockTypeDiscoveryService.Object;
+        _actionList.TestAccessor().Dynamic._uiSvc = _mockUIService.Object;
+        _actionList.TestAccessor().Dynamic._maskedTextBox = _maskedTextBox;
+        _actionList.TestAccessor().Dynamic._helpService = _mockHelpService.Object;
 
         _actionList.SetMask();
 
