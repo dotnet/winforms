@@ -168,10 +168,7 @@ Namespace Microsoft.VisualBasic.Devices
             End If
 
             Dim addressUri As Uri = GetUri(address.Trim())
-
-            ' Get network credentials
             Dim networkCredentials As ICredentials = GetNetworkCredentials(userName, password)
-
             Dim dialog As ProgressDialog = Nothing
             Try
                 If showUI AndAlso Environment.UserInteractive Then
@@ -515,6 +512,5 @@ Namespace Microsoft.VisualBasic.Devices
                 Throw
             End Try
         End Sub
-
     End Class
 End Namespace
