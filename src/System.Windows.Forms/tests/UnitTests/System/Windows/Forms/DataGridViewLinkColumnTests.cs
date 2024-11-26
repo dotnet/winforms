@@ -317,7 +317,7 @@ public class DataGridViewLinkColumnTests : IDisposable
         _column.UseColumnTextForLinkValue = true;
         _column.VisitedLinkColor = Color.Green;
 
-        using DataGridViewLinkColumn clone = (DataGridViewLinkColumn)_column.Clone();
+        using var clone = (DataGridViewLinkColumn)_column.Clone();
         clone.ActiveLinkColor.Should().Be(_column.ActiveLinkColor);
         clone.LinkBehavior.Should().Be(_column.LinkBehavior);
         clone.LinkColor.Should().Be(_column.LinkColor);
@@ -338,7 +338,7 @@ public class DataGridViewLinkColumnTests : IDisposable
         _column.UseColumnTextForLinkValue = true;
         _column.VisitedLinkColor = Color.Green;
 
-        using DataGridViewLinkColumn clone = (DataGridViewLinkColumn)_column.Clone();
+        using var clone = (DataGridViewLinkColumn)_column.Clone();
         clone.Should().NotBeSameAs(_column);
         clone.ActiveLinkColor.Should().Be(_column.ActiveLinkColor);
         clone.LinkBehavior.Should().Be(_column.LinkBehavior);
