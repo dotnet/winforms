@@ -17,12 +17,15 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Private Const DownloadLargeFileSize As Integer = 104_857_600
         Private Const DownloadSmallFileSize As Integer = 18_135
         Private Const InvalidUrlAddress As String = "invalidURL"
-        Private Const TestingConnectionTimeout As Integer = 100_000
+
         ' REVIEWER NOTE: The next 2 Constants need to be SR Resources,
         '                they are not accessible in this project they come from WebClient.
         Private Const SR_net_webstatus_Timeout As String = "The operation has timed out."
+
         Private Const SR_net_webstatus_Unauthorized As String =
             "The remote server returned an error: (401) Unauthorized."
+
+        Private Const TestingConnectionTimeout As Integer = 100_000
 
         Private Shared Sub CleanUpListener(listener As HttpListener)
             listener.Stop()
@@ -1228,6 +1231,27 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     .Throw(Of ArgumentException)() _
                     .Where(Function(e) e.Message.StartsWith(value))
             VerifyAndCleanupFailedDownload(testDirectory, destinationFileName, listener)
+        End Sub
+
+        <WinFormsTheory>
+        <NullAndEmptyStringData>
+        Public Sub DownloadFile_UrlWithAllOptionsWhereAddressIsNothingOrEmpty_Throws(address As String)
+            Dim testCode As Action =
+                Sub()
+                    My.Computer.Network.DownloadFile(
+                        address,
+                        destinationFileName:=Nothing,
+                        userName:=String.Empty,
+                        password:=String.Empty,
+                        showUI:=True,
+                        connectionTimeout:=TestingConnectionTimeout,
+                        overwrite:=False,
+                        onUserCancel:=UICancelOption.DoNothing)
+                End Sub
+
+            testCode.Should() _
+                .Throw(Of ArgumentNullException)() _
+                .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
         End Sub
 
         <WinFormsTheory>
