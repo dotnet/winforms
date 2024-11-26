@@ -735,14 +735,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim testCode As Action =
               Sub()
                   My.Computer.Network.DownloadFile(
-                          address:=New Uri(webListener.Address),
-                          destinationFileName,
-                          userName:=String.Empty,
-                          password:=String.Empty,
-                          showUI:=False,
-                          connectionTimeout:=TestingConnectionTimeout,
-                          overwrite:=True,
-                          onUserCancel:=UICancelOption.DoNothing)
+                    address:=New Uri(webListener.Address),
+                    destinationFileName,
+                    userName:=String.Empty,
+                    password:=String.Empty,
+                    showUI:=False,
+                    connectionTimeout:=TestingConnectionTimeout,
+                    overwrite:=True,
+                    onUserCancel:=UICancelOption.DoNothing)
               End Sub
 
             testCode.Should.NotThrow()
@@ -1227,6 +1227,27 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         <WinFormsTheory>
         <NullAndEmptyStringData>
+        Public Sub DownloadFile_UrlWithAllOptionsWhereAddressIsNothingOrEmpty_Throws(address As String)
+            Dim testCode As Action =
+                Sub()
+                    My.Computer.Network.DownloadFile(
+                        address,
+                        destinationFileName:=Nothing,
+                        userName:=String.Empty,
+                        password:=String.Empty,
+                        showUI:=True,
+                        connectionTimeout:=TestingConnectionTimeout,
+                        overwrite:=False,
+                        onUserCancel:=UICancelOption.DoNothing)
+                End Sub
+
+            testCode.Should() _
+                .Throw(Of ArgumentNullException)() _
+                .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
+        End Sub
+
+        <WinFormsTheory>
+        <NullAndEmptyStringData>
         Public Sub DownloadFile_UrlWithAllOptionsWhereDestinationFileNameInvalid_Throws(destinationFileName As String)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
@@ -1398,17 +1419,17 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Dim listener As HttpListener = webListener.ProcessRequests()
             Dim testCode As Action =
-              Sub()
-                  My.Computer.Network.DownloadFile(
-                          address:=New Uri(webListener.Address),
-                          destinationFileName,
-                          userName:=String.Empty,
-                          password:=String.Empty,
-                          showUI:=False,
-                          connectionTimeout:=TestingConnectionTimeout,
-                          overwrite:=True,
-                          onUserCancel:=UICancelOption.DoNothing)
-              End Sub
+                Sub()
+                    My.Computer.Network.DownloadFile(
+                        address:=New Uri(webListener.Address),
+                        destinationFileName,
+                        userName:=String.Empty,
+                        password:=String.Empty,
+                        showUI:=False,
+                        connectionTimeout:=TestingConnectionTimeout,
+                        overwrite:=True,
+                        onUserCancel:=UICancelOption.DoNothing)
+                End Sub
 
             testCode.Should.NotThrow()
             VerifyAndCleanupSuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
