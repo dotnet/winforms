@@ -2818,6 +2818,45 @@ public partial class GraphicsTests
         Assert.Equal(expectedVisibleClipBounds, graphics.VisibleClipBounds);
     }
 
+    [Fact]
+    public void IsVisible_AllOverloads_ReturnSameResult()
+    {
+        using Bitmap bitmap = new(100, 100);
+        using Graphics graphics = Graphics.FromImage(bitmap);
+
+        // Test points
+        Point point = new(10, 10);
+        PointF pointF = new(10.5f, 10.5f);
+        int x = 10, y = 10;
+        float fx = 10.5f, fy = 10.5f;
+
+        // Test rectangles
+        Rectangle rect = new(10, 10, 50, 50);
+        RectangleF rectF = new(10.5f, 10.5f, 50.5f, 50.5f);
+        int width = 50, height = 50;
+        float fwidth = 50.5f, fheight = 50.5f;
+
+        // Verify that all overloads return the same result for points
+        bool result1 = graphics.IsVisible(x, y);
+        bool result2 = graphics.IsVisible(point);
+        bool result3 = graphics.IsVisible(fx, fy);
+        bool result4 = graphics.IsVisible(pointF);
+
+        result1.Should().Be(result2);
+        result1.Should().Be(result3);
+        result1.Should().Be(result4);
+
+        // Verify that all overloads return the same result for rectangles
+        bool result5 = graphics.IsVisible(x, y, width, height);
+        bool result6 = graphics.IsVisible(rect);
+        bool result7 = graphics.IsVisible(fx, fy, fwidth, fheight);
+        bool result8 = graphics.IsVisible(rectF);
+
+        result5.Should().Be(result6);
+        result5.Should().Be(result7);
+        result5.Should().Be(result8);
+    }
+
 #if NET8_0_OR_GREATER
     [Fact]
     public void DrawCachedBitmap_ThrowsArgumentNullException()
