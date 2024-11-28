@@ -24,7 +24,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         ''' <param name="testDirectory">A Unique directory under the systems Temp directory.</param>
         ''' <param name="destinationFileName">The full path and filename of the new file.</param>
         ''' <param name="listener"></param>
-        Private Shared Sub VerifyFailedDownload(testDirectory As String, destinationFileName As String, listener As HttpListener)
+        Private Shared Sub VerifyFailedDownload(
+            testDirectory As String,
+            destinationFileName As String,
+            listener As HttpListener)
+
             If Not String.IsNullOrWhiteSpace(testDirectory) Then
                 Directory.Exists(testDirectory).Should.BeTrue()
             End If
@@ -44,9 +48,12 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         '''  do another FileInfo call.
         ''' </returns>
         ''' <param name="destinationFileName">The full path and filename of the new file.</param>
-        '''
         ''' <param name="listener"></param>
-        Private Shared Function VerifySuccessfulDownload(testDirectory As String, destinationFileName As String, listener As HttpListener) As Long
+        Private Shared Function VerifySuccessfulDownload(
+            testDirectory As String,
+            destinationFileName As String,
+            listener As HttpListener) As Long
+
             Directory.Exists(testDirectory).Should.BeTrue()
             Dim fileInfo As New FileInfo(destinationFileName)
             fileInfo.Exists.Should.BeTrue()
@@ -64,7 +71,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
             Dim webListener As New WebListener(DownloadSmallFileSize)
             Using listener As HttpListener = webListener.ProcessRequests()
-
                 Dim testCode As Action =
                     Sub()
                         My.Computer.Network.DownloadFile(
@@ -183,7 +189,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                 .Throw(Of ArgumentNullException)() _
                 .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
-                VerifyFailedDownload(testDirectory:=Nothing, destinationFileName:=destinationFileName, listener:=listener)
+                VerifyFailedDownload(testDirectory:=Nothing, destinationFileName, listener)
             End Using
         End Sub
 
@@ -274,11 +280,10 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
-                        Dim networkCredentials As New NetworkCredential(DefaultUserName, password)
                         My.Computer.Network.DownloadFile(
                             address:=New Uri(webListener.Address),
                             destinationFileName,
-                            networkCredentials,
+                            networkCredentials:=New NetworkCredential(userName:=DefaultUserName, password),
                             showUI:=False,
                             connectionTimeout:=TestingConnectionTimeout,
                             overwrite:=True)
@@ -540,7 +545,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                 .Throw(Of ArgumentNullException)() _
                 .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
-                VerifyFailedDownload(testDirectory:=Nothing, destinationFileName:=destinationFileName, listener:=listener)
+                VerifyFailedDownload(testDirectory:=Nothing, destinationFileName, listener)
             End Using
         End Sub
 
@@ -594,7 +599,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should.Throw(Of ArgumentNullException)()
-                VerifyFailedDownload(testDirectory:=Nothing, destinationFileName:=destinationFileName, listener:=listener)
+                VerifyFailedDownload(testDirectory:=Nothing, destinationFileName, listener)
             End Using
         End Sub
 
@@ -951,9 +956,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
-                        My.Computer.Network.DownloadFile(
-                            address,
-                            destinationFileName)
+                        My.Computer.Network.DownloadFile(address, destinationFileName)
                     End Sub
 
                 testCode.Should() _
@@ -971,9 +974,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
-                        My.Computer.Network.DownloadFile(
-                            address:=webListener.Address,
-                            destinationFileName)
+                        My.Computer.Network.DownloadFile(address:=webListener.Address, destinationFileName)
                     End Sub
 
                 testCode.Should() _
@@ -1005,7 +1006,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                 .Throw(Of ArgumentNullException)() _
                 .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
-                VerifyFailedDownload(testDirectory:=Nothing, destinationFileName:=destinationFileName, listener:=listener)
+                VerifyFailedDownload(testDirectory:=Nothing, destinationFileName, listener)
             End Using
         End Sub
 
@@ -1305,7 +1306,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 testCode.Should() _
                 .Throw(Of ArgumentNullException)() _
                 .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
-                VerifyFailedDownload(testDirectory:=Nothing, destinationFileName:=destinationFileName, listener:=listener)
+                VerifyFailedDownload(testDirectory:=Nothing, destinationFileName, listener)
             End Using
         End Sub
 
