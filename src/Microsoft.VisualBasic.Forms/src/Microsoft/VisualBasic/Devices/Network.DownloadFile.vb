@@ -2,7 +2,6 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.Net
-Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.MyServices.Internal
 
