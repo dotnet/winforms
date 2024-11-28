@@ -2,6 +2,7 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.Net
+Imports System.Net.Http
 Imports System.Threading
 Imports FluentAssertions
 Imports Microsoft.VisualBasic.FileIO
@@ -11,6 +12,35 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
     Public Class DownloadFileAsyncTests
         Inherits VbFileCleanupTestBase
+
+        <WinFormsFact>
+        Public Sub DownloadFileAsync_AllOptions_Success()
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim destinationFileName As String = GetUniqueFileNameWithPath(testDirectory)
+            Dim webListener As New WebListener(DownloadSmallFileSize)
+            Using listener As HttpListener = webListener.ProcessRequests()
+                Dim testCode As Action =
+                    Sub()
+                        Dim t As Task = Devices.Network.DownloadFileAsync(
+                            addressUri:=New Uri(uriString:=webListener.Address),
+                            destinationFileName,
+                            clientHandler:=New HttpClientHandler,
+                            dialog:=Nothing,
+                            connectionTimeout:=TestingConnectionTimeout,
+                            overwrite:=True,
+                            onUserCancel:=UICancelOption.DoNothing,
+                            cancelToken:=CancellationToken.None)
+                        If t.IsFaulted Then
+                            Throw t.Exception
+                        End If
+                        t.Wait()
+                    End Sub
+
+                testCode.Should.NotThrow()
+                VerifySuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
+                    .Be(DownloadSmallFileSize)
+            End Using
+        End Sub
 
         <WinFormsFact>
         Public Sub DownloadFileAsync_AllOptionsClientHandlerNothing_Throws()
@@ -72,7 +102,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
                     Sub()
-                        Dim t As Task = Devices.Network.DownloadFileAsync(
+                        Devices.Network.DownloadFileAsync(
                             addressUri:=New Uri(uriString:=webListener.Address),
                             destinationFileName,
                             userName:=Nothing,
@@ -80,15 +110,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                             dialog:=Nothing,
                             connectionTimeout:=TestingConnectionTimeout,
                             overwrite:=False,
-                            CancellationToken.None)
-                        If t.IsFaulted Then
-                            Throw t.Exception
-                        End If
+                            cancelToken:=CancellationToken.None).Wait()
                     End Sub
-
                 testCode.Should.NotThrow()
                 VerifySuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
-                .Be(DownloadSmallFileSize)
+                    .Be(DownloadSmallFileSize)
             End Using
         End Sub
 
