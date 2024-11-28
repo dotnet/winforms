@@ -580,7 +580,7 @@ public sealed unsafe partial class Graphics : MarshalByRefObject, IDisposable, I
 
     public void TranslateClip(int dx, int dy) => CheckStatus(PInvoke.GdipTranslateClip(NativeGraphics, dx, dy));
 
-    public bool IsVisible(int x, int y) => IsVisible(new Point(x, y));
+    public bool IsVisible(int x, int y) => IsVisible((float)x, y);
 
     public bool IsVisible(Point point) => IsVisible(point.X, point.Y);
 
