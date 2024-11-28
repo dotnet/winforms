@@ -19,9 +19,7 @@ public static class TheoryDataExtensions
         return theoryData;
     }
 
-    /// <summary>
-    ///  Converts an IEnumerable into an Xunit theory compatible enumerable.
-    /// </summary>
+    /// <inheritdoc cref="ToTheoryData{T}"/>
     public static TheoryData<T1, T2> ToTheoryData<T1, T2>(this IEnumerable<(T1, T2)> data)
     {
         TheoryData<T1, T2> theoryData = [];
@@ -33,9 +31,7 @@ public static class TheoryDataExtensions
         return theoryData;
     }
 
-    /// <summary>
-    ///  Converts an IEnumerable into an Xunit theory compatible enumerable.
-    /// </summary>
+    /// <inheritdoc cref="ToTheoryData{T}"/>
     public static TheoryData<T1, T2, T3> ToTheoryData<T1, T2, T3>(this IEnumerable<(T1, T2, T3)> data)
     {
         TheoryData<T1, T2, T3> theoryData = [];
