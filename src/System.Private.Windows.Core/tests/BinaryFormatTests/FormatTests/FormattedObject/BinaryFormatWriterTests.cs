@@ -206,26 +206,26 @@ public class BinaryFormatWriterTests
         SystemColors.ButtonFace
     };
 
-    public static TheoryData<string?[]> StringArray_Parse_Data => new()
-    {
+    public static TheoryData<Array> StringArray_Parse_Data =>
+    [
         new string?[] { "one", "two" },
         new string?[] { "yes", "no", null },
         new string?[] { "same", "same", "same" }
-    };
+    ];
 
-    public static TheoryData<Array> PrimitiveArray_Parse_Data => new()
-    {
+    public static TheoryData<Array> PrimitiveArray_Parse_Data =>
+    [
         new int[] { 1, 2, 3 },
         new int[] { 1, 2, 1 },
         new float[] { 1.0f, float.NaN, float.PositiveInfinity },
         new DateTime[] { DateTime.MaxValue }
-    };
+    ];
 
     public static IEnumerable<object[]> Array_TestData => ((IEnumerable<object[]>)StringArray_Parse_Data).Concat(PrimitiveArray_Parse_Data);
 
-    public static TheoryData<Array> Array_UnsupportedTestData => new()
-    {
+    public static TheoryData<Array> Array_UnsupportedTestData =>
+    [
         new Point[] { default },
         new object[] { new() },
-    };
+    ];
 }
