@@ -76,7 +76,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 VerifySuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
                     .Be(DownloadSmallFileSize)
             End Using
-
         End Sub
 
         <WinFormsFact>
