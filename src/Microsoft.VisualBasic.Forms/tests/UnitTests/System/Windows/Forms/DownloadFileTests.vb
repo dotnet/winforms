@@ -18,53 +18,6 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Private Const SR_net_webstatus_Unauthorized As String =
             "The remote server returned an error: (401) Unauthorized."
 
-        ''' <summary>
-        '''  Verify that testDirectory exists, that destinationFileName exist and what its length is.
-        ''' </summary>
-        ''' <param name="testDirectory">A Unique directory under the systems Temp directory.</param>
-        ''' <param name="destinationFileName">The full path and filename of the new file.</param>
-        ''' <param name="listener"></param>
-        Private Shared Sub VerifyFailedDownload(
-            testDirectory As String,
-            destinationFileName As String,
-            listener As HttpListener)
-
-            If Not String.IsNullOrWhiteSpace(testDirectory) Then
-                Directory.Exists(testDirectory).Should.BeTrue()
-            End If
-            If Not String.IsNullOrWhiteSpace(destinationFileName) Then
-                Call New FileInfo(destinationFileName).Exists.Should.BeFalse()
-            End If
-            listener.Stop()
-            listener.Close()
-        End Sub
-
-        ''' <summary>
-        '''  Verify that testDirectory exists, that destinationFileName exist and what its length is.
-        ''' </summary>
-        ''' <param name="testDirectory">A Unique directory under the systems Temp directory.</param>
-        ''' <returns>
-        '''  The size in bytes of the destination file, this saves the caller from having to
-        '''  do another FileInfo call.
-        ''' </returns>
-        ''' <param name="destinationFileName">The full path and filename of the new file.</param>
-        ''' <param name="listener"></param>
-        Private Shared Function VerifySuccessfulDownload(
-            testDirectory As String,
-            destinationFileName As String,
-            listener As HttpListener) As Long
-
-            Directory.Exists(testDirectory).Should.BeTrue()
-            Dim fileInfo As New FileInfo(destinationFileName)
-            fileInfo.Exists.Should.BeTrue()
-            Directory.Exists(fileInfo.DirectoryName).Should.BeTrue()
-            ' This directory should not be systems Temp Directory because it must be created
-            Path.GetTempPath.Should.NotBe(fileInfo.DirectoryName)
-            listener.Stop()
-            listener.Close()
-            Return fileInfo.Length
-        End Function
-
         <WinFormsFact>
         Public Sub DownloadFile_UriOnly_Success()
             Dim testDirectory As String = CreateTempDirectory()
