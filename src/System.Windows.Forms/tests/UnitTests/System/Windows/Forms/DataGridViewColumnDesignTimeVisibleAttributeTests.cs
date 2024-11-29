@@ -7,7 +7,7 @@ namespace System.Windows.Forms.Tests;
 
 public class DataGridViewColumnDesignTimeVisibleAttributeTests
 {
-    public static readonly DataGridViewColumnDesignTimeVisibleAttribute s_defaultAttribute = new();
+    private readonly DataGridViewColumnDesignTimeVisibleAttribute _defaultAttribute = new();
 
     [WinFormsTheory]
     [BoolData]
@@ -20,7 +20,7 @@ public class DataGridViewColumnDesignTimeVisibleAttributeTests
     [WinFormsFact]
     public void Ctor_Default_VisibleIsFalse()
     {
-        s_defaultAttribute.Visible.Should().BeFalse();
+        _defaultAttribute.Visible.Should().BeFalse();
     }
 
     [WinFormsTheory]
@@ -40,7 +40,7 @@ public class DataGridViewColumnDesignTimeVisibleAttributeTests
     [WinFormsFact]
     public void Equals_SameInstance_ReturnsTrue()
     {
-        s_defaultAttribute.Equals(s_defaultAttribute).Should().BeTrue();
+        _defaultAttribute.Equals(_defaultAttribute).Should().BeTrue();
     }
 
     [WinFormsTheory]
