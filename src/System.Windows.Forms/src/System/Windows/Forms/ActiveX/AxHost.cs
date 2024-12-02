@@ -3203,8 +3203,9 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     private unsafe void DetachAndForward(ref Message m)
     {
+        bool isHandleCreated = IsHandleCreated;
         DetachWindow();
-        if (IsHandleCreated)
+        if (isHandleCreated)
         {
             void* wndProc = (void*)PInvokeCore.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC);
             m.ResultInternal = PInvokeCore.CallWindowProc(
