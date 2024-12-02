@@ -113,11 +113,36 @@ public class ToolStripItemCollectionTests
         toolStripDropDownButton.DropDownItems.Add("b");
         toolStripDropDownButton.DropDownItems.Add("c");
         contextMenuStrip.Items.AddRange(toolStripDropDownButton.DropDownItems);
+
+        Assert.Empty(toolStripDropDownButton.DropDownItems);
         Assert.Equal(3, contextMenuStrip.Items.Count);
 
         // Validate order.
         Assert.Equal("a", contextMenuStrip.Items[0].Text);
         Assert.Equal("b", contextMenuStrip.Items[1].Text);
         Assert.Equal("c", contextMenuStrip.Items[2].Text);
+    }
+
+    [WinFormsFact]
+    public void ToolStripItemCollection_AddRange_ToolStripItemCollection_SameOwner_Success()
+    {
+        using ToolStrip toolStrip = new();
+
+        // Create a ToolStripItemCollection with 2 items
+        ToolStripItemCollection itemCollection = new(toolStrip,
+            [
+                new ToolStripButton("Button 1"),
+                new ToolStripButton("Button 2")
+            ]);
+
+        Assert.Equal(0, toolStrip.Items.Count);
+
+        toolStrip.Items.AddRange(itemCollection);
+
+        Assert.Equal(2, itemCollection.Count);
+        Assert.Equal(2, toolStrip.Items.Count);
+
+        Assert.Equal("Button 1", toolStrip.Items[0].Text);
+        Assert.Equal("Button 2", toolStrip.Items[1].Text);
     }
 }
