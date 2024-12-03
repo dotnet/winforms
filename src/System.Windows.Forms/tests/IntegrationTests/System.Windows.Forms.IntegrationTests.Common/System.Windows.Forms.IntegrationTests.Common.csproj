@@ -2,6 +2,7 @@
  
   <PropertyGroup>
     <IsPackable>false</IsPackable>
+    <IsTestUtilityProject>true</IsTestUtilityProject>
   </PropertyGroup>
 
   <ItemGroup>
