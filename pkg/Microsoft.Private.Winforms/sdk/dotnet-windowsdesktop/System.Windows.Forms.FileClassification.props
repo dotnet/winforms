@@ -3,7 +3,8 @@
     pkg\windowsdesktop\sfx\Microsoft.WindowsDesktop.App.Ref.sfxproj.
 -->
 <Project>
-  <ItemGroup Condition="'$(PackageTargetRuntime)' == ''">
+  <!-- File classifications that should be included for both the ref and runtime pack. -->
+  <ItemGroup>
     <FrameworkListFileClass Include="Microsoft.VisualBasic.dll" Profile="WindowsForms" />
     <FrameworkListFileClass Include="Microsoft.VisualBasic.Forms.dll" Profile="WindowsForms" />
     <FrameworkListFileClass Include="System.Design.dll" Profile="WindowsForms" />
@@ -12,14 +13,26 @@
     <FrameworkListFileClass Include="System.Drawing.dll" Profile="WindowsForms" />
     <!-- System.Private.Windows.Core is now used by both WPF and Windows Forms -->
     <FrameworkListFileClass Include="System.Private.Windows.Core.dll" Profile="WindowsForms;WPF" />
+    <FrameworkListFileClass Include="System.Windows.Forms.Design.dll" Profile="WindowsForms" />
+    <FrameworkListFileClass Include="System.Windows.Forms.Design.Editors.dll" Profile="WindowsForms" />
+    <FrameworkListFileClass Include="System.Windows.Forms.dll" Profile="WindowsForms" />
+    <FrameworkListFileClass Include="System.Windows.Forms.Primitives.dll" Profile="WindowsForms" />
+  </ItemGroup>
+
+  <!-- File classifications that should only be included for the ref pack. -->
+  <ItemGroup Condition="'$(PackageTargetRuntime)' == ''">
     <FrameworkListFileClass Include="System.Windows.Forms.Analyzers.CodeFixes.CSharp.dll" Profile="WindowsForms" />
     <FrameworkListFileClass Include="System.Windows.Forms.Analyzers.CodeFixes.VisualBasic.dll" Profile="WindowsForms" />
     <FrameworkListFileClass Include="System.Windows.Forms.Analyzers.CSharp.dll" Profile="WindowsForms" />
     <FrameworkListFileClass Include="System.Windows.Forms.Analyzers.dll" Profile="WindowsForms" />
     <FrameworkListFileClass Include="System.Windows.Forms.Analyzers.VisualBasic.dll" Profile="WindowsForms" />
-    <FrameworkListFileClass Include="System.Windows.Forms.Design.dll" Profile="WindowsForms" />
-    <FrameworkListFileClass Include="System.Windows.Forms.Design.Editors.dll" Profile="WindowsForms" />
-    <FrameworkListFileClass Include="System.Windows.Forms.dll" Profile="WindowsForms" />
-    <FrameworkListFileClass Include="System.Windows.Forms.Primitives.dll" Profile="WindowsForms" />
+  </ItemGroup>
+
+    <!-- File classifications that should only be included for the runtime pack. -->
+  <ItemGroup Condition="'$(PackageTargetRuntime)' != ''">
+    <FrameworkListFileClass Include="Microsoft.VisualBasic.Forms.resources.dll" Profile="WindowsForms" />
+    <FrameworkListFileClass Include="System.Windows.Forms.Design.resources.dll" Profile="WindowsForms" />
+    <FrameworkListFileClass Include="System.Windows.Forms.Primitives.resources.dll" Profile="WindowsForms" />
+    <FrameworkListFileClass Include="System.Windows.Forms.resources.dll" Profile="WindowsForms" />
   </ItemGroup>
 </Project>
