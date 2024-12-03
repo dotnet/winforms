@@ -12,12 +12,11 @@ public sealed class MaskDesignerDialogTests:IDisposable
 {
     private readonly MaskedTextBox _maskedTextBox;
     private readonly MaskDesignerDialog _dialog;
-    private readonly IHelpService? _helpService;
 
     public MaskDesignerDialogTests()
     {
         _maskedTextBox = new MaskedTextBox();
-        _dialog = new MaskDesignerDialog(_maskedTextBox, _helpService);
+        _dialog = new MaskDesignerDialog(_maskedTextBox, null);
     }
 
     public void Dispose()
