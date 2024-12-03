@@ -83,4 +83,16 @@ public class ClipboardProxyTests
         System.Windows.Forms.Clipboard.GetText(TextDataFormat.UnicodeText).Should().Be(clipboard.GetText(TextDataFormat.UnicodeText));
         clipboard.GetText(TextDataFormat.UnicodeText).Should().Be(text);
     }
+
+    [WinFormsFact]
+    public void SetDataAsJson()
+    {
+        var clipboard = new Computer().Clipboard;
+        Point point = new(1, 1);
+        clipboard.SetDataAsJson("point", point);
+        clipboard.ContainsData("point").Should().Be(System.Windows.Forms.Clipboard.ContainsData("point"));
+        Point retrieved = clipboard.GetData("point").Should().BeOfType<Point>().Which;
+        retrieved.Should().BeEquivalentTo(System.Windows.Forms.Clipboard.GetData("point"));
+        retrieved.Should().BeEquivalentTo(point);
+    }
 }

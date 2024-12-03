@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using System.Private.Windows;
 using System.Private.Windows.Core.BinaryFormat;
 using System.Private.Windows.Core.BinaryFormat.Serializer;
 
@@ -16,7 +17,7 @@ internal static class WinFormsBinaryFormatWriter
 
     private static readonly string s_currentWinFormsFullName = typeof(WinFormsBinaryFormatWriter).Assembly.FullName!;
 
-    public static unsafe void WriteBitmap(Stream stream, Bitmap bitmap)
+    public static void WriteBitmap(Stream stream, Bitmap bitmap)
     {
         using MemoryStream memoryStream = new();
         bitmap.Save(memoryStream);
@@ -51,6 +52,19 @@ internal static class WinFormsBinaryFormatWriter
         new ArraySinglePrimitive<byte>(3, data).Write(writer);
     }
 
+    public static void WriteJsonData(Stream stream, IJsonData jsonData)
+    {
+        using BinaryFormatWriterScope writer = new(stream);
+        new BinaryLibrary(libraryId: 2, IJsonData.CustomAssemblyName).Write(writer);
+        new ClassWithMembersAndTypes(
+            new ClassInfo(1, jsonData.TypeFullName, [$"<{nameof(jsonData.JsonBytes)}>k__BackingField"]),
+            libraryId: 2,
+            new MemberTypeInfo[] { new(BinaryType.PrimitiveArray, PrimitiveType.Byte) },
+            new MemberReference(idRef: 3)).Write(writer);
+
+        new ArraySinglePrimitive<byte>(objectId: 3, jsonData.JsonBytes).Write(writer);
+    }
+
     /// <summary>
     ///  Writes the given <paramref name="value"/> if supported.
     /// </summary>
@@ -70,6 +84,11 @@ internal static class WinFormsBinaryFormatWriter
             else if (value is Bitmap bitmap)
             {
                 WriteBitmap(stream, bitmap);
+                return true;
+            }
+            else if (value is IJsonData jsonData)
+            {
+                WriteJsonData(stream, jsonData);
                 return true;
             }
 

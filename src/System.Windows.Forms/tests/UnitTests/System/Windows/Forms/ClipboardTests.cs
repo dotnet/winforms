@@ -7,7 +7,10 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Formats.Nrbf;
+using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
+using System.Text.Json;
 using Windows.Win32.System.Ole;
 using Com = Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
@@ -642,5 +645,227 @@ public class ClipboardTests
 
         DataObject dataObject = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Which;
         dataObject.GetData(DataFormats.Text).Should().Be(testString);
+    }
+
+    [WinFormsTheory]
+    [InlineData("")]
+    [InlineData(null)]
+    [InlineData(" ")]
+    public void Clipboard_SetDataAsJson_EmptyFormat_Throws(string? format)
+    {
+        Action action = () => Clipboard.SetDataAsJson(format!, 1);
+        action.Should().Throw<ArgumentException>();
+    }
+
+    [WinFormsFact]
+    public void Clipboard_SetDataAsJson_DataObject_Throws()
+    {
+        string format = "format";
+        Action action = () => Clipboard.SetDataAsJson(format, new DataObject());
+        action.Should().Throw<InvalidOperationException>();
+        Action clipboardSet2 = () => Clipboard.SetDataAsJson(format, new DerivedDataObject());
+        clipboardSet2.Should().NotThrow();
+    }
+
+    [WinFormsFact]
+    public void Clipboard_SetDataAsJson_ReturnsExpected()
+    {
+        Point point = new() { X = 1, Y = 1 };
+
+        Clipboard.SetDataAsJson("point", point);
+        IDataObject? dataObject = Clipboard.GetDataObject();
+        dataObject.Should().NotBeNull();
+        dataObject!.GetDataPresent("point").Should().BeTrue();
+        Point deserialized = dataObject.GetData("point").Should().BeOfType<Point>().Which;
+        deserialized.Should().BeEquivalentTo(point);
+    }
+
+    [WinFormsTheory]
+    [BoolData]
+    public void Clipboard_SetDataObject_WithJson_ReturnsExpected(bool copy)
+    {
+        Point point = new() { X = 1, Y = 1 };
+
+        DataObject dataObject = new();
+        dataObject.SetDataAsJson("point", point);
+
+        Clipboard.SetDataObject(dataObject, copy);
+        IDataObject? returnedDataObject = Clipboard.GetDataObject();
+        returnedDataObject.Should().NotBeNull();
+        Point deserialized = returnedDataObject!.GetData("point").Should().BeOfType<Point>().Which;
+        deserialized.Should().BeEquivalentTo(point);
+    }
+
+    [WinFormsTheory]
+    [BoolData]
+    public void Clipboard_SetDataObject_WithMultipleData_ReturnsExpected(bool copy)
+    {
+        Point point1 = new() { X = 1, Y = 1 };
+        Point point2 = new() { Y = 2, X = 2 };
+        DataObject data = new();
+        data.SetDataAsJson("point1", point1);
+        data.SetDataAsJson("point2", point2);
+        data.SetData("Mystring", "test");
+        Clipboard.SetDataObject(data, copy);
+
+        Clipboard.GetData("point1").Should().BeOfType<Point>().Which.Should().BeEquivalentTo(point1);
+        Clipboard.GetData("point2").Should().BeOfType<Point>().Which.Should().BeEquivalentTo(point2);
+        Clipboard.GetData("Mystring").Should().Be("test");
+    }
+
+    [WinFormsFact]
+    public unsafe void Clipboard_Deserialize_FromStream_Manually()
+    {
+        // This test demonstrates how a user can manually deserialize JsonData<T> that has been serialized onto
+        // the clipboard from stream. This may need to be done if type JsonData<T> does not exist in the .NET version
+        // the user is utilizing.
+        Point point = new(1, 1);
+        Clipboard.SetDataAsJson("testFormat", point);
+
+        // Manually retrieve the serialized stream.
+        ComTypes.IDataObject dataObject = Clipboard.GetDataObject().Should().BeAssignableTo<ComTypes.IDataObject>().Which;
+        ComTypes.FORMATETC formatetc = new()
+        {
+            cfFormat = (short)DataFormats.GetFormat("testFormat").Id,
+            dwAspect = ComTypes.DVASPECT.DVASPECT_CONTENT,
+            lindex = -1,
+            tymed = ComTypes.TYMED.TYMED_HGLOBAL
+        };
+        dataObject.GetData(ref formatetc, out ComTypes.STGMEDIUM medium);
+        HGLOBAL hglobal = (HGLOBAL)medium.unionmember;
+        Stream stream;
+        try
+        {
+            void* buffer = PInvokeCore.GlobalLock(hglobal);
+            int size = (int)PInvokeCore.GlobalSize(hglobal);
+            byte[] bytes = new byte[size];
+            Marshal.Copy((nint)buffer, bytes, 0, size);
+            // this comes from DataObject.Composition.s_serializedObjectID
+            int index = 16;
+            stream = new MemoryStream(bytes, index, bytes.Length - index);
+        }
+        finally
+        {
+            PInvokeCore.GlobalUnlock(hglobal);
+        }
+
+        stream.Should().NotBeNull();
+        // Use NrbfDecoder to decode the stream and rehydrate the type.
+        SerializationRecord record = NrbfDecoder.Decode(stream);
+        ClassRecord types = record.Should().BeAssignableTo<ClassRecord>().Which;
+        types.HasMember("<JsonBytes>k__BackingField").Should().BeTrue();
+        SZArrayRecord<byte> byteData = types.GetRawValue("<JsonBytes>k__BackingField").Should().BeAssignableTo<SZArrayRecord<byte>>().Which;
+        TypeName.TryParse(types.TypeName.FullName, out TypeName? result).Should().BeTrue();
+        TypeName checkedResult = result.Should().BeOfType<TypeName>().Which;
+        TypeName genericTypeName = checkedResult.GetGenericArguments().SingleOrDefault().Should().BeOfType<TypeName>().Subject;
+        Type.GetType(genericTypeName.AssemblyQualifiedName).Should().Be(typeof(Point));
+
+        JsonSerializer.Deserialize(byteData.GetArray(), typeof(Point)).Should().BeEquivalentTo(point);
+    }
+
+    [WinFormsFact]
+    public void Clipboard_SurfaceJsonError()
+    {
+        using Font font = new("Microsoft Sans Serif", emSize: 10);
+        byte[] serialized = JsonSerializer.SerializeToUtf8Bytes(font);
+        string format = "font";
+        Clipboard.SetDataAsJson(format, font);
+        Clipboard.GetData(format).Should().BeOfType<NotSupportedException>();
+        DataObject dataObject = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
+        dataObject.GetData(format).Should().BeOfType<NotSupportedException>();
+    }
+
+    [WinFormsTheory]
+    [BoolData]
+    public void Clipboard_CustomDataObject_AvoidBinaryFormatter(bool copy)
+    {
+        string format = "customFormat";
+        TestData data = new() { X = 1, Y = 1 };
+        Clipboard.SetData(format, data);
+        // BinaryFormatter not enabled.
+        Clipboard.GetData(format).Should().BeOfType<NotSupportedException>();
+
+        Clipboard.Clear();
+        JsonDataObject jsonDataObject = new();
+        jsonDataObject.SetData(format, data);
+
+        Clipboard.SetDataObject(jsonDataObject, copy);
+
+        if (copy)
+        {
+            // Pasting in different process has been simulated. Manual Json deserialization will need to occur.
+            IDataObject received = Clipboard.GetDataObject().Should().BeAssignableTo<IDataObject>().Subject;
+            received.Should().NotBe(jsonDataObject);
+            byte[] jsonBytes = Clipboard.GetData(format).Should().BeOfType<byte[]>().Subject;
+            JsonSerializer.Deserialize(jsonBytes, typeof(TestData)).Should().BeEquivalentTo(data);
+        }
+        else
+        {
+            JsonDataObject received = Clipboard.GetDataObject().Should().BeOfType<JsonDataObject>().Subject;
+            received.Should().Be(jsonDataObject);
+            received.Deserialize<TestData>(format).Should().BeEquivalentTo(data);
+        }
+    }
+
+    [Serializable]
+    private struct TestData
+    {
+        public int X { get; set; }
+        public int Y { get; set; }
+    }
+
+    // Test class to demonstrate one way to write IDataObject to totally control serialization/deserialization
+    // and have it avoid BinaryFormatter.
+    private class JsonDataObject : IDataObject, ComTypes.IDataObject
+    {
+        private readonly Dictionary<string, byte[]> _formatToJson = [];
+        private readonly Dictionary<string, string> _formatToTypeName = [];
+
+        public T? Deserialize<T>(string format)
+        {
+            if (typeof(T).AssemblyQualifiedName != _formatToTypeName[format])
+            {
+                return default;
+            }
+
+            return JsonSerializer.Deserialize<T>(_formatToJson[format]);
+        }
+
+        public object GetData(string format, bool autoConvert) => GetData(format);
+        public object GetData(string format) => _formatToJson[format];
+        public object GetData(Type format) => throw new NotImplementedException();
+        public bool GetDataPresent(string format, bool autoConvert) => throw new NotImplementedException();
+        public bool GetDataPresent(string format) => _formatToJson.ContainsKey(format);
+        public bool GetDataPresent(Type format) => throw new NotImplementedException();
+        public string[] GetFormats(bool autoConvert) => throw new NotImplementedException();
+        public string[] GetFormats() => _formatToJson.Keys.ToArray();
+        public void SetData(string format, bool autoConvert, object? data) => throw new NotImplementedException();
+        public void SetData(string format, object? data)
+        {
+            _formatToTypeName.Add(format, data!.GetType().AssemblyQualifiedName!);
+            _formatToJson.Add(format, JsonSerializer.SerializeToUtf8Bytes(data));
+        }
+
+        public void SetData(Type format, object? data) => throw new NotImplementedException();
+        public void SetData(object? data) => throw new NotImplementedException();
+
+        public int DAdvise(ref ComTypes.FORMATETC pFormatetc, ComTypes.ADVF advf, ComTypes.IAdviseSink adviseSink, out int connection) => throw new NotImplementedException();
+        public void DUnadvise(int connection) => throw new NotImplementedException();
+        public int EnumDAdvise(out ComTypes.IEnumSTATDATA? enumAdvise) => throw new NotImplementedException();
+        public ComTypes.IEnumFORMATETC EnumFormatEtc(ComTypes.DATADIR direction) => throw new NotImplementedException();
+        public int GetCanonicalFormatEtc(ref ComTypes.FORMATETC formatIn, out ComTypes.FORMATETC formatOut) => throw new NotImplementedException();
+        public void SetData(ref ComTypes.FORMATETC formatIn, ref ComTypes.STGMEDIUM medium, bool release) => throw new NotImplementedException();
+        public void GetData(ref ComTypes.FORMATETC format, out ComTypes.STGMEDIUM medium) => throw new NotImplementedException();
+        public void GetDataHere(ref ComTypes.FORMATETC format, ref ComTypes.STGMEDIUM medium) => throw new NotImplementedException();
+        public int QueryGetData(ref ComTypes.FORMATETC format) => throw new NotImplementedException();
+    }
+
+    private class DerivedDataObject : DataObject { }
+
+    [WinFormsFact]
+    public void Clipboard_SetDataAsJson_NullData_Throws()
+    {
+        Action clipboardSet = () => Clipboard.SetDataAsJson<string>("format", null!);
+        clipboardSet.Should().Throw<ArgumentNullException>();
     }
 }

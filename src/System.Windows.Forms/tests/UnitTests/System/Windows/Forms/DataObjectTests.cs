@@ -7,6 +7,8 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.Serialization;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Moq;
 using Windows.Win32.System.Ole;
 using Com = Windows.Win32.System.Com;
@@ -2423,19 +2425,44 @@ public partial class DataObjectTests
         dynamic controlAccessor = typeof(Control).TestAccessor().Dynamic;
         var dropTargetAccessor = typeof(DropTarget).TestAccessor();
 
-        IComDataObject inData = controlAccessor.CreateRuntimeDataObjectForDrag(data);
-        if (data is DataObject)
+        DataObject inData = controlAccessor.CreateRuntimeDataObjectForDrag(data);
+        if (data is CustomDataObject)
         {
-            inData.Should().BeSameAs(data);
+            inData.Should().NotBeSameAs(data);
         }
         else
         {
-            inData.Should().NotBeSameAs(data);
+            inData.Should().BeSameAs(data);
         }
 
         using var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
         IDataObject outData = dropTargetAccessor.CreateDelegate<CreateWinFormsDataObjectForOutgoingDropData>()(inDataPtr);
         outData.Should().BeSameAs(data);
+    }
+
+    public static IEnumerable<object[]> DataObjectWithJsonMockRoundTripData()
+    {
+        yield return new object[] { new DataObject() };
+        yield return new object[] { new DerivedDataObject() };
+    }
+
+    [WinFormsTheory]
+    [MemberData(nameof(DataObjectWithJsonMockRoundTripData))]
+    public unsafe void DataObject_WithJson_MockRoundTrip_OutData_IsSame(DataObject data)
+    {
+        dynamic controlAccessor = typeof(Control).TestAccessor().Dynamic;
+        var dropTargetAccessor = typeof(DropTarget).TestAccessor();
+
+        Point point = new() { X = 1, Y = 1 };
+        data.SetDataAsJson("point", point);
+        DataObject inData = controlAccessor.CreateRuntimeDataObjectForDrag(data);
+        inData.Should().BeSameAs(data);
+
+        using var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
+        IDataObject outData = dropTargetAccessor.CreateDelegate<CreateWinFormsDataObjectForOutgoingDropData>()(inDataPtr);
+        outData.Should().BeSameAs(data);
+        outData.GetDataPresent("point").Should().BeTrue();
+        outData.GetData("point").Should().BeOfType<Point>().Which.Should().BeEquivalentTo(point);
     }
 
     [WinFormsFact]
@@ -2445,7 +2472,7 @@ public partial class DataObjectTests
         dynamic accessor = typeof(Control).TestAccessor().Dynamic;
         var dropTargetAccessor = typeof(DropTarget).TestAccessor();
 
-        IComDataObject inData = accessor.CreateRuntimeDataObjectForDrag(testString);
+        DataObject inData = accessor.CreateRuntimeDataObjectForDrag(testString);
         inData.Should().BeAssignableTo<DataObject>();
 
         using var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
@@ -2461,7 +2488,7 @@ public partial class DataObjectTests
         dynamic accessor = typeof(Control).TestAccessor().Dynamic;
         var dropTargetAccessor = typeof(DropTarget).TestAccessor();
 
-        IComDataObject inData = accessor.CreateRuntimeDataObjectForDrag(data);
+        DataObject inData = accessor.CreateRuntimeDataObjectForDrag(data);
         inData.Should().BeAssignableTo<DataObject>();
         inData.Should().NotBeSameAs(data);
 
@@ -2477,7 +2504,7 @@ public partial class DataObjectTests
         dynamic accessor = typeof(Control).TestAccessor().Dynamic;
         var dropTargetAccessor = typeof(DropTarget).TestAccessor();
 
-        IComDataObject inData = accessor.CreateRuntimeDataObjectForDrag(data);
+        DataObject inData = accessor.CreateRuntimeDataObjectForDrag(data);
         inData.Should().NotBeSameAs(data);
         inData.Should().BeAssignableTo<DataObject>();
 
@@ -2501,5 +2528,160 @@ public partial class DataObjectTests
         data.GetDataPresent(customFormat).Should().BeTrue();
         data.GetDataPresent("notExist").Should().BeFalse();
         data.GetFormats().Should().BeEquivalentTo([typeof(Bitmap).FullName, nameof(Bitmap), customFormat]);
+    }
+
+    [WinFormsFact]
+    public void DataObject_SetDataAsJson_DataObject_Throws()
+    {
+        string format = "format";
+        DataObject dataObject = new();
+        Action action = () => dataObject.SetDataAsJson(format, new DataObject());
+        action.Should().Throw<InvalidOperationException>();
+
+        Action dataObjectSet2 = () => dataObject.SetDataAsJson(format, new DerivedDataObject());
+        dataObjectSet2.Should().NotThrow();
+    }
+
+    [WinFormsFact]
+    public void DataObject_SetDataAsJson_ReturnsExpected()
+    {
+        Point point = new() { X = 1, Y = 1 };
+        DataObject dataObject = new();
+        dataObject.SetDataAsJson("point", point);
+        dataObject.GetDataPresent("point").Should().BeTrue();
+        dataObject.GetData("point").Should().BeOfType<Point>().Which.Should().BeEquivalentTo(point);
+    }
+
+    [WinFormsFact]
+    public void DataObject_SetDataAsJson_Wrapped_ReturnsExpected()
+    {
+        Point point = new() { X = 1, Y = 1 };
+        DataObject dataObject = new();
+        dataObject.SetDataAsJson("point", point);
+        DataObject wrapped = new(dataObject);
+        wrapped.GetDataPresent("point").Should().BeTrue();
+        wrapped.GetData("point").Should().BeOfType<Point>().Which.Should().BeEquivalentTo(point);
+    }
+
+    [WinFormsFact]
+    public void DataObject_SetDataAsJson_MultipleData_ReturnsExpected()
+    {
+        Point point1 = new() { X = 1, Y = 1 };
+        Point point2 = new() { Y = 2, X = 2 };
+        DataObject data = new();
+        data.SetDataAsJson("point1", point1);
+        data.SetDataAsJson("point2", point2);
+        data.SetData("Mystring", "test");
+
+        data.GetData("point1").Should().BeOfType<Point>().Which.Should().BeEquivalentTo(point1);
+        data.GetData("point2").Should().BeOfType<Point>().Which.Should().BeEquivalentTo(point2);
+        data.GetData("Mystring").Should().Be("test");
+    }
+
+    [WinFormsFact]
+    public void DataObject_SetDataAsJson_CustomJsonConverter_ReturnsExpected()
+    {
+        // This test demonstrates one way users can achieve custom JSON serialization behavior if the
+        // default JSON serialization behavior that is used in SetDataAsJson APIs is not enough for their scenario.
+        Font font = new("Consolas", emSize: 10);
+        WeatherForecast forecast = new()
+        {
+            Date = DateTimeOffset.Now,
+            TemperatureCelsius = 25,
+            Summary = "Hot",
+            Font = font
+        };
+
+        DataObject dataObject = new();
+        dataObject.SetDataAsJson("custom", forecast);
+        WeatherForecast deserialized = dataObject.GetData("custom").Should().BeOfType<WeatherForecast>().Subject;
+        string offsetFormat = "MM/dd/yyyy";
+        deserialized.Date.ToString(offsetFormat).Should().Be(forecast.Date.ToString(offsetFormat));
+        deserialized.TemperatureCelsius.Should().Be(forecast.TemperatureCelsius);
+        deserialized.Summary.Should().Be($"{forecast.Summary} custom!");
+        deserialized.Font.Should().Be(font);
+    }
+
+    [JsonConverter(typeof(WeatherForecastJsonConverter))]
+    private class WeatherForecast
+    {
+        public DateTimeOffset Date { get; set; }
+        public int TemperatureCelsius { get; set; }
+        public string Summary { get; set; }
+        public Font Font { get; set; }
+    }
+
+    private class WeatherForecastJsonConverter : JsonConverter<WeatherForecast>
+    {
+        public override WeatherForecast Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            WeatherForecast result = new();
+            string fontFamily = null;
+            int size = -1;
+            while (reader.Read())
+            {
+                if (reader.TokenType == JsonTokenType.EndObject)
+                {
+                    if (fontFamily is null || size == -1)
+                    {
+                        throw new JsonException();
+                    }
+
+                    result.Font = new(fontFamily, size);
+                    return result;
+                }
+
+                if (reader.TokenType != JsonTokenType.PropertyName)
+                {
+                    throw new JsonException();
+                }
+
+                string propertyName = reader.GetString();
+
+                reader.Read();
+
+                switch (propertyName)
+                {
+                    case nameof(WeatherForecast.Date):
+                        result.Date = DateTimeOffset.ParseExact(reader.GetString(), "MM/dd/yyyy", null);
+                        break;
+                    case nameof(WeatherForecast.TemperatureCelsius):
+                        result.TemperatureCelsius = reader.GetInt32();
+                        break;
+                    case nameof(WeatherForecast.Summary):
+                        result.Summary = reader.GetString();
+                        break;
+                    case nameof(Font.FontFamily):
+                        fontFamily = reader.GetString();
+                        break;
+                    case nameof(Font.Size):
+                        size = reader.GetInt32();
+                        break;
+                    default:
+                        throw new JsonException();
+                }
+            }
+
+            throw new JsonException();
+        }
+
+        public override void Write(Utf8JsonWriter writer, WeatherForecast value, JsonSerializerOptions options)
+        {
+            writer.WriteStartObject();
+            writer.WriteString(nameof(WeatherForecast.Date), value.Date.ToString("MM/dd/yyyy"));
+            writer.WriteNumber(nameof(WeatherForecast.TemperatureCelsius), value.TemperatureCelsius);
+            writer.WriteString(nameof(WeatherForecast.Summary), $"{value.Summary} custom!");
+            writer.WriteString(nameof(Font.FontFamily), value.Font.FontFamily.Name);
+            writer.WriteNumber(nameof(Font.Size), value.Font.Size);
+            writer.WriteEndObject();
+        }
+    }
+
+    [WinFormsFact]
+    public void DataObject_SetDataAsJson_NullData_Throws()
+    {
+        DataObject dataObject = new();
+        Action dataObjectSet = () => dataObject.SetDataAsJson<string>(null);
+        dataObjectSet.Should().Throw<ArgumentNullException>();
     }
 }
