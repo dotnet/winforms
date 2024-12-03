@@ -2476,7 +2476,7 @@ internal sealed partial class PropertyGridView :
 
             CommitValue(entry, valueNew, closeDropDown);
             EditTextBox.HookMouseDown = false;
-            EditTextBox?.SelectAll();
+            EditTextBox.SelectAll();
             return true;
         }
 
