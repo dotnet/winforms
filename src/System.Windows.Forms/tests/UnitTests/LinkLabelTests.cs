@@ -7,248 +7,203 @@ using System.Drawing;
 
 namespace System.Windows.Forms.Tests;
 
-public class LinkLabelTests
+public class LinkLabelTests : IDisposable
 {
+    private readonly LinkLabel _linkLabel = new();
+
+    public void Dispose() => _linkLabel.Dispose();
+
     [WinFormsFact]
     public void LinkLabel_Constructor()
     {
-        using LinkLabel label = new();
-
-        Assert.NotNull(label);
-        Assert.True(label.LinkArea.IsEmpty);
-        Assert.Equal(0, label.LinkArea.Start);
-        Assert.Equal(0, label.LinkArea.Length);
+        Assert.NotNull(_linkLabel);
+        Assert.True(_linkLabel.LinkArea.IsEmpty);
+        Assert.Equal(0, _linkLabel.LinkArea.Start);
+        Assert.Equal(0, _linkLabel.LinkArea.Length);
     }
 
     [WinFormsFact]
     public void LinkLabel_FlatStyle_Get_ReturnsExpected()
     {
-        using LinkLabel label = new();
-        label.FlatStyle.Should().Be(FlatStyle.Standard);
+        _linkLabel.FlatStyle.Should().Be(FlatStyle.Standard);
     }
 
     [WinFormsFact]
-    public void LinkLabel_FlatStyle_Set_GetReturnsExpected()
+    public void LinkLabel_FlatStyle_Set_ReturnsExpected()
     {
-        using LinkLabel label = new();
+        _linkLabel.FlatStyle = FlatStyle.Flat;
+        _linkLabel.FlatStyle.Should().Be(FlatStyle.Flat);
 
-        SetAndVerifyFlatStyle(label, FlatStyle.Flat);
-        SetAndVerifyFlatStyle(label, FlatStyle.Popup);
-        SetAndVerifyFlatStyle(label, FlatStyle.System);
-    }
+        _linkLabel.FlatStyle = FlatStyle.Popup;
+        _linkLabel.FlatStyle.Should().Be(FlatStyle.Popup);
 
-    private static void SetAndVerifyFlatStyle(LinkLabel label, FlatStyle style)
-    {
-        label.FlatStyle = style;
-        label.FlatStyle.Should().Be(style);
+        _linkLabel.FlatStyle = FlatStyle.System;
+        _linkLabel.FlatStyle.Should().Be(FlatStyle.System);
     }
 
     [WinFormsFact]
     public void LinkLabel_LinkArea_Get_ReturnsExpected()
     {
-        using LinkLabel label = new();
-        label.LinkArea.Should().Be(new LinkArea(0, 0));
+        _linkLabel.LinkArea.Should().Be(new LinkArea(0, 0));
     }
 
     [WinFormsFact]
-    public void LinkLabel_LinkArea_Set_GetReturnsExpected()
+    public void LinkLabel_LinkArea_Set_ReturnsExpected()
     {
-        using LinkLabel label = new();
+        _linkLabel.LinkArea = new LinkArea(1, 2);
+        _linkLabel.LinkArea.Should().Be(new LinkArea(1, 2));
 
-        SetAndVerifyLinkArea(label, new LinkArea(1, 2));
-        SetAndVerifyLinkArea(label, new LinkArea(3, 4));
-    }
-
-    private static void SetAndVerifyLinkArea(LinkLabel label, LinkArea area)
-    {
-        label.LinkArea = area;
-        label.LinkArea.Should().Be(area);
+        _linkLabel.LinkArea = new LinkArea(3, 4);
+        _linkLabel.LinkArea.Should().Be(new LinkArea(3, 4));
     }
 
     [WinFormsFact]
     public void LinkLabel_LinkArea_SetNegativeStart_ThrowsArgumentOutOfRangeException()
     {
-        using LinkLabel label = new();
-        Action act = () => label.LinkArea = new LinkArea(-1, 2);
+        Action act = () => _linkLabel.LinkArea = new LinkArea(-1, 2);
         act.Should().Throw<ArgumentOutOfRangeException>().WithMessage("*LinkArea*");
     }
 
     [WinFormsFact]
     public void LinkLabel_LinkArea_SetNegativeLength_ThrowsArgumentOutOfRangeException()
     {
-        using LinkLabel label = new();
-        Action act = () => label.LinkArea = new LinkArea(1, -2);
+        Action act = () => _linkLabel.LinkArea = new LinkArea(1, -2);
         act.Should().Throw<ArgumentOutOfRangeException>().WithMessage("*LinkArea*");
     }
 
     [WinFormsFact]
     public void LinkLabel_LinkArea_Set_UpdatesSelectability()
     {
-        using LinkLabel label = new();
-        label.Text = "Text";
+        _linkLabel.Text = "Text";
+        _linkLabel.LinkArea = new LinkArea(1, 2);
+        _linkLabel.TabStop.Should().BeTrue();
 
-        label.LinkArea = new LinkArea(1, 2);
-        label.TabStop.Should().BeTrue();
-
-        label.LinkArea = new LinkArea(0, 0);
-        label.TabStop.Should().BeFalse();
+        _linkLabel.LinkArea = new LinkArea(0, 0);
+        _linkLabel.TabStop.Should().BeFalse();
     }
 
     [WinFormsFact]
     public void LinkLabel_LinkBehavior_Get_ReturnsExpected()
     {
-        using LinkLabel label = new();
-        label.LinkBehavior.Should().Be(LinkBehavior.SystemDefault);
+        _linkLabel.LinkBehavior.Should().Be(LinkBehavior.SystemDefault);
     }
 
     [WinFormsFact]
-    public void LinkLabel_LinkBehavior_Set_GetReturnsExpected()
+    public void LinkLabel_LinkBehavior_Set_ReturnsExpected()
     {
-        using LinkLabel label = new();
+        _linkLabel.LinkBehavior = LinkBehavior.AlwaysUnderline;
+        _linkLabel.LinkBehavior.Should().Be(LinkBehavior.AlwaysUnderline);
 
-        SetAndVerifyLinkBehavior(label, LinkBehavior.AlwaysUnderline);
-        SetAndVerifyLinkBehavior(label, LinkBehavior.HoverUnderline);
-        SetAndVerifyLinkBehavior(label, LinkBehavior.NeverUnderline);
-    }
+        _linkLabel.LinkBehavior = LinkBehavior.HoverUnderline;
+        _linkLabel.LinkBehavior.Should().Be(LinkBehavior.HoverUnderline);
 
-    private static void SetAndVerifyLinkBehavior(LinkLabel label, LinkBehavior behavior)
-    {
-        label.LinkBehavior = behavior;
-        label.LinkBehavior.Should().Be(behavior);
+        _linkLabel.LinkBehavior = LinkBehavior.NeverUnderline;
+        _linkLabel.LinkBehavior.Should().Be(LinkBehavior.NeverUnderline);
     }
 
     [WinFormsFact]
     public void LinkLabel_LinkVisited_Get_ReturnsExpected()
     {
-        using LinkLabel label = new();
-        label.LinkVisited.Should().BeFalse();
+        _linkLabel.LinkVisited.Should().BeFalse();
     }
 
     [WinFormsFact]
     public void LinkLabel_LinkVisited_Set_ReturnsExpected()
     {
-        using LinkLabel label = new();
+        _linkLabel.LinkVisited = true;
+        _linkLabel.LinkVisited.Should().BeTrue();
 
-        SetAndVerifyLinkVisited(label, true);
-        SetAndVerifyLinkVisited(label, false);
-    }
-
-    private static void SetAndVerifyLinkVisited(LinkLabel label, bool visited)
-    {
-        label.LinkVisited = visited;
-        label.LinkVisited.Should().Be(visited);
+        _linkLabel.LinkVisited = false;
+        _linkLabel.LinkVisited.Should().BeFalse();
     }
 
     [WinFormsFact]
     public void LinkLabel_LinkVisited_Set_AddsLinkIfNoneExists()
     {
-        using LinkLabel label = new();
-        label.LinkVisited = true;
-        label.Links.Count.Should().Be(1);
-        label.Links[0].Visited.Should().BeTrue();
+        _linkLabel.LinkVisited = true;
+        _linkLabel.Links.Count.Should().Be(1);
+        _linkLabel.Links[0].Visited.Should().BeTrue();
     }
 
     [WinFormsFact]
     public void LinkLabel_LinkVisited_Set_UpdatesExistingLink()
     {
-        using LinkLabel label = new();
-        label.Links.Add(new LinkLabel.Link(label) { Visited = false });
+        _linkLabel.Links.Add(new LinkLabel.Link(_linkLabel) { Visited = false });
+        _linkLabel.LinkVisited = true;
+        _linkLabel.Links[0].Visited.Should().BeTrue();
 
-        label.LinkVisited = true;
-        label.Links[0].Visited.Should().BeTrue();
-
-        label.LinkVisited = false;
-        label.Links[0].Visited.Should().BeFalse();
+        _linkLabel.LinkVisited = false;
+        _linkLabel.Links[0].Visited.Should().BeFalse();
     }
 
     [WinFormsFact]
     public void LinkLabel_TabStop_Get_ReturnsExpected()
     {
-        using LinkLabel label = new();
-        label.TabStop.Should().BeFalse();
+        _linkLabel.TabStop.Should().BeFalse();
     }
 
     [WinFormsFact]
     public void LinkLabel_TabStop_Set_ReturnsExpected()
     {
-        using LinkLabel label = new();
+        _linkLabel.TabStop = true;
+        _linkLabel.TabStop.Should().BeTrue();
 
-        SetAndVerifyTabStop(label, true);
-        SetAndVerifyTabStop(label, false);
-    }
-
-    private static void SetAndVerifyTabStop(LinkLabel label, bool tabStop)
-    {
-        label.TabStop = tabStop;
-        label.TabStop.Should().Be(tabStop);
+        _linkLabel.TabStop = false;
+        _linkLabel.TabStop.Should().BeFalse();
     }
 
     [WinFormsFact]
     public void LinkLabel_TabStop_Set_RaisesTabStopChangedEvent()
     {
-        using LinkLabel label = new();
         bool eventRaised = false;
-        label.TabStopChanged += (sender, e) => eventRaised = true;
+        _linkLabel.TabStopChanged += (sender, e) => eventRaised = true;
 
-        label.TabStop = true;
+        _linkLabel.TabStop = true;
         eventRaised.Should().BeTrue();
 
         eventRaised = false;
-        label.TabStop = false;
+        _linkLabel.TabStop = false;
         eventRaised.Should().BeTrue();
     }
 
     [WinFormsFact]
     public void LinkLabel_Padding_Get_ReturnsExpected()
     {
-        using LinkLabel label = new();
-        label.Padding.Should().Be(new Padding(0));
+        _linkLabel.Padding.Should().Be(new Padding(0));
     }
 
     [WinFormsFact]
     public void LinkLabel_Padding_Set_ReturnsExpected()
     {
-        using LinkLabel label = new();
+        _linkLabel.Padding = new Padding(1, 2, 3, 4);
+        _linkLabel.Padding.Should().Be(new Padding(1, 2, 3, 4));
 
-        SetAndVerifyPadding(label, new Padding(1, 2, 3, 4));
-        SetAndVerifyPadding(label, new Padding(5));
-    }
-
-    private static void SetAndVerifyPadding(LinkLabel label, Padding padding)
-    {
-        label.Padding = padding;
-        label.Padding.Should().Be(padding);
+        _linkLabel.Padding = new Padding(5);
+        _linkLabel.Padding.Should().Be(new Padding(5));
     }
 
     [WinFormsFact]
     public void LinkLabel_VisitedLinkColor_Get_ReturnsExpected()
     {
-        using LinkLabel label = new();
-        label.VisitedLinkColor.Should().Be(LinkUtilities.GetVisitedLinkColor());
+        _linkLabel.VisitedLinkColor.Should().Be(LinkUtilities.GetVisitedLinkColor());
     }
 
     [WinFormsFact]
     public void LinkLabel_VisitedLinkColor_Set_ReturnsExpected()
     {
-        using LinkLabel label = new();
+        _linkLabel.VisitedLinkColor = Color.Red;
+        _linkLabel.VisitedLinkColor.Should().Be(Color.Red);
 
-        SetAndVerifyVisitedLinkColor(label, Color.Red);
-        SetAndVerifyVisitedLinkColor(label, Color.Blue);
-    }
-
-    private static void SetAndVerifyVisitedLinkColor(LinkLabel label, Color color)
-    {
-        label.VisitedLinkColor = color;
-        label.VisitedLinkColor.Should().Be(color);
+        _linkLabel.VisitedLinkColor = Color.Blue;
+        _linkLabel.VisitedLinkColor.Should().Be(Color.Blue);
     }
 
     [WinFormsFact]
     public void LinkLabel_VisitedLinkColor_Set_UpdatesLink()
     {
-        using LinkLabel label = new();
-        label.Links.Add(new LinkLabel.Link(label) { Visited = true });
-        label.VisitedLinkColor = Color.Red;
-        label.VisitedLinkColor.Should().Be(Color.Red);
+        _linkLabel.Links.Add(new LinkLabel.Link(_linkLabel) { Visited = true });
+        _linkLabel.VisitedLinkColor = Color.Red;
+        _linkLabel.VisitedLinkColor.Should().Be(Color.Red);
     }
 
     [WinFormsFact]
@@ -268,35 +223,32 @@ public class LinkLabelTests
     [WinFormsFact]
     public void LinkLabel_UseCompatibleTextRendering_Get_ReturnsExpected()
     {
-        using LinkLabel label = new();
-        label.UseCompatibleTextRendering.Should().BeTrue();
+        _linkLabel.UseCompatibleTextRendering.Should().BeTrue();
     }
 
     [WinFormsFact]
     public void LinkLabel_UseCompatibleTextRendering_Set_ReturnsExpected()
     {
-        using LinkLabel label = new();
+        _linkLabel.UseCompatibleTextRendering = true;
+        _linkLabel.UseCompatibleTextRendering.Should().BeTrue();
 
-        SetAndVerifyUseCompatibleTextRendering(label, true);
-        SetAndVerifyUseCompatibleTextRendering(label, false);
-    }
-
-    private static void SetAndVerifyUseCompatibleTextRendering(LinkLabel label, bool value)
-    {
-        label.UseCompatibleTextRendering = value;
-        label.UseCompatibleTextRendering.Should().Be(value);
+        _linkLabel.UseCompatibleTextRendering = false;
+        _linkLabel.UseCompatibleTextRendering.Should().BeFalse();
     }
 
     [WinFormsFact]
     public void LinkLabel_UseCompatibleTextRendering_Set_TriggersLayout()
     {
-        using LinkLabel label = new();
         bool layoutCalled = false;
-        label.Layout += (sender, e) => layoutCalled = true;
+        _linkLabel.Layout += (sender, e) => layoutCalled = true;
 
-        label.UseCompatibleTextRendering = true;
-        label.PerformLayout();
+        _linkLabel.UseCompatibleTextRendering = true;
+        _linkLabel.PerformLayout();
+        layoutCalled.Should().BeTrue();
 
+        layoutCalled = false;
+        _linkLabel.UseCompatibleTextRendering = false;
+        _linkLabel.PerformLayout();
         layoutCalled.Should().BeTrue();
     }
 
