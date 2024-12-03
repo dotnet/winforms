@@ -44,13 +44,14 @@ public class DataGridViewColumnDesignTimeVisibleAttributeTests
     }
 
     [WinFormsTheory]
-    [InlineData(true, true)]
-    [InlineData(true, false)]
-    public void Equals_DifferentInstances_ReturnsExpected(bool value1, bool value2)
+    [InlineData(true, true, true)]
+    [InlineData(true, false, false)]
+    [InlineData(false, false, true)]
+    public void Equals_DifferentInstances_ReturnsExpected(bool value1, bool value2, bool equals)
     {
         DataGridViewColumnDesignTimeVisibleAttribute attribute1 = new(value1);
         DataGridViewColumnDesignTimeVisibleAttribute attribute2 = new(value2);
-        attribute1.Equals(attribute2).Should().Be(value2);
+        attribute1.Equals(attribute2).Should().Be(equals);
     }
 
     [WinFormsTheory]
