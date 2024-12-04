@@ -16,10 +16,10 @@ public class LinkLabelTests : IDisposable
     [WinFormsFact]
     public void LinkLabel_Constructor()
     {
-        Assert.NotNull(_linkLabel);
-        Assert.True(_linkLabel.LinkArea.IsEmpty);
-        Assert.Equal(0, _linkLabel.LinkArea.Start);
-        Assert.Equal(0, _linkLabel.LinkArea.Length);
+        _linkLabel.Should().NotBeNull();
+        _linkLabel.LinkArea.IsEmpty.Should().BeTrue();
+        _linkLabel.LinkArea.Start.Should().Be(0);
+        _linkLabel.LinkArea.Length.Should().Be(0);
     }
 
     [WinFormsFact]
@@ -28,17 +28,15 @@ public class LinkLabelTests : IDisposable
         _linkLabel.FlatStyle.Should().Be(FlatStyle.Standard);
     }
 
-    [WinFormsFact]
-    public void LinkLabel_FlatStyle_Set_ReturnsExpected()
+    [WinFormsTheory]
+    [InlineData(FlatStyle.Flat)]
+    [InlineData(FlatStyle.Popup)]
+    [InlineData(FlatStyle.System)]
+    public void LinkLabel_FlatStyle_Set_ReturnsExpected(FlatStyle flatStyle)
     {
-        _linkLabel.FlatStyle = FlatStyle.Flat;
-        _linkLabel.FlatStyle.Should().Be(FlatStyle.Flat);
+        _linkLabel.FlatStyle = flatStyle;
 
-        _linkLabel.FlatStyle = FlatStyle.Popup;
-        _linkLabel.FlatStyle.Should().Be(FlatStyle.Popup);
-
-        _linkLabel.FlatStyle = FlatStyle.System;
-        _linkLabel.FlatStyle.Should().Be(FlatStyle.System);
+        _linkLabel.FlatStyle.Should().Be(flatStyle);
     }
 
     [WinFormsFact]
@@ -50,24 +48,22 @@ public class LinkLabelTests : IDisposable
     [WinFormsFact]
     public void LinkLabel_LinkArea_Set_ReturnsExpected()
     {
-        _linkLabel.LinkArea = new LinkArea(1, 2);
-        _linkLabel.LinkArea.Should().Be(new LinkArea(1, 2));
+        LinkArea linkArea1 = new LinkArea(1, 2);
+        LinkArea linkArea2 = new LinkArea(3, 4);
 
-        _linkLabel.LinkArea = new LinkArea(3, 4);
-        _linkLabel.LinkArea.Should().Be(new LinkArea(3, 4));
+        _linkLabel.LinkArea = linkArea1;
+        _linkLabel.LinkArea.Should().Be(linkArea1);
+
+        _linkLabel.LinkArea = linkArea2;
+        _linkLabel.LinkArea.Should().Be(linkArea2);
     }
 
-    [WinFormsFact]
-    public void LinkLabel_LinkArea_SetNegativeStart_ThrowsArgumentOutOfRangeException()
+    [WinFormsTheory]
+    [InlineData(-1, 2)]  // Test with negative Start
+    [InlineData(1, -2)]  // Test with negative Length
+    public void LinkLabel_LinkArea_Set_InvalidValues_ThrowsArgumentOutOfRangeException(int start, int length)
     {
-        Action act = () => _linkLabel.LinkArea = new LinkArea(-1, 2);
-        act.Should().Throw<ArgumentOutOfRangeException>().WithMessage("*LinkArea*");
-    }
-
-    [WinFormsFact]
-    public void LinkLabel_LinkArea_SetNegativeLength_ThrowsArgumentOutOfRangeException()
-    {
-        Action act = () => _linkLabel.LinkArea = new LinkArea(1, -2);
+        Action act = () => _linkLabel.LinkArea = new LinkArea(start, length);
         act.Should().Throw<ArgumentOutOfRangeException>().WithMessage("*LinkArea*");
     }
 
@@ -88,17 +84,14 @@ public class LinkLabelTests : IDisposable
         _linkLabel.LinkBehavior.Should().Be(LinkBehavior.SystemDefault);
     }
 
-    [WinFormsFact]
-    public void LinkLabel_LinkBehavior_Set_ReturnsExpected()
+    [WinFormsTheory]
+    [InlineData(LinkBehavior.AlwaysUnderline)]
+    [InlineData(LinkBehavior.HoverUnderline)]
+    [InlineData(LinkBehavior.NeverUnderline)]
+    public void LinkLabel_LinkBehavior_Set_ReturnsExpected(LinkBehavior linkBehavior)
     {
-        _linkLabel.LinkBehavior = LinkBehavior.AlwaysUnderline;
-        _linkLabel.LinkBehavior.Should().Be(LinkBehavior.AlwaysUnderline);
-
-        _linkLabel.LinkBehavior = LinkBehavior.HoverUnderline;
-        _linkLabel.LinkBehavior.Should().Be(LinkBehavior.HoverUnderline);
-
-        _linkLabel.LinkBehavior = LinkBehavior.NeverUnderline;
-        _linkLabel.LinkBehavior.Should().Be(LinkBehavior.NeverUnderline);
+        _linkLabel.LinkBehavior = linkBehavior;
+        _linkLabel.LinkBehavior.Should().Be(linkBehavior);
     }
 
     [WinFormsFact]
@@ -107,14 +100,13 @@ public class LinkLabelTests : IDisposable
         _linkLabel.LinkVisited.Should().BeFalse();
     }
 
-    [WinFormsFact]
-    public void LinkLabel_LinkVisited_Set_ReturnsExpected()
+    [WinFormsTheory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public void LinkLabel_LinkVisited_Set_ReturnsExpected(bool expectedVisited)
     {
-        _linkLabel.LinkVisited = true;
-        _linkLabel.LinkVisited.Should().BeTrue();
-
-        _linkLabel.LinkVisited = false;
-        _linkLabel.LinkVisited.Should().BeFalse();
+        _linkLabel.LinkVisited = expectedVisited;
+        _linkLabel.LinkVisited.Should().Be(expectedVisited);
     }
 
     [WinFormsFact]
@@ -142,14 +134,13 @@ public class LinkLabelTests : IDisposable
         _linkLabel.TabStop.Should().BeFalse();
     }
 
-    [WinFormsFact]
-    public void LinkLabel_TabStop_Set_ReturnsExpected()
+    [WinFormsTheory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public void LinkLabel_TabStop_Set_ReturnsExpected(bool expectedTabStop)
     {
-        _linkLabel.TabStop = true;
-        _linkLabel.TabStop.Should().BeTrue();
-
-        _linkLabel.TabStop = false;
-        _linkLabel.TabStop.Should().BeFalse();
+        _linkLabel.TabStop = expectedTabStop;
+        _linkLabel.TabStop.Should().Be(expectedTabStop);
     }
 
     [WinFormsFact]
@@ -175,11 +166,14 @@ public class LinkLabelTests : IDisposable
     [WinFormsFact]
     public void LinkLabel_Padding_Set_ReturnsExpected()
     {
-        _linkLabel.Padding = new Padding(1, 2, 3, 4);
-        _linkLabel.Padding.Should().Be(new Padding(1, 2, 3, 4));
+        Padding padding1 = new(1, 2, 3, 4);
+        Padding padding2 = new(5);
 
-        _linkLabel.Padding = new Padding(5);
-        _linkLabel.Padding.Should().Be(new Padding(5));
+        _linkLabel.Padding = padding1;
+        _linkLabel.Padding.Should().Be(padding1);
+
+        _linkLabel.Padding = padding2;
+        _linkLabel.Padding.Should().Be(padding2);
     }
 
     [WinFormsFact]
@@ -226,14 +220,13 @@ public class LinkLabelTests : IDisposable
         _linkLabel.UseCompatibleTextRendering.Should().BeTrue();
     }
 
-    [WinFormsFact]
-    public void LinkLabel_UseCompatibleTextRendering_Set_ReturnsExpected()
+    [WinFormsTheory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public void LinkLabel_UseCompatibleTextRendering_Set_ReturnsExpected(bool expectedValue)
     {
-        _linkLabel.UseCompatibleTextRendering = true;
-        _linkLabel.UseCompatibleTextRendering.Should().BeTrue();
-
-        _linkLabel.UseCompatibleTextRendering = false;
-        _linkLabel.UseCompatibleTextRendering.Should().BeFalse();
+        _linkLabel.UseCompatibleTextRendering = expectedValue;
+        _linkLabel.UseCompatibleTextRendering.Should().Be(expectedValue);
     }
 
     [WinFormsFact]
