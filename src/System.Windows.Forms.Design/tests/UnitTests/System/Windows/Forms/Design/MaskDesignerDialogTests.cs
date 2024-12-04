@@ -8,14 +8,13 @@ using Moq;
 
 namespace System.Windows.Forms.Design.Tests;
 
-public sealed class MaskDesignerDialogTests:IDisposable
+public sealed class MaskDesignerDialogTests : IDisposable
 {
-    private readonly MaskedTextBox _maskedTextBox;
+    private readonly MaskedTextBox _maskedTextBox = new MaskedTextBox();
     private readonly MaskDesignerDialog _dialog;
 
     public MaskDesignerDialogTests()
     {
-        _maskedTextBox = new MaskedTextBox();
         _dialog = new MaskDesignerDialog(_maskedTextBox, null);
     }
 
@@ -28,7 +27,7 @@ public sealed class MaskDesignerDialogTests:IDisposable
     [Fact]
     public void Constructor_ValidMaskedTextBox_UsesProvidedMaskedTextBox()
     {
-        var txtBoxMask = (TextBox)_dialog.TestAccessor().Dynamic._txtBoxMask;
+        TextBox txtBoxMask = _dialog.TestAccessor().Dynamic._txtBoxMask;
 
         _dialog.Mask.Should().Be(_maskedTextBox.Mask);
         txtBoxMask.Text.Should().Be(_maskedTextBox.Mask);
@@ -46,7 +45,7 @@ public sealed class MaskDesignerDialogTests:IDisposable
     [Fact]
     public void MaskDescriptorsEnumerator_ShouldReturnCorrectDescriptors()
     {
-        var enumerator = _dialog.MaskDescriptors;
+        Collections.IEnumerator enumerator = _dialog.MaskDescriptors;
 
         List<MaskDescriptor> descriptors = new List<MaskDescriptor>();
         while (enumerator.MoveNext())
@@ -55,6 +54,18 @@ public sealed class MaskDesignerDialogTests:IDisposable
         }
 
         descriptors.Should().NotBeEmpty();
+    }
+
+    [Fact]
+    public void DiscoverMaskDescriptors_ShouldHandleNullTypeDiscoveryService()
+    {
+        List<MaskDescriptor> initialDescriptors = _dialog.TestAccessor().Dynamic._maskDescriptors;
+
+        _dialog.DiscoverMaskDescriptors(null);
+
+        List<MaskDescriptor> maskDescriptors = _dialog.TestAccessor().Dynamic._maskDescriptors;
+
+        maskDescriptors.Should().Equal(initialDescriptors);
     }
 
     [WinFormsTheory]
@@ -69,7 +80,7 @@ public sealed class MaskDesignerDialogTests:IDisposable
         mockDiscoveryService.Setup(ds => ds.GetTypes(typeof(MaskDescriptor), false)).Returns(types);
 
         _dialog.DiscoverMaskDescriptors(mockDiscoveryService.Object);
-        var maskDescriptors = (List<MaskDescriptor>)_dialog.TestAccessor().Dynamic._maskDescriptors;
+        List<MaskDescriptor> maskDescriptors = _dialog.TestAccessor().Dynamic._maskDescriptors;
 
         if (shouldBeAdded)
         {
