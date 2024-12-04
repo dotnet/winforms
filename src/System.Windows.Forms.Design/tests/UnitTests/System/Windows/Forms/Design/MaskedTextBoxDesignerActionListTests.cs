@@ -40,8 +40,8 @@ public class MaskedTextBoxDesignerActionListTests : IDisposable
 
     public void Dispose()
     {
-        _maskedTextBox.Dispose();
         _designer.Dispose();
+        _maskedTextBox.Dispose();
     }
 
     [Fact]
