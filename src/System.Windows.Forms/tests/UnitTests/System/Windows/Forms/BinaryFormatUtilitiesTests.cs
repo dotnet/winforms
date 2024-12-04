@@ -18,18 +18,6 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
 
     public void Dispose() => _stream.Dispose();
 
-    private object? RoundTripObject(object value)
-    {
-        Utilities.WriteObjectToStream(_stream, value, restrictSerialization: false);
-        return ReadObjectFromStream();
-    }
-
-    private object? RoundTripObject_RestrictedFormat(object value)
-    {
-        Utilities.WriteObjectToStream(_stream, value, restrictSerialization: true);
-        return ReadObjectFromStream(restrictDeserialization: true);
-    }
-
     private void WriteObjectToStream(object value, bool restrictSerialization = false) =>
         Utilities.WriteObjectToStream(_stream, value, restrictSerialization);
 
@@ -37,6 +25,22 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
     {
         _stream.Position = 0;
         return Utilities.ReadObjectFromStream(_stream, restrictDeserialization);
+    }
+
+    private object? RoundTripObject(object value)
+    {
+        // This is equivalent to SetData/GetData methods with unbounded formats,
+        // and works with the BinaryFormat AppContext switches.
+        WriteObjectToStream(value);
+        return ReadObjectFromStream();
+    }
+
+    private object? RoundTripObject_RestrictedFormat(object value)
+    {
+        // This is equivalent to SetData/GetData methods using registered OLE formats and thus the BitmapBinder,
+        // and works with the BF AppCompat switches.
+        WriteObjectToStream(value, restrictSerialization: true);
+        return ReadObjectFromStream(restrictDeserialization: true);
     }
 
     // Primitive types as defined by the NRBF spec.
@@ -54,17 +58,17 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
         (float)9.0,
         10.0,
         'a',
-        true
+        true,
+        "string",
+        DateTime.Now,
+        TimeSpan.FromHours(1),
+        decimal.MaxValue
     ];
 
     public static TheoryData<object> KnownObjects_TheoryData =>
     [
-        "string",
-        DateTime.Now,
-        TimeSpan.FromHours(1),
         -(nint)11,
         (nuint)12,
-        decimal.MaxValue,
         new PointF(1, 2),
         new RectangleF(1, 2, 3, 4),
         new Point(-1, int.MaxValue),
@@ -167,7 +171,9 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
     [
         new List<object>(),
         new List<nint>(),
-        new List<(int, int)>()
+        new List<(int, int)>(),
+        new List<nint> { nint.MinValue, nint.MaxValue },
+        new List<nuint> { nuint.MinValue, nuint.MaxValue }
     ];
 
     [Theory]
@@ -289,7 +295,10 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
     [MemberData(nameof(Lists_UnsupportedTestData))]
     public void RoundTrip_Unsupported(IList value)
     {
-        ((Action)(() => WriteObjectToStream(value))).Should().Throw<NotSupportedException>();
+        Action writer = () => WriteObjectToStream(value);
+        Action reader = () => ReadObjectFromStream();
+
+        writer.Should().Throw<NotSupportedException>();
 
         using (BinaryFormatterScope scope = new(enable: true))
         {
@@ -297,16 +306,45 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
             ReadObjectFromStream().Should().BeEquivalentTo(value);
         }
 
-        ((Action)(() => ReadObjectFromStream())).Should().Throw<NotSupportedException>();
+        reader.Should().Throw<NotSupportedException>();
     }
 
     [Theory]
     [MemberData(nameof(Lists_UnsupportedTestData))]
     public void RoundTrip_RestrictedFormat_Unsupported(IList value)
     {
-        ((Action)(() => WriteObjectToStream(value, restrictSerialization: true))).Should().Throw<NotSupportedException>();
+        Action writer = () => WriteObjectToStream(value, restrictSerialization: true);
+        writer.Should().Throw<NotSupportedException>();
 
         using BinaryFormatterScope scope = new(enable: true);
-        ((Action)(() => WriteObjectToStream(value, restrictSerialization: true))).Should().Throw<SerializationException>();
+        writer.Should().Throw<SerializationException>();
+    }
+
+    [Fact]
+    public void RoundTrip_OffsetArray()
+    {
+        Array value = Array.CreateInstance(typeof(uint), lengths: [2, 3], lowerBounds: [1, 2]);
+        value.SetValue(101u, 1, 2);
+        value.SetValue(102u, 1, 3);
+        value.SetValue(103u, 1, 4);
+        value.SetValue(201u, 2, 2);
+        value.SetValue(202u, 2, 3);
+        value.SetValue(203u, 2, 4);
+
+        // Can read offset array with the BinaryFormatter.
+        using BinaryFormatterScope scope = new(enable: true);
+        var result = RoundTripObject(value).Should().BeOfType<uint[,]>().Subject;
+
+        result.Rank.Should().Be(2);
+        result.GetLength(0).Should().Be(2);
+        result.GetLength(1).Should().Be(3);
+        result.GetLowerBound(0).Should().Be(1);
+        result.GetLowerBound(1).Should().Be(2);
+        result.GetValue(1, 2).Should().Be(101u);
+        result.GetValue(1, 3).Should().Be(102u);
+        result.GetValue(1, 4).Should().Be(103u);
+        result.GetValue(2, 2).Should().Be(201u);
+        result.GetValue(2, 3).Should().Be(202u);
+        result.GetValue(2, 4).Should().Be(203u);
     }
 }
