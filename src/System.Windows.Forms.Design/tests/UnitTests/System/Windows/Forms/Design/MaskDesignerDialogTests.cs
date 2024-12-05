@@ -10,12 +10,12 @@ namespace System.Windows.Forms.Design.Tests;
 
 public sealed class MaskDesignerDialogTests : IDisposable
 {
-    private readonly MaskedTextBox _maskedTextBox = new MaskedTextBox();
+    private readonly MaskedTextBox _maskedTextBox = new();
     private readonly MaskDesignerDialog _dialog;
 
     public MaskDesignerDialogTests()
     {
-        _dialog = new MaskDesignerDialog(_maskedTextBox, null);
+        _dialog = new(_maskedTextBox, null);
     }
 
     public void Dispose()
@@ -27,7 +27,7 @@ public sealed class MaskDesignerDialogTests : IDisposable
     [Fact]
     public void Constructor_ValidMaskedTextBox_UsesProvidedMaskedTextBox()
     {
-        TextBox txtBoxMask = _dialog.TestAccessor().Dynamic._txtBoxMask;
+        using TextBox txtBoxMask = _dialog.TestAccessor().Dynamic._txtBoxMask;
 
         _dialog.Mask.Should().Be(_maskedTextBox.Mask);
         txtBoxMask.Text.Should().Be(_maskedTextBox.Mask);
@@ -47,7 +47,7 @@ public sealed class MaskDesignerDialogTests : IDisposable
     {
         Collections.IEnumerator enumerator = _dialog.MaskDescriptors;
 
-        List<MaskDescriptor> descriptors = new List<MaskDescriptor>();
+        List<MaskDescriptor> descriptors = new();
         while (enumerator.MoveNext())
         {
             descriptors.Add((MaskDescriptor)enumerator.Current);
@@ -74,8 +74,8 @@ public sealed class MaskDesignerDialogTests : IDisposable
     [InlineData(typeof(NonPublicMaskDescriptor), false)]
     public void DiscoverMaskDescriptors_ShouldHandleVariousDescriptorTypes(Type descriptorType, bool shouldBeAdded)
     {
-        Mock<ITypeDiscoveryService> mockDiscoveryService = new Mock<ITypeDiscoveryService>();
-        List<Type> types = new List<Type> { descriptorType };
+        Mock<ITypeDiscoveryService> mockDiscoveryService = new();
+        List<Type> types = new(){ descriptorType };
 
         mockDiscoveryService.Setup(ds => ds.GetTypes(typeof(MaskDescriptor), false)).Returns(types);
 
