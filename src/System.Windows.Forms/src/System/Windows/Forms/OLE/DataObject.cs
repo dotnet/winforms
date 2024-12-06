@@ -92,32 +92,30 @@ public unsafe partial class DataObject :
     internal IDataObject? OriginalIDataObject => _innerData.OriginalIDataObject;
 
     #region IDataObject
-    public virtual object? GetData(string format, bool autoConvert) =>
-        ((IDataObject)_innerData).GetData(format, autoConvert);
+    public virtual object? GetData(string format, bool autoConvert) => _innerData.GetData(format, autoConvert);
 
     public virtual object? GetData(string format) => GetData(format, autoConvert: true);
 
     public virtual object? GetData(Type format) => format is null ? null : GetData(format.FullName!);
 
-    public virtual bool GetDataPresent(string format, bool autoConvert) =>
-        ((IDataObject)_innerData).GetDataPresent(format, autoConvert);
+    public virtual bool GetDataPresent(string format, bool autoConvert) => _innerData.GetDataPresent(format, autoConvert);
 
     public virtual bool GetDataPresent(string format) => GetDataPresent(format, autoConvert: true);
 
     public virtual bool GetDataPresent(Type format) => format is not null && GetDataPresent(format.FullName!);
 
-    public virtual string[] GetFormats(bool autoConvert) => ((IDataObject)_innerData).GetFormats(autoConvert);
+    public virtual string[] GetFormats(bool autoConvert) => _innerData.GetFormats(autoConvert);
 
     public virtual string[] GetFormats() => GetFormats(autoConvert: true);
 
-    public virtual void SetData(string format, bool autoConvert, object? data)
-        => ((IDataObject)_innerData).SetData(format, autoConvert, data);
+    public virtual void SetData(string format, bool autoConvert, object? data) =>
+        _innerData.SetData(format, autoConvert, data);
 
-    public virtual void SetData(string format, object? data) => ((IDataObject)_innerData).SetData(format, data);
+    public virtual void SetData(string format, object? data) => _innerData.SetData(format, data);
 
-    public virtual void SetData(Type format, object? data) => ((IDataObject)_innerData).SetData(format, data);
+    public virtual void SetData(Type format, object? data) => _innerData.SetData(format, data);
 
-    public virtual void SetData(object? data) => ((IDataObject)_innerData).SetData(data);
+    public virtual void SetData(object? data) => _innerData.SetData(data);
     #endregion
 
     public virtual bool ContainsAudio() => GetDataPresent(DataFormats.WaveAudioConstant, autoConvert: false);
@@ -150,14 +148,14 @@ public unsafe partial class DataObject :
 
     public virtual Image? GetImage() => GetData(DataFormats.Bitmap, autoConvert: true) as Image;
 
-    public virtual string GetText() => GetText(TextDataFormat.UnicodeText);
-
     public virtual string GetText(TextDataFormat format)
     {
         // Valid values are 0x0 to 0x4
         SourceGenerated.EnumValidator.Validate(format, nameof(format));
-        return GetData(ConvertToDataFormats(format), false) is string text ? text : string.Empty;
+        return GetData(ConvertToDataFormats(format), autoConvert: false) is string text ? text : string.Empty;
     }
+
+    public virtual string GetText() => GetText(TextDataFormat.UnicodeText);
 
     public virtual void SetAudio(byte[] audioBytes) => SetAudio(new MemoryStream(audioBytes.OrThrowIfNull()));
 

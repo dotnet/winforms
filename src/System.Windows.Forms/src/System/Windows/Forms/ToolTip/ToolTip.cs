@@ -1935,6 +1935,11 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
             moveToLocation.X = screen.WorkingArea.Right - tipSize.Width;
         }
 
+        if (moveToLocation.X < screen.WorkingArea.Left)
+        {
+            moveToLocation.X = screen.WorkingArea.Left;
+        }
+
         // re-adjust the Y position of the tool tip if it bleeds off the screen working area.
         if (moveToLocation.Y + tipSize.Height > screen.WorkingArea.Bottom)
         {

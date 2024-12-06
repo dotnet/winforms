@@ -15,6 +15,7 @@
     <UpdateXlfOnBuild>false</UpdateXlfOnBuild>
     <SkipResolvePackageAssets>true</SkipResolvePackageAssets>
     <ResolveComReferenceSilent>true</ResolveComReferenceSilent>
+    <IsTestUtilityProject>true</IsTestUtilityProject>
   </PropertyGroup>
 
   <ItemGroup>

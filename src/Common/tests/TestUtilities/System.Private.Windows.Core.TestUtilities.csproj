@@ -1,4 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <AssemblyName>System.Private.Windows.Core.TestUtilities</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -6,6 +7,7 @@
     <Nullable>enable</Nullable>
     <IsPackable>true</IsPackable>
     <IsShipping>false</IsShipping>
+    <IsTestUtilityProject>true</IsTestUtilityProject>
   </PropertyGroup>
 
   <ItemGroup>

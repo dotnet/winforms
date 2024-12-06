@@ -20,6 +20,7 @@
     <!-- Do not build this project when doing a .NET product build. -->
     <!-- The files for this project have been removed from the .NET product due to licensing issues. -->
     <ExcludeFromDotNetBuild>true</ExcludeFromDotNetBuild>
+    <IsTestUtilityProject>true</IsTestUtilityProject>
   </PropertyGroup>
 
   <ItemGroup>
