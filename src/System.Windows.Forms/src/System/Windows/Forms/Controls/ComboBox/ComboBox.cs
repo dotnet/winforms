@@ -3832,6 +3832,7 @@ public partial class ComboBox : ListControl
                 base.WndProc(ref m);
                 ReleaseChildWindow();
                 break;
+
             default:
                 if (m.MsgInternal == RegisteredMessage.WM_MOUSEENTER)
                 {
