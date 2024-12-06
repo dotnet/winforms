@@ -7,8 +7,11 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
+using System.Windows.Forms.Primitives;
 using Windows.Win32.System.Ole;
+using static System.Windows.Forms.Tests.BinaryFormatUtilitiesTests;
 using Com = Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
 
@@ -20,6 +23,8 @@ namespace System.Windows.Forms.Tests;
 [UISettings(MaxAttempts = 3)] // Try up to 3 times before failing.
 public class ClipboardTests
 {
+#pragma warning disable WFDEV005 // Type or member is obsolete
+
     [WinFormsFact]
     public void Clipboard_SetText_InvokeString_GetReturnsExpected()
     {
@@ -248,6 +253,7 @@ public class ClipboardTests
             // GetData will hit "Data on clipboard is invalid (0x800401D3 (CLIPBRD_E_BAD_DATA))"
             Clipboard.ContainsData("MyData").Should().BeTrue();
             Clipboard.GetData("MyData").Should().BeNull();
+            Clipboard.TryGetData("MyData", out string? data).Should().BeFalse();
         }
         finally
         {
@@ -446,6 +452,9 @@ public class ClipboardTests
         try
         {
             using Metafile metafile = new("bitmaps/telescope_01.wmf");
+            using BinaryFormatterScope scope = new(enable: true);
+            using BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: true);
+
             // SetImage fails silently and corrupts the clipboard state for anything other than a bitmap.
             Clipboard.SetImage(metafile);
 
@@ -464,6 +473,9 @@ public class ClipboardTests
         try
         {
             using Metafile metafile = new("bitmaps/milkmateya01.emf");
+            using BinaryFormatterScope scope = new(enable: true);
+            using BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: true);
+
             // SetImage fails silently and corrupts the clipboard for everything other than a bitmap.
             Clipboard.SetImage(metafile);
 
@@ -526,9 +538,13 @@ public class ClipboardTests
         using BinaryFormatterScope scope = new(enable: false);
         string format = nameof(Clipboard_SetData_CustomFormat_Exception_BinaryFormatterDisabled_SerializesException);
 
-        // This will fail and NotSupportedException will be put on the Clipboard instead.
+        // This will fail because BinaryFormatter is disabled in the clipboard APIs, thus NotSupportedException
+        // will be put on the Clipboard instead.
         Clipboard.SetData(format, new FileNotFoundException());
         Clipboard.ContainsData(format).Should().BeTrue();
+        // However we don't need binary formatter to read this exception off of the clipboard.
+        Clipboard.TryGetData(format, out NotSupportedException? exception).Should().BeTrue();
+        exception.Should().NotBeNull();
         Clipboard.GetData(format).Should().BeOfType<NotSupportedException>();
     }
 
@@ -645,5 +661,218 @@ public class ClipboardTests
 
         DataObject dataObject = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Which;
         dataObject.GetData(DataFormats.Text).Should().Be(testString);
+    }
+
+    [WinFormsFact]
+    public void Clipboard_BinaryFormatter_AppContextSwitch()
+    {
+        // Test the switch to ensure it works as expected in the context of this test assembly.
+        LocalAppContextSwitches.ClipboardDragDropEnableUnsafeBinaryFormatterSerialization.Should().BeFalse();
+
+        using (BinaryFormatterInClipboardDragDropScope scope = new(enable: true))
+        {
+            LocalAppContextSwitches.ClipboardDragDropEnableUnsafeBinaryFormatterSerialization.Should().BeTrue();
+        }
+
+        LocalAppContextSwitches.ClipboardDragDropEnableUnsafeBinaryFormatterSerialization.Should().BeFalse();
+
+        using (BinaryFormatterInClipboardDragDropScope scope = new(enable: false))
+        {
+            LocalAppContextSwitches.ClipboardDragDropEnableUnsafeBinaryFormatterSerialization.Should().BeFalse();
+        }
+
+        LocalAppContextSwitches.ClipboardDragDropEnableUnsafeBinaryFormatterSerialization.Should().BeFalse();
+    }
+
+    [WinFormsFact]
+    public void Clipboard_NrbfSerializer_AppContextSwitch()
+    {
+        // Test the switch to ensure it works as expected in the context of this test assembly.
+        LocalAppContextSwitches.ClipboardDragDropEnableNrbfSerialization.Should().BeTrue();
+
+        using (NrbfSerializerInClipboardDragDropScope scope = new(enable: false))
+        {
+            LocalAppContextSwitches.ClipboardDragDropEnableNrbfSerialization.Should().BeFalse();
+        }
+
+        LocalAppContextSwitches.ClipboardDragDropEnableNrbfSerialization.Should().BeTrue();
+
+        using (NrbfSerializerInClipboardDragDropScope scope = new(enable: true))
+        {
+            LocalAppContextSwitches.ClipboardDragDropEnableNrbfSerialization.Should().BeTrue();
+        }
+
+        LocalAppContextSwitches.ClipboardDragDropEnableNrbfSerialization.Should().BeTrue();
+    }
+
+    [WinFormsFact]
+    public void Clipboard_TryGetInt_ReturnsExpected()
+    {
+        int expected = 101;
+        using (BinaryFormatterScope scope = new(enable: true))
+        {
+            Clipboard.SetData("TestData", expected);
+        }
+
+        Clipboard.TryGetData("TestData", out int? data).Should().BeTrue();
+        data.Should().Be(expected);
+    }
+
+    [WinFormsFact]
+    public void Clipboard_TryGetTestData()
+    {
+        TestData expected = new(DateTime.Now);
+        string format = "TestData";
+        using FullCompatScope scope = new();
+        Clipboard.SetData(format, expected);
+
+        Clipboard.TryGetData(format, TestData.TestDataResolver, out TestData? data).Should().BeTrue();
+        var result = data.Should().BeOfType<TestData>().Subject;
+        expected.Equals(result);
+
+        // We are still in the less safe switch configuration, but now we prefer the
+        // NRBF deserialization over the BinaryFormatter full compatibility mode.
+        using NrbfSerializerInClipboardDragDropScope nrbfScope = new(enable: true);
+        Clipboard.TryGetData(format, TestData.TestDataResolver, out TestData? testData).Should().BeTrue();
+        expected.Equals(testData.Should().BeOfType<TestData>().Subject);
+        // Resolver is required to read this type.
+        Action tryGetData = () => Clipboard.TryGetData(format, out testData);
+        tryGetData.Should().Throw<NotSupportedException>();
+
+        // This is the safe switch configuration, custom types can't be resolved
+        using NrbfSerializerInClipboardDragDropScope nrbfScope2 = new(enable: false);
+        using BinaryFormatterInClipboardDragDropScope binaryScope2 = new(enable: false);
+        Action tryGetDataWithResolver = () => Clipboard.TryGetData(format, TestData.TestDataResolver, out testData);
+        tryGetDataWithResolver.Should().Throw<NotSupportedException>();
+    }
+
+    [Serializable]
+    private class TestData
+    {
+        public TestData(DateTime dateTime)
+        {
+            _count = 2;
+            _dateTime = dateTime;
+        }
+
+        private readonly int _count;
+        private readonly DateTime _dateTime;
+        private readonly TestData1 _testData1 = new();
+
+        public void Equals(TestData actual)
+        {
+            _count.Should().Be(actual._count);
+            _dateTime.Should().Be(actual._dateTime);
+            _testData1.Text.Should().Be(actual._testData1.Text);
+        }
+
+        public static Type TestDataResolver(TypeName typeName)
+        {
+            string fullName = typeName.FullName;
+            if (typeof(TestData).FullName == fullName)
+            {
+                return typeof(TestData);
+            }
+
+            if (typeof(TestData1).FullName == fullName)
+            {
+                return typeof(TestData1);
+            }
+
+            throw new NotSupportedException($"Can't resolve {typeName.AssemblyQualifiedName}");
+        }
+    }
+
+    [Serializable]
+    public class TestData1
+    {
+        public string Text { get; } = "a";
+    }
+
+    [WinFormsFact]
+    public void Clipboard_TryGetObject_Throws()
+    {
+        object expected = new();
+        string format = "TestData";
+        Action tryGetData = () => Clipboard.TryGetData(format, out object? data);
+
+        using BinaryFormatterScope scope = new(enable: true);
+
+        using (BinaryFormatterInClipboardDragDropScope binaryFormatterScope = new(enable: true))
+        {
+            Clipboard.SetData(format, expected);
+
+            tryGetData.Should().Throw<NotSupportedException>();
+        }
+
+        tryGetData.Should().Throw<NotSupportedException>();
+    }
+
+    [WinFormsFact]
+    public void Clipboard_TryGetRectangleAsObject_Throws()
+    {
+        Rectangle expected = new(1, 1, 2, 2);
+        string format = "TestData";
+        using BinaryFormatterScope scope = new(enable: true);
+        Clipboard.SetData(format, expected);
+
+        Action tryGetData = () => Clipboard.TryGetData(format, out object? data);
+        tryGetData.Should().Throw<NotSupportedException>();
+
+        using BinaryFormatterInClipboardDragDropScope binaryFormatterScope = new(enable: true);
+        tryGetData.Should().Throw<NotSupportedException>();
+    }
+
+    [WinFormsFact]
+    public void Clipboard_TryGetNotSupportedException()
+    {
+        object expected = new();
+        string format = "TestData";
+        Action tryGetData = () => Clipboard.TryGetData(format, out object? data);
+
+        using BinaryFormatterScope scope = new(enable: true);
+        // BinaryFormatterInClipboardDragDropScope is off, the NotSupportedException is written to the clipboard.
+        Clipboard.SetData(format, expected);
+
+        using (BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: true))
+        {
+            Clipboard.SetData(format, expected);
+
+            tryGetData.Should().Throw<NotSupportedException>();
+        }
+
+        tryGetData.Should().Throw<NotSupportedException>();
+    }
+
+    [WinFormsFact]
+    public void Clipboard_TryGetOffsetArray()
+    {
+        Array value = Array.CreateInstance(typeof(uint), lengths: [2, 3], lowerBounds: [1, 2]);
+        value.SetValue(101u, 1, 2);
+        value.SetValue(102u, 1, 3);
+        value.SetValue(103u, 1, 4);
+        value.SetValue(201u, 2, 2);
+        value.SetValue(202u, 2, 3);
+        value.SetValue(203u, 2, 4);
+
+        using FullCompatScope scope = new();
+        Clipboard.SetData("test", value);
+
+        var result = Clipboard.GetData("test").Should().BeOfType<uint[,]>().Subject;
+        result.Rank.Should().Be(2);
+        result.GetLength(0).Should().Be(2);
+        result.GetLength(1).Should().Be(3);
+        result.GetLowerBound(0).Should().Be(1);
+        result.GetLowerBound(1).Should().Be(2);
+        result.GetValue(1, 2).Should().Be(101u);
+        result.GetValue(1, 3).Should().Be(102u);
+        result.GetValue(1, 4).Should().Be(103u);
+        result.GetValue(2, 2).Should().Be(201u);
+        result.GetValue(2, 3).Should().Be(202u);
+        result.GetValue(2, 4).Should().Be(203u);
+
+        Action tryGetData = () => Clipboard.TryGetData("test", out uint[,]? data);
+        // Can't decode the root record, thus can't validate the T.
+        tryGetData.Should().Throw<NotSupportedException>();
     }
 }

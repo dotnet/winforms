@@ -5,6 +5,7 @@
 
 using System.Collections;
 using System.Drawing;
+using System.Reflection.Metadata;
 using System.Runtime.Serialization;
 using Utilities = System.Windows.Forms.DataObject.Composition.BinaryFormatUtilities;
 
@@ -24,7 +25,13 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
     private object? ReadObjectFromStream(bool restrictDeserialization = false)
     {
         _stream.Position = 0;
-        return Utilities.ReadObjectFromStream(_stream, restrictDeserialization);
+        return Utilities.ReadObjectFromStream<object>(_stream, restrictDeserialization, resolver: null, legacyMode: true);
+    }
+
+    private object? ReadObjectFromStream<T>(bool restrictDeserialization, Func<TypeName, Type>? resolver)
+    {
+        _stream.Position = 0;
+        return Utilities.ReadObjectFromStream<T>(_stream, restrictDeserialization, resolver, legacyMode: false);
     }
 
     private object? RoundTripObject(object value)
@@ -41,6 +48,30 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
         // and works with the BinaryFormat AppCompat switches.
         WriteObjectToStream(value, restrictSerialization: true);
         return ReadObjectFromStream(restrictDeserialization: true);
+    }
+
+    private object? RoundTripOfType<T>(object value)
+    {
+        // This is equivalent to SetData/TryGetData<T> methods using unbounded OLE formats,
+        // and works with the BinaryFormat AppContext switches.
+        WriteObjectToStream(value);
+        return ReadObjectFromStream<T>(restrictDeserialization: false, NotSupportedResolver);
+    }
+
+    private object? RoundTripOfType_RestrictedFormat<T>(object value)
+    {
+        // This is equivalent to SetData/TryGetData<T> methods using OLE formats. Deserialization is restricted by
+        // BitmapBinder and the BinaryFormat AppContext switches.
+        WriteObjectToStream(value, restrictSerialization: true);
+        return ReadObjectFromStream<T>(restrictDeserialization: true, NotSupportedResolver);
+    }
+
+    private object? RoundTripOfType<T>(object value, Func<TypeName, Type>? resolver)
+    {
+        // This is equivalent to SetData/TryGetData<T> methods using unbounded formats,
+        // serialization is restricted by the resolver and BinaryFormat AppContext switches.
+        WriteObjectToStream(value);
+        return ReadObjectFromStream<T>(restrictDeserialization: false, resolver);
     }
 
     // Primitive types as defined by the NRBF spec.
@@ -300,12 +331,21 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
 
         writer.Should().Throw<NotSupportedException>();
 
-        using (BinaryFormatterScope scope = new(enable: true))
+        using (NrbfSerializerInClipboardDragDropScope nrbfScope = new(enable: false))
         {
-            WriteObjectToStream(value);
-            ReadObjectFromStream().Should().BeEquivalentTo(value);
+            using (BinaryFormatterScope scope = new(enable: true))
+            {
+                writer.Should().Throw<NotSupportedException>();
+
+                using BinaryFormatterInClipboardDragDropScope clipboardDragDropScope = new(enable: true);
+                WriteObjectToStream(value);
+                ReadObjectFromStream().Should().BeEquivalentTo(value);
+            }
+
+            reader.Should().Throw<NotSupportedException>();
         }
 
+        // Binary format deserializers in Clipboard/DragDrop scenarios are not opted in.
         reader.Should().Throw<NotSupportedException>();
     }
 
@@ -316,7 +356,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
         Action writer = () => WriteObjectToStream(value, restrictSerialization: true);
         writer.Should().Throw<SerializationException>();
 
-        using BinaryFormatterScope scope = new(enable: true);
+        using FullCompatScope scope = new();
         writer.Should().Throw<SerializationException>();
     }
 
@@ -332,7 +372,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
         value.SetValue(203u, 2, 4);
 
         // Can read offset array with the BinaryFormatter.
-        using BinaryFormatterScope scope = new(enable: true);
+        using FullCompatScope scope = new();
         var result = RoundTripObject(value).Should().BeOfType<uint[,]>().Subject;
 
         result.Rank.Should().Be(2);
@@ -346,5 +386,600 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
         result.GetValue(2, 2).Should().Be(201u);
         result.GetValue(2, 3).Should().Be(202u);
         result.GetValue(2, 4).Should().Be(203u);
+    }
+
+    [Fact]
+    public void RoundTripOfType_Unsupported()
+    {
+        // Not a known type, while 'List<object>' is resolved by default, 'object' requires a custom resolver.
+        List<object> value = ["text"];
+        using (FullCompatScope scope = new())
+        {
+            WriteObjectToStream(value);
+
+            ReadAndValidate();
+
+            using NrbfSerializerInClipboardDragDropScope nrbfScope = new(enable: true);
+            ReadAndValidate();
+        }
+
+        Action read = () => ReadObjectFromStream<List<object>>(restrictDeserialization: false, ObjectListResolver);
+        read.Should().Throw<NotSupportedException>();
+
+        void ReadAndValidate()
+        {
+            var result = ReadObjectFromStream<List<object>>(restrictDeserialization: false, ObjectListResolver)
+                .Should().BeOfType<List<object>>().Subject;
+            result.Count.Should().Be(1);
+            result[0].Should().Be("text");
+        }
+
+        static Type ObjectListResolver(TypeName typeName)
+        {
+            (string name, Type type)[] allowedTypes =
+            [
+                ("System.Object", typeof(object)),
+                ("System.Collections.Generic.List`1[[System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]", typeof(List<object>))
+            ];
+
+            string fullName = typeName.FullName;
+            foreach (var (name, type) in allowedTypes)
+            {
+                // Namespace-qualified type name.
+                if (name == fullName)
+                {
+                    return type;
+                }
+            }
+
+            throw new NotSupportedException($"Can't resolve {typeName.AssemblyQualifiedName}");
+        }
+    }
+
+    [Fact]
+    public void RoundTripOfType_AsUnmatchingType_Simple()
+    {
+        List<int> value = [1, 2, 3];
+        RoundTripOfType<Control>(value).Should().BeNull();
+    }
+
+    [Fact]
+    public void RoundTripOfType_RestrictedFormat_AsUnmatchingType_Simple()
+    {
+        Rectangle value = new(1, 1, 2, 2);
+        // We are setting up an invalid content scenario, Rectangle type can't be read as a restricted format,
+        // but in this case requested type will not match the payload type.
+        WriteObjectToStream(value);
+
+        ReadObjectFromStream<Control>(restrictDeserialization: true, NotSupportedResolver).Should().BeNull();
+
+        using FullCompatScope scope = new();
+        ReadObjectFromStream<Control>(restrictDeserialization: true, NotSupportedResolver).Should().BeNull();
+    }
+
+    [Fact]
+    public void RoundTripOfType_intNullable() =>
+        RoundTripOfType<int?>(101, NotSupportedResolver).Should().Be(101);
+
+    [Fact]
+    public void RoundTripOfType_RestrictedFormat_intNullable() =>
+        RoundTripOfType_RestrictedFormat<int?>(101).Should().Be(101);
+
+    [Theory]
+    [BoolData]
+    public void RoundTripOfType_intNullableArray_NotSupportedResolver(bool restrictDeserialization)
+    {
+        int?[] value = [101, null, 303];
+
+        using FullCompatScope scope = new();
+        WriteObjectToStream(value);
+        Action read = () => ReadObjectFromStream<int?[]>(restrictDeserialization, NotSupportedResolver);
+
+        // nullable strunct requires a custom resolver.
+        read.Should().Throw<SerializationException>();
+    }
+
+    [Theory]
+    [BoolData]
+    public void RoundTripOfType_OffsetArray_NotSupportedResolver(bool restrictDeserialization)
+    {
+        Array value = Array.CreateInstance(typeof(uint), lengths: [2, 3], lowerBounds: [1, 2]);
+        value.SetValue(101u, 1, 2);
+        value.SetValue(102u, 1, 3);
+        value.SetValue(103u, 1, 4);
+        value.SetValue(201u, 2, 2);
+        value.SetValue(202u, 2, 3);
+        value.SetValue(203u, 2, 4);
+
+        using FullCompatScope scope = new();
+        WriteObjectToStream(value);
+        Action read = () => ReadObjectFromStream<uint[,]>(restrictDeserialization, NotSupportedResolver);
+
+        read.Should().Throw<NotSupportedException>();
+    }
+
+    [Fact]
+    public void RoundTripOfType_intNullableArray_CustomResolver()
+    {
+        int?[] value = [101, null, 303];
+
+        using FullCompatScope scope = new();
+        RoundTripOfType<int?[]>(value, NullableIntArrayResolver).Should().BeEquivalentTo(value);
+    }
+
+    private static Type NullableIntArrayResolver(TypeName typeName)
+    {
+        (string name, Type type)[] allowedTypes =
+        [
+            ("System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]][]", typeof(int?[])),
+            ("System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]", typeof(int?))
+        ];
+
+        string fullName = typeName.FullName;
+        foreach (var (name, type) in allowedTypes)
+        {
+            // Namespace-qualified type name.
+            if (name == fullName)
+            {
+                return type;
+            }
+        }
+
+        throw new NotSupportedException($"Can't resolve {typeName.AssemblyQualifiedName}");
+    }
+
+    [Fact]
+    public void RoundTripOfType_TestData_TestDataResolver()
+    {
+        TestData value = new(new(10, 10), 2);
+
+        using FullCompatScope scope = new();
+        var result = RoundTripOfType<TestDataBase>(value, TestDataResolver).Should().BeOfType<TestData>().Subject;
+
+        result.Equals(value, value.Bitmap.Size);
+
+        static Type TestDataResolver(TypeName typeName)
+        {
+            (string name, Type type)[] allowedTypes =
+            [
+                (typeof(TestData).FullName!, typeof(TestData)),
+                (typeof(TestDataBase.InnerData).FullName!, typeof(TestDataBase.InnerData)),
+            ];
+
+            string fullName = typeName.FullName;
+            foreach (var (name, type) in allowedTypes)
+            {
+                // Namespace-qualified type name.
+                if (name == fullName)
+                {
+                    return type;
+                }
+            }
+
+            throw new NotSupportedException($"Can't resolve {typeName.AssemblyQualifiedName}");
+        }
+    }
+
+    [Fact]
+    public void RoundTripOfType_TestData_InvalidResolver()
+    {
+        TestData value = new(new(10, 10), 2);
+
+        using FullCompatScope scope = new();
+        WriteObjectToStream(value);
+
+        // Resolver that returns a null is blocked in our SerializationBinder wrapper.
+        Action read = () => ReadObjectFromStream<TestData>(restrictDeserialization: false, InvalidResolver);
+
+        read.Should().Throw<SerializationException>();
+
+        static Type InvalidResolver(TypeName typeName) => null!;
+    }
+
+    private static Type FontResolver(TypeName typeName)
+    {
+        (string? name, Type type)[] allowedTypes =
+        [
+            (typeof(Font).FullName, typeof(Font)),
+            (typeof(FontStyle).FullName, typeof(FontStyle)),
+            (typeof(FontFamily).FullName, typeof(FontFamily)),
+            (typeof(GraphicsUnit).FullName, typeof(GraphicsUnit)),
+        ];
+
+        string fullName = typeName.FullName;
+        foreach (var (name, type) in allowedTypes)
+        {
+            // Namespace-qualified type name.
+            if (name == fullName)
+            {
+                return type;
+            }
+        }
+
+        throw new NotSupportedException($"Can't resolve {typeName.AssemblyQualifiedName}");
+    }
+
+    [Fact]
+    public void RoundTripOfType_Font_FontResolver()
+    {
+        using Font value = new("Microsoft Sans Serif", emSize: 10);
+
+        using FullCompatScope scope = new();
+
+        using Font result = RoundTripOfType<Font>(value, FontResolver).Should().BeOfType<Font>().Subject;
+        result.Should().Be(value);
+    }
+
+    [Fact]
+    public void ReadFontSerializedOnNet481()
+    {
+        // This string was generated on net481.
+        // Clipboard.SetData("TestData", new Font("Microsoft Sans Serif", 10));
+        // And the resulting stream was saved as a string
+        // string text = Convert.ToBase64String(stream.ToArray());
+        string font =
+            "AAEAAAD/////AQAAAAAAAAAMAgAAAFFTeXN0ZW0uRHJhd2luZywgVmVyc2lvbj00LjAuMC4wLCBDdWx0dXJl"
+            + "PW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWIwM2Y1ZjdmMTFkNTBhM2EFAQAAABNTeXN0ZW0uRHJhd2luZy5G"
+            + "b250BAAAAAROYW1lBFNpemUFU3R5bGUEVW5pdAEABAQLGFN5c3RlbS5EcmF3aW5nLkZvbnRTdHlsZQIAAAAb"
+            + "U3lzdGVtLkRyYXdpbmcuR3JhcGhpY3NVbml0AgAAAAIAAAAGAwAAABRNaWNyb3NvZnQgU2FucyBTZXJpZgAA"
+            + "IEEF/P///xhTeXN0ZW0uRHJhd2luZy5Gb250U3R5bGUBAAAAB3ZhbHVlX18ACAIAAAAAAAAABfv///8bU3lz"
+            + "dGVtLkRyYXdpbmcuR3JhcGhpY3NVbml0AQAAAAd2YWx1ZV9fAAgCAAAAAwAAAAs=";
+
+        byte[] bytes = Convert.FromBase64String(font);
+        using MemoryStream stream = new(bytes);
+
+        // Default deserialization with the NRBF deserializer.
+        using (BinaryFormatterInClipboardDragDropScope binaryFormatScope = new(enable: true))
+        {
+            // GetData case.
+            stream.Position = 0;
+            Action getData = () => Utilities.ReadObjectFromStream<object>(
+               stream,
+               restrictDeserialization: false,
+               resolver: null,
+               legacyMode: true);
+
+            getData.Should().Throw<NotSupportedException>();
+
+            TryGetData(stream);
+        }
+
+        // Deserialize using the binary formatter.
+        using FullCompatScope scope = new();
+        // GetData case.
+        stream.Position = 0;
+        var result = Utilities.ReadObjectFromStream<object>(
+           stream,
+           restrictDeserialization: false,
+           resolver: null,
+           legacyMode: true).Should().BeOfType<Font>().Subject;
+
+        result.Name.Should().Be("Microsoft Sans Serif");
+        result.Size.Should().Be(10);
+
+        TryGetData(stream);
+
+        static void TryGetData(MemoryStream stream)
+        {
+            // TryGetData<Font> case.
+            stream.Position = 0;
+            var result = Utilities.ReadObjectFromStream<Font>(
+                stream,
+                restrictDeserialization: false,
+                resolver: FontResolver,
+                legacyMode: false).Should().BeOfType<Font>().Subject;
+
+            result.Name.Should().Be("Microsoft Sans Serif");
+            result.Size.Should().Be(10);
+        }
+    }
+
+    [Fact]
+    public void RoundTripOfType_FlatData_NoResolver()
+    {
+        TestDataBase.InnerData value = new("simple class");
+
+        using FullCompatScope scope = new();
+
+        RoundTripOfType<TestDataBase.InnerData>(value, resolver: null)
+            .Should().BeOfType<TestDataBase.InnerData>().Which.Should().BeEquivalentTo(value);
+    }
+
+    [Fact]
+    public void RoundTripOfType_FlatData_NrbfDeserializer_NoResolver()
+    {
+        TestDataBase.InnerData value = new("simple class");
+
+        using BinaryFormatterScope scope = new(enable: true);
+        using BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: true);
+
+        RoundTripOfType<TestDataBase.InnerData>(value, resolver: null)
+            .Should().BeOfType<TestDataBase.InnerData>().Which.Should().BeEquivalentTo(value);
+    }
+
+    [Fact]
+    public void Sample_GetData_UseBinaryFormatter()
+    {
+        MyClass1 value = new(value: 1);
+
+        using FullCompatScope scope = new();
+        WriteObjectToStream(value);
+
+        // legacyMode == true follows the GetData path.
+        _stream.Position = 0;
+        Utilities.ReadObjectFromStream<MyClass1>(_stream, restrictDeserialization: false, resolver: null, legacyMode: true)
+            .Should().BeEquivalentTo(value);
+    }
+
+    [Fact]
+    public void Sample_GetData_UseNrbfDeserialize()
+    {
+        MyClass1 value = new(value: 1);
+
+        using BinaryFormatterScope scope = new(enable: true);
+        using BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: true);
+        WriteObjectToStream(value);
+
+        // This works because GetData falls back to the BinaryFormatter deserializer, NRBF deserializer fails because it requires a resolver.
+        _stream.Position = 0;
+        Utilities.ReadObjectFromStream<MyClass1>(_stream, restrictDeserialization: false, resolver: null, legacyMode: true)
+            .Should().BeEquivalentTo(value);
+    }
+
+    [Theory]
+    [BoolData]
+    public void Sample_TryGetData_NoResolver_UseBinaryFormatter(bool restrictDeserialization)
+    {
+        MyClass1 value = new(value: 1);
+
+        using FullCompatScope scope = new();
+        WriteObjectToStream(value);
+
+        // SerializationException will be swallowed up the call stack, when reading HGLOBAL.
+        // Fails to resolve MyClass2 or both MyClass1 and MyClass2 in the case of restricted formats.
+        Action read = () => ReadObjectFromStream<MyClass1>(restrictDeserialization, resolver: null);
+        read.Should().Throw<SerializationException>();
+    }
+
+    [Theory]
+    [BoolData]
+    public void Sample_TryGetData_NoResolver_UseNrbfDeserializer(bool restrictDeserialization)
+    {
+        MyClass1 value = new(value: 1);
+
+        using BinaryFormatterScope scope = new(enable: true);
+        using BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: true);
+        WriteObjectToStream(value);
+
+        Action read = () => ReadObjectFromStream<MyClass1>(restrictDeserialization, resolver: null);
+        read.Should().Throw<NotSupportedException>();
+    }
+
+    [Fact]
+    public void Sample_TryGetData_UseBinaryFormatter()
+    {
+        MyClass1 value = new(value: 1);
+
+        using FullCompatScope scope = new();
+        WriteObjectToStream(value);
+
+        ReadObjectFromStream<MyClass1>(restrictDeserialization: false, MyClass1.MyExactMatchResolver)
+            .Should().BeEquivalentTo(value);
+    }
+
+    [Fact]
+    public void Sample_TryGetData_RestrictedFormat_UseBinaryFormatter()
+    {
+        MyClass1 value = new(value: 1);
+
+        using FullCompatScope scope = new();
+        WriteObjectToStream(value);
+
+        Action read = () => ReadObjectFromStream<MyClass1>(restrictDeserialization: true, MyClass1.MyExactMatchResolver);
+        read.Should().Throw<SerializationException>();
+    }
+
+    [Fact]
+    public void Sample_TryGetData_RestrictedFormat_UseNrbfDeserializer()
+    {
+        MyClass1 value = new(value: 1);
+
+        using BinaryFormatterScope scope = new(enable: true);
+        using BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: true);
+        WriteObjectToStream(value);
+
+        Action read = () => ReadObjectFromStream<MyClass1>(restrictDeserialization: true, MyClass1.MyExactMatchResolver);
+        read.Should().Throw<NotSupportedException>();
+    }
+
+    [Fact]
+    public void Sample_TryGetData_UseNrbfDeserializer()
+    {
+        MyClass1 value = new(value: 1);
+
+        using BinaryFormatterScope scope = new(enable: true);
+        using BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: true);
+        WriteObjectToStream(value);
+
+        ReadObjectFromStream<MyClass1>(restrictDeserialization: false, MyClass1.MyExactMatchResolver)
+            .Should().BeEquivalentTo(value);
+    }
+
+    private static Type NotSupportedResolver(TypeName typeName) =>
+        throw new NotSupportedException($"Can't resolve {typeName.AssemblyQualifiedName}");
+
+    [Serializable]
+    private class TestDataBase
+    {
+        public TestDataBase(Bitmap bitmap)
+        {
+            Bitmap = bitmap;
+            Inner = new("inner");
+        }
+
+        public Bitmap Bitmap;
+        public InnerData? Inner;
+
+        [Serializable]
+        internal class InnerData
+        {
+            public InnerData(string text)
+            {
+                Text = text;
+                Location = new Point(1, 2);
+            }
+
+            public string Text;
+            public Point Location;
+        }
+    }
+
+    [Serializable]
+    private class TestData : TestDataBase
+    {
+        public TestData(Bitmap bitmap, int count)
+            : base(bitmap)
+        {
+            Count = count;
+        }
+
+        private const float Delta = 0.0003f;
+
+        // BinaryFormatter resolves primitive types or arrays of primitive types with no resolver.
+        public int? Count;
+        public DateTime? Today = DateTime.Now;
+        public float[] FloatArray = [1.0f, 2.0f, 3.0f];
+        public TimeSpan[] TimeSpanArray = [TimeSpan.FromHours(1)];
+
+        // Common WinForms types are resolved using the intrinsic binder.
+        public NotSupportedException Exception = new();
+        public Point Point = new(1, 2);
+        public Rectangle Rectangle = new(1, 2, 3, 4);
+        public Size? Size = new(1, 2);
+        public SizeF SizeF = new(1, 2);
+        public Color Color = Color.Red;
+        public PointF PointF = new(1, 2);
+        public RectangleF RectangleF = new(1, 2, 3, 4);
+        public ImageListStreamer ImageList = new(new ImageList());
+
+        public List<byte> Bytes = [1];
+        public List<sbyte> Sbytes = [1];
+        public List<short> Shorts = [1];
+        public List<ushort> Ushorts = [1];
+        public List<int> Ints = [1, 2, 3];
+        public List<uint> Uints = [1, 2, 3];
+        public List<long> Longs = [1, 2, 3];
+        public List<ulong> Ulongs = [1, 2, 3];
+        public List<float> Floats = [1.0f, 2.0f, 3.0f];
+        public List<double> Doubles = [1.0, 2.0, 3.0];
+        public List<decimal> Decimals = [1.0m, 2.0m, 3.0m];
+        public List<DateTime> DateTimes = [DateTime.Now];
+        // System.Runtime.Serialization.SerializationException : Invalid BinaryFormatter stream.
+        // System.NotSupportedException : Can't resolve System.Collections.Generic.List`1[[System.TimeSpan, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]
+        // Even though when serialized as a root record, TimeSpan is normalized to the framework assembly.
+        // public List<TimeSpan> TimeSpans = new() { TimeSpan.FromHours(1) };
+        public List<string> Strings = ["a", "b", "c"];
+
+        public void Equals(TestData other, Size bitmapSize)
+        {
+            Bitmap.Size.Should().Be(bitmapSize);
+            Inner.Should().BeEquivalentTo(other.Inner);
+            Count.Should().Be(other.Count);
+            Today.Should().Be(other.Today);
+            FloatArray.Should().BeEquivalentTo(other.FloatArray);
+            TimeSpanArray.Should().BeEquivalentTo(other.TimeSpanArray);
+            Exception.Should().BeEquivalentTo(other.Exception);
+            Point.Should().Be(other.Point);
+            Rectangle.Should().Be(other.Rectangle);
+            Size.Should().Be(other.Size);
+            SizeF.Should().Be(other.SizeF);
+            Color.Should().Be(other.Color);
+            PointF.Should().BeApproximately(other.PointF, Delta);
+            RectangleF.Should().BeApproximately(other.RectangleF, Delta);
+            using ImageList newList = new();
+            newList.ImageStream = ImageList;
+            newList.Images.Count.Should().Be(0);
+            Bytes.Should().BeEquivalentTo(other.Bytes);
+            Sbytes.Should().BeEquivalentTo(other.Sbytes);
+            Shorts.Should().BeEquivalentTo(other.Shorts);
+            Ushorts.Should().BeEquivalentTo(other.Ushorts);
+            Ints.Should().BeEquivalentTo(other.Ints);
+            Uints.Should().BeEquivalentTo(other.Uints);
+            Longs.Should().BeEquivalentTo(other.Longs);
+            Ulongs.Should().BeEquivalentTo(other.Ulongs);
+            Floats.Should().BeEquivalentTo(other.Floats);
+            Doubles.Should().BeEquivalentTo(other.Doubles);
+            Decimals.Should().BeEquivalentTo(other.Decimals);
+            DateTimes.Should().BeEquivalentTo(other.DateTimes);
+            // TimeSpans.Should().BeEquivalentTo(other.TimeSpans);
+            Strings.Should().BeEquivalentTo(other.Strings);
+        }
+    }
+
+    [Serializable]
+    private class MyClass1
+    {
+        public MyClass1(int value)
+        {
+            Value = value;
+            MyClass2 = new();
+        }
+
+        public int Value { get; set; }
+        public MyClass2 MyClass2 { get; set; }
+
+        internal static Type MyExactMatchResolver(TypeName typeName)
+        {
+            // The preferred approach is to resolve types at build time to avoid assembly loading at runtime.
+            (Type type, TypeName typeName)[] allowedTypes =
+            [
+                (typeof(MyClass1), TypeName.Parse(typeof(MyClass1).AssemblyQualifiedName)),
+                (typeof(MyClass2), TypeName.Parse(typeof(MyClass2).AssemblyQualifiedName))
+            ];
+
+            foreach (var (type, name) in allowedTypes)
+            {
+                // Namespace-qualified type name, using case-sensitive comparison for C#.
+                if (name.FullName != typeName.FullName)
+                {
+                    continue;
+                }
+
+                AssemblyNameInfo? info1 = typeName.AssemblyName;
+                AssemblyNameInfo? info2 = name.AssemblyName;
+
+                if (info1 is null && info2 is null)
+                {
+                    return type;
+                }
+
+                if (info1 is null || info2 is null)
+                {
+                    continue;
+                }
+
+                // Full assembly name comparison, case sensitive.
+                if (info1.Name == info2.Name
+                     && info1.Version == info2.Version
+                     && ((info1.CultureName ?? string.Empty) == info2.CultureName)
+                     && info1.PublicKeyOrToken.AsSpan().SequenceEqual(info2.PublicKeyOrToken.AsSpan()))
+                {
+                    return type;
+                }
+            }
+
+            throw new NotSupportedException($"Can't resolve {typeName.AssemblyQualifiedName}");
+        }
+    }
+
+    [Serializable]
+    public class MyClass2
+    {
+        public MyClass2()
+        {
+            Point = new(1, 2);
+        }
+
+        public Point Point { get; set; } = new(1, 2);
     }
 }
