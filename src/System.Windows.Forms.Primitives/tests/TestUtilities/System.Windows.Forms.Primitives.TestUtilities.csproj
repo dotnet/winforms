@@ -7,6 +7,7 @@
       SYSLIB5005: System.Formats.Nrbf is experimental
     -->
     <NoWarn>$(NoWarn);SYSLIB5005</NoWarn>
+    <IsTestUtilityProject>true</IsTestUtilityProject>
   </PropertyGroup>
 
   <ItemGroup>

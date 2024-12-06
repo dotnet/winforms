@@ -10,6 +10,7 @@
     <!-- These are needed to suppress the localization step picked up from Arcade targets -->
     <EnableXlfLocalization>false</EnableXlfLocalization>
     <UpdateXlfOnBuild>false</UpdateXlfOnBuild>
+    <IsTestUtilityProject>true</IsTestUtilityProject>
   </PropertyGroup>
 
   <!-- Experiment with single file deployments
