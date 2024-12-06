@@ -175,17 +175,17 @@ public sealed class CreateFrameworkTypes : IDisposable
         DataTable orderDataTable = new("Orders");
 
         // Create two columns, and add them to the first table.
-        DataColumn customerIdDataColumn = new ("CustID", typeof(int));
-        DataColumn customerNameDataColumn = new ("CustName");
-        DataColumn currentDataColumn = new ("Current", typeof(bool));
+        DataColumn customerIdDataColumn = new("CustID", typeof(int));
+        DataColumn customerNameDataColumn = new("CustName");
+        DataColumn currentDataColumn = new("Current", typeof(bool));
         customerDataTable.Columns.Add(customerIdDataColumn);
         customerDataTable.Columns.Add(customerNameDataColumn);
         customerDataTable.Columns.Add(currentDataColumn);
 
         // Create three columns, and add them to the second table.
-        DataColumn idDataColumn = new ("CustID", typeof(int));
-        DataColumn orderDateDataColumn = new ("orderDate", typeof(DateTime));
-        DataColumn orderAmountDataColumn = new ("OrderAmount", typeof(decimal));
+        DataColumn idDataColumn = new("CustID", typeof(int));
+        DataColumn orderDateDataColumn = new("orderDate", typeof(DateTime));
+        DataColumn orderAmountDataColumn = new("OrderAmount", typeof(decimal));
         orderDataTable.Columns.Add(orderAmountDataColumn);
         orderDataTable.Columns.Add(idDataColumn);
         orderDataTable.Columns.Add(orderDateDataColumn);
@@ -255,7 +255,7 @@ public sealed class CreateFrameworkTypes : IDisposable
 
         customerDGTableStyle.GridColumnStyles.CollectionChanged += (sender, e) => _count++;
 
-        // Add a GridColumnStyle and set its MappingName 
+        // Add a GridColumnStyle and set its MappingName
         // to the name of a DataColumn in the DataTable.
         // Set the HeaderText and Width properties.
 
