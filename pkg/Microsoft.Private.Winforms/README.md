@@ -5,7 +5,7 @@ This is a transport package consumed by [WPF](https://github.com/dotnet/wpf/) an
 
 ## `sdk\dotnet-windowsdesktop` folder
 
-This folder contains props and targets used to ingest our assemblies into the [Windows Desktop SDK](https://github.com/dotnet/windowsdesktop/) for purpose of bundling of our analyzers into Microsoft.WindowsDesktop.App.Ref pack.
+This folder contains props and targets used to ingest our assemblies into the [Windows Desktop SDK](https://github.com/dotnet/windowsdesktop/), bundling the correct set of assemblies into either the Microsoft.WindowsDesktop.App.Ref pack or Microsoft.WindowsDesktop.App.Runtime pack.
 
 * [`System.Windows.Forms.FileClassification.props`](sdk\dotnet-windowsdesktop\System.Windows.Forms.FileClassification.props) contains a manifest for the "WindowsForms" SDK[&#x00B9;](#ref1), i.e. a list of our assemblies that form it.
 The file is imported by [Microsoft.WindowsDesktop.App.Ref project](https://github.com/dotnet/windowsdesktop/blob/main/src/windowsdesktop/src/sfx/Microsoft.WindowsDesktop.App.Ref.sfxproj).<br/>

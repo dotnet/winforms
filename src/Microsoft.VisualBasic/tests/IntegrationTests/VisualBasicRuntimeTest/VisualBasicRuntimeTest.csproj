@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
+    <IsTestUtilityProject>true</IsTestUtilityProject>
   </PropertyGroup>
 
   <ItemGroup>
