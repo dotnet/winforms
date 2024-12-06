@@ -428,7 +428,8 @@ internal static class SerializationRecordExtensions
     }
 
     /// <summary>
-    ///  Tries to get this object as a binary formatted <see cref="Hashtable"/> of <see cref="PrimitiveType"/> keys and values.
+    ///  Tries to get this object as a binary formatted <see cref="Hashtable"/> of
+    ///  <see cref="PrimitiveType"/> keys and values.
     /// </summary>
     public static bool TryGetPrimitiveHashtable(this SerializationRecord record, [NotNullWhen(true)] out Hashtable? hashtable)
     {
@@ -438,7 +439,8 @@ internal static class SerializationRecordExtensions
     }
 
     /// <summary>
-    ///  Tries to get this object as a binary formatted <see cref="Hashtable"/> of <see cref="PrimitiveType"/> keys and values.
+    ///  Tries to get this object as a binary formatted <see cref="Hashtable"/>
+    ///  of <see cref="PrimitiveType"/> keys and values.
     /// </summary>
     public static bool TryGetPrimitiveHashtable(this SerializationRecord record, [NotNullWhen(true)] out object? hashtable)
     {
@@ -536,7 +538,8 @@ internal static class SerializationRecordExtensions
 
     /// <summary>
     ///  Try to get a supported System.Drawing.Primitives object that has a <see cref="TypeConverter"/>.
-    ///  This method is used for Clipboard payload deserialization. ResX deserialization uses <see cref="TypeConverter"/>s for these types.
+    ///  This method is used for Clipboard payload deserialization.
+    ///  ResX deserialization uses <see cref="TypeConverter"/>s for these types.
     /// </summary>
     public static bool TryGetDrawingPrimitivesObject(
         this SerializationRecord record,

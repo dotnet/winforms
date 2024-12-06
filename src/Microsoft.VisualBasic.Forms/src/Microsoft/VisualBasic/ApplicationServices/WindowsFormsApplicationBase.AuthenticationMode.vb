@@ -3,7 +3,12 @@
 
 Namespace Microsoft.VisualBasic.ApplicationServices
 
-    ' Any changes to this enum must be reflected in ValidateAuthenticationModeEnumValue().
+    ''' <summary>
+    ''' Specifies the authentication mode to use in the application.
+    ''' </summary>
+    ''' <remarks>
+    '''  Any changes to this enum must be reflected in ValidateAuthenticationModeEnumValue().
+    ''' </remarks>
     Public Enum AuthenticationMode
         Windows
         ApplicationDefined
