@@ -116,6 +116,14 @@ public unsafe partial class DataObject
 
                     if (!TypeNameIsAssignableToType(record.TypeName, typeof(T), (ITypeResolver)binder))
                     {
+                        // If clipboard containes an exception from SetData, we will get its message and throw.
+                        if (record.TypeName.FullName == typeof(NotSupportedException).FullName
+                            && record.TryGetNotSupportedException(out object? @object)
+                            && @object is NotSupportedException exception)
+                        {
+                            throw new NotSupportedException(exception.Message);
+                        }
+
                         return null;
                     }
                 }
@@ -163,13 +171,7 @@ public unsafe partial class DataObject
                 }
                 catch (Exception ex) when (!ex.IsCriticalException())
                 {
-                    // Clipboard contains a wrong type, we want the API to return false to the caller.
-                    // TODO (TanyaSo): this does not special-case the NotSupportedException from the failed SetData call., but we probably want to
-                    // bubble it up to the user app.
-                    // if (typeName.FullName == typeof(NotSupportedException).FullName)
-                    // {
-                    //    throw new NotSupportedException("SetData had failed.");
-                    // }
+                    // Clipboard contains a wrong type, we want the typed API to return false to the caller.
                 }
 
                 return false;

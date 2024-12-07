@@ -285,13 +285,13 @@ public unsafe class NativeToWinFormsAdapterTests
 
     [WinFormsTheory]
     [MemberData(nameof(UndefinedRestrictedFormat))]
-    public void TryGetData_AsConcreteType_Custom_ReturnsFalse(string format)
+    public void TryGetData_AsConcreteType_Custom_FormatterDisabledException(string format)
     {
         (DataObject dataObject, TestData _) = SetDataObject(format);
 
         // Formatters are not supported, HGLOBAL contains NotSupportedException.
-        dataObject.TryGetData(format, out TestData? testData).Should().BeFalse();
-        testData.Should().BeNull();
+        Action tryGetData = () => dataObject.TryGetData(format, out TestData? testData);
+        tryGetData.Should().Throw<NotSupportedException>().WithMessage(expectedWildcardPattern: FormatterDisabledMessage);
     }
 
     [WinFormsTheory]
@@ -348,13 +348,13 @@ public unsafe class NativeToWinFormsAdapterTests
 
     [WinFormsTheory]
     [MemberData(nameof(UndefinedRestrictedFormat))]
-    public void TryGetData_WithResolver_AsConcreteType_Custom_ReturnFalse(string format)
+    public void TryGetData_WithResolver_AsConcreteType_Custom_FormatterDisabledException(string format)
     {
         (DataObject dataObject, TestData _) = SetDataObject(format);
 
         // Formatter is not enabled, HGLOBAL contains NotSupportedException.
-        dataObject.TryGetData(format, TestData.Resolver, autoConvert: true, out TestData? testData).Should().BeFalse();
-        testData.Should().BeNull();
+        Action tryGetData = () => dataObject.TryGetData(format, TestData.Resolver, autoConvert: true, out TestData? testData);
+        tryGetData.Should().Throw<NotSupportedException>().WithMessage(expectedWildcardPattern: FormatterDisabledMessage);
 
         dataObject.TryGetData(format, out NotSupportedException? ex).Should().BeTrue();
         ex.Should().BeOfType<NotSupportedException>().Which.Message.Should().Be(FormatterDisabledMessage);
