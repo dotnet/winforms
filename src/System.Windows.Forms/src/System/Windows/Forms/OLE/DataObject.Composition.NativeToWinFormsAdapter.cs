@@ -323,7 +323,7 @@ public unsafe partial class DataObject
                 bool result = false;
                 try
                 {
-                    if (medium.tymed == Com.TYMED.TYMED_HGLOBAL && !medium.hGlobal.IsNull)
+                    if (medium.tymed == Com.TYMED.TYMED_HGLOBAL && !medium.hGlobal.IsNull && hr != HRESULT.COR_E_SERIALIZATION)
                     {
                         result = TryGetDataFromHGLOBAL(medium.hGlobal, format, resolver, legacyMode, out data);
                     }

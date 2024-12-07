@@ -171,17 +171,17 @@ public unsafe class NativeToWinFormsAdapterTests
 
     [WinFormsTheory]
     [MemberData(nameof(UndefinedRestrictedFormat))]
-    public void TryGetData_AsObject_Custom_FormatterEnabled_ReturnsMemoryStream(string format)
+    public void TryGetData_AsObject_Custom_FormatterEnabled_ReturnsFalse(string format)
     {
         (DataObject dataObject, TestData _) = SetDataObject(format);
 
         using BinaryFormatterScope scope = new(enable: true);
         using BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: true);
 
-        // TODO (TanyaSo)
-        // This will throw SerializationException and put a stream that is not prefixed by a serialization GUID into the HGLOBAL.
-        dataObject.TryGetData(format, out object? result).Should().BeTrue();
-        result.Should().BeOfType<MemoryStream>();
+        // This will throw SerializationException from SetData and put a stream that is not prefixed
+        // by a serialization GUID into the HGLOBAL.
+        dataObject.TryGetData(format, out object? result).Should().BeFalse();
+        result.Should().BeNull();
     }
 
     [WinFormsTheory]
@@ -278,7 +278,7 @@ public unsafe class NativeToWinFormsAdapterTests
         using BinaryFormatterScope scope = new(enable: true);
         using BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: true);
 
-        // Format-type combination is invalid, serialization aborted, HGLOBAL contains MemoryStream.
+        // Format-type combination is invalid, serialization threw an exception.
         dataObject.TryGetData(format, out TestData? testData).Should().BeFalse();
         testData.Should().BeNull();
     }
@@ -369,12 +369,9 @@ public unsafe class NativeToWinFormsAdapterTests
         using BinaryFormatterScope scope = new(enable: true);
         using BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: true);
 
-        // Format-type combination is invalid, serialization aborted, HGLOBAL contains MemoryStream.
+        // Format-type combination is invalid, serialization threw an exception.
         dataObject.TryGetData(format, out AbstractBase? testData).Should().BeFalse();
         testData.Should().BeNull();
-
-        dataObject.TryGetData(format, out MemoryStream? stream).Should().BeTrue();
-        stream.Should().NotBeNull();
     }
 
     [WinFormsTheory]
@@ -424,7 +421,7 @@ public unsafe class NativeToWinFormsAdapterTests
         using BinaryFormatterScope scope = new(enable: true);
         using BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: true);
 
-        // Format-type combination is validated, but HGLOBAL contains a MemoryStream
+        // Format-type combination is validated, but serialization threw an exception
         dataObject.TryGetData(format, TestData.Resolver, autoConvert: true, out AbstractBase? testData).Should().BeFalse();
         testData.Should().BeNull();
     }
