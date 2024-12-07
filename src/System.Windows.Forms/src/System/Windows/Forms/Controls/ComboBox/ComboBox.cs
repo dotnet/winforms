@@ -2748,6 +2748,12 @@ public partial class ComboBox : ListControl
 
             base.OnLostFocus(e);
             _canFireLostFocus = false;
+
+            // If the dropdown is not active, that means the mouse is no longer over the control.
+            if (!DroppedDown)
+            {
+                MouseIsOver = false;
+            }
         }
     }
 
