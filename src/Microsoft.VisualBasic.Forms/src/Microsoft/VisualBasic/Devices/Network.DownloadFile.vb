@@ -2,7 +2,6 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.Net
-Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.MyServices.Internal
 
@@ -125,7 +124,7 @@ Namespace Microsoft.VisualBasic.Devices
                 showUI,
                 connectionTimeout,
                 overwrite,
-                UICancelOption.ThrowException)
+                onUserCancel:=UICancelOption.ThrowException)
         End Sub
 
         ''' <summary>
@@ -286,7 +285,6 @@ Namespace Microsoft.VisualBasic.Devices
                 connectionTimeout,
                 overwrite,
                 UICancelOption.ThrowException)
-
         End Sub
 
         ''' <summary>
@@ -329,7 +327,9 @@ Namespace Microsoft.VisualBasic.Devices
                 client.UseNonPassiveFtp = showUI
 
                 'Construct the local file. This will validate the full name and path
-                Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(destinationFileName, NameOf(destinationFileName))
+                Dim fullFilename As String = CompilerServices.FileSystemUtils.NormalizeFilePath(
+                    path:=destinationFileName,
+                    paramName:=NameOf(destinationFileName))
 
                 ' Sometime a path that can't be parsed is normalized to the current directory. This makes sure we really
                 ' have a file and path
@@ -368,14 +368,13 @@ Namespace Microsoft.VisualBasic.Devices
                 copier.DownloadFile(address, fullFilename)
 
                 'Handle a dialog cancel
-                If showUI AndAlso Environment.UserInteractive Then
-                    If onUserCancel = UICancelOption.ThrowException And dialog.UserCanceledTheDialog Then
-                        Throw New OperationCanceledException()
-                    End If
+                If showUI _
+                   AndAlso Environment.UserInteractive _
+                   AndAlso onUserCancel = UICancelOption.ThrowException _
+                   AndAlso dialog.UserCanceledTheDialog Then
+                    Throw New OperationCanceledException()
                 End If
-
             End Using
-
         End Sub
 
     End Class
