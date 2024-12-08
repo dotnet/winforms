@@ -5,30 +5,30 @@ using System.Drawing;
 
 namespace Windows.Win32.Foundation;
 
-internal readonly partial struct WPARAM
+internal readonly unsafe partial struct WPARAM
 {
-    public static unsafe implicit operator void*(WPARAM value) => (void*)value.Value;
-    public static unsafe implicit operator WPARAM(void* value) => new((nuint)value);
+    public static implicit operator void*(WPARAM value) => (void*)value.Value;
+    public static implicit operator WPARAM(void* value) => new((nuint)value);
 
-    public static unsafe explicit operator HWND(WPARAM value) => (HWND)(nint)value.Value;
-    public static unsafe explicit operator WPARAM(HWND value) => new((nuint)value.Value);
+    public static explicit operator HWND(WPARAM value) => (HWND)(nint)value.Value;
+    public static explicit operator WPARAM(HWND value) => new((nuint)value.Value);
 
-    public static unsafe explicit operator HDC(WPARAM value) => (HDC)(nint)value.Value;
-    public static unsafe explicit operator WPARAM(HDC value) => new((nuint)value.Value);
+    public static explicit operator HDC(WPARAM value) => (HDC)(nint)value.Value;
+    public static explicit operator WPARAM(HDC value) => new((nuint)value.Value);
 
-    public static unsafe explicit operator WPARAM(HFONT value) => new((nuint)value.Value);
+    public static explicit operator WPARAM(HFONT value) => new((nuint)value.Value);
 
-    public static unsafe explicit operator BOOL(WPARAM value) => (BOOL)(nint)value.Value;
-    public static unsafe explicit operator WPARAM(BOOL value) => new((nuint)(nint)value);
+    public static explicit operator BOOL(WPARAM value) => (BOOL)(nint)value.Value;
+    public static explicit operator WPARAM(BOOL value) => new((nuint)(nint)value);
 
     public static explicit operator int(WPARAM value) => (int)(nint)value.Value;
     public static explicit operator uint(WPARAM value) => (uint)value.Value;
-    public static unsafe explicit operator nint(WPARAM value) => (nint)value.Value;
+    public static explicit operator nint(WPARAM value) => (nint)value.Value;
     public static explicit operator WPARAM(int value) => new((nuint)(nint)value);
 
     public static explicit operator WPARAM(char value) => new(value);
 
-    public static unsafe explicit operator WPARAM(Color value) => new((nuint)ColorTranslator.ToWin32(value));
+    public static explicit operator WPARAM(Color value) => new((nuint)ColorTranslator.ToWin32(value));
 
     // #define HIWORD(l)           ((WORD)((((DWORD_PTR)(l)) >> 16) & 0xffff))
     public ushort HIWORD => (ushort)(((Value) >> 16) & 0xffff);
