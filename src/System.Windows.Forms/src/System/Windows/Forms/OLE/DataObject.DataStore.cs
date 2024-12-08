@@ -3,58 +3,62 @@
 
 using System.Collections.Specialized;
 using System.Drawing;
+using System.Reflection.Metadata;
 using System.Runtime.Serialization;
 
 namespace System.Windows.Forms;
 
 public partial class DataObject
 {
-    private sealed partial class DataStore : IDataObject
+    private sealed partial class DataStore : IDataObject, ITypedDataObject
     {
         private readonly Dictionary<string, DataStoreEntry> _mappedData = new(BackCompatibleStringComparer.Default);
 
-        public object? GetData(string format, bool autoConvert)
+        private bool TryGetDataInternal<T>(
+            string format,
+            bool autoConvert,
+            [NotNullWhen(true), MaybeNullWhen(false)] out T data)
         {
+            data = default;
             if (string.IsNullOrWhiteSpace(format))
             {
-                return null;
+                return false;
             }
 
-            object? baseVar = null;
-            if (_mappedData.TryGetValue(format, out DataStoreEntry? dse))
+            if (_mappedData.TryGetValue(format, out DataStoreEntry? dse) && dse.Data is T t)
             {
-                baseVar = dse.Data;
+                data = t;
+                return true;
             }
 
-            object? original = baseVar;
-
-            if (autoConvert
-                && (dse is null || dse.AutoConvert)
-                && (baseVar is null || baseVar is MemoryStream))
+            if (!autoConvert
+                || !(dse is null || dse.AutoConvert)
+                || GetMappedFormats(format) is not { } mappedFormats)
             {
-                string[]? mappedFormats = GetMappedFormats(format);
-                if (mappedFormats is not null)
+                return false;
+            }
+
+            for (int i = 0; i < mappedFormats.Length; i++)
+            {
+                if (format.Equals(mappedFormats[i]))
                 {
-                    for (int i = 0; i < mappedFormats.Length; i++)
-                    {
-                        if (!format.Equals(mappedFormats[i]))
-                        {
-                            if (_mappedData.TryGetValue(mappedFormats[i], out DataStoreEntry? found))
-                            {
-                                baseVar = found.Data;
-                            }
+                    continue;
+                }
 
-                            if (baseVar is not null and not MemoryStream)
-                            {
-                                original = null;
-                                break;
-                            }
-                        }
-                    }
+                if (_mappedData.TryGetValue(mappedFormats[i], out DataStoreEntry? found) && found.Data is T value)
+                {
+                    data = value;
+                    return true;
                 }
             }
 
-            return original ?? baseVar;
+            return false;
+        }
+
+        public object? GetData(string format, bool autoConvert)
+        {
+            TryGetDataInternal(format, autoConvert, out object? data);
+            return data;
         }
 
         public object? GetData(string format) => GetData(format, autoConvert: true);
@@ -74,14 +78,7 @@ public partial class DataObject
             // and let the system provide the conversion for us.
             if (data is Bitmap && format.Equals(DataFormats.Dib))
             {
-                if (autoConvert)
-                {
-                    format = DataFormats.Bitmap;
-                }
-                else
-                {
-                    throw new NotSupportedException(SR.DataObjectDibNotSupported);
-                }
+                format = autoConvert ? DataFormats.Bitmap : throw new NotSupportedException(SR.DataObjectDibNotSupported);
             }
 
             _mappedData[format] = new DataStoreEntry(data, autoConvert);
@@ -181,5 +178,27 @@ public partial class DataObject
         }
 
         public string[] GetFormats() => GetFormats(autoConvert: true);
+
+        public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
+            string format,
+            Func<TypeName, Type> resolver,
+            bool autoConvert,
+            [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
+                TryGetDataInternal(format, autoConvert, out data);
+
+        public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
+            string format,
+            bool autoConvert,
+            [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
+                TryGetDataInternal(format, autoConvert, out data);
+
+        public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
+            string format,
+            [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
+                TryGetDataInternal(format, autoConvert: false, out data);
+
+        public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
+            [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
+                TryGetDataInternal(typeof(T).FullName!, autoConvert: false, out data);
     }
 }
