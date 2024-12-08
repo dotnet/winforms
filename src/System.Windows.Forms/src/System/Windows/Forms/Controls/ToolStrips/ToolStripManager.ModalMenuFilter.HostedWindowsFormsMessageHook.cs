@@ -66,7 +66,7 @@ public static partial class ToolStripManager
                     _messageHookHandle = PInvoke.SetWindowsHookEx(
                         WINDOWS_HOOK_ID.WH_GETMESSAGE,
                         (delegate* unmanaged[Stdcall]<int, WPARAM, LPARAM, LRESULT>)hook,
-                        (HINSTANCE)0,
+                        HINSTANCE.Null,
                         PInvokeCore.GetCurrentThreadId());
 
                     if (_messageHookHandle != IntPtr.Zero)

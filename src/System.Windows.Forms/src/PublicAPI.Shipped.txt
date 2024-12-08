@@ -2272,7 +2272,6 @@ static System.Windows.Forms.Application.Run(System.Windows.Forms.ApplicationCont
 static System.Windows.Forms.Application.Run(System.Windows.Forms.Form! mainForm) -> void
 static System.Windows.Forms.Application.SafeTopLevelCaptionFormat.get -> string!
 static System.Windows.Forms.Application.SafeTopLevelCaptionFormat.set -> void
-static System.Windows.Forms.Application.SetColorMode(System.Windows.Forms.SystemColorMode systemColorMode) -> void
 static System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(bool defaultValue) -> void
 static System.Windows.Forms.Application.SetDefaultFont(System.Drawing.Font! font) -> void
 static System.Windows.Forms.Application.SetHighDpiMode(System.Windows.Forms.HighDpiMode highDpiMode) -> bool
@@ -2775,9 +2774,9 @@ static System.Windows.Forms.TabRenderer.IsSupported.get -> bool
 static System.Windows.Forms.TaskDialog.ShowDialog(nint hwndOwner, System.Windows.Forms.TaskDialogPage! page, System.Windows.Forms.TaskDialogStartupLocation startupLocation = System.Windows.Forms.TaskDialogStartupLocation.CenterOwner) -> System.Windows.Forms.TaskDialogButton!
 static System.Windows.Forms.TaskDialog.ShowDialog(System.Windows.Forms.IWin32Window! owner, System.Windows.Forms.TaskDialogPage! page, System.Windows.Forms.TaskDialogStartupLocation startupLocation = System.Windows.Forms.TaskDialogStartupLocation.CenterOwner) -> System.Windows.Forms.TaskDialogButton!
 static System.Windows.Forms.TaskDialog.ShowDialog(System.Windows.Forms.TaskDialogPage! page, System.Windows.Forms.TaskDialogStartupLocation startupLocation = System.Windows.Forms.TaskDialogStartupLocation.CenterOwner) -> System.Windows.Forms.TaskDialogButton!
-static System.Windows.Forms.TaskDialog.ShowDialogAsync(nint hwndOwner, System.Windows.Forms.TaskDialogPage! page, System.Windows.Forms.TaskDialogStartupLocation startupLocation = System.Windows.Forms.TaskDialogStartupLocation.CenterOwner) -> System.Threading.Tasks.Task<System.Windows.Forms.TaskDialogButton!>!
-static System.Windows.Forms.TaskDialog.ShowDialogAsync(System.Windows.Forms.IWin32Window! owner, System.Windows.Forms.TaskDialogPage! page, System.Windows.Forms.TaskDialogStartupLocation startupLocation = System.Windows.Forms.TaskDialogStartupLocation.CenterOwner) -> System.Threading.Tasks.Task<System.Windows.Forms.TaskDialogButton!>!
-static System.Windows.Forms.TaskDialog.ShowDialogAsync(System.Windows.Forms.TaskDialogPage! page, System.Windows.Forms.TaskDialogStartupLocation startupLocation = System.Windows.Forms.TaskDialogStartupLocation.CenterScreen) -> System.Threading.Tasks.Task<System.Windows.Forms.TaskDialogButton!>!
+[WFO5002]static System.Windows.Forms.TaskDialog.ShowDialogAsync(nint hwndOwner, System.Windows.Forms.TaskDialogPage! page, System.Windows.Forms.TaskDialogStartupLocation startupLocation = System.Windows.Forms.TaskDialogStartupLocation.CenterOwner) -> System.Threading.Tasks.Task<System.Windows.Forms.TaskDialogButton!>!
+[WFO5002]static System.Windows.Forms.TaskDialog.ShowDialogAsync(System.Windows.Forms.IWin32Window! owner, System.Windows.Forms.TaskDialogPage! page, System.Windows.Forms.TaskDialogStartupLocation startupLocation = System.Windows.Forms.TaskDialogStartupLocation.CenterOwner) -> System.Threading.Tasks.Task<System.Windows.Forms.TaskDialogButton!>!
+[WFO5002]static System.Windows.Forms.TaskDialog.ShowDialogAsync(System.Windows.Forms.TaskDialogPage! page, System.Windows.Forms.TaskDialogStartupLocation startupLocation = System.Windows.Forms.TaskDialogStartupLocation.CenterScreen) -> System.Threading.Tasks.Task<System.Windows.Forms.TaskDialogButton!>!
 static System.Windows.Forms.TaskDialogButton.Abort.get -> System.Windows.Forms.TaskDialogButton!
 static System.Windows.Forms.TaskDialogButton.Cancel.get -> System.Windows.Forms.TaskDialogButton!
 static System.Windows.Forms.TaskDialogButton.Close.get -> System.Windows.Forms.TaskDialogButton!
@@ -4642,7 +4641,7 @@ System.Windows.Forms.ControlEventHandler
 System.Windows.Forms.ControlPaint
 System.Windows.Forms.ControlStyles
 System.Windows.Forms.ControlStyles.AllPaintingInWmPaint = 8192 -> System.Windows.Forms.ControlStyles
-System.Windows.Forms.ControlStyles.ApplyThemingImplicitly = 524288 -> System.Windows.Forms.ControlStyles
+[WFO5001]System.Windows.Forms.ControlStyles.ApplyThemingImplicitly = 524288 -> System.Windows.Forms.ControlStyles
 System.Windows.Forms.ControlStyles.CacheText = 16384 -> System.Windows.Forms.ControlStyles
 System.Windows.Forms.ControlStyles.ContainerControl = 1 -> System.Windows.Forms.ControlStyles
 System.Windows.Forms.ControlStyles.DoubleBuffer = 65536 -> System.Windows.Forms.ControlStyles
@@ -6417,20 +6416,16 @@ System.Windows.Forms.Form.DpiChanged -> System.Windows.Forms.DpiChangedEventHand
 System.Windows.Forms.Form.Form() -> void
 System.Windows.Forms.Form.FormBorderColor.get -> System.Drawing.Color
 System.Windows.Forms.Form.FormBorderColor.set -> void
-System.Windows.Forms.Form.FormBorderColorChanged -> System.EventHandler?
 System.Windows.Forms.Form.FormBorderStyle.get -> System.Windows.Forms.FormBorderStyle
 System.Windows.Forms.Form.FormBorderStyle.set -> void
 System.Windows.Forms.Form.FormCaptionBackColor.get -> System.Drawing.Color
 System.Windows.Forms.Form.FormCaptionBackColor.set -> void
-System.Windows.Forms.Form.FormCaptionBackColorChanged -> System.EventHandler?
 System.Windows.Forms.Form.FormCaptionTextColor.get -> System.Drawing.Color
 System.Windows.Forms.Form.FormCaptionTextColor.set -> void
-System.Windows.Forms.Form.FormCaptionTextColorChanged -> System.EventHandler?
 System.Windows.Forms.Form.FormClosed -> System.Windows.Forms.FormClosedEventHandler?
 System.Windows.Forms.Form.FormClosing -> System.Windows.Forms.FormClosingEventHandler?
 System.Windows.Forms.Form.FormCornerPreference.get -> System.Windows.Forms.FormCornerPreference
 System.Windows.Forms.Form.FormCornerPreference.set -> void
-System.Windows.Forms.Form.FormCornerPreferenceChanged -> System.EventHandler?
 System.Windows.Forms.Form.HelpButton.get -> bool
 System.Windows.Forms.Form.HelpButton.set -> void
 System.Windows.Forms.Form.HelpButtonClicked -> System.ComponentModel.CancelEventHandler?
@@ -6484,11 +6479,8 @@ System.Windows.Forms.Form.RightToLeftLayoutChanged -> System.EventHandler?
 System.Windows.Forms.Form.SetDesktopBounds(int x, int y, int width, int height) -> void
 System.Windows.Forms.Form.SetDesktopLocation(int x, int y) -> void
 System.Windows.Forms.Form.Show(System.Windows.Forms.IWin32Window? owner) -> void
-System.Windows.Forms.Form.ShowAsync(System.Windows.Forms.IWin32Window? owner = null) -> System.Threading.Tasks.Task!
 System.Windows.Forms.Form.ShowDialog() -> System.Windows.Forms.DialogResult
 System.Windows.Forms.Form.ShowDialog(System.Windows.Forms.IWin32Window? owner) -> System.Windows.Forms.DialogResult
-System.Windows.Forms.Form.ShowDialogAsync() -> System.Threading.Tasks.Task<System.Windows.Forms.DialogResult>!
-System.Windows.Forms.Form.ShowDialogAsync(System.Windows.Forms.IWin32Window! owner) -> System.Threading.Tasks.Task<System.Windows.Forms.DialogResult>!
 System.Windows.Forms.Form.ShowIcon.get -> bool
 System.Windows.Forms.Form.ShowIcon.set -> void
 System.Windows.Forms.Form.ShowInTaskbar.get -> bool
@@ -6532,11 +6524,6 @@ System.Windows.Forms.FormClosingEventArgs.FormClosingEventArgs(System.Windows.Fo
 System.Windows.Forms.FormClosingEventHandler
 System.Windows.Forms.FormCollection
 System.Windows.Forms.FormCollection.FormCollection() -> void
-System.Windows.Forms.FormCornerPreference
-System.Windows.Forms.FormCornerPreference.Default = 0 -> System.Windows.Forms.FormCornerPreference
-System.Windows.Forms.FormCornerPreference.DoNotRound = 1 -> System.Windows.Forms.FormCornerPreference
-System.Windows.Forms.FormCornerPreference.Round = 2 -> System.Windows.Forms.FormCornerPreference
-System.Windows.Forms.FormCornerPreference.RoundSmall = 3 -> System.Windows.Forms.FormCornerPreference
 System.Windows.Forms.FormStartPosition
 System.Windows.Forms.FormStartPosition.CenterParent = 4 -> System.Windows.Forms.FormStartPosition
 System.Windows.Forms.FormStartPosition.CenterScreen = 1 -> System.Windows.Forms.FormStartPosition
@@ -9551,10 +9538,6 @@ System.Windows.Forms.StructFormat
 System.Windows.Forms.StructFormat.Ansi = 1 -> System.Windows.Forms.StructFormat
 System.Windows.Forms.StructFormat.Auto = 3 -> System.Windows.Forms.StructFormat
 System.Windows.Forms.StructFormat.Unicode = 2 -> System.Windows.Forms.StructFormat
-System.Windows.Forms.SystemColorMode
-System.Windows.Forms.SystemColorMode.Classic = 0 -> System.Windows.Forms.SystemColorMode
-System.Windows.Forms.SystemColorMode.Dark = 2 -> System.Windows.Forms.SystemColorMode
-System.Windows.Forms.SystemColorMode.System = 1 -> System.Windows.Forms.SystemColorMode
 System.Windows.Forms.SystemInformation
 System.Windows.Forms.SystemParameter
 System.Windows.Forms.SystemParameter.CaretWidthMetric = 8 -> System.Windows.Forms.SystemParameter
@@ -13018,12 +13001,8 @@ virtual System.Windows.Forms.Form.OnClosed(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Form.OnClosing(System.ComponentModel.CancelEventArgs! e) -> void
 virtual System.Windows.Forms.Form.OnDeactivate(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Form.OnDpiChanged(System.Windows.Forms.DpiChangedEventArgs! e) -> void
-virtual System.Windows.Forms.Form.OnFormBorderColorChanged(System.EventArgs! e) -> void
-virtual System.Windows.Forms.Form.OnFormCaptionBackColorChanged(System.EventArgs! e) -> void
-virtual System.Windows.Forms.Form.OnFormCaptionTextColorChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Form.OnFormClosed(System.Windows.Forms.FormClosedEventArgs! e) -> void
 virtual System.Windows.Forms.Form.OnFormClosing(System.Windows.Forms.FormClosingEventArgs! e) -> void
-virtual System.Windows.Forms.Form.OnFormCornerPreferenceChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Form.OnGetDpiScaledSize(int deviceDpiOld, int deviceDpiNew, ref System.Drawing.Size desiredSize) -> bool
 virtual System.Windows.Forms.Form.OnHelpButtonClicked(System.ComponentModel.CancelEventArgs! e) -> void
 virtual System.Windows.Forms.Form.OnInputLanguageChanged(System.Windows.Forms.InputLanguageChangedEventArgs! e) -> void

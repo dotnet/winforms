@@ -11515,7 +11515,7 @@ public partial class DataGridView
         ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(e.RowIndex, Rows.Count, "e.RowIndex");
     }
 
-    private static void CheckEventArgsIndexesNotNegative(IDataGridViewCellEventArgs e)
+    private static void CheckEventArgsIndexesNotNegative(DataGridViewCellValueEventArgs e)
     {
         ArgumentOutOfRangeException.ThrowIfNegative(e.ColumnIndex, "e.ColumnIndex");
         ArgumentOutOfRangeException.ThrowIfNegative(e.RowIndex, "e.RowIndex");

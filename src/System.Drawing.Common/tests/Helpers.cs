@@ -100,7 +100,7 @@ public static unsafe class Helpers
     private static Rectangle GetMonitorRectForWindow(HWND hwnd)
     {
         HMONITOR hmonitor = PInvokeCore.MonitorFromWindow(hwnd, MONITOR_FROM_FLAGS.MONITOR_DEFAULTTOPRIMARY);
-        hmonitor.Value.Should().NotBe(0);
+        ((nint)hmonitor.Value).Should().NotBe(0);
 
         MONITORINFO info = new()
         {

@@ -61,7 +61,7 @@ public class SerializableTypesTests
             Assert.True(ComHelpers.TryGetObjectForIUnknown(streamOut, out ComManagedStream managedStream));
             Stream bufferStream = managedStream.GetDataStream();
             byte[] buffer = new byte[3];
-            bufferStream.Read(buffer, 0, buffer.Length);
+            bufferStream.ReadExactly(buffer);
             Assert.Equal(payload, Encoding.UTF8.GetString(buffer));
         }
     }

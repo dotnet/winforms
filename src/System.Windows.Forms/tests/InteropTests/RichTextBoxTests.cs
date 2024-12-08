@@ -19,7 +19,7 @@ public class RichTextBoxTests
         RichTextBox_EnLink(out var value);
 
         Assert.Equal(132u, value.nmhdr.code);
-        Assert.Equal((HWND)765, value.nmhdr.hwndFrom);
+        Assert.Equal((HWND)(nint)765, value.nmhdr.hwndFrom);
         Assert.Equal(432u, value.nmhdr.idFrom);
         Assert.Equal(22, value.msg);
         Assert.Equal((nuint)6578, value.wParam);
@@ -34,7 +34,7 @@ public class RichTextBoxTests
         RichTextBox_EnProtected(out var value);
 
         Assert.Equal(132u, value.nmhdr.code);
-        Assert.Equal((HWND)765, value.nmhdr.hwndFrom);
+        Assert.Equal((HWND)(nint)765, value.nmhdr.hwndFrom);
         Assert.Equal(432u, value.nmhdr.idFrom);
         Assert.Equal(22, value.msg);
         Assert.Equal((nuint)6578, value.wParam);
@@ -49,7 +49,7 @@ public class RichTextBoxTests
         RichTextBox_EnDropFiles(out var value);
 
         Assert.Equal(132u, value.nmhdr.code);
-        Assert.Equal((HWND)765, value.nmhdr.hwndFrom);
+        Assert.Equal((HWND)(nint)765, value.nmhdr.hwndFrom);
         Assert.Equal(432u, value.nmhdr.idFrom);
         Assert.Equal(22, value.hDrop);
         Assert.Equal(6578, value.cp);
@@ -130,7 +130,7 @@ public class RichTextBoxTests
         RichTextBox_ReqResize(out var value);
 
         Assert.Equal(132u, value.nmhdr.code);
-        Assert.Equal((HWND)765, value.nmhdr.hwndFrom);
+        Assert.Equal((HWND)(nint)765, value.nmhdr.hwndFrom);
         Assert.Equal(432u, value.nmhdr.idFrom);
         Assert.Equal(6578, value.rc.left);
         Assert.Equal(109, value.rc.right);
@@ -144,7 +144,7 @@ public class RichTextBoxTests
         RichTextBox_SelChange(out var value);
 
         Assert.Equal(132u, value.nmhdr.code);
-        Assert.Equal((HWND)765, value.nmhdr.hwndFrom);
+        Assert.Equal((HWND)(nint)765, value.nmhdr.hwndFrom);
         Assert.Equal(432u, value.nmhdr.idFrom);
         Assert.Equal(RICH_EDIT_GET_CONTEXT_MENU_SEL_TYPE.SEL_MULTICHAR, value.seltyp);
         Assert.Equal(109, value.chrg.cpMin);

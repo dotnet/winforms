@@ -3,7 +3,7 @@
 
 namespace Windows.Win32.UI.WindowsAndMessaging;
 
-internal partial struct ICONINFO : IDisposable
+internal unsafe partial struct ICONINFO : IDisposable
 {
     public void Dispose()
     {

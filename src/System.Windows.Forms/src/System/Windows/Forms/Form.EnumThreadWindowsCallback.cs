@@ -35,14 +35,14 @@ public partial class Form
         }
 
         // Resets the owner of all the windows owned by this Form before handle recreation.
-        internal void ResetOwners()
+        internal unsafe void ResetOwners()
         {
             if (_ownedWindows is not null)
             {
                 foreach (HWND hwnd in _ownedWindows)
                 {
                     nint oldValue = PInvokeCore.SetWindowLong(hwnd, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, 0);
-                    Debug.Assert(oldValue == _formHandle.Value);
+                    Debug.Assert(oldValue == (nint)_formHandle.Value);
                 }
             }
         }

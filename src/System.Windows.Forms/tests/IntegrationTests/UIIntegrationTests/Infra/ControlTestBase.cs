@@ -307,7 +307,9 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
         TaskCompletionSource<VoidResult> gate = new(TaskCreationOptions.RunContinuationsAsynchronously);
         JoinableTask test = JoinableTaskFactory.RunAsync(async () =>
         {
+#pragma warning disable VSTHRD003 // Avoid awaiting foreign Tasks
             await gate.Task;
+#pragma warning restore VSTHRD003 // Avoid awaiting foreign Tasks
             await JoinableTaskFactory.SwitchToMainThreadAsync();
             await WaitForIdleAsync();
             try
@@ -351,7 +353,9 @@ public abstract class ControlTestBase : IAsyncLifetime, IDisposable
         TaskCompletionSource<VoidResult> gate = new(TaskCreationOptions.RunContinuationsAsynchronously);
         JoinableTask test = JoinableTaskFactory.RunAsync(async () =>
         {
+#pragma warning disable VSTHRD003 // Avoid awaiting foreign Tasks
             await gate.Task;
+#pragma warning restore VSTHRD003 // Avoid awaiting foreign Tasks
             await JoinableTaskFactory.SwitchToMainThreadAsync();
             await WaitForIdleAsync();
             try

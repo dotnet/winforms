@@ -20,7 +20,7 @@ internal partial struct PICTDESC
         return desc;
     }
 
-    public static PICTDESC FromIcon(IIcon icon, bool copy)
+    public static unsafe PICTDESC FromIcon(IIcon icon, bool copy)
     {
         PICTDESC desc = new()
         {

@@ -6064,7 +6064,7 @@ public partial class Form : ContainerControl
         }
     }
 
-    private void UpdateMenuHandles(bool recreateMenu = false)
+    private unsafe void UpdateMenuHandles(bool recreateMenu = false)
     {
         if (!IsHandleCreated)
         {

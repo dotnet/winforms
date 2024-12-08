@@ -66,7 +66,7 @@ public sealed unsafe partial class Icon : MarshalByRefObject, ICloneable, IDispo
         using (FileStream f = new(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
         {
             _iconData = new byte[(int)f.Length];
-            f.Read(_iconData, 0, _iconData.Length);
+            f.ReadExactly(_iconData);
         }
 
         Initialize(width, height);
@@ -101,7 +101,7 @@ public sealed unsafe partial class Icon : MarshalByRefObject, ICloneable, IDispo
             ?? throw new ArgumentException(SR.Format(SR.ResourceNotFound, type, resource));
 
         _iconData = new byte[(int)stream.Length];
-        stream.Read(_iconData, 0, _iconData.Length);
+        stream.ReadExactly(_iconData);
         Initialize(0, 0);
     }
 

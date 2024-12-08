@@ -54,7 +54,7 @@ internal sealed class ImmutablePropertyDescriptorGridEntry : PropertyDescriptorG
             PropertyDescriptorCollection? properties = parentConverter.GetProperties(parentEntry, owner);
             if (properties is not null)
             {
-                IDictionary values = new Hashtable(properties.Count);
+                Hashtable values = new Hashtable(properties.Count);
                 for (int i = 0; i < properties.Count; i++)
                 {
                     if (PropertyDescriptor.Name is not null && PropertyDescriptor.Name.Equals(properties[i].Name))
