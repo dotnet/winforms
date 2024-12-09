@@ -109,8 +109,8 @@ public class DragDropHelperTests
         {
             DragDropHelper.SetDragImage(dataObject, dragImage, cursorOffset, useDefaultDragImage);
             // This DataObject is backed up by the DataStore.
-            Assert.True(dataObject.TryGetData(DragDropHelper.DRAGIMAGEBITS, out DragDropFormat dragDropFormat));
-            Assert.NotNull(dragDropFormat);
+            dataObject.TryGetData(DragDropHelper.DRAGIMAGEBITS, out DragDropFormat dragDropFormat).Should().BeTrue();
+            dragDropFormat.Should().NotBeNull();
             void* basePtr = PInvokeCore.GlobalLock(dragDropFormat.Medium.hGlobal);
             SHDRAGIMAGE* pDragImage = (SHDRAGIMAGE*)basePtr;
             bool isDragImageNull = BitOperations.LeadingZeroCount((uint)(nint)pDragImage->hbmpDragImage).Equals(32);
