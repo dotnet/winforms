@@ -55,8 +55,8 @@ public unsafe class NativeToWinFormsAdapterTests
 
     private const string InvalidTypeFormatCombinationMessage = "Type '*' is not compatible with the specified format '*'.";
     private const string RequiresResolverMessage =
-        "'*' is not a concrete type, and could allow for unbounded deserialization.  Use a concrete type or" +
-        " define a resolver function that supports types that you are retrieving from the Clipboard or being dragged and dropped.";
+        $"'*' is not a concrete type, and could allow for unbounded deserialization.  Use a concrete type or" +
+        $" define a resolver function that supports types that you are retrieving from the Clipboard or being dragged and dropped.";
     private const string UseTryGetDataWithResolver =
         "Use 'TryGetData<T>' method with a 'resolver' function that defines a set of allowed types, to deserialize '*'.";
     private const string FormatterDisabledMessage =

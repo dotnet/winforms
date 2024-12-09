@@ -84,6 +84,7 @@ public unsafe partial class DataObject
                 catch (Exception ex) when (!ex.IsCriticalException())
                 {
                     // Couldn't parse for some reason, let BinaryFormatter handle the legacy invocation.
+                    // The types APIs can't compare the specified type when the root record is not available.
                     if (legacyMode && LocalAppContextSwitches.ClipboardDragDropEnableUnsafeBinaryFormatterSerialization)
                     {
                         stream.Position = startPosition;

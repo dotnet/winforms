@@ -12,6 +12,8 @@ namespace System.Windows.Forms;
 /// </summary>
 internal static class TypeExtensions
 {
+    private static readonly Type s_forwardedFromAttributeType = typeof(TypeForwardedFromAttribute);
+
     /// <summary>
     ///  Get the full assembly name this <paramref name="type"/> is forwarded from.
     /// </summary>
@@ -30,9 +32,10 @@ internal static class TypeExtensions
             attributedType = attributedType.GetElementType()!;
         }
 
-        foreach (Attribute first in attributedType.GetCustomAttributes(typeof(TypeForwardedFromAttribute), inherit: false))
+        object[] attributes = attributedType.GetCustomAttributes(s_forwardedFromAttributeType, inherit: false);
+        if (attributes.Length > 0 && attributes[0] is TypeForwardedFromAttribute attribute)
         {
-            name = ((TypeForwardedFromAttribute)first).AssemblyFullName;
+            name = attribute.AssemblyFullName;
             return true;
         }
 
