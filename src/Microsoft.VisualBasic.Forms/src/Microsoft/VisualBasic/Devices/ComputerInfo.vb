@@ -28,7 +28,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         '''  Gets the whole memory information details.
         ''' </summary>
-        ''' <value>An InternalMemoryStatus class.</value>
+        ''' <value>An <see cref="InternalMemoryStatus"/> class.</value>
         Private ReadOnly Property MemoryStatus() As InternalMemoryStatus
             Get
                 If _internalMemoryStatus Is Nothing Then
@@ -47,7 +47,6 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <exception cref="ComponentModel.Win32Exception">
         '''  Throw if we are unable to obtain the memory status.
         ''' </exception>
-        <CLSCompliant(False)>
         Public ReadOnly Property AvailablePhysicalMemory() As UInt64
             Get
                 Return MemoryStatus.AvailablePhysicalMemory
@@ -64,7 +63,6 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <exception cref="ComponentModel.Win32Exception">
         '''  Throw if we are unable to obtain the memory status.
         ''' </exception>
-        <CLSCompliant(False)>
         Public ReadOnly Property AvailableVirtualMemory() As UInt64
             Get
                 Return MemoryStatus.AvailableVirtualMemory
@@ -74,7 +72,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         '''  Gets the current UICulture installed on the machine.
         ''' </summary>
-        ''' <value>A CultureInfo object represents the UI culture installed on the machine.</value>
+        ''' <value>A <see cref="Globalization.CultureInfo"/> object represents the UI culture installed on the machine.</value>
         Public ReadOnly Property InstalledUICulture() As Globalization.CultureInfo
             Get
                 Return Globalization.CultureInfo.InstalledUICulture
@@ -84,7 +82,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         '''  Gets the full operating system name.
         ''' </summary>
-        ''' <value>A string contains the operating system name.</value>
+        ''' <value>A <see langword="string"/> contains the operating system name.</value>
         Public ReadOnly Property OSFullName() As String
             Get
                 Return RuntimeInformation.OSDescription
@@ -111,7 +109,7 @@ Namespace Microsoft.VisualBasic.Devices
         '''  Gets the current version number of the operating system.
         ''' </summary>
         ''' <value>
-        '''  A string contains the current version number of the operating system.</value>
+        '''  A <see langword="string"/> contains the current version number of the operating system.</value>
         ''' <exception cref="ExecutionEngineException">
         '''  If cannot obtain the OS Version information.
         ''' </exception>
@@ -131,7 +129,6 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <exception cref="ComponentModel.Win32Exception">
         '''  Throw if we are unable to obtain the memory status.
         ''' </exception>
-        <CLSCompliant(False)>
         Public ReadOnly Property TotalPhysicalMemory() As UInt64
             Get
                 Return MemoryStatus.TotalPhysicalMemory
@@ -148,7 +145,6 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <exception cref="ComponentModel.Win32Exception">
         '''  Throw if we are unable to obtain the memory status.
         ''' </exception>
-        <CLSCompliant(False)>
         Public ReadOnly Property TotalVirtualMemory() As UInt64
             Get
                 Return MemoryStatus.TotalVirtualMemory

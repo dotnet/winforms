@@ -162,7 +162,9 @@ End Namespace
 
     <Theory>
     <MemberData(NameOf(GetReferenceAssemblies))>
-    Public Async Function VB_MissingControlPropertySerializationConfigurationAnalyzer(referenceAssemblies As ReferenceAssemblies) As Task
+    Public Async Function VB_MissingControlPropertySerializationConfigurationAnalyzer(
+        referenceAssemblies As ReferenceAssemblies) As Task
+
         Dim context = New VisualBasicAnalyzerTest(Of
             MissingPropertySerializationConfigurationAnalyzer,
             DefaultVerifier) With
@@ -178,7 +180,9 @@ End Namespace
 
     <Theory>
     <MemberData(NameOf(GetReferenceAssemblies))>
-    Public Async Function VB_ControlPropertySerializationConfigurationAnalyzer(referenceAssemblies As ReferenceAssemblies) As Task
+    Public Async Function VB_ControlPropertySerializationConfigurationAnalyzer(
+        referenceAssemblies As ReferenceAssemblies) As Task
+
         Dim context = New VisualBasicAnalyzerTest(Of
             MissingPropertySerializationConfigurationAnalyzer,
             DefaultVerifier) With
