@@ -3320,6 +3320,7 @@ static System.Windows.Forms.VisualStyles.VisualStyleInformation.Url.get -> strin
 static System.Windows.Forms.VisualStyles.VisualStyleInformation.Version.get -> string!
 static System.Windows.Forms.VisualStyles.VisualStyleRenderer.IsElementDefined(System.Windows.Forms.VisualStyles.VisualStyleElement! element) -> bool
 static System.Windows.Forms.VisualStyles.VisualStyleRenderer.IsSupported.get -> bool
+static System.Windows.Forms.VisualStyles.VisualStyleRenderer.IsDarkModeSupported.get -> bool
 static System.Windows.Forms.WindowsFormsSynchronizationContext.AutoInstall.get -> bool
 static System.Windows.Forms.WindowsFormsSynchronizationContext.AutoInstall.set -> void
 static System.Windows.Forms.WindowsFormsSynchronizationContext.Uninstall() -> void
