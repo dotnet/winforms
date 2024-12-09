@@ -34,7 +34,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Public Sub VbTimeCloseToSystemTime(timeData As DualTimeZones)
             Dim systemTime As Date = timeData.SystemTime
             Dim vbTime As Date = timeData.ComputerTime
-            Dim because As String = $"{timeData.TimeName} is wrong, System Time is {systemTime} and Clock Time is {vbTime}"
+            Dim because As String =
+                $"{timeData.TimeName} is wrong, System Time is {systemTime} and Clock Time is {vbTime}"
             TimesEqual(
                 vbTime,
                 systemTime,
@@ -46,7 +47,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim timeData As New DualTimeZones(TimeZone.MismatchedTimes)
             Dim systemTime As Date = timeData.SystemTime
             Dim vbTime As Date = timeData.ComputerTime
-            Dim because As String = $"{timeData.ComputerTime} is wrong, System Time is {systemTime} and Clock Time is {vbTime}"
+            Dim because As String =
+                $"{timeData.ComputerTime} is wrong, System Time is {systemTime} and Clock Time is {vbTime}"
             Dim results As Boolean = TimesEqual(
                 vbTime,
                 systemTime,
