@@ -79,7 +79,7 @@ public sealed partial class BehaviorService
                     _mouseHookHandle = PInvoke.SetWindowsHookEx(
                         WINDOWS_HOOK_ID.WH_MOUSE,
                         (delegate* unmanaged[Stdcall]<int, WPARAM, LPARAM, LRESULT>)hook,
-                        (HINSTANCE)0,
+                        HINSTANCE.Null,
                         PInvokeCore.GetCurrentThreadId());
 
                     _isHooked = _mouseHookHandle != 0;
