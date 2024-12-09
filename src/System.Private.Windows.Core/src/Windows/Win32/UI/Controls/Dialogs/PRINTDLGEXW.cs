@@ -116,10 +116,14 @@ internal partial struct PRINTDLGEXW
     /// </summary>
     public HDC hDC;
 
-    /// <summary>Type: <b>DWORD</b></summary>
+    /// <summary>
+    ///  Type: <b>DWORD</b>
+    /// </summary>
     public PRINTDLGEX_FLAGS Flags;
 
-    /// <summary>Type: <b>DWORD</b></summary>
+    /// <summary>
+    ///  Type: <b>DWORD</b>
+    /// </summary>
     public uint Flags2;
 
     /// <summary>
@@ -338,6 +342,8 @@ internal partial struct PRINTDLGEXW
     /// </summary>
     public uint nStartPage;
 
-    /// <summary>Type: <b>DWORD</b></summary>
+    /// <summary>
+    ///  Type: <b>DWORD</b>
+    /// </summary>
     public uint dwResultAction;
 }

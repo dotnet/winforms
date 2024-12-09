@@ -68,7 +68,8 @@ Namespace Microsoft.VisualBasic.CompilerServices
             fAttach As Integer) As Integer
 
         <PreserveSig()>
-        Friend Declare Function SetForegroundWindow Lib "user32" (hwnd As IntPtr) As <MarshalAs(UnmanagedType.Bool)> Boolean
+        Friend Declare Function SetForegroundWindow Lib "user32" (
+            hwnd As IntPtr) As <MarshalAs(UnmanagedType.Bool)> Boolean
 
         <PreserveSig()>
         Friend Declare Function SetFocus Lib "user32" (hwnd As IntPtr) As IntPtr
@@ -86,7 +87,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
             hHandle As NativeTypes.LateInitSafeHandleZeroOrMinusOneIsInvalid,
             dwMilliseconds As Integer) As Integer
 
-#Disable Warning IDE0049  ' Use language keywords instead of framework type names for type references, Justification:=<Types come from Windows Native API>
+#Disable Warning IDE0049 ' Use language keywords instead of framework type names for type references, Justification:=<Types come from Windows Native API>
 #Disable Warning IDE1006 ' Naming Styles, Justification:=<Names come from Windows Native API>
 
         ''' <summary>
@@ -99,21 +100,24 @@ Namespace Microsoft.VisualBasic.CompilerServices
         End Function
 
         ''' <summary>
-        '''  Contains information about the current state of both physical and virtual memory, including extended memory.
+        '''  Contains information about the current state of both physical and virtual memory,
+        '''  including extended memory.
         ''' </summary>
         <StructLayout(LayoutKind.Sequential)>
         Friend Structure MEMORYSTATUSEX
-            'typedef struct _MEMORYSTATUSEX {
-            '   DWORD dwLength;                     Size of the structure. Must set before calling GlobalMemoryStatusEx.
-            '   DWORD dwMemoryLoad;                 Number between 0 and 100 on current memory utilization.
-            '   DWORDLONG ullTotalPhys;             Total size of physical memory.
-            '   DWORDLONG ullAvailPhys;             Total size of available physical memory.
-            '   DWORDLONG ullTotalPageFile;         Size of committed memory limit.
-            '   DWORDLONG ullAvailPageFile;         Size of available memory to committed (ullTotalPageFile max).
-            '   DWORDLONG ullTotalVirtual;          Total size of user potion of virtual address space of calling process.
-            '   DWORDLONG ullAvailVirtual;          Total size of unreserved and uncommitted memory in virtual address space.
-            '   DWORDLONG ullAvailExtendedVirtual;  Total size of unreserved and uncommitted memory in extended portion of virtual address.
-            '} MEMORYSTATUSEX, *LPMEMORYSTATUSEX;
+            ' typedef struct _MEMORYSTATUSEX {
+            '   DWORD dwLength;                    Size of the structure. Must set before calling GlobalMemoryStatusEx.
+            '   DWORD dwMemoryLoad;                Number between 0 and 100 on current memory utilization.
+            '   DWORDLONG ullTotalPhys;            Total size of physical memory.
+            '   DWORDLONG ullAvailPhys;            Total size of available physical memory.
+            '   DWORDLONG ullTotalPageFile;        Size of committed memory limit.
+            '   DWORDLONG ullAvailPageFile;        Size of available memory to committed (ullTotalPageFile max).
+            '   DWORDLONG ullTotalVirtual;         Total size of user potion of virtual address space of calling process.
+            '   DWORDLONG ullAvailVirtual;         Total size of unreserved and uncommitted memory in
+            '                                      virtual address space.
+            '   DWORDLONG ullAvailExtendedVirtual; Total size of unreserved and uncommitted memory in
+            '                                      extended portion of virtual address.
+            ' } MEMORYSTATUSEX, *LPMEMORYSTATUSEX;
 
             Friend dwLength As UInt32
             Friend dwMemoryLoad As UInt32
