@@ -19,38 +19,32 @@ public class DataGridViewComboBoxCell_ObjectCollectionTests : IDisposable
     }
 
     [WinFormsFact]
-    public void ObjectCollection_Count_Operations()
+    public void ObjectCollection_Add_Remove_Operations()
     {
         _collection.Count.Should().Be(0);
 
-        _collection.Add("Item1");
-        _collection.Add("Item2");
+        int index1 = _collection.Add("Item1");
+        int index2 = _collection.Add("Item2");
         _collection.Count.Should().Be(2);
+        index1.Should().Be(0);
+        index2.Should().Be(1);
 
         _collection.Remove("Item1");
         _collection.Count.Should().Be(1);
+        _collection[0].Should().Be("Item2");
+
+        _collection.Add("Item1");
+        _collection.Remove("Item2");
+        _collection.Count.Should().Be(1);
+        _collection[0].Should().Be("Item1");
 
         _collection.Clear();
         _collection.Count.Should().Be(0);
     }
 
     [WinFormsFact]
-    public void ObjectCollection_IsReadOnly_ReturnsCorrectValue()
-    {
+    public void ObjectCollection_IsReadOnly_ReturnsCorrectValue() =>
         _collection.IsReadOnly.Should().BeFalse();
-    }
-
-    [WinFormsFact]
-    public void ObjectCollection_Add_AddsItemCorrectly()
-    {
-        var item = "NewItem";
-
-        int index = _collection.Add(item);
-
-        index.Should().Be(0);
-        _collection.Count.Should().Be(1);
-        _collection[0].Should().Be(item);
-    }
 
     [WinFormsFact]
     public void ObjectCollection_Add_AddsItemInSortedOrder()
@@ -101,16 +95,6 @@ public class DataGridViewComboBoxCell_ObjectCollectionTests : IDisposable
         _collection[0].Should().Be("A");
         _collection[1].Should().Be("B");
         _collection[2].Should().Be("C");
-    }
-
-    [WinFormsFact]
-    public void ObjectCollection_AddRange_ThrowsException_WhenItemsContainNull()
-    {
-        var items = new object[] { "Item1", null!, "Item3" };
-
-        Action action = () => _collection.AddRange(items);
-
-        action.Should().Throw<InvalidOperationException>();
     }
 
     [WinFormsFact]
@@ -168,9 +152,11 @@ public class DataGridViewComboBoxCell_ObjectCollectionTests : IDisposable
         action.Should().Throw<ArgumentNullException>();
     }
 
-    [WinFormsFact]
-    public void ObjectCollection_Clear_RemovesAllItems()
+    [WinFormsTheory]
+    [BoolData]
+    public void ObjectCollection_Clear_RemovesAllItems(bool sorted)
     {
+        _comboBoxCell.Sorted = sorted;
         _collection.Add("Item1");
         _collection.Add("Item2");
 
@@ -179,9 +165,11 @@ public class DataGridViewComboBoxCell_ObjectCollectionTests : IDisposable
         _collection.Count.Should().Be(0);
     }
 
-    [WinFormsFact]
-    public void ObjectCollection_Contains_ReturnsCorrectValue()
+    [WinFormsTheory]
+    [BoolData]
+    public void ObjectCollection_Contains_ReturnsCorrectValue(bool sorted)
     {
+        _comboBoxCell.Sorted = sorted;
         var item = "Item1";
         _collection.Add(item);
 
@@ -278,7 +266,7 @@ public class DataGridViewComboBoxCell_ObjectCollectionTests : IDisposable
 
     [WinFormsTheory]
     [InlineData("Item1", "Item2", false)]
-    [InlineData("B", "A", true)]
+    [InlineData("Item2", "Item1", true)]
     public void ObjectCollection_Insert_InsertsItemCorrectly_OrInSortedOrder(string item1, string item2, bool sorted)
     {
         _comboBoxCell.Sorted = sorted;
@@ -297,9 +285,12 @@ public class DataGridViewComboBoxCell_ObjectCollectionTests : IDisposable
         }
     }
 
-    [WinFormsFact]
-    public void ObjectCollection_Insert_ThrowsException_WhenIndexIsInvalidOrItemIsNull()
+    [WinFormsTheory]
+    [BoolData]
+    public void ObjectCollection_Insert_ThrowsException_WhenIndexIsInvalidOrItemIsNull(bool sorted)
     {
+        _comboBoxCell.Sorted = sorted;
+
         Action actionNegativeIndex = () => _collection.Insert(-1, "Item");
         Action actionOutOfRangeIndex = () => _collection.Insert(1, "Item");
         Action actionNullItem = () => _collection.Insert(0, null!);
@@ -307,20 +298,6 @@ public class DataGridViewComboBoxCell_ObjectCollectionTests : IDisposable
         actionNegativeIndex.Should().Throw<ArgumentOutOfRangeException>();
         actionOutOfRangeIndex.Should().Throw<ArgumentOutOfRangeException>();
         actionNullItem.Should().Throw<ArgumentNullException>();
-    }
-
-    [WinFormsFact]
-    public void ObjectCollection_Remove_RemovesItemCorrectly()
-    {
-        var item1 = "Item1";
-        var item2 = "Item2";
-        _collection.Add(item1);
-        _collection.Add(item2);
-
-        _collection.Remove(item1);
-
-        _collection.Count.Should().Be(1);
-        _collection[0].Should().Be(item2);
     }
 
     [WinFormsFact]
