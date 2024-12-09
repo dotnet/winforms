@@ -1730,26 +1730,28 @@ public abstract partial class TextBoxBase : Control
     ///  But if you do have it cached, please pass it in. This will avoid
     ///  the expensive call to the TextLength property.
     /// </summary>
-    private protected virtual void SelectInternal(int start, int length, int textLen)
+    private protected virtual void SelectInternal(int selectionStart, int selectionLength, int textLength)
     {
         // if our handle is created - send message...
         if (IsHandleCreated)
         {
-            AdjustSelectionStartAndEnd(start, length, out int s, out int e, textLen);
+            AdjustSelectionStartAndEnd(selectionStart, selectionLength, out int start, out int end, textLength);
 
-            PInvoke.SendMessage(this, PInvoke.EM_SETSEL, (WPARAM)s, (LPARAM)e);
+            PInvoke.SendMessage(this, PInvoke.EM_SETSEL, (WPARAM)start, (LPARAM)end);
 
             if (IsAccessibilityObjectCreated)
             {
-                AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_Text_TextSelectionChangedEventId);
+                AccessibilityObject.RaiseAutomationEvent(end == 0
+                    ? UIA_EVENT_ID.UIA_AutomationFocusChangedEventId
+                    : UIA_EVENT_ID.UIA_Text_TextSelectionChangedEventId);
             }
         }
         else
         {
             // otherwise, wait until handle is created to send this message.
             // Store the indices until then...
-            _selectionStart = start;
-            _selectionLength = length;
+            _selectionStart = selectionStart;
+            _selectionLength = selectionLength;
             _textBoxFlags[s_setSelectionOnHandleCreated] = true;
         }
     }
