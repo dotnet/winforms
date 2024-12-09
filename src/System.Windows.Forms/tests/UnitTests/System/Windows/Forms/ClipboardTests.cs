@@ -310,7 +310,7 @@ public class ClipboardTests
         DataObject dataObject = new(data);
         Clipboard.SetDataObject(dataObject, copy, retryTimes, retryDelay);
 
-        DataObject actual = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Which;
+        DataObject actual = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
         actual.GetData(data.GetType()).Should().Be(data);
         Clipboard.ContainsData(data.GetType().FullName).Should().BeTrue();
     }
@@ -324,7 +324,7 @@ public class ClipboardTests
     {
         Clipboard.SetDataObject(data, copy, retryTimes, retryDelay);
 
-        DataObject dataObject = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Which;
+        DataObject dataObject = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
         dataObject.GetData(data.GetType()).Should().Be(data);
         Clipboard.ContainsData(data.GetType().FullName).Should().BeTrue();
     }
@@ -577,7 +577,7 @@ public class ClipboardTests
         Clipboard.SetDataObject(realDataObject);
 
         IDataObject? clipboardDataObject = Clipboard.GetDataObject();
-        var dataObject = clipboardDataObject.Should().BeOfType<DataObject>().Which;
+        var dataObject = clipboardDataObject.Should().BeOfType<DataObject>().Subject;
         dataObject.IsWrappedForClipboard.Should().BeTrue();
 
         Clipboard.SetDataObject(clipboardDataObject!);
@@ -659,7 +659,7 @@ public class ClipboardTests
         SetClipboardData((uint)CLIPBOARD_FORMAT.CF_UNICODETEXT, (HANDLE)Marshal.StringToHGlobalUni(testString));
         CloseClipboard().Should().BeTrue();
 
-        DataObject dataObject = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Which;
+        DataObject dataObject = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
         dataObject.GetData(DataFormats.Text).Should().Be(testString);
     }
 
@@ -723,7 +723,7 @@ public class ClipboardTests
     {
         TestData expected = new(DateTime.Now);
         string format = "TestData";
-        using FullCompatScope scope = new();
+        using BinaryFormatterFullCompatScope scope = new();
         Clipboard.SetData(format, expected);
 
         Clipboard.TryGetData(format, TestData.TestDataResolver, out TestData? data).Should().BeTrue();
@@ -855,7 +855,7 @@ public class ClipboardTests
         value.SetValue(202u, 2, 3);
         value.SetValue(203u, 2, 4);
 
-        using FullCompatScope scope = new();
+        using BinaryFormatterFullCompatScope scope = new();
         Clipboard.SetData("test", value);
 
         var result = Clipboard.GetData("test").Should().BeOfType<uint[,]>().Subject;

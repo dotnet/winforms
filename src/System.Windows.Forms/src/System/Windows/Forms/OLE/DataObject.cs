@@ -174,7 +174,7 @@ public unsafe partial class DataObject :
     #endregion
 
     /// <summary>
-    ///  Override this method in the derived class to provide custom data retrieval logic.
+    ///  Override this method in the derived class to provide custom data retrieval logic using the typed APIs.
     /// </summary>
     /// <inheritdoc cref="ITypedDataObject.TryGetData{T}(string, Func{TypeName, Type}, bool, out T)" />
     [CLSCompliant(false)]

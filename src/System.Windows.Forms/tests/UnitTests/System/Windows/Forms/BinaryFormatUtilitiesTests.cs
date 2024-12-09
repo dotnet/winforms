@@ -356,7 +356,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
         Action writer = () => WriteObjectToStream(value, restrictSerialization: true);
         writer.Should().Throw<SerializationException>();
 
-        using FullCompatScope scope = new();
+        using BinaryFormatterFullCompatScope scope = new();
         writer.Should().Throw<SerializationException>();
     }
 
@@ -372,7 +372,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
         value.SetValue(203u, 2, 4);
 
         // Can read offset array with the BinaryFormatter.
-        using FullCompatScope scope = new();
+        using BinaryFormatterFullCompatScope scope = new();
         var result = RoundTripObject(value).Should().BeOfType<uint[,]>().Subject;
 
         result.Rank.Should().Be(2);
@@ -393,7 +393,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
     {
         // Not a known type, while 'List<object>' is resolved by default, 'object' requires a custom resolver.
         List<object> value = ["text"];
-        using (FullCompatScope scope = new())
+        using (BinaryFormatterFullCompatScope scope = new())
         {
             WriteObjectToStream(value);
 
@@ -453,7 +453,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
 
         ReadObjectFromStream<Control>(restrictDeserialization: true, NotSupportedResolver).Should().BeNull();
 
-        using FullCompatScope scope = new();
+        using BinaryFormatterFullCompatScope scope = new();
         ReadObjectFromStream<Control>(restrictDeserialization: true, NotSupportedResolver).Should().BeNull();
     }
 
@@ -471,7 +471,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
     {
         int?[] value = [101, null, 303];
 
-        using FullCompatScope scope = new();
+        using BinaryFormatterFullCompatScope scope = new();
         WriteObjectToStream(value);
         Action read = () => ReadObjectFromStream<int?[]>(restrictDeserialization, NotSupportedResolver);
 
@@ -491,7 +491,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
         value.SetValue(202u, 2, 3);
         value.SetValue(203u, 2, 4);
 
-        using FullCompatScope scope = new();
+        using BinaryFormatterFullCompatScope scope = new();
         WriteObjectToStream(value);
         Action read = () => ReadObjectFromStream<uint[,]>(restrictDeserialization, NotSupportedResolver);
 
@@ -503,7 +503,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
     {
         int?[] value = [101, null, 303];
 
-        using FullCompatScope scope = new();
+        using BinaryFormatterFullCompatScope scope = new();
         RoundTripOfType<int?[]>(value, NullableIntArrayResolver).Should().BeEquivalentTo(value);
     }
 
@@ -533,7 +533,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
     {
         TestData value = new(new(10, 10), 2);
 
-        using FullCompatScope scope = new();
+        using BinaryFormatterFullCompatScope scope = new();
         var result = RoundTripOfType<TestDataBase>(value, TestDataResolver).Should().BeOfType<TestData>().Subject;
 
         result.Equals(value, value.Bitmap.Size);
@@ -565,7 +565,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
     {
         TestData value = new(new(10, 10), 2);
 
-        using FullCompatScope scope = new();
+        using BinaryFormatterFullCompatScope scope = new();
         WriteObjectToStream(value);
 
         // Resolver that returns a null is blocked in our SerializationBinder wrapper.
@@ -604,7 +604,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
     {
         using Font value = new("Microsoft Sans Serif", emSize: 10);
 
-        using FullCompatScope scope = new();
+        using BinaryFormatterFullCompatScope scope = new();
 
         using Font result = RoundTripOfType<Font>(value, FontResolver).Should().BeOfType<Font>().Subject;
         result.Should().Be(value);
@@ -645,7 +645,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
         }
 
         // Deserialize using the binary formatter.
-        using FullCompatScope scope = new();
+        using BinaryFormatterFullCompatScope scope = new();
         // GetData case.
         stream.Position = 0;
         var result = Utilities.ReadObjectFromStream<object>(
@@ -679,7 +679,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
     {
         TestDataBase.InnerData value = new("simple class");
 
-        using FullCompatScope scope = new();
+        using BinaryFormatterFullCompatScope scope = new();
 
         RoundTripOfType<TestDataBase.InnerData>(value, resolver: null)
             .Should().BeOfType<TestDataBase.InnerData>().Which.Should().BeEquivalentTo(value);
@@ -702,7 +702,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
     {
         MyClass1 value = new(value: 1);
 
-        using FullCompatScope scope = new();
+        using BinaryFormatterFullCompatScope scope = new();
         WriteObjectToStream(value);
 
         // legacyMode == true follows the GetData path.
@@ -732,7 +732,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
     {
         MyClass1 value = new(value: 1);
 
-        using FullCompatScope scope = new();
+        using BinaryFormatterFullCompatScope scope = new();
         WriteObjectToStream(value);
 
         // SerializationException will be swallowed up the call stack, when reading HGLOBAL.
@@ -760,7 +760,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
     {
         MyClass1 value = new(value: 1);
 
-        using FullCompatScope scope = new();
+        using BinaryFormatterFullCompatScope scope = new();
         WriteObjectToStream(value);
 
         ReadObjectFromStream<MyClass1>(restrictDeserialization: false, MyClass1.MyExactMatchResolver)
@@ -772,7 +772,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
     {
         MyClass1 value = new(value: 1);
 
-        using FullCompatScope scope = new();
+        using BinaryFormatterFullCompatScope scope = new();
         WriteObjectToStream(value);
 
         Action read = () => ReadObjectFromStream<MyClass1>(restrictDeserialization: true, MyClass1.MyExactMatchResolver);

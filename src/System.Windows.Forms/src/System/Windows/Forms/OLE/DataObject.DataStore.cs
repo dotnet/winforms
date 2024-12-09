@@ -32,7 +32,7 @@ public partial class DataObject
             }
 
             if (!autoConvert
-                || !(dse is null || dse.AutoConvert)
+                || (dse is not null && !dse.AutoConvert)
                 || GetMappedFormats(format) is not { } mappedFormats)
             {
                 return false;

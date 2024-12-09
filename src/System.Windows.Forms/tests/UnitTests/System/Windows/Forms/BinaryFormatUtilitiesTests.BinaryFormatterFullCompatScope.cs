@@ -5,13 +5,13 @@ namespace System.Windows.Forms.Tests;
 
 public partial class BinaryFormatUtilitiesTests
 {
-    internal readonly ref struct FullCompatScope : IDisposable
+    internal readonly ref struct BinaryFormatterFullCompatScope : IDisposable
     {
         private readonly BinaryFormatterScope _binaryFormatterScope;
         private readonly BinaryFormatterInClipboardDragDropScope _binaryFormatterInClipboardDragDropScope;
         private readonly NrbfSerializerInClipboardDragDropScope _nrbfSerializerInClipboardDragDropScope;
 
-        public FullCompatScope()
+        public BinaryFormatterFullCompatScope()
         {
             _binaryFormatterScope = new(enable: true);
             _binaryFormatterInClipboardDragDropScope = new(enable: true);
