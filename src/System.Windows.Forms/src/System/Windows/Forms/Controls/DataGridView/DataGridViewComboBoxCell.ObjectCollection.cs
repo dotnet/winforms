@@ -93,7 +93,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         public void AddRange(ObjectCollection value)
         {
             _owner.CheckNoDataSource();
-            AddRangeInternal((ICollection<object>)value);
+            AddRangeInternal(value);
             _owner.OnItemsCollectionChanged();
         }
 
@@ -114,6 +114,26 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
 
             // Add everything to the collection first, then sort
             InnerArray.AddRange(items);
+            if (_owner.Sorted)
+            {
+                InnerArray.Sort(Comparer);
+            }
+        }
+
+        internal void AddRangeInternal(ObjectCollection items)
+        {
+            ArgumentNullException.ThrowIfNull(items);
+
+            foreach (object item in items)
+            {
+                if (item is null)
+                {
+                    throw new InvalidOperationException(SR.InvalidNullItemInCollection);
+                }
+
+                InnerArray.Add(item);
+            }
+
             if (_owner.Sorted)
             {
                 InnerArray.Sort(Comparer);
