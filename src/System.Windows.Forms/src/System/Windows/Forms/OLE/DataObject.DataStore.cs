@@ -10,7 +10,7 @@ namespace System.Windows.Forms;
 
 public partial class DataObject
 {
-    private sealed partial class DataStore : IDataObject, ITypedDataObject
+    private sealed partial class DataStore : ITypedDataObject
     {
         private readonly Dictionary<string, DataStoreEntry> _mappedData = new(BackCompatibleStringComparer.Default);
 

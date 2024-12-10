@@ -16,7 +16,6 @@ namespace System.Windows.Forms;
 /// </summary>
 [ClassInterface(ClassInterfaceType.None)]
 public unsafe partial class DataObject :
-    IDataObject,
     ITypedDataObject,
     Com.IDataObject.Interface,
     ComTypes.IDataObject,

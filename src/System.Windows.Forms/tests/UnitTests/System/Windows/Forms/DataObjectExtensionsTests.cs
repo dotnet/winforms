@@ -178,7 +178,7 @@ public class DataObjectExtensionsTests
         public void SetData(object? data) => throw new NotImplementedException();
     }
 
-    internal class TypedDataObject : IDataObject, ITypedDataObject
+    internal class TypedDataObject : ITypedDataObject
     {
         public object? GetData(string format, bool autoConvert) => throw new NotImplementedException();
         public object? GetData(string format) => throw new NotImplementedException();

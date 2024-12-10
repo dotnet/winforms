@@ -17,7 +17,7 @@ public unsafe partial class DataObject
         /// <summary>
         ///  Maps native pointer <see cref="Com.IDataObject"/> to <see cref="IDataObject"/>.
         /// </summary>
-        private unsafe class NativeToWinFormsAdapter : IDataObject, ITypedDataObject, Com.IDataObject.Interface
+        private unsafe class NativeToWinFormsAdapter : ITypedDataObject, Com.IDataObject.Interface
         {
             private readonly AgileComPointer<Com.IDataObject> _nativeDataObject;
 
