@@ -422,7 +422,7 @@ public static class Clipboard
         {
             // TODO (TanyaSo): localize string
             throw new NotSupportedException(string.Format(
-                "IDataObject({0}) on the Clipboard doesn't implement `ITypedDataObject` interface and can't be read" +
+                "Data object `{0}` doesn't implement `ITypedDataObject` interface and can't be read" +
                     " using `TryGetData<T>(string, out T)` method.",
                 dataObject.GetType().FullName));
         }

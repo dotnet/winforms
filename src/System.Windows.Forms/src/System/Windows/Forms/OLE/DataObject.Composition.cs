@@ -14,7 +14,7 @@ public unsafe partial class DataObject
     ///  Contains the logic to move between <see cref="IDataObject"/>, <see cref="Com.IDataObject.Interface"/>,
     ///  and <see cref="ComTypes.IDataObject"/> calls.
     /// </summary>
-    internal unsafe partial class Composition : IDataObject, ITypedDataObject, Com.IDataObject.Interface, ComTypes.IDataObject
+    internal unsafe partial class Composition : ITypedDataObject, Com.IDataObject.Interface, ComTypes.IDataObject
     {
         private const Com.TYMED AllowedTymeds = Com.TYMED.TYMED_HGLOBAL | Com.TYMED.TYMED_ISTREAM | Com.TYMED.TYMED_GDI;
 
