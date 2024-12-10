@@ -2750,6 +2750,38 @@ public class ComboBoxTests
         Assert.Equal(numItems, comboBox.Items.Count);
     }
 
+    [WinFormsFact]
+    public void ComboBox_OnLostFocus_AutoCompleteModeNone_DoesNotClearMatchingText()
+    {
+        using ComboBox comboBox = new();
+        comboBox.TestAccessor().Dynamic._canFireLostFocus= true;
+        comboBox.AutoCompleteMode = AutoCompleteMode.None;
+        comboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+        comboBox.TestAccessor().Dynamic.MatchingText = "Test";
+        comboBox.DropDownStyle = ComboBoxStyle.Simple;
+        comboBox.TestAccessor().Dynamic.OnLostFocus(EventArgs.Empty);
+
+        string matchingText = comboBox.TestAccessor().Dynamic.MatchingText;
+        matchingText.Should().Be("Test");
+        comboBox.MouseIsOver.Should().BeFalse();
+    }
+
+    [WinFormsFact]
+    public void ComboBox_OnLostFocus_AutoCompleteModeNotNone_ClearsMatchingText()
+    {
+        using ComboBox comboBox = new();
+        comboBox.TestAccessor().Dynamic._canFireLostFocus = true;
+        comboBox.AutoCompleteMode = AutoCompleteMode.Suggest;
+        comboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+        comboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+        comboBox.TestAccessor().Dynamic.MatchingText = "Test";
+        comboBox.TestAccessor().Dynamic.OnLostFocus(EventArgs.Empty);
+
+        string matchingText = comboBox.TestAccessor().Dynamic.MatchingText;
+        matchingText.Should().BeEmpty();
+        comboBox.MouseIsOver.Should().BeFalse();
+    }
+
     private class OwnerDrawComboBox : ComboBox
     {
         public OwnerDrawComboBox()
