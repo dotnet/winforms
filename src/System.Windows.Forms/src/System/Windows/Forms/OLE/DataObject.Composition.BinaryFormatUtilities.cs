@@ -52,7 +52,7 @@ public unsafe partial class DataObject
 #pragma warning restore SYSLIB0011
             }
 
-            internal static object? ReadObjectFromStream(MemoryStream stream, bool restrictDeserialization)
+            internal static object ReadObjectFromStream(MemoryStream stream, bool restrictDeserialization)
             {
                 long startPosition = stream.Position;
                 try
