@@ -72,6 +72,7 @@ internal readonly partial struct HRESULT
     public static readonly HRESULT COR_E_SAFEARRAYTYPEMISMATCH  = (HRESULT)unchecked((int)0x80131533);
     public static readonly HRESULT COR_E_TARGETINVOCATION       = (HRESULT)unchecked((int)0x80131604);
     public static readonly HRESULT COR_E_OBJECTDISPOSED         = (HRESULT)unchecked((int)0x80131622);
+    public static readonly HRESULT COR_E_SERIALIZATION          = (HRESULT)unchecked((int)0x8013150c);
 
     /// <summary>
     ///  There is no associated handler for the given item registered by the specified application.

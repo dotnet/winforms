@@ -135,6 +135,13 @@ public unsafe partial class DataObject
                         // of this exception, so it will always work.)
                         return SaveDataToHGLOBAL(ex, format, ref *pmedium);
                     }
+                    catch (Exception) when (!pmedium->hGlobal.IsNull)
+                    {
+                        PInvokeCore.GlobalFree(pmedium->hGlobal);
+                        pmedium->hGlobal = HGLOBAL.Null;
+
+                        throw;
+                    }
                 }
 
                 if (((TYMED)pformatetc->tymed).HasFlag(TYMED.TYMED_GDI))
@@ -335,14 +342,14 @@ public unsafe partial class DataObject
 
             private static HRESULT SaveStreamToHGLOBAL(ref HGLOBAL hglobal, Stream stream)
             {
-                if (hglobal != 0)
+                if (!hglobal.IsNull)
                 {
                     PInvokeCore.GlobalFree(hglobal);
                 }
 
                 int size = checked((int)stream.Length);
                 hglobal = PInvokeCore.GlobalAlloc(GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE, (uint)size);
-                if (hglobal == 0)
+                if (hglobal.IsNull)
                 {
                     return HRESULT.E_OUTOFMEMORY;
                 }
