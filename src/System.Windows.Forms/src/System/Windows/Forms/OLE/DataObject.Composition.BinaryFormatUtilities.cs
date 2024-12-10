@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms.BinaryFormat;
@@ -17,11 +18,13 @@ public unsafe partial class DataObject
             internal static void WriteObjectToStream(MemoryStream stream, object data, bool restrictSerialization)
             {
                 long position = stream.Position;
-                bool success = false;
 
                 try
                 {
-                    success = WinFormsBinaryFormatWriter.TryWriteCommonObject(stream, data);
+                    if (WinFormsBinaryFormatWriter.TryWriteCommonObject(stream, data))
+                    {
+                        return;
+                    }
                 }
                 catch (Exception ex) when (!ex.IsCriticalException())
                 {
@@ -29,28 +32,27 @@ public unsafe partial class DataObject
                     Debug.Fail($"Unexpected exception writing binary formatted data. {ex.Message}");
                 }
 
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
-                if (!success)
+                if (restrictSerialization)
                 {
-                    // This check is to help in trimming scenarios with a trim warning on a call to BinaryFormatter.Serialize(),
-                    // which has a RequiresUnreferencedCode annotation.
-                    // If the flag is false, the trimmer will not generate a warning, since BinaryFormatter.Serialize(), will not be called,
-                    // If the flag is true, the trimmer will generate a warning for calling a method that has a RequiresUnreferencedCode annotation.
-                    if (!EnableUnsafeBinaryFormatterInNativeObjectSerialization)
-                    {
-                        throw new NotSupportedException(SR.BinaryFormatterNotSupported);
-                    }
-
-                    stream.Position = position;
-                    new BinaryFormatter()
-                    {
-                        Binder = restrictSerialization ? new BitmapBinder() : null
-                    }.Serialize(stream, data);
+                    throw new SerializationException(string.Format(SR.UnexpectedTypeForClipboardFormat, data.GetType().FullName));
                 }
+
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
+                // This check is to help in trimming scenarios with a trim warning on a call to BinaryFormatter.Serialize(),
+                // which has a RequiresUnreferencedCode annotation.
+                // If the flag is false, the trimmer will not generate a warning, since BinaryFormatter.Serialize(), will not be called,
+                // If the flag is true, the trimmer will generate a warning for calling a method that has a RequiresUnreferencedCode annotation.
+                if (!EnableUnsafeBinaryFormatterInNativeObjectSerialization)
+                {
+                    throw new NotSupportedException(SR.BinaryFormatterNotSupported);
+                }
+
+                stream.Position = position;
+                new BinaryFormatter().Serialize(stream, data);
 #pragma warning restore SYSLIB0011
             }
 
-            internal static object ReadObjectFromStream(MemoryStream stream, bool restrictDeserialization)
+            internal static object? ReadObjectFromStream(MemoryStream stream, bool restrictDeserialization)
             {
                 long startPosition = stream.Position;
                 try
@@ -63,6 +65,11 @@ public unsafe partial class DataObject
                 catch (Exception ex) when (!ex.IsCriticalException())
                 {
                     // Couldn't parse for some reason, let the BinaryFormatter try to handle it.
+                }
+
+                if (restrictDeserialization)
+                {
+                    throw new RestrictedTypeDeserializationException(SR.UnexpectedClipboardType);
                 }
 
                 // This check is to help in trimming scenarios with a trim warning on a call to BinaryFormatter.Deserialize(),
@@ -79,15 +86,14 @@ public unsafe partial class DataObject
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
 #pragma warning disable SYSLIB0050 // Type or member is obsolete
 #pragma warning disable CA2300 // Do not use insecure deserializer BinaryFormatter
-#pragma warning disable CA2302 // Ensure BinaryFormatter.Binder is set before calling BinaryFormatter.Deserialize
+#pragma warning disable CA2301 // The method 'object BinaryFormatter.Deserialize(Stream serializationStream)' is insecure when deserializing untrusted data without a SerializationBinder to restrict the type of objects in the deserialized object graph.
                 // cs/dangerous-binary-deserialization
                 return new BinaryFormatter()
                 {
-                    Binder = restrictDeserialization ? new BitmapBinder() : null,
                     AssemblyFormat = FormatterAssemblyStyle.Simple
                 }.Deserialize(stream); // CodeQL[SM03722] : BinaryFormatter is intended to be used as a fallback for unsupported types. Users must explicitly opt into this behavior.
 #pragma warning restore CA2300
-#pragma warning restore CA2302
+#pragma warning restore CA2301
 #pragma warning restore SYSLIB0050
 #pragma warning restore SYSLIB0011
             }

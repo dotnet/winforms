@@ -109,7 +109,7 @@ public unsafe partial class DataObject
                     _ => ReadObjectFromHGLOBAL(hglobal, RestrictDeserializationToSafeTypes(format))
                 };
 
-                static object ReadObjectFromHGLOBAL(HGLOBAL hglobal, bool restrictDeserialization)
+                static object? ReadObjectFromHGLOBAL(HGLOBAL hglobal, bool restrictDeserialization)
                 {
                     MemoryStream stream = ReadByteStreamFromHGLOBAL(hglobal, out bool isSerializedObject);
                     return !isSerializedObject
