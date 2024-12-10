@@ -55,7 +55,7 @@ Namespace Microsoft.VisualBasic.Devices
         Private Sub Play(sound As Media.SoundPlayer, mode As AudioPlayMode)
 
             Debug.Assert(sound IsNot Nothing, "There's no SoundPlayer")
-            Debug.Assert([Enum].IsDefined(GetType(AudioPlayMode), mode), "Enum value is out of range")
+            Debug.Assert([Enum].IsDefined(Of AudioPlayMode)(mode), "Enum value is out of range")
 
             ' Stopping the sound ensures it's safe to dispose it. This could happen when we change the value of _Sound below
             _sound?.Stop()
