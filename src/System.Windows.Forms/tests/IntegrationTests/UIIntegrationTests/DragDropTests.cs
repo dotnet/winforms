@@ -247,6 +247,7 @@ public class DragDropTests : ControlTestBase
 
             return Task.CompletedTask;
 
+#pragma warning disable VSTHRD100 // Avoid async void methods
             async void RunInputSimulator(Point virtualPointStart, Point virtualPointEnd)
             {
                 await InputSimulator.SendAsync(
@@ -265,6 +266,7 @@ public class DragDropTests : ControlTestBase
                             .MoveMouseToPositionOnVirtualDesktop(virtualPointEnd.X, virtualPointEnd.Y)
                             .LeftButtonUp());
             }
+#pragma warning restore VSTHRD100 // Avoid async void methods
         });
     }
 

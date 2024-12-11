@@ -5,10 +5,10 @@ using System.Drawing;
 
 namespace Windows.Win32.Foundation;
 
-internal readonly partial struct WPARAM
+internal readonly unsafe partial struct WPARAM
 {
-    public static unsafe implicit operator void*(WPARAM value) => (void*)value.Value;
-    public static unsafe implicit operator WPARAM(void* value) => new((nuint)value);
+    public static implicit operator void*(WPARAM value) => (void*)value.Value;
+    public static implicit operator WPARAM(void* value) => new((nuint)value);
 
     public static explicit operator HWND(WPARAM value) => (HWND)(nint)value.Value;
     public static explicit operator WPARAM(HWND value) => new((nuint)value.Value);
