@@ -111,10 +111,10 @@ public unsafe partial class DataObject
 
                 static object ReadObjectFromHGLOBAL(HGLOBAL hglobal, bool restrictDeserialization)
                 {
-                     MemoryStream stream = ReadByteStreamFromHGLOBAL(hglobal, out bool isSerializedObject);
-                     return !isSerializedObject
-                         ? stream
-                         : BinaryFormatUtilities.ReadObjectFromStream(stream, restrictDeserialization);
+                    MemoryStream stream = ReadByteStreamFromHGLOBAL(hglobal, out bool isSerializedObject);
+                    return !isSerializedObject
+                        ? stream
+                        : BinaryFormatUtilities.ReadObjectFromStream(stream, restrictDeserialization);
                 }
             }
 
@@ -266,10 +266,14 @@ public unsafe partial class DataObject
                     // get the data out.
                     Debug.WriteLineIf(hr == HRESULT.CLIPBRD_E_BAD_DATA, "CLIPBRD_E_BAD_DATA returned when trying to get clipboard data.");
                     Debug.WriteLineIf(hr == HRESULT.DV_E_TYMED, "DV_E_TYMED returned when trying to get clipboard data.");
+                    // This happens in copy == false case when the managed type does not have the [Serializable] attribute.
+                    Debug.WriteLineIf(hr == HRESULT.E_UNEXPECTED, "E_UNEXPECTED returned when trying to get clipboard data.");
+                    Debug.WriteLineIf(hr == HRESULT.COR_E_SERIALIZATION,
+                        "COR_E_SERIALIZATION returned when trying to get clipboard data, for example, BinaryFormatter threw SerializationException.");
 
                     try
                     {
-                        if (medium.tymed == Com.TYMED.TYMED_HGLOBAL && !medium.hGlobal.IsNull)
+                        if (medium.tymed == Com.TYMED.TYMED_HGLOBAL && !medium.hGlobal.IsNull && hr != HRESULT.COR_E_SERIALIZATION)
                         {
                             data = GetDataFromHGLOBAL(medium.hGlobal, format);
                         }
