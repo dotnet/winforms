@@ -130,7 +130,7 @@ public partial class ComboBox
                 return;
             }
 
-            IReadOnlyList<Entry> entries = owner.Items.InnerList;
+            List<Entry> entries = owner.Items.InnerList;
             Debug.Assert(index < entries.Count);
 
             Entry item = entries[index];
