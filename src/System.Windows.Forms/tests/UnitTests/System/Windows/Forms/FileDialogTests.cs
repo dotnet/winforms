@@ -651,7 +651,7 @@ public class FileDialogTests
         dialog.RunFileDialogAction = o =>
         {
             Assert.Equal(sizeof(OPENFILENAME), (int)o.lStructSize);
-            Assert.Equal((HWND)1, o.hwndOwner);
+            Assert.Equal((HWND)(nint)1, o.hwndOwner);
             Assert.Equal(dialog.Instance, o.hInstance);
             ReadOnlySpan<char> filter = new(o.lpstrFilter.Value, o.lpstrFilter.StringListLength);
             Assert.True(filter.SequenceEqual(" \0*.*"));
@@ -747,7 +747,7 @@ public class FileDialogTests
         dialog.RunFileDialogAction = o =>
         {
             Assert.Equal(sizeof(OPENFILENAME), (int)o.lStructSize);
-            Assert.Equal((HWND)1, o.hwndOwner);
+            Assert.Equal((HWND)(nint)1, o.hwndOwner);
             Assert.Equal(dialog.Instance, o.hInstance);
             ReadOnlySpan<char> filter = new(o.lpstrFilter.Value, o.lpstrFilter.StringListLength);
             Assert.True(filter.SequenceEqual(" \0*.*"));

@@ -23,7 +23,7 @@ public partial class ColorEditor
 
             int size = (int)(stream.Length - stream.Position);
             byte[] buffer = new byte[size];
-            stream.Read(buffer, 0, size);
+            stream.ReadExactly(buffer, 0, size);
 
             _hInstance = Marshal.AllocHGlobal(size);
             Marshal.Copy(buffer, 0, _hInstance, size);

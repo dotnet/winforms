@@ -30,7 +30,7 @@ internal readonly ref struct CreatePenScope
         HPEN = PInvokeCore.CreatePen(PEN_STYLE.PS_SOLID, width, color);
 
     public static implicit operator HPEN(in CreatePenScope scope) => scope.HPEN;
-    public static implicit operator HGDIOBJ(in CreatePenScope scope) => (HGDIOBJ)scope.HPEN.Value;
+    public static unsafe implicit operator HGDIOBJ(in CreatePenScope scope) => scope.HPEN;
 
     public bool IsNull => HPEN.IsNull;
 
