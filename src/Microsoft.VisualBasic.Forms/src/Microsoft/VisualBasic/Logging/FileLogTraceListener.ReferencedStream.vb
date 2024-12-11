@@ -141,6 +141,6 @@ Namespace Microsoft.VisualBasic.Logging
                 GC.SuppressFinalize(Me)
             End Sub
 
-        End Class 'ReferencedStream
+        End Class ' ReferencedStream
     End Class
 End Namespace
