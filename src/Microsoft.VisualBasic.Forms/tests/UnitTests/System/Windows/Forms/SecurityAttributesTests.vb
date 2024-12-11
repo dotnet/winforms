@@ -13,7 +13,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         <WinFormsFact>
         Public Sub SECURITY_ATTRIBUTES_New_Success()
             Using securityAttributes As New SECURITY_ATTRIBUTES
-                securityAttributes.nLength.Should.Be(Marshal.SizeOf(GetType(SECURITY_ATTRIBUTES)))
+                securityAttributes.nLength.Should.Be(Marshal.SizeOf(Of SECURITY_ATTRIBUTES)())
             End Using
         End Sub
 
