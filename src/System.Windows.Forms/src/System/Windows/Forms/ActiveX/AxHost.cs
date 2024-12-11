@@ -69,10 +69,14 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     private static readonly int s_listeningToIdle = BitVector32.CreateMask(s_editorRefresh);
     private static readonly int s_refreshProperties = BitVector32.CreateMask(s_listeningToIdle);
 
-    /// <summary>True if a window needs created when <see cref="CreateHandle"/> is called.</summary>
+    /// <summary>
+    ///  True if a window needs created when <see cref="CreateHandle"/> is called.
+    /// </summary>
     private static readonly int s_fNeedOwnWindow = BitVector32.CreateMask(s_refreshProperties);
 
-    /// <summary>True if the OCX is design time only and we're in user mode.</summary>
+    /// <summary>
+    ///  True if the OCX is design time only and we're in user mode.
+    /// </summary>
     private static readonly int s_fOwnWindow = BitVector32.CreateMask(s_fNeedOwnWindow);
 
     private static readonly int s_fSimpleFrame = BitVector32.CreateMask(s_fOwnWindow);
@@ -3627,7 +3631,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     /// <summary>
     ///  Maps from an OLE COLOR to a System.Drawing.Color
     /// </summary>
-    [CLSCompliant(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected static Color GetColorFromOleColor(uint color)
     {
@@ -3637,7 +3640,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     /// <summary>
     ///  Maps from an System.Drawing.Color to an OLE COLOR
     /// </summary>
-    [CLSCompliant(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected static uint GetOleColorFromColor(Color color)
     {

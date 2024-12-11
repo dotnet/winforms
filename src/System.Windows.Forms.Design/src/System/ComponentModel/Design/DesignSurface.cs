@@ -99,7 +99,8 @@ public class DesignSurface : IDisposable, IServiceProvider
     }
 
     /// <summary>
-    ///  Provides access to the design surface's ServiceContainer. This property allows inheritors to add their own services.
+    ///  Provides access to the design surface's ServiceContainer.
+    ///  This property allows inheritors to add their own services.
     /// </summary>
     protected ServiceContainer ServiceContainer
     {
@@ -205,7 +206,8 @@ public class DesignSurface : IDisposable, IServiceProvider
 
     /// <summary>
     ///  Called when a designer is about to begin reloading. When a designer reloads,
-    ///  all of the state for that designer is recreated, including the designer's view. The view should be unparented at this time.
+    ///  all of the state for that designer is recreated, including the designer's view.
+    ///  The view should be unparented at this time.
     /// </summary>
     public event EventHandler? Unloading;
 

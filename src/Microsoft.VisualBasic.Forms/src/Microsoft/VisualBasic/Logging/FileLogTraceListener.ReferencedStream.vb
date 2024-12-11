@@ -42,7 +42,7 @@ Namespace Microsoft.VisualBasic.Logging
             ''' <summary>
             '''  The size of the log file.
             ''' </summary>
-            ''' <value>The size.</value>
+            ''' <value>Size as a <see langword="Long"/>.</value>
             Friend ReadOnly Property FileSize() As Long
                 Get
                     Return _stream.BaseStream.Length
@@ -141,6 +141,6 @@ Namespace Microsoft.VisualBasic.Logging
                 GC.SuppressFinalize(Me)
             End Sub
 
-        End Class 'ReferencedStream
+        End Class ' ReferencedStream
     End Class
 End Namespace

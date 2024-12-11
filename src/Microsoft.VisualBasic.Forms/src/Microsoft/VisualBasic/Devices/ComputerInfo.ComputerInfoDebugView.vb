@@ -12,6 +12,9 @@ Namespace Microsoft.VisualBasic.Devices
         ''' </summary>
         Friend NotInheritable Class ComputerInfoDebugView
 
+            ''' <summary>
+            ''' New Debugger proxy for the <see cref="ComputerInfo"/> class.
+            ''' </summary>
             <DebuggerBrowsable(DebuggerBrowsableState.Never)>
             Private ReadOnly _instanceBeingWatched As ComputerInfo
 
