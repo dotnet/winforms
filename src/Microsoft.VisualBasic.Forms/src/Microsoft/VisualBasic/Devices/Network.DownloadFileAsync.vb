@@ -103,17 +103,17 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="onUserCancel">
         '''  Indicates what to do if user cancels dialog (either throw or do nothing).
         ''' </param>
-         ''' <param name="cancelToken"><see cref="CancellationToken"/></param>
-       Friend Shared Async Function DownloadFileAsync(
-            addressUri As Uri,
-            destinationFileName As String,
-            userName As String,
-            password As String,
-            dialog As ProgressDialog,
-            connectionTimeout As Integer,
-            overwrite As Boolean,
-            onUserCancel As UICancelOption,
-            Optional cancelToken As CancellationToken = Nothing) As Task
+        ''' <param name="cancelToken"><see cref="CancellationToken"/></param>
+        Friend Shared Async Function DownloadFileAsync(
+             addressUri As Uri,
+             destinationFileName As String,
+             userName As String,
+             password As String,
+             dialog As ProgressDialog,
+             connectionTimeout As Integer,
+             overwrite As Boolean,
+             onUserCancel As UICancelOption,
+             Optional cancelToken As CancellationToken = Nothing) As Task
 
             ' Get network credentials
             Dim networkCredentials As ICredentials = GetNetworkCredentials(userName, password)
