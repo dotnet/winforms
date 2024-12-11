@@ -46,7 +46,7 @@ public sealed partial class BinaryEditor : UITypeEditor
             stream.Position = 0;
             int byteCount = (int)(stream.Length - stream.Position);
             byte[] bytes = new byte[byteCount];
-            stream.Read(bytes, 0, byteCount);
+            stream.ReadExactly(bytes, 0, byteCount);
             return bytes;
         }
 

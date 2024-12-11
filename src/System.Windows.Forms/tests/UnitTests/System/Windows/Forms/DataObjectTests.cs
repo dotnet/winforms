@@ -2502,4 +2502,26 @@ public partial class DataObjectTests
         data.GetDataPresent("notExist").Should().BeFalse();
         data.GetFormats().Should().BeEquivalentTo([typeof(Bitmap).FullName, nameof(Bitmap), customFormat]);
     }
+
+    [WinFormsFact]
+    public unsafe void DataObject_Native_GetData_SerializationFailure()
+    {
+        using Font value = new("Arial", 10);
+        using BinaryFormatterScope scope = new(enable: true);
+        // We are blocking managed font from being serialized as a Locale format.
+        DataObject native = new(DataFormats.Locale, value);
+
+        // Simulate receiving DataObject from native.
+        // Clipboard.SetDataObject(native, copy: true);
+        var comDataObject = ComHelpers.GetComPointer<Com.IDataObject>(native);
+        Com.FORMATETC formatetc = new()
+        {
+            tymed = (uint)TYMED.TYMED_HGLOBAL,
+            cfFormat = (ushort)CLIPBOARD_FORMAT.CF_LOCALE
+        };
+        comDataObject->GetData(formatetc, out Com.STGMEDIUM medium);
+
+        // Validate that HGLOBAL had been freed when handling an error.
+        medium.hGlobal.IsNull.Should().BeTrue();
+    }
 }

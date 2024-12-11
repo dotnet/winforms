@@ -7,6 +7,7 @@ using System.Private.Windows.Core.BinaryFormat;
 using System.Formats.Nrbf;
 using System.Windows.Forms.Nrbf;
 using System.Drawing;
+using System.Diagnostics;
 
 namespace FormatTests.FormattedObject;
 
@@ -37,6 +38,8 @@ public class BinaryFormatWriterTests
     [MemberData(nameof(TryWriteFrameworkObject_SupportedObjects_TestData))]
     public void BinaryFormatWriter_TryWriteFrameworkObject_SupportedObjects_BinaryFormatterRead(object value)
     {
+        Debug.Print(value.ToString());
+
         using MemoryStream stream = new();
         bool success = BinaryFormatWriter.TryWriteFrameworkObject(stream, value);
         success.Should().BeTrue();
@@ -187,14 +190,14 @@ public class BinaryFormatWriterTests
             ListTests.ArrayLists_UnsupportedTestData).Concat(
             Array_UnsupportedTestData);
 
-    public static TheoryData<object> SystemDrawing_TestData => new()
-    {
+    public static TheoryData<object> SystemDrawing_TestData =>
+    [
         default(PointF),
         default(RectangleF)
-    };
+    ];
 
-    public static TheoryData<object> DrawingPrimitives_TestData => new()
-    {
+    public static TheoryData<object> DrawingPrimitives_TestData =>
+    [
         new Point(-1, 2),
         new Point(int.MaxValue, int.MinValue),
         Point.Empty,
@@ -215,7 +218,7 @@ public class BinaryFormatWriterTests
         Color.FromArgb(4, Color.Yellow),
         Color.FromName("Blue"),
         SystemColors.ButtonFace
-    };
+    ];
 
     public static TheoryData<Array> StringArray_Parse_Data =>
     [
@@ -232,7 +235,8 @@ public class BinaryFormatWriterTests
         new DateTime[] { DateTime.MaxValue }
     ];
 
-    public static IEnumerable<object[]> Array_TestData => ((IEnumerable<object[]>)StringArray_Parse_Data).Concat(PrimitiveArray_Parse_Data);
+    public static IEnumerable<object[]> Array_TestData =>
+        ((IEnumerable<object[]>)StringArray_Parse_Data).Concat(PrimitiveArray_Parse_Data);
 
     public static TheoryData<Array> Array_UnsupportedTestData =>
     [
