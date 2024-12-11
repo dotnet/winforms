@@ -207,15 +207,6 @@ public unsafe partial class DataObject
                 return resolved;
             }
 
-            public static Type? GetKnownType(string assemblyName, string fullTypeName, TypeName? typeName)
-            {
-                InitializeCommonTypes();
-
-                typeName ??= TypeName.Parse($"{fullTypeName}, {assemblyName}");
-
-                return s_knownTypes.TryGetValue(typeName, out Type? type) ? type : null;
-            }
-
             private Type? GetCachedType(string assemblyName, string fullTypeName, TypeName? typeName)
             {
                 InitializeCommonTypes();

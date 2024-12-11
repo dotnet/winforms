@@ -156,6 +156,9 @@ internal static class TypeExtensions
         }
     }
 
+    /// <summary>
+    ///  Match <see cref="TypeName"/>s using all information that had been set by the caller.
+    /// </summary>
     public static bool Matches(this TypeName x, TypeName y)
     {
         if (x.IsArray != y.IsArray
@@ -231,6 +234,10 @@ internal static class TypeExtensions
         }
     }
 
+    /// <summary>
+    ///  Convert <paramref name="type"/> to <see cref="TypeName"/>. This method removes nullability wrapper
+    ///  from the top level type only because <see cref="TypeName"/> in the serialization root record is not nullable.
+    /// </summary>
     public static TypeName ToTypeName(this Type type)
     {
         // Unwrap type that is matched against the root record type.

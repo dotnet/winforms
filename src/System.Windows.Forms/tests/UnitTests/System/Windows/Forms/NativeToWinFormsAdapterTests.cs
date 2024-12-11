@@ -164,9 +164,10 @@ public unsafe class NativeToWinFormsAdapterTests
     {
         (DataObject dataObject, TestData _) = SetDataObject(format);
 
-        // SetData writes NotSupportedException to HGLOBAL to indicate that formatters are disabled.
-        dataObject.TryGetData(format, out object? result).Should().BeTrue();
-        result.Should().BeOfType<NotSupportedException>().Which.Message.Should().Be(FormatterDisabledMessage);
+        // SetData writes NotSupportedException to HGLOBAL to indicate that formatters are disabled,
+        // but the restricted format can't read it.
+        dataObject.TryGetData(format, out object? result).Should().BeFalse();
+        result.Should().BeNull();
     }
 
     [WinFormsTheory]
@@ -178,8 +179,6 @@ public unsafe class NativeToWinFormsAdapterTests
         using BinaryFormatterScope scope = new(enable: true);
         using BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: true);
 
-        // This will throw SerializationException from SetData and put a stream that is not prefixed
-        // by a serialization GUID into the HGLOBAL.
         dataObject.TryGetData(format, out object? result).Should().BeFalse();
         result.Should().BeNull();
     }
@@ -206,7 +205,7 @@ public unsafe class NativeToWinFormsAdapterTests
         native.SetData(format, value);
         DataObject dataObject = new(ComHelpers.GetComPointer<Com.IDataObject>(native));
 
-        // Theoretically we don't require a resolver here, but this is an exception.  In the more common cases resolver
+        // Theoretically we don't require a resolver here, but this is an exception. In the more common cases resolver
         // is required to instantiate non-concrete types.
         Action tryGetData = () => dataObject.TryGetData(format, out IList<int>? _);
         tryGetData.Should().Throw<NotSupportedException>().WithMessage(expectedWildcardPattern: RequiresResolverMessage);
@@ -285,13 +284,14 @@ public unsafe class NativeToWinFormsAdapterTests
 
     [WinFormsTheory]
     [MemberData(nameof(UndefinedRestrictedFormat))]
-    public void TryGetData_AsConcreteType_Custom_FormatterDisabledException(string format)
+    public void TryGetData_AsConcreteType_Custom_FormattersDisabled_ReturnFalse(string format)
     {
         (DataObject dataObject, TestData _) = SetDataObject(format);
 
-        // Formatters are not supported, HGLOBAL contains NotSupportedException.
-        Action tryGetData = () => dataObject.TryGetData(format, out TestData? testData);
-        tryGetData.Should().Throw<NotSupportedException>().WithMessage(expectedWildcardPattern: FormatterDisabledMessage);
+        // Formatters are not supported, HGLOBAL contains NotSupportedException
+        // but these formats are not compatible with this type on the clipboard.
+        dataObject.TryGetData(format, out TestData? testData).Should().BeFalse();
+        testData.Should().BeNull();
     }
 
     [WinFormsTheory]
@@ -352,12 +352,9 @@ public unsafe class NativeToWinFormsAdapterTests
     {
         (DataObject dataObject, TestData _) = SetDataObject(format);
 
-        // Formatter is not enabled, HGLOBAL contains NotSupportedException.
-        Action tryGetData = () => dataObject.TryGetData(format, TestData.Resolver, autoConvert: true, out TestData? testData);
-        tryGetData.Should().Throw<NotSupportedException>().WithMessage(expectedWildcardPattern: FormatterDisabledMessage);
-
-        dataObject.TryGetData(format, out NotSupportedException? ex).Should().BeTrue();
-        ex.Should().BeOfType<NotSupportedException>().Which.Message.Should().Be(FormatterDisabledMessage);
+        // Formatter is not enabled, HGLOBAL contains NotSupportedException, we can't read it, assume wrong type on the clipboard.
+        dataObject.TryGetData(format, TestData.Resolver, autoConvert: true, out TestData? testData).Should().BeFalse();
+        testData.Should().BeNull();
     }
 
     [WinFormsTheory]

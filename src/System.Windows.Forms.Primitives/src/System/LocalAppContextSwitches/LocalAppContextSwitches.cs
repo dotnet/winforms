@@ -230,7 +230,7 @@ internal static partial class LocalAppContextSwitches
     }
 
     /// <summary>
-    ///  If <see langword="true"/>, then Clipboard and DataObject Get and Set methods will attempts to deserialize
+    ///  If <see langword="true"/>, then Clipboard and DataObject Get and Set methods will attempts to serialize or deserialize
     ///  binary formatted content using either <see cref="BinaryFormatter"/> or System.Windows.Forms.BinaryFormat.Deserializer.
     ///  To use <see cref="BinaryFormatter"/>, application should also opt in into the
     ///  "System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization" option and reference the out-of-band
