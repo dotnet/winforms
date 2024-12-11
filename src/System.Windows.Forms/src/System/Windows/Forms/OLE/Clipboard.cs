@@ -450,8 +450,7 @@ public static class Clipboard
     ///  Retrieves a <see cref="Bitmap"/> from the <see cref="Clipboard"/>.
     /// </summary>
     /// <devdoc>
-    ///  <see cref="Bitmap"/>s are re-hydrated from a <see cref="SerializationRecord"/> by reading a byte array
-    ///  but if that fails, <see cref="BinaryFormatter"/> is restricted by the <see cref="DataObject.BitmapBinder"/>.
+    ///  <see cref="Bitmap"/>s are re-hydrated from a <see cref="SerializationRecord"/> by reading a byte array.
     /// </devdoc>
     public static Image? GetImage() => GetTypedDataIfAvailable<Image>(DataFormats.Bitmap);
 

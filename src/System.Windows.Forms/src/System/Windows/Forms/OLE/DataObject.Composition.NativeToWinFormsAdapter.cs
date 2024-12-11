@@ -253,7 +253,7 @@ public unsafe partial class DataObject
                 Func<TypeName, Type>? resolver,
                 bool legacyMode,
                 out bool doNotContinue,
-                [NotNullWhen(true)]out T? data)
+                [NotNullWhen(true)] out T? data)
             {
                 data = default;
                 doNotContinue = false;
@@ -316,6 +316,7 @@ public unsafe partial class DataObject
                 // get the data out.
                 Debug.WriteLineIf(hr == HRESULT.CLIPBRD_E_BAD_DATA, "CLIPBRD_E_BAD_DATA returned when trying to get clipboard data.");
                 Debug.WriteLineIf(hr == HRESULT.DV_E_TYMED, "DV_E_TYMED returned when trying to get clipboard data.");
+                // This happens in copy == false case when the managed type does not have the [Serializable] attribute.
                 Debug.WriteLineIf(hr == HRESULT.E_UNEXPECTED, "E_UNEXPECTED returned when trying to get clipboard data.");
                 Debug.WriteLineIf(hr == HRESULT.COR_E_SERIALIZATION,
                     "COR_E_SERIALIZATION returned when trying to get clipboard data, for example, BinaryFormatter threw SerializationException.");
@@ -458,7 +459,7 @@ public unsafe partial class DataObject
 
             private static void ThrowIfFormatAndTypeRequireResolver<T>(string format)
             {
-                // Restricted format is either read directly from the HGLOBAL or is deserialized with the BitmapBinder restriction.
+                // Restricted format is either read directly from the HGLOBAL or serialization record is read manually.
                 if (!IsRestrictedFormat(format)
                     // This check is a convenience for simple usages if TryGetData APIs that don't take the resolver.
                     && IsUnboundedType())

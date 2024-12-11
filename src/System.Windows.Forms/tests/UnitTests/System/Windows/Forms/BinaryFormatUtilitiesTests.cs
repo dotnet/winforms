@@ -44,8 +44,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
 
     private object? RoundTripObject_RestrictedFormat(object value)
     {
-        // This is equivalent to SetData/GetData methods using registered OLE formats and thus the BitmapBinder,
-        // and works with the BinaryFormat AppCompat switches.
+        // This is equivalent to SetData/GetData methods using registered OLE formats, resolves only the known types
         WriteObjectToStream(value, restrictSerialization: true);
         return ReadObjectFromStream(restrictDeserialization: true);
     }
@@ -60,8 +59,8 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
 
     private object? RoundTripOfType_RestrictedFormat<T>(object value)
     {
-        // This is equivalent to SetData/TryGetData<T> methods using OLE formats. Deserialization is restricted by
-        // BitmapBinder and the BinaryFormat AppContext switches.
+        // This is equivalent to SetData/TryGetData<T> methods using OLE formats. Deserialization is restricted
+        // to known types.
         WriteObjectToStream(value, restrictSerialization: true);
         return ReadObjectFromStream<T>(restrictDeserialization: true, NotSupportedResolver);
     }
@@ -465,17 +464,30 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
     public void RoundTripOfType_RestrictedFormat_intNullable() =>
         RoundTripOfType_RestrictedFormat<int?>(101).Should().Be(101);
 
-    [Theory]
-    [BoolData]
-    public void RoundTripOfType_intNullableArray_NotSupportedResolver(bool restrictDeserialization)
+    [Fact]
+    public void RoundTripOfType_RestrictedFormat_intNullableArray_NotSupportedResolver()
     {
         int?[] value = [101, null, 303];
 
         using BinaryFormatterFullCompatScope scope = new();
         WriteObjectToStream(value);
-        Action read = () => ReadObjectFromStream<int?[]>(restrictDeserialization, NotSupportedResolver);
+        Action read = () => ReadObjectFromStream<int?[]>(restrictDeserialization: true, NotSupportedResolver);
 
-        // nullable strunct requires a custom resolver.
+        // nullable struct requires a custom resolver.
+        // RestrictedTypeDeserializationException
+        read.Should().Throw<Exception>();
+    }
+
+    [Fact]
+    public void RoundTripOfType_intNullableArray_NotSupportedResolver()
+    {
+        int?[] value = [101, null, 303];
+
+        using BinaryFormatterFullCompatScope scope = new();
+        WriteObjectToStream(value);
+        Action read = () => ReadObjectFromStream<int?[]>(restrictDeserialization: false, NotSupportedResolver);
+
+        // nullable struct requires a custom resolver.
         read.Should().Throw<SerializationException>();
     }
 
@@ -737,10 +749,10 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
         using BinaryFormatterFullCompatScope scope = new();
         WriteObjectToStream(value);
 
-        // SerializationException will be swallowed up the call stack, when reading HGLOBAL.
+        // RestrictedTypeDeserializationException will be swallowed up the call stack, when reading HGLOBAL.
         // Fails to resolve MyClass2 or both MyClass1 and MyClass2 in the case of restricted formats.
         Action read = () => ReadObjectFromStream<MyClass1>(restrictDeserialization, resolver: null);
-        read.Should().Throw<SerializationException>();
+        read.Should().Throw<Exception>();
     }
 
     [Theory]
@@ -754,7 +766,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
         WriteObjectToStream(value);
 
         Action read = () => ReadObjectFromStream<MyClass1>(restrictDeserialization, resolver: null);
-        read.Should().Throw<NotSupportedException>();
+        read.Should().Throw<Exception>();
     }
 
     [Fact]
@@ -778,7 +790,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
         WriteObjectToStream(value);
 
         Action read = () => ReadObjectFromStream<MyClass1>(restrictDeserialization: true, MyClass1.MyExactMatchResolver);
-        read.Should().Throw<SerializationException>();
+        read.Should().Throw<Exception>();
     }
 
     [Fact]
@@ -791,7 +803,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
         WriteObjectToStream(value);
 
         Action read = () => ReadObjectFromStream<MyClass1>(restrictDeserialization: true, MyClass1.MyExactMatchResolver);
-        read.Should().Throw<NotSupportedException>();
+        read.Should().Throw<Exception>();
     }
 
     [Fact]

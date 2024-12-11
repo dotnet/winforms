@@ -17,7 +17,7 @@ public unsafe class NativeToWinFormsAdapterTests
         "something custom"
     ];
 
-    // These formats might contain known types or types deserialized with BitmapBinder.
+    // These formats contain only known types.
     public static TheoryData<string> UndefinedRestrictedFormat() =>
     [
         DataFormats.CommaSeparatedValue,

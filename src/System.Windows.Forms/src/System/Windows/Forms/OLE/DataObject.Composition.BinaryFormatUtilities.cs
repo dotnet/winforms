@@ -37,6 +37,11 @@ public unsafe partial class DataObject
                     Debug.Fail($"Unexpected exception writing binary formatted data. {ex.Message}");
                 }
 
+                if (restrictSerialization)
+                {
+                    throw new SerializationException(string.Format(SR.UnexpectedTypeForClipboardFormat, data.GetType().FullName));
+                }
+
                 // This check is to help in trimming scenarios with a trim warning on a call to
                 // BinaryFormatter.Serialize(), which has a RequiresUnreferencedCode annotation.
                 // If the flag is false, the trimmer will not generate a warning, since BinaryFormatter.Serialize(),
@@ -56,10 +61,7 @@ public unsafe partial class DataObject
 
                 stream.Position = position;
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-                new BinaryFormatter()
-                {
-                    Binder = restrictSerialization ? new BitmapBinder() : null
-                }.Serialize(stream, data);
+                new BinaryFormatter().Serialize(stream, data);
 #pragma warning restore SYSLIB0011
             }
 
@@ -72,9 +74,7 @@ public unsafe partial class DataObject
                 long startPosition = stream.Position;
                 SerializationRecord? record;
 
-                SerializationBinder binder = restrictDeserialization
-                    ? new BitmapBinder()
-                    : new DataObject.Composition.Binder(typeof(T), resolver, legacyMode);
+                SerializationBinder binder = new Binder(typeof(T), resolver, legacyMode);
 
                 IReadOnlyDictionary<SerializationRecordId, SerializationRecord> recordMap;
                 try
@@ -87,6 +87,11 @@ public unsafe partial class DataObject
                     // The types APIs can't compare the specified type when the root record is not available.
                     if (legacyMode && LocalAppContextSwitches.ClipboardDragDropEnableUnsafeBinaryFormatterSerialization)
                     {
+                        if (restrictDeserialization)
+                        {
+                            throw new RestrictedTypeDeserializationException(SR.UnexpectedClipboardType);
+                        }
+
                         stream.Position = startPosition;
                         return ReadObjectWithBinaryFormatter<T>(stream, binder);
                     }
@@ -117,7 +122,7 @@ public unsafe partial class DataObject
 
                     if (!TypeNameIsAssignableToType(record.TypeName, typeof(T), (ITypeResolver)binder))
                     {
-                        // If clipboard containes an exception from SetData, we will get its message and throw.
+                        // If clipboard contains an exception from SetData, we will get its message and throw.
                         if (record.TypeName.FullName == typeof(NotSupportedException).FullName
                             && record.TryGetNotSupportedException(out object? @object)
                             && @object is NotSupportedException exception)
@@ -132,6 +137,11 @@ public unsafe partial class DataObject
                 if (record.TryGetCommonObject(out object? value))
                 {
                     return value;
+                }
+
+                if (restrictDeserialization)
+                {
+                    throw new RestrictedTypeDeserializationException(SR.UnexpectedClipboardType);
                 }
 
                 if (!LocalAppContextSwitches.ClipboardDragDropEnableUnsafeBinaryFormatterSerialization)
