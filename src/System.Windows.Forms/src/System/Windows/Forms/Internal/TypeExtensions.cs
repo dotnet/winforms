@@ -67,7 +67,7 @@ internal static class TypeExtensions
     private static bool MatchLessAssemblyVersion(this Type type, TypeName typeName)
     {
         // We don't need to check for pointers and references to arrays,
-        // as it's impossible to serialize them with BF.
+        // as it's impossible to serialize them with BinaryFormatter.
         if (type is null || type.IsPointer || type.IsByRef)
         {
             return false;
@@ -228,6 +228,42 @@ internal static class TypeExtensions
                 && name1.CultureName == name2.CultureName
                 && name1.Version == name2.Version
                 && name1.PublicKeyOrToken.AsSpan().SequenceEqual(name2.PublicKeyOrToken.AsSpan());
+        }
+    }
+
+    public static TypeName ToTypeName(this Type type)
+    {
+        // Unwrap type that is matched against the root record type.
+        type = Formatter.NullableUnwrap(type);
+        if (!type.TryGetForwardedFromName(out string? assemblyName))
+        {
+            assemblyName = type.Assembly.FullName;
+        }
+
+        return TypeName.Parse($"{GetTypeFullName(type)}, {assemblyName}");
+
+        static string GetTypeFullName(Type type)
+        {
+            if (type.IsConstructedGenericType)
+            {
+                Type[] genericArguments = type.GetGenericArguments();
+                string[] genericTypeNames = new string[genericArguments.Length];
+                for (int i = 0; i < type.GetGenericArguments().Length; i++)
+                {
+                    Type generic = genericArguments[i];
+                    // Keep Nullable wrappers for types inside generic types.
+                    if (!generic.TryGetForwardedFromName(out string? name))
+                    {
+                        name = generic.Assembly.FullName;
+                    }
+
+                    genericTypeNames[i] = $"[{GetTypeFullName(generic)}, {name}]";
+                }
+
+                return $"{type.Namespace}.{type.Name}[{string.Join(",", genericTypeNames)}]";
+            }
+
+            return type.FullName.OrThrowIfNull();
         }
     }
 }

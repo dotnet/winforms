@@ -544,6 +544,8 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
             [
                 (typeof(TestData).FullName!, typeof(TestData)),
                 (typeof(TestDataBase.InnerData).FullName!, typeof(TestDataBase.InnerData)),
+                ("System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]", typeof(decimal?)),
+                ("System.Collections.Generic.List`1[[System.Nullable`1[[System.Decimal, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]", typeof(List<decimal?>))
             ];
 
             string fullName = typeName.FullName;
@@ -848,8 +850,23 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
         // BinaryFormatter resolves primitive types or arrays of primitive types with no resolver.
         public int? Count;
         public DateTime? Today = DateTime.Now;
+
+        public byte[] ByteArray = [8, 9];
+        public sbyte[] SbyteArray = [8, 9];
+        public short[] ShortArray = [8, 9];
+        public ushort[] UshortArray = [8, 9];
+        public int[] IntArray = [8, 9];
+        public uint[] UintArray = [8, 9];
+        public long[] LongArray = [8, 9];
+        public ulong[] UlongArray = [8, 9];
         public float[] FloatArray = [1.0f, 2.0f, 3.0f];
+        public double[] DoubleArray = [1.0, 2.0, 3.0];
+        public char[] CharArray = ['a', 'b', 'c'];
+        public bool[] BoolArray = [true, false];
+        public string[] StringArray = ["a", "b", "c"];
+        public decimal[] DecimalArray = [1.0m, 2.0m, 3.0m];
         public TimeSpan[] TimeSpanArray = [TimeSpan.FromHours(1)];
+        public DateTime[] DateTimeArray = [DateTime.Now];
 
         // Common WinForms types are resolved using the intrinsic binder.
         public NotSupportedException Exception = new();
@@ -873,6 +890,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
         public List<float> Floats = [1.0f, 2.0f, 3.0f];
         public List<double> Doubles = [1.0, 2.0, 3.0];
         public List<decimal> Decimals = [1.0m, 2.0m, 3.0m];
+        public List<decimal?> NullableDecimals = [null, 2.0m, 3.0m];
         public List<DateTime> DateTimes = [DateTime.Now];
         // System.Runtime.Serialization.SerializationException : Invalid BinaryFormatter stream.
         // System.NotSupportedException : Can't resolve System.Collections.Generic.List`1[[System.TimeSpan, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]
@@ -886,8 +904,24 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
             Inner.Should().BeEquivalentTo(other.Inner);
             Count.Should().Be(other.Count);
             Today.Should().Be(other.Today);
+
+            ByteArray.Should().BeEquivalentTo(other.ByteArray);
+            SbyteArray.Should().BeEquivalentTo(other.SbyteArray);
+            ShortArray.Should().BeEquivalentTo(other.ShortArray);
+            UshortArray.Should().BeEquivalentTo(other.UshortArray);
+            IntArray.Should().BeEquivalentTo(other.IntArray);
+            UintArray.Should().BeEquivalentTo(other.UintArray);
+            LongArray.Should().BeEquivalentTo(other.LongArray);
+            UlongArray.Should().BeEquivalentTo(other.UlongArray);
             FloatArray.Should().BeEquivalentTo(other.FloatArray);
+            DoubleArray.Should().BeEquivalentTo(other.DoubleArray);
+            CharArray.Should().BeEquivalentTo(other.CharArray);
+            BoolArray.Should().BeEquivalentTo(other.BoolArray);
+            StringArray.Should().BeEquivalentTo(other.StringArray);
+            DecimalArray.Should().BeEquivalentTo(other.DecimalArray);
             TimeSpanArray.Should().BeEquivalentTo(other.TimeSpanArray);
+            DateTimeArray.Should().BeEquivalentTo(other.DateTimeArray);
+
             Exception.Should().BeEquivalentTo(other.Exception);
             Point.Should().Be(other.Point);
             Rectangle.Should().Be(other.Rectangle);
@@ -910,6 +944,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
             Floats.Should().BeEquivalentTo(other.Floats);
             Doubles.Should().BeEquivalentTo(other.Doubles);
             Decimals.Should().BeEquivalentTo(other.Decimals);
+            NullableDecimals.Should().BeEquivalentTo(other.NullableDecimals);
             DateTimes.Should().BeEquivalentTo(other.DateTimes);
             // TimeSpans.Should().BeEquivalentTo(other.TimeSpans);
             Strings.Should().BeEquivalentTo(other.Strings);
