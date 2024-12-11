@@ -1,33 +1,25 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Drawing;
-
 namespace System.Windows.Forms;
 
-internal partial class FocusableLabel : LinkLabel
+internal class FocusableLabel : Label
 {
     public FocusableLabel()
     {
-        LinkBehavior = LinkBehavior.NeverUnderline;
-        ActiveLinkColor = SystemColors.ControlText;
-        LinkColor = SystemColors.ControlText;
-        VisitedLinkColor = SystemColors.ControlText;
+        SetStyle(ControlStyles.Selectable, true);
+        TabStop = true;
     }
 
-    protected override void WndProc(ref Message msg)
+    protected override CreateParams CreateParams
     {
-        switch (msg.MsgInternal)
+        get
         {
-            case PInvokeCore.WM_SETCURSOR:
-                break;
-            default:
-                base.WndProc(ref msg);
-                break;
+            CreateParams createParams = base.CreateParams;
+            createParams.ClassName = null;
+            return createParams;
         }
     }
 
-    internal override AccessibleRole LinkAccessibleRole => AccessibleRole.StaticText;
-
-    protected override AccessibleObject CreateAccessibilityInstance() => new FocusableLabelAccessibleObject(this);
+    internal override bool SupportsUiaProviders => false;
 }

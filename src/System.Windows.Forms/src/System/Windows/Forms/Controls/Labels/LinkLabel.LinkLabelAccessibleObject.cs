@@ -9,7 +9,7 @@ namespace System.Windows.Forms;
 
 public partial class LinkLabel
 {
-    internal class LinkLabelAccessibleObject : LabelAccessibleObject
+    internal sealed class LinkLabelAccessibleObject : LabelAccessibleObject
     {
         private int[]? _runtimeId;
 

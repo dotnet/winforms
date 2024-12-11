@@ -142,8 +142,6 @@ public partial class LinkLabel : Label, IButtonControl
         }
     }
 
-    internal virtual AccessibleRole LinkAccessibleRole => AccessibleRole.Link;
-
     private Rectangle ClientRectWithPadding => LayoutUtils.DeflateRect(ClientRectangle, Padding);
 
     [Browsable(false)]
