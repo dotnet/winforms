@@ -2506,8 +2506,9 @@ public partial class DataObjectTests
     [WinFormsFact]
     public unsafe void DataObject_Native_GetData_SerializationFailure()
     {
-        using Font value = new("Ariel", 10);
+        using Font value = new("Arial", 10);
         using BinaryFormatterScope scope = new(enable: true);
+        // We are blocking managed font from being serialized as a Locale format.
         DataObject native = new(DataFormats.Locale, value);
 
         // Simulate receiving DataObject from native.

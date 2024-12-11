@@ -38,7 +38,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
     private object? RoundTripObject_RestrictedFormat(object value)
     {
         // This is equivalent to SetData/GetData methods using registered OLE formats and thus the BitmapBinder,
-        // and works with the BF AppCompat switches.
+        // and works with the BinaryFormat AppCompat switches.
         WriteObjectToStream(value, restrictSerialization: true);
         return ReadObjectFromStream(restrictDeserialization: true);
     }
@@ -314,7 +314,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
     public void RoundTrip_RestrictedFormat_Unsupported(IList value)
     {
         Action writer = () => WriteObjectToStream(value, restrictSerialization: true);
-        writer.Should().Throw<NotSupportedException>();
+        writer.Should().Throw<SerializationException>();
 
         using BinaryFormatterScope scope = new(enable: true);
         writer.Should().Throw<SerializationException>();
