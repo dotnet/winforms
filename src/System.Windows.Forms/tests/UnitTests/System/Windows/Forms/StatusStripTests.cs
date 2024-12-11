@@ -172,6 +172,14 @@ public partial class StatusStripTests
         Assert.False(control.IsHandleCreated);
     }
 
+    [WinFormsFact]
+    public void StatusStrip_Use_SystemRenderMode_As_Default()
+    {
+        using UseSystemRenderingModeAsDefault scope = new(enable: true);
+        using SubStatusStrip control = new();
+        Assert.Equal(ToolStripRenderMode.System, control.RenderMode);
+    }
+
     [WinFormsTheory]
     [BoolData]
     public void StatusStrip_CanOverflow_Set_GetReturnsExpected(bool value)
@@ -569,6 +577,11 @@ public partial class StatusStripTests
         property.ResetValue(control);
         Assert.Equal(ToolStripRenderMode.ManagerRenderMode, control.RenderMode);
         Assert.False(property.CanResetValue(control));
+
+        using UseSystemRenderingModeAsDefault scope = new(enable: true);
+        property.ResetValue(control);
+        Assert.Equal(ToolStripRenderMode.System, control.RenderMode);
+        Assert.False(property.CanResetValue(control));
     }
 
     [WinFormsFact]
@@ -596,6 +609,11 @@ public partial class StatusStripTests
 
         property.ResetValue(control);
         Assert.Equal(ToolStripRenderMode.ManagerRenderMode, control.RenderMode);
+        Assert.False(property.ShouldSerializeValue(control));
+
+        using UseSystemRenderingModeAsDefault scope = new(enable: true);
+        property.ResetValue(control);
+        Assert.Equal(ToolStripRenderMode.System, control.RenderMode);
         Assert.False(property.ShouldSerializeValue(control));
     }
 
