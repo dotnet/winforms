@@ -438,7 +438,9 @@ public partial class StatusStrip : ToolStrip
     internal override bool ShouldSerializeRenderMode()
     {
         // We should NEVER serialize custom.
-        return (RenderMode is not ToolStripRenderMode.ManagerRenderMode and not ToolStripRenderMode.System and not ToolStripRenderMode.Custom);
+        return LocalAppContextSwitches.UseSystemRenderingModeAsDefault
+            ? RenderMode is not ToolStripRenderMode.System and not ToolStripRenderMode.Custom
+            : base.ShouldSerializeRenderMode();
     }
 
     /// <summary>
