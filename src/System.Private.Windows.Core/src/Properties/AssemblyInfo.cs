@@ -36,6 +36,7 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo($"PresentationFramework, PublicKey={PublicKeys.MicrosoftShared}")]
 [assembly: InternalsVisibleTo($"PresentationUI, PublicKey={PublicKeys.MicrosoftShared}")]
 [assembly: InternalsVisibleTo($"ReachFramework, PublicKey={PublicKeys.MicrosoftShared}")]
+[assembly: InternalsVisibleTo($"System.Printing, PublicKey={PublicKeys.MicrosoftShared}")]
 [assembly: InternalsVisibleTo($"System.Windows.Controls.Ribbon, PublicKey={PublicKeys.Ecma}")]
 [assembly: InternalsVisibleTo($"System.Windows.Input.Manipulations, PublicKey={PublicKeys.Ecma}")]
 [assembly: InternalsVisibleTo($"System.Windows.Presentation, PublicKey={PublicKeys.Ecma}")]
