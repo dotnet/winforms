@@ -25,6 +25,7 @@ internal static partial class LocalAppContextSwitches
     internal const string NoClientNotificationsSwitchName = "Switch.System.Windows.Forms.AccessibleObject.NoClientNotifications";
     internal const string EnableMsoComponentManagerSwitchName = "Switch.System.Windows.Forms.EnableMsoComponentManager";
     internal const string TreeNodeCollectionAddRangeRespectsSortOrderSwitchName = "System.Windows.Forms.TreeNodeCollectionAddRangeRespectsSortOrder";
+    internal const string UseSystemRenderingModeAsDefaultSwitchName = "System.Windows.Forms.StatusStrip.UseSystemRenderingModeAsDefault";
 
     private static int s_scaleTopLevelFormMinMaxSizeForDpi;
     private static int s_anchorLayoutV2;
@@ -36,6 +37,7 @@ internal static partial class LocalAppContextSwitches
     private static int s_noClientNotifications;
     private static int s_enableMsoComponentManager;
     private static int s_treeNodeCollectionAddRangeRespectsSortOrder;
+    private static int s_useSystemRenderingModeAsDefault;
 
     private static FrameworkName? s_targetFrameworkName;
 
@@ -217,5 +219,14 @@ internal static partial class LocalAppContextSwitches
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get => GetCachedSwitchValue(TreeNodeCollectionAddRangeRespectsSortOrderSwitchName, ref s_treeNodeCollectionAddRangeRespectsSortOrder);
+    }
+
+    /// <summary>
+    ///  Indicates whether to use ToolStripRenderMode.System as the default painting mode for StatusStrip.
+    /// </summary>
+    public static bool UseSystemRenderingModeAsDefault
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => GetCachedSwitchValue(UseSystemRenderingModeAsDefaultSwitchName, ref s_useSystemRenderingModeAsDefault);
     }
 }

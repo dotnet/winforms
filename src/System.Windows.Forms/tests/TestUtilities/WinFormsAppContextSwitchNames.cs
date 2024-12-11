@@ -49,5 +49,11 @@ public static class WinFormsAppContextSwitchNames
     ///  The switch that controls whether the TreeNodeCollection will insert nodes in the sorted order.
     /// </summary>
     public const string TreeNodeCollectionAddRangeRespectsSortOrder
-        = "System.Windows.Forms.ApplyParentFontToMenus";
+        = "System.Windows.Forms.TreeNodeCollectionAddRangeRespectsSortOrder";
+
+    /// <summary>
+    ///  The switch that controls whether the use the system rendering mode as the default painting mode for StatusStrip.
+    /// </summary>
+    public const string UseSystemRenderingModeAsDefault
+        = "System.Windows.Forms.StatusStrip.UseSystemRenderingModeAsDefault";
 }

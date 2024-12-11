@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Layout;
+using System.Windows.Forms.Primitives;
 
 namespace System.Windows.Forms;
 
@@ -30,9 +31,7 @@ public partial class StatusStrip : ToolStrip
         CanOverflow = false;
         LayoutStyle = ToolStripLayoutStyle.Table;
 
-        // Default changed for SystemColorMode from System to ManagerRenderMode.
-        // Also to be consistent to the MenuStrip.
-        RenderMode = ToolStripRenderMode.ManagerRenderMode;
+        RenderMode = LocalAppContextSwitches.UseSystemRenderingModeAsDefault ? ToolStripRenderMode.System : ToolStripRenderMode.ManagerRenderMode;
         GripStyle = ToolStripGripStyle.Hidden;
 
         SetStyle(ControlStyles.ResizeRedraw, true);
@@ -429,6 +428,17 @@ public partial class StatusStrip : ToolStrip
         }
 
         base.SetDisplayedItems();
+    }
+
+    internal override void ResetRenderMode()
+    {
+        RenderMode = LocalAppContextSwitches.UseSystemRenderingModeAsDefault ? ToolStripRenderMode.System : RenderMode;
+    }
+
+    internal override bool ShouldSerializeRenderMode()
+    {
+        // We should NEVER serialize custom.
+        return (RenderMode is not ToolStripRenderMode.ManagerRenderMode and not ToolStripRenderMode.System and not ToolStripRenderMode.Custom);
     }
 
     /// <summary>

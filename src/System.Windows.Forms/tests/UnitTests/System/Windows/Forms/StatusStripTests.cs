@@ -172,6 +172,14 @@ public partial class StatusStripTests
         Assert.False(control.IsHandleCreated);
     }
 
+    [WinFormsFact]
+    public void StatusStrip_Use_SystemRenderMode_As_Default()
+    {
+        using UseSystemRenderingModeAsDefault scope = new(enable: true);
+        using SubStatusStrip control = new();
+        Assert.Equal(ToolStripRenderMode.System, control.RenderMode);
+    }
+
     [WinFormsTheory]
     [BoolData]
     public void StatusStrip_CanOverflow_Set_GetReturnsExpected(bool value)
