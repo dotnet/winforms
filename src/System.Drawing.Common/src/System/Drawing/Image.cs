@@ -925,7 +925,7 @@ public abstract unsafe class Image : MarshalByRefObject, IImage, IDisposable, IC
                 }
 
                 image._animatedGifRawData = new byte[(int)dataStream.Length];
-                dataStream.Read(image._animatedGifRawData, 0, (int)dataStream.Length);
+                dataStream.ReadExactly(image._animatedGifRawData, 0, (int)dataStream.Length);
             }
             finally
             {

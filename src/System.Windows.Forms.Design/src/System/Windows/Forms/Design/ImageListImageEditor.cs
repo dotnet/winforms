@@ -99,7 +99,7 @@ public class ImageListImageEditor : ImageEditor
     {
         // Copy the original stream to a buffer, then wrap a memory stream around it to avoid locking the file.
         byte[] buffer = new byte[stream.Length];
-        stream.Read(buffer, 0, (int)stream.Length);
+        stream.ReadExactly(buffer, 0, (int)stream.Length);
 
         // The created image will take over ownership of the stream.
         MemoryStream ms = new(buffer);

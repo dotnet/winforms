@@ -131,7 +131,7 @@ internal static partial class DeviceContextExtensions
         Rectangle bounds) =>
         DrawAndFillEllipse(hdc.HDC, pen, brush, bounds.Left, bounds.Top, bounds.Right, bounds.Bottom);
 
-    internal static void DrawAndFillEllipse(
+    internal static unsafe void DrawAndFillEllipse(
         this HDC hdc,
         HPEN pen,
         HBRUSH brush,

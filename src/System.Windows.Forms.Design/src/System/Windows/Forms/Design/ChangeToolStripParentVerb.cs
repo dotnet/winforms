@@ -118,7 +118,7 @@ internal class ChangeToolStripParentVerb
         }
     }
 
-    private static Control GetParent(ToolStripContainer container, Control c)
+    private static Control GetParent(ToolStripContainer container, ToolStrip c)
     {
         Control newParent = container.ContentPanel;
         DockStyle dock = c.Dock;

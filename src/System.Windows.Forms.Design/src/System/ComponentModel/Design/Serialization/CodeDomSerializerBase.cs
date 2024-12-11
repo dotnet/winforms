@@ -1430,7 +1430,7 @@ public abstract partial class CodeDomSerializerBase
         }
     }
 
-    private static object ExecuteBooleanOperator(IConvertible left, IConvertible right, CodeBinaryOperatorType op)
+    private static bool ExecuteBooleanOperator(IConvertible left, IConvertible right, CodeBinaryOperatorType op)
     {
         bool result = false;
         switch (op)
