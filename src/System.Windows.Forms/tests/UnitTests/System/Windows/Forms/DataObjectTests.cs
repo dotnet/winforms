@@ -3,7 +3,9 @@
 
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
+using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.Serialization;
@@ -18,6 +20,7 @@ namespace System.Windows.Forms.Tests;
 // NB: doesn't require thread affinity
 public partial class DataObjectTests
 {
+#pragma warning disable WFDEV005  // Type or member is obsolete
     private static readonly string[] s_restrictedClipboardFormats =
     [
         DataFormats.CommaSeparatedValue,
@@ -362,6 +365,143 @@ public partial class DataObjectTests
         mockDataObject.Object.GetData(format).Should().BeSameAs(expectedResult);
         mockDataObject.Verify(o => o.GetData(formatName), Times.Exactly(expectedCallCount));
     }
+
+    #nullable enable
+    internal class DataObjectOverridesTryGetDataCore : DataObject
+    {
+        private readonly string _format;
+        private readonly Func<TypeName, Type>? _resolver;
+        private readonly bool _autoConvert;
+
+        public DataObjectOverridesTryGetDataCore(string format, Func<TypeName, Type>? resolver, bool autoConvert) : base()
+        {
+            _format = format;
+            _resolver = resolver;
+            _autoConvert = autoConvert;
+        }
+
+        public int Count { get; private set; }
+        public static Type Resolver(TypeName _) => typeof(string);
+
+        protected override bool TryGetDataCore<T>(
+            string format,
+            Func<TypeName, Type>? resolver,
+            bool autoConvert,
+            [NotNullWhen(true), MaybeNullWhen(false)] out T data)
+        {
+            format.Should().Be(_format);
+            resolver.Should().BeEquivalentTo(_resolver);
+            autoConvert.Should().Be(_autoConvert);
+            typeof(T).Should().Be(typeof(string));
+
+            Count++;
+            data = default;
+            return false;
+        }
+    }
+
+    [Fact]
+    public void DataObject_TryGetData_InvokeString_CallsTryGetDataCore()
+    {
+        DataObjectOverridesTryGetDataCore dataObject = new(typeof(string).FullName!, resolver: null, autoConvert: false);
+        dataObject.Count.Should().Be(0);
+
+        dataObject.TryGetData(out string? data).Should().BeFalse();
+        data.Should().BeNull();
+        dataObject.Count.Should().Be(1);
+    }
+
+    public static TheoryData<string> RestrictedAndUnrestrictedFormat =>
+    [
+        DataFormats.CommaSeparatedValue,
+        "something custom"
+    ];
+
+    [Theory]
+    [MemberData(nameof(RestrictedAndUnrestrictedFormat))]
+    public void TryGetData_InvokeStringString_CallsTryGetDataCore(string format)
+    {
+        DataObjectOverridesTryGetDataCore dataObject = new(format, null, autoConvert: false);
+        dataObject.Count.Should().Be(0);
+
+        dataObject.TryGetData(format, out string? data).Should().BeFalse();
+        data.Should().BeNull();
+        dataObject.Count.Should().Be(1);
+    }
+
+    [Fact]
+    public void TryGetData_InvokeStringString_ValidationFails()
+    {
+        string format = DataFormats.Bitmap;
+        DataObjectOverridesTryGetDataCore dataObject = new(format, null, autoConvert: false);
+        dataObject.Count.Should().Be(0);
+
+        // Incompatible format and type.
+        Action tryGetData = () => dataObject.TryGetData(format, out string? data);
+        tryGetData.Should().Throw<NotSupportedException>();
+        dataObject.Count.Should().Be(0);
+    }
+
+    public static TheoryData<string, bool> FormatAndAutoConvert => new()
+    {
+        { DataFormats.CommaSeparatedValue, true },
+        { "something custom", true },
+        { DataFormats.CommaSeparatedValue, false },
+        { "something custom", false }
+    };
+
+    [Theory]
+    [MemberData(nameof(FormatAndAutoConvert))]
+    public void TryGetData_InvokeStringBoolString_CallsTryGetDataCore(string format, bool autoConvert)
+    {
+        DataObjectOverridesTryGetDataCore dataObject = new(format, resolver: null, autoConvert);
+        dataObject.Count.Should().Be(0);
+
+        dataObject.TryGetData(format, autoConvert, out string? data).Should().BeFalse();
+        data.Should().BeNull();
+        dataObject.Count.Should().Be(1);
+    }
+
+    private static Type NotSupportedResolver(TypeName typeName) => throw new NotSupportedException();
+
+    [Theory]
+    [BoolData]
+    public void TryGetData_InvokeStringBoolString_ValidationFails(bool autoConvert)
+    {
+        string format = DataFormats.Bitmap;
+        DataObjectOverridesTryGetDataCore dataObject = new(format, NotSupportedResolver, autoConvert);
+        dataObject.Count.Should().Be(0);
+
+        Action tryGetData = () => dataObject.TryGetData(format, autoConvert, out string? data);
+        tryGetData.Should().Throw<NotSupportedException>();
+        dataObject.Count.Should().Be(0);
+    }
+
+    [Theory]
+    [MemberData(nameof(FormatAndAutoConvert))]
+    public void DataObject_TryGetData_InvokeStringFuncBoolString_CallsTryGetDataCore(string format, bool autoConvert)
+    {
+        DataObjectOverridesTryGetDataCore dataObject = new(format, DataObjectOverridesTryGetDataCore.Resolver, autoConvert);
+        dataObject.Count.Should().Be(0);
+
+        dataObject.TryGetData(format, DataObjectOverridesTryGetDataCore.Resolver, autoConvert, out string? data).Should().BeFalse();
+        data.Should().BeNull();
+        dataObject.Count.Should().Be(1);
+    }
+
+    [Theory]
+    [BoolData]
+    public void TryGetData_InvokeStringFuncBoolString_ValidationFails(bool autoConvert)
+    {
+        string format = DataFormats.Bitmap;
+        DataObjectOverridesTryGetDataCore dataObject = new(format, DataObjectOverridesTryGetDataCore.Resolver, autoConvert);
+        dataObject.Count.Should().Be(0);
+
+        Action tryGetData = () => dataObject.TryGetData(format, DataObjectOverridesTryGetDataCore.Resolver, autoConvert, out string? data);
+        tryGetData.Should().Throw<NotSupportedException>();
+        dataObject.Count.Should().Be(0);
+    }
+    #nullable disable
 
     [Theory]
     [MemberData(nameof(GetData_String_TheoryData))]
@@ -1011,6 +1151,58 @@ public partial class DataObjectTests
         ((Action)(() => dataObject.SetData(null))).Should().Throw<ArgumentNullException>().WithParameterName("data");
     }
 
+    public static TheoryData<string, string, bool, bool> SetData_StringObject_TheoryData()
+    {
+        TheoryData<string, string, bool, bool> theoryData = new();
+        foreach (string format in s_restrictedClipboardFormats)
+        {
+            if (string.IsNullOrWhiteSpace(format) || format == typeof(Bitmap).FullName || format.StartsWith("FileName", StringComparison.Ordinal))
+            {
+                continue;
+            }
+
+            theoryData.Add(format, null, format == DataFormats.FileDrop, format == DataFormats.Bitmap);
+            theoryData.Add(format, "input", format == DataFormats.FileDrop, format == DataFormats.Bitmap);
+        }
+
+        theoryData.Add(typeof(Bitmap).FullName, null, false, true);
+        theoryData.Add(typeof(Bitmap).FullName, "input", false, true);
+
+        theoryData.Add("FileName", null, true, false);
+        theoryData.Add("FileName", "input", true, false);
+
+        theoryData.Add("FileNameW", null, true, false);
+        theoryData.Add("FileNameW", "input", true, false);
+
+        return theoryData;
+    }
+
+    [Theory]
+    [MemberData(nameof(SetData_StringObject_TheoryData))]
+    private void DataObject_SetData_InvokeStringObject_GetReturnsExpected(string format, string input, bool expectedContainsFileDropList, bool expectedContainsImage)
+    {
+        DataObject dataObject = new();
+        dataObject.SetData(format, input);
+
+        dataObject.GetDataPresent(format).Should().BeTrue();
+        dataObject.GetDataPresent(format, autoConvert: false).Should().BeTrue();
+        dataObject.GetDataPresent(format, autoConvert: true).Should().BeTrue();
+
+        dataObject.GetData(format).Should().Be(input);
+        dataObject.GetData(format, autoConvert: false).Should().Be(input);
+        dataObject.GetData(format, autoConvert: true).Should().Be(input);
+
+        dataObject.ContainsAudio().Should().Be(format == DataFormats.WaveAudio);
+        dataObject.ContainsFileDropList().Should().Be(expectedContainsFileDropList);
+        dataObject.ContainsImage().Should().Be(expectedContainsImage);
+        dataObject.ContainsText().Should().Be(format == DataFormats.UnicodeText);
+        dataObject.ContainsText(TextDataFormat.Text).Should().Be(format == DataFormats.UnicodeText);
+        dataObject.ContainsText(TextDataFormat.UnicodeText).Should().Be(format == DataFormats.UnicodeText);
+        dataObject.ContainsText(TextDataFormat.Rtf).Should().Be(format == DataFormats.Rtf);
+        dataObject.ContainsText(TextDataFormat.Html).Should().Be(format == DataFormats.Html);
+        dataObject.ContainsText(TextDataFormat.CommaSeparatedValue).Should().Be(format == DataFormats.CommaSeparatedValue);
+    }
+
     [Theory]
     [InlineData(DataFormats.SerializableConstant, null)]
     [InlineData(DataFormats.SerializableConstant, "input")]
@@ -1028,6 +1220,17 @@ public partial class DataObjectTests
         dataObject.GetData(format).Should().Be(input);
         dataObject.GetData(format, autoConvert: false).Should().Be(input);
         dataObject.GetData(format, autoConvert: true).Should().Be(input);
+
+        _ = dataObject.TryGetData(format, out object _).Should().Be(input is not null);
+        _ = dataObject.TryGetData(format, autoConvert: false, out object _).Should().Be(input is not null);
+        _ = dataObject.TryGetData(format, autoConvert: true, out object _).Should().Be(input is not null);
+        _ = dataObject.TryGetData(format, NotSupportedResolver, autoConvert: true, out object _).Should().Be(input is not null);
+        _ = dataObject.TryGetData(format, NotSupportedResolver, autoConvert: false, out object _).Should().Be(input is not null);
+
+        dataObject.TryGetData(format, NotSupportedResolver, autoConvert: false, out string data).Should().Be(input is not null);
+        data.Should().Be(input);
+        dataObject.TryGetData(format, NotSupportedResolver, autoConvert: true, out data).Should().Be(input is not null);
+        data.Should().Be(input);
 
         dataObject.ContainsAudio().Should().BeFalse();
         dataObject.ContainsFileDropList().Should().BeFalse();
@@ -1089,6 +1292,66 @@ public partial class DataObjectTests
         mockDataObject.Verify(o => o.SetData(format, data), Times.Once());
     }
 
+    public static TheoryData<string, bool, string, bool, bool> SetData_StringBoolObject_TheoryData()
+    {
+        TheoryData<string, bool, string, bool, bool> theoryData = new();
+
+        foreach (string format in s_restrictedClipboardFormats)
+        {
+            if (string.IsNullOrWhiteSpace(format) || format == typeof(Bitmap).FullName || format.StartsWith("FileName", StringComparison.Ordinal))
+            {
+                continue;
+            }
+
+            foreach (bool autoConvert in new bool[] { true, false })
+            {
+                theoryData.Add(format, autoConvert, null, format == DataFormats.FileDrop, format == DataFormats.Bitmap);
+                theoryData.Add(format, autoConvert, "input", format == DataFormats.FileDrop, format == DataFormats.Bitmap);
+            }
+        }
+
+        theoryData.Add(typeof(Bitmap).FullName, false, null, false, false);
+        theoryData.Add(typeof(Bitmap).FullName, false, "input", false, false);
+        theoryData.Add(typeof(Bitmap).FullName, true, null, false, true);
+        theoryData.Add(typeof(Bitmap).FullName, true, "input", false, true);
+
+        theoryData.Add("FileName", false, null, false, false);
+        theoryData.Add("FileName", false, "input", false, false);
+        theoryData.Add("FileName", true, null, true, false);
+        theoryData.Add("FileName", true, "input", true, false);
+
+        theoryData.Add("FileNameW", false, null, false, false);
+        theoryData.Add("FileNameW", false, "input", false, false);
+        theoryData.Add("FileNameW", true, null, true, false);
+        theoryData.Add("FileNameW", true, "input", true, false);
+
+        return theoryData;
+    }
+
+    [Theory]
+    [MemberData(nameof(SetData_StringBoolObject_TheoryData))]
+    private void DataObject_SetData_InvokeStringBoolObject_GetReturnsExpected(string format, bool autoConvert, string input, bool expectedContainsFileDropList, bool expectedContainsImage)
+    {
+        DataObject dataObject = new();
+        dataObject.SetData(format, autoConvert, input);
+
+        dataObject.GetData(format, autoConvert: false).Should().Be(input);
+        dataObject.GetData(format, autoConvert: true).Should().Be(input);
+
+        dataObject.GetDataPresent(format, autoConvert: true).Should().BeTrue();
+        dataObject.GetDataPresent(format, autoConvert: false).Should().BeTrue();
+
+        dataObject.ContainsAudio().Should().Be(format == DataFormats.WaveAudio);
+        dataObject.ContainsFileDropList().Should().Be(expectedContainsFileDropList);
+        dataObject.ContainsImage().Should().Be(expectedContainsImage);
+        dataObject.ContainsText().Should().Be(format == DataFormats.UnicodeText);
+        dataObject.ContainsText(TextDataFormat.Text).Should().Be(format == DataFormats.UnicodeText);
+        dataObject.ContainsText(TextDataFormat.UnicodeText).Should().Be(format == DataFormats.UnicodeText);
+        dataObject.ContainsText(TextDataFormat.Rtf).Should().Be(format == DataFormats.Rtf);
+        dataObject.ContainsText(TextDataFormat.Html).Should().Be(format == DataFormats.Html);
+        dataObject.ContainsText(TextDataFormat.CommaSeparatedValue).Should().Be(format == DataFormats.CommaSeparatedValue);
+    }
+
     [Theory]
     [InlineData("something custom", false, "input")]
     [InlineData("something custom", false, null)]
@@ -1098,13 +1361,26 @@ public partial class DataObjectTests
     [InlineData(DataFormats.SerializableConstant, false, null)]
     [InlineData(DataFormats.SerializableConstant, true, "input")]
     [InlineData(DataFormats.SerializableConstant, true, null)]
-    private void DataObject_SetData_InvokeStringBoolObject_Unbounded_GetReturnsExpected(string format, bool autoConvert, string input)
+    private void DataObject_SetData_InvokeStringBoolObject_Unbounded(string format, bool autoConvert, string input)
     {
         DataObject dataObject = new();
         dataObject.SetData(format, autoConvert, input);
 
         dataObject.GetData(format, autoConvert: false).Should().Be(input);
         dataObject.GetData(format, autoConvert: true).Should().Be(input);
+
+        dataObject.TryGetData(format, out string data).Should().Be(input is not null);
+        data.Should().Be(input);
+
+        dataObject.TryGetData(format, autoConvert: false, out data).Should().Be(input is not null);
+        data.Should().Be(input);
+        dataObject.TryGetData(format, autoConvert: true, out data).Should().Be(input is not null);
+        data.Should().Be(input);
+
+        dataObject.TryGetData(format, NotSupportedResolver, autoConvert: false, out data).Should().Be(input is not null);
+        data.Should().Be(input);
+        dataObject.TryGetData(format, NotSupportedResolver, autoConvert: true, out data).Should().Be(input is not null);
+        data.Should().Be(input);
 
         dataObject.GetDataPresent(format, autoConvert: true).Should().BeTrue();
         dataObject.GetDataPresent(format, autoConvert: false).Should().BeTrue();
@@ -1574,7 +1850,7 @@ public partial class DataObjectTests
 
         public int QueryGetData(ref FORMATETC format)
         {
-            // do not check the requested storage medium, we always return a metafile handle, thats what Office does
+            // do not check the requested storage medium, we always return a metafile handle, that's what Office does
 
             if (format.cfFormat != (short)CLIPBOARD_FORMAT.CF_ENHMETAFILE || format.dwAspect != DVASPECT.DVASPECT_CONTENT || format.lindex != -1)
                 return (int)HRESULT.DV_E_FORMATETC;
