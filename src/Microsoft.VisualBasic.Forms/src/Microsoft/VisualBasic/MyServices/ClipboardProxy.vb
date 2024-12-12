@@ -6,6 +6,8 @@ Imports System.ComponentModel
 Imports System.Drawing
 Imports System.IO
 Imports System.Windows.Forms
+Imports System.Reflection.Metadata
+Imports System.Runtime.InteropServices
 
 Namespace Microsoft.VisualBasic.MyServices
 
@@ -96,8 +98,15 @@ Namespace Microsoft.VisualBasic.MyServices
         ''' </summary>
         ''' <param name="format">The type of data being sought.</param>
         ''' <returns>The data.</returns>
+        <Obsolete(
+            Obsoletions.ClipboardProxyGetDataMessage,
+            False,
+            DiagnosticId:=Obsoletions.ClipboardGetDataDiagnosticId,
+            UrlFormat:=Obsoletions.SharedUrlFormat)>
         Public Function GetData(format As String) As Object
+#Disable Warning WFDEV005 ' Type or member is obsolete
             Return Clipboard.GetData(format)
+#Enable Warning WFDEV005
         End Function
 
         ''' <summary>
@@ -188,6 +197,16 @@ Namespace Microsoft.VisualBasic.MyServices
             Clipboard.SetFileDropList(filePaths)
         End Sub
 
+        ''' <inheritdoc cref="Clipboard.TryGetData(Of T)(String, Func(Of TypeName, Type), ByRef T)" />
+        Public Function TryGetData(Of T)(format As String, resolver As Func(Of TypeName, Type), <Out> ByRef data As T) As Boolean
+            Return Clipboard.TryGetData(format, resolver, data)
+        End Function
+
+        ''' <inheritdoc cref="Clipboard.TryGetData(Of T)(String, ByRef T)" />
+        Public Function TryGetData(Of T)(format As String, <Out> ByRef data As T) As Boolean
+            Return Clipboard.TryGetData(format, data)
+        End Function
+
         ''' <summary>
         '''  Saves the passed in <see cref="Image"/> to the clipboard.
         ''' </summary>
@@ -197,7 +216,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Sub
 
         ''' <summary>
-        '''  Clears the Clipboard and then adds text data in the <see cref="TextDataFormat.UnicodeText"/> format.
+        '''  Saves the passed in <see cref="String" /> to the clipboard.
         ''' </summary>
         ''' <param name="text">The <see cref="String"/> to save.</param>
         Public Sub SetText(text As String)
