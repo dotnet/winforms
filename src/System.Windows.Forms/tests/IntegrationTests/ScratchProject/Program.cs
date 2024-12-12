@@ -12,6 +12,7 @@ internal static class Program
     {
         Application.EnableVisualStyles();
         Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
-        Application.Run(new Form1());
+        Form1 form = new();
+        Application.Run(form);
     }
 }
