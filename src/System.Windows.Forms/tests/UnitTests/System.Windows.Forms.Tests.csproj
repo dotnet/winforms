@@ -5,6 +5,7 @@
     <TargetFramework>$(TargetFramework)-windows7.0</TargetFramework>
     <DisableTransitiveFrameworkReferences>true</DisableTransitiveFrameworkReferences>
     <AssemblyName>System.Windows.Forms.Tests</AssemblyName>
+    <RootNamespace />
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
   </PropertyGroup>
