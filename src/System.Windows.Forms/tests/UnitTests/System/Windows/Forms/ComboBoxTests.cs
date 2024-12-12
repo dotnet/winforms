@@ -2754,15 +2754,19 @@ public class ComboBoxTests
     public void ComboBox_OnLostFocus_AutoCompleteModeNone_DoesNotClearMatchingText()
     {
         using ComboBox comboBox = new();
-        comboBox.TestAccessor().Dynamic._canFireLostFocus= true;
+        var comboBoxAccessor = comboBox.TestAccessor().Dynamic;
+        comboBoxAccessor._canFireLostFocus= true;
         comboBox.AutoCompleteMode = AutoCompleteMode.None;
         comboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
-        comboBox.TestAccessor().Dynamic.MatchingText = "Test";
+        comboBoxAccessor.MatchingText = "Test";
         comboBox.DropDownStyle = ComboBoxStyle.Simple;
-        comboBox.TestAccessor().Dynamic.OnLostFocus(EventArgs.Empty);
+        comboBoxAccessor.OnLostFocus(EventArgs.Empty);
 
-        string matchingText = comboBox.TestAccessor().Dynamic.MatchingText;
+        string matchingText = comboBoxAccessor.MatchingText;
         matchingText.Should().Be("Test");
+
+        // Verifies the fix for issue "https://github.com/dotnet/winforms/issues/12590"
+        // related to ComboBox dropdown button disappear when switching RightToLeft property.
         comboBox.MouseIsOver.Should().BeFalse();
     }
 
@@ -2770,15 +2774,19 @@ public class ComboBoxTests
     public void ComboBox_OnLostFocus_AutoCompleteModeNotNone_ClearsMatchingText()
     {
         using ComboBox comboBox = new();
-        comboBox.TestAccessor().Dynamic._canFireLostFocus = true;
+        var comboBoxAccessor = comboBox.TestAccessor().Dynamic;
+        comboBoxAccessor._canFireLostFocus = true;
         comboBox.AutoCompleteMode = AutoCompleteMode.Suggest;
         comboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
         comboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-        comboBox.TestAccessor().Dynamic.MatchingText = "Test";
-        comboBox.TestAccessor().Dynamic.OnLostFocus(EventArgs.Empty);
+        comboBoxAccessor.MatchingText = "Test";
+        comboBoxAccessor.OnLostFocus(EventArgs.Empty);
 
-        string matchingText = comboBox.TestAccessor().Dynamic.MatchingText;
+        string matchingText = comboBoxAccessor.MatchingText;
         matchingText.Should().BeEmpty();
+
+        // Verifies the fix for issue "https://github.com/dotnet/winforms/issues/12590"
+        // related to ComboBox dropdown button disappear when switching RightToLeft property.
         comboBox.MouseIsOver.Should().BeFalse();
     }
 

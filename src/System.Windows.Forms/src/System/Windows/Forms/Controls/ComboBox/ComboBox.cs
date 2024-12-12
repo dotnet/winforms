@@ -3770,7 +3770,10 @@ public partial class ComboBox : ListControl
                     }
 
                     using Graphics g = Graphics.FromHdcInternal((IntPtr)dc);
-                    if ((!Enabled || FlatStyle == FlatStyle.Popup) && MouseIsOver)
+
+                    // The pop up border needs to be drawn only when the control gets the focus or the mouse hovers over it.
+                    bool isPopupAndActive = FlatStyle == FlatStyle.Popup && (Focused || MouseIsOver);
+                    if (!Enabled || isPopupAndActive)
                     {
                         FlatComboBoxAdapter.DrawPopUpCombo(this, g);
                     }
