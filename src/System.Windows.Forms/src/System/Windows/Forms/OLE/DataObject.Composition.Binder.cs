@@ -191,8 +191,7 @@ public unsafe partial class DataObject
                         typeName.AssemblyQualifiedName));
                 }
 
-                // This helper method is called after we verified that _resolver is not null.
-                Type resolved = _resolver!(typeName)
+                Type resolved = _resolver(typeName)
                     ?? throw new NotSupportedException(string.Format(
                         SR.ClipboardOrDragDrop_TypedAPI_InvalidResolver,
                         typeName.AssemblyQualifiedName));
