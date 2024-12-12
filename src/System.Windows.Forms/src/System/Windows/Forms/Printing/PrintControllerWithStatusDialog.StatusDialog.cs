@@ -40,7 +40,6 @@ public partial class PrintControllerWithStatusDialog
                 Size = new Size(240, 64),
                 TabIndex = 1,
                 Anchor = AnchorStyles.None,
-                Name = "label",
             };
 
             _cancelButton = new Button()
