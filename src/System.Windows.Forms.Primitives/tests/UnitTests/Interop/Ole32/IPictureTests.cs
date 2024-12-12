@@ -51,7 +51,7 @@ public unsafe class IPictureTests
     {
         using Icon icon = SystemIcons.Question;
         using Bitmap bitmap = icon.ToBitmap();
-        using var picture = bitmap.CreateIPicture();
+        using var picture = bitmap.CreateIPictureDisp();
         Assert.False(picture.IsNull);
         using VARIANT variant = default;
 
