@@ -18,28 +18,28 @@ internal static unsafe class CoreImageExtensions
             throw new ArgumentNullException(nameof(encoder));
         }
 
-        if (format == PInvokeCore.ImageFormatGIF && image.Data is { } rawData && rawData.Length > 0)
+        if (format == PInvokeGdiPlus.ImageFormatGIF && image.Data is { } rawData && rawData.Length > 0)
         {
             stream.Write(rawData);
             return;
         }
 
         using var iStream = stream.ToIStream();
-        PInvokeCore.GdipSaveImageToStream(image.GetPointer(), iStream, &encoder, encoderParameters).ThrowIfFailed();
+        PInvokeGdiPlus.GdipSaveImageToStream(image.GetPointer(), iStream, &encoder, encoderParameters).ThrowIfFailed();
     }
 
     internal static void Save(this IImage image, MemoryStream stream)
     {
         Guid format = default;
-        PInvokeCore.GdipGetImageRawFormat(image.GetPointer(), &format).ThrowIfFailed();
+        PInvokeGdiPlus.GdipGetImageRawFormat(image.GetPointer(), &format).ThrowIfFailed();
 
         Guid encoder = ImageCodecInfoHelper.GetEncoderClsid(format);
 
         // Jpeg loses data, so we don't want to use it to serialize. We'll use PNG instead.
         // If we don't find an Encoder (for things like Icon), we just switch back to PNG.
-        if (format == PInvokeCore.ImageFormatJPEG || encoder == Guid.Empty)
+        if (format == PInvokeGdiPlus.ImageFormatJPEG || encoder == Guid.Empty)
         {
-            format = PInvokeCore.ImageFormatPNG;
+            format = PInvokeGdiPlus.ImageFormatPNG;
             encoder = ImageCodecInfoHelper.GetEncoderClsid(format);
         }
 

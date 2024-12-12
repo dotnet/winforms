@@ -28,7 +28,7 @@ public sealed unsafe class TextureBrush : Brush
         }
 
         GpTexture* brush;
-        PInvoke.GdipCreateTexture(image.Pointer(), (WrapMode)wrapMode, &brush).ThrowIfFailed();
+        PInvokeGdiPlus.GdipCreateTexture(image.Pointer(), (WrapMode)wrapMode, &brush).ThrowIfFailed();
         GC.KeepAlive(image);
         SetNativeBrushInternal((GpBrush*)brush);
     }
@@ -43,7 +43,7 @@ public sealed unsafe class TextureBrush : Brush
         }
 
         GpTexture* brush;
-        PInvoke.GdipCreateTexture2(
+        PInvokeGdiPlus.GdipCreateTexture2(
             image.Pointer(),
             (WrapMode)wrapMode,
             dstRect.X, dstRect.Y, dstRect.Width, dstRect.Height, &brush).ThrowIfFailed();
@@ -64,7 +64,7 @@ public sealed unsafe class TextureBrush : Brush
         ArgumentNullException.ThrowIfNull(image);
 
         GpTexture* brush;
-        PInvoke.GdipCreateTextureIA(
+        PInvokeGdiPlus.GdipCreateTextureIA(
             image.Pointer(),
             imageAttr is null ? null : imageAttr._nativeImageAttributes,
             dstRect.X,
@@ -94,7 +94,7 @@ public sealed unsafe class TextureBrush : Brush
     public override object Clone()
     {
         GpBrush* cloneBrush;
-        PInvoke.GdipCloneBrush(NativeBrush, &cloneBrush).ThrowIfFailed();
+        PInvokeGdiPlus.GdipCloneBrush(NativeBrush, &cloneBrush).ThrowIfFailed();
         GC.KeepAlive(this);
 
         return new TextureBrush((GpTexture*)cloneBrush);
@@ -105,14 +105,14 @@ public sealed unsafe class TextureBrush : Brush
         get
         {
             Matrix matrix = new();
-            PInvoke.GdipGetTextureTransform((GpTexture*)NativeBrush, matrix.NativeMatrix).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetTextureTransform((GpTexture*)NativeBrush, matrix.NativeMatrix).ThrowIfFailed();
             GC.KeepAlive(this);
             return matrix;
         }
         set
         {
             ArgumentNullException.ThrowIfNull(value);
-            PInvoke.GdipSetTextureTransform((GpTexture*)NativeBrush, value.NativeMatrix).ThrowIfFailed();
+            PInvokeGdiPlus.GdipSetTextureTransform((GpTexture*)NativeBrush, value.NativeMatrix).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }
@@ -122,7 +122,7 @@ public sealed unsafe class TextureBrush : Brush
         get
         {
             WrapMode mode;
-            PInvoke.GdipGetTextureWrapMode((GpTexture*)NativeBrush, &mode).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetTextureWrapMode((GpTexture*)NativeBrush, &mode).ThrowIfFailed();
             GC.KeepAlive(this);
             return (Drawing2D.WrapMode)mode;
         }
@@ -133,7 +133,7 @@ public sealed unsafe class TextureBrush : Brush
                 throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Drawing2D.WrapMode));
             }
 
-            PInvoke.GdipSetTextureWrapMode((GpTexture*)NativeBrush, (WrapMode)value).ThrowIfFailed();
+            PInvokeGdiPlus.GdipSetTextureWrapMode((GpTexture*)NativeBrush, (WrapMode)value).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }
@@ -143,7 +143,7 @@ public sealed unsafe class TextureBrush : Brush
         get
         {
             GpImage* image;
-            PInvoke.GdipGetTextureImage((GpTexture*)NativeBrush, &image).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetTextureImage((GpTexture*)NativeBrush, &image).ThrowIfFailed();
             GC.KeepAlive(this);
             return Image.CreateImageObject(image);
         }
@@ -151,7 +151,7 @@ public sealed unsafe class TextureBrush : Brush
 
     public void ResetTransform()
     {
-        PInvoke.GdipResetTextureTransform((GpTexture*)NativeBrush).ThrowIfFailed();
+        PInvokeGdiPlus.GdipResetTextureTransform((GpTexture*)NativeBrush).ThrowIfFailed();
         GC.KeepAlive(this);
     }
 
@@ -166,7 +166,7 @@ public sealed unsafe class TextureBrush : Brush
             return;
         }
 
-        PInvoke.GdipMultiplyTextureTransform(
+        PInvokeGdiPlus.GdipMultiplyTextureTransform(
             (GpTexture*)NativeBrush,
             matrix.NativeMatrix,
             (GdiPlus.MatrixOrder)order).ThrowIfFailed();
@@ -179,7 +179,7 @@ public sealed unsafe class TextureBrush : Brush
 
     public void TranslateTransform(float dx, float dy, MatrixOrder order)
     {
-        PInvoke.GdipTranslateTextureTransform(
+        PInvokeGdiPlus.GdipTranslateTextureTransform(
             (GpTexture*)NativeBrush,
             dx, dy,
             (GdiPlus.MatrixOrder)order).ThrowIfFailed();
@@ -191,7 +191,7 @@ public sealed unsafe class TextureBrush : Brush
 
     public void ScaleTransform(float sx, float sy, MatrixOrder order)
     {
-        PInvoke.GdipScaleTextureTransform(
+        PInvokeGdiPlus.GdipScaleTextureTransform(
             (GpTexture*)NativeBrush,
             sx, sy,
             (GdiPlus.MatrixOrder)order).ThrowIfFailed();
@@ -203,7 +203,7 @@ public sealed unsafe class TextureBrush : Brush
 
     public void RotateTransform(float angle, MatrixOrder order)
     {
-        PInvoke.GdipRotateTextureTransform(
+        PInvokeGdiPlus.GdipRotateTextureTransform(
             (GpTexture*)NativeBrush,
             angle,
             (GdiPlus.MatrixOrder)order).ThrowIfFailed();
