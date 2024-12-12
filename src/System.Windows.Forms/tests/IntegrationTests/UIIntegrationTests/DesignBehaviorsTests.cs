@@ -183,7 +183,9 @@ public class DesignBehaviorsTests : ControlTestBase
 
         public ToolboxItem DeserializeToolboxItem(object serializedObject, IDesignerHost? host)
         {
+#pragma warning disable WFDEV005 // Type or member is obsolete
             ToolboxItem? item = ((DataObject)serializedObject)?.GetData(typeof(ToolboxItem)) as ToolboxItem;
+#pragma warning restore WFDEV005
             return item!;
         }
 

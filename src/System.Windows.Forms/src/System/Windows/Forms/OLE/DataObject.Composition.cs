@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Reflection.Metadata;
 using System.Runtime.InteropServices.ComTypes;
 using Com = Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
@@ -13,7 +14,7 @@ public unsafe partial class DataObject
     ///  Contains the logic to move between <see cref="IDataObject"/>, <see cref="Com.IDataObject.Interface"/>,
     ///  and <see cref="ComTypes.IDataObject"/> calls.
     /// </summary>
-    internal unsafe partial class Composition : IDataObject, Com.IDataObject.Interface, ComTypes.IDataObject
+    internal unsafe partial class Composition : ITypedDataObject, Com.IDataObject.Interface, ComTypes.IDataObject
     {
         private const Com.TYMED AllowedTymeds = Com.TYMED.TYMED_HGLOBAL | Com.TYMED.TYMED_ISTREAM | Com.TYMED.TYMED_GDI;
 
@@ -116,6 +117,30 @@ public unsafe partial class DataObject
         public void SetData(string format, object? data) => _winFormsDataObject.SetData(format, data);
         public void SetData(Type format, object? data) => _winFormsDataObject.SetData(format, data);
         public void SetData(object? data) => _winFormsDataObject.SetData(data);
+        #endregion
+
+        #region ITypedDataObject
+        public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
+            string format,
+            Func<TypeName, Type> resolver,
+            bool autoConvert,
+            [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
+                _winFormsDataObject.TryGetData(format, resolver, autoConvert, out data);
+
+        public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
+            string format,
+            bool autoConvert,
+            [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
+                _winFormsDataObject.TryGetData(format, resolver: null!, autoConvert, out data);
+
+        public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
+            string format,
+            [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
+                _winFormsDataObject.TryGetData(format, resolver: null!, autoConvert: false, out data);
+
+        public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
+            [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
+                _winFormsDataObject.TryGetData(typeof(T).FullName!, resolver: null!, autoConvert: false, out data);
         #endregion
 
         #region Com.IDataObject.Interface
