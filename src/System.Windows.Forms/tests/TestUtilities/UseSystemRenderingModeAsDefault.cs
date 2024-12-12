@@ -5,15 +5,15 @@ using System.Windows.Forms.Primitives;
 
 namespace System;
 
-public readonly ref struct UseSystemRenderingModeAsDefault
+public readonly ref struct UseSystemRenderingModeAsDefaultScope
 {
     private readonly AppContextSwitchScope _switchScope;
 
-    public UseSystemRenderingModeAsDefault(bool enable)
+    public UseSystemRenderingModeAsDefaultScope(bool enable)
     {
         // Prevent multiple UseSystemRenderingModeAsDefault instances from running simultaneously. Using Monitor to allow recursion on
         // the same thread.
-        Monitor.Enter(typeof(UseSystemRenderingModeAsDefault));
+        Monitor.Enter(typeof(UseSystemRenderingModeAsDefaultScope));
         _switchScope = new(WinFormsAppContextSwitchNames.UseSystemRenderingModeAsDefault, GetDefaultValue, enable);
     }
 
@@ -25,7 +25,7 @@ public readonly ref struct UseSystemRenderingModeAsDefault
         }
         finally
         {
-            Monitor.Exit(typeof(UseSystemRenderingModeAsDefault));
+            Monitor.Exit(typeof(UseSystemRenderingModeAsDefaultScope));
         }
     }
 

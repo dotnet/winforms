@@ -14,142 +14,138 @@ public partial class StatusStripTests
     public void StatusStrip_Ctor_Default()
     {
         using SubStatusStrip control = new();
-        Assert.Null(control.AccessibleDefaultActionDescription);
-        Assert.Null(control.AccessibleDescription);
-        Assert.Null(control.AccessibleName);
-        Assert.Equal(AccessibleRole.Default, control.AccessibleRole);
-        Assert.False(control.AllowDrop);
-        Assert.False(control.AllowItemReorder);
-        Assert.True(control.AllowMerge);
-        Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
-        Assert.False(control.AutoScroll);
-        Assert.Equal(Size.Empty, control.AutoScrollMargin);
-        Assert.Equal(Size.Empty, control.AutoScrollMinSize);
-        Assert.Equal(Point.Empty, control.AutoScrollPosition);
-        Assert.True(control.AutoSize);
-        Assert.Equal(Control.DefaultBackColor, control.BackColor);
-        Assert.Null(control.BackgroundImage);
-        Assert.Equal(ImageLayout.Tile, control.BackgroundImageLayout);
-        Assert.Null(control.BindingContext);
-        Assert.Equal(22, control.Bottom);
-        Assert.Equal(new Rectangle(0, 0, 200, 22), control.Bounds);
-        Assert.True(control.CanEnableIme);
-        Assert.False(control.CanFocus);
-        Assert.False(control.CanOverflow);
-        Assert.True(control.CanRaiseEvents);
-        Assert.False(control.CanSelect);
-        Assert.False(control.Capture);
-        Assert.False(control.CausesValidation);
-        Assert.Equal(new Rectangle(0, 0, 200, 22), control.ClientRectangle);
-        Assert.Equal(new Size(200, 22), control.ClientSize);
-        Assert.Null(control.Container);
-        Assert.False(control.ContainsFocus);
-        Assert.Null(control.ContextMenuStrip);
-        Assert.Empty(control.Controls);
-        Assert.Same(control.Controls, control.Controls);
-        Assert.False(control.Created);
-        Assert.Same(Cursors.Default, control.Cursor);
-        Assert.Same(Cursors.Default, control.DefaultCursor);
-        Assert.Equal(DockStyle.Bottom, control.DefaultDock);
-        Assert.Equal(ToolStripDropDownDirection.AboveRight, control.DefaultDropDownDirection);
-        Assert.Equal(ImeMode.Inherit, control.DefaultImeMode);
-        Assert.Equal(new Padding(2, 2, 2, 2), control.DefaultGripMargin);
-        Assert.Equal(Padding.Empty, control.DefaultMargin);
-        Assert.Equal(Size.Empty, control.DefaultMaximumSize);
-        Assert.Equal(Size.Empty, control.DefaultMinimumSize);
-        Assert.Equal(new Padding(1, 0, 14, 0), control.DefaultPadding);
-        Assert.Equal(new Size(200, 22), control.DefaultSize);
-        Assert.False(control.DefaultShowItemToolTips);
-        Assert.False(control.DesignMode);
-        Assert.Empty(control.DisplayedItems);
-        Assert.Same(control.DisplayedItems, control.DisplayedItems);
-        Assert.Equal(new Rectangle(1, 0, 185, 22), control.DisplayRectangle);
-        Assert.Equal(DockStyle.Bottom, control.Dock);
-        Assert.NotNull(control.DockPadding);
-        Assert.Same(control.DockPadding, control.DockPadding);
-        Assert.Equal(0, control.DockPadding.Top);
-        Assert.Equal(0, control.DockPadding.Bottom);
-        Assert.Equal(1, control.DockPadding.Left);
-        Assert.Equal(14, control.DockPadding.Right);
-        Assert.True(control.DoubleBuffered);
-        Assert.True(control.Enabled);
-        Assert.NotNull(control.Events);
-        Assert.Same(control.Events, control.Events);
-        Assert.False(control.Focused);
-        Assert.Equal(Control.DefaultFont, control.Font);
-        Assert.Equal(control.Font.Height, control.FontHeight);
-        Assert.Equal(Control.DefaultForeColor, control.ForeColor);
-        Assert.Equal(ToolStripGripStyle.Hidden, control.GripStyle);
-        Assert.Equal(ToolStripGripDisplayStyle.Horizontal, control.GripDisplayStyle);
-        Assert.Equal(new Padding(2, 2, 2, 2), control.GripMargin);
-        Assert.Equal(Rectangle.Empty, control.GripRectangle);
-        Assert.False(control.HasChildren);
-        Assert.Equal(22, control.Height);
-        Assert.NotNull(control.HorizontalScroll);
-        Assert.Same(control.HorizontalScroll, control.HorizontalScroll);
-        Assert.False(control.HScroll);
-        Assert.Null(control.ImageList);
-        Assert.Equal(new Size(16, 16), control.ImageScalingSize);
-        Assert.Equal(ImeMode.NoControl, control.ImeMode);
-        Assert.Equal(ImeMode.NoControl, control.ImeModeBase);
-        Assert.False(control.IsAccessible);
-        Assert.False(control.IsCurrentlyDragging);
-        Assert.False(control.IsDropDown);
-        Assert.False(control.IsMirrored);
-        Assert.Empty(control.Items);
-        Assert.Same(control.Items, control.Items);
-        Assert.NotNull(control.LayoutEngine);
-        Assert.Same(control.LayoutEngine, control.LayoutEngine);
-        Assert.IsType<TableLayoutSettings>(control.LayoutSettings);
-        Assert.Equal(ToolStripLayoutStyle.Table, control.LayoutStyle);
-        Assert.Equal(0, control.Left);
-        Assert.Equal(Point.Empty, control.Location);
-        Assert.Equal(Padding.Empty, control.Margin);
-        Assert.Equal(Size.Empty, control.MaximumSize);
-        Assert.Equal(new Size(185, 22), control.MaxItemSize);
-        Assert.Equal(Size.Empty, control.MinimumSize);
-        Assert.Equal(Orientation.Horizontal, control.Orientation);
-        Assert.NotNull(control.OverflowButton);
-        Assert.Same(control.OverflowButton, control.OverflowButton);
-        Assert.Same(control, control.OverflowButton.GetCurrentParent());
-        Assert.Equal(new Padding(1, 0, 14, 0), control.Padding);
-        Assert.Null(control.Parent);
-        Assert.True(control.PreferredSize.Width > 0);
-        Assert.True(control.PreferredSize.Height > 0);
-        Assert.Equal("Microsoft\u00AE .NET", control.ProductName);
-        Assert.False(control.RecreatingHandle);
-        Assert.Null(control.Region);
-        Assert.NotNull(control.Renderer);
-        Assert.Same(control.Renderer, control.Renderer);
+        control.AccessibleDefaultActionDescription.Should().BeNull();
+        control.AccessibleDescription.Should().BeNull();
+        control.AccessibleName.Should().BeNull();
+        control.AccessibleRole.Should().Be(AccessibleRole.Default);
+        control.AllowDrop.Should().BeFalse();
+        control.AllowItemReorder.Should().BeFalse();
+        control.AllowMerge.Should().BeTrue();
+        control.Anchor.Should().Be(AnchorStyles.Top | AnchorStyles.Left);
+        control.AutoScroll.Should().BeFalse();
+        control.AutoScrollMargin.Should().Be(Size.Empty);
+        control.AutoScrollMinSize.Should().Be(Size.Empty);
+        control.AutoScrollPosition.Should().Be(Point.Empty);
+        control.AutoSize.Should().BeTrue();
+        control.BackColor.Should().Be(Control.DefaultBackColor);
+        control.BackgroundImage.Should().BeNull();
+        control.BackgroundImageLayout.Should().Be(ImageLayout.Tile);
+        control.BindingContext.Should().BeNull();
+        control.Bottom.Should().Be(22);
+        control.Bounds.Should().Be(new Rectangle(0, 0, 200, 22));
+        control.CanEnableIme.Should().BeTrue();
+        control.CanFocus.Should().BeFalse();
+        control.CanOverflow.Should().BeFalse();
+        control.CanRaiseEvents.Should().BeTrue();
+        control.CanSelect.Should().BeFalse();
+        control.Capture.Should().BeFalse();
+        control.CausesValidation.Should().BeFalse();
+        control.ClientRectangle.Should().Be(new Rectangle(0, 0, 200, 22));
+        control.ClientSize.Should().Be(new Size(200, 22));
+        control.Container.Should().BeNull();
+        control.ContainsFocus.Should().BeFalse();
+        control.ContextMenuStrip.Should().BeNull();
+        control.Controls.Count.Should().Be(0);
+        control.Created.Should().BeFalse();
+        control.Cursor.Should().Be(Cursors.Default);
+        control.DefaultCursor.Should().Be(Cursors.Default);
+        control.DefaultDock.Should().Be(DockStyle.Bottom);
+        control.DefaultDropDownDirection.Should().Be(ToolStripDropDownDirection.AboveRight);
+        control.DefaultImeMode.Should().Be(ImeMode.Inherit);
+        control.DefaultGripMargin.Should().Be(new Padding(2, 2, 2, 2));
+        control.DefaultMargin.Should().Be(Padding.Empty);
+        control.DefaultMaximumSize.Should().Be(Size.Empty);
+        control.DefaultMinimumSize.Should().Be(Size.Empty);
+        control.DefaultPadding.Should().Be(new Padding(1, 0, 14, 0));
+        control.DefaultSize.Should().Be(new Size(200, 22));
+        control.DefaultShowItemToolTips.Should().BeFalse();
+        control.DesignMode.Should().BeFalse();
+        control.DisplayedItems.Count.Should().Be(0);
+        control.DisplayRectangle.Should().Be(new Rectangle(1, 0, 185, 22));
+        control.Dock.Should().Be(DockStyle.Bottom);
+        control.DockPadding.Should().NotBeNull();
+        control.DockPadding.Top.Should().Be(0);
+        control.DockPadding.Bottom.Should().Be(0);
+        control.DockPadding.Left.Should().Be(1);
+        control.DockPadding.Right.Should().Be(14);
+        control.DoubleBuffered.Should().BeTrue();
+        control.Enabled.Should().BeTrue();
+        control.Events.Should().NotBeNull();
+        control.Focused.Should().BeFalse();
+        control.Font.Should().Be(Control.DefaultFont);
+        control.FontHeight.Should().Be(control.Font.Height);
+        control.ForeColor.Should().Be(Control.DefaultForeColor);
+        control.GripStyle.Should().Be(ToolStripGripStyle.Hidden);
+        control.GripDisplayStyle.Should().Be(ToolStripGripDisplayStyle.Horizontal);
+        control.GripMargin.Should().Be(new Padding(2, 2, 2, 2));
+        control.GripRectangle.Should().Be(Rectangle.Empty);
+        control.HasChildren.Should().BeFalse();
+        control.Height.Should().Be(22);
+        control.HorizontalScroll.Should().NotBeNull();
+        control.HorizontalScroll.Should().Be(control.HorizontalScroll);
+        control.HScroll.Should().BeFalse();
+        control.ImageList.Should().BeNull();
+        control.ImageScalingSize.Should().Be(new Size(16, 16));
+        control.ImeMode.Should().Be(ImeMode.NoControl);
+        control.ImeModeBase.Should().Be(ImeMode.NoControl);
+        control.IsAccessible.Should().BeFalse();
+        control.IsCurrentlyDragging.Should().BeFalse();
+        control.IsDropDown.Should().BeFalse();
+        control.IsMirrored.Should().BeFalse();
+        control.Items.Count.Should().Be(0);
+        control.LayoutEngine.Should().NotBeNull();
+        control.LayoutEngine.Should().Be(control.LayoutEngine);
+        control.LayoutSettings.Should().BeOfType<TableLayoutSettings>();
+        control.LayoutStyle.Should().Be(ToolStripLayoutStyle.Table);
+        control.Left.Should().Be(0);
+        control.Location.Should().Be(Point.Empty);
+        control.Margin.Should().Be(Padding.Empty);
+        control.MaximumSize.Should().Be(Size.Empty);
+        control.MaxItemSize.Should().Be(new Size(185, 22));
+        control.MinimumSize.Should().Be(Size.Empty);
+        control.Orientation.Should().Be(Orientation.Horizontal);
+        control.OverflowButton.Should().NotBeNull();
+        control.OverflowButton.Should().Be(control.OverflowButton);
+        control.OverflowButton.GetCurrentParent().Should().BeSameAs(control);
+        control.Padding.Should().Be(new Padding(1, 0, 14, 0));
+        control.Parent.Should().BeNull();
+        control.PreferredSize.Width.Should().BeGreaterThan(0);
+        control.PreferredSize.Height.Should().BeGreaterThan(0);
+        control.ProductName.Should().Be("Microsoft® .NET");
+        control.RecreatingHandle.Should().BeFalse();
+        control.Region.Should().BeNull();
+        control.Renderer.Should().NotBeNull();
+        control.Renderer.Should().BeSameAs(control.Renderer);
 
-        Assert.True(control.Renderer is ToolStripSystemRenderer or ToolStripProfessionalRenderer, "Renderer is not one of the expected types.");
-        Assert.True(control.RenderMode is ToolStripRenderMode.System or ToolStripRenderMode.ManagerRenderMode);
+        control.Renderer.Should().Match<ToolStripRenderer>(r => r is ToolStripSystemRenderer || r is ToolStripProfessionalRenderer,
+            "because the renderer should be one of the expected types");
+        control.RenderMode.Should().BeOneOf(ToolStripRenderMode.System, ToolStripRenderMode.ManagerRenderMode);
 
-        Assert.True(control.ResizeRedraw);
-        Assert.Equal(200, control.Right);
-        Assert.Equal(RightToLeft.No, control.RightToLeft);
-        Assert.True(control.ShowFocusCues);
-        Assert.False(control.ShowItemToolTips);
-        Assert.True(control.ShowKeyboardCues);
-        Assert.Null(control.Site);
-        Assert.Equal(new Size(200, 22), control.Size);
-        Assert.True(control.SizingGrip);
-        Assert.Equal(new Rectangle(188, 0, 12, 22), control.SizeGripBounds);
-        Assert.True(control.Stretch);
-        Assert.Equal(0, control.TabIndex);
-        Assert.False(control.TabStop);
-        Assert.Empty(control.Text);
-        Assert.Equal(ToolStripTextDirection.Horizontal, control.TextDirection);
-        Assert.Equal(0, control.Top);
-        Assert.Null(control.TopLevelControl);
-        Assert.False(control.UseWaitCursor);
-        Assert.NotNull(control.VerticalScroll);
-        Assert.Same(control.VerticalScroll, control.VerticalScroll);
-        Assert.True(control.Visible);
-        Assert.False(control.VScroll);
-        Assert.Equal(200, control.Width);
+        control.ResizeRedraw.Should().BeTrue();
+        control.Right.Should().Be(200);
+        control.RightToLeft.Should().Be(RightToLeft.No);
+        control.ShowFocusCues.Should().BeTrue();
+        control.ShowItemToolTips.Should().BeFalse();
+        control.ShowKeyboardCues.Should().BeTrue();
+        control.Site.Should().BeNull();
+        control.Size.Should().Be(new Size(200, 22));
+        control.SizingGrip.Should().BeTrue();
+        control.SizeGripBounds.Should().Be(new Rectangle(188, 0, 12, 22));
+        control.Stretch.Should().BeTrue();
+        control.TabIndex.Should().Be(0);
+        control.TabStop.Should().BeFalse();
+        control.Text.Should().BeEmpty();
+        control.TextDirection.Should().Be(ToolStripTextDirection.Horizontal);
+        control.Top.Should().Be(0);
+        control.TopLevelControl.Should().BeNull();
+        control.UseWaitCursor.Should().BeFalse();
+        control.VerticalScroll.Should().NotBeNull();
+        control.VerticalScroll.Should().Be(control.VerticalScroll);
+        control.Visible.Should().BeTrue();
+        control.VScroll.Should().BeFalse();
+        control.Width.Should().Be(200);
 
-        Assert.False(control.IsHandleCreated);
+        control.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsFact]
@@ -157,27 +153,27 @@ public partial class StatusStripTests
     {
         using SubStatusStrip control = new();
         CreateParams createParams = control.CreateParams;
-        Assert.Null(createParams.Caption);
-        Assert.Null(createParams.ClassName);
-        Assert.Equal(0x8, createParams.ClassStyle);
-        Assert.Equal(0x10000, createParams.ExStyle);
-        Assert.Equal(22, createParams.Height);
-        Assert.Equal(IntPtr.Zero, createParams.Parent);
-        Assert.Null(createParams.Param);
-        Assert.Equal(0x56000000, createParams.Style);
-        Assert.Equal(200, createParams.Width);
-        Assert.Equal(0, createParams.X);
-        Assert.Equal(0, createParams.Y);
-        Assert.Same(createParams, control.CreateParams);
-        Assert.False(control.IsHandleCreated);
+        createParams.Caption.Should().BeNull();
+        createParams.ClassName.Should().BeNull();
+        createParams.ClassStyle.Should().Be(0x8);
+        createParams.ExStyle.Should().Be(0x10000);
+        createParams.Height.Should().Be(22);
+        createParams.Parent.Should().Be(IntPtr.Zero);
+        createParams.Param.Should().BeNull();
+        createParams.Style.Should().Be(0x56000000);
+        createParams.Width.Should().Be(200);
+        createParams.X.Should().Be(0);
+        createParams.Y.Should().Be(0);
+        control.CreateParams.Should().BeSameAs(createParams);
+        control.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsFact]
     public void StatusStrip_Use_SystemRenderMode_As_Default()
     {
-        using UseSystemRenderingModeAsDefault scope = new(enable: true);
+        using UseSystemRenderingModeAsDefaultScope scope = new(enable: true);
         using SubStatusStrip control = new();
-        Assert.Equal(ToolStripRenderMode.System, control.RenderMode);
+        control.RenderMode.Should().Be(ToolStripRenderMode.System);
     }
 
     [WinFormsTheory]
@@ -189,21 +185,22 @@ public partial class StatusStripTests
         control.Layout += (sender, e) => layoutCallCount++;
 
         control.CanOverflow = value;
-        Assert.Equal(value, control.CanOverflow);
-        Assert.Equal(0, layoutCallCount);
-        Assert.False(control.IsHandleCreated);
+        control.CanOverflow.Should().Be(value);
+
+        layoutCallCount.Should().Be(0);
+        control.IsHandleCreated.Should().BeFalse();
 
         // Set same.
         control.CanOverflow = value;
-        Assert.Equal(value, control.CanOverflow);
-        Assert.Equal(0, layoutCallCount);
-        Assert.False(control.IsHandleCreated);
+        control.CanOverflow.Should().Be(value);
+        layoutCallCount.Should().Be(0);
+        control.IsHandleCreated.Should().BeFalse();
 
         // Set different.
         control.CanOverflow = !value;
-        Assert.Equal(!value, control.CanOverflow);
-        Assert.Equal(0, layoutCallCount);
-        Assert.False(control.IsHandleCreated);
+        control.CanOverflow.Should().Be(!value);
+        layoutCallCount.Should().Be(0);
+        control.IsHandleCreated.Should().BeFalse();
     }
 
     public static IEnumerable<object[]> DefaultPadding_Get_TestData()
@@ -238,7 +235,8 @@ public partial class StatusStripTests
             LayoutStyle = layoutStyle,
             RightToLeft = rightToLeft
         };
-        Assert.Equal(expected, control.DefaultPadding);
+
+        control.DefaultPadding.Should().Be(expected);
     }
 
     public static IEnumerable<object[]> Dock_Set_TestData()
@@ -288,40 +286,42 @@ public partial class StatusStripTests
         {
             LayoutStyle = layoutStyle
         };
+
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
         {
             if (e.AffectedProperty == "Dock")
             {
-                Assert.Same(control, sender);
-                Assert.Same(control, e.AffectedControl);
+                sender.Should().BeSameAs(control);
+                e.AffectedControl.Should().BeSameAs(control);
                 layoutCallCount++;
             }
         };
+
         int layoutStyleChangedCallCount = 0;
         control.LayoutStyleChanged += (sender, e) =>
         {
-            Assert.Same(control, sender);
-            Assert.Same(EventArgs.Empty, e);
+            sender.Should().BeSameAs(control);
+            e.Should().BeSameAs(EventArgs.Empty);
             layoutStyleChangedCallCount++;
         };
 
         control.Dock = value;
-        Assert.Equal(value, control.Dock);
-        Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
-        Assert.Equal(expectedLayoutCallCount, layoutCallCount);
-        Assert.Equal(expectedOrientation, control.Orientation);
-        Assert.Equal(expectedLayoutStyleChangedCallCount, layoutStyleChangedCallCount);
-        Assert.False(control.IsHandleCreated);
+        control.Dock.Should().Be(value);
+        control.Anchor.Should().Be(AnchorStyles.Top | AnchorStyles.Left);
+        layoutCallCount.Should().Be(expectedLayoutCallCount);
+        control.Orientation.Should().Be(expectedOrientation);
+        layoutStyleChangedCallCount.Should().Be(expectedLayoutStyleChangedCallCount);
+        control.IsHandleCreated.Should().BeFalse();
 
         // Set same.
         control.Dock = value;
-        Assert.Equal(value, control.Dock);
-        Assert.Equal(AnchorStyles.Top | AnchorStyles.Left, control.Anchor);
-        Assert.Equal(expectedLayoutCallCount, layoutCallCount);
-        Assert.Equal(expectedOrientation, control.Orientation);
-        Assert.Equal(expectedLayoutStyleChangedCallCount, layoutStyleChangedCallCount);
-        Assert.False(control.IsHandleCreated);
+        control.Dock.Should().Be(value);
+        control.Anchor.Should().Be(AnchorStyles.Top | AnchorStyles.Left);
+        layoutCallCount.Should().Be(expectedLayoutCallCount);
+        control.Orientation.Should().Be(expectedOrientation);
+        layoutStyleChangedCallCount.Should().Be(expectedLayoutStyleChangedCallCount);
+        control.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsTheory]
@@ -331,24 +331,25 @@ public partial class StatusStripTests
     {
         using StatusStrip control = new();
         int layoutCallCount = 0;
+
         control.Layout += (sender, e) =>
         {
-            Assert.Same(control, sender);
-            Assert.Same(control, e.AffectedControl);
-            Assert.Equal("GripStyle", e.AffectedProperty);
+            sender.Should().BeSameAs(control);
+            e.AffectedControl.Should().BeSameAs(control);
+            e.AffectedProperty.Should().Be("GripStyle");
             layoutCallCount++;
         };
 
         control.GripStyle = value;
-        Assert.Equal(value, control.GripStyle);
-        Assert.Equal(expectedLayoutCallCount, layoutCallCount);
-        Assert.False(control.IsHandleCreated);
+        control.GripStyle.Should().Be(value);
+        layoutCallCount.Should().Be(expectedLayoutCallCount);
+        control.IsHandleCreated.Should().BeFalse();
 
         // Set same.
         control.GripStyle = value;
-        Assert.Equal(value, control.GripStyle);
-        Assert.Equal(expectedLayoutCallCount, layoutCallCount);
-        Assert.False(control.IsHandleCreated);
+        control.GripStyle.Should().Be(value);
+        layoutCallCount.Should().Be(expectedLayoutCallCount);
+        control.IsHandleCreated.Should().BeFalse();
     }
 
     public static IEnumerable<object[]> LayoutStyle_Set_TestData()
@@ -380,23 +381,24 @@ public partial class StatusStripTests
         {
             Dock = dock
         };
+
         int layoutCallCount = 0;
         control.Layout += (sender, e) => layoutCallCount++;
 
         control.LayoutStyle = value;
-        Assert.Equal(expected, control.LayoutStyle);
-        Assert.Equal(expectedOrientation, control.Orientation);
-        Assert.Equal(expectedGripDisplayStyle, control.GripDisplayStyle);
-        Assert.Equal(expectedLayoutCallCount, layoutCallCount);
-        Assert.False(control.IsHandleCreated);
+        control.LayoutStyle.Should().Be(expected);
+        control.Orientation.Should().Be(expectedOrientation);
+        control.GripDisplayStyle.Should().Be(expectedGripDisplayStyle);
+        layoutCallCount.Should().Be(expectedLayoutCallCount);
+        control.IsHandleCreated.Should().BeFalse();
 
         // Set same.
         control.LayoutStyle = value;
-        Assert.Equal(expected, control.LayoutStyle);
-        Assert.Equal(expectedOrientation, control.Orientation);
-        Assert.Equal(expectedGripDisplayStyle, control.GripDisplayStyle);
-        Assert.Equal(expectedLayoutCallCount, layoutCallCount);
-        Assert.False(control.IsHandleCreated);
+        control.LayoutStyle.Should().Be(expected);
+        control.Orientation.Should().Be(expectedOrientation);
+        control.GripDisplayStyle.Should().Be(expectedGripDisplayStyle);
+        layoutCallCount.Should().Be(expectedLayoutCallCount);
+        control.IsHandleCreated.Should().BeFalse();
     }
 
     public static IEnumerable<object[]> Padding_Set_TestData()
@@ -414,24 +416,25 @@ public partial class StatusStripTests
     {
         using StatusStrip control = new();
         int layoutCallCount = 0;
+
         control.Layout += (sender, e) =>
         {
-            Assert.Same(control, sender);
-            Assert.Same(control, e.AffectedControl);
-            Assert.Equal("Padding", e.AffectedProperty);
+            sender.Should().BeSameAs(control);
+            e.AffectedControl.Should().BeSameAs(control);
+            e.AffectedProperty.Should().Be("Padding");
             layoutCallCount++;
         };
 
         control.Padding = value;
-        Assert.Equal(expected, control.Padding);
-        Assert.Equal(expectedLayoutCallCount1, layoutCallCount);
-        Assert.False(control.IsHandleCreated);
+        control.Padding.Should().Be(expected);
+        layoutCallCount.Should().Be(expectedLayoutCallCount1);
+        control.IsHandleCreated.Should().BeFalse();
 
         // Set same.
         control.Padding = value;
-        Assert.Equal(expected, control.Padding);
-        Assert.Equal(expectedLayoutCallCount2, layoutCallCount);
-        Assert.False(control.IsHandleCreated);
+        control.Padding.Should().Be(expected);
+        layoutCallCount.Should().Be(expectedLayoutCallCount2);
+        control.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsFact]
@@ -439,10 +442,11 @@ public partial class StatusStripTests
     {
         using StatusStrip control = new();
         int callCount = 0;
+
         EventHandler handler = (sender, e) =>
         {
-            Assert.Equal(control, sender);
-            Assert.Equal(EventArgs.Empty, e);
+            sender.Should().Be(control);
+            e.Should().Be(EventArgs.Empty);
             callCount++;
         };
         control.PaddingChanged += handler;
@@ -450,25 +454,25 @@ public partial class StatusStripTests
         // Set different.
         Padding padding1 = new(1);
         control.Padding = padding1;
-        Assert.Equal(padding1, control.Padding);
-        Assert.Equal(1, callCount);
+        control.Padding.Should().Be(padding1);
+        callCount.Should().Be(1);
 
         // Set same.
         control.Padding = padding1;
-        Assert.Equal(padding1, control.Padding);
-        Assert.Equal(1, callCount);
+        control.Padding.Should().Be(padding1);
+        callCount.Should().Be(1);
 
         // Set different.
         Padding padding2 = new(2);
         control.Padding = padding2;
-        Assert.Equal(padding2, control.Padding);
-        Assert.Equal(2, callCount);
+        control.Padding.Should().Be(padding2);
+        callCount.Should().Be(2);
 
         // Remove handler.
         control.PaddingChanged -= handler;
         control.Padding = padding1;
-        Assert.Equal(padding1, control.Padding);
-        Assert.Equal(2, callCount);
+        control.Padding.Should().Be(padding1);
+        callCount.Should().Be(2);
     }
 
     [WinFormsTheory]
@@ -478,40 +482,41 @@ public partial class StatusStripTests
     {
         using StatusStrip control = new();
         int rendererChangedCallCount = 0;
+
         control.RendererChanged += (sender, e) =>
         {
-            Assert.Same(control, sender);
-            Assert.Same(EventArgs.Empty, e);
+            sender.Should().BeSameAs(control);
+            e.Should().BeSameAs(EventArgs.Empty);
             rendererChangedCallCount++;
         };
 
         // Set same.
         control.RenderMode = ToolStripRenderMode.System;
-        Assert.Equal(ToolStripRenderMode.System, control.RenderMode);
-        Assert.NotNull(control.Renderer);
-        Assert.Same(control.Renderer, control.Renderer);
-        Assert.IsType<ToolStripSystemRenderer>(control.Renderer);
-        Assert.Equal(1, rendererChangedCallCount);
+        control.RenderMode.Should().Be(ToolStripRenderMode.System);
+        control.Renderer.Should().NotBeNull();
+        control.Renderer.Should().BeSameAs(control.Renderer);
+        control.Renderer.Should().BeOfType<ToolStripSystemRenderer>();
+        rendererChangedCallCount.Should().Be(1);
 
         // Set different.
         control.RenderMode = value;
-        Assert.Equal(value, control.RenderMode);
-        Assert.IsType(expectedRendererType, control.Renderer);
-        Assert.Equal(2, rendererChangedCallCount);
+        control.RenderMode.Should().Be(value);
+        control.Renderer.Should().BeOfType(expectedRendererType);
+        rendererChangedCallCount.Should().Be(2);
 
         // Set same.
         control.RenderMode = value;
-        Assert.Equal(value, control.RenderMode);
-        Assert.IsType(expectedRendererType, control.Renderer);
-        Assert.Equal(expectedSameRendererChangedCallCount, rendererChangedCallCount);
+        control.RenderMode.Should().Be(value);
+        control.Renderer.Should().BeOfType(expectedRendererType);
+        rendererChangedCallCount.Should().Be(expectedSameRendererChangedCallCount);
 
         // Set System.
         control.RenderMode = ToolStripRenderMode.System;
-        Assert.Equal(ToolStripRenderMode.System, control.RenderMode);
-        Assert.NotNull(control.Renderer);
-        Assert.Same(control.Renderer, control.Renderer);
-        Assert.IsType<ToolStripSystemRenderer>(control.Renderer);
-        Assert.Equal(expectedSameRendererChangedCallCount + 1, rendererChangedCallCount);
+        control.RenderMode.Should().Be(ToolStripRenderMode.System);
+        control.Renderer.Should().NotBeNull();
+        control.Renderer.Should().BeSameAs(control.Renderer);
+        control.Renderer.Should().BeOfType<ToolStripSystemRenderer>();
+        rendererChangedCallCount.Should().Be(expectedSameRendererChangedCallCount + 1);
     }
 
     [WinFormsTheory]
@@ -523,32 +528,33 @@ public partial class StatusStripTests
         {
             Renderer = new SubToolStripRenderer()
         };
+
         int rendererChangedCallCount = 0;
         control.RendererChanged += (sender, e) =>
         {
-            Assert.Same(control, sender);
-            Assert.Same(EventArgs.Empty, e);
+            sender.Should().BeSameAs(control);
+            e.Should().BeSameAs(EventArgs.Empty);
             rendererChangedCallCount++;
         };
 
         control.RenderMode = value;
-        Assert.Equal(value, control.RenderMode);
-        Assert.IsType(expectedRendererType, control.Renderer);
-        Assert.Equal(1, rendererChangedCallCount);
+        control.RenderMode.Should().Be(value);
+        control.Renderer.Should().BeOfType(expectedRendererType);
+        rendererChangedCallCount.Should().Be(1);
 
         // Set same.
         control.RenderMode = value;
-        Assert.Equal(value, control.RenderMode);
-        Assert.IsType(expectedRendererType, control.Renderer);
-        Assert.Equal(expectedSameRendererChangedCallCount, rendererChangedCallCount);
+        control.RenderMode.Should().Be(value);
+        control.Renderer.Should().BeOfType(expectedRendererType);
+        rendererChangedCallCount.Should().Be(expectedSameRendererChangedCallCount);
 
         // Set System.
         control.RenderMode = ToolStripRenderMode.System;
-        Assert.Equal(ToolStripRenderMode.System, control.RenderMode);
-        Assert.NotNull(control.Renderer);
-        Assert.Same(control.Renderer, control.Renderer);
-        Assert.IsType<ToolStripSystemRenderer>(control.Renderer);
-        Assert.Equal(expectedSameRendererChangedCallCount + 1, rendererChangedCallCount);
+        control.RenderMode.Should().Be(ToolStripRenderMode.System);
+        control.Renderer.Should().NotBeNull();
+        control.Renderer.Should().BeSameAs(control.Renderer);
+        control.Renderer.Should().BeOfType<ToolStripSystemRenderer>();
+        rendererChangedCallCount.Should().Be(expectedSameRendererChangedCallCount + 1);
     }
 
     [WinFormsFact]
@@ -556,32 +562,32 @@ public partial class StatusStripTests
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(StatusStrip))[nameof(ToolStrip.RenderMode)];
         using StatusStrip control = new();
-        Assert.False(property.CanResetValue(control));
+        property.CanResetValue(control).Should().BeFalse();
 
         control.RenderMode = ToolStripRenderMode.Professional;
-        Assert.Equal(ToolStripRenderMode.Professional, control.RenderMode);
-        Assert.True(property.CanResetValue(control));
+        control.RenderMode.Should().Be(ToolStripRenderMode.Professional);
+        property.CanResetValue(control).Should().BeTrue();
 
         control.RenderMode = ToolStripRenderMode.System;
-        Assert.Equal(ToolStripRenderMode.System, control.RenderMode);
-        Assert.True(property.CanResetValue(control));
+        control.RenderMode.Should().Be(ToolStripRenderMode.System);
+        property.CanResetValue(control).Should().BeTrue();
 
         control.Renderer = new SubToolStripRenderer();
-        Assert.Equal(ToolStripRenderMode.Custom, control.RenderMode);
-        Assert.False(property.CanResetValue(control));
+        control.RenderMode.Should().Be(ToolStripRenderMode.Custom);
+        property.CanResetValue(control).Should().BeFalse();
 
         control.RenderMode = ToolStripRenderMode.ManagerRenderMode;
-        Assert.Equal(ToolStripRenderMode.ManagerRenderMode, control.RenderMode);
-        Assert.False(property.CanResetValue(control));
+        control.RenderMode.Should().Be(ToolStripRenderMode.ManagerRenderMode);
+        property.CanResetValue(control).Should().BeFalse();
 
         property.ResetValue(control);
-        Assert.Equal(ToolStripRenderMode.ManagerRenderMode, control.RenderMode);
-        Assert.False(property.CanResetValue(control));
+        control.RenderMode.Should().Be(ToolStripRenderMode.ManagerRenderMode);
+        property.CanResetValue(control).Should().BeFalse();
 
-        using UseSystemRenderingModeAsDefault scope = new(enable: true);
+        using UseSystemRenderingModeAsDefaultScope scope = new(enable: true);
         property.ResetValue(control);
-        Assert.Equal(ToolStripRenderMode.System, control.RenderMode);
-        Assert.False(property.CanResetValue(control));
+        control.RenderMode.Should().Be(ToolStripRenderMode.System);
+        property.CanResetValue(control).Should().BeFalse();
     }
 
     [WinFormsFact]
@@ -589,32 +595,33 @@ public partial class StatusStripTests
     {
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(StatusStrip))[nameof(ToolStrip.RenderMode)];
         using StatusStrip control = new();
-        Assert.False(property.ShouldSerializeValue(control));
+
+        property.ShouldSerializeValue(control).Should().BeFalse();
 
         control.RenderMode = ToolStripRenderMode.Professional;
-        Assert.Equal(ToolStripRenderMode.Professional, control.RenderMode);
-        Assert.True(property.ShouldSerializeValue(control));
+        control.RenderMode.Should().Be(ToolStripRenderMode.Professional);
+        property.ShouldSerializeValue(control).Should().BeTrue();
 
         control.RenderMode = ToolStripRenderMode.System;
-        Assert.Equal(ToolStripRenderMode.System, control.RenderMode);
-        Assert.True(property.ShouldSerializeValue(control));
+        control.RenderMode.Should().Be(ToolStripRenderMode.System);
+        property.ShouldSerializeValue(control).Should().BeTrue();
 
         control.Renderer = new SubToolStripRenderer();
-        Assert.Equal(ToolStripRenderMode.Custom, control.RenderMode);
-        Assert.False(property.ShouldSerializeValue(control));
+        control.RenderMode.Should().Be(ToolStripRenderMode.Custom);
+        property.ShouldSerializeValue(control).Should().BeFalse();
 
         control.RenderMode = ToolStripRenderMode.ManagerRenderMode;
-        Assert.Equal(ToolStripRenderMode.ManagerRenderMode, control.RenderMode);
-        Assert.False(property.ShouldSerializeValue(control));
+        control.RenderMode.Should().Be(ToolStripRenderMode.ManagerRenderMode);
+        property.ShouldSerializeValue(control).Should().BeFalse();
 
         property.ResetValue(control);
-        Assert.Equal(ToolStripRenderMode.ManagerRenderMode, control.RenderMode);
-        Assert.False(property.ShouldSerializeValue(control));
+        control.RenderMode.Should().Be(ToolStripRenderMode.ManagerRenderMode);
+        property.ShouldSerializeValue(control).Should().BeFalse();
 
-        using UseSystemRenderingModeAsDefault scope = new(enable: true);
+        using UseSystemRenderingModeAsDefaultScope scope = new(enable: true);
         property.ResetValue(control);
-        Assert.Equal(ToolStripRenderMode.System, control.RenderMode);
-        Assert.False(property.ShouldSerializeValue(control));
+        control.RenderMode.Should().Be(ToolStripRenderMode.System);
+        property.ShouldSerializeValue(control).Should().BeFalse();
     }
 
     [WinFormsTheory]
@@ -622,14 +629,17 @@ public partial class StatusStripTests
     public void StatusStrip_RenderMode_SetInvalidValue_ThrowsInvalidEnumArgumentException(ToolStripRenderMode value)
     {
         using StatusStrip control = new();
-        Assert.Throws<InvalidEnumArgumentException>("value", () => control.RenderMode = value);
+        control.Invoking(c => c.RenderMode = value)
+            .Should().Throw<InvalidEnumArgumentException>()
+            .WithParameterName("value");
     }
 
     [WinFormsFact]
     public void StatusStrip_RenderMode_SetCustomThrowsInvalidEnumArgumentException()
     {
         using StatusStrip control = new();
-        Assert.Throws<NotSupportedException>(() => control.RenderMode = ToolStripRenderMode.Custom);
+        control.Invoking(c => c.RenderMode = ToolStripRenderMode.Custom)
+           .Should().Throw<NotSupportedException>();
     }
 
     public static IEnumerable<object[]> SizeGripBounds_Get_TestData()
@@ -655,7 +665,8 @@ public partial class StatusStripTests
             LayoutStyle = layoutStyle,
             RightToLeft = rightToLeft
         };
-        Assert.Equal(expected, control.SizeGripBounds);
+
+        control.SizeGripBounds.Should().Be(expected);
     }
 
     public static IEnumerable<object[]> SizeGripBounds_GetLargeSize_TestData()
@@ -682,7 +693,8 @@ public partial class StatusStripTests
             RightToLeft = rightToLeft,
             Size = new Size(210, 32)
         };
-        Assert.Equal(expected, control.SizeGripBounds);
+
+        control.SizeGripBounds.Should().Be(expected);
     }
 
     public static IEnumerable<object[]> SizeGripBounds_GetSmallSize_TestData()
@@ -709,7 +721,8 @@ public partial class StatusStripTests
             RightToLeft = rightToLeft,
             Size = new Size(190, 12)
         };
-        Assert.Equal(expected, control.SizeGripBounds);
+
+        control.SizeGripBounds.Should().Be(expected);
     }
 
     [WinFormsTheory]
@@ -720,21 +733,22 @@ public partial class StatusStripTests
         {
             SizingGrip = value
         };
-        Assert.Equal(value, control.SizingGrip);
-        Assert.Empty(control.Controls);
-        Assert.False(control.IsHandleCreated);
+
+        control.SizingGrip.Should().Be(value);
+        control.Controls.Count.Should().Be(0);
+        control.IsHandleCreated.Should().BeFalse();
 
         // Set same.
         control.SizingGrip = value;
-        Assert.Equal(value, control.SizingGrip);
-        Assert.Empty(control.Controls);
-        Assert.False(control.IsHandleCreated);
+        control.SizingGrip.Should().Be(value);
+        control.Controls.Count.Should().Be(0);
+        control.IsHandleCreated.Should().BeFalse();
 
         // Set different.
         control.SizingGrip = !value;
-        Assert.Equal(!value, control.SizingGrip);
-        Assert.Empty(control.Controls);
-        Assert.False(control.IsHandleCreated);
+        control.SizingGrip.Should().Be(!value);
+        control.Controls.Count.Should().Be(0);
+        control.IsHandleCreated.Should().BeFalse();
     }
 
     public static IEnumerable<object[]> SizingGrip_SetRightToLeft_TestData()
@@ -757,21 +771,22 @@ public partial class StatusStripTests
             RightToLeft = rightToLeft,
             SizingGrip = value
         };
-        Assert.Equal(value, control.SizingGrip);
-        Assert.Equal(expectedChildrenCallCount1, control.Controls.Count);
-        Assert.False(control.IsHandleCreated);
+
+        control.SizingGrip.Should().Be(value);
+        control.Controls.Count.Should().Be(expectedChildrenCallCount1);
+        control.IsHandleCreated.Should().BeFalse();
 
         // Set same.
         control.SizingGrip = value;
-        Assert.Equal(value, control.SizingGrip);
-        Assert.Equal(expectedChildrenCallCount1, control.Controls.Count);
-        Assert.False(control.IsHandleCreated);
+        control.SizingGrip.Should().Be(value);
+        control.Controls.Count.Should().Be(expectedChildrenCallCount1);
+        control.IsHandleCreated.Should().BeFalse();
 
         // Set different.
         control.SizingGrip = !value;
-        Assert.Equal(!value, control.SizingGrip);
-        Assert.Equal(expectedChildrenCallCount2, control.Controls.Count);
-        Assert.False(control.IsHandleCreated);
+        control.SizingGrip.Should().Be(!value);
+        control.Controls.Count.Should().Be(expectedChildrenCallCount2);
+        control.IsHandleCreated.Should().BeFalse();
     }
 
     public static IEnumerable<object[]> StatusStrip_SizingGrip_SetRightToLeftNonReadOnlyControls_TestData()
@@ -792,21 +807,22 @@ public partial class StatusStripTests
             RightToLeft = rightToLeft,
             SizingGrip = value
         };
-        Assert.Equal(value, control.SizingGrip);
-        Assert.Empty(control.Controls);
-        Assert.False(control.IsHandleCreated);
+
+        control.SizingGrip.Should().Be(value);
+        control.Controls.Count.Should().Be(0);
+        control.IsHandleCreated.Should().BeFalse();
 
         // Set same.
         control.SizingGrip = value;
-        Assert.Equal(value, control.SizingGrip);
-        Assert.Empty(control.Controls);
-        Assert.False(control.IsHandleCreated);
+        control.SizingGrip.Should().Be(value);
+        control.Controls.Count.Should().Be(0);
+        control.IsHandleCreated.Should().BeFalse();
 
         // Set different.
         control.SizingGrip = !value;
-        Assert.Equal(!value, control.SizingGrip);
-        Assert.Empty(control.Controls);
-        Assert.False(control.IsHandleCreated);
+        control.SizingGrip.Should().Be(!value);
+        control.Controls.Count.Should().Be(0);
+        control.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsTheory]
@@ -815,7 +831,8 @@ public partial class StatusStripTests
     public void StatusStrip_SizingGrip_SetWithHandle_GetReturnsExpected(bool value, int expectedInvalidatedCallCount)
     {
         using StatusStrip control = new();
-        Assert.NotEqual(IntPtr.Zero, control.Handle);
+        control.Handle.Should().NotBe(IntPtr.Zero);
+
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
         int styleChangedCallCount = 0;
@@ -824,30 +841,30 @@ public partial class StatusStripTests
         control.HandleCreated += (sender, e) => createdCallCount++;
 
         control.SizingGrip = value;
-        Assert.Equal(value, control.SizingGrip);
-        Assert.Empty(control.Controls);
-        Assert.True(control.IsHandleCreated);
-        Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
-        Assert.Equal(0, styleChangedCallCount);
-        Assert.Equal(0, createdCallCount);
+        control.SizingGrip.Should().Be(value);
+        control.Controls.Count.Should().Be(0);
+        control.IsHandleCreated.Should().BeTrue();
+        invalidatedCallCount.Should().Be(expectedInvalidatedCallCount);
+        styleChangedCallCount.Should().Be(0);
+        createdCallCount.Should().Be(0);
 
         // Set same.
         control.SizingGrip = value;
-        Assert.Equal(value, control.SizingGrip);
-        Assert.Empty(control.Controls);
-        Assert.True(control.IsHandleCreated);
-        Assert.Equal(expectedInvalidatedCallCount, invalidatedCallCount);
-        Assert.Equal(0, styleChangedCallCount);
-        Assert.Equal(0, createdCallCount);
+        control.SizingGrip.Should().Be(value);
+        control.Controls.Count.Should().Be(0);
+        control.IsHandleCreated.Should().BeTrue();
+        invalidatedCallCount.Should().Be(expectedInvalidatedCallCount);
+        styleChangedCallCount.Should().Be(0);
+        createdCallCount.Should().Be(0);
 
         // Set different.
         control.SizingGrip = !value;
-        Assert.Equal(!value, control.SizingGrip);
-        Assert.Empty(control.Controls);
-        Assert.True(control.IsHandleCreated);
-        Assert.Equal(expectedInvalidatedCallCount + 1, invalidatedCallCount);
-        Assert.Equal(0, styleChangedCallCount);
-        Assert.Equal(0, createdCallCount);
+        control.SizingGrip.Should().Be(!value);
+        control.Controls.Count.Should().Be(0);
+        control.IsHandleCreated.Should().BeTrue();
+        invalidatedCallCount.Should().Be(expectedInvalidatedCallCount + 1);
+        styleChangedCallCount.Should().Be(0);
+        createdCallCount.Should().Be(0);
     }
 
     [WinFormsTheory]
@@ -858,31 +875,33 @@ public partial class StatusStripTests
         {
             ShowItemToolTips = value
         };
-        Assert.Equal(value, control.ShowItemToolTips);
-        Assert.False(control.IsHandleCreated);
+
+        control.ShowItemToolTips.Should().Be(value);
+        control.IsHandleCreated.Should().BeFalse();
 
         // Set same.
         control.ShowItemToolTips = value;
-        Assert.Equal(value, control.ShowItemToolTips);
-        Assert.False(control.IsHandleCreated);
+        control.ShowItemToolTips.Should().Be(value);
+        control.IsHandleCreated.Should().BeFalse();
 
         // Set different.
         control.ShowItemToolTips = !value;
-        Assert.Equal(!value, control.ShowItemToolTips);
-        Assert.Equal(!value, control.OverflowButton.DropDown.ShowItemToolTips);
-        Assert.False(control.IsHandleCreated);
+        control.ShowItemToolTips.Should().Be(!value);
+        control.OverflowButton.DropDown.ShowItemToolTips.Should().Be(!value);
+        control.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsFact]
     public void StatusStrip_CreateAccessibilityInstance_Invoke_ReturnsExpected()
     {
         using SubStatusStrip control = new();
-        Control.ControlAccessibleObject instance = Assert.IsAssignableFrom<Control.ControlAccessibleObject>(control.CreateAccessibilityInstance());
-        Assert.NotNull(instance);
-        Assert.NotSame(control.CreateAccessibilityInstance(), instance);
-        Assert.NotSame(control.AccessibilityObject, instance);
-        Assert.Same(control, instance.Owner);
-        Assert.Equal(AccessibleRole.StatusBar, instance.Role);
+        Control.ControlAccessibleObject instance = control.CreateAccessibilityInstance().Should().BeAssignableTo<Control.ControlAccessibleObject>().Subject;
+
+        instance.Should().NotBeNull();
+        control.CreateAccessibilityInstance().Should().NotBeSameAs(instance);
+        control.AccessibilityObject.Should().NotBeSameAs(instance);
+        instance.Owner.Should().BeSameAs(control);
+        instance.Role.Should().Be(AccessibleRole.StatusBar);
     }
 
     public static IEnumerable<object[]> CreateDefaultItem_Button_TestData()
@@ -900,9 +919,10 @@ public partial class StatusStripTests
     public void StatusStrip_CreateDefaultItem_Invoke_Success(string text, Image image, EventHandler onClick)
     {
         using SubStatusStrip control = new();
-        ToolStripStatusLabel button = Assert.IsType<ToolStripStatusLabel>(control.CreateDefaultItem(text, image, onClick));
-        Assert.Equal(text, button.Text);
-        Assert.Same(image, button.Image);
+        ToolStripStatusLabel button = control.CreateDefaultItem(text, image, onClick).Should().BeOfType<ToolStripStatusLabel>().Subject;
+
+        button.Text.Should().Be(text);
+        button.Image.Should().BeSameAs(image);
     }
 
     public static IEnumerable<object[]> Dispose_TestData()
@@ -924,15 +944,16 @@ public partial class StatusStripTests
             SizingGrip = sizingGrip
         };
         int callCount = 0;
+
         void handler(object sender, EventArgs e)
         {
-            Assert.Null(control.Parent);
-            Assert.Empty(control.Controls);
-            Assert.Empty(control.Items);
-            Assert.Empty(control.DataBindings);
-            Assert.False(control.IsHandleCreated);
-            Assert.True(control.Disposing);
-            Assert.Equal(callCount > 0, control.IsDisposed);
+            control.Parent.Should().BeNull();
+            control.Controls.Count.Should().Be(0);
+            control.Items.Count.Should().Be(0);
+            control.DataBindings.Count.Should().Be(0);
+            control.IsHandleCreated.Should().BeFalse();
+            control.Disposing.Should().BeTrue();
+            control.IsDisposed.Should().Be(callCount > 0);
             callCount++;
         }
 
@@ -941,25 +962,25 @@ public partial class StatusStripTests
         try
         {
             control.Dispose();
-            Assert.Null(control.Parent);
-            Assert.Empty(control.Controls);
-            Assert.Empty(control.Items);
-            Assert.Empty(control.DataBindings);
-            Assert.True(control.IsDisposed);
-            Assert.False(control.Disposing);
-            Assert.Equal(1, callCount);
-            Assert.False(control.IsHandleCreated);
+            control.Parent.Should().BeNull();
+            control.Controls.Count.Should().Be(0);
+            control.Items.Count.Should().Be(0);
+            control.DataBindings.Count.Should().Be(0);
+            control.IsDisposed.Should().BeTrue();
+            control.Disposing.Should().BeFalse();
+            callCount.Should().Be(1);
+            control.IsHandleCreated.Should().BeFalse();
 
             // Dispose multiple times.
             control.Dispose();
-            Assert.Null(control.Parent);
-            Assert.Empty(control.Controls);
-            Assert.Empty(control.Items);
-            Assert.Empty(control.DataBindings);
-            Assert.True(control.IsDisposed);
-            Assert.False(control.Disposing);
-            Assert.Equal(2, callCount);
-            Assert.False(control.IsHandleCreated);
+            control.Parent.Should().BeNull();
+            control.Controls.Count.Should().Be(0);
+            control.Items.Count.Should().Be(0);
+            control.DataBindings.Count.Should().Be(0);
+            control.IsDisposed.Should().BeTrue();
+            control.Disposing.Should().BeFalse();
+            callCount.Should().Be(2);
+            control.IsHandleCreated.Should().BeFalse();
         }
         finally
         {
@@ -977,15 +998,16 @@ public partial class StatusStripTests
             SizingGrip = sizingGrip
         };
         int callCount = 0;
+
         void handler(object sender, EventArgs e)
         {
-            Assert.Null(control.Parent);
-            Assert.Empty(control.Controls);
-            Assert.Empty(control.Items);
-            Assert.Empty(control.DataBindings);
-            Assert.False(control.IsHandleCreated);
-            Assert.True(control.Disposing);
-            Assert.Equal(callCount > 0, control.IsDisposed);
+            control.Parent.Should().BeNull();
+            control.Controls.Count.Should().Be(0);
+            control.Items.Count.Should().Be(0);
+            control.DataBindings.Count.Should().Be(0);
+            control.IsHandleCreated.Should().BeFalse();
+            control.Disposing.Should().BeTrue();
+            control.IsDisposed.Should().Be(callCount > 0);
             callCount++;
         }
 
@@ -994,25 +1016,25 @@ public partial class StatusStripTests
         try
         {
             control.Dispose(true);
-            Assert.Null(control.Parent);
-            Assert.Empty(control.Controls);
-            Assert.Empty(control.Items);
-            Assert.Empty(control.DataBindings);
-            Assert.True(control.IsDisposed);
-            Assert.False(control.Disposing);
-            Assert.Equal(1, callCount);
-            Assert.False(control.IsHandleCreated);
+            control.Parent.Should().BeNull();
+            control.Controls.Count.Should().Be(0);
+            control.Items.Count.Should().Be(0);
+            control.DataBindings.Count.Should().Be(0);
+            control.IsDisposed.Should().BeTrue();
+            control.Disposing.Should().BeFalse();
+            callCount.Should().Be(1);
+            control.IsHandleCreated.Should().BeFalse();
 
             // Dispose multiple times.
             control.Dispose(true);
-            Assert.Null(control.Parent);
-            Assert.Empty(control.Controls);
-            Assert.Empty(control.Items);
-            Assert.Empty(control.DataBindings);
-            Assert.True(control.IsDisposed);
-            Assert.False(control.Disposing);
-            Assert.Equal(2, callCount);
-            Assert.False(control.IsHandleCreated);
+            control.Parent.Should().BeNull();
+            control.Controls.Count.Should().Be(0);
+            control.Items.Count.Should().Be(0);
+            control.DataBindings.Count.Should().Be(0);
+            control.IsDisposed.Should().BeTrue();
+            control.Disposing.Should().BeFalse();
+            callCount.Should().Be(2);
+            control.IsHandleCreated.Should().BeFalse();
         }
         finally
         {
@@ -1041,31 +1063,32 @@ public partial class StatusStripTests
             SizingGrip = sizingGrip
         };
         int callCount = 0;
+
         void handler(object sender, EventArgs e) => callCount++;
         control.Disposed += handler;
 
         try
         {
             control.Dispose(false);
-            Assert.Null(control.Parent);
-            Assert.Equal(expectedChildrenCallCount1, control.Controls.Count);
-            Assert.Empty(control.Items);
-            Assert.Empty(control.DataBindings);
-            Assert.False(control.IsDisposed);
-            Assert.False(control.Disposing);
-            Assert.Equal(0, callCount);
-            Assert.False(control.IsHandleCreated);
+            control.Parent.Should().BeNull();
+            control.Controls.Count.Should().Be(expectedChildrenCallCount1);
+            control.Items.Count.Should().Be(0);
+            control.DataBindings.Count.Should().Be(0);
+            control.IsDisposed.Should().BeFalse();
+            control.Disposing.Should().BeFalse();
+            callCount.Should().Be(0);
+            control.IsHandleCreated.Should().BeFalse();
 
             // Dispose multiple times.
             control.Dispose(false);
-            Assert.Null(control.Parent);
-            Assert.Equal(expectedChildrenCallCount1, control.Controls.Count);
-            Assert.Empty(control.Items);
-            Assert.Empty(control.DataBindings);
-            Assert.False(control.IsDisposed);
-            Assert.False(control.Disposing);
-            Assert.Equal(0, callCount);
-            Assert.False(control.IsHandleCreated);
+            control.Parent.Should().BeNull();
+            control.Controls.Count.Should().Be(expectedChildrenCallCount1);
+            control.Items.Count.Should().Be(0);
+            control.DataBindings.Count.Should().Be(0);
+            control.IsDisposed.Should().BeFalse();
+            control.Disposing.Should().BeFalse();
+            callCount.Should().Be(0);
+            control.IsHandleCreated.Should().BeFalse();
         }
         finally
         {
@@ -1085,7 +1108,7 @@ public partial class StatusStripTests
         using SubStatusStrip control = new();
         ToolStripItem button = Assert.IsAssignableFrom<ToolStripItem>(control.CreateDefaultItem(text, null, onClick));
         button.PerformClick();
-        Assert.Equal(1, callCount);
+        callCount.Should().Be(1);
     }
 
     [WinFormsFact]
@@ -1107,7 +1130,7 @@ public partial class StatusStripTests
     public void StatusStrip_GetScrollState_Invoke_ReturnsExpected(int bit, bool expected)
     {
         using SubStatusStrip control = new();
-        Assert.Equal(expected, control.GetScrollState(bit));
+        control.GetScrollState(bit).Should().Be(expected);
     }
 
     [WinFormsTheory]
@@ -1134,10 +1157,10 @@ public partial class StatusStripTests
     public void StatusStrip_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
     {
         using SubStatusStrip control = new();
-        Assert.Equal(expected, control.GetStyle(flag));
+        control.GetStyle(flag).Should().Be(expected);
 
         // Call again to test caching.
-        Assert.Equal(expected, control.GetStyle(flag));
+        control.GetStyle(flag).Should().Be(expected);
     }
 
     public static IEnumerable<object[]> OnLayout_TestData()
@@ -1165,20 +1188,21 @@ public partial class StatusStripTests
         int callCount = 0;
         LayoutEventHandler handler = (sender, e) =>
         {
-            Assert.Same(control, sender);
-            Assert.Same(eventArgs, e);
+            sender.Should().BeSameAs(control);
+            e.Should().BeSameAs(eventArgs);
             callCount++;
         };
 
         // Call with handler.
         control.Layout += handler;
         control.OnLayout(eventArgs);
-        Assert.Equal(1, callCount);
+        callCount.Should().Be(1);
 
         // Remove handler.
         control.Layout -= handler;
         control.OnLayout(eventArgs);
-        Assert.Equal(1, callCount);
+        callCount.Should().Be(1);
+
     }
 
     [WinFormsFact]
@@ -1199,17 +1223,21 @@ public partial class StatusStripTests
             }
         };
         control.OnLayout(eventArgs);
-        Assert.Equal(1, layoutCallCount);
-        Control grip = Assert.IsAssignableFrom<Control>(Assert.Single(control.Controls));
-        Assert.Equal(control.SizeGripBounds, grip.Bounds);
-        Assert.Equal(Color.Transparent, grip.BackColor);
+        layoutCallCount.Should().Be(1);
+
+        control.Controls.Count.Should().Be(1);
+        Control grip = control.Controls[0];
+        grip.Should().BeAssignableTo<Control>();
+        grip.Bounds.Should().Be(control.SizeGripBounds);
+        grip.BackColor.Should().Be(Color.Transparent);
     }
 
     [WinFormsFact]
     public void StatusStrip_OnLayout_NullE_ThrowsNullReferenceException()
     {
         using SubStatusStrip control = new();
-        Assert.Throws<NullReferenceException>(() => control.OnLayout(null));
+        control.Invoking(c => c.OnLayout(null))
+            .Should().Throw<NullReferenceException>();
     }
 
     public static IEnumerable<object[]> OnPaintBackground_TestData()
@@ -1237,29 +1265,30 @@ public partial class StatusStripTests
         int callCount = 0;
         PaintEventHandler handler = (sender, e) =>
         {
-            Assert.Same(control, sender);
-            Assert.Same(eventArgs, e);
+            sender.Should().BeSameAs(control);
+            e.Should().BeSameAs(eventArgs);
             callCount++;
         };
 
         // Call with handler.
         control.Paint += handler;
         control.OnPaintBackground(eventArgs);
-        Assert.Equal(0, callCount);
-        Assert.False(control.IsHandleCreated);
+        callCount.Should().Be(0);
+        control.IsHandleCreated.Should().BeFalse();
 
         // Remove handler.
         control.Paint -= handler;
         control.OnPaintBackground(eventArgs);
-        Assert.Equal(0, callCount);
-        Assert.False(control.IsHandleCreated);
+        callCount.Should().Be(0);
+        control.IsHandleCreated.Should().BeFalse();
     }
 
     [WinFormsFact]
     public void StatusStrip_OnPaintBackground_NullE_ThrowsArgumentNullException()
     {
         using SubStatusStrip control = new();
-        Assert.Throws<ArgumentNullException>(() => control.OnPaintBackground(null));
+        control.Invoking(c => c.OnPaintBackground(null))
+           .Should().Throw<ArgumentNullException>();
     }
 
     private class SubToolStripRenderer : ToolStripRenderer
