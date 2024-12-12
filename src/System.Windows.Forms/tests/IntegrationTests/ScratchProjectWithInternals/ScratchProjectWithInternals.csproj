@@ -3,7 +3,6 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <Nullable>enable</Nullable>
-    <OutputType>WinExe</OutputType>
     <ImplicitUsings>enable</ImplicitUsings>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <EnablePreviewFeatures>true</EnablePreviewFeatures>

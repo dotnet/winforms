@@ -229,7 +229,6 @@
 [assembly: SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "Designer", Scope = "member", Target = "~M:System.Windows.Forms.MdiClient.ShouldSerializeLocation~System.Boolean")]
 
 // Ideally these should be different exceptions, but leaving them as shipped for compatibility
-[assembly: SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "Compat", Scope = "member", Target = "~M:System.Windows.Forms.DataObject.Composition.NativeToWinFormsAdapter.GetDataFromHGLOBAL(Windows.Win32.Foundation.HGLOBAL,System.String)~System.Object")]
 [assembly: SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "Compat", Scope = "member", Target = "~M:System.Windows.Forms.DataObject.Composition.NativeToWinFormsAdapter.ReadByteStreamFromHGLOBAL(Windows.Win32.Foundation.HGLOBAL,System.Boolean@)~System.IO.MemoryStream")]
 [assembly: SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "Compat", Scope = "member", Target = "~M:System.Windows.Forms.DataObject.Composition.NativeToRuntimeAdapter.System#Runtime#InteropServices#ComTypes#IDataObject#EnumFormatEtc(System.Runtime.InteropServices.ComTypes.DATADIR)~System.Runtime.InteropServices.ComTypes.IEnumFORMATETC")]
 [assembly: SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "Compat", Scope = "member", Target = "~M:System.Windows.Forms.Clipboard.SetDataObject(System.Object,System.Boolean,System.Int32,System.Int32)")]
