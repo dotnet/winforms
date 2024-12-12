@@ -655,11 +655,11 @@ public unsafe partial class DataObject
             public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
                 string format,
                 [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
-                    TryGetDataInternal(format, resolver: null!, autoConvert: false, legacyMode: false, out data);
+                    TryGetDataInternal(format, resolver: null!, autoConvert: true, legacyMode: false, out data);
 
             public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
                 [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
-                    TryGetDataInternal(typeof(T).FullName!, resolver: null!, autoConvert: false, legacyMode: false, out data);
+                    TryGetDataInternal(typeof(T).FullName!, resolver: null!, autoConvert: true, legacyMode: false, out data);
             #endregion
 
             private bool GetDataPresentInner(string format)
