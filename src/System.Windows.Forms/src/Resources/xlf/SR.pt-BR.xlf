@@ -292,6 +292,16 @@
         <target state="translated">A serialização e a desserialização de BinaryFormatter estão desabilitadas neste aplicativo. Consulte https://aka.ms/binaryformatter para obter mais informações.</target>
         <note />
       </trans-unit>
+      <trans-unit id="BinaryFormatter_NotSupported_InClipboardOrDragDrop">
+        <source>BinaryFormatter is not supported in Clipboard or drag and drop scenarios.</source>
+        <target state="new">BinaryFormatter is not supported in Clipboard or drag and drop scenarios.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BinaryFormatter_NotSupported_InClipboardOrDragDrop_UseTypedAPI">
+        <source>BinaryFormatter is not supported in Clipboard or drag and drop scenarios.  Enable it and use 'TryGetData&lt;T&gt;' API with a 'resolver' function that defines a set of allowed types, to deserialize '{0}'.</source>
+        <target state="new">BinaryFormatter is not supported in Clipboard or drag and drop scenarios.  Enable it and use 'TryGetData&lt;T&gt;' API with a 'resolver' function that defines a set of allowed types, to deserialize '{0}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
         <source>Occurs when the binding context has changed.</source>
         <target state="translated">Ocorre quando o contexto de associação foi alterado.</target>
@@ -955,6 +965,26 @@
       <trans-unit id="ClipboardOperationFailed">
         <source>Requested Clipboard operation did not succeed.</source>
         <target state="translated">A operação de Área de Transferência solicitada não foi bem-sucedida.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_InvalidFormatTypeCombination">
+        <source>Type '{0}' is not compatible with the specified format '{1}'.</source>
+        <target state="new">Type '{0}' is not compatible with the specified format '{1}'.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_InvalidType">
+        <source>'{0}' is not a concrete type, and could allow for unbounded deserialization.  Use a concrete type or define a resolver function that supports types that you are retrieving from the Clipboard or dragging.</source>
+        <target state="new">'{0}' is not a concrete type, and could allow for unbounded deserialization.  Use a concrete type or define a resolver function that supports types that you are retrieving from the Clipboard or dragging.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_TypedAPI_InvalidResolver">
+        <source>'resolver' function provided in 'TryGetData&lt;T&gt;' method should not return a null.  It should throw a 'System.NotSupportedException' unless type {0} is one of the allowed types, then the 'Type' should be returned."</source>
+        <target state="new">'resolver' function provided in 'TryGetData&lt;T&gt;' method should not return a null.  It should throw a 'System.NotSupportedException' unless type {0} is one of the allowed types, then the 'Type' should be returned."</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_UseTypedAPI">
+        <source>Use 'TryGetData&lt;T&gt;' API with a 'resolver' function that defines a set of allowed types, to deserialize '{0}'.</source>
+        <target state="new">Use 'TryGetData&lt;T&gt;' API with a 'resolver' function that defines a set of allowed types, to deserialize '{0}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="ClipboardSecurityException">
@@ -5773,6 +5803,11 @@ Deseja substituí-lo?</target>
       <trans-unit id="ISupportInitializeDescr">
         <source>Specifies support for transacted initialization. </source>
         <target state="translated">Especifica o suporte para a inicialização transacionada. </target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ITypeDataObject_Not_Implemented">
+        <source>Data object `{0}` doesn't implement `ITypedDataObject` interface and can't be read using `TryGetData&lt;T&gt;(string, out T)` methods.</source>
+        <target state="new">Data object `{0}` doesn't implement `ITypedDataObject` interface and can't be read using `TryGetData&lt;T&gt;(string, out T)` methods.</target>
         <note />
       </trans-unit>
       <trans-unit id="IllegalCrossThreadCall">

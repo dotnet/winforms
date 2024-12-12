@@ -169,13 +169,10 @@ public unsafe partial class DataObject
 
                 if (_legacyMode)
                 {
-                    // TODO (TanyaSo): localize string
                     return Switches.ClipboardDragDropEnableUnsafeBinaryFormatterSerialization
                         ? null
                         : throw new NotSupportedException(string.Format(
-                            "BinaryFormatter is not supported in Clipboard or drag and drop scenarios." +
-                                "  Enable it and use 'TryGetData<T>' API with a 'resolver'" +
-                                " function that defines a set of allowed types, to deserialize '{0}'.",
+                            SR.BinaryFormatter_NotSupported_InClipboardOrDragDrop_UseTypedAPI,
                             $"{assemblyName}.{typeName}"));
                 }
 
@@ -189,18 +186,15 @@ public unsafe partial class DataObject
             {
                 if (_resolver is null)
                 {
-                    // TODO (TanyaSo): localize string
                     throw new NotSupportedException(string.Format(
-                        "Use 'TryGetData<T>' method with a 'resolver' function that defines a set of allowed types, to deserialize '{0}'.",
+                        SR.ClipboardOrDragDrop_UseTypedAPI,
                         typeName.AssemblyQualifiedName));
                 }
 
                 // This helper method is called after we verified that _resolver is not null.
                 Type resolved = _resolver!(typeName)
                     ?? throw new NotSupportedException(string.Format(
-                        "'resolver' function provided in 'TryGetData<T>' method should not return a null.  " +
-                            "It should throw a 'System.NotSupportedException' when encountering unsupported types, " +
-                            "unless type {0} is one of the allowed types, then the 'Type' should be returned.",
+                        SR.ClipboardOrDragDrop_TypedAPI_InvalidResolver,
                         typeName.AssemblyQualifiedName));
 
                 _userTypes.Add(typeName, resolved);

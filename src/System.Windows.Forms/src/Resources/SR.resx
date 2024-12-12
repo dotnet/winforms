@@ -7015,4 +7015,25 @@ Stack trace where the illegal operation occurred was:
   <data name="FormOrTaskDialog_NoSyncContextForShowAsync" xml:space="preserve">
     <value>Failed to retrieve the Synchronization Context for showing the Form asynchronously.</value>
   </data>
+  <data name="ITypeDataObject_Not_Implemented" xml:space="preserve">
+    <value>Data object `{0}` doesn't implement `ITypedDataObject` interface and can't be read using `TryGetData&lt;T&gt;(string, out T)` methods.</value>
+  </data>
+  <data name="BinaryFormatter_NotSupported_InClipboardOrDragDrop" xml:space="preserve">
+    <value>BinaryFormatter is not supported in Clipboard or drag and drop scenarios.</value>
+  </data>
+  <data name="BinaryFormatter_NotSupported_InClipboardOrDragDrop_UseTypedAPI" xml:space="preserve">
+    <value>BinaryFormatter is not supported in Clipboard or drag and drop scenarios.  Enable it and use 'TryGetData&lt;T&gt;' API with a 'resolver' function that defines a set of allowed types, to deserialize '{0}'.</value>
+  </data>
+  <data name="ClipboardOrDragDrop_UseTypedAPI" xml:space="preserve">
+    <value>Use 'TryGetData&lt;T&gt;' API with a 'resolver' function that defines a set of allowed types, to deserialize '{0}'.</value>
+  </data>
+  <data name="ClipboardOrDragDrop_TypedAPI_InvalidResolver" xml:space="preserve">
+    <value>'resolver' function provided in 'TryGetData&lt;T&gt;' method should not return a null.  It should throw a 'System.NotSupportedException' unless type {0} is one of the allowed types, then the 'Type' should be returned."</value>
+  </data>
+  <data name="ClipboardOrDragDrop_InvalidType" xml:space="preserve">
+    <value>'{0}' is not a concrete type, and could allow for unbounded deserialization.  Use a concrete type or define a resolver function that supports types that you are retrieving from the Clipboard or dragging.</value>
+  </data>
+  <data name="ClipboardOrDragDrop_InvalidFormatTypeCombination" xml:space="preserve">
+    <value>Type '{0}' is not compatible with the specified format '{1}'.</value>
+  </data>
 </root>
