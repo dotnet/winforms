@@ -21,7 +21,7 @@ public sealed unsafe class InstalledFontCollection : FontCollection
     private static GpFontCollection* Create()
     {
         GpFontCollection* fontCollection;
-        PInvoke.GdipNewInstalledFontCollection(&fontCollection).ThrowIfFailed();
+        PInvokeGdiPlus.GdipNewInstalledFontCollection(&fontCollection).ThrowIfFailed();
         return fontCollection;
     }
 

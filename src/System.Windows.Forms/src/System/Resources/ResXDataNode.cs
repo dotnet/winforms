@@ -3,7 +3,6 @@
 
 using System.ComponentModel;
 using System.ComponentModel.Design;
-using System.Drawing;
 using System.Formats.Nrbf;
 using System.Globalization;
 using System.Reflection;

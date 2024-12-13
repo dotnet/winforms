@@ -3,6 +3,7 @@
 
 namespace WinFormsControlsTest
 {
+    [DesignerCategory("Default")]
     public partial class ScrollableControls : Form
     {
         public ScrollableControls()

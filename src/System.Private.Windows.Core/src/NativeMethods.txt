@@ -63,7 +63,6 @@ E_PENDING
 E_POINTER
 E_UNEXPECTED
 EM_*
-EncoderParameters
 EndPaint
 EnumChildWindows
 EnumDisplayMonitors
@@ -77,26 +76,6 @@ GetCurrentThreadId
 GetSysColorBrush
 GetWindowText
 GetWindowTextLength
-// All callers of these APIs MUST call GdiPlusInitialization.EnsureInitialized() before use.
-// There is no easy way to do this in Core as we want to make sure it is only done when needed.
-// (If using another GDI+ handle or wrapped object you can assume GDI+ is initialized.)
-GdipBitmapLockBits
-GdipBitmapUnlockBits
-GdipCreateFromHWND
-GdipCreateHalftonePalette
-GdipDeleteGraphics
-GdipCreateHBITMAPFromBitmap
-GdipGetHemfFromMetafile
-GdipGetImageBounds
-GdipGetImageEncoders
-GdipGetImageEncodersSize
-GdipGetImagePixelFormat
-GdipGetImageRawFormat
-GdipGetRegionHRgn
-GdipIsInfiniteRegion
-GdiplusStartup
-GdiplusStartupInputEx
-GdipSaveImageToStream
 GET_CLASS_LONG_INDEX
 GetClientRect
 GetClipRgn
@@ -125,10 +104,6 @@ GlobalLock
 GlobalReAlloc
 GlobalSize
 GlobalUnlock
-GpBitmap
-GpGraphics
-GpImage
-GpRegion
 HBITMAP
 HBMMENU_*
 HBRUSH
@@ -147,7 +122,6 @@ HWND_*
 IDI_*
 IEnumUnknown
 IGlobalInterfaceTable
-ImageFormat*
 ImageLockMode
 INPLACE_E_NOTOOLSPACE
 IntersectClipRect
@@ -190,15 +164,12 @@ OLE_E_PROMPTSAVECANCELLED
 OleCreatePictureIndirect
 PeekMessage
 PostMessage
-PixelFormat*
 POINTS
 PRINTDLGEX_FLAGS
 PropVariantClear
 PWSTR
 RealizePalette
-Rect
 RECT
-RectF
 REGDB_E_CLASSNOTREG
 ReleaseDC
 RestoreDC
