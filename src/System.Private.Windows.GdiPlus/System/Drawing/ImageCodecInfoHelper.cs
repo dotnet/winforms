@@ -41,13 +41,13 @@ internal static class ImageCodecInfoHelper
                 uint numEncoders;
                 uint size;
 
-                PInvokeCore.GdipGetImageEncodersSize(&numEncoders, &size).ThrowIfFailed();
+                PInvokeGdiPlus.GdipGetImageEncodersSize(&numEncoders, &size).ThrowIfFailed();
 
                 using BufferScope<byte> buffer = new((int)size);
 
                 fixed (byte* b = buffer)
                 {
-                    PInvokeCore.GdipGetImageEncoders(numEncoders, size, (ImageCodecInfo*)b).ThrowIfFailed();
+                    PInvokeGdiPlus.GdipGetImageEncoders(numEncoders, size, (ImageCodecInfo*)b).ThrowIfFailed();
                     ReadOnlySpan<ImageCodecInfo> codecInfo = new((ImageCodecInfo*)b, (int)numEncoders);
                     s_encoders = new (Guid Format, Guid Encoder)[codecInfo.Length];
 

@@ -371,6 +371,7 @@ public partial class DataObjectTests
     {
         private readonly string _format;
         private readonly Func<TypeName, Type>? _resolver;
+        // true is the default value for general purpose APIs (GetData).
         private readonly bool _autoConvert;
 
         public DataObjectOverridesTryGetDataCore(string format, Func<TypeName, Type>? resolver, bool autoConvert) : base()
@@ -403,7 +404,7 @@ public partial class DataObjectTests
     [Fact]
     public void DataObject_TryGetData_InvokeString_CallsTryGetDataCore()
     {
-        DataObjectOverridesTryGetDataCore dataObject = new(typeof(string).FullName!, resolver: null, autoConvert: false);
+        DataObjectOverridesTryGetDataCore dataObject = new(typeof(string).FullName!, resolver: null, autoConvert: true);
         dataObject.Count.Should().Be(0);
 
         dataObject.TryGetData(out string? data).Should().BeFalse();
@@ -421,7 +422,7 @@ public partial class DataObjectTests
     [MemberData(nameof(RestrictedAndUnrestrictedFormat))]
     public void TryGetData_InvokeStringString_CallsTryGetDataCore(string format)
     {
-        DataObjectOverridesTryGetDataCore dataObject = new(format, null, autoConvert: false);
+        DataObjectOverridesTryGetDataCore dataObject = new(format, null, autoConvert: true);
         dataObject.Count.Should().Be(0);
 
         dataObject.TryGetData(format, out string? data).Should().BeFalse();
@@ -433,7 +434,7 @@ public partial class DataObjectTests
     public void TryGetData_InvokeStringString_ValidationFails()
     {
         string format = DataFormats.Bitmap;
-        DataObjectOverridesTryGetDataCore dataObject = new(format, null, autoConvert: false);
+        DataObjectOverridesTryGetDataCore dataObject = new(format, null, autoConvert: true);
         dataObject.Count.Should().Be(0);
 
         // Incompatible format and type.

@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.Graphics.GdiPlus;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
 using Windows.Win32.System.Variant;
@@ -103,11 +104,11 @@ internal sealed unsafe class Com2PictureConverter : Com2DataTypeToManagedDataTyp
             PICTDESC pictdesc;
             if (managedValue is Icon icon)
             {
-                pictdesc = PICTDESC.FromIcon(icon, copy: false);
+                pictdesc = icon.CreatePICTDESC(copy: false);
             }
             else if (managedValue is Bitmap bitmap)
             {
-                pictdesc = PICTDESC.FromBitmap(bitmap);
+                pictdesc = bitmap.CreatePICTDESC();
                 own = true;
             }
             else

@@ -12,7 +12,7 @@ public sealed unsafe partial class AdjustableArrowCap : CustomLineCap
     public AdjustableArrowCap(float width, float height, bool isFilled)
     {
         GpAdjustableArrowCap* nativeCap;
-        PInvoke.GdipCreateAdjustableArrowCap(height, width, isFilled, &nativeCap).ThrowIfFailed();
+        PInvokeGdiPlus.GdipCreateAdjustableArrowCap(height, width, isFilled, &nativeCap).ThrowIfFailed();
         SetNativeLineCap((GpCustomLineCap*)nativeCap);
     }
 
@@ -23,13 +23,13 @@ public sealed unsafe partial class AdjustableArrowCap : CustomLineCap
         get
         {
             float height;
-            PInvoke.GdipGetAdjustableArrowCapHeight(NativeArrowCap, &height).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetAdjustableArrowCapHeight(NativeArrowCap, &height).ThrowIfFailed();
             GC.KeepAlive(this);
             return height;
         }
         set
         {
-            PInvoke.GdipSetAdjustableArrowCapHeight(NativeArrowCap, value).ThrowIfFailed();
+            PInvokeGdiPlus.GdipSetAdjustableArrowCapHeight(NativeArrowCap, value).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }
@@ -39,13 +39,13 @@ public sealed unsafe partial class AdjustableArrowCap : CustomLineCap
         get
         {
             float width;
-            PInvoke.GdipGetAdjustableArrowCapWidth(NativeArrowCap, &width).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetAdjustableArrowCapWidth(NativeArrowCap, &width).ThrowIfFailed();
             GC.KeepAlive(this);
             return width;
         }
         set
         {
-            PInvoke.GdipSetAdjustableArrowCapWidth(NativeArrowCap, value).ThrowIfFailed();
+            PInvokeGdiPlus.GdipSetAdjustableArrowCapWidth(NativeArrowCap, value).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }
@@ -55,13 +55,13 @@ public sealed unsafe partial class AdjustableArrowCap : CustomLineCap
         get
         {
             float middleInset;
-            PInvoke.GdipGetAdjustableArrowCapMiddleInset(NativeArrowCap, &middleInset).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetAdjustableArrowCapMiddleInset(NativeArrowCap, &middleInset).ThrowIfFailed();
             GC.KeepAlive(this);
             return middleInset;
         }
         set
         {
-            PInvoke.GdipSetAdjustableArrowCapMiddleInset(NativeArrowCap, value).ThrowIfFailed();
+            PInvokeGdiPlus.GdipSetAdjustableArrowCapMiddleInset(NativeArrowCap, value).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }
@@ -71,13 +71,13 @@ public sealed unsafe partial class AdjustableArrowCap : CustomLineCap
         get
         {
             BOOL isFilled;
-            PInvoke.GdipGetAdjustableArrowCapFillState(NativeArrowCap, &isFilled).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetAdjustableArrowCapFillState(NativeArrowCap, &isFilled).ThrowIfFailed();
             GC.KeepAlive(this);
             return isFilled;
         }
         set
         {
-            PInvoke.GdipSetAdjustableArrowCapFillState(NativeArrowCap, value).ThrowIfFailed();
+            PInvokeGdiPlus.GdipSetAdjustableArrowCapFillState(NativeArrowCap, value).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }

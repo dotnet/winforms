@@ -7,7 +7,6 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
-using Windows.Win32.System.Ole;
 
 namespace System.Drawing;
 
@@ -810,7 +809,7 @@ public sealed unsafe partial class Icon : MarshalByRefObject, ICloneable, IDispo
             // converting them to DIBS and saving them into the file. But, in the interest of simplicity, we just
             // call to OLE to do it for us.
 
-            using var iPicture = IPicture.CreateFromIcon(this, copy: false);
+            using var iPicture = this.CreateIPicture(copy: false);
             using var iStream = outputStream.ToIStream(makeSeekable: true);
             iPicture.Value->SaveAsFile(iStream, (BOOL)(-1), pCbSize: null).ThrowOnFailure();
         }

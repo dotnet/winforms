@@ -55,6 +55,12 @@
       <PrivateAssets>all</PrivateAssets>
     </ProjectReference>
 
+    <ProjectReference Include="..\..\System.Private.Windows.GdiPlus\System.Private.Windows.GdiPlus.csproj">
+      <SetTargetFramework>TargetFramework=$(TargetFramework)</SetTargetFramework>
+      <Pack>true</Pack>
+      <PrivateAssets>all</PrivateAssets>
+    </ProjectReference>
+
     <PackageReference Include="Microsoft.Win32.SystemEvents" />
     <PackageReference Include="Microsoft.Windows.CsWin32">
       <PrivateAssets>all</PrivateAssets>

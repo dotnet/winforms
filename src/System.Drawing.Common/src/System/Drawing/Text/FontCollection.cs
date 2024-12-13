@@ -32,7 +32,7 @@ public abstract unsafe class FontCollection : IDisposable, IPointer<GpFontCollec
         get
         {
             int numFound;
-            PInvoke.GdipGetFontCollectionFamilyCount(_nativeFontCollection, &numFound).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetFontCollectionFamilyCount(_nativeFontCollection, &numFound).ThrowIfFailed();
 
             if (numFound == 0)
             {
@@ -44,7 +44,7 @@ public abstract unsafe class FontCollection : IDisposable, IPointer<GpFontCollec
             GpFontFamily*[] gpFamilies = new GpFontFamily*[numFound];
             fixed (GpFontFamily** f = gpFamilies)
             {
-                PInvoke.GdipGetFontCollectionFamilyList(_nativeFontCollection, numFound, f, &numFound).ThrowIfFailed();
+                PInvokeGdiPlus.GdipGetFontCollectionFamilyList(_nativeFontCollection, numFound, f, &numFound).ThrowIfFailed();
             }
 
             Debug.Assert(gpFamilies.Length == numFound, "GDI+ can't give a straight answer about how many fonts there are");
