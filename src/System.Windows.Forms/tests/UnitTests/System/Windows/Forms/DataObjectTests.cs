@@ -3001,9 +3001,7 @@ public partial class DataObjectTests
     {
         DataObject dataObject = new();
         dataObject.SetDataAsJson(format, 1);
-        // 
-        var test = dataObject.GetData(format);
-        test.Should().NotBeOfType<IJsonData>();
+        dataObject.GetData(format).Should().NotBeOfType<IJsonData>();
     }
 
     [WinFormsFact]

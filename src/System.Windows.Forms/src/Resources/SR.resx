@@ -7035,7 +7035,5 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="ClipboardOrDragDrop_InvalidFormatTypeCombination" xml:space="preserve">
     <value>The specified type '{0}' is not compatible with the specified format '{1}'.</value>
-  <data name="InvalidTypeForSetDataAsJson" xml:space="preserve">
-    <value>DataObject cannot be JSON serialized meaningfully. Set the data by using {0} instead.</value>
   </data>
 </root>

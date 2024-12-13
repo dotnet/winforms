@@ -515,7 +515,8 @@ public static class Clipboard
     }
 
     /// <summary>
-    ///  Saves the data onto the clipboard in the specified format using JSON serialization.
+    ///  Saves the data onto the clipboard in the specified format.
+    ///  If the data is a managed object and format allows for serialization of managed objects, the object will be serialized using JSON.
     /// </summary>
     /// <exception cref="ArgumentException">
     ///  null, empty, or whitespace was passed as the format.
@@ -527,6 +528,11 @@ public static class Clipboard
     ///  onto the clipboard via <see cref="SetDataObject(object)"/>.
     /// </exception>
     /// <remarks>
+    ///  <para>
+    ///   If your data is an intrinsically handled type such as primitives, string, or Bitmap
+    ///   and you are using a custom format or <see cref="DataFormats.Serializable"/>
+    ///   it is recommended to use the <see cref="SetData(string, object?)"/> APIs to avoid unnecessary overhead.
+    ///  </para>
     ///  <para>
     ///   The default behavior of <see cref="JsonSerializer"/> is used to serialize the data.
     ///  </para>

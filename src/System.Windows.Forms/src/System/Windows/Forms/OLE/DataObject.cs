@@ -129,7 +129,8 @@ public unsafe partial class DataObject :
     }
 
     /// <summary>
-    ///  Stores the data as JSON in the specified format.
+    ///  Stores the data in the specified format.
+    ///  If the data is a managed object and format allows for serialization of managed objects, the object will be serialized as JSON.
     /// </summary>
     /// <param name="format">The format associated with the data. See <see cref="DataFormats"/> for predefined formats.</param>
     /// <param name="autoConvert"><see langword="true"/> to allow the data to be converted to another format; otherwise, <see langword="false"/>.</param>
@@ -140,6 +141,11 @@ public unsafe partial class DataObject :
     ///  passing in <paramref name="data"/>.
     /// </exception>
     /// <remarks>
+    ///  <para>
+    ///   If your data is an intrinsically handled type such as primitives, string, or Bitmap
+    ///   and you are using a custom format or <see cref="DataFormats.Serializable"/>
+    ///   it is recommended to use the <see cref="SetData(string, object?)"/> APIs to avoid unnecessary overhead.
+    ///  </para>
     ///  <para>
     ///   The default behavior of <see cref="JsonSerializer"/> is used to serialize the data.
     ///  </para>
