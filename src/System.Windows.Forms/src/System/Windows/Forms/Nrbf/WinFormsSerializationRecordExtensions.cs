@@ -79,14 +79,14 @@ internal static class WinFormsSerializationRecordExtensions
         if (record is not ClassRecord types
             || types.GetRawValue("<JsonBytes>k__BackingField") is not SZArrayRecord<byte> byteData
             || types.GetRawValue("<InnerTypeAssemblyQualifiedName>k__BackingField") is not string innerTypeFullName
-            || !TypeName.TryParse(innerTypeFullName, out TypeName? genericTypeName))
+            || !TypeName.TryParse(innerTypeFullName, out TypeName? serializedTypeName))
         {
             // This is supposed to be JsonData, but somehow the binary formatted data is corrupt.
             throw new SerializationException();
         }
 
-        Type genericType = resolver.GetType(genericTypeName);
-        if (!genericType.IsAssignableTo(typeof(T)))
+        Type serializedType = resolver.GetType(serializedTypeName);
+        if (!serializedType.IsAssignableTo(typeof(T)))
         {
             // Not the type the caller asked for.
             return false;
@@ -98,7 +98,8 @@ internal static class WinFormsSerializationRecordExtensions
         }
         catch (Exception ex)
         {
-            throw new NotSupportedException(ex.Message);
+            // loni TODO: localize string
+            throw new NotSupportedException("Failed to deserialize JSON data.", ex);
         }
 
         return true;

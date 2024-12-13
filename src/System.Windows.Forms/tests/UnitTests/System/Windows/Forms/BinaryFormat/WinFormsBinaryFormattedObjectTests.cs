@@ -35,7 +35,7 @@ public class WinFormsBinaryFormattedObjectTests
 
         JsonData<Point> json = new()
         {
-            JsonBytes = JsonSerializer.SerializeToUtf8Bytes(point),
+            JsonBytes = JsonSerializer.SerializeToUtf8Bytes(point)
         };
 
         using MemoryStream stream = new();
@@ -56,8 +56,7 @@ public class WinFormsBinaryFormattedObjectTests
         Point point = new() { X = 1, Y = 1 };
         JsonData<Point> data = new()
         {
-            JsonBytes = JsonSerializer.SerializeToUtf8Bytes(point),
-            InnerTypeAssemblyQualifiedName = typeof(Point).ToTypeName().AssemblyQualifiedName
+            JsonBytes = JsonSerializer.SerializeToUtf8Bytes(point)
     };
 
         using MemoryStream stream = new();
@@ -77,12 +76,12 @@ public class WinFormsBinaryFormattedObjectTests
     {
         public byte[] JsonBytes { get; set; }
 
-        public string InnerTypeFullName { get; }
+        public string InnerTypeAssemblyQualifiedName { get; set; }
 
         public readonly object GetRealObject(StreamingContext context)
         {
             object? result = null;
-            if (TypeName.TryParse(InnerTypeFullName, out TypeName? genericTypeName)
+            if (TypeName.TryParse(InnerTypeAssemblyQualifiedName, out TypeName? genericTypeName)
                 && genericTypeName.Matches(typeof(Point).ToTypeName()))
             {
                 result = JsonSerializer.Deserialize<Point>(JsonBytes);

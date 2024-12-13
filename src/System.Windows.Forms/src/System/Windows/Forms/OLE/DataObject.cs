@@ -106,27 +106,26 @@ public unsafe partial class DataObject :
     [RequiresUnreferencedCode("Uses default System.Text.Json behavior which is not trim-compatible.")]
     public void SetDataAsJson<T>(string format, T data)
     {
-        data.OrThrowIfNull(nameof(data));
         if (typeof(T) == typeof(DataObject))
         {
+            // loni TODO: localize string.
             throw new InvalidOperationException($"DataObject will serialize as empty. JSON serialize the data within {nameof(data)}, then use {nameof(SetData)} instead.");
         }
 
-        SetData(format, new JsonData<T>() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data), InnerTypeAssemblyQualifiedName = typeof(T).ToTypeName().AssemblyQualifiedName });
+        SetData(format, JsonSerializeNonRestricted(format, data));
     }
 
     /// <inheritdoc cref="SetDataAsJson{T}(string, bool, T)"/>
     [RequiresUnreferencedCode("Uses default System.Text.Json behavior which is not trim-compatible.")]
     public void SetDataAsJson<T>(T data)
     {
-        data.OrThrowIfNull(nameof(data));
         if (typeof(T) == typeof(DataObject))
         {
-            // TODO: Localize string.
-            throw new InvalidOperationException($"'DataObject' will serialize as empty. JSON serialize the data within {nameof(data)}, then use {nameof(SetData)} API instead.");
+            // loni TODO: localize string.
+            throw new InvalidOperationException($"DataObject will serialize as empty. JSON serialize the data within {nameof(data)}, then use {nameof(SetData)} instead.");
         }
 
-        SetData(typeof(T), new JsonData<T>() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data), InnerTypeAssemblyQualifiedName = typeof(T).ToTypeName().AssemblyQualifiedName });
+        SetData(typeof(T), JsonSerializeNonRestricted(typeof(T).FullName!, data));
     }
 
     /// <summary>
@@ -161,15 +160,71 @@ public unsafe partial class DataObject :
     [RequiresUnreferencedCode("Uses default System.Text.Json behavior which is not trim-compatible.")]
     public void SetDataAsJson<T>(string format, bool autoConvert, T data)
     {
-        data.OrThrowIfNull(nameof(data));
         if (typeof(T) == typeof(DataObject))
         {
-            // TODO: Localize string.
-            throw new InvalidOperationException($"'DataObject' will serialize as empty. JSON serialize the data within {nameof(data)}, then use {nameof(SetData)} API instead.");
+            // loni TODO: localize string.
+            throw new InvalidOperationException($"DataObject will serialize as empty. JSON serialize the data within {nameof(data)}, then use {nameof(SetData)} instead.");
         }
 
-        SetData(format, autoConvert, new JsonData<T>() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data), InnerTypeAssemblyQualifiedName = typeof(T).ToTypeName().AssemblyQualifiedName });
+        SetData(format, autoConvert, JsonSerializeNonRestricted(format, data));
     }
+
+    /// <summary>
+    ///  JSON serialize the data only if the format is not a restricted deserialization format.
+    /// </summary>
+    /// <returns>
+    ///  The passed in <paramref name="data"/> as is if the format is restricted. Otherwise the JSON serialized <paramref name="data"/>.
+    /// </returns>
+    private static object JsonSerializeNonRestricted<T>(string format, T data)
+    {
+        format.OrThrowIfNull(nameof(format));
+        data.OrThrowIfNull(nameof(data));
+        return IsRestrictedFormat(format)
+            ? data
+            : new JsonData<T>() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data) };
+    }
+
+    /// <summary>
+    ///  Check if the <paramref name="format"/> is one of the restricted formats, which formats that
+    ///  correspond to primitives or are pre-defined in the OS such as strings, bitmaps, and OLE types.
+    /// </summary>
+    internal static bool IsRestrictedFormat(string format) => RestrictDeserializationToSafeTypes(format)
+        || format is DataFormats.TextConstant
+            or DataFormats.UnicodeTextConstant
+            or DataFormats.RtfConstant
+            or DataFormats.HtmlConstant
+            or DataFormats.OemTextConstant
+            or DataFormats.FileDropConstant
+            or CF_DEPRECATED_FILENAME
+            or CF_DEPRECATED_FILENAMEW;
+
+    /// <summary>
+    ///  We are restricting binary serialization and deserialization of formats that represent strings, bitmaps or OLE types.
+    /// </summary>
+    /// <param name="format">format name</param>
+    /// <returns><see langword="true" /> - serialize only safe types, strings or bitmaps.</returns>
+    /// <remarks>
+    ///  <para>
+    ///   These formats are also restricted in WPF
+    ///   https://github.com/dotnet/wpf/blob/db1ae73aae0e043326e2303b0820d361de04e751/src/Microsoft.DotNet.Wpf/src/PresentationCore/System/Windows/dataobject.cs#L2801
+    ///  </para>
+    /// </remarks>
+    private static bool RestrictDeserializationToSafeTypes(string format) =>
+        format is DataFormats.StringConstant
+            or BitmapFullName
+            or DataFormats.CsvConstant
+            or DataFormats.DibConstant
+            or DataFormats.DifConstant
+            or DataFormats.LocaleConstant
+            or DataFormats.PenDataConstant
+            or DataFormats.RiffConstant
+            or DataFormats.SymbolicLinkConstant
+            or DataFormats.TiffConstant
+            or DataFormats.WaveAudioConstant
+            or DataFormats.BitmapConstant
+            or DataFormats.EmfConstant
+            or DataFormats.PaletteConstant
+            or DataFormats.WmfConstant;
 
     #region IDataObject
     [Obsolete(

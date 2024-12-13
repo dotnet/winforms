@@ -480,16 +480,6 @@ public unsafe partial class DataObject
                     // Image is a special case because we are reading Bitmaps directly from the SerializationRecord.
                     return type.IsInterface || (typeof(T) != typeof(Image) && type.IsAbstract);
                 }
-
-                static bool IsRestrictedFormat(string format) => RestrictDeserializationToSafeTypes(format)
-                    || format is DataFormats.TextConstant
-                        or DataFormats.UnicodeTextConstant
-                        or DataFormats.RtfConstant
-                        or DataFormats.HtmlConstant
-                        or DataFormats.OemTextConstant
-                        or DataFormats.FileDropConstant
-                        or CF_DEPRECATED_FILENAME
-                        or CF_DEPRECATED_FILENAMEW;
             }
 
             private bool TryGetDataInternal<T>(

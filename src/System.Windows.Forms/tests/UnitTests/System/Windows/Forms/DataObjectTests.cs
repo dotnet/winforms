@@ -12,6 +12,7 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.Serialization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Windows.Forms.TestUtilities;
 using Moq;
 using Windows.Win32.System.Ole;
 using Com = Windows.Win32.System.Com;
@@ -2886,15 +2887,6 @@ public partial class DataObjectTests
     }
 
     [WinFormsFact]
-    public void DataObject_SetDataAsJson_GetData_ReturnsNonDeserialized()
-    {
-        Point point = new() { X = 1, Y = 1 };
-        DataObject data = new();
-        data.SetDataAsJson("point", point);
-        data.GetData("point").Should().BeOfType<JsonData<Point>>();
-    }
-
-    [WinFormsFact]
     public void DataObject_SetDataAsJson_CustomJsonConverter_ReturnsExpected()
     {
         // This test demonstrates one way users can achieve custom JSON serialization behavior if the
@@ -2999,5 +2991,46 @@ public partial class DataObjectTests
         DataObject dataObject = new();
         Action dataObjectSet = () => dataObject.SetDataAsJson<string>(null);
         dataObjectSet.Should().Throw<ArgumentNullException>();
+    }
+
+    [WinFormsTheory]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.StringFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.BitmapFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.UndefinedRestrictedFormat))]
+    public void DataObject_SetDataAsJson_RestrictedFormats_NotJsonSerialized(string format)
+    {
+        DataObject dataObject = new();
+        dataObject.SetDataAsJson(format, 1);
+        // 
+        var test = dataObject.GetData(format);
+        test.Should().NotBeOfType<IJsonData>();
+    }
+
+    [WinFormsFact]
+    public void DataObject_SetDataAsJson_PredefinedTypes_NotJsonSerialized()
+    {
+        string format = "test";
+        using Bitmap bitmap = new(10, 10);
+        DataObject dataObject = new();
+
+        dataObject.SetDataAsJson(format, bitmap);
+        object result = dataObject.GetData(format);
+        result.Should().NotBeOfType<IJsonData>();
+        result.Should().Be(bitmap);
+
+        string testString = "testString";
+        dataObject.SetDataAsJson(format, testString);
+        result = dataObject.GetData(format);
+        result.Should().NotBeOfType<IJsonData>();
+        result.Should().Be(testString);
+    }
+
+    [WinFormsTheory]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.UnboundedFormat))]
+    public void DataObject_SetDataAsJson_NonRestrictedFormat_JsonSerialized(string format)
+    {
+        DataObject data = new();
+        data.SetDataAsJson(format, 1);
+        data.GetData(format).Should().BeOfType<JsonData<int>>();
     }
 }

@@ -3,6 +3,7 @@
 
 using System.Runtime.CompilerServices;
 using System.Text.Json;
+using System.Windows.Forms;
 
 namespace System.Private.Windows;
 
@@ -108,7 +109,7 @@ internal struct JsonData<T> : IJsonData
 {
     public byte[] JsonBytes { get; set; }
 
-    public string InnerTypeAssemblyQualifiedName { get; set; }
+    public readonly string InnerTypeAssemblyQualifiedName => typeof(T).ToTypeName().AssemblyQualifiedName;
 
     public readonly object Deserialize()
     {
@@ -141,7 +142,7 @@ internal interface IJsonData
     ///  The assembly qualified name of the T in <see cref="JsonData{T}"/>. This name should
     ///  have any <see cref="TypeForwardedFromAttribute"/> names taken into account.
     /// </summary>
-    string InnerTypeAssemblyQualifiedName { get; set; }
+    string InnerTypeAssemblyQualifiedName { get; }
 
     /// <summary>
     ///  Deserializes the data stored in the JsonData. This is a convenience method

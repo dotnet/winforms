@@ -82,28 +82,6 @@ public unsafe partial class DataObject
         /// </summary>
         public IDataObject? OriginalIDataObject { get; private set; }
 
-        /// <summary>
-        ///  We are restricting binary serialization and deserialization of formats that represent strings, bitmaps or OLE types.
-        /// </summary>
-        /// <param name="format">format name</param>
-        /// <returns><see langword="true" /> - serialize only safe types, strings or bitmaps.</returns>
-        private static bool RestrictDeserializationToSafeTypes(string format) =>
-            format is DataFormats.StringConstant
-                or BitmapFullName
-                or DataFormats.CsvConstant
-                or DataFormats.DibConstant
-                or DataFormats.DifConstant
-                or DataFormats.LocaleConstant
-                or DataFormats.PenDataConstant
-                or DataFormats.RiffConstant
-                or DataFormats.SymbolicLinkConstant
-                or DataFormats.TiffConstant
-                or DataFormats.WaveAudioConstant
-                or DataFormats.BitmapConstant
-                or DataFormats.EmfConstant
-                or DataFormats.PaletteConstant
-                or DataFormats.WmfConstant;
-
         #region IDataObject
         public object? GetData(string format, bool autoConvert) => _winFormsDataObject.GetData(format, autoConvert);
         public object? GetData(string format) => _winFormsDataObject.GetData(format);
