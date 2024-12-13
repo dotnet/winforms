@@ -35,7 +35,7 @@ public sealed unsafe class FontFamily : MarshalByRefObject, IDisposable, IPointe
         else
         {
             GpFontFamily* clonedFamily;
-            PInvoke.GdipCloneFontFamily(family, &clonedFamily).ThrowIfFailed();
+            PInvokeGdiPlus.GdipCloneFontFamily(family, &clonedFamily).ThrowIfFailed();
 
             // Only the font collection is ref counted, new font family instances are not created.
             Debug.Assert(clonedFamily == family);
@@ -93,7 +93,7 @@ public sealed unsafe class FontFamily : MarshalByRefObject, IDisposable, IPointe
         fixed (char* n = name)
         {
             Debug.Assert(n is null || n[name.Length] == '\0', "Expected null-terminated string.");
-            status = PInvoke.GdipCreateFontFamilyFromName(n, nativeFontCollection, &fontFamily);
+            status = PInvokeGdiPlus.GdipCreateFontFamilyFromName(n, nativeFontCollection, &fontFamily);
         }
 
         if (status != Status.Ok)
@@ -140,14 +140,14 @@ public sealed unsafe class FontFamily : MarshalByRefObject, IDisposable, IPointe
         switch (genericFamily)
         {
             case GenericFontFamilies.Serif:
-                PInvoke.GdipGetGenericFontFamilySerif(&nativeFamily).ThrowIfFailed();
+                PInvokeGdiPlus.GdipGetGenericFontFamilySerif(&nativeFamily).ThrowIfFailed();
                 break;
             case GenericFontFamilies.SansSerif:
-                PInvoke.GdipGetGenericFontFamilySansSerif(&nativeFamily).ThrowIfFailed();
+                PInvokeGdiPlus.GdipGetGenericFontFamilySansSerif(&nativeFamily).ThrowIfFailed();
                 break;
             case GenericFontFamilies.Monospace:
             default:
-                PInvoke.GdipGetGenericFontFamilyMonospace(&nativeFamily).ThrowIfFailed();
+                PInvokeGdiPlus.GdipGetGenericFontFamilyMonospace(&nativeFamily).ThrowIfFailed();
                 break;
         }
 
@@ -209,7 +209,7 @@ public sealed unsafe class FontFamily : MarshalByRefObject, IDisposable, IPointe
 
         // This will ref count the associated FontCollection object. This is only strictly necessary for
         // manually loaded FontCollections (PrivateFontCollection).
-        Status status = PInvoke.GdipDeleteFontFamily(_nativeFamily);
+        Status status = PInvokeGdiPlus.GdipDeleteFontFamily(_nativeFamily);
         _nativeFamily = null;
 
         if (disposing)
@@ -239,7 +239,7 @@ public sealed unsafe class FontFamily : MarshalByRefObject, IDisposable, IPointe
 
         fixed (char* name = span)
         {
-            PInvoke.GdipGetFamilyName(NativeFamily, name, language).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetFamilyName(NativeFamily, name, language).ThrowIfFailed();
         }
     }
 
@@ -257,7 +257,7 @@ public sealed unsafe class FontFamily : MarshalByRefObject, IDisposable, IPointe
     private static GpFontFamily* GetGdipGenericSansSerif()
     {
         GpFontFamily* nativeFamily;
-        PInvoke.GdipGetGenericFontFamilySansSerif(&nativeFamily).ThrowIfFailed();
+        PInvokeGdiPlus.GdipGetGenericFontFamilySansSerif(&nativeFamily).ThrowIfFailed();
         return nativeFamily;
     }
 
@@ -288,7 +288,7 @@ public sealed unsafe class FontFamily : MarshalByRefObject, IDisposable, IPointe
     public bool IsStyleAvailable(FontStyle style)
     {
         BOOL isStyleAvailable;
-        PInvoke.GdipIsStyleAvailable(NativeFamily, (int)style, &isStyleAvailable).ThrowIfFailed();
+        PInvokeGdiPlus.GdipIsStyleAvailable(NativeFamily, (int)style, &isStyleAvailable).ThrowIfFailed();
         GC.KeepAlive(this);
         return isStyleAvailable;
     }
@@ -299,7 +299,7 @@ public sealed unsafe class FontFamily : MarshalByRefObject, IDisposable, IPointe
     public int GetEmHeight(FontStyle style)
     {
         ushort emHeight;
-        PInvoke.GdipGetEmHeight(NativeFamily, (int)style, &emHeight).ThrowIfFailed();
+        PInvokeGdiPlus.GdipGetEmHeight(NativeFamily, (int)style, &emHeight).ThrowIfFailed();
         GC.KeepAlive(this);
         return emHeight;
     }
@@ -310,7 +310,7 @@ public sealed unsafe class FontFamily : MarshalByRefObject, IDisposable, IPointe
     public int GetCellAscent(FontStyle style)
     {
         ushort cellAscent;
-        PInvoke.GdipGetCellAscent(NativeFamily, (int)style, &cellAscent).ThrowIfFailed();
+        PInvokeGdiPlus.GdipGetCellAscent(NativeFamily, (int)style, &cellAscent).ThrowIfFailed();
         GC.KeepAlive(this);
         return cellAscent;
     }
@@ -321,7 +321,7 @@ public sealed unsafe class FontFamily : MarshalByRefObject, IDisposable, IPointe
     public int GetCellDescent(FontStyle style)
     {
         ushort cellDescent;
-        PInvoke.GdipGetCellDescent(NativeFamily, (int)style, &cellDescent).ThrowIfFailed();
+        PInvokeGdiPlus.GdipGetCellDescent(NativeFamily, (int)style, &cellDescent).ThrowIfFailed();
         GC.KeepAlive(this);
         return cellDescent;
     }
@@ -333,7 +333,7 @@ public sealed unsafe class FontFamily : MarshalByRefObject, IDisposable, IPointe
     public int GetLineSpacing(FontStyle style)
     {
         ushort lineSpacing;
-        PInvoke.GdipGetLineSpacing(NativeFamily, (int)style, &lineSpacing).ThrowIfFailed();
+        PInvokeGdiPlus.GdipGetLineSpacing(NativeFamily, (int)style, &lineSpacing).ThrowIfFailed();
         GC.KeepAlive(this);
         return lineSpacing;
     }

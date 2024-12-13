@@ -420,11 +420,8 @@ public static class Clipboard
 
         if (dataObject is not ITypedDataObject typedDataObject)
         {
-            // TODO (TanyaSo): localize string
-            throw new NotSupportedException(string.Format(
-                "Data object `{0}` doesn't implement `ITypedDataObject` interface and can't be read" +
-                    " using `TryGetData<T>(string, out T)` method.",
-                dataObject.GetType().FullName));
+            throw new NotSupportedException(
+                string.Format(SR.ITypeDataObject_Not_Implemented, dataObject.GetType().FullName));
         }
 
         typed = typedDataObject;

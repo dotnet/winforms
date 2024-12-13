@@ -464,11 +464,8 @@ public unsafe partial class DataObject
                     // This check is a convenience for simple usages if TryGetData APIs that don't take the resolver.
                     && IsUnboundedType())
                 {
-                    // TODO (TanyaSo): localize string
                     throw new NotSupportedException(string.Format(
-                        "'{0}' is not a concrete type, and could allow for unbounded deserialization.  Use a concrete type" +
-                            " or define a resolver function that supports types that you are retrieving from the Clipboard" +
-                            " or being dragged and dropped.",
+                        SR.ClipboardOrDragDrop_InvalidType,
                         typeof(T).FullName));
                 }
 
@@ -655,11 +652,11 @@ public unsafe partial class DataObject
             public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
                 string format,
                 [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
-                    TryGetDataInternal(format, resolver: null!, autoConvert: false, legacyMode: false, out data);
+                    TryGetDataInternal(format, resolver: null!, autoConvert: true, legacyMode: false, out data);
 
             public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
                 [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
-                    TryGetDataInternal(typeof(T).FullName!, resolver: null!, autoConvert: false, legacyMode: false, out data);
+                    TryGetDataInternal(typeof(T).FullName!, resolver: null!, autoConvert: true, legacyMode: false, out data);
             #endregion
 
             private bool GetDataPresentInner(string format)
