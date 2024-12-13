@@ -37,6 +37,7 @@
     <ProjectReference Include="..\..\System.Drawing.Common\src\System.Drawing.Common.csproj" />
     <ProjectReference Include="..\..\System.Private.Windows.Core\src\System.Private.Windows.Core.csproj" />
     <ProjectReference Include="..\..\System.Private.Windows.GdiPlus\System.Private.Windows.GdiPlus.csproj" />
+    <ProjectReference Include="..\..\System.Windows.Forms\src\System.Windows.Forms.csproj" />
   </ItemGroup>
 
   <ItemGroup>

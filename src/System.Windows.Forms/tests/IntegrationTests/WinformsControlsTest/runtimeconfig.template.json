@@ -11,6 +11,7 @@
     "System.Windows.Forms.NoClientNotifications": false,
     "System.Windows.Forms.ScaleTopLevelFormMinMaxSizeForDpi": false,
     "System.Windows.Forms.ServicePointManagerCheckCrl": false,
-    "System.Windows.Forms.TrackBarModernRendering": false
+    "System.Windows.Forms.TrackBarModernRendering": false,
+    "System.Windows.Forms.StatusStrip.UseSystemRenderingModeAsDefault":  true
   }
 }

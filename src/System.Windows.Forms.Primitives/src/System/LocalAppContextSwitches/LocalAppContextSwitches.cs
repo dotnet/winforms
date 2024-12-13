@@ -262,9 +262,9 @@ internal static partial class LocalAppContextSwitches
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         get => GetCachedSwitchValue(ClipboardDragDropEnableNrbfSerializationSwitchName, ref s_clipboardDragDropEnableNrbfSerialization);
     }
-  
-    /// <summary>    
-    ///  Indicates whether to use ToolStripRenderMode.System as the default painting mode for StatusStrip.
+
+    /// <summary>
+    ///  Indicates whether to use <see cref="ToolStripRenderMode.System" /> as the default painting mode for <see cref="StatusStrip" />.
     /// </summary>
     public static bool UseSystemRenderingModeAsDefault
     {
