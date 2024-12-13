@@ -66,16 +66,14 @@ public unsafe partial class DataObject
 
             internal static object? ReadObjectFromStream<T>(
                 MemoryStream stream,
-                bool restrictDeserialization,
                 Func<TypeName, Type>? resolver,
                 bool legacyMode)
             {
                 long startPosition = stream.Position;
                 SerializationRecord? record;
-
                 SerializationBinder binder = new Binder(typeof(T), resolver, legacyMode);
-
                 IReadOnlyDictionary<SerializationRecordId, SerializationRecord> recordMap;
+
                 try
                 {
                     record = stream.Decode(out recordMap);
@@ -83,14 +81,9 @@ public unsafe partial class DataObject
                 catch (Exception ex) when (!ex.IsCriticalException())
                 {
                     // Couldn't parse for some reason, let BinaryFormatter handle the legacy invocation.
-                    // The types APIs can't compare the specified type when the root record is not available.
+                    // The typed APIs can't compare the specified type when the root record is not available.
                     if (legacyMode && LocalAppContextSwitches.ClipboardDragDropEnableUnsafeBinaryFormatterSerialization)
                     {
-                        if (restrictDeserialization)
-                        {
-                            throw new RestrictedTypeDeserializationException(SR.UnexpectedClipboardType);
-                        }
-
                         stream.Position = startPosition;
                         return ReadObjectWithBinaryFormatter<T>(stream, binder);
                     }
@@ -108,7 +101,8 @@ public unsafe partial class DataObject
 
                 // For the new TryGet APIs, ensure that the stream contains the requested type,
                 // or type that can be assigned to the requested type.
-                if (!legacyMode && !typeof(T).MatchExceptAssemblyVersion(record.TypeName))
+                Type type = typeof(T);
+                if (!legacyMode && !type.MatchExceptAssemblyVersion(record.TypeName))
                 {
 #if false // TODO (TanyaSo): - modify TryGetObjectFromJson to take a resolver and rename to HasJsonData???
                     // Return true if the payload contains valid JsonData<T> struct, type matches or not
@@ -119,7 +113,7 @@ public unsafe partial class DataObject
                     }
 #endif
 
-                    if (!TypeNameIsAssignableToType(record.TypeName, typeof(T), (ITypeResolver)binder))
+                    if (!TypeNameIsAssignableToType(record.TypeName, type, (ITypeResolver)binder))
                     {
                         // If clipboard contains an exception from SetData, we will get its message and throw.
                         if (record.TypeName.FullName == typeof(NotSupportedException).FullName
@@ -136,11 +130,6 @@ public unsafe partial class DataObject
                 if (record.TryGetCommonObject(out object? value))
                 {
                     return value;
-                }
-
-                if (restrictDeserialization)
-                {
-                    throw new RestrictedTypeDeserializationException(SR.UnexpectedClipboardType);
                 }
 
                 if (!LocalAppContextSwitches.ClipboardDragDropEnableUnsafeBinaryFormatterSerialization)
@@ -168,6 +157,47 @@ public unsafe partial class DataObject
 
                 stream.Position = startPosition;
                 return ReadObjectWithBinaryFormatter<T>(stream, binder);
+            }
+
+            internal static object? ReadRestrictedObjectFromStream<T>(
+                MemoryStream stream,
+                Func<TypeName, Type>? resolver,
+                bool legacyMode)
+            {
+                long startPosition = stream.Position;
+                SerializationRecord? record;
+
+                try
+                {
+                    record = stream.Decode();
+                }
+                catch (Exception ex) when (!ex.IsCriticalException())
+                {
+                    throw new RestrictedTypeDeserializationException(SR.UnexpectedClipboardType);
+                }
+
+                // For the new TryGet APIs, ensure that the stream contains the requested type,
+                // or type that can be assigned to the requested type.
+                Type type = typeof(T);
+                if (!legacyMode && !type.MatchExceptAssemblyVersion(record.TypeName))
+                {
+                    if (!TypeNameIsAssignableToType(record.TypeName, type, new Binder(type, resolver, legacyMode)))
+                    {
+                        // If clipboard contains an exception from SetData, we will get its message and throw.
+                        if (record.TypeName.FullName == typeof(NotSupportedException).FullName
+                            && record.TryGetNotSupportedException(out object? @object)
+                            && @object is NotSupportedException exception)
+                        {
+                            throw new NotSupportedException(exception.Message);
+                        }
+
+                        return null;
+                    }
+                }
+
+                return record.TryGetCommonObject(out object? value)
+                    ? value
+                    : throw new RestrictedTypeDeserializationException(SR.UnexpectedClipboardType);
             }
 
             private static bool TypeNameIsAssignableToType(TypeName typeName, Type type, ITypeResolver resolver)
