@@ -18,7 +18,7 @@ public sealed unsafe class HatchBrush : Brush
         }
 
         GpHatch* nativeBrush;
-        PInvoke.GdipCreateHatchBrush((GdiPlus.HatchStyle)hatchstyle, (ARGB)foreColor, (ARGB)backColor, &nativeBrush).ThrowIfFailed();
+        PInvokeGdiPlus.GdipCreateHatchBrush((GdiPlus.HatchStyle)hatchstyle, (ARGB)foreColor, (ARGB)backColor, &nativeBrush).ThrowIfFailed();
         SetNativeBrushInternal((GpBrush*)nativeBrush);
     }
 
@@ -31,7 +31,7 @@ public sealed unsafe class HatchBrush : Brush
     public override object Clone()
     {
         GpBrush* clonedBrush;
-        PInvoke.GdipCloneBrush(NativeBrush, &clonedBrush).ThrowIfFailed();
+        PInvokeGdiPlus.GdipCloneBrush(NativeBrush, &clonedBrush).ThrowIfFailed();
         GC.KeepAlive(this);
         return new HatchBrush((GpHatch*)clonedBrush);
     }
@@ -41,7 +41,7 @@ public sealed unsafe class HatchBrush : Brush
         get
         {
             GdiPlus.HatchStyle hatchStyle;
-            PInvoke.GdipGetHatchStyle((GpHatch*)NativeBrush, &hatchStyle).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetHatchStyle((GpHatch*)NativeBrush, &hatchStyle).ThrowIfFailed();
             GC.KeepAlive(this);
             return (HatchStyle)hatchStyle;
         }
@@ -52,7 +52,7 @@ public sealed unsafe class HatchBrush : Brush
         get
         {
             ARGB foregroundArgb;
-            PInvoke.GdipGetHatchForegroundColor((GpHatch*)NativeBrush, (uint*)&foregroundArgb).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetHatchForegroundColor((GpHatch*)NativeBrush, (uint*)&foregroundArgb).ThrowIfFailed();
             GC.KeepAlive(this);
             return foregroundArgb;
         }
@@ -63,7 +63,7 @@ public sealed unsafe class HatchBrush : Brush
         get
         {
             ARGB backgroundArgb;
-            PInvoke.GdipGetHatchBackgroundColor((GpHatch*)NativeBrush, (uint*)&backgroundArgb).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetHatchBackgroundColor((GpHatch*)NativeBrush, (uint*)&backgroundArgb).ThrowIfFailed();
             GC.KeepAlive(this);
             return backgroundArgb;
         }

@@ -179,7 +179,7 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
 #if DEBUG
                 Status status = !Gdip.Initialized ? Status.Ok :
 #endif
-                PInvoke.GdipDeleteFont(_nativeFont);
+                PInvokeGdiPlus.GdipDeleteFont(_nativeFont);
 #if DEBUG
                 Debug.Assert(status == Status.Ok, $"GDI+ returned an error status: {status}");
 #endif
@@ -206,7 +206,7 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
         }
 
         float height;
-        PInvoke.GdipGetFontHeight(NativeFont, graphics.Pointer(), &height).ThrowIfFailed();
+        PInvokeGdiPlus.GdipGetFontHeight(NativeFont, graphics.Pointer(), &height).ThrowIfFailed();
         GC.KeepAlive(this);
         GC.KeepAlive(graphics);
         return height;
@@ -215,7 +215,7 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
     public float GetHeight(float dpi)
     {
         float height;
-        PInvoke.GdipGetFontHeightGivenDPI(NativeFont, dpi, &height).ThrowIfFailed();
+        PInvokeGdiPlus.GdipGetFontHeightGivenDPI(NativeFont, dpi, &height).ThrowIfFailed();
         GC.KeepAlive(this);
         return height;
     }
@@ -307,7 +307,7 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
 
         fixed (LOGFONT* lf = &logFont)
         {
-            PInvoke.GdipGetLogFont(NativeFont, graphics.Pointer(), (LOGFONTW*)lf).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetLogFont(NativeFont, graphics.Pointer(), (LOGFONTW*)lf).ThrowIfFailed();
             GC.KeepAlive(this);
             GC.KeepAlive(graphics);
         }
@@ -341,7 +341,7 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
         // if creating the font object from an external FontFamily, this object's FontFamily will share the same native object.
 
         GpFont* font;
-        Status status = PInvoke.GdipCreateFont(_fontFamily.Pointer(), _fontSize, (int)_fontStyle, (Unit)_fontUnit, &font);
+        Status status = PInvokeGdiPlus.GdipCreateFont(_fontFamily.Pointer(), _fontSize, (int)_fontStyle, (Unit)_fontUnit, &font);
         GC.KeepAlive(this);
         _nativeFont = font;
 
@@ -481,10 +481,10 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
         float size;
         FontStyle style;
         GpFontFamily* family;
-        PInvoke.GdipGetFontUnit(_nativeFont, (Unit*)&unit).ThrowIfFailed();
-        PInvoke.GdipGetFontSize(_nativeFont, &size).ThrowIfFailed();
-        PInvoke.GdipGetFontStyle(_nativeFont, (int*)&style).ThrowIfFailed();
-        PInvoke.GdipGetFamily(_nativeFont, &family).ThrowIfFailed();
+        PInvokeGdiPlus.GdipGetFontUnit(_nativeFont, (Unit*)&unit).ThrowIfFailed();
+        PInvokeGdiPlus.GdipGetFontSize(_nativeFont, &size).ThrowIfFailed();
+        PInvokeGdiPlus.GdipGetFontStyle(_nativeFont, (int*)&style).ThrowIfFailed();
+        PInvokeGdiPlus.GdipGetFamily(_nativeFont, &family).ThrowIfFailed();
 
         // Fonts from native HFONTs are always from the installed font collection.
         SetFontFamily(new FontFamily(family, fromInstalledFontCollection: true));
@@ -536,7 +536,7 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
 
         // Get actual size.
         float size;
-        status = PInvoke.GdipGetFontSize(_nativeFont, &size);
+        status = PInvokeGdiPlus.GdipGetFontSize(_nativeFont, &size);
         _fontSize = size;
         GC.KeepAlive(this);
         Gdip.CheckStatus(status);
@@ -586,7 +586,7 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
         GpFont* font;
         fixed (LOGFONT* lf = &logFont)
         {
-            status = PInvoke.GdipCreateFontFromLogfont((HDC)hdc, (LOGFONTW*)lf, &font);
+            status = PInvokeGdiPlus.GdipCreateFontFromLogfont((HDC)hdc, (LOGFONTW*)lf, &font);
         }
 
         // Special case this incredibly common error message to give more information
@@ -653,7 +653,7 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
     public static Font FromHdc(IntPtr hdc)
     {
         GpFont* font;
-        Status status = PInvoke.GdipCreateFontFromDC((HDC)hdc, &font);
+        Status status = PInvokeGdiPlus.GdipCreateFontFromDC((HDC)hdc, &font);
 
         // Special case this incredibly common error message to give more information
         if (status == Status.NotTrueTypeFont)
@@ -674,7 +674,7 @@ public sealed unsafe class Font : MarshalByRefObject, ICloneable, IDisposable, I
     public object Clone()
     {
         GpFont* font;
-        PInvoke.GdipCloneFont(_nativeFont, &font).ThrowIfFailed();
+        PInvokeGdiPlus.GdipCloneFont(_nativeFont, &font).ThrowIfFailed();
         GC.KeepAlive(this);
         return new Font(font, _gdiCharSet, _gdiVerticalFont);
     }

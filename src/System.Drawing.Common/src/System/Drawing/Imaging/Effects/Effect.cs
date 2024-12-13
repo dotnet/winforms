@@ -17,7 +17,7 @@ public abstract unsafe class Effect : IDisposable
     private protected Effect(Guid guid)
     {
         CGpEffect* nativeEffect;
-        PInvoke.GdipCreateEffect(guid, &nativeEffect).ThrowIfFailed();
+        PInvokeGdiPlus.GdipCreateEffect(guid, &nativeEffect).ThrowIfFailed();
         _nativeEffect = nativeEffect;
     }
 
@@ -31,7 +31,7 @@ public abstract unsafe class Effect : IDisposable
     {
         fixed (T* p = &parameters)
         {
-            PInvoke.GdipSetEffectParameters(NativeEffect, p, (uint)sizeof(T)).ThrowIfFailed();
+            PInvokeGdiPlus.GdipSetEffectParameters(NativeEffect, p, (uint)sizeof(T)).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }
@@ -45,7 +45,7 @@ public abstract unsafe class Effect : IDisposable
     {
         if (_nativeEffect is not null)
         {
-            PInvoke.GdipDeleteEffect(_nativeEffect);
+            PInvokeGdiPlus.GdipDeleteEffect(_nativeEffect);
             _nativeEffect = null;
         }
     }

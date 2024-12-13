@@ -55,8 +55,7 @@ public unsafe partial class DataObject
 
                 if (!LocalAppContextSwitches.ClipboardDragDropEnableUnsafeBinaryFormatterSerialization)
                 {
-                    // TODO (TanyaSo): localize string
-                    throw new NotSupportedException("BinaryFormatter is not supported in Clipboard or drag and drop scenarios.");
+                    throw new NotSupportedException(SR.BinaryFormatter_NotSupported_InClipboardOrDragDrop);
                 }
 
                 stream.Position = position;
@@ -146,11 +145,8 @@ public unsafe partial class DataObject
 
                 if (!LocalAppContextSwitches.ClipboardDragDropEnableUnsafeBinaryFormatterSerialization)
                 {
-                    // TODO (TanyaSo): localize string
                     throw new NotSupportedException(string.Format(
-                        "BinaryFormatter is not supported in Clipboard or drag and drop scenarios." +
-                            "  Enable it and use 'TryGetData<T>' API with a 'resolver'" +
-                            " function that defines a set of allowed types, to deserialize '{0}'.",
+                        SR.BinaryFormatter_NotSupported_InClipboardOrDragDrop_UseTypedAPI,
                         typeof(T).FullName));
                 }
 

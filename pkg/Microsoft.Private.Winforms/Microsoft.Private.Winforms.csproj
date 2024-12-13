@@ -85,6 +85,9 @@
     <!-- Reference and Source System.Private.Windows.Core -->
     <ProjectReference Include="..\..\src\System.Private.Windows.Core\src\System.Private.Windows.Core.csproj" />
 
+    <!-- Reference and Source System.Private.Windows.GdiPlus -->
+    <ProjectReference Include="..\..\src\System.Private.Windows.GdiPlus\System.Private.Windows.GdiPlus.csproj" />
+
     <!-- Reference and Source System.Windows.Forms.Primitives -->
     <ProjectReference Include="..\..\src\System.Windows.Forms.Primitives\src\System.Windows.Forms.Primitives.csproj" />
 
