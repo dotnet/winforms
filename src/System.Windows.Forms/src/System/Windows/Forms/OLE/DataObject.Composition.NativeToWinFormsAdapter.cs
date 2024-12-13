@@ -133,7 +133,9 @@ public unsafe partial class DataObject
                     MemoryStream stream = ReadByteStreamFromHGLOBAL(hglobal, out bool isSerializedObject);
                     return !isSerializedObject
                         ? stream
-                        : BinaryFormatUtilities.ReadObjectFromStream<T>(stream, restrictDeserialization, resolver, legacyMode);
+                        : restrictDeserialization
+                            ? BinaryFormatUtilities.ReadRestrictedObjectFromStream<T>(stream, resolver, legacyMode)
+                            : BinaryFormatUtilities.ReadObjectFromStream<T>(stream, resolver, legacyMode);
                 }
             }
 
