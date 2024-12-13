@@ -165,11 +165,11 @@ public unsafe partial class DataObject :
     public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
         string format,
         [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
-            TryGetDataInternal(format, resolver: null, autoConvert: false, out data);
+            TryGetDataInternal(format, resolver: null, autoConvert: true, out data);
 
     public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
         [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
-            TryGetDataInternal(typeof(T).FullName!, resolver: null, autoConvert: false, out data);
+            TryGetDataInternal(typeof(T).FullName!, resolver: null, autoConvert: true, out data);
     #endregion
 
     /// <summary>
@@ -284,9 +284,8 @@ public unsafe partial class DataObject :
             return true;
         }
 
-        // TODO (TanyaSo): localize string
         throw new NotSupportedException(string.Format(
-            "Type '{0}' is not compatible with the specified format '{1}'.",
+            SR.ClipboardOrDragDrop_InvalidFormatTypeCombination,
             typeof(T).FullName, format));
 
         static bool IsValidPredefinedFormatTypeCombination(string format) => format switch

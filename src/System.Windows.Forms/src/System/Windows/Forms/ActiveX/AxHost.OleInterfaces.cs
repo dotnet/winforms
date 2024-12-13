@@ -3,7 +3,6 @@
 
 using System.ComponentModel;
 using System.ComponentModel.Design;
-using System.Drawing;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;

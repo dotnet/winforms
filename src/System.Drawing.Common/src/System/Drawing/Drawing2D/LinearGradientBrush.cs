@@ -12,7 +12,7 @@ public sealed unsafe class LinearGradientBrush : Brush
     public LinearGradientBrush(PointF point1, PointF point2, Color color1, Color color2)
     {
         GpLineGradient* nativeBrush;
-        PInvoke.GdipCreateLineBrush(
+        PInvokeGdiPlus.GdipCreateLineBrush(
             (GdiPlus.PointF*)&point1, (GdiPlus.PointF*)&point2,
             (uint)color1.ToArgb(), (uint)color2.ToArgb(),
             GdiPlus.WrapMode.WrapModeTile,
@@ -35,7 +35,7 @@ public sealed unsafe class LinearGradientBrush : Brush
             throw new ArgumentException(SR.Format(SR.GdiplusInvalidRectangle, rect.ToString()));
 
         GpLineGradient* nativeBrush;
-        PInvoke.GdipCreateLineBrushFromRect(
+        PInvokeGdiPlus.GdipCreateLineBrushFromRect(
             (RectF*)&rect,
             (ARGB)color1,
             (ARGB)color2,
@@ -62,7 +62,7 @@ public sealed unsafe class LinearGradientBrush : Brush
             throw new ArgumentException(SR.Format(SR.GdiplusInvalidRectangle, rect.ToString()));
 
         GpLineGradient* nativeBrush;
-        PInvoke.GdipCreateLineBrushFromRectWithAngle(
+        PInvokeGdiPlus.GdipCreateLineBrushFromRectWithAngle(
             (RectF*)&rect,
             (ARGB)color1,
             (ARGB)color2,
@@ -95,7 +95,7 @@ public sealed unsafe class LinearGradientBrush : Brush
     public override object Clone()
     {
         GpBrush* clonedBrush;
-        PInvoke.GdipCloneBrush(NativeBrush, &clonedBrush).ThrowIfFailed();
+        PInvokeGdiPlus.GdipCloneBrush(NativeBrush, &clonedBrush).ThrowIfFailed();
         GC.KeepAlive(this);
         return new LinearGradientBrush((GpLineGradient*)clonedBrush);
     }
@@ -105,7 +105,7 @@ public sealed unsafe class LinearGradientBrush : Brush
         get
         {
             uint* colors = stackalloc uint[2];
-            PInvoke.GdipGetLineColors(NativeLineGradient, colors).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetLineColors(NativeLineGradient, colors).ThrowIfFailed();
             GC.KeepAlive(this);
 
             return
@@ -116,7 +116,7 @@ public sealed unsafe class LinearGradientBrush : Brush
         }
         set
         {
-            PInvoke.GdipSetLineColors(NativeLineGradient, (uint)value[0].ToArgb(), (uint)value[1].ToArgb()).ThrowIfFailed();
+            PInvokeGdiPlus.GdipSetLineColors(NativeLineGradient, (uint)value[0].ToArgb(), (uint)value[1].ToArgb()).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }
@@ -126,7 +126,7 @@ public sealed unsafe class LinearGradientBrush : Brush
         get
         {
             RectangleF rect;
-            PInvoke.GdipGetLineRect(NativeLineGradient, (RectF*)&rect).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetLineRect(NativeLineGradient, (RectF*)&rect).ThrowIfFailed();
             GC.KeepAlive(this);
             return rect;
         }
@@ -137,13 +137,13 @@ public sealed unsafe class LinearGradientBrush : Brush
         get
         {
             BOOL useGammaCorrection;
-            PInvoke.GdipGetLineGammaCorrection(NativeLineGradient, &useGammaCorrection).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetLineGammaCorrection(NativeLineGradient, &useGammaCorrection).ThrowIfFailed();
             GC.KeepAlive(this);
             return useGammaCorrection;
         }
         set
         {
-            PInvoke.GdipSetLineGammaCorrection(NativeLineGradient, value).ThrowIfFailed();
+            PInvokeGdiPlus.GdipSetLineGammaCorrection(NativeLineGradient, value).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }
@@ -159,7 +159,7 @@ public sealed unsafe class LinearGradientBrush : Brush
                 return null;
 
             int count;
-            PInvoke.GdipGetLineBlendCount(NativeLineGradient, &count).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetLineBlendCount(NativeLineGradient, &count).ThrowIfFailed();
             GC.KeepAlive(this);
 
             if (count <= 0)
@@ -171,7 +171,7 @@ public sealed unsafe class LinearGradientBrush : Brush
 
             fixed (float* f = blend.Factors, p = blend.Positions)
             {
-                PInvoke.GdipGetLineBlend(NativeLineGradient, f, p, count).ThrowIfFailed();
+                PInvokeGdiPlus.GdipGetLineBlend(NativeLineGradient, f, p, count).ThrowIfFailed();
                 GC.KeepAlive(this);
                 return blend;
             }
@@ -187,7 +187,7 @@ public sealed unsafe class LinearGradientBrush : Brush
             fixed (float* f = value.Factors, p = value.Positions)
             {
                 // Set blend factors.
-                PInvoke.GdipSetLineBlend(NativeLineGradient, f, p, value.Factors.Length).ThrowIfFailed();
+                PInvokeGdiPlus.GdipSetLineBlend(NativeLineGradient, f, p, value.Factors.Length).ThrowIfFailed();
                 GC.KeepAlive(this);
             }
         }
@@ -197,7 +197,7 @@ public sealed unsafe class LinearGradientBrush : Brush
 
     public void SetSigmaBellShape(float focus, float scale)
     {
-        PInvoke.GdipSetLineSigmaBlend(NativeLineGradient, focus, scale).ThrowIfFailed();
+        PInvokeGdiPlus.GdipSetLineSigmaBlend(NativeLineGradient, focus, scale).ThrowIfFailed();
         GC.KeepAlive(this);
     }
 
@@ -206,7 +206,7 @@ public sealed unsafe class LinearGradientBrush : Brush
     public void SetBlendTriangularShape(float focus, float scale)
     {
         _interpolationColorsWasSet = false;
-        PInvoke.GdipSetLineLinearBlend(NativeLineGradient, focus, scale).ThrowIfFailed();
+        PInvokeGdiPlus.GdipSetLineLinearBlend(NativeLineGradient, focus, scale).ThrowIfFailed();
         GC.KeepAlive(this);
     }
 
@@ -215,7 +215,7 @@ public sealed unsafe class LinearGradientBrush : Brush
         get
         {
             int count;
-            PInvoke.GdipGetLinePresetBlendCount(NativeLineGradient, &count).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetLinePresetBlendCount(NativeLineGradient, &count).ThrowIfFailed();
 
             if (count == 0)
             {
@@ -231,7 +231,7 @@ public sealed unsafe class LinearGradientBrush : Brush
             fixed (float* p = positions)
             {
                 // Retrieve horizontal blend factors
-                PInvoke.GdipGetLinePresetBlend(NativeLineGradient, c, p, count).ThrowIfFailed();
+                PInvokeGdiPlus.GdipGetLinePresetBlend(NativeLineGradient, c, p, count).ThrowIfFailed();
             }
 
             blend.Positions = positions;
@@ -257,7 +257,7 @@ public sealed unsafe class LinearGradientBrush : Brush
             fixed (uint* a = argbValues)
             {
                 // Set blend factors
-                PInvoke.GdipSetLinePresetBlend(NativeLineGradient, a, p, count).ThrowIfFailed();
+                PInvokeGdiPlus.GdipSetLinePresetBlend(NativeLineGradient, a, p, count).ThrowIfFailed();
                 GC.KeepAlive(this);
             }
         }
@@ -268,7 +268,7 @@ public sealed unsafe class LinearGradientBrush : Brush
         get
         {
             WrapMode mode;
-            PInvoke.GdipGetLineWrapMode(NativeLineGradient, (GdiPlus.WrapMode*)&mode).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetLineWrapMode(NativeLineGradient, (GdiPlus.WrapMode*)&mode).ThrowIfFailed();
             GC.KeepAlive(this);
             return mode;
         }
@@ -277,7 +277,7 @@ public sealed unsafe class LinearGradientBrush : Brush
             if (value is < WrapMode.Tile or > WrapMode.Clamp)
                 throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(WrapMode));
 
-            PInvoke.GdipSetLineWrapMode(NativeLineGradient, (GdiPlus.WrapMode)value).ThrowIfFailed();
+            PInvokeGdiPlus.GdipSetLineWrapMode(NativeLineGradient, (GdiPlus.WrapMode)value).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }
@@ -287,14 +287,14 @@ public sealed unsafe class LinearGradientBrush : Brush
         get
         {
             Matrix matrix = new();
-            PInvoke.GdipGetLineTransform(NativeLineGradient, matrix.NativeMatrix).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetLineTransform(NativeLineGradient, matrix.NativeMatrix).ThrowIfFailed();
             GC.KeepAlive(this);
             return matrix;
         }
         set
         {
             ArgumentNullException.ThrowIfNull(value);
-            PInvoke.GdipSetLineTransform(NativeLineGradient, value.NativeMatrix).ThrowIfFailed();
+            PInvokeGdiPlus.GdipSetLineTransform(NativeLineGradient, value.NativeMatrix).ThrowIfFailed();
             GC.KeepAlive(value);
             GC.KeepAlive(this);
         }
@@ -302,7 +302,7 @@ public sealed unsafe class LinearGradientBrush : Brush
 
     public void ResetTransform()
     {
-        PInvoke.GdipResetLineTransform(NativeLineGradient).ThrowIfFailed();
+        PInvokeGdiPlus.GdipResetLineTransform(NativeLineGradient).ThrowIfFailed();
         GC.KeepAlive(this);
     }
 
@@ -312,7 +312,7 @@ public sealed unsafe class LinearGradientBrush : Brush
     {
         ArgumentNullException.ThrowIfNull(matrix);
 
-        PInvoke.GdipMultiplyLineTransform(NativeLineGradient, matrix.NativeMatrix, (GdiPlus.MatrixOrder)order).ThrowIfFailed();
+        PInvokeGdiPlus.GdipMultiplyLineTransform(NativeLineGradient, matrix.NativeMatrix, (GdiPlus.MatrixOrder)order).ThrowIfFailed();
         GC.KeepAlive(this);
     }
 
@@ -320,7 +320,7 @@ public sealed unsafe class LinearGradientBrush : Brush
 
     public void TranslateTransform(float dx, float dy, MatrixOrder order)
     {
-        PInvoke.GdipTranslateLineTransform(NativeLineGradient, dx, dy, (GdiPlus.MatrixOrder)order).ThrowIfFailed();
+        PInvokeGdiPlus.GdipTranslateLineTransform(NativeLineGradient, dx, dy, (GdiPlus.MatrixOrder)order).ThrowIfFailed();
         GC.KeepAlive(this);
     }
 
@@ -328,7 +328,7 @@ public sealed unsafe class LinearGradientBrush : Brush
 
     public void ScaleTransform(float sx, float sy, MatrixOrder order)
     {
-        PInvoke.GdipScaleLineTransform(NativeLineGradient, sx, sy, (GdiPlus.MatrixOrder)order).ThrowIfFailed();
+        PInvokeGdiPlus.GdipScaleLineTransform(NativeLineGradient, sx, sy, (GdiPlus.MatrixOrder)order).ThrowIfFailed();
         GC.KeepAlive(this);
     }
 
@@ -336,7 +336,7 @@ public sealed unsafe class LinearGradientBrush : Brush
 
     public void RotateTransform(float angle, MatrixOrder order)
     {
-        PInvoke.GdipRotateLineTransform(NativeLineGradient, angle, (GdiPlus.MatrixOrder)order).ThrowIfFailed();
+        PInvokeGdiPlus.GdipRotateLineTransform(NativeLineGradient, angle, (GdiPlus.MatrixOrder)order).ThrowIfFailed();
         GC.KeepAlive(this);
     }
 }

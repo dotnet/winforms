@@ -15,3 +15,7 @@ global using Windows.Win32.UI.Shell.Common;
 global using Windows.Win32.UI.WindowsAndMessaging;
 global using PCWSTR = Windows.Win32.Foundation.PCWSTR;
 global using PWSTR = Windows.Win32.Foundation.PWSTR;
+
+global using Color = System.Drawing.Color;
+global using Point = System.Drawing.Point;
+global using PointF = System.Drawing.PointF;

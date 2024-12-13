@@ -131,16 +131,16 @@ public unsafe partial class DataObject
             string format,
             bool autoConvert,
             [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
-                _winFormsDataObject.TryGetData(format, resolver: null!, autoConvert, out data);
+                _winFormsDataObject.TryGetData(format, autoConvert, out data);
 
         public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
             string format,
             [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
-                _winFormsDataObject.TryGetData(format, resolver: null!, autoConvert: false, out data);
+                _winFormsDataObject.TryGetData(format, out data);
 
         public bool TryGetData<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T>(
             [NotNullWhen(true), MaybeNullWhen(false)] out T data) =>
-                _winFormsDataObject.TryGetData(typeof(T).FullName!, resolver: null!, autoConvert: false, out data);
+                _winFormsDataObject.TryGetData(typeof(T).FullName!, out data);
         #endregion
 
         #region Com.IDataObject.Interface

@@ -99,8 +99,7 @@ internal partial class DrawingEventArgs
             Debug.Assert(!_hdc.IsNull);
 
             // We need to manually unset the palette here so this scope shouldn't be disposed
-            var paletteScope = SelectPaletteScope.HalftonePalette(
-                _hdc,
+            var paletteScope = _hdc.HalftonePalette(
                 forceBackground: false,
                 realizePalette: false);
 
