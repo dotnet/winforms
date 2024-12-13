@@ -284,9 +284,8 @@ public unsafe partial class DataObject :
             return true;
         }
 
-        // TODO (TanyaSo): localize string
         throw new NotSupportedException(string.Format(
-            "Type '{0}' is not compatible with the specified format '{1}'.",
+            SR.ClipboardOrDragDrop_InvalidFormatTypeCombination,
             typeof(T).FullName, format));
 
         static bool IsValidPredefinedFormatTypeCombination(string format) => format switch

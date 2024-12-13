@@ -5,11 +5,12 @@
 
 using System.Drawing;
 using System.Reflection.Metadata;
+using System.Text.RegularExpressions;
 using Com = Windows.Win32.System.Com;
 
 namespace System.Windows.Forms.Tests;
 
-public unsafe class NativeToWinFormsAdapterTests
+public unsafe partial class NativeToWinFormsAdapterTests
 {
     public static TheoryData<string> UnboundedFormat() =>
     [
@@ -53,12 +54,14 @@ public unsafe class NativeToWinFormsAdapterTests
          "FileNameW"
     ];
 
-    private const string InvalidTypeFormatCombinationMessage = "Type '*' is not compatible with the specified format '*'.";
-    private const string RequiresResolverMessage =
-        $"'*' is not a concrete type, and could allow for unbounded deserialization.  Use a concrete type or" +
-        $" define a resolver function that supports types that you are retrieving from the Clipboard or being dragged and dropped.";
-    private const string UseTryGetDataWithResolver =
-        "Use 'TryGetData<T>' method with a 'resolver' function that defines a set of allowed types, to deserialize '*'.";
+    [GeneratedRegex(@"{[0-9]}")]
+    private static partial Regex PlaceholdersPattern();
+
+    private static string InvalidTypeFormatCombinationMessage =>
+        PlaceholdersPattern().Replace(SR.ClipboardOrDragDrop_InvalidFormatTypeCombination, "*");
+    private static string TypeRequiresResolverMessage => PlaceholdersPattern().Replace(SR.ClipboardOrDragDrop_InvalidType, "*");
+    private static string UseTryGetDataWithResolver => PlaceholdersPattern().Replace(SR.ClipboardOrDragDrop_UseTypedAPI, "*");
+
     private const string FormatterDisabledMessage =
         "BinaryFormatter serialization and deserialization are disabled within this application. See https://aka.ms/binaryformatter for more information.";
 
@@ -88,7 +91,7 @@ public unsafe class NativeToWinFormsAdapterTests
         DataObject dataObject = new(ComHelpers.GetComPointer<Com.IDataObject>(native));
 
         Action tryGetData = () => dataObject.TryGetData(format, out object? value);
-        tryGetData.Should().Throw<NotSupportedException>().WithMessage(expectedWildcardPattern: RequiresResolverMessage);
+        tryGetData.Should().Throw<NotSupportedException>().WithMessage(expectedWildcardPattern: TypeRequiresResolverMessage);
 
         dataObject.TryGetData(format, Resolver, autoConvert: false, out object? value).Should().BeTrue();
         value.Should().Be(1);
@@ -129,7 +132,7 @@ public unsafe class NativeToWinFormsAdapterTests
         (DataObject dataObject, TestData _) = SetDataObject(format);
         Action tryGetData = () => dataObject.TryGetData(format, out object? _);
 
-        tryGetData.Should().Throw<NotSupportedException>().WithMessage(expectedWildcardPattern: RequiresResolverMessage);
+        tryGetData.Should().Throw<NotSupportedException>().WithMessage(expectedWildcardPattern: TypeRequiresResolverMessage);
     }
 
     [WinFormsTheory]
@@ -142,7 +145,7 @@ public unsafe class NativeToWinFormsAdapterTests
         using BinaryFormatterScope scope = new(enable: true);
         using BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: true);
 
-        tryGetData.Should().Throw<NotSupportedException>().WithMessage(expectedWildcardPattern: RequiresResolverMessage);
+        tryGetData.Should().Throw<NotSupportedException>().WithMessage(expectedWildcardPattern: TypeRequiresResolverMessage);
     }
 
     [WinFormsTheory]
@@ -208,7 +211,7 @@ public unsafe class NativeToWinFormsAdapterTests
         // Theoretically we don't require a resolver here, but this is an exception. In the more common cases resolver
         // is required to instantiate non-concrete types.
         Action tryGetData = () => dataObject.TryGetData(format, out IList<int>? _);
-        tryGetData.Should().Throw<NotSupportedException>().WithMessage(expectedWildcardPattern: RequiresResolverMessage);
+        tryGetData.Should().Throw<NotSupportedException>().WithMessage(expectedWildcardPattern: TypeRequiresResolverMessage);
     }
 
     [WinFormsTheory]
@@ -390,7 +393,7 @@ public unsafe class NativeToWinFormsAdapterTests
         (DataObject dataObject, TestData _) = SetDataObject(format);
         Action tryGetData = () => dataObject.TryGetData(format, out AbstractBase? _);
 
-        tryGetData.Should().Throw<NotSupportedException>().WithMessage(expectedWildcardPattern: RequiresResolverMessage);
+        tryGetData.Should().Throw<NotSupportedException>().WithMessage(expectedWildcardPattern: TypeRequiresResolverMessage);
 
         dataObject.TryGetData(format, out NotSupportedException? ex).Should().BeTrue();
         ex.Should().BeOfType<NotSupportedException>().Which.Message.Should().Be(FormatterDisabledMessage);
@@ -406,7 +409,7 @@ public unsafe class NativeToWinFormsAdapterTests
         using BinaryFormatterScope scope = new(enable: true);
         using BinaryFormatterInClipboardDragDropScope clipboardScope = new(enable: true);
 
-        tryGetData.Should().Throw<NotSupportedException>().WithMessage(expectedWildcardPattern: RequiresResolverMessage);
+        tryGetData.Should().Throw<NotSupportedException>().WithMessage(expectedWildcardPattern: TypeRequiresResolverMessage);
     }
 
     [WinFormsTheory]
