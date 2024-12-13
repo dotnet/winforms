@@ -236,6 +236,12 @@ public sealed partial class Application
         set => InputLanguage.CurrentInputLanguage = value;
     }
 
+    /// <summary>
+    /// Get current application context's main form
+    /// </summary>
+    /// <returns>Current application context's main form</returns>
+    public static Form? CurrentMainForm { get => ThreadContext.FromCurrent().ApplicationContext?.MainForm; }
+
     internal static bool CustomThreadExceptionHandlerAttached
         => ThreadContext.FromCurrent().CustomThreadExceptionHandlerAttached;
 
