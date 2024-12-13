@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Tests.TestResources;
+using Windows.Win32.Graphics.GdiPlus;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
 using Windows.Win32.System.Variant;
@@ -20,7 +21,7 @@ public unsafe class ComNativeDescriptorTests
     public void ComNativeDescriptor_GetProperties_FromIPictureDisp_ComInterop()
     {
         using Bitmap bitmap = new(10, 20);
-        object iPictureDisp = IPictureDisp.CreateObjectFromImage(bitmap);
+        object iPictureDisp = bitmap.CreateIPictureDispRCW();
         Assert.NotNull(iPictureDisp);
 
         ValidateIPictureDispProperties(iPictureDisp, TypeDescriptor.GetProperties(iPictureDisp));
@@ -30,7 +31,7 @@ public unsafe class ComNativeDescriptorTests
     public void ComNativeDescriptor_GetProperties_FromIPictureDisp_ComWrappers()
     {
         using Bitmap bitmap = new(10, 20);
-        using var iPictureDisp = IPictureDisp.CreateFromImage(bitmap);
+        using var iPictureDisp = bitmap.CreateIPictureDisp();
         Assert.False(iPictureDisp.IsNull);
 
         // The runtime needs to be updated to allow ComWrappers through
@@ -79,7 +80,7 @@ public unsafe class ComNativeDescriptorTests
         // While we ask for IPicture, the underlying native class also supports IDispatch, so we get support
         // in the type descriptor.
         using Bitmap bitmap = new(10, 20);
-        object iPicture = IPicture.CreateObjectFromImage(bitmap);
+        object iPicture = bitmap.CreateIPictureDispRCW();
         Assert.NotNull(iPicture);
 
         var properties = TypeDescriptor.GetProperties(iPicture);

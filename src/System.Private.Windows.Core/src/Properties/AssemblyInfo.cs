@@ -10,6 +10,7 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo($"System.Windows.Forms.Design.Editors, PublicKey={PublicKeys.Ecma}")]
 [assembly: InternalsVisibleTo($"System.Windows.Forms.Primitives, PublicKey={PublicKeys.Ecma}")]
 [assembly: InternalsVisibleTo($"System.Drawing.Common, PublicKey={PublicKeys.Open}")]
+[assembly: InternalsVisibleTo($"System.Private.Windows.GdiPlus, PublicKey={PublicKeys.Ecma}")]
 
 [assembly: InternalsVisibleTo($"System.Windows.Forms.Design.Tests, PublicKey={PublicKeys.Ecma}")]
 [assembly: InternalsVisibleTo($"System.Windows.Forms.Primitives.Tests, PublicKey={PublicKeys.Ecma}")]
@@ -36,6 +37,7 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo($"PresentationFramework, PublicKey={PublicKeys.MicrosoftShared}")]
 [assembly: InternalsVisibleTo($"PresentationUI, PublicKey={PublicKeys.MicrosoftShared}")]
 [assembly: InternalsVisibleTo($"ReachFramework, PublicKey={PublicKeys.MicrosoftShared}")]
+[assembly: InternalsVisibleTo($"System.Printing, PublicKey={PublicKeys.MicrosoftShared}")]
 [assembly: InternalsVisibleTo($"System.Windows.Controls.Ribbon, PublicKey={PublicKeys.Ecma}")]
 [assembly: InternalsVisibleTo($"System.Windows.Input.Manipulations, PublicKey={PublicKeys.Ecma}")]
 [assembly: InternalsVisibleTo($"System.Windows.Presentation, PublicKey={PublicKeys.Ecma}")]

@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell;
+using Windows.Win32.Graphics.GdiPlus;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Com.StructuredStorage;
 using Windows.Win32.System.Ole;
@@ -3527,22 +3528,20 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     ///  Maps from a System.Drawing.Image to an OLE IPicture
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    protected static object? GetIPictureFromPicture(Image? image)
-        => image is null ? null : IPicture.CreateObjectFromImage(image);
+    protected static object? GetIPictureFromPicture(Image? image) => image?.CreateIPictureRCW();
 
     /// <summary>
     ///  Maps from a System.Drawing.Cursor to an OLE IPicture
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected static object? GetIPictureFromCursor(Cursor? cursor)
-        => cursor is null ? null : IPicture.CreateObjectFromIcon(Icon.FromHandle(cursor.Handle), copy: true);
+        => cursor is null ? null : Icon.FromHandle(cursor.Handle).CreateIPictureRCW(copy: true);
 
     /// <summary>
     ///  Maps from a System.Drawing.Image to an OLE IPictureDisp
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    protected static object? GetIPictureDispFromPicture(Image? image)
-        => image is null ? null : IPictureDisp.CreateObjectFromImage(image);
+    protected static object? GetIPictureDispFromPicture(Image? image) => image?.CreateIPictureDispRCW();
 
     /// <summary>
     ///  Maps from an OLE IPicture to a System.Drawing.Image
