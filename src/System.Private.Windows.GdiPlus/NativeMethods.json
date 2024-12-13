@@ -1,0 +1,11 @@
+{
+  "$schema": "https://aka.ms/CsWin32.schema.json",
+  "className": "PInvokeGdiPlus",
+  "allowMarshaling": false,
+  "useSafeHandles": false,
+  "comInterop": {
+    "preserveSigMethods": [
+      "*"
+    ]
+  }
+}

@@ -8,7 +8,7 @@ namespace Windows.Win32.Graphics.GdiPlus;
 /// </summary>
 internal static partial class GdiPlusInitialization
 {
-    private static readonly nuint s_initToken = Init();
+    private static nuint s_initToken;
 
     private static unsafe nuint Init()
     {
@@ -19,12 +19,12 @@ internal static partial class GdiPlusInitialization
 
         nuint token;
         GdiplusStartupInputEx startup = GdiplusStartupInputEx.GetDefault();
-        PInvokeCore.GdiplusStartup(&token, (GdiplusStartupInput*)&startup, null).ThrowIfFailed();
+        PInvokeGdiPlus.GdiplusStartup(&token, (GdiplusStartupInput*)&startup, null).ThrowIfFailed();
         return token;
     }
 
     /// <summary>
-    ///  Returns true if GDI+ has been started.
+    ///  Attempts to ensure that GGI+ is initialized. Returns <see langword="true"/> if GDI+ has been started.
     /// </summary>
     /// <remarks>
     ///  <para>
@@ -33,11 +33,21 @@ internal static partial class GdiPlusInitialization
     ///   so it is not necessary for methods defined there.
     ///  </para>
     ///  <para>
-    ///   We don't do this implicitly in the Core assembly to avoid unnecessary loading of GDI+.
-    ///  </para>
-    ///  <para>
     ///   https://github.com/microsoft/CsWin32/issues/1308 tracks a proposal to make this more automatic.
     ///  </para>
     /// </remarks>
-    internal static bool EnsureInitialized() => s_initToken != 0;
+    internal static bool EnsureInitialized()
+    {
+        if (s_initToken == 0)
+        {
+            s_initToken = Init();
+        }
+
+        return IsInitialized;
+    }
+
+    /// <summary>
+    ///  Returns <see langword="true"/> if GDI+ has been started.
+    /// </summary>
+    internal static bool IsInitialized => s_initToken != 0;
 }

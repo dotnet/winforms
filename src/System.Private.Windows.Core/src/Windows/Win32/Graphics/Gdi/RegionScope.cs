@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using Windows.Win32.Graphics.GdiPlus;
 
 namespace Windows.Win32.Graphics.Gdi;
 
@@ -58,48 +57,9 @@ internal unsafe ref struct RegionScope
     }
 
     /// <summary>
-    ///  Creates a native region from a GDI+ <see cref="GpRegion"/>.
+    ///  Creates a region scope with the given <see cref="HRGN"/>.
     /// </summary>
-    public RegionScope(IPointer<GpRegion> region, IPointer<GpGraphics> graphics)
-    {
-        InitializeFromGdiPlus(region.GetPointer(), graphics.GetPointer());
-        GC.KeepAlive(region);
-        GC.KeepAlive(graphics);
-    }
-
-    private void InitializeFromGdiPlus(GpRegion* region, GpGraphics* graphics)
-    {
-        BOOL isInfinite;
-        PInvokeCore.GdipIsInfiniteRegion(region, graphics, &isInfinite).ThrowIfFailed();
-
-        if (isInfinite)
-        {
-            // An infinite region would cover the entire device region which is the same as
-            // not having a clipping region. Observe that this is not the same as having an
-            // empty region, which when clipping to it has the effect of excluding the entire
-            // device region.
-            //
-            // To remove the clip region from a dc the SelectClipRgn() function needs to be
-            // called with a null region ptr - that's why we use the empty constructor here.
-            // GDI+ will return IntPtr.Zero for Region.GetHrgn(Graphics) when the region is
-            // Infinite.
-
-            Region = default;
-            return;
-        }
-
-        HRGN hrgn;
-        PInvokeCore.GdipGetRegionHRgn(region, graphics, &hrgn).ThrowIfFailed();
-        Region = hrgn;
-    }
-
-    public RegionScope(IPointer<GpRegion> region, HWND hwnd)
-    {
-        GpGraphics* graphics = null;
-        PInvokeCore.GdipCreateFromHWND(hwnd, &graphics).ThrowIfFailed();
-        InitializeFromGdiPlus(region.GetPointer(), graphics);
-        GC.KeepAlive(region);
-    }
+    public RegionScope(HRGN region) => Region = region;
 
     /// <summary>
     ///  Returns true if this represents a null HRGN.

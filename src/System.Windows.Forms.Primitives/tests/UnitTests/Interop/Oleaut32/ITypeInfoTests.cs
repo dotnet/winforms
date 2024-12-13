@@ -5,6 +5,7 @@ using System.Drawing;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
 using Windows.Win32.System.Variant;
+using Windows.Win32.Graphics.GdiPlus;
 
 namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32;
 
@@ -15,7 +16,7 @@ public class ITypeInfoTests
     public unsafe void ITypeInfo_AddressOfMember_Invoke_Success()
     {
         using Bitmap image = new(16, 32);
-        using var iPictureDisp = IPictureDisp.CreateFromImage(image);
+        using var iPictureDisp = image.CreateIPictureDisp();
         Assert.False(iPictureDisp.IsNull);
         using ComScope<ITypeInfo> typeInfo = new(null);
         ((IDispatch*)iPictureDisp.Value)->GetTypeInfo(0, PInvokeCore.GetThreadLocale(), typeInfo);
@@ -29,7 +30,7 @@ public class ITypeInfoTests
     public unsafe void ITypeInfo_CreateInstance_Invoke_Success()
     {
         using Bitmap image = new(16, 32);
-        using var iPictureDisp = IPictureDisp.CreateFromImage(image);
+        using var iPictureDisp = image.CreateIPictureDisp();
         Assert.False(iPictureDisp.IsNull);
         using ComScope<ITypeInfo> typeInfo = new(null);
         ((IDispatch*)iPictureDisp.Value)->GetTypeInfo(0, PInvokeCore.GetThreadLocale(), typeInfo);
@@ -43,7 +44,7 @@ public class ITypeInfoTests
     public unsafe void ITypeInfo_GetContainingTypeLib_Invoke_Success()
     {
         using Bitmap image = new(16, 32);
-        using var iPictureDisp = IPictureDisp.CreateFromImage(image);
+        using var iPictureDisp = image.CreateIPictureDisp();
         Assert.False(iPictureDisp.IsNull);
         using ComScope<ITypeInfo> typeInfo = new(null);
         ((IDispatch*)iPictureDisp.Value)->GetTypeInfo(0, PInvokeCore.GetThreadLocale(), typeInfo);
@@ -59,7 +60,7 @@ public class ITypeInfoTests
     public unsafe void ITypeInfo_GetDllEntry_Invoke_Success()
     {
         using Bitmap image = new(16, 32);
-        using var iPictureDisp = IPictureDisp.CreateFromImage(image);
+        using var iPictureDisp = image.CreateIPictureDisp();
         Assert.False(iPictureDisp.IsNull);
         using ComScope<ITypeInfo> typeInfo = new(null);
         ((IDispatch*)iPictureDisp.Value)->GetTypeInfo(0, PInvokeCore.GetThreadLocale(), typeInfo);
@@ -79,7 +80,7 @@ public class ITypeInfoTests
     public unsafe void ITypeInfo_GetDocumentation_Invoke_Success()
     {
         using Bitmap image = new(16, 32);
-        using var iPictureDisp = IPictureDisp.CreateFromImage(image);
+        using var iPictureDisp = image.CreateIPictureDisp();
         Assert.False(iPictureDisp.IsNull);
         using ComScope<ITypeInfo> typeInfo = new(null);
         ((IDispatch*)iPictureDisp.Value)->GetTypeInfo(0, PInvokeCore.GetThreadLocale(), typeInfo);
@@ -99,7 +100,7 @@ public class ITypeInfoTests
     public unsafe void ITypeInfo_GetFuncDesc_Invoke_Success()
     {
         using Bitmap image = new(16, 32);
-        using var iPictureDisp = IPictureDisp.CreateFromImage(image);
+        using var iPictureDisp = image.CreateIPictureDisp();
         Assert.False(iPictureDisp.IsNull);
         using ComScope<ITypeInfo> typeInfo = new(null);
         ((IDispatch*)iPictureDisp.Value)->GetTypeInfo(0, PInvokeCore.GetThreadLocale(), typeInfo);
@@ -133,7 +134,7 @@ public class ITypeInfoTests
     public unsafe void ITypeInfo_GetIDsOfNames_Invoke_Success()
     {
         using Bitmap image = new(16, 32);
-        using var iPictureDisp = IPictureDisp.CreateFromImage(image);
+        using var iPictureDisp = image.CreateIPictureDisp();
         Assert.False(iPictureDisp.IsNull);
         using ComScope<ITypeInfo> typeInfo = new(null);
         ((IDispatch*)iPictureDisp.Value)->GetTypeInfo(0, PInvokeCore.GetThreadLocale(), typeInfo);
@@ -148,7 +149,7 @@ public class ITypeInfoTests
             {
                 typeInfo.Value->GetIDsOfNames(pRgszNames, (uint)rgszNames.Length, pRgDispId);
                 Assert.Equal([width, other], rgszNames);
-                Assert.Equal(new int[] { (int)PInvokeCore.DISPID_PICT_WIDTH, PInvokeCore.DISPID_UNKNOWN }, rgDispId);
+                Assert.Equal([(int)PInvokeCore.DISPID_PICT_WIDTH, PInvokeCore.DISPID_UNKNOWN], rgDispId);
             }
         }
     }
@@ -157,7 +158,7 @@ public class ITypeInfoTests
     public unsafe void ITypeInfo_GetImplTypeFlags_Invoke_Success()
     {
         using Bitmap image = new(16, 32);
-        using var iPictureDisp = IPictureDisp.CreateFromImage(image);
+        using var iPictureDisp = image.CreateIPictureDisp();
         Assert.False(iPictureDisp.IsNull);
         using ComScope<ITypeInfo> typeInfo = new(null);
         ((IDispatch*)iPictureDisp.Value)->GetTypeInfo(0, PInvokeCore.GetThreadLocale(), typeInfo);
@@ -171,7 +172,7 @@ public class ITypeInfoTests
     public unsafe void ITypeInfo_GetMops_Invoke_Success()
     {
         using Bitmap image = new(16, 32);
-        using var iPictureDisp = IPictureDisp.CreateFromImage(image);
+        using var iPictureDisp = image.CreateIPictureDisp();
         Assert.False(iPictureDisp.IsNull);
         using ComScope<ITypeInfo> typeInfo = new(null);
         ((IDispatch*)iPictureDisp.Value)->GetTypeInfo(0, PInvokeCore.GetThreadLocale(), typeInfo);
@@ -185,7 +186,7 @@ public class ITypeInfoTests
     public unsafe void ITypeInfo_GetNames_Invoke_Success()
     {
         using Bitmap image = new(16, 32);
-        using var iPictureDisp = IPictureDisp.CreateFromImage(image);
+        using var iPictureDisp = image.CreateIPictureDisp();
         Assert.False(iPictureDisp.IsNull);
         using ComScope<ITypeInfo> typeInfo = new(null);
         ((IDispatch*)iPictureDisp.Value)->GetTypeInfo(0, PInvokeCore.GetThreadLocale(), typeInfo);
@@ -207,7 +208,7 @@ public class ITypeInfoTests
     public unsafe void ITypeInfo_GetRefTypeInfo_Invoke_Success()
     {
         using Bitmap image = new(16, 32);
-        using var iPictureDisp = IPictureDisp.CreateFromImage(image);
+        using var iPictureDisp = image.CreateIPictureDisp();
         Assert.False(iPictureDisp.IsNull);
         using ComScope<ITypeInfo> typeInfo = new(null);
         ((IDispatch*)iPictureDisp.Value)->GetTypeInfo(0, PInvokeCore.GetThreadLocale(), typeInfo);
@@ -224,7 +225,7 @@ public class ITypeInfoTests
     public unsafe void ITypeInfo_GetRefTypeOfImplType_Invoke_Success()
     {
         using Bitmap image = new(16, 32);
-        using var iPictureDisp = IPictureDisp.CreateFromImage(image);
+        using var iPictureDisp = image.CreateIPictureDisp();
         Assert.False(iPictureDisp.IsNull);
         using ComScope<ITypeInfo> typeInfo = new(null);
         ((IDispatch*)iPictureDisp.Value)->GetTypeInfo(0, PInvokeCore.GetThreadLocale(), typeInfo);
@@ -238,7 +239,7 @@ public class ITypeInfoTests
     public unsafe void ITypeInfo_GetTypeAttr_Invoke_Success()
     {
         using Bitmap image = new(16, 32);
-        using var iPictureDisp = IPictureDisp.CreateFromImage(image);
+        using var iPictureDisp = image.CreateIPictureDisp();
         Assert.False(iPictureDisp.IsNull);
         using ComScope<ITypeInfo> typeInfo = new(null);
         ((IDispatch*)iPictureDisp.Value)->GetTypeInfo(0, PInvokeCore.GetThreadLocale(), typeInfo);
@@ -277,7 +278,7 @@ public class ITypeInfoTests
     public unsafe void ITypeInfo_GetTypeComp_Invoke_Success()
     {
         using Bitmap image = new(16, 32);
-        using var iPictureDisp = IPictureDisp.CreateFromImage(image);
+        using var iPictureDisp = image.CreateIPictureDisp();
         Assert.False(iPictureDisp.IsNull);
         using ComScope<ITypeInfo> typeInfo = new(null);
         ((IDispatch*)iPictureDisp.Value)->GetTypeInfo(0, PInvokeCore.GetThreadLocale(), typeInfo);
@@ -290,7 +291,7 @@ public class ITypeInfoTests
     public unsafe void ITypeInfo_GetVarDesc_Invoke_Success()
     {
         using Bitmap image = new(16, 32);
-        using var iPictureDisp = IPictureDisp.CreateFromImage(image);
+        using var iPictureDisp = image.CreateIPictureDisp();
         Assert.False(iPictureDisp.IsNull);
         using ComScope<ITypeInfo> typeInfo = new(null);
         ((IDispatch*)iPictureDisp.Value)->GetTypeInfo(0, PInvokeCore.GetThreadLocale(), typeInfo);
@@ -319,7 +320,7 @@ public class ITypeInfoTests
     public unsafe void ITypeInfo_Invoke_Invoke_Success()
     {
         using Bitmap image = new(16, 32);
-        using var iPictureDisp = IPictureDisp.CreateFromImage(image);
+        using var iPictureDisp = image.CreateIPictureDisp();
         Assert.False(iPictureDisp.IsNull);
         using ComScope<ITypeInfo> typeInfo = new(null);
         ((IDispatch*)iPictureDisp.Value)->GetTypeInfo(0, PInvokeCore.GetThreadLocale(), typeInfo);

@@ -19,7 +19,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
     public GraphicsPath(FillMode fillMode)
     {
         GpPath* path;
-        PInvoke.GdipCreatePath((GdiPlus.FillMode)fillMode, &path).ThrowIfFailed();
+        PInvokeGdiPlus.GdipCreatePath((GdiPlus.FillMode)fillMode, &path).ThrowIfFailed();
         _nativePath = path;
     }
 
@@ -49,7 +49,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
         fixed (byte* t = types)
         {
             GpPath* path;
-            PInvoke.GdipCreatePath2((GdiPlus.PointF*)p, t, types.Length, (GdiPlus.FillMode)fillMode, &path).ThrowIfFailed();
+            PInvokeGdiPlus.GdipCreatePath2((GdiPlus.PointF*)p, t, types.Length, (GdiPlus.FillMode)fillMode, &path).ThrowIfFailed();
             _nativePath = path;
         }
     }
@@ -88,7 +88,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
         fixed (Point* p = pts)
         {
             GpPath* path;
-            PInvoke.GdipCreatePath2I((GdiPlus.Point*)p, t, types.Length, (GdiPlus.FillMode)fillMode, &path).ThrowIfFailed();
+            PInvokeGdiPlus.GdipCreatePath2I((GdiPlus.Point*)p, t, types.Length, (GdiPlus.FillMode)fillMode, &path).ThrowIfFailed();
             _nativePath = path;
         }
     }
@@ -96,7 +96,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
     public object Clone()
     {
         GpPath* path;
-        PInvoke.GdipClonePath(_nativePath, &path).ThrowIfFailed();
+        PInvokeGdiPlus.GdipClonePath(_nativePath, &path).ThrowIfFailed();
         GC.KeepAlive(this);
         return new GraphicsPath(path);
     }
@@ -124,7 +124,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
 #if DEBUG
                 Status status = !Gdip.Initialized ? Status.Ok :
 #endif
-                PInvoke.GdipDeletePath(_nativePath);
+                PInvokeGdiPlus.GdipDeletePath(_nativePath);
 #if DEBUG
                 Debug.Assert(status == Status.Ok, $"GDI+ returned an error status: {status}");
 #endif
@@ -144,7 +144,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
 
     public void Reset()
     {
-        PInvoke.GdipResetPath(_nativePath).ThrowIfFailed();
+        PInvokeGdiPlus.GdipResetPath(_nativePath).ThrowIfFailed();
         GC.KeepAlive(this);
     }
 
@@ -153,7 +153,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
         get
         {
             GdiPlus.FillMode fillMode;
-            PInvoke.GdipGetPathFillMode(_nativePath, &fillMode).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetPathFillMode(_nativePath, &fillMode).ThrowIfFailed();
             GC.KeepAlive(this);
             return (FillMode)fillMode;
         }
@@ -162,7 +162,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
             if (value is < FillMode.Alternate or > FillMode.Winding)
                 throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FillMode));
 
-            PInvoke.GdipSetPathFillMode(_nativePath, (GdiPlus.FillMode)value).ThrowIfFailed();
+            PInvokeGdiPlus.GdipSetPathFillMode(_nativePath, (GdiPlus.FillMode)value).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }
@@ -192,7 +192,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
                     Types = t
                 };
 
-                PInvoke.GdipGetPathData(_nativePath, (GdiPlus.PathData*)&data).ThrowIfFailed();
+                PInvokeGdiPlus.GdipGetPathData(_nativePath, (GdiPlus.PathData*)&data).ThrowIfFailed();
                 GC.KeepAlive(this);
             }
 
@@ -202,44 +202,44 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
 
     public void StartFigure()
     {
-        PInvoke.GdipStartPathFigure(_nativePath);
+        PInvokeGdiPlus.GdipStartPathFigure(_nativePath);
         GC.KeepAlive(this);
     }
 
     public void CloseFigure()
     {
-        PInvoke.GdipClosePathFigure(_nativePath).ThrowIfFailed();
+        PInvokeGdiPlus.GdipClosePathFigure(_nativePath).ThrowIfFailed();
         GC.KeepAlive(this);
     }
 
     public void CloseAllFigures()
     {
-        PInvoke.GdipClosePathFigures(_nativePath).ThrowIfFailed();
+        PInvokeGdiPlus.GdipClosePathFigures(_nativePath).ThrowIfFailed();
         GC.KeepAlive(this);
     }
 
     public void SetMarkers()
     {
-        PInvoke.GdipSetPathMarker(_nativePath).ThrowIfFailed();
+        PInvokeGdiPlus.GdipSetPathMarker(_nativePath).ThrowIfFailed();
         GC.KeepAlive(this);
     }
 
     public void ClearMarkers()
     {
-        PInvoke.GdipClearPathMarkers(_nativePath).ThrowIfFailed();
+        PInvokeGdiPlus.GdipClearPathMarkers(_nativePath).ThrowIfFailed();
         GC.KeepAlive(this);
     }
 
     public void Reverse()
     {
-        PInvoke.GdipReversePath(_nativePath).ThrowIfFailed();
+        PInvokeGdiPlus.GdipReversePath(_nativePath).ThrowIfFailed();
         GC.KeepAlive(this);
     }
 
     public PointF GetLastPoint()
     {
         PointF point;
-        PInvoke.GdipGetPathLastPoint(_nativePath, (GdiPlus.PointF*)&point);
+        PInvokeGdiPlus.GdipGetPathLastPoint(_nativePath, (GdiPlus.PointF*)&point);
         GC.KeepAlive(this);
         return point;
     }
@@ -251,7 +251,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
     public bool IsVisible(float x, float y, Graphics? graphics)
     {
         BOOL isVisible;
-        PInvoke.GdipIsVisiblePathPoint(
+        PInvokeGdiPlus.GdipIsVisiblePathPoint(
             _nativePath,
             x, y,
             graphics is null ? null : graphics.NativeGraphics,
@@ -280,7 +280,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
     {
         ArgumentNullException.ThrowIfNull(pen);
         BOOL isVisible;
-        PInvoke.GdipIsOutlineVisiblePathPoint(
+        PInvokeGdiPlus.GdipIsOutlineVisiblePathPoint(
             _nativePath,
             x, y,
             pen.NativePen,
@@ -307,7 +307,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
 
     public void AddLine(float x1, float y1, float x2, float y2)
     {
-        PInvoke.GdipAddPathLine(_nativePath, x1, y1, x2, y2).ThrowIfFailed();
+        PInvokeGdiPlus.GdipAddPathLine(_nativePath, x1, y1, x2, y2).ThrowIfFailed();
         GC.KeepAlive(this);
     }
 
@@ -341,7 +341,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
 
         fixed (PointF* p = points)
         {
-            PInvoke.GdipAddPathLine2(_nativePath, (GdiPlus.PointF*)p, points.Length).ThrowIfFailed();
+            PInvokeGdiPlus.GdipAddPathLine2(_nativePath, (GdiPlus.PointF*)p, points.Length).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }
@@ -368,7 +368,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
 
         fixed (Point* p = points)
         {
-            PInvoke.GdipAddPathLine2I(_nativePath, (GdiPlus.Point*)p, points.Length).ThrowIfFailed();
+            PInvokeGdiPlus.GdipAddPathLine2I(_nativePath, (GdiPlus.Point*)p, points.Length).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }
@@ -378,7 +378,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
 
     public void AddArc(float x, float y, float width, float height, float startAngle, float sweepAngle)
     {
-        PInvoke.GdipAddPathArc(_nativePath, x, y, width, height, startAngle, sweepAngle).ThrowIfFailed();
+        PInvokeGdiPlus.GdipAddPathArc(_nativePath, x, y, width, height, startAngle, sweepAngle).ThrowIfFailed();
         GC.KeepAlive(this);
     }
 
@@ -393,7 +393,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
 
     public void AddBezier(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4)
     {
-        PInvoke.GdipAddPathBezier(_nativePath, x1, y1, x2, y2, x3, y3, x4, y4).ThrowIfFailed();
+        PInvokeGdiPlus.GdipAddPathBezier(_nativePath, x1, y1, x2, y2, x3, y3, x4, y4).ThrowIfFailed();
         GC.KeepAlive(this);
     }
 
@@ -413,7 +413,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
     {
         fixed (PointF* p = points)
         {
-            PInvoke.GdipAddPathBeziers(_nativePath, (GdiPlus.PointF*)p, points.Length).ThrowIfFailed();
+            PInvokeGdiPlus.GdipAddPathBeziers(_nativePath, (GdiPlus.PointF*)p, points.Length).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }
@@ -440,7 +440,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
 
         fixed (Point* p = points)
         {
-            PInvoke.GdipAddPathBeziersI(_nativePath, (GdiPlus.Point*)p, points.Length).ThrowIfFailed();
+            PInvokeGdiPlus.GdipAddPathBeziersI(_nativePath, (GdiPlus.Point*)p, points.Length).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }
@@ -469,7 +469,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
     {
         fixed (PointF* p = points)
         {
-            PInvoke.GdipAddPathCurve3(
+            PInvokeGdiPlus.GdipAddPathCurve3(
                 _nativePath,
                 (GdiPlus.PointF*)p,
                 points.Length,
@@ -496,7 +496,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
     {
         fixed (PointF* p = points)
         {
-            PInvoke.GdipAddPathCurve2(
+            PInvokeGdiPlus.GdipAddPathCurve2(
                 _nativePath,
                 (GdiPlus.PointF*)p,
                 points.Length,
@@ -517,7 +517,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
     {
         fixed (Point* p = points)
         {
-            PInvoke.GdipAddPathCurve3I(
+            PInvokeGdiPlus.GdipAddPathCurve3I(
                 _nativePath,
                 (GdiPlus.Point*)p,
                 points.Length,
@@ -544,7 +544,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
     {
         fixed (Point* p = points)
         {
-            PInvoke.GdipAddPathCurve2I(
+            PInvokeGdiPlus.GdipAddPathCurve2I(
                 _nativePath,
                 (GdiPlus.Point*)p,
                 points.Length,
@@ -575,7 +575,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
     {
         fixed (PointF* p = points)
         {
-            PInvoke.GdipAddPathClosedCurve2(_nativePath, (GdiPlus.PointF*)p, points.Length, tension).ThrowIfFailed();
+            PInvokeGdiPlus.GdipAddPathClosedCurve2(_nativePath, (GdiPlus.PointF*)p, points.Length, tension).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }
@@ -605,14 +605,14 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
     {
         fixed (Point* p = points)
         {
-            PInvoke.GdipAddPathClosedCurve2I(_nativePath, (GdiPlus.Point*)p, points.Length, tension).ThrowIfFailed();
+            PInvokeGdiPlus.GdipAddPathClosedCurve2I(_nativePath, (GdiPlus.Point*)p, points.Length, tension).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }
 
     public void AddRectangle(RectangleF rect)
     {
-        PInvoke.GdipAddPathRectangle(
+        PInvokeGdiPlus.GdipAddPathRectangle(
             _nativePath,
             rect.X, rect.Y, rect.Width, rect.Height).ThrowIfFailed();
         GC.KeepAlive(this);
@@ -634,7 +634,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
     {
         fixed (RectangleF* r = rects)
         {
-            PInvoke.GdipAddPathRectangles(_nativePath, (RectF*)r, rects.Length).ThrowIfFailed();
+            PInvokeGdiPlus.GdipAddPathRectangles(_nativePath, (RectF*)r, rects.Length).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }
@@ -654,7 +654,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
     {
         fixed (Rectangle* r = rects)
         {
-            PInvoke.GdipAddPathRectanglesI(_nativePath, (Rect*)r, rects.Length).ThrowIfFailed();
+            PInvokeGdiPlus.GdipAddPathRectanglesI(_nativePath, (Rect*)r, rects.Length).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }
@@ -705,7 +705,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
 
     public void AddEllipse(float x, float y, float width, float height)
     {
-        PInvoke.GdipAddPathEllipse(_nativePath, x, y, width, height).ThrowIfFailed();
+        PInvokeGdiPlus.GdipAddPathEllipse(_nativePath, x, y, width, height).ThrowIfFailed();
         GC.KeepAlive(this);
     }
 
@@ -718,7 +718,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
 
     public void AddPie(float x, float y, float width, float height, float startAngle, float sweepAngle)
     {
-        PInvoke.GdipAddPathPie(
+        PInvokeGdiPlus.GdipAddPathPie(
             _nativePath,
             x, y, width, height,
             startAngle,
@@ -743,7 +743,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
     {
         fixed (PointF* p = points)
         {
-            PInvoke.GdipAddPathPolygon(_nativePath, (GdiPlus.PointF*)p, points.Length).ThrowIfFailed();
+            PInvokeGdiPlus.GdipAddPathPolygon(_nativePath, (GdiPlus.PointF*)p, points.Length).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }
@@ -764,7 +764,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
     {
         fixed (Point* p = points)
         {
-            PInvoke.GdipAddPathPolygonI(_nativePath, (GdiPlus.Point*)p, points.Length).ThrowIfFailed();
+            PInvokeGdiPlus.GdipAddPathPolygonI(_nativePath, (GdiPlus.Point*)p, points.Length).ThrowIfFailed();
             GC.KeepAlive(this);
         }
     }
@@ -772,7 +772,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
     public void AddPath(GraphicsPath addingPath, bool connect)
     {
         ArgumentNullException.ThrowIfNull(addingPath);
-        PInvoke.GdipAddPathPath(_nativePath, addingPath.Pointer(), connect).ThrowIfFailed();
+        PInvokeGdiPlus.GdipAddPathPath(_nativePath, addingPath.Pointer(), connect).ThrowIfFailed();
         GC.KeepAlive(addingPath);
         GC.KeepAlive(this);
     }
@@ -790,7 +790,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
 
         fixed (char* c = s)
         {
-            PInvoke.GdipAddPathString(
+            PInvokeGdiPlus.GdipAddPathString(
                 _nativePath,
                 c, s.Length,
                 family.Pointer(),
@@ -811,7 +811,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
     public void Transform(Matrix matrix)
     {
         ArgumentNullException.ThrowIfNull(matrix);
-        PInvoke.GdipTransformPath(_nativePath, matrix.NativeMatrix).ThrowIfFailed();
+        PInvokeGdiPlus.GdipTransformPath(_nativePath, matrix.NativeMatrix).ThrowIfFailed();
         GC.KeepAlive(matrix);
         GC.KeepAlive(this);
     }
@@ -823,7 +823,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
     public RectangleF GetBounds(Matrix? matrix, Pen? pen)
     {
         RectF bounds;
-        PInvoke.GdipGetPathWorldBounds(
+        PInvokeGdiPlus.GdipGetPathWorldBounds(
             _nativePath,
             &bounds,
             matrix.Pointer(),
@@ -841,7 +841,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
 
     public void Flatten(Matrix? matrix, float flatness)
     {
-        PInvoke.GdipFlattenPath(_nativePath, matrix.Pointer(), flatness).ThrowIfFailed();
+        PInvokeGdiPlus.GdipFlattenPath(_nativePath, matrix.Pointer(), flatness).ThrowIfFailed();
         GC.KeepAlive(this);
     }
 
@@ -858,7 +858,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
         if (PointCount == 0)
             return;
 
-        PInvoke.GdipWidenPath(_nativePath, pen.Pointer(), matrix.Pointer(), flatness).ThrowIfFailed();
+        PInvokeGdiPlus.GdipWidenPath(_nativePath, pen.Pointer(), matrix.Pointer(), flatness).ThrowIfFailed();
         GC.KeepAlive(pen);
         GC.KeepAlive(matrix);
         GC.KeepAlive(this);
@@ -911,7 +911,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
     {
         fixed (PointF* p = destPoints)
         {
-            PInvoke.GdipWarpPath(
+            PInvokeGdiPlus.GdipWarpPath(
                 _nativePath,
                 matrix.Pointer(),
                 (GdiPlus.PointF*)p,
@@ -929,7 +929,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
         get
         {
             int count;
-            PInvoke.GdipGetPointCount(_nativePath, &count).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetPointCount(_nativePath, &count).ThrowIfFailed();
             GC.KeepAlive(this);
             return count;
         }
@@ -974,7 +974,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
 
         fixed (byte* t = destination)
         {
-            PInvoke.GdipGetPathTypes(_nativePath, t, destination.Length).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetPathTypes(_nativePath, t, destination.Length).ThrowIfFailed();
             GC.KeepAlive(this);
             return PointCount;
         }
@@ -1019,7 +1019,7 @@ public sealed unsafe class GraphicsPath : MarshalByRefObject, ICloneable, IDispo
 
         fixed (PointF* p = destination)
         {
-            PInvoke.GdipGetPathPoints(_nativePath, (GdiPlus.PointF*)p, destination.Length).ThrowIfFailed();
+            PInvokeGdiPlus.GdipGetPathPoints(_nativePath, (GdiPlus.PointF*)p, destination.Length).ThrowIfFailed();
             GC.KeepAlive(this);
             return PointCount;
         }

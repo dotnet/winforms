@@ -47,7 +47,7 @@ public sealed unsafe class CachedBitmap : IDisposable
         ArgumentNullException.ThrowIfNull(graphics);
 
         GpCachedBitmap* cachedBitmap;
-        PInvoke.GdipCreateCachedBitmap(
+        PInvokeGdiPlus.GdipCreateCachedBitmap(
             bitmap.Pointer(),
             graphics.Pointer(),
             &cachedBitmap);
@@ -64,7 +64,7 @@ public sealed unsafe class CachedBitmap : IDisposable
             return;
         }
 
-        Status status = PInvoke.GdipDeleteCachedBitmap((GpCachedBitmap*)handle);
+        Status status = PInvokeGdiPlus.GdipDeleteCachedBitmap((GpCachedBitmap*)handle);
         if (disposing)
         {
             // Don't want to throw on the finalizer thread.

@@ -26,7 +26,7 @@ public unsafe class ColorMatrixEffect : Effect
     {
         fixed (float* p = &matrix.GetPinnableReference())
         {
-            PInvoke.GdipSetEffectParameters(NativeEffect, p, (uint)sizeof(GdiPlus.ColorMatrix)).ThrowIfFailed();
+            PInvokeGdiPlus.GdipSetEffectParameters(NativeEffect, p, (uint)sizeof(GdiPlus.ColorMatrix)).ThrowIfFailed();
             GC.KeepAlive(this);
         }
 

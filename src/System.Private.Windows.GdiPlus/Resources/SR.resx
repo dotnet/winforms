@@ -1,0 +1,185 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema
+
+    Version 1.3
+
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+
+    Example:
+
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">1.3</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1">this is my long string</data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+      [base64 mime encoded serialized .NET Framework object]
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+      [base64 mime encoded string representing a byte array form of the .NET Framework object]
+    </data>
+
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+      : System.Serialization.Formatters.Binary.BinaryFormatter
+      : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+      : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+      : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+      : using a System.ComponentModel.TypeConverter
+      : and then encoded with base64 encoding.
+  -->
+  
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="GdiplusAborted" xml:space="preserve">
+    <value>Function was ended.</value>
+  </data>
+  <data name="GdiplusAccessDenied" xml:space="preserve">
+    <value>File access is denied.</value>
+  </data>
+  <data name="GdiplusCannotCreateGraphicsFromIndexedPixelFormat" xml:space="preserve">
+    <value>A Graphics object cannot be created from an image that has an indexed pixel format.</value>
+  </data>
+  <data name="GdiplusCannotSetPixelFromIndexedPixelFormat" xml:space="preserve">
+    <value>SetPixel is not supported for images with indexed pixel formats.</value>
+  </data>
+  <data name="GdiplusDestPointsInvalidParallelogram" xml:space="preserve">
+    <value>Destination points define a parallelogram which must have a length of 3. These points will represent the upper-left, upper-right, and lower-left coordinates (defined in that order).</value>
+  </data>
+  <data name="GdiplusDestPointsInvalidLength" xml:space="preserve">
+    <value>Destination points must be an array with a length of 3 or 4. A length of 3 defines a parallelogram with the upper-left, upper-right, and lower-left corners. A length of 4 defines a quadrilateral with the fourth element of the array specifying the lower-right coordinate.</value>
+  </data>
+  <data name="GdiplusFileNotFound" xml:space="preserve">
+    <value>File not found.</value>
+  </data>
+  <data name="GdiplusFontFamilyNotFound" xml:space="preserve">
+    <value>Font '{0}' cannot be found.</value>
+  </data>
+  <data name="GdiplusFontStyleNotFound" xml:space="preserve">
+    <value>Font '{0}' does not support style '{1}'.</value>
+  </data>
+  <data name="GdiplusGenericError" xml:space="preserve">
+    <value>A generic error occurred in GDI+.</value>
+  </data>
+  <data name="GdiplusInsufficientBuffer" xml:space="preserve">
+    <value>Buffer is too small (internal GDI+ error).</value>
+  </data>
+  <data name="GdiplusInvalidParameter" xml:space="preserve">
+    <value>Parameter is not valid.</value>
+  </data>
+  <data name="GdiplusInvalidRectangle" xml:space="preserve">
+    <value>Rectangle '{0}' cannot have a width or height equal to 0.</value>
+  </data>
+  <data name="GdiplusInvalidSize" xml:space="preserve">
+    <value>Operation requires a transformation of the image from GDI+ to GDI. GDI does not support images with a width or height greater than 32767.</value>
+  </data>
+  <data name="GdiplusOutOfMemory" xml:space="preserve">
+    <value>Out of memory.</value>
+  </data>
+  <data name="GdiplusNotImplemented" xml:space="preserve">
+    <value>Not implemented.</value>
+  </data>
+  <data name="GdiplusNotInitialized" xml:space="preserve">
+    <value>GDI+ is not properly initialized (internal GDI+ error).</value>
+  </data>
+  <data name="GdiplusNotTrueTypeFont" xml:space="preserve">
+    <value>Only TrueType fonts are supported. '{0}' is not a TrueType font.</value>
+  </data>
+  <data name="GdiplusNotTrueTypeFont_NoName" xml:space="preserve">
+    <value>Only TrueType fonts are supported. This is not a TrueType font.</value>
+  </data>
+  <data name="GdiplusObjectBusy" xml:space="preserve">
+    <value>Object is currently in use elsewhere.</value>
+  </data>
+  <data name="GdiplusOverflow" xml:space="preserve">
+    <value>Overflow error.</value>
+  </data>
+  <data name="GdiplusPropertyNotFoundError" xml:space="preserve">
+    <value>Property cannot be found.</value>
+  </data>
+  <data name="GdiplusPropertyNotSupportedError" xml:space="preserve">
+    <value>Property is not supported.</value>
+  </data>
+  <data name="GdiplusUnknown" xml:space="preserve">
+    <value>Unknown GDI+ error occurred.</value>
+  </data>
+  <data name="GdiplusUnknownImageFormat" xml:space="preserve">
+    <value>Image format is unknown.</value>
+  </data>
+  <data name="GdiplusUnsupportedGdiplusVersion" xml:space="preserve">
+    <value>Current version of GDI+ does not support this feature.</value>
+  </data>
+  <data name="GdiplusWrongState" xml:space="preserve">
+    <value>Bitmap region is already locked.</value>
+  </data>
+  <data name="PlatformNotSupported_Unix" xml:space="preserve">
+    <value>System.Drawing.Common is not supported on non-Windows platforms. See https://aka.ms/systemdrawingnonwindows for more information.</value>
+  </data>
+</root>
