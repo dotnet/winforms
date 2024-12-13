@@ -3,6 +3,8 @@
 
 using System.Drawing;
 using System.Runtime.CompilerServices;
+using DrawingColor = System.Drawing.Color;
+using Windows.Win32.System.Ole;
 
 namespace Windows.Win32.Graphics.GdiPlus;
 
@@ -16,7 +18,7 @@ internal static unsafe class GpBitmapExtensions
         ref BitmapData data)
     {
         // LockBits always creates a temporary copy of the data.
-        PInvokeCore.GdipBitmapLockBits(
+        PInvokeGdiPlus.GdipBitmapLockBits(
             bitmap.GetPointer(),
             rect.IsEmpty ? null : (Rect*)&rect,
             (uint)flags,
@@ -28,21 +30,36 @@ internal static unsafe class GpBitmapExtensions
 
     public static void UnlockBits(this IPointer<GpBitmap> bitmap, ref BitmapData data)
     {
-        PInvokeCore.GdipBitmapUnlockBits(bitmap.GetPointer(), (BitmapData*)Unsafe.AsPointer(ref data)).ThrowIfFailed();
+        PInvokeGdiPlus.GdipBitmapUnlockBits(bitmap.GetPointer(), (BitmapData*)Unsafe.AsPointer(ref data)).ThrowIfFailed();
         GC.KeepAlive(bitmap);
     }
 
-    public static HBITMAP GetHBITMAP(this IPointer<GpBitmap> bitmap) => bitmap.GetHBITMAP(Color.LightGray);
+    public static HBITMAP GetHBITMAP(this IPointer<GpBitmap> bitmap) => bitmap.GetHBITMAP(DrawingColor.LightGray);
 
-    public static HBITMAP GetHBITMAP(this IPointer<GpBitmap> bitmap, Color background)
+    public static HBITMAP GetHBITMAP(this IPointer<GpBitmap> bitmap, DrawingColor background)
     {
         HBITMAP hbitmap;
-        PInvokeCore.GdipCreateHBITMAPFromBitmap(
+        PInvokeGdiPlus.GdipCreateHBITMAPFromBitmap(
             bitmap.GetPointer(),
             &hbitmap,
             (uint)ColorTranslator.ToWin32(background)).ThrowIfFailed();
 
         GC.KeepAlive(bitmap);
         return hbitmap;
+    }
+
+    /// <summary>
+    ///  Creates a <see cref="PICTDESC"/> structure from the specified <see cref="GpBitmap"/>.
+    /// </summary>
+    public static PICTDESC CreatePICTDESC(this IPointer<GpBitmap> bitmap, HPALETTE paletteHandle = default)
+    {
+        PICTDESC desc = new()
+        {
+            picType = PICTYPE.PICTYPE_BITMAP
+        };
+
+        desc.Anonymous.bmp.hbitmap = bitmap.GetHBITMAP();
+        desc.Anonymous.bmp.hpal = paletteHandle;
+        return desc;
     }
 }

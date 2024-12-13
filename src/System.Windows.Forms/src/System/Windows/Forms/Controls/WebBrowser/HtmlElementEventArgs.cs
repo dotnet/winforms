@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
-using System.Drawing;
 using Windows.Win32.Web.MsHtml;
 
 namespace System.Windows.Forms;

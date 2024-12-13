@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.Graphics.GdiPlus;
 
 namespace System.Windows.Forms;
 
@@ -373,7 +374,7 @@ public partial class ErrorProvider
             MirrorDcIfNeeded(hdc);
 
             using Graphics g = hdc.CreateGraphics();
-            using RegionScope windowRegionHandle = new(windowRegion, g);
+            using RegionScope windowRegionHandle = windowRegion.GetRegionScope(g);
             if (PInvoke.SetWindowRgn(this, windowRegionHandle, fRedraw: true) != 0)
             {
                 // The HWnd owns the region.

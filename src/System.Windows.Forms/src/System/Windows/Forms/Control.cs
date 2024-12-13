@@ -12,6 +12,7 @@ using System.Windows.Forms.Automation;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.Primitives;
 using Windows.Win32.Graphics.Dwm;
+using Windows.Win32.Graphics.GdiPlus;
 using Windows.Win32.System.Ole;
 using Windows.Win32.UI.Accessibility;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
@@ -2742,7 +2743,7 @@ public unsafe partial class Control :
 
         // If we're an ActiveX control, clone the region so it can potentially be modified
         using Region? regionCopy = IsActiveX ? ActiveXMergeRegion(region.Clone()) : null;
-        using RegionScope regionHandle = new(regionCopy ?? region, HWND);
+        using RegionScope regionHandle = (regionCopy ?? region).GetRegionScope(HWND);
 
         if (PInvoke.SetWindowRgn(this, regionHandle, PInvoke.IsWindowVisible(this)) != 0)
         {
@@ -5774,7 +5775,7 @@ public unsafe partial class Control :
         else if (IsHandleCreated)
         {
             using Graphics graphics = CreateGraphicsInternal();
-            using RegionScope regionHandle = new(region, graphics);
+            using RegionScope regionHandle = region.GetRegionScope(graphics);
 
             if (invalidateChildren)
             {
@@ -11713,7 +11714,7 @@ public unsafe partial class Control :
         PaintEventArgs? pevent = null;
 
         using var paletteScope = doubleBuffered || usingBeginPaint
-            ? SelectPaletteScope.HalftonePalette(dc, forceBackground: false, realizePalette: false)
+            ? dc.HalftonePalette(forceBackground: false, realizePalette: false)
             : default;
 
         bool paintBackground = (usingBeginPaint && GetStyle(ControlStyles.AllPaintingInWmPaint)) || doubleBuffered;
@@ -11814,8 +11815,7 @@ public unsafe partial class Control :
         using GetDcScope dc = new(HWND);
 
         // We don't want to unset the palette in this case so we don't do this in a using.
-        var paletteScope = SelectPaletteScope.HalftonePalette(
-            dc,
+        var paletteScope = dc.HalftonePalette(
             forceBackground: true,
             realizePalette: true);
 

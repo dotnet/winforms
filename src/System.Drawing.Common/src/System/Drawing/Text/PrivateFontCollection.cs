@@ -20,7 +20,7 @@ public sealed unsafe class PrivateFontCollection : FontCollection
     private static GpFontCollection* Create()
     {
         GpFontCollection* fontCollection;
-        PInvoke.GdipNewPrivateFontCollection(&fontCollection).ThrowIfFailed();
+        PInvokeGdiPlus.GdipNewPrivateFontCollection(&fontCollection).ThrowIfFailed();
         return fontCollection;
     }
 
@@ -33,7 +33,7 @@ public sealed unsafe class PrivateFontCollection : FontCollection
 
         if (nativeFontCollection is not null)
         {
-            Status status = PInvoke.GdipDeletePrivateFontCollection(&nativeFontCollection);
+            Status status = PInvokeGdiPlus.GdipDeletePrivateFontCollection(&nativeFontCollection);
             if (disposing)
             {
                 Debug.Assert(status == Status.Ok, $"GDI+ returned an error status: {status}");
@@ -57,7 +57,7 @@ public sealed unsafe class PrivateFontCollection : FontCollection
 
         fixed (char* p = filename)
         {
-            PInvoke.GdipPrivateAddFontFile(this.Pointer(), p).ThrowIfFailed();
+            PInvokeGdiPlus.GdipPrivateAddFontFile(this.Pointer(), p).ThrowIfFailed();
             GC.KeepAlive(this);
         }
 
@@ -70,7 +70,7 @@ public sealed unsafe class PrivateFontCollection : FontCollection
     /// </summary>
     public void AddMemoryFont(IntPtr memory, int length)
     {
-        PInvoke.GdipPrivateAddMemoryFont(this.Pointer(), (void*)memory, length).ThrowIfFailed();
+        PInvokeGdiPlus.GdipPrivateAddMemoryFont(this.Pointer(), (void*)memory, length).ThrowIfFailed();
         GC.KeepAlive(this);
     }
 

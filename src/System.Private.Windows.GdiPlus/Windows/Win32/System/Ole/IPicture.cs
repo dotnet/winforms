@@ -3,21 +3,22 @@
 
 using System.Drawing;
 using System.Runtime.InteropServices;
+using Windows.Win32.Graphics.GdiPlus;
 
 namespace Windows.Win32.System.Ole;
 
-internal unsafe partial struct IPicture
+internal static unsafe class IPictureExtensions
 {
-    public static object CreateObjectFromImage(IImage image)
+    public static object CreateObjectFromImage(IPointer<GpImage> image)
     {
         // GetObjectForIUnknown increments the ref count so we need to dispose.
         using ComScope<IPicture> picture = CreateFromImage(image);
         return Marshal.GetObjectForIUnknown(picture);
     }
 
-    public static ComScope<IPicture> CreateFromImage(IImage image)
+    public static ComScope<IPicture> CreateFromImage(IPointer<GpImage> image)
     {
-        PICTDESC desc = PICTDESC.FromImage(image);
+        PICTDESC desc = image.CreatePICTDESC();
         ComScope<IPicture> picture = new(null);
         PInvokeCore.OleCreatePictureIndirect(&desc, IID.Get<IPicture>(), fOwn: true, picture).ThrowOnFailure();
         return picture;
@@ -32,7 +33,7 @@ internal unsafe partial struct IPicture
 
     public static ComScope<IPicture> CreateFromIcon(IIcon icon, bool copy)
     {
-        PICTDESC desc = PICTDESC.FromIcon(icon, copy);
+        PICTDESC desc = icon.CreatePICTDESC(copy);
         ComScope<IPicture> picture = new(null);
         PInvokeCore.OleCreatePictureIndirect(&desc, IID.Get<IPicture>(), fOwn: copy, picture).ThrowOnFailure();
         return picture;
