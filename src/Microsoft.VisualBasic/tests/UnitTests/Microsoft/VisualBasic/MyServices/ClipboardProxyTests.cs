@@ -5,7 +5,6 @@
 
 using System.Drawing;
 using System.Reflection.Metadata;
-using FluentAssertions;
 using Microsoft.VisualBasic.Devices;
 using DataFormats = System.Windows.Forms.DataFormats;
 using TextDataFormat = System.Windows.Forms.TextDataFormat;
@@ -94,13 +93,15 @@ public class ClipboardProxyTests
         Point point = new(1, 1);
         clipboard.SetDataAsJson("point", point);
         clipboard.ContainsData("point").Should().Be(System.Windows.Forms.Clipboard.ContainsData("point"));
-        Point retrieved = clipboard.GetData("point").Should().BeOfType<Point>().Which;
-        retrieved.Should().BeEquivalentTo(System.Windows.Forms.Clipboard.GetData("point"));
+        clipboard.TryGetData("point", out Point retrieved).Should().Be(System.Windows.Forms.Clipboard.TryGetData("point", out Point retrieved2));
+        retrieved.Should().BeEquivalentTo(retrieved2);
         retrieved.Should().BeEquivalentTo(point);
     }
 
     [WinFormsFact]
     public void DataOfT_StringArray()
+    {
+        var clipboard = new Computer().Clipboard;
         string format = nameof(DataOfT_StringArray);
         // Array of primitive types does not require the OOB assembly.
         string[] data = ["thing1", "thing2"];
@@ -145,11 +146,5 @@ public class ClipboardProxyTests
             typeof(DataWithObjectField).FullName == typeName.FullName
                 ? typeof(DataWithObjectField)
                 : throw new NotSupportedException($"Can't resolve {typeName.AssemblyQualifiedName}");
-        Point point = new(1, 1);
-        clipboard.SetDataAsJson("point", point);
-        clipboard.ContainsData("point").Should().Be(System.Windows.Forms.Clipboard.ContainsData("point"));
-        Point retrieved = clipboard.GetData("point").Should().BeOfType<Point>().Which;
-        retrieved.Should().BeEquivalentTo(System.Windows.Forms.Clipboard.GetData("point"));
-        retrieved.Should().BeEquivalentTo(point);
     }
 }

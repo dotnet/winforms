@@ -110,14 +110,10 @@ public unsafe partial class DataObject
                 // or type that can be assigned to the requested type.
                 if (!legacyMode && !typeof(T).MatchExceptAssemblyVersion(record.TypeName))
                 {
-#if false // TODO (TanyaSo): - modify TryGetObjectFromJson to take a resolver and rename to HasJsonData???
-                    // Return true if the payload contains valid JsonData<T> struct, type matches or not
-                    // run IsAssignable in the JSON method
-                    if (record.TryGetObjectFromJson(binder.GetType, out object? data))
+                    if (record.TryGetObjectFromJson<T>((ITypeResolver)binder, out object? data))
                     {
                         return data;
                     }
-#endif
 
                     if (!TypeNameIsAssignableToType(record.TypeName, typeof(T), (ITypeResolver)binder))
                     {

@@ -27,9 +27,10 @@ public unsafe partial class DataObjectTests
 
         using var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
         IDataObject outData = dropTargetAccessor.CreateDelegate<CreateWinFormsDataObjectForOutgoingDropData>()(inDataPtr);
-        outData.Should().BeSameAs(data);
-        outData.GetDataPresent("point").Should().BeTrue();
-        outData.GetData("point").Should().BeOfType<Point>().Which.Should().BeEquivalentTo(point);
+        ITypedDataObject typedOutData = outData.Should().BeAssignableTo<ITypedDataObject>().Subject;
+        typedOutData.GetDataPresent("point").Should().BeTrue();
+        typedOutData.TryGetData("point", out Point deserialized).Should().BeTrue();
+        deserialized.Should().BeEquivalentTo(point);
     }
 
     [WinFormsFact]

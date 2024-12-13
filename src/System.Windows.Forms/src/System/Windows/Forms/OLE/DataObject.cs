@@ -112,7 +112,7 @@ public unsafe partial class DataObject :
             throw new InvalidOperationException($"DataObject will serialize as empty. JSON serialize the data within {nameof(data)}, then use {nameof(SetData)} instead.");
         }
 
-        SetData(format, new JsonData<T>() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data) });
+        SetData(format, new JsonData<T>() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data), InnerTypeAssemblyQualifiedName = typeof(T).ToTypeName().AssemblyQualifiedName });
     }
 
     /// <inheritdoc cref="SetDataAsJson{T}(string, bool, T)"/>
@@ -123,14 +123,14 @@ public unsafe partial class DataObject :
         if (typeof(T) == typeof(DataObject))
         {
             // TODO: Localize string.
-            throw new InvalidOperationException($"DataObject will serialize as empty. JSON serialize the data within  {nameof(data)}, then use {nameof(SetData)}  instead.");
+            throw new InvalidOperationException($"'DataObject' will serialize as empty. JSON serialize the data within {nameof(data)}, then use {nameof(SetData)} API instead.");
         }
 
-        SetData(typeof(T), new JsonData<T>() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data) });
+        SetData(typeof(T), new JsonData<T>() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data), InnerTypeAssemblyQualifiedName = typeof(T).ToTypeName().AssemblyQualifiedName });
     }
 
     /// <summary>
-    ///  Stores the specified data and its associated format in this instance as JSON.
+    ///  Stores the data as JSON in the specified format.
     /// </summary>
     /// <param name="format">The format associated with the data. See <see cref="DataFormats"/> for predefined formats.</param>
     /// <param name="autoConvert"><see langword="true"/> to allow the data to be converted to another format; otherwise, <see langword="false"/>.</param>
@@ -165,10 +165,10 @@ public unsafe partial class DataObject :
         if (typeof(T) == typeof(DataObject))
         {
             // TODO: Localize string.
-            throw new InvalidOperationException($"DataObject will serialize as empty. JSON serialize the data within {nameof(data)}, then use {nameof(SetData)} instead.");
+            throw new InvalidOperationException($"'DataObject' will serialize as empty. JSON serialize the data within {nameof(data)}, then use {nameof(SetData)} API instead.");
         }
 
-        SetData(format, autoConvert, new JsonData<T>() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data) });
+        SetData(format, autoConvert, new JsonData<T>() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data), InnerTypeAssemblyQualifiedName = typeof(T).ToTypeName().AssemblyQualifiedName });
     }
 
     #region IDataObject
@@ -177,11 +177,7 @@ public unsafe partial class DataObject :
         error: false,
         DiagnosticId = Obsoletions.ClipboardGetDataDiagnosticId,
         UrlFormat = Obsoletions.SharedUrlFormat)]
-    public virtual object? GetData(string format, bool autoConvert)
-    {
-        object? data = ((IDataObject)_innerData).GetData(format, autoConvert);
-        return data is IJsonData jsonData ? jsonData.Deserialize() : data;
-    }
+    public virtual object? GetData(string format, bool autoConvert) => _innerData.GetData(format, autoConvert);
 
     [Obsolete(
         Obsoletions.DataObjectGetDataMessage,

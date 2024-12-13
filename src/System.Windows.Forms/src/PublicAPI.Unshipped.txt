@@ -40,7 +40,6 @@ virtual System.Windows.Forms.DataObject.TryGetDataCore<T>(string! format, System
 [WFO5002]System.Windows.Forms.Form.ShowAsync(System.Windows.Forms.IWin32Window? owner = null) -> System.Threading.Tasks.Task!
 [WFO5002]System.Windows.Forms.Form.ShowDialogAsync() -> System.Threading.Tasks.Task<System.Windows.Forms.DialogResult>!
 [WFO5002]System.Windows.Forms.Form.ShowDialogAsync(System.Windows.Forms.IWin32Window! owner) -> System.Threading.Tasks.Task<System.Windows.Forms.DialogResult>!
-System.Windows.Forms.DataGridViewCellStyle.Font.get -> System.Drawing.Font?
 System.Windows.Forms.DataObject.SetDataAsJson<T>(string! format, bool autoConvert, T data) -> void
 System.Windows.Forms.DataObject.SetDataAsJson<T>(string! format, T data) -> void
 System.Windows.Forms.DataObject.SetDataAsJson<T>(T data) -> void

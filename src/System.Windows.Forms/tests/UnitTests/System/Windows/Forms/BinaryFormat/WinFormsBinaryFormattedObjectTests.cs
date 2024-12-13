@@ -24,7 +24,8 @@ public class WinFormsBinaryFormattedObjectTests
     {
         Point point = new() { X = 1, Y = 1 };
         SerializationRecord format = point.SerializeAndDecode();
-        format.TryGetObjectFromJson(out _).Should().BeFalse();
+        ITypeResolver resolver = new DataObject.Composition.Binder(typeof(Point), resolver: null, legacyMode: false);
+        format.TryGetObjectFromJson<Point>(resolver, out _).Should().BeFalse();
     }
 
     [Fact]
@@ -43,7 +44,8 @@ public class WinFormsBinaryFormattedObjectTests
         stream.Position = 0;
         SerializationRecord binary = NrbfDecoder.Decode(stream);
         binary.TypeName.AssemblyName!.FullName.Should().Be(IJsonData.CustomAssemblyName);
-        binary.TryGetObjectFromJson(out object? result).Should().BeTrue();
+        ITypeResolver resolver = new DataObject.Composition.Binder(typeof(Point), resolver: null, legacyMode: false);
+        binary.TryGetObjectFromJson<Point>(resolver, out object? result).Should().BeTrue();
         Point deserialized = result.Should().BeOfType<Point>().Which;
         deserialized.Should().BeEquivalentTo(point);
     }
@@ -55,7 +57,8 @@ public class WinFormsBinaryFormattedObjectTests
         JsonData<Point> data = new()
         {
             JsonBytes = JsonSerializer.SerializeToUtf8Bytes(point),
-        };
+            InnerTypeAssemblyQualifiedName = typeof(Point).ToTypeName().AssemblyQualifiedName
+    };
 
         using MemoryStream stream = new();
         WinFormsBinaryFormatWriter.WriteJsonData(stream, data);
@@ -70,25 +73,32 @@ public class WinFormsBinaryFormattedObjectTests
     }
 
     [Serializable]
-    private struct ReplicatedJsonData<T> : IObjectReference
+    private struct ReplicatedJsonData : IObjectReference
     {
         public byte[] JsonBytes { get; set; }
 
-        public string OriginalAssemblyQualifiedTypeName { get; set; }
+        public string InnerTypeFullName { get; }
 
-        public readonly object GetRealObject(StreamingContext context) =>
-            JsonSerializer.Deserialize(JsonBytes, typeof(T)) ?? throw new InvalidOperationException();
+        public readonly object GetRealObject(StreamingContext context)
+        {
+            object? result = null;
+            if (TypeName.TryParse(InnerTypeFullName, out TypeName? genericTypeName)
+                && genericTypeName.Matches(typeof(Point).ToTypeName()))
+            {
+                result = JsonSerializer.Deserialize<Point>(JsonBytes);
+            }
+
+            return result ?? throw new InvalidOperationException();
+        }
     }
 
     private class JsonDataPointBinder : SerializationBinder
     {
         public override Type? BindToType(string assemblyName, string typeName)
         {
-            if (assemblyName == "System.Private.Windows.VirtualJson"
-                && TypeName.TryParse(typeName, out TypeName? name)
-                && name.GetGenericArguments().Single().AssemblyQualifiedName == typeof(Point).AssemblyQualifiedName)
+            if (assemblyName == "System.Private.Windows.VirtualJson")
             {
-                return typeof(ReplicatedJsonData<Point>);
+                return typeof(ReplicatedJsonData);
             }
 
             throw new InvalidOperationException();
@@ -155,7 +165,7 @@ public class WinFormsBinaryFormattedObjectTests
         using ImageListStreamer stream = sourceList.ImageStream!;
 
         SerializationRecord rootRecord = stream.SerializeAndDecode();
-        Formats.Nrbf.ClassRecord root = rootRecord.Should().BeAssignableTo<Formats.Nrbf.ClassRecord>().Subject;
+        ClassRecord root = rootRecord.Should().BeAssignableTo<Formats.Nrbf.ClassRecord>().Subject;
         root.TypeName.FullName.Should().Be(typeof(ImageListStreamer).FullName);
         root.TypeName.AssemblyName!.FullName.Should().Be(typeof(WinFormsBinaryFormatWriter).Assembly.FullName);
         root.GetArrayRecord("Data")!.Should().BeAssignableTo<SZArrayRecord<byte>>();

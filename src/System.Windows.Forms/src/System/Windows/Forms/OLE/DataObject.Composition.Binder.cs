@@ -32,7 +32,7 @@ public unsafe partial class DataObject
             private readonly bool _legacyMode;
 
             // These types are read from and written to serialized stream manually, accessing record field by field.
-            // Thus they are re-hydrated with no formatters and are safe.  The default resolver should recognize them
+            // Thus they are re-hydrated with no formatters and are safe. The default resolver should recognize them
             // to resolve primitive types or fields of the specified type T.
             private static readonly Type[] s_types =
             [

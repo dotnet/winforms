@@ -557,13 +557,14 @@ public static class Clipboard
         if (typeof(T) == typeof(DataObject))
         {
             // TODO: Localize string
-            throw new InvalidOperationException($"DataObject will serialize as empty. JSON serialize the data within {nameof(data)}, then use {nameof(SetDataObject)} instead.");
+            throw new InvalidOperationException($"'DataObject' will serialize as empty. JSON serialize the data within {nameof(data)}, then use {nameof(SetDataObject)} API instead.");
         }
 
         JsonData<T> jsonData = new()
         {
             JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data),
-        };
+            InnerTypeAssemblyQualifiedName = typeof(T).ToTypeName().AssemblyQualifiedName
+    };
 
         SetDataObject(new DataObject(format, jsonData), copy: true);
     }

@@ -510,10 +510,10 @@ public class DragDropTests : ControlTestBase
             };
             form.DragOver += (s, e) =>
             {
-                if (e.Data?.GetDataPresent(typeof(Point)) ?? false)
+                if (e.Data?.TryGetData(out Point data) ?? false)
                 {
                     // Get the JSON serialized Point.
-                    dropped = e.Data?.GetData(typeof(Point));
+                    dropped = data;
                     e.Effect = DragDropEffects.Copy;
                 }
             };

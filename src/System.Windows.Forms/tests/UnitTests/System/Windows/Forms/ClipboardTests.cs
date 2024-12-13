@@ -10,8 +10,8 @@ using System.Drawing.Imaging;
 using System.Formats.Nrbf;
 using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
-using System.Windows.Forms.Primitives;
 using System.Text.Json;
+using System.Windows.Forms.Primitives;
 using Windows.Win32.System.Ole;
 using static System.Windows.Forms.Tests.BinaryFormatUtilitiesTests;
 using Com = Windows.Win32.System.Com;
@@ -899,16 +899,45 @@ public class ClipboardTests
     }
 
     [WinFormsFact]
+    public void Clipboard_SetDataAsJson_WithGeneric_ReturnsExpected()
+    {
+        List<Point> generic1 = [];
+        Clipboard.SetDataAsJson("list", generic1);
+        Clipboard.TryGetData("list", out List<Point>? points).Should().BeTrue();
+        points.Should().BeEquivalentTo(generic1);
+
+        List<TestData1> generic2 = [];
+        Clipboard.SetDataAsJson("list", generic2);
+        Clipboard.TryGetData("list", out List<TestData1>? testData).Should().BeTrue();
+        testData.Should().BeEquivalentTo(generic2);
+    }
+
+    [WinFormsFact]
     public void Clipboard_SetDataAsJson_ReturnsExpected()
     {
         Point point = new() { X = 1, Y = 1 };
 
         Clipboard.SetDataAsJson("point", point);
-        IDataObject? dataObject = Clipboard.GetDataObject();
-        dataObject.Should().NotBeNull();
-        dataObject!.GetDataPresent("point").Should().BeTrue();
-        Point deserialized = dataObject.GetData("point").Should().BeOfType<Point>().Which;
+        IDataObject dataObject = Clipboard.GetDataObject().Should().BeAssignableTo<IDataObject>().Subject;
+        dataObject.GetDataPresent("point").Should().BeTrue();
+        dataObject.TryGetData("point", out Point deserialized).Should().BeTrue();
         deserialized.Should().BeEquivalentTo(point);
+    }
+
+    [WinFormsFact]
+    public void Clipboard_SetDataAsJson_GetData()
+    {
+        Point point = new() { X = 1, Y = 1 };
+        // Note that this simulates out of process scenario.
+        Clipboard.SetDataAsJson("point", point);
+        Action a = () => Clipboard.GetData("point");
+        a.Should().Throw<NotSupportedException>();
+
+        using BinaryFormatterInClipboardDragDropScope scope = new(enable: true);
+        a.Should().Throw<NotSupportedException>();
+
+        using BinaryFormatterScope scope2 = new(enable: true);
+        Clipboard.GetData("point").Should().BeOfType<MemoryStream>();
     }
 
     [WinFormsTheory]
@@ -921,9 +950,8 @@ public class ClipboardTests
         dataObject.SetDataAsJson("point", point);
 
         Clipboard.SetDataObject(dataObject, copy);
-        IDataObject? returnedDataObject = Clipboard.GetDataObject();
-        returnedDataObject.Should().NotBeNull();
-        Point deserialized = returnedDataObject!.GetData("point").Should().BeOfType<Point>().Which;
+        ITypedDataObject returnedDataObject = Clipboard.GetDataObject().Should().BeAssignableTo<ITypedDataObject>().Subject;
+        returnedDataObject.TryGetData("point", out Point deserialized).Should().BeTrue();
         deserialized.Should().BeEquivalentTo(point);
     }
 
@@ -939,9 +967,12 @@ public class ClipboardTests
         data.SetData("Mystring", "test");
         Clipboard.SetDataObject(data, copy);
 
-        Clipboard.GetData("point1").Should().BeOfType<Point>().Which.Should().BeEquivalentTo(point1);
-        Clipboard.GetData("point2").Should().BeOfType<Point>().Which.Should().BeEquivalentTo(point2);
-        Clipboard.GetData("Mystring").Should().Be("test");
+        Clipboard.TryGetData("point1", out Point deserializedPoint1).Should().BeTrue();
+        deserializedPoint1.Should().BeEquivalentTo(point1);
+        Clipboard.TryGetData("point2", out Point deserializedPoint2).Should().BeTrue();
+        deserializedPoint2.Should().BeEquivalentTo(point2);
+        Clipboard.TryGetData("Mystring", out string? deserializedString).Should().BeTrue();
+        deserializedString.Should().Be("test");
     }
 
     [WinFormsFact]
@@ -985,11 +1016,15 @@ public class ClipboardTests
         SerializationRecord record = NrbfDecoder.Decode(stream);
         ClassRecord types = record.Should().BeAssignableTo<ClassRecord>().Which;
         types.HasMember("<JsonBytes>k__BackingField").Should().BeTrue();
-        SZArrayRecord<byte> byteData = types.GetRawValue("<JsonBytes>k__BackingField").Should().BeAssignableTo<SZArrayRecord<byte>>().Which;
-        TypeName.TryParse(types.TypeName.FullName, out TypeName? result).Should().BeTrue();
-        TypeName checkedResult = result.Should().BeOfType<TypeName>().Which;
-        TypeName genericTypeName = checkedResult.GetGenericArguments().SingleOrDefault().Should().BeOfType<TypeName>().Subject;
-        Type.GetType(genericTypeName.AssemblyQualifiedName).Should().Be(typeof(Point));
+        types.HasMember("<InnerTypeAssemblyQualifiedName>k__BackingField").Should().BeTrue();
+        SZArrayRecord<byte> byteData = types.GetRawValue("<JsonBytes>k__BackingField").Should().BeAssignableTo<SZArrayRecord<byte>>().Subject;
+        string innerTypeFullName = types.GetRawValue("<InnerTypeAssemblyQualifiedName>k__BackingField").Should().BeOfType<string>().Subject;
+        TypeName.TryParse(innerTypeFullName, out TypeName? result).Should().BeTrue();
+        TypeName checkedResult = result.Should().BeOfType<TypeName>().Subject;
+        // These should not be the same since we take TypeForwardedFromAttribute name into account during serialization,
+        // which changes the assembly name.
+        typeof(Point).AssemblyQualifiedName.Should().NotBe(checkedResult.AssemblyQualifiedName);
+        typeof(Point).ToTypeName().Matches(checkedResult).Should().BeTrue();
 
         JsonSerializer.Deserialize(byteData.GetArray(), typeof(Point)).Should().BeEquivalentTo(point);
     }
@@ -999,11 +1034,17 @@ public class ClipboardTests
     {
         using Font font = new("Microsoft Sans Serif", emSize: 10);
         byte[] serialized = JsonSerializer.SerializeToUtf8Bytes(font);
+        Action a1 = () => JsonSerializer.Deserialize<Font>(serialized);
+        a1.Should().Throw<NotSupportedException>();
+
         string format = "font";
         Clipboard.SetDataAsJson(format, font);
-        Clipboard.GetData(format).Should().BeOfType<NotSupportedException>();
-        DataObject dataObject = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
-        dataObject.GetData(format).Should().BeOfType<NotSupportedException>();
+        Action a2 = () => Clipboard.TryGetData(format, out Font? _);
+        a2.Should().Throw<NotSupportedException>();
+
+        DataObject dataObject = Clipboard.GetDataObject().Should().BeAssignableTo<DataObject>().Subject;
+        Action a3 = () => dataObject.TryGetData(format, out Font? _);
+        a3.Should().Throw<NotSupportedException>();
     }
 
     [WinFormsTheory]
@@ -1011,7 +1052,7 @@ public class ClipboardTests
     public void Clipboard_CustomDataObject_AvoidBinaryFormatter(bool copy)
     {
         string format = "customFormat";
-        TestData data = new() { X = 1, Y = 1 };
+        SimpleTestData data = new() { X = 1, Y = 1 };
         Clipboard.SetData(format, data);
         // BinaryFormatter not enabled.
         Clipboard.GetData(format).Should().BeOfType<NotSupportedException>();
@@ -1028,18 +1069,18 @@ public class ClipboardTests
             IDataObject received = Clipboard.GetDataObject().Should().BeAssignableTo<IDataObject>().Subject;
             received.Should().NotBe(jsonDataObject);
             byte[] jsonBytes = Clipboard.GetData(format).Should().BeOfType<byte[]>().Subject;
-            JsonSerializer.Deserialize(jsonBytes, typeof(TestData)).Should().BeEquivalentTo(data);
+            JsonSerializer.Deserialize(jsonBytes, typeof(SimpleTestData)).Should().BeEquivalentTo(data);
         }
         else
         {
             JsonDataObject received = Clipboard.GetDataObject().Should().BeOfType<JsonDataObject>().Subject;
             received.Should().Be(jsonDataObject);
-            received.Deserialize<TestData>(format).Should().BeEquivalentTo(data);
+            received.Deserialize<SimpleTestData>(format).Should().BeEquivalentTo(data);
         }
     }
 
     [Serializable]
-    private struct TestData
+    private struct SimpleTestData
     {
         public int X { get; set; }
         public int Y { get; set; }
