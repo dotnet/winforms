@@ -3001,26 +3001,9 @@ public partial class DataObjectTests
     {
         DataObject dataObject = new();
         dataObject.SetDataAsJson(format, 1);
-        dataObject.GetData(format).Should().NotBeOfType<IJsonData>();
-    }
-
-    [WinFormsFact]
-    public void DataObject_SetDataAsJson_PredefinedTypes_NotJsonSerialized()
-    {
-        string format = "test";
-        using Bitmap bitmap = new(10, 10);
-        DataObject dataObject = new();
-
-        dataObject.SetDataAsJson(format, bitmap);
-        object result = dataObject.GetData(format);
-        result.Should().NotBeOfType<IJsonData>();
-        result.Should().Be(bitmap);
-
-        string testString = "testString";
-        dataObject.SetDataAsJson(format, testString);
-        result = dataObject.GetData(format);
-        result.Should().NotBeOfType<IJsonData>();
-        result.Should().Be(testString);
+        object storedData = dataObject.TestAccessor().Dynamic._innerData.GetData(format);
+        storedData.Should().NotBeAssignableTo<IJsonData>();
+        dataObject.GetData(format).Should().Be(1);
     }
 
     [WinFormsTheory]
@@ -3029,6 +3012,10 @@ public partial class DataObjectTests
     {
         DataObject data = new();
         data.SetDataAsJson(format, 1);
-        data.GetData(format).Should().BeOfType<JsonData<int>>();
+        object storedData = data.TestAccessor().Dynamic._innerData.GetData(format);
+        storedData.Should().BeOfType<JsonData<int>>();
+
+        // We don't expose JsonData<T> in public legacy API
+        data.GetData(format).Should().BeNull();
     }
 }

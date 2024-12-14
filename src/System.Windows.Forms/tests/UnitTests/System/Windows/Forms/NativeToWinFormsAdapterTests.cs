@@ -428,6 +428,59 @@ public unsafe partial class NativeToWinFormsAdapterTests
         data.Should().BeNull();
     }
 
+    [WinFormsFact]
+    public void SetDataAsJson_TryGetData_Requires_Resolver()
+    {
+        SimpleTestData value = new("text", new(10, 10));
+
+        DataObject native = new();
+        native.SetDataAsJson("test", value);
+
+        DataObject dataObject = new(ComHelpers.GetComPointer<Com.IDataObject>(native));
+        Action a = () => dataObject.TryGetData("test", out SimpleTestDataBase? _);
+        a.Should().Throw<NotSupportedException>();
+        dataObject.TryGetData("test", SimpleTestData.Resolver, autoConvert: false, out SimpleTestDataBase? deserialized).Should().BeTrue();
+        var deserializedChecked = deserialized.Should().BeOfType<SimpleTestDataBase>().Subject;
+        deserializedChecked.Text.Should().Be(value.Text);
+    }
+
+    private class SimpleTestDataBase
+    {
+        public string? Text { get; set; }
+    }
+
+    private class SimpleTestData : SimpleTestDataBase
+    {
+        public SimpleTestData(string text, Point point)
+        {
+            Text = text;
+            Point = point;
+        }
+
+        public Point Point { get; set; }
+
+        public static Type Resolver(TypeName typeName)
+        {
+            (string name, Type type)[] allowedTypes =
+            [
+                (typeof(SimpleTestData).FullName!, typeof(SimpleTestData)),
+                (typeof(SimpleTestDataBase).FullName!, typeof(SimpleTestDataBase)),
+            ];
+
+            string fullName = typeName.FullName;
+            foreach (var (name, type) in allowedTypes)
+            {
+                // Namespace-qualified type name.
+                if (name == fullName)
+                {
+                    return type;
+                }
+            }
+
+            throw new NotSupportedException($"Can't resolve {fullName}");
+        }
+    }
+
     // This class does not have [Serializable] attribute, serialization stream will be corrupt.
     private class NotSerializableData
     {

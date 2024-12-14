@@ -238,7 +238,12 @@ public unsafe partial class DataObject :
         error: false,
         DiagnosticId = Obsoletions.ClipboardGetDataDiagnosticId,
         UrlFormat = Obsoletions.SharedUrlFormat)]
-    public virtual object? GetData(string format, bool autoConvert) => _innerData.GetData(format, autoConvert);
+    public virtual object? GetData(string format, bool autoConvert)
+    {
+        object? result = _innerData.GetData(format, autoConvert);
+        // Avoid exposing our internal JsonData<T>
+        return result is IJsonData ? null : result;
+    }
 
     [Obsolete(
         Obsoletions.DataObjectGetDataMessage,
