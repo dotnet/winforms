@@ -23,7 +23,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 Directory.Exists(testDirectory).Should.BeTrue()
             End If
             If Not String.IsNullOrWhiteSpace(destinationFileName) Then
-                Call New FileInfo(destinationFileName).Exists.Should.BeFalse()
+                File.Exists(destinationFileName).Should.BeFalse()
             End If
             listener.Stop()
             listener.Close()
