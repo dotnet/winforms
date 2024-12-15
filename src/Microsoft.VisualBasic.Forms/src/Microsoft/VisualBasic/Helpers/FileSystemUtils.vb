@@ -32,7 +32,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
 
                 ' DirectoryInfo.GetFiles and GetDirectories call FindFirstFile which resolves 8.3 path.
                 ' Get the DirectoryInfo (user must have code permission or access permission).
-                Dim dInfo As New IO.DirectoryInfo(FileIO.FileSystem.GetParentPath(fullPath))
+                Dim dInfo As New DirectoryInfo(FileIO.FileSystem.GetParentPath(fullPath))
 
                 If IO.File.Exists(fullPath) Then
                     Debug.Assert(dInfo.GetFiles(IO.Path.GetFileName(fullPath)).Length = 1, "Must found exactly 1")
@@ -50,15 +50,15 @@ Namespace Microsoft.VisualBasic.CompilerServices
                 ' or indicate that caller does not have enough permission and should get back the 8.3 path.
                 If TypeOf ex Is ArgumentException OrElse
                     TypeOf ex Is ArgumentNullException OrElse
-                    TypeOf ex Is IO.PathTooLongException OrElse
+                    TypeOf ex Is PathTooLongException OrElse
                     TypeOf ex Is NotSupportedException OrElse
-                    TypeOf ex Is IO.DirectoryNotFoundException OrElse
+                    TypeOf ex Is DirectoryNotFoundException OrElse
                     TypeOf ex Is SecurityException OrElse
                     TypeOf ex Is UnauthorizedAccessException Then
 
                     Debug.Assert(Not (TypeOf ex Is ArgumentException OrElse
                         TypeOf ex Is ArgumentNullException OrElse
-                        TypeOf ex Is IO.PathTooLongException OrElse
+                        TypeOf ex Is PathTooLongException OrElse
                         TypeOf ex Is NotSupportedException), "These exceptions should be caught above")
 
                     Return fullPath
@@ -149,8 +149,8 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' </summary>
         ''' <param name="path">The path to be normalized.</param>
         ''' <returns>The normalized path.</returns>
-        ''' <exception cref="IO.Path.GetFullPath">
-        '''  <see cref="IO.Path.GetFullPath"/> for possible exceptions.
+        ''' <exception cref="Path.GetFullPath">
+        '''  <see cref="Path.GetFullPath"/> for possible exceptions.
         ''' </exception>
         ''' <remarks>
         '''  Keep this function since we might change the implementation / behavior later.
