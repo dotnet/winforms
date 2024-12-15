@@ -12,10 +12,10 @@ namespace System.Windows.Forms;
 /// <remarks>
 ///  <para>
 ///   Implement this interface to use your data object with <see cref="Clipboard.TryGetData{T}(string, out T)"/>
-///   family of methods as well as in the drag and drop operations.  This interface will ensure that only
-///   data of the specified <see cref="Type"/> is exchanged.  Otherwise the APIs that specify a <see cref="Type"/> parameter
-///   will throw a <see cref="NotSupportedException"/>.  This is replacement of <see cref="IDataObject"/>
-///   interface, implement this interface as well.  Otherwise the APIs that specify a <see cref="Type"/> parameter
+///   family of methods as well as in the drag and drop operations. This interface will ensure that only
+///   data of the specified <see cref="Type"/> is exchanged. Otherwise the APIs that specify a <see cref="Type"/> parameter
+///   will throw a <see cref="NotSupportedException"/>. This is replacement of <see cref="IDataObject"/>
+///   interface, implement this interface as well. Otherwise the APIs that specify a <see cref="Type"/> parameter
 ///   will throw a <see cref="NotSupportedException"/>.
 ///  </para>
 /// </remarks>
@@ -55,7 +55,7 @@ public interface ITypedDataObject : IDataObject
     ///  the exchange medium.
     /// </param>
     /// <param name="format">
-    ///  A string that specifies what format to retrieve the data as.  See the <see cref="DataFormats"/> class for
+    ///  A string that specifies what format to retrieve the data as. See the <see cref="DataFormats"/> class for
     ///  a set of predefined data formats.
     /// </param>
     /// <param name="autoConvert">

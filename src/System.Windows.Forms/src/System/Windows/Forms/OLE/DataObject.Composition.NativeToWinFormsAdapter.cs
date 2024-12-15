@@ -243,7 +243,7 @@ public unsafe partial class DataObject
             ///  </para>
             ///  <para>
             ///   If <paramref name="dataObject"/> contains <see cref="MemoryStream"/> that contains a serialized object,
-            ///   we return that object cast to <typeparamref name="T"/> or null.  If that <see cref="MemoryStream"/> is
+            ///   we return that object cast to <typeparamref name="T"/> or null. If that <see cref="MemoryStream"/> is
             ///   not a serialized object, and a stream was requested, i.e. can be assigned to <typeparamref name="T"/>
             ///   we return that <see cref="MemoryStream"/>.
             ///  </para>
