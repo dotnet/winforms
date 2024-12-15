@@ -235,8 +235,10 @@ internal static class TypeExtensions
     }
 
     /// <summary>
-    ///  Convert <paramref name="type"/> to <see cref="TypeName"/>. This method removes nullability wrapper
-    ///  from the top level type only because <see cref="TypeName"/> in the serialization root record is not nullable.
+    ///  Convert <paramref name="type"/> to <see cref="TypeName"/>. Take into account type forwarding in order
+    ///  to create <see cref="TypeName"/> compatible with the type names serialized to the binary format.This
+    ///  method removes nullability wrapper from the top level type only because <see cref="TypeName"/> in the
+    ///  serialization root record is not nullable, but the generic types could be nullable.
     /// </summary>
     public static TypeName ToTypeName(this Type type)
     {
