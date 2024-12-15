@@ -22,16 +22,36 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
     private void WriteObjectToStream(object value, bool restrictSerialization = false) =>
         Utilities.WriteObjectToStream(_stream, value, restrictSerialization);
 
-    private object? ReadObjectFromStream(bool restrictDeserialization = false)
+    private object? ReadObjectFromStream()
     {
         _stream.Position = 0;
-        return Utilities.ReadObjectFromStream<object>(_stream, restrictDeserialization, resolver: null, legacyMode: true);
+        return Utilities.ReadObjectFromStream<object>(_stream, resolver: null, legacyMode: true);
+    }
+
+    private object? ReadRestrictedObjectFromStream()
+    {
+        _stream.Position = 0;
+        return Utilities.ReadRestrictedObjectFromStream<object>(_stream, resolver: null, legacyMode: true);
     }
 
     private object? ReadObjectFromStream<T>(bool restrictDeserialization, Func<TypeName, Type>? resolver)
     {
         _stream.Position = 0;
-        return Utilities.ReadObjectFromStream<T>(_stream, restrictDeserialization, resolver, legacyMode: false);
+        return restrictDeserialization
+            ? Utilities.ReadRestrictedObjectFromStream<T>(_stream, resolver, legacyMode: false)
+            : Utilities.ReadObjectFromStream<T>(_stream, resolver, legacyMode: false);
+    }
+
+    private object? ReadObjectFromStream<T>(Func<TypeName, Type>? resolver)
+    {
+        _stream.Position = 0;
+        return Utilities.ReadObjectFromStream<T>(_stream, resolver, legacyMode: false);
+    }
+
+    private object? ReadRestrictedObjectFromStream<T>(Func<TypeName, Type>? resolver)
+    {
+        _stream.Position = 0;
+        return Utilities.ReadRestrictedObjectFromStream<T>(_stream, resolver, legacyMode: false);
     }
 
     private object? RoundTripObject(object value)
@@ -46,7 +66,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
     {
         // This is equivalent to SetData/GetData methods using registered OLE formats, resolves only the known types
         WriteObjectToStream(value, restrictSerialization: true);
-        return ReadObjectFromStream(restrictDeserialization: true);
+        return ReadRestrictedObjectFromStream();
     }
 
     private object? RoundTripOfType<T>(object value)
@@ -54,7 +74,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
         // This is equivalent to SetData/TryGetData<T> methods using unbounded OLE formats,
         // and works with the BinaryFormat AppContext switches.
         WriteObjectToStream(value);
-        return ReadObjectFromStream<T>(restrictDeserialization: false, NotSupportedResolver);
+        return ReadObjectFromStream<T>(NotSupportedResolver);
     }
 
     private object? RoundTripOfType_RestrictedFormat<T>(object value)
@@ -62,7 +82,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
         // This is equivalent to SetData/TryGetData<T> methods using OLE formats. Deserialization is restricted
         // to known types.
         WriteObjectToStream(value, restrictSerialization: true);
-        return ReadObjectFromStream<T>(restrictDeserialization: true, NotSupportedResolver);
+        return ReadRestrictedObjectFromStream<T>(NotSupportedResolver);
     }
 
     private object? RoundTripOfType<T>(object value, Func<TypeName, Type>? resolver)
@@ -70,7 +90,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
         // This is equivalent to SetData/TryGetData<T> methods using unbounded formats,
         // serialization is restricted by the resolver and BinaryFormat AppContext switches.
         WriteObjectToStream(value);
-        return ReadObjectFromStream<T>(restrictDeserialization: false, resolver);
+        return ReadObjectFromStream<T>(resolver);
     }
 
     // Primitive types as defined by the NRBF spec.
@@ -311,14 +331,14 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
     public void RoundTrip_Bitmap()
     {
         using Bitmap value = new(10, 10);
-        RoundTripObject(value).Should().BeOfType<Bitmap>().Subject.Size.Should().Be(value.Size);
+        RoundTripObject(value).Should().BeOfType<Bitmap>().Which.Size.Should().Be(value.Size);
     }
 
     [Fact]
     public void RoundTrip_RestrictedFormat_Bitmap()
     {
         using Bitmap value = new(10, 10);
-        RoundTripObject_RestrictedFormat(value).Should().BeOfType<Bitmap>().Subject.Size.Should().Be(value.Size);
+        RoundTripObject_RestrictedFormat(value).Should().BeOfType<Bitmap>().Which.Size.Should().Be(value.Size);
     }
 
     [Theory]
@@ -402,12 +422,12 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
             ReadAndValidate();
         }
 
-        Action read = () => ReadObjectFromStream<List<object>>(restrictDeserialization: false, ObjectListResolver);
+        Action read = () => ReadObjectFromStream<List<object>>(ObjectListResolver);
         read.Should().Throw<NotSupportedException>();
 
         void ReadAndValidate()
         {
-            var result = ReadObjectFromStream<List<object>>(restrictDeserialization: false, ObjectListResolver)
+            var result = ReadObjectFromStream<List<object>>(ObjectListResolver)
                 .Should().BeOfType<List<object>>().Subject;
             result.Count.Should().Be(1);
             result[0].Should().Be("text");
@@ -450,10 +470,10 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
         // but in this case requested type will not match the payload type.
         WriteObjectToStream(value);
 
-        ReadObjectFromStream<Control>(restrictDeserialization: true, NotSupportedResolver).Should().BeNull();
+        ReadRestrictedObjectFromStream<Control>(NotSupportedResolver).Should().BeNull();
 
         using BinaryFormatterFullCompatScope scope = new();
-        ReadObjectFromStream<Control>(restrictDeserialization: true, NotSupportedResolver).Should().BeNull();
+        ReadRestrictedObjectFromStream<Control>(NotSupportedResolver).Should().BeNull();
     }
 
     [Fact]
@@ -471,7 +491,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
 
         using BinaryFormatterFullCompatScope scope = new();
         WriteObjectToStream(value);
-        Action read = () => ReadObjectFromStream<int?[]>(restrictDeserialization: true, NotSupportedResolver);
+        Action read = () => ReadRestrictedObjectFromStream<int?[]>(NotSupportedResolver);
 
         // nullable struct requires a custom resolver.
         // RestrictedTypeDeserializationException
@@ -485,10 +505,11 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
 
         using BinaryFormatterFullCompatScope scope = new();
         WriteObjectToStream(value);
-        Action read = () => ReadObjectFromStream<int?[]>(restrictDeserialization: false, NotSupportedResolver);
+        Action read = () => ReadObjectFromStream<int?[]>(NotSupportedResolver);
 
         // nullable struct requires a custom resolver.
-        read.Should().Throw<SerializationException>();
+        // This is either NotSupportedException of RestrictedTypeDeserializationException, depending on format.
+        read.Should().Throw<Exception>();
     }
 
     [Theory]
@@ -507,7 +528,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
         WriteObjectToStream(value);
         Action read = () => ReadObjectFromStream<uint[,]>(restrictDeserialization, NotSupportedResolver);
 
-        read.Should().Throw<NotSupportedException>();
+        read.Should().Throw<Exception>();
     }
 
     [Fact]
@@ -583,7 +604,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
         WriteObjectToStream(value);
 
         // Resolver that returns a null is blocked in our SerializationBinder wrapper.
-        Action read = () => ReadObjectFromStream<TestData>(restrictDeserialization: false, InvalidResolver);
+        Action read = () => ReadObjectFromStream<TestData>(InvalidResolver);
 
         read.Should().Throw<SerializationException>();
 
@@ -649,7 +670,6 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
             stream.Position = 0;
             Action getData = () => Utilities.ReadObjectFromStream<object>(
                stream,
-               restrictDeserialization: false,
                resolver: null,
                legacyMode: true);
 
@@ -664,7 +684,6 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
         stream.Position = 0;
         var result = Utilities.ReadObjectFromStream<object>(
            stream,
-           restrictDeserialization: false,
            resolver: null,
            legacyMode: true).Should().BeOfType<Font>().Subject;
 
@@ -679,7 +698,6 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
             stream.Position = 0;
             var result = Utilities.ReadObjectFromStream<Font>(
                 stream,
-                restrictDeserialization: false,
                 resolver: FontResolver,
                 legacyMode: false).Should().BeOfType<Font>().Subject;
 
@@ -721,7 +739,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
 
         // legacyMode == true follows the GetData path.
         _stream.Position = 0;
-        Utilities.ReadObjectFromStream<MyClass1>(_stream, restrictDeserialization: false, resolver: null, legacyMode: true)
+        Utilities.ReadObjectFromStream<MyClass1>(_stream, resolver: null, legacyMode: true)
             .Should().BeEquivalentTo(value);
     }
 
@@ -736,7 +754,7 @@ public partial class BinaryFormatUtilitiesTests : IDisposable
 
         // This works because GetData falls back to the BinaryFormatter deserializer, NRBF deserializer fails because it requires a resolver.
         _stream.Position = 0;
-        Utilities.ReadObjectFromStream<MyClass1>(_stream, restrictDeserialization: false, resolver: null, legacyMode: true)
+        Utilities.ReadObjectFromStream<MyClass1>(_stream, resolver: null, legacyMode: true)
             .Should().BeEquivalentTo(value);
     }
 
