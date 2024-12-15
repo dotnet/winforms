@@ -1039,6 +1039,28 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             End Using
         End Sub
 
+        <WinFormsFact(Skip:="Manual Tests")>
+        Public Sub DownloadFile_UrlWithAllOptions_ExceptOnUserCancelWhereOverwriteTrue_Fail()
+            Dim testDirectory As String = CreateTempDirectory()
+            Dim destinationFileName As String = CreateTempFile(testDirectory, size:=1)
+            Dim webListener As New WebListener(DownloadLargeFileSize * 10)
+            Using listener As HttpListener = webListener.ProcessRequests()
+                Dim testCode As Action =
+                    Sub()
+                        My.Computer.Network.DownloadFile(
+                            address:=webListener.Address,
+                            destinationFileName,
+                            userName:=String.Empty,
+                            password:=String.Empty,
+                            showUI:=True,
+                            connectionTimeout:=TestingConnectionTimeout,
+                            overwrite:=True)
+                    End Sub
+
+                testCode.Should.Throw(Of OperationCanceledException)()
+            End Using
+        End Sub
+
         <WinFormsFact>
         Public Sub DownloadFile_UrlWithAllOptions_ExceptOnUserCancelWhereOverwriteWhereDestinationFileExists_Success()
             Dim testDirectory As String = CreateTempDirectory()
