@@ -82,7 +82,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         Dim buffer() As Byte = Text.Encoding.UTF8.GetBytes(responseString)
                         response.ContentLength64 = buffer.Length
                         Using output As Stream = response.OutputStream
-                            output.Write(buffer, offset:=0, count:=buffer.Length)
+                            Try
+                                output.Write(buffer, offset:=0, count:=buffer.Length)
+                            Catch ex As Exception
+                                ' ignore it will be handled elsewhere
+                            End Try
                         End Using
                     Finally
                         response?.Close()
