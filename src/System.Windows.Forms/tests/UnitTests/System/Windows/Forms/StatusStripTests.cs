@@ -1202,7 +1202,6 @@ public partial class StatusStripTests
         control.Layout -= handler;
         control.OnLayout(eventArgs);
         callCount.Should().Be(1);
-
     }
 
     [WinFormsFact]
