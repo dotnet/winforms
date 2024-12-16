@@ -44,7 +44,6 @@ public partial class PrintControllerWithStatusDialog
 
             _cancelButton = new Button()
             {
-                AutoSize = true,
                 Size = new Size(75, 23),
                 TabIndex = 0,
                 Text = SR.PrintControllerWithStatusDialog_Cancel,
