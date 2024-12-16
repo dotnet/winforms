@@ -183,7 +183,11 @@ public unsafe partial class DataObject :
     /// </returns>
     private static object TryJsonSerialize<T>(string format, T data)
     {
-        format.OrThrowIfNull(nameof(format));
+        if (string.IsNullOrWhiteSpace(format.OrThrowIfNull()))
+        {
+            throw new ArgumentException(SR.DataObjectWhitespaceEmptyFormatNotAllowed, nameof(format));
+        }
+
         data.OrThrowIfNull(nameof(data));
         return IsRestrictedFormat(format) || Composition.Binder.IsKnownType<T>()
             ? data
@@ -194,7 +198,7 @@ public unsafe partial class DataObject :
     ///  Check if the <paramref name="format"/> is one of the restricted formats, which formats that
     ///  correspond to primitives or are pre-defined in the OS such as strings, bitmaps, and OLE types.
     /// </summary>
-    internal static bool IsRestrictedFormat(string format) => RestrictDeserializationToSafeTypes(format)
+    private static bool IsRestrictedFormat(string format) => RestrictDeserializationToSafeTypes(format)
         || format is DataFormats.TextConstant
             or DataFormats.UnicodeTextConstant
             or DataFormats.RtfConstant

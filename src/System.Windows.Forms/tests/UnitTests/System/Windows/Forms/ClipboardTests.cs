@@ -1027,9 +1027,9 @@ public class ClipboardTests
         types.HasMember("<JsonBytes>k__BackingField").Should().BeTrue();
         types.HasMember("<InnerTypeAssemblyQualifiedName>k__BackingField").Should().BeTrue();
         SZArrayRecord<byte> byteData = types.GetRawValue("<JsonBytes>k__BackingField").Should().BeAssignableTo<SZArrayRecord<byte>>().Subject;
-        string innerTypeFullName = types.GetRawValue("<InnerTypeAssemblyQualifiedName>k__BackingField").Should().BeOfType<string>().Subject;
-        TypeName.TryParse(innerTypeFullName, out TypeName? result).Should().BeTrue();
-        TypeName checkedResult = result.Should().BeOfType<TypeName>().Subject;
+        string innerTypeAssemblyQualifiedName = types.GetRawValue("<InnerTypeAssemblyQualifiedName>k__BackingField").Should().BeOfType<string>().Subject;
+        TypeName.TryParse(innerTypeAssemblyQualifiedName, out TypeName? innerTypeName).Should().BeTrue();
+        TypeName checkedResult = innerTypeName.Should().BeOfType<TypeName>().Subject;
         // These should not be the same since we take TypeForwardedFromAttribute name into account during serialization,
         // which changes the assembly name.
         typeof(SimpleTestData).AssemblyQualifiedName.Should().NotBe(checkedResult.AssemblyQualifiedName);

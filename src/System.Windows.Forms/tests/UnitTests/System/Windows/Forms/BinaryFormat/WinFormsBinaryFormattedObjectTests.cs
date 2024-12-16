@@ -46,6 +46,7 @@ public class WinFormsBinaryFormattedObjectTests
         SerializationRecord binary = NrbfDecoder.Decode(stream);
         binary.TypeName.AssemblyName!.FullName.Should().Be(IJsonData.CustomAssemblyName);
         ITypeResolver resolver = new DataObject.Composition.Binder(typeof(SimpleTestData), resolver: null, legacyMode: false);
+        binary.TryGetObjectFromJson<int>(resolver, out _).Should().BeTrue();
         binary.TryGetObjectFromJson<SimpleTestData>(resolver, out object? result).Should().BeTrue();
         SimpleTestData deserialized = result.Should().BeOfType<SimpleTestData>().Which;
         deserialized.Should().BeEquivalentTo(testData);
@@ -58,7 +59,7 @@ public class WinFormsBinaryFormattedObjectTests
         JsonData<SimpleTestData> data = new()
         {
             JsonBytes = JsonSerializer.SerializeToUtf8Bytes(testData)
-    };
+        };
 
         using MemoryStream stream = new();
         WinFormsBinaryFormatWriter.WriteJsonData(stream, data);
@@ -82,8 +83,8 @@ public class WinFormsBinaryFormattedObjectTests
         public readonly object GetRealObject(StreamingContext context)
         {
             object? result = null;
-            if (TypeName.TryParse(InnerTypeAssemblyQualifiedName, out TypeName? genericTypeName)
-                && genericTypeName.Matches(typeof(SimpleTestData).ToTypeName()))
+            if (TypeName.TryParse(InnerTypeAssemblyQualifiedName, out TypeName? innerTypeName)
+                && innerTypeName.Matches(typeof(SimpleTestData).ToTypeName()))
             {
                 result = JsonSerializer.Deserialize<SimpleTestData>(JsonBytes);
             }
@@ -96,7 +97,8 @@ public class WinFormsBinaryFormattedObjectTests
     {
         public override Type? BindToType(string assemblyName, string typeName)
         {
-            if (assemblyName == "System.Private.Windows.VirtualJson")
+            if (assemblyName == "System.Private.Windows.VirtualJson"
+                && typeName == "System.Private.Windows.JsonData")
             {
                 return typeof(ReplicatedJsonData);
             }

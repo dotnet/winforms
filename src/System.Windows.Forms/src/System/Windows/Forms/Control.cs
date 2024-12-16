@@ -4785,7 +4785,7 @@ public unsafe partial class Control :
         DoDragDropAsJson(data, allowedEffects, dragImage: null, cursorOffset: default, useDefaultDragImage: false);
 
     /// <summary>
-    ///  Begins a drag operation
+    ///  Begins a drag operation.
     /// </summary>
     /// <param name="data">The data being dragged.</param>
     /// <param name="allowedEffects">determine which drag operations can occur.</param>
@@ -4795,13 +4795,13 @@ public unsafe partial class Control :
     /// <returns>A value from the <see cref="DragDropEffects"/> enumeration that represents the final effect that was performed during the drag-and-drop operation.</returns>
     /// <exception cref="InvalidOperationException">
     ///  If <paramref name="data"/> is a non derived <see cref="DataObject"/>. This is for better error reporting as <see cref="DataObject"/> will serialize empty. If <see cref="DataObject"/>
-    ///  needs to used to start a drag operation, use <see cref="DataObject.SetDataAsJson{T}(T)"/> to JSON serialize the data being held within the <paramref name="data"/>,
+    ///  needs to be used to start a drag operation, use <see cref="DataObject.SetDataAsJson{T}(T)"/> to JSON serialize the data being held within the <paramref name="data"/>,
     ///  then pass the <paramref name="data"/> to <see cref="DoDragDrop(object, DragDropEffects)"/>.
     /// </exception>
     /// <remarks>
     ///  <para>
-    ///  The data will be stored as Json if the data is not an intrinsically handled type. Otherwise, it will be stored
-    ///  as the same as <see cref="DoDragDrop(object, DragDropEffects)"/>.
+    ///  The data will be stored as JSON if the data is not an intrinsically handled type. Otherwise, it will be stored
+    ///  the same as <see cref="DoDragDrop(object, DragDropEffects)"/>.
     ///  </para>
     /// </remarks>
     public DragDropEffects DoDragDropAsJson<T>(

@@ -7,7 +7,6 @@ using System.Drawing;
 using System.Reflection.Metadata;
 using System.Text.RegularExpressions;
 using System.Windows.Forms.TestUtilities;
-using static System.Windows.Forms.Tests.TestAccessorTests;
 using Com = Windows.Win32.System.Com;
 
 namespace System.Windows.Forms.Tests;

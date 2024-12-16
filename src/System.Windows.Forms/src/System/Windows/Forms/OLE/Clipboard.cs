@@ -519,7 +519,7 @@ public static class Clipboard
     ///  If the data is a non intrinsic type, the object will be serialized using JSON.
     /// </summary>
     /// <exception cref="ArgumentException">
-    ///  null, empty, or whitespace was passed as the format.
+    ///  <see langword="null"/>, empty string, or whitespace was passed as the format.
     /// </exception>
     /// <exception cref="InvalidOperationException">
     ///  If <paramref name="data"/> is a non derived <see cref="DataObject"/>. This is for better error reporting as <see cref="DataObject"/> will serialize as empty.

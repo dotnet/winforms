@@ -62,7 +62,7 @@ internal static class WinFormsSerializationRecordExtensions
     ///  Tries to deserialize this object if it was serialized as JSON.
     /// </summary>
     /// <returns>
-    ///  <see langword="true"/> if the data was serialized as JSON and was successfully deserialized. Otherwise, <see langword="false"/>.
+    ///  <see langword="true"/> if the data was serialized as JSON. Otherwise, <see langword="false"/>.
     /// </returns>
     /// <exception cref="SerializationException">If the data was supposed to be our <see cref="JsonData{T}"/>, but was serialized incorrectly./></exception>
     /// <exception cref="NotSupportedException">If an exception occurred while JSON deserializing.</exception>
@@ -88,8 +88,8 @@ internal static class WinFormsSerializationRecordExtensions
         Type serializedType = resolver.GetType(serializedTypeName);
         if (!serializedType.IsAssignableTo(typeof(T)))
         {
-            // Not the type the caller asked for.
-            return false;
+            // Not the type the caller asked for so @object remains null.
+            return true;
         }
 
         try

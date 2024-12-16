@@ -100,7 +100,6 @@ public class ClipboardProxyTests
         retrieved.Should().BeEquivalentTo(testData);
     }
 
-    [Serializable]
     [TypeForwardedFrom("System.ForwardAssembly")]
     public struct SimpleTestData
     {

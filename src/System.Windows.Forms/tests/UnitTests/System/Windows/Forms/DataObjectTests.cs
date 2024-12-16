@@ -3032,5 +3032,18 @@ public partial class DataObjectTests
 
         // We don't expose JsonData<T> in public legacy API
         data.GetData(format).Should().BeNull();
+
+        // For the clipboard, we don't expose JsonData<T> either for in proc scenarios.
+        Clipboard.SetDataObject(data, copy: false);
+        Clipboard.GetData(format).Should().BeNull();
+    }
+
+    [WinFormsFact]
+    public void DataObject_SetDataAsJson_WrongType_ReturnsNull()
+    {
+        DataObject dataObject = new();
+        dataObject.SetDataAsJson("test", new SimpleTestData() { X = 1, Y = 1 });
+        dataObject.TryGetData("test", out Bitmap data).Should().BeFalse();
+        data.Should().BeNull();
     }
 }

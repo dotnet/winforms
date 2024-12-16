@@ -134,7 +134,7 @@ internal struct JsonData<T> : IJsonData
 internal interface IJsonData
 {
     // We use a custom assembly name to allow versions where JsonData<T> doesn't exist to still be able rehydrate JSON serialized data.
-    public const string CustomAssemblyName = "System.Private.Windows.VirtualJson";
+    const string CustomAssemblyName = "System.Private.Windows.VirtualJson";
 
     byte[] JsonBytes { get; set; }
 
@@ -146,7 +146,7 @@ internal interface IJsonData
 
     /// <summary>
     ///  Deserializes the data stored in the JsonData. This is a convenience method
-    ///  to deserialize teh data when we are not dealing with a binary formatted record.
+    ///  to deserialize the data when we are not dealing with a binary formatted record.
     /// </summary>
     object Deserialize();
 }

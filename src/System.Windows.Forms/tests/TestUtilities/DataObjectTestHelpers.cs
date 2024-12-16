@@ -27,7 +27,7 @@ public static class DataObjectTestHelpers
     public static TheoryData<string> UnboundedFormat() =>
     [
         DataFormats.Serializable,
-            "something custom"
+        "something custom"
     ];
 
     // These formats contain only known types.
