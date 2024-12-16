@@ -112,7 +112,7 @@ public unsafe partial class DataObject :
             throw new InvalidOperationException($"DataObject will serialize as empty. JSON serialize the data within {nameof(data)}, then use {nameof(SetData)} instead.");
         }
 
-        SetData(format, JsonSerializeNonRestricted(format, data));
+        SetData(format, TryJsonSerialize(format, data));
     }
 
     /// <inheritdoc cref="SetDataAsJson{T}(string, bool, T)"/>
@@ -125,7 +125,7 @@ public unsafe partial class DataObject :
             throw new InvalidOperationException($"DataObject will serialize as empty. JSON serialize the data within {nameof(data)}, then use {nameof(SetData)} instead.");
         }
 
-        SetData(typeof(T), JsonSerializeNonRestricted(typeof(T).FullName!, data));
+        SetData(typeof(T), TryJsonSerialize(typeof(T).FullName!, data));
     }
 
     /// <summary>
@@ -172,20 +172,20 @@ public unsafe partial class DataObject :
             throw new InvalidOperationException($"DataObject will serialize as empty. JSON serialize the data within {nameof(data)}, then use {nameof(SetData)} instead.");
         }
 
-        SetData(format, autoConvert, JsonSerializeNonRestricted(format, data));
+        SetData(format, autoConvert, TryJsonSerialize(format, data));
     }
 
     /// <summary>
-    ///  JSON serialize the data only if the format is not a restricted deserialization format.
+    ///  JSON serialize the data only if the format is not a restricted deserialization format and the data is not an intrinsic type.
     /// </summary>
     /// <returns>
     ///  The passed in <paramref name="data"/> as is if the format is restricted. Otherwise the JSON serialized <paramref name="data"/>.
     /// </returns>
-    private static object JsonSerializeNonRestricted<T>(string format, T data)
+    private static object TryJsonSerialize<T>(string format, T data)
     {
         format.OrThrowIfNull(nameof(format));
         data.OrThrowIfNull(nameof(data));
-        return IsRestrictedFormat(format)
+        return IsRestrictedFormat(format) || Composition.Binder.IsKnownType<T>()
             ? data
             : new JsonData<T>() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data) };
     }

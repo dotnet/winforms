@@ -1,8 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Drawing;
 using System.Runtime.InteropServices.ComTypes;
+using static System.Windows.Forms.TestUtilities.DataObjectTestHelpers;
 using Com = Windows.Win32.System.Com;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
@@ -18,9 +18,9 @@ public unsafe partial class DataObjectTests
         dynamic controlAccessor = typeof(Control).TestAccessor().Dynamic;
         var dropTargetAccessor = typeof(DropTarget).TestAccessor();
 
-        Point point = new() { X = 1, Y = 1 };
+        SimpleTestData testData = new() { X = 1, Y = 1 };
         DataObject data = new();
-        data.SetDataAsJson("point", point);
+        data.SetDataAsJson("testData", testData);
 
         DataObject inData = controlAccessor.CreateRuntimeDataObjectForDrag(data);
         inData.Should().BeSameAs(data);
@@ -28,9 +28,9 @@ public unsafe partial class DataObjectTests
         using var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
         IDataObject outData = dropTargetAccessor.CreateDelegate<CreateWinFormsDataObjectForOutgoingDropData>()(inDataPtr);
         ITypedDataObject typedOutData = outData.Should().BeAssignableTo<ITypedDataObject>().Subject;
-        typedOutData.GetDataPresent("point").Should().BeTrue();
-        typedOutData.TryGetData("point", out Point deserialized).Should().BeTrue();
-        deserialized.Should().BeEquivalentTo(point);
+        typedOutData.GetDataPresent("testData").Should().BeTrue();
+        typedOutData.TryGetData("testData", out SimpleTestData deserialized).Should().BeTrue();
+        deserialized.Should().BeEquivalentTo(testData);
     }
 
     [WinFormsFact]

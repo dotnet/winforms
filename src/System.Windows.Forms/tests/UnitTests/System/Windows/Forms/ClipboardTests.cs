@@ -14,6 +14,7 @@ using System.Text.Json;
 using System.Windows.Forms.Primitives;
 using Windows.Win32.System.Ole;
 using static System.Windows.Forms.Tests.BinaryFormatUtilitiesTests;
+using static System.Windows.Forms.TestUtilities.DataObjectTestHelpers;
 using Com = Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
 
@@ -902,75 +903,83 @@ public class ClipboardTests
     public void Clipboard_SetDataAsJson_WithGeneric_ReturnsExpected()
     {
         List<Point> generic1 = [];
-        Clipboard.SetDataAsJson("list", generic1);
-        Clipboard.TryGetData("list", out List<Point>? points).Should().BeTrue();
+        string format = "list";
+        Clipboard.SetDataAsJson(format, generic1);
+        DataObject dataObject = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
+        Action a = () => dataObject.TestAccessor().Dynamic._innerData.GetData(format);
+        // We do not handle List<Point>
+        a.Should().Throw<NotSupportedException>();
+        Clipboard.TryGetData(format, out List<Point>? points).Should().BeTrue();
         points.Should().BeEquivalentTo(generic1);
 
-        List<TestData1> generic2 = [];
-        Clipboard.SetDataAsJson("list", generic2);
-        Clipboard.TryGetData("list", out List<TestData1>? testData).Should().BeTrue();
-        testData.Should().BeEquivalentTo(generic2);
+        List<int> generic2 = [];
+        Clipboard.SetDataAsJson(format, generic2);
+        dataObject = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
+        a = () => dataObject.TestAccessor().Dynamic._innerData.GetData(format);
+        a.Should().NotThrow();
+        Clipboard.TryGetData(format, out List<int>? intList).Should().BeTrue();
+        intList.Should().BeEquivalentTo(generic2);
     }
 
     [WinFormsFact]
     public void Clipboard_SetDataAsJson_ReturnsExpected()
     {
-        Point point = new() { X = 1, Y = 1 };
+        SimpleTestData testData = new() { X = 1, Y = 1 };
 
-        Clipboard.SetDataAsJson("point", point);
+        Clipboard.SetDataAsJson("testData", testData);
         IDataObject dataObject = Clipboard.GetDataObject().Should().BeAssignableTo<IDataObject>().Subject;
-        dataObject.GetDataPresent("point").Should().BeTrue();
-        dataObject.TryGetData("point", out Point deserialized).Should().BeTrue();
-        deserialized.Should().BeEquivalentTo(point);
+        dataObject.GetDataPresent("testData").Should().BeTrue();
+        dataObject.TryGetData("testData", out SimpleTestData deserialized).Should().BeTrue();
+        deserialized.Should().BeEquivalentTo(testData);
     }
 
     [WinFormsFact]
     public void Clipboard_SetDataAsJson_GetData()
     {
-        Point point = new() { X = 1, Y = 1 };
+        SimpleTestData testData = new() { X = 1, Y = 1 };
         // Note that this simulates out of process scenario.
-        Clipboard.SetDataAsJson("point", point);
-        Action a = () => Clipboard.GetData("point");
+        Clipboard.SetDataAsJson("test", testData);
+        Action a = () => Clipboard.GetData("test");
         a.Should().Throw<NotSupportedException>();
 
         using BinaryFormatterInClipboardDragDropScope scope = new(enable: true);
         a.Should().Throw<NotSupportedException>();
 
         using BinaryFormatterScope scope2 = new(enable: true);
-        Clipboard.GetData("point").Should().BeOfType<MemoryStream>();
+        Clipboard.GetData("test").Should().BeOfType<MemoryStream>();
     }
 
     [WinFormsTheory]
     [BoolData]
     public void Clipboard_SetDataObject_WithJson_ReturnsExpected(bool copy)
     {
-        Point point = new() { X = 1, Y = 1 };
+        SimpleTestData testData = new() { X = 1, Y = 1 };
 
         DataObject dataObject = new();
-        dataObject.SetDataAsJson("point", point);
+        dataObject.SetDataAsJson("testData", testData);
 
         Clipboard.SetDataObject(dataObject, copy);
         ITypedDataObject returnedDataObject = Clipboard.GetDataObject().Should().BeAssignableTo<ITypedDataObject>().Subject;
-        returnedDataObject.TryGetData("point", out Point deserialized).Should().BeTrue();
-        deserialized.Should().BeEquivalentTo(point);
+        returnedDataObject.TryGetData("testData", out SimpleTestData deserialized).Should().BeTrue();
+        deserialized.Should().BeEquivalentTo(testData);
     }
 
     [WinFormsTheory]
     [BoolData]
     public void Clipboard_SetDataObject_WithMultipleData_ReturnsExpected(bool copy)
     {
-        Point point1 = new() { X = 1, Y = 1 };
-        Point point2 = new() { Y = 2, X = 2 };
+        SimpleTestData testData1 = new() { X = 1, Y = 1 };
+        SimpleTestData testData2 = new() { Y = 2, X = 2 };
         DataObject data = new();
-        data.SetDataAsJson("point1", point1);
-        data.SetDataAsJson("point2", point2);
+        data.SetDataAsJson("testData1", testData1);
+        data.SetDataAsJson("testData2", testData2);
         data.SetData("Mystring", "test");
         Clipboard.SetDataObject(data, copy);
 
-        Clipboard.TryGetData("point1", out Point deserializedPoint1).Should().BeTrue();
-        deserializedPoint1.Should().BeEquivalentTo(point1);
-        Clipboard.TryGetData("point2", out Point deserializedPoint2).Should().BeTrue();
-        deserializedPoint2.Should().BeEquivalentTo(point2);
+        Clipboard.TryGetData("testData1", out SimpleTestData deserializedTestData1).Should().BeTrue();
+        deserializedTestData1.Should().BeEquivalentTo(testData1);
+        Clipboard.TryGetData("testData2", out SimpleTestData deserializedTestData2).Should().BeTrue();
+        deserializedTestData2.Should().BeEquivalentTo(testData2);
         Clipboard.TryGetData("Mystring", out string? deserializedString).Should().BeTrue();
         deserializedString.Should().Be("test");
     }
@@ -981,8 +990,8 @@ public class ClipboardTests
         // This test demonstrates how a user can manually deserialize JsonData<T> that has been serialized onto
         // the clipboard from stream. This may need to be done if type JsonData<T> does not exist in the .NET version
         // the user is utilizing.
-        Point point = new(1, 1);
-        Clipboard.SetDataAsJson("testFormat", point);
+        SimpleTestData testData = new() { X = 1, Y = 1 };
+        Clipboard.SetDataAsJson("testFormat", testData);
 
         // Manually retrieve the serialized stream.
         ComTypes.IDataObject dataObject = Clipboard.GetDataObject().Should().BeAssignableTo<ComTypes.IDataObject>().Which;
@@ -1023,10 +1032,10 @@ public class ClipboardTests
         TypeName checkedResult = result.Should().BeOfType<TypeName>().Subject;
         // These should not be the same since we take TypeForwardedFromAttribute name into account during serialization,
         // which changes the assembly name.
-        typeof(Point).AssemblyQualifiedName.Should().NotBe(checkedResult.AssemblyQualifiedName);
-        typeof(Point).ToTypeName().Matches(checkedResult).Should().BeTrue();
+        typeof(SimpleTestData).AssemblyQualifiedName.Should().NotBe(checkedResult.AssemblyQualifiedName);
+        typeof(SimpleTestData).ToTypeName().Matches(checkedResult).Should().BeTrue();
 
-        JsonSerializer.Deserialize(byteData.GetArray(), typeof(Point)).Should().BeEquivalentTo(point);
+        JsonSerializer.Deserialize(byteData.GetArray(), typeof(SimpleTestData)).Should().BeEquivalentTo(testData);
     }
 
     [WinFormsFact]
@@ -1077,13 +1086,6 @@ public class ClipboardTests
             received.Should().Be(jsonDataObject);
             received.Deserialize<SimpleTestData>(format).Should().BeEquivalentTo(data);
         }
-    }
-
-    [Serializable]
-    private struct SimpleTestData
-    {
-        public int X { get; set; }
-        public int Y { get; set; }
     }
 
     // Test class to demonstrate one way to write IDataObject to totally control serialization/deserialization

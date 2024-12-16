@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Runtime.CompilerServices;
+
 namespace System.Windows.Forms.TestUtilities;
 
 /// <summary>
@@ -23,10 +25,10 @@ public static class DataObjectTestHelpers
     ];
 
     public static TheoryData<string> UnboundedFormat() =>
-[
-    DataFormats.Serializable,
-        "something custom"
-];
+    [
+        DataFormats.Serializable,
+            "something custom"
+    ];
 
     // These formats contain only known types.
     public static TheoryData<string> UndefinedRestrictedFormat() =>
@@ -49,4 +51,12 @@ public static class DataObjectTestHelpers
         DataFormats.Bitmap,
         "System.Drawing.Bitmap"
     ];
+
+    [Serializable]
+    [TypeForwardedFrom("System.ForwardAssembly")]
+    public struct SimpleTestData
+    {
+        public int X { get; set; }
+        public int Y { get; set; }
+    }
 }

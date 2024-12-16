@@ -3,7 +3,7 @@
 
 #nullable enable
 
-using System.Drawing;
+using static System.Windows.Forms.TestUtilities.DataObjectTestHelpers;
 
 namespace System.Windows.Forms.Tests;
 
@@ -25,27 +25,27 @@ public class ClipboardComTests
     [WinFormsFact]
     public void Clipboard_SetDataAsJson_ReturnsExpected()
     {
-        Point point = new() { X = 1, Y = 1 };
+        SimpleTestData testData = new() { X = 1, Y = 1 };
 
-        Clipboard.SetDataAsJson("point", point);
+        Clipboard.SetDataAsJson("testData", testData);
         ITypedDataObject dataObject = Clipboard.GetDataObject().Should().BeAssignableTo<ITypedDataObject>().Subject;
-        dataObject.GetDataPresent("point").Should().BeTrue();
-        dataObject.TryGetData("point", out Point deserialized).Should().BeTrue();
-        deserialized.Should().BeEquivalentTo(point);
+        dataObject.GetDataPresent("testData").Should().BeTrue();
+        dataObject.TryGetData("testData", out SimpleTestData deserialized).Should().BeTrue();
+        deserialized.Should().BeEquivalentTo(testData);
     }
 
     [WinFormsTheory]
     [BoolData]
     public void Clipboard_SetDataObject_WithJson_ReturnsExpected(bool copy)
     {
-        Point point = new() { X = 1, Y = 1 };
+        SimpleTestData testData = new() { X = 1, Y = 1 };
 
         DataObject dataObject = new();
-        dataObject.SetDataAsJson("point", point);
+        dataObject.SetDataAsJson("testData", testData);
 
         Clipboard.SetDataObject(dataObject, copy);
         ITypedDataObject returnedDataObject = Clipboard.GetDataObject().Should().BeAssignableTo<ITypedDataObject>().Subject;
-        returnedDataObject.TryGetData("point", out Point deserialized).Should().BeTrue();
-        deserialized.Should().BeEquivalentTo(point);
+        returnedDataObject.TryGetData("testData", out SimpleTestData deserialized).Should().BeTrue();
+        deserialized.Should().BeEquivalentTo(testData);
     }
 }

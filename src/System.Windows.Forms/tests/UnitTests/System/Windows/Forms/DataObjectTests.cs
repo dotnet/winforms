@@ -18,6 +18,7 @@ using Windows.Win32.System.Ole;
 using Com = Windows.Win32.System.Com;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 using Point = System.Drawing.Point;
+using SimpleTestData = System.Windows.Forms.TestUtilities.DataObjectTestHelpers.SimpleTestData;
 
 namespace System.Windows.Forms.Tests;
 
@@ -2848,40 +2849,42 @@ public partial class DataObjectTests
     [WinFormsFact]
     public void DataObject_SetDataAsJson_ReturnsExpected()
     {
-        Point point = new() { X = 1, Y = 1 };
+        SimpleTestData testData = new() { X = 1, Y = 1 };
         DataObject dataObject = new();
-        dataObject.SetDataAsJson("point", point);
-        dataObject.GetDataPresent("point").Should().BeTrue();
-        dataObject.TryGetData("point", out Point deserialized).Should().BeTrue();
-        deserialized.Should().BeEquivalentTo(point);
+        string format = "testData";
+        dataObject.SetDataAsJson(format, testData);
+        dataObject.GetDataPresent(format).Should().BeTrue();
+        dataObject.TryGetData(format, out SimpleTestData deserialized).Should().BeTrue();
+        deserialized.Should().BeEquivalentTo(testData);
     }
 
     [WinFormsFact]
     public void DataObject_SetDataAsJson_Wrapped_ReturnsExpected()
     {
-        Point point = new() { X = 1, Y = 1 };
+        SimpleTestData testData = new() { X = 1, Y = 1 };
         DataObject dataObject = new();
-        dataObject.SetDataAsJson("point", point);
+        string format = "testData";
+        dataObject.SetDataAsJson(format, testData);
         DataObject wrapped = new(dataObject);
-        wrapped.GetDataPresent("point").Should().BeTrue();
-        wrapped.TryGetData("point", out Point deserialized).Should().BeTrue();
-        deserialized.Should().BeEquivalentTo(point);
+        wrapped.GetDataPresent(format).Should().BeTrue();
+        wrapped.TryGetData(format, out SimpleTestData deserialized).Should().BeTrue();
+        deserialized.Should().BeEquivalentTo(testData);
     }
 
     [WinFormsFact]
     public void DataObject_SetDataAsJson_MultipleData_ReturnsExpected()
     {
-        Point point1 = new() { X = 1, Y = 1 };
-        Point point2 = new() { Y = 2, X = 2 };
+        SimpleTestData testData1 = new() { X = 1, Y = 1 };
+        SimpleTestData testData2 = new() { Y = 2, X = 2 };
         DataObject data = new();
-        data.SetDataAsJson("point1", point1);
-        data.SetDataAsJson("point2", point2);
+        data.SetDataAsJson("testData1", testData1);
+        data.SetDataAsJson("testData2", testData2);
         data.SetData("Mystring", "test");
 
-        data.TryGetData("point1", out Point deserializedPoint1).Should().BeTrue();
-        deserializedPoint1.Should().BeEquivalentTo(point1);
-        data.TryGetData("point2", out Point deserializedPoint2).Should().BeTrue();
-        deserializedPoint2.Should().BeEquivalentTo(point2);
+        data.TryGetData("testData1", out SimpleTestData deserializedTestData1).Should().BeTrue();
+        deserializedTestData1.Should().BeEquivalentTo(testData1);
+        data.TryGetData("testData2", out SimpleTestData deserializedTestData2).Should().BeTrue();
+        deserializedTestData2.Should().BeEquivalentTo(testData2);
         data.TryGetData("Mystring", out string deserializedString).Should().BeTrue();
         deserializedString.Should().Be("test");
     }
@@ -3008,12 +3011,24 @@ public partial class DataObjectTests
 
     [WinFormsTheory]
     [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.UnboundedFormat))]
-    public void DataObject_SetDataAsJson_NonRestrictedFormat_JsonSerialized(string format)
+    public void DataObject_SetDataAsJson_NonRestrictedFormat_NotJsonSerialized(string format)
     {
         DataObject data = new();
         data.SetDataAsJson(format, 1);
         object storedData = data.TestAccessor().Dynamic._innerData.GetData(format);
-        storedData.Should().BeOfType<JsonData<int>>();
+        storedData.Should().NotBeAssignableTo<IJsonData>();
+        data.GetData(format).Should().Be(1);
+    }
+
+    [WinFormsTheory]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.UnboundedFormat))]
+    public void DataObject_SetDataAsJson_NonRestrictedFormat_JsonSerialized(string format)
+    {
+        DataObject data = new();
+        SimpleTestData testData = new() { X = 1, Y = 1 };
+        data.SetDataAsJson(format, testData);
+        object storedData = data.TestAccessor().Dynamic._innerData.GetData(format);
+        storedData.Should().BeOfType<JsonData<SimpleTestData>>();
 
         // We don't expose JsonData<T> in public legacy API
         data.GetData(format).Should().BeNull();

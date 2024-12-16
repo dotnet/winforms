@@ -8,6 +8,7 @@ using Windows.Win32.System.Com;
 using Windows.Win32.UI.Accessibility;
 using Windows.Win32.UI.WindowsAndMessaging;
 using Xunit.Abstractions;
+using static System.Windows.Forms.TestUtilities.DataObjectTestHelpers;
 
 namespace System.Windows.Forms.UITests;
 
@@ -495,7 +496,7 @@ public class DragDropTests : ControlTestBase
     {
         // Verifies that we can successfully drag and drop a JSON serialized object.
 
-        Point point = new(10, 10);
+        SimpleTestData testData = new() { X = 10, Y = 10 };
         object? dropped = null;
         await RunFormWithoutControlAsync(() => new Form(), async (form) =>
         {
@@ -503,14 +504,14 @@ public class DragDropTests : ControlTestBase
             form.ClientSize = new Size(100, 100);
             form.DragEnter += (s, e) =>
             {
-                if (e.Data?.GetDataPresent(typeof(Point)) ?? false)
+                if (e.Data?.GetDataPresent(typeof(SimpleTestData)) ?? false)
                 {
                     e.Effect = DragDropEffects.Copy;
                 }
             };
             form.DragOver += (s, e) =>
             {
-                if (e.Data?.TryGetData(out Point data) ?? false)
+                if (e.Data?.TryGetData(out SimpleTestData data) ?? false)
                 {
                     // Get the JSON serialized Point.
                     dropped = data;
@@ -519,7 +520,7 @@ public class DragDropTests : ControlTestBase
             };
             form.MouseDown += (s, e) =>
             {
-                form.DoDragDropAsJson(point, DragDropEffects.Copy);
+                form.DoDragDropAsJson(testData, DragDropEffects.Copy);
             };
 
             var startRect = form.DisplayRectangle;
@@ -541,8 +542,8 @@ public class DragDropTests : ControlTestBase
                         .LeftButtonUp());
         });
 
-        dropped.Should().BeOfType(typeof(Point));
-        dropped.Should().BeEquivalentTo(point);
+        dropped.Should().BeOfType(typeof(SimpleTestData));
+        dropped.Should().BeEquivalentTo(testData);
     }
 
     private void CloseExplorer(string directory)

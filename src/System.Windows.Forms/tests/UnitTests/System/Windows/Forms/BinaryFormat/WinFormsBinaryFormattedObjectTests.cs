@@ -12,6 +12,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.Json;
 using System.Windows.Forms.BinaryFormat;
 using System.Windows.Forms.Nrbf;
+using static System.Windows.Forms.TestUtilities.DataObjectTestHelpers;
 
 namespace System.Private.Windows.Core.BinaryFormat.Tests;
 
@@ -22,20 +23,20 @@ public class WinFormsBinaryFormattedObjectTests
     [Fact]
     public void BinaryFormattedObject_NonJsonData_RemainsSerialized()
     {
-        Point point = new() { X = 1, Y = 1 };
-        SerializationRecord format = point.SerializeAndDecode();
-        ITypeResolver resolver = new DataObject.Composition.Binder(typeof(Point), resolver: null, legacyMode: false);
-        format.TryGetObjectFromJson<Point>(resolver, out _).Should().BeFalse();
+        SimpleTestData testData = new() { X = 1, Y = 1 };
+        SerializationRecord format = testData.SerializeAndDecode();
+        ITypeResolver resolver = new DataObject.Composition.Binder(typeof(SimpleTestData), resolver: null, legacyMode: false);
+        format.TryGetObjectFromJson<SimpleTestData>(resolver, out _).Should().BeFalse();
     }
 
     [Fact]
     public void BinaryFormattedObject_JsonData_RoundTrip()
     {
-        Point point = new() { X = 1, Y = 1 };
+        SimpleTestData testData = new() { X = 1, Y = 1 };
 
-        JsonData<Point> json = new()
+        JsonData<SimpleTestData> json = new()
         {
-            JsonBytes = JsonSerializer.SerializeToUtf8Bytes(point)
+            JsonBytes = JsonSerializer.SerializeToUtf8Bytes(testData)
         };
 
         using MemoryStream stream = new();
@@ -44,19 +45,19 @@ public class WinFormsBinaryFormattedObjectTests
         stream.Position = 0;
         SerializationRecord binary = NrbfDecoder.Decode(stream);
         binary.TypeName.AssemblyName!.FullName.Should().Be(IJsonData.CustomAssemblyName);
-        ITypeResolver resolver = new DataObject.Composition.Binder(typeof(Point), resolver: null, legacyMode: false);
-        binary.TryGetObjectFromJson<Point>(resolver, out object? result).Should().BeTrue();
-        Point deserialized = result.Should().BeOfType<Point>().Which;
-        deserialized.Should().BeEquivalentTo(point);
+        ITypeResolver resolver = new DataObject.Composition.Binder(typeof(SimpleTestData), resolver: null, legacyMode: false);
+        binary.TryGetObjectFromJson<SimpleTestData>(resolver, out object? result).Should().BeTrue();
+        SimpleTestData deserialized = result.Should().BeOfType<SimpleTestData>().Which;
+        deserialized.Should().BeEquivalentTo(testData);
     }
 
     [Fact]
     public void BinaryFormattedObject_Deserialize_FromStream_WithBinaryFormatter()
     {
-        Point point = new() { X = 1, Y = 1 };
-        JsonData<Point> data = new()
+        SimpleTestData testData = new() { X = 1, Y = 1 };
+        JsonData<SimpleTestData> data = new()
         {
-            JsonBytes = JsonSerializer.SerializeToUtf8Bytes(point)
+            JsonBytes = JsonSerializer.SerializeToUtf8Bytes(testData)
     };
 
         using MemoryStream stream = new();
@@ -65,10 +66,10 @@ public class WinFormsBinaryFormattedObjectTests
 
         using BinaryFormatterScope scope = new(enable: true);
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-        BinaryFormatter binaryFormatter = new() { Binder = new JsonDataPointBinder() };
+        BinaryFormatter binaryFormatter = new() { Binder = new JsonDataTestDataBinder() };
 #pragma warning restore SYSLIB0011
-        Point deserialized = binaryFormatter.Deserialize(stream).Should().BeOfType<Point>().Which;
-        deserialized.Should().BeEquivalentTo(point);
+        SimpleTestData deserialized = binaryFormatter.Deserialize(stream).Should().BeOfType<SimpleTestData>().Which;
+        deserialized.Should().BeEquivalentTo(testData);
     }
 
     [Serializable]
@@ -82,16 +83,16 @@ public class WinFormsBinaryFormattedObjectTests
         {
             object? result = null;
             if (TypeName.TryParse(InnerTypeAssemblyQualifiedName, out TypeName? genericTypeName)
-                && genericTypeName.Matches(typeof(Point).ToTypeName()))
+                && genericTypeName.Matches(typeof(SimpleTestData).ToTypeName()))
             {
-                result = JsonSerializer.Deserialize<Point>(JsonBytes);
+                result = JsonSerializer.Deserialize<SimpleTestData>(JsonBytes);
             }
 
             return result ?? throw new InvalidOperationException();
         }
     }
 
-    private class JsonDataPointBinder : SerializationBinder
+    private class JsonDataTestDataBinder : SerializationBinder
     {
         public override Type? BindToType(string assemblyName, string typeName)
         {

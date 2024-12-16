@@ -5,6 +5,7 @@
 
 using System.Drawing;
 using System.Reflection.Metadata;
+using System.Runtime.CompilerServices;
 using Microsoft.VisualBasic.Devices;
 using DataFormats = System.Windows.Forms.DataFormats;
 using TextDataFormat = System.Windows.Forms.TextDataFormat;
@@ -90,12 +91,21 @@ public class ClipboardProxyTests
     public void SetDataAsJson()
     {
         var clipboard = new Computer().Clipboard;
-        Point point = new(1, 1);
-        clipboard.SetDataAsJson("point", point);
-        clipboard.ContainsData("point").Should().Be(System.Windows.Forms.Clipboard.ContainsData("point"));
-        clipboard.TryGetData("point", out Point retrieved).Should().Be(System.Windows.Forms.Clipboard.TryGetData("point", out Point retrieved2));
+        SimpleTestData testData = new() { X = 1, Y = 1 };
+        string format = "testData";
+        clipboard.SetDataAsJson(format, testData);
+        clipboard.ContainsData(format).Should().Be(System.Windows.Forms.Clipboard.ContainsData(format));
+        clipboard.TryGetData(format, out SimpleTestData retrieved).Should().Be(System.Windows.Forms.Clipboard.TryGetData(format, out SimpleTestData retrieved2));
         retrieved.Should().BeEquivalentTo(retrieved2);
-        retrieved.Should().BeEquivalentTo(point);
+        retrieved.Should().BeEquivalentTo(testData);
+    }
+
+    [Serializable]
+    [TypeForwardedFrom("System.ForwardAssembly")]
+    public struct SimpleTestData
+    {
+        public int X { get; set; }
+        public int Y { get; set; }
     }
 
     [WinFormsFact]

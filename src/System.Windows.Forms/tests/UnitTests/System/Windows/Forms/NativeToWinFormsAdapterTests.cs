@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Reflection.Metadata;
 using System.Text.RegularExpressions;
 using System.Windows.Forms.TestUtilities;
+using static System.Windows.Forms.Tests.TestAccessorTests;
 using Com = Windows.Win32.System.Com;
 
 namespace System.Windows.Forms.Tests;
@@ -439,9 +440,27 @@ public unsafe partial class NativeToWinFormsAdapterTests
         DataObject dataObject = new(ComHelpers.GetComPointer<Com.IDataObject>(native));
         Action a = () => dataObject.TryGetData("test", out SimpleTestDataBase? _);
         a.Should().Throw<NotSupportedException>();
+        // This requires a resolver because this simulates out of process scenario with a type that is not intrinsic and not supported.
         dataObject.TryGetData("test", SimpleTestData.Resolver, autoConvert: false, out SimpleTestDataBase? deserialized).Should().BeTrue();
         var deserializedChecked = deserialized.Should().BeOfType<SimpleTestDataBase>().Subject;
         deserializedChecked.Text.Should().Be(value.Text);
+    }
+
+    [WinFormsTheory]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.StringFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.BitmapFormat))]
+    public void SetDataAsJson_InvalidTypeFormatCombination(string format)
+    {
+        SimpleTestData value = new("text", new(10, 10));
+
+        DataObject native = new();
+        native.SetDataAsJson(format, value);
+
+        DataObject dataObject = new(ComHelpers.GetComPointer<Com.IDataObject>(native));
+        Action a = () => dataObject.TryGetData(format, out SimpleTestDataBase? _);
+
+        a.Should().Throw<NotSupportedException>()
+            .WithMessage(expectedWildcardPattern: InvalidTypeFormatCombinationMessage);
     }
 
     private class SimpleTestDataBase
