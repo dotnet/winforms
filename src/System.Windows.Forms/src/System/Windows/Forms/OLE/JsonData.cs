@@ -72,7 +72,8 @@ namespace System.Private.Windows;
 ///     // TODO: Additional checking on result TypeName to ensure it is expected type.
 ///
 ///     // This should return the original data that was JSON serialized.
-///     System.Text.Json.JsonSerializer.Deserialize(byteData.GetArray(), genericType);
+///     var result = System.Text.Json.JsonSerializer.Deserialize(byteData.GetArray(), genericType);
+///     // TODO: Process the payload as needed.
 ///  }
 ///
 ///  [DllImport("kernel32.dll")]
