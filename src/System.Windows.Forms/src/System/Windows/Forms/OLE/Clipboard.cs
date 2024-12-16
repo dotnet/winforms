@@ -251,19 +251,19 @@ public static class Clipboard
     ///  Retrieves data from the <see cref="Clipboard"/> in the specified format if that data is of type <typeparamref name="T"/>.
     ///  This is an alternative to <see cref="GetData(string)"/> that uses <see cref="BinaryFormatter"/> only when application
     ///  enabled the <see cref="AppContext"/> switch named "Windows.ClipboardDragDrop.EnableUnsafeBinaryFormatterSerialization".
-    ///  By default the NRBF deserializer attempts to deserialize the stream.  It can be disabled in favor of <see cref="BinaryFormatter"/>
+    ///  By default the NRBF deserializer attempts to deserialize the stream. It can be disabled in favor of <see cref="BinaryFormatter"/>
     ///  with <see cref="AppContext"/> switch named "Windows.ClipboardDragDrop.EnableNrbfSerialization".
     /// </summary>
     /// <param name="format">
     ///  <para>
-    ///   The format of the data to retrieve.  See the <see cref="DataFormats"/> class for a set of predefined data formats.
+    ///   The format of the data to retrieve. See the <see cref="DataFormats"/> class for a set of predefined data formats.
     ///  </para>
     /// </param>
     /// <param name="resolver">
     ///  <para>
-    ///   A <see cref="Func{Type, TypeName}"/> that is used only when deserializing non-OLE formats.  It returns the type if
+    ///   A <see cref="Func{Type, TypeName}"/> that is used only when deserializing non-OLE formats. It returns the type if
     ///   <see cref="TypeName"/> is allowed or throws a <see cref="NotSupportedException"/> if <see cref="TypeName"/> is not
-    ///   expected.  It should not return a <see langword="null"/>.  It should resolve type requested by the user as
+    ///   expected. It should not return a <see langword="null"/>. It should resolve type requested by the user as
     ///   <typeparamref name="T"/>, as well as types of its fields, unless they are primitive or known types.
     ///  </para>
     ///  <para>
@@ -307,31 +307,31 @@ public static class Clipboard
     /// </returns>
     /// <remarks>
     ///  <para>
-    ///   Avoid loading assemblies named in the <see cref="TypeName"/> argument of the resolver function.  Resolve only types
+    ///   Avoid loading assemblies named in the <see cref="TypeName"/> argument of the resolver function. Resolve only types
     ///   available at the compile time, for example do not call the <see cref="Type.GetType(string)"/> method.
     ///  </para>
     ///  <para>
     ///   Some common types, for example <see cref="Bitmap"/>, are type-forwarded from .NET Framework assemblies using the
-    ///   <see cref="Runtime.CompilerServices.TypeForwardedFromAttribute"/>.  <see cref="BinaryFormatter"/> serializes these types
-    ///   using the forwarded from assembly information.  The resolver function should take this into account and either
+    ///   <see cref="Runtime.CompilerServices.TypeForwardedFromAttribute"/>. <see cref="BinaryFormatter"/> serializes these types
+    ///   using the forwarded from assembly information. The resolver function should take this into account and either
     ///   match only namespace qualified type names or read the <see cref="Runtime.CompilerServices.TypeForwardedFromAttribute.AssemblyFullName"/>
     ///   from the allowed type and match it to the <see cref="AssemblyNameInfo.FullName"/> property of <see cref="TypeName.AssemblyName"/>.
     ///  </para>
     ///  <para>
     ///   Make sure to match short assembly names if other information, such as version, is not needed, for example, when your
-    ///   application can read multiple versions of the type.  For exact matching, including assembly version, resolver
+    ///   application can read multiple versions of the type. For exact matching, including assembly version, resolver
     ///   function is required, however primitive and common types are always matched after assembly version is removed.
     ///  </para>
     ///  <para>
     ///   Arrays, generic types, and nullable value types have full element name, including its assembly name, in the
-    ///   <see cref="TypeName.FullName"/> property.  Resolver function should either remove or type-forward these assembly
+    ///   <see cref="TypeName.FullName"/> property. Resolver function should either remove or type-forward these assembly
     ///   names when matching.
     ///  </para>
     /// </remarks>
     /// <exception cref="NotSupportedException">
     ///  If application does not support <see cref="BinaryFormatter"/> and the object can't be deserialized otherwise, or
     ///  application supports <see cref="BinaryFormatter"/> but <typeparamref name="T"/> is an <see cref="object"/>,
-    ///  or not a concrete type, or if <paramref name="resolver"/> does not resolve the actual payload type.  Or
+    ///  or not a concrete type, or if <paramref name="resolver"/> does not resolve the actual payload type. Or
     ///  the <see cref="IDataObject"/> on the <see cref="Clipboard"/> does not implement <see cref="ITypedDataObject"/>
     ///  interface.
     ///  </exception>
