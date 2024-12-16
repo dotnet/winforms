@@ -264,7 +264,7 @@ internal static partial class LocalAppContextSwitches
     }
 
     /// <summary>
-    ///  Indicates whether to use <see cref="ToolStripRenderMode.System" /> as the default painting mode for <see cref="StatusStrip" />.
+    ///  Indicates whether to use ToolStripRenderMode.System as the default painting mode for System.Windows.Forms.StatusStrip />.
     /// </summary>
     public static bool UseSystemRenderingModeAsDefault
     {
