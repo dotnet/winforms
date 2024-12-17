@@ -140,8 +140,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should() _
-                .Throw(Of ArgumentNullException)() _
-                .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
+                    .Throw(Of ArgumentNullException)() _
+                    .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
                 VerifyFailedDownload(testDirectory:=Nothing, destinationFileName, listener)
             End Using
         End Sub
@@ -243,8 +243,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should() _
-                .Throw(Of WebException)() _
-                .WithMessage(SR_net_webstatus_Unauthorized)
+                    .Throw(Of WebException)() _
+                    .WithMessage(SR_net_webstatus_Unauthorized)
                 VerifyFailedDownload(testDirectory, destinationFileName, listener)
             End Using
         End Sub
@@ -268,8 +268,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should() _
-               .Throw(Of WebException)() _
-               .WithMessage(SR_net_webstatus_Timeout)
+                    .Throw(Of WebException)() _
+                    .WithMessage(SR_net_webstatus_Timeout)
                 VerifyFailedDownload(testDirectory, destinationFileName, listener)
             End Using
         End Sub
@@ -293,8 +293,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should() _
-                .Throw(Of ArgumentException)() _
-                .Where(Function(e) e.Message.StartsWith(SR.Network_BadConnectionTimeout))
+                    .Throw(Of ArgumentException)() _
+                    .Where(Function(e) e.Message.StartsWith(SR.Network_BadConnectionTimeout))
                 VerifyFailedDownload(testDirectory, destinationFileName, listener)
             End Using
         End Sub
@@ -318,8 +318,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should() _
-                .Throw(Of ArgumentNullException)() _
-                .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
+                    .Throw(Of ArgumentNullException)() _
+                    .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
                 VerifyFailedDownload(testDirectory, destinationFileName, listener)
             End Using
         End Sub
@@ -496,8 +496,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should() _
-                .Throw(Of ArgumentNullException)() _
-                .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
+                    .Throw(Of ArgumentNullException)() _
+                    .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
                 VerifyFailedDownload(testDirectory:=Nothing, destinationFileName, listener)
             End Using
         End Sub
@@ -527,8 +527,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 Function(e) e.Message.StartsWith(SR.IO_FilePathException) _
                     AndAlso e.Message.Contains(NameOf(destinationFileName))
                 testCode.Should() _
-                .Throw(Of ArgumentException)() _
-                .Where(exceptionExpression)
+                    .Throw(Of ArgumentException)() _
+                    .Where(exceptionExpression)
                 VerifyFailedDownload(testDirectory, destinationFileName, listener)
             End Using
         End Sub
@@ -610,8 +610,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 Function(e) e.Message.StartsWith(SR.IO_FilePathException) _
                     AndAlso e.Message.Contains(NameOf(destinationFileName))
                 testCode.Should() _
-                .Throw(Of ArgumentException)() _
-                .Where(exceptionExpression)
+                    .Throw(Of ArgumentException)() _
+                    .Where(exceptionExpression)
                 VerifyFailedDownload(testDirectory, destinationFileName, listener)
             End Using
         End Sub
@@ -663,8 +663,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should() _
-                .Throw(Of InvalidOperationException)() _
-                .Where(Function(e) e.Message.StartsWith(SR.Network_DownloadNeedsFilename))
+                    .Throw(Of InvalidOperationException)() _
+                    .Where(Function(e) e.Message.StartsWith(SR.Network_DownloadNeedsFilename))
                 VerifyFailedDownload(testDirectory, destinationFileName, listener)
             End Using
         End Sub
@@ -694,8 +694,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 Function(e) e.Message.StartsWith(SR.IO_FilePathException) _
                     AndAlso e.Message.Contains(NameOf(destinationFileName))
                 testCode.Should() _
-                .Throw(Of ArgumentException)() _
-                .Where(exceptionExpression)
+                    .Throw(Of ArgumentException)() _
+                    .Where(exceptionExpression)
                 VerifyFailedDownload(testDirectory, destinationFileName, listener)
             End Using
         End Sub
@@ -746,8 +746,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should() _
-                .Throw(Of ArgumentNullException)() _
-                .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
+                    .Throw(Of ArgumentNullException)() _
+                    .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
                 VerifyFailedDownload(testDirectory, destinationFileName, listener)
             End Using
         End Sub
@@ -797,8 +797,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should() _
-                .Throw(Of InvalidOperationException)() _
-                .WithMessage(SR.Network_DownloadNeedsFilename)
+                    .Throw(Of InvalidOperationException)() _
+                    .WithMessage(SR.Network_DownloadNeedsFilename)
                 VerifyFailedDownload(testDirectory, destinationFileName, listener)
             End Using
         End Sub
@@ -848,8 +848,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should() _
-                .Throw(Of WebException)() _
-                .WithMessage(SR_net_webstatus_Unauthorized)
+                    .Throw(Of WebException)() _
+                    .WithMessage(SR_net_webstatus_Unauthorized)
                 VerifyFailedDownload(testDirectory, destinationFileName, listener)
             End Using
         End Sub
@@ -875,8 +875,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should() _
-                .Throw(Of WebException)() _
-                .WithMessage(SR_net_webstatus_Unauthorized)
+                    .Throw(Of WebException)() _
+                    .WithMessage(SR_net_webstatus_Unauthorized)
                 VerifyFailedDownload(testDirectory, destinationFileName, listener)
             End Using
         End Sub
@@ -913,8 +913,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should() _
-                .Throw(Of ArgumentNullException)() _
-                .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
+                    .Throw(Of ArgumentNullException)() _
+                    .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
                 VerifyFailedDownload(testDirectory, destinationFileName, listener)
             End Using
         End Sub
@@ -931,8 +931,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should() _
-                .Throw(Of ArgumentNullException)() _
-                .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
+                    .Throw(Of ArgumentNullException)() _
+                    .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
                 VerifyFailedDownload(testDirectory, destinationFileName, listener)
             End Using
         End Sub
@@ -957,8 +957,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should() _
-                .Throw(Of ArgumentNullException)() _
-                .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
+                    .Throw(Of ArgumentNullException)() _
+                    .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
                 VerifyFailedDownload(testDirectory:=Nothing, destinationFileName, listener)
             End Using
         End Sub
@@ -983,8 +983,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 Dim value As String = SR.IO_FileExists_Path.Replace("{0}", destinationFileName)
                 testCode.Should() _
-                .Throw(Of IOException)() _
-                .Where(Function(e) e.Message.Equals(value))
+                    .Throw(Of IOException)() _
+                    .Where(Function(e) e.Message.Equals(value))
                 VerifySuccessfulDownload(testDirectory, destinationFileName, listener).Should.Be(1)
             End Using
         End Sub
@@ -1009,8 +1009,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 Dim value As String = SR.Network_InvalidUriString.Replace("{0}", "invalidURL")
                 testCode.Should() _
-                .Throw(Of ArgumentException)() _
-                .Where(Function(e) e.Message.StartsWith(value))
+                    .Throw(Of ArgumentException)() _
+                    .Where(Function(e) e.Message.StartsWith(value))
                 VerifyFailedDownload(testDirectory, destinationFileName, listener)
             End Using
         End Sub
@@ -1104,8 +1104,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should() _
-                .Throw(Of WebException)() _
-                .WithMessage(SR_net_webstatus_Timeout)
+                    .Throw(Of WebException)() _
+                    .WithMessage(SR_net_webstatus_Timeout)
                 VerifyFailedDownload(testDirectory, destinationFileName, listener)
             End Using
         End Sub
@@ -1129,8 +1129,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should() _
-                .Throw(Of ArgumentException)() _
-                .Where(Function(e) e.Message.StartsWith(SR.Network_BadConnectionTimeout))
+                    .Throw(Of ArgumentException)() _
+                    .Where(Function(e) e.Message.StartsWith(SR.Network_BadConnectionTimeout))
                 VerifyFailedDownload(testDirectory, destinationFileName, listener)
             End Using
         End Sub
@@ -1155,7 +1155,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 Dim value As String = SR.Network_InvalidUriString.Replace("{0}", "invalidURL")
                 testCode.Should() _
-                .Throw(Of ArgumentException)() _
+                    .Throw(Of ArgumentException)() _
                     .Where(Function(e) e.Message.StartsWith(value))
                 VerifyFailedDownload(testDirectory, destinationFileName, listener)
             End Using
@@ -1279,8 +1279,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should() _
-                .Throw(Of ArgumentNullException)() _
-                .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
+                    .Throw(Of ArgumentNullException)() _
+                    .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
                 VerifyFailedDownload(testDirectory:=Nothing, destinationFileName, listener)
             End Using
         End Sub
@@ -1310,8 +1310,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 Function(e) e.Message.StartsWith(SR.IO_FilePathException) _
                     AndAlso e.Message.Contains(NameOf(destinationFileName))
                 testCode.Should() _
-                .Throw(Of ArgumentException)() _
-                .Where(exceptionExpression)
+                    .Throw(Of ArgumentException)() _
+                    .Where(exceptionExpression)
                 VerifyFailedDownload(testDirectory, destinationFileName, listener)
             End Using
         End Sub
@@ -1341,8 +1341,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 Function(e) e.Message.StartsWith(SR.IO_FilePathException) _
                     AndAlso e.Message.Contains(NameOf(destinationFileName))
                 testCode.Should() _
-                .Throw(Of ArgumentException)() _
-                .Where(exceptionExpression)
+                    .Throw(Of ArgumentException)() _
+                    .Where(exceptionExpression)
                 VerifyFailedDownload(testDirectory, destinationFileName, listener)
             End Using
         End Sub
@@ -1394,8 +1394,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should() _
-                .Throw(Of InvalidOperationException)() _
-                .Where(Function(e) e.Message.StartsWith(SR.Network_DownloadNeedsFilename))
+                    .Throw(Of InvalidOperationException)() _
+                    .Where(Function(e) e.Message.StartsWith(SR.Network_DownloadNeedsFilename))
                 VerifyFailedDownload(testDirectory, destinationFileName, listener)
             End Using
         End Sub
@@ -1425,8 +1425,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                 Function(e) e.Message.StartsWith(SR.IO_FilePathException) _
                     AndAlso e.Message.Contains(NameOf(destinationFileName))
                 testCode.Should() _
-                .Throw(Of ArgumentException)() _
-                .Where(exceptionExpression)
+                    .Throw(Of ArgumentException)() _
+                    .Where(exceptionExpression)
                 VerifyFailedDownload(testDirectory, destinationFileName, listener)
             End Using
         End Sub
@@ -1477,8 +1477,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should() _
-                .Throw(Of ArgumentNullException)() _
-                .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
+                    .Throw(Of ArgumentNullException)() _
+                    .Where(Function(e) e.Message.StartsWith(SR.General_ArgumentNullException))
                 VerifyFailedDownload(testDirectory, destinationFileName, listener)
             End Using
         End Sub
@@ -1528,8 +1528,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should() _
-                .Throw(Of InvalidOperationException)() _
-                .WithMessage(SR.Network_DownloadNeedsFilename)
+                    .Throw(Of InvalidOperationException)() _
+                    .WithMessage(SR.Network_DownloadNeedsFilename)
                 VerifyFailedDownload(testDirectory, destinationFileName, listener)
             End Using
         End Sub
@@ -1579,8 +1579,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     End Sub
 
                 testCode.Should() _
-                .Throw(Of WebException)() _
-                .WithMessage(SR_net_webstatus_Unauthorized)
+                    .Throw(Of WebException)() _
+                    .WithMessage(SR_net_webstatus_Unauthorized)
                 VerifyFailedDownload(testDirectory, destinationFileName, listener)
             End Using
         End Sub
