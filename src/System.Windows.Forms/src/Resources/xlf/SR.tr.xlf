@@ -294,12 +294,12 @@
       </trans-unit>
       <trans-unit id="BinaryFormatter_NotSupported_InClipboardOrDragDrop">
         <source>BinaryFormatter is not supported in clipboard or drag-and-drop operations.</source>
-        <target state="new">BinaryFormatter is not supported in clipboard or drag-and-drop operations.</target>
+        <target state="translated">BinaryFormatter panoda veya sürükle ve bırak işlemlerinde desteklenmiyor.</target>
         <note />
       </trans-unit>
       <trans-unit id="BinaryFormatter_NotSupported_InClipboardOrDragDrop_UseTypedAPI">
         <source>BinaryFormatter is not supported in clipboard or drag-and-drop operations. Please enable it and use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</source>
-        <target state="new">BinaryFormatter is not supported in clipboard or drag-and-drop operations. Please enable it and use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</target>
+        <target state="translated">BinaryFormatter panoda veya sürükle ve bırak işlemlerinde desteklenmiyor. Lütfen etkinleştirin ve 'TryGetData&lt;T&gt;' API'lerini, seri durumdan çıkarma için izin verilen türler kümesi tanımlayan bir 'çözümleyici' işleviyle '{0}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
@@ -969,22 +969,22 @@
       </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_InvalidFormatTypeCombination">
         <source>The specified type '{0}' is not compatible with the specified format '{1}'.</source>
-        <target state="new">The specified type '{0}' is not compatible with the specified format '{1}'.</target>
+        <target state="translated">Belirtilen tür '{0}' belirtilen biçim türüyle uyumlu '{1}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_InvalidType">
         <source>'{0}' is not a concrete type, and could result in an unbounded deserialization attempt. Please use a concrete type or alternatively define a 'resolver' function that supports types that you are expecting to retrieve from the clipboard or use in drag-and-drop operations.</source>
-        <target state="new">'{0}' is not a concrete type, and could result in an unbounded deserialization attempt. Please use a concrete type or alternatively define a 'resolver' function that supports types that you are expecting to retrieve from the clipboard or use in drag-and-drop operations.</target>
+        <target state="translated">'{0}' somut bir tür değil ve bir unbounded deserialization girişimine neden olabilir. Lütfen somut bir tür kullanın veya alternatif olarak panodan almayı bekleyen türleri destekleyen bir 'çözümleyici' işlevi ya da sürükle ve bırak işlemleri içinde kullanın.</target>
         <note />
       </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_TypedAPI_InvalidResolver">
         <source>Type {0} is not found. If this type is allowed, please ensure that the 'resolver' function provided in 'TryGetData&lt;T&gt;' APIs supports it.</source>
-        <target state="new">Type {0} is not found. If this type is allowed, please ensure that the 'resolver' function provided in 'TryGetData&lt;T&gt;' APIs supports it.</target>
+        <target state="translated">Tür {0} bulunamadı. Bu türe izin verilirse lütfen 'TryGetData&lt;T&gt;' API'lerinde sağlanan 'resolver' işlevinin bunu desteklediğinden emin olun.</target>
         <note />
       </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_UseTypedAPI">
         <source>Please use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</source>
-        <target state="new">Please use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</target>
+        <target state="translated">Lütfen 'TryGetData&lt;T&gt;' API'lerini, seri durumdan çıkarma için izin verilen türler kümesi tanımlayan bir 'çözümleyici' işleviyle '{0}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="ClipboardSecurityException">
@@ -5807,7 +5807,7 @@ Bunu değiştirmek istiyor musunuz?</target>
       </trans-unit>
       <trans-unit id="ITypeDataObject_Not_Implemented">
         <source>Data object '{0}' doesn't implement the 'ITypedDataObject' interface and can't be read using 'TryGetData&lt;T&gt;(string, out T)' methods.</source>
-        <target state="new">Data object '{0}' doesn't implement the 'ITypedDataObject' interface and can't be read using 'TryGetData&lt;T&gt;(string, out T)' methods.</target>
+        <target state="translated">Veri nesnesi '{0}' 'ITypedDataObject' arabirimini uygulamıyor ve 'TryGetData&lt;T&gt;(string, out T)' yöntemleri kullanılarak okunamıyor.</target>
         <note />
       </trans-unit>
       <trans-unit id="IllegalCrossThreadCall">
