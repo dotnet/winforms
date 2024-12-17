@@ -7,7 +7,6 @@ namespace System.Drawing.Design;
 ///  Provides an editor that can perform default file searching for bitmap (.bmp)
 ///  files.
 /// </summary>
-[CLSCompliant(false)]
 public class BitmapEditor : ImageEditor
 {
     protected static List<string> BitmapExtensions = ["bmp", "gif", "jpg", "jpeg", "png", "ico"];

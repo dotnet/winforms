@@ -14,10 +14,10 @@ namespace System.ComponentModel.Design.Serialization;
 ///  There are times when that serializer may need to know the context in which it is creating its expression.
 ///  In the above example, this isn't needed, but take this slightly modified example:
 ///  button1.Text = rm.GetString("button1_Text");
-///  Here, the serializer responsible for writing the resource expression needs to know the names of the target objects.
-///  The ExpressionContext class can be used for this. As each serializer creates an expression and
-///  invokes a serializer to handle a smaller part of the statement as a whole,
-///  the serializer pushes an expression context on the context stack.
+///  Here, the serializer responsible for writing the resource expression needs to know the
+///  names of the target objects. The ExpressionContext class can be used for this.
+///  As each serializer creates an expression and invokes a serializer to handle a smaller part
+///  of the statement as a whole, the serializer pushes an expression context on the context stack.
 ///  Each expression context has a parent property that locates the next expression context on the stack,
 ///  which provides a way for easy traversal.
 /// </summary>
