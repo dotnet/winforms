@@ -3,6 +3,8 @@
 
 #nullable enable
 
+using static System.Windows.Forms.TestUtilities.DataObjectTestHelpers;
+
 namespace System.Windows.Forms.Tests;
 
 // Each registered Clipboard format is an OS singleton,
@@ -18,5 +20,32 @@ public class ClipboardComTests
 
         Clipboard.GetText().Should().Be("text");
         Clipboard.ContainsText().Should().BeTrue();
+    }
+
+    [WinFormsFact]
+    public void Clipboard_SetDataAsJson_ReturnsExpected()
+    {
+        SimpleTestData testData = new() { X = 1, Y = 1 };
+
+        Clipboard.SetDataAsJson("testData", testData);
+        ITypedDataObject dataObject = Clipboard.GetDataObject().Should().BeAssignableTo<ITypedDataObject>().Subject;
+        dataObject.GetDataPresent("testData").Should().BeTrue();
+        dataObject.TryGetData("testData", out SimpleTestData deserialized).Should().BeTrue();
+        deserialized.Should().BeEquivalentTo(testData);
+    }
+
+    [WinFormsTheory]
+    [BoolData]
+    public void Clipboard_SetDataObject_WithJson_ReturnsExpected(bool copy)
+    {
+        SimpleTestData testData = new() { X = 1, Y = 1 };
+
+        DataObject dataObject = new();
+        dataObject.SetDataAsJson("testData", testData);
+
+        Clipboard.SetDataObject(dataObject, copy);
+        ITypedDataObject returnedDataObject = Clipboard.GetDataObject().Should().BeAssignableTo<ITypedDataObject>().Subject;
+        returnedDataObject.TryGetData("testData", out SimpleTestData deserialized).Should().BeTrue();
+        deserialized.Should().BeEquivalentTo(testData);
     }
 }
