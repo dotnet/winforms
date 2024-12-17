@@ -9,8 +9,8 @@ Imports System.Threading
 Namespace Microsoft.VisualBasic.Forms.Tests
 
     Public Class WebListener
-        Private ReadOnly _fileUrlPrefix As String
         Private ReadOnly _fileSize As Integer
+        Private ReadOnly _fileUrlPrefix As String
         Private ReadOnly _password As String
         Private ReadOnly _userName As String
 
