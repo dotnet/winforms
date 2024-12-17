@@ -44,11 +44,11 @@ Namespace Microsoft.VisualBasic.Forms.Tests
             Dim webListener As New WebListener(SmallTestFileSize)
             Using listener As HttpListener = webListener.ProcessRequests()
                 Dim testCode As Action =
-                        Sub()
-                            My.Computer.Network.DownloadFile(
-                                address:=New Uri(String.Empty),
-                                destinationFileName)
-                        End Sub
+                    Sub()
+                        My.Computer.Network.DownloadFile(
+                            address:=New Uri(String.Empty),
+                            destinationFileName)
+                    End Sub
 
                 testCode.Should.Throw(Of UriFormatException)()
                 VerifyFailedDownload(testDirectory, destinationFileName, listener)
