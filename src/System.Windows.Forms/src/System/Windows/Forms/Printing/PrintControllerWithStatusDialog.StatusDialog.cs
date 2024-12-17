@@ -44,7 +44,7 @@ public partial class PrintControllerWithStatusDialog
 
             _cancelButton = new Button()
             {
-                Size = new Size(75, 23),
+                Size = ScaleHelper.ScaleToDpi(new Size(75, 23), ScaleHelper.InitialSystemDpi),
                 TabIndex = 0,
                 Text = SR.PrintControllerWithStatusDialog_Cancel,
                 Location = new Point(88, 88),
