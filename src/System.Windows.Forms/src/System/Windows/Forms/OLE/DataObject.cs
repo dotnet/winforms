@@ -4,8 +4,10 @@
 using System.Collections.Specialized;
 using System.Drawing;
 using System.Reflection.Metadata;
+using System.Private.Windows;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
+using System.Text.Json;
 using Com = Windows.Win32.System.Com;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
 
@@ -100,13 +102,152 @@ public unsafe partial class DataObject :
     /// <inheritdoc cref="Composition.OriginalIDataObject"/>
     internal IDataObject? OriginalIDataObject => _innerData.OriginalIDataObject;
 
+    /// <inheritdoc cref="SetDataAsJson{T}(string, bool, T)"/>
+    [RequiresUnreferencedCode("Uses default System.Text.Json behavior which is not trim-compatible.")]
+    public void SetDataAsJson<T>(string format, T data)
+    {
+        if (typeof(T) == typeof(DataObject))
+        {
+            // loni TODO: localize string.
+            throw new InvalidOperationException($"DataObject will serialize as empty. JSON serialize the data within {nameof(data)}, then use {nameof(SetData)} instead.");
+        }
+
+        SetData(format, TryJsonSerialize(format, data));
+    }
+
+    /// <inheritdoc cref="SetDataAsJson{T}(string, bool, T)"/>
+    [RequiresUnreferencedCode("Uses default System.Text.Json behavior which is not trim-compatible.")]
+    public void SetDataAsJson<T>(T data)
+    {
+        if (typeof(T) == typeof(DataObject))
+        {
+            // loni TODO: localize string.
+            throw new InvalidOperationException($"DataObject will serialize as empty. JSON serialize the data within {nameof(data)}, then use {nameof(SetData)} instead.");
+        }
+
+        SetData(typeof(T), TryJsonSerialize(typeof(T).FullName!, data));
+    }
+
+    /// <summary>
+    ///  Stores the data in the specified format.
+    ///  If the data is a managed object and format allows for serialization of managed objects, the object will be serialized as JSON.
+    /// </summary>
+    /// <param name="format">The format associated with the data. See <see cref="DataFormats"/> for predefined formats.</param>
+    /// <param name="autoConvert"><see langword="true"/> to allow the data to be converted to another format; otherwise, <see langword="false"/>.</param>
+    /// <param name="data">The data to store.</param>
+    /// <exception cref="InvalidOperationException">
+    ///  If <paramref name="data"/> is a non derived <see cref="DataObject"/>. This is for better error reporting as <see cref="DataObject"/> will serialize as empty.
+    ///  If <see cref="DataObject"/> needs to be set, JSON serialize the data held in <paramref name="data"/> using this method, then use <see cref="SetData(object?)"/>
+    ///  passing in <paramref name="data"/>.
+    /// </exception>
+    /// <remarks>
+    ///  <para>
+    ///   If your data is an intrinsically handled type such as primitives, string, or Bitmap
+    ///   and you are using a custom format or <see cref="DataFormats.Serializable"/>
+    ///   it is recommended to use the <see cref="SetData(string, object?)"/> APIs to avoid unnecessary overhead.
+    ///  </para>
+    ///  <para>
+    ///   The default behavior of <see cref="JsonSerializer"/> is used to serialize the data.
+    ///  </para>
+    ///  <para>
+    ///   See
+    ///   <see href="https://learn.microsoft.com/dotnet/standard/serialization/system-text-json/how-to#serialization-behavior"/>
+    ///   and <see href="https://learn.microsoft.com/dotnet/standard/serialization/system-text-json/reflection-vs-source-generation#metadata-collection"/>
+    ///   for more details on default <see cref="JsonSerializer"/> behavior.
+    ///  </para>
+    ///  <para>
+    ///   If custom JSON serialization behavior is needed, manually JSON serialize the data and then use <see cref="SetData(object?)"/>,
+    ///   or create a custom <see cref="Text.Json.Serialization.JsonConverter"/>, attach the
+    ///   <see cref="Text.Json.Serialization.JsonConverterAttribute"/>, and then recall this method.
+    ///   See <see href="https://learn.microsoft.com/dotnet/standard/serialization/system-text-json/converters-how-to"/> for more details
+    ///   on custom converters for JSON serialization.
+    ///  </para>
+    /// </remarks>
+    [RequiresUnreferencedCode("Uses default System.Text.Json behavior which is not trim-compatible.")]
+    public void SetDataAsJson<T>(string format, bool autoConvert, T data)
+    {
+        if (typeof(T) == typeof(DataObject))
+        {
+            // loni TODO: localize string.
+            throw new InvalidOperationException($"DataObject will serialize as empty. JSON serialize the data within {nameof(data)}, then use {nameof(SetData)} instead.");
+        }
+
+        SetData(format, autoConvert, TryJsonSerialize(format, data));
+    }
+
+    /// <summary>
+    ///  JSON serialize the data only if the format is not a restricted deserialization format and the data is not an intrinsic type.
+    /// </summary>
+    /// <returns>
+    ///  The passed in <paramref name="data"/> as is if the format is restricted. Otherwise the JSON serialized <paramref name="data"/>.
+    /// </returns>
+    private static object TryJsonSerialize<T>(string format, T data)
+    {
+        if (string.IsNullOrWhiteSpace(format.OrThrowIfNull()))
+        {
+            throw new ArgumentException(SR.DataObjectWhitespaceEmptyFormatNotAllowed, nameof(format));
+        }
+
+        data.OrThrowIfNull(nameof(data));
+        return IsRestrictedFormat(format) || Composition.Binder.IsKnownType<T>()
+            ? data
+            : new JsonData<T>() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data) };
+    }
+
+    /// <summary>
+    ///  Check if the <paramref name="format"/> is one of the restricted formats, which formats that
+    ///  correspond to primitives or are pre-defined in the OS such as strings, bitmaps, and OLE types.
+    /// </summary>
+    private static bool IsRestrictedFormat(string format) => RestrictDeserializationToSafeTypes(format)
+        || format is DataFormats.TextConstant
+            or DataFormats.UnicodeTextConstant
+            or DataFormats.RtfConstant
+            or DataFormats.HtmlConstant
+            or DataFormats.OemTextConstant
+            or DataFormats.FileDropConstant
+            or CF_DEPRECATED_FILENAME
+            or CF_DEPRECATED_FILENAMEW;
+
+    /// <summary>
+    ///  We are restricting binary serialization and deserialization of formats that represent strings, bitmaps or OLE types.
+    /// </summary>
+    /// <param name="format">format name</param>
+    /// <returns><see langword="true" /> - serialize only safe types, strings or bitmaps.</returns>
+    /// <remarks>
+    ///  <para>
+    ///   These formats are also restricted in WPF
+    ///   https://github.com/dotnet/wpf/blob/db1ae73aae0e043326e2303b0820d361de04e751/src/Microsoft.DotNet.Wpf/src/PresentationCore/System/Windows/dataobject.cs#L2801
+    ///  </para>
+    /// </remarks>
+    private static bool RestrictDeserializationToSafeTypes(string format) =>
+        format is DataFormats.StringConstant
+            or BitmapFullName
+            or DataFormats.CsvConstant
+            or DataFormats.DibConstant
+            or DataFormats.DifConstant
+            or DataFormats.LocaleConstant
+            or DataFormats.PenDataConstant
+            or DataFormats.RiffConstant
+            or DataFormats.SymbolicLinkConstant
+            or DataFormats.TiffConstant
+            or DataFormats.WaveAudioConstant
+            or DataFormats.BitmapConstant
+            or DataFormats.EmfConstant
+            or DataFormats.PaletteConstant
+            or DataFormats.WmfConstant;
+
     #region IDataObject
     [Obsolete(
         Obsoletions.DataObjectGetDataMessage,
         error: false,
         DiagnosticId = Obsoletions.ClipboardGetDataDiagnosticId,
         UrlFormat = Obsoletions.SharedUrlFormat)]
-    public virtual object? GetData(string format, bool autoConvert) => _innerData.GetData(format, autoConvert);
+    public virtual object? GetData(string format, bool autoConvert)
+    {
+        object? result = _innerData.GetData(format, autoConvert);
+        // Avoid exposing our internal JsonData<T>
+        return result is IJsonData ? null : result;
+    }
 
     [Obsolete(
         Obsoletions.DataObjectGetDataMessage,

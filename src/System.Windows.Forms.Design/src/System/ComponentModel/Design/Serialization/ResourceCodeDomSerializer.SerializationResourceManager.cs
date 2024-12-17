@@ -520,7 +520,7 @@ internal partial class ResourceCodeDomSerializer
 #pragma warning disable SYSLIB0050 // Type or member is obsolete
             if (value is not null && (!value.GetType().IsSerializable))
             {
-                Debug.Fail($"Cannot save a non-serializable value into resources.  Add serializable to {(value is null ? "(null)" : value.GetType().Name)}");
+                Debug.Fail($"Cannot save a non-serializable value into resources. Add serializable to {(value is null ? "(null)" : value.GetType().Name)}");
                 return;
             }
 #pragma warning restore SYSLIB0050
@@ -605,7 +605,7 @@ internal partial class ResourceCodeDomSerializer
 #pragma warning disable SYSLIB0050 // Type or member is obsolete
             if (value is not null && (!value.GetType().IsSerializable))
             {
-                Debug.Fail($"Cannot save a non-serializable value into resources.  Add serializable to {(value is null ? "(null)" : value.GetType().Name)}");
+                Debug.Fail($"Cannot save a non-serializable value into resources. Add serializable to {(value is null ? "(null)" : value.GetType().Name)}");
                 return;
             }
 #pragma warning restore SYSLIB0050
