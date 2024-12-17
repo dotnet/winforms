@@ -294,12 +294,12 @@
       </trans-unit>
       <trans-unit id="BinaryFormatter_NotSupported_InClipboardOrDragDrop">
         <source>BinaryFormatter is not supported in clipboard or drag-and-drop operations.</source>
-        <target state="new">BinaryFormatter is not supported in clipboard or drag-and-drop operations.</target>
+        <target state="translated">BinaryFormatter n’est pas pris en charge dans les opérations de presse-papiers ou de glisser-déplacer.</target>
         <note />
       </trans-unit>
       <trans-unit id="BinaryFormatter_NotSupported_InClipboardOrDragDrop_UseTypedAPI">
         <source>BinaryFormatter is not supported in clipboard or drag-and-drop operations. Please enable it and use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</source>
-        <target state="new">BinaryFormatter is not supported in clipboard or drag-and-drop operations. Please enable it and use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</target>
+        <target state="translated">BinaryFormatter n’est pas pris en charge dans les opérations de presse-papiers ou de glisser-déplacer. Activez-la et utilisez les API 'TryGetData&lt;T&gt;' avec une fonction 'resolver' qui définit un ensemble de types autorisés pour désérialiser '{0}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
@@ -969,22 +969,22 @@
       </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_InvalidFormatTypeCombination">
         <source>The specified type '{0}' is not compatible with the specified format '{1}'.</source>
-        <target state="new">The specified type '{0}' is not compatible with the specified format '{1}'.</target>
+        <target state="translated">Le type spécifié '{0}' n’est pas compatible avec le format spécifié '{1}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_InvalidType">
         <source>'{0}' is not a concrete type, and could result in an unbounded deserialization attempt. Please use a concrete type or alternatively define a 'resolver' function that supports types that you are expecting to retrieve from the clipboard or use in drag-and-drop operations.</source>
-        <target state="new">'{0}' is not a concrete type, and could result in an unbounded deserialization attempt. Please use a concrete type or alternatively define a 'resolver' function that supports types that you are expecting to retrieve from the clipboard or use in drag-and-drop operations.</target>
+        <target state="translated">'{0}' n’est pas un type concret et peut entraîner une tentative de désérialisation non liée. Utilisez un type concret ou définissez une fonction « resolver » qui prend en charge les types que vous voulez récupérer à partir du Presse-papiers ou utilisez-la dans les opérations de glisser-déplacer.</target>
         <note />
       </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_TypedAPI_InvalidResolver">
         <source>Type {0} is not found. If this type is allowed, please ensure that the 'resolver' function provided in 'TryGetData&lt;T&gt;' APIs supports it.</source>
-        <target state="new">Type {0} is not found. If this type is allowed, please ensure that the 'resolver' function provided in 'TryGetData&lt;T&gt;' APIs supports it.</target>
+        <target state="translated">Type {0} introuvable. Si ce type est autorisé, vérifiez que la fonction « resolver » fournie dans les API « TryGetData&lt;T&gt; » le prend en charge.</target>
         <note />
       </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_UseTypedAPI">
         <source>Please use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</source>
-        <target state="new">Please use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</target>
+        <target state="translated">Utilisez les API 'TryGetData&lt;T&gt;' avec une fonction 'resolver' qui définit un ensemble de types autorisés pour désérialiser '{0}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="ClipboardSecurityException">
@@ -5807,7 +5807,7 @@ Voulez-vous le remplacer ?</target>
       </trans-unit>
       <trans-unit id="ITypeDataObject_Not_Implemented">
         <source>Data object '{0}' doesn't implement the 'ITypedDataObject' interface and can't be read using 'TryGetData&lt;T&gt;(string, out T)' methods.</source>
-        <target state="new">Data object '{0}' doesn't implement the 'ITypedDataObject' interface and can't be read using 'TryGetData&lt;T&gt;(string, out T)' methods.</target>
+        <target state="translated">L’objet de données '{0}' n’implémente pas l’interface 'ITypedDataObject' et ne peut pas être lu à l’aide des méthodes 'TryGetData&lt;T&gt;(string, out T)'.</target>
         <note />
       </trans-unit>
       <trans-unit id="IllegalCrossThreadCall">

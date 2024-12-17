@@ -294,12 +294,12 @@
       </trans-unit>
       <trans-unit id="BinaryFormatter_NotSupported_InClipboardOrDragDrop">
         <source>BinaryFormatter is not supported in clipboard or drag-and-drop operations.</source>
-        <target state="new">BinaryFormatter is not supported in clipboard or drag-and-drop operations.</target>
+        <target state="translated">剪贴板或拖放操作不支持 BinaryFormatter。</target>
         <note />
       </trans-unit>
       <trans-unit id="BinaryFormatter_NotSupported_InClipboardOrDragDrop_UseTypedAPI">
         <source>BinaryFormatter is not supported in clipboard or drag-and-drop operations. Please enable it and use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</source>
-        <target state="new">BinaryFormatter is not supported in clipboard or drag-and-drop operations. Please enable it and use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</target>
+        <target state="translated">剪贴板或拖放操作不支持 BinaryFormatter。请启用它，并将 “TryGetData&lt;T&gt;” API 与定义一组允许类型的 “resolver” 函数一起使用，以反序列化 '{0}'。</target>
         <note />
       </trans-unit>
       <trans-unit id="BindableComponentBindingContextChangedDescr">
@@ -969,22 +969,22 @@
       </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_InvalidFormatTypeCombination">
         <source>The specified type '{0}' is not compatible with the specified format '{1}'.</source>
-        <target state="new">The specified type '{0}' is not compatible with the specified format '{1}'.</target>
+        <target state="translated">指定的类型 '{0}' 与指定的格式 '{1}' 不兼容。</target>
         <note />
       </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_InvalidType">
         <source>'{0}' is not a concrete type, and could result in an unbounded deserialization attempt. Please use a concrete type or alternatively define a 'resolver' function that supports types that you are expecting to retrieve from the clipboard or use in drag-and-drop operations.</source>
-        <target state="new">'{0}' is not a concrete type, and could result in an unbounded deserialization attempt. Please use a concrete type or alternatively define a 'resolver' function that supports types that you are expecting to retrieve from the clipboard or use in drag-and-drop operations.</target>
+        <target state="translated">'{0}' 不是具体类型，可能导致未绑定的反序列化尝试。请使用具体类型，或者定义支持希望从剪贴板检索的类型或用于拖放操作的“解析程序”函数。</target>
         <note />
       </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_TypedAPI_InvalidResolver">
         <source>Type {0} is not found. If this type is allowed, please ensure that the 'resolver' function provided in 'TryGetData&lt;T&gt;' APIs supports it.</source>
-        <target state="new">Type {0} is not found. If this type is allowed, please ensure that the 'resolver' function provided in 'TryGetData&lt;T&gt;' APIs supports it.</target>
+        <target state="translated">找不到类型 {0}。如果允许此类型，请确保 “TryGetData&lt;T&gt;” API 中提供的 “resolver” 函数支持它。</target>
         <note />
       </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_UseTypedAPI">
         <source>Please use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</source>
-        <target state="new">Please use 'TryGetData&lt;T&gt;' APIs with a 'resolver' function that defines a set of allowed types to deserialize '{0}'.</target>
+        <target state="translated">请将 “TryGetData&lt;T&gt;” API 与定义一组允许类型的 “resolver” 函数一起使用，以反序列化 '{0}'。</target>
         <note />
       </trans-unit>
       <trans-unit id="ClipboardSecurityException">
@@ -5807,7 +5807,7 @@ Do you want to replace it?</source>
       </trans-unit>
       <trans-unit id="ITypeDataObject_Not_Implemented">
         <source>Data object '{0}' doesn't implement the 'ITypedDataObject' interface and can't be read using 'TryGetData&lt;T&gt;(string, out T)' methods.</source>
-        <target state="new">Data object '{0}' doesn't implement the 'ITypedDataObject' interface and can't be read using 'TryGetData&lt;T&gt;(string, out T)' methods.</target>
+        <target state="translated">数据对象 '{0}' 未实现 “ITypedDataObject” 接口，无法使用 “TryGetData&lt;T&gt;(string， out T)” 方法进行读取。</target>
         <note />
       </trans-unit>
       <trans-unit id="IllegalCrossThreadCall">
