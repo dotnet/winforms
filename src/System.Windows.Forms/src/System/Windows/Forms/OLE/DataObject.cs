@@ -104,29 +104,11 @@ public unsafe partial class DataObject :
 
     /// <inheritdoc cref="SetDataAsJson{T}(string, bool, T)"/>
     [RequiresUnreferencedCode("Uses default System.Text.Json behavior which is not trim-compatible.")]
-    public void SetDataAsJson<T>(string format, T data)
-    {
-        if (typeof(T) == typeof(DataObject))
-        {
-            // loni TODO: localize string.
-            throw new InvalidOperationException($"DataObject will serialize as empty. JSON serialize the data within {nameof(data)}, then use {nameof(SetData)} instead.");
-        }
-
-        SetData(format, TryJsonSerialize(format, data));
-    }
+    public void SetDataAsJson<T>(string format, T data) => SetData(format, TryJsonSerialize(format, data));
 
     /// <inheritdoc cref="SetDataAsJson{T}(string, bool, T)"/>
     [RequiresUnreferencedCode("Uses default System.Text.Json behavior which is not trim-compatible.")]
-    public void SetDataAsJson<T>(T data)
-    {
-        if (typeof(T) == typeof(DataObject))
-        {
-            // loni TODO: localize string.
-            throw new InvalidOperationException($"DataObject will serialize as empty. JSON serialize the data within {nameof(data)}, then use {nameof(SetData)} instead.");
-        }
-
-        SetData(typeof(T), TryJsonSerialize(typeof(T).FullName!, data));
-    }
+    public void SetDataAsJson<T>(T data) => SetData(typeof(T), TryJsonSerialize(typeof(T).FullName!, data));
 
     /// <summary>
     ///  Stores the data in the specified format.
@@ -164,16 +146,7 @@ public unsafe partial class DataObject :
     ///  </para>
     /// </remarks>
     [RequiresUnreferencedCode("Uses default System.Text.Json behavior which is not trim-compatible.")]
-    public void SetDataAsJson<T>(string format, bool autoConvert, T data)
-    {
-        if (typeof(T) == typeof(DataObject))
-        {
-            // loni TODO: localize string.
-            throw new InvalidOperationException($"DataObject will serialize as empty. JSON serialize the data within {nameof(data)}, then use {nameof(SetData)} instead.");
-        }
-
-        SetData(format, autoConvert, TryJsonSerialize(format, data));
-    }
+    public void SetDataAsJson<T>(string format, bool autoConvert, T data) => SetData(format, autoConvert, TryJsonSerialize(format, data));
 
     /// <summary>
     ///  JSON serialize the data only if the format is not a restricted deserialization format and the data is not an intrinsic type.
@@ -189,6 +162,12 @@ public unsafe partial class DataObject :
         }
 
         data.OrThrowIfNull(nameof(data));
+
+        if (typeof(T) == typeof(DataObject))
+        {
+            throw new InvalidOperationException(string.Format(SR.ClipboardOrDragDrop_CannotJsonSerializeDataObject, nameof(data), nameof(SetData)));
+        }
+
         return IsRestrictedFormat(format) || Composition.Binder.IsKnownType<T>()
             ? data
             : new JsonData<T>() { JsonBytes = JsonSerializer.SerializeToUtf8Bytes(data) };

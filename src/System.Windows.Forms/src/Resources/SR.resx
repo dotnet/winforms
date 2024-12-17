@@ -7036,4 +7036,10 @@ Stack trace where the illegal operation occurred was:
   <data name="ClipboardOrDragDrop_InvalidFormatTypeCombination" xml:space="preserve">
     <value>The specified type '{0}' is not compatible with the specified format '{1}'.</value>
   </data>
+  <data name="ClipboardOrDragDrop_JsonDeserializationFailed" xml:space="preserve">
+    <value>Failed to deserialize JSON data.</value>
+  </data>
+  <data name="ClipboardOrDragDrop_CannotJsonSerializeDataObject">
+    <value>'DataObject' will serialize as empty. JSON serialize the data within '{0}', then use '{1}' API instead.</value>
+  </data>
 </root>

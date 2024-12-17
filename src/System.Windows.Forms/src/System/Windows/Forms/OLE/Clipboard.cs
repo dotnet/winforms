@@ -561,8 +561,7 @@ public static class Clipboard
 
         if (typeof(T) == typeof(DataObject))
         {
-            // TODO: Localize string
-            throw new InvalidOperationException($"'DataObject' will serialize as empty. JSON serialize the data within {nameof(data)}, then use {nameof(SetDataObject)} API instead.");
+            throw new InvalidOperationException(string.Format(SR.ClipboardOrDragDrop_CannotJsonSerializeDataObject, nameof(data), nameof(SetDataObject)));
         }
 
         DataObject dataObject = new();

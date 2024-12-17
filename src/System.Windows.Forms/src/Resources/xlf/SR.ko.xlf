@@ -967,6 +967,11 @@
         <target state="translated">요청한 클립보드 작업을 수행하지 못했습니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_CannotJsonSerializeDataObject">
+        <source>'DataObject' will serialize as empty. JSON serialize the data within '{0}', then use '{1}' API instead.</source>
+        <target state="new">'DataObject' will serialize as empty. JSON serialize the data within '{0}', then use '{1}' API instead.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_InvalidFormatTypeCombination">
         <source>The specified type '{0}' is not compatible with the specified format '{1}'.</source>
         <target state="new">The specified type '{0}' is not compatible with the specified format '{1}'.</target>
@@ -975,6 +980,11 @@
       <trans-unit id="ClipboardOrDragDrop_InvalidType">
         <source>'{0}' is not a concrete type, and could result in an unbounded deserialization attempt. Please use a concrete type or alternatively define a 'resolver' function that supports types that you are expecting to retrieve from the clipboard or use in drag-and-drop operations.</source>
         <target state="new">'{0}' is not a concrete type, and could result in an unbounded deserialization attempt. Please use a concrete type or alternatively define a 'resolver' function that supports types that you are expecting to retrieve from the clipboard or use in drag-and-drop operations.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_JsonDeserializationFailed">
+        <source>Failed to deserialize JSON data.</source>
+        <target state="new">Failed to deserialize JSON data.</target>
         <note />
       </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_TypedAPI_InvalidResolver">
