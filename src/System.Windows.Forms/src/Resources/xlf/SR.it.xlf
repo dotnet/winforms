@@ -967,6 +967,11 @@
         <target state="translated">Operazione richiesta sugli Appunti non riuscita.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_CannotJsonSerializeDataObject">
+        <source>An object of type 'DataObject' will serialize as empty. Use 'DataObject.SetDataAsJson' APIs on your object to JSON-serialize the data within your object, then use the '{0}' API with your object.</source>
+        <target state="new">An object of type 'DataObject' will serialize as empty. Use 'DataObject.SetDataAsJson' APIs on your object to JSON-serialize the data within your object, then use the '{0}' API with your object.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_InvalidFormatTypeCombination">
         <source>The specified type '{0}' is not compatible with the specified format '{1}'.</source>
         <target state="translated">Il tipo specificato '{0}' non è compatibile con il formato specificato '{1}'.</target>
@@ -975,6 +980,11 @@
       <trans-unit id="ClipboardOrDragDrop_InvalidType">
         <source>'{0}' is not a concrete type, and could result in an unbounded deserialization attempt. Please use a concrete type or alternatively define a 'resolver' function that supports types that you are expecting to retrieve from the clipboard or use in drag-and-drop operations.</source>
         <target state="translated">'{0}' non è un tipo concreto e potrebbe causare un tentativo di deserializzazione senza limitazioni. Usare un tipo concreto o in alternativa definire una funzione 'resolver' che supporta tipi che si prevede di recuperare dagli Appunti o da usare nelle operazioni di trascinamento della selezione.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardOrDragDrop_JsonDeserializationFailed">
+        <source>Failed to deserialize JSON data.</source>
+        <target state="new">Failed to deserialize JSON data.</target>
         <note />
       </trans-unit>
       <trans-unit id="ClipboardOrDragDrop_TypedAPI_InvalidResolver">
