@@ -16,9 +16,9 @@ public unsafe partial class DataObject
         /// <summary>
         ///  A type resolver for use in the <see cref="NativeToWinFormsAdapter"/> when processing binary formatted stream
         ///  contained in our <see cref="DataObject"/> class using the typed consumption side APIs, such as
-        ///  <see cref="TryGetData{T}(out T)"/>.  This class recognizes primitive types, exchange types from
+        ///  <see cref="TryGetData{T}(out T)"/>. This class recognizes primitive types, exchange types from
         ///  System.Drawing.Primitives, <see cref="List{T}"/>s or arrays of primitive types, and common WinForms types.
-        ///  The user can provide a custom resolver for additional types.  If the resolver function is not provided,
+        ///  The user can provide a custom resolver for additional types. If the resolver function is not provided,
         ///  the <see cref="Type"/> parameter specified by the user is resolved automatically.
         /// </summary>
         /// <remarks>
@@ -32,7 +32,7 @@ public unsafe partial class DataObject
             private readonly bool _legacyMode;
 
             // These types are read from and written to serialized stream manually, accessing record field by field.
-            // Thus they are re-hydrated with no formatters and are safe.  The default resolver should recognize them
+            // Thus they are re-hydrated with no formatters and are safe. The default resolver should recognize them
             // to resolve primitive types or fields of the specified type T.
             private static readonly Type[] s_intrinsicTypes =
             [
@@ -122,7 +122,7 @@ public unsafe partial class DataObject
             /// </param>
             /// <param name="legacyMode">
             ///  <see langword="true"/> if the user had not requested any specific type, i.e. the call originates from
-            ///  <see cref="GetData(string)"/> API family, that returns an <see cref="object"/>.  <see langword="false"/>
+            ///  <see cref="GetData(string)"/> API family, that returns an <see cref="object"/>. <see langword="false"/>
             ///  if the user had requested a specific type by calling <see cref="TryGetData{T}(out T)"/> API family.
             /// </param>
             public Binder(Type type, Func<TypeName, Type>? resolver, bool legacyMode)

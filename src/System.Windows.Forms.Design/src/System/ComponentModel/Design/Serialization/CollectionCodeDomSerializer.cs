@@ -269,7 +269,7 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
                             else
                             {
                                 // we found another method. Pick the one that uses the most derived type.
-                                Debug.Assert(candidateType!.IsAssignableFrom(type) || type.IsAssignableFrom(candidateType), "These two types are not related.  how were they chosen based on the base type");
+                                Debug.Assert(candidateType!.IsAssignableFrom(type) || type.IsAssignableFrom(candidateType), "These two types are not related, how were they chosen based on the base type");
                                 bool assignable = candidateType.IsAssignableFrom(type);
                                 candidate = assignable ? method : candidate;
                                 candidateType = assignable ? type : candidateType;

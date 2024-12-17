@@ -150,7 +150,7 @@ public class InheritanceService : IInheritanceService, IDisposable
 
                     InheritanceAttribute attr;
 
-                    Debug.Assert(value is IComponent, "Value of inherited field is not IComponent.  How did this value get into the datatype?");
+                    Debug.Assert(value is IComponent, "Value of inherited field is not IComponent. How did this value get into the datatype?");
 
                     bool privateInherited = false;
 

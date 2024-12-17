@@ -246,7 +246,7 @@ internal static partial class LocalAppContextSwitches
 
     /// <summary>
     ///  If <see langword="true"/>, then Clipboard Get methods will prefer System.Windows.Forms.BinaryFormat.Deserializer
-    ///  to deserialize the payload, if needed.  If <see langword="false"/>, then <see cref="BinaryFormatter"/> is used
+    ///  to deserialize the payload, if needed. If <see langword="false"/>, then <see cref="BinaryFormatter"/> is used
     ///  to get full compatibility with the downlevel versions of .NET.
     /// </summary>
     /// <remarks>

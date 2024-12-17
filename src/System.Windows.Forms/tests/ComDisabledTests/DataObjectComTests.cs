@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.InteropServices.ComTypes;
+using static System.Windows.Forms.TestUtilities.DataObjectTestHelpers;
 using Com = Windows.Win32.System.Com;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
@@ -10,6 +11,27 @@ namespace System.Windows.Forms.Tests;
 public unsafe partial class DataObjectTests
 {
     private delegate IDataObject CreateWinFormsDataObjectForOutgoingDropData(Com.IDataObject* dataObject);
+
+    [WinFormsFact]
+    public void DataObject_WithJson_MockRoundTrip()
+    {
+        dynamic controlAccessor = typeof(Control).TestAccessor().Dynamic;
+        var dropTargetAccessor = typeof(DropTarget).TestAccessor();
+
+        SimpleTestData testData = new() { X = 1, Y = 1 };
+        DataObject data = new();
+        data.SetDataAsJson("testData", testData);
+
+        DataObject inData = controlAccessor.CreateRuntimeDataObjectForDrag(data);
+        inData.Should().BeSameAs(data);
+
+        using var inDataPtr = ComHelpers.GetComScope<Com.IDataObject>(inData);
+        IDataObject outData = dropTargetAccessor.CreateDelegate<CreateWinFormsDataObjectForOutgoingDropData>()(inDataPtr);
+        ITypedDataObject typedOutData = outData.Should().BeAssignableTo<ITypedDataObject>().Subject;
+        typedOutData.GetDataPresent("testData").Should().BeTrue();
+        typedOutData.TryGetData("testData", out SimpleTestData deserialized).Should().BeTrue();
+        deserialized.Should().BeEquivalentTo(testData);
+    }
 
     [WinFormsFact]
     public void DataObject_CustomIDataObject_MockRoundTrip()

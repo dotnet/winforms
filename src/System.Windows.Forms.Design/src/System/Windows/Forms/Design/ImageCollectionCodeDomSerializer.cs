@@ -26,7 +26,7 @@ public class ImageListCodeDomSerializer : CodeDomSerializer
         // Find our base class's serializer.
         if (!manager.TryGetSerializer(typeof(Component), out CodeDomSerializer? serializer))
         {
-            Debug.Fail("Unable to find a CodeDom serializer for 'Component'.  Has someone tampered with the serialization providers?");
+            Debug.Fail("Unable to find a CodeDom serializer for 'Component'. Has someone tampered with the serialization providers?");
 
             return null;
         }
