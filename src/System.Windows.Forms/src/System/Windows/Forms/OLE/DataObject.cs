@@ -165,7 +165,7 @@ public unsafe partial class DataObject :
 
         if (typeof(T) == typeof(DataObject))
         {
-            throw new InvalidOperationException(string.Format(SR.ClipboardOrDragDrop_CannotJsonSerializeDataObject, nameof(data), nameof(SetData)));
+            throw new InvalidOperationException(string.Format(SR.ClipboardOrDragDrop_CannotJsonSerializeDataObject, nameof(SetData)));
         }
 
         return IsRestrictedFormat(format) || Composition.Binder.IsKnownType<T>()

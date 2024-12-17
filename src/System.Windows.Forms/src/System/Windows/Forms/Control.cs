@@ -4814,7 +4814,7 @@ public unsafe partial class Control :
         data.OrThrowIfNull(nameof(data));
         if (typeof(T) == typeof(DataObject))
         {
-            throw new InvalidOperationException(string.Format(SR.ClipboardOrDragDrop_CannotJsonSerializeDataObject, nameof(data), nameof(DoDragDrop)));
+            throw new InvalidOperationException(string.Format(SR.ClipboardOrDragDrop_CannotJsonSerializeDataObject, nameof(DoDragDrop)));
         }
 
         DataObject dataObject = new();

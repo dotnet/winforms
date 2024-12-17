@@ -7040,6 +7040,6 @@ Stack trace where the illegal operation occurred was:
     <value>Failed to deserialize JSON data.</value>
   </data>
   <data name="ClipboardOrDragDrop_CannotJsonSerializeDataObject">
-    <value>'DataObject' will serialize as empty. JSON serialize the data within '{0}', then use '{1}' API instead.</value>
+    <value>An object of type 'DataObject' will serialize as empty. Use 'DataObject.SetDataAsJson' APIs on your object to JSON-serialize the data within your object, then use the '{0}' API with your object.</value>
   </data>
 </root>

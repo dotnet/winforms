@@ -561,7 +561,7 @@ public static class Clipboard
 
         if (typeof(T) == typeof(DataObject))
         {
-            throw new InvalidOperationException(string.Format(SR.ClipboardOrDragDrop_CannotJsonSerializeDataObject, nameof(data), nameof(SetDataObject)));
+            throw new InvalidOperationException(string.Format(SR.ClipboardOrDragDrop_CannotJsonSerializeDataObject, nameof(SetDataObject)));
         }
 
         DataObject dataObject = new();
