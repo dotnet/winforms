@@ -27,7 +27,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 testCode.Should.NotThrow()
                 VerifySuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
-                .Be(SmallTestFileSize)
+                    .Be(SmallTestFileSize)
             End Using
         End Sub
 
