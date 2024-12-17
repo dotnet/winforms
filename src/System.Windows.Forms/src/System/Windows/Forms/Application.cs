@@ -1138,7 +1138,7 @@ public sealed partial class Application
         ThreadContext? threadContext = ThreadContext.FromId(PInvoke.GetWindowThreadProcessId(handle.Handle, null));
         Debug.Assert(
             threadContext is not null,
-            "No thread context for handle.  This is expected if you saw a previous assert about the handle being invalid.");
+            "No thread context for handle. This is expected if you saw a previous assert about the handle being invalid.");
 
         GC.KeepAlive(handle);
         return threadContext;
