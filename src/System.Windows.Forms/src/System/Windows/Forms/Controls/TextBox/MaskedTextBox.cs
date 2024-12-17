@@ -573,7 +573,7 @@ public partial class MaskedTextBox : TextBoxBase
                     return _flagState[s_insertToggled];
 
                 default:
-                    Debug.Fail("Invalid InsertKeyMode.  This code path should have never been executed.");
+                    Debug.Fail("Invalid InsertKeyMode. This code path should have never been executed.");
                     return false;
             }
         }

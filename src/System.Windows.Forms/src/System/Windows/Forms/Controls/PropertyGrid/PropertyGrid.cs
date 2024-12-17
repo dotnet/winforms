@@ -2040,7 +2040,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
                 }
                 catch (Exception e)
                 {
-                    Debug.Fail("Bad Tab.  Disable for now.", e.ToString());
+                    Debug.Fail("Bad Tab. Disable for now.", e.ToString());
                     canExtend = false;
                     break;
                 }
@@ -3509,7 +3509,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         }
         catch (Exception e)
         {
-            Debug.Fail("Bad Tab.  It's going away.", e.ToString());
+            Debug.Fail("Bad Tab. It's going away.", e.ToString());
             killTab = true;
         }
 

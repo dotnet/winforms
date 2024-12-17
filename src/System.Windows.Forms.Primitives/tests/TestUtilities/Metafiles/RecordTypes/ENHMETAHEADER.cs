@@ -12,17 +12,17 @@ namespace System.Windows.Forms.Metafiles;
 internal struct ENHMETAHEADER
 {
     public uint iType;              // Record typeEMR_HEADER
-    public uint nSize;              // Record size in bytes.  This may be greater
+    public uint nSize;              // Record size in bytes. This may be greater
                                     // than the sizeof(ENHMETAHEADER).
     public RECT rclBounds;          // Inclusive-inclusive bounds in device units
     public RECT rclFrame;           // Inclusive-inclusive Picture Frame of metafile in .01 mm units
-    public uint dSignature;         // Signature.  Must be ENHMETA_SIGNATURE.
+    public uint dSignature;         // Signature. Must be ENHMETA_SIGNATURE.
     public uint nVersion;           // Version number
     public uint nBytes;             // Size of the metafile in bytes
     public uint nRecords;           // Number of records in the metafile
     public ushort nHandles;         // Number of handles in the handle table
                                     // Handle index zero is reserved.
-    public ushort sReserved;        // Reserved.  Must be zero.
+    public ushort sReserved;        // Reserved. Must be zero.
     public uint nDescription;       // Number of chars in the unicode description string
                                     // This is 0 if there is no description string
     public uint offDescription;     // Offset to the metafile description record.
