@@ -62,7 +62,7 @@ public sealed partial class NotifyIcon
         /// </summary>
         protected override void WndProc(ref Message m)
         {
-            Debug.Assert(_reference is not null, "NotifyIcon was garbage collected while it was still visible.  How did we let that happen?");
+            Debug.Assert(_reference is not null, "NotifyIcon was garbage collected while it was still visible. How did we let that happen?");
             _reference.WndProc(ref m);
         }
     }

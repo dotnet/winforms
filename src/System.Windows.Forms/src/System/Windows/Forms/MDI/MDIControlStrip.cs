@@ -94,7 +94,7 @@ internal partial class MdiControlStrip : MenuStrip
     protected internal override void OnItemAdded(ToolStripItemEventArgs e)
     {
         base.OnItemAdded(e);
-        Debug.Assert(Items.Count <= 4, "Too many items in the MDIControlStrip.  How did we get into this situation?");
+        Debug.Assert(Items.Count <= 4, "Too many items in the MDIControlStrip. How did we get into this situation?");
     }
 
     private void OnTargetWindowDisposed(object? sender, EventArgs e)

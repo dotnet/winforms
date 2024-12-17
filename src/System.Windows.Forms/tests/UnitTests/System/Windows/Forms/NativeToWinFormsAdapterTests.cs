@@ -6,54 +6,13 @@
 using System.Drawing;
 using System.Reflection.Metadata;
 using System.Text.RegularExpressions;
+using System.Windows.Forms.TestUtilities;
 using Com = Windows.Win32.System.Com;
 
 namespace System.Windows.Forms.Tests;
 
 public unsafe partial class NativeToWinFormsAdapterTests
 {
-    public static TheoryData<string> UnboundedFormat() =>
-    [
-        DataFormats.Serializable,
-        "something custom"
-    ];
-
-    // These formats contain only known types.
-    public static TheoryData<string> UndefinedRestrictedFormat() =>
-    [
-        DataFormats.CommaSeparatedValue,
-        DataFormats.Dib,
-        DataFormats.Dif,
-        DataFormats.PenData,
-        DataFormats.Riff,
-        DataFormats.Tiff,
-        DataFormats.WaveAudio,
-        DataFormats.SymbolicLink,
-        DataFormats.EnhancedMetafile,
-        DataFormats.MetafilePict,
-        DataFormats.Palette
-    ];
-
-    public static TheoryData<string> BitmapFormat() =>
-    [
-        DataFormats.Bitmap,
-        "System.Drawing.Bitmap"
-    ];
-
-    // These formats set and get strings by accessing HGLOBAL directly.
-    public static TheoryData<string> StringFormat() =>
-    [
-         DataFormats.Text,
-         DataFormats.UnicodeText,
-         DataFormats.StringConstant,
-         DataFormats.Rtf,
-         DataFormats.Html,
-         DataFormats.OemText,
-         DataFormats.FileDrop,
-         "FileName",
-         "FileNameW"
-    ];
-
     [GeneratedRegex(@"{[0-9]}")]
     private static partial Regex PlaceholdersPattern();
 
@@ -66,7 +25,7 @@ public unsafe partial class NativeToWinFormsAdapterTests
         "BinaryFormatter serialization and deserialization are disabled within this application. See https://aka.ms/binaryformatter for more information.";
 
     [WinFormsTheory]
-    [MemberData(nameof(UndefinedRestrictedFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.UndefinedRestrictedFormat))]
     public void TryGetData_AsObject_Primitive_Success(string format)
     {
         DataObject native = new();
@@ -82,7 +41,7 @@ public unsafe partial class NativeToWinFormsAdapterTests
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(UnboundedFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.UnboundedFormat))]
     public void TryGetData_AsObject_Primitive_RequiresResolver(string format)
     {
         DataObject native = new();
@@ -100,8 +59,8 @@ public unsafe partial class NativeToWinFormsAdapterTests
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(StringFormat))]
-    [MemberData(nameof(BitmapFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.StringFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.BitmapFormat))]
     public void TryGetData_AsObject_Primitive_InvalidTypeFormatCombination(string format)
     {
         DataObject native = new();
@@ -126,7 +85,7 @@ public unsafe partial class NativeToWinFormsAdapterTests
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(UnboundedFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.UnboundedFormat))]
     public void TryGetData_AsObject_Custom_RequiresResolver(string format)
     {
         (DataObject dataObject, TestData _) = SetDataObject(format);
@@ -136,7 +95,7 @@ public unsafe partial class NativeToWinFormsAdapterTests
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(UnboundedFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.UnboundedFormat))]
     public void TryGetData_AsObject_Custom_FormatterEnabled_RequiresResolver(string format)
     {
         (DataObject dataObject, TestData _) = SetDataObject(format);
@@ -149,8 +108,8 @@ public unsafe partial class NativeToWinFormsAdapterTests
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(StringFormat))]
-    [MemberData(nameof(BitmapFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.StringFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.BitmapFormat))]
     public void TryGetData_AsObject_Custom_InvalidTypeFormatCombination(string format)
     {
         (DataObject dataObject, TestData _) = SetDataObject(format);
@@ -162,7 +121,7 @@ public unsafe partial class NativeToWinFormsAdapterTests
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(UndefinedRestrictedFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.UndefinedRestrictedFormat))]
     public void TryGetData_AsObject_Custom_ReturnsNotSupportedException(string format)
     {
         (DataObject dataObject, TestData _) = SetDataObject(format);
@@ -174,7 +133,7 @@ public unsafe partial class NativeToWinFormsAdapterTests
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(UndefinedRestrictedFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.UndefinedRestrictedFormat))]
     public void TryGetData_AsObject_Custom_FormatterEnabled_ReturnsFalse(string format)
     {
         (DataObject dataObject, TestData _) = SetDataObject(format);
@@ -187,7 +146,7 @@ public unsafe partial class NativeToWinFormsAdapterTests
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(UndefinedRestrictedFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.UndefinedRestrictedFormat))]
     public void TryGetData_AsInterface_ListOfPrimitives_Success(string format)
     {
         DataObject native = new();
@@ -200,7 +159,7 @@ public unsafe partial class NativeToWinFormsAdapterTests
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(UnboundedFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.UnboundedFormat))]
     public void TryGetData_AsInterface_ListOfPrimitives_RequiresResolver(string format)
     {
         DataObject native = new();
@@ -215,8 +174,8 @@ public unsafe partial class NativeToWinFormsAdapterTests
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(StringFormat))]
-    [MemberData(nameof(BitmapFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.StringFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.BitmapFormat))]
     public void TryGetData_AsInterface_ListOfPrimitives_InvalidTypeFormatCombination(string format)
     {
         DataObject native = new();
@@ -230,8 +189,8 @@ public unsafe partial class NativeToWinFormsAdapterTests
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(UnboundedFormat))]
-    [MemberData(nameof(UndefinedRestrictedFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.UnboundedFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.UndefinedRestrictedFormat))]
     public void TryGetData_AsConcreteType_ListOfPrimitives_Success(string format)
     {
         DataObject native = new();
@@ -244,8 +203,8 @@ public unsafe partial class NativeToWinFormsAdapterTests
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(StringFormat))]
-    [MemberData(nameof(BitmapFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.StringFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.BitmapFormat))]
     public void TryGetData_AsConcreteType_ListOfPrimitives_InvalidTypeFormatCombination(string format)
     {
         DataObject native = new();
@@ -259,7 +218,7 @@ public unsafe partial class NativeToWinFormsAdapterTests
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(UnboundedFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.UnboundedFormat))]
     public void TryGetData_AsConcreteType_Custom_FormatterEnabled_RequiresResolver(string format)
     {
         (DataObject dataObject, TestData _) = SetDataObject(format);
@@ -272,7 +231,7 @@ public unsafe partial class NativeToWinFormsAdapterTests
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(UndefinedRestrictedFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.UndefinedRestrictedFormat))]
     public void TryGetData_AsConcreteType_Custom_FormatterEnabled_ReturnsFalse(string format)
     {
         (DataObject dataObject, TestData _) = SetDataObject(format);
@@ -286,7 +245,7 @@ public unsafe partial class NativeToWinFormsAdapterTests
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(UndefinedRestrictedFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.UndefinedRestrictedFormat))]
     public void TryGetData_AsConcreteType_Custom_FormattersDisabled_ReturnFalse(string format)
     {
         (DataObject dataObject, TestData _) = SetDataObject(format);
@@ -298,8 +257,8 @@ public unsafe partial class NativeToWinFormsAdapterTests
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(StringFormat))]
-    [MemberData(nameof(BitmapFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.StringFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.BitmapFormat))]
     public void TryGetData_AsConcreteType_Custom_InvalidTypeFormatCombination(string format)
     {
         (DataObject dataObject, TestData _) = SetDataObject(format);
@@ -310,7 +269,7 @@ public unsafe partial class NativeToWinFormsAdapterTests
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(UnboundedFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.UnboundedFormat))]
     public void TryGetData_WithResolver_AsConcreteType_Custom_FormatterEnabled_Success(string format)
     {
         (DataObject dataObject, TestData value) = SetDataObject(format);
@@ -323,8 +282,8 @@ public unsafe partial class NativeToWinFormsAdapterTests
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(StringFormat))]
-    [MemberData(nameof(BitmapFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.StringFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.BitmapFormat))]
     public void TryGetData_WithResolver_AsConcreteType_Custom_InvalidTypeFormatCombination(string format)
     {
         (DataObject dataObject, TestData _) = SetDataObject(format);
@@ -335,8 +294,8 @@ public unsafe partial class NativeToWinFormsAdapterTests
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(StringFormat))]
-    [MemberData(nameof(BitmapFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.StringFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.BitmapFormat))]
     public void TryGetData_WithResolver_AsConcreteType_Custom_FormatterEnabled_InvalidTypeFormatCombination(string format)
     {
         (DataObject dataObject, TestData _) = SetDataObject(format);
@@ -350,7 +309,7 @@ public unsafe partial class NativeToWinFormsAdapterTests
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(UndefinedRestrictedFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.UndefinedRestrictedFormat))]
     public void TryGetData_WithResolver_AsConcreteType_Custom_FormatterDisabledException(string format)
     {
         (DataObject dataObject, TestData _) = SetDataObject(format);
@@ -361,7 +320,7 @@ public unsafe partial class NativeToWinFormsAdapterTests
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(UndefinedRestrictedFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.UndefinedRestrictedFormat))]
     public void TryGetData_AsAbstract_Custom_FormatterEnabled_ReturnFalse(string format)
     {
         (DataObject dataObject, TestData _) = SetDataObject(format);
@@ -375,8 +334,8 @@ public unsafe partial class NativeToWinFormsAdapterTests
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(StringFormat))]
-    [MemberData(nameof(BitmapFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.StringFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.BitmapFormat))]
     public void TryGetData_AsAbstract_Custom_InvalidTypeFormatCombination(string format)
     {
         (DataObject dataObject, TestData _) = SetDataObject(format);
@@ -387,7 +346,7 @@ public unsafe partial class NativeToWinFormsAdapterTests
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(UnboundedFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.UnboundedFormat))]
     public void TryGetData_AsAbstract_Custom_RequiresResolver(string format)
     {
         (DataObject dataObject, TestData _) = SetDataObject(format);
@@ -400,7 +359,7 @@ public unsafe partial class NativeToWinFormsAdapterTests
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(UnboundedFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.UnboundedFormat))]
     public void TryGetData_AsAbstract_Custom_FormatterEnabled_RequiresResolver(string format)
     {
         (DataObject dataObject, TestData _) = SetDataObject(format);
@@ -413,7 +372,7 @@ public unsafe partial class NativeToWinFormsAdapterTests
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(UndefinedRestrictedFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.UndefinedRestrictedFormat))]
     public void TryGetData_WithResolver_AsAbstract_Custom_FormatterEnabled_ReturnFalse(string format)
     {
         (DataObject dataObject, TestData _) = SetDataObject(format);
@@ -427,7 +386,7 @@ public unsafe partial class NativeToWinFormsAdapterTests
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(UnboundedFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.UnboundedFormat))]
     public void TryGetData_WithResolver_AsAbstract_Custom_FormatterEnabled_Success(string format)
     {
         (DataObject dataObject, TestData value) = SetDataObject(format);
@@ -440,8 +399,8 @@ public unsafe partial class NativeToWinFormsAdapterTests
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(StringFormat))]
-    [MemberData(nameof(BitmapFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.StringFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.BitmapFormat))]
     public void TryGetData_WithResolver_AsAbstract_Custom_InvalidTypeFormatCombination(string format)
     {
         (DataObject dataObject, TestData _) = SetDataObject(format);
@@ -453,7 +412,7 @@ public unsafe partial class NativeToWinFormsAdapterTests
     }
 
     [WinFormsTheory]
-    [MemberData(nameof(UnboundedFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.UnboundedFormat))]
     public void TryGetData_AsConcrete_NotSerializable_FormatterEnabled_ReturnFalse(string format)
     {
         DataObject native = new();
@@ -467,6 +426,77 @@ public unsafe partial class NativeToWinFormsAdapterTests
         // E_UNEXPECTED and a NULL HGLOBAL is returned from the COM GetData, we have no stream to deserialize.
         dataObject.TryGetData(format, out NotSerializableData? data).Should().BeFalse();
         data.Should().BeNull();
+    }
+
+    [WinFormsFact]
+    public void SetDataAsJson_TryGetData_Requires_Resolver()
+    {
+        SimpleTestData value = new("text", new(10, 10));
+
+        DataObject native = new();
+        native.SetDataAsJson("test", value);
+
+        DataObject dataObject = new(ComHelpers.GetComPointer<Com.IDataObject>(native));
+        Action a = () => dataObject.TryGetData("test", out SimpleTestDataBase? _);
+        a.Should().Throw<NotSupportedException>();
+        // This requires a resolver because this simulates out of process scenario with a type that is not intrinsic and not supported.
+        dataObject.TryGetData("test", SimpleTestData.Resolver, autoConvert: false, out SimpleTestDataBase? deserialized).Should().BeTrue();
+        var deserializedChecked = deserialized.Should().BeOfType<SimpleTestDataBase>().Subject;
+        deserializedChecked.Text.Should().Be(value.Text);
+    }
+
+    [WinFormsTheory]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.StringFormat))]
+    [CommonMemberData(typeof(DataObjectTestHelpers), nameof(DataObjectTestHelpers.BitmapFormat))]
+    public void SetDataAsJson_InvalidTypeFormatCombination(string format)
+    {
+        SimpleTestData value = new("text", new(10, 10));
+
+        DataObject native = new();
+        native.SetDataAsJson(format, value);
+
+        DataObject dataObject = new(ComHelpers.GetComPointer<Com.IDataObject>(native));
+        Action a = () => dataObject.TryGetData(format, out SimpleTestDataBase? _);
+
+        a.Should().Throw<NotSupportedException>()
+            .WithMessage(expectedWildcardPattern: InvalidTypeFormatCombinationMessage);
+    }
+
+    private class SimpleTestDataBase
+    {
+        public string? Text { get; set; }
+    }
+
+    private class SimpleTestData : SimpleTestDataBase
+    {
+        public SimpleTestData(string text, Point point)
+        {
+            Text = text;
+            Point = point;
+        }
+
+        public Point Point { get; set; }
+
+        public static Type Resolver(TypeName typeName)
+        {
+            (string name, Type type)[] allowedTypes =
+            [
+                (typeof(SimpleTestData).FullName!, typeof(SimpleTestData)),
+                (typeof(SimpleTestDataBase).FullName!, typeof(SimpleTestDataBase)),
+            ];
+
+            string fullName = typeName.FullName;
+            foreach (var (name, type) in allowedTypes)
+            {
+                // Namespace-qualified type name.
+                if (name == fullName)
+                {
+                    return type;
+                }
+            }
+
+            throw new NotSupportedException($"Can't resolve {fullName}");
+        }
     }
 
     // This class does not have [Serializable] attribute, serialization stream will be corrupt.

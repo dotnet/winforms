@@ -3,6 +3,7 @@
 
 using System.Collections.Specialized;
 using System.Drawing;
+using System.Private.Windows;
 using System.Reflection.Metadata;
 using System.Runtime.Serialization;
 
@@ -25,10 +26,18 @@ public partial class DataObject
                 return false;
             }
 
-            if (_mappedData.TryGetValue(format, out DataStoreEntry? dse) && dse.Data is T t)
+            if (_mappedData.TryGetValue(format, out DataStoreEntry? dse))
             {
-                data = t;
-                return true;
+                if (dse.Data is T t)
+                {
+                    data = t;
+                    return true;
+                }
+                else if (dse.Data is JsonData<T> jsonData)
+                {
+                    data = (T)jsonData.Deserialize();
+                    return true;
+                }
             }
 
             if (!autoConvert
@@ -45,10 +54,18 @@ public partial class DataObject
                     continue;
                 }
 
-                if (_mappedData.TryGetValue(mappedFormats[i], out DataStoreEntry? found) && found.Data is T value)
+                if (_mappedData.TryGetValue(mappedFormats[i], out DataStoreEntry? found))
                 {
-                    data = value;
-                    return true;
+                    if (found.Data is T value)
+                    {
+                        data = value;
+                        return true;
+                    }
+                    else if (found.Data is JsonData<T> jsonData)
+                    {
+                        data = (T)jsonData.Deserialize();
+                        return true;
+                    }
                 }
             }
 
