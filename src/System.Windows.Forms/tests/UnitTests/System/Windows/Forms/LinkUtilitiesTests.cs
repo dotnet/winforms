@@ -4,6 +4,7 @@
 #nullable enable
 
 using System.Drawing;
+using Microsoft.Win32;
 
 namespace System.Windows.Forms.Tests;
 
@@ -17,7 +18,7 @@ public class LinkUtilitiesTests
     public void LinkUtilities_GetIELinkBehavior_ReturnsExpected(string? registryValue, LinkBehavior expectedBehavior)
     {
         // Set registry value if provided
-        using var key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(LinkUtilities.IEMainRegPath);
+        RegistryKey? key = Registry.CurrentUser.CreateSubKey(LinkUtilities.IEMainRegPath);
         if (registryValue is not null)
         {
             key.SetValue("Anchor Underline", registryValue);
