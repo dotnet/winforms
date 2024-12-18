@@ -29,7 +29,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         Private Const WS_THICKFRAME As Integer = &H40000
 
         'Required by the Windows Form Designer
-        Private ReadOnly _components As System.ComponentModel.IContainer
+        Private ReadOnly _components As IContainer
 
         ' Indicates whether or not the user has canceled the copy
         Private _canceled As Boolean
@@ -121,7 +121,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         'Do not modify it using the code editor.
         <DebuggerStepThrough()>
         Private Sub InitializeComponent()
-            Dim resources As New System.ComponentModel.ComponentResourceManager(GetType(ProgressDialog))
+            Dim resources As New ComponentResourceManager(GetType(ProgressDialog))
             LabelInfo = New Label
             ProgressBarWork = New ProgressBar
             ButtonCloseDialog = New Button
