@@ -14,7 +14,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
             Implements IDisposable
 
             Friend Sub New()
-                nLength = Marshal.SizeOf(GetType(SECURITY_ATTRIBUTES))
+                nLength = Marshal.SizeOf(Of SECURITY_ATTRIBUTES)()
             End Sub
 
             Public nLength As Integer

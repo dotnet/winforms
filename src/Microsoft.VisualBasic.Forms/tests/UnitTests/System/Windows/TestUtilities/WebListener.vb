@@ -17,7 +17,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         Private ReadOnly _userName As String
 
         ''' <summary>
-        '''  The name of the function that creates the server is uses to establish the file to be downloaded.
+        '''  The name of the function that creates the server is used to establish the file to be downloaded.
         ''' </summary>
         ''' <param name="fileSize">Is used to create the file name and the size of download.</param>
         ''' <param name="memberName">Used to establish the file path to be downloaded.</param>
