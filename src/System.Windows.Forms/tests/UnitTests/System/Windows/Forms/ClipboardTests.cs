@@ -908,17 +908,31 @@ public class ClipboardTests
         string format = "list";
         Clipboard.SetDataAsJson(format, generic1);
         DataObject dataObject = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
-        Action a = () => dataObject.TestAccessor().Dynamic._innerData.GetData(format);
-        // We do not handle List<Point>
-        a.Should().Throw<NotSupportedException>();
+
+        // We do not handle List<Point>, this is a wrong API to read JSON-serialized payload.
+        // This call returns an unfilled MemoryStream due to the BinaryFormatter being disabled,
+        // same as it was in .NET9 for any payload.
+        dataObject.GetData(format).Should().BeOfType<MemoryStream>();
+
+        using (BinaryFormatterInClipboardDragDropScope scope = new(enable: true))
+        using (BinaryFormatterScope scope2 = new(enable: true))
+        {
+            // BinaryFormatter will not find our fake System.Private.Windows.VirtualJson assembly
+            // and will throw a SerializationException.
+            var result1 = dataObject.GetData(format);
+            result1.Should().BeOfType<MemoryStream>();
+        }
+
         Clipboard.TryGetData(format, out List<Point>? points).Should().BeTrue();
         points.Should().BeEquivalentTo(generic1);
 
+        // List of primitives is an intrinsic type, formatters are bypassed.
         List<int> generic2 = [];
         Clipboard.SetDataAsJson(format, generic2);
         dataObject = Clipboard.GetDataObject().Should().BeOfType<DataObject>().Subject;
-        a = () => dataObject.TestAccessor().Dynamic._innerData.GetData(format);
-        a.Should().NotThrow();
+
+        dataObject.GetData(format).Should().BeEquivalentTo(generic2);
+
         Clipboard.TryGetData(format, out List<int>? intList).Should().BeTrue();
         intList.Should().BeEquivalentTo(generic2);
     }
@@ -943,11 +957,11 @@ public class ClipboardTests
         SimpleTestData testData = new() { X = 1, Y = 1 };
         // Note that this simulates out of process scenario.
         Clipboard.SetDataAsJson("test", testData);
-        Action a = () => Clipboard.GetData("test");
-        a.Should().Throw<NotSupportedException>();
+
+        Clipboard.GetData("test").Should().BeOfType<MemoryStream>();
 
         using BinaryFormatterInClipboardDragDropScope scope = new(enable: true);
-        a.Should().Throw<NotSupportedException>();
+        Clipboard.GetData("test").Should().BeOfType<MemoryStream>();
 
         using BinaryFormatterScope scope2 = new(enable: true);
         Clipboard.GetData("test").Should().BeOfType<MemoryStream>();
@@ -1001,7 +1015,7 @@ public class ClipboardTests
         Clipboard.SetDataAsJson("testFormat", testData);
 
         // Manually retrieve the serialized stream.
-        ComTypes.IDataObject dataObject = Clipboard.GetDataObject().Should().BeAssignableTo<ComTypes.IDataObject>().Which;
+        ComTypes.IDataObject dataObject = Clipboard.GetDataObject().Should().BeAssignableTo<ComTypes.IDataObject>().Subject;
         ComTypes.FORMATETC formatetc = new()
         {
             cfFormat = (short)DataFormats.GetFormat("testFormat").Id,
@@ -1011,38 +1025,45 @@ public class ClipboardTests
         };
         dataObject.GetData(ref formatetc, out ComTypes.STGMEDIUM medium);
         HGLOBAL hglobal = (HGLOBAL)medium.unionmember;
-        Stream stream;
+        MemoryStream? stream = null;
         try
         {
-            void* buffer = PInvokeCore.GlobalLock(hglobal);
-            int size = (int)PInvokeCore.GlobalSize(hglobal);
-            byte[] bytes = new byte[size];
-            Marshal.Copy((nint)buffer, bytes, 0, size);
-            // this comes from DataObject.Composition.s_serializedObjectID
-            int index = 16;
-            stream = new MemoryStream(bytes, index, bytes.Length - index);
+            try
+            {
+                void* buffer = PInvokeCore.GlobalLock(hglobal);
+                int size = (int)PInvokeCore.GlobalSize(hglobal);
+                byte[] bytes = new byte[size];
+                Marshal.Copy((nint)buffer, bytes, 0, size);
+                // this comes from DataObject.Composition.s_serializedObjectID
+                int index = 16;
+                stream = new MemoryStream(bytes, index, bytes.Length - index);
+            }
+            finally
+            {
+                PInvokeCore.GlobalUnlock(hglobal);
+            }
+
+            stream.Should().NotBeNull();
+            // Use NrbfDecoder to decode the stream and rehydrate the type.
+            SerializationRecord record = NrbfDecoder.Decode(stream);
+            ClassRecord types = record.Should().BeAssignableTo<ClassRecord>().Subject;
+            types.HasMember("<JsonBytes>k__BackingField").Should().BeTrue();
+            types.HasMember("<InnerTypeAssemblyQualifiedName>k__BackingField").Should().BeTrue();
+            SZArrayRecord<byte> byteData = types.GetRawValue("<JsonBytes>k__BackingField").Should().BeAssignableTo<SZArrayRecord<byte>>().Subject;
+            string innerTypeAssemblyQualifiedName = types.GetRawValue("<InnerTypeAssemblyQualifiedName>k__BackingField").Should().BeOfType<string>().Subject;
+            TypeName.TryParse(innerTypeAssemblyQualifiedName, out TypeName? innerTypeName).Should().BeTrue();
+            TypeName checkedResult = innerTypeName.Should().BeOfType<TypeName>().Subject;
+            // These should not be the same since we take TypeForwardedFromAttribute name into account during serialization,
+            // which changes the assembly name.
+            typeof(SimpleTestData).AssemblyQualifiedName.Should().NotBe(checkedResult.AssemblyQualifiedName);
+            typeof(SimpleTestData).ToTypeName().Matches(checkedResult).Should().BeTrue();
+
+            JsonSerializer.Deserialize(byteData.GetArray(), typeof(SimpleTestData)).Should().BeEquivalentTo(testData);
         }
         finally
         {
-            PInvokeCore.GlobalUnlock(hglobal);
+            stream?.Dispose();
         }
-
-        stream.Should().NotBeNull();
-        // Use NrbfDecoder to decode the stream and rehydrate the type.
-        SerializationRecord record = NrbfDecoder.Decode(stream);
-        ClassRecord types = record.Should().BeAssignableTo<ClassRecord>().Which;
-        types.HasMember("<JsonBytes>k__BackingField").Should().BeTrue();
-        types.HasMember("<InnerTypeAssemblyQualifiedName>k__BackingField").Should().BeTrue();
-        SZArrayRecord<byte> byteData = types.GetRawValue("<JsonBytes>k__BackingField").Should().BeAssignableTo<SZArrayRecord<byte>>().Subject;
-        string innerTypeAssemblyQualifiedName = types.GetRawValue("<InnerTypeAssemblyQualifiedName>k__BackingField").Should().BeOfType<string>().Subject;
-        TypeName.TryParse(innerTypeAssemblyQualifiedName, out TypeName? innerTypeName).Should().BeTrue();
-        TypeName checkedResult = innerTypeName.Should().BeOfType<TypeName>().Subject;
-        // These should not be the same since we take TypeForwardedFromAttribute name into account during serialization,
-        // which changes the assembly name.
-        typeof(SimpleTestData).AssemblyQualifiedName.Should().NotBe(checkedResult.AssemblyQualifiedName);
-        typeof(SimpleTestData).ToTypeName().Matches(checkedResult).Should().BeTrue();
-
-        JsonSerializer.Deserialize(byteData.GetArray(), typeof(SimpleTestData)).Should().BeEquivalentTo(testData);
     }
 
     [WinFormsFact]
