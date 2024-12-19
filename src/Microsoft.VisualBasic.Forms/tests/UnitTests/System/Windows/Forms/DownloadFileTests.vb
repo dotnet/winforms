@@ -12,8 +12,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
     Public Class DownloadFileTests
         Inherits VbFileCleanupTestBase
 
-        ' REVIEWER NOTE: The next 2 Constants need to be SR Resources,
-        '                they are not accessible in this project they come from WebClient.
+        ' The next 2 Constants need to be SR Resources,
+        ' they are not accessible in this project they come from WebClient.
         Private Const SR_net_webstatus_Timeout As String = "The operation has timed out."
         Private Const SR_net_webstatus_Unauthorized As String =
             "The remote server returned an error: (401) Unauthorized."
@@ -116,7 +116,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 testCode.Should.NotThrow()
                 VerifySuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
-                .Be(SmallTestFileSize)
+                    .Be(SmallTestFileSize)
             End Using
         End Sub
 
@@ -192,7 +192,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 testCode.Should.NotThrow()
                 VerifySuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
-                .Be(LargeTestFileSize)
+                    .Be(LargeTestFileSize)
             End Using
         End Sub
 
@@ -216,7 +216,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 testCode.Should.NotThrow()
                 VerifySuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
-                .Be(SmallTestFileSize)
+                    .Be(SmallTestFileSize)
             End Using
         End Sub
 
@@ -367,7 +367,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 testCode.Should.NotThrow()
                 VerifySuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
-                .Be(SmallTestFileSize)
+                    .Be(SmallTestFileSize)
             End Using
         End Sub
 
@@ -422,7 +422,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 testCode.Should.NotThrow()
                 VerifySuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
-                .Be(SmallTestFileSize)
+                    .Be(SmallTestFileSize)
             End Using
         End Sub
 
@@ -637,7 +637,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 testCode.Should.NotThrow()
                 VerifySuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
-                .Be(SmallTestFileSize)
+                    .Be(SmallTestFileSize)
             End Using
         End Sub
 
@@ -722,7 +722,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 testCode.Should.NotThrow()
                 VerifySuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
-                .Be(SmallTestFileSize)
+                    .Be(SmallTestFileSize)
             End Using
         End Sub
 
@@ -773,7 +773,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 testCode.Should.NotThrow()
                 VerifySuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
-                .Be(SmallTestFileSize)
+                    .Be(SmallTestFileSize)
             End Using
         End Sub
 
@@ -823,7 +823,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 testCode.Should.NotThrow()
                 VerifySuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
-                .Be(SmallTestFileSize)
+                    .Be(SmallTestFileSize)
             End Using
         End Sub
 
@@ -896,7 +896,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 testCode.Should.NotThrow()
                 VerifySuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
-                .Be(SmallTestFileSize)
+                    .Be(SmallTestFileSize)
             End Using
         End Sub
 
@@ -1035,7 +1035,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 testCode.Should.NotThrow()
                 VerifySuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
-                .Be(LargeTestFileSize)
+                    .Be(LargeTestFileSize)
             End Using
         End Sub
 
@@ -1081,7 +1081,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 testCode.Should.NotThrow()
                 VerifySuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
-                .Be(SmallTestFileSize)
+                    .Be(SmallTestFileSize)
             End Using
         End Sub
 
@@ -1181,7 +1181,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 testCode.Should.NotThrow()
                 VerifySuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
-                .Be(SmallTestFileSize)
+                    .Be(SmallTestFileSize)
             End Using
         End Sub
 
@@ -1209,7 +1209,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 testCode.Should.NotThrow()
                 VerifySuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
-                .Be(SmallTestFileSize)
+                    .Be(SmallTestFileSize)
             End Using
         End Sub
 
@@ -1368,7 +1368,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 testCode.Should.NotThrow()
                 VerifySuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
-                .Be(SmallTestFileSize)
+                    .Be(SmallTestFileSize)
             End Using
         End Sub
 
@@ -1453,7 +1453,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 testCode.Should.NotThrow()
                 VerifySuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
-                .Be(SmallTestFileSize)
+                    .Be(SmallTestFileSize)
             End Using
         End Sub
 
@@ -1504,7 +1504,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 testCode.Should.NotThrow()
                 VerifySuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
-                .Be(SmallTestFileSize)
+                    .Be(SmallTestFileSize)
             End Using
         End Sub
 
@@ -1554,7 +1554,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                 testCode.Should.NotThrow()
                 VerifySuccessfulDownload(testDirectory, destinationFileName, listener).Should() _
-                .Be(SmallTestFileSize)
+                    .Be(SmallTestFileSize)
             End Using
         End Sub
 

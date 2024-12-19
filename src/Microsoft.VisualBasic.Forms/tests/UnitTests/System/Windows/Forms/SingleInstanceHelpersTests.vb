@@ -61,15 +61,14 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                     Dim awaitable As ConfiguredTaskAwaitable = SendSecondInstanceArgsAsync(
                         pipeName,
                         args:=commandLine,
-                        cancellationToken:=tokenSource.Token) _
-                            .ConfigureAwait(continueOnCapturedContext:=False)
+                        cancellationToken:=tokenSource.Token).ConfigureAwait(continueOnCapturedContext:=False)
 
                     awaitable.GetAwaiter().GetResult()
                     Dim CancelToken As New CancellationToken
                     Dim buffer As Byte() = New Byte(commandLine.Length) {}
-                    Dim count As Integer =
-                        Await pipeServer.ReadAsync(buffer:=buffer.AsMemory(start:=0, length:=commandLine.Length)) _
-                            .ConfigureAwait(continueOnCapturedContext:=True)
+                    Dim count As Integer = Await pipeServer.ReadAsync(
+                            buffer:=buffer.AsMemory(start:=0, length:=commandLine.Length)) _
+                                .ConfigureAwait(continueOnCapturedContext:=True)
 
                     ' Ensure the result is set
                     Do
