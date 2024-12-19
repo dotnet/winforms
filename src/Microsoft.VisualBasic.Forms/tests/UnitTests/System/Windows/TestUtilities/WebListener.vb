@@ -4,25 +4,27 @@
 Imports System.IO
 Imports System.Net
 Imports System.Runtime.CompilerServices
+Imports System.Text.RegularExpressions
 Imports System.Threading
 
 Namespace Microsoft.VisualBasic.Forms.Tests
 
     Public Class WebListener
-        Private ReadOnly _downloadFileUrlPrefix As String
+        Private Const BufferSize As Integer = 4096
         Private ReadOnly _fileSize As Integer
+        Private ReadOnly _fileUrlPrefix As String
         Private ReadOnly _password As String
         Private ReadOnly _userName As String
 
         ''' <summary>
-        '''  The name of the function that creates the server is uses to establish the file to be downloaded.
+        '''  The name of the function that creates the server is used to establish the file to be downloaded.
         ''' </summary>
         ''' <param name="fileSize">Is used to create the file name and the size of download.</param>
         ''' <param name="memberName">Used to establish the file path to be downloaded.</param>
         Public Sub New(fileSize As Integer, <CallerMemberName> Optional memberName As String = Nothing)
             _fileSize = fileSize
-            _downloadFileUrlPrefix = $"http://127.0.0.1:8080/{memberName}/"
-            Address = $"{_downloadFileUrlPrefix}T{fileSize}"
+            _fileUrlPrefix = $"http://127.0.0.1:8080/{memberName}/"
+            Address = $"{_fileUrlPrefix}T{fileSize}"
         End Sub
 
         ''' <summary>
@@ -45,11 +47,17 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
         Public ReadOnly Property Address As String
 
+        Private Shared Function GetBoundary(contentType As String) As String
+            Dim elements As String() = contentType.Split(New Char() {";"c}, StringSplitOptions.RemoveEmptyEntries)
+            Dim element As String = elements.FirstOrDefault(Function(e) e.Trim().StartsWith("boundary=", StringComparison.OrdinalIgnoreCase))
+            Return If(element IsNot Nothing, element.Substring(startIndex:=element.IndexOf("="c) + 1).Trim().Trim(""""c), String.Empty)
+        End Function
+
         Friend Function ProcessRequests() As HttpListener
             ' Create a listener and add the prefixes.
             Dim listener As New HttpListener()
 
-            listener.Prefixes.Add(_downloadFileUrlPrefix)
+            listener.Prefixes.Add(_fileUrlPrefix)
             If _userName IsNot Nothing OrElse _password IsNot Nothing Then
                 listener.AuthenticationSchemes = AuthenticationSchemes.Basic
             End If
@@ -66,7 +74,8 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
                         If context.User?.Identity.IsAuthenticated Then
                             Dim identity As HttpListenerBasicIdentity =
-                                              CType(context.User?.Identity, HttpListenerBasicIdentity)
+                                CType(context.User?.Identity, HttpListenerBasicIdentity)
+
                             If String.IsNullOrWhiteSpace(identity.Name) _
                                 OrElse identity.Name <> _userName _
                                 OrElse String.IsNullOrWhiteSpace(identity.Password) _
@@ -78,16 +87,51 @@ Namespace Microsoft.VisualBasic.Forms.Tests
                         End If
                         ' Simulate network traffic
                         Thread.Sleep(millisecondsTimeout:=20)
-                        Dim responseString As String = Strings.StrDup(_fileSize, "A")
-                        Dim buffer() As Byte = Text.Encoding.UTF8.GetBytes(responseString)
-                        response.ContentLength64 = buffer.Length
-                        Using output As Stream = response.OutputStream
-                            Try
-                                output.Write(buffer, offset:=0, count:=buffer.Length)
-                            Catch ex As Exception
-                                ' ignore it will be handled elsewhere
-                            End Try
-                        End Using
+                        If listener.Prefixes(0).Contains("UploadFile") Then
+                            Dim request As HttpListenerRequest = context.Request
+                            If request.HttpMethod.Equals("Post", StringComparison.OrdinalIgnoreCase) _
+                                AndAlso request.HasEntityBody Then
+
+                                Dim formData As Dictionary(Of String, String) = GetMultipartFormData(request)
+
+                                Using bodyStream As Stream = request.InputStream
+                                    Using reader As New StreamReader(
+                                        stream:=bodyStream,
+                                        encoding:=request.ContentEncoding,
+                                        detectEncodingFromByteOrderMarks:=True,
+                                        BufferSize)
+                                    End Using
+                                    Try
+                                        Dim dataLength As String = formData(NameOf(dataLength))
+                                        If _fileSize.ToString <> dataLength Then
+                                            Throw New IOException($"File size mismatch, expected {_fileSize} actual {dataLength}")
+                                        End If
+
+                                        Dim fileName As String = formData("file")
+                                        If Not fileName.Equals("Testing.Txt", StringComparison.OrdinalIgnoreCase) Then
+                                            Throw New IOException($"Filename incorrect, expected 'Testing.Txt', actual {fileName}")
+                                        End If
+                                    Catch ioEx As IOException
+                                        Throw
+                                    Catch ex As Exception
+                                        Stop
+                                        ' ignore it will be handled elsewhere
+                                    End Try
+                                End Using
+                            End If
+                            response.StatusCode = 200
+                        Else
+                            Dim responseString As String = Strings.StrDup(_fileSize, "A")
+                            Dim buffer() As Byte = Text.Encoding.UTF8.GetBytes(responseString)
+                            response.ContentLength64 = buffer.Length
+                            Using output As Stream = response.OutputStream
+                                Try
+                                    output.Write(buffer, offset:=0, count:=buffer.Length)
+                                Catch ex As Exception
+                                    ' ignore it will be handled elsewhere
+                                End Try
+                            End Using
+                        End If
                     Finally
                         response?.Close()
                         response = Nothing
@@ -96,6 +140,53 @@ Namespace Microsoft.VisualBasic.Forms.Tests
 
             Task.Run(action)
             Return listener
+        End Function
+
+        ''' <summary>
+        '''  Parses a <see cref="HttpListenerRequest"/> and gets the fileName of the uploaded file
+        '''  and the lenght of the data file in bytes
+        ''' </summary>
+        ''' <param name="request"></param>
+        ''' <returns>
+        '''  A <see cref="Dictionary(Of String, String)"/> that contains the filename and lenght of the data file.
+        ''' </returns>
+        Public Function GetMultipartFormData(request As HttpListenerRequest) As Dictionary(Of String, String)
+            Dim result As New Dictionary(Of String, String)
+
+            If request.ContentType.StartsWith("multipart/form-data", StringComparison.OrdinalIgnoreCase) Then
+                Dim boundary As String = GetBoundary(request.ContentType)
+                Using reader As New StreamReader(request.InputStream, request.ContentEncoding)
+                    Dim content As String = reader.ReadToEnd()
+                    Dim parts As String() = content.Split(boundary, StringSplitOptions.RemoveEmptyEntries)
+
+                    For Each part As String In parts
+                        If part.Trim() <> "--" Then
+                            Dim separator As String() = New String() {Environment.NewLine}
+                            Dim lines As String() = part.Split(separator, StringSplitOptions.RemoveEmptyEntries)
+                            If lines.Length > 2 Then
+                                Dim headerParts As String() = lines(0).Split({":"c}, count:=2)
+                                If headerParts.Length = 2 _
+                                    AndAlso headerParts(0).Trim().Equals(value:="Content-Disposition",
+                                    comparisonType:=StringComparison.OrdinalIgnoreCase) Then
+
+                                    Dim nameMatch As Match = Regex.Match(input:=headerParts(1), pattern:="name=""(?<name>[^""]+)""")
+                                    If nameMatch.Success Then
+                                        Dim name As String = nameMatch.Groups("name").Value
+                                        Dim value As String = headerParts(1).Split("filename=")(1).Trim(""""c)
+                                        result.Add(name, value.Trim())
+                                        If lines.Length > 2 Then
+                                            result.Add("dataLength", lines(1).Length.ToString)
+                                        End If
+                                        Exit For
+                                    End If
+                                End If
+                            End If
+                        End If
+                    Next
+                End Using
+            End If
+
+            Return result
         End Function
 
     End Class
